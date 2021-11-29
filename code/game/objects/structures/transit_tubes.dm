@@ -144,28 +144,28 @@
 /obj/structure/transit_tube/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
-		to_chat(user, "You begin to cut the glass off...")
-		if(WT.do_weld(user, src, 40))
+		to_chat(user, "<span class='notice'>You begin to cut the glass off...</span>")
+		if(WT.do_weld(user, src, 4 SECONDS))
 			to_chat(user, "<span class='notice'>You detach the glass from the [src].</span>")
 			new /obj/item/stack/sheet/glass/rglass(get_turf(src), 2)
 			var/obj/structure/transit_tube_frame/TTF
 			switch(icon_state)
 				if("N-S","E-W")
-					TTF = new /obj/structure/transit_tube_frame(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame(get_turf(src), iconstate2framedir())
 				if("NE-SW","NW-SE")
-					TTF = new /obj/structure/transit_tube_frame/diag(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame/diag(get_turf(src), iconstate2framedir())
 				if("N-SW","S-NE","E-NW","W-SE")
-					TTF = new /obj/structure/transit_tube_frame/bent(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame/bent(get_turf(src), iconstate2framedir())
 				if("N-SE","S-NW","E-SW","W-NE")
-					TTF = new /obj/structure/transit_tube_frame/bent_invert(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame/bent_invert(get_turf(src), iconstate2framedir())
 				if("N-SW-SE","S-NE-NW","E-NW-SW","W-SE-NE")
-					TTF = new /obj/structure/transit_tube_frame/fork(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame/fork(get_turf(src), iconstate2framedir())
 				if("N-SE-SW","S-NW-NE","E-SW-NW","W-NE-SE")
-					TTF = new /obj/structure/transit_tube_frame/fork_invert(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame/fork_invert(get_turf(src), iconstate2framedir())
 				if("N-S-pass","E-W-pass")
-					TTF = new /obj/structure/transit_tube_frame/pass(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame/pass(get_turf(src), iconstate2framedir())
 				if("closed","open","closing","opening")
-					TTF = new /obj/structure/transit_tube_frame/station(get_turf(src), iconstate2framedir(icon_state))
+					TTF = new /obj/structure/transit_tube_frame/station(get_turf(src), iconstate2framedir())
 			if(TTF)
 				TTF.anchored = 1
 				if(istype(TTF,/obj/structure/transit_tube_frame/station))
@@ -183,8 +183,8 @@
 /obj/structure/transit_tube_pod/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
-		to_chat(user, "You begin to cut the glass off...")
-		if(WT.do_weld(user, src, 40))
+		to_chat(user, "<span class='notice'>You begin to cut the glass off...</span>")
+		if(WT.do_weld(user, src, 4 SECONDS))
 			to_chat(user, "<span class='notice'>You detach the glass from the [src].</span>")
 			new /obj/item/stack/sheet/glass/rglass(get_turf(src), 2)
 			var/obj/structure/transit_tube_frame/pod/TTFP = new /obj/structure/transit_tube_frame/pod(get_turf(src), dir)
@@ -252,7 +252,7 @@
 
 /obj/structure/transit_tube/station/proc/open_animation()
 	if(icon_state == "closed")
-		playsound(get_turf(src), 'sound/machines/windowdoor.ogg', 50, 1)
+		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		icon_state = "opening"
 		spawn(OPEN_DURATION)
 			if(icon_state == "opening")
@@ -263,7 +263,7 @@
 
 /obj/structure/transit_tube/station/proc/close_animation()
 	if(icon_state == "open")
-		playsound(get_turf(src), 'sound/machines/windowdoor.ogg', 50, 1)
+		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		icon_state = "closing"
 		spawn(CLOSE_DURATION)
 			if(icon_state == "closing")
@@ -703,7 +703,7 @@
 		else
 	return
 
-/obj/structure/transit_tube/proc/iconstate2framedir(var/icon_state)
+/obj/structure/transit_tube/proc/iconstate2framedir()
 	switch(icon_state)
 		if("N-S","NE-SW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
 			return 1

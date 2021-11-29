@@ -23,11 +23,11 @@
         if(G.amount < 2)
             to_chat(user, "<span class='warning'>You need 2 sheets of glass to do this.</span>")
             return 1
-        if(do_after(user,src,40))
+        if(do_after(user, src, 4 SECONDS))
             if(G.amount < 2) //User being tricky
                 return 1
             G.use(2)
-            to_chat(user, "You add the reinforced glass to the [src].")
+            to_chat(user, "<span class='notice'>You add the reinforced glass to the [src].</span>")
             new /obj/structure/transit_tube(loc, dir_icon_states[dir])
             qdel(src)
         return 1
@@ -38,7 +38,7 @@
     if(iswelder(W))
         var/obj/item/tool/weldingtool/WT = W
         to_chat(user, "<span class='notice'>You begin to dismantle \the [src]...</span>")
-        if(WT.do_weld(user,src,40))
+        if(WT.do_weld(user, src, 4 SECONDS))
             to_chat(user, "<span class='notice'>You dismantle \the [src].</span>")
             new /obj/item/stack/sheet/metal(get_turf(src), 5)
             qdel(src)
@@ -81,11 +81,11 @@
         if(G.amount < 2)
             to_chat(user, "<span class='warning'>You need 2 sheets of glass to do this.</span>")
             return 1
-        if(do_after(user,src,40))
+        if(do_after(user, src, 4 SECONDS))
             if(G.amount < 2) //User being tricky
                 return 1
             G.use(2)
-            to_chat(user, "You add the reinforced glass to the [src].")
+            to_chat(user, "<span class='notice'>You add the reinforced glass to the [src].</span>")
             var/obj/structure/transit_tube/station/TTS = new /obj/structure/transit_tube/station(loc, dir_icon_states[dir])
 
             if(src.electronics.one_access)
@@ -121,7 +121,7 @@
             return 1
         var/obj/item/tool/weldingtool/WT = W
         to_chat(user, "<span class='notice'>You begin to dismantle \the [src]...</span>")
-        if(WT.do_weld(user,src,40))
+        if(WT.do_weld(user, src, 4 SECONDS))
             to_chat(user, "<span class='notice'>You dismantle \the [src].</span>")
             new /obj/item/stack/sheet/metal(get_turf(src), 5)
             qdel(src)
@@ -140,11 +140,11 @@
         if(G.amount < 2)
             to_chat(user, "<span class='warning'>You need 2 sheets of glass to do this.</span>")
             return 1
-        if(do_after(user,src,40))
+        if(do_after(user, src, 4 SECONDS))
             if(G.amount < 2) //User being tricky
                 return 1
             G.use(2)
-            to_chat(user, "You add the reinforced glass to the [src].")
+            to_chat(user, "<span class='notice'>You add the reinforced glass to the [src].</span>")
             new /obj/structure/transit_tube(loc, dir_icon_states[dir])
             qdel(src)
         return 1
@@ -167,7 +167,7 @@
             return 1
         var/obj/item/tool/weldingtool/WT = W
         to_chat(user, "<span class='notice'>You begin to dismantle \the [src]...</span>")
-        if(WT.do_weld(user,src,40))
+        if(WT.do_weld(user, src, 4 SECONDS))
             to_chat(user, "<span class='notice'>You dismantle \the [src].</span>")
             new /obj/item/stack/sheet/metal(get_turf(src), 5)
             qdel(src)
