@@ -189,6 +189,7 @@
 #include "code\ATMOSPHERICS\components\binary_devices\volume_pump.dm"
 #include "code\ATMOSPHERICS\components\trinary_devices\filter.dm"
 #include "code\ATMOSPHERICS\components\trinary_devices\mixer.dm"
+#include "code\ATMOSPHERICS\components\trinary_devices\pressure_valve.dm"
 #include "code\ATMOSPHERICS\components\trinary_devices\t_valve.dm"
 #include "code\ATMOSPHERICS\components\trinary_devices\trinary_base.dm"
 #include "code\ATMOSPHERICS\components\unary\cap.dm"
