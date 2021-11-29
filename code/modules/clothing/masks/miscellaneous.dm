@@ -3,6 +3,7 @@
 	desc = "To stop that awful noise."
 	icon_state = "muzzle"
 	item_state = "muzzle"
+	clothing_flags = MASKINTERNALS
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90

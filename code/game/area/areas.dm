@@ -434,6 +434,8 @@ var/area/space_area
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = get_area(OldLoc)
 
+	if(oldArea == src)
+		return 1
 	if(project_shadows)
 		Obj.update_shadow()
 	else if(istype(oldArea) && oldArea.project_shadows)
@@ -444,9 +446,9 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
+	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
@@ -454,6 +456,7 @@ var/area/space_area
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
+	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
 
 /area/proc/subjectDied(target)

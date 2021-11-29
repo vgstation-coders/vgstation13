@@ -223,12 +223,12 @@
 		)
 	)
 	items_to_collect = list(
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
 		/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
 	)
 

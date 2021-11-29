@@ -74,6 +74,8 @@ var/list/ai_list = list()
 	var/cooldown = 0
 	var/acceleration = 1
 
+	var/static/obj/abstract/screen/nocontext/aistatic/aistatic = new()
+
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = FALSE)
 
 	var/list/possibleNames = ai_names

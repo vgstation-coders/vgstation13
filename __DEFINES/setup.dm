@@ -1791,3 +1791,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))
 
 #define RECOMMENDED_CLIENT_FPS 100
+
+// /datum/reagent/var/sport
+#define SPORTINESS_NONE 1
+#define SPORTINESS_SUGAR 1.2
+#define SPORTINESS_SPORTS_DRINK 5

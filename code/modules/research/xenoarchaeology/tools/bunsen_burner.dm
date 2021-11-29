@@ -45,6 +45,10 @@
 	processing_objects.Remove(src)
 	create_reagents(250)
 
+/obj/machinery/bunsen_burner/mapping/New()
+	..()
+	reagents.add_reagent(GLYCEROL, 250)
+
 /obj/machinery/bunsen_burner/Destroy()
 	if(held_container)
 		held_container.forceMove(get_turf(src))
@@ -114,6 +118,9 @@
 		var/o2_consumption
 		var/co2_consumption
 
+		if(reagents.is_empty())
+			try_refill_nearby()
+
 		for(var/possible_fuel in possible_fuels)
 			if(reagents.has_reagent(possible_fuel))
 				var/list/fuel_stats = possible_fuels[possible_fuel]
@@ -141,6 +148,17 @@
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
 		set_light(0)
+
+/obj/machinery/bunsen_burner/proc/try_refill_nearby()
+	for(var/obj/machinery/chem_dispenser/CD in view(1))
+		if(CD.energy > 0.5)
+			reagents.add_reagent(ETHANOL, 5)
+			CD.energy -= 0.5
+			return //Got a machine that's not empty? Exit.
+	for(var/obj/structure/reagent_dispensers/fueltank/FT in view(1))
+		if(FT.reagents.trans_id_to(src, FUEL, 5))
+			return //Got something from the dispenser? Exit.
+
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"

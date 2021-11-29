@@ -73,6 +73,7 @@
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define GIANTSPIDER "giant spider"
+#define PULSEDEMON "pulse demon"
 #define STREAMER "streamer"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"

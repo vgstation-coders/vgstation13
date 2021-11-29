@@ -1094,8 +1094,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		delete_text = input(usr,"Delete stripped items?","Equip Outfit","") as null|anything in list("Yes","No")
 		if(!delete_text)
 			return
-	var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
-	var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+	var/outfit_type = select_loadout()
 	if(!outfit_type || !ispath(outfit_type))
 		return
 	var/strip_items = FALSE
@@ -1112,8 +1111,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /proc/select_loadout()
-	var/list/outfits = (subtypesof(/datum/outfit/) - /datum/outfit/striketeam/)
-	var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+	var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Equip Outfit") as null|text
+	var/outfit_type = filter_list_input("Outfit Type","Equip Outfit", get_matching_types(object, /datum/outfit) - /datum/outfit/ - /datum/outfit/striketeam/)
 	if(!outfit_type || !ispath(outfit_type))
 		return
 	return outfit_type

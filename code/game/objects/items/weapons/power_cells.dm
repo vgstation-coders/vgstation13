@@ -21,6 +21,7 @@
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
 	var/starch_cell = 0
+	var/mob/living/simple_animal/hostile/pulse_demon/occupant
 
 /obj/item/weapon/cell/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")

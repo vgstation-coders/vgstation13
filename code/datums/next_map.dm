@@ -78,7 +78,7 @@
 /datum/next_map/island
 	name = "Island Station"
 	path = "Island"
-	min_players = 15
+	min_players = 25
 
 /datum/next_map/lamprey
 	name = "Lamprey Station"

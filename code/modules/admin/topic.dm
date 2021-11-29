@@ -3972,8 +3972,7 @@
 				if (!newname)
 					newname = "Admin"
 				var/choice = alert("Edit appearance on spawn?", "Admin", "Yes", "No")
-				var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
-				var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+				var/outfit_type = select_loadout()
 				if(!outfit_type || !ispath(outfit_type))
 					return
 				var/turf/T = get_turf(usr)
@@ -4218,6 +4217,20 @@
 				virus2_make_custom(usr.client,null)
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","VIR")
+			if("bloodstone")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BS")
+				var/choice = alert("Flashy spawn and surroundings cultification?","Blood Stone Spawning","Yes","No")
+				if (!choice)
+					return
+				var/turf/T = get_turf(usr)
+				var/obj/structure/cult/bloodstone/blood_stone = new(T)
+				if(choice == "Yes")
+					blood_stone.flashy_entrance()
+				if(choice == "No")
+					blood_stone.update_icon()
+				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
+
 
 			if("hardcore_mode")
 				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""]slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
@@ -5800,18 +5813,7 @@
 				z_del = new_limit
 			if ("type") // Lifted from "spawn" code.
 				var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Setting the type to delete.") as null|text
-
-				var/list/matches = get_matching_types(object, /atom)
-
-				if(matches.len==0)
-					to_chat(usr, "<span class='warning'>No typepaths found.</span>")
-					return
-
-				var/chosen
-				if(matches.len==1)
-					chosen = matches[1]
-				else
-					chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
+				var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
 				if(!chosen)
 					to_chat(usr, "<span class='warning'>No type chosen.</span>")
 					return
