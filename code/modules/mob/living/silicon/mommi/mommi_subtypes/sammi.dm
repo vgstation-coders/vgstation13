@@ -10,6 +10,10 @@
 	prefix = "Stationary Assembler MMI"
 	canmove = 0
 	anchored = 0
+	var/ghost_name
+	var/ghost_icon
+	var/ghost_icon_state
+	var/ghost_overlays
 	var/cellhold = null
 	var/unsafe = 0
 
@@ -247,6 +251,10 @@
 					icon_state = "sammi_online_a"
 				else
 					icon_state = "sammi_online"
+				ghost_name = O.mind.name
+				ghost_icon = O.icon
+				ghost_icon_state = O.icon_state
+				ghost_overlays = O.overlays
 				updateicon()
 			else if(src.key)
 				to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
