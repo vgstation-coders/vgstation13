@@ -125,10 +125,11 @@
 
 //TODO move this somewhere else
 /atom/movable/proc/set_glide_size(glide_size_override = 0, var/min = 0.9, var/max = WORLD_ICON_SIZE/2)
+	glide_size_override *= step_size / WORLD_ICON_SIZE //This should probably go in DELAY2GLIDESIZE() instead but that would be a lot of changed macros
 	if(!glide_size_override || glide_size_override > max)
 		glide_size = 0
 	else
-		glide_size = max(min, glide_size_override) * step_size / WORLD_ICON_SIZE //This should probably go in DELAY2GLIDESIZE() instead but that would be a lot of changed macros
+		glide_size = max(min, glide_size_override)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc || locked_to)
@@ -458,28 +459,40 @@
 	return bounds_dist(src, mover) >= 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+/atom/movable/proc/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	INVOKE_EVENT(src, /event/before_move)
 	if(glide_size_override)
 		glide_size = glide_size_override
-	var/atom/old_loc = loc
+
+	var/list/atom/old_locs = locs //locs is implicitly copied on assignment, not aliased
+	var/atom/old_loc = loc //Just for convenience; should be equivalent to old_locs[1].
+	var/list/atom/uncrossing
+	if(isturf(loc)) //obounds() provides nonsense results when Ref.loc isn't a turf.
+		uncrossing = obounds(src)
+	else
+		uncrossing = loc?.contents //contents IS aliased on assignment but we're not changing it so it's fine
+
 	loc = destination
+	src.step_x = step_x
+	src.step_y = step_y
+
 	last_moved = world.time
 
-	if(old_loc)
-		old_loc.Exited(src, destination)
-		for(var/atom/movable/AM in old_loc)
-			AM.Uncrossed(src)
+	for(var/atom/A in old_locs)
+		A.Exited(src, loc)
+	for(var/atom/A in uncrossing)
+		A.Uncrossed(src)
 
 	if(loc)
 		last_move = get_dir(old_loc, loc)
 
-		loc.Entered(src, old_loc)
+		for(var/atom/A in locs)
+			A.Entered(src, old_loc)
 		if(isturf(loc))
-			var/area/A = get_area(loc)
+			var/area/A = loc.loc
 			A.Entered(src, old_loc)
 
-			for(var/atom/movable/AM in loc)
+			for(var/atom/movable/AM in obounds(src))
 				AM.Crossed(src,no_tp)
 
 
@@ -490,9 +503,12 @@
 	update_client_hook(loc)
 
 	INVOKE_EVENT(src, /event/moved, "mover" = src)
-	var/turf/T = get_turf(destination)
-	if(old_loc && T && old_loc.z != T.z)
-		INVOKE_EVENT(src, /event/z_transition, "user" = src, "from_z" = old_loc.z, "to_z" = T.z)
+
+	var/turf/from_turf = get_turf(old_loc)
+	var/turf/to_turf = get_turf(destination)
+	if(from_turf && to_turf && (from_turf.z != to_turf.z))
+		INVOKE_EVENT(src, /event/z_transition, "user" = src, "from_z" = from_turf.z, "to_z" = to_turf.z)
+
 	INVOKE_EVENT(src, /event/after_move)
 	return 1
 

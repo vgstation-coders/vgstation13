@@ -412,7 +412,7 @@
 		update_icon()
 		return
 
-	forceMove(T, get_dir(src, T))
+	forceMove(T)
 
 	if(A == extremity_A)//depending on which side is pulling the link, we'll pull the other side.
 		var/obj/effect/overlay/chain/CH = extremity_B
