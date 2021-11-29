@@ -94,10 +94,10 @@
 	. = ..()
 	if (!enabled)
 		close()
+		return
 
-	if ((air2.pressure > pressure_threshold) && open_on_above_threshold)
-		open()
-	else if ((air2.pressure < pressure_threshold) && !open_on_above_threshold)
+	if (open_on_above_threshold && (air2.pressure > pressure_threshold)
+		|| !open_on_above_threshold && (air2.pressure < pressure_threshold))
 		open()
 	else
 		close()
@@ -158,12 +158,12 @@
 	use_power = 0
 
 /obj/machinery/atmospherics/trinary/pressure_valve/manual/attack_ai(mob/user)
-	if(isMoMMI(user) && user in (viewers(1, src) + loc)) // MoMMIs must be next to the valve to view and manipulate it
+	if(isMoMMI(user) && (user in (viewers(1, src) + loc))) // MoMMIs must be next to the valve to view and manipulate it
 		attack_hand(user)
 	return
 
 /obj/machinery/atmospherics/trinary/pressure_valve/manual/attack_robot(mob/user)
-	if(isMoMMI(user) && user in (viewers(1, src) + loc)) // MoMMIs must be next to the valve to view and manipulate it
+	if(isMoMMI(user) && (user in (viewers(1, src) + loc))) // MoMMIs must be next to the valve to view and manipulate it
 		attack_hand(user)
 	return
 
@@ -184,5 +184,35 @@
 	var/datum/radio_frequency/radio_connection
 	machine_flags = MULTITOOL_MENU
 
-// --- Interaction and UI ---
+// --- Radio ---
+/obj/machinery/atmospherics/trinary/pressure_valve/digital/multitool_menu(mob/user, obj/item/device/multitool/P)
+	return {"
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag","set_tag")]</a></li>
+	</ul>
+	"}
 
+/obj/machinery/atmospherics/trinary/pressure_valve/digital/proc/set_frequency(new_frequency)
+	radio_controller.remove_object(src, frequency)
+	frequency = new_frequency
+	if(frequency)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
+
+/obj/machinery/atmospherics/trinary/pressure_valve/digital/initialize()
+	..()
+	if(frequency)
+		set_frequency(frequency)
+
+
+/obj/machinery/atmospherics/trinary/pressure_valve/digital/receive_signal(datum/signal/signal)
+	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))
+		return 0
+
+	switch(signal.data["command"])
+		if("enable")
+			enabled = signal.data["enable"]
+
+		if("mode")
+			open_on_above_threshold = signal.data["above"]
+			pressure_threshold = max(0, signal.data["threshold"])
