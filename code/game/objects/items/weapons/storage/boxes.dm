@@ -319,7 +319,7 @@
 
 /obj/item/weapon/storage/box/teargas/New()
 	..()
-	for(var/i = 1 to 5)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/chem_grenade/teargas(src)
 
 /obj/item/weapon/storage/box/syndigrenades
