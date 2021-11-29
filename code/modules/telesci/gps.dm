@@ -260,7 +260,7 @@ var/list/all_GPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
-	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE, istype(src,/obj/item/device/gps/secure/command))
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE, view_all)
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead, var/iscommand = FALSE)
 	var/turf/pos = get_turf(SPS)
