@@ -5913,12 +5913,14 @@
 	color = "#A88C50" //rgb: 168, 140, 80
 	alpha = 240
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	overdose_am = 25
 	glass_desc = "Brown and nutritious... for cats!"
 
 /datum/reagent/drink/pilk/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
+	M.Jitter(25)
 
 	if(M.getBruteLoss() && prob(20))
 		M.heal_organ_damage(1, 0)
@@ -5931,11 +5933,11 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 
-		if(prob(min(tick / 15, 25)))
+		if(prob(min(tick / 25, 35)))
 			H.vomit()
 
 		switch(volume)
-			if(25 to 35)
+			if(25 to 45)
 				H.dizziness = max(H.dizziness, 10)
 				if(prob(5))
 					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
