@@ -82,7 +82,7 @@
 
 	else if (prob(33))
 		pressure_threshold = rand(0, 9000)
-		investigation_log(I_ATMOS,"had it's threshold configured to open [(open_on_above_threshold ? "above" : "below")] [pressure_threshold]kPa by [key_name(L)]")
+		investigation_log(I_ATMOS,"had its threshold configured to open [(open_on_above_threshold ? "above" : "below")] [pressure_threshold]kPa by [key_name(L)]")
 
 	else
 		toggle_enabled()
