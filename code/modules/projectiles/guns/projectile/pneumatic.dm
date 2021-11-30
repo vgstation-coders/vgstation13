@@ -145,8 +145,8 @@
 	src.remove_from_storage(object,user.loc)
 	object.throw_at(target,10,speed)
 
-	//if we're throwing food and the target doesn't have its mouth covered, it takes a bite.
-	if(istype(object,/obj/item/weapon/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))
+	//if we're throwing food or pills and the target doesn't have its mouth covered, it takes a bite.
+	if((istype(object,/obj/item/weapon/reagent_containers/food/snacks) || istype(object,/obj/item/weapon/reagent_containers/pill)) && ishuman(target) && object.Adjacent(target))
 		var/mob/living/carbon/human/victim = target
 		if(!victim.check_body_part_coverage(MOUTH))
 			object.attack(target,target)
