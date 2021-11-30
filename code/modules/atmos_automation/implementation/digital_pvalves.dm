@@ -22,7 +22,7 @@
 
 /datum/automation/set_pressure_valve_status/GetText()
 	// Enable/Disable pressure valve "valve_id"
-	return "<a href=\"?src=\ref[src];set_enable=1\">[enable?"Enable":"Disable"]</a>. pressure valve <a href=\"?src=\ref[src];set_subject=1\">[fmtString(pvalve)]</a>"
+	return "<a href=\"?src=\ref[src];set_enable=1\">[enable?"Enable":"Disable"]</a> pressure valve <a href=\"?src=\ref[src];set_subject=1\">[fmtString(pvalve)]</a>"
 
 /datum/automation/set_pressure_valve_status/Topic(href,href_list)
 	if(href_list["set_enable"])

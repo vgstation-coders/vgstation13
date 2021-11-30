@@ -8,6 +8,7 @@
 /obj/machinery/atmospherics/trinary/pressure_valve
 	icon = 'icons/obj/atmospherics/pressure_valve.dmi'
 	icon_state = "pvalve"
+	var/icon_state_overlay_enabled = "pvalve_enabled"
 	var/icon_state_overlay_open = "pvalve_open"
 	var/icon_state_overlay_threshold_switch = "pvalve_switch"
 
@@ -59,7 +60,7 @@
 	add_fingerprint(usr)
 
 	if(href_list["toggle_enabled"])
-		enabled = !enabled
+		toggle_enabled()
 
 	if (href_list["toggle_mode"])
 		open_on_above_threshold = !open_on_above_threshold
@@ -75,18 +76,19 @@
 
 // NPCs and assorted gremlins
 /obj/machinery/atmospherics/trinary/pressure_valve/npc_tamper_act(mob/living/L)
-	if(!(stat & (BROKEN|NOPOWER)))
-		if (prob(0.33))
-			open_on_above_threshold = !open_on_above_threshold
-			investigation_log(I_ATMOS,"was switched to open [(open_on_above_threshold ? "above" : "below")] [pressure_threshold]kPa by [key_name(L)]")
+	if (prob(33))
+		open_on_above_threshold = !open_on_above_threshold
+		investigation_log(I_ATMOS,"was switched to open [(open_on_above_threshold ? "above" : "below")] [pressure_threshold]kPa by [key_name(L)]")
 
-		else if (prob(0.33))
-			pressure_threshold = rand(0, 9000)
-			investigation_log(I_ATMOS,"had it's threshold configured to open [(open_on_above_threshold ? "above" : "below")] [pressure_threshold]kPa by [key_name(L)]")
+	else if (prob(33))
+		pressure_threshold = rand(0, 9000)
+		investigation_log(I_ATMOS,"had it's threshold configured to open [(open_on_above_threshold ? "above" : "below")] [pressure_threshold]kPa by [key_name(L)]")
 
-		else
-			enabled = !enabled
-			investigation_log(I_ATMOS,"was [(enabled ? "enabled" : "disabled")] by [key_name(L)]")
+	else
+		toggle_enabled()
+		investigation_log(I_ATMOS,"was [(enabled ? "enabled" : "disabled")] by [key_name(L)]")
+
+	update_icon()
 
 // --- Behaviour ---
 
@@ -96,8 +98,7 @@
 		close()
 		return
 
-	if (open_on_above_threshold && (air2.pressure > pressure_threshold)
-		|| !open_on_above_threshold && (air2.pressure < pressure_threshold))
+	if (open_on_above_threshold && (air2.pressure > pressure_threshold) || !open_on_above_threshold && (air2.pressure < pressure_threshold))
 		open()
 	else
 		close()
@@ -130,11 +131,18 @@
 		qdel(network3)
 	build_network()
 
+/obj/machinery/atmospherics/trinary/pressure_valve/proc/toggle_enabled()
+	enabled = !enabled
+	if (!enabled) close()
+
 // --- Graphics ---
 
 /obj/machinery/atmospherics/trinary/pressure_valve/update_icon()
 	..()
 	overlays.Cut()
+	if(enabled)
+		overlays += image(icon = icon, icon_state = icon_state_overlay_enabled)
+
 	if(open)
 		overlays += image(icon = icon, icon_state = icon_state_overlay_open)
 
@@ -149,6 +157,7 @@
 // Cannot be controlled by AI or borgs, completely unaffected by lack of power
 /obj/machinery/atmospherics/trinary/pressure_valve/manual
 	icon_state = "pvalve"
+	icon_state_overlay_enabled = "pvalve_enabled"
 	icon_state_overlay_open = "pvalve_open"
 	icon_state_overlay_threshold_switch = "pvalve_switch"
 
@@ -174,6 +183,7 @@
 // TODO !JLVG Radio stuff
 /obj/machinery/atmospherics/trinary/pressure_valve/digital
 	icon_state = "pvalve_d"
+	icon_state_overlay_enabled = "pvalve_d_enabled"
 	icon_state_overlay_open = "pvalve_d_open"
 	icon_state_overlay_threshold_switch = "pvalve_d_switch"
 
