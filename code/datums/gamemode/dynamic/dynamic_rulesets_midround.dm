@@ -551,7 +551,7 @@
 	name = "Time Agent Anomaly"
 	role_category = /datum/role/time_agent
 	required_candidates = 1
-	weight = 4
+	weight = BASE_RULESET_WEIGHT * 0.4
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
