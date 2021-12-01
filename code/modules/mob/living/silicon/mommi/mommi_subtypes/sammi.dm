@@ -188,8 +188,6 @@
 
 	else
 		return ..()
-else
-	return ..()
 
 /mob/living/silicon/robot/mommi/sammi/attack_hand(mob/user)
 	add_fingerprint(user)
