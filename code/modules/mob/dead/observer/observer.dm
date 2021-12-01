@@ -54,14 +54,8 @@ var/creating_arena = FALSE
 
 	// Our new boo spell.
 	add_spell(new /spell/aoe_turf/boo, "grey_spell_ready")
-	add_spell(new /spell/targeted/ghost/toggle_medHUD)
-	add_spell(new /spell/targeted/ghost/toggle_darkness)
-	add_spell(new /spell/targeted/ghost/become_mouse)
-	add_spell(new /spell/targeted/ghost/hide_sprite)
-	add_spell(new /spell/targeted/ghost/haunt)
-	add_spell(new /spell/targeted/ghost/reenter_corpse)
-	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
-
+	for(var/path in subtypesof(/spell/targeted/ghost))
+		add_spell(new path)
 	can_reenter_corpse = flags & GHOST_CAN_REENTER
 	started_as_observer = flags & GHOST_IS_OBSERVER
 

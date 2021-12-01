@@ -83,14 +83,25 @@ var/global/list/boo_phrases_silicon=list(
 
 /spell/targeted/ghost/toggle_medHUD
 	name = "Toggle Medic HUD"
-	desc = "It also toggles the diagnostic HUD (to see the borgs health)"
-	hud_state = "medhud2"
+	desc = "It also toggles the diagnostic HUD (to see the borgs health) and pathogen HUD (for diseases)"
+	hud_state = "medhud"
 
 /spell/targeted/ghost/toggle_medHUD/cast()
 	var/mob/dead/observer/ghost = holder
 	ASSERT(istype(ghost))
 	ghost.toggle_medHUD()
 	ghost.toggle_diagHUD()
+	ghost.toggle_pathogenHUD()
+
+/spell/targeted/ghost/toggle_secHUD
+	name = "Toggle Sec HUD"
+	desc = "You are the law."
+	hud_state = "sechud"
+
+/spell/targeted/ghost/toggle_secHUD/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.toggle_secHUD()
 
 /spell/targeted/ghost/toggle_darkness
 	name = "Toggle Darkness"
@@ -113,6 +124,28 @@ var/global/list/boo_phrases_silicon=list(
 	ASSERT(istype(ghost))
 	ghost.become_mouse()
 
+/spell/targeted/ghost/become_mommi
+	name = "Become a Derelict MoMMI"
+	desc = "Blyat!"
+	override_icon = 'icons/obj/clothing/hats.dmi'
+	hud_state = "ushankared"
+
+/spell/targeted/ghost/become_mommi/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.become_mommi()
+
+/spell/targeted/ghost/become_hobo
+	name = "Become a Space Hobo"
+	desc = "Hic!"
+	override_icon = 'icons/obj/clothing/hats.dmi'
+	hud_state = "ghettorig1"
+
+/spell/targeted/ghost/become_hobo/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.become_hobo()
+
 /spell/targeted/ghost/hide_sprite
 	name = "Hide Sprite"
 	desc = "For filming shit."
@@ -122,6 +155,16 @@ var/global/list/boo_phrases_silicon=list(
 	var/mob/dead/observer/ghost = holder
 	ASSERT(istype(ghost))
 	ghost.hide_sprite()
+
+/spell/targeted/ghost/hide_ghosts
+	name = "Hide Ghosts"
+	desc = "For seeing the world."
+	hud_state = "hideghosts"
+
+/spell/targeted/ghost/hide_ghosts/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.hide_ghosts()
 
 /spell/targeted/ghost/haunt
 	name = "Haunt"
@@ -133,6 +176,16 @@ var/global/list/boo_phrases_silicon=list(
 	ASSERT(istype(ghost))
 	ghost.follow()
 
+/spell/targeted/ghost/teleport
+	name = "Teleport"
+	desc = "Teleport to a location."
+	hud_state = "teleport"
+
+/spell/targeted/ghost/teleport/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.dead_tele()
+
 /spell/targeted/ghost/reenter_corpse
 	name = "Reenter Corpse"
 	desc = ""
@@ -143,22 +196,12 @@ var/global/list/boo_phrases_silicon=list(
 	ASSERT(istype(ghost))
 	ghost.reenter_corpse()
 
-/* FIXME
-/spell/ghost_show_map
+/spell/targeted/ghost/show_map
 	name = "Show Map"
 	desc = "Display the station map."
-
-	spell_flags = STATALLOWED | GHOSTCAST
-
-	school = "transmutation"
-	charge_type = 0 // Apparently bypasses charge checks.
-	invocation = ""
-	invocation_type = SpI_NONE
-
-	override_base = "grey"
 	hud_state = "stationmap"
 
-/spell/ghost_show_map/cast(list/targets)
-	var/mob/dead/observer/O = holder
-	O.station_holomap.toggleHolomap(O, FALSE) // Don't need client.eye.
-*/
+/spell/targeted/ghost/show_map/cast(list/targets)
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.toggle_station_map()
