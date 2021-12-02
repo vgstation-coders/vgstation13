@@ -1128,5 +1128,5 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	world.name = new_station_name()
 	station_name = world.name
 	log_admin("[key_name(usr)] reset the station name.")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] reset the station name.</span>")
+	message_admins("[key_name_admin(usr)] reset the station name.")
 
