@@ -1116,3 +1116,16 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!outfit_type || !ispath(outfit_type))
 		return
 	return outfit_type
+
+/client/proc/cmd_station_name_reset()
+	set category = "Special Verbs"
+	set name = "Reset station name"
+	set desc = "Resets the name of the station to default."
+	
+	if(alert(src, "You sure?", "Confirm", "Yes", "No") != "Yes")
+		return
+		
+	world.name = new_station_name()
+	station_name = world.name
+	log_admin("[key_name(usr)] reset the station name.")
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] reset the station name.</span>")
