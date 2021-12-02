@@ -44,10 +44,10 @@ var/list/all_GPS_list = list()
 /obj/item/device/gps/update_icon()
 	overlays.Cut()
 	if(emped)
-		overlays += image(icon, "emp")
+		overlays += image(icon, "[istype(src,/obj/item/device/gps/secure/command) && Holiday == APRIL_FOOLS_DAY ? "af-" : ""]emp")
 		return
 	if(transmitting)
-		overlays += image(icon, "working")
+		overlays += image(icon, "[istype(src,/obj/item/device/gps/secure/command) && Holiday == APRIL_FOOLS_DAY ? "af-" : ""]working")
 
 /obj/item/device/gps/emp_act(severity)
 	emped = TRUE
@@ -341,6 +341,11 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	icon_state = "sps-c"
 	base_tag = "CMD"
 	view_all = TRUE
+
+/obj/item/device/gps/secure/command/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		icon_state = "af-sps-c"
 
 /obj/item/device/gps/secure/command/OnMobDeath(mob/wearer)
 	if(!transmitting)
