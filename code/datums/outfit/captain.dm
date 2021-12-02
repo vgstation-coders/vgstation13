@@ -43,6 +43,7 @@
 	items_to_collect = list(
 		/obj/item/weapon/storage/box/ids = GRASP_RIGHT_HAND,
 		/obj/item/weapon/gun/energy/gun = GRASP_LEFT_HAND,
+		/obj/item/station_charter = SURVIVAL_BOX
 	)
 
 	race_items_to_collect = list(
