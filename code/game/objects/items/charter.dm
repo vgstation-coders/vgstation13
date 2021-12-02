@@ -14,7 +14,7 @@
 
 /obj/item/station_charter/attack_self(mob/living/user)
 	if(used)
-		user << "The station has already been named."
+		to_chat(user, "<span class='warning'>The station has already been named.</span>")
 		return
 	used = TRUE
 
