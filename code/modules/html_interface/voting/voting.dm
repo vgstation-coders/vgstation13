@@ -327,7 +327,7 @@ var/global/datum/controller/vote/vote = new()
 		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
-		weighted  = weighted_vote
+		//weighted  = weighted_vote
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		if(mode == "custom")
