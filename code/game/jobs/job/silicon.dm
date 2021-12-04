@@ -16,7 +16,8 @@
 	return 1
 
 /datum/job/ai/is_disabled()
-	return !config.allow_ai
+	return TRUE
+	//return !config.allow_ai
 
 /datum/job/cyborg
 	title = "Cyborg"
@@ -43,6 +44,9 @@
 	supervisors = "your laws and the AI"
 	selection_color = "#ddffdd"
 	species_blacklist = list() //for shrooms
+
+/datum/job/mommi/is_disabled()
+	return TRUE
 
 /datum/job/mommi/equip(var/mob/living/carbon/human/H)
 	if(!H)
