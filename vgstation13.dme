@@ -2697,6 +2697,7 @@
 #include "code\modules\surgery\surgery.dm"
 #include "code\modules\surgery\tooth.dm"
 #include "code\modules\telesci\bscrystal.dm"
+#include "code\modules\telesci\dses.dm"
 #include "code\modules\telesci\gps.dm"
 #include "code\modules\telesci\rcs.dm"
 #include "code\modules\telesci\telepad.dm"
