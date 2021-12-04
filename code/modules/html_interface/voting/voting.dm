@@ -362,6 +362,16 @@ var/global/datum/controller/vote/vote = new()
 				world << sound('sound/voice/Serithi/weneedvote.ogg')
 			if("map")
 				world << sound('sound/misc/rockthevote.ogg')
+				var/thisisstupid = 0
+				if(vote.choices.Find("Island Station"))
+					thisisstupid = 1
+				else if(vote.choices.Find("Island"))
+					thisisstupid = 2
+				if(thisisstupid)
+					if(thisisstupid == 2)
+						vote.choices["Island"] = -15
+					else
+						vote.choices["Island Station"] = -15
 		if(mode == "gamemode" && going)
 			going = 0
 			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
