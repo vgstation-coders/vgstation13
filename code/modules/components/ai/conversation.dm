@@ -40,10 +40,12 @@
 /datum/component/ai/conversation/auto/process()
 	if(next_speech < world.time && prob(speech_prob))
 		var/list/targets = INVOKE_EVENT(parent, /event/comp_ai_cmd_find_targets)
-		for(var/mob/living/carbon/human/H in targets)
-			if(H == src)
+		for(var/mob/living/M in targets)
+			if(istype(M,/mob/living/simple_animal))
 				continue
-			if(H.isDead()) //No speaking to the dead
+			if(M == parent)
+				continue
+			if(M.isDead()) //No speaking to the dead
 				continue
 			next_speech = world.time + speech_delay
 			cmd_say()
