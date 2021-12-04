@@ -486,7 +486,10 @@
 /mob/dead/observer/verb/become_mommi()
 	set name = "Become MoMMI"
 	set category = "Ghost"
-
+	
+	to_chat(src, "Sorry, this verb is disabled.")
+	
+	/*
 	if(!config.respawn_as_mommi)
 		to_chat(src, "<span class='warning'>Respawning as MoMMI is disabled..</span>")
 		return
@@ -518,7 +521,8 @@
 					break
 	else
 		to_chat(src, "<span class='warning'>Unable to find any MoMMI Spawners ready to build a MoMMI in the universe. Please try again.</span>")
-
+	*/
+	
 /mob/dead/observer/verb/become_hobo()
 	set name = "Become Space Hobo"
 	set category = "Ghost"
