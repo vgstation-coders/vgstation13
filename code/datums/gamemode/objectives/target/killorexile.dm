@@ -10,7 +10,7 @@
 	var/turf/T = get_turf(target.current)
 	if(!T)
 		return TRUE
-	if(T.z != STATION_Z)
+	if(T.z != map.zMainStation)
 		if(istype(T.loc, /area/shuttle/escape/centcom))
 			return FALSE
 		else if(istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))

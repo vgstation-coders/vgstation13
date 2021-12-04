@@ -40,7 +40,7 @@ atom/movable/GotoAirflowDest(n)
 */
 
 /mob/var/tmp/last_airflow_stun = 0
-/mob/proc/airflow_stun()
+/mob/proc/airflow_stun(differential)
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
 		return FALSE
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
@@ -55,7 +55,7 @@ atom/movable/GotoAirflowDest(n)
 		return FALSE
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(5)
+	SetKnockdown(rand(differential/20,differential/10))
 	last_airflow_stun = world.time
 
 /mob/living/silicon/airflow_stun()
@@ -103,7 +103,7 @@ atom/movable/GotoAirflowDest(n)
 	return TRUE
 
 /mob/living/carbon/human/check_airflow_movable(n)
-	if(reagents.has_reagent(MEDCORES))
+	if(reagents.has_any_reagents(CORES))
 		return FALSE
 	return ..()
 
@@ -158,7 +158,7 @@ atom/movable/GotoAirflowDest(n)
 		xo *= -1
 		yo *= -1
 
-	airflow_speed = Clamp(n * (9 / airflow_falloff), 1, 9)
+	airflow_speed = clamp(n * (9 / airflow_falloff), 1, 9)
 
 	airflow_dest = null
 
@@ -188,14 +188,14 @@ atom/movable/GotoAirflowDest(n)
 			if(od)
 				setDensity(TRUE)
 			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
-				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
+				airflow_dest = locate(clamp(x + xo, 1, world.maxx), clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
 				break
 			if(!isturf(loc))
 				break
 			if(curturf != get_turf(src)) //We've managed to get to our feet and move away
 				break
-			if(!check_airflow_movable()) //We've turned our magboots on, or become unstunnable, etc.
+			if(!check_airflow_movable(n*10)) //We've turned our magboots on, or become unstunnable, etc.
 				break
 			set_glide_size(DELAY2GLIDESIZE(sleep_time))
 			step_towards(src, src.airflow_dest)
@@ -209,18 +209,10 @@ atom/movable/GotoAirflowDest(n)
 		if(od)
 			setDensity(FALSE)
 
-/atom/movable/to_bump(atom/Obstacle)
-	if(airflow_speed > 0 && airflow_dest)
-		airflow_hit(Obstacle)
-	else
-		airflow_speed = 0
-		airflow_time = 0
-		. = ..()
-	sound_override = 0
-
 /atom/movable/proc/airflow_hit(atom/A)
 	airflow_speed = 0
 	airflow_dest = null
+	A.Bumped(src)
 
 /mob/airflow_hit(atom/A)
 	if(size == SIZE_TINY)
@@ -264,7 +256,7 @@ atom/movable/GotoAirflowDest(n)
 	var/groin_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_GROIN,"melee"))
 	apply_damage(groin_damage, BRUTE, LIMB_GROIN, 0, 0, used_weapon = "Airflow")
 
-	if((head_damage + chest_damage + groin_damage) > 15)
+	if(!(species.anatomy_flags & NO_BLOOD) && (head_damage + chest_damage + groin_damage) > 15)
 		var/turf/T = get_turf(src)
 		T.add_blood(src)
 		bloody_body(src)

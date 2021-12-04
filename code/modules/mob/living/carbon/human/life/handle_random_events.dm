@@ -7,7 +7,7 @@
 			vomit()
 
 		//No hair for radroaches
-		if(src.radiation >= 50)
+		if((src.radiation >= 50) && !(src.species.anatomy_flags & NO_BALD))
 			src.my_appearance.h_style = "Bald"
 			src.my_appearance.f_style = "Shaved"
 			src.update_hair()

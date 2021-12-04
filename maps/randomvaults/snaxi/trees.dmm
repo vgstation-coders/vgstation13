@@ -1,0 +1,13 @@
+"a" = (/obj/structure/flora/tree/pine,/turf/unsimulated/floor/snow,/area)
+"l" = (/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+llllla
+lallll
+llllal
+alllll
+llalll
+llllal
+lallll
+allala
+"}

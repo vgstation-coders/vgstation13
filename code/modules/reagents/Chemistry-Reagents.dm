@@ -22,11 +22,11 @@
 	var/description = ""
 	var/datum/reagents/holder = null
 	var/reagent_state = REAGENT_STATE_SOLID
-	var/list/data = null
+	var/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
-	var/sport = 1 //High sport helps you show off on a treadmill. Multiplicative
+	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
 	var/overdose_am = 0
@@ -39,6 +39,15 @@
 	var/flags = 0
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
+	var/glass_icon_state = null
+	var/glass_desc = null //for reagents with a different desc in a glass
+	var/glass_name = null //defaults to "glass of [reagent name]"
+	var/light_color = null
+	var/flammable = 0
+	var/glass_isGlass = 1
+	var/mug_icon_state = null
+	var/mug_name = null
+	var/mug_desc = null
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -52,7 +61,7 @@
 	src = null
 
 	//If the chemicals are in a smoke cloud, do not let the chemicals "penetrate" into the mob's system (balance station 13) -- Doohl
-	if(self.holder && !istype(self.holder.my_atom, /obj/effect/effect/smoke/chem))
+	if(self.holder && !istype(self.holder.my_atom, /obj/effect/smoke/chem))
 		if(method == TOUCH)
 
 			var/chance = 1
@@ -73,7 +82,10 @@
 
 			chance = chance * 100
 
-			if(prob(chance) && !block)
+			if(self.id == HOLYWATER && istype(self.holder.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
+				if(M.reagents)
+					M.reagents.add_reagent(self.id, min(5,self.volume/2)) //holy water flasks only splash 5u at a time. But for deconversion purposes they will always be ingested.
+			else if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
 
@@ -81,6 +93,20 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
+
+/datum/reagent/proc/reaction_dropper_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
+	src = null
+	if(M.reagents)
+		M.reagents.add_reagent(self.id, self.volume) //Hardcoded, transfer half of volume
+
+	if (M.mind)
+		for (var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			R.handle_splashed_reagent(self.id)
+
+/datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
+	reaction_obj(O, volume)
 
 /datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	set waitfor = 0
@@ -123,7 +149,8 @@
 		if(L)
 			L.metabolize_reagent(src.id, custom_metabolism)
 			return
-	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
+	if(holder)
+		holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
 
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
@@ -165,27 +192,26 @@
 
 	holder.remove_reagent(src.id, custom_plant_metabolism)
 
-/datum/reagent/proc/on_move(var/mob/M)
-	return
-
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)
-	return
-
-//Called when two reagents are mixing
-/datum/reagent/proc/on_merge(var/data)
-	return
-
-/datum/reagent/proc/on_update(var/atom/A)
 	return
 
 /datum/reagent/proc/on_removal(var/data)
 	return 1
 
+//Completely unimplemented as of 2021, commenting out
+///datum/reagent/proc/on_move(var/mob/M)
+//	return
+///datum/reagent/proc/on_merge(var/data)
+///	return
+///datum/reagent/proc/on_update(var/atom/A)
+//	return
+
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 
-/datum/reagent/proc/OnTransfer()
+//Called when reagentcontainer A transfers into reagentcontainer B (this /datum/reagent belongs to B, i.e. we are the catchers here)
+/datum/reagent/proc/post_transfer(var/datum/reagents/donor)
 	return
 
 /datum/reagent/send_to_past(var/duration)
@@ -203,14 +229,14 @@
 
 	reset_vars_after_duration(resettable_vars, duration, TRUE)
 
-	spawn(duration + 1)
-		var/datum/reagents/R = holder
-		R.reagent_list.Add(src)
-
 /datum/reagent/Destroy()
 	if(istype(holder))
 		holder.reagent_list -= src
 		holder = null
+	..()
+
+/datum/reagent/proc/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D) //rip steve
+	return
 
 /datum/reagent/piccolyn
 	name = "Piccolyn"
@@ -241,6 +267,7 @@
 													/obj/item/clothing/under/rank/medical,
 													/obj/item/clothing/under/rank/nursesuit,
 													/obj/item/clothing/under/rank/nurse,
+													/obj/item/clothing/under/rank/orderly,
 													/obj/item/clothing/under/rank/chemist,
 													/obj/item/clothing/under/rank/pharma,
 													/obj/item/clothing/under/rank/geneticist,
@@ -323,6 +350,24 @@
 		else
 			M.say("Rogan?")
 
+/datum/reagent/bluegoo
+	name = "Blue Goo"
+	id = BLUEGOO
+	description = "A viscous blue substance of unknown origin."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#64D2E6"
+	custom_metabolism = 0.01
+
+/datum/reagent/bluegoo/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(prob(2))
+		if(prob(75))
+			to_chat(M, "<span class='notice'>[pick("The mothership is always watching.","All hail the Chairman.","You should buy more Zam snacks.","You would love to get some alien tissue samples under a microscope.","You feel exceptionally loyal to the mothership.","You feel the mothership's psychic presence.","The mothership will ensure your prosperity.","Maybe the commissary will dispense extra ration vouchers this cloning cycle.","Humans really do behave like apes sometimes.","A refreshing sip of acid would be delightful.")]</span>")
+		else
+			M.say(pick("Praise the mothership!", "Be productive this quarter, fellow denizens.", "Grey minds are naturally superior.", "I work for the happiness of all greykind.", "Alert the local battalion about any socially unstable behavior."))
+
 /datum/reagent/slimejelly
 	name = "Slime Jelly"
 	id = SLIMEJELLY
@@ -351,9 +396,12 @@
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
 	specheatcap = 3.49
+	glass_name = "Tomato Juice Glass"
+	glass_desc = "Are you sure this is tomato juice?"
+	mug_name = "mug of tomato juice"
+	mug_desc = "Are you sure this is tomato juice?"
 
 	data = list(
-		"donor"= null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = null,
@@ -362,7 +410,29 @@
 		"trace_chem" = null,
 		"virus2" = null,
 		"immunity" = null,
+		"occult" = null,
 		)
+
+/datum/reagent/blood/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	var/totally_not_blood = "Tomato Juice"
+
+	switch(color)
+		if (VOX_BLOOD)//#2299FC
+			totally_not_blood = "Space Lube"
+		if (INSECT_BLOOD)//#EBECE6
+			totally_not_blood = "Milk"
+		if (MUSHROOM_BLOOD)//#D3D3D3
+			totally_not_blood = "Milk"
+		if (PALE_BLOOD)//#272727
+			totally_not_blood = "Carbon"
+		if (GHOUL_BLOOD)//#7FFF00
+			totally_not_blood = "Piccolyn"
+
+	glass_name = "glass of [totally_not_blood]"
+	glass_desc = "Are you sure this is [totally_not_blood]?"
+	mug_name = "mug of [totally_not_blood]"
+	mug_desc = "Are you sure this is [totally_not_blood]?"
+
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -392,7 +462,8 @@
 					if(method == TOUCH)
 						var/block = L.check_contact_sterility(FULL_TORSO)
 						var/bleeding = L.check_bodypart_bleeding(FULL_TORSO)
-						if (!block)
+						if(attempt_colony(L,D,"splashed with infected blood"))
+						else if (!block)
 							if (D.spread & SPREAD_CONTACT)
 								L.infect_disease2(D, notes="(Contact, splashed with infected blood)")
 							else if (bleeding && (D.spread & SPREAD_BLOOD))
@@ -402,9 +473,8 @@
 
 		if(ishuman(L) && (method == TOUCH))
 			var/mob/living/carbon/human/H = L
-			H.bloody_body(self.data["donor"])
-			if(self.data["donor"])
-				H.bloody_hands(self.data["donor"])
+			H.bloody_body_from_data(data,0,src)
+			H.bloody_hands_from_data(data,2,src)
 			spawn() //Bloody feet, result of the blood that fell on the floor
 				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 
@@ -437,15 +507,15 @@
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 
-/datum/reagent/blood/on_merge(var/data)
-	if(data["blood_colour"])
-		color = data["blood_colour"]
-	return ..()
-
-/datum/reagent/blood/on_update(var/atom/A)
-	if(data["blood_colour"])
-		color = data["blood_colour"]
-	return ..()
+// Was unused as of 2021
+///datum/reagent/blood/on_merge(var/data)
+//	if(data["blood_colour"])
+//		color = data["blood_colour"]
+//	return ..()
+///datum/reagent/blood/on_update(var/atom/A)
+//	if(data["blood_colour"])
+//		color = data["blood_colour"]
+//	return ..()
 
 /datum/reagent/blood/reaction_turf(var/turf/simulated/T, var/volume) //Splash the blood all over the place
 
@@ -455,52 +525,27 @@
 
 	if(volume < 3) //Hardcoded
 		return
-//	WHY WAS THIS MAKING 2 SPLATTERS? Awfully hardcoded, no need to exist, and this is completely broken colorwise
-//
-	//var/datum/disease/D = self.data["virus"]
-//	if(!self.data["donor"] || ishuman(self.data["donor"]))
-//		var/obj/effect/decal/cleanable/blood/blood_prop = locate() in T //Find some blood here
-//		if(!blood_prop) //First blood
-//			blood_prop = getFromPool(/obj/effect/decal/cleanable/blood, T)
-//			blood_prop.New(T)
-//			blood_prop.blood_DNA[self.data["blood_DNA"]] = self.data["blood_type"]
-//
-//		for(var/datum/disease/D in self.data["viruses"])
-//			var/datum/disease/newVirus = D.Copy(1)
-//			blood_prop.viruses += newVirus
-//
 
-	if(!self.data["donor"] || ishuman(self.data["donor"]))
-		blood_splatter(T, self, 1)
-	else if(ismonkey(self.data["donor"]))
-		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
-		if(B)
-			B.blood_DNA["Non-Human DNA"] = "A+"
-	else if(isalien(self.data["donor"]))
-		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
-		if(B)
-			B.blood_DNA["UNKNOWN DNA STRUCTURE"] = "X*"
+	blood_splatter(T, self, 1)
 	T.had_blood = TRUE
 	if(volume >= 5 && !istype(T.loc, /area/chapel)) //Blood desanctifies non-chapel tiles
 		T.holy = 0
 	return
 
-/datum/reagent/blood/on_removal(var/data)
-	if(holder && holder.my_atom)
-		var/mob/living/carbon/human/H = holder.my_atom
-		if(istype(H))
-			if(H.species && H.species.anatomy_flags & NO_BLOOD)
-				return 0
-	return 1
-
 /datum/reagent/blood/reaction_obj(var/obj/O, var/volume)
-
 	if(..())
 		return 1
+
+	O.add_blood_from_data(data)
 
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
+
+/datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.5, bloody=1)
+	T.adjust_water(0.7)
 
 /datum/reagent/water
 	name = "Water"
@@ -511,6 +556,7 @@
 	alpha = 128
 	specheatcap = 4.184
 	density = 1
+	glass_desc = "The father of all refreshments."
 
 /datum/reagent/water/on_mob_life(var/mob/living/M, var/alien)
 
@@ -613,6 +659,9 @@
 	else if(istype(O,/obj/machinery/space_heater/campfire))
 		var/obj/machinery/space_heater/campfire/campfire = O
 		campfire.snuff()
+	else if(istype(O, /obj/item/weapon/book/manual/snow))
+		var/obj/item/weapon/book/manual/snow/S = O
+		S.trigger()
 	else if(O.on_fire) // For extinguishing objects on fire
 		O.extinguish()
 	else if(O.molten) // Molten shit.
@@ -629,6 +678,10 @@
 	if(istype(M,/mob/living/simple_animal/bee))
 		var/mob/living/simple_animal/bee/B = M
 		B.calming()
+
+/datum/reagent/water/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(1)
 
 /datum/reagent/lube
 	name = "Space Lube"
@@ -669,7 +722,7 @@
 		T.dry(TURF_WET_LUBE) //Absorbs water or lube
 
 /datum/reagent/anti_toxin
-	name = "Anti-Toxin (Dylovene)"
+	name = "Dylovene"
 	id = ANTI_TOXIN
 	description = "Dylovene is a broad-spectrum antitoxin."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -684,8 +737,8 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
-		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
 	if(holder.has_any_reagents(STOXINS))
 		holder.remove_reagents(STOXINS, 2 * REM)
 	if(holder.has_reagent(PLASMA))
@@ -700,6 +753,8 @@
 		holder.remove_reagent(AMATOXIN, 2 * REM)
 	if(holder.has_reagent(CHLORALHYDRATE))
 		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(SUX))
+		holder.remove_reagent(SUX, REM)
 	if(holder.has_reagent(CARPOTOXIN))
 		holder.remove_reagent(CARPOTOXIN, REM)
 	if(holder.has_reagent(ZOMBIEPOWDER))
@@ -726,6 +781,12 @@
 				H.dizziness = max(H.dizziness, 20)
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
+
+/datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins -= 10
+	if(T.seed && !T.dead)
+		T.health += 1
 
 /datum/reagent/phalanximine
 	name = "Phalanximine"
@@ -760,6 +821,10 @@
 
 	//Toxins are really weak, but without being treated, last very long
 	M.adjustToxLoss(0.2)
+
+/datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
 
 /datum/reagent/plasticide
 	name = "Plasticide"
@@ -876,7 +941,7 @@
 		if(!isslimeperson(human))
 
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
-			human.set_species("Evolved Slime")
+			human.set_species("Slime")
 
 			human.regenerate_icons()
 
@@ -1011,6 +1076,7 @@
 			M.stuttering = 0
 			M.confused = 0
 			M.remove_jitter()
+			M.hallucination = 0
 	data++
 
 /datum/reagent/inaprovaline
@@ -1065,9 +1131,10 @@
 	id = HOLYWATER
 	description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#0064C8" //rgb: 0, 100, 200
-	custom_metabolism = 2 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
+	color = "#8497A9" //rgb: 52, 59, 63
+	custom_metabolism = 2
 	specheatcap = 4.183
+	alpha = 128
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 
@@ -1088,11 +1155,63 @@
 	..()
 
 	if(volume >= 5)
-		if(istype(M,/mob/living/simple_animal/construct))
-			var/mob/living/simple_animal/construct/C = M
+		if(istype(M,/mob/living/simple_animal/construct) || istype(M,/mob/living/simple_animal/shade))
+			var/mob/living/simple_animal/C = M
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
+
+/datum/reagent/holysalts
+	name = "Holy Salts"
+	id = HOLYSALTS
+	description = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#C1CCD7" //rgb: 80, 80, 84
+	density = 2.09
+	specheatcap = 1.65
+
+/datum/reagent/holysalts/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+	if(volume >= 1)
+		O.bless()
+
+/datum/reagent/holysalts/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	if(!T.has_dense_content() && volume >= 10 && !(locate(/obj/effect/decal/cleanable/salt/holy) in T))
+		if(!T.density)
+			T.bless()
+			new /obj/effect/decal/cleanable/salt/holy(T)
+
+/datum/reagent/holysalts/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	var/list/borers = M.get_brain_worms()
+	if(borers)
+		for(var/mob/living/simple_animal/borer/B in borers)
+			B.health -= 1
+			to_chat(B, "<span class='warning'>Something in your host's bloodstream burns you!</span>")
+
+/datum/reagent/holysalts/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+	if(volume >= 5)
+		if(istype(M,/mob/living/simple_animal/construct) || istype(M,/mob/living/simple_animal/shade))
+			var/mob/living/simple_animal/C = M
+			C.purge = 3
+			C.adjustBruteLoss(5)
+			C.visible_message("<span class='danger'>The holy salts erode \the [src].</span>")
+
+/datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-3)
+	T.adjust_nutrient(-0.3)
+	T.toxins += 8
+	T.weedlevel -= 2
+	T.pestlevel -= 1
+	if(T.seed && !T.dead)
+		T.health -= 2
+
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -1262,6 +1381,14 @@
 
 	M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 
+/datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-0.5)
+	T.toxins += 15
+	T.weedlevel -= 3
+	if(T.seed && !T.dead)
+		T.health -= 1
+
 /datum/reagent/fluorine
 	name = "Fluorine"
 	id = FLUORINE
@@ -1278,6 +1405,16 @@
 		return 1
 
 	M.adjustToxLoss(REM)
+	if(prob(5) && !M.isUnconscious())
+		M.emote("stare")
+
+/datum/reagent/fluorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-0.5)
+	T.toxins += 25
+	T.weedlevel -= 4
+	if(T.seed && !T.dead)
+		T.health -= 2
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -1302,7 +1439,7 @@
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		for(var/datum/organ/internal/lungs/L in H.internal_organs)
 			L.take_damage(REM, 1)
@@ -1324,6 +1461,12 @@
 	color = "#832828" //rgb: 131, 40, 40
 	density = 1.823
 	specheatcap = 0.769
+
+/datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.adjust_water(-0.5)
+	T.weedlevel -= 2
 
 /datum/reagent/lithium
 	name = "Lithium"
@@ -1350,16 +1493,21 @@
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	sport = 1.2
+	sport = SPORTINESS_SUGAR
 	density = 1.59
 	specheatcap = 1.244
 
 /datum/reagent/sugar/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
 	M.nutrition += REM
+
+/datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.weedlevel += 2
+	T.pestlevel += 2
 
 /datum/reagent/caramel
 	name = "Caramel"
@@ -1525,6 +1673,13 @@
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
 
+/datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
+	T.weedlevel -= 2
+	if(T.seed && !T.dead)
+		T.health -= 4
+
 /datum/reagent/pacid
 	name = "Polytrinic acid"
 	id = PACID
@@ -1612,10 +1767,8 @@
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
-		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
-		qdel(O)
+		O.acid_melt()
 	else if(istype(O,/obj/effect/plantsegment))
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
 		I.desc = "Looks like these were some [O.name] some time ago."
@@ -1624,6 +1777,13 @@
 	else if(istype(O,/obj/effect/dummy/chameleon))
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
+
+/datum/reagent/pacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 20
+	T.weedlevel -= 4
+	if(T.seed && !T.dead)
+		T.health -= 8
 
 /datum/reagent/glycerol
 	name = "Glycerol"
@@ -1643,6 +1803,22 @@
 	density = 4.33
 	specheatcap = 2.64
 
+/datum/reagent/nitroglycerin/on_mob_life(var/mob/living/M)
+	M.adjustToxLoss(2 * REM)
+	if(prob(80))
+		M.adjustOxyLoss(2 * REM)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/E = H.internal_organs_by_name["heart"]
+		if(istype(E) && !E.robotic)
+			if(E.damage > 0)
+				E.damage = max(0, E.damage - 0.2)
+		if(prob(15))
+			H.custom_pain("You feel a throbbing pain in your head", 1)
+			M.adjustBrainLoss(2 * REM)
+	if(prob(50))
+		M.drowsyness = max(M.drowsyness, 4)
+
 /datum/reagent/radium
 	name = "Radium"
 	id = RADIUM
@@ -1651,6 +1827,7 @@
 	color = "#669966" //rgb: 102, 153, 102
 	density = 5
 	specheatcap = 94
+	custom_plant_metabolism = 2
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -1674,6 +1851,15 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
+
+/datum/reagent/radium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.mutation_level += 0.6*T.mutation_mod*custom_plant_metabolism
+	T.toxins += 4
+	if(T.seed && !T.dead)
+		T.health -= 1.5
+		if(prob(20))
+			T.mutation_mod += 0.1 //ha ha
 
 /datum/reagent/ryetalyn
 	name = "Ryetalyn"
@@ -1780,6 +1966,7 @@
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
 	specheatcap = 96.86
+	custom_plant_metabolism = 2
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1806,6 +1993,10 @@
 	if(..())
 		return 1
 	M.apply_radiation(10,RAD_INTERNAL)
+
+/datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.mutation_level += 1*T.mutation_mod*custom_plant_metabolism
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -1914,7 +2105,7 @@
 
 	if(T.is_wet())
 		T.dry(TURF_WET_LUBE) //Cleans water or lube
-		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(T)
+		var/obj/effect/smoke/S = new /obj/effect/smoke(T)
 		S.time_to_live = 10 //unusually short smoke
 		//We don't need to start up the system because we only want to smoke one tile.
 
@@ -1970,6 +2161,24 @@
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
 
+/datum/reagent/diamond
+	name = "Diamond dust"
+	id = DIAMONDDUST
+	description = "An allotrope of carbon, one of the hardest minerals known."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "c4d4e0" //196 212 224
+	density = 3.51
+	specheatcap = 6.57
+
+/datum/reagent/diamond/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
+	if(prob(30))
+		M.audible_scream()
+
 /datum/reagent/phazon
 	name = "Phazon salt"
 	id = PHAZON
@@ -2020,6 +2229,8 @@
 	color = "#660000" //rgb: 102, 0, 0
 	density = 1.1
 	specheatcap = 0.68
+	glass_icon_state = "dr_gibb_glass"
+	glass_desc = "Unless you are an industrial tool, this is probably not safe for consumption."
 
 /datum/reagent/fuel/reaction_obj(var/obj/O, var/volume)
 
@@ -2037,7 +2248,7 @@
 		return 1
 
 	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in T))
-		getFromPool(/obj/effect/decal/cleanable/liquid_fuel, T, volume)
+		new /obj/effect/decal/cleanable/liquid_fuel(T, volume)
 
 /datum/reagent/fuel/on_mob_life(var/mob/living/M)
 
@@ -2067,7 +2278,7 @@
 
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/vomit) in T))
-			getFromPool(/obj/effect/decal/cleanable/vomit, T)
+			new /obj/effect/decal/cleanable/vomit(T)
 
 /datum/reagent/space_cleaner
 	name = "Space Cleaner"
@@ -2084,10 +2295,15 @@
 		return 1
 
 	O.clean_blood()
-	if(istype(O, /obj/effect/decal/cleanable))
+	if(istype(O, /obj/effect/rune))
+		var/obj/effect/rune/R = O
+		if (!R.activated)
+			qdel(O)
+	else if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
-	else if(O.color && istype(O, /obj/item/weapon/paper))
-		O.color = null
+	else if(O.color)
+		O.color = ""
+	..()
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -2096,8 +2312,6 @@
 
 	if(volume >= 1)
 		T.clean_blood()
-		for(var/obj/effect/decal/cleanable/C in src)
-			qdel(C)
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))
@@ -2105,6 +2319,8 @@
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
+
+	T.color = ""
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2135,6 +2351,7 @@
 				if(H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 		M.clean_blood()
+		M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2180,7 +2397,12 @@
 				else if(prob(5))
 					H.vomit()
 	data++
-
+	M.color = ""
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
+			H.species.anatomy_flags &= ~MULTICOLOR
+			H.update_body()
 	M.adjustToxLoss(4 * REM)
 
 /datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -2227,6 +2449,10 @@
 	density = 1.32
 	specheatcap = 0.60
 
+/datum/reagent/fertilizer/eznutrient/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+
 /datum/reagent/fertilizer/left4zed
 	name = "Left-4-Zed"
 	id = LEFT4ZED
@@ -2235,6 +2461,14 @@
 	density = 1.32
 	specheatcap = 0.60
 
+/datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	if(T.seed && !T.dead)
+		T.health -= 0.5
+		if(prob(30))
+			T.mutation_mod += 0.2
+
 /datum/reagent/fertilizer/robustharvest
 	name = "Robust Harvest"
 	id = ROBUSTHARVEST
@@ -2242,6 +2476,25 @@
 	color = "#3E901C" // rgb: 62, 144, 28
 	density = 1.32
 	specheatcap = 0.60
+	custom_plant_metabolism = 0.1
+
+/datum/reagent/fertilizer/robustharvest/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.05)
+	if(prob(25*custom_plant_metabolism))
+		T.weedlevel += 1
+	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
+		T.pestlevel += 1
+	if(T.seed && !T.dead && !T.seed.immutable)
+		var/chance
+		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
+		if(prob(chance))
+			T.check_for_divergence(1)
+			T.seed.potency++
+		chance = unmix(T.seed.yield, 6, 2)*15*custom_plant_metabolism
+		if(prob(chance))
+			T.check_for_divergence(1)
+			T.seed.yield--
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -2314,6 +2567,40 @@
 				if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage //aren't they toxin-proof anyways?
 					H.adjustToxLoss(10 * REM)
 
+/datum/reagent/toxin/plantbgone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 6
+	T.weedlevel -= 8
+	if(T.seed && !T.dead)
+		T.health -= 20
+		T.mutation_mod += 0.1
+
+/datum/reagent/toxin/insecticide
+	name = "Insecticide"
+	id = INSECTICIDE
+	description = "A broad pesticide. Do not ingest!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#49002E" //rgb: 73, 0, 46
+	density = 1.08
+	specheatcap = 4.18
+
+/datum/reagent/toxin/insecticide/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(!C.wear_mask) //If not wearing a mask
+			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
+		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
+			M.adjustToxLoss(10 * REM)
+
+/datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+
+	T.pestlevel -= 8
+
+
 /datum/reagent/plasma
 	name = "Plasma"
 	id = PLASMA
@@ -2332,7 +2619,7 @@
 		return 1
 
 	var/mob/living/carbon/human/H = M
-	if(isplasmaman(H))
+	if(isplasmaman(H) || H.species.flags & PLASMA_IMMUNE)
 		return 1
 	else
 		M.adjustToxLoss(3 * REM)
@@ -2481,14 +2768,32 @@
 	if(..())
 		return 1
 
-	if(M.getOxyLoss() && prob(80))
+	if(M.getOxyLoss())
 		M.adjustOxyLoss(-REM)
-	if(M.getBruteLoss() && prob(80))
+	if(M.getBruteLoss())
 		M.heal_organ_damage(REM, 0)
-	if(M.getFireLoss() && prob(80))
+	if(M.getFireLoss())
 		M.heal_organ_damage(0, REM)
-	if(M.getToxLoss() && prob(80))
+	if(M.getToxLoss())
 		M.adjustToxLoss(-REM)
+
+/datum/reagent/simpolinol
+	name = "Simpolinol"
+	id = SIMPOLINOL
+	description = "A broad spectrum rejuvenant used to heal fauna with less complex cardiovascular systems. Not for human injestion."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A5A5FF" //rgb: 165, 165, 255
+	density = 1.58
+	specheatcap = 0.44
+
+/datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(isanimal(M))
+		M.health = min(M.maxHealth, M.health + REM)
+	else
+		M.adjustToxLoss(5)
 
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine
@@ -2563,6 +2868,16 @@
 		D2.stage--
 		if(D2.stage < 1)
 			D2.cure(M)
+
+/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	T.adjust_water(1)
+	T.weedlevel -= 5
+	T.pestlevel -= 5
+	T.toxins -= 5
+	if(T.seed && !T.dead)
+		T.health += 50
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
@@ -2725,6 +3040,42 @@
 			if(E.damage > 0)
 				E.damage = max(0, E.damage - 1)
 
+/datum/reagent/imidazoline/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+			if(eyes_covered)
+				return
+			else //eyedrops, why not
+				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+				if(istype(E) && !E.robotic)
+					M.eye_blurry = 0
+					M.eye_blind = 0
+					if(E.damage > 0)
+						E.damage = 0 //cosmic technologies
+					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
+
+/datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
+	. = ..()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+		if(eyes_covered)
+			return
+		else //eyedrops, why not
+			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+			if(istype(E) && !E.robotic)
+				M.eye_blurry = 0
+				M.eye_blind = 0
+				if(E.damage > 0)
+					E.damage = 0 //cosmic technologies
+				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
+
 /datum/reagent/inacusiate
 	name = "Inacusiate"
 	id = INACUSIATE
@@ -2791,8 +3142,6 @@
 	density = 1.96
 	specheatcap = 0.57
 
-
-
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
@@ -2827,6 +3176,24 @@
 
 	M.heal_organ_damage(2 * REM)
 
+
+/datum/reagent/drink/blisterol
+	name = "Blisterol"
+	id = BLISTEROL
+	description = "Blisterol is a deprecated drug used to treat wounds. Renamed and marked as deprecated due to its tendency to cause blisters."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC"
+	density = 1.8
+	specheatcap = 3
+	adj_temp = 40
+	custom_metabolism = 1 //goes through you fast
+
+/datum/reagent/drink/blisterol/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.heal_organ_damage(4 * REM, -1 * REM) //heal 2 brute, cause 0.5 burn
+
 /datum/reagent/hyperzine
 	name = "Hyperzine"
 	id = HYPERZINE
@@ -2845,6 +3212,19 @@
 
 	if(prob(5) && M.stat == CONSCIOUS)
 		M.emote(pick("twitch","blink_r","shiver"))
+
+/datum/reagent/hyperzine/on_overdose(var/mob/living/M)
+	if(ishuman(M) && M.get_heart()) // Got a heart?
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/damagedheart = H.get_heart()
+		if(H.species.name != "Diona" && damagedheart) // Not on dionae
+			if(prob(5) && M.stat == CONSCIOUS)
+				to_chat(H, "<span class='danger'>You feel a sharp pain in your chest!</span>")
+			damagedheart.damage += 1
+		else
+			M.adjustFireLoss(1) // Burn damage for dionae
+	else
+		M.adjustToxLoss(1) // Toxins for everyone else
 
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
@@ -3000,6 +3380,12 @@
 		M.heal_organ_damage(1,1)
 		M.adjustToxLoss(-1)
 
+/datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins -= 3
+	if(T.seed && !T.dead)
+		T.health += 3
+
 /datum/reagent/clonexadone
 	name = "Clonexadone"
 	id = CLONEXADONE
@@ -3008,9 +3394,9 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	custom_plant_metabolism = 0.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
@@ -3019,6 +3405,21 @@
 		M.adjustOxyLoss(-3)
 		M.heal_organ_damage(3,3)
 		M.adjustToxLoss(-3)
+
+/datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins -= 5
+	if(T.seed && !T.dead)
+		T.health += 5
+		var/datum/seed/S = T.seed
+		var/deviation
+		if(T.age > S.maturation)
+			deviation = max(S.maturation-1, T.age-rand(7,10))
+		else
+			deviation = S.maturation/S.growth_stages
+		T.age -= deviation
+		T.skip_aging++
+		T.force_update = 1
 
 /datum/reagent/rezadone
 	name = "Rezadone"
@@ -3083,6 +3484,31 @@
 		return 1
 	M.immune_system.ApplyAntipathogenics(data["threshold"])
 
+
+
+/datum/reagent/antipathogenic/tomato_soup
+	name = "Tomato Soup"
+	id = TOMATO_SOUP
+	description = "Water, tomato extract, and maybe some other stuff. Great for when you're feeling under the weather."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#731008" //rgb: 115, 16, 8
+	density = 0.63
+	specheatcap = 4.21
+	data = list(
+		"threshold" = 10,
+		)
+
+/datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
+
+	..()
+
+	M.nutrition += nutriment_factor
+	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
+
+
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
 	name = "Allicin"
@@ -3101,8 +3527,8 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
-		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
 	if(holder.has_any_reagents(STOXINS))
 		holder.remove_reagents(STOXINS, 2 * REM)
 	if(holder.has_reagent(PLASMA))
@@ -3345,7 +3771,7 @@
 		var/mob/living/carbon/human/H = M
 		for(var/datum/organ/external/temp in H.organs)
 			if(temp.status & ORGAN_BLEEDING)
-				temp.clamp()
+				temp.clamp_wounds()
 
 	if(M.losebreath >= 10)
 		M.losebreath = max(10, M.losebreath - 5)
@@ -3390,19 +3816,25 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
-	var/diseasetype = /datum/disease/robotic_transformation
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	var/disease_type = DISEASE_CYBORG
 
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new diseasetype, 1)
+		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
+
+/datum/reagent/nanites/reaction_dropper_mob(var/mob/living/M)
+	if(prob(30))
+		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
+	return ..()
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
-	diseasetype = /datum/disease/robotic_transformation/mommi
+	description = "Microscopic construction robots. They look more autistic than usual."
+	disease_type = DISEASE_MOMMI
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -3415,9 +3847,13 @@
 
 	if(..())
 		return 1
-
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/xeno_transformation(0), 1)
+		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
+
+/datum/reagent/xenomicrobes/reaction_dropper_mob(var/mob/living/M)
+	if(prob(30))
+		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
+	return ..()
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -3471,7 +3907,7 @@
 	if(M.dizziness)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
 		D.spread = "Remissive"
 		D.stage--
@@ -3661,6 +4097,12 @@
 	density = 0.51
 	specheatcap = 14.38
 
+/datum/reagent/ammonia/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	if(T.seed && !T.dead)
+		T.health += 0.5
+
 /datum/reagent/ultraglue
 	name = "Ultra Glue"
 	id = GLUE
@@ -3675,6 +4117,27 @@
 	color = "#604030" //rgb: 96, 64, 48
 	density = 0.65
 	specheatcap = 35.37
+	custom_plant_metabolism = 0.1
+
+/datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	if(prob(100*custom_plant_metabolism))
+		T.pestlevel -= 1
+	if(T.seed && !T.dead)
+		T.health += 0.1
+		if(prob(200*custom_plant_metabolism))
+			T.affect_growth(1)
+		if(!T.seed.immutable)
+			var/chance
+			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			if(prob(chance))
+				T.check_for_divergence(1)
+				T.seed.lifespan++
+			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			if(prob(chance))
+				T.check_for_divergence(1)
+				T.seed.endurance++
 //Fuck you, alcohol
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
@@ -3690,10 +4153,12 @@
 	if(..())
 		return 1
 
+	M.slurring = 0
 	M.dizziness = 0
 	M.drowsyness = 0
 	M.stuttering = 0
 	M.confused = 0
+	holder.convert_some_of_type(/datum/reagent/ethanol, /datum/reagent/water, 2 * REM) //booze-b-gone
 
 //Otherwise known as a "Mickey Finn"
 /datum/reagent/chloralhydrate
@@ -3702,7 +4167,14 @@
 	description = "A powerful sedative."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#000067" //rgb: 0, 0, 103
-	data = 1 //Used as a tally
+	// There used to be a bug: if someone was injected with chloral once,
+	// and then injected with chloral a second time, this person would
+	// briefly wake up. proc/add_reagent, called by proc/trans_to, sets the
+	// data var of the destination reagent to the one of the source reagent
+	// if the new data was not null. Since this var was set to 1, it ended up
+	// resetting the data var of the existing chloralhydrate in the spessman's
+	// body, waking them up until the following tick.
+	data = null //Used as a tally
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
 	specheatcap = 13.79
@@ -3710,13 +4182,18 @@
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+	if(isnull(data))
+		// This is technically not needed: the switch could check for
+		// null instead of 0 and "data++" would automatically convert a null
+		// to a 0, then increase it to 1. It would work. But this is clearer.
+		data = 0
 	switch(data)
-		if(1)
+		if(0)
 			M.confused += 2
 			M.drowsyness += 2
-		if(2 to 80)
+		if(1 to 79)
 			M.sleeping++
-		if(81 to INFINITY)
+		if(80 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
 	data++
@@ -3728,6 +4205,33 @@
 	description = "An alcoholic beverage made from malted grains, hops, yeast, and water."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "beerglass"
+	glass_desc = "A cold pint of pale lager."
+
+/datum/reagent/suxameth
+	name = "Suxameth"
+	id = SUX
+	description = "A name for Suxamethonium chloride. A medical full-body paralytic preferred because it is easy to purge."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#CFC5E9" //rgb: 207, 197, 223
+	data = null
+	flags = CHEMFLAG_DISHONORABLE
+	overdose_am = 21
+	custom_metabolism = 1
+
+/datum/reagent/suxameth/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(isnull(data))
+		// copied from chloral for the same reasons
+		data = 0
+	if(data >= 2)
+		M.SetStunned(2)
+		M.SetKnockdown(2)
+	data++
+
+/datum/reagent/suxameth/on_overdose(var/mob/living/M)
+	M.adjustOxyLoss(6) //Paralyzes the diaphragm if they go over 20 units
 
 /////////////////////////Food Reagents////////////////////////////
 
@@ -3753,6 +4257,12 @@
 
 	M.nutrition += nutriment_factor	//For hunger and fatness
 
+/datum/reagent/nutriment/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	if(T.seed && !T.dead)
+		T.health += 0.5
+
 //The anti-nutriment
 /datum/reagent/lipozine
 	name = "Lipozine"
@@ -3773,6 +4283,48 @@
 	M.overeatduration = 0
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
+
+/datum/reagent/dietine
+	name = "Dietine"
+	id = DIETINE
+	description = "An uncommon makeshift weight loss aid. Mildly toxic, moreso in larger doses."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#BBEDA4" //rgb: 187, 237, 164
+	density = 1.44
+	specheatcap = 60
+	overdose_am = 5
+
+	var/on_a_diet
+	var/oldmetabolism
+
+/datum/reagent/dietine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(5))
+		M.adjustToxLoss(1)
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!on_a_diet)
+			oldmetabolism = H.calorie_burn_rate
+			on_a_diet = TRUE
+			H.calorie_burn_rate += H.calorie_burn_rate * 3
+		if(prob(8))
+			H.vomit(0,1)
+
+/datum/reagent/dietine/reagent_deleted()
+	if(ishuman(holder.my_atom))
+		var/mob/living/carbon/human/H = holder.my_atom
+		H.calorie_burn_rate -= oldmetabolism / 3
+		on_a_diet = FALSE
+
+/datum/reagent/dietine/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.vomit(0,1)
 
 /datum/reagent/soysauce
 	name = "Soysauce"
@@ -3816,6 +4368,174 @@
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#33cc33" //rgb: 51, 204, 51
 
+/datum/reagent/mayo
+	name = "Mayonnaise"
+	id = MAYO
+	description = "A substance of unspeakable suffering."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#FAF0E6" //rgb: 51, 102, 0
+
+/datum/reagent/zamspices
+	name = "Zam Spices"
+	id = ZAMSPICES
+	description = "A blend of several mothership spices. It has a sharp, tangy aroma."
+	reagent_state = REAGENT_STATE_SOLID
+	nutriment_factor = 1 * REAGENTS_METABOLISM
+	color = "#850E0E" //rgb: 133, 14, 14
+
+/datum/reagent/zammild
+	name = "Zam's Mild Sauce"
+	id = ZAMMILD
+	description = "A tasty sauce made from mothership spices and acid."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#B38B26" //rgb: 179, 139, 38
+
+/datum/reagent/zamspicytoxin
+	name = "Zam's Spicy Sauce"
+	id = ZAMSPICYTOXIN
+	description = "A dangerously flavorful sauce made from mothership spices and powerful acid."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 6 * REAGENTS_METABOLISM
+	color = "#D35A0D" //rgb: 211, 90, 13
+
+/datum/reagent/zamspicytoxin/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+
+	if(alien && alien == IS_GREY)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			M.bodytemperature += 1.4 * TEMPERATURE_DAMAGE_COEFFICIENT
+			switch(volume)
+				if(1 to 15)
+					if(prob(10))
+						to_chat(M,"<span class='notice'>Your throat feels a little hot!</span>")
+					if(prob(5))
+						to_chat(M,"<span class='notice'>[pick("Now that's a Zam zing!","By the mothership, that was a perfect spice level.","That was an excellent flavor.","Spicy goodness is flowing through your system.")]</span>")
+				if(15 to 30)
+					if(prob(10))
+						to_chat(M,"<span class='notice'>Your throat feels like it's on fire!</span>")
+						M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+					if(prob(5))
+						to_chat(M,"<span class='warning'>[pick("That's a serious Zam zing!", "This is really starting to burn.", "The spice is overpowering the flavor.", "Spicy embers are starting to flare up in your chest.")]</span>")
+					if(prob(5))
+						to_chat(M,"<span class='warning'>You feel a slight burning in your chest.</span>")
+						M.adjustToxLoss(1)
+				if(30 to INFINITY)
+					M.Jitter(5)
+					if(prob(15))
+						H.custom_pain("You feel an awful burning in your chest.",1)
+						M.adjustToxLoss(3)
+					if(prob(10))
+						H.vomit()
+					if(prob(5))
+						to_chat(M,"<span class='warning'>[pick("That's way too much zing!", "By the mothership, that burns!", "You can't taste anything but flaming spice!", "There's a fire in your gut!")]</span>")
+					if(prob(5))
+						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+						if(istype(L))
+							L.take_damage(1, 0)
+
+	else
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			M.bodytemperature += 1.6 * TEMPERATURE_DAMAGE_COEFFICIENT
+			switch(volume)
+				if(1 to 15)
+					if(prob(10))
+						to_chat(M,"<span class='notice'>Your throat feels like it's on fire!</span>")
+						M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+					if(prob(5))
+						to_chat(M,"<span class='warning'>You feel a slight burning in your chest.</span>")
+						M.adjustToxLoss(1)
+				if(15 to 30)
+					M.Jitter(5)
+					if(prob(15))
+						H.custom_pain("You feel an awful burning in your chest.",1)
+						M.adjustToxLoss(3)
+					if(prob(10))
+						H.vomit()
+					if(prob(5))
+						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+						if(istype(L))
+							L.take_damage(1, 0)
+				if(30 to INFINITY)
+					M.Jitter(5)
+					if(prob(40))
+						M.adjustToxLoss(6)
+					if(prob(25))
+						H.vomit()
+					if(prob(15))
+						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+						if(istype(L))
+							L.take_damage(5, 0)
+					if(prob(10))
+						H.custom_pain("Your chest feels like its on fire!",1)
+						M.audible_scream()
+
+/datum/reagent/egg_yolk
+	name = "Egg Yolk"
+	id = EGG_YOLK
+	description = "A chicken before it could become a chicken."
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#ffcd42"
+
+/datum/reagent/spaghetti
+	name = "Spaghetti"
+	id = SPAGHETTI
+	description = "Bursts into treats on consumption."
+	nutriment_factor = 8 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FFCD9A"
+
+/datum/reagent/spaghetti/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(prob(80))
+			H.apply_effect(1, STUTTER)
+		else
+			if(prob(50))
+				H.Mute(1)
+			else
+				H.visible_message("<span class='notice'>[src] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
+				var/turf/T = get_turf(M)
+				new /obj/effect/decal/cleanable/spaghetti_spill(T)
+				playsound(M, 'sound/effects/splat.ogg', 50, 1)
+
+/datum/reagent/drink/gatormix
+	name = "Gator Mix"
+	id = GATORMIX
+	description = "A vile sludge of mixed carbohydrates. Makes people more alert. May cause kidney damage in large doses."
+	nutriment_factor = 8 * REAGENTS_METABOLISM //get fat, son
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A41D77"
+	adj_dizzy = -5
+	adj_drowsy = -5
+	adj_sleepy = -5
+	adj_temp = 10
+	overdose_am = 50
+
+/datum/reagent/drink/gatormix/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M) && prob(20))
+		var/mob/living/carbon/human/H = M
+		H.Jitter(5)
+
+/datum/reagent/drink/gatormix/on_overdose(var/mob/living/M)
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/kidney/killdney = H.get_kidneys()
+		killdney.damage++
+
+
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"
 	id = CAPSAICIN
@@ -3827,10 +4547,22 @@
 	density = 0.53
 	specheatcap = 3.49
 
+/datum/reagent/mustard_powder
+	name = "Mustard Powder"
+	id = MUSTARD_POWDER
+	description = "A deep yellow powder, unrelated the gas variant"
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8D07D" // dark dirty yellow
+
+
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
+
+	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels a little hot!</span>")
 
 	var/mob/living/carbon/human/H
 	if(ishuman(M))
@@ -3866,6 +4598,7 @@
 	color = "#B31008" //rgb: 179, 16, 8
 	density = 0.9
 	specheatcap = 8.59
+	data = 1
 
 /datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -3894,19 +4627,57 @@
 				return
 			else //Oh dear
 				H.audible_scream()
-				H << "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>"
+				to_chat(H, "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>")
 				H.eye_blurry = max(M.eye_blurry, 25)
 				H.eye_blind = max(M.eye_blind, 10)
 				H.Paralyse(1)
 				H.drop_item()
 
-/datum/reagent/condensedcapsaicin/on_mob_life(var/mob/living/M)
+/datum/reagent/condensedcapsaicin/reaction_dropper_mob(var/mob/living/M)
+	M.audible_scream()
+	to_chat(M, "<span class='danger'>Pure solid peppespray is dropped directly in your eyes!</span>")
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.eye_blurry = max(M.eye_blurry, 25)
+		H.eye_blind = max(M.eye_blind, 10)
+		H.Paralyse(1)
+		H.drop_item()
+	return ..()
 
+/datum/reagent/condensedcapsaicin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels like it's on fire!</span>")
 		M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+
+	//let's just copy capsaicin/on_mob_life does, but make it worse.
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
+	switch(data)
+		if(1 to 15)
+			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(holder.has_reagent("frostoil"))
+				holder.remove_reagent("frostoil", 5)
+			if(isslime(M))
+				M.bodytemperature += rand(10,20)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(10,20)
+		if(15 to 30)
+			M.bodytemperature += 1.1 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(prob(6))//Start vomiting
+				H.vomit(0,1)
+			if(isslime(M))
+				M.bodytemperature += rand(20,25)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(20,25)
+		if(30 to 45)//Reagent dies out at about 50. Set up the vomiting to "fade out".
+			if(prob(9))
+				H.vomit()
+	data++
+
 
 /datum/reagent/blackcolor
 	name = "Black Food Coloring"
@@ -3921,7 +4692,7 @@
 	id = FROSTOIL
 	description = "A special oil that noticably chills the body. Extraced from Icepeppers."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#B31008" //rgb: 139, 166, 233
+	color = "#8BA6E9" //rgb: 139, 166, 233
 	data = 1 //Used as a tally
 	custom_metabolism = FOOD_METABOLISM
 
@@ -3978,6 +4749,14 @@
 	density = 2.09
 	specheatcap = 1.65
 
+/datum/reagent/sodiumchloride/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	if(!T.has_dense_content() && volume >= 10 && !(locate(/obj/effect/decal/cleanable/salt) in T))
+		if(!T.density)
+			new /obj/effect/decal/cleanable/salt(T)
+
+
 /datum/reagent/sodiumchloride/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -3988,6 +4767,16 @@
 		for(var/mob/living/simple_animal/borer/B in borers)
 			B.health -= 1
 			to_chat(B, "<span class='warning'>Something in your host's bloodstream burns you!</span>")
+
+/datum/reagent/sodiumchloride/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-3)
+	T.adjust_nutrient(-0.3)
+	T.toxins += 8
+	T.weedlevel -= 2
+	T.pestlevel -= 1
+	if(T.seed && !T.dead)
+		T.health -= 2
 
 /datum/reagent/creatine
 	name = "Creatine"
@@ -4079,13 +4868,13 @@
 		H.update_body()
 
 /datum/reagent/carp_pheromones
-	name = "carp pheromones"
+	name = "Carp Pheromones"
 	id = CARPPHEROMONES
 	description = "A disgusting liquid with a horrible smell, which is used by space carps to mark their territory and food."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
-	custom_metabolism = 0.1
-	data = 1 //Used as a tally
+	custom_metabolism = 0.05
+	data = 0 //Used as a tally
 	density = 109.06
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Contains leporazine, better this than 6 digits
 
@@ -4094,9 +4883,18 @@
 	if(..())
 		return 1
 
+	if(!data)
+		to_chat(M,"<span class='good'><b>You feel more carplike! [pick("Do you, perhaps...?","Maybe... just maybe...")]</b></span>")
+
+	if(volume < 3)
+		if(volume <= custom_metabolism)
+			to_chat(M,"<span class='danger'>You feel not at all carplike!</span>")
+		else if(!(data%4))
+			to_chat(M,"<span class='warning'>You feel less carplike...</span>")
+
 	data++
 
-	var/stench_radius = Clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
+	var/stench_radius = clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
 
 	if(prob(5)) //5% chance of stinking per life()
 		for(var/mob/living/carbon/C in oview(stench_radius, M)) //All other carbons in 4 tile radius (excluding our mob)
@@ -4114,7 +4912,14 @@
 	id = BLACKPEPPER
 	description = "A powder ground from peppercorns. *AAAACHOOO*"
 	reagent_state = REAGENT_STATE_SOLID
-	//rgb: 0, 0, 0
+	color = "#664C3E" //rgb: 40, 30, 24
+
+
+/datum/reagent/blackpepper/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	if(!T.has_dense_content() && volume >= 10 && !(locate(/obj/effect/decal/cleanable/pepper) in T))
+		new /obj/effect/decal/cleanable/pepper(T)
 
 /datum/reagent/cinnamon
 	name = "Cinnamon Powder"
@@ -4139,16 +4944,19 @@
 
 	M.nutrition += nutriment_factor
 
-/datum/reagent/hot_coco
+/datum/reagent/drink/hot_coco
 	name = "Hot Chocolate"
 	id = HOT_COCO
-	description = "Made with love! And coco beans."
+	description = "Made with love! And cocoa beans."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 2 * REAGENTS_METABOLISM
+	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
+	adj_temp = 5
+	density = 1.2
+	specheatcap = 4.18
+	mug_desc = "A delicious warm brew of milk and chocolate."
 
-/datum/reagent/hot_coco/on_mob_life(var/mob/living/M)
-
+/datum/reagent/drink/hot_coco/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -4156,6 +4964,30 @@
 		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 	M.nutrition += nutriment_factor
+
+/datum/reagent/drink/hot_coco/subhuman
+	id = HOT_COCO_SUBHUMAN
+	description = "Made with hate! And coco beans."
+	data = 0
+
+/datum/reagent/drink/hot_coco/subhuman/on_mob_life(var/mob/living/M)
+	..()
+	if(prob(1))
+		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
+
+/datum/reagent/drink/creamy_hot_coco
+	name = "Creamy Hot Chocolate"
+	id = CREAMY_HOT_COCO
+	description = "Never ever let it cool."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 2 * FOOD_METABOLISM
+	color = "#403010" //rgb: 64, 48, 16
+	glass_icon_state = "creamyhotchocolate"
+	glass_name = "\improper Creamy Hot Chocolate"
+	adj_temp = 5
+	density = 1.2
+	specheatcap = 4.18
+	mug_desc = "A delicious warm brew of milk and chocolate. Never ever let it cool."
 
 /datum/reagent/amatoxin
 	name = "Amatoxin"
@@ -4310,6 +5142,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -4317,6 +5150,30 @@
 		return 1
 
 	M.nutrition += nutriment_factor
+
+//Now handle corn oil interactions
+	if(!has_had_heart_explode && ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
+		switch(volume)
+			if(1 to 15)
+				if(prob(5))
+					H.emote("me", 1, "burps.")
+					holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
+			if(15 to 100)
+				if(prob(10))
+					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
+				if(prob(5))
+					if(heart && !heart.robotic)
+						to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
+						heart.take_damage(0.2, 1)
+			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
+				if(heart && !heart.robotic)
+					to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+					has_had_heart_explode = 1 //That way it doesn't blow up any new transplant hearts
+					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
+					H.adjustOxyLoss(60)
+					H.adjustBruteLoss(30)
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -4394,25 +5251,6 @@
 	M.nutrition += nutriment_factor
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
-/datum/reagent/tomato_soup
-	name = "Tomato Soup"
-	id = TOMATO_SOUP
-	description = "Water, tomato extract, and maybe some other stuff."
-	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 5 * REAGENTS_METABOLISM
-	color = "#731008" //rgb: 115, 16, 8
-	density = 0.63
-	specheatcap = 4.21
-
-/datum/reagent/tomato_soup/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += nutriment_factor
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
-
 /datum/reagent/flour
 	name = "flour"
 	id = FLOUR
@@ -4445,6 +5283,29 @@
 	if(..())
 		return 1
 	M.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT
+
+/datum/reagent/pancake_mix
+	name = "pancake mix"
+	id = PANCAKE
+	description = "A mix of flour, milk, butter, and egg yolk. ready to be cooked into delicious pancakes."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	color = "#E6C968" //rgb: 90, 78, 40
+
+/datum/reagent/pancake_mix/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	M.nutrition += nutriment_factor
+
+/datum/reagent/pancake_mix/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(!(locate(/obj/effect/decal/cleanable/flour) in T))
+		var/obj/effect/decal/cleanable/flour/F = new (T)
+		F.color = "#E6C968"
 
 /datum/reagent/rice
 	name = "Rice"
@@ -4483,6 +5344,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
+	nutriment_factor = 4 * REAGENTS_METABOLISM
 
 /datum/reagent/discount/New()
 	..()
@@ -4519,12 +5381,26 @@
 					H.adjustToxLoss(0.13)
 					holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
 
+/datum/reagent/discount/mannitol
+	name = "Mannitol"
+	id = MANNITOL
+	description = "The only medicine a <B>REAL MAN</B> needs."
+
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
 	id = IRRADIATEDBEANS
 	description = "You can almost taste the lead sheet behind it!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 1 * REAGENTS_METABOLISM
+
+/datum/reagent/irradiatedbeans/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(5))
+		M.apply_radiation(2, RAD_INTERNAL)
 
 /datum/reagent/toxicwaste
 	name = "Toxic Waste"
@@ -4535,12 +5411,21 @@
 	density = 5.59
 	specheatcap = 2.71
 
+/datum/reagent/toxicwaste/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(20))
+		M.adjustToxLoss(1)
+
 /datum/reagent/refriedbeans
 	name = "Re-Fried Beans"
 	id = REFRIEDBEANS
 	description = "Mmm.."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 
 /datum/reagent/mutatedbeans
 	name = "Mutated Beans"
@@ -4548,6 +5433,15 @@
 	description = "Mutated flavor."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 1 * REAGENTS_METABOLISM
+
+/datum/reagent/mutatedbeans/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(10))
+		M.adjustToxLoss(1)
 
 /datum/reagent/beff
 	name = "Beff"
@@ -4555,6 +5449,7 @@
 	description = "What's beff? Find out!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
 
 /datum/reagent/horsemeat
 	name = "Horse Meat"
@@ -4562,6 +5457,7 @@
 	description = "Tastes excellent in lasagna."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 3 * REAGENTS_METABOLISM
 
 /datum/reagent/moonrocks
 	name = "Moon Rocks"
@@ -4570,12 +5466,21 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
+/datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(15))
+		M.adjustBruteLoss(2) //Brute damage since it hates the human skeleton
+
 /datum/reagent/offcolorcheese
 	name = "Off-Color Cheese"
 	id = OFFCOLORCHEESE
 	description = "American Cheese."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = REAGENTS_METABOLISM
 
 /datum/reagent/bonemarrow
 	name = "Bone Marrow"
@@ -4583,6 +5488,7 @@
 	description = "Looks like a skeleton got stuck in the production line."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = REAGENTS_METABOLISM
 
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
@@ -4590,6 +5496,18 @@
 	description = "That green isn't organic."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+
+/datum/reagent/greenramen/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(5))
+		M.adjustToxLoss(1)
+
+	if(prob(5))
+		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage
 
 /datum/reagent/glowingramen
 	name = "Glowing Ramen Noodles"
@@ -4597,6 +5515,15 @@
 	description = "That glow 'aint healthy."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+
+/datum/reagent/glowingramen/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(10))
+		M.apply_radiation(1, RAD_INTERNAL)
 
 /datum/reagent/deepfriedramen
 	name = "Deep Fried Ramen Noodles"
@@ -4604,6 +5531,7 @@
 	description = "Ramen, deep fried."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
 
 /datum/reagent/peptobismol
 	name = "Peptobismol"
@@ -4641,6 +5569,45 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
+
+/datum/reagent/caffeine
+	name = "Caffeine"
+	id = CAFFEINE
+	description = "Caffeine is a common stimulant. It works by making your metabolism faster so it also increases your appetite."
+	color = "#E8E8E8" //rgb: 232, 232, 232
+	density = 1.23
+	specheatcap = 0.89
+	custom_metabolism = 0.1
+
+/datum/reagent/caffeine/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	// you just ingested pure caffeine so you're gonna get the BIG shakes
+	M.Jitter(10)
+	// it also makes you hungry because it speeds up your metabolism
+	M.nutrition--
+
+/datum/reagent/tendies
+	name = "Tendies"
+	id = TENDIES
+	description = "Gimme gimme chicken tendies, be they crispy or from Wendys."
+	nutriment_factor = REAGENTS_METABOLISM
+	color = "#AB6F0E" //rgb: 171, 111, 14
+	density = 5
+	specheatcap = 1
+
+/datum/reagent/tendies/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += REM * nutriment_factor
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.mind.assigned_role == "Janitor")
+			H.heal_organ_damage(1, 1)
+			H.nutrition += REM * nutriment_factor //Double nutrition
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
@@ -4683,8 +5650,25 @@
 	description = "Both delicious AND rich in Vitamin C. What more do you need?"
 	color = "#E78108" //rgb: 231, 129, 8
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Vitamins! Yay!"
 
 /datum/reagent/drink/orangejuice/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getToxLoss() && prob(20))
+		M.adjustToxLoss(-REM)
+
+/datum/reagent/drink/opokjuice
+	name = "Opok Juice"
+	id = OPOKJUICE
+	description = "A fruit from the mothership pulped into bitter juice, with a very slight undertone of sweetness."
+	color = "#FF9191" //rgb: 255, 145, 145
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Vitamins from the mothership!"
+
+/datum/reagent/drink/opokjuice/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -4698,6 +5682,8 @@
 	description = "Tomatoes made into juice. What a waste of good tomatoes, huh?"
 	color = "#731008" //rgb: 115, 16, 8
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Are you sure this is tomato juice?"
+	mug_desc = "Are you sure this is tomato juice?"
 
 /datum/reagent/drink/tomatojuice/on_mob_life(var/mob/living/M)
 
@@ -4711,9 +5697,10 @@
 	name = "Lime Juice"
 	id = LIMEJUICE
 	description = "The sweet-sour juice of limes."
-	color = "#BBB943" //rgb: 187, 185, 67
+	color = "#99bb43" //rgb: 153, 187, 67
 	alpha = 170
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "A glass of sweet-sour lime juice."
 
 /datum/reagent/drink/limejuice/on_mob_life(var/mob/living/M)
 
@@ -4727,9 +5714,10 @@
 	name = "Carrot juice"
 	id = CARROTJUICE
 	description = "It's like a carrot, but less crunchy."
-	color = "#973800" //rgb: 151, 56, 0
+	color = "#FF8820" //rgb: 255, 136, 32
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	data = 1 //Used as a tally
+	glass_desc = "It's like a carrot, but less crunchy."
 
 /datum/reagent/drink/carrotjuice/on_mob_life(var/mob/living/M)
 
@@ -4762,14 +5750,16 @@
 	name = "Berry Juice"
 	id = BERRYJUICE
 	description = "A delicious blend of several different kinds of berries."
-	color = "#863333" //rgb: 134, 51, 51
+	color = "#660099" //rgb: 102, 0, 153
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Berry juice. Or maybe it's jam. Who cares?"
 
 /datum/reagent/drink/poisonberryjuice
 	name = "Poison Berry Juice"
 	id = POISONBERRYJUICE
 	description = "A surprisingly tasty juice blended from various kinds of very deadly and toxic berries."
-	color = "#863353" //rgb: 134, 51, 83
+	color = "#6600CC" //rgb: 102, 0, 204
+	glass_desc = "Drinking this may not be a good idea."
 
 /datum/reagent/drink/poisonberryjuice/on_mob_life(var/mob/living/M)
 
@@ -4798,15 +5788,16 @@
 	name = "Lemon Juice"
 	id = LEMONJUICE
 	description = "This juice is VERY sour."
-	color = "#C6BB6E" //rgb: 198, 187, 110
+	color = "#fff690" //rgb: 255, 246, 144
 	alpha = 170
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Sour..."
 
 /datum/reagent/drink/banana
 	name = "Banana Juice"
 	id = BANANA
-	description = "The raw essence of a banana."
-	color = "#FFEBC1" //rgb: 255, 235, 193
+	description = "The raw essence of a banana. HONK"
+	color = "#FFE777" //rgb: 255, 230, 119
 	alpha = 255
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 
@@ -4814,7 +5805,9 @@
 	name = "Nothing"
 	id = NOTHING
 	description = "Absolutely nothing."
+	color = "#FFFFFF" //rgb: 255, 255, 255
 	nutriment_factor = 0
+	glass_name = "nothing"
 
 /datum/reagent/drink/nothing/on_mob_life(var/mob/living/M)
 
@@ -4843,6 +5836,9 @@
 	description = "Eeeewwwww."
 	nutriment_factor = 5 * FOOD_METABOLISM
 	color = "#A28691" //rgb: 162, 134, 145
+	glass_name = "glass of plump helmet wine"
+	glass_desc = "An absolute staple to get through a day's work."
+	glass_icon_state = "plumphwineglass"
 
 /datum/reagent/drink/milk
 	name = "Milk"
@@ -4851,6 +5847,7 @@
 	color = "#DFDFDF" //rgb: 223, 223, 223
 	alpha = 240
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "White and nutritious goodness!"
 
 /datum/reagent/drink/milk/on_mob_life(var/mob/living/M)
 
@@ -4861,15 +5858,43 @@
 		M.heal_organ_damage(1, 0)
 	if(holder.has_reagent("capsaicin"))
 		holder.remove_reagent("capsaicin", 10 * REAGENTS_METABOLISM)
+	if(holder.has_reagent("zamspicytoxin"))
+		holder.remove_reagent("zamspicytoxin", 10 * REAGENTS_METABOLISM)
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
+
+/datum/reagent/drink/milk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.adjust_water(0.9)
+
+
+/datum/reagent/drink/milk/mommimilk
+	name = "MoMMI Milk"
+	id = MOMMIMILK
+	description = "Milk from a MoMMI, but how is it produced?"
+	color = "#eaeaea" //rgb(234, 234, 234)
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Artificially white nutrition!"
+
+
+/datum/reagent/drink/milk/mommimilk/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.adjustToxLoss(1)
+/datum/reagent/drink/milk/mommimilk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
+	if(T.seed && !T.dead)
+		T.health -= 20
 
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
 	id = SOYMILK
 	description = "An opaque white liquid made from soybeans."
-	color = "#DFDFC7" //rgb: 223, 223, 199
+	color = "#e8e8d8" //rgb: 232, 232, 216
 	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "White and nutritious soy goodness!"
 
 /datum/reagent/drink/milk/cream
 	name = "Cream"
@@ -4879,16 +5904,7 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	density = 2.37
 	specheatcap = 1.38
-
-/datum/reagent/drink/hot_coco
-	name = "Hot Chocolate"
-	id = HOT_COCO
-	description = "Made with love! And cocoa beans."
-	nutriment_factor = 2 * FOOD_METABOLISM
-	color = "#403010" //rgb: 64, 48, 16
-	adj_temp = 5
-	density = 1.2
-	specheatcap = 4.18
+	glass_desc = "Like milk, but thicker."
 
 /datum/reagent/drink/coffee
 	name = "Coffee"
@@ -4901,6 +5917,9 @@
 	adj_temp = 25
 	custom_metabolism = 0.1
 	var/causes_jitteriness = 1
+	glass_desc = "Careful, it's hot!"
+	mug_icon_state = "coffee"
+	mug_desc = "A warm mug of coffee."
 
 /datum/reagent/drink/coffee/on_mob_life(var/mob/living/M)
 
@@ -4917,6 +5936,8 @@
 	description = "Coffee and ice. Refreshing and cool."
 	color = "#102838" //rgb: 16, 40, 56
 	adj_temp = -5
+	glass_icon_state = "icedcoffeeglass"
+	glass_desc = "For when you need a coffee without the warmth."
 
 /datum/reagent/drink/coffee/soy_latte
 	name = "Soy Latte"
@@ -4925,6 +5946,9 @@
 	color = "#664300" //rgb: 102, 67, 0
 	adj_sleepy = 0
 	adj_temp = 5
+	glass_icon_state = "soy_latte"
+	glass_name = "soy latte"
+	mug_icon_state = "latte"
 
 /datum/reagent/drink/coffee/soy_latte/on_mob_life(var/mob/living/M)
 
@@ -4943,6 +5967,9 @@
 	color = "#664300" //rgb: 102, 67, 0
 	adj_sleepy = 0
 	adj_temp = 5
+	glass_icon_state = "cafe_latte"
+	glass_name = "cafe latte"
+	mug_icon_state = "latte"
 
 /datum/reagent/drink/coffee/cafe_latte/on_mob_life(var/mob/living/M)
 
@@ -4963,6 +5990,8 @@
 	adj_drowsy = -1
 	adj_sleepy = -3
 	adj_temp = 20
+	mug_icon_state = "tea"
+	mug_desc = "A warm mug of tea."
 
 /datum/reagent/drink/tea/on_mob_life(var/mob/living/M)
 
@@ -4980,6 +6009,7 @@
 	adj_temp = -5
 	density = 1
 	specheatcap = 1
+	glass_icon_state = "icedteaglass"
 
 /datum/reagent/drink/tea/arnoldpalmer
 	name = "Arnold Palmer"
@@ -4990,6 +6020,8 @@
 	adj_sleepy = -3
 	adj_dizzy = -1
 	adj_drowsy = -3
+	glass_icon_state = "arnoldpalmer"
+	glass_name = "\improper Arnold Palmer"
 
 /datum/reagent/drink/kahlua
 	name = "Kahlua"
@@ -4999,6 +6031,9 @@
 	adj_dizzy = -5
 	adj_drowsy = -3
 	adj_sleepy = -2
+	glass_icon_state = "kahluaglass"
+	glass_name = "glass of coffee liqueur"
+	glass_desc = "DAMN, THIS STUFF LOOKS ROBUST."
 
 /datum/reagent/drink/kahlua/on_mob_life(var/mob/living/M)
 
@@ -5008,6 +6043,7 @@
 	M.Jitter(5)
 
 /datum/reagent/drink/cold
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	name = "Cold drink"
 	adj_temp = -5
 
@@ -5015,7 +6051,7 @@
 	name = "Tonic Water"
 	id = TONIC
 	description = "It tastes strange but at least the quinine keeps the space malaria at bay."
-	color = "#664300" //rgb: 102, 67, 0
+	color = "#bafffd" //rgb: 186, 255, 253
 	adj_dizzy = -5
 	adj_drowsy = -3
 	adj_sleepy = -2
@@ -5024,9 +6060,17 @@
 	name = "Soda Water"
 	id = SODAWATER
 	description = "Effervescent water used in many cocktails and drinks."
-	color = "#619494" //rgb: 97, 148, 148
+	color = "#bafffd" //rgb: 186, 255, 253
 	adj_dizzy = -5
 	adj_drowsy = -3
+	glass_desc = "Soda water. Why not make a scotch and soda?"
+
+/datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.adjust_water(1)
+	if(T.seed && !T.dead)
+		T.health += 0.1
 
 /datum/reagent/drink/cold/ice
 	name = "Ice"
@@ -5036,14 +6080,17 @@
 	color = "#619494" //rgb: 97, 148, 148
 	density = 0.91
 	specheatcap = 4.18
+	glass_icon_state = "iceglass"
+	glass_desc = "Generally, you're supposed to put something else in there too..."
 
 /datum/reagent/drink/cold/space_cola
 	name = "Cola"
 	id = COLA
 	description = "A refreshing beverage."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#100800" //rgb: 16, 8, 0
+	color = "#6e6450" //rgb: 110, 100, 80
 	adj_drowsy 	= 	-3
+	glass_desc = "A glass of refreshing Space Cola."
 
 /datum/reagent/drink/cold/nuka_cola
 	name = "Nuka Cola"
@@ -5053,6 +6100,9 @@
 	adj_sleepy = -2
 	density = 4.17
 	specheatcap = 124
+	glass_icon_state = "nuka_colaglass"
+	glass_name = "\improper Nuka Cola"
+	glass_desc = "Don't cry. Don't raise your eye. It's only nuclear wasteland."
 
 /datum/reagent/drink/cold/nuka_cola/on_mob_life(var/mob/living/M)
 
@@ -5064,13 +6114,22 @@
 	M.dizziness += 5
 	M.drowsyness = 0
 
+/datum/reagent/drink/cold/geometer
+	name = "Geometer"
+	id = GEOMETER
+	description = "Summon the Beast."
+	color = "#ffd700"
+	adj_sleepy = -2
+
 /datum/reagent/drink/cold/spacemountainwind
 	name = "Space Mountain Wind"
 	id = SPACEMOUNTAINWIND
 	description = "Blows right through you like a space wind."
-	color = "#102000" //rgb: 16, 32, 0
+	color = "#A4FF8F" //rgb: 164, 255, 143
 	adj_drowsy = -7
 	adj_sleepy = -1
+	glass_icon_state = "Space_mountain_wind_glass"
+	glass_desc = "Space Mountain Wind. As you know, there are no mountains in space, only wind."
 
 /datum/reagent/drink/cold/dr_gibb
 	name = "Dr. Gibb"
@@ -5078,6 +6137,8 @@
 	description = "A delicious blend of 42 different flavors."
 	color = "#102000" //rgb: 16, 32, 0
 	adj_drowsy = -6
+	glass_icon_state = "dr_gibb_glass"
+	glass_desc = "Dr. Gibb. Not as dangerous as the name might imply."
 
 /datum/reagent/drink/cold/space_up
 	name = "Space-Up"
@@ -5085,6 +6146,8 @@
 	description = "Tastes like a hull breach in your mouth."
 	color = "#202800" //rgb: 32, 40, 0
 	adj_temp = -8
+	glass_icon_state = "space-up_glass"
+	glass_desc = "Space-up. It helps keep your cool."
 
 /datum/reagent/drink/cold/lemon_lime
 	name = "Lemon Lime"
@@ -5098,12 +6161,15 @@
 	description = "Oh, the nostalgia..."
 	id = LEMONADE
 	color = "#FFFF00" //rgb: 255, 255, 0
+	glass_icon_state = "lemonadeglass"
 
 /datum/reagent/drink/cold/kiraspecial
 	name = "Kira Special"
 	description = "Long live the guy who everyone had mistaken for a girl. Baka!"
 	id = KIRASPECIAL
 	color = "#CCCC99" //rgb: 204, 204, 153
+	glass_icon_state = "kiraspecial"
+	glass_name = "\improper Kira Special"
 
 /datum/reagent/drink/cold/brownstar
 	name = "Brown Star"
@@ -5111,6 +6177,8 @@
 	id = BROWNSTAR
 	color = "#9F3400" //rgb: 159, 052, 000
 	adj_temp = -2
+	glass_icon_state = "brownstar"
+	glass_name = "\improper Brown Star"
 
 /datum/reagent/drink/cold/milkshake
 	name = "Milkshake"
@@ -5120,6 +6188,8 @@
 	adj_temp = -9
 	custom_metabolism = FOOD_METABOLISM
 	data = 1 //Used as a tally
+	glass_icon_state = "milkshake"
+	glass_desc = "Brings all the boys to the yard."
 
 /datum/reagent/drink/cold/milkshake/on_mob_life(var/mob/living/M)
 
@@ -5159,6 +6229,9 @@
 	description = "The librarian's special."
 	id = REWRITER
 	color = "#485000" //rgb:72, 080, 0
+	glass_icon_state = "rewriter"
+	glass_name = "\improper Rewriter"
+	glass_desc = "This will cure your dyslexia and cause your arrhythmia."
 
 /datum/reagent/drink/cold/rewriter/on_mob_life(var/mob/living/M)
 
@@ -5188,6 +6261,9 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	data = 1 //Used as a tally
+	glass_icon_state = "hippiesdelightglass"
+	glass_name = "\improper Hippie's Delight"
+	glass_desc = "A drink popular in the 1960s."
 
 /datum/reagent/hippies_delight/on_mob_life(var/mob/living/M)
 
@@ -5311,6 +6387,8 @@
 	description = "An alcoholic beverage made from malted grains, hops, yeast, and water."
 	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "beerglass"
+	glass_desc = "A cold pint of pale lager."
 
 /datum/reagent/ethanol/beer/on_mob_life(var/mob/living/M)
 
@@ -5319,6 +6397,11 @@
 
 	M.jitteriness = max(M.jitteriness - 3, 0)
 
+/datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.25)
+	T.adjust_water(0.7)
+
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"
 	id = WHISKEY
@@ -5326,6 +6409,8 @@
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	pass_out = 225
+	glass_icon_state = "whiskeyglass"
+	glass_desc = "The silky, smokey whiskey goodness inside the glass makes the drink look very classy."
 
 /datum/reagent/ethanol/specialwhiskey
 	name = "Special Blend Whiskey"
@@ -5342,6 +6427,8 @@
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 3
 	pass_out = 260
+	glass_icon_state = "ginvodkaglass"
+	glass_desc = "A crystal clear glass of Griffeater gin."
 
 /datum/reagent/ethanol/absinthe
 	name = "Absinthe"
@@ -5352,6 +6439,8 @@
 	slur_start = 25
 	confused_start = 100
 	pass_out = 175
+	glass_icon_state = "absintheglass"
+	glass_desc = "One sip of this and you just know you're gonna have a good time."
 
 //Copy paste from LSD... shoot me
 /datum/reagent/ethanol/absinthe/on_mob_life(var/mob/living/M)
@@ -5362,34 +6451,6 @@
 	data++
 	M.hallucination += 5
 
-/datum/reagent/ethanol/rum
-	name = "Rum"
-	id = RUM
-	description = "Yohoho and all that."
-	color = "#664300" //rgb: 102, 67, 0
-	pass_out = 250
-
-/datum/reagent/ethanol/tequila
-	name = "Tequila"
-	id = TEQUILA
-	description = "A strong and mildly flavoured, mexican produced spirit. Feeling thirsty, hombre?"
-	color = "#FFFF91" //rgb: 255, 255, 145
-
-/datum/reagent/ethanol/vermouth
-	name = "Vermouth"
-	id = VERMOUTH
-	description = "You suddenly feel a craving for a martini..."
-	color = "#91FF91" //rgb: 145, 255, 145
-
-/datum/reagent/ethanol/wine
-	name = "Wine"
-	id = WINE
-	description = "A premium alcoholic beverage made from fermented grape juice."
-	color = "#7E4043" //rgb: 126, 64, 67
-	dizzy_adj = 2
-	slur_start = 65
-	confused_start = 145
-
 /datum/reagent/ethanol/bwine
 	name = "Berry Wine"
 	id = BWINE
@@ -5398,6 +6459,8 @@
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145
+	glass_icon_state = "bwineglass"
+	glass_desc = "A particular favorite of doctors."
 
 /datum/reagent/ethanol/wwine
 	name = "White Wine"
@@ -5407,6 +6470,8 @@
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145
+	glass_icon_state = "wwineglass"
+	glass_desc = "A drink enjoyed by intellectuals and middle-aged female alcoholics alike."
 
 /datum/reagent/ethanol/plumphwine
 	name = "Plump Helmet Wine"
@@ -5417,30 +6482,6 @@
 	slur_start = 60
 	confused_start = 135
 
-/datum/reagent/ethanol/cognac
-	name = "Cognac"
-	id = COGNAC
-	description = "A sweet and strongly alcoholic drink, twice distilled and left to mature for several years. Classy as fornication."
-	color = "#AB3C05" //rgb: 171, 60, 5
-	dizzy_adj = 4
-	confused_start = 115
-
-/datum/reagent/ethanol/hooch
-	name = "Hooch"
-	id = HOOCH
-	description = "A suspiciously viscous off-brown liquid that reeks of fuel. Do you really want to drink that?"
-	color = "#664300" //rgb: 102, 67, 0
-	dizzy_adj = 6
-	slurr_adj = 5
-	slur_start = 35
-	confused_start = 90
-
-/datum/reagent/ethanol/ale
-	name = "Ale"
-	id = ALE
-	description = "A dark alcoholic beverage made from malted barley and yeast."
-	color = "#664300" //rgb: 102, 67, 0
-
 /datum/reagent/ethanol/pwine
 	name = "Poison Wine"
 	id = PWINE
@@ -5449,6 +6490,8 @@
 	dizzy_adj = 1
 	slur_start = 1
 	confused_start = 1
+	glass_name = "glass of Vintage 2018 Special Reserve"
+	glass_icon_state = "pwineglass"
 
 /datum/reagent/ethanol/pwine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5519,6 +6562,9 @@
 	id = SMOKYROOM
 	description = "It was the kind of cool, black night that clung to you like something real... a black, tangible fabric of smoke, deceit, and murder. I had finished working my way through the fat cigars for the day - or at least told myself that to feel the sense of accomplishment for another night wasted on little more than chasing cheating dames and abusive husbands. It was enough to drive a man to drink... and it did. I sauntered into the cantina and wordlessly nodded to the barman. He knew my poison. I was a regular, after all. By the time the night was over, there would be another empty bottle and a case no closer to being cracked. Then I saw her, like a mirage across a desert, or a striken starlet on stage across a smoky room."
 	color = "#664300"
+	glass_icon_state = "smokyroom"
+	glass_name = "\improper Smoky Room"
+
 
 /datum/reagent/ethanol/smokyroom/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5557,13 +6603,15 @@
 	description = "The Spaceman Dream, incarnated as a cocktail."
 	color = "#664300"
 	dupeable = FALSE
+	glass_icon_state = "ragstoriches"
+	glass_name = "\improper Rags to Riches"
 
 /datum/reagent/ethanol/rags_to_riches/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(!M.loc || prob(70))
 		return
-	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	playsound(M, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
 	dispense_cash(rand(5,15),get_turf(M))
 
 /datum/reagent/ethanol/bad_touch
@@ -5571,6 +6619,9 @@
 	id = BAD_TOUCH
 	description = "On the scale of bad touches, somewhere between 'fondled by clown' and 'brushed by supermatter shard'."
 	color = "#664300"
+	glass_icon_state = "bad_touch"
+	glass_name = "\improper Bad Touch"
+
 
 /datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
 	if(..())
@@ -5584,6 +6635,8 @@
 	description = "Silicons dream of this."
 	color = "#664300"
 	custom_metabolism = 1
+	glass_icon_state = "electric_sheep"
+	glass_name = "\improper Electric Sheep"
 
 /datum/reagent/ethanol/electric_sheep/on_mob_life(var/mob/living/M) //If it's human, shoot sparks every tick! If MoMMI, cause alcohol effects.
 	if(..())
@@ -5603,6 +6656,8 @@
 	description = "It's only tolerable because of the added alcohol."
 	color = "#664300"
 	custom_metabolism = 2
+	glass_icon_state = "suicide"
+	glass_name = "\improper Suicide"
 
 /datum/reagent/ethanol/suicide/on_mob_life(var/mob/living/M)  //Instant vomit. Every tick.
 	if(..())
@@ -5617,6 +6672,9 @@
 	description = "Ban when?"
 	color = "#664300"
 	var/global/list/datum/mind/metaclub = list()
+	glass_icon_state = "metabuddy"
+	glass_name = "\improper Metabuddy"
+	glass_desc = "The glass is etched with the name of a very deserving spaceman. There's a special note etched in the bottom..."
 
 /datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
 	if(..())
@@ -5633,17 +6691,19 @@
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
 				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
-				I.plane = METABUDDY_HUD_PLANE
+				I.plane = MISC_HUD_MARKERS_PLANE
 				M.current.client.images += I
 				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
-				J.plane = METABUDDY_HUD_PLANE
+				J.plane = MISC_HUD_MARKERS_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu
 	name = "Waifu"
 	id = WAIFU
 	description = "Don't drink more than one waifu if you value your laifu."
-	color = "#664300"
+	color = "#D0206F"
+	glass_icon_state = "waifu"
+	glass_name = "\improper Waifu"
 
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5663,6 +6723,32 @@
 			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
 	M.regenerate_icons()
 
+/datum/reagent/ethanol/husbando
+	name = "Husbando"
+	id = HUSBANDO
+	description = "You talkin' shit about my husbando?"
+	color = "#2043D0"
+	glass_icon_state = "husbando"
+	glass_name = "\improper Husbando"
+
+/datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
+	if(..())
+		return 1
+	if(M.gender == FEMALE)
+		M.setGender(MALE)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!M.is_wearing_item(/obj/item/clothing/under/callum))
+			var/turf/T = get_turf(H)
+			T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
+			H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+			var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
+			if(H.w_uniform)
+				H.u_equip(H.w_uniform, 1)
+			H.equip_to_slot(C, slot_w_uniform)
+			holder.remove_reagent(HUSBANDO,4)
+	M.regenerate_icons()
+
 /datum/reagent/ethanol/scientists_serendipity
 	name = "Scientist's Serendipity"
 	id = SCIENTISTS_SERENDIPITY
@@ -5671,12 +6757,34 @@
 	custom_metabolism = 0.01
 	dupeable = FALSE
 
+/datum/reagent/ethanol/scientists_serendipity/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	if(volume < 10)
+		glass_icon_state = "scientists_surprise"
+		glass_name = "\improper Scientist's Surprise"
+		glass_desc = "There is as yet insufficient data for a meaningful answer."
+		D.origin_tech = ""
+
+	else if(volume < 50)
+		glass_icon_state = "scientists_serendipity"
+		glass_name = "\improper Scientist's Serendipity"
+		glass_desc = "Knock back a cold glass of R&D."
+		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
+
+	else
+		glass_icon_state = "scientists_serendipity"
+		glass_name = "\improper Scientist's Sapience"
+		glass_desc = "Why research what has already been catalogued?"
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
+
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
 	description = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
 	color = "#664300" //rgb: 102, 67, 0
 	custom_metabolism = 2 //Ten times the normal rate.
+	glass_icon_state = "beepsky_classic"
+	name = "\improper Beepsky Classic"
+
 
 /datum/reagent/ethanol/beepskyclassic/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5684,11 +6792,11 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
-			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
+			playsound(H, 'sound/voice/halt.ogg', 100, 1, 0)
 		else
 			H.Knockdown(10)
 			H.Stun(10)
-			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
+			playsound(H, 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
 	name = "Spiders"
@@ -5696,6 +6804,9 @@
 	description = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA."
 	color = "#666666" //rgb(102, 102, 102)
 	custom_metabolism = 0.01 //Spiders really 'hang around'
+	glass_icon_state = "spiders"
+	name = "\improper This glass is full of spiders"
+	glass_desc = "Seriously, dude, don't touch it."
 
 /datum/reagent/ethanol/spiders/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5712,6 +6823,8 @@
 	id = WEED_EATER
 	description = "The vegetarian equivalant of a snake eater."
 	color = "#009933" //rgb(0, 153, 51)
+	glass_icon_state = "weed_eater"
+	glass_name = "\improper Weed Eater"
 
 /datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5721,33 +6834,177 @@
 		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
 		M.add_spell(spell)
 
-/datum/reagent/ethanol/deadrum
-	name = "Deadrum"
-	id = RUM
-	description = "Popular with the sailors. Not very popular with anyone else."
-	color = "#664300" //rgb: 102, 67, 0
-	pass_out = 325
+/datum/reagent/ethanol/magicadeluxe
+	name = "Magica Deluxe"
+	id = MAGICADELUXE
+	description = "Makes you feel enchanted until the aftertaste hits you."
+	color = "#009933" //rgb(0, 153, 51)
+	glass_icon_state = "magicadeluxe"
+	glass_name = "magica deluxe"
 
-/datum/reagent/ethanol/deadrum/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/magicadeluxe/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.spell_list.len)
+		return //one per customer, magicians need not apply
+	var/list/fake_spells = list()
+	var/list/choices = getAllWizSpells()
+	for(var/i=5; i > 0; i--)
+		var/spell/passive/fakespell = new /spell/passive
+		var/name_modifier = pick("Efficient ","Efficient ","Free ", "Instant ")
+		fakespell.spell_flags = STATALLOWED
+		var/spell/readyup = pick_n_take(choices)
+		var/spell/fromwhichwetake = new readyup
+		fakespell.name = fromwhichwetake.name
+		fakespell.desc = fromwhichwetake.desc
+		fakespell.hud_state = fromwhichwetake.hud_state
+		fakespell.invocation = "MAH'JIK"
+		fakespell.invocation_type = SpI_SHOUT
+		fakespell.charge_type = Sp_CHARGES
+		fakespell.charge_counter = 0
+		fakespell.charge_max = 1
+		if(prob(20))
+			fakespell.name = name_modifier + fakespell.name
+		fake_spells += fakespell
+	if(!M.spell_list.len) //just to be sure
+		to_chat(M, "<span class='notice'>You feel magical!</span>")
+		playsound(M,'sound/effects/summon_guns.ogg', 50, 1)
+		for (var/spell/majik in fake_spells)
+			M.add_spell(majik)
 
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/spell/thisisdumb = new /spell/targeted/equip_item/robesummon
+			H.add_spell(thisisdumb)
+			thisisdumb.charge_type = Sp_CHARGES
+			thisisdumb.charge_counter = 1
+			thisisdumb.charge_max = 1
+			H.cast_spell(thisisdumb,list(H))
+		holder.remove_reagent(MAGICADELUXE,5)
+
+/datum/reagent/ethanol/drink/gravsingulo
+	name = "Gravitational Singulo"
+	id = GRAVSINGULO
+	description = "A true gravitational anomaly."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2E6671" //rgb: 46, 102, 113
+	custom_metabolism = 1 // A bit faster to prevent easy singuloosing
+	dizzy_adj = 15
+	slurr_adj = 15
+	data = 1 //Used as a tally
+	glass_icon_state = "gravsingulo"
+	glass_name = "\improper Gravitational Singulo"
+	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
+
+/datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	switch(data)
+		if(0 to 65)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
+		if(65 to 130)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
+		if(130 to 250)
+			if(prob(5))
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
+			M.adjustBruteLoss(1)
+		if(250 to INFINITY)
+			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				new /obj/item/toy/spinningtoy(T)
+				M.gib()
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/50, data/50)
+	data++
+
+/datum/reagent/drink/tea/gravsingularitea
+	name = "Gravitational Singularitea"
+	id = GRAVSINGULARITEA
+	description = "Spirally!"
+	custom_metabolism = 1 // A bit faster to prevent easy singuloosing
+	data = 1 //Used as a tally
+	mug_icon_state = "gravsingularitea"
+	mug_name = "\improper Gravitational Singularitea"
+	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
+
+/datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	switch(data)
+		if(0 to 65)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
+		if(65 to 130)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
+		if(130 to 250)
+			if(prob(5))
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
+			M.adjustBruteLoss(1)
+		if(250 to INFINITY)
+			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				new /obj/item/toy/spinningtoy(T)
+				M.gib()
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/50, data/50)
+	data++
+
+/datum/reagent/ethanol/drink
+	id = EXPLICITLY_INVALID_REAGENT_ID
+	pass_out = 250
+
+/datum/reagent/ethanol/drink/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	M.dizziness += 5
 
-/datum/reagent/ethanol/deadrum/vodka
+/datum/reagent/ethanol/drink/rum
+	name = "Rum"
+	id = RUM
+	description = "Popular with the sailors. Not very popular with anyone else."
+	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "rumglass"
+	glass_desc = "Now you want to pray for a pirate suit, don't you?"
+
+/datum/reagent/ethanol/drink/vodka
 	name = "Vodka"
 	id = VODKA
 	description = "The drink and fuel of choice of Russians galaxywide."
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "ginvodkaglass"
+	glass_desc = "The glass contain wodka. Xynta."
 
-/datum/reagent/ethanol/deadrum/sake
+/datum/reagent/ethanol/drink/sake
 	name = "Sake"
 	id = SAKE
 	description = "Anime's favorite drink."
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "sakeglass"
+	glass_desc = "A glass of sake."
 
-/datum/reagent/ethanol/deadrum/sake/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/sake/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -5766,9 +7023,9 @@
 			if(M.dizziness != 0)
 				M.dizziness = max(0, M.dizziness - 15)
 			if(M.confused != 0)
-				M.confused = max(0, M.confused - 5)
+				M.remove_confused(5)
 
-/datum/reagent/ethanol/deadrum/glasgow
+/datum/reagent/ethanol/drink/glasgow
 	name = "Glasgow Deadrum"
 	id = GLASGOW
 	description = "Makes you feel like you had one hell of a party."
@@ -5776,19 +7033,23 @@
 	slur_start = 1
 	confused_start = 1
 
-/datum/reagent/ethanol/deadrum/tequila
+/datum/reagent/ethanol/drink/tequila
 	name = "Tequila"
 	id = TEQUILA
 	description = "A strong and mildly flavoured, mexican produced spirit. Feeling thirsty, hombre?"
 	color = "#A8B0B7" //rgb: 168, 176, 183
+	glass_icon_state = "tequilaglass"
+	glass_desc = "Now all that's missing is the weird colored shades!"
 
-/datum/reagent/ethanol/deadrum/vermouth
+/datum/reagent/ethanol/drink/vermouth
 	name = "Vermouth"
 	id = VERMOUTH
 	description = "You suddenly feel a craving for a martini..."
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "vermouthglass"
+	glass_desc = "You wonder why you're even drinking this straight."
 
-/datum/reagent/ethanol/deadrum/wine
+/datum/reagent/ethanol/drink/wine
 	name = "Wine"
 	id = WINE
 	description = "A premium alcoholic beverage made from fermented grape juice."
@@ -5796,16 +7057,20 @@
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145
+	glass_icon_state = "wineglass"
+	glass_desc = "A drink enjoyed by intellectuals and middle-aged female alcoholics alike."
 
-/datum/reagent/ethanol/deadrum/cognac
+/datum/reagent/ethanol/drink/cognac
 	name = "Cognac"
 	id = COGNAC
 	description = "A sweet and strongly alcoholic drink, twice distilled and left to mature for several years. Classy as fornication."
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	confused_start = 115
+	glass_icon_state = "cognacglass"
+	glass_desc = "You feel aristocratic just holding this."
 
-/datum/reagent/ethanol/deadrum/hooch
+/datum/reagent/ethanol/drink/hooch
 	name = "Hooch"
 	id = HOOCH
 	description = "A suspiciously viscous off-brown liquid that reeks of fuel. Do you really want to drink that?"
@@ -5815,21 +7080,66 @@
 	slur_start = 35
 	confused_start = 90
 	pass_out = 250
+	glass_desc = "You've really hit rock bottom now... your liver packed its bags and left last night."
 
-/datum/reagent/ethanol/deadrum/ale
+/datum/reagent/ethanol/drink/triplesec
+	name = "Triple Sec"
+	id = TRIPLESEC
+	description = "Clear, dry, tastes like oranges. A necessity in any bartender's shelves."
+	color = "#D1D1D1" //rgb: 209, 209, 209
+	glass_icon_state = "triplesecglass"
+	glass_desc = "Triple Sec, a clear orange liquor with a syrupy texture. Maybe mix it with something, you weirdo."
+
+/datum/reagent/ethanol/drink/schnapps
+	name = "Schnapps"
+	id = SCHNAPPS
+	description = "Tastes like all the fruits in the galaxy."
+	color = "#FFAC38" //rgb: 255, 172, 56
+	glass_icon_state = "schnappsglass"
+	glass_desc = "A glass of indescernibly fruity schnapps."
+
+/datum/reagent/ethanol/drink/bitters
+	name = "Bitters"
+	id = BITTERS
+	description = "Dark, bitter alcohol. Who in their right mind drinks this straight?"
+	color = "#361412" //rgb: 54, 20, 18
+	glass_icon_state = "bittersglass"
+	glass_desc = "A glass of dark and, well, bitter, bitters."
+
+/datum/reagent/ethanol/drink/champagne
+	name = "Champagne"
+	id = CHAMPAGNE
+	description = "Often found sprayed all over sports victors or at New Years parties."
+	color = "#FAD6A5" //rgb: 250, 214, 165
+	glass_icon_state = "champagneglass"
+	glass_desc = "A fancy, bubbly glass of sparkling yellow champagne!"
+
+/datum/reagent/ethanol/drink/bluecuracao
+	name = "Blue Curacao"
+	id = BLUECURACAO
+	description = "Essentially a sweeter, bluer form of Triple Sec."
+	color = "#3AD1F0" //rgb: 58, 209, 240
+	glass_icon_state = "curacaoglass"
+	glass_desc = "Why's it blue if it tastes like an orange?"
+
+/datum/reagent/ethanol/drink/ale
 	name = "Ale"
 	id = ALE
 	description = "A dark alcoholic beverage made from malted barley and yeast."
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "aleglass"
+	glass_desc = "A cold pint of delicious ale."
 
-/datum/reagent/ethanol/deadrum/thirteenloko
+/datum/reagent/ethanol/drink/thirteenloko
 	name = "Thirteen Loko"
 	id = THIRTEENLOKO
 	description = "A potent mixture of caffeine and alcohol."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#102000" //rgb: 16, 32, 0
+	glass_icon_state = "thirteen_loko_glass"
+	glass_desc = "This is a glass of Thirteen Loko. It appears to be of the highest quality. The drink, not the glass."
 
-/datum/reagent/ethanol/deadrum/thirteenloko/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/thirteenloko/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -5840,30 +7150,37 @@
 
 /////////////////////////////////////////////////////////////////Cocktail Entities//////////////////////////////////////////////
 
-/datum/reagent/ethanol/deadrum/bilk
+/datum/reagent/ethanol/drink/bilk
 	name = "Bilk"
 	id = BILK
 	description = "This appears to be beer mixed with milk. Disgusting."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#895C4C" //rgb: 137, 92, 76
+	color = "#AA9988" //rgb: 170, 153, 136
 	density = 0.89
 	specheatcap = 2.46
+	glass_desc = "A brew of milk and beer. For alcoholics who fear osteoporosis."
 
-/datum/reagent/ethanol/deadrum/atomicbomb
+/datum/reagent/ethanol/drink/atomicbomb
 	name = "Atomic Bomb"
 	id = ATOMICBOMB
 	description = "Nuclear proliferation never tasted so good."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666300" //rgb: 102, 99, 0
+	glass_icon_state = "atomicbombglass"
+	glass_name = "\improper Atomic Bomb"
+	glass_desc = "NanoTrasen does not take legal responsibility for your actions after imbibing."
 
-/datum/reagent/ethanol/deadrumm/threemileisland
+/datum/reagent/ethanol/drink/threemileisland
 	name = "Three Mile Island Iced Tea"
 	id = THREEMILEISLAND
 	description = "Made for a woman. Strong enough for a man."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666340" //rgb: 102, 99, 64
+	glass_icon_state = "threemileislandglass"
+	glass_name = "\improper Three Mile Island Iced Tea"
+	glass_desc = "A glass of this is sure to prevent a meltdown. Or cause one."
 
-/datum/reagent/ethanol/deadrum/goldschlager
+/datum/reagent/ethanol/drink/goldschlager
 	name = "Goldschlager"
 	id = GOLDSCHLAGER
 	description = "100 proof cinnamon schnapps with small gold flakes mixed in."
@@ -5871,8 +7188,10 @@
 	color = "#664300" //rgb: 102, 67, 0
 	density = 2.72
 	specheatcap = 0.32
+	glass_icon_state = "goldschlagerglass"
+	glass_desc = "A schnapps with tiny flakes of gold floating in it."
 
-/datum/reagent/ethanol/deadrum/patron
+/datum/reagent/ethanol/drink/patron
 	name = "Patron"
 	id = PATRON
 	description = "Tequila with small flakes of silver in it."
@@ -5880,111 +7199,153 @@
 	color = "#585840" //rgb: 88, 88, 64
 	density = 1.84
 	specheatcap = 0.59
+	glass_icon_state = "patronglass"
+	glass_desc = "Drinking Patron in the bar, with all the subpar ladies."
 
-/datum/reagent/ethanol/deadrum/gintonic
+/datum/reagent/ethanol/drink/gintonic
 	name = "Gin and Tonic"
 	id = GINTONIC
 	description = "An all time classic, mild cocktail."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "gintonicglass"
+	glass_desc = "A mild but still great cocktail. Drink up, like a true Englishman."
 
-/datum/reagent/ethanol/deadrum/cuba_libre
+/datum/reagent/ethanol/drink/cuba_libre
 	name = "Cuba Libre"
 	id = CUBALIBRE
 	description = "Rum, mixed with cola. Viva la revolution."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3E1B00" //rgb: 62, 27, 0
+	glass_icon_state = "cubalibreglass"
+	glass_name = "\improper Cuba Libre"
+	glass_desc = "A classic mix of rum and cola. Viva la revolution."
 
-/datum/reagent/ethanol/deadrum/whiskey_cola
+/datum/reagent/ethanol/drink/whiskey_cola
 	name = "Whiskey Cola"
 	id = WHISKEYCOLA
 	description = "Whiskey, mixed with cola. Surprisingly refreshing."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3E1B00" //rgb: 62, 27, 0
+	glass_icon_state = "whiskeycolaglass"
+	glass_desc = "An innocent-looking mixture of cola and whiskey. Delicious."
 
-/datum/reagent/ethanol/deadrum/martini
+/datum/reagent/ethanol/drink/martini
 	name = "Classic Martini"
 	id = MARTINI
 	description = "Vermouth with gin. Not quite how 007 enjoyed it, but still delicious."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "martiniglass"
+	glass_desc = "Shaken, not stirred."
 
-/datum/reagent/ethanol/deadrum/vodkamartini
+/datum/reagent/ethanol/drink/vodkamartini
 	name = "Vodka Martini"
 	id = VODKAMARTINI
 	description = "Vodka with gin. Not quite how 007 enjoyed it, but still delicious."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "martiniglass"
+	glass_desc = "A bastardisation of the classic martini. Still great."
 
-/datum/reagent/ethanol/deadrum/sakemartini
+/datum/reagent/ethanol/drink/sakemartini
 	name = "Sake Martini"
 	id = SAKEMARTINI
 	description = "A martini mixed with sake instead of vermouth. Has a fruity, oriental flavor."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "martiniglass"
+	glass_desc = "An oriental spin on the martini, mixed with sake instead of vermouth."
 
-/datum/reagent/ethanol/deadrum/white_russian
+/datum/reagent/ethanol/drink/white_russian
 	name = "White Russian"
 	id = WHITERUSSIAN
 	description = "That's just, like, your opinion, man..."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68340" //rgb: 166, 131, 64
+	glass_icon_state = "whiterussianglass"
+	glass_name = "\improper White Russian"
+	glass_desc = "A very nice looking drink. But that's just, like, your opinion, man."
 
-/datum/reagent/ethanol/deadrum/screwdrivercocktail
+/datum/reagent/ethanol/drink/screwdrivercocktail
 	name = "Screwdriver"
 	id = SCREWDRIVERCOCKTAIL
 	description = "Vodka, mixed with plain ol' orange juice. The result is surprisingly delicious."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68310" //rgb: 166, 131, 16
+	glass_icon_state = "screwdriverglass"
+	glass_name = "\improper Screwdriver"
+	glass_desc = "A simple, yet superb mixture of vodka and orange juice. Just the thing for the tired engineer."
 
-/datum/reagent/ethanol/deadrum/booger
+/datum/reagent/ethanol/drink/booger
 	name = "Booger"
 	id = BOOGER
 	description = "Ewww..."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68310" //rgb: 166, 131, 16
+	glass_icon_state = "booger"
+	glass_name = "\improper Booger"
+	glass_desc = "The color reminds you of something that came out of the clown's nose."
 
-/datum/reagent/ethanol/deadrum/bloody_mary
+/datum/reagent/ethanol/drink/bloody_mary
 	name = "Bloody Mary"
 	id = BLOODYMARY
 	description = "A strange yet pleasant mixture made of vodka, tomato and lime juice. Or at least you think the red stuff is tomato juice."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "bloodymaryglass"
+	glass_name = "\improper Bloody Mary"
+	glass_desc = "Tomato juice, mixed with vodka and a lil' bit of lime. Tastes like liquid murder."
 
-/datum/reagent/ethanol/deadrum/gargle_blaster
+/datum/reagent/ethanol/drink/gargle_blaster
 	name = "Pan-Galactic Gargle Blaster"
 	id = GARGLEBLASTER
 	description = "Whoah, this stuff looks volatile!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "gargleblasterglass"
+	glass_name = "\improper Pan-Galactic Gargle Blaster"
+	glass_desc = "Does... does this mean that Arthur and Ford are on the station? Oh joy."
 
-/datum/reagent/ethanol/deadrum/brave_bull
+/datum/reagent/ethanol/drink/brave_bull
 	name = "Brave Bull"
 	id = BRAVEBULL
 	description = "A mixture of tequila and coffee liqueur."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "bravebullglass"
+	glass_name = "\improper Brave Bull"
+	glass_desc = "Tequila and coffee liqueur. Kicks like a bull."
 
-/datum/reagent/ethanol/deadrum/tequila_sunrise
+/datum/reagent/ethanol/drink/tequila_sunrise
 	name = "Tequila Sunrise"
 	id = TEQUILASUNRISE
 	description = "Tequila and orange juice. Much like a Screwdriver, only Mexican."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "tequilasunriseglass"
+	glass_name = "\improper Tequila Sunrise"
+	glass_desc = "Oh great, now you feel nostalgic about sunrises back on Terra..."
 
-/datum/reagent/ethanol/deadrum/toxins_special
+/datum/reagent/ethanol/drink/toxins_special
 	name = "Toxins Special"
 	id = TOXINSSPECIAL
 	description = "This thing is FLAMING! CALL THE DAMN SHUTTLE!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "toxinsspecialglass"
+	glass_name = "\improper Toxins Special"
+	glass_desc = "Whoah, this thing is on FIRE!"
 
-/datum/reagent/ethanol/deadrum/beepsky_smash
+/datum/reagent/ethanol/drink/beepsky_smash
 	name = "Beepsky Smash"
 	id = BEEPSKYSMASH
 	description = "This drink is the law."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "beepskysmashglass"
+	glass_name = "\improper Beepsky Smash"
+	glass_desc = "Heavy, hot and strong. Best enjoyed with your hands behind your back."
 
 /datum/reagent/drink/doctor_delight
 	name = "The Doctor's Delight"
@@ -5993,6 +7354,9 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = FOOD_METABOLISM
 	color = "#BA7DBA" //rgb: 73, 49, 73
+	glass_icon_state = "doctorsdelightglass"
+	glass_name = "\improper Doctor's Delight"
+	glass_desc = "A rejuvenating mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 
@@ -6000,125 +7364,407 @@
 		return 1
 
 	M.nutrition += nutriment_factor
-	if(M.getOxyLoss() && prob(50))
+	if(M.getOxyLoss())
 		M.adjustOxyLoss(-2)
-	if(M.getBruteLoss() && prob(60))
+	if(M.getBruteLoss())
 		M.heal_organ_damage(2, 0)
-	if(M.getFireLoss() && prob(50))
+	if(M.getFireLoss())
 		M.heal_organ_damage(0, 2)
-	if(M.getToxLoss() && prob(50))
+	if(M.getToxLoss())
 		M.adjustToxLoss(-2)
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused != 0)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 
-/datum/reagent/ethanol/deadrum/changelingsting
+/datum/reagent/ethanol/drink/changelingsting
 	name = "Changeling Sting"
 	id = CHANGELINGSTING
 	description = "Milder than the name suggests. Not that you've ever been stung."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
 
-/datum/reagent/ethanol/deadrum/irish_cream
+/datum/reagent/ethanol/drink/irish_cream
 	name = "Irish Cream"
 	id = IRISHCREAM
 	description = "Whiskey-imbued cream. What else could you expect from the Irish."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "irishcreamglass"
+	glass_desc = "It's cream, mixed with whiskey. What else would you expect from the Irish?"
 
-/datum/reagent/ethanol/deadrum/manly_dorf
+/datum/reagent/ethanol/drink/manly_dorf
 	name = "The Manly Dorf"
 	id = MANLYDORF
 	description = "A dwarfy concoction made from ale and beer. Intended for stout dwarves only."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "manlydorfglass"
+	glass_name = "The Manly Dorf"
+	glass_desc = "A dwarfy concoction made from ale and beer. Intended for stout dwarves only."
 
-/datum/reagent/ethanol/deadrum/longislandicedtea
+/datum/reagent/ethanol/drink/longislandicedtea
 	name = "Long Island Iced Tea"
 	id = LONGISLANDICEDTEA
 	description = "The liquor cabinet, brought together in a delicious mix. Intended for middle-aged alcoholic women only."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "longislandicedteaglass"
+	glass_name = "\improper Long Island Iced Tea"
 
-/datum/reagent/ethanol/deadrum/moonshine
+/datum/reagent/ethanol/drink/mudslide
+	name = "Mudslide"
+	id = MUDSLIDE
+	description = "Like a milkshake, but for irresponsible adults."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b6ac94" //rgb: 182, 172, 148
+	glass_icon_state = "mudslide"
+	glass_name = "\improper Mudslide"
+
+/datum/reagent/ethanol/drink/sacrificial_mary
+	name = "Sacrificial Mary"
+	id = SACRIFICIAL_MARY
+	description = "Fresh Altar-To-Table taste in every sip."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#bd1c1e" //rgb: 189, 28, 30
+	glass_icon_state = "sacrificialmary"
+	glass_name = "\improper Sacrificial Mary"
+
+/datum/reagent/ethanol/drink/boysenberry_blizzard
+	name = "Boysenberry Blizzard"
+	id = BOYSENBERRY_BLIZZARD
+	description = "Don't stick your tongue out for these snowflakes!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#aa4cbd" //rgb: 170, 76, 189
+	glass_icon_state = "boysenberryblizzard"
+	glass_name = "\improper Boysenberry Blizzard"
+
+/datum/reagent/ethanol/drink/moonshine
 	name = "Moonshine"
 	id = MOONSHINE
 	description = "You've really hit rock bottom now... your liver packed its bags and left last night."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
-/datum/reagent/ethanol/deadrum/b52
+/datum/reagent/ethanol/drink/midnightkiss
+	name = "Midnight Kiss"
+	id = MIDNIGHTKISS
+	description = "Vodka mixed with Blue Curacao and topped with champagne. Bubbly!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#82f0ff" //rgb: 130, 240, 255
+	glass_icon_state = "midnightkiss"
+	glass_name = "\improper Midnight Kiss"
+
+/datum/reagent/ethanol/drink/cosmopolitan
+	name = "Cosmopolitan"
+	id = COSMOPOLITAN
+	description = "A Cosmopolitan, the poster child of fruity cocktails."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#d64054" //rgb: 214, 64, 84
+	glass_icon_state = "cosmopolitan"
+	glass_name = "cosmopolitan"
+
+/datum/reagent/ethanol/drink/corpsereviver
+	name = "Corpse Reviver No. 2"
+	id = CORPSEREVIVER
+	description = "Hair of the dog taken to one of its most logical extremes."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	glass_icon_state = "corpsereviver"
+	glass_name = "\improper Corpse Reviver No. 2"
+
+/datum/reagent/ethanol/drink/bluelagoon
+	name = "Blue Lagoon"
+	id = BLUELAGOON
+	description = "Goes best with swim trunks, a sea breeze, and a nice big beach."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#82f0ff" //rgb: 130, 240, 255
+	glass_icon_state = "bluelagoon"
+	glass_name = "\improper Blue Lagoon"
+
+/datum/reagent/ethanol/drink/sexonthebeach
+	name = "Sex On The Beach"
+	id = SEXONTHEBEACH
+	description = "Did you hear a bear just now?"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#fca668" //rgb: 252, 166, 104
+	glass_icon_state = "sexonthebeach"
+	glass_desc = "\improper Sex On The Beach"
+
+/datum/reagent/ethanol/drink/americano
+	name = "Americano"
+	id = AMERICANO
+	description = "Expensive soda water - the best way to improve a poor drink."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#872d12" //rgb: 135, 45, 18
+	glass_icon_state = "americano"
+	glass_name = "americano"
+
+/datum/reagent/ethanol/drink/betweenthesheets
+	name = "Between The Sheets"
+	id = BETWEENTHESHEETS
+	description = "This is basically just a sidecar with rum in it."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f0d695" //rgb: 240, 214, 149
+	glass_icon_state = "betweenthesheets"
+	glass_name = "\improper Between The Sheets"
+
+/datum/reagent/ethanol/drink/sidecar
+	name = "Sidecar"
+	id = SIDECAR
+	description = "For those who still want a fruity cocktail, without the effeminate connotations of a Cosmo."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#99593c" //rgb: 153, 89, 60
+	glass_icon_state = "sidecar"
+	glass_name = "sidecar"
+
+/datum/reagent/ethanol/drink/champagnecocktail
+	name = "Champagne Cocktail"
+	id = CHAMPAGNECOCKTAIL
+	description = "Champagne, bitters, and cognac, garnished with a cherry. Very classy."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#fcdf95" //rgb: 252, 223, 149
+	glass_icon_state = "champagnecocktail"
+	glass_name = "Champagne cocktail"
+
+/datum/reagent/ethanol/drink/espressomartini
+	name = "Espresso Martini"
+	id = ESPRESSOMARTINI
+	description = "Two of any self respecting substance abuser's fixes in one drink!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#120705" //rgb: 18, 7, 5
+	glass_icon_state = "espressomartini"
+	glass_name = "espresso martini"
+
+/datum/reagent/ethanol/drink/kamikaze
+	name = "Kamikaze"
+	id = KAMIKAZE
+	description = "Banzai!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	glass_icon_state = "kamikaze"
+	glass_name = "kamikaze"
+
+/datum/reagent/ethanol/drink/mojito
+	name = "Mojito"
+	id = MOJITO
+	description = "A giant pain in the ass to make on the best of days."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#c3f08d" //rgb: 195, 240, 141
+	glass_icon_state = "mojito"
+	glass_name = "mojito"
+
+/datum/reagent/ethanol/drink/whiskeytonic
+	name = "Whiskey Tonic"
+	id = WHISKEYTONIC
+	description = "Quinine makes everything taste better."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#fff9cf" //rgb: 255, 249, 207
+	glass_icon_state = "whiskeytonic"
+	glass_name = "\improper Whiskey Tonic"
+
+/datum/reagent/ethanol/drink/moscowmule
+	name = "Moscow Mule"
+	id = MOSCOWMULE
+	description = "Wait a minute, this isn't ginger beer..."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#6e573f" //rgb: 110, 87, 63
+	glass_icon_state = "moscowmule"
+	glass_name = "\improper Moscow Mule"
+
+/datum/reagent/ethanol/drink/cinnamonwhisky
+	name = "Cinnamon Whisky"
+	id = CINNAMONWHISKY
+	description = "Cinnamon whisky. Feel the burn."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" //rgb: 242, 146, 36
+	glass_icon_state = "fireballglass"
+	glass_desc = "Red-hot cinnamon whisky in a shot glass."
+
+/datum/reagent/ethanol/drink/c4cocktail
+	name = "C-4 Cocktail"
+	id = C4COCKTAIL
+	description = "Kahlua and Cinnamon Whisky, a burning explosion of flavor - tastes like pain. And cinnamon."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#1f0802" //31, 8, 2
+	glass_icon_state = "c4cocktail"
+	glass_name = "\improper C-4 Cocktail"
+	glass_desc = "Kahlua and Cinnamon Whisky, a burning explosion of cinnamon flavor."
+
+/datum/reagent/ethanol/drink/dragonsblood
+	name = "Dragon's Blood"
+	id = DRAGONSBLOOD
+	description = "Burning hot and bright red, just like the mythical namesake."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b01522" //176, 21, 34
+	glass_icon_state = "dragonsblood"
+	glass_name = "\improper Dragon's Blood"
+	flammable = 1
+	light_color = "#540303"
+
+/datum/reagent/ethanol/drink/dragonspit
+	name = "Dragon's Spit"
+	id = DRAGONSSPIT
+	description = "The simplest idea possible; take something hot, and make it hotter."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+	glass_icon_state = "dragonsspit"
+	glass_name = "\improper Dragon's Spit"
+	light_color = "#ff7003"
+	flammable = 1
+
+/datum/reagent/ethanol/drink/firecider
+	name = "Fire Cider"
+	id = FIREBALLCIDER
+	description = "Apples, alcohol, and cinnamon, a match made in heaven."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+	glass_icon_state = "fireballcider"
+	glass_name = "\improper Fireball Cider"
+	glass_desc = "A toasty hot glass of apple cider and cinnamon whisky - makes you feel warm and fuzzy inside."
+
+/datum/reagent/ethanol/drink/cinnamontoastcocktail
+	name = "Cinnamon Toast"
+	id = CINNAMONTOASTCOCKTAIL
+	description = "Rum, cream, and cinnamon whisky. Tastes a little like the milk you get out of a sugary cereal."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+	glass_icon_state = "cinnamontoastcocktail"
+	glass_name = "\improper Cinnamon Toast Cocktail"
+	glass_desc = "Kind of like drinking left-over cereal milk, but for people with a drinking problem."
+
+/datum/reagent/ethanol/drink/manhattanfireball
+	name = "Manhattan Fireball"
+	id = MANHATTANFIREBALL
+	description = "A timeless classic made with a burning hot twist."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+	glass_icon_state = "manhattanfireball"
+	glass_name = "\improper Manhattan Fireball"
+	light_color = "#540303"
+	flammable = 1
+
+/datum/reagent/ethanol/drink/fireballcola
+	name = "Fireball Cola"
+	id = FIREBALLCOLA
+	description = "Like a Whiskey Cola, but with added painful burning sensation."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f20224" //242, 146, 36
+	glass_icon_state = "fireballcola"
+	glass_name = "\improper Fireball Cola"
+	glass_desc = "Cinnamon whisky and cola - like a regular whiskey cola, but with more burning."
+
+/datum/reagent/ethanol/drink/firerita
+	name = "Fire-rita"
+	id = FIRERITA
+	description = "Triple sec, Cinnamon Whisky, and Tequila, eugh. Less a cocktail more than throwing whatever's on the shelf in a glass."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f0133c" //rgb: 240, 19, 60
+	glass_icon_state = "firerita"
+	glass_name = "firerita"
+	glass_desc = "Looks pretty, offends a sane person's taste buds. Then again, anyone who orders this probably lacks one of those two traits."
+
+/datum/reagent/ethanol/drink/magica
+	name = "Magica"
+	id = MAGICA
+	description = "A bitter mix with a burning aftertaste."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#774F1B"
+	glass_icon_state = "magica"
+	glass_name = "magica"
+	glass_desc = "Bitter, with an annoying aftertaste of spice. Supposedly inspired by wearers of bath robes."
+
+/datum/reagent/ethanol/drink/b52
 	name = "B-52"
 	id = B52
 	description = "Coffee, irish cream, and cognac. You will get bombed."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "b52glass"
+	glass_name = "\improper B-52"
+	light_color = "#000080"
+	flammable = 1
 
-/datum/reagent/ethanol/deadrum/irishcoffee
+/datum/reagent/ethanol/drink/irishcoffee
 	name = "Irish Coffee"
 	id = IRISHCOFFEE
 	description = "Coffee served with irish cream. Regular cream just isn't the same."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "irishcoffeeglass"
 
-/datum/reagent/ethanol/deadrum/margarita
+/datum/reagent/ethanol/drink/margarita
 	name = "Margarita"
 	id = MARGARITA
 	description = "On the rocks with salt on the rim. Arriba!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "margaritaglass"
 
-/datum/reagent/ethanol/deadrum/black_russian
+/datum/reagent/ethanol/drink/black_russian
 	name = "Black Russian"
 	id = BLACKRUSSIAN
 	description = "For the lactose-intolerant. Still as classy as a White Russian."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#360000" //rgb: 54, 0, 0
+	glass_icon_state = "blackrussianglass"
+	glass_name = "\improper Black Russian"
+	glass_desc = "For the lactose-intolerant. Still as classy as a White Russian."
 
-/datum/reagent/ethanol/deadrum/manhattan
+/datum/reagent/ethanol/drink/manhattan
 	name = "Manhattan"
 	id = MANHATTAN
 	description = "The Detective's undercover drink of choice. He never could stomach gin..."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "manhattanglass"
+	glass_name = "\improper Manhattan"
 
-/datum/reagent/ethanol/deadrum/manhattan_proj
+/datum/reagent/ethanol/drink/manhattan_proj
 	name = "Manhattan Project"
 	id = MANHATTAN_PROJ
 	description = "A scientist's drink of choice, for thinking about how to blow up the station."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "proj_manhattanglass"
+	glass_name = "\improper Manhattan Project"
 
-/datum/reagent/ethanol/deadrum/whiskeysoda
+/datum/reagent/ethanol/drink/whiskeysoda
 	name = "Whiskey Soda"
 	id = WHISKEYSODA
 	description = "Ultimate refreshment."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "whiskeysodaglass2"
 
-/datum/reagent/ethanol/deadrum/antifreeze
+/datum/reagent/ethanol/drink/antifreeze
 	name = "Anti-freeze"
 	id = ANTIFREEZE
-	description = "Ultimate refreshment."
+	description = "The ultimate refreshment."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "antifreeze"
+	glass_name = "\improper Anti-freeze"
 
-/datum/reagent/ethanol/deadrum/barefoot
+/datum/reagent/ethanol/drink/barefoot
 	name = "Barefoot"
 	id = BAREFOOT
 	description = "Barefoot and pregnant"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "b&p"
+	glass_name = "\improper Barefoot"
 
-/datum/reagent/ethanol/deadrum/snowwhite
+/datum/reagent/ethanol/drink/snowwhite
 	name = "Snow White"
 	id = SNOWWHITE
 	description = "Pale lager mixed with lemon-lime soda. Refreshing and sweet."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "snowwhite"
+	glass_name = "\improper Snow White"
 
-/datum/reagent/ethanol/deadrum/demonsblood
+/datum/reagent/ethanol/drink/demonsblood
 	name = "Demon's Blood"
 	id = DEMONSBLOOD
 	description = "AHHHH!!"
@@ -6126,8 +7772,11 @@
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 10
 	slurr_adj = 10
+	glass_icon_state = "demonsblood"
+	glass_name = "\improper Demon's Blood"
+	glass_desc = "Just looking at this thing makes the hair on the back of your neck stand up."
 
-/datum/reagent/ethanol/deadrum/vodkatonic
+/datum/reagent/ethanol/drink/vodkatonic
 	name = "Vodka and Tonic"
 	id = VODKATONIC
 	description = "For when a gin and tonic isn't Russian enough."
@@ -6135,8 +7784,10 @@
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	slurr_adj = 3
+	glass_icon_state = "vodkatonicglass"
+	glass_desc = "For when a gin and tonic isn't Russian enough."
 
-/datum/reagent/ethanol/deadrum/ginfizz
+/datum/reagent/ethanol/drink/ginfizz
 	name = "Gin Fizz"
 	id = GINFIZZ
 	description = "Refreshingly lemony, deliciously dry."
@@ -6144,22 +7795,30 @@
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	slurr_adj = 3
+	glass_icon_state = "ginfizzglass"
+	glass_name = "\improper Gin Fizz"
 
-/datum/reagent/ethanol/deadrum/bahama_mama
+/datum/reagent/ethanol/drink/bahama_mama
 	name = "Bahama mama"
 	id = BAHAMA_MAMA
 	description = "Tropical cocktail."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "bahama_mama"
+	glass_name = "\improper Bahama Mama"
+	glass_desc = "A delicious tropical cocktail."
 
-/datum/reagent/ethanol/deadrum/pinacolada
+/datum/reagent/ethanol/drink/pinacolada
 	name = "Pina Colada"
 	id = PINACOLADA
 	description = "Sans pineapple."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "F2F5BF" //rgb: 242, 245, 191
+	glass_icon_state = "pinacolada"
+	glass_name = "\improper Pina Colada"
+	glass_desc = "If you like this and getting caught in the rain, come with me and escape."
 
-/datum/reagent/ethanol/deadrum/singulo
+/datum/reagent/ethanol/drink/singulo
 	name = "Singulo"
 	id = SINGULO
 	description = "A gravitational anomaly."
@@ -6167,8 +7826,11 @@
 	color = "#2E6671" //rgb: 46, 102, 113
 	dizzy_adj = 15
 	slurr_adj = 15
+	glass_icon_state = "singulo"
+	glass_name = "\improper Singulo"
+	glass_desc = "IT'S LOOSE!"
 
-/datum/reagent/ethanol/deadrum/sangria
+/datum/reagent/ethanol/drink/sangria
 	name = "Sangria"
 	id = SANGRIA
 	description = "So tasty you won't believe it's alcohol."
@@ -6177,15 +7839,19 @@
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145
+	glass_icon_state = "sangria"
+	glass_name = "\improper Sangria"
 
-/datum/reagent/ethanol/deadrum/sbiten
+/datum/reagent/ethanol/drink/sbiten
 	name = "Sbiten"
 	id = SBITEN
 	description = "A spicy vodka."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "sbitenglass"
+	glass_desc = "A spicy mix of vodka and spice. Very hot."
 
-/datum/reagent/ethanol/deadrum/sbiten/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/sbiten/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -6193,35 +7859,40 @@
 	if(M.bodytemperature < 360)
 		M.bodytemperature = min(360, M.bodytemperature + 50) //310 is the normal bodytemp. 310.055
 
-/datum/reagent/ethanol/deadrum/devilskiss
+/datum/reagent/ethanol/drink/devilskiss
 	name = "Devil's Kiss"
 	id = DEVILSKISS
 	description = "Creepy time!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68310" //rgb: 166, 131, 16
+	glass_icon_state = "devilskiss"
+	glass_name = "\improper Devil's Kiss"
 
-/datum/reagent/ethanol/deadrum/red_mead
+/datum/reagent/ethanol/drink/red_mead
 	name = "Red Mead"
 	id = RED_MEAD
 	description = "A crimson beverage consumed by space vikings. The coloration is from berries... you hope."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "red_meadglass"
 
-/datum/reagent/ethanol/deadrum/mead
+/datum/reagent/ethanol/drink/mead
 	name = "Mead"
 	id = MEAD
 	description = "A beverage consumed by space vikings on their long raids and rowdy festivities."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "meadglass"
 
-/datum/reagent/ethanol/deadrum/iced_beer
+/datum/reagent/ethanol/drink/iced_beer
 	name = "Iced Beer"
 	id = ICED_BEER
 	description = "A beer so frosty the air around it freezes."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "iced_beerglass"
 
-/datum/reagent/ethanol/deadrum/iced_beer/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/iced_beer/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -6229,63 +7900,82 @@
 	if(M.bodytemperature < T0C+33)
 		M.bodytemperature = min(T0C+33, M.bodytemperature - 4) //310 is the normal bodytemp. 310.055
 
-/datum/reagent/ethanol/deadrum/grog
+/datum/reagent/ethanol/drink/grog
 	name = "Grog"
 	id = GROG
 	description = "Watered down rum. NanoTrasen approves!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "grogglass"
+	glass_desc = "The favorite of pirates everywhere."
 
-/datum/reagent/ethanol/deadrum/aloe
+/datum/reagent/ethanol/drink/aloe
 	name = "Aloe"
 	id = ALOE
-	description = "Contains no actual aloe."
+	description = "Watermelon juice and irish cream. Contains no actual aloe."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "aloe"
+	glass_name = "\improper Aloe"
 
-/datum/reagent/ethanol/deadrum/andalusia
+/datum/reagent/ethanol/drink/andalusia
 	name = "Andalusia"
 	id = ANDALUSIA
 	description = "Rum, whiskey, and lemon juice."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "andalusia"
+	glass_name = "\improper Andalusia"
+	glass_desc = "A strong cocktail named after a historical Terran land."
 
-/datum/reagent/ethanol/deadrum/alliescocktail
+/datum/reagent/ethanol/drink/alliescocktail
 	name = "Allies Cocktail"
 	id = ALLIESCOCKTAIL
 	description = "English gin, French vermouth, and Russian vodka."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "alliescocktail"
+	glass_name = "\improper Allies Cocktail"
+	glass_desc = "A cocktail of spirits from three historical Terran nations, symbolizing their alliance in a great war."
 
-/datum/reagent/ethanol/deadrum/acid_spit
+/datum/reagent/ethanol/drink/acid_spit
 	name = "Acid Spit"
 	id = ACIDSPIT
 	description = "Wine and sulphuric acid. You hope the wine has neutralized the acid."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#365000" //rgb: 54, 80, 0
+	glass_icon_state = "acidspitglass"
+	glass_name = "\improper Acid Spit"
+	glass_desc = "Bites like a xeno queen."
 
-/datum/reagent/ethanol/deadrum/amasec
+/datum/reagent/ethanol/drink/amasec
 	name = "Amasec"
 	id = AMASEC
 	description = "The official drink of the Imperium."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "amasecglass"
+	glass_name = "\improper Amasec"
+	glass_desc = "A grim and dark drink that knows only war."
 
-/datum/reagent/ethanol/deadrum/amasec/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/amasec/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
-	M.stunned = 4
+	M.AdjustStunned(4)
 
-/datum/reagent/ethanol/deadrum/neurotoxin
+/datum/reagent/ethanol/drink/neurotoxin
 	name = "Neurotoxin"
 	id = NEUROTOXIN
 	description = "A strong neurotoxin that puts the subject into a death-like state."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E2E61" //rgb: 46, 46, 97
+	glass_icon_state = "neurotoxinglass"
+	glass_name = "\improper Neurotoxin"
+	glass_desc = "Guaranteed to knock you silly."
 
-/datum/reagent/ethanol/deadrum/neurotoxin/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/neurotoxin/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -6301,6 +7991,9 @@
 	description = "A non-alcoholic drink of banana juice, milk cream and sugar."
 	nutriment_factor = FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "bananahonkglass"
+	glass_name = "\improper Banana Honk"
+	glass_desc = "A cocktail from the clown planet."
 
 /datum/reagent/drink/silencer
 	name = "Silencer"
@@ -6308,6 +8001,9 @@
 	description = "Some say this is the diluted blood of the mime."
 	nutriment_factor = FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "silencerglass"
+	glass_name = "\improper Silencer"
+	glass_desc = "The mime's favorite, though you won't hear him ask for it."
 
 /datum/reagent/drink/silencer/on_mob_life(var/mob/living/M)
 
@@ -6315,57 +8011,71 @@
 		return 1
 	M.silent = max(M.silent, 15)
 
-/datum/reagent/ethanol/deadrum/changelingsting
+/datum/reagent/ethanol/drink/changelingsting
 	name = "Changeling Sting"
 	id = CHANGELINGSTING
 	description = "Milder than the name suggests. Not that you've ever been stung."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
+	glass_icon_state = "changelingsting"
+	glass_name = "\improper Changeling Sting"
+	glass_desc = "Stings, but not deadly."
 
-/datum/reagent/ethanol/deadrum/changelingsting/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/changelingsting/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
 	M.dizziness += 5
 
-/datum/reagent/ethanol/deadrum/erikasurprise
+/datum/reagent/ethanol/drink/erikasurprise
 	name = "Erika Surprise"
 	id = ERIKASURPRISE
 	description = "The surprise is, it's green!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
+	glass_icon_state = "erikasurprise"
+	glass_name = "\improper Erika Surprise"
 
-/datum/reagent/ethanol/deadrum/irishcarbomb
+/datum/reagent/ethanol/drink/irishcarbomb
 	name = "Irish Car Bomb"
 	id = IRISHCARBOMB
 	description = "A troubling mixture of irish cream and ale."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
+	glass_icon_state = "irishcarbomb"
+	glass_name = "\improper Irish Car Bomb"
+	glass_desc = "Something about this drink troubles you."
 
-/datum/reagent/ethanol/deadrum/irishcarbomb/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/irishcarbomb/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
 	M.dizziness += 5
 
-/datum/reagent/ethanol/deadrum/syndicatebomb
+/datum/reagent/ethanol/drink/syndicatebomb
 	name = "Syndicate Bomb"
 	id = SYNDICATEBOMB
 	description = "Whiskey cola and beer. Figuratively explosive."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
+	glass_icon_state = "syndicatebomb"
+	glass_name = "\improper Syndicate Bomb"
+	glass_desc = "Somebody set up us the bomb!"
+	glass_isGlass = 0
 
-/datum/reagent/ethanol/deadrum/driestmartini
+/datum/reagent/ethanol/drink/driestmartini
 	name = "Driest Martini"
 	id = DRIESTMARTINI
 	description = "Only for the experienced. You think you see sand floating in the glass."
 	nutriment_factor = FOOD_METABOLISM
 	color = "#2E6671" //rgb: 46, 102, 113
 	data = 1 //Used as a tally
+	glass_icon_state = "driestmartiniglass"
+	glass_name = "\improper Driest Martini"
 
-/datum/reagent/ethanol/deadrum/driestmartini/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/driestmartini/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -6377,14 +8087,17 @@
 		M.confused = max(M.confused + 15, 15)
 	data++
 
-/datum/reagent/ethanol/deadrum/danswhiskey
+/datum/reagent/ethanol/drink/danswhiskey
 	name = "Discount Dan's 'Malt' Whiskey"
 	id = DANS_WHISKEY
 	description = "It looks like whiskey... kinda."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 181, 199, 158
+	glass_icon_state = "dans_whiskey"
+	glass_name = "\improper Discount Dan's 'Malt' Whiskey"
+	glass_desc = "The cheapest path to liver failure."
 
-/datum/reagent/ethanol/deadrum/danswhiskey/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/danswhiskey/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -6416,13 +8129,89 @@
 					H.adjustToxLoss(3)
 				H.adjustToxLoss(0.3)
 
-/datum/reagent/ethanol/deadrumm/pintpointer
+/datum/reagent/ethanol/drink/pintpointer
 	name = "Pintpointer"
 	id = PINTPOINTER
 	description = "A little help finding the bartender."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
+/datum/reagent/ethanol/drink/pintpointer/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(D))
+	var/datum/reagents/glassreagents = D.reagents
+
+	if(glassreagents.last_ckey_transferred_to_this)
+		for(var/client/C in clients)
+			if(C.ckey == glassreagents.last_ckey_transferred_to_this)
+				var/mob/M = C.mob
+				P.creator = M
+	glassreagents.trans_to(P, glassreagents.total_volume)
+	spawn(1)
+		qdel(D)
+
+/datum/reagent/ethanol/drink/monstermash
+	name = "Monster Mash"
+	id = MONSTERMASH
+	description = "It'll be gone in a flash!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b97309"
+	glass_icon_state = "monster_mash"
+	glass_name = "\improper Monster Mash"
+	glass_desc = "Will get you graveyard smashed."
+
+/datum/reagent/ethanol/drink/monstermash/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(isskellington(H) || isskelevox(H) || islich(H) || H.is_wearing_item(/obj/item/clothing/under/skelesuit))
+			doTheMash(H)
+		if(H.is_wearing_item(/obj/item/clothing/head/franken_bolt) || istype(H, /mob/living/carbon/human/frankenstein))
+			joltOfMyElectrodes(H)
+		if(H.is_wearing_item(/obj/item/clothing/mask/vamp_fangs) || H.is_wearing_item(/obj/item/clothing/suit/storage/draculacoat) || isvampire(H))
+			draculaAndHisSon(H)
+
+/datum/reagent/ethanol/drink/monstermash/proc/doTheMash(mob/living/carbon/human/H)
+	playsound(H, 'sound/effects/rattling_bones.ogg', 100, 1)
+	if(prob(15))
+		H.emote("spin")
+		H.visible_message("<span class='good'>[H] does the mash!</span>")
+		if(prob(25))
+			spawn(1 SECONDS)
+				H.emote("spin")
+				H.visible_message("<span class='good'>[H] does the monster mash!</span>")
+
+/datum/reagent/ethanol/drink/monstermash/proc/joltOfMyElectrodes(mob/living/carbon/human/H)
+	for(var/turf/simulated/T in orange(1, H))
+		if(prob(volume))
+			spark(T, 1)
+
+/datum/reagent/ethanol/drink/monstermash/proc/draculaAndHisSon(mob/living/carbon/human/H)
+	if(prob(15))
+		var/mob/living/simple_animal/dracson/dSon = new /mob/living/simple_animal/dracson(H.loc)
+		try_move_adjacent(dSon)
+		spawn(5 SECONDS)
+			dSon.death()
+
+/datum/reagent/ethanol/drink/eggnog
+	name = "Eggnog"
+	id = EGGNOG
+	description = "Milk, cream and egg."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#F0DFD1" //rgb: 240, 223, 209
+	glass_icon_state = "eggnog"
+	glass_name = "\improper eggnog"
+	glass_desc = "Celebrate the holidays with practically liquid custard. Something is missing though."
+
+/datum/reagent/ethanol/drink/festive_eggnog
+	name = "Festive Eggnog"
+	id = FESTIVE_EGGNOG
+	description = "Eggnog, complete with booze and a dusting of cinnamon."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#F0DFD1" //rgb: 240, 223, 209
+	glass_icon_state = "festive_eggnog"
+	glass_name = "\improper festive eggnog"
+	glass_desc = "Eggnog, complete with booze and a dusting of cinnamon for that winter warmth."
 
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
@@ -6440,6 +8229,21 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
+	overdose_am = REAGENTS_OVERDOSE
+
+/datum/reagent/honkserum/on_overdose(var/mob/living/H)
+
+	if (H?.mind?.miming)
+		H.mind.miming = 0
+		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in H.spell_list)
+			H.remove_spell(spell)
+		for(var/spell/targeted/oathbreak/spell in H.spell_list)
+			H.remove_spell(spell)
+		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
+			qdel(H.wear_mask)
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
+		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
+
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 
@@ -6448,7 +8252,7 @@
 
 	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
-		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
+		playsound(M, 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"
@@ -6472,16 +8276,23 @@
 	name = "Green Tea"
 	id = GREENTEA
 	description = "Delicious green tea."
+	mug_icon_state = "greentea"
+	mug_desc = "Green Tea served in a traditional Japanese tea cup, just like in your Chinese cartoons!"
 
 /datum/reagent/drink/tea/redtea
 	name = "Red Tea"
 	id = REDTEA
 	description = "Tasty red tea."
+	mug_icon_state = "redtea"
+	mug_desc = "Red Tea served in a traditional Chinese tea cup, just like in your Malaysian movies!"
 
 /datum/reagent/drink/tea/singularitea
 	name = "Singularitea"
 	id = SINGULARITEA
 	description = "Swirly!"
+	mug_icon_state = "singularitea"
+	mug_name = "\improper Singularitea"
+	mug_desc = "Brewed under intense radiation to be extra flavorful!"
 
 var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 
@@ -6489,6 +8300,8 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	name = "Chifir"
 	id = CHIFIR
 	description = "Strong Russian tea. It'll help you remember what you had for lunch!"
+	mug_icon_state = "chifir"
+	mug_desc = "A Russian kind of tea. Not for those with weak stomachs."
 
 /datum/reagent/drink/tea/chifir/on_mob_life(var/mob/living/M)
 
@@ -6510,16 +8323,22 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	name = "Earl's Grey Tea"
 	id = ACIDTEA
 	description = "Get in touch with your Roswellian side!"
+	mug_icon_state = "acidtea"
+	mug_desc = "A sizzling mug of tea made just for Greys."
 
 /datum/reagent/drink/tea/yinyang
 	name = "Zen Tea"
 	id = YINYANG
 	description = "Find inner peace."
+	mug_icon_state = "yinyang"
+	mug_desc = "Enjoy inner peace and ignore the watered down taste"
 
 /datum/reagent/drink/tea/gyro
 	name = "Gyro"
 	id = GYRO
 	description = "Nyo ho ho~"
+	mug_icon_state = "gyro"
+	mug_name = "\improper Gyro"
 
 /datum/reagent/drink/tea/gyro/on_mob_life(var/mob/living/M)
 
@@ -6537,41 +8356,61 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	name = "Discount Dan's Green Flavor Tea"
 	id = DANTEA
 	description = "Not safe for children above or under the age of 12."
+	mug_icon_state = "dantea"
+	mug_name = "\improper Discount Dan's Green Flavor Tea"
+	mug_desc = "Tea probably shouldn't be sizzling like that..."
 
 /datum/reagent/drink/tea/mint
 	name = "Groans Tea: Minty Delight Flavor"
 	id = MINT
 	description = "Very filling!"
+	mug_icon_state = "mint"
+	mug_name = "\improper Groans Tea: Minty Delight Flavor"
+	mug_desc = "Groans knows mint might not be the kind of flavor our fans expect from us, but we've made sure to give it that patented Groans zing."
 
 /datum/reagent/drink/tea/chamomile
 	name = "Groans Tea: Chamomile Flavor"
 	id = CHAMOMILE
 	description = "Enjoy a good night's sleep."
+	mug_icon_state = "chamomile"
+	mug_name = "\improper Groans Tea: Chamomile Flavor"
+	mug_desc = "Groans presents the perfect cure for insomnia: Chamomile!"
 
 /datum/reagent/drink/tea/exchamomile
 	name = "Tea"
 	id = EXCHAMOMILE
 	description = "Who needs to wake up anyway?"
+	mug_icon_state = "exchamomile"
+	mug_name = "\improper Groans Banned Tea: EXTREME Chamomile Flavor"
+	mug_desc = "Banned literally everywhere."
 
 /datum/reagent/drink/tea/fancydan
 	name = "Groans Banned Tea: Fancy Dan Flavor"
 	id = FANCYDAN
 	description = "Full of that patented Dan taste you love!"
+	mug_icon_state = "fancydan"
+	mug_name = "\improper Groans Banned Tea: Fancy Dan Flavor"
+	mug_desc = "Banned literally everywhere."
 
 /datum/reagent/drink/tea/plasmatea
 	name = "Plasma Pekoe"
 	id = PLASMATEA
 	description = "Probably not the safest beverage."
+	mug_icon_state = "plasmatea"
+	mug_desc = "You can practically taste the science. Or maybe that's just the horrible plasma burns."
 
 /datum/reagent/drink/tea/greytea
 	name = "Tide"
 	id = GREYTEA
 	description = "This probably shouldn't even be considered tea..."
+	mug_icon_state = "greytea"
+	mug_name = "\improper Tide"
 
 /datum/reagent/drink/coffee/espresso
 	name = "Espresso"
 	id = ESPRESSO
 	description = "A thick blend of coffee made by forcing near-boiling pressurized water through finely ground coffee beans."
+	mug_icon_state = "espresso"
 
 //Let's hope this one works
 var/global/list/tonio_doesnt_remove=list("tonio", "blood")
@@ -6581,6 +8420,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = TONIO
 	nutriment_factor = FOOD_METABOLISM
 	description = "This coffee seems uncannily good."
+	mug_icon_state = "tonio"
+	mug_name = "\improper Tonio"
+	mug_desc = "Delicious, and may help you get out of a Jam."
 
 /datum/reagent/drink/coffee/tonio/on_mob_life(var/mob/living/M)
 
@@ -6606,22 +8448,55 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Cappuccino"
 	id = CAPPUCCINO
 	description = "Espresso with milk."
+	mug_icon_state = "cappuccino"
+	mug_desc = "The stronger big brother of the cafe latte, cappuccino contains more espresso in proportion to milk."
+
+/datum/reagent/drink/coffee/cappuccino/on_mob_life(var/mob/living/M)
+	..()
+	if(M.getBruteLoss() && prob(20))
+		M.heal_organ_damage(1, 0) //milk doing its work
 
 /datum/reagent/drink/coffee/doppio
 	name = "Doppio"
 	id = DOPPIO
 	description = "Double shot of espresso."
+	mug_icon_state = "doppio"
+	mug_name = "\improper Doppio"
+	mug_desc = "Ring ring ring ring."
 
 /datum/reagent/drink/coffee/passione
 	name = "Passione"
 	id = PASSIONE
 	description = "Rejuvenating!"
+	nutriment_factor = 3 * REAGENTS_METABOLISM //because honey
+	mug_icon_state = "passione"
+	mug_name = "\improper Passione"
+	mug_desc = "Sometimes referred to as a 'Vento Aureo'."
+
+/datum/reagent/drink/coffee/passione/on_mob_life(var/mob/living/M)
+	..()
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!holder)
+			return
+		H.sleeping = 0
+		H.nutrition += nutriment_factor //honey doing it's work
+		if(H.getBruteLoss() && prob(60))
+			H.heal_organ_damage(1, 0)
+		if(H.getFireLoss() && prob(50))
+			H.heal_organ_damage(0, 1)
+		if(H.getToxLoss() && prob(50))
+			H.adjustToxLoss(-1)
 
 /datum/reagent/drink/coffee/seccoffee
 	name = "Wake-Up Call"
 	id = SECCOFFEE
 	description = "All the essentials."
-	
+	mug_icon_state = "seccoffee"
+	mug_name = "\improper Wake-Up Call"
+	mug_desc = "The perfect start for any Sec officer's day."
+
 /datum/reagent/drink/coffee/seccoffee/on_mob_life(var/mob/living/M)
 	..()
 	if(ishuman(M))
@@ -6633,6 +8508,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Lifeline"
 	id = MEDCOFFEE
 	description = "Tastes like it's got iron in it or something."
+	mug_icon_state = "medcoffee"
+	mug_name = "\improper Lifeline"
+	mug_desc = "Some days, the only thing that keeps you going is cryo and caffeine."
 
 /datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
 
@@ -6651,7 +8529,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused != 0)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 	M.reagents.add_reagent (IRON, 0.1)
 
 /datum/reagent/drink/coffee/detcoffee
@@ -6661,6 +8539,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	causes_jitteriness = 0
 	var/activated = 0
 	var/noir_set_by_us = 0
+	mug_icon_state = "detcoffee"
+	mug_name = "\improper Joe"
+	mug_desc = "The lights, the smoke, the grime... the station itself felt alive that day when I stepped into my office, mug in hand. It had been one of those damn days. Some nurse got smoked in the tunnels, and it came down to me to catch the son of a bitch that did it. The dark, stale air of the tunnels sucks the soul out of a man -- sometimes literally -- and I was no closer to finding the killer than when the nurse was still alive. I hobbled over to my desk, reached for the flask in my pocket, and topped off my coffee with its contents. I had barely gotten settled in my chair when an officer burst through the door. Another body in the tunnels, an assistant this time. I grumbled and downed what was left of my joe. This stuff used to taste great when I was a rookie, but now it was like boiled dirt. I guess that's how the station changes you. I set the mug back down on my desk and lit my last cigar. My fingers instinctively sought out the comforting grip of the .44 snub in my coat as I stepped out into the bleak halls of the station. The case was not cold yet."
 
 /datum/reagent/drink/coffee/detcoffee/on_mob_life(var/mob/living/M)
 	if(..())
@@ -6690,6 +8571,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Recharger"
 	id = ETANK
 	description = "Regardless of how energized this coffee makes you feel, jumping against doors will still never be a viable way to open them."
+	mug_icon_state = "etank"
+	mug_name = "\improper Recharger"
+	mug_desc = "Helps you get back on your feet after a long day of robot maintenance. Can also be used as a substitute for motor oil."
 
 /datum/reagent/drink/cold/quantum
 	name = "Nuka Cola Quantum"
@@ -6697,7 +8581,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Take the leap... enjoy a Quantum!"
 	color = "#100800" //rgb: 16, 8, 0
 	adj_sleepy = -2
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 
 /datum/reagent/drink/cold/quantum/on_mob_life(var/mob/living/M)
 
@@ -6710,12 +8594,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Sport Drink"
 	id = SPORTDRINK
 	description = "You like sports, and you don't care who knows."
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
 	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
-/datum/reagent/antidepressant/citalopram
+/datum/reagent/citalopram
 	name = "Citalopram"
 	id = CITALOPRAM
 	description = "Stabilizes the mind a little."
@@ -6726,7 +8610,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 1.01
 	specheatcap = 3.88
 
-/datum/reagent/antidepressant/citalopram/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/citalopram/on_mob_life(var/mob/living/M as mob)
 	if(..())
 		return 1
 	if(volume <= 0.1)
@@ -6738,7 +8622,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			data = world.time
 			to_chat(M, "<span class='notice'>Your mind feels stable... a little stable.</span>")
 
-/datum/reagent/antidepressant/paroxetine
+/datum/reagent/paroxetine
 	name = "Paroxetine"
 	id = PAROXETINE
 	description = "Stabilizes the mind greatly, but has a chance of adverse effects."
@@ -6749,7 +8633,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 1.19
 	specheatcap = 3.99
 
-/datum/reagent/antidepressant/paroxetine/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/paroxetine/on_mob_life(var/mob/living/M as mob)
 	if(..())
 		return 1
 	if(volume <= 0.1)
@@ -6764,6 +8648,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			else
 				to_chat(M, "<span class='warning'>Your mind breaks apart.</span>")
 				M.hallucination += 200
+	if(M.mind && M.mind.suiciding)
+		M.mind.suiciding = FALSE
+		to_chat(M, "<span class='numb'>Whoah... You feel like this life is worth living after all!</span>")
 
 /datum/reagent/gravy
 	name = "Gravy"
@@ -6771,7 +8658,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Aww, come on Double D, I don't say 'gravy' all the time."
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 10 * REAGENTS_METABOLISM
-	color = "#EDEDE1"
+	color = "#E7A568"
 
 /datum/reagent/gravy/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -6860,15 +8747,17 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#8B4513"
 
-/datum/reagent/ethanol/deadrum/greyvodka
+/datum/reagent/ethanol/drink/greyvodka
 	name = "Greyshirt vodka"
 	id = GREYVODKA
 	description = "Made presumably from whatever scrapings you can get out of maintenance. Don't think, just drink."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEF7F5"
 	alpha = 64
+	glass_icon_state = "ginvodkaglass"
+	glass_desc = "A questionable concoction of ingredients found within maintenance. Tastes just like you'd expect."
 
-/datum/reagent/ethanol/deadrum/greyvodka/on_mob_life(var/mob/living/carbon/human/H)
+/datum/reagent/ethanol/drink/greyvodka/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
 		return 1
 	H.radiation = max(H.radiation - 5 * REM, 0)
@@ -6880,6 +8769,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "A derivative of the chemical known as 'Hardcores', easier to mass produce, but at a cost of quality."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFA500"
+	custom_metabolism = 0.1
+
+/datum/reagent/softcores
+	name = "softcores"
+	id = SOFTCORES
+	description = "Lesser known than its cheaper cousin in the popular snack 'mag-bites', softcores have all the benefits of chemical magnetism without the heart-stopping side effects."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#ff5100"
 	custom_metabolism = 0.1
 
 //Plant-specific reagents
@@ -6945,7 +8842,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Phenol is a corrosive acid which can cause chemical burns."
 	color = "#C71839" //rgb: 199, 24, 57
 
-/datum/reagent/ethanol/deadrum/neurotoxin/curare
+/datum/reagent/ethanol/drink/neurotoxin/curare
 	name = "Curare"
 	id = CURARE
 	description = "An alkaloid plant extract which causes weakness of the skeletal muscles."
@@ -7014,25 +8911,49 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#002000" //rgb: 0, 32, 0
 	dupeable = FALSE
 
-	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
+	var/min_to_start = 1 //At least 1 unit is needed for petriication to start
+	var/is_being_petrified = FALSE
+	var/stage
 
 /datum/reagent/petritricin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+	if(issilicon(M))
+		return
+	var/mob/living/carbon/C
+	if(iscarbon(M))
+		C = M
+	if(volume >= min_to_start && !is_being_petrified)
+		is_being_petrified = TRUE
+	if(is_being_petrified)
+		if(holder.has_any_reagents(PETRITRICINCURES))
+			to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
+			C.pain_shock_stage = max(0, C.pain_shock_stage - 300)
+			is_being_petrified = FALSE
+			holder.del_reagent(PETRITRICIN)
+			return
+		switch(stage)
+			if(1)
+				//Second message is shown to hallucinating mobs
+				M.simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
+				"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in a foreign body.</span>")
+				if(istype(C))
+					C.pain_shock_stage += 300
+				M.audible_scream()
+			if(2)
+				M.simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
+				"<span class='notice'>You decide to channel your inner Italian sculptor to create a beautiful statue.</span>")
+				M.Stun(3)
+			if(3)
+				if(M.turn_into_statue(1))
+					M.simple_message("<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>",\
+					"<span class='notice'>You've created a masterwork statue of David!</span>")
+					is_being_petrified = FALSE
+		stage = stage + 1
 
-	if(volume >= minimal_dosage && prob(30))
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			if(locate(/datum/disease/petrification) in H.viruses)
-				return
 
-			var/datum/disease/D = new /datum/disease/petrification
-			D.holder = H
-			D.affected_mob = H
-			H.viruses += D
-		else if(!issilicon(M))
-			if(M.turn_into_statue(1)) //Statue forever
-				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
+
+
 
 //A chemical for curing petrification. It only works after you've been fully petrified
 //Items on corpses will survive the process, but the corpses itself will be damaged and uncloneable after unstoning
@@ -7051,7 +8972,18 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 	if(istype(O, /obj/structure/closet/statue))
 		var/obj/structure/closet/statue/statue = O
+		statue.dissolve()
+	if(istype(O, /obj/structure/mannequin))
+		var/obj/structure/mannequin/statue = O
+		statue.dissolve()
 
+
+/datum/reagent/apetrine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+
+	if(istype(M, /mob/living/simple_animal/hostile/mannequin))
+		var/mob/living/simple_animal/hostile/mannequin/statue = M
 		statue.dissolve()
 
 /datum/reagent/hemoscyanine
@@ -7235,7 +9167,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		M.adjustFireLoss(0.5 * REM)
 		if(prob(10))
@@ -7248,6 +9180,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#FFFFFF"
 	density = 2.211
 	specheatcap = 87.45
+
+/datum/reagent/calciumcarbonate
+	name = "Calcium Carbonate"
+	id = CALCIUMCARBONATE
+	description = "An odorless, fine, white micro-crystalline powder. Usually obtained by grinding limestone, or egg shells."
+	color = "#FFFFFF"
+	density = 2.73
+	specheatcap = 83.43
 
 /datum/reagent/sodium_silicate
 	name = "Sodium Silicate"
@@ -7355,6 +9295,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = 208.4
 	custom_metabolism = 0.01 //oh shit what are you doin
 
+/datum/reagent/aminomician
+	name = "Aminomician"
+	id = AMINOMICIAN
+	description = "An experimental and unstable chemical, said to be able to create companionship. Potential reaction detected if mixed with nutriment."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#634848" //rgb: 99, 72, 72
+	density = 13.49 //our ingredients are pretty dense
+	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin
+
 /datum/reagent/aminocyprinidol
 	name = "Aminocyprinidol"
 	id = AMINOCYPRINIDOL
@@ -7387,12 +9337,181 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return TRUE
 	O.apply_luminol()
 
+/datum/reagent/ironrot
+	name = "Ironrot"
+	id = IRONROT
+	description = "A mutated fungal compound that causes rapid rotting in iron infrastructures."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#005200" //moldy green
+
+/datum/reagent/ironrot/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 5 && T.can_thermite && istype(T, /turf/simulated/wall))
+		var/turf/simulated/wall/W = T
+		W.rot()
+
+/datum/reagent/ironrot/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.adjustToxLoss(2 * REM)
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
+		for(var/datum/organ/internal/I in C.internal_organs)
+			if(I.robotic == 2)
+				I.take_damage(10, 0)//robo organs get damaged by ingested ironrot
+
+/datum/reagent/ironrot/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		if(issilicon(M))//borgs are hurt on touch by this chem
+			M.adjustFireLoss(10)
+			M.adjustBruteLoss(10)
+//todo : mech and pod damage
+
+
+/datum/reagent/diabeetusol
+	name = "Diabeetusol"
+	id = DIABEETUSOL
+	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	nutriment_factor = 45 * REAGENTS_METABOLISM //This is maybe a little much
+	sport = 0 //This will never come up but adding it made me smile
+	density = 3 //He DENSE
+	specheatcap = 0.55536
+	overdose_am = 30
+	custom_metabolism = 0.05
+
+/datum/reagent/diabeetusol/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
+		var/static/list/chubbysound = list('sound/instruments/trombone/Eb3.mid', 'sound/instruments/trombone/Gb2.mid', 'sound/instruments/trombone/Bb3.mid')
+		var/sugarUnits = H.reagents.get_reagent_amount(SUGAR)
+		if(sugarUnits < volume)
+			if(prob(volume*30))
+				playsound(H, pick(chubbysound), 50, 1)
+				H.confused += 2
+				H.eye_blurry += 2
+				H.dizziness += 2
+			if(prob(volume*5))
+				H.sleeping++
+		else
+			playsound(H, pick(chubbysound), 100, 1)
+			H.overeatduration += 10 * volume
+			H.nutrition += 10 * volume
+		if(H.nutrition > 750)
+			if(prob(volume) && heart && !heart.robotic)
+				to_chat(H, "<span class='danger'>Your heart just can't take it anymore!</span>")
+				qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
+				H.adjustOxyLoss(60)
+				H.adjustBruteLoss(30)
+
+
+/datum/reagent/ectoplasm
+	name = "Ectoplasm"
+	id = ECTOPLASM
+	description = "Pure, distilled spooky"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#21d389b4"
+	density = 0.05
+
+/datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(isskellington(M) || isskelevox(M) || islich(M))	//Slightly better than DD for spooks
+		playsound(M, 'sound/effects/rattling_bones.ogg', 100, 1)
+		if(M.getOxyLoss())
+			M.adjustOxyLoss(-3)
+		if(M.getBruteLoss())
+			M.heal_organ_damage(3, 0)
+		if(M.getFireLoss())
+			M.heal_organ_damage(0, 3)
+		if(M.getToxLoss())
+			M.adjustToxLoss(-3)
+	else
+		M.hallucination += 5	//50% mindbreaker
+
+/datum/reagent/self_replicating
+	id = EXPLICITLY_INVALID_REAGENT_ID
+	var/whitelisted_ids = list()
+
+/datum/reagent/self_replicating/post_transfer(var/datum/reagents/donor)
+	..()
+	holder.convert_all_to_id(id, whitelisted_ids)
+
+/datum/reagent/self_replicating/on_introduced(var/data)
+	..()
+	holder.convert_all_to_id(id, whitelisted_ids)
+
+/datum/reagent/self_replicating/midazoline
+	name = "Midazoline"
+	id = MIDAZOLINE
+	description = "Chrysopoeia, the artificial production of gold, was one of the defining ambitions of ancient alchemy. Turns out, all it took was a little plasma. Converts all other reagents into Midazoline, except for Mercury, which will convert Midazoline into itself."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#F7C430" //rgb: 247, 196, 48
+	density = 19.3
+	specheatcap = 0.129
+	whitelisted_ids = list(MERCURY)
+
+/datum/reagent/temp_hearer/
+	id = EXPLICITLY_INVALID_REAGENT_ID
+	data = list("stored_phrase" = null)
+
+/datum/reagent/temp_hearer/on_introduced(var/data)
+	. = ..()
+	var/obj/item/weapon/reagent_containers/RC = holder.my_atom
+	if(!istype(RC))
+		return
+	if(!RC.virtualhearer)
+		RC.addHear(/mob/virtualhearer/one_time)
+
+/datum/reagent/temp_hearer/proc/parent_heard(var/datum/speech/speech, var/rendered_speech="")
+	if(!data["stored_phrase"])
+		set_phrase(sanitize(speech.message))
+		var/atom/container = holder.my_atom
+		if(container.is_open_container())
+			container.visible_message("<span class='notice'>[bicon(container)] The solution fizzles for a moment.</span>", "You hear something fizzling for a moment.", "<span class='notice'>[bicon(container)] \The [container] replies something, but you can't hear them.</span>")
+			if(!(container.flags & SILENTCONTAINER))
+				playsound(container, 'sound/effects/bubbles.ogg', 20, -3)
+
+/datum/reagent/temp_hearer/proc/set_phrase(var/phrase)
+	data["stored_phrase"] = phrase
+
+/datum/reagent/temp_hearer/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	description = "Sound-activated solution. Permanently stores the first soundwaves it 'hears' into a long polymer chain, which reacts into a crude form of speech into the ears of a live host. Tastes sweet."
+	reagent_state = REAGENT_STATE_LIQUID
+	custom_metabolism = 0.01
+	color = "#8E18A9" //rgb: 142, 24, 169
+	density = 1.58
+	specheatcap = 1.44
+
+/datum/reagent/temp_hearer/locutogen/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(!M.isUnconscious() && data["stored_phrase"])
+		to_chat(M, "You hear a voice in your head saying: <span class='bold'>'[data["stored_phrase"]]'</span>.")
+		M.reagents.del_reagent(LOCUTOGEN)
+
 //////////////////////
 //					//
 //      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //					//
 //////////////////////
 /datum/reagent/incense
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	reagent_state = REAGENT_STATE_GAS
 	density = 3.214
 	specheatcap = 1.34
@@ -7441,6 +9560,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Incense"
 	id = INCENSE_SUNFLOWERS
 	description = "While it smells really nice, incense is known to increase the risk of lung cancer."
+
+/datum/reagent/incense/mustardplant //same as sunflower, no connection to mustard gas
+	name = "Mustardplant Incense"
+	id = INCENSE_MUSTARDPLANT
+	description = "A sweet scent with a tinge of clover." //i have no idea what these smell like, im going off of forum posts, if anyone does know please edit the desc
 
 /datum/reagent/incense/moonflowers//Basically mindbreaker
 	name = "Hallucinogenic Incense"
@@ -7537,7 +9661,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	custom_metabolism = 0.25
 
 /datum/reagent/incense/dense/OnDisperse(var/turf/location)
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(2, 0, location) //Make 2 drifting clouds of smoke, direction
 	smoke.start()
 
@@ -7551,7 +9675,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Sporty Incense"
 	id = INCENSE_CRAVE
 	description = "This has what you crave. Electrolytes."
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 	custom_metabolism = 0.15
 
 /datum/reagent/incense/cornoil
@@ -7566,3 +9690,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		to_chat(M,"<span class='warning'>[pick("You feel fuller.", "You no longer feel snackish.")]</span>")
 		M.reagents.add_reagent(NUTRIMENT, 2)
 
+/datum/reagent/dsyrup
+	name = "Delightful Mix"
+	id = DSYRUP
+	description = "This syrupy stuff is everyone's favorite tricord additive."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#571212" //like a dark red
+	density = 1.00 //basically water
+	specheatcap = 4.184

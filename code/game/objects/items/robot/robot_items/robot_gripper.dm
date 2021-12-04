@@ -191,6 +191,7 @@
 	can_hold = list(
 		/obj/item/weapon/reagent_containers/glass,
 		/obj/item/weapon/reagent_containers/blood,
+		/obj/item/stack/sheet/mineral/plasma,
 		)
 
 	valid_containers = list(

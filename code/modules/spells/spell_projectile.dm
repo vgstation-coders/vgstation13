@@ -24,12 +24,12 @@
 			if(targets && targets.len)
 				src.prox_cast(targets)
 		if(proj_trail && src && src.loc) //pretty trails
-			var/obj/effect/overlay/trail = getFromPool(/obj/effect/overlay, src.loc)
+			var/obj/effect/overlay/trail = new /obj/effect/overlay(src.loc)
 			trail.icon = proj_trail_icon
 			trail.icon_state = proj_trail_icon_state
 			trail.setDensity(FALSE)
 			spawn(proj_trail_lifespan)
-				returnToPool(trail)
+				qdel(trail)
 	return
 
 /obj/item/projectile/spell_projectile/proc/prox_cast(var/list/targets)

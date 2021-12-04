@@ -30,7 +30,7 @@
 			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
 				src.mutual_handcuffs = cuffs
 				update_inv_mutual_handcuffed(redraw_mob)
-			else 
+			else
 				src.handcuffed = W
 				update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
@@ -102,18 +102,21 @@
 		success = 1
 		slot = slot_head
 		update_inv_hat()
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else if(W == glasses)
 		glasses = null
 		success = 1
 		slot = slot_glasses
 		update_inv_glasses()
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else if(W == uniform)
 		uniform = null
 		success = 1
 		slot = slot_w_uniform
 		update_inv_uniform()
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else
-		..()
+		success = ..()
 	if(success)
 		if (W)
 			if (client)

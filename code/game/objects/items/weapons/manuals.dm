@@ -9,6 +9,7 @@
 /obj/item/weapon/book/manual/engineering_construction
 	name = "Station Repairs and Construction"
 	icon_state ="bookEngineering"
+	item_state = "book3"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Station Repairs and Construction"
 	wiki_page = "Guide_to_Construction"
@@ -114,8 +115,9 @@
 /obj/item/weapon/book/manual/hydroponics_pod_people
 	name = "Growing Dionae and YOU! A book on growing your new best friends!"
 	icon_state ="bookHydroponicsPodPeople"
+	item_state = "book5"
 	author = "Farmer John"
-	title = "The Human Harvest - From seed to market"
+	title = "Growing Dionae and YOU! A book on growing your new best friends!"
 	dat = {"<html>
 				<head>
 				<style>
@@ -154,6 +156,7 @@
 /obj/item/weapon/book/manual/chemistry_manual
 	name = "Chemistry 101"
 	icon_state ="bookChemistry"
+	item_state = "book6"
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
 	wiki_page = "Guide_to_Chemistry"
@@ -503,6 +506,12 @@
 	title = "Engineering Textbook"
 	wiki_page = "Guide_to_Engineering"
 
+/obj/item/weapon/book/manual/rust
+	name = "R-UST User Manual"
+	icon_state = "bookEngineering2"
+	author = "NanoTrasen"
+	title = "R-UST User Manual"
+	wiki_page = "R-UST"
 
 /obj/item/weapon/book/manual/chef_recipes
 	name = "Chef Recipes"
@@ -523,6 +532,7 @@
 /obj/item/weapon/book/manual/detective
 	name = "The Film Noir: proper Procedures for Investigations"
 	icon_state ="bookDetective"
+	item_state = "book2"
 	author = "Nanotrasen"
 	title = "The Film Noir: proper Procedures for Investigations"
 	wiki_page = "Guide_to_Forensics"
@@ -530,6 +540,7 @@
 /obj/item/weapon/book/manual/nuclear
 	name = "Fission Mailed: Nuclear Sabotage 101"
 	icon_state ="bookNuclear"
+	item_state ="bookNuclear"
 	author = "Syndicate"
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
@@ -606,6 +617,7 @@
 /obj/item/weapon/book/manual/virology_guide
 	name = "A Crash Course in Virology"
 	icon_state ="bookVirologyGuide"
+	item_state ="bookVirologyGuide"
 	author = "Frederick Chapman Montagnier"
 	title = "A Crash Course in Virology"
 	book_width = 819
@@ -734,7 +746,7 @@
 				</ul>
 				<p><b>Incubation also has a chance to occur in individuals irradiated to dangerous levels, however should an Effect Mutation occur this way, it has been observed that the new effect would have a similar danger to the original one, thankfully.</b></p>
 				<p>At 100% growth, the dish can be removed from the incubator and analyzed.</p>
-				<p>Simply place it on the Analyser and operate it. The process is very quick, but requires you to remain adjacent. After the process is done, the following occurs:</p>
+				<p>Simply place it on the Analyzer and operate it. The process is very quick, but requires you to remain adjacent. After the process is done, the following occurs:</p>
 				<ul>
 				<li>a sticker appears on the dish that you can examine and that lets you check what is the disease's information, such as quick descriptions of its effects or its antigens
 				<li>this information is also added to the Pathogen Database which you can edit, and also give the disease a Nickname or set it's dangerousness.
@@ -745,7 +757,7 @@
 				<p>Among the data stored, the following information is the most important:</p>
 				<ul>
 				<li><b>Strength</b>: This is the antibody concentration required for the body to get rid of the pathogen. Lower values mean the disease will easily be cured with spaceacillin alone.
-				<li><b>Robustness</b>: This is the percentage of the strength at which the stronger effects will start getting muted. The numbers in parenthesis next to it indicate the specific concentrations at which the effects will be muted. So for example, if your body has 50% antibody concentration, and the disease has a Strength of 51%, and a Robustness bellow 90%, you will carry the disease WITHOUT seeing any of its effects yourself.
+				<li><b>Robustness</b>: This is the percentage of the strength at which the stronger effects will start getting muted. The numbers in parenthesis next to it indicate the specific concentrations at which the effects will be muted. So for example, if your body has 50% antibody concentration, and the disease has a Strength of 51%, and a Robustness below 90%, you will carry the disease WITHOUT seeing any of its effects yourself.
 				<li><b>Infection Chance</b>: Whenever there is a window of opportunity for a vector to infect you, and it manages to get through any clothing or other protections due to insufficient sterility, this is the chance percentage that you will be infected by the disease. Additionally, Pathogenic Clouds emitted will travel much further and be more numerous if the Infection chance is high, and infected items will remain infected for a longer duration.
 				<li><b>Progress Speed</b>: The percentage chance that a disease will progress to the next stage after it has been present in a body for long enough.
 				</ul>
@@ -804,6 +816,7 @@ var/virology_encyclopedia = ""
 /obj/item/weapon/book/manual/virology_encyclopedia
 	name = "Symptom Encyclopedia"
 	icon_state ="bookVirologyEncyclopedia"
+	item_state ="bookVirologyEncyclopedia"
 	author = "Frederick Chapman Montagnier"
 	title = "Symptom Encyclopedia"
 	dat = ""
@@ -907,3 +920,28 @@ var/virology_encyclopedia = ""
 				</html>"}
 
 	dat = virology_encyclopedia
+
+/obj/item/weapon/book/manual/snow
+	name = "\improper Snow Survival Guide"
+	icon_state ="triangulate"
+	author = "The Abominable Snowman"
+	title = "Snow Survival Guide"
+	wiki_page = "Guide_to_Snow_Map"
+	desc = "A guide to surviving on the surface of a snow planet. It even comes with a magnesium strip to ignite for emergency heating when applied to snow!</span>"
+
+/obj/item/weapon/book/manual/snow/afterattack(atom/A, mob/user as mob)
+	if(!user.Adjacent(A) || !istype(A,/turf/unsimulated/floor/snow))
+		return
+	trigger(user)
+
+/obj/item/weapon/book/manual/snow/proc/trigger(var/mob/living/L)
+	if(!L)
+		L = get_holder_of_type(src,/mob/living)
+	visible_message("<span class='danger'>The magnesium in \the [src]'s emergency strip flash-ignites!</span>")
+	var/turf/T = get_turf(src)
+	new /obj/effect/decal/cleanable/ash(T)
+	playsound(src, 'sound/items/lighter1.ogg', 50, 1)
+	if(L)
+		L.bodytemperature = L.bodytemperature + 10 //This is enough to push someone from the edge of passing out to safe
+		to_chat(L, "<span class='warning'>You feel a jolt of warmth from the flash-incineration of \the [src].")
+	qdel(src)

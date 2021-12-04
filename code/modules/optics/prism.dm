@@ -14,8 +14,6 @@ var/list/obj/machinery/prism/prism_list = list()
 
 	machine_flags = WRENCHMOVE | SCREWTOGGLE | CROWDESTROY
 
-	var/list/powerchange_hooks=list()
-
 /obj/machinery/prism/New()
 	..()
 
@@ -63,7 +61,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	update_beams()
 	return 1
 
-/obj/machinery/prism/wrenchAnchor(var/mob/user)
+/obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -75,7 +73,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		powerchange_hooks[B]=B.power_change.Add(src,"on_power_change")
+		B.register_event(/event/beam_power_change, src, .proc/on_power_change)
 		update_beams(B)
 
 /obj/machinery/prism/beam_disconnect(var/obj/effect/beam/emitter/B)
@@ -83,13 +81,11 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.power_change.Remove(powerchange_hooks[B])
-		powerchange_hooks.Remove(B)
+		B.unregister_event(/event/beam_power_change, src, .proc/on_power_change)
 		update_beams(B)
 
 // When beam power changes
-/obj/machinery/prism/proc/on_power_change(var/list/args)
-	//Don't care about args, just update beam.
+/obj/machinery/prism/proc/on_power_change(obj/effect/beam/beam)
 	update_beams()
 
 /obj/machinery/prism/proc/update_beams(var/obj/effect/beam/emitter/touching_beam)
@@ -105,7 +101,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	if(beams.len>0 && anchored)
 		var/newbeam=0
 		if(!beam)
-			beam = new (loc)
+			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir=dir
 			newbeam=1
 		beam.power=0
@@ -134,5 +130,6 @@ var/list/obj/machinery/prism/prism_list = list()
 		icon_state = "prism_on"
 	else
 		icon_state = "prism_off"
-		qdel(beam)
-		beam=null
+		if (beam)
+			qdel(beam)
+			beam=null

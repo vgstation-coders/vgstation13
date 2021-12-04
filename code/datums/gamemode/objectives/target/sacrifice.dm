@@ -10,8 +10,8 @@
 		message_admins("Could not find a target to sacrifice, rerolling objectives the hard way.")
 		var/datum/faction/cult/narsie/cult = faction
 		cult.getNewObjective()
+		. = FALSE
 		CRASH("Could not find a target to sacrifice, rereolling objectives the hard way.") // Crash, so that it doesn't try to pass the bugged objective to the rest of the proc.
-		return FALSE
 	return TRUE
 
 /datum/objective/target/assassinate/sacrifice/find_target()
@@ -27,7 +27,7 @@
 	for(var/mob/living/carbon/human/player in player_list)
 		if(player.z == map.zCentcomm) //We can't sacrifice people that are on the centcom z-level
 			continue
-		if(player.mind && !is_convertable_to_cult(player.mind) && (player.stat != DEAD))
+		if(player.mind && !is_convertable_to_cult_legacy(player.mind) && (player.stat != DEAD))
 			possible_targets += player.mind
 
 	if(!possible_targets.len)

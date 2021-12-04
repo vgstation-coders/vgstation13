@@ -6,26 +6,25 @@
 	priority = 2
 	can_infect = 1
 	blood_level = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+/datum/surgery_step/open_encased/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
 
-		if (!hasorgans(target))
-			return 0
-
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return affected.encased && (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN))
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	return affected.encased && (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN))
 
 
 
 //////SAW///////
 /datum/surgery_step/open_encased/saw
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75, \
+		/obj/item/tool/circular_saw = 100,
+		/obj/item/weapon/melee/blood_dagger = 80,
+		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75,
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/open_encased/saw/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
@@ -75,13 +74,12 @@
 ///////RETRACT////////
 /datum/surgery_step/open_encased/retract
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
+		/obj/item/tool/retractor = 100,
+		/obj/item/tool/crowbar = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
-	min_duration = 30
-	max_duration = 40
+	duration = 3 SECONDS
 
 /datum/surgery_step/open_encased/retract/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
@@ -135,13 +133,12 @@
 ////////CLOSE////////
 /datum/surgery_step/open_encased/close
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
+		/obj/item/tool/retractor = 100,
+		/obj/item/tool/crowbar = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
-	min_duration = 20
-	max_duration = 40
+	duration = 2 SECONDS
 
 /datum/surgery_step/open_encased/close/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
@@ -196,13 +193,12 @@
 ///////MEND///////
 /datum/surgery_step/open_encased/mend
 	allowed_tools = list(
-		/obj/item/weapon/bonegel = 100,
-		/obj/item/weapon/bonesetter/bone_mender = 100,
-		/obj/item/weapon/screwdriver = 75,
+		/obj/item/tool/bonegel = 100,
+		/obj/item/tool/bonesetter/bone_mender = 100,
+		/obj/item/tool/screwdriver = 75,
 		)
 
-	min_duration = 20
-	max_duration = 40
+	duration = 2 SECONDS
 
 /datum/surgery_step/open_encased/mend/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 

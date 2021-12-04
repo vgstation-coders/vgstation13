@@ -31,12 +31,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/defective = 0
 	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
-	var/event/on_use
 	var/sheet_type = /obj/item/stack/sheet/metal
 	var/sheet_amt = 1
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
-	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
+	var/datum/delay_controller/pAImove_delayer
 	var/pAImovement_delay = 0
 
 	// Can we wrench/weld this to a turf with a dense /obj on it?
@@ -44,6 +43,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/has_been_invisible_sprayed = FALSE
 	var/impactsound
+	var/current_glue_state = GLUE_STATE_NONE
+
+	// Does this item have a slime installed?
+	var/has_slime = 0
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
@@ -53,10 +56,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/turf/T = loc
 	if(istype(T) && ticker && ticker.current_state != GAME_STATE_PLAYING)
 		T.add_holomap(src)
-
-/obj/New()
-	..()
-	on_use = new(owner=src)
 
 /obj/Destroy()
 	for(var/mob/user in _using)
@@ -68,15 +67,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(integratedpai)
 		qdel(integratedpai)
 		integratedpai = null
-	if(on_use)
-		on_use.holder = null
-		qdel(on_use)
-		on_use = null
 
 	material_type = null //Don't qdel, they're held globally
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
+
+/obj/proc/blocks_doors()
+	return 0
 
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
@@ -85,8 +83,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	P.forceMove(src)
 	integratedpai = P
 	verbs += /obj/proc/remove_pai
+	pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
 
 /obj/attackby(obj/item/weapon/W, mob/user)
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -98,7 +98,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
 	if(W)
-		INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
 		if(W.material_type)
 			W.material_type.on_use(W, src, user)
 
@@ -186,6 +185,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		verbs -= /obj/proc/remove_pai
 		var/obj/item/device/paicard/P = integratedpai
 		integratedpai = null
+		qdel(pAImove_delayer)
+		pAImove_delayer = null
 		return P
 	return 0
 
@@ -213,6 +214,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/clockworkify()
 	return
+
+/obj/shuttle_rotate(var/angle)
+	..()
+	if(req_access_dir)
+		req_access_dir = turn(req_access_dir, -angle)
 
 /obj/proc/wrenchable()
 	return 0
@@ -311,6 +317,29 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/interact(mob/user)
 	return
 
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/obj/proc/suicide_act(var/mob/living/user)
+	if (is_hot())
+		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		user.IgniteMob()
+		return SUICIDE_ACT_FIRELOSS
+	else if (sharpness >= 1)
+		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+	else if (force >= 10)
+		if (prob(50))
+			playsound(user, 'sound/items/trayhit1.ogg', 50, 1)
+		else
+			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
+		user.visible_message("<span class='danger'>[user] strikes his head on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
 		return
@@ -322,19 +351,29 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/shuttle_act(datum/shuttle/S)
 	return qdel(src)
 
+/obj/slime_act(primarytype, mob/user)
+	if(has_slime)
+		to_chat(user, "\the [src] already has a slime extract attached.")
+		return FALSE
+
 /obj/singularity_pull(S, current_size)
+	INVOKE_EVENT(src, /event/before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
 	else
 		step_towards(src, S)
+	INVOKE_EVENT(src, /event/after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
 /obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
 	return 0
+
+/obj/proc/shouldReInitOnMultitoolLink(var/mob/user, var/obj/buffer, var/list/context)
+	return FALSE
 
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
@@ -374,12 +413,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 0
 
 	// Cloning stuff goes here.
-	if(P.clone && P.buffer) // Cloning is on.
-		if(!canClone(P.buffer))
+	var/obj/machinery/bufRef = P.buffer?.get();
+	if(P.clone && bufRef) // Cloning is on.
+		if(!canClone(bufRef))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
 			return
 
-		if(!clone(P.buffer))
+		if(!clone(bufRef))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
 			return
 
@@ -408,19 +448,19 @@ a {
 "}
 	dat += multitool_menu(user,P)
 	if(P)
-		if(P.buffer)
+		if(bufRef)
 			var/id = null
-			if(istype(P.buffer, /obj/machinery/telecomms))
-				var/obj/machinery/telecomms/buffer = P.buffer//Casting is better than using colons
+			if(istype(bufRef, /obj/machinery/telecomms))
+				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
 				id = buffer.id
-			else if(P.buffer.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
-				id = P.buffer:id_tag//sadly, : is needed
+			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = bufRef:id_tag//sadly, : is needed
 
-			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
+			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
 
-			dat += linkMenu(P.buffer)
+			dat += linkMenu(bufRef)
 
-			if(P.buffer)
+			if(bufRef)
 				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
 			dat += "</p>"
 		else
@@ -474,12 +514,12 @@ a {
  * @param time_to_wrench The time to complete the wrenchening
  * @returns TRUE on success, FALSE on fail
  */
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
+/obj/proc/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
 	if(!canAffixHere(user))
 		return FALSE
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
+			if(isshuttleturf(src.loc) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to this!</span>")
 				return FALSE
 			if(istype(src.loc, /turf/space)) //if on a space tile
@@ -487,7 +527,8 @@ a {
 				return FALSE
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(I)
+		I.playtoolsound(loc, 50)
 	if(do_after(user, src, time_to_wrench))
 		if(!canAffixHere(user))
 			return FALSE
@@ -648,7 +689,11 @@ a {
 				surrounding_mod *= I.quality/rand(1,3)
 	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
-	quality = Clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+	quality = clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(icon, to_icon_state))
+		icon_state = to_icon_state
 
 /obj/proc/gen_description(mob/user)
 	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0
@@ -696,7 +741,15 @@ a {
 	gen_quality(additional_quality, min_quality)
 	if(quality > B_SUPERIOR)
 		gen_description()
-	if(!findtext(lowertext(name), lowertext(mat.name)))
+	if(material_type)
+		if(sharpness_flags && sharpness)
+			force = initial(force)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			sharpness = initial(sharpness)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+		else
+			force = initial(force)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+	if(!findtext(lowertext(name), lowertext(material_type.name)))
 		name = "[quality == B_AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
@@ -704,6 +757,8 @@ a {
 
 //Return true if thrown object misses
 /obj/PreImpact(atom/movable/A, speed)
+	if(flow_flags & ON_BORDER) //If the object should hit this, it will just by normal collision detection.
+		return ..()
 	if(density && !throwpass)
 		return FALSE
 	return TRUE
@@ -722,7 +777,7 @@ a {
 				var/danger = FALSE
 
 				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
-				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+				if(foot && !H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
 					if(foot.is_organic())
 						danger = TRUE
 
@@ -734,3 +789,19 @@ a {
 						H.updatehealth()
 
 				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")
+
+/**
+ * This proc is used for telling whether something can pass by this object in a given direction, for use by the pathfinding system.
+ *
+ * Trying to generate one long path across the station will call this proc on every single object on every single tile that we're seeing if we can move through, likely
+ * multiple times per tile since we're likely checking if we can access said tile from multiple directions, so keep these as lightweight as possible.
+ *
+ * Arguments:
+ * * ID- An ID card representing what access we have (and thus if we can open things like airlocks or windows to pass through them). The ID card's physical location does not matter, just the reference
+ * * to_dir- What direction we're trying to move in, relevant for things like directional windows that only block movement in certain directions
+ * * caller- The movable we're checking pass flags for, if we're making any such checks
+ **/
+/obj/proc/CanAStarPass(obj/item/weapon/card/id/ID, to_dir, atom/movable/caller)
+	if(istype(caller) && (caller.pass_flags & pass_flags_self))
+		return TRUE
+	. = !density

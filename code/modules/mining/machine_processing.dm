@@ -3,11 +3,11 @@
 /obj/machinery/computer/smelting
 	name = "ore processing console"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "computer_generic"//TODO
+	icon_state = "orecomp"
 	density = 1
 	anchored = 1
 	circuit = "/obj/item/weapon/circuitboard/smeltcomp"
-	light_color = LIGHT_COLOR_GREEN
+	light_color = LIGHT_COLOR_BLUE
 	req_access = list(access_mining)
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors.
@@ -229,7 +229,7 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.data["tag"] = smelter_tag
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
@@ -263,6 +263,7 @@
 
 /obj/machinery/mineral/processing_unit
 	name = "ore processor"
+	desc = "Turns lumpy rocks into completely smooth sheets."
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "furnace_o"
 	density = 1
@@ -274,34 +275,19 @@
 	light_range_on = 3
 	light_color = LIGHT_COLOR_ORANGE
 
-	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
+	allowed_types = list(/obj/item/stack/ore) //Does nothing for now, functions are a mess in this
+	max_moved = 100
 
-	var/frequency = FREQ_DISPOSAL //Same as conveyors
-	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
 	var/datum/materials/ore
 	var/list/recipes[0]
 	var/on = 0 //0 = off, 1 =... oh you know!
 
-	var/in_dir = NORTH
-	var/out_dir = SOUTH
-
-	var/sheets_per_tick = 100
-
 	var/credits = 0 //Amount of money, set to -1 to disable the $ amount showing in the menu (recycling, for example)
-
-/obj/machinery/mineral/processing_unit/Destroy()
-	. = ..()
-
-	id_tag = null
-
-	qdel(mover)
-	mover = null
 
 /obj/machinery/mineral/processing_unit/power_change()
 	. = ..()
-
 	update_icon()
 
 /obj/machinery/mineral/processing_unit/update_icon()
@@ -317,7 +303,7 @@
 	for(var/obj/item/weapon/stock_parts/matter_bin/A in component_parts)
 		i += A.rating
 
-	sheets_per_tick = initial(sheets_per_tick) * (i / 2)
+	max_moved = initial(max_moved) * (i / 2)
 
 	i = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/A in component_parts)
@@ -339,15 +325,12 @@
 
 	RefreshParts()
 
-	mover = new
-
 	ore = new
 
 	for(var/recipe in typesof(/datum/smelting_recipe) - /datum/smelting_recipe)
 		recipes += new recipe()
 
 	if(ticker && ticker.current_state == 3)
-		initialize()
 		broadcast_status()
 
 /obj/machinery/mineral/processing_unit/initialize()
@@ -362,7 +345,10 @@
 	data["ore"] = list()
 	for(var/metal in ore.storage)
 		var/datum/material/M = ore.getMaterial(metal)
-		data["ore"][metal] = list("name" = M.name, "amount" = ore.getAmount(metal))
+		var/amount = ore.getAmount(metal)
+		if (M.default_show_in_menus || amount != 0)
+			// display 1 = 1 sheet in the interface.
+			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet)
 
 	data["credits"] = credits
 
@@ -371,7 +357,7 @@
 	send_signal(data)
 
 /obj/machinery/mineral/processing_unit/proc/send_signal(list/data)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data["tag"] = id_tag
@@ -396,26 +382,16 @@
 			continue
 
 		sheets_this_tick++
-		if(sheets_this_tick >= sheets_per_tick)
+		if(sheets_this_tick >= max_moved)
 			break
 
-		if(!istype(A, /obj/item/stack/ore))//Check if it's an ore
+		if(!istype(A, /obj/item/stack/ore) || !A.materials) // Check if it's an ore
 			A.forceMove(out_T)
 			continue
 
-		var/obj/item/stack/ore/O = A
-		if(!O.material)
-			continue
-
-		ore.addAmount(O.material, O.amount)
-
-		var/datum/material/mat = ore.getMaterial(O.material)
-		if(!mat)
-			continue
-
-		credits += mat.value*O.amount //Dosh.
-
-		returnToPool(O)
+		credits += A.materials.getValue()
+		ore.addFrom(A.materials, FALSE)
+		qdel(A)
 
 /obj/machinery/mineral/processing_unit/process()
 	if(stat & (NOPOWER | BROKEN))
@@ -424,7 +400,7 @@
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+	if(!in_T.Enter(mover, mover.loc, TRUE) || !out_T.Enter(mover, mover.loc, TRUE))
 		return
 
 	grab_ores() //Grab some more ore to process this tick.
@@ -437,18 +413,18 @@
 	var/sheets_this_tick = 0
 
 	for(var/datum/smelting_recipe/R in recipes)
-		while(R.checkIngredients(src)) //While we have materials for this
+		while(R.checkIngredients(ore)) //While we have materials for this
 			for(var/ore_id in R.ingredients)
-				ore.removeAmount(ore_id, 1)
+				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
 				score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
 
 			drop_stack(R.yieldtype, out_T)
 
 			sheets_this_tick++
-			if(sheets_this_tick >= sheets_per_tick)
+			if(sheets_this_tick >= max_moved)
 				break
 
-		if(sheets_this_tick >= sheets_per_tick) //Second one is so it cancels the for loop when the while loop gets broken.
+		if(sheets_this_tick >= max_moved) //Second one is so it cancels the for loop when the while loop gets broken.
 			break
 
 	if(sheets_this_tick) //We produced something this tick, make it take more power.
@@ -478,52 +454,12 @@
 			credits = 0
 
 	if(signal.data["inc_priority"])
-		var/idx = Clamp(signal.data["inc_priority"], 2, recipes.len)
+		var/idx = clamp(signal.data["inc_priority"], 2, recipes.len)
 		recipes.Swap(idx, idx - 1)
 
 	if(signal.data["dec_priority"])
-		var/idx = Clamp(signal.data["dec_priority"], 1, recipes.len - 1)
+		var/idx = clamp(signal.data["dec_priority"], 1, recipes.len - 1)
 		recipes.Swap(idx, idx + 1)
-
-/obj/machinery/mineral/processing_unit/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return {"
-	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
-		<li>[format_tag("ID Tag","id_tag")]</li>
-		<li><b>Input: </b><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(in_dir))]</a></li>
-		<li><b>Output: </b><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(out_dir))]</a></li>
-	</ul>
-	"}
-
-//For the purposes of this proc, 1 = in, 2 = out.
-//Yes the implementation is overkill but I felt bad for hardcoding it with gigantic if()s and shit.
-/obj/machinery/mineral/processing_unit/multitool_topic(mob/user, list/href_list, obj/item/device/multitool/P)
-	if("changedir" in href_list)
-		var/changingdir = text2num(href_list["changedir"])
-		changingdir = Clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
-
-		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
-		if(!newdir)
-			return 1
-		newdir = text2dir(newdir)
-
-		var/list/dirlist = list(in_dir, out_dir) //Behold the idea I got on how to do this.
-		var/olddir = dirlist[changingdir] //Store this for future reference before wiping it next line.
-		dirlist[changingdir] = -1 //Make the dir that's being changed -1 so it doesn't see itself.
-
-		var/conflictingdir = dirlist.Find(newdir) //Check if the dir is conflicting with another one
-		if(conflictingdir) //Welp, it is.
-			dirlist[conflictingdir] = olddir //Set it to the olddir of the dir we're changing.
-
-		dirlist[changingdir] = newdir //Set the changindir to the selected dir.
-
-		in_dir = dirlist[1]
-		out_dir = dirlist[2]
-
-		return MT_UPDATE
-		//Honestly I didn't expect that to fit in, what, 10 lines of code?
-
-	return ..()
 
 /////////////////////////////////////////////////
 // Recycling Furnace
@@ -545,6 +481,7 @@
 
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
 			if(A.recycle(ore))
+				ore.addFrom(A.materials, FALSE)
 				qdel(A)
 				continue
 

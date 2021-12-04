@@ -58,8 +58,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
 
 	// Cosmetics.
-	var/plant_dmi = 'icons/obj/hydroponics.dmi'// DMI  to use for the plant growing in the tray.
-	var/plant_icon                  // Icon to use for the plant growing in the tray.
+	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
+	var/plant_icon_state = "produce"                 // icon_state to use for the product
 	var/packet_icon = "seed"        // Icon to use for physical seed packet item.
 	var/biolum                      // Plant is bioluminescent.
 	var/biolum_colour               // The colour of the plant's radiance.
@@ -68,6 +68,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
 	var/large = 1					// Is the plant large? For clay pots.
+	var/list/mutation_log = list() // Who did what
+
+/datum/seed/New()
+	..()
 
 //Creates a random seed. MAKE SURE THE LINE HAS DIVERGED BEFORE THIS IS CALLED.
 /datum/seed/proc/randomize()
@@ -79,7 +83,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	mysterious = 1
 
 	seed_noun = pick("spores","nodes","cuttings","seeds")
-	products = list(pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-/obj/item/weapon/reagent_containers/food/snacks/grown))
+	products = list(pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown)))
 	potency = rand(5,30)
 
 	randomize_icon()
@@ -238,81 +242,21 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	chems[new_chem] = list(rand(1,severity/3),rand(10-Ceiling(severity/3),15))
 	return 1
 
-//Gives the plant a new, random icon from a list, with matching growth stages number.
-/datum/seed/proc/randomize_icon(var/change_packet = 1)
-	var/list/plant_icons = pick(list(
-		list("seed-chili",              "chili",				6),
-		list("seed-icepepper",          "chiliice",				6),
-		list("seed-berry",              "berry",				6),
-		list("seed-glowberry",          "glowberry",			6),
-		list("seed-poisonberry",        "poisonberry",			6),
-		list("seed-deathberry",         "deathberry",			6),
-		list("seed-nettle",             "nettle",				6),
-		list("seed-deathnettle",        "deathnettle",			6),
-		list("seed-tomato",             "tomato",				6),
-		list("seed-bloodtomato",        "bloodtomato",			6),
-		list("seed-killertomato",       "killertomato",			2),
-		list("seed-bluetomato",         "bluetomato",			6),
-		list("seed-bluespacetomato",    "bluespacetomato",		6),
-		list("seed-eggplant",           "eggplant",				6),
-		list("seed-eggy",               "eggy",					6),
-		list("seed-apple",              "apple",				6),
-		list("seed-goldapple",          "goldapple",			6),
-		list("seed-ambrosiavulgaris",   "ambrosiavulgaris",		6),
-		list("seed-ambrosiadeus",       "ambrosiadeus",			6),
-		list("mycelium-chanter",        "chanter",				3),
-		list("mycelium-plump",          "plump",				3),
-		list("mycelium-reishi",         "reishi",				4),
-		list("mycelium-liberty",        "liberty",				3),
-		list("mycelium-amanita",        "amanita",				3),
-		list("mycelium-angel",          "angel",				3),
-		list("mycelium-tower",          "towercap",				3),
-		list("mycelium-glowshroom",     "glowshroom",			4),
-		list("mycelium-walkingmushroom","walkingmushroom",		3),
-		list("mycelium-plast",          "plastellium",			3),
-		list("seed-harebell",           "harebell",				4),
-		list("seed-poppy",              "poppy",				3),
-		list("seed-sunflower",          "sunflower",			3),
-		list("seed-moonflower",         "moonflower",			3),
-		list("seed-novaflower",         "novaflower",			3),
-		list("seed-grapes",             "grape",				2),
-		list("seed-greengrapes",        "greengrape",			2),
-		list("seed-peanut",             "peanut",				6),
-		list("seed-cabbage",            "cabbage",				1),
-		list("seed-shand",              "shand",				3),
-		list("seed-mtear",              "mtear",				4),
-		list("seed-banana",             "banana",				6),
-		list("seed-corn",               "corn",					3),
-		list("seed-potato",             "potato",				4),
-		list("seed-soybean",            "soybean",				6),
-		list("seed-koibean",            "soybean",				6),
-		list("seed-wheat",              "wheat",				6),
-		list("seed-rice",               "rice",					4),
-		list("seed-carrot",             "carrot",				3),
-		list("seed-ambrosiavulgaris",   "weeds",				4),
-		list("seed-whitebeet",          "whitebeet",			6),
-		list("seed-sugarcane",          "sugarcane",			3),
-		list("seed-watermelon",         "watermelon",			6),
-		list("seed-pumpkin",            "pumpkin",				2),
-		list("seed-lime",               "lime",					6),
-		list("seed-lemon",              "lemon",				6),
-		list("seed-orange",             "orange",				6),
-		list("seed-grass",              "grass",				2),
-		list("seed-cocoapod",           "cocoapod",				5),
-		list("seed-cherry",             "cherry",				5),
-		list("seed-kudzu",              "kudzu",				4),
-		list("seed-pear",               "pear", 				6),
-		))
+/datum/seed/proc/randomize_icon()
+	var/random = rand(1, SSplant.roundstart_seeds)
+	var/random_key = SSplant.seeds[random]
+	var/datum/seed/random_seed = SSplant.seeds[random_key]
+	set_icon(random_seed)
 
-	if (change_packet)
-		packet_icon = plant_icons[1]
-	plant_icon = plant_icons[2]
-	growth_stages = plant_icons[3]
+/datum/seed/proc/set_icon(datum/seed/seed)
+	plant_dmi = seed.plant_dmi
+	plant_icon_state = "produce"
+	growth_stages = seed.growth_stages
 
 //Random mutations moved to hydroponics_mutations.dm!
 
 //Mutates a specific trait/set of traits. Used by the Bioballistic Delivery System.
-/datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode)
+/datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode, var/mob/user)
 
 	if(!gene || !gene.values || immutable > 0)
 		return
@@ -455,6 +399,15 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					harvest_repeat 		= max(gene.values[4], harvest_repeat)
 					yield				= round(mix(gene.values[5], yield,		rand(40, 60)/100), 0.1)
 
+	var/text = "([timestamp()]) Plant engineered by [key_name(usr)], mode: [mode] (cf __DEFINES/hydroponics.dm). |"
+	text += " Plant is now [carnivorous ? "carnivorous" : "NO LONGER carnivorous."] |"
+	text += " Plant is now [thorny ? "thorny" : "NO LONGER thorny."] |"
+	text += " Plant chems: "
+	for (var/chemical in chems)
+		text += "[chemical], vol: [chems[chemical][1]], potency: [chems[chemical][2]]."
+
+	mutation_log += text
+
 //Returns a list of the desired trait values.
 /datum/seed/proc/get_gene(var/genetype)
 	if(!genetype)
@@ -563,6 +516,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 		if(ispath(product_type, /obj/item/stack))
 			product = drop_stack(product_type, T, 1, null)
+		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown) || ispath(product_type, /obj/item/weapon/grown))
+			product = new product_type(T, custom_plantname = name)
 		else
 			product = new product_type(T)
 
@@ -583,14 +538,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
 			handle_living_product(product)
-
-		// Make sure the product is inheriting the correct seed type reference.
-		else if(istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/current_product = product
-			current_product.plantname = name
-		else if(istype(product,/obj/item/weapon/grown))
-			var/obj/item/weapon/grown/current_product = product
-			current_product.plantname = name
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
@@ -622,7 +569,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 						if(stinging)
 							if(chems && chems.len)
 								for(var/rid in chems)
-									H.reagents.add_reagent(rid, Clamp(1, 5, potency/10))
+									H.reagents.add_reagent(rid, clamp(1, 5, potency/10))
 								to_chat(H, "<span class='danger'>You are stung by \the [seed_name]!</span>")
 								if(hematophage)
 									if(tray && H.species && !(H.species.anatomy_flags & NO_BLOOD)) //the indentation gap doesn't stop from getting wider
@@ -712,13 +659,15 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.ligneous =             ligneous
 	new_seed.teleporting =          teleporting
 	new_seed.juicy =        	    juicy
-	new_seed.plant_icon =           plant_icon
+	new_seed.plant_icon_state =     plant_icon_state
 	new_seed.splat_type =           splat_type
 	new_seed.packet_icon =          packet_icon
 	new_seed.biolum =               biolum
 	new_seed.biolum_colour =        biolum_colour
 	new_seed.alter_temp = 			alter_temp
 	new_seed.plant_dmi =			plant_dmi
+	new_seed.mutation_log =			mutation_log
+	new_seed.mutation_log += "([timestamp()]) Diverged from seed with uid: [uid]."
 
 	ASSERT(istype(new_seed)) //something happened... oh no...
 	return new_seed

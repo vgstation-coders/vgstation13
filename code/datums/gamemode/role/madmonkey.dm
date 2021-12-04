@@ -33,9 +33,11 @@
 	special_role = MADMONKEY
 	logo_state = "monkey-logo"
 	greets = list(GREET_MASTER,GREET_DEFAULT,GREET_CUSTOM)
+	default_admin_voice = "Monkey King"
+	admin_voice_style = "rough"
 	var/countdown = 60
 
-datum/role/madmonkey/Greet(var/greeting,var/custom)
+/datum/role/madmonkey/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 
@@ -43,12 +45,12 @@ datum/role/madmonkey/Greet(var/greeting,var/custom)
 	switch(greeting)
 		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>[custom]</B>")
-		else if(GREET_MASTER)
+		if (GREET_MASTER)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='warning'><B>You are the Jungle Fever patient zero!</B><BR>Find somewhere safe, you will transform in one minute. At that time, start biting!</span>")
 		else //default
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='warning'><B>You are a [name]!</B><BR>Bite crewmembers to add to your ranks!</span>")
 
-/datum/role/madmonkey/OnPostSetup()
+/datum/role/madmonkey/OnPostSetup(var/laterole = FALSE)
 	if(faction)
 		return
 	var/datum/faction/F = find_active_faction_by_type(/datum/faction/junglefever)
@@ -86,4 +88,4 @@ datum/role/madmonkey/Greet(var/greeting,var/custom)
 			antag.current.hud_used.countdown_display.overlays += I1
 			antag.current.hud_used.countdown_display.overlays += I2
 		else
-			antag.current.hud_used.countdown_hud()
+			antag.current.hud_used.countdown_monkey()

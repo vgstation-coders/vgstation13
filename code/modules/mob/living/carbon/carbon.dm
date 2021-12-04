@@ -23,11 +23,13 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
+	INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
+	INVOKE_EVENT(src, /event/bumped, "bumper" = AM, "bumped" = src)
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
@@ -38,9 +40,10 @@
 
 			if(m_intent == "run")
 				burn_calories(HUNGER_FACTOR / 20)
-		//update_minimap()
-		if (displayed_holomap)
-			displayed_holomap.update_holomap()
+
+/mob/living/carbon/proc/update_holomaps()
+	if (displayed_holomap)
+		displayed_holomap.update_holomap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
 	M.unarmed_attack_mob(src)
@@ -84,7 +87,7 @@
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
 				user.delayNextMove(10) //no just holding the key for an instant gib
 
-/mob/living/carbon/gib()
+/mob/living/carbon/gib(animation = FALSE, meat = TRUE)
 	dropBorers(1)
 	if(stomach_contents && stomach_contents.len)
 		drop_stomach_contents()
@@ -101,26 +104,36 @@
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	handle_symptom_on_touch(M, src, HAND)
+	INVOKE_EVENT(src, /event/touched, "toucher" = M, "touched" = src)
 
-/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
+	if(incapacitation_duration <= 0)
+		return 0
+	incapacitation_duration = max(incapacitation_duration / (2 SECONDS), 1) // life ticks are 2 seconds, we simply make a conversion from seconds to life ticks
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
-		damage = 0
+		adjustFireLoss(damage) //Heal burns equal to the negative value
+		return 0
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
-		Jitter(10)
-		Stun(5)
-		Knockdown(5)
+		Jitter(incapacitation_duration)
+		Stun(incapacitation_duration / 2)
+		Knockdown(incapacitation_duration / 2)
+		damage = 0
 		//It would be cool if someone added an animation of some electrical shit going through the body
 	else
-		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
+		if(!def_zone)
+			damage = take_overall_damage(0, damage, used_weapon = source)
+		else
+			damage = apply_damage(damage, BURN, def_zone, used_weapon = source)
+		if(damage <= 0)
 			return 0
-		Jitter(20)
-		Stun(10)
-		Knockdown(10)
+		Jitter(incapacitation_duration * 2)
+		Stun(incapacitation_duration)
+		Knockdown(incapacitation_duration)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
@@ -141,25 +154,34 @@
 /mob/living/carbon/swap_hand()
 	if(++active_hand > held_items.len)
 		active_hand = 1
-
-	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
-		if(active_hand == hand_hud_object.hand_index)
-			hand_hud_object.icon_state = "hand_active"
-		else
-			hand_hud_object.icon_state = "hand_inactive"
-
-	return
+	update_hands_icons()
 
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
+	update_hands_icons()
 
+/mob/living/carbon/proc/update_hands_icons()
+	if(!hud_used)
+		return
 	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
-		if(active_hand == hand_hud_object.hand_index)
-			hand_hud_object.icon_state = "hand_active"
-		else
-			hand_hud_object.icon_state = "hand_inactive"
+		update_hand_icon(hand_hud_object)
+
+/mob/living/carbon/proc/update_hand_icon(var/obj/abstract/screen/inventory/hand_hud_object)
+	if(active_hand == hand_hud_object.hand_index)
+		hand_hud_object.icon_state = "hand_active"
+	else
+		hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
+	if (src != M)
+		// we assume that they use their hands to shake us from our torso
+		var/block = 0
+		var/bleeding = 0
+		if (M.check_contact_sterility(HANDS) || check_contact_sterility(FULL_TORSO))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(FULL_TORSO))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(M,block,bleeding)
 	if (src.health >= config.health_threshold_crit)
 		if(src == M && istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src
@@ -221,7 +243,7 @@
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			src.sleeping = max(0,src.sleeping-5)
+			src.sleeping = max(0,src.sleeping-10)
 			if(src.sleeping == 0)
 				src.resting = 0
 			AdjustParalysis(-3)
@@ -331,18 +353,18 @@
 	bodytemperature = max(bodytemperature, BODYTEMP_HEAT_DAMAGE_LIMIT+10)*/
 
 /mob/living/carbon/can_use_hands()
-	if(handcuffed)
-		return 0
+	if(!..())
+		return FALSE
 	if(locked_to && ! istype(locked_to, /obj/structure/bed/chair)) // buckling does not restrict hands
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 /mob/living/carbon/restrained()
-	if(timestopped)
-		return 1 //under effects of time magick
+	if(..())
+		return TRUE
 	if (check_handcuffs())
-		return 1
-	return
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)
@@ -454,8 +476,7 @@
 		B.host_brain.real_name = "host brain"
 
 	//reset name if the borer changed it
-	if(name != real_name)
-		name = real_name
+	fully_replace_character_name(null, B.host_name)
 
 	verbs -= /mob/living/carbon/proc/release_control
 	verbs -= /mob/living/carbon/proc/punish_host
@@ -513,7 +534,7 @@
 	return 0
 
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
-	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
+	var/walking_factor = (!slip_on_walking && glide_size <= GLIDE_SIZE_OF_A_WALKING_HUMAN)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
 
 /mob/living/carbon/teleport_to(var/atom/A)
@@ -526,23 +547,22 @@
 	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
+	for(var/obj/item/I in held_items)
+		I.SlipDropped(src,dir,overlay_type) // can be set to trigger specific behaviours when items are dropped by slipping
+
 	if(..())
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 		return 1
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
-		I.forceMove(newmob)
-		I.implanted = 1
-		I.imp_in = newmob
-		if(istype(newmob, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = newmob
-			if(!I.part) //implanted as a nonhuman, won't have one.
-				I.part = /datum/organ/external/chest
-			for (var/datum/organ/external/affected in H.organs)
-				if(!istype(affected, I.part))
-					continue
-				affected.implants += I
+		if(!I.imp_in)
+			continue
+		if(!I.remove())
+			stack_trace("failed to remove implant")
+			continue
+		if(!I.insert(newmob, I.part?.name))
+			stack_trace("failed to insert implant")
 
 /mob/living/carbon/proc/dropBorers(var/gibbed = null)
 	var/list/borer_list = get_brain_worms()
@@ -587,7 +607,7 @@
 			src.stomach_contents.Remove(O)
 			O.forceMove(target)
 
-/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(eyecheck() < intensity)
 		..()
 
@@ -607,14 +627,17 @@
 	if (toucher == touched)
 		return
 	if(virus2.len)
+		var/list/symptom_types = list()
 		for(var/I in virus2)
 			var/datum/disease2/disease/D = virus2[I]
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
-					E.on_touch(src, toucher, touched, touch_type)
+					if (!(E.type in symptom_types))
+						symptom_types += E.type
+						E.on_touch(src, toucher, touched, touch_type)
 
 /mob/living/carbon/proc/check_handcuffs()
-	return handcuffed
+	return handcuffed || istype(locked_to, /obj/structure/bed/nest)
 
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)
@@ -633,7 +656,6 @@
 	..()
 	var/static/list/resettable_vars = list(
 		"gender",
-		"antibodies",
 		"last_eating",
 		"life_tick",
 		"number_wounds",
@@ -642,6 +664,8 @@
 		"pulse")
 
 	reset_vars_after_duration(resettable_vars, duration)
+	if(immune_system)
+		immune_system.send_to_past(duration)
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
@@ -650,7 +674,10 @@
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
-				. *= I.slowdown
+				if(I.flags & SLOWDOWN_WHEN_CARRIED)
+					. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
+				else
+					. *= I.slowdown
 
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
@@ -658,6 +685,9 @@
 
 		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
 			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
+
+		if(reagents.has_reagent(SUX) && !(reagents.has_any_reagents(HYPERZINES)))
+			. *= 4
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
@@ -704,7 +734,7 @@
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
 				return FALSE
 			for (var/i = 1 to 4)
 				spawn(i)

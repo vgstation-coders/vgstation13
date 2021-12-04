@@ -19,12 +19,12 @@
 	slot_flags = 0 //doesn't fit on your back!
 	w_class = W_CLASS_SMALL //fits in pockets!
 
-/obj/item/weapon/storage/backpack/holding/suicide_act(mob/user)
+/obj/item/weapon/storage/backpack/holding/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] puts \the [src.name] on \his head and stretches the bag around \himself. With a sudden snapping sound, the bag shrinks to its original size, leaving no trace of [user].</b></span>")
 	user.drop_item(src)
 	qdel(user)
 
-/obj/item/weapon/storage/backpack/holding/miniblackhole/suicide_act(mob/user)
+/obj/item/weapon/storage/backpack/holding/miniblackhole/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] puts \the [src.name] on the ground and jumps inside, never to be seen again.<</b></span>")
 	user.drop_item(src)
 	qdel(user)
@@ -37,12 +37,10 @@
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
 		return
-	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
-	if(H)
-		singulocreate(H, user)
+	var/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
+	if(length(recursive_list) > 0) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
+		singulocreate(recursive_list[1], user)
 		return
-	if(istype(W, /obj/item/weapon/storage/backpack/holding))
-		singulocreate(W, user)
 
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
@@ -54,12 +52,12 @@
 	qdel(H)
 	qdel(src)
 	var/datum/zLevel/ourzLevel = map.zLevels[user.z]
-	if(ourzLevel.bluespace_jammed)
+	if(ourzLevel.bluespace_jammed && !is_on_shuttle(usr))
 		//Stop breaking into centcomm via dungeons you shits
 		message_admins("[key_name_admin(user)] detonated [H] and [src], creating an explosion.")
 		log_game("[key_name(user)] detonated [H] and [src], creating an explosion.")
 		empulse(T,(20),(40))
-		explosion(T, 5, 10, 20, 40, 1)
+		explosion(T, 5, 10, 20, 40, 1, whodunnit = user)
 		user.gib() //Just to be sure
 	else
 		investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")

@@ -16,6 +16,8 @@
 
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
+#define isinsectoid(A) (ishuman(A) && istype(A:species, /datum/species/insectoid))
+
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))
 
 #define isgrey(A) (ishuman(A) && istype(A:species, /datum/species/grey))
@@ -58,6 +60,10 @@
 
 #define isalienadult(A) istype(A, /mob/living/carbon/alien/humanoid)
 
+#define isalienqueen(A)	istype(A, /mob/living/carbon/alien/humanoid/queen)
+
+#define isaliendrone(A)	istype(A, /mob/living/carbon/alien/humanoid/drone)
+
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
@@ -67,6 +73,8 @@
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
 
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
+
+#define ispulsedemon(A) (istype(A, /mob/living/simple_animal/hostile/pulse_demon))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -85,6 +93,8 @@
 #define isbear(A) istype(A, /mob/living/simple_animal/hostile/bear)
 
 #define iscarp(A) istype(A, /mob/living/simple_animal/hostile/carp)
+
+#define isspider(A) istype(A, /mob/living/simple_animal/hostile/giant_spider)
 
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
@@ -136,9 +146,7 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswrench(A) istype(A, /obj/item/weapon/wrench)
-
-#define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
+#define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
 
@@ -148,7 +156,7 @@
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 
-#define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
+#define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
@@ -162,11 +170,11 @@
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
-#define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
+#define iscrowbar(A) istype(A, /obj/item/tool/crowbar)
 
-#define issolder(A) istype(A, /obj/item/weapon/solder)
+#define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
+#define issocketwrench(A) istype(A, /obj/item/tool/wrench/socket)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
@@ -180,13 +188,17 @@
 
 #define isvehicle(A) (istype(A, /obj/structure/bed/chair/vehicle))
 
+#define istable(A) (istype(A, /obj/structure/table))
+
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
+#define isfullwindow(A) (istype(A, /obj/structure/window/full))
+
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -198,13 +210,11 @@
 
 #define isclient(A) (istype(A, /client))
 
-#define isatom(A) (istype(A, /atom))
-
-#define isatommovable(A) (istype(A, /atom/movable))
+#define isatom(A) isloc(A)
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -216,15 +226,27 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
-#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
+
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
 #define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
 
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
+
+#define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
+
+#define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
+
+#define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
+
+#define isNonTimeDataReagent(R) (is_type_in_list(R, list( /datum/reagent/citalopram, /datum/reagent/paroxetine)))
+
+#define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
@@ -241,11 +263,15 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
+
+#define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
+
+#define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))
 
 #define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
+#define isanycultist(H) (islegacycultist(H) || iscultist(H))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
@@ -257,11 +283,15 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+#define ischallenger(H) (H.mind && H.mind.GetRole(CHALLENGER))
+
+#define iselitesyndie(H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
 
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define issyndicate(H) (H.mind && (H.mind.GetRole(TRAITOR) ||  H.mind.GetRole(SYNDIESQUADIE) || H.mind.GetRole(NUKE_OP) || H.mind.GetRole(CHALLENGER)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -269,7 +299,7 @@
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
-#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUADIE))
 
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
@@ -287,20 +317,28 @@
 
 #define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
+#define istimeagent(H) (H.mind && (H.mind.GetRole(TIMEAGENT) || (H.mind.GetRole(TIMEAGENTTWIN))))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
+
+#define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))
+
+#define istagmime(H) (H.mind && H.mind.GetRole(TAG_MIME))
 
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
-
+#define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 //Macro for AREAS!
 
 #define isspace(A) (A.type == /area)
 
+#define isopenspace(A) istype(A, /turf/simulated/open)
+
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
-proc/get_space_area()
+/proc/get_space_area()
 	//global.space_area is defined in code/game/areas/areas.dm, and set when the space area is created
 	if(!global.space_area)
 		var/area/new_space_area = new /area
@@ -328,15 +366,11 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#define Clamp(x, y, z) 	min(max(x, y), z)
-//x is the number you want to clamp
-//y is the minimum
-//z is the maximum
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
 
-#define CLAMP01(x) 		(Clamp(x, 0, 1))
+#define CLAMP01(x) 		(clamp(x, 0, 1))
 
 //CPU lag shit
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.
@@ -383,8 +417,13 @@ proc/get_space_area()
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
+#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE, FALSE)
 //Starts 0 credits, not sourced from any database, earns 0 credits, hidden
 
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) (isatom(A))
+#define isapperanceeditable(A) (isatom(A))
+
+#define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)

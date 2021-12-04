@@ -14,7 +14,7 @@
 	w_type = RECYK_METAL
 	level = 2
 	var/ptype = 0
-	// 0=straight, 1=bent, 2=junction-j1, 3=junction-j2, 4=junction-y, 5=trunk, 6=disposal bin, 7=outlet, 8=inlet
+	// 0=straight, 1=bent, 2=junction-j1, 3=junction-j2, 4=junction-y, 5=trunk, 6=disposal bin, 7=outlet, 8=inlet, 9=up, 10=down
 
 	var/dpdir = 0	// directions as disposalpipe
 	var/base_state = "pipe-s"
@@ -66,13 +66,29 @@
 			base_state = "intake"
 			dpdir = dir
 
-		if(9, 11)
+		if(9)
 			base_state = "pipe-j1s"
 			dpdir = dir | right | flip
 
-		if(10, 12)
+		if(10)
 			base_state = "pipe-j2s"
 			dpdir = dir | left | flip
+
+		if(11)
+			base_state = "pipe-j1ms"
+			dpdir = dir | right | flip
+
+		if(12)
+			base_state = "pipe-j2ms"
+			dpdir = dir | left | flip
+
+		if(13)
+			base_state = "pipe-u"
+			dpdir = dir
+
+		if(14)
+			base_state = "pipe-d"
+			dpdir = dir
 
 	if(ptype<6 || ptype>8)
 		icon_state = "con[base_state]"
@@ -202,7 +218,7 @@
 			nicetype = "pipe"
 			ispipe = 1
 
-	if(iswrench(I))
+	if(I.is_wrench(user))
 		if(anchored) //This the only part where we're DETACHING the pipe, so it doesn't really need to check anything.
 			anchored = 0
 			if(ispipe)
@@ -211,7 +227,7 @@
 			else
 				setDensity(TRUE)
 			to_chat(user, "You detach the [nicetype] from the underfloor.")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			I.playtoolsound(src, 100)
 			update()
 			return
 		else
@@ -231,7 +247,7 @@
 			else
 				setDensity(TRUE) // We don't want disposal bins or outlets to go density 0
 			to_chat(user, "You attach the [nicetype] to the underfloor.")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			I.playtoolsound(src, 100)
 			update()
 
 	else if(iswelder(I))
@@ -248,7 +264,7 @@
 			if(competing_pipe())
 				to_chat(user, "There is already a [nicetype] at that location.")
 				return
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/tool/weldingtool/W = I
 			to_chat(user, "Welding the [nicetype] in place.")
 			if(W.do_weld(user,src,20,0))
 				if(gcDestroyed || !W.isOn())

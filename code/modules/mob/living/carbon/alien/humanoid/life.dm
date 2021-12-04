@@ -3,7 +3,7 @@
 	toxins_alert = 0
 	fire_alert = 0
 
-	var/temperature_alert = 0
+	var/temperature_alert = TEMP_ALARM_SAFE
 
 /mob/living/carbon/alien/humanoid/Life()
 	//set background = 1
@@ -125,7 +125,7 @@
 				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				// Handle chem smoke effect  -- Doohl
-				for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
+				for(var/obj/effect/smoke/chem/smoke in view(1, src))
 					if(smoke.reagents.total_volume)
 						smoke.reagents.reaction(src, INGEST)
 						spawn(5)
@@ -283,7 +283,7 @@
 			sleeping += 1
 			Paralyse(5)
 
-	confused = max(0, confused - 1)
+	remove_confused(1)
 	// decrement dizziness counter, clamped to 0
 	if(resting)
 		dizziness = max(0, dizziness - 5)
@@ -381,18 +381,8 @@
 
 /mob/living/carbon/alien/humanoid/handle_regular_hud_updates()
 
-
-	if (stat == 2 || (M_XRAY in mutations))
-		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-		see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (stat != 2)
-		change_sight(adding = SEE_MOBS, removing = SEE_TURFS|SEE_OBJS)
-		see_in_dark = 4
-		see_invisible = SEE_INVISIBLE_MINIMUM
-
-	if (healths)
-		if (stat != 2)
+	if(healths)
+		if(!isDead())
 			switch(health)
 				if(100 to INFINITY)
 					healths.icon_state = "health0"
@@ -411,36 +401,32 @@
 
 	update_pull_icon()
 
-
-	if (toxin)
-		toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-	if (oxygen)
-		oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-	if (fire)
-		fire.icon_state = "fire[fire_alert ? 1 : 0]"
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox/alien)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath/alien)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/alien)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 	//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 	//blame the person who coded them. Temporary fix added.
-	if (client)
-		clear_fullscreens()
 
-		if(src.eye_blind)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		if (src.druggy)
-			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+	standard_damage_overlay_updates()
 
-	if (stat != 2)
-		if (machine)
-			if (!( machine.check_eye(src) ))
+	if(!isDead())
+		if(machine)
+			if (!(machine.check_eye(src)))
 				reset_view(null)
 		else
 			if(client && !client.adminobs && !isTeleViewing(client.eye))
 				reset_view(null)
 
-	return 1
+	return TRUE
 
 /mob/living/carbon/alien/humanoid/proc/handle_stomach()
 	spawn(0)
@@ -448,7 +434,7 @@
 			if(M.loc != src)
 				stomach_contents.Remove(M)
 				continue
-			if(istype(M, /mob/living/carbon) && stat & stat != 2)
+			if(istype(M, /mob/living/carbon) && stat & !isDead())
 				var/digest = 0
 				if(M.stat == 2)
 					if(prob(5))

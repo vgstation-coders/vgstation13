@@ -1,3 +1,6 @@
+// No longer necessary for doing xenoarch, but kept in because you can use it on people.
+// Still available from cargo.
+
 /obj/machinery/suspension_gen
 	name = "suspension field generator"
 	desc = "It has stubby legs bolted up against it's body for stabilising."
@@ -24,6 +27,20 @@
 /obj/machinery/suspension_gen/New()
 	src.cell = new/obj/item/weapon/cell/high(src)
 	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/suspension_gen,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+	RefreshParts()
+
+/obj/machinery/suspension_gen/RefreshParts()
+	for(var/obj/item/weapon/stock_parts/parts in component_parts)
+		if(istype(parts, /obj/item/weapon/stock_parts/capacitor))
+			var/pSave = parts.rating*2
+			power_use = 27 - pSave
 
 /obj/machinery/suspension_gen/process()
 	//set background = 1
@@ -196,7 +213,7 @@
 				to_chat(user, "<span class='warning'>Unscrew \the [src]'s battery panel first.</span>")
 		else
 			to_chat(user, "<span class='warning'>\the [src]'s security locks are engaged.</span>")
-	else if (iswrench(W))
+	else if (W.is_wrench(user))
 		if(!suspension_field)
 			if(anchored)
 				anchored = 0
@@ -348,10 +365,8 @@
 
 /obj/effect/suspension_field
 	name = "energy field"
-	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 1
-	mouse_opacity = 0
 	var/field_type = "chlorine"
 
 /obj/effect/suspension_field/Destroy()

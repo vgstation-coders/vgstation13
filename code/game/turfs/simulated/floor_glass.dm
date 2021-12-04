@@ -26,12 +26,12 @@
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
-	if(!floor_overlays[icon_state])
+	if(!floor_overlays[glass_state])
 		var/image/floor_overlay = image('icons/turf/overlays.dmi', glass_state)
-		floor_overlay.plane = TURF_PLANE
+		floor_overlay.plane = GLASSTILE_PLANE
 		floor_overlay.layer = TURF_LAYER
-		floor_overlays[icon_state] = floor_overlay
-	overlays += floor_overlays[icon_state]
+		floor_overlays[glass_state] = floor_overlay
+	overlays += floor_overlays[glass_state]
 	update_icon()
 
 /turf/simulated/floor/glass/update_icon()
@@ -42,11 +42,11 @@
 			overlays -= current_damage_overlay
 			current_damage_overlay = null
 		return
-	var/damage_fraction = Clamp(round((max_health - current_health) / max_health * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
+	var/damage_fraction = clamp(round((max_health - current_health) / max_health * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
 	var/icon_state = "[cracked_base][damage_fraction]"
 	if(!damage_overlays[icon_state])
 		var/image/_damage_overlay = image('icons/obj/structures.dmi', icon_state)
-		_damage_overlay.plane = TURF_PLANE
+		_damage_overlay.plane = GLASSTILE_PLANE
 		_damage_overlay.layer = TURF_LAYER
 		damage_overlays[icon_state] = _damage_overlay
 	var/damage_overlay = damage_overlays[icon_state]
@@ -77,11 +77,11 @@
 	// TODO: Break all pipes/wires? //Maybe not, N3X.
 
 	spawnBrokenPieces(src)
-	ChangeTurf(/turf/space)
+	ChangeTurf(get_base_turf(src.z))
 
 /turf/simulated/floor/glass/proc/spawnBrokenPieces(var/turf/T)
-	getFromPool(shardtype, T, sheetamount)
-	getFromPool(/obj/item/stack/rods, T, sheetamount+1) // Includes lattice
+	new shardtype(T, sheetamount)
+	new /obj/item/stack/rods(T, sheetamount+1) // Includes lattic)
 
 /turf/simulated/floor/glass/proc/healthcheck(var/mob/M, var/sound = 1, var/method="unknown", var/no_teleport=TRUE)
 	if(health <= 0)
@@ -102,7 +102,6 @@
 
 
 /turf/simulated/floor/glass/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(FALSE) // ALWAYS show subfloor stuff.
@@ -175,8 +174,6 @@
 		"You hear banging.")
 		healthcheck(user, TRUE, "attack_hand hurt")
 
-	return
-
 /turf/simulated/floor/glass/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
@@ -215,34 +212,34 @@
 	switch(construction_state)
 		if(2) // intact
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 				"<span class='notice'>You unfasten \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(1)
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 				"<span class='notice'>You fasten \the [src] to its frame.</span>")
 				construction_state += 1
 				return
 			if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 				"<span class='notice'>You pry \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(0)
 			if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 				"<span class='notice'>You pry \the [src] into its frame.</span>")
 				construction_state += 1
 				return
 
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
 				"<span class='notice'>You begin removing \the [src].</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -258,7 +255,7 @@
 						message_admins("Glass floor with pressure [pressure]kPa deconstructed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(src)]!")
 						log_admin("Window with pressure [pressure]kPa deconstructed by [user.real_name] ([user.ckey]) at [src]!")
 
-					getFromPool(sheettype, src, sheetamount)
+					new sheettype(src, sheetamount)
 					src.ReplaceWithLattice()
 	if(ishuman(user) && user.a_intent != I_HURT)
 		return
@@ -279,7 +276,7 @@
 	if(istype(G.affecting, /mob/living))
 		var/mob/living/M = G.affecting
 		var/gstate = G.state
-		returnToPool(G)	//Gotta delete it here because if window breaks, it won't get deleted
+		qdel(G)	//Gotta delete it here because if window breaks, it won't get deleted
 		user.do_attack_animation(src, G)
 		switch(gstate)
 			if(GRAB_PASSIVE)

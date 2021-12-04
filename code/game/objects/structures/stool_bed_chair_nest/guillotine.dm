@@ -60,7 +60,7 @@
 	pixel_y_offset = -8 * PIXEL_MULTIPLIER
 	flags = CANT_BE_MOVED_BY_LOCKED_MOBS
 
-/obj/structure/bed/guillotine/manual_unbuckle(mob/user)
+/obj/structure/bed/guillotine/manual_unbuckle(mob/user, var/resisting = FALSE)
 	if(!is_locking(mob_lock_type))
 		return
 
@@ -173,10 +173,10 @@
 /obj/structure/bed/guillotine/attackby(obj/item/weapon/W, mob/user)
 	if(user == victim)
 		return
-	if(iswrench(W))
-		wrenchAnchor(user)
+	if(W.is_wrench(user))
+		wrenchAnchor(user, W)
 
-/obj/structure/bed/guillotine/wrenchAnchor(var/mob/user)
+/obj/structure/bed/guillotine/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(victim)
 		to_chat(user, "<span class='warning'>You can't unsecure \the [src] from the floor while someone's inside it!</span>")
 		return FALSE

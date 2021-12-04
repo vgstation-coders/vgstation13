@@ -148,7 +148,7 @@ var/global/list/battery_online =	list(
 		update_icon()
 
 /obj/machinery/power/battery/proc/chargedisplay()
-	return Clamp(round(5.5*charge/(capacity ? capacity : 5e6)), 0, battery_charge.len)
+	return clamp(round(5.5*charge/(capacity ? capacity : 5e6)), 0, battery_charge.len)
 
 /*
  * Called after all power processes are finished
@@ -286,7 +286,7 @@ var/global/list/battery_online =	list(
 
 			sleep(10*pick(4,5,6,7,10,14))
 
-			var/datum/effect/effect/system/smoke_spread/smoke = new()
+			var/datum/effect/system/smoke_spread/smoke = new()
 			smoke.set_up(3, 0, src.loc)
 			smoke.attach(src)
 			smoke.start()
@@ -302,7 +302,7 @@ var/global/list/battery_online =	list(
 				emp_act(2)
 		else if(prob(5)) //smoke only
 			message_admins("<span class='warning'>SMES smoke in [get_area(src)]</span>")
-			var/datum/effect/effect/system/smoke_spread/smoke = new()
+			var/datum/effect/system/smoke_spread/smoke = new()
 			smoke.set_up(3, 0, src.loc)
 			smoke.attach(src)
 			smoke.start()

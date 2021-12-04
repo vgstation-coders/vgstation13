@@ -12,6 +12,7 @@
 	slot_flags = SLOT_BELT
 	var/active = 0
 	var/det_time = 5 SECONDS
+	var/armsound = 'sound/weapons/armbomb.ogg'
 	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
@@ -51,7 +52,7 @@
 	if(det_time > 1)
 		to_chat(user, "<span class='info'>The timer is set to [det_time/10] seconds.</span>")
 		return
-	to_chat(user, "<span class='warning'>\The [src] is set for instant detonation.</span>")
+	//to_chat(user, "<span class='warning'>\The [src] is set for instant detonation.</span>")  commented out because this shows up on every chem grenade regardless of detonator, that and we lack an impact-detonator for our chem grenades
 
 
 /obj/item/weapon/grenade/attack_self(mob/user as mob)
@@ -78,7 +79,7 @@
 
 	icon_state = initial(icon_state) + "_active"
 	active = 1
-	playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
+	playsound(loc, armsound, 75, 1, -3)
 
 	spawn(det_time)
 		if(gcDestroyed)
@@ -86,7 +87,7 @@
 		prime(user)
 
 
-/obj/item/weapon/grenade/proc/prime()
+/obj/item/weapon/grenade/proc/prime(var/mob/user)
 //	playsound(loc, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)
@@ -123,3 +124,10 @@
 
 /obj/item/weapon/grenade/attack_paw(mob/user as mob)
 	return attack_hand(user)
+
+/obj/item/weapon/grenade/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"active")
+
+	reset_vars_after_duration(resettable_vars, duration)

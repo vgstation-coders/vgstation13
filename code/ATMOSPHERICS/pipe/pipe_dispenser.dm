@@ -34,6 +34,12 @@
 	interact(user)
 
 /obj/machinery/pipedispenser/interact(mob/user)
+	var/multi_z_dat = map.multiz ? {"
+<b>Multi-floor pipes:</b>
+<ul>
+	<li><a href='?src=\ref[src];make=[PIPE_Z_UP];dir=1'>Up Pipe</a></li>
+	<li><a href='?src=\ref[src];make=[PIPE_Z_DOWN];dir=1'>Down Pipe</a></li>
+</ul>"} : ""
 	var/dat = {"
 <b>Regular pipes:</b>
 <ul>
@@ -76,6 +82,7 @@
 	<li><a href='?src=\ref[src];make=[PIPE_HE_BENT];dir=5'>Bent Pipe</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_JUNCTION];dir=1'>Junction</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_HEAT_EXCHANGE];dir=1'>Heat Exchanger</a></li>
+	<li><a href='?src=\ref[src];make=[PIPE_HE_CAP];dir=1'>Pipe Cap</a></li>
 </ul>
 <b>Insulated pipes:</b>
 <ul>
@@ -84,6 +91,7 @@
 	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD];dir=1'>Manifold</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
 </ul>
+[multi_z_dat]
 <b> Currently aligned at: [layer_to_make] \[ <a href='?src=\ref[src];editlayer=1'>EDIT</a> \]</b></li>
 "}
 //What number the make points to is in the define # at the top of construction.dm in same folder
@@ -106,8 +114,7 @@
 		if(!wait)
 			var/p_type = text2num(href_list["make"])
 			var/p_dir = text2num(href_list["dir"])
-			var/obj/item/pipe/P = getFromPool(/obj/item/pipe, get_turf(src)) //new (/*usr.loc*/ src.loc, pipe_type=p_type, dir=p_dir)
-			P.New(P.loc, pipe_type=p_type, dir=p_dir)
+			var/obj/item/pipe/P = new /obj/item/pipe(get_turf(src), pipe_type = p_type, dir = p_dir)
 			P.setPipingLayer(layer_to_make)
 			P.update()
 			P.add_fingerprint(usr)
@@ -129,7 +136,7 @@
 	if(href_list["editlayer"])
 		if(!wait)
 			var/num_input = input(usr, "Alignment", "Calibrate Dispenser", "") as num
-			num_input = Clamp(round(num_input, PIPING_LAYER_INCREMENT), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+			num_input = clamp(round(num_input, PIPING_LAYER_INCREMENT), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 			layer_to_make = num_input
 			interact(usr)
 	return
@@ -140,14 +147,14 @@
 		if(user.drop_item(W, src))
 			to_chat(usr, "<span class='notice'>You put [W] back to [src].</span>")
 			if(istype(W, /obj/item/pipe))
-				returnToPool(W)
+				qdel(W)
 			else
 				qdel(W)
 			return
 	else
 		return ..()
 
-/obj/machinery/pipedispenser/wrenchAnchor(var/mob/user)
+/obj/machinery/pipedispenser/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

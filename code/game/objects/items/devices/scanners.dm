@@ -8,6 +8,11 @@ REAGENT SCANNER
 BREATHALYZER
 */
 
+#define CAN_REVIVE_NO 0 // Human cannot be revived.
+#define CAN_REVIVE_GHOSTING 1 // Human is observing but can otherwise be revived.
+#define CAN_REVIVE_IN_BODY 2 // Human can be revived AND is in body.
+
+
 /obj/item/device/t_scanner
 	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
@@ -125,7 +130,8 @@ BREATHALYZER
 				var/datum/disease2/disease/D = I.virus2[ID]
 				if(ID in virusDB)
 					var/datum/data/record/V = virusDB[ID]
-					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
+					var/nickname = V.fields["nickname"]
+					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][nickname ? " [nickname]" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
 				else
 					to_chat(user,"<span class='warning'>Warning: Unknown [D.form] detected on \the [src].</span>")
 		else
@@ -144,7 +150,7 @@ BREATHALYZER
 		to_chat(user, last_reading)
 
 //Note : Used directly by other objects. Could benefit of OOP, maybe ?
-proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, var/skip_checks = 0, var/silent = 0)
+/proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, var/skip_checks = 0, var/silent = 0)
 	var/message = ""
 	if(!skip_checks)
 		if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
@@ -154,7 +160,7 @@ proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, va
 			to_chat(user, {"<span class='notice'>Analyzing Results for the floor:<br>Overall Status: Healthy</span>
 Key: <span class='notice'>Suffocation</span>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<span class='red'>Brute</span>
 Damage Specifics: <span class='notice'>0</span> - <font color='green'>0</font> - <font color='#FFA500'>0</font> - <span class='red'>0</span>
-[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: ???&deg;C (???&deg;F)</span>
+[(M.undergoing_hypothermia() || M.undergoing_hyperthermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: ???&deg;C (???&deg;F)</span>
 <span class='notice'>Localized Damage, Brute/Burn:</span>
 <span class='notice'>No limb damage detected.</span>
 Blood Level Unknown: ???% ???cl
@@ -172,10 +178,13 @@ Subject's pulse: ??? BPM"})
 		OX = fake_oxy > 50 ? "<b>[fake_oxy]</b>" : fake_oxy
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
-		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
+		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[(M.health - M.halloss)/M.maxHealth*100]% Healthy"]</span>"
+	if(isanimal(M))
+		to_chat(user, message)//Simple animal, we don't care about anything else.
+		return message
 	message += "<br>Key: <span class='notice'>Suffocation</span>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<span class='red'>Brute</span>"
 	message += "<br>Damage Specifics: <span class='notice'>[OX]</span> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <span class='red'>[BR]</span>"
-	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
+	message += "<br>[(M.undergoing_hypothermia() || M.undergoing_hyperthermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
 	if(M.tod && M.isDead())
 		message += "<br><span class='notice'>Time of Death: [M.tod]</span>"
 	if(istype(M, /mob/living/carbon/human) && mode)
@@ -267,9 +276,41 @@ Subject's pulse: ??? BPM"})
 				if(-1000000000 to BLOOD_VOLUME_SURVIVE)
 					message += "<br><span class='danger'>Danger: Blood Level Fatal: [blood_percent]% [blood_volume]cl</span>"
 		message += "<br><span class='notice'>Subject's pulse: <font color='[H.pulse == PULSE_THREADY || H.pulse == PULSE_NONE ? "red" : "blue"]'>[H.get_pulse(GETPULSE_TOOL)] BPM</font></span>"
+		if (H.isDead())
+			var/revive_status = check_can_revive(H)
+
+			if (revive_status == CAN_REVIVE_NO)
+				message += "<br><span class='danger'>No brainwaves detected. Subject cannot be revived.</span>"
+
+			else if (revive_status == CAN_REVIVE_GHOSTING)
+				message += "<br><span class='notice'>Faint brainwaves detected. Subject may be revivable.</span>"
+
+			else if (revive_status == CAN_REVIVE_IN_BODY)
+				message += "<br><span class='notice'>Faint brainwaves detected. Subject can be revived.</span>"
+
 	to_chat(user, message)//Here goes
 
 	return message //To read last scan
+
+/proc/check_can_revive(mob/living/carbon/human/target)
+	ASSERT(istype(target))
+	ASSERT(target.isDead())
+
+	if (!target.mind)
+		return CAN_REVIVE_NO
+
+	if (target.client)
+		return CAN_REVIVE_IN_BODY
+
+	var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
+	if (!ghost)
+		return CAN_REVIVE_NO
+
+	var/mob/ghostmob = ghost.get_top_transmogrification()
+	if (!ghostmob)
+		return CAN_REVIVE_NO
+
+	return CAN_REVIVE_GHOSTING
 
 /obj/item/device/healthanalyzer/verb/toggle_mode()
 	set name = "Switch mode"
@@ -500,7 +541,7 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%)" : ""]</span>"
+				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && isnum(R.data) && !isNonTimeDataReagent(R) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else
@@ -580,3 +621,8 @@ Subject's pulse: ??? BPM"})
 /obj/item/device/breathalyzer/examine(mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Its legal limit is set to [legal_limit] units.</span>")
+
+
+#undef CAN_REVIVE_NO
+#undef CAN_REVIVE_GHOSTING
+#undef CAN_REVIVE_IN_BODY

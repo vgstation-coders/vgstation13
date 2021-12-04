@@ -61,7 +61,7 @@
 
 /datum/design/mech_energy_relay
 	name = "Module Design (Tesla Energy Relay)"
-	desc = "Tesla Energy Relay"
+	desc = "Tesla Energy Relay."
 	id = "mech_energy_relay"
 	build_type = MECHFAB
 	req_tech = list(Tc_MAGNETS = 4, Tc_POWERSTORAGE = 3)
@@ -181,7 +181,7 @@
 
 /datum/design/mech_generator_nuclear
 	name = "Module Design (ExoNuclear Reactor)"
-	desc = "Compact nuclear reactor module"
+	desc = "Compact nuclear reactor module."
 	id = "mech_generator_nuclear"
 	build_type = MECHFAB
 	req_tech = list(Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 3, Tc_MATERIALS = 3)
@@ -201,7 +201,7 @@
 
 /datum/design/mech_jail_cell
 	name = "Exosuit Module Design (Mounted Jail Cell)"
-	desc = "Exosuit-controlled secure holding cell"
+	desc = "An exosuit-controlled secure holding cell."
 	id = "mech_jail_cell"
 	build_type = MECHFAB
 	req_tech = list(Tc_BIOTECH = 2, Tc_COMBAT = 4)
@@ -268,3 +268,23 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/collector
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=10000,MAT_PLASMA=10000)
+
+/datum/design/mechrack
+	name = "Module Design (Exosuit-Mounted Rack)"
+	desc = "Allows for the construction of the Exosuit-Mounted Rack."
+	id = "mech_rack"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 3, Tc_MAGNETS = 3)
+	build_path = /obj/item/mecha_parts/mecha_equipment/passive/rack
+	category = "Exosuit_Modules"
+	materials = list(MAT_IRON=10000)
+
+/datum/design/mechrunningboard
+	name = "Module Design (Powered Exosuit Running Board)"
+	desc = "Allows for the construction of the Powered Exosuit Running Board."
+	id = "mech_runningboard"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 6)
+	build_path = /obj/item/mecha_parts/mecha_equipment/passive/runningboard
+	category = "Exosuit_Modules"
+	materials = list(MAT_IRON=10000)

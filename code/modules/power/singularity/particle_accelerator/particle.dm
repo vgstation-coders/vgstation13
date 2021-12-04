@@ -33,25 +33,10 @@
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 
-/obj/effect/accelerated_particle/resetVariables()
-	..("movement_range", "target", "ionizing", "particle_type", "source", "movetotarget", args)
-	movement_range = PARTICLE_RANGE
-	target = null
-	ionizing = 0
-	particle_type = null
-	source = null
-	movetotarget = 1
-
-
 /obj/effect/accelerated_particle/wide/weak
 	movement_range = WEAK_PARTICLE_RANGE
 	energy = WEAK_PARTICLE_ENERGY
 	icon_state="particle0"
-
-/obj/effect/accelerated_particle/wide/weak/resetVariables()
-	..("energy", "movement_range")
-	movement_range = WEAK_PARTICLE_RANGE
-	energy = WEAK_PARTICLE_ENERGY
 
 
 /obj/effect/accelerated_particle/wide/strong
@@ -59,21 +44,10 @@
 	energy = STRONG_PARTICLE_ENERGY
 	icon_state="particle2"
 
-/obj/effect/accelerated_particle/wide/strong/resetVariables()
-	..("energy", "movement_range")
-	energy = STRONG_PARTICLE_ENERGY
-	movement_range = STRONG_PARTICLE_RANGE
-
-
 /obj/effect/accelerated_particle/wide/powerful
 	movement_range = POWERFUL_PARTICLE_RANGE
 	energy = POWERFUL_PARTICLE_ENERGY
 	icon_state="particle3"
-
-/obj/effect/accelerated_particle/wide/powerful/resetVariables()
-	..("energy", "movement_range")
-	energy = POWERFUL_PARTICLE_ENERGY
-	movement_range = POWERFUL_PARTICLE_RANGE
 
 
 /obj/effect/accelerated_particle/New(loc, dir = 2, move = 0)
@@ -127,7 +101,7 @@
 	return
 
 /obj/effect/accelerated_particle/ex_act(severity)
-	returnToPool(src)
+	qdel(src)
 	return
 
 /obj/effect/accelerated_particle/proc/toxmob(var/mob/living/M)
@@ -161,7 +135,7 @@
 			src.forceMove(get_step(src,dir))
 	movement_range--
 	if(movement_range <= 0)
-		returnToPool(src)
+		qdel(src)
 		loc = null
 		return 0
 	else
@@ -170,7 +144,7 @@
 
 /obj/effect/accelerated_particle/singularity_act()
 	. = energy
-	returnToPool(src)
+	qdel(src)
 
 #undef PARTICLE_ENERGY
 #undef WEAK_PARTICLE_ENERGY

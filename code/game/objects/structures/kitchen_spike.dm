@@ -4,7 +4,7 @@
 	name = "meat spike"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "spike"
-	desc = "A spike for collecting meat from animals"
+	desc = "A spike for collecting meat from animals."
 	density = 1
 	anchored = 1
 
@@ -22,11 +22,11 @@
 
 /obj/structure/kitchenspike/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		if(occupant)
 			to_chat(user, "<span class='warning'>You can't disassemble [src] with meat and gore all over it.</span>")
 			return
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 2
 		qdel(src)
 		return
@@ -75,7 +75,7 @@
 
 				occupant.meat_amount++
 
-				returnToPool(G)
+				qdel(G)
 				return
 
 /obj/structure/kitchenspike/attack_hand(mob/user)
@@ -99,3 +99,11 @@
 	if(occupant)
 		qdel(occupant)
 		occupant = null
+
+/obj/structure/kitchenspike/suicide_act(var/mob/living/user)
+	user.forceMove(get_turf(src))
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \himself onto the [src]! It looks like \he's trying to commit suicide.</span>")
+	while(user.meat_taken < user.meat_amount)
+		user.drop_meat(get_turf(src))
+	user.gib()
+	return(SUICIDE_ACT_CUSTOM)

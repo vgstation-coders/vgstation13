@@ -64,7 +64,7 @@ var/const/tk_maxrange = 15
 */
 /obj/item/tk_grab
 	name = "The Force"
-	desc = "Magic"
+	desc = "Magic!"
 	icon = 'icons/obj/magic.dmi'//Needs sprites
 	icon_state = "2"
 	flags = NO_ATTACK_MSG

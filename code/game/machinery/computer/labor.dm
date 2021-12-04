@@ -20,6 +20,7 @@ var/list/labor_console_categories = list(
 	var/awaiting_swipe = FALSE
 	var/verifying = FALSE
 	var/freeing = "" //If this variable is set with a job's title, the user will be prompted to swipe to free up a job slot.
+	var/closing = "" //Same, except to close a slot
 	var/toggling_priority = "" //If this variable is set with a job's title, the user will be prompted to swipe to prioritize/deprioritize.
 	var/selected_category = "Civilian"
 
@@ -57,6 +58,8 @@ var/list/labor_console_categories = list(
 		dat += "<div class='modal'><div class='modal-content'><div class='line'>Swipe a valid ID to confirm:</div><br>"
 		if(freeing != "")
 			dat += "<b>Freeing</b> <div class='line'>[uppertext(freeing)]</div> Job Slot"
+		else if(closing != "")
+			dat += "<b>Closing</b> <div class='line'>[uppertext(closing)]</div> Job Slot"
 		else if(toggling_priority != "")
 			dat += "<b>[job_master.IsJobPrioritized(toggling_priority) ? "Deprioritizing" : "Prioritizing"]</b> <div class='line'>[uppertext(toggling_priority)]</div> Job Slot"
 		dat += "<br><br><A href='?src=\ref[src];cancel=1'>CANCEL</A>"
@@ -83,8 +86,10 @@ var/list/labor_console_categories = list(
 		dat += "<tr><td>[job_datum.title]</td> <td>([job_datum.current_positions]/[job_datum.get_total_positions()])</td> <td>"
 		if(job_datum.current_positions >= job_datum.get_total_positions())
 			var/reason = job_datum.reject_new_slots()
-			dat += "[reason ? "([reason])" : "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot!)</A>"]"
+			dat += "[reason ? "([reason])" : "<A href='?src=\ref[src];free=[job_datum.title]'>(Free Slot)</A>"]"
 		else
+			if(job_datum.xtra_positions>0) //not all available positions are filled AND there freed slots
+				dat += "<A href='?src=\ref[src];close=[job_datum.title]'>(Close Slot)</A> "
 			dat += "<A [job_master.priority_jobs_remaining < 1 ? "class='linkOff'" : "href='?src=\ref[src];priority=[job_datum.title]'"]>&emsp14;(Prioritize)&emsp14;</A>"
 		dat += "</td></tr>"
 	dat += "</table>"
@@ -98,14 +103,14 @@ var/list/labor_console_categories = list(
 
 	dat += "</center>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "labor_admin", "Labor Administration Console", 325, 500, src)
+	var/datum/browser/popup = new(user, "labor_admin", "Labor Administration Console", 375, 500, src)
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "labor_admin")
 
 /obj/machinery/computer/labor/proc/verified(mob/user, var/delay = TRUE)
 	if(awaiting_swipe == TRUE)
-		if((toggling_priority != "" && job_master.TogglePriority(toggling_priority, user)) || (freeing != "" && job_master.FreeRole(freeing, user)))
+		if((toggling_priority != "" && job_master.TogglePriority(toggling_priority, user)) || (freeing != "" && job_master.FreeRole(freeing, user)) || (closing != "" && job_master.CloseRole(closing, user)))
 			awaiting_swipe = FALSE
 			verifying = TRUE
 			update_icon()
@@ -119,6 +124,7 @@ var/list/labor_console_categories = list(
 					overlays -= verified_overlay
 		toggling_priority = "" //clear it even if it doesn't work
 		freeing = "" //clear it even if it doesn't work
+		closing = ""
 
 /obj/machinery/computer/labor/proc/cancel_swipe()
 	awaiting_swipe = FALSE
@@ -163,6 +169,16 @@ var/list/labor_console_categories = list(
 				freeing = href_list["free"]
 				awaiting_swipe = TRUE
 				update_icon()
+
+		else if(href_list["close"])
+			if(!is_valid_job(href_list["close"]))
+				to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["close"]] button was there just a second ago!")
+				return
+			if(job_master.GetJob(href_list["close"]))
+				closing = href_list["close"]
+				awaiting_swipe = TRUE
+				update_icon()
+
 
 		else if(href_list["priority"])
 			if(!is_valid_job(href_list["priority"]))

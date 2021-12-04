@@ -21,15 +21,18 @@
 							  //then open it in a populated area to crash clients.
 	var/breakout_time = 2 //2 minutes by default
 	var/sound_file = 'sound/machines/click.ogg'
-
+	var/required_quirk = MODULE_CAN_CLOSE_CLOSETS
 	var/has_electronics = 0
 	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
+	var/is_wooden = null //used in dismantling cabinet-type closets
 	var/obj/item/weapon/circuitboard/airlock/electronics
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	ignoreinvert = 1
+
+	var/time_initialized_at = 0
 
 /obj/structure/closet/New()
 	..()
@@ -51,17 +54,28 @@
 	for(var/path in to_spawn)
 		var/amount = to_spawn[path] || 1
 		for(var/i in 1 to amount)
-			new path(src)
+			var/atom/A = new path(src)
+			A.initialize()  // recursive
 
 /obj/structure/closet/basic
 	has_lock_type = /obj/structure/closet/secure_closet/basic
 
 /obj/structure/closet/proc/canweld()
-	return 1
+	if(is_wooden)
+		return 0
+	else
+		return 1
 
 /obj/structure/closet/initialize()
 	..()
-	spawn_contents()
+	if (!time_initialized_at)
+		time_initialized_at = world.time
+		spawn_contents()
+	else
+		//haha, so you'd like to initialize twice huh? you got some explaining to do kid.
+		message_admins("[src] at ([x],[y],[z]) tried to initialize at time = [world.time] despite having already initialized at time = [time_initialized_at]")
+		ASSERT(!time_initialized_at)
+		return
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
 		if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
 			take_contents()
@@ -70,8 +84,7 @@
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
-
-	initialize()
+	take_contents()
 
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()
@@ -80,11 +93,6 @@
 
 /obj/structure/closet/alter_health()
 	return get_turf(src)
-
-/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted))
-		return 1
-	return (!density)
 
 /obj/structure/closet/proc/can_open()
 	if(src.welded)
@@ -95,7 +103,7 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
-	
+
 	for(var/mob/living/carbon/carbon in src.loc)
 		if (carbon.mutual_handcuffs)
 			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
@@ -129,7 +137,6 @@
 	for(var/atom/movable/AM in src.loc)
 		if(insert(AM) == -1) // limit reached
 			break
-		INVOKE_EVENT(AM.on_moved,list("loc"=src))
 
 /obj/structure/closet/proc/open(mob/user)
 	if(src.opened)
@@ -223,7 +230,7 @@
 
 /obj/structure/closet/proc/add_lock(var/obj/item/weapon/circuitboard/airlock/E, var/mob/user)
 	if(has_lock_type && !electronics && E && E.icon_state != "door_electronics_smoked")
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		E.playtoolsound(src, 100)
 		user.visible_message("[user] is installing electronics on \the [src].", "You start to install electronics into \the [src].")
 		if(do_after(user, src, 40))
 			var/obj/structure/closet/new_closet
@@ -254,7 +261,7 @@
 
 /obj/structure/closet/proc/remove_lock(var/mob/user)
 	if(has_lockless_type)
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		electronics.playtoolsound(src, 100)
 		user.visible_message("[user] is removing \the [src]'s electronics.", "You start removing \the [src]'s electronics.")
 		if(do_after(user, src, 40))
 			var/obj/structure/closet/new_closet
@@ -364,7 +371,7 @@
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	if(health <= 0)
 		broken = 1
 		if(has_electronics)
@@ -401,7 +408,7 @@
 
 // This is broken, see attack_ai.
 /obj/structure/closet/attack_robot(mob/living/silicon/robot/user as mob)
-	if(isMoMMI(user))
+	if(isMoMMI(user) || HAS_MODULE_QUIRK(user, required_quirk))
 		src.add_hiddenprint(user)
 		add_fingerprint(user)
 		return src.attack_hand(user)
@@ -448,13 +455,22 @@
 			return 0
 
 		if(iswelder(W) && canweld())
-			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
-				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			var/obj/item/tool/weldingtool/WT = W
+			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
+			if(has_electronics)
+				dump_electronics()
+			qdel(src)
+			return
+
+		if((istype(W, /obj/item/tool/crowbar)) && is_wooden)
+			var/obj/item/tool/crowbar/WT = W
+			materials.makeSheets(src)
+			for(var/mob/M in viewers(src))
+				M.show_message("<span class='notice'>\The [src] has been dismantled by [user] with \the [WT].</span>", 1)
 			if(has_electronics)
 				dump_electronics()
 			qdel(src)
@@ -465,9 +481,8 @@
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(iswelder(W) && canweld())
-		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+		var/obj/item/tool/weldingtool/WT = W
+		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
 		src.update_icon()
@@ -496,8 +511,10 @@
 		return 0
 	if(istype(O, /obj/structure/closet))
 		return 0
-	if(move_them)
-		step_towards(O, src.loc)
+	if(move_them)//We've already checked for adjacency so it's fine to use forceMove, it also guarrantees that they won't bump into us?
+		O.forceMove(user.loc)
+		sleep(1)
+		O.forceMove(src.loc)
 	if(show_message && user != O)
 		user.show_viewers("<span class='danger'>[user] stuffs [O] into [src]!</span>")
 	src.add_fingerprint(user)
@@ -583,13 +600,17 @@
 	if(usr.incapacitated())
 		return
 
-	if(ishuman(usr) || isMoMMI(usr))
-		if(isMoMMI(usr))
-			src.add_hiddenprint(usr)
-			add_fingerprint(usr)
+	if (isrobot(usr))
+		var/mob/living/silicon/robot/R = usr
+		if(isMoMMI(R) || HAS_MODULE_QUIRK(R, required_quirk))
+			src.attack_robot(R)
+			return
+
+	if(ishuman(usr))
 		src.attack_hand(usr)
-	else
-		to_chat(usr, "<span class='warning'>This mob type can't use this verb.</span>")
+		return
+
+	to_chat(usr, "<span class='warning'>You can't toggle the open state of [src].</span>")
 
 /obj/structure/closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
@@ -652,5 +673,16 @@
 		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
 			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //Scrying or astral travel, fuck them.
 				return
-		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
+		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
+// -- Vox raiders.
+
+/obj/structure/closet/loot
+	name = "Loot closet"
+	desc = "Store the valuables here for a direct transfer to the shoal. We make much bluespace."
+
+/obj/structure/closet/loot/Destroy()
+	for (var/datum/faction/vox_shoal/VS in ticker.mode.factions)
+		VS.our_bounty_lockers -= src
+	return ..()

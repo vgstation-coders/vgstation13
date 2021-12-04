@@ -49,30 +49,11 @@
 		else
 			light = new/datum/light_source(src, .)
 
-// Incase any lighting vars are on in the typepath we turn the light on in New().
-/atom/New()
-	. = ..()
-
-	if (light_power && light_range)
-		update_light()
-
-	if (opacity && isturf(loc))
-		var/turf/T = loc
-		T.has_opaque_atom = TRUE // No need to recalculate it in this case, it's guaranteed to be on afterwards anyways.
-
 // Destroy our light source so we GC correctly.
 /atom/Destroy()
 	if (light)
 		light.destroy()
 		light = null
-	. = ..()
-
-// If we have opacity, make sure to tell (potentially) affected light sources.
-/atom/movable/Destroy()
-	var/turf/T = loc
-	if (opacity && istype(T))
-		T.reconsider_lights()
-
 	. = ..()
 
 // Should always be used to change the opacity of an atom.

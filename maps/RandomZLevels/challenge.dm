@@ -17,7 +17,7 @@
 
 /obj/machinery/power/emitter/energycannon
 	name = "Energy Cannon"
-	desc = "A heavy duty industrial laser"
+	desc = "A heavy duty industrial laser."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "emitter"
 	anchored = 1
@@ -30,3 +30,9 @@
 	active = 1
 	locked = 1
 	state = 2
+
+/obj/machinery/power/emitter/energycannon/update_icon()
+	if(powered && get_powernet() && avail(active_power_usage) && active)
+		icon_state = "emitter_+a"
+	else
+		icon_state = "emitter"

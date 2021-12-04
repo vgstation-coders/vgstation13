@@ -5,9 +5,11 @@
 	special_role = RAMBLER
 	logo_state = "rambler-logo"
 	wikiroute = ROLE_MINOR
+	default_admin_voice = "Chief Master Guru"
+	admin_voice_style = "rose"
 	var/remaining_vows = 3
 
-/datum/role/rambler/OnPostSetup()
+/datum/role/rambler/OnPostSetup(var/laterole = FALSE)
 	. =..()
 	if(ishuman(antag.current))
 		equip_rambler(antag.current)
@@ -50,6 +52,7 @@
 	name = "shakashuri"
 	desc = "Similar to other woodwinds, though it can be played only by a true rambler of souls."
 	slot_flags = SLOT_BACK
+	requires_mouth = FALSE //Playing a shakashuri doth art in the mindbrain's heart, anyway
 
 /obj/item/device/instrument/recorder/shakashuri/attack_self(mob/user)
 	if(!isrambler(user))
@@ -153,7 +156,7 @@
 		if(!target.mind)
 			to_chat(user,"<span class='warning'>[target] has no mind!</span>")
 			continue
-		var/vow = copytext(sanitize(input(user, "Enter your vow. You have [R.remaining_vows] left.", "VOW LOCK IN") as null|text),1,MAX_MESSAGE_LEN)
+		var/vow = stripped_input(user, "Enter your vow. You have [R.remaining_vows] left.", "VOW LOCK IN")
 		if(vow)
 			user.say("[target], I vow [vow].")
 			user.say("VOW LOCKED IN!")

@@ -23,7 +23,7 @@ var/list/all_doors = list()
 	var/autoclose = 0
 	var/glass = 0
 	var/normalspeed = 1
-
+	pass_flags_self = PASSDOOR
 	machine_flags = SCREWTOGGLE
 
 	// for glass airlocks/opacity firedoors
@@ -44,7 +44,11 @@ var/list/all_doors = list()
 
 	// TODO: refactor to best :(
 	var/animation_delay = 10
-	var/animation_delay_2 = null
+	// These two vars control animation delays for changing density when the door opens/closes.
+	// If they are not 0, the density change of a door will happen only after the delay.
+	// Total animation delay is still animation_delay, these just give a "sub section".
+	var/animation_delay_predensity_opening = 0
+	var/animation_delay_predensity_closing = 0
 
 	// turf animation
 	var/atom/movable/overlay/c_animation = null
@@ -78,6 +82,7 @@ var/list/all_doors = list()
 	return TRUE
 
 /obj/machinery/door/Bumped(atom/AM)
+
 	if (ismob(AM))
 		var/mob/M = AM
 
@@ -89,7 +94,7 @@ var/list/all_doors = list()
 	if (istype(AM, /obj/machinery/bot))
 		var/obj/machinery/bot/bot = AM
 
-		if (check_access(bot.botcard) && !operating)
+		if (check_access(bot.botcard) && !operating && SpecialAccess(AM))
 			open()
 
 		return
@@ -98,7 +103,7 @@ var/list/all_doors = list()
 		var/obj/mecha/mecha = AM
 
 		if (density)
-			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
+			if (mecha.occupant && !operating && SpecialAccess(mecha.occupant) && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
 			else if(!operating)
 				denied()
@@ -107,7 +112,7 @@ var/list/all_doors = list()
 		var/obj/structure/bed/chair/vehicle/vehicle = AM
 
 		if (density)
-			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
+			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && SpecialAccess(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]) && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 				if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
@@ -146,6 +151,9 @@ var/list/all_doors = list()
 		open()
 	else if(!operating)
 		denied()
+
+/obj/machinery/door/proc/SpecialAccess(var/atom/user)
+	return TRUE
 
 /obj/machinery/door/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
@@ -230,8 +238,6 @@ var/list/all_doors = list()
 	else
 		icon_state = "[prefix]door_closed"
 
-	sleep(animation_delay_2)
-
 
 /obj/machinery/door/proc/open()
 	if(!density)
@@ -240,6 +246,9 @@ var/list/all_doors = list()
 		return
 	if(!ticker)
 		return 0
+	for (var/obj/O in src.loc)
+		if (O.blocks_doors())
+			return 0
 	if(!operating)
 		operating = 1
 
@@ -248,13 +257,18 @@ var/list/all_doors = list()
 
 	set_opacity(0)
 	door_animate("opening")
-	sleep(animation_delay)
+	if (animation_delay_predensity_opening)
+		sleep(animation_delay_predensity_opening)
+	else
+		sleep(animation_delay)
 	layer = open_layer
 	setDensity(FALSE)
+	update_nearby_tiles()
 	explosion_resistance = 0
+	if (animation_delay_predensity_opening)
+		sleep(animation_delay - animation_delay_predensity_opening)
 	update_icon()
 	set_opacity(0)
-	update_nearby_tiles()
 	//update_freelook_sight()
 
 	if(operating == 1)
@@ -271,6 +285,11 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/close()
 	if (density || operating || jammed)
 		return
+
+	for (var/obj/O in src.loc)
+		if (O.blocks_doors())
+			return 0
+
 	operating = 1
 
 	layer = closed_layer
@@ -278,28 +297,39 @@ var/list/all_doors = list()
 	if (makes_noise)
 		playsound(src, soundeffect, soundpitch, 1)
 
-	setDensity(TRUE)
 	door_animate("closing")
-	sleep(animation_delay)
-	update_icon()
+
+	if (animation_delay_predensity_closing)
+		sleep(animation_delay_predensity_closing)
+
+	setDensity(TRUE)
+	update_nearby_tiles()
 
 	if (!glass)
 		src.set_opacity(1)
-		// Copypasta!!!
-		var/obj/effect/beam/B = locate() in loc
-		if(B)
-			qdel(B)
+	// Copypasta!!!
+	var/obj/effect/beam/B = locate() in loc
+	if(B)
+		qdel(B)
+
+	if (animation_delay_predensity_closing)
+		sleep(animation_delay - animation_delay_predensity_closing)
+	else
+		sleep(animation_delay)
+
+	update_icon()
 
 	// TODO: rework how fire works on doors
 	var/obj/effect/fire/F = locate() in loc
 	if(F)
 		qdel(F)
 
-	update_nearby_tiles()
 	operating = 0
 
 /obj/machinery/door/New()
 	. = ..()
+	if(!opacity)
+		pass_flags_self |= PASSGLASS
 	all_doors += src
 
 	if(density)
@@ -349,7 +379,7 @@ var/list/all_doors = list()
 		open()
 	return ..()
 
-/obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
+/obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
 
 
@@ -379,7 +409,7 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/requiresID()
 	return 1
 
-/obj/machinery/door/proc/update_nearby_tiles(var/turf/T)
+/obj/machinery/door/update_nearby_tiles(var/turf/T)
 	if(!SS_READY(SSair))
 		return 0
 
@@ -394,7 +424,7 @@ var/list/all_doors = list()
 	update_freelok_sight()
 	return 1
 
-/obj/machinery/door/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/machinery/door/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_tiles(T)
@@ -420,6 +450,9 @@ var/list/all_doors = list()
 
 	update_nearby_tiles()
 
+/obj/machinery/door/can_overload()
+	return 0
+
 // Flash denied and such.
 /obj/machinery/door/proc/denied()
 	playsound(loc, 'sound/machines/denied.ogg', 50, 1)
@@ -430,3 +463,5 @@ var/list/all_doors = list()
 	icon = 'icons/obj/doors/morgue.dmi'
 	animation_delay = 15
 	penetration_dampening = 15
+
+

@@ -81,7 +81,7 @@
 "bC" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor/wood,/area/vault/biodome)
 "bD" = (/obj/structure/closet/crate/hydroponics,/obj/item/weapon/reagent_containers/glass/bucket,/obj/item/weapon/minihoe,/turf/simulated/floor/wood,/area/vault/biodome)
 "bE" = (/obj/structure/flora/ausbushes/ywflowers,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/grass,/area/vault/biodome)
-"bF" = (/obj/structure/closet/crate/hydroponics,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/storage/bag/plants,/turf/simulated/floor/wood,/area/vault/biodome)
+"bF" = (/obj/structure/closet/crate/hydroponics,/obj/item/tool/wirecutters/clippers,/obj/item/weapon/storage/bag/plants,/turf/simulated/floor/wood,/area/vault/biodome)
 "bG" = (/obj/machinery/chem_dispenser,/turf/simulated/floor/wood,/area/vault/biodome)
 "bH" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/glass/mortar,/turf/simulated/floor/wood,/area/vault/biodome)
 "bI" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating/airless,/area/vault/biodome)

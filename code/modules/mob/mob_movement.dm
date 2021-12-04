@@ -2,7 +2,7 @@
 	if(air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(PASSMOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 
 	if(ismob(mover))
@@ -123,7 +123,11 @@
 	usr.stop_pulling()
 
 /client/verb/swap_hand()
-	set hidden = 1
+
+	set name = "Swap-hands"
+	set category = "IC"
+	set desc = "Swap your current active hand."
+
 	if(istype(mob,/mob/living/silicon/robot/mommi))
 		return // MoMMIs only have one tool slot.
 	if(istype(mob,/mob/living/silicon/robot))//Oh nested logic loops, is there anything you can't do? -Sieve
@@ -218,7 +222,6 @@
 	if(!isrobot(mob))
 		mob.drop_item_v()
 	return
-
 
 /client/Center()
 	/* No 3D movement in 2D spessman game. dir 16 is Z Up
@@ -345,6 +348,7 @@
 		mob.last_move_intent = world.time + 10
 		mob.set_glide_size(DELAY2GLIDESIZE(move_delay)) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
+		INVOKE_EVENT(mob, /event/before_move)
 		// Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in mob
 		if(Findgrab)
@@ -356,6 +360,7 @@
 					if(M)
 						if ((mob.Adjacent(M) || M.loc == mob.loc))
 							var/turf/T = mob.loc
+							INVOKE_EVENT(M, /event/before_move)
 							step(mob, Dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
@@ -363,6 +368,7 @@
 									diag = null
 								if ((get_dist(mob, M) > 1 || diag))
 									step(M, get_dir(M.loc, T))
+							INVOKE_EVENT(M, /event/after_move)
 				else
 					for(var/mob/M in L)
 						M.other_mobs = 1
@@ -370,17 +376,18 @@
 							M.animate_movement = 3
 					for(var/mob/M in L)
 						spawn( 0 )
+							INVOKE_EVENT(M, /event/before_move)
 							step(M, dir)
+							INVOKE_EVENT(M, /event/after_move)
 							return
 						spawn( 1 )
 							M.other_mobs = null
 							M.animate_movement = 2
 							return
 
-		else if(mob.confused)
-			step_rand(mob)
-			mob.last_movement=world.time
 		else
+			if (mob.process_confused(Dir))
+				return
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
@@ -388,7 +395,43 @@
 			mob.last_movement=world.time
 
 		if(mob.dir != old_dir)
-			mob.Facing()
+			INVOKE_EVENT(mob, /event/face)
+		INVOKE_EVENT(mob, /event/after_move)
+
+/mob/proc/process_confused(var/Dir)
+	if (confused <= 0)
+		return FALSE
+	. = TRUE
+	var/old_dir = dir
+	if (confused_intensity == CONFUSED_MAGIC)
+		INVOKE_EVENT(src, /event/before_move)
+		step_rand(src)
+		INVOKE_EVENT(src, /event/after_move)
+		return
+
+	INVOKE_EVENT(src, /event/before_move)
+	switch(Dir)
+		if(NORTH)
+			step(src, pick(NORTHEAST, NORTHWEST))
+		if(SOUTH)
+			step(src, pick(SOUTHEAST, SOUTHWEST))
+		if(EAST)
+			step(src, pick(NORTHEAST, SOUTHEAST))
+		if(WEST)
+			step(src, pick(NORTHWEST, SOUTHWEST))
+		if(NORTHEAST)
+			step(src, pick(NORTH, EAST))
+		if(NORTHWEST)
+			step(src, pick(NORTH, WEST))
+		if(SOUTHEAST)
+			step(src, pick(SOUTH, EAST))
+		if(SOUTHWEST)
+			step(src, pick(SOUTH, WEST))
+	INVOKE_EVENT(src, /event/after_move)
+
+	last_movement=world.time
+	if(dir != old_dir)
+		INVOKE_EVENT(src, /event/face)
 
 ///Process_Grab()
 ///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
@@ -410,14 +453,14 @@
 					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s grip!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s hug!</span>")
-				returnToPool(G)
+				qdel(G)
 			if(G.state == GRAB_NECK)
 				mob.delayNextMove(10)
 				if(!prob(5))
 					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s headlock!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s passionate hug!</span>")
-				returnToPool(G)
+				qdel(G)
 	return 0
 
 
@@ -438,6 +481,9 @@
 			if(isobserver(mob))
 				var/mob/dead/observer/observer = mob
 				movedelay = observer.movespeed
+			else if (isanimal(mob))
+				var/mob/living/simple_animal/animal = mob
+				movedelay = animal.speed
 			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/T = get_step(mob, direct)
 			var/area/A = get_area(T)
@@ -446,7 +492,7 @@
 			else
 				if((T && T.holy) && isobserver(mob))
 					var/mob/dead/observer/observer = mob
-					if(observer.invisibility == 0 || observer.mind && (find_active_faction_by_member(observer.mind.GetRole(LEGACY_CULTIST)) || find_active_faction_by_member(observer.mind.GetRole(CULTIST))))
+					if(observer.invisibility == 0 || observer.mind && (find_active_faction_by_member(observer.mind.GetRole(LEGACY_CULTIST)) || find_active_faction_by_member(iscultist(observer))))
 						to_chat(mob, "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>")
 					else
 						mob.forceEnter(get_step(mob, direct))
@@ -454,9 +500,21 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
+			if(istype(T, /turf/simulated/open)) // Stair movement down
+				var/turf/below = GetBelow(T)
+				if(below)
+					var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
+					if(down_stairs && down_stairs.dir == GetOppositeDir(mob.dir))
+						mob.Move(below)
+			var/obj/structure/stairs/up_stairs = locate(/obj/structure/stairs) in T
+			if(up_stairs && up_stairs.dir == mob.dir)
+				up_stairs.Bumped(mob)
 			mob.delayNextMove(movedelay)
-		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
+		if(INCORPOREAL_ETHEREAL, INCORPOREAL_ETHEREAL_IMPROVED) //Jaunting, without needing to be done through relaymove
+			var/jaunt_type = mob.incorporeal_move
 			var/movedelay = ETHEREAL_MOVEDELAY
+			if(jaunt_type == INCORPOREAL_ETHEREAL_IMPROVED)
+				movedelay = ETHEREAL_IMPROVED_MOVEDELAY
 			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.turf_flags & NOJAUNT) && !newLoc.holy)
@@ -464,7 +522,7 @@
 				mob.dir = direct
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
-			INVOKE_EVENT(mob.on_moved,list("dir"=direct))
+			INVOKE_EVENT(mob, /event/moved)
 			mob.delayNextMove(movedelay)
 			return 1
 	// Crossed is always a bit iffy
@@ -525,11 +583,15 @@
 		var/mob/mobpulled = target
 		var/atom/movable/secondarypull = mobpulled.pulling
 		mobpulled.stop_pulling()
+		INVOKE_EVENT(mobpulled, /event/before_move)
 		step(mobpulled, get_dir(mobpulled.loc, dest))
+		INVOKE_EVENT(mobpulled, /event/after_move)
 		if(mobpulled && secondarypull)
 			mobpulled.start_pulling(secondarypull)
 	else
+		INVOKE_EVENT(target, /event/before_move)
 		step(target, get_dir(target.loc, dest))
+		INVOKE_EVENT(target, /event/after_move)
 	target.add_fingerprint(src)
 
 /mob/proc/movement_delay()
@@ -556,3 +618,29 @@
 			. = T.adjust_slowdown(src, .)
 		if(movement_speed_modifier)
 			. *= (1/movement_speed_modifier)
+
+/mob/living/carbon/proc/toggle_move_intent()
+	if(legcuffed)
+		to_chat(src, "<span class='notice'>You are legcuffed! You cannot run until you get [legcuffed] removed!</span>")
+		m_intent = M_INTENT_WALK	//Just incase
+		hud_used.move_intent.icon_state = "walking"
+		return 1
+	switch(m_intent)
+		if(M_INTENT_RUN)
+			m_intent = M_INTENT_WALK
+			hud_used.move_intent.icon_state = "walking"
+		if(M_INTENT_WALK)
+			m_intent = M_INTENT_RUN
+			hud_used.move_intent.icon_state = "running"
+	if(istype(src,/mob/living/carbon/alien/humanoid))
+		update_icons()
+
+/mob/living/carbon/verb/toggle_move_intent_verb()
+
+	set name = "Toggle-Walk"
+	set category = "IC"
+	set desc = "Switch between walking and running."
+
+	toggle_move_intent()
+
+

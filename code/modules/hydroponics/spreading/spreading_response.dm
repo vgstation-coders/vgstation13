@@ -40,6 +40,8 @@
 		return
 	if(!istype(victim))
 		return
+	if(victim.vine_protected())
+		return
 	var/cuts = 0
 	for(var/datum/organ/external/Ex in victim.organs) //hahaha shit this is probably going to MINCE people
 		if(Ex && Ex.is_existing() && Ex.is_organic())
@@ -60,16 +62,20 @@
 		return
 	if(!istype(victim))
 		return
+	if(victim.vine_protected())
+		return
 	if(victim.get_exposed_body_parts() && prob(chance))
 		if(seed.chems && seed.chems.len)
 			for(var/rid in seed.chems)
-				victim.reagents.add_reagent(rid, Clamp(1, 5, seed.potency/10))
+				victim.reagents.add_reagent(rid, clamp(1, 5, seed.potency/10))
 			to_chat(victim, "<span class='danger'>You are stung by \the [src]!</span>")
 	last_special = world.time
 
 /obj/effect/plantsegment/proc/do_carnivorous_bite(var/mob/living/carbon/human/victim, var/chance)
 	// http://i.imgur.com/Xt6rM4P.png
 	if(!seed || !seed.carnivorous || !prob(chance))
+		return
+	if(victim.vine_protected())
 		return
 	if(victim.stat != DEAD)
 		to_chat(victim, "<span class='danger'>\The [src] horribly twist and mangle your body!</span>")
@@ -91,6 +97,8 @@
 	last_special = world.time
 
 /obj/effect/plantsegment/proc/do_chem_inject(var/mob/living/carbon/human/victim, var/chance)
+	if(victim.vine_protected())
+		return
 	if(seed.chems && seed.chems.len && istype(victim) && victim.stat != DEAD)
 		to_chat(victim, "<span class='danger'>You feel something seeping into your skin!</span>")
 		for(var/rid in seed.chems)
@@ -103,13 +111,13 @@
 			victim.vessel.remove_reagent(BLOOD, drawing)
 			last_special = world.time
 
-/obj/effect/plantsegment/proc/manual_unbuckle(mob/user as mob)
+/obj/effect/plantsegment/proc/manual_unbuckle(mob/user)
 	var/list/atom/movable/locked = get_locked(/datum/locking_category/plantsegment)
 	if(locked && locked.len)
 		var/mob/M = locked[1]
 		if(!user || !istype(user))
 			user = M //Since the event sytem can't hot-potato arguments, for now, assume if noone's trying to free you, then you're trying to free yourself.
-		if(prob(Clamp(140 - seed.potency, 20, 100)))
+		if(prob(clamp(140 - seed.potency, 20, 100)))
 			if(M != user)
 				M.visible_message(\
 					"<span class='notice'>[user.name] frees [M.name] from \the [src].</span>",\
@@ -137,7 +145,7 @@
 	if(!istype(M))
 		return
 
-	on_resist_key = M.on_resist.Add(src, "manual_unbuckle")
+	M.register_event(/event/resist, src, .proc/manual_unbuckle)
 
 	last_special = world.time
 
@@ -149,13 +157,13 @@
 	if(!istype(M))
 		return
 
-	M.on_resist.Remove(on_resist_key)
-	on_resist_key = null
+	M.unregister_event(/event/resist, src, .proc/manual_unbuckle)
 
 /obj/effect/plantsegment/proc/entangle_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment)) //How much of this is actually necessary, I wonder
 		return
-
+	if(victim.vine_protected())
+		return
 	lock_atom(victim, /datum/locking_category/plantsegment)
 	if(victim.stat != DEAD)
 		to_chat(victim, "<span class='danger'>The vines [pick("wind", "tangle", "tighten")] around you!</span>")
@@ -163,15 +171,25 @@
 /obj/effect/plantsegment/proc/grab_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !Adjacent(victim)|| !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment))
 		return
-
 	var/can_grab = 1
 	if(istype(victim, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = victim
 		if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.clothing_flags & NOSLIP))
 			can_grab = 0
+		if(victim.vine_protected())
+			can_grab = 0
 	if(can_grab)
 		src.visible_message("<span class='danger'>Tendrils lash out from \the [src] and drag \the [victim] in!</span>")
 		victim.forceMove(src.loc)
 		lock_atom(victim, /datum/locking_category/plantsegment)
+
+/mob/living/proc/vine_protected()
+	return FALSE
+
+/mob/living/carbon/human/vine_protected()
+	var/obj/item/clothing/suit/S = wear_suit
+	if(!istype(S))
+		return FALSE
+	return S.vine_protected()
 
 /datum/locking_category/plantsegment

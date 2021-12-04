@@ -60,6 +60,11 @@
 
 	return 0
 
+/mob/proc/activate_empty_hand()
+	var/empty_hand = find_empty_hand_index()
+	if(empty_hand)
+		activate_hand(empty_hand)
+
 /mob/proc/empty_hand_indexes_amount()
 	. = 0
 
@@ -207,7 +212,7 @@
 	return put_in_hand(GRASP_RIGHT_HAND, W)
 
 /mob/proc/put_in_hand_check(var/obj/item/W, index)
-	if(lying) //&& !(W.flags & ABSTRACT))
+	if(lying && !W.laying_pickup) //&& !(W.flags & ABSTRACT))
 		return 0
 	if(!isitem(W))
 		return 0
@@ -215,7 +220,7 @@
 	if(held_items[index])
 		return 0
 
-	if(W.flags & MUSTTWOHAND)
+	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
 		if(!W.wield(src, 1))
 			to_chat(src, "You need both hands to pick up \the [W].")
 			return 0
@@ -291,7 +296,7 @@
 
 		//W.dropped(src)
 		//update_icons() // Redundant as u_equip will handle updating the specific overlay
-		return 1
+	return 1
 
 
 // Drops all and only equipped items, including items in hand
@@ -299,7 +304,7 @@
 	for (var/obj/item/I in get_all_slots())
 		drop_from_inventory(I)
 	drop_hands()
-	
+
 // deletes all and only equipped items, including items in hand
 /mob/proc/delete_all_equipped_items()
 	for (var/obj/item/I in get_all_slots())
@@ -346,7 +351,7 @@
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
 	for(var/obj/item/I in held_items)
 		drop_item(I, Target, force_drop = force_drop)
-		
+
 /mob/proc/delete_held_items(var/atom/Target) //deletes both items
 	for(var/obj/item/I in held_items)
 		qdel(I)
@@ -363,7 +368,6 @@
 	if(!W)
 		return 0
 	var/success = 0
-
 	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
@@ -379,7 +383,7 @@
 		update_inv_wear_mask()
 	else
 		return 0
-
+	INVOKE_EVENT(src, /event/unequipped, W)
 	if(success)
 		if(client)
 			client.screen -= W

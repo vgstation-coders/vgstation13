@@ -8,9 +8,14 @@
 #define SHUTTLETRANSITTIME 120		// 2 minutes = 120 seconds
 #define SHUTTLEGRACEPERIOD 300      // time after roundstart until the shuttle can be called, 5 minutes = 300 seconds
 
+#define EMERGENCY_SHUTTLE_RECALLED	-1
+#define EMERGENCY_SHUTTLE_STANDBY	0
+#define EMERGENCY_SHUTTLE_GOING_TO_STATION 1
+#define EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM 2
+
 var/global/datum/emergency_shuttle/emergency_shuttle
 
-datum/emergency_shuttle
+/datum/emergency_shuttle
 	var/alert = 0 //0 = emergency, 1 = crew cycle
 
 	var/location = 0 //0 = in transit (or on standby), 1 = at the station, 2 = at centcom
@@ -44,7 +49,7 @@ datum/emergency_shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
 
-datum/emergency_shuttle/proc/incall(coeff = 1)
+/datum/emergency_shuttle/proc/incall(coeff = 1)
 	if(shutdown)
 		return
 	if((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
@@ -63,13 +68,13 @@ datum/emergency_shuttle/proc/incall(coeff = 1)
 			if(istype(A, /area/hallway))
 				A.readyalert()
 
-datum/emergency_shuttle/proc/shuttlealert(var/X)
+/datum/emergency_shuttle/proc/shuttlealert(var/X)
 	if(shutdown)
 		return
 	alert = X
 
 
-datum/emergency_shuttle/proc/recall()
+/datum/emergency_shuttle/proc/recall()
 	if(shutdown)
 		return
 	if(!can_recall)
@@ -79,7 +84,7 @@ datum/emergency_shuttle/proc/recall()
 		if(alert == 0)
 			if(timeleft >= 600)
 				return
-			captain_announce("The emergency shuttle has been recalled.")
+			command_alert(/datum/command_alert/emergency_shuttle_recalled)
 			world << sound('sound/AI/shuttlerecalled.ogg')
 			setdirection(-1)
 			online = 1
@@ -95,9 +100,9 @@ datum/emergency_shuttle/proc/recall()
 
 // returns the time (in seconds) before shuttle arrival
 // note if direction = -1, gives a count-up to SHUTTLEARRIVETIME
-datum/emergency_shuttle/proc/timeleft()
+/datum/emergency_shuttle/proc/timeleft()
 	if(online)
-		var/timeleft = round((endtime - world.timeofday)/10 ,1)
+		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
 			return timeleft
 		else
@@ -106,23 +111,23 @@ datum/emergency_shuttle/proc/timeleft()
 		return SHUTTLEARRIVETIME
 
 // sets the time left to a given delay (in seconds)
-datum/emergency_shuttle/proc/settimeleft(var/delay)
-	endtime = world.timeofday + delay * 10
+/datum/emergency_shuttle/proc/settimeleft(var/delay)
+	endtime = world.time + delay * 10
 	timelimit = delay
 
 // sets the shuttle direction
 // 1 = towards SS13, -1 = back to centcom
-datum/emergency_shuttle/proc/setdirection(var/dirn)
+/datum/emergency_shuttle/proc/setdirection(var/dirn)
 	if(direction == dirn || !direction || !dirn)
 		direction = dirn
 		return
 	direction = dirn
 	// if changing direction, flip the timeleft by SHUTTLEARRIVETIME, unless changing from/to 0
-	var/ticksleft = endtime - world.timeofday
-	endtime = world.timeofday + (SHUTTLEARRIVETIME*10 - ticksleft)
+	var/ticksleft = endtime - world.time
+	endtime = world.time + (SHUTTLEARRIVETIME*10 - ticksleft)
 	return
 
-datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
+/datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
 	if (!pod || !destination || !(istype(pod, /datum/shuttle/escape)) || !escape_pods.Find(pod))
 		return
 
@@ -144,7 +149,7 @@ datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
 			else
 				D.open()
 
-datum/emergency_shuttle/proc/force_shutdown()
+/datum/emergency_shuttle/proc/force_shutdown()
 	online=0
 	shutdown=1
 
@@ -169,7 +174,7 @@ datum/emergency_shuttle/proc/force_shutdown()
 
 
 // "preload" the assets for when they're needed for the map vote.
-datum/emergency_shuttle/proc/vote_preload()
+/datum/emergency_shuttle/proc/vote_preload()
 	if (voting_cache)
 		return
 	voting_cache = 1
@@ -178,7 +183,7 @@ datum/emergency_shuttle/proc/vote_preload()
 			spawn
 				vote.interface.sendAssets(C)
 
-datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
+/datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
 	var/frequency = get_rand_frequency()
 
 	switch (phase)
@@ -209,7 +214,7 @@ datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
 					if (M_turf.z == shuttle.dock_centcom.z)
 						M.playsound_local(shuttle.dock_centcom, 'sound/machines/hyperspace_end.ogg', 75 - (get_dist(shuttle.dock_centcom,M_turf)*2), 1, frequency, falloff = 5)
 
-datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
+/datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
 		if ("station")
 			location = 1
@@ -226,7 +231,8 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				settimeleft(SHUTTLELEAVETIME)
 				send2mainirc("The Emergency Shuttle has docked with the station.")
 				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
-				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
+				send2ickdiscord("The **Emergency Shuttle** has docked with the station.")
+				command_alert(/datum/command_alert/emergency_shuttle_docked)
 				world << sound('sound/AI/shuttledock.ogg')
 			if(ticker)
 				ticker.shuttledocked_time = world.time / 10
@@ -253,8 +259,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 
 				// Shuttle Radio
 				CallHook("EmergencyShuttleDeparture", list())
-
-				captain_announce("The Emergency Shuttle has left the station. Estimate [round(timeleft()/60,1)] minutes until the shuttle docks at Central Command.")
+				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
@@ -280,6 +285,27 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				vote_preload()
 				location = 2
 
+			//if the crew brought items ordered by centcom with them, they get paid for those as if it were the supply shuttle
+			for(var/atom/movable/MA in shuttle.linked_area)
+				if(MA.anchored && !ismecha(MA))
+					continue
+
+				if(istype(MA,/obj/structure/closet/crate))
+					for(var/obj/A in MA)
+						SSsupply_shuttle.SellObjToOrders(A,1,TRUE)
+				else
+					SSsupply_shuttle.SellObjToOrders(MA,0,TRUE)
+
+				for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
+					O.cargo_contribution = 0//Cargo doesn't get their 10% bonus when items are shipped this way.
+					if(O.CheckFulfilled())
+						if (!istype(O, /datum/centcomm_order/per_unit))
+							O.Pay()//per_unit payments are handled by CheckFulfilled()
+						SSsupply_shuttle.centcomm_orders.Remove(O)
+						for(var/obj/machinery/computer/supplycomp/S in SSsupply_shuttle.supply_consoles)//juiciness!
+							S.say("Central Command request fulfilled!")
+							playsound(S, 'sound/machines/info.ogg', 50, 1)
+
 			if(ticker)
 				ticker.mode.ShuttleDocked(2)
 
@@ -293,7 +319,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 
 			online = 0
 
-datum/emergency_shuttle/proc/process()
+/datum/emergency_shuttle/proc/process()
 	if(!online || shutdown)
 		return
 

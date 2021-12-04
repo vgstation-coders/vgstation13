@@ -73,8 +73,7 @@ var/list/pda_multicasters = list()
 		var/obj/item/device/pda/P = available_pdas[element]
 		if(is_type_in_list(P,redirection_list[target]))
 			CAMO.ownjob = "[sender.owner]"
-			CAMO.reply = sender
-			CAMO.create_message(U,P,message)
+			CAMO.create_message(U, P, message, sender)
 
 /obj/item/device/pda/camo
 	name = "Centralized Autonomous Messaging Operator"

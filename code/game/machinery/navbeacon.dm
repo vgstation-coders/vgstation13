@@ -33,10 +33,12 @@ var/list/navbeacons = list()
 	hide(T.intact)
 
 	navbeacons.Add(src)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-	spawn(5)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_controller.add_object(src, freq, RADIO_NAVBEACONS)
+/obj/machinery/navbeacon/initialize()
+	if(radio_controller)
+		radio_controller.add_object(src, freq, RADIO_NAVBEACONS)
 
 /obj/machinery/navbeacon/Destroy()
 	navbeacons.Remove(src)
@@ -85,32 +87,31 @@ var/list/navbeacons = list()
 	// or one of the set transponder keys
 	// if found, return a signal
 /obj/machinery/navbeacon/receive_signal(datum/signal/signal)
-
 	var/request = signal.data["findbeacon"]
 	if(request && ((request in codes) || request == "any" || request == location))
 		spawn(1)
-			post_signal()
+			post_signal(request)
 
 	// return a signal giving location and transponder codes
 
-/obj/machinery/navbeacon/proc/post_signal()
-
-
+/obj/machinery/navbeacon/proc/post_signal(request)
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
-
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	signal.data["beacon"] = location
 
+	if (request == "patrol")
+		signal.data["patrol"] = 1
+
 	for(var/key in codes)
 		signal.data[key] = codes[key]
 
+	astar_debug("navbeacon [location] posted signal with request [request] on freq [freq].")
 	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-
 
 /obj/machinery/navbeacon/attackby(var/obj/item/I, var/mob/user)
 	var/turf/T = loc

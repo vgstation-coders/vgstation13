@@ -17,7 +17,8 @@
 		if(stat & (NOPOWER|BROKEN))
 			to_chat(user, "This terminal isn't functioning right now, get it working!")
 			return
-		I:transfer_ai("AIFIXER","AICARD",src,user)
+		var/obj/item/card = I
+		card.transfer_ai("AIFIXER","AICARD",src,user)
 		return
 	return ..()
 

@@ -92,7 +92,7 @@ var/intercom_range_display_status = 0
 			if(!(locate(/obj/structure/grille,T)))
 				var/window_check = 0
 				for(var/obj/structure/window/W in T)
-					if (W.dir == turn(C1.dir,180) || W.is_fulltile() )
+					if (W.dir == turn(C1.dir,180) || W.is_fulltile)
 						window_check = 1
 						break
 				if(!window_check)
@@ -271,12 +271,16 @@ var/intercom_range_display_status = 0
 			// Space is okay for walls
 			/turf/space
 		),
-		/turf/simulated/shuttle/floor = list(
-			/turf/simulated/shuttle,
+		/turf/simulated/floor/shuttle = list(
+			/turf/simulated/wall/shuttle,
+			/turf/simulated/floor/shuttle,
+			/turf/simulated/floor/shuttle/plating,
 			/turf/space
 		),
-		/turf/simulated/shuttle/floor4 = list(
-			/turf/simulated/shuttle,
+		/turf/simulated/floor/shuttle/brig = list(
+			/turf/simulated/wall/shuttle,
+			/turf/simulated/floor/shuttle,
+			/turf/simulated/floor/shuttle/plating,
 			/turf/space
 		),
 		/turf/simulated/floor/plating/airless = list(
@@ -294,7 +298,7 @@ var/intercom_range_display_status = 0
 		/turf/simulated/floor = list(
 			/turf/simulated/floor,
 			/turf/simulated/wall,
-			/turf/simulated/shuttle/wall
+			/turf/simulated/wall/shuttle
 		),
 	)
 

@@ -42,6 +42,9 @@
 	var/datum/disease2/disease/virus
 		// Parent virus. Plans to generalize these are underway.
 
+	var/spoof = 0
+		// If this effect is used to hide a true effect on a database.
+
 	var/restricted = 0
 	// If 1, will never appear randomly in a disease, requiring instead to be manually set in the code. If 2, will not either appear in the encyclopedia.
 // The actual guts of the effect. Has a prob(chance)% to get called per tick.
@@ -57,6 +60,8 @@
 	// Called when the sufferer of the symptom bumps, is bumped, or is touched by hand.
 /datum/disease2/effect/proc/on_death(var/mob/living/carbon/mob)
 	// Called when the sufferer of the symptom dies
+/datum/disease2/effect/proc/side_effect(var/mob/living/mob)
+	// Called on every Life() while the body is alive
 
 // Most of the stuff below shouldn't be changed when you make a new effect.
 /datum/disease2/effect/New(var/datum/disease2/disease/D)
@@ -67,11 +72,11 @@
 		return 1
 	return 0
 
-/datum/disease2/effect/proc/run_effect(var/mob/living/carbon/human/mob)
+/datum/disease2/effect/proc/run_effect(var/mob/living/mob)
 	activate(mob)
 	count += 1
 
-/datum/disease2/effect/proc/disable_effect(var/mob/living/carbon/human/mob)
+/datum/disease2/effect/proc/disable_effect(var/mob/living/mob)
 	if (count > 0)
 		deactivate(mob)
 
@@ -80,7 +85,7 @@
 		chance = rand(initial(chance), max_chance)
 
 /datum/disease2/effect/proc/multiplier_tweak(var/tweak)
-	multiplier = Clamp(multiplier+tweak,1,max_multiplier)
+	multiplier = clamp(multiplier+tweak,1,max_multiplier)
 
 /datum/disease2/effect/proc/getcopy(var/datum/disease2/disease/disease)
 	var/datum/disease2/effect/new_e = new type(disease)

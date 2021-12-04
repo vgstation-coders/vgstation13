@@ -69,6 +69,23 @@
 		else
 			toggle_door(user)
 
+
+/obj/structure/cage/bullet_act(var/obj/item/projectile/Proj)
+	if (!locked_atoms?.len)
+		return PROJECTILE_COLLISION_DEFAULT
+	if(cover_state != C_OPENED)
+		return PROJECTILE_COLLISION_DEFAULT
+	var/mob/victim = pick(locked_atoms)
+	if (!istype(victim))
+		return PROJECTILE_COLLISION_DEFAULT
+	if(prob(75))
+		var/act = victim.bullet_act(Proj)
+		if(act == PROJECTILE_COLLISION_DEFAULT)
+			visible_message("<span class='warning'>\The [victim] is hit by \the [Proj]!")
+		return act
+	return PROJECTILE_COLLISION_DEFAULT
+
+
 /obj/structure/cage/verb/toggle_cover_v()
 	set name = "Toggle Cover"
 	set category = "Object"
@@ -81,7 +98,7 @@
 		toggle_cover(usr)
 
 /obj/structure/cage/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(anchored)
 			to_chat(user, "<span class='info'>You start unsecuring \the [src] from \the [loc].</span>")
 		else
@@ -91,7 +108,7 @@
 			to_chat(user, "<span class='info'>You start securing \the [src] to \the [loc].</span>")
 
 		spawn()
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			W.playtoolsound(src, 100)
 			if(do_after(user, src, 50))
 				anchored = !anchored
 				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")

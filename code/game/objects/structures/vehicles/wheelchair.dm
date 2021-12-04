@@ -28,8 +28,11 @@
 	if(istype(W, /obj/item/weapon/gun_barrel))
 		to_chat(user, "You place \the [W] on \the [src].")
 		var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/I = new (get_turf(src.loc))
+		I.base_wheelchair = src
 		I.dir = dir
-		qdel(src)
+		for (var/atom/movable/AM in locked_atoms)
+			unlock_atom(AM)
+		forceMove(I)
 		qdel(W)
 
 /obj/structure/bed/chair/vehicle/wheelchair/unlock_atom(var/atom/movable/AM)
@@ -51,6 +54,10 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
 	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+		return 0
+	if(M_HULK in M.mutations)
+		if(M == user)
+			to_chat(M, "<span class='warning'>You are too muscular to fit in the wheelchair!</span>")
 		return 0
 	return 1
 
@@ -83,11 +90,10 @@
 		else if(M.held_items[i])
 			available_hands -= 1
 
-	available_hands = Clamp(available_hands, 0, 4)
+	available_hands = clamp(available_hands, 0, 4)
 
 	return available_hands
 
-	return 1
 	/*var/left_hand_exists = 1
 	var/right_hand_exists = 1
 
@@ -135,6 +141,9 @@
 		if(can_warn())
 			to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
 		return 0
+	if(M_HULK in user.mutations)
+		to_chat(user, "<span class='warning'>\The [src] won't budge under your hulking weight!</span>")
+		return 0
 	return ..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/handle_layer()
@@ -162,8 +171,8 @@
 		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
-	getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+	new /obj/item/stack/sheet/metal(get_turf(src), 4)
+	new /obj/item/stack/rods(get_turf(src), 2)
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people
@@ -178,7 +187,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
 	//Same as parent's, but no occupant check!
-	if(M != user || !Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to)
+	if(!Adjacent(user) && !user.Adjacent(M) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || M.locked_to)
 		return 0
 	return 1
 
@@ -190,7 +199,7 @@
 
 		i++
 
-/obj/structure/bed/chair/vehicle/wheelchair/multi_people/manual_unbuckle(mob/user)
+/obj/structure/bed/chair/vehicle/wheelchair/multi_people/manual_unbuckle(mob/user, var/resisting)
 	..()
 
 	update_mob() //Update the rest
@@ -256,9 +265,6 @@
 	icon_state = "wheelchair-syndie"
 	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
 	var/attack_cooldown = 0
-
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
-	return (..() + 1) //Somewhat slower
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)

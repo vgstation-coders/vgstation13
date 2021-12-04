@@ -13,9 +13,9 @@
 #define WOLF_VHUNGRY 1
 #define WOLF_STARVING 0
 
-#define WOLF_MOVECOST 0.5
-#define WOLF_STANDCOST 0.5
-#define WOLF_REGENCOST 20
+#define WOLF_MOVECOST 0
+#define WOLF_STANDCOST 0
+#define WOLF_REGENCOST 5
 
 #define MAXALPHADIST 7
 /* TODONE: Pack mentality - Wolves will generally stick around the 'alpha', at least within 6 tiles, unless hunting [x]
@@ -25,7 +25,7 @@
 		Be able to point at them and then to elsewhere to 'instruct' them on where to go (To a turf, they go to that turf. To an animal, they attack that animal) [x]
 */
 /mob/living/simple_animal/hostile/wolf
-	name = "wolf"
+	name = "feral wolf"
 	desc = "Not quite as cuddly as a corgi."
 	icon_state = "wolf"
 	icon_living = "wolf"
@@ -36,6 +36,7 @@
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
+	species_type = /mob/living/simple_animal/hostile/wolf
 
 	speed = 1
 	health = 75
@@ -53,9 +54,10 @@
 	faction = "wolf"
 	attack_same = 1 //Handled more in CanAttack
 	minbodytemp = 200
+	nutrition = 250
 
 	var/alert = 0 //Listening out for pointings from the pack alpha
-	var/aggressive = WOLF_AGGNO
+	var/aggressive = WOLF_AGGYES
 	var/anger_chance = 30
 	var/mob/living/pack_alpha //Who they will never attack, and if human, will listen to commands
 	var/alpha_stance = WOLF_ALPHANONE //What the alpha may want them to do
@@ -65,8 +67,14 @@
 	var/alpha_challenge //Used only by pack alphas, used for duels
 	var/obj/effect/decal/point/point_last //Stores the last point we saw
 
+/mob/living/simple_animal/hostile/wolf/pliable
+	name = "pliable wolf"
+	desc = "Not quite as ferocious as some other wolves."
+	aggressive = WOLF_AGGNO
+	nutrition = 400
+
 /mob/living/simple_animal/hostile/wolf/alpha
-	name = "wolf alpha"
+	name = "feral wolf alpha"
 
 /mob/living/simple_animal/hostile/wolf/alpha/New()
 	..()
@@ -87,11 +95,14 @@
 					alpha_challenger.challenge(src)
 					challenge(alpha_challenger)
 
+/mob/living/simple_animal/hostile/wolf/get_butchering_products()
+	return list(/datum/butchering_product/skin/wolf, /datum/butchering_product/teeth/lots)
+
 /mob/living/simple_animal/hostile/wolf/CanAttack(var/atom/the_target)
 	//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
 	var/list/target_prox = view(the_target, vision_range)
 	for(var/obj/machinery/space_heater/campfire/fire in target_prox)
-		var/dist = get_dist(the_target, fire)
+		var/dist = get_dist(src, fire)
 		if(dist < (fire.light_range*2))//Just sitting on the edge of the fire
 			alpha_stance = WOLF_ALPHANONE
 			visible_message("<span class = 'notice'>\The [src] whimpers and runs from \the [fire]</span>")
@@ -160,7 +171,7 @@
 						playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 						var/damage = rand(melee_damage_lower, melee_damage_upper)
 						mob_target.adjustBruteLoss(damage)
-						nutrition += damage*3
+						adjust_nutrition(damage*3)
 			return
 	return ..()
 
@@ -173,9 +184,10 @@
 		if(F.food_flags & FOOD_MEAT) //Any meaty dish goes!
 			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
-			nutrition += 15
+			adjust_nutrition(15)
 			if(prob(25))
 				if(!pack_alpha)
+					environment_smash_flags = 0 //No longer smash things
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					message_admins("[key_name(user)] has tamed a wolf: @[formatJumpTo(user, "JMP")]")
@@ -227,7 +239,7 @@
 /mob/living/simple_animal/hostile/wolf/Life()
 	..()
 	if(!isUnconscious())
-		nutrition -= WOLF_STANDCOST
+		adjust_nutrition(-WOLF_STANDCOST)
 		handle_hunger() //Handle hunger
 		var/list/can_see = view(src, vision_range)
 
@@ -242,6 +254,7 @@
 				if(pack_alpha.isDead())
 					visible_message("<span class = 'notice'>\The [src] lets out a mournful howl. </span>")
 					//Howl noise?
+					environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 					pack_alpha = null
 				else
 					if(alpha_stance == WOLF_ALPHANONE) //Rough following
@@ -271,7 +284,6 @@
 							if(W.health <= 0)
 								alpha_target = null
 								alpha_stance = WOLF_ALPHANONE*/
-						log_admin("A wolf is attacking a target, [key_name(alpha_target)], their alpha is: [key_name(pack_alpha)] @([src.x], [src.y], [src.z])")
 				if(WOLF_ALPHAMOVE)
 					var/turf/target = alpha_target
 					var/dist = get_dist(src, alpha_target)
@@ -287,9 +299,14 @@
 			stop_automated_movement = 0
 
 
-		if((health < (maxHealth/2)) && nutrition >= WOLF_REGENCOST)
-			health += rand(1,3)
-			nutrition -= WOLF_REGENCOST
+		if(health < maxHealth/2)
+			if(nutrition >= WOLF_REGENCOST)
+				health += 3
+				adjust_nutrition(-WOLF_REGENCOST)
+		else
+			if((hunger_status >= WOLF_WELLFED) && (health < maxHealth))
+				health += min(3,maxHealth-health)
+				adjust_nutrition(-WOLF_REGENCOST)
 
 /mob/living/simple_animal/hostile/wolf/proc/handle_hunger()
 	switch(nutrition)
@@ -305,6 +322,10 @@
 		if(0 to 150)
 			hunger_status = WOLF_STARVING
 			aggressive = WOLF_AGGALL
+
+/mob/living/simple_animal/hostile/wolf/proc/adjust_nutrition(var/val)
+	if(ishuman(pack_alpha)) //Don't ever adjust nutrition at all unless the alpha is human.
+		nutrition += val
 
 /mob/living/simple_animal/hostile/wolf/examine(mob/user)
 	..()
@@ -345,7 +366,7 @@
 				to_chat(user, "<span class='info'>It seems to be sitting down, waiting patiently.</span>")
 /mob/living/simple_animal/hostile/wolf/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
-	nutrition -= WOLF_MOVECOST
+	adjust_nutrition(-WOLF_MOVECOST)
 
 /mob/living/simple_animal/hostile/wolf/proc/point_listen(var/list/can_see)
 	if(pack_alpha == src)
@@ -385,8 +406,8 @@
 			stance = HOSTILE_STANCE_ATTACK
 			alpha_stance = WOLF_ALPHAATTACK
 			alpha_target = target
-			add_attacklogs(pack_alpha, target, "ordered a wolf a wolf to attack", src, null, TRUE)
-			log_admin("[key_name(pack_alpha)] has ordered a wolf to attack [key_name(target)] @([src.x], [src.y], [src.z])")
+			add_attacklogs(pack_alpha, target, "set [src] (wolf) on", admin_warn = TRUE)
+			log_admin("[key_name(pack_alpha)] has ordered a wolf named \[src] to attack [key_name(target)] @([src.x], [src.y], [src.z])")
 		if(istype (target, /turf)) //We go!
 			alpha_stance = WOLF_ALPHAMOVE
 			alpha_target = target

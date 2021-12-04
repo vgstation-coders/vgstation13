@@ -19,17 +19,18 @@
 /datum/context_click/cardhand/action(obj/item/used_item, mob/user, params)
 	var/obj/item/toy/cardhand/hand = holder
 	if(!used_item)
-		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
+		var/index = clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		var/obj/item/toy/singlecard/card = hand.currenthand[index]
 		hand.currenthand.Remove(card)
 		user.put_in_hands(card)
 		hand.update_icon()
 		if(hand.currenthand.len == 1)
 			var/obj/item/toy/singlecard/C = hand.currenthand[1]
-			qdel(hand)
+			user.u_equip(hand, FALSE)
 			user.put_in_inactive_hand(C)
+			qdel(hand)
 	else if(istype(used_item, /obj/item/toy/singlecard))
-		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
+		var/index = clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		hand.currenthand.Insert(index, used_item) //We put it where we specified
 		hand.update_icon()
 
@@ -173,25 +174,8 @@
 		update_icon()
 
 /obj/item/toy/cards/MouseDropFrom(atom/over_object)
-	var/mob/M = usr
-	if(!ishigherbeing(usr) || usr.incapacitated())
-		return
-	if(Adjacent(usr) || is_holder_of(usr, src))
-		if(over_object == M)
-			M.put_in_hands(src)
-			to_chat(usr, "<span class='notice'>You pick up the deck.</span>")
-		else if(istype(over_object, /obj/abstract/screen/inventory))
-			var/obj/abstract/screen/inventory/OI = over_object
-
-			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
-				M.u_equip(src, 0)
-				M.put_in_hand(OI.hand_index, src)
-				add_fingerprint(usr)
-				to_chat(usr, "<span class='notice'>You pick up the deck.</span>")
-
-			return
-	else
-		to_chat(usr, "<span class='warning'>You can't reach it from here.</span>")
+	MouseDropPickUp(over_object)
+	return ..()
 
 ////////////////////////////
 /////////CARD HANDS/////////
@@ -205,7 +189,7 @@
 	w_class = W_CLASS_SMALL
 	var/list/currenthand = list()
 	var/obj/item/toy/cards/parentdeck = null
-	var/max_hand_size = 5
+	var/max_hand_size = 7
 
 	var/datum/context_click/cardhand/hand_click
 
@@ -288,7 +272,7 @@
 
 /obj/item/toy/singlecard
 	name = "card"
-	desc = "\a card"
+	desc = "A card."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "singlecard_down"
 	w_class = W_CLASS_TINY
@@ -296,6 +280,9 @@
 	var/obj/item/toy/cards/parentdeck = null
 	var/flipped = TRUE //Cards start flipped so that dealers can deal without having to see the card.
 	pixel_x = -5
+
+/obj/item/toy/singlecard/unflipped //Card that is face-up, just so that it's visible
+	flipped = FALSE
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
 	..(NewLoc)
@@ -305,6 +292,11 @@
 		cardname = newcardname
 		name = cardname
 	update_icon()
+
+/obj/item/toy/singlecard/Destroy()
+	if(parentdeck)
+		parentdeck.cards -= src
+	..()
 
 /obj/item/toy/singlecard/update_icon()
 	if(flipped)

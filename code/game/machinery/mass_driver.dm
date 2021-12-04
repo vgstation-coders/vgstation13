@@ -13,7 +13,7 @@ var/list/mass_drivers = list()
 
 	var/power = 1.0
 	var/code = 1.0
-	var/id_tag = "default"
+	id_tag = "default"
 	var/drive_range = 50 //this is mostly irrelevant since current mass drivers throw into space, but you could make a lower-range mass driver for interstation transport or something I guess.
 
 /obj/machinery/mass_driver/New()
@@ -42,7 +42,7 @@ var/list/mass_drivers = list()
 
 	if(W.is_screwdriver(user))
 		to_chat(user, "You begin to unscrew the bolts off the [src]...")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 30))
 			var/obj/machinery/mass_driver_frame/F = new(get_turf(src))
 			F.dir = src.dir
@@ -137,19 +137,19 @@ var/list/mass_drivers = list()
 	switch(build)
 		if(0) // Loose frame
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin to cut the frame apart...")
 				if(WT.do_weld(user, src, 30) && (build == 0))
 					to_chat(user, "<span class='notice'>You detach the plasteel sheets from each others.</span>")
 					new /obj/item/stack/sheet/plasteel(get_turf(src),3)
 					qdel(src)
 				return 1
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				if(check_competition())
 					to_chat(user, "<span class = 'notice'>You can't anchor \the [src], as there's a mass driver in that location already.</span>")
 					return
 				to_chat(user, "You begin to anchor \the [src] on the floor.")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && (build == 0))
 					to_chat(user, "<span class='notice'>You anchor \the [src]!</span>")
 					anchored = 1
@@ -157,9 +157,9 @@ var/list/mass_drivers = list()
 					update_icon()
 				return 1
 		if(1) // Fixed to the floor
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You begin to de-anchor \the [src] from the floor.")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && (build == 1))
 					build--
 					update_icon()
@@ -167,7 +167,7 @@ var/list/mass_drivers = list()
 					to_chat(user, "<span class='notice'>You de-anchored \the [src]!</span>")
 				return 1
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin to weld \the [src] to the floor...")
 				if(WT.do_weld(user, src, 40) && (build == 1))
 					to_chat(user, "<span class='notice'>You welded \the [src] to the floor.</span>")
@@ -176,7 +176,7 @@ var/list/mass_drivers = list()
 				return 1
 		if(2) // Welded to the floor
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin to unweld \the [src] to the floor...")
 				if(WT.do_weld(user, src, 40) && (build == 2))
 					to_chat(user, "<span class='notice'>You unwelded \the [src] to the floor.</span>")
@@ -192,11 +192,11 @@ var/list/mass_drivers = list()
 					build++
 					update_icon()
 		if(3) // Wired
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(user, "You begin to remove the wiring from \the [src].")
 				if(do_after(user, src, 10) && (build == 3))
 					new /obj/item/stack/cable_coil(loc,3)
-					playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					to_chat(user, "<span class='notice'>You've removed the cables from \the [src].</span>")
 					build--
 					update_icon()
@@ -214,7 +214,7 @@ var/list/mass_drivers = list()
 		if(4) // Grille in place
 			if(iscrowbar(W))
 				to_chat(user, "You begin to pry off the grille from \the [src]...")
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 30) && (build == 4))
 					new /obj/item/stack/rods(loc,2)
 					build--
@@ -222,7 +222,7 @@ var/list/mass_drivers = list()
 				return 1
 			if(W.is_screwdriver(user))
 				to_chat(user, "You finalize the Mass Driver...")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				var/obj/machinery/mass_driver/M = new(get_turf(src))
 				M.dir = src.dir
 				qdel(src)

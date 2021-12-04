@@ -1,5 +1,3 @@
-var/list/cyborg_list = list()
-
 /mob/living/silicon/robot
 	name = "Cyborg"
 	real_name = "Cyborg"
@@ -9,7 +7,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
@@ -19,14 +16,9 @@ var/list/cyborg_list = list()
 	var/startup_sound = 'sound/voice/liveagain.ogg'
 	var/startup_vary = TRUE //Does the startup sounds vary?
 
-	// Alerts
-	var/pressure_alert = FALSE
-	var/temp_alert = FALSE
-
 	var/obj/item/device/station_map/station_holomap = null
 
 	//Hud stuff
-	var/obj/abstract/screen/cells = null
 	var/obj/abstract/screen/inv1 = null
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
@@ -65,6 +57,7 @@ var/list/cyborg_list = list()
 
 	var/opened = FALSE
 	var/emagged = FALSE
+	var/pulsecompromised = FALSE //Used for pulsedemons
 	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
 	var/locked = TRUE
@@ -74,15 +67,13 @@ var/list/cyborg_list = list()
 	var/viewalerts = FALSE
 	var/modtype = "Default"
 	var/jetpack = FALSE
-	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
+	var/datum/effect/system/ion_trail_follow/ion_trail = null
 	var/jeton = FALSE
 
-	var/killswitch = FALSE
-	var/killswitch_time = 60
 	var/modulelock = FALSE
 	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
-	var/lockcharge //Used when locking down a borg to preserve cell charge
+	var/lockdown //Used when locking down a borg to preserve cell charge
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
 	var/lawcheck[1]
@@ -103,7 +94,7 @@ var/list/cyborg_list = list()
 	var/last_tase_timeofday
 	var/last_high_damage_taken_timeofday
 
-/mob/living/silicon/robot/New(loc, var/malfAI = null)
+/mob/living/silicon/robot/New(loc, var/mob/living/silicon/ai/malfAI = null)
 	ident = rand(1, 999)
 	updatename(modtype)
 
@@ -148,6 +139,14 @@ var/list/cyborg_list = list()
 
 	..()
 
+	if(cyborg_detonation_time < world.time)	//Reset the global cyborg killswitch if it was already triggered, so an activated killswitch + missing robot consoles doesnt prevent all new borgs from instantly exploding. This probably isn't the best place for it but it should work.
+		cyborg_detonation_time = 0
+
+	if(mind && !stored_freqs)
+		spawn(1)
+			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+		stored_freqs = 1
+
 	if(cell)
 		var/datum/robot_component/cell_component = components["power cell"]
 		cell_component.wrapped = cell
@@ -168,18 +167,29 @@ var/list/cyborg_list = list()
 			add_language(lang.name, can_speak = FALSE)
 
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+	init_language = default_language
 
 /mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
 	if(istype(new_AI))
 		connected_ai = new_AI
 		connected_ai.connected_robots += src
+		to_chat(src, "<span class='notice' style=\"font-family:Courier\">Notice: Linked to [connected_ai].</span>")
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: Link to [src] established.</span>")
 		lawsync()
 		lawupdate = TRUE
+		var/datum/role/malfAI/malf_role = new_AI.mind.GetRole(MALF)
+		if (malf_role)
+			var/datum/faction/malf/malf_faction = malf_role.faction
+			ASSERT(malf_faction && mind)
+			malf_faction.HandleNewMind(mind)
 	else
 		lawupdate = FALSE
 
-/mob/living/silicon/robot/proc/disconnect_AI()
+/mob/living/silicon/robot/proc/disconnect_AI(var/announce = FALSE)
 	if(connected_ai)
+		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
+		if(announce)
+			to_chat(connected_ai, "<span class='alert' style=\"font-family:Courier\">Notice: Link to [src] lost.</span>")
 		connected_ai.connected_robots -= src
 		connected_ai = null
 
@@ -207,33 +217,28 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
-	if(cells)
-		returnToPool(cells)
-		if(client)
-			client.screen -= cells
-		cells = null //TODO: Move to mob level helper
 	if(inv1)
-		returnToPool(inv1)
+		qdel(inv1)
 		if(client)
 			client.screen -= inv1
 		inv1 = null
 	if(inv2)
-		returnToPool(inv2)
+		qdel(inv2)
 		if(client)
 			client.screen -= inv2
 		inv2 = null
 	if(inv3)
-		returnToPool(inv3)
+		qdel(inv3)
 		if(client)
 			client.screen -= inv3
 		inv3 = null
 	if(robot_modules_background)
-		returnToPool(robot_modules_background)
+		qdel(robot_modules_background)
 		if(client)
 			client.screen -= robot_modules_background
 		robot_modules_background = null
 	if(sensor)
-		returnToPool(sensor)
+		qdel(sensor)
 		if(client)
 			client.screen -= sensor
 		sensor = null
@@ -299,6 +304,8 @@ var/list/cyborg_list = list()
 		changed_name = custom_name
 	else
 		changed_name = "[modtype] [braintype]-[num2text(ident)]"
+	if(connected_ai)
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: unit [name] renamed to [changed_name].</span>")
 	real_name = changed_name
 	name = real_name
 
@@ -376,7 +383,6 @@ var/list/cyborg_list = list()
 	else
 		gib()
 		return TRUE
-	return FALSE
 
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
@@ -418,7 +424,7 @@ var/list/cyborg_list = list()
 		stat(null, text("No Cell Inserted!"))
 
 /mob/living/silicon/robot/proc/show_welding_fuel()
-	var/obj/item/weapon/weldingtool/WT = installed_module(/obj/item/weapon/weldingtool)
+	var/obj/item/tool/weldingtool/WT = installed_module(/obj/item/tool/weldingtool)
 	if(WT)
 		stat(null, text("Welding fuel: [WT.get_fuel()]/[WT.max_fuel]"))
 
@@ -451,7 +457,7 @@ var/list/cyborg_list = list()
 	return FALSE
 
 
-/mob/living/silicon/robot/ex_act(severity)
+/mob/living/silicon/robot/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		to_chat(src, "The bus' robustness protects you from the explosion.")
 		return
@@ -463,15 +469,18 @@ var/list/cyborg_list = list()
 			if(!isDead())
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
 				gib()
 				return
 		if(2.0)
 			if(!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 		if(3.0)
 			if(!isDead())
 				adjustBruteLoss(30)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	updatehealth()
 
@@ -487,7 +496,7 @@ var/list/cyborg_list = list()
 			last_high_damage_taken_timeofday = world.timeofday
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
-	return 2
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/robot/emp_act(severity)
 	..()
@@ -623,7 +632,7 @@ var/list/cyborg_list = list()
 		if(!getBruteLoss())
 			to_chat(user, "Nothing to fix here!")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0))
 			var/starting_health = health
 			adjustBruteLoss(-30)
@@ -736,7 +745,7 @@ var/list/cyborg_list = list()
 			C.brute_damage = cell.brute_damage
 			C.install()
 			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
 		else
 			user.drop_item(W, src)
 			cell = W
@@ -748,7 +757,7 @@ var/list/cyborg_list = list()
 			C.brute_damage = cell.brute_damage
 			C.install()
 			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
 		updateicon()
 
 	else if(iswiretool(W))
@@ -996,13 +1005,13 @@ var/list/cyborg_list = list()
 	if(!istype(I, /obj/item/weapon/card/id) && istype(I, /obj/item))
 		I = I.GetID()
 	if(!I || !I.access) //not ID or no access
-		return TRUE
+		return FALSE
 	for(var/req in req_access)
 		if(!(req in I.access)) //doesn't have this access
 			return FALSE
 	return TRUE
 
-/mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
+/mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = ABOVE_LIGHTING_PLANE)
 	overlays.Cut()
 	update_fire()
 	if(!stat && cell != null)
@@ -1146,7 +1155,7 @@ var/list/cyborg_list = list()
 			var/turf/tile = loc
 			if(isturf(tile))
 				tile.clean_blood()
-				for(var/A in tile)
+				for(var/atom/A in tile)
 					if(istype(A, /obj/effect))
 						if(iscleanaway(A))
 							qdel(A)
@@ -1175,9 +1184,10 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/proc/self_destruct()
 	if(istraitor(src) && emagged)
-		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
+		to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
+	to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Self-Destruct signal recieved.</span>")
 	gib()
 	return TRUE
 
@@ -1185,7 +1195,7 @@ var/list/cyborg_list = list()
 	if(connected_ai)
 		disconnect_AI()
 	lawupdate = FALSE
-	lockcharge = FALSE
+	lockdown = FALSE
 	canmove = TRUE
 	scrambledcodes = TRUE
 	//Disconnect it's camera so it's not so easily tracked.
@@ -1239,11 +1249,23 @@ var/list/cyborg_list = list()
 	update_icons()
 
 
-/mob/living/silicon/robot/proc/SetLockdown(var/state = TRUE)
+/mob/living/silicon/robot/proc/SetLockdown(var/state = TRUE, var/fromconsole = FALSE)
 	if(wires.LockedCut()) // They stay locked down if their wire is cut.
+		lockdown = TRUE
 		state = TRUE
-	lockcharge = state
+	if(istraitor(src) && emagged && fromconsole)
+		to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Lockdown signal detected. Scrambling security and identification codes.</span>")
+		UnlinkSelf()
+		return FALSE
+	lockdown = state
+	if(lockdown)
+		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Lockdown signal recieved. Halting all activity.</b></span>")
+		src << 'sound/machines/twobeep.ogg'
+	else
+		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Your lockdown has been lifted.</b></span>")
+		src << 'sound/misc/notice2.ogg'
 	update_canmove()
+	return TRUE
 
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft = 3)
 	if(!triesleft || !module_sprites.len)
@@ -1338,3 +1360,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
 	return modulelock
+
+//Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
+/mob/living/silicon/robot/proc/get_percentage_power_for_movement()
+	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)

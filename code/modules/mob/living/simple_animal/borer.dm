@@ -43,6 +43,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	wander = 0
 	pass_flags = PASSTABLE
 	universal_understand=1
+	heat_damage_per_tick = 1
+	cold_damage_per_tick = 1
 
 	var/busy = 0 // So we aren't trying to lay many eggs at once.
 
@@ -51,6 +53,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/hostlimb = null						// Which limb of the host is inhabited by the borer.
 	var/truename                            // Name used for brainworm-speak.
 	var/mob/living/captive_brain/host_brain // Used for swapping control of the body back and forth.
+	var/host_name 							// Stores the old name of the host to revert to after namepick
 	var/controlling                         // Used in human death check.
 	var/list/avail_chems=list()
 	var/list/unlocked_chems_head=list()
@@ -94,6 +97,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/name_prefix_index = 1
 	held_items = list()
 
+/mob/living/simple_animal/borer/check_environment_susceptibility()
+	return !host
+
 /mob/living/simple_animal/borer/whisper()
 	return FALSE
 
@@ -107,7 +113,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/defected_borer
 	name = "special borer"
 	real_name = "special borer"
-	desc = "A slightly defected, yet incredibly happy little brainslug"
+	desc = "A slightly defected, yet incredibly happy little brainslug."
 	speak_emote = list("borks")
 	emote_hear = list("barks")
 	attacktext = "barks at"
@@ -115,6 +121,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	icon_state = "bestborer"
 	icon_living = "bestborer"
 	icon_dead = "bestborer"
+
+/mob/living/simple_animal/borer/defected_borer/singularity_act(current_size, obj/machinery/singularity/S)
+	if(S.modifier != "special_")
+		to_chat(world, "<span class='numb'><font size='15'>You feel Very Nice.</font></span>")
+		S.modifier = "special_"
+		S.name = "specialarity"
+		world << sound('sound/effects/explosionfar.ogg')
+	..()
 
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
@@ -148,6 +162,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 
+
 /*
 /mob/living/simple_animal/borer/Login()
 	..()
@@ -168,9 +183,13 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	if(client)
 		regular_hud_updates()
+		standard_damage_overlay_updates()
 
 /mob/living/simple_animal/borer/regular_hud_updates()
-	var/severity = 0
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, fire_alert == 1 ? /obj/abstract/screen/alert/carbon/burn/ice : /obj/abstract/screen/alert/carbon/burn/fire, fire_alert) //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 
 	var/healthpercent = (health/maxHealth)*100
 
@@ -179,24 +198,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			healths.icon_state = "borer_health0"
 		if(75 to 100)
 			healths.icon_state = "borer_health1"
-			severity = 2
 		if(50 to 75)
 			healths.icon_state = "borer_health2"
-			severity = 3
 		if(25 to 50)
 			healths.icon_state = "borer_health3"
-			severity = 4
 		if(1 to 25)
 			healths.icon_state = "borer_health4"
-			severity = 5
 		else
 			healths.icon_state = "borer_health5"
-			severity = 6
-
-	if(severity > 0)
-		overlay_fullscreen("damage", /obj/abstract/screen/fullscreen/brute, severity)
-	else
-		clear_fullscreen("damage")
 
 /mob/living/simple_animal/borer/proc/update_verbs(var/mode)
 	if(verb_holders.len>0)
@@ -302,18 +311,18 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 		var/encoded_message = html_encode(speech.message)
 
-		to_chat(src, "You drop words into [host]'s body: <span class='borer2host'>\"[encoded_message]\"</span>")
+		to_chat(src, "You drop words into [host]'s body: <span class='borer'>\"[encoded_message]\"</span>")
 		if(host.transmogged_to)
-			to_chat(host.transmogged_to, "<b>Something speaks within you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+			to_chat(host.transmogged_to, "<b>Something speaks within you:</b> <span class='borer'>\"[encoded_message]\"</span>")
 		else if(hostlimb == LIMB_HEAD)
-			to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+			to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer'>\"[encoded_message]\"</span>")
 		else
-			to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+			to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer'>\"[encoded_message]\"</span>")
 		var/list/borers_in_host = host.get_brain_worms()
 		borers_in_host.Remove(src)
 		if(borers_in_host.len)
 			for(var/I in borers_in_host)
-				to_chat(I, "<b>[truename]</b> speaks from your host's [limb_to_name(hostlimb)]: <span class='borer2host'>\"[encoded_message]\"</span>")
+				to_chat(I, "<b>[truename]</b> speaks from your host's [limb_to_name(hostlimb)]: <span class='borer'>\"[encoded_message]\"</span>")
 
 		var/turf/T = get_turf(src)
 		log_say("[truename] [key_name(src)] (@[T.x],[T.y],[T.z]) -> [host]([key_name(host)]) Borer->Host Speech: [encoded_message]")
@@ -325,7 +334,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
 				if(M.client.holder)
 					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
-				var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[truename]</b> ([controls]) in <b>[host]</b>'s [limb_to_name(hostlimb)]: [encoded_message]</span>"
+				var/rendered="<span class='borer'>Thought-speech, <b>[truename]</b> ([controls]) in <b>[host]</b>'s [limb_to_name(hostlimb)]: [encoded_message]</span>"
 				M.show_message(rendered, 2) //Takes into account blindness and such.
 		return 1
 	else
@@ -381,7 +390,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(hostlimb != LIMB_HEAD)
 		to_chat(src, "You are not attached to your host's brain.")
 		return
-	
+
 	if(host.ckey || !istype(host, /mob/living/carbon/monkey))
 		to_chat(src, "<span class='danger'>The host consciousness resists your attempts to overwhelm it!</span>")
 		return
@@ -398,7 +407,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/do_bonding(var/rptext=0)
 	if(!host || host.stat==DEAD || !src || research.unlocking)
 		return
-	
+
 	if(host.ckey || !istype(host, /mob/living/carbon/monkey)) //check again just to be sure
 		to_chat(src, "<span class='danger'>You attempt to interface with the host's nervous system, but their consciousness resists!</span>")
 		return
@@ -414,15 +423,16 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		controlling = 1
 	var/newname
 	for(var/i = 1 to 3)
-		newname = reject_bad_name(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
+		newname = reject_bad_name(stripped_input(host,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 		if(!newname || newname == "")
-			if(alert(src,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
+			if(alert(host,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
 				break
 		else
-			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+			if(alert(host,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
 				break
 	if(newname)
-		host.name = newname
+		host_name = host.real_name //store the old host name in the borer
+		host.fully_replace_character_name(null, newname)
 	host.verbs += /mob/living/carbon/proc/release_control
 	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host
@@ -657,8 +667,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(U.remove_on_detach)
 					U.relock()
 				U.on_detached()
-
-		host.on_emote.Remove(eh_emote)
 
 	if(host_brain && host_brain.ckey)
 		src.ckey = host.ckey
@@ -910,8 +918,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	host_brain.name = M.name
 	host_brain.real_name = M.real_name
-
-	eh_emote = host.on_emote.Add(src,"host_emote")
 
 	// Tell our upgrades that we've attached.
 	for(var/uid in research.unlocked.Copy())

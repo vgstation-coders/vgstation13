@@ -18,10 +18,6 @@
 /obj/item/weapon/sword/weaponcraft
 	var/obj/item/weapon/reagent_containers/hypospray/hypo = null
 
-/obj/item/weapon/sword/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/sword/weaponcraft/attack_self(mob/user as mob)
 	if(!hypo)
 		return
@@ -97,7 +93,7 @@
 	if (N)
 		if(usr.incapacitated() || !(usr in range(src,0)))
 			return
-		inject_amount = Clamp(N, min_inject_amount, max_inject_amount)
+		inject_amount = clamp(N, min_inject_amount, max_inject_amount)
 		to_chat(usr, "<span class='notice'>\The [src] will now inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/examine(mob/user)
@@ -235,6 +231,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		B.reagents.trans_to(M, inject_amount)
 
@@ -265,7 +262,7 @@
 
 /obj/item/weapon/sword/executioner/attackby(obj/item/weapon/W, mob/user)
 	if(iswelder(W) && !complete)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the metal blade onto \the [src].")
 		if(WT.do_weld(user, src, 30))
 			to_chat(user, "You weld the metal blade onto \the [src].")
@@ -287,23 +284,31 @@
 /obj/item/weapon/sword/shortsword
 	name = "shortsword"
 	desc = "A short-bladed sword, used for close combat agility, over overpowering your foes."
+	icon = 'icons/obj/blacksmithing/shortsword.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shortsword_left.dmi', "right_hand" = 'icons/mob/in-hand/right/shortsword_right.dmi')
 	icon_state = "shortsword"
-	item_state = "sword"
+	item_state = "shortsword"
 
 /obj/item/weapon/sword/gladius
 	name = "gladius"
 	desc = "An ancient sword design employed by the romans, used for its simple design for mass manufacture. It lacks a cross-guard."
+	icon = 'icons/obj/blacksmithing/gladius.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/gladius_left.dmi', "right_hand" = 'icons/mob/in-hand/right/gladius_right.dmi')
 	icon_state = "gladius"
-	item_state = "sword"
+	item_state = "gladius"
 
 /obj/item/weapon/sword/sabre
 	name = "sabre"
 	desc = "A sword with a slight-curved blade, associated with cavalry usage. Commonly used for duelling in academic fencing."
+	icon = 'icons/obj/blacksmithing/sabre.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sabre_left.dmi', "right_hand" = 'icons/mob/in-hand/right/sabre_right.dmi')
 	icon_state = "sabre"
-	item_state = "sword"
+	item_state = "sabre"
 
 /obj/item/weapon/sword/scimitar
 	name = "scimitar"
 	desc = "A sword with a curved blade. The curved blade made it easier for use from horseback."
+	icon = 'icons/obj/blacksmithing/scimitar.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/scimitar_left.dmi', "right_hand" = 'icons/mob/in-hand/right/scimitar_right.dmi')
 	icon_state = "scimitar"
-	item_state = "sword"
+	item_state = "scimitar"

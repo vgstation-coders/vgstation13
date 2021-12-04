@@ -137,6 +137,7 @@
 		return
 	for (var/i = 1 to 4)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+
 /*
  * Pill Bottles
  */
@@ -160,7 +161,9 @@
 	colour_overlay = image('icons/obj/chemical.dmi',"bottle_colour")
 	overlays += colour_overlay
 
-/obj/item/weapon/storage/pill_bottle/AltClick()
+/obj/item/weapon/storage/pill_bottle/CtrlClick()
+	if(isturf(loc))
+		return ..()
 	if(!usr.isUnconscious() && Adjacent(usr))
 		change()
 		return
@@ -253,6 +256,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	new /obj/item/weapon/dice/d12(src)
 	new /obj/item/weapon/dice/d20(src)
 
+/obj/item/weapon/storage/pill_bottle/dice/with_die/New()
+	. = ..()
+	new /obj/item/weapon/dice/borg(src)
+
 
 /obj/item/weapon/storage/pill_bottle/hyperzine
 	name = "pill bottle (hyperzine)"
@@ -279,10 +286,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	name = "Experimental Medication"
 	desc = "Hazardous.  Warranty voided if consumed."
 
-	/obj/item/weapon/storage/pill_bottle/nanobot/New()
-		..()
-		for (var/i = 1 to 5)
-			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+/obj/item/weapon/storage/pill_bottle/nanobot/New()
+	..()
+	for (var/i = 1 to 5)
+		new /obj/item/weapon/reagent_containers/pill/nanobot(src)
 
 /obj/item/weapon/storage/pill_bottle/radiation
 	name = "pill bottle (radiation treatment)"
@@ -301,15 +308,44 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	icon_state = "candybag"
 	var/spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet
 
-	/obj/item/weapon/storage/pill_bottle/sweets/New()
-		..()
-		overlays -= colour_overlay
-		colour_overlay = null
-		for (var/i = 1 to 10)
-			new spawn_type(src)
+/obj/item/weapon/storage/pill_bottle/sweets/New()
+	..()
+	overlays -= colour_overlay
+	colour_overlay = null
+	for (var/i = 1 to 10)
+		new spawn_type(src)
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
+
+/obj/item/weapon/storage/pill_bottle/lollipops
+	name = "bag of lollipops"
+	desc = "Ha, sucker!"
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollibag"
+	max_combined_w_class = 4
+	storage_slots = 4
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/lollipop","/obj/item/trash/lollipopstick")
+
+/obj/item/weapon/storage/pill_bottle/lollipops/New()
+	..()
+	for (var/i = 1 to 4)
+		new /obj/item/weapon/reagent_containers/food/snacks/lollipop(src)
+	overlays = null
+
+/obj/item/weapon/storage/pill_bottle/zambiscuits
+	name = "Zam Biscuit Package"
+	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "zambiscuits"
+	storage_slots = 3
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit", "/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical")
+
+/obj/item/weapon/storage/pill_bottle/zambiscuits/New()
+	..()
+	for (var/i = 1 to 3)
+		new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
+	overlays = null
 
 /obj/item/weapon/storage/pill_bottle/nanofloxacin
 	name = "pill bottle (nanofloxacin)"

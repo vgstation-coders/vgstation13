@@ -58,17 +58,6 @@
 /datum/disease2/effect/hallucinations/activate(var/mob/living/mob)
 	mob.hallucination += 25
 
-
-/datum/disease2/effect/deaf
-	name = "Hard of Hearing Syndrome"
-	desc = "Attacks the infected's aural senses."
-	stage = 3
-	badness = EFFECT_DANGER_HINDRANCE
-
-/datum/disease2/effect/deaf/activate(var/mob/living/mob)
-	mob.ear_deaf = 5
-
-
 /datum/disease2/effect/giggle
 	name = "Uncontrolled Laughter Effect"
 	desc = "Gives the infected a sense of humor."
@@ -151,11 +140,11 @@
 		return
 
 	var/mob/living/carbon/human/H = mob
-	var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new /obj/item/clothing/glasses/sunglasses/virus
-	if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/sunglasses/virus))
-		mob.u_equip(H.glasses,1)
-		mob.equip_to_slot(virussunglasses, slot_glasses)
-	if(!slot_glasses)
+	var/obj/item/clothing/glasses/H_glasses = H.get_item_by_slot(slot_glasses)
+
+	if(!istype(H_glasses, /obj/item/clothing/glasses/sunglasses/virus))
+		var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new
+		mob.u_equip(H_glasses,1)
 		mob.equip_to_slot(virussunglasses, slot_glasses)
 	mob.confused += 10
 
@@ -293,8 +282,8 @@
 			if(multiplier >= 2)
 				if(multiplier >=2.3)
 					//Cursed, pure evil cat ears that should not have been created
-					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
+					var/obj/item/clothing/head/kitty/anime/cursed/kitty_c = new /obj/item/clothing/head/kitty/anime/cursed
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/anime/cursed))
 						affected.u_equip(affected.head,1)
 						affected.equip_to_slot(kitty_c, slot_head)
 					if(!affected.head)
@@ -320,7 +309,7 @@
 					affected.put_in_hands(fake_katana)
 				given_katana = 1
 
-datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
+/datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
 	if (ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
@@ -373,7 +362,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	if(prob(15))
 		to_chat(mob, "Your feet feel slippy!")
 
-datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
+/datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
 
@@ -520,3 +509,320 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		else
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
 
+/datum/disease2/effect/colorsmoke
+	name = "Colorful Syndrome"
+	desc = "Causes the infected to synthesize smoke & rainbow colourant."
+	stage = 3
+	badness = EFFECT_DANGER_HINDRANCE
+
+/datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
+	if (ismouse(mob))//people don't like infected mice ruining maint
+		var/mob/living/simple_animal/mouse/M = mob
+		if (!initial(M.infectable))
+			return
+	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
+	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
+	mob.reagents.add_reagent(PAISMOKE, 5)
+
+/datum/disease2/effect/cleansmoke
+	name = "Cleaning Syndrome"
+	desc = "Causes the infected to synthesize smoke & space cleaner."
+	stage = 3
+	badness = EFFECT_DANGER_HELPFUL
+
+/datum/disease2/effect/cleansmoke/activate(var/mob/living/mob)
+	to_chat(mob, "<span class='notice'>You feel clean!</span>")
+	mob.reagents.add_reagent(CLEANER, 5)
+	mob.reagents.add_reagent(PAISMOKE, 5)
+
+/datum/disease2/effect/chimera
+	name = "Chimeral Xenosis"
+	desc = "Causes the infected's body to gradually mutate into a chimera of different alien species."
+	encyclopedia = "Stronger strains will cause more gruesome mutations in the infected. Extremely strong strains will mutate internal organs."
+	stage = 3
+	badness = EFFECT_DANGER_HINDRANCE
+	chance = 1
+	max_multiplier = 3
+
+/datum/disease2/effect/chimera/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	var/mob/living/carbon/human/H = mob
+
+	var/list/valid_species = list("Human", "Unathi", "Tajaran", "Grey", "Skrell", "Vox", "Diona", "Slime", "Mushroom")
+	var/list/species_rare = list("Manifested", "Skellington", "Skeletal Vox", "Muton", "Golem", "Grue", "Ghoul", "Lich")
+	var/species_mult = clamp(multiplier - 1, 0, 1)
+	for(var/S in species_rare)
+		if(prob(100*species_mult))
+			valid_species += S
+	valid_species.Remove(H.species.name)
+
+	var/limb_probability = min(100, 160 - (30*multiplier))
+
+	if(prob(limb_probability)) //most of the time, depending on the multiplier, we'll replace limbs
+		var/list/valid_organs = new()
+		for(var/datum/organ/external/E in H.organs)
+			if((!E.species || E.species == H.species) && !E.is_robotic())
+				valid_organs += E
+		if(!valid_organs.len)
+			return //all our organs are already replaced
+		var/datum/organ/external/E = pick(valid_organs)
+		E.species = all_species[pick(valid_species)]
+		H.update_body()
+		//to_chat(mob, "<span class='notice'>Your [E.display_name] feels foreign.</span>")
+	else //the rest of the time we replace internal organs
+		var/list/valid_organs = new()
+		for(var/datum/organ/internal/I in H.internal_organs)
+			if(I.name != "brain" && !I.robotic && ispath(H.species.has_organ[I.organ_type], I))
+				valid_organs += I
+		if(!valid_organs.len)
+			return //all our organs are already replaced
+
+		var/datum/organ/internal/old_organ = pick(valid_organs)
+		var/list/valid_replacement_organs = new()
+		for(var/I_type in subtypesof(/datum/organ/internal))
+			var/datum/organ/internal/I = new I_type()
+			if((I.organ_type == old_organ.organ_type) && (I.type != old_organ.type) && !I.robotic)
+				valid_replacement_organs += I
+		if(!valid_replacement_organs.len)
+			return //nothing interesting to replace with
+
+		var/datum/organ/internal/new_organ = pick(valid_replacement_organs)
+
+		//remove the old organ
+		var/obj/item/organ/internal/old_organ_item = H.remove_internal_organ(H, old_organ, H.organs_by_name[old_organ.parent_organ])
+		qdel(old_organ_item)
+
+		//insert the new organ
+		new_organ.transplant_data = list()
+		new_organ.transplant_data["species"] =    H.species.name
+		new_organ.transplant_data["blood_type"] = H.dna.b_type
+		new_organ.transplant_data["blood_DNA"] =  H.dna.unique_enzymes
+		new_organ.owner = H
+		H.internal_organs_by_name[new_organ.organ_type] = new_organ
+		H.internal_organs |= new_organ
+		H.organs_by_name[new_organ.parent_organ].internal_organs |= new_organ
+		new_organ.Insert(H)
+
+		to_chat(mob, "<span class='warning'>You feel a foreign sensation in your [new_organ.parent_organ].")
+
+
+/datum/disease2/effect/damage_converter
+	name = "Toxic Compensation"
+	desc = "Stimulates cellular growth within the body, causing it to regenerate tissue damage. Repair done by these cells causes toxins to build up in the body."
+	encyclopedia = "Manipulation of the symptom's strength can be used to either reduce or amplify the toxic feedback."
+	badness = EFFECT_DANGER_FLAVOR
+	stage = 3
+	chance = 10
+	max_chance = 50
+	multiplier = 5
+	max_multiplier = 10
+
+/datum/disease2/effect/damage_converter/activate(var/mob/living/mob)
+	if(mob.getFireLoss() > 0 || mob.getBruteLoss() > 0)
+		var/get_damage = rand(1, 3)
+		mob.adjustFireLoss(-get_damage)
+		mob.adjustBruteLoss(-get_damage)
+		mob.adjustToxLoss(max(1,get_damage * multiplier / 5))
+
+/datum/disease2/effect/cyborg_limbs
+	name = "Metallica Syndrome"
+	desc = "Rapidly replaces some organic tissue in the body, causing limbs and other organs to become robotic."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	restricted = 2
+
+/datum/disease2/effect/cyborg_limbs/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+
+	var/mob/living/carbon/human/H = mob
+
+	var/list/valid_external_organs = list()
+	for(var/datum/organ/external/E in H.organs)
+		if(!E.is_robotic())
+			valid_external_organs += E
+
+	var/list/valid_internal_organs = list()
+	for(var/datum/organ/internal/I in H.internal_organs)
+		if(I.name != "brain" && !I.robotic)
+			valid_internal_organs += I
+
+	if(prob(75) && valid_external_organs.len)
+		var/datum/organ/external/E = pick(valid_external_organs)
+		E.robotize()
+		H.update_body()
+	else if(valid_internal_organs.len)
+
+		var/datum/organ/internal/I = pick(valid_internal_organs)
+		I.mechanize()
+		to_chat(mob, "<span class='warning'>You feel a foreign sensation in your [I.parent_organ].")
+
+/datum/disease2/effect/mommi_hallucination
+	name = "Supermatter Syndrome"	//names suck
+	desc = "Causes the infected to experience engineering-related hallucinations."
+	stage = 3
+	badness = EFFECT_DANGER_ANNOYING
+	restricted = 2
+
+/datum/disease2/effect/mommi_hallucination/activate(var/mob/living/mob)
+	if(prob(50))
+		mob << sound('sound/effects/supermatter.ogg')
+
+	var/mob/living/silicon/robot/mommi/mommi = /mob/living/silicon/robot/mommi
+	for(var/mob/living/M in viewers(mob))
+		if(M == mob)
+			continue
+
+		var/image/crab = image(icon = null)
+		crab.appearance = initial(mommi.appearance)
+
+		crab.icon_state = "mommi-withglow"
+		crab.loc = M
+		crab.override = 1
+
+		var/client/C = mob.client
+		if(C)
+			C.images += crab
+		var/duration = rand(60 SECONDS, 120 SECONDS)
+
+		spawn(duration)
+			if(C)
+				C.images.Remove(crab)
+
+	var/list/turf_list = list()
+	for(var/turf/T in spiral_block(get_turf(mob), 40))
+		if(prob(4))
+			turf_list += T
+	if(turf_list.len)
+		for(var/turf/simulated/floor/T in turf_list)
+			var/image/supermatter = image('icons/obj/engine.dmi', T ,"darkmatter_shard", ABOVE_HUMAN_PLANE)
+
+			var/client/C = mob.client
+			if(C)
+				C.images += supermatter
+			var/duration = rand(60 SECONDS, 120 SECONDS)
+
+			spawn(duration)
+				if(C)
+					C.images.Remove(supermatter)
+
+
+/datum/disease2/effect/xenomorph_traits
+	name = "Plasmatic Adaptation"
+	desc = "Induces heavy mutation and optimization in the infected's cellular structure. The infected gains several physical abilities and an affinity for plasma."
+	badness = EFFECT_DANGER_HELPFUL
+	stage = 3
+	restricted = 2
+	var/datum/species/old_species
+	var/activated
+
+/datum/disease2/effect/xenomorph_traits/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	if(activated)
+		return
+	var/mob/living/carbon/human/H = mob
+	var/datum/species/S = H.species
+
+	old_species = new S.type
+	old_species.flags = S.flags
+	old_species.attack_verb = S.attack_verb
+	old_species.blood_color = S.blood_color
+	old_species.punch_damage = S.punch_damage
+
+	S.flags |= PLASMA_IMMUNE
+	S.attack_verb = "claws"
+	S.blood_color = "#05EE05"
+	S.punch_damage = 12
+
+	H.species = S
+	H.mutations.Add(M_CLAWS, M_RUN, M_THERMALS)
+	domutcheck(H,null,MUTCHK_FORCED)
+	H.UpdateDamageIcon()
+	H.copy_dna_data_to_blood_reagent()
+	to_chat(mob, "<span class='sinister'>You feel different.</span>")
+	activated = 1
+
+/datum/disease2/effect/xenomorph_traits/deactivate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	var/mob/living/carbon/human/H = mob
+	H.species = old_species
+	H.change_sight(removing = SEE_MOBS)
+	H.mutations.Remove(M_CLAWS, M_RUN, M_THERMALS)
+	domutcheck(H,null,MUTCHK_FORCED)
+	H.UpdateDamageIcon()
+	H.copy_dna_data_to_blood_reagent()
+	to_chat(mob, "<span class='warning'>You feel like your old self again.</span>")
+	activated = 0
+
+
+/datum/disease2/effect/wendigo_hallucination
+	name = "Eldritch Mind Syndrome"
+	desc = "UNKNOWN"
+	badness = EFFECT_DANGER_HARMFUL
+	stage = 3
+	restricted = 2
+	var/activated = 0
+
+/datum/disease2/effect/wendigo_hallucination/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	var/mob/living/carbon/human/H = mob
+	H.Jitter(100)
+	if(!activated)
+		mob.overlay_fullscreen("wendigoblur", /obj/abstract/screen/fullscreen/snowfall_blizzard)
+		activated = 1
+		if(!isskellington(H) && !islich(H))	//ignore skellingtons since they can only eat meat anyway
+			H.species.chem_flags |= NO_EAT
+
+
+
+
+	//creepy sounds copypasted from hallucination code
+	var/list/possible_sounds = list('sound/effects/ghost.ogg', 'sound/effects/ghost2.ogg', 'sound/effects/heart_beat_single.ogg', 'sound/effects/ear_ring_single.ogg', 'sound/effects/screech.ogg',\
+		'sound/hallucinations/behind_you1.ogg', 'sound/hallucinations/behind_you2.ogg', 'sound/hallucinations/far_noise.ogg', 'sound/hallucinations/growl1.ogg', 'sound/hallucinations/growl2.ogg',\
+		'sound/hallucinations/growl3.ogg', 'sound/hallucinations/im_here1.ogg', 'sound/hallucinations/im_here2.ogg', 'sound/hallucinations/i_see_you1.ogg', 'sound/hallucinations/i_see_you2.ogg',\
+		'sound/hallucinations/look_up1.ogg', 'sound/hallucinations/look_up2.ogg', 'sound/hallucinations/over_here1.ogg', 'sound/hallucinations/over_here2.ogg', 'sound/hallucinations/over_here3.ogg',\
+		'sound/hallucinations/turn_around1.ogg', 'sound/hallucinations/turn_around2.ogg', 'sound/hallucinations/veryfar_noise.ogg', 'sound/hallucinations/wail.ogg')
+	mob << pick(possible_sounds)
+
+
+/datum/disease2/effect/wendigo_hallucination/deactivate(var/mob/living/mob)
+	mob.clear_fullscreen("wendigoblur", animate = 0)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(!isskellington(H) && !islich(H))	//ignore skellingtons since they can only eat meat anyway
+			H.species.chem_flags &= ~NO_EAT
+	activated = 0
+
+
+/datum/disease2/effect/wendigo_hallucination/affect_mob_voice(var/datum/speech/speech)
+	var/message = speech.message
+	message = replacetext(message,"I","we")
+	message = replacetext(message,"me","us")
+	speech.message = message
+
+/datum/disease2/effect/toothdecay
+	name = "Piratitis Syndrome"
+	desc = "Causes the infected to progressively lose their teeth and speak like a pirate."
+	encyclopedia = "Symptom strength increases the chance of losing teeth, but the chance also goes down the less teeth the infected has."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	affect_voice = 1
+	multiplier = 1
+	max_multiplier = 3
+
+/datum/disease2/effect/toothdecay/activate(var/mob/living/mob)
+	if (!count)
+		to_chat(mob, "<span class='warning'>[pick("You feel like you could use a bottle o' rhum.","You feel like kidnapping the princess of Canada.")]</span>")
+		affect_voice_active = 1
+	if (ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in H.butchering_drops
+		if (prob((5 * T.amount / 32) * multiplier))
+			H.knock_out_teeth()
+
+/datum/disease2/effect/toothdecay/affect_mob_voice(var/datum/speech/speech)
+	speech.message = piratespeech(speech.message)

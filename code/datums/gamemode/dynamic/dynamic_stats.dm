@@ -65,18 +65,22 @@
 
 /datum/stat/role/proc/generate_statistics(var/datum/role/R, var/victorious)
 	name = R.name
-	faction_id = R.faction.ID
+	if(R.faction)
+		faction_id = R.faction.ID
+	else
+		faction_id = 0
 	mind_name = STRIP_NEWLINE(R.antag.name)
 	mind_key = ckey(R.antag.key)
 	victory = victorious
 
 	for(var/datum/objective/O in R.objectives.GetObjectives())
-		objectives.Add(new /datum/stat/role_objective)
+		objectives.Add(new /datum/stat/role_objective(O))
 
 /datum/stat/role_objective
 	var/obj_type = null
 	var/name = null
 	var/desc = null
+	var/owner_key = null // used when factionless antags happen (vampires)
 	var/belongs_to_faction = null
 	var/target = null
 	var/is_fulfilled = FALSE
@@ -85,9 +89,14 @@
 	obj_type = O.type
 	name = O.name
 	desc = O.explanation_text
-	belongs_to_faction = O.faction.ID
+	belongs_to_faction = O.faction?.ID
+	if(O.owner)
+		owner_key = ckey(O.owner.key)
 	is_fulfilled = O.IsFulfilled()
-	if(istype(O, /datum/objective/target))
+	if (istype(O, /datum/objective/target/steal))
+		var/datum/objective/target/steal/TO = O
+		target = TO.steal_target.name
+	else if(istype(O, /datum/objective/target) && !istype(O, /datum/objective/target/killsilicons))
 		var/datum/objective/target/TO = O
 		target = TO.target.name
 
@@ -133,7 +142,7 @@
 	// count of all built structures
 	var/datum/stat/faction_data/blob/structure_counts/built_structures = new
 
-/datum/stat/faction/blob/generate_statistics(/var/datum/faction/blob_conglomerate/BF)
+/datum/stat/faction/blob/generate_statistics(var/datum/faction/blob_conglomerate/BF)
 	..(BF)
 	//we're using global pre-existing global vars here: structure counts are collected
 	//throughout the round elsewhere
@@ -156,7 +165,7 @@
 
 /datum/stat/role/vampire/generate_statistics(var/datum/role/vampire/V)
 	..(V)
-	for(var/datum/power/P in V.powers)
+	for(var/datum/power/P in V.current_powers)
 		powers.Add(P.type)
 	blood_total = V.blood_total
 
@@ -171,6 +180,8 @@
 	var/shuriken_thrown = 0
 	var/times_charged_sword = 0
 	var/stealth_posters_posted = 0
+
+/datum/stat/role/xenomorph
 
 /datum/stat/role/catbeast
 	var/ticks_survived = 0

@@ -67,6 +67,10 @@
 		to_chat(user, "<span class='warning'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return FALSE
 
+	if (stat & NOPOWER)
+		to_chat(user, "<span class='warning'>\The [src] is not powered, please check the area power controller before continuing.</span>")
+		return FALSE
+
 	if (.)
 		return
 
@@ -130,11 +134,11 @@
 			icon_state = "centrifuge_moving"
 			set_light(2,2)
 			var/image/centrifuge_light = image(icon,"centrifuge_light")
-			centrifuge_light.plane = LIGHTING_PLANE
+			centrifuge_light.plane = ABOVE_LIGHTING_PLANE
 			centrifuge_light.layer = ABOVE_LIGHTING_LAYER
 			overlays += centrifuge_light
 			var/image/centrifuge_glow = image(icon,"centrifuge_glow")
-			centrifuge_glow.plane = LIGHTING_PLANE
+			centrifuge_glow.plane = ABOVE_LIGHTING_PLANE
 			centrifuge_glow.layer = ABOVE_LIGHTING_LAYER
 			centrifuge_glow.blend_mode = BLEND_ADD
 			overlays += centrifuge_glow
@@ -144,13 +148,13 @@
 		switch (special)
 			if (CENTRIFUGE_LIGHTSPECIAL_BLINKING)
 				var/image/centrifuge_light = image(icon,"centrifuge_special_update")
-				centrifuge_light.plane = LIGHTING_PLANE
+				centrifuge_light.plane = ABOVE_LIGHTING_PLANE
 				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += centrifuge_light
 				special = CENTRIFUGE_LIGHTSPECIAL_ON
 			if (CENTRIFUGE_LIGHTSPECIAL_ON)
 				var/image/centrifuge_light = image(icon,"centrifuge_special")
-				centrifuge_light.plane = LIGHTING_PLANE
+				centrifuge_light.plane = ABOVE_LIGHTING_PLANE
 				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += centrifuge_light
 
@@ -161,9 +165,12 @@
 
 
 /obj/machinery/disease2/centrifuge/proc/add_vial_sprite(var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/slot)
-	overlays += "centrifuge_vial[slot][on ? "_moving" : ""]"
+	var/spin = on
+	if(stat & (BROKEN|NOPOWER))
+		spin = FALSE
+	overlays += "centrifuge_vial[slot][spin ? "_moving" : ""]"
 	if (vial.reagents.total_volume)
-		var/image/filling = image(icon, "centrifuge_vial[slot]_filling[on ? "_moving" : ""]")
+		var/image/filling = image(icon, "centrifuge_vial[slot]_filling[spin ? "_moving" : ""]")
 		filling.icon += mix_color_from_reagents(vial.reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
 		overlays += filling
@@ -323,7 +330,7 @@
 
 				var/data = list("antigen" = list(task.target_name))
 				vial_datum.vial.reagents.add_reagent(VACCINE, amount, data)
-
+				isolated_antibodies[task.target_name] = 1
 				vial_datum.current_task = null
 
 				alert_noise("ping")
@@ -535,6 +542,7 @@
 	visible_message("\The [src] prints a growth dish.")
 	spawn(10)
 		var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
+		dish.pixel_y = -7
 		dish.contained_virus = D.getcopy()
 		dish.contained_virus.infectionchance = dish.contained_virus.infectionchance_base
 		dish.update_icon()

@@ -14,6 +14,7 @@
 /datum/barsign/bay/limbo
 	name = "The Limbo"
 	icon = "limbo"
+	desc = "A popular haunt for lost souls. The mood lighting is killer!"
 
 /datum/barsign/bay/magmasea
 	name = "The Magma Sea"
@@ -42,6 +43,7 @@
 /datum/barsign/bay/theclownshead
 	name = "The Clown's Head"
 	icon = "theclownshead"
+	desc = "Home of Headdy, the honking clown head!"
 
 /datum/barsign/bay/theorchard
 	name = "The Orchard"
@@ -50,10 +52,12 @@
 /datum/barsign/bay/thesaucyclown
 	name = "The Saucy Clown"
 	icon = "thesaucyclown"
+	desc = "A known gathering site for the annual clown courtship rituals."
 
 /datum/barsign/bay/thedamnwall
 	name = "The Damn Wall"
 	icon = "thedamnwall"
+	desc = "When you're up against a wall, it's best to have stout friends and stout liquor right there beside you."
 
 /datum/barsign/bay/whiskeyimplant
 	name = "Whiskey Implant"

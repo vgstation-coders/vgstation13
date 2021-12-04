@@ -63,15 +63,15 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	var/client/C = mymob.client
 
 	if(!C.parallax_master)
-		C.parallax_master = getFromPool(/obj/abstract/screen/plane_master/parallax_master)
+		C.parallax_master = new /obj/abstract/screen/plane_master/parallax_master
 	if(!C.parallax_spacemaster)
-		C.parallax_spacemaster = getFromPool(/obj/abstract/screen/plane_master/parallax_spacemaster)
+		C.parallax_spacemaster = new /obj/abstract/screen/plane_master/parallax_spacemaster
 	if(!C.parallax_dustmaster)
-		C.parallax_dustmaster = getFromPool(/obj/abstract/screen/plane_master/parallax_dustmaster)
+		C.parallax_dustmaster = new /obj/abstract/screen/plane_master/parallax_dustmaster
 
 	if(!C.parallax.len)
 		for(var/obj/abstract/screen/parallax/bgobj in parallax_icon)
-			var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
+			var/obj/abstract/screen/parallax/parallax_layer = new /obj/abstract/screen/parallax
 			parallax_layer.appearance = bgobj.appearance
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
@@ -171,7 +171,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		pixel_y += WORLD_ICON_SIZE * round(i/PARALLAX_IMAGE_WIDTH)
 
 	for(var/i in 0 to ((GRID_WIDTH**2)-1))
-		var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
+		var/obj/abstract/screen/parallax/parallax_layer = new /obj/abstract/screen/parallax
 
 		var/list/L = list()
 		for(var/j in 1 to PARALLAX_IMAGE_TILES)
@@ -188,7 +188,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		index++
 
 	for(var/i in 0 to ((GRID_WIDTH**2)-1))
-		var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
+		var/obj/abstract/screen/parallax/parallax_layer = new /obj/abstract/screen/parallax
 
 		var/list/L = list()
 		for(var/j in 1 to PARALLAX_IMAGE_TILES)
@@ -205,7 +205,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		index++
 
 	for(var/i in 0 to ((GRID_WIDTH**2)-1))
-		var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
+		var/obj/abstract/screen/parallax/parallax_layer = new /obj/abstract/screen/parallax
 		var/list/L = list()
 		for(var/j in 1 to PARALLAX_IMAGE_TILES)
 			if(plane3[j+i*PARALLAX_IMAGE_TILES] <= PARALLAX2_ICON_NUMBER)

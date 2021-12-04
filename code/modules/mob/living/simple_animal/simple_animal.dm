@@ -49,6 +49,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/fire_alert = 0
 	var/oxygen_alert = 0
 	var/toxins_alert = 0
+	var/temperature_alert = 0
 
 	var/show_stat_health = 1	//does the percentage health show in the stat panel for the mob
 
@@ -67,6 +68,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	mob_bump_flag = SIMPLE_ANIMAL
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
+	status_flags = CANPUSH //They cannot be conventionally stunned. AIs normally ignore this but stuns used to be able to disable player-controlled ones
 
 	//LETTING SIMPLE ANIMALS ATTACK? WHAT COULD GO WRONG. Defaults to zero so Ian can still be cuddly
 	var/melee_damage_lower = 0
@@ -105,6 +107,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
+	var/pacify_aura = FALSE
+
+	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff
+
+/mob/living/simple_animal/isBloodedAnimal()
+	return blooded
+
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
@@ -122,6 +131,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
+
 /mob/living/simple_animal/New()
 	..()
 	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
@@ -131,6 +141,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		real_name = name
 
 	animal_count[src.type]++
+
+/mob/living/simple_animal/Destroy()
+	if (stat != DEAD)
+		animal_count[src.type]--//dealing with mobs getting deleted while still alive
+	..()
 
 /mob/living/simple_animal/Login()
 	if(src && src.client)
@@ -157,6 +172,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
+/mob/living/simple_animal/proc/check_environment_susceptibility()
+	return TRUE
+
 /mob/living/simple_animal/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -168,12 +186,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			icon_state = icon_living
 			src.resurrect()
 			stat = CONSCIOUS
+			animal_count[src.type]++//re-added to the count
 			setDensity(TRUE)
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
 		return 0
-
 
 	if(health < 1 && stat != DEAD)
 		death()
@@ -189,7 +207,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
+	update_canmove()
+
 	handle_jitteriness()
+	jitteriness = max(0, jitteriness - 1)
 
 	//Eyes
 	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
@@ -208,7 +229,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
 		ear_damage = max(ear_damage-0.05, 0)
 
-	confused = max(0, confused - 1)
+	remove_confused(1)
 
 	if(say_mute)
 		say_mute = max(say_mute-1, 0)
@@ -224,90 +245,114 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
+					INVOKE_EVENT(src, /event/before_move)
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
+					INVOKE_EVENT(src, /event/after_move)
 
 	handle_automated_speech()
 
-	//Atmos
-	if(flags & INVULNERABLE)
-		return 1
+	var/datum/gas_mixture/environment
+	if(loc)
+		environment = loc.return_air()
 
-	var/atmos_suitable = 1
-
-	var/atom/A = loc
-
-	if(isturf(A))
-		var/turf/T = A
-		var/datum/gas_mixture/Environment = T.return_air()
-
-		if(Environment)
-			if(abs(Environment.temperature - bodytemperature) > 40)
-				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
-
-			if(min_oxy)
-				if(Environment.molar_density(GAS_OXYGEN) < min_oxy / CELL_VOLUME)
-					atmos_suitable = 0
-					oxygen_alert = 1
-				else
-					oxygen_alert = 0
-
-			if(max_oxy)
-				if(Environment.molar_density(GAS_OXYGEN) > max_oxy / CELL_VOLUME)
-					atmos_suitable = 0
-
-			if(min_tox)
-				if(Environment.molar_density(GAS_PLASMA) < min_tox / CELL_VOLUME)
-					atmos_suitable = 0
-
-			if(max_tox)
-				if(Environment.molar_density(GAS_PLASMA) > max_tox / CELL_VOLUME)
-					atmos_suitable = 0
-					toxins_alert = 1
-				else
-					toxins_alert = 0
-
-			if(min_n2)
-				if(Environment.molar_density(GAS_NITROGEN) < min_n2 / CELL_VOLUME)
-					atmos_suitable = 0
-
-			if(max_n2)
-				if(Environment.molar_density(GAS_NITROGEN) > max_n2 / CELL_VOLUME)
-					atmos_suitable = 0
-
-			if(min_co2)
-				if(Environment.molar_density(GAS_CARBON) < min_co2 / CELL_VOLUME)
-					atmos_suitable = 0
-
-			if(max_co2)
-				if(Environment.molar_density(GAS_CARBON) > max_co2 / CELL_VOLUME)
-					atmos_suitable = 0
-
-	//Atmos effect
-	if(bodytemperature < minbodytemp)
-		fire_alert = 2
-		adjustBruteLoss(cold_damage_per_tick)
-	else if(bodytemperature > maxbodytemp)
-		fire_alert = 1
-		adjustBruteLoss(heat_damage_per_tick)
-	else
-		fire_alert = 0
-
-	if(!atmos_suitable)
-		adjustBruteLoss(unsuitable_atoms_damage)
+	handle_environment(environment)
+	handle_regular_hud_updates()
 
 	if(can_breed)
 		make_babies()
 
 	if(reagents)
 		reagents.metabolize(src)
-
 	return 1
+
+/mob/living/simple_animal/handle_regular_hud_updates()
+	if(!..())
+		return FALSE
+
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire, fire_alert)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
+	if(temperature_alert)
+		throw_alert(SCREEN_ALARM_TEMPERATURE, temperature_alert < 0 ? /obj/abstract/screen/alert/carbon/temp/cold : /obj/abstract/screen/alert/carbon/temp/hot, temperature_alert)
+	else
+		clear_alert(SCREEN_ALARM_TEMPERATURE)
+	return TRUE
+
+/mob/living/simple_animal/proc/handle_environment(datum/gas_mixture/environment)
+	toxins_alert = 0
+	if(flags & INVULNERABLE)
+		return
+
+	var/atmos_suitable = 1
+
+	if(environment && check_environment_susceptibility())
+		if(abs(environment.temperature - bodytemperature) > 40)
+			bodytemperature += ((environment.temperature - bodytemperature) / 5)
+
+		if(min_oxy)
+			if(environment.molar_density(GAS_OXYGEN) < min_oxy / CELL_VOLUME)
+				atmos_suitable = 0
+				oxygen_alert = 1
+			else
+				oxygen_alert = 0
+
+		if(max_oxy)
+			if(environment.molar_density(GAS_OXYGEN) > max_oxy / CELL_VOLUME)
+				atmos_suitable = 0
+
+		if(min_tox)
+			if(environment.molar_density(GAS_PLASMA) < min_tox / CELL_VOLUME)
+				atmos_suitable = 0
+
+		if(max_tox)
+			if(environment.molar_density(GAS_PLASMA) > max_tox / CELL_VOLUME)
+				atmos_suitable = 0
+				toxins_alert = 1
+
+		if(min_n2)
+			if(environment.molar_density(GAS_NITROGEN) < min_n2 / CELL_VOLUME)
+				atmos_suitable = 0
+
+		if(max_n2)
+			if(environment.molar_density(GAS_NITROGEN) > max_n2 / CELL_VOLUME)
+				atmos_suitable = 0
+				toxins_alert = 1
+
+		if(min_co2)
+			if(environment.molar_density(GAS_CARBON) < min_co2 / CELL_VOLUME)
+				atmos_suitable = 0
+
+		if(max_co2)
+			if(environment.molar_density(GAS_CARBON) > max_co2 / CELL_VOLUME)
+				atmos_suitable = 0
+				toxins_alert = 1
+
+	if(!atmos_suitable)
+		adjustBruteLoss(unsuitable_atoms_damage)
+
+	if(bodytemperature < minbodytemp)
+		temperature_alert = TEMP_ALARM_COLD_STRONG
+		adjustBruteLoss(cold_damage_per_tick)
+	else if(bodytemperature > maxbodytemp)
+		temperature_alert = TEMP_ALARM_HEAT_STRONG
+		adjustBruteLoss(heat_damage_per_tick)
+	else
+		temperature_alert = 0
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(icon_gib)
-		flick(icon_gib, src)
+		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)
 
 	if(meat && meat_type)
 		for(var/i = 0; i < (src.size - meat_taken); i++)
@@ -331,7 +376,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			return "[emote], [text]"
 	return "says, [text]";
 
-/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE)
+/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE, arguments)
 	if(timestopped)
 		return //under effects of time magick
 	if(stat)
@@ -355,7 +400,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				someone_in_earshot=1
 				break
 
-	if(someone_in_earshot)
+	if(someone_in_earshot && !istype(loc, /obj/item/device/mobcapsule))
 		if(rand(0,200) < speak_chance)
 			var/mode = pick(
 			speak.len;      1,
@@ -365,9 +410,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 			switch(mode)
 				if(1)
-					say(pick(speak))
-					if(emote_sound.len)
-						playsound(loc, "[pick(emote_sound)]", 80, 1)
+					say(pick(speak)) // The sound is in say_quote
 				if(2)
 					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
 					if(emote_sound.len)
@@ -380,10 +423,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
-		return
-	adjustBruteLoss(Proj.damage)
+		return PROJECTILE_COLLISION_DEFAULT
 	Proj.on_hit(src, 0)
-	return 0
+	adjustBruteLoss(Proj.damage)
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
 	. = ..()
@@ -520,8 +563,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		emote("deathgasp", message = TRUE)
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
-	living_mob_list -= src
-	dead_mob_list += src
 	stat = DEAD
 	if(icon_dying && !gibbed)
 		do_flick(src, icon_dying, icon_dying_time)
@@ -529,45 +570,47 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	setDensity(FALSE)
 
 	animal_count[src.type]--
-	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
-		var/list/L = animal_butchering_products[src.species_type]
-		src.butchering_drops = list()
+	var/list/animal_butchering_products = get_butchering_products()
+	if(!src.butchering_drops && animal_butchering_products.len > 0) //If we already created a list of butchering drops, don't create another one
+		butchering_drops = list()
 
-		for(var/butchering_type in L)
-			src.butchering_drops += new butchering_type
-
-	verbs += /mob/living/proc/butcher
+		for(var/butchering_type in animal_butchering_products)
+			butchering_drops += new butchering_type
 
 	..(gibbed)
 
 
-/mob/living/simple_animal/ex_act(severity)
+/mob/living/simple_animal/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 	..()
 	switch (severity)
 		if (1.0)
 			adjustBruteLoss(500)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 			gib()
 			return
 
 		if (2.0)
 			adjustBruteLoss(60)
-
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 60", admin_warn = TRUE)
 
 		if(3.0)
 			adjustBruteLoss(30)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = damage))
 		return 0
+	if (damage > 0)
+		damageoverlaytemp = 20
 	if(skinned())
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
 
-	health = Clamp(health - damage, 0, maxHealth)
+	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 
@@ -576,13 +619,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = damage))
 		return 0
 	if(skinned())
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	health = Clamp(health - damage, 0, maxHealth)
+	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 
@@ -689,6 +732,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(src.type == new_type) //Already grown up
 		return
 
+	if(istype(locked_to,/obj/item/critter_cage)) // Baby mobs in cages won't grow up!
+		return
+
 	var/mob/living/simple_animal/new_animal = new new_type(src.loc)
 
 	if(locked_to) //Handle atom locking
@@ -698,9 +744,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(name != initial(name)) //Not chicken
 		new_animal.name = name
+	if(mind)
+		mind.transfer_to(new_animal)
 	new_animal.inherit_mind(src)
-	new_animal.ckey = src.ckey
-	new_animal.key = src.key
 
 	if(colour)
 		new_animal.colour = colour
@@ -779,10 +825,28 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	flick_overlay(heart, list(user.client), 20)
 
 
+/mob/living/simple_animal/make_meat(location)
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/ourMeat = new meat_type(location)
+	if(!istype(ourMeat))
+		return
+	if(species_type)
+		var/mob/living/specimen = species_type
+		ourMeat.name = "[initial(specimen.name)] meat"
+		ourMeat.animal_name = initial(specimen.name)
+	else
+		ourMeat.name = "[initial(name)] meat"
+		ourMeat.animal_name = initial(name)
+	return ourMeat
+
+
+/mob/living/simple_animal/meatEndStep(mob/user)
+	if(meat_taken < meat_amount)
+		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
+		return
+	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
+	if(size > SIZE_TINY) //Tiny animals don't produce gibs
+		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
+	else
+		qdel(src)
+
 /datum/locking_category/simple_animal
-
-
-/mob/living/simple_animal/resetVariables()
-	..("emote_hear", "emote_see", args)
-	emote_hear = list()
-	emote_see = list()

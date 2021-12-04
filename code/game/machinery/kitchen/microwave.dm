@@ -18,7 +18,10 @@
 	var/broken = 0 // ={0,1,2} How broken is it???
 	var/reagent_disposal = 1 //Does it empty out reagents when you eject? Default yes.
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
-	var/global/list/acceptable_items // List of the items you can put in
+	var/global/list/acceptable_items = list(
+							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
+							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
+							)// List of the items you can put in
 	var/global/list/acceptable_reagents // List of the reagents you can put in
 	var/list/holdingitems = list()
 	var/limit = 100
@@ -58,7 +61,6 @@
 		available_recipes = new
 		for (var/type in (typesof(/datum/recipe)-/datum/recipe))
 			available_recipes+= new type
-		acceptable_items = new
 		acceptable_reagents = new
 		for (var/datum/recipe/recipe in available_recipes)
 			for (var/item in recipe.items)
@@ -83,6 +85,29 @@
 /*******************
 *   Item Adding
 ********************/
+
+/obj/machinery/microwave/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(holdingitems && holdingitems.len >= limit)
+		return FALSE
+	else if(istype(AM, /obj/item/weapon/storage/bag/plants))
+		var/obj/item/weapon/storage/bag/B = AM
+		for (var/obj/item/weapon/reagent_containers/food/snacks/G in AM.contents)
+			B.remove_from_storage(G,src)
+			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
+				break
+	else if(is_type_in_list(AM,acceptable_items))
+		if (istype(AM,/obj/item/stack))
+			var/obj/item/stack/ST = AM
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
+		else
+			AM.forceMove(src)
+	else
+		return FALSE
+	src.updateUsrDialog()
+	return TRUE
+
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
 		if(src.broken == 2 && O.is_screwdriver(user)) // If it's broken and they're using a screwdriver
@@ -96,7 +121,7 @@
 					"<span class='notice'>You have fixed part of the microwave.</span>" \
 				)
 				src.broken = 1 // Fix it a bit
-		else if(src.broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
+		else if(src.broken == 1 && O.is_wrench(user)) // If it's broken and they're doing the wrench
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -147,35 +172,29 @@
 		var/obj/item/weapon/storage/bag/B = O
 		for (var/obj/item/weapon/reagent_containers/food/snacks/G in O.contents)
 			B.remove_from_storage(G,src)
-			if(contents && contents.len >= limit) //Sanity checking so the microwave doesn't overfill
-				to_chat(user, "You fill the Microwave to the brim.")
+			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
+				to_chat(user, "<span class='notice'>You fill \the [src]] to the brim.</span>")
 				break
+		updateUsrDialog()
 
-		if(!O.contents.len)
-			to_chat(user, "You empty \the [O] into the Microwave.")
-			src.updateUsrDialog()
-			return 0
-			if (!is_type_in_list(O.contents))
-				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
-				return 1
-
-		if(user.drop_item(O, src))
-			holdingitems += O
-			src.updateUsrDialog()
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
-		if (istype(O,/obj/item/stack) && O:amount>1)
-			new O.type (src)
-			O:use(1)
-			user.visible_message( \
-				"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
-				"<span class='notice'>You add one of [O] to \the [src].</span>")
-		else
-		//	user.before_take_item(O)	//This just causes problems so far as I can tell. -Pete
-			if(user.drop_item(O, src))
+		if (istype(O,/obj/item/stack))
+			var/obj/item/stack/ST = O
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
 				user.visible_message( \
-					"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
-					"<span class='notice'>You add \the [O] to \the [src].</span>")
+					"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
+					"<span class='notice'>You add one of [O] to \the [src].</span>")
+				updateUsrDialog()
+				return 1
+		if(user.drop_item(O, src))
+			user.visible_message( \
+				"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
+				"<span class='notice'>You add \the [O] to \the [src].</span>")
+			updateUsrDialog()
+			return 1
 	else if(is_type_in_list(O,accepts_reagents_from))
 		if (!O.reagents)
 			return 1
@@ -191,7 +210,7 @@
 	else
 		to_chat(user, "<span class='warning'>You have no idea what you can cook with this [O].</span>")
 		return 1
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/microwave/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -226,65 +245,19 @@
 	else if(src.dirty==100)
 		dat = {"<TT>This microwave is dirty!<BR>Please clean it before use!</TT>"}
 	else
-		var/list/items_counts = new
-		var/list/items_measures = new
-		var/list/items_measures_p = new
-		for (var/obj/O in contents)
-			var/display_name = O.name
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat)) //any meat
-				items_measures[display_name] = "slab of meat"
-				items_measures_p[display_name] = "slabs of meat"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
-				items_measures[display_name] = "fillet of meat"
-				items_measures_p[display_name] = "fillets of meat"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
-				items_measures[display_name] = "egg"
-				items_measures_p[display_name] = "eggs"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/tofu))
-				items_measures[display_name] = "tofu chunk"
-				items_measures_p[display_name] = "tofu chunks"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/donkpocket))
-				display_name = "Turnovers"
-				items_measures[display_name] = "turnover"
-				items_measures_p[display_name] = "turnovers"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
-				items_measures[display_name] = "soybean"
-				items_measures_p[display_name] = "soybeans"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
-				display_name = "Grapes"
-				items_measures[display_name] = "bunch of grapes"
-				items_measures_p[display_name] = "bunches of grapes"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
-				display_name = "Green Grapes"
-				items_measures[display_name] = "bunch of green grapes"
-				items_measures_p[display_name] = "bunches of green grapes"
-			items_counts[display_name]++
-		for (var/O in items_counts)
-			var/N = items_counts[O]
-			if (!(O in items_measures))
-				dat += {"<B>[capitalize(O)]:</B> [N] [lowertext(O)]\s<BR>"}
-			else
-				if (N==1)
-					dat += {"<B>[capitalize(O)]:</B> [N] [items_measures[O]]<BR>"}
-				else
-					dat += {"<B>[capitalize(O)]:</B> [N] [items_measures_p[O]]<BR>"}
-
-		for (var/datum/reagent/R in reagents.reagent_list)
-			var/display_name = R.name
-			if (R.id == CAPSAICIN)
-				display_name = "Hotsauce"
-			if (R.id == FROSTOIL)
-				display_name = "Coldsauce"
-			dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
-
-		if (items_counts.len==0 && reagents.reagent_list.len==0)
+		if (contents.len==0 && reagents.reagent_list.len==0)
 			dat = {"<B>The microwave is empty</B><BR>"}
 		else
+			dat = src.build_list_of_contents()
 			dat = {"<b>Ingredients:</b><br>[dat]<HR><BR>"}
 			if (scanning_power >= 2 )
 				var/datum/recipe/recipe = select_recipe(available_recipes,src)
 				if (!recipe)
 					dat += {"<font color = 'red'>ERROR: No matching recipe found!</font><br>"}
+					for(var/obj/O in contents) // Informs them if it might blow up
+						if((istype(O,/obj/item/weapon/kitchen/utensil) && !(O.melt_temperature == MELTPOINT_PLASTIC)) || istype(O,/obj/item/weapon/cell))
+							dat += {"<font color = 'red'>ALERT: Hazardous contents! Do not microwave!</font><br>"}
+							break
 				else
 					var/obj/O = recipe.result
 					var/display_name = initial(O.name)
@@ -300,6 +273,80 @@
 	return
 
 
+/obj/machinery/microwave/proc/build_list_of_contents()
+	var/dat = ""
+	var/list/items_counts = new
+	var/list/items_measures = new
+	var/list/items_measures_p = new
+	for (var/obj/O in contents)
+		var/display_name = O.name
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat)) //any meat
+			items_measures[display_name] = "slab of meat"
+			items_measures_p[display_name] = "slabs of meat"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
+			items_measures[display_name] = "fillet of fish"
+			items_measures_p[display_name] = "fillets of fish"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
+			items_measures[display_name] = "egg"
+			items_measures_p[display_name] = "eggs"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/tofu))
+			items_measures[display_name] = "tofu chunk"
+			items_measures_p[display_name] = "tofu chunks"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/donkpocket))
+			display_name = "Turnovers"
+			items_measures[display_name] = "turnover"
+			items_measures_p[display_name] = "turnovers"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
+			items_measures[display_name] = "soybean"
+			items_measures_p[display_name] = "soybeans"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
+			display_name = "Grapes"
+			items_measures[display_name] = "bunch of grapes"
+			items_measures_p[display_name] = "bunches of grapes"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
+			display_name = "Green Grapes"
+			items_measures[display_name] = "bunch of green grapes"
+			items_measures_p[display_name] = "bunches of green grapes"
+		if (istype(O,/obj/item/weapon/kitchen/utensil)) //any spoons, forks, knives, etc
+			items_measures[display_name] = "utensil"
+			items_measures_p[display_name] = "utensils"
+		items_counts[display_name]++
+	for (var/O in items_counts)
+		var/N = items_counts[O]
+		if (!(O in items_measures))
+			dat += {"<B>[capitalize(O)]:</B> [N] [lowertext(O)]\s<BR>"}
+		else
+			if (N==1)
+				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures[O]]<BR>"}
+			else
+				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures_p[O]]<BR>"}
+
+	for (var/datum/reagent/R in reagents.reagent_list)
+		var/display_name = R.name
+		if (R.id == CAPSAICIN)
+			display_name = "Hotsauce"
+		if (R.id == FROSTOIL)
+			display_name = "Coldsauce"
+		dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
+	return dat
+
+/obj/machinery/microwave/examine(mob/user)
+	to_chat(user, "[bicon(src)] That's a [name].")
+	if(desc)
+		to_chat(user, desc)
+
+	if(get_dist(user, src) > 3)
+		to_chat(user, "<span class='info'>You can't make out the contents.</span>")
+	else
+		if(contents.len==0 && reagents.reagent_list.len==0)
+			to_chat(user, "It's empty.")
+		else
+			var/list_of_contents = "It contains:<br>" + src.build_list_of_contents()
+			to_chat(user, list_of_contents)
+
+	if(panel_open)
+		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
+
 
 /***********************************
 *   Microwave Menu Handling/Cooking
@@ -312,7 +359,7 @@
 		return
 	start()
 	if (reagents.total_volume==0 && !(locate(/obj) in contents)) //dry run
-		if (!wzhzhzh(10))
+		if (!running(10))
 			abort()
 			return
 		stop()
@@ -320,20 +367,61 @@
 
 	var/datum/recipe/recipe = select_recipe(available_recipes,src)
 	var/obj/cooked
+
 	if (!recipe)
+		// Handle the silly stuff first
+		for(var/obj/O in contents)
+			if(istype(O,/obj/item/weapon/cell))
+				var/obj/item/weapon/cell/microwave_cell = O
+				src.visible_message("<span class='warning'>[O] sparks violently in the microwave!</span>")
+				if (!running(4))
+					abort()
+					return
+				broke()
+				playsound(usr, 'sound/machines/ding.ogg', 50, 1)
+				empty()
+				if(microwave_cell.rigged)
+					if(microwave_cell.occupant)
+						microwave_cell.occupant.forceMove(get_turf(src))
+					explosion(get_turf(src), -1, round(sqrt(microwave_cell.charge)/60), round(sqrt(microwave_cell.charge)/30))
+				else
+					explosion(get_turf(src), -1,0,2) // Let's not be too harsh on idiots
+				return
+			if(istype(O,/obj/item/weapon/kitchen/utensil) && !(O.melt_temperature == MELTPOINT_PLASTIC))
+				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
+				if (!running(4))
+					abort()
+					return
+				broke()
+				playsound(src, 'sound/machines/ding.ogg', 50, 1)
+				empty()
+				explosion(get_turf(src), -1,0,0)
+				return
+			if(istype(O,/obj/item/device/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
+				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
+				if (!running(4))
+					abort()
+					return
+				broke()
+				playsound(src, 'sound/machines/ding.ogg', 50, 1)
+				empty()
+				var/obj/item/trash/slag/gunk = new(src)
+				gunk.forceMove(src.loc)
+				return
+
+		// Everything else continued from here
 		dirty += 1
 		if (prob(max(10,dirty*5)))
-			if (!wzhzhzh(4))
+			if (!running(4))
 				abort()
 				return
 			muck_start()
-			wzhzhzh(4)
 			muck_finish()
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
 		else if (has_extra_item())
-			if (!wzhzhzh(4))
+			if(!running(4))
 				abort()
 				return
 			broke()
@@ -341,7 +429,7 @@
 			cooked.forceMove(src.loc)
 			return
 		else
-			if (!wzhzhzh(10))
+			if(!running(10))
 				abort()
 				return
 			stop()
@@ -350,10 +438,10 @@
 			return
 	else
 		var/halftime = round(recipe.time/10/2)
-		if (!wzhzhzh(halftime))
+		if (!running(halftime))
 			abort()
 			return
-		if (!wzhzhzh(halftime))
+		if (!running(halftime))
 			abort()
 			cooked = fail()
 			cooked.forceMove(src.loc)
@@ -364,7 +452,7 @@
 			cooked.forceMove(src.loc)
 		return
 
-/obj/machinery/microwave/proc/wzhzhzh(var/seconds as num)
+/obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
 		if (stat & (NOPOWER|BROKEN))
 			return 0
@@ -406,7 +494,20 @@
 	if (src.reagents.total_volume)
 		src.dirty++
 		if(reagent_disposal)
-			if(scanning_power >= 1) //You get one bottle, don't fuck it up
+			var/mob/user = usr
+			var/recovered_reagents = FALSE
+			if (user && Adjacent(user))
+				for(var/obj/item/weapon/reagent_containers/glass/G in (user.get_active_hand() + user.get_inactive_hand()))
+					if(!G.reagents)
+						continue
+					if(!G.is_open_container())
+						continue
+
+					to_chat(user, "<span class='notice'>You recover the reagents from the microwave inside your [G]!</span>")
+					reagents.trans_to(G, reagents.total_volume)
+					recovered_reagents = TRUE
+					break
+			if(!recovered_reagents && scanning_power >= 1) //You get one bottle, don't fuck it up
 				var/obj/item/weapon/reagent_containers/food/condiment/C = new(get_turf(src))
 				reagents.trans_to(C, reagents.total_volume)
 			reagents.clear_reagents()
@@ -451,6 +552,12 @@
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
 	return ffuu
 
+/obj/machinery/microwave/proc/empty()
+	for (var/obj/O in contents)
+		qdel(O)
+	src.reagents.clear_reagents()
+	return
+
 /obj/machinery/microwave/CtrlClick(mob/user)
 	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored))
 		if(issilicon(user) && !attack_ai(user))
@@ -473,10 +580,8 @@
 			list("Toggle Reagent Disposal", (reagent_disposal ? "radial_chem_notrash" : "radial_chem_trash")),
 			list("Examine", "radial_examine")
 		)
-		var/event/menu_event = new(owner = usr)
-		menu_event.Add(src, "radial_check_handler")
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
 		if(!radial_check(usr))
 			return
 
@@ -492,10 +597,6 @@
 				usr.examination(src)
 		return
 	return ..()
-
-/obj/machinery/microwave/proc/radial_check_handler(list/arguments)
-	var/event/E = arguments["event"]
-	return radial_check(E.holder)
 
 /obj/machinery/microwave/proc/radial_check(mob/living/user)
 	if(!istype(user))

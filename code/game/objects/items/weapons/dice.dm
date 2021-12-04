@@ -140,7 +140,7 @@
 				result = 24
 				sleep(40)
 			var/turf/epicenter = get_turf(src)
-			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap)
+			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
 			if(cap)
 				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 					if(bhangmeter)
@@ -149,7 +149,7 @@
 
 /obj/item/weapon/dice/d20/cursed
 	name = "\improper Mysterious d20"
-	desc = "Something about this dice seems wrong"
+	desc = "Something about this dice seems wrong."
 	var/deactivated = 0 //Eventually the dice runs out of power
 	var/infinite = 0 //dice with 1 will not run out
 	mech_flags = MECH_SCAN_ILLEGAL
@@ -272,7 +272,7 @@
 					to_chat(user, "<span class=sinister><B>You get nothing. No curse or reward! </span></B>")
 				if(13)
 					to_chat(user, "<span class=sinister><B>You've rolled 13! The cursed dice is broken! </span></B>")
-					explosion(get_turf(src), 0, 0, 4, 7)
+					explosion(get_turf(src), 0, 0, 4, 7, whodunnit = user)
 					to_chat(user, "<span class=danger><B>The dice explosively shatters! </span></B>")
 					qdel(src)
 
@@ -303,10 +303,10 @@
 							user.update_mutations()
 							to_chat(user, "<span class=danger><B>You have been granted protection! </span></B>")
 						if(4)
-							getFromPool(/obj/item/stack/sheet/mineral/gold,user.loc,25)
+							new /obj/item/stack/sheet/mineral/gold(user.loc, 25)
 							to_chat(user, "<span class=danger)(B>You have been reward in gold! </span></B>")
 						if(5)
-							getFromPool(/obj/item/stack/sheet/mineral/silver,user.loc,25)
+							new /obj/item/stack/sheet/mineral/silver(user.loc, 25)
 							to_chat(user, "<span class=danger><B>You have been rewarded in silver! </span></B>")
 						if(6)
 							to_chat(user, "<span class=danger><B>You have been reward with a fancy new costume! </span></B>")
@@ -327,9 +327,9 @@
 
 				if(20)
 					to_chat(user, "<span class=sinister><B>A perfect roll! enjoy your reward! </span></B>")
-					getFromPool(/obj/item/stack/sheet/mineral/phazon,user.loc,10)
-					getFromPool(/obj/item/stack/sheet/mineral/diamond,user.loc,10)
-					getFromPool(/obj/item/stack/sheet/mineral/clown,user.loc,10)
+					new /obj/item/stack/sheet/mineral/phazon(user.loc, 10)
+					new /obj/item/stack/sheet/mineral/diamond(user.loc, 10)
+					new /obj/item/stack/sheet/mineral/clown(user.loc, 10)
 					user.dna.SetSEState(XRAYBLOCK,1)
 					user.dna.SetSEState(TELEBLOCK,1)
 					user.dna.SetSEState(INCREASERUNBLOCK,1)

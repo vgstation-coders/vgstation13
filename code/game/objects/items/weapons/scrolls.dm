@@ -48,11 +48,9 @@
 	return
 
 /obj/item/weapon/teleportation_scroll/proc/teleportscroll(var/mob/user)
-
-
 	var/A
+	A = input(user, "Area to jump to", "BOOYEA", A) as null|anything in teleportlocs
 
-	A = input(user, "Area to jump to", "BOOYEA", A) in teleportlocs
 	var/area/thearea = teleportlocs[A]
 
 	if (!user || user.stat || user.restrained())
@@ -60,7 +58,7 @@
 	if(!((user == loc || (in_range(src, user) && istype(src.loc, /turf)))))
 		return
 
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(5, 0, user.loc)
 	smoke.attach(user)
 	smoke.start()
@@ -92,12 +90,12 @@
 		if(!success)
 			tempL.Remove(attempt)
 		else
-			INVOKE_EVENT(user.on_z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
+			INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
 			break
 
 	if(!success)
 		user.forceMove(pick(L))
-		INVOKE_EVENT(user.on_z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
+		INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
 
 	smoke.start()
 	src.uses -= 1

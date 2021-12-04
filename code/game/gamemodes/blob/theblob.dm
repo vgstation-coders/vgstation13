@@ -1,40 +1,4 @@
-//I will need to recode parts of this but I am way too tired atm <- whoever said this, I've got your back -Deity Link
 
-/* Contents
-/obj/effect/blob
-/obj/effect/blob/blob_act()
-/obj/effect/blob/New(turf/loc,newlook = "new")
-/obj/effect/blob/Destroy()
-/obj/effect/blob/projectile_check()
-/obj/effect/blob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-/obj/effect/blob/beam_connect(var/obj/effect/beam/B)
-/obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
-/obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
-/obj/effect/blob/handle_beams()
-/obj/effect/blob/process()
-/obj/effect/blob/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-/obj/effect/blob/ex_act(severity)
-/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
-/obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
-/obj/effect/blob/update_icon(var/spawnend = 0)
-
-/obj/effect/blob/proc/update_looks()
-var/list/blob_looks
-/obj/effect/blob/proc/Life()
-/obj/effect/blob/proc/aftermove()
-/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0)
-/obj/effect/blob/proc/run_action()
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1)
-/obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null)
-/obj/effect/blob/proc/Delete()
-/obj/effect/blob/proc/update_health()
-
-
-/obj/effect/blob/normal
-/obj/effect/blob/normal/Delete()
-/obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
-/obj/effect/blob/normal/update_icon(var/spawnend = 0)
-*/
 //Few global vars to track the blob
 var/blob_tiles_grown_total = 0
 var/list/blobs = list()
@@ -54,6 +18,8 @@ var/list/blob_overminds = list()
 	opacity = 0
 	anchored = 1
 	penetration_dampening = 17
+	mouse_opacity = 1
+	pass_flags_self = PASSBLOB
 	var/health = 20
 	var/maxhealth = 20
 	var/health_timestamp = 0
@@ -81,6 +47,8 @@ var/list/blob_overminds = list()
 	var/manual_remove = 0
 	var/icon_size = 64
 
+	var/asleep = FALSE
+
 /obj/effect/blob/blob_act()
 	return
 
@@ -91,11 +59,10 @@ var/list/blob_overminds = list()
 		looks = newlook
 	update_looks()
 	blobs += src
-	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
 	if(icon_size == 64)
-		if(spawning && !no_morph)
+		if(!asleep && spawning && !no_morph && !istype(src, /obj/effect/blob/core))
 			icon_state = initial(icon_state) + "_spawn"
 			spawn(10)
 				spawning = 0//for sprites
@@ -112,7 +79,6 @@ var/list/blob_overminds = list()
 		A.blob_act(0,src)
 
 	blob_tiles_grown_total++
-	return
 
 
 /obj/effect/blob/Destroy()
@@ -121,7 +87,7 @@ var/list/blob_overminds = list()
 
 	if(icon_size == 64)
 		for(var/atom/movable/overlay/O in loc)
-			returnToPool(O)
+			qdel(O)
 
 		for(var/obj/effect/blob/B in orange(loc,1))
 			B.update_icon()
@@ -143,9 +109,8 @@ var/list/blob_overminds = list()
 /obj/effect/blob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSBLOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
-	mover.to_bump(src) //Only automatic for dense objects
 	return 0
 
 /obj/effect/blob/beam_connect(var/obj/effect/beam/B)
@@ -163,7 +128,7 @@ var/list/blob_overminds = list()
 	update_health()
 	update_icon()
 	if(beams.len == 0)
-		if(!custom_process && src in processing_objects)
+		if(!custom_process)
 			processing_objects.Remove(src)
 
 /obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
@@ -195,7 +160,7 @@ var/list/blob_overminds = list()
 
 /obj/effect/blob/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	..()
-	var/damage = Clamp(0.01 * exposed_temperature / fire_resist, 0, 4 - fire_resist)
+	var/damage = clamp(0.01 * exposed_temperature / fire_resist, 0, 4 - fire_resist)
 	if(damage)
 		health -= damage
 		update_health()
@@ -209,7 +174,7 @@ var/list/blob_overminds = list()
 	return
 
 /obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	switch(Proj.damage_type)
 		if(BRUTE)
 			health -= (Proj.damage/brute_resist)
@@ -218,7 +183,7 @@ var/list/blob_overminds = list()
 
 	update_health()
 	update_icon()
-	return 0
+	return
 
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	user.do_attack_animation(src, W)
@@ -396,7 +361,7 @@ var/list/blob_looks_player = list(//Options available to players
 			num /= 10000
 			B.layer = layer - num
 
-	if(T.Enter(B,src))//Attempt to move into the tile
+	if(T.Enter(B, loc, TRUE))//Attempt to move into the tile //This should probably just actually call Move() instead
 		B.setDensity(initial(B.density))
 		if(icon_size == 64)
 			spawn(1)
@@ -441,6 +406,9 @@ var/list/blob_looks_player = list(//Options available to players
 	qdel(src)
 
 /obj/effect/blob/proc/update_health()
+	if(asleep && (health < maxhealth))
+		for (var/obj/effect/blob/B in range(7,src))
+			B.asleep = FALSE
 	if(!dying && (health <= 0))
 		dying = 1
 		if(get_turf(src))
@@ -453,9 +421,14 @@ var/list/blob_looks_player = list(//Options available to players
 	health = 21
 	layer = BLOB_BASE_LAYER
 
+/obj/effect/blob/normal/New(turf/loc,newlook = null,no_morph = 0)
+	if (!asleep)
+		dir = pick(cardinal)
+	..()
+
 /obj/effect/blob/normal/Delete()
 	..()
-/*
+/*	// Sadly having hundreds of blobs create overlays every few seconds is proving quite laggy
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
 	if(icon_size == 64)

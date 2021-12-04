@@ -6,6 +6,8 @@
 #define TimeOfGame (get_game_time())
 #define TimeOfTick (world.tick_usage*0.01*world.tick_lag)
 
+//#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
+
 /proc/get_game_time()
 	var/global/time_offset = 0
 	var/global/last_time = 0
@@ -54,7 +56,7 @@
 	return time2text(world.timeofday, "hh:mm:ss")
 
 /* Preserving this so future generations can see how fucking retarded some people are
-/proc/time_stamp()
+//proc/time_stamp()
 	var/hh = text2num(time2text(world.timeofday, "hh")) // Set the hour
 	var/mm = text2num(time2text(world.timeofday, "mm")) // Set the minute
 	var/ss = text2num(time2text(world.timeofday, "ss")) // Set the second
@@ -98,3 +100,38 @@
 //returns timestamp in a sql and ISO 8601 friendly format
 /proc/SQLtime()
 	return time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")
+
+//Returns time as a "slot", a predefined type of time, see dates.dm for defines
+/proc/getTimeslot()
+	switch(text2num(time2text(world.timeofday, "hh")))
+		if(SLEEPTIME_HOURS)
+			return SLEEPTIME
+		if(EUROTIME_HOURS)
+			return EUROTIME
+		if(DAYTIME_HOURS)
+			return DAYTIME
+		if(PRIMETIME_HOURS)
+			return PRIMETIME
+		if(LATETIME_HOURS)
+			return LATETIME
+	CRASH("getTimeslot: Hour not found.")
+
+
+var/global/obj/effect/statclick/time/time_statclick
+/proc/timeStatEntry()
+	if(!time_statclick)
+		time_statclick = new /obj/effect/statclick/time("loading...")
+	stat("Station Time:", time_statclick.update("[worldtime2text()]"))
+
+
+var/midnight_rollovers = 0
+var/rollovercheck_last_timeofday = 0
+/proc/update_midnight_rollover()
+	if (world.timeofday < rollovercheck_last_timeofday) //TIME IS GOING BACKWARDS!
+		midnight_rollovers++
+	rollovercheck_last_timeofday = world.timeofday
+	return midnight_rollovers
+
+#define MIDNIGHT_ROLLOVER_CHECK (rollovercheck_last_timeofday != world.timeofday ? update_midnight_rollover() : midnight_rollovers)
+#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
+#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))

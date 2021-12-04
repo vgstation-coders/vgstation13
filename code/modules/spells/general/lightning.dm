@@ -3,7 +3,7 @@
 	abbreviation = "LS"
 	desc = "Strike an enemy with a bolt of lightning."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 	charge_max = 100
 	cooldown_min = 40
 	cooldown_reduc = 30
@@ -11,7 +11,7 @@
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0)
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3) //each level of power grants 1 additional target.
 
-	spell_flags = NEEDSCLOTHES|WAIT_FOR_CLICK
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	charge_type = Sp_RECHARGE
 	invocation = "ZAP MUTHA FUH KA"
 	invocation_type = SpI_SHOUT
@@ -29,6 +29,11 @@
 /spell/lightning/New()
 	..()
 	chargeoverlay = image("icon" = 'icons/mob/mob.dmi', "icon_state" = "sithlord")
+
+/spell/lightning/is_valid_target(var/target, mob/user, options)
+	if(options)
+		return (target in options)
+	return ((target in view_or_range(range, user, selection_type)) && (istype(target, /mob/living) || istype(target, /obj/machinery/bot) || istype(target, /obj/mecha)))
 
 /spell/lightning/quicken_spell()
 	if(!can_improve(Sp_SPEED))
@@ -100,7 +105,6 @@
 		zapzap = 0
 	return 1
 
-// Listener for /atom/movable/on_moved
 /spell/lightning/cast(var/list/targets, mob/user)
 	var/mob/living/L = targets[1]
 	if(istype(L))
@@ -121,7 +125,7 @@
 	zapped.Add(target)
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
-	var/obj/item/projectile/beam/lightning/spell/L = getFromPool(/obj/item/projectile/beam/lightning/spell, T)
+	var/obj/item/projectile/beam/lightning/spell/L = new /obj/item/projectile/beam/lightning/spell(T)
 
 	if(!oursound)
 		oursound = pick(lightning_sound)
@@ -163,11 +167,11 @@
 			target.emp_act(2)
 			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
 	else if(target)
-		var/obj/item/projectile/beam/lightning/spell/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		var/obj/item/projectile/beam/lightning/spell/B = new /obj/item/projectile/beam/lightning/spell
 		B.our_spell = src
 		B.damage = basedamage
 		target.bullet_act(B)
-		returnToPool(B)
+		qdel(B)
 	if(chained)
 		//DO IT AGAIN
 		var/mob/next_target

@@ -53,7 +53,7 @@ var/datum/subsystem/persistence_map/SSpersistence_map
 			T.writeSavefile()
 		else
 			T.deleteSavefile()
-	log_debug("[time_stamp()] - Map persistence finished in [stop_watch(watch)]s.")
+	log_debug("Map persistence finished in [stop_watch(watch)]s.")
 	finished = TRUE
 
 /datum/subsystem/persistence_map/proc/qdelAllFilth(var/whodunnit)

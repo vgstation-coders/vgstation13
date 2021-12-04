@@ -59,10 +59,9 @@
 			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0
 				for(var/obj/item/stack/ore/I in get_turf(target))
-					if(I.material)
-						W.ore_box.materials.addAmount(I.material, I.amount)
-						returnToPool(I)
-						count++
+					if(W.ore_box.try_add_ore(I))
+						qdel(I)
+						count += I.amount
 				if(count)
 					log_message("Loaded [count] ore into compatible ore box.")
 					occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
@@ -176,10 +175,9 @@
 				if(W.hydraulic_clamp && W.ore_box)
 					var/count = 0
 					for(var/obj/item/stack/ore/ore in range(chassis,1))
-						if(get_dir(chassis,ore)&chassis.dir && ore.material)
-							W.ore_box.materials.addAmount(ore.material,ore.amount)
-							returnToPool(ore)
-							count++
+						if(get_dir(chassis,ore)&chassis.dir && W.ore_box.try_add_ore(ore))
+							qdel(ore)
+							count += ore.amount
 					if(count)
 						occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 
@@ -197,9 +195,9 @@
 					M.gets_dug()
 					if(hydraulic_clamp && ore_box)
 						for(var/obj/item/stack/ore/glass/sandore in get_turf(M))
-							ore_box.materials.addAmount(sandore.material,sandore.amount)
-							returnToPool(sandore)
-							count++
+							if (ore_box.try_add_ore(sandore))
+								qdel(sandore)
+								count += sandore.amount
 			log_message("Drilled through [target]")
 			if(count)
 				occupant_message("<span class='notice'>[count] sand successfully loaded into cargo compartment.</span>")
@@ -215,6 +213,7 @@
 					M.LAssailant = null
 				else
 					M.LAssailant = chassis.occupant
+					M.assaulted_by(chassis.occupant)
 			log_message("Drilled through [target]")
 			occupant_message("<span class='red'><b>You drill into \the [target].</b></span>")
 			chassis.visible_message("<span class='red'><b>[chassis] drills into \the [target]!</b></span>", "You hear a drill breaking something.")
@@ -269,7 +268,7 @@
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 			playsound(target, 'sound/mecha/mechsmash.ogg', 50, 1)
 			tray.smashDestroy(50) //Just to really drive it home
-	else if(istype(target, /obj/effect/plantsegment) || istype(target, /obj/effect/alien/weeds) || istype(target, /obj/effect/biomass)|| istype(target, /turf/simulated/floor))
+	else if(istype(target, /obj/effect/plantsegment) || istype(target, /obj/effect/alien/weeds) || istype(target, /obj/effect/biomass)|| istype(target, /turf/simulated/floor) || istype(target, /obj/structure/cable/powercreeper))
 		set_ready_state(0)
 		var/olddir = chassis.dir
 		var/eradicated = 0
@@ -283,6 +282,11 @@
 						eradicated++
 					else if(istype(E, /obj/effect/alien/weeds) || istype(E, /obj/effect/biomass))
 						qdel(E)
+						eradicated++
+			for(var/obj/structure/cable/powercreeper/C in range(chassis,i == 4 ? 2 : 1))
+				if(get_dir(chassis,C)&chassis.dir || C.loc == get_turf(chassis))
+					if(istype(C, /obj/structure/cable/powercreeper))
+						C.die()
 						eradicated++
 			sleep(3)
 		if(eradicated)
@@ -347,7 +351,7 @@
 						var/datum/reagents/R = new/datum/reagents(5)
 						R.my_atom = src
 						reagents.trans_to_holder(R,1)
-						var/obj/effect/effect/foam/fire/W = new /obj/effect/effect/foam/fire(get_turf(chassis), R)
+						var/obj/effect/foam/fire/W = new /obj/effect/foam/fire(get_turf(chassis), R)
 						if(!W || !src)
 							return
 						var/turf/my_target = pick(the_targets)
@@ -372,9 +376,9 @@
 										atm.molten=0
 										atm.solidify()
 
-							var/obj/effect/effect/foam/fire/F = locate() in oldturf
+							var/obj/effect/foam/fire/F = locate() in oldturf
 							if(!istype(F) && oldturf != get_turf(src))
-								F = new /obj/effect/effect/foam/fire( get_turf(oldturf) , W.reagents)
+								F = new /obj/effect/foam/fire( get_turf(oldturf) , W.reagents)
 
 							if(W.loc == my_target)
 								break
@@ -386,12 +390,6 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/on_reagent_change()
 	return
-
-/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M as obj)
-	if(..())
-		if(istype(M))
-			return 1
-	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/New()
 	. = ..()
@@ -407,7 +405,7 @@
 	equip_cooldown = 5
 	energy_drain = 75
 	var/wait = 0
-	var/datum/effect/effect/system/trail/ion_trail
+	var/datum/effect/system/trail/ion_trail
 
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/can_attach(obj/mecha/M as obj)
@@ -422,8 +420,9 @@
 /obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
 	..()
 	if(!ion_trail)
-		ion_trail = new /datum/effect/effect/system/trail()
+		ion_trail = new /datum/effect/system/trail()
 	ion_trail.set_up(chassis)
+	linked_spell = new /spell/mech/jetpack(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/proc/toggle()
@@ -431,10 +430,6 @@
 		return
 	!equip_ready? turn_off() : turn_on()
 	return equip_ready
-
-/obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
-	..()
-	linked_spell = new /spell/mech/jetpack(M, src)
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/activate()
 	toggle()
@@ -523,7 +518,7 @@
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
 	var/obj/item/device/rcd/mech/RCD
-	var/obj/item/weapon/wrench/socket/sock
+	var/obj/item/tool/wrench/socket/sock
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
@@ -608,7 +603,7 @@
 	if(T)
 		set_ready_state(0)
 		chassis.use_power(energy_drain)
-		do_teleport(chassis, T, 4)
+		do_teleport(chassis, T)
 		do_after_cooldown()
 	return
 
@@ -996,9 +991,9 @@
 	var/list/use_channels = list(EQUIP,ENVIRON,LIGHT)
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/New()
-	..()
 	pr_energy_relay = new /datum/global_iterator/mecha_energy_relay(list(src),0)
 	pr_energy_relay.set_delay(equip_cooldown)
+	..()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()
@@ -1079,6 +1074,12 @@
 		set_ready_state(1)
 		log_message("Deactivated.")
 		to_chat(chassis.occupant, "<span class='notice'>Relay disabled.</span>")
+
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/emp_act()
+	if(equip_ready)
+		set_ready_state(1)
+		log_message("Disabled.")
+		to_chat(chassis.occupant, "<span class='warning'>Relay shut down.</span>")
 
 /spell/mech/tesla
 	name = "Tesla Energy Relay"
@@ -1171,6 +1172,12 @@
 			set_ready_state(1)
 			log_message("Deactivated.")
 	return
+
+/obj/item/mecha_parts/mecha_equipment/generator/emp_act()
+	if(equip_ready)
+		set_ready_state(1)
+		log_message("Disabled.")
+		to_chat(chassis.occupant, "<span class='warning'>Generator shut down.</span>")
 
 /obj/item/mecha_parts/mecha_equipment/generator/get_equip_info()
 	var/output = ..()
@@ -1443,7 +1450,7 @@
 		return
 	for(var/obj/item/I in mech_switchtool.switchtool.stored_modules)
 		if(iswelder(I))
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/tool/weldingtool/W = I
 			if(W.reagents.total_volume <= W.max_fuel-10)
 				W.reagents.add_reagent(FUEL, 10)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
@@ -1453,7 +1460,7 @@
 				C.add(5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
 		else if(issolder(I))
-			var/obj/item/weapon/solder/S = I
+			var/obj/item/tool/solder/S = I
 			if(S.reagents.total_volume < S.max_fuel-5)
 				S.reagents.add_reagent(SACID, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)
@@ -1516,10 +1523,13 @@
 		return
 
 	playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
-	if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
-		T.ChangeTurf(/turf/simulated/floor/plating/airless)
-	else
-		T.ChangeTurf(/turf/simulated/floor/plating)
+	if(T.air)
+		var/datum/gas_mixture/GM = T.air
+		if(GM.pressure > HALF_ATM)
+			T.ChangeTurf(/turf/simulated/floor/plating)
+			return
+	T.ChangeTurf(/turf/simulated/floor/plating/airless)
+
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector
 	name = "\improper Exosuit-Mounted Radiation Collector Array"

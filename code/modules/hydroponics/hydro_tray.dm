@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	anchored = 1
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
@@ -42,7 +42,6 @@
 	var/closed_system          // If set, the tray will attempt to take atmos from a pipe.
 	var/force_update           // Set this to bypass the cycle time check.
 	var/skip_aging = 0		   // Don't advance age for the next N cycles.
-
 	var/pollination = 0
 	var/bees = 0				//Are the trays currently affected by the bees' pollination?
 
@@ -51,8 +50,13 @@
 	var/internal_light = 1
 	var/light_on = 0
 
+	var/key_name_last_user = ""
+
 	// Seed details/line data.
 	var/datum/seed/seed = null // The currently planted seed
+
+/obj/machinery/portable_atmospherics/hydroponics/loose
+	anchored = FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/New()
 	..()
@@ -196,6 +200,9 @@
 	if(O.is_open_container())
 		return 0
 
+	add_fingerprint(user)
+	key_name_last_user = key_name(user)
+
 	if (istype(O, /obj/item/seeds))
 
 		if(!seed)
@@ -212,10 +219,10 @@
 			switch(S.seed.spread)
 				if(1)
 					var/turf/T = get_turf(src)
-					msg_admin_attack("[key_name(user)] has planted a creeper packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+					msg_admin_attack("[key_name(user)] has planted a creeper packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a> ([bad_stuff()])")
 				if(2)
 					var/turf/T = get_turf(src)
-					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a> ([bad_stuff()])")
 			if(S.seed.exude_gasses && S.seed.exude_gasses.len)
 				add_gamelogs(user, "planted a packet exuding [english_list(S.seed.exude_gasses)]", tp_link = TRUE)
 
@@ -226,7 +233,7 @@
 				nutrilevel = 1
 
 			//Snowflakey, maybe move this to the seed datum
-			health = (istype(S, /obj/item/seeds/cutting) ? round(seed.endurance/rand(2,5)) : seed.endurance)
+			health = seed.endurance
 
 			lastcycle = world.time
 
@@ -272,14 +279,14 @@
 				S.icon_state += "-large"
 
 			if(dead)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
+				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
+				S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
+				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
 			else
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[seed.growth_stages]")
+				S.overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
 
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
@@ -297,7 +304,7 @@
 			C.being_potted = FALSE
 		return
 
-	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
 
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
@@ -363,7 +370,7 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(iswrench(O) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+	else if(O.is_wrench(user) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
 	else if(istype(O, /obj/item/apiary))
@@ -391,9 +398,16 @@
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
-
+		
 	else
 		return ..()
+
+/obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/green)
+		has_slime=1
+		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
+		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 
@@ -500,6 +514,7 @@
 		flags |= OPENCONTAINER
 
 	update_icon()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle()
 	set name = "Toggle Light"
@@ -509,6 +524,7 @@
 		return
 	light_on = !light_on
 	calculate_light()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
 	set name = "Set Tray Label"
@@ -568,14 +584,29 @@
 				return
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(seed && !dead)
-			yield_mod = Clamp(yield_mod + (rand(3,5)/10), 1, 2)
+			yield_mod = clamp(yield_mod + (rand(3,5)/10), 1, 2)
 			if(yield_mod >= 2)
 				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
 			return
 
 	..()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
 	close_lid()
+
+// See no evil, hear no evil. Returns all the potentially bad things on a hydroponic tray.
+/obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
+	var/list/things = list()
+	if(seed)
+		if (seed.thorny)
+			things += "thorny"
+		if (seed.carnivorous)
+			things += "carnivorous"
+		for (var/chemical_id in seed.chems)
+			if (chemical_id in reagents_to_log)
+				things += chemical_id
+	return english_list(things, "nothing")
 
 /datum/locking_category/hydro_tray

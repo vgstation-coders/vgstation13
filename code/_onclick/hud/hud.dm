@@ -20,12 +20,16 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 	var/obj/abstract/screen/lingchemdisplay
 	var/obj/abstract/screen/vampire_blood_display // /vg/
+	var/obj/abstract/screen/spider_food_display // /vg/
+	var/obj/abstract/screen/spiderling_growth_display // /vg/
+	var/obj/abstract/screen/spider_queen_counter // /vg/
 	var/obj/abstract/screen/countdown_display // /vg/
 	var/obj/abstract/screen/cult_Act_display // /vg/
 	var/obj/abstract/screen/cult_tattoo_display // /vg/
 	var/list/obj/abstract/screen/hand_hud_objects = list()
 	var/obj/abstract/screen/action_intent
 	var/obj/abstract/screen/move_intent
+	var/obj/abstract/screen/streamer_display // Sponsored
 
 	var/obj/abstract/screen/movable/action_button/hide_toggle/hide_actions_toggle
 	var/action_buttons_hidden = FALSE
@@ -142,7 +146,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 /datum/hud/proc/init_hand_icons(var/new_icon, var/new_color, var/new_alpha)
 	for(var/i = 1 to mymob.held_items.len) //Hands
-		var/obj/abstract/screen/inventory/inv_box = getFromPool(/obj/abstract/screen/inventory)
+		var/obj/abstract/screen/inventory/inv_box = new /obj/abstract/screen/inventory
 		inv_box.name = "[mymob.get_index_limb_name(i)]"
 
 		if(mymob.get_direction_by_index(i) == "right_hand")
@@ -181,7 +185,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 			mymob.client.screen -= IN
 
 		hand_hud_objects -= IN
-		returnToPool(IN)
+		qdel(IN)
 
 	if(mymob.client)
 		adding = list()
@@ -193,7 +197,6 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		return FALSE
 	if(!mymob.client)
 		return FALSE
-
 
 	var/ui_style
 	var/ui_color
@@ -213,6 +216,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		monkey_hud(ui_style)
 	else if(iscorgi(mymob))
 		corgi_hud()
+	else if(ispulsedemon(mymob))
+		pulsedemon_hud()
 	else if(isbrain(mymob))
 		brain_hud(ui_style)
 	else if(islarva(mymob))
@@ -233,6 +238,10 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		borer_hud()
 	else if(isconstruct(mymob))
 		construct_hud()
+	else if(isshade(mymob))
+		shade_hud()
+	else if(isspider(mymob))
+		spider_hud()
 	else if(ispAI(mymob))
 		pai_hud()
 	else if(ismartian(mymob))
@@ -242,16 +251,20 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	else if(isgrinch(mymob))
 		grinch_hud()
 
+	var/datum/role/cultist/C = iscultist(mymob)
+	if (C)
+		C.update_cult_hud()
+
 	if(isliving(mymob))
 		var/obj/abstract/screen/using
-		using = getFromPool(/obj/abstract/screen)
+		using = new /obj/abstract/screen
 		using.dir = SOUTHWEST
 		using.icon = 'icons/mob/screen1.dmi'
 		using.icon_state = "block"
 		src.adding += using
 		mymob:schematics_background = using
 
-	holomap_obj = getFromPool(/obj/abstract/screen/holomap)
+	holomap_obj = new /obj/abstract/screen/holomap
 	holomap_obj.name = "holomap"
 	holomap_obj.icon = null
 	holomap_obj.icon_state = ""
@@ -344,7 +357,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		if(!override)
 			override = R.schematics
 		if(!R.closer)
-			R.closer = getFromPool(/obj/abstract/screen/close)
+			R.closer = new /obj/abstract/screen/close
 			R.closer.icon_state = "x"
 			R.closer.master = R
 			R.closer.transform *= 0.8
@@ -362,7 +375,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 					to_chat(usr, "<span class='danger'>Unexpected type in schematics list. [RS][RS ? "/[RS.type]" : "null"]")
 					continue
 			if(!RS.ourobj)
-				RS.ourobj = getFromPool(/obj/abstract/screen/schematics, null, RS)
+				RS.ourobj = new /obj/abstract/screen/schematics(null, RS)
 			var/obj/abstract/screen/A = RS.ourobj
 			//Module is not currently active
 			L.client.screen += A

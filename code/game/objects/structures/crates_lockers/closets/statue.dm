@@ -1,11 +1,12 @@
 /obj/structure/closet/statue
 	name = "statue"
-	desc = "An incredibly lifelike marble carving"
+	desc = "An incredibly lifelike marble carving."
 	icon = 'icons/obj/statue.dmi'
 	icon_state = "human_male"
 	density = 1
 	anchored = 1
 	health = 0 //destroying the statue kills the mob within
+	pass_flags_self = PASSTABLE
 	var/intialTox = 0 	//these are here to keep the mob from taking damage from things that logically wouldn't affect a rock
 	var/intialFire = 0	//it's a little sloppy I know but it was this or the GODMODE flag. Lesser of two evils.
 	var/intialBrute = 0
@@ -74,9 +75,10 @@
 	..()
 
 /obj/structure/closet/statue/Destroy()
-	..()
-
 	processing_objects.Remove(src)
+	for (var/atom/A in src)
+		qdel(A)
+	..()
 
 
 /obj/structure/closet/statue/proc/dissolve()
@@ -92,12 +94,13 @@
 	spawn(10)
 		for(var/i=1 to 5)
 			for(var/mob/living/L in contents)
-				L.adjustBruteLoss(60)
-				L.mutations |= M_NOCLONE
+				L.adjustBruteLoss(10)
+				if (L.health <= 0)
+					L.mutations |= M_NOCLONE
 
-				if(ishuman(L) && !(M_HUSK in L.mutations))
-					var/mob/living/carbon/human/H = L
-					H.ChangeToHusk()
+					if(ishuman(L) && !(M_HUSK in L.mutations))
+						var/mob/living/carbon/human/H = L
+						H.ChangeToHusk()
 				sleep(10)
 
 		dump_contents()
@@ -106,7 +109,7 @@
 /obj/structure/closet/statue/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 
 	return ..()
@@ -129,18 +132,13 @@
 		O.forceMove(src.loc)
 
 	for(var/mob/living/M in src)
+		M.timestopped = 0
 		M.forceMove(src.loc)
 		M.sdisabilities &= ~MUTE
 		M.take_overall_damage((M.health - health - 100),0) //any new damage the statue incurred is transfered to the mob
 		if(M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
-
-/obj/structure/closet/statue/take_contents()
-	return
-
-/obj/structure/closet/statue/open()
-	return
 
 /obj/structure/closet/statue/take_contents()
 	return
@@ -163,7 +161,7 @@
 		for(var/mob/M in src)
 			shatter(M)
 
-	return
+	return ..()
 
 /obj/structure/closet/statue/attack_animal(mob/living/simple_animal/user as mob)
 	if(user.environment_smash_flags & SMASH_CONTAINERS)
@@ -204,7 +202,7 @@
 	if (user)
 		user.gib()
 	dump_contents()
-	visible_message("<span class='warning'>[src] shatters into pieces!. </span>")
+	visible_message("<span class='warning'>[src] shatters into pieces! </span>")
 	qdel(src)
 
 /obj/structure/closet/statue/container_resist()

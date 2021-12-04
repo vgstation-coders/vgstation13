@@ -4,6 +4,8 @@
 #define PIPE_TRINARY 3
 #define PIPE_TRIN_M  4
 #define PIPE_UNARY   5
+#define PIPE_Z_UP_BINARY   6
+#define PIPE_Z_DOWN_BINARY   7
 
 //UTILITIES.
 
@@ -32,7 +34,7 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	if(istype(AM, /obj/item/pipe))
-		returnToPool(A)
+		qdel(A)
 	else
 		qdel(AM)
 
@@ -109,16 +111,33 @@
 
 	var/obj/machinery/atmospherics/O = A
 
+	if(!O.can_be_coloured)
+		to_chat(user, "<span class='danger'>\The [O] cannot be painted.</span>")
+		return 1
+
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
 	if (selected_color in available_colors)
 		selected_color = available_colors[selected_color]
 	if(mass_colour && world.timeofday < last_colouration + colouring_delay)
 		return "We aren't ready to mass paint again; please wait [(last_colouration+colouring_delay)-world.timeofday] more seconds!"
-	if(mass_colour && istype(O, /obj/machinery/atmospherics/pipe))
+	if(mass_colour && istype(O, /obj/machinery/atmospherics/unary/cap))
+		var/obj/machinery/atmospherics/unary/cap/cap = O
+		var/obj/machinery/atmospherics/pipe/maybe_pipe_to_colour = cap.node1
+		if (istype(maybe_pipe_to_colour))
+			var/datum/pipeline/pipe_line = maybe_pipe_to_colour.parent
+			var/list/pipeline_members = pipe_line.members
+			if(pipeline_members.len < 500)
+				last_colouration = world.timeofday
+				colouring_delay = (pipeline_members.len)/2
+				O.color = selected_color
+				maybe_pipe_to_colour.mass_colouration(selected_color)
+			else
+				return "That pipe network is simply too big to paint!"
+	else if(mass_colour && istype(O, /obj/machinery/atmospherics/pipe))
 		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
 		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
-		if (pipeline_members.len < 500)
+		if(pipeline_members.len < 500)
 			last_colouration = world.timeofday
 			colouring_delay = (pipeline_members.len)/2
 			O.color = selected_color
@@ -222,7 +241,7 @@
 // Rule of thumb: scrolling is clockwise.
 /datum/rcd_schematic/pipe/proc/get_dirs()
 	switch(pipe_type)
-		if(PIPE_UNARY)
+		if(PIPE_UNARY, PIPE_Z_UP_BINARY, PIPE_Z_DOWN_BINARY)
 			. = list(NORTH, EAST, SOUTH, WEST)
 
 		if(PIPE_TRINARY)
@@ -288,6 +307,20 @@
 			. += render_dir_image(NORTHWEST, "East North West")
 			. += render_dir_image(SOUTHWEST, "South East North")
 
+		if(PIPE_Z_UP_BINARY)
+			. += render_dir_image(NORTH, "North to Up")
+			. += render_dir_image(EAST, "East to Up")
+			. += "<br/>"
+			. += render_dir_image(SOUTH, "South to Up")
+			. += render_dir_image(WEST, "West to Up")
+
+		if(PIPE_Z_DOWN_BINARY)
+			. += render_dir_image(NORTH, "North to Down")
+			. += render_dir_image(EAST, "East to Down")
+			. += "<br/>"
+			. += render_dir_image(SOUTH, "South to Down")
+			. += render_dir_image(WEST, "West to Down")
+
 	. += "</div>"
 
 	if(layer)
@@ -327,7 +360,7 @@
 		return 1
 
 	if(href_list["set_layer"] && layer) //Only handle this is layer is nonzero.
-		var/n_layer = Clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		var/n_layer = clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		if(layer == n_layer) //No point doing anything.
 			return 1
 
@@ -381,10 +414,13 @@
 
 	playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
 
-	var/obj/item/pipe/P = getFromPool(/obj/item/pipe, A, pipe_id, thisdir)
+	var/obj/item/pipe/P = new /obj/item/pipe(A, pipe_id, thisdir)
 	P.setPipingLayer(thislayer)
 	P.update()
 	P.add_fingerprint(user)
+	var/obj/item/device/rcd/rpd/ourmaster = master
+	if(ourmaster.autowrench)
+		P.attackby(ourmaster.internal_wrench, user)
 
 /datum/rcd_schematic/pipe/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
 	if(!istype(old_schematic, /datum/rcd_schematic/pipe))
@@ -443,6 +479,8 @@ var/global/list/disposalpipeID2State = list(
 	"intake",
 	"pipe-j1s",
 	"pipe-j1s",
+	"pipe-u",
+	"pipe-d"
 )
 
 //This is a meta thing to send a blended pipe sprite to clients, basically the default straight pipe, but blended blue.
@@ -466,6 +504,18 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= PIPE_SIMPLE_BENT
 	pipe_type	= PIPE_BENT
+
+/datum/rcd_schematic/pipe/z_up
+	name		= "Up Pipe"
+
+	pipe_id		= PIPE_Z_UP
+	pipe_type	= PIPE_Z_UP_BINARY
+
+/datum/rcd_schematic/pipe/z_down
+	name		= "Down Pipe"
+
+	pipe_id		= PIPE_Z_DOWN
+	pipe_type	= PIPE_Z_DOWN_BINARY
 
 /datum/rcd_schematic/pipe/manifold
 	name		= "Manifold"
@@ -611,6 +661,13 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= PIPE_THERMAL_PLATE
 	pipe_type	= PIPE_UNARY
 
+/datum/rcd_schematic/pipe/heat_pump
+	name		= "Thermoelectric Cooler"
+	category	= "Devices"
+
+	pipe_id		= PIPE_HEAT_PUMP
+	pipe_type	= PIPE_UNARY
+
 /datum/rcd_schematic/pipe/injector
 	name		= "Injector"
 	category	= "Devices"
@@ -668,6 +725,13 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= PIPE_HE_MANIFOLD4W
 	pipe_type	= PIPE_BINARY
+
+/datum/rcd_schematic/pipe/he_cap
+	name		= "Pipe Cap"
+	category	= "Heat Exchange"
+
+	pipe_id		= PIPE_HE_CAP
+	pipe_type	= PIPE_UNARY
 
 //INSULATED PIPES.
 
@@ -764,3 +828,17 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= DISP_SORT_WRAP_JUNCTION
 	actual_id	= 11
 	pipe_type	= PIPE_TRINARY
+
+/datum/rcd_schematic/pipe/disposal/up
+	name		= "Up Pipe"
+
+	pipe_id		= DISP_PIPE_UP
+	actual_id	= 13
+	pipe_type	= PIPE_Z_UP_BINARY
+
+/datum/rcd_schematic/pipe/disposal/down
+	name		= "Down Pipe"
+
+	pipe_id		= DISP_PIPE_DOWN
+	actual_id	= 14
+	pipe_type	= PIPE_Z_DOWN_BINARY

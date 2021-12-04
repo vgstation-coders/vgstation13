@@ -3,6 +3,15 @@
 //MEDBOT ASSEMBLY
 #define INJECTION_TIME 30
 
+var/list/firstaid_exceptions = list(
+	"antitoxfirstaid",
+	"antitoxfirstaid2",
+	"antitoxfirstaid3",
+	"radfirstaid2",
+	"radfirstaid3",
+	"nanotrasen"
+	)//these use a different mask since they don't have a "+" at the front
+
 /obj/item/weapon/medbot_cube
 	name = "advanced medibot cube"
 	desc = "Compressed Nanotrasen Advanced Medibot, ready for deployment. Just unwrap the cube!"
@@ -27,28 +36,22 @@
 	health = 20
 	maxhealth = 20
 	req_access =list(access_medical)
+	bot_flags = BOT_NOT_CHASING|BOT_CONTROL
 	can_take_pai = TRUE
 	var/stunned = 0 //It can be stunned by tasers. Delicate circuits.
-//var/emagged = 0
 	var/list/botcard_access = list(access_medical)
 	var/obj/item/weapon/reagent_containers/glass/reagent_glass = null //Can be set to draw from this for reagents.
 	var/skin = null //Set to "tox", "ointment" or "o2" for the other two firstaid kits.
-	var/frustration = 0
-	var/path[] = new()
-	var/mob/living/carbon/patient = null
-	var/mob/living/carbon/oldpatient = null
-	var/oldloc = null
-	var/last_found = 0
 	var/last_newpatient_speak = 0 //Don't spam the "HEY I'M COMING" messages
 	var/currently_healing = 0
 	var/injection_amount = 15 //How much reagent do we inject at a time?
 	var/heal_threshold = 10 //Start healing when they have this much damage in a category
 	var/use_beaker = 0 //Use reagents in beaker instead of default treatment agents.
 	//Setting which reagents to use to treat what by default. By id.
-	var/treatment_brute = TRICORDRAZINE
-	var/treatment_oxy = TRICORDRAZINE
-	var/treatment_fire = TRICORDRAZINE
-	var/treatment_tox = TRICORDRAZINE
+	var/treatment_brute = BICARIDINE
+	var/treatment_oxy = DEXALIN
+	var/treatment_fire = KELOTANE
+	var/treatment_tox = ANTI_TOXIN
 	var/treatment_virus = SPACEACILLIN
 	var/declare_treatment = 0 //When attempting to treat a patient, should it notify everyone wearing medhuds?
 	var/shut_up = 0 //self explanatory :)
@@ -59,6 +62,7 @@
 	var/last_spoke = 0
 
 	bot_type = MED_BOT
+	commanding_radio = /obj/item/radio/integrated/signal/bot/medbot
 
 /obj/machinery/bot/medbot/mysterious
 	name = "Mysterious Medibot"
@@ -81,37 +85,61 @@
 	icon_state = "firstaid_arm"
 	var/build_step = 0
 	var/created_name = "Medibot" //To preserve the name if it's a unique medbot I guess
-	var/skin = null //Same as medbot, set to tox or ointment for the respective kits.
+	var/skin = null
+	var/image/skin_image = null
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/firstaid_arm_assembly/New()
+/obj/item/weapon/firstaid_arm_assembly/New(turf/loc, var/new_skin)
 	..()
-	spawn(5)
-		if(skin)
-			overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
 
+	if (!skin)
+		skin = new_skin ? new_skin : "firstaid"
 
-/obj/machinery/bot/medbot/New()
+	var/icon/I
+	if (skin in firstaid_exceptions)
+		I = new /icon('icons/obj/aibots.dmi', "mask_assembly_exception")
+	else
+		I = new /icon('icons/obj/aibots.dmi', "mask_assembly")
+
+	I.Blend(new /icon('icons/obj/storage/storage.dmi', skin),ICON_MULTIPLY)
+
+	/*
+	var/icon/J = new /icon(icon,icon_state)
+	J.Blend(I,ICON_OVERLAY)
+	*/
+
+	overlays += I
+
+/obj/machinery/bot/medbot/New(turf/loc, var/new_skin)
 	..()
 	icon_state = "[icon_initial][on]"
-	spawn(4)
-		if(skin)
-			overlays += image('icons/obj/aibots.dmi', "medskin_[skin]")
-			switch(skin)
-				if("tox")
-					treatment_tox = ANTI_TOXIN
-				if("ointment")
-					treatment_fire = KELOTANE
-				if("o2")
-					treatment_oxy = DEXALIN
-		else
-			treatment_brute = BICARIDINE
-		botcard = new /obj/item/weapon/card/id(src)
-		if(isnull(botcard_access) || (botcard_access.len < 1))
-			var/datum/job/doctor/J = new/datum/job/doctor
-			botcard.access = J.get_access()
-		else
-			botcard.access = botcard_access
+
+	if (!skin)
+		skin = new_skin ? new_skin : "firstaid"
+
+	var/icon/I
+	if (skin in firstaid_exceptions)
+		I = new /icon('icons/obj/aibots.dmi', "mask_bot_exception")
+	else
+		I = new /icon('icons/obj/aibots.dmi', "mask_bot")
+
+	I.Blend(new /icon('icons/obj/storage/storage.dmi', skin),ICON_MULTIPLY)
+	I.Shift(EAST,5)
+	I.Shift(SOUTH,5)
+
+	/*
+	var/icon/J = new /icon(icon,icon_state)
+	J.Blend(I,ICON_OVERLAY)
+	*/
+
+	overlays += I
+
+	botcard = new /obj/item/weapon/card/id(src)
+	if(isnull(botcard_access) || (botcard_access.len < 1))
+		var/datum/job/doctor/D = new/datum/job/doctor
+		botcard.access = D.get_access()
+	else
+		botcard.access = botcard_access
 
 /obj/machinery/bot/medbot/turn_on()
 	. = ..()
@@ -120,19 +148,17 @@
 
 /obj/machinery/bot/medbot/turn_off()
 	..()
-	patient = null
-	oldpatient = null
-	oldloc = null
-	path = new()
+	target = null
+	old_targets = list()
+	path = list()
 	currently_healing = 0
-	last_found = world.time
 	icon_state = "[icon_initial][on]"
 	updateUsrDialog()
 
-/obj/machinery/bot/medbot/attack_paw(mob/user as mob)
+/obj/machinery/bot/medbot/attack_paw(mob/user)
 	return attack_hand(user)
 
-/obj/machinery/bot/medbot/attack_hand(mob/user as mob)
+/obj/machinery/bot/medbot/attack_hand(mob/user)
 	. = ..()
 	if (.)
 		return
@@ -260,187 +286,62 @@
 		if (. && isturf(loc))
 			step_away(src,user)
 
-/obj/machinery/bot/medbot/Emag(mob/user as mob)
+/obj/machinery/bot/medbot/Emag(mob/user)
 	..()
 	if(open && !locked)
 		declare_crit = 0
 		if(user)
 			to_chat(user, "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>")
-		spawn(0)
-			for(var/mob/O in hearers(src, null))
-				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
+		for(var/mob/O in hearers(src, 7))
+			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		flick("medibot_spark", src)
 		playsound(src.loc, 'sound/medbot/Chemical_Detected.ogg', 35, channel = CHANNEL_MEDBOTS)
-		patient = null
-		if(user)
-			oldpatient = user
+		target = null
+		steps_per = 5 // Gotta go fast
+		add_oldtarget(user.name)
 		currently_healing = 0
-		last_found = world.time
 		anchored = 0
 		emagged = 2
 		on = 1
 		icon_state = "[icon_initial][on]"
 
-/obj/machinery/bot/medbot/process()
-	//set background = 1
+/obj/machinery/bot/medbot/can_path()
+	return !(stunned || currently_healing)
 
-	if(integratedpai)
-		return
-
-	if(!on)
-		stunned = 0
-		return
-
+/obj/machinery/bot/medbot/process_bot()
 	if(stunned)
-		icon_state = "[icon_initial]a"
 		stunned--
-
-		oldpatient = patient
-		patient = null
-		currently_healing = 0
-
-		if(stunned <= 0)
-			icon_state = "[icon_initial][on]"
-			stunned = 0
 		return
 
-	if(frustration > 8)
-		oldpatient = patient
-		patient = null
+	if (can_abandon_target())
+		target = null
 		currently_healing = 0
-		last_found = world.time
-		path = new()
+		find_target()
 
-	if(!patient)
-		if(!shut_up && prob(1))
-			var/message = pick("Radar, put a mask on!","There's always a catch, and it's the best there is.","I knew it, I should've been a plastic surgeon.","What kind of medbay is this? Everyone's dropping like dead flies.","Delicious!")
-			speak(message)
+	decay_oldtargets()
 
-		for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
-			if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
-				continue
-
-			if ((C == oldpatient) && (world.time < last_found + 100))
-				continue
-
-			if(assess_patient(C))
-				patient = C
-				oldpatient = C
-				last_found = world.time
-				spawn(0)
-					if((last_newpatient_speak + 100 < world.time) &&  (shut_up == 0)) //Don't spam these messages!
-						playsound(src.loc, 'sound/medbot/Administering_medical.ogg', 35, channel = CHANNEL_MEDBOTS)
-						say("Administering medical attention!")
-						last_newpatient_speak = world.time
-						if(declare_treatment)
-							var/area/location = get_area(src)
-							broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
-					visible_message("<b>[src]</b> points at [C.name]!")
-					sleep(35)
-				break
-			else
-				continue
-
-	if(!path)
-		path = new()
-	if(patient && (get_dist(src,patient) <= 1))
+	if (get_dist(src, target) <= 1)
+		if (summoned)
+			summoned = FALSE
+		path = list() // Kill our path
 		if(!currently_healing)
-			currently_healing = 1
-			frustration = 0
-			medicate_patient(patient)
-		return
+			currently_healing = TRUE
+			medicate_patient(target)
 
-	else if(patient && (path.len) && (get_dist(patient,path[path.len]) > 2))
-		path = new()
-		currently_healing = 0
-		last_found = world.time
-
-	if(patient && path.len == 0 && (get_dist(src,patient) > 1))
-		spawn(0)
-			path = AStar(loc, get_turf(patient), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-			if (!path)
-				path = list()
-			if(path.len == 0)
-				oldpatient = patient
-				patient = null
-				currently_healing = 0
-				last_found = world.time
-		return
-
-	if(path.len > 0 && patient && isturf(loc))
-		step_to(src, path[1])
-		path -= path[1]
-		spawn(3)
-			if(path.len)
-				step_to(src, path[1])
-				path -= path[1]
-
-	if(path.len > 8 && patient)
-		frustration++
-
-	return
-
-/obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C as mob)
-	//Time to see if they need medical help!
-	if(C.isDead())
-		return 0 //welp too late for them!
-
-	if(C.suiciding)
-		return 0 //Kevorkian school of robotic medical assistants.
-
-	if(emagged == 2) //Everyone needs our medicine. (Our medicine is toxins)
-		return 1
-
-	if(declare_crit && C.health <= 0) //Critical condition! Call for help!
-		declare()
-
-	//If they're injured, we're using a beaker, and don't have one of our WONDERCHEMS.
-	if((reagent_glass) && (use_beaker) && ((C.getBruteLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getOxyLoss() >= (heal_threshold + 15))))
-		for(var/datum/reagent/R in reagent_glass.reagents.reagent_list)
-			if(!C.reagents.has_reagent(R))
-				return 1
-			continue
-
-	//They're injured enough for it!
-	if((C.getBruteLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_brute)))
-		return 1 //If they're already medicated don't bother!
-
-	if((C.getOxyLoss() >= (15 + heal_threshold)) && (!C.reagents.has_reagent(treatment_oxy)))
-		return 1
-
-	if((C.getFireLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_fire)))
-		return 1
-
-	if((C.getToxLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_tox)))
-		return 1
-
-
-	for(var/datum/disease/D in C.viruses)
-		if((D.stage > 1) || (D.spread_type == AIRBORNE))
-
-			if (!C.reagents.has_reagent(treatment_virus))
-				return 1 //STOP DISEASE FOREVER
-
-	return 0
-
-/obj/machinery/bot/medbot/proc/medicate_patient(mob/living/carbon/C as mob)
+/obj/machinery/bot/medbot/proc/medicate_patient(mob/living/carbon/C)
 	if(!on)
 		return
 
 	if(!istype(C))
-		oldpatient = patient
-		patient = null
-		currently_healing = 0
-		last_found = world.time
+		add_oldtarget(target.name)
+		target = null
 		return
 
 	if(C.isDead())
 		playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35, channel = CHANNEL_MEDBOTS)
 		visible_message("<b>[src]</b> points at [C.name]!")
-		oldpatient = patient
-		patient = null
-		currently_healing = 0
-		last_found = world.time
+		add_oldtarget(target.name)
+		target = null
 		return
 
 	//Use whatever is inside the loaded beaker. If there is one.
@@ -470,7 +371,7 @@
 				playsound(src.loc, 'sound/medbot/Minor_lacerations.ogg', 35, channel = CHANNEL_MEDBOTS)
 				say("Minor lacerations detected!")
 				sleep(35)
-			if(patient.getBruteLoss() > 50 && (shut_up == 0))
+			if(C.getBruteLoss() > 50 && (shut_up == 0))
 				playsound(src.loc, 'sound/medbot/Major_lacerations.ogg', 35, channel = CHANNEL_MEDBOTS)
 				say("Major lacerations detected!")
 				sleep(35)
@@ -505,14 +406,13 @@
 
 
 	if(!reagent_id) //If they don't need any of that they're probably cured!
-		oldpatient = patient
-		patient = null
+		add_oldtarget(target.name)
+		target = null
 		currently_healing = 0
-		last_found = world.time
 		return
 	else
 		icon_state = "[icon_initial]s"
-		visible_message("<span class='danger'>[src] is trying to inject [patient]!</span>")
+		visible_message("<span class='danger'>[src] is trying to inject [target]!</span>")
 
 		if(integratedpai)
 			if(do_after(integratedpai.pai, src, INJECTION_TIME))
@@ -524,17 +424,17 @@
 /obj/machinery/bot/medbot/proc/inject_patient()
 
 	var/succesful_inject = 0
-	if ((get_dist(src, patient) <= 1) && (on))
+	if ((get_dist(src, target) <= 1) && (on))
 		if((reagent_id == "internal_beaker") && (reagent_glass) && (reagent_glass.reagents.total_volume))
-			reagent_glass.reagents.trans_to(patient,injection_amount) //Inject from beaker instead.
-			reagent_glass.reagents.reaction(patient, 2)
+			reagent_glass.reagents.trans_to(target,injection_amount) //Inject from beaker instead.
+			reagent_glass.reagents.reaction(target, 2)
 			succesful_inject = 1
 		else
-			if(!patient.reagents.has_reagent(reagent_id) && !emagged) //Somebody got there first
-				patient.reagents.add_reagent(reagent_id,injection_amount)
+			if(!target.reagents.has_reagent(reagent_id) && !emagged) //Somebody got there first
+				target.reagents.add_reagent(reagent_id,injection_amount)
 				succesful_inject = 1
 	if(succesful_inject)
-		visible_message("<span class='danger'>[src] injects [patient] with the syringe!</span>")
+		visible_message("<span class='danger'>[src] injects [target] with the syringe!</span>")
 
 	icon_state = "[icon_initial][on]"
 	currently_healing = 0
@@ -552,7 +452,7 @@
 /obj/machinery/bot/medbot/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag == "taser")
 		stunned = min(stunned+10,20)
-	..()
+	return ..()
 
 /obj/machinery/bot/medbot/explode()
 	on = 0
@@ -560,15 +460,8 @@
 	playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35, channel = CHANNEL_MEDBOTS)
 	var/turf/Tsec = get_turf(src)
 
-	switch(skin)
-		if("tox")
-			new /obj/item/weapon/storage/firstaid/toxin/empty(Tsec)
-		if("ointment")
-			new /obj/item/weapon/storage/firstaid/fire/empty(Tsec)
-		if("o2")
-			new /obj/item/weapon/storage/firstaid/o2/empty(Tsec)
-		else
-			new /obj/item/weapon/storage/firstaid(Tsec)
+	var/obj/item/weapon/storage/firstaid/medkit = new (Tsec)
+	medkit.icon_state = skin
 
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 	new /obj/item/device/healthanalyzer(Tsec)
@@ -585,54 +478,78 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/medbot/to_bump(M as mob|obj) //Leave no door unopened!
-	if ((istype(M, /obj/machinery/door)) && (!isnull(botcard)))
-		var/obj/machinery/door/D = M
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
-			D.open()
-			frustration = 0
-	else if ((istype(M, /mob/living/)) && (!anchored))
-		forceMove(M:loc)
-		frustration = 0
-	return
+/obj/machinery/bot/medbot/target_selection()
+	look_for_target = TRUE
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Time to find a patient!
+		if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
+			continue
 
-/* terrible
-/obj/machinery/bot/medbot/Bumped(atom/movable/M as mob|obj)
-	spawn(0)
-		if (M)
-			var/turf/T = get_turf(src)
-			M:forceMove(T)
-*/
+		if (C.name in old_targets)
+			continue
 
-/*
- *	Pathfinding procs, allow the medibot to path through doors it has access to.
- */
+		if(assess_patient(C))
+			target = C
+			if((last_newpatient_speak + 100 < world.time) &&  (shut_up == 0)) //Don't spam these messages!
+				playsound(src.loc, 'sound/medbot/Administering_medical.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Administering medical attention!")
+				last_newpatient_speak = world.time
+				if(declare_treatment)
+					var/area/location = get_area(src)
+					broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
+			visible_message("<b>[src]</b> points at [C.name]!")
+			process_path() // Let's waste no time
+			look_for_target = FALSE
+			break
+	look_for_target = FALSE
 
-//Pretty ugh
-/*
-/turf/proc/AdjacentTurfsAllowMedAccess()
-	var/L[] = new()
-	for(var/turf/t in oview(src,1))
-		if(!t.density)
-			if(!LinkBlocked(src, t) && !TurfBlockedNonWindowNonDoor(t,get_access("Medical Doctor")))
-				L.Add(t)
-	return L
+/obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C)
+	//Time to see if they need medical help!
+	if(C.isDead())
+		return 0 //welp too late for them!
 
+	if(C.mind && C.mind.suiciding)
+		return 0 //Kevorkian school of robotic medical assistants.
 
-//It isn't blocked if we can open it, man.
-/proc/TurfBlockedNonWindowNonDoor(turf/loc, var/list/access)
-	for(var/obj/O in loc)
-		if(O.density && !istype(O, /obj/structure/window) && !istype(O, /obj/machinery/door))
-			return 1
+	if(emagged == 2) //Everyone needs our medicine. (Our medicine is toxins)
+		return 1
 
-		if (O.density && (istype(O, /obj/machinery/door)) && (access.len))
-			var/obj/machinery/door/D = O
-			for(var/req in D.req_access)
-				if(!(req in access)) //doesn't have this access
-					return 1
+	if(declare_crit && C.health <= 0) //Critical condition! Call for help!
+		declare()
+
+	//If they're injured, we're using a beaker, and don't have one of our WONDERCHEMS.
+	if((reagent_glass) && (use_beaker) && ((C.getBruteLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getOxyLoss() >= (heal_threshold + 15))))
+		for(var/datum/reagent/R in reagent_glass.reagents.reagent_list)
+			if(!C.reagents.has_reagent(R))
+				return 1
+			continue
+
+	//They're injured enough for it!
+	if((C.getBruteLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_brute)))
+		return 1 //If they're already medicated don't bother!
+
+	if((C.getOxyLoss() >= (15 + heal_threshold)) && (!C.reagents.has_reagent(treatment_oxy)))
+		return 1
+
+	if((C.getFireLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_fire)))
+		return 1
+
+	if((C.getToxLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_tox)))
+		return 1
+
+	for(var/ID in C.virus2)
+		if (ID in virusDB)
+			var/datum/data/record/v = virusDB[ID]
+			if ((v.fields["danger"] != "Safe") && (!C.reagents.has_reagent(treatment_virus)))
+				return 1
 
 	return 0
-*/
+
+/obj/machinery/bot/medbot/return_status()
+	if (currently_healing)
+		return "Healing"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
 
 /*
  *	Medbot Assembly -- Can be made out of all three medkits.
@@ -649,13 +566,7 @@
 		to_chat(user, "<span class='notice'>You need to empty [src] out first.</span>")
 		return
 
-	var/obj/item/weapon/firstaid_arm_assembly/A = new /obj/item/weapon/firstaid_arm_assembly
-	if(istype(src,/obj/item/weapon/storage/firstaid/fire))
-		A.skin = "ointment"
-	else if(istype(src,/obj/item/weapon/storage/firstaid/toxin))
-		A.skin = "tox"
-	else if(istype(src,/obj/item/weapon/storage/firstaid/o2))
-		A.skin = "o2"
+	var/obj/item/weapon/firstaid_arm_assembly/A = new /obj/item/weapon/firstaid_arm_assembly(get_turf(src),icon_state)
 
 	qdel(S)
 	S = null
@@ -693,7 +604,7 @@
 						to_chat(user, "<span class='notice'>You complete the Medibot! Beep boop.</span>")
 						playsound(src.loc, 'sound/medbot/Automedic_on.ogg', 35, channel = CHANNEL_MEDBOTS)
 						var/turf/T = get_turf(src)
-						var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T)
+						var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T,skin)
 						S.skin = skin
 						S.name = created_name
 						user.drop_from_inventory(src)
@@ -739,7 +650,7 @@
 	if(!Adjacent(A))
 		return
 
-	patient = A //Needed because medicate_patient doesn't set up one.
+	target = A //Needed because medicate_patient doesn't set up one.
 
 	if(pai_analyze_mode)
 		if(istype(A, /mob/living/carbon))

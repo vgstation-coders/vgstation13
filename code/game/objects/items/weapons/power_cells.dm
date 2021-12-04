@@ -21,9 +21,11 @@
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
 	var/starch_cell = 0
+	var/mob/living/simple_animal/hostile/pulse_demon/occupant
 
-/obj/item/weapon/cell/suicide_act(mob/user)
+/obj/item/weapon/cell/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	electrocute_mob(user, get_area(src), src, 2)
 	return (SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/cell/empty/New()
@@ -79,6 +81,10 @@
 	name = "cyborg rechargeable power cell"
 	maxcharge = 7500
 
+/obj/item/weapon/cell/high/mecha
+	name = "custom high-capacity power cell"
+	maxcharge = 15000
+
 /obj/item/weapon/cell/high/empty/New()
 	..()
 	charge = 0
@@ -109,19 +115,14 @@
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
 	origin_tech = Tc_POWERSTORAGE + "=1"
-	icon = 'icons/obj/power.dmi' //'icons/obj/harvest.dmi'
-	icon_state = "potato_cell" //"potato_battery"
+	icon = 'icons/obj/power.dmi'
+	icon_state = "potato_cell"
 	charge = 100
 	maxcharge = 300
 	starting_materials = null
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 	starch_cell = 1
-
-/obj/item/weapon/cell/potato/soviet
-	charge = 15000
-	maxcharge = 15000
-	minor_fault = 0
 
 /obj/item/weapon/cell/potato/soviet
 	charge = 15000
@@ -138,11 +139,6 @@
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 	starch_cell = 1
-
-/obj/item/weapon/cell/crepe/mommi
-	maxcharge = 10000
-	charge = 10000
-	minor_fault = 0
 
 /obj/item/weapon/cell/crepe/mommi
 	maxcharge = 10000
@@ -169,8 +165,8 @@
 	name = "charged slime core"
 	desc = "A yellow slime core infused with plasma, it crackles with power."
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_BIOTECH + "=4"
-	icon = 'icons/mob/slimes.dmi' //'icons/obj/harvest.dmi'
-	icon_state = "yellow slime extract" //"potato_battery"
+	icon = 'icons/mob/slimes.dmi'
+	icon_state = "yellow slime extract"
 	maxcharge = 30000
 	starting_materials =  null
 	w_type = RECYK_BIOLOGICAL
@@ -178,7 +174,7 @@
 
 /obj/item/weapon/cell/temperaturegun
 	name = "temperature gun cell"
-	desc = "A specially designed power cell for heating and cooling projectiles"
+	desc = "A specially designed power cell for heating and cooling projectiles."
 	icon_state = "icell"
 	maxcharge = 900
 
@@ -227,8 +223,9 @@
 	icon_state = "rcell"
 	maxcharge = 1000
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
-	var/charge_rate = 10
-
+	var/charge_rate = 100
+	var/damaged = FALSE
+	
 /obj/item/weapon/cell/rad/empty/New()
 	..()
 	charge = 0
@@ -245,13 +242,47 @@
 	return
 
 /obj/item/weapon/cell/rad/process()
+	if(!maxcharge && prob(5)) //5% chance to explode every 2 seconds if the cell is broken
+		explosion(loc, 0, 1, 2, 2)
+		qdel(src)
 	if(maxcharge <= charge)
 		return 0
 	var/power_used = min(maxcharge-charge,charge_rate)
 	charge += power_used
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate, RAD_EXTERNAL)
+			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+	if(charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge and a 5% chance to explode every 2s
+		name = "broken cell"
+		icon_state = "cell"
+		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
+		charge = 0
+		maxcharge = 0
+		charge_rate = 0
+		damaged = FALSE //so you don't get the damaged examine if the cell is broken
+		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
+
+		
+/obj/item/weapon/cell/rad/emp_act(severity)
+	..()
+	if(maxcharge > 0)
+		switch(rand(3))
+			if(0)
+				charge_rate *= severity*0.2
+				damaged = TRUE
+			if(1)
+				maxcharge *= severity*0.2
+				charge = 0
+			if(2)
+				maxcharge *= severity*0.2
+				charge = 0
+				charge_rate *= severity*0.2
+				damaged = TRUE
+			
+/obj/item/weapon/cell/rad/examine(mob/user)
+	..()
+	if(damaged)
+		to_chat(user, "<span class='warning'>Seems to be damaged as if it were leaking power, you estimate that it selfcharges [(1-charge_rate/initial(charge_rate))*100]% slower than normal.</span>")
 
 /obj/item/weapon/cell/rad/large
 	name = "PDTG power cell"
@@ -259,7 +290,7 @@
 	icon_state = "pcell"
 	maxcharge = 2500
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
-	charge_rate = 25
+	charge_rate = 250
 
 /obj/item/weapon/cell/rad/large/empty/New()
 	..()

@@ -165,7 +165,7 @@
 
 
 	for(var/i=0; i<icount;i++)
-		var/obj/abstract/screen/H = getFromPool(/obj/abstract/screen)
+		var/obj/abstract/screen/H = new /obj/abstract/screen
 
 		H.screen_loc = "[5 + i%icx],[6+ round(i/icx)]"
 
@@ -298,7 +298,7 @@
 
 
 	for(var/i=0; i<icount;i++)
-		var/obj/abstract/screen/H = getFromPool(/obj/abstract/screen)
+		var/obj/abstract/screen/H = new /obj/abstract/screen
 
 		H.screen_loc = "[5 + i%icx],[6+ round(i/icx)]"
 
@@ -344,20 +344,20 @@
 
 		return
 
-proc/getr(col)
+/proc/getr(col)
 	return hex2num( copytext(col, 2,4))
 
-proc/getg(col)
+/proc/getg(col)
 	return hex2num( copytext(col, 4,6))
 
-proc/getb(col)
+/proc/getb(col)
 	return hex2num( copytext(col, 6))
 
 
 /mob/proc/clearmap()
 	src.client.screen -= src.mapobjs
 	for(var/obj/abstract/screen/O in mapobjs)
-		returnToPool(O)
+		qdel(O)
 
 	mapobjs = null
 	src.unset_machine()

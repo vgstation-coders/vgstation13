@@ -3,7 +3,7 @@
 	desc = "Slick grease covers the ground in a radius, turning the terrain into difficult terrain. Has spell congruency with fire-based spells."
 	abbreviation = "GR"
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 300
@@ -36,7 +36,7 @@
 	if(spell_levels[Sp_POWER] >= 1)
 		for(var/A in targets)
 			var/turf/T = get_turf(A)
-			var/datum/effect/effect/system/foam_spread/s = new()
+			var/datum/effect/system/foam_spread/s = new()
 			s.set_up(50, T, null, 0)
 			s.carried_reagents.Add(LUBE)
 			if(user.has_spell_with_flag(SPELL_FIRE))
@@ -44,7 +44,7 @@
 			s.start()
 	else
 		var/turf/T = get_turf(user)
-		var/datum/effect/effect/system/foam_spread/s = new()
+		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(50, T, null, 0)
 		s.carried_reagents.Add(LUBE)
 		if(user.has_spell_with_flag(SPELL_FIRE))

@@ -10,6 +10,7 @@
 	var/message_mime = "" //Message displayed if the user is a mime
 	var/message_alien = "" //Message displayed if the user is a grown alien
 	var/message_larva = "" //Message displayed if the user is an alien larva
+	var/message_pulsedemon = "" //Message displayed if the user is a pulse demon
 	var/message_robot = "" //Message displayed if the user is a robot
 	var/message_AI = "" //Message displayed if the user is an AI
 	var/message_monkey = "" //Message displayed if the user is a monkey
@@ -24,8 +25,12 @@
 	var/list/mob_type_ignore_stat_typelist
 	var/voxemote = TRUE //Flags if a vox CAN use an emote. Defaults to can.
 	var/voxrestrictedemote = FALSE //Flags if Non-Vox CANNOT use an emote. Defaults to CAN.
+	var/insectoidemote = TRUE
+	var/insectoidrestrictedemote = FALSE
 	var/stat_allowed = CONSCIOUS
+	var/hands_needed = 0//how many hands do you need to perform the emote
 	var/static/list/emote_list = list()
+	var/replace_pronouns = TRUE
 
 /datum/emote/New()
 	if(key_third_person)
@@ -33,7 +38,7 @@
 	if(!message_mommi)
 		message_mommi = message_robot
 
-/datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+/datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE, var/arguments)
 	. = TRUE
 	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
 		return FALSE
@@ -44,27 +49,40 @@
 	msg = replace_pronoun(user, msg)
 
 	if(isliving(user))
-		var/mob/living/L = user
-		for(var/obj/item/weapon/implant/I in L)
-			I.trigger(key, L)
+		INVOKE_EVENT(user, /event/emote, "emote" = key, "source" = user)
 
 	if(!msg)
 		return
 
+	var/msg_runechat = msg
 	msg = "<b>[user]</b> " + msg
 
-	for(var/mob/M in dead_mob_list)
-		if(!M.client || isnewplayer(M))
-			continue
-		var/T = get_turf(user)
-		if(isobserver(M) && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
-			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
+	var/obs_pass = TRUE
+	// Don't hear simple mobs without a client.
+	if (istype(user, /mob/living/simple_animal) && !user.client)
+		obs_pass = FALSE
+
+	if (obs_pass)
+		for(var/mob/M in dead_mob_list)
+			if(!M.client || isnewplayer(M))
+				continue
+			var/T = get_turf(user)
+			if(isobserver(M) && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
+				M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
+				if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < M?.client.view)
+					M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
+		for(var/z0 in GetOpenConnectedZlevels(user))
+			for (var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
+				if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
+					O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
+			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !O.is_deaf())
+				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	var/turf/T = get_turf(user)
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
@@ -83,7 +101,7 @@
 			if(findtext(message, "%s"))
 				message = replacetext(message, "%s", "")
 			return message
-		else
+		else if (replace_pronouns)
 			switch(H.gender)
 				if(MALE)
 					if(findtext(message, "their"))
@@ -115,6 +133,8 @@
 		. = message_alien
 	else if(islarva(user) && message_larva)
 		. = message_larva
+	else if(ispulsedemon(user) && message_pulsedemon)
+		. = message_pulsedemon
 	else if(isAI(user) && message_AI)
 		. = message_AI
 	else if(isMoMMI(user) && message_mommi)
@@ -135,6 +155,12 @@
 	if(is_type_in_list(user, mob_type_blacklist_typelist))
 		return FALSE
 
+	if((isinsectoid(user)) && insectoidrestrictedemote == TRUE)
+		return TRUE
+	if((!isinsectoid(user)) && insectoidrestrictedemote == TRUE)
+		return FALSE
+	if((isinsectoid(user)) && insectoidemote == FALSE)
+		return FALSE
 	if((isvox(user) || isskelevox(user)) && voxrestrictedemote == TRUE)
 		return TRUE
 	if((!isvox(user) || !isskelevox(user)) && voxrestrictedemote == TRUE)
@@ -178,10 +204,14 @@
 /mob/proc/audible_cough()
 	emote("coughs", message = TRUE, ignore_status = TRUE)
 
-/mob/proc/audible_scream()
+/mob/proc/audible_scream(var/arguments)
 	if(isvox(src) || isskelevox(src))
-		emote("shrieks", message = TRUE, ignore_status = TRUE)
+		emote("shrieks", message = TRUE, ignore_status = TRUE, arguments = arguments)
 		return
-
+	if(isinsectoid(src))
+		emote("chitters", message = TRUE, ignore_status = TRUE, arguments = arguments)
+		return
 	else
-		emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
+		emote("screams", message = TRUE, ignore_status = TRUE, arguments = arguments) // So it's forced
+
+

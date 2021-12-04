@@ -1,48 +1,7 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
-
-/* new portable generator - work in progress
-
-/obj/machinery/power/port_gen
-	name = "portable generator"
-	desc = "A portable generator used for emergency backup power."
-	icon = 'generator.dmi'
-	icon_state = "off"
-	density = 1
-	anchored = 0
-	var/t_status = 0
-	var/t_per = 5000
-	var/filter = 1
-	var/tank = null
-	var/turf/inturf
-	var/starter = 0
-	var/rpm = 0
-	var/rpmtarget = 0
-	var/capacity = 1e6
-	var/turf/outturf
-	var/lastgen
-
-
-/obj/machinery/power/port_gen/process()
-ideally we're looking to generate 5000
-
-/obj/machinery/power/port_gen/attackby(obj/item/weapon/W, mob/user)
-tank [un]loading stuff
-
-/obj/machinery/power/port_gen/attack_hand(mob/user)
-turn on/off
-
-/obj/machinery/power/port_gen/examine()
-display round(lastgen) and plasmatank amount
-
-*/
-
-//Previous code been here forever, adding new framework for portable generators
-
-
 //Baseline portable generator. Has all the default handling. Not intended to be used on it's own (since it generates unlimited power).
 /obj/machinery/power/port_gen
 	name = "Portable Generator"
-	desc = "A portable generator for emergency backup power"
+	desc = "A portable generator for emergency backup power."
 	icon = 'icons/obj/power.dmi'
 	icon_state = "portgen1"
 	density = 1
@@ -97,7 +56,7 @@ display round(lastgen) and plasmatank amount
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""
-	var/sheet_path = /obj/item/stack/sheet/mineral/plasma
+	var/obj/sheet_path = /obj/item/stack/sheet/mineral/plasma
 	var/board_path = "/obj/item/weapon/circuitboard/pacman"
 	var/sheet_left = 0 // How much is left of the sheet
 	var/time_per_sheet = 40
@@ -120,8 +79,7 @@ display round(lastgen) and plasmatank amount
 		board_path
 	)
 
-	var/obj/sheet = new sheet_path(null)
-	sheet_name = sheet.name
+	sheet_name = initial(sheet_path.name)
 	RefreshParts()
 
 /obj/machinery/power/port_gen/pacman/Destroy()
@@ -208,7 +166,7 @@ display round(lastgen) and plasmatank amount
 	emp_act(1)
 	return 1
 
-/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user) //don't like the copy/paste, but the proc has special handling in the middle so we need it
+/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user, obj/item/tool/crowbar/I) //don't like the copy/paste, but the proc has special handling in the middle so we need it
 	if(..())
 		while ( sheets > 0 )
 			var/obj/item/stack/sheet/G = new sheet_path(src.loc)
@@ -217,10 +175,10 @@ display round(lastgen) and plasmatank amount
 			else
 				G.amount = sheets
 			sheets -= G.amount
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
-/obj/machinery/power/port_gen/pacman/wrenchAnchor(var/mob/user)
+/obj/machinery/power/port_gen/pacman/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -244,6 +202,20 @@ display round(lastgen) and plasmatank amount
 	else if(!active)
 		if( ..() )
 			return 1
+
+/obj/machinery/power/port_gen/pacman/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, sheet_path))
+		var/obj/item/stack/addstack = AM
+		var/amount = min((max_sheets - sheets), addstack.amount)
+		if(amount < 1)
+			return FALSE
+		sheets += amount
+		addstack.use(amount)
+		return TRUE
+	else if(!active)
+		if( ..() )
+			return FALSE
+	return FALSE
 
 /obj/machinery/power/port_gen/pacman/attack_hand(mob/user as mob)
 	..()
@@ -334,8 +306,8 @@ display round(lastgen) and plasmatank amount
 	power_gen = 15000
 	time_per_sheet = 65
 	board_path = "/obj/item/weapon/circuitboard/pacman/super"
-	overheat()
-		explosion(src.loc, 3, 3, 3, -1)
+/obj/machinery/power/port_gen/pacman/super/overheat()
+	explosion(src.loc, 3, 3, 3, -1)
 
 /obj/machinery/power/port_gen/pacman/mrs
 	name = "M.R.S.P.A.C.M.A.N.-type Portable Generator"
@@ -344,5 +316,5 @@ display round(lastgen) and plasmatank amount
 	power_gen = 40000
 	time_per_sheet = 80
 	board_path = "/obj/item/weapon/circuitboard/pacman/mrs"
-	overheat()
-		explosion(src.loc, 4, 4, 4, -1)
+/obj/machinery/power/port_gen/pacman/mrs/overheat()
+	explosion(src.loc, 4, 4, 4, -1)

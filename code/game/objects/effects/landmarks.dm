@@ -9,6 +9,7 @@
 	. = ..()
 	tag = text("landmark*[]", name)
 	invisibility = 101
+	landmarks_list += src
 
 	switch(name)			//some of these are probably obsolete
 		if("shuttle")
@@ -63,6 +64,13 @@
 			prisonsecuritywarp += loc
 			qdel(src)
 
+		//the ACTUAL prisoners
+		if("Prisoner")
+			var/turf/T = get_turf(src)
+			var/obj/structure/bed/chair/chair = locate(/obj/structure/bed/chair) in T.contents
+			prisonerstart += chair	//the prisoners start buckled in chairs that are on shuttles, add those to the list
+			qdel(src)
+
 		if("blobstart")
 			blobstart += loc
 			qdel(src)
@@ -81,7 +89,20 @@
 		if("grinchstart")
 			grinchstart += loc
 
-	landmarks_list += src
+		if("hobostart")
+			hobostart += loc
+
+		if("voxstart")
+			voxstart += loc
+
+		if("voxlocker")
+			voxlocker += loc
+			
+		if("ninjastart")
+			ninjastart += loc
+
+		if("timeagentstart")
+			timeagentstart += loc
 	return 1
 
 /obj/effect/landmark/Destroy()
@@ -96,7 +117,6 @@
 
 /obj/effect/landmark/start/New()
 	..()
-	tag = "start*[name]"
 	invisibility = 101
 
 	return 1
@@ -135,3 +155,9 @@
 
 /obj/effect/landmark/xtra_cleanergrenades
 	name = "xtra_cleanergrenades"
+
+/obj/effect/landmark/vox_locker
+	name = "vox_locker"
+
+/obj/effect/landmark/hobostart
+	name = "hobostart"

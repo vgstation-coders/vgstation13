@@ -1,5 +1,8 @@
 #define WORLD_ICON_SIZE 32
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
+
+var/world_startup_time
+
 /world
 	mob = /mob/new_player
 	turf = /turf/space
@@ -7,27 +10,45 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 512
-
+	sleep_offline = FALSE
+	movement_mode = PIXEL_MOVEMENT_MODE
 
 var/savefile/panicfile
+
+var/datum/early_init/early_init_datum = new
+
+#if AUXTOOLS_DEBUGGER
+var/auxtools_path
+
+/proc/enable_debugging(mode, port) //Hooked by auxtools
+	CRASH("auxtools not loaded")
+
+/proc/auxtools_stack_trace(msg)
+	CRASH(msg)
+
+/proc/auxtools_expr_stub()
+	CRASH("auxtools not loaded")
+#endif
+
+/datum/early_init/New()
+	..()
+	#if AUXTOOLS_DEBUGGER
+	auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
+	if(fexists(auxtools_path))
+		call(auxtools_path, "auxtools_init")()
+		enable_debugging()
+	else
+		// warn on missing library
+		warning("There is no auxtools library for this system included with SpacemanDMM. Debugging will not work. Pester them to add one.")
+	#endif
+	world.Profile(PROFILE_START)
+
 /world/New()
+	world_startup_time = world.timeofday
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
-
-	// Initialize world events as early as possible.
-	on_login = new ()
-	on_ban   = new ()
-	on_unban = new ()
-
-
-	/*Runtimes, not sure if i need it still so commenting out for now
-	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
-	midicon = rotate_icon('icons/obj/lightning.dmi', "lightning")
-	endicon = rotate_icon('icons/obj/lightning.dmi', "lightningend")
-	*/
 
 	// logs
 	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
@@ -44,28 +65,21 @@ var/savefile/panicfile
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
 	admin_diary = file("data/logs/[date_string] admin only.log")
 
-	var/log_start = "---------------------\n\[[time_stamp()]\]WORLD: starting up..."
+	var/now = time_stamp()
+	var/log_start = "---------------------\n\[[now]\]WORLD: starting up..."
 
 	diary << log_start
 	diaryofmeanpeople << log_start
 	admin_diary << log_start
-	var/ourround = time_stamp()
-	panicfile.cd = ourround
-
+	panicfile.cd = now
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
-/*
- * IF YOU HAVE BYOND VERSION BELOW 507.1248 OR ARE ABLE TO WALK THROUGH WINDOORS/BORDER WINDOWS COMMENT OUT
- * #define BORDER_USE_TURF_EXIT
- * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
- */
-#ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < RECOMMENDED_VERSION)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 512.1426")
-#endif
+
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
+	SSdbcore.Initialize(world.timeofday) // Get a database running, first thing
+
 	load_mode()
 	load_motd()
 	load_admins()
@@ -95,78 +109,24 @@ var/savefile/panicfile
 
 	src.update_status()
 
-	paperwork_setup()
-
-	global_deadchat_listeners = list()
-
-	initialize_runesets()
+	initialize_rune_words()
 
 	initialize_beespecies()
+	generate_radio_frequencies()
 
-	//sun = new /datum/sun()
-	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
 
-	if(!setup_database_connection())
-		world.log << "Your server failed to establish a connection with the feedback database."
-	else
-		world.log << "Feedback database connection established."
-	migration_controller_mysql = new
-	migration_controller_sqlite = new ("players2.sqlite", "players2_empty.sqlite")
-
-	if(!setup_old_database_connection())
-		world.log << "Your server failed to establish a connection with the tgstation database."
-	else
-		world.log << "Tgstation database connection established."
-
-	plmaster = new /obj/effect/overlay()
-	plmaster.icon = 'icons/effects/tile_effects.dmi'
-	plmaster.icon_state = "plasma"
-	plmaster.layer = FLY_LAYER
-	plmaster.plane = EFFECTS_PLANE
-	plmaster.mouse_opacity = 0
-
-	slmaster = new /obj/effect/overlay()
-	slmaster.icon = 'icons/effects/tile_effects.dmi'
-	slmaster.icon_state = "sleeping_agent"
-	slmaster.layer = FLY_LAYER
-	slmaster.plane = EFFECTS_PLANE
-	slmaster.mouse_opacity = 0
-
 	src.update_status()
-
-	sleep_offline = 0
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
 
-	process_teleport_locs()				//Sets up the wizard teleport locations
-	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
-	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
-	spawn(2000)		//so we aren't adding to the round-start lag
-		if(config.ToRban)
-			ToRban_autoupdate()
-		/*if(config.kick_inactive)
-			KickInactiveClients()*/
-
-#undef RECOMMENDED_VERSION
 	return ..()
-
-//world/Topic(href, href_list[])
-//		to_chat(world, "Received a Topic() call!")
-//		to_chat(world, "[href]")
-//		for(var/a in href_list)
-//			to_chat(world, "[a]")
-//		if(href_list["hello"])
-//			to_chat(world, "Hello world!")
-//			return "Hello world!"
-//		to_chat(world, "End of Topic() call.")
-//		..()
 
 /world/Topic(T, addr, master, key)
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
@@ -195,6 +155,7 @@ var/savefile/panicfile
 		s["host"] = host ? host : null
 		s["players"] = list()
 		s["map_name"] = map.nameLong
+		s["station_time"] = worldtime2text()
 		s["gamestate"] = 1
 		if(ticker)
 			s["gamestate"] = ticker.current_state
@@ -202,19 +163,21 @@ var/savefile/panicfile
 		s["revision"] = return_revision()
 		var/n = 0
 		var/admins = 0
+		var/afk_admins = 0
 
 		for(var/client/C in clients)
 			if(C.holder)
 				if(C.holder.fakekey)
 					continue	//so stealthmins aren't revealed by the hub
+				if(C.is_afk())
+					afk_admins++
 				admins++
 			s["player[n]"] = C.key
 			n++
 		s["players"] = n
 
-		if(revdata)
-			s["revision"] = revdata.revision
-		s["admins"] = admins
+		s["admins"] = admins - afk_admins
+		s["afk_admins"] = afk_admins
 
 		return list2params(s)
 	else if (findtext(T,"notes:"))
@@ -274,7 +237,6 @@ var/savefile/panicfile
 		D.closeAll()
 
 	Master.Shutdown()
-	paperwork_stop()
 
 	stop_all_media()
 
@@ -292,6 +254,10 @@ var/savefile/panicfile
 
 		else
 			C << link("byond://[world.address]:[world.port]")
+
+	#if AUXTOOLS_DEBUGGER
+	call(auxtools_path, "auxtools_shutdown")()
+	#endif
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
@@ -408,89 +374,3 @@ var/savefile/panicfile
 	/* does this help? I do not know */
 	if (src.status != s)
 		src.status = s
-
-#define FAILED_DB_CONNECTION_CUTOFF 5
-var/failed_db_connections = 0
-var/failed_old_db_connections = 0
-
-proc/setup_database_connection()
-
-
-	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
-		return 0
-
-	if(!dbcon)
-		dbcon = new()
-
-	var/user = sqlfdbklogin
-	var/pass = sqlfdbkpass
-	var/db = sqlfdbkdb
-	var/address = sqladdress
-	var/port = sqlport
-
-	dbcon.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
-	. = dbcon.IsConnected()
-	if ( . )
-		failed_db_connections = 0	//If this connection succeeded, reset the failed connections counter.
-	else
-		world.log << "Database Error: [dbcon.ErrorMsg()]"
-		failed_db_connections++		//If it failed, increase the failed connections counter.
-
-	return .
-
-//This proc ensures that the connection to the feedback database (global variable dbcon) is established
-proc/establish_db_connection()
-	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)
-		return 0
-
-	var/DBQuery/q
-	if(dbcon)
-		q = dbcon.NewQuery("show global variables like 'wait_timeout'")
-		q.Execute()
-		if(q && q.ErrorMsg())
-			dbcon.Disconnect()
-	if(!dbcon || !dbcon.IsConnected())
-		return setup_database_connection()
-	else
-		return 1
-
-
-
-
-//These two procs are for the old database, while it's being phased out. See the tgstation.sql file in the SQL folder for more information.
-proc/setup_old_database_connection()
-
-
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
-		return 0
-
-	if(!dbcon_old)
-		dbcon_old = new()
-
-	var/user = sqllogin
-	var/pass = sqlpass
-	var/db = sqldb
-	var/address = sqladdress
-	var/port = sqlport
-
-	dbcon_old.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
-	. = dbcon_old.IsConnected()
-	if ( . )
-		failed_old_db_connections = 0	//If this connection succeeded, reset the failed connections counter.
-	else
-		failed_old_db_connections++		//If it failed, increase the failed connections counter.
-		world.log << dbcon_old.ErrorMsg()
-
-	return .
-
-//This proc ensures that the connection to the feedback database (global variable dbcon) is established
-proc/establish_old_db_connection()
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)
-		return 0
-
-	if(!dbcon_old || !dbcon_old.IsConnected())
-		return setup_old_database_connection()
-	else
-		return 1
-
-#undef FAILED_DB_CONNECTION_CUTOFF

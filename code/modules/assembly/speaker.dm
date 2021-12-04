@@ -28,6 +28,7 @@
 	if(user.stat == DEAD) //ENGAGE SPOOKS!
 		language = all_languages["Spooky"]
 	src.say("New message: [message]", language)
+	log_say("[key_name(user)]: '[message]' as [language ? language.name : "no language"] (using a speaker)")
 
 /obj/item/device/assembly/speaker/attackby(obj/item/W as obj, mob/user as mob)
 	..()

@@ -77,7 +77,7 @@
 	update_icon()
 	sleep(30)
 
-/obj/item/weapon/gun/projectile/hivehand/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/projectile/hivehand/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (istype(A, /obj/item/weapon/storage/backpack ))
 		return
 

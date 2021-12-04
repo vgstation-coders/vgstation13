@@ -15,16 +15,27 @@
 	var/hidecount = 0
 	var/extinguishingProb = 15
 
+//Sound stuff
+//sound_change flags are CLOTHING_SOUND_SCREAM and CLOTHING_SOUND_COUGH
+//sound_priority are CLOTHING_SOUND_[level]_PRIORITY, replace [level] with LOW/MED/HIGH
+	var/list/sound_change //Clothing can change audible emotes, this will determine what is affected
+	var/sound_priority //The priority of the clothing when it comes to playing sounds, higher priority means it will always play first otherwise it will randomly pick
+	var/list/sound_file //The actual files to be played, it will pick from the list
+	var/list/sound_species_whitelist
+	var/list/sound_genders_allowed //Checks for what gender it is allowed to play the sound for
+
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
 		accessories.Remove(A)
 		qdel(A)
 	..()
-	
+
 /obj/item/clothing/CtrlClick(var/mob/user)
+	if(isturf(loc))
+		return ..()
 	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
 		removeaccessory()
-	
+
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -273,6 +284,12 @@
 /obj/item/clothing/proc/get_armor_absorb(var/type)
 	return armor_absorb[type]
 
+/obj/item/clothing/proc/offenseTackleBonus()
+	return
+
+/obj/item/clothing/proc/defenseTackleBonus()
+	return
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
@@ -336,6 +353,9 @@
 
 	var/attack_verb_override = "punches"
 
+	var/transfer_blood = 0
+	var/list/bloody_hands_data = list()
+
 /obj/item/clothing/gloves/get_cell()
 	return cell
 
@@ -377,6 +397,81 @@
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/gave_out_gifts = FALSE //for snowman animation
+	var/obj/item/clothing/head/on_top = null //for stacking
+	var/stack_depth = 0
+
+var/global/hatStacking = 0
+var/global/maxStackDepth = 10
+
+/client/proc/configHat()
+	set name = "Configure Hat Stacking"
+	set category = "Debug"
+
+	. = (alert("Allow hats to stack?",,"Yes","No")=="Yes")
+	if(.)
+		hatStacking = 1
+	else
+		hatStacking = 0
+	. = (input("Set stack limit. (1 to 100)"))
+	. = text2num(.)
+	if(isnum(.) && (. in 1 to 100))
+		maxStackDepth = .
+	else
+		to_chat(usr, "That wasn't a valid number.")
+	log_admin("[key_name(usr)] set hatStacking to [hatStacking].")
+	message_admins("[key_name(usr)] set hatStacking to [hatStacking].")
+	log_admin("[key_name(usr)] set maxStackDepth to [maxStackDepth].")
+	message_admins("[key_name(usr)] set maxStackDepth to [maxStackDepth].")
+
+/obj/item/clothing/head/attackby(obj/item/W, mob/user)
+	if(hatStacking)
+		if(on_top)
+			on_top.attackby(W,user)
+		else if(istype(W,/obj/item/clothing/head) && !istype(W,/obj/item/clothing/head/helmet))
+			var/obj/item/clothing/head/hat = W
+			if(stack_depth >= maxStackDepth)
+				to_chat(user,"<span class='warning'>You cannot stack any higher than this!</span>")
+			else if(user.drop_item(W))
+				to_chat(user,"<span class='notice'>You add \the [hat] onto \the [src] and stack it in a towering pillar!</span>")
+				stack_depth++
+				hat.stack_depth = stack_depth
+				W.forceMove(src)
+				W.pixel_y += 4 * PIXEL_MULTIPLIER
+				vis_contents.Add(W)
+				on_top = hat
+				user.update_inv_head()
+				for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+					above.stack_depth = stack_depth
+	..()
+
+/obj/item/clothing/head/attack_hand(mob/user)
+	if(on_top)
+		if(on_top.on_top)
+			on_top.attack_hand(user)
+		else
+			to_chat(user,"You remove \the [on_top] from the towering pillar.")
+			on_top.pixel_y = 0
+			stack_depth--
+			on_top.stack_depth = 0
+			user.put_in_hands(on_top)
+			vis_contents.Cut()
+			on_top = null
+			user.update_inv_head()
+			for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+				above.stack_depth = stack_depth
+		return
+	return ..()
+
+/obj/item/clothing/head/description_hats()
+	var/list/hat_names = list()
+	for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+		hat_names += above.name
+	if(hat_names.len)
+		return " It is piled underneath a [english_list(hat_names)]."
+
+/obj/item/clothing/head/proc/bite_action(mob/target)
+	return
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
@@ -416,6 +511,7 @@
 			src.icon_state = initial(icon_state)
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
+			sterility = initial(sterility)
 			flags = initial(flags)
 			body_parts_covered = initial(body_parts_covered)
 			to_chat(usr, "You push \the [src] back into place.")
@@ -425,6 +521,7 @@
 			to_chat(usr, "You push \the [src] out of the way.")
 			gas_transfer_coefficient = null
 			permeability_coefficient = null
+			sterility = 0
 			flags = 0
 			src.is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
@@ -447,8 +544,7 @@
 	desc = "Comfortable-looking shoes."
 	gender = PLURAL //Carn: for grammarically correct text-parsing
 
-	var/chained = 0
-	var/chaintype = null // Type of chain.
+	var/obj/item/weapon/chain = null // handcuffs attached
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
 	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
@@ -463,6 +559,7 @@
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
 	var/stepstaken = 1
+	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
 
 /obj/item/clothing/shoes/proc/step_action()
 	stepstaken++
@@ -470,13 +567,27 @@
 		var/mob/living/carbon/human/H = loc
 		switch(H.m_intent)
 			if("run")
-				if(stepstaken % 2 == 1)
+				if(stepstaken % modulo_steps == 0)
 					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
 			if("walk")
 				playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
+
+/obj/item/clothing/shoes/defenseTackleBonus()
+	if(clothing_flags & MAGPULSE)
+		return 40
+
+//Called from human_defense.dm proc foot_impact
+/obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
+	return damage
+
+/obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
+	if(user.equip_to_slot_if_possible(src, slot_shoes))
+		user.visible_message("<span class='notice'>[user] kicks \the [src] and slips them on!</span>", "<span class='notice'>You kick \the [src] and slip them on!</span>")
+	else
+		..()
 
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()
@@ -512,6 +623,9 @@
 	clothing_flags = CANEXTINGUISH
 	sterility = 30
 
+/obj/item/clothing/suit/proc/vine_protected()
+	return FALSE
+
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
 //      Meaning the the suit is defined directly after the corresponding helmet. Just like below!
@@ -519,19 +633,20 @@
 	name = "Space helmet"
 	icon_state = "space"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	item_state = "space"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_visible_override = EYES
 	siemens_coefficient = 0.9
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")
 	eyeprot = 1
 	cold_breath_protection = 230
 	sterility = 100
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -553,6 +668,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	clothing_flags = CANEXTINGUISH
 	sterility = 100
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 //Under clothing
 /obj/item/clothing/under
@@ -574,6 +690,20 @@
 		*/
 	var/displays_id = 1
 	clothing_flags = CANEXTINGUISH
+	var/icon/jersey_overlays
+
+// Associative list of exact type -> number
+var/list/jersey_numbers = list()
+
+/obj/item/clothing/under/New()
+	..()
+	if(jersey_overlays)
+		var/number = jersey_numbers[type]++ % 99
+		var/first_digit = num2text(round((number / 10) % 10))
+		var/second_digit = num2text(round(number % 10))
+		var/image/jersey_overlay = image(jersey_overlays, src, "[first_digit]-")
+		jersey_overlay.overlays += image(jersey_overlays, src, second_digit)
+		dynamic_overlay["[UNIFORM_LAYER]"] = jersey_overlay
 
 /obj/item/clothing/under/examine(mob/user)
 	..()
@@ -655,6 +785,15 @@
 		return
 	for(var/obj/item/clothing/accessory/holomap_chip/HC in T.accessories)
 		HC.togglemap()
+
+/datum/action/item_action/target_appearance/check_watch
+	name = "Check the Time"
+
+/datum/action/item_action/target_appearance/check_watch/Trigger()
+	var/obj/item/clothing/accessory/wristwatch/W = target
+	if(!istype(W))
+		return
+	W.check_watch()
 
 /obj/item/clothing/under/rank/New()
 	. = ..()

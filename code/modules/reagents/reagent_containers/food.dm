@@ -57,7 +57,7 @@
 
 /obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole
 	name = "guacamole"
-	desc = "The original recipe calls for avocado, but this space-age substitute has supplanted the ancient style in popularity."
+	desc = "The Avocado Rebellion of 2562 briefly caused all NT guac to be made with a cheap, fire-retardant synthetic substitute. But thanks to a quick orbital bombardment, workers' rights have once again been squashed, much like the avocados in this dip. Tasty."
 	icon_state = "guacamole"
 	dip_message = "Taste the tang!"
 

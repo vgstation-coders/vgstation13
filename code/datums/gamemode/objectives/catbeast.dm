@@ -6,7 +6,7 @@
 	if (..())
 		return TRUE
 	var/datum/role/catbeast/C = owner.GetRole(CATBEAST)
-	return C.ticks_survived > 150
+	return C.ticks_survived >= 150
 
 /datum/objective/catbeast/defile
 	explanation_text = "Defile 30 rooms by entering them."
@@ -16,4 +16,4 @@
 	if (..())
 		return TRUE
 	var/datum/role/catbeast/C = owner.GetRole(CATBEAST)
-	return C.areas_defiled.len > 30
+	return C.areas_defiled.len >= 30

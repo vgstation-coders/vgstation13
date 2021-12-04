@@ -54,7 +54,7 @@
 				if(CA.type == A.type)
 					if(C.number)
 						number = max(number, C.number+1)
-			c_tag = "[A.name] #[number]"
+			c_tag = format_text("[A.name] #[number]")
 
 
 // CHECKS

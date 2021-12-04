@@ -1,0 +1,30 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"b" = (/obj/item/device/flashlight/lantern,/turf/unsimulated/floor/snow/permafrost,/area)
+"g" = (/obj/item/weapon/caution/cone,/turf/unsimulated/floor/snow,/area)
+"h" = (/obj/item/stack/rods,/turf/unsimulated/floor/snow/permafrost,/area)
+"i" = (/obj/item/weapon/pickaxe/shovel,/turf/unsimulated/floor/snow/permafrost,/area)
+"q" = (/obj/structure/fence/corner{dir = 1},/turf/unsimulated/floor/snow,/area)
+"y" = (/obj/structure/fence/door,/obj/item/tape/engineering{icon_state = "engineering_door"},/turf/unsimulated/floor/snow/asphalt,/area)
+"A" = (/obj/item/weapon/caution/cone,/turf/unsimulated/floor/snow/permafrost,/area)
+"C" = (/turf/unsimulated/floor/snow/permafrost,/area)
+"E" = (/obj/machinery/constructable_frame/machine_frame,/obj/item/stack/cable_coil/random,/turf/unsimulated/floor/snow/permafrost,/area)
+"M" = (/obj/item/weapon/grown/log/tree,/turf/unsimulated/floor/snow/permafrost,/area)
+"N" = (/obj/structure/closet/crate{icon_state = "crateopen"; opened = 1},/obj/item/stack/sheet/metal/bigstack,/obj/item/blueprints/construction_permit,/turf/unsimulated/floor/snow/permafrost,/area)
+"R" = (/obj/structure/fence/corner,/turf/unsimulated/floor/snow,/area)
+"S" = (/obj/item/weapon/pickaxe/shovel,/obj/item/weapon/hatchet,/turf/unsimulated/floor/snow/permafrost,/area)
+"W" = (/obj/structure/fence{dir = 4},/turf/unsimulated/floor/snow/permafrost,/area)
+"Y" = (/obj/structure/fence{dir = 4},/obj/structure/sign/securearea{desc = "A warning sign which reads 'CONSTRUCTION'."; name = "CONSTRUCTION"},/turf/unsimulated/floor/snow,/area)
+"Z" = (/obj/structure/fence{dir = 4},/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaa
+aaaaCCaaCACaaa
+aaaaaACCCCaaaa
+aaCCCECNChACCa
+aaaChiMCCCCaaa
+aCCCCbCMhCaaaa
+aagCMCCCSMACaa
+aCCCChCChCCaaa
+aaCACCCCCMCCaa
+aaqZZWYyZWWRaa
+"}

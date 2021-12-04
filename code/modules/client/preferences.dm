@@ -17,13 +17,17 @@ var/global/list/special_roles = list(
 	ROLE_POSIBRAIN  = 1,
 	REV          	= 1,
 	TRAITOR      	= 1,
+	CHALLENGER		= 1,
 	VAMPIRE      	= 1,
 	VOXRAIDER    	= 1,
 	WIZARD       	= 1,
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
+	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
+	ROLE_PRISONER   = 1,
 )
 
 /var/list/antag_roles = list(
@@ -35,13 +39,17 @@ var/global/list/special_roles = list(
 	NUKE_OP	    	= 1,
 	REV          	= 1,
 	TRAITOR      	= 1,
+	CHALLENGER		= 1,
 	VAMPIRE      	= 1,
 	VOXRAIDER    	= 1,
 	WIZARD       	= 1,
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
+	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
+	ROLE_PRISONER	= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -64,12 +72,14 @@ var/list/role_wiki=list(
 	ROLE_POSIBRAIN			= "Guide_to_Silicon_Laws",
 	REV						= "Revolution",
 	TRAITOR					= "Traitor",
+	CHALLENGER				= "Challengers",
 	VAMPIRE					= "Vampire",
 	VOXRAIDER				= "Vox_Raider",
 	WIZARD					= "Wizard",
 	GRINCH					= "Grinch",
 	NINJA					= "Space_Ninja",
 	ROLE_MINOR				= "Minor_Roles",
+	ROLE_PRISONER			= "Minor_Roles",
 )
 
 var/list/special_popup_text2num = list(
@@ -78,7 +88,7 @@ var/list/special_popup_text2num = list(
 	"Use both chat and special" = SPECIAL_POPUP_USE_BOTH,
 )
 
-var/const/MAX_SAVE_SLOTS = 8
+var/const/MAX_SAVE_SLOTS = 16
 
 #define POLLED_LIMIT	100
 
@@ -96,6 +106,9 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	//non-preference stuff
 	var/warns = 0
+	var/show_warning_next_time = 0
+	var/last_warned_message = ""
+	var/warning_admin = ""
 	var/warnbans = 0
 	var/muted = 0
 	var/last_ip
@@ -142,24 +155,16 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/credits_volume = 75
 	var/window_flashing = 1
 	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
+	var/typing_indicator = 0
 
 		//Mob preview
 	var/icon/preview_icon = null
 	var/icon/preview_icon_front = null
 	var/icon/preview_icon_side = null
+	var/preview_background = null
+	var/list/background_options = list("Black", "White", "Tile")
 
-		//Jobs, uses bitflags
-	var/job_civilian_high = 0
-	var/job_civilian_med = 0
-	var/job_civilian_low = 0
-
-	var/job_medsci_high = 0
-	var/job_medsci_med = 0
-	var/job_medsci_low = 0
-
-	var/job_engsec_high = 0
-	var/job_engsec_med = 0
-	var/job_engsec_low = 0
+	var/list/jobs = list()
 
 	//Keeps track of preferrence for not getting any wanted jobs
 	var/alternate_option = RETURN_TO_LOBBY
@@ -211,6 +216,15 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/credits = CREDITS_ALWAYS
 	var/jingle = JINGLE_CLASSIC
+
+	// Runscape-like chat
+	var/mob_chat_on_map = FALSE
+	var/max_chat_length = CHAT_MESSAGE_MAX_LENGTH
+	var/obj_chat_on_map = FALSE
+	var/no_goonchat_for_obj = FALSE
+
+	var/tgui_fancy = TRUE
+	var/fps = 0
 
 	var/client/client
 	var/saveloaded = 0
@@ -273,7 +287,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Gender:</b> <a href='?_src_=prefs;preference=gender'>[gender == MALE ? "Male" : "Female"]</a><BR>
 	<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a>
 	</td><td valign='center'>
-	<div class='statusDisplay'><center><img src=previewicon.png class="charPreview"><img src=previewicon2.png class="charPreview"></center></div>
+	<div class='statusDisplay'style="height: 64px; width: 128px; padding:0px"><center><img src=previewicon.png class="charPreview"><img src=previewicon2.png class="charPreview"></center></div>
+	<b>Background </b><a href='?_src_=prefs;preference=previous_preview_background;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_preview_background;task=input'>&gt;</a><BR>
 	</td></tr></table>
 	<h2>Body</h2>
 	<a href='?_src_=prefs;preference=all;task=random'>Random Body</A>
@@ -338,6 +353,8 @@ var/const/MAX_SAVE_SLOTS = 8
 		<a href='?_src_=prefs;preference=hear_attack'><b>[toggles & CHAT_ATTACKLOGS ? "Enabled" : "Disabled"]</b></a><br>
 		<b>Toggle Debug Logs</b>
 		<a href='?_src_=prefs;preference=hear_debug'><b>[toggles & CHAT_DEBUGLOGS ? "Enabled" : "Disabled"]</b></a><br>
+		<b>De-admin on login</b>
+		<a href="?_src_=prefs;preference=auto_deadmin"><b>[toggles & AUTO_DEADMIN ? "Enabled" : "Disabled"]</b></a><br>
 	  </div>
 	</div>"}
 
@@ -345,6 +362,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<h1>General Settings</h1>
 <div id="container" style="border:1px solid #000; width:96; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
   <div id="leftDiv" style="width:50%;height:100%;float:left;">
+	<b>FPS:</b>
+	<a href='?_src_=prefs;preference=fps'><b>[fps]</b></a><br>
 	<b>Space Parallax:</b>
 	<a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
 	<b>Parallax Speed:</b>
@@ -377,6 +396,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=pulltoggle'><b>[(pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
 	<b>Solo Antag Objectives:</b>
 	<a href='?_src_=prefs;preference=antag_objectives'><b>[(antag_objectives) ? "Standard" : "Freeform"]</b></a><br>
+	<b>Say bubbles:</b>
+	<a href='?_src_=prefs;preference=typing_indicator'><b>[(typing_indicator) ? "Active" : "Inactive"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -409,6 +430,18 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
 	<b>Window Flashing</b>
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
+	<b>Fancy tgui:</b>
+	<a href='?_src_=prefs;preference=tgui_fancy'>[tgui_fancy ? "Enabled" : "Disabled"]</a><br>
+	<b>
+	<center>Runechat prefererences</center>
+	<b>Chat on map for mobs:</b>
+	<a href='?_src_=prefs;preference=mob_chat_on_map'>[mob_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>Chat on map for objects:</b>
+	<a href='?_src_=prefs;preference=obj_chat_on_map'>[obj_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>No goonchat messages for objects:</b>
+	<a href='?_src_=prefs;preference=no_goonchat_for_obj'>[no_goonchat_for_obj ? "Enabled" : "Disabled"]</a><br>
+	<b>Runechat message char limit:</b>
+	<a href='?_src_=prefs;preference=max_chat_length;task=input'>[max_chat_length]</a><br>
   </div>
 </div>"}
 
@@ -418,38 +451,16 @@ var/const/MAX_SAVE_SLOTS = 8
 	return dat
 
 /datum/preferences/proc/getPrefLevelText(var/datum/job/job)
-	if(GetJobDepartment(job, 1) & job.flag)
-		return "High"
-	else if(GetJobDepartment(job, 2) & job.flag)
-		return "Medium"
-	else if(GetJobDepartment(job, 3) & job.flag)
-		return "Low"
-	else
-		return "NEVER"
-
-/datum/preferences/proc/getPrefLevelUpOrDown(var/datum/job/job, var/inc)
-	if(GetJobDepartment(job, 1) & job.flag)
-		if(inc)
-			return "NEVER"
-		else
-			return "Medium"
-	else if(GetJobDepartment(job, 2) & job.flag)
-		if(inc)
+	switch(jobs[job.title])
+		if(JOB_PREF_HIGH)
 			return "High"
-		else
-			return "Low"
-	else if(GetJobDepartment(job, 3) & job.flag)
-		if(inc)
+		if(JOB_PREF_MED)
 			return "Medium"
-		else
-			return "NEVER"
-	else
-		if(inc)
+		if(JOB_PREF_LOW)
 			return "Low"
-		else
-			return "High"
+	return "NEVER"
 
-/datum/preferences/proc/SetChoices(mob/user, limit = 17, list/splitJobs = list("Chief Engineer", "AI"), widthPerColumn = 295, height = 620)
+/datum/preferences/proc/SetChoices(mob/user, limit = 16, list/splitJobs = list("Chief Engineer", "Head of Security"), widthPerColumn = 295, height = 620)
 	if(!job_master)
 		return
 
@@ -462,20 +473,18 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/HTML = "<link href='./common.css' rel='stylesheet' type='text/css'><body>"
 	HTML += {"<script type='text/javascript'>function setJobPrefRedirect(level, rank) { window.location.href='?_src_=prefs;preference=job;task=input;level=' + level + ';text=' + encodeURIComponent(rank); return false; }
-			function mouseDown(event,levelup,leveldown,rank){
+			function mouseDown(event,rank){
 				return false;
 				}
 
-			function mouseUp(event,levelup,leveldown,rank){
+			function mouseUp(event,rank){
 				if(event.button == 0 || event.button == 1)
 					{
-					//alert("left click " + levelup + " " + rank);
 					setJobPrefRedirect(1, rank);
 					return false;
 					}
 				if(event.button == 2)
 					{
-					//alert("right click " + leveldown + " " + rank);
 					setJobPrefRedirect(0, rank);
 					return false;
 					}
@@ -535,52 +544,28 @@ var/const/MAX_SAVE_SLOTS = 8
 
 		HTML += "</td><td width='40%'>"
 
+		var/prefLevelLabel = "NEVER"
+		var/prefLevelColor = "red"
 
-
-		var/prefLevelLabel = "ERROR"
-		var/prefLevelColor = "pink"
-		var/prefUpperLevel = -1
-		var/prefLowerLevel = -1
-
-		if(GetJobDepartment(job, 1) & job.flag)
-			prefLevelLabel = "High"
-			prefLevelColor = "slateblue"
-			prefUpperLevel = 4
-			prefLowerLevel = 2
-		else if(GetJobDepartment(job, 2) & job.flag)
-			prefLevelLabel = "Medium"
-			prefLevelColor = "green"
-			prefUpperLevel = 1
-			prefLowerLevel = 3
-		else if(GetJobDepartment(job, 3) & job.flag)
-			prefLevelLabel = "Low"
-			prefLevelColor = "orange"
-			prefUpperLevel = 2
-			prefLowerLevel = 4
+		if(job.species_whitelist.len && !job.species_whitelist.Find(src.species))
+			prefLevelLabel = "Unavailable"
+			prefLevelColor = "gray"
+		else if(job.species_blacklist.Find(src.species))
+			prefLevelLabel = "Unavailable"
+			prefLevelColor = "gray"
 		else
-			prefLevelLabel = "NEVER"
-			prefLevelColor = "red"
-			prefUpperLevel = 3
-			prefLowerLevel = 1
+			switch(jobs[job.title])
+				if(JOB_PREF_HIGH)
+					prefLevelLabel = "High"
+					prefLevelColor = "slateblue"
+				if(JOB_PREF_MED)
+					prefLevelLabel = "Medium"
+					prefLevelColor = "green"
+				if(JOB_PREF_LOW)
+					prefLevelLabel = "Low"
+					prefLevelColor = "orange"
 
-		if(job.species_whitelist.len)
-			if(!job.species_whitelist.Find(src.species))
-				prefLevelLabel = "Unavailable"
-				prefLevelColor = "gray"
-				prefUpperLevel = 0
-				prefLowerLevel = 0
-		else if(job.species_blacklist.len)
-			if(job.species_blacklist.Find(src.species))
-				prefLevelLabel = "Unavailable"
-				prefLevelColor = "gray"
-				prefUpperLevel = 0
-				prefLowerLevel = 0
-
-		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");' oncontextmenu='javascript:return mouseDown(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");'>"
-
-
-		//if(job.alt_titles)
-			//HTML += "</a></td></tr><tr bgcolor='[lastJob.selection_color]'><td width='60%' align='center'><a>&nbsp</a></td><td><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">\[[GetPlayerAltTitle(job)]\]</a></td></tr>"
+		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event, \"[rank]\");' oncontextmenu='javascript:return mouseDown(event, \"[rank]\");'>"
 		HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
 		HTML += "</a></td></tr>"
 
@@ -590,6 +575,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	HTML += {"</td'></tr></table>
 		</center></table>"}
 	switch(alternate_option)
+		if(GET_EMPTY_JOB)
+			HTML += "<center><br><a href='?_src_=prefs;preference=job;task=random'>Get unique job</a></center><br>"
 		if(GET_RANDOM_JOB)
 			HTML += "<center><br><a href='?_src_=prefs;preference=job;task=random'>Get random job if preferences unavailable</a></center><br>"
 		if(BE_ASSISTANT)
@@ -679,6 +666,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_VEGAN,      "Vegan")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ASTHMA,      "Asthma")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LACTOSE,     "Lactose Intolerant")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LISP,       "Lisp")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -726,9 +714,10 @@ var/const/MAX_SAVE_SLOTS = 8
 
 
 /datum/preferences/proc/GetPlayerAltTitle(datum/job/job)
-	return player_alt_titles.Find(job.title) > 0 \
-		? player_alt_titles[job.title] \
-		: job.title
+	var/alt_title = player_alt_titles[job.title]
+	if(!alt_title || !(alt_title in job.alt_titles))
+		return job.title
+	return alt_title
 
 /datum/preferences/proc/SetPlayerAltTitle(datum/job/job, new_title)
 	// remove existing entry
@@ -738,7 +727,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	if(job.title != new_title)
 		player_alt_titles[job.title] = new_title
 
-/datum/preferences/proc/SetJob(mob/user, role, inc)
+/datum/preferences/proc/SetJob(mob/user, role, increase)
 	var/datum/job/job = job_master.GetJob(role)
 	if(!job)
 		user << browse(null, "window=mob_occupation")
@@ -761,182 +750,32 @@ var/const/MAX_SAVE_SLOTS = 8
 			to_chat(user, "<span class='notice'>Only the following species can have this job: [allowed_species]. Your species is ([src.species]).</span>")
 			return
 
-	if(inc == null)
-		if(GetJobDepartment(job, 1) & job.flag)
-			SetJobDepartment(job, 1)
-		else if(GetJobDepartment(job, 2) & job.flag)
-			SetJobDepartment(job, 2)
-		else if(GetJobDepartment(job, 3) & job.flag)
-			SetJobDepartment(job, 3)
-		else//job = Never
-			SetJobDepartment(job, 4)
+	var/new_value = jobs[job.title]
+	if(increase)
+		new_value += 1
+		if(new_value > JOB_PREF_HIGH)
+			new_value = JOB_PREF_NEVER
 	else
-		inc = text2num(inc)
-		var/desiredLevel = getPrefLevelUpOrDown(job,inc)
-		while(getPrefLevelText(job) != desiredLevel)
-			if(GetJobDepartment(job, 1) & job.flag)
-				SetJobDepartment(job, 1)
-			else if(GetJobDepartment(job, 2) & job.flag)
-				SetJobDepartment(job, 2)
-			else if(GetJobDepartment(job, 3) & job.flag)
-				SetJobDepartment(job, 3)
-			else//job = Never
-				SetJobDepartment(job, 4)
+		new_value -= 1
+		if(new_value < JOB_PREF_NEVER)
+			new_value = JOB_PREF_HIGH
 
-		/*if(level < 4)
-			to_chat(world,"setting [job] to [level+1]")
-			SetJobDepartment(job,level+1)
-		else
-			to_chat(world,"setting [job] to 1");SetJobDepartment(job,1)
-*/
+	// If setting a job to high,
+	// set any other job that is currently high to med
+	if(new_value == JOB_PREF_HIGH)
+		for(var/some_job in jobs)
+			if(jobs[some_job] == JOB_PREF_HIGH)
+				jobs[some_job] = JOB_PREF_MED
+		jobs[job.title] = new_value
+	else if(new_value == JOB_PREF_NEVER)
+		jobs -= job.title
+	else
+		jobs[job.title] = new_value
 	SetChoices(user)
 	return 1
+
 /datum/preferences/proc/ResetJobs()
-	job_civilian_high = 0
-	job_civilian_med = 0
-	job_civilian_low = 0
-
-	job_medsci_high = 0
-	job_medsci_med = 0
-	job_medsci_low = 0
-
-	job_engsec_high = 0
-	job_engsec_med = 0
-	job_engsec_low = 0
-
-/datum/preferences/proc/GetJobDepartment(var/datum/job/job, var/level)
-	if(!job || !level)
-		return 0
-	switch(job.department_flag)
-		if(CIVILIAN)
-			switch(level)
-				if(1)
-					return job_civilian_high
-				if(2)
-					return job_civilian_med
-				if(3)
-					return job_civilian_low
-		if(MEDSCI)
-			switch(level)
-				if(1)
-					return job_medsci_high
-				if(2)
-					return job_medsci_med
-				if(3)
-					return job_medsci_low
-		if(ENGSEC)
-			switch(level)
-				if(1)
-					return job_engsec_high
-				if(2)
-					return job_engsec_med
-				if(3)
-					return job_engsec_low
-	return 0
-
-/datum/preferences/proc/SetJobDepartment(var/datum/job/job, var/level)
-	if(!job || !level)
-		return 0
-	switch(level)
-		if(1)//Only one of these should ever be active at once so clear them all here
-			job_civilian_high = 0
-			job_medsci_high = 0
-			job_engsec_high = 0
-			return 1
-		if(2)//Set current highs to med, then reset them
-			job_civilian_med |= job_civilian_high
-			job_medsci_med |= job_medsci_high
-			job_engsec_med |= job_engsec_high
-
-			job_civilian_high = 0
-			job_medsci_high = 0
-			job_engsec_high = 0
-
-	switch(job.department_flag)
-		if(CIVILIAN)
-			switch(level)
-				if(2)
-					job_civilian_high = job.flag
-					job_civilian_med &= ~job.flag
-				if(3)
-					job_civilian_med |= job.flag
-					job_civilian_low &= ~job.flag
-				else
-					job_civilian_low |= job.flag
-		if(MEDSCI)
-			switch(level)
-				if(2)
-					job_medsci_high = job.flag
-					job_medsci_med &= ~job.flag
-				if(3)
-					job_medsci_med |= job.flag
-					job_medsci_low &= ~job.flag
-				else
-					job_medsci_low |= job.flag
-		if(ENGSEC)
-			switch(level)
-				if(2)
-					job_engsec_high = job.flag
-					job_engsec_med &= ~job.flag
-				if(3)
-					job_engsec_med |= job.flag
-					job_engsec_low &= ~job.flag
-				else
-					job_engsec_low |= job.flag
-	return 1
-
-
-/datum/preferences/proc/SetDepartmentFlags(datum/job/job, level, new_flags)	//Sets a department's preference flags (job_medsci_high, job_engsec_med - those variables) to 'new_flags'.
-																		//First argument can either be a job, or the department's flag (ENGSEC, MISC, ...)
-																		//Second argument can be either text ("high", "MEDIUM", "LoW") or number (1-high, 2-med, 3-low)
-
-																		//NOTE: If you're not sure what you're doing, be careful when using this proc.
-
-	//Determine department flag
-	var/d_flag
-	if(istype(job))
-		d_flag = job.department_flag
-	else
-		d_flag = job
-
-	//Determine department level
-	var/d_level
-	if(istext(level))
-		switch(lowertext(level))
-			if("high")
-				d_level = 1
-			if("med", "medium")
-				d_level = 2
-			if("low")
-				d_level = 3
-	else
-		d_level = level
-
-	switch(d_flag)
-		if(CIVILIAN)
-			switch(d_level)
-				if(1) //high
-					job_civilian_high = new_flags
-				if(2) //med
-					job_civilian_med = new_flags
-				if(3) //low
-					job_civilian_low = new_flags
-		if(MEDSCI)
-			switch(d_level)
-				if(1) //high
-					job_medsci_high = new_flags
-				if(2) //med
-					job_medsci_med = new_flags
-				if(3) //low
-					job_medsci_low = new_flags
-		if(ENGSEC)
-			switch(d_level)
-				if(1) //high
-					job_engsec_high = new_flags
-				if(2) //med
-					job_engsec_med = new_flags
-				if(3) //low
-					job_engsec_low = new_flags
+	jobs.Cut()
 
 /datum/preferences/proc/SetRole(var/mob/user, var/list/href_list)
 	var/role_id = href_list["role_id"]
@@ -990,9 +829,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				ResetJobs()
 				SetChoices(user)
 			if("random")
-				if(alternate_option == GET_RANDOM_JOB || alternate_option == BE_ASSISTANT)
+				if(alternate_option == GET_RANDOM_JOB || alternate_option == BE_ASSISTANT || alternate_option == RETURN_TO_LOBBY)
 					alternate_option += 1
-				else if(alternate_option == RETURN_TO_LOBBY)
+				else if(alternate_option == GET_EMPTY_JOB)
 					alternate_option = 0
 				else
 					return 0
@@ -1006,7 +845,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						SetPlayerAltTitle(job, choice)
 						SetChoices(user)
 			if("input")
-				SetJob(user, href_list["text"], href_list["level"])
+				SetJob(user, href_list["text"], href_list["level"] == "1")
 			else
 				SetChoices(user)
 		return 1
@@ -1117,6 +956,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					f_style = next_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("previous_facehair_style")
 					f_style = previous_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
+				if("next_preview_background")
+					preview_background = next_list_item(preview_background, background_options)
+				if("previous_preview_background")
+					preview_background = previous_list_item(preview_background, background_options)
 				if("age")
 					var/new_age = input(user, "Choose your character's age:\n([AGE_MIN]-[AGE_MAX])", "Character Preference") as num|null
 					if(new_age)
@@ -1165,24 +1008,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					for(var/datum/job/job in job_master.occupations)
 						if(job.species_blacklist.Find(species)) //If new species is in a job's blacklist
-							for(var/i = 1 to 3)
-								var/F = GetJobDepartment(job, i)
-
-								F &= ~job.flag //Disable that job in our preferences
-								SetDepartmentFlags(job, i, F)
-
+							jobs -= job.title
 							to_chat(usr, "<span class='info'>Your new species ([species]) is blacklisted from [job.title].</span>")
 
 						if(job.species_whitelist.len) //If the job has a species whitelist
 							if(!job.species_whitelist.Find(species)) //And it doesn't include our new species
-								for(var/i = 1 to 3)
-									var/F = GetJobDepartment(job, i)
-
-									if(F & job.flag)
-										to_chat(usr, "<span class='info'>Your new species ([species]) can't be [job.title]. Your preferences have been adjusted.</span>")
-
-									F &= ~job.flag //Disable that job in our preferences
-									SetDepartmentFlags(job, i, F)
+								if(jobs.Remove(job.title))
+									to_chat(usr, "<span class='info'>Your new species ([species]) can't be [job.title]. Your preferences have been adjusted.</span>")
 
 				if("language")
 					var/list/new_languages = list("None")
@@ -1200,13 +1032,21 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						metadata = sanitize(copytext(new_metadata,1,MAX_MESSAGE_LEN))
 
 				if("hair")
-					if(species == "Human" || species == "Unathi")
+					if(species == "Human" || species == "Unathi" || species == "Diona" || species == "Mushroom")
 						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(new_hair)
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
 							b_hair = hex2num(copytext(new_hair, 6, 8))
-
+					if(species == "Insectoid")
+						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
+						if(carapace)
+							r_hair = hex2num(copytext(carapace, 2, 4))
+							g_hair = hex2num(copytext(carapace, 4, 6))
+							b_hair = hex2num(copytext(carapace, 6, 8))
+							r_hair = clamp(r_hair, 0, 80)
+							g_hair = clamp(g_hair, 0, 50)
+							b_hair = clamp(b_hair, 0, 35)
 				if("h_style")
 					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
@@ -1248,13 +1088,27 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(species == "Human")
 						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
 						if(new_s_tone)
-							s_tone = 35 - max(min(round(new_s_tone),220),1)
+							s_tone = 35 - clamp(new_s_tone,1,220)
 							to_chat(user,"You're now [skintone2racedescription(s_tone, species)].")
 					else if(species == "Vox")//Can't reference species flags here, sorry.
 						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green, 5 = Azure, 6 = Emerald)", "Character Preference") as num|null
 						if(skin_c)
-							s_tone = max(min(round(skin_c),6),1)
+							s_tone = clamp(skin_c,1,6)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
+					else if(species == "Grey")
+						var/skin_c = input(user, "Choose your Grey's skin color:\n(1 = Gray, 2 = Light, 3 = Green, 4 = Blue)", "Character Preference") as num|null
+						if(skin_c)
+							s_tone = clamp(skin_c,1,4)
+							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
+					else if(species == "Insectoid")
+						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
+						if(carapace)
+							r_hair = hex2num(copytext(carapace, 2, 4))
+							g_hair = hex2num(copytext(carapace, 4, 6))
+							b_hair = hex2num(copytext(carapace, 6, 8))
+							r_hair = clamp(r_hair, 0, 80)
+							g_hair = clamp(g_hair, 0, 50)
+							b_hair = clamp(b_hair, 0, 35)
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return
@@ -1289,6 +1143,19 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 		else
 			switch(href_list["preference"])
+				if("fps")
+					var/desired_fps = input(user, "Choose your desired frames per second.\n\
+WARNING: BYOND versions earlier than 513.1523 might not work properly with values other than 0.\n\
+Set this to -1 to use the recommended value.\n\
+Set this to 0 to use the server's FPS (currently [world.fps])\n\
+Values up to 1000 are allowed.", "FPS", fps) as null|num
+					if(isnull(desired_fps))
+						return
+					if(desired_fps < 0)
+						desired_fps = -1
+					desired_fps = sanitize_integer(desired_fps, -1, 1000, fps)
+					fps = desired_fps
+					client.fps = (fps < 0) ? RECOMMENDED_CLIENT_FPS : fps
 				if("gender")
 					if(gender == MALE)
 						gender = FEMALE
@@ -1319,7 +1186,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("UIalpha")
 					var/UI_style_alpha_new = input(user, "Select a new alpha(transparency) parameter for UI, between 50 and 255") as num
-					if(!UI_style_alpha_new | !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50))
+					if(!UI_style_alpha_new || !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50))
 						return
 					UI_style_alpha = UI_style_alpha_new
 
@@ -1493,10 +1360,29 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("window_flashing")
 					window_flashing = !window_flashing
-				
+
 				if("antag_objectives")
 					antag_objectives = !antag_objectives
-				
+
+				if("typing_indicator")
+					typing_indicator = !typing_indicator
+
+				if("tgui_fancy")
+					tgui_fancy = !tgui_fancy
+
+				if ("mob_chat_on_map")
+					mob_chat_on_map = !mob_chat_on_map
+
+				if ("obj_chat_on_map")
+					obj_chat_on_map = !obj_chat_on_map
+
+				if ("max_chat_length")
+					max_chat_length = input(user, "Choose the max character length of shown Runechat messages. Valid range is 1 to [CHAT_MESSAGE_MAX_LENGTH] (default: [initial(max_chat_length)]))", "Character Preference", max_chat_length)  as null|num
+
+				if ("no_goonchat_for_obj")
+					no_goonchat_for_obj = !no_goonchat_for_obj
+
+
 			if(user.client.holder)
 				switch(href_list["preference"])
 					if("hear_ahelp")
@@ -1513,6 +1399,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					if("hear_debug")
 						toggles ^= CHAT_DEBUGLOGS
+
+					if("auto_deadmin")
+						toggles ^= AUTO_DEADMIN
 
 	ShowChoices(user)
 	return 1
@@ -1564,6 +1453,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.my_appearance.h_style = h_style
 	character.my_appearance.f_style = f_style
 
+	character.dna.ResetUIFrom(character)
 
 	character.skills = skills
 
@@ -1587,15 +1477,14 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			O.status &= ~ORGAN_ROBOT
 			O.status |= ORGAN_PEG
 		else if(status == "assisted")
-			I.mechassist()
+			I?.mechassist()
 		else if(status == "mechanical")
-			I.mechanize()
+			I?.mechanize()
 		else
 			continue
 	var/datum/species/chosen_species = all_species[species]
 	if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		character.mutations += M_FAT
-		character.mutations += M_OBESITY
 	if(disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		character.disabilities|=NEARSIGHTED
 	if(disabilities & DISABILITY_FLAG_EPILEPTIC)

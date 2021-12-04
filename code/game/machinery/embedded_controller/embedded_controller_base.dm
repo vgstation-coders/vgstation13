@@ -41,7 +41,7 @@
 					to_chat(usr, "You begin removing screws from \the [src] backplate...")
 					if(do_after(user, src, 50))
 						to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
-						playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+						W.playtoolsound(src, 50)
 						new /obj/item/mounted/frame/airlock_controller(get_turf(src))
 						qdel(src)
 					return 1
@@ -89,7 +89,7 @@
 							"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
 							"You add cables to \the [src].")
 			if(2) // Circuitboard installed, wired.
-				if(iswirecutter(W))
+				if(W.is_wirecutter(user))
 					to_chat(usr, "You begin to remove the wiring from \the [src].")
 					if(do_after(user, src, 50))
 						new /obj/item/stack/cable_coil(loc,5)
@@ -101,7 +101,7 @@
 					return 1
 				if(W.is_screwdriver(user))
 					to_chat(user, "You begin to complete \the [src]...")
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					if(do_after(user, src, 20))
 						if(!_circuitboard)
 							_circuitboard=new boardtype(src)
@@ -163,7 +163,7 @@
 	density = 0
 
 	// Setup parameters only
-	var/id_tag
+
 	var/tag_exterior_door
 	var/tag_interior_door
 	var/tag_airpump
@@ -220,85 +220,5 @@
 	frequency = new_frequency
 	radio_connection = radio_controller.add_object(src, frequency)
 
-/obj/machinery/embedded_controller/radio/handle_multitool_topic(var/href, var/list/href_list, var/mob/user)//need to add an override here because this shit is stupidly hardcoded and I don't want to have to revise this code, atleast not right now
-	var/obj/item/device/multitool/P = get_multitool(usr)
-	if(P && istype(P))
-		var/update_mt_menu=0
-		var/re_init=0
-		if("set_tag" in href_list)
-			if(!(href_list["set_tag"] in vars))
-				to_chat(usr, "<span class='warning'>Something went wrong: Unable to find [href_list["set_tag"]] in vars!</span>")
-				return 1
-			var/current_tag = src.vars[href_list["set_tag"]]
-			var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src, current_tag) as null|text),1,MAX_MESSAGE_LEN)
-			if(newid)
-				vars[href_list["set_tag"]] = newid
-				re_init=1
-
-		if("unlink" in href_list)
-			var/idx = text2num(href_list["unlink"])
-			if (!idx)
-				return 1
-
-			var/obj/O = getLink(idx)
-			if(!O)
-				return 1
-			if(!canLink(O))
-				to_chat(usr, "<span class='warning'>You can't link with that device.</span>")
-				return 1
-
-			if(unlinkFrom(usr, O))
-				to_chat(usr, "<span class='confirm'>A green light flashes on \the [P], confirming the link was removed.</span>")
-			else
-				to_chat(usr, "<span class='attack'>A red light flashes on \the [P].  It appears something went wrong when unlinking the two devices.</span>")
-			update_mt_menu=1
-
-		if("link" in href_list)
-			var/obj/O = P.buffer
-			if(!O)
-				return 1
-			if(!canLink(O,href_list))
-				to_chat(usr, "<span class='warning'>You can't link with that device.</span>")
-				return 1
-			if (isLinkedWith(O))
-				to_chat(usr, "<span class='attack'>A red light flashes on \the [P]. The two devices are already linked.</span>")
-				return 1
-
-			if(linkWith(usr, O, href_list))
-				to_chat(usr, "<span class='confirm'>A green light flashes on \the [P], confirming the link has been created.</span>")
-				re_init = 1//this is the only thing different, crappy, I know
-			else
-				to_chat(usr, "<span class='attack'>A red light flashes on \the [P].  It appears something went wrong when linking the two devices.</span>")
-			update_mt_menu=1
-
-		if("buffer" in href_list)
-			if(istype(src, /obj/machinery/telecomms))
-				if(!hasvar(src, "id"))
-					to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
-					return
-			else if(!hasvar(src, "id_tag"))
-				to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
-				return
-			P.buffer = src
-			to_chat(usr, "<span class='confirm'>A green light flashes, and the device appears in the multitool buffer.</span>")
-			update_mt_menu=1
-
-		if("flush" in href_list)
-			to_chat(usr, "<span class='confirm'>A green light flashes, and the device disappears from the multitool buffer.</span>")
-			P.buffer = null
-			update_mt_menu=1
-
-		var/ret = multitool_topic(usr,href_list,P.buffer)
-		if(ret == MT_ERROR)
-			return 1
-		if(ret & MT_UPDATE)
-			update_mt_menu=1
-		if(ret & MT_REINIT)
-			re_init=1
-
-		if(re_init)
-			initialize()
-		if(update_mt_menu)
-			//usr.set_machine(src)
-			update_multitool_menu(usr)
-			return 1
+/obj/machinery/embedded_controller/radio/shouldReInitOnMultitoolLink(var/mob/user, var/obj/buffer, var/list/context)
+	return TRUE

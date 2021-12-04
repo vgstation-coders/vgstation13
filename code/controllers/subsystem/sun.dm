@@ -16,7 +16,7 @@ var/datum/subsystem/sun/SSsun
 
 /datum/subsystem/sun/Initialize(timeofday)
 	sun = new
-
+	gas_giant = new
 	..()
 
 

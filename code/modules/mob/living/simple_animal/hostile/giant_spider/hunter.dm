@@ -19,6 +19,7 @@
 	wander = 1
 	ranged = 0
 	minimum_distance = 1
+	speed = 2
 
 /mob/living/simple_animal/hostile/giant_spider/hunter/dead
 	health = 0

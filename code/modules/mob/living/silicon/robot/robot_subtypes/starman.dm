@@ -3,10 +3,10 @@
 	deny_client_move = 1
 	anchored = 1
 	namepick_uses = 0
-	
+
 /mob/living/silicon/robot/starman/wearing_wiz_garb()
 	return 1
-	
+
 /mob/living/silicon/robot/starman/New()
 	..()
 	UnlinkSelf()
@@ -20,12 +20,12 @@
 	src.add_spell(new /spell/targeted/starman_warp)
 
 /mob/living/silicon/robot/starman/updatename(var/prefix)
-	
+
 	var/greek_alphabet = list("Alpha", "Beta", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", \
 						 "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
 	custom_name = "[pick("Starman DX","Starman","Starman Ultra")] [pick(greek_alphabet)]"
 	..()
-	
+
 /mob/living/silicon/robot/starman/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/bullet))
 		var/reflectchance = 70 - round(P.damage/3)
@@ -37,7 +37,7 @@
 			P.reflected = 1
 			P.rebound(src)
 
-			return -1 // complete projectile permutation
+			return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
 	return (..(P))
 
@@ -51,24 +51,24 @@
 
 /mob/living/silicon/robot/starman/getarmorabsorb()
 	return 10
-	
+
 /mob/living/silicon/robot/starman/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(O.force && O.force < 11)
 		user.delayNextAttack(8)
 		user.visible_message("<span class='danger'>[O] bounces harmlessly off of \the [src].</span>", "<span class='userdanger'>[O] bounces harmlessly off of \the [src].</span>")
 	else
-		..()	
-	
-	
-	
-	
-	
+		..()
+
+
+
+
+
 /proc/psi_precast(var/mob/user)
 	playsound(user, 'sound/effects/psi/psi_precast.ogg', 30, 0, wait = TRUE)
 	sleep(3)
-		
 
-		
+
+
 
 
 /spell/aoe_turf/starman_play_music
@@ -87,18 +87,18 @@
 			if(M && M.client)
 				M << sound(pick(starman_music), repeat = 0, wait = 0, volume = 20, channel = CHANNEL_STARMAN)
 		user << sound(pick(starman_music), repeat = 0, wait = 0, volume = 20, channel = CHANNEL_STARMAN)
-		
-		
+
+
 /proc/stop_starman_music()
 	for(var/mob/M in mob_list)
 		if(M && M.client)
-			M << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_STARMAN)	
-		
+			M << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_STARMAN)
 
-		
-		
-		
-		
+
+
+
+
+
 /spell/targeted/starman_warp
 	name = "Warp"
 	desc = "Teleport to the targeted location."
@@ -127,13 +127,13 @@
 			return
 	playsound(user, 'sound/machines/buzz-sigh.ogg', 25, 0)
 	to_chat(user,"<span class='warning'>*Bzzt* Warp failed.</span>")
-	
 
-	
-	
-	
-	
-	
+
+
+
+
+
+
 /spell/aoe_turf/starman_heal
 	name = "Psi Lifeup Alpha"
 	desc = "Slightly heal yourself."
@@ -159,15 +159,15 @@
 			for(var/name in robot.components)
 				var/datum/robot_component/component = robot.components[name]
 				component.heal_damage(30,30)
-		user.updatehealth()	
+		user.updatehealth()
 		playsound(user, 'sound/effects/psi/psi_lifeup_alpha.ogg', 15, 0)
 		user.visible_message("<span class='danger'>\The [user] envelops himself in a bubble of healing magic!</span>","<span class='notice'>*Bzzt* Restoration successful.</span>")
-	
-
-	
 
 
-	
+
+
+
+
 /spell/targeted/starman_shield
 	name = "Psi Shield Beta"
 	desc = "Generates a psionic barrier in the given direction."
@@ -180,7 +180,7 @@
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
 	selection_type = "range"
-	
+
 /spell/targeted/starman_shield/cast(list/targets, mob/user = user)
 	spawn(0)
 		psi_precast(user)
@@ -193,8 +193,8 @@
 				user.visible_message("<span class='danger'>\The [user] projects a psionic forcefield!</span>","<span class='notice'>*Whirrr* Projection successful.</span>")
 				return
 		playsound(user, 'sound/machines/buzz-sigh.ogg', 40, 0)
-		to_chat(user,"<span class='warning'>*Click* Projection failed.</span>")		
-		
+		to_chat(user,"<span class='warning'>*Click* Projection failed.</span>")
+
 
 /obj/effect/forcefield/starman
 	desc = "It shimmers with reality-bending energy."
@@ -212,7 +212,7 @@
 	set_light(2)
 	spawn(lifespan)
 		qdel(src)
-	
+
 /obj/effect/forcefield/starman/proc/spread_outward(var/mob/caster)
 	var/cast_direction = get_dir(caster,src)
 	var/turf/left = get_step(get_turf(src),turn(cast_direction,-90))
@@ -220,12 +220,12 @@
 		new /obj/effect/forcefield/starman(left)
 	var/turf/right = get_step(get_turf(src),turn(cast_direction,90))
 	if(!right.density)
-		new /obj/effect/forcefield/starman(right)		
-		
-		
-		
-		
-		
+		new /obj/effect/forcefield/starman(right)
+
+
+
+
+
 /spell/aoe_turf/starman_starstorm
 	name = "Psi Starstorm Omega"
 	desc = "Conjures a psionic starstorm that impacts around you."
@@ -261,7 +261,7 @@
 		user.visible_message("<span class='danger'>\The [user] summons a fearsome starstorm!</span>","<span class='notice'>*Click* Star-matrix realized.</span>")
 
 	..()
-	
+
 /obj/item/projectile/meteor/mini
 	name = "small meteor"
 	desc = "It's a starstorm, baby!"
@@ -273,10 +273,10 @@
 		return
 
 	explosion(get_turf(src), 0, 0, 2, 2) //Small boom.
-	qdel(src)	
-	
-	
-	
+	qdel(src)
+
+
+
 /spell/aoe_turf/starman_brainshock
 	name = "Psi Brainshock Omega"
 	desc = "Shocks the minds of all entities around you, causing severe mental distress."
@@ -299,22 +299,22 @@
 	spawn(0)
 		psi_precast(user)
 		playsound(user, 'sound/effects/psi/psi_brainshock_omega.ogg', 10, 0)
-		
+
 		spawn(6)
 			for(var/mob/living/carbon/target in targets)
 				target.stuttering += 5
 				target.ear_deaf += 1
 				target.dizziness += 5
 				target.confused +=  5
-				target.Jitter(5)		
+				target.Jitter(5)
 				target.Knockdown(1)
 				target.shakecamera += 1
 
 		user.visible_message("<span class='danger'>\The [user] bends reality in impossible ways!</span>","<span class='notice'>*Beep* Hostile consciousnesses twisted.</span>")
 
 	..()
-	
-	
+
+
 /obj/item/weapon/gun/energy/starman_beam
 	name = "Psi Beam Vestibule"
 	desc = "Used to channel psionic energy into a deadly form."
@@ -325,7 +325,7 @@
 	cell_type = "/obj/item/weapon/cell/infinite"
 	projectile_type = "/obj/item/projectile/beam/pulse"
 	force = 10
-	
+
 /obj/item/device/starman_hailer
 	name = "Horror Translucidator"
 	desc = "Activate to frighten the carbons with specially-produced sound effects."
@@ -335,13 +335,13 @@
 	var/list/sound_volumes = list(40,40,75)
 	var/nextuse
 	var/cooldown = 6 SECONDS
-	
+
 /obj/item/device/starman_hailer/attack_self(mob/user)
 	activate(user)
 
 /obj/item/device/starman_hailer/afterattack(atom/target, mob/user)
 	activate(user)
-	
+
 /obj/item/device/starman_hailer/proc/activate(var/mob/user)
 	if(world.time < nextuse)
 		return

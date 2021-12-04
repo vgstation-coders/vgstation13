@@ -5,6 +5,7 @@
 	desc = "A basic energy-based gun with two settings: Stun and kill."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	icon_state = "energystun100"
+	clowned = CLOWNABLE
 	item_state = null	//so the human update icon uses the icon_state instead.
 	fire_sound = 'sound/weapons/Taser.ogg'
 
@@ -12,7 +13,6 @@
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2"
 	modifystate = "energystun"
-
 
 	var/mode = 0 //0 = stun, 1 = kill
 
@@ -53,6 +53,7 @@
 	icon_state = "nucgun"
 	item_state = "nucgun"
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=3"
+	clowned = UNCLOWN
 	var/core_stability = 10
 	var/charge_tick = 0
 

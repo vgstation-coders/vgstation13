@@ -38,7 +38,7 @@
 
 		return f_style
 
-proc/random_name(gender, speciesName = "Human")
+/proc/random_name(gender, speciesName = "Human")
 	var/datum/species/S = all_species[speciesName]
 	if(S)
 		return S.makeName(gender)
@@ -48,7 +48,7 @@ proc/random_name(gender, speciesName = "Human")
 
 
 
-proc/random_skin_tone(species = "Human")
+/proc/random_skin_tone(species = "Human")
 	if(species == "Human")
 		switch(pick(60;"caucasian", 15;"afroamerican", 10;"african", 10;"latino", 5;"albino"))
 			if("caucasian")
@@ -67,12 +67,15 @@ proc/random_skin_tone(species = "Human")
 	else if(species == "Vox")
 		. = rand(1,6)
 		return .
+	else if(species == "Grey")
+		. = rand(1,4)
+		return .
 	else if(species == "Tajaran")
 		return 1
 	else
 		return 0
 
-proc/skintone2racedescription(tone, species = "Human")
+/proc/skintone2racedescription(tone, species = "Human")
 	if(species == "Human")
 		switch (tone)
 			if(30 to INFINITY)
@@ -107,6 +110,16 @@ proc/skintone2racedescription(tone, species = "Human")
 				return "gray"
 			else
 				return "green"
+	else if(species == "Grey")
+		switch(tone)
+			if(GREYLIGHT)
+				return "light gray"
+			if(GREYGREEN)
+				return "green"
+			if(GREYBLUE)
+				return "blue"
+			else
+				return "gray"
 	else if(species == "Tajaran")
 		switch(tone)
 			if(CATBEASTBLACK)
@@ -116,7 +129,7 @@ proc/skintone2racedescription(tone, species = "Human")
 	else
 		return "unknown"
 
-proc/age2agedescription(age)
+/proc/age2agedescription(age)
 	switch(age)
 		if(0 to 1)
 			return "infant"
@@ -139,11 +152,11 @@ proc/age2agedescription(age)
 		else
 			return "unknown"
 
-proc/RoundHealth(health)
+/proc/RoundHealth(health)
 	switch(health)
-		if(100 to INFINITY)
+		if(99 to INFINITY)
 			return "health100"
-		if(70 to 100)
+		if(70 to 99)
 			return "health80"
 		if(50 to 70)
 			return "health60"
@@ -159,7 +172,6 @@ proc/RoundHealth(health)
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 /proc/cyborg_health_to_icon_state(var/health_ratio)
 	switch(health_ratio)
@@ -205,7 +217,7 @@ Proc for attack log creation, because really why not
 6 is additional information, anything that needs to be added
 */
 
-proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var/addition=null)
+/proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var/addition=null)
 	if(user && ismob(user))
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has [what_done] [target ? "[target.name][(ismob(target) && target.ckey) ? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 	if(target && ismob(target))
@@ -214,10 +226,11 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 			target.LAssailant = null
 		else
 			target.LAssailant = user
+			target.assaulted_by(user)
 	if(admin)
 		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 
-proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var/addition=null)
+/proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var/addition=null)
 	var/target_text = "NON-EXISTENT TARGET"
 	var/subject_text = "NON-EXISTENT SUBJECT"
 	if(target)
@@ -300,3 +313,18 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 			L.Add(A)
 
 	return L
+
+/mob/proc/is_loyalty_implanted()
+	return is_implanted(/obj/item/weapon/implant/loyalty)
+
+//not to be confused with is_loyalty_implanted
+/mob/proc/is_implanted(var/type)
+	for(var/obj/item/weapon/implant/I in src)
+		if(I.imp_in && istype(I, type))
+			return TRUE
+	return FALSE
+
+/proc/find_player_by_ckey(var/ckey)
+	for (var/mob/M in player_list)
+		if (M.ckey == ckey)
+			return M

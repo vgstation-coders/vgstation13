@@ -1,0 +1,16 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"e" = (/obj/structure/flora/tree/pine,/turf/unsimulated/floor/snow,/area)
+"x" = (/obj/glacier,/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+aaaaaaaaaa
+aaaaaaaaaa
+aaxxxaeaaa
+axxxxxxxxa
+axxxxxxxxa
+axxxxxxxxa
+axxxxxxxxa
+aaexxxxxaa
+aaaaaaaeaa
+aaaaaaaaaa
+"}

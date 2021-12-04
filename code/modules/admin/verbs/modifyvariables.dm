@@ -1,7 +1,8 @@
 var/list/forbidden_varedit_object_types = list(
 										/datum/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
-										/datum/blackbox,	//Prevents people messing with feedback gathering
+										/datum/blackbox,					//Prevents people messing with feedback gathering
 										/datum/feedback_variable,			//Prevents people messing with feedback gathering
+										/datum/subsystem/dbcore/,			// No messing with the database.
 									)
 
 //Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
@@ -160,9 +161,7 @@ var/list/forbidden_varedit_object_types = list(
 
 			if(V_TYPE)
 				var/partial_type = input("Enter type, or leave blank to see all types", window_title, "[old_value]") as text|null
-
-				var/list/matches = get_matching_types(partial_type, /datum)
-				new_value = input("Select type", window_title) as null|anything in matches
+				new_value = filter_list_input("Select type", window_title, get_matching_types(partial_type, /datum))
 
 			if(V_LIST_EMPTY)
 				if (acceptsLists)
@@ -207,12 +206,6 @@ var/list/forbidden_varedit_object_types = list(
 
 			else
 				to_chat(user, "Unknown type: [selected_type]")
-
-	switch(edited_variable)
-		if("bound_width", "bound_height", "bound_x", "bound_y")
-			if(new_value % world.icon_size) //bound_width/height must be a multiple of 32, otherwise movement breaks - BYOND issue
-				to_chat(usr, "[edited_variable] can only be a multiple of [world.icon_size]!")
-				return
 
 	if(edited_datum && edited_variable)
 		if(isdatum(edited_datum) && edited_datum.variable_edited(edited_variable, old_value, new_value))
@@ -339,10 +332,6 @@ var/list/forbidden_varedit_object_types = list(
 	return M
 
 /client/proc/can_edit_var(var/tocheck, var/type_to_check)
-	if(tocheck in nevervars)
-		to_chat(usr, "Editing this variable is forbidden.")
-		return FALSE
-
 	if (is_type_in_list(type_to_check, forbidden_varedit_object_types))
 		to_chat(usr, "Editing this variable is forbidden.")
 		return FALSE

@@ -12,7 +12,7 @@
 	var/strapped = 0.0
 	throwpass = 1 //so Adjacent passes.
 	var/rating = 1 //Use this for upgrades some day
-
+	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
 
 /obj/machinery/optable/New()
@@ -60,7 +60,7 @@
 	if(air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0
@@ -113,12 +113,24 @@
 /obj/machinery/optable/process()
 	check_victim()
 
+/obj/machinery/optable/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+	for (var/atom/A in loc)
+		if (A == src)
+			continue
+		if (!A.Cross(victim,get_turf(victim)))
+			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
+			return FALSE
+	victim.forceMove(loc)
+	return TRUE
+
 /obj/machinery/optable/proc/take_victim(mob/living/carbon/C, mob/living/carbon/user as mob)
 	if (victim)
 		to_chat(user, "<span class='bnotice'>The table is already occupied!</span>")
 
+	if (!TryToThrowOnTable(user, C))
+		return
 	C.unlock_from()
-	C.forceMove(loc)
+	C.forceMove(loc) // again in case unlock_from() brought them back where they were
 
 	if (C.client)
 		C.client.perspective = EYE_PERSPECTIVE
@@ -137,10 +149,10 @@
 	add_fingerprint(user)
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 40))
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			switch(rating)
 				if(1)
 					new /obj/item/weapon/stock_parts/scanning_module(src.loc)
@@ -154,11 +166,14 @@
 	if (istype(W, /obj/item/weapon/grab))
 		if(iscarbon(W:affecting))
 			take_victim(W:affecting,usr)
-			returnToPool(W)
+			qdel(W)
 			return
 	if(isrobot(user))
 		return
 	//user.drop_item(W, src.loc) why?
+
+/obj/machinery/optable/can_overload()
+	return 0
 
 /obj/machinery/optable/npc_tamper_act(mob/living/user)
 	//Messages are overridden for this proc

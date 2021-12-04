@@ -21,7 +21,7 @@
 	to_chat(user, "<span class='notice'>You remove the containers from the electrolyzer.</span>")
 
 /obj/item/weapon/electrolyzer/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswirecutter(W))
+	if(W.is_wirecutter(user))
 		if(beakers.len)
 			to_chat(user, "<span class='warning'>The electrolyzer contains beakers!</span>")
 			return

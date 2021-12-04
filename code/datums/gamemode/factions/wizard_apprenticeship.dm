@@ -7,6 +7,8 @@
 	roletype = /datum/role/wizard_apprentice
 	logo_state = "apprentice-logo"
 	hud_icons = list("wizard-logo", "apprentice-logo")
+	default_admin_voice = "Wizard Federation"
+	admin_voice_style = "notice"
 
 /datum/faction/wizard_contract/HandleNewMind(var/datum/mind/M)
 	. = ..()

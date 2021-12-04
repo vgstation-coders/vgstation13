@@ -1,6 +1,6 @@
-/mob/living/carbon/var/pain_shock_stage = 0
-/mob/living/carbon/var/pain_level = 0 //Gets overwritten every tick! If you want to add pain "resistance" or constain pain, see update_pain_level()
-/mob/living/carbon/var/pain_numb = 0 // When this is set, the mob isn't affected by shock or pain, but can't see their health.
+/mob/living/var/pain_shock_stage = 0
+/mob/living/var/pain_level = 0 //Gets overwritten every tick! If you want to add pain "resistance" or constain pain, see update_pain_level()
+/mob/living/var/pain_numb = 0 // When this is set, the mob isn't affected by shock or pain, but can't see their health.
 
 // proc to find out in how much pain the mob is at the moment
 /mob/living/carbon/proc/update_pain_level()
@@ -19,7 +19,7 @@
 	for(var/datum/reagent/R in reagents.reagent_list)
 		pain_level -= R.pain_resistance
 
-	if(src.slurring) //I'm not sure why this is here.
+	if(src.slurring) //We're drunk, dulls the pain a bit
 		pain_level -= 20
 
 	// broken or ripped off organs will add quite a bit of pain

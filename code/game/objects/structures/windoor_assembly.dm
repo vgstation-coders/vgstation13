@@ -15,8 +15,7 @@
 	anchored = FALSE
 	density = FALSE
 	dir = NORTH
-
-	var/ini_dir
+	pass_flags_self = PASSDOOR|PASSGLASS
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
@@ -27,18 +26,19 @@
 	var/reinforce_material = /obj/item/stack/sheet/plasteel
 	var/wired = FALSE	//How hard was to make a fucking var to check this jesus christ old coders.
 	var/glass_type = /obj/item/stack/sheet/glass/rglass
+	var/created_name = null
 
 /obj/structure/windoor_assembly/proc/update_name()
 	name = "[secure ? "secure ":""][anchored ? "anchored ":""][anchored && wired ? "and ":""][wired ? "wired ":""][initial(name)]"
 	if(anchored && wired && electronics) //We're almost there bros
 		name = "near finished [secure ? "secure ":""][initial(name)]"
 
-/obj/structure/windoor_assembly/New(dir=NORTH)
+/obj/structure/windoor_assembly/New()
 	..()
-	ini_dir = dir
 	update_nearby_tiles()
+	setup_border_dummy() //I guess? It's not dense anyway but whatever
 
-obj/structure/windoor_assembly/Destroy()
+/obj/structure/windoor_assembly/Destroy()
 	setDensity(FALSE)
 	update_nearby_tiles()
 	..()
@@ -47,32 +47,20 @@ obj/structure/windoor_assembly/Destroy()
 	icon_state = "[facing]_[secure ? "secure_":""]windoor_assembly[wired ? "02":"01"]"
 
 /obj/structure/windoor_assembly/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
-	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
+	if(istype(mover))
+		return !density || (bounds_dist(border_dummy, mover) >= 0)
+	else if(get_dir(loc, target) == dir)
 		if(air_group)
-			return FALSE
+			return FALSE //There's no especially compelling reason for this here but it's copied from windoors
 		return !density
-	else
-		return TRUE
-
-/obj/structure/windoor_assembly/Uncross(atom/movable/mover, turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return TRUE
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
 	return TRUE
 
 /obj/structure/windoor_assembly/proc/make_windoor(var/mob/user)
 	var/spawn_type = secure ? secure_type : windoor_type
 	var/obj/machinery/door/window/windoor = new spawn_type(loc)
-	windoor.dir = dir
+	windoor.change_dir(dir)
 	windoor.base_state = (facing == "l" ? "left" : "right")
 	windoor.icon_state = windoor.base_state
 	transfer_fingerprints_to(windoor)
@@ -86,23 +74,38 @@ obj/structure/windoor_assembly/Destroy()
 			windoor.req_one_access = electronics.conf_access
 		else
 			windoor.req_access = electronics.conf_access
+		windoor.req_access_dir = src.electronics.dir_access
+		windoor.access_not_dir = src.electronics.access_nodir
+		electronics.forceMove(windoor)
+		windoor.electronics = electronics
+		electronics.installed = TRUE
 		windoor.set_electronics()
-		qdel(electronics)
 		electronics = null
 
 
 /obj/structure/windoor_assembly/attackby(obj/item/W, mob/user)
+
+	// Now can be renamed like doors
+	if(istype(W, /obj/item/weapon/pen))
+		var/t = copytext(stripped_input(user, "Enter the name for the windoor.", src.name, src.created_name),1,MAX_NAME_LEN)
+		if(!t)
+			return
+		if(!in_range(src, usr) && src.loc != usr)
+			return
+		created_name = t
+		return
+
 	if(iswelder(W) && (!anchored && !wired && !electronics))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		user.visible_message("[user] dissassembles [src].", "You start to dissassemble [src].")
 		if(WT.do_weld(user, src, 40, 0))
 			if(gcDestroyed)
 				return
 			to_chat(user, "<span class='notice'>You dissasembled [src]!</span>")
 			if(glass_type)
-				getFromPool(glass_type,loc,5)
+				new glass_type(loc, 5)
 			if(secure)
-				getFromPool(reinforce_material,loc,2)
+				new reinforce_material(loc, 2)
 			qdel(src)
 		else
 			to_chat(user, "<span class='rose'>You need more welding fuel to dissassemble [src].</span>")
@@ -125,8 +128,8 @@ obj/structure/windoor_assembly/Destroy()
 				update_name()
 
 	//Wrenching an un/secure assembly un/anchors it in place. Step 4 complete/undone
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is [anchored ? "un":""]securing [src] [anchored ? "from" : "to"] the floor.", "You start to [anchored ? "un":""]secure [src] to the floor.")
 
 		if(do_after(user, src, 40))
@@ -153,15 +156,15 @@ obj/structure/windoor_assembly/Destroy()
 				update_name()
 
 	//Removing wire from the assembly. Step 5 undone.
-	if(iswirecutter(W) && (anchored && wired))
-		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+	if(W.is_wirecutter(user) && (anchored && wired))
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is cutting the wires from [src].", "You start to cut the wires from [src].")
 
 		if(do_after(user, src, 40))
 			if(gcDestroyed)
 				return
 			to_chat(user, "<span class='notice'>You cut \the [name] wires!</span>")
-			new /obj/item/stack/cable_coil(get_turf(user), 1)
+			new /obj/item/stack/cable_coil(get_turf(user), 2)
 			wired = FALSE
 			update_name()
 
@@ -173,7 +176,7 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(user, "<span class='notice'>\The [AE.name] is too damaged to work.</span>")
 			return
 
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] installs [AE] into [src].", "You start to install [AE] into [src].")
 
 		if(do_after(user, src, 40))
@@ -187,7 +190,7 @@ obj/structure/windoor_assembly/Destroy()
 
 	//Screwdriver to remove airlock electronics. Step 6 undone.
 	if(W.is_screwdriver(user) && (anchored && electronics))
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] removes the [electronics] from [src].", "You start to uninstall [electronics] from [src].")
 
 		if(do_after(user, src, 40))
@@ -211,13 +214,15 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(usr, "<span class='rose'>\The [name] is missing electronics.</span>")
 			return
 		usr << browse(null, "window=windoor_access")
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is prying [src] into the frame.", "You start prying [src] into the frame.")
 
 		if(do_after(user, src, 40))
 			if(gcDestroyed)
 				return
 			var/obj/machinery/door/window/windoor = make_windoor()
+			if(created_name)
+				windoor.name = created_name
 			to_chat(user, "<span class='notice'>You finish the [windoor.name]!</span>")
 			qdel(src)
 
@@ -236,9 +241,8 @@ obj/structure/windoor_assembly/Destroy()
 	if(anchored)
 		to_chat(usr, "It is fastened to the floor; therefore, you can't rotate it!")
 		return FALSE
-	dir = turn(dir, 270)
+	change_dir(turn(dir, 270))
 	update_nearby_tiles()
-	ini_dir = dir
 	update_icon()
 
 //Flips the windoor assembly, determines whather the door opens to the left or the right
@@ -250,15 +254,6 @@ obj/structure/windoor_assembly/Destroy()
 	facing = facing == "l" ? "r":"l"
 	to_chat(usr, "The windoor will now slide to the [facing == "l" ? "left":"right"].")
 	update_icon()
-
-
-/obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if(!SS_READY(SSair))
-		return FALSE
-	var/T = loc
-	if (isturf(T))
-		SSair.mark_for_update(T)
-	return TRUE
 
 /obj/structure/windoor_assembly/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/windoor_assembly/clockwork, BRASS_WINDOOR_GLOW)

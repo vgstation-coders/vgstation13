@@ -2,7 +2,7 @@
 	if(!c_animation)//spamming turf animations can have unintended effects, such as the overlays never disapearing. hence this check.
 		if(anim_sound)
 			playsound(src, anim_sound, 50, 1)
-		var/atom/movable/overlay/animation = getFromPool(/atom/movable/overlay, src)
+		var/atom/movable/overlay/animation = new /atom/movable/overlay(src)
 		animation.name = "turf_animation"
 		animation.setDensity(FALSE)
 		animation.anchored = 1
@@ -18,7 +18,7 @@
 			animation.color = anim_color
 		flick("turf_animation",animation)
 		spawn(10)
-			returnToPool(animation)
+			qdel(animation)
 			if(c_animation == animation) //Turf may have changed into another form by this time
 				c_animation = null
 
@@ -28,7 +28,7 @@
 //Does not require sleeptime, specifies for how long the animation should be allowed to exist before returning to pool
 //Does not require animation direction, but you can specify
 //Does not require a name
-proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,flick_anim as text,sleeptime = 0,direction as num, name as text, lay as num, offX as num, offY as num, col as text, alph as num,plane as num, var/trans, var/invis)
+/proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,flick_anim as text,sleeptime = 0,direction as num, name as text, lay as num, offX as num, offY as num, col as text, alph as num,plane as num, var/trans, var/invis)
 //This proc throws up either an icon or an animation for a specified amount of time.
 //The variables should be apparent enough.
 	if(!location && target)
@@ -37,7 +37,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		target = location
 	if(!location && !target)
 		return
-	var/atom/movable/overlay/animation = getFromPool(/atom/movable/overlay, location)
+	var/atom/movable/overlay/animation = new /atom/movable/overlay(location)
 	if(name)
 		animation.name = name
 	if(direction)
@@ -66,7 +66,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		animation.color = col
 	if(trans)
 		animation.transform = trans
-	if (target && isatommovable(target))
+	if (target && ismovable(target))
 		var/atom/movable/AM = target
 		AM.lock_atom(animation, /datum/locking_category/buckle)
 	if(a_icon_state)
@@ -77,7 +77,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		flick(flick_anim, animation)
 
 	spawn(max(sleeptime, 15))
-		returnToPool(animation)
+		qdel(animation)
 
 	return animation
 

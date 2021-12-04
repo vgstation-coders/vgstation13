@@ -11,6 +11,7 @@
 	for(var/obj/machinery/cart/M in members) //Edges are a subset of members
 		if(M.train_net == src)
 			M.train_net = null
+	..()
 
 /datum/train/proc/connect_train(obj/machinery/cart/base, obj/machinery/cart/connecting, mob/user)
 	if (connecting.train_net == src)

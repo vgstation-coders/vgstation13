@@ -2,6 +2,7 @@
 
 /obj/machinery/chem_dispenser
 	name = "\improper Chem Dispenser"
+	desc = "It dispenses chemicals."
 	density = TRUE
 	anchored = TRUE
 	icon = 'icons/obj/chemical.dmi'
@@ -18,6 +19,7 @@
 	var/custom = 0
 	var/useramount = 30 // Last used amount
 	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
+	var/template_path = "chem_dispenser.tmpl"
 	var/list/dispensable_reagents = list(
 		HYDROGEN,
 		LITHIUM,
@@ -42,7 +44,6 @@
 		SACID,
 		TUNGSTEN
 		)
-
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 /*
@@ -126,6 +127,32 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	else
 		recharged -= 1
 
+/obj/machinery/chem_dispenser/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it with a lethal mixture! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+	var/list/reagents_to_add = list(PACID, SACID, MINDBREAKER, IMPEDREZENE, LUBE)
+	if(prob(10))
+		user.reagents.add_reagent(pick(reagents_to_add),25)
+	if(prob(10)) //smoke
+		user.reagents.add_reagent(SUGAR,5)
+		user.reagents.add_reagent(POTASSIUM,5)
+		user.reagents.add_reagent(PHOSPHORUS,5)
+	if(prob(10)) //boom
+		user.reagents.add_reagent(POTASSIUM,50)
+		user.reagents.add_reagent(WATER,50)
+	if(prob(10)) //emp
+		user.reagents.add_reagent(IRON,25)
+		user.reagents.add_reagent(URANIUM,25)
+	if(prob(10)) //fire
+		user.reagents.add_reagent(ALUMINUM,5)
+		user.reagents.add_reagent(PLASMA,5)
+		user.reagents.add_reagent(SACID,5)
+	if(prob(10)) //flash
+		user.reagents.add_reagent(ALUMINUM,5)
+		user.reagents.add_reagent(POTASSIUM,5)
+		user.reagents.add_reagent(SULFUR,5)
+	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS|SUICIDE_ACT_FIRELOSS)
+
 /obj/machinery/chem_dispenser/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -201,7 +228,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "chem_dispenser.tmpl", "[src.name] 5000", 390, 630)
+		ui = new(user, src, ui_key, template_path, "[src.name]", 390, 630)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -221,12 +248,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(href_list["amount"] == "0")
 			var/num = input("Enter desired output amount", "Amount", useramount) as num
 			if (num)
-				amount = round(text2num(num), 5)
+				amount = round(text2num(num), 1)
 				custom = 1
 		else
 			custom = 0
-			amount = round(text2num(href_list["amount"]), 5) // round to nearest 5
-		amount = Clamp(amount, 5, 100) // Since the user can actually type the commands himself, some sanity checking
+			amount = round(text2num(href_list["amount"]), 1)
+		amount = clamp(amount, 1, container ? container.volume : 100)
 		if (custom)
 			useramount = amount
 
@@ -281,8 +308,31 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return
 	return ..()
 
-/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
+/obj/machinery/chem_dispenser/proc/can_insert(var/obj/item/I)
+	return istype(I, /obj/item/weapon/reagent_containers/glass) || istype(I, /obj/item/weapon/reagent_containers/food/drinks)
 
+/obj/machinery/chem_dispenser/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(can_insert(AM))
+		if(src.container)
+			return FALSE
+		if(istype(AM,/obj/item))
+			var/obj/item/I = AM
+			if(I.w_class > W_CLASS_SMALL)
+				return FALSE
+		else if(!panel_open)
+			AM.forceMove(src)
+
+			container =  AM
+			AM.pixel_x = x_coord_to_nozzle(16) // put in the middle for now
+			update_icon()
+
+			nanomanager.update_uis(src) // update all UIs attached to src
+			return TRUE
+		else
+			return FALSE
+	return FALSE
+
+/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob, params) //to be worked on
 	if(..())
 		return 1
 
@@ -290,7 +340,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(!can_use(user))
 			return
 
-	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
+	if(can_insert(D))
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
 			return
@@ -303,6 +353,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				return
 
 			container =  D
+			D.pixel_x = x_coord_to_nozzle(text2num(params2list(params)["icon-x"]) * PIXEL_MULTIPLIER)
 			to_chat(user, "You add \the [D] to the machine!")
 			update_icon()
 
@@ -311,6 +362,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			to_chat(user, "You can't add \a [D] to the machine while the panel is open.")
 			return
+
+/obj/machinery/chem_dispenser/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/black)
+		has_slime=1
+		dispensable_reagents.Add(DSYRUP)
+		to_chat(user, "You throw the slime into the dispenser's tank.")
+		return TRUE
 
 /obj/machinery/chem_dispenser/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -345,8 +404,26 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_glassb")
 
 		overlay.pixel_y = beaker_height * PIXEL_MULTIPLIER //used for children
-		overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
+		if(container.pixel_x)
+			overlay.pixel_x = container.pixel_x
+		else
+			overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
 		overlays += overlay
+
+//Returns the pixel_x that our beaker overlay should have to match up with where the user clicked.
+/obj/machinery/chem_dispenser/proc/x_coord_to_nozzle(x_coord)
+	switch(x_coord)
+		if(0 to 10)
+			return -7
+		if(11 to 14)
+			return -3
+		if(15 to 18)
+			return 1
+		if(19 to 21)
+			return 5
+		if(22 to INFINITY)
+			return 8
+	return 0
 
 //Cafe stuff
 
@@ -382,6 +459,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/brewer/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS)
+
 /obj/machinery/chem_dispenser/brewer/mapping
 	max_energy = 100
 	energy = 100
@@ -411,6 +493,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/soda_dispenser/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_TOXLOSS)
+
 /obj/machinery/chem_dispenser/soda_dispenser/mapping
 	max_energy = 100
 	energy = 100
@@ -431,6 +518,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		COGNAC,
 		WINE,
 		SAKE,
+		TRIPLESEC,
+		BITTERS,
+		CINNAMONWHISKY,
+		SCHNAPPS,
+		BLUECURACAO,
 		KAHLUA,
 		ALE,
 		ICE = T0C,
@@ -460,9 +552,47 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/booze_dispenser/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and drowning his sorrows! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_TOXLOSS)
+
 /obj/machinery/chem_dispenser/booze_dispenser/mapping
 	max_energy = 100
 	energy = 100
+
+/obj/machinery/chem_dispenser/condiment
+	name = "\improper Condiment Dispenser"
+	desc = "A dispenser designed to output condiments directly onto food, or into condiment bottles. These were banned for being 'unhygienic' after one too many licking incidents."
+	icon_state = "condi_dispenser"
+	pass_flags = PASSTABLE
+	max_energy = 30
+	required_quirk = MODULE_CAN_HANDLE_FOOD
+	template_path = "condi_dispenser.tmpl"
+	dispensable_reagents = list(
+		SODIUMCHLORIDE,
+		BLACKPEPPER,
+		KETCHUP,
+		MUSTARD,
+		RELISH,
+		CAPSAICIN,
+		FROSTOIL,
+		LIQUIDBUTTER,
+		SOYSAUCE,
+		SPRINKLES
+		)
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
+
+/obj/machinery/chem_dispenser/condiment/can_insert(obj/item/I)
+	return istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/reagent_containers/food/condiment)
+
+/obj/machinery/chem_dispenser/condiment/update_icon()
+	return //no overlays for this one, it takes special inputs
+
+/obj/machinery/chem_dispenser/condiment/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_TOXLOSS)
 
 #undef FORMAT_DISPENSER_NAME
 

@@ -24,7 +24,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	ignoreinvert = 1
 
 /mob/virtualhearer/New(atom/attachedto)
-	AddToProfiler()
 	virtualhearers += src
 	loc = get_turf(attachedto)
 	attached = attachedto
@@ -38,8 +37,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	if(!is_type_in_list(attachedto,stationary_hearers))
 		movable_hearers += src
 
-	virtualhearers += src
-
 /mob/virtualhearer/Destroy()
 	..()
 	virtualhearers -= src
@@ -47,14 +44,14 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	mob_hearers -= attached
 	attached = null
 
-/mob/virtualhearer/resetVariables()
-	return
-
+// NOTE: Almost nothing actually uses this proc.
+// Most forms of speech, such as get_hearers_in_view(), simply call Hear() directly in our attached atom.
+// If you want to actually override this proc somewhere... you're screwed lol
 /mob/virtualhearer/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(attached)
 		attached.Hear(arglist(args))
 	else
-		returnToPool(src)
+		qdel(src)
 
 /mob/virtualhearer/ex_act()
 	return
@@ -71,19 +68,27 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 /mob/virtualhearer/blob_act()
 	return
 
+/mob/virtualhearer/update_canmove()
+	return 1 // the default canmove value of virtualhearers
+
 /mob/proc/change_sight(adding, removing, copying)
 	var/oldsight = sight
 	if(copying)
 		sight = copying
-	if(adding)
-		sight |= adding
-		if(adding & SEE_TURFS)
-			sight &= ~SEE_BLACKNESS
 	if(removing)
 		sight &= ~removing
-		if(removing & SEE_TURFS)
+		if((sight != oldsight) && (removing & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
 			sight |= SEE_BLACKNESS
+	if(adding)
+		sight |= adding
+		if((sight != oldsight) && (adding & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
+			sight &= ~SEE_BLACKNESS
 	if(sight != oldsight)
 		var/mob/virtualhearer/VH = mob_hearers[src]
 		if(VH)
 			VH.sight = sight
+
+// This subtype does nothing by itself. Since overriding Hear() in a virtualhearer subtype is impossible (see comment above),
+// the only reason this subtype exists is so other procs can explicitly check its type and know to delete it themselves.
+// Currently, this type is given by /datum/reagent/temp_hearer/on_introduced() and removed by /obj/item/weapon/reagent_containers/Hear().
+/mob/virtualhearer/one_time

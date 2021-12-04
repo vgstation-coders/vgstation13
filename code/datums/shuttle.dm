@@ -106,7 +106,7 @@
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
-/datum/shuttle/proc/initialize()
+/datum/shuttle/initialize()
 	. = INIT_SUCCESS
 	src.docking_ports = list()
 	src.docking_ports_aboard = list()
@@ -331,9 +331,9 @@
 						to_chat(user, "[A.name] is preventing the shuttle from departing.")
 				moving = 0
 				destination_port = null
-				return 0
-			for(var/atom/AA in linked_area)
-				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
+				return
+			for(var/atom/movable/AA in linked_area)
+				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -541,6 +541,12 @@
 				occupants.Add(L)
 	return occupants
 
+/proc/get_refill_area(var/obj/docking_port/destination/D)
+	if(ispath(D.refill_area))
+		return locate(D.refill_area)
+	else
+		return get_space_area()
+
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad
 /datum/shuttle/proc/move_area_to(var/turf/our_center, var/turf/new_center, var/rotate = 0)
@@ -559,11 +565,12 @@
 	//For displacing
 	var/throwy = world.maxy
 
-	var/area/space
+	var/obj/docking_port/destination/D = linked_port.docked_with
+	var/area/refill_area //the area that will be stamped over where the shuttle left
 
-	space = get_space_area()
-	if(!space)
-		warning("Unable to find space area for shuttle [src.type]")
+	refill_area = get_refill_area(D)
+	if(!refill_area)
+		warning("Unable to find refill area for shuttle [src.type]")
 
 	//Make a list of coordinates of turfs to move, and associate the coordinates with the turfs they represent
 	var/list/turfs_to_move = list()
@@ -573,7 +580,7 @@
 	var/list/our_own_turfs = list()
 
 	//Go through all turfs in our area
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		turfs_to_move += C
 		turfs_to_move[C] = T
@@ -631,13 +638,6 @@
 		if(!old_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get original turf at [old_C.x_pos];[old_C.y_pos];[our_center.z]")
 			continue
-		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/shuttle/wall)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
-			if(old_turf.icon_state in transparent_icons)
-				add_underlay = 1
-				if(old_turf.underlays.len) //this list is in code/game/area/areas.dm
-					var/image/I = locate(/image) in old_turf.underlays //bandaid
-					if(I.icon == 'icons/turf/shuttle.dmi') //Don't change underlay to space if CURRENT underlay is a shuttle floor!
-						add_underlay = 0
 
 		if(!new_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
@@ -650,9 +650,14 @@
 			else
 				AM.forceMove(displace_to)
 
-		var/area/old_area = get_area(new_turf)
+		var/area/old_area = get_area(new_turf) //this is the area that is being replaced by shuttle area in the destination
 		if(!old_area)
-			old_area = space
+			old_area = get_space_area()
+
+		for(var/O in old_turf.overlays)
+			var/image/I = O
+			if(I.icon == 'icons/obj/projectiles.dmi')
+				old_turf.overlays.Remove(I)		//remove beam overlays so they don't stay on the new turfs forever
 
 		//Get the turf's image before it's gone!
 		var/image/undlay
@@ -669,26 +674,14 @@
 
 		//***Remove old turf from shuttle's area****
 
-		space.contents.Add(old_turf)
-		old_turf.change_area(linked_area,space)
+		refill_area.contents.Add(old_turf)
+		old_turf.change_area(linked_area,refill_area)
 
-		//All objects which can't be moved by the shuttle have their area changed to space!
+		//All objects which can't be moved by the shuttle have their area changed to refill_area!
 		for(var/atom/movable/AM in old_turf.contents)
 			if(!AM.can_shuttle_move(src))
-				AM.change_area(linked_area,space)
+				AM.change_area(linked_area,refill_area)
 
-		//****Move all variables from the old turf over to the new turf****
-
-		for(var/key in old_turf.vars)
-			if(key in ignored_keys)
-				continue
-			//ignored_keys: code/game/area/areas.dm, 526 (above the move_contents_to proc)
-			//as of 06/08/2015: list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group","contents","air","light","areaMaster","underlays","lighting_overlay")
-			if(istype(old_turf.vars[key],/list))
-				var/list/L = old_turf.vars[key]
-				new_turf.vars[key] = L.Copy()
-			else if(old_turf.vars)
-				new_turf.vars[key] = old_turf.vars[key]
 		if(old_turf.transform)
 			new_turf.transform = old_turf.transform
 
@@ -709,6 +702,19 @@
 		new_turf.dir = old_turf.dir
 		new_turf.icon_state = old_turf.icon_state
 		new_turf.icon = old_turf.icon
+		new_turf.plane = old_turf.plane
+		new_turf.layer = old_turf.layer
+
+		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
+		// Floor turfs create their `floor_tile` in New() if it's null.
+		// The better solution would be to not do that at all in New(), or use
+		// something like the map loader's atom preloader to transfer the
+		// floor_tile before New().
+		if(istype(old_turf, /turf/simulated/floor))
+			var/turf/simulated/floor/ancient = old_turf
+			var/turf/simulated/floor/modern = new_turf
+			modern.floor_tile = ancient.floor_tile
+			ancient.floor_tile = null
 		if(rotate)
 			new_turf.shuttle_rotate(rotate)
 
@@ -726,22 +732,15 @@
 			S_OLD.zone.remove(S_OLD)
 
 		//*****Move objects and mobs*****
+		for(var/mob/M in old_turf)	//mobs first
+			if(!M.can_shuttle_move(src))
+				continue
+			move_atom(M, new_turf, rotate)
 		for(var/atom/movable/AM in old_turf)
 			if(!AM.can_shuttle_move(src))
 				continue
+			move_atom(AM, new_turf, rotate)
 
-			if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
-				AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
-
-				spawn()
-					AM.forceMove(new_turf)
-
-				//TODO: Make this compactible with bound_x and bound_y.
-			else
-				AM.forceMove(new_turf)
-
-			if(rotate)
-				AM.shuttle_rotate(rotate)
 
 		//Move landmarks - for moving the arrivals shuttle
 		for(var/list/L in moved_landmarks) //moved_landmarks: code/game/area/areas.dm, 527 (above the move_contents_to proc)
@@ -754,7 +753,6 @@
 
 		//Delete the old turf
 		var/replacing_turf_type = old_turf.get_underlying_turf()
-		var/obj/docking_port/destination/D = linked_port.docked_with
 
 		if(D && istype(D))
 			replacing_turf_type = D.base_turf_type
@@ -777,6 +775,19 @@
 				D2.update_nearby_tiles()
 
 	return 1
+
+/datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
+	if(AM.locs.len > 1) //If the moved object is on multiple tiles, move it after everything else (using spawn())
+		AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
+
+		spawn()
+			AM.forceMove(new_turf)
+
+	else
+		AM.forceMove(new_turf)
+
+	if(rotate)
+		AM.shuttle_rotate(rotate)
 
 /proc/setup_shuttles()
 	world.log << "Setting up all shuttles..."
@@ -846,7 +857,7 @@
 	var/rotate = dir2angle(turn(user.dir,180)) - dir2angle(linked_port.dir)
 
 	var/list/original_coords = list()
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		original_coords += C
 

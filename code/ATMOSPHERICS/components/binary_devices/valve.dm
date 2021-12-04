@@ -63,10 +63,10 @@
 
 	if(network1)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 	if(network2)
 		if(network1)
-			returnToPool(network2)
+			qdel(network2)
 
 	build_network()
 
@@ -112,7 +112,7 @@
 	desc = "A digitally controlled valve."
 	icon = 'icons/obj/atmospherics/digital_valve.dmi'
 	var/frequency = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 
 	machine_flags = MULTITOOL_MENU
@@ -220,6 +220,9 @@
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")
 		return
+	if(!user.dexterity_check()) //preventing mice and stuff from just doing it
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
 	src.add_fingerprint(usr)
 	if (src.open)
 		src.close()
@@ -232,6 +235,9 @@
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")
 		return
+	if(!user.dexterity_check()) //preventing mice and stuff from just doing it
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
 	src.add_fingerprint(usr)
 	if (src.open)
 		src.close()

@@ -8,8 +8,9 @@
 	active_power_usage = 300
 	var/obj/item/weapon/circuitboard/circuit = null //if circuit==null, computer can't disassembly
 	var/processing = 0
+	var/empproof = FALSE // For plasma glass builds
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
-
+	pass_flags_self = PASSMACHINE
 	use_auto_lights = 1
 	light_power_on = 1
 	light_range_on = 3
@@ -20,11 +21,11 @@
 
 /obj/machinery/computer/New()
 	..()
-	if(ticker)
+	if(world.has_round_started())
 		initialize()
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return ..()
 
@@ -38,7 +39,7 @@
 	return 1
 
 /obj/machinery/computer/emp_act(severity)
-	if(prob(20/severity))
+	if(prob(20/severity) && !empproof) // Don't EMP if proofed
 		set_broken()
 	..()
 
@@ -67,7 +68,7 @@
 /obj/machinery/computer/bullet_act(var/obj/item/projectile/Proj)
 	if(prob(Proj.damage))
 		set_broken()
-	..()
+	return ..()
 
 /obj/machinery/computer/attack_construct(var/mob/user)
 	if (!Adjacent(user))
@@ -103,13 +104,22 @@
 	update_icon()
 
 /obj/machinery/computer/proc/set_broken()
+	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
+		return
 	stat |= BROKEN
 	update_icon()
 
-/obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
+/obj/machinery/computer/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src] screen! It looks like \he's trying to commit suicide.</span>")
+	stat |= BROKEN
+	update_icon()
+	playsound(src, "shatter", 70, 1)
+	return(SUICIDE_ACT_BRUTELOSS)
+
+/obj/machinery/computer/togglePanelOpen(var/obj/item/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
 		return
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+	toggleitem.playtoolsound(src, 50)
 	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
@@ -120,11 +130,16 @@
 			CC.forceMove(A)
 		A.circuit = CC
 		A.anchored = 1
+		A.empproof = empproof // Transfer status
 		for (var/obj/C in src)
 			C.forceMove(src.loc)
 		if (src.stat & BROKEN)
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
-			getFromPool(/obj/item/weapon/shard, loc)
+			if(empproof) // Return plasma or normal glass shard if variable is set or not
+				new /obj/item/weapon/shard/plasma(loc)
+				A.empproof = FALSE // Since there's no type of glass now
+			else
+				new /obj/item/weapon/shard(loc)
 			A.state = 3
 			A.icon_state = "3"
 		else
@@ -137,11 +152,8 @@
 	else
 		return 1 // Needed, otherwise the computer UI will pop open
 
-	return
-
 /obj/machinery/computer/attackby(I as obj, user as mob)
 	if(..(I,user))
 		return
 	else
 		src.attack_hand(user)
-	return

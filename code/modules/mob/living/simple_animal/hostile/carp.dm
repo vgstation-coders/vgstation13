@@ -151,8 +151,12 @@
 			user.drop_item(F, force_drop = 1)
 
 			if(prob(25))
-				if(!friends.Find(user))
-					friends.Add(user)
+				var/already_friend = FALSE
+				for(var/datum/weakref/ref in friends)
+					if (ref.get() == user)
+						already_friend = TRUE
+				if (!already_friend)
+					friends += makeweakref(user)
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 					heart.plane = ABOVE_HUMAN_PLANE
@@ -180,6 +184,8 @@
 		//Start growing up
 		desc = "[initial(desc)] <span class='notice'>It ate a lot recently, and it appears to be ready to grow up.</span>"
 		spawn(rand(5 SECONDS, 30 SECONDS))
+			if(src.stat == DEAD)
+				return
 			grow_up()
 
 /mob/living/simple_animal/hostile/carp/baby/reagent_act(id, method, volume)

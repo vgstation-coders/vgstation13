@@ -2,7 +2,7 @@
 	name = "Fire Breath"
 	desc = "This spell allows you to spew a plume of fire."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	proj_type = /obj/item/projectile/fire_breath
 
@@ -10,7 +10,7 @@
 	school = "evocation"
 	invocation = "SPY'SI MEAT'A'BAL"
 
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	spell_aspect_flags = SPELL_FIRE
 	dumbfire = 0
 

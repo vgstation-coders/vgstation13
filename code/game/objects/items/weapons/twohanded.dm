@@ -17,16 +17,24 @@
 	abstract = 1
 	var/obj/item/wielding = null
 
+/obj/item/offhand/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
+	giver.swap_hand()
+	receiver.give_item(giver)
+	return FALSE
+
+/obj/item/offhand/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return FALSE
+
 /obj/item/offhand/dropped(user)
 	if(!wielding)
-		returnToPool(src)
+		qdel(src)
 		return null
 	return wielding.unwield(user)
 
 
 /obj/item/offhand/unwield(user)
 	if(!wielding)
-		returnToPool(src)
+		qdel(src)
 		return null
 	return wielding.unwield(user)
 
@@ -78,6 +86,14 @@
 	if(user)
 		user.update_inv_hands()
 
+/obj/item/weapon/fireaxe/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W,/obj/item/weapon/antiaxe_kit))
+		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
+		new /obj/item/weapon/fireaxe/antimatter(loc)
+		qdel(W)
+		qdel(src)
+
 /obj/item/weapon/fireaxe/suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
 		return (SUICIDE_ACT_BRUTELOSS)
@@ -98,105 +114,6 @@
 		else
 			qdel(A)
 			A = null
-
-
-/*
- * Double-Bladed Energy Swords - Cheridan
- */
-/obj/item/weapon/dualsaber
-	icon_state = "dualsaber0"
-	name = "double-bladed energy sword"
-	desc = "Handle with care."
-	var/colorset = ""
-	force = 3
-	throwforce = 5.0
-	throw_speed = 1
-	throw_range = 5
-	w_class = W_CLASS_SMALL
-	flags = FPRINT | TWOHANDABLE
-	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-
-/obj/item/weapon/dualsaber/update_wield(mob/user)
-	..()
-	icon_state = "dualsaber[wielded ? colorset : 0]"
-	item_state = "dualsaber[wielded ? colorset : 0]"
-	force = wielded ? 30 : 3
-	w_class = wielded ? 5 : 2
-	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK : 0
-	sharpness = wielded ? 1.5 : 0
-	armor_penetration = wielded ? 100 : 0
-	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
-	if(user)
-		user.update_inv_hands()
-	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
-	return
-
-/obj/item/weapon/dualsaber/attack(target as mob, mob/living/user as mob)
-	..()
-	if(clumsy_check(user) && (wielded) &&prob(40))
-		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on the [src].</span>")
-		user.take_organ_damage(20,25)
-		return
-	if((wielded) && prob(50))
-		spawn for(var/i=1, i<=8, i++)
-			user.dir = turn(user.dir, 45)
-			sleep(1)
-
-/obj/item/weapon/dualsaber/IsShield()
-	if(wielded)
-		return 1
-	else
-		return 0
-
-/obj/item/weapon/dualsaber/New()
-	..()
-	if(!colorset)
-		colorset = pick("redred","blueblue","greengreen","purplepurple")
-	update_icon()
-
-/*
- * Banana Bunch
- */
-/obj/item/weapon/dualsaber/bananabunch
-	icon_state = "bananabunch0"
-	name = "banana bunch"
-	desc = "Potential for some serious chaos."
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-
-/obj/item/weapon/dualsaber/bananabunch/update_wield(mob/user)
-	..()
-	icon_state = "bananabunch[wielded ? 1 : 0]"
-	item_state = "bananabunch[wielded ? 1 : 0]"
-	return
-
-/obj/item/weapon/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
-	if(user.mind && !(user.mind.assigned_role == "Clown"))
-		to_chat(user, "<span class='warning'>Your clumsy hands fumble and you slice yourself open with [src].</span>")
-		user.take_organ_damage(40,50)
-		return
-	if((wielded) && (user.mind.assigned_role == "Clown"))
-		..()
-		spawn for(var/i=1, i<=8, i++)
-			user.dir = turn(user.dir, 45)
-			sleep(1)
-
-/obj/item/weapon/dualsaber/bananabunch/IsShield()
-	if(wielded)
-		return 1
-	else
-		return 0
-
-/obj/item/weapon/dualsaber/bananabunch/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
-		var/mob/living/carbon/M = AM
-		if (M.Slip(2, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
-
-/obj/item/weapon/dualsaber/bananabunch/clumsy_check(mob/living/user)
-	return 0
 
 /*
  * High-Frequency Blade
@@ -293,15 +210,14 @@
 	flags = FPRINT | TWOHANDABLE
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
-	var/event_key
 
-/obj/item/binoculars/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/binoculars/proc/mob_moved(atom/movable/mover)
 	if(wielded)
-		unwield(holder)
+		unwield(mover)
 
 /obj/item/binoculars/update_wield(mob/user)
 	if(wielded)
-		event_key = user.on_moved.Add(src, "mob_moved")
+		user.register_event(/event/moved, src, .proc/mob_moved)
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
 		item_state = "binoculars_wielded"
 		user.regenerate_icons()
@@ -310,7 +226,7 @@
 			var/client/C = user.client
 			C.changeView(C.view + 7)
 	else
-		user.on_moved.Remove(event_key)
+		user.unregister_event(/event/moved, src, .proc/mob_moved)
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 		item_state = "binoculars"
 		user.regenerate_icons()
@@ -335,7 +251,6 @@
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
 	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-	var/event_key
 
 /obj/item/weapon/bloodlust/update_wield(mob/user)
 	..()
@@ -350,10 +265,9 @@
 	if(user)
 		user.update_inv_hands()
 	if(wielded)
-		event_key = user.on_moved.Add(src, "mob_moved")
+		user.register_event(/event/moved, src, .proc/mob_moved)
 	else
-		user.on_moved.Remove(event_key)
-		event_key = null
+		user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
 	if(isliving(target))
@@ -365,9 +279,9 @@
 		return
 	..()
 
-/obj/item/weapon/bloodlust/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(iscarbon(holder) && wielded)
-		for(var/obj/effect/plantsegment/P in range(holder,0))
+/obj/item/weapon/bloodlust/proc/mob_moved(atom/movable/mover)
+	if(iscarbon(mover) && wielded)
+		for(var/obj/effect/plantsegment/P in range(mover,0))
 			qdel(P)
 
 /obj/item/weapon/bloodlust/IsShield()
@@ -383,12 +297,14 @@
 
 /obj/item/weapon/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
 	..()
-	if(istype(W, /obj/item/weapon/screwdriver) && user.is_holding_item(src))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+	if(W.is_screwdriver(user) && user.is_holding_item(src))
+		W.playtoolsound(loc, 50)
 		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
-		user.drop_item(src, force_drop=1)
+		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
+		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
+		qdel(src)
 
-/obj/item/weapon/bloodlust/suicide_act(mob/user)
+/obj/item/weapon/bloodlust/suicide_act(var/mob/living/user)
 	. = (SUICIDE_ACT_OXYLOSS)
 	user.visible_message("<span class='danger'>[user] is putting \his neck between \the [src]s blades! It looks like \he's trying to commit suicide.</span>")
 	spawn(2 SECONDS) //Adds drama.

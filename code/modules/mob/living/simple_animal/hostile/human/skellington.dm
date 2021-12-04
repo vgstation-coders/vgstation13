@@ -6,6 +6,7 @@
 	icon_state = "skellington"
 
 	faction = "skeleton"
+	mob_property_flags = MOB_UNDEAD
 
 	corpse = /obj/effect/landmark/corpse/skellington
 
@@ -24,6 +25,8 @@
 	max_co2 = 0
 	min_n2 = 0
 	max_n2 = 0
+
+	blooded = FALSE
 
 /mob/living/simple_animal/hostile/humanoid/skellington/corsaire
 	name = "skellington corsaire"
@@ -88,7 +91,7 @@
 
 	..(TRUE)
 
-	explosion(T, -1, 1, 2)
+	explosion(T, -1, 1, 2, whodunnit = src)
 
 /obj/effect/landmark/corpse/skellington
 	name = "skellington"

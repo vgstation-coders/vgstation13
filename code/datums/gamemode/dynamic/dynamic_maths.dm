@@ -22,7 +22,7 @@
 		// Porportional conversion from the lorentz variable to the threat.
 
 		// First, we use a rule of three to get a number from -40 to -30.
-		// Then we shift it by 50 to get a number from 10 to 20. 
+		// Then we shift it by 50 to get a number from 10 to 20.
 		// The same process is done for other intervalls.
 		if (-20 to -10)
 			y = RULE_OF_THREE(-40, -20, x) + 50
@@ -45,7 +45,7 @@
 
 		if (20 to INFINITY)
 			y = rand(90, 100)
-	
+
 	return y
 
 // Same as above, but for a Gaussian law, which has much shorter tails.
@@ -78,7 +78,7 @@
 
 		if (20 to INFINITY)
 			y = rand(90, 100)
-	
+
 	return y
 
 // Exp gives us something between 0 and 5 ; we just convert it to something between 0 and 100.
@@ -110,6 +110,11 @@
 			threat = threat_level
 			starting_threat = threat_level
 
+			relative_threat = lorentz_distribution(dynamic_curve_centre, dynamic_curve_width)
+			midround_threat_level = lorentz2threat(relative_threat)
+			midround_threat = midround_threat_level
+			midround_starting_threat = midround_threat_level
+
 		if (GAUSS)
 			relative_threat = dynamic_curve_centre + GaussRand(dynamic_curve_width)
 			threat_level = Gauss2threat(relative_threat)
@@ -122,10 +127,20 @@
 			threat = threat_level
 			starting_threat = threat_level
 
+			relative_threat = lorentz_distribution(dynamic_curve_centre, dynamic_curve_width)
+			midround_threat_level = Gauss2threat(relative_threat)
+			midround_threat = midround_threat_level
+			midround_starting_threat = midround_threat_level
+
 		if (DIRAC)
 			threat = dynamic_curve_centre
 			threat_level = dynamic_curve_centre
 			starting_threat = threat_level
+
+			midround_threat = dynamic_curve_centre
+			midround_threat_level = dynamic_curve_centre
+			midround_starting_threat = threat_level
+
 			peaceful_percentage = "Undefined"
 
 		if (EXPONENTIAL)
@@ -140,8 +155,16 @@
 			threat = threat_level
 			starting_threat = threat_level
 
+			relative_threat = exp_distribution(dynamic_curve_centre)
+			midround_threat_level = exp2threat(relative_threat)
+			midround_starting_threat = midround_threat_level
+			midround_threat = midround_threat_level
+
 		if (UNIFORM)
 			threat_level = rand(1, 100)
 			threat = threat_level
 			starting_threat = threat_level
+			midround_threat_level = rand(1, 100)
+			midround_threat = threat_level
+			midround_starting_threat = threat_level
 			peaceful_percentage = "Undefined"

@@ -7,15 +7,17 @@
 	var/spellname = "sandbox"
 	var/used = 0
 	name = "spellbook of "
+	item_state = "oneuse"
 	uses = 1
 	max_uses = 1
 	desc = "This template spellbook was never meant for the eyes of man..."
+	var/disabled_from_bundle //if 1, this will not appear in the spellbook bundle
 
 /obj/item/weapon/spellbook/oneuse/New()
 	..()
 	name += spellname
 
-/obj/item/weapon/spellbook/oneuse/attack_self(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/attack_self(mob/user)
 	var/spell/S = new spell(user)
 	for(var/spell/knownspell in user.spell_list)
 		if(knownspell.type == S.type)
@@ -28,15 +30,16 @@
 	if(used)
 		recoil(user)
 	else
+		S.refund_price = 0 // So that they can't be refunded
 		user.add_spell(S)
 		to_chat(user, "<span class='notice'>you rapidly read through the arcane book. Suddenly you realize you understand [spellname]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.real_name] ([user.ckey]) learned the spell [spellname] ([S]).</font>")
 		onlearned(user)
 
-/obj/item/weapon/spellbook/oneuse/proc/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/proc/recoil(mob/user)
 	user.visible_message("<span class='warning'>[src] glows in a black light!</span>")
 
-/obj/item/weapon/spellbook/oneuse/proc/onlearned(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/proc/onlearned(mob/user)
 	used = 1
 	user.visible_message("<span class='caution'>[src] glows dark for a second!</span>")
 
@@ -49,9 +52,9 @@
 	icon_state ="bookfireball"
 	desc = "This book feels warm to the touch."
 
-/obj/item/weapon/spellbook/oneuse/fireball/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/fireball/recoil(mob/user)
 	..()
-	explosion(user.loc, -1, 0, 2, 3, 0, flame_range = 2)
+	explosion(user.loc, -1, 0, 2, 3, 0, whodunnit = user)
 	qdel(src)
 
 /obj/item/weapon/spellbook/oneuse/smoke
@@ -72,7 +75,7 @@
 	icon_state ="bookblind"
 	desc = "This book looks blurry, no matter how you look at it."
 
-/obj/item/weapon/spellbook/oneuse/blind/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/blind/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>You go blind!</span>")
 	user.eye_blind = 10
@@ -100,13 +103,36 @@
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to mimes everywhere inside the front cover."
 
-/obj/item/weapon/spellbook/oneuse/forcewall/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/forcewall/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>You suddenly feel very solid!</span>")
 	var/obj/structure/closet/statue/S = new /obj/structure/closet/statue(user.loc, user)
 	S.timer = 30
 	user.drop_item()
 
+/obj/item/weapon/spellbook/oneuse/unwall
+	spell = /spell/targeted/mime_unwall
+	spellname = "unwall"
+	icon_state ="bookforcewall"
+	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
+	disabled_from_bundle = 1
+
+/obj/item/weapon/spellbook/oneuse/unwall/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/M = user
+		if(!issilent(M))
+			recoil(user)
+	else
+		recoil(user)
+	..()
+
+/obj/item/weapon/spellbook/oneuse/unwall/recoil(mob/user)
+	..()
+	to_chat(user, "<span class='warning'>You suddenly feel very silent!</span>")
+	if(ishuman(user))
+		var/mob/living/carbon/human/M = user
+		M.flash_eyes(visual = 1)
+	user.mind.miming = MIMING_OUT_OF_CURSE
 
 /obj/item/weapon/spellbook/oneuse/knock
 	spell = /spell/aoe_turf/knock
@@ -114,10 +140,23 @@
 	icon_state ="bookknock"
 	desc = "This book is hard to hold closed properly."
 
-/obj/item/weapon/spellbook/oneuse/knock/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/knock/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>You're knocked down!</span>")
 	user.Knockdown(20)
+
+/obj/item/weapon/spellbook/oneuse/hangman
+	spell = /spell/aoe_turf/hangman
+	spellname = "hangman"
+	icon_state ="bookhangman"
+	desc = "This book has some letters blanked out in the words."
+
+/obj/item/weapon/spellbook/oneuse/hangman/recoil(mob/user)
+	..()
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		H.set_muted_letters(6)
+		H.visible_message("<span class='danger'>[H]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>You attempt to read the book and find your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")
 
 /obj/item/weapon/spellbook/oneuse/horsemask
 	spell = /spell/targeted/equip_item/horsemask
@@ -142,8 +181,9 @@
 	spellname = "charging"
 	icon_state ="bookcharge"
 	desc = "This book is made of 100% post-consumer wizard."
+	disabled_from_bundle = 1
 
-/obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>[src] suddenly feels very warm!</span>")
 	empulse(src, 1, 1)
@@ -208,7 +248,7 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/victim = user
 		to_chat(user, "<span class ='warning'>You suddenly feel very restrained!</span>")
-		var/obj/item/clothing/suit/straight_jacket/magicjacket = new/obj/item/clothing/suit/straight_jacket
+		var/obj/item/clothing/suit/strait_jacket/magicjacket = new
 		user.drop_from_inventory(victim.wear_suit)
 		user.equip_to_slot(magicjacket, slot_wear_suit, 1, 1)
 		user.flash_eyes(visual = 1)
@@ -258,6 +298,7 @@
 	spellname  = "highlander power"
 	icon_state = "bookhighlander"
 	desc = "You can hear the bagpipes playing already."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient
@@ -300,6 +341,7 @@
 	spell = /spell/targeted/buttbots_revenge
 	spellname = "ass magic"
 	icon_state = "bookbutt"
+	desc = "You feel as if your ass could explode at any moment, just by looking at this."
 
 /obj/item/weapon/spellbook/oneuse/buttbot/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -318,6 +360,7 @@
 	spell = /spell/lightning
 	spellname = "lightning"
 	icon_state = "booklightning"
+	desc = "You can hear it crackle with malevolent electricity."
 
 /obj/item/weapon/spellbook/oneuse/lightning/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -330,6 +373,7 @@
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
 	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
@@ -339,7 +383,7 @@
 
 /obj/item/weapon/spellbook/oneuse/timestop/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		user.stunned = 5
+		user.AdjustStunned(5)
 		user.flash_eyes(visual = 1)
 		to_chat(user, "<span class = 'warning'>You have been turned into a statue!</span>")
 		new /obj/structure/closet/statue(user.loc, user) //makes the statue
@@ -488,14 +532,33 @@
 	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
 	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
 
+/obj/item/weapon/spellbook/oneuse/alchemy
+	spell = /spell/targeted/alchemy
+	spellname = "Street Alchemy"
+	desc = "The letters are all in different hand writing and the ink varies in colour."
+	icon_state = "bookalch"
+
+/obj/item/weapon/spellbook/oneuse/alchemy/recoil(mob/living/carbon/user)
+	..()
+	playsound(user, "sound/effects/bubbles.ogg", 75, 1)
+	var/datum/reagent/toAdd = pick(PACID, HELL_RAMEN, CHLORALHYDRATE, MINDBREAKER)
+	user.reagents.add_reagent(toAdd, 3)
+
+/obj/item/weapon/spellbook/oneuse/absorb
+	spell = /spell/targeted/absorb
+	spellname = "absorb"
+	icon_state ="bookabsorb"
+	desc = "This book glows with sinister energy."
+	disabled_from_bundle = 1
+
 
 ///// ANCIENT SPELLBOOK /////
 
 /obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise available to purchase, only available via the spellbook bundle
-	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate, /spell/targeted/card)
 	spell = null
 	icon_state = "book"
-	desc = "A book of lost and forgotten knowledge"
+	desc = "A book of lost and forgotten knowledge."
 	spellname = "forgotten knowledge"
 
 /obj/item/weapon/spellbook/oneuse/ancient/New()
@@ -512,10 +575,10 @@
 /obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be available at christmas
 	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
 	icon_state = "winter"
-	desc = "A book of festive knowledge"
+	desc = "A book of festive knowledge."
 	spellname = "winter"
 
-/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
-	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
+/obj/item/weapon/spellbook/oneuse/ancient/winter/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from Santa!</span>")
 	user.gib()
 	qdel(src)

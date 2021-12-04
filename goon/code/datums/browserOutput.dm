@@ -147,6 +147,7 @@ For the main html chat area
 
 /datum/chatOutput/proc/pingLoop()
 	set waitfor = FALSE
+	usr = null //Otherwise this holds a reference to the new_player and causes it to hard del
 
 	while (owner)
 		ehjax_send(data = owner.is_afk(29 SECONDS) ? "softPang" : "pang") // SoftPang isn't handled anywhere but it'll always reset the opts.lastPang.
@@ -181,7 +182,7 @@ For the main html chat area
 				var/list/row = src.connectionHistory[i]
 				if (!row || row.len < 3 || (!row["ckey"] && !row["compid"] && !row["ip"])) //Passed malformed history object
 					return
-				if (world.IsBanned(row["ckey"], row["compid"], row["ip"]))
+				if (world.IsBanned(row["ckey"], row["ip"], row["compid"], "goonchat"))
 					found = row
 					break
 
@@ -217,6 +218,16 @@ For the main html chat area
 		return 0
 
 	iconCache[iconKey] << icon
+	var/iconData = iconCache.ExportText(iconKey)
+	var/list/partial = splittext(iconData, "{")
+	return replacetext(copytext(partial[2], 3, -5), "\n", "")
+
+//same as above but only saves the South icon_state, used to display the players on last round's scoreboard.
+/proc/iconsouth2base64(var/icon/icon, var/iconKey = "misc")
+	if (!isicon(icon))
+		return 0
+
+	iconCache[iconKey] << icon(icon, dir = SOUTH, frame = 1)
 	var/iconData = iconCache.ExportText(iconKey)
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")
@@ -263,6 +274,8 @@ For the main html chat area
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
 	//It stands that we PROBABLY don't want to output those to the browser output so just handle them here
+	if(!target)
+		return
 	if (istype(target, /datum/zLevel)) //Passing it to an entire z level
 		for(var/mob/M in player_list) //List of all mobs with clients, excluding new_player
 			if(!istype(get_z_level(M),target))
@@ -313,8 +326,7 @@ For the main html chat area
 
 		message = replacetext(message, "\n", "<br>")
 
-		// url_encode it TWICE, this way any UTF-8 characters are able to be decoded by the Javascript.
-		target << output(url_encode(url_encode(message)), "browseroutput:output")
+		target << output(url_encode(message), "browseroutput:output")
 
 /datum/log	//exists purely to capture to_chat() output
 	var/log = ""

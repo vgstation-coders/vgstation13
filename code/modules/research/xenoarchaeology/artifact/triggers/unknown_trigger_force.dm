@@ -9,35 +9,39 @@
 
 /datum/artifact_trigger/force/New()
 	..()
-	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
-	key_explode = my_artifact.on_explode.Add(src, "owner_explode")
-	key_projectile = my_artifact.on_projectile.Add(src, "owner_projectile")
+	my_artifact.register_event(/event/attackby, src, .proc/owner_attackby)
+	my_artifact.register_event(/event/explosion, src, .proc/owner_explode)
+	my_artifact.register_event(/event/projectile, src, .proc/owner_projectile)
+	my_artifact.register_event(/event/bumped, src, .proc/owner_bumped)
 
-/datum/artifact_trigger/force/proc/owner_attackby(var/list/event_args, var/source)
-	var/toucher = event_args[1]
-	var/context = event_args[2]
-	var/obj/item/weapon/item = event_args[3]
+/datum/artifact_trigger/force/proc/owner_attackby(mob/living/attacker, obj/item/item)
+	if(item.force < FORCE_THRESHOLD)
+		return
+	Triggered(attacker, "MELEE", item)
 
-	if(context == "THROW" && item:throwforce >= FORCE_THRESHOLD)
-		Triggered(toucher, context, item)
-	else if(item.force >= FORCE_THRESHOLD)
-		Triggered(toucher, context, item)
+/datum/artifact_trigger/force/proc/owner_explode(severity)
+	Triggered(null, "EXPLOSION", null)
 
-/datum/artifact_trigger/force/proc/owner_explode(var/list/event_args, var/source)
-	var/context = event_args[2]
-	Triggered(0, context, 0)
+/datum/artifact_trigger/force/proc/owner_projectile(obj/item/projectile/projectile)
+	var/static/list/valid_projectiles = list(
+		/obj/item/projectile/bullet,
+		/obj/item/projectile/hivebotbullet,
+	)
+	if(!is_type_in_list(projectile, valid_projectiles))
+		return
+	Triggered(projectile.firer, "PROJECTILE", projectile)
 
-/datum/artifact_trigger/force/proc/owner_projectile(var/list/event_args, var/source)
-	var/toucher = event_args[1]
-	var/context = event_args[2]
-	var/item = event_args[3]
-
-	if(istype(item,/obj/item/projectile/bullet) ||\
-		istype(item,/obj/item/projectile/hivebotbullet))
-		Triggered(toucher, context, item)
+/datum/artifact_trigger/force/proc/owner_bumped(atom/movable/bumper, atom/bumped)
+	var/obj/item/thrown_item = bumper
+	if(!istype(thrown_item))
+		return
+	if(thrown_item.throwforce < FORCE_THRESHOLD)
+		return
+	Triggered(usr, "THROW", thrown_item)
 
 /datum/artifact_trigger/force/Destroy()
-	my_artifact.on_attackby.Remove(key_attackby)
-	my_artifact.on_explode.Remove(key_explode)
-	my_artifact.on_projectile.Remove(key_projectile)
+	my_artifact.unregister_event(/event/attackby, src, .proc/owner_attackby)
+	my_artifact.unregister_event(/event/explosion, src, .proc/owner_explode)
+	my_artifact.unregister_event(/event/projectile, src, .proc/owner_projectile)
+	my_artifact.unregister_event(/event/bumped, src, .proc/owner_bumped)
 	..()

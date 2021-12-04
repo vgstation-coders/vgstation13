@@ -1,16 +1,20 @@
-var/global/current_date_string
-var/global/num_financial_terminals = 1
-var/global/num_financial_database = 1
-var/global/num_vending_machines = 1
-var/global/num_pda_terminals = 1
-var/global/num_merch_computers = 1
-var/global/datum/money_account/station_account
-var/global/list/datum/money_account/department_accounts = list()
-var/global/next_account_number = 0
-var/global/obj/machinery/account_database/centcomm_account_db
-var/global/datum/money_account/vendor_account
-var/global/list/all_money_accounts = list()
-var/global/datum/money_account/trader_account
+var/current_date_string
+var/num_financial_terminals = 1
+var/num_financial_database = 1
+var/num_vending_machines = 1
+var/num_pda_terminals = 1
+var/num_merch_computers = 1
+var/datum/money_account/station_account
+var/list/datum/money_account/department_accounts = list()
+var/next_account_number = 0
+var/obj/machinery/account_database/centcomm_account_db
+var/datum/money_account/vendor_account
+var/list/all_money_accounts = list()
+var/list/all_station_accounts = list()
+var/datum/money_account/trader_account
+
+var/station_allowance = 0//This is what Nanotrasen will send to the Station Account after every salary, as provision for the next salary.
+var/latejoiner_allowance = 0//Added to station_allowance and reset before every wage payout.
 
 /proc/create_station_account()
 	if(!station_account)
@@ -19,14 +23,14 @@ var/global/datum/money_account/trader_account
 		station_account.owner_name = "[station_name()] Station Account"
 		station_account.account_number = rand(11111, 99999)
 		station_account.remote_access_pin = rand(1111, 9999)
-		station_account.money = DEPARTMENT_START_FUNDS
-		station_account.wage_gain = DEPARTMENT_START_WAGE
+		station_account.money = 0//The money is distributed by Nanotrasen in prevision for the next salary.
+		station_account.wage_gain = 0//Salary money is taken from this account, so no more getting money out of nowhere.
 
 		//create an entry in the account transaction log for when it was created
 		var/datum/transaction/T = new()
 		T.target_name = station_account.owner_name
 		T.purpose = "Account creation"
-		T.amount = 750
+		T.amount = 0
 		T.date = "2nd April, [game_year]"
 		T.time = "11:24"
 		T.source_terminal = "Biesel GalaxyNet Terminal #277"
@@ -45,6 +49,7 @@ var/global/datum/money_account/trader_account
 	department_account.money = DEPARTMENT_START_FUNDS
 	if(recieves_wage == 1)
 		department_account.wage_gain = DEPARTMENT_START_WAGE
+		station_allowance += DEPARTMENT_START_WAGE + round(DEPARTMENT_START_WAGE/10)//overhead of 10%
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -59,12 +64,14 @@ var/global/datum/money_account/trader_account
 	department_account.transaction_log.Add(T)
 	all_money_accounts.Add(department_account)
 
+	all_station_accounts.Add(department_account)
+
 	department_accounts[department] = department_account
 
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/makehidden = FALSE)
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/makehidden = FALSE, var/isStationAccount = TRUE)
 
 	//create a new account
 	var/datum/money_account/M = new()
@@ -122,6 +129,8 @@ var/global/datum/money_account/trader_account
 	//add the account
 	M.transaction_log.Add(T)
 	all_money_accounts.Add(M)
+	if (isStationAccount)
+		all_station_accounts.Add(M)
 
 	return M
 
@@ -178,7 +187,7 @@ var/global/datum/money_account/trader_account
 		for(var/department in station_departments)
 			create_department_account(department, recieves_wage = 1)
 	if(!vendor_account)
-		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE)
+		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"
@@ -194,7 +203,7 @@ var/global/datum/money_account/trader_account
 /obj/machinery/account_database/initialize()
 	..()
 
-	if(z == CENTCOMM_Z && isnull(centcomm_account_db))
+	if(z == map.zCentcomm && isnull(centcomm_account_db))
 		centcomm_account_db = src
 
 /obj/machinery/account_database/Destroy()
@@ -215,7 +224,7 @@ var/global/datum/money_account/trader_account
 		if(access_level > 0 || isAdminGhost(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
-				You may not edit accounts at this terminal, only create and view them.<br>"}
+				Combined department and personnel budget is currently [station_allowance] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}
 			if(creating_new_account)
 
 				dat += {"<br>
@@ -237,7 +246,7 @@ var/global/datum/money_account/trader_account
 						<b>Account number:</b> #[detailed_account_view.account_number]<br>
 						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
-						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
+						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=\ref[src];choice=edit_wage_payout;account_num=[detailed_account_view.account_number]'>Edit</a><br>
 						<b>Account status:</b> "}
 					switch(detailed_account_view.disabled)
 						if(0)
@@ -383,6 +392,14 @@ var/global/datum/money_account/trader_account
 			if("toggle_account")
 				if(detailed_account_view)
 					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
+			if("edit_wage_payout")
+				var/acc_num = text2num(href_list["account_num"])
+				var/datum/money_account/acc = get_money_account_global(acc_num)
+				if(acc)
+					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
+					if(new_payout >= 0 && new_payout != null)
+						acc.wage_gain = round(new_payout)
+					detailed_account_view = acc
 
 	src.attack_hand(usr)
 

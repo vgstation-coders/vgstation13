@@ -79,7 +79,6 @@
 /obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
 	..()
 	add_languages(R)
-	AddToProfiler()
 	if(default_modules)
 		AddDefaultModules()
 	UpdateModuleHolder(R)
@@ -199,10 +198,10 @@
 /obj/item/weapon/robot_module/standard/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
-	modules += new /obj/item/weapon/wrench(src)
+	modules += new /obj/item/tool/wrench(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/device/taperecorder(src)
@@ -224,7 +223,7 @@
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
 	module_holder = "medical"
-	quirk_flags = MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
+	quirk_flags = MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_LIFT_VIROTAPE
 	networks = list(CAMERANET_MEDBAY)
 	radio_key = /obj/item/device/encryptionkey/headset_med
 	sprites = list(
@@ -251,7 +250,7 @@
 /obj/item/weapon/robot_module/medical/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/device/antibody_scanner(src)
@@ -260,18 +259,19 @@
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
 	modules += new /obj/item/weapon/reagent_containers/syringe(src)
 	modules += new /obj/item/weapon/storage/bag/chem(src)
-	modules += new /obj/item/weapon/scalpel(src)
-	modules += new /obj/item/weapon/hemostat(src)
-	modules += new /obj/item/weapon/retractor(src)
-	modules += new /obj/item/weapon/circular_saw(src)
-	modules += new /obj/item/weapon/cautery(src)
-	modules += new /obj/item/weapon/bonegel(src)
-	modules += new /obj/item/weapon/bonesetter(src)
-	modules += new /obj/item/weapon/FixOVein(src)
-	modules += new /obj/item/weapon/surgicaldrill(src)
+	modules += new /obj/item/tool/scalpel(src)
+	modules += new /obj/item/tool/hemostat(src)
+	modules += new /obj/item/tool/retractor(src)
+	modules += new /obj/item/tool/circular_saw(src)
+	modules += new /obj/item/tool/cautery(src)
+	modules += new /obj/item/tool/bonegel(src)
+	modules += new /obj/item/tool/bonesetter(src)
+	modules += new /obj/item/tool/FixOVein(src)
+	modules += new /obj/item/tool/surgicaldrill(src)
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/robot_rack/bed(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
 	B.max_amount = MEDICAL_MAX_KIT
 	B.amount = MEDICAL_MAX_KIT
@@ -312,21 +312,21 @@
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
-	respawnables = list(/obj/item/stack/cable_coil)
+	respawnables = list(/obj/item/stack/cable_coil/yellow)
 	respawnables_max_amount = ENGINEERING_MAX_COIL
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher(src)
 	modules += new /obj/item/weapon/extinguisher/foam(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
-	modules += new /obj/item/weapon/weldingtool/largetank(src)
-	modules += new /obj/item/weapon/screwdriver(src)
-	modules += new /obj/item/weapon/wrench(src)
-	modules += new /obj/item/weapon/wirecutters(src)
+	modules += new /obj/item/tool/weldingtool/largetank(src)
+	modules += new /obj/item/tool/screwdriver(src)
+	modules += new /obj/item/tool/wrench(src)
+	modules += new /obj/item/tool/wirecutters(src)
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/t_scanner(src)
 	modules += new /obj/item/device/analyzer(src)
@@ -337,7 +337,7 @@
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/borg/fire_shield
-	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
+	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil/yellow(src)
 	W.amount = ENGINEERING_MAX_COIL
 	W.max_amount = ENGINEERING_MAX_COIL
 	modules += W
@@ -369,7 +369,7 @@
 /obj/item/weapon/robot_module/security/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
 	modules += new /obj/item/weapon/handcuffs/cyborg(src)
@@ -403,7 +403,7 @@
 /obj/item/weapon/robot_module/janitor/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/weapon/storage/bag/trash(src)
@@ -425,6 +425,7 @@
 		"Default - 'Butler'" = "servbot_m",
 		"Default - 'Waitress'" = "servbot_f",
 		"Default - 'Bro'" = "brobot",
+		"Default - 'Fro'" = "frobot",
 		"Default - 'Maximillion'" = "maximillion",
 		"Default - 'Hydro'" = "hydrobot",
 		"Toiletbot" = "toiletbot",
@@ -450,7 +451,7 @@
 /obj/item/weapon/robot_module/butler/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/gripper/service(src)
 	modules += new /obj/item/weapon/pen/robopen(src)
@@ -470,6 +471,7 @@
 /obj/item/weapon/robot_module/miner
 	name = "supply robot module"
 	module_holder = "miner"
+	quirk_flags = MODULE_CAN_CLOSE_CLOSETS
 	networks = list(CAMERANET_MINE)
 	radio_key = /obj/item/device/encryptionkey/headset_mining
 	sprites = list(
@@ -491,7 +493,7 @@
 /obj/item/weapon/robot_module/miner/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
@@ -500,6 +502,7 @@
 	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
 	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 	modules += new /obj/item/device/destTagger/cyborg(src)
+	modules += new /obj/item/weapon/storage/bag/clipboard(src)
 	modules += new /obj/item/device/gps/cyborg(src)
 	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
 	W.amount = SUPPLY_MAX_WRAP
@@ -522,8 +525,7 @@
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
 
-	modules += new /obj/item/weapon/card/emag(src)
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	fix_modules()
 
 /obj/item/weapon/robot_module/syndicate/blitzkrieg
@@ -535,7 +537,7 @@
 /obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
 	..()
 
-	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
+	modules += new /obj/item/tool/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
 	modules += new /obj/item/robot_rack/ammo/a12mm(src)
@@ -554,8 +556,9 @@
 /obj/item/weapon/robot_module/syndicate/crisis/New()
 	..()
 
-	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
+	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_LIFT_VIROTAPE
 
+	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
 	modules += new /obj/item/device/chameleon(src)
@@ -565,8 +568,9 @@
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
 	modules += new /obj/item/weapon/revivalprod(src)
-	modules += new /obj/item/weapon/switchtool/surgery(src)
+	modules += new /obj/item/weapon/switchtool/surgery/maxed(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
@@ -586,6 +590,7 @@
 		"Marina" = "marinaCB",
 		"#41" = "servbot-combat",
 		"Kodiak - 'Grizzly'" = "kodiak-combat",
+		"Sleek" = "sleekcombat",
 		"R34 - WAR8a 'Chesty'" = "chesty"
 		)
 	speed_modifier = CYBORG_COMBAT_SPEED_MODIFIER
@@ -593,13 +598,13 @@
 /obj/item/weapon/robot_module/combat/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
 	modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
 	modules += new /obj/item/borg/combat/shield(src)
 	modules += new /obj/item/borg/combat/mobility(src)
-	modules += new /obj/item/weapon/wrench(src) //Is a combat machine really going to be stopped by a chair?
+	modules += new /obj/item/tool/wrench(src) //Is a combat machine really going to be stopped by a chair?
 	emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
 
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
@@ -630,7 +635,7 @@
 	sensor_augs = list("Medical", "Disable")
 
 	fix_modules()
-	
+
 /obj/item/weapon/robot_module/starman
 	name = "starman robot module"
 	module_holder = "starman"

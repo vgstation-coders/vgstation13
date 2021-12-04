@@ -16,6 +16,11 @@
 
 	machine_flags = WRENCHMOVE
 
+
+/obj/machinery/auto_cloner/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/machinery/auto_cloner/New()
 	..()
 
@@ -97,19 +102,20 @@
 		if(prob(Proj.damage/2))
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
-			explosion(get_turf(src), 1, 2, 3, 3)
+			explosion(get_turf(src), 1, 2, 3, 3, whodunnit = Proj.firer)
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
+	return ..()
 
-/obj/machinery/auto_cloner/attackby(var/obj/O, var/mob/user)
-	if(iswrench(O))
+/obj/machinery/auto_cloner/attackby(var/obj/item/O, var/mob/user)
+	if(O.is_wrench(user))
 		return ..()
 	else if(O.force > 10)
 		log_attack("<font color='red'>[user] damaged [src]/([formatJumpTo(src)]) with [O]</font>")
 		src.visible_message("<span class='warning'>\The [user] damages \the [src] with \the [O].</span>")
 		if(prob(O.force/2))
 			msg_admin_attack("[user] blew up [src]/([formatJumpTo(src)]) with [O] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			explosion(get_turf(src), 1, 2, 3, 3)
+			explosion(get_turf(src), 1, 2, 3, 3, whodunnit = user)
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [O] || attacked by [key_name(user)].")
 			qdel(src)
 	else

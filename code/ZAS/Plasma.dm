@@ -52,28 +52,31 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(stat >= 2)
 		return
 
-	if(species.breath_type != GAS_PLASMA)
+	if(species.breath_type == GAS_PLASMA)
+		return
+	if(species.flags & PLASMA_IMMUNE)
+		return
 
-		//Burn skin if exposed.
-		if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
-			if(!pl_head_protected() || !pl_suit_protected())
-				burn_skin(0.75)
-				if(prob(20))
-					to_chat(src, "<span class='warning'>Your skin burns!</span>")
-				updatehealth()
+	//Burn skin if exposed.
+	if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
+		if(!pl_head_protected() || !pl_suit_protected())
+			burn_skin(0.75)
+			if(prob(20))
+				to_chat(src, "<span class='warning'>Your skin burns!</span>")
+			updatehealth()
 
-		//Burn eyes if exposed.
-		if(zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
-			var/eye_protection = get_body_part_coverage(EYES)
-			if(!eye_protection)
-				burn_eyes()
+	//Burn eyes if exposed.
+	if(zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
+		var/eye_protection = get_body_part_coverage(EYES)
+		if(!eye_protection)
+			burn_eyes()
 
-		//Genetic Corruption
-		if(zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
-			if(rand(1,10000) < zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
-				randmutb(src)
-				to_chat(src, "<span class='warning'>High levels of toxins cause you to spontaneously mutate.</span>")
-				domutcheck(src,null)
+	//Genetic Corruption
+	if(zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
+		if(rand(1,10000) < zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
+			randmutb(src)
+			to_chat(src, "<span class='warning'>High levels of toxins cause you to spontaneously mutate.</span>")
+			domutcheck(src,null)
 
 
 /mob/living/carbon/human/proc/burn_eyes()

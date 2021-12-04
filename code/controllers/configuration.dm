@@ -14,6 +14,8 @@
 	var/log_admin = 0					// log admin actions
 	var/log_admin_only = FALSE
 	var/log_debug = 1					// log debug output
+	var/log_sql = 0						// log SQL events
+	var/log_sql_queries = 0				// debug info SQL queries
 	var/log_game = 0					// log game events
 	var/log_vote = 0					// log voting
 	var/log_whisper = 0					// log client whisper
@@ -26,7 +28,7 @@
 	var/log_rc = 0						// log requests consoles
 	var/log_hrefs = 0					// logs all links clicked in-game. Could be used for debugging and tracking down exploits
 	var/log_runtimes = 0                // Logs all runtimes.
-	var/sql_enabled = 1					// for sql switching
+	var/sql_enabled = 0					// for sql switching
 	var/allow_admin_ooccolor = 0		// Allows admins with relevant permissions to have their own ooc colour
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
@@ -62,14 +64,24 @@
 	var/respawn_delay=30
 	var/respawn_as_mommi = 0
 	var/respawn_as_mouse = 1
+	var/respawn_as_hobo = 1
 	var/guest_jobban = 1
 	var/usewhitelist = 0
 	var/kick_inactive = 0				//force disconnect for inactive players
 	var/load_jobs_from_txt = 0
-	var/ToRban = 0
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
+
+
+	var/multiz_render_cap = 8			//how far down open spaces will render
+	var/multiz_bottom_cap = 16			//how far down open spaces will detect for a bottom
+
+	// BSQL things
+	var/bsql_debug = 0
+	var/async_query_timeout = 10
+	var/blocking_query_timeout = 5
+	var/bsql_thread_limit = 50
 
 	var/cult_ghostwriter = 1               //Allows ghosts to write in blood in cult rounds...
 	var/cult_ghostwriter_req_cultists = 10 //...so long as this many cultists are active.
@@ -171,6 +183,7 @@
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
+	var/disable_vault_rotation = 0 //If 1, don't load vaults rotated
 	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
 	var/no_lobby_music = 0 //If 1, don't play lobby music, regardless of client preferences.
 	var/no_ambience = 0 //If 1, don't play ambience, regardless of client preferences.
@@ -186,6 +199,7 @@
 	// Discord crap.
 	var/discord_url
 	var/discord_password
+	var/kill_phrase = "All your bases are belong to us."
 
 	// Weighted Votes
 	var/weighted_votes = 0
@@ -286,6 +300,12 @@
 				if ("log_debug")
 					config.log_debug = text2num(value)
 
+				if ("log_sql")
+					config.log_sql = 1
+
+				if ("log_sql_queries")
+					config.log_sql_queries = 1
+
 				if ("log_game")
 					config.log_game = 1
 
@@ -366,6 +386,9 @@
 
 				if ("no_respawn_as_mouse")
 					config.respawn_as_mouse = 0
+
+				if ("no_respawn_as_hobo")
+					config.respawn_as_hobo = 0
 
 				if ("servername")
 					config.server_name = value
@@ -480,9 +503,6 @@
 				if("humans_need_surnames")
 					humans_need_surnames = 1
 
-				if("tor_ban")
-					ToRban = 1
-
 				if("automute_on")
 					automute_on = 1
 
@@ -546,6 +566,23 @@
 					config.assistantratio = text2num(value)
 				if("copy_logs")
 					copy_logs = value
+
+				// BRSQL
+				if("bsql_debug")
+					bsql_debug = value
+				if("async_query_timeout")
+					async_query_timeout = text2num(value)
+				if("blocking_query_timeout")
+					blocking_query_timeout = text2num(value)
+				if("bsql_thread_limit")
+					bsql_thread_limit = text2num(value)
+
+
+				if("multiz_render_cap")
+					multiz_render_cap = text2num(value)
+				if("multiz_bottom_cap")
+					multiz_bottom_cap = text2num(value)
+
 				if("media_base_url")
 					media_base_url = value
 				if("media_secret_key")
@@ -568,6 +605,8 @@
 					skip_holominimap_generation = 1
 				if("skip_vault_generation")
 					skip_vault_generation = 1
+				if("disable_vault_rotation")
+					disable_vault_rotation = 1
 				if("shut_up_automatic_diagnostic_and_announcement_system")
 					shut_up_automatic_diagnostic_and_announcement_system = 1
 				if("no_lobby_music")
@@ -592,6 +631,9 @@
 					discord_password = value
 				if("weighted_votes")
 					weighted_votes = TRUE
+
+				if ("kill_phrase")
+					kill_phrase = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"
@@ -682,7 +724,7 @@
 			if ("address")
 				sqladdress = value
 			if ("port")
-				sqlport = value
+				sqlport = text2num(value)
 			if ("database")
 				sqldb = value
 			if ("login")

@@ -7,7 +7,7 @@
 /mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
 
-	if(!is_pacified() && a_intent == "hurt" && A.loc != src)
+	if(a_intent == "hurt" && !is_pacified() && A.loc != src)
 		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 		switch(attack_type) //Special attacks - kicks, bites
 			if(ATTACK_KICK)
@@ -47,6 +47,9 @@
 	if(ismob(A))
 		delayNextAttack(10)
 
+	if(!can_use_hand_or_stump())
+		to_chat(src, "You try to move your arm but nothing happens. Need a hand?")
+		return
 	if(src.can_use_hand())
 		A.attack_hand(src, params, proximity)
 	else
@@ -70,9 +73,6 @@
 
 /atom/proc/requires_dexterity(mob/user)
 	return 0
-
-/mob/living/carbon/human/RestrainedClickOn(var/atom/A)
-	..()
 
 /mob/living/carbon/human/RangedAttack(var/atom/A)
 	if(!gloves && !mutations.len)
@@ -109,9 +109,6 @@
 
 /atom/proc/attack_animal(mob/user as mob)
 	return
-/mob/living/RestrainedClickOn(var/atom/A)
-	..()
-
 /*
 	Monkeys
 */

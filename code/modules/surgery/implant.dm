@@ -6,9 +6,9 @@
 
 /datum/surgery_step/cavity
 	priority = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
+/datum/surgery_step/cavity/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
 
 /datum/surgery_step/cavity/proc/get_max_wclass(datum/organ/external/affected)
 	switch (affected.name)
@@ -35,13 +35,12 @@
 //////MAKE SPACE//////
 /datum/surgery_step/cavity/make_space
 	allowed_tools = list(
-		/obj/item/weapon/surgicaldrill = 100,
+		/obj/item/tool/surgicaldrill = 100,
 		/obj/item/weapon/pen = 75,
 		/obj/item/stack/rods = 50,
 		)
 
-	min_duration = 60
-	max_duration = 80
+	duration = 6 SECONDS
 
 /datum/surgery_step/cavity/make_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
@@ -80,15 +79,14 @@
 /datum/surgery_step/cavity/close_space
 	priority = 2
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/tool/cautery = 100,
+		/obj/item/tool/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
 		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/tool/weldingtool = 25,
 		)
 
-	min_duration = 60
-	max_duration = 80
+	duration = 6 SECONDS
 
 /datum/surgery_step/cavity/close_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -122,8 +120,7 @@
 		/obj/item = 100,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/cavity/place_item/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
@@ -155,9 +152,8 @@
 	tool.forceMove(target)
 
 	if(istype(tool, /obj/item/weapon/implant))
-		var/obj/item/weapon/implant/disobj = tool
-		disobj.part = affected
-		affected.implants += disobj
+		var/obj/item/weapon/implant/timp = tool
+		timp.insert(target, affected.name, user)
 	affected.cavity = 0
 
 /datum/surgery_step/cavity/place_item/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -172,13 +168,13 @@
 
 /datum/surgery_step/cavity/implant_removal
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
-		/obj/item/weapon/wirecutters = 75,
+		/obj/item/tool/hemostat = 100,
+		/obj/item/tool/wirecutters = 75,
+		/obj/item/weapon/talisman = 70,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 2 SECONDS
 
 /datum/surgery_step/cavity/implant_removal/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/internal/brain/sponge = target.internal_organs_by_name["brain"]
@@ -196,7 +192,7 @@
 	var/datum/organ/external/chest/affected = target.get_organ(target_zone)
 
 	if (affected.implants.len)
-		var/obj/item/obj = affected.implants[1]
+		var/obj/item/obj = affected.implants[affected.implants.len]
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		affected.implants -= obj
@@ -208,17 +204,17 @@
 				target.release_control()
 			worm.detach()
 
-		obj.forceMove(get_turf(target))
 		if(istype(obj,/obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
-			imp.imp_in = null
-			imp.implanted = 0
-			affected.implants -= imp
-			target.contents -= imp
+			imp.remove(user)
+			user.put_in_hands(imp)
+		else
+			obj.forceMove(get_turf(target))
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		affected.hidden.forceMove(get_turf(target))
+		user.put_in_hands(affected.hidden)
 		if(!affected.hidden.blood_DNA)
 			affected.hidden.blood_DNA = list()
 		affected.hidden.blood_DNA[target.dna.unique_enzymes] = target.dna.b_type

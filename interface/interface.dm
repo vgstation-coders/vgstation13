@@ -64,6 +64,10 @@ Hotkey-Mode: (hotkey-mode must be on)
 \tz = activate held object (or y)
 \tf = cycle-intents-left
 \tg = cycle-intents-right
+\tu = cycle-target-zone-up
+\tj = cycle-target-zone-down
+\t h = cycle-target-zone-left
+\tk = cycle-target-zone-right
 \t1 = help-intent
 \t2 = disarm-intent
 \t3 = grab-intent
@@ -85,6 +89,10 @@ Any-Mode: (hotkey doesn't need to be on)
 \tCtrl+z = activate held object (or Ctrl+y)
 \tCtrl+f = cycle-intents-left
 \tCtrl+g = cycle-intents-right
+\tCtrl+u = cycle-target-zone-up
+\tCtrl+j = cycle-target-zone-down
+\tCtrl+h = cycle-target-zone-left
+\tCtrl+k = cycle-target-zone-right
 \tCtrl+1 = help-intent
 \tCtrl+2 = disarm-intent
 \tCtrl+3 = grab-intent
@@ -98,6 +106,19 @@ Any-Mode: (hotkey doesn't need to be on)
 \tPGDN = activate held object
 \tEND = throw
 \tSHIFT+MMB = point-at
+\tAlt+NUMPAD8 = target head
+\tAlt+NUMPAD7 = target mouth
+\tAlt+NUMPAD9 = target eyes
+\tAlt+NUMPAD5 = target chest
+\tAlt+NUMPAD2 = target groin
+\tAlt+NUMPAD4 = target left arm
+\tAlt+NUMPAD6 = target right arm
+\tAlt+NUMPAD1 = target left leg
+\tAlt+NUMPAD3 = target right leg
+\tCtrl+NUMPAD4 = target left hand
+\tCtrl+NUMPAD6 = target right hand
+\tCtrl+NUMPAD1 = target left foot
+\tCtrl+NUMPAD3 = target right foot
 
 For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 </font>"}
@@ -127,4 +148,13 @@ Admin:
 	set desc = "Open the Round End Information window."
 	set hidden = 1
 
-	src << browse(round_end_info, "window=roundstats;size=1000x600")
+	if (round_end_info)
+		var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
+		popup.set_content(round_end_info)
+		popup.open()
+	else if (last_round_end_info)
+		var/datum/browser/popup = new(src, "roundstats", "Last Round Summary", 1000, 600)
+		popup.set_content(last_round_end_info)
+		popup.open()
+	else
+		to_chat(usr, "<span class='warning'>no Round End Summary found.</span>")

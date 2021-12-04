@@ -6,8 +6,8 @@
 /obj/item/device/depth_scanner
 	name = "depth analysis scanner"
 	desc = "Used to check spatial depth and density of rock outcroppings."
-	icon = 'icons/obj/pda.dmi'
-	icon_state = "crap"
+	icon = 'icons/obj/xenoarchaeology.dmi'
+	icon_state = "depthscanner"
 	item_state = "analyzer"
 	w_class = W_CLASS_TINY
 	flags = FPRINT
@@ -21,7 +21,6 @@
 	var/depth = 0
 	var/clearance = 0
 	var/record_index = 1
-	var/dissonance_spread = 1
 	var/material = "unknown"
 
 /obj/item/device/depth_scanner/proc/scan_atom(var/mob/user, var/atom/A)
@@ -29,7 +28,9 @@
 	if(istype(A,/turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
 		if(M.finds.len || M.artifact_find)
-
+			for(var/mob/L in range(src, 1))
+				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
+			playsound(user, 'sound/machines/info.ogg', 20, 1)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
 			D.coords = "[M.x-WORLD_X_OFFSET[M.z]].[rand(0,9)]:[M.y-WORLD_Y_OFFSET[M.z]].[rand(0,9)]:[10 * M.z].[rand(0,9)]"
@@ -40,25 +41,31 @@
 			//find the first artifact and store it
 			if(M.finds.len)
 				var/datum/find/F = M.finds[1]
-				D.depth = F.excavation_required * 2		//0-100% and 0-200cm
-				D.clearance = F.clearance_range * 2
+				D.depth = F.excavation_required	//0-100% and 0-100cm
+				D.clearance = F.clearance_range
 				D.material = F.responsive_reagent
-			/*
-			if(M.excavation_minerals.len)
-				if(M.excavation_minerals[1] < D.depth)
-					D.depth = M.excavation_minerals[1]
-					D.clearance = rand(2,6)
-					D.dissonance_spread = rand(1,1000) / 100
-			*/
+				to_chat(user,"<span class='notice'>Anomaly depth: <strong>[F.excavation_required]</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[F.clearance_range]</strong> cm</span>")
+				var/index = responsive_carriers.Find(F.responsive_reagent)
+				if(index > 0 && index <= finds_as_strings.len)
+					to_chat(user,"<span class='notice'>Anomaly material: <strong><font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font></strong></span>")
+				else
+					to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
+			else
+				to_chat(user,"<span class='notice'>Anomaly depth: <strong>0</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>0</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 
 			positive_locations.Add(D)
-
-			for(var/mob/L in range(src, 1))
-				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
+		else
+			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
 	else if(istype(A,/obj/structure/boulder))
 		var/obj/structure/boulder/B = A
 		if(B.artifact_find)
+			for(var/mob/L in range(src, 1))
+				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
 			D.coords = "[10 * (B.x-WORLD_X_OFFSET[B.z])].[rand(0,9)]:[10 * (B.y-WORLD_Y_OFFSET[B.z])].[rand(0,9)]:[10 * B.z].[rand(0,9)]"
@@ -68,12 +75,14 @@
 			//these values are arbitrary
 			D.depth = rand(75,100)
 			D.clearance = rand(5,25)
-			D.dissonance_spread = rand(750,2500) / 100
 
 			positive_locations.Add(D)
 
-			for(var/mob/L in range(src, 1))
-				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
+			to_chat(user,"<span class='notice'>Anomaly depth: <strong>[rand(75,100)]</strong></span> cm")
+			to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[rand(5,25)]</strong> cm</span>")
+			to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
+		else
+			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
 /obj/item/device/depth_scanner/attack_self(var/mob/user as mob)
 	return src.interact(user)
@@ -86,10 +95,9 @@
 		dat += "Coords: [current.coords]<br>"
 		dat += "Anomaly depth: [current.depth] cm<br>"
 		dat += "Clearance above anomaly depth: [current.clearance] cm<br>"
-		dat += "Dissonance spread: [current.dissonance_spread]<br>"
 		var/index = responsive_carriers.Find(current.material)
 		if(index > 0 && index <= finds_as_strings.len)
-			dat += "Anomaly material: [finds_as_strings[index]]<br>"
+			dat += "Anomaly material: <font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font><br>"
 		else
 			dat += "Anomaly material: Unknown<br>"
 		dat += "<A href='?src=\ref[src];clear=[current.record_index]'>clear entry</a><br>"
@@ -138,49 +146,3 @@
 		usr << browse(null, "window=depth_scanner")
 
 	updateSelfDialog()
-
-
-/obj/item/device/xenoarch_scanner
-	name = "xenoarch digsite locator"
-	desc = "A scanner that checks the surrounding area for potential xenoarch digsites. If it finds any, It will briefly make them visible. Requires mesons for optimal use."
-	icon_state = "forensic0-old" //placeholder
-	item_state  = "analyzer"
-	w_class = W_CLASS_SMALL
-	flags = 0
-	slot_flags = SLOT_BELT
-	origin_tech = Tc_ANOMALY+"=1"
-	var/cooldown = 0
-	var/adv = FALSE
-
-/obj/item/device/xenoarch_scanner/adv
-	name = "advanced xenoarch digsite locator"
-	icon_state = "forensic1-old" //placeholder
-	desc = "A scanner that scans the surrounding area for potential xenoarch digsites, highlighting them temporarily in a colour associated with their responsive reagent. REquires mesons for optimal use."
-	adv = TRUE
-
-/obj/item/device/xenoarch_scanner/attack_self(mob/user)
-	if(world.time > cooldown + 4 SECONDS)
-		var/client/C = user.client
-		if(!C)
-			return
-		cooldown = world.time
-		for(var/turf/unsimulated/mineral/M in range(7, user))
-			if(M.finds.len)
-				var/datum/find/F = M.finds[1]
-				var/new_icon_state
-				var/new_color
-				if(adv)
-					new_icon_state = "find_overlay"
-					new_color = color_from_find_reagent[F.responsive_reagent]
-				else
-					new_icon_state = pick("archaeo1","archaeo2","archaeo3")
-				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = new_icon_state, layer = UNDER_HUD_LAYER)
-				if(new_color)
-					I.color = new_color
-				I.plane = HUD_PLANE
-				C.images += I
-				spawn(1 SECONDS)
-					animate(I, alpha = 0, time = 2 SECONDS)
-				spawn(3 SECONDS)
-					if(C)
-						C.images -= I

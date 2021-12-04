@@ -4,6 +4,9 @@
 /var/list/asset_cache      = list()
 /var/asset_cache_populated = FALSE
 
+/// Associative list of type path -> instance of type path
+var/list/asset_datums = list()
+
 /client
 	var/list/cache = list() // List of all assets sent to this client by the asset cache.
 	var/list/completed_asset_jobs = list() // List of all completed jobs, awaiting acknowledgement.
@@ -125,12 +128,16 @@
 	asset_cache[asset_name] = asset
 
 
+/proc/get_asset_datum(path)
+	return asset_datums[path]
+
 //From here on out it's populating the asset cache.
 
 /proc/populate_asset_cache()
-	for(var/type in typesof(/datum/asset) - list(/datum/asset, /datum/asset/simple))
+	for(var/type in typesof(/datum/asset) - list(/datum/asset, /datum/asset/simple, /datum/asset/spritesheet))
 		var/datum/asset/A = new type()
-
+		asset_datums += type
+		asset_datums[type] = A
 		A.register()
 
 	global.asset_cache_populated = TRUE
@@ -139,13 +146,29 @@
 /datum/asset/proc/register()
 	return
 
+/datum/asset/proc/send()
+	return
+
+// TG uses this to allow hosting files on external URLs and have pages load from there rather than the BYOND cache.
+// We don't do that so this is just here to facilitate porting tgui, and always returns the filename of the asset instead of a url.
+/datum/asset/proc/get_url_mappings()
+	CRASH("not implemented")
+
 //If you don't need anything complicated.
 /datum/asset/simple
-	var/assets = list()
+	var/list/assets = list()
 
 /datum/asset/simple/register()
 	for(var/asset_name in assets)
 		register_asset(asset_name, assets[asset_name])
+
+/datum/asset/simple/get_url_mappings()
+	. = list()
+	for(var/asset_name in assets)
+		.[asset_name] = asset_name
+
+/datum/asset/simple/send(client)
+	send_asset_list(client, assets)
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
 
@@ -355,7 +378,7 @@
 
 /datum/asset/simple/nanoui_maps/New()
 	for(var/z in 1 to world.maxz)
-		if(z == CENTCOMM_Z)
+		if(z == map.zCentcomm)
 			continue
 		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
 
@@ -370,3 +393,289 @@
 
 /datum/asset/simple/power_chart
 	assets = list("powerChart.js" = 'code/modules/power/powerChart.js')
+
+/datum/asset/simple/util
+	assets = list(
+		"href_multipart_handler.js" =  'code/modules/html_interface/href_multipart_handler.js'
+	)
+
+/datum/asset/simple/emoji_list
+	assets = list(
+		"emoji-happy.png"		=	'icons/pda_icons/emoji/happy.png',
+		"emoji-sad.png"		=	'icons/pda_icons/emoji/sad.png',
+		"emoji-angry.png"		=	'icons/pda_icons/emoji/angry.png',
+		"emoji-confused.png"		=	'icons/pda_icons/emoji/confused.png',
+		"emoji-pensive.png"		=	'icons/pda_icons/emoji/pensive.png',
+		"emoji-rolling_eyes.png"		=	'icons/pda_icons/emoji/rolling_eyes.png',
+		"emoji-noface.png"		=	'icons/pda_icons/emoji/noface.png',
+		"emoji-joy.png"		=	'icons/pda_icons/emoji/joy.png',
+		"emoji-gun.png"		=	'icons/pda_icons/emoji/gun.png',
+		"emoji-ok_hand.png"		=	'icons/pda_icons/emoji/ok_hand.png',
+		"emoji-middle_finger.png"		=	'icons/pda_icons/emoji/middle_finger.png',
+		"emoji-thinking.png"		=	'icons/pda_icons/emoji/thinking.png',
+		"emoji-thumbs_up.png"		=	'icons/pda_icons/emoji/thumbs_up.png',
+		"emoji-thumbs_down.png"		=	'icons/pda_icons/emoji/thumbs_down.png',
+		"emoji-rocket_ship.png"		=	'icons/pda_icons/emoji/rocket_ship.png',
+		"emoji-tada.png"		=	'icons/pda_icons/emoji/tada.png',
+		"emoji-heart.png"		=	'icons/pda_icons/emoji/heart.png',
+		"emoji-carp.png"		=	'icons/pda_icons/emoji/carp.png',
+		"emoji-clown.png"		=	'icons/pda_icons/emoji/clown.png',
+		"emoji-prohibited.png"		=	'icons/pda_icons/emoji/prohibited.png',
+		"emoji-sunglasses.png"		=	'icons/pda_icons/emoji/sunglasses.png'
+	)
+
+/datum/asset/simple/fontawesome
+	assets = list(
+		"fa-regular-400.eot"  = 'html/font-awesome/webfonts/fa-regular-400.eot',
+		"fa-regular-400.woff" = 'html/font-awesome/webfonts/fa-regular-400.woff',
+		"fa-solid-900.eot"    = 'html/font-awesome/webfonts/fa-solid-900.eot',
+		"fa-solid-900.woff"   = 'html/font-awesome/webfonts/fa-solid-900.woff',
+		"font-awesome.css"    = 'html/font-awesome/css/all.min.css',
+		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
+	)
+
+/datum/asset/simple/tgui
+	assets = list(
+		"tgui.bundle.js" = file("tgui/public/tgui.bundle.js"),
+		"tgui.bundle.css" = file("tgui/public/tgui.bundle.css"),
+	)
+
+/datum/asset/simple/tgfont
+	assets = list(
+		"tgfont.eot" = file("tgui/packages/tgfont/dist/tgfont.eot"),
+		"tgfont.woff2" = file("tgui/packages/tgfont/dist/tgfont.woff2"),
+		"tgfont.css" = file("tgui/packages/tgfont/dist/tgfont.css"),
+	)
+
+/datum/asset/simple/other_fonts
+	assets = list(
+		"BLOODY.TTF"  = 'html/fonts/BLOODY.TTF',
+	)
+
+// spritesheet implementation - coalesces various icons into a single .png file
+// and uses CSS to select icons out of that file - saves on transferring some
+// 1400-odd individual PNG files
+#define SPR_SIZE 1
+#define SPR_IDX 2
+#define SPRSZ_COUNT 1
+#define SPRSZ_ICON 2
+#define SPRSZ_STRIPPED 3
+
+/datum/asset/spritesheet
+	var/name
+	var/list/sizes = list()    // "32x32" -> list(10, icon/normal, icon/stripped)
+	var/list/sprites = list()  // "foo_bar" -> list("32x32", 5)
+
+/datum/asset/spritesheet/register()
+	if (!name)
+		return
+	ensure_stripped()
+	for(var/size_id in sizes)
+		var/size = sizes[size_id]
+		register_asset("[name]_[size_id].png", size[SPRSZ_STRIPPED])
+	var/res_name = "spritesheet_[name].css"
+	var/fname = "data/spritesheets/[res_name]"
+	fdel(fname)
+	text2file(generate_css(), fname)
+	register_asset(res_name, fcopy_rsc(fname))
+	fdel(fname)
+
+/datum/asset/spritesheet/send(client/C)
+	if (!name)
+		return
+	var/all = list("spritesheet_[name].css")
+	for(var/size_id in sizes)
+		all += "[name]_[size_id].png"
+	send_asset_list(C, all)
+
+/datum/asset/spritesheet/get_url_mappings()
+	if (!name)
+		return
+	. = list("spritesheet_[name].css" = url_encode("spritesheet_[name].css"))
+	for(var/size_id in sizes)
+		.["[name]_[size_id].png"] = url_encode("[name]_[size_id].png")
+
+
+
+/datum/asset/spritesheet/proc/ensure_stripped(sizes_to_strip = sizes)
+	for(var/size_id in sizes_to_strip)
+		var/size = sizes[size_id]
+		if (size[SPRSZ_STRIPPED])
+			continue
+
+		// save flattened version
+		var/fname = "data/spritesheets/[name]_[size_id].png"
+		fcopy(size[SPRSZ_ICON], fname)
+		var/error = rustg_dmi_strip_metadata(fname)
+		if(length(error))
+			stack_trace("Failed to strip [name]_[size_id].png: [error]")
+		size[SPRSZ_STRIPPED] = icon(fname)
+		fdel(fname)
+
+/datum/asset/spritesheet/proc/generate_css()
+	var/list/out = list()
+
+	for (var/size_id in sizes)
+		var/size = sizes[size_id]
+		var/icon/tiny = size[SPRSZ_ICON]
+		out += ".[name][size_id]{display:inline-block;width:[tiny.Width()]px;height:[tiny.Height()]px;background:url('[url_encode("[name]_[size_id].png")]') no-repeat;}"
+
+	for (var/sprite_id in sprites)
+		var/sprite = sprites[sprite_id]
+		var/size_id = sprite[SPR_SIZE]
+		var/idx = sprite[SPR_IDX]
+		var/size = sizes[size_id]
+
+		var/icon/tiny = size[SPRSZ_ICON]
+		var/icon/big = size[SPRSZ_STRIPPED]
+		var/per_line = big.Width() / tiny.Width()
+		var/x = (idx % per_line) * tiny.Width()
+		var/y = round(idx / per_line) * tiny.Height()
+
+		out += ".[name][size_id].[sprite_id]{background-position:-[x]px -[y]px;}"
+
+	return out.Join("\n")
+
+/datum/asset/spritesheet/proc/Insert(sprite_name, icon/I, icon_state="", dir=SOUTH, frame=1, moving=FALSE)
+	I = icon(I, icon_state=icon_state, dir=dir, frame=frame, moving=moving)
+	if (!I || !length(icon_states(I)))  // that direction or state doesn't exist
+		return
+	//any sprite modifications we want to do (aka, coloring a greyscaled asset)
+	I = ModifyInserted(I)
+	var/size_id = "[I.Width()]x[I.Height()]"
+	var/size = sizes[size_id]
+
+	if (sprites[sprite_name])
+		CRASH("duplicate sprite \"[sprite_name]\" in sheet [name] ([type])")
+
+	if (size)
+		var/position = size[SPRSZ_COUNT]++
+		var/icon/sheet = size[SPRSZ_ICON]
+		size[SPRSZ_STRIPPED] = null
+		sheet.Insert(I, icon_state=sprite_name)
+		sprites[sprite_name] = list(size_id, position)
+	else
+		sizes[size_id] = size = list(1, I, null)
+		sprites[sprite_name] = list(size_id, 0)
+
+/**
+ * A simple proc handing the Icon for you to modify before it gets turned into an asset.
+ *
+ * Arguments:
+ * * I: icon being turned into an asset
+ */
+/datum/asset/spritesheet/proc/ModifyInserted(icon/pre_asset)
+	return pre_asset
+
+/datum/asset/spritesheet/proc/InsertAll(prefix, icon/I, list/directions)
+	if (length(prefix))
+		prefix = "[prefix]-"
+
+	if (!directions)
+		directions = list(SOUTH)
+
+	for (var/icon_state_name in icon_states(I))
+		for (var/direction in directions)
+			var/prefix2 = (directions.len > 1) ? "[dir2text(direction)]-" : ""
+			Insert("[prefix][prefix2][icon_state_name]", I, icon_state=icon_state_name, dir=direction)
+
+/datum/asset/spritesheet/proc/css_tag()
+	return {"<link rel="stylesheet" href="[css_filename()]" />"}
+
+/datum/asset/spritesheet/proc/css_filename()
+	return url_encode("spritesheet_[name].css")
+
+/datum/asset/spritesheet/proc/icon_tag(sprite_name)
+	var/sprite = sprites[sprite_name]
+	if (!sprite)
+		return null
+	var/size_id = sprite[SPR_SIZE]
+	return {"<span class="[name][size_id] [sprite_name]"></span>"}
+
+/datum/asset/spritesheet/proc/icon_class_name(sprite_name)
+	var/sprite = sprites[sprite_name]
+	if (!sprite)
+		return null
+	var/size_id = sprite[SPR_SIZE]
+	return {"[name][size_id] [sprite_name]"}
+
+/**
+ * Returns the size class (ex design32x32) for a given sprite's icon
+ *
+ * Arguments:
+ * * sprite_name - The sprite to get the size of
+ */
+/datum/asset/spritesheet/proc/icon_size_id(sprite_name)
+	var/sprite = sprites[sprite_name]
+	if (!sprite)
+		return null
+	var/size_id = sprite[SPR_SIZE]
+	return "[name][size_id]"
+
+#undef SPR_SIZE
+#undef SPR_IDX
+#undef SPRSZ_COUNT
+#undef SPRSZ_ICON
+#undef SPRSZ_STRIPPED
+
+/datum/asset/spritesheet/merch
+	name = "merch"
+
+/datum/asset/spritesheet/merch/register()
+	for (var/category in centcomm_store.items)
+		var/list/category_items = centcomm_store.items[category]
+		for(var/datum/storeitem/k in category_items)
+			var/atom/item = initial(k.typepath)
+			if (!ispath(item, /atom))
+				continue
+
+			var/icon_file = initial(item.icon)
+			var/icon_state = initial(item.icon_state)
+			var/icon/I
+
+			var/icon_states_list = icon_states(icon_file)
+			if(icon_state in icon_states_list)
+				I = icon(icon_file, icon_state, SOUTH)
+				var/c = initial(item.color)
+				if (!isnull(c) && c != "#FFFFFF")
+					I.Blend(c, ICON_MULTIPLY)
+			else
+				var/icon_states_string
+				for (var/an_icon_state in icon_states_list)
+					if (!icon_states_string)
+						icon_states_string = "[json_encode(an_icon_state)](\ref[an_icon_state])"
+					else
+						icon_states_string += ", [json_encode(an_icon_state)](\ref[an_icon_state])"
+				stack_trace("[item] does not have a valid icon state, icon=[icon_file], icon_state=[json_encode(icon_state)](\ref[icon_state]), icon_states=[icon_states_string]")
+				I = icon('icons/turf/floors.dmi', "", SOUTH)
+
+			var/imgid = replacetext(replacetext("[item]", "/obj/item/", ""), "/", "-")
+
+			Insert(imgid, I)
+	return ..()
+
+/datum/asset/spritesheet/bible
+	name = "bible"
+
+/datum/asset/spritesheet/bible/register()
+	var/const/icon_file = 'icons/obj/storage/bibles.dmi'
+	var/list/bible_icon_states = icon_states(icon_file)
+
+	for(var/name in all_bible_styles)
+		var/list/data = all_bible_styles[name]
+
+		var/icon_state
+		if(islist(data))
+			icon_state = data["icon"]
+		else
+			icon_state = data
+
+		var/icon/I
+		if(icon_state in bible_icon_states)
+			I = icon(icon_file, icon_state, SOUTH)
+		else
+			stack_trace("[icon_state] is not a valid icon state, icon=[icon_file], icon_states=[bible_icon_states]")
+			I = icon('icons/turf/floors.dmi', "", SOUTH)
+
+		Insert(icon_state, I)
+	return ..()

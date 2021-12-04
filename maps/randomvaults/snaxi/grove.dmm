@@ -1,0 +1,18 @@
+"a" = (/obj/structure/flora/tree/pine,/turf/unsimulated/floor/snow,/area)
+"r" = (/turf/unsimulated/floor/snow,/area)
+"J" = (/obj/item/weapon/hatchet,/turf/unsimulated/floor/snow,/area)
+"V" = (/obj/structure/flora/tree_stump,/turf/unsimulated/floor/snow,/area)
+"W" = (/obj/structure/flora/tree/pine,/obj/structure/flora/tree/pine,/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+arrrrrarra
+rraraaarrr
+rraarrrWaa
+raarrrraaa
+aarrVJraWr
+aWrrrrrrar
+aarrrrraar
+rWarrraarr
+rraaraarar
+arrararara
+"}

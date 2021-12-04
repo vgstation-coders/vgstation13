@@ -115,7 +115,7 @@
 	else
 		to_chat(user, "<span class='info'>There doesn't appear to be a cylinder loaded into \the [src].</span>")
 
-/obj/item/weapon/gun/projectile/revialver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/projectile/revialver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (istype(A, /obj/item/weapon/storage/backpack ))
 		return
 

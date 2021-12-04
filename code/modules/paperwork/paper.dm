@@ -7,7 +7,9 @@
 	name = "paper"
 	gender = NEUTER
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	icon_state = "paper"
+	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
@@ -97,6 +99,40 @@
 	return
 
 /obj/item/weapon/paper/attack_self(mob/living/user as mob)
+	if(user.attack_delayer.blocked())
+		return
+	if(ishuman(user)) // best not let the monkeys write loveletters
+		var/mob/living/carbon/human/H = user
+		if((H.attack_type == ATTACK_BITE) && (H.a_intent == I_HELP)) //if biting and helping
+			if(!(H.species.anatomy_flags & HAS_LIPS) || (H.species.flags & SPECIES_NO_MOUTH)) // skeletons can apply lipstick but cannot kiss
+				to_chat(user, "You have no lips, how are you going to kiss?")
+				return
+			if(H.check_body_part_coverage(MOUTH))
+				to_chat(user, "Remove the equipment covering your mouth, first.")
+				return
+			add_fingerprint(H)
+			user.delayNextAttack(1 SECONDS)
+			if(H.lip_style)
+				to_chat(user, "<span class='notice'>You kiss the piece of paper, leaving a lipstick impression.</span>")
+				src.stamps += (src.stamps=="" ? "<HR>" : "<BR>") + "<i>The [src.name] has a big [H.lip_style] kiss on it.</i>"
+				var/image/kissoverlay = image('icons/obj/paper.dmi')
+				var/colourcode = "#FF0000" //red default
+				switch(H.lip_style) // TODO - make lip_style use RGB values instead of color name in text
+					if("jade")
+						colourcode = "#00FF00"
+					if("black")
+						colourcode = "#000000"
+					if("blue")
+						colourcode = "#0000FF"
+					if("purple")
+						colourcode = "#800080"
+				kissoverlay.icon_state = "lipstick_kiss"
+				kissoverlay.icon += colourcode // make the kiss the color of the lipstick
+				add_paper_overlay(src,kissoverlay,1,1)
+			else
+				to_chat(user, "<span class='notice'>You kiss the piece of paper.</span>")
+
+
 	user.examination(src)
 	if(rigged && (Holiday == APRIL_FOOLS_DAY))
 		if(spam_flag == 0)
@@ -123,6 +159,11 @@
 	else
 		show_text(user, starred = TRUE)
 	return
+
+//Normally ghosts can read at any range, but nobody bothered to actually make attack_ghost not be attack_ai who
+//normally can't read at any range. This fixes it.
+/obj/item/weapon/paper/attack_ghost(mob/user)
+	user.examination(src)
 
 /obj/item/weapon/paper/proc/addtofield(var/id, var/text, var/links = 0)
 	var/locid = 0
@@ -207,7 +248,7 @@
 /obj/item/weapon/paper/proc/openhelp(mob/user as mob)
 	user << browse({"<HTML><HEAD><TITLE>Pen Help</TITLE></HEAD>
 	<BODY>
-		<b><center>Crayon&Pen commands</center></b><br>
+		<b><center>Crayon & Pen commands</center></b><br>
 		<br>
 		\[br\] : Creates a linebreak.<br>
 		\[center\] - \[/center\] : Centers the text.<br>
@@ -215,8 +256,13 @@
 		\[i\] - \[/i\] : Makes the text <i>italic</i>.<br>
 		\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
 		\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
+		\[table\] - \[/table\] : Creates table using \[row\] and \[cell\] tags.<br>
+		\[row\] - Creates a new table row.<br>
+		\[cell\] - Creates a new table cell.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
+		\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
+		\[time\] : Inserts the current station time.<br>
 		<br>
 		<b><center>Pen exclusive commands</center></b><br>
 		\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
@@ -226,7 +272,7 @@
 		\[hr\] : Adds a horizontal rule.<br>
 		\[img\]http://url\[/img\] : Add an image.<br>
 		<br>
-		<center>Fonts</center><br>
+		<b><center>Fonts</center><br></b>
 		\[agency\] - \[/agency\] : <span style=\"font-family:Agency FB\">Agency FB</span><br>
 		\[algerian\] - \[/algerian\] : <span style=\"font-family:Algerian\">Algerian</span><br>
 		\[arial\] - \[/arial\] : <span style=\"font-family:Arial\">Arial</span><br>
@@ -237,6 +283,7 @@
 		\[impact\] - \[/impact\] : <span style=\"font-family:Impact\">Impact</span><br>
 		\[palatino\] - \[/palatino\] : <span style=\"font-family:Palatino Linotype\">Palatino Linotype</span><br>
 		\[tnr\] - \[/tnr\] : <span style=\"font-family:Times New Roman\">Times New Roman</span>
+
 	</BODY></HTML>"}, "window=paper_help")
 
 /obj/item/weapon/paper/Topic(href, href_list)
@@ -324,37 +371,8 @@
 		return
 
 	else if(istype(P, /obj/item/weapon/stamp))
-
-		if(istype(P, /obj/item/weapon/stamp/clown))
-			var/clown = FALSE
-			if(user.mind && (user.mind.assigned_role == "Clown"))
-				clown = TRUE
-			if(isrobot(user))
-				var/mob/living/silicon/robot/R = user
-				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
-					clown = TRUE
-			if(!clown)
-				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
-				return
-
-		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
-
-		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-		stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
-		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
-		stampoverlay.icon_state = "paper_[P.icon_state]"
-
-		if(!stamped)
-			stamped = new
-		stamped += P.type
-		overlays += stampoverlay
-
-		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
-
-		if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
-			var/obj/C = loc
-			C.update_icon()
-
+		var/obj/item/weapon/stamp/S = P
+		S.try_stamp(user,src)
 	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
 		if(img)
 			to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
@@ -459,6 +477,17 @@ var/global/list/paper_folding_results = list ( \
 	else
 		return ..()
 
+
+/obj/item/weapon/paper/proc/sudokize(var/color)
+	var/list/sudokus = file2list("data/sudoku.txt")
+	info = "<style>\
+	td{width: 35px;height: 35px;border: 1px solid black;text-align: center;vertical-align: middle;font-family:Verdana, sans;color:[color];font-weight: bold;}\
+	table{border: 3px solid black;}\
+	</style>\
+	<table cellpadding='0' cellspacing='0'>[pick(sudokus)]</table>"
+	updateinfolinks()
+	update_icon()
+
 /*
  * Premade paper
  */
@@ -480,11 +509,45 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/djstation
 	name = "paper - 'DJ Listening Outpost'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br><ol><li>Equip yourself with a multi-tool</li><li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li><li>Turn all the machines on, it has already been configured for you to listen on.</li></ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+
+/obj/item/weapon/paper/djstation/initialize()
+	..()
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br>\
+	<ol>\
+		<li>Equip yourself with a multi-tool</li>\
+		<li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li>\
+		<li>Turn all the machines on, it has already been configured for you to listen on.</li>\
+	</ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. \
+	\
+	Here is a list of frequencies for you to listen on.<br>\
+	<ul>\
+		<li>[COMMON_FREQ] - Common Channel</li>\
+		<li>[AIPRIV_FREQ] - Private AI Channel</li>\
+		<li>[SEC_FREQ] - Security Channel</li>\
+		<li>[ENG_FREQ] - Engineering Channel</li>\
+		<li>[MED_FREQ] - Medical Channel</li>\
+		<li>[COMM_FREQ] - Command Channel</li>\
+		<li>[SCI_FREQ] - Science Channel</li>\
+		<li>[SER_FREQ] - Service Channel</li>\
+		<li>[SUP_FREQ] - Supply Channel</li>"
 
 /obj/item/weapon/paper/intercoms
 	name = "paper - 'Ace Reporter Intercom manual'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br> Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+
+/obj/item/weapon/paper/intercoms/initialize()
+	..()
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio frequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br>\
+	Here is a list of frequencies for you to listen on.<br>\
+	<ul>\
+		<li>[COMMON_FREQ] - Common Channel</li>\
+		<li>[AIPRIV_FREQ] - Private AI Channel</li>\
+		<li>[SEC_FREQ] - Security Channel</li>\
+		<li>[ENG_FREQ] - Engineering Channel</li>\
+		<li>[MED_FREQ] - Medical Channel</li>\
+		<li>[COMM_FREQ] - Command Channel</li>\
+		<li>[SCI_FREQ] - Science Channel</li>\
+		<li>[SER_FREQ] - Service Channel</li>\
+		<li>[SUP_FREQ] - Supply Channel</li>"
 
 /obj/item/weapon/paper/flag
 	icon_state = "flag_neutral"
@@ -537,11 +600,15 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/suitdispenser
 	name = "paper- 'Suit Dispenser Manual - How to use them?'"
-	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one bellow this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
+	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one below this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
 
 /obj/item/weapon/paper/diy_soda
 	name = "paper- 'Instructions'"
 	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<BR>\nIt has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<BR>\nNow as you may have guessed, you will have to mix this delicious beverage yourself.<BR>\nDon't worry, it's pretty basic stuff. Just remember to never lick the spoon!<BR>\nFirst, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<BR>\nThen, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<BR>\nAnd finally, get ready for our secret trademarked ingredient: <BR>\n<b>The element of surprise!</b>"
+
+/obj/item/weapon/paper/spectrometry_decommission
+	name = "paper- 'Re:Spectrometry Decommission'"
+	info = "The mulebots have finished carrying out the last packs of floor tiles and furnitures from the lab. It was always a matter of time given how little results we got from mass spectrometry, despite how interesting the technology seemed at first.<br>I cannot blame Nanotrasen given the advances in the anomalous energies field, this is definitely a much better investment.<br>I'm not sure where I'll be working now that my contract is over, I think I'll stay at Central Command for the foreseeable future, their testing facilities have a pretty high turnover rate I hear. Please do come say hello the next time you're there!<br><br><i>W.R.</i>"
 
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"
@@ -550,39 +617,111 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"
 
-/obj/item/weapon/paper/merchantreport
+/obj/item/weapon/paper/anomaly
+	name = "Anomaly Report"
+	var/obj/machinery/artifact/artifact
+
+/obj/item/weapon/paper/anomaly/Destroy()
+	artifact = null
+	..()
+
+/obj/item/weapon/paper/merchant
 	var/identity
 	var/list/mugshots = list()
+	var/icon_updates = FALSE
+	display_y = 500
 
-/obj/item/weapon/paper/merchantreport/New(loc,mob/living/carbon/human/merchant)
+/obj/item/weapon/paper/merchant/update_icon()
+	if(icon_updates)
+		..()
+
+/obj/item/weapon/paper/merchant/New(loc,mob/living/carbon/human/merchant)
 	if(merchant)
-		identity = merchant.client.prefs.real_name
-		name = "Licensed Merchant Report - [identity]"
 		merchant.client.prefs.update_preview_icon(0) //This is necessary because if they don't check their character sheet it never generates!
 		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_front)
 		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_side)
-		info = {"<html><style>
-						body {color: #000000; background: #ccffff;}
-						h1 {color: #000000; font-size:30px;}
-						fieldset {width:140px;}
-						</style>
-						<body>
-						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
-						Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
-						<fieldset>
-	  					<legend>Picture</legend>
-						<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
-						</fieldset><BR>
-						Name: [identity]<BR>
-						Blood Type: [merchant.dna.b_type]<BR>
-						Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
-		display_y = 700
-		CentcommStamp(src)
+		apply_text(merchant)
 	..()
 
-/obj/item/weapon/paper/merchantreport/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
+/obj/item/weapon/paper/merchant/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
 	var/index = 1
 	for(var/image in mugshots)
 		user << browse_rsc(image, "previewicon-[identity][index].png")
 		index++
 	..()
+
+/obj/item/weapon/paper/merchant/proc/apply_text(mob/living/carbon/human/merchant)
+	identity = merchant.client.prefs.real_name
+	icon = 'icons/obj/items.dmi'
+	icon_state = "permit"
+	name = "Merchant's Licence - [identity]"
+	info = {"<html><style>
+			body {color: #000000; background: #ffff0d;}
+			h1 {color: #000000; font-size:30px;}
+			fieldset {width:140px;}
+			</style>
+			<body>
+			<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>Merchant's Licence</h1></center>
+			Nanotrasen\'s commercial arm has authorized commercial activity for a merchant who holds a licence for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is displayed below.<BR>
+			<fieldset>
+	  		<legend>Picture</legend>
+			<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
+			</fieldset><BR>
+			Name: [identity]<BR>
+			Blood Type: [merchant.dna.b_type]<BR>
+			Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
+
+/obj/item/weapon/paper/merchant/report
+	icon_updates = TRUE
+	display_y = 700
+
+/obj/item/weapon/paper/merchant/report/apply_text(mob/living/carbon/human/merchant)
+	identity = merchant.client.prefs.real_name
+	name = "Licensed Merchant Report - [identity]"
+	info = {"<html><style>
+			body {color: #000000; background: #ccffff;}
+			h1 {color: #000000; font-size:30px;}
+			fieldset {width:140px;}
+			</style>
+			<body>
+			<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
+			Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a licence for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
+			<fieldset>
+	  		<legend>Picture</legend>
+			<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
+			</fieldset><BR>
+			Name: [identity]<BR>
+			Blood Type: [merchant.dna.b_type]<BR>
+			Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
+	CentcommStamp(src)
+
+/obj/item/weapon/paper/traderapplication
+	name = "trader application"
+	display_x = 500
+	display_y = 600
+	var/applicant
+
+/obj/item/weapon/paper/traderapplication/New(loc,var/newapp)
+	..()
+	applicant = newapp
+	if(!applicant)
+		qdel(src)
+	info = {"<html><style>
+						body {color: #000000; background: #e7c9a9;}
+						h1 {color: #4444ee; font-size:30px;}
+  						h2 {color: #4444ee; font-size:14px}
+						fieldset {width:140px;}
+						</style>
+						<body>
+						<center><img src="https://ss13.moe/wiki/images/9/92/Shoal-logo.png"> <h1>Trade Pact</h1></center>
+						<h2>
+                          I, the inker, do solemnly vow that [applicant] (hereafter 'Applicant') can be trusted. By blood and claw, responsibility for this one is bound in blood to me.<BR>
+                          <B>JURISDICTION.</B> Disputes related to this contract will be brought before the Shoal Trade Council.<BR>
+                          <B>SCOPE.</B> Provisional licensure as a trader shall last the duration of this shift and apply to this sector.<BR>
+                          <B>INDEMNIFICATION.</B> The applicant waives legal rights against the Shoal, holding it harmless against all indemnification. Traders are independent contractors and the shoal does not accept responsibility for their actions.<BR>
+                          <B>CONFIDENTIALITY.</B> The applicant vows to uphold all Shoal trade secrets.<BR>
+                          <B>ASSIGNMENT.</B> The Shoal retains all rights related to its intellectual properties. This contract is not to be construed as a release of IP rights.<BR>
+                          <B>ARBITRATION.</B> The applicant is entitled to settle legal disputes before a Shoal Arbitration Flock and must seek this remedy before formal lawsuit.<BR>
+                          <B>NOTICE.</B> Notice of intent to dissolve relationship must be given by fax with at least one day advance notice.<BR>
+                          <B>FORCE MAJEURE.</B> This contract may be voided if the trade outpost is destroyed.
+                         </h2> <BR></body></html>"}

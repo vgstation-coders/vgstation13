@@ -47,3 +47,23 @@
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_BIOTECH = 5)
 	materials = list(MAT_GLASS = 2000)
 	category = "Misc"
+
+/datum/design/xenobiobag
+	name = "Slime Extract Bag"
+	desc = "A bag that is capable of carrying slime extracts and slime products."
+	id = "extract_bag"
+	build_type = PROTOLATHE
+	build_path = /obj/item/weapon/storage/bag/xenobio
+	req_tech = list(Tc_ENGINEERING = 1, Tc_MATERIALS = 1)
+	materials = list(MAT_GLASS = 500, MAT_IRON = 750)
+	category = "Misc"
+
+/datum/design/fishtank_helper
+	name = "Aquarium Clean Module"
+	desc = "Automates cleaning of aquariums. Fits all sizes."
+	id = "fishtank_helper"
+	build_type = PROTOLATHE
+	build_path = /obj/item/weapon/fishtools/fishtank_helper
+	req_tech = list(Tc_MATERIALS = 2, Tc_BIOTECH = 2, Tc_PROGRAMMING = 2)
+	materials = list(MAT_GLASS = 500, MAT_IRON = 1000)
+	category = "Misc"

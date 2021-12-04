@@ -3,7 +3,7 @@
 	desc = "This spell grants you a magic weapon and causes you to vanish, before reappearing behind the enemy."
 	abbreviation = "FT"
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	school = "transmutation"
 	charge_max = 300
@@ -24,7 +24,7 @@
 
 	anim(location = mobloc, target = L, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", direction = L.dir, name = "water")
 	L.ExtinguishMob()
-	var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+	var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 	steam.set_up(10, 0, mobloc)
 	steam.start()
 
@@ -57,7 +57,7 @@
 	var/mob/M = pick(targets)
 	var/targloc = get_turf(get_step(M,turn(M.dir,180)))
 
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(3, 0, targloc)
 	smoke.start()
 	L.forceMove(targloc)
@@ -71,3 +71,4 @@
 	L.alphas -= "etheral_jaunt"
 	L.handle_alpha()
 	to_chat(M, "<span class='danger'>\The [L] teleports behind you!</span>")
+	playsound(L, 'sound/misc/teleport_behind.ogg', 100)

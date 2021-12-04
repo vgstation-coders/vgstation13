@@ -9,7 +9,7 @@
  */
 
 //slower then jointext, but correctly processes associative lists.
-proc/tg_jointext(list/list, glue = ",")
+/proc/tg_jointext(list/list, glue = ",")
 	if(!istype(list) || !list.len)
 		return
 	for(var/i=1 to list.len)
@@ -262,3 +262,46 @@ proc/tg_jointext(list/list, glue = ",")
 		finalNum = copytext(finalNum, 1, pos) + sep + copytext(finalNum, pos)
 
 	return finalNum
+
+// heat2color functions. Adapted from: http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+/proc/heat2color(temp)
+	return rgb(heat2color_r(temp), heat2color_g(temp), heat2color_b(temp))
+
+/proc/heat2color_r(temp)
+	temp /= 100
+	if(temp <= 66)
+		. = 255
+	else
+		. = max(0, min(255, 329.698727446 * (temp - 60) ** -0.1332047592))
+
+/proc/heat2color_g(temp)
+	temp /= 100
+	if(temp <= 66)
+		. = max(0, min(255, 99.4708025861 * log(temp) - 161.1195681661))
+	else
+		. = max(0, min(255, 288.1221695283 * ((temp - 60) ** -0.0755148492)))
+
+/proc/heat2color_b(temp)
+	temp /= 100
+	if(temp >= 66)
+		. = 255
+	else
+		if(temp <= 16)
+			. = 0
+		else
+			. = max(0, min(255, 138.5177312231 * log(temp - 10) - 305.0447927307))
+
+/proc/type2parent(child)
+	var/string_type = "[child]"
+	var/last_slash = findlasttext(string_type, "/")
+	if(last_slash == 1)
+		switch(child)
+			if(/datum)
+				return null
+			if(/obj, /mob)
+				return /atom/movable
+			if(/area, /turf)
+				return /atom
+			else
+				return /datum
+	return text2path(copytext(string_type, 1, last_slash))

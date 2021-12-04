@@ -15,6 +15,28 @@
 	pressure_resistance = 2
 	attack_verb = list("stamps")
 
+/proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffset)
+	if(istype(P, /obj/item/weapon/paper/envelope))
+		stampoverlay.pixel_x = Yoffset * PIXEL_MULTIPLIER
+		stampoverlay.pixel_y = Xoffset * PIXEL_MULTIPLIER //envelopes are broad instead of long, we just invert the x and y.
+	else
+		stampoverlay.pixel_x = rand(Xoffset * -1, Xoffset) * PIXEL_MULTIPLIER
+		stampoverlay.pixel_y = rand(Yoffset * -1, Yoffset) * PIXEL_MULTIPLIER
+	P.overlays += stampoverlay
+	if(istype(P.loc, /obj/item/weapon/storage/bag/clipboard))
+		var/obj/C = P.loc
+		C.update_icon()
+
+/obj/item/weapon/stamp/proc/try_stamp(mob/user,obj/item/weapon/paper/P)
+	P.stamps += (P.stamps=="" ? "<HR>" : "<BR>") + "<i>This [P.name] has been stamped with \the [name].</i>"
+	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
+	stampoverlay.icon_state = "paper_[icon_state]"
+	add_paper_overlay(P,stampoverlay,2,2)
+	if(!P.stamped)
+		P.stamped = new
+	P.stamped += type
+	to_chat(user, "<span class='notice'>You stamp [P] with \the [src].</span>")
+
 /obj/item/weapon/stamp/captain
 	name = "captain's rubber stamp"
 	icon_state = "stamp-cap"
@@ -70,11 +92,54 @@
 	icon_state = "stamp-clown"
 	_color = "clown"
 
+/obj/item/weapon/stamp/mime
+	name = "mimes's rubber stamp"
+	icon_state = "stamp-mime"
+	_color = "mime"
+
+/obj/item/weapon/stamp/clown/try_stamp(mob/user,obj/item/weapon/paper/P)
+	if(!clumsy_check(user))
+		to_chat(user, "<span class='warning'>You are totally unable to use the stamp. HONK!</span>")
+	else
+		..()
+
+/obj/item/weapon/stamp/mime/try_stamp(mob/user,obj/item/weapon/paper/P)
+	if(!user.mind.miming)
+		to_chat(user, "<span class='warning'>Only a vow of silence will activate this stamp.</span>")
+	else
+		..()
+
 /obj/item/weapon/stamp/chaplain
 	name = "chaplain's seal"
 	icon_state = "stamp-chaplain"
 	_color = "red"
 
+/obj/item/weapon/stamp/chaplain/try_stamp(mob/user,obj/item/weapon/paper/P)
+	if(!isReligiousLeader(user))
+		message_admins("[user] <span class='danger'>blasphemously</span> used a chaplain's stamp. <A HREF='?_src_=holder;ashpaper=\ref[P]'>(Smite)</A>")
+	..()
+
+/obj/item/weapon/stamp/trader
+	name = "trader's inkpad"
+	desc = "An inkpad for stamping important documents by talon."
+	icon_state = "stamp-trader"
+	_color = "black"
+
+/obj/item/weapon/stamp/trader/try_stamp(mob/user,obj/item/weapon/paper/P)
+	if(!ishuman(user))
+		if(istype(user,/mob/living/carbon/monkey/vox))
+			..()
+		else
+			to_chat(user, "<span class='warning'>You have no talons!</span>")
+		return
+	var/mob/living/carbon/human/H = user
+	if(!H.organ_has_mutation(H.get_active_hand_organ(), M_TALONS))
+		to_chat(H, "<span class='warning'>Your active hand is not a talon!</span>")
+		return
+	..()
+	var/obj/structure/trade_window/TW = locate() in P.loc
+	if(TW)
+		TW.attackby(P,user)
 
 /obj/item/weapon/stamp/attack_paw(mob/user as mob)
 	return attack_hand(user)

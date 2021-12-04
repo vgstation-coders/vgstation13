@@ -17,11 +17,11 @@
 		if(locate(/obj/effect/plantsegment) in T.contents)
 			continue
 		if(T.density)
-			if(!isnull(seed.chems[PHENOL]))
+			if(seed.chems && !isnull(seed.chems[PHENOL]))
 				spawn(rand(5,25))
 					T.ex_act(prob(80) ? 3 : 2)
 			continue
-		if(!Adjacent(T) || !T.Enter(src))
+		if(!Adjacent(T) || !T.Enter(src, loc, TRUE))
 			continue
 		neighbors |= T
 	// Update all of our friends.
@@ -99,7 +99,7 @@
 
 	if(is_mature() && neighbors.len && prob(spread_chance))
 		//spread to 1-3 adjacent turfs depending on yield trait.
-		var/max_spread = Clamp(round(seed.yield*3/14), 1, 3) // 3/14? Why?
+		var/max_spread = clamp(round(seed.yield*3/14), 1, 3) // 3/14? Why?
 
 		for(var/i in 1 to max_spread)
 			if(prob(spread_chance))
@@ -133,5 +133,10 @@
 			neighbor.neighbors |= check_turf
 			SSplant.add_plant(neighbor)
 	qdel(src)
+
+/obj/effect/plantsegment/proc/proxDensityChange(atom/atom)
+	var/turf/T = get_turf(atom)
+	if(!is_blocked_turf(T))
+		SSplant.add_plant(src)
 
 #undef NEIGHBOR_REFRESH_TIME

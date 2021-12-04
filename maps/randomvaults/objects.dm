@@ -10,6 +10,8 @@
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
 	//Used for bizarre/odd/reference vaults, entering them causes the wild wasteland sound to play
 	var/mysterious = FALSE
 
@@ -19,9 +21,6 @@
 	if(mysterious)
 		//Create a narrator object to play a sound to everybody who enters the area
 		narrator = new /obj/effect/narration/mystery_sound(null)
-
-/area/vault/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
 
 //Special area that can be used in map elements. When loaded, it creates a new area object and transfers all of its contents into it.
 //This means that this area can be put into multiple map elements without any issues
@@ -40,7 +39,13 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
+/area/vault/gingerbread_house
 
+/area/vault/podstation
+	requires_power = 1
+
+/area/vault/mechclubhouse
+	requires_power = 1
 
 /area/vault/icetruck
 
@@ -75,7 +80,12 @@
 
 /area/vault/hive_shuttle
 
+/area/vault/rsvault
+
 /area/vault/syndiecargo
+
+/area/vault/black_site_prism
+	jammed = 2
 
 //prison vault
 
@@ -191,64 +201,80 @@
 	..()
 	pod_code = "[rand(10000, 99999.0)]"
 
-/area/vault/meteorlogical
-	name = "\improper Meteorlogical Station"
-
-
-/area/vault/lightship
-	name = "\improper Lightspeed Ship"
+/area/vault/amelab
+	name = "\improper Nanotrasen Experimental AME Lab"
 	requires_power = 1
 
-/area/vault/lightship/nopowerstorage
-	name = "\improper Engine Storage Bay"
-	icon_state = "engine"
+/area/vault/amelab/lab
 	requires_power = 0
+	jammed = 2
+	color = "blue"
 
-/area/vault/lightship/cockpit
-	name = "\improper Cockpit"
+/obj/effect/blob/core/ame_lab
+	name = "antimatter control unit"
+	desc = "This device injects antimatter into connected shielding units. Wrench the device to set it...wait hold on, something's off..?"
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi'
+	looks = "AME_new"
+	asleep = TRUE
+	no_ghosts_allowed = TRUE
 
-/area/vault/lightship/dronebay
-	name = "\improper Drone Bay"
+/obj/item/weapon/paper/amelab1
+	name = "paper- 'Initial Report'"
+	info = "I have arrived at the lab. The builders have just finished setting up the atmos and have departed. The station is using so little power that the P.A.C.M.A.N. in the maintenance is more than enough to recharge the APC. Centcomm should send the parts for the reactor by tomorrow, I can't wait to build it."
 
-/area/vault/lightship/Doormaint
-	name = "\improper Airlock Maintenance"
+/obj/item/weapon/paper/amelab2
+	name = "paper- 'Second Report'"
+	info = "The cargo shuttle dropped the parts about an hour ago and I've somehow already finished assembling the Antimatter Engine. In fact, the lab is running on its power right now. It's such a fool-proof system, you just pulse the parts with a multitool and it assembles on its own, not sure how anyone could mess it up really. I've shutdown the P.A.C.M.A.N., it might come in handy later in case of emergency. Antimatter is a much more efficient energy source, with just one jar this small lab could stay online for aeons."
 
-/area/vault/lightship/cameraroom
-	name = "\improper Surveillance Room"
+/obj/item/weapon/paper/amelab3
+	name = "paper- 'Third Report'"
+	info = "As instructed in Phase One of the experiment, I've started slowly raising the fuel injection. The engine seems to remain stable at up to 4 units of antimatter per injection, beyond that it quickly starts losing structural integrity and the injections become quite loud. I have determined that the highest safe amount of fuel units per injection is equal to twice the amount of cores."
 
-/area/vault/lightship/shieldbattery
-	name = "\improper Shield Battery"
+/obj/item/weapon/paper/amelab4
+	name = "paper- 'Fourth Report'"
+	info = "Centcomm has shipped me some much larger fuel jars in preparation for Phase Two. A scientist will be coming, an Anomalist specifically. I'm not quite versed into Exotic Particle science but they will test alternative ways to raise the power output. This can go wrong in so many ways but we're all well aware of the risks, and the pay is good enough. Worst case scenario the lab explodes and we'll be the only casualties."
 
-/area/vault/lightship/Medbay
-	name = "\improper Medical Bay"
+/obj/item/weapon/paper/amelab5
+	name = "paper- 'Fifth Report'"
+	info = "The anomalist has started their experiments on the engine, they brought various devices and machines I do not recognize. Regardless, the radiations their tools emit seem to have a positive effect on the power output. Looks like we're on the verge of a technological breakthrough! With the last deliveries we also ordered a portable SMES kit. If we can export enough surplus energy we might not only earn ourselves a bonus, but also prove the commercial applications of the enhanced AME."
 
-/area/vault/lightship/lounge
-	name = "\improper Lounge"
+/obj/item/weapon/paper/amelab6
+	name = "paper- 'Sixth Report'"
+	info = "Something went wrong, very wrong. The AME isn't outputting any power anymore but will not shutdown. More worrying even, the engine appears to be emitting its own exotic particles now, different from those we were using until now. The rate of particle production seems to be slowly rising at a constant rate. You will find attached to this report all the data we could gather from it. Please advise."
 
-/area/vault/lightship/dining
-	name = "\improper Dining Quarters"
+/obj/item/weapon/paper/amelab7
+	name = "paper- 'Final Report'"
+	info = "We've drained the engine room of oxygen, somehow this seems to have slowed down the increase in exotic particles. After reading the data that came with our previous report Centcomm decided to completely abort the project. A shuttle will come by to extract us shortly, which is either a testament to how valuable we are, or how dangerous the engine has actually become. I like to hope it's both. I leave those notes here should Centcomm decide to resume the experiments. <b>Most importantly I advise against trying to put any more fuel inside the engine</b>."
 
-/area/vault/lightship/atmospherics
-	name = "\improper Atmospherics"
+/obj/item/weapon/storage/bag/clipboard/amelab/New()
+	..()
+	var/list/papers = list()
+	papers += new /obj/item/weapon/paper/amelab1(src)
+	papers += new /obj/item/weapon/paper/amelab2(src)
+	papers += new /obj/item/weapon/paper/amelab3(src)
+	papers += new /obj/item/weapon/paper/amelab4(src)
+	papers += new /obj/item/weapon/paper/amelab5(src)
+	papers += new /obj/item/weapon/paper/amelab6(src)
+	papers += new /obj/item/weapon/paper/amelab7(src)
 
-/area/vault/lightship/teleporter
-	name = "\improper Teleportation Station"
+	for (var/obj/item/weapon/paper/P in papers)
+		P.update_icon()
+		P.mouse_opacity = 2
+		toppaper = P
 
-/area/vault/lightship/maintenance
-	name = "\improper Maintenance"
+	update_icon()
 
-/area/vault/lightship/engine
-	name = "\improper Engineering"
+/obj/item/weapon/disk/shuttle_coords/vault/amelab
+	name = "Experimental AME Lab shuttle destination disk"
+	desc = "This satellite could be repurposed as a comfortable hang-out. Although we might want to keep the lab properly sealed."
+	destination = /obj/docking_port/destination/vault/amelab
 
-/area/vault/lightship/portdock
-	name = "\improper Port Docking"
+/obj/docking_port/destination/vault/amelab
+	areaname = "Nanotrasen Experimental AME Lab"
 
-/area/vault/lightship/starboarddocking
-	name = "\improper Starboard Docking"
 
-/area/vault/lightship/weaponsroom
-	name = "\improper Weapon Systems"
-
+/area/vault/meteorlogical
+	name = "\improper Meteorlogical Station"
 
 /area/vault/icecomet
 	jammed = 2
@@ -480,7 +506,7 @@
 	. = ..()
 	name = "\improper AI Satellite APC"
 
-/obj/machinery/porta_turret/AIvault
+/obj/machinery/turret/portable/AIvault
 	req_access = list(access_ai_upload)
 	check_records = 1
 	criminals = 1
@@ -489,7 +515,7 @@
 	check_anomalies = 1
 	ai = 1
 
-/obj/machinery/porta_turret/AIvault/New()
+/obj/machinery/turret/portable/AIvault/New()
 	installed = new/obj/item/weapon/gun/energy/laser/retro/ancient(src)
 	..()
 	if(prob(25))
@@ -503,7 +529,6 @@
 
 /obj/item/projectile/beam/retro/weak
 	damage = 15
-	linear_movement = 0
 
 /turf/simulated/floor/engine/old
 	icon_state = "engineold"
@@ -512,10 +537,6 @@
 	..()
 	network = list()
 	cameranet.removeCamera(src)
-
-/obj/machinery/power/monitor/old
-	icon_state = "powerold"
-	light_color = LIGHT_COLOR_BLUE
 
 /obj/effect/landmark/corpse/engineer/old
 	generate_random_mob_name = 1
@@ -859,7 +880,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled
 	name = "acid pie"
-	desc = "Tangy tasting"
+	desc = "Tangy tasting!"
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
 	..()
@@ -919,3 +940,46 @@
 		/obj/item/weapon/stock_parts/console_screen\
 	)
 
+
+/obj/machinery/turret/russian
+	faction = "russian"
+
+/obj/machinery/turret/russian/New()
+	installed = new /obj/item/weapon/gun/energy/laser(src)
+
+// Minisat stuff
+
+/obj/item/weapon/disk/shuttle_coords/vault/minisat
+	name = "NT microstation shuttle destination disk"
+	destination = /obj/docking_port/destination/vault/minisat
+
+/obj/docking_port/destination/vault/minisat
+	name = "NT Microstation 1"
+
+/area/vault/mini_station
+	name = "NT Microstation Hallway"
+	icon_state = "hallC"
+
+/area/vault/mini_station_entrance
+	name = "NT Microstation Entrance"
+	icon_state = "entry"
+
+/area/vault/mini_station_kitchen
+	name = "NT Microstation Kitchen"
+	icon_state = "bar"
+
+/area/vault/mini_station_medbay
+	name = "NT Microstation Medbay"
+	icon_state = "medbay"
+
+/area/vault/mini_station_engineering
+	name = "NT Microstation Engineering"
+	icon_state = "engine"
+
+/area/vault/mini_station_botany
+	name = "NT Microstation Botany"
+	icon_state = "hydro"
+
+/area/vault/mini_station_construction
+	name = "NT Microstation Construction Room"
+	icon_state = "construction"

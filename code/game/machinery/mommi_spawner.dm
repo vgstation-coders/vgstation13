@@ -66,11 +66,11 @@
 	if(building)
 		to_chat(user, "<span class='warning'>\The [src] is busy building something already.</span>")
 		return FALSE
-	
+
 	if(metal < metalPerMoMMI)
 		to_chat(user, "<span class='warning'>\The [name] doesn't have enough metal to complete this task.</span>")
 		return FALSE
-	
+
 	if(user.client)
 		var/timedifference = world.time - user.client.time_died_as_mouse
 		if(user.client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
@@ -78,11 +78,11 @@
 			timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 			to_chat(user, "<span class='warning'>You may only spawn again as a mouse or MoMMI more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
 			return FALSE
-	
+
 	if(jobban_isbanned(user, "Mobile MMI"))
 		to_chat(user, "<span class='warning'>\The [name] lets out an annoyed buzz.</span>")
 		return FALSE
-	
+
 	return TRUE
 
 /obj/machinery/mommi_spawner/attack_ghost(var/mob/dead/observer/user)
@@ -103,7 +103,7 @@
 				if(!mind_can_reenter(mmi.brainmob.mind))
 					to_chat(user, "<span class='notice'>\The [src] indicates that [O.name]'s mind is completely unresponsive; there's no point.</span>")
 					return TRUE
-			
+
 			if(mmi.brainmob.stat == DEAD)
 				to_chat(user, "<span class='warning'>Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud.</span>")
 				return TRUE
@@ -123,14 +123,14 @@
 		// Player has already been made into another mob before this one spawned, so let's reset the spawner
 		building = FALSE
 		update_icon()
-		return FALSE
+		return
 
 	spawn(50)
 		if(!user || !istype(user) || !user.client)
 			// Player disappeared between clicking on the spawner and now, so we have no one to give a MoMMI to!
 			building = FALSE
 			update_icon()
-			return FALSE
+			return
 
 		// Make the MoMMI!
 		var/mob/living/silicon/robot/mommi/M = new mommi_type(loc)
@@ -147,7 +147,7 @@
 		metal = 0
 		building = FALSE
 		update_icon()
-		
+
 
 /obj/machinery/mommi_spawner/proc/PostMoMMIMaking(var/mob/living/silicon/robot/mommi/M)
 	if(!M)

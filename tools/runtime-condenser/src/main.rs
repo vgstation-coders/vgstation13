@@ -68,6 +68,11 @@ fn line_kind(line: &str) -> LineKind {
     {
         return LineKind::RecursionLimit;
     }
+
+    if !line.is_char_boundary(9) {
+        return LineKind::Junk;
+    }
+
     if line.len() > 22 && line[9..].starts_with("] Runtime in ") {
         return LineKind::Runtime;
     }

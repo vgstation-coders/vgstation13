@@ -6,22 +6,28 @@
 	triggertype = TRIGGER_PAY2USE
 	scanned_trigger = SCAN_PHYSICAL
 	var/mode
-	var/key_attackhand
-	var/key_attackby
 	var/time_left = 0
 	var/obj/machinery/account_database/linked_db
 
 /datum/artifact_trigger/pay2use/New()
 	..()
-	key_attackhand = my_artifact.on_attackhand.Add(src, "owner_attackhand")
-	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
+	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackhand)
+	my_artifact.register_event(/event/attackby, src, .proc/owner_attackby)
 	mode = rand(0,2)
+	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
+	switch(mode)
+		if (COIN)
+			my_artifact.desc += " There appears to be a coin slot [where]."
+		if (CREDIT)
+			my_artifact.desc += " There appears to be what looks like a bill acceptor [where]."
+		if (BANK_CARD)
+			my_artifact.desc += " There appears to be a card reader [where]."
 	reconnect_database()
 
 /datum/artifact_trigger/pay2use/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((my_artifact.loc && (DB.z == my_artifact.loc.z)) || (DB.z == STATION_Z))
+		if((my_artifact.loc && (DB.z == my_artifact.loc.z)) || (DB.z == map.zMainStation))
 			if((DB.stat == 0) && DB.activated )//If the database if damaged or not powered, people won't be able to use the app anymore.
 				linked_db = DB
 				break
@@ -38,10 +44,15 @@
 		if(my_effect.activated)
 			Triggered(0, "NOMONEY", 0)
 
-/datum/artifact_trigger/pay2use/proc/owner_attackhand(var/list/event_args, var/source)
-	var/toucher = event_args[1]
-	var/context = event_args[2]
 
+// unused?
+/datum/artifact_trigger/pay2use/proc/owner_bumped(mob/user, atom/target)
+	activate(user, "BUMPED")
+
+/datum/artifact_trigger/pay2use/proc/owner_attackhand(mob/user, atom/target)
+	activate(user, "TOUCH")
+
+/datum/artifact_trigger/pay2use/proc/activate(mob/user, context)
 	if(context != "TOUCH" || mode != BANK_CARD)
 		return
 
@@ -65,54 +76,49 @@
 		dat += "1 Hour - $500 - "
 		dat += "<A href='?src=\ref[src];pay1h=1'>Pay</a><BR>"
 
-		var/datum/browser/popup = new(toucher, "\ref[src]", "[my_artifact.artifact_id]", 575, 400, src)
+		var/datum/browser/popup = new(user, "\ref[src]", "[my_artifact.artifact_id]", 575, 400, src)
 		popup.set_content(dat)
 		popup.open()
 
-/datum/artifact_trigger/pay2use/proc/owner_attackby(var/list/event_args, var/source)
-	var/toucher = event_args[1]
-	var/context = event_args[2]
-	var/obj/item/weapon/item = event_args[3]
+/datum/artifact_trigger/pay2use/proc/owner_attackby(mob/living/attacker, obj/item/item)
+	if(iscoin(item))
+		if(mode == COIN)
+			my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [item] inserted to ([my_effect.trigger]) || used by [key_name(attacker)].")
+			my_artifact.visible_message("<span class='info'>[attacker] inserts a coin into [my_artifact].</span>")
+			if(istype(item, /obj/item/weapon/coin/clown))
+				playsound(my_artifact, 'sound/items/bikehorn.ogg', 50, 1)
+				time_left += 150
+			else if(istype(item, /obj/item/weapon/coin/iron))
+				time_left += 10
+			else if(istype(item, /obj/item/weapon/coin/silver))
+				time_left += 30
+			else if(istype(item, /obj/item/weapon/coin/gold))
+				time_left += 60
+			else if(istype(item, /obj/item/weapon/coin/plasma))
+				time_left += 45
+			else if(istype(item, /obj/item/weapon/coin/uranium))
+				time_left += 50
+			else if(istype(item, /obj/item/weapon/coin/diamond))
+				time_left += 100
+			else if(istype(item, /obj/item/weapon/coin/phazon))
+				time_left += 150
+			else if(istype(item, /obj/item/weapon/coin/adamantine))
+				time_left += 150
+			else if(istype(item, /obj/item/weapon/coin/mythril))
+				time_left += 150
+			qdel(item)
+		else
+			to_chat(attacker, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept coins!</span>")
 
-	if(context == "MELEE")
-		if(iscoin(item))
-			if(mode == COIN)
-				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [item] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
-				my_artifact.visible_message("<span class='info'>[toucher] inserts a coin into [my_artifact].</span>")
-				if(istype(item, /obj/item/weapon/coin/clown))
-					playsound(my_artifact, 'sound/items/bikehorn.ogg', 50, 1)
-					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/iron))
-					time_left += 10
-				else if(istype(item, /obj/item/weapon/coin/silver))
-					time_left += 30
-				else if(istype(item, /obj/item/weapon/coin/gold))
-					time_left += 60
-				else if(istype(item, /obj/item/weapon/coin/plasma))
-					time_left += 45
-				else if(istype(item, /obj/item/weapon/coin/uranium))
-					time_left += 50
-				else if(istype(item, /obj/item/weapon/coin/diamond))
-					time_left += 100
-				else if(istype(item, /obj/item/weapon/coin/phazon))
-					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/adamantine))
-					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/mythril))
-					time_left += 150
-				qdel(item)
-			else
-				to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept coins!</span>")
-
-		else if(istype(item, /obj/item/weapon/spacecash))
-			if(mode == CREDIT)
-				var/obj/item/weapon/spacecash/dosh = item
-				my_artifact.visible_message("<span class='info'>[toucher] inserts a credit chip into [my_artifact].</span>")
-				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || $[dosh.get_total()] [dosh] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
-				time_left += (dosh.get_total() * 3) //6 seconds per credit
-				qdel(dosh)
-			else
-				to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept credits!</span>")
+	else if(istype(item, /obj/item/weapon/spacecash))
+		if(mode == CREDIT)
+			var/obj/item/weapon/spacecash/dosh = item
+			my_artifact.visible_message("<span class='info'>[attacker] inserts a credit chip into [my_artifact].</span>")
+			my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || $[dosh.get_total()] [dosh] inserted to ([my_effect.trigger]) || used by [key_name(attacker)].")
+			time_left += (dosh.get_total() * 3) //6 seconds per credit
+			qdel(dosh)
+		else
+			to_chat(attacker, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept credits!</span>")
 
 /datum/artifact_trigger/pay2use/proc/payviacard(var/dosh = 0, var/time = 0, var/mob)
 
@@ -190,7 +196,7 @@
 		payviacard(500, 3600, usr)
 
 /datum/artifact_trigger/pay2use/Destroy()
-	my_artifact.on_attackhand.Remove(key_attackhand)
-	my_artifact.on_attackby.Remove(key_attackby)
+	my_artifact.unregister_event(/event/attackhand, src, .proc/owner_attackhand)
+	my_artifact.unregister_event(/event/attackby, src, .proc/owner_attackby)
 	linked_db = null
 	..()

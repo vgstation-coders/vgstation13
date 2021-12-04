@@ -1,7 +1,7 @@
 #define SYNDICATE_SHUTTLE_TRANSIT_DELAY 240
 #define SYNDICATE_SHUTTLE_COOLDOWN 200
 
-var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area/syndicate_station/start)
+var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area/shuttle/nuclearops)
 
 /datum/shuttle/syndicate
 	name = "syndicate shuttle"

@@ -4,12 +4,12 @@
 
 /obj/item/weapon/grown // Grown weapons
 	name = "grown_weapon"
-	icon = 'icons/obj/weapons.dmi'
+	icon = 'icons/obj/hydroponics/nettle.dmi'
 	var/plantname
 	var/potency = 1
 	var/fragrance = null
 
-/obj/item/weapon/grown/New()
+/obj/item/weapon/grown/New(atom/loc, custom_plantname)
 
 	..()
 
@@ -17,33 +17,34 @@
 	reagents = R
 	R.my_atom = src
 
-	//Handle some post-spawn var stuff.
-	spawn(1)
-		// Fill the object up with the appropriate reagents.
-		if(!isnull(plantname))
-			var/datum/seed/S = SSplant.seeds[plantname]
-			if(!S || !S.chems)
-				return
+	if(custom_plantname)
+		plantname = custom_plantname
 
-			potency = round(S.potency)
+	// Fill the object up with the appropriate reagents.
+	if(!isnull(plantname))
+		var/datum/seed/S = SSplant.seeds[plantname]
+		if(!S || !S.chems)
+			return
 
-			var/totalreagents = 0
+		changePotency(S.potency)
+
+		var/totalreagents = 0
+		for(var/rid in S.chems)
+			var/list/reagent_data = S.chems[rid]
+			var/rtotal = reagent_data[1]
+			if(reagent_data.len > 1 && potency > 0)
+				rtotal += round(potency/reagent_data[2])
+			totalreagents += rtotal
+
+		if(totalreagents)
+			var/coeff = min(reagents.maximum_volume / totalreagents, 1)
+
 			for(var/rid in S.chems)
 				var/list/reagent_data = S.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				totalreagents += rtotal
-
-			if(totalreagents)
-				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
-
-				for(var/rid in S.chems)
-					var/list/reagent_data = S.chems[rid]
-					var/rtotal = reagent_data[1]
-					if(reagent_data.len > 1 && potency > 0)
-						rtotal += round(potency/reagent_data[2])
-					reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
+				reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
 	potency = newValue
@@ -51,8 +52,8 @@
 /obj/item/weapon/grown/log
 	name = "tower-cap log"
 	desc = "It's better than bad, it's good!"
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "logs"
+	icon = 'icons/obj/hydroponics/towercap.dmi'
+	icon_state = "produce"
 	force = 5
 	flags = 0
 	throwforce = 5
@@ -62,11 +63,13 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
+	var/planks = 2
+
 /obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.sharpness_flags & CHOPWOOD) // I considered adding serrated to this but c'mon, making planks out of a serrated blade sounds like an awful idea
 		user.show_message("<span class='notice'>You make two planks out of \the [src].</span>", MESSAGE_SEE)
 		playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
-		drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 2, user)
+		drop_stack(/obj/item/stack/sheet/wood, get_turf(user), planks, user)
 
 		qdel(src)
 		return
@@ -78,12 +81,24 @@
 	force = 10
 	w_class = W_CLASS_LARGE
 
+	planks = 4
+
+/obj/item/weapon/grown/log/tree/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/weapon/grown/log/tree) && isturf(loc))
+		to_chat(user,"<span class='notice'>You begin building a storm door out of the heavy tree logs.</span>")
+		if(do_after(user,src,4 SECONDS))
+			to_chat(user,"<span class='notice'>You finish the door.</span>")
+			new /obj/machinery/door/mineral/wood/log(loc)
+			qdel(src)
+	else
+		..()
+
 /obj/item/weapon/grown/sunflower // FLOWER POWER!
 	plantname = "sunflowers"
 	name = "sunflower"
 	desc = "It's beautiful! A certain person might beat you to death if you trample these."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "sunflower"
+	icon = 'icons/obj/hydroponics/sunflower.dmi'
+	icon_state = "produce"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -102,8 +117,8 @@
 	plantname = "novaflowers"
 	name = "novaflower"
 	desc = "These beautiful flowers have a crisp smokey scent, like a summer bonfire."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "novaflower"
+	icon = 'icons/obj/hydroponics/novaflower.dmi'
+	icon_state = "produce"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -115,12 +130,14 @@
 	attack_verb = list("sears", "heats", "whacks", "steams")
 	fragrance = INCENSE_NOVAFLOWERS
 
-/obj/item/weapon/grown/novaflower/New()
+/obj/item/weapon/grown/novaflower/New(atom/loc, custom_plantname)
 	..()
-	spawn(5) // So potency can be set in the proc that creates these crops
-		reagents.add_reagent(NUTRIMENT, 1)
-		reagents.add_reagent(CAPSAICIN, round(potency, 1))
-		force = round((5 + potency / 5), 1)
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(CAPSAICIN, round(potency, 1))
+
+/obj/item/weapon/grown/novaflower/changePotency(newValue)
+	potency = newValue
+	force = round((5 + potency / 5), 1)
 
 /obj/item/weapon/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(!..())
@@ -133,12 +150,16 @@
 		to_chat(user, "<span class='warning'>The [name] burns your bare hand!</span>")
 		user.adjustFireLoss(rand(1,5))
 
+/obj/item/weapon/grown/novaflower/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS)
+
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
 	desc = "It's probably <B>not</B> wise to touch it with bare hands..."
-	icon = 'icons/obj/weapons.dmi'
+	icon = 'icons/obj/hydroponics/nettle.dmi'
 	name = "nettle"
-	icon_state = "nettle"
+	icon_state = "produce"
 	damtype = "fire"
 	force = 15
 	flags = 0
@@ -147,11 +168,6 @@
 	throw_speed = 1
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=1"
-
-/obj/item/weapon/grown/nettle/New()
-	..()
-	spawn(5)
-		force = round((5+potency/5), 1)
 
 /obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(istype(user))
@@ -180,12 +196,16 @@
 	potency = newValue
 	force = round((5+potency/5), 1)
 
+/obj/item/weapon/grown/nettle/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
+
 /obj/item/weapon/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
 	desc = "A glowing red nettle that incites rage in you just from looking at it."
-	icon = 'icons/obj/weapons.dmi'
+	icon = 'icons/obj/hydroponics/deathnettle.dmi'
 	name = "deathnettle"
-	icon_state = "deathnettle"
+	icon_state = "produce"
 	damtype = "fire"
 	force = 30
 	flags = 0
@@ -196,12 +216,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("stings, pricks")
 
-/obj/item/weapon/grown/deathnettle/New()
-	..()
-	spawn(5)
-		force = round((5+potency/2.5), 1)
-
-/obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
+/obj/item/weapon/grown/deathnettle/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
 
@@ -248,15 +263,15 @@
 /obj/item/weapon/corncob
 	name = "corn cob"
 	desc = "A reminder of meals gone by."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "corncob"
+	icon = 'icons/obj/hydroponics/corn.dmi'
+	icon_state = "cob"
 	item_state = "corncob"
-	w_class = W_CLASS_SMALL
+	w_class = W_CLASS_TINY
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/weapon/corncob/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/corncob/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
 	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "<span class='notice'>You use [W] to fashion a pipe out of the corn cob!</span>")
@@ -271,6 +286,7 @@
 	icon = 'icons/obj/clothing/hats.dmi'
 	icon_state = "hardhat1_pumpkin"
 	cant_drop = 1
+	laying_pickup = TRUE
 
 /obj/item/weapon/carnivorous_pumpkin/New()
 	..()
@@ -291,3 +307,4 @@
 		M.drop_item(M.get_active_hand(), force_drop = 1)
 		M.put_in_hands(src)
 		to_chat(M, "<span class = 'userwarning'>\The [src] has been forced onto you by \the [user]! Find somebody else to give it to before it consumes your head!</span>")
+

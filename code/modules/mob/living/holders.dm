@@ -42,15 +42,15 @@
 
 /obj/item/weapon/holder/process()
 	if(!loc)
-		return returnToPool(src)
+		return qdel(src)
 	else if(istype(loc,/turf) || !(contents.len))
-		return returnToPool(src)
+		return qdel(src)
 
 /obj/item/weapon/holder/relaymove(mob/M, direction)
-	returnToPool(src) //This calls Destroy(), and frees the mob
+	qdel(src) //This calls Destroy(), and frees the mob
 
-/obj/item/weapon/holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	for(var/mob/M in src.contents)
+/obj/item/weapon/holder/attackby(var/obj/item/weapon/W, var/mob/user)
+	for(var/mob/M in contents)
 		M.attackby(W,user)
 
 /obj/item/weapon/holder/update_wield(mob/user)
@@ -95,7 +95,7 @@
 	..()
 	if(M)
 		appearance = M.appearance
-		w_class = Clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
+		w_class = clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
 		//	SIZE		|	W_CLASS
 
 		//	SIZE_TINY	|	W_CLASS_TINY
@@ -108,6 +108,18 @@
 
 		if(w_class > W_CLASS_SMALL)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
+
+/obj/item/weapon/holder/animal/attackby(var/obj/item/weapon/W, var/mob/user)
+	if (istype(W, /obj/item/offhand))
+		for(var/mob/M in contents)
+			M.attack_hand(user)
+		return
+	for(var/mob/M in contents)
+		M.attackby(W,user)
+
+/obj/item/weapon/holder/animal/attack_self(var/mob/user)
+	for(var/mob/M in contents)
+		M.attack_hand(user)
 
 //MICE
 
@@ -135,6 +147,11 @@
 
 	update_itemstate_on_twohand = TRUE
 
+/obj/item/weapon/holder/animal/mutt
+	name = "sasha holder"
+	item_state = "mutt"
+	update_itemstate_on_twohand = TRUE
+
 //CARP
 
 /obj/item/weapon/holder/animal/carp
@@ -147,17 +164,33 @@
 
 /obj/item/weapon/holder/animal/cow
 	name = "cow holder"
-	desc = "Pretty heavy"
+	desc = "Pretty heavy!"
 	item_state = "cow"
 
 //CATS
 
 /obj/item/weapon/holder/animal/cat
 	name = "cat holder"
-	desc = "Runtime error"
+	desc = "RUNTIME ERROR"
 	item_state = "cat1"
 
 	update_itemstate_on_twohand = TRUE
+
+//FROG
+
+/obj/item/weapon/holder/animal/frog
+	name = "frog holder"
+	desc = "Don't hold it too tight."
+	item_state = "frog"
+	slot_flags = SLOT_HEAD
+
+//SNAIL
+
+/obj/item/weapon/holder/animal/snail
+	name = "snail holder"
+	desc = "Eh, it's all gooey and sticky."
+	item_state = "snail"
+	slot_flags = SLOT_HEAD
 
 //SALEM
 
@@ -168,17 +201,23 @@
 
 	update_itemstate_on_twohand = TRUE
 
+//SNAKES
+
+/obj/item/weapon/holder/animal/snek
+	name = "snake holder"
+	desc = "Kept you waiting?"
+	item_state = "snek"
 
 //SLIMES
 /obj/item/weapon/holder/animal/slime
 	name = "slime holder"
-	desc = "It seeps through your fingers"
+	desc = "It seeps through your fingers."
 
 /obj/item/weapon/holder/animal/slime/proc/unfreeze()
 	var/mob/living/simple_animal/slime/S = stored_mob
 	S.canmove = TRUE
 	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/weapon/holder/animal/slime/throw_impact(atom/hit_atom)
 	..()
@@ -190,7 +229,7 @@
 
 /obj/item/weapon/holder/animal/pillow
 	name = "pillow holder"
-	desc = "Comforbable"
+	desc = "Comfortable."
 	item_state = "pillow"
 	slot_flags = SLOT_HEAD
 	update_itemstate_on_twohand = TRUE

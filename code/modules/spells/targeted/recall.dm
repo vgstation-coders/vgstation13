@@ -2,7 +2,7 @@
 	name = "Bound Object"
 	desc = "This spell allows a wizard to bind an object to themselves, then teleport it to them at will. Middle click the spell icon or use the 'Unbind' spell to select a new object."
 	user_type = USER_TYPE_WIZARD
-	specialization = UTILITY
+	specialization = SSUTILITY
 	abbreviation = "BO"
 
 	school = "abjuration"
@@ -30,7 +30,7 @@
 		/obj/machinery/camera,									//AI cameras
 		/obj/machinery/requests_console,						//requests consoles
 		/obj/machinery/door_control,							//door control buttons
-		/obj/structure/closet/fireaxecabinet,					//fire axe cabinets
+		/obj/structure/fireaxecabinet,					//fire axe cabinets
 		/obj/machinery/light_switch,							//light switches                  //list taken from subspacetunneler.dm
 		/obj/structure/sign,									//area signs
 		/obj/structure/closet/walllocker,						//defib lockers, wall-mounted O2 lockers, etc.

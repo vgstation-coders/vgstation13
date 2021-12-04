@@ -20,7 +20,8 @@ var/list/fish_eggs_list = list("dud" = /obj/item/fish_eggs,
 									"shrimp" = /obj/item/fish_eggs/shrimp,
 									"electric eel" = /obj/item/fish_eggs/electric_eel,
 									"glofish" = /obj/item/fish_eggs/glofish,
-									"sea devil" = /obj/item/fish_eggs/seadevil
+									"sea devil" = /obj/item/fish_eggs/seadevil,
+									"lobster" = /obj/item/fish_eggs/lobster
 									)
 
 var/list/nonhatching_types = list("sea devil") //If you ever want to create another no-egg fish, add it here.
@@ -90,6 +91,12 @@ var/list/nonhatching_types = list("sea devil") //If you ever want to create anot
 	desc = "An aquatic offshoot of gremlins that engage in the peculiar behavior of hatching fish eggs to eat mature adults."
 	icon_state = "seadevil"
 	fish_type = "sea devil"
+
+/obj/item/fish_eggs/lobster
+	name = "lobster eggs"
+	desc = "A clutch of reddish-orange eggs, belonging to lobsters."
+	icon_state = "catfish_eggs"
+	fish_type = "lobster"
 
 /obj/item/fish_eggs/seadevil/New()
 	..()

@@ -8,12 +8,11 @@
 	layer = BLOB_SHIELD_LAYER
 	spawning = 0
 	destroy_sound = "sound/effects/blobsplat.ogg"
-
 	icon_new = "strong"
 	icon_classic = "blob_idle"
 
 //obj/effect/blob/shield/New(loc,newlook = "new")
-/obj/effect/blob/shield/New(loc,newlook = null)
+/obj/effect/blob/shield/New(turf/loc,newlook = null,no_morph = 0)
 	..()
 	flick("morph_strong",src)
 
@@ -21,10 +20,8 @@
 	return
 
 /obj/effect/blob/shield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSBLOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
-	if(mover)
-		mover.to_bump(src) //Only automatic for dense objects
 	return 0
 
 /obj/effect/blob/shield/run_action()

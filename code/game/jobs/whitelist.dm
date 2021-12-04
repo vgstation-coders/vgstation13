@@ -75,7 +75,7 @@ var/global/list/alien_whitelist = list()
 
 	// Occupation is in whitelist (for lizard janitors :V)
 	if("job=[lowertext(M.mind.assigned_role)]" in alien_whitelist[species]\
-	|| "job=[lowertext(M.mind.assigned_role)]" in alien_whitelist["all"])
+	||("job=[lowertext(M.mind.assigned_role)]" in alien_whitelist["all"]))
 		return 1
 	return 0
 

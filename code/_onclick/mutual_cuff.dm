@@ -9,8 +9,8 @@
 	if(!istype(first) || !istype(second) || !istype(third))
 		return FALSE
 
-	if(restraint_apply_sound)
-		playsound(src, restraint_apply_sound, 30, 1, -2)
+	playtoolsound(src, 30, TRUE, -2)
+
 	third.visible_message("<span class='danger'>\The [third] is trying to restrain \the [first] and \the [second] together with the \the [src]!</span>",
 						 "<span class='danger'>You try to tether \the [first] and \the [second] using \the [src]!</span>")
 
@@ -50,8 +50,14 @@
 	second.equip_to_slot(cuffs, slot_handcuffed)
 	first.equip_to_slot(cuffs, slot_handcuffed)
 
-	second.mutual_handcuffed_to_event_key = second.on_moved.Add(first, "on_mutual_cuffed_move")
-	first.mutual_handcuffed_to_event_key = first.on_moved.Add(second, "on_mutual_cuffed_move")
+	first.register_event(/event/z_transition, first, /mob/living/carbon/proc/z_transition_bringalong)
+	second.register_event(/event/z_transition, second, /mob/living/carbon/proc/z_transition_bringalong)
+
+	first.register_event(/event/post_z_transition, first, /mob/living/carbon/proc/post_z_transition_bringalong)
+	second.register_event(/event/post_z_transition, second, /mob/living/carbon/proc/post_z_transition_bringalong)
+
+	second.register_event(/event/moved, first, /mob/living/carbon/proc/on_mutual_cuffed_move)
+	first.register_event(/event/moved, second, /mob/living/carbon/proc/on_mutual_cuffed_move)
 
 	cuffs.on_restraint_apply(first)
 	cuffs.on_restraint_apply(second)
@@ -69,8 +75,14 @@
 		mutual_handcuffed_mobs.Remove(handcuffed_to)
 
 		//remove from the event
-		C.on_moved.Remove(C.mutual_handcuffed_to_event_key)
-		handcuffed_to.on_moved.Remove(handcuffed_to.mutual_handcuffed_to_event_key)
+		C.unregister_event(/event/moved, C, /mob/living/carbon/proc/on_mutual_cuffed_move)
+		handcuffed_to.unregister_event(/event/moved, handcuffed_to, /mob/living/carbon/proc/on_mutual_cuffed_move)
+
+		C.unregister_event(/event/z_transition, C, /mob/living/carbon/proc/z_transition_bringalong)
+		handcuffed_to.unregister_event(/event/z_transition, handcuffed_to, /mob/living/carbon/proc/z_transition_bringalong)
+
+		C.unregister_event(/event/post_z_transition, C, /mob/living/carbon/proc/post_z_transition_bringalong)
+		handcuffed_to.unregister_event(/event/post_z_transition, handcuffed_to, /mob/living/carbon/proc/post_z_transition_bringalong)
 
 		//reset the mob's vars
 		handcuffed_to.mutual_handcuffed_to = null
@@ -80,11 +92,18 @@
 		C.u_equip(src)
 		handcuffed_to.u_equip(src)
 
-/mob/living/carbon/proc/on_mutual_cuffed_move()
-	if (mutual_handcuffed_to && !mutual_handcuffed_to.Adjacent(src) && (world.time > mutual_handcuff_forcemove_time + 2)) 
+/mob/living/carbon/proc/on_mutual_cuffed_move(atom/movable/mover)
+	if (!isturf(loc) || (mutual_handcuffed_to && get_dist(mutual_handcuffed_to, src) > 3)) // We moved to a mech, a sleeper, or a locker, or got teleported
+		var/obj/item/weapon/handcuffs/H = mutual_handcuffs
+		if (!istype(H))
+			return
+		H.visible_message("<span class='warning'>\The [H] breaks!</span>")
+		qdel(H)
+		return
+	if (mutual_handcuffed_to && !mutual_handcuffed_to.Adjacent(src) && (world.time > mutual_handcuff_forcemove_time + 2))
 		mutual_handcuffed_to.Slip(2, 3)
 		src.Slip(2, 3)
-		src.forceMove(mutual_handcuffed_to.loc)
+		src.forceMove(get_turf(mutual_handcuffed_to))
 		//if pulling somebody who is buckled force them out of the buckled structure
 		var/obj/structure/bed/locked_to = src.locked_to
 		if (locked_to && istype(locked_to))
@@ -92,4 +111,17 @@
 		//last_call as not to get too many nested calls
 		mutual_handcuff_forcemove_time = world.time
 
-	
+/mob/living/carbon/proc/z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
+	if (mutual_handcuffed_to)
+		// Remove the ability to bring his buddy, since his buddy already brought him here
+		mutual_handcuffed_to.unregister_event(/event/z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/z_transition_bringalong)
+		mutual_handcuffed_to.unregister_event(/event/post_z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/post_z_transition_bringalong)
+		mutual_handcuffed_to.unregister_event(/event/moved, mutual_handcuffed_to, /mob/living/carbon/proc/on_mutual_cuffed_move)
+
+/mob/living/carbon/proc/post_z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
+	if (mutual_handcuffed_to)
+		// Re-adds the events on the fly once the transition is done.
+		mutual_handcuffed_to.forceMove(get_turf(src))
+		mutual_handcuffed_to.register_event(/event/z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/z_transition_bringalong)
+		mutual_handcuffed_to.register_event(/event/post_z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/post_z_transition_bringalong)
+		mutual_handcuffed_to.register_event(/event/moved, mutual_handcuffed_to, /mob/living/carbon/proc/on_mutual_cuffed_move)

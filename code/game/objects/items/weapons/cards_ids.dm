@@ -167,11 +167,11 @@
 /obj/item/weapon/card/emag/attack()
 	return
 
-//perform individual emag_act() stuff on children overriding the method here 
+//perform individual emag_act() stuff on children overriding the method here
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
-	if (istype(target, /mob/living/carbon/human)) 
+	if (istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/target_living = target
 		//get target zone with 0% chance of missing
 		var/zone = ran_zone(user.zone_sel.selecting, 100)
@@ -208,11 +208,8 @@
 
 	if(virtual_wallet)
 		update_virtual_wallet()
-		spawn(30) //AWFULNESS AHOY
-			if(ishuman(loc))
-				var/mob/living/carbon/human/H = loc
-				SetOwnerInfo(H)
-			update_virtual_wallet()
+	if(ishuman(loc))
+		SetOwnerDNAInfo(loc)
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -257,10 +254,26 @@
 		virtual_wallet.account_number = next_account_number
 		next_account_number += rand(1,25)
 
+/obj/item/weapon/card/id/proc/add_to_virtual_wallet(var/added_funds=0, var/mob/user, var/atom/source)
+	if(!virtual_wallet)
+		return 0
+	virtual_wallet.money += added_funds
+	var/datum/transaction/T = new()
+	if(user)
+		T.target_name = user.name
+	T.purpose = "Currency deposit"
+	T.amount = added_funds
+	if(source)
+		T.source_terminal = source.name
+	T.date = current_date_string
+	T.time = worldtime2text()
+	virtual_wallet.transaction_log.Add(T)
+	return 1
+
 /obj/item/weapon/card/id/proc/UpdateName()
 	name = "[src.registered_name]'s ID Card ([src.assignment])"
 
-/obj/item/weapon/card/id/proc/SetOwnerInfo(var/mob/living/carbon/human/H)
+/obj/item/weapon/card/id/proc/SetOwnerDNAInfo(var/mob/living/carbon/human/H)
 	if(!H || !H.dna)
 		return
 
@@ -285,7 +298,7 @@
 		return jobName
 	if(alt_jobName in get_all_job_icons()) //Check if the base job has a hud icon
 		return alt_jobName
-	if(jobName in get_all_centcom_jobs() || alt_jobName in get_all_centcom_jobs()) //Return with the NT logo if it is a Centcom job
+	if(jobName in get_all_centcom_jobs() || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
 		return "Centcom"
 	return "Unknown" //Return unknown if none of the above apply
 
@@ -329,7 +342,7 @@
 
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-			SetOwnerInfo(H)
+			SetOwnerDNAInfo(H)
 			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
 
 		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
@@ -339,7 +352,7 @@
 			return
 		src.registered_name = n
 
-		var/u = strict_ascii(sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+		var/u = sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
 		if(!u)
 			alert("Invalid assignment.")
 			src.registered_name = null
@@ -380,7 +393,7 @@
 						to_chat(user, "Name changed to [new_name].")
 
 					if("Occupation")
-						var/new_job = strict_ascii(sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
 						if (!Adjacent(user) || user.incapacitated())
 							return
 						if (!new_job)
@@ -393,12 +406,21 @@
 	else
 		..()
 
+#define AGENT_CARD_DEFAULT_ACCESS list(access_maint_tunnels, access_syndicate, access_external_airlocks)
+
 /obj/item/weapon/card/id/syndicate
 	name = "agent card"
-	access = list(access_maint_tunnels, access_syndicate, access_external_airlocks)
+	access = AGENT_CARD_DEFAULT_ACCESS
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
+
+/obj/item/weapon/card/id/syndicate/commando
+	name = "Hacked syndie card"
+
+/obj/item/weapon/card/id/syndicate/commando/New()
+	..()
+	access = get_all_accesses()
 
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
@@ -451,14 +473,15 @@
 							"silver",
 							"centcom_old",
 							"centcom",
-							"security",
-							"medical",
 							"HoS",
-							"research",
-							"engineering",
 							"CMO",
 							"RD",
 							"CE",
+							"security",
+							"medical",
+							"research",
+							"engineering",
+							"cargo",
 							"clown",
 							"mime",
 							"trader",
@@ -469,6 +492,7 @@
 							"ERT_security",
 							"ERT_engineering",
 							"ERT_medical",
+							"ERT_empty",
 						)
 						var/choice = input(user, "Select the appearance for this card.", "Choose.") in appearances
 						if(!Adjacent(user))
@@ -544,12 +568,18 @@
 						blood_type = initial(blood_type)
 						dna_hash = initial(dna_hash)
 						fingerprint_hash = initial(fingerprint_hash)
-						access = initial(access)
+						access = AGENT_CARD_DEFAULT_ACCESS
 						registered_user = null
 
 						to_chat(user, "<span class='notice'>All information has been deleted from \the [src].</span>")
 	else
 		..()
+
+/obj/item/weapon/card/id/syndicate/raider
+	access = list(access_syndicate, access_trade)
+	assignment = "Trader"
+
+#undef AGENT_CARD_DEFAULT_ACCESS
 
 /obj/item/weapon/card/id/syndicate_command
 	name = "syndicate ID card"
@@ -703,6 +733,15 @@
 	access = list(access_trade)
 	base_access = list(access_trade)
 
+/obj/item/weapon/card/id/hobo
+	name = "worn ID"
+	desc = "A worn ID card, long since of any use. The only thing others may use to recognise you. It shows signs of wear and the photo is almost unrecognizable."
+	registered_name = "traveler"
+	assignment = "visitor"
+	icon_state = "trader"
+	access = list()
+	base_access = list()
+
 /obj/item/weapon/card/id/tunnel_clown
 	name = "Tunnel Clown ID card"
 	assignment = "Tunnel Clown!"
@@ -725,8 +764,17 @@
 	icon_state = "deathsquad"
 
 /obj/item/weapon/card/id/death_commando/New()
-	..()
+	. = ..()
 	access = get_centcom_access("Death Commando")
+
+/obj/item/weapon/card/id/death_commando_leader
+	name = "Sgt.Reaper ID card"
+	assignment = "Death Commander"
+	icon_state = "creed"
+
+/obj/item/weapon/card/id/death_commando_leader/New()
+	. = ..()
+	access = get_centcom_access("Creed Commander")
 
 /obj/item/weapon/card/id/syndicate/commando
 	name = "Syndicate Commando ID card"
@@ -767,11 +815,11 @@
 	access = get_all_accesses()
 	access += get_all_centcom_access()
 
-/obj/item/weapon/card/id/admin/nt_supreme
+/obj/item/weapon/card/id/centcom/nt_supreme
 	name = "Nanotrasen Supreme Commander ID card"
 	assignment = "Nanotrasen Supreme Commander"
 
-/obj/item/weapon/card/id/admin/nt_supreme/New()
+/obj/item/weapon/card/id/centcom/nt_supreme/New()
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()
@@ -784,6 +832,15 @@
 /obj/item/weapon/card/id/emergency_responder/New()
 	..()
 	access = get_centcom_access("Emergency Responder")
+
+/obj/item/weapon/card/id/emergency_responder_leader
+	name = "Emergency Responder Leader ID card"
+	assignment = "Emergency Responder Leader"
+	icon_state = "ERT_leader"
+
+/obj/item/weapon/card/id/emergency_responder_leader/New()
+	..()
+	access = get_centcom_access("Emergency Responders Leader")
 
 /obj/item/weapon/card/id/special_operations
 	name = "Special Operations Officer ID card"
@@ -804,3 +861,12 @@
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/judge
+	name = "Judge ID card"
+	assignment = "Judge"
+	icon_state = "ERT_empty"
+
+/obj/item/weapon/card/id/judge/New()
+	..()
+	access = get_centcom_access("Emergency Responder")

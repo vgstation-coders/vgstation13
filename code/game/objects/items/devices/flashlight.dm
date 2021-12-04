@@ -108,7 +108,7 @@
 /obj/item/device/flashlight/tactical
 	name = "tactical light"
 	desc = "A compact, tactical flashlight with automatic self-attaching screws. Fits on armor and headgear."
-	icon_state = "tacticoollight"
+	icon_state = "taclight"
 	item_state = ""
 	
 /obj/item/device/flashlight/tactical/preattack(atom/target, mob/user, proximity_flag, click_parameters)
@@ -246,6 +246,16 @@
 	if(on)
 		return source_temperature
 	return 0
+
+/obj/item/device/flashlight/flare/suicide_act(var/mob/living/user)
+	if(!on)
+		Light(user)
+	to_chat(viewers(user), "<span class='danger'>[user] is swallowing a lit flare! It looks like \he's trying to commit suicide.</span>")
+	qdel(src)
+	if(!fuel)
+		return (SUICIDE_ACT_TOXLOSS)
+	user.IgniteMob()
+	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/device/flashlight/flare/ever_bright/New()
 	. = ..()

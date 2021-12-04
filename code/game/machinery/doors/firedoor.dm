@@ -70,6 +70,9 @@ var/global/list/alert_overlays_global = list()
 
 	dir = 2
 
+	animation_delay_predensity_opening = 3
+	animation_delay_predensity_closing = 7
+
 	var/list/alert_overlays_local
 
 	var/blocked = 0
@@ -90,9 +93,9 @@ var/global/list/alert_overlays_global = list()
 		"cold"
 	)
 
-/obj/machinery/door/firedoor/New()
+/obj/machinery/door/firedoor/New(loc, new_dir)
 	. = ..()
-
+	change_dir(new_dir)
 	if(!("[src.type]" in alert_overlays_global))
 		alert_overlays_global += list("[src.type]" = list("alert_hot" = list(),
 														"alert_cold" = list())
@@ -131,7 +134,6 @@ var/global/list/alert_overlays_global = list()
 			if(A)
 				A.all_doors |= src
 				areas_added |= A
-
 
 /obj/machinery/door/firedoor/initialize()
 	if (twin) // Already paired with something
@@ -214,6 +216,11 @@ var/global/list/alert_overlays_global = list()
 		if (mecha.occupant)
 			var/mob/M = mecha.occupant
 			attack_hand(M)
+	if(ismob(AM))
+		var/mob/M = AM
+		var/obj/item/I = M.get_active_hand()
+		if((iscrowbar(I)||istype(I,/obj/item/weapon/fireaxe)) && M.a_intent == I_HURT)
+			attackby(I,M)
 	return 0
 
 /obj/machinery/door/firedoor/power_change()
@@ -242,13 +249,13 @@ var/global/list/alert_overlays_global = list()
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 /obj/machinery/door/firedoor/CtrlClick(mob/user)
-	if(isAdminGhost(user))
-		attack_ai(user,TRUE)
+	if(isrobot(user) || isAdminGhost(user))
+		attack_ai(user, TRUE)
 	else
 		..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
-	return attackby(null, user)
+	return do_interaction(user)
 
 /obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
 	force_open(user)
@@ -265,12 +272,28 @@ var/global/list/alert_overlays_global = list()
 		return 1
 	return 0
 
-/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user, var/no_reruns = FALSE)
-	add_fingerprint(user)
+/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user)
 	if(operating)
 		return//Already doing something.
+
+	if(istype(C, /obj/item/weapon/batteringram))
+		var/obj/item/weapon/batteringram/ram = C
+		if(!ram.can_ram(user))
+			return
+		user.delayNextAttack(3 SECONDS)
+		var/breaktime = 4 SECONDS
+		visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
+		if(!do_after(user, src, breaktime, 2, custom_checks = new /callback(ram, /obj/item/weapon/batteringram/proc/on_do_after)))
+			return
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		visible_message("<span class='warning'>[user] breaks down \the [src]!</span>", "<span class='warning'>You broke \the [src]!</span>")
+		var/obj/item/firedoor_frame/frame = new(get_turf(src))
+		frame.add_fingerprint(user)
+		qdel(src)
+		return
+
 	if(iswelder(C))
-		var/obj/item/weapon/weldingtool/W = C
+		var/obj/item/tool/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
 			user.visible_message("<span class='attack'>\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
@@ -279,7 +302,7 @@ var/global/list/alert_overlays_global = list()
 			update_icon()
 			return
 
-	if( iscrowbar(C) || ( istype(C,/obj/item/weapon/fireaxe) && C.wielded ) )
+	if(iscrowbar(C) || (istype(C,/obj/item/weapon/fireaxe) && C.wielded))
 		force_open(user, C)
 		return
 
@@ -299,39 +322,60 @@ var/global/list/alert_overlays_global = list()
 									"<span class='warning'>You hear slicing noises.</span>")
 				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 				blocked = !blocked
-				open()
+				force_open(user, C)
+				sleep(8)
+				blocked = TRUE
+				update_icon()
 			return
 		else
 			user.visible_message("<span class='warning'>[user] swiftly slices \the [src] open!</span>",\
 								"You slice \the [src] open in one clean cut!",\
 								"You hear the sound of a swift, sharp slice.")
-			open()
+			force_open(user, C)
+			sleep(8)
+			blocked = TRUE
+			update_icon()
 			return
 
-	if(istype(C, /obj/item/weapon/wrench))
+	if(C.is_wrench(user))
 		if(blocked)
 			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
 			"You begin to deconstruct \the [src] with \the [C].")
 			if(do_after(user, src, 5 SECONDS))
-				new/obj/item/firedoor_frame(get_turf(src))
+				var/obj/item/firedoor_frame/frame = new(get_turf(src))
+				frame.add_fingerprint(user)
 				qdel(src)
 			return
 		else
 			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
 
-	if( isEmag(C) )
-		if ( density==1 )
+	if(isEmag(C))
+		if(density)
 			flick("door_spark", src)
-			spawn(6)
+			sleep(6)
 			force_open(user, C)
-			spawn(8)
-			blocked = TRUE
-			update_icon()
-			return
-		else
-			blocked = TRUE
-			update_icon()
-			return
+			sleep(8)
+		blocked = TRUE
+		update_icon()
+		return
+
+	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/attack_animal(var/mob/living/simple_animal/M as mob)
+	M.delayNextAttack(8)
+	if(M.melee_damage_upper == 0)
+		return
+	M.do_attack_animation(src, M)
+	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+					  "<span class='warning'>You smash against \the [src].</span>", \
+					  "You hear twisting metal.")
+	if(prob(33))
+		new /obj/item/firedoor_frame(get_turf(src))
+		qdel(src)
+
+/obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/weapon/C, var/no_reruns = FALSE)
+	if(operating)
+		return//Already doing something.
 
 	if(blocked)
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
@@ -341,20 +385,20 @@ var/global/list/alert_overlays_global = list()
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 
-	var/access_granted = 0
+	var/access_granted = FALSE
 	var/users_name
 
 	if(allowed(user))
-		access_granted = 1
+		access_granted = TRUE
 	if(ishuman(user))
 		users_name = FindNameFromID(user)
 	else
 		users_name = "Unknown"
 
-	if( ishuman(user) &&  !stat && ( istype(C, /obj/item/weapon/card/id) || istype(C, /obj/item/device/pda) ) )
+	if(ishuman(user) && !stat && (isID(C) || isPDA(C)))
 		var/obj/item/weapon/card/id/ID = C
 
-		if( istype(C, /obj/item/device/pda) )
+		if(isPDA(C))
 			var/obj/item/device/pda/pda = C
 			ID = pda.id
 		if(!istype(ID))
@@ -366,7 +410,7 @@ var/global/list/alert_overlays_global = list()
 		if(check_access(ID))
 			access_granted = 1
 
-	if(alarmed && density && lockdown && !access_granted/* && !( users_name in users_to_open ) */)
+	if(alarmed && density && lockdown && !access_granted)
 		if(horror_force(user))
 			return
 
@@ -381,14 +425,14 @@ var/global/list/alert_overlays_global = list()
 		if(!users_to_open)
 			users_to_open = list()
 		users_to_open += users_name
-		if (twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
-			twin.attackby(C, user, TRUE)
+		if(twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
+			twin.do_interaction(user, C, TRUE)
 	var/needs_to_close = 0
 	if(density)
 		if(alarmed)
 			needs_to_close = 1
 		spawn()
-			open()
+			open(user)
 	else
 		spawn()
 			close()
@@ -400,7 +444,9 @@ var/global/list/alert_overlays_global = list()
 			if(alarmed && !density)
 				close()
 
-/obj/machinery/door/firedoor/open()
+/obj/machinery/door/firedoor/open(mob/user)
+	if(user)
+		add_fingerprint(user)
 	if(!loc || blocked)
 		return
 	..()
@@ -431,7 +477,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(density)
 		spawn(0)
-			open()
+			open(user)
 	else
 		spawn(0)
 			close()
@@ -555,13 +601,24 @@ var/global/list/alert_overlays_global = list()
 	heat_proof = 1
 	air_properties_vary_with_direction = 1
 	flow_flags = ON_BORDER
+	pass_flags_self = PASSDOOR|PASSGLASS
+
+/obj/machinery/door/firedoor/border_only/New()
+	..()
+	setup_border_dummy()
 
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		return !density
-	return 1
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/firedoor/CanAStarPass()
@@ -572,19 +629,6 @@ var/global/list/alert_overlays_global = list()
 		open()
 	else
 		close()
-
-/obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
 
 /obj/machinery/door/firedoor/border_only/is_fulltile()
 	return 0
@@ -607,23 +651,28 @@ var/global/list/alert_overlays_global = list()
 		return 0
 	if(!isturf(user.loc))
 		return 0
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 
 	var/current_turf = get_turf(src)
-	var/turf_face = get_step(current_turf,user.dir)
-	if(SSair.air_blocked(current_turf, turf_face))
-		to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
-		return 1
-	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
+	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in current_turf
 	if(F && F.dir == user.dir)
 		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
 		return 1
 	if(do_after(user, user, 5 SECONDS))
-		var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
-		B.change_dir(user.dir)
+		new /obj/machinery/door/firedoor/border_only(current_turf, user.dir)
 		qdel(src)
+
+/obj/item/firedoor_frame/attackby(var/obj/item/weapon/C, var/mob/user)
+	if(C.is_wrench(user))
+		user.visible_message("<span class='notice'>\The [user] deconstructs \the [src] with \a [C].</span>",\
+		"You deconstruct \the [src] with \the [C]!")
+		drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
+		qdel(src)
+
+/obj/machinery/door/firedoor/AICtrlClick(mob/user)
+	attack_ai(user,TRUE)
 
 //Removed pending a fix for atmos issues caused by full tile firelocks.
 /*

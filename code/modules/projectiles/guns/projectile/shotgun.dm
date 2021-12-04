@@ -8,6 +8,7 @@
 	slot_flags = SLOT_BACK
 	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1)
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
+	recoil = 4
 
 /obj/item/weapon/gun/projectile/shotgun/isHandgun()
 	return FALSE
@@ -22,10 +23,12 @@
 	max_shells = 4
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+	clowned = CLOWNABLE
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
 	gun_flags = 0
+	starting_materials = list(MAT_IRON = 7500, MAT_WOOD = 3750)
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
 	if(recentpump)
@@ -48,7 +51,10 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/shotgun/pump/proc/pump(mob/M as mob)
-	playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
+	if(clowned == CLOWNED)
+		playsound(M, 'sound/items/quack.ogg', 60, 1)
+	else
+		playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
 		current_shell.forceMove(get_turf(src))//Eject casing
@@ -67,11 +73,22 @@
 /obj/item/weapon/gun/projectile/shotgun/pump/combat
 	name = "combat shotgun"
 	icon_state = "cshotgun"
+	clowned = UNCLOWN
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 8
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
+	silencer_offset = list(28,5)
+
+/obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty //nuke op engineering special
+	name = "combat shorty"
+	desc = "Handy for close encounters."
+	icon_state = "scshotgun"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT
+	max_shells = 3
+	silencer_offset = list(22,5)
 
 //this is largely hacky and bad :(	-Pete
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel
@@ -123,7 +140,7 @@
 	..()
 	A.update_icon()
 	update_icon()
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if(istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
 		if(getAmmo())
 			afterattack(user, user)	//will this work?
@@ -132,17 +149,15 @@
 			user.visible_message("<span class='danger'>The shotgun goes off!</span>", "<span class='danger'>The shotgun goes off in your face!</span>")
 			return
 		if(do_after(user, src, 30))	//SHIT IS STEALTHY EYYYYY
-			icon_state = "sawnshotgun"
-			w_class = W_CLASS_MEDIUM
-			item_state = "sawnshotgun"
-			slot_flags &= ~SLOT_BACK	//you can't sling it on your back
-			slot_flags |= SLOT_BELT		//but you can wear it on your belt (poorly concealed under a trenchcoat, ideally)
-			name = "sawn-off shotgun"
-			desc = "Omar's coming!"
+			var/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/itssmallnow = new /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/empty(src.loc)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
 			if(istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
+				H.drop_item(src, force_drop = 1)
+				H.put_in_hands(itssmallnow)
 				H.update_inv_hands()
+			src.transfer_fingerprints_to(itssmallnow)
+			qdel(src)
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
 	name = "sawn-off shotgun"
@@ -153,6 +168,9 @@
 	slot_flags = SLOT_BELT
 	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
 
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/empty
+	ammo_type = null
+
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/super
 	name = "super shotgun"
 	desc = "bang-bang, click, tack, shoomph, click"
@@ -160,7 +178,7 @@
 	item_state = "sawnshotgun"
 	fire_delay = 0
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		..()
 		attack_self(user)
@@ -179,9 +197,15 @@
 	load_method = 2
 	slot_flags = 0
 	gun_flags = EMPTYCASINGS
+	silencer_offset = list(28,5)
 
 /obj/item/weapon/gun/projectile/shotgun/nt12/update_icon()
 	..()
 	var/MT = stored_magazine ? "[stored_magazine.max_ammo > 4 ? "-drum-20" : "-mag-4"]" : ""
 	icon_state = "[initial(icon_state)]["[MT]"][stored_magazine ? "" : "-m"][chambered ? "" : "-e"]"
 	item_state = icon_state
+
+/obj/item/weapon/gun/projectile/shotgun/nt12/widowmaker2000
+	name = "\improper Widowmaker 2000"
+	desc = "Also known as the \"Colt Widowmaker M2000 SMG shotgun\"."
+	w_class = W_CLASS_MEDIUM

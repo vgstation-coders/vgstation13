@@ -10,17 +10,21 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 				"oldburning","light-on-r","light-on-y","light-on-g","light-on-b", "wood", "wood-broken", "wood-broken2", "wood-broken3", "wood-broken4", "wood-broken5", "wood-broken6", "wood-broken7", "carpet",
 				"carpetcorner", "carpetside", "carpet", "arcade", "ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5",
 				"ironsand6", "ironsand7", "ironsand8", "ironsand9", "ironsand10", "ironsand11",
-				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
+				"ironsand12", "ironsand13", "ironsand14", "ironsand15","engine")
 
 var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3","asteroid","asteroid_dug",
 				"ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5", "ironsand6", "ironsand7",
 				"ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
 var/list/wood_icons = list("wood","wood-broken")
+
+//For phazon tile teleportation
+var/global/list/turf/simulated/floor/phazontiles = list()
+
 /turf/simulated/floor
 
 	//Note to coders, the 'intact' var can no longer be used to determine if the floor is a plating or not.
-	//Use the is_plating(), is_plasteel_floor() and is_light_floor() procs instead. --Errorage
+	//Use the is_plating(), is_metal_floor() and is_light_floor() procs instead. --Errorage
 	name = "floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "floor"
@@ -34,6 +38,8 @@ var/list/wood_icons = list("wood","wood-broken")
 	var/burnt = 0
 	var/material = "metal"
 	var/spam_flag = 0 //For certain interactions, like bananium floors honking when stepped on
+	var/enter_sound = "clownstep"
+	var/attack_sound = 'sound/items/bikehorn.ogg'
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
 
@@ -41,15 +47,27 @@ var/list/wood_icons = list("wood","wood-broken")
 
 	plane = FLOOR_PLANE
 
+	holomap_draw_override = HOLOMAP_DRAW_PATH
+
+
 /turf/simulated/floor/New()
+	create_floor_tile()
 	..()
-	if(!floor_tile)
-		floor_tile = getFromPool(/obj/item/stack/tile/plasteel, null)
-		floor_tile.amount = 1
 	if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
+
+/turf/simulated/floor/proc/create_floor_tile()
+	if(!floor_tile)
+		floor_tile = new /obj/item/stack/tile/metal(null)
+		floor_tile.amount = 1
+
+/turf/simulated/floor/Destroy()
+	//No longer phazon, not a teleport destination
+	if(material=="phazon")
+		phazontiles -= src
+	..()
 
 /turf/simulated/floor/ashify()
 	burn_tile()
@@ -73,7 +91,7 @@ var/list/wood_icons = list("wood","wood-broken")
 				if (1)
 					src.ReplaceWithLattice()
 					if(prob(33))
-						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
 				if(2)
 					src.ChangeTurf(get_underlying_turf())
@@ -84,7 +102,7 @@ var/list/wood_icons = list("wood","wood-broken")
 						src.break_tile()
 					src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 					if(prob(33))
-						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
 		if(3.0)
 			if (prob(50))
@@ -97,13 +115,12 @@ var/list/wood_icons = list("wood","wood-broken")
 
 /turf/simulated/floor/add_dust()
 	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
-		getFromPool(/obj/effect/decal/cleanable/dirt,src)
+		new /obj/effect/decal/cleanable/dirt(src)
 
-turf/simulated/floor/update_icon()
-
+/turf/simulated/floor/update_icon()
 	if(lava)
 		return
-	else if(is_plasteel_floor())
+	else if(is_metal_floor())
 		if(!broken && !burnt)
 			icon_state = icon_regular_floor
 	else if(is_plating())
@@ -113,6 +130,7 @@ turf/simulated/floor/update_icon()
 		icon_state = "tile-slime"
 	else if(is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
+		overlays -= floor_overlay //Removes overlay without removing other overlays. Replaces it a few lines down if on.
 		if(T.on)
 			set_light(5)
 			floor_overlay = T.get_turf_image()
@@ -122,7 +140,6 @@ turf/simulated/floor/update_icon()
 		else
 			set_light(0)
 			icon_state = "light_off"
-			overlays -= floor_overlay //Removes overlay when off without removing other overlays.
 	else if(is_grass_floor())
 		if(!broken && !burnt)
 			if(!(icon_state in list("grass1","grass2","grass3","grass4")))
@@ -212,7 +229,15 @@ turf/simulated/floor/update_icon()
 		if("bananium")
 			if(!spam_flag)
 				spam_flag = 1
-				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
+				playsound(src, attack_sound, 50, 1)
+				spawn(20)
+					spam_flag = 0
+		//Phazon tiles teleport to another random one in the world when clicked
+		if("phazon")
+			if(!spam_flag)
+				spam_flag = 1
+				var/turf/simulated/floor/destination = pick(phazontiles)
+				do_teleport(user, destination)
 				spawn(20)
 					spam_flag = 0
 	..()
@@ -225,8 +250,8 @@ turf/simulated/floor/update_icon()
 		make_plating()
 	break_tile()
 
-/turf/simulated/floor/is_plasteel_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/plasteel))
+/turf/simulated/floor/is_metal_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/metal))
 		return 1
 	else
 		return 0
@@ -281,7 +306,7 @@ turf/simulated/floor/update_icon()
 		return
 	if(broken)
 		return
-	if(is_plasteel_floor())
+	if(is_metal_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		broken = 1
 	else if(is_light_floor())
@@ -321,10 +346,10 @@ turf/simulated/floor/update_icon()
 		return
 	if(istype(src,/turf/unsimulated/floor/asteroid))
 		return//Asteroid tiles don't burn
-	if(is_plasteel_floor())
+	if(is_metal_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
-	else if(is_plasteel_floor())
+	else if(is_metal_floor())
 		src.icon_state = "floorscorched[pick(1,2)]"
 		burnt = 1
 	else if(is_plating())
@@ -345,9 +370,6 @@ turf/simulated/floor/update_icon()
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.
 /turf/simulated/floor/proc/make_plating()
-	if(istype(src,/turf/simulated/floor/engine))
-		return
-
 	if(is_grass_floor())
 		for(var/direction in cardinal)
 			if(istype(get_step(src,direction),/turf/simulated/floor))
@@ -362,14 +384,16 @@ turf/simulated/floor/update_icon()
 						FF.update_icon() //so siding get updated properly
 
 	if(floor_tile)
-		//qdel(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null
 	intact = 0
 	broken = 0
 	burnt = 0
+	//No longer phazon, not a teleport destination
+	if(material=="phazon")
+		phazontiles -= src
 	material = "metal"
 	plane = PLATING_PLANE
 
@@ -379,34 +403,37 @@ turf/simulated/floor/update_icon()
 //This proc will make the turf a plasteel floor tile. The expected argument is the tile to make the turf with
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
-/turf/simulated/floor/proc/make_plasteel_floor(var/obj/item/stack/tile/plasteel/T = null)
-	broken = 0
-	burnt = 0
+/turf/simulated/floor/proc/make_metal_floor(var/obj/item/stack/tile/metal/T = null)
+	if(floor_tile)
+		qdel(floor_tile)
+	floor_tile = null
+	floor_tile = new T.type(null)
+	material = floor_tile.material
+	//Becomes a teleport destination for other phazon tiles
+	if(material=="phazon")
+		phazontiles += src
 	intact = 1
 	plane = TURF_PLANE
-	set_light(0)
-	if(floor_tile)
-		returnToPool(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/plasteel))
-			floor_tile = T
-			if (icon_regular_floor)
-				icon_state = icon_regular_floor
-			else
-				icon_state = "floor"
-				icon_regular_floor = icon_state
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/plasteel, null)
-	icon_state = "floor"
-	icon_regular_floor = icon_state
-
+	if(istype(T,/obj/item/stack/tile/light))
+		var/obj/item/stack/tile/light/L = T
+		var/obj/item/stack/tile/light/F = floor_tile
+		F.color_r = L.color_r
+		F.color_g = L.color_g
+		F.color_b = L.color_b
+		F.on = L.on
+	if(istype(T,/obj/item/stack/tile/grass))
+		for(var/direction in cardinal)
+			if(istype(get_step(src,direction),/turf/simulated/floor))
+				var/turf/simulated/floor/FF = get_step(src,direction)
+				FF.update_icon() //so siding gets updated properly
+	else if(istype(T,/obj/item/stack/tile/carpet))
+		for(var/direction in alldirs)
+			if(istype(get_step(src,direction),/turf/simulated/floor))
+				var/turf/simulated/floor/FF = get_step(src,direction)
+				FF.update_icon() //so siding gets updated properly
 	update_icon()
 	levelupdate()
-
+	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 //This proc will make the turf a light floor tile. The expected argument is the tile to make the turf with
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
@@ -416,7 +443,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/light))
@@ -425,7 +452,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/light, null)
+	floor_tile = new /obj/item/stack/tile/light(null)
 
 	update_icon()
 	levelupdate()
@@ -438,7 +465,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/grass))
@@ -447,7 +474,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/wood, null)
+	floor_tile = new /obj/item/stack/tile/wood(null)
 	update_icon()
 	levelupdate()
 
@@ -459,7 +486,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/wood))
@@ -468,7 +495,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/wood, null)
+	floor_tile = new /obj/item/stack/tile/wood(null)
 	update_icon()
 	levelupdate()
 
@@ -480,7 +507,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/carpet))
@@ -489,7 +516,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/carpet, null)
+	floor_tile = new /obj/item/stack/tile/carpet(null)
 
 	update_icon()
 	levelupdate()
@@ -531,13 +558,16 @@ turf/simulated/floor/update_icon()
 				floor_tile.forceMove(src)
 				floor_tile = null
 			else
+				//No longer phazon, not a teleport destination
+				if(material=="phazon")
+					phazontiles -= src
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
 				floor_tile.forceMove(src)
 				floor_tile = null
 
 		make_plating()
 		// Can't play sounds from areas. - N3X
-		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
+		C.playtoolsound(src, 80)
 
 		return
 	else if(C.is_screwdriver(user))
@@ -550,7 +580,7 @@ turf/simulated/floor/update_icon()
 					new floor_tile.type(src)
 
 			make_plating()
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			C.playtoolsound(src, 80)
 		return
 	else if(istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
@@ -568,45 +598,15 @@ turf/simulated/floor/update_icon()
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 		return
 	else if(istype(C, /obj/item/stack/tile))
-		if(is_plating())
+		if(istype(C, /obj/item/stack/tile/metal/plasteel))
+			to_chat(user, "<span class='warning'>This floor needs something to anchor this kind of tile to, add some rods first.</span>")
+		else if(is_plating())
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					if(floor_tile)
-						returnToPool(floor_tile)
-					floor_tile = null
-					floor_tile = getFromPool(T.type, null)
-					material = floor_tile.material
-					intact = 1
-					plane = TURF_PLANE
-					if(istype(T,/obj/item/stack/tile/light))
-						var/obj/item/stack/tile/light/L = T
-						var/obj/item/stack/tile/light/F = floor_tile
-						F.color_r = L.color_r
-						F.color_g = L.color_g
-						F.color_b = L.color_b
-						F.on = L.on
-					if(istype(T,/obj/item/stack/tile/grass))
-						for(var/direction in cardinal)
-							if(istype(get_step(src,direction),/turf/simulated/floor))
-								var/turf/simulated/floor/FF = get_step(src,direction)
-								FF.update_icon() //so siding gets updated properly
-					else if(istype(T,/obj/item/stack/tile/carpet))
-						for(var/direction in alldirs)
-							if(istype(get_step(src,direction),/turf/simulated/floor))
-								var/turf/simulated/floor/FF = get_step(src,direction)
-								FF.update_icon() //so siding gets updated properly
-					update_icon()
-					levelupdate()
-					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+					make_metal_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
-	else if(istype(C, /obj/item/stack/cable_coil))
-		if(can_place_cables())
-			var/obj/item/stack/cable_coil/coil = C
-			coil.turf_place(src, user)
-		else
-			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 	else if(isshovel(C))
 		if(is_grass_floor())
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
@@ -624,17 +624,17 @@ turf/simulated/floor/update_icon()
 				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
 	else if(iswelder(C))
-		var/obj/item/weapon/weldingtool/welder = C
+		var/obj/item/tool/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
-				if(welder.remove_fuel(0,user))
+				if(welder.remove_fuel(1,user))
 					to_chat(user, "<span class='warning'>You fix some dents on the broken plating.</span>")
-					playsound(src, 'sound/items/Welder.ogg', 80, 1)
+					welder.playtoolsound(src, 80)
 					icon_state = "plating"
 					burnt = 0
 					broken = 0
 				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 
 /turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()
@@ -644,7 +644,7 @@ turf/simulated/floor/update_icon()
 			if("bananium")
 				if(!spam_flag)
 					spam_flag = 1
-					playsound(src, "clownstep", 50, 1)
+					playsound(src, enter_sound, 50, 1)
 					spawn(20)
 						spam_flag = 0
 			if("uranium")
@@ -652,6 +652,7 @@ turf/simulated/floor/update_icon()
 					spam_flag = 1
 					set_light(3)
 					icon_state = "uranium_inactive"
+					emitted_harvestable_radiation(src, 2, range = 5)
 					for(var/mob/living/L in range(2,src)) //Weak radiation
 						L.apply_radiation(3,RAD_EXTERNAL)
 					flick("uranium_active",src)
@@ -681,21 +682,21 @@ turf/simulated/floor/update_icon()
 			return
 		qdel(P)
 
-
-/turf/simulated/floor/attack_construct(mob/user as mob)
+/turf/simulated/floor/attack_construct(var/mob/user)
 	if(istype(src,/turf/simulated/floor/carpet))
 		return//carpets are cool
 	if(istype(user,/mob/living/simple_animal/construct/builder))
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
 			S.perform(user, 0, list(src))
-			//var/obj/abstract/screen/spell/SS = S.connected_button
-			//SS.update_charge(1)
 			return 1
 	return 0
 
 /turf/simulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+		//No longer phazon, not a teleport destination
+		if(material=="phazon")
+			phazontiles -= src
 		name = "engraved floor"
 		icon = 'icons/turf/floors.dmi'
 		icon_state = "cult"

@@ -20,12 +20,18 @@ except ImportError:
     Fore = ColorDummy()
     Style = ColorDummy()
 
-BAD_STRINGS = {
+MAP_SANITY = {
     "step_x": re.compile(r"\bstep_x\b"),
     "step_y": re.compile(r"\bstep_y\b"),
     "layer": re.compile(r"\blayer\b"),
     "pixel_w" : re.compile(r"\bpixel_w\b") # This causes the map to require 511/512 to play on.
 }
+
+ITEMS_BLACKLIST = {
+    "rigsuit helmet": re.compile(r"\/obj\/item\/clothing\/head\/helmet\/space\/rig")
+}
+
+BAD_STRINGS = {**MAP_SANITY, **ITEMS_BLACKLIST}
 
 def main():
     if len(sys.argv) != 2:
@@ -36,14 +42,15 @@ def main():
     rootpath = sys.argv[1]
     for root, _, files in os.walk(rootpath):
         for filename in files:
-            if not checkfile(os.path.join(root, filename)):
+            # we don't care if blacklist items are mapped in vaults/away missions, but we still check for step_
+            if not checkfile(os.path.join(root, filename), BAD_STRINGS if root.endswith('maps/') else MAP_SANITY):
                 passed = False
 
     if not passed:
         exit(1)
 
 
-def checkfile(filename):
+def checkfile(filename, badstrings: dict):
     if not filename.endswith(".dmm"):
         return True
 
@@ -51,7 +58,7 @@ def checkfile(filename):
     print(Fore.CYAN + Style.DIM + "Checking file: {}".format(filename) + Style.RESET_ALL)
     with open(filename, "r") as f:
         for linenumber, line in enumerate(f.readlines()):
-            for string, regex in BAD_STRINGS.items():
+            for string, regex in badstrings.items():
                 if regex.search(line) != None:
                     print(Fore.RED + ("ERROR: '{}' found on line {}. Remove it, please."
                           .format(string, linenumber+1)) + Style.RESET_ALL)

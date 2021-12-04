@@ -466,7 +466,7 @@ var/global/list/atmos_controllers = list()
 				return 1
 			if("scrubbers_gases")
 				var/gas = href_list["gas"]
-				if(gas && gas in selected_preset.scrubbers_gases)
+				if(gas && (gas in selected_preset.scrubbers_gases))
 					selected_preset.scrubbers_gases[gas] = !selected_preset.scrubbers_gases[gas] //toggle scrubbing for it
 				return 1
 

@@ -11,10 +11,7 @@
 	see_in_dark = 7
 	var/dash_dir = null
 	var/turf/crashing = null
-
-/mob/living/simple_animal/construct/armoured/perfect/New()
-	..()
-	setupfloat()
+	spell_on_use_inhand = /spell/juggerdash //standard jug gets forcewall, but this seems better for perfect
 
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
 	if(src.throwing)
@@ -71,7 +68,7 @@
 					L.locked_to.unlock_atom(L)
 				L.Stun(2)
 				L.Knockdown(2)
-				L.apply_effect(STUTTER, 5)
+				L.apply_effect(5, STUTTER)
 				playsound(src, 'sound/weapons/heavysmash.ogg', 50, 0, 0)
 				breakthrough = 1
 		else
@@ -107,123 +104,17 @@
 	icon_living = "wraith2"
 	icon_dead = "wraith2"
 	see_in_dark = 7
-	construct_spells = list(/spell/targeted/ethereal_jaunt/shift/alt)
-	var/ranged_cooldown = 0
-	var/ammo = 3
-	var/ammo_recharge = 0
+	construct_spells = list(
+		/spell/targeted/ethereal_jaunt/shift/alt,
+		/spell/wraith_warp,
+		/spell/aoe_turf/conjure/path_entrance,
+		/spell/aoe_turf/conjure/path_exit,
+		)
+	var/warp_ready = FALSE
 
-/mob/living/simple_animal/construct/wraith/perfect/New()
-	..()
-	setupfloat()
-
-/mob/living/simple_animal/construct/wraith/perfect/Life()
-	if(timestopped)
-		return 0
-	. = ..()
-	ranged_cooldown = max(0,ranged_cooldown-1)
-	if (ammo < 3)
-		ammo_recharge++
-		if (ammo_recharge >= 3)
-			ammo_recharge = 0
-			ammo++
-
-/mob/living/simple_animal/construct/wraith/perfect/RangedAttack(var/atom/A, var/params)
-	if(ranged_cooldown <= 0 && ammo)
-		ammo--
-		generic_projectile_fire(A, src, /obj/item/projectile/wraithnail, 'sound/weapons/hivehand.ogg')
-	return ..()
-
-/obj/item/projectile/wraithnail
-	icon = 'icons/obj/projectiles_experimental.dmi'
-	icon_state = "wraithnail"
-	damage = 5
-
-
-/obj/item/projectile/wraithnail/to_bump(var/atom/A)
-	if(bumped)
-		return 0
-	bumped = 1
-
-	if(A)
-		setDensity(FALSE)
-		invisibility = 101
-		kill_count = 0
-		var/obj/effect/overlay/wraithnail/nail = new (A.loc)
-		nail.transform = transform
-		if(isliving(A))
-			nail.stick_to(A)
-			var/mob/living/L = A
-			L.take_overall_damage(damage,0)
-		else if(loc)
-			var/turf/T = get_turf(src)
-			nail.stick_to(T,get_dir(src,A))
-		bullet_die()
-
-/obj/item/projectile/wraithnail/bump_original_check()
-	if(!bumped)
-		if(loc == get_turf(original))
-			if(!(original in permutated))
-				to_bump(original)
-
-/obj/effect/overlay/wraithnail
-	name = "red bolt"
-	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
-	icon = 'icons/effects/effects.dmi'
-	icon_state = "wraithnail"
-	anchored = 1
-	density = 0
-	plane = ABOVE_HUMAN_PLANE
-	layer = CLOSED_CURTAIN_LAYER
-	var/atom/stuck_to = null
-	var/duration = 100
-
-/obj/effect/overlay/wraithnail/New()
-	..()
-	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
-	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
-
-/obj/effect/overlay/wraithnail/Destroy()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	stuck_to = null
-	..()
-
-/obj/effect/overlay/wraithnail/proc/stick_to(var/atom/A, var/side = null)
-	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
-	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
-	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
-	var/turf/T = get_turf(A)
-	loc = T
-	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
-
-	if(isturf(A))
-		switch(side)
-			if(NORTH)
-				pixel_y = WORLD_ICON_SIZE/2
-			if(SOUTH)
-				pixel_y = -WORLD_ICON_SIZE/2
-			if(EAST)
-				pixel_x = WORLD_ICON_SIZE/2
-			if(WEST)
-				pixel_x = -WORLD_ICON_SIZE/2
-
-	else if(isliving(A) && !isspace(T))
-		stuck_to = A
-		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
-		lock_atom(A, /datum/locking_category/buckle)
-
-	spawn(duration)
-		qdel(src)
-
-
-/obj/effect/overlay/wraithnail/attack_hand(var/mob/user)
-	if (do_after(user,src,15))
-		unstick()
-
-/obj/effect/overlay/wraithnail/proc/unstick()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	qdel(src)
+/mob/living/simple_animal/construct/wraith/perfect/toggle_throw_mode()
+	var/spell/wraith_warp/WW = locate() in spell_list
+	WW.perform(src)
 
 
 ////////////////////Artificer/////////////////////////
@@ -248,17 +139,14 @@
 	var/heal_range = 2
 	var/list/minions = list()
 
-/mob/living/simple_animal/construct/builder/perfect/New()
-	..()
-	setupfloat()
-
 /mob/living/simple_animal/construct/builder/perfect/Life()
 	if(timestopped)
 		return 0
 	. = ..()
 	if(. && heal_target)
 		heal_target.health = min(heal_target.maxHealth, heal_target.health + round(heal_target.maxHealth/10))
-		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+		heal_target.update_icons()
+		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 		move_ray()
 		process_construct_hud(src)
 
@@ -390,24 +278,42 @@
 	flying = 1
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
+	var/no_master = TRUE
 
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
-	overlays = 0
-	var/overlay_layer = ABOVE_LIGHTING_LAYER
-	var/overlay_plane = LIGHTING_PLANE
-	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
-	glow.plane = overlay_plane
-	overlays += glow
+	setupglow(rgb(255,255,255))
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
+
+/mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
+	overlays = 0
+	var/overlay_layer = ABOVE_LIGHTING_LAYER
+	var/overlay_plane = ABOVE_LIGHTING_PLANE
+	if(layer != MOB_LAYER) // ie it's hiding
+		overlay_layer = FLOAT_LAYER
+		overlay_plane = FLOAT_PLANE
+
+	var/icon/glowicon = icon(icon,"glow-[icon_state]")
+	glowicon.Blend(glowcolor, ICON_ADD)
+	var/image/glow = image(icon = glowicon, layer = overlay_layer)
+	glow.plane = relative_plane(overlay_plane)
+	overlays += glow
 
 /mob/living/simple_animal/hostile/hex/Destroy()
 	if (master)
 		master.minions.Remove(src)
 	master = null
 	..()
+
+/mob/living/simple_animal/hostile/hex/Life()
+	if(timestopped)
+		return 0
+	. = ..()
+	if (!no_master)
+		if (!master || master.gcDestroyed || master.isDead())
+			adjustBruteLoss(20)//we shortly die out after our master's demise
 
 /mob/living/simple_animal/hostile/hex/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile/bloodslash))//stop hitting yourself ffs!
@@ -438,3 +344,329 @@
 
 /mob/living/simple_animal/hostile/hex/cultify()
 	return
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+var/list/astral_projections = list()
+
+/mob/living/simple_animal/astral_projection
+	name = "astral projection"
+	real_name = "astral projection"
+	desc = "A fragment of a cultist's soul, freed from the laws of physics."
+	icon = 'icons/mob/mob.dmi'
+	icon_state = "ghost-narsie"
+	icon_living = "ghost-narsie"
+	icon_dead = "ghost-narsie"
+	maxHealth = 1
+	health = 1
+	melee_damage_lower = 0
+	melee_damage_upper = 0
+	minbodytemp = 0
+	maxbodytemp = 4000
+	min_oxy = 0
+	max_co2 = 0
+	max_tox = 0
+	speed = 1
+	stop_automated_movement = TRUE
+	faction = "cult"
+	supernatural = TRUE
+	flying = TRUE
+	mob_property_flags = MOB_SUPERNATURAL
+	speed = 0.5
+	forced_density = 1
+	density = 0
+	lockflags = 0
+	canmove = 0
+	blinded = 0
+	anchored = 1
+	flags = HEAR | TIMELESS | INVULNERABLE
+	universal_understand = 1
+	universal_speak = 1
+	plane = GHOST_PLANE
+	layer = GHOST_LAYER
+	invisibility = INVISIBILITY_CULTJAUNT
+	see_invisible = SEE_INVISIBLE_CULTJAUNT
+	incorporeal_move = INCORPOREAL_GHOST
+	alpha = 127
+	now_pushing = 1 //prevents pushing atoms
+
+	//keeps track of whether we're in "ghost" form or "slightly less ghost" form
+	var/tangibility = FALSE
+
+	//the cultist's original body
+	var/mob/living/anchor
+
+	var/image/incorporeal_appearance
+	var/image/tangible_appearance
+
+	var/time_last_speech = 0//speech bubble cooldown
+
+	//sechud stuff
+	var/cardjob = "hudunknown"
+
+	//convertibility HUD
+	var/list/propension = list()
+
+	var/projection_destroyed = FALSE
+	var/direct_delete = FALSE
+
+
+/mob/living/simple_animal/astral_projection/New()
+	..()
+	astral_projections += src
+
+	incorporeal_appearance = image('icons/mob/mob.dmi',"blank")
+	tangible_appearance = image('icons/mob/mob.dmi',"blank")
+	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
+	see_in_dark = 100
+	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
+	add_spell(new /spell/astral_return, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	add_spell(new /spell/astral_toggle, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
+/mob/living/simple_animal/astral_projection/Login()
+	..()
+	client.CAN_MOVE_DIAGONALLY = 1
+
+	if (!tangibility)
+		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
+		update_fullscreen_alpha("astralborder", 255, 5)
+
+	//astral projections can identify cultists
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		return
+	for(var/datum/role/cultist in cult.members)
+		if(cultist.antag && cultist.antag.current)
+			var/imageloc = cultist.antag.current
+			if(istype(cultist.antag.current.loc,/obj/mecha))
+				imageloc = cultist.antag.current.loc
+			var/hud_icon = cultist.logo_state
+			var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
+			I.pixel_x = 20 * PIXEL_MULTIPLIER
+			I.pixel_y = 20 * PIXEL_MULTIPLIER
+			I.plane = ANTAG_HUD_PLANE
+			client.images += I
+
+
+/mob/living/simple_animal/astral_projection/proc/destroy_projection()
+	if (projection_destroyed)
+		return
+	projection_destroyed = TRUE
+	astral_projections -= src
+	//the projection has ended, let's return to our body
+	if (anchor && anchor.stat != DEAD && client)
+		if (key)
+			if (tangibility)
+				var/obj/effect/afterimage/A = new (loc,anchor,10)
+				A.dir = dir
+				for(var/mob/M in dview(world.view, loc, INVISIBILITY_MAXIMUM))
+					if (M.client)
+						M.playsound_local(loc, get_sfx("disappear_sound"), 75, 0, -2)
+			anchor.key = key
+			to_chat(anchor, "<span class='notice'>You reconnect with your body.</span>")
+			anchor.ajourn = null
+	//if our body was somehow already destroyed however, we'll become a shade right here
+	else if(client)
+		var/turf/T = get_turf(src)
+		if (T)
+			var/mob/living/simple_animal/shade/shade = new (T)
+			playsound(T, 'sound/hallucinations/growl1.ogg', 50, 1)
+			shade.name = "[real_name] the Shade"
+			shade.real_name = "[real_name]"
+			mind.transfer_to(shade)
+			shade.key = key
+			update_faction_icons()
+			to_chat(shade, "<span class='sinister'>It appears your body was unfortunately destroyed. The remains of your soul made their way to your astral projection where they merge together, forming a shade.</span>")
+	invisibility = 101
+	setDensity(FALSE)
+	sleep(20)
+	if (!direct_delete)
+		qdel(src)
+
+/mob/living/simple_animal/astral_projection/Destroy()
+	if (!projection_destroyed)
+		direct_delete = TRUE
+		destroy_projection()
+	..()
+
+/mob/living/simple_animal/astral_projection/Life()
+	. = ..()
+
+	if (anchor)
+		var/turf/T = get_turf(anchor)
+		var/turf/U = get_turf(src)
+		if (T.z != U.z)
+			to_chat(src, "<span class='warning'>You cannot sustain the astral projection at such a distance.</span>")
+			death()
+			return
+	else
+		death()
+		return
+
+	//convertibility HUD
+	if (!tangibility && client)
+		client.images -= propension
+		propension.len = 0
+
+		for(var/mob/living/carbon/C in range(client.view+DATAHUD_RANGE_OVERHEAD, get_turf(src)))
+			C.update_convertibility()
+			propension += C.hud_list[CONVERSION_HUD]
+
+		client.images += propension
+
+/mob/living/simple_animal/astral_projection/death(var/gibbed = FALSE)
+	spawn()
+		destroy_projection(src)
+
+/mob/living/simple_animal/astral_projection/examine(mob/user)
+	if (!tangibility)
+		if ((user == src) && anchor)
+			to_chat(user, "<span class='notice'>You check yourself to see how others would see you were you tangible:</span>")
+			anchor.examine(user)
+		else if (iscultist(user))
+			to_chat(user, "<span class='notice'>It's an astral projection.</span>")
+		else
+			to_chat(user, "<span class='sinister'>Wait something's not right here.</span>")//it's a g-g-g-g-ghost!
+	else if (anchor)
+		anchor.examine(user)//examining the astral projection alone won't be enough to see through it, although the user might want to make sure they cannot be identified first.
+
+//no pulling stuff around
+/mob/living/simple_animal/astral_projection/start_pulling(var/atom/movable/AM)
+	return
+
+//no dragging shit into disposals and whatnot
+/mob/living/simple_animal/astral_projection/canMouseDrag()
+	return FALSE
+
+//no resting
+/mob/living/simple_animal/astral_projection/rest_action()
+	return
+
+//and certainly no punching, you're barely more than a ghost
+/mob/living/simple_animal/astral_projection/unarmed_attack_mob(mob/living/target)
+	return
+
+//this should prevent most other edge cases
+/mob/living/simple_animal/astral_projection/incapacitated()
+	return TRUE
+
+//bullets instantly end us
+/mob/living/simple_animal/astral_projection/bullet_act(var/obj/item/projectile/P)
+	if (tangibility)
+		death()
+		return PROJECTILE_COLLISION_MISS//the bullet keeps moving past it
+
+//so does a suicide attempt
+/mob/living/simple_animal/astral_projection/attempt_suicide(forced = 0, suicide_set = 1)
+	death()
+
+/mob/living/simple_animal/astral_projection/ex_act(var/severity)
+	death()
+
+//called once when we are created, shapes our appearance in the image of our anchor
+/mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
+	if (!body)
+		return
+	anchor = body
+	//memorizing our anchor's appearance so we can toggle to it
+	tangible_appearance = body.appearance
+
+	//getting our ghostly looks
+	overlays.len = 0
+	if (ishuman(body))
+		var/mob/living/carbon/human/H = body
+		//instead of just adding an overlay of the body's uniform and suit, we'll first process them a bit so the leg part is mostly erased, for a ghostly look.
+		overlays += crop_human_suit_and_uniform(body)
+		overlays += H.obj_overlays[ID_LAYER]
+		overlays += H.obj_overlays[EARS_LAYER]
+		overlays += H.obj_overlays[GLASSES_LAYER]
+		overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
+		overlays += H.obj_overlays[BELT_LAYER]
+		overlays += H.obj_overlays[BACK_LAYER]
+		overlays += H.obj_overlays[HEAD_LAYER]
+		overlays += H.obj_overlays[HANDCUFF_LAYER]
+
+	//giving control to the player
+	key = body.key
+
+	//name  & examine stuff
+	desc = body.desc
+	gender = body.gender
+	if(body.mind && body.mind.name)
+		name = body.mind.name
+	else
+		if(body.real_name)
+			name = body.real_name
+		else
+			if(gender == MALE)
+				name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+			else
+				name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+	real_name = name
+
+	//important to trick sechuds
+	var/obj/item/weapon/card/id/card = body.get_id_card()
+	if(card)
+		cardjob = card.GetJobName()
+
+	//memorizing our current appearance so we can toggle back to it later. Has to be done AFTER setting our new name.
+	incorporeal_appearance = appearance
+
+	//we don't transfer the mind but we keep a reference to it.
+	mind = body.mind
+
+
+/mob/living/simple_animal/astral_projection/proc/toggle_tangibility()
+	if (tangibility)
+		setDensity(FALSE)
+		appearance = incorporeal_appearance
+		canmove = 0
+		incorporeal_move = 1
+		flying = 1
+		flags = HEAR | TIMELESS | INVULNERABLE
+		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+		speed = 0.5
+		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
+		update_fullscreen_alpha("astralborder", 255, 5)
+		var/obj/effect/afterimage/A = new (loc,anchor,10)
+		A.dir = dir
+	else
+		setDensity(TRUE)
+		appearance = tangible_appearance
+		canmove = 1
+		incorporeal_move = 0
+		stop_flying()
+		flags = HEAR | PROXMOVE
+		see_invisible = SEE_INVISIBLE_CULTJAUNT//still can see some hidden things
+		speed = 1
+		clear_fullscreen("astralborder", animate = 0)
+		alpha = 0
+		animate(src, alpha = 255, time = 10)
+		if (client)
+			client.images -= propension
+
+	tangibility = !tangibility
+
+//saycode
+/mob/living/simple_animal/astral_projection/say(var/message, bubble_type)
+	. = ..(tangibility ? "[message]" : "..[message]",tangibility ? "" : "C")
+	//adding a few dots before the message when intangible so the message isn't truncated when formated for cult chat
+
+	if(tangibility && ishuman(anchor) && config.voice_noises && world.time>time_last_speech+5 SECONDS)
+		time_last_speech = world.time
+		for(var/mob/O in hearers())
+			if(!O.is_deaf() && O.client)
+				O.client.handle_hear_voice(src)
+
+
+/mob/living/simple_animal/astral_projection/get_message_mode(message)
+	if(!tangibility)
+		return MODE_CULTCHAT//chatting while intangible always sends messages to cult chat
+	else
+		return ..()
+
+/mob/living/simple_animal/astral_projection/cult_chat_check(setting)
+	if(!mind)
+		return
+	if(find_active_faction_by_member(iscultist(src)))//can also use cult chat while tangible when using :x
+		return 1

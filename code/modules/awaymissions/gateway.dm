@@ -37,6 +37,12 @@ var/list/gateways = list() //List containing the gateways on away missions
 	var/wait = 0				//this just grabs world.time at world start
 	var/obj/machinery/gateway/centeraway/awaygate = null
 
+/obj/machinery/gateway/centerstation/proc/admin_active()
+	detect()
+	initialize()
+	wait = 0
+	toggleon()
+
 /obj/machinery/gateway/centerstation/initialize()
 	update_icon()
 	wait = world.time + config.gateway_delay	//+ thirty minutes default
@@ -51,7 +57,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 
 
 
-obj/machinery/gateway/centerstation/process()
+/obj/machinery/gateway/centerstation/process()
 	if(stat & (NOPOWER))
 		if(active)
 			toggleoff()
@@ -173,7 +179,7 @@ obj/machinery/gateway/centerstation/process()
 
 /obj/machinery/gateway/centeraway/Destroy()
 	gateways.Remove(src)
-	
+
 	..()
 
 /obj/machinery/gateway/centeraway/initialize()
@@ -266,7 +272,10 @@ obj/machinery/gateway/centerstation/process()
 			calibrated = 1
 			return
 
-/obj/machinery/gateway/centerstation/attack_ghost(mob/user as mob)
+/obj/machinery/gateway/centerstation/attack_ghost(mob/user)
+	if (isAdminGhost(user) && existing_away_missions.len)
+		admin_active()
+		return
 	return src.Bumped(user)
 
 /obj/machinery/gateway/centeraway/attack_ghost(mob/user as mob)

@@ -28,17 +28,29 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/getFireFuel()
 	return fire_fuel
 
-/atom/proc/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
+/atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
-	if(fire_fuel<=0.1)
+	if(fire_fuel <= 0.1)
 		//testing("[src] ashifying (BFF)!")
 		ashify()
+
+/atom/proc/burnItselfUp()
+	while(on_fire)
+		var/in_fire = FALSE
+		for(var/obj/effect/fire/F in loc)
+			in_fire = TRUE
+			break
+		if(!in_fire)
+			var/used_ratio = min(0.2 / getFireFuel(), 1) //To maintain the previous behavior of just using 0.2 fire_fuel
+			burnFireFuel(1, used_ratio) //1 is valid as used_fuel_ratio and the two arguments should multiply to used_ratio, so this is simplest.
+		sleep(2 SECONDS)
 
 /atom/proc/ashify()
 	if(!on_fire)
 		return
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
+	extinguish()
 	qdel(src)
 
 /atom/proc/extinguish()
@@ -52,6 +64,8 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
+	spawn()
+		burnItselfUp()
 
 /atom/proc/melt()
 	return //lolidk
@@ -86,7 +100,7 @@ Attach to transfer valve and open. BOOM.
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
-	var/obj/effect/effect/foam/fire/W = locate() in contents
+	var/obj/effect/foam/fire/W = locate() in contents
 	if(istype(W))
 		return 0
 	if(fire_protection > world.time-300)
@@ -223,7 +237,7 @@ Attach to transfer valve and open. BOOM.
 					continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
-				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
+				var/obj/effect/foam/fire/W = locate() in enemy_tile
 				if(istype(W))
 					firelevel -= 3
 					continue
@@ -262,13 +276,13 @@ Attach to transfer valve and open. BOOM.
 	set_light(0)
 	..()
 
-turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
-turf/proc/apply_fire_protection()
-turf/simulated/apply_fire_protection()
+/turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
+/turf/proc/apply_fire_protection()
+/turf/simulated/apply_fire_protection()
 	fire_protection = world.time
 
 
-datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
+/datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	// NOTE: zburn is also called from canisters and in tanks/pipes (via react()).  Do NOT assume T is always a turf.
 	//  In the aforementioned cases, it's null. - N3X.
 	var/value = 0
@@ -307,7 +321,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		var/total_reactants = total_fuel + total_oxygen
 
 		//determine the amount of reactants actually reacting
-		var/used_reactants_ratio = Clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), Clamp(0.2 / total_reactants, 0, 1), 1)
+		var/used_reactants_ratio = clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), clamp(0.2 / total_reactants, 0, 1), 1)
 
 		//remove and add gasses as calculated
 		adjust_multi(
@@ -366,7 +380,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 
 	return still_burning
 
-datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
+/datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	//this check comes up very often and is thus centralized here to ease adding stuff
 	// zburn is used in tank fires, as well. This check, among others, broke tankbombs. - N3X
 	/*
@@ -390,7 +404,7 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 
 	return 0
 
-datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
+/datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	//Calculates the firelevel based on one equation instead of having to do this multiple times in different areas.
 
 	var/total_fuel = 0
@@ -460,10 +474,10 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 
 	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
 
-	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, "Fire")
-	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, "Fire")
-	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, "Fire")
+	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")

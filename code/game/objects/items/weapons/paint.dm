@@ -1,6 +1,7 @@
 //NEVER USE THIS IT SUX	-PETETHEGOAT
 
 var/global/list/cached_icons = list()
+var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 
 /obj/item/weapon/reagent_containers/glass/paint
 	desc = "A bucket containing paint."
@@ -18,7 +19,7 @@ var/global/list/cached_icons = list()
 	flags = FPRINT | OPENCONTAINER
 	var/paint_type = ""
 
-/obj/item/weapon/reagent_containers/glass/paint/suicide_act(mob/user)
+/obj/item/weapon/reagent_containers/glass/paint/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is taking \his hand and eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -62,9 +63,9 @@ var/global/list/cached_icons = list()
 	icon_state = "paint_yellow"
 	paint_type = "yellow"
 
-/obj/item/weapon/reagent_containers/glass/paint/violet
-	icon_state = "paint_violet"
-	paint_type = "violet"
+/obj/item/weapon/reagent_containers/glass/paint/purple
+	icon_state = "paint_purple"
+	paint_type = "purple"
 
 /obj/item/weapon/reagent_containers/glass/paint/black
 	icon_state = "paint_black"
@@ -106,10 +107,10 @@ var/global/list/cached_icons = list()
 	color = "FFFF00"
 	icon_state = "paint_yellow"
 
-/obj/item/weapon/paint/violet
-	name = "Violet paint"
+/obj/item/weapon/paint/purple
+	name = "Purple paint"
 	color = "FF00FF"
-	icon_state = "paint_violet"
+	icon_state = "paint_purple"
 
 /obj/item/weapon/paint/black
 	name = "Black paint"
@@ -139,7 +140,7 @@ var/global/list/cached_icons = list()
 				color = "00FF00"
 			if("yellow")
 				color = "FFFF00"
-			if("violet")
+			if("purple")
 				color = "FF00FF"
 			if("white")
 				color = "FFFFFF"
@@ -174,7 +175,7 @@ var/global/list/cached_icons = list()
 		return
 */
 
-datum/reagent/paint
+/datum/reagent/paint
 	name = "Paint"
 	id = "paint_"
 	description = "Floor paint is used to color floor tiles."
@@ -183,63 +184,66 @@ datum/reagent/paint
 	density = 1.808
 	specheatcap = 0.85
 
-	reaction_turf(var/turf/T, var/volume)
-		if(!istype(T) || istype(T, /turf/space))
-			return
-		var/ind = "[initial(T.icon)][color]"
-		if(!cached_icons[ind])
-			var/icon/overlay = new/icon(initial(T.icon))
-			overlay.Blend(color,ICON_MULTIPLY)
-			overlay.SetIntensity(1.4)
-			T.icon = overlay
-			cached_icons[ind] = T.icon
-		else
-			T.icon = cached_icons[ind]
+/datum/reagent/paint/reaction_turf(var/turf/T, var/volume)
+	if(!istype(T) || istype(T, /turf/space))
 		return
+	var/ind = "[initial(T.icon)][color]"
+	if(!cached_icons[ind])
+		var/icon/overlay = new/icon(initial(T.icon))
+		overlay.Blend(color,ICON_MULTIPLY)
+		overlay.SetIntensity(1.4)
+		T.icon = overlay
+		cached_icons[ind] = T.icon
+	else
+		T.icon = cached_icons[ind]
 
-	red
-		name = "Red Paint"
-		id = "paint_red"
-		color = "#FF0000"
+/datum/reagent/paint/red
+	name = "Red Paint"
+	id = "paint_red"
+	color = "#FF0000"
 
-	green
-		name = "Green Paint"
-		color = "#00FF00"
-		id = "paint_green"
+/datum/reagent/paint/green
+	name = "Green Paint"
+	color = "#00FF00"
+	id = "paint_green"
 
-	blue
-		name = "Blue Paint"
-		color = "#0000FF"
-		id = "paint_blue"
+/datum/reagent/paint/blue
+	name = "Blue Paint"
+	color = "#0000FF"
+	id = "paint_blue"
 
-	yellow
-		name = "Yellow Paint"
-		color = "#FFFF00"
-		id = "paint_yellow"
+/datum/reagent/paint/yellow
+	name = "Yellow Paint"
+	color = "#FFFF00"
+	id = "paint_yellow"
 
-	violet
-		name = "Violet Paint"
-		color = "#FF00FF"
-		id = "paint_violet"
+/datum/reagent/paint/purple
+	name = "Purple Paint"
+	color = "#FF00FF"
+	id = "paint_purple"
 
-	black
-		name = "Black Paint"
-		color = "#333333"
-		id = "paint_black"
+/datum/reagent/paint/black
+	name = "Black Paint"
+	color = "#333333"
+	id = "paint_black"
 
-	white
-		name = "White Paint"
-		color = "#FFFFFF"
-		id = "paint_white"
+/datum/reagent/paint/white
+	name = "White Paint"
+	color = "#FFFFFF"
+	id = "paint_white"
 
-datum/reagent/paint_remover
+/datum/reagent/paint_remover
 	name = "Paint Remover"
 	id = "paint_remover"
 	description = "Paint remover is used to remove floor paint from floor tiles."
 	reagent_state = 2
 	color = "#808080"
 
-	reaction_turf(var/turf/T, var/volume)
-		if(istype(T) && T.icon != initial(T.icon))
-			T.icon = initial(T.icon)
-		return
+/datum/reagent/paint_remover/reaction_turf(var/turf/T, var/volume)
+	if(istype(T) && T.icon != initial(T.icon))
+		T.icon = initial(T.icon)
+
+/datum/reagent/paint_remover/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.reagents.remove_reagents_by_type(paint_types, 2)

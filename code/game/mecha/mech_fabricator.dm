@@ -8,6 +8,9 @@
 #define MECH_SCREEN_ROBOT_PARTS		12
 #define	MECH_SCREEN_ROBOT_UPGRADES	13
 
+#define MECH_SCREEN_HARDSUIT_PARTS	51
+#define MECH_SCREEN_HARDSUIT_UPGRADES	52
+
 #define	MECH_SCREEN_EXOSUIT_TOOLS	21
 #define	MECH_SCREEN_EXOSUIT_MODULES	22
 #define	MECH_SCREEN_EXOSUIT_WEAPONS	23
@@ -30,7 +33,6 @@
 	desc = "A specialised fabricator for robotic and mechatronic components."
 	icon = 'icons/obj/robotics.dmi'
 	icon_state = "fab"
-	req_one_access = list(access_robotics)
 
 	research_flags = NANOTOUCH | HASOUTPUT | HASMAT_OVER | TAKESMATIN | ACCESS_EMAG | LOCKBOXES
 
@@ -73,6 +75,10 @@
 		"Exosuit_Weapons"=list(
 		),
 		"Robotic_Upgrade_Modules" = list(
+		),
+		"Hardsuit_Parts" = list(
+		),
+		"Hardsuit_Upgrades" = list(
 		),
 		"Misc"=list(
 		)

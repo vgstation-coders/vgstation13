@@ -85,8 +85,9 @@
 		head = null
 		success = 1
 		update_inv_head()
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else
-		..()
+		success = ..()
 
 	if(success)
 		if (W)

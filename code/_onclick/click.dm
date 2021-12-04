@@ -75,10 +75,7 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	on_clickon.Invoke(list(
-		"modifiers" = modifiers,
-		"target" = A
-	))
+	INVOKE_EVENT(src, /event/clickon, "user" = src,	"modifiers" = modifiers, "target" = A)
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
@@ -117,7 +114,10 @@
 		return
 
 	if(in_throw_mode)
-		throw_item(A)
+		if(!get_active_hand() && (a_intent == I_GRAB || a_intent == I_DISARM))
+			doTackle(A)
+		else
+			throw_item(A)
 		return
 
 	var/obj/item/held_item = get_active_hand()
@@ -143,21 +143,15 @@
 			item_attack_delay = held_item.attack_delay
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
-				if(ismob(A) && modifiers["def_zone"])
-					var/mob/M = A
-					var/def_zone
-					def_zone = modifiers["def_zone"]
-					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
-				else
-					resolved = A.attackby(held_item, src, params)
+				resolved = A.attackby(held_item, src, params)
 				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
-				if(!resolved && A && !A.gcDestroyed && held_item)
+				if(!resolved && A && !A.gcDestroyed && held_item && !held_item.gcDestroyed)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
 			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+			if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 
@@ -188,7 +182,7 @@
 	else
 		if(ismob(A))
 			delayNextAttack(10)
-		if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+		if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
 			return
 		RangedAttack(A, params)
 
@@ -250,8 +244,7 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	if(INVOKE_EVENT(on_ruattack,list("atom"=A))) //This returns 1 when doing an action intercept
-		return
+	INVOKE_EVENT(src, /event/ruattack, "atom" = A)
 
 /*
 	Middle click
@@ -269,7 +262,11 @@
 */
 
 /mob/proc/MiddleShiftClickOn(var/atom/A)
-	pointed(A)
+	A.MiddleShiftClick(src)
+
+/atom/proc/MiddleShiftClick(var/mob/user)
+	user.pointed(src)
+
 
 /*
 	Shift click
@@ -325,9 +322,15 @@
 			user.client.statpanel = T.name
 
 /mob/living/carbon/AltClick(var/mob/user)
-	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
-		src.give_item(user)
-		return
+	if(!(user == src) && user.Adjacent(src))
+		if((meat_type || butchering_drops) && (stat == DEAD))	//if the carbon has a meat, and if it is dead.
+			var/obj/item/item_in_hand = user.get_active_hand()
+			if(item_in_hand && (item_in_hand.sharpness_flags & SHARP_BLADE))
+				butcher()
+				return 1
+		else if(!isrobot(user))
+			src.give_item(user)
+			return
 	..()
 
 /*
@@ -345,7 +348,7 @@
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 
-	var/obj/item/projectile/beam/LE = getFromPool(/obj/item/projectile/beam, loc)
+	var/obj/item/projectile/beam/LE = new /obj/item/projectile/beam(loc)
 	LE.icon = 'icons/effects/genetics.dmi'
 	LE.icon_state = "eyelasers"
 	playsound(usr.loc, 'sound/weapons/laser2.ogg', 75, 1)
@@ -390,7 +393,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
-		Facing()
+		INVOKE_EVENT(src, /event/before_move)
+		INVOKE_EVENT(src, /event/face)
+		INVOKE_EVENT(src, /event/after_move)
 		return
 
 	if(abs(dx) < abs(dy))
@@ -404,7 +409,9 @@
 		else
 			change_dir(WEST)
 
-	Facing()
+	INVOKE_EVENT(src, /event/before_move)
+	INVOKE_EVENT(src, /event/face)
+	INVOKE_EVENT(src, /event/after_move)
 
 
 // File renamed to mouse.dm?

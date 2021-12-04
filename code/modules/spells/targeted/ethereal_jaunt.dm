@@ -3,7 +3,7 @@
 	desc = "This spell creates your ethereal form, temporarily making you invisible and able to pass through walls."
 	abbreviation = "EJ"
 	user_type = USER_TYPE_WIZARD
-	specialization = UTILITY
+	specialization = SSUTILITY
 
 	school = "transmutation"
 	charge_max = 300
@@ -13,12 +13,14 @@
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
 	duration = 50 //in deciseconds
+	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 
 	hud_state = "wiz_jaunt"
 
 	var/enteranim = "liquify"
 	var/exitanim = "reappear"
 	var/mist = 1
+	var/empowered
 
 /image/jaunter
 
@@ -27,26 +29,40 @@
 
 /spell/targeted/ethereal_jaunt/cast(list/targets)
 	if(targets.len > 1)
-		mass_jaunt(targets, duration, enteranim, exitanim, mist)
+		mass_jaunt(targets, duration, enteranim, exitanim, mist, empowered)
 	else
-		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist)
+		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist, empowered)
 
-/proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1)
+/spell/targeted/ethereal_jaunt/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Makes you faster while jaunting."
+	return ..()
+
+/spell/targeted/ethereal_jaunt/empower_spell()
+	if(!can_improve(Sp_POWER))
+		return 0
+	spell_levels[Sp_POWER]++
+	empowered = 1
+
+/proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, var/empowered)
 	var/mobloc = get_turf(target)
 	var/previncorp = target.incorporeal_move //This shouldn't ever matter under usual circumstances
-	if(target.incorporeal_move == INCORPOREAL_ETHEREAL) //they're already jaunting, we have another fix for this but this is sane
+	if(target.incorporeal_move) //they're already jaunting, we have another fix for this but this is sane
 		return
 	target.unlock_from()
 	//Begin jaunting with an animation
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	if(mist)
 		target.ExtinguishMob()
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, mobloc)
 		steam.start()
 
 	//Turn on jaunt incorporeal movement, make him invincible and invisible
-	target.incorporeal_move = INCORPOREAL_ETHEREAL
+	if(empowered)
+		target.incorporeal_move = INCORPOREAL_ETHEREAL_IMPROVED
+	else
+		target.incorporeal_move = INCORPOREAL_ETHEREAL
 	target.invisibility = INVISIBILITY_MAXIMUM
 	target.flags |= INVULNERABLE
 	var/old_density = target.density
@@ -61,18 +77,24 @@
 
 	sleep(duration)
 
+	if (target.gcDestroyed)
+		return
+
 	//Begin unjaunting
 	mobloc = get_turf(target)
 	if(mist)
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, mobloc)
 		steam.start()
 	target.delayNextMove(25)
 	target.dir = SOUTH
 	sleep(20)
+	if (target.gcDestroyed)
+		return
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	sleep(5)
-
+	if (target.gcDestroyed)
+		return
 	//Forcemove him onto the tile and make him visible and vulnerable
 	target.forceMove(mobloc)
 	target.invisibility = 0
@@ -94,23 +116,23 @@
 		jaunts[target] = I
 	for(var/mob/living/target in targets)
 		spawn(0)
-			if(target.incorporeal_move != INCORPOREAL_ETHEREAL) //To avoid the potential for infinite jaunt
+			if(target.incorporeal_move != INCORPOREAL_ETHEREAL && target.incorporeal_move != INCORPOREAL_ETHEREAL_IMPROVED)//To avoid the potential for infinite jaunt
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images += jaunts[A]
-				var/on_moved_holder = target.on_moved
-				target.on_moved = new("owner"=src)
-				target.on_moved.Add(jaunts[target],"update_dir")
+				target.register_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				ethereal_jaunt(target, duration, enteranim, exitanim, mist)
-				qdel(target.on_moved)
-				target.on_moved = on_moved_holder
+				target.unregister_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images -= jaunts[A]
 
+/proc/update_dir_on_moved_callback(atom/movable/mover)
+	mover.update_dir()
+
 /spell/targeted/ethereal_jaunt/jauntgroup
 	name = "Group Jaunt"
-	desc = "This spell allows all people within range to be jaunted along with the user"
+	desc = "This spell allows all people within range to be jaunted along with the user."
 	hud_state = "group_jaunt"
 	user_type = USER_TYPE_OTHER
 
@@ -125,7 +147,7 @@
 
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
-	desc = "This spell allows you to pass through walls"
+	desc = "This spell allows you to pass through walls."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200
@@ -142,7 +164,7 @@
 
 /spell/targeted/ethereal_jaunt/shift/alt
 	desc = "Vibrate through the veil for about 5 seconds, letting you move around freely through any obstacle."
-	charge_max = 170
+	charge_max = 150
 	hud_state = "const_phase"
 	enteranim = "wraith2_phaseenter"
 	exitanim = "wraith2_phaseexit"

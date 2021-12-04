@@ -31,18 +31,6 @@
 	else
 		return ..()
 
-//Looks like copy/pasted code... I doubt 'need_rebuild' is even used here - Nodrak
-/obj/machinery/shield/proc/update_nearby_tiles()
-	if (!SS_READY(SSair))
-		return 0
-
-	var/T = loc
-
-	if (isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
-
 /obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(!istype(W))
 		return
@@ -75,7 +63,7 @@
 
 /obj/machinery/shield/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	if(health <=0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
 		qdel(src)
@@ -257,7 +245,7 @@
 		update_icon()
 		return 1
 
-/obj/machinery/shieldgen/wrenchAnchor(var/mob/user)
+/obj/machinery/shieldgen/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(locked)
 		to_chat(user, "The bolts are covered, unlocking this would retract the covers.")
 		return FALSE
@@ -472,7 +460,7 @@
 		CF.forceMove(T)
 		CF.dir = field_dir
 
-/obj/machinery/shieldwallgen/wrenchAnchor(var/mob/user)
+/obj/machinery/shieldwallgen/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(active)
 		to_chat(user, "Turn off the field generator first.")
 		return FALSE
@@ -522,7 +510,7 @@
 
 /obj/machinery/shieldwallgen/bullet_act(var/obj/item/projectile/Proj)
 	storedpower -= Proj.damage
-	..()
+	return ..()
 
 //////////////Containment Field START
 /obj/machinery/shieldwall
@@ -533,12 +521,16 @@
 	anchored = 1
 	density = 1
 	luminosity = 3
+	pass_flags_self = PASSGLASS
 	var/needs_power = 0
 	var/active = 1
 	var/obj/machinery/shieldwallgen/gen_primary
 	var/obj/machinery/shieldwallgen/gen_secondary
 
 /obj/machinery/shieldwall/acidable()
+	return 0
+
+/obj/machinery/shieldwall/can_overload()
 	return 0
 
 /obj/machinery/shieldwall/New(var/obj/machinery/shieldwallgen/A, var/obj/machinery/shieldwallgen/B)
@@ -580,7 +572,7 @@
 		else
 			G = gen_secondary
 		G.storedpower -= Proj.damage
-	..()
+	return ..()
 
 
 /obj/machinery/shieldwall/ex_act(severity)
@@ -615,7 +607,7 @@
 	if(!mover)
 		return
 
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return prob(20)
 	else
 		if (istype(mover, /obj/item/projectile))

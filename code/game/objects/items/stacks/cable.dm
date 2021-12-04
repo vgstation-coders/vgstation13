@@ -36,9 +36,14 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"
 	attack_verb = list("whips", "lashes", "disciplines", "flogs")
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
-/obj/item/stack/cable_coil/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+// Noose suicides, now ported from hippie!
+/obj/item/stack/cable_coil/suicide_act(var/mob/living/user)
+	if(locate(/obj/item/weapon/stool) in get_turf(user))
+		user.visible_message("<span class='danger'>[user] is making a noose with \the [src.name]! It looks like \he's trying to commit suicide!</span>")
+	else
+		user.visible_message("<span class='danger'>[user] is strangling \himself with \the [src.name]! It looks like \he's trying to commit suicide!</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/stack/cable_coil/New(loc, amount, var/param_color = null)
@@ -55,6 +60,22 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 ///////////////////////////////////
 // General procedures
 ///////////////////////////////////
+
+/obj/item/stack/cable_coil/preattack(atom/target, mob/user, proximity_flag, params)
+	var/turf/target_turf
+
+	if(isturf(target))
+		target_turf = target
+		if(!target_turf.can_place_cables())
+			to_chat(user, "<span class='warning'>You can't place cables there.</span>")
+			return
+	else if(istype(target, /obj/structure/catwalk))
+		target_turf = get_turf(target)
+
+	if(target_turf)
+		turf_place(target_turf, user)
+	else
+		return ..()
 
 //You can use wires to heal robotics
 /obj/item/stack/cable_coil/attack(mob/M as mob, mob/user as mob)
@@ -120,9 +141,9 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 // - Wirecutters : Cut a piece off
 // - Cable coil : Merge the cables
 /obj/item/stack/cable_coil/attackby(obj/item/weapon/W, mob/user)
-	if((iswirecutter(W)) && (amount > 1))
+	if(W.is_wirecutter(user) && (amount > 1))
 		use(1)
-		getFromPool(/obj/item/stack/cable_coil, user.loc, 1, _color)
+		new /obj/item/stack/cable_coil(user.loc, 1, _color)
 		to_chat(user, "<span class='notice'>You cut a piece off the cable coil.</span>")
 		update_icon()
 		return
@@ -157,7 +178,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 			to_chat(user, "<span class='warning'>There already is a cable at that position.</span>")
 			return
 
-	var/obj/structure/cable/C = getFromPool(/obj/structure/cable, F)
+	var/obj/structure/cable/C = new /obj/structure/cable(F)
 	C.cableColor(_color)
 
 	//Set up the new cable
@@ -167,7 +188,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	C.update_icon()
 
 	//Create a new powernet with the cable, if needed it will be merged later
-	var/datum/powernet/PN = getFromPool(/datum/powernet)
+	var/datum/powernet/PN = new /datum/powernet
 	PN.add_cable(C)
 
 	C.mergeConnectedNetworks(C.d2)   //Merge the powernet with adjacents powernets
@@ -180,8 +201,8 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 	if(C.shock(user, 50))
 		if(prob(50)) //Fail
-			getFromPool(/obj/item/stack/cable_coil, C.loc, 1)
-			returnToPool(C)
+			new /obj/item/stack/cable_coil(C.loc, 1)
+			qdel(C)
 			return // let's not return the reference to a pooled cable
 
 	return C //What was our last known position?
@@ -260,8 +281,8 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 		if(C.shock(user, 50))
 			if(prob(50)) //Fail
-				getFromPool(/obj/item/stack/cable_coil, C.loc, 1, C.light_color)
-				returnToPool(C)
+				new /obj/item/stack/cable_coil(C.loc, 1, C.light_color)
+				qdel(C)
 				return
 
 		C.denode() //This call may have disconnected some cables that terminated on the centre of the turf, if so split the powernets.
@@ -271,7 +292,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /////////////////////////////
 
 /obj/item/stack/cable_coil/cut
-	item_state = "coil_red2"
 
 /obj/item/stack/cable_coil/cut/New(loc, amount, var/param_color = null)
 	..(loc)

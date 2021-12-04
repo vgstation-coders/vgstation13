@@ -6,7 +6,7 @@
 
 /datum/poster/tg_2//31
 	name = "Atmosia Declaration of Independence"
-	desc = "A relic of a failed rebellion"
+	desc = "A relic of a failed rebellion."
 	icon_state="poster2"
 
 /datum/poster/tg_3//32
@@ -48,8 +48,3 @@
 	name = "Hacking Guide"
 	desc = "This poster details the internal workings of the common Nanotrasen airlock."
 	icon_state="poster10"
-
-/datum/poster/goldstar//serial_number -1
-	name = "Award of Sufficiency"
-	desc = "The mere sight of it makes you very proud."
-	icon_state = "goldstar"

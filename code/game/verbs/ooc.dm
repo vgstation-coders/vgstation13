@@ -12,7 +12,8 @@
 		to_chat(src, "Guests may not use OOC.")
 		return
 
-	msg = utf8_sanitize(msg, src, MAX_MESSAGE_LEN)
+	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
+	msg = parse_emoji(msg, ooc_mode = TRUE)
 	if(!msg)
 		return
 
@@ -30,7 +31,7 @@
 		if(prefs.muted & MUTE_OOC)
 			to_chat(src, "<span class='warning'>You cannot use OOC (muted).</span>")
 			return
-		if(oocban_isbanned(ckey))
+		if(oocban_isbanned(ckey) || iscluwnebanned(mob))
 			to_chat(src, "<span class='warning'>You cannot use OOC (banned).</span>")
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))
@@ -60,7 +61,7 @@
 				display_colour = "#b82e00"	//orange
 
 	for(var/client/C in clients)
-		if(C.prefs.toggles & CHAT_OOC)
+		if((C.prefs.toggles & CHAT_OOC) && !iscluwnebanned(C.mob))
 			var/display_name = src.key
 			if(holder)
 				if(holder.fakekey)
@@ -108,7 +109,8 @@
 		to_chat(src, "Guests may not use OOC.")
 		return
 
-	msg = to_utf8(copytext(sanitize(msg), 1, MAX_MESSAGE_LEN), src)
+	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
+	msg = parse_emoji(msg, ooc_mode = TRUE)
 	if(!msg)
 		return
 
@@ -126,7 +128,7 @@
 		if(prefs.muted & MUTE_OOC)
 			to_chat(src, "<span class='warning'>You cannot use LOOC (muted).</span>")
 			return
-		if(oocban_isbanned(ckey))
+		if(oocban_isbanned(ckey) || iscluwnebanned(mob))
 			to_chat(src, "<span class='warning'>You cannot use LOOC (banned).</span>")
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))
@@ -162,20 +164,21 @@
 				C = E.ai.client
 		if(C.prefs.toggles & CHAT_LOOC)
 			var/display_name = src.key
+			var/is_living = isliving(src.mob) //Ghosts will show up with their ckey, living people show up with their names
 			if(holder)
 				if(holder.fakekey)
 					if(C.holder)
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
-			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>")
+			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[is_living ? src.mob.name : display_name]:</EM> <span class='message'>[msg]</span></span></font>")
 
 	for(var/client/C in admins)
 		if(C.prefs.toggles & CHAT_LOOC)
 			var/prefix = "(R)LOOC"
 			if (C.mob in heard)
 				prefix = "LOOC"
-			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>")
+			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[src.key]/[src.mob.name]:</EM> <span class='message'>[msg]</span></span></font>")
 	if(istype(AI))
 		var/client/C = AI.client
 		if (C in admins)
@@ -183,10 +186,11 @@
 
 		if(C.prefs.toggles & CHAT_LOOC)
 			var/display_name = src.key
+			var/is_living = isliving(src.mob)
 			if(holder)
 				if(holder.fakekey)
 					if(C.holder)
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
-			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>")
+			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[is_living ? src.mob.name : display_name]:</EM> <span class='message'>[msg]</span></span></font>")

@@ -1,3 +1,5 @@
+#define MALF_INITIAL_TIMER 1800
+
 /datum/faction/malf
 	name = "Malfunctioning AI"
 	desc = "ERROR"
@@ -8,6 +10,8 @@
 	initroletype = /datum/role/malfAI //First addition should be the AI
 	roletype = /datum/role/malfbot //Then anyone else should be bots
 	logo_state = "malf-logo"
+	default_admin_voice = "01100111 01101111 01100100" // god
+	admin_voice_style = "siliconsay"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
 	playlist = "malfdelta"
@@ -39,9 +43,12 @@
 				continue
 			if(isAI(R.antag.current) && !R.antag.current.isDead())
 				living_ais++
-		if(!living_ais)
+		if(!living_ais && stage<MALF_CHOOSING_NUKE)
 			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
+			var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+			if (istype(dynamic_mode))
+				dynamic_mode.update_stillborn_rulesets()
 			return
 		if(apcs >= 3 && can_malf_ai_takeover())
 			AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
@@ -57,7 +64,7 @@
 /datum/faction/malf/proc/can_malf_ai_takeover()
 	for(var/datum/role/malfAI in members) //if there happens to be more than one malfunctioning AI, there only needs to be one in the main station: the crew can just kill that one and the countdown stops while they get the rest
 		var/turf/T = get_turf(malfAI.antag.current)
-		if(T && (T.z == STATION_Z))
+		if(T && (T.z == map.zMainStation))
 			return TRUE
 	return FALSE
 
@@ -74,11 +81,17 @@
 		to_chat(malfAI.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
-		malfAI.antag.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "malf_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
 
 	return
 
 /datum/faction/malf/get_statpanel_addition()
 	if(stage >= FACTION_ENDGAME)
-		return "Time left: [max(AI_win_timeleft/(apcs/3), 0)]"
+		return "Station integrity: [round((AI_win_timeleft/MALF_INITIAL_TIMER)*100)]%"
 	return null
+
+/proc/calculate_malf_hack_APC_cooldown(var/apcs)
+	// if you can come up with a better proc name be my guest
+	// 60 seconds at no APC and 1 APC, 45 seconds at 2 APCs, 30 seconds
+	//return round(max(300, 600 * (apcs > 1 ? (1/apcs + 0.5/apcs) : 1)), 10)
+	return 600

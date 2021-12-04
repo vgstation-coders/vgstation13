@@ -163,7 +163,7 @@
 	feedback_add_details("admin_verb","GOD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
-proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
+/proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
 	if(automute)
 		if(!config.automute_on)
 			return
@@ -516,6 +516,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		new_character.dna = new()//Let's first give them a new DNA.
 		new_character.dna.unique_enzymes = record_found.fields["b_dna"]//Enzymes are based on real name but we'll use the record for conformity.
 		new_character.dna.b_type = record_found.fields["b_type"]
+		new_character.copy_dna_data_to_blood_reagent()
 
 		// I HATE BYOND.  HATE.  HATE. - N3X
 		var/list/newSE= record_found.fields["enzymes"]
@@ -635,7 +636,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(!M)
 			return
 		M.revive(0)
-		M.suiciding = 0
+		if(M.mind)
+			M.mind.suiciding = 0
 
 		log_admin("[key_name(usr)] healed / revived [key_name(M)]")
 		message_admins("<span class='warning'>Admin [key_name_admin(usr)] healed / revived [key_name_admin(M)]!</span>", 1)
@@ -655,11 +657,24 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(confirmation == "No")
 			return
 	var/input = input(usr, "Please enter anything you want. Anything. Serious.", "What?", "") as message|null
-	var/customname = input(usr, "Pick a title for the report.", "Title") as text|null
 	if(!input)
 		return
+
+	var/customname = input(usr, "Pick a title for the report, or just leave it as Nanotrasen Update. \nLeaving this blank will cancel the command report.", "Choose a title", "Nanotrasen Update") as text|null
 	if(!customname)
-		customname = "Nanotrasen Update"
+		return
+
+	var/headsonly = FALSE
+
+	switch(alert("\t[customname] \n\n[input] \n---------- \nIf this message is correct, who is it intended for?", "Please verify your message", "All Crew", "Heads Only", "Cancel"))
+		if("All Crew")
+			command_alert(input, customname,1);
+		if("Heads Only")
+			headsonly = TRUE
+			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
+		else
+			return
+
 	for (var/obj/machinery/computer/communications/C in machines)
 		if(! (C.stat & (BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
@@ -669,18 +684,12 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			C.messagetitle.Add("[command_name()] Update")
 			C.messagetext.Add(P.info)
 
-	switch(alert("Should this be announced to the general population?",,"Yes","No"))
-		if("Yes")
-			command_alert(input, customname,1);
-		if("No")
-			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
-
 	world << sound('sound/AI/commandreport.ogg', volume = 60)
-	log_admin("[key_name(src)] has created a command report: [input]")
+	log_admin("[key_name(src)] has created a [headsonly ? "heads only" : "publicly announced"] command report titled [customname]: [input]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/cmd_admin_delete(atom/O as obj|mob|turf in world)
+/client/proc/cmd_admin_delete(atom/O in world)
 	set category = "Admin"
 	set name = "Delete"
 
@@ -735,7 +744,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			if (alert(src, "Are you sure you want to do this? It will laaag.", "Confirmation", "Yes", "No") == "No")
 				return
 
-		explosion(O, devastation, heavy, light, flash)
+		explosion(O, devastation, heavy, light, flash, whodunnit = usr)
 		log_admin("[key_name(usr)] created an explosion ([devastation],[heavy],[light],[flash]) at ([O.x],[O.y],[O.z])")
 		message_admins("[key_name_admin(usr)] created an explosion ([devastation],[heavy],[light],[flash]) at ([O.x],[O.y],[O.z])", 1)
 		feedback_add_details("admin_verb","EXPL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -785,20 +794,28 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	log_admin("[key_name(usr)] has gibbed [key_name(M)]")
 	message_admins("[key_name_admin(usr)] has gibbed [key_name_admin(M)]", 1)
 
-	M.gib()
+	if(!istype(M, /mob/dead/observer))
+		M.gib()
+	else
+		gibs(M.loc, null)
 	feedback_add_details("admin_verb","GIB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_gib_self()
 	set name = "Gibself"
 	set category = "Fun"
 
-	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
-	if(confirm == "Yes")
-		log_admin("[key_name(usr)] used gibself.")
-		message_admins("<span class='notice'>[key_name_admin(usr)] used gibself.</span>", 1)
-		if(!istype(mob, /mob/dead/observer))
-			mob.gib()
-		feedback_add_details("admin_verb","GIBS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	if(!istype(mob, /mob/dead/observer))
+		var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
+		if(confirm != "Yes")
+			return
+
+	log_admin("[key_name(usr)] used gibself.")
+	message_admins("<span class='notice'>[key_name_admin(usr)] used gibself.</span>", 1)
+	if(!istype(mob, /mob/dead/observer))
+		mob.gib()
+	else
+		gibs(mob.loc, null)
+	feedback_add_details("admin_verb","GIBS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /*
 /client/proc/cmd_manual_ban()
 	set name = "Manual Ban"
@@ -912,8 +929,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 
 	emergency_shuttle.incall()
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.[justification ? " Justification : '[justification]'" : ""]")
-	world << sound('sound/AI/shuttlecalled.ogg')
+	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
+	if(justification)
+		CA.justification = justification
+	command_alert(CA)
 	feedback_add_details("admin_verb","CSHUT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] admin-called the emergency shuttle.")
 	message_admins("<span class='notice'>[key_name_admin(usr)] admin-called the emergency shuttle.</span>", 1)
@@ -1067,33 +1086,33 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 	if(!mob)
 		return
-	var/list/dropped_items
-	var/delete_items
-	var/strip_items = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Loadout","") as null|anything in list("Yes","No")
-	if(!strip_items)
+	var/delete_text
+	var/strip_text = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Outfit","") as null|anything in list("Yes","No")
+	if(!strip_text)
 		return
-	if(strip_items == "Yes")
-		delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|anything in list("Yes","No")
-		if(!delete_items)
+	if(strip_text == "Yes")
+		delete_text = input(usr,"Delete stripped items?","Equip Outfit","") as null|anything in list("Yes","No")
+		if(!delete_text)
 			return
-	var/list/loadouts = list() + "USE ITEMS ON MY TURF" + (typesof(/obj/abstract/loadout) - /obj/abstract/loadout)
-	var/loadout_type = input(usr,"Loadout Type","Equip Loadout","") as null|anything in loadouts
-	if(!loadout_type)
+	var/outfit_type = select_loadout()
+	if(!outfit_type || !ispath(outfit_type))
 		return
-	if(strip_items == "Yes")
-		dropped_items = M.unequip_everything()
-		if(delete_items == "Yes")
-			for(var/atom/A in dropped_items)
-				qdel(A)
-	if(loadout_type == "USE ITEMS ON MY TURF")
-		M.equip_loadout(null, FALSE)
-	else
-		if(!ispath(loadout_type))
-			alert("ERROR: No such loadout type found.")
-			return
-		M.equip_loadout(loadout_type, FALSE)
-
-	log_admin("[key_name(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].")
-	message_admins("<span class='notice'>[key_name_admin(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].</span>", 1)
+	var/strip_items = FALSE
+	var/delete_items = FALSE
+	if(strip_text == "Yes")
+		strip_items = TRUE
+	if(delete_text == "Yes")
+		delete_items = TRUE
+	var/datum/outfit/concrete_outfit = new outfit_type
+	concrete_outfit.equip(M, TRUE, strip = strip_items, delete = delete_items)
+	log_admin("[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].")
+	message_admins("<span class='notice'>[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].</span>", 1)
 
 	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/proc/select_loadout()
+	var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Equip Outfit") as null|text
+	var/outfit_type = filter_list_input("Outfit Type","Equip Outfit", get_matching_types(object, /datum/outfit) - /datum/outfit/ - /datum/outfit/striketeam/)
+	if(!outfit_type || !ispath(outfit_type))
+		return
+	return outfit_type

@@ -15,12 +15,10 @@
 	can_border_transition = 1
 	var/static/list/parallax_appearances
 
-/turf/space/New()
+/turf/space/initialize()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-
-/turf/space/initialize()
 	if(!parallax_appearances)
 		parallax_appearances = list()
 		for(var/i in 0 to 25)
@@ -190,7 +188,7 @@
 	return
 
 /turf/space/void
-	name = "the void"
+	name = "\proper the void"
 	icon_state = "void"
 	desc = "The final final frontier."
 	plane = ABOVE_PARALLAX_PLANE
@@ -210,3 +208,14 @@
 	if(A)
 		for(var/obj/effect/beam/B in src)
 			B.Crossed(A)
+
+/turf/space/can_place_cables()
+	var/obj/structure/catwalk/support = locate() in src
+	return !isnull(support)
+
+/turf/space/attack_construct(var/mob/user)
+	if(istype(user,/mob/living/simple_animal/construct/builder))
+		var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
+		S.perform(user, 0, list(src))
+		return 1
+	return 0

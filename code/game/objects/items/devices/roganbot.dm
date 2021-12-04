@@ -7,9 +7,12 @@
 	flags = HEAR | FPRINT
 	var/speak_cooldown = 0.6 SECONDS
 	var/tmp/last_speak
+	var/mobsonly = TRUE //Fuck off speaker assemblies
 
 /obj/item/device/roganbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Should be queued after the original speech completes
+	if(!speech.speaker || (mobsonly && !isliving(speech.speaker)))
+		return
 	if(last_speak + speak_cooldown >= world.timeofday)
 		return
 	for(var/index in number2rogansound)
@@ -17,7 +20,7 @@
 			playtaunt(number2rogansound[index])
 
 /obj/item/device/roganbot/proc/playtaunt(var/datum/rogan_sound/S)
-	playsound(get_turf(src), S.soundfile, 35, FALSE)
+	playsound(src, S.soundfile, 35, FALSE)
 	if(S.transcript)
 		say(S.transcript)
 	else if(S.emote)

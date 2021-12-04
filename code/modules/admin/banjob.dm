@@ -62,7 +62,7 @@ DEBUG
 			jobban_keylist=list()
 			log_admin("jobban_keylist was empty")
 	else
-		if(!establish_db_connection())
+		if(!SSdbcore.Connect())
 			world.log << "Database connection failed. Reverting to the legacy ban system."
 			diary << "Database connection failed. Reverting to the legacy ban system."
 			config.ban_legacy_system = 1
@@ -70,24 +70,37 @@ DEBUG
 			return
 
 		//Job permabans
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = 'JOB_PERMABAN' AND isnull(unbanned)")
-		query.Execute()
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = :bantype AND isnull(unbanned)",
+			list(
+				"bantype" = "JOB_PERMABAN"
+			))
+		if(!query.Execute())
+			message_admins("Error: [query.ErrorMsg()]")
+			log_sql("Error: [query.ErrorMsg()]")
+			qdel(query)
+			return
 
 		while(query.NextRow())
 			var/ckey = query.item[1]
 			var/job = query.item[2]
 
 			jobban_keylist.Add("[ckey] - [job]")
-
+		qdel(query)
 		//Job tempbans
-		var/DBQuery/query1 = dbcon.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = 'JOB_TEMPBAN' AND isnull(unbanned) AND expiration_time > Now()")
-		query1.Execute()
+		var/datum/DBQuery/query1 = SSdbcore.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = :bantype AND isnull(unbanned) AND expiration_time > Now()",
+			list(
+				"bantype" = "JOB_TEMPBAN",
+			))
+		if(!query1.Execute())
+			log_sql("Error: [query1.ErrorMsg()]")
+			qdel(query1)
+			return
 
 		while(query1.NextRow())
 			var/ckey = query1.item[1]
 			var/job = query1.item[2]
-
 			jobban_keylist.Add("[ckey] - [job]")
+		qdel(query1)
 
 /proc/jobban_savebanfile()
 	var/savefile/S = new("data/job_full.ban")

@@ -3,7 +3,7 @@
 var/req_console_assistance = list()
 var/req_console_supplies = list()
 var/req_console_information = list()
-var/list/obj/machinery/requests_console/allConsoles = list()
+var/list/obj/machinery/requests_console/requests_consoles = list()
 
 /obj/machinery/requests_console
 	name = "requests console"
@@ -45,7 +45,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		// 1 = hacked
 	var/announcementConsole = 0
 		// 0 = This console cannot be used to send department announcements
-		// 1 = This console can send department announcementsf
+		// 1 = This console can send department announcements
 	var/open = 0 // 1 if open
 	var/announceAuth = 0 //Will be set to 1 when you authenticate yourself for announcements
 	var/msgVerified = "" //Will contain the name of the person who varified it
@@ -53,7 +53,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	var/message = "";
 	var/dpt = ""; //the department which will be receiving the message
 	var/priority = -1 ; //Priority of the message being sent
-	var/announceSound = 'sound/vox/bloop.wav'
+	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
 
 /obj/machinery/requests_console/power_change()
@@ -69,9 +69,13 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			icon_state = "req_comp0"
 
 /obj/machinery/requests_console/New()
-	allConsoles.Add(src)
+	requests_consoles += src
 	set_department(department,departmentType)
 	return ..()
+
+/obj/machinery/requests_console/Destroy()
+	requests_consoles -= src
+	..()
 
 /obj/machinery/requests_console/proc/set_department(var/name, var/D)
 	department = name
@@ -116,9 +120,18 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			if(!("[department]" in req_console_information))
 				req_console_information += department
 
-/obj/machinery/requests_console/attack_hand(user as mob)
-	if(..(user))
+/obj/machinery/requests_console/attack_ghost(user as mob)
+	if(..())
 		return
+	interact(user)
+
+/obj/machinery/requests_console/attack_hand(user as mob)
+	if(..())
+		return
+	add_fingerprint(user)
+	interact(user)
+
+/obj/machinery/requests_console/interact(user as mob)
 	var/dat
 	dat = text("<HEAD><TITLE>Requests Console</TITLE></HEAD><H3>[department] Requests Console</H3>")
 	if(!open)
@@ -181,8 +194,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Continue</A><BR>")
 
 			if(8)	//view messages
-				if(!isAdminGhost(user)) //Do not clear if admin
-					for (var/obj/machinery/requests_console/Console in allConsoles)
+				if(!isobserver(user)) //Do not clear if ghost
+					for (var/obj/machinery/requests_console/Console in requests_consoles)
 						if (Console.department == department)
 							Console.newmessagepriority = 0
 							Console.icon_state = "req_comp0"
@@ -208,7 +221,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 				dat += text("<b>Message: </b>[message] <A href='?src=\ref[src];writeAnnouncement=1'>Write</A><BR><BR>")
 				if (announceAuth && message)
-					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>");
+					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
 			else	//main menu
@@ -239,7 +252,6 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	if(..())
 		return
 	usr.set_machine(src)
-	add_fingerprint(usr)
 
 	if(reject_bad_text(href_list["write"]))
 		dpt = ckey(href_list["write"]) //write contains the string of the receiving department's name
@@ -301,7 +313,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 			if(pass)
 
-				for (var/obj/machinery/requests_console/Console in allConsoles)
+				for (var/obj/machinery/requests_console/Console in requests_consoles)
 					if (ckey(Console.department) == ckey(href_list["department"]))
 						screen = 6
 						switch(priority)
@@ -447,9 +459,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 		else
 			to_chat(user, "You can't do much with that.")
-	if(iswrench(O) && open && !departmentType)
+	if(O.is_wrench(user) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		O.playtoolsound(src, 100)
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return
@@ -474,8 +486,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			else
 				announceAuth = FALSE
 				to_chat(user, "<span class='warning'>You are not authorized to send announcements.</span>")
-
 			updateUsrDialog()
+
 	if (istype(O, /obj/item/weapon/stamp))
 		if(screen == 9)
 			var/obj/item/weapon/stamp/T = O

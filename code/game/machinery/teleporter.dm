@@ -3,6 +3,7 @@
 	desc = "Used to control a linked teleportation Hub and Station."
 	icon_state = "teleport"
 	circuit = "/obj/item/weapon/circuitboard/teleporter"
+	var/frequency = 1459
 	var/obj/item/locked = null
 	var/id = null
 	var/one_time_use = 0 //Used for one-time-use teleport cards (such as clown planet coordinates.)
@@ -13,6 +14,7 @@
 
 /obj/machinery/computer/teleporter/New()
 	. = ..()
+	frequency = format_frequency(sanitize_frequency(frequency))
 	id = "[rand(1000, 9999)]"
 
 /obj/machinery/computer/teleporter/attackby(I as obj, mob/living/user as mob)
@@ -62,7 +64,7 @@
 /obj/machinery/computer/teleporter/attack_paw(var/mob/user)
 	src.attack_hand(user)
 
-/obj/machinery/teleport/station/attack_ai(var/mob/user)
+/obj/machinery/teleport/teleporter/attack_ai(var/mob/user)
 	src.attack_hand(user)
 
 /obj/machinery/computer/teleporter/attack_hand(var/mob/user)
@@ -75,6 +77,10 @@
 
 /obj/machinery/computer/teleporter/interact(var/mob/user)
 	var/area/locked_area
+	if(frequency)
+		. = {"
+		<b>Frequency:</b> <a href='?src=\ref[src];freq=1'>[frequency]</a><br><br>
+		"}
 	if(locked)
 		locked_area = get_area(locked)
 		if(!locked_area)
@@ -84,12 +90,13 @@
 			locked_area = get_area(locked)
 			if(!locked_area)
 				locked = null
-			. = {"
+
+			. += {"
 			<b>Destination:</b> [sanitize(locked_area.name)]<br>
 			<a href='?src=\ref[src];clear=1'>Clear destination</a><br>
 			"}
 	else
-		. = {"
+		. += {"
 		<b>Destination unset!</b><br>
 		"}
 
@@ -117,6 +124,12 @@
 	if(.)
 		return
 
+	if(href_list["freq"])
+		if(change_freq())
+			say("Frequency set")
+		updateUsrDialog()
+		return 1
+
 	if(href_list["clear"])
 		locked = null
 		updateUsrDialog()
@@ -124,7 +137,7 @@
 
 	if(href_list["dest"])
 		var/list/dests = get_avail_dests()
-		var/idx = Clamp(text2num(href_list["dest"]), 1, dests.len)
+		var/idx = clamp(text2num(href_list["dest"]), 1, dests.len)
 		locked = dests[dests[idx]]
 		say("Locked in")
 		updateUsrDialog()
@@ -136,9 +149,11 @@
 
 	for(var/obj/item/beacon/R in beacons)
 		var/turf/T = get_turf(R)
+		if(R.frequency != src.frequency)
+			continue
 		if (!T)
 			continue
-		if(T.z == CENTCOMM_Z || T.z > map.zLevels.len)
+		if(T.z == map.zCentcomm || T.z > map.zLevels.len)
 			continue
 		var/tmpname = T.loc.name
 		if(areaindex[tmpname])
@@ -148,7 +163,7 @@
 		L[tmpname] = R
 
 	for (var/obj/item/weapon/implant/tracking/I in tracking_implants)
-		if (!I.implanted || !ismob(I.loc))
+		if (!I.imp_in || !ismob(I.loc))
 			continue
 		else
 			var/mob/M = I.loc
@@ -168,6 +183,31 @@
 			L[tmpname] = I
 
 	. = L
+
+/obj/machinery/computer/teleporter/proc/change_freq(var/mob/user)
+	var/newfreq = input("Input a new frequency for the teleporter", "Frequency", null) as null|num
+	if(stat & (BROKEN|NOPOWER))
+		return 0
+	var/ghost_flags=0
+	if(ghost_write)
+		ghost_flags |= PERMIT_ALL
+	if(!canGhostWrite(usr,src,"",ghost_flags))
+		if(usr.restrained() || usr.lying || usr.stat)
+			return 0
+		if (!usr.dexterity_check())
+			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+			return 0
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 0
+		if(!is_in_range(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
+			return 0
+	else if(!newfreq)
+		return 0
+
+	frequency = format_frequency(sanitize_frequency(newfreq))
+	return 1
 
 /obj/machinery/computer/teleporter/verb/set_id(t as text)
 	set category = "Object"
@@ -196,7 +236,7 @@
 	name = "teleporter horizon generator"
 	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
-	var/accurate = 0
+	//var/accurate = 0
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
@@ -238,16 +278,15 @@
 /obj/machinery/teleport/hub/update_icon()
 	if(stat & (BROKEN|NOPOWER) || !engaged)
 		icon_state = "tele0"
+		set_light(0)
 	else
 		icon_state = "tele1"
+		set_light(3, l_color = "#FFAA00")
 
 
 /obj/machinery/teleport/hub/Crossed(AM as mob|obj)
 	if(AM == src)
 		return//DUH
-	if(istype(AM,/obj/item/projectile/beam))
-		var/obj/item/projectile/beam/B = AM
-		B.wait = 1
 	if(istype(AM,/obj/effect/beam))
 		src.to_bump(AM)
 		return
@@ -255,32 +294,54 @@
 		if (src.engaged && teleport(AM))
 			use_power(teleport_power_usage)
 
-/obj/machinery/teleport/hub/proc/teleport(atom/movable/M as mob|obj)
-	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1))
-	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, orange(1, st))
-	if (!com)
-		return 0
-	if (!com.locked || com.locked.gcDestroyed)
-		com.locked = null
-		visible_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
-		return 0
-	if(get_turf(com.locked) == get_turf(src))
-		to_chat(M, "<span class = 'notice'>The act of teleportation was so smooth, it feels like you didn't move at all.</span>")
-		return 0
-	if (istype(M, /atom/movable))
-		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
-			do_teleport(M, locate(rand((2*TRANSITIONEDGE), world.maxx - (2*TRANSITIONEDGE)), rand((2*TRANSITIONEDGE), world.maxy - (2*TRANSITIONEDGE)), 3), 2)
-		else
-			do_teleport(M, com.locked) //dead-on precision
 
-		if(com.one_time_use) //Make one-time-use cards only usable one time!
-			com.one_time_use = 0
-			com.locked = null
+/obj/machinery/teleport/hub/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover,/obj/item/projectile/beam))
+		return 0
+	else
+		return ..()
+
+/obj/machinery/teleport/hub/bullet_act(var/obj/item/projectile/Proj)
+	var/atom/locked = get_target_lock()
+	if(!locked)
+		return PROJECTILE_COLLISION_MISS
+
+	return PROJECTILE_COLLISION_PORTAL
+
+
+/obj/machinery/teleport/hub/proc/teleport(atom/movable/M as mob|obj)
+	var/atom/locked = get_target_lock()
+	if(!locked)
+		return FALSE
+	if(get_turf(locked) == get_turf(src))
+		to_chat(M, "<span class = 'notice'>The act of teleportation was so smooth, it feels like you didn't move at all!</span>")
+		return FALSE
+	if(istype(M, /atom/movable))
+		do_teleport(M, locked)
+		after_teleport()
 	else
 		spark(src, 5)
 
 	return 1
 
+/obj/machinery/teleport/hub/proc/get_target_lock()
+	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1,src))
+	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, orange(1, st))
+	if (!com)
+		visible_message("<span class='warning'>Failure: Cannot identify linked computer.</span>")
+		return
+	if (!com.locked || com.locked.gcDestroyed)
+		com.locked = null
+		visible_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
+		return
+	return com.locked
+
+/obj/machinery/teleport/hub/proc/after_teleport()
+	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1,src))
+	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, orange(1, st))
+	if(com && com.one_time_use) //one-time-use cards
+		com.one_time_use = 0
+		com.locked = null
 
 /obj/machinery/teleport/station
 	name = "teleporter controller"
@@ -321,8 +382,6 @@
 		icon_state = "controller-p"
 	else
 		icon_state = "controller"
-
-
 
 /obj/machinery/teleport/station/attackby(var/obj/item/weapon/W, var/mob/user as mob)
 	if (..())
@@ -370,27 +429,75 @@
 	src.engaged = 0
 	return
 
-/obj/machinery/teleport/station/verb/testfire()
-	set name = "Test Fire Teleporter"
-	set category = "Object"
-	set src in oview(1)
+///obj/machinery/teleport/station/verb/testfire()
+	//set name = "Test Fire Teleporter"
+	//set category = "Object"
+	//set src in oview(1)
 
-	if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
-		return
+	//if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
+	//	return
+	//for(var/obj/machinery/teleport/hub/hub in orange(1))
+	//	engaged = 1
+	//	var/wasaccurate = hub.accurate //let's make sure if you have a mapped in accurate tele that it stays that way
+	//	hub.accurate = 1
+	//	hub.engaged = 1
+	//	hub.update_icon()
+	//	visible_message("<span class='notice'>Test firing! Teleporter temporarily calibrated to be more accurate.</span>", range = 2)
+	//	hub.teleport()
+	//	use_power(teleport_power_usage)
+	//	spawn(30)
+	//		hub.accurate = wasaccurate
+	//		visible_message("<span class='notice'>Test fire completed.</span>", range = 2)
+	//src.add_fingerprint(usr)
+	//return
 
+/obj/machinery/teleport/hub/emergency
+	name = "emergency horizon generator"
+	desc = "This specialized horizon generator creates a portal, but always to the same place, and only becomes active during emergencies."
+	machine_flags = SCREWTOGGLE | FIXED2WORK //cannot wrenchmove or crowdestroy
+	var/emergency = FALSE //this will keep trying to re-engage it if power is lost then restored
+	var/embeacon = null
 
-	for(var/obj/machinery/teleport/hub/hub in orange(1))
-		engaged = 1
-		var/wasaccurate = hub.accurate //let's make sure if you have a mapped in accurate tele that it stays that way
-		hub.accurate = 1
-		hub.engaged = 1
-		hub.update_icon()
-		visible_message("<span class='notice'>Test firing! Teleporter temporarily calibrated to be more accurate.</span>", range = 2)
-		hub.teleport()
-		use_power(teleport_power_usage)
-		spawn(30)
-			hub.accurate = wasaccurate
-			visible_message("<span class='notice'>Test fire completed.</span>", range = 2)
+/obj/machinery/teleport/hub/emergency/examine(mob/user)
+	..()
+	if(engaged && embeacon)
+		to_chat(user,"<span class='danger'>Due to the alert, it is set to travel to [get_area(embeacon)].</span>")
 
-	src.add_fingerprint(usr)
+/obj/machinery/teleport/hub/emergency/power_change()
+	if(stat & (BROKEN|NOPOWER))
+		engaged = FALSE
+	else
+		engaged = emergency
+	update_icon()
+
+/obj/machinery/teleport/hub/emergency/after_teleport()
 	return
+
+/obj/machinery/teleport/hub/emergency/process()
+	return //this prevents us from being removed from machines
+
+/obj/machinery/teleport/hub/emergency/get_target_lock()
+	if(!embeacon)
+		embeacon = pick(emergency_beacons)
+	return embeacon
+
+/obj/machinery/teleport/hub/emergency/proc/alarm(var/panic = FALSE)
+	engaged = panic
+	emergency = panic
+	if(!embeacon)
+		embeacon = pick(emergency_beacons)
+	update_icon()
+
+/obj/machinery/teleport/hub/emergency/attack_hand(mob/user)
+	if(!embeacon)
+		embeacon = pick(emergency_beacons)
+		to_chat(user,"<span class='notice'>Target updated to [get_area(embeacon)].</span>")
+		return
+	else if(emergency_beacons.len > 1)
+		var/list/L = emergency_beacons.Copy()
+		L -= embeacon
+		embeacon = pick(L)
+		to_chat(user,"<span class='notice'>Target updated to [get_area(embeacon)].</span>")
+		return
+	else
+		..()

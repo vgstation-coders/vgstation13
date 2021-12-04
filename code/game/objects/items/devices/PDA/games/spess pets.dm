@@ -60,7 +60,7 @@
 				if(1 to 5)
 					talk_line = pick("beebeep","ping","beep boop","buzz")
 				if(6 to 10)
-					to_chat(talk_line = pick("Hello World!","[isdirty ? "out, poop":"bebop!"]","squigity giggity","Am I cute?"))
+					talk_line = pick("Hello World!","[isdirty ? "out, poop":"bebop!"]","squigity giggity","Am I cute?")
 				if(11 to 15)
 					talk_line = pick("Imma cut you","[ishurt ? "Minor dents aquired":"*buzzing loudly*"]","[ishappy ? "*beeping loudly*":"c'mon, emmag me"]","ur the autistic one")
 				if(16 to 48)
@@ -333,5 +333,5 @@
 	last_spoken = "<i>At the current rates you will get [nanocoins_rates] dollars per nanocoins.</i>"
 
 
-proc/nano2dollar(var/nanocoins)
+/proc/nano2dollar(var/nanocoins)
 	return round(nanocoins * nanocoins_rates)

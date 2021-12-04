@@ -129,14 +129,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			return 0
 
 
-// this prevented pills, food, and other things from being picked up by bags.
-// possibly intentional, but removing it allows us to not duplicate functionality.
-// -Sayu (storage consolidation)
-/*
-/obj/item/weapon/reagent_containers/attackby(obj/item/I as obj, mob/user as mob)
-	return
-*/
-
 /**
  * This usually handles reagent transfer between containers and splashing the contents.
  * Please see `transfer()` for a general reusable proc for that.
@@ -209,7 +201,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
-	reagents.reaction(target, TOUCH)
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount))
 
 	if (amount > 0)
 		if(user)
@@ -254,7 +246,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
-				return tx_amount
+			return tx_amount
 	// Transfer to container
 	if (can_send /*&& target.reagents**/)
 		var/obj/container = target
@@ -341,6 +333,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return FALSE
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
+	if(!can_drink(user))
+		return 0
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
@@ -349,17 +343,19 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
-		if(can_drink(user))
-			reagents.reaction(user, INGEST)
-			spawn(5)
-				if(reagents)
-					reagents.trans_to(user, amount_per_imbibe)
+		reagents.reaction(user, INGEST)
+		spawn(5)
+			if(reagents)
+				reagents.trans_to(user, amount_per_imbibe)
 
 	return 1
 
 /obj/item/weapon/reagent_containers/proc/can_drink(mob/user)
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
+		if(H.species.flags & SPECIES_NO_MOUTH)
+			H.visible_message("<span class='warning'>[H] can't drink without a mouth!</span>","<span class='warning'>You can't drink without a mouth!</span>")
+			return 0
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
@@ -383,3 +379,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.heating(A.thermal_energy_transfer(), temperature)
 		if(user)
 			to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")
+
+/obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
+	. = ..()
+	for(var/datum/reagent/temp_hearer/R in reagents.reagent_list)
+		R.parent_heard(speech, rendered_speech)
+	//We have to check for a /mob/virtualhearer/one_time here, and kill it ourselves. This is fairly bad OOP.
+	if(virtualhearer && istype(virtualhearer, /mob/virtualhearer/one_time))
+		removeHear()

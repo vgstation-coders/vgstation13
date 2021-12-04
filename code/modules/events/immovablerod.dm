@@ -4,12 +4,22 @@
 //As well as hurting all dense mobs
 //Recoded as a projectile for better movement/appearance
 
+var/list/all_rods = list()
+
 /datum/event/immovable_rod
 	announceWhen = 1
 
 /datum/event/immovable_rod/can_start(var/list/active_with_role)
 	if(active_with_role["Engineer"] > 1)
 		return 15
+	return 0
+
+/datum/event/immovable_rod/big/can_start(var/list/active_with_role)
+	if(active_with_role["Engineer"] > 2)
+		return 15
+	return 0
+
+/datum/event/immovable_rod/hyper/can_start(var/list/active_with_role)
 	return 0
 
 /datum/event/immovable_rod/announce()
@@ -63,11 +73,18 @@
 	lock_angle = 1
 	clongSound = 'sound/effects/immovablerod_clong.ogg'
 
+/obj/item/projectile/immovablerod/New()
+	all_rods += src
+	..()
+
+/obj/item/projectile/immovablerod/Destroy()
+	all_rods -= src
+	..()
+
 /obj/item/projectile/immovablerod/hyper/New()
 	..()
 	var/image/I = image('icons/obj/objects_96x96.dmi',"immrod_bottom")
-	I.layer = layer-1
-	I.plane = -1
+	I.plane = relative_plane(PLATING_PLANE-1)
 	overlays += I
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
@@ -148,7 +165,7 @@
 		if(prob(50))
 			clong()
 
-/obj/item/projectile/immovablerod/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/item/projectile/immovablerod/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	..()
 	if(z != starting.z)
 		qdel(src)
@@ -180,3 +197,29 @@
 	for (var/mob/M in range(loc,20))
 		to_chat(M,"<FONT size=[max(0, 5 - round(get_dist(src, M)/4))]>CLANG!</FONT>")
 		M.playsound_local(loc, clongSound, 100 - (get_dist(src,M)*5), 1)
+
+/proc/random_start_turf(var/z)
+	var/startx
+	var/starty
+	var/chosen_dir = pick(NORTH, SOUTH, EAST, WEST)
+
+	switch(chosen_dir)
+
+		if(NORTH) //North, along the y = max edge
+			starty = world.maxy - (TRANSITIONEDGE + 2)
+			startx = rand((TRANSITIONEDGE + 2), world.maxx - (TRANSITIONEDGE + 2))
+
+		if(SOUTH) //South, along the y = 0 edge
+			starty = (TRANSITIONEDGE + 2)
+			startx = rand((TRANSITIONEDGE + 2), world.maxx - (TRANSITIONEDGE + 2))
+
+		if(EAST) //East, along the x = max edge
+			starty = rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2))
+			startx = world.maxx - (TRANSITIONEDGE + 2)
+
+		if(WEST) //West, along the x = 0 edge
+			starty = rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2))
+			startx = (TRANSITIONEDGE + 2)
+
+	var/turf/T = locate(startx, starty, z)
+	return T

@@ -55,6 +55,36 @@
 		icon_state = "trashbag3"
 		slowdown = 1.8
 
+/obj/item/weapon/storage/bag/trash/bio
+	name = "hazardous waste bag"
+	desc = "A heavy-duty sterilized garbage bag for handling infectious medical waste and sharps."
+	icon_state = "biobag0"
+	item_state = "biobag"
+
+	sterility = 100
+	fits_max_w_class = W_CLASS_LARGE
+	can_only_hold = list(
+		"/obj/item/trash",
+		"/obj/item/weapon/shard",
+		"/obj/item/weapon/reagent_containers",
+		"/obj/item/organ",
+		"/obj/item/stack/medical",
+	)
+	slot_flags = SLOT_BELT
+
+/obj/item/weapon/storage/bag/trash/bio/update_icon()
+	if(contents.len == 0)
+		icon_state = "biobag0"
+		slowdown = 1
+	else if(contents.len < 12)
+		icon_state = "biobag1"
+		slowdown = 1.4
+	else if(contents.len < 21)
+		icon_state = "biobag2"
+		slowdown = 1.6
+	else
+		icon_state = "biobag3"
+		slowdown = 1.8
 
 // -----------------------------
 //        Plastic Bag
@@ -66,7 +96,7 @@
 	icon = 'icons/obj/trash.dmi'
 	icon_state = "plasticbag"
 	item_state = "plasticbag"
-
+	species_fit = list(INSECT_SHAPED)
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
@@ -78,13 +108,13 @@
 	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
 
-obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
 
-obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
 
-/obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
+/obj/item/weapon/storage/bag/plasticbag/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -112,7 +142,6 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	icon_state = "tech_satchel"
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
-	var/event_key = null
 
 /datum/action/item_action/toggle_auto_handling
 	name = "Toggle Ore Loader"
@@ -133,10 +162,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		T.event_key = user.on_moved.Add(T, "mob_moved")
+		user.register_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.on_moved.Remove(T, "mob_moved")
-		T.event_key = null
+		user.unregister_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
@@ -149,33 +177,35 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		box = holder.pulling
 	if(box)
 		for(var/obj/item/stack/ore/ore in contents)
-			if(ore.material)
+			if(box.try_add_ore(ore))
 				remove_from_storage(ore)
-				box.materials.addAmount(ore.material, ore.amount)
 				qdel(ore)
 
-/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(isrobot(holder))
-		var/mob/living/silicon/robot/S = holder
+/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(atom/movable/mover)
+	if(isrobot(mover))
+		var/mob/living/silicon/robot/S = mover
 		if(locate(src) in S.get_all_slots())
 			auto_collect(get_turf(src))
-			auto_fill(holder)
-	else
-		if(holder.is_holding_item(src))
+			auto_fill(mover)
+	else if(isliving(mover))
+		var/mob/living/living_mover = mover
+		if(living_mover.is_holding_item(src))
 			auto_collect(get_turf(src))
-			auto_fill(holder)
+			auto_fill(living_mover)
+
+/obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
+	if(handling)
+		user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	if(event_key)
-		user.on_moved.Remove(src, "mob_moved")
-		event_key = null
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag
 // -----------------------------
 
 /obj/item/weapon/storage/bag/plants
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbag"
 	name = "Plant Bag"
 	storage_slots = 50; //the number of plant pieces it can carry.
@@ -184,6 +214,26 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
+
+
+/obj/item/weapon/storage/bag/plants/CtrlClick()
+	if(isturf(loc))
+		return ..()
+	if(!usr.isUnconscious() && Adjacent(usr))
+		change()
+		return
+	return ..()
+
+var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "green blue stripe", "green yellow stripe", "green purple stripe", "green lime stripe", "green black stripe", "green white stripe", "cyan", "cyan red stripe", "cyan blue stripe", "cyan yellow stripe", "cyan purple stripe", "cyan lime stripe", "cyan black stripe", "cyan white stripe")
+/obj/item/weapon/storage/bag/plants/verb/change()
+	set name = "Change Bag Colour"
+	set category = "Object"
+	set src in usr
+	var/plantbag_colour
+	plantbag_colour = input("Select Colour to change it to", "Plant Bag Colour", plantbag_colour) as null|anything in plantbag_colour_choices
+	if(!plantbag_colour||(usr.stat))
+		return
+	icon_state = plantbag_colour
 
 /obj/item/weapon/storage/bag/plants/portactor
 	name = "portable seed extractor"
@@ -217,6 +267,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		if(user.s_active)
 			user.s_active.show_to(user)
 
+
+/obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
+	return
+
 // -----------------------------
 //          Food bag
 // -----------------------------
@@ -230,7 +284,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil")
 
 /obj/item/weapon/storage/bag/food/update_icon()
 	if(contents.len < 1)
@@ -240,15 +294,67 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 /obj/item/weapon/storage/bag/food/menu1/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/fries(src)//4 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/fries/cone(src)//4 nutriments
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
+	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/food/menu2/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries(src)//6 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet(src)//6 nutriments
+	new/obj/item/weapon/kitchen/utensil/fork/plastic(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
+	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/zam_food
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "Zam_foodbag0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
+	name = "Zam Food Bag"
+	desc = "A gift from the mothership to keep your Zam drinks cool and your Zam meals warm. Praise the mothership!"
+	storage_slots = 14
+	fits_max_w_class = 3
+	max_combined_w_class = 28
+	w_class = W_CLASS_MEDIUM
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil")
+
+/obj/item/weapon/storage/bag/zam_food/update_icon()
+	if(contents.len < 1)
+		icon_state = "Zam_foodbag0"
+	else icon_state = "Zam_foodbag1"
+
+/obj/item/weapon/storage/bag/zam_food/zam_menu1/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped(src)//18 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/zam_food/zam_menu2/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped(src)//15 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/zam_food/zam_menu3/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped(src)//12 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
 // -----------------------------
@@ -396,7 +502,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	update_icon()
 
 // Instead of removing
-/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	var/obj/item/stack/sheet/S = W
 	if(!istype(S))
 		return FALSE
@@ -441,11 +547,11 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
-		if(B.get_rating() < lowest_rating)
-			lowest_rating = B.get_rating()
+		if(B.rped_rating() < lowest_rating)
+			lowest_rating = B.rped_rating()
 
 	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.get_rating() > lowest_rating)
+		if(B.rped_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 
@@ -540,7 +646,28 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	name = "ammunition pouch"
 	desc = "Designed to hold stray magazines and spare bullets."
 	icon_state = "ammo_pouch"
-	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
 	storage_slots = 3
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BELT | SLOT_POCKET
+
+
+
+// -----------------------------
+//          Xenobiology Bag
+// -----------------------------
+
+
+/obj/item/weapon/storage/bag/xenobio
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "slimebag"
+	name = "extract bag"
+	desc = "A bag designed to hold slime extract and other slime-related products."
+	item_state = "satchel"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
+	storage_slots = 50
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/slime_extract","/obj/item/weapon/slimenutrient","/obj/item/weapon/slimesteroid", "/obj/item/weapon/slimepotion", "/obj/item/weapon/slimepotion2", "/obj/item/weapon/slimesteroid2", "/obj/item/weapon/slimeres", "/obj/item/weapon/slimedupe")
+	display_contents_with_number = TRUE

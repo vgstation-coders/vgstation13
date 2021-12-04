@@ -50,6 +50,8 @@ var/list/smes_list = list()
 /obj/machinery/power/battery/smes/initialize()
 	..()
 	connect_to_network()
+	if(master_mode == "sandbox")
+		infinite_power = TRUE
 	spawn(5)
 		if(!terminal)
 			stat |= BROKEN
@@ -82,7 +84,7 @@ var/list/smes_list = list()
 					"You made a terminal for the SMES.")
 				src.stat = 0
 				return 1
-		else if(iswirecutter(W) && terminal)
+		else if(W.is_wirecutter(user) && terminal)
 			var/turf/T = get_turf(terminal)
 			if(T.intact)
 				to_chat(user, "<span class='warning'>You must remove the floor plating in front of the SMES first.</span>")
@@ -93,7 +95,7 @@ var/list/smes_list = list()
 				if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 					spark(src, 5)
 					return
-				getFromPool(/obj/item/stack/cable_coil, get_turf(src), 10)
+				new /obj/item/stack/cable_coil(get_turf(src), 10)
 				user.visible_message(\
 					"<span class='warning'>[user.name] cut the cables and dismantled the power terminal.</span>",\
 					"You cut the cables and dismantle the power terminal.")

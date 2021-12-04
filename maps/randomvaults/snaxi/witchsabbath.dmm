@@ -1,0 +1,24 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"b" = (/turf/simulated/floor/grass,/area)
+"l" = (/turf/unsimulated/floor/snow/permafrost,/area)
+"m" = (/obj/structure/table/woodentable,/obj/item/potion/healing{pixel_x = -4; pixel_y = 4},/obj/item/potion/deception,/turf/simulated/floor/grass,/area)
+"n" = (/obj/effect/decal/cleanable/campfire,/obj/machinery/cooking/grill/spit,/turf/simulated/floor/grass,/area)
+"r" = (/obj/item/weapon/staff/broom,/obj/item/clothing/head/witchwig{name = "witch hat"},/obj/structure/table/woodentable,/turf/simulated/floor/grass,/area)
+"t" = (/obj/item/weapon/stool/piano{dir = 4; name = "stool"},/turf/simulated/floor/grass,/area)
+"B" = (/obj/structure/flora/ausbushes/fullgrass,/turf/simulated/floor/grass,/area)
+"D" = (/obj/structure/flora/ausbushes/lavendergrass,/obj/structure/flora/ausbushes/lavendergrass,/obj/structure/flora/ausbushes/sparsegrass,/turf/simulated/floor/grass,/area)
+"G" = (/obj/structure/flora/ausbushes/sparsegrass,/turf/simulated/floor/grass,/area)
+"H" = (/obj/structure/flora/grass/both,/turf/unsimulated/floor/snow,/area)
+"N" = (/obj/structure/reagent_dispensers/cauldron/witch,/turf/simulated/floor/grass,/area)
+"V" = (/obj/structure/flora/grass/brown,/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+aallllHaa
+allbDllaa
+llrmbGbll
+lBtNnbbbl
+lbGbbbbBl
+llbbbBbla
+aVlBbllaa
+aalllaaVa
+"}

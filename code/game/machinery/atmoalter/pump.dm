@@ -154,7 +154,7 @@
 
 	if (href_list["pressure_adj"])
 		var/diff = text2num(href_list["pressure_adj"])
-		target_pressure = Clamp(target_pressure+diff, pressuremin, pressuremax)
+		target_pressure = clamp(target_pressure+diff, pressuremin, pressuremax)
 		update_icon()
 
 	src.add_fingerprint(usr)

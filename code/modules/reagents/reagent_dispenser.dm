@@ -23,8 +23,8 @@
 	return ..()
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W) && wrenchable())
-		return wrenchAnchor(user)
+	if(W.is_wrench(user) && wrenchable())
+		return wrenchAnchor(user, W)
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
@@ -49,12 +49,12 @@
 			return
 		if(2.0)
 			if (prob(50))
-				new /obj/effect/effect/water(src.loc)
+				new /obj/effect/water(src.loc)
 				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
-				new /obj/effect/effect/water(src.loc)
+				new /obj/effect/water(src.loc)
 				qdel(src)
 				return
 		else
@@ -62,7 +62,7 @@
 
 /obj/structure/reagent_dispensers/blob_act()
 	if(prob(50))
-		new /obj/effect/effect/water(src.loc)
+		new /obj/effect/water(src.loc)
 		qdel(src)
 
 /obj/structure/reagent_dispensers/New()
@@ -90,6 +90,16 @@
 	. = ..()
 	reagents.add_reagent(WATER, 1000)
 
+/obj/structure/reagent_dispensers/watertank/suicide_act(var/mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species == "Grey") // harms the grayys
+			to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+			reagents.trans_to(user, amount_per_transfer_from_this)
+			return(SUICIDE_ACT_BRUTELOSS)
+	else
+		return ..()
+
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
 	desc = "A storage tank containing welding fuel."
@@ -113,24 +123,25 @@
 
 /obj/structure/reagent_dispensers/fueltank/attack_hand()
 	if (rig)
-		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src]")
+		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
 		if(do_after(usr, src, 20))
-			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
+			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
 			if(rig)
 				rig.forceMove(get_turf(usr))
+				rig.master = null
 				rig = null
 			overlays = new/list()
 
 /obj/structure/reagent_dispensers/fueltank/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W,/obj/item/weapon/wrench))
+	if (W.is_wrench(user))
 		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
-			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
+			"You wrench [src]'s faucet [modded ? "closed" : "open"].")
 		modded = modded ? 0 : 1
 	if (istype(W,/obj/item/device/assembly_holder))
 		if (rig)
 			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
 			return ..()
-		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src]")
+		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src].")
 		if(do_after(user, src, 20))
 			if(rig)
 				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
@@ -139,7 +150,7 @@
 				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
 				return
 
-			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src]</span>")
+			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")
 
 			var/obj/item/device/assembly_holder/H = W
 			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
@@ -147,6 +158,7 @@
 				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 
 			rig = W
+			rig.master = src
 
 			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
 			overlays += test
@@ -168,14 +180,29 @@
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(Proj.get_damage())
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
 				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
 			else
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode()
+			explode(Proj.firer)
+	return ..()
+
+/obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
+	var/obj/item/tool/weldingtool/welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
+	if(welder)
+		welder.setWelding(1)
+		if(welder.welding)
+			var/message_say = user.handle_suicide_bomb_cause()
+			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
+			user.say(message_say)
+			welder.afterattack(src,user,1)
+			return(SUICIDE_ACT_BRUTELOSS)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
@@ -191,17 +218,24 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
-	visible_message("<span class='danger'>\the [F] crashes into \the [src]!</span>")
-	explode()
+/obj/structure/reagent_dispensers/fueltank/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle))
+		var/obj/structure/bed/chair/vehicle/car = AM
+		if(car.explodes_fueltanks)
+			visible_message("<span class='danger'>\The [car] crashes into \the [src]!</span>")
+			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = car.occupant
+				H.audible_scream("fueltank_crash")
+			explode(car.occupant)
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode()
+/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
 	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4)
+		explosion(src.loc,1,2,4, whodunnit = user)
 	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3)
+		explosion(src.loc,0,1,3, whodunnit = user)
 	else
-		explosion(src.loc,-1,1,2)
+		explosion(src.loc,-1,1,2, whodunnit = user)
 	if(src)
 		qdel(src)
 
@@ -221,6 +255,11 @@
 /obj/structure/reagent_dispensers/peppertank/New()
 	. = ..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 1000)
+
+/obj/structure/reagent_dispensers/peppertank/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his head underneath the dispenser nozzle and spraying the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_BRUTELOSS)
 
 /obj/structure/reagent_dispensers/water_cooler
 	name = "Water-Cooler"
@@ -254,7 +293,7 @@
 
 /obj/structure/reagent_dispensers/water_cooler/attackby(obj/item/I as obj, mob/user as mob)
 	if (iswelder(I))
-		var/obj/item/weapon/weldingtool/WT = I
+		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(0, user))
 			new /obj/item/stack/sheet/mineral/plastic (src.loc,4)
 			qdel(src)
@@ -272,6 +311,11 @@
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
 	reagents.add_reagent(BEER, 1000)
+
+/obj/structure/reagent_dispensers/beerkeg/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the keg nozzle and drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/beerkeg/wrenchable()
 	return 1
@@ -303,7 +347,8 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "virusfoodtank"
 	amount_per_transfer_from_this = 10
-	anchored = 1
+	anchored = TRUE
+	density = FALSE
 
 /obj/structure/reagent_dispensers/virusfood/New()
 	. = ..()
@@ -348,6 +393,48 @@
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 
+/obj/structure/reagent_dispensers/silicate/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
+
+/obj/structure/reagent_dispensers/sacid
+	name = "\improper Sulphuric Acid Dispenser"
+	desc = "A dispenser of sulphuric acid."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "sacidtank"
+	amount_per_transfer_from_this = 50
+
+/obj/structure/reagent_dispensers/sacid/New()
+	. = ..()
+	reagents.add_reagent(SACID, 1000)
+
+/obj/structure/reagent_dispensers/sacid/attackby(var/obj/item/W, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if(issolder(W))
+		var/obj/item/tool/solder/S = W
+		if(S.reagents.get_reagent_amount() >= S.max_fuel) // Already filled.
+			to_chat(user, "<span class='notice'>\The [S] is already full!</span>")
+			return
+
+		reagents.trans_to(S, S.max_fuel)
+		S.update_icon()
+		to_chat(user, "<span class='notice'>Solder refilled.</span>")
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		return 1
+
+/obj/structure/reagent_dispensers/sacid/suicide_act(var/mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species == "Grey")
+			return ..() // Not harmed by this stuff, so get out
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_BRUTELOSS)
+
 /obj/structure/reagent_dispensers/degreaser
 	name = "ethanol tank"
 	desc = "A tank filled with ethanol, used in the degreasing of engines."
@@ -357,6 +444,22 @@
 /obj/structure/reagent_dispensers/degreaser/New()
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
+
+/obj/structure/reagent_dispensers/degreaser/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and heavily drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
+
+/obj/structure/reagent_dispensers/spooktank
+	name = "spooktank"
+	desc = "A storage tank containing spook."
+	icon = 'icons/obj/halloween.dmi'
+	icon_state = "spooktank"
+	amount_per_transfer_from_this = 10
+
+/obj/structure/reagent_dispensers/spooktank/New()
+	. = ..()
+	reagents.add_reagent(MONSTERMASH, 1000)
 
 /obj/structure/reagent_dispensers/cauldron
 	name = "cauldron"
@@ -390,3 +493,140 @@
 	if(user.a_intent != I_HELP)
 		return TRUE
 	return FALSE
+
+// BARRELS AND BARREL ACCESSORIES //
+/obj/structure/reagent_dispensers/cauldron/barrel
+	name = "metal barrel"
+	icon_state = "metalbarrel"
+	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of metal."
+	layer = TABLE_LAYER
+	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
+	var/list/exiting = list() // Manages people leaving the barrel
+	var/health = 50
+
+/obj/structure/reagent_dispensers/cauldron/barrel/wood
+	name = "wooden barrel"
+	icon_state = "woodenbarrel"
+	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
+	health = 30
+
+/obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
+	return
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/take_damage(var/damage, var/sound_effect = 1)
+	health = max(0, health - damage)
+	if(sound_effect)
+		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)
+	if(health <= 0)
+		spawn(1)
+			Destroy()
+		return 1
+	return 0
+
+/obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
+	..()
+	if (!reagents)
+		return 1
+	if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+	H.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
+	reagents.reaction(usr.loc)
+	src.reagents.clear_reagents()
+	H.visible_message("<span class='warning'>[usr] kicks \the [src]!</span>", "<span class='notice'>You kick \the [src].</span>")
+	for(var/atom/movable/AM in src)
+		AM.forceMove(loc)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers))
+		return
+	if(istype(W,/obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = W
+		var/mob/living/target = G.affecting
+		user.visible_message("<span class='danger'>[user] begins to drag [target] into the barrel!</span>")
+		if(do_after_many(user,list(target,src),10)) //Twice the normal time
+			enter_barrel(target)
+	else
+		take_damage(W.force)
+		user.delayNextAttack(10)
+		..()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/enter_barrel(mob/user)
+	user.forceMove(src)
+	update_icon()
+	user.reset_view()
+	to_chat(user,"<span class='notice'>You enter \the [src].</span>")
+
+/obj/structure/reagent_dispensers/cauldron/barrel/MouseDropTo(atom/movable/O, mob/user)
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
+		return
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+		return
+	if(!Adjacent(user) || !user.Adjacent(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		return
+	else if(O.anchored)
+		return
+	if(issilicon(O)) //robutts dont fit
+		return
+	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the barrel
+		return
+	var/mob/living/target = O
+	if(!istype(target))
+		return
+	for(var/mob/living/carbon/slime/M in range(1,target))
+		if(M.Victim == target)
+			to_chat(user, "[target.name] will not fit into \the [src] because they have a slime latched onto their head.")
+			return
+
+	if(target == user)
+		to_chat(user,"<span class='notice'>You begin to climb into the barrel.</span>")
+		if(do_after(target,src,10))
+			enter_barrel(target)
+	else
+		user.visible_message("<span class='danger'>[user] begins to drag [target] into the barrel!</span>")
+		if(do_after_many(user,list(target,src),10)) //Twice the normal time
+			enter_barrel(target)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/container_resist(mob/user)
+	if (exiting.Remove(user))
+		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
+		return
+	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
+	exiting += user
+	spawn(3 SECONDS)
+		if(loc && exiting.Remove(user))
+			user.forceMove(loc)
+			update_icon()
+			to_chat(user,"<span class='notice'>You climb free of the barrel.</span>")
+
+/obj/structure/reagent_dispensers/cauldron/barrel/Destroy()
+	for(var/atom/movable/AM in src)
+		AM.forceMove(loc)
+	..()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/bullet_act(var/obj/item/projectile/Proj)
+	. = ..()
+	if(Proj.damage)
+		take_damage(Proj.damage)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/ex_act(severity)
+	switch(severity)
+		if(1)
+			Destroy()
+		if(2)
+			Destroy()
+		if(3)
+			take_damage(rand(15,45), 0)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_animal(var/mob/living/simple_animal/M)
+	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))
+		M.visible_message("<span class='danger'>[M] tears open \the [src]!</span>")
+	else
+		M.visible_message("<span class='danger'>[M] [M.attacktext] \the [src]!</span>")
+	M.delayNextAttack(10)
+	return 1
+
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_alien(mob/user)
+	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
+	Destroy()

@@ -213,7 +213,7 @@
 /mob/living/carbon/slime/bullet_act(var/obj/item/projectile/Proj)
 	attacked += 10
 	..(Proj)
-	return 0
+	return PROJECTILE_COLLISION_DEFAULT
 
 
 /mob/living/carbon/slime/emp_act(severity)
@@ -229,7 +229,7 @@
 	powerlevel = 0 // oh no, the power!
 	..()
 
-/mob/living/carbon/slime/ex_act(severity)
+/mob/living/carbon/slime/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 
@@ -246,16 +246,19 @@
 	switch (severity)
 		if (1.0)
 			b_loss += 500
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 			return
 
 		if (2.0)
 
 			b_loss += 60
 			f_loss += 60
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 
 
 		if(3.0)
 			b_loss += 30
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	adjustBruteLoss(b_loss)
 	adjustFireLoss(f_loss)
@@ -460,21 +463,11 @@
 	return 0
 
 
-mob/living/carbon/slime/var/co2overloadtime = null
-mob/living/carbon/slime/var/temperature_resistance = T0C+75
+/mob/living/carbon/slime/var/co2overloadtime = null
+/mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 
 /mob/living/carbon/slime/show_inv(mob/user)
-	return
-
-	user.set_machine(src)
-	var/dat = {"
-	<B><HR><FONT size=3>[name]</FONT></B>
-	<BR><HR><BR>
-	<BR><A href='?src=\ref[user];mach_close=mob[name]'>Close</A>
-	<BR>"}
-	user << browse(dat, text("window=mob[name];size=340x480"))
-	onclose(user, "mob[name]")
 	return
 
 /mob/living/carbon/slime/updatehealth()
@@ -484,87 +477,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	else
 		// slimes can't suffocate unless they suicide or they fall into crit. They are also not harmed by fire
 		health = maxHealth - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
-
-/mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
-	var/direct = get_dir(src, A)
-	var/obj/item/weapon/dummy/D = new /obj/item/weapon/dummy( src.loc )
-	var/ok = 0
-	if ( (direct - 1) & direct)
-		var/turf/Step_1
-		var/turf/Step_2
-		switch(direct)
-			if(5.0)
-				Step_1 = get_step(src, NORTH)
-				Step_2 = get_step(src, EAST)
-
-			if(6.0)
-				Step_1 = get_step(src, SOUTH)
-				Step_2 = get_step(src, EAST)
-
-			if(9.0)
-				Step_1 = get_step(src, NORTH)
-				Step_2 = get_step(src, WEST)
-
-			if(10.0)
-				Step_1 = get_step(src, SOUTH)
-				Step_2 = get_step(src, WEST)
-
-			else
-		if(Step_1 && Step_2)
-			var/check_1 = 0
-			var/check_2 = 0
-			if(step_to(D, Step_1))
-				check_1 = 1
-				for(var/obj/border_obstacle in Step_1)
-					if(border_obstacle.flow_flags & ON_BORDER)
-						if(!border_obstacle.Uncross(D, A))
-							check_1 = 0
-				for(var/obj/border_obstacle in get_turf(A))
-					if((border_obstacle.flow_flags & ON_BORDER) && (src != border_obstacle))
-						if(!border_obstacle.Cross(D, D.loc, 1, 0))
-							check_1 = 0
-
-			D.forceMove(src.loc)
-			if(step_to(D, Step_2))
-				check_2 = 1
-
-				for(var/obj/border_obstacle in Step_2)
-					if(border_obstacle.flow_flags & ON_BORDER)
-						if(!border_obstacle.Uncross(D, A))
-							check_2 = 0
-				for(var/obj/border_obstacle in get_turf(A))
-					if((border_obstacle.flow_flags & ON_BORDER) && (src != border_obstacle))
-						if(!border_obstacle.Cross(D, D.loc, 1, 0))
-							check_2 = 0
-			if(check_1 || check_2)
-				ok = 1
-	else
-		if(loc == src.loc)
-			ok = 1
-		else
-			ok = 1
-
-			//Now, check objects to block exit that are on the border
-			for(var/obj/border_obstacle in src.loc)
-				if(border_obstacle.flow_flags & ON_BORDER)
-					if(!border_obstacle.Uncross(D, A))
-						ok = 0
-
-			//Next, check objects to block entry that are on the border
-			for(var/obj/border_obstacle in get_turf(A))
-				if((border_obstacle.flow_flags & ON_BORDER) && (A != border_obstacle))
-					if(!border_obstacle.Cross(D, D.loc, 1, 0))
-						ok = 0
-
-	//del(D)
-	//Garbage Collect Dummy
-	D.forceMove(null)
-	D = null
-	if (!( ok ))
-
-		return 0
-
-	return 1
 
 
 /obj/item/slime_extract
@@ -589,10 +501,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(enhanced == 1)
 			to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
 			return ..()
-		if(Uses == 0)
-			to_chat(user, "<span class='warning'>You can't enhance a used extract!</span>")
-			return ..()
-		to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
+		to_chat(user, "You apply the enhancer to \the [src]. It now has triple the amount of uses.")
 		Uses = 3
 		enhanced = 1
 		qdel(O)
@@ -602,10 +511,20 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(Uses == 0)
 			to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
 			return ..()
-		to_chat(user, "You splash the Slime Resurrection Serum onto the extract causing it to quiver and come to life.")
+		to_chat(user, "You splash the Slime Resurrection Serum onto \the [src] causing it to quiver and come to life.")
 		new primarytype(get_turf(src))
 		Uses--
 		qdel(O)
+
+//perform individual slime_act() stuff on children overriding the method here
+/obj/item/slime_extract/afterattack(var/atom/target, mob/user, proximity)
+	if(!proximity)
+		return
+	if(target.slime_act(primarytype,user))
+		if (Uses > 0)
+			Uses -= 1
+		if (Uses == 0)
+			qdel(src)
 
 /obj/item/slime_extract/New()
 	..()
@@ -616,7 +535,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
-	primarytype = /mob/living/carbon/slime/gold
+	primarytype = /mob/living/carbon/slime
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
@@ -728,73 +647,73 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "bottle19"
 	w_class = W_CLASS_TINY
 
-	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
-		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
-			to_chat(user, "<span class='warning'>The potion only works on baby slimes!</span>")
-			return ..()
-		if(istype(M, /mob/living/carbon/slime/adult)) //Can't tame adults
-			to_chat(user, "<span class='warning'>Only baby slimes can be tamed!</span>")
-			return..()
-		if(M.stat)
-			to_chat(user, "<span class='warning'>The slime is dead!</span>")
-			return..()
-		var/mob/living/simple_animal/slime/pet = new /mob/living/simple_animal/slime(M.loc)
-		pet.icon_state = "[M.colour] baby slime"
-		pet.icon_living = "[M.colour] baby slime"
-		pet.icon_dead = "[M.colour] baby slime dead"
-		pet.colour = "[M.colour]"
-		to_chat(user, "You feed the slime the potion, removing its powers and calming it.")
-		if(M.mind)
-			M.mind.transfer_to(pet)
-		qdel (M)
-		M = null
-		var/newname = ""
-		if(pet.client)//leaving the player-controlled slimes the ability to choose their new name
-			newname = copytext(sanitize(input(pet, "You have been fed a docility potion, what shall we call you?", "Give yourself a new name", "pet slime") as null|text),1,MAX_NAME_LEN)
-		else
-			newname = copytext(sanitize(input(user, "Would you like to give the slime a name?", "Name your new pet", "pet slime") as null|text),1,MAX_NAME_LEN)
+/obj/item/weapon/slimepotion/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+	if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
+		to_chat(user, "<span class='warning'>The potion only works on baby slimes!</span>")
+		return ..()
+	if(istype(M, /mob/living/carbon/slime/adult)) //Can't tame adults
+		to_chat(user, "<span class='warning'>Only baby slimes can be tamed!</span>")
+		return..()
+	if(M.stat)
+		to_chat(user, "<span class='warning'>The [M] is dead!</span>")
+		return..()
+	var/mob/living/simple_animal/slime/pet = new /mob/living/simple_animal/slime(M.loc)
+	pet.icon_state = "[M.colour] baby slime"
+	pet.icon_living = "[M.colour] baby slime"
+	pet.icon_dead = "[M.colour] baby slime dead"
+	pet.colour = "[M.colour]"
+	to_chat(user, "You feed \the [M] the potion, removing its powers and calming it.")
+	if(M.mind)
+		M.mind.transfer_to(pet)
+	qdel (M)
+	M = null
+	var/newname = ""
+	if(pet.client)//leaving the player-controlled slimes the ability to choose their new name
+		newname = copytext(sanitize(input(pet, "You have been fed a docility potion, what shall we call you?", "Give yourself a new name", "pet slime") as null|text),1,MAX_NAME_LEN)
+	else
+		newname = copytext(sanitize(input(user, "Would you like to give the slime a name?", "Name your new pet", "pet slime") as null|text),1,MAX_NAME_LEN)
 
-		if (!newname)
-			newname = "pet slime"
-		pet.name = newname
-		pet.real_name = newname
-		qdel (src)
+	if (!newname)
+		newname = "pet slime"
+	pet.name = newname
+	pet.real_name = newname
+	qdel (src)
 
 /obj/item/weapon/slimepotion2
 	name = "advanced docility potion"
-	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame. This one is meant for adult slimes"
+	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame. This one is meant for adult slimes."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle19"
 	w_class = W_CLASS_TINY
 
-	attack(mob/living/carbon/slime/adult/M as mob, mob/user as mob)
-		if(!istype(M, /mob/living/carbon/slime/adult))//If target is not a slime.
-			to_chat(user, "<span class='warning'>The potion only works on adult slimes!</span>")
-			return ..()
-		if(M.stat)
-			to_chat(user, "<span class='warning'>The slime is dead!</span>")
-			return..()
-		var/mob/living/simple_animal/slime/adult/pet = new /mob/living/simple_animal/slime/adult(M.loc)
-		pet.icon_state = "[M.colour] adult slime"
-		pet.icon_living = "[M.colour] adult slime"
-		pet.icon_dead = "[M.colour] baby slime dead"
-		pet.colour = "[M.colour]"
-		to_chat(user, "You feed the slime the potion, removing its powers and calming it.")
-		if(M.mind)
-			M.mind.transfer_to(pet)
-		qdel (M)
-		M = null
-		var/newname = ""
-		if(pet.client)//leaving the player-controlled slimes the ability to choose their new name
-			newname = copytext(sanitize(input(pet, "You have been fed an advanced docility potion, what shall we call you?", "Give yourself a new name", "pet slime") as null|text),1,MAX_NAME_LEN)
-		else
-			newname = copytext(sanitize(input(user, "Would you like to give the slime a name?", "Name your new pet", "pet slime") as null|text),1,MAX_NAME_LEN)
+/obj/item/weapon/slimepotion2/attack(mob/living/carbon/slime/adult/M as mob, mob/user as mob)
+	if(!istype(M, /mob/living/carbon/slime/adult))//If target is not a slime.
+		to_chat(user, "<span class='warning'>The potion only works on adult slimes!</span>")
+		return ..()
+	if(M.stat)
+		to_chat(user, "<span class='warning'>The [M] is dead!</span>")
+		return..()
+	var/mob/living/simple_animal/slime/adult/pet = new /mob/living/simple_animal/slime/adult(M.loc)
+	pet.icon_state = "[M.colour] adult slime"
+	pet.icon_living = "[M.colour] adult slime"
+	pet.icon_dead = "[M.colour] baby slime dead"
+	pet.colour = "[M.colour]"
+	to_chat(user, "You feed \the [M] the potion, removing its powers and calming it.")
+	if(M.mind)
+		M.mind.transfer_to(pet)
+	qdel (M)
+	M = null
+	var/newname = ""
+	if(pet.client)//leaving the player-controlled slimes the ability to choose their new name
+		newname = copytext(sanitize(input(pet, "You have been fed an advanced docility potion, what shall we call you?", "Give yourself a new name", "pet slime") as null|text),1,MAX_NAME_LEN)
+	else
+		newname = copytext(sanitize(input(user, "Would you like to give the slime a name?", "Name your new pet", "pet slime") as null|text),1,MAX_NAME_LEN)
 
-		if (!newname)
-			newname = "pet slime"
-		pet.name = newname
-		pet.real_name = newname
-		qdel (src)
+	if (!newname)
+		newname = "pet slime"
+	pet.name = newname
+	pet.real_name = newname
+	qdel (src)
 
 /obj/item/weapon/slimesteroid
 	name = "slime steroid"
@@ -803,23 +722,23 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "bottle16"
 	w_class = W_CLASS_TINY
 
-	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
-		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
-			to_chat(user, "<span class='warning'>The steroid only works on baby slimes!</span>")
-			return ..()
-		if(istype(M, /mob/living/carbon/slime/adult)) //Can't tame adults
-			to_chat(user, "<span class='warning'>Only baby slimes can use the steroid!</span>")
-			return..()
-		if(M.stat)
-			to_chat(user, "<span class='warning'>The slime is dead!</span>")
-			return..()
-		if(M.cores == 3)
-			to_chat(user, "<span class='warning'>The slime already has the maximum amount of extract!</span>")
-			return..()
+/obj/item/weapon/slimesteroid/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+	if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
+		to_chat(user, "<span class='warning'>The steroid only works on baby slimes!</span>")
+		return ..()
+	if(istype(M, /mob/living/carbon/slime/adult)) //Can't tame adults
+		to_chat(user, "<span class='warning'>Only baby slimes can use the steroid!</span>")
+		return..()
+	if(M.stat)
+		to_chat(user, "<span class='warning'>The [M] is dead!</span>")
+		return..()
+	if(M.cores == 3)
+		to_chat(user, "<span class='warning'>The [M] already has the maximum amount of extract!</span>")
+		return..()
 
-		to_chat(user, "You feed the slime the steroid. It now has triple the amount of extract.")
-		M.cores = 3
-		qdel (src)
+	to_chat(user, "You feed \the [M] the steroid. It now has triple the amount of extract.")
+	M.cores = 3
+	qdel (src)
 
 
 /obj/item/weapon/slimenutrient
@@ -835,13 +754,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(user, "<span class='warning'>The steroid only works on slimes!</span>")
 		return ..()
 	if(M.stat)
-		to_chat(user, "<span class='warning'>The slime is dead!</span>")
+		to_chat(user, "<span class='warning'>The [M] is dead!</span>")
 		return..()
 	if(M.amount_grown == 10)
-		to_chat(user, "<span class='warning'>The slime has already fed enough!</span>")
+		to_chat(user, "<span class='warning'>The [M] has already fed enough!</span>")
 		return..()
 
-	to_chat(user, "You feed the slime the nutrient. It now appears ready to grow.")
+	to_chat(user, "You feed \the [M] the nutrient. It now appears ready to grow.")
 	M.amount_grown = 10
 
 	if (Uses > 0)
@@ -855,19 +774,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle17"
 	w_class = W_CLASS_TINY
-
-	/*afterattack(obj/target, mob/user , flag)
-		if(istype(target, /obj/item/slime_extract))
-			if(target.enhanced == 1)
-				to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
-				return ..()
-			if(target.Uses == 0)
-				to_chat(user, "<span class='warning'>You can't enhance a used extract!</span>")
-				return ..()
-			to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
-			target.Uses = 3
-			target.enahnced = 1
-			del (src)*/
 
 /obj/item/weapon/slimedupe
 	name = "slime duplicator"
@@ -884,15 +790,15 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(user, "<span class='warning'>Only baby slimes can be duplicated!</span>")
 		return ..()
 	if(M.stat)//dunno if this should be allowed but i think it's probably better this way
-		to_chat(user, "<span class='warning'>That slime is dead!</span>")
+		to_chat(user, "<span class='warning'>The [M] is dead!</span>")
 		return ..()
 
-	to_chat(user, "You splash the cloning juice onto the slime.")
+	to_chat(user, "You splash the cloning juice onto \the [M].")
 
 	var/mob/living/carbon/slime/S = new M.primarytype // don't let's start
-	S.tame = M.tame
-	S.forceMove(get_turf(M))
-	qdel(src)
+	S.tame = M.tame // this is the worst part
+	S.forceMove(get_turf(M)) // could believe for all the world
+	qdel(src) // that you're my precious little girl
 
 /obj/item/weapon/slimeres
 	name = "slime resurrection serum"
@@ -905,7 +811,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /*
 /obj/item/clothing/under/golem
 	name = "adamantine skin"
-	desc = "a golem's skin"
+	desc = "a golem's skin."
 	icon_state = "golem"
 	item_state = "golem"
 	_color = "golem"
@@ -915,7 +821,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/suit/golem
 	name = "adamantine shell"
-	desc = "a golem's thick outer shell"
+	desc = "a golem's thick outer shell."
 	icon_state = "golem"
 	item_state = "golem"
 	w_class = W_CLASS_LARGE//bulky item
@@ -932,7 +838,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/shoes/golem
 	name = "golem's feet"
-	desc = "sturdy adamantine feet"
+	desc = "sturdy adamantine feet."
 	icon_state = "golem"
 	item_state = null
 	canremove = 0
@@ -941,7 +847,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/mask/gas/golem
 	name = "golem's face"
-	desc = "the imposing face of an adamantine golem"
+	desc = "The imposing face of an adamantine golem."
 	icon_state = "golem"
 	item_state = "golem"
 	canremove = 0
@@ -952,7 +858,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/gloves/golem
 	name = "golem's hands"
-	desc = "strong adamantine hands"
+	desc = "Strong adamantine hands."
 	icon_state = "golem"
 	item_state = null
 	siemens_coefficient = 0
@@ -964,7 +870,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	item_state = "dermal"
 	_color = "dermal"
 	name = "golem's head"
-	desc = "a golem's head"
+	desc = "A golem's head."
 	canremove = 0
 	flags = FPRINT
 	pressure_resistance = 200 * ONE_ATMOSPHERE
@@ -977,10 +883,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 */
 /obj/effect/golem_rune
 	anchored = 1
-	desc = "a strange rune used to create golems. It glows when spirits are nearby."
+	desc = "A strange rune used to create golems. It glows when spirits are nearby."
 	name = "rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
+	mouse_opacity = 1 //So we can actually click these
 	plane = ABOVE_TURF_PLANE
 	layer = RUNE_LAYER
 	var/list/mob/dead/observer/ghosts[0]
@@ -1052,7 +959,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			return
 		if(O.key in has_died_as_golem)
 			if(world.time < has_died_as_golem[O.key] + GOLEM_RESPAWN_TIME)
-				to_chat(O, "<span class='warning'>You have died as a golem too recently. You must wait longer before you can become a golem again.</span>")
+				to_chat(O, "<span class='warning'>You already died as a golem too recently. You must wait longer before you can become a golem again.</span>")
 				return
 		ghosts.Add(O)
 		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")

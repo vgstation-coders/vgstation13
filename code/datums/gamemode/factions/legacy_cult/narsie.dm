@@ -53,12 +53,8 @@ var/global/list/narsie_list = list()
 		world << sound('sound/effects/wind/wind_5_1.ogg')
 		if(narnar)
 			narsie_spawn_animation()
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (cult)
-		cult.stage(CULT_EPILOGUE)
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
-
-		if (emergency_shuttle && !cult)//in case of Cult 3.0, the round will end after about 5 minutes
+		if (emergency_shuttle)
 			emergency_shuttle.incall()
 			emergency_shuttle.can_recall = 0
 			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
@@ -104,23 +100,6 @@ var/global/list/narsie_list = list()
 			if(!isanycultist(M))
 				to_chat(M, "<span class='danger'>You feel your sanity crumble away in an instant as you gaze upon [src.name]...</span>")
 				M.apply_effect(3, STUN)
-
-
-/obj/machinery/singularity/narsie/large/to_bump(atom/A)
-	if(!narnar)
-		return
-	if(isturf(A))
-		narsiewall(A)
-	else if(istype(A, /obj/structure/cult))
-		qdel(A)
-
-/obj/machinery/singularity/narsie/large/Bumped(atom/A)
-	if(!narnar)
-		return
-	if(isturf(A))
-		narsiewall(A)
-	else if(istype(A, /obj/structure/cult))
-		qdel(A)
 
 /obj/machinery/singularity/narsie/move(var/force_move = 0)
 	if(!move_self)
@@ -175,14 +154,6 @@ var/global/list/narsie_list = list()
 			T.desc = "something that goes beyond your understanding went this way"
 			T.icon_state = "cult-narsie"
 			T.luminosity = 1
-
-/obj/machinery/singularity/narsie/proc/narsiewall(var/turf/T)
-	T.desc = "An opening has been made on that wall, but who can say if what you seek truly lies on the other side?"
-	T.icon = 'icons/turf/walls.dmi'
-	T.icon_state = "cult-narsie"
-	T.opacity = 0
-	T.setDensity(FALSE)
-	luminosity = 1
 
 /obj/machinery/singularity/narsie/large/consume(const/atom/A) //Has its own consume proc because it doesn't need energy and I don't want BoHs to explode it. --NEO
 //NEW BEHAVIOUR

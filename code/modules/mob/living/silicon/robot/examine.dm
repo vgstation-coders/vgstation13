@@ -38,9 +38,8 @@
 		if(UNCONSCIOUS)
 			msg += "<span class='warning'>It doesn't seem to be responding.</span>\n"
 		if(DEAD)
-			msg += "<span class='warning'>It is broken beyond functioning.</span>\n"
-			if(!client)
-				msg += "<span class='deadsay'>It looks completely unsalvageable.</span>\n" //ghosted
+			msg += "<span class='warning'>It is broken, 'Please Check Internal Components' is flashing on its diagnostics display.</span>\n"
+			msg += "<spn class='deadsay'>'Emergency Restart Required' is scrolling repeatedly across the top of its diagnostics display.</span>\n"
 	msg += "*---------*</span>"
 
 	to_chat(user, msg)

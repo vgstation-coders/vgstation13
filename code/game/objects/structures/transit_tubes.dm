@@ -54,7 +54,7 @@
 	..()
 
 // When destroyed by explosions, properly handle contents.
-obj/structure/transit_tube_pod/ex_act(severity)
+/obj/structure/transit_tube_pod/ex_act(severity)
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/AM in contents)
@@ -129,7 +129,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 /obj/structure/transit_tube/station/attack_hand(mob/user)
 	if(!pod_moving)
 		for(var/obj/structure/transit_tube_pod/pod in loc)
-			if(!pod.moving && pod.dir in directions())
+			if(!pod.moving && (pod.dir in directions()))
 				if(open)
 					if(!user.lying && user.loc != pod)
 						var/unloaded = 0
@@ -206,7 +206,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 
 /obj/structure/transit_tube/station/proc/launch_pod()
 	for(var/obj/structure/transit_tube_pod/pod in loc)
-		if(!pod.moving && pod.dir in directions())
+		if(!pod.moving && (pod.dir in directions()))
 			spawn(5)
 				pod_moving = 1
 				close_animation()

@@ -16,7 +16,7 @@
 
 /obj/item/projectile/change/proc/wabbajack(var/mob/living/M,var/type) //WHY: as mob in living_mob_list
 	if(istype(M, /mob/living) && M.stat != DEAD)
-		if(ismanifested(M))
+		if(ismanifested(M) || iscluwnebanned(M))
 			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
 			return
 		var/mob/living/new_mob
@@ -41,7 +41,7 @@
 			if(SOC_SLIME)
 				new_mob = M.slimeize()
 			if(SOC_XENO)
-				new_mob = M.Alienize()
+				new_mob = M.Alienize(pick("Hunter", "Sentinel"))
 			if(SOC_HUMAN)
 				new_mob = M.Humanize()
 			if(SOC_CATBEAST)
@@ -54,3 +54,44 @@
 			var/mob/living/carbon/human/H = new_mob
 			to_chat(new_mob, "<B>Your form morphs into that of a [(istype(H) && H.species && H.species.name) ? H.species.name : randomize].</B>")
 			return new_mob
+
+/obj/item/projectile/zwartepiet
+	name = "bolt of zwarte piet"
+	icon_state = "ice_1"
+	damage = 0
+	damage_type = BURN
+	nodamage = TRUE
+	flag = "energy"
+	var/changetype=null
+	fire_sound = 'sound/weapons/radgun.ogg'
+
+/obj/item/projectile/zwartepiet/on_hit(var/atom/pietje)
+	var/type = changetype
+	spawn(1)
+		zwartepietenate(pietje,type)
+
+/obj/item/projectile/zwartepiet/proc/zwartepietenate(var/mob/living/carbon/human/M,var/type) //WHY: as mob in living_mob_list
+	if(istype(M, /mob/living) && M.stat != DEAD)
+		M.zwartepietify()
+		to_chat(M, "<B>You feel jovial!</B>")
+
+/obj/item/projectile/mouse
+	name = "mouser pistol shot"
+	icon_state = "ice_1"
+	damage = 0
+	damage_type = BURN
+	nodamage = TRUE
+	flag = "energy"
+	fire_sound = 'sound/effects/stealthoff.ogg'
+
+/obj/item/projectile/mouse/on_hit(var/atom/change)
+	if(!iscarbon(change))
+		return
+	var/mob/tomouse = change
+	tomouse.audible_scream()
+	spawn(1)//fixes bugs caused by the target ceasing to exist before the projectile has died.
+		var/mob/M = tomouse.transmogrify(/mob/living/simple_animal/mouse/transmog)
+		M.SetStunned(5)
+		M.Jitter(5)
+		to_chat(M,"<span class='sinister'>You are dazed by the transformation!</span>")
+		to_chat(M,"<span class='danger'>You are imprisoned by this tiny body. If you can die, you will change back!</span>")

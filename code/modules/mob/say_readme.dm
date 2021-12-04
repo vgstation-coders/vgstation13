@@ -46,7 +46,7 @@ global procs
 
 	mob/languages
 		list of languages
-		What language(s) the speaker speaks, and the hearer understands. 
+		What language(s) the speaker speaks, and the hearer understands.
 		If the hearer doesn't understand it will be treated in lang_treat()
 
 	mob/universal_speak
@@ -65,7 +65,7 @@ global procs
 	Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
 		This proc handles hearing. What it does varies. For mobs, it treats the message with hearer-specific things
 		like language and deafness, then outputs it to the hearer.
-		
+
 		IMPORTANT NOTE: If radio_freq is not null, the code will assume that the speaker is virtual! (more info on this in the Radios section below)
 
 	send_speech(message, range, datum/language/speaking)
@@ -166,8 +166,6 @@ If radio_freq is not null, the code will rely on the fact that the speaker is vi
 	(all of these procs are defined at the atom/movable level and return "" at that level.)
 	GetJob()
 		Returns the job string variable of the virtual speaker.
-	GetTrack()
-		Returns wether the tracking href should be fake or not.
 	GetSource()
 		Returns the source of the virtual speaker.
 	GetRadio()

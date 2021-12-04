@@ -16,6 +16,8 @@ var/datum/controller/gameticker/ticker
 	var/event_time = null
 	var/event = 0
 
+	var/list/achievements = list()
+
 	var/login_music			// music played in pregame lobby
 
 	var/list/datum/mind/minds = list()//The people in the game. Used for objective tracking.
@@ -27,6 +29,8 @@ var/datum/controller/gameticker/ticker
 	var/datum/religion/chap_rel 			// Official religion of chappy
 	var/list/datum/religion/religions = list() // Religion(s) in the game
 
+	var/list/runescape_skulls = list() // Keeping track of the runescape skulls that appear over mobs when enabled
+
 	var/random_players = 0 	// if set to nonzero, ALL players who latejoin or declare-ready join will have random appearances/genders
 
 	var/hardcore_mode = 0	//If set to nonzero, hardcore mode is enabled (current hardcore mode features: damage from hunger)
@@ -37,47 +41,37 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
+	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
 
 	// Hack
 	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
 
+	// Tag mode!
+	var/tag_mode_enabled = FALSE
+
+
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
-	var/oursong = file(pick(
-		"sound/music/space.ogg",
-		"sound/music/traitor.ogg",
-		"sound/music/space_oddity.ogg",
-		"sound/music/title1.ogg",
-		"sound/music/title2.ogg",
-		"sound/music/title3.ogg",
-		"sound/music/clown.ogg",
-		"sound/music/robocop.ogg",
-		"sound/music/gaytony.ogg",
-		"sound/music/rocketman.ogg",
-		"sound/music/2525.ogg",
-		"sound/music/moonbaseoddity.ogg",
-		"sound/music/whatisthissong.ogg",
-		"sound/music/space_asshole.ogg",
-		"sound/music/starman.ogg",
-		"sound/music/dawsonschristian.ogg",
-		"sound/music/carmenmirandasghost.ogg",
-		"sound/music/twilight.ogg",
-		))
-
-	if(SNOW_THEME)
-		var/path = "sound/music/xmas/"
-		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
-				filenames -= filename
-		login_music = file("[path][pick(filenames)]")
+	var/path = "sound/music/login/"
+	if(Holiday == APRIL_FOOLS_DAY)
+		path = "sound/music/aprilfools/"
+	else if(SNOW_THEME)
+		path = "sound/music/xmas/"
+	var/list/filenames = flist(path)
+	for(var/filename in filenames)
+		if(copytext(filename, length(filename)) == "/")
+			filenames -= filename
+	if (map.nameShort == "lamprey")
+		login_music = file("sound/music/lampreytheme.ogg")
+	else if (map.nameShort == "dorf")
+		login_music = file("sound/music/b12_combined_start.ogg")
 	else
-		login_music = fcopy_rsc(oursong)
+		login_music = file("[path][pick(filenames)]")
 
-	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
 	do
 #ifdef GAMETICKER_LOBBY_DURATION
@@ -121,7 +115,7 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker/proc/StartThematic(var/playlist)
 	if(!theme)
-		theme = new(locate(1,1,CENTCOMM_Z))
+		theme = new(locate(1,1,map.zCentcomm))
 	theme.playlist_id=playlist
 	theme.playing=1
 	theme.update_music()
@@ -170,6 +164,14 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
+
+	gamestart_time = world.time / 10
+
+	init_mind_ui()
+	init_PDAgames_leaderboard()
+	create_characters() //Create player characters and transfer them
+	collect_minds()
+
 	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
@@ -191,21 +193,22 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	gamestart_time = world.time / 10
-
-	init_PDAgames_leaderboard()
-	create_characters() //Create player characters and transfer them
-	collect_minds()
 	equip_characters()
+
+	for(var/mob/living/carbon/human/player in player_list)
+		switch(player.mind.assigned_role)
+			if("MODE","Mobile MMI","Trader")
+				//No injection
+			else
+				player.update_icons()
+				data_core.manifest_inject(player)
+
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()
 
-
-	//here to initialize the random events nicely at round start
-	setup_economy()
 
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
@@ -254,11 +257,11 @@ var/datum/controller/gameticker/ticker
 				'sound/AI/vox_reminder14.ogg',
 				'sound/AI/vox_reminder15.ogg')
 			for(var/sound in welcome_sentence)
-				play_vox_sound(sound,STATION_Z,null)
+				play_vox_sound(sound,map.zMainStation,null)
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		//mode.Clean_Antags()
-
+		create_random_orders(3) //Populate the order system so cargo has something to do
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
 
@@ -380,24 +383,14 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/create_characters()
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind)
-			if(player.mind.assigned_role=="AI")
-				player.close_spawn_windows()
-				player.AIize()
-			else if(player.mind.assigned_role=="Cyborg")
-				player.create_roundstart_cyborg()
-
+			if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
+				player.create_roundstart_silicon(player.mind.assigned_role)
 			else if(!player.mind.assigned_role)
 				continue
 			else
-
-				var/mob/living/carbon/human/new_character = player.create_character()
-				switch(new_character.mind.assigned_role)
-					if("MODE","Mobile MMI","Trader")
-						//No injection
-					else
-						data_core.manifest_inject(new_character)
-				player.FuckUpGenes(new_character)
-				player.DiseaseCarrierCheck(new_character)
+				var/mob/living/carbon/human/new_character = player.create_character(0)
+				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
 
 
@@ -415,6 +408,7 @@ var/datum/controller/gameticker/ticker
 			if(player.mind.assigned_role != "MODE")
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
+			player.apeify()
 	if(captainless)
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player))
@@ -434,6 +428,12 @@ var/datum/controller/gameticker/ticker
 		nanocoins_lastchange = world.time + rand(3000,15000)
 		nanocoins_rates = (rand(1,30))/10
 
+	//runescape skull updates
+	if (runescape_skull_display)
+		for (var/entry in runescape_skulls)
+			var/datum/runescape_skull_data/the_data = runescape_skulls[entry]
+			the_data.process()
+
 	/*emergency_shuttle.process()*/
 	watchdog.check_for_update()
 
@@ -450,8 +450,6 @@ var/datum/controller/gameticker/ticker
 		spawn
 			declare_completion()
 
-			end_credits.on_round_end()
-
 			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
@@ -460,13 +458,13 @@ var/datum/controller/gameticker/ticker
 				feedback_set("map vote choices", options)
 
 			else
-				var/list/maps = get_maps()
+				var/list/maps = get_votable_maps()
 				var/list/choices=list()
 				for(var/key in maps)
 					choices.Add(key)
 				var/mapname=pick(choices)
 				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
-				watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
+				watchdog.chosen_map = mapname
 				log_game("Server chose [watchdog.chosen_map]!")
 
 
@@ -479,6 +477,8 @@ var/datum/controller/gameticker/ticker
 				feedback_set_details("end_proper","\proper completion")
 				if(!delay_end && !watchdog.waiting)
 					to_chat(world, "<span class='notice'><B>Restarting in [restart_timeout/10] seconds</B></span>")
+
+			end_credits.on_round_end()
 
 			if(blackbox)
 				if(config.map_voting)
@@ -545,87 +545,12 @@ var/datum/controller/gameticker/ticker
 	scoreboard()
 	return 1
 
-/*
-/datum/controller/gameticker/proc/ert_declare_completion()
-	var/text = ""
-	if( ticker.mode.ert.len )
-		var/icon/logo = icon('icons/logos.dmi', "ert-logo")
-		end_icons += logo
-		var/tempstate = end_icons.len
-		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The emergency responders were:</B></FONT> <img src="logo_[tempstate].png">"}
-		for(var/datum/mind/ert in ticker.mode.ert)
-			if(ert.current)
-				var/icon/flat = getFlatIcon(ert.current, SOUTH, 1, 1)
-				end_icons += flat
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> <b>[ert.key]</b> was <b>[ert.name]</b> ("}
-				if(ert.current.stat == DEAD)
-					text += "died"
-					flat.Turn(90)
-					end_icons[tempstate] = flat
-				else
-					text += "survived"
-				if(ert.current.real_name != ert.name)
-					text += " as [ert.current.real_name]"
-			else
-				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
-				end_icons += sprotch
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> [ert.key] was [ert.name] ("}
-				text += "body destroyed"
-			text += ")"
-		text += "<BR><HR>"
-
-	return text
-
-/datum/controller/gameticker/proc/deathsquad_declare_completion()
-	var/text = ""
-	if( ticker.mode.deathsquad.len )
-		var/icon/logo = icon('icons/logos.dmi', "death-logo")
-		end_icons += logo
-		var/tempstate = end_icons.len
-		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The death commando were:</B></FONT> <img src="logo_[tempstate].png">"}
-		for(var/datum/mind/deathsquad in ticker.mode.deathsquad)
-			if(deathsquad.current)
-				var/icon/flat = getFlatIcon(deathsquad.current, SOUTH, 1, 1)
-				end_icons += flat
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> <b>[deathsquad.key]</b> was <b>[deathsquad.name]</b> ("}
-				if(deathsquad.current.stat == DEAD)
-					text += "died"
-					flat.Turn(90)
-					end_icons[tempstate] = flat
-				else
-					text += "survived"
-				if(deathsquad.current.real_name != deathsquad.name)
-					text += " as [deathsquad.current.real_name]"
-			else
-				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
-				end_icons += sprotch
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> [deathsquad.key] was [deathsquad.name] ("}
-				text += "body destroyed"
-			text += ")"
-		text += "<BR><HR>"
-
-	return text
-*/
 /datum/controller/gameticker/proc/bomberman_declare_completion()
 	var/icon/bomberhead = icon('icons/obj/clothing/hats.dmi', "bomberman")
-	end_icons += bomberhead
-	var/tempstatebomberhead = end_icons.len
 	var/icon/bronze = icon('icons/obj/bomberman.dmi', "bronze")
-	end_icons += bronze
-	var/tempstatebronze = end_icons.len
 	var/icon/silver = icon('icons/obj/bomberman.dmi', "silver")
-	end_icons += silver
-	var/tempstatesilver = end_icons.len
 	var/icon/gold = icon('icons/obj/bomberman.dmi', "gold")
-	end_icons += gold
-	var/tempstategold = end_icons.len
 	var/icon/platinum = icon('icons/obj/bomberman.dmi', "platinum")
-	end_icons += platinum
-	var/tempstateplatinum = end_icons.len
 
 	var/list/bronze_tier = list()
 	for (var/mob/living/carbon/M in player_list)
@@ -656,55 +581,43 @@ var/datum/controller/gameticker/ticker
 		if(istype(M.head_state, /obj/item/clothing/head/helmet/space/bomberman) && istype(M.tool_state, /obj/item/weapon/bomberman/))
 			special_tier += M
 
-	var/text = {"<img src="logo_[tempstatebomberhead].png"> <font size=5><b>Bomberman Mode Results</b></font> <img src="logo_[tempstatebomberhead].png">"}
+	var/text = {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(bomberhead)]'> <font size=5><b>Bomberman Mode Results</b></font> <img class='icon' src='data:image/png;base64,[iconsouth2base64(bomberhead)]'>"}
 	if(!platinum_tier.len && !gold_tier.len && !silver_tier.len && !bronze_tier.len)
 		text += "<br><span class='danger'>DRAW!</span>"
 	if(platinum_tier.len)
-		text += {"<br><img src="logo_[tempstateplatinum].png"> <b>Platinum Trophy</b> (never removed his clothes, kept his bomb dispenser until the end, and escaped on the shuttle):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(platinum)]'> <b>Platinum Trophy</b> (never removed his clothes, kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in platinum_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(gold_tier.len)
-		text += {"<br><img src="logo_[tempstategold].png"> <b>Gold Trophy</b> (kept his bomb dispenser until the end, and escaped on the shuttle):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(gold)]'> <b>Gold Trophy</b> (kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in gold_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(silver_tier.len)
-		text += {"<br><img src="logo_[tempstatesilver].png"> <b>Silver Trophy</b> (kept his bomb dispenser until the end, and escaped in a pod):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(silver)]'> <b>Silver Trophy</b> (kept his bomb dispenser until the end, and escaped in a pod):"}
 		for (var/mob/M in silver_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(bronze_tier.len)
-		text += {"<br><img src="logo_[tempstatebronze].png"> <b>Bronze Trophy</b> (kept his bomb dispenser until the end):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(bronze)]'> <b>Bronze Trophy</b> (kept his bomb dispenser until the end):"}
 		for (var/mob/M in bronze_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(special_tier.len)
 		text += "<br><b>Special Mention</b> to those adorable MoMMis:"
 		for (var/mob/M in special_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.name]</b>"}
 
 	return text
 
 /datum/controller/gameticker/proc/achievement_declare_completion()
+	if(!ticker.achievements.len)
+		return
 	var/text = "<br><FONT size = 5><b>Additionally, the following players earned achievements:</b></FONT>"
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
-	end_icons += cup
-	var/tempstate = end_icons.len
-	for(var/winner in achievements)
-		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
-
+	for(var/datum/achievement/achievement in ticker.achievements)
+		text += {"<br>[bicon(achievement.item)] <b>[achievement.ckey]</b> as <b>[achievement.mob_name]</b> won <b>[achievement.award_name]</b>, <b>[achievement.award_desc]!</b>"}
 	return text
 
 /datum/controller/gameticker/proc/get_all_heads()
@@ -731,6 +644,37 @@ var/datum/controller/gameticker/ticker
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
 
+	//Toggle lightswitches on in occupied departments
+	var/discrete_areas = list()
+	for(var/mob/living/carbon/human/H in player_list)
+		var/area/A = get_area(H)
+		if(!(A in discrete_areas)) //We've already added their department
+			discrete_areas += get_department_areas(H)
+	for(var/area/DA in discrete_areas)
+		for(var/obj/machinery/light_switch/LS in DA)
+			LS.toggle_switch(1)
+
+// -- Tag mode!
+
+/datum/controller/gameticker/proc/tag_mode(var/mob/user)
+	tag_mode_enabled = TRUE
+	to_chat(world, "<h1>Tag mode enabled!<h1>")
+	to_chat(world, "<span class='notice'>Tag mode is a 'gamemode' about a changeling clown infiltrated in a station populated by Mimes. His goal is to destroy it. Any mime killing the clown will in turn become the changeling.</span>")
+	to_chat(world, "<span class='notice'>The game ends when all mimes are dead, or when the shuttle is called.</span>")
+	to_chat(world, "<span class='notice'>Have fun!</span>")
+
+	// This is /datum/forced_ruleset thing. This shit exists ONLY for pre-roundstart rulesets. Yes. This is a thing.
+	var/datum/forced_ruleset/tag_mode = new
+	tag_mode.name = "Tag mode"
+	tag_mode.calledBy = "[key_name(user)]"
+	forced_roundstart_ruleset += tag_mode
+	dynamic_forced_extended = TRUE
+
+/datum/controller/gameticker/proc/cancel_tag_mode(var/mob/user)
+	tag_mode_enabled = FALSE
+	to_chat(world, "<h1>Tag mode has been cancelled.<h1>")
+	dynamic_forced_extended = FALSE
+	forced_roundstart_ruleset = list()
 
 /world/proc/has_round_started()
 	return ticker && ticker.current_state >= GAME_STATE_PLAYING

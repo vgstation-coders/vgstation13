@@ -71,3 +71,84 @@
 		new /obj/item/weapon/stock_parts/capacitor/adv(src)
 	for(var/i in 1 to 8)
 		new /obj/item/weapon/stock_parts/console_screen(src)
+
+//Takes a tier 1 stock part path and a target rating
+//Returns a part object
+/proc/part_subtype(var/basepath, var/target)
+	for(var/path in subtypesof(basepath))
+		var/obj/item/weapon/stock_parts/SP = path
+		if(initial(SP.rating) == target)
+			return new SP
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector
+	name = "upgrade injector"
+	desc = "A single use upgrade injector. Just stab it into the side of a machine and it will dissolve away."
+	icon = 'icons/obj/syringe.dmi'
+	icon_state = "combat_hypo"
+	item_state = "hypo"
+	mech_flags = MECH_SCAN_FAIL
+	bluespace = TRUE
+	w_class = W_CLASS_SMALL
+	use_to_pickup = FALSE
+	var/base_rating = 2
+	var/parts_each = 3
+	var/list/part_types = list(/obj/item/weapon/stock_parts/manipulator,
+								/obj/item/weapon/stock_parts/matter_bin,
+								/obj/item/weapon/stock_parts/scanning_module,
+								/obj/item/weapon/stock_parts/capacitor,
+								/obj/item/weapon/stock_parts/micro_laser)
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super
+	name = "super upgrade injector"
+	icon_state = "combat_hypo_s"
+	base_rating = 3
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/New()
+	..()
+	var/obj/item/weapon/stock_parts/SP
+	for(var/i in 1 to parts_each)
+		for(var/path in part_types)
+			var/target_rating = base_rating
+			if(prob(10))
+				target_rating++
+			SP = part_subtype(path,target_rating)
+			SP.forceMove(src)
+			SP.mech_flags |= MECH_SCAN_FAIL
+		new /obj/item/weapon/stock_parts/console_screen(src)
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/attackby(obj/O,mob/user)
+	return
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/can_be_inserted(obj/item/W, stop_messages = 0)
+	return FALSE
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
+	if(force)
+		return ..()
+	else
+		return FALSE
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/play_rped_sound()
+	..()
+	qdel(src) //We've had a successful upgrade, time to die.
+
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED
+	name = "part exchange device"
+	desc = "A tool for replacing components in machines. Requires the user to manually guide and articulate it."
+	icon_state = "PED"
+	item_state = "PED"
+	storage_slots = 35
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED/preattack(var/atom/A, mob/user)
+	if(istype(A, /obj/machinery))
+		var/obj/machinery/M = A
+		if(!M.panel_open)
+			..()
+		else if(do_after(user, M, 5 SECONDS))
+			..()
+		else
+			return 1
+	else
+		..()

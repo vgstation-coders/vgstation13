@@ -4,9 +4,6 @@
 
 	Guidelines for using minds properly:
 
-	-	Never mind.transfer_to(ghost). The var/current and var/original of a mind must always be of type mob/living!
-		ghost.mind is however used as a reference to the ghost's corpse
-
 	-	When creating a new mob for an existing IC character (e.g. cloning a dead guy or borging a brain of a human)
 		the existing mind of the old mob should be transfered to the new mob like so:
 
@@ -32,11 +29,11 @@
 /datum/mind
 	var/key
 	var/name				//replaces mob/var/original_name
-	var/mob/living/current
-	var/mob/living/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
+	var/mob/current
 	var/active = 0
 
 	var/memory
+	var/datum/body_archive/body_archive
 
 	var/assigned_role
 	var/special_role
@@ -44,7 +41,8 @@
 
 	var/role_alt_title
 
-	var/datum/job/assigned_job
+	var/job_priority // How much did we want the job we ended up having? Used for assistant rerolls.
+
 	var/datum/religion/faith
 
 	var/list/kills=list()
@@ -57,8 +55,9 @@
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
 
-		//put this here for easier tracking ingame
+	//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
+	var/initial_wallet_funds = 0
 
 	var/total_TC = 0
 	var/spent_TC = 0
@@ -71,14 +70,16 @@
 	var/hasbeensacrificed = FALSE
 
 	var/miming = null //Toggle for the mime's abilities.
+	var/suiciding = FALSE //Do not allow revives for this person if they have sudoku'd
+
+	var/list/activeUIs = list()
+
+	var/mob_legacy_fac
 
 /datum/mind/New(var/key)
 	src.key = key
 
-/datum/mind/proc/transfer_to(mob/living/new_character)
-	if(!istype(new_character))
-		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
-
+/datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
 		transfer_to_without_current(new_character)
 		return
@@ -91,27 +92,33 @@
 		R.PreMindTransfer(current)
 
 	if(current)					//remove ourself from our old body's mind variable
+		current.old_assigned_role = assigned_role
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
 
 	nanomanager.user_transferred(current, new_character)
 
-	if(active)
-		new_character.key = key		//now transfer the key to link the client to our new body
-
 	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
+
+	if(active)
+		new_character.key = key		//now transfer the key to link the client to our new body
+									//gotta do that after linking the mind to the body or we'll create an extra mind on Login()
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
 
+	if(mob_legacy_fac)
+		new_character.faction = mob_legacy_fac
+
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
+	INVOKE_EVENT(src, /event/after_mind_transfer, "mind" = src)
 
-/datum/mind/proc/transfer_to_without_current(var/mob/living/new_character)
+/datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
 
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
@@ -128,7 +135,14 @@
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
 
-/datum/mind/proc/store_memory(new_text)
+/datum/mind/proc/store_memory(new_text, var/forced)
+	if(!forced)
+		if(length(memory) > MAX_PAPER_MESSAGE_LEN)
+			to_chat(current, "<span class = 'warning'>Your memory, however hazy, is full.</span>")
+			return
+		if(length(new_text) > MAX_MESSAGE_LEN)
+			to_chat(current, "<span class = 'warning'>That's a lot to memorize at once.</span>")
+			return
 	if(new_text)
 		memory += "[new_text]<BR>"
 
@@ -184,10 +198,41 @@
 			out += R.GetMemory(src, TRUE)//allowing edits
 
 	out += "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a>"
+	out += antag_roles.len ? "<br><a href='?src=\ref[src];show_purchases=1'>(show purchase log)</a>" : ""
 
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
 	usr << browse(out, "window=role_panel[src];size=700x500")
+
+/datum/mind/proc/role_purchase_log()
+	if(!ticker || !ticker.mode)
+		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
+		return
+
+	var/out = {"<TITLE>Role purchase log</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<BR>Assigned job: [assigned_role]<hr>"}
+	if(current.spell_list && current.spell_list.len)
+		out += "Known spells:<BR>"
+		for(var/spell/S in current.spell_list)
+			var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+			out += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+	for(var/role in antag_roles)
+		var/datum/role/R = antag_roles[role]
+		if(R.uplink_items_bought)
+			out += "Uplink items bought:<BR>"
+			for(var/entry in R.uplink_items_bought)
+				out += "[entry]<BR>"
+		if(istype(R,/datum/role/wizard))
+			var/datum/role/wizard/W = R
+			if(W.artifacts_bought)
+				out += "Artifacts bought:<BR>"
+				for(var/entry in W.artifacts_bought)
+					out += "[entry]<BR>"
+			if(W.potions_bought)
+				out += "Potions bought:<BR>"
+				for(var/entry in W.potions_bought)
+					out += "[entry]<BR>"
+
+	usr << browse(out, "window=role_purchase_log[src];size=300x500")
 
 /datum/mind/proc/get_faction_list()
 	var/list/all_factions = list()
@@ -205,6 +250,9 @@
 	return all_factions
 
 /datum/mind/Topic(href, href_list)
+	if (href_list["show_purchases"])
+		role_purchase_log()
+
 	if(!check_rights(R_ADMIN))
 		return
 	if (href_list["job_edit"])
@@ -224,8 +272,8 @@
 
 			if ((chosen_greeting && chosen_greeting != GREET_CUSTOM) || (chosen_greeting == GREET_CUSTOM && custom_greeting))
 				R.Greet(chosen_greeting,custom_greeting)
-			
-			
+
+
 
 	if (href_list["add_role"])
 		var/list/available_roles = list()
@@ -279,11 +327,7 @@
 				if (joined)
 					joined.HandleRecruitedRole(newRole)
 
-		if (isninja(current))
-			if ((alert("Throw the ninja into the station from space?", "Alert", "Yes", "No") == "Yes"))
-				current.ThrowAtStation()
-
-		newRole.OnPostSetup(FALSE)
+		newRole.OnPostSetup()
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
 			newRole.Greet(chosen_greeting,custom_greeting)
 
@@ -517,13 +561,14 @@
 		mind.key = key
 	else
 		mind = new /datum/mind(key)
-		mind.original = src
 		if(ticker)
 			ticker.minds += mind
 		else
 			world.log << "## DEBUG: mind_initialize(): No ticker ready yet! Please inform Carn"
 	if(!mind.name)
 		mind.name = real_name
+	if (!mind.body_archive)
+		mind.body_archive = new(src)
 	mind.current = src
 
 //HUMAN

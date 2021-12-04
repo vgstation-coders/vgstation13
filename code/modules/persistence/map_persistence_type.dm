@@ -3,6 +3,7 @@
 	var/filename
 	var/list/tracking = list()
 	var/list/tracked_types = list()
+	var/arbitrary_max_objects = 500
 	var/max_per_turf = 5
 	var/max_age = 5
 	var/filth = FALSE
@@ -30,8 +31,12 @@
 	fdel(writing)
 
 //Note: We save all items. Even if they're in space etc. Next round will be in charge of seeing if they're valid. I don't expect any significant performance loss from this, but if so, this can be changed easily.
+//Note 2: The cap was added because reading 30k of objects crashes the server
 /datum/map_persistence_type/proc/writeSavefile()
 	var/list/finished_list = list()
+	if(tracking.len > arbitrary_max_objects)
+		log_debug("Map persistence \"[name]\" hit the cap. [tracking.len - arbitrary_max_objects] objects did not make it.")
+		tracking.Cut(arbitrary_max_objects)
 	for(var/atom/A in tracking)
 		if(A.getPersistenceAge() >= max_age) //This used to be in canTrack() but I moved it here in case an admin varedits an atom's age or something.
 			continue

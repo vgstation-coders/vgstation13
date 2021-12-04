@@ -60,6 +60,11 @@
 	id = "rdconsole_pod"
 	build_path = /obj/item/weapon/circuitboard/rdconsole/pod
 
+/datum/design/rdconsole/derelict
+	name = "Circuit Design (Derelict R&D Console)"
+	id = "rdconsole_derelict"
+	build_path = /obj/item/weapon/circuitboard/rdconsole/derelict
+
 /datum/design/aifixer
 	name = "Circuit Design (AI Integrity Restorer)"
 	desc = "Allows for the construction of circuit boards used to build an AI Integrity Restorer."

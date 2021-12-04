@@ -38,6 +38,10 @@
 	..()
 	update_icon()
 
+/mob/living/simple_animal/hostile/roboduck/Destroy()
+	new /datum/artifact_postmortem_data(src,TRUE)//we only archive those that were excavated
+	..()
+
 /mob/living/simple_animal/hostile/roboduck/update_icon()
 	if(angered)
 		icon_state = "[initial(icon_state)]_hostile"

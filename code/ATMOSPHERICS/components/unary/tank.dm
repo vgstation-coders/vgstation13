@@ -27,7 +27,7 @@
 		verbs -= rotate_verbs
 
 /obj/machinery/atmospherics/unary/tank/Destroy()
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+	new /obj/item/stack/sheet/metal(get_turf(src), 5)
 	..()
 
 /obj/machinery/atmospherics/unary/tank/ex_act()
@@ -151,7 +151,7 @@
 	src.dir = turn(src.dir, 90)
 	return 1
 
-/obj/machinery/atmospherics/unary/tank/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/unary/tank/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -180,9 +180,8 @@
 	
 	//deconstruction
 	if(iswelder(W) && !anchored)
-		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+		var/obj/item/tool/weldingtool/WT = W
+		if(!WT.remove_fuel(1,user))
 			return
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 		user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
@@ -190,7 +189,7 @@
 		if(do_after(user, src, 40))
 			user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 			"<span class='notice'>You dissasemble \the [src].</span>")
-			//getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+			//new /obj/item/stack/sheet/metal(get_turf(src), 5)
 			punctured(user)
 		return
 

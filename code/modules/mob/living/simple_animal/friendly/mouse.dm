@@ -1,5 +1,5 @@
 #define MOUSETFAT 1000
-#define MOUSEFAT 600
+#define MOUSEFAT 700
 #define MOUSESTARVE 25
 #define MOUSEHUNGRY 100
 #define MOUSEMOVECOST 0.5
@@ -21,6 +21,7 @@
 	emote_hear = list("squeeks","squeaks","squiks")
 	emote_see = list("runs in a circle", "shakes", "scritches at something")
 	pass_flags = PASSTABLE
+	flags = HEAR_ALWAYS | PROXMOVE
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
@@ -46,6 +47,7 @@
 	var/can_chew_wires = 0
 	var/splat = 0
 	var/infectable = 0
+	var/nutrition_loss_mod = 1
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -53,6 +55,7 @@
 	initIcons()
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
+	init_language = default_language
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 
 	var/turf/T = get_turf(src)
@@ -66,6 +69,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	..()
+	standard_damage_overlay_updates()
 	if(!stat && prob(speak_chance))
 		for(var/mob/M in view())
 			M << 'sound/effects/mousesqueek.ogg'
@@ -98,9 +102,10 @@
 		is_fat = 0
 		speed = initial(speed)
 		meat_amount = size //What it is on living/New(),
-	if(nutrition <= MOUSESTARVE && prob(5) && client)
-		to_chat(src, "<span class = 'warning'>You are starving!</span>")
-		health -= 1
+	if(nutrition <= MOUSESTARVE && client)
+		speed = 10
+		if(prob(1))
+			to_chat(src, "<span class = 'warning'>You are starving!</span>")
 	if(nutrition <= MOUSEHUNGRY && nutrition > MOUSESTARVE)
 		speed = 3
 		if(prob(5))
@@ -140,7 +145,7 @@
 			else if (prob(25))
 				dir = pick(cardinal - dir)
 
-		if(!food_target && (!client || nutrition <= MOUSEHUNGRY)) //Regular mice will be moved towards food, mice with a client won't be moved unless they're desperate
+		if(!food_target && !client) //Regular mice will be moved towards food, mice with a client won't be
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
@@ -184,11 +189,11 @@
 					//spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
 
 */
-		nutrition = max(0, nutrition - MOUSESTANDCOST)
+		nutrition = max(0, nutrition - (MOUSESTANDCOST * nutrition_loss_mod))
 
 
 
-/mob/living/simple_animal/mouse/revive()
+/mob/living/simple_animal/mouse/revive(refreshbutcher = 1)
 	for (var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
 		V.cure(src)
@@ -218,7 +223,7 @@
 	var/multiplier = 1
 	if(nutrition >= MOUSEFAT) //Fat mice lose nutrition faster through movement
 		multiplier = 2.5
-	nutrition = max(0, nutrition - MOUSEMOVECOST*multiplier)
+	nutrition = max(0, nutrition - (MOUSEMOVECOST*multiplier*nutrition_loss_mod))
 
 
 /mob/living/simple_animal/mouse/proc/initIcons()
@@ -231,8 +236,7 @@
 
 /mob/living/simple_animal/mouse/proc/MaintInfection()
 	infectable = TRUE
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
-	var/datum/disease2/disease/D = new virus_choice
+	var/datum/disease2/disease/D = get_random_weighted_disease(WMOUSE)
 
 	var/list/anti = list(
 		ANTIGEN_BLOOD	= 1,
@@ -260,6 +264,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
+	if(isUnconscious())
+		return
+
 	if(!can_be_infected())
 		return
 	var/block = 0
@@ -337,42 +344,9 @@
 	if (plane != HIDING_MOB_PLANE)
 		plane = HIDING_MOB_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
-		/*
-		for(var/mob/O in oviewers(src, null))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, text("<B>[] scurries to the ground!</B>", src))
-		*/
 	else
 		plane = MOB_PLANE
 		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
-		/*
-		for(var/mob/O in oviewers(src, null))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, text("[] slowly peaks up from the ground...", src))
-		*/
-
-//make mice fit under tables etc? this was hacky, and not working
-/*
-/mob/living/simple_animal/mouse/Move(var/dir)
-
-	var/turf/target_turf = get_step(src,dir)
-	//CanReachThrough(src.loc, target_turf, src)
-	var/can_fit_under = 0
-	if(target_turf.ZCross(get_turf(src),1))
-		can_fit_under = 1
-
-	..(dir)
-	if(can_fit_under)
-		src.forceMove(target_turf)
-	for(var/d in cardinal)
-		var/turf/O = get_step(T,d)
-		//Simple pass check.
-		if(O.ZCross(T, 1) && !(O in open) && !(O in closed) && O in possibles)
-			open += O
-			*/
-
-///mob/living/simple_animal/mouse/restrained() //Hotfix to stop mice from doing things with MouseDrop
-//	return 1
 
 /mob/living/simple_animal/mouse/scoop_up(var/mob/living/M)
 	if (..() && can_be_infected())
@@ -418,14 +392,14 @@
 		return 0
 
 /mob/living/simple_animal/mouse/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(!Proj)
 		return
 	var/mob/living/simple_animal/mouse/M = src
 	if((Proj.stun + Proj.weaken + Proj.paralyze + Proj.agony) > M.maxHealth)
 		to_chat(M, "<span class='warning'>The force of the projectile completely overwhelms your tiny body...</span>")
 		M.splat()
-		return 0
+		return PROJECTILE_COLLISION_DEFAULT
 
 /*
  * Common mouse types
@@ -449,11 +423,16 @@
 	_color = "black"
 	icon_state = "mouse_black"
 
+//Selects a 1 of 3 random colours.
+/mob/living/simple_animal/mouse/common
+	_color = null
+
 /mob/living/simple_animal/mouse/common/New()
 	..()
 	// Mice IDs
 	if(namenumbers)
 		name = "[name] ([rand(1, 1000)])"
+		real_name = name
 	if(!_color)
 		_color = pick( list("brown","gray","white") )
 		initIcons()
@@ -544,5 +523,28 @@
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
 	..(TRUE)
-	if(gibbed == FALSE)
-		src.gib()
+	if(!gibbed && !(mind && mind.suiciding) && loc != null)
+		explosion(get_turf(loc),-1,0,2)
+		gib()
+
+/mob/living/simple_animal/mouse/transmog
+	maxHealth = 35
+	health = 35
+
+/mob/living/simple_animal/mouse/transmog/transmog_death()
+	if(!transmogged_from)
+		return //Should never happen, but sanity is good
+	var/obj/transmog_body_container/C = transmogged_from
+	var/mob/living/L = C.contained_mob
+	if(istype(loc,/obj/machinery/atmospherics))
+		loc.visible_message("<span class='danger'>\The [loc] gets destroyed by the sudden emergence of \the [L]!</span>")
+		var/turf/T = get_turf(loc)
+		T.ex_act(3) //lightly damage turf
+		qdel(loc) //moves out
+	else
+		L.visible_message("<span class='danger'>\The [src] suddenly snaps back into the shape of \the [L]!</span>")
+	transmogrify()
+
+/mob/living/simple_animal/mouse/transmog/attempt_suicide(forced = FALSE, suicide_set = TRUE)
+	to_chat(src, "<span class='warning'>Your mousy instincts prevent you from snapping your own neck!</span>")
+	return

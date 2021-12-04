@@ -10,8 +10,9 @@
 		if(O.is_organic() && O.is_existing())
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
+	var/prevhealth = health
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
-
+	critlog(health,prevhealth)
 	if((maxHealth - total_burn) < config.health_threshold_dead)
 		death(FALSE)
 		ChangeToHusk()
@@ -55,7 +56,7 @@
 
 	amount = amount * brute_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = amount))
 		return 0
 
 	if(amount > 0)
@@ -67,7 +68,7 @@
 /mob/living/carbon/human/adjustFireLoss(var/amount)
 	amount = amount * burn_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = amount))
 		return 0
 
 	if(amount > 0)
@@ -82,7 +83,7 @@
 /mob/living/carbon/human/proc/adjustBruteLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * brute_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = amount))
 		return 0
 
 	if (organ_name in organs_by_name)
@@ -99,7 +100,7 @@
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * burn_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = amount))
 		return 0
 
 	if (organ_name in organs_by_name)
@@ -121,6 +122,7 @@
 /mob/living/carbon/human/Knockdown(amount)
 	if(M_HULK in mutations)
 		return
+	handle_spaghetti(100)
 	..()
 
 /mob/living/carbon/human/Paralyse(amount)
@@ -135,7 +137,7 @@
 	if(isslimeperson(src))
 		amount = 0
 
-	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = CLONE, "amount" = amount))
 		return 0
 
 	var/heal_prob = max(0, 80 - getCloneLoss())
@@ -144,7 +146,7 @@
 		if (prob(mut_prob))
 			var/list/datum/organ/external/candidates = list()
 			for (var/datum/organ/external/O in organs)
-				if(!(O.status & ORGAN_MUTATED))
+				if(O.is_organic() && O.is_usable())
 					candidates |= O
 			if (candidates.len)
 				var/datum/organ/external/O = pick(candidates)
@@ -154,14 +156,14 @@
 	else
 		if (prob(heal_prob))
 			for (var/datum/organ/external/O in organs)
-				if (O.status & ORGAN_MUTATED)
+				if (O.is_existing() && O.status & ORGAN_MUTATED)
 					O.unmutate()
 					to_chat(src, "<span class = 'notice'>Your [O.display_name] is shaped normally again.</span>")
 					return
 
 	if (getCloneLoss() < 1)
 		for (var/datum/organ/external/O in organs)
-			if (O.status & ORGAN_MUTATED)
+			if (O.is_existing() && O.status & ORGAN_MUTATED)
 				O.unmutate()
 				to_chat(src, "<span class = 'notice'>Your [O.display_name] is shaped normally again.</span>")
 	hud_updateflag |= 1 << HEALTH_HUD
@@ -279,7 +281,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 This function restores the subjects blood to max.
 */
 /mob/living/carbon/human/proc/restore_blood()
-	if(!species.anatomy_flags & NO_BLOOD)
+	if(!(species.anatomy_flags & NO_BLOOD))
 		var/blood_volume = vessel.get_reagent_amount(BLOOD)
 		vessel.add_reagent(BLOOD,560.0-blood_volume)
 
@@ -303,6 +305,7 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/get_organ(var/zone)
+	RETURN_TYPE(/datum/organ/external)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
@@ -372,19 +375,23 @@ This function restores all organs.
 	if(blocked)
 		damage = (damage/100)*(100-blocked)
 
-	if(!ignore_events && INVOKE_EVENT(on_damaged, list("type" = damagetype, "amount" = damage)))
+	if(!ignore_events && INVOKE_EVENT(src, /event/damaged, "kind" = damagetype, "amount" = damage))
 		return 0
 
 	switch(damagetype)
 		if(BRUTE)
-			damageoverlaytemp = 20
 			damage = damage * brute_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 		if(BURN)
-			damageoverlaytemp = 20
 			damage = damage * burn_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
@@ -484,10 +491,14 @@ This function restores all organs.
 	update_canmove()
 
 /mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(species.flags & RAD_IMMUNE)
+		return
 	if(application == RAD_EXTERNAL)
-		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
-
+		INVOKE_EVENT(src, /event/irradiate, "user" = src, "rads" = rads)
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
-			rads = rads/2
+			rads /= 2
+	if(species.rad_mod)
+		rads *= species.rad_mod
 	return ..()
+

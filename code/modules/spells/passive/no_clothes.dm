@@ -5,5 +5,5 @@
 	desc = "Removes the need of wizard robes to cast powerful spells."
 	hud_state = "wiz_noclothes"
 	price = 2 * Sp_BASE_PRICE
-	specialization = UTILITY
+	specialization = SSUTILITY
 //The no_clothes check exists in spell_code.dm

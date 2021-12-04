@@ -19,6 +19,8 @@
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL|ALIEN
 
+	flags = HEAR_ALWAYS | PROXMOVE
+
 	size = SIZE_SMALL
 
 	var/canWearClothes = 1
@@ -39,6 +41,7 @@
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
 	var/canPossess = FALSE
+	var/unmonkey_anim = "monkey2h"
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -79,6 +82,7 @@
 
 		add_language(languagetoadd)
 		default_language = all_languages[languagetoadd]
+		init_language = default_language
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
@@ -92,6 +96,9 @@
 	uniform = null
 	hat = null
 	glasses = null
+
+/mob/living/carbon/monkey/get_butchering_products()
+	return list(/datum/butchering_product/skin/monkey, /datum/butchering_product/teeth/few)
 
 /mob/living/carbon/monkey/abiotic()
 	for(var/obj/item/I in held_items)
@@ -160,6 +167,7 @@
 	voice_name = "greyling"
 	icon_state = "grey"
 	canWearGlasses = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	languagetoadd = LANGUAGE_GREY
 	greaterform = "Grey"
 
@@ -314,7 +322,7 @@
 
 
 
-/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
 	if(!..())
 		return
 
@@ -356,6 +364,11 @@
 	if(wear_id)
 		wear_id.emp_act(severity)
 	..()
+
+/mob/living/carbon/monkey/adjustBruteLoss(damage)
+	..()
+	if (damage > 0)
+		damageoverlaytemp = 20
 
 /mob/living/carbon/monkey/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -402,9 +415,6 @@
 		return
 
 
-/mob/living/carbon/monkey/IsAdvancedToolUser()//Unless its monkey mode monkeys cant use advanced tools
-	return dexterity_check()
-
 // Get ALL accesses available.
 /mob/living/carbon/monkey/GetAccess()
 	var/list/ACL=list()
@@ -445,19 +455,19 @@
 				threatcount += 4
 
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 
 	return threatcount
 
 /mob/living/carbon/monkey/dexterity_check()
 	if(stat != CONSCIOUS)
-		return 0
-	if(ticker.mode.name == "monkey")
-		return 1
+		return FALSE
+	if(ticker.mode.name == "monkey")//monkey mode override
+		return TRUE
 	if(reagents.has_reagent(METHYLIN))
-		return 1
-	return 0
+		return TRUE
+	return FALSE//monkeys can't use complex things by default unless they're high on methylin
 
 /mob/living/carbon/monkey/reset_layer()
 	if(lying)
@@ -512,7 +522,7 @@
 			var/turf/T = loc
 			light_amount = T.get_lumcount() * 10
 
-		growth = Clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
+		growth = clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
 
 		if(growth >= 100)
 			growth = 0
@@ -524,6 +534,10 @@
 			var/matrix/M = adult.transform
 			M.Scale(0)
 			adult.set_species("Mushroom")
+			adult.my_appearance.h_style = "Plump Helmet"
+			adult.my_appearance.r_hair = 60
+			adult.my_appearance.g_hair = 40
+			adult.my_appearance.b_hair = 80
 			for(var/datum/language/L in languages)
 				adult.add_language(L.name)
 
@@ -556,3 +570,55 @@
 
 /mob/living/carbon/monkey/can_be_infected()
 	return 1
+
+/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
+	if (greaterform != "Human")
+		return FALSE
+
+	var/turf/T = get_turf(src)
+	var/obj/structure/mannequin/new_mannequin
+
+	var/list/mannequin_clothing = list(
+		SLOT_MANNEQUIN_ICLOTHING,
+		SLOT_MANNEQUIN_FEET,
+		SLOT_MANNEQUIN_GLOVES,
+		SLOT_MANNEQUIN_EARS,
+		SLOT_MANNEQUIN_OCLOTHING,
+		SLOT_MANNEQUIN_EYES,
+		SLOT_MANNEQUIN_BELT,
+		SLOT_MANNEQUIN_MASK,
+		SLOT_MANNEQUIN_HEAD,
+		SLOT_MANNEQUIN_BACK,
+		SLOT_MANNEQUIN_ID,
+		)
+
+	mannequin_clothing[SLOT_MANNEQUIN_ICLOTHING] = uniform
+	mannequin_clothing[SLOT_MANNEQUIN_HEAD] = hat
+	mannequin_clothing[SLOT_MANNEQUIN_EYES] = glasses
+	mannequin_clothing[SLOT_MANNEQUIN_MASK] = wear_mask
+	mannequin_clothing[SLOT_MANNEQUIN_BACK] = back
+
+	var/list/mannequin_held_items = list(null, null)
+
+	for (var/i = 1 to mannequin_held_items.len)
+		var/obj/O = held_items[i]
+		if (O)
+			drop_item(O,T,TRUE)
+			mannequin_held_items[i] = O
+
+	for (var/obj/O in get_all_slots())
+		drop_item(O,T,TRUE)
+
+	switch (material)
+		if ("marble")
+			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
+		if ("wood")
+			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
+
+	if (new_mannequin)
+		return TRUE
+	return FALSE
+
+/mob/living/carbon/monkey/make_meat(location)
+	var/ourMeat = new meat_type(location, src)
+	return ourMeat

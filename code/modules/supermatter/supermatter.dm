@@ -65,12 +65,19 @@
 
 	// Monitoring shit
 	var/frequency = 1333
-	var/id_tag
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
+	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
+
+	var/has_exploded = 0 // increments each times it tries to explode so we may track how it may occur more than once
+
+/obj/machinery/power/supermatter/airflow_hit(atom/A)
+	if(ismovable(A))
+		var/atom/movable/movingA = A
+		Bumped(movingA)
+	. = ..()
 
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
 	name = "\improper Supermatter Shard"
@@ -97,37 +104,66 @@
 	. = ..()
 	radio = new (src)
 
+/obj/machinery/power/supermatter/shard/New()
+	. = ..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		icon_state = "darkmatter_shard_chad"
+		base_icon_state = "darkmatter_shard_chad"
+		desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You are confident this is literally the best engine on the station, no other engine can compare to the intelligence required to set it up nor the unparalleled power output. All those idiot engineers will set up the Singularity, the TEG, the AME, but they all kneel to those who set up the SME. What are you waiting for? If this doesn't produce enough power to power the station for billions of years then you are doing it wrong.</span>"
+
 /obj/machinery/power/supermatter/initialize()
 	..()
 	set_frequency(frequency) //also broadcasts
 
 /obj/machinery/power/supermatter/Destroy()
+	new /datum/artifact_postmortem_data(src,TRUE)//we only archive those that were excavated
 	qdel(radio)
 	radio = null
-	qdel(radio_connection)
+	radio_controller.remove_object(src, frequency)
 	radio_connection = null
 	. = ..()
 
-/obj/machinery/power/supermatter/proc/explode()
-	if(!istype(universe,/datum/universal_state/supermatter_cascade))
-		var/turf/turff = get_turf(src)
-		new /turf/unsimulated/wall/supermatter(turff)
-		SetUniversalState(/datum/universal_state/supermatter_cascade)
-		explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-		empulse(turff, 100, 200, 1)
-	qdel(src)
+/obj/machinery/power/supermatter/proc/explode(var/mob/user)
+	has_exploded++
+	var/turf/T = get_turf(src)
+	if (has_exploded <= 1)
+		if(!istype(universe,/datum/universal_state/supermatter_cascade))
+			var/turf/turff = get_turf(src)
+			new /turf/unsimulated/wall/supermatter(turff)
+			SetUniversalState(/datum/universal_state/supermatter_cascade)
+			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
+			empulse(turff, 100, 200, 1)
+	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
+		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
-/obj/machinery/power/supermatter/shard/explode()
-	explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-	empulse(get_turf(src), 100, 200, 1)
 	qdel(src)
+	if (has_exploded > 1)
+		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
-/obj/machinery/power/supermatter/ex_act(severity)
+/obj/machinery/power/supermatter/shard/explode(var/mob/user)
+	has_exploded++
+	var/turf/T = get_turf(src)
+	if (has_exploded <= 1)
+		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
+		empulse(get_turf(src), 100, 200, 1)
+	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
+		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+	qdel(src)
+	if (has_exploded > 1)
+		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+
+/obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	Bumped(AM)
+	return TRUE
+
+/obj/machinery/power/supermatter/ex_act(severity,var/mob/whodunnit)
 	switch(severity)
 		if(3.0)
 			return //Should be improved
 		else
-			return explode()
+			return explode(whodunnit)
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/super = FALSE
@@ -144,14 +180,16 @@
 
 /obj/machinery/power/supermatter/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
+	var/ssgss = FALSE
 	if(src.fingerprintshidden)
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	if(current_size == STAGE_SUPER) // and this is to go even further beyond
 		if(!istype(universe,/datum/universal_state/supermatter_cascade))
 			SetUniversalState(/datum/universal_state/supermatter_cascade)
 		S.expand(STAGE_SSGSS, 1)
-	log_admin("New SSGSS made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New SSGSS made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+		ssgss = TRUE
+	log_admin("[ssgss ? "New SSGSS made" : "Singularity gained 20000 energy"] by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("[ssgss ? "New SSGSS made" : "Singularity gained 20000 energy"] by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 20000
 
@@ -206,12 +244,12 @@
 				play_alert = (damage > audio_warning_point)
 			else
 				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
-			var/datum/speech/speech = radio.create_speech(warning, frequency=1459, transmitter=radio)
+			var/datum/speech/speech = radio.create_speech(warning, frequency=COMMON_FREQ, transmitter=radio)
 			speech.name = "Supermatter [short_name] Monitor"
 			speech.job = "Automated Announcement"
 			speech.as_name = "Supermatter [short_name] Monitor"
 			Broadcast_Message(speech, level = list(current_zlevel))
-			returnToPool(speech)
+			qdel(speech)
 
 			lastwarning = world.timeofday - offset
 
@@ -249,7 +287,7 @@
 	damage = max( damage + ( (removed.temperature - 800) / 150 ) , 0 )
 	//Ok, 100% oxygen atmosphere = best reaction
 	//Maxes out at 100% oxygen pressure
-	oxygen = Clamp((removed[GAS_OXYGEN] - removed[GAS_NITROGEN] * NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
+	oxygen = clamp((removed[GAS_OXYGEN] - removed[GAS_NITROGEN] * NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
 
 	var/temp_factor = 100
 
@@ -298,7 +336,7 @@
 
 	power -= (power/power_loss_modifier)**3
 
-	var/light_value = Clamp(round(Clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
+	var/light_value = clamp(round(clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
 
 	// Lighting based on power output.
 	set_light(light_value, light_value / 2)
@@ -317,7 +355,7 @@
 /obj/machinery/power/supermatter/bullet_act(var/obj/item/projectile/Proj)
 	var/turf/L = loc
 	if(!istype(L))		// We don't run process() when we are in space
-		return 0	// This stops people from being able to really power up the supermatter
+		return ..()	// This stops people from being able to really power up the supermatter
 				// Then bring it inside to explode instantly upon landing on a valid turf.
 
 
@@ -326,6 +364,7 @@
 	else
 		damage += Proj.damage * config_bullet_energy
 
+	return ..()
 
 /obj/machinery/power/supermatter/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -359,6 +398,15 @@
 
 
 /obj/machinery/power/supermatter/attack_hand(mob/user as mob)
+	var/obj/item/clothing/gloves/golden/G = user.get_item_by_slot(slot_gloves)
+	if(istype(G))
+		to_chat(user,"<span class='warning'>Carefully extending a single finger, you nearly touch the supermatter before the gloves stop you -- repulsed by and absorbing some kind of charge.</span>")
+		if(G.siemens_coefficient > -1)
+			G.siemens_coefficient = -1
+			G.icon_state = "golden-awakened"
+			G.desc = "Gloves imbued with the power of the supermatter. They absorb electrical shocks to heal the wearer."
+			to_chat(user, "<span class='good'>Some of the power of the supermatter remains trapped in the gloves, changing their properties!</span>")
+		return
 	user.visible_message("<span class=\"warning\">\The [user] reaches out and touches \the [src], inducing a resonance... \his body starts to glow and bursts into flames before flashing into ash.</span>",\
 		"<span class=\"danger\">You reach out and touch \the [src]. Everything starts burning and all you can hear is ringing. Your last thought is \"That was not a wise decision.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
@@ -433,28 +481,29 @@
 				new /obj/machinery/power/supermatter(T)
 
 
-/obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
-	if(istype(user))
-		. = user.supermatter_act(src, SUPERMATTER_DUST)
-		if(istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
-			return
+/obj/machinery/power/supermatter/proc/Consume(atom/A)
+	if(isliving(A))
+		. = A.supermatter_act(src, SUPERMATTER_DUST)
+		if(ismouse(A)) //>implying mice are going to follow the rules
+			return .
 		power += 200
-	else if(istype(user, /atom))
-		var/atom/A = user
+	else
 		. = A.supermatter_act(src, SUPERMATTER_DELETE)
 
 	power += 200
 
-		//Some poor sod got eaten, go ahead and irradiate people nearby.
-	for(var/mob/living/l in range(10,src))
-		if(l in view())
-			l.show_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find your skin covered in new radiation burns.</span>", 1,\
-				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)
-		else
-			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
+	for(var/mob/living/l in range(10,src)) //Some poor sod got eaten, go ahead and irradiate people nearby.
+		if(l == A) //It's the guy that just died.
+			continue
 		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
-		l.apply_radiation(rads, RAD_EXTERNAL) // Permit blocking
+		if(l.apply_radiation(rads, RAD_EXTERNAL))
+			visible_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>", "<span class=\"warning\">The unearthly ringing subsides and you notice you have fresh radiation burns.</span>")
 
+/obj/machinery/power/supermatter/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] suicidally slams \himself head first into the [src], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash, never to be seen again.</span>")
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+	Consume(user)
+	return SUICIDE_ACT_CUSTOM
 
 /obj/machinery/power/supermatter/blob_act()
 	explode()
@@ -502,7 +551,6 @@
 	circuit = "/obj/item/weapon/circuitboard/supermatter"
 	light_color = LIGHT_COLOR_YELLOW
 	var/frequency = 1333
-	var/id_tag //mappable
 	var/datum/radio_frequency/radio_connection
 	var/obj/machinery/power/supermatter/linked = null //Gets cleared in process if the shard explodes
 	//"LIST" BUTTON

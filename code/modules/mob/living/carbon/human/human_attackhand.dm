@@ -28,6 +28,11 @@
 			return
 	//end vampire code
 
+	if(M.head && istype(M.head,/obj/item/clothing/head))
+		var/obj/item/clothing/head/H = M.head
+		if(H.bite_action(src))
+			return //Head slot item overrode the bite
+
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)*dam_check
 
@@ -44,14 +49,22 @@
 		if(2) //Full block
 			damage = 0
 
+	var/attacktype = "bitten"
+	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in M.butchering_drops
+
 	damage = run_armor_absorb(affecting, "melee", damage)
+
+	if(T.amount == 0)
+		attacktype = "gummed"
+		damage = 1
+
 	if(!damage && dam_check)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	src.visible_message("<span class='danger'>\The [M] has [attacktype] \the [src]!</span>", "<span class='userdanger'>You were [attacktype] by \the [M]!</span>")
 	M.do_attack_animation(src, M)
 
 	for(var/datum/disease/D in M.viruses)
@@ -59,6 +72,7 @@
 			contract_disease(D,1,0)
 
 	apply_damage(damage, BRUTE, affecting)
+	attack_hand_contact_diseases(M, affecting, FALSE, TRUE)
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
 	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
@@ -66,6 +80,7 @@
 		LAssailant = null
 	else
 		LAssailant = M
+		assaulted_by(M)
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
 	return
 
@@ -119,7 +134,7 @@
 	if(istype(S))
 		damage += S.bonus_kick_damage
 		S.on_kick(M, src)
-	else if(organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
+	else if(M.organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
 		damage += rand(1,6)
 
 	playsound(loc, "punch", 30, 1, -1)
@@ -142,12 +157,13 @@
 		M.say(pick("Take that!", "Taste the pain!"))
 
 	apply_damage(damage, BRUTE, affecting)
+	attack_hand_contact_diseases(M, affecting, TRUE)
 
 	if(!stomping) //Kicking somebody while holding them with a grab sends the victim flying
 		var/obj/item/weapon/grab/G = M.get_inactive_hand()
 		if(istype(G) && G.affecting == src)
 			spawn()
-				returnToPool(G)
+				qdel(G)
 
 				var/throw_dir = M.dir
 				if(M.loc != src.loc)
@@ -163,7 +179,28 @@
 		LAssailant = null
 	else
 		LAssailant = M
-	log_attack("[M.name] ([M.ckey]) kicked by [src.name] ([src.ckey])")
+		assaulted_by(M)
+	log_attack("[src.name] ([src.ckey]) kicked by [M.name] ([M.ckey])")
+
+/mob/living/carbon/human/proc/attack_hand_contact_diseases(var/mob/living/carbon/human/M, var/datum/organ/external/affecting_override = null, var/kick = FALSE, var/bite = FALSE)
+	var/datum/organ/external/S
+	if (affecting_override)
+		S = affecting_override
+	else
+		S = get_organ(M.zone_sel.selecting)
+	if (!(!S || S.status & ORGAN_DESTROYED))
+		var/touch_zone = S.body_part
+		var/used_bodypart = HANDS
+		if (kick)
+			used_bodypart = FEET
+		var/block = 0
+		var/bleeding = 0
+		// biting causes the check to consider that both sides are bleeding, allowing for blood-only disease transmission through biting.
+		if ((!bite && M.check_contact_sterility(used_bodypart)) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if ((bite || M.check_bodypart_bleeding(used_bodypart)) && (bite || check_bodypart_bleeding(touch_zone)))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(M,block,bleeding)
 
 /mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)
 	//M.delayNextAttack(10)
@@ -181,17 +218,6 @@
 	if((M != src) && check_shields(0, M))
 		visible_message("<span class='borange'>[M] attempts to touch [src]!</span>")
 		return 0
-
-	var/datum/organ/external/S = src.get_organ(M.zone_sel.selecting)
-	if (!(!S || S.status & ORGAN_DESTROYED))
-		var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
-		var/block = 0
-		var/bleeding = 0
-		if (M.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
-			block = 1
-		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(touch_zone))//both sides have to be bleeding to allow for blood infections
-			bleeding = 1
-		share_contact_diseases(M,block,bleeding)
 
 	// CHEATER CHECKS
 	if(M.mind)
@@ -233,20 +259,42 @@
 
 	switch(M.a_intent)
 		if(I_HELP)
-			if(health >= config.health_threshold_crit)
+			if(istype(head, /obj/item/clothing/mask/facehugger/headcrab))
+				var/obj/item/clothing/mask/facehugger/headcrab/crab = get_item_by_slot(slot_head)
+				if(do_after(M, src, 2 SECONDS))
+					if(head == crab)
+						drop_from_inventory(crab)
+						crab.GoIdle(15 SECONDS)
+						visible_message("[M] pulls the headcrab off of [src]'s head!")
+			else if(health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1
 			else if(ishuman(M))
+				attack_hand_contact_diseases(M)
 				M.perform_cpr(src)
 
 		if(I_GRAB)
+			attack_hand_contact_diseases(M)
 			return M.grab_mob(src)
 
 		if(I_HURT)
-			return M.unarmed_attack_mob(src)
+			var/punch_damage = M.unarmed_attack_mob(src)
+			if (punch_damage >= 0)
+				var/punch_zone = M.zone_sel.selecting
+				if (punch_zone == TARGET_EYES || punch_zone == TARGET_MOUTH)
+					punch_zone = LIMB_HEAD
+				var/datum/organ/external/limb = organs_by_name[punch_zone]
+				if(limb.status & ORGAN_BLEEDING)
+					M.bloody_hands(src,1)
+				return punch_damage
+			else // dodged
+				return 0
 
 		if(I_DISARM)
-			return M.disarm_mob(src)
+			var/disarm_attempt = M.disarm_mob(src)
+			if (disarm_attempt)
+				attack_hand_contact_diseases(M)
+			return disarm_attempt
 	return
 
 /mob/living/carbon/human/proc/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, inrange, params)

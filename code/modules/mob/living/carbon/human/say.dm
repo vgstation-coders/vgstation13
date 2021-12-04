@@ -1,6 +1,18 @@
-///mob/living/carbon/human/say(var/message)
-//	..(message)
+/mob/living/carbon/human
+	var/list/muted_letters = list()
+	var/muteletter_tries = 3
+	var/list/muteletters_check = list()
+	var/hangman_phrase = ""
 
+/mob/living/carbon/human/say(var/message)
+	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message) && !findtext(message, "*", 1, 2))
+		species.silent_speech(src,message)
+	else
+		..()
+
+// This is obsolete if the human is using a language.
+// Verbs in such a situation are given in /datum/language/get_spoken_verb().
+// The proc get_spoken_verb(var/msg) allows you to override the spoken verb depending on the mob.
 /mob/living/carbon/human/say_quote(text)
 	if(!text)
 		return "says, \"...\"";	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
@@ -18,14 +30,26 @@
 
 //	if(dna)
 //		return "[dna.species.say_mod], \"[text]\"";
-
+	handle_spaghetti(20) // 20% chance to spill spaghetti when saying something, if in pockets -kanef
 	return "says, [text]";
 
-/mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
-	if(!(copytext(speech.message, 1, 2) == "*"/* || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")*/))
-		for(var/obj/item/I in get_all_slots() + held_items)
-			I.affect_speech(speech, src)
+// Use this for an override of the spoken verb.
+/mob/living/carbon/human/get_spoken_verb(var/msg)
+	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice) || istype(wear_mask, /obj/item/clothing/head/cardborg))
+		if (istype(wear_mask, /obj/item/clothing/mask/gas/voice))
+			var/obj/item/clothing/mask/gas/voice/V = wear_mask
+			if (!(V.vchange) || V.speech_mode == VOICE_CHANGER_SAYS)
+				return ..()
+		var/ending = copytext(msg, length(msg))
+		if (ending == "?")
+			return "queries"
+		if (ending == "!")
+			return "declares"
+		return "states"
 
+	return ..()
+
+/mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))
 		speech.message = "[uppertext(replacetext(speech.message, ".", "!"))]!!" //because I don't know how to code properly in getting vars from other files -Bro
 	if (src.slurring || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
@@ -64,6 +88,18 @@
 		for(var/mob/O in hearers())
 			if(!O.is_deaf() && O.client)
 				O.client.handle_hear_voice(src)
+	if(muted_letters && muted_letters.len)
+		muteletter_tries = 3 //Resets on new thing spoken
+		muteletters_check = uniquelist(splittext(uppertext(speech.message),""))
+		for(var/letter in muteletters_check)
+			if(!(letter in muted_letters))
+				muteletters_check.Remove(letter)
+		hangman_phrase = speech.message
+		hangman_phrase = replacetext(hangman_phrase,".","") // Filter out punctuation
+		hangman_phrase = replacetext(hangman_phrase,"?","")
+		hangman_phrase = replacetext(hangman_phrase,"!","")
+		for(var/letter in muted_letters)
+			speech.message = replacetext(speech.message, letter, "_")
 
 
 /mob/living/carbon/human/GetVoice()
@@ -82,6 +118,11 @@
 				return "Unknown"
 		else
 			return real_name
+
+	if(istype(head, /obj/item/clothing/head/culthood))
+		var/obj/item/clothing/head/culthood/C = head
+		if(C.anon_mode)
+			return "Unknown"
 
 	if(mind) // monkeyhumans exist, don't descriminate
 		var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
@@ -150,7 +191,7 @@
 
 /mob/living/carbon/human/get_alt_name()
 	if(name != GetVoice())
-		return get_id_name("Unknown")
+		return get_worn_id_name("Unknown")
 	return null
 
 /mob/living/carbon/human/say_understands(var/mob/other,var/datum/language/speaking = null)

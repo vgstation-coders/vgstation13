@@ -18,8 +18,6 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 	machine_flags = WRENCHMOVE | SCREWTOGGLE | CROWDESTROY
 
-	var/list/powerchange_hooks=list()
-
 /obj/machinery/mirror/New()
 	..()
 	mirror_list += src
@@ -89,7 +87,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	update_beams()
 	return 1
 
-/obj/machinery/mirror/wrenchAnchor(var/mob/user)
+/obj/machinery/mirror/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -103,7 +101,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		powerchange_hooks[B]=B.power_change.Add(src,"on_power_change")
+		B.register_event(/event/beam_power_change, src, .proc/on_power_change)
 		update_beams()
 
 /obj/machinery/mirror/beam_disconnect(var/obj/effect/beam/emitter/B)
@@ -111,13 +109,11 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.power_change.Remove(powerchange_hooks[B])
-		powerchange_hooks.Remove(B)
+		B.unregister_event(/event/beam_power_change, src, .proc/on_power_change)
 		update_beams()
 
 // When beam power changes
-/obj/machinery/mirror/proc/on_power_change(var/list/args)
-	//Don't care about args, just update beam.
+/obj/machinery/mirror/proc/on_power_change(obj/effect/beam/beam)
 	update_beams()
 
 /obj/machinery/mirror/proc/kill_all_beams()
@@ -255,15 +251,15 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 /obj/machinery/mirror/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	if(!istype(P, /obj/item/projectile/beam))
-		return
+		return ..()
 	if(P.damage < initial(P.damage)/4)  //Can only be reflected 5 times, let's say
-		return
+		return ..()
 	var/list/deflections = get_deflections(get_dir(src,P))
 	var/turf/T = get_turf(src)
 	for(var/i=1 to nsplits)
 		var/splitdir = deflections[i]
 		var/turf/target = get_edge_target_turf(src, splitdir)
-		var/obj/item/projectile/beam/B = new P.type
+		var/obj/item/projectile/beam/B = new P.type(T)
 		B.original = target
 		B.starting = T
 		B.current = T
@@ -275,3 +271,4 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		B.damage = P.damage/2
 		spawn()
 			B.process()
+	return ..()

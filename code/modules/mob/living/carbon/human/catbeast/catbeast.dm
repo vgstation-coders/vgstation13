@@ -1,7 +1,2 @@
-/mob/living/carbon/human/tajaran/New(var/new_loc)
-	..(new_loc, "Tajaran")
-	my_appearance.h_style = "Tajaran Ears"
-	regenerate_icons()
-
-/mob/living/carbon/human/tajaran/IsAdvancedToolUser()
-	return 0
+/mob/living/carbon/human/tajaran/dexterity_check()
+	return FALSE//catbeasts are dumb and their paws/claws prevent them from using machines

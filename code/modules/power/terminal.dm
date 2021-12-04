@@ -57,8 +57,8 @@
 	..()
 
 /obj/machinery/power/terminal/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W) && !master) //Sanity in the rare case something destroys a machine and leaves a terminal
-		getFromPool(/obj/item/stack/cable_coil, get_turf(src), 10)
+	if(W.is_wirecutter(user) && !master) //Sanity in the rare case something destroys a machine and leaves a terminal
+		new /obj/item/stack/cable_coil(get_turf(src), 10)
 		qdel(src)
 		return
 	..()
@@ -91,6 +91,11 @@
 	terminal = new /obj/machinery/power/terminal(newloc)
 	terminal.dir = get_dir(newloc, src)
 	terminal.master = src
+
+/obj/machinery/power/shuttle_rotate(angle)
+	..()
+	if(terminal.dir != get_dir(terminal.loc, src))
+		terminal.dir = get_dir(terminal.loc, src)
 
 /obj/machinery/power/proc/can_attach_terminal(mob/user)
 	return user.loc != src.loc && (get_dir(user, src) in cardinal) && !terminal

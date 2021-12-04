@@ -37,6 +37,10 @@
 	add_max_amounts()
 	return
 
+/datum/construction/Destroy()
+	holder = null
+	return ..()
+
 /datum/construction/proc/next_step(mob/user as mob)
 	steps.len--
 	if(!steps.len)
@@ -72,24 +76,13 @@
 	return 0
 
 /datum/construction/proc/custom_action(step, obj/item/used_atom, mob/user)
-	if(iswelder(used_atom))
-		playsound(holder, 'sound/items/Welder2.ogg', 50, 1)
-
-	else if(iswrench(used_atom))
-		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
-
-	else if(used_atom.is_screwdriver(user))
-		playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
-
-	else if(iswirecutter(used_atom))
-		playsound(holder, 'sound/items/Wirecutter.ogg', 50, 1)
-
-	else if(istype(used_atom,/obj/item/weapon/circuitboard))
+	if(istype(used_atom,/obj/item/weapon/circuitboard))
 		playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
-
-	else if(iscablecoil(used_atom))
-		playsound(holder, 'sound/items/zip.ogg', 50, 1)
-
+	else
+		if(iscablecoil(used_atom))
+			playsound(holder, 'sound/items/zip.ogg', 50, 1)
+		else
+			used_atom.playtoolsound(holder, 50)
 	construct_message(step, user)
 	return 1
 
@@ -176,7 +169,7 @@
 			stack.use(amount)
 		// WELDER
 		else if(iswelder(used_atom) && !(Co_TAKE in given_step))
-			var/obj/item/weapon/weldingtool/welder=used_atom
+			var/obj/item/tool/weldingtool/welder=used_atom
 			if(!welder.isOn())
 				to_chat(user, "<span class='notice'>You tap \the [holder] with your unlit welder.  [pick("Ding","Dong")].</span>")
 				return 0
@@ -349,7 +342,7 @@
 			stack.use(amount)
 		// WELDER
 		else if(iswelder(used_atom) && !(Co_TAKE in given_step))
-			var/obj/item/weapon/weldingtool/welder=used_atom
+			var/obj/item/tool/weldingtool/welder=used_atom
 			if(!welder.isOn())
 				to_chat(user, "<span class='notice'>You tap \the [holder] with your unlit welder.  [pick("Ding","Dong")].</span>")
 				return 0
@@ -411,7 +404,7 @@
 		return S[Co_NEXTSTEP]
 
 /datum/construction/reversible/proc/get_backward_step(index)
-	if(index < 0 || index > steps.len)
+	if(index < 1 || index > steps.len)
 		return
 	var/list/S = steps[index]
 	if(Co_BACKSTEP in S)

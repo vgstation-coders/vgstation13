@@ -27,7 +27,7 @@
 	. = ..()
 	update_icon()
 
-/obj/structure/bed/roller/manual_unbuckle(var/mob/user)
+/obj/structure/bed/roller/manual_unbuckle(var/mob/user, var/resisting = FALSE)
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return FALSE
@@ -139,9 +139,9 @@
 	desc = "A syndicate-modded cyborg hover bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "syndie_borgbed_stored"
-	bed_type = /obj/structure/bed/roller/borg/syndie
+	bed_type = /obj/structure/bed/roller/surgery/borg/syndie
 
-/obj/structure/bed/roller/borg/syndie
+/obj/structure/bed/roller/surgery/borg/syndie
 	name = "syndicate hover bed"
 	icon_state = "syndie_borgbed_down"
 	up_state ="syndie_borgbed_up"

@@ -97,7 +97,7 @@
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
 		transfer_amount = reagents.total_volume
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
-	var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)
+	var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 	reagents.trans_to(D, transfer_amount, 1/3)
 
 	// Move the puff toward the target
@@ -107,7 +107,7 @@
 			D.react()
 			sleep(3)
 
-		returnToPool(D)
+		qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
@@ -123,7 +123,7 @@
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
 	name = "pepperspray"
-	desc = "Manufactured by UhangInc, used to blind and down an opponent quickly."
+	desc = "A pepper spray manufactured by UhangInc, used to blind and down an opponent quickly."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "pepperspray"
 	item_state = "pepperspray"
@@ -133,6 +133,19 @@
 /obj/item/weapon/reagent_containers/spray/pepper/New()
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
+
+/obj/item/weapon/reagent_containers/spray/pepper/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/orange)
+		has_slime=1
+		reagents.add_reagent(CONDENSEDCAPSAICIN, 40)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
+		to_chat(user, "You drop the slime extract down into the spray canister, and liquid capsaicin swells up to the brim.")
+		return TRUE
+
+/obj/item/weapon/reagent_containers/spray/pepper/make_puff(var/atom/target, var/mob/user)
+	if(has_slime)
+		reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
+	..()
 
 // Luminol
 /obj/item/weapon/reagent_containers/spray/luminol
@@ -147,26 +160,26 @@
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
 	name = "Plant-B-Gone"
 	desc = "Kills those pesky weeds!"
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/plantbgone/New()
 	..()
-	reagents.add_reagent(PLANTBGONE, 100)
+	reagents.add_reagent(PLANTBGONE, 250)
 
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
 	desc = "Kills those pesky bugs!"
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/bugzapper/New()
 	..()
-	reagents.add_reagent(TOXIN, 100)
+	reagents.add_reagent(INSECTICIDE, 250)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer
@@ -182,6 +195,10 @@
 
 	delay_spraying = FALSE
 
+/obj/item/weapon/reagent_containers/spray/chemsprayer/attack_self(var/mob/user)
+	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
+	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this * 3] units per spray.</span>")
+
 /obj/item/weapon/reagent_containers/spray/chemsprayer/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puffs
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
@@ -191,7 +208,7 @@
 		if (src.reagents.total_volume < 1)
 			break
 
-		var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)
+		var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 		reagents.trans_to(D, amount_per_transfer_from_this)
 		Sprays[i] = D
 
@@ -217,7 +234,7 @@
 				D.react(iteration_delay = 0)
 				sleep(2)
 
-			returnToPool(D)
+			qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
@@ -237,7 +254,7 @@
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
 		transfer_amount = reagents.total_volume
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
-	var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)
+	var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 	D.flags |= NOREACT
 	reagents.trans_to(D, transfer_amount, 1/3)
 
@@ -251,6 +268,6 @@
 			D.react()
 			sleep(3)
 
-		returnToPool(D)
+		qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)

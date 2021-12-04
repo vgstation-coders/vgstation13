@@ -369,7 +369,7 @@
 
 //Bullets
 /mob/living/simple_animal/parrot/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(!stat && !client)
 		if(parrot_state == PARROT_PERCH)
 			parrot_sleep_dur = parrot_sleep_max //Reset it's sleep timer if it was perched
@@ -494,11 +494,11 @@
 					return
 			return
 
-		if(parrot_interest && parrot_interest in view(src))
+		if(parrot_interest && (parrot_interest in view(src)))
 			parrot_state = PARROT_SWOOP | PARROT_STEAL
 			return
 
-		if(parrot_perch && parrot_perch in view(src))
+		if(parrot_perch && (parrot_perch in view(src)))
 			parrot_state = PARROT_SWOOP | PARROT_RETURN
 			return
 
@@ -805,7 +805,7 @@
 		if(istype(held_item, /obj/item/weapon/grenade))
 			var/obj/item/weapon/grenade/G = held_item
 			G.forceMove(src.loc)
-			G.prime()
+			G.prime(src)
 			to_chat(src, "You let go of [held_item]!")
 			held_item = null
 			return 1

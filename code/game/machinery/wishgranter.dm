@@ -2,7 +2,7 @@
 	name = "\improper Wish Granter"
 	desc = "You're not so sure about this anymore."
 	icon = 'icons/obj/device.dmi'
-	icon_state = "syndbeacon"
+	icon_state = "wishgranter"
 
 	use_power = 0
 	anchored = 1
@@ -23,15 +23,12 @@
 		to_chat(user, "<span class='sinister'>You feel a dark stirring inside of \the [src], something you want nothing of! Your instincts are better than any man's.</span>")
 		return
 
-	/*else if(is_special_character(user))
-		to_chat(user, "<span class='sinister'>Even to a heart as dark as yours, you know nothing good will come out of messing with \the [src]! Something instinctual pulls you away.</span>")
-	*/
 	else if (!insisting)
 		user.visible_message("<span class='sinister'>[user] touches [src] delicately, causing it to stir.</span>", "<span class='sinister'>Your first touch makes [src] stir, listening to you. Are you still sure about this ?</span>")
 		insisting++
 
 	else
-		user.whisper(pick(wish_whispers), heard="kneels before \the [src] and mumbles sinisterly,", unheard="kneels before \the [src] and mumbles something sinisterly.", allow_lastwords = 0)
+		user.whisper(pick(wish_whispers))
 		spawn(10) //OH SHI-
 			message_admins("[user] has interacted with \the [src] (Wish Granter) and is now its powerful avatar!")
 			user.visible_message("<span class='sinister'>[user] clenches in pain before \the [src] and then raises back up with a demonic and soulless expression!</span>", "<span class='sinister'>\the [src] answers and your head pounds for a moment before your vision clears. You are the avatar of [src], and your power is LIMITLESS! And it's all yours. You need to make sure no one can take it from you! No one must know, first!</span>", "<span class='sinister'>You hear a demonic hum, this can't be good!</span>")

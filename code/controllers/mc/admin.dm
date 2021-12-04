@@ -1,6 +1,7 @@
 // Clickable stat() button.
 /obj/effect/statclick
 	var/target
+	icon = null
 
 /obj/effect/statclick/New(text, target)
 	name = text
@@ -9,6 +10,9 @@
 /obj/effect/statclick/proc/update(text)
 	name = text
 	return src
+
+/obj/effect/statclick/time/Click()
+	to_chat(usr,"<span class='notice'>The server time is [time2text(world.timeofday, "hh:mm:ss")]. The time slot is [getTimeslot()].</span>")
 
 /obj/effect/statclick/debug
 	var/class
@@ -93,12 +97,10 @@
 		if("Cameras")
 			debug_variables(cameranet)
 			feedback_add_details("admin_verb","DCameras")
-		if("Garbage")
-			debug_variables(garbageCollector)
-			feedback_add_details("admin_verb","DGarbage")
 		if("Vote")
 			debug_variables(vote)
 			feedback_add_details("admin_verb","DprocessVote")
+
 	message_admins("Admin [key_name_admin(usr)] is debugging the [controller] controller.")
 
 /client/proc/rigvote()
@@ -109,21 +111,24 @@
 	if(!vote)
 		return
 	var/winner
-	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Input New") == "Preexisting")
+	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
 		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
 		if(!winner)
 			return
 		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	else
-		winner = input(usr,"Add a result.","Add a result","") as text|null
-		if(!winner)
-			return
 		if(vote.ismapvote)
-			var/path = input(usr,"Add the map path.","Path","") as text|null
-			if(!path)
-				to_chat(usr,"<span class='warning'>You must specify a path to rig a mapvote!</span>")
+			var/all_maps = get_all_maps()
+			winner = input(usr, "Pick a map.") as null|anything in all_maps
+			if(!winner)
 				return
+			var/path = all_maps[winner]
 			vote.ismapvote[winner] = path
 			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
+		else
+			winner = input(usr,"Add a result.","Add a result","") as text|null
+		if(!winner)
+			return
 		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")

@@ -26,7 +26,7 @@ var/list/potential_theft_objectives=list(
 		if(objective.typepath in map.unavailable_items)
 			continue
 
-		if(owner && owner.assigned_role in objective.protected_jobs)
+		if(owner && (owner.assigned_role in objective.protected_jobs))
 			continue
 
 		steal_target = objective
@@ -61,7 +61,6 @@ var/list/potential_theft_objectives=list(
 		steal_target = new new_target
 		explanation_text = format_explanation()
 		return TRUE
-	return FALSE
 
 /datum/objective/target/steal/IsFulfilled()
 	if (..())

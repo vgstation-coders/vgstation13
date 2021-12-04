@@ -15,13 +15,12 @@
 /mob/living/simple_animal/shade/proc/give_blade_powers()
 	if (!istype(loc, /obj/item/weapon/melee/soulblade))
 		return
+	DisplayUI("Soulblade")
+	register_event(/event/living_login, src, /mob/living/simple_animal/shade/proc/add_HUD)
 	if (client)
 		client.CAN_MOVE_DIAGONALLY = 1
 		client.screen += list(
-			gui_icons.soulblade_bgLEFT,
-			gui_icons.soulblade_coverLEFT,
-			gui_icons.soulblade_bloodbar,
-			fire,
+			healths2,
 			)
 	var/obj/item/weapon/melee/soulblade/SB = loc
 	var/datum/control/new_control = new /datum/control/soulblade(src, SB)
@@ -33,7 +32,7 @@
 	add_spell(new /spell/soulblade/blade_mend, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_boil, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(src)
 	if (C)
 		C.logo_state = "shade-blade"
 
@@ -42,19 +41,27 @@
 	if (client)
 		client.CAN_MOVE_DIAGONALLY = 0
 		client.screen -= list(
-			gui_icons.soulblade_bgLEFT,
-			gui_icons.soulblade_coverLEFT,
-			gui_icons.soulblade_bloodbar,
-			fire,
+			healths2,
 			)
-	if (hud_used && gui_icons && gui_icons.soulblade_coverLEFT)
-		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = ""
+	HideUI("Soulblade")
+	unregister_event(/event/living_login, src, /mob/living/simple_animal/shade/proc/add_HUD)
 	for(var/spell/soulblade/spell_to_remove in spell_list)
 		remove_spell(spell_to_remove)
 
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(src)
 	if (C)
-		C.logo_state = "cult-logo"
+		switch(C.cultist_role)
+			if (CULTIST_ROLE_ACOLYTE)
+				C.logo_state = "cult-apprentice-logo"
+			if (CULTIST_ROLE_HERALD)
+				C.logo_state = "cult-logo"
+			if (CULTIST_ROLE_MENTOR)
+				C.logo_state = "cult-master-logo"
+			else
+				C.logo_state = "cult-logo"
+
+/mob/living/simple_animal/shade/proc/add_HUD(var/mob/user)
+	DisplayUI("Soulblade")
 
 /spell/soulblade
 	panel = "Cult"
@@ -74,12 +81,7 @@
 	var/obj/item/weapon/melee/soulblade/SB = holder.loc
 	SB.blood = max(0,SB.blood-blood_cost)
 	var/mob/shade = holder
-	var/matrix/M = matrix()
-	M.Scale(1,SB.blood/SB.maxblood)
-	var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER
-	shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
-	shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-	shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[SB.blood]"
+	shade.DisplayUI("Soulblade")
 
 
 /////////////////////////////
@@ -116,7 +118,7 @@
 
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
-	charge_max = 15
+	charge_max = 0
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""
@@ -125,6 +127,13 @@
 	cast_delay = 0
 
 	blood_cost = 5
+	var/spin_cooldown = FALSE //gotta use that to get a more strict cooldown at such a small value
+
+
+/spell/soulblade/blade_spin/perform(mob/user = usr, skipcharge = 0, list/target_override)
+	if (spin_cooldown)
+		return
+	..()
 
 /spell/soulblade/blade_spin/choose_targets(var/mob/user = usr)
 	var/obj/item/weapon/melee/soulblade/SB = user.loc
@@ -140,8 +149,8 @@
 			return null
 	var/turf/T = get_turf(SB)
 	var/dir = SB.dir
-	if (istype(T,/obj/item/projectile))
-		var/obj/item/projectile/P = T
+	if (istype(SB.loc,/obj/item/projectile))
+		var/obj/item/projectile/P = SB.loc
 		dir = get_dir(P.starting,P.target)
 	var/list/my_targets = list()
 	for (var/atom/A in T)
@@ -176,7 +185,13 @@
 
 /spell/soulblade/blade_spin/cast(var/list/targets, var/mob/user)
 	..()
+	spin_cooldown = TRUE
+	spawn(10) // 10 ticks of cooldown starting right now
+		spin_cooldown = FALSE
 	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	SB.reflector = TRUE
+	spawn(4) // reflects projectiles for 4 ticks
+		SB.reflector = FALSE
 	SB.throwing = 0
 	if (istype(SB.loc,/obj/item/projectile))
 		var/obj/item/projectile/P = SB.loc
@@ -197,7 +212,7 @@
 
 /spell/soulblade/blade_perforate
 	name = "Perforate"
-	desc = "(20 BLOOD) Hurl yourself through the air."
+	desc = "(20 BLOOD) Hurl yourself through the air. You can cast this spell by doing a Drag n Drop with your mouse for more interesting trajectories. If you hit a cultist, they'll automatically grab you."
 	hud_state = "soulblade_perforate"
 
 	invocation_type = SpI_NONE
@@ -304,7 +319,7 @@
 		var/mob/living/carbon/human/H = wielder
 		for(var/datum/organ/external/temp in H.organs)
 			if(temp.status & ORGAN_BLEEDING)
-				temp.clamp()
+				temp.clamp_wounds()
 
 	playsound(wielder.loc, 'sound/effects/mend.ogg', 50, 0, -2)
 	wielder.heal_organ_damage(10, 0)

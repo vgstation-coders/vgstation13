@@ -4,6 +4,14 @@
 	if(!check_rights(R_SOUNDS))
 		return
 
+	if (map.nameShort == "lamprey")
+		alert("Playing sounds on Lamprey Station is disabled.")
+		return FALSE
+
+	var/confirm = alert(src, "Consider using 'Play Local Sound' or using the jukebox 'Custom Songs' feature for a large file.","Confirmation","Confirm","Cancel")
+	if(confirm == "Cancel")
+		return
+
 	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = CHANNEL_ADMINMUSIC)
 	uploaded_sound.status = SOUND_STREAM
 	uploaded_sound.priority = 250

@@ -47,6 +47,12 @@
 				if (antibody == ANTIGEN_RH && findtext(body.dna.b_type,"+"))
 					antibodies[antibody] += rand(12,15)
 
+/datum/immune_system/Destroy()
+	if(body)
+		body.immune_system = null
+		body = null
+	..()
+
 /datum/immune_system/proc/transfer_to(var/mob/living/L)
 	if (!L.immune_system)
 		L.immune_system = new (L)
@@ -127,3 +133,14 @@
 
 	for (var/A in antigen)
 		antibodies[A] = min(antibodies[A] + 20, 100)
+
+
+/datum/immune_system/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"strength",
+		"overloaded",
+		"antibodies"
+	)
+
+	reset_vars_after_duration(resettable_vars, duration)

@@ -20,6 +20,10 @@
 	base_state = icon_state
 	button_icon = image(src.icon)
 
+/obj/item/device/remote_button/Destroy()
+	holder = null
+	return ..()
+
 /obj/item/device/remote_button/update_icon(button_id = 0)
 	if(holder)
 		holder.overlays -= button_icon

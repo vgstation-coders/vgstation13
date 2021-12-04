@@ -41,7 +41,7 @@
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
 
-/obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
+/obj/structure/closet/body_bag/attackby(obj/item/W, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
 		if(S.amount<5)
@@ -51,7 +51,7 @@
 		qdel(src)
 	else if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user, maxlength=32)
-	else if(iswirecutter(W))
+	else if(W.is_wirecutter(user))
 		remove_label()
 		to_chat(user, "<span class='notice'>You cut the tag off the bodybag.</span>")
 
@@ -111,6 +111,19 @@
 				else
 					return 1
 	return ..()
+
+/obj/structure/closet/body_bag/olympics/New()
+	..()
+	var/mob/living/carbon/human/torso = new
+	torso.resting = TRUE
+	for(var/datum/organ/external/limb in torso.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_LEFT_ARM, LIMB_RIGHT_ARM))
+		var/obj/limb_obj = limb.droplimb(override = TRUE, no_explode = TRUE, spawn_limb = TRUE, display_message = FALSE)
+		limb_obj.forceMove(src)
+	var/obj/heart = torso.remove_internal_organ(torso, torso.get_heart(), torso.get_organ(LIMB_CHEST))
+	heart.forceMove(get_turf(src))
+	var/datum/organ/external/head = torso.organs_by_name[LIMB_HEAD]
+	head.droplimb(override = TRUE, no_explode = TRUE, spawn_limb = FALSE, display_message = FALSE)
+	torso.forceMove(src)
 
 //Cryobag (statis bag) below, not currently functional it seems
 

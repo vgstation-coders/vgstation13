@@ -1,19 +1,25 @@
 /obj/item/weapon/grenade/smokebomb
-	desc = "It is set to detonate in 2 seconds."
+	desc = "Generates a cloud of harmless, vision-obscuring smoke upon detonation."
 	name = "smoke bomb"
 	icon = 'icons/obj/grenade.dmi'
-	icon_state = "flashbang"
+	icon_state = "smokebomb"
 	det_time = 20
 	item_state = "flashbang"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	var/datum/effect/effect/system/smoke_spread/bad/smoke
+	var/datum/effect/system/smoke_spread/bad/smoke
 	mech_flags = null
 
 /obj/item/weapon/grenade/smokebomb/New()
 	..()
-	smoke = new /datum/effect/effect/system/smoke_spread/bad
+	smoke = new /datum/effect/system/smoke_spread/bad
 	smoke.attach(src)
+
+/obj/item/weapon/grenade/smokebomb/Destroy()
+	if(smoke)
+		qdel(smoke)
+		smoke = null
+	..()
 
 /obj/item/weapon/grenade/smokebomb/prime()
 	playsound(src, 'sound/effects/smoke.ogg', 50, 1, -3)

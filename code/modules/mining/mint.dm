@@ -2,20 +2,20 @@
 
 /obj/machinery/mineral/mint
 	name = "coin press"
+	desc = "Turns precious sheets into luxurious item tokens. Or small, annoying throwing weapons."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "coinpress0"
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-	var/atom/movable/mover //see ore processing_unit, it's for input/output
 	starting_materials = list() //makes the new empty datum
 	var/coins_per_sheet = 5 //Related to part quality
 	var/newCoins = 0   //how many coins the machine made last run
 	var/processing = 0
 	var/chosen = null //which material will be used to make coins
 	var/coinsToProduce = 10
-	var/in_dir = WEST // Sheets go in
-	var/out_dir = EAST //Coins come out.
+	in_dir = WEST // Sheets go in
+	out_dir = EAST //Coins come out.
 
 /obj/machinery/mineral/mint/New()
 	..()
@@ -29,23 +29,8 @@
 	)
 	RefreshParts()
 
-/obj/machinery/mineral/mint/process()
-	if(stat & (NOPOWER|BROKEN)) //It still moves sheets when unbolted otherwise.
-		return 0
-	var/turf/in_T = get_step(src, in_dir)
-	var/turf/out_T = get_step(src, out_dir)
-
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
-		return
-
-	for(var/atom/movable/A in in_T)
-		if(A.anchored)
-			continue
-
-		if(!istype(A, /obj/item/stack/sheet))//Sheets only
-			A.forceMove(out_T)
-			continue
-
+/obj/machinery/mineral/mint/process_inside(atom/movable/A)
+	if(istype(A,/obj/item/stack/sheet))
 		var/obj/item/stack/sheet/O = A
 
 		for(var/sheet_id in materials.storage)
@@ -112,7 +97,7 @@
 
 /obj/machinery/mineral/mint/proc/Change_Dir(var/dir)
 	var/changingdir = dir //See ore processing_unit for original comments
-	changingdir = Clamp(changingdir, 1, 2)
+	changingdir = clamp(changingdir, 1, 2)
 
 	var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
 	if(!newdir)
@@ -173,7 +158,7 @@
 	if("changedir" in href_list)
 		//Change_Dir()
 		var/changingdir = text2num(href_list["changedir"]) //See ore processing_unit for original comments
-		changingdir = Clamp(changingdir, 1, 2)
+		changingdir = clamp(changingdir, 1, 2)
 
 		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
 		if(!newdir)
@@ -197,7 +182,7 @@
 		chosen = href_list["choose"]
 
 	if(href_list["chooseAmt"])
-		coinsToProduce = Clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
+		coinsToProduce = clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
 
 	if(href_list["makeCoins"])
 		if(chosen == null)
@@ -230,15 +215,10 @@
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/mineral/mint/Destroy()
-	qdel(mover)
-	mover = null
-	..()
-
-/obj/machinery/mineral/mint/crowbarDestroy(mob/user)
-	if(..() == 1)
+/obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
+	if(..())
 		if(materials)
 			for(var/matID in materials.storage)
 				DropSheet(matID)
-		return 1
-	return -1
+		return TRUE
+	return FALSE

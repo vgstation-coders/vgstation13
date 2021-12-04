@@ -13,7 +13,9 @@
             if("finalise_create_account")
                 var/account_name = hrefs["holder_name"]
                 var/starting_funds = max(text2num(hrefs["starting_funds"]), 0)
-                create_account(account_name, starting_funds, src)
+                var/staring_payout = max(text2num(hrefs["staring_payout"]), 0)
+                var/hidden = (hrefs["hidden"] == "hidden")
+                create_account(account_name, starting_funds, null, staring_payout, 0, hidden)
                 creating_new_account = 0
             if("view_account_detail")
                 var/index = text2num(hrefs["account_index"])
@@ -46,18 +48,20 @@
             <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a>
             <form name='create_account' action='?src=\ref[src]' method='get'>
             <input type='hidden' name='src' value='\ref[src]'>
-            <input type='hidden' name='choice' value='finalise_create_account'>
+            <input type='hidden' name='econ_panel' value='finalise_create_account'>
             <b>Holder name:</b> <input type='text' id='holder_name' name='holder_name' style='width:250px; background-color:white;'><br>
-            <b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' style='width:250px; background-color:white;'><br>
-            <i>New accounts are automatically assigned a secret number and pin</i>
-            <input type='submit' value='Create'><br>
-            </form>"}
+            <b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' value="0" style='width:250px; background-color:white;'><br>
+            <b>Wage payout:</b> <input type='text' id='staring_payout' name='staring_payout' value="[DEPARTMENT_START_WAGE]" style='width:250px; background-color:white;'><br>
+            <input type="checkbox" name="hidden" value="hidden" id="hidden"><label for="hidden">Hidden account</label><br>
+            <i>New accounts are automatically assigned a secret number and pin</i><br>
+            <input type='submit' value='Create'></form>"}
     else
         if(detailed_account_view)
 
             dat += {"
                 <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a><hr>
                 <b>Account number:</b> #[detailed_account_view.account_number]<br>
+                <b>Account pin:</b> #[detailed_account_view.remote_access_pin]<br>
                 <b>Account holder:</b> [detailed_account_view.owner_name]<br>
                 <b>Account balance:</b> $[detailed_account_view.money] <a href='?src=\ref[src];econ_panel=edit_balance;account_num=[detailed_account_view.account_number]'>Edit</a><br>
                 <b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=\ref[src];econ_panel=edit_wage_payout;account_num=[detailed_account_view.account_number]'>Edit</a><br>

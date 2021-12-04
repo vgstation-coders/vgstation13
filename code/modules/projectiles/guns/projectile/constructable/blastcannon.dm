@@ -13,7 +13,7 @@
 	caliber = null
 	ammo_type = null
 	fire_sound = null
-	fire_volume = 500
+	fire_volume = 100
 	conventional_firearm = 0
 	silenced = 1
 	var/obj/item/device/transfer_valve/bomb = null
@@ -87,7 +87,7 @@
 		w_class = W_CLASS_LARGE
 	update_icon()
 
-/obj/item/weapon/gun/projectile/blastcannon/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/projectile/blastcannon/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (istype(A, /obj/item/weapon/storage/backpack ))
 		return
 

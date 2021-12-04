@@ -16,7 +16,7 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/mob/camera/aiEye/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	if(ai)
 		if(!isturf(ai.loc))
 			return
@@ -91,7 +91,6 @@
 
 /client/proc/AIMove(n, direct, var/mob/living/silicon/ai/user)
 
-
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
@@ -124,14 +123,13 @@
 	cameraFollow = null
 	unset_machine()
 
-	if(src.eyeobj && src.loc)
-		//src.eyeobj.loc = src.loc
-		src.eyeobj.forceMove(src.loc)
+	if(!loc)
+		return
+
+	if(!eyeobj)
+		make_eyeobj()
 	else
-		src.eyeobj = new(src.loc)
-		src.eyeobj.ai = src
-		src.eyeobj.name = "[src.name] (AI Eye)" // Give it a name
-		src.eyeobj.forceMove(src.loc)
+		eyeobj.forceMove(loc)
 
 	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src
@@ -141,6 +139,45 @@
 
 	for(var/datum/camerachunk/c in eyeobj.visibleCameraChunks)
 		c.remove(eyeobj)
+
+/mob/living/silicon/ai/proc/make_eyeobj()
+	eyeobj = new(loc)
+	eyeobj.ai = src
+	refresh_eyeobj_name()
+	eyeobj.forceMove(loc)
+
+/mob/living/silicon/ai/proc/refresh_eyeobj_name()
+	eyeobj.name = "[name] (AI Eye)"
+
+/mob/living/silicon/ai/proc/jump_to_area(var/area/A)
+	if(!A)
+		return
+	if(!eyeobj)
+		make_eyeobj()
+	var/list/turfs = list()
+	for(var/turf/T in A)
+		turfs.Add(T)
+	var/turf/T = pick(turfs)
+	if(!T)
+		to_chat(src, "<span class='danger'>Nowhere to jump to!</span>")
+		return
+	cameraFollow = null
+	eyeobj.forceMove(T)
+
+/mob/living/silicon/ai/proc/toggleholopadoverlays() //shows holopads above all static
+	if (!holopadoverlays.len)
+		for(var/obj/machinery/hologram/holopad/holopads in machines)
+			var/image/holopadoverlay = image('icons/obj/stationobjs.dmi',holopads,"holopad0", ABOVE_HUD_PLANE)
+			holopadoverlay.plane = ABOVE_HUD_PLANE
+			if(client)
+				client.images += holopadoverlay
+				holopadoverlays += holopadoverlay
+	else
+		if(client)
+			for(var/image/ol in holopadoverlays)
+				client.images -= ol
+			holopadoverlays.Cut()
+
 
 /mob/living/silicon/ai/verb/toggle_acceleration()
 	set category = "AI Commands"

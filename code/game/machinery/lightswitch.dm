@@ -16,6 +16,10 @@
 
 /obj/machinery/light_switch/initialize()
 	add_self_to_holomap()
+	if (!map.lights_always_ok)
+		var/area/A = get_area(src)
+		if (!A.lights_always_start_on)
+			toggle_switch(newstate = 0)
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
@@ -33,12 +37,13 @@
 /obj/machinery/light_switch/proc/updateicon()
 	if(!overlay)
 		overlay = image(icon, "light1-overlay")
-		overlay.plane = LIGHTING_PLANE
+		overlay.plane = ABOVE_LIGHTING_PLANE
 		overlay.layer = ABOVE_LIGHTING_LAYER
 
 	overlays.Cut()
 	if((stat & NOPOWER) || buildstage != 2)
 		icon_state = "light-p"
+		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
 		overlay.icon_state = "[icon_state]-overlay"
@@ -57,7 +62,7 @@
 		if(2)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin unscrewing \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 2)
 					to_chat(user, "<span class='notice'>You unscrew the cover blocking the inner wiring of \the [src].</span>")
 					buildstage = 1
@@ -67,15 +72,15 @@
 		if(1)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin screwing closed \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You tightly screw closed the cover of \the [src].</span>")
 					buildstage = 2
 					power_change()
 				return
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(user, "You begin cutting the wiring from \the [src].")
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You cut the wiring to the lighting power line.</span>")
 					new /obj/item/stack/cable_coil(get_turf(src),3)
@@ -104,7 +109,7 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_paw(mob/user)
-	src.attack_hand(user)
+	toggle_switch()
 
 /obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/ghost)
 	if(!can_spook())
@@ -116,9 +121,15 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_hand(mob/user)
+	toggle_switch()
+
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null)
+	if(!isnull(newstate) && on == newstate)
+		return
 	if(buildstage != 2)
 		return
 	on = !on
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	var/area/this_area = get_area(src)
 	this_area.lightswitch = on
 	this_area.updateicon()

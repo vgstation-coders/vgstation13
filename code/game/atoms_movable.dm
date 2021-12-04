@@ -19,7 +19,7 @@
 	var/pass_flags = 0
 
 	var/sound_override = 0 //Do we make a sound when bumping into something?
-	var/hard_deleted = 0
+	var/hard_deleted
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/obj/effect/overlay/chain/tether = null
 	var/tether_pull = 0
@@ -45,9 +45,6 @@
 	var/throwpass = 0
 	var/level = 2
 
-	// When this object moves. (args: loc)
-	var/event/on_moved
-
 	var/atom/movable/tether_master
 	var/list/tether_slaves
 	var/list/current_tethers
@@ -55,37 +52,36 @@
 
 	var/ignore_blocking = 0
 
+	var/last_explosion_push = 0
+	var/mob/virtualhearer/virtualhearer
+
+	var/list/could_bump //In a given movement, holds the objects that BYOND internally calls Bump() on, so we can pick one to call to_bump() on.
+
+	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
-		getFromPool(/mob/virtualhearer, src)
+		virtualhearer = new /mob/virtualhearer(src)
 
 	if(starting_materials)
-		materials = getFromPool(/datum/materials, src)
+		materials = new /datum/materials(src)
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
-	on_moved = new("owner"=src)
-
 /atom/movable/Destroy()
-	gcDestroyed = "Bye, world!"
-	tag = null
+	var/turf/T
+	if (opacity && isturf(loc))
+		T = loc // recalc_atom_opacity() is called later on this
+		T.reconsider_lights()
 
 	if(materials)
-		returnToPool(materials)
+		qdel(materials)
 		materials = null
 
-	if(on_moved)
-		on_moved.holder = null
-		on_moved = null
+	remove_border_dummy()
 
-	var/turf/un_opaque
-	if (opacity && isturf(loc))
-		un_opaque = loc
-
-	loc = null
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
+	INVOKE_EVENT(src, /event/destroyed, "thing" = src)
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -95,50 +91,32 @@
 
 	for (var/datum/locking_category/category in locking_categories)
 		qdel(category)
-
 	locking_categories      = null
 	locking_categories_name = null
 
 	break_all_tethers()
 
-	if((flags & HEAR) && !ismob(src))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
+	forceMove(null, harderforce = TRUE)
+
+	if (T)
+		T.recalc_atom_opacity()
+
+	if(virtualhearer)
+		qdel(virtualhearer)
+		virtualhearer = null
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
 
 	..()
 
-/proc/delete_profile(var/type, code = 0)
-	if(!ticker || ticker.current_state < 3)
-		return
-	if(code == 0)
-		if (!("[type]" in del_profiling))
-			del_profiling["[type]"] = 0
-
-		del_profiling["[type]"] += 1
-	else if(code == 1)
-		if (!("[type]" in ghdel_profiling))
-			ghdel_profiling["[type]"] = 0
-
-		ghdel_profiling["[type]"] += 1
-	else
-		if (!("[type]" in gdel_profiling))
-			gdel_profiling["[type]"] = 0
-
-		gdel_profiling["[type]"] += 1
-		soft_dels += 1
-
 /atom/movable/Del()
 	if (gcDestroyed)
-
 		if (hard_deleted)
 			delete_profile("[type]", 1)
 		else
-			garbageCollector.dequeue("\ref[src]") // hard deletions have already been handled by the GC queue.
 			delete_profile("[type]", 2)
+
 	else // direct del calls or nulled explicitly.
 		delete_profile("[type]", 0)
 		Destroy()
@@ -147,14 +125,16 @@
 
 //TODO move this somewhere else
 /atom/movable/proc/set_glide_size(glide_size_override = 0, var/min = 0.9, var/max = WORLD_ICON_SIZE/2)
+	glide_size_override *= step_size / WORLD_ICON_SIZE //This should probably go in DELAY2GLIDESIZE() instead but that would be a lot of changed macros
 	if(!glide_size_override || glide_size_override > max)
 		glide_size = 0
 	else
 		glide_size = max(min, glide_size_override)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
-	if(!loc || !NewLoc)
+	if(!loc || !NewLoc || locked_to)
 		return 0
+	INVOKE_EVENT(src, /event/before_move)
 
 	if(current_tethers && current_tethers.len)
 		for(var/datum/tether/master_slave/T in current_tethers)
@@ -164,6 +144,7 @@
 					break
 				if(get_exact_dist(T.effective_master, NewLoc) > T.tether_distance)
 					change_dir(Dir)
+					INVOKE_EVENT(src, /event/after_move)
 					return 0
 		for(var/datum/tether/equal/restrictive/R in current_tethers)
 			var/atom/movable/AM
@@ -176,9 +157,11 @@
 				break
 			if(get_exact_dist(AM, NewLoc) > R.tether_distance)
 				change_dir(Dir)
+				INVOKE_EVENT(src, /event/after_move)
 				return 0
 	if(timestopped)
 		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
+			INVOKE_EVENT(src, /event/after_move)
 			return 0
 
 	var/can_pull_tether = 0
@@ -186,22 +169,25 @@
 		if(tether.attempt_to_follow(src,NewLoc))
 			can_pull_tether = 1
 		else
+			INVOKE_EVENT(src, /event/after_move)
 			return 0
 
 	if(glide_size_override > 0)
 		set_glide_size(glide_size_override)
 
 	var/atom/oldloc = loc
-	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
-		. = ..()
-
-		update_dir()
-		return
 
 	//We always split up movements into cardinals for issues with diagonal movements.
-	if(loc != NewLoc)
+	if(Dir || (loc != NewLoc))
 		if (!(Dir & (Dir - 1))) //Cardinal move
+			could_bump = list()
+			var/old_dir = dir
 			. = ..()
+			if(flow_flags & KEEP_DIR)
+				dir = old_dir //We can set it directly instead of calling change_dir() because:
+					//1. It wasn't changed through change_dir() in the supercall
+					//2. update_dir() is called later anyway
+			perform_bump()
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
 				if (Dir & EAST) //Northeast
@@ -228,15 +214,15 @@
 
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
-		spawn(0)
-			for(var/atom/movable/AM in locked_atoms)
-				var/datum/locking_category/category = locked_atoms[AM]
-				category.update_lock(AM)
+		for(var/atom/movable/AM in locked_atoms)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
 
 	update_dir()
 
 	if(!loc || (loc == oldloc && oldloc != NewLoc))
 		last_move = 0
+		INVOKE_EVENT(src, /event/after_move)
 		return
 
 	update_client_hook(loc)
@@ -254,8 +240,8 @@
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+	INVOKE_EVENT(src, /event/moved, "mover" = src)
+	INVOKE_EVENT(src, /event/after_move)
 
 /atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
 	var/list/found = ..()
@@ -268,9 +254,14 @@
 	for(var/atom/movable/AM in locked_atoms)
 		if(dir != AM.dir)
 			AM.change_dir(dir, src)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
 
 //Like forceMove(), but for dirs!
-/atom/movable/proc/change_dir(new_dir, var/changer)
+/atom/proc/change_dir(new_dir, changer)
+	dir = new_dir
+
+/atom/movable/change_dir(new_dir, changer)
 	if(locked_to && changer != locked_to)
 		return
 
@@ -295,9 +286,12 @@
 		var/mob/living/M = AM
 		for(var/obj/item/weapon/grab/G in M.grabbed_by)
 			if (istype(G, /obj/item/weapon/grab))
-				returnToPool(G)
+				qdel(G)
 
 	AM.locked_to = src
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 0
 
 	locked_atoms[AM] = category
 	category.lock(AM)
@@ -311,6 +305,10 @@
 	var/datum/locking_category/category = locked_atoms[AM]
 	locked_atoms    -= AM
 	AM.locked_to     = null
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 1
+
 	category.unlock(AM)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
@@ -328,7 +326,7 @@
 	if(locking_categories_name.Find(id))
 		return locking_categories_name[id]
 
-	var/datum/locking_category/C = getFromPool(type, src)
+	var/datum/locking_category/C = new type(src)
 	C.name = id
 	locking_categories_name[id] = C
 	locking_categories += C
@@ -342,7 +340,7 @@
 		if (istext(category))
 			return
 
-		. = getFromPool(category, src)
+		. = new category(src)
 		locking_categories_name[category] = .
 		locking_categories += .
 
@@ -394,10 +392,7 @@
 
 /atom/movable/proc/recycle(var/datum/materials/rec)
 	if(materials)
-		for(var/matid in materials.storage)
-			var/datum/material/material = materials.getMaterial(matid)
-			rec.addAmount(matid, materials.storage[matid] / material.cc_per_sheet) //the recycler's material is read as 1 = 1 sheet
-			materials.storage[matid] = 0
+		rec.addFrom(materials, TRUE)
 		return 1
 	return 0
 
@@ -406,36 +401,98 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/to_bump(atom/Obstacle)
-	if(src.throwing)
-		src.throw_impact(Obstacle)
-		src.throwing = 0
+// Always override this proc instead of BYOND-provided Bump().
+// This gives us better control over what actually gets bumped instead of being stuck with BYOND's decision.
+/atom/movable/proc/to_bump(atom/Obstacle)
+	if(airflow_speed > 0 && airflow_dest)
+		airflow_hit(Obstacle)
+	else
+		airflow_speed = 0
+		airflow_time = 0
+		if(src.throwing)
+			src.throw_impact(Obstacle)
+			src.throwing = 0
+		if(Obstacle)
+			Obstacle.Bumped(src)
+	sound_override = 0
 
-	if (Obstacle)
-		Obstacle.Bumped(src)
+//As it says above, don't override this. Override to_bump() and/or Obstacle's get_bump_target() instead. Assumes could_bump is already a list (not null).
+/atom/movable/Bump(atom/Obstacle)
+	SHOULD_NOT_OVERRIDE(TRUE)
+	could_bump += Obstacle
+
+//Choose an actual bump target from the list of potential bump targets, and to_bump() it.
+//Bumps the first border object in the list, or the last object if there isn't one.
+//This seems weird, but the list order is out of our control and essentially arbitrary, so it doesn't matter.
+//The only relevant guarantee is that any turfs in the list will be at the end, so they have priority over non-border objects.
+//(The order is based on ref, as far as I can tell.)
+/atom/movable/proc/perform_bump()
+	var/atom/target
+	for(var/atom/A as anything in could_bump)
+		target = A //Can't just use target as the loop variable. For some reason, BYOND nulls it after the loop in that case.
+		if(target.flow_flags & ON_BORDER)
+			break
+	if(target)
+		to_bump(target.get_bump_target())
+	could_bump = null
+
+/atom/movable/proc/setup_border_dummy()
+	if(border_dummy)
+		return
+	border_dummy = new()
+	lock_atom(border_dummy, /datum/locking_category/border_dummy)
+	border_dummy.update_dir()
+
+/atom/movable/proc/remove_border_dummy()
+	if(border_dummy)
+		unlock_atom(border_dummy)
+		qdel(border_dummy)
+		border_dummy = null
+
+/atom/movable/proc/border_dummy_Cross(atom/movable/mover) //border_dummy calls this in its own Cross() to detect collision
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return TRUE
+	return bounds_dist(src, mover) >= 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+/atom/movable/proc/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	INVOKE_EVENT(src, /event/before_move)
 	if(glide_size_override)
 		glide_size = glide_size_override
-	var/atom/old_loc = loc
+
+	var/list/atom/old_locs = locs //locs is implicitly copied on assignment, not aliased
+	var/atom/old_loc = loc //Just for convenience; should be equivalent to old_locs[1].
+	var/list/atom/uncrossing
+	if(isturf(loc)) //obounds() provides nonsense results when Ref.loc isn't a turf.
+		uncrossing = obounds(src)
+	else
+		uncrossing = loc?.contents //contents IS aliased on assignment but we're not changing it so it's fine
+
 	loc = destination
+	src.step_x = step_x
+	src.step_y = step_y
+
 	last_moved = world.time
 
-	if(old_loc)
-		old_loc.Exited(src, destination)
-		for(var/atom/movable/AM in old_loc)
-			AM.Uncrossed(src)
+	for(var/atom/A in old_locs)
+		A.Exited(src, loc)
+	for(var/atom/A in uncrossing)
+		A.Uncrossed(src)
 
 	if(loc)
 		last_move = get_dir(old_loc, loc)
 
-		loc.Entered(src, old_loc)
+		for(var/atom/A in locs)
+			A.Entered(src, old_loc)
 		if(isturf(loc))
-			var/area/A = get_area(loc)
+			var/area/A = loc.loc
 			A.Entered(src, old_loc)
 
-			for(var/atom/movable/AM in loc)
+			for(var/atom/movable/AM in obounds(src))
 				AM.Crossed(src,no_tp)
 
 
@@ -445,11 +502,14 @@
 
 	update_client_hook(loc)
 
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=loc))
-	var/turf/T = get_turf(destination)
-	if(old_loc && T && old_loc.z != T.z)
-		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
+	INVOKE_EVENT(src, /event/moved, "mover" = src)
+
+	var/turf/from_turf = get_turf(old_loc)
+	var/turf/to_turf = get_turf(destination)
+	if(from_turf && to_turf && (from_turf.z != to_turf.z))
+		INVOKE_EVENT(src, /event/z_transition, "user" = src, "from_z" = from_turf.z, "to_z" = to_turf.z)
+
+	INVOKE_EVENT(src, /event/after_move)
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
@@ -496,7 +556,7 @@
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
-	if(src.throwing)
+	if(throwing)
 		for(var/atom/A in get_turf(src))
 			if(A == src)
 				continue
@@ -564,7 +624,7 @@
 
 
 		var/tS = 0
-		while(src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+		while(src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 			if(tS && dist_travelled)
 				timestopped = loc.timestopped
@@ -578,7 +638,7 @@
 				fly_speed += kinetic_acceleration-kinetic_sum
 				kinetic_sum = kinetic_acceleration
 			if(afterimage)
-				new /obj/effect/red_afterimage(loc,src)
+				new /obj/effect/afterimage/red(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -610,7 +670,7 @@
 			a = get_area(src.loc)
 	else
 		var/error = dist_y/2 - dist_x
-		while(src && target &&((((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+		while(src && target &&((((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 			if(timestopped)
 				sleep(1)
@@ -619,7 +679,7 @@
 				fly_speed += kinetic_acceleration
 				kinetic_acceleration = 0
 			if(afterimage)
-				new /obj/effect/red_afterimage(loc,src)
+				new /obj/effect/afterimage/red(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -658,13 +718,42 @@
 		src.throw_impact(get_turf(src), speed, user)
 
 //Overlays
+
+/datum/locking_category/overlay
+
 /atom/movable/overlay
 	var/atom/master = null
 	anchored = 1
+	lockflags = 0 //Neither dense when locking or dense when locked to something
 
 /atom/movable/overlay/New()
 	. = ..()
+	if(!loc)
+		qdel(src)
+		CRASH("[type] created in nullspace.")
+
+	master = loc
+	name = master.name
+	dir = master.dir
+
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.lock_atom(src, /datum/locking_category/overlay)
+	if (istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.register_event(/event/destroyed, src, .proc/qdel_self)
 	verbs.len = 0
+
+/atom/movable/overlay/proc/qdel_self(datum/thing)
+	qdel(src) // Rest in peace
+
+/atom/movable/overlay/Destroy()
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.unlock_atom(src)
+		AM.unregister_event(/event/destroyed, src, .proc/qdel_self)
+	master = null
+	return ..()
 
 /atom/movable/overlay/blob_act()
 	return
@@ -684,6 +773,12 @@
 		return src.master.attack_hand(a, b, c)
 	return
 
+/atom/movable/overlay/proc/move_to_turf_or_null(atom/movable/mover)
+	var/turf/T = get_turf(mover)
+	var/atom/movable/AM = master // the proc is only called if the master has a "on_moved" event.
+	if(T != loc)
+		forceMove(T, glide_size_override = DELAY2GLIDESIZE(AM.move_speed))
+
 /atom/movable/proc/attempt_to_follow(var/atom/movable/A,var/turf/T)
 	if(anchored)
 		return 0
@@ -694,6 +789,11 @@
 		if(!U)
 			return null
 		return src.forceMove(U)
+
+/atom/movable/overlay/crit
+	icon = 'icons/random_krit.dmi'
+	icon_state = "randomcrit"
+	plane = ABOVE_HUMAN_PLANE
 
 /////////////////////////////
 // SINGULOTH PULL REFACTOR
@@ -707,19 +807,19 @@
 ////////////
 /// HEAR ///
 ////////////
-/atom/movable/proc/addHear()
+/atom/movable/proc/addHear(var/hearer_type = /mob/virtualhearer)
 	flags |= HEAR
-	getFromPool(/mob/virtualhearer, src)
+	virtualhearer = new hearer_type(src)
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
-	for(var/mob/virtualhearer/VH in virtualhearers)
-		if(VH.attached == src)
-			returnToPool(VH)
+	if(virtualhearer)
+		qdel(virtualhearer)
+		virtualhearer = null
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)
-	return 1
+	return !locked_to
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
@@ -965,23 +1065,41 @@
 		for(var/client/C in viewers)
 			C.images -= override_image
 
-//Attack Animation for ghost object being pixel shifted onto person
-	var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
-	item.appearance = tool.attack_icon()
-	item.alpha = 128
-	item.loc = target
-	item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
-	item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
-	item.mouse_opacity = 0
+	spawn()
+		//Attack Animation for ghost object being pixel shifted onto person
+		var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
+		item.appearance = tool.attack_icon()
+		item.alpha = 128
+		item.loc = target
+		item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
+		item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
+		item.mouse_opacity = 0
 
-	var/viewers = item_animation_viewers.Copy()
-	for(var/client/C in viewers)
-		C.images += item
+		var/viewers = item_animation_viewers.Copy()
+		for(var/client/C in viewers)
+			C.images += item
 
-	animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
-	sleep(3)
-	for(var/client/C in viewers)
-		C.images -= item
+		animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
+		sleep(3)
+		for(var/client/C in viewers)
+			C.images -= item
+
+	spawn()
+		target.do_hitmarker(usr)
+
+/atom/proc/do_hitmarker(mob/shooter)
+	spawn()
+		var/datum/role/streamer/streamer_role = shooter?.mind?.GetRole(STREAMER)
+		if(streamer_role && streamer_role.team == ESPORTS_SECURITY)
+			streamer_role.hits += IS_WEEKEND ? 2 : 1
+			streamer_role.update_antag_hud()
+			playsound(src, 'sound/effects/hitmarker.ogg', 100, FALSE)
+			var/image/hitmarker = image(icon='icons/effects/effects.dmi', loc=src, icon_state="hitmarker")
+			for(var/client/C in clients)
+				C.images += hitmarker
+			sleep(3)
+			for(var/client/C in clients)
+				C.images -= hitmarker
 
 /atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
 	return invisibility || alpha <= 1	//already invisible
@@ -1007,8 +1125,8 @@
 		return 0
 	var/list/params_list = params2list(params)
 	if(clamp)
-		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
-		pixel_y = Clamp(base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+		pixel_x = clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+		pixel_y = clamp(base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
 	else
 		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
@@ -1051,7 +1169,8 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	if(!isspace(get_area(startzone)))
+	var/area/startzone_area = get_area(startzone)
+	if(!isspace(startzone_area))
 		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)
@@ -1081,3 +1200,135 @@
 				forceMove(F)
 				return TRUE
 	return FALSE
+
+/atom/movable/proc/teleport_radius(var/range)
+	var/list/best_options = list()
+	var/list/backup_options = list()
+	var/turf/picked
+	for(var/turf/T in orange(range, src))
+		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
+			continue
+		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
+			backup_options += T
+			continue
+		best_options += T
+	if(best_options.len)
+		picked = pick(best_options)
+	else if(backup_options.len)
+		picked = pick(backup_options)
+	else
+		return
+	forceMove(picked)
+
+
+//border_dummy
+
+//Replaces the use of Uncross() for border object collision, because Uncross() is not quite correct for that.
+//Using Uncross() causes various problems for objects with altered bounding boxes or step_size.
+//The solution used here is absolutely idiotic, but as far as I can figure is the most correct approach within BYOND's stock movecode.
+
+//#define DEBUG_BORDER_DUMMY
+
+/atom/movable/border_dummy
+	#ifdef DEBUG_BORDER_DUMMY
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "window"
+	color = "red"
+	#else
+	invisibility = 101
+	#endif
+	flow_flags = ON_BORDER
+	flags = TIMELESS | INVULNERABLE
+
+//The following serves to prevent objects from overlapping the border object from the side.
+//By widening the border_dummy to either side of the border object, we make it so that objects approaching from the edge overlap it as well as objects in front of the border object.
+/atom/movable/border_dummy/update_dir()
+	..()
+	//A general system to let arbitrary atoms rotate their bounds with dir would be good, but this is enough for now
+	switch(dir)
+		if(NORTH, SOUTH)
+			bound_x = -WORLD_ICON_SIZE
+			bound_width = 3 * WORLD_ICON_SIZE
+			bound_y = 0
+			bound_height = WORLD_ICON_SIZE
+		if(EAST, WEST)
+			bound_x = 0
+			bound_width = WORLD_ICON_SIZE
+			bound_y = -WORLD_ICON_SIZE
+			bound_height = 3 * WORLD_ICON_SIZE
+		else //Shouldn't happen
+			CRASH("border_dummy has invalid dir [dir]")
+
+
+/atom/movable/border_dummy/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(!istype(mover))
+		return TRUE //The parent object will handle airflow calculations.
+	if(!locked_to)
+		CRASH("border_dummy was collision checked while not locked to anything! ([x], [y], [z])")
+	return (mover == locked_to) || locked_to.border_dummy_Cross(mover) //An object will hit its own border_dummy if the (mover == locked_to) isn't included.
+
+/atom/movable/border_dummy/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0)
+	return //It wouldn't actually move even without this override, but it would still hit things on its own tile.
+
+/atom/movable/border_dummy/get_bump_target()
+	return locked_to.get_bump_target() //I don't think it's possible for this line to execute if locked_to is null due to Cross() above.
+
+
+/datum/locking_category/border_dummy
+	y_offset = 1
+	rotate_offsets = TRUE
+
+#ifdef DEBUG_BORDER_DUMMY
+#undef DEBUG_BORDER_DUMMY
+#endif
+
+
+// -- trackers
+
+/atom/movable/proc/add_tracker(var/datum/tracker/T)
+	register_event(T, /datum/tracker/proc/recieve_position)
+
+/datum/tracker
+	var/name = "Tracker"
+	var/active = TRUE
+	var/changed = FALSE
+
+	var/turf/target
+
+	var/tick_refresh = 5 // The number of moved events before we update the position.
+	var/current_tick = 1
+
+	var/lost_position_probability = 0 // Probability of losing the target
+	var/lost_position_distance = 0 // Distance at which the tracker loses the target
+
+/datum/tracker/proc/recieve_position(var/list/loc)
+
+	ASSERT(loc)
+
+	if (!active)
+		return
+	if (current_tick < tick_refresh)
+		current_tick++
+		return
+
+	if (prob(lost_position_probability))
+		active = FALSE
+		return
+
+	var/target_loc = loc["loc"]
+	if (target != target_loc)
+		changed = TRUE
+
+	target = get_turf(target_loc)
+
+	current_tick = 1
+
+
+/atom/movable/proc/speen(times = 4)
+	set waitfor = FALSE
+	var/prev_dir = dir
+	for(var/i in 1 to times)
+		for(var/new_dir in cardinal)
+			change_dir(new_dir)
+			sleep(1)
+	change_dir(prev_dir)

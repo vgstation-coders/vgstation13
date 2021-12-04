@@ -1,6 +1,6 @@
 /obj/item/weapon/melee/lance
 	name = "tournament lance"
-	desc = "A very long and heavy spear, used for jousting. "
+	desc = "A very long and heavy spear, used for jousting."
 
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/96x96.dmi', "right_hand" = 'icons/mob/in-hand/right/96x96.dmi')
 	item_state = "lance"
@@ -75,7 +75,7 @@
 
 /obj/effect/lance_trigger //This stays in front of the user (when the lance is lowered)
 	name = "lance tip"
-	desc = "Colliding with this is a bad idea"
+	desc = "Colliding with this is a bad idea."
 
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "toddler"
@@ -120,7 +120,7 @@
 		L.raise_lance()
 		return
 
-/obj/effect/lance_trigger/forceMove(turf/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/effect/lance_trigger/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/old_last_move = last_move //Old direction
 
 	if(amount_of_turfs_charged > 0 && (world.time - last_moved) >= 3) //More than 2/10 of a second since last moved

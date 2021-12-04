@@ -25,8 +25,8 @@
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/stock_parts/console_screen/rped_rating()
-	// Same as T3 parts so that you don't dump them along with T1 ones.
-	return 3
+	// Same as T4 parts so that you don't dump them along with T1 ones.
+	return 4
 
 /obj/item/weapon/stock_parts/capacitor
 	name = "capacitor"
@@ -46,7 +46,7 @@
 			to_chat(user, "<span class='info'>\The [src.name] has maximum charge!</span>")
 
 /obj/item/weapon/stock_parts/capacitor/attackby(obj/item/weapon/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(!istype(src.loc, /turf))
 			to_chat(user, "<span class='warning'>\The [src] needs to be on the ground to be secured.</span>")
 			return
@@ -54,13 +54,13 @@
 			to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
 			return
 		to_chat(user, "You discharge \the [src] and secure it to the floor.")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		switch(src.type)
 			if(/obj/item/weapon/stock_parts/capacitor)
 				new /obj/machinery/power/secured_capacitor(get_turf(src.loc))
 			if(/obj/item/weapon/stock_parts/capacitor/adv)
 				new /obj/machinery/power/secured_capacitor/adv(get_turf(src.loc))
-			if(/obj/item/weapon/stock_parts/capacitor/adv/super)
+			if(/obj/item/weapon/stock_parts/capacitor/adv/super, /obj/item/weapon/stock_parts/capacitor/adv/super/pre_charged)
 				new /obj/machinery/power/secured_capacitor/adv/super(get_turf(src.loc))
 			if(/obj/item/weapon/stock_parts/capacitor/adv/super/ultra)
 				new /obj/machinery/power/secured_capacitor/adv/super/ultra(get_turf(src.loc))

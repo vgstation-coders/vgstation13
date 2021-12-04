@@ -12,20 +12,27 @@ Gunshots/explosions/opening doors/less rare audio (done)
 */
 #define MIN_HAL_SLEEP 30
 
-mob/living/carbon/var
-	image/halimage
-	image/halbody
-	obj/halitem
-	hal_screwyhud = 0 //1 - critical, 2 - dead, 3 - oxygen indicator, 4 - toxin indicator
-	handling_hal = 0
-	hal_crit = 0
+/mob/living/carbon
+	var/image/halimage
+	var/image/halbody
+	var/obj/halitem
+	var/hal_screwyhud = 0 //1 - critical, 2 - dead, 3 - oxygen indicator, 4 - toxin indicator
+	var/handling_hal = 0
+	var/hal_crit = 0
 
-mob/living/carbon/proc/handle_hallucinations()
-	if(handling_hal)
+/mob/living/carbon/proc/handle_hallucinations()
+	if(handling_hal || isUnconscious())
 		return
 	handling_hal = 1
 	while(hallucination > 20)
 		sleep(max(MIN_HAL_SLEEP,(rand(200,500)/(hallucination/25))))
+
+		if (isUnconscious())
+			return
+
+		if(gcDestroyed)
+			return
+
 		if((src.reagents.has_reagent(CITALOPRAM) && prob(30)) || src.reagents.has_reagent(PAROXETINE))
 			continue
 		if(prob(3) && hallucinations.len < 3)
@@ -147,14 +154,16 @@ mob/living/carbon/proc/handle_hallucinations()
 							//To make it more realistic, I added two gunshots (enough to kill)
 							src << 'sound/weapons/Gunshot.ogg'
 							spawn(rand(10,30))
-								src << 'sound/weapons/Gunshot.ogg'
+								if (!isUnconscious())
+									src << 'sound/weapons/Gunshot.ogg'
 						if(10)
 							src << 'sound/weapons/smash.ogg'
 						if(11)
 							//Same as above, but with tasers.
 							src << 'sound/weapons/Taser.ogg'
 							spawn(rand(10,30))
-								src << 'sound/weapons/Taser.ogg'
+								if (!isUnconscious())
+									src << 'sound/weapons/Taser.ogg'
 					//Rare audio
 						if(12)
 							//These sounds are (mostly) taken from Hidden: Source
@@ -180,7 +189,8 @@ mob/living/carbon/proc/handle_hallucinations()
 						if(16) //rip pomf
 							src << 'sound/machines/ya_dun_clucked.ogg'
 							spawn(rand(1,15))
-								to_chat(src, "<i>You are filled with a great sadness.</i>")
+								if (!isUnconscious())
+									to_chat(src, "<i>You are filled with a great sadness.</i>")
 
 			if(66 to 70)
 				//Flashes of danger
@@ -252,7 +262,7 @@ mob/living/carbon/proc/handle_hallucinations()
 						if(4)
 							to_chat(src, "<span class='warning'>Your joints feel very stiff.</span>")
 						if(5)
-							src.say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
+							say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
 						if(6)
 							to_chat(src, "Your skin feels loose.")
 						if(7)
@@ -276,7 +286,8 @@ mob/living/carbon/proc/handle_hallucinations()
 			if(82 to 85) //Clown
 				src << get_sfx("clownstep")
 				spawn(rand(16,28))
-					src << get_sfx("clownstep")
+					if (!isUnconscious())
+						src << get_sfx("clownstep")
 			if(86) //Makes a random mob near you look like a random food item
 				if(prob(15))
 					var/mob/living/L = src //Mob to change appearance of (you by default)
@@ -440,7 +451,7 @@ proc/check_panel(mob/M)
 		attack_loop()
 		if(my_target)
 			my_target.hallucinations -= src
-		returnToPool(src)
+		qdel(src)
 
 
 /obj/effect/fake_attacker/proc/updateimage()
@@ -503,7 +514,7 @@ proc/check_panel(mob/M)
 	updateimage()
 */
 /proc/fake_blood(var/mob/living/carbon/human/target)
-	var/obj/effect/overlay/O = getFromPool(/obj/effect/overlay,target.loc)
+	var/obj/effect/overlay/O = new /obj/effect/overlay(target.loc)
 	O.name = "blood"
 	var/image/I = image('icons/effects/blood.dmi',O,"floor[rand(1,7)]",O.dir,1)
 	var/blood_color = DEFAULT_BLOOD
@@ -512,7 +523,7 @@ proc/check_panel(mob/M)
 	I.color = blood_color
 	target << I
 	spawn(300)
-		returnToPool(O)
+		qdel(O)
 
 var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/item/ammo_storage/box/a357,\
 	/obj/item/weapon/gun/energy/crossbow, /obj/item/weapon/melee/energy/sword,\
@@ -522,7 +533,7 @@ var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/ite
 	/obj/item/clothing/mask/gas/voice, /obj/item/clothing/glasses/thermal,\
 	/obj/item/device/chameleon, /obj/item/weapon/card/emag,\
 	/obj/item/weapon/storage/toolbox/syndicate, /obj/item/weapon/aiModule,\
-	/obj/item/device/radio/headset/syndicate,	/obj/item/weapon/plastique,\
+	/obj/item/device/radio/headset/syndicate,	/obj/item/weapon/c4,\
 	/obj/item/device/powersink, /obj/item/weapon/storage/box/syndie_kit,\
 	/obj/item/toy/syndicateballoon, /obj/item/weapon/gun/energy/laser/captain,\
 	/obj/item/weapon/hand_tele, /obj/item/device/rcd, /obj/item/weapon/tank/jetpack,\
@@ -548,7 +559,7 @@ var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/ite
 		return
 
 	//var/obj/effect/fake_attacker/F = new/obj/effect/fake_attacker(outside_range(target))
-	var/obj/effect/fake_attacker/F = getFromPool(/obj/effect/fake_attacker,target.loc)
+	var/obj/effect/fake_attacker/F = new /obj/effect/fake_attacker(target.loc)
 
 	for(var/obj/item/I in clone.held_items)
 		if(!non_fakeattack_weapons.Find(I.type))

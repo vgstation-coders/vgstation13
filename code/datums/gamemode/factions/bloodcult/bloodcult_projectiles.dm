@@ -92,7 +92,7 @@
 	if (shade && leave_shadows >= 0)
 		leave_shadows++
 		if ((leave_shadows%3)==0)
-			anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "soulblade-shadow", lay = NARSIE_GLOW, offX = pixel_x, offY = pixel_y, plane = LIGHTING_PLANE, trans = shadow_matrix)
+			anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "soulblade-shadow", lay = NARSIE_GLOW, offX = pixel_x, offY = pixel_y, plane = ABOVE_LIGHTING_PLANE, trans = shadow_matrix)
 	if(..())
 		return 2
 	else
@@ -107,6 +107,13 @@
 			else if (!M.get_active_hand())//cultists can catch the blade on the fly
 				blade.forceMove(loc)
 				blade.attack_hand(M)
+				blade = null
+				qdel(src)
+			else if (!M.get_inactive_hand())//cultists can catch the blade on the fly
+				blade.forceMove(loc)
+				M.swap_hand() // guarrantees
+				blade.attack_hand(M)
+				M.swap_hand()
 				blade = null
 				qdel(src)
 		else
@@ -230,7 +237,7 @@
 
 //////////////////////////////
 //                          //
-//       BLOOD DAGGER       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//        BLOOD NAIL        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                          //Used when a cultist throws a blood dagger
 //////////////////////////////
 
@@ -260,7 +267,26 @@
 		forceMove(A.loc)
 		var/mob/living/M = A
 		if (!iscultist(M))
-			..()
+			setDensity(FALSE)
+			invisibility = 101
+			kill_count = 0
+			var/obj/effect/rooting_trap/bloodnail/nail = new (A.loc)
+			nail.transform = transform
+			if (color)
+				nail.color = color
+			else
+				nail.color = DEFAULT_BLOOD
+			if(isliving(A))
+				nail.stick_to(A)
+				var/mob/living/L = A
+				L.take_overall_damage(damage,0)
+				to_chat(L, "<span class='warning'>\The [src] stabs your body, sticking you in place.</span>")
+				to_chat(L, "<span class='danger'>Resist or click the nail to dislodge it.</span>")
+			else if(loc)
+				var/turf/T = get_turf(src)
+				nail.stick_to(T,get_dir(src,A))
+			bullet_die()
+			return
 		else if (ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/datum/reagent/blood/B = get_blood(H.vessel)
@@ -285,6 +311,13 @@
 		if (M.stat == DEAD)
 			return 0
 	return 1
+
+
+/obj/item/projectile/blooddagger/bump_original_check()
+	if(!bumped)
+		if(loc == get_turf(original))
+			if(!(original in permutated))
+				to_bump(original)
 
 /obj/item/projectile/blooddagger/cultify()
 	return

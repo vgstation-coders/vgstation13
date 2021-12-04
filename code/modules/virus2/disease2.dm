@@ -1,12 +1,13 @@
 
 var/global/list/disease2_list = list()
 /datum/disease2/disease
-	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion
+	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion, Fungus, Meme
 	var/spread = 0 //if it remains at 0, the virus can never be transmitted or extracted from the carrier, therefore it cannot either be cured.
 	var/uniqueID = 0// 0000 to 9999, set when the pathogen gets initially created
 	var/subID = 0// 000 to 9999, set if the pathogen underwent effect or antigen mutation
 	var/childID = 0// 01 to 99, incremented as the pathogen gets analyzed after a mutation
 	var/list/datum/disease2/effect/effects = list()
+	var/list/datum/disease2/effect/fake_effects = list()
 
 	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
 	//Ignored if infected materials are ingested (injected with infected blood, eating infected meat)
@@ -26,6 +27,8 @@ var/global/list/disease2_list = list()
 	var/stageprob = 10
 	//when spreading to another mob, that new carrier has the disease's stage reduced by stage_variance
 	var/stage_variance = -1
+	//bitflag showing which transmission types are allowed for this disease
+	var/allowed_transmission = SPREAD_BLOOD | SPREAD_CONTACT | SPREAD_AIRBORNE
 
 	//the antibody concentration at which the disease will fully exit the body
 	var/strength = 100
@@ -56,6 +59,8 @@ var/global/list/disease2_list = list()
 	//pathogenic warfare
 	var/list/can_kill = list("Bacteria")
 
+	var/list/type_weight = list(1,1,1,1) //weight that it will appear in dish, new player, mouse; 4 is base
+
 /datum/disease2/disease/virus
 	form = "Virus"
 	max_stage = 4
@@ -64,6 +69,7 @@ var/global/list/disease2_list = list()
 	stageprob = 10
 	stage_variance = -1
 	can_kill = list("Bacteria")
+	type_weight = list(2,1,1,1)
 
 /datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
 	form = "Bacteria"
@@ -73,6 +79,7 @@ var/global/list/disease2_list = list()
 	stageprob = 30
 	stage_variance = -4
 	can_kill = list("Parasite")
+	type_weight = list(2,3,1,0) //more common in mice
 
 /datum/disease2/disease/parasite//slower spread. stage preserved on spread
 	form = "Parasite"
@@ -81,6 +88,7 @@ var/global/list/disease2_list = list()
 	stageprob = 10
 	stage_variance = 0
 	can_kill = list("Virus")
+	type_weight = list(2,1,1,1)
 
 /datum/disease2/disease/prion//very fast progression, but very slow spread and resets to stage 1.
 	form = "Prion"
@@ -89,6 +97,27 @@ var/global/list/disease2_list = list()
 	stageprob = 80
 	stage_variance = -10
 	can_kill = list()
+	type_weight = list(2,0,0,1)
+
+/datum/disease2/disease/fungus //most infectious, but with a greater stage setback; has special transmission
+	form = "Fungus"
+	infectionchance = 100
+	infectionchance_base = 100
+	stageprob = 15
+	stage_variance = -2
+	allowed_transmission = SPREAD_BLOOD | SPREAD_CONTACT | SPREAD_AIRBORNE | SPREAD_COLONY
+	type_weight = list(1,0,0,0)
+
+/datum/disease2/disease/meme //infectious and fast progressing, but limited stages; has special transmission
+	form = "Meme"
+	max_stage = 2
+	infectionchance = 70
+	infectionchance_base = 70
+	stageprob = 30
+	stage_variance = -1
+	allowed_transmission = SPREAD_BLOOD | SPREAD_MEMETIC
+	type_weight = list(0,0,0,0) //rare in dishes and never in mice, very common in people
+	//Note: if more types of creatures become infectable than humans/monkeys/mice, give them HEAR_ALWAYS
 
 /datum/disease2/disease/proc/update_global_log()
 	if ("[uniqueID]-[subID]" in disease2_list)
@@ -128,6 +157,7 @@ var/global/list/disease2_list = list()
 	roll_antigen(anti)
 
 	//effects
+	effects = list()
 	for(var/i = 1; i <= max_stage; i++)
 		var/selected_badness = pick(
 			bad[EFFECT_DANGER_HELPFUL];EFFECT_DANGER_HELPFUL,
@@ -218,6 +248,23 @@ var/global/list/disease2_list = list()
 		spread |= SPREAD_CONTACT
 							//22,8% chance of staying in blood
 
+/datum/disease2/disease/meme/randomize_spread()
+	spread = SPREAD_BLOOD | SPREAD_MEMETIC //not random
+
+/datum/disease2/disease/fungus/randomize_spread()
+	spread = SPREAD_BLOOD
+	if(prob(50)) //40% just colonizing
+		spread |= SPREAD_COLONY
+		if(prob(20)) //10% colonizing + air OR contact
+			spread |= pick(SPREAD_AIRBORNE,SPREAD_CONTACT)
+	else if(prob(40)) //14% just airborne
+		spread |= SPREAD_AIRBORNE
+		if(prob(30))
+			spread |= SPREAD_CONTACT //6% air+contact
+	else if(prob(60)) //18% just contact
+		spread |= SPREAD_CONTACT
+			//12% blood only
+
 /datum/disease2/disease/proc/get_spread_string()
 	var/dat = ""
 	var/check = 0
@@ -233,9 +280,19 @@ var/global/list/disease2_list = list()
 			dat += ", "
 	if (spread & SPREAD_AIRBORNE)
 		dat += "Airborne"
-		//check += SPREAD_AIRBORNE
-		//if (spread > check)
-		//	dat += ", "
+		check += SPREAD_AIRBORNE
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_COLONY)
+		dat += "Colonizing"
+		check += SPREAD_COLONY
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_MEMETIC)
+		dat += "Memetic"
+		check += SPREAD_MEMETIC
+		if (spread > check)
+			dat += ", "
 
 	return dat
 
@@ -247,7 +304,7 @@ var/global/list/disease2_list = list()
 	D.origin = "Badmin"
 
 	var/list/known_forms = list()
-	for (var/disease_type in subtypesof(/datum/disease2/disease))
+	for (var/disease_type in subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 		var/datum/disease2/disease/d_type = disease_type
 		known_forms[initial(d_type.form)] = d_type
 
@@ -262,11 +319,15 @@ var/global/list/disease2_list = list()
 		return
 
 	if (chosen_form == "infect with an already existing pathogen")
-		var/chosen_pathogen = input(C, "Choose a pathogen", "Choose a pathogen") as null | anything in disease2_list
+		var/list/existing_pathogen = list()
+		for (var/pathogen in disease2_list)
+			var/datum/disease2/disease/dis = disease2_list[pathogen]
+			existing_pathogen["[dis.real_name()]"] = pathogen
+		var/chosen_pathogen = input(C, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
 		if (!chosen_pathogen)
 			qdel(D)
 			return
-		var/datum/disease2/disease/dis = disease2_list[chosen_pathogen]
+		var/datum/disease2/disease/dis = disease2_list[existing_pathogen[chosen_pathogen]]
 		D = dis.getcopy()
 		D.origin = "[D.origin] (Badmin)"
 	else
@@ -277,14 +338,14 @@ var/global/list/disease2_list = list()
 				return
 			D.form = form_name
 			D.max_stage = input(C, "How many stages will your pathogen have?", "Custom Pathogen", D.max_stage) as num
-			D.max_stage = Clamp(D.max_stage,1,99)
+			D.max_stage = clamp(D.max_stage,1,99)
 			D.infectionchance = input(C, "What will be your pathogen's infection chance?", "Custom Pathogen", D.infectionchance) as num
-			D.infectionchance = Clamp(D.infectionchance,0,100)
+			D.infectionchance = clamp(D.infectionchance,0,100)
 			D.infectionchance_base = D.infectionchance
 			D.stageprob = input(C, "What will be your pathogen's progression speed?", "Custom Pathogen", D.stageprob) as num
-			D.stageprob = Clamp(D.stageprob,0,100)
+			D.stageprob = clamp(D.stageprob,0,100)
 			D.stage_variance = input(C, "What will be your pathogen's stage variance?", "Custom Pathogen", D.stage_variance) as num
-			D.stageprob = Clamp(D.stageprob,-1*D.max_stage,0)
+			D.stageprob = clamp(D.stageprob,-1*D.max_stage,0)
 			//D.can_kill = something something a while loop but probably not worth the effort. If you need it for your bus code it yourself.
 		else
 			var/d_type = known_forms[chosen_form]
@@ -298,16 +359,12 @@ var/global/list/disease2_list = list()
 			qdel(d_inst)
 
 		D.strength = input(C, "What will be your pathogen's strength? (1-50 is trivial to cure. 50-100 requires a bit more effort)", "Pathogen Strength", D.infectionchance) as num
-		D.strength = Clamp(D.strength,0,100)
+		D.strength = clamp(D.strength,0,100)
 
 		D.robustness = input(C, "What will be your pathogen's robustness? (1-100) Lower values mean that infected can carry the pathogen without getting affected by its symptoms.", "Pathogen Robustness", D.infectionchance) as num
-		D.robustness = Clamp(D.strength,0,100)
+		D.robustness = clamp(D.strength,0,100)
 
-		var/new_id = copytext(sanitize(input(C, "You can pick a 4 number ID for your Pathogen. Otherwise a random ID will be generated.", "Pick a unique ID", rand(0,9999)) as null | num),1,4)
-		if (!new_id)
-			D.uniqueID = rand(0,9999)
-		else
-			D.uniqueID = new_id
+		D.uniqueID = clamp(input(C, "You can specify the 4 number ID for your Pathogen, or just use this randomly generated one.", "Pick a unique ID", rand(0,9999)) as num, 0, 9999)
 
 		D.subID = rand(0,9999)
 		D.childID = 0
@@ -320,13 +377,13 @@ var/global/list/disease2_list = list()
 			var/datum/disease2/effect/e = new symptom(D)
 			e.stage = i
 			e.chance = input(C, "Choose the default chance for this effect to activate", "Effect", e.chance) as null | num
-			e.chance = Clamp(e.chance,0,100)
+			e.chance = clamp(e.chance,0,100)
 			e.max_chance = input(C, "Choose the maximum chance for this effect to activate", "Effect", e.max_chance) as null | num
-			e.max_chance = Clamp(e.max_chance,0,100)
+			e.max_chance = clamp(e.max_chance,0,100)
 			e.multiplier = input(C, "Choose the default strength for this effect", "Effect", e.multiplier) as null | num
-			e.multiplier = Clamp(e.multiplier,0,100)
+			e.multiplier = clamp(e.multiplier,0,100)
 			e.max_multiplier = input(C, "Choose the maximum strength for this effect", "Effect", e.max_multiplier) as null | num
-			e.max_multiplier = Clamp(e.max_multiplier,0,100)
+			e.max_multiplier = clamp(e.max_multiplier,0,100)
 
 			D.log += "Added [e.name] at [e.chance]% chance and [e.multiplier] strength<br>"
 			D.effects += e
@@ -352,16 +409,25 @@ var/global/list/disease2_list = list()
 		if (alert("Do you want to specify the appearance of your pathogen in a petri dish?","Choose your appearance","Yes","No") == "Yes")
 			D.color = input(C, "Choose the color of the dish", "Cosmetic") as color
 			D.pattern = input(C, "Choose the shape of the pattern inside the dish (1 to 6)", "Cosmetic",rand(1,6)) as num
-			D.pattern = Clamp(D.pattern,1,6)
+			D.pattern = clamp(D.pattern,1,6)
 			D.pattern_color = input(C, "Choose the color of the pattern", "Cosmetic") as color
 
 		D.spread = 0
 		if (alert("Can this virus spread into blood? (warning! if choosing No, this virus will be impossible to sample and analyse!)","Spreading Vectors","Yes","No") == "Yes")
 			D.spread |= SPREAD_BLOOD
-		if (alert("Can this virus spread by contact, and on items?","Spreading Vectors","Yes","No") == "Yes")
-			D.spread |= SPREAD_CONTACT
-		if (alert("Can this virus spread through the air?","Spreading Vectors","Yes","No") == "Yes")
-			D.spread |= SPREAD_AIRBORNE
+		if(D.allowed_transmission & SPREAD_CONTACT)
+			if (alert("Can this virus spread by contact, and on items?","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_CONTACT
+		if(D.allowed_transmission & SPREAD_AIRBORNE)
+			if (alert("Can this virus spread through the air?","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_AIRBORNE
+		if(D.allowed_transmission & SPREAD_COLONY)
+			if (alert("Does this fungus prefer suits? Exclusive with contact/air.","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_COLONY
+				D.spread &= ~(SPREAD_BLOOD|SPREAD_AIRBORNE)
+		if(D.allowed_transmission & SPREAD_MEMETIC)
+			if (alert("Can this virus spread through words?","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_MEMETIC
 
 		disease2_list -= "[D.uniqueID]-[D.subID]"//little odds of this happening thanks to subID but who knows
 		D.update_global_log()
@@ -391,7 +457,7 @@ var/global/list/disease2_list = list()
 	return 1
 
 /datum/disease2/disease/proc/AddToGoggleView(var/mob/living/infectedMob)
-	if (spread & SPREAD_CONTACT)
+	if (spread & (SPREAD_CONTACT | SPREAD_COLONY))
 		infected_contact_mobs |= infectedMob
 		if (!infectedMob.pathogen)
 			infectedMob.pathogen = image('icons/effects/effects.dmi',infectedMob,"pathogen_contact")
@@ -448,12 +514,18 @@ var/global/list/disease2_list = list()
 		ticks += speed
 		return
 
+	// Activating the disease's symptoms
+	for(var/datum/disease2/effect/e in effects)
+		if (e.count > 0)
+			e.side_effect(mob)
+
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
 	if(starved)
 		return
 
 	var/list/immune_data = GetImmuneData(mob)
 
+	// Activating the disease's symptoms
 	for(var/datum/disease2/effect/e in effects)
 		if (e.can_run_effect(immune_data[1]))
 			e.run_effect(mob)
@@ -494,11 +566,17 @@ var/global/list/disease2_list = list()
 					if (mob.bodytemperature > 350)
 						to_chat(mob, "<span class='warning'>Your arms are heavy.</span>")
 						fever_warning++
+				if (4)
+					if(ishuman(mob) && mob.bodytemperature > 365)
+						var/mob/living/carbon/human/H = mob
+						to_chat(mob, "<span class='warning'>There's vomit on your sweater already.</span>")
+						H.reagents.add_reagent(SPAGHETTI,20)
+						fever_warning++
 
 
 	ticks += speed
 
-
+//This proc is what governs how a disease mutates when it's in a pathogenic incubator (or with a lower chance inside an irradiated individual)
 /datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1)
 	mutatechance *= mutation_modifier
 
@@ -514,29 +592,34 @@ var/global/list/disease2_list = list()
 			machine = dish.loc
 
 	if (mutatechance > 0 && (body || dish) && incubator.reagents)
+		//MUTAGEN + CREATINE = Robustness Up, Effect Strength Up, Effect Chance randomized
 		if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(CREATINE,0.5))
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(CREATINE,0.5))
 				log += "<br />[timestamp()] Robustness Strengthening (Mutagen and Creatine in [incubator])"
 				var/change = rand(1,5)
 				robustness = min(100,robustness + change)
 				for(var/datum/disease2/effect/e in effects)
-					e.multiplier_tweak(0.1)
-					minormutate()
+					e.multiplier_tweak(0.1)//all effects get their strength increased
+					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
+							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,0,change,0.1)
+		//MUTAGEN + SPACEACILLIN = Robustness Down, Effect Strength Down, Effect Chance randomized
 		else if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(SPACEACILLIN,0.5))
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(SPACEACILLIN,0.5))
 				log += "<br />[timestamp()] Robustness Weakening (Mutagen and Spaceacillin in [incubator])"
 				var/change = rand(1,5)
 				robustness = max(0,robustness - change)
 				for(var/datum/disease2/effect/e in effects)
-					e.multiplier_tweak(-0.1)
-					minormutate()
+					e.multiplier_tweak(-0.1)//all effects get their strength reduced
+					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
+							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,0,-change,-0.1)
 		else
+			//MUTAGEN (with no creatine or spaceacillin) = New Effect
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
 				effectmutate(body != null)
@@ -547,6 +630,7 @@ var/global/list/disease2_list = list()
 					dish.update_icon()
 					if (machine)
 						machine.update_major(dish)
+			//CREATINE (with no mutagen) = Strength Up
 			if(!incubator.reagents.remove_reagent(CREATINE,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Strengthening (Creatine in [incubator])"
 				var/change = rand(1,5)
@@ -554,6 +638,7 @@ var/global/list/disease2_list = list()
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,change)
+			//SPACEACILLIN (with no mutagen) = Strength Down
 			if(!incubator.reagents.remove_reagent(SPACEACILLIN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Weakening (Spaceacillin in [incubator])"
 				var/change = rand(1,5)
@@ -561,6 +646,7 @@ var/global/list/disease2_list = list()
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,-change)
+		//RADIUM = New Antigen
 		if(!incubator.reagents.remove_reagent(RADIUM,0.02) && prob(mutatechance/8))
 			log += "<br />[timestamp()] Antigen Mutation (Radium in [incubator])"
 			antigenmutate()
@@ -610,7 +696,7 @@ var/global/list/disease2_list = list()
 	if (plague && ("[uniqueID]-[subID]" == plague.diseaseID))
 		plague.update_hud_icons()
 	//----------------
-	var/list/V = filter_disease_by_spread(mob.virus2, required = SPREAD_CONTACT)
+	var/list/V = filter_disease_by_spread(mob.virus2, required = (SPREAD_CONTACT | SPREAD_COLONY))
 	if (V && V.len <= 0)
 		infected_contact_mobs -= mob
 		if (mob.pathogen)
@@ -621,7 +707,7 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/get_effect(var/index)
 	if(!index)
 		return pick(effects)
-	return effects[Clamp(index,0,effects.len)]
+	return effects[clamp(index,0,effects.len)]
 
 /datum/disease2/disease/proc/roll_antigen(var/list/factors = list())
 	if (factors.len <= 0)
@@ -686,7 +772,8 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/minormutate(var/index)
 	var/datum/disease2/effect/e = get_effect(index)
 	e.minormutate()
-	infectionchance = min(50,infectionchance + rand(0,10))
+	infectionchance = clamp(infectionchance_base + rand(-10,10),0,100)
+	//infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/minorstrength(var/index)
@@ -747,6 +834,13 @@ var/global/list/virusDB = list()
 		var/datum/data/record/V = virusDB["[uniqueID]-[subID]"]
 		.= V.fields["name"]
 
+/datum/disease2/disease/proc/real_name()
+	.= "[form] #[add_zero("[uniqueID]", 4)]-[add_zero("[subID]", 4)]"
+	if ("[uniqueID]-[subID]" in virusDB)
+		var/datum/data/record/v = virusDB["[uniqueID]-[subID]"]
+		var/nickname = v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
+		. += nickname
+
 /datum/disease2/disease/proc/get_subdivisions_string()
 	var/subdivision = (strength - ((robustness * strength) / 100)) / max_stage
 	var/dat = "("
@@ -763,20 +857,33 @@ var/global/list/virusDB = list()
 		dat += "[A]"
 	return dat
 
-/datum/disease2/disease/proc/get_info()
+/datum/disease2/disease/proc/get_info(var/trueinfo = FALSE)
 	var/r = "GNAv3 [name()]"
 	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b> - [get_subdivisions_string()]"
 	r += "<BR>Infectability : <b>[infectionchance]%</b>"
 	r += "<BR>Spread forms : <b>[get_spread_string()]</b>"
 	r += "<BR>Progress Speed : <b>[stageprob]%</b>"
 	r += "<dl>"
+	var/i = 1
 	for(var/datum/disease2/effect/e in effects)
-		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
-		r += "<dd>[e.desc]</dd>"
+		if(fake_effects.len >= i && !trueinfo)
+			var/datum/disease2/effect/f_e = fake_effects[i]
+			r += "<dt> &#x25CF; <b>Stage [f_e.stage] - [f_e.name]</b> (Danger: [f_e.badness]). Strength: <b>[f_e.multiplier]</b>. Occurrence: <b>[f_e.chance]%</b>.</dt>"
+			r += "<dd>[f_e.desc]</dd>"
+		else
+			r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
+			r += "<dd>[e.desc]</dd>"
+		i++
 	r += "</dl>"
 	r += "<BR>Antigen pattern: [get_antigen_string()]"
 	r += "<BR><i>last analyzed at: [worldtime2text()]</i>"
 	return r
+
+/datum/disease2/disease/proc/get_total_badness()
+	var/total_badness = 0
+	for(var/datum/disease2/effect/e in effects)
+		total_badness += text2num(e.badness)
+	return total_badness
 
 /datum/disease2/disease/proc/addToDB()
 	if ("[uniqueID]-[subID]" in virusDB)
@@ -794,6 +901,8 @@ var/global/list/virusDB = list()
 	v.fields["name"] = name()
 	v.fields["nickname"] = ""
 	v.fields["description"] = get_info()
+	v.fields["description_hidden"] = get_info(TRUE)
+	v.fields["custom_desc"] = "No comments yet."
 	v.fields["antigen"] = get_antigen_string()
 	v.fields["spread type"] = get_spread_string()
 	v.fields["danger"] = "Undetermined"

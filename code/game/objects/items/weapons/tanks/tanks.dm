@@ -247,7 +247,9 @@
 		return 0
 
 	var/pressure = air_contents.return_pressure()
+
 	if(pressure > TANK_FRAGMENT_PRESSURE)
+
 		if(!istype(src.loc,/obj/item/device/transfer_valve))
 			message_admins("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
 			log_game("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
@@ -265,8 +267,8 @@
 		var/turf/epicenter = get_turf(loc)
 
 //		to_chat(world, "<span class='notice'>Exploding Pressure: [pressure] kPa, intensity: [range]</span>")
-
-		explosion(epicenter, round(range*0.25), round(range*0.5), round(range), round(range*1.5), 1, cap)
+		var/mob/user = istype(src.loc,/obj/item/device/transfer_valve) ? get_mob_by_key(loc.fingerprintslast) : get_mob_by_key(fingerprintslast)
+		explosion(epicenter, round(range*0.25), round(range*0.5), round(range), round(range*1.5), 1, cap, whodunnit = user)
 		if(cap)
 			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 				if(bhangmeter)

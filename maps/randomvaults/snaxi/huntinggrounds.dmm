@@ -1,0 +1,23 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"h" = (/obj/structure/flora/tree/pine,/turf/unsimulated/floor/snow,/area)
+"A" = (/obj/abstract/map/nest/deer,/turf/unsimulated/floor/snow,/area)
+"E" = (/turf/unsimulated/wall/rock/ice,/area)
+"S" = (/obj/abstract/map/nest/wolf,/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaa
+ahaaaahaaaaaaaa
+aaaaaaaaahaahaa
+aaaaaAaaaaaaaaa
+aaaaaaaaaaahEEa
+ahaaaaaahaaEEEa
+aaaahaaAaaEEEaa
+aaaaaaaaaaEESaa
+aaaAaaaaaaEEaaa
+aaaaaahaaaEEEaa
+ahaaaaaaahaEEEa
+aaaaaaaaaaaaEEa
+aaaaaaaaaaaaaha
+aahaaaaaahaaaaa
+aaaaaaaaaaaaaaa
+"}

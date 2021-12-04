@@ -44,6 +44,28 @@
 	message = "dances around happily."
 	restraint_check = TRUE
 
+/datum/emote/living/dance/cult
+	key = "cultdance"
+	key_third_person = "cultdances"
+	message = "displays the dance of their people."
+	restraint_check = TRUE
+	replace_pronouns = FALSE
+
+/datum/emote/living/dance/cult/can_run_emote(var/mob/user, var/status_check)
+	if (user.occult_muted())
+		return FALSE
+	if (iscultist(user) || istype(user, /mob/living/simple_animal/astral_projection))
+		return TRUE
+	return FALSE
+
+/datum/emote/living/dance/cult/run_emote(mob/living/user, params)
+	. = ..()
+	if (.)
+		for (var/obj/effect/cult_ritual/dance/dance_center in range(1,get_turf(user)))
+			dance_center.add_dancer(user)
+			return
+		new /obj/effect/cult_ritual/dance(get_step(user,user.dir), user)
+
 /datum/emote/living/deathgasp
 	key = "deathgasp"
 	key_third_person = "deathgasps"
@@ -52,6 +74,7 @@
 	message_AI = "lets out a flurry of sparks, its screen flickering as its systems slowly halt."
 	message_alien = "lets out a waning guttural screech, green blood bubbling from its maw..."
 	message_larva = "lets out a sickly hiss of air and falls limply to the floor..."
+	message_pulsedemon = "fizzles out into faint sparks before vanishing with slight trails of smoke..."
 	message_monkey = "lets out a faint chimper as it collapses and stops moving..."
 	message_simple =  "stops moving..."
 	stat_allowed = UNCONSCIOUS
@@ -64,7 +87,7 @@
 	if(!issilent(user) && (M_HARDCORE in user.mutations))
 		message = "whispers with their final breath, <i>'i told u i was hardcore..'</i>"
 	. = ..()
-	if(. && isalienadult(user))
+	if(params && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
 	if (. && user.stat == UNCONSCIOUS && !params)
 		user.succumb_proc(0, 1)
@@ -87,6 +110,18 @@
 		var/mob/living/L = user
 		L.sleeping += 10 // You can't faint when you're asleep.
 
+var/list/animals_with_wings = list(
+	/mob/living/simple_animal/parrot,
+	/mob/living/simple_animal/bee,
+	/mob/living/simple_animal/penguin,
+	/mob/living/simple_animal/chick,
+	/mob/living/simple_animal/chicken,
+	/mob/living/simple_animal/hostile/retaliate/cockatrice,
+	/mob/living/simple_animal/hostile/scarybat,
+	/mob/living/simple_animal/hostile/bigroach,
+	/mob/living/simple_animal/hostile/viscerator,
+	)
+
 /datum/emote/living/flap
 	key = "flap"
 	key_third_person = "flaps"
@@ -102,6 +137,8 @@
 
 /datum/emote/living/flap/can_run_emote(var/mob/user, var/status_check)
 	if (isMoMMI(user))
+		return TRUE
+	if (is_type_in_list(user,animals_with_wings))
 		return TRUE
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
@@ -163,6 +200,7 @@
 	key = "sigh"
 	key_third_person = "sighs"
 	message = "sighs."
+	message_mime = "performs a silent theatrical sigh."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/sit

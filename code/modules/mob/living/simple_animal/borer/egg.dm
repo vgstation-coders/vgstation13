@@ -40,11 +40,11 @@
 		recruiter.jobban_roles = list("pAI")
 
 		// A player has their role set to Yes or Always
-		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 		// ", but No or Never
-		recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-		recruiter.recruited.Add(src, "recruiter_recruited")
+		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/Hatch()
 	if(hatching)
@@ -55,27 +55,22 @@
 	src.visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")
 	recruiter.request_player()
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [src] is starting to hatch. You have been added to the list of potential ghosts. ([controls])</span>")
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is starting to hatch. You have been added to the list of potential ghosts. ([controls])</span>")
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [src] is starting to hatch. ([controls])</span>")
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is starting to hatch. ([controls])</span>")
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
-		var/defect = rand(1,10000)
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
 		var/turf/T = get_turf(src)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 		//Adds the chance for a "special" borer to be born
-		var/borer_type = (defect == 666 ? /mob/living/simple_animal/borer/defected_borer : /mob/living/simple_animal/borer)
+		var/borer_type = pick_type()
 		var/mob/living/simple_animal/borer/B = new borer_type(T, child_prefix_index)
-		B.transfer_personality(O.client)
+		B.transfer_personality(player.client)
 		// Play hatching noise here.
+		new /obj/item/trash/egg/borer(T)
 		playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
 		qdel(src)
 	else
@@ -84,6 +79,8 @@
 		spawn (BORER_EGG_RERECRUITE_DELAY)
 			Grow() // Reset egg, check for hatchability.
 
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/pick_type()
+	return (rand(1,10000) == 666 ? /mob/living/simple_animal/borer/defected_borer : /mob/living/simple_animal/borer)
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/process()
 	var/turf/location = get_turf(src)
@@ -115,5 +112,12 @@
 	qdel(recruiter)
 	recruiter = null
 	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected
+	name = "special borer egg"
+	desc = "A small, gelatinous egg. This one is destined to do great things."
+
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected/pick_type()
+	return /mob/living/simple_animal/borer/defected_borer
 
 #undef BORER_EGG_RERECRUITE_DELAY

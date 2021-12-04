@@ -176,7 +176,7 @@
 
 /obj/machinery/computer/telecomms/monitor/proc/traceroute(var/freq)
 	//First, generate a signal
-	trace_signal = getFromPool(/datum/signal)
+	trace_signal = new /datum/signal
 	trace_signal.data = list(
 		"name" = "Telecommunications Network",
 		"job" = "Machine",
@@ -198,7 +198,7 @@
 	spawn(1 SECONDS)
 		if(!trace_signal.data["done"])
 			tracert_report += "The operation timed out.<BR><font color = #D70B00>Last Known Machine:</font color> <a href='?src=\ref[src];viewmachine=[last_machine.id]'>\ref[last_machine] [last_machine.id]</a>"
-		returnToPool(trace_signal)
+		qdel(trace_signal)
 		trace_signal = null
 		updateUsrDialog()
 

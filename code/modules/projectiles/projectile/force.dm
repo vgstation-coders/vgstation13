@@ -24,7 +24,7 @@
 		if(isliving(target))
 			..()
 			to_chat(target, "<span class='warning'>The force knocks you off your feet!</span>")
-	if(isatommovable(target))
+	if(ismovable(target))
 		var/atom/movable/AM = target
 		AM.throw_at(get_edge_target_turf(target, throwdir),throw_distance,1)
 	return 1

@@ -35,14 +35,6 @@
 			to_chat(user, "<span class='notice'>Nothing left to wet [M] with!</span>")
 		return 1
 
-/*
- * Hard to have colored bottles work with dynamic reagent filling
-/obj/item/weapon/reagent_containers/glass/bottle/New()
-	..()
-	if(!icon_state)
-		icon_state = "bottle[rand(1,20)]"
-*/
-
 /obj/item/weapon/reagent_containers/glass/bottle/on_reagent_change()
 	update_icon()
 
@@ -109,6 +101,17 @@
 /obj/item/weapon/reagent_containers/glass/bottle/toxin/New()
 	..()
 	reagents.add_reagent(TOXIN, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide
+	name = "insecticide bottle"
+	desc = "A small bottle of insecticide. Do not pour on insectoid colleagues."
+	icon = 'icons/obj/chemical.dmi'
+	//icon_state = "bottle12"
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
+	..()
+	reagents.add_reagent(INSECTICIDE, 30)
+
 
 /obj/item/weapon/reagent_containers/glass/bottle/charcoal
 	name = "activated charcoal bottle"
@@ -258,15 +261,45 @@
 	reagents.add_reagent(BLOOD, 20, data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/random
-	name = "Random culture bottle"
-	desc = "A small bottle. Contains a random disease."
+	name = "unknown culture bottle"
+	desc = "A small bottle. Contains an unknown disease."
 	icon = 'icons/obj/chemical.dmi'
-	//icon_state = "bottle3"
+	icon_state = "bottle_alt"
+
 /obj/item/weapon/reagent_containers/glass/bottle/random/New()
 	..()
-	var/datum/disease/advance/F = new(0)
-	var/list/data = list("viruses"= list(F))
-	reagents.add_reagent(BLOOD, 20, data)
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+	var/datum/disease2/disease/new_virus = new virus_choice
+
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 1,
+		ANTIGEN_COMMON	= 1,
+		ANTIGEN_RARE	= 1,
+		ANTIGEN_ALIEN	= 0,
+		)
+	var/list/bad = list(
+		EFFECT_DANGER_HELPFUL	= 1,
+		EFFECT_DANGER_FLAVOR	= 2,
+		EFFECT_DANGER_ANNOYING	= 2,
+		EFFECT_DANGER_HINDRANCE	= 2,
+		EFFECT_DANGER_HARMFUL	= 2,
+		EFFECT_DANGER_DEADLY	= 1,
+		)
+
+	new_virus.origin = "Random culture bottle"
+
+	new_virus.makerandom(list(40,60),list(20,90),anti,bad)
+
+	var/list/blood_data = list(
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = "O-",
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = list()
+	)
+	blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+	reagents.add_reagent(BLOOD, volume, blood_data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/retrovirus
 	name = "Retrovirus culture bottle"
@@ -397,7 +430,6 @@ var/datum/disease2/disease/magnitis = null
 		magnitis.update_global_log()
 
 	var/list/blood_data = list(
-		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O-",
@@ -457,7 +489,6 @@ var/datum/disease2/disease/wizarditis = null
 		wizarditis.update_global_log()
 
 	var/list/blood_data = list(
-		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O-",
@@ -470,7 +501,7 @@ var/datum/disease2/disease/wizarditis = null
 
 /obj/item/weapon/reagent_containers/glass/bottle/pacid
 	name = "Polytrinic Acid Bottle"
-	desc = "A small bottle. Contains a small amount of Polytrinic Acid"
+	desc = "A small bottle. Contains a small amount of polytrinic acid."
 	icon = 'icons/obj/chemical.dmi'
 	//icon_state = "bottle17"
 
@@ -623,6 +654,24 @@ var/datum/disease2/disease/wizarditis = null
 	..()
 	reagents.add_reagent(ROBUSTHARVEST, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide
+	name = "Insecticide Bottle"
+	desc = "A bottle of highly toxic insecticide. There's a small, almost unreadable label warning against consumption."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
+	..()
+	reagents.add_reagent(INSECTICIDE, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/plantbgone
+	name = "Plant-B-Gone Bottle"
+	desc = "A bottle of broad spectrum herbicide. A small decal shows a diona nymph with a no symbol on top."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/plantbgone/New()
+	..()
+	reagents.add_reagent(PLANTBGONE, 30)
+
 /obj/item/weapon/reagent_containers/glass/bottle/carbon/New()
 	..()
 	reagents.add_reagent(CARBON, 30)
@@ -650,3 +699,12 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/potassium/New()
 	..()
 	reagents.add_reagent(POTASSIUM, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/carppheromones
+	name = "Carp Pheromones Bottle"
+	desc = "A bottle filled with pheromones. It smells awful. A small decal shows a space carp giving a thumbs... err... fins up."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/carppheromones/New()
+	..()
+	reagents.add_reagent(CARPPHEROMONES, 30)

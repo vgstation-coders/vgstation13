@@ -27,10 +27,10 @@
 	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
 	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
 	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
-	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS])
-	list_observers = trim_list(candidates[CURRENT_OBSERVERS])
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], trim_prefs_set_to_no = FALSE)
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS], trim_prefs_set_to_no = FALSE)
 
-/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
+/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), trim_prefs_set_to_no = TRUE)
 	var/list/trimmed_list = L.Copy()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
@@ -38,14 +38,18 @@
 		if (!M.client)//are they connected?
 			trimmed_list.Remove(M)
 			continue
-		if (!M.client.desires_role(role_pref) || jobban_isbanned(M, role_id) || isantagbanned(M))//are they willing and not antag-banned?
+		var/preference = get_role_desire_str(M.client.prefs.roles[role_pref])
+		if(preference == "Never" || (preference == "No" && trim_prefs_set_to_no)) // are they willing or at least not unwilling?
+			trimmed_list.Remove(M)
+			continue
+		if (jobban_isbanned(M, role_id) || isantagbanned(M))//are they not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
-			if (M.mind.assigned_role in restricted_from_jobs || M.mind.role_alt_title in restricted_from_jobs)//does their job allow for it?
+			if ((M.mind.assigned_role && (M.mind.assigned_role in restricted_from_jobs)) || (M.mind.role_alt_title && (M.mind.role_alt_title in restricted_from_jobs)))//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
-			if (M.mind.assigned_role in protected_from_jobs || M.mind.role_alt_title in protected_from_jobs)
+			if ((M.mind.assigned_role && (M.mind.assigned_role in protected_from_jobs)) || (M.mind.role_alt_title && (M.mind.role_alt_title in protected_from_jobs)))
 				var/probability = initial(role_category.protected_traitor_prob)
 				if (prob(probability))
 					candidates.Remove(M)
@@ -61,12 +65,16 @@
 // (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs(TRUE))
+		if(!check_enemy_jobs(TRUE,TRUE))
 			return 0
 	return 1
 
+// Done via review_applications.
+/datum/dynamic_ruleset/midround/from_ghosts/choose_candidates()
+	return TRUE
+
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
+	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
 		return 0
 	return ..()
 
@@ -86,7 +94,7 @@
 		if(applicants.len <= 0)
 			if(i == candidate_checks)
 				//We have found no candidates so far and we are out of applicants.
-				mode.refund_threat(cost)
+				mode.refund_midround_threat(cost)
 				mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (all applications invalid)"
 				mode.executed_rules -= src
 			break
@@ -104,6 +112,10 @@
 			message_admins("[name]: Applicant was null. This may be caused if the mind changed bodies after applying.")
 			i++
 			continue
+		if(!applicant.key)
+			message_admins("[name] was chosen but he logged out, picking another...")
+			i++
+			continue
 		message_admins("DEBUG: Selected [applicant] for rule.")
 
 		var/mob/new_character = applicant
@@ -111,14 +123,9 @@
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
 
-		finish_setup(new_character, i)
+		finish_setup(new_character, candidate_checks - (i-1)) // i = N, N - 1.... so that N - (i-1) = 1, 2, ...
 
 	applicants.Cut()
-
-/datum/dynamic_ruleset/midround/from_ghosts/proc/generate_ruleset_body(mob/applicant)
-	var/mob/living/carbon/human/new_character = makeBody(applicant)
-	new_character.dna.ResetSE()
-	return new_character
 
 /datum/dynamic_ruleset/midround/from_ghosts/proc/finish_setup(var/mob/new_character, var/index)
 	var/datum/role/new_role = new role_category
@@ -164,10 +171,11 @@
 /datum/dynamic_ruleset/midround/autotraitor
 	name = "Syndicate Sleeper Agent"
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Cyborg", "Merchant")
+	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain","Head of Personnel",
+							"Cyborg", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = BASE_RULESET_WEIGHT
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
@@ -178,7 +186,7 @@
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))//adding traitors if the antag population is getting low
+	if ((antag_count < max_traitors) && prob(mode.midround_threat_level))//adding traitors if the antag population is getting low
 		return ..()
 	else
 		return 0
@@ -188,6 +196,12 @@
 	for(var/mob/living/player in living_players)
 		if(isAI(player) || isMoMMI(player))
 			living_players -= player //Your assigned role doesn't change when you are turned into a MoMMI or AI
+			continue
+		if(isanimal(player) && !isborer(player))
+			living_players -= player //No animal traitors except borers.
+			continue
+		if(isalien(player))
+			living_players -= player //Xenos don't bother with the syndicate
 			continue
 		if(player.z == map.zCentcomm)
 			living_players -= player//we don't autotator people on Z=2
@@ -200,10 +214,14 @@
 		return 0
 	return ..()
 
-/datum/dynamic_ruleset/midround/autotraitor/execute()
+/datum/dynamic_ruleset/midround/autotraitor/choose_candidates()
 	var/mob/M = pick(living_players)
 	assigned += M
 	living_players -= M
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/midround/autotraitor/execute()
+	var/mob/M = pick(assigned)
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.OnPostSetup()
@@ -211,6 +229,9 @@
 	newTraitor.ForgeObjectives()
 	newTraitor.AnnounceObjectives()
 	return 1
+
+/datum/dynamic_ruleset/midround/autotraitor/previous_rounds_odds_reduction(var/result)
+	return result
 
 
 //////////////////////////////////////////////
@@ -223,9 +244,9 @@
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	exclusive_to_jobs = list("AI")
-	required_enemies = list(3,3,3,2,2,2,1,1,1,1)
+	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
 	cost = 35
 	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 65
@@ -248,15 +269,12 @@
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
 	if (!unction)
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
-	if(!candidates || !candidates.len)
+	if(!assigned || !assigned.len)
 		return 0
-	var/mob/living/silicon/ai/M = pick(candidates)
-	assigned += M
-	candidates -= M
-	var/datum/role/malfAI/AI = new
-	AI.AssignToRole(M.mind,1)
-	unction.HandleNewMind(M.mind)
-	AI.Greet()
+	var/mob/living/silicon/ai/M = pick(assigned)
+	var/datum/role/malfAI/malf = unction.HandleNewMind(M.mind)
+	malf.OnPostSetup()
+	malf.Greet()
 	for(var/mob/living/silicon/robot/R in M.connected_robots)
 		unction.HandleRecruitedMind(R.mind)
 	unction.forgeObjectives()
@@ -274,9 +292,9 @@
 	role_category = /datum/role/wizard
 	my_fac = /datum/faction/wizard
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(20,20,15,15,15,15,15,10,10,0)
 	required_candidates = 1
-	weight = 1
+	weight = BASE_RULESET_WEIGHT/2
 	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
@@ -303,6 +321,9 @@
 		new_role.OnPostSetup() //Each individual role to show up gets a postsetup
 	..()
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/finish_setup(var/mob/new_character, var/index)
+	new_character.forceMove(pick(wizardstart))
+	..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -313,17 +334,24 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear
 	name = "Nuclear Assault"
 	role_category = /datum/role/nuclear_operative
+	role_category_override = "Nuke Operative" // this is what is used on the ban page
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3, 3, 3, 3, 3, 2, 1, 1, 0, 0)
-	required_candidates = 5
-	weight = 5
+	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
+	required_candidates = 5 // Placeholder, see op. cap
+	max_candidates = 5
+	weight = BASE_RULESET_WEIGHT
 	cost = 35
-	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
+	requirements = list(90, 90, 80, 40, 40, 40, 30, 20, 20, 10)
 	high_population_requirement = 60
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	logo = "nuke-logo"
 	flags = HIGHLANDER_RULESET
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
+	if (forced)
+		required_candidates = 1
+	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population = 0,var/threat = 0)
 	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
@@ -334,7 +362,21 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(!nuclear)
+		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
 	nuclear.forgeObjectives()
+
+	var/list/turf/synd_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "Syndicate-Spawn")
+			synd_spawn += get_turf(A)
+			continue
+	
+	var/spawnpos = index
+	if(spawnpos > synd_spawn.len)
+		spawnpos = 1
+	new_character.forceMove(synd_spawn[spawnpos])
 	if(index == 1) //Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind, 1)
@@ -353,16 +395,21 @@
 	role_category = /datum/role/blob_overmind/
 	my_fac = /datum/faction/blob_conglomerate/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
-	required_enemies = list(3,2,2,1,1,1,0,0,0,0)
+	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
-	weight = 2
+	weight = BASE_RULESET_WEIGHT
+	weekday_rule_boost = list("Tue")
 	cost = 30
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	requirements = list(90,90,80,40,40,40,30,20,20,10)
 	high_population_requirement = 70
 	logo = "blob-logo"
 	flags = HIGHLANDER_RULESET
 
 	makeBody = FALSE
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/acceptable(population, threat_level)
+	max_candidates = max(1, round(population/25))
+	return ..()
 
 // -- The offsets are here so that the cone of meteors always meet the station. Blob meteors shouldn't miss the station, else a blob would spawn outside of the main z-level.
 
@@ -389,11 +436,11 @@
 	name = "Revolutionary Squad"
 	role_category = /datum/role/revolutionary/leader
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_pop = list(25,25,25,25,25,20,15,15,10,10)
 	required_candidates = 3
-	weight = 5
-	cost = 45
-	requirements = list(101,101,90,60,45,45,45,45,45,45)
+	weight = BASE_RULESET_WEIGHT
+	cost = 30
+	requirements = list(90, 90, 90, 90, 40, 40, 30, 20, 10, 10)
 	high_population_requirement = 50
 	my_fac = /datum/faction/revolution
 	logo = "rev-logo"
@@ -427,9 +474,9 @@
 	name = "Space Ninja Attack"
 	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,15,15,15,10,10,10,5,5)
 	required_candidates = 1
-	weight = 3
+	weight = BASE_RULESET_WEIGHT
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -440,19 +487,21 @@
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))
+	if ((antag_count < max_traitors) && prob(mode.midround_threat_level))
 		return ..()
 	else
 		return 0
 
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/spider_clan))
+		ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	new_character.forceMove(pick(ninjastart))
+	..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/setup_role(var/datum/role/newninja)
-	newninja.OnPostSetup()
-	newninja.Greet(GREET_MIDROUND)
-	newninja.ForgeObjectives()
-	newninja.AnnounceObjectives()
-	if(!newninja.antag.current.ThrowAtStation())
-		newninja.antag.current.spawn_rand_maintenance()
-	return 1
+	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
+	spoider.HandleRecruitedRole(newninja)
+	return ..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -464,9 +513,10 @@
 	name = "Soul Rambler Migration"
 	role_category = /datum/role/rambler
 	enemy_jobs = list("Librarian","Detective", "Chaplain", "Internal Affairs Agent")
-	required_enemies = list(0,0,1,1,2,2,3,3,3,4)
+	required_pop = list(0,0,10,10,15,15,20,20,20,25)
 	required_candidates = 1
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
+	timeslot_rule_boost = list(SLEEPTIME)
 	cost = 5
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	logo = "rambler-logo"
@@ -477,7 +527,8 @@
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
-	weight = Clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	if(population>0)
+		weight = clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
 	//We don't cotton to freaks in highpop
 	return ..()
 
@@ -492,6 +543,47 @@
 
 //////////////////////////////////////////////
 //                                          //
+//               TIME AGENT                 //
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent
+	name = "Time Agent Anomaly"
+	role_category = /datum/role/time_agent
+	required_candidates = 1
+	weight = 4
+	cost = 10
+	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
+	logo = "time-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if (antag_count < max_traitors)
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
+	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
+	agency.HandleRecruitedRole(newagent)
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if(required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/time_agent))
+		ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	new_character.forceMove(pick(timeagentstart))
+	..()
+
+//////////////////////////////////////////////
+//                                          //
 //               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
@@ -501,9 +593,9 @@
 	role_category = /datum/role/grinch
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = BASE_RULESET_WEIGHT
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
@@ -531,7 +623,7 @@
 	name = "Loose Catbeast"
 	role_category = /datum/role/catbeast
 	required_candidates = 1
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 0
@@ -539,13 +631,68 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
-	if(mode.threat>50) //We're threatening enough!
-		message_admins("Rejected catbeast ruleset, [mode.threat] threat was over 50.")
+	if(mode.midround_threat>50) //We're threatening enough!
+		message_admins("Rejected catbeast ruleset, [mode.midround_threat] threat was over 50.")
 		return FALSE
 	if(!..())
 		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
 		return FALSE
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//          Vox Heist			 (MIDROUND) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist
+	name = "Vox Heist"
+	role_category = /datum/role/vox_raider
+	my_fac = /datum/faction/vox_shoal
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_pop = list(20,20,20,15,15,15,15,15,10,10)
+	required_candidates = 5
+	weight = BASE_RULESET_WEIGHT
+	cost = 25
+	requirements = list(50,50,50,30,30,30,30,20,10,10)
+	high_population_requirement = 35
+	var/vox_cap = list(2,2,3,3,4,5,5,5,5,5)
+	logo = "vox-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/acceptable(var/population=0,var/threat=0)
+	var/indice_pop = min(10,round(living_players.len/5)+1)
+	required_candidates = vox_cap[indice_pop]
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/ready(var/forced = 0)
+	if (forced)
+		required_candidates = 1
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	. = ..()
+	required_candidates = initial(required_candidates)
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/finish_setup(var/mob/new_character, var/index)
+	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
+	shoal.forgeObjectives()
+
+	var/list/turf/vox_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "voxstart")
+			vox_spawn += get_turf(A)
+			continue
+	
+	var/spawn_count = index
+	if(spawn_count > vox_spawn.len)
+		spawn_count = 1
+	new_character.forceMove(vox_spawn[spawn_count])
+	if (index == 1) // Our first guy is the leader
+		var/datum/role/vox_raider/chief_vox/new_role = new
+		new_role.AssignToRole(new_character.mind,1)
+		setup_role(new_role)
+	else
+		return ..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -557,10 +704,10 @@
 	name = "Plague Mice Invasion"
 	role_category = /datum/role/plague_mouse
 	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
-	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
+	required_pop = list(15,15,15,15,15,15,15,15,15,15)
 	required_candidates = 1
 	max_candidates = 5
-	weight = 5
+	weight = BASE_RULESET_WEIGHT
 	cost = 25
 	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -578,3 +725,264 @@
 	my_fac.HandleRecruitedRole(new_role)
 	new_role.Greet(GREET_DEFAULT)
 	new_role.AnnounceObjectives()
+
+//////////////////////////////////////////////
+//                                          //
+//          SPIDER INFESTATION              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation
+	name = "Spider Infestation"
+	role_category = /datum/role/giant_spider
+	//no enemy jobs, it's just a bunch of spiders
+	//might change later if they actually happen to stomp the crew but that seems pretty unlikely
+	required_candidates = 1
+	max_candidates = 12 // max amount of spiderlings spawned by a spider infestation random event
+	weight = BASE_RULESET_WEIGHT
+	cost = 25
+	requirements = list(90,80,60,40,30,20,10,10,10,10)
+	high_population_requirement = 50
+	flags = MINOR_RULESET
+	my_fac = /datum/faction/spider_infestation
+	logo = "spider-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation/generate_ruleset_body(var/mob/applicant)
+	var/datum/faction/spider_infestation/active_fac = find_active_faction_by_type(my_fac)
+	if (!active_fac.invasion)
+		active_fac.SetupSpawn()
+	var/mob/living/simple_animal/hostile/giant_spider/spiderling/new_spider = new (active_fac.invasion)
+	new_spider.key = applicant.key
+	return new_spider
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()
+
+//////////////////////////////////////////////
+//                                          //
+//             XENOMORPHS                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs
+	name = "Alien Infestation"
+	role_category = /datum/role/xenomorph
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Roboticist")
+	required_pop = list(25,20,20,15,15,15,10,10,10,10)
+	required_candidates = 1
+	max_candidates = 3
+	weight = 1
+	cost = 30
+	requirements = list(90,90,70,60,50,40,20,10,10,10)
+	high_population_requirement = 35
+	logo = "xeno-logo"
+	my_fac = /datum/faction/xenomorph
+	var/list/vents = list()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/ready()
+	..()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
+		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
+			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
+				vents += temp_vent
+
+
+	if (vents.len == 0)
+		message_admins("A suitable vent couldn't be found for alien larva. That's bad.")
+		return
+	return 1
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/generate_ruleset_body(var/mob/applicant)
+	var/obj/vent = pick(vents)
+	var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
+
+	new_xeno.key = applicant.key
+	new_xeno << sound('sound/voice/alienspawn.ogg')
+	if(vents.len > 1)
+		vents -= vent
+
+	return new_xeno
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+
+//////////////////////////////////////////////
+//                                          //
+//                PULSE DEMON               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon
+	name = "Pulse Demon Infiltration"
+	role_category = /datum/role/pulse_demon
+	enemy_jobs = list("Station Engineer","Chief Engineer")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+	logo = "pulsedemon-logo"
+	var/list/cables_to_spawn_at = list()
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/ready(var/forced = 0)
+	for(var/datum/powernet/PN in powernets)
+		for(var/obj/structure/cable/C in PN.cables)
+			var/turf/simulated/floor/F = get_turf(C)
+			// Cable to spawn at must be on a floor, not tiled over, on the main station, powered and in maint
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation && istype(get_area(C),/area/maintenance) && C.powernet.avail)
+				cables_to_spawn_at.Add(C)
+	if(!cables_to_spawn_at.len)
+		log_admin("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		message_admins("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		return 0
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/generate_ruleset_body(var/mob/applicant)
+	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
+	applicant.forceMove(get_turf(our_cable))
+	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
+	PD.key = applicant.key
+	return PD
+
+//////////////////////////////////////////////
+//                                          //
+//             Prisoner                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner
+	name = "Prisoner Transfer"
+	role_category = /datum/role/prisoner
+	restricted_from_jobs = list()
+	enemy_jobs = list("Warden","Head of Security")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_pop = list(0,0,10,10,15,15,20,20,20,25)
+	required_candidates = 1
+	weight = 3
+	cost = 0
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+	flags = MINOR_RULESET
+	makeBody = FALSE
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/setup_role(var/datum/role/new_role)
+	new_role.OnPostSetup()
+	if(prob(80))
+		new_role.Greet(GREET_DEFAULT)
+		new_role.ForgeObjectives()
+		new_role.AnnounceObjectives()
+	else
+		to_chat(new_role.antag.current, "<B>You are an <span class='warning'>innocent</span> prisoner!</B>")
+		to_chat(new_role.antag.current, "You are a Nanotrasen Employee that has been wrongfully accused of espionage! The exact details of your situation are hazy, but you know that you are innocent.")
+		to_chat(new_role.antag.current, "You were transferred to this station after a brief stay at Alcatraz IV. You know nothing about this station or the people aboard it.")
+		to_chat(new_role.antag.current, "<span class='danger'>Remember that you are not affiliated with the Syndicate. You should protect yourself and work towards freedom, but you are not an enemy of the station!</span>")
+		new_role.Drop()
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/finish_setup(mob/new_character, index)
+	command_alert(/datum/command_alert/prisoner_transfer)
+	to_chat(new_character, "<span class='notice'>You were selected to be a Prisoner! You will spawn at Central Command in two minutes.</span>")
+	sleep(2 MINUTES)
+
+	//the applicant left or something
+	if(!new_character)
+		return
+
+	new_character = generate_ruleset_body(new_character)
+	var/datum/role/new_role = new role_category
+	var/obj/structure/bed/chair/chair = pick(prisonerstart)
+	new_character.forceMove(get_turf(chair))
+	new_role.AssignToRole(new_character.mind,1)
+	setup_role(new_role)
+	current_prisoners += new_character
+
+	//Send the shuttle that they spawned on.
+	var/obj/docking_port/destination/transport/station/stationdock = locate(/obj/docking_port/destination/transport/station) in all_docking_ports
+	var/obj/docking_port/destination/transport/centcom/centcomdock = locate(/obj/docking_port/destination/transport/centcom) in all_docking_ports
+
+	spawn(59 SECONDS)	//its 59 seconds to make sure they cant unbuckle themselves beforehand
+		if(!transport_shuttle.move_to_dock(stationdock))
+			message_admins("PRISONER TRANSFER SHUTTLE FAILED TO MOVE! PANIC!")
+			return
+
+		//Try to send the shuttle back every 15 seconds
+		while(transport_shuttle.current_port == stationdock)
+			sleep(150)
+			if(!can_move_shuttle())
+				continue
+
+			sleep(50)	//everyone is off, wait 5 more seconds so people don't get ZAS'd out the airlock
+			if(!can_move_shuttle())
+				continue
+			if(!transport_shuttle.move_to_dock(centcomdock))
+				message_admins("The transport shuttle couldn't return to centcomm for some reason.")
+				return
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/generate_ruleset_body(mob/applicant)
+	var/obj/structure/bed/chair/chair = pick(prisonerstart)
+	var/mob/living/carbon/human/H = new(get_turf(chair))
+	H.key = applicant.key
+	chair.buckle_mob(H, H)
+	H.client.changeView()
+
+	var/species = pickweight(list(
+		"Human" 	= 4,
+		"Vox"		= 1,
+		"Plasmaman" = 1,
+		"Grey"		= 1,
+		"Insectoid"	= 1,
+	))
+
+	H.set_species(species)
+	H.randomise_appearance_for()
+	var/randname = random_name(H.gender, H.species.name)
+	H.fully_replace_character_name(null,randname)
+	H.regenerate_icons()
+	H.dna.ResetUIFrom(H)
+	H.dna.ResetSE()
+
+	var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner
+	outfit.equip(H)
+	mob_rename_self(H, "prisoner")
+
+	var/obj/item/weapon/handcuffs/C = new /obj/item/weapon/handcuffs(H)
+	H.equip_to_slot(C, slot_handcuffed)
+
+	return H
+
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/proc/can_move_shuttle()
+	var/contents = get_contents_in_object(transport_shuttle.linked_area)
+	if (locate(/mob/living) in contents)
+		return FALSE
+	if (locate(/obj/item/weapon/disk/nuclear) in contents)
+		return FALSE
+	if (locate(/obj/machinery/nuclearbomb) in contents)
+		return FALSE
+	if (locate(/obj/item/beacon) in contents)
+		return FALSE
+	if (locate(/obj/effect/portal) in contents)
+		return FALSE
+	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//         JUDGE                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/judge
+	name = "Judge"
+	role_category = /datum/role/judge
+	my_fac = /datum/faction/justice
+	required_pop = list(101,101,101,101,101,101,101,101,101,101)
+	required_candidates = 1
+	max_candidates = 5
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(10,10,10,10,10,10,10,10,10,10)
+	logo = "gun-logo"
+	repeatable = TRUE

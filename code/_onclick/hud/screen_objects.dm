@@ -6,6 +6,10 @@
 	They are used with the client/screen list and the screen_loc var.
 	For more information, see the byond documentation on the screen_loc and screen vars.
 */
+
+/obj/abstract
+	vis_flags = 0
+
 /obj/abstract/screen
 	name = ""
 	icon = 'icons/mob/screen1.dmi'
@@ -21,10 +25,6 @@
 	master = null
 	..()
 
-/obj/abstract/screen/resetVariables()
-	..("icon","icon_state","name","master", "screen_loc", args)
-	animate(src)
-
 /obj/abstract/screen/text
 	icon = null
 	icon_state = null
@@ -32,11 +32,6 @@
 	screen_loc = "CENTER-7,CENTER-7"
 	maptext_height = 480
 	maptext_width = 480
-
-/obj/abstract/screen/adminbus
-
-/obj/abstract/screen/specialblob
-	var/obj/effect/blob/linked_blob = null
 
 /obj/abstract/screen/schematics
 	var/datum/rcd_schematic/ourschematic
@@ -50,6 +45,7 @@
 	icon = ourschematic.icon
 	icon_state = ourschematic.icon_state
 	name = ourschematic.name
+	overlays += ourschematic.overlays
 	transform = transform*0.8
 
 /obj/abstract/screen/schematics/Click()
@@ -58,6 +54,7 @@
 
 /obj/abstract/screen/schematics/Destroy()
 	ourschematic = null
+	overlays = list()
 	..()
 
 /obj/abstract/screen/inventory
@@ -73,7 +70,7 @@
 	if (!G) return
 	var/list/params_list = params2list(params)
 	if (params_list.len)
-		var/new_aim = Clamp(text2num(params_list["icon-y"]), 0, 480)
+		var/new_aim = clamp(text2num(params_list["icon-y"]), 0, 480)
 		if (new_aim>6)
 			G.aim = new_aim
 			G.update_aim()
@@ -158,7 +155,14 @@
 	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
-		return 1
+		if(istype(master,/obj/item/weapon/storage)) //should always be true, but sanity
+			var/obj/item/weapon/storage/S = master
+			if(!S.distance_interact(usr))
+				return 1
+			//else... continue onward to master.attackby
+		else
+			//master isn't storage, exit
+			return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
 		if(I)
@@ -166,32 +170,37 @@
 			//usr.next_move = world.time+2
 	return 1
 
+/obj/abstract/screen/nocontext/MouseEntered(location, control, params)
+	usr?.client?.show_popup_menus = FALSE
+
+/obj/abstract/screen/nocontext/MouseExited(location, control, params)
+	usr?.client?.show_popup_menus = TRUE
+
 /obj/abstract/screen/gun
 	name = "gun"
 	icon = 'icons/mob/screen1.dmi'
 	master = null
 	dir = 2
 
-	move
-		name = "Allow Walking"
-		icon_state = "no_walk0"
-		screen_loc = ui_gun2
+/obj/abstract/screen/gun/move
+	name = "Allow Walking"
+	icon_state = "no_walk0"
+	screen_loc = ui_gun2
 
-	run
-		name = "Allow Running"
-		icon_state = "no_run0"
-		screen_loc = ui_gun3
+/obj/abstract/screen/gun/run
+	name = "Allow Running"
+	icon_state = "no_run0"
+	screen_loc = ui_gun3
 
-	item
-		name = "Allow Item Use"
-		icon_state = "no_item0"
-		screen_loc = ui_gun1
+/obj/abstract/screen/gun/item
+	name = "Allow Item Use"
+	icon_state = "no_item0"
+	screen_loc = ui_gun1
 
-	mode
-		name = "Toggle Gun Mode"
-		icon_state = "gun0"
-		screen_loc = ui_gun_select
-		//dir = 1
+/obj/abstract/screen/gun/mode
+	name = "Toggle Gun Mode"
+	icon_state = "gun0"
+	screen_loc = ui_gun_select
 
 /obj/abstract/screen/gun/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
@@ -296,13 +305,16 @@
 	var/view = world.view
 	if(user && user.client)
 		view = user.client.view
-	X = Clamp((origin.x + text2num(X) - (view + 1)), 1, world.maxx)
-	Y = Clamp((origin.y + text2num(Y) - (view + 1)), 1, world.maxy)
+	X = clamp((origin.x + text2num(X) - (view + 1)), 1, world.maxx)
+	Y = clamp((origin.y + text2num(Y) - (view + 1)), 1, world.maxy)
 	return locate(X, Y, origin.z)
 
 /obj/abstract/screen/Click(location, control, params)
 	if(!usr)
 		return 1
+
+	if(map.special_ui(src,usr))
+		return 1 //exit early, we found our UI on map
 
 	switch(name)
 		if("toggle")
@@ -328,22 +340,10 @@
 				L.resist()
 
 		if("mov_intent")
-			if(iscarbon(usr))
+			if (iscarbon(usr))
 				var/mob/living/carbon/C = usr
-				if(C.legcuffed)
-					to_chat(C, "<span class='notice'>You are legcuffed! You cannot run until you get [C.legcuffed] removed!</span>")
-					C.m_intent = M_INTENT_WALK	//Just incase
-					C.hud_used.move_intent.icon_state = "walking"
-					return 1
-				switch(usr.m_intent)
-					if(M_INTENT_RUN)
-						usr.m_intent = M_INTENT_WALK
-						usr.hud_used.move_intent.icon_state = "walking"
-					if(M_INTENT_WALK)
-						usr.m_intent = M_INTENT_RUN
-						usr.hud_used.move_intent.icon_state = "running"
-				if(istype(usr,/mob/living/carbon/alien/humanoid))
-					usr.update_icons()
+				C.toggle_move_intent()
+
 		if("m_intent")
 			if(!usr.m_int)
 				switch(usr.m_intent)
@@ -490,12 +490,12 @@
 		if("Announcement")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.announcement()
+				AI.make_announcement()
 
-		if("Call Emergency Shuttle")
+		if("(Re)Call Emergency Shuttle")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.ai_call_shuttle()
+				AI.ai_call_or_recall_shuttle()
 
 		if("State Laws")
 			if(isAI(usr))
@@ -595,173 +595,6 @@
 			return 0
 	return 1
 
-/obj/abstract/screen/adminbus/Click()
-	switch(name)
-		if("Delete Bus")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Adminbus_Deletion(usr)
-		if("Delete Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.remove_mobs(usr)
-		if("Spawn Clowns")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,1,5)
-		if("Spawn Carps")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,2,5)
-		if("Spawn Bears")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,3,5)
-		if("Spawn Trees")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,4,5)
-		if("Spawn Spiders")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,5,5)
-		if("Spawn Large Alien Queen")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,6,1)
-		if("Spawn Loads of Captain Spare IDs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.loadsa_goodies(usr,1)
-		if("Spawn Loads of Money")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.loadsa_goodies(usr,2)
-		if("Repair Surroundings")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Mass_Repair(usr)
-		if("Mass Rejuvination")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.mass_rejuvinate(usr)
-		if("Singularity Hook")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.throw_hookshot(usr)
-		if("Adminbus-mounted Jukebox")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Mounted_Jukebox(usr)
-		if("Teleportation")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Teleportation(usr)
-		if("Release Passengers")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.release_passengers(usr)
-		if("Send Passengers Back Home")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Send_Home(usr)
-		/*if("Antag Madness!")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Make_Antag(usr)*/
-		if("Give Infinite Laser Guns to the Passengers")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.give_lasers(usr)
-		if("Delete the given Infinite Laser Guns")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.delete_lasers(usr)
-		if("Give Fuse-Bombs to the Passengers")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.give_bombs(usr)
-		if("Delete the given Fuse-Bombs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.delete_bombs(usr)
-		if("Send Passengers to the Thunderdome's Red Team")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Arena_Red(usr)
-		if("Split the Passengers between the two Thunderdome Teams")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Arena(usr)
-		if("Send Passengers to the Thunderdome's Green Team")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Arena_Green(usr)
-		if("Send Passengers to the Thunderdome's Observers' Lodge")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Obs(usr)
-		if("Capture Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_bumpers(usr,1)
-		if("Hit Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_bumpers(usr,2)
-		if("Gib Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_bumpers(usr,3)
-		if("Close Door")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_door(usr,0)
-		if("Open Door")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_door(usr,1)
-		if("Turn Off Headlights")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_lights(usr,0)
-		if("Dipped Headlights")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_lights(usr,1)
-		if("Main Headlights")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_lights(usr,2)
-
-/obj/abstract/screen/specialblob/Click()
-	if(isovermind(usr))
-		var/mob/camera/blob/overmind = usr
-		switch(name)
-			if("Spawn Blob")
-				overmind.expand_blob_power()
-			if("Spawn Strong Blob")
-				overmind.create_shield_power()
-			if("Spawn Resource Blob")
-				overmind.create_resource()
-			if("Spawn Factory Blob")
-				overmind.create_factory()
-			if("Spawn Node Blob")
-				overmind.create_node()
-			if("Spawn Blob Core")
-				overmind.create_core()
-			if("Call Overminds")
-				overmind.callblobs()
-			if("Rally Spores")
-				overmind.rally_spores_power()
-			if("Psionic Message")
-				var/message = input(overmind,"Send a message to the crew.","Psionic Message") as null|text
-				if(message)
-					overmind.telepathy(message)
-			if("Jump to Blob")
-				overmind.forceMove(linked_blob.loc)
-		return 1
-
 /obj/abstract/screen/inventory/Click()
 	// At this point in client Click() code we have passed the 1/10 sec check and little else
 	// We don't even know if it's a middle click
@@ -789,7 +622,7 @@
 /client/proc/reset_screen()
 	for(var/obj/abstract/screen/objects in src.screen)
 		if(!objects.globalscreen)
-			returnToPool(objects)
+			qdel(objects)
 	src.screen = null
 
 /obj/abstract/screen/acidable()

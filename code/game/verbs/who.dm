@@ -90,7 +90,7 @@
 	if (holder)
 		for (var/client/C in admins)
 			var/displayrank = "\improper [C.holder.rank]"
-			if (R_ADMIN & C.holder.rights || !(R_MOD & C.holder.rights))
+			if (R_ADMIN & C.holder.rights)
 				aNames += "\t[C] is \an [displayrank]"
 
 				if (C.holder.fakekey)
@@ -129,7 +129,7 @@
 	else
 		for (var/client/C in admins)
 			var/displayrank = "\improper [C.holder.rank]"
-			if (R_ADMIN & C.holder.rights || !(R_MOD & C.holder.rights))
+			if (R_ADMIN & C.holder.rights)
 				if (!C.holder.fakekey)
 					aNames += "\t[C] is \an [displayrank]\n"
 					numAdminsOnline++

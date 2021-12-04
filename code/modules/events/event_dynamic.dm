@@ -7,6 +7,12 @@ var/list/event_last_fired = list()
 
 	var/minutes_passed = world.time/600
 	var/roundstart_delay = 50
+
+	if (admin_disable_events)
+		message_admins("A random event was prevented from firing by admins.")
+		log_admin("A random event was prevented from firing by admins.")
+		return
+
 	if(minutes_passed < roundstart_delay) //Self-explanatory
 		message_admins("Too early to trigger random event, aborting.")
 		return
@@ -23,12 +29,13 @@ var/list/event_last_fired = list()
 	var/list/possibleEvents = list()
 
 	//see:
-	// Code/WorkInProgress/Cael_Aislinn/Economy/Economy_Events.dm
-	// Code/WorkInProgress/Cael_Aislinn/Economy/Economy_Events_Mundane.dm
+	// code\modules\Economy\Economy_Events.dm
+	// code\modules\Economy\Economy_Events_Mundane.dm
 	//Commented out for now. Let's be honest, a string of text on PDA is not worth a meteor shower or ion storm
-	//possibleEvents[/datum/event/economic_event] = 100
-	//possibleEvents[/datum/event/trivial_news] = 150
-	//possibleEvents[/datum/event/mundane_news] = 100
+	//Will be re-implemented in the near future, its chance to proc will be independant from the other random events
+	//possibleEvents[/datum/event/news_event] = 100//
+	//possibleEvents[/datum/event/trivial_news] = 150//Gibson Gazette, taken from config/trivial.txt
+	//possibleEvents[/datum/event/mundane_news] = 100//Tau Ceti Daily
 
 	//It is this coder's thought that weighting events on job counts is dumb and predictable as hell. 10 Engies ? Hope you like Meteors
 	//Instead, weighting goes from 100 (boring and common) to 10 (exceptional)
@@ -37,15 +44,18 @@ var/list/event_last_fired = list()
 			possibleEvents[type] = 0
 			continue
 		var/datum/event/E = new type(FALSE)
-		possibleEvents[type] = E.can_start(active_with_role)
+		var/value = E.can_start(active_with_role)
+		if(value > 0)
+			possibleEvents[type] = value
 		qdel(E)
 
-	for(var/event_type in event_last_fired) if(possibleEvents[event_type])
-		var/time_passed = world.time - event_last_fired[event_type]
-		var/full_recharge_after = 60 * 60 * 10 // Was 3 hours, changed to 1 hour since rounds rarely last that long anyways
-		var/weight_modifier = max(0, (full_recharge_after - time_passed) / 300)
+	for(var/event_type in event_last_fired)
+		if(possibleEvents[event_type])
+			var/time_passed = world.time - event_last_fired[event_type]
+			var/full_recharge_after = 60 * 60 * 10 // Was 3 hours, changed to 1 hour since rounds rarely last that long anyways
+			var/weight_modifier = max(0, (full_recharge_after - time_passed) / 300)
 
-		possibleEvents[event_type] = max(possibleEvents[event_type] - weight_modifier, 0)
+			possibleEvents[event_type] = max(possibleEvents[event_type] - weight_modifier, 0)
 
 	var/picked_event = pickweight(possibleEvents)
 	event_last_fired[picked_event] = world.time

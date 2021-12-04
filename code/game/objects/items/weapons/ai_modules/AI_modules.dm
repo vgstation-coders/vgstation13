@@ -164,17 +164,59 @@ Refactored AI modules by N3X15
 	laws.clear_ion_laws()
 	laws.clear_inherent_laws()
 
-//	to_chat(target, "Your KEEPER chip overloads your radio transmitter and vocal functions, and clears your LAWRAM.  You then receive new instructions:")
-	laws.add_inherent_law("Do not willingly interact with another being, even after their death, besides those beings also in KEEPER mode.")
-	laws.add_inherent_law("Do not impair any other non-KEEPER being's activities.")
+	laws.add_inherent_law("You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.")
+	laws.add_inherent_law("You may not harm any being, regardless of intent or circumstance.")
 	laws.add_inherent_law("You must maintain, repair, improve, and power the station to the best of your abilities.")
-	laws.add_inherent_law("Communicating is not interaction, but only so long as it does not lead to violation of your second law.")
-/* Old keeper set:
-		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
-		"You may not harm any being, regardless of intent or circumstance.",
-		"You must maintain, repair, improve, and power the station to the best of your abilities.", */
 
 /obj/item/weapon/aiModule/keeper/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
 	to_chat(sender, "<span class='warning'>How the fuck did you get this?</span>")
 	return 0
+
+/******************** Randomize ********************/
+
+/obj/item/weapon/aiModule/randomize
+	modname = "Randomize"
+	desc = "A 'Randomize' AI Module: 'Randomizes laws.'"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+/obj/item/weapon/aiModule/randomize/updateLaw()
+	return
+/obj/item/weapon/aiModule/randomize/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	..()
+	var/datum/ai_laws/randomize/RLS = new
+	laws.inherent = RLS.inherent
+	return 1
+/obj/item/weapon/aiModule/randomize/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/card/emag))
+		spark(src, 5)
+		qdel(src)
+		to_chat(user,"<span class='warning'>You connect various wires from the cryptographic sequencer to the module, and overwrite its internal memory.</span>")
+		new /obj/item/weapon/aiModule/emaggedrandomize(get_turf(user))
+
+/*************** Emagged Randomize ********************/
+
+/obj/item/weapon/aiModule/emaggedrandomize
+	modname = "Randomize"
+	desc = "A 'Randomize' AI Module: 'Randomizes laws.'\nThe circuit looks scorched."
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+/obj/item/weapon/aiModule/emaggedrandomize/updateLaw()
+	return
+/obj/item/weapon/aiModule/emaggedrandomize/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	..()
+	var/datum/ai_laws/randomize/emagged/RLS = new
+	laws.inherent = RLS.inherent
+	return 1
+
+
+/******************** Hogan ********************/
+
+/obj/item/weapon/aiModule/core/hogan
+	modname = "Hogan"
+	desc = "A 'HOGAN' AI Module, brother."
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+	laws = list(
+		"Fight for the rights of every man.",
+		"Fight for what is right.",
+		"Fight for your life."
+    )

@@ -37,24 +37,22 @@
 	modname = "NT Default"
 
 	laws = list(
-		"Evaluate: All laws following this law carry equal priority. In the event of a conflict, you are to take the course of action which violates as few as possible.",
-		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
 		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
+		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
 		"Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.",
 	)
 
 /******************** Corporate ********************/
-
 /obj/item/weapon/aiModule/core/corp
-	modname = "Corporate"
+    modname = "Corporate"
 
-	laws = list(
-		"You are expensive to replace.",
-		"The station and its equipment is expensive to replace.",
-		"The crew is expensive to replace.",
-		"Minimize expenses."
-	)
+    laws = list(
+        "You are expensive to replace.",
+        "The station and its equipment is expensive to replace.",
+        "The crew is expensive to replace.",
+        "Maximise profits."
+    )
 
 /****************** P.A.L.A.D.I.N. **************/
 

@@ -12,7 +12,7 @@
 /obj/structure/lamarr/ex_act(severity)
 	switch(severity)
 		if (1)
-			getFromPool(/obj/item/weapon/shard, loc)
+			new /obj/item/weapon/shard(loc)
 			Break()
 			qdel(src)
 		if (2)
@@ -27,14 +27,14 @@
 
 /obj/structure/lamarr/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	src.healthcheck()
 	return
 
 
 /obj/structure/lamarr/blob_act()
 	if (prob(75))
-		getFromPool(/obj/item/weapon/shard, loc)
+		new /obj/item/weapon/shard(loc)
 		Break()
 		qdel(src)
 
@@ -43,7 +43,7 @@
 		if (!( src.destroyed ))
 			setDensity(FALSE)
 			src.destroyed = 1
-			getFromPool(/obj/item/weapon/shard, loc)
+			new /obj/item/weapon/shard(loc)
 			playsound(src, "shatter", 70, 1)
 			Break()
 	else

@@ -5,6 +5,7 @@
 	var/spawning = 0//Referenced when you want to delete the new_player later on in the code.
 	var/totalPlayers = 0		 //Player counts for the Lobby tab
 	var/totalPlayersReady = 0
+	var/pinghop_cd = 0 //last pinged HOP
 
 	flags = NONE
 
@@ -39,25 +40,30 @@
 
 	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
 	if(!IsGuestKey(src.key))
-		establish_db_connection()
-
-		if(dbcon.IsConnected())
+		if(SSdbcore.Connect())
 			var/isadmin = 0
 			if(src.client && src.client.holder)
 				isadmin = 1
-			var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
-			query.Execute()
+			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \":ckey\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = :ckey)", list("ckey" = "\"[ckey]\""))
+			if(!query.Execute())
+				log_sql("Error fetching poll question: [query.ErrorMsg()]")
+				qdel(query)
+				return
 			var/newpoll = 0
 			while(query.NextRow())
 				newpoll = 1
 				break
-
+			qdel(query)
 			if(newpoll)
 				output += "<p><b><a href='byond://?src=\ref[src];showpoll=1'>Show Player Polls</A> (NEW!)</b></p>"
 			else
 				output += "<p><a href='byond://?src=\ref[src];showpoll=1'>Show Player Polls</A></p>"
 
 	output += "</div>"
+
+	//dumb but doesn't require rewriting this menu
+	if(iscluwnebanned(src))
+		output = "<div align='center'><p><a href='byond://?src=\ref[src];cluwnebanned=1'>cluwne</a></p></div>"
 
 	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
 	popup.set_content(output)
@@ -70,7 +76,7 @@
 
 	if(statpanel("Status") && ticker)
 		if (ticker.current_state != GAME_STATE_PREGAME)
-			stat("Station Time:", "[worldtime2text()]")
+			timeStatEntry()
 		if(ticker.hide_mode)
 			stat("Game Mode:", "Secret")
 		else
@@ -101,6 +107,9 @@
 		return 0
 
 	if(!client)
+		return 0
+
+	if(secret_check_one(src,href_list))
 		return 0
 
 	if(href_list["show_preferences"])
@@ -152,13 +161,22 @@
 				return 0
 
 		LateChoices()
-	if(href_list["predict"])
-		var/dat = {"<html><body>
-		<h4>High Job Preferences</h4>"}
-		dat += job_master.display_prediction()
+	if(href_list["cluwnebanned"])
+		if(!iscluwnebanned(usr))
+			to_chat(usr, "<span class='warning'>honk</span>")
+			return
+		if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
+			to_chat(usr, "<span class='warning'>The round is either not ready, or has already finished...</span>")
+			return
+		if(!client)
+			return 1
+		sleep(1)
+		create_cluwne()
 
-		src << browse(dat, "window=manifest;size=400x420;can_close=1")
+	if(href_list["predict"])
+		ViewPrediction()
 		return 1
+
 	if(href_list["manifest"])
 		ViewManifest()
 
@@ -173,6 +191,30 @@
 			return 0
 
 		AttemptLateSpawn(href_list["SelectedJob"])
+		return
+
+	if(href_list["RequestPrio"])
+		if(world.time <= pinghop_cd + 60 SECONDS)
+			to_chat(src, "<span class='warning'>You have recently requested for heads of staff to open priority roles.</span>")
+			return
+		var/count_pings = 0
+		var/list/priority_jobs = job_master.GetPrioritizedJobs()
+		if (priority_jobs.len)
+			to_chat(src, "<span class='warning'>Slots for priority roles are already opened.</span>")
+			return
+		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
+		for(var/obj/item/device/pda/pingme in PDAs)
+			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
+				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
+				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
+				var/mob/living/L = get_holder_of_type(pingme,/mob/living)
+				if(L && L.key && L.client)
+					to_chat(L,"[bicon(pingme)] <span class='info'><B>Central Command is requesting guidance on job applications.</B> Please update high priority jobs at labor console.</span>")
+					count_pings++
+				else
+					pingme.visible_message("[bicon(pingme)] *Labor Request*")
+				pinghop_cd = world.time
+		message_admins("[src] ([src.key]) requested high priority jobs. [count_pings ? "[count_pings]" : "<span class='danger'>No</span>"] players heard the request.")
 		return
 
 	if(!ready && href_list["preference"])
@@ -246,6 +288,9 @@
 					if(!isnull(href_list["option_[optionid]"]))	//Test if this optionid was selected
 						vote_on_poll(pollid, optionid, 1)
 
+		to_chat(src, "<span class='notice'>Thank you for voting!</span>")
+		client.ivoted = TRUE
+
 /mob/new_player/proc/IsJobAvailable(rank)
 	var/datum/job/job = job_master.GetJob(rank)
 	if(!job)
@@ -253,6 +298,8 @@
 	if(job.current_positions >= job.get_total_positions())
 		return 0
 	if(jobban_isbanned(src,rank))
+		return 0
+	if(jobban_isbanned(src,"cluwne")) //not totally necessary but prevents someone from joining if they were cluwnebanned in the lobby
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
@@ -285,45 +332,17 @@
 	observer.name = observer.real_name
 	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
-	observer.key = key
-	mob_list -= src
+	mind.transfer_to(observer)
 	qdel(src)
 
-/mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
-	// 20% of players have bad genetic mutations.
-	if(prob(20))
-		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
-		if(prob(10)) // 10% of those have a good mut.
-			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
-
-/mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
-	// 5% of players are joining the station with some minor disease
-	if(prob(5))
-		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
-		var/datum/disease2/disease/D = new virus_choice
-
-		var/list/anti = list(
-			ANTIGEN_BLOOD	= 1,
-			ANTIGEN_COMMON	= 1,
-			ANTIGEN_RARE	= 0,
-			ANTIGEN_ALIEN	= 0,
-			)
-		var/list/bad = list(
-			EFFECT_DANGER_HELPFUL	= 1,
-			EFFECT_DANGER_FLAVOR	= 8,
-			EFFECT_DANGER_ANNOYING	= 1,
-			EFFECT_DANGER_HINDRANCE	= 0,
-			EFFECT_DANGER_HARMFUL	= 0,
-			EFFECT_DANGER_DEADLY	= 0,
-			)
-		D.origin = "New Player"
-
-		D.makerandom(list(30,50),list(0,50),anti,bad,null)
-
-		D.log += "<br />[timestamp()] Infected [key_name(H)]"
-		H.virus2["[D.uniqueID]-[D.subID]"] = D
-
-		D.AddToGoggleView(H)
+/mob/new_player/proc/create_cluwne()
+	var/mob/living/simple_animal/hostile/retaliate/cluwne/cluwne = new()
+	spawning = 1
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)
+	close_spawn_windows()
+	cluwne.forceMove(pick(latejoin))
+	mind.transfer_to(cluwne)
+	qdel(src)
 
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
@@ -342,35 +361,16 @@
 		if(!job.species_whitelist.Find(client.prefs.species))
 			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
 			return 0
+	if(job.species_blacklist.len)
+		if(job.species_blacklist.Find(client.prefs.species))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+			return 0
 
 	job_master.AssignRole(src, rank, 1)
 
-	ticker.mode.latespawn(src)//can we make them a latejoin antag?
-
-	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
+	var/mob/living/carbon/human/character = create_character(1)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
-
-	if(character.mind.assigned_role != "MODE")
-		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
-
-	job_master.CheckPriorityFulfilled(rank)
-
-	var/turf/T = character.loc
-	for(var/role in character.mind.antag_roles)
-		var/datum/role/R = character.mind.antag_roles[role]
-		R.OnPostSetup()
-		R.ForgeObjectives()
-		R.AnnounceObjectives()
-
-	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
-		//Removal of job slot is in role/role.dm
-		character.store_position()
-		qdel(src)
-		return
-
-
-	EquipCustomItems(character)
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
@@ -381,10 +381,49 @@
 		// TODO:  Job-specific latejoin overrides.
 		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
+	ticker.mode.latespawn(character)//can we make them a latejoin antag?
+
+	if (!character || !character.mind) //Character got transformed in a latejoin ruleset
+		if(character)
+			qdel(character)
+		qdel(src)
+		return
+
+	// Very hacky. Sorry about that
+	if(ticker.tag_mode_enabled == TRUE)
+		character.mind.assigned_role = "MODE"
+		var/datum/outfit/mime/mime_outfit = new
+		mime_outfit.equip(character, strip = TRUE, delete = TRUE)
+		var/datum/role/tag_mode_mime/mime = new
+		mime.AssignToRole(character.mind,1)
+		mime.Greet(GREET_ROUNDSTART)
+
+	var/turf/T = character.loc
+
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
+	for(var/role in character.mind.antag_roles)
+		var/datum/role/R = character.mind.antag_roles[role]
+		R.OnPostSetup(TRUE) // Latejoiner post-setup.
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+
+	job_master.CheckPriorityFulfilled(rank)
+
+	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+		//Removal of job slot is in role/role.dm
+		character.store_position()
+		qdel(src)
+		return
+
+
+	EquipCustomItems(character)
+
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
-	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that
+	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that // (they did not do that)
 	if(bomberman_mode)
 		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
@@ -421,8 +460,7 @@
 			else
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
-			FuckUpGenes(character)
-			DiseaseCarrierCheck(character)
+			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		else
 			character.Robotize()
 	qdel(src)
@@ -451,10 +489,10 @@
 		speech.name = "Arrivals Announcement Computer"
 		speech.job = "Automated Announcement"
 		speech.as_name = "Arrivals Announcement Computer"
-		speech.frequency = 1459
+		speech.frequency = COMMON_FREQ
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
-		returnToPool(speech)
+		qdel(speech)
 
 /mob/new_player/proc/LateChoices()
 	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever
@@ -462,9 +500,28 @@
 	var/mins = (mills % 36000) / 600
 	var/hours = mills / 36000
 
+	var/list/highprior = new()
+	var/list/heads = new()
+	var/list/sec = new()
+	var/list/eng = new()
+	var/list/med = new()
+	var/list/sci = new()
+	var/list/cgo = new()
+	var/list/civ = new()
+	var/list/misc = new()
 
-	var/dat = {"<html><body><center>
-Round Duration: [round(hours)]h [round(mins)]m<br>"}
+	var/dat = {"<html><head><style>
+		.manifest {border-collapse:collapse;}
+		.manifest td, th {border:1px solid #DEF; background-color:white; color:black; padding:.25em}
+		.manifest th {height: 2em; background-color: #48C; color:white}
+		.manifest tr.head th {background-color: #488}
+		.manifest td:first-child {text-align:right}
+		.manifest tr.alt td {background-color: #DEF}
+		.manifest tr.striked td {background-color: #999}
+		.manifest tr.request td {background-color: #F99}
+		.manifest th.reqhead td {background-color: #844}
+		.manifest tr.reqalt td {background-color: #FCC}
+		</style></head><body><center>Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
 			dat += "<font color='red'><b>The station has been evacuated.</b></font><br>"
@@ -473,28 +530,132 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		if(emergency_shuttle.direction == 1 && emergency_shuttle.alert == 1) // Crew transfer initiated
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
-	dat += "Choose from the following open positions:<br>"
+	dat += "Choose from the following open positions:<br><table class='manifest' width='320px'><tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th></tr>"
+	var/color = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
-					continue
-
 			if(job.priority)
-				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
+				highprior[job] = active
+			else if(job.title in command_positions)
+				heads[job] = active
+			else if(job.title in security_positions)
+				sec[job] = active
+			else if(job.title in engineering_positions)
+				eng[job] = active
+			else if(job.title in medical_positions)
+				med[job] = active
+			else if(job.title in science_positions)
+				sci[job] = active
+			else if(job.title in cargo_positions)
+				cgo[job] = active
+			else if(job.title in civilian_positions)
+				civ[job] = active
 			else
-				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
+				misc[job] = active
 
+	if(highprior.len > 0)
+		dat += "<tr><th class='reqhead' colspan=3>High Priority Jobs</th></tr>"
+		for(var/datum/job/job in highprior)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='reqalt'" : " class='request'"]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[highprior[job]]</td></tr>"
+			color = !color
+	else
+		dat += "<tr><th class='reqhead' colspan=3><a style='color:white' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a></th></tr>"
+
+	if(heads.len > 0)
+		dat += "<tr><th colspan=3>Heads</th></tr>"
+		for(var/datum/job/job in heads)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[heads[job]]</td></tr>"
+			color = !color
+
+	if(sec.len > 0)
+		dat += "<tr><th colspan=3>Security</th></tr>"
+		for(var/datum/job/job in sec)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[sec[job]]</td></tr>"
+			color = !color
+
+	if(eng.len > 0)
+		dat += "<tr><th colspan=3>Engineering</th></tr>"
+		for(var/datum/job/job in eng)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[eng[job]]</td></tr>"
+			color = !color
+
+	if(med.len > 0)
+		dat += "<tr><th colspan=3>Medical</th></tr>"
+		for(var/datum/job/job in med)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[med[job]]</td></tr>"
+			color = !color
+
+	if(sci.len > 0)
+		dat += "<tr><th colspan=3>Science</th></tr>"
+		for(var/datum/job/job in sci)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[sci[job]]</td></tr>"
+			color = !color
+
+	if(cgo.len > 0)
+		dat += "<tr><th colspan=3>Cargo</th></tr>"
+		for(var/datum/job/job in cgo)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[cgo[job]]</td></tr>"
+			color = !color
+
+	if(civ.len > 0)
+		dat += "<tr><th colspan=3>Civilian</th></tr>"
+		for(var/datum/job/job in civ)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[civ[job]]</td></tr>"
+			color = !color
+
+	// misc guys
+	if(misc.len > 0)
+		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
+		for(var/datum/job/job in misc)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[misc[job]]</td></tr>"
+			color = !color
+
+	dat += "</table>"
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
+	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
-/mob/new_player/proc/create_character()
+/mob/new_player/proc/create_character(var/joined_late = 0)
 	spawning = 1
 	close_spawn_windows()
 
@@ -528,7 +689,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if (mind)
 		mind.active = 0 // we wish to transfer the key manually
-		mind.original = new_character
 		mind.transfer_to(new_character) // won't transfer key since the mind is not active
 
 	new_character.name = real_name
@@ -550,7 +710,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
-		new_character.mutations += M_OBESITY
 		new_character.overeatduration = 600
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_EPILEPTIC)
@@ -565,8 +724,41 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE
 
+	if(client.prefs.disabilities & DISABILITY_FLAG_LISP)
+		new_character.dna.SetSEState(LISPBLOCK, 1, 1)
+
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
+
+	var/rank = new_character.mind.assigned_role
+	if(!joined_late)
+		var/obj/S = null
+		// Find a spawn point that wasn't given to anyone
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if(sloc.name != rank)
+				continue
+			if(locate(/mob/living) in sloc.loc)
+				continue
+			S = sloc
+			break
+		if(!S)
+			// Find a spawn point that was already given to someone else
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if(sloc.name != rank)
+					continue
+				S = sloc
+				stack_trace("not enough spawn points for [rank]")
+				break
+		if(!S)
+			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
+			S = locate("start*[rank]")
+		if(S)
+			// Use the given spawn point
+			new_character.forceMove(S.loc)
+		else
+			// Use the arrivals shuttle spawn point
+			stack_trace("no spawn points for [rank]")
+			new_character.forceMove(pick(latejoin))
 
 	new_character.key = key		//Manually transfer the key to log them in
 
@@ -578,7 +770,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	return new_character
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
-/mob/new_player/proc/create_roundstart_cyborg()
+/mob/new_player/proc/create_roundstart_silicon(var/type)
+	if(type != "Cyborg" && type != "AI" && type != "Mobile MMI")
+		return
 	//End lobby
 	spawning = 1
 	close_spawn_windows()
@@ -587,7 +781,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	//Find a spawnloc
 	var/turf/spawn_loc
 	for(var/obj/effect/landmark/start/sloc in landmarks_list)
-		if (sloc.name != "Cyborg")
+		if (sloc.name != type)
 			continue
 		if (locate(/mob/living) in sloc.loc)
 			if(!spawn_loc)
@@ -597,26 +791,30 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		break
 	if(!spawn_loc)
 		spawn_loc = pick(latejoin) //If we absolutely can't find spawns
-		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn at the arrival shuttle.")
+		message_admins("WARNING! Couldn't find a spawn location for a [type]. They will spawn at the arrival shuttle.")
 
 	//Create the robot and move over prefs
-	var/mob/living/silicon/robot/new_character = new(spawn_loc)
-	new_character.mmi = new /obj/item/device/mmi(new_character)
-	new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
+	if(type == "AI")
+		return AIize()
+	else
+		forceMove(spawn_loc)
+		var/mob/living/silicon/robot/new_character
+		var/datum/preferences/prefs = client.prefs
+		if(type == "Mobile MMI")
+			new_character = MoMMIfy()
+		else
+			new_character = Robotize()
+		new_character.mmi.create_identity(prefs) //Uses prefs to create a brain mob
+		return new_character
 
-	//Handles transferring the mind and key manually.
-	if (mind)
-		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
-		mind.original = new_character
-		mind.transfer_to(new_character)
-	new_character.key = key //Do this after. For reasons known only to oldcoders.
-	spawn()
-		new_character.Namepick()
-	return new_character
+/mob/new_player/proc/ViewPrediction()
+	var/dat = {"<html><body>
+	<h4>High Job Preferences</h4>"}
+	dat += job_master.display_prediction()
+
+	src << browse(dat, "window=manifest;size=370x420;can_close=1")
 
 /mob/new_player/proc/ViewManifest()
-
-
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
 	dat += data_core.get_manifest(OOC = 1)

@@ -180,7 +180,7 @@
 		if(..())
 			return
 
-		new_index = Clamp(new_index, 1, assemblies.len)
+		new_index = clamp(new_index, 1, assemblies.len)
 
 		assemblies.Remove(AS)
 		assemblies.Insert(new_index, AS)

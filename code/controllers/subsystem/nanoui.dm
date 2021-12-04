@@ -25,7 +25,7 @@ var/datum/subsystem/nano/SSnano
 		var/datum/nanoui/UI = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!UI || UI.gcDestroyed || UI.disposed)
+		if (!UI || UI.gcDestroyed)
 			continue
 
 		UI.process()

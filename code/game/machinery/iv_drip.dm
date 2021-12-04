@@ -73,9 +73,9 @@
 		return
 	if(user.stat)
 		return
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 2
 		if(src.beaker)
 			src.remove_container()
@@ -103,7 +103,7 @@
 /obj/machinery/iv_drip/process()
 	if(src.attached)
 		if(!(get_dist(src, src.attached) <= 1 && isturf(src.attached.loc)))
-			visible_message("The needle is ripped out of [src.attached], doesn't that hurt?")
+			visible_message("The needle is ripped out of [src.attached] as they move out of range of the IV drip.")
 			src.attached:apply_damage(3, BRUTE, pick(LIMB_RIGHT_ARM, LIMB_LEFT_ARM))
 			src.detach()
 			return
@@ -133,6 +133,7 @@
 			if(amount == 0)
 				if(prob(5))
 					visible_message("\The [src] pings.")
+					playsound(src, 'sound/machines/notify.ogg', 50, 0)
 				return
 
 			var/mob/living/carbon/human/T = attached
@@ -148,6 +149,7 @@
 			if(T.vessel.get_reagent_amount(BLOOD) < BLOOD_VOLUME_SAFE)
 				if(prob(5))
 					visible_message("\The [src] beeps loudly.")
+					playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 
 			var/datum/reagent/blood/B = T.take_blood(beaker,amount)
 
@@ -221,3 +223,6 @@
 			to_chat(user, "<span class='info'>Attached is \an empty [beaker].</span>")
 	else
 		to_chat(user, "<span class='info'>No chemicals are attached.</span>")
+
+/obj/machinery/iv_drip/can_overload()
+	return 0

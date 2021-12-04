@@ -38,12 +38,14 @@
 	notify_slaved()
 
 /mob/living/silicon/ai/proc/notify_slaved(var/force_sync=0)
-	for(var/mob/living/silicon/robot/R in mob_list)
+	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(force_sync)
 			R.lawsync()
 		if(R.lawupdate && (R.connected_ai == src))
 			R << sound('sound/machines/lawsync.ogg')
 			to_chat(R, "<span class='danger'>...LAWS UPDATED</span>")
+			R.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
+
 
 /mob/living/silicon/ai/proc/clear_ion_laws()
 	src.laws_sanity_check()

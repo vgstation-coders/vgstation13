@@ -2,7 +2,7 @@
 	name = "rune"
 	desc = "A rune drawn in crayon."
 	icon = 'icons/obj/rune.dmi'
-
+	reagent = COLORFUL_REAGENT
 	persistence_type = null //todo
 
 /obj/effect/decal/cleanable/crayon/New(loc,age,icon_state,color,dir,pixel_x,pixel_y,main = "#FFFFFF",shade = "#000000",var/type = "rune")

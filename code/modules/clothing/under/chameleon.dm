@@ -8,7 +8,7 @@
 	origin_tech = Tc_SYNDICATE + "=3"
 	siemens_coefficient = 0.8
 	permeability_coefficient = 0.90
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	var/list/clothing_choices = list()
 
 /obj/item/clothing/under/chameleon/New()

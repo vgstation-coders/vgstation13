@@ -25,11 +25,12 @@
 	var/biomass = 0
 	var/time_coeff = 1 //Upgraded via part upgrading
 	var/resource_efficiency = 1
-	var/id_tag = "clone_pod"
+	id_tag = "clone_pod"
+	var/upgraded = 0 //if fully upgraded with T4 components, it will drastically improve and allow for some stuff
 	var/obj/machinery/computer/cloning/cloning_computer = null
 
 
-	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU | MULTIOUTPUT
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -40,7 +41,7 @@
 	biomass = CLONE_BIOMASS // * 3 - N3X
 
 /obj/machinery/cloning/clonepod/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return ""
+	return "(<a href='?src=\ref[src];set_output_dir=1'>Set Output Direction</a>)"
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -60,15 +61,22 @@
 	RefreshParts()
 
 /obj/machinery/cloning/clonepod/RefreshParts()
+	var/total = 0
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
 		T += SM.rating //First rank is two times more efficient, second rank is two and a half times, third is three times. For reference, there's TWO scanning modules
+		total += SM.rating
 	time_coeff = T/2
 	T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating //Ditto above
+		total += MA.rating
 	resource_efficiency = T/2
 	T = 0
+	if(total >= 16)
+		upgraded = 1
+	else
+		upgraded = 0
 
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
@@ -83,11 +91,11 @@
 
 /obj/item/weapon/disk/data/New()
 	for(var/i=1;i<=DNA_SE_LENGTH;i++)
-		labels[i] = getFromPool(/datum/block_label)
+		labels[i] = new /datum/block_label
 
 /obj/item/weapon/disk/data/Destroy()
 	for(var/datum/block_label/label in labels)
-		returnToPool(label)
+		qdel(label)
 	labels.Cut()
 	..()
 
@@ -153,24 +161,6 @@
 /obj/item/weapon/disk/data/examine(mob/user)
 	..()
 	to_chat(user, "The write-protect tab is set to [read_only ? "protected" : "unprotected"].")
-
-//Health Tracker Implant
-
-/obj/item/weapon/implant/health
-	name = "health implant"
-	var/healthstring = ""
-
-/obj/item/weapon/implant/health/proc/sensehealth()
-	if (!implanted)
-		return "ERROR"
-	else
-		if(isliving(implanted))
-			var/mob/living/L = implanted
-			healthstring = "[round(L.getOxyLoss())] - [round(L.getFireLoss())] - [round(L.getToxLoss())] - [round(L.getBruteLoss())]"
-		if (!healthstring)
-			healthstring = "ERROR"
-		return healthstring
-
 /obj/machinery/cloning/clonepod/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
 	return attack_hand(user)
@@ -210,7 +200,7 @@
 					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
 						return FALSE
 
-	heal_level = rand(10,40) //Randomizes what health the clone is when ejected
+	heal_level = upgraded ? 100 : rand(10,40) //Randomizes what health the clone is when ejected
 	working = TRUE //One at a time!!
 	locked = TRUE
 
@@ -241,7 +231,7 @@
 		H.set_species(H.dna.species, TRUE)
 
 	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
-	H.adjustBrainLoss(heal_level + 50 + rand(10, 30)) // The rand(10, 30) will come out as extra brain damage
+	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
 	H.stat = UNCONSCIOUS //There was a bug which allowed you to talk for a few seconds after being cloned, because your stat wasn't updated until next Life() tick. This is a fix for this!
 
@@ -259,17 +249,29 @@
 		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
 			H.add_spell(new /spell/targeted/oathbreak/)
 
+	// Check for any powers that goes missing after cloning, in case of reviving after ashing
+	if (isvampire(H))
+		var/datum/role/vampire/V = isvampire(H)
+		V.check_vampire_upgrade()
+		V.update_vamp_hud()
+
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
-	randmutb(H) // sometimes the clones come out wrong.
+	if(!upgraded)
+		randmutb(H) // sometimes the clones come out wrong.
 	H.dna.mutantrace = R.dna.mutantrace
 	H.update_mutantrace()
 	for(var/datum/language/L in R.languages)
 		H.add_language(L.name)
+		if (L == R.default_language)
+			H.default_language = R.default_language
+	H.attack_log = R.attack_log
 	H.real_name = H.dna.real_name
 	H.flavor_text = H.dna.flavor_text
 
-	H.suiciding = FALSE
+	if(H.mind)
+		H.mind.suiciding = FALSE
+	H.update_name()
 	return TRUE
 
 //Grow clones to maturity then kick them out.  FREELOADERS
@@ -282,7 +284,7 @@
 		return
 
 	if((occupant) && (occupant.loc == src))
-		if((occupant.stat == DEAD) || (occupant.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
+		if((occupant.stat == DEAD) || (occupant.mind && occupant.mind.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
 			locked = FALSE
 			go_out()
 			connected_message("Clone Rejected: Deceased.")
@@ -339,10 +341,10 @@
 	go_out()
 	return
 
-/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user)
+/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
-		return
+		return FALSE
 	for(biomass; biomass > 0;biomass -= BIOMASS_CHUNK)
 		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(loc)
 	return..()
@@ -400,14 +402,17 @@
 	add_fingerprint(usr)
 	return
 
-/obj/machinery/cloning/clonepod/proc/go_out(var/exit = loc)
+/obj/machinery/cloning/clonepod/proc/go_out(var/exit)
 	if (locked)
 		return
+
+	if(!exit)
+		exit = output_turf()
 
 	if (mess) //Clean that mess and dump those gibs!
 		mess = FALSE
 		working = FALSE //NOW we're done.
-		gibs(loc)
+		gibs(exit)
 		icon_state = "pod_0"
 		return
 
@@ -418,10 +423,32 @@
 		occupant.client.eye = occupant.client.mob
 		occupant.client.perspective = MOB_PERSPECTIVE
 	occupant.forceMove(exit)
+	var/obj/machinery/conveyor/C = locate() in exit
+	if(C && C.operating != 0)
+		occupant << sound('sound/ambience/powerhouse.ogg') //the ride begins
 	icon_state = "pod_0"
 	eject_wait = FALSE //If it's still set somehow.
+	//do early ejection damage
+	var/completion = 10*((occupant.health + 100) / (heal_level + 100)) //same way completion is calculated for examine text, but out of 10 instead of 100
+	var/damage_rolls = 10 - round(completion) - (round(resource_efficiency) - 1) // 1 roll for each 10% missing, each improved pair of manipulators reduces one roll
+	var/hits = 0
+	while(damage_rolls > 0)
+		if(prob(25))//each roll has a 25% chance to give the occupant a bad time
+			hits++
+		damage_rolls--
+	//apply the damage
+	var/mob/living/carbon/human/H = occupant
+	while(hits>0)
+		if (hits>=4)
+			qdel(pick(H.internal_organs - H.internal_organs_by_name["brain"]))
+			hits -= 4
+		else //if this pick lands on either torso part, those can't be droplimb'd. Get out of jail free, I guess
+			H.organs_by_name[pick(H.organs_by_name)].droplimb(override = 1, no_explode = 1, spawn_limb = 1, display_message = FALSE)
+			hits--
+
+	occupant.updatehealth()
+
 	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
-	occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
 	occupant = null
 	if(biomass > 0)
 		biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass
@@ -541,6 +568,16 @@
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		locked = FALSE
 		go_out()
+
+/obj/machinery/cloning/clonepod/proc/output_turf()
+	if(!output_dir || !isturf(loc))
+		return loc
+
+	var/turf/T = get_step(get_turf(src), output_dir)
+	if(!T || is_blocked_turf(T))
+		return loc
+	return T
+
 
 /*
  *	Diskette Box

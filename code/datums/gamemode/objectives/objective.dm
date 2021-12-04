@@ -6,6 +6,10 @@
 	var/name = ""
 
 	var/flags = 0 // Objective flags.
+	/*
+		FREEFORM_OBJECTIVE	No display of whether the objective was accomplished or failed. A role that only has freeform objectives won't be marked as being successful or having failed.
+		FACTION_OBJECTIVE	When adding this objective using the admin panel, you'll be prompted to select a faction on which to attach the objective
+	*/
 
 /datum/objective/target/Destroy()
 	owner = null
@@ -32,6 +36,8 @@
 	return FALSE
 
 /datum/objective/proc/feedbackText()
+
+/datum/objective/proc/format_explanation()
 
 /datum/objective_holder
 	var/list/datum/objective/objectives = list()
@@ -65,7 +71,7 @@
 		for(var/datum/objective/O in objectives)
 			var/current_completion = O.IsFulfilled()
 			dat += {"<b>Objective #[obj_count++]</b>: [O.explanation_text]
-				[admin_edit ? " - <a href='?src=\ref[M];obj_delete=\ref[O];obj_holder=\ref[src]'>(remove)</a> - <a href='?src=\ref[M];obj_completed=\ref[O];obj_holder=\ref[src]'>(toggle:[current_completion ? "<font color='green'>SUCCESS" : "<span class='red'>FAILURE" ]</span>)</a>" : ""]
+				[admin_edit ? " - <a href='?src=\ref[M];obj_delete=\ref[O];obj_holder=\ref[src]'>(remove)</a> - <a href='?src=\ref[M];obj_completed=\ref[O];obj_holder=\ref[src]'>(toggle:[current_completion ? "<font color='green'>SUCCESS</font>" : "<font color='red'>FAILURE" ]</font>)</a>" : ""]
 				<br>"}
 			if(check_success)
 				dat += {"<BR>[current_completion ? "Success" : "Failed"]"}

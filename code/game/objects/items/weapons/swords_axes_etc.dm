@@ -31,12 +31,14 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 10
+	var/hurt_intent_stun_duration = 0.8 SECONDS
+	var/normal_stun_duration = 0.5 SECONDS
 
 /obj/item/weapon/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
-		user.Knockdown(8)
-		user.Stun(8)
+		user.Knockdown(hurt_intent_stun_duration)
+		user.Stun(hurt_intent_stun_duration)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -54,17 +56,17 @@
 		if(!..())
 			return
 		playsound(src, "swing_hit", 50, 1, -1)
-		if (M.stuttering < 8 && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
-			M.stuttering = 8
-		M.Stun(8)
-		M.Knockdown(8)
+		if (M.stuttering < hurt_intent_stun_duration && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
+			M.stuttering = hurt_intent_stun_duration
+		M.Stun(hurt_intent_stun_duration)
+		M.Knockdown(hurt_intent_stun_duration)
 		for(var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been beaten with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 	else
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
-		M.Stun(5)
-		M.Knockdown(5)
+		M.Stun(normal_stun_duration)
+		M.Knockdown(normal_stun_duration)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
@@ -72,11 +74,19 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 		src.add_fingerprint(user)
 
 		for(var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
+
+/obj/item/weapon/melee/classic_baton/daystick
+	name = "\improper Daystick"
+	desc = "The Daystick is named as such as a Judge would \"beat the daylights\" out of a target."
+	hurt_intent_stun_duration = 1.6 SECONDS
+	normal_stun_duration = 1 SECONDS
+	force = 15
 
 //Telescopic baton
 /obj/item/weapon/melee/telebaton
@@ -177,6 +187,7 @@
 				target.LAssailant = null
 			else
 				target.LAssailant = user
+				target.assaulted_by(user)
 		return
 	else
 		return ..()
@@ -241,10 +252,6 @@
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/melee/bone_sword/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/melee/bone_sword/New(atom/A, var/p_borer = null)
 	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
@@ -285,3 +292,45 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	item_state = "grey_sword"
 	force = 4
+
+/obj/item/weapon/rsscimmy
+	name = "rune scimitar"
+	desc = "A vicious, curved sword."
+	icon_state = "rsscimmy"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	hitsound = 'sound/weapons/runescapeslash.ogg'
+	flags = FPRINT
+	siemens_coefficient = 1
+	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 25.0
+	w_class = W_CLASS_MEDIUM
+	throwforce = 15.0
+	throw_speed = 3
+	throw_range = 9
+	attack_verb = list("attacks", "slashes", "slices", "tears", "rips", "dices", "cuts")
+
+/obj/item/weapon/damocles
+	name = "Damocles"
+	desc = "An extremely powerful experimental sword. Generates an explosion at the site of impact."
+	icon_state = "damocles"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	siemens_coefficient = 1
+	sharpness = 1
+	flags = FPRINT
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 25 //A solid weapon by itself
+	w_class = W_CLASS_LARGE
+	attack_verb = list("slashes", "rips", "dices", "cuts", "attacks", "slices", "tears")
+
+/obj/item/weapon/damocles/attack(atom/target, mob/living/user)
+	..()
+	if(prob(1))
+		to_chat(user, "<span class='notice'>You hit [pick("a good and caring parent", "a criminal", "someone everyone will miss",
+		"someone no one will miss", "a thief", "an abusive parent", "a space communist", "an alcoholic", "an adventurer")].</span>")
+	explosion(target, 0, 0, 1, whodunnit = user)
+
+/obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
+	..()
+	explosion(get_turf(src), 0, 2, 3, whodunnit = user)
+	qdel(src)

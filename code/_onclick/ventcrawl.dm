@@ -117,6 +117,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/simple_animal/shade/can_ventcrawl()
 	return TRUE
 
+/mob/living/simple_animal/hostile/giant_spider/spiderling/can_ventcrawl()
+	return TRUE
+
 /mob/living/carbon/alien/can_ventcrawl()
 	if(handcuffed)
 		to_chat(src, "<span class='warning'>You can't vent crawl while you're restrained!</span>")
@@ -221,7 +224,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		for(var/obj/machinery/atmospherics/A in (pipeline.members || pipeline.edges))
 			if(!A.pipe_image)
 				A.pipe_image = image(A, A.loc, layer = ABOVE_LIGHTING_LAYER, dir = A.dir)
-				A.pipe_image.plane = LIGHTING_PLANE
+				A.pipe_image.plane = ABOVE_LIGHTING_PLANE
 			pipes_shown += A.pipe_image
 			client.images += A.pipe_image
 

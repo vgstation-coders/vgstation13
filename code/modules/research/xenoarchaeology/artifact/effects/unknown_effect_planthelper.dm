@@ -1,11 +1,12 @@
 /datum/artifact_effect/planthelper
 	effecttype = "planthelper"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_UNKNOWN)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 5
 
 /datum/artifact_effect/planthelper/DoEffectAura()
 	if(holder)
-		for (var/obj/machinery/portable_atmospherics/hydroponics/H in range(src.effectrange,holder))
+		for (var/obj/machinery/portable_atmospherics/hydroponics/H in range(src.effectrange,get_turf(holder)))
 			if(H.seed && !H.dead)
 				switch(rand(1,4))
 					if(1)
@@ -22,7 +23,7 @@
 
 /datum/artifact_effect/planthelper/DoEffectPulse()
 	if(holder)
-		for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(src.effectrange,holder))
+		for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(src.effectrange,get_turf(holder)))
 			if(H.seed && !H.dead)
 				switch(rand(1,3))
 					if(1)

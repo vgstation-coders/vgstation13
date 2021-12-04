@@ -9,12 +9,6 @@
 	var/tmp/list/datum/lighting_corner/corners
 	var/tmp/has_opaque_atom = FALSE // Not to be confused with opacity, this will be TRUE if there's any opaque atom on the tile.
 
-/turf/New()
-	. = ..()
-
-	if (opacity)
-		has_opaque_atom = TRUE
-
 // Causes any affecting light sources to be queued for a visibility update, for example a door got opened.
 /turf/proc/reconsider_lights()
 	for (var/datum/light_source/L in affecting_lights)
@@ -22,7 +16,7 @@
 
 /turf/proc/lighting_clear_overlay()
 	if (lighting_overlay)
-		returnToPool(lighting_overlay)
+		qdel(lighting_overlay)
 
 	for (var/datum/lighting_corner/C in corners)
 		C.update_active()
@@ -37,7 +31,7 @@
 		if (!lighting_corners_initialised)
 			generate_missing_corners()
 
-		getFromPool(/atom/movable/lighting_overlay, src)
+		new /atom/movable/lighting_overlay(src)
 
 		for (var/datum/lighting_corner/C in corners)
 			if (!C.active) // We would activate the corner, calculate the lighting for it.
@@ -68,14 +62,6 @@
 	for (var/atom/A in src.contents + src) // Loop through every movable atom on our tile PLUS ourselves (we matter too...)
 		if (A.opacity)
 			has_opaque_atom = TRUE
-
-// If an opaque movable atom moves around we need to potentially update visibility.
-/turf/Entered(var/atom/movable/Obj, var/atom/OldLoc)
-	. = ..()
-
-	if (Obj && Obj.opacity)
-		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
-		reconsider_lights()
 
 /turf/Exited(var/atom/movable/Obj, var/atom/newloc)
 	. = ..()

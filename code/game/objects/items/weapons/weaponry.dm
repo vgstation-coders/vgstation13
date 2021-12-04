@@ -1,5 +1,5 @@
 /obj/item/weapon/banhammer
-	desc = "A banhammer"
+	desc = "A banhammer."
 	name = "banhammer"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "toyhammer"
@@ -12,13 +12,13 @@
 	attack_verb = list("bans")
 
 
-/obj/item/weapon/banhammer/suicide_act(mob/user)
+/obj/item/weapon/banhammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/sord
 	name = "\improper SORD"
-	desc = "This thing is so unspeakably shitty you are having a hard time even holding it."
+	desc = "This thing is so unspeakably shitty you're having a hard time even holding it."
 	icon_state = "sord"
 	item_state = "sord"
 	flags = FPRINT
@@ -29,7 +29,7 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
-/obj/item/weapon/sord/suicide_act(mob/user)
+/obj/item/weapon/sord/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -59,17 +59,13 @@
 /obj/item/weapon/claymore/IsShield()
 	return 1
 
-/obj/item/weapon/claymore/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/claymore/cultify()
 	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()
 
 /obj/item/weapon/katana
 	name = "katana"
-	desc = "Woefully underpowered in D20"
+	desc = "Woefully underpowered in D20."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "katana"
 	item_state = null
@@ -84,7 +80,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/weapon/katana/suicide_act(mob/user)
+/obj/item/weapon/katana/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -124,7 +120,7 @@
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("jabs","stabs","rips")
 
-obj/item/weapon/wirerod
+/obj/item/weapon/wirerod
 	name = "wired rod"
 	desc = "A rod with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 	icon_state = "wiredrod"
@@ -139,7 +135,7 @@ obj/item/weapon/wirerod
 	attack_verb = list("hits", "bludgeons", "whacks", "bonks")
 
 
-obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/weapon/shard))
 		user.visible_message("<span class='notice'>[user] starts securing \the [I] to the top of \the [src].</span>",\
@@ -184,7 +180,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 			I = null
 			qdel(src)
 
-	else if(iswirecutter(I))
+	else if(I.is_wirecutter(user))
 		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
 
 		user.before_take_item(I)
@@ -231,7 +227,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	item_state = "skinningknife"
 	force = 10
 
-obj/item/weapon/banhammer/admin
+/obj/item/weapon/banhammer/admin
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
 	force = 999
@@ -255,7 +251,7 @@ obj/item/weapon/banhammer/admin
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
+/obj/item/weapon/melee/bone_hammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -292,35 +288,6 @@ obj/item/weapon/banhammer/admin
 	else
 		parent_borer.chemicals -= 10
 		sleep(10)
-
-/obj/item/weapon/bullwhip
-	name = "bullwhip"
-	desc = "An archaeologist's best friend."
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	icon_state = "bullwhip"
-	item_state = null
-	hitsound = "sound/weapons/whip_crack.ogg"
-	flags = FPRINT
-	slot_flags = SLOT_BELT
-	force = 15
-	throwforce = 0
-	w_class = W_CLASS_MEDIUM
-	attack_verb = list("whips", "lashes", "thrashes", "flagellates", "flogs")
-
-/obj/item/weapon/bullwhip/afterattack(atom/A, mob/living/user)
-	if(user.Adjacent(A))
-		user.delayNextAttack(10)
-		return
-	var/obj/item/projectile/beam/bullwhip/projectile = new(get_turf(user), get_dir(user, A), src, user)
-	var/targeting = "chest"
-	if(user.zone_sel)
-		targeting = user.zone_sel.selecting
-	projectile.launch_at(A,tar_zone = targeting,from = user)
-
-/obj/item/weapon/bullwhip/attack(mob/M, mob/user)
-	sharpness = 1.2	//a whip can only cut things when it is actually whipping
-	..()
-	sharpness = 0
 
 /obj/item/weapon/macuahuitl
 	name = "wooden paddle"
@@ -483,8 +450,110 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/hammer
 	name = "smithing hammer"
-	desc = "for those with a predeliction for applying concussive maintenance"
+	desc = "for those with a predeliction for applying concussive maintenance."
+	icon = 'icons/obj/blacksmithing/hammer.dmi'
 	icon_state = "hammer"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
+
+/obj/item/weapon/pitchfork
+	name = "pitchfork"
+	desc = "Down with the current state of things!"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "pitchspoon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 8
+	sharpness = 2
+	sharpness = SHARP_TIP
+	hitsound = 'sound/weapons/bladeslice.ogg'
+
+/obj/item/weapon/baseball_bat
+	name = "baseball bat"
+	desc = "Good for reducing a doubleheader to a zeroheader."
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	icon_state = "baseball_bat"
+	item_state = "baseball_bat0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	flags = TWOHANDABLE
+	force = 15
+	throwforce = 10
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
+
+/obj/item/weapon/baseball_bat/update_wield(mob/user)
+	..()
+	item_state = "baseball_bat[wielded ? 1 : 0]"
+	force = wielded ? 18 : initial(force)
+	if(user)
+		user.update_inv_hands()
+
+/obj/item/weapon/baseball_bat/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/stack/rods))
+		if(!ishammer(user.get_inactive_hand()))
+			to_chat(user, "<span class='info'>You need to be holding a toolbox or hammer to do that!</span>")
+			return
+		to_chat(user, "<span class='notice'>You hammer the [W.name] into \the [src].</span>")
+		var/obj/item/stack/rodstack = W
+		rodstack.use(1)
+		new /obj/item/weapon/spiked_bat(get_turf(src))
+		qdel(src)
+
+/obj/item/weapon/baseball_bat/IsShield()
+	return TRUE
+
+/obj/item/weapon/baseball_bat/on_block(damage, atom/movable/blocked)
+	if(isliving(loc))
+		var/mob/living/H = loc
+		if(!H.in_throw_mode || !wielded || damage > 15)
+			return FALSE
+		if(IsShield() < blocked.ignore_blocking)
+			return FALSE
+		if (ismob(blocked) || prob(85 - round(damage * 5)))
+			visible_message("<span class='borange'>[loc] knocks away \the [blocked] with \the [src]!</span>")
+			playsound(usr.loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
+			if(ismovable(blocked))
+				var/atom/movable/M = blocked
+				var/turf/Q = get_turf(M)
+				var/turf/target
+				var/list/throwdir_chances = list(
+					"-45" = 1,
+					"0" = H.reagents.get_sportiness(),
+					"45" = 1
+				)
+				var/throwdir = turn(H.dir, text2num(pickweight(throwdir_chances)))
+				if(istype(Q, /turf/space)) // if ended in space, then range is unlimited
+					target = get_edge_target_turf(Q, throwdir)
+				else						// otherwise limit to 10 tiles
+					target = get_ranged_target_turf(Q, throwdir, 10)
+				M.throw_at(target,100,4)
+			H.throw_mode_off()
+			return TRUE
+		return FALSE
+
+
+/obj/item/weapon/spiked_bat
+	name = "spiked bat"
+	desc = "A classic among delinquent youths. Not very effective at hitting balls."
+	icon = 'icons/obj/weapons.dmi'
+	hitsound = "sound/weapons/spikebat_hit.ogg"
+	icon_state = "spikebat"
+	item_state = "spikebat0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	flags = TWOHANDABLE
+	force = 10
+	sharpness = 0.5
+	sharpness_flags = SHARP_TIP
+	throwforce = 10
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
+
+/obj/item/weapon/spiked_bat/update_wield(mob/user)
+	..()
+	item_state = "spikebat[wielded ? 1 : 0]"
+	force = wielded ? 15 : initial(force)
+	if(user)
+		user.update_inv_hands()

@@ -78,7 +78,7 @@ var/global/list/organ_damage_overlays = list(
 	var/fire_alert = 0
 	var/pressure_alert = 0
 	var/prev_gender = null // Debug for plural genders
-	var/temperature_alert = 0
+	var/temperature_alert = TEMP_ALARM_SAFE
 	var/in_stasis = 0
 	var/do_deferred_species_setup=0
 	var/exposedtimenow = 0
@@ -166,9 +166,12 @@ var/global/list/organ_damage_overlays = list(
 		handle_stomach()
 		handle_shock()
 		handle_pain()
-		handle_medical_side_effects()
-		handle_equipment()
+		//handle_medical_side_effects()
 	handle_stasis_bag()
+	if(m_intent == "running") //If running, 10% chance to spill spaghetti -kanef
+		handle_spaghetti(10)
+	else //Otherwise 5% -kanef
+		handle_spaghetti(5)
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000)) //We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		cycle = "DEAD"
 		return //We go ahead and process them 5 times for HUD images and other stuff though.
@@ -177,7 +180,6 @@ var/global/list/organ_damage_overlays = list(
 	handle_regular_status_updates()	//Optimized a bit
 	update_canmove()
 	//Update our name based on whether our face is obscured/disfigured
-	name = get_visible_name()
 	handle_regular_hud_updates()
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)

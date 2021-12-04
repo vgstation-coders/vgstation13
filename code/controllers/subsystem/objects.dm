@@ -11,6 +11,7 @@ var/list/processing_objects = list()
 	wait          = 2 SECONDS
 
 	var/list/currentrun
+	var/list/bad_inits = list()
 
 
 /datum/subsystem/obj/New()
@@ -19,7 +20,15 @@ var/list/processing_objects = list()
 
 /datum/subsystem/obj/Initialize()
 	for(var/atom/object in world)
-		object.initialize()
+		if(!(object.flags & ATOM_INITIALIZED))
+			var/time_start = world.timeofday
+			object.initialize()
+			var/time = (world.timeofday - time_start)
+			if(time > 1 SECONDS)
+				var/turf/T = get_turf(object)
+				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
+		else
+			bad_inits[object.type] = bad_inits[object.type]+1
 		CHECK_TICK
 	for(var/area/place in areas)
 		var/obj/machinery/power/apc/place_apc = place.areaapc
@@ -40,7 +49,7 @@ var/list/processing_objects = list()
 		var/atom/o = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!o || o.gcDestroyed || o.disposed || o.timestopped)
+		if (!o || o.gcDestroyed || o.timestopped)
 			continue
 
 		// > this fucking proc isn't defined on a global level.

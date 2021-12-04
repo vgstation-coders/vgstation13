@@ -41,7 +41,7 @@
 		usr.name = usr.real_name
 		if(ishuman(usr))
 			var/mob/living/carbon/human/H = usr
-			H.name = H.get_visible_name()
+			H.update_name()
 //		usr.regenerate_icons() //So the name is updated properly
 
 	usr.forceMove(O.loc) // Appear where the object you were controlling is -- TLE

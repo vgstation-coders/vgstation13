@@ -1,0 +1,32 @@
+"a" = (/turf/simulated/wall,/area/vault/kennel)
+"b" = (/obj/machinery/door/airlock/external,/turf/simulated/floor{icon_state = "dark"},/area/vault/kennel)
+"g" = (/turf/unsimulated/floor/snow,/area)
+"i" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/kennel)
+"l" = (/turf/simulated/floor{icon_state = "dark"},/area/vault/kennel)
+"m" = (/obj/structure/fence/corner{dir = 1},/obj/structure/fence/corner,/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"o" = (/turf/simulated/floor{icon_state = "dark vault stripe"},/area/vault/kennel)
+"p" = (/obj/structure/fence{dir = 4},/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"w" = (/obj/item/stack/rods,/obj/item/weapon/shard{icon_state = "medium"},/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"A" = (/obj/structure/window/reinforced{dir = 8},/obj/item/stack/rods,/obj/structure/flora/rock/pile/snow,/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/plating,/area/vault/kennel)
+"C" = (/obj/item/stack/rods,/turf/unsimulated/floor/snow,/area)
+"D" = (/obj/structure/fence/cut/large,/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"H" = (/obj/structure/fence,/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"J" = (/obj/structure/fence/door/secure/from_south,/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"K" = (/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"L" = (/mob/living/simple_animal/crab/norris{name = "Carpenter"},/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"N" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/kennel)
+"R" = (/mob/living/simple_animal/hostile/wolf/pliable,/turf/simulated/floor/engine/concrete,/area/vault/kennel)
+"S" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning_corner"; tag = "icon-warning_corner (NORTH)"},/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning_corner"; tag = "icon-warning_corner (EAST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/kennel)
+"V" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/kennel)
+"Y" = (/obj/structure/hanging_lantern,/turf/simulated/floor{icon_state = "dark vault stripe"},/area/vault/kennel)
+
+(1,1,1) = {"
+ggCggggggg
+aaAiaaViaa
+aKwRDKKKRa
+aRKKHRKKLa
+apJpmppJpa
+aNSNNNNSNa
+aoooYooloa
+aaaaaaabaa
+"}

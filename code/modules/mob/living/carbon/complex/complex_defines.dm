@@ -8,7 +8,7 @@
 	var/fire_alert = 0
 	var/pressure_alert = 0
 	base_insulation = 0.5
-	var/temperature_alert = 0
+	var/temperature_alert = TEMP_ALARM_SAFE
 	var/safe_oxygen_min = 16 // Minimum safe partial pressure of O2, in kPa
 	var/co2overloadtime = null
 

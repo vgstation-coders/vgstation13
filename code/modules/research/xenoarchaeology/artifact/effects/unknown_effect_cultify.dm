@@ -1,5 +1,6 @@
 /datum/artifact_effect/cultify
 	effecttype = "cultify"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_RELIQUARY)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
 

@@ -1,40 +1,47 @@
 var/bomb_set
 var/obj/item/weapon/disk/nuclear/nukedisk
 
+var/list/nuclear_bombs = list()
+
 /obj/machinery/nuclearbomb
 	name = "\improper Nuclear Fission Explosive"
 	desc = "Uh oh. RUN!!!!"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "nuclearbomb0"
 	density = 1
-	var/deployable = 0.0
-	var/extended = 0.0
-	var/timeleft = 60.0
-	var/timing = 0.0
+	var/deployable = 0
+	var/extended = 0
+	var/timeleft = 60 //This is a value in seconds, deciseconds will be deducted
+	var/timing = 0
 	var/r_code = "ADMIN"
 	var/code = ""
-	var/yes_code = 0.0
-	var/safety = 1.0
+	var/yes_code = 0
+	var/safety = 1
 	var/obj/item/weapon/disk/nuclear/auth = null
 	var/removal_stage = 0 // 0 is no removal, 1 is covers removed, 2 is covers open,
 	                      // 3 is sealant open, 4 is unwrenched, 5 is removed from bolts.
+	var/nt_aligned = 1
 	flags = FPRINT
 	use_power = 0
 
 /obj/machinery/nuclearbomb/New()
 	..()
-	r_code = "[rand(10000, 99999.0)]"//Creates a random code upon object spawn.
+	nuclear_bombs += src
+	r_code = "[rand(10000, 99999)]"//Creates a random code upon object spawn.
+
+/obj/machinery/nuclearbomb/Destroy()
+	nuclear_bombs -= src
+	..()
 
 /obj/machinery/nuclearbomb/process()
-	if (src.timing)
+	if(timing)
 		bomb_set = 1 //So long as there is one nuke timing, it means one nuke is armed.
-		src.timeleft--
-		if (src.timeleft <= 0)
+		timeleft -= SS_WAIT_MACHINERY / (1 SECONDS) //Machinery does NOT tick every 10 ms. Divided by ten to convert into seconds
+		if(timeleft <= 0)
 			explode()
 		for(var/mob/M in viewers(1, src))
-			if ((M.client && M.machine == src))
-				src.attack_hand(M)
-	return
+			if((M.client && M.machine == src))
+				attack_hand(M)
 
 /obj/machinery/nuclearbomb/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if (src.extended)
@@ -49,7 +56,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(0)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/tool/weldingtool/WT = O
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -60,7 +67,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(1)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/tool/crowbar))
 					user.visible_message("[user] starts forcing open the bolt covers on [src].", "You start forcing open the anchoring bolt covers with [O]...")
 
 					if(do_after(user,  src, 15))
@@ -73,7 +80,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(2)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/tool/weldingtool/WT = O
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -84,7 +91,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(3)
-				if(istype(O,/obj/item/weapon/wrench))
+				if(O.is_wrench(user))
 
 					user.visible_message("[user] begins unwrenching the anchoring bolts on [src].", "You begin unwrenching the anchoring bolts...")
 
@@ -96,7 +103,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(4)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/tool/crowbar))
 
 					user.visible_message("[user] begins lifting [src] off of the anchors.", "You begin lifting the device off the anchors...")
 
@@ -136,7 +143,11 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			message = text("[]", src.code)
 			if (src.yes_code)
 				message = "*****"
-		dat += text("<HR>\n>[]<BR>\n<A href='?src=\ref[];type=1'>1</A>-<A href='?src=\ref[];type=2'>2</A>-<A href='?src=\ref[];type=3'>3</A><BR>\n<A href='?src=\ref[];type=4'>4</A>-<A href='?src=\ref[];type=5'>5</A>-<A href='?src=\ref[];type=6'>6</A><BR>\n<A href='?src=\ref[];type=7'>7</A>-<A href='?src=\ref[];type=8'>8</A>-<A href='?src=\ref[];type=9'>9</A><BR>\n<A href='?src=\ref[];type=R'>R</A>-<A href='?src=\ref[];type=0'>0</A>-<A href='?src=\ref[];type=E'>E</A><BR>\n</TT>", message, src, src, src, src, src, src, src, src, src, src, src, src)
+		dat += {"<HR><br/>>[message]<BR>\n
+		<A href='?src=\ref[src];type=1'>1</A>-<A href='?src=\ref[src];type=2'>2</A>-<A href='?src=\ref[src];type=3'>3</A><BR>\n
+		<A href='?src=\ref[src];type=4'>4</A>-<A href='?src=\ref[src];type=5'>5</A>-<A href='?src=\ref[src];type=6'>6</A><BR>\n
+		<A href='?src=\ref[src];type=7'>7</A>-<A href='?src=\ref[src];type=8'>8</A>-<A href='?src=\ref[src];type=9'>9</A><BR>\n
+		<A href='?src=\ref[src];type=R'>R</A>-<A href='?src=\ref[src];type=0'>0</A>-<A href='?src=\ref[src];type=E'>E</A><BR>\n</TT>"}
 		user << browse(dat, "window=nuclearbomb;size=300x400")
 		onclose(user, "nuclearbomb")
 	else if (src.deployable)
@@ -226,12 +237,18 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 						src.icon_state = "nuclearbomb1"
 						bomb_set = 0
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+						if (istype(dynamic_mode))
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["safety"])
 					src.safety = !( src.safety )
 					if(safety)
 						src.timing = 0
 						bomb_set = 0
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+						if (istype(dynamic_mode))
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["anchor"])
 
 					if(removal_stage == 5)
@@ -312,6 +329,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
 	return TRUE
+
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."

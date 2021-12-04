@@ -40,8 +40,6 @@ var/global/floorIsLava = 0
 	if (!istype(src,/datum/admins))
 		to_chat(usr, "Error: you are not an admin!")
 		return
-
-	checkSessionKey()
 	var/body = {"<html><head><title>Options for [M.key]</title></head>
 <body>Options panel for <b>[M]</b>"}
 	var/species_description
@@ -106,6 +104,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
 			<A href='?src=\ref[src];makecatbeast=\ref[M]'>Make Catbeast</A> |
 			<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
+			<A href='?src=\ref[src];makebox=\ref[M]'>Make Box</A> |
 			<A href='?src=\ref[src];Assplode=\ref[M]'>Assplode</A> |
 			<A href='?src=\ref[src];DealBrainDam=\ref[M]'>Deal brain damage</A> |
 		"}
@@ -272,11 +271,9 @@ var/global/floorIsLava = 0
 	if (!istype(src,/datum/admins))
 		to_chat(usr, "Error: you are not an admin!")
 		return
-	checkSessionKey()
 	var/cid = input("Type computer ID", "CID", 0) as num | null
 	if(cid)
 		usr << link(getVGPanel("rapsheet", admin = 1, query = list("cid" = cid)))
-//	to_chat(usr, link("[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]&cid=[cid]"))
 	return
 
 /datum/admins/proc/checkCKEY()
@@ -290,10 +287,8 @@ var/global/floorIsLava = 0
 	if (!istype(src,/datum/admins))
 		to_chat(usr, "Error: you are not an admin!")
 		return
-	checkSessionKey()
 	var/ckey = lowertext(input("Type player ckey", "ckey", null) as text | null)
 	usr << link(getVGPanel("rapsheet", admin = 1, query = list("ckey" = ckey)))
-//	usr << link("[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]&ckey=[ckey]")
 	return
 
 /datum/admins/proc/PlayerNotesPage(page)
@@ -399,7 +394,7 @@ var/global/floorIsLava = 0
 				I.rank = "N/A"
 				update_file = 1
 			dat += "<font color=#008800>[I.content]</font> <i>by [I.author] ([I.rank])</i> on <i><font color=blue>[I.timestamp]</i></font> "
-			if(I.author == usr.key || check_rights(R_PERMISSIONS, show_msg = 0))
+			if(ckey(I.author) == usr.ckey || check_rights(R_PERMISSIONS, show_msg = 0)) // Older notes stored the key of the banning admin.
 				dat += "<A href='?src=\ref[src];remove_player_info=[key];remove_index=[i]'>Remove</A>"
 			dat += "<br><br>"
 		if(update_file)
@@ -685,10 +680,9 @@ var/global/floorIsLava = 0
 			dat += "<A href='?src=\ref[src];f_dynamic_roundstart=1'>(Force Roundstart Rulesets)</A><br>"
 			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>(Dynamic mode options)</A><br>"
 			if (forced_roundstart_ruleset.len > 0)
-				for(var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
+				for(var/datum/forced_ruleset/rule in forced_roundstart_ruleset)
 					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
 				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
-			dat += "<A href='?src=\ref[src];f_dynamic_options=1>Dynamic mode options</a><br/>"
 		else
 			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
 			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
@@ -696,7 +690,9 @@ var/global/floorIsLava = 0
 				if (mode.forced_latejoin_rule)
 					dat += {"<A href='?src=\ref[src];f_dynamic_latejoin_clear=1'>-> [mode.forced_latejoin_rule.name] <-</A><br>"}
 			dat += "<A href='?src=\ref[src];f_dynamic_midround=1'>(Execute Midround Ruleset!)</A><br>"
+		dat += "Rulesets are <A href='?src=\ref[src];toggle_rulesets=1'>[admin_disable_rulesets ? "DISABLED" : "ENABLED"]</A><br>"
 		dat += "<hr/>"
+	dat += "Random Events are <A href='?src=\ref[src];toggle_events=1'>[admin_disable_events ? "DISABLED" : "ENABLED"]</A><br>"
 
 	dat += {"
 		<hr />
@@ -719,6 +715,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
 		<A href='?src=\ref[src];toggle_light=1'>Slow down lighting (Forces MC to crash, do not panic.)</A><br>
 		<hr />
+		<A href='?src=\ref[src];tag_mode=1'>Toggle tag mode! (it is currently [ticker?.tag_mode_enabled ? "On" : "Off"])</A><br>
 		"}
 
 	if(wages_enabled)
@@ -787,6 +784,7 @@ var/global/floorIsLava = 0
 	if(check_rights(R_FUN,0))
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawnselfdummyoutfit'>Spawn yourself as a Test Dummy with a Custom Outfit</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -819,7 +817,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
 			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
 			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team!</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -839,6 +837,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
 			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=old_vendotron_crash'>Launch an old vendotron at the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=old_vendotron_teleport'>Teleport an old vendotron onto the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
 			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
@@ -854,7 +854,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
 			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
+			<A href='?src=\ref[src];secretsfun=lightsout'>Trigger an Electrical Storm (breaks some lights)</A><BR>
 			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
@@ -866,6 +866,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
+			<A href='?src=\ref[src];secretsfun=RandomizedLawset'>Give the AIs a randomly generated Lawset.</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
 			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
@@ -874,6 +875,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchoff'>Flip all (ALL Z-LEVELS) light switches to off (Lags briefly)</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on (Lags briefly)</A><BR>
 			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
@@ -883,6 +886,7 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
+			<A href='?src=\ref[src];secretsfun=bloodstone'>Spawn a cult Blood Stone</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
 			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
@@ -898,11 +902,16 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
 			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapepvp'>Toggle Maint-Only PvP</A><BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapeskull'>Toggle Skull icon appearing over aggressors</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
@@ -1312,21 +1321,12 @@ var/global/floorIsLava = 0
 
 		object = copytext(object, 1, variables_start)
 
-	var/list/matches = get_matching_types(object, /atom)
-
-	if(matches.len==0)
+	var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
+	if(!chosen)
 		return
 
-	var/chosen
-	if(matches.len==1)
-		chosen = matches[1]
-	else
-		chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
-		if(!chosen)
-			return
-
-	//preloader is hooked to atom/New(), and is automatically deleted once it 'loads' an object
-	_preloader = new(varchanges, chosen)
+	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
+	_preloader.setup(varchanges, chosen)
 
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
@@ -1432,6 +1432,17 @@ var/global/floorIsLava = 0
 	if(istype(H))
 		H.regenerate_icons()
 
+/datum/admins/proc/ashInvokedEmotions()
+	set category = "Admin"
+	set name = "Ash Invoked Emotions"
+	set desc = "Ashes all paper from the 'invoke emotions' wizard spell. Emergency porn purge."
+	if(alert("Are you sure you want to ash all invoked emotions?", "Invoked Emotions Panic", "Yes", "No") != "No")
+		var/numEmot = 0
+		for(var/obj/item/weapon/paper/emotion_invoker/EI in invoked_emotions)
+			EI.destroyEmotion()
+			numEmot++
+		message_admins("<span class='notice'>[numEmot] invoked emotions ashed.</span>")
+
 //
 //
 //ALL DONE
@@ -1445,7 +1456,7 @@ var/global/floorIsLava = 0
 
 var/admin_shuttle_location = 0 // 0 = centcom 13, 1 = station
 
-proc/move_admin_shuttle()
+/proc/move_admin_shuttle()
 	var/area/fromArea
 	var/area/toArea
 	if (admin_shuttle_location == 1)
@@ -1465,7 +1476,7 @@ proc/move_admin_shuttle()
 
 var/alien_ship_location = 1 // 0 = base , 1 = mine
 
-proc/move_alien_ship()
+/proc/move_alien_ship()
 	var/area/fromArea
 	var/area/toArea
 	if (alien_ship_location == 1)
@@ -1481,7 +1492,7 @@ proc/move_alien_ship()
 		alien_ship_location = 1
 	return
 
-proc/formatJumpTo(location, where = "")
+/proc/formatJumpTo(location, where = "")
 	var/turf/loc
 
 	if (isturf(location))
@@ -1494,7 +1505,7 @@ proc/formatJumpTo(location, where = "")
 
 	return "<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc ? loc.x : "mystery"];Y=[loc ? loc.y : "mystery"];Z=[loc ? loc.z : "mystery"]'>[where]</a>"
 
-proc/formatLocation(location)
+/proc/formatLocation(location)
 	var/turf/loc
 
 	if (isturf(location))
@@ -1506,7 +1517,7 @@ proc/formatLocation(location)
 	var/answer = "[istype(A) ? "[A.name]" : "UNKNOWN"] - [istype(loc) ? "[loc.x],[loc.y],[loc.z]" : "UNKNOWN"]"
 	return answer
 
-proc/formatPlayerPanel(var/mob/U,var/text="PP")
+/proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	return "<A HREF='?_src_=holder;adminplayeropts=\ref[U]'>[text]</A>"
 
 //Credit to MrStonedOne from TG for this QoL improvement
@@ -1546,6 +1557,13 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		return
 
 	var/dat = "<center><B>Credits Panel</B></center><hr>"
+	dat += "<center><B>Screenshot:</b></center>"
+	dat += "Chosen Screenshot: [end_credits.customized_ss && end_credits.ss] <A href='?src=\ref[src];credits=setss'>(Set Link)</A> "
+	if(end_credits.customized_ss != "" && !end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=resetss'>(Reset)</A> "
+	if(!end_credits.drafted)
+		dat += "<span style='color:red'><br>The round isn't over, so the featured screenshot can still be set. Screenshots do not generate automatically.</span>"
+	dat += "<hr>"
 	dat += "<center><B>Star Of The Show:</b></center>"
 	dat += "Chosen Star: [end_credits.customized_star == "" && end_credits.star == "" ? "(Will Select Automatically)" : end_credits.customized_star || end_credits.star] <A href='?src=\ref[src];credits=setstartext'>(Set Plaintext)</A> <A href='?src=\ref[src];credits=setstarmob'>(Set Mob From List)</A> "
 	if(end_credits.customized_star != "" && !end_credits.drafted)
@@ -1618,3 +1636,17 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
 
 	usr << browse(dat, "window=persistencepanel;size=350x600")
+
+/datum/admins/proc/ViewAllRods()
+	if(!check_rights(0))
+		return
+
+	var/dat = "<center><B>View all active rods</B></center><hr>"
+
+	for (var/obj/item/projectile/immovablerod/rod in all_rods)
+		dat += "<b>[rod]</b> in z = [rod.z] (<a href='?_src_=vars;Vars=\ref[rod]'>\[VV\]</A>)"
+		if (rod.tracking)
+			dat += "- <A href='?src=\ref[src];rod_to_untrack=\ref[rod]'>(UNTRACK)</A>"
+		dat += "<br/>"
+
+	usr << browse(dat, "window=rodswindow;size=350x300")

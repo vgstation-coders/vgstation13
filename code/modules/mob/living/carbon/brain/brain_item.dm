@@ -19,12 +19,6 @@
 
 	var/mob/living/carbon/brain/brainmob = null
 
-/obj/item/organ/internal/brain/New()
-	..()
-	spawn(5)
-		if(brainmob && brainmob.client)
-			brainmob.client.screen.len = null //clear the hud
-
 /obj/item/organ/internal/brain/proc/transfer_identity(var/mob/living/carbon/H)
 	name = "[H.real_name]'s brain"
 	brainmob = new(src)
@@ -32,7 +26,15 @@
 	brainmob.real_name = H.real_name
 	if(istype(H) && H.dna)
 		brainmob.dna = H.dna.Clone()
-	brainmob.timeofhostdeath = H.timeofdeath
+
+	if (isbrain(H))
+		var/mob/living/carbon/brain/otherbrain = H
+		brainmob.timeofhostdeath = otherbrain.timeofhostdeath
+	else if (H.timeofdeath == 0)//happens when the human gets decapitated while still alive
+		brainmob.timeofhostdeath = world.time
+	else
+		brainmob.timeofhostdeath = H.timeofdeath
+
 	if(H.mind)
 		H.mind.transfer_to(brainmob)
 

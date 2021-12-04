@@ -141,7 +141,7 @@ var/global/list/hidden_tech = list(
 			AddDesign2Known(PD)
 	for(var/ID in known_tech)
 		var/datum/tech/T = known_tech[ID]
-		T.level = Clamp(T.level, 1, 20)
+		T.level = clamp(T.level, 1, 20)
 	for(var/datum/design/D in known_designs)
 		D.CalcReliability(known_tech)
 	return
@@ -166,7 +166,7 @@ var/global/list/hidden_tech = list(
  **	Includes all the various technoliges and what they make.  **
  ***************************************************************/
 
-datum/tech	//Datum of individual technologies.
+/datum/tech	//Datum of individual technologies.
 	var/name = "name"					//Name of the technology.
 	var/desc = "description"			//General description of what it does and what it makes.
 	var/id = "id"						//An easily referenced ID. Must be alphanumeric, lower-case, and no symbols.
@@ -183,72 +183,72 @@ datum/tech	//Datum of individual technologies.
 
 //Trunk Technologies (don't require any other techs and you start knowning them).
 
-datum/tech/materials
+/datum/tech/materials
 	name = "Materials Research"
 	desc = "Development of new and improved materials."
 	id = "materials"
 	max_level=9
 	goal_level=8 // 9 is Phazon.
 
-datum/tech/engineering
+/datum/tech/engineering
 	name = "Engineering Research"
-	desc = "Development of new and improved engineering parts and."
+	desc = "Development of new and improved engineering parts and equipment."
 	id = "engineering"
 	max_level=5
 
-datum/tech/plasmatech
+/datum/tech/plasmatech
 	name = "Plasma Research"
 	desc = "Research into the mysterious substance colloqually known as 'plasma'."
 	id = "plasmatech"
 	max_level=4
 
-datum/tech/powerstorage
+/datum/tech/powerstorage
 	name = "Power Manipulation Technology"
 	desc = "The various technologies behind the storage and generation of electicity."
 	id = "powerstorage"
 	max_level=6
 
-datum/tech/bluespace
+/datum/tech/bluespace
 	name = "'Blue-space' Research"
-	desc = "Research into the sub-reality known as 'blue-space'"
+	desc = "Research into the sub-reality known as 'blue-space'."
 	id = "bluespace"
-	max_level =10
+	max_level=10
 	goal_level=4 // Without phazon.
 
-datum/tech/biotech
+/datum/tech/biotech
 	name = "Biological Technology"
 	desc = "Research into the deeper mysteries of life and organic substances."
 	id = "biotech"
 	max_level=5 // Max USABLE level.
 
-datum/tech/combat
+/datum/tech/combat
 	name = "Combat Systems Research"
 	desc = "The development of offensive and defensive systems."
 	id = "combat"
 	goal_level=5 // Pulse rifles don't count.
 	max_level=6
 
-datum/tech/magnets
+/datum/tech/magnets
 	name = "Electromagnetic Spectrum Research"
 	desc = "Research into the electromagnetic spectrum. No clue how they actually work, though."
 	id = "magnets"
 	goal_level=5 // No phazon
 	max_level=8
 
-datum/tech/programming
+/datum/tech/programming
 	name = "Data Theory Research"
 	desc = "The development of new computer and artificial intelligence and data storage systems."
 	id = "programming"
 	max_level=5
 
-datum/tech/syndicate
+/datum/tech/syndicate
 	name = "Illegal Technologies Research"
 	desc = "The study of technologies that violate standard Nanotrasen regulations."
 	id = "syndicate"
 	goal_level=0 // Doesn't count towards maxed research, since it's illegal.
 	max_level=8
 
-datum/tech/nanotrasen
+/datum/tech/nanotrasen
 	name = "Nanotrasen Experimental Technologies"
 	desc = "The research of miscellaneous bleeding-edge technologies, sponsored by Nanotrasen."
 	id = "nanotrasen"
@@ -256,7 +256,7 @@ datum/tech/nanotrasen
 	max_level=8
 	new_category = "Nanotrasen"
 
-datum/tech/anomaly
+/datum/tech/anomaly
 	name = "Anomaly Research"
 	desc = "The study of high energy materials and technology reconstruction."
 	id = "anomaly"
@@ -265,7 +265,7 @@ datum/tech/anomaly
 /*
 datum/tech/arcane
 	name = "Arcane Research"
-	desc = "Research into the occult and arcane field for use in practical science"
+	desc = "Research into the occult and arcane field for use in practical science."
 	id = "arcane"
 	level = 0 //It didn't become "secret" as advertised.
 
@@ -310,4 +310,4 @@ datum/tech/robotics
 
 /obj/item/weapon/paper/tech_nanotrasen
 	name = "paper - 'Nanotrasen Experimental Technologies'"
-	info = "<B>Thank you for participating in this Nanotrasen-sponsored initiative!</B><BR><BR>This technology disk will open you the doors of Nanotrasen's most bleeding-edge experimental devices, and we look forward to you testing them for us! Also, note that you will still need to perform some research before these designs become available for you to print, but here's a guide to the tech levels that they will require.<br><ol><li><b>Hookshot</b>: Materials=2, Engineering=5, Electromagnetic=2</li><li><b>Ricochet Rifle</b>: Materials=3, Power=3, Combat=3</li><li><b>Gravity Well Gun</b>: Materials=7, Bluespace=5, Electromagnetic=5</li><li><b>Machine-Man Interface</b>: Biotech=4, Data Theory=4</li></ol> <li><b>Plasma Cutter</b>: Materials=4, Plasma=3, Engineering=3</li></ol> <br>, We look forward to the results of your experiments. Depending on their success we might grant you access to even more bleeding-edge technologies in the future! Make Science proud!<br><br><i>Central Command R&D Lab</i>"
+	info = "<B>Thank you for participating in this Nanotrasen-sponsored initiative!</B><BR><BR>This technology disk will open you the doors of Nanotrasen's most bleeding-edge experimental devices, and we look forward to you testing them for us! Also, note that you will still need to perform some research before these designs become available for you to print, but here's a guide to the tech levels that they will require.<br><ol><li><b>Hookshot</b>: Materials=2, Engineering=5, Electromagnetic=2</li><li><b>Ricochet Rifle</b>: Materials=3, Power=3, Combat=3</li><li><b>Gravity Well Gun</b>: Materials=7, Bluespace=5, Electromagnetic=5</li><li><b>Machine-Man Interface</b>: Biotech=4, Data Theory=4</li><li><b>Plasma Cutter</b>: Materials=4, Plasma=3, Engineering=3</li><li><b>Mind Machine Pod & Hub</b>: Bluespace=4, Biotech=5, Anomaly=2, Data Theory=4</li></ol> <br>, We look forward to the results of your experiments. Depending on their success we might grant you access to even more bleeding-edge technologies in the future! Make Science proud!<br><br><i>Central Command R&D Lab</i>"

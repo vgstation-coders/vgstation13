@@ -3,7 +3,7 @@
  *		Balloons
  *		Fake telebeacon
  *		Fake singularity
- *		Toy gun
+ *		Toy guns
  *		Toy crossbow
  *		Toy swords
  *		Foam armblade
@@ -99,19 +99,27 @@
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
 
+/obj/item/toy/syndicateballoon/green
+    name = "green balloon"
+    desc = "it is just a balloon that is green"
+    icon_state = "greenballoon"
+    item_state = "greenballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+
 /obj/item/toy/syndicateballoon/ntballoon
     name = "nanotrasen balloon"
     desc = "There is a tag on the back that reads \"LUV NT!<3!\"."
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
-	
+
 /obj/item/toy/syndicateballoon/byondballoon
     name = "\improper BYOND balloon"
     desc = "There is a tag on the back that reads \"LUMMOX <3!\"."
     icon_state = "byondballoon"
     item_state = "byondballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+
 /*
  * Fake telebeacon
  */
@@ -131,7 +139,7 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 
-/obj/item/toy/spinningtoy/suicide_act(mob/user)
+/obj/item/toy/spinningtoy/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -169,17 +177,17 @@
 			return 1
 		if (A.amount_left < (7 - src.bullets))
 			src.bullets += A.amount_left
-			to_chat(user, text("<span class = 'warning'>You reload [] caps\s!</span>", A.amount_left))
+			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", A.amount_left))
 			A.amount_left = 0
 		else
-			to_chat(user, text("<span class = 'warning'>You reload [] caps\s!</span>", 7 - src.bullets))
+			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", 7 - src.bullets))
 			A.amount_left -= 7 - src.bullets
 			src.bullets = 7
 		A.update_icon()
 		return 1
 	return
 
-/obj/item/toy/gun/afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
+/obj/item/toy/gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (flag)
 		return
 	if (!user.dexterity_check())
@@ -193,7 +201,7 @@
 	playsound(user, 'sound/weapons/Gunshot.ogg', 100, 1)
 	src.bullets--
 	for(var/mob/O in viewers(user, null))
-		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
+		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [A]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
 	name = "box of cap gun caps"
@@ -215,8 +223,36 @@
 
 /obj/item/toy/ammo/gun/examine(mob/user)
 	..()
+	if (src.amount_left == 0)
+		return
 	to_chat(user, "There [amount_left == 1 ? "is" : "are"] [amount_left] cap\s left.")
 
+/*
+ * Toy pulse rifle
+ */
+
+
+/obj/item/weapon/gun/energy/pulse_rifle/destroyer/lasertag //subtype because of attack_self override
+	name = "pulse destroyer"
+	desc = "A heavy-duty, pulse-based lasertag weapon."
+	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
+
+/*
+ * Fireworks launcher
+ */
+
+
+/obj/item/weapon/gun/energy/fireworkslauncher
+	name = "fireworks launcher"
+	desc = "Celebrate in style!"
+	icon_state = "fireworkslauncher"
+	item_state = "riotgun"
+	fire_sound = "sound/weapons/railgun_lowpower.ogg"
+	projectile_type = "/obj/item/projectile/meteor/firework"
+	charge_cost = 0 //infinite ammo!
+
+/obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
+	return
 
 /*
  * Toy crossbow
@@ -353,29 +389,81 @@
 	name = "toy sword"
 	desc = "A cheap, plastic replica of an energy sword. Realistic sounds! Ages 8 and up."
 	icon = 'icons/obj/weapons.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "sword0"
 	item_state = "sword0"
 	var/active = 0.0
+	var/base_state = "sword"
+	var/active_state = ""
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	attack_verb = list("attacks", "strikes", "hits")
+	var/dualsaber_type = /obj/item/toy/sword/dualsaber
 
-	attack_self(mob/user as mob)
-		src.active = !( src.active )
-		if (src.active)
-			to_chat(user, "<span class = 'info'>You extend the plastic blade with a quick flick of your wrist.</span>")
-			playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
-			src.icon_state = "swordblue"
-			src.item_state = "swordblue"
-			src.w_class = W_CLASS_LARGE
-		else
-			to_chat(user, "<span class = 'info'>You push the plastic blade back down into the handle.</span>")
-			playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
-			src.icon_state = "sword0"
-			src.item_state = "sword0"
-			src.w_class = W_CLASS_SMALL
-		src.add_fingerprint(user)
-		return
+/obj/item/toy/sword/New()
+	..()
+	_color = pick("red","blue","green","purple")
+	if(!active_state)
+		active_state = base_state + _color
+	update_icon()
+
+/obj/item/toy/sword/attack_self(mob/user as mob)
+	src.active = !( src.active )
+	if (src.active)
+		to_chat(user, "<span class = 'info'>You extend the plastic blade with a quick flick of your wrist.</span>")
+		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
+		src.w_class = W_CLASS_LARGE
+	else
+		to_chat(user, "<span class = 'info'>You push the plastic blade back down into the handle.</span>")
+		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+		src.w_class = W_CLASS_SMALL
+	src.add_fingerprint(user)
+	update_icon()
+
+/obj/item/toy/sword/update_icon()
+	if(active && _color)
+		icon_state = active_state
+		item_state = active_state
+	else
+		icon_state = "[base_state][active]"
+		item_state = "[base_state][active]"
+
+/obj/item/toy/sword/attackby(obj/item/weapon/W, mob/living/user)
+	if(istype(W, /obj/item/toy/sword))
+		to_chat(user, "<span class='notice'>You attach the ends of the two toy swords, making a single double-bladed one! You're cool.</span>")
+		var/obj/item/toy/sword/dualsaber/saber = new dualsaber_type(user.loc)
+		saber.colorset = W._color + src._color
+		saber.swords.Add(W, src)
+		user.drop_item(W)
+		W.forceMove(saber)
+		user.drop_item(src)
+		forceMove(saber)
+		user.put_in_hands(saber)
+		return 1
+	return ..()
+
+/obj/item/toy/sword/dualsaber
+	name = "toy double-bladed sword"
+	desc = "Two cheap, plastic replicas of energy swords, combined together! Ages 4 times 2 and up."
+	icon_state = "dualsaber0"
+	item_state = "dualsaber0"
+	var/list/swords = list()
+	var/colorset = ""
+
+/obj/item/toy/sword/dualsaber/attack_self(mob/user as mob)
+	..()
+	if (src.active)
+		src.w_class = W_CLASS_HUGE
+
+/obj/item/toy/sword/dualsaber/update_icon()
+	icon_state = "dualsaber[active ? colorset : 0]"
+	item_state = "dualsaber[active ? colorset : 0]"
+
+/obj/item/toy/sword/dualsaber/Destroy()
+	for(var/obj/item/I in swords)
+		qdel(I)
+	swords.Cut()
+	..()
 
 /obj/item/toy/katana
 	name = "replica katana"
@@ -404,7 +492,7 @@
 	attack_verb = list("pricked", "absorbed", "gored", "stung")
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/toy/foamblade/suicide_act(mob/user)
+/obj/item/toy/foamblade/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is absorbing \himself! It looks like \he's trying to commit suicide.</span>")
 	playsound(src, 'sound/effects/lingabsorbs.ogg', 50, 1)
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
@@ -465,7 +553,7 @@
 /obj/item/toy/crayon/proc/Format(var/mob/user,var/text,var/obj/item/weapon/paper/P)
 	return style.Format(text,src,user,P)
 
-/obj/item/toy/crayon/suicide_act(mob/user)
+/obj/item/toy/crayon/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -529,7 +617,7 @@
 	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
 		if(T.density) //no wallsmoke pls
 			continue
-		var/datum/effect/effect/system/smoke_spread/bad/smoke = new /datum/effect/effect/system/smoke_spread/bad()
+		var/datum/effect/system/smoke_spread/bad/smoke = new /datum/effect/system/smoke_spread/bad()
 		smoke.set_up(5, 0, T)
 		smoke.start()
 	qdel(src)
@@ -540,8 +628,8 @@
 /obj/item/toy/waterflower
 	name = "Water Flower"
 	desc = "A seemingly innocent sunflower...with a twist."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "sunflower"
+	icon = 'icons/obj/hydroponics/sunflower.dmi'
+	icon_state = "produce"
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -689,12 +777,12 @@
  */
 /obj/item/toy/gooncode
 	name = "Goonecode"
-	desc = "The holy grail of all programmers. It seems a bit leaky."
+	desc = "The holy grail of all programmers...or at least it was at some point. It looks like it has fully leaked out."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
 
-/obj/item/toy/gooncode/suicide_act(mob/user)
+/obj/item/toy/gooncode/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -713,7 +801,8 @@
 	name = "whisperphone"
 	desc = "A device used to project your voice. Quietly."
 	icon_state = "megaphone"
-	item_state = "radio"
+	item_state = "megaphone"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -780,7 +869,7 @@
 		sleep(50)
 		say("Someone pass the boombox.")
 		sleep(5)
-		explosion(get_turf(src), -1,1,4)
+		explosion(get_turf(src), -1,1,4, whodunnit = user)
 		qdel(src)
 	else
 		return
@@ -911,7 +1000,7 @@
 
 /obj/item/toy/gasha/snowflake
 	name = "toy snowflake"
-	desc = "What a faggot"
+	desc = "What a faggot."
 	icon_state = "fag"
 
 /obj/item/toy/gasha/shade
@@ -936,7 +1025,7 @@
 
 /obj/item/toy/gasha/harvester
 	name = "toy harvester"
-	desc = "Harvesters tend to have a bad habit of violently stabbing anyone they meet"
+	desc = "Harvesters tend to have a bad habit of violently stabbing anyone they meet."
 	icon_state = "harvester"
 
 /obj/item/toy/gasha/narnar
@@ -946,7 +1035,7 @@
 
 /obj/item/toy/gasha/quote
 	name = "Robot"
-	desc = "It's a small robot toy"
+	desc = "It's a small robot toy."
 	icon_state = "quote"
 
 /obj/item/toy/gasha/quote/curly
@@ -960,11 +1049,11 @@
 
 /obj/item/toy/gasha/mimiga/
 	name = "toy mimiga"
-	desc = "It looks like some sort of rabbit-thing"
+	desc = "It looks like some sort of rabbit-thing."
 	icon_state = ""
 
 /obj/item/toy/gasha/mimiga/sue
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl.'"
+	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl'."
 	icon_state = "sue"
 
 /obj/item/toy/gasha/mimiga/toroko
@@ -974,7 +1063,7 @@
 	icon_state = "king"
 
 /obj/item/toy/gasha/mimiga/chaco
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl.'"
+	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl'."
 	icon_state = "chaco"
 
 /obj/item/toy/gasha/mario
@@ -1041,7 +1130,7 @@
 
 /obj/item/toy/gasha/borertoy
 	name = "Mini Borer"
-	desc = "Probably not something you should be playing with"
+	desc = "Probably not something you should be playing with."
 	icon_state = "borertoy"
 
 /obj/item/toy/gasha/minislime
@@ -1051,13 +1140,13 @@
 
 /obj/item/toy/gasha/AI/attack_self(mob/user as mob)
 	if(cooldown < world.time - 8)
-		playsound(user, 'sound/vox/doop.wav', 20, 1)
+		playsound(user, 'sound/vox/_doop.wav', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/AI/attack_hand(mob/user as mob)
 	if(loc == user)
 		if(cooldown < world.time - 8)
-			playsound(user, 'sound/vox/doop.wav', 20, 1)
+			playsound(user, 'sound/vox/_doop.wav', 20, 1)
 			cooldown = world.time
 			return
 	..()
@@ -1069,7 +1158,7 @@
 
 /obj/item/toy/gasha/AI/malf
 	name = "Mini Malf"
-	desc = "May be a bad influence for cyborgs"
+	desc = "May be a bad influence for cyborgs."
 	icon_state = "malfAI"
 
 /obj/item/toy/gasha/minibutt/attack_self(mob/user as mob)
@@ -1243,6 +1332,7 @@
 
 /obj/item/toy/balloon/inflated/bullet_act()
 	pop()
+	return ..()
 
 /obj/item/toy/balloon/inflated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > T0C+100)
@@ -1387,7 +1477,7 @@
 	if(desc)
 		to_chat(user, desc)
 
-/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+/obj/item/toy/balloon/inflated/decoy/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(!src.gcDestroyed)
 		attack_hand(user)
@@ -1511,6 +1601,7 @@
 	name = "balloon hat"
 	desc = "Just like the ones made in the sweatshops of the clown planet."
 	icon_state = "hat_balloon"
+	species_fit = list(INSECT_SHAPED)
 	slot_flags = SLOT_HEAD
 	on_body_layer = HEAD_LAYER
 
@@ -1783,3 +1874,11 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
+
+/obj/item/toy/foam_hand
+	name = "\improper NanoTrasen foam hand"
+	desc = "A simple balloon."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "foam_hand"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	w_class = W_CLASS_LARGE

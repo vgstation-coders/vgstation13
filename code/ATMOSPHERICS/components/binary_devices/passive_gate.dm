@@ -5,12 +5,12 @@
 	icon_state = "intact_off"
 
 	name = "Passive gate"
-	desc = "A one-way gas valve that does not require power"
+	desc = "A one-way gas valve that does not require power."
 
 	var/open = FALSE
 
 	var/frequency = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 	machine_flags = MULTITOOL_MENU
 
@@ -76,7 +76,7 @@
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 

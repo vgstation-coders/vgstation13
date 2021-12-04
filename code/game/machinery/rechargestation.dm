@@ -151,6 +151,9 @@
 	set src in range(0)
 
 	var/mob/user = usr
+	if(!issilicon(user))
+		to_chat(user, "<span class='warning'>You can't seem to find any cell to upgrade on your person, maybe because you're not a silicon you dummy.</span>")
+		return
 	if(user != occupant)
 		to_chat(user, "<span class='warning'>You must be inside \the [src] to do this.</span>")
 		return
@@ -314,10 +317,10 @@
 		return -1
 	return ..()
 
-/obj/machinery/recharge_station/crowbarDestroy(mob/user)
+/obj/machinery/recharge_station/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='notice'>You can't do that while this charger is occupied.</span>")
-		return -1
+		return 0
 	return ..()
 
 /obj/machinery/recharge_station/Bumped(atom/AM as mob|obj)

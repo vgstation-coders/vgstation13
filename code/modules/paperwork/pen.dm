@@ -81,77 +81,34 @@
 	addReplacement(REG_BBTAG("\[^\\\]\]"), "")
 	return
 
-//var/stdshellout_dllFile = 'byond_markdown.dll'
-var/paperwork = 0
-var/paperwork_library
-
-/client/proc/handle_paperwork()
-
-	set category = "Debug"
-	set name = "Modify Paperwork Mode"
-
-	if(!check_rights(R_DEBUG))
-		return
-
-	if(!paperwork)
-		paperwork_setup()
-	else
-		paperwork_stop()
-		paperwork = 0
-
-/proc/paperwork_setup()
-	if(config.paperwork_library)
-		if(world.system_type == MS_WINDOWS)
-			paperwork_library = "markdown_byond.dll"
-		else
-			paperwork_library = "markdown_byond.so"
-		world.log << "Setting up paperwork..."
-		if(!fexists(paperwork_library))
-			world.log << "Paperwork was not properly setup, please notify a coder/host about this issue."
-			return
-		world.log << call(paperwork_library, "init_renderer")()
-		paperwork = 1
-		return 1
-	else
-		return 0
-	return 0
-
-/proc/paperwork_stop()
-	if(!fexists(paperwork_library))
-		world.log << "Paperwork file may be missing or something terrible has happened, don't panic and notify a coder/host about this issue."
-		return
-	if(paperwork)
-		call(paperwork_library, "free_memory")()
-		return
-	else
-		return
-
-/datum/writing_style/proc/parse_markdown(command_args)
-//	if(!fexists("byond_markdown.dll")){fcopy(stdshellout_dllFile,"[stdshellout_dllFile]")}
-	return call(paperwork_library,"render_html")(command_args)
-
 
 /datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
-	if(paperwork)
-		t = parse_markdown(t)
-	else
-		var/count = 0
-		if(expressions.len)
-			for(var/key in expressions)
-				if(count >= 500)
-					break
-				count++
-				var/datum/speech_filter_action/SFA = expressions[key]
-				if(SFA && !SFA.broken)
-					t = SFA.Run(t,user,paper)
-				if(count%100 == 0)
-					sleep(1) //too much for us.
-		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
-		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+	var/count = 0
+	if(expressions.len)
+		for(var/key in expressions)
+			if(count >= 500)
+				break
+			count++
+			var/datum/speech_filter_action/SFA = expressions[key]
+			if(SFA && !SFA.broken)
+				t = SFA.Run(t,user,paper)
+			if(count%100 == 0)
+				sleep(1) //too much for us.
+	t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
+	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+	t = replacetext(t, "\[date\]", "[current_date_string]")
+	t = replacetext(t, "\[time\]", "[worldtime2text()]")
+
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+
+	t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	t = replacetext(t, "\[/table\]", "</td></tr></table>")
+	t = replacetext(t, "\[row\]", "</td><tr>")
+	t = replacetext(t, "\[cell\]", "<td>")
 
 	var/text_color
 	if(istype(P, /obj/item/weapon/pen))
-		text_color = P.color
+		text_color = P.colour
 	else if(istype(P, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = P
 		text_color = C.colour
@@ -192,6 +149,21 @@ var/paperwork_library
 
 	..() // Order of operations
 
+/datum/writing_style/script/New()
+	style = "font-family:'Segoe Script', cursive;"
+	addReplacement(REG_BBTAG("\\*"), "<li>")
+	addReplacement(REG_BBTAG("hr"), "<HR>")
+	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
+	addReplacement(REG_BBTAG("/small"), "</span>")
+	addReplacement(REG_BBTAG("tiny"), "<span style=\"font-size:10px\">")
+	addReplacement(REG_BBTAG("/tiny"), "</span>")
+	addReplacement(REG_BBTAG("list"), "<ul>")
+	addReplacement(REG_BBTAG("/list"), "</ul>")
+
+	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
+
+	..()
+
 /datum/writing_style/pen/nano_paper/New()
 	addExpression(REG_BBTAG("video")+"("+REG_NOTBB+")"+REG_BBTAG("/video"), ACT_BBCODE_VIDEO,list(),flags = "gi")
 	addExpression(REG_BBTAG("youtube")+"("+REG_NOTBB+")"+REG_BBTAG("/youtube"), ACT_BBCODE_YOUTUBE,list(),flags = "gi")
@@ -209,6 +181,7 @@ var/paperwork_library
 	desc = "It's a normal black ink pen."
 	name = "pen"
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	icon_state = "pen"
 	item_state = "pen"
 	origin_tech = Tc_MATERIALS + "=1"
@@ -243,7 +216,19 @@ var/paperwork_library
 	else
 		return style.Format(text,src,user,P)
 
-/obj/item/weapon/pen/suicide_act(mob/user)
+/obj/item/weapon/pen/suicide_act(var/mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/reagent/blood/B = get_blood(H.vessel)
+		if(B)
+			for(var/obj/item/weapon/paper/P in recursive_type_check(user, /obj/item/weapon/paper))
+				if(P.info) //clean paper only
+					continue
+				P.sudokize(B.data["blood_colour"])
+				H.vessel.remove_reagent(BLOOD, 15)
+				to_chat(viewers(user), "<span class='danger'>[user] is stabbing \himself with \the [src.name] and pouring their soul into \the [P]! It looks like they're trying to commit sudoku.</span>")
+				return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
+
 	to_chat(viewers(user), "<span class='danger'>[user] is jamming the [src.name] into \his ear! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -266,7 +251,91 @@ var/paperwork_library
 	name = "promotional Nanotrasen pen"
 	desc = "Just a cheap plastic pen. It reads: \"For our most valued customers\". They probably meant 'employees'."
 
+/obj/item/weapon/pen/multi
+	colour = "black"
+	name = "multi-pen"
+	desc = "It's a multicolor ink pen with three different ink colors. Its color is currently set to black."
+	icon_state = "pen_multi"
+	var/image/tip = null
+
+/obj/item/weapon/pen/multi/attack_self(mob/user as mob)
+	overlays.len = 0
+	switch(colour)
+		if("black")
+			colour = "blue"
+			tip = image('icons/obj/bureaucracy.dmi', src, "pen_tip_blue")
+		if("blue")
+			colour = "red"
+			tip = image('icons/obj/bureaucracy.dmi', src, "pen_tip_red")
+		else //red and also edge cases (how???)
+			colour = "black"
+			tip = image('icons/obj/bureaucracy.dmi', src, "pen_tip_black")
+	overlays += tip
+	desc = "It's a multicolor ink pen with three different ink colors. Its color is currently set to [colour]."
+	to_chat(user, "<span class='notice'>You switch the tip of \the [src] to [colour].</span>")
+
+/obj/item/weapon/pen/fountain
+	name = "fountain pen"
+	desc = "A fancy fountain pen, for when you really want to impress. The nib is quite sharp."
+	icon_state = "pen_fountain"
+	sharpness = 1.2
+	force = 5
+	throwforce = 5
+	attack_verb = list("stabs")
+	style_type = /datum/writing_style/script
+	var/bloodied = null
+
+/obj/item/weapon/pen/fountain/examine(mob/user)
+	. = ..()
+	if(bloodied)
+		to_chat(user, "<span class='info'>The nib is dripping with a viscous substance.</span>")
+
+/obj/item/weapon/pen/fountain/afterattack(obj/reagentholder, mob/user as mob)
+	..()
+	if(!bloodied)
+		return
+	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+		if(reagentholder.reagents.has_only_any(list(WATER,CLEANER,BLEACH,ETHANOL, HOLYWATER))) //cannot contain any reagent outside of this list, but can contain the list in any proportion
+			to_chat(user, "<span class='notice'>You dip \the [src] into \the [reagentholder], cleaning out the nib.</span>")
+			bloodied = FALSE
+			colour = "black"
+
+/obj/item/weapon/pen/fountain/cap
+	name = "captain's fountain pen"
+	desc = "A fancy fountain pen, for when you really want to impress. This one comes in a commanding navy and gold. The nib is quite sharp."
+	icon_state = "pen_fountain_cap"
+
+/obj/item/weapon/pen/tactical
+	name = "tacpen"
+	desc = "Tactical pen. The tip is self heating and can light things, the reverse can be used as a screwdriver. It contains a one-time reservoir of biofoam that cannot be refilled."
+	sharpness_flags = SHARP_TIP | HOT_EDGE
+
+/obj/item/weapon/pen/tactical/New()
+	..()
+	create_reagents(9)
+	reagents.add_reagent(BIOFOAM, 9) //90 ticks, about 3 minutes
+
+/obj/item/weapon/pen/tactical/is_screwdriver(mob/user)
+	return TRUE
+
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
+	if(istype(src, /obj/item/weapon/pen/fountain))
+		var/obj/item/weapon/pen/fountain/P = src
+		if(user.zone_sel.selecting == "eyes" || user.zone_sel.selecting == LIMB_HEAD)
+			if(!istype(M))
+				return ..()
+			if(can_operate(M, user, P))
+				return ..()
+			if(clumsy_check(user) && prob(50))
+				M = user
+			return eyestab(M,user)
+		..()
+		var/mob/living/carbon/human/H = M
+		var/datum/reagent/blood/B = get_blood(H.vessel)
+		if(B)
+			P.bloodied = TRUE
+			P.colour = B.data["blood_colour"]
+
 	if(!ismob(M))
 		return
 	to_chat(user, "<span class='warning'>You stab [M] with the pen.</span>")
@@ -278,7 +347,9 @@ var/paperwork_library
 		M.LAssailant = null
 	else
 		M.LAssailant = user
-	return
+		M.assaulted_by(user)
+	if(reagents && reagents.total_volume)
+		reagents.trans_to(M,50)
 
 
 /*
@@ -296,16 +367,6 @@ var/paperwork_library
 	create_reagents(30) // Used to be 300
 	reagents.add_reagent(CHLORALHYDRATE, 22) // Used to be 100 sleep toxin // 30 Chloral seems to be fatal, reducing it to 22. /N
 
-/obj/item/weapon/pen/sleepypen/attack(mob/M as mob, mob/user as mob)
-	if(!(istype(M,/mob)))
-		return
-	..()
-	if(reagents.total_volume)
-		if(M.reagents)
-			reagents.trans_to(M, 50) //used to be 150
-	return
-
-
 /*
  * Parapens
  */
@@ -314,17 +375,6 @@ var/paperwork_library
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
-
-/obj/item/weapon/pen/paralysis/attack(mob/M as mob, mob/user as mob)
-	if(!(istype(M,/mob)))
-		return
-	..()
-	if(reagents.total_volume)
-		if(M.reagents)
-			reagents.trans_to(M, 50)
-	return
-
-
 /obj/item/weapon/pen/paralysis/New()
 	var/datum/reagents/R = new/datum/reagents(25)
 	reagents = R
@@ -332,4 +382,3 @@ var/paperwork_library
 	R.add_reagent(ZOMBIEPOWDER, 10)
 	R.add_reagent(CRYPTOBIOLIN, 15)
 	..()
-	return

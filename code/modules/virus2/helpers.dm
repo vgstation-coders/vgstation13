@@ -1,6 +1,19 @@
+//Build random disease type
+/proc/get_random_weighted_disease(var/operation = WDISH)
+	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined)
+	var/list/weighted_list = list()
+	for(var/P in possibles)
+		var/datum/disease2/disease/D = new P
+		var/weight = D.type_weight[operation]
+		if (weight != 0)
+			weighted_list[D] = weight
+	return pickweight(weighted_list)
+
+////////////////////////////////////////////////////
+
 //Checks if table-passing table can reach target (5 tile radius)
 //For the record that proc is only used by the "Gregarious Impetus" symptom and super/toxic farts.
-proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
+/proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	var/obj/dummy = new(source)
 	dummy.flags = FPRINT
 	dummy.pass_flags = PASSTABLE
@@ -45,7 +58,6 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	return 0
 
 /mob/living/carbon/human/check_contact_sterility(var/body_part)
-	var/block = 0
 	var/list/clothing_to_check = list(
 		wear_mask,
 		w_uniform,
@@ -64,11 +76,10 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	for (var/thing in clothing_to_check)
 		var/obj/item/cloth = thing
 		if(istype(cloth) && (cloth.body_parts_covered & body_part) && prob(cloth.sterility))
-			block = 1
-	return block
+			return TRUE
+	return FALSE
 
 /mob/living/carbon/monkey/check_contact_sterility(var/body_part)
-	var/block = 0
 	var/list/clothing_to_check = list(
 		wear_mask,
 		uniform,
@@ -80,8 +91,33 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	for (var/thing in clothing_to_check)
 		var/obj/item/cloth = thing
 		if(istype(cloth) && (cloth.body_parts_covered & body_part) && prob(cloth.sterility))
-			block = 1
-	return block
+			return TRUE
+	return FALSE
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VALID COLONY (spread SPREAD_COLONY)
+/mob/living/carbon/suitable_colony()
+	return FALSE
+
+/mob/living/carbon/human/suitable_colony()
+	var/obj/item/clothing = wear_suit
+	if(clothing && clothing.pressure_resistance > ONE_ATMOSPHERE)
+		return TRUE
+	return FALSE
+
+/mob/living/carbon/monkey/suitable_colony()
+	var/obj/item/clothing = uniform
+	if(istype(clothing,/obj/item/clothing/monkeyclothes/space)) //Also covers sanity if null
+		return TRUE
+	return FALSE
+
+/proc/attempt_colony(var/atom/A, var/datum/disease2/disease/D,var/info)
+	if(!(D.spread & SPREAD_COLONY))
+		return FALSE
+	if(A.suitable_colony())
+		A.infect_disease2(D, notes="(Colonized[info ? ", [info]" : ""])")
+		return TRUE
+	return FALSE
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //BLEEDING (bleeding body parts allow SPREAD_BLOOD to infect)
@@ -149,7 +185,7 @@ var/list/infected_contact_mobs = list()
 		var/datum/disease2/disease/D = disease.getcopy()
 		if (D.infectionchance > 10)
 			D.infectionchance = max(10, D.infectionchance - 10)//The virus gets weaker as it jumps from people to people
-		D.stage = Clamp(D.stage+D.stage_variance, 1, D.max_stage)
+		D.stage = clamp(D.stage+D.stage_variance, 1, D.max_stage)
 		D.log += "<br />[timestamp()] Infected [key_name(src)] [notes]. Infection chance now [D.infectionchance]%"
 		virus2["[D.uniqueID]-[D.subID]"] = D
 
@@ -162,6 +198,10 @@ var/list/infected_contact_mobs = list()
 			if (O && !istype(src, /mob/living/simple_animal/mouse/plague))
 				O.total_infections++
 			plague.update_hud_icons()
+			for(var/datum/role/plague_mouse/M in plague.members)
+				var/datum/mind/mouse_mind = M.antag
+				mouse_mind.store_memory(D.get_info(TRUE), forced = 1)
+				mouse_mind.store_memory("<hr>")
 		//----------------
 
 		for (var/obj/item/device/pda/p in contents)
@@ -181,6 +221,12 @@ var/list/infected_contact_mobs = list()
 
 		return 1
 	return 0
+
+/mob/living/proc/infect_disease2_predefined(var/category, var/forced, var/notes)
+	if(!global_diseases[category])
+		return
+	infect_disease2(global_diseases[category], forced, notes)
+
 
 //ITEMS
 var/list/infected_items = list()
@@ -314,3 +360,21 @@ var/list/infected_items = list()
 		if("eyes")
 			part = EYES
 	return part
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/proc/spread_disease_among_crew(var/datum/disease2/disease/D, var/reason = "4noraisin")
+	var/list/candidates = list()
+	for(var/mob/living/candidate in player_list)
+		if(candidate.z == map.zMainStation && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
+			candidates += candidate
+
+	if(!candidates.len)
+		return
+
+	var/infected = 1 + round(candidates.len/10)
+
+	for (var/i = 1 to infected)
+		var/mob/living/candidate = pick(candidates)
+		candidates -= candidate
+		candidate.infect_disease2(D,1, reason)

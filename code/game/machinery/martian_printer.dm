@@ -63,7 +63,7 @@
 		// Player has already been made into another mob before this one spawned, so let's reset the spawner
 		building = FALSE
 		update_icon()
-		return FALSE
+		return
 	if(istype(print_path,/mob/living/carbon/complex/martian))
 		flick("m_pad_active", src) //Martians get a special animation
 	else
@@ -72,7 +72,7 @@
 		if(!user || !istype(user) || !user.client)
 			// Player disappeared between clicking on the spawner and now, so we have no one to turn tentacle!
 			building = FALSE
-			return FALSE
+			return
 
 		var/mob/M = new print_path(get_turf(src))
 
@@ -81,4 +81,3 @@
 
 
 		building = FALSE
-		return TRUE

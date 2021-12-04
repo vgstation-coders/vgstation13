@@ -4,7 +4,7 @@
 	icon_state = "red_pyjamas"
 	_color = "red_pyjamas"
 	item_state = "w_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/pj/blue
 	name = "blue pj's"
@@ -12,7 +12,7 @@
 	icon_state = "blue_pyjamas"
 	_color = "blue_pyjamas"
 	item_state = "w_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/captain_fly
 	name = "rogue captains uniform"
@@ -27,19 +27,20 @@
 	icon_state = "scratch"
 	item_state = "scratch"
 	_color = "scratch"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/sl_suit
 	desc = "It's a very amish looking suit."
 	name = "amish suit"
-	icon_state = "sl_suit"
+	icon_state = "detective_noir"
 	_color = "sl_suit"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sl_suit/armored
-	desc = "It's a very amish looking suit. This one looks armored."
+	desc = "It's a very amish looking suit. This one has a tag. It says \"Gorlex\" in cursive."
 	name = "armored amish suit"
-	armor = list(melee = 30, bullet = 20, laser = 10,energy = 5, bomb = 5, bio = 0, rad = 0)
+	armor = list(melee = 15, bullet = 5, laser = 5, energy = 0, bomb = 5, bio = 0, rad = 0)
 
 /obj/item/clothing/under/waiter
 	name = "waiter's outfit"
@@ -48,7 +49,7 @@
 	item_state = "waiter"
 	_color = "waiter"
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/mailman
 	name = "mailman's jumpsuit"
@@ -56,7 +57,7 @@
 	icon_state = "mailman"
 	item_state = "b_suit"
 	_color = "mailman"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sexyclown
 	name = "sexy-clown suit"
@@ -64,6 +65,7 @@
 	icon_state = "sexyclown"
 	item_state = "sexyclown"
 	_color = "sexyclown"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/lola
 	name = "fighting clown suit"
@@ -71,6 +73,7 @@
 	icon_state = "lola"
 	item_state = "lola"
 	_color = "lola"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/vice
 	name = "vice officer's jumpsuit"
@@ -78,7 +81,7 @@
 	icon_state = "vice"
 	item_state = "gy_suit"
 	_color = "vice"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/centcom_officer
 	desc = "It's a jumpsuit worn by CentCom Officers."
@@ -120,7 +123,7 @@
 	armor = list(melee = 100, bullet = 100, laser = 100,energy = 100, bomb = 100, bio = 100, rad = 100)
 	siemens_coefficient = 0
 	heat_conductivity = INS_JUMPSUIT_HEAT_CONDUCTIVITY
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/owl
 	name = "owl uniform"
@@ -128,7 +131,7 @@
 	icon_state = "owl"
 	_color = "owl"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/johnny
 	name = "johnny~~ jumpsuit"
@@ -143,7 +146,7 @@
 	icon_state = "rainbow"
 	item_state = "rainbow"
 	_color = "rainbow"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/cloud
 	name = "cloud"
@@ -164,7 +167,7 @@
 	icon_state = "green_suit"
 	item_state = "dg_suit"
 	_color = "green_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/gimmick/rank/head_of_personnel/suit
 	name = "head of personnel's suit"
@@ -181,7 +184,7 @@
 	item_state = "bl_suit"
 	_color = "black_suit"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/really_black
 	name = "executive suit"
@@ -189,7 +192,7 @@
 	icon_state = "really_black_suit"
 	item_state = "bl_suit"
 	_color = "black_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/female
 	name = "executive suit"
@@ -197,7 +200,7 @@
 	icon_state = "black_suit_fem"
 	item_state = "black_suit_fem"
 	_color = "black_suit_fem"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/red
 	name = "red suit"
@@ -205,7 +208,7 @@
 	icon_state = "red_suit"
 	item_state = "r_suit"
 	_color = "red_suit"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/blackskirt
 	name = "black skirt"
@@ -213,7 +216,7 @@
 	icon_state = "blackskirt"
 	_color = "blackskirt"
 	body_parts_covered = FULL_TORSO|ARMS
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/schoolgirl
 	name = "schoolgirl uniform"
@@ -222,7 +225,7 @@
 	item_state = "schoolgirl"
 	_color = "schoolgirl"
 	body_parts_covered = FULL_TORSO|ARMS
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/overalls
 	name = "laborer's overalls"
@@ -239,7 +242,7 @@
 	icon_state = "pirate"
 	item_state = "pirate"
 	_color = "pirate"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/soviet
 	name = "soviet uniform"
@@ -247,6 +250,7 @@
 	icon_state = "soviet"
 	item_state = "soviet"
 	_color = "soviet"
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/redcoat
 	name = "redcoat uniform"
@@ -261,7 +265,7 @@
 	icon_state = "kilt"
 	item_state = "kilt"
 	_color = "kilt"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sexymime
 	name = "sexy mime outfit"
@@ -269,6 +273,7 @@
 	icon_state = "sexymime"
 	item_state = "sexymime"
 	_color = "sexymime"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/gladiator
 	name = "gladiator uniform"
@@ -277,6 +282,7 @@
 	item_state = "gladiator"
 	_color = "gladiator"
 	body_parts_covered = LOWER_TORSO|ARM_LEFT|HAND_LEFT
+	species_fit = list(INSECT_SHAPED)
 
 //dress
 
@@ -288,81 +294,91 @@
 	desc = "A small black dress with blue flames print on it."
 	icon_state = "dress_fire"
 	_color = "dress_fire"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_green
 	name = "green dress"
 	desc = "A simple, tight fitting green dress."
 	icon_state = "dress_green"
 	_color = "dress_green"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_orange
 	name = "orange dress"
 	desc = "A fancy orange gown for those who like to show leg."
 	icon_state = "dress_orange"
 	_color = "dress_orange"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_pink
 	name = "pink dress"
 	desc = "A simple, tight fitting pink dress."
 	icon_state = "dress_pink"
 	_color = "dress_pink"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_yellow
 	name = "yellow dress"
 	desc = "A flirty, little yellow dress."
 	icon_state = "dress_yellow"
 	_color = "dress_yellow"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_saloon
 	name = "saloon girl dress"
 	desc = "A old western inspired gown for the girl who likes to drink."
 	icon_state = "dress_saloon"
 	_color = "dress_saloon"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_rd
 	name = "research director dress uniform"
 	desc = "Feminine fashion for the style concious RD."
 	icon_state = "dress_rd"
 	_color = "dress_rd"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_cap
 	name = "captain dress uniform"
 	desc = "Feminine fashion for the style concious captain."
 	icon_state = "dress_cap"
 	_color = "dress_cap"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_hop
 	name = "head of personal dress uniform"
 	desc = "Feminine fashion for the style concious HoP."
 	icon_state = "dress_hop"
 	_color = "dress_hop"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_hr
 	name = "human resources director uniform"
 	desc = "Superior class for the nosy H.R. Director."
 	icon_state = "huresource"
 	_color = "huresource"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/plaid_blue
 	name = "blue plaid skirt"
 	desc = "A preppy blue skirt with a white blouse."
 	icon_state = "plaid_blue"
 	_color = "plaid_blue"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/plaid_red
 	name = "red plaid skirt"
 	desc = "A preppy red skirt with a white blouse."
 	icon_state = "plaid_red"
 	_color = "plaid_red"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/plaid_purple
 	name = "blue purple skirt"
 	desc = "A preppy purple skirt with a white blouse."
 	icon_state = "plaid_purple"
 	_color = "plaid_purple"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 //wedding stuff
 
@@ -374,30 +390,35 @@
 	desc = "A big and puffy orange dress."
 	icon_state = "bride_orange"
 	_color = "bride_orange"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/wedding/bride_purple
 	name = "purple wedding dress"
 	desc = "A big and puffy purple dress."
 	icon_state = "bride_purple"
 	_color = "bride_purple"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/wedding/bride_blue
 	name = "blue wedding dress"
 	desc = "A big and puffy blue dress."
 	icon_state = "bride_blue"
 	_color = "bride_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/wedding/bride_red
 	name = "red wedding dress"
 	desc = "A big and puffy red dress."
 	icon_state = "bride_red"
 	_color = "bride_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/wedding/bride_white
 	name = "white wedding dress"
 	desc = "A white wedding gown made from the finest silk."
 	icon_state = "bride_white"
 	_color = "bride_white"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/sundress
 	name = "sundress"
@@ -406,6 +427,7 @@
 	item_state = "sundress"
 	_color = "sundress"
 	body_parts_covered = FULL_TORSO
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/roman
 	name = "roman armor"
@@ -414,14 +436,15 @@
 	_color = "roman"
 	item_state = "armor"
 	armor = list(melee = 25, bullet = 0, laser = 25, energy = 10, bomb = 10, bio = 0, rad = 0)
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/simonpants
 	name = "Simon's Pants"
 	desc = "Simon's pants, clad with belt and whatever the fuck that thing is around his neck."
-	icon_state = "spants"
+	icon_state = "simonpants"
 	_color = "simonpants"
 	item_state = "spants"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	gender = PLURAL
 
 /obj/item/clothing/under/batmansuit
@@ -436,6 +459,7 @@
 	icon_state = "officeruniform"
 	item_state = "officeruniform"
 	_color = "officeruniform"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/soldieruniform
 	name = "soldier's uniform"
@@ -443,6 +467,7 @@
 	icon_state = "soldieruniform"
 	item_state = "soldieruniform"
 	_color = "soldieruniform"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/squatter_outfit
 	name = "slav squatter tracksuit"
@@ -450,6 +475,7 @@
 	icon_state = "squatteroutfit"
 	item_state = "squatteroutfit"
 	_color = "squatteroutfit"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/russobluecamooutfit
 	name = "russian blue camo"
@@ -457,6 +483,7 @@
 	icon_state = "russobluecamo"
 	item_state = "russobluecamo"
 	_color = "russobluecamo"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/jester
 	name = "jester suit"
@@ -464,6 +491,7 @@
 	icon_state = "jester"
 	item_state = "jester"
 	_color = "jester"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/stilsuit
 	name = "stillsuit"
@@ -471,6 +499,7 @@
 	icon_state = "stilsuit"
 	item_state = "stilsuit"
 	_color = "stilsuit"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/aviatoruniform
 	name = "aviator uniform"
@@ -478,6 +507,7 @@
 	icon_state = "aviator_uniform"
 	item_state = "aviator_uniform"
 	_color = "aviator_uniform"
+	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/under/libertyshirt
@@ -486,13 +516,14 @@
 	icon_state = "libertyshirt"
 	item_state = "libertyshirt"
 	_color = "libertyshirt"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/bikersuit
 	name = "biker's outfit"
 	icon_state = "biker"
 	item_state = "biker"
 	_color = "biker"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/jacketsuit
 	name = "richard's outfit"
@@ -507,6 +538,7 @@
 	icon_state = "mega"
 	item_state = "mega"
 	_color = "mega"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/proto
 	name = "The Prototype Suit"
@@ -514,6 +546,7 @@
 	icon_state = "proto"
 	item_state = "proto"
 	_color = "proto"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/megax
 	name = "\improper Maverick Hunter regalia"
@@ -521,6 +554,7 @@
 	icon_state = "megax"
 	item_state = "megax"
 	_color = "megax"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/joe
 	name = "The Sniper Suit"
@@ -528,6 +562,7 @@
 	icon_state = "joe"
 	item_state = "joe"
 	_color = "joe"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/roll
 	name = "\improper DRN-002 Dress"
@@ -535,6 +570,7 @@
 	icon_state = "roll"
 	item_state = "roll"
 	_color = "roll"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/maid
 	name = "maid outfit"
@@ -542,6 +578,7 @@
 	icon_state = "maid"
 	item_state = "maid"
 	_color = "maid"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/darkholme
 	name = "\improper Darkholme"
@@ -549,6 +586,7 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/gokugidown
 	name = "turtle hermit undershirt"
@@ -591,6 +629,7 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
 	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)
@@ -612,6 +651,7 @@
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
 	_color = "clownpiece"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/cia
 	name = "casual IAA outfit"
@@ -619,12 +659,15 @@
 	icon_state = "cia"
 	item_state = "cia"
 	_color = "cia"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/greaser
 	name = "greaser outfit"
 	desc = "The one that you want!"
 	icon_state = "greaser_default"
 	item_state = "greaser_default"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/greaser/New()
 	var/greaser_colour = "default"
@@ -641,6 +684,7 @@
 	icon_state = "greaser_[greaser_colour]"
 	item_state = "greaser_[greaser_colour]"
 	_color = "greaser_[greaser_colour]"
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/under/wintercasualwear
 	name = "winter casualwear"
@@ -649,7 +693,7 @@
 	item_state = "shizunewinter"
 	_color = "shizunewinter"
 	body_parts_covered = FULL_TORSO|ARMS
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/casualwear
 	name = "spring casualwear"
@@ -658,7 +702,7 @@
 	item_state = "shizunenormal"
 	_color = "shizunenormal"
 	body_parts_covered = FULL_TORSO|ARMS
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/keyholesweater
 	name = "keyhole sweater"
@@ -698,7 +742,8 @@
 	icon_state = "nr_uniform"
 	item_state = "nr_uniform"
 	_color = "nr_uniform"
-
+	species_fit = list(INSECT_SHAPED)
+/*
 /obj/item/clothing/under/skelevoxsuit
 	name = "skelevox suit"
 	desc = "Feels like wearing literally nothing at all!"
@@ -707,7 +752,7 @@
 	_color = "vox-skelesuit"
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
-
+*/
 /obj/item/clothing/under/rottensuit
 	name = "rotten suit"
 	desc = "This suit seems perfect for wearing underneath a disguise."
@@ -715,6 +760,7 @@
 	item_state = "rottensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	_color = "rottensuit"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/franksuit
 	name = "Dr. Frank's clothes"
@@ -722,6 +768,7 @@
 	icon_state = "franksuit"
 	item_state = "franksuit"
 	_color = "franksuit"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/elf
 	name = "elf uniform"
@@ -733,12 +780,88 @@
 /obj/item/clothing/under/elf/stickymagic
 	canremove = 0
 
+/obj/item/clothing/under/onesie
+	name = "green christmas onesie"
+	desc = "Festive pyjamas for the comfy crewman."
+	icon_state = "onesiegreen"
+	item_state = "onesiegreen"
+	_color = "onesiegreen"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/blue
+	name = "blue christmas onesie"
+	icon_state = "onesieblue"
+	item_state = "onesieblue"
+	_color = "onesieblue"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/red
+	name = "red christmas onesie"
+	icon_state = "onesiered"
+	item_state = "onesiered"
+	_color = "onesiered"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/pink
+	name = "pink christmas onesie"
+	icon_state = "onesiepink"
+	item_state = "onesiepink"
+	_color = "onesiepink"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/white
+	name = "white christmas onesie"
+	icon_state = "onesiewhite"
+	item_state = "onesiewhite"
+	_color = "onesiewhite"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/grey
+	name = "grey christmas onesie"
+	icon_state = "onesiegrey"
+	item_state = "onesiegrey"
+	_color = "onesiegrey"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/black
+	name = "black christmas onesie"
+	icon_state = "onesieblack"
+	item_state = "onesieblack"
+	_color = "onesieblack"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/redgreen
+	name = "striped red and green christmas onesie"
+	icon_state = "onesieredgreen"
+	item_state = "onesieredgreen"
+	_color = "onesieredgreen"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/bluenavy
+	name = "striped blue and navy christmas onesie"
+	icon_state = "onesiebluenavy"
+	item_state = "onesiebluenavy"
+	_color = "onesiebluenavy"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/police
 	name = "police uniform"
 	desc = "A policeman's lot is not a happy one."
 	icon_state = "britpolice"
 	item_state = "britpolice"
 	_color = "britpolice"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/casualsec
+	name = "plainclothes uniform"
+	desc = "The Western District way, gentlemen."
+	icon_state = "casualsec"
+	item_state = "casualsec"
+	_color = "casualsec"
+	clothing_flags = ONESIZEFITSALL
+	species_restricted = list("exclude", VOX_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/inquisitor
 	name = "inquisitor's suit"
@@ -746,6 +869,7 @@
 	icon_state = "uni-church"
 	item_state = "uni-church"
 	_color = "uni-church"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/newclothes
 	name = "Emperor's new clothes"
@@ -760,7 +884,7 @@
 	icon_state = "tourist"
 	item_state = "g_suit"
 	_color = "tourist"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/varsity
 	name = "varsity jacket"
@@ -768,3 +892,121 @@
 	icon_state = "varsity"
 	item_state = "varsity"
 	_color = "varsity"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/galo
+	name = "delinquent clothes"
+	desc = "Yeah, Galo Sengen."
+	icon_state = "galo"
+	item_state = "galo"
+	_color = "galo"
+
+/obj/item/clothing/under/callum
+	name = "gaelic suit"
+	desc = "Smells faintly of alcohol."
+	icon_state = "callum_suit"
+	item_state = "callum_suit"
+	_color = "callum_suit"
+
+/obj/item/clothing/under/clownsuit
+	name = "formal clown outfit"
+	desc = "for clowns living in a society."
+	icon_state = "clownsuit"
+	item_state = "clownsuit"
+	_color = "clownsuit"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/skelesuit
+	name = "skeleton suit"
+	desc = "Inside of everyone there is a spooky skinman waiting to escape."
+	icon_state = "skelesuit"
+	item_state = "skelesuit"
+	_color = "skelesuit"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+
+/obj/item/clothing/under/clownpsyche
+	name = "Psychedelic clown outfit"
+	desc = "Do you know the definition of insanity?"
+	icon_state = "clownpsyche"
+	item_state = "clownpsyche"
+	_color = "clownpsyche"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/team_security
+	name = "light Team Security suit"
+	desc = "A snappy white and red suit worn by Team Security members and fans."
+	icon_state = "teamsec_light"
+	_color = "teamsec_light"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/team_security/dark
+	name = "dark Team Security suit"
+	desc = "A snappy black and red suit worn by Team Security members and fans."
+	icon_state = "teamsec_dark"
+	_color = "teamsec_dark"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/spesstv
+	name = "promotional Spess.TV suit"
+	desc = "A cheap green and white suit worn by Spess.TV members and fans."
+	icon_state = "spesstv"
+	_color = "spesstv"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/team_geometer
+	name = "\improper Team Geometer suit"
+	desc = "A smelly green and black suit worn by team Geometer members and fans."
+	icon_state = "teamgeometer"
+	_color = "teamgeometer"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/team_nt
+	name = "\improper NanoTrasen sports suit"
+	desc = "A dusty blue and white suit worn by NanoTrasen referees."
+	icon_state = "teamnt"
+	_color = "teamnt"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/football
+	name ="\improper Red football shirt"
+	desc = "The perfect shirt to show support for your favourite team."
+	icon_state = "redfootball"
+	item_state = "redfootball"
+	_color = "redfootball"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/under/football/offenseTackleBonus()
+	return 5
+
+/obj/item/clothing/under/football/New()
+	icon_state = "redfootball_[pick(23,13,69,56)]"
+	item_state = icon_state
+	_color = icon_state
+
+/obj/item/clothing/under/rags
+	name ="rags"
+	desc = "Some leather scraps tied together."
+	icon_state = "rags"
+	item_state = "rags"
+	_color = "rags"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)

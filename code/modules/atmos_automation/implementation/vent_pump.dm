@@ -198,21 +198,21 @@
 	if(href_list["set_intpressure_out"])
 		var/response = input("Set new pressure, in kPa. \[0-[50*ONE_ATMOSPHERE]\]") as num
 		intpressureout = text2num(response)
-		intpressureout = Clamp(intpressureout, 0, 50*ONE_ATMOSPHERE)
+		intpressureout = clamp(intpressureout, 0, 50*ONE_ATMOSPHERE)
 		parent.updateUsrDialog()
 		return 1
 
 	if(href_list["set_intpressure_in"])
 		var/response = input("Set new pressure, in kPa. \[0-[50*ONE_ATMOSPHERE]\]") as num
 		intpressurein = text2num(response)
-		intpressurein = Clamp(intpressurein, 0, 50*ONE_ATMOSPHERE)
+		intpressurein = clamp(intpressurein, 0, 50*ONE_ATMOSPHERE)
 		parent.updateUsrDialog()
 		return 1
 
 	if(href_list["set_external"])
 		var/response = input(usr,"Set new pressure, in kPa. \[0-[50*ONE_ATMOSPHERE]\]") as num
 		extpressure = text2num(response)
-		extpressure = Clamp(extpressure, 0, 50*ONE_ATMOSPHERE)
+		extpressure = clamp(extpressure, 0, 50*ONE_ATMOSPHERE)
 		parent.updateUsrDialog()
 		return 1
 

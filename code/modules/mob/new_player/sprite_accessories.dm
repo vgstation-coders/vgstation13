@@ -56,13 +56,13 @@
 
 /datum/sprite_accessory/hair
 
-	icon = 'icons/mob/human_face.dmi'	  // default icon for all hairs
+	icon = 'icons/mob/hair_styles.dmi'	  // default icon for all hairs
 
 /datum/sprite_accessory/hair/bald
 	name = "Bald"
 	icon_state = "bald"
 	gender = MALE
-	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Evolved Slime")
+	species_allowed = list("Human","Manifested","Insectoid","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime")
 
 /datum/sprite_accessory/hair/short
 	name = "Short Hair"	  // try to capatilize the names please~
@@ -75,10 +75,6 @@
 /datum/sprite_accessory/hair/long
 	name = "Shoulder-length Hair"
 	icon_state = "hair_b"
-
-/datum/sprite_accessory/hair/longalt
-	name = "Shoulder-length Hair Alt"
-	icon_state = "hair_longfringe"
 
 /*/datum/sprite_accessory/hair/longish
 	name = "Longer Hair"
@@ -116,6 +112,50 @@
 	name = "Ponytail 1"
 	icon_state = "hair_ponytail"
 
+/datum/sprite_accessory/hair/sideswept
+	name = "Sideswept"
+	icon_state = "hair_sideswept"
+
+/datum/sprite_accessory/hair/rightside
+	name = "Right Side"
+	icon_state = "hair_rightside"
+
+/datum/sprite_accessory/hair/amazon
+	name = "Amazon"
+	icon_state = "hair_amazon"
+
+/datum/sprite_accessory/hair/gipsy
+	name = "Gipsy"
+	icon_state = "hair_gipsy"
+
+/datum/sprite_accessory/hair/bluntbangs
+	name = "Blunt Bangs"
+	icon_state = "hair_bluntbangs"
+
+/datum/sprite_accessory/hair/longhalfshave
+	name = "Long Half-Shave"
+	icon_state = "hair_halfshaved"
+
+/datum/sprite_accessory/hair/longsidepart
+	name = "Long Sidepart"
+	icon_state = "hair_longsidepartstraight"
+
+/datum/sprite_accessory/hair/slightlymessy
+	name = "Slightly Messy"
+	icon_state = "hair_slightlymessy"
+
+/datum/sprite_accessory/hair/baum
+	name = "Baum"
+	icon_state = "hair_baum"
+
+/datum/sprite_accessory/hair/slick
+	name = "Slick"
+	icon_state = "hair_slick"
+
+/datum/sprite_accessory/hair/wolfmane
+	name = "Wolfmane"
+	icon_state = "hair_wolfmane"
+
 /datum/sprite_accessory/hair/ponytail2
 	name = "Ponytail 2"
 	icon_state = "hair_pa"
@@ -128,6 +168,10 @@
 /datum/sprite_accessory/hair/longpony
 	name = "Long Ponytail"
 	icon_state = "hair_longpony"
+
+/datum/sprite_accessory/hair/mediumpony
+	name = "Medium Ponytail"
+	icon_state = "hair_mediumpony"
 
 /datum/sprite_accessory/hair/highpony
 	name = "High Ponytail"
@@ -152,6 +196,10 @@
 /datum/sprite_accessory/hair/parted
 	name = "Parted"
 	icon_state = "hair_parted"
+
+/datum/sprite_accessory/hair/partedalt
+	name = "Parted Alt"
+	icon_state = "hair_partedalt"
 
 /datum/sprite_accessory/hair/pompadour
 	name = "Pompadour"
@@ -222,6 +270,10 @@
 /datum/sprite_accessory/hair/dreadlocks
 	name = "Dreadlocks"
 	icon_state = "hair_dreads"
+
+/datum/sprite_accessory/hair/dreadlockslong
+	name = "Long Dreadlocks"
+	icon_state = "hair_dreads_long"
 
 /datum/sprite_accessory/hair/curls
 	name = "Curls"
@@ -394,11 +446,16 @@
 	icon_state = "hair_twincurl"
 	gender = FEMALE
 
+/datum/sprite_accessory/hair/minidrills
+	name = "Twincurls 2"
+	icon_state = "hair_twincurl2"
+	gender = FEMALE
+
 /datum/sprite_accessory/hair/twintails
 	name = "Twintails"
 	icon_state = "hair_twintail"
 	gender = FEMALE
-	
+
 /datum/sprite_accessory/hair/cia
 	name = "CIA"
 	icon_state = "hair_cia"
@@ -485,6 +542,10 @@
 	icon_state = "hair_nia"
 	gender = FEMALE
 
+/datum/sprite_accessory/hair/nia_short
+	name = "Nia (Short)"
+	icon_state = "hair_nia_short"
+
 /datum/sprite_accessory/hair/shinobu
 	name = "Shinobu"
 	icon_state = "hair_shinobu"
@@ -503,9 +564,10 @@
 	icon_state = "hair_manbun"
 	gender = MALE
 
-/datum/sprite_accessory/hair/bald
-	name = "Bald"
-	icon_state = "bald"
+/datum/sprite_accessory/hair/sonicboom
+	name = "SonicBoom"
+	icon_state = "hair_sonicboom"
+
 /*
 ///////////////////////////////////
 /  =---------------------------=  /
@@ -516,14 +578,14 @@
 
 /datum/sprite_accessory/facial_hair
 
-	icon = 'icons/mob/human_face.dmi'
+	icon = 'icons/mob/hair_styles.dmi'
 	gender = MALE // barf (unless you're a dorf, dorfs dig chix /w beards :P)
 
 /datum/sprite_accessory/facial_hair/shaved
 	name = "Shaved"
 	icon_state = "bald"
 	gender = NEUTER
-	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom", "Evolved Slime")
+	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Insectoid")
 
 /datum/sprite_accessory/facial_hair/watson
 	name = "Watson Mustache"
@@ -625,6 +687,115 @@
 /  =---------------------------=  /
 ///////////////////////////////////
 */
+
+/datum/sprite_accessory/hair/insect_antennae
+	name = "Insectoid Antennae"
+	icon_state = "insect_antennae"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_long
+	name = "Long Insectoid Antennae"
+	icon_state = "insect_antennae_long"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_curly
+	name = "Curly Insectoid Antennae"
+	icon_state = "insect_curly"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_crest
+	name =  "Short Crest"
+	icon_state = "insect_crest_short"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_thick
+	name = "Thick Carapace"
+	icon_state = "insect_thick"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_sharp
+	name = "Sharp Insectoid Crest"
+	icon_state = "crest_sharp"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_quad
+	name = "Quad Insectoid Antennae"
+	icon_state = "insect_quad"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_swept
+	name = "Swept-back Antennae"
+	icon_state = "insect_swept"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_ridge
+	name = "Ridged Carapace"
+	icon_state = "insect_ridges"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_wide
+	name = "Wide Carapace"
+	icon_state = "insect_wide"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_nasute
+	name = "Nasute Head"
+	icon_state = "insect_nasute"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_triple
+	name = "Triple Insectoid Horns"
+	icon_state = "insect_triple"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_mandible
+	name = "Large Mandibles"
+	icon_state = "insect_mandibles"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_wedge
+	name = "Wedge Head"
+	icon_state = "insect_wedge"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_hiver
+	name = "Hiver Head"
+	icon_state = "insect_hiver"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_soldier
+	name = "Soldier Head"
+	icon_state = "insect_soldier"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_shiny
+	name = "Shiny Head"
+	icon_state = "insect_shiny"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_hornet
+	name = "Hornet Head"
+	icon_state = "insect_hornet"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
 
 /datum/sprite_accessory/hair/una_spines_long
 	name = "Long Unathi Spines"
@@ -806,31 +977,110 @@
 	species_allowed = list(VOX_SHAPED)
 	do_colouration = 0
 
+/datum/sprite_accessory/hair/vox_quills_surf
+	name = "Vox Surf"
+	icon_state = "vox_surf"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/vox_quills_cropped
+	name = "Vox Cropped"
+	icon_state = "vox_cropped"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/vox_quills_bald
+	name = "Vox Bald"
+	icon_state = "vox_bald"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/vox_quills_ruffhawk
+	name = "Vox Ruffhawk"
+	icon_state = "vox_ruff_hawk"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/vox_quills_rows
+	name = "Vox Rows"
+	icon_state = "vox_rows"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/vox_quills_mange
+	name = "Vox Mange"
+	icon_state = "vox_mange"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/vox_quills_pony
+	name = "Vox Pony"
+	icon_state = "vox_pony"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
 /datum/sprite_accessory/hair/diona_popcorn
 	name = "Popped Hair"
 	icon_state = "hair_popcorn"
 	species_allowed = list("Diona")
 	do_colouration = 0
 
+/datum/sprite_accessory/hair/hair_fullbloom
+	name = "Bloomed"
+	icon_state = "hair_fullbloom"
+	species_allowed = list("Diona")
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_bushy
+	name = "Bushy"
+	icon_state = "hair_bushy"
+	species_allowed = list("Diona")
+
+/datum/sprite_accessory/hair/hair_weepingwillow
+	name = "Weeping Willow"
+	icon_state = "hair_weepingwillow"
+	species_allowed = list("Diona")
+	do_colouration = 0
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_vines
+	name = "Vines"
+	icon_state = "hair_vines"
+	species_allowed = list("Diona")
+	do_colouration = 0
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_mushroom
+	name = "Mushrooms"
+	icon_state = "hair_mushroom"
+	species_allowed = list("Diona")
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_flowers
+	name = "Flowers"
+	icon_state = "hair_flowers"
+	species_allowed = list("Diona")
+	additional_accessories = TRUE
+
 /datum/sprite_accessory/hair/slime_tendrils
 	name = "Long Tendrils"
 	icon_state = "slime_tendrils"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 
 /datum/sprite_accessory/hair/slime_spikes
 	name = "Spikes"
 	icon_state = "slime_spikes"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 
 /datum/sprite_accessory/hair/slime_droplet
 	name = "Droplet"
 	icon_state = "slime_droplet"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 
 /datum/sprite_accessory/hair/slime_suu
 	name = "Wiggly"
 	icon_state = "slime_suu"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 	do_colouration = 0
 
 /datum/sprite_accessory/facial_hair/taj_sideburns
@@ -893,6 +1143,13 @@
 	species_allowed = list(VOX_SHAPED)
 	do_colouration = 0
 
+/datum/sprite_accessory/facial_hair/vox_ruff_beard
+	name = "Ruff Beard"
+	icon_state = "vox_ruff_beard"
+	species_allowed = list(VOX_SHAPED)
+	do_colouration = 0
+
+
 //skin styles - WIP
 //going to have to re-integrate this with surgery
 //let the icon_state hold an icon preview for now
@@ -930,3 +1187,24 @@
 /datum/sprite_accessory/hair/mohawk
 	name = "Mohawk"
 	icon_state = "mohawk"
+
+/datum/sprite_accessory/hair/mush_plumphelmet
+	name = "Plump Helmet"
+	icon_state = "mush_plumphelmet"
+	species_allowed = list("Mushroom")
+
+/datum/sprite_accessory/hair/mush_amanita
+	name = "Amanita"
+	icon_state = "mush_amanita"
+	species_allowed = list("Mushroom")
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/mush_flat
+	name = "Flat Cap"
+	icon_state = "mush_flat"
+	species_allowed = list("Mushroom")
+
+/datum/sprite_accessory/hair/mush_chanterelle
+	name = "Chanterelle"
+	icon_state = "mush_chanterelle"
+	species_allowed = list("Mushroom")

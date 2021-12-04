@@ -1,12 +1,14 @@
 /mob/living/simple_animal/hologram
 	name = "hologram"
-	desc = "A holographic image of something"
+	desc = "A holographic image of something."
 	icon = 'icons/mob/AI.dmi'
 	icon_state = "holo2"
 	icon_living = "holo2"
 	icon_dead = null
 	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
+
+	blooded = FALSE
 
 
 /mob/living/simple_animal/hologram/death(var/gibbed = FALSE)
@@ -38,11 +40,6 @@
 /mob/living/simple_animal/hologram/examine(mob/user, var/size = "")
 	if(desc)
 		to_chat(user, desc)
-
-/mob/living/simple_animal/hologram/RangedAttack(var/atom/A)
-	if((istype(A, /obj) || isliving(A)) && A != src)
-		mimic(A.type)
-
 
 /mob/living/simple_animal/hologram/corgi
 	atom_to_mimic = /mob/living/simple_animal/corgi
@@ -81,9 +78,9 @@
 	..()
 	name = "[name] ([rand(1, 1000)])"
 	real_name = name
-	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
-	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
-	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
+	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
+	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
+	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
 
 /mob/living/simple_animal/hologram/advanced/Login()
 	..()

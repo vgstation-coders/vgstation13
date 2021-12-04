@@ -1,5 +1,8 @@
-/mob/living/silicon/robot/gib()
+/mob/living/silicon/robot/gib(animation = FALSE, meat = TRUE)
 	//robots don't die when gibbed. instead they drop their MMI'd brain
+	if(!isUnconscious())
+		forcesay("-")
+	disconnect_AI()
 	monkeyizing = TRUE
 	canmove = FALSE
 	icon = null
@@ -9,7 +12,7 @@
 	robogibs(loc, virus2)
 
 	if(mind) //To make sure we're gibbing a player, who knows
-		if(!suiciding) //I don't know how that could happen, but you can't be too sure
+		if(!mind.suiciding) //I don't know how that could happen, but you can't be too sure
 			score["deadsilicon"] += 1
 
 	living_mob_list -= src
@@ -17,6 +20,7 @@
 	qdel(src)
 
 /mob/living/silicon/robot/dust()
+	disconnect_AI()
 	death(1)
 	monkeyizing = TRUE
 	canmove = FALSE
@@ -36,6 +40,13 @@
 /mob/living/silicon/robot/death(gibbed)
 	if(stat == DEAD)
 		return
+	if(connected_ai)
+		if(connected_ai.explosive_cyborgs)
+			visible_message("<span class='notice'>You hear a soft beep.</span>")
+			spawn(10)
+				explosion(src.loc, 1, 4, 5, 6, whodunnit = src)
+				gib()
+				return
 	if(!gibbed)
 		emote("deathgasp", message = TRUE)
 	stat = DEAD
@@ -62,7 +73,7 @@
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
-		if(!suiciding)
+		if(!mind.suiciding)
 			score["deadsilicon"] += 1
 
 	sql_report_cyborg_death(src)

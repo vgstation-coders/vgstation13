@@ -6,7 +6,7 @@
 	var/obj/abstract/screen/using
 	var/obj/abstract/screen/inventory/inv_box
 
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "act_intent"
 	using.dir = SOUTHWEST
 	using.icon = ui_style
@@ -21,7 +21,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),1,ico.Height()/2,ico.Width()/2,ico.Height())
-	using = getFromPool(/obj/abstract/screen,src)
+	using = new /obj/abstract/screen(src)
 	using.name = "help"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -32,7 +32,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,ico.Height()/2,ico.Width(),ico.Height())
-	using = getFromPool(/obj/abstract/screen,src)
+	using = new /obj/abstract/screen(src)
 	using.name = "disarm"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -43,7 +43,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,1,ico.Width(),ico.Height()/2)
-	using = getFromPool(/obj/abstract/screen,src)
+	using = new /obj/abstract/screen(src)
 	using.name = "grab"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -54,7 +54,7 @@
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),1,1,ico.Width()/2,ico.Height()/2)
-	using = getFromPool(/obj/abstract/screen,src)
+	using = new /obj/abstract/screen(src)
 	using.name = "harm"
 	using.icon = ico
 	using.screen_loc = ui_acti
@@ -64,7 +64,7 @@
 
 //end intent small hud objects
 
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "mov_intent"
 	using.dir = SOUTHWEST
 	using.icon = ui_style
@@ -73,7 +73,7 @@
 	src.adding += using
 	move_intent = using
 
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "drop"
 	using.icon = ui_style
 	using.icon_state = "act_drop"
@@ -87,7 +87,7 @@
 	#define ui_swaphand_hologram2	"CENTER:16,SOUTH:5"
 	#define ui_equip_hologram		"CENTER:16,SOUTH:5"
 
-	using = getFromPool(/obj/abstract/screen/inventory)
+	using = new /obj/abstract/screen/inventory
 	using.name = "hand"
 	using.dir = SOUTH
 	using.icon = ui_style
@@ -96,7 +96,7 @@
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
-	using = getFromPool(/obj/abstract/screen/inventory)
+	using = new /obj/abstract/screen/inventory
 	using.name = "hand"
 	using.dir = SOUTH
 	using.icon = ui_style
@@ -109,14 +109,14 @@
 	#undef ui_swaphand_hologram1
 	#undef ui_swaphand_hologram2
 
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "equip"
 	using.icon = ui_style
 	using.icon_state = "act_equip"
 	using.screen_loc = ui_equip
 	src.adding += using
 /*
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "resist"
 	using.icon = ui_style
 	using.icon_state = "act_resist"
@@ -125,7 +125,7 @@
 	src.adding += using
 */
 
-	inv_box = getFromPool(/obj/abstract/screen/inventory)
+	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "back"
 	inv_box.dir = NORTH
 	inv_box.icon = ui_style
@@ -134,7 +134,7 @@
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
-	inv_box = getFromPool(/obj/abstract/screen/inventory)
+	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "i_clothing"
 	inv_box.dir = SOUTH
 	inv_box.icon = ui_style
@@ -144,25 +144,25 @@
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
-	mymob.throw_icon = getFromPool(/obj/abstract/screen)
+	mymob.throw_icon = new /obj/abstract/screen
 	mymob.throw_icon.icon = ui_style
 	mymob.throw_icon.icon_state = "act_throw_off"
 	mymob.throw_icon.name = "throw"
 	mymob.throw_icon.screen_loc = ui_drop_throw
 
-	mymob.healths = getFromPool(/obj/abstract/screen)
+	mymob.healths = new /obj/abstract/screen
 	mymob.healths.icon = ui_style
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
 
-	mymob.pullin = getFromPool(/obj/abstract/screen)
+	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = ui_style
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 
-	mymob.zone_sel = getFromPool(/obj/abstract/screen/zone_sel)
+	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = ui_style
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")

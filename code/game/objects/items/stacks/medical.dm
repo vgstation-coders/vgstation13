@@ -12,6 +12,9 @@
 	var/heal_burn = 0
 
 /obj/item/stack/medical/attack(mob/living/carbon/M as mob, mob/user as mob)
+	if(restraint_resist_time > 0)
+		if(restraint_apply_check(M, user))
+			return attempt_apply_restraints(M, user)
 
 	if(!istype(M))
 		to_chat(user, "<span class='warning'>\The [src] cannot be applied to [M]!</span>")
@@ -54,13 +57,15 @@
 		use(1)
 
 	M.updatehealth()
+
 /obj/item/stack/medical/bruise_pack
 	name = "roll of gauze"
 	singular_name = "gauze length"
 	desc = "Some sterile gauze to wrap around bloody stumps."
 	icon_state = "brutepack"
 	origin_tech = Tc_BIOTECH + "=1"
-	restraint_resist_time = 20 SECONDS
+	restraint_resist_time = 2 SECONDS
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/stack/medical/bruise_pack/bandaid
 	name = "small bandage"
@@ -68,6 +73,7 @@
 	icon_state = "bandaid"
 	amount = 1
 	max_amount = 1
+	restraint_resist_time = 1 SECONDS
 
 /obj/item/stack/medical/bruise_pack/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(..())
@@ -97,7 +103,7 @@
 										"<span class='notice'>You place a bandaid over \the [W.desc] on [M]'s [affecting.display_name].</span>")
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -128,7 +134,7 @@
 										"<span class='notice'>You salve the wounds on [M]'s [affecting.display_name].</span>" )
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -138,16 +144,16 @@
 	name = "\improper S'rendarr's Hand leaf"
 	singular_name = "S'rendarr's Hand leaf"
 	desc = "A poultice made of soft leaves that is rubbed on bruises."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "cabbage"
+	icon = 'icons/obj/hydroponics/shand.dmi'
+	icon_state = "pack"
 	heal_brute = 5
 
 /obj/item/stack/medical/ointment/tajaran
 	name = "\improper Messa's Tear petals"
 	singular_name = "Messa's Tear petals"
 	desc = "A poultice made of cold, blue petals that is rubbed on burns."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "ambrosiavulgaris"
+	icon = 'icons/obj/hydroponics/mtear.dmi'
+	icon_state = "pack"
 	heal_burn = 5
 
 
@@ -188,7 +194,7 @@
 				affecting.heal_damage(rand(heal_brute, heal_brute + 5), 0)
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -221,7 +227,7 @@
 				affecting.heal_damage(0, rand(heal_burn, heal_burn + 5))
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else

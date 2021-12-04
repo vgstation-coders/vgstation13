@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Title: Communications
 Used In File(s): /code/game/machinery/computers/communications.dm
 -->
@@ -15,7 +15,6 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 	{{if !data.is_ai}}
 	<div class="notice">Please remember to {{:helper.link('Log Out','locked',{'operation':'logout'},null,'fixed')}}</div>
 	{{/if}}
-	
 	<div class="item">
 		<h3>Emergency Shuttle:</h3>
 		{{if data.shuttle.eta}}
@@ -75,6 +74,22 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 			{{if data.str_security_level == "red" || data.str_security_level == "delta"}}
 				<div class="line">
 					{{:helper.link('Request Response Team','alert',{'operation':'emergency_screen'})}}
+				</div>
+			{{/if}}
+			{{if data.defcon_1_enabled}}
+				<div class="line">
+					<div class="notice">DEFCON-1 Biohazard Level 5 supplies	</div>
+					<i>The equipment will be transfered in any available spot adjacent to the console.</i> <br/>
+					Last shipment: {{:data.last_shipment_time}}, new supplies available at {{:data.next_shipment_time}}
+				</div>
+				<div class="line">
+					{{:helper.link('Request Medical Supplies','',{'operation':'request_supplies', 'supplies':'medical'})}}
+				</div>
+				<div class="line">
+					{{:helper.link('Request Engineering Supplies','',{'operation':'request_supplies', 'supplies':'engineering'})}}
+				</div>
+				<div class="line">
+					{{:helper.link('Request Weapons','',{'operation':'request_supplies', 'supplies':'weapons'})}}
 				</div>
 			{{/if}}
 		</div>

@@ -8,6 +8,7 @@
  *		Butt
  *		Tinfoil Hat
  *		Celtic Crown
+ *		Energy Dome
  */
 
 /*
@@ -27,7 +28,7 @@
 	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -63,6 +64,7 @@
 	name = "cake-hat"
 	desc = "It's tasty looking!"
 	icon_state = "cake0"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EYES
 	light_power = 0.5
@@ -114,9 +116,10 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushanka"
 	item_state = "ushanka"
-	flags = HIDEHAIRCOMPLETELY
+	flags = HIDEHEADHAIR
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
 	var/initial_icon_state = initial(icon_state)
@@ -136,6 +139,16 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
+	species_fit = list(INSECT_SHAPED)
+	armor = list(melee = 30, bullet = 15, laser = 25, energy = 10, bomb = 20, bio = 0, rad = 0)
+
+/obj/item/clothing/head/ushanka/hos
+	name = "head of security ushanka"
+	desc = "The armored ushanka of the head of security. You cannot bribe an officer of Nanotrasen."
+	icon_state = "ushankablack"
+	item_state = "ushankablack"
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+
 /*
  * Pumpkin head
  */
@@ -144,26 +157,34 @@
 	desc = "A jack o' lantern! Believed to ward off evil spirits."
 	icon_state = "hardhat0_pumpkin"//Could stand to be renamed
 	item_state = "hardhat0_pumpkin"
+	species_fit = list(INSECT_SHAPED)
 	_color = "pumpkin"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	var/brightness_on = 2 //luminosity when on
 	var/on = 0
 
-	attack_self(mob/user)
-		if(!isturf(user.loc))
-			to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
+/obj/item/clothing/head/pumpkinhead/attack_self(mob/user)
+	if(!isturf(user.loc))
+		to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
 
-			return
-		on = !on
-		icon_state = "hardhat[on]_[_color]"
-		item_state = "hardhat[on]_[_color]"
+		return
+	on = !on
+	icon_state = "hardhat[on]_[_color]"
+	item_state = "hardhat[on]_[_color]"
 
-		if(on)
-			set_light(brightness_on)
-		else
-			set_light(0)
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
 
+/obj/item/clothing/head/pumpkinhead/attackby(var/obj/item/I, var/mob/user)
+	..()
+	if(istype(I, /obj/item/stack/sheet/bone))
+		var/obj/item/stack/sheet/bone/B = I
+		if(B.use(6))
+			new /obj/structure/candybucket/candy_jack(src.loc)
+			qdel(src)
 /*
  * Kitty ears
  */
@@ -172,30 +193,51 @@
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
 	flags = FPRINT
-	var/haircolored = 1
+	var/haircolored = TRUE
+	var/cringe = FALSE
+	var/anime = FALSE
 	siemens_coefficient = 1.5
 
-/obj/item/clothing/head/kitty/cursed
-	canremove = 0
+/obj/item/clothing/head/kitty/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(L.is_wearing_item(src, slot_head))
+		if(cringe || Holiday == APRIL_FOOLS_DAY)
+			speech.message = tumblrspeech(speech.message)
+		if(anime || Holiday == APRIL_FOOLS_DAY)
+			speech.message = nekospeech(speech.message)
 
-/obj/item/clothing/head/kitty/collectable
-	desc = "A pair of black kitty ears. Meow!"
-	haircolored = 0
+/obj/item/clothing/head/kitty/equipped(var/mob/user, var/slot, hand_index = 0)
+	..()
+	if((haircolored) && (slot == slot_head))
+		update_icon(user)
 
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
-	if(!istype(user) || !haircolored)
+	if(!istype(user))
 		return
 	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
 	wear_override.Blend(rgb(user.my_appearance.r_hair, user.my_appearance.g_hair, user.my_appearance.b_hair), ICON_ADD)
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
 	wear_override.Blend(earbit, ICON_OVERLAY)
+	user.update_inv_head()
+
+/obj/item/clothing/head/kitty/collectable
+	desc = "A pair of black kitty ears. Meow!"
+	haircolored = FALSE
+
+/obj/item/clothing/head/kitty/anime
+	desc = "A pair of nekomimi. Nya!"
+	anime = TRUE
+
+/obj/item/clothing/head/kitty/anime/cursed
+	canremove = FALSE
+	cringe = TRUE
 
 /obj/item/clothing/head/butt
 	name = "butt"
 	desc = "So many butts, so little time."
 	icon_state = "butt"
 	item_state = "butt"
+	species_fit = list(INSECT_SHAPED)
 	flags = 0
 	force = 4.0
 	w_class = W_CLASS_TINY
@@ -218,6 +260,7 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"
@@ -244,9 +287,16 @@
 
 /obj/item/clothing/head/beret/sec/ocelot
 	name = "Ocelot's beret"
-	desc = "Ocelot's signature red beret"
+	desc = "Ocelot's signature red beret."
 
 /obj/item/clothing/head/beret/sec/ocelot/OnMobLife(var/mob/living/carbon/human/wearer)
 	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(5))
 			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
+
+/obj/item/clothing/head/energy_dome
+	name = "energy dome"
+	desc = "According to the manufacturer it was designed according to ancient ziggurat mound proportions used in votive worship. Like the mounds it collects energy and recirculates it. In this case the Dome collects energy that escapes from the crown of the human head and pushes it back into the medulla oblongata for increased mental energy."
+	icon_state = "energy_dome"
+	item_state = "energy_dome"
+	species_fit = list(INSECT_SHAPED)

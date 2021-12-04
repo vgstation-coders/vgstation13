@@ -157,7 +157,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Ensure the frequency is within bounds of what it should be sending/recieving at
 /proc/sanitize_frequency(var/f)
-	f = Clamp(round(f), 1201, 1599) // 120.1, 159.9
+	f = clamp(round(f), 1201, 1599) // 120.1, 159.9
 
 	if ((f % 2) == 0) //Ensure the last digit is an odd number
 		f += 1
@@ -248,15 +248,15 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
-//Last modified by Carn
-/mob/proc/rename_self(var/role, var/allow_numbers=0)
+//Also used for the screen alarm rename option
+/mob/proc/rename_self(var/role, var/allow_numbers=0, var/namepick_message = "You are a [role]. Would you like to change your name to something else?")
 	spawn(0)
 		var/oldname = real_name
 
 		var/newname
 
 		for(var/i=1,i<=3,i++)	//we get 3 attempts to pick a suitable name.
-			newname = input(src,"You are a [role]. Would you like to change your name to something else?", "Name change",oldname) as text
+			newname = input(src,namepick_message, "Name change",oldname) as text
 			newname = reject_bad_name(newname,allow_numbers)	//returns null if the name doesn't meet some basic requirements. Tidies up a few other things like bad-characters.
 
 			for(var/mob/living/M in player_list)
@@ -267,7 +267,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					break
 			if(newname)
 				break	//That's a suitable name!
-			to_chat(src, "Sorry, that [role]-name wasn't appropriate, please try another. It's possibly too long/short, has bad characters or is already taken.")
+			to_chat(src, "Sorry, that name wasn't appropriate, please try another. It's possibly too long/short, has bad characters or is already taken.")
 
 		if(!newname)	//we'll stick with the oldname then
 			return
@@ -275,6 +275,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		if(cmptext("ai",role))
 			if(isAI(src))
 				var/mob/living/silicon/ai/A = src
+				if(A.connected_robots.len) //let the borgs know what their master's new name is
+					for(var/mob/living/silicon/robot/robitt in A.connected_robots)
+						to_chat(robitt, "<span class='notice' style=\"font-family:Courier\">Notice: Linked AI [oldname] renamed to [newname].</span>")
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
 //				world << sound('sound/AI/newAI.ogg')
@@ -288,6 +291,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					A.aiPDA.name = newname + " (" + A.aiPDA.ownjob + ")"
 
 
+		to_chat(src, "<span class='notice'>You will now be known as [newname].</span>")
 		fully_replace_character_name(oldname,newname)
 
 
@@ -598,13 +602,13 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // returns turf relative to A offset in dx and dy tiles
 // bound to map limits
 /proc/get_offset_target_turf(atom/A, dx, dy)
-	var/x = Clamp(A.x + dx, 1, world.maxx)
-	var/y = Clamp(A.y + dy, 1, world.maxy)
+	var/x = clamp(A.x + dx, 1, world.maxx)
+	var/y = clamp(A.y + dy, 1, world.maxy)
 
 	return locate(x, y, A.z)
 
 //returns random gauss number
-proc/GaussRand(var/sigma)
+/proc/GaussRand(var/sigma)
   var/x,y,rsq
   do
     x=2*rand()-1
@@ -614,7 +618,7 @@ proc/GaussRand(var/sigma)
   return sigma*y*sqrt(-2*log(rsq)/rsq)
 
 //returns random gauss number, rounded to 'roundto'
-proc/GaussRandRound(var/sigma,var/roundto)
+/proc/GaussRandRound(var/sigma,var/roundto)
 	return round(GaussRand(sigma),roundto)
 
 //Step-towards method of determining whether one atom can see another. Similar to viewers()
@@ -676,7 +680,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	else
 		return get_step(ref, base_dir)
 
-/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10) //This is quite an ugly solution but i refuse to use the old request system.
+//if needs_item is 0 it won't need any item that existed in "holding" to finish
+/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
 	if(!user || !target)
 		return 0
 	var/user_loc = user.loc
@@ -709,7 +714,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
+		if ( user.loc != user_loc || target.loc != target_loc || (needs_item && (holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())) || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -730,7 +735,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	progress_bar.pixel_z = WORLD_ICON_SIZE
 	progress_bar.plane = HUD_PLANE
 	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
-	progress_bar.appearance_flags = RESET_COLOR
+	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	return progress_bar
 
 /proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
@@ -777,7 +782,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					var/image/target_progress_bar = targets[target_]
 					stop_progress_bar(user, target_progress_bar)
 				return FALSE
-		if(needhand && !user.do_after_hand_check(holding))
+		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))
 			for(var/target_ in targets)
 				var/image/target_progress_bar = targets[target_]
 				stop_progress_bar(user, target_progress_bar)
@@ -788,7 +793,43 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 	return TRUE
 
-/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
+
+// Returns TRUE if the checks passed
+/proc/do_after_default_checks(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	if(!user)
+		return FALSE
+	if(user.isStunned())
+		return FALSE
+	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
+	if(user_loc_to_check != user_original_location)
+		return FALSE
+	if(target.loc != target_original_location)
+		return FALSE
+	if(needhand)
+		if(originally_held_item)
+			if(!user.is_holding_item(originally_held_item))
+				return FALSE
+		else
+			if(user.get_active_hand())
+				return FALSE
+	return TRUE
+
+/**
+  * Used to delay actions.
+  *
+  * Given a mob, a target atom and a duration,
+  * returns TRUE if the mob wasn't interrupted and stayed
+  * at the same position for the specified duration.
+  * Arguments:
+  * * mob/user - the user who will see the progress bar
+  * * atom/target - the atom the progress bar will be attached to
+  * * delay - duration in deciseconds of the delay
+  * * numticks - how many times the failure conditions will be checked throughout the duration
+  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration
+  * * use_user_turf - if TRUE, the turf of the user is checked instead of its location
+  * * custom_checks - if specified, the return value of this callback (called every `delay/numticks` seconds) will determine whether the action succeeded
+  */
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
@@ -812,11 +853,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.appearance_flags = RESET_COLOR
-		//if(!barbar)
-			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
-			//barbar.pixel_y = 36
-	//var/oldstate
+			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	for (var/i = 1 to numticks)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
@@ -824,35 +861,18 @@ proc/GaussRandRound(var/sigma,var/roundto)
 				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
-				progbar.appearance_flags = RESET_COLOR
-			//oldstate = progbar.icon_state
+				progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
 		sleep(delayfraction)
-		//if(user.client && progbar.icon_state != oldstate)
-			//user.client.images.Remove(progbar)
-		var/user_loc_to_check
-		if(use_user_turf)
-			user_loc_to_check = get_turf(user)
+		var/success
+		if(custom_checks)
+			success = custom_checks.invoke(user, use_user_turf, Location, target, target_location, needhand, holding)
 		else
-			user_loc_to_check = user.loc
-		if(!user || user.isStunned() || !(user_loc_to_check == Location) || !(target.loc == target_location))
+			success = do_after_default_checks(user, use_user_turf, Location, target, target_location, needhand, holding)
+		if(!success)
 			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
-			return 0
-		if(needhand && !user.do_after_hand_check(holding))	//Sometimes you don't want the user to have to keep their active hand
-			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
+				stop_progress_bar(user, progbar)
 			return 0
 	if(user && user.client)
 		user.client.images -= progbar
@@ -864,14 +884,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	flick(icon_state, A)
 	sleep(time)
 	return 1
-
-//Takes: Anything that could possibly have variables and a varname to check.
-//Returns: 1 if found, 0 if not.
-/proc/hasvar(var/datum/A, var/varname)
-	if(A.vars.Find(lowertext(varname)))
-		return 1
-	else
-		return 0
 
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
@@ -964,25 +976,23 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/datum/coords/CR = new(x_pos+C.x_pos,y_pos+C.y_pos,z_pos+C.z_pos)
 	return CR
 
-proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
-	if(!original)
-		return null
-
-	var/obj/O = null
-
-	if(sameloc)
-		O=new original.type(original.loc)
-	else
-		O=new original.type(locate(0,0,0))
-
-	if(perfectcopy)
-		if((O) && (original))
-			for(var/V in original.vars - variables_not_to_be_copied)
-				O.vars[V] = original.vars[V]
-	return O
+// If you're looking at this proc and thinking "that's exactly what I need!"
+// then you're wrong and you need to take a step back and reconsider.
+/atom/movable/proc/DuplicateObject(var/location)
+	var/atom/movable/duplicate = new src.type(location)
+	duplicate.change_dir(dir)
+	duplicate.plane = plane
+	duplicate.layer = layer
+	duplicate.name = name
+	duplicate.desc = desc
+	duplicate.pixel_x = pixel_x
+	duplicate.pixel_y = pixel_y
+	duplicate.pixel_w = pixel_w
+	duplicate.pixel_z = pixel_z
+	return duplicate
 
 
-/area/proc/copy_contents_to(var/area/A , var/platingRequired = 0 )
+/area/proc/copy_contents_to(area/A , platingRequired = FALSE)
 	//Takes: Area. Optional: If it should copy to areas that don't have plating
 	//Returns: Nothing.
 	//Notes: Attempts to move the contents of one area to another area.
@@ -1027,8 +1037,6 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 		C.x_pos = (T.x - trg_min_x)
 		C.y_pos = (T.y - trg_min_y)
 
-	var/list/toupdate = new/list()
-
 	var/list/copiedobjs = list()
 
 	moving:
@@ -1037,96 +1045,45 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 			for (var/turf/B in refined_trg)
 				var/datum/coords/C_trg = refined_trg[B]
 				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
-
-					var/old_dir1 = T.dir
-					var/old_icon_state1 = T.icon_state
-					var/old_icon1 = T.icon
+					var/old_name = T.name
+					var/old_dir = T.dir
+					var/old_icon_state = T.icon_state
+					var/old_icon = T.icon
 
 					if(platingRequired)
 						if(istype(B, /turf/space))
 							continue moving
 
-					var/turf/X = B.ChangeTurf(T.type)
-					X.dir = old_dir1
-					X.icon_state = old_icon_state1
-					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
+					B.ChangeTurf(T.type)
+					B.name = old_name
+					B.dir = old_dir
+					B.icon_state = old_icon_state
+					B.icon = old_icon
 
-					var/list/objs = new/list()
-					var/list/newobjs = new/list()
-					var/list/mobs = new/list()
-					var/list/newmobs = new/list()
+					B.return_air().copy_from(T.return_air())
 
 					for(var/obj/O in T)
-
-						if(!istype(O,/obj))
-							continue
-
-						objs += O
-
-
-					for(var/obj/O in objs)
-						newobjs += DuplicateObject(O , 1)
-
-
-					for(var/obj/O in newobjs)
-						O.forceMove(X)
+						copiedobjs += O.DuplicateObject(B)
 
 					for(var/mob/M in T)
-
 						if(!M.can_shuttle_move())
 							continue
-						mobs += M
-
-					for(var/mob/M in mobs)
-						newmobs += DuplicateObject(M , 1)
-
-					for(var/mob/M in newmobs)
-						M.forceMove(X)
-
-					copiedobjs += newobjs
-					copiedobjs += newmobs
-
-
-
-					for(var/V in T.vars - variables_not_to_be_copied)
-						X.vars[V] = T.vars[V]
-
-//					var/area/AR = X.loc
-
-//					if(AR.dynamic_lighting)
-//						X.opacity = !X.opacity
-//						X.sd_SetOpacity(!X.opacity)			//TODO: rewrite this code so it's not messed by lighting ~Carn
-
-					toupdate += X
+						copiedobjs += M.DuplicateObject(B)
 
 					refined_src -= T
 					refined_trg -= B
 					continue moving
 
-
-
-
-	var/list/doors = new/list()
-
-	if(toupdate.len)
-		for(var/turf/simulated/T1 in toupdate)
-			for(var/obj/machinery/door/D2 in T1)
-				doors += D2
-			/*if(T1.parent)
-				SSair.groups_to_rebuild += T1.parent
-			else
-				SSair.mark_for_update(T1)*/
-
-	for(var/obj/O in doors)
-		O:update_nearby_tiles()
+	for(var/obj/machinery/door/new_door in copiedobjs)
+		new_door.update_nearby_tiles()
 
 	return copiedobjs
 
 //chances are 1:value. anyprob(1) will always return true
-proc/anyprob(value)
+/proc/anyprob(value)
 	return (rand(1,value)==value)
 
-proc/view_or_range(distance = world.view , center = usr , type)
+/proc/view_or_range(distance = world.view , center = usr , type)
 	switch(type)
 		if("view")
 			. = view(distance,center)
@@ -1134,7 +1091,7 @@ proc/view_or_range(distance = world.view , center = usr , type)
 			. = range(distance,center)
 	return
 
-proc/oview_or_orange(distance = world.view , center = usr , type)
+/proc/oview_or_orange(distance = world.view , center = usr , type)
 	switch(type)
 		if("view")
 			. = oview(distance,center)
@@ -1142,7 +1099,7 @@ proc/oview_or_orange(distance = world.view , center = usr , type)
 			. = orange(distance,center)
 	return
 
-proc/get_mob_with_client_list()
+/proc/get_mob_with_client_list()
 	var/list/mobs = list()
 	for(var/mob/M in mob_list)
 		if (M.client)
@@ -1170,6 +1127,35 @@ proc/get_mob_with_client_list()
 			return "right foot"
 		else
 			return zone
+
+/proc/limb_define_to_part_define(var/zone)
+	switch(zone)
+		if (LIMB_HEAD)
+			return HEAD
+		if (LIMB_CHEST)
+			return UPPER_TORSO
+		if (LIMB_GROIN)
+			return LOWER_TORSO
+		if (TARGET_MOUTH)
+			return MOUTH
+		if (TARGET_EYES)
+			return EYES
+		if (LIMB_RIGHT_HAND)
+			return HAND_RIGHT
+		if (LIMB_LEFT_HAND)
+			return HAND_LEFT
+		if (LIMB_LEFT_ARM)
+			return ARM_LEFT
+		if (LIMB_RIGHT_ARM)
+			return ARM_RIGHT
+		if (LIMB_LEFT_LEG)
+			return LEG_LEFT
+		if (LIMB_RIGHT_LEG)
+			return LEG_RIGHT
+		if (LIMB_LEFT_FOOT)
+			return FOOT_LEFT
+		if (LIMB_RIGHT_FOOT)
+			return FOOT_RIGHT
 
 /*
 	get_holder_at_turf_level(): Similar to get_turf(), will return the "highest up" holder of this atom, excluding the turf.
@@ -1220,35 +1206,48 @@ proc/get_mob_with_client_list()
 //Quick type checks for some tools
 var/global/list/common_tools = list(
 /obj/item/stack/cable_coil,
-/obj/item/weapon/wrench,
-/obj/item/weapon/weldingtool,
-/obj/item/weapon/screwdriver,
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wrench,
+/obj/item/tool/weldingtool,
+/obj/item/tool/screwdriver,
+/obj/item/tool/wirecutters,
 /obj/item/device/multitool,
-/obj/item/weapon/crowbar)
+/obj/item/tool/crowbar)
 
 /proc/is_surgery_tool(obj/item/W as obj)
 	return (	\
-	istype(W, /obj/item/weapon/scalpel)			||	\
-	istype(W, /obj/item/weapon/hemostat)		||	\
-	istype(W, /obj/item/weapon/retractor)		||	\
-	istype(W, /obj/item/weapon/cautery)			||	\
-	istype(W, /obj/item/weapon/bonegel)			||	\
-	istype(W, /obj/item/weapon/bonesetter)
+	istype(W, /obj/item/tool/scalpel)			||	\
+	istype(W, /obj/item/tool/hemostat)		||	\
+	istype(W, /obj/item/tool/retractor)		||	\
+	istype(W, /obj/item/tool/cautery)			||	\
+	istype(W, /obj/item/tool/bonegel)			||	\
+	istype(W, /obj/item/tool/bonesetter)
 	)
 
 //check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M, mob/U)
+/proc/can_operate(mob/living/carbon/M, mob/U, var/obj/item/tool) // tool arg only needed if you actually intend to perform surgery (and not for instance, just do an autopsy)
 	if(U == M)
 		return 0
+	var/too_bad = FALSE
 	if((ishuman(M) || isslime(M)) && M.lying)
 		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
 			return 1
-		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
+		if(iscultist(U) && locate(/obj/structure/cult/altar, M.loc))
 			return 1
+		if(locate(/obj/structure/bed/roller, M.loc))
+			too_bad = TRUE
+			if (prob(75))
+				return 1
 		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
-		if(T && !T.flipped && prob(66))
+		if(T && !T.flipped)
+			too_bad = TRUE
+			if (prob(66))
+				return 1
+
+	//if we failed when trying to use a table or roller bed, let's at least check if it was a valid surgery step
+	if (too_bad && tool)
+		if (do_surgery(M,U,tool,SURGERY_SUCCESS_NEVER))
 			return 1
+
 	return 0
 
 /*
@@ -1261,7 +1260,7 @@ var/list/WALLITEMS = list(
 	"/obj/machinery/newscaster", "/obj/machinery/firealarm", "/obj/structure/noticeboard", "/obj/machinery/door_control",
 	"/obj/machinery/computer/security/telescreen", "/obj/machinery/embedded_controller/radio/simple_vent_controller",
 	"/obj/item/weapon/storage/secure/safe", "/obj/machinery/door_timer", "/obj/machinery/flasher", "/obj/machinery/keycard_auth",
-	"/obj/structure/mirror", "/obj/structure/closet/fireaxecabinet", "obj/structure/sign", "obj/structure/painting"
+	"/obj/structure/mirror", "/obj/structure/fireaxecabinet", "obj/structure/sign", "obj/structure/painting"
 	)
 /proc/gotwallitem(loc, dir)
 	for(var/obj/O in loc)
@@ -1295,7 +1294,7 @@ var/list/WALLITEMS = list(
 					return 1
 	return 0
 
-proc/rotate_icon(file, state, step = 1, aa = FALSE)
+/proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	var/icon/base = icon(file, state)
 
 	var/w
@@ -1370,6 +1369,33 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 
 /mob/dview/send_to_future(var/duration)
 	return
+
+/mob/dview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
+	CRASH("Somebody called qdel on dview. That's extremely rude.")
+
+//Returns a list of everything target can see, taking into account its sight, but without being blocked by being inside an object.
+//No, view(client) does not work for this, despite what the Ref says.
+//This could be made into a define if you don't mind leaving tview_mob lying around. This could cause bugs though.
+/proc/tview(mob/target)
+	. = view(target.client?.view || world.view, setup_tview(target))
+	tview_mob.loc = null
+
+/proc/setup_tview(mob/target)
+	tview_mob.loc = get_turf(target)
+	tview_mob.sight = target.sight
+	tview_mob.see_in_dark = target.see_in_dark
+	tview_mob.see_invisible = target.see_invisible
+	tview_mob.see_infrared = target.see_infrared //I'm pretty sure we don't actually use this but might as well include it
+	return tview_mob
+
+//Aside from usage, this proc is the only difference between tview and dview.
+/mob/dview/tview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
+	CRASH("Somebody called qdel on tview. That's extremely rude.")
+
+//They SHOULD both be independent children of a common parent, but dview has been around much longer and I don't really want to change it
+var/mob/dview/tview/tview_mob = new()
 
 //Gets the Z level datum for this atom's Z level
 /proc/get_z_level(var/atom/A)
@@ -1558,6 +1584,9 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			colour += temp_col
 	return colour
 
+/proc/get_random_potion()	//Pulls up a random potion, excluding minor-types
+	return pick(subtypesof(/obj/item/potion) - /obj/item/potion/mutation)
+
 //We check if a specific game mode is currently undergoing.
 //First by checking if it is the current main mode,
 //Secondly by checking if it is part of a Mixed game mode.
@@ -1651,11 +1680,11 @@ Game Mode config tags:
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
-	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
-		C.output_to_special_tab(sane_msg)
+		C.output_to_special_tab(msg)
 
-/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+// This is awful and probably should be thrown away at some point.
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound, var/mob/firer)
 	var/turf/T = get_turf(source)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
@@ -1673,8 +1702,8 @@ Game Mode config tags:
 	projectile.original = target
 	projectile.target = U
 	projectile.shot_from = source
-	if(istype(source, /mob))
-		projectile.firer = source
+	projectile.firer = firer
+
 	projectile.current = T
 	projectile.starting = T
 	projectile.yo = U.y - T.y
@@ -1799,6 +1828,34 @@ Game Mode config tags:
 	else
 		return null
 
+/proc/IsRoundAboutToEnd()
+	//Is the round even already over?
+	if (ticker.current_state == GAME_STATE_FINISHED)
+		return TRUE
+
+	//Is the shuttle on its way to the station? or to centcomm after having departed from the station?
+	if(emergency_shuttle.online && emergency_shuttle.direction > 0)
+		return TRUE
+
+	//Is a nuke currently ticking down?
+	for (var/obj/machinery/nuclearbomb/the_bomba in nuclear_bombs)
+		if (the_bomba.timing)
+			return TRUE
+
+	//Is reality fucked?
+	if (universe.name in list("Hell Rising", "Supermatter Cascade"))
+		return TRUE
+
+	//Is some faction about to end the round?
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+	if (istype(dynamic_mode))
+		for (var/datum/faction/faction in dynamic_mode.factions)
+			if (faction.stage >= FACTION_ENDGAME)
+				return TRUE
+
+	//All is well
+	return FALSE
+
 //Ported from TG
 /proc/window_flash(client/C, ignorepref = FALSE)
     if(ismob(C))
@@ -1808,3 +1865,110 @@ Game Mode config tags:
     if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
+
+
+/proc/generate_radio_frequencies()
+	//1200-1600
+	var/list/taken_freqs = list()
+
+	for(var/i in freq_text)
+		var/freq_found = FALSE
+		while(freq_found != TRUE)
+			var/chosen_freq = rand(1201, 1599)
+			chosen_freq = sanitize_frequency(chosen_freq)
+			if(taken_freqs.Find(chosen_freq))
+				continue
+			taken_freqs.Add(chosen_freq)
+			freqs[i] = chosen_freq
+			world.log << "freq [i] is now [chosen_freq]"
+			freq_found = TRUE
+
+	freqtospan = list(
+		"[COMMON_FREQ]" = "commonradio",
+		"[SCI_FREQ]" = "sciradio",
+		"[MED_FREQ]" = "medradio",
+		"[ENG_FREQ]" = "engradio",
+		"[SUP_FREQ]" = "supradio",
+		"[SER_FREQ]" = "serradio",
+		"[SEC_FREQ]" = "secradio",
+		"[COMM_FREQ]" = "comradio",
+		"[AIPRIV_FREQ]" = "aiprivradio",
+		"[SYND_FREQ]" = "syndradio",
+		"[DSQUAD_FREQ]" = "dsquadradio",
+		"[RESPONSE_FREQ]" = "resteamradio",
+		"[RAID_FREQ]" = "raiderradio",
+	)
+
+	radiochannelsreverse = list(
+		"[DJ_FREQ]" = "DJ",
+		"[SYND_FREQ]" = "Syndicate",
+		"[RAID_FREQ]" = "Raider",
+		"[RESPONSE_FREQ]" = "Response Team",
+		"[SUP_FREQ]" = "Supply",
+		"[SER_FREQ]" = "Service",
+		"[SCI_FREQ]" = "Science",
+		"[MED_FREQ]" = "Medical",
+		"[COMM_FREQ]" = "Command",
+		"[ENG_FREQ]" = "Engineering",
+		"[SEC_FREQ]" = "Security",
+		"[DSQUAD_FREQ]" = "Deathsquad",
+		"[AIPRIV_FREQ]" = "AI Private",
+		"[COMMON_FREQ]" = "Common"
+	)
+
+	radiochannels = list(
+		"Common" = COMMON_FREQ,
+		"AI Private" = AIPRIV_FREQ,
+		"Deathsquad" = DSQUAD_FREQ,
+		"Security" = SEC_FREQ,
+		"Engineering" = ENG_FREQ,
+		"Command" = COMM_FREQ,
+		"Medical" = MED_FREQ,
+		"Science" = SCI_FREQ,
+		"Service" = SER_FREQ,
+		"Supply" = SUP_FREQ,
+		"Response Team" = RESPONSE_FREQ,
+		"Raider" = RAID_FREQ,
+		"Syndicate" = SYND_FREQ,
+		"DJ" = DJ_FREQ
+	)
+
+	stationchannels = list(
+	"Common" = COMMON_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SER_FREQ,
+	"Supply" = SUP_FREQ
+	)
+
+/proc/getviewsize(view)
+	if(isnum(view))
+		var/totalviewrange = (view < 0 ? -1 : 1) + 2 * view
+		return list(totalviewrange, totalviewrange)
+	else
+		var/list/viewrangelist = splittext(view,"x")
+		return list(text2num(viewrangelist[1]), text2num(viewrangelist[2]))
+
+/**
+ * Get a bounding box of a list of atoms.
+ *
+ * Arguments:
+ * - atoms - List of atoms. Can accept output of view() and range() procs.
+ *
+ * Returns: list(x1, y1, x2, y2)
+ */
+/proc/get_bbox_of_atoms(list/atoms)
+	var/list/list_x = list()
+	var/list/list_y = list()
+	for(var/_a in atoms)
+		var/atom/a = _a
+		list_x += a.x
+		list_y += a.y
+	return list(
+		min(list_x),
+		min(list_y),
+		max(list_x),
+		max(list_y))

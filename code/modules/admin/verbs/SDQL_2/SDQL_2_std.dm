@@ -182,3 +182,9 @@
 
 /proc/_list_swap(var/list/L, var/Index1, var/Index2)
 	L.Swap(Index1, Index2)
+
+/proc/_winset(player, control_id, params)
+	winset(player, control_id, params)
+
+/proc/_winget(player, control_id, params)
+	return winget(player, control_id, params)

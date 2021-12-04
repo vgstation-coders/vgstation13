@@ -18,17 +18,19 @@
 					alien = IS_VOX
 				if(/datum/species/plasmaman)
 					alien = IS_PLASMA
+				if(/datum/species/grey)
+					alien = IS_GREY
 		reagents.metabolize(src,alien)
 
 	if(status_flags & GODMODE)
 		return 0 //Godmode. This causes jittering and other variables to never go down but whatever.
-
-	var/total_plasmaloss = 0
-	for(var/obj/item/I in src)
-		if(I.contaminated && !(species.flags & PLASMA_IMMUNE))
-			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
-		I.OnMobLife(src)
-	adjustToxLoss(total_plasmaloss)
+	if(!(species.flags & PLASMA_IMMUNE))
+		var/total_plasmaloss = 0
+		for(var/obj/item/I in src)
+			if(I.contaminated)
+				total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
+			I.OnMobLife(src)
+		adjustToxLoss(total_plasmaloss)
 
 	if(species.flags & REQUIRE_LIGHT)
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing
@@ -42,28 +44,14 @@
 		if(species.flags & IS_PLANT)
 			if(nutrition > 500)
 				nutrition = 500
-			if(light_amount >= 3 && !reagents.has_reagent(HYPERZINE)) //If there's enough light, and you do not have hyperzine in body, heal
+			if(light_amount >= 3 && !reagents.has_any_reagents(list(HYPERZINE,PLANTBGONE))) //If there's enough light, you do not have hyperzine in body, and you don't have plant-b-gone inside you, heal
 				adjustBruteLoss(-(light_amount))
 				adjustToxLoss(-(light_amount))
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
 
-	if(species.flags & REQUIRE_DARK && !(head && head.islightshielded()))
-		var/light_amount = 0
-		if(isturf(loc))
-			var/turf/T = loc
-			light_amount = T.get_lumcount() * 10
-
-		nutrition -= -3+light_amount
-		pain_shock_stage += -3+light_amount
-
-		if(species.flags & IS_PLANT)
-			if(nutrition > 500)
-				nutrition = 500
-			if(!reagents.has_reagent(HYPERZINE))
-				adjustBruteLoss(-10+light_amount)
-				adjustToxLoss(-10+light_amount)
-				adjustOxyLoss(-10+light_amount)
+	if(isslimeperson(src) && reagents.total_volume > 10)
+		blend_multicolor_skin(get_weighted_reagent_color(reagents), min(0.5, (reagents.total_volume / 1000)), 1)
 
 	if(dna && dna.mutantrace == "shadow")
 		var/light_amount = 0
@@ -112,8 +100,8 @@
 			nutrition = OVEREAT_THRESHOLD
 	else
 		if(overeatduration > 1)
-			if(M_OBESITY in mutations)
-				overeatduration -= 1 //Those with obesity gene take twice as long to unfat
+			if(M_FAT in mutations)
+				overeatduration -= 1 //Those already fat take twice as long to unfat
 			else
 				overeatduration -= 2
 
@@ -129,7 +117,7 @@
 			sleeping += 1
 			Paralyse(5)
 
-	confused = max(0, confused - 1)
+	remove_confused(1)
 	//Decrement dizziness counter, clamped to 0
 	if(resting)
 		dizziness = max(0, dizziness - 15)
@@ -143,3 +131,16 @@
 	handle_trace_chems()
 
 	updatehealth()
+
+//Color as text in hex, weight for the color we're adding should be < 1
+/mob/living/carbon/human/proc/blend_multicolor_skin(var/color, var/weight = 0.5, var/updatehair = 0)
+	var/list/colors = GetHexColors(color)
+	multicolor_skin_r = round((1 - weight) * multicolor_skin_r + weight * colors[1])
+	multicolor_skin_g = round((1 - weight) * multicolor_skin_g + weight * colors[2])
+	multicolor_skin_b = round((1 - weight) * multicolor_skin_b + weight * colors[3])
+	update_body()
+	if(updatehair)
+		my_appearance.r_hair = round(multicolor_skin_r * 0.8)
+		my_appearance.g_hair = round(multicolor_skin_g * 0.8)
+		my_appearance.b_hair = round(multicolor_skin_b * 0.8)
+		update_hair()

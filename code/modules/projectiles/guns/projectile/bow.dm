@@ -252,7 +252,7 @@
 			return
 	else if(iswelder(W))
 		if(buildstate == 1)
-			var/obj/item/weapon/weldingtool/T = W
+			var/obj/item/tool/weldingtool/T = W
 			if(T.remove_fuel(0,user))
 				if(!src || !T.isOn()) return
 				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
@@ -296,7 +296,7 @@
 			else
 				to_chat(user, "<span class='notice'>You need at least three plastic sheets to complete this task.</span>")
 			return*/
-	else if(istype(W,/obj/item/weapon/screwdriver))
+	else if(W.is_screwdriver(user))
 		if(buildstate == 5)
 			to_chat(user, "<span class='notice'>You secure the crossbow's various parts.</span>")
 			new /obj/item/weapon/crossbow(get_turf(src))

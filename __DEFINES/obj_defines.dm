@@ -32,3 +32,13 @@ var/list/qualityByString = list(
 // If "IGNORE" is higher than "SHIELD", then the thrown item will always pass.
 #define IGNORE_SOME_SHIELDS 1
 #define SHIELD_ADVANCED 2
+
+//Glue states
+#define GLUE_STATE_NONE 0
+#define GLUE_STATE_TEMP 1
+#define GLUE_STATE_PERMA 2
+
+// Spawners
+
+#define SPAWN_ON_TURF "turf"
+#define SPAWN_ON_LOC "loc"

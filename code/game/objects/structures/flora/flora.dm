@@ -13,7 +13,7 @@
 
 /obj/structure/flora/attackby(var/obj/item/I, var/mob/user, params)
 	if(shovelaway && isshovel(I))
-		to_chat(user,"<span class='notice'>You clear away \the [src]</span>")
+		to_chat(user,"<span class='notice'>You clear away \the [src].</span>")
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		qdel(src)
 		return 1
@@ -41,8 +41,8 @@
 
 			var/clamp_x = clicked.Width() / 2
 			var/clamp_y = clicked.Height() / 2
-			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)+(((((clicked.Width()/32)-1)*16)*PIXEL_MULTIPLIER))
-			O.pixel_y = (Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)+((((clicked.Height()/32)-1)*16)*PIXEL_MULTIPLIER))-(5*PIXEL_MULTIPLIER)
+			O.pixel_x = clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)+(((((clicked.Width()/32)-1)*16)*PIXEL_MULTIPLIER))
+			O.pixel_y = (clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)+((((clicked.Height()/32)-1)*16)*PIXEL_MULTIPLIER))-(5*PIXEL_MULTIPLIER)
 			overlays += O
 			to_chat(user, "You hang \the [I] on \the [src].")
 			return 1
@@ -84,6 +84,7 @@
 	var/const/randomize_on_creation = 1
 	var/const/log_type = /obj/item/weapon/grown/log/tree
 	var/holo = FALSE
+	var/image/transparent
 
 /obj/structure/flora/tree/New()
 	..()
@@ -109,6 +110,44 @@
 	var/rangevalue = 0.1 //Range over which the values spread. We don't want it to collide with "true" layer differences
 
 	layer += rangevalue * (1 - (y + 0.5 * (x & 1)) / world.maxy)
+
+	update_transparency()
+
+	for(var/turf/T in circlerange(src,2))
+		if(T.y > y)
+			T.register_event(/event/entered, src, .proc/give_transparency)
+			T.register_event(/event/exited, src, .proc/remove_transparency)
+
+
+/obj/structure/flora/tree/Destroy()
+	for(var/turf/T in circlerange(src,2))
+		if(T.y > y)
+			T.unregister_event(/event/entered, src, .proc/give_transparency)
+			T.unregister_event(/event/exited, src, .proc/remove_transparency)
+	..()
+
+/obj/structure/flora/tree/proc/update_transparency()
+	transparent = image(icon,src,icon_state)
+	transparent.color = "[color ? color : "#FFFFFF"]"+"7F"
+	transparent.override = TRUE
+
+/obj/structure/flora/tree/proc/give_transparency(mover, location, oldloc)
+	if(!ismob(mover))
+		return
+	var/mob/M = mover
+	if(!M.client)
+		return
+	var/client/C = M.client
+	C.images += transparent
+
+/obj/structure/flora/tree/proc/remove_transparency(mover, location, newloc)
+	if(!ismob(mover))
+		return
+	var/mob/M = mover
+	if(!M.client)
+		return
+	var/client/C = M.client
+	C.images -= transparent
 
 /obj/structure/flora/tree/examine(mob/user)
 	.=..()
@@ -191,6 +230,7 @@
 /obj/structure/flora/tree/pine/New()
 	..()
 	icon_state = "pine_[rand(1, 3)]"
+	update_transparency()
 
 /obj/structure/flora/tree/pine/xmas
 	name = "xmas tree"
@@ -203,6 +243,8 @@
 /obj/structure/flora/tree/pine/xmas/New()
 	..()
 	icon_state = "pine_c"
+	update_transparency()
+
 
 /obj/structure/flora/tree/dead
 	name = "dead tree"
@@ -215,11 +257,13 @@
 /obj/structure/flora/tree/dead/New()
 	..()
 	icon_state = "tree_[rand(1, 6)]"
+	update_transparency()
 
 /obj/structure/flora/tree_stump
 	name = "tree stump"
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_stump"
+	shovelaway = TRUE
 
 //grass
 /obj/structure/flora/grass
@@ -336,7 +380,7 @@
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"
 	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "claypot"
 	anchored = 0
 	density = FALSE
@@ -348,8 +392,8 @@
 		to_chat(user, "<span class='info'>You can see [plant_name] planted in it.</span>")
 
 /obj/structure/flora/pottedplant/claypot/attackby(var/obj/item/O,var/mob/user)
-	if(istype(O,/obj/item/weapon/wrench))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(O.is_wrench(user))
+		O.playtoolsound(loc, 50)
 		if(do_after(user, src, 30))
 			anchored = !anchored
 			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
@@ -382,6 +426,7 @@
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "firstbush_1"
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/ausbushes/New()
 	..()
@@ -496,7 +541,7 @@
 //and now these defines
 /obj/structure/flora/rock
 	name = "rock"
-	desc = "a rock"
+	desc = "A rock."
 	icon_state = "rock1"
 	icon = 'icons/obj/flora/rocks.dmi'
 	anchored = 1

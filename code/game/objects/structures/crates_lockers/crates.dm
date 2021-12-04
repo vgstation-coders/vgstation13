@@ -122,21 +122,21 @@
 	var/target_temp = T0C - 40
 	var/cooling_power = 40
 
-	return_air()
-		var/datum/gas_mixture/gas = (..())
-		if(!gas)
-			return null
-		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
-		newgas.copy_from(gas)
-		if(newgas.temperature <= target_temp)
-			return
+/obj/structure/closet/crate/freezer/return_air()
+	var/datum/gas_mixture/gas = (..())
+	if(!gas)
+		return null
+	var/datum/gas_mixture/newgas = new/datum/gas_mixture()
+	newgas.copy_from(gas)
+	if(newgas.temperature <= target_temp)
+		return
 
-		if((newgas.temperature - cooling_power) > target_temp)
-			newgas.temperature -= cooling_power
-		else
-			newgas.temperature = target_temp
-		newgas.update_values()
-		return newgas
+	if((newgas.temperature - cooling_power) > target_temp)
+		newgas.temperature -= cooling_power
+	else
+		newgas.temperature = target_temp
+	newgas.update_values()
+	return newgas
 
 /obj/structure/closet/crate/freezer/surgery
 	desc = "A freezer specifically designed to store organic material."
@@ -155,8 +155,8 @@
 	icon_closed = "largebin"
 
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(iswrench(W) && wrenchable())
-        return wrenchAnchor(user)
+    if(W.is_wrench(user) && wrenchable())
+        return wrenchAnchor(user, W)
     ..()
 
 /obj/structure/closet/crate/bin/wrenchable()
@@ -220,8 +220,8 @@
 	emag = "largebinemag"
 
 /obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(iswrench(W) && wrenchable())
-        return wrenchAnchor(user)
+    if(W.is_wrench(user) && wrenchable())
+        return wrenchAnchor(user, W)
     ..()
 
 /obj/structure/closet/crate/secure/bin/wrenchable()
@@ -286,7 +286,7 @@
 /obj/structure/closet/crate/secure/anti_tamper/Destroy()
 	if(locked)
 		visible_message("<span class = 'warning'>Something bursts open from within \the [src]!</span>")
-		var/datum/effect/effect/system/smoke_spread/chem/S = new //Surprise!
+		var/datum/effect/system/smoke_spread/chem/S = new //Surprise!
 		S.attach(get_turf(src))
 		S.chemholder.reagents.add_reagent(CAPSAICIN, 40)
 		S.chemholder.reagents.add_reagent(CONDENSEDCAPSAICIN, 16)
@@ -402,9 +402,9 @@
 
 /obj/structure/closet/crate/rcd/New()
 	..()
-	new /obj/item/weapon/rcd_ammo(src)
-	new /obj/item/weapon/rcd_ammo(src)
-	new /obj/item/weapon/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
 	new /obj/item/device/rcd/matter/engineering(src)
 
 /obj/structure/closet/crate/radiation/New()
@@ -480,9 +480,10 @@
 	AM.forceMove(src)
 	return 1
 
-/obj/structure/closet/crate/attack_hand(mob/user as mob)
+/obj/structure/closet/crate/attack_hand(var/mob/user)
 	if(!Adjacent(user))
 		return
+	add_fingerprint(user)
 	if(opened)
 		close()
 	else
@@ -536,7 +537,7 @@
 	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
 		togglelock(user)
 		return
-	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
+	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
 		remove_lock(user)
 		return
 	return ..()
@@ -606,10 +607,10 @@
 			if(user.drop_item(W, src.loc))
 				to_chat(user, "<span class='notice'>You attach [W] to [src].</span>")
 			return
-	else if(iswirecutter(W))
+	else if(W.is_wirecutter(user))
 		if(rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
-			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			W.playtoolsound(loc, 100)
 			rigged = 0
 			return
 	else if(!place(user, W))
@@ -674,7 +675,7 @@
 /obj/structure/closet/crate/secure/weapon/experimental/New()
 	..()
 	if(!chosen_set)
-		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell")
+		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell", "clown")
 
 	switch(chosen_set)
 		if("ricochet")
@@ -721,6 +722,13 @@
 			new/obj/item/clothing/head/radiation(src)
 			new/obj/item/clothing/shoes/magboots(src)
 			new/obj/item/weapon/gun/gravitywell(src)
+		if("clown")
+			new/obj/item/clothing/under/clownpsyche(src)
+			new/obj/item/clothing/mask/gas/clownmaskpsyche(src)
+			new/obj/item/clothing/shoes/clownshoespsyche(src)
+			new/obj/item/weapon/storage/backpack/clownpackpsyche(src)
+			new/obj/item/weapon/gun/energy/laser/rainbow(src)
+			new/obj/item/weapon/gun/energy/laser/rainbow(src)
 
 /obj/structure/closet/crate/secure/weapon/experimental/ricochet
 	chosen_set = "ricochet"

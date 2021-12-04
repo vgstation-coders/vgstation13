@@ -1,6 +1,10 @@
-/obj/item/weapon/storage/box/syndicate/New()
+/obj/item/weapon/storage/box/syndicate/New(var/loc, var/list/conditions, var/forced_bundle)
 	..()
-	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+	var/tagname
+	if(!forced_bundle)
+		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 25, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 25, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100, "clown" = 50, "druid" = 50, "actor" = 100, "jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50))
+	else
+		tagname = forced_bundle
 
 	switch (tagname)
 		if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -26,10 +30,10 @@
 			new /obj/item/clothing/head/helmet/space/syndicate(src)
 
 		if("guns")//13+4+6+4=27
-			new /obj/item/weapon/gun/projectile(src)
+			new /obj/item/weapon/gun/projectile/revolver(src)
 			new /obj/item/ammo_storage/box/a357(src)
 			new /obj/item/weapon/card/emag(src)
-			new /obj/item/weapon/plastique(src)
+			new /obj/item/weapon/c4(src)
 
 		if("murder")//8+6+6+2+4=26
 			new /obj/item/weapon/melee/energy/sword(src)
@@ -72,7 +76,7 @@
 			new /obj/item/weapon/soap/syndie(src)
 			new /obj/item/device/chameleon(src)
 			new /obj/item/device/encryptionkey/syndicate/hacked(src)
-			new /obj/item/weapon/plastique(src)
+			new /obj/item/weapon/c4(src)
 
 		if("psycho")//1+1+5+2+6+(fireaxe, 6?)+2=23
 			new /obj/item/clothing/suit/raincoat(src)
@@ -118,16 +122,22 @@
 			new /obj/item/clothing/gloves/red(src)
 			new /obj/item/clothing/accessory/storage/bandolier(src)
 
-		if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
-			new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
-			new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
-			new /obj/item/weapon/dnainjector/nofail/telemut(src)
-			new /obj/item/weapon/dnainjector/nofail/jumpy(src)
-			new /obj/item/weapon/spellbook/oneuse/bound_object(src)
-			new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
-			new /obj/item/clothing/head/sith(src)
-			new /obj/item/clothing/suit/sith(src)
-			new /obj/item/clothing/shoes/sandal(src)
+		if ("sith")
+			if("plasmaman" in conditions) //General Veers, you're too close to me
+				new /obj/item/weapon/melee/energy/sword/red(src)
+				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
+				new /obj/item/clothing/head/helmet/space/plasmaman/sith(src)
+				new /obj/item/clothing/suit/space/plasmaman/sith(src)
+			else // It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
+				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
+				new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
+				new /obj/item/weapon/dnainjector/nofail/telemut(src)
+				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
+				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
+				new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
+				new /obj/item/clothing/head/sith(src)
+				new /obj/item/clothing/suit/sith(src)
+				new /obj/item/clothing/shoes/sandal(src)
 
 		if("anarchist")//14+14+6=34, plus molotovs
 			new /obj/item/weapon/implanter/traitor(src)
@@ -165,7 +175,60 @@
 			new /obj/item/weapon/vinyl/scotland(src)
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
 
+		if("clown") //4 + 4 + 6 + 14 + 6 + ? = 34?
+			new /obj/item/weapon/invisible_spray/permanent(src)
+			new /obj/item/weapon/glue(src)
+			new /obj/item/weapon/glue(src)
+			new /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox(src)
+			new /obj/item/weapon/dnainjector/nofail/clumsymut(src)
+			for(var/i = 1 to 7)
+				new /obj/item/toy/balloon/long/living(src)
+			new /obj/item/weapon/spellbook/oneuse/shoesnatch(src)
+
+		if("druid")	//bear*viscerator to the power of carp
+			var/list/druidSummon = list(
+					/obj/item/weapon/grenade/spawnergrenade/spesscarp,
+					/obj/item/weapon/grenade/spawnergrenade/beenade,
+					/obj/item/weapon/grenade/spawnergrenade/bearnade
+					)
+			for(var/i = 1 to 6)
+				var/obj/item/dS = pick(druidSummon)
+				new dS(src)
+				new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos(src)
+			new /obj/item/clothing/suit/storage/wintercoat/druid(src)
+
+		if("actor")	//6*5 + 1 + 5 + 2 + 6 + mask = 44^mask
+			for(var/i = 1 to 5)
+				new /obj/item/device/reportintercom(src)
+			new /obj/item/device/megaphone/madscientist(src)
+			new /obj/item/clothing/mask/gas/voice(src)
+			new /obj/item/weapon/card/id/syndicate(src)
+			new /obj/item/clothing/mask/morphing/amorphous(src)
+			new /obj/item/device/chameleon(src)
+
+
+		if("jackpot") //14*2 = 28
+			new /obj/item/weapon/storage/box/syndicate(src)
+			new /obj/item/weapon/storage/box/syndicate(src)
+
+		if("Eugenics")
+			new /obj/item/weapon/dnainjector/nofail/hulkmut(src)
+			new /obj/item/weapon/dnainjector/nofail/xraymut(src)
+			new /obj/item/weapon/dnainjector/nofail/telemut(src)
+			new /obj/item/weapon/dnainjector/nofail/nobreath(src)
+			new /obj/item/weapon/dnainjector/nofail/regenerate(src)
+			new /obj/item/weapon/dnainjector/nofail/runfast(src)
+			new /obj/item/weapon/dnainjector/nofail/jumpy(src)
+			new /obj/item/weapon/dnainjector/nofail/strong(src)
+
+		if("Alchemist")
+			new /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle(src)
+			new /obj/item/weapon/storage/bag/potion/lesser_bundle(src)
+			new /obj/item/weapon/storage/box/mystery_vial(src)
+			new /obj/item/weapon/storage/box/mystery_vial(src)
+
 	tag = tagname
+
 
 
 /obj/item/weapon/storage/box/syndie_kit
@@ -249,7 +312,7 @@
 /obj/item/weapon/storage/box/syndie_kit/boolets
 	name = "Shotgun shells"
 
-/obj/item/weapon/storage/box/syndie_kit/greytide/New()
+/obj/item/weapon/storage/box/syndie_kit/boolets/New()
 	..()
 	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
 	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
@@ -266,14 +329,14 @@
 	new /obj/item/ammo_storage/speedloader/a357(src)
 	return
 
-obj/item/weapon/storage/box/syndie_kit/cheaptide
+/obj/item/weapon/storage/box/syndie_kit/cheaptide
 	name = "box (CT)"
 
 /obj/item/weapon/storage/box/syndie_kit/cheaptide/New()
 	..()
 	new /obj/item/weapon/implanter/traitor(src)
 	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
-	
+
 /obj/item/weapon/storage/box/syndie_kit/flaregun
 	name = "box (modified flare gun)"
 
@@ -336,3 +399,129 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/glue(src)
 	return
+
+
+//Syndicate Experimental Gear
+//Contains unique gear not found anywhere else
+/obj/item/weapon/storage/box/syndicate_experimental/New()
+	..()
+	var/selection = pick("damocles", "bomber vest", "bike horn")
+	switch(selection)
+		if("damocles")
+			new /obj/item/weapon/damocles(src)
+		if("bomber vest")
+			new /obj/item/clothing/suit/bomber_vest(src)
+		if("bike horn")
+			new /obj/item/weapon/bikehorn/syndicate(src)
+
+/obj/item/weapon/storage/box/syndie_kit/cratesender
+	name = "box (CS)"
+
+/obj/item/weapon/storage/box/syndie_kit/cratesender/New()
+	..()
+	new /obj/item/device/telepad_beacon(src)
+	new /obj/item/weapon/rcs/salvage/syndicate(src)
+
+
+//Elite Syndicate Bundles
+//for all of the team bundles
+
+/obj/item/weapon/storage/box/syndie_kit/sniper
+	name = "Sniper"
+
+/obj/item/weapon/storage/box/syndie_kit/sniper/New()
+	..()
+	new /obj/item/device/radio/headset/headset_earmuffs/syndie(src)
+	new /obj/item/weapon/gun/projectile/hecate(src)
+	new /obj/item/clothing/accessory/storage/webbing(src)
+	new /obj/item/ammo_storage/box/BMG50(src)
+	new /obj/item/ammo_storage/box/BMG50(src)
+	new /obj/item/ammo_storage/box/BMG50(src)
+	new /obj/item/clothing/glasses/thermal/syndi(src)
+
+/obj/item/weapon/storage/box/syndie_kit/spotter
+	name = "Spotter"
+
+/obj/item/weapon/storage/box/syndie_kit/spotter/New()
+	..()
+	new /obj/item/device/radio/headset/headset_earmuffs/syndie(src)
+	new /obj/item/binoculars(src)
+	new /obj/item/weapon/gun/projectile/deagle/camo(src)
+	new /obj/item/clothing/accessory/holster/handgun(src)
+	new /obj/item/ammo_storage/box/a50(src)
+	new /obj/item/clothing/glasses/thermal/syndi(src)
+
+/obj/item/weapon/storage/box/syndie_kit/scammer
+	name = "Legitimate Businessman"
+
+/obj/item/weapon/storage/box/syndie_kit/scammer/New()
+	..()
+	new /obj/item/clothing/mask/gas/voice(src)
+	new /obj/item/weapon/storage/briefcase/false_bottomed/smg(src)
+	new /obj/item/clothing/under/chameleon(src)
+	new /obj/item/clothing/shoes/syndigaloshes(src)
+	new /obj/item/weapon/card/id/syndicate(src)
+	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
+	new /obj/item/device/reportintercom(src)
+	dispense_cash(10000, src)
+
+/obj/item/weapon/storage/box/syndie_kit/shootershotty
+	name = "Shotgun"
+
+/obj/item/weapon/storage/box/syndie_kit/shootershotty/New()
+	..()
+	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
+	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/clothing/gloves/neorussian/fingerless(src)
+	new /obj/item/clothing/under/sl_suit/armored(src)
+	new /obj/item/clothing/suit/armor/hos/jensen(src)
+	new /obj/item/clothing/glasses/sunglasses/prescription(src)
+	new /obj/item/clothing/head/beanie/black(src)
+	new /obj/item/clothing/accessory/storage/bandolier(src)
+	new /obj/item/weapon/gun/projectile/shotgun/pump/combat(src)
+	new /obj/item/weapon/storage/box/buckshotshells(src)
+	new /obj/item/weapon/storage/box/buckshotshells(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+
+/obj/item/weapon/storage/box/syndie_kit/shooteruzis
+	name = "Dual Uzis"
+
+/obj/item/weapon/storage/box/syndie_kit/shooteruzis/New()
+	..()
+	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
+	new /obj/item/clothing/shoes/combat(src)
+	new /obj/item/clothing/gloves/neorussian/fingerless(src)
+	new /obj/item/clothing/under/syndicate(src)
+	new /obj/item/clothing/suit/armor/hos/jensen(src)
+	new /obj/item/clothing/glasses/sunglasses/prescription(src)
+	new /obj/item/clothing/head/soft/black(src)
+	new /obj/item/clothing/accessory/storage/webbing(src)
+	new /obj/item/weapon/gun/projectile/automatic/microuzi(src)
+	new /obj/item/weapon/gun/projectile/automatic/microuzi(src)
+	new /obj/item/ammo_storage/box/c9mm(src)
+	new /obj/item/ammo_storage/box/c9mm(src)
+	new /obj/item/ammo_storage/box/c9mm(src)
+	new /obj/item/ammo_storage/box/c9mm(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+
+/obj/item/weapon/storage/box/syndicate_team/New()
+	..()
+	var/team_kit = pick("sniperspotter", "scammers", "workplaceshooter")
+	switch(team_kit)
+		if("sniperspotter")
+			new /obj/item/weapon/storage/box/syndie_kit/sniper(src)
+			new /obj/item/weapon/storage/box/syndie_kit/spotter(src)
+
+		if("scammers")
+			new /obj/item/weapon/storage/box/syndie_kit/scammer(src)
+			new /obj/item/weapon/storage/box/syndie_kit/scammer(src)
+
+		if("workplaceshooter")
+			new /obj/item/weapon/storage/box/syndie_kit/shootershotty(src)
+			new /obj/item/weapon/storage/box/syndie_kit/shooteruzis(src)

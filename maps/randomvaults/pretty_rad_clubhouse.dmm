@@ -1,0 +1,66 @@
+"a" = (/turf/space,/area)
+"b" = (/obj/item/clothing/head/welding,/obj/item/clothing/under/rank/mechanic,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"c" = (/obj/structure/curtain/open/shower,/obj/machinery/shower{dir = 8},/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"d" = (/turf/simulated/wall,/area/vault/mechclubhouse)
+"e" = (/obj/structure/bedsheetbin,/obj/item/clothing/suit/storage/wintercoat/engineering/mechanic,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"f" = (/obj/machinery/light{dir = 4},/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"g" = (/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"h" = (/obj/structure/closet/crate/flatpack/brewer,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"i" = (/obj/structure/plasticflaps/mining,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"j" = (/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"k" = (/obj/structure/catwalk,/obj/structure/catwalk,/turf/simulated/floor/plating/deck,/area/vault/mechclubhouse)
+"l" = (/obj/structure/flora/pottedplant{tag = "icon-plant-22"; icon_state = "plant-22"},/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"m" = (/obj/structure/sign/parking,/turf/simulated/wall,/area/vault/mechclubhouse)
+"n" = (/obj/item/weapon/storage/toolbox/electrical{pixel_y = -8},/obj/item/weapon/storage/toolbox/mechanical{pixel_y = 8},/obj/item/weapon/storage/belt,/obj/structure/table,/obj/item/device/multitool,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"o" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"p" = (/obj/structure/catwalk,/turf/space,/area/vault/mechclubhouse)
+"q" = (/obj/machinery/vending/mining,/obj/structure/catwalk,/turf/space,/area/vault/mechclubhouse)
+"r" = (/obj/item/stack/sheet/metal/bigstack,/obj/item/stack/sheet/glass/glass/bigstack{pixel_y = -4},/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"u" = (/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/machinery/light{dir = 8},/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"v" = (/obj/structure/catwalk,/obj/structure/catwalk,/turf/space,/area/vault/mechclubhouse)
+"w" = (/obj/machinery/washing_machine,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"y" = (/obj/item/device/device_analyser/syndicate,/obj/machinery/r_n_d/fabricator/mechanic_fab,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"z" = (/obj/item/pod_parts/armor,/obj/structure/catwalk,/obj/structure/catwalk,/obj/structure/table,/turf/space,/area/vault/mechclubhouse)
+"A" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"B" = (/obj/structure/table/glass,/obj/item/pizzabox/mushroom,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"C" = (/obj/structure/bed,/obj/item/weapon/bedsheet/ce,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"D" = (/obj/machinery/r_n_d/blueprinter,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"E" = (/obj/machinery/light{dir = 4},/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"F" = (/obj/structure/catwalk,/obj/structure/catwalk,/obj/structure/vendomatpack/mining,/turf/space,/area/vault/mechclubhouse)
+"G" = (/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"H" = (/obj/item/crossbowframe,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"I" = (/obj/structure/bookcase/manuals/engineering,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"J" = (/mob/living/simple_animal/spiderbot{name = "Lil Wrenchy"},/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"K" = (/obj/machinery/r_n_d/reverse_engine,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"M" = (/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"N" = (/obj/machinery/power/apc{cell_type = 1000; cell_type_path = /obj/item/weapon/cell/rad/empty; coverlocked = 0; dir = 1; locked = 0; pixel_y = 24},/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"O" = (/obj/structure/plasticflaps,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"P" = (/obj/structure/table/glass,/obj/item/device/flashlight/lamp/green,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"Q" = (/obj/structure/bookcase/manuals/xenoarchaeology,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"R" = (/obj/structure/table/glass,/obj/item/weapon/book{author = "A. Genius"; dat = "Dear Diary, I've finally done it. I quit that shitty job with all those shitty engineers always telling me to make shitty engines. Fuck engines. I stole one of those self-powering battery cells from R&D and now I never need to see an engine again. Why those idiots insist on powering things with singularities and supermatter when these cells exist is beyond me. Whatever, more endless energy for me. I'm a genius."; name = "Diary of a Genius"; pixel_x = 5; title = "Diary of a Genius"},/obj/item/weapon/pen,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"S" = (/obj/structure/catwalk,/turf/simulated/floor/plating/deck,/area/vault/mechclubhouse)
+"T" = (/obj/item/pod_parts/core,/obj/structure/catwalk,/obj/structure/catwalk,/obj/structure/table,/turf/space,/area/vault/mechclubhouse)
+"U" = (/obj/structure/table/glass,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+"V" = (/obj/structure/sink{dir = 8},/obj/item/weapon/soap,/obj/machinery/light{dir = 8},/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"X" = (/obj/machinery/suit_storage_unit/engie,/obj/structure/catwalk,/obj/structure/catwalk,/turf/space,/area/vault/mechclubhouse)
+"Y" = (/obj/structure/toilet{dir = 4},/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"Z" = (/obj/structure/bookcase/manuals/research_and_development,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+aadddddddddddaaa
+aadbjyddKDghdaaa
+aadHgddduggrdaaa
+aaddOdddMggfdaaa
+aadZIQoNJGGndaaa
+aadAGGGGGGGGdaaa
+aadewGGBUGGldvvp
+aaddddGURGGEdFXq
+aadVgOGGGGGPdzvp
+aadYcdGlGGGCdTvp
+aaddddidddddmppp
+aaaapSSkvppppppa
+aaaaappvpppppppa
+aaaaaaaaaaaaaaaa
+"}

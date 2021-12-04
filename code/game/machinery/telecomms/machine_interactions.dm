@@ -17,18 +17,18 @@
 	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
 	if (!istype(C))
 		return
-	C.integrity = Clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
+	C.integrity = clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
 
 /obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	if(issolder(W))
 		if(integrity >= TELECOMMS_MAX_INTEGRITY)
 			to_chat(user, "It's not damaged.")
 			return
-		var/obj/item/weapon/solder/S = W
+		var/obj/item/tool/solder/S = W
 		if (!S.remove_fuel(2, user))
 			to_chat(user, "You need more fuel.")
 			return
-		playsound(user, 'sound/items/Welder.ogg', 100, 1)
+		S.playtoolsound(user, 100)
 		integrity = TELECOMMS_MAX_INTEGRITY
 		to_chat(user, "<span class='notice'>You repair the damaged internals of \the [src].</span>")
 		updateUsrDialog()
@@ -59,7 +59,8 @@
 	// You need a multitool to use this, or be silicon
 	if(!issilicon(user))
 		// istype returns false if the value is null
-		if(!ismultitool(user.get_active_hand()))
+		var/obj/item/I = user.get_active_hand()
+		if(!I.is_multitool(user))
 			return
 
 	if(stat & (BROKEN|NOPOWER))
@@ -70,7 +71,7 @@
 	dat = {"
 		<p>[temp]</p>
 		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>
-		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
+		<p><b>Integrity:</b> [clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
 	"}
 	if(on && toggled)
 		dat += {"
@@ -113,15 +114,15 @@
 	return istype(O,/obj/machinery/telecomms)
 
 /obj/machinery/telecomms/isLinkedWith(var/obj/O)
-	return O != null && O in links
+	return O != null && (O in links)
 
 /obj/machinery/telecomms/getLink(var/idx)
 	return (idx >= 1 && idx <= links.len) ? links[idx] : null
 
 // Off-Site Relays
 //
-// You are able to send/receive signals from the station's z level (changeable in the STATION_Z #define) if
-// the relay is on the telecomm satellite (changable in the TELECOMM_Z #define)
+// You are able to send/receive signals from the station's z level (changeable in the map.zMainStation #define) if
+// the relay is on the telecomm satellite (changable in the zTCommSat var on map datums)
 
 
 /obj/machinery/telecomms/relay/proc/toggle_level()
@@ -130,11 +131,11 @@
 	var/turf/position = get_turf(src)
 
 	// Toggle on/off getting signals from the station or the current Z level
-	if(src.listening_level == STATION_Z) // equals the station
+	if(src.listening_level == map.zMainStation) // equals the station
 		src.listening_level = position.z
 		return 1
-	else if(position.z == TELECOMM_Z)
-		src.listening_level = STATION_Z
+	else if(position.z == map.zTCommSat)
+		src.listening_level = map.zMainStation
 		return 1
 	return 0
 
@@ -167,8 +168,8 @@
 
 /obj/machinery/telecomms/relay/Options_Menu()
 	var/dat = ""
-	if(src.z == TELECOMM_Z)
-		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == STATION_Z ? "TRUE" : "FALSE"]</a>"
+	if(src.z == map.zTCommSat)
+		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == map.zMainStation ? "TRUE" : "FALSE"]</a>"
 
 	dat += {"<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
 		<br>Receiving:    <A href='?src=\ref[src];receive=1'>[receiving ? "YES" : "NO"]</a>"}
@@ -290,7 +291,7 @@
 // NOTE: A user won't be provided if unlinked by deletion!
 /obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/O)
 	var/obj/machinery/telecomms/T=O
-	if(O && O in links)
+	if(O && (O in links))
 		if(T.links)
 			T.links.Remove(src)
 		links.Remove(O)
@@ -302,6 +303,9 @@
 			temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
 		else
 			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
+
+	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
+		M.notify_unlinked()
 
 /obj/machinery/telecomms/linkWith(var/mob/user, var/mob/O)
 	if(O && O != src && istype(O, /obj/machinery/telecomms))

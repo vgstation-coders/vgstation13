@@ -8,7 +8,7 @@
 	item_state = "rig_helm"
 	_color = "unathi_breacher"
 	clothing_flags = PLASMAGUARD
-	
+
 /obj/item/clothing/suit/space/unathi/breacher
 	name = "unathi breacher armor"
 	desc = "Some sort of ancient Unathi power suit with ridiculous armor plating."
@@ -66,6 +66,16 @@
 	)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 
+/obj/item/clothing/head/helmet/space/unathi/soghun
+	name = "unathi soghun helmet"
+	desc = "A Unathi helmet designed after ancient soghun outfits."
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	icon_state = "unathi_soghun"
+	item_state = "engspace_helmet"
+	_color = "unathi_soghun"
+
 /obj/item/clothing/suit/space/unathi/soghun
 	name = "unathi soghun armor"
 	desc = "A Unathi suit designed after ancient soghun outfits."
@@ -107,6 +117,7 @@
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 30, bio = 30, rad = 30)
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
+	body_parts_visible_override = 0
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
@@ -145,6 +156,19 @@
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	var/step_sound = ""
+
+/obj/item/clothing/suit/space/vox/stealth/New()
+  ..()
+  if(Holiday == APRIL_FOOLS_DAY)
+    name = "vox suit"
+    desc = "Squeak."
+    step_sound = "clownstep"
+
+/obj/item/clothing/suit/space/vox/stealth/step_action()
+    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
+        var/mob/living/carbon/human/H = loc
+        playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/medic
 	name = "alien goggled helmet"
@@ -234,6 +258,18 @@
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
 	clothing_flags = GOLIATHREINFORCE
 
+/obj/item/clothing/suit/space/vox/civ/trader/flex
+	name = "flexible trader pressure suit"
+	desc = "A bulky, pressurized suit, even larger than would need to accomodate an alien body. A flexible solution for certain friends of the Shoal."
+	species_fit = list(VOX_SHAPED,MUSHROOM_SHAPED)
+	species_restricted = list(VOX_SHAPED,MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/vox/civ/trader/flex
+	name = "flexible helmet"
+	desc = "A pressurized helmet. The sides expand to accomodate quills or cap."
+	species_fit = list(VOX_SHAPED,MUSHROOM_SHAPED)
+	species_restricted = list(VOX_SHAPED,MUSHROOM_SHAPED)
+
 /obj/item/clothing/suit/space/vox/civ/trader/carapace //carapace
 	name = "alien carapace armor"
 	icon_state = "vox-carapace"
@@ -264,48 +300,25 @@
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	var/step_sound = ""
+
+/obj/item/clothing/suit/space/vox/civ/trader/stealth/New()
+  ..()
+  if(Holiday == APRIL_FOOLS_DAY)
+    name = "vox suit"
+    desc = "Squeak."
+    step_sound = "clownstep"
+
+/obj/item/clothing/suit/space/vox/civ/trader/stealth/step_action()
+    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
+        var/mob/living/carbon/human/H = loc
+        playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet.?"
-
-// -- Mushroom,traders --
-
-/obj/item/clothing/suit/space/vox/civ/mushmen
-	name = "mushmen pressure suit"
-	icon_state = "mushroom-pressure"
-	item_state = "mushroom-pressure"
-	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
-	species_restricted = list(MUSHROOM_SHAPED)
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen
-	actions_types = list(/datum/action/item_action/dim_lighting)
-	name = "mushmen helmet"
-	icon_state = "mushroom-pressure"
-	item_state = "mushroom-pressure"
-	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
-	species_restricted = list(MUSHROOM_SHAPED)
-	var/up = 0
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
-	toggle(user)
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
-	if(!user.incapacitated())
-		if(src.up)
-			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incoming light.</span>")
-		else
-			to_chat(user, "<span class='notice'>You disengage \the [src]'s light protection visor.</span>")
-		src.up = !src.up
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
-	return !up
-
-
-/datum/action/item_action/dim_lighting
-	name = "Dim lighting"
 
 // Vox Casual//////////////////////////////////////////////
 // Civvie
@@ -323,7 +336,7 @@
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
 	desc = "A very alien-looking helmet for vox crewmembers."
-	flags = FPRINT|HIDEHAIRCOMPLETELY //Flags need updating from inheritance above
+	flags = FPRINT //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	eyeprot = 0
@@ -409,7 +422,7 @@
 	icon_state = "vox-civ-engineer"
 	item_state = "vox-pressure-engineer"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 
@@ -652,24 +665,26 @@
 
 //Grey spacesuit
 
+// The line of code that made items under the helmet visible has been removed. While an interesting idea, it tended to cause clipping on side sprites.
+
 /obj/item/clothing/head/helmet/space/grey
-	name = "grey pressure helmet"
+	name = "explorer pressure helmet"
 	icon_state = "grey-fishbowl-helm"
 	item_state = "grey-fishbowl-helm"
-	desc = "A strange globe-like structure. Despite looking like a decent glare would break it, it is surprisingly durable. Enough thinking room for a Grey."
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
+	desc = "A grey explorer's pressure helmet. It has plenty of room for planning an atmospheric reentry. Zounds!"
+	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	body_parts_covered = FULL_HEAD|IGNORE_INV
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/space/grey
-	name = "grey pressure suit"
+	name = "explorer pressure suit"
 	icon_state = "grey-pressure-suit"
 	item_state = "grey-pressure-suit"
-	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
+	desc = "An outdated pressure suit that was once standard issue for spacefaring grey explorers. It's compact enough to be stored in a bag."
+	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
+	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 
@@ -715,8 +730,8 @@
 	..()
 	if(tank)
 		to_chat(user, "<span class = 'notice'>It has a [bicon(tank)][tank] attached to the back.</span>")
-		
-		
+
+
 /obj/item/clothing/head/helmet/space/skrell/black
 	name = "skrell combat helmet"
 	desc = "a military Skrell space helmet."
@@ -749,7 +764,7 @@
 		/obj/item/weapon/legcuffs/bolas,
 	)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	
+
 /obj/item/clothing/head/helmet/space/skrell/white
 	name = "skrell space helmet"
 	desc = "a civilian Skrell space helmet."

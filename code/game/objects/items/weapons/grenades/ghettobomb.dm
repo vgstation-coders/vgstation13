@@ -2,17 +2,28 @@
 
 //iedcasing assembly crafting//
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
-    if(istype(I, /obj/item/device/assembly/igniter))
-        var/obj/item/device/assembly/igniter/G = I
-        var/obj/item/weapon/grenade/iedcasing/W = new /obj/item/weapon/grenade/iedcasing
-        user.before_take_item(G)
-        user.before_take_item(src)
-        user.put_in_hands(W)
-        to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
-        W.underlays += image(src.icon, icon_state = src.icon_state)
-        qdel(I)
-        I = null
-        qdel(src)
+	if(istype(I, /obj/item/device/assembly/igniter))
+		var/obj/item/device/assembly/igniter/G = I
+		var/obj/item/weapon/grenade/iedcasing/W = new /obj/item/weapon/grenade/iedcasing
+		user.before_take_item(G)
+		user.before_take_item(src)
+		user.put_in_hands(W)
+		to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
+		W.underlays += image(src.icon, icon_state = src.icon_state)
+		qdel(I)
+		I = null
+		qdel(src)
+	if(I.is_wirecutter(user))
+		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
+		I.playtoolsound(user, 50)
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/aluminum_cylinder/W = new (get_turf(user))
+			user.put_in_hands(W)
+			qdel(src)
+		else
+			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
+			qdel(src)
 
 
 /obj/item/weapon/grenade/iedcasing
@@ -105,6 +116,15 @@
 				if(!gcDestroyed)
 					prime()
 
+/obj/item/weapon/grenade/iedcasing/suicide_act(var/mob/living/user)
+	if (!active) //no explosion with no active ied, dummy
+		return
+	
+	var/message_say = user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
+	user.say(message_say)
+	attack_self(user)
+	return SUICIDE_ACT_BRUTELOSS
 
 /obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
 
@@ -123,13 +143,13 @@
 			to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
 
 
-/obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
+/obj/item/weapon/grenade/iedcasing/prime(var/mob/user) //Blowing that can up
 	update_mob()
 	process_shrapnel()
-	explosion(get_turf(src.loc),-1,0,2)
+	explosion(get_turf(src.loc),-1,0,2, whodunnit = user)
 
-	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
-		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
+	if(istype(loc, /obj/item/weapon/beartrap))
+		var/obj/item/weapon/beartrap/boomtrap = loc
 		if(istype(boomtrap.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = loc.loc
 			if(H.legcuffed == boomtrap)
@@ -139,6 +159,7 @@
 
 				qdel(H.legcuffed)
 				H.legcuffed = null
+				unlock_atom(H)
 				boomtrap.IED = null
 	qdel(src)
 
@@ -191,6 +212,7 @@
 
 /obj/item/weapon/grenade/iedcasing/preassembled/New()
     ..()
+    underlays += image('icons/obj/drinks.dmi', icon_state = "greyshitvodka")
     det_time = rand(30,80)
     overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
     overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_wired")

@@ -11,6 +11,7 @@
 	var/syndie = 0
 	var/raider = 0
 	var/list/channels = list()
+	channels = list("Common" = 1)
 
 /obj/item/device/encryptionkey/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -74,11 +75,23 @@
 	icon_state = "medsci_cypherkey"
 	channels = list("Medical" = 1, "Science" = 1)
 
+/obj/item/device/encryptionkey/headset_medsec
+	name = "Medical Security Radio Encryption Key"
+	desc = "An encryption key for a radio headset.  Contains cypherkeys."
+	icon_state = "medsec_cypherkey"
+	channels = list("Medical" = 1, "Security" = 1)
+
 /obj/item/device/encryptionkey/headset_com
 	name = "Command Radio Encryption Key"
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."
 	icon_state = "com_cypherkey"
 	channels = list("Command" = 1)
+
+/obj/item/device/encryptionkey/headset_iaa
+	name = "Internal Affairs Radio Encryption Key"
+	desc = "An encryption key for a radio headset.  Contains cypherkeys."
+	icon_state = "com_cypherkey"
+	channels = list("Command" = 1, "Security" = 1)
 
 /obj/item/device/encryptionkey/heads/captain
 	name = "Captain's Encryption Key"
@@ -89,10 +102,11 @@
 /obj/item/device/encryptionkey/syndicate/hacked
 	name = "Standard Encryption Key"
 	desc = "An encryption key for a radio headset.  Has no special codes in it. Looks more sophisticated than usual."
-	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1)
+	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1, "Syndicate" = 1)
+	syndie = 1
 
 /obj/item/device/encryptionkey/syndicate/hacked/full
-	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1, "Deathsquad" = 1, "Response Team" = 1)
+	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1, "Deathsquad" = 1, "Response Team" = 1, "Syndicate" = 1)
 
 /obj/item/device/encryptionkey/heads/rd
 	name = "Research Director's Encryption Key"
@@ -176,4 +190,4 @@
 	name = "AI Encryption Key"
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."
 	icon_state = "cap_cypherkey"
-	channels = list("AI Private" = 1, "Command" = 1, "Security" = 1, "Engineering" = 0, "Science" = 0, "Medical" = 0, "Supply" = 0, "Service" = 0)
+	channels = list("AI Private" = 1, "Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1)

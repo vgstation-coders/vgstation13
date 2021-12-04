@@ -3,13 +3,12 @@
 	var/mob/controller
 	var/atom/movable/controlled
 	var/control_flags = 0
-	var/damaged_event_key
 	var/is_controlled = FALSE //Whether we're in strict control
 
 /datum/control/New(var/mob/new_controller, var/atom/new_controlled)
 	..()
 	controller = new_controller
-	damaged_event_key = controller.on_damaged.Add(src, "user_damaged")
+	controller.register_event(/event/damaged, src, .proc/user_damaged)
 	controlled = new_controlled
 
 /datum/control/Destroy()
@@ -20,8 +19,7 @@
 	controlled = null
 	..()
 
-/datum/control/proc/user_damaged(list/arguments)
-	var/amount = arguments["amount"]
+/datum/control/proc/user_damaged(kind, amount)
 	if(amount > 0 && control_flags & REVERT_ON_CONTROLLER_DAMAGED)
 		break_control()
 
@@ -113,14 +111,10 @@
 	step(controlled,direction)
 	controlled.dir = direction
 	if (blade.loc != start)
-		blade.blood = max(blade.blood-1,0)
+		if (!blade.linked_cultist || (get_dist(get_turf(blade.linked_cultist),get_turf(controller)) > 5))
+			blade.blood = max(blade.blood-1,0)
 		move_delay = 1
 		spawn(blade.movespeed)
 			move_delay = 0
 
-	var/matrix/M = matrix()
-	M.Scale(1,blade.blood/blade.maxblood)
-	var/total_offset = (60 + (100*(blade.blood/blade.maxblood))) * PIXEL_MULTIPLIER
-	controller.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
-	controller.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-	controller.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blade.blood]"
+	controller.DisplayUI("Soulblade")

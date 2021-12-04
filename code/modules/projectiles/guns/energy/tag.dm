@@ -15,6 +15,7 @@
 	golem_check = 0
 	var/charge_tick = 0
 	var/score = 0
+	var/last_disable_time = -1
 
 	icon_state = "bluetag"
 	fire_sound = 'sound/weapons/Laser.ogg'
@@ -77,7 +78,20 @@
         makeTaser(user)
 
 /obj/item/weapon/gun/energy/tag/special_check(var/mob/living/M)
-	if(istype(get_tag_armor(M), needed_vest))
+	var/obj/item/clothing/suit/tag/vest = get_tag_armor(M)
+	if(istype(vest, needed_vest))
+		var/obj/item/clothing/suit/tag/our_tag = vest
+		if (our_tag.my_laser_tag_game)
+			if (world.time < last_disable_time)
+				to_chat(M, "<span class='warning'>Your gun is currently disabled!</span>")
+				return 0
+			if ((our_tag.my_laser_tag_game.fire_mode == LT_FIREMODE_LASER) && (projectile_type != laser_projectile))
+				to_chat(M, "<span class='warning'>Your laser tag game requires you to play with lasers!</span>")
+				return 0
+			if ((our_tag.my_laser_tag_game.fire_mode == LT_FIREMODE_TASER) && (projectile_type != taser_projectile))
+				to_chat(M, "<span class='warning'>Your laser tag game requires you to play with tasers!</span>")
+				return 0
+			vest.player.total_shoots++
 		return 1
 	to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
 	return 0
@@ -101,3 +115,8 @@
 	power_supply.give(100)
 	update_icon()
 	return 1
+
+/obj/item/weapon/gun/energy/tag/proc/cooldown(var/time)
+	if (time > 0)
+		last_disable_time = world.time + (time SECONDS)
+

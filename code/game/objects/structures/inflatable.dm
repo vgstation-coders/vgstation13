@@ -56,13 +56,13 @@
 		weld(I, user)
 	..()
 
-/obj/item/inflatable/proc/weld(var/obj/item/weapon/weldingtool/WE, var/mob/user)
+/obj/item/inflatable/proc/weld(var/obj/item/tool/weldingtool/WE, var/mob/user)
 	if(!istype(WE))
 		return
 	if(!WE.remove_fuel(1, user))
 		return
 	to_chat(user, "<span class='notice'>You melt \the [src] into a plastic sheet.</span>")
-	getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src))
+	new /obj/item/stack/sheet/mineral/plastic(get_turf(src))
 	qdel(src)
 
 /obj/item/inflatable/wall
@@ -134,7 +134,7 @@
 	opacity = 0
 	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "wall"
-
+	pass_flags_self = PASSGLASS
 	var/undeploy_path = null
 	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
@@ -154,7 +154,7 @@
 	..()
 
 /obj/structure/inflatable/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(Proj.damage)
 		take_damage(Proj.damage)
 
@@ -183,7 +183,11 @@
 	user.delayNextAttack(10)
 
 /obj/structure/inflatable/attack_animal(var/mob/living/simple_animal/M)
-	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))
+	var/damage_dealt = rand(M.melee_damage_lower, M.melee_damage_upper)
+	if (!damage_dealt)
+		M.visible_message("<span class='notice'>\The [M] nuzzles \the [src].</span>")
+		return 1
+	if(take_damage(damage_dealt))
 		M.visible_message("<span class='danger'>[M] tears open \the [src]!</span>")
 	else
 		M.visible_message("<span class='danger'>[M] [M.attacktext] \the [src]!</span>")
@@ -237,26 +241,16 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!isliving(usr) || usr.incapacitated() || !usr.Adjacent(src) || !usr.IsAdvancedToolUser() || deflating)
+	if(!isliving(usr) || usr.incapacitated() || !usr.Adjacent(src) || !usr.dexterity_check() || deflating)
 		return
 
 	verbs -= /obj/structure/inflatable/verb/hand_deflate
 	deflate()
 
-/obj/structure/inflatable/proc/update_nearby_tiles(var/turf/T)
-	if(!SS_READY(SSair))
-		return 0
-
-	if(!T)
-		T = get_turf(src)
-	if(isturf(T))
-		SSair.mark_for_update(T)
-	return 1
-
 /obj/structure/inflatable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return !density
 
@@ -332,14 +326,14 @@
 	if(!(user.loc == src))
 		to_chat(user, "<span class='notice'>Click to enter. Use grab on shelter to force target inside. Click-drag onto firealarm or right click to deflate.</span>")
 	else
-		to_chat(user, "<span class='notice'>Click to package contaminated clothes. Resist to exit/cancel exit.</span>")
+		to_chat(user, "<span class='notice'>Click to package contaminated clothes. Click-drag to an adjacent turf or Resist to exit/cancel exit.</span>")
 	var/list/living_contents = list()
 	for(var/mob/living/L in contents)
 		living_contents += L.name //Shelters can frequently end up with dropped items because people fall asleep.
 	if(living_contents.len)
 		to_chat(user,"<span class='info'>You can see [english_list(living_contents)] inside.</span>")
 
-/obj/structure/inflatable/shelter/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0) //Like an unanchored window, we can block if pushed into place.
+/obj/structure/inflatable/shelter/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0) //Like an unanchored window, we can block if pushed into place.
 	..()
 	update_nearby_tiles()
 
@@ -444,7 +438,11 @@
 			A.ex_act(severity++)
 	..()
 
-/obj/structure/inflatable/shelter/container_resist(mob/user)
+/obj/structure/inflatable/shelter/container_resist(var/mob/user,var/turf/dest)
+	if (user.loc != src)
+		exiting -= user
+		to_chat(user,"<span class='warning'>You cannot climb out of something you aren't even in!</span>")
+		return
 	if(exiting.Find(user))
 		exiting -= user
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
@@ -453,7 +451,10 @@
 	exiting += user
 	spawn(6 SECONDS)
 		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
-			user.forceMove(loc)
+			if (dest)
+				user.forceMove(dest)
+			else
+				user.forceMove(loc)
 			exiting -= user
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
@@ -494,6 +495,22 @@
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
 		if(do_after_many(user,list(target,src),20)) //Twice the normal time
 			enter_shelter(target)
+
+
+/obj/structure/inflatable/shelter/MouseDropFrom(over_object, src_location, turf/over_location, src_control, over_control, params)
+	if(!Adjacent(over_location))
+		return
+	if(!istype(over_location) || over_location.density)
+		return
+	if(usr.incapacitated())
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	if(istype(over_location))
+		container_resist(usr,over_location)
 
 /obj/structure/inflatable/shelter/Exited(var/atom/movable/mover)
 	update_icon()

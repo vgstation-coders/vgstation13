@@ -43,7 +43,7 @@ var/list/obj/machinery/power/photocollector/photocollector_list = list()
 		add_avail(power_produced)
 		last_power = power_produced
 
-/obj/machinery/power/photocollector/wrenchAnchor(var/mob/user)
+/obj/machinery/power/photocollector/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

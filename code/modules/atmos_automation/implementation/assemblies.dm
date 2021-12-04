@@ -38,7 +38,7 @@
 	if(href_list["set_ass_num"])
 		assembly_num = input("Select an assembly port to send a pulse to (max: [parent.max_linked_assembly_amount]).", "Assembly", assembly_num) as null|num
 
-		assembly_num = Clamp(assembly_num, 1, parent.max_linked_assembly_amount)
+		assembly_num = clamp(assembly_num, 1, parent.max_linked_assembly_amount)
 
 		parent.updateUsrDialog()
 		return 1

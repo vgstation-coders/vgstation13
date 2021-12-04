@@ -95,7 +95,7 @@
 	icon_state = "pilot"
 
 	corpse = /obj/effect/landmark/corpse/pilot
-	items_to_drop = list(/obj/item/weapon/gun/projectile)
+	items_to_drop = list(/obj/item/weapon/gun/projectile/revolver)
 
 	faction = "syndicate"
 

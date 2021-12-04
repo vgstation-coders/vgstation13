@@ -63,7 +63,7 @@
 /var/const/access_tcomsat = 61 // has access to the entire telecomms satellite / machinery
 /var/const/access_gateway = 62
 /var/const/access_sec_doors = 63 // Security front doors
-/var/const/access_psychiatrist = 64 // Psychiatrist's office
+// 64 was used by access_psychiatrist. Feel free to repurpose.
 /var/const/access_salvage_captain = 65 // Salvage ship captain's quarters
 /var/const/access_weapons = 66 //Weapon authorization for secbots
 
@@ -97,9 +97,12 @@
 /var/const/access_mechanic = 501
 
 /obj/var/list/req_access = null
+/obj/var/list/backup_access = null
 /obj/var/req_access_txt = "0"			// A user must have ALL of these accesses to use the object
 /obj/var/list/req_one_access = null
 /obj/var/req_one_access_txt = "0"		// If this list is populated, a user must have at least ONE of these accesses to use the object
+/obj/var/req_access_dir = 0				// The dir the user must be facing to do access checks on
+/obj/var/access_not_dir = TRUE			// Behaviour if the user is not in the access dir
 
 //returns 1 if this mob has sufficient access to use this object
 /obj/proc/allowed(var/mob/M)
@@ -109,6 +112,14 @@
 	if(M.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
+	if(req_access_dir)
+		var/turf/T = get_turf(src)
+		if(!((flow_flags & ON_BORDER) && dir == opposite_dirs[req_access_dir])) // For non-windoors
+			T = get_step(T,req_access_dir)
+		if(M in T.contents)
+			return can_access(ACL,req_access,req_one_access)
+		else
+			return access_not_dir
 	return can_access(ACL,req_access,req_one_access)
 
 /obj/item/proc/GetAccess()
@@ -233,7 +244,7 @@
 	            access_teleporter, access_eva, access_heads, access_captain, access_all_personal_lockers,
 	            access_tech_storage, access_chapel_office, access_atmospherics, access_kitchen,
 	            access_bar, access_janitor, access_crematorium, access_robotics, access_cargo, access_construction,
-	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
+	            access_hydroponics, access_library, access_lawyer, access_virology, access_cmo, access_qm, access_clown, access_mime, access_surgery,
 	            access_theatre, access_science, access_mining, access_mailsorting,access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
 	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_biohazard)
@@ -381,8 +392,6 @@
 			return "Virology"
 		if(access_biohazard)
 			return "Biohazard"
-		if(access_psychiatrist)
-			return "Psychiatrist's Office"
 		if(access_cmo)
 			return "Chief Medical Officer"
 		if(access_qm)
@@ -483,7 +492,7 @@ var/global/list/all_jobs
 	return list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer","BlackOps Commander","Supreme Commander")
 
 
-proc/FindNameFromID(var/mob/living/carbon/human/H)
+/proc/FindNameFromID(var/mob/living/carbon/human/H)
 	ASSERT(istype(H))
 	var/obj/item/weapon/card/id/C = H.get_active_hand()
 	if( istype(C) || istype(C, /obj/item/device/pda) )
@@ -512,5 +521,5 @@ proc/FindNameFromID(var/mob/living/carbon/human/H)
 		if(ID)
 			return ID.registered_name
 
-proc/get_all_job_icons() //For all existing HUD icons
+/proc/get_all_job_icons() //For all existing HUD icons
 	return get_all_jobs() + list("Prisoner", "visitor")

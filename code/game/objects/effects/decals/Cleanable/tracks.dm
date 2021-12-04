@@ -45,6 +45,7 @@
 	//It is populated every time we use AddTracks().
 	var/list/steps_to_remake = list()
 
+	var/last_blood_color = DEFAULT_BLOOD //when ghost use those tracks to write, they'll use the most recent blood color added
 
 	var/list/setdirs=list(
 		"1"=0,
@@ -57,23 +58,12 @@
 		"128"=0
 	)
 
+/obj/effect/decal/cleanable/blood/tracks/fixDNA()
+	blood_DNA = list()
+
 	/** DO NOT FUCKING REMOVE THIS. **/
 /obj/effect/decal/cleanable/blood/tracks/process()
 	return PROCESS_KILL
-
-/obj/effect/decal/cleanable/blood/tracks/resetVariables()
-	..("setdirs", "steps_to_remake")
-	setdirs=list(
-		"1"=0,
-		"2"=0,
-		"4"=0,
-		"8"=0,
-		"16"=0,
-		"32"=0,
-		"64"=0,
-		"128"=0
-	)
-	steps_to_remake = list()
 
 /obj/effect/decal/cleanable/blood/tracks/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor, var/list/steps_to_remake)
 	if(steps_to_remake && steps_to_remake.len)
@@ -102,6 +92,7 @@
 	if (!counts_as_blood)
 		if (DNA && DNA.len > 0)
 			counts_as_blood = 1
+			last_blood_color = bloodcolor
 			bloodspill_add()
 
 	var/updated=0

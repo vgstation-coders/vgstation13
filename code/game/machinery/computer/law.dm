@@ -3,12 +3,24 @@
 /obj/machinery/computer/aiupload
 	name = "AI Upload"
 	desc = "Used to upload laws to the AI using a cheap radio transceiver."
-	icon_state = "command"
+	icon_state = "upload"
 	circuit = "/obj/item/weapon/circuitboard/aiupload"
 	var/mob/living/silicon/ai/current = null
+	var/mob/living/silicon/ai/occupant = null
 	var/opened = 0
 
 	light_color = "#555555"
+
+/obj/machinery/computer/aiupload/attackby(I as obj, user as mob)
+	if(istype(I, /obj/item/device/aicard))
+		if(stat & (NOPOWER|BROKEN))
+			to_chat(user, "This terminal isn't functioning right now, get it working!")
+			return
+		var/obj/item/card = I
+		card.transfer_ai("AIUPLOAD","AICARD",src,user)
+		attack_hand(user)
+		return
+	return ..()
 
 
 /obj/machinery/computer/aiupload/verb/AccessInternals()
@@ -39,7 +51,7 @@
 		to_chat(usr, "Law uploads have been disabled by Nanotrasen!")
 		return 0
 
-	if(current.stat == 2 || current.control_disabled == 1)
+	if(current.stat == 2 && occupant != current)
 		to_chat(usr, "Upload failed. No signal is being detected from the AI.")
 	else if(current.aiRestorePowerRoutine)
 		to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
@@ -57,11 +69,12 @@
 	to_chat(current, "These are your laws now:")
 	current.show_laws()
 	current << sound('sound/machines/lawsync.ogg')
-	for(var/mob/living/silicon/robot/R in mob_list)
+	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(R.lawupdate && (R.connected_ai == current))
 			to_chat(R, "These are your laws now:")
 			R.show_laws()
 			R << sound('sound/machines/lawsync.ogg')
+			R.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	to_chat(user, "<span class='notice'>Upload complete. The AI's laws have been modified.</span>")
 
 /obj/machinery/computer/aiupload/proc/same_zlevel()
@@ -131,12 +144,24 @@
 		to_chat(usr, "The upload computer is broken!")
 		return
 
-	current = select_active_ai(user)
+	if (occupant)
+		current = occupant
+	else if (current)
+		current = null
+		update_icon()
+		return
+	else
+		current = select_active_ai(user)
 
 	if(!current)
 		to_chat(usr, "No active AIs detected.")
 	else
-		to_chat(usr, "[current.name] selected for law changes.")
+		if(src.occupant)
+			to_chat(usr, "AI detected on this terminal. [current.name] selected for law changes.")
+		else
+			to_chat(usr, "[current.name] selected for law changes.")
+
+	update_icon()
 
 /obj/machinery/computer/borgupload
 	name = "Cyborg Upload"
@@ -150,6 +175,7 @@
 	to_chat(current, "These are your laws now:")
 	current.show_laws()
 	current << sound('sound/machines/lawsync.ogg')
+	current.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	to_chat(usr, "<span class='notice'>Upload complete. The robot's laws have been modified.</span>")
 
 /obj/machinery/computer/borgupload/proc/install_module(var/obj/item/weapon/aiModule/M,var/mob/user)
@@ -272,3 +298,28 @@
 
 /obj/machinery/computer/aiupload/longrange/same_zlevel()
 	return TRUE
+
+/obj/machinery/computer/aiupload/update_icon()
+	..()
+	overlays = 0
+	
+	if(stat & (BROKEN | NOPOWER))
+		return
+	
+	if (occupant)
+		switch (occupant.stat)
+			if (CONSCIOUS)
+				overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
+			if (DEAD)
+				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
+	else if (current)
+		if(current.stat == DEAD)
+			overlays += image('icons/obj/computer.dmi', "upload_wireless_dead")
+		else if(current.aiRestorePowerRoutine)
+			overlays += image('icons/obj/computer.dmi', "upload_wireless_nopower")
+		else
+			overlays += image('icons/obj/computer.dmi', "upload_wireless")
+
+/obj/machinery/computer/aiupload/process()
+	..()
+	update_icon()

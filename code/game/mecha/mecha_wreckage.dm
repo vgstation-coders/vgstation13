@@ -10,6 +10,8 @@
 	density = 1
 	anchored = 0
 	opacity = 0
+	mouse_opacity = 1 //So we can actually click these
+	pass_flags_self = PASSTABLE
 	var/list/welder_salvage = list(/obj/item/stack/sheet/plasteel,/obj/item/stack/sheet/metal,/obj/item/stack/rods)
 	var/list/wirecutters_salvage = list(/obj/item/stack/cable_coil)
 	var/list/crowbar_salvage
@@ -17,7 +19,7 @@
 /obj/effect/decal/mecha_wreckage/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return ..()
 
@@ -55,7 +57,7 @@
 		qdel(E)
 
 /obj/effect/decal/mecha_wreckage/bullet_act(var/obj/item/projectile/Proj)
-	return
+	return null
 
 /obj/effect/decal/mecha_wreckage/examine(var/mob/user)
 	..()
@@ -83,11 +85,11 @@
 
 /obj/effect/decal/mecha_wreckage/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(isemptylist(welder_salvage))
 			to_chat(user, "You don't see anything that can be cut with [W].")
 			return
-		if (WT.remove_fuel(0,user))
+		if (WT.remove_fuel(1,user))
 			var/type = prob(70)?pick(welder_salvage):null
 			if(type)
 				var/N = new type(get_turf(user))
@@ -97,9 +99,8 @@
 			else
 				to_chat(user, "You failed to salvage anything valuable from [src].")
 		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 			return
-	if(iswirecutter(W))
+	if(W.is_wirecutter(user))
 		if(isemptylist(wirecutters_salvage))
 			to_chat(user, "You don't see anything that can be cut with [W].")
 			return
@@ -247,6 +248,10 @@
 /obj/effect/decal/mecha_wreckage/odysseus
 	name = "Odysseus wreckage"
 	icon_state = "odysseus-broken"
+
+/obj/effect/decal/mecha_wreckage/odysseus/murdysseus
+	name = "MURDYSSEUS wreckage"
+	icon_state = "murdysseus-broken"
 
 /obj/effect/decal/mecha_wreckage/odysseus/New()
 	..()

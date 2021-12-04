@@ -80,7 +80,7 @@ Frequency:
 
 				src.temp += "<B>Extranneous Signals:</B><BR>"
 				for (var/obj/item/weapon/implant/tracking/W in tracking_implants)
-					if (!W.implanted || !(istype(W.loc,/datum/organ/external) || ismob(W.loc)))
+					if (!W.imp_in)
 						continue
 					else
 						var/mob/M = W.loc
@@ -123,8 +123,8 @@ Frequency:
 /obj/item/weapon/bananapeel/bluespace
 	name = "bluespace banana peel"
 	desc = "A peel from a bluespace banana."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "bluespacebanana_peel"
+	icon = 'icons/obj/hydroponics/bluespacebanana.dmi'
+	icon_state = "peel"
 	item_state = "bluespacebanana_peel"
 
 /obj/item/weapon/bananapeel/bluespace/Crossed(AM as mob|obj)

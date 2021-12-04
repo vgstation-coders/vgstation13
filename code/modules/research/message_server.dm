@@ -4,8 +4,9 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	var/recipient = "Unspecified" //name of the person
 	var/sender = "Unspecified" //name of the sender
 	var/message = "Blank" //transferred message
+	var/icon/img_sent = null //transferred image, if any
 
-/datum/data_pda_msg/New(var/param_rec = "",var/param_sender = "",var/param_message = "")
+/datum/data_pda_msg/New(var/param_rec = "",var/param_sender = "",var/param_message = "", var/icon/param_image = null)
 
 	if(param_rec)
 		recipient = param_rec
@@ -13,6 +14,8 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 		sender = param_sender
 	if(param_message)
 		message = param_message
+	if(param_image)
+		img_sent = param_image
 
 /datum/data_rc_msg
 	var/rec_dpt = "Unspecified" //name of the person
@@ -85,8 +88,8 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 /obj/machinery/message_server/proc/is_functioning()
 	return !disabled && !(stat & (BROKEN|NOPOWER))
 
-/obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "")
-	pda_msgs += new/datum/data_pda_msg(recipient,sender,message)
+/obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "", var/icon/img_sent = null)
+	pda_msgs += new/datum/data_pda_msg(recipient,sender,message,img_sent)
 
 /obj/machinery/message_server/proc/send_rc_message(var/recipient = "",var/sender = "",var/message = "",var/stamp = "", var/id_auth = "", var/priority = 1)
 	rc_msgs += new/datum/data_rc_msg(recipient,sender,message,stamp,id_auth)

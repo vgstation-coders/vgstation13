@@ -48,7 +48,7 @@
 		grown = 1
 
 	//basic cable stuff, this gets done in the cable stack logic, so i needed to copy paste it over, oh well
-	var/datum/powernet/PN = getFromPool(/datum/powernet)
+	var/datum/powernet/PN = new /datum/powernet
 	PN.add_cable(src)
 	for(var/dir in cardinal)
 		mergeConnectedNetworks(dir)   //Merge the powernet with adjacents powernets
@@ -59,6 +59,9 @@
 	//we are processing
 	processing_objects.Add(src)
 	set_light(1, 15, LIGHT_COLOR_RED)
+
+/obj/structure/cable/powercreeper/reset_plane()
+	return
 
 /obj/structure/cable/powercreeper/Destroy()
 	processing_objects.Remove(src)
@@ -80,11 +83,14 @@
 		if(isturf(loc))
 			var/turf/T = loc
 			environment = T.return_air()
+			if(environment.temperature < T0C)
+				die()
+				return
 		//add power to powernet through converting atmospheric heat to power
 		add_avail(-(environment.add_thermal_energy(max(environment.get_thermal_energy_change(T0C),-POWER_PER_FRUIT*10)/10)))
 		if(growdirs)
-			var/grow_chance = Clamp(MIN_SPREAD_CHANCE + (powernet.avail/1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
-			if(prob(grow_chance))
+			var/grow_chance = clamp(MIN_SPREAD_CHANCE + (powernet.avail/1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
+			if(prob(grow_chance) && (environment.temperature > T0C + 5))
 				var/chosen_dir = pick(cardinal)
 				if(growdirs & chosen_dir)
 					var/turf/target_turf = get_step(src, chosen_dir)
@@ -119,7 +125,7 @@
 
 /obj/structure/cable/powercreeper/proc/die()
 	grown = 0 //we can't attack or spread anymore
-	do_flick(src, "death[add_state]", 13)
+	do_flick(src, "death[add_state]", 0.7 SECONDS)
 	qdel(src)
 
 /obj/structure/cable/powercreeper/proc/try_electrocution_turf(var/turf/T, var/checkdir)
@@ -135,7 +141,6 @@
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
 	if(!istype(M) || M.isDead())
 		return 0
-	Beam(M, "lighting", 'icons/obj/zap.dmi', 5, 2)
 	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
 	return electrocute_mob(M, powernet, src)
 
@@ -173,12 +178,12 @@
 			else
 				P.growdirs &= ~get_dir(P, src)
 		if(dying)
-			T.on_density_change.Remove(src)
+			T.unregister_event(/event/density_change, src, .proc/proxDensityChange)
 		else
-			T.on_density_change.Add(src, "proxDensityChange")
+			T.register_event(/event/density_change, src, .proc/proxDensityChange)
 
-/obj/structure/cable/powercreeper/proc/proxDensityChange(var/list/args)
-	var/turf/T = args["atom"]
+/obj/structure/cable/powercreeper/proc/proxDensityChange(atom/atom)
+	var/turf/T = get_turf(atom)
 	if(get_dist(T, src) <= 1)
 		var/Adir = get_dir(src, T)
 		if(Adir in cardinal)
@@ -200,7 +205,7 @@
 		if(T)
 			. += power_list(T, src, turn(dir, 180), powernetless_only)
 
-obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
+/obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
 	var/turf/TB = get_step(src, direction)
 
 	for(var/obj/structure/cable/C in TB)
@@ -209,7 +214,7 @@ obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
 		if(src == C)
 			continue
 		if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
-			var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+			var/datum/powernet/newPN = new /datum/powernet/
 			newPN.add_cable(C)
 		if(powernet) // if we already have a powernet, then merge the two powernets
 			merge_powernets(powernet,C.powernet)

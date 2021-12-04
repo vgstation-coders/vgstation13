@@ -146,7 +146,7 @@
 	name = "waistband holster"
 	desc = "A handgun holster that clips to a suit. Made of expensive leather."
 	_color = "holster_low"
-	
+
 /obj/item/clothing/accessory/holster/handgun/preloaded
 	var/gun_type
 
@@ -155,15 +155,21 @@
 	if(!holstered)
 		holstered = new gun_type(src)
 		update_icon()
-		
+
 /obj/item/clothing/accessory/holster/handgun/preloaded/mateba
 	gun_type = /obj/item/weapon/gun/projectile/mateba
 
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP
 	gun_type = /obj/item/weapon/gun/projectile/NTUSP
-	
+
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy
 	gun_type = /obj/item/weapon/gun/projectile/NTUSP/fancy
+	
+/obj/item/clothing/accessory/holster/handgun/preloaded/glock
+	gun_type = /obj/item/weapon/gun/projectile/glock
+	
+/obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy
+	gun_type = /obj/item/weapon/gun/projectile/glock/fancy
 
 //
 // Knives
@@ -185,15 +191,16 @@
 
 	return is_type_in_list(W, list(\
 		/obj/item/weapon/kitchen/utensil, \
-		/obj/item/weapon/screwdriver, \
-		/obj/item/weapon/wirecutters, \
+		/obj/item/tool/screwdriver, \
+		/obj/item/tool/wirecutters, \
 		/obj/item/weapon/pen, \
-		/obj/item/weapon/scalpel, \
+		/obj/item/tool/scalpel, \
 		/obj/item/weapon/minihoe, \
 		/obj/item/weapon/hatchet, \
 		/obj/item/weapon/pickaxe/shovel/spade, \
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana, \
-		/obj/item/weapon/bikehorn
+		/obj/item/weapon/bikehorn, \
+		/obj/item/weapon/gun/projectile/banana
 		)) //honk
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)

@@ -3,13 +3,13 @@
 	abbreviation = "FB"
 	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything, or when it gets close to anyone else."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
 	school = "evocation"
 	charge_max = 100
-	spell_flags = 0
+	spell_flags = IS_HARMFUL
 	invocation = "ONI SOMA"
 	invocation_type = SpI_SHOUT
 	range = 20
@@ -20,12 +20,12 @@
 	duration = 20
 	projectile_speed = 1
 
-	amt_dam_brute = 20
-	amt_dam_fire = 25
+	amt_dam_brute = 40
+	amt_dam_fire = 45
 
 	var/ex_severe = -1
-	var/ex_heavy = 1
-	var/ex_light = 2
+	var/ex_heavy = 0
+	var/ex_light = 3
 	var/ex_flash = 5
 
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
@@ -35,7 +35,7 @@
 /spell/targeted/projectile/dumbfire/fireball/prox_cast(var/list/targets, spell_holder)
 	for(var/mob/living/M in targets)
 		apply_spell_damage(M)
-	explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash)
+	explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash, whodunnit = spell_holder)
 	return targets
 
 /spell/targeted/projectile/dumbfire/fireball/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder)

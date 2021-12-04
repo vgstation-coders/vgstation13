@@ -4,6 +4,9 @@
 /obj/item/ammo_storage/magazine
 	desc = "A magazine capable of holding bullets. Can be loaded into certain weapons."
 	exact = 1 //we only load the thing we want to load
+	materials = list(MAT_IRON = 200)
+	var/magoffsetx = null // difference between where magazine sprite overlay sprite starts
+	var/magoffsety = null // compared to where the magazine should be on the sprite
 
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"
@@ -86,6 +89,9 @@
 /obj/item/ammo_storage/magazine/a12mm/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/a12mm/ops/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/smg9mm
 	name = "magazine (9mm)"
 	icon_state = "smg9mm"
@@ -114,7 +120,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a50
-	name = "magazine (.50)"
+	name = "magazine (.50AE)"
 	icon_state = "50ae"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a50"
@@ -126,7 +132,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a75
-	name = "magazine (.75)"
+	name = "magazine (.75 gyrojet)"
 	icon_state = "75"
 	ammo_type = "/obj/item/ammo_casing/a75"
 	multiple_sprites = 1
@@ -137,7 +143,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a762
-	name = "magazine (a762)"
+	name = "magazine (7.62x51mm)"
 	icon_state = "a762"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
@@ -193,6 +199,8 @@
 	max_ammo = 10
 	multiple_sprites = 1
 	sprite_modulo = 2
+	magoffsetx = 11
+	magoffsety = 11
 
 /obj/item/ammo_storage/magazine/m380auto/empty
 	starting_ammo = 0
@@ -226,11 +234,25 @@
 /obj/item/ammo_storage/magazine/m380auto/extended/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/lr22
+	name = "magazine (22LR)"
+	icon_state = "22LR"
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/lr22"
+	max_ammo = 10
+	sprite_modulo = 1
+	multiple_sprites = 1
+
+/obj/item/ammo_storage/magazine/lr22/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
+	exact = 0
+	caliber = POINT45
 	max_ammo = 16
 	multiple_sprites = 1
 	sprite_modulo = 4

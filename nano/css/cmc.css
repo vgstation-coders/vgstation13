@@ -29,19 +29,19 @@ td, th {
 }
 
 .fire {
-  color: orange;
+  color: #FFA500;
 }
 
 .brute {
-  color: red;
+  color: #FF0000;
 }
 
 .toxin {
-  color: green;
+  color: #00FF00;
 }
 
 .oxygen {
-  color: blue;
+  color: #3399CC;
 }
 
 .name {

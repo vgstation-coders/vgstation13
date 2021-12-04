@@ -1,4 +1,4 @@
-proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
+/proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 	if(!epicenter)
 		return
 
@@ -32,19 +32,19 @@ proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 			//Double check for client
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
-				if(M_turf && M_turf.z == epicenter.z)
+				if(M_turf && (M_turf.z == epicenter.z || AreConnectedZLevels(M_turf.z,epicenter.z)))
 					var/dist = cheap_pythag(M_turf.x - x0, M_turf.y - y0)
-					if(dist <= round(heavy_range + world.view - 2, 1))
+					if((dist <= round(heavy_range + world.view - 2, 1)) && (M_turf.z - epicenter.z <= max_range) && (epicenter.z - M_turf.z <= max_range))
 						M << 'sound/effects/EMPulse.ogg'
 
-		for(var/turf/T in spiral_block(epicenter,max_range))
+		for(var/turf/T in multi_z_spiral_block(epicenter,max_range,0,0,0))
+			CHECK_TICK
 			var/dist = cheap_pythag(T.x - x0, T.y - y0)
 			if(dist > max_range)
 				continue
 			var/act = 2
 			if(dist <= heavy_range)
 				act = 1
-
 			for(var/atom/movable/A in T.contents)
 				A.emp_act(act)
 	return

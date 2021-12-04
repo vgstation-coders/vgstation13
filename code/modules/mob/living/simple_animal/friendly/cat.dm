@@ -62,7 +62,7 @@
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
-	desc = "D'aaawwww"
+	desc = "D'aaawwww!"
 	icon_state = "kitten"
 	icon_living = "kitten"
 	icon_dead = "kitten_dead"
@@ -117,6 +117,9 @@
 	react_to_touch(M)
 	M.delayNextAttack(2 SECONDS)
 
+/mob/living/simple_animal/cat/get_butchering_products()
+	return list(/datum/butchering_product/skin/cat)
+
 /mob/living/simple_animal/cat/proc/react_to_touch(mob/M)
 	if(M && !isUnconscious())
 		switch(M.a_intent)
@@ -125,9 +128,9 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
 				emote("me", EMOTE_AUDIBLE, "purrs.")
-				playsound(loc, 'sound/voice/catpurr.ogg', 80, 1)
+				playsound(loc, 'sound/voice/catpurr.ogg', 50, 1)
 			if(I_HURT)
-				playsound(loc, 'sound/voice/cathiss.ogg', 80, 1)
+				playsound(loc, 'sound/voice/cathiss.ogg', 50, 1)
 				emote("me", EMOTE_AUDIBLE, "hisses.")
 
 /mob/living/simple_animal/cat/snek/react_to_touch(mob/M)
@@ -151,7 +154,7 @@
 	species_type = /mob/living/simple_animal/cat/snek
 	butchering_drops = null
 	childtype = null
-	holder_type = null
+	holder_type = /obj/item/weapon/holder/animal/snek
 
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
@@ -169,12 +172,32 @@ var/list/wizard_snakes = list()
 		wizard_snakes[src] = spell_holder
 
 /mob/living/simple_animal/cat/snek/wizard/death(var/gibbed = FALSE)
+	..(TRUE)
 	if(!transmogrify())
 		visible_message("<span class='notice'>\The [src] vanishes!</span>")
 		qdel(src)
-	..(TRUE)
 
 /mob/living/simple_animal/cat/snek/wizard/Destroy()
 	wizard_snakes[src] = null
 	wizard_snakes -= src
 	..()
+
+/mob/living/simple_animal/cat/snek/pudge
+	name = "Pudge"
+	desc = "You've never seen a snake like this before. It is quite chubby!"
+	icon_state = "pudge"
+	icon_living = "pudge"
+	icon_dead = "pudge_dead"
+	gender = NEUTER
+	speak = list("Meep!", "Chirp!","Mweeeb!")
+	speak_emote = list("squeaks")
+	emote_hear = list("squeaks")
+	emote_see = list("slithers")
+	emote_sound = list() // stops snakes purring
+	kill_verbs = list("strikes at", "splats", "bites", "lunges at")
+	growl_verbs = list("squeaks")
+
+	species_type = /mob/living/simple_animal/cat/snek
+	butchering_drops = null
+	childtype = null
+	holder_type = /obj/item/weapon/holder/animal/snek

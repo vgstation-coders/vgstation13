@@ -40,6 +40,13 @@
 		return new shrapnel_type(src)
 
 
+/obj/item/ammo_casing/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"BB")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 //Boxes of ammo
 /obj/item/ammo_storage
 	name = "ammo box (.357)"
@@ -145,7 +152,7 @@
 	var/trying_to_load = 0
 	if(istype(target, /obj/item/weapon/gun/projectile))
 		var/obj/item/weapon/gun/projectile/PW = target
-		trying_to_load = min(PW.max_shells - PW.loaded.len, bullets_from.stored_ammo.len) //either we fill to max, or we fill as much as possible
+		trying_to_load = min(PW.max_shells - PW.loaded.len - PW.refuse.len, bullets_from.stored_ammo.len) //either we fill to max, or we fill as much as possible
 	else
 		var/obj/item/ammo_storage/AS = target
 		trying_to_load = min(AS.max_ammo - AS.stored_ammo.len, bullets_from.stored_ammo.len) //either we fill to max, or we fill as much as possible
@@ -194,7 +201,7 @@
 				return 0
 		var/obj/item/weapon/gun/projectile/PW = target
 		for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
-			if(PW.loaded.len >= PW.max_shells)
+			if(PW.loaded.len + PW.refuse.len >= PW.max_shells)
 				break
 			if(PW.caliber && PW.caliber[loading.caliber]) //hurrah for gun variables.
 				bullets_from.stored_ammo -= loading
@@ -219,3 +226,10 @@
 
 /obj/item/ammo_storage/proc/ammo_count()
 	return stored_ammo.len
+
+/obj/item/ammo_storage/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"stored_ammo")
+
+	reset_vars_after_duration(resettable_vars, duration)

@@ -4,7 +4,6 @@ var/global/datum/controller/vote/vote = new()
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
 
-
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
 
@@ -51,6 +50,7 @@ var/global/datum/controller/vote/vote = new()
 	var/vote_threshold = 0.15
 	var/discarded_votes = 0
 	var/weighted        = FALSE // Whether to use weighted voting.
+	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
@@ -118,6 +118,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	var/greatest_votes = 0
+	currently_voting = FALSE
 	for(var/option in choices)
 		var/votes = choices[option]
 		total_votes += votes
@@ -182,6 +183,7 @@ var/global/datum/controller/vote/vote = new()
 	var/text
 	var/feedbackanswer
 	var/qualified_votes = total_votes - discarded_votes
+	currently_voting = FALSE
 	if(winners.len > 0)
 		if(winners.len > 1)
 			text = "<b>Vote Tied Between:</b><br>"
@@ -209,6 +211,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/result()
 	. = announce_result()
 	var/restart = 0
+	currently_voting = FALSE
 	if(.)
 		switch(mode)
 			if("restart")
@@ -229,9 +232,8 @@ var/global/datum/controller/vote/vote = new()
 					init_shift_change(null, 1)
 			if("map")
 				if(.)
-					chosen_map = ismapvote[.]
-					var/mapname = .
-					watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
+					chosen_map = "maps/voting/" + ismapvote[.] + "/vgstation13.dmb"
+					watchdog.chosen_map = ismapvote[.]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 					//testing("Vote picked [chosen_map]")
 
@@ -246,31 +248,41 @@ var/global/datum/controller/vote/vote = new()
 		log_game("Rebooting due to restart vote")
 		world.Reboot()
 
-/datum/controller/vote/proc/submit_vote(var/ckey, var/vote)
+/datum/controller/vote/proc/submit_vote(var/mob/user, var/vote)
+	var/mob_ckey = user.ckey
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
+		if (mob_ckey in voted)
+			to_chat(user, "<span class='warning'>You may only vote once.</span>")
+			return 0
+		if (isnum(vote) && (1>vote) || (vote > choices.len))
+			to_chat(user, "<span class='warning'>Illegal vote.</span>")
+			return 0
 		if(mode == "map")
-			if(!usr.client.holder)
-				var/mob/M = usr
-				if(isnewplayer(M))
+			if(!user.client.holder)
+				if(isnewplayer(user))
 					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 					return 0
-				if(isobserver(M))
-					var/mob/dead/observer/O = M
+				if(isobserver(user))
+					var/mob/dead/observer/O = user
 					if(O.started_as_observer)
 						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 						return 0
-		if(current_votes[ckey])
-			choices[choices[current_votes[ckey]]]--
-		if(vote && 1<=vote && vote<=choices.len)
-			voted += usr.ckey
+		if(current_votes[mob_ckey])
+			choices[choices[current_votes[mob_ckey]]]--
+		if(vote && vote != "cancel_vote")
+			voted += mob_ckey
 			choices[choices[vote]]++	//check this
-			current_votes[ckey] = vote
+			current_votes[mob_ckey] = vote
 			return vote
 	return 0
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0, var/weighted_vote = 0)
+	if(currently_voting)
+		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
+		return
+	currently_voting = TRUE
 	if(!mode)
 		if(started_time != null && !check_rights(R_ADMIN))
 			var/next_allowed_time = (started_time + config.vote_delay)
@@ -303,7 +315,7 @@ var/global/datum/controller/vote/vote = new()
 					choices.Add(option)
 			if("map")
 				question = "What should the next map be?"
-				var/list/maps = get_maps()
+				var/list/maps = get_votable_maps()
 				for(var/key in maps)
 					choices.Add(key)
 				if(!choices.len)
@@ -350,6 +362,16 @@ var/global/datum/controller/vote/vote = new()
 				world << sound('sound/voice/Serithi/weneedvote.ogg')
 			if("map")
 				world << sound('sound/misc/rockthevote.ogg')
+				var/thisisstupid = 0
+				if(vote.choices.Find("Island Station"))
+					thisisstupid = 1
+				else if(vote.choices.Find("Island"))
+					thisisstupid = 2
+				if(thisisstupid)
+					if(thisisstupid == 2)
+						vote.choices["Island"] = -15
+					else
+						vote.choices["Island Station"] = -15
 		if(mode == "gamemode" && going)
 			going = 0
 			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
@@ -434,10 +456,20 @@ var/global/datum/controller/vote/vote = new()
 	if(!usr || !usr.client)
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
+		if ("cancel_vote")
+			var/mob_ckey = usr.ckey
+			if (!(mob_ckey in voted))
+				return
+			voted -= mob_ckey
+			choices[choices[current_votes[mob_ckey]]]--
+			current_votes[mob_ckey] = null
+			src.updateFor(usr.client)
+			return 0
 		if("cancel")
 			if(usr.client.holder)
 				reset()
 				update()
+				currently_voting = FALSE
 		if("toggle_restart")
 			if(usr.client.holder)
 				config.allow_vote_restart = !config.allow_vote_restart
@@ -459,7 +491,7 @@ var/global/datum/controller/vote/vote = new()
 			if(usr.client.holder)
 				initiate_vote("custom",usr.key)
 		else
-			submit_vote(usr.ckey, round(text2num(href_list["vote"])))
+			submit_vote(usr, round(text2num(href_list["vote"])))
 	usr.vote()
 
 

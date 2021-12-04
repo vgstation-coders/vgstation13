@@ -78,7 +78,7 @@
 
 /datum/theft_objective/traitor/cap_hardsuit
 	name = "the captain's full-body armor" //technically only the bodypiece, which is the hardest one to conceal anyways
-	typepath = /obj/item/clothing/suit/armor/captain
+	typepath = /obj/item/clothing/suit/space/rig/captain
 	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/cap_stamp

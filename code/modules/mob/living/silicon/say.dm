@@ -25,7 +25,7 @@
 
 	for (var/mob/S in player_list)
 		if(istype(S , /mob/living/silicon/ai))
-			var/renderedAI = "<i><span class='binaryradio'>Robotic Talk, <a href='byond://?src=\ref[S];track2=\ref[S];track=\ref[src]'><span class='name'>[name]</span></a> <span class='message'>[message_a]</span></span></i>"
+			var/renderedAI = "<i><span class='binaryradio'>Robotic Talk, <a href='byond://?src=\ref[S];track=[name]'><span class='name'>[name]</span></a> <span class='message'>[message_a]</span></span></i>"
 			to_chat(S, renderedAI)
 		else if(S.binarycheck() || ((S in dead_mob_list) && !istype(S, /mob/new_player)))
 			handle_render(S,rendered,src)

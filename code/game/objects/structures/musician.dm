@@ -60,11 +60,14 @@
 	for(var/mob/M in get_hearers_in_view(15, source))
 		if(!M.client)
 			continue
-		if(M.client.prefs.hear_instruments)
-			M.playsound_local(source, soundfile, 100, falloff = 5)
+		if(M.is_deaf())
+			continue
 		if(istype(instrumentObj,/obj/item/device/instrument))
 			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
+		if(!M.client.prefs.hear_instruments)
+			continue
+		M.playsound_local(source, soundfile, 100, falloff = 5)
 
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
@@ -98,13 +101,13 @@
 					if(!playing || shouldStopPlaying(user))//If the instrument is playing, or special case
 						playing = 0
 						return
-					if(lentext(note) == 0)
+					if(length(note) == 0)
 						continue
 					//world << "Parse: [copytext(note,1,2)]"
 					var/cur_note = text2ascii(note) - 96
 					if(cur_note < 1 || cur_note > 7)
 						continue
-					for(var/i=2 to lentext(note))
+					for(var/i=2 to length(note))
 						var/ni = copytext(note,i,i+1)
 						if(!text2num(ni))
 							if(ni == "#" || ni == "b" || ni == "n")
@@ -113,7 +116,7 @@
 								cur_acc[cur_note] = "#" // so shift is never required
 						else
 							cur_oct[cur_note] = text2num(ni)
-					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)		
+					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)
 				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
 				if (ui)
 					ui.send_message("activeChord", list2params(list(lineCount, chordCount)))
@@ -123,7 +126,7 @@
 				else
 					sleep(tempo)
 				chordCount++
-				
+
 			lineCount++
 		repeat--
 	playing = 0
@@ -192,8 +195,6 @@
 			return 0 // no updates, completely disabled (red visibility)
 		else if (nano.user.restrained() || nano.user.lying)
 			return 1 // update only (orange visibility)
-		else if (istype(instrumentObj, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
-			return 2 // Will build in distance checks on the topics for sanity.
 		else if (!(instrumentObj in view(4, nano.user))) // If the src object is not in visable, set status to 0
 			return 0 // no updates, completely disabled (red visibility)
 		else if (dist <= 1)
@@ -221,14 +222,18 @@
 			t = html_encode(input(usr, "Please paste the entire song, formatted:", text("[]", name), t)  as message)
 			if(!in_range(instrumentObj, usr))
 				return
-			if(lentext(t) >= INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
+			if(length(t) >= INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
 				var/cont = input(usr, "Your message is too long! Would you like to continue editing it?", "", "yes") in list("yes", "no")
 				if(cont == "no")
 					break
-		while(lentext(t) > INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
+		while(length(t) > INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
 		//split into lines
 		spawn()
 			lines = splittext(t, "\n")
+			//if the user didn't paste in a song, we have nothing to do here
+			if(lines.len == 0)
+				alert("You can't import an empty song!")
+				return
 			if(copytext(lines[1],1,6) == "BPM: ")
 				tempo = sanitize_tempo(600 / text2num(copytext(lines[1],6)))
 				lines.Cut(1,2)
@@ -239,7 +244,7 @@
 				lines.Cut(INSTRUMENT_MAX_LINE_NUMBER+1)
 			var/linenum = 1
 			for(var/l in lines)
-				if(lentext(l) > INSTRUMENT_MAX_LINE_LENGTH)
+				if(length(l) > INSTRUMENT_MAX_LINE_LENGTH)
 					alert(usr, "Line [linenum] too long! Removing...")
 					lines.Remove(l)
 				else
@@ -256,6 +261,8 @@
 	else if(href_list["tempo"])
 		tempo = sanitize_tempo(tempo + text2num(href_list["tempo"]))
 	else if(href_list["play"])
+		if(playing)
+			return
 		playing = 1
 		spawn()
 			playsong(usr)
@@ -266,7 +273,7 @@
 			return
 		if(lines.len > INSTRUMENT_MAX_LINE_NUMBER)
 			return
-		if(lentext(newline) > INSTRUMENT_MAX_LINE_LENGTH)
+		if(length(newline) > INSTRUMENT_MAX_LINE_LENGTH)
 			newline = copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH)
 		lines.Add(newline)
 	else if(href_list["deleteline"])
@@ -281,7 +288,7 @@
 		var/content = html_encode(input("Enter your line: ", instrumentObj.name, lines[num]) as text|null)
 		if(!content || !in_range(instrumentObj, usr))
 			return
-		if(lentext(content) > INSTRUMENT_MAX_LINE_LENGTH)
+		if(length(content) > INSTRUMENT_MAX_LINE_LENGTH)
 			content = copytext(content, 1, INSTRUMENT_MAX_LINE_LENGTH)
 		if(num > lines.len || num < 1)
 			return
@@ -307,7 +314,7 @@
 
 		lines.Swap(index, index+dir)
 	interact(usr)
-	
+
 	return
 /datum/song/proc/sanitize_tempo(new_tempo)
 	new_tempo = abs(new_tempo)
@@ -337,6 +344,8 @@
 
 /obj/structure/piano/New()
 	..()
+	if (isobj(loc))//we probably spawned inside a supply crate
+		anchored = FALSE
 	song = new("piano", src)
 
 /obj/structure/piano/random/New()
@@ -356,7 +365,7 @@
 	..()
 
 /obj/structure/piano/attack_hand(mob/user)
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
 	if(broken)
@@ -375,9 +384,9 @@
 	song.interact(user)
 
 /obj/structure/piano/attackby(obj/item/O, mob/user, params)
-	if (istype(O, /obj/item/weapon/wrench))
+	if (O.is_wrench(user))
 		if (!anchored && !istype(get_turf(src),/turf/space))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			O.playtoolsound(src, 50)
 			user << "<span class='notice'> You begin to tighten \the [src] to the floor...</span>"
 			if (do_after(user, 20, target = src))
 				user.visible_message( \
@@ -386,7 +395,7 @@
 					"<span class='italics'>You hear a ratchet.</span>")
 				anchored = 1
 		else if(anchored)
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			O.playtoolsound(src, 50)
 			user << "<span class='notice'> You begin to loosen \the [src]'s casters...</span>"
 			if (do_after(user, 40, target = src))
 				user.visible_message( \
@@ -418,6 +427,7 @@
 	else if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 		if(prob(Proj.damage))
 			src.ex_act(2)
+	return ..()
 
 /obj/structure/piano/xylophone
 	name = "xylophone"

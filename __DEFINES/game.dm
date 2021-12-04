@@ -27,10 +27,22 @@
 
 #define COMMAND_POSITIONS list("Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer")
 #define ENGINEERING_POSITIONS list("Chief Engineer", "Station  Engineer", "Atmospheric Technician", "Mechanic")
-#define MEDICAL_POSITIONS list("Chief Medical Officer", "Medical Doctor", "Geneticist", "Virologist", "Paramedic", "Chemist")
+#define MEDICAL_POSITIONS list("Chief Medical Officer", "Medical Doctor", "Geneticist", "Virologist", "Paramedic", "Chemist", "Orderly")
 #define SCIENCE_POSITIONS list("Research Director", "Scientist", "Geneticist", "Roboticist", "Mechanic")
 #define CIVILIAN_POSITIONS list("Head of Personnel", "Bartender", "Botanist", "Chef", "Janitor", "Librarian", "Internal Affairs Agent", "Chaplain", "Clown", "Mime", "Assistant")
 #define CARGO_POSITIONS list("Head of Personnel", "Quartermaster", "Cargo Technician", "Shaft Miner")
 #define SECURITY_POSITIONS list("Head of Security", "Warden", "Detective", "Security Officer")
 
 #define ALWAYSTRUE 2
+
+#define APPEARANCE_UI_IGNORE_ALPHA			(RESET_COLOR|RESET_TRANSFORM|NO_CLIENT_COLOR|RESET_ALPHA|PIXEL_SCALE)
+
+#define SPEECH_MODE_SAY     1
+#define SPEECH_MODE_WHISPER 2
+#define SPEECH_MODE_FINAL   3
+
+#define MINIMUM_NON_SUS_ACCOUNT_AGE 14 // If the connecting account is older than this many days, admins don't get notified
+
+#define APE_MODE_OFF 0 // He has no style
+#define APE_MODE_EVERYONE 1 // He has no grace
+#define APE_MODE_NEW_PLAYERS 2 // This Kong has a funny face

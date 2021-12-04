@@ -20,12 +20,12 @@
 	attack_verb = list("shoves", "bashes")
 	var/cooldown = 0 //shield bash cooldown. based on world.time
 
-/obj/item/weapon/shield/riot/suicide_act(mob/user)
+/obj/item/weapon/shield/riot/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his face into the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
-	return 1
+	return TRUE
 
 /obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/melee/baton) || istype(W, /obj/item/weapon/melee/telebaton) || istype(W, /obj/item/weapon/melee/classic_baton))
@@ -98,7 +98,7 @@
 	attack_verb = list("shoves", "bashes")
 	var/active = 0
 
-/obj/item/weapon/shield/energy/suicide_act(mob/user)
+/obj/item/weapon/shield/energy/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] to their head and activating it! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -243,8 +243,10 @@
 		return
 	if(!parent_borer.channeling_bone_shield) //the borer has stopped sustaining the sword
 		qdel(src)
+		return
 	if(parent_borer.chemicals < 3) //the parent borer no longer has the chemicals required to sustain the shield
 		qdel(src)
+		return
 	else
 		parent_borer.chemicals -= 3
 
@@ -253,7 +255,22 @@
 	desc = "A veritable wall of defense."
 	icon_state = "tower_shield"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
+	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
 	slowdown = 4
+
+/obj/item/weapon/shield/riot/rune
+	name = "rune kiteshield"
+	desc = "A large metal shield."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "runeshield"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
+	siemens_coefficient = 1
+	slot_flags = null
+	force = 10
+	throwforce = 3
+	throw_speed = 1
+	throw_range = 6
+	w_class = W_CLASS_LARGE
 
 /obj/item/weapon/shield/riot/tower/IsShield()
 	return 2 //Considering its size, twice as effective as a normal shield, but difficult to lug around

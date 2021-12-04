@@ -2,6 +2,9 @@
 
 #define MAX_BEES_PER_HIVE	40
 #define EXILE_RESTRICTION	200
+#define APIARY_WILDERNESS_NONE		0	// a regular apiary
+#define APIARY_WILDERNESS_WILD		1	// can only harvest its content by breaking it, but bees will come outside to pollinate flowers as normal
+#define APIARY_WILDERNESS_DANGER	2	// can only harvest its content by breaking it, and all bees that come outside will be angry
 
 /*
 
@@ -15,10 +18,11 @@ var/list/apiaries_list = list()
 
 /obj/machinery/apiary
 	name = "apiary tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
+	pass_flags_self = PASSTABLE
 	var/apiary_icon = "apiary"
 	var/beezeez = 0//beezeez removes 1 toxic and adds 1 nutrilevel per cycle
 	var/nutrilevel = 0//consumed every round based on how many bees the apiary is sustaining.
@@ -38,11 +42,13 @@ var/list/apiaries_list = list()
 
 	var/obj/item/weapon/reagent_containers/glass/consume = null
 
-	var/wild = 0
+	var/wild = APIARY_WILDERNESS_NONE
 
 	var/datum/bee_species/species = null
 
 	var/open_for_exile = 0
+
+	var/faction = null
 
 	machine_flags = WRENCHMOVE
 
@@ -111,7 +117,7 @@ var/list/apiaries_list = list()
 			else
 				to_chat(user, "<span class='danger'>The [species_name] are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
 
-	if (species.worker_product)
+	if (species?.worker_product)
 		switch(reagents.total_volume)
 			if(30 to 60)
 				to_chat(user, "<span class='info'>Looks like there's a bit of [reagent_name(species.worker_product)] in it.</span>")
@@ -123,8 +129,7 @@ var/list/apiaries_list = list()
 /obj/machinery/apiary/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0
@@ -138,29 +143,29 @@ var/list/apiaries_list = list()
 		else if (prob(1/(yieldmod * yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
 			yieldmod += 1
 	else
-		..()
 		if(src)
 			angry_swarm()
-		return
+	return ..()
 
-/obj/machinery/apiary/hitby(AM as mob|obj)
+/obj/machinery/apiary/hitby(var/atom/movable/AM)
 	. = ..()
 	if(.)
 		return
 	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
 	angry_swarm()
 
-/obj/machinery/apiary/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/apiary/attackby(var/obj/item/O, var/mob/user)
 	if(..())
 		return
 	if(istype(O, /obj/item/device/analyzer/plant_analyzer))
 		to_chat(user, "<span class='warning'>That's not a plant you dummy. You can get basic info about \the [src] by simply examining it.</span>")
 		return
-	if (wild)
+	if (wild != APIARY_WILDERNESS_NONE)
 		return
 	if(istype(O, /obj/item/queen_bee))
 		var/obj/item/queen_bee/bee_packet = O
 		if(user.drop_item(bee_packet))
+			bee_packet.on_insertion(src,user)
 			nutrilevel = max(15,nutrilevel+15)
 			if (!species || !(queen_bees_inside || worker_bees_inside))
 				species = bee_packet.species
@@ -258,7 +263,7 @@ var/list/apiaries_list = list()
 	if (!species)
 		species = B.species
 	B.home = src
-	B.state = null
+	B.intent = null
 	B.health = B.maxHealth
 	for (var/datum/seed/S in B.pollens)
 		var/potency = round(S.potency)
@@ -329,15 +334,17 @@ var/list/apiaries_list = list()
 		H.reagents.clear_reagents()
 		H.reagents.add_reagent(NUTRIMENT, 0.5)
 		H.icon_state = "[species.prefix]honeycomb-base"
+		H.overlays.len = 0 // removing the one added in the honeycomb's New()
 		H.overlays += I
 		reagents.trans_to(H,reagents_per_honeycomb)
+		H.authentify()
 
 	return 1
 
 /obj/machinery/apiary/proc/empty_beehive()
 	if (!queen_bees_inside && !worker_bees_inside)
 		return
-	var/mob/living/simple_animal/bee/lastBees = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+	var/mob/living/simple_animal/bee/lastBees = new /mob/living/simple_animal/bee(get_turf(src))
 	for(var/i = 1 to worker_bees_inside)
 		worker_bees_inside--
 		lastBees.addBee(new species.bee_type())
@@ -354,7 +361,7 @@ var/list/apiaries_list = list()
 		return 0
 	if (A.queen_bees_inside > 0 || locate(/datum/bee/queen_bee) in A.bees_outside_hive)//another queen made her way there somehow
 		return 0
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), src)
+	var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src), src)
 	var/datum/bee/queen_bee/new_queen = new species.queen_type(src)
 	queen_bees_inside--
 	B_mob.addBee(new_queen)
@@ -381,7 +388,7 @@ var/list/apiaries_list = list()
 	for(var/datum/bee/B in bees_outside_hive)
 		B.angerAt(M)
 
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), get_turf(src), src)
+	var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src), get_turf(src), src)
 	for (var/i=1 to worker_bees_inside)
 		var/datum/bee/B = new species.bee_type(src)
 		B_mob.addBee(B)
@@ -466,7 +473,7 @@ var/list/apiaries_list = list()
 		//SENDING OUT BEES
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 11)
 			var/turf/T = get_turf(src)
-			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
+			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = null
 			if (species.queen_wanders && queen_bees_inside > 0 && nutrilevel > 0 && worker_bees_inside > 15 && prob(nutrilevel/3))
 				B = new species.queen_type(src)
@@ -475,8 +482,15 @@ var/list/apiaries_list = list()
 				B = new species.bee_type(src)
 				worker_bees_inside--
 			bees_outside_hive.Add(B)
+			if (wild == APIARY_WILDERNESS_DANGER)
+				B.wild = 1 // out for blood!
 			B_mob.addBee(B)
-			if (prob(species.aggressiveness) || (toxic > species.toxic_threshold_anger && prob(toxic/1.5)))//if our beehive is full of toxicity, bees will become ANGRY
+			if (faction)
+				B_mob.faction = faction
+			if (B.wild)
+				B_mob.mood_change(BEE_OUT_FOR_ENEMIES)
+				B_mob.update_icon()
+			if (B.wild || (toxic > species.toxic_threshold_anger && prob(toxic/1.5)))//if our beehive is full of toxicity, bees will become ANGRY
 				B_mob.mood_change(BEE_OUT_FOR_ENEMIES)
 			else
 				B_mob.mood_change(BEE_OUT_FOR_PLANTS)
@@ -489,6 +503,9 @@ var/list/apiaries_list = list()
 					break
 
 		consume.reagents.clear_reagents()
+
+/obj/machinery/apiary/can_overload()
+	return 0
 
 ///////////////////////////WILD BEEHIVES////////////////////////////
 
@@ -521,13 +538,13 @@ var/list/apiaries_list = list()
 		W.icon_state = "[prefix][W.icon_state]"
 		for (var/mob/living/simple_animal/bee/B_mob in loc)
 			//The bees that built the hive become its starting population
-			if (B_mob.state == BEE_BUILDING)
+			if (B_mob.intent == BEE_BUILDING)
 				for(var/datum/bee/B in B_mob.bees)
 					W.enterHive(B)
 				qdel(B_mob)
 
 			//Nearby homeless bees get a free invite.
-			if (W.species && W.species == B_mob.bee_species && (B_mob.bees + W.worker_bees_inside + W.queen_bees_inside) <= MAX_BEES_PER_HIVE)
+			if (W.species && W.species == B_mob.bee_species && (B_mob.bees.len + W.worker_bees_inside + W.queen_bees_inside) <= MAX_BEES_PER_HIVE)
 				for(var/datum/bee/B in B_mob.bees)
 					W.enterHive(B)
 				qdel(B_mob)
@@ -535,7 +552,7 @@ var/list/apiaries_list = list()
 
 
 /obj/structure/wild_apiary/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P.damage && P.damtype != HALLOSS)
 		health -= P.damage
 		updateHealth()
@@ -564,12 +581,13 @@ var/list/apiaries_list = list()
 
 	cycledelay = 100
 
-	//we'll allow those to start pumping out bees right away
-	wild = 1
 	var/health = 100
 
+	//Cannot normally harvest the apiary other than by breaking it
+	wild = APIARY_WILDERNESS_WILD
+
 /obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P.damage && P.damtype != HALLOSS)
 		health -= P.damage
 		updateHealth()
@@ -619,7 +637,10 @@ var/list/apiaries_list = list()
 	//we'll allow those to start pumping out bees right away
 	queen_bees_inside = 1
 	worker_bees_inside = 20
-	wild = 1
+
+	//Cannot normally harvest the apiary other than by breaking it
+	//Those bees never stops being angry unless calm'd
+	wild = APIARY_WILDERNESS_DANGER
 
 	health = 100
 
@@ -653,8 +674,10 @@ var/list/apiaries_list = list()
 		//sending out bees to KILL
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 15)
 			var/turf/T = get_turf(src)
-			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
+			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = new species.bee_type(src)
+			//those bees never stops being angry unless calm'd
+			B.wild = 1
 			worker_bees_inside--
 			bees_outside_hive.Add(B)
 			B_mob.addBee(B)
@@ -674,12 +697,19 @@ var/list/apiaries_list = list()
 
 	cycledelay = 50
 
-	//we'll allow those to start pumping out bees right away
+	//we'll allow those to start pumping out hornets right away
 	queen_bees_inside = 1
 	worker_bees_inside = 20
-	wild = 1
+
+	//Cannot normally harvest the apiary other than by breaking it
+	//Those bees never stops being angry unless calm'd
+	wild = APIARY_WILDERNESS_DANGER
 
 	health = 100
+
+/obj/machinery/apiary/wild/angry/hornet/deployable
+	worker_bees_inside = 8//will start producing hornets after a few seconds
+
 
 /obj/machinery/apiary/wild/angry/hornet/New()
 	..()
@@ -693,3 +723,6 @@ var/list/apiaries_list = list()
 
 #undef MAX_BEES_PER_HIVE
 #undef EXILE_RESTRICTION
+#undef APIARY_WILDERNESS_NONE
+#undef APIARY_WILDERNESS_WILD
+#undef APIARY_WILDERNESS_DANGER

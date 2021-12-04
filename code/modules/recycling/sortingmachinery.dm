@@ -61,11 +61,11 @@
 	if(W.is_screwdriver(user))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		update_icon()
 		return 1
 
-	if(ismultitool(W) && panel)
+	if(W.is_multitool(user) && panel)
 		mode = !mode
 		to_chat(user, "<span class='notify'>You [mode ? "disable" : "enable"] the lock on \the [src].</span>")
 		return 1
@@ -88,12 +88,12 @@
 	add_fingerprint(usr)
 
 	if(href_list["nextTag"])
-		currTag = Clamp(text2num(href_list["nextTag"]), 0, destinations.len)
+		currTag = clamp(text2num(href_list["nextTag"]), 0, destinations.len)
 		interact(usr)
 		return 1
 
 	if(href_list["remove_dest"] && mode)
-		var/idx = Clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
+		var/idx = clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
 		if(currTag == destinations[idx])
 			currTag = 0 // In case the index was at the end of the list
 		destinations -= destinations[idx]
@@ -149,15 +149,25 @@
 	//testing("[src] FUCKING BUMPED BY \a [AM]")
 
 	if(istype(AM, /obj))
-		var/obj/O = AM
-		O.forceMove(src)
+		receive_atom(AM)
 	else if(istype(AM, /mob))
-		var/mob/M = AM
-		M.forceMove(src)
-	//src.flush() This spams audio like fucking crazy.
-	// Instead, we queue up for the next process.
-	doFlushIn=5 // Ticks, adjust if delay is too long or too short
+		receive_atom(AM)
+
+
+/obj/machinery/disposal/deliveryChute/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item))
+		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
+			return FALSE
+		receive_atom(AM)
+		return TRUE
+	return FALSE
+
+
+/obj/machinery/disposal/deliveryChute/proc/receive_atom(var/atom/movable/AM)
+	AM.forceMove(src)
+	doFlushIn = 5
 	num_contents++
+
 
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1
@@ -202,16 +212,16 @@
 	if(I.is_screwdriver(user))
 		if(c_mode==0)
 			c_mode=1
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(c_mode==1)
 			c_mode=0
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && c_mode==1)
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the floorweld off the delivery chute.")
 		if(W.do_weld(user, src,20, 0))
 			if(gcDestroyed)
@@ -249,8 +259,8 @@
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
+	output_dir = WEST
 	var/input_dir = EAST
-	var/output_dir = WEST
 	var/filter_dir = SOUTH
 
 	var/max_items_moved = 100
@@ -285,7 +295,7 @@
 	var/turf/out_T = get_step(src, output_dir)
 	var/turf/filter_T = get_step(src, filter_dir)
 
-	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
+	if(!out_T.Enter(mover, mover.loc, TRUE) || !filter_T.Enter(mover, mover.loc, TRUE))
 		return
 
 	var/affecting = in_T.contents
@@ -341,7 +351,7 @@
 
 	if("changedir" in href_list)
 		var/changingdir = text2num(href_list["changedir"])
-		changingdir = Clamp(changingdir, 1, 3)//No runtimes from HREF exploits.
+		changingdir = clamp(changingdir, 1, 3)//No runtimes from HREF exploits.
 
 		var/newdir = input("Select the new direction", "MinerX SortMaster 5000", "North") as null|anything in list("North", "South", "East", "West")
 		if(!newdir)
@@ -405,7 +415,7 @@
 	if(href_list["toggle_types"])
 		var/typeID = text2num(href_list["toggle_types"])
 
-		typeID = Clamp(typeID, 1, types.len)//No HREF exploits causing runtimes.
+		typeID = clamp(typeID, 1, types.len)//No HREF exploits causing runtimes.
 
 		if(types[typeID] in selected_types)//Toggle these
 			selected_types -= types[typeID]
@@ -507,7 +517,7 @@
 		return
 
 	if(href_list["toggle_dest"])
-		var/idx = Clamp(text2num(href_list["toggle_dest"]), 0, destinations.len)
+		var/idx = clamp(text2num(href_list["toggle_dest"]), 0, destinations.len)
 		if(destinations[idx] in sorting)
 			sorting -= destinations[idx]
 		else
@@ -516,7 +526,7 @@
 		return 1
 
 	if(href_list["remove_dest"])
-		var/idx = Clamp(text2num(href_list["remove_dest"]), 0, destinations.len)
+		var/idx = clamp(text2num(href_list["remove_dest"]), 0, destinations.len)
 		sorting -= destinations[idx]
 		destinations -= destinations[idx]
 		updateUsrDialog()

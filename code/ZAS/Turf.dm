@@ -4,11 +4,13 @@
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
 
+/turf/var/tmp/list/connection/connections
+
 /turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
 	if(graphic_add && graphic_add.len)
-		overlays += graphic_add
+		vis_contents += graphic_add
 	if(graphic_remove && graphic_remove.len)
-		overlays -= graphic_remove
+		vis_contents -= graphic_remove
 
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)
@@ -70,16 +72,34 @@
 
 	var/list/postponed
 	#ifdef ZLEVELS
-	for(var/d = 1, d < 64, d *= 2)
+	for(var/d = 1, d <= 32, d *= 2)
 	#else
-	for(var/d = 1, d < 16, d *= 2)
+	for(var/d = 1, d <= 8, d *= 2)
 	#endif
 
+		#ifdef ZLEVELS
+		var/turf/unsim
+		if(d == UP)
+			unsim = GetAbove(src)
+		else if(d == DOWN)
+			unsim = GetBelow(src)
+		else
+			unsim = get_step(src, d)
+		#else
 		var/turf/unsim = get_step(src, d)
+		#endif
 
 		if(!unsim) // Edge of map.
 			continue
 
+		if(istype(unsim,/turf/portal))
+			var/turf/portal/port = unsim // Area portal handling.
+			if(port.target_turf)
+				unsim = port.target_turf
+		
+		if(!unsim) // Above check should be fine, but sanity
+			continue
+		
 		var/block = unsim.c_airblock(src)
 		if(block & AIR_BLOCKED)
 
@@ -177,13 +197,14 @@
 		SSair.connect(src, T)
 
 /turf/proc/post_update_air_properties()
-	if(connections)
-		connections.update_all()
+	for(var/turf/T in connections) //Attempting to loop through null just doesn't do anything.
+		connections[T].update()
 
 /turf/assume_air(datum/gas_mixture/giver) //use this for machines to adjust air
 	return 0
 
 /turf/return_air()
+	RETURN_TYPE(/datum/gas_mixture)
 	//Create gas mixture to hold data for passing
 	var/datum/gas_mixture/unsimulated/GM = new
 

@@ -4,7 +4,7 @@
 	icon_state = "syndicate"
 	item_state = "bl_suit"
 	_color = "syndicate"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
 
@@ -34,7 +34,7 @@
 	icon_state = "tactifool"
 	item_state = "bl_suit"
 	_color = "tactifool"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	siemens_coefficient = 1
 
 /obj/item/clothing/under/syndicate/executive

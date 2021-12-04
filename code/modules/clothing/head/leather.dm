@@ -4,6 +4,7 @@
 	flags = FPRINT
 	icon_state = "helmet_leather"
 	item_state = "helmet_leather"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS
 	armor = list(melee = 30, bullet = 10, laser = 20, energy = 10, bomb = 20, bio = 0, rad = 0)
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
@@ -35,6 +36,7 @@
 	desc = "Who was a good boy?"
 	icon_state = "helmet_leather_corgi"
 	item_state = "helmet_leather_corgi"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/leather/deer
 	name = "deer pelt head cover"
@@ -42,6 +44,7 @@
 	body_parts_covered = HEAD|EARS|MOUTH
 	icon_state = "helmet_leather_deerNH"
 	item_state = "helmet_leather_deerNH"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/leather/deer/attackby(obj/W, mob/user)
 	if(istype (W, /obj/item/antlers))
@@ -57,6 +60,7 @@
 	desc = "Made to help you blend in and stalk deer. Perfect for headbutting people with."
 	icon_state = "helmet_leather_deer"
 	item_state = "helmet_leather_deer"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 35, bullet = 10, laser = 20, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/head/leather/xeno
@@ -64,6 +68,7 @@
 	desc = "A brutal attempt at using a brutal combatant as armor."
 	icon_state = "helmet_leather_xeno"
 	item_state = "helmet_leather_xeno"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 25, laser = 30, energy = 25, bomb = 15, bio = 20, rad = 20)
 
 /obj/item/clothing/head/leather/xeno/acidable()

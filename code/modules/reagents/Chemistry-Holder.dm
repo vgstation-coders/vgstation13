@@ -25,6 +25,8 @@ var/const/INGEST = 2
 
 		for (var/path in typesof(/datum/reagent) - /datum/reagent)
 			var/datum/reagent/D = new path()
+			if(D.id == EXPLICITLY_INVALID_REAGENT_ID)
+				continue
 			chemical_reagents_list[D.id] = D
 
 	if (!chemical_reactions_list)
@@ -82,6 +84,16 @@ var/const/INGEST = 2
 
 	handle_reactions()
 	return total_transfered
+
+/datum/reagents/proc/get_master_reagent()
+	var/the_reagent = null
+	var/the_volume = 0
+
+	for(var/datum/reagent/A in reagent_list)
+		if(A.volume > the_volume)
+			the_volume = A.volume
+			the_reagent = A
+	return the_reagent
 
 /datum/reagents/proc/get_master_reagent_name()
 	var/the_name = null
@@ -161,6 +173,9 @@ var/const/INGEST = 2
 				adminwarn_message += "[current_reagent_transfer]u of <span class='warning'>[current_reagent.name]</span>"
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
 		src.remove_reagent(current_reagent.id, current_reagent_transfer)
+
+	for(var/datum/reagent/reagent_datum in R.reagent_list) //Wake up all of the reagents in our target, let them know we did stuff
+		reagent_datum.post_transfer(src)
 
 	// Called from add/remove_agent. -- N3X
 	//src.update_total()
@@ -345,7 +360,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = A
 		if(M && R)
 			R.on_mob_life(M, alien)
-			R.metabolize(M)
+			if(R)
+				R.metabolize(M)
 	update_total()
 
 /datum/reagents/proc/update_aerosol(var/mob/M)
@@ -353,16 +369,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = A
 		if(M && R)
 			R.on_mob_life(M)
-	update_total()
-
-/datum/reagents/proc/conditional_update_move(var/atom/A, var/Running = 0)
-	for(var/datum/reagent/R in reagent_list)
-		R.on_move (A, Running)
-	update_total()
-
-/datum/reagents/proc/conditional_update(var/atom/A, )
-	for(var/datum/reagent/R in reagent_list)
-		R.on_update (A)
 	update_total()
 
 /datum/reagents/proc/handle_reactions()
@@ -385,7 +391,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				var/total_required_catalysts = C.required_catalysts.len
 				var/total_matching_catalysts= 0
 				var/matching_container = 0
-				var/matching_other = 0
+				var/required_conditions = 0
 				var/list/multipliers = new/list()
 				var/required_temp = C.required_temp
 				var/is_cold_recipe = C.is_cold_recipe
@@ -421,25 +427,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					if(istype(my_atom, C.required_container))
 						matching_container = 1
 
-				if(!C.required_other)
-					matching_other = 1
-
-				else
-					/*if(istype(my_atom, /obj/item/slime_core))
-						var/obj/item/slime_core/M = my_atom
-
-						if(M.POWERFLAG == C.required_other && M.Uses > 0) // added a limit to slime cores -- Muskets requested this
-							matching_other = 1*/
-					if(istype(my_atom, /obj/item/slime_extract))
-						var/obj/item/slime_extract/M = my_atom
-
-						if(M.Uses > 0) // added a limit to slime cores -- Muskets requested this
-							matching_other = 1
+				if(C.required_condition_check(src))
+					required_conditions = 1
 
 				if(required_temp == 0 || (is_cold_recipe && chem_temp <= required_temp) || (!is_cold_recipe && chem_temp >= required_temp))
 					meets_temp_requirement = 1
 
-				if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other && meets_temp_requirement)
+				if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions && meets_temp_requirement)
 					var/multiplier = min(multipliers)
 					var/preserved_data = null
 					for(var/B in C.required_reagents)
@@ -479,15 +473,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
 						C.log_reaction(src, created_volume)
 
-					if(istype(my_atom, /obj/item/slime_extract))
-						var/obj/item/slime_extract/ME2 = my_atom
-						ME2.Uses--
-						if(ME2.Uses <= 0) // give the notification that the slime core is dead
-							if (!istype(ME2.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
-								ME2.visible_message("<span class='notice'>[bicon(my_atom)] \The [my_atom]'s power is consumed in the reaction.</span>")
-							ME2.name = "used slime extract"
-							ME2.desc = "This extract has been used up."
-
 					if(!quiet && !(my_atom.flags & SILENTCONTAINER))
 						playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
 
@@ -507,6 +492,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if (R.id != reagent)
 			del_reagent(R.id,update_totals=0)
 	// Only call ONCE. -- N3X
+	update_total()
+	my_atom.on_reagent_change()
+
+/datum/reagents/proc/isolate_any_reagent(var/list/protected_reagents)
+	for(var/A in reagent_list)
+		var/datum/reagent/R = A
+		var/protected = FALSE
+		for(var/B in protected_reagents)
+			if(R.id == B)
+				protected = TRUE
+		if (protected == FALSE)
+			del_reagent(R.id,update_totals=0)
 	update_total()
 	my_atom.on_reagent_change()
 
@@ -550,32 +547,47 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0)
-
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0)
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
+				var/amount_splashed = R.volume+volume_modifier
+				if (amount_override)
+					amount_splashed = amount_override
 				if(ismob(A))
 					if(isanimal(A))
-						R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
+						R.reaction_animal(A, TOUCH, amount_splashed)
 					else
-						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
+						R.reaction_mob(A, TOUCH, amount_splashed)
 				if(isturf(A))
-					R.reaction_turf(A, R.volume+volume_modifier)
+					R.reaction_turf(A, amount_splashed)
 				if(istype(A, /obj))
-					R.reaction_obj(A, R.volume+volume_modifier)
+					R.reaction_obj(A, amount_splashed)
 		if(INGEST)
 			for(var/datum/reagent/R in reagent_list)
+				var/amount_splashed = R.volume+volume_modifier
+				if (amount_override)
+					amount_splashed = amount_override
 				if(ismob(A))
 					if(isanimal(A))
-						R.reaction_animal(A, INGEST, R.volume+volume_modifier)
+						R.reaction_animal(A, INGEST, amount_splashed)
 					else
-						R.reaction_mob(A, INGEST, R.volume+volume_modifier)
+						R.reaction_mob(A, INGEST, amount_splashed)
 				if(isturf(A) && R)
-					R.reaction_turf(A, R.volume+volume_modifier)
+					R.reaction_turf(A, amount_splashed)
 				if(istype(A, /obj) && R)
-					R.reaction_obj(A, R.volume+volume_modifier)
+					R.reaction_obj(A, amount_splashed)
 	return
+
+/datum/reagents/proc/reaction_dropper(var/atom/A, var/volume_modifier=0)
+
+	if(ismob(A))
+		for(var/datum/reagent/R in reagent_list)
+			R.reaction_dropper_mob(A)
+
+	if(istype(A, /obj))
+		for(var/datum/reagent/R in reagent_list)
+			R.reaction_dropper_obj(A, R.volume+volume_modifier)
 
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
@@ -713,6 +725,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return amount_cache[reagent] >= max(0,amount)
 	return 0
 
+/datum/reagents/proc/has_only_any(list/good_reagents)
+    var/found_any_good_reagent = FALSE
+    for(var/reagent in amount_cache)
+        if(!good_reagents.Find(reagent))
+            return FALSE
+        found_any_good_reagent = TRUE
+    return found_any_good_reagent
+
 /datum/reagents/proc/has_reagent_type(var/reagent_type, var/amount = -1, var/strict = 0)
 	if(!ispath(reagent_type,/datum/reagent))
 		return 0
@@ -836,7 +856,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	reagent_list.Cut()
 
 	if(my_atom)
+		my_atom.reagents = null
 		my_atom = null
+	..()
 
 /**
  * Helper proc to retrieve the 'bad' reagents in the holder. Used for logging.
@@ -966,7 +988,38 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = y
 		R.send_to_past(duration)
 
-	spawn(duration + 1)
-		if(my_atom)
-			var/atom/A = my_atom
-			A.reagents = src
+//written for ethylredoxrazine, but might be fun for turning water into wine or something
+/datum/reagents/proc/convert_some_of_type(var/datum/reagent/convert_from_type, var/datum/reagent/convert_to_type,var/convert_amount)
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
+	var/total_amount_converted = 0
+
+	for(var/datum/reagent/itsareagent in reagent_list)
+		if(istype(itsareagent, convert_from_type))
+			var/amount_to_convert
+			amount_to_convert = min(itsareagent.volume, convert_amount)
+			total_amount_converted += amount_to_convert
+			remove_that_reagent(itsareagent, amount_to_convert)
+	return add_reagent(initial(convert_to_type.id), total_amount_converted)
+
+/datum/reagents/proc/convert_all_to_id(var/reagent_id, var/list/whitelisted_ids)
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
+	if(!reagent_list.len)
+		return
+	if(reagent_list.len == 1)
+		var/datum/reagent/the_one_and_only = reagent_list[1]
+		if(the_one_and_only.id == reagent_id || (the_one_and_only.id in whitelisted_ids)) //work's done
+			return
+
+	var/total_amount_converted = 0
+	for(var/datum/reagent/reagent_datum in reagent_list)
+		if(reagent_datum.id == reagent_id || (reagent_datum.id in whitelisted_ids))
+			continue
+		total_amount_converted += reagent_datum.volume
+		remove_that_reagent(reagent_datum, reagent_datum.volume)
+
+	if(!(my_atom.flags & SILENTCONTAINER))
+		playsound(my_atom, 'sound/effects/bubbles.ogg', 50, 1)
+
+	return add_reagent(reagent_id, total_amount_converted)

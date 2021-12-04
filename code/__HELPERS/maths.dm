@@ -25,20 +25,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	var/invcos = arccos(x / sqrt(x * x + y * y))
 	return y >= 0 ? invcos : -invcos
 
-proc/arctan(x)
-	var/y=arcsin(x/sqrt(1+x*x))
-	return y
-
 /proc/Ceiling(x, y = 1)
 	. = -round(-x / y) * y
 
-/proc/sgn(const/i)
-	if(i > 0)
-		return 1
-	else if(i < 0)
-		return -1
-	else
-		return 0
+// Returns the sign of the given number (1 or -1)
+#define sgn(x) ((x) != 0 ? (x) / abs(x) : 0)
 
 // -- Returns a Lorentz-distributed number.
 // -- The probability density function has centre x0 and width s.
@@ -66,7 +57,7 @@ proc/arctan(x)
 		x = rand()
 	var/y = -(1/lambda)*log(1-x)
 	return y
-	
+
 // -- Returns the Lorentz cummulative distribution of the real x, with mean lambda
 
 /proc/exp_cummulative_distribution(var/x, var/lambda)
@@ -76,7 +67,7 @@ proc/arctan(x)
 
 //Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
 /*
-/proc/Clamp(const/val, const/min, const/max)
+/proc/clamp(const/val, const/min, const/max)
 	if (val <= min)
 		return min
 
@@ -186,7 +177,7 @@ proc/arctan(x)
 /proc/unmix(x, a, b, min = 0, max = 1)
 	if(a==b)
 		return 1
-	return Clamp( (b - x)/(b - a), min, max )
+	return clamp( (b - x)/(b - a), min, max )
 
 /proc/Mean(...)
 	var/values 	= 0
@@ -227,7 +218,7 @@ proc/arctan(x)
 /*
  * Tangent.
  */
-/proc/Tan(const/x) 
+/proc/Tan(const/x)
 	return sin(x) / cos(x)
 
 /proc/tan_rad(const/x) // This one assumes that x is in radians.
@@ -324,3 +315,9 @@ proc/arctan(x)
 	assert_eq(count_set_bitflags(65536|32768), 2)
 	assert_eq(count_set_bitflags(1|4|16), 3)
 #endif
+
+// Given a number in the range [old_bottom, old_top],
+// Returns that number mapped to the range [new_bottom, new_top]
+/proc/map_range(old_value, old_bottom, old_top, new_bottom, new_top)
+	var/new_value = (old_value - old_bottom) / (old_top - old_bottom) * (new_top - new_bottom) + new_bottom
+	return new_value

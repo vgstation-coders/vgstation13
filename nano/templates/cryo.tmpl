@@ -55,16 +55,15 @@ Used In File(s): \code\game\machinery\cryo.dm
 			</div>
 		{{/if}}
 	{{/if}}
-	<hr>
 	<div class="line">
 		<div class="statusLabel">Cell Temperature:</div><div class="statusValue">
-			<span class="{{:data.cellTemperatureStatus}}">{{:data.cellTemperature}} K</span>
+			<span class="{{:data.cellTemperatureStatus}}">{{:helper.round(data.cellTemperature - 273.15)}} C ({{:helper.round(data.cellTemperature)}} K)</span>
 		</div>
 	</div>
 	{{if data.hasOccupant}}
 		<div class="line">
 			<div class="statusLabel" style="width: 200px">Occupant Body Temperature:</div><div class="statusValue">
-				<span class="{{:data.occupantTemperatureStatus}}">{{:helper.round(data.occupant.bodyTemperature - 273.15)}} C</span>
+				<span class="{{:data.occupantTemperatureStatus}}">{{:helper.round(data.occupant.bodyTemperature - 273.15)}} C ({{:helper.round(data.occupant.bodyTemperature)}} K)</span>
 			</div>
 		</div>
 	{{/if}}

@@ -12,7 +12,7 @@ list("category" = "resources", "name" = "iron foam grenade", "path" = /obj/item/
 list("category" = "resources", "name" = "camera assembly", "path" = /obj/item/weapon/camera_assembly, "cost" = 100),
 
 
-list("category" = "tools", "name" = "socket wrench", "path" = /obj/item/weapon/wrench/socket, "cost" = 1000), //One gigawatt
+list("category" = "tools", "name" = "socket wrench", "path" = /obj/item/tool/wrench/socket, "cost" = 1000), //One gigawatt
 list("category" = "tools", "name" = "foam extinguisher", "path" = /obj/item/weapon/extinguisher/foam, "cost" = 1000),
 list("category" = "tools", "name" = "empty O2 tank", "path" = /obj/item/weapon/tank/oxygen/empty, "cost" = 1000),
 list("category" = "tools", "name" = "empty plasma tank", "path" = /obj/item/weapon/tank/plasma/empty, "cost" = 1000),
@@ -136,7 +136,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 		toggle_power()
 	if(href_list["set_draw"])
 		consumption = input("Megajoules to draw per tick: ", "1MW = 1000kW = 1000000W", consumption/MEGAWATT) as num
-		consumption = round(Clamp(consumption*MEGAWATT, 0, 2*GIGAWATT)) //we're storing the actual number of watts but only displaying the users the mw conversion
+		consumption = round(clamp(consumption*MEGAWATT, 0, 2*GIGAWATT)) //we're storing the actual number of watts but only displaying the users the mw conversion
 	if(href_list["synth"])
 		locate_data(href_list["synth"]) //Even though the list contains a path, hrefs only pass text so let's use name here instead of path
 	if(href_list["category"])
@@ -160,7 +160,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	spark(src, 10, FALSE)
 
 
-/obj/machinery/power/antiquesynth/wrenchAnchor(var/mob/user)
+/obj/machinery/power/antiquesynth/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(!..())
 		return
 	if(anchored)

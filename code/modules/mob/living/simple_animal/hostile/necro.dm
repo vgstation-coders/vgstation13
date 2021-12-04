@@ -12,8 +12,8 @@
 		if(ghost && ghost.can_reenter_corpse)
 			key = mind.key // Force the ghost in here
 	if(Owner)
-		faction = "\ref[Owner]"
-		friends.Add(Owner)
+		faction = "necro"
+		friends += makeweakref(Owner)
 		creator = Owner
 		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
@@ -32,6 +32,94 @@
 		*/
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul
+	name = "meat ghoul"
+	desc = "An abomination of muscle and fat. Ironically, it's very hungry."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "meatghoul"
+	icon_living = "meatghoul"
+	icon_dead = "meatghoul_dead"
+	speak_chance = 0
+	turns_per_move = 1
+	speed = 5
+	move_to_delay = 3
+	maxHealth = 10
+	health = 10
+	melee_damage_lower = 5
+	melee_damage_upper = 8
+	attacktext = "meats"
+	environment_smash_flags = 0
+	var/bites = 3
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/proc/ghoulifyMeat(M)
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/mType = M
+	bites = mType.bitesize
+	maxHealth += bites + mType.reagents.get_reagent_amount(NUTRIMENT)
+	health = maxHealth
+	melee_damage_upper += bites
+	melee_damage_lower += bites
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/Life()
+	..()
+	if(prob(bites))
+		new /obj/effect/decal/cleanable/blood(get_turf(src))
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/bite_act(mob/living/carbon/human/user)
+	..()
+	bites--
+	user.reagents.add_reagent(NUTRIMENT, bites)
+	playsound(user, 'sound/items/eatfood.ogg', 50, 1)
+	if(bites <= 0)
+		to_chat(user, "<span class='notice'>You devour \the [src]!</span>")
+		qdel(src)
+
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/death(var/gibbed = FALSE)
+	..(gibbed)
+	new /obj/effect/decal/cleanable/ash(loc)
+	qdel(src)
+
+/mob/living/simple_animal/hostile/necro/animal_ghoul
+	name = "ghoulish animal"
+	desc = "A ghoulish animal."
+	icon_state = "skelly"
+	icon_living = "skelly"
+	icon_dead = "skelly_dead"
+	turns_per_move = 1
+	speed = 7
+	move_to_delay = 5
+	maxHealth = 30
+	health = 30
+	melee_damage_lower = 5
+	melee_damage_upper = 10
+	attacktext = "bites"
+	speak_emote = list("groans", "moans")
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+
+/mob/living/simple_animal/hostile/necro/animal_ghoul/proc/ghoulifyAnimal(S)
+	var/mob/living/aGhoul = S
+	var/icon/zombIcon = icon(aGhoul.icon, aGhoul.icon_state)
+	if(isanimal(aGhoul))
+		var/mob/living/simple_animal/ghoulToBe = aGhoul
+		zombIcon = icon(ghoulToBe.icon, ghoulToBe.icon_living)
+		speed = ghoulToBe.speed*2	//Slower than we were
+		maxHealth = ghoulToBe.maxHealth
+		health = maxHealth
+		melee_damage_upper = ghoulToBe.melee_damage_upper
+		melee_damage_lower = ghoulToBe.melee_damage_lower
+		attacktext = ghoulToBe.attacktext
+		speak = ghoulToBe.speak
+	zombIcon.ColorTone("#85B060")
+	icon = zombIcon
+	name = "[aGhoul.name] ghoul"
+	desc = "A ghoulish [aGhoul.name]."
+
+
+/mob/living/simple_animal/hostile/necro/animal_ghoul/death(var/gibbed = FALSE)
+	..(gibbed)
+	new /obj/effect/decal/cleanable/ash(loc)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/necro/skeleton
 	name = "skeleton"
@@ -134,6 +222,10 @@
 	search_objects = 1
 
 	var/list/clothing = list() //If the previous corpse had clothing, it 'wears' it
+
+/mob/living/simple_animal/hostile/necro/zombie/New() //(mob/living/L)
+	..()
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudundead")
 
 /mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
 	if(the_target == creator)
@@ -272,7 +364,7 @@
 
 		animate(src, transform = final_transform, pixel_y = final_pixel_y, dir = final_dir, time = 2, easing = EASE_IN | EASE_OUT)
 
-/mob/living/simple_animal/hostile/necro/zombie/revive()
+/mob/living/simple_animal/hostile/necro/zombie/revive(refreshbutcher = 1)
 	..()
 	times_revived += 1
 	lying = 0
@@ -285,7 +377,7 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/UnarmedAttack(atom/A) //There's got to be a better way to keep everything together
 	if(A == creator) //Evil necromancy magic means no attacking our creator
-		to_chat(src, "Try as you might, you can't bring yourself to attack [A]")
+		to_chat(src, "Try as you might, you can't bring yourself to attack [A].")
 		return
 	..()
 	if(istype(A, /mob/living/carbon/human))
@@ -303,7 +395,7 @@
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
 	icon_living = "zombie_turned"
 	icon_dead = "zombie_turned"
-	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
+	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite fresh."
 	maxHealth = 50
 	health = 50
 	can_evolve = TRUE
@@ -339,7 +431,7 @@
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
 					if(prob(5)) //Let's be generous, they'll only get one regen for this
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
@@ -357,7 +449,7 @@
 							holy_modifier += 1
 
 					if(prob(15*holy_modifier)) //Gotta have faith
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
@@ -372,11 +464,11 @@
 			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
-		visible_message("<span class='notice'>\The [src]'s eyes regain focus, the smell of decay vanishing, [host] has come back to their senses!.</span>")
+		visible_message("<span class='notice'>\The [src]'s eyes regain focus, and the smell of decay vanishes. [host] has come back to their senses!</span>")
 		host = null
 		qdel(src)
 	else
-		visible_message("<span class='notice'>\The [src] grumbles for a moment, then begins to decay at an accelerated rate, seems there was nobody left to save.</span>")
+		visible_message("<span class='notice'>\The [src] grumbles for a moment, then begins to decay at an accelerated rate. Seems there was nobody left to save.</span>")
 		dust()
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting
@@ -400,7 +492,7 @@
 	icon_living = "zombie" //The original
 	icon_state = "zombie"
 	icon_dead = "zombie"
-	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttenous"
+	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttonous."
 	maxHealth = 150
 	health = 150
 	can_evolve = 0
@@ -523,7 +615,7 @@
 	icon_state = "glowing_one"
 	icon_dead = "glowing_one"
 	icon_living = "glowing_one"
-	desc = "Some poor fool having been caught in an incident involving radiation has now suffered it binding to their very essence."
+	desc = "Some poor fool, having been caught in an incident involving radiation, has now suffered it binding to their very essence."
 
 	health = 200
 	maxHealth = 200
@@ -572,3 +664,67 @@
 				set_light(1, 2, "#5dca31")
 
 #undef RAD_COST
+
+
+///////////////////////////////////////////////////////
+///////////////// HEADCRAB ZOMBIES ////////////////////
+///////////////////////////////////////////////////////
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab //Not very useful
+	icon_state = "zombie_headcrab"
+	icon_living = "zombie_headcrab"
+	icon_dead = "zombie_headcrab"
+	desc = "A human that is under control of a headcrab. Better stay away unless you want to become one too."
+	maxHealth = 75
+	health = 75
+	can_evolve = FALSE
+	canRegenerate = 0
+	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+	var/obj/item/clothing/mask/facehugger/headcrab/crab //The crab controlling it.
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
+	..()
+	if (!Victim)
+		icon_state = "zombie_headcrab_clothed"
+		icon_living = "zombie_headcrab_clothed"
+		icon_dead = "zombie_headcrab_clothed"
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
+	if(host)
+		qdel(host)
+		host = null
+	..()
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/death(var/gibbed = FALSE)
+	if(transmogged_from) // we're not a real zombie!
+		..(gibbed)
+		return
+	..(gibbed)
+	if(host)
+		host.forceMove(get_turf(src))
+		if(mind)
+			mind.transfer_to(host)
+			var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+			if(ghost && ghost.can_reenter_corpse)
+				key = mind.key
+		if(prob(33))	//33% chance to blow up their fucking head
+			var/datum/organ/external/head/head_organ = host.get_organ(LIMB_HEAD)
+			head_organ.explode()
+		else
+			visible_message("<span class='danger'>The headcrab releases it's grasp from [src]!</span>")
+		crab?.escaping = 1
+		crab?.stat = CONSCIOUS
+		crab?.target = null
+		host = null
+	else
+		host = new /mob/living/carbon/human(get_turf(src))
+		host.get_organ(LIMB_HEAD).explode()
+		host = null
+		visible_message("<span class='danger'>The [src] collapses weakly!</span>")  //There was not a host.
+	qdel(src)
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/say(message, bubble_type)
+	return ..(reverse_text(message))
+
+
+

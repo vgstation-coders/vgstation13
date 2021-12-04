@@ -2,7 +2,8 @@
 	name = "megaphone"
 	desc = "A device used to project your voice. Loudly. Hold in hand to use."
 	icon_state = "megaphone"
-	item_state = "radio"
+	item_state = "megaphone"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -47,7 +48,7 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 	if(mask_voice)
 		clone.name = "A distorted voice"
 		clone.job = ""
-	Broadcast_Message(clone, level = list(STATION_Z, ASTEROID_Z))
+	Broadcast_Message(clone, level = list(map.zMainStation, map.zAsteroid))
 	to_chat(speech.speaker, "\The [src] [pick("creaks", "whines", "crackles", "whirrs", 1;"makes an odd static/popping noise that you kind of recognize as similar to a geiger counter", 1;"squeaks")] \
 		as it transmits your voice into the set frequency...") //Since you may not be able to hear your own demands, some feedback that they're getting through
 

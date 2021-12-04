@@ -48,13 +48,13 @@ var/list/station_holomaps = list()
 	holomap_datum = null
 	..()
 
-/obj/machinery/station_map/crowbarDestroy(mob/user)
+/obj/machinery/station_map/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	user.visible_message(	"[user] begins to pry out \the [src] from the wall.",
 							"You begin to pry out \the [src] from the wall...")
 	if(do_after(user, src, 40))
 		user.visible_message(	"[user] detaches \the [src] from the wall.",
 								"You detach \the [src] from the wall.")
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		C.playtoolsound(src, 50)
 		new /obj/item/mounted/frame/station_map(src.loc)
 
 		for(var/obj/I in src)
@@ -65,13 +65,13 @@ var/list/station_holomaps = list()
 		new /obj/item/stack/sheet/glass/glass(loc,1)
 
 		return 1
-	return -1
+	return 0
 
 /obj/machinery/station_map/initialize()
 	bogus = 0
 	var/turf/T = get_turf(src)
 	original_zLevel = T.z
-	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]" in extraMiniMaps))
+	if(!((HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]") in extraMiniMaps))
 		bogus = 1
 		holomap_datum.initialize_holomap_bogus()
 		update_icon()
@@ -80,7 +80,7 @@ var/list/station_holomaps = list()
 	holomap_datum.initialize_holomap(T)
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[original_zLevel]"])
-	small_station_map.plane = LIGHTING_PLANE
+	small_station_map.plane = ABOVE_LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
 
 	floor_markings = image('icons/turf/overlays.dmi', "station_map")
@@ -106,7 +106,7 @@ var/list/station_holomaps = list()
 			watching_mob = user
 			flick("station_map_activate", src)
 			watching_mob.client.images |= holomap_datum.station_map
-			watching_mob.callOnFace["\ref[src]"] = "checkPosition"
+			watching_mob.register_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 			if(bogus)
 				to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
 			else
@@ -143,7 +143,7 @@ var/list/station_holomaps = list()
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
 				M.client.images -= holomap_datum.station_map
-		watching_mob.callOnFace -= "\ref[src]"
+		watching_mob.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 	watching_mob = null
 	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
@@ -227,7 +227,7 @@ var/list/station_holomaps = list()
 			if (prob(25))
 				set_broken()
 
-//Portable holomaps, currently AI/Borg/MoMMI only
+//Portable holomaps, used by Ghosts, Silicons, and PDA (using the Station Holomap app)
 /obj/item/device/station_map
 	name					= "portable station holomap"
 	desc					= "A virtual map of the surrounding station."
@@ -249,12 +249,13 @@ var/list/station_holomaps = list()
 	var/datum/station_holomap/holomap_datum
 
 	var/bogus = 0
-	var/lastZ = STATION_Z
+	var/lastZ
 	var/prevent_close = 0
 
 /obj/item/device/station_map/New()
 	..()
 	holomap_datum = new()
+	lastZ = map.zMainStation
 
 /obj/item/device/station_map/attack_self(var/mob/user)
 	toggleHolomap(user)
@@ -271,7 +272,7 @@ var/list/station_holomaps = list()
 		watching_mob = user
 		var/turf/T = get_turf(user)
 		bogus = 0
-		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			bogus = 1
 			holomap_datum.initialize_holomap_bogus()
 		else
@@ -300,7 +301,7 @@ var/list/station_holomaps = list()
 	if (lastZ != T.z)
 		lastZ = T.z
 		bogus = 0
-		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			holomap_datum.initialize_holomap_bogus()
 			bogus = 1
 		else
@@ -395,13 +396,16 @@ var/list/station_holomaps = list()
 	holomap_datum.initialize_holomap()
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
-	small_station_map.plane = LIGHTING_PLANE
+	small_station_map.plane = ABOVE_LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
 
 	update_icon()
 
 /obj/machinery/station_map/strategic/attack_hand(var/mob/user)
 	if(isliving(user) && anchored && !(stat & (NOPOWER|BROKEN)))
+		if( (holoMiniMaps.len < user.loc.z) || (holoMiniMaps[user.loc.z] == null ))
+			to_chat(user, "<span class='notice'>It doesn't seem to be working.</span>")
+			return
 		if(user in watching_mobs)
 			stopWatching(user)
 		else
@@ -414,8 +418,8 @@ var/list/station_holomaps = list()
 				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 				watching_mobs |= user
 				user.client.images |= watcher_maps["\ref[user]"]
-				user.callOnFace["\ref[src]"] = "checkPosition"
-				to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
+				user.register_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
+				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
 
 /obj/machinery/station_map/strategic/checkPosition()
@@ -429,7 +433,7 @@ var/list/station_holomaps = list()
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.callOnFace -= "\ref[src]"
+				M.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -439,7 +443,7 @@ var/list/station_holomaps = list()
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.callOnFace -= "\ref[src]"
+			user.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -449,7 +453,7 @@ var/list/station_holomaps = list()
 	if(!(stat & (NOPOWER|BROKEN)))
 		if(!small_station_map)
 			small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
-			small_station_map.plane = LIGHTING_PLANE
+			small_station_map.plane = ABOVE_LIGHTING_PLANE
 			small_station_map.layer = ABOVE_LIGHTING_LAYER
 		small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"]
 		small_station_map.pixel_x = WORLD_ICON_SIZE/2

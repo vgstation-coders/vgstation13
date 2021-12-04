@@ -22,7 +22,8 @@
 		LANGUAGE_VOX,
 		LANGUAGE_MOUSE,
 		LANGUAGE_GOLEM,
-		LANGUAGE_SLIME)
+		LANGUAGE_SLIME,
+		LANGUAGE_CLOWN)
 
 /obj/structure/losetta_stone/examine(mob/user)
 	var/datum/language/picked_language = all_languages[chosen_language]

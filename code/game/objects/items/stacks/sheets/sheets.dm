@@ -1,10 +1,12 @@
+
+
 /obj/item/stack/sheet
 	name = "sheet"
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM
 	force = 5
 	throwforce = 5
-	max_amount = 50
+	max_amount = MAX_SHEET_STACK_AMOUNT
 	throw_speed = 3
 	throw_range = 3
 	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "smashes")

@@ -185,7 +185,7 @@
 	if(!CheckToken("(", /datum/token/symbol)) //Check for and skip open parenthesis
 		return
 	var/loops = 0
-	for()
+	while(TRUE)
 		loops++
 		if(loops >= 800)
 			errors +=new/datum/scriptError("Cannot find ending params.")

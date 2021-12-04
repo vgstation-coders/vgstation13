@@ -42,7 +42,7 @@
 
 	if(health <= 0)
 		visible_message("<span class='warning'>\The [src] breaks apart!</span>")
-		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 3)
+		new /obj/item/stack/sheet/wood(get_turf(src), 3)
 		qdel(src)
 
 /obj/structure/bookcase/attackby(obj/item/O as obj, mob/user as mob)
@@ -55,7 +55,7 @@
 		to_chat(user, "<span class='notice'>There are no screws on \the [src], it appears to be nailed together. You could probably disassemble it with just a crowbar.</span>")
 		return
 	else if(iscrowbar(O) && user.a_intent == I_HELP) //Only way to deconstruct, needs help intent
-		playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+		O.playtoolsound(src, 75)
 		user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 		"<span class='notice'>You start disassembling \the [src].</span>")
 		busy = 1
@@ -65,15 +65,15 @@
 			user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 			"<span class='notice'>You disassemble \the [src].</span>")
 			busy = 0
-			getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 5)
+			new /obj/item/stack/sheet/wood(get_turf(src), 5)
 			qdel(src)
 			return
 		else
 			busy = 0
 		return
-	else if(iswrench(O))
+	else if(O.is_wrench(user))
 		anchored = !anchored
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		O.playtoolsound(src, 50)
 		user.visible_message("<span class='warning'>[user] [anchored ? "":"un"]anchors \the [src] [anchored ? "to":"from"] the floor.</span>", \
 		"<span class='notice'>You [anchored ? "":"un"]anchor the [src] [anchored ? "to":"from"] the floor.</span>")
 	else if(istype(O, /obj/item/weapon/pen))
@@ -209,16 +209,16 @@
 	var/runestun = 0	//Does it have a stun talisman in it?
 	var/occult = 0 //Does this book contain forbidden and occult writings?
 
-	var/book_width = 400
-	var/book_height = 400
+	var/book_width = 600
+	var/book_height = 800
 
 /obj/item/weapon/book/New()
 	..()
 	if(wiki_page)
 		dat = {"
 		<html>
-			<body>
-				<iframe width='100%' height='100%' src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
+			<body style="margin:5px;padding:0px;overflow:hidden">
+				<iframe width='100%' height='100%' frameborder="0" style="overflow:hidden;height:100%;width:100%" src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
 			</body>
 		</html>
 		"}
@@ -408,26 +408,26 @@
 	var/obj/item/weapon/book/book	 //  Currently scanned book
 	var/mode = 0 					// 0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 
-	attack_self(mob/user as mob)
-		mode += 1
-		if(mode > 3)
-			mode = 0
-		to_chat(user, "[src] Status Display:")
-		var/modedesc
-		switch(mode)
-			if(0)
-				modedesc = "Scan book to local buffer."
-			if(1)
-				modedesc = "Scan book to local buffer and set associated computer buffer to match."
-			if(2)
-				modedesc = "Scan book to local buffer, attempt to check in scanned book."
-			if(3)
-				modedesc = "Scan book to local buffer, attempt to add book to general inventory."
-			else
-				modedesc = "ERROR"
-		to_chat(user, " - Mode [mode] : [modedesc]")
-		if(src.computer)
-			to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
+/obj/item/weapon/barcodescanner/attack_self(mob/user as mob)
+	mode += 1
+	if(mode > 3)
+		mode = 0
+	to_chat(user, "[src] Status Display:")
+	var/modedesc
+	switch(mode)
+		if(0)
+			modedesc = "Scan book to local buffer."
+		if(1)
+			modedesc = "Scan book to local buffer and set associated computer buffer to match."
+		if(2)
+			modedesc = "Scan book to local buffer, attempt to check in scanned book."
+		if(3)
+			modedesc = "Scan book to local buffer, attempt to add book to general inventory."
 		else
-			to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
-		to_chat(user, "\n")
+			modedesc = "ERROR"
+	to_chat(user, " - Mode [mode] : [modedesc]")
+	if(src.computer)
+		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
+	else
+		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
+	to_chat(user, "\n")

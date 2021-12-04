@@ -114,6 +114,12 @@ var/global/ingredientLimit = 10
 	if(cooks_in_reagents)
 		return TRUE
 
+/obj/machinery/cooking/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+		T += M.rating-1
+	cookTime = initial(cookTime)-(25 * T) //150 ticks minus 25 ticks per every laser tier, T4s make it 75 ticks.
+
 // Interactions ////////////////////////////////////////////////
 
 /obj/machinery/cooking/examine(mob/user)
@@ -170,6 +176,10 @@ var/global/ingredientLimit = 10
 	set src in oview(1)
 
 	if(isjustobserver(usr) || ismouse(usr))
+		return
+
+	if(active)
+		to_chat(usr, "<span class='warning'>\The [src] is currently busy!</span>")
 		return
 
 	if(cooks_in_reagents)
@@ -295,7 +305,13 @@ var/global/ingredientLimit = 10
 	icon_state = "mixer_off"
 	icon_state_on = "mixer_on"
 	cookSound = 'sound/machines/juicer.ogg'
+	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
 
+/obj/machinery/cooking/candy/RefreshParts()						
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		T += M.rating-1
+	cookTime = initial(cookTime)-(10 * T) //150 ticks minus 10 ticks per every tier level, T4s make it 60 ticks.
 
 /obj/machinery/cooking/candy/validateIngredient(var/obj/item/I)
 	. = ..()
@@ -342,6 +358,13 @@ var/global/ingredientLimit = 10
 	icon_state = "cereal_off"
 	icon_state_on = "cereal_on"
 	foodChoices = null
+	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
+	
+/obj/machinery/cooking/cerealmaker/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		T += M.rating-1
+	cookTime = initial(cookTime)-(10 * T) //150 ticks minus 10 ticks per every tier level, T4s make it 60 ticks.
 
 /obj/machinery/cooking/cerealmaker/validateIngredient(var/obj/item/I)
 	. = ..()
@@ -351,6 +374,9 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/cerealmaker/makeFood()
+	makeCereal()
+
+/obj/machinery/cooking/proc/makeCereal()	
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
 	for(var/obj/item/embedded in src.ingredient.contents)
 		embedded.forceMove(src.loc)
@@ -653,7 +679,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(30)
-	if(istype(I,/obj/item/weapon/crowbar) && do_after(user,src,30))
+	if(istype(I,/obj/item/tool/crowbar) && do_after(user,src,30))
 		user.visible_message("<span class='notice'>[user] dissassembles the [src].</span>", "<span class='notice'>You dissassemble \the [src].</span>")
 		if(src.ingredient)
 			ingredient.forceMove(src.loc)
@@ -777,3 +803,54 @@ var/global/ingredientLimit = 10
 		toggle()
 	if(within)
 		within.attempt_heating(src)
+
+/obj/machinery/cooking/foodpress
+	name = "food press"
+	desc = "Press your nutriment into various fun shapes!"
+	icon_state = "oven_off"
+	icon_state_on = "oven_on"
+	cookSound = 'sound/machines/juicer.ogg'
+	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
+	var/mode = "Candy"
+
+/obj/machinery/cooking/foodpress/validateIngredient(var/obj/item/I)
+	. = ..()
+	if ((. == "valid") && (!foodNesting))
+		for (var/food in foodChoices)
+			if (findtext(I.name, food))
+				. = "It's already pressed into that shape."
+				break
+
+/obj/machinery/cooking/foodpress/attack_hand(mob/user)
+	if(!active)
+		if(Adjacent(user) && !user.stat && !user.incapacitated() && !isobserver(user))
+			var/which = alert("What shape would you like?", "Food press", "Candy", "Baked Goods", "Cereal")
+			if((!which) || (!Adjacent(user)))
+				return
+			mode = which
+			to_chat(user, "You set \the [src.name] to [mode].")
+			foodChoices = list()
+			var/obj/item/food
+			for (var/path in getFoodChoices())
+				food = path
+				foodChoices.Add(list(initial(food.name) = path))
+		else
+			to_chat(user, "You are too far away from [src.name].")
+	..()
+
+/obj/machinery/cooking/foodpress/makeFood()
+	if(mode == "Cereal")
+		makeCereal()
+		return
+	..()
+
+/obj/machinery/cooking/foodpress/getFoodChoices()
+	var/list/types = list()
+	switch(mode)
+		if("Candy")
+			types = typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy)
+		if("Baked Goods")
+			types = typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)
+		if("Cereal")
+			types = list(/obj/item/weapon/reagent_containers/food/snacks/cereal)
+	return types
