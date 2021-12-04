@@ -67,7 +67,7 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 	..()
 	
 /obj/item/device/radio_jammer/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W,/obj/item/weapon/screwdriver))
+	if (W.is_screwdriver(user))
 		cover_open = !cover_open
 		if (cover_open)
 			to_chat(user, "<span class='notice'>You open up the power cell cover.</span>")
