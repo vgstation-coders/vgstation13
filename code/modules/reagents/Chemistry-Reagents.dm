@@ -26,7 +26,7 @@
 	var/volume = 0
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
-	var/sport = 1 //High sport helps you show off on a treadmill. Multiplicative
+	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
 	var/overdose_am = 0
@@ -1493,7 +1493,7 @@
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	sport = 1.2
+	sport = SPORTINESS_SUGAR
 	density = 1.59
 	specheatcap = 1.244
 
@@ -4153,6 +4153,7 @@
 	if(..())
 		return 1
 
+	M.slurring = 0
 	M.dizziness = 0
 	M.drowsyness = 0
 	M.stuttering = 0
@@ -5652,6 +5653,22 @@
 	glass_desc = "Vitamins! Yay!"
 
 /datum/reagent/drink/orangejuice/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getToxLoss() && prob(20))
+		M.adjustToxLoss(-REM)
+
+/datum/reagent/drink/opokjuice
+	name = "Opok Juice"
+	id = OPOKJUICE
+	description = "A fruit from the mothership pulped into bitter juice, with a very slight undertone of sweetness."
+	color = "#FF9191" //rgb: 255, 145, 145
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Vitamins from the mothership!"
+
+/datum/reagent/drink/opokjuice/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -8564,7 +8581,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Take the leap... enjoy a Quantum!"
 	color = "#100800" //rgb: 16, 8, 0
 	adj_sleepy = -2
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 
 /datum/reagent/drink/cold/quantum/on_mob_life(var/mob/living/M)
 
@@ -8577,7 +8594,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Sport Drink"
 	id = SPORTDRINK
 	description = "You like sports, and you don't care who knows."
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
 	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
@@ -9658,7 +9675,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Sporty Incense"
 	id = INCENSE_CRAVE
 	description = "This has what you crave. Electrolytes."
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 	custom_metabolism = 0.15
 
 /datum/reagent/incense/cornoil

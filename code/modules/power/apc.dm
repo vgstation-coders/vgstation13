@@ -50,6 +50,7 @@
 	use_power = 0
 	req_access = list(access_engine_equip)
 	var/spooky=0
+	var/pulsecompromising=0
 	var/obj/item/weapon/cell/cell
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
@@ -306,7 +307,7 @@
 			update_state |= UPSTATE_OPENED1
 		if(opened==2)
 			update_state |= UPSTATE_OPENED2
-	else if(emagged || malfai || spooky)
+	else if(emagged || malfai || spooky || pulsecompromising)
 		update_state |= UPSTATE_BLUESCREEN
 	else if(wiresexposed)
 		update_state |= UPSTATE_WIREEXP
@@ -435,6 +436,10 @@
 				to_chat(user, "You swap the power cell within with the new cell in your hand.")
 				var/obj/item/weapon/oldpowercell = cell
 				cell = W
+				if(cell.occupant && !pulsecompromised)
+					cell.occupant.forceMove(src)
+					cell.occupant.hijackAPC(src)
+					cell.occupant.current_power = src
 				chargecount = 0
 				update_icon()
 				user.put_in_hands(oldpowercell)
@@ -446,6 +451,10 @@
 				return
 			if(user.drop_item(W, src))
 				cell = W
+				if(cell.occupant && !pulsecompromised)
+					cell.occupant.forceMove(src)
+					cell.occupant.hijackAPC(src)
+					cell.occupant.current_power = src
 				user.visible_message(\
 					"<span class='warning'>[user.name] has inserted the power cell to [src.name]!</span>",\
 					"You insert the power cell.")

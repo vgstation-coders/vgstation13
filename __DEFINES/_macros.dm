@@ -74,6 +74,8 @@
 
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
 
+#define ispulsedemon(A) (istype(A, /mob/living/simple_animal/hostile/pulse_demon))
+
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
@@ -111,6 +113,8 @@
 #define issilicon(A) istype(A, /mob/living/silicon)
 
 #define isMoMMI(A) istype(A, /mob/living/silicon/robot/mommi)
+
+#define isSaMMI(A) istype(A, /mob/living/silicon/robot/mommi/sammi)
 
 #define isbot(A) istype(A, /obj/machinery/bot)
 

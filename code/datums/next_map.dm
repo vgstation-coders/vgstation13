@@ -78,6 +78,11 @@
 /datum/next_map/island
 	name = "Island Station"
 	path = "Island"
+	min_players = 25
+	
+/datum/next_map/line
+	name = "Frankenline Station"
+	path = "line"
 	min_players = 15
 
 /datum/next_map/lamprey

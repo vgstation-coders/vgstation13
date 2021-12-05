@@ -308,8 +308,10 @@
 	return new_frank
 
 /mob/proc/Animalize()
-	var/list/mobtypes = existing_typesof(/mob/living/simple_animal)
-	var/mobpath = input("Which type of mob should [src] turn into?", "Choose a type") in mobtypes
+	var/mobtext = input("Filter to a type name", "Choose a type") as text
+	var/mobpath = filter_list_input("Which type of mob should [src] turn into?", "Choose a type", get_matching_types(mobtext, /mob/living/simple_animal))
+	if(!mobpath)
+		return
 	if(!safe_animal(mobpath))
 		to_chat(usr, "<span class='warning'>Sorry but this mob type is currently unavailable.</span>")
 		return
