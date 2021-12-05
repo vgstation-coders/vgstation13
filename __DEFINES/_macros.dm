@@ -114,6 +114,8 @@
 
 #define isMoMMI(A) istype(A, /mob/living/silicon/robot/mommi)
 
+#define isSaMMI(A) istype(A, /mob/living/silicon/robot/mommi/sammi)
+
 #define isbot(A) istype(A, /obj/machinery/bot)
 
 #define isborer(A) istype(A, /mob/living/simple_animal/borer)

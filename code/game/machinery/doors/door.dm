@@ -107,7 +107,7 @@ var/list/all_doors = list()
 	if (ismob(AM))
 		var/mob/M = AM
 
-		if(!M.restrained() && (M.size > SIZE_TINY))
+		if(!M.restrained() && (M.size > SIZE_TINY) && !isSaMMI(M))
 			bump_open(M)
 
 		return
