@@ -1285,6 +1285,14 @@ var/global/floorIsLava = 0
 	if (istype(R) && R.emagged)
 		return TRUE
 	return (M.mind ? M.mind.antag_roles.len : null)
+
+/proc/get_afk_admins()
+	var/admin_number_afk = 0
+	for(var/client/X in admins)
+		if(X.is_afk())
+			admin_number_afk++
+
+	return admin_number_afk
 /*
 /datum/admins/proc/get_sab_desc(var/target)
 	switch(target)
