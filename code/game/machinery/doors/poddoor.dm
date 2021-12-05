@@ -74,21 +74,22 @@ var/list/poddoors = list()
 		denied()
 		return FALSE
 
-/obj/machinery/door/poddoor/attackby(var/obj/item/weapon/C, var/mob/user)
-	src.add_fingerprint(user)
-	if (!( iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
+/obj/machinery/door/poddoor/attackby(obj/item/weapon/C, mob/user)
+	add_fingerprint(user)
+	if(!density)
 		return
-	if ((density && (stat & NOPOWER) && !( operating )))
-		spawn()
-			src.operating = 1
-			flick(openingicon, src)
-			src.icon_state = openicon
-			src.set_opacity(0)
-			sleep(animation_delay)
-			setDensity(FALSE)
-			src.operating = 0
-			return
-	return
+	if(istype(C, /obj/item/weapon/melee/energy/sword/ninja))
+		attempt_slicing(user)
+	else if(iscrowbar(C) || istype(C, /obj/item/weapon/fireaxe) && C.wielded)
+		if(!operating && stat & NOPOWER)
+			spawn()
+				operating = TRUE
+				flick(openingicon, src)
+				icon_state = openicon
+				set_opacity(FALSE)
+				sleep(animation_delay)
+				setDensity(FALSE)
+				operating = FALSE
 
 /obj/machinery/door/poddoor/allowed(mob/M)
 	return 0
