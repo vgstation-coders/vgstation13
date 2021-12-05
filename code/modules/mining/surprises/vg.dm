@@ -123,8 +123,7 @@
 	name = "The Buried Bar"
 	desc = "A miner walks into a bar, Dusky says \"Sorry, you're too young to be served\"."
 
-	file_path = "maps/randomvaults/mining/bar.dmm" 
-	can_rotate = TRUE
+	file_path = "maps/randomvaults/mining/bar.dmm"
 
 /datum/map_element/hoboshack
 	name = "Space hobo shack"

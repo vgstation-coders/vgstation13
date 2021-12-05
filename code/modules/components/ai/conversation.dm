@@ -14,12 +14,14 @@
 /datum/component/ai/conversation/proc/cmd_say()
 	if(isliving(parent))
 		var/mob/living/M=parent
-		M.say("[pick(messages)]")
+		if(!M.isDead())
+			M.say("[pick(messages)]")
 
 /datum/component/ai/conversation/proc/cmd_specific_say(var/list/to_say)
 	if(isliving(parent))
 		var/mob/living/M=parent
-		M.say("[pick(to_say)]")
+		if(!M.isDead())
+			M.say("[pick(to_say)]")
 
 /datum/component/ai/conversation/auto
 	var/speech_prob = 30
@@ -39,7 +41,9 @@
 	if(next_speech < world.time && prob(speech_prob))
 		var/list/targets = INVOKE_EVENT(parent, /event/comp_ai_cmd_find_targets)
 		for(var/mob/living/M in targets)
-			if(M == src)
+			if(istype(M,/mob/living/simple_animal))
+				continue
+			if(M == parent)
 				continue
 			if(M.isDead()) //No speaking to the dead
 				continue
