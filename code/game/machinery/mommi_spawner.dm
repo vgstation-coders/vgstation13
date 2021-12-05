@@ -116,10 +116,6 @@
 				return TRUE
 
 /obj/machinery/mommi_spawner/proc/makeMoMMI(var/mob/user, var/obj/item/device/mmi/use_mmi)
-	return FALSE
-
-/*
-/obj/machinery/mommi_spawner/proc/makeMoMMI(var/mob/user, var/obj/item/device/mmi/use_mmi)
 	building = TRUE
 	update_icon()
 
@@ -151,7 +147,7 @@
 		metal = 0
 		building = FALSE
 		update_icon()
-*/
+
 
 /obj/machinery/mommi_spawner/proc/PostMoMMIMaking(var/mob/living/silicon/robot/mommi/M)
 	if(!M)
