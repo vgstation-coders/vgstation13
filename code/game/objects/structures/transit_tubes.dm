@@ -660,21 +660,21 @@
 /obj/structure/transit_tube/proc/text2dir_extended(direction)
 	switch(uppertext(direction))
 		if("NORTH", "N")
-			return 1
+			return NORTH
 		if("SOUTH", "S")
-			return 2
+			return SOUTH
 		if("EAST", "E")
-			return 4
+			return EAST
 		if("WEST", "W")
-			return 8
+			return WEST
 		if("NORTHEAST", "NE")
-			return 5
+			return NORTHEAST
 		if("NORTHWEST", "NW")
-			return 9
+			return NORTHWEST
 		if("SOUTHEAST", "SE")
-			return 6
+			return SOUTHEAST
 		if("SOUTHWEST", "SW")
-			return 10
+			return SOUTHWEST
 		else
 	return 0
 
@@ -684,21 +684,21 @@
 //  directions used in tube icon states.
 /obj/structure/transit_tube/proc/dir2text_short(direction)
 	switch(direction)
-		if(1)
+		if(NORTH)
 			return "N"
-		if(2)
+		if(SOUTH)
 			return "S"
-		if(4)
+		if(EAST)
 			return "E"
-		if(8)
+		if(WEST)
 			return "W"
-		if(5)
+		if(NORTHEAST)
 			return "NE"
-		if(6)
+		if(SOUTHEAST)
 			return "SE"
-		if(9)
+		if(NORTHWEST)
 			return "NW"
-		if(10)
+		if(SOUTHWEST)
 			return "SW"
 		else
 	return
@@ -706,13 +706,13 @@
 /obj/structure/transit_tube/proc/iconstate2framedir()
 	switch(icon_state)
 		if("N-S","NE-SW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
-			return 1
+			return NORTH
 		if("S-NE","S-NW","S-NE-NW","S-NW-NE")
-			return 2
+			return SOUTH
 		if("E-W","NW-SE","E-NW","E-SW","E-NW-SW","E-SW-NW","E-W-pass")
-			return 4
+			return EAST
 		if("W-SE","W-NE","W-SE-NE","W-NE-SE")
-			return 8
+			return WEST
 		if("closed","open","closing","opening")
 			return dir
 	return 0
