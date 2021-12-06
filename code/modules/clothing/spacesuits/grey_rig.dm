@@ -9,6 +9,7 @@
 	species_fit = list(GREY_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 20, energy = 5, bomb = 25, bio = 100, rad = 50)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey
+	initial_modules = list(/obj/item/rig_module/rad_shield)
 
 /obj/item/clothing/head/helmet/space/rig/grey
 	name = "worker pressure helmet"

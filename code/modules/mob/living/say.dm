@@ -189,7 +189,15 @@ var/list/headset_modes = list(
 		return
 
 	//parse the language code and consume it
-
+	
+	//but first, scoreboard for syndiphrases stuff
+	if(src.mind && (src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER)))
+		for(var/syn in syndicate_code_phrase)
+			if(findtext(speech.message, syn))
+				score["syndiphrases"] += 1
+		for(var/syn in syndicate_code_response)
+			if(findtext(speech.message, syn))
+				score["syndisponses"] += 1
 
 	var/message_range = 7
 	treat_speech(speech)
@@ -244,7 +252,7 @@ var/list/headset_modes = list(
 				if(V.spread & SPREAD_MEMETIC)
 					infect_disease2(V, notes="(Memed, from [L])")
 
-	INVOKE_EVENT(src, /event/comp_ai_cmd_hear, "speech" = speech)
+	INVOKE_EVENT(src, /event/hear, "speech" = speech)
 	if(!client)
 		return
 	say_testing(src, "[src] ([src.type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")
@@ -267,7 +275,6 @@ var/list/headset_modes = list(
 
 	//checking for syndie codephrases if person is a tator
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
-		//is tator
 		for(var/T in syndicate_code_phrase)
 			rendered_message = replacetext(html_decode(rendered_message), T, "<b style='color: red;'>[html_encode(T)]</b>")
 

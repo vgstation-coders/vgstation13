@@ -75,6 +75,7 @@
 		/obj/item/weapon/grenade/chem_grenade/cleaner,
 		/obj/item/weapon/grenade/chem_grenade/metalfoam,
 		/obj/item/weapon/grenade/flashbang,		//Pretty powerful
+		/obj/item/weapon/grenade/chem_grenade/teargas,
 		/obj/item/weapon/grenade/smokebomb,
 		/obj/item/weapon/grenade/chem_grenade/wind,
 

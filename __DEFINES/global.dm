@@ -277,12 +277,15 @@ var/list/score=list(
 	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
 	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
 	"lawchanges"	 = 0, //Amount of AI modules used.
+	"syndiphrases"	 = 0, //Amount of times a syndicate code phrase was used
+	"syndisponses"	 = 0, //Amount of times a syndicate code response was used
 
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
 
 	"money_leaderboard" = list(),
+	"implant_phrases" = list(),
 )
 
 var/list/isolated_antibodies = list(

@@ -40,6 +40,8 @@
 //#define MAP_OVERRIDE 12
 // island.dm
 //#define MAP_OVERRIDE 13
+// line.dm
+//#define MAP_OVERRIDE 14
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this

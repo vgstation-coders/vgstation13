@@ -162,6 +162,21 @@
 	logo = "pulsedemon-logo"
 	
 	repeatable = TRUE
+	var/list/cables_to_spawn_at = list()
+
+/datum/dynamic_ruleset/latejoin/pulse_demon/ready(var/forced = 0)
+	for(var/datum/powernet/PN in powernets)
+		for(var/obj/structure/cable/C in PN.cables)
+			var/turf/simulated/floor/F = get_turf(C)
+			// Cable to spawn at must be on a floor, not tiled over, on the main station, powered and in maint
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation && istype(get_area(C),/area/maintenance) && C.powernet.avail)
+				cables_to_spawn_at.Add(C)
+	if(!cables_to_spawn_at.len)
+		log_admin("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		message_admins("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		return 0
+
+	return ..()
 
 /datum/dynamic_ruleset/latejoin/pulse_demon/execute()
 	var/mob/M = pick(assigned)
@@ -169,18 +184,6 @@
 	M.forceMove(null)
 	if(!latejoinprompt(M,src))
 		message_admins("[M.key] has opted out of becoming a pulse demon.")
-		M.forceMove(oldloc)
-		return 0
-	var/list/cables_to_spawn_at = list()
-	for(var/datum/powernet/PN in powernets)
-		for(var/obj/structure/cable/C in PN.cables)
-			var/turf/simulated/floor/F = get_turf(C)
-			// Cable to spawn at must be on a floor, not tiled over, on the main station and in maint
-			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation && istype(get_area(C),/area/maintenance))
-				cables_to_spawn_at.Add(C)
-	if(!cables_to_spawn_at.len)
-		message_admins("[M.key] could not start as a pulse demon, no suitable cables found!")
-		to_chat(M,"<span class='warning'>You could not become as a pulse demon, as no suitable cables were found.</span>")
 		M.forceMove(oldloc)
 		return 0
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)

@@ -310,6 +310,17 @@
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/flashbang(src)
+		
+/obj/item/weapon/storage/box/teargas
+	name = "box of teargas grenades (WARNING)"
+	desc = "<FONT color=red><B>WARNING: Do not use without reading these precautions!</B></FONT>\n<B>WARNING: These devices can expose you to chemicals including Lead Salts and Hexavalent Chromium, which are known to the Republic of New California to cause cancer, and Lead Salts, which are known to the Republic of New California to cause birth defects and other reproductive harm.</B>\nThe Tear-Gas™ Grenade is a high volume, continuous discharge grenade. Tear-Gas™ is discharged through four (4) gas ports located on top of the canister and one (1) located on the bottom. It is similar in size to the typical Flash-Bang™ Grenade.\nThe Tear-Gas™ Grenade was designed for training, but may also be used in operations. The Tear-Gas™ Grenade offers the same approximate stunning time as the Flash-Bang™ Grenade. The similar stunning times may make it the appropriate choice for training or simulation deployment of chemical agent canisters. The Tear-Gas™ formulation is considered to be less toxic than Chloral Hydrate (chloral) smoke. The Tear-Gas™ Grenade emits a very red smoke.\nIn operations, it can be utilized as a carrying agent (multiplier) for Flash-Bang™ Grenades or other stunning munitions, or for concealing the movement of security personnel. It may also be used as a distraction to focus attention away from other activities. The device should be deployed utilizing wind advantage.\nIt should NOT be deployed onto rooftops, in crawl spaces, or indoors due to its fire-producing capability. Hand throw or launch. Launching of grenades will provide deploying officers additional standoff situations.\n<B>WARNING: THIS PRODUCT IS TO BE USED ONLY BY AUTHORIZED AND TRAINED LAW ENFORCEMENT, CORRECTIONS, OR MILITARY PERSONNEL. THIS PRODUCT MAY CAUSE SERIOUS INJURY OR DEATH TO YOU OR OTHERS. THIS PRODUCT MAY CAUSE SERIOUS DAMAGE TO PROPERTY. HANDLE, STORE AND USE WITH EXTREME CARE AND CAUTION. USE ONLY AS INSTRUCTED.</B>"
+	icon_state = "flashbang"
+	item_state = "flashbang"
+
+/obj/item/weapon/storage/box/teargas/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chem_grenade/teargas(src)
 
 /obj/item/weapon/storage/box/syndigrenades
 	name = "box of C28E pipe bombs (WARNING)"

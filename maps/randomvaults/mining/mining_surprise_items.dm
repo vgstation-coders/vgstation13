@@ -20,6 +20,14 @@
 	desc = "A little rusted at the creases, but this barbot is still happy to serve so long as the generator is running"
 	icon_state = "kodiak-service"
 
+// No radio
+/mob/living/silicon/robot/NPC/dusky/initialize_components()
+	components["actuator"] = new/datum/robot_component/actuator(src)
+	components["power cell"] = new/datum/robot_component/cell(src)
+	components["diagnosis unit"] = new/datum/robot_component/diagnosis_unit(src)
+	components["camera"] = new/datum/robot_component/camera(src)
+	components["armour"] = new/datum/robot_component/armour(src)
+
 /mob/living/silicon/robot/NPC/dusky/initialize_NPC_components()
 	..()
 	var/datum/component/ai/target_finder/simple_view/SV = add_component(/datum/component/ai/target_finder/simple_view)
