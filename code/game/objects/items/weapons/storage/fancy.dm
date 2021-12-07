@@ -446,7 +446,7 @@
 	desc = "A rich green-colored foil pack, containing the best unfiltered smokes this side of Andromeda. L.S./M.F.T."
 	icon_state = "DLSpacket"
 	item_state = "DLSpacket"
-	cigtype = /obj/item/clothing/mask/cigarette/lucky
+	cigtype = /obj/item/clothing/mask/cigarette/dlucky
 
 /obj/item/weapon/storage/fancy/cigarettes/ntstandard
 	name = "\improper NT Standard packet"
@@ -462,6 +462,15 @@
 	item_state = "RSpacket"
 	cigtype = /obj/item/clothing/mask/cigarette/redsuit
 
+/obj/item/weapon/storage/fancy/cigarettes/redsuits/New()
+	..()
+	if(prob(5))
+		new /obj/item/device/camera_bug(src) //5% chance to have a camerabug.
+		if(prob(5))
+			for(var/atom/A in src)
+				qdel(A)
+			for(var/i = 1 to 5)
+				new /obj/item/device/camera_bug(src) // 0.2% chance to be nothing but them.
 /*
  * Vial Box
  */

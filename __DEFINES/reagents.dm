@@ -485,6 +485,7 @@
 #define THYMOL			"thymol"
 #define POTASSIUMCARBONATE "potassium_carbonate"
 #define TOBACCO			"tobacco"
+#define PURETOBACCO		"unfiltered tobacco"
 #define DANBACCO		"danbacco"
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"

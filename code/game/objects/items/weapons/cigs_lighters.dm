@@ -481,6 +481,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/bidibutt
 	burn_on_end = TRUE
 
+/obj/item/clothing/mask/cigarette/bidi/New()
+	..()
+	reagents.add_reagent(GRAVY, 5)
+
 /obj/item/clothing/mask/cigarette/goldencarp
 	name = "Golden Carp cigarette"
 	desc = "A cigarette made from light, fine paper, with a thin gold band above the filter."
@@ -488,6 +492,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "goldencarplit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/goldencarpbutt
+
+/obj/item/clothing/mask/cigarette/goldencarp/New()
+	..()
+	reagents.add_reagent(GOLD, 1) // Golden paper
 
 /obj/item/clothing/mask/cigarette/starlight
 	name = "Starlight cigarette"
@@ -497,6 +505,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/starlightbutt
 
+/obj/item/clothing/mask/cigarette/starlight/New()
+	..()
+	reagents.add_reagent(DEXALIN, 3) // Light spaceproofing
+	reagents.add_reagent(LEPORAZINE, 2)
+
 /obj/item/clothing/mask/cigarette/lucky
 	name = "Lucky Strike cigarette"
 	desc = "Plain and unfiltered, just how great-great-grandad used to like them."
@@ -504,6 +517,23 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "luckylit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/luckybutt
+
+/obj/item/clothing/mask/cigarette/lucky/New()
+	..()
+	reagents.remvoe_reagent(TOBACCO, 5)
+	reagents.add_reagent(PURETOBACCO, 5) // Pure
+
+/obj/item/clothing/mask/cigarette/dlucky
+	name = "Deluxe Lucky Strike cigarette"
+	desc = "Plain, unfiltered and a rich foil blue paper, just how great-great-grandad would've only wished for."
+	icon_state = "dlucky"
+	overlay_on = "dluckylit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/dluckybutt
+
+/obj/item/clothing/mask/cigarette/dlucky/New()
+	..()
+	reagents.add_reagent(COCAINE, 5) // Speed
 
 /obj/item/clothing/mask/cigarette/redsuit
 	name = "Redsuit cigarette"
@@ -513,6 +543,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/redsuitbutt
 
+/obj/item/clothing/mask/cigarette/redsuit/New()
+	..()
+	reagents.add_reagent(SUGAR, 1) // A new meaning to the term "smoke"
+	reagents.add_reagent(POTASSIUM, 1) // A new meaning to the term "smoke"
+	reagents.add_reagent(PHOSPHORUS, 1) // A new meaning to the term "smoke"
+
 /obj/item/clothing/mask/cigarette/ntstandard
 	name = "NT Standard cigarette"
 	desc = "Matte grey with a blue band. Corporate loyalty with every puff."
@@ -520,6 +556,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "ntstandardlit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/ntstandardbutt
+
+/obj/item/clothing/mask/cigarette/ntstandard/New()
+	..()
+	reagents.add_reagent(SPRINKLES, 5) // For the most loyal
 
 /obj/item/clothing/mask/cigarette/spaceport
 	name = "Spaceport cigarette"
@@ -529,7 +569,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/spaceportbutt
 
-
+/obj/item/clothing/mask/cigarette/spaceport/New()
+	..()
+	reagents.remvoe_reagent(TOBACCO, 2)
+	reagents.add_reagent(DANBACCO, 2) // Not so pure
 
 ////////////
 // CIGARS //
@@ -603,6 +646,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "An unfiltered cigarette butt."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "luckybutt"
+
+/obj/item/trash/cigbutt/dluckybutt
+	name = "cigarette butt"
+	desc = "A slick-looking cigarette butt with no filter."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "dluckybutt"
 
 /obj/item/trash/cigbutt/redsuitbutt
 	name = "cigarette butt"

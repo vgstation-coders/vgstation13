@@ -4061,32 +4061,58 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#181818" //rgb: 24, 24, 24
 	density = 1.01
+	var/focus_increase_amount = 1
+
+/datum/reagent/nicotine/on_mob_life(var/mob/living/M) // Tobacco without the downsides
+	if(..())
+		return 1
+
+	M.dizziness = max(0,M.dizziness - focus_increase_amount)
+	M.confusion = max(0,M.confusion - focus_increase_amount)
+	M.drowsyness = max(0,M.drowsyness - focus_increase_amount)
 
 //Solely for flavor.
-/datum/reagent/tobacco
+/datum/reagent/nicotine/tobacco
 	name = "Tobacco"
 	id = TOBACCO
 	description = "The cured and ground leaves of a tobacco plant."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
+	var/lungprob = 5
 
-/datum/reagent/danbacco
+/datum/reagent/nicotine/tobacco/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(prob(lungprob))
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/internal/lungs/damagedlungs = H.get_lungs()
+			damagedlungs.damage++
+			if(damagedlungs.damage > 10)
+				H.add_cancer(1, LIMB_CHEST)
+
+/datum/reagent/nicotine/tobacco/unfiltered
+	name = "Condensed Tobacco"
+	id = PURETOBACCO
+	description = "The cured and ground leaves of a tobacco plant without the effects of a cigarette filter."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#4c1e00" //rgb: 76, 30, 0
+	density = 1.01
+	lungprob = 20
+	focus_increase_amount = 3
+
+/datum/reagent/nicotine/tobacco/danbacco
 	name = "Tobacco"
 	id = DANBACCO //This product may or may not cause cancer.
 	description = "The cured and ground leaves of a tobacco plant with additional Discount Dan flavors."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
-
-/datum/reagent/danbacco/on_mob_life(var/mob/living/M)
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(prob(50)) //Discount dan's special blend.
-			H.add_cancer(1, LIMB_CHEST)
+	lungprob = 50
+	focus_increase_amount = 0
 
 /datum/reagent/ammonia
 	name = "Ammonia"
