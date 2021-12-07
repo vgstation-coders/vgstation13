@@ -597,12 +597,25 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	chem_volume = 25
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
+
+/obj/item/clothing/mask/cigarette/cigar/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		reagents.add_reagent(DANBACCO, 5)
+	else
+		reagents.add_reagent(TOBACCO, 5) // Another 5 on top
+
 /obj/item/clothing/mask/cigarette/cigar/cohiba
 	name = "Cohiba Robusto Cigar"
 	desc = "There's little more you could want from a cigar."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+
+/obj/item/clothing/mask/cigarette/cigar/cohiba/New()
+	..()
+	reagents.add_reagent(SPORTDRINK, 5) // Robusto!
 
 /obj/item/clothing/mask/cigarette/cigar/havana
 	name = "Premium Havanian Cigar"
@@ -612,6 +625,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	smoketime = 7200
 	chem_volume = 30
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/mask/cigarette/cigar/havana/New()
+	..()
+	reagents.remove_reagent(TOBACCO, 5)
+	reagents.add_reagent(NICOTINE, 5) // More for less downsides
 
 /obj/item/trash/cigbutt
 	name = "cigarette butt"
