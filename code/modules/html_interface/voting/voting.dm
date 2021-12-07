@@ -467,7 +467,7 @@ var/global/datum/controller/vote/vote = new()
 			return 0
 		if("cancel")
 			if(usr.client.holder)
-				if(alert("Are you sure you want to cancel this vote? This will not the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
+				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
 					return
 				log_admin("[key_name(usr)] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				message_admins("[key_name(usr)] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
