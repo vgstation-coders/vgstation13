@@ -467,6 +467,8 @@ var/global/datum/controller/vote/vote = new()
 			return 0
 		if("cancel")
 			if(usr.client.holder)
+				if(alert("Are you sure you want to cancel this vote? This will not the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
+					return
 				reset()
 				update()
 				currently_voting = FALSE
