@@ -4068,7 +4068,7 @@
 		return 1
 
 	M.dizziness = max(0,M.dizziness - focus_increase_amount)
-	M.confusion = max(0,M.confusion - focus_increase_amount)
+	M.confused = max(0,M.confused - focus_increase_amount)
 	M.drowsyness = max(0,M.drowsyness - focus_increase_amount)
 
 //Solely for flavor.

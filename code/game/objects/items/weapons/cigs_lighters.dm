@@ -520,7 +520,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/lucky/New()
 	..()
-	reagents.remvoe_reagent(TOBACCO, 5)
+	reagents.remove_reagent(TOBACCO, 5)
 	reagents.add_reagent(PURETOBACCO, 5) // Pure
 
 /obj/item/clothing/mask/cigarette/dlucky
@@ -571,7 +571,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/spaceport/New()
 	..()
-	reagents.remvoe_reagent(TOBACCO, 2)
+	reagents.remove_reagent(TOBACCO, 2)
 	reagents.add_reagent(DANBACCO, 2) // Not so pure
 
 ////////////
