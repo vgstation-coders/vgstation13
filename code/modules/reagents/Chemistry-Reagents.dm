@@ -4088,7 +4088,6 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(prob(lungprob))
-			var/mob/living/carbon/human/H = M
 			var/datum/organ/internal/lungs/damagedlungs = H.get_lungs()
 			damagedlungs.damage++
 			if(damagedlungs.damage > 10)
