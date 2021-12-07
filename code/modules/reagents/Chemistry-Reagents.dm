@@ -4090,6 +4090,8 @@
 		if(prob(lungprob))
 			var/datum/organ/internal/lungs/damagedlungs = H.get_lungs()
 			damagedlungs.damage++
+			if(damagedlungs.damage > 5)
+				M.audible_cough() // Some warning not to have too many of these
 			if(damagedlungs.damage > 10)
 				H.add_cancer(1, LIMB_CHEST)
 
