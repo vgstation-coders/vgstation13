@@ -10,7 +10,7 @@
 /*
 /spell/cult/trace_rune
 	name = "Trace Rune"
-	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
+	desc = "(2 BLOOD) Use available blood to write down words. Three words form a rune."
 	hud_state = "cult_word"
 
 	invocation_type = SpI_NONE
@@ -28,7 +28,7 @@
 	var/obj/effect/rune/rune = null
 	var/datum/rune_spell/spell = null
 	var/continue_drawing = 0
-	var/blood_cost = 1
+	var/blood_cost = 2
 
 
 /spell/cult/trace_rune/choose_targets(var/mob/user = usr)
