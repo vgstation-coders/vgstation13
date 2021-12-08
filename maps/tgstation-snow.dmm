@@ -20141,11 +20141,9 @@
 	},
 /area/vox_trading_post/vault)
 "aWD" = (
-/obj/machinery/vending/trader,
-/turf/simulated/floor/vox{
-	icon_state = "dark"
-	},
-/area/vox_trading_post/vault)
+/obj/structure/trade_window,
+/turf/simulated/floor/plating/vox,
+/area/vox_trading_post/hallway)
 "aWE" = (
 /obj/machinery/cooking/grill,
 /turf/simulated/floor/vox{
@@ -283947,7 +283945,7 @@ aYv
 bpt
 bsR
 aWi
-aXs
+aWD
 bJW
 bPa
 bRF
@@ -289980,7 +289978,7 @@ bZp
 bZp
 bZp
 aWh
-aWD
+aXv
 aXv
 aXv
 bpr

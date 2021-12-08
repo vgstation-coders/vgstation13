@@ -3196,14 +3196,6 @@ var/global/num_vending_terminals = 1
 
 //trade vendor used to be here, now see trade_datums.dm
 
-/obj/machinery/vending/trader/New()
-	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
-	var/list/upgrades = existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper
-	for(var/i = 1 to 3)
-		premium.Add(pick_n_take(upgrades))
-
-	..()
-
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"
 	desc = "The ultimate vendor for any aspiring space stylist."
