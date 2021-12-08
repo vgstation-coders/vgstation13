@@ -99,16 +99,16 @@ var/list/assassination_objectives = list()
 		var/datum/component/uplink/enemy_uplink = target.find_syndicate_uplink(enemy.uplink)
 		//chances are the target's uplink is no longer on their mind.current especially if they got decapitated or such.
 		//by associating the uplink with the role we can at least try and get the TCs out of it.
+		//Leaving this as is, even though this change no longer moves the target's TC from their uplink into yours, it instead sets the target's to 0 and increases yours by a static amount (8).
 
 		if (A.target == owner)
 			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your Victory. Look forward to be assigned on higher risk operations another day.</span>")
 		else
 			if (owner_uplink)
-				owner_uplink.telecrystals += DOUBLE_AGENT_TC_REWARD
 				if (enemy_uplink)
-					owner_uplink.telecrystals += enemy_uplink.telecrystals
+					owner_uplink.telecrystals += 8
 					enemy_uplink.telecrystals = 0
-				to_chat(owner.current, "<span class='notice'>Good work agent. [DOUBLE_AGENT_TC_REWARD] additional tele-crystals have been sent to your uplink.</span>")
+				to_chat(owner.current, "<span class='notice'>Good work agent. 8 additional tele-crystals have been sent to your uplink.</span>")
 			else
 				to_chat(owner.current, "<span class='notice'>Good work agent. Unfortunately we couldn't find your uplink on your person, so no additional tele-crystals could be distributed.</span>")
 			var/datum/objective/target/assassinate/new_kill_target = new(auto_target = FALSE)
@@ -117,7 +117,7 @@ var/list/assassination_objectives = list()
 				to_chat(owner.current, "<b>New Objective</b>: [new_kill_target.explanation_text]<br>")
 
 		if (owner_uplink && enemy_uplink)
-			owner_uplink.telecrystals += enemy_uplink.telecrystals
+			owner_uplink.telecrystals += 8
 			enemy_uplink.telecrystals = 0
 
 		A.syndicate_checked = SYNDICATE_CANCELED
