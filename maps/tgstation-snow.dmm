@@ -2354,12 +2354,14 @@
 /turf/simulated/wall/r_wall,
 /area/research_outpost/xenobot)
 "aeZ" = (
-/obj/structure/transit_tube/station,
 /obj/machinery/light{
 	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -2390,12 +2392,6 @@
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
-"aff" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
-	},
-/turf/simulated/wall/r_wall,
-/area/research_outpost/xenobot)
 "afg" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -2463,12 +2459,6 @@
 	icon_state = "whitegreen";
 	tag = "icon-whitegreen (NORTHEAST)"
 	},
-/area/research_outpost/xenobot)
-"afo" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NE"
-	},
-/turf/simulated/wall/r_wall,
 /area/research_outpost/xenobot)
 "afp" = (
 /obj/structure/window/reinforced{
@@ -2813,12 +2803,14 @@
 /turf/simulated/wall/r_wall,
 /area/research_outpost/hallway)
 "age" = (
-/obj/structure/transit_tube/station,
 /obj/machinery/light/small{
 	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -4683,12 +4675,6 @@
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
-"akK" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
-	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/mine/explored)
 "akL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable{
@@ -4704,12 +4690,6 @@
 	icon_state = "whiteblue"
 	},
 /area/research_outpost/sample)
-"akO" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SW"
-	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/mine/explored)
 "akP" = (
 /obj/structure/disposalpipe/trunk{
 	dir = 8
@@ -5849,9 +5829,6 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/transit_tube{
-	icon_state = "D-SW"
-	},
 /turf/simulated/floor/plating,
 /area/research_outpost/entry)
 "anE" = (
@@ -6664,12 +6641,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/entry)
-"apt" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SW"
-	},
-/turf/simulated/floor,
-/area/research_outpost/entry)
 "apu" = (
 /obj/structure/table,
 /obj/item/device/paicard,
@@ -6988,12 +6959,6 @@
 	icon_state = "white"
 	},
 /area/research_outpost/anomaly)
-"aqb" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/unsimulated/mineral/snow,
-/area/mine/explored)
 "aqc" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -7534,20 +7499,6 @@
 /area/comms{
 	name = "\improper Cyborg Station"
 	})
-"ars" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/transit_tube{
-	icon_state = "D-NE"
-	},
-/turf/simulated/floor/plating,
-/area/research_outpost/entry)
 "art" = (
 /obj/structure/transit_tube{
 	icon_state = "S-NW"
@@ -8060,15 +8011,6 @@
 "atb" = (
 /turf/simulated/wall/r_wall,
 /area/research_outpost/power)
-"atc" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NE"
-	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "whitepurple"
-	},
-/area/research_outpost/hallway)
 "atd" = (
 /obj/structure/transit_tube{
 	icon_state = "E-NW"
@@ -8086,7 +8028,9 @@
 	},
 /area/research_outpost/hallway)
 "atg" = (
-/obj/structure/transit_tube/station,
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitepurple"
@@ -8102,9 +8046,6 @@
 	},
 /area/research_outpost/hallway)
 "ati" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
-	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitepurple"
@@ -9029,12 +8970,6 @@
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/research_outpost/power)
-"avg" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
-	},
-/turf/unsimulated/mineral/snow,
-/area/mine/explored)
 "avh" = (
 /obj/machinery/light/small{
 	dir = 2
@@ -9615,10 +9550,11 @@
 /turf/simulated/wall,
 /area/research_outpost/entry)
 "awn" = (
-/obj/structure/transit_tube/station{
-	dir = 4
-	},
 /obj/structure/transit_tube_pod,
+/obj/structure/transit_tube/station{
+	dir = 4;
+	req_access_txt = "47"
+	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "awo" = (
@@ -9673,20 +9609,6 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/research_outpost/hallway)
-"awt" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/simulated/floor/plating,
 /area/research_outpost/hallway)
 "awu" = (
 /obj/structure/grille,
@@ -11157,22 +11079,6 @@
 	icon_state = "floorgrime"
 	},
 /area/mine/production)
-"azC" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/simulated/floor/plating,
-/area/research_outpost/entry)
 "azF" = (
 /obj/structure/transit_tube{
 	icon_state = "N-SW"
@@ -12434,12 +12340,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/entry)
-"aCE" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
-	},
-/turf/simulated/floor,
-/area/research_outpost/entry)
 "aCF" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
@@ -12762,10 +12662,11 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDX" = (
-/obj/structure/transit_tube/station{
-	dir = 8
-	},
 /obj/structure/transit_tube_pod,
+/obj/structure/transit_tube/station{
+	dir = 8;
+	req_access_txt = "47"
+	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDY" = (
@@ -12840,12 +12741,6 @@
 	icon_state = "toxlab";
 	name = "Toxins"
 	})
-"aEc" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NE"
-	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/mine/explored)
 "aEe" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -13677,7 +13572,8 @@
 	})
 "aFY" = (
 /obj/structure/transit_tube/station{
-	dir = 4
+	dir = 4;
+	req_access_txt = "8"
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/dorm2{
@@ -14395,12 +14291,6 @@
 	icon_state = "floorgrime"
 	},
 /area/mine/production)
-"aHq" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
-	},
-/turf/unsimulated/mineral/snow,
-/area/mine/unexplored)
 "aHt" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -15596,11 +15486,12 @@
 /turf/simulated/floor,
 /area/mine/production)
 "aJR" = (
-/obj/structure/transit_tube/station{
-	dir = 8
-	},
 /obj/structure/hanging_lantern{
 	dir = 4
+	},
+/obj/structure/transit_tube/station{
+	dir = 8;
+	req_access_txt = "47"
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
@@ -15678,12 +15569,6 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/research_outpost/tempstorage)
-"aJY" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/simulated/wall/r_wall,
-/area/research_outpost/maintstore2)
 "aJZ" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -15726,21 +15611,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/mine/explored)
-"aKe" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/transit_tube{
-	icon_state = "D-SW"
-	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
-/area/mine/explored)
-"aKf" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/mine/explored)
 "aKg" = (
 /obj/structure/transit_tube{
 	icon_state = "E-SW"
@@ -15752,7 +15622,6 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKj" = (
-/obj/structure/transit_tube/station,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'VACUUM'";
 	icon_state = "space";
@@ -15761,6 +15630,9 @@
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
@@ -15926,20 +15798,6 @@
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
-"aKz" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/transit_tube{
-	icon_state = "D-NE"
-	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/mine/explored)
 "aKA" = (
 /obj/structure/window/reinforced,
 /obj/structure/transit_tube{
@@ -15959,20 +15817,6 @@
 	},
 /obj/structure/hanging_lantern{
 	dir = 4
-	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/mine/explored)
-"aKD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
@@ -16039,30 +15883,6 @@
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
-"aKJ" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SW"
-	},
-/turf/simulated/wall/r_wall,
-/area/mine/explored)
-"aKK" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SW"
-	},
-/turf/simulated/wall/r_wall,
-/area/research_outpost/dorm2{
-	icon_state = "toxlab";
-	name = "Toxins"
-	})
-"aKL" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/simulated/wall/r_wall,
-/area/research_outpost/dorm2{
-	icon_state = "toxlab";
-	name = "Toxins"
-	})
 "aKM" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -16145,9 +15965,6 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKV" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NE"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -16167,12 +15984,14 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKY" = (
-/obj/structure/transit_tube/station,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
 /obj/structure/hanging_lantern{
 	dir = 1
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
@@ -20322,11 +20141,9 @@
 	},
 /area/vox_trading_post/vault)
 "aWD" = (
-/obj/machinery/vending/trader,
-/turf/simulated/floor/vox{
-	icon_state = "dark"
-	},
-/area/vox_trading_post/vault)
+/obj/structure/trade_window,
+/turf/simulated/floor/plating/vox,
+/area/vox_trading_post/hallway)
 "aWE" = (
 /obj/machinery/cooking/grill,
 /turf/simulated/floor/vox{
@@ -173689,13 +173506,13 @@ dYP
 dYP
 aEI
 aEI
-aKf
+aaJ
 akJ
 aIJ
 aAV
 aJR
 anC
-aKz
+aKE
 edy
 edy
 aNb
@@ -173990,13 +173807,13 @@ dYP
 dYP
 dYP
 dYP
-aKf
+aaJ
 afe
-avg
+aEg
 bgQ
 aJt
 aJt
-aKe
+aJt
 aKA
 edy
 edy
@@ -174293,7 +174110,7 @@ dYP
 dYP
 dYP
 aGo
-aHq
+aEI
 aEg
 aEg
 edy
@@ -176110,7 +175927,7 @@ edy
 edy
 edy
 edy
-aKf
+aaJ
 aKC
 edy
 edy
@@ -176405,7 +176222,7 @@ evh
 evh
 edy
 edy
-aKf
+aaJ
 afu
 edy
 edy
@@ -176413,7 +176230,7 @@ edy
 edy
 edy
 aKg
-aKD
+aKy
 edy
 edy
 aNb
@@ -176705,10 +176522,10 @@ evh
 evh
 edy
 edy
-aKf
+aaJ
 akJ
 ajr
-akK
+aaJ
 edy
 edy
 edy
@@ -177008,7 +176825,7 @@ edy
 edy
 edy
 aKg
-akK
+aaJ
 aDS
 aDS
 aDS
@@ -177298,12 +177115,12 @@ edy
 edy
 edy
 edy
-aKf
+aaJ
 akJ
 aAV
 aAV
 anC
-aEc
+aaJ
 edy
 edy
 edy
@@ -177593,7 +177410,7 @@ dYP
 evh
 edy
 edy
-aKf
+aaJ
 akJ
 aAV
 aAV
@@ -177601,16 +177418,16 @@ aAV
 aAV
 aAV
 ajr
-akK
+aaJ
 alr
 ame
 anD
 aps
-ars
+aEV
 ame
 awm
 ame
-azC
+anD
 aCD
 aEV
 aDS
@@ -177894,9 +177711,9 @@ dYP
 dYP
 evh
 edy
-aKf
+aaJ
 afe
-akK
+aaJ
 agI
 agI
 aht
@@ -177907,13 +177724,13 @@ agI
 agI
 amg
 anE
-apt
+anE
 art
 auc
 awn
 axB
 azF
-aCE
+anE
 aEW
 aDS
 aGr
@@ -178197,7 +178014,7 @@ dYP
 evh
 edy
 aKg
-akK
+aaJ
 aEg
 agI
 ahb
@@ -179705,7 +179522,7 @@ dYP
 evh
 edy
 edy
-aKf
+aaJ
 afu
 aEg
 aEg
@@ -180006,9 +179823,9 @@ dYP
 evh
 evh
 edy
-aKf
+aaJ
 afe
-akK
+aaJ
 afM
 aEg
 agI
@@ -180309,7 +180126,7 @@ evh
 edy
 edy
 aKg
-aff
+aeW
 aeW
 afN
 aeW
@@ -182453,7 +182270,7 @@ aIT
 aJA
 aDt
 ekr
-aKJ
+ekr
 aKW
 ekr
 aEI
@@ -183027,7 +182844,7 @@ edy
 edy
 edy
 afa
-afo
+aeW
 afD
 afV
 aeW
@@ -183328,9 +183145,9 @@ evh
 edy
 edy
 edy
-akO
+aaJ
 aoQ
-aEc
+aaJ
 aaJ
 qct
 atn
@@ -183631,9 +183448,9 @@ edy
 edy
 edy
 edy
-akO
+aaJ
 aoQ
-aEc
+aaJ
 qct
 agN
 agA
@@ -183934,7 +183751,7 @@ edy
 edy
 edy
 edy
-akO
+aaJ
 afW
 qct
 afX
@@ -186654,7 +186471,7 @@ evh
 edy
 edy
 agi
-aEc
+aaJ
 aaJ
 aaJ
 akw
@@ -186681,7 +186498,7 @@ aIZ
 aJE
 aJG
 aEg
-aqb
+aEg
 aKZ
 aLi
 edy
@@ -186955,7 +186772,7 @@ dYP
 evh
 edy
 edy
-akO
+aaJ
 agt
 aAV
 aAV
@@ -186971,7 +186788,7 @@ aAV
 aAV
 aAV
 asa
-atc
+ati
 aBo
 aCf
 aFm
@@ -186982,9 +186799,9 @@ aIt
 aJa
 aJF
 aJG
-aqb
+aEg
 afe
-akK
+aaJ
 edy
 aEs
 evh
@@ -187283,9 +187100,9 @@ aBE
 aCb
 aCb
 aJG
-aJY
+aJG
 afe
-akK
+aaJ
 edy
 aEs
 edy
@@ -187586,7 +187403,7 @@ aIu
 aCb
 aEg
 aKg
-akK
+aaJ
 aEs
 edy
 edy
@@ -188480,7 +188297,7 @@ edy
 edy
 edy
 edy
-awt
+ase
 ath
 auB
 aCa
@@ -188781,7 +188598,7 @@ edy
 edy
 edy
 edy
-aKf
+aaJ
 awu
 ati
 auB
@@ -189686,7 +189503,7 @@ edy
 edy
 aEg
 aEg
-aqb
+aEg
 ara
 aEg
 qct
@@ -189983,13 +189800,13 @@ edy
 edy
 edy
 edy
-aKf
+aaJ
 akJ
 amf
 amf
 amf
 asJ
-avg
+aEg
 aEg
 qct
 auC
@@ -190286,7 +190103,7 @@ edy
 edy
 edy
 aKg
-akK
+aaJ
 aEg
 aEg
 aEg
@@ -193928,7 +193745,7 @@ aIx
 aJc
 evh
 agi
-aEc
+aaJ
 edy
 edy
 evh
@@ -194229,9 +194046,9 @@ aHM
 aIy
 aJc
 evh
-akO
+aaJ
 aoQ
-aEc
+aaJ
 edy
 edy
 evh
@@ -194532,9 +194349,9 @@ aIz
 aJd
 evh
 evh
-akO
+aaJ
 aoQ
-aEc
+aaJ
 edy
 edy
 dYP
@@ -194815,9 +194632,9 @@ edy
 edy
 edy
 edy
-akO
+aaJ
 aoQ
-aEc
+aaJ
 aaJ
 evh
 evh
@@ -194835,7 +194652,7 @@ aso
 aso
 aso
 aso
-aKK
+aso
 afW
 edy
 edy
@@ -195118,9 +194935,9 @@ edy
 edy
 edy
 edy
-akO
+aaJ
 aoQ
-aEc
+aaJ
 aaJ
 evh
 evh
@@ -195421,9 +195238,9 @@ edy
 edy
 edy
 edy
-akO
+aaJ
 aoQ
-aEc
+aaJ
 evh
 evh
 evh
@@ -195724,9 +195541,9 @@ edy
 edy
 edy
 edy
-akO
+aaJ
 aoQ
-aEc
+aaJ
 aaJ
 awA
 aso
@@ -195741,7 +195558,7 @@ aso
 aso
 aso
 aKq
-aKL
+aso
 afu
 edy
 edy
@@ -196027,7 +195844,7 @@ edy
 edy
 edy
 edy
-akO
+aaJ
 agt
 aAV
 awB
@@ -196044,7 +195861,7 @@ aJJ
 aAV
 aKr
 ajr
-akK
+aaJ
 edy
 edy
 dYP
@@ -284128,7 +283945,7 @@ aYv
 bpt
 bsR
 aWi
-aXs
+aWD
 bJW
 bPa
 bRF
@@ -290161,7 +289978,7 @@ bZp
 bZp
 bZp
 aWh
-aWD
+aXv
 aXv
 aXv
 bpr

@@ -83,7 +83,7 @@
 /datum/next_map/line
 	name = "Frankenline Station"
 	path = "line"
-	min_players = 15
+	min_players = 20
 
 /datum/next_map/lamprey
 	name = "Lamprey Station"

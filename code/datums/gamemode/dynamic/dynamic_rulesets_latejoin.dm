@@ -242,3 +242,49 @@
 		L.OnPostSetup()
 		update_faction_icons()
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//               TIME AGENT                 //
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/time_agent
+	name = "Time Agent Anomaly"
+	role_category = /datum/role/time_agent
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT * 0.4
+	cost = 10
+	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
+	logo = "time-logo"
+
+/datum/dynamic_ruleset/latejoin/time_agent/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if (antag_count < max_traitors)
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
+	if(required_candidates > (mode.dead_players.len + mode.list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/latejoin/time_agent/execute()
+	var/mob/M = pick(assigned)
+	var/turf/oldloc = get_turf(M)
+	M.forceMove(null)
+	if(!latejoinprompt(M,src))
+		message_admins("[M.key] has opted out of becoming a time agent.")
+		M.forceMove(oldloc)
+		return 0
+	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
+	if (!agency)
+		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	var/datum/role/time_agent/newagent = new
+	M.forceMove(pick(timeagentstart))
+	newagent.AssignToRole(M.mind,1)
+	agency.HandleRecruitedRole(newagent)
+	newagent.Greet(GREET_DEFAULT)
