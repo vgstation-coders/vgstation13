@@ -1374,7 +1374,7 @@ var/list/confusion_victims = list()
 	var/hallucination_radius=25
 
 /datum/rune_spell/confusion/cast(var/duration = rune_duration)
-	new /obj/effect/cult_ritual/confusion(spell_holder,duration,hallucination_radius)
+	new /obj/effect/cult_ritual/confusion(spell_holder,duration,hallucination_radius, null, activator)
 	qdel(spell_holder)
 
 /datum/rune_spell/confusion/cast_talisman()//talismans have the same range, but the effect lasts shorter.
@@ -1392,7 +1392,7 @@ var/list/confusion_victims = list()
 	var/duration = 5
 	var/hallucination_radius=25
 
-/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null)
+/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null, var/culprit)
 	..()
 	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
 	var/turf/T = get_turf(src)
@@ -1461,10 +1461,15 @@ var/list/confusion_victims = list()
 			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
 
 	spawn(10)
+		var/ritual_victim_count
 		for(var/mob/living/carbon/C in victims)
 			var/new_victim = 0
 			if (!(C in confusion_victims))
 				new_victim = 1
+				//if(C.client && C.stat == CONSCIOUS)
+				if(C.stat == CONSCIOUS)
+					to_chat(world, "sneed 1")
+					ritual_victim_count++
 				C.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
 			C.update_fullscreen_alpha("blindblind", 255, 0)
 			C.update_fullscreen_alpha("blindblack", 0, 10)
@@ -1500,6 +1505,9 @@ var/list/confusion_victims = list()
 							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
+		if(culprit && ritual_victim_count > 0)
+			to_chat(world, "sneed 2")
+			CompleteCultRitual(/datum/bloodcult_ritual/sow_confusion, culprit, list("victimcount" = ritual_victim_count))
 		while (confusion_victims.len > 0)//if the ritual atom stops existing while people are still confused, weird shit can occurs such as people remaining blinded forever.
 			sleep(10 SECONDS)
 		qdel(src)

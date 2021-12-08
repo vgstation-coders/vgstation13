@@ -153,6 +153,7 @@
 /datum/mind_ui/bloodcult_left_panel
 	uniqueID = "Cultist Left Panel"
 	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/bloodcult_veil_weakness,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help,
 		)
@@ -286,6 +287,23 @@
 	var/datum/mind_ui/bloodcult_help/tooltip = locate() in parent.subUIs
 	if(tooltip)
 		tooltip.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_veil_weakness
+	name = "Veil Weakness"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "template"
+	offset_x = 6
+	offset_y = -56
+
+/obj/abstract/mind_ui_element/bloodcult_veil_weakness/UpdateIcon()
+	overlays.len = 0
+	var/image/I = String2Image("[veil_weakness]")
+	I.pixel_y = 14
+	I.pixel_x = 13
+	overlays += I
+
 
 
 ////////////////////////////////////////////////////////////////////

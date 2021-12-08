@@ -202,6 +202,7 @@
 	var/altar_task = ALTARTASK_NONE
 	var/gem_delay = 300
 	var/narsie_message_cooldown = 0
+	var/obj/effect/cult_offerings/offerings_effect
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
@@ -228,6 +229,7 @@
 	holomap_datum = new
 	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
 
+	cult_altars += src
 
 /obj/structure/cult/altar/Destroy()
 
@@ -241,6 +243,10 @@
 	flick("[icon_state]-break", src)
 
 	holomap_markers -= HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"
+	if(offerings_effect)
+		qdel(offerings_effect)
+
+	cult_altars -= src
 
 	..()
 
@@ -299,10 +305,11 @@
 			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
 			return 1
-	if(user.drop_item(I, loc))
-		if((I.loc == loc) && params)
-			I.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
-			return 1
+	if(user.a_intent != I_HURT)
+		if(user.drop_item(I, loc))
+			if((I.loc == loc) && params)
+				I.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
+				return 1
 	..()
 
 /obj/structure/cult/altar/update_icon()

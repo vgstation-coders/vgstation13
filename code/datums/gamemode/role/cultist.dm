@@ -458,3 +458,17 @@
 		to_chat(user, "<span class='notice'>You retrace your steps, carefully undoing the lines of the [removed_word] rune.</span>")
 	else
 		to_chat(user, "<span class='warning'>There aren't any rune words left to erase.</span>")
+
+/datum/role/cultist/proc/GiveTattoo(var/type)
+	var/datum/cult_tattoo/T = new type
+	if(tattoos[T.name])
+		qdel(T)
+		return
+	tattoos[T.name] = T
+	update_cult_hud()
+	T.getTattoo(antag.current)
+	anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	sleep(1)
+	antag.current.update_mutations()
+	var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	animate(tattoo_markings, alpha = 0, time = 30)

@@ -26,7 +26,8 @@
 
 	var/list/cultist_cap = 1	//clamped between 5 and 9 depending on crew size. once the cap goes up it cannot go down.
 
-	var/mentor_count = 0 //so we don't loop through the member list if we already know there are no mentors in there
+	var/mentor_count = 0 	//so we don't loop through the member list if we already know there are no mentors in there
+
 
 /datum/faction/bloodcult/check_win()
 	return cult_win
@@ -39,6 +40,8 @@
 	..()
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
 		UpdateCap()
+	for(var/datum/bloodcult_ritual/R in unlocked_rituals)
+		R.CheckCompletion()
 
 /datum/faction/bloodcult/proc/UpdateCap()
 	var/living_players = 0
@@ -91,6 +94,7 @@
 
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_rune_words()
+	initialize_rituals()
 	AppendObjective(/datum/objective/bloodcult)
 	for (var/datum/role/R in members)
 		var/mob/M = R.antag.current
