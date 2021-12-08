@@ -4079,21 +4079,26 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
+	var/lungtime = 60
 	var/lungprob = 5
+	data = null //Used as a tally
 
 /datum/reagent/nicotine/tobacco/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
+	if(isnull(data))
+		// copied from chloral for the same reasons
+		data = 0
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(prob(lungprob))
+		if(data > lungtime && prob(lungprob))
+			M.audible_cough() // Some warning not to have too many of these
+		if(data > lungtime * 3 && prob(lungprob))
 			var/datum/organ/internal/lungs/damagedlungs = H.get_lungs()
 			damagedlungs.damage++
-			if(damagedlungs.damage > 5)
-				M.audible_cough() // Some warning not to have too many of these
-			if(damagedlungs.damage > 10)
-				H.add_cancer(1, LIMB_CHEST)
+	data++
 
 /datum/reagent/nicotine/tobacco/unfiltered
 	name = "Condensed Tobacco"
@@ -4102,19 +4107,27 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
+	lungtime = 20
 	lungprob = 20
 	focus_increase_amount = 3
 
-/datum/reagent/nicotine/tobacco/danbacco
+/datum/reagent/danbacco
 	name = "Tobacco"
 	id = DANBACCO //This product may or may not cause cancer.
 	description = "The cured and ground leaves of a tobacco plant with additional Discount Dan flavors."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
-	lungprob = 50
-	focus_increase_amount = 0
 
+/datum/reagent/danbacco/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(prob(50)) //Discount dan's special blend.
+			H.add_cancer(1, LIMB_CHEST)
+		
 /datum/reagent/ammonia
 	name = "Ammonia"
 	id = AMMONIA
