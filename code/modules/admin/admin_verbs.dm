@@ -804,10 +804,7 @@ var/list/admin_verbs_mod = list(
 		message_admins("[src] deadminned themself.")
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
 			var/admins_number = admins.len
-			var/admin_number_afk = 0
-			for(var/client/X in admins)
-				if(X.is_afk())
-					admin_number_afk++
+			var/admin_number_afk = get_afk_admins()
 
 			var/available_admins = admins_number - admin_number_afk
 

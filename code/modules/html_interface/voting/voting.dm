@@ -49,7 +49,7 @@ var/global/datum/controller/vote/vote = new()
 	var/total_votes    = 0
 	var/vote_threshold = 0.15
 	var/discarded_votes = 0
-	var/weighted        = FALSE // Whether to use weighted voting.
+	var/weighted        = TRUE // Whether to use weighted voting.
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
