@@ -262,6 +262,9 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		return
 
 	var/list/radios = list()
+	/// Jamming code
+	var/list/gibberish_radios = list() // list of radios that display disrupted messages
+	var/jamming_severity = 0
 
 	var/atom/movable/virtualspeaker/virt = new /atom/movable/virtualspeaker(null)
 	virt.name = speech.name
@@ -277,6 +280,12 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		if (1) // broadcast only to intercom devices
 			for (var/obj/item/device/radio/intercom/R in all_radios["[speech.frequency]"])
 				if (R && R.receive_range(speech.frequency, level) > -1)
+					jamming_severity = radio_jamming_severity(R)
+					if (is_completely_jammed(jamming_severity))
+						continue
+					if (jamming_severity > 0)
+						gibberish_radios += new /datum/jammed_radio_src(R, jamming_severity)
+						continue
 					radios += R
 		if (2) // broadcast only to intercoms and station-bounced radios
 			for (var/obj/item/device/radio/R in all_radios["[speech.frequency]"])
@@ -284,10 +293,22 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 					continue
 
 				if (R && R.receive_range(speech.frequency, level) > -1)
+					jamming_severity = radio_jamming_severity(R)
+					if (is_completely_jammed(jamming_severity))
+						continue
+					if (jamming_severity > 0)
+						gibberish_radios += new /datum/jammed_radio_src(R, jamming_severity)
+						continue
 					radios += R
 		else // broadcast to ALL radio devices
 			for (var/obj/item/device/radio/R in all_radios["[speech.frequency]"])
 				if (R && R.receive_range(speech.frequency, level) > -1)
+					jamming_severity = radio_jamming_severity(R)
+					if (is_completely_jammed(jamming_severity))
+						continue
+					if (jamming_severity > 0)
+						gibberish_radios += new /datum/jammed_radio_src(R, jamming_severity)
+						continue
 					radios += R
 
 			/*
@@ -302,8 +323,9 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	// get a list of mobs who can hear from the radios we collected and observers
 	var/list/listeners = get_mobs_in_radio_ranges(radios) | observers
-
+	var/list/gibberish_listeners = get_mobs_in_jammed_radio_ranges(gibberish_radios)
 	radios = null
+	gibberish_radios = null
 
 	//Scramble messages if radio blackout is enabled
 	if(malf_radio_blackout)
@@ -313,6 +335,18 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	for (var/atom/movable/listener in listeners)
 		if (listener)
 			listener.Hear(speech, rendered)
+	
+	// Note that a mob can hear both fine and fucked up version of the same message - this is intentional
+	for (var/J in gibberish_listeners)
+		var/datum/jammed_mob_dst/dst = gibberish_listeners[J]
+		if (dst.attached)
+			// everyone affected gets a fucked up version
+			var/datum/speech/nu_speech = speech.clone()
+			nu_speech.message = Gibberish(nu_speech.message, dst.severity)
+			dst.attached.Hear(nu_speech, virt.render_speech(nu_speech))
+	
+	if (length(gibberish_listeners))
+		gibberish_listeners = null
 
 
 	if (length(listeners))
