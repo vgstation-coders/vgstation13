@@ -663,6 +663,7 @@ var/bloodstone_backup = 0
 	var/list/dancers = list()
 
 /obj/effect/cult_ritual/dance/New(var/turf/loc, var/mob/first_dancer)
+	..()
 	if (!first_dancer)
 		qdel(src)
 		return
@@ -695,6 +696,8 @@ var/bloodstone_backup = 0
 		sleep(6)
 
 /obj/effect/cult_ritual/dance/proc/add_dancer(var/mob/dancer)
+	if(dancer in dancers)
+		return
 	dancers += dancer
 
 /obj/effect/cult_ritual/dance/proc/dance_step()

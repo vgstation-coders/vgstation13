@@ -36,7 +36,6 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual
 	var/name = "Cult Ritual"        
 	var/desc = "Do something culty!"
-	var/worth = 0
 	var/point_limit = 0       // The ritual will stop working after this many points. 0 = infinite
 	var/points_rewarded = 0
 
@@ -46,11 +45,9 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/proc/Complete()
 	Reward()
 
-/datum/bloodcult_ritual/proc/Reward(var/worth_override)
-	if(!worth_override)
-		worth_override = worth
-	points_rewarded += worth_override
-	veil_weakness += worth_override
+/datum/bloodcult_ritual/proc/Reward(var/worth)
+	points_rewarded += worth
+	veil_weakness += worth
 	if(point_limit != 0 && points_rewarded >= point_limit)
 		unlocked_rituals -= src
 		completed_rituals += src
@@ -190,7 +187,9 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/draw_rune
 	name = "Draw Rune"
 	desc = "Draw a rune."
-	worth = 1
+
+/datum/bloodcult_ritual/sow_confusion/Complete()
+	Reward(1)
 
 /datum/bloodcult_ritual/sow_confusion
 	name = "Sow Confusion"
@@ -229,3 +228,10 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	if(victims.len > 0)
 		Reward(25 * victims.len)
 		GrantTattoo(cultist, /datum/cult_tattoo/shortcut)
+
+/datum/bloodcult_ritual/human_sacrifice
+	name = "Sacrifice"
+	desc = "Impale a human at an altar and sacrifice them."
+
+/datum/bloodcult_ritual/human_sacrifice/Complete(var/mob/cultist, var/list/extrainfo)
+	Reward(500)

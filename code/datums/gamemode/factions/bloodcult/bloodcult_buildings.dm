@@ -278,7 +278,7 @@
 		else if(S && S.stat != DEAD)
 			S.unlock_from()
 			S.update_canmove()
-			S.pixel_y = 16
+			S.pixel_y = 8
 			lock_atom(S, lock_type)
 			S.death()	
 			I.add_blood()
@@ -488,32 +488,18 @@
 				if (user.client)
 					user.client.images |= progbar
 		return
-	if(is_locking(lock_type))
+	if(is_locking(lock_type) && istype(blade, /obj/item/weapon/melee/cultblade) && ishuman(get_locked(lock_type)[1]))
 		var/mob/M = get_locked(lock_type)[1]
 		if(M != user)
-			if (do_after(user,src,20))
-				M.visible_message("<span class='notice'>\The [M] was freed from \the [src] by \the [user]!</span>","You were freed from \the [src] by \the [user].")
-				unlock_atom(M)
-				if (blade)
-					blade.forceMove(loc)
-					blade.attack_hand(user)
-					to_chat(user, "<span class='warning'>You remove \the [blade] from \the [src]</span>")
-					blade = null
-					playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
-					update_icon()
-		// TODO UPHEAVAL PART 2, might bring back sacrifices later, for now you can still stab people on altars
-		/*
-		var/choices = list(
-			list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
-			list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
-			)
-		var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
-		if (!is_locking(lock_type) || !Adjacent(user) || !task)
-			return
-		switch (task)
-			if ("Remove Blade")
-				var/mob/M = get_locked(lock_type)[1]
-				if(M != user)
+			var/choices = list(
+				list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
+				list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
+				)
+			var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
+			if (!is_locking(lock_type) || !Adjacent(user) || !task)
+				return
+			switch (task)
+				if ("Remove Blade")
 					if (do_after(user,src,20))
 						M.visible_message("<span class='notice'>\The [M] was freed from \the [src] by \the [user]!</span>","You were freed from \the [src] by \the [user].")
 						unlock_atom(M)
@@ -524,51 +510,50 @@
 							blade = null
 							playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 							update_icon()
-			if ("Sacrifice")
-				// First we'll check for any blockers around it since we'll dance using forceMove to allow up to 8 dancers without them bumping into each others
-				// Of course this means that walls and objects placed AFTER the start of the dance can be crossed by dancing but that's good enough.
-				for (var/turf/T in orange(1,src))
-					if (T.density)
-						to_chat(user, "<span class='warning'>The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
-						return
-					var/atom/A = T.has_dense_content()
-					if (A && (A != src) && !ismob(A)) // mobs get a free pass
-						to_chat(user, "<span class='warning'>\The [A] would hinder the ritual. Either move it or use an altar located in a more spacious area.</span>")
-						return
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (cult)
-					if (is_locking(lock_type))
-						altar_task = ALTARTASK_SACRIFICE
-						timeleft = 30
-						timetotal = timeleft
-						update_icon()
-						contributors.Add(user)
-						update_progbar()
-						if (user.client)
-							user.client.images |= progbar
-						var/image/I = image('icons/obj/cult.dmi',"build")
-						I.pixel_y = 8
-						src.overlays += I
-						if (!user.checkTattoo(TATTOO_SILENT))
-							if (prob(5))
-								user.say("Let me show you the dance of my people!","C")
-							else
-								user.say("Barhah hra zar'garis!","C")
-						if (user.client)
-							user.client.images |= progbar
-							/*
-						for(var/mob/M in range(src,40))
-							if (M.z == z && M.client)
-								if (get_dist(M,src)<=20)
-									M.playsound_local(src, get_sfx("explosion"), 50, 1)
-									shake_camera(M, 2, 1)
+				if ("Sacrifice")
+					// First we'll check for any blockers around it since we'll dance using forceMove to allow up to 8 dancers without them bumping into each others
+					// Of course this means that walls and objects placed AFTER the start of the dance can be crossed by dancing but that's good enough.
+					for (var/turf/T in orange(1,src))
+						if (T.density)
+							to_chat(user, "<span class='warning'>The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
+							return
+						var/atom/A = T.has_dense_content()
+						if (A && (A != src) && !ismob(A)) // mobs get a free pass
+							to_chat(user, "<span class='warning'>\The [A] would hinder the ritual. Either move it or use an altar located in a more spacious area.</span>")
+							return
+					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+					if (cult)
+						if (is_locking(lock_type))
+							altar_task = ALTARTASK_SACRIFICE
+							timeleft = 30
+							timetotal = timeleft
+							update_icon()
+							contributors.Add(user)
+							update_progbar()
+							if (user.client)
+								user.client.images |= progbar
+							var/image/I = image('icons/obj/cult.dmi',"build")
+							I.pixel_y = 8
+							src.overlays += I
+							if (!user.checkTattoo(TATTOO_SILENT))
+								if (prob(5))
+									user.say("Let me show you the dance of my people!","C")
 								else
-									M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-									shake_camera(M, 1, 1)
-									*/
-						spawn()
-							dance_start()
-			*/
+									user.say("Barhah hra zar'garis!","C")
+							if (user.client)
+								user.client.images |= progbar
+								/*
+							for(var/mob/M in range(src,40))
+								if (M.z == z && M.client)
+									if (get_dist(M,src)<=20)
+										M.playsound_local(src, get_sfx("explosion"), 50, 1)
+										shake_camera(M, 2, 1)
+									else
+										M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
+										shake_camera(M, 1, 1)
+								*/
+							spawn()
+								dance_start()
 	else if (blade)
 		blade.forceMove(loc)
 		blade.attack_hand(user)
@@ -773,16 +758,18 @@
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
-	//var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	//if (cult)
-	//	cult.change_cooldown = max(cult.change_cooldown,60 SECONDS)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult) // this should not happen
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	. = ..()//true if the ritual was successful
 	altar_task = ALTARTASK_NONE
 	update_icon()
 	if (. &&  is_locking(lock_type))
 		var/mob/M = get_locked(lock_type)[1]
+		if(M.mind)
+			CompleteCultRitual(/datum/bloodcult_ritual/human_sacrifice)
 
-		if (istype(blade) && !blade.shade)//If an empty soul blade was the tool used for the ritual, let's make them its shade.
+		if (istype(blade) && !blade.shade && (cult && cult.CanConvert()))//If an empty soul blade was the tool used for the ritual, let's make them its shade.
 			var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, 1 )
 			blade.forceMove(loc)
 			blade.blood = blade.maxblood
@@ -802,9 +789,6 @@
 			if (!iscultist(new_shade))
 				var/datum/role/cultist/newCultist = new
 				newCultist.AssignToRole(new_shade.mind,1)
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (!cult)
-					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 				cult.HandleRecruitedRole(newCultist)
 				newCultist.OnPostSetup()
 				newCultist.Greet(GREET_SACRIFICE)
@@ -818,6 +802,10 @@
 			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
+
+	var/obj/structure/cult/bloodstone/blood_stone = new(get_turf(src))
+	blood_stone.flashy_entrance()
+	qdel(src)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
