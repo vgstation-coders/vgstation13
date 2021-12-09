@@ -10,7 +10,7 @@
 /*
 /spell/cult/trace_rune
 	name = "Trace Rune"
-	desc = "(2 BLOOD) Use available blood to write down words. Three words form a rune."
+	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
 	hud_state = "cult_word"
 
 	invocation_type = SpI_NONE
