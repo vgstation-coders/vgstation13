@@ -1781,6 +1781,22 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	info = "The purchaser or purchasers of this or any other Circuitry Circus Education Toy Booster Pack <i>TM</i> recognizes, accepts, and is bound to the terms and conditions found within any Circuitry Circus Education Toy Starter Pack <i>TM</i>. This includes but is not limited to: <BR>the relinquishment of any state, country, nation, or planetary given rights protecting those of select ages from legal action based on misuse of the product.<BR>All: injuries, dismemberments, trauma (mental or physical), diseases, invasive species, deaths, memory loss, time loss, genetic recombination, or quantum displacement is the sole responsibility of the owner of the Circuitry Circus Education Toy Booster Pack <i>TM</i> <BR><BR>Please ask for your parent or guardian's permission before playing. Have fun."
 
 
+//Mystery upgrades////////////
+
+/obj/item/weapon/storage/box/mystery_upgrade
+	name = "random cyborg upgrade pack"
+	desc = "Magnetic gripper not included. Ever."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "circuit"
+
+/obj/item/weapon/storage/box/mystery_upgrade/New()
+	..()
+	var/list/legalCircuits = existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper //Moved from old trade vendor
+	for(var/i = 1 to 3)
+		var/boosterPack = pick(legalCircuits)
+		new boosterPack(src)
+
+
 //Mystery material//////////////////////
 
 /obj/item/weapon/storage/box/large/mystery_material
