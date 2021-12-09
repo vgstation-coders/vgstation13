@@ -37,7 +37,7 @@
 	duration = 9 SECONDS
 
 /datum/surgery_step/eye/cut_open/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.op_stage.eyes == 0
+	return ..() && target.op_stage.eyes == 0
 
 /datum/surgery_step/eye/cut_open/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts to separate the corneas on [target]'s eyes with \the [tool].", \
