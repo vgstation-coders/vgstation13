@@ -76,7 +76,7 @@ var/list/false_wall_images = list()
 	return 0
 
 /proc/performWallPressureCheckFromTurfList(var/list/turf/simulated/turf_list)
-	var/pdiff = getOPressureDifferentialFromTurfList(turf_list)
+	var/pdiff = getPressureDifferentialFromTurfList(turf_list)
 	if(pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
 		return pdiff
 	return 0
