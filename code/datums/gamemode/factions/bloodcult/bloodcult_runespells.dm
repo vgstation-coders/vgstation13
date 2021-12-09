@@ -1962,8 +1962,8 @@ var/list/seer_rituals = list()
 		R.one_pulse()
 
 	var/list/potential_targets = list()
-	var/turf/T = get_turf(spell_holder)
-	for(var/mob/living/carbon/C in T)
+	var/turf/TU = get_turf(spell_holder)
+	for(var/mob/living/carbon/C in TU)
 		potential_targets += C
 	var/mob/living/carbon/target
 	if(activator in potential_targets)
