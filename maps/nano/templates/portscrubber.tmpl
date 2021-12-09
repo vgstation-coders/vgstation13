@@ -1,0 +1,67 @@
+<h3>Scrubber Status</h3>
+<div class="item">
+	<div class="itemLabel">
+		Tank Pressure:
+	</div>
+	<div class="itemContent">
+		{{:data.tankPressure}} kPa
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Port Status:
+	</div>
+	<div class="itemContent">
+		{{:data.portConnected ? '<span class="good">Connected</span>' : '<span class="average">Disconnected</span>'}}
+	</div>
+</div>
+
+<h3>Holding Tank Status</h3>
+{{if data.hasHoldingTank}}
+	<div class="item">
+		<div class="itemLabel">
+			Tank Label:
+		</div>
+		<div class="itemContent">
+			<div style="float: left; width: 180px;">{{:data.holdingTank.name}}</div> {{:helper.link('Eject', 'eject', {'remove_tank' : 1})}}
+		</div>
+	</div>
+
+	<div class="item">
+		<div class="itemLabel">
+			Tank Pressure:
+		</div>
+		<div class="itemContent">
+			{{:data.holdingTank.tankPressure}} kPa
+		</div>
+	</div>
+{{else}}
+	<div class="item"><span class="average"><i>No holding tank inserted.</i></span></div>
+	<div class="item">&nbsp;</div>
+{{/if}}
+
+<h3>Power Regulator Status</h3>
+
+<div class="item">
+	<div class="itemLabel">
+		Scrubbing Gases:
+	</div>
+	<div class="itemContent">
+		{{:helper.link('CO<sub>2</sub>', null, {'scrub_toggle': 'co2'}, null, data.scrub_co2 ? 'greenBackground' : null)}}
+		{{:helper.link('Plasma', null, {'scrub_toggle': 'plasma'}, null, data.scrub_plasma ? 'greenBackground' : null)}}
+		{{:helper.link('N<sub>2</sub>O', null, {'scrub_toggle': 'n2o'}, null, data.scrub_n2o ? 'greenBackground' : null)}}
+		{{:helper.link('N<sub>2</sub>', null, {'scrub_toggle': 'n2'}, null, data.scrub_n2 ? 'greenBackground' : null)}}
+		{{:helper.link('O<sub>2</sub>', null, {'scrub_toggle': 'o2'}, null, data.scrub_o2 ? 'greenBackground' : null)}}
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">
+		Power Switch:
+	</div>
+	<div class="itemContent">
+		{{:helper.link('On', 'unlocked', {'power' : 1}, data.on ? 'selected' : null)}}{{:helper.link('Off', 'locked', {'power' : 1}, data.on ? null : 'selected')}}
+	</div>
+</div>
+

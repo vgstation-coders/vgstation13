@@ -1,0 +1,120 @@
+<!--
+Title: instrument view
+Used In File(s): /code/game/objects/structures/musician.dm
+ -->
+<div class="item">
+    <H3>Playback</H3>
+    <div class="item">
+        {{:helper.link('Play', '', { 'play' : 1 })}}
+        {{:helper.link('Stop', '', { 'stop' : 1 })}}
+    </div>
+    <div class="item">
+        Repeat Song:
+        {{:helper.link('--', '', { 'repeat' : -10 })}}
+        {{:helper.link('-', '', { 'repeat' : -1 })}}
+        {{:data.repeat}} times
+        {{:helper.link('+', '', { 'repeat' : 1 })}}
+        {{:helper.link('++', '', { 'repeat' : 10 })}}
+    </div>
+    <div class="item">
+        Tempo: {{:helper.link('-', '', { 'tempo' : data.ticklag })}} {{:data.bpm}} BPM {{:helper.link('+', '', { 'tempo' : -data.ticklag })}}
+    </div>
+</div>
+<div class="item">
+    <H3>Editing</H3>
+    <div class="item">
+        {{:helper.link('New Song', '', { 'newsong' : 1 })}}
+        {{:helper.link('Import Song', '', { 'import' : 1 })}}
+    </div>
+    <div class="item" id="lines">
+    {{:data.lines}}
+    </div>
+    {{:helper.link('Add Line', '', { 'newline' : 1 })}}
+</div>
+<div class="item">
+    <B><button id="help_btn" onclick="helpVisibility()">Hide Help</button></B>
+    <span id="help">
+    <BR>
+    Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
+    Every note in a chord will play together, with chord timed by the tempo.<br>
+    <br>
+    Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
+    By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
+    Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
+    After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
+    Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
+    A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
+    To make a chord be a different time, end it with /x, where the chord length will be length<br>
+    defined by tempo / x: <i>C,G/2,E/4</i><br>
+    Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
+    <br>
+    Lines may be up to 50 characters.<br>
+    A song may only contain up to 50 lines.<br>
+    </span>
+</div>
+<script>
+var prevChord = "";
+var highlightClass = "activeChord";
+var helpvis = 0;
+var src_ref = "{{:data.src}}";
+
+function renderLines(lines){
+    var result = "<table>";
+    for (i = 0; i < lines.length; i++) { 
+        var curLine = lines[i].split(",");
+        var htmlLine = [];
+        for(j = 0; j < curLine.length; j++){
+            htmlLine.push("<div class='chord' id='chord_"+(i+1)+"_"+(j+1)+"'>"+curLine[j]+"</div>");
+        }
+
+        buttons = "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";modifyline="+(i+1)+"\">Modify</div>";
+        buttons += "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";deleteline="+(i+1)+"\">Delete</div>";
+        if(i != 0){
+            buttons += "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";moveline="+(i+1)+";dir=-1\">Up</div>";
+        }
+        if(i < lines.length-1){
+            buttons += "<div class=\"link linkActive\" data-href=\"?src="+src_ref+";moveline="+(i+1)+";dir=1\">Down</div>";
+        }
+
+        result += "<tr><td>Line "+(i+1)+": </td><td>"+htmlLine.join("")+"</td><td>"+buttons+"</td></tr>";
+    }
+    result += "</table>";
+    $("#lines").html(result);
+}
+
+function activeChord(lineIndex, chordIndex){
+    var id = "#chord_"+lineIndex+"_"+chordIndex;
+    if(prevChord == ""){
+        prevChord = id;
+        $(id).addClass(highlightClass);
+    }
+
+    if(prevChord != id){
+        $(prevChord).removeClass(highlightClass);
+        $(id).addClass(highlightClass);
+        prevChord = id;
+    }
+}
+
+function helpVisibility(){
+    if(helpvis == 1){
+        $("#help").show();
+        $("#help_btn").text("Hide Help");
+        helpvis = 0;
+    }else{
+        $("#help").hide();
+        $("#help_btn").text("Show Help");
+        helpvis = 1;
+    }
+}
+
+function messageReceived(){
+    $('.linkActive').stopTime('linkPending');
+    $('.linkActive').removeClass('linkPending');
+    $('.buttonActive').stopTime('linkPending');
+    $('.buttonActive').removeClass('linkPending');
+}
+
+var lines = $.parseJSON($("#lines").text());
+renderLines(lines);
+</script>

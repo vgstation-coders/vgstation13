@@ -1,0 +1,42 @@
+<!--
+Used In File(s): \code\game\machinery\weathercontrol.dm
+-->
+{{if data.error}}
+	<div class='item'>
+		<div class='statusDisplay'>
+			<div class="line">
+				<span class='bad'>{{:data.error}}</span>
+			</div>
+		</div>
+	</div>
+{{else}}
+	<div class='item'>
+		<div class='statusDisplay'>
+			<div class="line">
+				<div class="statusLabel">Crystal refraction:</div>
+				<div class="statusValue">{{:data.crystals}}</div>
+			</div>
+		</div>
+	</div>
+	<div class='item'>
+		<div class='statusDisplay'>
+			<div class="line">
+				<div class="statusLabel">Current snowfall:</div>
+				<div class="statusValue">{{:data.currentweather}} ({{:data.remaining_time}})</div>
+			</div>
+			<div class="line">
+				<div class="statusLabel">Forecast:</div>
+				<div class="statusValue">{{:data.forecast}}</div>
+			</div>
+		</div>
+	</div>
+	<div class='item'>
+		<div class='statusDisplay'>
+			<div class="line">
+				{{:helper.link("Disrupt", "arrowrefresh-1-w", {'disrupt': '1'})}}
+				{{:helper.link("Intensify", "arrowstop-1-n", {'intensify': '1'})}}
+				{{:helper.link("Abate", "arrowstop-1-s", {'abate': '1'})}}
+			</div>
+		</div>
+	</div>
+{{/if}}

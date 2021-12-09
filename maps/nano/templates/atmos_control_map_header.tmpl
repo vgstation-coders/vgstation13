@@ -1,0 +1,25 @@
+<!--
+Title: Atmos Control (Map content)
+Used In File(s): \code\workinprogress\mini\atmos_control.dm
+ -->
+{{if !data.logged_in}}
+ <div class="line">
+     {{:helper.link('Log in', 'unlocked', {'login': 1})}}
+ </div>	
+{{else}}
+    <div class="line">
+        Logged in as: <b>{{:data.login_name}}</b> {{:helper.link('Log out', 'locked', {'logout': 1, 'showMap': 0}, (data.emagged) ? 'disabled' : null)}}
+    </div>
+    {{:helper.link('Show Detail List', 'script', {'showMap' : 0, 'set_screen': 1})}}
+    {{if data.admin_access}}
+        {{:helper.link('Show Presets Panel', 'gear', {'showMap': 0, 'set_screen': 2})}}
+    {{/if}}
+    <div style="float: right; width: 365px;">
+        {{:helper.link('Change Z-Level', 'script', {'zlevel' : 1})}}
+        <span style="float: left;">Zoom Level:&nbsp;</span>
+        <div unselectable="on" class="link zoomLink" data-zoom-level="4">x1.0</div>
+        <div unselectable="on" class="link zoomLink" data-zoom-level="6">x1.5</div>
+        <div unselectable="on" class="link zoomLink" data-zoom-level="8">x2.0</div>
+        <div unselectable="on" class="link zoomLink" data-zoom-level="12">x2.5</div>
+    </div>
+{{/if}}

@@ -1,0 +1,92 @@
+<!--
+Title: Supply Console UI
+Used In File(s): \code\game\supplyshuttle.dm
+-->
+
+<style type='text/css'>
+	#category
+	{
+		width:125px;
+		float:left;
+	}
+</style>
+<div class="item" style="float: left; width:100%; margin-bottom: 0px;">
+	<div class="itemLabel">
+		Account Name:
+	</div>
+	<div class="itemContent">
+		{{if data.authorized_name != ""}}
+			{{:data.name_of_source_account}} as {{:data.authorized_name}}
+		{{else}}
+			{{:data.name_of_source_account}}
+		{{/if}}
+	</div>
+</div>
+<div class="item" style="width:100%; margin-bottom: 3px;">
+	<div class="itemLabel">
+		Account Funds:
+	</div>
+	<div class="itemContent">
+		{{:data.money}}
+	</div>
+</div>
+<div style="float: right; width: 67%;">
+	<div class="itemLabel">
+		Supply Crates
+	</div>
+	<div class="itemContentWide" style="width: 95%;">
+		<div class="statusDisplay">
+			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 184px">
+				{{for data.supply_packs}}
+					<div class="line">
+						<div class="statusValue">
+							{{:helper.link(value.name, null, value.command1, null, 'fixedLeftWidest noOverflow')}}
+							{{:helper.link('#', null, value.command2, null)}}${{:value.cost}}
+						</div>
+					</div>
+				{{/for}}
+			</div>
+		</div>
+	</div>
+</div>
+<div style="float: left; width: 32%;">
+	<div class="itemLabel" style="margin-bottom: 3px;">
+		Categories
+	</div>
+	{{for data.all_supply_groups}}
+	<div class="line">
+		{{:helper.link(value.category, null, {'last_viewed_group': value.category}, (data.last_viewed_group==value.category)?'linkOn':'', 'noOverflow', 'category')}}
+	</div>
+	{{/for}}
+</div>
+<div class="item">
+	<div class="itemLabel">
+		Supply Orders
+	</div>
+	<div class="itemContentWide">
+		<div class="statusDisplay">
+			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 220px;">
+				<u><b>Requests</b></u>
+				<br>
+				{{for data.requests}}
+					<div class="line">
+						{{:value.ordernum}} - {{:value.supply_type}}
+						{{:helper.link('CANCEL', null, value.command1, null)}}
+					</div>
+				{{empty}}
+					No active requests.
+				{{/for}}
+				<br><br>
+				<u><b>Orders</b></u>
+				<br>
+				{{for data.orders}}
+					<div class="line">
+						#{{:value.ordernum}} - {{:value.supply_type}} for {{:value.orderedby}}
+					</div>
+				{{empty}}
+					No confirmed orders.
+				{{/for}}
+			</div>
+		</div>
+	</div>
+</div>

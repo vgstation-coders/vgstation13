@@ -1,0 +1,92 @@
+{{if data.splicing}}
+<div class="mask">
+	<div class="maskContent" style="margin: 160px 0">
+		<h1>Splicing</h1>
+		<h3>Please wait until the splicing is complete.</h3>
+	</div>
+</div>
+{{else data.scanning}}
+<div class="mask">
+	<div class="maskContent" style="margin: 160px 0">
+		<h1>Scanning</h1>
+		<h3>Please wait until the scan is complete.</h3>
+	</div>
+</div>
+{{else data.burning}}
+<div class="mask">
+	<div class="maskContent" style="margin: 160px 0">
+		<h1>Burning</h1>
+		<h3>Please wait until the data is written to disk.</h3>
+	</div>
+</div>
+{{/if}}
+
+</div>
+<h3>Buffer</h3>
+<div class="item">
+	<div class="itemLabelNarrow">
+		Contents:
+	</div>
+	<div class="itemContent">
+		<div class="statusDisplay">
+		{{if data.memorybank}}
+			{{>data.memorybank}}
+		{{else}}
+			<b>EMPTY</b>
+		{{/if}}
+		</div>
+		{{:helper.link('Erase', 'trash', {'erase_buffer': 1}, data.memorybank ? null : 'disabled')}}
+		{{:helper.link('Save to data storage disk', 'print', {'burn_buffer_to_disk': 1}, data.memorybank ? null : 'disabled')}}
+		{{:helper.link('Splice into containment dish', 'shuffle', {'splice_buffer_to_dish': 1}, data.memorybank && data.dish_name ? null : 'disabled')}}
+	</div>
+</div>
+<h3>Containment dish</h3>
+<div class="item">
+	<div class="itemLabelNarrow">
+		Dish:
+	</div>
+	<div class="itemContent">
+		{{:helper.link(data.dish_name || '-----', 'eject', {'eject_dish': 1})}}
+	</div>
+</div>
+
+{{if data.dish_error}}
+<div class="item">
+	<div class="itemLabelNarrow">
+		Error:
+	</div>
+	<div class="itemContent">
+		<span class="bad">
+		{{if data.dish_error == "no dish inserted"}}
+			No dish inserted.
+		{{else data.dish_error == "no virus in dish"}}
+			No virus found in the containment dish.
+		{{else data.dish_error == "dish not analysed"}}
+			The containment dish has no analysis data.<br>It has to be analysed before the pathogen's genes can be manipulated.
+		{{else data.dish_error == "not enough cells"}}
+			Dish growth insufficient for gene manipulation.<br>Incubate the dish with some virus food until reaching at least 50% growth.
+		{{else}}
+			Unknown error!
+		{{/if}}
+		</span>
+	</div>
+</div>
+{{/if}}
+
+{{if data.dish_effects}}
+	<div class="item">
+		Choose a symptom to isolate its gene data. This will destroy the dish, so be sure to have a backup.
+	</div>
+	{{for data.dish_effects}}
+	<div class="item">
+		<div class="itemLabelNarrow">
+			Stage {{>value.stage}}:
+		</div>
+		<div class="itemContent">
+			{{:helper.link('Extract '+value.name, 'shuffle', {'dish_effect_to_buffer': value.stage})}}
+		</div>
+	</div>
+	{{empty}}
+		ERROR: Virus dish with no effects?
+	{{/for}}
+{{/if}}

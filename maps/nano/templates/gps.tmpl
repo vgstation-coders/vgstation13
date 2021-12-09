@@ -1,0 +1,43 @@
+<!--
+Used In File(s): \code\modules\telesci\gps.dm
+-->
+{{if data.emped}}
+	<div class="mask">
+		<div class="maskContent" style="margin: 160px 0">
+			<h1><span class='bad'>ERROR</span></h1>
+			<h3>Bluespace module failure. Attempting to recalibrate...</h3>
+		</div>
+	</div>
+{{/if}}
+<h3>Settings</h3>
+{{if !data.transmitting}}
+	This unit is currently <span class="bad">OFFLINE.</span>
+	{{:helper.link('Turn on', 'power', {'turn_on': '1'})}}
+{{else}}
+	<div class="item">
+		<div class="itemLabel">Tag:</div>
+		<div class="itemContent">
+			{{:helper.link(data.gpstag, 'pencil', {'tag' : '1'}, null)}}
+		</div>
+	</div>
+	<div class="item">
+		<div class="itemLabel">Auto-refresh:</div>
+		<div class="itemContent">
+			{{:helper.link(data.autorefresh ? 'On' : 'Off', 'refresh', {'toggle_refresh' : '1'}, null)}}
+		</div>
+	</div>
+
+	<h3>Detected signals</h3>
+	<div class="item">
+		<div class="itemLabelNarrow">{{>data.gpstag}}</div>
+		<div class="itemContentWide">{{>data.location_text}}</div>
+	</div>
+	{{for data.devices}}
+		<div class="item">
+			<div class="itemLabelNarrow">{{>value.tag}}</div>
+			<div class="itemContentWide">{{>value.location_text}}</div>
+		</div>
+	{{empty}}
+		<i>No signal detected.</i>
+	{{/for}}
+{{/if}}
