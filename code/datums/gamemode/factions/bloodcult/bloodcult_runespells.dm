@@ -1965,6 +1965,10 @@ var/list/seer_rituals = list()
 	var/turf/TU = get_turf(spell_holder)
 	for(var/mob/living/carbon/C in TU)
 		potential_targets += C
+	if(potential_targets.len == 0)
+		to_chat(activator, "<span class='warning'>There needs to be someone standing or lying on top of the rune.</span>")
+		qdel(src)
+		return
 	var/mob/living/carbon/target
 	if(activator in potential_targets)
 		target = activator
