@@ -1078,7 +1078,7 @@
 	name = "Metal Foam"
 	id = "metalfoam"
 	result = null
-	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/metalfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1096,7 +1096,7 @@
 	name = "Iron Foam"
 	id = "ironlfoam"
 	result = null
-	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/ironfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -3437,7 +3437,7 @@
 	name = "Apetrine"
 	id = APETRINE
 	result = APETRINE
-	required_reagents = list(PETRITRICIN = 2, PACID = 3)
+	required_reagents = list(PETRITRICIN = 2, PACIDS = 3)
 	result_amount = 1
 
 /datum/chemical_reaction/potassiumcarbonate
