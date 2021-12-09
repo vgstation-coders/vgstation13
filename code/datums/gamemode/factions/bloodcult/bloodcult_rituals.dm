@@ -21,9 +21,8 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	return cult_altars
 
 /datum/faction/bloodcult/proc/initialize_rituals()
-	unlocked_rituals += new /datum/bloodcult_ritual/continuous/offerings
-	unlocked_rituals += new /datum/bloodcult_ritual/draw_rune
-	unlocked_rituals += new /datum/bloodcult_ritual/sow_confusion
+	for(var/type in (subtypesof(/datum/bloodcult_ritual) - /datum/bloodcult_ritual/continuous))
+		unlocked_rituals += new type
 
 /datum/faction/bloodcult/proc/update_cultist_uis()
 	for(var/datum/role/cultist/C in members)
@@ -38,21 +37,21 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	var/name = "Cult Ritual"        
 	var/desc = "Do something culty!"
 	var/worth = 0
-	var/max_times = 0       // The ritual will stop working after this many times. 0 = infinite
-	var/times_completed = 0
+	var/point_limit = 0       // The ritual will stop working after this many points. 0 = infinite
+	var/points_rewarded = 0
 
 /datum/bloodcult_ritual/proc/CheckCompletion()
 	return
 
 /datum/bloodcult_ritual/proc/Complete()
-	return
+	Reward()
 
 /datum/bloodcult_ritual/proc/Reward(var/worth_override)
 	if(!worth_override)
 		worth_override = worth
+	points_rewarded += worth_override
 	veil_weakness += worth_override
-	times_completed += 1
-	if(max_times != 0 && times_completed >= max_times)
+	if(point_limit != 0 && points_rewarded >= point_limit)
 		unlocked_rituals -= src
 		completed_rituals += src
 	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
@@ -73,8 +72,6 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/continuous 
 	var/rate = 5 SECONDS   		// The rate at which the ritual weakens the veil.
 	var/next_reward
-	var/points_rewarded = 0
-	var/point_limit = 0    			// The ritual will stop weakening the veil after this limit is reached. Set to zero to disable.
 
 /datum/bloodcult_ritual/continuous/CheckCompletion()  
 	if(world.time < next_reward)
@@ -82,17 +79,30 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	next_reward = world.time + rate
 	return TRUE
 
-/datum/bloodcult_ritual/continuous/Reward(var/worth_override)
-	if(!worth_override)
-		worth_override = worth
-	points_rewarded += worth_override
-	veil_weakness += worth_override
-	if(point_limit != 0 && points_rewarded >= point_limit)
-		unlocked_rituals -= src
-		completed_rituals += src
-	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
-	if(B)
-		B.update_cultist_uis()
+/datum/bloodcult_ritual/proc/GetMobValue(var/type, var/multiplier)
+	var/awardedpoints = 0
+	switch(type)
+		if(/mob/living/simple_animal/cat/salem)
+			awardedpoints = 16
+		if(/mob/living/simple_animal/cat/Runtime)
+			awardedpoints = 16
+		if(/mob/living/simple_animal/cat)
+			awardedpoints = 8
+		if(/mob/living/simple_animal/corgi/Ian)
+			awardedpoints = 30
+		if(/mob/living/simple_animal/corgi/sasha)
+			awardedpoints = 25
+		if(/mob/living/simple_animal/corgi/Lisa)
+			awardedpoints = 30
+		if(/mob/living/simple_animal/corgi)
+			awardedpoints = 15
+		if(/mob/living/simple_animal/parrot/Poly)
+			awardedpoints = 10
+		if(/mob/living/simple_animal/mouse)
+			awardedpoints = 2
+		else
+			awardedpoints = 5
+	return awardedpoints * multiplier
 
 /////////////////////////////////////
 
@@ -103,7 +113,6 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 //		OFFERINGS BONUS CALCULATION: (once per area)
 //		(items must be placed on top of altar)
 //	
-//		Altar Exists 				(1 point)
 //		Talisman 					(1 point)
 // 		Skull 						(3 points)
 // 		Meat 						(2 points)
@@ -119,17 +128,19 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		var/list/ritual_areas = list()
 		var/awardedpoints = 0
 		for(var/obj/structure/cult/altar/C in cult_altars)
+
 			var/turf/T = get_turf(C)
 			var/area/A = T.loc
 			if(!T || !A)
+				C.vis_contents = list()
 				continue
 			if(isspace(A))
+				C.vis_contents = list()
 				continue
 			if(locate(A) in ritual_areas)
+				C.vis_contents = list()
 				continue
-			ritual_areas += A
-
-			awardedpoints += 1			
+		
 			if(locate(/obj/item/weapon/talisman) in T.contents)
 				awardedpoints += 1
 			if(locate(/obj/item/weapon/skull) in T.contents)
@@ -163,25 +174,12 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 				if(candles >= 5)
 					break
 
-			var/mob/living/simple_animal/animal = locate(/mob/living/simple_animal) in T.contents
-			if(animal && animal.stat == DEAD)	
-				if(istype(animal, /mob/living/simple_animal/cat))
-					awardedpoints += 8
-					if(istype(animal, /mob/living/simple_animal/cat/salem) || istype(animal, /mob/living/simple_animal/cat/Runtime))
-						awardedpoints += 10
-				else if(istype(animal, /mob/living/simple_animal/corgi))
-					awardedpoints += 8
-					if(istype(animal, /mob/living/simple_animal/corgi/Ian) || istype(animal, /mob/living/simple_animal/corgi/sasha)) 
-						awardedpoints += 17	
-				else if(istype(animal, /mob/living/simple_animal/parrot/Poly))
-					awardedpoints += 12
-				else if(istype(animal, /mob/living/simple_animal/mouse))
-					awardedpoints += 2
-				else 
-					awardedpoints += 5
-
-			if(!locate(/obj/effect/cult_offerings) in C.vis_contents)
-				C.vis_contents += new /obj/effect/cult_offerings
+			if(awardedpoints > 0)
+				if(!locate(/obj/effect/cult_offerings) in C.vis_contents)
+					C.vis_contents += new /obj/effect/cult_offerings
+				ritual_areas += A
+			else 
+				C.vis_contents = list()
 
 		Reward(awardedpoints)
 	else
@@ -201,4 +199,33 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/sow_confusion/Complete(var/mob/cultist, var/list/extrainfo)
 	var/people = extrainfo["victimcount"]
 	Reward(people * 10)
+	
+
+/datum/bloodcult_ritual/animal_sacrifice
+	name = "Small sacrifice"
+	desc = "Impale a creature on an altar."
+	
+/datum/bloodcult_ritual/animal_sacrifice/Complete(var/mob/cultist, var/list/extrainfo)
+	var/mobtype = extrainfo["mobtype"]
+	Reward(GetMobValue(mobtype, 4))
 	GrantTattoo(cultist, /datum/cult_tattoo/dagger)
+
+
+/datum/bloodcult_ritual/spirited_away
+	name = "Spirited Away"
+	desc = "Send a non-cultist through a path rune."
+	var/list/previous_victims = list()
+
+/datum/bloodcult_ritual/spirited_away/Complete(var/mob/cultist, var/list/extrainfo)
+	var/list/victims = extrainfo["victims"]
+	for(var/mob/V in victims)
+		if(V in previous_victims)
+			victims -= V
+			to_chat(world, "[V] was previous victim")
+		else
+			to_chat(world, "adding [V]")
+	previous_victims += victims
+	to_chat(world, victims.len)
+	if(victims.len > 0)
+		Reward(25 * victims.len)
+		GrantTattoo(cultist, /datum/cult_tattoo/shortcut)

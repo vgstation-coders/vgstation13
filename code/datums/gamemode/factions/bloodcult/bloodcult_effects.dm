@@ -182,7 +182,7 @@
 
 	var/force_jaunt = FALSE
 
-/obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup)
+/obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup, var/mob/activator)
 	..()
 	if (!user && !packup && !force_jaunt)
 		qdel(src)
@@ -206,6 +206,7 @@
 				M.apply_vision_overrides()
 				M.flags |= INVULNERABLE
 	if (packup)
+		var/list/noncult_victims = list()
 		for (var/atom/movable/AM in packup)
 			if (AM.anchored)
 				if (ismob(AM))
@@ -218,6 +219,8 @@
 				if (C.occult_muted())
 					muted = TRUE
 					to_chat(C, "<span class='warning'>The holy energies upon your body repel the blood jaunt.</span>")
+				if(!iscultist(C))
+					noncult_victims += C
 			if (!AM.anchored && !muted)
 				AM.forceMove(src)
 				packed.Add(AM)
@@ -227,6 +230,8 @@
 					M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
 					M.apply_vision_overrides()
 					M.flags |= INVULNERABLE
+		if(noncult_victims.len > 0 && activator)
+			CompleteCultRitual(/datum/bloodcult_ritual/spirited_away, activator, list("victims" = noncult_victims))
 	starting = loc
 	target = destination
 	initial_pixel_x = pixel_x

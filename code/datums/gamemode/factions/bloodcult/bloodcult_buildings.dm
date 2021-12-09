@@ -253,7 +253,7 @@
 /obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user, params)
 	if (altar_task)
 		return ..()
-	if(istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
+	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/ritual) || istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
 		if (blade)
 			to_chat(user,"<span class='warning'>You must remove \the [blade] planted into \the [src] first.</span>")
 			return 1
@@ -264,15 +264,37 @@
 		blade = I
 		update_icon()
 		var/mob/living/carbon/human/C = locate() in loc
+		var/mob/living/simple_animal/S = locate() in loc
 		if (C && C.resting)
 			C.unlock_from()
 			C.update_canmove()
 			lock_atom(C, lock_type)
 			C.apply_damage(blade.force, BRUTE, LIMB_CHEST)
+			I.add_blood(C)
 			if (C == user)
 				user.visible_message("<span class='danger'>\The [user] holds \the [I] above their stomach and impales themselves on \the [src]!</span>","<span class='danger'>You hold \the [I] above your stomach and impale yourself on \the [src]!</span>")
 			else
 				user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [C]'s stomach and impales them on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [C]'s stomach and impale them on \the [src]!</span>")
+		else if(S && S.stat != DEAD)
+			S.unlock_from()
+			S.update_canmove()
+			S.pixel_y = 16
+			lock_atom(S, lock_type)
+			S.death()	
+			I.add_blood()
+			user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [S] and impales them on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [S] and impale them on \the [src]!</span>")
+			if(locate(/datum/bloodcult_ritual/animal_sacrifice) in unlocked_rituals)
+				playsound(src, get_sfx("soulstone"), 50,1)
+				spawn(10)
+					var/atom/movable/overlay/landing_animation = anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+					playsound(src, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
+					spawn(10)
+						CompleteCultRitual(/datum/bloodcult_ritual/animal_sacrifice, user, list("mobtype" = S.type))
+						qdel(S)
+						bloodmess_splatter(get_turf(src))
+						playsound(src, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+						flick("cult_jaunt_land",landing_animation)
+
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
 			if (istype(blade) && !blade.shade)
@@ -317,7 +339,9 @@
 	overlays.len = 0
 	if (blade)
 		var/image/I
-		if (!istype(blade))
+		if(istype(blade, /obj/item/weapon/kitchen/utensil/knife/large/ritual))
+			I = image(icon, "altar-ritualknife")
+		else if (!istype(blade))
 			I = image(icon, "altar-cultblade")
 		else if (blade.shade)
 			I = image(icon, "altar-soulblade-full")
@@ -375,28 +399,29 @@
 			return
 		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
 			return
-		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon))
-			return
+
 		var/mob/living/L = O
-		if(!istype(L) || L.locked_to || L == user)
+		if(!istype(L) || L.locked_to)
 			return
 		if (blade)
 			to_chat(user,"<span class='warning'>You must remove \the [blade] planted on \the [src] first.</span>")
 			return 1
-		var/mob/living/carbon/C = O
 
-		if (!do_after(user,C,15))
+		if (!do_after(user,L,15))
 			return
-		C.unlock_from()
+		L.unlock_from()
 
-		if (ishuman(C))
-			C.resting = 1
-			C.update_canmove()
+		if (ishuman(L) && L != user)
+			L.resting = 1
+			L.update_canmove()
 
-		add_fingerprint(C)
+		add_fingerprint(L)
 
 	O.forceMove(loc)
-	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
+	if(O == user)
+		to_chat(user, "<span class='warning'>You climb on top of \the [src]</span>")
+	else
+		to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
 	return 1
 
 
