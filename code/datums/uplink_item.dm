@@ -523,7 +523,12 @@ var/list/uplink_items = list()
 	cost = 1
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
-
+	
+/datum/uplink_item/device_tools/radio_jammer
+	name = "Radio Jammer"
+	desc = "A device that disrupts all radio communication in nearby area. Guaranteed radio silence at point blank range, but effectiveness decreases with range. Requires a power cell for operation. Batteries and screwdriver not included."
+	item = /obj/item/device/radio_jammer
+	cost = 8
 
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here

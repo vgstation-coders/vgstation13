@@ -106,7 +106,7 @@
 	canmove = 0
 	return 0
 
-/mob/living/silicon/robot/mommi/can_ventcrawl()
+/mob/living/silicon/robot/mommi/sammi/can_ventcrawl()
 	return FALSE
 
 /mob/living/silicon/robot/mommi/sammi/ventcrawl()

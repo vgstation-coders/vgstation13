@@ -49,7 +49,7 @@ var/global/datum/controller/vote/vote = new()
 	var/total_votes    = 0
 	var/vote_threshold = 0.15
 	var/discarded_votes = 0
-	var/weighted        = FALSE // Whether to use weighted voting.
+	var/weighted        = TRUE // Whether to use weighted voting.
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
@@ -467,6 +467,10 @@ var/global/datum/controller/vote/vote = new()
 			return 0
 		if("cancel")
 			if(usr.client.holder)
+				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
+					return
+				log_admin("[key_name(usr)] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
+				message_admins("[key_name(usr)] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				reset()
 				update()
 				currently_voting = FALSE
