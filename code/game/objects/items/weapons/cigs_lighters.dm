@@ -507,8 +507,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/starlight/New()
 	..()
-	reagents.add_reagent(DEXALIN, 3) // Light spaceproofing
-	reagents.add_reagent(LEPORAZINE, 2)
+	reagents.add_reagent(DEXALIN, 5) // Breathe easy
 
 /obj/item/clothing/mask/cigarette/lucky
 	name = "Lucky Strike cigarette"
