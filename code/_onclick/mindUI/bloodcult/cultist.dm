@@ -91,12 +91,14 @@
 	if (M)
 
 		var/list/available_runes = list()
+		var/i = 1
 		for(var/blood_spell in subtypesof(/datum/rune_spell))
 			var/datum/rune_spell/instance = blood_spell
 			if (initial(instance.secret))
 				continue
-			available_runes.Add("[initial(instance.name)]")
-			available_runes["[initial(instance.name)]"] = instance
+			available_runes.Add("[initial(instance.name)] - \Roman[i]")
+			available_runes["[initial(instance.name)] - \Roman[i]"] = instance
+			i++
 		var/spell_name = input(M,"Remember how to trace a given rune.", "Trace Rune with a Guide", null) as null|anything in available_runes
 
 		if (spell_name)
