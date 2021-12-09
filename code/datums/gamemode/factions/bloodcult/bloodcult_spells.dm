@@ -28,7 +28,7 @@
 	var/obj/effect/rune/rune = null
 	var/datum/rune_spell/spell = null
 	var/continue_drawing = 0
-	var/blood_cost = 2
+	var/blood_cost = 1
 
 
 /spell/cult/trace_rune/choose_targets(var/mob/user = usr)
