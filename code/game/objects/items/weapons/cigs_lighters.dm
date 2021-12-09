@@ -533,7 +533,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/dlucky/New()
 	..()
-	reagents.add_reagent(COCAINE, 5) // Speed
+	reagents.add_reagent(NICOTINE, 5) // More of the same
 
 /obj/item/clothing/mask/cigarette/redsuit
 	name = "Redsuit cigarette"
@@ -628,8 +628,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/cigar/havana/New()
 	..()
-	reagents.remove_reagent(TOBACCO, 5)
-	reagents.add_reagent(NICOTINE, 5) // More for less downsides
+	reagents.add_reagent(NICOTINE, 5) // More with less downsides
 
 /obj/item/trash/cigbutt
 	name = "cigarette butt"
