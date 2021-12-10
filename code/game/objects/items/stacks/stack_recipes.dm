@@ -200,18 +200,25 @@
 	src.req_strikes = required_strikes
 
 /datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
-	//Yeah nah let's put you in a blacksmith_placeholder
-	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
-	I.name = "unforged [R.name]"
+	// Figure out main material from stack
+	if(istype(S, /obj/item/stack/sheet/))
+		var/obj/item/stack/sheet/SS = S
+		var/datum/materials/materials_list = new
+		R.material_type = materials_list.getMaterial(SS.mat_type)
+		qdel(materials_list)
+	else if(S.material_type)
+		R.material_type = S.material_type
 
-	//Make it recyclable back into the material it's made out of
+	// Apply material info to end product for recycling
 	if (R.materials == null)
 		R.materials = new /datum/materials(src)
-	R.materials.addAmount(S.material_type, S.perunit * req_amount/res_amount)
-
+	R.materials.addAmount(R.material_type.id, S.perunit * req_amount/res_amount)
 	for (var/obj/item/stack/req in other_reqs)
 		R.materials.addAmount(req.material_type, other_reqs[req]*req.perunit)
 
+	//Yeah nah let's put you in a blacksmith_placeholder
+	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)
+	I.name = "unforged [R.name]"
 	return 0
 
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(

@@ -108,3 +108,5 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "spring"
 	desc = "A piece of woven metal capable of high elasticity."
+	w_type = RECYK_METAL
+	starting_materials = list(MAT_IRON = 1 * CC_PER_SHEET_METAL)

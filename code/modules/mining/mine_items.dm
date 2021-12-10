@@ -196,7 +196,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_LARGE
 	sharpness = 0.6
 	sharpness_flags = SHARP_TIP
-	starting_materials = list(MAT_IRON = 3750) //one sheet, but where can you make them?
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5) // Blacksmithing recipe
 	w_type = RECYK_METAL
 	toolspeed = 0.4 //moving the delay to an item var so R&D can make improved picks. --NEO
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
@@ -226,6 +226,7 @@ proc/move_mining_shuttle()
 	toolspeed = 0.3
 	origin_tech = Tc_MATERIALS + "=3"
 	desc = "This makes no metallurgic sense."
+	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/jackhammer
 	name = "sonic jackhammer"
@@ -256,6 +257,7 @@ proc/move_mining_shuttle()
 	toolspeed = 0.2
 	origin_tech = Tc_MATERIALS + "=4"
 	desc = "This makes no metallurgic sense."
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/plasmacutter
 	name = "plasma torch"
@@ -344,7 +346,8 @@ proc/move_mining_shuttle()
 	toolspeed = 0.1
 	sharpness = 1.2
 	origin_tech = Tc_MATERIALS + "=6;" + Tc_ENGINEERING + "=4"
-	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
+	desc = "A pickaxe with a diamond coated pick head, this is just like minecraft."
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 3.9, MAT_DIAMOND = CC_PER_SHEET_DIAMOND * 0.1, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5) // Letting miners recycle their diamond pickaxes into 4 diamond sheets would be a tad bit much, so let's make it mostly iron with diamond bits
 
 /obj/item/weapon/pickaxe/drill
 	name = "mining drill" // Can dig sand as well!

@@ -456,6 +456,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
+	w_type = RECYK_METAL
 
 /obj/item/weapon/pitchfork
 	name = "pitchfork"
@@ -467,6 +468,7 @@
 	sharpness = 2
 	sharpness = SHARP_TIP
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	w_type = RECYK_METAL
 
 /obj/item/weapon/baseball_bat
 	name = "baseball bat"
@@ -481,6 +483,7 @@
 	throw_speed = 1
 	throw_range = 7
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
 
 /obj/item/weapon/baseball_bat/update_wield(mob/user)
 	..()
@@ -550,6 +553,7 @@
 	throw_speed = 1
 	throw_range = 7
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
 
 /obj/item/weapon/spiked_bat/update_wield(mob/user)
 	..()
