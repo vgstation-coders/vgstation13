@@ -14,7 +14,7 @@
 	// Graphics stuff
 	desc = "Horse hair on a stick, with a space age twist. Paint won't dry or run out on this"
 	name = "painting brush"
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "painting_brush"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 

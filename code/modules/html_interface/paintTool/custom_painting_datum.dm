@@ -15,13 +15,19 @@
 	var/min_strength = 0
 	var/max_strength = 1
 	var/list/palette = list()
+	var/base_color
 
-/datum/painting_utensil/New(mob/user, obj/item/held_item = user.get_active_hand())
+/datum/painting_utensil/New(mob/user, obj/item/held_item)
+	if (!user) // Special case
+		return
+	if (!held_item)
+		held_item = user.get_active_hand()
 	if (istype(held_item, /obj/item/weapon/pen))
 		var/obj/item/weapon/pen/p = held_item
 		max_strength = PENCIL_STRENGTH_MAX
 		min_strength = PENCIL_STRENGTH_MIN
 		palette += p.colour_rgb
+		base_color = p.colour_rgb
 
 	if (istype(held_item, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/c = held_item
@@ -29,12 +35,14 @@
 		min_strength = PENCIL_STRENGTH_MIN
 		palette += c.colour
 		palette += c.shadeColour
+		base_color = c.color
 
 	if (istype(held_item, /obj/item/weapon/hair_dye))
 		var/obj/item/weapon/hair_dye/h = held_item
 		max_strength = PENCIL_STRENGTH_MAX
 		min_strength = PENCIL_STRENGTH_MIN
 		palette += rgb(h.color_r, h.color_g, h.color_b)
+		base_color = rgb(h.color_r, h.color_g, h.color_b)
 
 	if (istype(held_item, /obj/item/weapon/painting_brush))
 		var/obj/item/weapon/painting_brush/b = held_item
@@ -42,6 +50,16 @@
 			max_strength = BRUSH_STRENGTH_MAX
 			min_strength = BRUSH_STRENGTH_MIN
 			palette += b.paint_color
+			base_color = b.paint_color
+
+/datum/painting_utensil/proc/duplicate()
+	var/datum/painting_utensil/dupe = new(null, null)
+	dupe.max_strength = src.max_strength
+	dupe.min_strength = src.min_strength
+	dupe.palette = src.palette
+	dupe.base_color = src.base_color
+	dupe.tag = "\ref[dupe]"
+	return dupe
 
 /*
 * CUSTOM PAINTING DATUM
