@@ -99,25 +99,26 @@ var/list/assassination_objectives = list()
 		var/datum/component/uplink/enemy_uplink = target.find_syndicate_uplink(enemy.uplink)
 		//chances are the target's uplink is no longer on their mind.current especially if they got decapitated or such.
 		//by associating the uplink with the role we can at least try and get the TCs out of it.
-		//Leaving this as is, even though this change no longer moves the target's TC from their uplink into yours, it instead sets the target's to 0 and increases yours by a static amount (8).
+		//Increases the victor's uplink (if it finds it) by 8tcs and sets the victim's to 0 (if it finds it).
 
 		if (A.target == owner)
-			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your Victory. Look forward to be assigned on higher risk operations another day.</span>")
+			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your victory. Look forward to be assigned on higher risk operations another day.</span>")
 		else
 			if (owner_uplink)
-				if (enemy_uplink)
-					owner_uplink.telecrystals += 8
-					enemy_uplink.telecrystals = 0
-				to_chat(owner.current, "<span class='notice'>Good work agent. 8 additional tele-crystals have been sent to your uplink.</span>")
+				owner_uplink.telecrystals += 8
+				to_chat(owner.current, "<span class='notice'>Good work, agent. 8 additional tele-crystals have been sent to your uplink.</span>")
 			else
-				to_chat(owner.current, "<span class='notice'>Good work agent. Unfortunately we couldn't find your uplink on your person, so no additional tele-crystals could be distributed.</span>")
+				to_chat(owner.current, "<span class='notice'>Good work, agent. Unfortunately, we couldn't find your uplink on your person, so no additional tele-crystals could be distributed.</span>")
+			if (enemy_uplink)
+				enemy_uplink.telecrystals = 0
+
 			var/datum/objective/target/assassinate/new_kill_target = new(auto_target = FALSE)
 			if(new_kill_target.set_target(A.target))
 				self.AppendObjective(new_kill_target)
 				to_chat(owner.current, "<b>New Objective</b>: [new_kill_target.explanation_text]<br>")
-
-		if (owner_uplink && enemy_uplink)
+		if (owner_uplink)
 			owner_uplink.telecrystals += 8
+		if (enemy_uplink)
 			enemy_uplink.telecrystals = 0
 
 		A.syndicate_checked = SYNDICATE_CANCELED
