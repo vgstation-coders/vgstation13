@@ -115,6 +115,8 @@
 	if(req_access_dir)
 		// A special check that combines dirs specified in this number by chaining the conditions below, for example NORTHEAST would add the north and east conditions together.
 		var/condition = FALSE
+		if((flow_flags & ON_BORDER) && dir == opposite_dirs[req_access_dir]) // For windoors and etc.
+			condition |= M.y == src.y && M.x == src.x
 		if(req_access_dir & NORTH)
 			condition |= M.y > src.y
 		if(req_access_dir & SOUTH)
