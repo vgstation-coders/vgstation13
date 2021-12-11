@@ -481,6 +481,92 @@ var/list/beam_master = list()
 		var/message = pick("\the [src] narrowly whizzes past [L]!","\the [src] almost hits [L]!","\the [src] straight up misses its target.","[L]'s hair is singed off by \the [src]!","\the [src] misses [L] by a millimetre!","\the [src] doesn't hit","\the [src] misses its intended target.","[L] has a lucky escape from \the [src]!")
 		target.loc.visible_message("<span class='danger'>[message]</span>")
 
+/obj/item/projectile/beam/scorchray
+	name = "scorch ray"
+	icon_state = "scorchray"
+	damage = 30
+	fire_sound = 'sound/weapons/ray1.ogg'
+
+/obj/item/projectile/beam/scorchray/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = M
+			if (H.isDead())
+				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to humans, vox, greys, etc. Having it "disintegrate the flesh" off of species like golems, diona, and plasmamen would be odd
+					return 0
+				if(isvox(H))
+					H.set_species("Skeletal Vox")
+					H.regenerate_icons()
+					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
+
+					if(H.lying)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15) //This should animate based on whether the mob is standing or sitting, and also make the skellington transformation seem more natural
+					else
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
+
+					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+				else
+					H.set_species("Skellington")
+					H.regenerate_icons()
+					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
+
+					if(H.lying)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15) //This should animate based on whether the mob is standing or sitting, and also make the skellington transformation seem more natural
+					else
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
+
+					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+		else
+			return 1
+
+/obj/item/projectile/beam/immolationray
+	name = "immolation ray"
+	icon_state = "immolationray"
+	damage = 40
+	fire_sound = 'sound/weapons/ray1.ogg'
+
+/obj/item/projectile/beam/immolationray/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = M
+			if (H.isDead())
+				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to humans, vox, greys, etc. Having it "disintegrate the flesh" off of species like golems, diona, and plasmamen would be odd
+					return 0
+				if(isvox(H))
+					H.set_species("Skeletal Vox")
+					H.regenerate_icons()
+					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
+
+					if(H.lying)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15)
+					else
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
+
+					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+				else
+					H.set_species("Skellington")
+					H.regenerate_icons()
+					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
+
+					if(H.lying)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15)
+					else
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
+
+					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+		else
+			return 1
+
 /obj/item/projectile/beam/lightlaser
 	name = "light laser"
 	damage = 25
