@@ -944,7 +944,7 @@ var/list/tag_suits_list = list()
 	H.register_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
 	H.register_event(/event/to_bump, src, .proc/on_to_bump)
 	H.register_event(/event/bumped, src, .proc/on_bumped)
-	canremove = 0
+	can_unequip = 0
 
 /obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
 	if(toucher == touched) //No bombing ourselves by checking ourselves
@@ -984,7 +984,7 @@ var/list/tag_suits_list = list()
 	var/message_say = user.handle_suicide_bomb_cause()
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
-	explosion(user, 1, 3, 6, whodunnit = user)
+	explosion(user, 2, 4, 6, whodunnit = user)
 	message_admins("[user] has detonated \the [src]!")
 	qdel(src) //Just in case
 	return SUICIDE_ACT_CUSTOM
@@ -993,7 +993,7 @@ var/list/tag_suits_list = list()
 	var/mob/living/carbon/human/H = loc
 	if(!ishuman(H) || !active)
 		return
-	explosion(H, 1, 3, 6, whodunnit = H)
+	explosion(get_turf(H), 2, 4, 6, whodunnit = H)
 	message_admins("[H] has detonated \the [src]!")
 	qdel(src) //Just in case
 
