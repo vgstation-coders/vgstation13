@@ -94,8 +94,9 @@
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 1 //Not used here the same way as elsewhere; see burnFireFuel() below.
 	sheettype = "wood"
-	w_type = RECYK_WOOD
 	siemens_coefficient = 0 //no conduct
+	w_type = RECYK_WOOD
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD)
 	mat_type = MAT_WOOD
 	perunit = CC_PER_SHEET_WOOD
 

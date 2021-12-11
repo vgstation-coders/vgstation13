@@ -180,13 +180,21 @@
 		else if(S.material_type)
 			mat = S.material_type
 
-		//Make it recyclable back into the material it's made out of
+		// Make it recyclable back into the materials it's made out of
+		// Initialize materials list if doesn't exist already
 		if (R.materials == null)
 			R.materials = new /datum/materials(src)
-		R.materials.addAmount(mat.id, S.perunit * req_amount/res_amount)
 
-		for (var/obj/item/stack/req in other_reqs)
-			R.materials.addAmount(req.material_type, other_reqs[req]*req.perunit)
+		// Add main materials off the stack
+		R.materials.addRatioFrom(S.materials, req_amount/(S.amount * res_amount))
+
+		// Add extra materials off additional recipe requisites
+		for (var/req in other_reqs)
+			// other_reqs contains typepaths, so create an instance and use it's materials as base
+			// TODO: pull the materials from the actual object that was used to fulfill the other_req
+			var/atom/movable/A = new req
+			if (A.materials)
+				R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
 
 		R.dorfify(mat)
 	return 1
@@ -210,11 +218,20 @@
 		R.material_type = S.material_type
 
 	// Apply material info to end product for recycling
+	// Initialize materials list if doesn't exist already
 	if (R.materials == null)
 		R.materials = new /datum/materials(src)
-	R.materials.addAmount(R.material_type.id, S.perunit * req_amount/res_amount)
-	for (var/obj/item/stack/req in other_reqs)
-		R.materials.addAmount(req.material_type, other_reqs[req]*req.perunit)
+
+	// Add main materials off the stack
+	R.materials.addRatioFrom(S.materials, req_amount/(S.amount * res_amount))
+
+	// Add extra materials off additional recipe requisites
+	for (var/req in other_reqs)
+		// other_reqs contains typepaths, so create an instance and use it's materials as base
+		// TODO: pull the materials from the actual object that was used to fulfill the other_req
+		var/atom/movable/A = new req
+		if (A.materials)
+			R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
 
 	//Yeah nah let's put you in a blacksmith_placeholder
 	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)

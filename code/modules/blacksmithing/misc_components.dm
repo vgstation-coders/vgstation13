@@ -18,7 +18,7 @@
 		if(do_after(user, src, 4 SECONDS))
 			if(istype(I, /obj/item/stack))
 				var/obj/item/stack/S = I
-				var/datum/material/stack_material = S
+				var/datum/material/stack_material = S.materials
 				if(!S.use(1))
 					return
 				else
