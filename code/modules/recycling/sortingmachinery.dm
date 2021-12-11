@@ -464,6 +464,13 @@
 		return 1
 
 /obj/machinery/sorting_machine/recycling/sort(atom/movable/A)
+	// A closet or crate that can't be opened can't be recycled, regardless of recycle type and selected types
+	if (istype(A, /obj/structure/closet))
+		var/obj/structure/closet/C = A
+		if (!C.can_open())
+			return FALSE
+
+	// Check atom recycle type is in selected types
 	return A.w_type && (types[A.w_type] in selected_types)
 
 /obj/machinery/sorting_machine/recycling/interact(mob/user)
