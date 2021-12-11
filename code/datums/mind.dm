@@ -91,9 +91,10 @@
 		var/datum/role/R = antag_roles[role]
 		R.PreMindTransfer(current)
 
-	if(current)					//remove ourself from our old body's mind variable
+	if(current)					//remove ourself from our old body's mind variable NOW THAT THE TRANSFER IS DONE
 		current.old_assigned_role = assigned_role
 		current.mind = null
+
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
 
@@ -105,7 +106,10 @@
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
-									//gotta do that after linking the mind to the body or we'll create an extra mind on Login()
+		to_chat(world, "transfered to successfully") //gotta do that after linking the mind to the body or we'll create an extra mind on Login()
+
+	if (!active)
+		to_chat(world, "<h1>We are not active. What</h1>")
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
@@ -126,6 +130,7 @@
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
+		to_chat(world, "transfered to successfully")
 
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
