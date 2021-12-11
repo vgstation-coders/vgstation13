@@ -277,7 +277,7 @@
 	key_third_person = "dismisses"
 	key_shorthand = "dis"
 	message = "waves dimissively."
-	message_param = "dismisses %t."
+	message_param = "waves dismissively to %t."
 
 /datum/emote/living/carbon/snap
 	key = "snap"
