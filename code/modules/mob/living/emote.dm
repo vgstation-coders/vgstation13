@@ -356,9 +356,9 @@ var/list/animals_with_wings = list(
 	var/datum/emote/E
 
 	for(var/e in emote_list)
-		if(e in keys)
-			continue
 		E = emote_list[e]
+		if(E.key in keys)
+			continue
 		if(E.can_run_emote(user, status_check = FALSE))
 			keys += E.key
 
