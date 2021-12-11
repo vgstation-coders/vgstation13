@@ -106,10 +106,6 @@
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
-		to_chat(world, "transfered to successfully") //gotta do that after linking the mind to the body or we'll create an extra mind on Login()
-
-	if (!active)
-		to_chat(world, "<h1>We are not active. What</h1>")
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
