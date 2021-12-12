@@ -314,7 +314,7 @@ var/list/lawgiver_modes = list(
 	var/orientation = get_dir(origin_turf, target_turf)
 	// Turfs to the "left" and to the "right" of the clicked target
 	var/projectile1_target = get_step(target_turf, counterclockwise_perpendicular_dirs[orientation])
-	var/projectile2_target = get_step(target_turf, opposite_dirs[counterclockwise_perpendicular_dirs[orientation]])
+	var/projectile2_target = get_step(target_turf, clockwise_perpendicular_dirs(orientation))
 	Fire(projectile1_target, user, params, struggle)
 	if(!in_chamber)
 		in_chamber = new projectile_type(src)
