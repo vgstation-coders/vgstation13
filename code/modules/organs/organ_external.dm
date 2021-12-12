@@ -1928,6 +1928,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 					msg_admin_attack("[user] ([user.ckey]) debrained [brainmob] ([brainmob.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 					//TODO: ORGAN REMOVAL UPDATE.
+
+					for(var/datum/organ/internal/brain/B in src.internal_organs)
+						src.internal_organs -= B
 					var/turf/T = get_turf(src)
 					if(isatom(organ_data.removed_type))
 						var/obj/I = organ_data.removed_type
