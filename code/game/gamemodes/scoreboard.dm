@@ -315,6 +315,8 @@
 				score["disease_vaccine_score"] += 200
 			else if (antigen in alien_antigens)
 				score["disease_vaccine_score"] += 400
+			else if (antigen in special_antigens)
+				score["disease_vaccine_score"] += 400
 		else
 			score["disease_vaccine"] += "-"
 

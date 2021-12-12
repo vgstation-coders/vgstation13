@@ -1468,7 +1468,6 @@ var/list/confusion_victims = list()
 				new_victim = 1
 				//if(C.client && C.stat == CONSCIOUS)
 				if(C.stat == CONSCIOUS)
-					to_chat(world, "sneed 1")
 					ritual_victim_count++
 				C.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
 			C.update_fullscreen_alpha("blindblind", 255, 0)
@@ -1692,7 +1691,8 @@ var/list/confusion_victims = list()
 
 	for(var/mob/living/L in shocked)
 		new /obj/effect/cult_ritual/reveal(L.loc, L, shocked[L])
-		to_chat(L, "<span class='danger'>The shock of having occult symbols suddenly revealed to you leaves you temporarily unable to move or talk.</span>")
+		CompleteCultRitual(/datum/bloodcult_ritual/reveal_truth, activator, list("shocked" = shocked))
+		to_chat(L, "<span class='danger'>You feel a terrifying shock resonate within your body as the hidden runes are revealed!</span>")
 		L.update_fullscreen_alpha("shockborder", 100, 5)
 		spawn(8)
 			L.update_fullscreen_alpha("shockborder", 0, 5)
@@ -1973,6 +1973,9 @@ var/list/seer_rituals = list()
 	var/turf/TU = get_turf(spell_holder)
 	for(var/mob/living/carbon/C in TU)
 		potential_targets += C
+	if(potential_targets.len == 0)
+		qdel(src)
+		return
 	var/mob/living/carbon/target
 	if(activator in potential_targets)
 		target = activator

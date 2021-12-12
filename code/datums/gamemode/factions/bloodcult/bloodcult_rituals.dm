@@ -182,8 +182,6 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	else
 
 
-
-
 /datum/bloodcult_ritual/draw_rune
 	name = "Draw Rune"
 	desc = "Draw a rune."
@@ -220,11 +218,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	for(var/mob/V in victims)
 		if(V in previous_victims)
 			victims -= V
-			to_chat(world, "[V] was previous victim")
-		else
-			to_chat(world, "adding [V]")
 	previous_victims += victims
-	to_chat(world, victims.len)
 	if(victims.len > 0)
 		Reward(25 * victims.len)
 		GrantTattoo(cultist, /datum/cult_tattoo/shortcut)
@@ -235,3 +229,18 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 /datum/bloodcult_ritual/human_sacrifice/Complete(var/mob/cultist, var/list/extrainfo)
 	Reward(500)
+
+/datum/bloodcult_ritual/reveal_truth 
+	name = "Reveal the Truth"
+	desc = "Ensnare victims in the veil by revealing runes next to them."
+
+/datum/bloodcult_ritual/reveal_truth/Complete(var/mob/cultist, var/list/extrainfo)
+	var/points = 0
+	var/list/shocked = extrainfo["shocked"]
+	if(!shocked || shocked.len == 0)
+		return
+	var/points = 0
+	for(var/mob/living/L in shocked)
+		points += 10*(shocked[L])
+	if(points > 0)
+		Reward(points)

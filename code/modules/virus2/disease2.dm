@@ -711,8 +711,8 @@ var/global/list/disease2_list = list()
 
 /datum/disease2/disease/proc/roll_antigen(var/list/factors = list())
 	if (factors.len <= 0)
-		antigen = list(pick(all_antigens))
-		antigen |= pick(all_antigens)
+		antigen = list(pick(all_antigens - special_antigens))
+		antigen |= pick(all_antigens - special_antigens)
 	else
 		var/selected_first_antigen = pick(
 			factors[ANTIGEN_BLOOD];ANTIGEN_BLOOD,
@@ -786,7 +786,7 @@ var/global/list/disease2_list = list()
 
 
 /datum/disease2/disease/proc/getcopy()
-	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
+	var/datum/disease2/disease/disease = new src.type("")
 	disease.form=form
 	disease.log=log
 	disease.origin=origin
@@ -908,3 +908,7 @@ var/global/list/virusDB = list()
 	v.fields["danger"] = "Undetermined"
 	virusDB["[uniqueID]-[subID]"] = v
 	return 1
+
+// Override with additional checks if needed.
+/datum/disease2/disease/proc/CanInfect(var/mob/living/body)
+	return TRUE

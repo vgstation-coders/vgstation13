@@ -1554,6 +1554,12 @@ var/list/arcane_tomes = list()
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
+	
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.id == BLOOD)
+			var/datum/reagent/blood/B = R
+			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
+			B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] += cultvirus.getcopy()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)
@@ -1568,6 +1574,15 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/gamer
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/gamer
+	..()
+	overlays.len = 0
+	if (reagents.reagent_list.len > 0)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += filling
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/cultify()
 	return

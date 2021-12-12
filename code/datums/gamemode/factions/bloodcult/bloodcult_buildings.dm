@@ -278,7 +278,7 @@
 		else if(S && S.stat != DEAD)
 			S.unlock_from()
 			S.update_canmove()
-			S.pixel_y = 8
+			S.pixel_y = 6
 			lock_atom(S, lock_type)
 			S.death()	
 			I.add_blood()
@@ -286,14 +286,24 @@
 			if(locate(/datum/bloodcult_ritual/animal_sacrifice) in unlocked_rituals)
 				playsound(src, get_sfx("soulstone"), 50,1)
 				spawn(10)
+					var/turf/TU = get_turf(src)
 					var/atom/movable/overlay/landing_animation = anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 					playsound(src, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
 					spawn(10)
+						var/obj/item/weapon/reagent_containers/R = locate(/obj/item/weapon/reagent_containers) in TU.contents
+						var/remaining = R.volume - R.reagents.total_volume
+						if(R && R.is_open_container())
+							if(istype(S, /mob/living/simple_animal/mouse))
+								S.take_blood(R, min(remaining, 30))
+							else 
+								S.take_blood(R, min(remaining, 60))
+							R.on_reagent_change()
 						CompleteCultRitual(/datum/bloodcult_ritual/animal_sacrifice, user, list("mobtype" = S.type))
 						qdel(S)
-						bloodmess_splatter(get_turf(src))
+						bloodmess_splatter(TU)
 						playsound(src, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
 						flick("cult_jaunt_land",landing_animation)
+					
 
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
