@@ -20,7 +20,6 @@
 "aw" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor6"},/mob/living/simple_animal/hostile/humanoid/grey/space/melee/toolbox{name = "Klaatu"},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
 "ax" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/obj/effect/decal/cleanable/dirt,/obj/item/trash/zam_sliderwrapper,/turf/simulated/floor/carpet,/area/vault/brokeufo)
 "ay" = (/obj/structure/bed,/obj/item/weapon/bedsheet,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/vault/brokeufo)
-"aA" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = 30},/turf/simulated/floor/plating,/area/vault/brokeufo)
 "aB" = (/obj/item/clothing/gloves/yellow,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
 "aC" = (/obj/machinery/light/small,/turf/simulated/floor/carpet,/area/vault/brokeufo)
 "aD" = (/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor/carpet,/area/vault/brokeufo)
@@ -30,7 +29,7 @@
 "aI" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/carpet,/area/vault/brokeufo)
 "aJ" = (/obj/structure/dispenser/oxygen,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating,/area/vault/brokeufo)
 "aK" = (/obj/structure/bed,/obj/item/weapon/bedsheet,/obj/item/weapon/bedsheet/green,/obj/machinery/light{dir = 4},/turf/simulated/floor/carpet,/area/vault/brokeufo)
-"aL" = (/obj/structure/rack,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/turf/simulated/floor/engine,/area/vault/brokeufo)
+"aL" = (/obj/structure/rack,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor/engine,/area/vault/brokeufo)
 "aM" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/vault/brokeufo)
 "aN" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/brokeufo)
 "aP" = (/turf/simulated/floor/glass/plasma,/area/vault/brokeufo)
@@ -52,54 +51,55 @@
 "bh" = (/obj/effect/decal/cleanable/dirt,/obj/item/device/flashlight/flare/ever_bright,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "bi" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "bj" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/brokeufo)
-"dj" = (/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
-"em" = (/obj/structure/table/reinforced,/obj/item/weapon/circuitboard/communications,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/vault/brokeufo)
-"eV" = (/obj/machinery/light,/obj/structure/rack,/obj/item/clothing/shoes/magboots,/obj/item/clothing/head/helmet/space/nasavoid,/obj/item/clothing/suit/space/nasavoid,/obj/item/weapon/tank/jetpack/carbondioxide,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
-"gC" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"is" = (/obj/structure/closet/crate/freezer/surgery,/obj/item/organ/internal/heart/insectoid,/obj/item/organ/internal/heart,/obj/item/organ/internal/heart,/obj/item/organ/internal/lungs,/obj/item/organ/internal/lungs/plasmaman,/obj/item/organ/internal/lungs/vox,/obj/item/organ/internal/lungs,/obj/item/organ/internal/liver,/obj/item/organ/internal/eyes/grey,/obj/item/organ/internal/eyes/tajaran,/obj/item/organ/internal/eyes/tajaran,/obj/item/organ/internal/kidneys,/obj/item/organ/internal/appendix,/obj/item/organ/internal/appendix,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
-"iL" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/bag/zam_food,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/kitchen/utensil/fork/teflon,/obj/item/weapon/kitchen/utensil/fork/teflon,/turf/simulated/floor/carpet,/area/vault/brokeufo)
-"kW" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "darkredfull"; tag = "icon-darkredfull"},/area/vault/brokeufo)
-"kZ" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/reinforced,/obj/machinery/light/small{dir = 8},/obj/item/weapon/storage/firstaid,/obj/item/weapon/storage/box/masks,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"mg" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor{icon_state = "darkredfull"; tag = "icon-darkredfull"},/area/vault/brokeufo)
-"mN" = (/turf/simulated/floor/carpet,/area/vault/brokeufo)
+"cH" = (/obj/structure/table/reinforced,/obj/item/weapon/circuitboard/communications,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/vault/brokeufo)
+"dh" = (/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"dY" = (/obj/structure/computerframe,/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/vault/brokeufo)
+"eH" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/brokeufo)
+"ia" = (/obj/structure/dispenser/oxygen,/obj/machinery/light/small/broken,/turf/simulated/floor/plating,/area/vault/brokeufo)
+"mD" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = -30},/turf/simulated/floor/plating,/area/vault/brokeufo)
+"mK" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"nq" = (/obj/machinery/optable,/obj/machinery/light,/obj/effect/landmark/corpse/tajaran,/obj/effect/decal/cleanable/blood{icon_state = "floor4"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "nG" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/simulated/floor/plating,/area/vault/brokeufo)
-"pk" = (/obj/machinery/light/small,/turf/simulated/floor/plating,/area/vault/brokeufo)
+"nV" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibleg"},/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"oc" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/simulated/floor/plating,/area/vault/brokeufo)
+"oe" = (/obj/structure/rack,/obj/item/weapon/cell/super,/obj/item/weapon/cell/super,/obj/item/weapon/electrolyzer,/obj/item/tool/solder/pre_fueled,/obj/item/tool/weldingtool/hugetank,/obj/item/weapon/switchtool/swiss_army_knife,/obj/item/tool/crowbar/red,/obj/item/stack/sheet/glass/glass/bigstack,/obj/item/stack/sheet/metal/bigstack,/obj/item/device/radio,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/item/weapon/storage/firstaid/adv,/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
+"oG" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "darkredfull"; tag = "icon-darkredfull"},/area/vault/brokeufo)
+"oU" = (/turf/simulated/floor/carpet,/area/vault/brokeufo)
+"qi" = (/obj/item/toy/gasha/wizard,/turf/space,/area)
+"ql" = (/obj/effect/decal/cleanable/blood/drip,/mob/living/simple_animal/hostile/humanoid/grey/space/melee/scalpel{name = "Nikto"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "qo" = (/obj/structure/table/reinforced,/obj/machinery/microwave/upgraded{pixel_y = 5},/obj/item/trash/used_tray,/obj/item/weapon/kitchen/utensil/fork/teflon{pixel_x = 6},/turf/simulated/floor/carpet,/area/vault/brokeufo)
-"qv" = (/obj/structure/sign/poster{icon_state = "bsposter10"; pixel_x = -32},/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/vault/brokeufo)
-"qM" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/fancy/flares,/obj/machinery/door_control{id_tag = "ufocell"; name = "Cell Bolt Control"; normaldoorcontrol = 1; pixel_x = -25; specialfunctions = 4},/turf/simulated/floor{dir = 10; icon_state = "whitered"},/area/vault/brokeufo)
-"rj" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/door/unpowered/shuttle{name = "Crew Quarters"},/turf/simulated/floor/carpet,/area/vault/brokeufo)
-"sO" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor{icon_state = "darkredcorners"; tag = "icon-darkredcorners"},/area/vault/brokeufo)
-"ty" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/simulated/floor/plating,/area/vault/brokeufo)
-"uT" = (/obj/machinery/door/airlock/vault{id_tag = "ufostorage"; locked = 1; name = "Storage Room"},/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
-"wo" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "loading_area"; tag = "icon-loading_area (EAST)"},/turf/simulated/floor/plating,/area/vault/brokeufo)
-"ww" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor/plating,/area/vault/brokeufo)
-"wF" = (/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"AN" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/pill_bottle/zambiscuits,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,/turf/simulated/floor{dir = 4; icon_state = "whitered"},/area/vault/brokeufo)
-"Bk" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/carpet,/area/vault/brokeufo)
-"Bz" = (/obj/structure/rack,/obj/item/weapon/cell/super,/obj/item/weapon/cell/super,/obj/item/weapon/electrolyzer,/obj/item/tool/solder/pre_fueled,/obj/item/tool/weldingtool/hugetank,/obj/item/weapon/switchtool/swiss_army_knife,/obj/item/tool/crowbar/red,/obj/item/stack/sheet/glass/glass/bigstack,/obj/item/stack/sheet/metal/bigstack,/obj/item/device/radio,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/item/weapon/storage/firstaid/adv,/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
-"CF" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/humanoid/grey/space/ranged{name = "Zorb"},/turf/simulated/floor/engine,/area/vault/brokeufo)
-"CG" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"tl" = (/obj/item/device/flashlight/flare/ever_bright,/obj/effect/decal/warning_stripes{dir = 8; icon_state = "loading_area"; tag = "icon-loading_area (WEST)"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/brokeufo)
+"tQ" = (/obj/structure/closet/crate/freezer/surgery,/obj/item/organ/internal/heart/insectoid,/obj/item/organ/internal/heart,/obj/item/organ/internal/heart,/obj/item/organ/internal/lungs,/obj/item/organ/internal/lungs/plasmaman,/obj/item/organ/internal/lungs/vox,/obj/item/organ/internal/lungs,/obj/item/organ/internal/liver,/obj/item/organ/internal/eyes/grey,/obj/item/organ/internal/eyes/tajaran,/obj/item/organ/internal/eyes/tajaran,/obj/item/organ/internal/kidneys,/obj/item/organ/internal/appendix,/obj/item/organ/internal/appendix,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
+"uo" = (/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
+"uY" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/humanoid/grey/space/ranged{name = "Zorb"},/turf/simulated/floor/engine,/area/vault/brokeufo)
+"vO" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor{icon_state = "darkredcorners"; tag = "icon-darkredcorners"},/area/vault/brokeufo)
+"wb" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor/plating,/area/vault/brokeufo)
+"yX" = (/obj/structure/table/reinforced,/obj/item/weapon/switchtool/surgery,/obj/item/organ/internal/lungs/filter,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"AD" = (/obj/machinery/light,/obj/structure/rack,/obj/item/clothing/shoes/magboots,/obj/item/clothing/head/helmet/space/nasavoid,/obj/item/clothing/suit/space/nasavoid,/obj/item/weapon/tank/jetpack/carbondioxide,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
+"AT" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/energy/smalldisintegrator,/obj/machinery/door_control{id_tag = "ufostorage"; name = "Storage Bolt Control"; normaldoorcontrol = 1; pixel_x = 25; specialfunctions = 4},/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/vault/brokeufo)
 "CM" = (/obj/machinery/door/unpowered/shuttle{name = "Engine Room"},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
-"DT" = (/mob/living/simple_animal/hostile/humanoid/grey/space/ranged{name = "Barada"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"FT" = (/obj/machinery/optable,/obj/machinery/light,/obj/effect/landmark/corpse/tajaran,/obj/effect/decal/cleanable/blood{icon_state = "floor4"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"FX" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibleg"},/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"Gg" = (/obj/machinery/door/airlock/external{locked = 1},/turf/simulated/floor/plating,/area/vault/brokeufo)
-"Gk" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = -30},/turf/simulated/floor/plating,/area/vault/brokeufo)
-"IP" = (/obj/effect/decal/cleanable/blood/drip,/mob/living/simple_animal/hostile/humanoid/grey/space/melee/scalpel{name = "Nikto"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"Jw" = (/obj/structure/bed/chair/shuttle/red,/obj/item/stack/cable_coil/random,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"KD" = (/obj/item/device/flashlight/flare/ever_bright,/obj/effect/decal/warning_stripes{dir = 8; icon_state = "loading_area"; tag = "icon-loading_area (WEST)"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/brokeufo)
+"EZ" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/bag/zam_food,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/kitchen/utensil/fork/teflon,/obj/item/weapon/kitchen/utensil/fork/teflon,/turf/simulated/floor/carpet,/area/vault/brokeufo)
+"FO" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = 30},/turf/simulated/floor/plating,/area/vault/brokeufo)
+"Gf" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/fancy/flares,/obj/machinery/door_control{id_tag = "ufocell"; name = "Cell Bolt Control"; normaldoorcontrol = 1; pixel_x = -25; specialfunctions = 4},/turf/simulated/floor{dir = 10; icon_state = "whitered"},/area/vault/brokeufo)
+"HF" = (/obj/structure/sign/poster{icon_state = "bsposter10"; pixel_x = -32},/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/vault/brokeufo)
+"Ii" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "loading_area"; tag = "icon-loading_area (EAST)"},/turf/simulated/floor/plating,/area/vault/brokeufo)
+"Ik" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"Jd" = (/obj/structure/bed/chair/shuttle/red,/obj/item/stack/cable_coil/random,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"JI" = (/obj/structure/closet/secure_closet/medical2,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "LK" = (/obj/item/trash/zam_notraisins,/turf/simulated/floor/carpet,/area/vault/brokeufo)
+"MM" = (/obj/machinery/light/small,/turf/simulated/floor/plating,/area/vault/brokeufo)
+"NO" = (/obj/machinery/door/airlock/vault{id_tag = "ufostorage"; locked = 1; name = "Storage Room"},/turf/simulated/floor{icon_state = "dark"},/area/vault/brokeufo)
+"OY" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/reinforced,/obj/machinery/light/small{dir = 8},/obj/item/weapon/storage/firstaid,/obj/item/weapon/storage/box/masks,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"Rw" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/door/unpowered/shuttle{name = "Crew Quarters"},/turf/simulated/floor/carpet,/area/vault/brokeufo)
 "Tp" = (/obj/machinery/door/unpowered/shuttle{name = "Bridge"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"TU" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/energy/smalldisintegrator,/obj/machinery/door_control{id_tag = "ufostorage"; name = "Storage Bolt Control"; normaldoorcontrol = 1; pixel_x = 25; specialfunctions = 4},/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/vault/brokeufo)
-"UA" = (/obj/item/toy/gasha/wizard,/turf/space,/area)
-"Vi" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/projectile/flare,/turf/simulated/floor{dir = 10; icon_state = "whitered"},/area/vault/brokeufo)
-"Vp" = (/obj/structure/dispenser/oxygen,/obj/machinery/light/small/broken,/turf/simulated/floor/plating,/area/vault/brokeufo)
-"Vz" = (/obj/structure/table/reinforced,/obj/item/weapon/switchtool/surgery,/obj/item/organ/internal/lungs/filter,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"Ww" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/vault/brokeufo)
-"Xn" = (/obj/structure/closet/secure_closet/medical2,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"Xs" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/brokeufo)
-"YX" = (/obj/structure/computerframe,/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/vault/brokeufo)
+"TL" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/vault/brokeufo)
+"Ur" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/carpet,/area/vault/brokeufo)
+"Wb" = (/obj/machinery/door/airlock/external{locked = 1},/turf/simulated/floor/plating,/area/vault/brokeufo)
+"WA" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor{icon_state = "darkredfull"; tag = "icon-darkredfull"},/area/vault/brokeufo)
+"XP" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/projectile/flare,/turf/simulated/floor{dir = 10; icon_state = "whitered"},/area/vault/brokeufo)
 "Zo" = (/obj/structure/bed,/obj/item/weapon/bedsheet,/obj/item/weapon/bedsheet/green,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/carpet,/area/vault/brokeufo)
+"Zv" = (/mob/living/simple_animal/hostile/humanoid/grey/space/ranged{name = "Barada"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
+"ZF" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/pill_bottle/zambiscuits,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,/turf/simulated/floor{dir = 4; icon_state = "whitered"},/area/vault/brokeufo)
 
 (1,1,1) = {"
 aaaaaaaaabaZadataeaZakaaaaaaaa
@@ -107,14 +107,14 @@ aaaaabaZaZaZaiaiaiaZaZaZakaaaa
 aaabaZamanaZaoapaqaZaraxaZakaa
 abaZasacafauavawaBaZayaDaKaZak
 aZaLbcbdbeaZaZCMaZaZqoaILKZoaZ
-aZaZaZaECFaFaZaQrjaCaImNBkiLaZ
-aZaJaZaZaZaZnGaGwwaZaZaZaZaZaZ
-GgGkaMaNpkaQKDaPwoaQaRaNaMaAGg
-aZaZaZaZaZaZaTaUtyaZaZaZaZVpaZ
-aZbfVzaWwFaWaXaQuTaYdjagmgaZaZ
-aZkZFXbabbaZaZTpaZaZsOkWWwisaZ
-XsaZXnIPaZbgbhwFbiANaZqvBzaZbj
-aaXsaZFTaZViaWJwDTemaZeVaZbjaa
-aaaaXsaZaZaZqMYXTUaZaZaZbjaaaa
-aaaaaaaaXsaZCGgCgCaZbjaaaaaaUA
+aZaZaZaEuYaFaZaQRwaCaIoUUrEZaZ
+aZaJaZaZaZaZnGaGwbaZaZaZaZaZaZ
+WbmDaMaNMMaQtlaPIiaQaRaNaMFOWb
+aZaZaZaZaZaZaTaUocaZaZaZaZiaaZ
+aZbfyXaWdhaWaXaQNOaYuoagWAaZaZ
+aZOYnVbabbaZaZTpaZaZvOoGTLtQaZ
+eHaZJIqlaZbgbhdhbiZFaZHFoeaZbj
+aaeHaZnqaZXPaWJdZvcHaZADaZbjaa
+aaaaeHaZaZaZGfdYATaZaZaZbjaaaa
+aaaaaaaaeHaZIkmKmKaZbjaaaaaaqi
 "}
