@@ -797,7 +797,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			for(var/datum/organ/external/O in children)
 				O.droplimb(1, no_explode, spawn_limb, display_message)
 
-		for(var/implant in implants)
+		for(var/obj/implant in implants)
 			implant.forceMove(organ)
 
 		src.status &= ~ORGAN_BROKEN
