@@ -820,6 +820,10 @@ var/list/arcane_tomes = list()
 		if(old_cult?.is_sacrifice_target(target.mind))
 			to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 			return
+		for(var/obj/item/weapon/implant/loyalty/I in target)
+			return
+		for(var/obj/item/weapon/implant/holy/I in target)
+			return
 
 		var/datum/soul_capture/capture_datum = new()
 		capture_datum.init_datum(user, target, src)
