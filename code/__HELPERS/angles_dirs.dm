@@ -1,5 +1,7 @@
 // Moved from move_loop file, now has full inverted bitflag support!
-var/list/opposite_dirs = list(SOUTH,NORTH,NORTH|SOUTH,WEST,SOUTHWEST,NORTHWEST,NORTH|SOUTH|WEST,EAST,SOUTHEAST,NORTHEAST,NORTH|SOUTH|EAST,WEST|EAST,WEST|EAST|NORTH,WEST|EAST|SOUTH,WEST|EAST|NORTH|SOUTH)
+var/static/list/opposite_dirs = list(SOUTH,NORTH,NORTH|SOUTH,WEST,SOUTHWEST,NORTHWEST,NORTH|SOUTH|WEST,EAST,SOUTHEAST,NORTHEAST,NORTH|SOUTH|EAST,WEST|EAST,WEST|EAST|NORTH,WEST|EAST|SOUTH,WEST|EAST|NORTH|SOUTH)
+// This was originally a function too, both are now cut down to these.
+var/static/list/counterclockwise_perpendicular_dirs = list(EAST,WEST,EAST|WEST,SOUTH,SOUTHEAST,SOUTHWEST,EAST|WEST|SOUTH,NORTH,NORTHEAST,NORTHWEST,EAST|WEST|NORTH,NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST,NORTH|SOUTH|EAST|WEST)
 
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end)
@@ -76,25 +78,6 @@ var/list/opposite_dirs = list(SOUTH,NORTH,NORTH|SOUTH,WEST,SOUTHWEST,NORTHWEST,N
 		else
 			return null
 
-
-/proc/counter_clockwise_perpendicular_direction(var/dir)
-	switch(dir)
-		if(NORTH)
-			return EAST
-		if(SOUTH)
-			return WEST
-		if(EAST)
-			return SOUTH
-		if(WEST)
-			return NORTH
-		if(NORTHEAST)
-			return NORTHWEST
-		if(SOUTHEAST)
-			return NORTHEAST
-		if(SOUTHWEST)
-			return SOUTHEAST
-		if(NORTHWEST)
-			return SOUTHWEST
 
 /proc/widen_dir(var/dir, var/angle = 45)
 	var/list/dirs = list()
