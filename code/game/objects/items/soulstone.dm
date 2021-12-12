@@ -70,9 +70,7 @@
 				return
 
 
-			for(var/obj/item/weapon/implant/loyalty/I in victim)
-				to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of them impeding the process.</span>")
-				return
+
 
 			var/datum/soul_capture/capture_datum = new()
 			capture_datum.init_datum(user, M, src)
