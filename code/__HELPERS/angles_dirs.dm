@@ -1,3 +1,5 @@
+var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,SOUTHWEST,NORTHWEST,null,EAST,SOUTHEAST,NORTHEAST)
+
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end)
 		return 0
