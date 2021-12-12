@@ -103,6 +103,9 @@
 				"You unbuckle yourself from \the [src].",
 				"You hear metal clanking.")
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
+		if(M.disabilities & ANEMIA)
+			M.sleeping += 2
+			M.visible_message("<span class='alert'>[M] collapses to the ground after standing up too fast.</span>", "<span class='warning'>Your vision swims as you fall over.</span>")
 		return TRUE
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
