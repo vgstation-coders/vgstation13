@@ -6,7 +6,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 /obj/item/weapon/reagent_containers/glass/paint
 	desc = "A bucket containing paint."
 	name = "paint bucket"
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "paint_neutral"
 	item_state = "paintcan"
 	starting_materials = list(MAT_IRON = 200)
@@ -66,6 +66,10 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 /obj/item/weapon/reagent_containers/glass/paint/purple
 	icon_state = "paint_purple"
 	paint_type = "purple"
+
+/obj/item/weapon/reagent_containers/glass/paint/cyan
+	icon_state = "paint_cyan"
+	paint_type = "cyan"
 
 /obj/item/weapon/reagent_containers/glass/paint/black
 	icon_state = "paint_black"
@@ -221,6 +225,11 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	name = "Purple Paint"
 	color = "#FF00FF"
 	id = "paint_purple"
+
+/datum/reagent/paint/cyan
+	name = "Cyan Paint"
+	color = "#00FFFF"
+	id = "paint_cyan"
 
 /datum/reagent/paint/black
 	name = "Black Paint"
