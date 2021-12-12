@@ -81,7 +81,7 @@
 							found = FALSE
 						else
 							stacks_to_consume.Add(SS)
-							stacks_to_consume[S] = req_amount
+							stacks_to_consume[SS] = req_amount
 			if(!found)
 				return
 	var/atom/O
