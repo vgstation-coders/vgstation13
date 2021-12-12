@@ -2727,12 +2727,12 @@ var/list/bloodcult_exitportals = list()
 	word2 = /datum/rune_word/join
 	word3 = /datum/rune_word/hell
 	page = "This rune lets you provide a shade with a body replicated from the one they originally had (or at least the one their soul remembers them having)\
-		<br><br>The shade must stand above the rune for the ritual to begin. However mind that this rune has a very steep cost in blood of 300u that have to be paid over 60 seconds of channeling. \
+		<br><br>The shade must stand above the rune for the ritual to begin. However mind that this rune has a very steep cost in blood of 1200u that have to be paid over 60 seconds of channeling. \
 		Other cultists can join in the ritual to help you share the burden you might prefer having a construct use their connection to the other side to bypass the blood cost entirely.\
 		<br><br>Note that the resulting body might look much paler than the original, this is an unfortunate side-effect that you may have to resolve on your own.\
 		<br><br>This rune persists upon use, allowing repeated usage."
-	cost_upkeep = 5
-	remaining_cost = 300
+	cost_upkeep = 20
+	remaining_cost = 1200
 	var/obj/effect/cult_ritual/resurrect/husk = null
 	var/mob/living/simple_animal/shade/shade = null
 
