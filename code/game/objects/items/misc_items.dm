@@ -106,3 +106,24 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "spring"
 	desc = "A piece of woven metal capable of high elasticity."
+
+/obj/item/grue_antilight //invisible negative-lightsource for grue nullify light ability
+    name="light nullifier"
+    desc="Nullifies some of the light in an area." //it should be invisible so this shouldn't appear
+
+	icon = 'icons/obj/candle.dmi' //temporary
+	icon_state = "candle"
+	item_state = "candle1"
+    var/maxjuice=200
+    var/juice=200
+    var/darkrange=3 //range of darkness
+    var/darkint=1 //intensity of darkness
+/obj/item/grue_antilight/process() //slowly decrease in dark levels till it disappears
+    setlight(darkrange,darkint*juice/maxjuice)
+    juice=juice-1
+    if(juice<=0)
+        qdel(src)
+    
+
+    
+
