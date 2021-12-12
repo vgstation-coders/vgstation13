@@ -76,7 +76,7 @@
 	var/in_darkness = 0
 	if(istype(T, /turf/simulated)) //Simulated turfs only
 		var/turf/simulated/sim = T
-		if(!sim.affecting_lights || !sim.affecting_lights.len) //Check if lights are affecting us (otherwise darkness, obviously)
+		if(sim.get_lumcount() > 2) //Check if lights are affecting us (otherwise darkness, obviously)
 			in_darkness = 1
 
 	//Humans can observe SCP-173. If a single human observes him, he's observed for everyone
@@ -254,7 +254,7 @@
 			snap_neck(M)
 			break
 
-/mob/living/simple_animal/scp_173/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+/mob/living/simple_animal/scp_173/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 
 	..()
 	check_snap_neck()

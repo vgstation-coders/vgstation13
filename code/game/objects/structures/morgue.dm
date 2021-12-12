@@ -14,36 +14,51 @@
 	name = "morgue"
 	desc = "Used to keep bodies in until someone fetches them."
 	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "morgue1"
+	icon_state = "morgue"
 	dir = EAST
 	density = 1
 	var/obj/structure/m_tray/connected = null
 	anchored = 1.0
+	moody_light_type = /atom/movable/light/moody/morgue
+	light_range = 1
+	light_power = 1
+	light_color = LIGHT_COLOR_HALOGEN
+	lighting_flags = FOLLOW_PIXEL_OFFSET | NO_LUMINOSITY
 
 /obj/structure/morgue/New()
 	..()
 	morgue_list += src
+	update_icon()
 
 /obj/structure/morgue/Destroy()
 	..()
 	morgue_list -= src
 
 /obj/structure/morgue/update_icon()
+	overlays.len = 0
+	var/image/I = image(icon, src, "morgue0")
+	I.plane = ABOVE_LIGHTING_PLANE
+	I.layer = ABOVE_LIGHTING_LAYER
 	if(connected)
-		icon_state = "morgue0"
+		I.icon_state = "morgue0"
+		overlays += I
 		return
 	if(!contents.len)
-		icon_state = "morgue1"
+		I.icon_state = "morgue1"
+		overlays += I
 		return
 	var/list/inside = recursive_type_check(src, /mob)
 	if(!inside.len)
-		icon_state = "morgue3" // no mobs at all, but objects inside
+		I.icon_state = "morgue3" // no mobs at all, but objects inside
+		overlays += I
 		return
 	for(var/mob/living/body in inside)
 		if(body && body.client && !(body.mind && body.mind.suiciding))
-			icon_state = "morgue4" // clone that mofo
+			I.icon_state = "morgue4" // clone that mofo
+			overlays += I
 			return
-	icon_state = "morgue2" // dead no-client mob
+	I.icon_state = "morgue2" // dead no-client mob
+	overlays += I
 
 /obj/structure/morgue/proc/update()
 	update_icon()

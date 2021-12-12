@@ -120,7 +120,7 @@
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
-	set_light(0)
+	kill_light()
 	update_icon()
 
 //Harvests the product of a plant.
@@ -398,7 +398,7 @@
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
-		
+
 	else
 		return ..()
 

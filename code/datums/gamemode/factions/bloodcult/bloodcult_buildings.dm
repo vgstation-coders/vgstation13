@@ -879,7 +879,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/spire/conceal()
 	overlays.len = 0
-	set_light(0)
+	kill_light()
 	anim(location = loc,target = loc,a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "spire[stage]-conceal", lay = BELOW_PROJECTILE_LAYER, offX = pixel_x, offY = pixel_y, plane = EFFECTS_PLANE)
 	..()
 	var/obj/structure/cult/concealed/C = loc
@@ -1116,7 +1116,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/forge/conceal()
 	overlays.len = 0
-	set_light(0)
+	kill_light()
 	anim(location = loc,target = loc,a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-conceal", lay = BELOW_PROJECTILE_LAYER, offX = pixel_x, offY = pixel_y, plane = EFFECTS_PLANE)
 	..()
 	var/obj/structure/cult/concealed/C = loc

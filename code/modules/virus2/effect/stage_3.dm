@@ -504,8 +504,11 @@
 
 	if (mob.see_in_dark_override < 9)
 		mob.see_in_dark_override = night_vision_strength + 1
-		if (count == 1)
+		if (count == 0)
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate as they adjust for low-light environments.</span>")
+		else if (count == 6)
+			to_chat(mob, "<span class = 'notice'>Your pupils reach their maximum dilation.</span>")
+			mob.see_in_dark_override = 9
 		else
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
 

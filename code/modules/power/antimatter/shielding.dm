@@ -33,6 +33,12 @@
 	var/mapped = 0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
 	var/getting_blobbed = 0
 
+	lighting_flags = IS_LIGHT_SOURCE
+	light_power = 0
+	light_range = 1
+	light_color = LIGHT_COLOR_HALOGEN
+	light_type = LIGHT_SOFT_FLICKER
+
 // Stupidly easy way to use it in maps
 /obj/machinery/am_shielding/map
 	mapped = 1
@@ -183,12 +189,12 @@
 			overlays += I
 			set_light(1.4,1)
 		else
-			set_light(0)
+			kill_light()
 		if(!processing)
 			setup_core()
 		return
 	else if(processing)
-		set_light(0)
+		kill_light()
 		shutdown_core()
 
 	for(var/direction in alldirs)
@@ -198,6 +204,11 @@
 			if(direction in cardinal)
 				if((istype(machine, /obj/machinery/am_shielding) && machine:control_unit == control_unit) || (istype(machine, /obj/machinery/power/am_control_unit) && machine == control_unit))
 					dirs |= direction
+
+	if (control_unit && control_unit.active)
+		set_light(1, 1)
+	else
+		kill_light()
 
 	icon_state = "shield_[dirs]"
 

@@ -271,7 +271,7 @@
 				if(lighted)
 					card.set_light(4) //Equal to flashlight
 				else
-					card.set_light(0)
+					card.kill_light()
 		if("pps")
 			if(!pps_device)
 				pps_device = new(src)

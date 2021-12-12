@@ -409,6 +409,7 @@ var/list/blob_candidates = list()
 		blob_candidate.perspective = EYE_PERSPECTIVE
 		blob_candidate.eye = src
 		blob_candidate.mob.see_invisible = SEE_INVISIBLE_MINIMUM
+		blob_candidate.mob.seedarkness = FALSE
 		if(isobserver(M))
 			var/mob/dead/observer/O = M
 			if(O.can_reenter_corpse)

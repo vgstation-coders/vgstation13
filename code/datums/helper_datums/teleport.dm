@@ -58,6 +58,8 @@
 	if(istype(ateleatom, /obj/effect) && !istype(ateleatom, /obj/effect/dummy/chameleon))
 		qdel(ateleatom)
 		return FALSE
+	if(istype(ateleatom, /atom/movable/light))
+		return FALSE
 	if(istype(ateleatom))
 		teleatom = ateleatom
 		return TRUE
@@ -148,7 +150,7 @@
 			INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = curturf.z, "to_z" = destturf.z)
 
 	if(force_teleport)
-		teleatom.forceMove(destturf, no_tp = 1)
+		teleatom.forceMove(destturf, from_tp = TRUE)
 		playSpecials(destturf,effectout,soundout)
 	else
 		if(teleatom.Move(destturf))

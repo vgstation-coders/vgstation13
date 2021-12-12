@@ -158,7 +158,7 @@
 	if(light_switch)
 		set_light(2,2,"#a0a080")
 	else
-		set_light(0)
+		kill_light()
 
 //////////////////////////////
 //		/NEW() PROCS			//

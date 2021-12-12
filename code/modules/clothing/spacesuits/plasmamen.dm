@@ -46,7 +46,7 @@
 	icon_state = "plasmaman_helmet0"
 	item_state = "plasmaman_helmet0"
 	var/base_state = "plasmaman_helmet"
-	var/brightness_on = 4 //luminosity when on
+	light_range = 4
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
@@ -58,9 +58,9 @@
 	on = !on
 	icon_state = "[base_state][on]"
 	if(on)
-		set_light(brightness_on)
+		set_light()
 	else
-		set_light(0)
+		kill_light()
 	user.update_inv_head()
 
 // Tc_ENGINEERING

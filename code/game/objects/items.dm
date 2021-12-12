@@ -1199,7 +1199,7 @@ var/global/list/image/blood_overlays = list()
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		var/obj/effect/decal/cleanable/blueglow/BG
 		BG = had_blood
-		BG.set_light(0)
+		BG.kill_light()
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)

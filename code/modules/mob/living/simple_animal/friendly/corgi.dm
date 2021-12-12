@@ -348,7 +348,7 @@
 	min_oxy = initial(min_oxy)
 	minbodytemp = initial(minbodytemp)
 	maxbodytemp = initial(maxbodytemp)
-	set_light(0)
+	kill_light()
 
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)

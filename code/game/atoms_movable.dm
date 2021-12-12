@@ -70,10 +70,6 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T
-	if (opacity && isturf(loc))
-		T = loc // recalc_atom_opacity() is called later on this
-		T.reconsider_lights()
 
 	if(materials)
 		qdel(materials)
@@ -82,6 +78,10 @@
 	remove_border_dummy()
 
 	INVOKE_EVENT(src, /event/destroyed, "thing" = src)
+
+	var/turf/T = loc
+	if (opacity && isturf(loc))
+		T = loc // check_blocks_light() is called later on this
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -96,10 +96,10 @@
 
 	break_all_tethers()
 
-	forceMove(null, harderforce = TRUE)
+	forceMove(null)
 
-	if (T)
-		T.recalc_atom_opacity()
+	if (istype(T))
+		T.check_blocks_light()
 
 	if(virtualhearer)
 		qdel(virtualhearer)
@@ -131,8 +131,8 @@
 	else
 		glide_size = max(min, glide_size_override)
 
-/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
-	if(!loc || !NewLoc || locked_to)
+/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	if(!loc || !NewLoc)
 		return 0
 	INVOKE_EVENT(src, /event/before_move)
 
@@ -458,8 +458,8 @@
 		return TRUE
 	return bounds_dist(src, mover) >= 0
 
-// harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+/atom/movable/proc/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
+
 	INVOKE_EVENT(src, /event/before_move)
 	if(glide_size_override)
 		glide_size = glide_size_override
@@ -472,7 +472,8 @@
 	else
 		uncrossing = loc?.contents //contents IS aliased on assignment but we're not changing it so it's fine
 
-	loc = destination
+	loc = NewLoc
+
 	src.step_x = step_x
 	src.step_y = step_y
 
@@ -492,8 +493,8 @@
 			var/area/A = loc.loc
 			A.Entered(src, old_loc)
 
-			for(var/atom/movable/AM in obounds(src))
-				AM.Crossed(src,no_tp)
+			for(var/atom/movable/AM in loc)
+				AM.Crossed(src, from_tp) // Says if we crossed it from a teleporter.
 
 
 	for(var/atom/movable/AM in locked_atoms)
@@ -505,7 +506,7 @@
 	INVOKE_EVENT(src, /event/moved, "mover" = src)
 
 	var/turf/from_turf = get_turf(old_loc)
-	var/turf/to_turf = get_turf(destination)
+	var/turf/to_turf = get_turf(NewLoc)
 	if(from_turf && to_turf && (from_turf.z != to_turf.z))
 		INVOKE_EVENT(src, /event/z_transition, "user" = src, "from_z" = from_turf.z, "to_z" = to_turf.z)
 

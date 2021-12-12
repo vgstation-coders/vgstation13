@@ -85,8 +85,8 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     // So we can see in maint better
-    if(client && client.darkness_planemaster)
-        client.darkness_planemaster.alpha = 192    
+    if(dark_plane)
+        dark_plane.alphas["pulse_demon"] = 192
     update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/regular_hud_updates()
@@ -118,7 +118,7 @@
 		stat(null, text("Charge stored: [charge]W"))
 		stat(null, text("Max charge stored: [maxcharge]W"))
 
-/mob/living/simple_animal/hostile/pulse_demon/Life()    
+/mob/living/simple_animal/hostile/pulse_demon/Life()
     // Add the regen rate unless it puts us over max health, then just cap it off
     var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
     if(current_cable)
@@ -409,7 +409,7 @@
         log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
         log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
         message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
-        
+
     else
         to_chat(src, "You have no hijacked robot to speak with.")
         return 1 //this ensures we don't end up speaking out loud

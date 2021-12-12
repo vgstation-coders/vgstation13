@@ -349,7 +349,7 @@ var/list/global_singularity_pool
 		var/z_dist = abs(z0 - T.z)
 		if(z_dist <= grav_pull)
 			for(var/atom/X in orange(grav_pull - z_dist, locate(T.x,T.y,z0)))
-				if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+				if(X.type == /atom/movable/light)//since there's one on every turf
 					continue
 				if (current_size > 11 && X.type == /turf/unsimulated/wall/supermatter) // galaxy end ongoing
 					continue
@@ -761,7 +761,7 @@ var/list/global_singularity_pool
 
 /obj/machinery/singularity/deadchat_controlled/proc/eat_no_pull() //Copied from proc/eat() and altered
 	for(var/atom/X in orange(consume_range, src))
-		if(X.type == /atom/movable/lighting_overlay)
+		if(X.type == /atom/movable/light)
 			continue
 		if(current_size > 11 && X.type == /turf/unsimulated/wall/supermatter)
 			continue

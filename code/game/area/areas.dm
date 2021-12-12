@@ -29,7 +29,7 @@ var/area/space_area
 	if(isspace(src))	// override defaults for space. TODO: make space areas of type /area/space rather than /area
 		requires_power = 1
 		always_unpowered = 1
-		dynamic_lighting = 0
+		dynamic_lighting = 1
 		power_light = 0
 		power_equip = 0
 		power_environ = 0
@@ -47,6 +47,8 @@ var/area/space_area
 		power_environ = 1
 
 	..()
+
+	update_dynamic_lighting()
 
 //	spawn(15)
 	power_change()		// all machines set to current power level, also updates lighting icon

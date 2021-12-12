@@ -2021,10 +2021,10 @@ var/global/msg_id = 0
 		if("Light")
 			if(fon)
 				fon = 0
-				set_light(0)
+				kill_light()
 			else
 				fon = 1
-				set_light(f_lum)
+				set_light(f_lum, l_type = LIGHT_SOFT)
 		if("Medical Scan")
 			if(scanmode == SCANMODE_MEDICAL)
 				scanmode = SCANMODE_NONE

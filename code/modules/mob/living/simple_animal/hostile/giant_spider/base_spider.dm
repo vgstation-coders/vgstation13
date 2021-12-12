@@ -86,6 +86,22 @@
 	var/a_53 = 0
 	var/a_54 = 0
 
+	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
+	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
+
+/mob/living/simple_animal/hostile/giant_spider/New()
+	..()
+	overdark_planemaster = new
+	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
+	overdark_target = new
+	overdark_target.render_source = "night vision goggles (\ref[src])"
+
+/mob/living/simple_animal/hostile/giant_spider/Login()
+	..()
+	client.images += light_source_images
+	client.screen |= overdark_planemaster
+	client.screen |= overdark_target
+
 /mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
 		return 1
@@ -160,10 +176,19 @@
 	standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/giant_spider/update_perception()
-	if(client)
-		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_ADD
-			client.darkness_planemaster.alpha = 100
+	if(a_matrix_testing_override)	// setting to 1 lets you use spiders as a perception-testing mob
+		client.color = list(a_11,a_12,a_13,a_14,
+							a_21,a_22,a_23,a_24,
+	 						a_31,a_32,a_33,a_34,
+		 					a_41,a_42,a_43,a_44,
+		 					a_51,a_52,a_53,a_54)
+		check_dark_vision()
+		return
+
+	if(dark_plane)
+		if (master_plane)
+			master_plane.blend_mode = BLEND_ADD
+		dark_plane.alphas["spider"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
 					1,0,0,0,
 					0,1,0,0,
@@ -171,12 +196,7 @@
 		 			0,0,-0.1,1,
 		 			0,0,0,0)
 
-		if(a_matrix_testing_override)
-			client.color = list(a_11,a_12,a_13,a_14,
-								a_21,a_22,a_23,a_24,
-		 						a_31,a_32,a_33,a_34,
-			 					a_41,a_42,a_43,a_44,
-			 					a_51,a_52,a_53,a_54)
+	check_dark_vision()
 
 /mob/living/simple_animal/hostile/giant_spider/regular_hud_updates()
 	if (!client)

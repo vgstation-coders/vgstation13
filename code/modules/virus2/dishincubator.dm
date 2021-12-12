@@ -294,7 +294,7 @@
 		light_color = "#6496FA"
 
 	if(stat & (BROKEN|NOPOWER))
-		set_light(0)
+		kill_light()
 	else
 		if (on)
 			set_light(2,2)

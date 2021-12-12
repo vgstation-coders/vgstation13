@@ -233,7 +233,7 @@
 		switch(roadlights)							//if the bus is right against a wall, only the wall's tile is lit
 			if(0)
 				if(lightsource.light_range != 0)
-					lightsource.set_light(0)
+					lightsource.kill_light()
 			if(1,2)
 				if(lightsource.light_range != 1)
 					lightsource.set_light(1)
@@ -244,7 +244,7 @@
 			switch(roadlights)
 				if(0)
 					if(lightsource.light_range != 0)
-						lightsource.set_light(0)
+						lightsource.kill_light()
 				if(1)
 					if(lightsource.light_range != 1)
 						lightsource.set_light(1)
@@ -256,7 +256,7 @@
 			switch(roadlights)						//otherwise, the lightsource position itself two tiles in front of the bus and with regular light_range
 				if(0)
 					if(lightsource.light_range != 0)
-						lightsource.set_light(0)
+						lightsource.kill_light()
 				if(1)
 					if(lightsource.light_range != 2)
 						lightsource.set_light(2)

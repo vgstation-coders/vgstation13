@@ -13,6 +13,7 @@
 	var/cover_hair = 0
 	var/see_invisible = 0
 	var/see_in_dark = 0
+	var/seedarkness = TRUE
 	var/prescription = 0
 	min_harm_label = 12
 	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
@@ -24,6 +25,10 @@
 
 	var/my_dark_plane_alpha_override
 	var/my_dark_plane_alpha_override_value
+
+
+/obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
+	return
 
 /*
 SEE_SELF  // can see self, no matter what
@@ -264,6 +269,16 @@ var/list/science_goggles_wearers = list()
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/glasses/sunglasses/equipped(mob/M, slot)
+	if (M.self_vision)
+		M.self_vision.target_alpha = SUNGLASSES_TARGET_ALPHA // You see almost nothing with those on!
+	return ..()
+
+/obj/item/clothing/glasses/sunglasses/unequipped(mob/living/carbon/human/M, from_slot)
+	if (M.self_vision)
+		M.self_vision.target_alpha = initial(M.self_vision.target_alpha)
+	return ..()
 
 /obj/item/clothing/glasses/sunglasses/virus
 
@@ -537,10 +552,12 @@ var/list/science_goggles_wearers = list()
 	if(harm_labeled < min_harm_label)
 		vision_flags |= SEE_MOBS
 		see_invisible |= SEE_INVISIBLE_MINIMUM
+		seedarkness = FALSE
 		invisa_view = 2
 	else
 		vision_flags &= ~SEE_MOBS
 		see_invisible &= ~SEE_INVISIBLE_MINIMUM
+		seedarkness = TRUE
 		invisa_view = 0
 
 /obj/item/clothing/glasses/thermal/eyepatch

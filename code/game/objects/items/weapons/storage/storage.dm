@@ -364,6 +364,8 @@
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
+	if (W.light_obj)
+		W.kill_light()
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)
@@ -397,6 +399,8 @@
 		if(!A.can_be_inserted(W, 1))
 			return 0
 
+	var/light_update = 1
+
 	if(istype(src, /obj/item/weapon/storage/fancy))
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
@@ -414,10 +418,19 @@
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location
 				A.handle_item_insertion(W, 1)
+				light_update = 0
 			else
 				W.forceMove(new_location)
 	else
 		W.forceMove(get_turf(src))
+
+	if (light_update)
+		if (istype(W, /obj/item/device/flashlight))
+			var/obj/item/device/flashlight/F = W
+			if (F.on)
+				F.set_light()
+		if (W.lighting_flags & IS_LIGHT_SOURCE)
+			W.set_light()
 
 	if(W.maptext)
 		W.maptext = ""

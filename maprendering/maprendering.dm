@@ -48,7 +48,8 @@
 						var/list/allturfcontents = currentturf.contents.Copy()
 
 						//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
-						allturfcontents -= locate(/atom/movable/lighting_overlay) in allturfcontents
+						for (var/atom/movable/light/L in allturfcontents)
+							allturfcontents -= L
 
 						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
 						if(!istype(currentturf,/turf/space))

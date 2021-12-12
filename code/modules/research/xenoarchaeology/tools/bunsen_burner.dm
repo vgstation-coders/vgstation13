@@ -54,7 +54,7 @@
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
-	set_light(0)
+	kill_light()
 	..()
 
 /obj/machinery/bunsen_burner/examine(mob/user)
@@ -147,7 +147,7 @@
 
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 
 /obj/machinery/bunsen_burner/proc/try_refill_nearby()
 	for(var/obj/machinery/chem_dispenser/CD in view(1))

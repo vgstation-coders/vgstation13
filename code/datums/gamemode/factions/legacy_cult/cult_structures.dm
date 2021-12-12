@@ -54,7 +54,7 @@
 			isbroken = 1
 			setDensity(FALSE)
 			icon_state = "pylon-broken"
-			set_light(0)
+			kill_light()
 		else
 			to_chat(user, "You hit the pylon!")
 			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)

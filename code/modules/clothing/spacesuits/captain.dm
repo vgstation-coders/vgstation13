@@ -10,7 +10,7 @@
 	armor = list(melee = 65, bullet = 50, laser = 50,energy = 25, bomb = 50, bio = 100, rad = 50)
 	allowed = list(/obj/item/device/flashlight)
 	light_power = 1.7
-	brightness_on = 4
+	light_range = 4
 	on = 0
 	no_light = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)

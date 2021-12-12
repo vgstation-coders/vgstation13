@@ -1,9 +1,9 @@
 /datum/component/ai/target_finder
-	var/range = 0
-	var/list/exclude_types = list(
-		/obj/effect,
-		/atom/movable/lighting_overlay,
-		/turf
+	var/range=0
+	var/list/exclude_types=list(
+			/obj/effect,
+			/atom/movable/light,
+			/turf
 	)
 
 /datum/component/ai/target_finder/initialize()

@@ -171,7 +171,7 @@
 
 		if(!use_auto_lights)
 			return
-		set_light(0)
+		kill_light()
 
 /obj/machinery/power/can_overload()
 	return 0

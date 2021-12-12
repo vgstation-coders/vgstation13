@@ -55,7 +55,7 @@
 	if(src.on)
 		set_light(2)
 	else
-		set_light(0)
+		kill_light()
 
 /obj/machinery/bot/secbot/beepsky
 	name = "Officer Beep O'sky"

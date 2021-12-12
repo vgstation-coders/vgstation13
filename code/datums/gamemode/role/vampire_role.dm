@@ -255,6 +255,7 @@
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
+		H.dark_plane.alphas["vampire_vision"] = 255
 		H.see_in_dark = 8
 
 /datum/role/vampire/proc/is_mature_or_has_vision()
@@ -297,6 +298,12 @@
 			O.status &= ~ORGAN_SPLINTED
 			O.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
+
+/datum/role/vampire/update_perception()
+	var/mob/living/carbon/human/H = antag.current
+	if (locate(/datum/power/vampire/mature) in current_powers)
+		H.dark_plane.alphas["vampire_vision"] = 255
+		H.see_in_dark = 8
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)

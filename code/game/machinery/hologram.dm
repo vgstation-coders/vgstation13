@@ -135,7 +135,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
-		
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/clear_holo()
@@ -151,7 +151,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(master.current == src)
 		master.current = null
 	master = null//Null the master, since no-one is using it now.
-	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
+	kill_light()			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
 	return 1

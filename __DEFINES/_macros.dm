@@ -184,7 +184,7 @@
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
-#define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
+#define islightingoverlay(A) (istype(A, /atom/movable/light))
 
 #define ischair(A) (istype(A, /obj/structure/bed/chair))
 
@@ -231,6 +231,8 @@
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
+
+#define iswallturf(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/simulated/shuttle/wall))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
@@ -332,6 +334,9 @@
 
 #define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
+// This might look silly. But it saves you up to 2 procs calls and a contents search. When you do thousands of it, it adds up.
+#define CHECK_OCCLUSION(T) ((T?.blocks_light > 0) || CheckOcclusion(T))
+
 //Macro for AREAS!
 
 #define isspace(A) (A.type == /area)
@@ -377,11 +382,6 @@
 //CPU lag shit
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
-
-#define FOR_DVIEW(type, range, center, invis_flags) \
-	dview_mob.loc = center;           \
-	dview_mob.see_invisible = invis_flags; \
-	for(type in view(range, dview_mob))
 
 //get_turf(): Returns the turf that contains the atom.
 //Example: A fork inside a box inside a locker will return the turf the locker is standing on.

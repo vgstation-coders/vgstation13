@@ -979,7 +979,7 @@ var/global/list/loopModeNames=list(
 	if(popup)
 		popup.close()
 	playing = 0
-	set_light(0)
+	kill_light()
 	icon_state = ""
 	flick("repacking",src)
 	update_music()

@@ -293,7 +293,7 @@
 /obj/machinery/mineral/processing_unit/update_icon()
 	if(stat & (NOPOWER | BROKEN) || !on)
 		icon_state = "furnace_o"
-		set_light(0)
+		kill_light()
 	else if(on)
 		icon_state = "furnace"
 		set_light(light_range_on, light_power_on)
