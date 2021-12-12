@@ -332,10 +332,10 @@
 		to_chat(user, "<span class='rose'>\The [receptacle] isn't reacting, looks like their brain was separated from their head.</span>")
 		return
 	for(var/obj/item/weapon/implant/loyalty/I in humanHead)
-		to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of [humanHead] impeding the process.</span>")
+		to_chat(user, "<span class='warning'>\The [receptacle] fails to rip this soul. There must be something inside of [humanHead] impeding the process.</span>")
 		return
 	for(var/obj/item/weapon/implant/holy/I in humanHead)
-		to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of [humanHead] impeding the process.</span>")
+		to_chat(user, "<span class='warning'>\The [receptacle] fails to rip this soul. There must be something inside of [humanHead] impeding the process.</span>")
 		return
 	var/mob/living/carbon/brain/humanBrainMob = humanHead.brainmob
 	if(!humanBrainMob.client)
