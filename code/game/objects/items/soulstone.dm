@@ -70,10 +70,10 @@
 				return
 
 			for(var/obj/item/weapon/implant/loyalty/I in M)
-				to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of them impeding the process.</span>")
+				to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of [M] impeding the process.</span>")
 				return
 			for(var/obj/item/weapon/implant/holy/I in M)
-				to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of them impeding the process.</span>")
+				to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of [M] impeding the process.</span>")
 				return
 
 			var/datum/soul_capture/capture_datum = new()
@@ -330,6 +330,12 @@
 /datum/soul_capture/proc/init_head(var/obj/item/organ/external/head/humanHead, var/mob/user)
 	if(!humanHead.organ_data)
 		to_chat(user, "<span class='rose'>\The [receptacle] isn't reacting, looks like their brain was separated from their head.</span>")
+		return
+	for(var/obj/item/weapon/implant/loyalty/I in humanHead)
+		to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of [humanHead] impeding the process.</span>")
+		return
+	for(var/obj/item/weapon/implant/holy/I in humanHead)
+		to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of [humanHead] impeding the process.</span>")
 		return
 	var/mob/living/carbon/brain/humanBrainMob = humanHead.brainmob
 	if(!humanBrainMob.client)

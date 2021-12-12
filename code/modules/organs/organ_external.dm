@@ -798,7 +798,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 				O.droplimb(1, no_explode, spawn_limb, display_message)
 
 		for(var/implant in implants)
-			qdel(implant)
+			implant.forceMove(organ)
 
 		src.status &= ~ORGAN_BROKEN
 		src.status &= ~ORGAN_BLEEDING
