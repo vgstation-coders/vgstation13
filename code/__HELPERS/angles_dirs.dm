@@ -3,6 +3,10 @@ var/static/list/opposite_dirs = list(SOUTH,NORTH,NORTH|SOUTH,WEST,SOUTHWEST,NORT
 // This was originally a function too, both are now cut down to these.
 var/static/list/counterclockwise_perpendicular_dirs = list(EAST,WEST,EAST|WEST,SOUTH,SOUTHEAST,SOUTHWEST,EAST|WEST|SOUTH,NORTH,NORTHEAST,NORTHWEST,EAST|WEST|NORTH,NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST,NORTH|SOUTH|EAST|WEST)
 
+// Saves writing a whole new list
+/proc/clockwise_perpendicular_dir(var/dir)
+	return opposite_dirs[counterclockwise_perpendicular_dirs[dir]]
+
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end)
 		return 0
