@@ -1,4 +1,5 @@
-var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,SOUTHWEST,NORTHWEST,null,EAST,SOUTHEAST,NORTHEAST)
+// Moved from move_loop file, now has full inverted bitflag support!
+var/list/opposite_dirs = list(SOUTH,NORTH,NORTH|SOUTH,WEST,SOUTHWEST,NORTHWEST,NORTH|SOUTH|WEST,EAST,SOUTHEAST,NORTHEAST,NORTH|SOUTH|EAST,WEST|EAST,WEST|EAST|NORTH,WEST|EAST|SOUTH,WEST|EAST|NORTH|SOUTH)
 
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end)
