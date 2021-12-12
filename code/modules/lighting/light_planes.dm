@@ -17,6 +17,24 @@
 	plane = LIGHTING_PLANE
 	mouse_opacity = 0
 
+/obj/abstract/screen/plane/master/New(var/client/C)
+	. = ..()
+	if (C.prefs.blur_size)
+		filters = filter(type = "blur", size = C.prefs.blur_size)
+
+/obj/abstract/screen/plane/master/proc/update_blurring(var/client/C)
+	filters = list()
+	if (C.prefs.blur_size)
+		filters = filter(type = "blur", size = C.prefs.blur_size)
+
+/client/proc/update_bluring()
+	set name = "Update Bluring setting"
+	set desc = "Update the rendering to match your bluring setting."
+	set category = "OOC"
+	if (mob.master_plane)
+		mob.master_plane.update_blurring(src)
+		to_chat(mob, "<span class='notice'>Blur size updared.</span>")
+
 //poor inheritance shitcode
 /obj/abstract/screen/backdrop
 	blend_mode = BLEND_OVERLAY

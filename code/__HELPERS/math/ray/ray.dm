@@ -176,7 +176,7 @@
 
 var/list/ray_draw_icon_cache = list()
 
-/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE, var/color_override=null, var/color_shift=null)
+/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE, var/color_override=null, var/color_shift=null, var/emit_light = TRUE, var/_light_power, var/_light_color)
 	var/distance_pointer = starting_distance
 	var/angle = direction.toAngle()
 	var/max_distance = draw_distance - distance_from_endpoint
@@ -192,7 +192,7 @@ var/list/ray_draw_icon_cache = list()
 
 		var/turf/T = locate(point_floored.x, point_floored.y, z)
 
-		var/obj/effect/overlay/beam/I = new (T, lifetime=lifetime, fade=fade, src_icon = icon, icon_state = icon_state, base_damage = original_damage, col_override = color_override, col_shift = color_shift)
+		var/obj/effect/overlay/beam/I = new (T, lifetime=lifetime, fade=fade, src_icon = icon, icon_state = icon_state, base_damage = original_damage, col_override = color_override, col_shift = color_shift, emit_light = emit_light, _light_power = _light_power, _light_color = _light_color)
 		I.transform = matrix().Turn(angle)
 		I.pixel_x = pixels.x
 		I.pixel_y = pixels.y
