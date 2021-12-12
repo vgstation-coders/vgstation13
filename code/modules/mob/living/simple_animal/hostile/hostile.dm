@@ -240,7 +240,7 @@
 		LoseTarget()
 		return
 
-	if(loc == lastloc)
+	if(loc == lastloc && !target.Adjacent(src))
 		hostile_interest--
 		if(hostile_interest <= 0)
 			LoseTarget()
