@@ -474,6 +474,7 @@
 						var/obj/machinery/door/firedoor/FIR = A
 						if(!FIR.density || FIR.blocked || FIR.operating)
 							continue
+					hostile_interest = initial(hostile_interest) // don't lose interest while smashing shit!
 					UnarmedAttack(A, Adjacent(A))
 	return
 
