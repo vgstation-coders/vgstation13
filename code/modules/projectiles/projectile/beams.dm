@@ -527,7 +527,7 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/immolationray
 	name = "immolation ray"
 	icon_state = "immolationray"
-	damage = 40
+	damage = 45
 	fire_sound = 'sound/weapons/ray1.ogg'
 
 /obj/item/projectile/beam/immolationray/on_hit(var/atom/target, var/blocked = 0)
