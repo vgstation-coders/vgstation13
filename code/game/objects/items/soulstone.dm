@@ -69,7 +69,10 @@
 				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 				return
 
-			for(var/obj/item/weapon/implant/loyalty/I in victim)
+			for(var/obj/item/weapon/implant/loyalty/I in M)
+				to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of them impeding the process.</span>")
+				return
+			for(var/obj/item/weapon/implant/holy/I in M)
 				to_chat(user, "<span class='warning'>\The [src] fails to rip this soul. There must be something inside of them impeding the process.</span>")
 				return
 
