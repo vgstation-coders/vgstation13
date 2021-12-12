@@ -94,8 +94,8 @@
 		else
 			user.delayNextAttack(8)
 			user.do_attack_animation(src, W)
-			if (W.hitsound)
-				playsound(src, W.hitsound, 50, 1, -1)
+	//		if (W.hitsound)
+	//			playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
 				playsound(src, sound_damaged, 75, 1)
 			takeDamage(W.force)
@@ -125,7 +125,6 @@
 		noncultist_act(user)
 
 /obj/structure/cult/proc/cultist_act(var/mob/user)
-
 	return 1
 
 /obj/structure/cult/proc/noncultist_act(var/mob/user)
@@ -291,13 +290,14 @@
 					playsound(src, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
 					spawn(10)
 						var/obj/item/weapon/reagent_containers/R = locate(/obj/item/weapon/reagent_containers) in TU.contents
-						var/remaining = R.volume - R.reagents.total_volume
-						if(R && R.is_open_container())
-							if(istype(S, /mob/living/simple_animal/mouse))
-								S.take_blood(R, min(remaining, 30))
-							else 
-								S.take_blood(R, min(remaining, 60))
-							R.on_reagent_change()
+						if(R)
+							var/remaining = R.volume - R.reagents.total_volume
+							if(R && R.is_open_container())
+								if(istype(S, /mob/living/simple_animal/mouse))
+									S.take_blood(R, min(remaining, 30))
+								else 
+									S.take_blood(R, min(remaining, 60))
+								R.on_reagent_change()
 						CompleteCultRitual(/datum/bloodcult_ritual/animal_sacrifice, user, list("mobtype" = S.type))
 						qdel(S)
 						bloodmess_splatter(TU)
@@ -565,6 +565,8 @@
 							spawn()
 								dance_start()
 	else if (blade)
+		if(is_locking(lock_type))
+			unlock_atom(get_locked(lock_type)[1])
 		blade.forceMove(loc)
 		blade.attack_hand(user)
 		to_chat(user, "You remove \the [blade] from \the [src]</span>")
@@ -867,8 +869,8 @@ var/list/cult_spires = list()
 	holomap_markers -= HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"
 	..()
 
-/obj/structure/cult/spire/proc/upgrade()
-	var/new_stage = clamp(stage, 1, 3)
+/obj/structure/cult/spire/proc/upgrade(var/new_stage)
+	new_stage = clamp(new_stage, 1, 3)
 	if (new_stage>stage)
 		stage = new_stage
 		alpha = 255
@@ -1907,3 +1909,35 @@ var/list/bloodstone_list = list()
 					sleep(0.75)
 					M.dir = SOUTH
 					INVOKE_EVENT(M, /event/face)
+
+
+
+
+/obj/structure/cult/pylon
+	name = "pylon"
+	desc = "A floating crystal that hums with an unearthly energy."
+	icon_state = "pylon"
+	light_range = 7
+	light_color = LIGHT_COLOR_RED
+	health = 50
+	maxHealth = 50
+	sound_damaged = 'sound/effects/Glasshit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	var/broken
+
+/obj/structure/cult/pylon/takeDamage()
+	..()
+	if(health <= 20 && !broken)
+		playsound(src, 'sound/effects/Glassbr3.ogg', 75, 1)
+		visible_message("<span class='warning'>\The [src] breaks apart!</span>")
+		icon_state = "pylon-broken"
+		sound_damaged = 'sound/effects/stone_hit.ogg'
+		set_light(0)
+		setDensity(FALSE)
+		broken = 1
+
+/obj/structure/cult/pylon/New()
+	..()
+	flick("[icon_state]-spawn", src)

@@ -18,6 +18,7 @@
 	desc = "A forge used in crafting the unholy weapons used by the armies of Nar-Sie."
 	icon_state = "forge"
 
+/*
 /obj/structure/cult_legacy/pylon
 	name = "Pylon"
 	desc = "A floating crystal that hums with an unearthly energy."
@@ -75,7 +76,7 @@
 		setDensity(TRUE)
 		icon_state = "pylon"
 		set_light(5)
-
+*/
 /obj/structure/cult_legacy/tome
 	name = "Desk"
 	desc = "A desk covered in arcane manuscripts and tomes in unknown languages. Looking at the text makes your skin crawl."
@@ -102,7 +103,6 @@
 	desc = "You're pretty sure that abyss is staring back."
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "hole"
-	density = 1
 	anchored = 1.0
 	plane = ABOVE_TURF_PLANE
 	var/spawnable = null
@@ -129,10 +129,13 @@
 	return
 
 /obj/effect/gateway/active/New()
+	anim(target = src, a_icon = 'icons/obj/cult.dmi', flick_anim = "hole-appear")
 	spawn(rand(30,60) SECONDS)
 		var/t = pick(spawnable)
 		new t(src.loc)
-		qdel(src)
+		anim(target = src, a_icon = 'icons/obj/cult.dmi', flick_anim = "hole-die")
+		spawn(6)
+			qdel(src)
 
 /obj/effect/gateway/active/Crossed(var/atom/A)
 	if(!istype(A, /mob/living))

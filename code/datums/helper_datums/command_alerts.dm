@@ -596,11 +596,25 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 //////////////BLOOD CULT
 
-/*
-TODO (UPHEAVAL PART 2) Guess i'll add the future new announcements here
+/datum/command_alert/cult_eclipse_start
+	name = "Blood Cult Eclipse Start"
+	alert_title = "Space-Time Distortions Detected"
+	force_report = 1
+	theme = "endgame"
+	alertlevel = "red"
 
-*/
+/datum/command_alert/cult_eclipse_start/announce()
+	message = "External sensors have detected that the star [station_name()] is orbiting has seemingly disappeared. These irregularities in space-time and a surge of occult energy from [station_name()] correspond to previous incidents involving the Cult of Nar-Sie. Under Directive 7-10, this station is now locked down until space-time stabilizes. "
+	..()
 
+/datum/command_alert/cult_eclipse_end
+	name = "Blood Cult Eclipse End"
+	alert_title = "Reality Stabilized"
+	force_report = 1
+
+/datum/command_alert/cult_eclipse_end/announce()
+	message = "Sensors indicate that the fabric of space-time around [station_name()] has stabilized. Continue to monitor the station for persistent occult activity. Directive 7-10 is hereby lifted."
+	..()
 
 ////////MISC STUFF
 

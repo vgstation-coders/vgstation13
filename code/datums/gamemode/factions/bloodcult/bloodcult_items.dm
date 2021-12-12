@@ -1575,7 +1575,7 @@ var/list/arcane_tomes = list()
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
 
-/obj/item/weapon/reagent_containers/food/drinks/cult/gamer
+/obj/item/weapon/reagent_containers/food/drinks/cult/gamer/on_reagent_change()
 	..()
 	overlays.len = 0
 	if (reagents.reagent_list.len > 0)

@@ -276,7 +276,7 @@
 
 /datum/rune_spell/raisestructure/proc/proximity_check()
 	var/obj/effect/rune/R = spell_holder
-	if (locate(/obj/structure/cult) in range(R.loc,1))
+	if (locate(/obj/structure/cult) in range(R.loc,0))
 		abort(RITUALABORT_BLOCKED)
 		return FALSE
 
@@ -297,7 +297,8 @@
 	var/list/choices = list(
 		list("Altar", "radial_altar", "The nexus of a cult base. Lets you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station."),
 		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
-		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
+		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience."),
+		list("Pylon", "radial_pylon", "Provides some light in the surrounding area, and has some use in rituals.")
 	)
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
 
@@ -317,7 +318,11 @@
 			spawntype = /obj/structure/cult/spire
 		if("Forge")
 			spawntype = /obj/structure/cult/forge
+		if("Pylon")
+			spawntype = /obj/structure/cult/pylon
 
+	if(!spell_holder)
+		return
 	loc_memory = spell_holder.loc
 	contributors.Add(user)
 	update_progbar()

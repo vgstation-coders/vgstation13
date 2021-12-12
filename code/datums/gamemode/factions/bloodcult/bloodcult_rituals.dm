@@ -11,6 +11,25 @@ var/global/list/completed_rituals = list()	// Rituals that the cult has complete
 var/global/list/locked_rituals = list()		// Rituals that the cult haven't unlocked yet.
 var/global/list/cult_altars = list()       // List of cult altars in the world.
 
+
+#define SPIRE_STAGE_2 	30
+#define SPIRE_STAGE_3 	60
+
+/proc/ChangeVeilWeakness(var/add, var/set_to)
+	if(set_to)
+		veil_weakness = set_to
+	else 
+		veil_weakness += add
+	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
+	if(B)
+		B.update_cultist_uis()
+	if(veil_weakness >= SPIRE_STAGE_3)	
+		for(var/obj/structure/cult/spire/S in cult_spires)
+			S.upgrade(3)
+	else if(veil_weakness >= SPIRE_STAGE_2)
+		for(var/obj/structure/cult/spire/S in cult_spires)
+			S.upgrade(2)
+
 /datum/faction/bloodcult/proc/GetVeilWeakness()
 	return veil_weakness
 
@@ -47,13 +66,11 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 /datum/bloodcult_ritual/proc/Reward(var/worth)
 	points_rewarded += worth
-	veil_weakness += worth
+	ChangeVeilWeakness(worth)
 	if(point_limit != 0 && points_rewarded >= point_limit)
 		unlocked_rituals -= src
 		completed_rituals += src
-	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
-	if(B)
-		B.update_cultist_uis()
+
 
 /datum/bloodcult_ritual/proc/GrantTattoo(var/mob/cultist, var/type)
 	if(!ishuman(cultist))
@@ -150,11 +167,11 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 				awardedpoints += 1
 
 			var/pyloncount = 0
-			for(var/obj/structure/cult_legacy/pylon/P in range(1,T))
-				if(!P.isbroken)
+			for(var/obj/structure/cult/pylon/P in range(1,T))
+				if(P.health > 20)
 					pyloncount++
 			if(pyloncount >= 2)
-				awardedpoints += 5
+				awardedpoints += 6
 
 			var/obj/item/weapon/reagent_containers/container = locate(/obj/item/weapon/reagent_containers) in T.contents
 			if(container)
@@ -239,7 +256,6 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	var/list/shocked = extrainfo["shocked"]
 	if(!shocked || shocked.len == 0)
 		return
-	var/points = 0
 	for(var/mob/living/L in shocked)
 		points += 10*(shocked[L])
 	if(points > 0)
