@@ -188,7 +188,7 @@ var/list/one_way_windows
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return TRUE
 	if(istype(mover) && mover.checkpass(pass_flags_self))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
-		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | reverse_direction(dir)))
+		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | opposite_dirs[dir]))
 			dim_beam(mover)
 		return TRUE
 	if(!density)

@@ -1,4 +1,4 @@
-var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
+var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,SOUTHWEST,NORTHWEST,null,EAST,SOUTHEAST,NORTHEAST)
 
 /client
 	var/tmp
