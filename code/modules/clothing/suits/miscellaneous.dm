@@ -928,6 +928,7 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO|IGNORE_INV
 	actions_types = list(/datum/action/item_action/toggle_bomber_vest)
 	var/active = 0
+	var/detonation_msg //This will be parsed onto the admin logs and is written at the time of the detonation trigger.
 
 /obj/item/clothing/suit/bomber_vest/proc/activate_vest()
 	var/mob/living/carbon/human/H = loc
@@ -939,26 +940,27 @@ var/list/tag_suits_list = list()
 		return
 	active = 1
 	H.register_event(/event/touched, src, .proc/on_touched)
-	H.register_event(/event/hitby, src, .proc/on_hitby)
 	H.register_event(/event/attacked_by, src, .proc/on_attacked_by)
 	H.register_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
 	H.register_event(/event/to_bump, src, .proc/on_to_bump)
 	H.register_event(/event/bumped, src, .proc/on_bumped)
-	can_unequip = 0
 
 /obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
 	if(toucher == touched) //No bombing ourselves by checking ourselves
 		return
-	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/victim, obj/item/item)
+	detonation_msg = "being touched by [toucher]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, mob/item)
+	detonation_msg = "being hit with \a [item] by [attacker]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack(mob/attacker, mob/attacked)
+	detonation_msg = "being punched by [attacker]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_to_bump(atom/movable/bumper, atom/bumped)
+	detonation_msg = "bumping into [bumped]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_bumped(atom/movable/bumper, atom/bumped)
+	detonation_msg = "being bumped into by [bumper]"
 	detonate()
 
 /obj/item/clothing/suit/bomber_vest/proc/deactivate_vest()
@@ -966,8 +968,7 @@ var/list/tag_suits_list = list()
 	var/mob/living/carbon/human/H = loc
 	if(H)
 		H.unregister_event(/event/touched, src, .proc/on_touched)
-		H.unregister_event(/event/hitby, src, .proc/on_hitby)
-		H.unregister_event(/event/unarmed_attack, src, .proc/on_attacked_by)
+		H.unregister_event(/event/attacked_by, src, .proc/on_attacked_by)
 		H.unregister_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
 		H.unregister_event(/event/to_bump, src, .proc/on_to_bump)
 		H.unregister_event(/event/bumped, src, .proc/on_bumped)
@@ -985,7 +986,7 @@ var/list/tag_suits_list = list()
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
 	explosion(user, 2, 4, 6, whodunnit = user)
-	message_admins("[user] has detonated \the [src]!")
+	message_admins("[user] has detonated \the [src] via [detonation_msg]!")
 	qdel(src) //Just in case
 	return SUICIDE_ACT_CUSTOM
 
@@ -993,8 +994,8 @@ var/list/tag_suits_list = list()
 	var/mob/living/carbon/human/H = loc
 	if(!ishuman(H) || !active)
 		return
-	explosion(get_turf(H), 2, 4, 6, whodunnit = H)
-	message_admins("[H] has detonated \the [src]!")
+	explosion(H, 2, 4, 6, whodunnit = H)
+	message_admins("[H] has detonated \the [src] via [detonation_msg]!")
 	qdel(src) //Just in case
 
 /datum/action/item_action/toggle_bomber_vest
