@@ -86,11 +86,23 @@
 	border: 1px solid #000000;
 }
 
-.palette div {
+.palette div.paletteColor {
 	width: 28px;
 	height: 28px;
 	display: inline-block;
 	border: 1px solid #000000;
+}
+
+.palette div.paletteButton {
+	background: #40628a;
+}
+
+.palette div.paletteButton:hover {
+	background: #507aac;
+}
+
+.paletteButton .uiIcon16 {
+	margin: 6px;
 }
 
 .toolPanel input[type="text"] {
