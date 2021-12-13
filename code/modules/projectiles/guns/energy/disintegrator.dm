@@ -62,9 +62,6 @@
 
 	var/mode = 0 //0 = immolate, 1 = scramble
 
-/obj/item/weapon/gun/energy/heavydisintegrator/isHandgun()
-	return TRUE
-
 /obj/item/weapon/gun/energy/heavydisintegrator/attack_self(mob/living/user as mob)
 	switch(mode)
 		if(0)
