@@ -349,3 +349,10 @@ var/list/crushed_cans_cache = list()
 	icon_state	= "emptysaucerbowl"
 	starting_materials = list(MAT_IRON = 100)
 	w_type=RECYK_METAL
+
+/obj/item/trash/soupcantrash
+	name = "empty soup can"
+	desc = "At least it fed a hungry greyling"
+	icon_state	= "soupcantrash"
+	starting_materials = list(MAT_IRON = 50)
+	w_type=RECYK_METAL
