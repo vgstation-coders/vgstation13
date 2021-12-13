@@ -1,5 +1,5 @@
 /datum/event/cult_eclipse
-	endWhen = 30
+	endWhen = 9999
 	announceWhen = 5
 
 
@@ -7,21 +7,21 @@
 	return 0
 
 /datum/event/cult_eclipse/announce()
-	set_security_level("red")
-	command_alert(/datum/command_alert/cult_eclipse_start)
+	command_alert(/datum/command_alert/eclipse_start)
 	emergency_shuttle.force_shutdown()
 
 /datum/event/cult_eclipse/end()
 	SetUniversalState(/datum/universal_state)
-	set_security_level("blue")
-	command_alert(/datum/command_alert/cult_eclipse_end)
-	emergency_shuttle.shutdown = 0
-	ticker.StartThematic()
-
+	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
+	if(!B || B.stage < FACTION_ENDGAME) 
+		command_alert(/datum/command_alert/eclipse_end)
+		return 		
+	else 
+		command_alert(/datum/command_alert/cult_eclipse_end)
+		B.stage(FACTION_DEFEATED)
 
 /datum/event/cult_eclipse/start()
 	SetUniversalState(/datum/universal_state/eclipse)
-	ticker.StartThematic("endgame")
 
 
 

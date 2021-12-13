@@ -129,14 +129,15 @@
 	return
 
 /obj/effect/gateway/active/New()
-	anim(target = src, a_icon = 'icons/obj/cult.dmi', flick_anim = "hole-appear")
+	flick("hole-appear", src)
 	spawn(rand(30,60) SECONDS)
 		var/t = pick(spawnable)
 		new t(src.loc)
-		anim(target = src, a_icon = 'icons/obj/cult.dmi', flick_anim = "hole-die")
+		flick("hole-die",src)
 		spawn(6)
 			qdel(src)
 
+/*
 /obj/effect/gateway/active/Crossed(var/atom/A)
 	if(!istype(A, /mob/living))
 		return
@@ -193,3 +194,4 @@
 			new_mob.key = M.key
 
 		to_chat(new_mob, "<B>Your form morphs into that of a cluwne.</B>")
+*/
