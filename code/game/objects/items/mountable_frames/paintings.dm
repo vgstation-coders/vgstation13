@@ -309,7 +309,7 @@ var/global/list/available_paintings = list(
 
 		else
 			name = "painting"
-			desc = "a blank painting."
+			desc = "so perfectly blank you dare not paint on it."
 
 /obj/structure/painting/attack_hand(mob/user)
 	to_chat(user, "<span class='notice'>You pick up \the [src]...</span>")

@@ -3,7 +3,7 @@
  *  here are applied there too.
 */
 /obj/structure/painting/custom
-
+	name = "small canvas"
 	desc = "What to draw?"
 
 	var/blank = TRUE
@@ -104,6 +104,8 @@
  *  this separate icon is applied as the structure's icon
 */
 /obj/item/mounted/frame/painting/custom
+	name = "small canvas"
+	desc = "What to draw?"
 	var/blank = TRUE
 	var/datum/custom_painting/painting_data
 
@@ -185,6 +187,8 @@
 
 // Blank landscape canvas
 /obj/item/mounted/frame/painting/custom/landscape
+	name = "landscape canvas"
+	desc = "Where to draw?"
 	base_icon_state = "blank_landscape"
 	painting_height = 14
 	painting_width = 24
@@ -194,6 +198,8 @@
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 /obj/structure/painting/custom/landscape
+	name = "landscape canvas"
+	desc = "Where to draw?"
 	icon_state = "blank_landscape"
 	base_icon_state = "blank_landscape"
 	painting_height = 14
@@ -205,6 +211,8 @@
 
 // Blank portrait canvas
 /obj/item/mounted/frame/painting/custom/portrait
+	name = "portrait canvas"
+	desc = "Who to draw?"
 	base_icon_state = "blank_portrait"
 	painting_height = 24
 	painting_width = 14
@@ -214,6 +222,8 @@
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 /obj/structure/painting/custom/portrait
+	name = "portrait canvas"
+	desc = "Who to draw?"
 	icon_state = "blank_portrait"
 	base_icon_state = "blank_portrait"
 	painting_height = 24
@@ -225,6 +235,8 @@
 
 // Large blank canvas
 /obj/item/mounted/frame/painting/custom/large
+	name = "large canvas"
+	desc = "The larger the canvas, the more overwhelming it is to put pen to paper and get started."
 	base_icon_state = "blank_large"
 	painting_height = 24
 	painting_width = 24
@@ -234,6 +246,8 @@
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
 
 /obj/structure/painting/custom/large
+	name = "large canvas"
+	desc = "The larger the canvas, the more overwhelming it is to put pen to paper and get started."
 	icon_state = "blank_large"
 	base_icon_state = "blank_large"
 	painting_height = 24
