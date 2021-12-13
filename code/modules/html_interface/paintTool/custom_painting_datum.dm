@@ -3,8 +3,6 @@
 #define BRUSH_STRENGTH_MAX 1
 #define BRUSH_STRENGTH_MIN 0
 
-
-
 /*
  * PAINTING UTENSIL DATUM
  *
@@ -14,14 +12,16 @@
 /datum/painting_utensil
 	var/min_strength = 0
 	var/max_strength = 1
-	var/list/palette = list()
-	var/base_color
+	var/list/palette = list() // List of colors that will be made available while painting
+	var/base_color // Color that will start selected when paining
 
 /datum/painting_utensil/New(mob/user, obj/item/held_item)
 	if (!user) // Special case
 		return
 	if (!held_item)
 		held_item = user.get_active_hand()
+
+	// Painting with a pen
 	if (istype(held_item, /obj/item/weapon/pen))
 		var/obj/item/weapon/pen/p = held_item
 		max_strength = PENCIL_STRENGTH_MAX
@@ -29,6 +29,7 @@
 		palette += p.colour_rgb
 		base_color = p.colour_rgb
 
+	// Painting with a crayon
 	if (istype(held_item, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/c = held_item
 		max_strength = PENCIL_STRENGTH_MAX
@@ -37,6 +38,7 @@
 		palette += c.shadeColour
 		base_color = c.color
 
+	// Painting with hair dye sprays
 	if (istype(held_item, /obj/item/weapon/hair_dye))
 		var/obj/item/weapon/hair_dye/h = held_item
 		max_strength = PENCIL_STRENGTH_MAX
@@ -44,6 +46,7 @@
 		palette += rgb(h.color_r, h.color_g, h.color_b)
 		base_color = rgb(h.color_r, h.color_g, h.color_b)
 
+	// Painting with a brush
 	if (istype(held_item, /obj/item/weapon/painting_brush))
 		var/obj/item/weapon/painting_brush/b = held_item
 		if (b.paint_color)
@@ -51,6 +54,11 @@
 			min_strength = BRUSH_STRENGTH_MIN
 			palette += b.paint_color
 			base_color = b.paint_color
+
+		// If holding a palette (item) add it's colors to the brush's list
+		for (var/obj/item/weapon/palette/pal in user.held_items)
+			for (var/datum/painting_utensil/pu in pal.stored_colours)
+				palette += pu.base_color
 
 /datum/painting_utensil/proc/duplicate()
 	var/datum/painting_utensil/dupe = new(null, null)
