@@ -203,7 +203,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	name = "Draw Rune"
 	desc = "Draw a rune."
 
-/datum/bloodcult_ritual/sow_confusion/Complete()
+/datum/bloodcult_ritual/draw_rune/Complete()
 	Reward(1)
 
 /datum/bloodcult_ritual/sow_confusion
@@ -246,6 +246,17 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 /datum/bloodcult_ritual/human_sacrifice/Complete(var/mob/cultist, var/list/extrainfo)
 	Reward(500)
+	var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
+	if(!C)
+		return  // huh?
+	if(!cultist.mind)
+		return  // HUH?
+	GrantTattoo(cultist, /datum/cult_tattoo/manifest)
+	playsound(cultist, 'sound/effects/fervor.ogg', 50, 0, -2)
+	anim(target = cultist, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = cultist.dir)
+	C.MakeArchCultist()
+
+
 
 /datum/bloodcult_ritual/reveal_truth 
 	name = "Reveal the Truth"

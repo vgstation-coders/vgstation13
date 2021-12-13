@@ -10,7 +10,8 @@
 	var/conceal_cooldown = 0
 	var/timeleft = 0
 	var/timetotal = 0
-	var/list/contributors = list()//list of cultists currently participating in the ritual
+	var/list/contributors = list()// list of cultists currently participating in the ritual
+	var/min_contributors = 1 	  // how many cultists we need for the current ritual
 	var/image/progbar = null//progress bar
 	var/cancelling = 3//check to abort the ritual if interrupted
 	var/custom_process = 0
@@ -202,6 +203,7 @@
 	var/gem_delay = 300
 	var/narsie_message_cooldown = 0
 	var/obj/effect/cult_offerings/offerings_effect
+	var/mob/sacrificer  // who started the sacrifice ritual
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
@@ -498,7 +500,7 @@
 				if (user.client)
 					user.client.images |= progbar
 		return
-	if(is_locking(lock_type) && istype(blade, /obj/item/weapon/melee/cultblade) && ishuman(get_locked(lock_type)[1]))
+	if(is_locking(lock_type) && (istype(blade, /obj/item/weapon/melee/cultblade) || istype(blade, /obj/item/weapon/melee/soulblade)) && ishuman(get_locked(lock_type)[1]))
 		var/mob/M = get_locked(lock_type)[1]
 		if(M != user)
 			var/choices = list(
@@ -523,6 +525,9 @@
 				if ("Sacrifice")
 					// First we'll check for any blockers around it since we'll dance using forceMove to allow up to 8 dancers without them bumping into each others
 					// Of course this means that walls and objects placed AFTER the start of the dance can be crossed by dancing but that's good enough.
+					if(!M.mind)
+						to_chat(user, "<span class='warning'>\The [M] lacks a proper soul. They are an unsuitable sacrifice.</span>")
+						return	
 					for (var/turf/T in orange(1,src))
 						if (T.density)
 							to_chat(user, "<span class='warning'>The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
@@ -537,6 +542,8 @@
 							altar_task = ALTARTASK_SACRIFICE
 							timeleft = 30
 							timetotal = timeleft
+							min_contributors = 2
+							sacrificer = user
 							update_icon()
 							contributors.Add(user)
 							update_progbar()
@@ -566,13 +573,21 @@
 								dance_start()
 	else if (blade)
 		if(is_locking(lock_type))
-			unlock_atom(get_locked(lock_type)[1])
-		blade.forceMove(loc)
-		blade.attack_hand(user)
-		to_chat(user, "You remove \the [blade] from \the [src]</span>")
-		blade = null
-		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
-		update_icon()
+			if (do_after(user,src,20))
+				unlock_atom(get_locked(lock_type)[1])
+				blade.forceMove(loc)
+				blade.attack_hand(user)
+				to_chat(user, "You remove \the [blade] from \the [src]</span>")
+				blade = null
+				playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
+				update_icon()
+		else 
+			blade.forceMove(loc)
+			blade.attack_hand(user)
+			to_chat(user, "You remove \the [blade] from \the [src]</span>")
+			blade = null
+			playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
+			update_icon()
 		return
 	else
 		var/choices = list(
@@ -769,17 +784,18 @@
 		newCultist.conversion.Add("altar")
 
 
-/obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
+/obj/structure/cult/altar/dance_start(var/first_contributor)//This is executed at the end of the sacrifice ritual
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult) // this should not happen
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	. = ..()//true if the ritual was successful
 	altar_task = ALTARTASK_NONE
+	min_contributors = initial(min_contributors)
 	update_icon()
 	if (. &&  is_locking(lock_type))
 		var/mob/M = get_locked(lock_type)[1]
 		if(M.mind)
-			CompleteCultRitual(/datum/bloodcult_ritual/human_sacrifice)
+			CompleteCultRitual(/datum/bloodcult_ritual/human_sacrifice, sacrificer)
 
 		if (istype(blade) && !blade.shade && (cult && cult.CanConvert()))//If an empty soul blade was the tool used for the ritual, let's make them its shade.
 			var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, 1 )
@@ -815,9 +831,9 @@
 		else
 			M.gib()
 
-	var/obj/structure/cult/bloodstone/blood_stone = new(get_turf(src))
-	blood_stone.flashy_entrance()
-	qdel(src)
+		var/obj/structure/cult/bloodstone/blood_stone = new(get_turf(src))
+		blood_stone.flashy_entrance()
+		qdel(src)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -1838,6 +1854,9 @@ var/list/bloodstone_list = list()
 				continue
 		if (contributors.len <= 0)
 			return 0
+		if(contributors.len < min_contributors)
+			sleep(10)
+			continue
 		timeleft -= 1 + round(contributors.len/2)//Additional dancers will complete the ritual faster
 		update_progbar()
 		dance_step()
@@ -1941,3 +1960,26 @@ var/list/bloodstone_list = list()
 /obj/structure/cult/pylon/New()
 	..()
 	flick("[icon_state]-spawn", src)
+
+/obj/structure/cult/tear_beacon
+	name = "tear beacon"
+	desc = "This looks ominous."
+	icon = 'icons/obj/cult_96x96.dmi'
+	icon_state = ""
+	health = 300
+	maxHealth = 300
+	pixel_x = -32 * PIXEL_MULTIPLIER
+	pixel_y = -36 * PIXEL_MULTIPLIER
+	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = OBJ_PLANE
+	layer = ABOVE_OBJ_LAYER
+	light_color = "#FF0000"
+	density = 0
+
+/obj/structure/cult/tear_beacon/New()
+	..()
+	set_light(1)
+	flick("tear-spawn",src)
+	spawn(5)
+		icon_state = "tear"

@@ -28,8 +28,6 @@
 
 ////////////////////////////////////
 
-var/global/list/eclipse_mobs = list()
-var/global/list/eclipse_gateways = list()
 
 /obj/effect/gateway/active/cult/eclipse
 	luminosity=5
@@ -43,17 +41,6 @@ var/global/list/eclipse_gateways = list()
 
 /obj/effect/gateway/active/cult/eclipse/Crossed()
 	return
-
-/obj/effect/gateway/active/cult/eclipse/New()
-	eclipse_gateways += src
-	spawn(rand(30,60) SECONDS)
-		var/t = pick(spawnable)
-		var/mob/living/T = new t(src.loc)
-		eclipse_mobs += T
-		eclipse_gateways -= src
-		anim(target = src, a_icon = 'icons/obj/cult.dmi', flick_anim = "hole-die")
-		spawn(6)
-			qdel(src)
 
 
 // Blood eclipse unversal state. It's a tamer version of the usual hell Universal state
@@ -73,26 +60,21 @@ var/global/list/eclipse_gateways = list()
 /datum/universal_state/eclipse/OnEnter()
 	set background = 1
 
+	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
+	if(B)
+		B.update_cultist_uis()
+
 	suspend_alert = 1
 	convert_all_parallax()
 	OverlayAndAmbientSet()
-
-
 
 /datum/universal_state/eclipse/OnExit()
 	suspend_alert = 0
 	deconvert_all_parallax()
 	CleanUp()
 
-
 /datum/universal_state/eclipse/OverlayAndAmbientSet()
 	set waitfor = FALSE
-	for(var/area/A in areas)
-		if(A.z == map.zMainStation && !isspace(A))
-			for(var/turf/T in A)
-				if(!T.holy && prob(0.5))
-					new /obj/effect/gateway/active/cult/eclipse(T)
-
 
 	for(var/datum/lighting_corner/C in global.all_lighting_corners)
 		if (!C.active)
@@ -102,13 +84,6 @@ var/global/list/eclipse_gateways = list()
 		CHECK_TICK
 
 /datum/universal_state/eclipse/proc/CleanUp()
-	for(var/obj/effect/gateway/active/cult/eclipse/G in eclipse_gateways)
-		anim(target = src, a_icon = 'icons/obj/cult.dmi', flick_anim = "hole-die")
-		spawn(6)
-			qdel(G)
-	for(var/mob/living/M in eclipse_mobs)
-		M.death()
-
 	for(var/datum/lighting_corner/C in global.all_lighting_corners)
 		if (!C.active)
 			continue

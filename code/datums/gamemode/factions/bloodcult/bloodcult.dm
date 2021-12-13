@@ -28,6 +28,7 @@
 
 	var/mentor_count = 0 	//so we don't loop through the member list if we already know there are no mentors in there
 
+	var/list/arch_cultists = list()
 
 /datum/faction/bloodcult/check_win()
 	return cult_win

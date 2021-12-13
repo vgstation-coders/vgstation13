@@ -21,6 +21,8 @@
 	var/verbose = FALSE	// Used by the rune writing UI to avoid message spam
 
 	var/cultist_role = CULTIST_ROLE_NONE // Because the role might change on the fly and we don't want to set everything again each time, better not start dealing with subtypes
+	var/arch_cultist = FALSE	// same as above
+
 	var/time_role_changed_last = 0
 
 	var/datum/role/cultist/mentor = null
@@ -472,3 +474,21 @@
 	antag.current.update_mutations()
 	var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	animate(tattoo_markings, alpha = 0, time = 30)
+
+
+/datum/role/cultist/proc/MakeArchCultist()
+	var/datum/faction/bloodcult/B = faction
+	if(!B || !istype(B))
+		return
+	arch_cultist = TRUE
+	B.arch_cultists += src
+
+/datum/role/cultist/proc/TearReality()
+	if(!arch_cultist)
+		return
+	if(!istype(universe,/datum/universal_state/eclipse))
+		return
+	var/mob/M = antag.current
+	var/turf/T = get_turf(M)
+	new /obj/structure/cult/tear_beacon(T)
+	
