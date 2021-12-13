@@ -7461,7 +7461,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT | FOOD_LIQUID
 	crumb_icon = "dribbles"
 	filling_color = "#FF9700"
-	valid_utensils = UTENSILE_SPOON
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 	wrapped = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/New()
