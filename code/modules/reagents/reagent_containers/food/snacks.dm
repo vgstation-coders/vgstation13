@@ -7461,7 +7461,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT | FOOD_LIQUID
 	crumb_icon = "dribbles"
 	filling_color = "#FF9700"
-	valid_utensils = UTENSILE_SPOON
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 	wrapped = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/New()
@@ -7488,7 +7488,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A hearty grey noodle soup. Great for teaching growing greylings new words! Not to be confused with human alphabet soup."
 	food_flags = FOOD_MEAT | FOOD_LIQUID
 	icon_state = "blethernoodlesoup_open"
-	to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. A hearty smell wafts out.")
+	to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. An inviting smell wafts out.")
 	wrapped = 0
 
 //You have now exited the ayy food zone. Thanks for visiting.
