@@ -14,7 +14,6 @@
 
 	icon_state = "greyspace"
 	icon_living = "greyspace"
-	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 
 	min_oxy = 0
 	max_oxy = 0
@@ -37,7 +36,6 @@
 
 	icon_state = "greyspace_toolbox"
 	icon_living = "greyspace_toolbox"
-	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	melee_damage_lower = 12
 	melee_damage_upper = 15
 
@@ -59,7 +57,6 @@
 
 	icon_state = "greyspace_scalpel"
 	icon_living = "greyspace_scalpel"
-	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	melee_damage_lower = 15
 	melee_damage_upper = 18
 
@@ -81,7 +78,6 @@
 
 	icon_state = "greyspace_laser"
 	icon_living = "greyspace_laser"
-	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	melee_damage_lower = 5
 	melee_damage_upper = 5
 
