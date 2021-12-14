@@ -242,7 +242,7 @@
 
 /obj/item/weapon/melee/energy/sword/dualsaber/update_wield(mob/user)
 	..()
-	force = wielded ? 30 : 3
+	force = wielded ? 33 : 3
 	w_class = wielded ? 5 : 2
 	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK : 0
 	sharpness = wielded ? 1.5 : 0
