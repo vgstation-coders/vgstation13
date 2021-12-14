@@ -454,7 +454,6 @@
 	throw_range = 5
 	attack_delay = 15 // Takes 50% more time between attacks
 	w_class = W_CLASS_LARGE
-	flags = FPRINT | TWOHANDABLE
 	mech_flags = MECH_SCAN_ILLEGAL
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
 	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
