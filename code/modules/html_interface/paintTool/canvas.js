@@ -3,7 +3,9 @@
  * Scripts meant to handle canvas.html
  */
 
+//--------------------------------
 // Tab selector
+//--------------------------------
 var panelIdList = ["infoPanel", "templatePanel", "exportPanel"];
 function panelSelect(panelId) {
 	var panelClass;
@@ -36,7 +38,9 @@ function toggleHelp(helpButton, helpPanel) {
 	toggleClass(helpPanel, "hidden");
 }
 
+//--------------------------------
 // Template control
+//--------------------------------
 var currentTemplate = {};
 /* A test template for 14x14 sized paintings
 {
@@ -198,17 +202,21 @@ function templatePaint(id) {
 		if (currentTemplate.bmp[i] == id) {
 			var x = i % width;
 			var y = (i - x)/width;
-			pixelDraw(x, y, paint_color, paint_strength);
+			pixelDraw(x, y, getPaintColor(), getOpacity());
 		}
 	}
 	display_bitmap();
 	document.getElementById("bitmap").value = bitmap;
 }
 
+//--------------------------------
+// INIT
+//--------------------------------
 var src;
 function initCanvas(paintInitData, canvasInitData) {
 	initPaint(paintInitData);
 	document.getElementById("paintColumn").style.maxWidth = (document.getElementById("canvas").width + 40) +  "px";
+	document.getElementById("paint_strength").value = getOpacity()
 
 	canvasInitData = JSON.parse(canvasInitData);
 
@@ -226,19 +234,22 @@ function initCanvas(paintInitData, canvasInitData) {
 	while (paletteButtonPanel.childElementCount > 0) {
 		paletteButtonPanel.removeChild(paletteButtonPanel.firstChild);
 	}
-
+	
 	for (color in palette) {
 		paletteButtonPanel.innerHTML +=
-			  '<div onclick="setColor(\'' + palette[color] + '\');" style="background-image:' +  generateColorPaletteBackgroundStyle(palette[color]) + '; background-image:' +  generateColorPaletteBackgroundStyle(palette[color], true) + '"></div>\n';
+			'<div class="paletteColor" onclick="setColor(\'' + palette[color] + '\');" style="background-image:' + generateColorPaletteBackgroundStyle(palette[color]) + '; background-image:' + generateColorPaletteBackgroundStyle(palette[color], true) + '"></div>\n';
 	}
 	setColor(palette[0]);
 }
 
+//--------------------------------
+// COLORS & PALETTE
+//--------------------------------
 function generateColorPaletteBackgroundStyle (color, ieMode) {
 	let colorOpaque = hexToRgba(color);
 	colorOpaque.a = 255;
 	colorOpaque = rgbaToHex(colorOpaque);
-
+	
 	// Stupid IE has to use this
 	if (ieMode) {
 		let ocolor = hexToRgba(color);
@@ -277,6 +288,9 @@ function setStrength() {
 	updateSelectedColorDisplay(getPaintColor(), strengthInput.value);
 }
 
+//--------------------------------
+// SUBMIT
+//--------------------------------
 function sanitizeLength (inputId, meterId) {
 	var input = document.getElementById(inputId);
 
