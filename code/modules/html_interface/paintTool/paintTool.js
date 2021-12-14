@@ -116,7 +116,7 @@ function initPaint(initData) {
 
 	minPaintStrength = initData.minPaintStrength;
 	maxPaintStrength = initData.maxPaintStrength;
-	setStrength();
+	setOpacity(maxPaintStrength);
 
 	//No data? start with a blank canvas
 	if (bitmap.length != width * height) {

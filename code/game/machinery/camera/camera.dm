@@ -400,7 +400,7 @@ var/list/camera_messages = list()
 		T = get_ranged_target_turf(src, direction, 1)
 
 		if (istype(T))
-			dir = reverse_direction(direction)
+			dir = opposite_dirs[direction]
 			break
 
 //Return a working camera that can see a given mob

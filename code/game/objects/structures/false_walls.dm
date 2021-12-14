@@ -34,13 +34,14 @@ var/list/false_wall_images = list()
 * Gets the highest and lowest pressures from the list of turfs provided
 * around us, then checks the difference.
 */
-/proc/getPressureDifferentialFromTurfList(var/list/turf/simulated/turf_list)
+/proc/getPressureDifferentialFromTurfList(var/list/turf/turf_list)
 	var/minp=SHORT_REAL_LIMIT; // Lowest recorded pressure.
 	var/maxp=0;        // Highest recorded pressure.
-	for(var/turf/simulated/T in turf_list)
+	for(var/turf/T in turf_list)
 		var/cp = 0
-		if(T.zone)
-			var/datum/gas_mixture/environment = T.return_air()
+		var/turf/simulated/TS = T
+		if(TS && istype(TS) && TS.zone)
+			var/datum/gas_mixture/environment = TS.return_air()
 			cp = environment.return_pressure()
 		else
 			if(istype(T,/turf/simulated))
@@ -71,6 +72,12 @@ var/list/false_wall_images = list()
 
 /proc/performWallPressureCheck(var/turf/loc)
 	var/pdiff = getOPressureDifferential(loc)
+	if(pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
+		return pdiff
+	return 0
+
+/proc/performWallPressureCheckFromTurfList(var/list/turf/turf_list)
+	var/pdiff = getPressureDifferentialFromTurfList(turf_list)
 	if(pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
 		return pdiff
 	return 0

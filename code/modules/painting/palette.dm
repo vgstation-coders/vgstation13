@@ -223,7 +223,8 @@ interactions:
 	rgb[1] = tmpRyb["r"] + tmpRyb["y"] - min(tmpRyb["y"], tmpRyb["b"]);
 	rgb[2] = tmpRyb["y"] + min(tmpRyb["y"], tmpRyb["b"]);
 	rgb[3] = 2*(tmpRyb["b"] - min(tmpRyb["y"], tmpRyb["b"]));
-	/* According to the RYB papers linked, the formula for green should be
+	/* According to the RYB papers linked in code\modules\html_interface\paintTool\paintTool.js,
+	 * the formula for green should be:
 	 *	"g = y + 2*min(y, b)"
 	 * But for whatever godforsaken reason that returns wrong values for colors where y < b
 	 * (eg: cyan). Got rid of the '2*' on a hunch and sure it WORKS without breaking anything
