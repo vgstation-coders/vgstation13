@@ -26,7 +26,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "match"
 	var/lit = 0
 	var/smoketime = 10
-	light_range = 1
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
 	autoignition_temperature = AUTOIGNITION_PAPER
@@ -35,7 +34,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
+
+	light_range = 1
 	light_color = LIGHT_COLOR_FIRE
+	lighting_flags = MOVABLE_LIGHT
+	light_type = LIGHT_SOFT_FLICKER
+
 	var/base_name = "match"
 	var/base_icon = "match"
 
@@ -185,7 +189,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/trash/cigbutt
 	var/lastHolder = null
+
 	light_range = 1
+	light_color = LIGHT_COLOR_FIRE
+	lighting_flags = MOVABLE_LIGHT
+	light_type = LIGHT_SOFT_FLICKER
+
 	var/smoketime = 300
 	var/chem_volume = 20
 	var/inside_item = 0 //For whether the cigarette is contained inside another item.
@@ -794,7 +803,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	flags = null
 	siemens_coefficient = 1
 	var/color_suffix = "-g" // Determines the sprite used
-	light_range = 2
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
 	var/fueltime
@@ -804,7 +812,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
+
+	light_range = 2
 	light_color = LIGHT_COLOR_FIRE
+	lighting_flags = MOVABLE_LIGHT
+	light_type = LIGHT_SOFT_FLICKER
+
 	var/lit = 0
 	var/base_icon = "lighter"
 
