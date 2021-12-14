@@ -6,14 +6,24 @@
 	icon_state = "grey"
 	icon_living = "grey"
 
+	attacktext = "bites"
+	attack_sound = 'sound/weapons/bite.ogg'
+
 	corpse = /obj/effect/landmark/corpse/grey
 
 /mob/living/simple_animal/hostile/humanoid/grey/space
 	name = "Grey Explorer"
-	desc = "A thin alien humanoid in a space suit. This one seems to be feral."
+	desc = "A thin alien humanoid in a space suit. This one seems to be hostile."
 
 	icon_state = "greyspace"
 	icon_living = "greyspace"
+	melee_damage_lower = 5
+	melee_damage_upper = 8 // Their arms may be noodly and weak, but getting kicked by a steel toed boot hurts!
+
+	stat_attack = UNCONSCIOUS // Greys hostile humanoids are too smart to think that someone is dead just because they fell over
+
+	attacktext = "kicks"
+	attack_sound = 'sound/weapons/punch1.ogg'
 
 	min_oxy = 0
 	max_oxy = 0
@@ -32,7 +42,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/melee/toolbox
 	name = "Grey Explorer"
-	desc = "A thin alien humanoid in a space suit. This one seems to be feral."
+	desc = "A thin alien humanoid in a space suit. This one seems to be hostile."
 
 	icon_state = "greyspace_toolbox"
 	icon_living = "greyspace_toolbox"
@@ -53,7 +63,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/melee/scalpel
 	name = "Grey Explorer"
-	desc = "A thin alien humanoid in a space suit. This one seems to be feral."
+	desc = "A thin alien humanoid in a space suit. This one seems to be hostile."
 
 	icon_state = "greyspace_scalpel"
 	icon_living = "greyspace_scalpel"
@@ -74,12 +84,10 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/ranged
 	name = "Grey Explorer"
-	desc = "A thin alien humanoid in a space suit. This one seems to be feral."
+	desc = "A thin alien humanoid in a space suit. This one seems to be hostile."
 
 	icon_state = "greyspace_laser"
 	icon_living = "greyspace_laser"
-	melee_damage_lower = 5
-	melee_damage_upper = 5
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
