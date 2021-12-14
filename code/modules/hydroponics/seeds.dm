@@ -1159,7 +1159,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasbage)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),PLASMA = list(3,5))
-	consume_gasses = list(GAS_PLASMA = 20)
 
 	lifespan = 30
 	maturation = 3
