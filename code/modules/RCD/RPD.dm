@@ -21,8 +21,6 @@
 		/datum/rcd_schematic/pipe/manifold,
 		/datum/rcd_schematic/pipe/valve,
 		/datum/rcd_schematic/pipe/dvalve,
-		/datum/rcd_schematic/pipe/mpvalve,
-		/datum/rcd_schematic/pipe/dpvalve,
 		/datum/rcd_schematic/pipe/cap,
 		/datum/rcd_schematic/pipe/manifold_4w,
 		/datum/rcd_schematic/pipe/mtvalve,

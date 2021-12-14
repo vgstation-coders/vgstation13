@@ -34,7 +34,7 @@
 			if(!A.mind || A.stat == DEAD)
 				continue
 			var/turf/T = get_turf(A)
-			if(!(T.z == map.zMainStation || T.z == map.zCentcomm))
+			if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
 				continue
 			if(isaliendrone(A) || isalienqueen(A) || islarva(A))
 				living_breeders = TRUE
@@ -52,7 +52,7 @@
 			if(!M.mind || M.stat == DEAD)
 				continue
 			var/turf/T = get_turf(M)
-			if(!(T.z == map.zMainStation || T.z == map.zCentcomm))
+			if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
 				continue
 			living_humans = TRUE
 			break
@@ -78,7 +78,7 @@
 		if(isanimal(M) || ispAI(M))     //borers and pAIs dont count
 			continue
 		var/turf/T = get_turf(M)
-		if(!(T.z == map.zMainStation || T.z == map.zCentcomm))
+		if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
 			continue
 
 		if(isalien(M))

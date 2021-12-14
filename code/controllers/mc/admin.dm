@@ -1,7 +1,6 @@
 // Clickable stat() button.
 /obj/effect/statclick
 	var/target
-	icon = null
 
 /obj/effect/statclick/New(text, target)
 	name = text

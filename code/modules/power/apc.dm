@@ -50,7 +50,6 @@
 	use_power = 0
 	req_access = list(access_engine_equip)
 	var/spooky=0
-	var/pulsecompromising=0
 	var/obj/item/weapon/cell/cell
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
@@ -347,7 +346,7 @@
 			update_state |= UPSTATE_OPENED1
 		if(opened==2)
 			update_state |= UPSTATE_OPENED2
-	else if(emagged || malfai || spooky || pulsecompromising)
+	else if(emagged || malfai || spooky)
 		update_state |= UPSTATE_BLUESCREEN
 	else if(wiresexposed)
 		update_state |= UPSTATE_WIREEXP
@@ -476,10 +475,6 @@
 				to_chat(user, "You swap the power cell within with the new cell in your hand.")
 				var/obj/item/weapon/oldpowercell = cell
 				cell = W
-				if(cell.occupant && !pulsecompromised)
-					cell.occupant.forceMove(src)
-					cell.occupant.hijackAPC(src)
-					cell.occupant.current_power = src
 				chargecount = 0
 				update_icon()
 				user.put_in_hands(oldpowercell)
@@ -491,10 +486,6 @@
 				return
 			if(user.drop_item(W, src))
 				cell = W
-				if(cell.occupant && !pulsecompromised)
-					cell.occupant.forceMove(src)
-					cell.occupant.hijackAPC(src)
-					cell.occupant.current_power = src
 				user.visible_message(\
 					"<span class='warning'>[user.name] has inserted the power cell to [src.name]!</span>",\
 					"You insert the power cell.")
@@ -999,13 +990,13 @@
 					malfai.malfhacking = 0
 					hacking_ai = null
 					locked = 1
-					if(M && map.zMainStation == z)
+					if(M && STATION_Z == z)
 						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [map.zMainStation == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
+					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					malfai.handle_regular_hud_updates()
 					update_icon()
 
@@ -1035,7 +1026,7 @@
 	operating = !operating
 	if(malfai)
 		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && map.zMainStation == z)
+		if(M && STATION_Z == z)
 			operating ? M.apcs++ : M.apcs--
 
 	src.update()
@@ -1050,7 +1041,7 @@
 	if(!malf.can_shunt)
 		to_chat(malf, "<span class='warning'>You cannot shunt.</span>")
 		return
-	if(map.zMainStation != z)
+	if(STATION_Z != z)
 		return
 	src.occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
 	src.occupant.adjustOxyLoss(malf.getOxyLoss())
@@ -1107,7 +1098,7 @@
 
 /obj/machinery/power/apc/proc/ion_act()
 	//intended to be exactly the same as an AI malf attack
-	if(!src.malfhack && map.zMainStation == z)
+	if(!src.malfhack && STATION_Z == z)
 		if(prob(3))
 			src.locked = 1
 			if (src.cell.charge > 0)
@@ -1306,7 +1297,7 @@
 // val 0=off, 1=off(auto) 2=on 3=on(auto)
 // on 0=off, 1=on, 2=autooff
 
-/obj/machinery/power/apc/proc/autoset(var/val, var/on)
+obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(on==0)
 		if(val==2)			// if on, return off
 			return 0
@@ -1343,26 +1334,25 @@
 	..()
 
 /obj/machinery/power/apc/ex_act(severity)
+
 	switch(severity)
-		if(1)
-			if(cell)
-				qdel(cell)
-				cell = null
+		if(1.0)
+			//set_broken() //now Destroy() do what we need
+			if (cell)
+				cell.ex_act(1.0) // more lags woohoo
 			qdel(src)
-		if(2)
-			if(prob(50))
+			return
+		if(2.0)
+			if (prob(50))
 				set_broken()
-				if(cell && prob(50))
-					cell.ex_act(2)
-					if(cell && cell.gcDestroyed)
-						cell = null
-		if(3)
-			if(prob(25))
+				if (cell && prob(50))
+					cell.ex_act(2.0)
+		if(3.0)
+			if (prob(25))
 				set_broken()
 				if (cell && prob(25))
-					cell.ex_act(3)
-					if(cell && cell.gcDestroyed)
-						cell = null
+					cell.ex_act(3.0)
+	return
 
 /obj/machinery/power/apc/blob_act()
 	if (prob(75))
@@ -1373,7 +1363,7 @@
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
 		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && map.zMainStation == z)
+		if(M && STATION_Z == z)
 			M.apcs--
 	stat |= BROKEN
 	operating = 0
@@ -1409,7 +1399,7 @@
 			to_chat(hacking_ai, "<span class='warning'>The APC you were currently hacking was destroyed.</span>")
 		if(malfai && operating)
 			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-			if (M && map.zMainStation == z)
+			if (M && STATION_Z == z)
 				M.apcs--
 		this_area.power_light = 0
 		this_area.power_equip = 0

@@ -2,6 +2,7 @@
 //**************************************************************
 // Map Datum -- Teststation
 //**************************************************************
+
 /datum/map/active
 	nameShort = "test_tiny"
 	nameLong = "Test Station"
@@ -9,14 +10,13 @@
 	tDomeX = 100
 	tDomeY = 100
 	tDomeZ = 1
-	zLevels = list(/datum/zLevel/station)
-	enabled_jobs = list(/datum/job/trader)
-	load_map_elements = list(/datum/map_element/dungeon/holodeck)
-	zCentcomm = 1
-	lights_always_ok = TRUE
+	zLevels = list(
+		/datum/zLevel/station,
+		)
 
-/datum/subsystem/supply_shuttle
-	movetime = 5 SECONDS
+	load_map_elements = list(/datum/map_element/dungeon/holodeck)
+
+	lights_always_ok = TRUE
 
 ////////////////////////////////////////////////////////////////
 #include "test_tiny.dmm"

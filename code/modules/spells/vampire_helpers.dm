@@ -38,10 +38,23 @@
 	return 1
 
 /mob/proc/can_enthrall(var/mob/living/carbon/human/H)
+	var/implanted = 0
 	var/datum/role/vampire/V = isvampire(src)
 	if(restrained())
 		to_chat(src, "<span class ='warning'> You cannot do this while restrained! </span>")
 		return 0
+	if(!(locate(/datum/power/vampire/charisma) in V.current_powers)) //Charisma allows implanted targets to be enthralled.
+		for(var/obj/item/weapon/implant/loyalty/L in H)
+			if(L && L.implanted)
+				implanted = TRUE
+				break
+		/* Greytide implantes - to fix
+		for(var/obj/item/weapon/implant/traitor/T in H)
+			if(T && T.implanted)
+				enthrall_safe = TRUE
+				break
+		*/
+
 	if(!istype(H))
 		to_chat(src, "<span class='warning'>You can only enthrall humanoids!</span>")
 		return 0
@@ -54,8 +67,7 @@
 	if(isvampire(H) || isthrall(H))
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a familiar sensation in your skull that quickly dissipates.</span>")
 		return FALSE
-	//Charisma allows implanted targets to be enthralled.
-	if(!(locate(/datum/power/vampire/charisma) in V.current_powers) && H.is_loyalty_implanted())
+	if (implanted)
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a strange sensation in your skull that quickly dissipates.</span>")
 		return FALSE
 	if(H.vampire_affected(mind) <= 0)

@@ -23,6 +23,7 @@
 	nick = "pimpin' ride"
 	keytype = /obj/item/key/janicart
 	flags = OPENCONTAINER
+	noghostspin = 0
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
@@ -121,7 +122,7 @@
 		var/turf/tile = loc
 		if(isturf(tile))
 			tile.clean_blood()
-			for(var/atom/A in tile)
+			for(var/A in tile)
 				if(istype(A, /obj/effect))
 					if(iscleanaway(A))
 						qdel(A)

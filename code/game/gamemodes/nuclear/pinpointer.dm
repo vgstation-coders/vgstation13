@@ -304,7 +304,7 @@ var/list/pinpointerpinpointer_list = list()
 	var/length = 1
 	for (var/obj/item/device/pda/P in PDAs)
 		var/turf/T = get_turf(P)
-		if(P.name != "\improper PDA" && T.z != map.zCentcomm)
+		if(P.name != "\improper PDA" && T.z != CENTCOMM_Z)
 			L[text("([length]) [P.name]")] = P
 			length++
 
@@ -362,7 +362,6 @@ var/list/pinpointerpinpointer_list = list()
 /obj/item/weapon/pinpointer/implant
 	name = "implant pinpointer"
 	watches_nuke = FALSE
-	var/debug_alerted = FALSE // I don't want to spam the console like a madman
 
 /obj/item/weapon/pinpointer/implant/process()
 	var/closest_distance = INFINITY
@@ -370,11 +369,6 @@ var/list/pinpointerpinpointer_list = list()
 	target = null
 	for(var/mob/living/dude in living_mob_list)
 		var/turf/dude_pos = get_turf(dude)
-		if(!dude_pos)
-			if(!debug_alerted)
-				log_debug("Pinpointer found [dude] of type [dude.type] in nullspace! It being there might be valid or not, please investigate. REF: [ref(dude)]")
-				debug_alerted = TRUE
-			continue
 		if(dude_pos.z != this_pos.z || dude.stat == DEAD || !dude.is_implanted(/obj/item/weapon/implant/loyalty))
 			continue
 		var/distance = abs(cheap_pythag(this_pos.x - dude_pos.x, this_pos.y - dude_pos.y))

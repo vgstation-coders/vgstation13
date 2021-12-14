@@ -2,7 +2,7 @@
 	name = "grille"
 	desc = "A matrix of metal rods, usually used as a support for window bays, with screws to secure it to the floor."
 	icon = 'icons/obj/structures.dmi'
-	icon_state = "grille0"
+	icon_state = "grille"
 	density = 1
 	anchored = 1
 	flags = FPRINT
@@ -10,38 +10,9 @@
 	pressure_resistance = 5*ONE_ATMOSPHERE
 	layer = BELOW_OBJ_LAYER
 	explosion_resistance = 5
-	pass_flags_self = PASSGRILLE
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
 	var/grille_material = /obj/item/stack/rods
-
-/obj/structure/grille/canSmoothWith()
-	var/static/list/smoothables = list(
-		/obj/structure/grille,
-	)
-	return smoothables
-
-/obj/structure/grille/New(loc)
-	..(loc)
-	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
-		initialize()
-
-/obj/structure/grille/initialize()
-	relativewall()
-	relativewall_neighbours()
-
-/obj/structure/grille/relativewall()
-	if(broken)
-		return
-	var/junction = findSmoothingNeighbors()
-	icon_state = "grille[junction]"
-
-/obj/structure/grille/isSmoothableNeighbor(atom/A)
-	if(istype(A,/obj/structure/grille))
-		var/obj/structure/grille/G = A
-		if(G.broken)
-			return 0
-	return ..()
 
 /obj/structure/grille/examine(mob/user)
 
@@ -63,12 +34,10 @@
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
 		new grille_material(get_turf(src)) //One rod set
-		relativewall_neighbours()
 	else if(health > (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		setDensity(TRUE)
-		relativewall_neighbours()
 	if(health <= 0) //Dead
 		new grille_material(get_turf(src)) //Drop the second set of rods
 		qdel(src)
@@ -171,7 +140,7 @@
 /obj/structure/grille/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1
 	else
 		if(istype(mover, /obj/item/projectile))
@@ -200,7 +169,7 @@
 					var/obj/structure/window/S = SR.build(user,G,1,loc)
 					if(S)
 						S.forceMove(get_turf(src))
-						S.change_dir(get_dir(src, user))
+						S.dir = get_dir(src, user)
 						return
 		else
 			to_chat(user, "<span class='warning'>You need to stand properly in front of the grille to place windows on it.</span>")
@@ -293,7 +262,7 @@
 /obj/structure/grille/broken //THIS IS ONLY TO BE USED FOR MAPPING, THANK YOU FOR YOUR UNDERSTANDING
 
 	//We need to set all variables for broken grilles manually, notably to have those show up nicely in mapmaker
-	icon_state = "grille0-b"
+	icon_state = "grille-b"
 	broken = 1
 	density = 0 //Not blocking anything anymore
 
@@ -321,8 +290,6 @@
 		return 0 //Make sure air doesn't drain
 	return ..()
 
-/obj/structure/grille/cult/relativewall()
-	return
 
 /obj/structure/grille/invulnerable
 	desc = "A reinforced grille made with advanced alloys and techniques. It's impossible to break one without the use of heavy machinery."
@@ -347,7 +314,4 @@
 	return
 
 /obj/structure/grille/replicant/clockworkify()
-	return
-
-/obj/structure/grille/replicant/relativewall()
 	return

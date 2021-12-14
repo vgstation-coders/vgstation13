@@ -7,7 +7,6 @@
 	anchored = 1.0
 	layer = LATTICE_LAYER
 	plane = ABOVE_PLATING_PLANE
-	pass_flags_self = PASSGRILLE
 
 	//	flags = CONDUCT
 

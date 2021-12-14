@@ -50,15 +50,7 @@
 
 	var/datum/role/cultist/C = iscultist(src)
 	if (C)
-		switch(C.cultist_role)
-			if (CULTIST_ROLE_ACOLYTE)
-				C.logo_state = "cult-apprentice-logo"
-			if (CULTIST_ROLE_HERALD)
-				C.logo_state = "cult-logo"
-			if (CULTIST_ROLE_MENTOR)
-				C.logo_state = "cult-master-logo"
-			else
-				C.logo_state = "cult-logo"
+		C.logo_state = "cult-logo"
 
 /mob/living/simple_animal/shade/proc/add_HUD(var/mob/user)
 	DisplayUI("Soulblade")
@@ -118,7 +110,7 @@
 
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_max = 15
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""
@@ -127,13 +119,6 @@
 	cast_delay = 0
 
 	blood_cost = 5
-	var/spin_cooldown = FALSE //gotta use that to get a more strict cooldown at such a small value
-
-
-/spell/soulblade/blade_spin/perform(mob/user = usr, skipcharge = 0, list/target_override)
-	if (spin_cooldown)
-		return
-	..()
 
 /spell/soulblade/blade_spin/choose_targets(var/mob/user = usr)
 	var/obj/item/weapon/melee/soulblade/SB = user.loc
@@ -149,8 +134,8 @@
 			return null
 	var/turf/T = get_turf(SB)
 	var/dir = SB.dir
-	if (istype(SB.loc,/obj/item/projectile))
-		var/obj/item/projectile/P = SB.loc
+	if (istype(T,/obj/item/projectile))
+		var/obj/item/projectile/P = T
 		dir = get_dir(P.starting,P.target)
 	var/list/my_targets = list()
 	for (var/atom/A in T)
@@ -185,13 +170,7 @@
 
 /spell/soulblade/blade_spin/cast(var/list/targets, var/mob/user)
 	..()
-	spin_cooldown = TRUE
-	spawn(10) // 10 ticks of cooldown starting right now
-		spin_cooldown = FALSE
 	var/obj/item/weapon/melee/soulblade/SB = user.loc
-	SB.reflector = TRUE
-	spawn(4) // reflects projectiles for 4 ticks
-		SB.reflector = FALSE
 	SB.throwing = 0
 	if (istype(SB.loc,/obj/item/projectile))
 		var/obj/item/projectile/P = SB.loc
@@ -212,7 +191,7 @@
 
 /spell/soulblade/blade_perforate
 	name = "Perforate"
-	desc = "(20 BLOOD) Hurl yourself through the air. You can cast this spell by doing a Drag n Drop with your mouse for more interesting trajectories. If you hit a cultist, they'll automatically grab you."
+	desc = "(20 BLOOD) Hurl yourself through the air."
 	hud_state = "soulblade_perforate"
 
 	invocation_type = SpI_NONE

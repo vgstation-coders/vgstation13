@@ -1,3 +1,5 @@
+
+
 /obj/item/weapon/implantpad
 	name = "implantpad"
 	desc = "Used to modify implants."
@@ -18,13 +20,13 @@
 		icon_state = "implantpad-0"
 
 
-/obj/item/weapon/implantpad/attack_hand(mob/user)
+/obj/item/weapon/implantpad/attack_hand(var/mob/user)
 	if (case && user.is_holding_item(src))
 		eject(user)
 	else
 		return ..()
 
-/obj/item/weapon/implantpad/proc/eject(mob/user)
+/obj/item/weapon/implantpad/proc/eject(var/mob/user)
 	user.put_in_active_hand(case)
 
 	case.add_fingerprint(user)
@@ -34,7 +36,7 @@
 	update_icon()
 
 
-/obj/item/weapon/implantpad/attackby(obj/item/weapon/implantcase/C, mob/user)
+/obj/item/weapon/implantpad/attackby(var/obj/item/weapon/implantcase/C, var/mob/user)
 	..()
 	if(istype(C, /obj/item/weapon/implantcase))
 		if(!case)
@@ -45,7 +47,7 @@
 	update_icon()
 
 
-/obj/item/weapon/implantpad/attack_self(mob/user)
+/obj/item/weapon/implantpad/attack_self(var/mob/user)
 	user.set_machine(src)
 	var/dat = "<B>Implant Mini-Computer:</B><HR>"
 	if (case)
@@ -68,21 +70,23 @@
 
 /obj/item/weapon/implantpad/Topic(href, href_list)
 	..()
-	if (usr.incapacitated() || !in_range(src, usr))
+	var/mob/user = usr
+	if (user.incapacitated())
 		return
-	usr.set_machine(src)
-	if (href_list["tracking_id"])
-		var/obj/item/weapon/implant/tracking/T = case.imp
-		T.id += text2num(href_list["tracking_id"])
-		T.id = min(100, T.id)
-		T.id = max(1, T.id)
+	if ((user.contents.Find(src)) || ((in_range(src, user) && istype(loc, /turf))))
+		user.set_machine(src)
+		if (href_list["tracking_id"])
+			var/obj/item/weapon/implant/tracking/T = case.imp
+			T.id += text2num(href_list["tracking_id"])
+			T.id = min(100, T.id)
+			T.id = max(1, T.id)
 
-	if (href_list["eject"])
-		if (case && (usr.is_holding_item(src) || Adjacent(usr)))
-			eject(usr)
+		if (href_list["eject"])
+			if (case && (user.is_holding_item(src) || Adjacent(user)))
+				eject(user)
 
-		attack_self(usr)
+		attack_self(user)
 
-		add_fingerprint(usr)
+		add_fingerprint(user)
 	else
-		usr << browse(null, "window=implantpad")
+		user << browse(null, "window=implantpad")

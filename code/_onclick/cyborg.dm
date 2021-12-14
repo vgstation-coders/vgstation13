@@ -47,7 +47,7 @@
 		aicamera.captureimage(A, src)
 		return
 
-	if(INVOKE_EVENT(src, /event/uattack, "atom" = A))
+	if(invoke_event(/event/uattack, list("atom" = A)))
 		return
 
 	var/obj/item/W = get_active_hand()

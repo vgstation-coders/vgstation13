@@ -135,6 +135,7 @@
 
 	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src
+		client.show_popup_menus = TRUE
 		change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 		see_in_dark = 0
 		see_invisible = SEE_INVISIBLE_LIVING

@@ -17,14 +17,6 @@
 	abstract = 1
 	var/obj/item/wielding = null
 
-/obj/item/offhand/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
-	giver.swap_hand()
-	receiver.give_item(giver)
-	return FALSE
-
-/obj/item/offhand/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
-	return FALSE
-
 /obj/item/offhand/dropped(user)
 	if(!wielding)
 		qdel(src)
@@ -86,15 +78,7 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/fireaxe/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W,/obj/item/weapon/antiaxe_kit))
-		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
-		new /obj/item/weapon/fireaxe/antimatter(loc)
-		qdel(W)
-		qdel(src)
-
-/obj/item/weapon/fireaxe/suicide_act(mob/user)
+/obj/item/weapon/fireaxe/suicide_act(var/mob/living/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
 		return (SUICIDE_ACT_BRUTELOSS)
 

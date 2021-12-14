@@ -3,7 +3,6 @@
 
 /mob
 	plane = MOB_PLANE
-	pass_flags_self = PASSMOB
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 
@@ -360,7 +359,7 @@
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
-	if(hallucination || (src in confusion_victims))
+	if(hallucination)
 		if(drugged_message)
 			msg = drugged_message
 		if(blind_drugged_message)
@@ -1142,12 +1141,9 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Examine"
 	set category = "IC"
 
+//	if( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
 	if(is_blind(src))
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
-		return
-
-	if (src in confusion_victims)
-		to_chat(src, "<span class='sinister'>[pick("Oh god what's this even?","Paranoia and panic prevent you from calmly observing whatever this is.")]</span>")
 		return
 
 	if(get_dist(A,client.eye) > client.view)
@@ -1562,10 +1558,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		INVOKE_EVENT(src, /event/before_move)
+		invoke_event(/event/before_move)
 	dir = direction
-	INVOKE_EVENT(src, /event/face)
-	INVOKE_EVENT(src, /event/after_move)
+	invoke_event(/event/face)
+	invoke_event(/event/after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1604,9 +1600,9 @@ Use this proc preferably at the end of an equipment loadout
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	INVOKE_EVENT(src, /event/before_move)
+	invoke_event(/event/before_move)
 	..()
-	INVOKE_EVENT(src, /event/after_move)
+	invoke_event(/event/after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0
@@ -1789,10 +1785,10 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/hasFullAccess()
 	return 0
 
-/mob/proc/assess_threat()
+mob/proc/assess_threat()
 	return 0
 
-/mob/proc/on_foot()
+mob/proc/on_foot()
 	return !(lying || flying || locked_to)
 
 /mob/proc/dexterity_check()//can the mob use computers, guns, and other fine technologies
@@ -2211,9 +2207,6 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/get_personal_ambience()
 	return list()
-
-/mob/proc/isBloodedAnimal()
-	return FALSE
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

@@ -23,13 +23,13 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
+	invoke_event(/event/to_bump, list("bumper" = src, "bumped" = AM))
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
-	INVOKE_EVENT(src, /event/bumped, "bumper" = AM, "bumped" = src)
+	invoke_event(/event/bumped, list("bumper" = AM, "bumped" = src))
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
@@ -104,7 +104,7 @@
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	handle_symptom_on_touch(M, src, HAND)
-	INVOKE_EVENT(src, /event/touched, "toucher" = M, "touched" = src)
+	invoke_event(/event/touched, list("toucher" = M, "touched" = src))
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
 	if(incapacitation_duration <= 0)
@@ -556,13 +556,17 @@
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
-		if(!I.imp_in)
-			continue
-		if(!I.remove())
-			stack_trace("failed to remove implant")
-			continue
-		if(!I.insert(newmob, I.part?.name))
-			stack_trace("failed to insert implant")
+		I.forceMove(newmob)
+		I.implanted = 1
+		I.imp_in = newmob
+		if(istype(newmob, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = newmob
+			if(!I.part) //implanted as a nonhuman, won't have one.
+				I.part = /datum/organ/external/chest
+			for (var/datum/organ/external/affected in H.organs)
+				if(!istype(affected, I.part))
+					continue
+				affected.implants += I
 
 /mob/living/carbon/proc/dropBorers(var/gibbed = null)
 	var/list/borer_list = get_brain_worms()

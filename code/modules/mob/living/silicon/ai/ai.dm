@@ -74,8 +74,6 @@ var/list/ai_list = list()
 	var/cooldown = 0
 	var/acceleration = 1
 
-	var/static/obj/abstract/screen/nocontext/aistatic/aistatic = new()
-
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = FALSE)
 
 	var/list/possibleNames = ai_names
@@ -435,7 +433,7 @@ var/list/ai_list = list()
 					message_admins("[key_name_admin(src)] called the shuttle due to being hit with an EMP.'.")
 	..()
 
-/mob/living/silicon/ai/ex_act(severity, var/child=null, var/mob/whodunnit)
+/mob/living/silicon/ai/ex_act(severity)
 	if(flags & INVULNERABLE)
 		return
 
@@ -447,16 +445,13 @@ var/list/ai_list = list()
 			if(!isDead())
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
 		if(2.0)
 			if(!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 		if(3.0)
 			if(!isDead())
 				adjustBruteLoss(30)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	updatehealth()
 
@@ -565,8 +560,6 @@ var/list/ai_list = list()
 		light_cameras()
 	if(istype(A,/obj/machinery/camera))
 		current = A
-		var/obj/machinery/camera/C = A
-		C.camera_twitch()
 	..()
 
 
@@ -753,10 +746,6 @@ var/list/ai_list = list()
 		"SHODAN",
 		"Spoopy",
 		"Yotsuba",
-		"Xenomorph",
-		"Gondola",
-		"Cat",
-		"Hornets"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
@@ -791,14 +780,6 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo13"))
 				if("Beach Ball")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"beachball"))
-				if("Xenomorph")
-					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo15"))
-				if("Gondola")
-					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo16"))
-				if("Cat")
-					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo17"))
-				if("Hornets")
-					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo18"))
 
 	return
 

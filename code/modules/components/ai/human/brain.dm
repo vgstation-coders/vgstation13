@@ -1,6 +1,6 @@
 //Basic thought processes
 /datum/component/ai/human_brain
-	var/life_tick = 0
+	var/life_tick=0
 	var/wander = TRUE	//Whether the mob will walk around searching for goals, or wait for them to become visible
 	var/lastdir = null
 
@@ -14,32 +14,34 @@
 	var/list/friends = list()
 	var/list/enemies = list()
 
+	var/datum/component/ai/target_holder/target_holder = null
 	var/atom/current_target
 
-/datum/component/ai/human_brain/initialize()
-	active_components += src
-	return TRUE
+/datum/component/ai/human_brain/RecieveSignal(var/message_type, var/list/args)
+	switch(message_type)
+		if(COMSIG_LIFE) // no arguments
+			OnLife()
 
-/datum/component/ai/human_brain/Destroy()
-	active_components -= src
-	..()
-
-/datum/component/ai/human_brain/process()
+/datum/component/ai/human_brain/proc/OnLife()
 	life_tick++
-	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
+	if(!target_holder)
+		target_holder = GetComponent(/datum/component/ai/target_holder)
+	if(!controller)
+		controller = GetComponent(/datum/component/controller)
+	if(controller.getBusy())
 		return
-	if(!ishuman(parent))
+	if(!ishuman(container.holder))
 		return
-	var/mob/living/carbon/human/H = parent
+	var/mob/living/carbon/human/H = container.holder
 
 	if(H.stat != CONSCIOUS || !H.canmove || !isturf(H.loc))
-		INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
+		SendSignal(COMSIG_MOVE, list("dir" = 0))
 		return
 
-	current_target = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_best_target)
+	current_target = target_holder.GetBestTarget(src, "target_evaluator")
 	if(!isnull(current_target))
 		personal_desires.Add(DESIRE_CONFLICT)
-		INVOKE_EVENT(parent, /event/comp_ai_cmd_set_target, "target" = current_target)
+		SendSignal(COMSIG_TARGET, list("target"=current_target))
 		if(IsBetterWeapon(H))
 			personal_desires.Add(DESIRE_HAVE_WEAPON)
 		if(IsBetterWeapon(H, H.contents))
@@ -51,18 +53,18 @@
 	if(I)
 		if(H.Adjacent(I))
 			AcquireItem(H, I)
-			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
+			SendSignal(COMSIG_MOVE, list("dir" = 0))
 		else
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
-				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = get_turf(I))
+				SendSignal(COMSIG_MOVE, list("loc" = get_turf(I)))
 		return
 
 	if(!isnull(current_target))
-		INVOKE_EVENT(parent, /event/comp_ai_cmd_attack, "target" = current_target)
+		SendSignal(COMSIG_ATTACKING, list("target"=current_target))
 		var/turf/T = get_turf(current_target)
 		if(T)
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
-				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = T)
+				SendSignal(COMSIG_MOVE, list("loc" = T))
 		return
 	else
 		personal_desires.Remove(DESIRE_CONFLICT)
@@ -78,7 +80,7 @@
 			else
 				dir = turn(lastdir, 180)
 		if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
-			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = dir)
+			SendSignal(COMSIG_STEP, list("dir" = dir))
 			lastdir = dir
 
 /datum/component/ai/human_brain/proc/AssessNeeds(mob/living/carbon/human/H)
@@ -162,29 +164,28 @@
 	return goal
 
 /datum/component/ai/human_brain/proc/AcquireItem(mob/living/carbon/human/H, obj/item/I)
-	H.activate_empty_hand()
-	H.ClickOn(I)
+	SendSignal(COMSIG_ACTVEMPTYHAND, list())
+	SendSignal(COMSIG_CLICKON, list("target" = I))
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
 		ConsumeFood(H, I)
 	else
-		var/obj/item/held = H.get_active_hand()
-		if(held)
-			H.equip_to_appropriate_slot(held)
+		SendSignal(COMSIG_EQUIPACTVHAND, list())
 
 /datum/component/ai/human_brain/proc/ConsumeFood(mob/living/carbon/human/H, obj/item/I)
 	while(H.nutrition < 250 && !I.gcDestroyed)
-		var/obj/item/held = H.get_active_hand()
-		if(held)
-			held.attack_self(H)
+		SendSignal(COMSIG_ITMATKSELF, list())
 		sleep(1)
-	H.drop_item()
+	SendSignal(COMSIG_DROP, list())
+
+/datum/component/ai/human_brain/proc/target_evaluator(var/atom/target)
+	return TRUE
 
 /datum/component/ai/human_brain/proc/WieldBestWeapon(mob/living/carbon/human/H, var/list/excluded)
 	if(H.isStunned()) //We're on the floor, nothing we can do
 		return 0
-	H.activate_empty_hand()
+	SendSignal(COMSIG_ACTVEMPTYHAND, list())
 	if(H.get_active_hand())
-		H.drop_item()
+		SendSignal(COMSIG_DROP, list())
 		if(H.get_active_hand())
 			return 1
 	if(!excluded)
@@ -198,7 +199,7 @@
 			if(I.force > current_candidate.force || (I.force == current_candidate.force && I.sharpness > current_candidate.sharpness))
 				current_candidate = I
 	if(current_candidate)
-		H.ClickOn(current_candidate)
+		SendSignal(COMSIG_CLICKON, list("target" = current_candidate))
 		if(current_candidate != H.get_active_hand())
 			excluded.Add(current_candidate)
 			.(H, excluded)

@@ -495,18 +495,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	update_total()
 	my_atom.on_reagent_change()
 
-/datum/reagents/proc/isolate_any_reagent(var/list/protected_reagents)
-	for(var/A in reagent_list)
-		var/datum/reagent/R = A
-		var/protected = FALSE
-		for(var/B in protected_reagents)
-			if(R.id == B)
-				protected = TRUE
-		if (protected == FALSE)
-			del_reagent(R.id,update_totals=0)
-	update_total()
-	my_atom.on_reagent_change()
-
 /datum/reagents/proc/del_reagent(var/reagent, var/update_totals=1)
 	var/total_dirty=0
 	for(var/A in reagent_list)
@@ -724,14 +712,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(reagent in amount_cache)
 		return amount_cache[reagent] >= max(0,amount)
 	return 0
-
-/datum/reagents/proc/has_only_any(list/good_reagents)
-    var/found_any_good_reagent = FALSE
-    for(var/reagent in amount_cache)
-        if(!good_reagents.Find(reagent))
-            return FALSE
-        found_any_good_reagent = TRUE
-    return found_any_good_reagent
 
 /datum/reagents/proc/has_reagent_type(var/reagent_type, var/amount = -1, var/strict = 0)
 	if(!ispath(reagent_type,/datum/reagent))

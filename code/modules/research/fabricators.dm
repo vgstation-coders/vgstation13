@@ -35,7 +35,7 @@
 	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
 	var/fabricator_cooldown = 2 //In deciseconds, the delay between each item starting to be built
 
-	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE | MULTIOUTPUT
+	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
 
 /obj/machinery/r_n_d/fabricator/New()

@@ -12,7 +12,7 @@
 /datum/artifact_trigger/pay2use/New()
 	..()
 	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackhand)
-	my_artifact.register_event(/event/attackby, src, .proc/owner_attackby)
+	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackby)
 	mode = rand(0,2)
 	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
 	switch(mode)
@@ -27,7 +27,7 @@
 /datum/artifact_trigger/pay2use/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((my_artifact.loc && (DB.z == my_artifact.loc.z)) || (DB.z == map.zMainStation))
+		if((my_artifact.loc && (DB.z == my_artifact.loc.z)) || (DB.z == STATION_Z))
 			if((DB.stat == 0) && DB.activated )//If the database if damaged or not powered, people won't be able to use the app anymore.
 				linked_db = DB
 				break

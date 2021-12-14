@@ -104,14 +104,7 @@ var/list/uplink_items = list()
 		if(get_cost(U.job) > U.telecrystals)
 			return 0
 
-		var/O = spawn_item(get_turf(user), U, user)
-		var/obj/I = null
-		var/datum/uplink_item/UI = null
-		if(isobj(O))
-			I = O
-		else if(istype(O,/datum/uplink_item))
-			UI = O
-			I = new_uplink_item(UI.item,get_turf(user),user)
+		var/obj/I = spawn_item(get_turf(user), U, user)
 		if(!I)
 			return 0
 		on_item_spawned(I,user)
@@ -119,10 +112,7 @@ var/list/uplink_items = list()
 
 		var/bundlename = name
 		if(name == "Random Item" || name == "For showing that you are The Boss")
-			if(UI)
-				bundlename = UI.name
-			else
-				bundlename = I.name
+			bundlename = I.name
 		if(I.tag)
 			bundlename = "[I.tag] bundle"
 			I.tag = null
@@ -132,7 +122,7 @@ var/list/uplink_items = list()
 			if(istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
-			U.purchase_log += {"[user] ([user.ckey]) bought <img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)]."}
+			U.purchase_log += {"[user] ([user.ckey]) bought <img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name] for [get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
 
@@ -141,15 +131,15 @@ var/list/uplink_items = list()
 				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
 				var/datum/role/R = user.mind.GetRole(NUKE_OP)
 				if(R)
-					R.faction.faction_scoreboard_data += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
+					R.faction.faction_scoreboard_data += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				else
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
-						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
+						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 					else
 						R = user.mind.GetRole(CHALLENGER)
 						if(R)
-							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
+							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		return 1
 	return 0
 
@@ -523,12 +513,7 @@ var/list/uplink_items = list()
 	cost = 1
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
-	
-/datum/uplink_item/device_tools/radio_jammer
-	name = "Radio Jammer"
-	desc = "A device that disrupts all radio communication in nearby area. Guaranteed radio silence at point blank range, but effectiveness decreases with range. Requires a power cell for operation. Batteries and screwdriver not included."
-	item = /obj/item/device/radio_jammer
-	cost = 8
+
 
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
@@ -587,7 +572,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/trophybelt
  	name = "Trophy Belt"
- 	desc = "An unremarkable leather belt specially crafted to hold whole heads and limbs in storage, perfect for serial killers and maimers with something to prove. Will not accept brains, so behead mindfully."
+ 	desc = "An unremarkable leather belt specially crafted to hold whole heads in storage, perfect for serial killers with something to prove. Comes with seven storage slots. Will not accept brains, so behead mindfully."
  	item = /obj/item/weapon/storage/belt/skull
  	cost = 4
 
@@ -629,7 +614,7 @@ var/list/uplink_items = list()
 		var/datum/uplink_item/I = pick(possible_items)
 		U.telecrystals -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
-		return I
+		return new_uplink_item(I.item, loc, user)
 
 /datum/uplink_item/jobspecific/command_security
 	category = "Command and Security Specials"
@@ -772,26 +757,10 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical/viruscollection
 	name = "Deadly Syndrome Collection"
-	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected, and a GNA forging disk for masking deadly syndromes in the database."
+	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
 	item = /obj/item/weapon/storage/lockbox/diskettebox/syndisease
 	cost = 20
 	discounted_cost = 12
-	jobs_with_discount = list("Virologist", "Chief Medical Officer")
-
-/datum/uplink_item/jobspecific/medical/symptomforger
-	name = "GNA Database Forger Disk"
-	desc = "A disk that looks almost exactly like a normal GNA disk, with the exception of being able to copy the symptom from any other normal one to splice into a disk. Splicing this in does not affect the disease, but instead creates a forged symptom onto the database, obscuring the original effect."
-	item = /obj/item/weapon/disk/disease/spoof
-	cost = 12
-	discounted_cost = 6
-	jobs_with_discount = list("Virologist", "Chief Medical Officer")
-
-/datum/uplink_item/jobspecific/medical/syndietape_viro
-	name = "Syndicate Biohazard Tape"
-	desc = "A length of biohazard tape coated in an engineered bacterium that forcibly ejects explosive goo when disturbed, but can be handled safely with latex gloves. Can be used 3 times."
-	item = /obj/item/taperoll/syndie/viro
-	cost = 4
-	discounted_cost = 2
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/engineering

@@ -39,8 +39,6 @@
 	cold_damage_per_tick = 0
 	stop_automated_movement = 1
 
-	blooded = FALSE
-
 
 /mob/living/simple_animal/hostile/arcane_golem/Destroy()
 	..()

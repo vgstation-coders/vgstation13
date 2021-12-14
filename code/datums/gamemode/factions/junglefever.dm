@@ -45,7 +45,7 @@
 		if(!iscarbon(M) || M.stat == DEAD)
 			continue //include borers, silicons, the dead, etc.
 		var/turf/T = get_turf(M)
-		if(T.z != map.zMainStation)
+		if(T.z != STATION_Z)
 			continue
 		if(isbadmonkey(M))
 			monkeys++

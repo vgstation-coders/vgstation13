@@ -13,7 +13,6 @@
 /datum/emote/living/cross
 	key = "cross"
 	key_third_person = "crosses"
-	key_shorthand = "cro"
 	message = "crosses their arms."
 	message_mommi = "crosses their utility arms."
 	restraint_check = TRUE
@@ -21,14 +20,12 @@
 /datum/emote/living/collapse
 	key = "collapse"
 	key_third_person = "collapses"
-	key_shorthand = "col"
 	message = "collapses!"
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/glare
 	key = "glare"
 	key_third_person = "glares"
-	key_shorthand = "gla"
 	message = "glares."
 	message_mommi = "glares as best a robot spider can glare."
 	message_param = "glares at %t."
@@ -44,17 +41,14 @@
 /datum/emote/living/dance
 	key = "dance"
 	key_third_person = "dances"
-	key_shorthand = "dan"
 	message = "dances around happily."
 	restraint_check = TRUE
 
 /datum/emote/living/dance/cult
 	key = "cultdance"
 	key_third_person = "cultdances"
-	key_shorthand = "cultd"
 	message = "displays the dance of their people."
 	restraint_check = TRUE
-	replace_pronouns = FALSE
 
 /datum/emote/living/dance/cult/can_run_emote(var/mob/user, var/status_check)
 	if (user.occult_muted())
@@ -79,7 +73,6 @@
 	message_AI = "lets out a flurry of sparks, its screen flickering as its systems slowly halt."
 	message_alien = "lets out a waning guttural screech, green blood bubbling from its maw..."
 	message_larva = "lets out a sickly hiss of air and falls limply to the floor..."
-	message_pulsedemon = "fizzles out into faint sparks, leaving only a slight trail of smoke..."
 	message_monkey = "lets out a faint chimper as it collapses and stops moving..."
 	message_simple =  "stops moving..."
 	stat_allowed = UNCONSCIOUS
@@ -102,13 +95,11 @@
 /datum/emote/living/carbon/drool
 	key = "drool"
 	key_third_person = "drools"
-	key_shorthand = "dro"
 	message = "drools."
 
 /datum/emote/living/faint
 	key = "faint"
 	key_third_person = "faints"
-	key_shorthand = "fai"
 	message = "faints."
 
 /datum/emote/living/faint/run_emote(mob/user, params)
@@ -169,7 +160,6 @@ var/list/animals_with_wings = list(
 /datum/emote/living/frown
 	key = "frown"
 	key_third_person = "frowns"
-	key_shorthand = "fro"
 	message = "frowns."
 
 /datum/emote/living/jump
@@ -189,11 +179,6 @@ var/list/animals_with_wings = list(
 	key_third_person = "looks"
 	message = "looks."
 	message_param = "looks at %t."
-
-/datum/emote/living/nervous
-	key = "nervous"
-	key_shorthand = "ner"
-	message = "looks around nervously."
 
 /datum/emote/living/nod
 	key = "nod"
@@ -216,14 +201,6 @@ var/list/animals_with_wings = list(
 	message_mime = "performs a silent theatrical sigh."
 	emote_type = EMOTE_AUDIBLE
 
-/datum/emote/living/scoff
-	key = "scoff"
-	key_third_person = "scoffs"
-	key_shorthand = "sco"
-	message = "scoffs."
-	message_mime = "silently scoffs."
-	emote_type = EMOTE_AUDIBLE
-
 /datum/emote/living/sit
 	key = "sit"
 	key_third_person = "sits"
@@ -232,19 +209,11 @@ var/list/animals_with_wings = list(
 /datum/emote/living/smile
 	key = "smile"
 	key_third_person = "smiles"
-	key_shorthand = "smi"
 	message = "smiles."
-
-/datum/emote/living/squint
-	key = "squint"
-	key_third_person = "squints"
-	key_shorthand = "squ"
-	message = "squints."
 
 /datum/emote/living/carbon/sneeze
 	key = "sneeze"
 	key_third_person = "sneezes"
-	key_shorthand = "sne"
 	message = "sneezes."
 	emote_type = EMOTE_AUDIBLE
 
@@ -256,14 +225,12 @@ var/list/animals_with_wings = list(
 /datum/emote/living/stare
 	key = "stare"
 	key_third_person = "stares"
-	key_shorthand = "sta"
 	message = "stares."
 	message_param = "stares at %t."
 
 /datum/emote/living/strech
 	key = "stretch"
 	key_third_person = "stretches"
-	key_shorthand = "str"
 	message = "stretches their arms."
 
 /datum/emote/living/sulk
@@ -274,7 +241,6 @@ var/list/animals_with_wings = list(
 /datum/emote/living/surrender
 	key = "surrender"
 	key_third_person = "surrenders"
-	key_shorthand = "sur"
 	message = "puts their hands on their head and falls to the ground. They surrender%s!"
 	emote_type = EMOTE_AUDIBLE
 
@@ -293,7 +259,6 @@ var/list/animals_with_wings = list(
 /datum/emote/living/tremble
 	key = "tremble"
 	key_third_person = "trembles"
-	key_shorthand = "tre"
 	message = "trembles in fear!"
 
 /datum/emote/living/custom
@@ -356,9 +321,9 @@ var/list/animals_with_wings = list(
 	var/datum/emote/E
 
 	for(var/e in emote_list)
-		E = emote_list[e]
-		if(E.key in keys)
+		if(e in keys)
 			continue
+		E = emote_list[e]
 		if(E.can_run_emote(user, status_check = FALSE))
 			keys += E.key
 

@@ -62,13 +62,5 @@
 		#undef MAP_OVERRIDE
 		#include "lowfatbagel.dm"
 		#define MAP_OVERRIDE 12
-	#elif MAP_OVERRIDE == 13
-		#undef MAP_OVERRIDE
-		#include "island.dm"
-		#define MAP_OVERRIDE 13
-	#elif MAP_OVERRIDE == 14
-		#undef MAP_OVERRIDE
-		#include "line.dm"
-		#define MAP_OVERRIDE 13
 	#endif
 #endif

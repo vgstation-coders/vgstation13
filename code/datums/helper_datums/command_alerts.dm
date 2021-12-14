@@ -42,7 +42,7 @@
 	)
 
 	for(var/word in vox_sentence)
-		play_vox_sound(word,map.zMainStation,null)
+		play_vox_sound(word,STATION_Z,null)
 
 /datum/command_alert/biohazard_organ
 	name = "Organ Failures"
@@ -267,7 +267,7 @@
 /datum/command_alert/jungle_endgame/announce()
 	var/nukecode = "ERROR"
 	for(var/obj/machinery/nuclearbomb/bomb in machines)
-		if(bomb && bomb.r_code && bomb.z == map.zMainStation && bomb.nt_aligned)
+		if(bomb && bomb.r_code && bomb.z == STATION_Z && bomb.nt_aligned)
 			nukecode = bomb.r_code
 	message = "Central Command has deemed the situation beyond salvageable, and is releasing the nuclear fission explosive authorization code. Your authorization key is [nukecode]. Send them to Ape Hell."
 	..()
@@ -580,7 +580,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Vermin Alert"
 	alert_title = "Vermin infestation"
 
-/datum/command_alert/vermin/New(vermstring = "various vermin", locstring = "the station's maintenance tunnels", warning = "Clear them out before this starts to affect productivity.")
+/datum/command_alert/vermin/New(vermstring = "various vermin", locstring = "the station's maintenance tunnels", warning = "Clear them out, before this starts to affect productivity.")
 	..()
 
 	message = "Bioscans indicate that [vermstring] have been breeding in [locstring]. [warning]"
@@ -596,11 +596,47 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 //////////////BLOOD CULT
 
-/*
-TODO (UPHEAVAL PART 2) Guess i'll add the future new announcements here
+/datum/command_alert/cult_detected
+	name = "Occult Activity Detected - Please Investigate"
+	alert_title = "Occult Activity"
+	force_report = 1
 
-*/
+/datum/command_alert/cult_detected/announce()
+	message = "Irregularities in the fabric of space-time around [station_name()] appear to correlate with the propagation of occult activities. Remember that cult membership is strictly prohibited by Nanotrasen and exposes you to the death penalty, applicable immediately if evidence is made. We encourage the station's security department to investigate, and the rest of the crew to cooperate with them."
+	..()
 
+/datum/command_alert/bloodstones_raised
+	name = "Occult Activity Detected - Station Locked Down"
+	alert_title = "Occult Assault"
+	force_report = 1
+	theme = "endgame"
+	alertlevel = "red"
+
+/datum/command_alert/bloodstones_raised/announce()
+	message = "Occult energies detected emanating from [station_name()]. Readings suggest an assault from the Cult of Nar-Sie. The station is now locked down under Directive 7-10, until destruction of all the bloodstones has been confirmed. Regroup with your station's security forces and approach the stones with caution, follow your superiors' directions."
+	..()
+
+/datum/command_alert/bloodstones_anchor
+	name = "Occult Activity Critical - Breach of Space-Time Detected"
+	alert_title = "Occult Assault Critical"
+	force_report = 1
+	theme = "endgame"
+	alertlevel = "red"
+
+/datum/command_alert/bloodstones_anchor/announce()
+	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
+	..()
+
+/datum/command_alert/bloodstones_broken
+	name = "Occult Activity Ceased - Lock Down Lifted"
+	alert_title = "Occult Gone"
+	force_report = 1
+	stoptheme = 1
+	alertlevel = "blue"
+
+/datum/command_alert/bloodstones_broken/announce()
+	message = "Destruction of the bloodstones confirmed. The Cult is no longer an immediate threat to Nanotrasen. Lock down of the station has been revoked."
+	..()
 
 ////////MISC STUFF
 
@@ -704,14 +740,3 @@ TODO (UPHEAVAL PART 2) Guess i'll add the future new announcements here
 	name = "Ancient Cryogenic Pod"
 	alert_title = "Abnormal Life Sign Report"
 	message = "An abnormal life sign has been detected in promiximity of the station. Long range scans determine signal to be human life. Approach with caution."
-
-/datum/command_alert/old_vendotron_crash
-	alert_title = "Odd Machine Debris"
-	message = "A large chunk of debris is on a collision course with your station. Moderate damage is expected at its current velocity. The nature of the debris is unknown, however our sensors are picking up what sounds like the faint jingling of coins."
-
-/datum/command_alert/old_vendotron_teleport
-	alert_title = "Warning - Unknown Bluespace Anom#ly Det%ct!$"
-
-/datum/command_alert/old_vendotron_teleport/announce()
-	message = "A bluespace tear of unknown origin is formi!g w£thi$ !$@ cu&ic met£#s o£ [station_name()] plea$e-BZZZZZZZT Come on down for fabulous, splendiferous, one of a kind goods at reasona#le pri$es! We'%e prac@ic£all% giving #$e@ away! All $ales a#$ fi@%l-BZZZT excercise caution and report any anomalous activity."
-	..()

@@ -50,7 +50,6 @@ export const CameraConsole = (props, context) => {
   ] = prevNextCamera(cameras, activeCamera);
   return (
     <Window
-      title={data.title}
       width={870}
       height={708}>
       <div className="CameraConsole__left">
@@ -66,22 +65,6 @@ export const CameraConsole = (props, context) => {
             || '—'}
         </div>
         <div className="CameraConsole__toolbarRight">
-          {props.isSpessTV && (
-            <>
-              <Button
-                icon="heart"
-                disabled={!activeCamera}
-                onClick={() => act('follow')}>
-                Follow
-              </Button>
-              <Button
-                icon="star"
-                disabled={!activeCamera}
-                onClick={() => act('subscribe')}>
-                Subscribe
-              </Button>
-            </>
-          )}
           <Button
             icon="chevron-left"
             disabled={!prevCameraName}
@@ -129,7 +112,8 @@ export const CameraConsoleContent = (props, context) => {
       <Flex.Item
         height="100%">
         <Section
-          fill>
+          fill
+          scrollable>
           {cameras.map(camera => (
           // We're not using the component here because performance
           // would be absolutely abysmal (50+ ms for each re-render).

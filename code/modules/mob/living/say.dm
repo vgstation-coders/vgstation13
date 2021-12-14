@@ -189,15 +189,7 @@ var/list/headset_modes = list(
 		return
 
 	//parse the language code and consume it
-	
-	//but first, scoreboard for syndiphrases stuff
-	if(src.mind && (src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER)))
-		for(var/syn in syndicate_code_phrase)
-			if(findtext(speech.message, syn))
-				score["syndiphrases"] += 1
-		for(var/syn in syndicate_code_response)
-			if(findtext(speech.message, syn))
-				score["syndisponses"] += 1
+
 
 	var/message_range = 7
 	treat_speech(speech)
@@ -214,11 +206,6 @@ var/list/headset_modes = list(
 		message_range = 1
 	if(copytext(text, length(text)) == "!")
 		message_range++
-	if(M_WHISPER in mutations)
-		message_range -= 2
-
-	if(M_LOUD in mutations)
-		message_range += 3
 
 	if(radio_return & ITALICS)
 		speech.message_classes.Add("italics")
@@ -228,7 +215,7 @@ var/list/headset_modes = list(
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
-	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
+	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")
 	qdel(speech)
 	return 1
 
@@ -252,7 +239,6 @@ var/list/headset_modes = list(
 				if(V.spread & SPREAD_MEMETIC)
 					infect_disease2(V, notes="(Memed, from [L])")
 
-	INVOKE_EVENT(src, /event/hear, "speech" = speech)
 	if(!client)
 		return
 	say_testing(src, "[src] ([src.type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")
@@ -275,6 +261,7 @@ var/list/headset_modes = list(
 
 	//checking for syndie codephrases if person is a tator
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
+		//is tator
 		for(var/T in syndicate_code_phrase)
 			rendered_message = replacetext(html_decode(rendered_message), T, "<b style='color: red;'>[html_encode(T)]</b>")
 
@@ -299,6 +286,7 @@ var/list/headset_modes = list(
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
+
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
@@ -417,13 +405,7 @@ var/list/headset_modes = list(
 			if(cult_chat_check(SPEAK_OVER_CHANNEL_INTO_CULT_CHAT))
 				var/turf/T = get_turf(src)
 				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
-				var/mob/living/L = speech.speaker
-				var/themessage
-				var/datum/role/cultist/C = iscultist(L)
-				if (C && (C.cultist_role == CULTIST_ROLE_MENTOR))
-					themessage = text("<span class='sinisterbig'><b>[]:</b> []</span>",src.name,html_encode(speech.message))//mentor messages are bigger
-				else
-					themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
+				var/themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				for(var/mob/M in player_list)
 					if(M.cult_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
@@ -559,29 +541,25 @@ var/list/headset_modes = list(
 #define HEAR_CULT_CHAT 2
 
 /mob/living/cult_chat_check(var/setting = SPEAK_OVER_GENERAL_CULT_CHAT)
-	if (!mind)
+	if(!mind)
 		return
-	if (occult_muted())
-		return
-	if (setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
+	if(setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
 		return
 
 	var/datum/role/cultist/culto = iscultist(src)
 	if (culto)
-		if (setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
-			var/turf/T = get_turf(src)
-			for (var/obj/structure/cult/spire/S in cult_spires)
-				if (isturf(S.loc) && S.z == T.z) // Spires need to not be concealed and on the same Z Level.
-					return 1
-		if (setting == HEAR_CULT_CHAT)
+		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
+			if (checkTattoo(TATTOO_CHAT) || istype(culto, /datum/role/cultist/chief))
+				return 1
+		if(setting == HEAR_CULT_CHAT)
 			return 1
 
 	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
-	if (cult)
-		if (setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
+	if(cult)
+		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
 			if(universal_cult_chat == 1)
 				return 1
-		if (setting == HEAR_CULT_CHAT)
+		if(setting == HEAR_CULT_CHAT)
 			return 1
 
 #undef SPEAK_OVER_GENERAL_CULT_CHAT
@@ -624,10 +602,7 @@ var/list/headset_modes = list(
 		if(tracking_speech_bubble_recipients.len)
 			display_bubble_to_clientlist(image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1), tracking_speech_bubble_recipients)
 
-/proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist, var/mob/living/source)
-	if (source)
-		speech_bubble.pixel_x = source.pixel_x
-		speech_bubble.pixel_y = source.pixel_y
+/proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist)
 	speech_bubble.plane = ABOVE_LIGHTING_PLANE
 	speech_bubble.appearance_flags = RESET_COLOR
 	flick_overlay(speech_bubble, clientlist, 30)

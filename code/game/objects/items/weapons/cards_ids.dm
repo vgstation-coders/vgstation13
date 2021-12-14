@@ -208,8 +208,11 @@
 
 	if(virtual_wallet)
 		update_virtual_wallet()
-	if(ishuman(loc))
-		SetOwnerDNAInfo(loc)
+		spawn(30) //AWFULNESS AHOY
+			if(ishuman(loc))
+				var/mob/living/carbon/human/H = loc
+				SetOwnerInfo(H)
+			update_virtual_wallet()
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -273,7 +276,7 @@
 /obj/item/weapon/card/id/proc/UpdateName()
 	name = "[src.registered_name]'s ID Card ([src.assignment])"
 
-/obj/item/weapon/card/id/proc/SetOwnerDNAInfo(var/mob/living/carbon/human/H)
+/obj/item/weapon/card/id/proc/SetOwnerInfo(var/mob/living/carbon/human/H)
 	if(!H || !H.dna)
 		return
 
@@ -342,7 +345,7 @@
 
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-			SetOwnerDNAInfo(H)
+			SetOwnerInfo(H)
 			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
 
 		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names

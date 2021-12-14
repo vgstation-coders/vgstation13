@@ -4,7 +4,7 @@
 	stat = DEAD
 	icon_state = "ai-crash"
 	spawn(10)
-		explosion(loc, 3, 6, 12, 15, whodunnit = src)
+		explosion(loc, 3, 6, 12, 15)
 		gib()
 
 	return ..(gibbed)

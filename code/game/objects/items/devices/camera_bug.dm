@@ -15,7 +15,7 @@
 		/obj/effect,
 		/turf/simulated/floor,
 		/turf/space,
-		/turf/simulated/wall/shuttle,
+		/turf/simulated/shuttle,
 		/mob/living/carbon,
 		/obj/item/weapon/storage
 	)
@@ -88,7 +88,7 @@
 		visible_message(message)
 	if(catastrophic)
 		spawn(0.5 SECONDS)
-			explosion(loc, 0, prob(15), 2, 0, whodunnit = user)
+			explosion(loc, 0, prob(15), 2, 0)
 
 /obj/item/device/camera_bug/Destroy()
 	camera_bugs -= src

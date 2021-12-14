@@ -7,8 +7,8 @@
 	priority = 1 //this is more important than anything else!
 	can_infect = 0
 	blood_level = 1
-/datum/surgery_step/butt/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	return target_zone == LIMB_GROIN && hasorgans(target)
+	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		return target_zone == LIMB_GROIN && hasorgans(target)
 
 
 //And thus begins the madness.

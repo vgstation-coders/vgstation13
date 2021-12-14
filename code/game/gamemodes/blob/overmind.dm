@@ -196,7 +196,7 @@
 			if(newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
-		INVOKE_EVENT(src, /event/moved, "mover" = src)
+		invoke_event(/event/moved, list("mover" = src))
 		return 0
 
-	INVOKE_EVENT(src, /event/moved, "mover" = src)
+	invoke_event(/event/moved, list("mover" = src))

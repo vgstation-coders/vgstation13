@@ -28,8 +28,6 @@
 	return getAllSpellsByType(USER_TYPE_GENETIC)
 /proc/getAllMalfSpells()
 	return getAllSpellsByType(USER_TYPE_MALFAI)
-/proc/getAllPulseDemonSpells()
-	return getAllSpellsByType(USER_TYPE_PULSEDEMON)
 /proc/getAllXenoSpells()
 	return getAllSpellsByType(USER_TYPE_XENOMORPH)
 /proc/getAllVampSpells()

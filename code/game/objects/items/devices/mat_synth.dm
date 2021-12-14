@@ -60,7 +60,7 @@
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
 							 "glass" = /obj/item/stack/sheet/glass/glass,
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
-							 "floor tiles" = /obj/item/stack/tile/metal,
+							 "floor tiles" = /obj/item/stack/tile/plasteel,
 							 "metal rods" = /obj/item/stack/rods)
 
 /obj/item/device/material_synth/robot/engiborg/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.

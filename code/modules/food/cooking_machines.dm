@@ -374,9 +374,6 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/cerealmaker/makeFood()
-	makeCereal()
-
-/obj/machinery/cooking/proc/makeCereal()	
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
 	for(var/obj/item/embedded in src.ingredient.contents)
 		embedded.forceMove(src.loc)
@@ -803,54 +800,3 @@ var/global/ingredientLimit = 10
 		toggle()
 	if(within)
 		within.attempt_heating(src)
-
-/obj/machinery/cooking/foodpress
-	name = "food press"
-	desc = "Press your nutriment into various fun shapes!"
-	icon_state = "oven_off"
-	icon_state_on = "oven_on"
-	cookSound = 'sound/machines/juicer.ogg'
-	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
-	var/mode = "Candy"
-
-/obj/machinery/cooking/foodpress/validateIngredient(var/obj/item/I)
-	. = ..()
-	if ((. == "valid") && (!foodNesting))
-		for (var/food in foodChoices)
-			if (findtext(I.name, food))
-				. = "It's already pressed into that shape."
-				break
-
-/obj/machinery/cooking/foodpress/attack_hand(mob/user)
-	if(!active)
-		if(Adjacent(user) && !user.stat && !user.incapacitated() && !isobserver(user))
-			var/which = alert("What shape would you like?", "Food press", "Candy", "Baked Goods", "Cereal")
-			if((!which) || (!Adjacent(user)))
-				return
-			mode = which
-			to_chat(user, "You set \the [src.name] to [mode].")
-			foodChoices = list()
-			var/obj/item/food
-			for (var/path in getFoodChoices())
-				food = path
-				foodChoices.Add(list(initial(food.name) = path))
-		else
-			to_chat(user, "You are too far away from [src.name].")
-	..()
-
-/obj/machinery/cooking/foodpress/makeFood()
-	if(mode == "Cereal")
-		makeCereal()
-		return
-	..()
-
-/obj/machinery/cooking/foodpress/getFoodChoices()
-	var/list/types = list()
-	switch(mode)
-		if("Candy")
-			types = typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy)
-		if("Baked Goods")
-			types = typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)
-		if("Cereal")
-			types = list(/obj/item/weapon/reagent_containers/food/snacks/cereal)
-	return types

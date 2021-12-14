@@ -333,7 +333,7 @@
 				destination_port = null
 				return
 			for(var/atom/movable/AA in linked_area)
-				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
+				AA.invoke_event(/event/z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -580,7 +580,7 @@
 	var/list/our_own_turfs = list()
 
 	//Go through all turfs in our area
-	for(var/turf/T in linked_area.contents)
+	for(var/turf/T in linked_area.get_turfs())
 		var/datum/coords/C = new(T.x,T.y)
 		turfs_to_move += C
 		turfs_to_move[C] = T
@@ -638,6 +638,13 @@
 		if(!old_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get original turf at [old_C.x_pos];[old_C.y_pos];[our_center.z]")
 			continue
+		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/shuttle/wall)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
+			if(old_turf.icon_state in transparent_icons)
+				add_underlay = 1
+				if(old_turf.underlays.len) //this list is in code/game/area/areas.dm
+					var/image/I = locate(/image) in old_turf.underlays //bandaid
+					if(I.icon == 'icons/turf/shuttle.dmi') //Don't change underlay to space if CURRENT underlay is a shuttle floor!
+						add_underlay = 0
 
 		if(!new_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
@@ -774,12 +781,13 @@
 	return 1
 
 /datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
-	if(AM.locs.len > 1) //If the moved object is on multiple tiles, move it after everything else (using spawn())
+	if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
 		AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
 
 		spawn()
 			AM.forceMove(new_turf)
 
+		//TODO: Make this compactible with bound_x and bound_y.
 	else
 		AM.forceMove(new_turf)
 
@@ -854,7 +862,7 @@
 	var/rotate = dir2angle(turn(user.dir,180)) - dir2angle(linked_port.dir)
 
 	var/list/original_coords = list()
-	for(var/turf/T in linked_area.contents)
+	for(var/turf/T in linked_area.get_turfs())
 		var/datum/coords/C = new(T.x,T.y)
 		original_coords += C
 

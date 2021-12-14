@@ -7,7 +7,7 @@
 		return TRUE
 	if(!istype(owner.current, /mob/living/silicon))
 		return FALSE
-	if(emergency_shuttle.location != map.zCentcomm)
+	if(emergency_shuttle.location != CENTCOMM_Z)
 		return FALSE
 	if(!owner.current)
 		return FALSE

@@ -174,10 +174,7 @@
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
 		"/obj/item/weapon/electrolyzer",
-		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro",
-		"/obj/item/weapon/depocket_wand/suit",
-		"/obj/item/taperoll/viro",
-		"/obj/item/taperoll/syndie/viro"
+		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro"
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -321,21 +318,13 @@
 
 /obj/item/weapon/storage/belt/skull
 	name = "trophy-belt" //FATALITY
-	desc = "Excellent for holding the heads and limbs of your fallen foes."
+	desc = "Excellent for holding the heads of your fallen foes."
 	icon_state = "utilitybelt"
 	item_state = "utility"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		"/obj/item/organ/external/head",
- 		"/obj/item/organ/external/r_arm",
- 		"/obj/item/organ/external/r_hand",
- 		"/obj/item/organ/external/r_foot",
- 		"/obj/item/organ/external/r_leg",
- 		"/obj/item/organ/external/l_arm",
- 		"/obj/item/organ/external/l_hand",
- 		"/obj/item/organ/external/l_foot",
- 		"/obj/item/organ/external/l_leg"
+ 		"/obj/item/organ/external/head"
  	)
 
 /obj/item/weapon/storage/belt/silicon
@@ -346,8 +335,9 @@
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		/obj/item/device/aicard,
- 		/obj/item/device/mmi,
+ 		"/obj/item/device/aicard",
+ 		"/obj/item/device/mmi",
+		"/obj/item/organ/external/head"
  	)
 
 /obj/item/weapon/storage/belt/silicon/New()

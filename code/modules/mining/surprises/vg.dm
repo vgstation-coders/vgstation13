@@ -87,17 +87,14 @@
 /datum/map_element/mining_surprise/geode
 	name="Geode"
 	file_path = "maps/randomvaults/mining/geode.dmm"
-	can_rotate = TRUE
 
 /datum/map_element/mining_surprise/crashed_tradeship
 	name="Crashed Tradeship"
 	file_path = "maps/randomvaults/mining/crashed_tradeship.dmm"
-	can_rotate = TRUE
 
 /datum/map_element/mining_surprise/crashed_pod
 	name="Crashed Pod"
 	file_path = "maps/randomvaults/mining/crashed_pod.dmm"
-	can_rotate = TRUE
 
 /datum/map_element/mining_surprise/digsite
 	name="Abandoned Digsite"
@@ -110,20 +107,12 @@
 /datum/map_element/mining_surprise/aliens
 	name="Alien Hive"
 	file_path = "maps/randomvaults/mining/huggernest.dmm"
-	can_rotate = TRUE
 
 /datum/map_element/mining_surprise/angie
 	name = "Angie's lair"
 	desc = "From within this rich soil, the stone gathers moss."
 
 	file_path = "maps/randomvaults/mining/angie_lair.dmm"
-	can_rotate = TRUE
-
-/datum/map_element/mining_surprise/mine_bar
-	name = "The Buried Bar"
-	desc = "A miner walks into a bar, Dusky says \"Sorry, you're too young to be served\"."
-
-	file_path = "maps/randomvaults/mining/bar.dmm"
 
 /datum/map_element/hoboshack
 	name = "Space hobo shack"
@@ -134,4 +123,3 @@
 	name = "Space hobo shack"
 
 	file_path = "maps/misc/hoboshack.dmm"
-	can_rotate = TRUE

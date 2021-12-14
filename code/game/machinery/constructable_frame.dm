@@ -172,7 +172,7 @@
 					components = null
 				else
 					if(P.is_screwdriver(user))
-						if(isshuttleturf(get_turf(src)))
+						if(istype(get_turf(src), /turf/simulated/shuttle))
 							to_chat(user, "<span class='warning'>You must move \the [src] to a more stable location, such as a space station, before you can finish constructing it.</span>")
 							return
 						var/component_check = 1
@@ -452,7 +452,7 @@ to destroy them and players will be able to make replacements.
 	icon_state = "door_electronics"
 	//origin_tech = Tc_PROGRAMMING + "=2"
 
-/obj/item/weapon/circuitboard/rdserver
+obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (R&D Server)"
 	desc = "A circuit board used to run a R&D server."
 	build_path = /obj/machinery/r_n_d/server
@@ -632,17 +632,6 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 2,
 							/obj/item/weapon/stock_parts/manipulator = 1,
 							/obj/item/weapon/stock_parts/matter_bin = 1)
-
-/obj/item/weapon/circuitboard/suit_modifier
-	name = "Circuit Board (Spacesuit Modification Station)"
-	desc = "A circuit board used to run a spacesuit modification station."
-	build_path = /obj/machinery/suit_modifier
-	board_type = MACHINE
-	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_PROGRAMMING + "=3"
-	req_components = list (
-							/obj/item/weapon/stock_parts/manipulator = 2,
-							/obj/item/weapon/stock_parts/scanning_module = 1,
-							/obj/item/weapon/stock_parts/micro_laser = 1)
 
 /obj/item/weapon/circuitboard/heater
 	name = "Circuit Board (Heater)"
@@ -1428,7 +1417,7 @@ to destroy them and players will be able to make replacements.
 						/obj/item/weapon/stock_parts/capacitor = 2,
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
-
+						
 /obj/item/weapon/circuitboard/cooking/candy
 	name = "circuit board (candy machine)"
 	desc = "A circuit board for a candy machine."
@@ -1438,7 +1427,7 @@ to destroy them and players will be able to make replacements.
 	req_components = list(
 						/obj/item/weapon/stock_parts/manipulator = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1) //boring recipe I know, but they're very simple machines
-
+						
 /obj/item/weapon/circuitboard/cooking/cerealmaker
 	name = "circuit board (cereal maker)"
 	desc = "A circuit board for a cereal maker."

@@ -55,10 +55,9 @@
 /obj/item/projectile/rocket/to_bump(var/atom/A)
 	var/A_turf = get_turf(A)
 	..()
-	if(special_collision == PROJECTILE_COLLISION_DEFAULT || special_collision == PROJECTILE_COLLISION_BLOCKED)
-		explosion(A_turf, exdev, exheavy, exlight, exflash, whodunnit = firer)
-		if(!gcDestroyed)
-			qdel(src)
+	explosion(A_turf, exdev, exheavy, exlight, exflash)
+	if(!gcDestroyed)
+		qdel(src)
 
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
@@ -246,7 +245,7 @@
 	return 1
 
 /obj/item/projectile/rocket/nikita/proc/detonate(var/atom/A)
-	explosion(A, exdev, exheavy, exlight, exflash, whodunnit = firer)
+	explosion(A, exdev, exheavy, exlight, exflash)
 	if(!gcDestroyed)
 		qdel(src)
 

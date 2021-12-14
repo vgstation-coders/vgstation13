@@ -5,31 +5,30 @@
 // Mappers: you can use "Generate Instances from Icon-states"
 //  to get the different pieces.
 /obj/structure/transit_tube
-	name = "transit tube"
 	icon = 'icons/obj/pipes/transit_tube.dmi'
 	icon_state = "E-W"
 	density = 1
 	layer = ABOVE_OBJ_LAYER
 	anchored = 1.0
-	pixel_x = -8
-	pixel_y = -8
 	var/list/tube_dirs = null
-	var/exit_delay = 0
+	var/exit_delay = 2
 	var/enter_delay = 1
 
+	// alldirs in global.dm is the same list of directions, but since
+	//  the specific order matters to get a usable icon_state, it is
+	//  copied here so that, in the unlikely case that alldirs is changed,
+	//  this continues to work.
+	var/global/list/tube_dir_list = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 
 
 // A place where tube pods stop, and people can get in or out.
 // Mappers: use "Generate Instances from Directions" for this
 //  one.
 /obj/structure/transit_tube/station
-	name = "transit tube station"
 	icon = 'icons/obj/pipes/transit_tube_station.dmi'
 	icon_state = "closed"
-	exit_delay = 4
-	enter_delay = 4
-	pixel_x = 0
-	pixel_y = 0
+	exit_delay = 2
+	enter_delay = 3
 	var/pod_moving = 0
 	var/automatic_launch_time = 100
 	var/open = FALSE
@@ -40,7 +39,6 @@
 
 
 /obj/structure/transit_tube_pod
-	name = "transit pod"
 	icon = 'icons/obj/pipes/transit_tube_pod.dmi'
 	icon_state = "pod"
 	animate_movement = FORWARD_STEPS
@@ -56,7 +54,7 @@
 	..()
 
 // When destroyed by explosions, properly handle contents.
-/obj/structure/transit_tube_pod/ex_act(severity)
+obj/structure/transit_tube_pod/ex_act(severity)
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/AM in contents)
@@ -77,12 +75,8 @@
 		if(3.0)
 			return
 
-/obj/structure/transit_tube_pod/New(var/loc, var/dir_override = null)
-	. = ..(loc)
-
-	if(dir_override)
-		dir = dir_override
-
+/obj/structure/transit_tube_pod/New()
+	. = ..()
 	air_contents.adjust_multi_temp(
 		GAS_OXYGEN, MOLES_O2STANDARD, T20C,
 		GAS_NITROGEN, MOLES_N2STANDARD, T20C)
@@ -91,14 +85,8 @@
 	spawn (5)
 		follow_tube()
 
-/obj/structure/transit_tube/New(var/loc, var/icon_state_override = null, var/dir_override = null)
-	. = ..(loc)
-
-	if(dir_override)
-		dir = dir_override
-
-	if(icon_state_override)
-		icon_state = icon_state_override
+/obj/structure/transit_tube/New()
+	. = ..()
 
 	if (tube_dirs == null)
 		init_dirs()
@@ -131,66 +119,12 @@
 
 /obj/structure/transit_tube/station/Bumped(atom/movable/mover)
 	if(!pod_moving && open && (get_dir(src, mover) == dir) && isliving(mover))
-		var/mob/living/L = mover
-		if(allowed(L))
-			var/obj/structure/transit_tube_pod/pod = locate() in loc
-			if(pod && !pod.moving && (pod.dir in directions()))
-				mover.forceMove(pod)
-				return
-		else
-			to_chat(L, "<span class='warning'>Access denied.</span>")
+		var/obj/structure/transit_tube_pod/pod = locate() in loc
+		if(pod && !pod.moving && (pod.dir in directions()))
+			mover.forceMove(pod)
+			return
 	..()
 
-/obj/structure/transit_tube/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswelder(W))
-		var/obj/item/tool/weldingtool/WT = W
-		to_chat(user, "<span class='notice'>You begin to cut the glass off...</span>")
-		if(WT.do_weld(user, src, 4 SECONDS))
-			to_chat(user, "<span class='notice'>You detach the glass from the [src].</span>")
-			new /obj/item/stack/sheet/glass/rglass(get_turf(src), 2)
-			var/obj/structure/transit_tube_frame/TTF
-			switch(icon_state)
-				if("N-S","E-W")
-					TTF = new /obj/structure/transit_tube_frame(get_turf(src), iconstate2framedir())
-				if("NE-SW","NW-SE")
-					TTF = new /obj/structure/transit_tube_frame/diag(get_turf(src), iconstate2framedir())
-				if("N-SW","S-NE","E-NW","W-SE")
-					TTF = new /obj/structure/transit_tube_frame/bent(get_turf(src), iconstate2framedir())
-				if("N-SE","S-NW","E-SW","W-NE")
-					TTF = new /obj/structure/transit_tube_frame/bent_invert(get_turf(src), iconstate2framedir())
-				if("N-SW-SE","S-NE-NW","E-NW-SW","W-SE-NE")
-					TTF = new /obj/structure/transit_tube_frame/fork(get_turf(src), iconstate2framedir())
-				if("N-SE-SW","S-NW-NE","E-SW-NW","W-NE-SE")
-					TTF = new /obj/structure/transit_tube_frame/fork_invert(get_turf(src), iconstate2framedir())
-				if("N-S-pass","E-W-pass")
-					TTF = new /obj/structure/transit_tube_frame/pass(get_turf(src), iconstate2framedir())
-				if("closed","open","closing","opening")
-					TTF = new /obj/structure/transit_tube_frame/station(get_turf(src), iconstate2framedir())
-			if(TTF)
-				TTF.anchored = 1
-				if(istype(TTF,/obj/structure/transit_tube_frame/station))
-					var/obj/structure/transit_tube_frame/station/TTS = TTF
-					if(req_access && req_access.len > 0)
-						TTS.electronics.conf_access = req_access
-					else if(req_one_access && req_one_access.len > 0)
-						TTS.electronics.conf_access = req_one_access
-						TTS.electronics.one_access = 1
-					TTS.electronics.dir_access = req_access_dir
-					TTS.electronics.access_nodir = access_not_dir
-			qdel(src)
-		return 1
-
-/obj/structure/transit_tube_pod/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswelder(W))
-		var/obj/item/tool/weldingtool/WT = W
-		to_chat(user, "<span class='notice'>You begin to cut the glass off...</span>")
-		if(WT.do_weld(user, src, 4 SECONDS))
-			to_chat(user, "<span class='notice'>You detach the glass from the [src].</span>")
-			new /obj/item/stack/sheet/glass/rglass(get_turf(src), 2)
-			var/obj/structure/transit_tube_frame/pod/TTFP = new /obj/structure/transit_tube_frame/pod(get_turf(src), dir)
-			TTFP.circuitry = new /obj/item/weapon/circuitboard/mecha/transitpod(TTFP)
-			qdel(src)
-		return 1
 
 /obj/structure/transit_tube/station/attack_hand(mob/user)
 	if(!pod_moving)
@@ -252,7 +186,6 @@
 
 /obj/structure/transit_tube/station/proc/open_animation()
 	if(icon_state == "closed")
-		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		icon_state = "opening"
 		spawn(OPEN_DURATION)
 			if(icon_state == "opening")
@@ -263,7 +196,6 @@
 
 /obj/structure/transit_tube/station/proc/close_animation()
 	if(icon_state == "open")
-		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		icon_state = "closing"
 		spawn(CLOSE_DURATION)
 			if(icon_state == "closing")
@@ -524,11 +456,8 @@
 					if(!station.pod_moving)
 						if(direction == station.dir)
 							if(station.open)
-								if(allowed(mob))
-									mob.forceMove(loc)
-									mob.client.Move(get_step(loc, direction), direction)
-								else
-									to_chat(mob, "<span class='warning'>Access denied.</span>")
+								mob.forceMove(loc)
+								mob.client.Move(get_step(loc, direction), direction)
 
 							else
 								station.open_animation()
@@ -560,7 +489,7 @@
 	else
 		tube_dirs = parse_dirs(icon_state)
 
-		if(findtextEx(icon_state, "Pass"))
+		if(copytext(icon_state, 1, 3) == "D-" || findtextEx(icon_state, "Pass"))
 			setDensity(FALSE)
 
 
@@ -573,14 +502,14 @@
 
 
 // Initialize dirs by searching for tubes that do/might connect
-//  on nearby turfs.
+//  on nearby turfs. Create corner pieces if nessecary.
 // Pick two directions, preferring tubes that already connect
 //  to loc, or other auto tubes if there aren't enough connections.
 /obj/structure/transit_tube/proc/init_dirs_automatic()
 	var/list/connected = list()
 	var/list/connected_auto = list()
 
-	for(var/direction in alldirs)
+	for(var/direction in tube_dir_list)
 		var/location = get_step(loc, direction)
 		for(var/obj/structure/transit_tube/tube in location)
 			if(tube.directions() == null && tube.icon_state == "auto")
@@ -595,9 +524,10 @@
 
 	tube_dirs = select_automatic_dirs(connected)
 
-	if(length(tube_dirs) == 2 && alldirs.Find(tube_dirs[1]) > alldirs.Find(tube_dirs[2]))
+	if(length(tube_dirs) == 2 && tube_dir_list.Find(tube_dirs[1]) > tube_dir_list.Find(tube_dirs[2]))
 		tube_dirs.Swap(1, 2)
 
+	generate_automatic_corners(tube_dirs)
 	select_automatic_icon_state(tube_dirs)
 
 
@@ -627,6 +557,38 @@
 
 
 
+// Look for diagonal directions, generate the decorative corners in each.
+/obj/structure/transit_tube/proc/generate_automatic_corners(directions)
+	for(var/direction in directions)
+		if(direction == 5 || direction == 6 || direction == 9 || direction == 10)
+			if(direction & NORTH)
+				create_automatic_decorative_corner(get_step(loc, NORTH), direction ^ 3)
+
+			else
+				create_automatic_decorative_corner(get_step(loc, SOUTH), direction ^ 3)
+
+			if(direction & EAST)
+				create_automatic_decorative_corner(get_step(loc, EAST), direction ^ 12)
+
+			else
+				create_automatic_decorative_corner(get_step(loc, WEST), direction ^ 12)
+
+
+
+// Generate a corner, if one doesn't exist for the direction on the turf.
+/obj/structure/transit_tube/proc/create_automatic_decorative_corner(location, direction)
+	var/state = "D-[dir2text_short(direction)]"
+
+	for(var/obj/structure/transit_tube/tube in location)
+		if(tube.icon_state == state)
+			return
+
+	var/obj/structure/transit_tube/tube = new(location)
+	tube.icon_state = state
+	tube.init_dirs()
+
+
+
 // Uses a list() to cache return values. Since they should
 //  never be edited directly, all tubes with a certain
 //  icon_state can just reference the same list. In theory,
@@ -641,6 +603,13 @@
 		return direction_table[text]
 
 	var/list/split_text = splittext(text, "-")
+
+	// If the first token is D, the icon_state represents
+	//  a purely decorative tube, and doesn't actually
+	//  connect to anything.
+	if(split_text[1] == "D")
+		direction_table[text] = list()
+		return null
 
 	var/list/directions = list()
 
@@ -660,21 +629,21 @@
 /obj/structure/transit_tube/proc/text2dir_extended(direction)
 	switch(uppertext(direction))
 		if("NORTH", "N")
-			return NORTH
+			return 1
 		if("SOUTH", "S")
-			return SOUTH
+			return 2
 		if("EAST", "E")
-			return EAST
+			return 4
 		if("WEST", "W")
-			return WEST
+			return 8
 		if("NORTHEAST", "NE")
-			return NORTHEAST
+			return 5
 		if("NORTHWEST", "NW")
-			return NORTHWEST
+			return 9
 		if("SOUTHEAST", "SE")
-			return SOUTHEAST
+			return 6
 		if("SOUTHWEST", "SW")
-			return SOUTHWEST
+			return 10
 		else
 	return 0
 
@@ -684,37 +653,23 @@
 //  directions used in tube icon states.
 /obj/structure/transit_tube/proc/dir2text_short(direction)
 	switch(direction)
-		if(NORTH)
+		if(1)
 			return "N"
-		if(SOUTH)
+		if(2)
 			return "S"
-		if(EAST)
+		if(4)
 			return "E"
-		if(WEST)
+		if(8)
 			return "W"
-		if(NORTHEAST)
+		if(5)
 			return "NE"
-		if(SOUTHEAST)
+		if(6)
 			return "SE"
-		if(NORTHWEST)
+		if(9)
 			return "NW"
-		if(SOUTHWEST)
+		if(10)
 			return "SW"
 		else
 	return
-
-/obj/structure/transit_tube/proc/iconstate2framedir()
-	switch(icon_state)
-		if("N-S","NE-SW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
-			return NORTH
-		if("S-NE","S-NW","S-NE-NW","S-NW-NE")
-			return SOUTH
-		if("E-W","NW-SE","E-NW","E-SW","E-NW-SW","E-SW-NW","E-W-pass")
-			return EAST
-		if("W-SE","W-NE","W-SE-NE","W-NE-SE")
-			return WEST
-		if("closed","open","closing","opening")
-			return dir
-	return 0
 
 #undef TUBE_POD_UNLOAD_LIMIT

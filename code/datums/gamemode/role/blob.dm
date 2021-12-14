@@ -47,7 +47,7 @@
 			antag.current.hud_used.countdown_display.overlays += I1
 			antag.current.hud_used.countdown_display.overlays += I2
 		else
-			antag.current.hud_used.countdown_blob()
+			antag.current.hud_used.countdown_hud()
 
 /datum/role/blob_overmind/proc/burst()
 	if(!antag || istype(antag.current,/mob/camera/blob))

@@ -496,7 +496,7 @@
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_examine"])
 
 		var/datum/browser/popup = new(usr, "\ref[D]", "[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]", 600, 300, src)
-		popup.set_content(D.get_info(TRUE))
+		popup.set_content(D.get_info())
 		popup.open()
 
 	else if(href_list["diseasepanel_toggledb"])
@@ -625,14 +625,6 @@
 		if(O.locked_to)
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(T)
-
-	else if(href_list["bodyarchivepanel_spawncopy"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawncopy"])
-
-		archive.spawn_copy(get_turf(usr))
 
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
@@ -2849,29 +2841,6 @@
 			M.Knockdown(20)
 			M.stuttering = 20
 
-	else if(href_list["NarSieDevour"])
-		if(!check_rights(R_ADMIN|R_FUN))
-			return
-
-		var/mob/living/M = locate(href_list["NarSieDevour"])
-		if(!isliving(M))
-			to_chat(usr, "This can only be used on instances of type /mob/living")
-			return
-
-		if(alert(src.owner, "Are you sure you wish to gib [key_name(M)]?",  "Confirm Gibbing?" , "Yes" , "No") != "Yes")
-			return
-
-		to_chat(M, "<span class='danger'>You have angered the gods!</span>")
-
-		log_admin("[key_name(M)] has been Devoured (gibbed) by [src.owner]")
-		message_admins("[key_name(M)] has been Devoured (gibbed) by [src.owner]")
-
-		M.Stun(10)
-		anim(target = M, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_sac", lay = ABOVE_SINGULO_LAYER, plane = EFFECTS_PLANE)
-		sleep(4)
-		M.gib()
-
-
 	else if(href_list["Assplode"])
 		if(!check_rights(R_ADMIN|R_FUN))
 			return
@@ -2943,35 +2912,6 @@
 		log_admin("[src.owner] replied to [key_name(M)]'s Centcomm message with the message [input].")
 		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Centcom message with:</span> \"[input]\"")
 		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from Central Command. Message as follows.\"\n<span class = 'bold'>\"[input]\"</span>")
-
-	else if(href_list["NarSieReply"])
-		var/mob/M = locate(href_list["NarSieReply"])
-		if (!istype(M))
-			to_chat(usr, "This can only be used on instances of type /mob")
-			return
-
-		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a communion to Nar-Sie from [key_name_admin(M)]</span>.")
-
-		var/datum/role/cultist/C = iscultist(M)
-		if (!C)
-			to_chat(usr, "<span class='warning'>Non-cultists cannot be replied to.</span>") // should only happen if they get deconverted in the meantime
-			return
-
-		var/message = input("What message shall Nar-Sie respond with?",
-                    "Nar-Sie Reply",
-                    "")
-		if (!message)
-			return
-
-		if (M)
-			to_chat(M, "<b><span class='danger'>Nar-Sie</span></b> murmurs... <span class='sinister'>[message]</span>")
-
-		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b><span class='danger'>Nar-Sie</span></b> replies to [M]... <span class='sinister'>[message]</span></span>")
-
-		message_admins("Admin [key_name_admin(usr)] has replied to a communion from [key_name(M)].")
-		log_admin("[src.owner] replied to [key_name(M)]'s communion to Nar-Sie with the message: [message].")
-		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s communion to Nar-Sie with:</span> \"[message]\"")
 
 	else if(href_list["SyndicateReply"])
 		var/mob/M = locate(href_list["SyndicateReply"])
@@ -3593,16 +3533,6 @@
 				feedback_add_details("admin_secrets_fun_used","IRH")
 				message_admins("[key_name_admin(usr)] has sent an immovable monolith to the station. That one's gonna hurt.", 1)
 				immovablerod(2)
-			if("old_vendotron_crash")
-				feedback_inc("admin_secrets_fun_used", 1)
-				feedback_add_details("admin_secrets_fun_used","VENDC")
-				message_admins("[key_name_admin(usr)] has started an old vendotron crash event", 1)
-				new /datum/event/old_vendotron_crash
-			if("old_vendotron_teleport")
-				feedback_inc("admin_secrets_fun_used", 1)
-				feedback_add_details("admin_secrets_fun_used","VENDT")
-				message_admins("[key_name_admin(usr)] has started an old vendotron teleport event", 1)
-				new /datum/event/old_vendotron_teleport
 			if("prison_break")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PB")
@@ -3887,7 +3817,7 @@
 				feedback_add_details("admin_secrets_fun_used","SC")
 				var/choice = input("You sure you want to destroy the universe and create a large explosion at your location? Misuse of this could result in removal of flags or hilarity.") in list("NO TIME TO EXPLAIN", "Cancel")
 				if(choice == "NO TIME TO EXPLAIN")
-					explosion(get_turf(usr), 8, 16, 24, 32, 1, whodunnit = usr)
+					explosion(get_turf(usr), 8, 16, 24, 32, 1)
 					new /turf/unsimulated/wall/supermatter(get_turf(usr))
 					SetUniversalState(/datum/universal_state/supermatter_cascade)
 					message_admins("[key_name_admin(usr)] has managed to destroy the universe with a supermatter cascade. Good job, [key_name_admin(usr)]")
@@ -3944,6 +3874,8 @@
 			if("spawnselfdummy")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TD")
+				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+				log_admin("[key_name_admin(usr)] spawned himself as a Test Dummy.")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
 				if (!newname)
@@ -3961,40 +3893,6 @@
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
 				D.real_name = newname
-				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy.")
-				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy.")
-				usr.client.cmd_assume_direct_control(D)
-			if("spawnselfdummyoutfit")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","TDO")
-				var/newname = ""
-				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
-				var/choice = alert("Edit appearance on spawn?", "Admin", "Yes", "No")
-				var/outfit_type = select_loadout()
-				if(!outfit_type || !ispath(outfit_type))
-					return
-				var/turf/T = get_turf(usr)
-				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				var/obj/item/weapon/card/id/admin/admin_id = new(D)
-				admin_id.registered_name = newname
-				var/datum/outfit/concrete_outfit = new outfit_type
-				concrete_outfit.equip(D, TRUE)
-				var/obj/item/I = D.get_item_by_slot(slot_wear_id)
-				qdel(I)
-				var/obj/item/IT = D.get_item_by_slot(slot_ears)
-				qdel(IT)
-				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
-				D.equip_to_slot_or_del(admin_id, slot_wear_id)
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
-				D.name = newname
-				D.real_name = newname
-				if(choice == "Yes")
-					D.pick_gender(usr)
-					D.pick_appearance(usr)
-				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
-				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
 				usr.client.cmd_assume_direct_control(D)
 
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
@@ -4052,7 +3950,16 @@
 						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						return
-					//TODO (UPHEAVAL PART 2) think of fake alerts too
+					if("Bloodstones raised")
+						command_alert(/datum/command_alert/bloodstones_raised)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						return
+					if("Bloodstones destroyed")
+						command_alert(/datum/command_alert/bloodstones_broken)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodsontes Alert (destroyed).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodsontes Aler (destroyed).")
+						return
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
@@ -4217,20 +4124,6 @@
 				virus2_make_custom(usr.client,null)
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","VIR")
-			if("bloodstone")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","BS")
-				var/choice = alert("Flashy spawn and surroundings cultification?","Blood Stone Spawning","Yes","No")
-				if (!choice)
-					return
-				var/turf/T = get_turf(usr)
-				var/obj/structure/cult/bloodstone/blood_stone = new(T)
-				if(choice == "Yes")
-					blood_stone.flashy_entrance()
-				if(choice == "No")
-					blood_stone.update_icon()
-				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
-
 
 			if("hardcore_mode")
 				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""]slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
@@ -5813,7 +5706,18 @@
 				z_del = new_limit
 			if ("type") // Lifted from "spawn" code.
 				var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Setting the type to delete.") as null|text
-				var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
+
+				var/list/matches = get_matching_types(object, /atom)
+
+				if(matches.len==0)
+					to_chat(usr, "<span class='warning'>No typepaths found.</span>")
+					return
+
+				var/chosen
+				if(matches.len==1)
+					chosen = matches[1]
+				else
+					chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
 				if(!chosen)
 					to_chat(usr, "<span class='warning'>No type chosen.</span>")
 					return

@@ -26,7 +26,7 @@
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
-/obj/machinery/gibber/New()
+obj/machinery/gibber/New()
 	. = ..()
 
 	component_parts = newlist(
@@ -224,7 +224,7 @@
 	for (var/i=1 to totalslabs)
 		//first we spawn the meat
 		var/obj/item/weapon/newmeat
-		if(ispath(occupant.meat_type, /obj/item/weapon/reagent_containers))
+		if(istype(occupant.meat_type, /obj/item/weapon/reagent_containers))
 			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 		else

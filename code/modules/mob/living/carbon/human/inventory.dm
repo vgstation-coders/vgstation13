@@ -348,7 +348,7 @@
 	else
 		return 0
 	// Call update_name AFTER the inventory gets updated.
-	INVOKE_EVENT(src, /event/unequipped, W)
+	invoke_event(/event/unequipped, list(W))
 	if(success)
 		update_hidden_item_icons(W)
 
@@ -500,7 +500,7 @@
 	W.equipped(src, slot)
 	if(client)
 		client.screen |= W
-	INVOKE_EVENT(src, /event/equipped, W, slot)
+	invoke_event(/event/equipped, list(W, slot))
 
 /mob/living/carbon/human/get_multitool(var/active_only=0)
 	if(istype(get_active_hand(),/obj/item/device/multitool))

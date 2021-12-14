@@ -37,8 +37,6 @@
 	a_intent = I_HURT
 	var/rattled = FALSE
 
-	blooded = FALSE
-
 /mob/living/simple_animal/hostile/rattlemebones/Bumped(atom/thing)
 	if(ismob(thing))
 		var/mob/M = thing

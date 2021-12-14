@@ -187,7 +187,6 @@
 			adjust_nutrition(15)
 			if(prob(25))
 				if(!pack_alpha)
-					environment_smash_flags = 0 //No longer smash things
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					message_admins("[key_name(user)] has tamed a wolf: @[formatJumpTo(user, "JMP")]")
@@ -254,7 +253,6 @@
 				if(pack_alpha.isDead())
 					visible_message("<span class = 'notice'>\The [src] lets out a mournful howl. </span>")
 					//Howl noise?
-					environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 					pack_alpha = null
 				else
 					if(alpha_stance == WOLF_ALPHANONE) //Rough following

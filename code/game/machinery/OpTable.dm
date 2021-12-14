@@ -12,7 +12,7 @@
 	var/strapped = 0.0
 	throwpass = 1 //so Adjacent passes.
 	var/rating = 1 //Use this for upgrades some day
-	pass_flags_self = PASSTABLE
+
 	var/obj/machinery/computer/operating/computer = null
 
 /obj/machinery/optable/New()
@@ -60,7 +60,7 @@
 	if(air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	else
 		return 0
@@ -117,7 +117,7 @@
 	for (var/atom/A in loc)
 		if (A == src)
 			continue
-		if (!A.Cross(victim,get_turf(victim)))
+		if (A.density)
 			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
 			return FALSE
 	victim.forceMove(loc)

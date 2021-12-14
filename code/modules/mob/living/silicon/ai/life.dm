@@ -36,6 +36,7 @@
 /mob/living/silicon/ai/proc/life_handle_powered_core()
 	var/unblindme = FALSE
 	if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
+		client.show_popup_menus = FALSE
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_LEVEL_TWO

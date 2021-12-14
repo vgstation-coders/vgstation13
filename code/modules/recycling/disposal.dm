@@ -1333,17 +1333,17 @@
 	icon_state = "pipe-j2s"
 
 //////////////////
-//a three-way junction that sorts wrapped objects destined for the mail office mail table (tomail = 1)
+//a three-way junction that sorts objects destined for the mail office mail table (tomail = 1)
 /obj/structure/disposalpipe/wrapsortjunction
 
 	desc = "An underfloor disposal pipe which sorts wrapped and unwrapped objects."
-	icon_state = "pipe-j1ms"
+	icon_state = "pipe-j1s"
 	var/posdir = 0
 	var/negdir = 0
 	var/sortdir = 0
 
 /obj/structure/disposalpipe/wrapsortjunction/mirrored
-	icon_state = "pipe-j2ms"
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/wrapsortjunction/New()
 	. = ..()
@@ -1355,10 +1355,10 @@
 	posdir = dir
 	negdir = turn(posdir, 180)
 
-	if(icon_state == "pipe-j1ms")
+	if(icon_state == "pipe-j1s")
 		sortdir = turn(posdir, -90)
 	else
-		icon_state = "pipe-j2ms"
+		icon_state = "pipe-j2s"
 		sortdir = turn(posdir, 90)
 	dpdir = sortdir | posdir | negdir
 

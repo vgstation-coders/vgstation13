@@ -381,8 +381,6 @@
 				playsound(usr, 'sound/machines/ding.ogg', 50, 1)
 				empty()
 				if(microwave_cell.rigged)
-					if(microwave_cell.occupant)
-						microwave_cell.occupant.forceMove(get_turf(src))
 					explosion(get_turf(src), -1, round(sqrt(microwave_cell.charge)/60), round(sqrt(microwave_cell.charge)/30))
 				else
 					explosion(get_turf(src), -1,0,2) // Let's not be too harsh on idiots

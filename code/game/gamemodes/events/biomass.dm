@@ -80,7 +80,7 @@
 		var/turf/Floor = location
 
 		if(isnull(locate(/obj/effect/biomass) in Floor))
-			if(Floor.Enter(src, loc, TRUE))
+			if(Floor.Enter(src, loc))
 				if(master)
 					master.spawn_biomass_piece(Floor)
 					return 1
