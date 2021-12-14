@@ -60,11 +60,6 @@
 
 	return 0
 
-/mob/proc/activate_empty_hand()
-	var/empty_hand = find_empty_hand_index()
-	if(empty_hand)
-		activate_hand(empty_hand)
-
 /mob/proc/empty_hand_indexes_amount()
 	. = 0
 
@@ -220,7 +215,7 @@
 	if(held_items[index])
 		return 0
 
-	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
+	if(W.flags & MUSTTWOHAND)
 		if(!W.wield(src, 1))
 			to_chat(src, "You need both hands to pick up \the [W].")
 			return 0
@@ -383,7 +378,7 @@
 		update_inv_wear_mask()
 	else
 		return 0
-	INVOKE_EVENT(src, /event/unequipped, W)
+	invoke_event(/event/unequipped, list(W))
 	if(success)
 		if(client)
 			client.screen -= W

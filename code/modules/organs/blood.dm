@@ -38,8 +38,14 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	vessel.add_reagent(BLOOD,560)
 
+	spawn(1)
+		//This lets DNA stuff properly initialize first, otherwise the blood in the vessels won't have any DNA.
+		//To safely remove this spawn(), find where dna.unique_enzymes/b_type are created and call fixblood() right after.
+		//Also test that blood driping when you cut yourself with a knife carries DNA properly using the detective scanner to be sure.
+		fixblood()
+
 //Resets blood data
-/mob/living/carbon/human/proc/copy_dna_data_to_blood_reagent()
+/mob/living/carbon/human/proc/fixblood()
 	for(var/datum/reagent/blood/B in vessel.reagent_list)
 		if(B.id == BLOOD)
 			B.data = list(
@@ -51,7 +57,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				"trace_chem"=null,
 				"virus2" = null,
 				"immunity" = null,
-				"occult" = null,
 				)
 			B.color = B.data["blood_colour"]
 
@@ -185,9 +190,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 			if(!(temp.status & ORGAN_BLEEDING) || temp.status & (ORGAN_ROBOT|ORGAN_PEG))
 				continue
 
-			for(var/datum/wound/W in temp.wounds)
-				if(W.bleeding())
-					blood_max += W.damage / 4
+			for(var/datum/wound/W in temp.wounds) if(W.bleeding())
+				blood_max += W.damage / 4
 
 			if(temp.status & ORGAN_DESTROYED && !(temp.status & ORGAN_GAUZED) && !temp.amputated)
 				blood_max += 20 //Yer missing a fucking limb.
@@ -195,18 +199,18 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 			if (temp.open)
 				blood_max += 2 //Yer stomach is cut open
 
-		blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
+			blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
 
-		if(lying)
-			blood_factor -= 0.3
+			if(lying)
+				blood_factor -= 0.3
 
-		if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
-			blood_factor += 0.3
+			if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
+				blood_factor += 0.3
 
-		if(reagents.has_reagent(INAPROVALINE))
-			blood_factor -= 0.3
+			if(reagents.has_reagent(INAPROVALINE))
+				blood_factor -= 0.3
 
-		drip(blood_max * max(0, blood_factor))
+		drip(blood_max * blood_factor)
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
@@ -262,9 +266,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		temp_chem[R.id] = R.volume
 	B.data["trace_chem"] = list2params(temp_chem)
 
-	if (iscultist(src))
-		B.data["occult"] = mind
-
 	if(container)
 		container.reagents.reagent_list |= B
 		container.reagents.update_total()
@@ -283,7 +284,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"=null,
 		"virus2" = null,
 		"immunity" = null,
-		"occult" = null,
 		)
 
 	if (dna)
@@ -315,10 +315,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if (immune_system)
 		blood_data["immunity"] = immune_system.GetImmunity()
-
-	if (iscultist(src))
-		blood_data["occult"] = mind
-
 	return blood_data
 
 /proc/copy_blood_data(var/list/list/data)
@@ -331,7 +327,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"	=data["trace_chem"],
 		"virus2" 		=virus_copylist(data["virus2"]),
 		"immunity" 		=null,
-		"occult" 		=data["occult"],
 		)
 	if (data["resistances"])
 		blood_data["resistances"] = data["resistances"].Copy()
@@ -349,7 +344,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"	=blood_data["trace_chem"],
 		"virus2" 		=virus_copylist(blood_data["virus2"]),
 		"immunity" 		=null,
-		"occult" 		=blood_data["occult"],
 		)
 	if (blood_data["resistances"])
 		data["resistances"] = blood_data["resistances"].Copy()
@@ -442,7 +436,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 /proc/get_blood(datum/reagents/container)
 	return locate(/datum/reagent/blood) in container.reagent_list
 
-/proc/blood_incompatible(donor,receiver)
+proc/blood_incompatible(donor,receiver)
 	if(!donor || !receiver)
 		return 0
 
@@ -466,7 +460,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		//AB is a universal receiver.
 	return 0
 
-/proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
+proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	var/obj/effect/decal/cleanable/blood/B
 	var/decal_type = /obj/effect/decal/cleanable/blood/splatter
 	var/turf/T = get_turf(target)

@@ -161,7 +161,8 @@ var/list/wizard_apprentice_setups_by_name = list()
 	to_chat(player, "<span class='recruit'>\A [src] is looking for candidates. You have been added to the list of potential ghosts. ([controls])</span>")
 
 /obj/item/wizard_apprentice_contract/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
-	to_chat(player, "<span class='recruit'>\A [src] is looking for candidates. ([controls])</span>")
+	var/mob/dead/observer/O = args["player"]
+	to_chat(O, "<span class='recruit'>\A [src] is looking for candidates. ([controls])</span>")
 
 /obj/item/wizard_apprentice_contract/proc/recruiter_recruited(mob/dead/observer/player)
 	if(!player)

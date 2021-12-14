@@ -34,7 +34,7 @@
 
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
-		/obj/item/weapon/implant/explosive/nuclear,
+		/obj/item/weapon/implant/explosive/,
 	)
 
 	id_type = /obj/item/weapon/card/id/death_commando

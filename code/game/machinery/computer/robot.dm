@@ -164,7 +164,7 @@
 		return FALSE
 	if(isrobot(controller) && controller != robot)
 		return FALSE
-	if(isAI(controller) && robot.connected_ai != controller)
+	if(isAI(controller))
 		return FALSE
 	return TRUE
 

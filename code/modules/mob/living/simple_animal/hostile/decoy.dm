@@ -17,8 +17,6 @@
 	var/invincible = FALSE
 	var/to_spawn = null
 
-	blooded = FALSE
-
 /mob/living/simple_animal/hostile/decoy/death(var/gibbed = FALSE)
 	if(!invincible)
 		..(gibbed)

@@ -223,7 +223,7 @@
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
 	module_holder = "medical"
-	quirk_flags = MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_LIFT_VIROTAPE
+	quirk_flags = MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 	networks = list(CAMERANET_MEDBAY)
 	radio_key = /obj/item/device/encryptionkey/headset_med
 	sprites = list(
@@ -425,7 +425,6 @@
 		"Default - 'Butler'" = "servbot_m",
 		"Default - 'Waitress'" = "servbot_f",
 		"Default - 'Bro'" = "brobot",
-		"Default - 'Fro'" = "frobot",
 		"Default - 'Maximillion'" = "maximillion",
 		"Default - 'Hydro'" = "hydrobot",
 		"Toiletbot" = "toiletbot",
@@ -556,7 +555,7 @@
 /obj/item/weapon/robot_module/syndicate/crisis/New()
 	..()
 
-	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_LIFT_VIROTAPE
+	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 
 	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)

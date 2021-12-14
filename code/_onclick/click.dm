@@ -75,7 +75,11 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	INVOKE_EVENT(src, /event/clickon, "user" = src,	"modifiers" = modifiers, "target" = A)
+	invoke_event(/event/clickon, list(
+		"user" = src,
+		"modifiers" = modifiers,
+		"target" = A
+	))
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
@@ -146,12 +150,12 @@
 				resolved = A.attackby(held_item, src, params)
 				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
-				if(!resolved && A && !A.gcDestroyed && held_item && !held_item.gcDestroyed)
+				if(!resolved && A && !A.gcDestroyed && held_item)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
 			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
+			if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 
@@ -182,7 +186,7 @@
 	else
 		if(ismob(A))
 			delayNextAttack(10)
-		if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
+		if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 			return
 		RangedAttack(A, params)
 
@@ -244,7 +248,7 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	INVOKE_EVENT(src, /event/ruattack, "atom" = A)
+	invoke_event(/event/ruattack, list("atom" = A))
 
 /*
 	Middle click
@@ -322,15 +326,9 @@
 			user.client.statpanel = T.name
 
 /mob/living/carbon/AltClick(var/mob/user)
-	if(!(user == src) && user.Adjacent(src))
-		if((meat_type || butchering_drops) && (stat == DEAD))	//if the carbon has a meat, and if it is dead.
-			var/obj/item/item_in_hand = user.get_active_hand()
-			if(item_in_hand && (item_in_hand.sharpness_flags & SHARP_BLADE))
-				butcher()
-				return 1
-		else if(!isrobot(user))
-			src.give_item(user)
-			return
+	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
+		src.give_item(user)
+		return
 	..()
 
 /*
@@ -393,9 +391,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
-		INVOKE_EVENT(src, /event/before_move)
-		INVOKE_EVENT(src, /event/face)
-		INVOKE_EVENT(src, /event/after_move)
+		invoke_event(/event/before_move)
+		invoke_event(/event/face)
+		invoke_event(/event/after_move)
 		return
 
 	if(abs(dx) < abs(dy))
@@ -409,9 +407,9 @@
 		else
 			change_dir(WEST)
 
-	INVOKE_EVENT(src, /event/before_move)
-	INVOKE_EVENT(src, /event/face)
-	INVOKE_EVENT(src, /event/after_move)
+	invoke_event(/event/before_move)
+	invoke_event(/event/face)
+	invoke_event(/event/after_move)
 
 
 // File renamed to mouse.dm?

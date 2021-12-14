@@ -8,11 +8,7 @@
 #define UI_CLOSE -1
 
 /// Maximum number of windows that can be suspended/reused
-/// Normally 5.
-/// There's an issue that causes the cursor to always show the loading animation
-/// if tgui windows are open (pooled hidden windows count as well).
-#define TGUI_WINDOW_SOFT_LIMIT 0
-
+#define TGUI_WINDOW_SOFT_LIMIT 5
 /// Maximum number of open windows
 #define TGUI_WINDOW_HARD_LIMIT 9
 

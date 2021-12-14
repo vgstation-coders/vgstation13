@@ -521,7 +521,6 @@
 	anchored = 1
 	density = 1
 	luminosity = 3
-	pass_flags_self = PASSGLASS
 	var/needs_power = 0
 	var/active = 1
 	var/obj/machinery/shieldwallgen/gen_primary
@@ -607,7 +606,7 @@
 	if(!mover)
 		return
 
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return prob(20)
 	else
 		if (istype(mover, /obj/item/projectile))

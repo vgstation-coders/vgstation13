@@ -156,11 +156,12 @@
 //This is used to give the user a hint that he's a massive retard for using a floor painter on the carpet
 /datum/paint_info/proc/validate(var/turf/simulated/floor/test)
 	switch (ftype)
-		if (PAINT_FLOOR)
-			if (!(istype(test.floor_tile,/obj/item/stack/tile/metal)))
+		if (PAINT_FLOOR) //why is it named plasteel anyway?
+			if (!(istype(test.floor_tile,/obj/item/stack/tile/plasteel)))
 				return 0 //if it's carpet, wood or some other stuff, we aren't going to paint that
-			if (istype(test, /turf/simulated/floor/engine) && !test.floor_tile)
-				return 0 	//for reinforced floors with (actual) plasteel tiles on them
+			if (istype(test, /turf/simulated/floor/engine))
+				return 0 	//reinforced floor has plasteel in floor_tile too
+							//but that isn't a regular floor
 		if (PAINT_PLATING)
 			if (!istype(test,/turf/simulated/floor/plating))
 				return 0

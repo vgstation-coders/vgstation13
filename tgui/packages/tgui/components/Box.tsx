@@ -5,7 +5,7 @@
  */
 
 import { BooleanLike, classes, pureComponentHooks } from 'common/react';
-import { createVNode, InfernoNode, SFC } from 'inferno';
+import { createVNode, InfernoNode } from 'inferno';
 import { ChildFlags, VNodeFlags } from 'inferno-vnode-flags';
 import { CSS_COLORS } from '../constants';
 
@@ -256,7 +256,7 @@ export const computeBoxClassName = (props: BoxProps) => {
   ]);
 };
 
-export const Box: SFC<BoxProps> = (props: BoxProps) => {
+export const Box = (props: BoxProps) => {
   const {
     as = 'div',
     className,
@@ -278,9 +278,7 @@ export const Box: SFC<BoxProps> = (props: BoxProps) => {
     computedClassName,
     children,
     ChildFlags.UnknownChildren,
-    computedProps,
-    undefined,
-  );
+    computedProps);
 };
 
 Box.defaultHooks = pureComponentHooks;

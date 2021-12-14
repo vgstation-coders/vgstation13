@@ -19,7 +19,6 @@ var/list/blob_overminds = list()
 	anchored = 1
 	penetration_dampening = 17
 	mouse_opacity = 1
-	pass_flags_self = PASSBLOB
 	var/health = 20
 	var/maxhealth = 20
 	var/health_timestamp = 0
@@ -109,7 +108,7 @@ var/list/blob_overminds = list()
 /obj/effect/blob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSBLOB))
 		return 1
 	return 0
 
@@ -335,10 +334,12 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/proc/run_action()
 	return 0
 
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source)
+/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source, var/manual = FALSE)
 	if(prob && !prob(health))
 		return
 	if(istype(T, /turf/space) && prob(75))
+		if (source && manual)
+			source.add_points(round(2*BLOBATTCOST/3))
 		return
 	if(!T)
 		var/list/dirs = cardinal.Copy()
@@ -361,7 +362,7 @@ var/list/blob_looks_player = list(//Options available to players
 			num /= 10000
 			B.layer = layer - num
 
-	if(T.Enter(B, loc, TRUE))//Attempt to move into the tile //This should probably just actually call Move() instead
+	if(T.Enter(B,src))//Attempt to move into the tile
 		B.setDensity(initial(B.density))
 		if(icon_size == 64)
 			spawn(1)
@@ -381,6 +382,8 @@ var/list/blob_looks_player = list(//Options available to players
 	else //If we cant move in hit the turf
 		if(!source || !source.restrain_blob)
 			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.
+		if (source && manual)
+			source.add_points(round(2*BLOBATTCOST/3))
 		B.manual_remove = 1
 		B.Delete()
 

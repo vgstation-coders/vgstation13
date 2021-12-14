@@ -187,7 +187,7 @@
 				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
 			else
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode(Proj.firer)
+			explode()
 	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
@@ -227,15 +227,15 @@
 			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = car.occupant
 				H.audible_scream("fueltank_crash")
-			explode(car.occupant)
+			explode()
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
+/obj/structure/reagent_dispensers/fueltank/proc/explode()
 	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4, whodunnit = user)
+		explosion(src.loc,1,2,4)
 	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3, whodunnit = user)
+		explosion(src.loc,0,1,3)
 	else
-		explosion(src.loc,-1,1,2, whodunnit = user)
+		explosion(src.loc,-1,1,2)
 	if(src)
 		qdel(src)
 
@@ -502,6 +502,7 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
+	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
 	var/health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood

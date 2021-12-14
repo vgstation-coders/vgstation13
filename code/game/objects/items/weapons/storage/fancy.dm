@@ -63,8 +63,7 @@
 	storage_slots = 6
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/donut", \
 					"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut", \
-					"/obj/item/weapon/reagent_containers/food/snacks/donutiron", \
-					"/obj/item/weapon/reagent_containers/food/snacks/riceball")
+					"/obj/item/weapon/reagent_containers/food/snacks/donutiron")
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)

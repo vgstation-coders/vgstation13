@@ -146,8 +146,6 @@
 
 		if(has_reagent_in_blood(CAPSAICIN))
 			temperature_alert = TEMP_ALARM_HEAT_STRONG
-		if(has_reagent_in_blood(ZAMSPICYTOXIN))
-			temperature_alert = TEMP_ALARM_HEAT_STRONG
 		else if(has_reagent_in_blood(FROSTOIL))
 			temperature_alert = TEMP_ALARM_COLD_STRONG
 		else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)
@@ -235,7 +233,7 @@
 		var/masked = 0
 
 		if(head)
-			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
+			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
 				var/enable_mask = TRUE
 
 				var/datum/action/item_action/toggle_helmet_mask/action = locate(/datum/action/item_action/toggle_helmet_mask) in head.actions
@@ -244,6 +242,9 @@
 					enable_mask = !action.up
 				else if(istype(head, /obj/item/clothing/head/welding))
 					var/obj/item/clothing/head/welding/O = head
+					enable_mask = !O.up
+				else if(istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen))
+					var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/O = head
 					enable_mask = !O.up
 				if(enable_mask && tinted_weldhelh)
 					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)

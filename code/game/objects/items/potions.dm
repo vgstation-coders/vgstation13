@@ -469,7 +469,7 @@
 	icon_state = "fireball_flask"
 
 /obj/item/potion/fireball/imbibe_effect(mob/living/user)
-	explosion(get_turf(user), -1, 1, 2, 5, whodunnit = user)
+	explosion(get_turf(user), -1, 1, 2, 5)
 
 /obj/item/potion/fireball/impact_atom(atom/target)
 	explosion(get_turf(target), -1, 1, 2, 5)

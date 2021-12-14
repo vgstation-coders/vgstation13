@@ -103,8 +103,6 @@ var/global/list/whitelisted_species = list("Human")
 	var/blood_color = DEFAULT_BLOOD //Red.
 	var/flesh_color = DEFAULT_FLESH //Pink.
 	var/base_color      //Used when setting species.
-	var/max_skin_tone = 1
-
 	var/uniform_icons       = 'icons/mob/uniform.dmi'
 	var/fat_uniform_icons   = 'icons/mob/uniform_fat.dmi'
 	var/gloves_icons        = 'icons/mob/hands.dmi'
@@ -285,8 +283,6 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/OutOfCrit(var/mob/living/carbon/human/H)
 
-/datum/species/proc/silent_speech(message)
-
 // -- Outfit datums --
 /datum/species/proc/final_equip(var/mob/living/carbon/human/H)
 
@@ -318,8 +314,6 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey
 
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
-
-	max_skin_tone = 220
 
 /datum/species/human/gib(mob/living/carbon/human/H)
 	..()
@@ -541,7 +535,6 @@ var/global/list/whitelisted_species = list("Human")
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
 
 	flesh_color = "#AFA59E"
-	max_skin_tone = 1
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -598,15 +591,10 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 	deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
 	known_languages = list(LANGUAGE_GREY)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	eyes = "grey_eyes_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
 	tacklePower = 25
-
-	blood_color = "#CFAAAA"
-	flesh_color = "#B5B5B5"
-	max_skin_tone = 4
 
 	primitive = /mob/living/carbon/monkey/grey
 
@@ -757,7 +745,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
-	max_skin_tone = 6
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
 
@@ -1126,8 +1113,7 @@ var/list/has_died_as_golem = list()
 	var/mob/living/slime_pile/S = new(H.loc)
 	if(H.real_name)
 		S.real_name = H.real_name
-		S.name = "puddle of [H.real_name]"
-		S.desc = "The slimy remains of what used to be [S.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
+		S.desc = "The remains of what used to be [S.real_name]."
 	S.slime_person = H
 	H.forceMove(S)
 
@@ -1212,7 +1198,6 @@ var/list/has_died_as_golem = list()
 	deform = 'icons/mob/human_races/r_def_insectoid.dmi'
 	eyes = "insectoid_eyes_m"
 	known_languages = list(LANGUAGE_INSECT)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	primitive = /mob/living/carbon/monkey/roach
 
 	flags = IS_WHITELISTED
@@ -1289,10 +1274,10 @@ var/list/has_died_as_golem = list()
 
 	primitive = /mob/living/carbon/monkey/mushroom
 
-	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/genetic/fungaltelepathy)
+	spells = list(/spell/targeted/genetic/invert_eyes)
 
-
-	default_mutations=list() //exoskeleton someday...
+	default_mutations=list(M_REMOTE_TALK)
+	default_block_names=list("REMOTETALK")
 
 	blood_color = MUSHROOM_BLOOD
 	flesh_color = "#D3D3D3"
@@ -1306,18 +1291,6 @@ var/list/has_died_as_golem = list()
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
-//	uniform_icons = 'icons/mob/species/mushroom/uniform.dmi'
-//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
-//	gloves_icons    = 'icons/mob/species/vox/gloves.dmi'
-//	glasses_icons   = 'icons/mob/species/vox/eyes.dmi'
-//	ears_icons      = 'icons/mob/ears.dmi'
-//	shoes_icons 	= 'icons/mob/species/vox/shoes.dmi'
-	head_icons      = 'icons/mob/species/mushroom/head.dmi'
-//	belt_icons      = 'icons/mob/belt.dmi'
-	wear_suit_icons = 'icons/mob/species/mushroom/suit.dmi'
-//	wear_mask_icons = 'icons/mob/species/mushroom/masks.dmi'
-//	back_icons      = 'icons/mob/back.dmi'
-
 	has_mutant_race = 0
 
 	has_organ = list(
@@ -1327,10 +1300,9 @@ var/list/has_died_as_golem = list()
 
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
-					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
-					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
+					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
+					Additionally, you cannot speak. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
-	var/mob/living/telepathic_target
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1338,18 +1310,6 @@ var/list/has_died_as_golem = list()
 /datum/species/mushroom/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
-
-/datum/species/mushroom/silent_speech(mob/M, message)
-	if(istype(telepathic_target) && M.can_mind_interact(telepathic_target))
-		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Fungal Telepathy, <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
-		log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
-		if(telepathic_target == M) //Talking to ourselves
-			to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
-			return
-		to_chat(telepathic_target,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>.")
-		to_chat(M,"<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
-
 
 /datum/species/lich
 	name = "Undead"

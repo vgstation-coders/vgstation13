@@ -238,7 +238,6 @@
 	var/mob/M = pick(assigned)
 	if (M)
 		var/datum/role/wizard/newWizard = new
-		M.forceMove(pick(wizardstart))
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
@@ -310,7 +309,6 @@
 			WPF.HandleRecruitedRole(newWizard)
 		else
 			PFW.HandleRecruitedRole(newWizard)
-		M.forceMove(pick(wizardstart))
 		newWizard.AssignToRole(M.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
@@ -361,8 +359,14 @@
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+	var/leader = 1
 	for(var/mob/M in assigned)
-		var/datum/role/cultist/newCultist = new
+		var/datum/role/cultist/newCultist
+		if (leader) // First of the gang
+			newCultist = new /datum/role/cultist/chief
+			leader = 0
+		else
+			newCultist = new
 		newCultist.AssignToRole(M.mind,1)
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.Greet(GREET_ROUNDSTART)
@@ -458,19 +462,8 @@ Assign your candidates in choose_candidates() instead.
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	if(!nuclear)
 		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
-	var/list/turf/synd_spawn = list()
-
-	for(var/obj/effect/landmark/A in landmarks_list)
-		if(A.name == "Syndicate-Spawn")
-			synd_spawn += get_turf(A)
-			continue
-
-	var/spawnpos = 1
 	var/leader = 1
 	for(var/mob/M in assigned)
-		if(spawnpos > synd_spawn.len)
-			spawnpos = 1
-		M.forceMove(synd_spawn[spawnpos])
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
@@ -482,7 +475,6 @@ Assign your candidates in choose_candidates() instead.
 			newCop.AssignToRole(M.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
-		spawnpos++
 	for(var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
 		bomb.spawnbomb()
 	return 1
@@ -513,7 +505,7 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
 	if(M.mind.assigned_role != "AI")
-		for(var/mob/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
+		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
 			if(player.mind.assigned_role == "AI")
 				//We have located an AI to replace
 				displace_AI(player)
@@ -521,10 +513,6 @@ Assign your candidates in choose_candidates() instead.
 
 	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
 	M.mind.assigned_role = "AI"
-	if(!isAI(M))
-		assigned.Remove(M)
-		M = M.AIize()
-		assigned.Add(M)
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
@@ -764,9 +752,7 @@ Assign your candidates in choose_candidates() instead.
 	clown.Greet(GREET_ROUNDSTART)
 
 	// And everyone else as mimes.
-	for (var/mob/M2 in (living_mob_list - M))
-		if (!M2.mind || !M2.client)
-			continue
+	for (var/mob/M2 in (mode.get_ready_players() - M))
 		var/datum/role/tag_mode_mime/mime = new
 		mime.AssignToRole(M2.mind,1)
 		mime.Greet(GREET_ROUNDSTART)

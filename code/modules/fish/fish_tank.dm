@@ -51,7 +51,6 @@
 	var/cur_health = 0			// Current health, starts at max_health
 	var/leaking = NO_LEAK
 	var/shard_count = 0			// Number of glass shards to salvage when broken (1 less than the number of sheets to build the tank)
-	var/automated = 0			// Cleans the aquarium on its own
 
 /obj/machinery/fishtank/bowl
 	name = "fish bowl"
@@ -110,7 +109,7 @@
 	anchored = TRUE
 	throwpass = FALSE				// This thing is the size of a wall, you can't throw past it.
 	circuitboard = /obj/item/weapon/circuitboard/fishwall
-	pass_flags_self = PASSGLASS
+
 	tank_type = "wall"
 	water_capacity = 500		// This thing fills an entire tile,5 large beakers worth
 	max_fish = 10				// Plenty of room for a lot of fish
@@ -125,7 +124,7 @@
 	food_level = MAX_FOOD
 
 /obj/machinery/fishtank/wall/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0) // Prevents airflow. Copied from windows.
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return TRUE
 	return FALSE
 
@@ -295,11 +294,6 @@
 				remove_water(10)
 			if(MINOR_LEAK)						//At or below 50% health, the tank will lose 1 water_level per cycle (minor leak)
 				remove_water(1)
-
-	if(automated)
-		if(filth_level > 0)
-			remove_filth(0.05)
-
 
 //////////////////////////////
 //		SUPPORT PROCS		//
@@ -575,11 +569,6 @@
 		else
 			examine_message += "<span class = 'notice'>The lid is open.</span>"
 
-	if(automated)
-		examine_message += "<br>"
-		var/flavor_text = pick("burps and gulps", "cleans and tinks", "boops and beeps", "gloops and loops")
-		examine_message += "<span class = 'notice'>The automated cleaning module [flavor_text].</span>"
-
 	examine_message += "<br>"
 
 	//Report if the tank is leaking/cracked
@@ -595,6 +584,7 @@
 				examine_message += "<span class = 'warning'>\The [src] is cracked.</span>"
 			if(MAJOR_LEAK)
 				examine_message += "<span class = 'warning'>\The [src] is nearly shattered!</span>"
+
 
 	//Finally, report the full examine_message constructed from the above reports
 	to_chat(user, jointext(examine_message, ""))
@@ -770,15 +760,6 @@
 		filth_level = 0
 		user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")
 		return TRUE
-	//Installing the automation module
-	if(istype(O, /obj/item/weapon/fishtools/fishtank_helper))
-		if(automated)
-			to_chat(user, "<span class='warning'>\The [src] has this module already.</span>")
-		else if(user.drop_item(O, src))
-			automated = O
-			playsound(src,'sound/effects/vacuum.ogg', 50, 1)
-			user.visible_message("\The [user] installs a module inside \the [src].", "<span class='notice'>You install the module inside \the [src].</span>")
-			return TRUE
 
 	else if(O && O.force)
 		user.visible_message("<span class='danger'>\The [src] has been attacked by \the [user] with \the [O]!</span>")

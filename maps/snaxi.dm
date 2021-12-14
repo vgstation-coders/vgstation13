@@ -11,7 +11,6 @@
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2
-	zAsteroid = 6
 	zLevels = list(
 		/datum/zLevel/snowsurface,
 		/datum/zLevel/centcomm,
@@ -50,6 +49,7 @@
 ****************************/
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY
+	daynight_z_lvl = STATION_Z
 
 /datum/map/active/New()
 	. = ..()

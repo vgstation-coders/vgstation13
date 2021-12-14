@@ -26,7 +26,6 @@
 		/obj/item/clothing/mask/bandana/red = 3,
 		/obj/item/clothing/head/peaked = 3,
 		/obj/item/clothing/head/garrison = 2,
-		/obj/item/clothing/head/cowboy/sec = 3,
 	)
 
 /obj/structure/closet/wardrobe/pink

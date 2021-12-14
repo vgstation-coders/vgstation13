@@ -433,9 +433,8 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	for(var/obj/effect/rust_particle_catcher/catcher in particle_catchers)
 		qdel(catcher)
 
-	if(owned_core)
-		owned_core.owned_field = null
-		owned_core = null
+	owned_core.owned_field = null
+	owned_core = null
 
 	RadiateAll()
 

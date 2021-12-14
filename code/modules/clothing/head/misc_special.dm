@@ -164,19 +164,19 @@
 	light_range = 2
 	var/on = 0
 
-/obj/item/clothing/head/pumpkinhead/attack_self(mob/user)
-	if(!isturf(user.loc))
-		to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
+	attack_self(mob/user)
+		if(!isturf(user.loc))
+			to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
 
-		return
-	on = !on
-	icon_state = "hardhat[on]_[_color]"
-	item_state = "hardhat[on]_[_color]"
+			return
+		on = !on
+		icon_state = "hardhat[on]_[_color]"
+		item_state = "hardhat[on]_[_color]"
 
-	if(on)
-		set_light()
-	else
-		kill_light()
+		if(on)
+			set_light()
+		else
+			kill_light()
 
 /obj/item/clothing/head/pumpkinhead/attackby(var/obj/item/I, var/mob/user)
 	..()

@@ -25,7 +25,6 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
-	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
 )
@@ -47,7 +46,6 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
-	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
 )
@@ -225,6 +223,9 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	var/tgui_fancy = TRUE
 	var/fps = 0
+
+	// Lights
+	var/blur_size = 0
 
 	var/client/client
 	var/saveloaded = 0
@@ -432,7 +433,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
 	<b>Fancy tgui:</b>
 	<a href='?_src_=prefs;preference=tgui_fancy'>[tgui_fancy ? "Enabled" : "Disabled"]</a><br>
-	<b>
+	<b>Lighting post-processing:</b>
+	<a href='?_src_=prefs;preference=blur_size'>[blur_size]</a><br>
 	<center>Runechat prefererences</center>
 	<b>Chat on map for mobs:</b>
 	<a href='?_src_=prefs;preference=mob_chat_on_map'>[mob_chat_on_map ? "Enabled" : "Disabled"]</a><br>
@@ -1382,6 +1384,9 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 				if ("no_goonchat_for_obj")
 					no_goonchat_for_obj = !no_goonchat_for_obj
 
+				if ("blur_size")
+					blur_size = input(user, "Choose the intensity of post-processing bluring. Valid range is 0 (no bluring) to 2.", "Character Preference", 0)  as null|num
+					user.client.update_bluring()
 
 			if(user.client.holder)
 				switch(href_list["preference"])
@@ -1477,9 +1482,9 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 			O.status &= ~ORGAN_ROBOT
 			O.status |= ORGAN_PEG
 		else if(status == "assisted")
-			I?.mechassist()
+			I.mechassist()
 		else if(status == "mechanical")
-			I?.mechanize()
+			I.mechanize()
 		else
 			continue
 	var/datum/species/chosen_species = all_species[species]

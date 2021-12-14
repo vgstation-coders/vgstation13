@@ -106,7 +106,11 @@
 	if (!firerate) // If firerate is set to lower aim after one shot, untarget the target
 		T.NotTargeted(src)
 
-/proc/GunTrace(X1,Y1,X2,Y2,Z=1,exc_obj,PX1=16,PY1=16,PX2=16,PY2=16)
+//Yay, math!
+
+#define SIGN(X) ((X<0)?-1:1)
+
+proc/GunTrace(X1,Y1,X2,Y2,Z=1,exc_obj,PX1=16,PY1=16,PX2=16,PY2=16)
 //	to_chat(bluh, "Tracin' [X1],[Y1] to [X2],[Y2] on floor [Z].")
 	var/turf/T
 	var/mob/living/M
@@ -153,14 +157,14 @@
 
 
 //Targeting management procs
-/mob
-	var/list/targeted_by
-	var/target_time = -100
-	var/last_move_intent = -100
-	var/last_target_click = -5
-	var/target_locked = null
+mob/var
+	list/targeted_by
+	target_time = -100
+	last_move_intent = -100
+	last_target_click = -5
+	target_locked = null
 
-/mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
+mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 	if(!I.target)
 		I.target = list(src)
 	else if(I.automatic && I.target.len < 5) //Automatic weapon, they can hold down a room.
@@ -228,7 +232,7 @@
 				I.last_moved_mob = src
 			sleep(1)
 
-/mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
+mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
 	if(!I.silenced)
 		for(var/mob/living/M in viewers(src))
 			M << 'sound/weapons/TargetOff.ogg'
@@ -245,14 +249,14 @@
 	spawn(1) update_targeted()
 
 //If you move out of range, it isn't going to still stay locked on you any more.
-/client
-	var/target_can_move = 0
-	var/target_can_run = 0
-	var/target_can_click = 0
-	var/gun_mode = 0
+client/var
+	target_can_move = 0
+	target_can_run = 0
+	target_can_click = 0
+	gun_mode = 0
 
 //These are called by the on-screen buttons, adjusting what the victim can and cannot do.
-/client/proc/add_gun_icons()
+client/proc/add_gun_icons()
 	if (!usr.item_use_icon)
 		usr.item_use_icon = new /obj/abstract/screen/gun/item
 		usr.item_use_icon.icon_state = "no_item[target_can_click]"
@@ -273,7 +277,7 @@
 	if (target_can_move)
 		screen += usr.gun_run_icon
 
-/client/proc/remove_gun_icons()
+client/proc/remove_gun_icons()
 	if(!usr)
 		return
 	if(usr.gun_move_icon)
@@ -289,7 +293,7 @@
 		screen -= usr.gun_run_icon
 		usr.gun_run_icon = null
 
-/client/verb/ToggleGunMode()
+client/verb/ToggleGunMode()
 	set hidden = 1
 	gun_mode = !gun_mode
 	if(gun_mode)
@@ -304,7 +308,7 @@
 		usr.gun_setting_icon.icon_state = "gun[gun_mode]"
 
 
-/client/verb/AllowTargetMove()
+client/verb/AllowTargetMove()
 	set hidden=1
 
 	//Changing client's permissions
@@ -337,7 +341,7 @@
 				else
 					to_chat(M, "<span class='danger'>Your character will now be shot if they move.</span>")
 
-/mob/living/proc/set_m_intent(var/intent)
+mob/living/proc/set_m_intent(var/intent)
 	if (intent != "walk" && intent != "run")
 		return 0
 	m_intent = intent
@@ -345,7 +349,7 @@
 		if (hud_used.move_intent)
 			hud_used.move_intent.icon_state = intent == "walk" ? "walking" : "running"
 
-/client/verb/AllowTargetRun()
+client/verb/AllowTargetRun()
 	set hidden=1
 
 	//Changing client's permissions
@@ -370,7 +374,7 @@
 				else
 					to_chat(M, "<span class='danger'>Your character will now be shot if they run.</span>")
 
-/client/verb/AllowTargetClick()
+client/verb/AllowTargetClick()
 	set hidden=1
 
 	//Changing client's permissions

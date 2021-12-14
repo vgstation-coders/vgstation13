@@ -77,9 +77,6 @@
 /obj/item/proc/description_accessories()
 	return
 
-/obj/item/proc/description_hats()
-	return
-
 /obj/item/clothing/description_accessories()
 	if(accessories.len)
 		return " It has [counted_english_list(accessories)]."

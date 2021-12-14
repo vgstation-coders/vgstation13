@@ -4,7 +4,6 @@
 	desc = "Forces the speaking centre of the subjects brain to yell every sentence."
 	activation_message = "YOU FEEL LIKE YELLING!"
 	deactivation_message = "You feel like being quiet..."
-	mutation = M_LOUD
 
 /datum/dna/gene/disability/loud/New()
 	..()
@@ -23,7 +22,6 @@
 	desc = "Damages the subjects vocal cords."
 	activation_message = "<i>Your throat feels sore...</i>"
 	deactivation_message = "You feel fine again."
-	mutation = M_WHISPER
 
 /datum/dna/gene/disability/whisper/New()
 	..()

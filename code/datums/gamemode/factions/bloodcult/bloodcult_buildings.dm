@@ -87,10 +87,16 @@
 	takeDamage(Proj.damage)
 	return ..()
 
-/obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user, params)
-	if (istype(W))
+/obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
+	if (istype(W, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = W
+		if(iscarbon(G.affecting))
+			MouseDropTo(G.affecting,user)
+			qdel(W)
+	else if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
+			MouseDropTo(W,user)
 		else
 			user.delayNextAttack(8)
 			user.do_attack_animation(src, W)
@@ -196,12 +202,10 @@
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	layer = TABLE_LAYER
-	pass_flags_self = PASSTABLE
 	var/obj/item/weapon/melee/soulblade/blade = null
 	var/lock_type = /datum/locking_category/buckle/bed
 	var/altar_task = ALTARTASK_NONE
 	var/gem_delay = 300
-	var/narsie_message_cooldown = 0
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
@@ -244,7 +248,7 @@
 
 	..()
 
-/obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user, params)
+/obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user)
 	if (altar_task)
 		return ..()
 	if(istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
@@ -285,9 +289,6 @@
 			return 1
 		var/obj/item/weapon/grab/G = I
 		if(iscarbon(G.affecting))
-			if (blade)
-				to_chat(user,"<span class='warning'>You must remove \the [blade] planted on \the [src] first.</span>")
-				return 1
 			var/mob/living/carbon/C = G.affecting
 			C.unlock_from()
 			if (!do_after(user,C,15))
@@ -298,10 +299,6 @@
 			C.forceMove(loc)
 			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
-			return 1
-	if(user.drop_item(I, loc))
-		if((I.loc == loc) && params)
-			I.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
 			return 1
 	..()
 
@@ -346,7 +343,7 @@
 		var/mob/M = mover
 		if(M.flying)
 			return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	else
 		return 0
@@ -390,7 +387,6 @@
 
 	O.forceMove(loc)
 	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
-	return 1
 
 
 /obj/structure/cult/altar/proc/checkPosition()
@@ -441,36 +437,19 @@
 		stopWatching(user)
 		return
 	if (altar_task)
-		switch (altar_task)
-			if (ALTARTASK_GEM)
-				to_chat(user, "<span class='warning'>You must wait before the Altar's current task is over.</span>")
-			if (ALTARTASK_SACRIFICE)
-				if (user in contributors)
-					return
-				if (!user.checkTattoo(TATTOO_SILENT))
-					if (prob(5))
-						user.say("Let me show you the dance of my people!","C")
-					else
-						user.say("Barhah hra zar'garis!","C")
-				contributors.Add(user)
-				if (user.client)
-					user.client.images |= progbar
+		if (altar_task == ALTARTASK_SACRIFICE)
+			if (user in contributors)
+				return
+			if (!user.checkTattoo(TATTOO_SILENT))
+				if (prob(5))
+					user.say("Let me show you the dance of my people!","C")
+				else
+					user.say("Barhah hra zar'garis!","C")
+			contributors.Add(user)
+			if (user.client)
+				user.client.images |= progbar
 		return
 	if(is_locking(lock_type))
-		var/mob/M = get_locked(lock_type)[1]
-		if(M != user)
-			if (do_after(user,src,20))
-				M.visible_message("<span class='notice'>\The [M] was freed from \the [src] by \the [user]!</span>","You were freed from \the [src] by \the [user].")
-				unlock_atom(M)
-				if (blade)
-					blade.forceMove(loc)
-					blade.attack_hand(user)
-					to_chat(user, "<span class='warning'>You remove \the [blade] from \the [src]</span>")
-					blade = null
-					playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
-					update_icon()
-		// TODO UPHEAVAL PART 2, might bring back sacrifices later, for now you can still stab people on altars
-		/*
 		var/choices = list(
 			list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
 			list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
@@ -493,50 +472,44 @@
 							playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 							update_icon()
 			if ("Sacrifice")
-				// First we'll check for any blockers around it since we'll dance using forceMove to allow up to 8 dancers without them bumping into each others
-				// Of course this means that walls and objects placed AFTER the start of the dance can be crossed by dancing but that's good enough.
-				for (var/turf/T in orange(1,src))
-					if (T.density)
-						to_chat(user, "<span class='warning'>The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
-						return
-					var/atom/A = T.has_dense_content()
-					if (A && (A != src) && !ismob(A)) // mobs get a free pass
-						to_chat(user, "<span class='warning'>\The [A] would hinder the ritual. Either move it or use an altar located in a more spacious area.</span>")
-						return
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (cult)
-					if (is_locking(lock_type))
-						altar_task = ALTARTASK_SACRIFICE
-						timeleft = 30
-						timetotal = timeleft
-						update_icon()
-						contributors.Add(user)
-						update_progbar()
-						if (user.client)
-							user.client.images |= progbar
-						var/image/I = image('icons/obj/cult.dmi',"build")
-						I.pixel_y = 8
-						src.overlays += I
-						if (!user.checkTattoo(TATTOO_SILENT))
-							if (prob(5))
-								user.say("Let me show you the dance of my people!","C")
-							else
-								user.say("Barhah hra zar'garis!","C")
-						if (user.client)
-							user.client.images |= progbar
-							/*
-						for(var/mob/M in range(src,40))
-							if (M.z == z && M.client)
-								if (get_dist(M,src)<=20)
-									M.playsound_local(src, get_sfx("explosion"), 50, 1)
-									shake_camera(M, 2, 1)
+					var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
+					if (O && is_locking(lock_type))
+						var/mob/victim = get_locked(lock_type)[1]
+						if (victim == O.sacrifice_target || (victim.mind && victim.mind == O.sacrifice_mind))
+							altar_task = ALTARTASK_SACRIFICE
+							timeleft = 30
+							timetotal = timeleft
+							update_icon()
+							contributors.Add(user)
+							update_progbar()
+							if (user.client)
+								user.client.images |= progbar
+							var/image/I = image('icons/obj/cult.dmi',"build")
+							I.pixel_y = 8
+							src.overlays += I
+							if (!user.checkTattoo(TATTOO_SILENT))
+								if (prob(5))
+									user.say("Let me show you the dance of my people!","C")
 								else
-									M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-									shake_camera(M, 1, 1)
-									*/
-						spawn()
-							dance_start()
-			*/
+									user.say("Barhah hra zar'garis!","C")
+							if (user.client)
+								user.client.images |= progbar
+							safe_space()
+							for(var/mob/M in range(src,40))
+								if (M.z == z && M.client)
+									if (get_dist(M,src)<=20)
+										M.playsound_local(src, get_sfx("explosion"), 50, 1)
+										shake_camera(M, 2, 1)
+									else
+										M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
+										shake_camera(M, 1, 1)
+							spawn()
+								dance_start()
+						else
+							to_chat(user, "<span class='sinister'>This isn't the One.</span>")
+
 	else if (blade)
 		blade.forceMove(loc)
 		blade.attack_hand(user)
@@ -549,7 +522,7 @@
 		var/choices = list(
 			list("Consult Roster", "radial_altar_roster", "Check the names and status of all of the cult's members."),
 			list("Look through Veil", "radial_altar_map", "Check the veil for tears to locate other occult constructions."),
-			list("Commune with Nar-Sie", "radial_altar_commune", "Make contact with Nar-Sie."),
+			list("Commune with Nar-Sie", "radial_altar_commune", "Obtain guidance from Nar-Sie to help you complete your objectives."),
 			list("Conjure Soul Gem", "radial_altar_gem", "Order the altar to sculpt you a Soul Gem, to capture the soul of your enemies."),
 			)
 		var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
@@ -560,20 +533,10 @@
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (!cult)
 					return
-				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000">"}
-				dat += "<b>Our cult can currently grow up to [cult.cultist_cap] members.</b>"
-				dat += "<ul>"
+				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000"><ul>"}
 				for (var/datum/role/cultist/C in cult.members)
 					var/datum/mind/M = C.antag
 					var/conversion = ""
-					var/cult_role = ""
-					switch (C.cultist_role)
-						if (CULTIST_ROLE_ACOLYTE)
-							cult_role = "Acolyte"
-						if (CULTIST_ROLE_MENTOR)
-							cult_role = "Mentor"
-						else
-							cult_role = "Herald"
 					if (C.conversion.len > 0)
 						conversion = pick(C.conversion)
 					var/origin_text = ""
@@ -597,7 +560,7 @@
 							extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
 						else if (H.isDead())
 							extra = " - <span style='color:#FF0000'>DEAD</span>"
-					dat += "<li><b>[M.name] ([cult_role])</b></li> - [origin_text][extra]"
+					dat += "<li><b>[M.name]</b></li> - [origin_text][extra]"
 				for(var/obj/item/weapon/handcuffs/cult/cuffs in cult.bindings)
 					if (iscarbon(cuffs.loc))
 						var/mob/living/carbon/C = cuffs.loc
@@ -611,7 +574,7 @@
 									extra = " - <span style='color:#FF0000'>DEAD</span>"
 							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
 				dat += {"</ul></body>"}
-				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=600x400")
+				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")
 			if ("Look through Veil")
 				if(user.hud_used && user.hud_used.holomap_obj)
@@ -624,7 +587,7 @@
 						else
 							holomap_datum.cursor.pixel_x = (T.x-8)*PIXEL_MULTIPLIER
 							holomap_datum.cursor.pixel_y = (T.y-8)*PIXEL_MULTIPLIER
-						if (T.z == map.zMainStation)
+						if (T.z == STATION_Z)
 							personnal_I.overlays += holomap_datum.cursor
 						watcher_maps["\ref[user]"] = personnal_I
 					var/image/I = watcher_maps["\ref[user]"]
@@ -635,19 +598,47 @@
 					user.client.images |= watcher_maps["\ref[user]"]
 					user.register_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
-				if(narsie_message_cooldown)
-					to_chat(user, "<span class='warning'>This altar has already sent a message in the past 30 seconds, wait a moment.</span>")
-					return
-				var/input = stripped_input(user, "Please choose a message to transmit to Nar-Sie through the veil. Know that he can be fickle, and abuse of this ritual will leave your body asunder. Communion does not guarantee a response. There is a 30 second delay before you may commune again, be clear, full and concise.", "To abort, send an empty message.", "")
-				if(!input || !Adjacent(user))
-					return
-				NarSie_announce(input, usr)
-				to_chat(usr, "<span class='notice'>Your communion has been received.</span>")
-				var/turf/T = get_turf(usr)
-				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has communed with Nar-Sie: [input]")
-				narsie_message_cooldown = 1
-				spawn(30 SECONDS)
-					narsie_message_cooldown = 0
+				switch(veil_thickness)
+					if (CULT_MENDED)
+						to_chat(user, "...nothing but silence...")
+					if (CULT_PROLOGUE)
+						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>How interesting...</span></span>")
+					if (CULT_ACT_I)
+						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The conversion rune is <span class='danger'>Join Blood Self</span>, but you now have many new runes at your disposal to help you in your task, therefore I recommend you first summon an Arcane Tome to easily scribe them. The rune that conjures a tome is <span class='danger'>See Blood Hell</span>.</span></span>")
+					if (CULT_ACT_II)
+						var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+						if (cult)
+							var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
+							if (O && !O.IsFulfilled())
+								if (!O.sacrifice_target || !O.sacrifice_target.loc)//if there's no target or its body was destroyed, immediate reroll
+									replace_target()
+									return
+								else
+									var/turf/T = get_turf(O.sacrifice_target)
+									var/datum/shuttle/S = is_on_shuttle(T)
+									if ((T.z == CENTCOMM_Z) && (emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S)))
+										to_chat(user,"<b>\The [O.sacrifice_target] has fled the station along with the rest of the crew. Unless we can bring them back in time with a Path rune or sacrifice him where he stands, it's over.</b>")
+										return
+									else if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
+										var/choice = alert(user,"The target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
+										if (choice == "Yes")
+											replace_target(user)
+											return
+									else
+										to_chat(user,"<b>\The [O.sacrifice_target] is in [get_area_name(O, 1)].</b>")
+						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>To perform the sacrifice, you'll have to forge a cult blade first. It doesn't matter if the target is alive of not, lay their body down on the altar and plant the blade on their stomach. Next, touch the altar to perform the next step of the ritual. The more of you, the quicker it will be done.</span></span>")
+					if (CULT_ACT_III)
+						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The crew is now aware of our presence, prepare to draw blood. Your priority is to spill as much blood as you can all over the station, bloody trails left by foot steps count toward this goal. How you obtain the blood, I leave to your ambition, but remember that if the crew destroys every blood stones, you will be doomed.</span></span>")
+					if (CULT_ACT_IV)
+						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>One of the blood stones has become my anchor in this plane, you can touch any other stone to locate it. Touch the anchor to perform the Tear Reality ritual before the crew breaks it.</span></span>")
+					if (CULT_EPILOGUE)
+						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>Remarkable work, [user.real_name], I greatly enjoyed observing this game. Your work is over now, but I may have more in store for you in the future. In the meanwhile, bask in your victory.</span></span>")
+				/* TODO: I'll finish that up someday
+				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000"><ul>"}
+				dat += {"</ul></body>"}
+				user << browse("<TITLE>Nar-Sie's Tips</TITLE>[dat]", "window=narsietips;size=500x300")
+				onclose(user, "narsietips")
+				*/
 			if ("Conjure Soul Gem")
 				altar_task = ALTARTASK_GEM
 				update_icon()
@@ -663,6 +654,26 @@
 					update_icon()
 					var/obj/item/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
+
+/obj/structure/cult/altar/proc/replace_target(var/mob/user)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
+		if (O && !O.IsFulfilled())
+			if (O.replace_target(user))
+				for(var/datum/role/cultist/C in cult.members)
+					var/mob/M = C.antag.current
+					if (M && iscultist(M))
+						to_chat(M,"<b>A new target has been assigned. [O.explanation_text]</b>")
+						if (M == O.sacrifice_target)
+							to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie.</b>")
+						to_chat(M,"<b>Should the target's body be annihilated, or should they flee the station, you may commune with Nar-Sie at an altar to have him designate a new target.</b>")
+			else
+				for(var/datum/role/cultist/C in cult.members)
+					var/mob/M = C.antag.current
+					if (M && iscultist(M))
+						to_chat(M,"<b>There are no elligible targets aboard the station, how did you guys even manage that one?</b>")//if there's literally no humans aboard the station
+						to_chat(M,"<b>There needs to be humans aboard the station, cultist or not, for a target to be selected.</b>")
 
 /obj/structure/cult/altar/noncultist_act(var/mob/user)//Non-cultists can still remove blades planted on altars.
 	if(is_locking(lock_type))
@@ -738,6 +749,7 @@
 		var/datum/role/cultist/newCultist = cult.HandleRecruitedMind(shadeMob.mind, TRUE)
 		newCultist.Greet(GREET_SOULBLADE)
 		newCultist.conversion.Add("altar")
+		cult_risk()//risk of exposing the cult early if too many soul blades created
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
@@ -758,14 +770,6 @@
 			blade.shade = new_shade
 			blade.update_icon()
 			blade = null
-			for(var/mob/living/L in dview(world.view, loc, INVISIBILITY_MAXIMUM))
-				if (L.client)
-					L.playsound_local(loc, 'sound/effects/convert_failure.ogg', 75, 0, -4)
-			playsound(loc, get_sfx("soulstone"), 50,1)
-			var/obj/effect/cult_ritual/conversion/anim = new(loc)
-			anim.icon_state = ""
-			flick("rune_convert_refused",anim)
-			anim.Die()
 
 			if (!iscultist(new_shade))
 				var/datum/role/cultist/newCultist = new
@@ -786,6 +790,17 @@
 			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
+		var/turf/T = loc
+
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			if (emergency_shuttle.direction == 2) // Going to centcomm
+				cult.minor_victory()
+			else
+				cult.stage(CULT_ACT_III,T)
+		else
+			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
+		qdel(src)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -816,10 +831,9 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/spire/New()
 	..()
-	cult_spires += src
+	cult_spires.Add(src)
 	set_light(1)
-	//TODO (UPHEAVAL PART 2) appearance changes with cult score
-	stage = 1
+	stage = clamp(veil_thickness, 1, 3)
 	flick("spire[stage]-spawn",src)
 	spawn(10)
 		update_stage()
@@ -833,12 +847,12 @@ var/list/cult_spires = list()
 	holomap_markers[HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"] = holomarker
 
 /obj/structure/cult/spire/Destroy()
-	cult_spires -= src
+	cult_spires.Remove(src)
 	holomap_markers -= HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"
 	..()
 
 /obj/structure/cult/spire/proc/upgrade()
-	var/new_stage = clamp(stage, 1, 3)
+	var/new_stage = clamp(veil_thickness, 1, 3)
 	if (new_stage>stage)
 		stage = new_stage
 		alpha = 255
@@ -871,7 +885,7 @@ var/list/cult_spires = list()
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 	var/image/I_spire = image('icons/obj/cult_64x64.dmi',"spire[stage]-light")
-	I_spire.plane = ABOVE_LIGHTING_PLANE
+	I_spire.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 	I_spire.layer = NARSIE_GLOW
 	overlays += I_base
 	overlays += I_spire
@@ -902,9 +916,6 @@ var/list/cult_spires = list()
 	if (!.)
 		return
 
-	// For now spires work as cult telecomms relay. Might give them another role later, maybe soul gem production instead of altars
-
-	/*
 	if (!ishuman(user))
 		to_chat(user,"<span class='warning'>Only humans can bear the arcane markings granted by this [name].</span>")
 		return
@@ -972,7 +983,6 @@ var/list/cult_spires = list()
 			if (available_tattoos.len > 0)
 				cultist_act(user)
 			break
-	*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                       //Spawned from the Raise Structure rune. Available from Act II
@@ -1051,7 +1061,7 @@ var/list/cult_spires = list()
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 	var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-	I_lave.plane = ABOVE_LIGHTING_PLANE
+	I_lave.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 	I_lave.layer = NARSIE_GLOW
 	I_lave.blend_mode = BLEND_ADD
 	overlays += I_base
@@ -1102,11 +1112,11 @@ var/list/cult_spires = list()
 						forger = null
 						template = null
 					else
-						anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-work", lay = NARSIE_GLOW, offX = pixel_x, offY = pixel_y, plane = ABOVE_LIGHTING_PLANE)
+						anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-work", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 						playsound(L, 'sound/effects/forge.ogg', 50, 0, -4)
 						forging.overlays.len = 0
 						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")
-						I.plane = ABOVE_LIGHTING_PLANE
+						I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 						I.layer = NARSIE_GLOW
 						I.blend_mode = BLEND_ADD
 						I.alpha = (timeleft/timetotal)*255
@@ -1151,7 +1161,7 @@ var/list/cult_spires = list()
 		I_base.layer = BELOW_PROJECTILE_LAYER
 		I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 		var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-		I_lave.plane = ABOVE_LIGHTING_PLANE
+		I_lave.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 		I_lave.layer = NARSIE_GLOW
 		I_lave.blend_mode = BLEND_ADD
 		overlays += I_base
@@ -1161,10 +1171,6 @@ var/list/cult_spires = list()
 	if(istype(I,/obj/item/clothing/mask/cigarette))
 		var/obj/item/clothing/mask/cigarette/fag = I
 		fag.light("<span class='notice'>\The [user] lights \the [fag] by bringing its tip close to \the [src]'s molten flow.</span>")
-		return 1
-	if(istype(I,/obj/item/candle))
-		var/obj/item/candle/stick = I
-		stick.light("<span class='notice'>\The [user] lights \the [stick] by bringing its wick close to \the [src]'s molten flow.</span>")
 		return 1
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper) || istype(I,/obj/item/weapon/tome))
 		I.ashify_item(user)
@@ -1256,17 +1262,11 @@ var/list/cult_spires = list()
 	..()
 	icon_state = i_forge
 	var/image/I = image('icons/obj/cult_64x64.dmi',"[i_forge]-mask")
-	I.plane = ABOVE_LIGHTING_PLANE
+	I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 	I.layer = NARSIE_GLOW
 	I.blend_mode = BLEND_ADD
 	overlays += I
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                       //Spawns next to blood stones
-//    OBSIDIAN PILLAR    //
-//                       //
-///////////////////////////
 
 /obj/structure/cult/pillar
 	name = "obsidian pillar"
@@ -1325,155 +1325,6 @@ var/list/cult_spires = list()
 		if (3)
 			takeDamage(20)
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                       //Re-added as a cosmetic structure by admin request
-//      BLOOD STONE      //
-//                       //
-///////////////////////////
-
-/obj/structure/cult/bloodstone
-	name = "blood stone"
-	icon_state = "bloodstone-enter1"
-	icon = 'icons/obj/cult_64x64.dmi'
-	pixel_x = -16 * PIXEL_MULTIPLIER
-	health = 600
-	maxHealth = 600
-	sound_damaged = 'sound/effects/stone_hit.ogg'
-	sound_destroyed = 'sound/effects/stone_crumble.ogg'
-	plane = EFFECTS_PLANE
-	layer = BELOW_PROJECTILE_LAYER
-	light_color = "#FF0000"
-
-/obj/structure/cult/bloodstone/New()
-	..()
-	set_light(3)
-
-/obj/structure/cult/bloodstone/proc/flashy_entrance()
-	for (var/obj/O in loc)
-		if (O != src && !istype(O,/obj/item/weapon/melee/soulblade))
-			O.ex_act(2)
-	safe_space()
-	for(var/mob/M in player_list)
-		if (M.z == z && M.client)
-			if (get_dist(M,src)<=20)
-				M.playsound_local(src, get_sfx("explosion"), 50, 1)
-				shake_camera(M, 4, 1)
-			else
-				M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-				shake_camera(M, 1, 1)
-	spawn(10)
-		var/list/pillars = list()
-		icon_state = "bloodstone-enter2"
-		for(var/mob/M in player_list)
-			if (M.z == z && M.client)
-				if (get_dist(M,src)<=20)
-					M.playsound_local(src, get_sfx("explosion"), 50, 1)
-					shake_camera(M, 4, 1)
-				else
-					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-					shake_camera(M, 1, 1)
-		var/turf/T1 = locate(x-2,y-2,z)
-		pillars += new /obj/structure/cult/pillar(T1)
-		var/turf/T2 = locate(x+2,y-2,z)
-		pillars += new /obj/structure/cult/pillar/alt(T2)
-		var/turf/T3 = locate(x-2,y+2,z)
-		pillars += new /obj/structure/cult/pillar(T3)
-		var/turf/T4 = locate(x+2,y+2,z)
-		pillars += new /obj/structure/cult/pillar/alt(T4)
-		sleep(10)
-		icon_state = "bloodstone-enter3"
-		for(var/mob/M in player_list)
-			if (M.z == z && M.client)
-				if (get_dist(M,src)<=20)
-					M.playsound_local(src, get_sfx("explosion"), 50, 1)
-					shake_camera(M, 4, 1)
-				else
-					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-					shake_camera(M, 1, 1)
-		for (var/obj/structure/cult/pillar/P in pillars)
-			P.update_icon()
-		sleep(10)
-		update_icon()
-
-/obj/structure/cult/bloodstone/Destroy()
-	new /obj/effect/decal/cleanable/ash(loc)
-	new /obj/item/weapon/ectoplasm(loc)
-	..()
-
-/obj/structure/cult/bloodstone/attack_construct(var/mob/user)
-	if (!Adjacent(user))
-		return 0
-	cultist_act(user)
-	return 1
-
-/obj/structure/cult/bloodstone/cultist_act(var/mob/user)
-	.=..()
-	if (!.)
-		return
-	if(isliving(user))
-		var/obj/effect/cult_ritual/dance/dance_center = locate() in loc
-		if (dance_center)
-			dance_center.add_dancer(user)
-		else
-			dance_center = new(loc, user)
-
-		if (prob(5))
-			user.say("Let me show you the dance of my people!","C")
-		else
-			user.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
-
-/obj/structure/cult/bloodstone/conceal()
-	return
-
-/obj/structure/cult/bloodstone/takeDamage(var/damage)
-	health -= damage
-	if (health <= 0)
-		if (sound_destroyed)
-			playsound(src, sound_destroyed, 100, 1)
-		qdel(src)
-	else
-		update_icon()
-
-/obj/structure/cult/bloodstone/ex_act(var/severity)
-	switch(severity)
-		if (1)
-			takeDamage(250)
-		if (2)
-			takeDamage(50)
-		if (3)
-			takeDamage(10)
-
-/obj/structure/cult/bloodstone/update_icon()
-	icon_state = "bloodstone-9"
-	overlays.len = 0
-	var/image/I_base = image('icons/obj/cult_64x64.dmi',"bloodstone-base")
-	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
-	overlays += I_base
-	if (health < maxHealth/3)
-		overlays.Add("bloodstone_damage2")
-	else if (health < 2*maxHealth/3)
-		overlays.Add("bloodstone_damage1")
-
-/obj/structure/cult/bloodstone/proc/set_animate()
-	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
-	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)
-	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)
-	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)
-	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)
-	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)
-	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
-	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
-	update_icon()
-
-/*
 var/list/bloodstone_list = list()
 
 /obj/structure/cult/bloodstone
@@ -1660,6 +1511,10 @@ var/list/bloodstone_list = list()
 
 			watching_mobs -= user
 
+/datum/station_holomap/cult/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null, var/cursor_icon = "bloodstone-here")
+	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
+	cursor = image('icons/holomap_markers.dmi', cursor_icon)
+
 /obj/structure/cult/bloodstone/update_icon()
 	icon_state = "bloodstone-0"
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -1769,7 +1624,6 @@ var/list/bloodstone_list = list()
 			takeDamage(50)
 		if (3)
 			takeDamage(10)
-*/
 
 /obj/structure/cult/proc/safe_space()
 	for(var/turf/T in range(5,src))
@@ -1826,7 +1680,7 @@ var/list/bloodstone_list = list()
 	switch(dance_move)
 		if ("clock")
 			for (var/mob/M in contributors)
-				INVOKE_EVENT(M, /event/before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHWEST,NORTH)
 						M.forceMove(get_step(M,EAST))
@@ -1840,11 +1694,11 @@ var/list/bloodstone_list = list()
 					if (SOUTHWEST,WEST)
 						M.forceMove(get_step(M,NORTH))
 						M.dir = NORTH
-				INVOKE_EVENT(M, /event/after_move)
-				INVOKE_EVENT(M, /event/moved, "mover" = M)
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("counter")
 			for (var/mob/M in contributors)
-				INVOKE_EVENT(M, /event/before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHEAST,NORTH)
 						M.forceMove(get_step(M,WEST))
@@ -1858,22 +1712,22 @@ var/list/bloodstone_list = list()
 					if (NORTHWEST,WEST)
 						M.forceMove(get_step(M,SOUTH))
 						M.dir = SOUTH
-				INVOKE_EVENT(M, /event/after_move)
-				INVOKE_EVENT(M, /event/moved, "mover" = M)
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("spin")
 			for (var/mob/M in contributors)
 				spawn()
 					M.dir = SOUTH
-					INVOKE_EVENT(M, /event/face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = EAST
-					INVOKE_EVENT(M, /event/face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = NORTH
-					INVOKE_EVENT(M, /event/face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = WEST
-					INVOKE_EVENT(M, /event/face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = SOUTH
-					INVOKE_EVENT(M, /event/face)
+					M.invoke_event(/event/face)

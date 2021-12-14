@@ -47,8 +47,6 @@
 	// for constructs with one spell, locate() that spell and use it.
 	var/spell/spell_on_use_inhand = /spell
 
-	blooded = FALSE
-
 
 /mob/living/simple_animal/construct/New()
 	..()

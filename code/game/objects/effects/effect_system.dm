@@ -807,7 +807,7 @@ steam.start() -- spawns the effect
 		if(!T)
 			continue
 
-		if(!T.Enter(src, loc, TRUE))
+		if(!T.Enter(src))
 			continue
 
 		var/obj/effect/foam/F = locate() in T
@@ -1039,9 +1039,8 @@ steam.start() -- spawns the effect
 	var/amount 						// TNT equivalent
 	var/flashing = 0			// does explosion creates flash effect?
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
-	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0)
 	amount = amt
 	if(istype(loc, /turf/))
 		location = loc
@@ -1050,7 +1049,6 @@ steam.start() -- spawns the effect
 
 	flashing = flash
 	flashing_factor = flash_fact
-	user = whodunnit
 
 	return
 
@@ -1082,7 +1080,7 @@ steam.start() -- spawns the effect
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 
-		explosion(location, devastation, heavy, light, flash, whodunnit = user)
+		explosion(location, devastation, heavy, light, flash)
 
 /datum/effect/system/reagents_explosion/proc/holder_damage(var/atom/holder)
 	if(holder)

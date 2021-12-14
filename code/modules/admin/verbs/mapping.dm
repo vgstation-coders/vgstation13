@@ -271,16 +271,12 @@ var/intercom_range_display_status = 0
 			// Space is okay for walls
 			/turf/space
 		),
-		/turf/simulated/floor/shuttle = list(
-			/turf/simulated/wall/shuttle,
-			/turf/simulated/floor/shuttle,
-			/turf/simulated/floor/shuttle/plating,
+		/turf/simulated/shuttle/floor = list(
+			/turf/simulated/shuttle,
 			/turf/space
 		),
-		/turf/simulated/floor/shuttle/brig = list(
-			/turf/simulated/wall/shuttle,
-			/turf/simulated/floor/shuttle,
-			/turf/simulated/floor/shuttle/plating,
+		/turf/simulated/shuttle/floor4 = list(
+			/turf/simulated/shuttle,
 			/turf/space
 		),
 		/turf/simulated/floor/plating/airless = list(
@@ -298,7 +294,7 @@ var/intercom_range_display_status = 0
 		/turf/simulated/floor = list(
 			/turf/simulated/floor,
 			/turf/simulated/wall,
-			/turf/simulated/wall/shuttle
+			/turf/simulated/shuttle/wall
 		),
 	)
 

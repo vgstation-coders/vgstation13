@@ -29,8 +29,6 @@
 
 	attacktext = "punches"
 
-	blooded = FALSE
-
 /mob/living/simple_animal/hostile/humanoid/frostgolem/death(var/gibbed = FALSE)
 	visible_message("<span class='danger'>\The [src] crumbles to snow!</span>")
 	for(var/i = 1 to rand(1,10))

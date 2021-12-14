@@ -35,8 +35,6 @@
 
 	heat_damage_per_tick = 20
 
-	blooded = FALSE
-
 /obj/effect/landmark/corpse/mummy
 	name = "mummy"
 

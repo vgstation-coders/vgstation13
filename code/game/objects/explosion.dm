@@ -28,7 +28,7 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit)
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1)
 	var/explosion_time = world.time
 
 	spawn()
@@ -42,10 +42,6 @@ var/explosion_shake_message_cooldown = 0
 		if(!epicenter)
 			return
 
-		if(devastation_range > 1)
-			score["largeexplosions"]++ //For the scoreboard
-		if(istype(get_area(epicenter),/area/shuttle/escape/centcom))
-			score["shuttlebombed"] += devastation_range //For the scoreboard
 		score["explosions"]++ //For the scoreboard
 
 		var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
@@ -103,8 +99,8 @@ var/explosion_shake_message_cooldown = 0
 				if(!istype(M.loc,/turf/space))
 					M << 'sound/effects/explosionfar.ogg'
 		if(adminlog)
-			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([formatJumpTo(epicenter,"JMP")]) [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"] ([formatJumpTo(whodunnit,"JMP")])" : ""]")
-			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"]" : ""]")
+			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
+			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")
 
 		//Pause the lighting updates for a bit.
 		var/postponeCycles = max(round(devastation_range/8),1)
@@ -122,7 +118,7 @@ var/explosion_shake_message_cooldown = 0
 		var/z0 = epicenter.z
 
 
-		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit)
+		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time)
 
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
@@ -139,16 +135,15 @@ var/explosion_shake_message_cooldown = 0
 
 	return 1
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
 	var/x0 = offcenter.x
 	var/y0 = offcenter.y
 	var/z0 = offcenter.z
-
-	if(epicenter != offcenter) // Not relevant if not in multi-z
-		log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [offcenter.loc.name] ([x0],[y0],[z0])")
-
+	
+	log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [offcenter.loc.name] ([x0],[y0],[z0])")
+	
 	for(var/turf/T in spiral_block(offcenter,max_range,1))
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
 		var/_dist = dist
@@ -206,11 +201,14 @@ var/explosion_shake_message_cooldown = 0
 				A.throw_at(throwT,pushback+2,500)
 				//else A.GotoExplosionThrowDest(throwT, 50)
 				//world.log << "THROWING [A] AT [throwT]"
-			A.ex_act(dist,null,whodunnit)
+			A.ex_act(dist)
 
-		T.ex_act(dist,null,whodunnit)
+		T.ex_act(dist)
 
 		CHECK_TICK
 
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
-	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time, whodunnit)
+
+proc/secondaryexplosion(turf/epicenter, range)
+	for(var/turf/tile in trange(range, epicenter))
+		tile.ex_act(2)

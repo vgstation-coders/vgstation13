@@ -26,7 +26,7 @@
 
 	if(istype(user, /obj/mecha))
 		open()
-	else if (istype(user, /obj/machinery/bot) && SpecialAccess(user))
+	else if (istype(user, /obj/machinery/bot))
 		open()
 	else if(ismob(user))
 		var/mob/M = user
@@ -152,9 +152,9 @@
 /obj/machinery/door/mineral/transparent
 	opacity = 0
 
-/obj/machinery/door/mineral/transparent/close()
-	..()
-	opacity = 0
+	close()
+		..()
+		opacity = 0
 
 /obj/machinery/door/mineral/transparent/plasma
 	prefix = "plasma"

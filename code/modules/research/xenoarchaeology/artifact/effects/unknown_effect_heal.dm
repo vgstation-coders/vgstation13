@@ -25,6 +25,8 @@
 				H.adjustBrainLoss(-25 * weakness)
 				H.radiation -= min(H.radiation, 25 * weakness)
 				H.bodytemperature = initial(H.bodytemperature)
+				spawn(1)
+					H.fixblood()
 			//
 			C.adjustOxyLoss(-25 * weakness)
 			C.adjustToxLoss(-25 * weakness)

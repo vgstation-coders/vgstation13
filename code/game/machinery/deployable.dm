@@ -11,7 +11,6 @@
 	anchored = FALSE
 	density = TRUE
 	icon_state = "barrier0"
-	pass_flags_self = PASSTABLE
 	var/health = 140
 	var/maxhealth = 140
 
@@ -83,7 +82,7 @@
 /obj/machinery/deployable/barrier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	else
 		return 0

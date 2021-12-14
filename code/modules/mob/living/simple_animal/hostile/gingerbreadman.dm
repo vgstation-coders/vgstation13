@@ -32,5 +32,3 @@
 	max_n2 = 0
 	minbodytemp = 0
 	speed = 7
-
-	blooded = FALSE

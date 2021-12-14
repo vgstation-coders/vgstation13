@@ -207,14 +207,9 @@
 	for(var/x = 1 to effects.len)
 		var/datum/disease2/effect/e = effects[x]
 		if(e.stage == memorybank.stage)
-			if(e.spoof)
-				dish.contained_virus.fake_effects[x] = memorybank.getcopy(dish.contained_virus)
-				log_debug("[dish.contained_virus.form] #[add_zero("[dish.contained_virus.uniqueID]", 4)][dish.contained_virus.childID ? "-[add_zero("[dish.contained_virus.childID]", 2)]" : ""] had [memorybank.name] falsely spliced into to replace [e.name] in databases by [key_name(usr)].")
-				dish.contained_virus.log += "<br />[timestamp()] [memorybank.name] spoof spliced in by [key_name(usr)] (replaces [e.name] in database listing)"
-			else
-				effects[x] = memorybank.getcopy(dish.contained_virus)
-				log_debug("[dish.contained_virus.form] #[add_zero("[dish.contained_virus.uniqueID]", 4)][dish.contained_virus.childID ? "-[add_zero("[dish.contained_virus.childID]", 2)]" : ""] had [memorybank.name] spliced into to replace [e.name] by [key_name(usr)].")
-				dish.contained_virus.log += "<br />[timestamp()] [memorybank.name] spliced in by [key_name(usr)] (replaces [e.name])"
+			effects[x] = memorybank.getcopy(dish.contained_virus)
+			log_debug("[dish.contained_virus.form] #[add_zero("[dish.contained_virus.uniqueID]", 4)][dish.contained_virus.childID ? "-[add_zero("[dish.contained_virus.childID]", 2)]" : ""] had [memorybank.name] spliced into to replace [e.name] by [key_name(usr)].")
+			dish.contained_virus.log += "<br />[timestamp()] [memorybank.name] spliced in by [key_name(usr)] (replaces [e.name])"
 			break
 
 	splicing = DISEASE_SPLICER_SPLICING_TICKS

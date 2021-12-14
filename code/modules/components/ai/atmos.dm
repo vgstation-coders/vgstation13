@@ -20,22 +20,30 @@
 
 	var/min_overheat_temp=40
 
-/datum/component/ai/atmos_checker/process()
-	var/mob/living/dude = parent
-	if(dude.flags & INVULNERABLE)
+/datum/component/ai/atmos_checker/RecieveSignal(var/message_type, var/list/args)
+	switch(message_type)
+		if("life")
+			OnLife()
+		else
+			..(message_type, args)
+
+/datum/component/ai/atmos_checker/proc/OnLife()
+	if(!isliving(container.holder))
+		return 1
+	if(container.holder & INVULNERABLE)
 		return 1
 
 	var/atmos_suitable = 1
 
-	var/atom/A = dude.loc
+	var/atom/A = container.holder.loc
 
 	if(isturf(A))
 		var/turf/T = A
 		var/datum/gas_mixture/Environment = T.return_air()
 
 		if(Environment)
-			if(abs(Environment.temperature - dude.bodytemperature) > min_overheat_temp)
-				dude.bodytemperature = (Environment.temperature - dude.bodytemperature) / 5
+			if(abs(Environment.temperature - controller.getBodyTemperature()) > min_overheat_temp)
+				SendSignal(COMSIG_ADJUST_BODYTEMP, list("temp"=((Environment.temperature - controller.getBodyTemperature()) / 5)))
 
 			if(min_oxy)
 				if(Environment.molar_density(GAS_OXYGEN) < min_oxy)
@@ -76,14 +84,14 @@
 					atmos_suitable = 0
 
 	//Atmos effect
-	if(dude.bodytemperature < minbodytemp)
+	if(controller.getBodyTemperature() < minbodytemp)
 		fire_alert = 2
-		dude.adjustBruteLoss(cold_damage_per_tick)
-	else if(dude.bodytemperature > maxbodytemp)
+		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=cold_damage_per_tick))
+	else if(controller.getBodyTemperature() > maxbodytemp)
 		fire_alert = 1
-		dude.adjustBruteLoss(heat_damage_per_tick)
+		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=heat_damage_per_tick))
 	else
 		fire_alert = 0
 
 	if(!atmos_suitable)
-		dude.adjustBruteLoss(unsuitable_damage)
+		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=unsuitable_damage))

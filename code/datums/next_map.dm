@@ -5,12 +5,14 @@
 	var/max_players = 999
 	var/is_enabled = TRUE // If FALSE, it doesn't show up during the vote but can be rigged
 
-/datum/next_map/proc/is_compiled()
-	return fexists("maps/voting/"+path+"/vgstation13.dmb")
-
 /datum/next_map/proc/is_votable()
-	if(!is_compiled())
-		var/msg = "Skipping map [name] because it has not been compiled."
+	if(!fexists("maps/voting/"+path))
+		var/msg = "Skipping map [name] because the folder [path] does not exist."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	if(!fexists("maps/voting/"+path+"/vgstation13.dmb"))
+		var/msg = "Skipping map [name] because the file [path]/vgstation13.dmb does not exist."
 		message_admins(msg)
 		warning(msg)
 		return FALSE
@@ -75,16 +77,6 @@
 		return FALSE
 	return ..()
 
-/datum/next_map/island
-	name = "Island Station"
-	path = "Island"
-	min_players = 25
-	
-/datum/next_map/line
-	name = "Frankenline Station"
-	path = "line"
-	min_players = 20
-
 /datum/next_map/lamprey
 	name = "Lamprey Station"
 	path = "Lamprey"
@@ -148,26 +140,6 @@
 	path = "xoq"
 	is_enabled = FALSE
 
-/datum/next_map/snowbox
-	name = "Snowbox Station"
-	path = "snowstation"
-
-/datum/next_map/snowbox/is_votable()
-	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
-	var/allowed_months = list(1, 2, 7, 12)
-	if (!(MM in allowed_months))
-		var/msg = "Skipping map [name] as this is no longer the Christmas season."
-		message_admins(msg)
-		warning(msg)
-		return FALSE
-
-	if(get_station_avg_temp() >= T0C)
-		var/msg = "Skipping map [name] as station average temperature is above 0C."
-		message_admins(msg)
-		warning(msg)
-		return FALSE
-	return ..()
-
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
@@ -188,8 +160,6 @@
 	var/list/all_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
 		var/datum/next_map/map = new map_path
-		if(!map.is_compiled())
-			continue
 		all_maps += map.name
 		all_maps[map.name] = map.path
 	return all_maps

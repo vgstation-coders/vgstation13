@@ -49,8 +49,6 @@
 
 	var/additional_damage = 0//tracking how much damage we took
 
-	blooded = FALSE
-
 
 /mob/living/simple_animal/hostile/mannequin/New()
 	..()

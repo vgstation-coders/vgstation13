@@ -242,7 +242,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	send_prayer_to_admins(msg, admin_msg, 'sound/effects/fax.ogg', "Centcomm Fax", key_name(Sender, 1), get_turf(Sender))
 
 	for (var/obj/machinery/faxmachine/fax in allfaxes)
-		if (fax.z == map.zCentcomm)
+		if (fax.z == CENTCOMM_Z)
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(fax)
 			P.name = "[sentname]"
 			P.info = "[sent.info]"
@@ -299,12 +299,12 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
 
 /proc/SendMerchantFax(mob/living/carbon/human/merchant)
-	var/obj/item/weapon/paper/merchant/report/P
+	var/obj/item/weapon/paper/merchantreport/P
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 		if(F.department == "Internal Affairs" && !F.stat)
 			flick("faxreceive", F)
 			playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
-			P = new /obj/item/weapon/paper/merchant/report(F,merchant)
+			P = new /obj/item/weapon/paper/merchantreport(F,merchant)
 			spawn(2 SECONDS)
 				P.forceMove(F.loc)
 	return P

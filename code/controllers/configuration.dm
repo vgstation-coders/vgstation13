@@ -69,13 +69,10 @@
 	var/usewhitelist = 0
 	var/kick_inactive = 0				//force disconnect for inactive players
 	var/load_jobs_from_txt = 0
+	var/ToRban = 0
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
-
-
-	var/multiz_render_cap = 8			//how far down open spaces will render
-	var/multiz_bottom_cap = 16			//how far down open spaces will detect for a bottom
 
 	// BSQL things
 	var/bsql_debug = 0
@@ -183,7 +180,6 @@
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
-	var/disable_vault_rotation = 0 //If 1, don't load vaults rotated
 	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
 	var/no_lobby_music = 0 //If 1, don't play lobby music, regardless of client preferences.
 	var/no_ambience = 0 //If 1, don't play ambience, regardless of client preferences.
@@ -503,6 +499,9 @@
 				if("humans_need_surnames")
 					humans_need_surnames = 1
 
+				if("tor_ban")
+					ToRban = 1
+
 				if("automute_on")
 					automute_on = 1
 
@@ -577,12 +576,6 @@
 				if("bsql_thread_limit")
 					bsql_thread_limit = text2num(value)
 
-
-				if("multiz_render_cap")
-					multiz_render_cap = text2num(value)
-				if("multiz_bottom_cap")
-					multiz_bottom_cap = text2num(value)
-
 				if("media_base_url")
 					media_base_url = value
 				if("media_secret_key")
@@ -605,8 +598,6 @@
 					skip_holominimap_generation = 1
 				if("skip_vault_generation")
 					skip_vault_generation = 1
-				if("disable_vault_rotation")
-					disable_vault_rotation = 1
 				if("shut_up_automatic_diagnostic_and_announcement_system")
 					shut_up_automatic_diagnostic_and_announcement_system = 1
 				if("no_lobby_music")

@@ -25,7 +25,7 @@
 	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
-	return TRUE
+	return 1
 
 /obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/melee/baton) || istype(W, /obj/item/weapon/melee/telebaton) || istype(W, /obj/item/weapon/melee/classic_baton))
@@ -243,10 +243,8 @@
 		return
 	if(!parent_borer.channeling_bone_shield) //the borer has stopped sustaining the sword
 		qdel(src)
-		return
 	if(parent_borer.chemicals < 3) //the parent borer no longer has the chemicals required to sustain the shield
 		qdel(src)
-		return
 	else
 		parent_borer.chemicals -= 3
 

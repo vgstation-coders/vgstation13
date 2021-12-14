@@ -150,26 +150,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 
-/datum/recipe/moonsuperbiteburger //Alternate recipe using moon cheese
-	reagents = list(SODIUMCHLORIDE = 5, BLACKPEPPER = 5, FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
-
 /datum/recipe/slimeburger
 	reagents = list(SLIMEJELLY = 5, FLOUR = 15)
 	items = list()
@@ -302,15 +282,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/omelette
 
-/datum/recipe/moonomelette //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/omelette
-
 /datum/recipe/benedict
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/friedegg,
@@ -336,19 +307,21 @@
 // Human ///////////////////////////////////////////////////////
 
 /datum/recipe/human //Parent datum only
-
-/datum/recipe/human/make_food(var/obj/container)
-	var/human_name
-	for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
-		if(HM.subjectname)
-			human_name = HM.subjectname
-			break
-	var/lastname_index = findtext(human_name, " ")
-	if(lastname_index)
-		human_name = copytext(human_name,lastname_index+1)
-	var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
-	HB.name = human_name+HB.name
-	return HB
+	make_food(var/obj/container as obj)
+		var/human_name
+		var/human_job
+		for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
+			if(HM.subjectname)
+				human_name = HM.subjectname
+				human_job = HM.subjectjob
+				break
+		var/lastname_index = findtext(human_name, " ")
+		if(lastname_index)
+			human_name = copytext(human_name,lastname_index+1)
+		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
+		HB.name = human_name+HB.name
+		HB.job = human_job
+		return HB
 
 /datum/recipe/human/burger
 	reagents = list(FLOUR = 5)
@@ -426,10 +399,6 @@
 	reagents = list(FLOUR = 5, CARAMEL = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/caramelcookie
-
-/datum/recipe/holidaycookie
-	reagents = list(FLOUR = 5, SUGAR = 5, SPRINKLES = 5)
-	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
 
 /datum/recipe/gingerbread_man
 	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
@@ -523,18 +492,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
 
-/datum/recipe/moonsyntibread //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
-
 /datum/recipe/xenomeatbread
 	reagents = list(FLOUR = 15)
 	items = list(
@@ -544,18 +501,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
-
-/datum/recipe/moonxenomeatbread //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
 
@@ -571,18 +516,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
 
-/datum/recipe/moonspidermeatbread //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
-
 /datum/recipe/meatbread
 	reagents = list(FLOUR = 15)
 	items = list(
@@ -592,18 +525,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread
-
-/datum/recipe/moonmeatbread //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread
 
@@ -629,31 +550,11 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
 
-/datum/recipe/moontofubread //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/tofu,
-		/obj/item/weapon/reagent_containers/food/snacks/tofu,
-		/obj/item/weapon/reagent_containers/food/snacks/tofu,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
-
 /datum/recipe/creamcheesebread
 	reagents = list(FLOUR = 15)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
-
-/datum/recipe/mooncreamcheesebread //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
 
@@ -667,14 +568,6 @@
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/eggplantparm
-
-/datum/recipe/mooneggplantparm //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/eggplantparm
@@ -752,24 +645,10 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato
 
-/datum/recipe/moonloadedbakedpotato //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato
-
 /datum/recipe/cheesyfries
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries
-
-/datum/recipe/mooncheesyfries //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/fries,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries
 
@@ -880,17 +759,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesecake
-
-/datum/recipe/mooncheesecake //Alternate recipe using moon cheese
-	reagents = list(MILK = 5, FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesecake
 
@@ -1166,17 +1034,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
 
-/datum/recipe/moonpizzamargherita //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
-
 /datum/recipe/syntipizza
 	reagents = list(FLOUR = 10)
 	items = list(
@@ -1188,17 +1045,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza/synth
 
-/datum/recipe/moonsyntipizza //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza/synth
-
 /datum/recipe/meatpizza
 	reagents = list(FLOUR = 10)
 	items = list(
@@ -1206,17 +1052,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza
-
-/datum/recipe/moonmeatpizza //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza
@@ -1405,16 +1240,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mysterysoup
 
-/datum/recipe/moonmysterysoup //Alternate recipe using moon cheese
-	reagents = list(WATER = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/badrecipe,
-		/obj/item/weapon/reagent_containers/food/snacks/tofu,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mysterysoup
-
 /datum/recipe/primordialsoup
 	reagents = list(WATER = 10)
 	items = list(
@@ -1436,46 +1261,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
 
-/datum/recipe/mothershipbroth
-	reagents = list(ZAMMILD = 5, CREAM = 5)
-	items = list()
-	result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth
-
-/datum/recipe/mothershipbroth_spicy
-	reagents = list(ZAMSPICYTOXIN = 5, CREAM = 5)
-	items = list()
-	result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy
-
-/datum/recipe/cheesybroth
-	reagents = list(ZAMMILD = 5, CREAM = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/cheesybroth
-
-/datum/recipe/mooncheesybroth //Alternate recipe using moon cheese
-	reagents = list(ZAMMILD = 5, CREAM = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/cheesybroth
-
-/datum/recipe/swimmingcarp
-	reagents = list(ZAMMILD = 5, CREAM = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/swimmingcarp
-
-/datum/recipe/swimmingcarp_spicy
-	reagents = list(ZAMSPICYTOXIN = 5, CREAM = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/swimmingcarp_spicy
-
 // Sandwiches //////////////////////////////////////////////////
 
 /datum/recipe/sandwich
@@ -1484,15 +1269,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich
-
-/datum/recipe/moonsandwich //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meatsteak,
-		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich
 
@@ -1505,14 +1281,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/grilledcheese
-
-/datum/recipe/moongrilledcheese //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/grilledcheese
 
@@ -1726,16 +1494,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
 
-/datum/recipe/moonconfederatespirit //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
-		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
-
 /datum/recipe/fruitsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
@@ -1770,14 +1528,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
 
-/datum/recipe/moongrapesalad //Alternate recipe using moon cheese
-	reagents = list (SUGAR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
-
 /datum/recipe/orzosalad
 	reagents = list (RICE = 10)
 	items = list(
@@ -1793,16 +1543,6 @@
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mexicansalad
-
-/datum/recipe/moonmexicansalad //Alternate recipe using moon cheese
-	reagents = list (LIMEJUICE = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
@@ -1885,14 +1625,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar
 
-/datum/recipe/mooncheddarchips // Alternate recipe using moon cheese
-	reagents = list (SODIUMCHLORIDE = 2)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar
-
 /datum/recipe/clownchips
 	reagents = list (BANANA = 20)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/potato)
@@ -1925,15 +1657,6 @@
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/chili
-		)
-	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/queso
-
-/datum/recipe/lunaqueso // Alternate recipe using moon cheese
-	reagents = list(BLACKPEPPER = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/chili
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/queso
@@ -1986,28 +1709,11 @@
 				/obj/item/weapon/reagent_containers/food/dipping_sauce/salsa)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chilaquiles
 
-/datum/recipe/lunachilaquiles // Alternate recipe using moon cheese
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-				/obj/item/weapon/reagent_containers/food/dipping_sauce/salsa)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chilaquiles
-
 /datum/recipe/quiche
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 				/obj/item/weapon/reagent_containers/food/snacks/egg,
 				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
-	result = /obj/item/weapon/reagent_containers/food/snacks/quiche
-
-/datum/recipe/moonquiche // Alternate recipe using moon cheese
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-				/obj/item/weapon/reagent_containers/food/snacks/egg,
-				/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese)
 	result = /obj/item/weapon/reagent_containers/food/snacks/quiche
 
 /datum/recipe/minestrone
@@ -2028,13 +1734,6 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
-	result = /obj/item/weapon/reagent_containers/food/snacks/bruschetta
-
-/datum/recipe/moonbruschetta // Alternate recipe using moon cheese
-	reagents = list(SODIUMCHLORIDE = 2, FLOUR = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-				/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese)
 	result = /obj/item/weapon/reagent_containers/food/snacks/bruschetta
 
 /datum/recipe/pannacotta
@@ -2453,13 +2152,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/risotto
 
-/datum/recipe/moonrisotto //Alternate recipe using moon cheese
-	reagents = list(RICE = 10, WINE = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/risotto
-
 /datum/recipe/potentham
 	reagents = list(PLASMA = 10)
 	items = list(
@@ -2626,17 +2318,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/flammkuchen
 
-/datum/recipe/moonflammkuche //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/flammkuchen
-
 /datum/recipe/welcomepie
 	reagents = list(FLOUR = 10)
 	items = list(
@@ -2653,7 +2334,7 @@
 
 /datum/recipe/zhulongcaofan/make_food(var/obj/container as obj)
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
-		P.reagents.del_reagent(FORMIC_ACID) //This cleanses the plant.
+		P.reagents.del_reagent(SACID) //This cleanses the plant.
 	return ..()
 
 /datum/recipe/bacon
@@ -2684,20 +2365,7 @@
 
 /datum/recipe/hoboburger/make_food(var/obj/container as obj)
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
-		P.reagents.del_reagent(FORMIC_ACID) //This cleanses the plant.
-	return ..()
-
-/datum/recipe/moonhoboburger //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/box,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/hoboburger
-
-/datum/recipe/moonhoboburger/make_food(var/obj/container as obj)
-	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
-		P.reagents.del_reagent(FORMIC_ACID) //This cleanses the plant.
+		P.reagents.del_reagent(SACID) //This cleanses the plant.
 	return ..()
 
 /datum/recipe/reclaimed
@@ -2735,14 +2403,6 @@
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
-
-/datum/recipe/moonpoutine //Alternate recipe using moon cheese
-	reagents = list(GRAVY = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/fries,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
 
@@ -2828,18 +2488,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/lasagna
-
-/datum/recipe/moonlasagna //Alternate recipe using moon cheese
-	reagents = list(TOMATOJUICE = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/lasagna
 
@@ -3097,15 +2745,6 @@
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/pierogi
 
-/datum/recipe/moonpierogi //Alternate recipe using moon cheese
-	reagents = list(FLOUR = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
-		)
-
-	result = /obj/item/weapon/reagent_containers/food/snacks/pierogi
-
 /datum/recipe/sauerkraut
 	reagents = list(SODIUMCHLORIDE = 2, WATER = 15)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
@@ -3276,11 +2915,23 @@
 
 // You have now entered the Ayy food zone
 
-/datum/recipe/greytvdinnerclassic
+/datum/recipe/greytvdinner1
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner1
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinnerclassic
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
+
+/datum/recipe/greytvdinner2
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner2
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2
+
+/datum/recipe/greytvdinner3
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner3
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3
 
 /datum/recipe/greygreens
 	reagents = list(SOYSAUCE = 10)
@@ -3296,15 +2947,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
-
-/datum/recipe/moonstuffedpitcher //Alternate recipe using moon cheese
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
 

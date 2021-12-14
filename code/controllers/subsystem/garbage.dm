@@ -139,18 +139,17 @@ List of hard deletions:"}
 #ifdef GC_FINDREF
 /world/loop_checks = 0
 
-#define FINDREF_OUTPUT(msg) to_chat(world, msg);testing(msg)
-
 /datum/subsystem/garbage/proc/FindRef(datum/D)
-	FINDREF_OUTPUT("GC: Searching references for [ref(D)] [D] | [D.type]")
+	to_chat(world, "picnic! searching [D]")
+	testing("GC: Searching references for [ref(D)] [D] | [D.type]")
 	if(istype(D, /atom/movable))
 		var/atom/movable/A = D
 		if(A.loc != null)
-			FINDREF_OUTPUT("GC: [A] | [A.type] is located in [A.loc] instead of null")
+			testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
 		if(A.contents.len)
-			FINDREF_OUTPUT("GC: [A] | [A.type] has contents:")
+			testing("GC: [A] | [A.type] has contents:")
 			for(var/atom/B in A.contents)
-				FINDREF_OUTPUT("[B] | [B.type]")
+				testing("[B] | [B.type]")
 	var/found = 0
 	for(var/atom/R in world)
 		found += LookForRefs(R, D)
@@ -160,7 +159,7 @@ List of hard deletions:"}
 		found += LookForRefs(R, D)
 	found += LookForRefs(world, D)
 	found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
-	FINDREF_OUTPUT("we found [found]")
+	to_chat(world, "we found [found]")
 
 /datum/subsystem/garbage/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
@@ -170,7 +169,7 @@ List of hard deletions:"}
 			continue
 		var/datum/A = Dvars[V]
 		if(A == targ)
-			FINDREF_OUTPUT("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
+			testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
 			.++
 		else if(islist(A))
 			. += LookForListRefs(A, targ, D, V)
@@ -194,18 +193,17 @@ List of hard deletions:"}
 		if(istype(F, /datum))
 			var/datum/A = F
 			if(A == targ)
-				FINDREF_OUTPUT("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V]")
+				testing("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V]")
 				. += 1
 		if(istype(G, /datum))
 			var/datum/A = G
 			if(A == targ)
-				FINDREF_OUTPUT("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V] at key [F]")
+				testing("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V] at key [F]")
 				. += 1
 		if(islist(F))
 			. += LookForListRefs(F, targ, D, "[F] in list [V]", foundcache)
 		if(islist(G))
 			. += LookForListRefs(G, targ, D, "[G] in list [V] at key [F]", foundcache)
-#undef FINDREF_OUTPUT
 #undef GC_FINDREF
 #endif
 
@@ -259,12 +257,8 @@ List of hard deletions:"}
 
 /datum/proc/Destroy()
 	SHOULD_CALL_PARENT(TRUE)
-	registered_events = null
 	gcDestroyed = "Bye, world!"
 	tag = null
-	for(var/timer in active_timers)
-		qdel(timer)
-	active_timers = null
 
 /datum/var/gcDestroyed
 

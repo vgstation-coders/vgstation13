@@ -18,8 +18,6 @@
 	I = user.get_active_hand()
 	if(!I)
 		return
-	if(!I.pregive(user,src))
-		return
 	if(src == user) //Shouldn't happen
 		to_chat(user, "<span class='warning'>You tried to give yourself \the [I], but you didn't want it.</span>")
 		return
@@ -42,8 +40,6 @@
 				if(!find_empty_hand_index())
 					to_chat(src, "<span class='warning'>Your hands are full.</span>")
 					to_chat(user, "<span class='warning'>Their hands are full.</span>")
-					return
-				if(!I.on_give(user,src))
 					return
 				if(!user.drop_item(I))
 					src << "<span class='warning'>[user] can't let go of \the [I]!</span>"

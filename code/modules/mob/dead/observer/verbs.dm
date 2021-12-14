@@ -300,9 +300,9 @@
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = TRUE
 
-	//TODO (UPHEAVAL PART 2): Allow ghosts_can_write during Eclipse
-	//if (veil_thickness >= CULT_ACT_III)
-	//	ghosts_can_write = TRUE
+	//new cult
+	if (veil_thickness >= CULT_ACT_III)
+		ghosts_can_write = TRUE
 	if (invisibility == 0)
 		ghosts_can_write = TRUE
 
@@ -524,6 +524,9 @@
 /mob/dead/observer/verb/become_hobo()
 	set name = "Become Space Hobo"
 	set category = "Ghost"
+	if(!(mind && mind.current && can_reenter_corpse) || (mind.current.key && copytext(mind.current.key,1,2)!="@"))
+		to_chat(src, "<span class='warning'>You must have had presence on this plane to become this.</span>")
+		return
 	if(!config.respawn_as_hobo)
 		to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled.</span>")
 		return
@@ -535,9 +538,6 @@
 		return
 	if(hoboamount == hobostart.len)
 		to_chat(src, "<span class='warning'>The world has enough of these as is.</span>")
-		return
-	if(!world.has_round_started())
-		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
 		return
 
 	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
@@ -553,7 +553,7 @@
 	hobo_outfit.equip(hobo)
 	to_chat(hobo, "<B>You are a Space Hobo.</B>")
 	// somewhat taken from CEV eris
-	to_chat(hobo, "<b>The ID you wear is likely not even your own. At least as far as you can remember. But this chunk of plastic still can be a rare oddity that can change your character. Find a way to stay out of trouble, and survive. Though this does not mean you have no home, as the asteroid is your home. Whatever planet you may have come from is now a distant memory.</b>")
+	to_chat(hobo, "<b>The ID you wear likely not even your own. At least as far as you can remember. But this chunk of plastic still can be a rare oddity that can change your character. Find a way to stay out of trouble, and survive. Though this does not mean you have no home, as the asteroid is your home. Whatever planet you may have come from is now a distant memory.</b>")
 	to_chat(hobo, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
 	hoboamount++
 

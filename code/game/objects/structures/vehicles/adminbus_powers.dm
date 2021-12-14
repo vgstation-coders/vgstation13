@@ -403,7 +403,7 @@
 		if(istype(T, /turf/space/))
 			if(isspace(T.loc))
 				continue
-			var/obj/item/stack/tile/metal/P = new /obj/item/stack/tile/metal
+			var/obj/item/stack/tile/plasteel/P = new /obj/item/stack/tile/plasteel
 			P.build(T)
 		else if(istype(T,/turf/simulated/floor))
 			var/turf/simulated/floor/F = T

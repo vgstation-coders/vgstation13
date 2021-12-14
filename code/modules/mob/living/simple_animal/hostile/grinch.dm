@@ -44,7 +44,7 @@
 		back = null
 		success = 1
 		update_inv_back()
-		INVOKE_EVENT(src, /event/unequipped, W)
+		invoke_event(/event/unequipped, list(W))
 	else
 		success = ..()
 

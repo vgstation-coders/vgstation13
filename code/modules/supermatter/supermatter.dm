@@ -125,7 +125,7 @@
 	radio_connection = null
 	. = ..()
 
-/obj/machinery/power/supermatter/proc/explode(var/mob/user)
+/obj/machinery/power/supermatter/proc/explode()
 	has_exploded++
 	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
@@ -133,7 +133,7 @@
 			var/turf/turff = get_turf(src)
 			new /turf/unsimulated/wall/supermatter(turff)
 			SetUniversalState(/datum/universal_state/supermatter_cascade)
-			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
+			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 			empulse(turff, 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
@@ -143,11 +143,11 @@
 	if (has_exploded > 1)
 		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
-/obj/machinery/power/supermatter/shard/explode(var/mob/user)
+/obj/machinery/power/supermatter/shard/explode()
 	has_exploded++
 	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
-		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
+		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 		empulse(get_turf(src), 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
@@ -157,15 +157,15 @@
 		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 /obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	Bumped(AM)
+	Consume(AM)
 	return TRUE
 
-/obj/machinery/power/supermatter/ex_act(severity,var/mob/whodunnit)
+/obj/machinery/power/supermatter/ex_act(severity)
 	switch(severity)
 		if(3.0)
 			return //Should be improved
 		else
-			return explode(whodunnit)
+			return explode()
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/super = FALSE

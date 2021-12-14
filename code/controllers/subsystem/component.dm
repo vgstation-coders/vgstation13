@@ -15,21 +15,27 @@ var/datum/subsystem/component/SScomp
 
 
 /datum/subsystem/component/stat_entry()
-	..("P:[active_components.len]")
+	..("P:[active_component_containers.len]")
 
 
 /datum/subsystem/component/fire(resumed = FALSE)
 	if (!resumed)
-		currentrun = active_components.Copy()
+		currentrun = active_component_containers.Copy()
 
 	while (currentrun.len)
-		var/datum/component/C = currentrun[currentrun.len]
+		var/datum/component_container/C = currentrun[currentrun.len]
 		currentrun.len--
 
-		if(!C || C.gcDestroyed)
+		if(!C || C.gcDestroyed || !C.holder || !C.components.len)
 			continue
 
-		C.process()
+		if(isliving(C.holder))
+			var/mob/living/M = C.holder
+			if (!M || M.gcDestroyed || M.timestopped || M.monkeyizing || M.stat == DEAD)
+				continue
+
+
+		C.SendSignal(COMSIG_LIFE, list())
 
 		if(MC_TICK_CHECK)
 			return

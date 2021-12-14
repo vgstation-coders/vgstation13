@@ -87,15 +87,9 @@ var/creating_arena = FALSE
 			overlays = body.overlays
 		*/
 
-		if(isSaMMI(body))
-			var/mob/living/silicon/robot/mommi/sammi/SM = body
-			icon = SM.ghost_icon
-			icon_state = SM.ghost_icon_state
-			overlays = SM.ghost_overlays
-		else
-			icon = body.icon
-			icon_state = body.icon_state
-			overlays = body.overlays
+		icon = body.icon
+		icon_state = body.icon_state
+		overlays = body.overlays
 
 		// No icon?  Ghost icon time.
 		if(isnull(icon) || isnull(icon_state))
@@ -106,9 +100,6 @@ var/creating_arena = FALSE
 		// END BAY SPOOKY GHOST SPRITES
 
 		gender = body.gender
-		if(isSaMMI(body))
-			var/mob/living/silicon/robot/mommi/sammi/SM2 = body
-			name = SM2.ghost_name
 		if(body.mind && body.mind.name)
 			name = body.mind.name
 		else
@@ -420,14 +411,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/mob/living/carbon/brain/brainmob = src
 		timetocheck = brainmob.timeofhostdeath
 
-	if(iscultist(src) && (ishuman(src)||isconstruct(src)||isbrain(src)||istype(src,/mob/living/carbon/complex/gondola)) && (timetocheck == 0 || timetocheck >= world.time - DEATH_SHADEOUT_TIMER))
+	if(iscultist(src) && (ishuman(src)||isconstruct(src)||isbrain(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE && (timetocheck == 0 || timetocheck >= world.time - DEATH_SHADEOUT_TIMER))
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
-				if (occult_muted())
-					to_chat(src, "<span class='danger'>Holy interference within your body prevents you from separating your shade from your body.</span>")
-				else
-					dust(TRUE)
+				dust(TRUE)
 				return
 			if ("Stay in body")
 				return
@@ -616,6 +604,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
 		else
 			to_chat(usr, "That arena doesn't seem to exist anymore.")
+
+	..()
 
 //END TELEPORT HREF CODE
 

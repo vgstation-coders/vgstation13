@@ -1,5 +1,6 @@
 var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floor/glass)
 
+#define isopenspace(A) istype(A, /turf/simulated/open)
 #define isvisiblespace(A) is_type_in_list(A, visible_spaces)
 #define OPENSPACE_PLANE_START -23
 #define OPENSPACE_PLANE_END -8
@@ -28,43 +29,6 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 	return 0
 
 // BEGIN /VG/ CODE
-
-// Helper for the below
-/proc/get_zs_away(atom/Loc1,atom/Loc2)
-	if(Loc1.z == Loc2.z)
-		return 0 // Nip this in the bud to save performance maybe
-	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
-		return INFINITY // Redundant to below but sanity checking
-
-	var/dist_above = 0
-	var/dist_below = 0
-	var/above_found = FALSE // Using booleans to see how we handle this later, don't want us hitting the ceiling and pulling a short distance when it wasn't found
-	var/below_found = FALSE
-
-	for(var/level = Loc1.z, HasBelow(level), level = map.zLevels[level].z_below)
-		if(level == Loc2.z)
-			below_found = TRUE
-			break
-		dist_below++
-		if(map.zLevels[level].z_below == Loc1.z) // If we end up where we started, get out of the infinite loop (called after value is upped)
-			break
-
-	for(var/level = Loc1.z, HasAbove(level), level = map.zLevels[level].z_above)
-		if(level == Loc2.z)
-			above_found = TRUE
-			break
-		dist_above++
-		if(map.zLevels[level].z_above == Loc1.z)
-			break
-
-	if(above_found && below_found)
-		return min(dist_above,dist_below) // Get minimum of each if found above AND below
-	else if(above_found)
-		return dist_above // Otherwise as normal
-	else if(below_found)
-		return dist_below
-	return INFINITY // Yeah, redundant
-
 /**
  * Z-Distance functions
  *
@@ -72,17 +36,23 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
  *
  * Euclidean follows suit for the proper formula
  */
-/proc/get_z_dist(atom/Loc1, atom/Loc2)
+/proc/get_z_dist(atom/Loc1,atom/Loc2)
 	var/dx = abs(Loc1.x - Loc2.x)
 	var/dy = abs(Loc1.y - Loc2.y)
-	var/dz = get_zs_away(Loc1,Loc2)
+	var/dz = abs(Loc1.z - Loc2.z)
+
+	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
+		return INFINITY
 
 	return max(dx,dy,dz)
 
 /proc/get_z_dist_euclidian(atom/Loc1, atom/Loc2)
 	var/dx = Loc1.x - Loc2.x
 	var/dy = Loc1.y - Loc2.y
-	var/dz = get_zs_away(Loc1,Loc2)
+	var/dz = Loc1.z - Loc2.z
+
+	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
+		return INFINITY
 
 	return sqrt(dx**2 + dy**2 + dz**2)
 
@@ -94,8 +64,10 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
  * Use to compare distances. Used in component mobs.
  */
 /proc/get_z_dist_squared(var/atom/a, var/atom/b)
+	if(!AreConnectedZLevels(a.z, b.z))
+		return INFINITY
 
-	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((get_zs_away(a,b))**2)
+	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((b.z-a.z)**2)
 
 /proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/inward=0,var/draw_red=0,var/cube=1)
 	var/list/spiraled_turfs = list()
@@ -120,8 +92,10 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 				downturf = GetAbove(downturf)
 				spiraled_turfs += spiral_block(downturf, cube ? max_range : i + (max_range - downcount), inward, draw_red)
 				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - downcount)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
+		log_debug("Spiralling block of size [max_range] in [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z])")
 		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
 	else
+		log_debug("Spiralling block of size [max_range] in [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z])")
 		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
 		for(var/i = 1, i < max_range, i++)
 			if(HasAbove(upturf.z))
@@ -148,12 +122,12 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 	multi_z_spiral_block(epicenter,max_range,inward,1,shape)
 
 // Halves above and below, as per suggestion by deity on how to handle multi-z explosions
-/proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)
+/proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
 	if(HasAbove(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/upcenter = GetAbove(offcenter)
 		if(upcenter.z > epicenter.z)
-			explosion_destroy(epicenter, upcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time, whodunnit)
+			explosion_destroy(epicenter, upcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)
 	if(HasBelow(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/downcenter = GetBelow(offcenter)
 		if(downcenter.z < epicenter.z)
-			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time, whodunnit)
+			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)

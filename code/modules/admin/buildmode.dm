@@ -54,19 +54,21 @@
 /obj/effect/bmode/builddir
 	icon_state = "build"
 	screen_loc = "NORTH,WEST"
-/obj/effect/bmode/builddir/Click()
-	switch(dir)
-		if(NORTH)
-			dir = EAST
-		if(EAST)
-			dir = SOUTH
-		if(SOUTH)
-			dir = WEST
-		if(WEST)
-			dir = SOUTHWEST
-		if(SOUTHWEST)
-			dir = NORTH
-	return 1
+	Click()
+		switch(dir)
+			if(NORTH)
+				dir = EAST
+			if(EAST)
+				dir = SOUTH
+			if(SOUTH)
+				dir = WEST
+			if(WEST)
+				dir = SOUTHWEST
+			if(SOUTHWEST)
+				dir = NORTH
+		return 1
+	DblClick(object,location,control,params)
+		return Click(object,location,control,params)
 
 /obj/effect/bmode/buildhelp
 	icon = 'icons/misc/buildmode.dmi'
@@ -159,7 +161,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 	var/strictness = FALSE
 	var/warnings = TRUE
 
-/obj/effect/bmode/buildholder/New()
+obj/effect/bmode/buildholder/New()
 	..()
 	buildmodeholders |= src
 
@@ -234,7 +236,8 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 				if(isnull(partial_type))
 					return
 
-				objholder = filter_list_input("Select type", "Typepath", get_matching_types(partial_type, /atom))
+				var/list/matches = get_matching_types(partial_type, /atom)
+				objholder = input("Select type", "Typepath") as null|anything in matches
 
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
@@ -356,13 +359,13 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 								if(!v_typechk(thing,chosen,strict))
 									continue
 								var/atom/A = new whatfill(T)
-								A.change_dir(thing.dir)
+								A.dir = thing.dir
 								qdel(thing)
 								CHECK_TICK
 						else
 							var/obj/A = new whatfill(T)
 							if(istype(A))
-								A.change_dir(holder.builddir.dir)
+								A.dir = holder.builddir.dir
 				CHECK_TICK
 			if(deletions)
 				to_chat(usr, "<span class='info'>Successfully deleted [deletions] [chosen]'\s</span>")
@@ -469,16 +472,16 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 				switch(holder.builddir.dir)
 					if(NORTH)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.change_dir(NORTH)
+						WIN.dir = NORTH
 					if(SOUTH)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.change_dir(SOUTH)
+						WIN.dir = SOUTH
 					if(EAST)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.change_dir(EAST)
+						WIN.dir = EAST
 					if(WEST)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.change_dir(WEST)
+						WIN.dir = WEST
 					if(SOUTHWEST)
 						new/obj/structure/window/full/reinforced(get_turf(object))
 		if(2)
@@ -592,13 +595,13 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 													if(!istype(thing, chosen))
 														continue
 												var/atom/A = new holder.buildmode.objholder(T)
-												A.change_dir(thing.dir)
+												A.dir = thing.dir
 												qdel(thing)
 												CHECK_TICK
 										else
 											var/obj/A = new holder.buildmode.objholder(T)
 											if(istype(A))
-												A.change_dir(holder.builddir.dir)
+												A.dir = holder.builddir.dir
 								CHECK_TICK
 							holder.fill_left = null
 							holder.fill_right = null
@@ -620,7 +623,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 						var/atom/movable/A = new holder.buildmode.copycat.type(get_turf(object))
 						if(istype(A))
 							A.appearance = holder.buildmode.copycat.appearance
-							A.change_dir(holder.builddir.dir)
+							A.dir = holder.builddir.dir
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
 					if(ispath(holder.buildmode.objholder,/turf)) //Handle turf changing
@@ -633,7 +636,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 					else //Handle object spawning
 						var/obj/A = new holder.buildmode.objholder (get_turf(object))
 						if(istype(A))
-							A.change_dir(holder.builddir.dir)
+							A.dir = holder.builddir.dir
 					log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at [formatJumpTo(RT)]")
 			else if(pa.Find("right"))
 				log_admin("[key_name(usr)] deleted a [object] at [formatJumpTo(RT)]")

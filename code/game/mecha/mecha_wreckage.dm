@@ -11,7 +11,6 @@
 	anchored = 0
 	opacity = 0
 	mouse_opacity = 1 //So we can actually click these
-	pass_flags_self = PASSTABLE
 	var/list/welder_salvage = list(/obj/item/stack/sheet/plasteel,/obj/item/stack/sheet/metal,/obj/item/stack/rods)
 	var/list/wirecutters_salvage = list(/obj/item/stack/cable_coil)
 	var/list/crowbar_salvage
@@ -19,7 +18,7 @@
 /obj/effect/decal/mecha_wreckage/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
+	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	return ..()
 

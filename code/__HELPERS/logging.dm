@@ -183,6 +183,4 @@
 	// Insert message
 	if(message)
 		entry += "\n[message]"
-	var/datum/log_controller/log = investigations[I_HREFS]
-	if(log)
-		log.write(jointext(entry, null))
+	world.log << jointext(entry, null)

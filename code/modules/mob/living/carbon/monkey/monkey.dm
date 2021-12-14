@@ -167,7 +167,6 @@
 	voice_name = "greyling"
 	icon_state = "grey"
 	canWearGlasses = 0
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	languagetoadd = LANGUAGE_GREY
 	greaterform = "Grey"
 
@@ -455,7 +454,7 @@
 				threatcount += 4
 
 	//Loyalty implants imply trustworthyness
-	if(is_loyalty_implanted())
+	if(isloyal(src))
 		threatcount -= 1
 
 	return threatcount
@@ -619,6 +618,3 @@
 		return TRUE
 	return FALSE
 
-/mob/living/carbon/monkey/make_meat(location)
-	var/ourMeat = new meat_type(location, src)
-	return ourMeat

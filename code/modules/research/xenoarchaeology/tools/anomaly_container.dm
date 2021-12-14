@@ -148,9 +148,8 @@
 	playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 
 /obj/structure/anomaly_container/proc/release()
-	if(contained)
-		contained.forceMove(get_turf(src))
-		contained = null
+	contained.forceMove(get_turf(src))
+	contained = null
 	update_icon()
 	playsound(loc, 'sound/machines/click.ogg', 50, 1)
 

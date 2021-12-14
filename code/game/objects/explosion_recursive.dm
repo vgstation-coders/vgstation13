@@ -25,7 +25,7 @@
 var/list/datum/explosion_turf/explosion_turfs = list()
 var/explosion_in_progress = 0
 
-/proc/get_explosion_turf(var/turf/T)
+proc/get_explosion_turf(var/turf/T)
 	for( var/datum/explosion_turf/ET in explosion_turfs )
 		if( T == ET.turf )
 			return ET
@@ -34,7 +34,7 @@ var/explosion_in_progress = 0
 	explosion_turfs += ET
 	return ET
 
-/proc/explosion_rec(turf/epicenter, power)
+proc/explosion_rec(turf/epicenter, power)
 
 
 	var/loopbreak = 0
@@ -102,16 +102,16 @@ var/explosion_in_progress = 0
 /turf/unsimulated/mineral
 	explosion_resistance = 2
 
-/turf/simulated/floor/shuttle
+/turf/simulated/shuttle/floor
 	explosion_resistance = 1
 
-/turf/simulated/floor/shuttle/brig
+/turf/simulated/shuttle/floor4
 	explosion_resistance = 1
 
-/turf/simulated/floor/shuttle/plating
+/turf/simulated/shuttle/plating
 	explosion_resistance = 1
 
-/turf/simulated/wall/shuttle
+/turf/simulated/shuttle/wall
 	explosion_resistance = 5
 
 /turf/simulated/wall

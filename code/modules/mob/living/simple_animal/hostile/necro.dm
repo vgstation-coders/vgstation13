@@ -492,7 +492,7 @@
 	icon_living = "zombie" //The original
 	icon_state = "zombie"
 	icon_dead = "zombie"
-	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttonous."
+	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttenous."
 	maxHealth = 150
 	health = 150
 	can_evolve = 0
