@@ -18,3 +18,6 @@
 
 /atom/movable/light/moody/morgue
 	overlay_state = "_morgue"
+
+/atom/movable/light/moody/holomap
+	overlay_state = "_holomap"
