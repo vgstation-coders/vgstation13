@@ -102,9 +102,9 @@
 	seed_type = "cabbage"
 	vending_cat = "vegetables"
 	
-/obj/item/seeds/plasbageseed
-	name = "packet of plasbage seeds"
-	seed_type = "plasbage"
+/obj/item/seeds/plasmacabbageseed
+	name = "packet of plasma cabbage seeds"
+	seed_type = "plasmacabbage"
 
 /obj/item/seeds/shandseed
 	name = "packet of S'randar's hand seeds"
@@ -1137,7 +1137,7 @@
 	display_name = "cabbages"
 	plant_dmi = 'icons/obj/hydroponics/cabbage.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
-	mutants = list("plasbage")
+	mutants = list("plasmacabbage")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -1151,12 +1151,12 @@
 	water_consumption = 6
 	nutrient_consumption = 0.15
 
-/datum/seed/plasbage
-	name = "plasbage"
-	seed_name = "plasbage"
-	display_name = "plasbages"
+/datum/seed/plasmacabbage
+	name = "plasmacabbage"
+	seed_name = "plasma cabbage"
+	display_name = "plasma cabbages"
 	plant_dmi = 'icons/obj/hydroponics/cabbageplasma.dmi'
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasbage)
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),PLASMA = list(3,5))
 
