@@ -93,6 +93,7 @@
 		return 0
 
 /obj/machinery/power/proc/get_powernet()
+	RETURN_TYPE(/datum/powernet)
 	check_rebuild()
 	return powernet
 

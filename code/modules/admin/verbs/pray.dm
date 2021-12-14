@@ -48,6 +48,12 @@
 	msg = "<span class='notice'><b>  SYNDICATE: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<A HREF='?_src_=holder;SyndicateReply=\ref[Sender]'>RPLY</A>):</b> [msg]</span>"
 	send_prayer_to_admins(msg, admin_msg, 'sound/effects/inception.ogg', "Syndicate", key_name(Sender, 1), get_turf(Sender))
 
+/proc/NarSie_announce(var/text , var/mob/Sender)
+	var/msg = copytext(sanitize(text), 1, MAX_MESSAGE_LEN)
+	var/admin_msg = msg
+	msg = "<span class='notice'><b>  NAR-SIE: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<A HREF='?_src_=holder;NarSieDevour=\ref[Sender]'>GIB</A>) (<A HREF='?_src_=holder;NarSieReply=\ref[Sender]'>RPLY</A>):</b> [msg]</span>"
+	send_prayer_to_admins(msg, admin_msg, 'sound/effects/commune.ogg', "Nar-Sie", key_name(Sender, 1), get_turf(Sender))
+
 /proc/send_prayer_to_admins(var/msg,var/admin_msg,var/sound,var/type,var/key,var/jumploc)
 	var/admin_number_afk = 0
 	for(var/client/C in admins)
@@ -71,5 +77,5 @@
 	else
 		send2adminirc("[uppertext(type)] [key]: [admin_msg]")
 		send2admindiscord("**[type]**: [key]: `[replacetext(admin_msg, "`", "\\`")]` - **[admin_number_present]** Active admins, **[admin_number_afk]** AFK admins.")
-	
+
 	log_admin("[uppertext(type)]: [key] at [formatJumpTo(jumploc)]: [admin_msg]")

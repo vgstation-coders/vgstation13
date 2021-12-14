@@ -2110,9 +2110,9 @@ var/global/msg_id = 0
 			tnote.Cut()
 		if("Ringtone")
 			var/t = input(U, "Please enter new ringtone", name, ttone) as text
-			if (in_range(U, src) && loc == U)
+			if (loc == U)
 				if (t)
-					if(invoke_event(/event/pda_change_ringtone, list("user" = U, "new_ringtone" = t)))
+					if(INVOKE_EVENT(src, /event/pda_change_ringtone, "user" = U, "new_ringtone" = t))
 						to_chat(U, "The PDA softly beeps.")
 						U << browse(null, "window=pda")
 						src.mode = 0
@@ -2311,7 +2311,7 @@ var/global/msg_id = 0
 								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded")
 								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded", 1)
 								cartridge:shock_charges--
-								P.explode()
+								P.explode(U)
 			else
 				U.unset_machine()
 				U << browse(null, "window=pda")
@@ -2568,7 +2568,7 @@ var/global/msg_id = 0
 	else
 		to_chat(usr, "<span class='notice'>You cannot do this while restrained.</span>")
 
-obj/item/device/pda/CtrlClick()
+/obj/item/device/pda/CtrlClick()
 	if ( can_use(usr) ) // Checks that the PDA is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
 		verb_remove_pen(usr)
 		return
@@ -2597,7 +2597,7 @@ obj/item/device/pda/CtrlClick()
 	else
 		to_chat(usr, "<span class='notice'>You cannot do this while restrained.</span>")
 
-obj/item/device/pda/AltClick()
+/obj/item/device/pda/AltClick()
 	if ( can_use(usr) ) // Checks that the PDA is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
 		verb_remove_id(usr)
 		return
@@ -2786,7 +2786,7 @@ obj/item/device/pda/AltClick()
 				if(A.Adjacent(user))
 					return dev_analys.preattack(A, user, 1)
 
-/obj/item/device/pda/proc/explode() //This needs tuning.
+/obj/item/device/pda/proc/explode(var/mob/user) //This needs tuning.
 	var/turf/T = get_turf(src.loc)
 
 	if (ismob(loc))
@@ -2796,7 +2796,7 @@ obj/item/device/pda/AltClick()
 	if(T)
 		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 
-		explosion(T, -1, -1, 2, 3)
+		explosion(T, -1, -1, 2, 3, whodunnit = user)
 
 	qdel(src)
 	return

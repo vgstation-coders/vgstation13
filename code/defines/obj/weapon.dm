@@ -395,16 +395,16 @@
 	IED = null
 	..()
 
-/obj/item/weapon/beartrap/ex_act(var/severity)
+/obj/item/weapon/beartrap/ex_act(var/severity, var/child = null, var/mob/whodunnit)
 	switch(severity)
 		if (1)
 			qdel(src)
 		if (2)
 			if (IED)
-				IED.prime()
+				IED.prime(whodunnit)
 		if (3)
 			if (IED && prob(50))
-				IED.prime()
+				IED.prime(whodunnit)
 
 /obj/item/weapon/beartrap/armed
 	armed = 1
@@ -622,7 +622,7 @@
 				armed = 0
 				anchored = FALSE
 				var/mob/living/simple_animal/SA = AM
-				visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
+				SA.visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
 						"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
 						"<span class='notice'>You hear a sudden snapping sound!",\
 						//Hallucination messages
@@ -691,7 +691,7 @@
 	message_admins(log_str)
 	log_game(log_str)
 	spawn(IED.det_time)
-		IED.prime()
+		IED.prime(L)
 		desc = initial(desc)
 		overlays.Remove(ied_overlay)
 		if (trappeduser && trappedorgan?.amputated)//check if they lost their leg, and get them out of the trap
@@ -831,7 +831,7 @@
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
 				message_admins("[C] triggered the explosive wet floor sign at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 				log_game("[C] triggered the explosive wet floor sign at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
-				explosion(src.loc,-1,2,0)
+				explosion(src.loc,-1,2,0, whodunnit = get_mob_by_key(fingerprintslast))
 				if(ishuman(C))
 					dead_legs(C)
 				if(src)

@@ -11,7 +11,6 @@
 
 	// Stuff for cloners
 	var/id=null
-	var/implant=null
 	var/ckey=null
 	var/mind=null
 	var/list/languages = list()
@@ -43,7 +42,6 @@
 	new_copy.types = types
 	new_copy.name = name
 	new_copy.id = id
-	new_copy.implant = implant
 	new_copy.ckey = ckey
 	new_copy.mind = mind
 	new_copy.languages = languages.Copy()

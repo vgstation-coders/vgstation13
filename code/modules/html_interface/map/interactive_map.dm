@@ -92,7 +92,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 	else
 		testing("MINIMAP: Will attempt to use cached minimaps")
 	for (var/z = 1 to world.maxz)
-		if(z == CENTCOMM_Z && !ALLOW_CENTCOMM)
+		if(z == map.zCentcomm && !ALLOW_CENTCOMM)
 			continue
 		if(delete_cache)
 			fdel("[getMinimapFile(z)].png")
@@ -114,7 +114,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 	C << browse_rsc('map_shared.js')
 	C << browse_rsc('map_shared.css')
 	for (var/z = 1 to world.maxz)
-		if(z == CENTCOMM_Z)
+		if(z == map.zCentcomm)
 			continue
 		C << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
 

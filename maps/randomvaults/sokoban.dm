@@ -49,7 +49,7 @@
 		SL.file_path = pick_n_take(src.available_levels) //No duplicate levels
 		SL.parent = src
 
-		load_dungeon(SL)
+		load_dungeon(SL,rotation)
 		loaded_levels.Add(SL)
 
 	//Load ending

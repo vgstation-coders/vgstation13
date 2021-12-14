@@ -12,7 +12,7 @@
 "ei" = (/obj/structure/cable/yellow{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/effect/decal/warning_stripes/pathmarkers/yellow,/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 4; tag = "icon-pathmarker (EAST)"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
 "ev" = (/obj/effect/decal/cleanable/dirt,/obj/structure/rack,/obj/machinery/light/small,/obj/item/stack/sheet/metal{amount = 10},/obj/item/stack/sheet/mineral/plasma{amount = 30},/turf/simulated/floor/plating,/area/vault/amelab)
 "eT" = (/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 1},/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{dir = 1},/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/dark,/area/vault/amelab)
-"gh" = (/obj/item/weapon/paper_bin{pixel_x = -3; pixel_y = 7},/turf/simulated/floor/plating,/area/vault/amelab/lab)
+"gh" = (/obj/item/weapon/paper_bin/black{pixel_x = -3; pixel_y = 7},/turf/simulated/floor/plating,/area/vault/amelab/lab)
 "gk" = (/turf/simulated/wall/r_wall,/area/vault/amelab)
 "gT" = (/obj/structure/closet/secure_closet/engineering_electrical,/obj/machinery/alarm{pixel_y = 24},/obj/machinery/light{dir = 4},/turf/simulated/floor/dark,/area/vault/amelab)
 "hu" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/structure/rack,/obj/machinery/light,/obj/item/clothing/suit/storage/hazardvest,/obj/item/device/multitool,/turf/simulated/floor/plating/airless,/area/vault/amelab/lab)
@@ -62,7 +62,6 @@
 "Af" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating/airless,/area/vault/amelab/lab)
 "Ah" = (/obj/machinery/vending/wallmed1{name = "Emergency NanoMed"; pixel_x = -28},/obj/machinery/light{dir = 8},/obj/structure/closet/crate/bin,/obj/item/trash/used_tray,/obj/item/trash/chips,/obj/item/trash/lollipopstick,/obj/item/weapon/reagent_containers/food/snacks/donkpocket{bitecount = 1},/obj/item/weapon/reagent_containers/food/drinks/sillycup{icon_state = "coffee"; name = "\improper coffee cup"},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/amelab)
 "AO" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/mob/living/simple_animal/hostile/blobspore{icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter containment jar"},/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = "icon-platingdmg1"},/area/vault/amelab/lab)
-"AT" = (/obj/item/tool/screwdriver,/turf/simulated/wall,/area/vault/amelab)
 "AW" = (/obj/structure/sign/securearea,/turf/simulated/wall/r_wall,/area/vault/amelab)
 "AX" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical{pixel_y = 5},/obj/machinery/light{dir = 4},/turf/simulated/floor/dark,/area/vault/amelab)
 "Bw" = (/obj/structure/grille{opacity = 1},/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = "icon-platingdmg1"},/area/vault/amelab/lab)
@@ -105,7 +104,7 @@
 "Qs" = (/obj/effect/blob/normal{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; dir = 1; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
 "QU" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/amelab)
 "Rz" = (/obj/machinery/atmospherics/unary/vent_scrubber/on{dir = 4},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"RB" = (/obj/structure/closet/crate{density = 0; icon_state = "crateopen"; name = "AME Shielding Crate"; opened = 1},/obj/item/weapon/storage/box{icon = 'icons/obj/machines/new_ame.dmi'},/turf/simulated/floor/dark,/area/vault/amelab)
+"RB" = (/obj/structure/closet/crate{density = 0; icon_state = "crateopen"; name = "AME Shielding Crate"; opened = 1},/obj/item/weapon/storage/box{desc = "It's just a box, although with an interesting design."; icon = 'icons/obj/machines/new_ame.dmi'},/turf/simulated/floor/dark,/area/vault/amelab)
 "RX" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/dark,/area/vault/amelab)
 "Sk" = (/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
 "Sx" = (/obj/item/weapon/am_containment/huge,/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
@@ -123,7 +122,7 @@
 "VP" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/amelab)
 "Wf" = (/obj/machinery/atmospherics/unary/vent_pump/on/layered{canSpawnMice = 0; dir = 4},/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{dir = 4},/obj/machinery/light/small{dir = 8},/obj/machinery/alarm{dir = 1; pixel_y = -22},/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
 "Wu" = (/obj/machinery/power/battery_port,/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"Wx" = (/obj/effect/blob/core{asleep = 1; desc = "This device injects antimatter into connected shielding units. Wrench the device to set it up."; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter control unit"; no_ghosts_allowed = 1},/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
+"Wx" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/obj/effect/blob/core/ame_lab,/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
 "WE" = (/obj/structure/catwalk,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 10},/turf/space,/area/vault/amelab)
 "WH" = (/obj/structure/bed,/obj/item/weapon/bedsheet/orange,/obj/machinery/computer/security/telescreen/entertainment{pixel_y = 32},/obj/item/weapon/disk/shuttle_coords/vault/amelab,/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
 "WI" = (/obj/effect/decal/cleanable/cobweb2,/obj/structure/closet/crate{density = 0; icon_state = "crateopen"; name = "portable SMES crate"; opened = 1},/obj/item/weapon/stock_parts/capacitor{pixel_x = -4; pixel_y = -1},/obj/item/weapon/stock_parts/capacitor{pixel_x = -2; pixel_y = 3},/obj/item/weapon/stock_parts/capacitor{pixel_x = 4; pixel_y = 3},/obj/item/weapon/stock_parts/capacitor{pixel_y = 4},/obj/item/weapon/stock_parts/micro_laser{pixel_x = 4; pixel_y = -2},/obj/item/weapon/stock_parts/micro_laser{pixel_x = 5},/obj/item/weapon/stock_parts/micro_laser{pixel_x = -3},/obj/item/weapon/stock_parts/micro_laser{pixel_y = 3},/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/circuitboard/port_smes,/turf/simulated/floor/plating,/area/vault/amelab/lab)
@@ -146,7 +145,7 @@ SMSMSMSMSMSMuhSMSMpnHVcUQsKyKyQsRzwxXcXcAWSMSMSMSMSMSMSM
 SMSMSMJwJwJwJwVnSMpnSxeiWxqcSAuARzcoWESMXcSMSMSMSMSMSMSM
 SMSMSMdhdXCNJwKzpnpnSkSJIZavavIZRzUhZfOpWESMSMSMSMSMSMSM
 SMSMSMJwWfujEttppnpnpnDnKOJPSkSkpnpnpnpnJISMSMSMSMSMSMSM
-rjXcXcJwATJwJwQUpnMEpnhusTAfLTVKpnOYWIpnZfWESMSMSMSMSMSM
+rjXcXcJwJwJwJwQUpnMEpnhusTAfLTVKpnOYWIpnZfWESMSMSMSMSMSM
 SMSMSMdhnWWHJwvMpnCrpnpnpnFzDIpnpnUSghpnpnoIpnpnSMSMSMSM
 SMSMSMJwWfiGMenypnaSCrjHakhNrEmMZYZYEkWupnvsAOBwrjSMSMSM
 SMSMSMJwJwJwJwGMpnpnpngkYNmYYNgkpnpnpnpnpnpnpnpngkSMSMSM

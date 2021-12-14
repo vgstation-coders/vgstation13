@@ -20,7 +20,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 
 	light_color = LIGHT_COLOR_CYAN
 
-	research_flags = CONSOLECONTROL | HASOUTPUT | TAKESMATIN | HASMAT_OVER | LOCKBOXES
+	research_flags = CONSOLECONTROL | HASOUTPUT | TAKESMATIN | HASMAT_OVER | LOCKBOXES | MULTIOUTPUT
 
 	part_sets = list(
 		"Stock Parts" = list(),

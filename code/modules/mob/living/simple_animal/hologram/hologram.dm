@@ -8,6 +8,8 @@
 	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
 
+	blooded = FALSE
+
 
 /mob/living/simple_animal/hologram/death(var/gibbed = FALSE)
 	..(gibbed)

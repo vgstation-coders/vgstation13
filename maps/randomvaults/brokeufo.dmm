@@ -1,15 +1,12 @@
 "aa" = (/turf/space,/area)
-"ab" = (/turf/simulated/shuttle/wall,/area/vault/brokeufo)
+"ab" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/vault/brokeufo)
 "ac" = (/obj/machinery/light,/obj/structure/table/flipped{dir = 8},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "ad" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/space,/area/vault/brokeufo)
 "ae" = (/obj/structure/shuttle/engine/propulsion/right{dir = 1},/turf/space,/area/vault/brokeufo)
-"af" = (/turf/simulated/shuttle/wall{icon_state = "swall_s6"; tag = "icon-swall_s6"},/area/vault/brokeufo)
-"ag" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/vault/brokeufo)
-"ah" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/vault/brokeufo)
+"af" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/brokeufo)
+"ag" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/brokeufo)
 "ai" = (/obj/structure/shuttle/engine/heater{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "old_enginewarn"; tag = "icon-old_enginewarn"},/area/vault/brokeufo)
-"aj" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/vault/brokeufo)
-"ak" = (/turf/simulated/shuttle/wall{icon_state = "swall_s10"},/area/vault/brokeufo)
-"al" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/vault/brokeufo)
+"ak" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/space,/area/vault/brokeufo)
 "am" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "an" = (/obj/machinery/light{dir = 8},/obj/machinery/vending/engivend,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
 "ao" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/toolbox/electrical,/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
@@ -23,8 +20,6 @@
 "aw" = (/obj/item/clothing/gloves/yellow,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
 "ax" = (/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "whitebluefull"; tag = "icon-whitebluefull"},/area/vault/brokeufo)
 "ay" = (/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "whitebluefull"; tag = "icon-whitebluefull"},/area/vault/brokeufo)
-"az" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/vault/brokeufo)
-"aA" = (/turf/simulated/shuttle/wall{icon_state = "swall15"},/area/vault/brokeufo)
 "aB" = (/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor/carpet,/area/vault/brokeufo)
 "aC" = (/turf/simulated/floor/carpet,/area/vault/brokeufo)
 "aD" = (/obj/structure/table/reinforced,/obj/item/tool/bonesetter,/obj/item/tool/bonegel,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
@@ -42,38 +37,36 @@
 "aP" = (/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "aQ" = (/obj/item/weapon/reagent_containers/glass/beaker/sulphuric{name = "beaker 'sulphuric acid'"},/turf/simulated/floor/carpet,/area/vault/brokeufo)
 "aR" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/vault/brokeufo)
-"aS" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/vault/brokeufo)
 "aT" = (/mob/living/simple_animal/hostile/humanoid/grey/space{name = "Barada"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "aU" = (/obj/item/stack/cable_coil/random,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"aV" = (/turf/simulated/shuttle/wall{icon_state = "swall_s5"; tag = "icon-swall_s5"},/area/vault/brokeufo)
 "aW" = (/obj/structure/table/reinforced,/obj/item/stack/sheet/mineral/diamond{amount = 10},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "aX" = (/obj/structure/bed/chair/comfy,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "aY" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/energy/laser/retro,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
-"aZ" = (/turf/simulated/shuttle/wall{icon_state = "swall_s9"; tag = "icon-swall_s9"},/area/vault/brokeufo)
+"aZ" = (/turf/simulated/wall/shuttle,/area/vault/brokeufo)
 "ba" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/fancy/flares,/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/vault/brokeufo)
 "bb" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/projectile/flare,/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/vault/brokeufo)
 "bc" = (/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/vault/brokeufo)
 "bd" = (/obj/structure/computerframe,/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/vault/brokeufo)
 "be" = (/obj/structure/table/reinforced,/obj/item/weapon/circuitboard/communications,/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/vault/brokeufo)
-"bf" = (/turf/simulated/shuttle/wall{icon_state = "swall_s5"},/area/vault/brokeufo)
+"bf" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/brokeufo)
 "bg" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "bh" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "bi" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/brokeufo)
 "bj" = (/obj/item/toy/gasha/wizard,/turf/space,/area)
 
 (1,1,1) = {"
-aaaaaaaaabaeadatabaaaaaaaaaaaa
-aaaaafagahaiaiaiajagagakaaaaaa
-aaaaalamalanaoapalaqaralaaaaaa
-aaaaasacasauavawalaxayalaaaaaa
-aaafazagaAagasagahaBaCalaaaaaa
-aaalaDaEalaFaGaHalaCaIalaaaaaa
-aaaJaKaGasaGaGaGasaLaCalaaaaaa
-aaalaMaNalaOaGaPalaQaRalaaaaaa
-aaajaSagabaGaTaUabagaSahaaaaaa
-aaaVahaWaGaGaXaGaGaYajaZaaaaaa
-aaaaalbabbbcbdbcbcbealaaaaaaaa
-aaaabfagagbgbhbhbiagaZaaaaaaaa
+aaaaaaaaaZaeadataZaaaaaaaaaaaa
+aaaaabaZaZaiaiaiaZaZaZakaaaaaa
+aaaaaZamaZanaoapaZaqaraZaaaaaa
+aaaaasacasauavawaZaxayaZaaaaaa
+aaabaZaZaZaZasaZaZaBaCaZaaaaaa
+aaaZaDaEaZaFaGaHaZaCaIaZaaaaaa
+aaaJaKaGasaGaGaGasaLaCaZaaaaaa
+aaaZaMaNaZaOaGaPaZaQaRaZaaaaaa
+aaaZaZaZaZaGaTaUaZaZaZaZaaaaaa
+aaafaZaWaGaGaXaGaGaYaZagaaaaaa
+aaaaaZbabbbcbdbcbcbeaZaaaaaaaa
+aaaabfaZaZbgbhbhbiaZagaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaabjaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

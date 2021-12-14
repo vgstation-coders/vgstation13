@@ -557,6 +557,17 @@ var/list/camera_messages = list()
 	if(wires)
 		wires.npc_tamper(L)
 
+/obj/machinery/camera/proc/camera_twitch()
+	for(var/mob/living/carbon/human/H in view(view_range, src))
+		if(H.disabilities & NERVOUS)
+			var/list/watching_you = list("Did something just move?","Did that camera move?","The security camera... turned?",
+			"Is someone watching you?", "Are you alone?", "Is someone keeping an eye on you?", "Who's there?",
+			"Someone is watching...", "The hairs on your neck stand up.", "The station AI is keeping tabs on you.",
+			"The whirr of the security camera as it turns to face you...", "Is that camera lens focusing in on you?",
+			"The security camera keeps lingering on you...", "The cameras are watching you.", "The security team is observing you.",
+			"Someone is watching you in the camera.", "They know. And they're watching.", "They've found you.")
+			to_chat(H,"<i>[pick(watching_you)]</i>")
+
 #undef CAMERA_MAX_HEALTH
 #undef CAMERA_DEACTIVATE_HEALTH
 #undef CAMERA_MIN_WEAPON_DAMAGE

@@ -29,6 +29,8 @@
 	held_items = list()
 	mob_property_flags = MOB_ROBOTIC
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/viscerator/Life()
 	..()
 	if(stat == CONSCIOUS)

@@ -143,10 +143,10 @@
 			to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
 
 
-/obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
+/obj/item/weapon/grenade/iedcasing/prime(var/mob/user) //Blowing that can up
 	update_mob()
 	process_shrapnel()
-	explosion(get_turf(src.loc),-1,0,2)
+	explosion(get_turf(src.loc),-1,0,2, whodunnit = user)
 
 	if(istype(loc, /obj/item/weapon/beartrap))
 		var/obj/item/weapon/beartrap/boomtrap = loc

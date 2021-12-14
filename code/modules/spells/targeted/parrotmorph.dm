@@ -1,4 +1,4 @@
-spell/targeted/parrotmorph
+/spell/targeted/parrotmorph
 	name = "Poly-Morph"
 	desc = "This spell turns the victim into a harmless and near-invincible parrot for a short amount of time."
 	abbreviation = "PM"
@@ -20,7 +20,7 @@ spell/targeted/parrotmorph
 
 	hud_state = "wiz_parrotmorph"
 
-spell/targeted/parrotmorph/cast(var/list/targets)
+/spell/targeted/parrotmorph/cast(var/list/targets)
 	..()
 	for(var/mob/living/target in targets)
 		target.flash_eyes(visual = 1)

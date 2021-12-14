@@ -4,7 +4,7 @@
 //This will *ONLY* accept a colour in the
 // form "#XXXXXX".  Nothing else will work!
 
-proc/invertHTML(HTMLstring)
+/proc/invertHTML(HTMLstring)
 	if(!istext(HTMLstring))
 		CRASH("Given non-text argument!")
 	else if(length(HTMLstring) != 7)

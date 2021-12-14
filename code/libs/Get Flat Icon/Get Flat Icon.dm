@@ -45,7 +45,7 @@ var/list/directional = list(
 	/obj/machinery/power/generator,
 	/obj/structure/particle_accelerator,
 	/obj/structure/hanging_lantern,
-	/turf/simulated/shuttle/wall
+	/turf/simulated/wall/shuttle
 	)
 
 var/list/exception = list(
@@ -69,7 +69,7 @@ var/list/exception = list(
 		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
 	return sorted // return the sorted list.
 
-proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
+/proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
 
 	var/hash = "" // Hash of overlay combination
 

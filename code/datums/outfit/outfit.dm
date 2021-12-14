@@ -90,7 +90,7 @@
 	return
 
 // -- Equip mindless: if we're going to give the outfit to a mob without a mind
-/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE)
+/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE, var/strip = FALSE, var/delete = FALSE)
 	if (!H || (!H.mind && !equip_mindless) )
 		return
 
@@ -101,6 +101,12 @@
 	if (!L) // Couldn't find the particular species
 		species = "Default"
 		L = items_to_spawn["Default"]
+
+	if(strip)
+		var/list/dropped_items = H.unequip_everything()
+		if(delete)
+			for(var/atom/A in dropped_items)
+				qdel(A)
 
 	if (priority)
 		pre_equip_priority(H, species)
@@ -251,11 +257,8 @@
 /datum/outfit/proc/give_implants(var/mob/living/carbon/human/H)
 	for (var/imp_type in implant_types)
 		var/obj/item/weapon/implant/I = new imp_type(H)
-		I.imp_in = H
-		I.implanted = 1
-		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD) // By default, all implants go to the head.
-		affected.implants += I
-		I.part = affected
+		if(!I.insert(H, LIMB_HEAD))
+			stack_trace("implant/insert() failed")
 
 // -- Species-related equip (turning on internals, etc)
 /datum/outfit/proc/species_final_equip(var/mob/living/carbon/human/H)
@@ -357,7 +360,7 @@
 	W.name = "[H.real_name]'s ID Card"
 	W.registered_name = H.real_name
 	W.UpdateName()
-	W.SetOwnerInfo(H)
+	W.SetOwnerDNAInfo(H)
 	H.equip_to_slot_or_drop(W, slot_wear_id)
 	return W
 

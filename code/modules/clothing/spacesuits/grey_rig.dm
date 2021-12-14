@@ -9,10 +9,11 @@
 	species_fit = list(GREY_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 20, energy = 5, bomb = 25, bio = 100, rad = 50)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey
+	initial_modules = list(/obj/item/rig_module/rad_shield)
 
 /obj/item/clothing/head/helmet/space/rig/grey
 	name = "worker pressure helmet"
-	desc = " A Grey laborer's pressure helmet. It protects the cranium from common work hazards in vacuum. Safety first!"
+	desc = " A grey laborer's pressure helmet. It protects the cranium from common work hazards in vacuum. Safety first!"
 	icon_state = "rig0_grey_worker_dome"
 	item_state = "rig0_grey_worker_dome"
 	_color = "grey_worker_dome"
@@ -33,7 +34,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/grey/researcher
 	name = "researcher pressure helmet"
-	desc = "A Grey researcher's pressure helmet. The brightest minds will lead the way!"
+	desc = "A grey researcher's pressure helmet. The brightest minds will lead the way!"
 	icon_state = "rig0_grey_researcher_dome"
 	item_state = "rig0_grey_researcher_dome"
 	_color = "grey_researcher_dome"
@@ -53,7 +54,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/grey/soldier
 	name = "soldier pressure helmet"
-	desc = "A Grey soldier's pressure helmet. All enemies of the mothership must be disintegrated!"
+	desc = "A grey soldier's pressure helmet. All enemies of the mothership must be disintegrated!"
 	icon_state = "rig0_grey_soldier_dome"
 	item_state = "rig0_grey_soldier_dome"
 	_color = "grey_soldier_dome"
@@ -73,7 +74,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/grey/leader
 	name = "administrator pressure helmet"
-	desc = "A Grey Administrator's pressure helmet. Glory to the mothership, and all hail the Chairman!"
+	desc = "A grey Administrator's pressure helmet. Glory to the mothership, and all hail the Chairman!"
 	icon_state = "rig0_grey_leader_dome"
 	item_state = "rig0_grey_leader_dome"
 	_color = "grey_leader_dome"

@@ -147,6 +147,11 @@
 
 	update_itemstate_on_twohand = TRUE
 
+/obj/item/weapon/holder/animal/mutt
+	name = "sasha holder"
+	item_state = "mutt"
+	update_itemstate_on_twohand = TRUE
+
 //CARP
 
 /obj/item/weapon/holder/animal/carp

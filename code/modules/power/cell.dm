@@ -89,6 +89,9 @@
 
 /obj/item/weapon/cell/proc/explode()
 	var/turf/T = get_turf(src.loc)
+	if(occupant)
+		occupant.forceMove(get_turf(src))
+		occupant.current_power = null
 /*
  * 1000-cell	explosion(T, -1, 0, 1, 1)
  * 2500-cell	explosion(T, -1, 0, 1, 1)
@@ -113,7 +116,7 @@
 	message_admins("LOG: Rigged power cell explosion, last touched by [fingerprintslast]")
 
 	charge = 0
-	explosion(T, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+	explosion(T, devastation_range, heavy_impact_range, light_impact_range, flash_range, whodunnit = get_mob_by_key(fingerprintslast))
 
 	qdel(src)
 

@@ -10,6 +10,8 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 // PRESET UPLINKS
 // A collection of preset uplinks.
+/obj/item/device/radio/uplink
+	icon_state = "radio"
 
 /obj/item/device/radio/uplink/New()
 	..()

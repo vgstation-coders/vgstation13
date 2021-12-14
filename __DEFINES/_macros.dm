@@ -74,6 +74,8 @@
 
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
 
+#define ispulsedemon(A) (istype(A, /mob/living/simple_animal/hostile/pulse_demon))
+
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
@@ -111,6 +113,8 @@
 #define issilicon(A) istype(A, /mob/living/silicon)
 
 #define isMoMMI(A) istype(A, /mob/living/silicon/robot/mommi)
+
+#define isSaMMI(A) istype(A, /mob/living/silicon/robot/mommi/sammi)
 
 #define isbot(A) istype(A, /obj/machinery/bot)
 
@@ -212,7 +216,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -224,7 +228,9 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
-#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
+
+#define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 
 #define iswallturf(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/simulated/shuttle/wall))
 
@@ -261,11 +267,7 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define isnewcultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
-
-#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
-
-#define iscultist(H) (isnewcultist(H) || ischiefcultist(H))
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
@@ -339,9 +341,11 @@
 
 #define isspace(A) (A.type == /area)
 
+#define isopenspace(A) istype(A, /turf/simulated/open)
+
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
-proc/get_space_area()
+/proc/get_space_area()
 	//global.space_area is defined in code/game/areas/areas.dm, and set when the space area is created
 	if(!global.space_area)
 		var/area/new_space_area = new /area

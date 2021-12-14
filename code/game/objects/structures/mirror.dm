@@ -79,7 +79,7 @@
 		if("Beard")
 			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, target.gender, target.species.name)
 			if(species_facial_hair.len)
-				var/new_style = input(user, "Select a facial hair style", "Grooming") as null|anything in species_facial_hair
+				var/new_style = input(user, "Select a facial hair style", "Grooming", target.my_appearance.f_style) as null|anything in species_facial_hair
 				if(!new_style || !attempt(user, target, which))
 					return
 				target.my_appearance.f_style = new_style
@@ -88,7 +88,7 @@
 		if("Hair")
 			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, target.species.name) //gender intentionally left null so speshul snowflakes can cross-hairdress
 			if(species_hair.len)
-				var/new_style = input(user, "Select a hair style", "Grooming") as null|anything in species_hair
+				var/new_style = input(user, "Select a hair style", "Grooming", target.my_appearance.h_style) as null|anything in species_hair
 				if(!new_style || !attempt(user, target, which))
 					return
 				target.my_appearance.h_style = new_style
@@ -221,7 +221,7 @@
 		switch(which)
 
 			if("Name")
-				var/stagename = copytext(sanitize(input(targ, "Pick a name","Name") as null|text), 1, MAX_NAME_LEN)
+				var/stagename = copytext(sanitize(input(targ, "Pick a name","Name",M.real_name) as null|text), 1, MAX_NAME_LEN)
 				targ.real_name = stagename
 				targ.name = stagename
 

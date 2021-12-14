@@ -12,7 +12,7 @@
 	if(!location)
 		return FALSE
 
-	if(location.z == STATION_Z)
+	if(location.z == map.zMainStation)
 		return FALSE
 	else
 		return TRUE

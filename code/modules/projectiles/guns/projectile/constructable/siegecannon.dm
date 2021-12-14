@@ -388,9 +388,9 @@
 	admin_warn(user)
 	add_fingerprint(user)
 	update_icon()
-	fuse_burn()
+	fuse_burn(user)
 
-/obj/item/cannonball/fuse_bomb/proc/fuse_burn()
+/obj/item/cannonball/fuse_bomb/proc/fuse_burn(var/mob/user)
 	set waitfor = 0
 
 	if(src && src.fuse_lit)
@@ -398,9 +398,9 @@
 			sleep(10)
 			src.seconds_left--
 			src.update_icon()
-			.()
+			.(user)
 		else
-			src.detonation()
+			src.detonation(user)
 	return
 
 /obj/item/cannonball/fuse_bomb/extinguish()
@@ -408,12 +408,12 @@
 	fuse_lit = 0
 	update_icon()
 
-/obj/item/cannonball/fuse_bomb/proc/detonation()
-	explosion(get_turf(src), -1, 0, 4) //buff range to compensate for this somehow breaching
+/obj/item/cannonball/fuse_bomb/proc/detonation(var/mob/user)
+	explosion(get_turf(src), -1, 0, 4, whodunnit = user) //buff range to compensate for this somehow breaching
 	qdel(src)
 
-/obj/item/cannonball/fuse_bomb/admin/detonation() //okay, this one can breach if it wants
-	explosion(get_turf(src), -1, 1, 3)
+/obj/item/cannonball/fuse_bomb/admin/detonation(var/mob/user) //okay, this one can breach if it wants
+	explosion(get_turf(src), -1, 1, 3, whodunnit = user)
 	qdel(src)
 
 /obj/item/cannonball/fuse_bomb/update_icon()
@@ -459,8 +459,8 @@
 	bombers += log_str
 	log_game(log_str)
 
-/obj/item/cannonball/fuse_bomb/ex_act(severity)//MWAHAHAHA
-	detonation()
+/obj/item/cannonball/fuse_bomb/ex_act(severity, var/child = null, var/mob/whodunnit)//MWAHAHAHA
+	detonation(whodunnit)
 
 /obj/item/cannonball/fuse_bomb/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//consistency
 	..()

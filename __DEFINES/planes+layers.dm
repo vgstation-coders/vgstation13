@@ -88,6 +88,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define WIRE_LAYER					6
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
+	#define PULSEDEMON_LAYER			9
 
 #define FLOOR_PLANE 			(-3 + FLOAT_PLANE)
 
@@ -221,7 +222,9 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define BASE_PLANE 				(16)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define OPEN_OVERLAY_PLANE	(14 + FLOAT_PLANE) // This one won't behave either
+
+#define BASE_PLANE 				(15 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
 #define LIGHT_SOURCE_PLANE		16	// For Spiders to be able to click them despite being blinded
 

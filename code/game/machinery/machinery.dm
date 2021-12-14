@@ -136,6 +136,7 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/output_dir = 0   //Direction used to output to (for things like fabs), set to 0 for loc.
 
 	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
 	var/battery_dependent = 0	//Requires a battery to run
@@ -144,6 +145,7 @@ Class Procs:
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
+	var/pulsecompromised = 0 //Used for pulsedemons
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -380,9 +382,7 @@ Class Procs:
 	return TRUE
 
 /obj/machinery/proc/is_in_range(var/mob/user)
-	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		return FALSE
-	return TRUE
+	return (in_range(src, user) && isturf(loc)) || issilicon(user) || ispulsedemon(user)
 
 /obj/machinery/Topic(href, href_list)
 	..()
@@ -519,7 +519,7 @@ Class Procs:
 		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(toggleitem.is_screwdriver(user))
+	if(toggleitem?.is_screwdriver(user))
 		toggleitem.playtoolsound(loc, 50)
 	update_icon()
 	return 1
@@ -626,9 +626,14 @@ Class Procs:
 			else
 				return -1
 
-	if(O.is_multitool(user) && machine_flags & MULTITOOL_MENU)
-		update_multitool_menu(user)
-		return 1
+	if(O.is_multitool(user))
+		if(!panel_open && machine_flags & MULTIOUTPUT)
+			setOutputLocation(user)
+			return 1
+		if(machine_flags & MULTITOOL_MENU)
+			update_multitool_menu(user)
+			return 1
+
 
 	if(!anchored && machine_flags & FIXED2WORK)
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")
@@ -654,7 +659,7 @@ Class Procs:
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
 	return 1
 
-/obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
+/obj/machinery/proc/shock(mob/living/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
 	if(!istype(user) || !user.Adjacent(src))
@@ -774,3 +779,17 @@ Class Procs:
 
 /obj/machinery/proc/is_operational()
 	return !(stat & (NOPOWER|BROKEN|MAINT))
+
+
+/obj/machinery/proc/setOutputLocation(user)
+	var/result = input("Set your location as output?") in list("Yes","No","Machine Location")
+	switch(result)
+		if("Yes")
+			if(!Adjacent(user))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+				return 1
+			output_dir = get_dir(src, user)
+			to_chat(user, "<span class='notice'>Output set.</span>")
+		if("Machine Location")
+			output_dir = 0
+			to_chat(user, "<span class='notice'>Output set.</span>")

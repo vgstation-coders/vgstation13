@@ -57,7 +57,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 
 
 
-obj/machinery/gateway/centerstation/process()
+/obj/machinery/gateway/centerstation/process()
 	if(stat & (NOPOWER))
 		if(active)
 			toggleoff()
@@ -179,7 +179,7 @@ obj/machinery/gateway/centerstation/process()
 
 /obj/machinery/gateway/centeraway/Destroy()
 	gateways.Remove(src)
-	
+
 	..()
 
 /obj/machinery/gateway/centeraway/initialize()

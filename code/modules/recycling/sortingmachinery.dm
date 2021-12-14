@@ -259,8 +259,8 @@
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
+	output_dir = WEST
 	var/input_dir = EAST
-	var/output_dir = WEST
 	var/filter_dir = SOUTH
 
 	var/max_items_moved = 100
@@ -295,7 +295,7 @@
 	var/turf/out_T = get_step(src, output_dir)
 	var/turf/filter_T = get_step(src, filter_dir)
 
-	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
+	if(!out_T.Enter(mover, mover.loc, TRUE) || !filter_T.Enter(mover, mover.loc, TRUE))
 		return
 
 	var/affecting = in_T.contents

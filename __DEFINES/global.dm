@@ -277,12 +277,15 @@ var/list/score=list(
 	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
 	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
 	"lawchanges"	 = 0, //Amount of AI modules used.
+	"syndiphrases"	 = 0, //Amount of times a syndicate code phrase was used
+	"syndisponses"	 = 0, //Amount of times a syndicate code response was used
 
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
 
 	"money_leaderboard" = list(),
+	"implant_phrases" = list(),
 )
 
 var/list/isolated_antibodies = list(
@@ -403,7 +406,8 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
 	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
-	/mob/living/simple_animal/hostile/ginger/gingerbroodmother		// Gingerbominations...
+	/mob/living/simple_animal/hostile/ginger/gingerbroodmother,		// Gingerbominations...
+	/mob/living/simple_animal/hostile/old_vendotron,				// Why is a normal, harmless, vending machine on this list?
 	)
 
 // Set by traitor item, affects cargo supplies

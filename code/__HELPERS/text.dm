@@ -188,7 +188,7 @@
 //checks text for html tags
 //if tag is not in whitelist (var/list/paper_tag_whitelist in global.dm)
 //relpaces < with &lt;
-proc/checkhtml(var/t)
+/proc/checkhtml(var/t)
 	t = sanitize_simple(t, list("&#"="."))
 	var/p = findtext(t,"<",1)
 	while (p)	//going through all the tags
@@ -407,7 +407,7 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
 //         text_ends_with("Woody got wood", "d") returns 1
 //         text_ends_with("Woody got wood", "Wood") returns 0
-proc/text_ends_with(text, suffix)
+/proc/text_ends_with(text, suffix)
 	if(length(suffix) > length(text))
 		return FALSE
 
@@ -517,7 +517,7 @@ var/quote = ascii2text(34)
 //	to_chat(usr, "\"[jointext(num2words(number), " ")]\"")
 
 // Sanitize inputs to avoid SQL injection attacks
-proc/sql_sanitize_text(var/text)
+/proc/sql_sanitize_text(var/text)
 	text = replacetext(text, "'", "''")
 	text = replacetext(text, ";", "")
 	text = replacetext(text, "&", "")

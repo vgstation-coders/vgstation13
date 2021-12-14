@@ -53,6 +53,7 @@
 	max_tox = 0
 	max_co2 = 0
 	min_n2 = 0
+	minbodytemp = 0
 
 	corpse = /obj/effect/landmark/corpse/vox/crossbow/space
 
@@ -83,6 +84,7 @@
 	max_tox = 0
 	max_co2 = 0
 	min_n2 = 0
+	minbodytemp = 0
 
 	corpse = /obj/effect/landmark/corpse/vox/ion/space
 

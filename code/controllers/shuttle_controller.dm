@@ -15,7 +15,7 @@
 
 var/global/datum/emergency_shuttle/emergency_shuttle
 
-datum/emergency_shuttle
+/datum/emergency_shuttle
 	var/alert = 0 //0 = emergency, 1 = crew cycle
 
 	var/location = 0 //0 = in transit (or on standby), 1 = at the station, 2 = at centcom
@@ -49,7 +49,7 @@ datum/emergency_shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
 
-datum/emergency_shuttle/proc/incall(coeff = 1)
+/datum/emergency_shuttle/proc/incall(coeff = 1)
 	if(shutdown)
 		return
 	if((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
@@ -68,13 +68,13 @@ datum/emergency_shuttle/proc/incall(coeff = 1)
 			if(istype(A, /area/hallway))
 				A.readyalert()
 
-datum/emergency_shuttle/proc/shuttlealert(var/X)
+/datum/emergency_shuttle/proc/shuttlealert(var/X)
 	if(shutdown)
 		return
 	alert = X
 
 
-datum/emergency_shuttle/proc/recall()
+/datum/emergency_shuttle/proc/recall()
 	if(shutdown)
 		return
 	if(!can_recall)
@@ -100,7 +100,7 @@ datum/emergency_shuttle/proc/recall()
 
 // returns the time (in seconds) before shuttle arrival
 // note if direction = -1, gives a count-up to SHUTTLEARRIVETIME
-datum/emergency_shuttle/proc/timeleft()
+/datum/emergency_shuttle/proc/timeleft()
 	if(online)
 		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
@@ -111,13 +111,13 @@ datum/emergency_shuttle/proc/timeleft()
 		return SHUTTLEARRIVETIME
 
 // sets the time left to a given delay (in seconds)
-datum/emergency_shuttle/proc/settimeleft(var/delay)
+/datum/emergency_shuttle/proc/settimeleft(var/delay)
 	endtime = world.time + delay * 10
 	timelimit = delay
 
 // sets the shuttle direction
 // 1 = towards SS13, -1 = back to centcom
-datum/emergency_shuttle/proc/setdirection(var/dirn)
+/datum/emergency_shuttle/proc/setdirection(var/dirn)
 	if(direction == dirn || !direction || !dirn)
 		direction = dirn
 		return
@@ -127,7 +127,7 @@ datum/emergency_shuttle/proc/setdirection(var/dirn)
 	endtime = world.time + (SHUTTLEARRIVETIME*10 - ticksleft)
 	return
 
-datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
+/datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
 	if (!pod || !destination || !(istype(pod, /datum/shuttle/escape)) || !escape_pods.Find(pod))
 		return
 
@@ -149,7 +149,7 @@ datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
 			else
 				D.open()
 
-datum/emergency_shuttle/proc/force_shutdown()
+/datum/emergency_shuttle/proc/force_shutdown()
 	online=0
 	shutdown=1
 
@@ -174,7 +174,7 @@ datum/emergency_shuttle/proc/force_shutdown()
 
 
 // "preload" the assets for when they're needed for the map vote.
-datum/emergency_shuttle/proc/vote_preload()
+/datum/emergency_shuttle/proc/vote_preload()
 	if (voting_cache)
 		return
 	voting_cache = 1
@@ -183,7 +183,7 @@ datum/emergency_shuttle/proc/vote_preload()
 			spawn
 				vote.interface.sendAssets(C)
 
-datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
+/datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
 	var/frequency = get_rand_frequency()
 
 	switch (phase)
@@ -214,7 +214,7 @@ datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
 					if (M_turf.z == shuttle.dock_centcom.z)
 						M.playsound_local(shuttle.dock_centcom, 'sound/machines/hyperspace_end.ogg', 75 - (get_dist(shuttle.dock_centcom,M_turf)*2), 1, frequency, falloff = 5)
 
-datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
+/datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
 		if ("station")
 			location = 1
@@ -319,7 +319,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 
 			online = 0
 
-datum/emergency_shuttle/proc/process()
+/datum/emergency_shuttle/proc/process()
 	if(!online || shutdown)
 		return
 

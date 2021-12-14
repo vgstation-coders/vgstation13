@@ -295,9 +295,7 @@
 				extremity_B = null
 			else
 				var/turf/U = C1.loc
-				if(U && U.Enter(C2,C2.loc))//if we cannot pull the target through the turf, we just let him go.
-					C2.forceMove(C1.loc)
-				else
+				if(!(U && C2.Move(U)))//if we cannot pull the target through the turf, we just let him go.
 					extremity_B.tether = null
 					extremity_B = null
 					C1.extremity_B = null
@@ -414,7 +412,7 @@
 		update_icon()
 		return
 
-	forceMove(T, get_dir(src, T))
+	forceMove(T)
 
 	if(A == extremity_A)//depending on which side is pulling the link, we'll pull the other side.
 		var/obj/effect/overlay/chain/CH = extremity_B
@@ -467,6 +465,7 @@
 /obj/item/weapon/gun/hookshot/whip
 	name = "bullwhip"
 	icon = 'icons/obj/weapons.dmi'
+	desc = "A leather whip, commonly used as a tool for herding livestock."
 	icon_state = "bullwhip"
 	fire_sound = 'sound/weapons/whip_crack.ogg'
 	fire_action = "flick"

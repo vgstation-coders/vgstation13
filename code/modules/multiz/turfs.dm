@@ -42,15 +42,21 @@
 	..()
 	mover.fall()
 
+// Static list so it isn't slow in the check below
+var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated/wall,/turf/unsimulated/mineral)
+
 /turf/simulated/open/has_gravity()
 	var/turf/below = GetBelow(src)
 	if(!below)
 		return 0
-	if(istype(below,/turf/simulated/wall) || istype(below,/turf/unsimulated/wall))
+	// Turf checks for not spacemoving
+	if(is_type_in_list(below, no_spacemove_turfs))
 		return get_gravity()
+	// Dense stuff below checks
 	for(var/atom/A in below)
 		if(A.density)
 			return get_gravity()
+	// Structure checks (these really should be turfs)
 	if(locate(/obj/structure/catwalk) in src || locate(/obj/structure/lattice) in src)
 		return get_gravity()
 	return 0
@@ -83,15 +89,19 @@
 	icon = 'icons/effects/32x32.dmi'
 	icon_state = "white"
 	layer = ABOVE_LIGHTING_LAYER
-	plane = ABOVE_LIGHTING_PLANE
+	plane = OPEN_OVERLAY_PLANE
 
 /turf/simulated/open/update_icon()
 	var/alpha_to_subtract = 127
 	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
+	var/depth = 0
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 		alpha_to_subtract /= 2
+		depth++
+		if(depth > config.multiz_render_cap) // To stop getting caught on this in infinite loops
+			break
 
 	if(!bottom || bottom == src)
 		return
@@ -106,18 +116,6 @@
 	overlays.Cut()
 	vis_contents.Cut()
 	..()
-
-/turf/simulated/wall/New()
-	..()
-	var/turf/simulated/open/OS = GetAbove(src)
-	if(OS && isopenspace(OS))
-		OS.ChangeTurf(/turf/simulated/floor/plating)
-
-/turf/simulated/wall/initialize()
-	..()
-	var/turf/simulated/open/OS = GetAbove(src)
-	if(OS && isopenspace(OS))
-		OS.ChangeTurf(/turf/simulated/floor/plating)
 
 /turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)
@@ -203,8 +201,12 @@
 		vis_contents.Cut()
 		overlays.Cut()
 		var/turf/bottom
+		var/depth = 0
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 			alpha_to_subtract /= 2
+			depth++
+			if(depth > config.multiz_render_cap) // To stop getting caught on this in infinite loops
+				break
 
 		if(!bottom || bottom == src)
 			return
@@ -221,7 +223,7 @@
 		var/obj/effect/open_overlay/glass/overglass = new /obj/effect/open_overlay/glass
 		overglass.icon_state = glass_state
 		vis_contents.Add(overglass)
-		var/obj/effect/open_overlay/glass/overdamage = new /obj/effect/open_overlay/glass/damage
+		var/obj/effect/open_overlay/glass/damage/overdamage = new /obj/effect/open_overlay/glass/damage
 		overdamage.icon_state = icon_state
 		vis_contents.Add(overdamage)
 

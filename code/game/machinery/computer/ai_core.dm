@@ -101,7 +101,7 @@
 				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
 					return
-				if(!map.map_specific_conditions(ROBOT_CHECK))
+				if(!map.can_have_robots)
 					to_chat(user, "<span class='warning'>The station prevents you from kickstarting the tyranny of the AI!</span>")
 					return
 				if(prison.brainmob.stat == DEAD)

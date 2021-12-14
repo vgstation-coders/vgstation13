@@ -64,7 +64,7 @@
 /datum/faction/malf/proc/can_malf_ai_takeover()
 	for(var/datum/role/malfAI in members) //if there happens to be more than one malfunctioning AI, there only needs to be one in the main station: the crew can just kill that one and the countdown stops while they get the rest
 		var/turf/T = get_turf(malfAI.antag.current)
-		if(T && (T.z == STATION_Z))
+		if(T && (T.z == map.zMainStation))
 			return TRUE
 	return FALSE
 

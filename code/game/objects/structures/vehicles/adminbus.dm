@@ -11,7 +11,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
-	noghostspin = 1
+	ghost_can_rotate = FALSE
 	var/can_move=1
 	var/list/passengers = list()
 	var/unloading = 0

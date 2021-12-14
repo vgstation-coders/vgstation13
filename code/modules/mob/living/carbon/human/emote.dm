@@ -30,11 +30,13 @@
 
 /datum/emote/living/carbon/human/eyebrow
 	key = "eyebrow"
+	key_shorthand = "eyeb"
 	message = "raises an eyebrow."
 
 /datum/emote/living/carbon/human/grumble
 	key = "grumble"
 	key_third_person = "grumbles"
+	key_shorthand = "gru"
 	message = "grumbles!"
 	message_mime = "grumbles silently!"
 	emote_type = EMOTE_AUDIBLE
@@ -58,8 +60,8 @@
 /datum/emote/living/carbon/human/mumble
 	key = "mumble"
 	key_third_person = "mumbles"
-	message = "mumbles!"
-	message_mime = "mumbles silently!"
+	message = "mumbles under their breath."
+	message_mime = "mumbles silently."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/human/pale
@@ -69,18 +71,21 @@
 /datum/emote/living/carbon/human/raise
 	key = "raise"
 	key_third_person = "raises"
+	key_shorthand = "rai"
 	message = "raises a hand."
 	restraint_check = TRUE
 
 /datum/emote/living/carbon/human/salute
 	key = "salute"
 	key_third_person = "salutes"
+	key_shorthand = "sal"
 	message = "salutes."
 	message_param = "salutes to %t."
 	restraint_check = TRUE
 
 /datum/emote/living/carbon/human/peace
 	key = "peace"
+	key_shorthand = "pea"
 	message = "makes a peace sign."
 	message_param = "makes a peace sign to %t."
 	restraint_check = TRUE
@@ -88,6 +93,7 @@
 
 /datum/emote/living/carbon/human/doublepeace
 	key = "doublepeace"
+	key_shorthand = "dpea"
 	message = "makes a double peace sign."
 	message_param = "makes a double peace sign to %t."
 	restraint_check = TRUE
@@ -96,16 +102,18 @@
 /datum/emote/living/carbon/human/thumbsup
 	key = "thumbup"
 	key_third_person = "thumbsup"
-	message = "makes a thumbs up."
-	message_param = "makes a thumbs up to %t."
+	key_shorthand = "thuu"
+	message = "gives a thumbs up."
+	message_param = "gives a thumbs up to %t."
 	restraint_check = TRUE
 	hands_needed = 1
 
 /datum/emote/living/carbon/human/thumbsdown
 	key = "thumbdown"
 	key_third_person = "thumbsdown"
-	message = "makes a thumbs down."
-	message_param = "makes a thumbs down to %t."
+	key_shorthand = "thud"
+	message = "gives a thumbs down."
+	message_param = "gives a thumbs down to %t."
 	restraint_check = TRUE
 	hands_needed = 1
 
@@ -120,6 +128,7 @@
 /datum/emote/living/carbon/human/shrug
 	key = "shrug"
 	key_third_person = "shrugs"
+	key_shorthand = "shr"
 	message = "shrugs."
 
 // Effin /vg/ fart Fetishists
@@ -134,7 +143,7 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	if(world.time - H.lastFart <= 400)
+	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
 		message = "strains, and nothing happens."
 		emote_type = EMOTE_VISIBLE
 		return ..()
@@ -261,7 +270,7 @@
 					if(H && B)
 						to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
 						H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
-						explosion(get_turf(H),-1,-1,1,5) //Tiny explosion with flash
+						explosion(get_turf(H),-1,-1,1,5, whodunnit = H) //Tiny explosion with flash
 						H.dust()
 //Ayy lmao
 

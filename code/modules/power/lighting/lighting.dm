@@ -351,7 +351,7 @@ var/list/light_source_images = list()
 					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 
-					explode()
+					explode(get_mob_by_key(fingerprintslast))
 			else
 				to_chat(user, "This type of light requires a [fitting].")
 				return
@@ -591,11 +591,11 @@ var/list/light_source_images = list()
 /*
  * Explode the light.
  */
-/obj/machinery/light/proc/explode()
+/obj/machinery/light/proc/explode(var/mob/user)
 	spawn(0)
 		broken() // Break it first to give a warning.
 		sleep(2)
-		explosion(get_turf(src), 0, 0, 2, 2)
+		explosion(get_turf(src), 0, 0, 2, 2, whodunnit = user)
 		sleep(1)
 		qdel(src)
 

@@ -53,14 +53,53 @@
 
 /obj/structure/dispenser/attack_hand(mob/user as mob)
 	user.set_machine(src)
-	var/dat = "[src]<br><br>"
-
+	var/dat = ""
 	dat += {"Oxygen tanks: [oxytanks.len] - [oxytanks.len ? "<A href='?src=\ref[src];oxygen=1'>Dispense</A>" : "empty"]<br>
 		Plasma tanks: [platanks.len] - [platanks.len ? "<A href='?src=\ref[src];plasma=1'>Dispense</A>" : "empty"]"}
-	user << browse(dat, "window=dispenser")
-	onclose(user, "dispenser")
-	return
+	var/datum/browser/popup = new(user, "dispenser", "Tank Storage Unit Contents", 300, 100)
+	popup.set_content(dat)
+	popup.open()
 
+/obj/structure/dispenser/AltClick(mob/user)
+	if(Adjacent(user))
+		if(platanks.len || oxytanks.len)
+			var/list/choices = list(
+				list("Take O2 tank", "radial_tank[oxytanks.len ? "" : "empty"]"),
+				list("Take plasma tank", "radial_ptank[platanks.len ? "" : "empty"]"),
+			)
+
+			var/task = show_radial_menu(user,loc,choices,custom_check = new /callback(src, .proc/radial_check, user),starting_angle=90,ending_angle=450)
+			if(!radial_check(user))
+				return
+
+			switch(task)
+				if("Take O2 tank")
+					if(oxytanks.len)
+						var/obj/item/weapon/tank/oxygen/O = oxytanks[oxytanks.len]
+						oxytanks.Remove(O)
+						usr.put_in_hands(O)
+						to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
+						update_icon()
+						if(platanks.len || oxytanks.len)
+							AltClick(user)
+				if("Take plasma tank")
+					if(platanks.len)
+						var/obj/item/weapon/tank/plasma/P = platanks[platanks.len]
+						platanks.Remove(P)
+						usr.put_in_hands(P)
+						to_chat(usr, "<span class='notice'>You take [P] out of [src].</span>")
+						update_icon()
+						if(platanks.len || oxytanks.len)
+							AltClick(user)
+		else
+			to_chat(user, "<span class='warning'>[src] is empty.</span>")
+
+/obj/structure/dispenser/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/structure/dispenser/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/tank/oxygen) || istype(I, /obj/item/weapon/tank/air) || istype(I, /obj/item/weapon/tank/anesthetic))

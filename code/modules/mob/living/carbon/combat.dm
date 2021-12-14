@@ -7,7 +7,7 @@
 			return TRUE
 		else
 			to_chat(src, "<span class='warning'>You fail to catch \the [I]!")
-	invoke_event(/event/hitby, list("victim" = src, "item" = I))
+	INVOKE_EVENT(src, /event/hitby, "victim" = src, "item" = I)
 	return ..()
 
 /mob/living/carbon/proc/can_catch(var/obj/item/I, var/speed)
@@ -74,7 +74,7 @@
 		add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [max(damage - armor, 0)]")
 
 	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
-	invoke_event(/event/attacked_by, list("attacked" = src, "attacker" = user, "item" = I))
+	INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
 	return TRUE
 
 /mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)
@@ -123,20 +123,9 @@
 			if(isliving(hit_atom))
 				add_attacklogs(src, hit_atom, "tackled")
 				var/mob/living/L = hit_atom
-				to_chat(src, "<span class='warning'>Your tackle connects!</span>")
-				to_chat(L, "<span class='danger'>You are hit by [src]'s tackle!</span>")
-				playsound(src, 'sound/effects/bodyfall.ogg', 75, 1)
-				if (L.held_items.len)
-					for (var/obj/O in L.held_items)
-						drop_item(O, get_turf(src))
-						spawn()
-							var/dir = pick(alldirs)
-							var/turf/T = get_step(get_turf(src), dir)
-							T = get_step(T, dir)
-							T = get_step(T, dir)
-							drop_item(O)
-							O.throw_at(T, 3, 10)
-				var/tackleDefense = L.calcTackleDefense()
+				visible_message("<span class='warning'>[src] tackles [L]!</span>")
+
+				var/tackleDefense = L.calcTackleDefense(src)
 				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
 				var/rngDefense = rand(tackleDefense/2, tackleDefense)
 				var/tKnock = max(0, rngDefense - rngForce)
@@ -149,6 +138,12 @@
 					if(M_HORNS in mutations)
 						tKnock += 5
 					L.adjustBruteLoss(tKnock)
+					for (var/obj/held in L.held_items)
+						var/dir = pick(alldirs)
+						var/turf/target = get_turf(src)
+						for(var/i in 1 to 3)
+							target = get_step(target, dir)
+						L.throw_item(target, held)
 			spawn(3)	//Just to let throw_impact stop throwing a tantrum
 				isTackling = FALSE
 	..()
@@ -195,11 +190,10 @@
 				tF -= 20
 	return tF
 
-/mob/living/carbon/calcTackleDefense(var/tDef = 50)
+/mob/living/carbon/calcTackleDefense(atom/attacker, var/tDef = 50)
 	tDef += get_strength()*10
-	for(var/obj/item/weapon/I in held_items)
-		if(I.IsShield())
-			tDef += 35
+	if(check_shields(15, attacker))
+		tDef += 35
 	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
 	return max(0, tDef)

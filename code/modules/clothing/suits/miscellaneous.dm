@@ -366,7 +366,7 @@ var/list/tag_suits_list = list()
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
-obj/item/clothing/suit/cassock
+/obj/item/clothing/suit/cassock
 	name = "Cassock"
 	desc = "A black garment belonging to a priest."
 	icon_state = "cassock"
@@ -443,11 +443,11 @@ obj/item/clothing/suit/cassock
  * Misc
  */
 
-/obj/item/clothing/suit/straight_jacket
-	name = "straight jacket"
+/obj/item/clothing/suit/strait_jacket
+	name = "straitjacket"
 	desc = "A suit that completely restrains the wearer."
-	icon_state = "straight_jacket"
-	item_state = "straight_jacket"
+	icon_state = "strait_jacket"
+	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	species_fit = list(INSECT_SHAPED)
@@ -908,6 +908,7 @@ obj/item/clothing/suit/cassock
 	desc = "A wooly poncho. Smells of beans."
 	icon_state = "poncho"
 	item_state = "poncho"
+	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
 /obj/item/clothing/suit/banana_suit
@@ -983,7 +984,7 @@ obj/item/clothing/suit/cassock
 	var/message_say = user.handle_suicide_bomb_cause()
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
-	explosion(user, 1, 3, 6)
+	explosion(user, 1, 3, 6, whodunnit = user)
 	message_admins("[user] has detonated \the [src]!")
 	qdel(src) //Just in case
 	return SUICIDE_ACT_CUSTOM
@@ -992,7 +993,7 @@ obj/item/clothing/suit/cassock
 	var/mob/living/carbon/human/H = loc
 	if(!ishuman(H) || !active)
 		return
-	explosion(H, 1, 3, 6)
+	explosion(H, 1, 3, 6, whodunnit = H)
 	message_admins("[H] has detonated \the [src]!")
 	qdel(src) //Just in case
 

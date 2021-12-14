@@ -41,6 +41,9 @@
 
 /area/vault/gingerbread_house
 
+/area/vault/podstation
+	requires_power = 1
+
 /area/vault/mechclubhouse
 	requires_power = 1
 
@@ -206,6 +209,14 @@
 	requires_power = 0
 	jammed = 2
 	color = "blue"
+
+/obj/effect/blob/core/ame_lab
+	name = "antimatter control unit"
+	desc = "This device injects antimatter into connected shielding units. Wrench the device to set it...wait hold on, something's off..?"
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi'
+	looks = "AME_new"
+	asleep = TRUE
+	no_ghosts_allowed = TRUE
 
 /obj/item/weapon/paper/amelab1
 	name = "paper- 'Initial Report'"
@@ -935,3 +946,40 @@
 
 /obj/machinery/turret/russian/New()
 	installed = new /obj/item/weapon/gun/energy/laser(src)
+
+// Minisat stuff
+
+/obj/item/weapon/disk/shuttle_coords/vault/minisat
+	name = "NT microstation shuttle destination disk"
+	destination = /obj/docking_port/destination/vault/minisat
+
+/obj/docking_port/destination/vault/minisat
+	name = "NT Microstation 1"
+
+/area/vault/mini_station
+	name = "NT Microstation Hallway"
+	icon_state = "hallC"
+
+/area/vault/mini_station_entrance
+	name = "NT Microstation Entrance"
+	icon_state = "entry"
+
+/area/vault/mini_station_kitchen
+	name = "NT Microstation Kitchen"
+	icon_state = "bar"
+
+/area/vault/mini_station_medbay
+	name = "NT Microstation Medbay"
+	icon_state = "medbay"
+
+/area/vault/mini_station_engineering
+	name = "NT Microstation Engineering"
+	icon_state = "engine"
+
+/area/vault/mini_station_botany
+	name = "NT Microstation Botany"
+	icon_state = "hydro"
+
+/area/vault/mini_station_construction
+	name = "NT Microstation Construction Room"
+	icon_state = "construction"

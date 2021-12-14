@@ -41,6 +41,8 @@ Buildable meters
 #define PIPE_HE_CAP				34
 #define PIPE_Z_UP				35
 #define PIPE_Z_DOWN				36
+#define PIPE_MPVALVE			37
+#define PIPE_DPVALVE			38
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -185,6 +187,10 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 			src.pipe_type = PIPE_LAYER_ADAPTER
 		else if(istype(make_from, /obj/machinery/atmospherics/binary/heat_pump))
 			src.pipe_type = PIPE_HEAT_PUMP
+		else if(istype(make_from, /obj/machinery/atmospherics/trinary/pressure_valve/manual))
+			src.pipe_type = PIPE_MPVALVE
+		else if(istype(make_from, /obj/machinery/atmospherics/trinary/pressure_valve/digital))
+			src.pipe_type = PIPE_DPVALVE
 		setPipingLayer(make_from.piping_layer)
 
 	else
@@ -241,7 +247,9 @@ var/global/list/pipeID2State = list(
 	"heat_pump",
 	"he_cap",
 	"z_up",
-	"z_down"
+	"z_down",
+	"mpvalve",
+	"dpvalve"
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -280,7 +288,9 @@ var/global/list/nlist = list( \
 	"thermoelectric cooler", \
 	"h/e pipe cap", \
 	"up pipe", \
-	"down pipe"
+	"down pipe", \
+	"manual pressure valve", \
+	"digital pressure valve", \
 )
 /obj/item/pipe/proc/update()
 
@@ -365,7 +375,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return dir|flip|cw|acw
 		if(PIPE_MANIFOLD, PIPE_INSUL_MANIFOLD, PIPE_HE_MANIFOLD)
 			return flip|cw|acw
-		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER,PIPE_MTVALVE,PIPE_DTVALVE)
+		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER,PIPE_MTVALVE,PIPE_DTVALVE,PIPE_MPVALVE,PIPE_DPVALVE)
 			return dir|flip|cw
 		if(PIPE_CAP, PIPE_HE_CAP, PIPE_Z_UP, PIPE_Z_DOWN)
 			return dir
@@ -538,6 +548,12 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_HEAT_PUMP)
 			P = new /obj/machinery/atmospherics/binary/heat_pump(loc)
+
+		if(PIPE_MPVALVE)
+			P = new /obj/machinery/atmospherics/trinary/pressure_valve/manual(loc)
+
+		if(PIPE_DPVALVE)
+			P = new /obj/machinery/atmospherics/trinary/pressure_valve/digital(loc)
 
 	P.setPipingLayer(src.piping_layer)
 	if(P.buildFrom(usr,src))

@@ -23,7 +23,7 @@ var/list/all_doors = list()
 	var/autoclose = 0
 	var/glass = 0
 	var/normalspeed = 1
-
+	pass_flags_self = PASSDOOR
 	machine_flags = SCREWTOGGLE
 
 	// for glass airlocks/opacity firedoors
@@ -56,7 +56,28 @@ var/list/all_doors = list()
 	var/soundeffect = 'sound/machines/airlock.ogg'
 	var/soundpitch = 30
 
+	var/being_cut = FALSE
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
+
+/obj/machinery/door/proc/bashed_in(mob/user)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+	new /obj/effect/decal/cleanable/dirt(get_turf(src))
+	qdel(src)
+
+/obj/machinery/door/proc/attempt_slicing(mob/user)
+	being_cut = TRUE
+	user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+	"<span class='notice'>You begin slicing through \the [src].</span>", \
+	"<span class='warning'>You hear slicing noises.</span>")
+	playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+
+	if(do_after(user, src, 20 SECONDS))
+		user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+		"<span class='notice'>You slice through \the [src].</span>", \
+		"<span class='warning'>You hear slicing noises.</span>")
+		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+		bashed_in(user, FALSE)
+	being_cut = FALSE
 
 /obj/machinery/door/projectile_check()
 	if(opacity)
@@ -86,7 +107,7 @@ var/list/all_doors = list()
 	if (ismob(AM))
 		var/mob/M = AM
 
-		if(!M.restrained() && (M.size > SIZE_TINY))
+		if(!M.restrained() && (M.size > SIZE_TINY) && !isSaMMI(M))
 			bump_open(M)
 
 		return
@@ -328,6 +349,8 @@ var/list/all_doors = list()
 
 /obj/machinery/door/New()
 	. = ..()
+	if(!opacity)
+		pass_flags_self |= PASSGLASS
 	all_doors += src
 
 	if(density)
@@ -377,7 +400,7 @@ var/list/all_doors = list()
 		open()
 	return ..()
 
-/obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
+/obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
 
 
