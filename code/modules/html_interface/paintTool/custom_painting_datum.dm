@@ -13,7 +13,7 @@
 	var/min_strength = 0
 	var/max_strength = 1
 	var/list/palette = list() // List of colors that will be made available while painting
-	var/base_color // Color that will start selected when paining
+	var/base_color
 
 /datum/painting_utensil/New(mob/user, obj/item/held_item)
 	if (!user) // Special case
@@ -48,17 +48,21 @@
 
 	// Painting with a brush
 	if (istype(held_item, /obj/item/weapon/painting_brush))
-		var/obj/item/weapon/painting_brush/b = held_item
-		if (b.paint_color)
-			max_strength = BRUSH_STRENGTH_MAX
-			min_strength = BRUSH_STRENGTH_MIN
-			palette += b.paint_color
-			base_color = b.paint_color
-
 		// If holding a palette (item) add it's colors to the brush's list
 		for (var/obj/item/weapon/palette/pal in user.held_items)
 			for (var/datum/painting_utensil/pu in pal.stored_colours)
 				palette += pu.base_color
+
+		var/obj/item/weapon/painting_brush/b = held_item
+		if (b.paint_color)
+			max_strength = BRUSH_STRENGTH_MAX
+			min_strength = BRUSH_STRENGTH_MIN
+			// Players are likely to have one of the palette's colors on their brush from mixing colors earlier,
+			//  so make sure we're not adding it again to the list
+			if (!(b.paint_color in palette))
+				palette += b.paint_color
+			base_color = b.paint_color
+
 
 /datum/painting_utensil/proc/duplicate()
 	var/datum/painting_utensil/dupe = new(null, null)
@@ -135,11 +139,20 @@
 	src.parent = parent
 	mp_handler.set_parent(parent)
 
-
 /datum/custom_painting/proc/blank_contents()
 	bitmap = list()
 	for (var/i = 0, i < bitmap_height * bitmap_width, i++)
 		bitmap += base_color
+
+/datum/custom_painting/proc/is_blank()
+	if (author || title || description)
+		return FALSE
+
+	for (var/b in bitmap)
+		if (b != base_color)
+			return FALSE
+
+	return TRUE
 
 /datum/custom_painting/proc/setup_UI()
 	// Setup head
@@ -188,20 +201,22 @@
 
 
 /datum/custom_painting/Topic(href, href_list)
+	world.log << "painting topic"
 	// Handle multipart href
 	if (href_list["multipart"])
+		world.log << "painting topic: href"
 		mp_handler.Topic(href, href_list)
 		return
 
 	// Save changes
 	else
+		world.log << "painting topic: onwards"
 		// Make sure the player can actually paint
 		if(!usr || usr.incapacitated())
 			return
 
 		var /datum/painting_utensil/pu = new /datum/painting_utensil(usr)
 		if(!pu.palette.len)
-			//TODO other tools (crayons, brushes)
 			to_chat(usr, "<span class='warning'>You need to be holding a painting utensil in your active hand.</span>")
 			return
 
