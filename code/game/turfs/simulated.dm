@@ -54,7 +54,7 @@
 
 			if (bloodDNA)
 				src.AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor) // Coming
-				var/turf/simulated/from = get_step(H,reverse_direction(H.dir))
+				var/turf/simulated/from = get_step(H,opposite_dirs[H.dir])
 				if(istype(from) && from)
 					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor) // Going
 
