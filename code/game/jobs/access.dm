@@ -113,10 +113,24 @@
 		return 1
 	var/list/ACL = M.GetAccess()
 	if(req_access_dir)
-		var/turf/T = get_turf(src)
-		if(!((flow_flags & ON_BORDER) && dir == opposite_dirs[req_access_dir])) // For non-windoors
-			T = get_step(T,req_access_dir)
-		if(M in T.contents)
+		// A special check that combines dirs specified in this number by chaining the conditions below, for example NORTHEAST would add the north and east conditions together.
+		var/condition = FALSE
+		if((flow_flags & ON_BORDER) && opposite_dirs[req_access_dir] & dir) // For windoors and etc.
+			condition |= M.y == src.y && M.x == src.x
+		if(req_access_dir & NORTH)
+			condition |= M.y > src.y
+		if(req_access_dir & SOUTH)
+			condition |= M.y < src.y
+		if(req_access_dir & EAST)
+			condition |= M.x > src.x
+		if(req_access_dir & WEST)
+			condition |= M.x < src.x
+		if(map.multiz)
+			if(req_access_dir & UP)
+				condition |= M.z > src.z
+			if(req_access_dir & DOWN)
+				condition |= M.z < src.z
+		if(condition)
 			return can_access(ACL,req_access,req_one_access)
 		else
 			return access_not_dir
