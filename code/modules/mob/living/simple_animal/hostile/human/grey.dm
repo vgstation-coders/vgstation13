@@ -20,7 +20,7 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 8 // Their arms may be noodly and weak, but getting kicked by a steel toed boot hurts!
 
-	stat_attack = UNCONSCIOUS // Greys hostile humanoids are too smart to think that someone is dead just because they fell over
+	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	attacktext = "kicks"
 	attack_sound = 'sound/weapons/punch1.ogg'
