@@ -532,6 +532,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		temp_appearance += image_result
 	else
 		temp_appearance += temp_appearance_shadows
+
+	if (light_range < 3)
+		return
+
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
