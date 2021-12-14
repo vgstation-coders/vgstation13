@@ -69,6 +69,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	if(light_type == LIGHT_SOFT_FLICKER)
 		alpha = initial(alpha)
 		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
+		animate(alpha = initial(alpha), time = 0)
 
 	for (var/thing in view(min(world.view, light_range), src))
 		if (ismob(thing))
