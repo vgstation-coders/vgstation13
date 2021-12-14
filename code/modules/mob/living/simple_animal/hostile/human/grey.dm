@@ -37,7 +37,7 @@
 
 	corpse = /obj/effect/landmark/corpse/grey/space
 
-	faction = "mothership_explorers"
+	faction = "mothership"
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/Process_Spacemove(var/check_drift = 0)
 	return 1
