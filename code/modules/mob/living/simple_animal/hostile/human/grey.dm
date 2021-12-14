@@ -54,7 +54,7 @@
 	items_to_drop = list(/obj/item/weapon/storage/toolbox/mechanical)
 
 	speak = list("Speak softly, and carry a robust toolbox.","Where did I put that soldering iron?","Mothership guide us...")
-	speak_chance = 10
+	speak_chance = 5
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/melee/toolbox/Aggro()
 	..()
@@ -75,7 +75,7 @@
 	items_to_drop = list(/obj/item/tool/scalpel)
 
 	speak = list("I need a new specimen to dissect.","A dissection is all I need... just one more dissection.","Praise the mothership.")
-	speak_chance = 10
+	speak_chance = 5
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/melee/scalpel/Aggro()
 	..()
@@ -94,7 +94,7 @@
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
 	speak = list("Set disintegrators to scorch, medium well.","Praise the mothership, and all hail the Chairman.","Disintegrate all unidentified targets.")
-	speak_chance = 10
+	speak_chance = 5
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/ranged/Aggro()
 	..()
