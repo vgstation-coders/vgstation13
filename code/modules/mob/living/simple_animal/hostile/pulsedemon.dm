@@ -172,7 +172,7 @@
         moved = TRUE
     if(!is_under_tile() && prob(25))
         spark(src,rand(2,4))
-    if(new_power && !current_power)
+    if(new_power)
         current_power = new_power
         current_cable = null
         loc = new_power
