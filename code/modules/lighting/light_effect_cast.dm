@@ -13,7 +13,7 @@
 #define ALL_SHADOWS	 		2
 
 var/light_power_multiplier = 5
-var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
+var/light_post_processing = WALL_SHADOWS_ONLY // Use writeglobal to change this
 
 // We actually see these "pseudo-light atoms" in order to ensure that wall shadows are only seen by people who can see the light.
 // Yes, this is stupid, but it's one of the limitations of TILE_BOUND, which cannot be chosen on an overlay-per-overlay basis.
