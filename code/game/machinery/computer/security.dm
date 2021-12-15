@@ -43,7 +43,7 @@
 			if(active1.fields["fingerprint"])
 				var/list/customprints = list()
 				var/print = active1.fields["fingerprint"]
-				to_chat(user,"<span class='notice'>You scan the fingerprints from the active record and add them to the custom fingerprints.</span>")
+				to_chat(user,"<span class='notice'>You scan the fingerprints from the active record and add them to the custom fingerprints. will be tied to the next applicable scanned item.</span>")
 				customprints[print] = print
 				F.custom_forgery[1] = customprints ? customprints.Copy() : null
 	..()

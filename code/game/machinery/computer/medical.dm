@@ -157,14 +157,14 @@
 			if(active1.fields["fingerprint"])
 				var/list/customprints = list()
 				var/print = active1.fields["fingerprint"]
-				to_chat(user,"<span class='notice'>You scan the fingerprints from the active record and add them to the custom fingerprints.</span>")
+				to_chat(user,"<span class='notice'>You scan the fingerprints from the active record and add them to the custom fingerprints. It will be tied to the next applicable scanned item.</span>")
 				customprints[print] = print
 				F.custom_forgery[1] = customprints ? customprints.Copy() : null
 			if(active2 && active2.fields["b_dna"] && active2.fields["b_type"])
 				var/list/customblood = list()
 				var/blood = active2.fields["b_dna"]
 				var/bloodtype = active2.fields["b_type"]
-				to_chat(user,"<span class='notice'>You scan the blood type and DNA from the active record and add them to the custom blood data.</span>")
+				to_chat(user,"<span class='notice'>You scan the blood type and DNA from the active record and add them to the custom blood data. It will be tied to the next applicable scanned item.</span>")
 				customblood[blood] = bloodtype
 				F.custom_forgery[3] = customblood ? customblood.Copy() : null
 	..()
