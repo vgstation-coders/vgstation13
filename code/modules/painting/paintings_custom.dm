@@ -110,7 +110,7 @@
 	var/obj/item/mounted/frame/painting/custom/P = new(user.loc)
 
 	// Painting info
-	P.painting_data = painting_data.Copy()
+	P.set_painting_data(painting_data.Copy())
 	P.rendered_icon = icon
 	P.base_icon = base_icon
 	P.base_icon_state = base_icon_state
@@ -234,7 +234,7 @@
 	var/obj/structure/painting/custom/P = new(user.loc)
 
 	// Painting info
-	P.painting_data = painting_data.Copy()
+	P.set_painting_data(painting_data.Copy())
 	P.icon = rendered_icon ? rendered_icon : icon(base_icon, base_icon_state)
 	P.icon_state = base_icon_state
 	P.base_icon = base_icon
