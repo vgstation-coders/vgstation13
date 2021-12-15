@@ -3,8 +3,6 @@
 #define BRUSH_STRENGTH_MAX 1
 #define BRUSH_STRENGTH_MIN 0
 
-
-
 /*
  * PAINTING UTENSIL DATUM
  *
@@ -14,7 +12,7 @@
 /datum/painting_utensil
 	var/min_strength = 0
 	var/max_strength = 1
-	var/list/palette = list()
+	var/list/palette = list() // List of colors that will be made available while painting
 	var/base_color
 
 /datum/painting_utensil/New(mob/user, obj/item/held_item)
@@ -22,6 +20,8 @@
 		return
 	if (!held_item)
 		held_item = user.get_active_hand()
+
+	// Painting with a pen
 	if (istype(held_item, /obj/item/weapon/pen))
 		var/obj/item/weapon/pen/p = held_item
 		max_strength = PENCIL_STRENGTH_MAX
@@ -29,6 +29,7 @@
 		palette += p.colour_rgb
 		base_color = p.colour_rgb
 
+	// Painting with a crayon
 	if (istype(held_item, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/c = held_item
 		max_strength = PENCIL_STRENGTH_MAX
@@ -37,6 +38,7 @@
 		palette += c.shadeColour
 		base_color = c.color
 
+	// Painting with hair dye sprays
 	if (istype(held_item, /obj/item/weapon/hair_dye))
 		var/obj/item/weapon/hair_dye/h = held_item
 		max_strength = PENCIL_STRENGTH_MAX
@@ -44,13 +46,23 @@
 		palette += rgb(h.color_r, h.color_g, h.color_b)
 		base_color = rgb(h.color_r, h.color_g, h.color_b)
 
+	// Painting with a brush
 	if (istype(held_item, /obj/item/weapon/painting_brush))
+		// If holding a palette (item) add it's colors to the brush's list
+		for (var/obj/item/weapon/palette/pal in user.held_items)
+			for (var/datum/painting_utensil/pu in pal.stored_colours)
+				palette += pu.base_color
+
 		var/obj/item/weapon/painting_brush/b = held_item
 		if (b.paint_color)
 			max_strength = BRUSH_STRENGTH_MAX
 			min_strength = BRUSH_STRENGTH_MIN
-			palette += b.paint_color
+			// Players are likely to have one of the palette's colors on their brush from mixing colors earlier,
+			//  so make sure we're not adding it again to the list
+			if (!(b.paint_color in palette))
+				palette += b.paint_color
 			base_color = b.paint_color
+
 
 /datum/painting_utensil/proc/duplicate()
 	var/datum/painting_utensil/dupe = new(null, null)
@@ -127,11 +139,20 @@
 	src.parent = parent
 	mp_handler.set_parent(parent)
 
-
 /datum/custom_painting/proc/blank_contents()
 	bitmap = list()
 	for (var/i = 0, i < bitmap_height * bitmap_width, i++)
 		bitmap += base_color
+
+/datum/custom_painting/proc/is_blank()
+	if (author || title || description)
+		return FALSE
+
+	for (var/b in bitmap)
+		if (b != base_color)
+			return FALSE
+
+	return TRUE
 
 /datum/custom_painting/proc/setup_UI()
 	// Setup head
@@ -193,7 +214,6 @@
 
 		var /datum/painting_utensil/pu = new /datum/painting_utensil(usr)
 		if(!pu.palette.len)
-			//TODO other tools (crayons, brushes)
 			to_chat(usr, "<span class='warning'>You need to be holding a painting utensil in your active hand.</span>")
 			return
 
