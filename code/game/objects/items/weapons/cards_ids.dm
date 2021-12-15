@@ -418,8 +418,8 @@
 
 /obj/item/weapon/card/id/syndicate/AltClick()
 	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
-		to_chat(usr, "<span class='notice'>The [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
 		copy_appearance = !copy_appearance
+		to_chat(usr, "<span class='notice'>The [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
 		return
 	return ..()
 
