@@ -545,6 +545,7 @@
 		return  //Hit the wrong key...again.
 
 	//find a viable mouse candidate
+
 	var/mob/living/carbon/human/hobo = new(pick(hobostart))
 	hobo.key = src.key
 	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
