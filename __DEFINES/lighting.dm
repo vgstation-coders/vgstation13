@@ -90,6 +90,7 @@
 #define LIGHT_SOFT             "soft"
 #define LIGHT_SOFT_FLICKER     "soft-flicker"
 #define LIGHT_DIRECTIONAL      "directional"
+#define LIGHT_REGULAR_FLICKER  "regular flicker"
 
 // Lighting temperatures.
 #define COLOUR_LTEMP_CANDLE        rgb(255, 147, 41)

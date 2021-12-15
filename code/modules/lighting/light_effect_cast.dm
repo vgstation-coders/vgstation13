@@ -66,10 +66,14 @@ var/light_post_processing = WALL_SHADOWS_ONLY // Use writeglobal to change this
 			light_type = LIGHT_SOFT_FLICKER
 		light_swallowed--
 
-	if(light_type == LIGHT_SOFT_FLICKER)
-		alpha = initial(alpha)
-		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
-		animate(alpha = initial(alpha), time = 0)
+	switch (light_type)
+		if (LIGHT_SOFT_FLICKER)
+			alpha = initial(alpha)
+			animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
+			animate(alpha = initial(alpha), time = 0)
+		if (LIGHT_REGULAR_FLICKER)
+			animate(src, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
+			animate(alpha = 255, time = 5, loop = -1, easing = CIRCULAR_EASING)
 
 	for (var/thing in view(min(world.view, light_range), src))
 		if (ismob(thing))
@@ -654,9 +658,14 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		T.lumcount = -1
 		affecting_turfs += T
 
-	if(light_type == LIGHT_SOFT_FLICKER)
-		alpha = initial(alpha)
-		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
+	switch (light_type)
+		if (LIGHT_SOFT_FLICKER)
+			alpha = initial(alpha)
+			animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
+			animate(alpha = initial(alpha), time = 0)
+		if (LIGHT_REGULAR_FLICKER)
+			animate(src, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
+			animate(alpha = 255, time = 5, loop = -1, easing = CIRCULAR_EASING)
 
 /atom/movable/light/moody/cast_main_light()
 	if (gcDestroyed)
