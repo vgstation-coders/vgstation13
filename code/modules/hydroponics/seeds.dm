@@ -101,6 +101,10 @@
 	name = "packet of cabbage seeds"
 	seed_type = "cabbage"
 	vending_cat = "vegetables"
+	
+/obj/item/seeds/plasmacabbageseed
+	name = "packet of plasma cabbage seeds"
+	seed_type = "plasmacabbage"
 
 /obj/item/seeds/shandseed
 	name = "packet of S'randar's hand seeds"
@@ -1133,12 +1137,32 @@
 	display_name = "cabbages"
 	plant_dmi = 'icons/obj/hydroponics/cabbage.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
+	mutants = list("plasmacabbage")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
 	lifespan = 50
 	maturation = 3
 	production = 5
+	yield = 4
+	potency = 10
+	growth_stages = 1
+	ideal_light = 8
+	water_consumption = 6
+	nutrient_consumption = 0.15
+
+/datum/seed/plasmacabbage
+	name = "plasmacabbage"
+	seed_name = "plasma cabbage"
+	display_name = "plasma cabbages"
+	plant_dmi = 'icons/obj/hydroponics/cabbageplasma.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage)
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10),PLASMA = list(3,5))
+
+	lifespan = 30
+	maturation = 3
+	production = 6
 	yield = 4
 	potency = 10
 	growth_stages = 1
