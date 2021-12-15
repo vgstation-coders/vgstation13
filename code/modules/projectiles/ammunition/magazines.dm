@@ -16,7 +16,7 @@
 		if(colored_marking) 
 			overlays -= colored_marking
 		var/image/magazine_mark = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-overlay")
-		if(has_icon(magazine_mark.icon, "[initial(icon_state)]-overlay")) //need to add a thing here that checks if there's actually an icon
+		if(has_icon(magazine_mark.icon, "[initial(icon_state)]-overlay"))
 			magazine_mark.icon += grayon.colour
 			markingcolor = grayon.colour
 			overlays += magazine_mark
