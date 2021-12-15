@@ -541,7 +541,7 @@
 		return
 
 	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
-	if(response != "Yeah!")
+	if(response != "Yeah!" || !src.key)
 		return  //Hit the wrong key...again.
 
 	//find a viable mouse candidate

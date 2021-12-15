@@ -201,16 +201,13 @@
 
 
 /datum/custom_painting/Topic(href, href_list)
-	world.log << "painting topic"
 	// Handle multipart href
 	if (href_list["multipart"])
-		world.log << "painting topic: href"
 		mp_handler.Topic(href, href_list)
 		return
 
 	// Save changes
 	else
-		world.log << "painting topic: onwards"
 		// Make sure the player can actually paint
 		if(!usr || usr.incapacitated())
 			return
