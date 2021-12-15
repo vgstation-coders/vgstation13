@@ -266,6 +266,14 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if(abs(x_offset) > abs(y_offset))
 		xy_swap = 1
 
+	var/two_bordering_walls = 0
+
+	if (num == 2)
+		if (xy_swap)
+			two_bordering_walls = check_wall_occlusion(get_step(target_turf, NORTH)) && check_wall_occlusion(get_step(target_turf, SOUTH))
+		else
+			two_bordering_walls = check_wall_occlusion(get_step(target_turf, EAST)) && check_wall_occlusion(get_step(target_turf, WEST))
+
 	var/shadowoffset = WORLD_ICON_SIZE/2 + (WORLD_ICON_SIZE*light_range)
 
 	//TODO: rewrite this comment:
@@ -287,7 +295,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// Using BYOND's render_target magick here
 
 	var/image/I = new()
-	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]"
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]_[two_bordering_walls]"
 
 	// We've done this before...
 	if (shadow_image_identifier in pre_rendered_shadows)
@@ -302,48 +310,59 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
 		var/icon/shadowicon
-		switch(light_range)
-			if(2)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_2_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_2_shadows2.dmi'
-			if(3)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_3_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_3_shadows2.dmi'
-			if(4)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_4_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_4_shadows2.dmi'
-			if(5)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_5_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_5_shadows2.dmi'
-			if(6)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_6_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_6_shadows2.dmi'
-			if(7)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_7_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_7_shadows2.dmi'
-			if(8)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_8_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_8_shadows2.dmi'
-			if(9)
-				if(num == 1)
-					shadowicon = 'icons/lighting/light_range_9_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_9_shadows2.dmi'
-
+		if (!two_bordering_walls)
+			switch(light_range)
+				if(2)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_2_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_2_shadows2.dmi'
+				if(3)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_3_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_3_shadows2.dmi'
+				if(4)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_4_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_4_shadows2.dmi'
+				if(5)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_5_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_5_shadows2.dmi'
+				if(6)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_6_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_6_shadows2.dmi'
+				if(7)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_7_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_7_shadows2.dmi'
+				if(8)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_8_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_8_shadows2.dmi'
+				if(9)
+					if(num == 1)
+						shadowicon = 'icons/lighting/light_range_9_shadows1.dmi'
+					else
+						shadowicon = 'icons/lighting/light_range_9_shadows2.dmi'
+		else
+			// Darker shadow icons if both adj. walls are occluded
+			switch(light_range)
+				if(2)
+					shadowicon = 'icons/lighting/fully_occl/light_range_2_shadows2.dmi'
+				if(3)
+					shadowicon = 'icons/lighting/fully_occl/light_range_3_shadows2.dmi'
+				if(4)
+					shadowicon = 'icons/lighting/fully_occl/light_range_4_shadows2.dmi'
+				if(5)
+					shadowicon = 'icons/lighting/fully_occl/light_range_5_shadows2.dmi'
 		I = image(shadowicon)
 
 		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
@@ -559,6 +578,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		black_turf.layer = ANTI_GLOW_PASS_LAYER
 		temp_appearance += black_turf
 
+
 // Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/shadow/post_processing()
 	// Fetch the image processed so far
@@ -719,6 +739,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			targ_dir = pick(closest_attack_angles & diagonal)
 
 	message_admins("final targ_dir is: [targ_dir]")
+
+// Just explicitly checks if something is a wall... we don't want to cast the hard shadow if the neighbouring occluding obj. is a door, as it will force us to update it
+/proc/check_wall_occlusion(var/turf/T)
+	return iswallturf(T)
 
 #undef MAX_LIGHT_RANGE
 #undef BASE_PIXEL_OFFSET

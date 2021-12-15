@@ -399,8 +399,10 @@
 	icon_state = "fireplace"
 	base_state = "fireplace"
 	desc = "The wood cracks and pops as the fire dances across its grainy surface. The sweet and smokey smell reminds you of smores and hot chocolate."
-	light_power_on = 0.8
-	light_range_on = 0
+	light_power_on = 3
+	light_range_on = 2
+	light_type = LIGHT_SOFT_FLICKER
+	light_color = LIGHT_COLOR_FIRE
 	nocell = 2
 	density = 0
 	pixel_x = -WORLD_ICON_SIZE/2
