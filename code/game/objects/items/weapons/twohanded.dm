@@ -17,6 +17,14 @@
 	abstract = 1
 	var/obj/item/wielding = null
 
+/obj/item/offhand/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
+	giver.swap_hand()
+	receiver.give_item(giver)
+	return FALSE
+
+/obj/item/offhand/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return FALSE
+
 /obj/item/offhand/dropped(user)
 	if(!wielding)
 		qdel(src)
@@ -78,7 +86,15 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/fireaxe/suicide_act(var/mob/living/user)
+/obj/item/weapon/fireaxe/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W,/obj/item/weapon/antiaxe_kit))
+		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
+		new /obj/item/weapon/fireaxe/antimatter(loc)
+		qdel(W)
+		qdel(src)
+
+/obj/item/weapon/fireaxe/suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
 		return (SUICIDE_ACT_BRUTELOSS)
 
@@ -201,7 +217,7 @@
 
 /obj/item/binoculars/update_wield(mob/user)
 	if(wielded)
-		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, .proc/mob_moved)
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
 		item_state = "binoculars_wielded"
 		user.regenerate_icons()
@@ -210,7 +226,7 @@
 			var/client/C = user.client
 			C.changeView(C.view + 7)
 	else
-		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, .proc/mob_moved)
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 		item_state = "binoculars"
 		user.regenerate_icons()
@@ -249,9 +265,9 @@
 	if(user)
 		user.update_inv_hands()
 	if(wielded)
-		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, .proc/mob_moved)
 	else
-		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
 	if(isliving(target))

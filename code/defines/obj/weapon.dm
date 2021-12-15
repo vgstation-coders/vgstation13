@@ -17,25 +17,6 @@
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
-/*/obj/item/weapon/syndicate_uplink
-	name = "station bounced radio"
-	desc = "Remain silent about this..."
-	icon = 'icons/obj/radio.dmi'
-	icon_state = "radio"
-	var/temp = null
-	var/uses = 10.0
-	var/selfdestruct = 0.0
-	var/traitor_frequency = 0.0
-	var/mob/currentUser = null
-	var/obj/item/device/radio/origradio = null
-	flags = FPRINT  | CONDUCT | ONBELT
-	w_class = W_CLASS_SMALL
-	item_state = "radio"
-	throw_speed = 4
-	throw_range = 20
-	m_amt = 100
-	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=3"*/
-
 /obj/item/weapon/rsp
 	name = "\improper Rapid-Seed-Producer (RSP)"
 	desc = "A device used to rapidly deploy seeds."
@@ -63,17 +44,6 @@
 /obj/item/weapon/bananapeel/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
 	return(SUICIDE_ACT_BRUTELOSS)
-
-/obj/item/weapon/corncob
-	name = "corn cob"
-	desc = "A reminder of meals gone by."
-	icon = 'icons/obj/hydroponics/corn.dmi'
-	icon_state = "cob"
-	item_state = "corncob"
-	w_class = W_CLASS_TINY
-	throwforce = 0
-	throw_speed = 4
-	throw_range = 20
 
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
@@ -425,16 +395,16 @@
 	IED = null
 	..()
 
-/obj/item/weapon/beartrap/ex_act(var/severity)
+/obj/item/weapon/beartrap/ex_act(var/severity, var/child = null, var/mob/whodunnit)
 	switch(severity)
 		if (1)
 			qdel(src)
 		if (2)
 			if (IED)
-				IED.prime()
+				IED.prime(whodunnit)
 		if (3)
 			if (IED && prob(50))
-				IED.prime()
+				IED.prime(whodunnit)
 
 /obj/item/weapon/beartrap/armed
 	armed = 1
@@ -510,7 +480,7 @@
 					to_chat(trappeduser, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 					trapped = 0
 					unlock_atom(trappeduser)
-					trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+					trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 					trappeduser = null
 					anchored = FALSE
 					return
@@ -525,7 +495,7 @@
 						playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 						trapped = 0
 						unlock_atom(trappeduser)
-						trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+						trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 						trappeduser = null
 						anchored = FALSE
 						return
@@ -599,7 +569,7 @@
 				trapped = 0
 				anchored = FALSE
 				unlock_atom(trappeduser)
-				trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+				trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 				trappeduser = null
 			else
 				to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappeduser.name].</span>")
@@ -608,7 +578,7 @@
 					trapped = 0
 					anchored = FALSE
 					unlock_atom(trappeduser)
-					trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+					trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 					trappeduser = null
 		else if (istype(trappedbear))
 			to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappedbear.name].</span>")
@@ -652,7 +622,7 @@
 				armed = 0
 				anchored = FALSE
 				var/mob/living/simple_animal/SA = AM
-				visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
+				SA.visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
 						"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
 						"<span class='notice'>You hear a sudden snapping sound!",\
 						//Hallucination messages
@@ -677,7 +647,7 @@
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
 		H.audible_scream()
 		lock_atom(H, /datum/locking_category/beartrap)
-		H.lazy_register_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+		H.register_event(/event/moved, src, .proc/forcefully_remove)
 
 		if(trappedorgan.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
 			H.UpdateDamageIcon()
@@ -686,7 +656,7 @@
 		if(!H.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
 			to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap!</span>")
 			trapped = 0
-			trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+			trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 			trappeduser = null
 			unlock_atom(H)
 			anchored = FALSE
@@ -721,14 +691,14 @@
 	message_admins(log_str)
 	log_game(log_str)
 	spawn(IED.det_time)
-		IED.prime()
+		IED.prime(L)
 		desc = initial(desc)
 		overlays.Remove(ied_overlay)
 		if (trappeduser && trappedorgan?.amputated)//check if they lost their leg, and get them out of the trap
 			to_chat(trappeduser, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 			trapped = 0
 			unlock_atom(trappeduser)
-			trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+			trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 			trappeduser = null
 			anchored = FALSE
 
@@ -755,7 +725,7 @@
 		visible_message("<span class='warning'>The wound on [mover]'s leg worsens terribly as the trap let go of them.</span>")
 		trapped = 0
 		unlock_atom(trappeduser)
-		trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+		trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 		anchored = FALSE
 		trappeduser.update_canmove()
 		trappeduser = null
@@ -861,7 +831,7 @@
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
 				message_admins("[C] triggered the explosive wet floor sign at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 				log_game("[C] triggered the explosive wet floor sign at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
-				explosion(src.loc,-1,2,0)
+				explosion(src.loc,-1,2,0, whodunnit = get_mob_by_key(fingerprintslast))
 				if(ishuman(C))
 					dead_legs(C)
 				if(src)

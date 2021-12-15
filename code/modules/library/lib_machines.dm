@@ -66,7 +66,7 @@
 /datum/library_catalog
 	var/list/cached_books = list()
 
-/datum/library_catalog/proc/initialize()
+/datum/library_catalog/initialize()
 	var/newid=1
 	for(var/typepath in typesof(/obj/item/weapon/book/manual)-/obj/item/weapon/book/manual)
 		var/obj/item/weapon/book/B = new typepath(null)

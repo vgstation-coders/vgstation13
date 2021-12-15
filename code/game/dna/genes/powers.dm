@@ -278,10 +278,14 @@
 
 /datum/dna/gene/basic/midget/activate(var/mob/M, var/connected, var/flags)
 	..()
+	M.shrunken = 1
+	M.update_transform()
 	M.pass_flags |= PASSTABLE
 
 /datum/dna/gene/basic/midget/deactivate(var/mob/M, var/connected, var/flags)
 	if(..())
+		M.shrunken = 0
+		M.update_transform()
 		M.pass_flags &= ~PASSTABLE
 
 /datum/dna/gene/basic/xray

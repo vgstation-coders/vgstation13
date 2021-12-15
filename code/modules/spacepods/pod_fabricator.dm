@@ -10,7 +10,7 @@
 	build_number = PODFAB
 	build_time = 1
 	nano_file = "podfab.tmpl"
-	research_flags = NANOTOUCH | HASOUTPUT | HASMAT_OVER | TAKESMATIN | ACCESS_EMAG | LOCKBOXES
+	research_flags = NANOTOUCH | HASOUTPUT | HASMAT_OVER | TAKESMATIN | ACCESS_EMAG | LOCKBOXES | MULTIOUTPUT
 
 	part_sets = list( //set names must be unique
 		"Pod_Frame" = list(

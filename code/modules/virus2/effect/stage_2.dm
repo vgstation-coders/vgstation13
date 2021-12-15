@@ -632,24 +632,16 @@
 	if(activated)
 		return
 	to_chat(mob, "<span class = 'warning'>You feel small...</span>")
-	var/matrix/M = matrix()
-	M.Scale(1,0.7)
-	mob.transform = M
-
-	mob.pixel_y = -4 * PIXEL_MULTIPLIER
-
+	mob.shrunken = 1
+	mob.update_transform()
 	mob.pass_flags |= PASSTABLE
 
 	activated = 1
 
 /datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
-	var/matrix/M = matrix()
-	M.Scale(1,1)
-	mob.transform = M
-
-	mob.pixel_y = 0 * PIXEL_MULTIPLIER
-
+	mob.shrunken = 0
+	mob.update_transform()
 	mob.pass_flags &= ~PASSTABLE
 	activated = 0
 

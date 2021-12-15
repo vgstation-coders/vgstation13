@@ -397,18 +397,6 @@
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
 
-
-/obj/item/weapon/circuitboard/security/solder_improve(mob/user)
-	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
-		return ..()
-	if(istype(src,/obj/item/weapon/circuitboard/security/engineering))
-		return ..()
-	else
-		to_chat(user, "<span class='notice'>You locate a short that makes the feed circuitry more elegant.</span>")
-		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
-		user.put_in_hands(A)
-		qdel(src)
-
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)

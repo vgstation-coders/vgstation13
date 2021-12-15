@@ -398,7 +398,7 @@
 			to_chat(user, "<span class='warning'>\The [target] already has [o_a][O.organ_tag].</span>")
 			return 0
 
-		if(O.organ_data && affected.name == O.organ_data.parent_organ)
+		if(O.organ_data && affected.name == O.organ_data.parent_organ && affected.destspawn == 0)
 			organ_compatible = 1
 		else
 			to_chat(user, "<span class='warning'>\The [O.organ_tag] [o_do] normally go in \the [affected.display_name].</span>")
@@ -423,7 +423,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has transplanted \the [tool] into [target]'s [affected.display_name].</span>", \
 	"<span class='notice'>You have transplanted \the [tool] into [target]'s [affected.display_name].</span>")
-	user.drop_item()
+	user.drop_item(tool)
 	var/obj/item/organ/internal/O = tool
 
 	if(istype(O))

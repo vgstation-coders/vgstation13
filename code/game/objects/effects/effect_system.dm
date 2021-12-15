@@ -727,7 +727,7 @@ steam.start() -- spawns the effect
 /obj/effect/foam/fire
 	name = "fire supression foam"
 	icon_state = "mfoam"
-	
+
 /obj/effect/foam/fire/enhanced
 	lowest_temperature = 16
 
@@ -760,7 +760,7 @@ steam.start() -- spawns the effect
 	reagents.my_atom = src
 	var/ccolor = mix_color_from_reagents(reagents.reagent_list)
 	if(ccolor)
-		icon += ccolor
+		color = ccolor
 	var/savedtemp
 	if(reagents.has_reagent(WATER))
 		var/turf/simulated/T = get_turf(src)
@@ -805,7 +805,7 @@ steam.start() -- spawns the effect
 		if(!T)
 			continue
 
-		if(!T.Enter(src))
+		if(!T.Enter(src, loc, TRUE))
 			continue
 
 		var/obj/effect/foam/F = locate() in T
@@ -1037,8 +1037,9 @@ steam.start() -- spawns the effect
 	var/amount 						// TNT equivalent
 	var/flashing = 0			// does explosion creates flash effect?
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
+	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit)
 	amount = amt
 	if(istype(loc, /turf/))
 		location = loc
@@ -1047,6 +1048,7 @@ steam.start() -- spawns the effect
 
 	flashing = flash
 	flashing_factor = flash_fact
+	user = whodunnit
 
 	return
 
@@ -1078,7 +1080,7 @@ steam.start() -- spawns the effect
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 
-		explosion(location, devastation, heavy, light, flash)
+		explosion(location, devastation, heavy, light, flash, whodunnit = user)
 
 /datum/effect/system/reagents_explosion/proc/holder_damage(var/atom/holder)
 	if(holder)

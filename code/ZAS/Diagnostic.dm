@@ -1,4 +1,4 @@
-client/proc/Zone_Info(turf/T as null|turf)
+/client/proc/Zone_Info(turf/T as null|turf)
 	set category = "Debug"
 	if(T)
 		if(istype(T,/turf/simulated) && T:zone)
@@ -14,9 +14,9 @@ client/proc/Zone_Info(turf/T as null|turf)
 				images -= zone_debug_images[zone]
 			zone_debug_images = null
 
-client/var/list/zone_debug_images
+/client/var/list/zone_debug_images
 
-client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
+/client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 	set category = "Debug"
 
 	if(!istype(T))

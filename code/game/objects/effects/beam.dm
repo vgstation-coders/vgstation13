@@ -129,7 +129,7 @@
 	else
 		icon_state = "emitter_double_mouse_end"
 
-// Listener for /lazy_event/on_moved
+// Listener for /event/moved
 /obj/effect/beam/proc/target_moved(atom/movable/mover)
 	if(master)
 		beam_testing("Child got target_moved!  Feeding to master.")
@@ -150,7 +150,7 @@
 	if(A && !(A in sources) && Cross(A)) //If there is a dense atom, we're not being emitted by it, and it can cross us
 		Crossed(A)
 
-// Listener for /lazy_event/on_density_change
+// Listener for /event/density_change
 /obj/effect/beam/proc/target_density_change(atom/atom)
 	if(master)
 		beam_testing("Child got target_density_change!  Feeding to master.")
@@ -161,7 +161,7 @@
 	// Disconnect and re-emit.
 	disconnect()
 
-// Listener for /lazy_event/on_destroyed
+// Listener for /event/destroyed
 /obj/effect/beam/proc/target_destroyed(datum/thing)
 	if(master)
 		beam_testing("Child got target_destroyed!  Feeding to master.")
@@ -226,9 +226,9 @@
 	BM.target=AM
 	BM.update_end_icon()
 	if(istype(AM))
-		AM.lazy_register_event(/lazy_event/on_moved, BM, .proc/target_moved)
-		AM.lazy_register_event(/lazy_event/on_destroyed, BM, .proc/target_destroyed)
-	AM.lazy_register_event(/lazy_event/on_density_change, BM, .proc/target_density_change)
+		AM.register_event(/event/moved, BM, .proc/target_moved)
+		AM.register_event(/event/destroyed, BM, .proc/target_destroyed)
+	AM.register_event(/event/density_change, BM, .proc/target_density_change)
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
 	AM.beam_connect(BM)
@@ -269,8 +269,8 @@
 	var/obj/effect/beam/_master=get_master()
 	if(_master.target)
 		if(ismovable(_master.target))
-			_master.target.lazy_unregister_event(/lazy_event/on_moved, _master, .proc/target_moved)
-			_master.target.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/target_destroyed)
+			_master.target.unregister_event(/event/moved, _master, .proc/target_moved)
+			_master.target.unregister_event(/event/destroyed, src, .proc/target_destroyed)
 		_master.target.beam_disconnect(_master)
 		_master.target=null
 		//if(_master.next)
@@ -382,7 +382,7 @@
 
 	var/turf/T = get_turf(src)
 	if(T)
-		T.lazy_register_event(/lazy_event/on_density_change, src, .proc/turf_density_change)
+		T.register_event(/event/density_change, src, .proc/turf_density_change)
 
 	next = spawn_child()
 	if(next)
@@ -428,11 +428,11 @@
 /obj/effect/beam/Destroy()
 	var/turf/T = get_turf(src)
 	if(T)
-		T.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/turf_density_change)
+		T.unregister_event(/event/density_change, src, .proc/turf_density_change)
 	var/obj/effect/beam/ourselves = src
 	var/obj/effect/beam/ourmaster = get_master()
 	if(target)
-		target.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/target_density_change)
+		target.unregister_event(/event/density_change, src, .proc/target_density_change)
 		if(target.beams)
 			target.beams -= ourselves
 	for(var/obj/machinery/mirror/M in mirror_list)

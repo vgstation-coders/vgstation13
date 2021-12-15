@@ -21,6 +21,12 @@
 		message += " OLE!"
 	speech.message = message
 
+/obj/item/clothing/mask/luchador/offenseTackleBonus()
+	return 5
+
+/obj/item/clothing/mask/luchador/defenseTackleBonus()
+	return 5
+
 /obj/item/clothing/mask/luchador/tecnicos
 	name = "Tecnicos Mask"
 	desc = "Worn by robust fighters who uphold justice and fight honorably."

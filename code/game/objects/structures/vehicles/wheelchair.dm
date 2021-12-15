@@ -28,8 +28,11 @@
 	if(istype(W, /obj/item/weapon/gun_barrel))
 		to_chat(user, "You place \the [W] on \the [src].")
 		var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/I = new (get_turf(src.loc))
+		I.base_wheelchair = src
 		I.dir = dir
-		qdel(src)
+		for (var/atom/movable/AM in locked_atoms)
+			unlock_atom(AM)
+		forceMove(I)
 		qdel(W)
 
 /obj/structure/bed/chair/vehicle/wheelchair/unlock_atom(var/atom/movable/AM)

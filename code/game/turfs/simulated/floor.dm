@@ -10,7 +10,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 				"oldburning","light-on-r","light-on-y","light-on-g","light-on-b", "wood", "wood-broken", "wood-broken2", "wood-broken3", "wood-broken4", "wood-broken5", "wood-broken6", "wood-broken7", "carpet",
 				"carpetcorner", "carpetside", "carpet", "arcade", "ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5",
 				"ironsand6", "ironsand7", "ironsand8", "ironsand9", "ironsand10", "ironsand11",
-				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
+				"ironsand12", "ironsand13", "ironsand14", "ironsand15","engine")
 
 var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3","asteroid","asteroid_dug",
 				"ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5", "ironsand6", "ironsand7",
@@ -24,7 +24,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 /turf/simulated/floor
 
 	//Note to coders, the 'intact' var can no longer be used to determine if the floor is a plating or not.
-	//Use the is_plating(), is_plasteel_floor() and is_light_floor() procs instead. --Errorage
+	//Use the is_plating(), is_metal_floor() and is_light_floor() procs instead. --Errorage
 	name = "floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "floor"
@@ -38,6 +38,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/burnt = 0
 	var/material = "metal"
 	var/spam_flag = 0 //For certain interactions, like bananium floors honking when stepped on
+	var/enter_sound = "clownstep"
+	var/attack_sound = 'sound/items/bikehorn.ogg'
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
 
@@ -58,7 +60,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/proc/create_floor_tile()
 	if(!floor_tile)
-		floor_tile = new /obj/item/stack/tile/plasteel(null)
+		floor_tile = new /obj/item/stack/tile/metal(null)
 		floor_tile.amount = 1
 
 /turf/simulated/floor/Destroy()
@@ -115,11 +117,10 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
 		new /obj/effect/decal/cleanable/dirt(src)
 
-turf/simulated/floor/update_icon()
-
+/turf/simulated/floor/update_icon()
 	if(lava)
 		return
-	else if(is_plasteel_floor())
+	else if(is_metal_floor())
 		if(!broken && !burnt)
 			icon_state = icon_regular_floor
 	else if(is_plating())
@@ -228,7 +229,7 @@ turf/simulated/floor/update_icon()
 		if("bananium")
 			if(!spam_flag)
 				spam_flag = 1
-				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
+				playsound(src, attack_sound, 50, 1)
 				spawn(20)
 					spam_flag = 0
 		//Phazon tiles teleport to another random one in the world when clicked
@@ -249,8 +250,8 @@ turf/simulated/floor/update_icon()
 		make_plating()
 	break_tile()
 
-/turf/simulated/floor/is_plasteel_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/plasteel))
+/turf/simulated/floor/is_metal_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/metal))
 		return 1
 	else
 		return 0
@@ -305,7 +306,7 @@ turf/simulated/floor/update_icon()
 		return
 	if(broken)
 		return
-	if(is_plasteel_floor())
+	if(is_metal_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		broken = 1
 	else if(is_light_floor())
@@ -345,10 +346,10 @@ turf/simulated/floor/update_icon()
 		return
 	if(istype(src,/turf/unsimulated/floor/asteroid))
 		return//Asteroid tiles don't burn
-	if(is_plasteel_floor())
+	if(is_metal_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
-	else if(is_plasteel_floor())
+	else if(is_metal_floor())
 		src.icon_state = "floorscorched[pick(1,2)]"
 		burnt = 1
 	else if(is_plating())
@@ -369,9 +370,6 @@ turf/simulated/floor/update_icon()
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.
 /turf/simulated/floor/proc/make_plating()
-	if(istype(src,/turf/simulated/floor/engine))
-		return
-
 	if(is_grass_floor())
 		for(var/direction in cardinal)
 			if(istype(get_step(src,direction),/turf/simulated/floor))
@@ -405,7 +403,7 @@ turf/simulated/floor/update_icon()
 //This proc will make the turf a plasteel floor tile. The expected argument is the tile to make the turf with
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
-/turf/simulated/floor/proc/make_plasteel_floor(var/obj/item/stack/tile/plasteel/T = null)
+/turf/simulated/floor/proc/make_metal_floor(var/obj/item/stack/tile/metal/T = null)
 	if(floor_tile)
 		qdel(floor_tile)
 	floor_tile = null
@@ -600,11 +598,13 @@ turf/simulated/floor/update_icon()
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 		return
 	else if(istype(C, /obj/item/stack/tile))
-		if(is_plating())
+		if(istype(C, /obj/item/stack/tile/metal/plasteel))
+			to_chat(user, "<span class='warning'>This floor needs something to anchor this kind of tile to, add some rods first.</span>")
+		else if(is_plating())
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					make_plasteel_floor(T)
+					make_metal_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
 	else if(isshovel(C))
@@ -644,7 +644,7 @@ turf/simulated/floor/update_icon()
 			if("bananium")
 				if(!spam_flag)
 					spam_flag = 1
-					playsound(src, "clownstep", 50, 1)
+					playsound(src, enter_sound, 50, 1)
 					spawn(20)
 						spam_flag = 0
 			if("uranium")

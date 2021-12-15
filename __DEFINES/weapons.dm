@@ -33,7 +33,8 @@
 #define AUTOMAGDROP  2		//Does the mag drop when it's empty?
 #define EMPTYCASINGS 4		//Does the gun eject empty casings?
 #define SCOPED		 8		//Attachable scope?
-#define CHAMBERSPENT 16		//Spent casings stay in the gun untill reloaded
+#define CHAMBERSPENT 16		//Spent casings stay in the gun until reloaded
+#define MAG_OVERLAYS 32		//this gun uses magazine overlays instead of flat sprites with magazines included
 
 //projectiles bouncing off and phasing through obstacles
 #define PROJREACT_WALLS		1//includes opaque doors

@@ -50,7 +50,7 @@
 		spark(src)
 		playsound(src, 'sound/machines/Alarm_short.ogg', 100, FALSE)
 		spawn(30)
-			explosion(src.loc, 2, 5, 8, 10)
+			explosion(src.loc, 2, 5, 8, 10, whodunnit = src)
 			gibbed = TRUE
 			gib()
 

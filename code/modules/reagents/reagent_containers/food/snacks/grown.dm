@@ -275,6 +275,12 @@ var/list/special_fruits = list()
 	trash = /obj/item/weapon/corncob
 	fragrance = INCENSE_CORNOIL
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/corn/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "<span class='warning'>You'll have to eat the corn first before you can cut a pipe out of its cob.</span>")
+		return
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
 	desc = "Great for toppings!"
@@ -399,6 +405,13 @@ var/list/special_fruits = list()
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
 	fragrance = INCENSE_LEAFY
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage
+	name = "plasma cabbage"
+	desc = "Not to be confused with red cabbage."
+	potency = 25
+	filling_color = "#99335C"
+	plantname = "plasmacabbage"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"

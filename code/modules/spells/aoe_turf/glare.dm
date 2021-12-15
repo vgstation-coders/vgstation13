@@ -72,6 +72,7 @@
 					C.blinded = 1
 				C.blinded += max(1, distance_value)
 		to_chat(C, "<span class='warning'>You are blinded by [user]'s glare.</span>")
+		C.flash_eyes()
 	V.remove_blood(blood_cost)
 
 /spell/aoe_turf/glare/critfail(var/list/targets, var/mob/user)

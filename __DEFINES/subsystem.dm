@@ -28,8 +28,10 @@
 #define SS_INIT_MINIMAP           -23
 #define SS_INIT_PERSISTENCE_MAP	  -98
 #define SS_INIT_PERSISTENCE_MISC  -99
+#define SS_INIT_PATHFINDER        -100
 #define SS_INIT_DAYNIGHT		  -200
 
+#define SS_PRIORITY_TIMER          1000
 #define SS_PRIORITY_WEATHER        210
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
@@ -67,6 +69,7 @@
 #define SS_WAIT_TICKER              2 SECONDS
 #define SS_WAIT_ENGINES				30 SECONDS
 
+#define SS_DISPLAY_TIMER          -110
 #define SS_DISPLAY_GARBAGE        -100
 #define SS_DISPLAY_AIR            -90
 #define SS_DISPLAY_LIGHTING       -80

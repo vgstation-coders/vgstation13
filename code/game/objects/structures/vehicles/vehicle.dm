@@ -14,6 +14,14 @@
 				paired_to = V
 				V.mykey = src
 
+/obj/item/key/dropped(mob/user)
+	..()
+	if(locate(/obj/structure/table) in loc.contents)
+		desc = "Why did they get left upon the table? [user] wanted to."
+
+/obj/item/key/pickup(mob/user)
+	desc = initial(desc)
+
 /obj/item/key/Destroy()
 	if(paired_to)
 		paired_to.mykey = null
@@ -26,7 +34,6 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
-	noghostspin = 1 //You guys are no fun
 	buckle_range = 1
 	var/empstun = 0
 	var/health = 100
@@ -191,6 +198,9 @@
 		return 0
 	if(move_delayer.blocked())
 		return 0
+	if (istype(locked_to, /obj/machinery/bot/mulebot))
+		var/obj/machinery/bot/mulebot/M = locked_to
+		M.unload(0)
 
 	//If we're in space or our area has no gravity...
 	var/turf/T = loc
@@ -429,8 +439,8 @@
 	if(!.)
 		return
 
-	AM.pixel_x = initial(AM.pixel_x)
-	AM.pixel_y = initial(AM.pixel_y)
+	AM.pixel_x -= offsets["[dir]"]["x"]
+	AM.pixel_y -= offsets["[dir]"]["y"]
 
 	last_dir = null
 

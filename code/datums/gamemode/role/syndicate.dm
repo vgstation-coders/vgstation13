@@ -7,7 +7,7 @@
 	default_admin_voice = "The Syndicate"
 	admin_voice_style = "syndradio"
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
-	var/obj/item/device/uplink/hidden/uplink//so we keep track of where the uplink they spawn with ends up
+	var/datum/component/uplink/uplink //so we keep track of where the uplink they spawn with ends up
 
 /datum/role/traitor/OnPostSetup()
 	..()
@@ -81,9 +81,9 @@
 
 /datum/role/traitor/extraPanelButtons()
 	var/dat = ""
-	var/obj/item/device/uplink/hidden/guplink = antag.find_syndicate_uplink()
+	var/datum/component/uplink/guplink = antag.find_syndicate_uplink()
 	if(guplink)
-		dat += " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];telecrystalsSet=1;'>Telecrystals: [guplink.uses](Set telecrystals)</a><br>"
+		dat += " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];telecrystalsSet=1;'>Telecrystals: [guplink.telecrystals](Set telecrystals)</a><br>"
 		dat += " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];removeuplink=1;'>(Remove uplink)</a><br>"
 	else
 		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];giveuplink=1;'>(Give uplink)</a><br>"
@@ -94,11 +94,11 @@
 	if(href_list["giveuplink"])
 		equip_traitor(antag.current, 20, src)
 	if(href_list["telecrystalsSet"])
-		var/obj/item/device/uplink/hidden/guplink = M.find_syndicate_uplink()
-		var/amount = input("What would you like to set their crystal count to?", "Their current count is [guplink.uses]") as null|num
+		var/datum/component/uplink/guplink = M.find_syndicate_uplink()
+		var/amount = input("What would you like to set their crystal count to?", "Their current count is [guplink.telecrystals]") as null|num
 		if(isnum(amount) && amount >= 0)
 			to_chat(usr, "<span class = 'notice'>You have set [M]'s uplink telecrystals to [amount].</span>")
-			guplink.uses = amount
+			guplink.telecrystals = amount
 
 	if(href_list["removeuplink"])
 		M.take_uplink()
@@ -132,6 +132,37 @@
 				. += "[entry]<BR>"
 		else
 			. += "The traitor was a smooth operator this round.<BR>"
+
+/datum/role/traitor/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20)
+	. = FALSE
+	if (!istype(traitor_mob))
+		return
+
+	var/list/contents = recursive_type_check(traitor_mob, /obj/item/device)
+
+	var/datum/component/uplink/new_uplink
+
+	// Hide the uplink in a PDA if available, otherwise radio
+	var/obj/item/device/pda/found_pda = locate() in contents
+	if(found_pda)
+		new_uplink = found_pda.add_component(/datum/component/uplink)
+		traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([found_pda.name]).")
+		traitor_mob.mind.total_TC += new_uplink.telecrystals
+		to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [found_pda.name]. Simply enter the code \"[new_uplink.unlock_code]\" as its ringtone to unlock its hidden features.")
+		. = TRUE
+	else
+		var/obj/item/device/radio/found_radio = locate() in contents
+		if(found_radio)
+			new_uplink = found_radio.add_component(/datum/component/uplink)
+			traitor_mob.mind.store_memory("<B>Uplink frequency:</B> [format_frequency(new_uplink.unlock_frequency)] ([found_radio.name]).")
+			traitor_mob.mind.total_TC += new_uplink.telecrystals
+			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [found_radio.name]. Simply dial the frequency [format_frequency(new_uplink.unlock_frequency)] to unlock its hidden features.")
+			. = TRUE
+	if (new_uplink)
+		uplink = new_uplink
+		new_uplink.job = traitor_mob.mind.assigned_role
+	else
+		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you an uplink.")
 
 //________________________________________________
 

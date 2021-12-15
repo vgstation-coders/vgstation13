@@ -3,6 +3,7 @@
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
+	. = INVOKE_EVENT(src, /event/item_attack_self, "user" = user)
 	if(flags & TWOHANDABLE)
 		if(!(flags & MUSTTWOHAND))
 			if(wielded)
@@ -31,8 +32,7 @@
 			I.attack(src, user, def_zone, originator)
 		else
 			I.attack(src, user, def_zone)
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = I)
 
 
 
@@ -48,12 +48,6 @@
 // If it returns 1 it exits click code. Always . = 1 at start of the function if you delete src.
 /obj/item/proc/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	return
-
-obj/item/proc/get_clamped_volume()
-	if(src.force && src.w_class)
-		return clamp((src.force + src.w_class) * 4, 30, 100)// Add the item's force to its weight class and multiply by 4, then clamp the value between 30 and 100
-	else if(!src.force && src.w_class)
-		return clamp(src.w_class * 6, 10, 100) // Multiply the item's weight class by 6, then clamp the value between 10 and 100
 
 /obj/item/proc/attack(mob/living/M as mob, mob/living/user as mob, def_zone, var/originator = null)
 	if(restraint_resist_time > 0)

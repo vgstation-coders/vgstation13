@@ -1,4 +1,28 @@
 
+///////////////////////////////////////VISUAL EFFECTS//////////////////////////////////////////////
+
+// Based on holopad rays. Causes a Shadow to move from T to C
+// "sprite" var can be replaced to use another icon_state from icons/effects/96x96.dmi
+/proc/shadow(var/atom/C,var/turf/T,var/sprite="rune_blind")
+	var/disty = C.y - T.y
+	var/distx = C.x - T.x
+	var/newangle
+	if(!disty)
+		if(distx >= 0)
+			newangle = 90
+		else
+			newangle = 270
+	else
+		newangle = arctan(distx/disty)
+		if(disty < 0)
+			newangle += 180
+		else if(distx < 0)
+			newangle += 360
+	var/matrix/M1 = matrix()
+	var/matrix/M2 = turn(M1.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = ABOVE_LIGHTING_PLANE, trans = M2)
+
+
 ///////////////////////////////////////CULT RITUALS////////////////////////////////////////////////
 //Effects spawned by rune spells
 
@@ -79,6 +103,9 @@
 
 /obj/effect/afterimage/red
 	image_color = "red"
+
+/obj/effect/afterimage/black
+	image_color = "black"
 
 /obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5)
 	..()
@@ -389,8 +416,14 @@
 				var/mob/M = rider
 				M.flags &= ~INVULNERABLE
 				M.see_invisible = SEE_INVISIBLE_LIVING
-				M.see_invisible_override = 0
-				M.apply_vision_overrides()
+				var/jaunter = FALSE
+				for (var/obj/effect/cult_ritual/seer/seer_ritual in seer_rituals)
+					if (seer_ritual.caster == M)
+						jaunter = TRUE
+						break
+				if (!jaunter)
+					M.see_invisible_override = 0
+					M.apply_vision_overrides()
 				if (iscarbon(rider))
 					var/mob/living/carbon/C = rider
 					if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
@@ -404,8 +437,14 @@
 					var/mob/M = AM
 					M.flags &= ~INVULNERABLE
 					M.see_invisible = SEE_INVISIBLE_LIVING
-					M.see_invisible_override = 0
-					M.apply_vision_overrides()
+					var/jaunter = FALSE
+					for (var/obj/effect/cult_ritual/seer/seer_ritual in seer_rituals)
+						if (seer_ritual.caster == M)
+							jaunter = TRUE
+							break
+					if (!jaunter)
+						M.see_invisible_override = 0
+						M.apply_vision_overrides()
 					if (iscarbon(AM))
 						var/mob/living/carbon/C = AM
 						if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
@@ -652,7 +691,7 @@ var/bloodstone_backup = 0
 	switch(dance_move)
 		if ("clock")
 			for (var/mob/M in dancers)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				INVOKE_EVENT(M, /event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHWEST,NORTH)
 						step_to(M, get_step(M,EAST))
@@ -662,11 +701,11 @@ var/bloodstone_backup = 0
 						step_to(M, get_step(M,WEST))
 					if (SOUTHWEST,WEST)
 						step_to(M, get_step(M,NORTH))
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				INVOKE_EVENT(M, /event/after_move)
+				INVOKE_EVENT(M, /event/moved, "mover" = M)
 		if ("counter")
 			for (var/mob/M in dancers)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				INVOKE_EVENT(M, /event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHEAST,NORTH)
 						step_to(M, get_step(M,WEST))
@@ -676,22 +715,22 @@ var/bloodstone_backup = 0
 						step_to(M, get_step(M,EAST))
 					if (NORTHWEST,WEST)
 						step_to(M, get_step(M,SOUTH))
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				INVOKE_EVENT(M, /event/after_move)
+				INVOKE_EVENT(M, /event/moved, "mover" = M)
 		if ("spin")
 			for (var/mob/M in dancers)
 				spawn()
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					INVOKE_EVENT(M, /event/face)
 					sleep(0.75)
 					M.dir = EAST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					INVOKE_EVENT(M, /event/face)
 					sleep(0.75)
 					M.dir = NORTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					INVOKE_EVENT(M, /event/face)
 					sleep(0.75)
 					M.dir = WEST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					INVOKE_EVENT(M, /event/face)
 					sleep(0.75)
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					INVOKE_EVENT(M, /event/face)

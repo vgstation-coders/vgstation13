@@ -1,19 +1,22 @@
 /datum/component/ai/target_holder
 
-/datum/component/ai/target_holder/proc/AddTarget(var/atom/A)
+/datum/component/ai/target_holder/initialize()
+	parent.register_event(/event/comp_ai_cmd_add_target, src, .proc/cmd_add_target)
+	parent.register_event(/event/comp_ai_cmd_remove_target, src, .proc/cmd_remove_target)
+	parent.register_event(/event/comp_ai_cmd_get_best_target, src, .proc/cmd_get_best_target)
+	return TRUE
+
+/datum/component/ai/target_holder/proc/cmd_add_target(var/atom/A)
 	return
 
-/datum/component/ai/target_holder/proc/RemoveTarget(var/atom/A)
+/datum/component/ai/target_holder/proc/cmd_remove_target(var/atom/A)
 	return
 
 
 /**
  * Get the best target
  *
- * @param objRef Direct reference to the holding object containing the target validation callback
- * @param procName Name of the callback proc
- * @param from_finder Use /datum/component/ai/target_finder.GetTargets()
  * @return null if not target found, /atom if a target is found.
  */
-/datum/component/ai/target_holder/proc/GetBestTarget(var/objRef, var/procName, var/from_finder=1)
+/datum/component/ai/target_holder/proc/cmd_get_best_target()
 	return

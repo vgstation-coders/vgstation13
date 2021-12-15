@@ -993,7 +993,20 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/under/football/offenseTackleBonus()
+	return 5
+
 /obj/item/clothing/under/football/New()
 	icon_state = "redfootball_[pick(23,13,69,56)]"
 	item_state = icon_state
 	_color = icon_state
+
+/obj/item/clothing/under/rags
+	name ="rags"
+	desc = "Some leather scraps tied together."
+	icon_state = "rags"
+	item_state = "rags"
+	_color = "rags"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)

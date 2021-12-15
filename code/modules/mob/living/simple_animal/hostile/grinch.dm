@@ -44,7 +44,7 @@
 		back = null
 		success = 1
 		update_inv_back()
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else
 		success = ..()
 

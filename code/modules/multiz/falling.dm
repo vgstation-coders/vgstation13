@@ -31,13 +31,27 @@
 		return
 
 	var/turf/bottom = null
+	var/depth = 0
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+		depth++
+		if(depth > config.multiz_bottom_cap) // To stop getting caught on this in infinite loops
+			break
 
 	if(istype(bottom,/turf/space))
 		return
 
 	var/turf/T = loc
 	if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
+		return
+
+	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
+	// Detect stairs below and traverse down them.
+	if(down_stairs && down_stairs.dir == GetOppositeDir(dir))
+		Move(below)
+		if(isliving(src))
+			var/mob/living/L = src
+			if(L.pulling)
+				L.pulling.Move(below)
 		return
 
 	var/gravity = get_gravity()
@@ -47,28 +61,41 @@
 	fall_lock = TRUE
 	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
 		fall_lock = FALSE
-		
+
 		// We're in a new loc most likely, so check all this again
 		below = GetBelow(src)
 		if(!below)
 			return
-	
+
 		bottom = null
+		depth = 0
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-	
+			depth++
+			if(depth > config.multiz_bottom_cap) // To stop getting caught on this in infinite loops
+				break
+
 		if(istype(bottom,/turf/space))
 			return
 		T = loc
 		if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
 			return
-	
+
+		down_stairs = locate(/obj/structure/stairs) in below
+		if(down_stairs && down_stairs.dir == GetOppositeDir(dir))
+			Move(below)
+			if(isliving(src))
+				var/mob/living/L = src
+				if(L.pulling)
+					L.pulling.Move(below)
+			return
+
 		gravity = get_gravity()
 		if(!gravity)
 			return
 
 		/*if(throwing)  This was causing odd behavior where things wouldn't stop.
 			return*/
-	
+
 		if(can_fall())
 			// We spawn here to let the current move operation complete before we start falling. fall() is normally called from
 			// Entered() which is part of Move(), by spawn()ing we let that complete.  But we want to preserve if we were in client movement
@@ -123,15 +150,8 @@
 		if(!A.Cross(src, src.loc, 1, 0))
 			return FALSE
 
-	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
-
 	// Now lets move there!
 	if(!Move(landing))
-		return 1
-
-	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
-	// Detect if we made a silent landing.
-	if(down_stairs)
 		return 1
 
 	if(isopenspace(oldloc))

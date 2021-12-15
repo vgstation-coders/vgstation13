@@ -147,6 +147,7 @@ For the main html chat area
 
 /datum/chatOutput/proc/pingLoop()
 	set waitfor = FALSE
+	usr = null //Otherwise this holds a reference to the new_player and causes it to hard del
 
 	while (owner)
 		ehjax_send(data = owner.is_afk(29 SECONDS) ? "softPang" : "pang") // SoftPang isn't handled anywhere but it'll always reset the opts.lastPang.
@@ -190,6 +191,12 @@ For the main html chat area
 				//TODO: add a new evasion ban for the CURRENT client details, using the matched row details
 				message_admins("<span class='danger big'>[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])</span>")
 				log_admin("[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")
+				var/admins_number = admins.len
+				var/admin_number_afk = get_afk_admins()
+				var/available_admins = admins_number - admin_number_afk
+				//Probably not a good idea to print IP and CID in these channels
+				send2adminirc("[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]]) [available_admins ? "" : "No non-AFK admins online"]")
+				send2admindiscord("**[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]]) [available_admins ? "" : "No non-AFK admins online"]**", !available_admins)
 
 	cookieSent = 1
 

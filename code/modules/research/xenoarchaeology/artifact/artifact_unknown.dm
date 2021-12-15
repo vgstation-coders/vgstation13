@@ -18,10 +18,6 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	var/artifact_id = ""
 	anchored = 0
 	layer = ABOVE_OBJ_LAYER
-	var/event/on_attackby
-	var/event/on_explode
-	var/event/on_projectile
-	var/event/on_beam
 	var/analyzed = 0 //set to 1 after having been analyzed successfully
 	var/safe_delete = FALSE
 
@@ -33,11 +29,6 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		artifact_id = generate_artifact_id()
 
 	excavated_large_artifacts[artifact_id] = src
-
-	on_attackby = new(owner = src)
-	on_explode = new(owner = src)
-	on_projectile = new(owner = src)
-	on_beam = new(owner = src)
 	//event arguement list format (user, "context", item)
 
 	if(generate_effect)
@@ -151,11 +142,9 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 	src.add_fingerprint(user)
 	to_chat(user, "<b>You touch [src].</b>")
-	lazy_invoke_event(/lazy_event/on_attackhand, list("user" = user, "target" = src))
+	INVOKE_EVENT(src, /event/attackhand, "user" = user, "target" = src)
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-
-	..()
 	user.delayNextAttack(8)
 	user.do_attack_animation(src, W)
 	if (W.hitsound)
@@ -164,17 +153,17 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
 	else
 		visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>")
-	on_attackby.Invoke(list(user, "MELEE", W))
+	..()	// /obj/attackby invokes /event/attackby
 
 /obj/machinery/artifact/Bumped(var/atom/A)
 	if (istype(A,/obj))
-		on_attackby.Invoke(list(usr, "THROW", A))
+		INVOKE_EVENT(src, /event/bumped, "bumper" = A, "bumped" = src)
 	else if (isliving(A))
 		var/mob/living/L = A
 		if (!ishuman(L) || !istype(L:gloves,/obj/item/clothing/gloves))
 			if (prob(50))
 				to_chat(L, "<b>You accidentally touch [src].<b>")
-				lazy_invoke_event(/lazy_event/on_bumped, list("user" = L, "target" = src))
+				INVOKE_EVENT(src, /event/bumped, "bumper" = L, "bumped" = src)
 	..()
 
 /obj/machinery/artifact/to_bump(var/atom/A)
@@ -183,16 +172,16 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		if (!ishuman(L) || !istype(L:gloves,/obj/item/clothing/gloves))
 			if (prob(50))
 				to_chat(L, "<b>\The [src] bumps into you.<b>")
-				lazy_invoke_event(/lazy_event/on_bumped, list("user" = L, "target" = src))
+				INVOKE_EVENT(src, /event/bumped, "bumper" = L, "bumped" = src)
 	..()
 
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
-	on_projectile.Invoke(list(P.firer, "PROJECTILE",P))
+	INVOKE_EVENT(src, /event/projectile, "projectile" = P)
 	return ..()
 
 /obj/machinery/artifact/beam_connect(var/obj/effect/beam/B)
 	..()
-	on_beam.Invoke(list(B, "BEAMCONNECT"))
+	INVOKE_EVENT(src, /event/beam_connect, "beam" = B)
 
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)
@@ -206,10 +195,9 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 				ArtifactRepercussion(src, null, "an explosion", "[type]")
 				qdel(src)
 			else
-				on_explode.Invoke(list("", "EXPLOSION"))
+				INVOKE_EVENT(src, /event/explosion, "severity" = severity)
 		if(3.0)
-			on_explode.Invoke(list("", "EXPLOSION"))
-	return
+			INVOKE_EVENT(src, /event/explosion, "severity" = severity)
 
 /obj/machinery/artifact/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
@@ -223,10 +211,6 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 	qdel(primary_effect); primary_effect = null
 	qdel(secondary_effect); secondary_effect = null
-	qdel(on_attackby); on_attackby = null
-	qdel(on_explode); on_explode = null
-	qdel(on_projectile); on_projectile = null
-	qdel(on_beam); on_beam = null
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")

@@ -6,7 +6,7 @@
 	density = 1
 	anchored = 1
 	var/input_dir = 1
-	var/output_dir = 2
+	output_dir = 2
 
 /obj/machinery/patient_processor/proc/notify_ghost(var/mob/M)
 	if(!M.client)

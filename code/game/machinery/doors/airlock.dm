@@ -25,7 +25,6 @@
 	power_channel = ENVIRON
 
 	custom_aghost_alerts=1
-
 	var/aiControlDisabled = 0 //If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock. If -1, the control is enabled but the AI had bypassed it earlier, so if it is disabled again the AI would have no trouble getting back in.
 	var/hackProof = 0 // if 1, this door can't be hacked by the AI
 	var/secondsMainPowerLost = 0 //The number of seconds until power is restored.
@@ -1176,21 +1175,9 @@ About the new airlock wires panel:
 			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
 
-	if((I.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT && density)
-		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
-		"<span class='notice'>You begin slicing through \the [src].</span>", \
-		"<span class='warning'>You hear slicing noises.</span>")
-		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-
-		if(do_after(user, src, 200))
-			if(!istype(src))
-				return
-			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
-			"<span class='notice'>You slice through \the [src].</span>", \
-			"<span class='warning'>You hear slicing noises.</span>")
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			bashed_in(user, FALSE)
-
+	if(!being_cut && (I.sharpness_flags & CUT_AIRLOCK) && density)
+		attempt_slicing(user)
+		return
 	if(istype(I, /obj/item/weapon/batteringram))
 		var/obj/item/weapon/batteringram/B = I
 		if(!B.can_ram(user))
@@ -1286,7 +1273,7 @@ About the new airlock wires panel:
 	add_fingerprint(user)
 	return
 
-/obj/machinery/door/airlock/proc/bashed_in(var/mob/user, var/throw_circuit = TRUE)
+/obj/machinery/door/airlock/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
 	var/obj/structure/door_assembly/DA = revert(user,throw_circuit ? user.dir : null)
@@ -1319,6 +1306,10 @@ About the new airlock wires panel:
 		else if(req_one_access && req_one_access.len)
 			A.conf_access = req_one_access
 			A.one_access = 1
+		if(req_access_dir)
+			A.dir_access = req_access_dir
+		if(access_not_dir)
+			A.access_nodir = access_not_dir
 	else
 		A = electronics
 		electronics = null

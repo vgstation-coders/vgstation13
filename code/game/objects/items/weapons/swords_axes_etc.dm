@@ -328,9 +328,9 @@
 	if(prob(1))
 		to_chat(user, "<span class='notice'>You hit [pick("a good and caring parent", "a criminal", "someone everyone will miss",
 		"someone no one will miss", "a thief", "an abusive parent", "a space communist", "an alcoholic", "an adventurer")].</span>")
-	explosion(target, 0, 0, 1)
+	explosion(target, 0, 0, 1, whodunnit = user)
 
 /obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
 	..()
-	explosion(get_turf(src), 0, 2, 3)
+	explosion(get_turf(src), 0, 2, 3, whodunnit = user)
 	qdel(src)

@@ -1,8 +1,7 @@
 /mob/living/silicon/ai/Login()	//ThisIsDumb(TM) TODO: tidy this up ¬_¬ ~Carn
 	..()
-	
-	var/datum/runeset/rune_set = global_runesets["blood_cult"]
-	for(var/obj/effect/rune/rune in rune_set.rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
+
+	for(var/obj/effect/rune/rune in runes)
 		client.images += rune.blood_image
 	regenerate_icons()
 	clear_all_alerts()	//fuck alerts
@@ -22,7 +21,7 @@
 	if(M)
 		DisplayUI("Malf")
 	client.CAN_MOVE_DIAGONALLY = TRUE
-
+	client.screen += aistatic
 
 /mob/living/silicon/ai/proc/show_intro_text()
 	to_chat(src, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")

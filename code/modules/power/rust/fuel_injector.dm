@@ -266,7 +266,7 @@
 		stop_injecting()
 
 /obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap()
-	var/rev_dir = reverse_direction(dir)
+	var/rev_dir = opposite_dirs[dir]
 	var/turf/mid = get_step(src, rev_dir)
 	var/success = 0
 	for(var/obj/machinery/rust_fuel_assembly_port/check_port in get_step(mid, rev_dir))

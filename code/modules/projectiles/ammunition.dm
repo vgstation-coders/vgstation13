@@ -89,7 +89,7 @@
 	if(istype(A, /obj/item/ammo_casing)) //loading a bullet into the magazine or box
 		var/obj/item/ammo_casing/AC = A
 		var/accepted = 0
-		if((exact && (istype(AC, ammo_type))) || (!exact && (AC.caliber == caliber)))
+		if((exact && (AC.type == text2path(ammo_type))) || (!exact && (AC.caliber == caliber)))
 			accepted = 1
 		else
 			to_chat(user, "<span class='warning'>\the [AC] does not fit into [src]. </span>")

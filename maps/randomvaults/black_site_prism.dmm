@@ -51,7 +51,7 @@
 "de" = (/obj/machinery/light{color = "#FF0000"; light_color = "#FF0000"},/turf/simulated/floor/carpet,/area/vault/black_site_prism)
 "dn" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/invulnerable,/area/vault/black_site_prism)
 "dF" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4; one_way = 1},/obj/structure/window/reinforced{dir = 1},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
-"dG" = (/obj/structure/table,/obj/item/weapon/reagent_containers/glass/beaker{pixel_x = 5},/obj/item/weapon/storage/box/donkpockets{pixel_x = 3; pixel_y = 3},/obj/item/weapon/kitchen/utensil/knife/large,/obj/abstract/map/spawner/food,/turf/simulated/floor{icon_state = "white"},/area/vault/black_site_prism)
+"dG" = (/obj/structure/table,/obj/item/weapon/reagent_containers/glass/beaker{pixel_x = 5},/obj/item/weapon/storage/box/donkpockets{pixel_x = 3; pixel_y = 3},/obj/item/weapon/kitchen/utensil/knife/large,/obj/abstract/map/spawner/voxfood,/turf/simulated/floor{icon_state = "white"},/area/vault/black_site_prism)
 "dI" = (/obj/effect/mine,/turf/unsimulated/floor{dir = 1; icon_state = "darkred"},/area/vault/black_site_prism)
 "dT" = (/turf/simulated/floor/carpet,/area/vault/black_site_prism)
 "eb" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/chicken,/turf/simulated/floor/grass,/area/vault/black_site_prism)
@@ -114,7 +114,6 @@
 "mV" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/black_site_prism)
 "ng" = (/obj/effect/decal/cleanable/soot,/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/black_site_prism)
 "nh" = (/turf/simulated/wall/invulnerable,/area/vault/black_site_prism)
-"nl" = (/obj/machinery/computer/security/advanced,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "nw" = (/obj/machinery/door/airlock/centcom{locked = 1; name = "Command Center"; opacity = 1; req_access_txt = "101"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "ny" = (/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser{name = "Black Site Prism Operative"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "nA" = (/obj/effect/landmark/corpse/syndicatecommando{name = "Black Site Prism Commando"},/obj/effect/decal/cleanable/blood/splatter,/turf/simulated/floor/wood,/area/vault/black_site_prism)
@@ -356,7 +355,7 @@
 "Ot" = (/mob/living/simple_animal/hostile/humanoid/vox/crossbow,/turf/unsimulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/black_site_prism)
 "Ou" = (/obj/machinery/door/airlock/research{name = "Research Division Access"; req_access_txt = "47"},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "ON" = (/obj/structure/table,/obj/item/weapon/paper,/obj/item/weapon/pen,/turf/simulated/floor/plating,/area/vault/black_site_prism)
-"OP" = (/obj/structure/rack,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/nitrogen,/obj/abstract/map/spawner/food/voxfood,/turf/simulated/floor/vox{icon_state = "asteroidplating"},/area/vault/black_site_prism)
+"OP" = (/obj/structure/rack,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/nitrogen,/obj/abstract/map/spawner/voxfood,/turf/simulated/floor/vox{icon_state = "asteroidplating"},/area/vault/black_site_prism)
 "Pg" = (/obj/item/stack/teeth,/turf/unsimulated/floor{icon_state = "darkredcorners"},/area/vault/black_site_prism)
 "Pk" = (/turf/unsimulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/black_site_prism)
 "Pm" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/full/reinforced,/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/unsimulated/floor{name = "plating"},/area/vault/black_site_prism)
@@ -368,7 +367,7 @@
 "PM" = (/obj/effect/landmark/corpse/assistant,/turf/simulated/floor/wood,/area/vault/black_site_prism)
 "PO" = (/obj/machinery/light{color = "#FF0000"; dir = 4; light_color = "#FF0000"},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor{dir = 8; icon_state = "darkred"},/area/vault/black_site_prism)
 "PV" = (/obj/machinery/sleeper{dir = 1},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
-"Qe" = (/obj/machinery/door/window{dir = 2; req_access = 63},/turf/unsimulated/floor{dir = 1; icon_state = "darkred"},/area/vault/black_site_prism)
+"Qe" = (/obj/machinery/door/window{dir = 2; req_access = list(63)},/turf/unsimulated/floor{dir = 1; icon_state = "darkred"},/area/vault/black_site_prism)
 "Qf" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/full/plasma,/obj/structure/window/plasma{dir = 1},/obj/structure/window/plasma,/obj/structure/cable/yellow{icon_state = "0-8"},/turf/space,/area/vault/black_site_prism)
 "Qh" = (/obj/effect/decal/cleanable/blood/stattrack{dir = 4},/turf/unsimulated/floor{dir = 1; icon_state = "darkred"},/area/vault/black_site_prism)
 "Qk" = (/obj/machinery/portable_atmospherics/canister/plasma,/obj/machinery/light{color = "#FF0000"; dir = 8; light_color = "#FF0000"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
@@ -423,7 +422,7 @@
 "XB" = (/obj/effect/decal/cleanable/blood/drip,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "XC" = (/turf/simulated/floor/vox{icon_state = "asteroidplating"},/area/vault/black_site_prism)
 "XE" = (/obj/effect/alien/weeds,/turf/unsimulated/floor{dir = 4; icon_state = "darkredcorners"},/area/vault/black_site_prism)
-"XO" = (/obj/machinery/door/window{dir = 2; req_access = 63},/obj/machinery/door/window{dir = 1; req_access = 63},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
+"XO" = (/obj/machinery/door/window{dir = 2; req_access = list(63)},/obj/machinery/door/window{dir = 1; req_access = list(63)},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "XP" = (/obj/effect/decal/cleanable/blood/stattrack,/turf/unsimulated/floor{dir = 8; icon_state = "darkredcorners"},/area/vault/black_site_prism)
 "Ya" = (/obj/machinery/portable_atmospherics/canister/plasma,/obj/machinery/atmospherics/unary/portables_connector,/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "Yc" = (/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
@@ -469,7 +468,7 @@ KrKrKrKrKrKrKrKrKrKrnhiQcCakysaHngxocCcCcCnhaqThAQKButTharnhFEuXomomomomomomhXsZ
 KrKrKrKrKrKrKrKrKrKrnhiQcCkVkVEpxPngiQiQiQSZiQZgiQasiQZgiQTHKniQiQiQiQiQiQiQKOgWnhKrKrKrKrKrKrKrKrKrKr
 nhnhnhnhnhnhnhnhnhnhnhSmnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhnhglnhnhnhnhnhnhnhnhnhnhnh
 nhQkYaiQiQiQiQiQiQiQiQiQnhUtviWIWIWIviMrnhyiQHNmKFLfHUnhLWbdnhUtviWIWIWIviMrnhAWMwMwMwMwbhMwMwMwMwqqnh
-nhuweZhMloxkxkexmLxkmViznhHEKhMqudFaKhwdnhnliQnyiQxwiQnEPEoMnhsaKhqLVJyVKhwdnhcCcCcCcCcCcCcCcCcCcCJXnh
+nhuweZhMloxkxkexmLxkmViznhHEKhMqudFaKhwdnhXdiQnyiQxwiQnEPEoMnhsaKhqLVJyVKhwdnhcCcCcCcCcCcCcCcCcCcCJXnh
 nhiQstQAgKrKpRHhtcvdTKYcnhBRdbkLkLkLdbxPnhnhnhnhnhnhnwnhnhnhnhtypolFwKwKpoxPnhOgyJucYYkKJXErJZaCcCJXnh
 nhiQiQOuNUiQNUAjcNiQuuywnhBRaLkLatkLCADhKAiQQHiQiQQHiQiQQHiQIGGHGWwKauMGknxPnhxYIMiQiQFnJXJtiQiQcCJXnh
 nhKTLlgFQwsqwJexiQFuJzQBnhBRBfkLkLkLBfLCnhnhnhnhnhnhnhnhnhnhnhtyHvSfwKwKHvxPnhNlsSLohjfPtTPVVUNucCJXnh

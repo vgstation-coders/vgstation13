@@ -2,9 +2,13 @@
 	var/list/muted_letters = list()
 	var/muteletter_tries = 3
 	var/list/muteletters_check = list()
+	var/hangman_phrase = ""
 
-///mob/living/carbon/human/say(var/message)
-//	..(message)
+/mob/living/carbon/human/say(var/message)
+	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message) && !findtext(message, "*", 1, 2))
+		species.silent_speech(src,message)
+	else
+		..()
 
 // This is obsolete if the human is using a language.
 // Verbs in such a situation are given in /datum/language/get_spoken_verb().
@@ -86,10 +90,14 @@
 				O.client.handle_hear_voice(src)
 	if(muted_letters && muted_letters.len)
 		muteletter_tries = 3 //Resets on new thing spoken
-		muteletters_check = uniquelist(splittext(speech.message,""))
+		muteletters_check = uniquelist(splittext(uppertext(speech.message),""))
 		for(var/letter in muteletters_check)
 			if(!(letter in muted_letters))
 				muteletters_check.Remove(letter)
+		hangman_phrase = speech.message
+		hangman_phrase = replacetext(hangman_phrase,".","") // Filter out punctuation
+		hangman_phrase = replacetext(hangman_phrase,"?","")
+		hangman_phrase = replacetext(hangman_phrase,"!","")
 		for(var/letter in muted_letters)
 			speech.message = replacetext(speech.message, letter, "_")
 

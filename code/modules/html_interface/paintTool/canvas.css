@@ -1,0 +1,111 @@
+
+.mainPanel {
+	height:650px;
+	white-space: nowrap;
+}
+
+.mainPanel > * {
+	white-space: normal;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.controlColumn {
+	overflow: auto;
+	height:100%;
+	width: 250px;
+	padding: 20px;
+}
+
+.controlColumn input[type="text"] {
+	width:100%;
+}
+.controlColumn textarea {
+	width:100%;
+	max-width:100%;
+	min-width:100%;
+}
+
+.colorHint {
+	width: 22px;
+}
+
+.navigationBar a {
+    width: 32.3%;
+    box-sizing: border-box;
+}
+
+.paintColumn {
+	min-width: 320px;
+	max-width: 560px;
+}
+
+.canvasPanel {
+	border: 1px solid #40628a;
+	margin: 19px;
+	background-color: #202020;
+	line-height: 0px;
+}
+
+.canvasPanel p {
+	line-height: normal;
+	position: absolute;
+	width: 130px;
+	margin: 10px;
+	z-index: 0;
+}
+
+.canvasPanel canvas {
+	background: #202020;
+	z-index: 1;
+	position: relative;
+}
+
+.paintPanel {
+	margin: 20px;
+}
+
+.paintPanel label {
+	margin-right:20px;
+}
+.colorPanel {
+	margin-top: 20px;
+}
+
+.selectedColor {
+	float: left;
+}
+
+.palette {
+	overflow: auto;
+}
+
+.selectedColor div {
+	width: 58px;
+	height: 58px;
+	border: 1px solid #000000;
+}
+
+.palette div.paletteColor {
+	width: 28px;
+	height: 28px;
+	display: inline-block;
+	border: 1px solid #000000;
+}
+
+.palette div.paletteButton {
+	background: #40628a;
+}
+
+.palette div.paletteButton:hover {
+	background: #507aac;
+}
+
+.paletteButton .uiIcon16 {
+	margin: 6px;
+}
+
+.toolPanel input[type="text"] {
+	width: 5ch;
+	text-align:center
+}

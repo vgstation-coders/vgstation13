@@ -32,75 +32,97 @@ Included in this file
 
 /datum/map_element/snowvault/cabin
 	file_path = "maps/randomvaults/snaxi/cabin.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/crash
 	file_path = "maps/randomvaults/snaxi/crash.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/kennel
 	file_path = "maps/randomvaults/snaxi/kennel.dmm"
 
 /datum/map_element/snowvault/grove
 	file_path = "maps/randomvaults/snaxi/grove.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/hotspring
 	file_path = "maps/randomvaults/snaxi/hotspring.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/deerfeeder
 	file_path = "maps/randomvaults/snaxi/deerfeeder.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/wolfcave
 	file_path = "maps/randomvaults/snaxi/wolfcave.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/thermalplant
 	file_path = "maps/randomvaults/snaxi/thermalplant.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/construction_site
 	file_path = "maps/randomvaults/snaxi/construction_site.dmm"
 
 /datum/map_element/snowvault/santacabin
 	file_path = "maps/randomvaults/snaxi/santacabin.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/frozenpond
 	file_path = "maps/randomvaults/snaxi/frozenpond.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/rockysnow
 	file_path = "maps/randomvaults/snaxi/rockysnow.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/bus_stop
 	file_path = "maps/randomvaults/snaxi/bus_stop.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/buriedbody
 	file_path = "maps/randomvaults/snaxi/buriedbody.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/guncache
 	file_path = "maps/randomvaults/snaxi/guncache.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/mine_patch
 	file_path = "maps/randomvaults/snaxi/mine_patch.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/lostsnowmobile
 	file_path = "maps/randomvaults/snaxi/lostsnowmobile.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/bearcave
 	file_path = "maps/randomvaults/snaxi/bearcave.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/trees
 	file_path = "maps/randomvaults/snaxi/trees.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/geysercluster
 	file_path = "maps/randomvaults/snaxi/geysercluster.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/unfrozen_pond
 	file_path = "maps/randomvaults/snaxi/unfrozen_pond.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/greatwhite
 	file_path = "maps/randomvaults/snaxi/greatwhite.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/witchsabbath
 	file_path = "maps/randomvaults/snaxi/witchsabbath.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/huntinggrounds
 	file_path = "maps/randomvaults/snaxi/huntinggrounds.dmm"
+	can_rotate = TRUE
 
 //Vault atoms
 

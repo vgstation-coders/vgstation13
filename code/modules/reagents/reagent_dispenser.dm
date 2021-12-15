@@ -99,7 +99,7 @@
 			return(SUICIDE_ACT_BRUTELOSS)
 	else
 		return ..()
-	
+
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
 	desc = "A storage tank containing welding fuel."
@@ -187,7 +187,7 @@
 				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
 			else
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode()
+			explode(Proj.firer)
 	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
@@ -224,15 +224,18 @@
 		var/obj/structure/bed/chair/vehicle/car = AM
 		if(car.explodes_fueltanks)
 			visible_message("<span class='danger'>\The [car] crashes into \the [src]!</span>")
-			explode()
+			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = car.occupant
+				H.audible_scream("fueltank_crash")
+			explode(car.occupant)
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode()
+/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
 	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4)
+		explosion(src.loc,1,2,4, whodunnit = user)
 	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3)
+		explosion(src.loc,0,1,3, whodunnit = user)
 	else
-		explosion(src.loc,-1,1,2)
+		explosion(src.loc,-1,1,2, whodunnit = user)
 	if(src)
 		qdel(src)
 
@@ -499,7 +502,6 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
-	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
 	var/health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood

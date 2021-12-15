@@ -86,7 +86,6 @@
 	var/a_53 = 0
 	var/a_54 = 0
 
-
 /mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
 		return 1

@@ -81,7 +81,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag, params)
 	if(!flag || ismob(target))
 		return 0
-	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
+	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 		if(!target.reagents.total_volume) //Nothing in the dispenser
 			to_chat(user, "<span class='warning'>\The [target] is empty.</span>")
@@ -270,6 +270,21 @@
 				desc = "Not an instrument."
 				icon_state = MAYO
 				condiment_overlay = MAYO
+			if(ZAMSPICES)
+				name = "Zam Spice Bottle"
+				desc = "A blend of several mothership spices. It has a sharp, tangy aroma."
+				icon_state = ZAMSPICES
+				condiment_overlay = ZAMSPICES
+			if(ZAMMILD)
+				name = "Zam's Mild Sauce"
+				desc = "A tasty sauce made from mothership spices and acid."
+				icon_state = ZAMMILD
+				condiment_overlay = ZAMMILD
+			if(ZAMSPICYTOXIN)
+				name = "Zam's Spicy Sauce"
+				desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
+				icon_state = ZAMSPICYTOXIN
+				condiment_overlay = ZAMSPICYTOXIN
 			if(CREAM)
 				name = "whipped cream dispenser"
 				desc = "Instant delight." //placeholder desc
@@ -521,7 +536,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10,ZAMSPICES=10,ZAMMILD=5,ZAMSPICYTOXIN=3)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
@@ -544,6 +559,31 @@
 /obj/item/weapon/reagent_containers/food/condiment/mayo/New()
 	..()
 	reagents.add_reagent(MAYO, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspices
+	name = "Zam Spice Bottle"
+	desc = "A blend of several mothership spices. It has a sharp, tangy aroma."
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspices/New()
+	..()
+	reagents.add_reagent(ZAMSPICES, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/zammild
+	name = "Zam's Mild Sauce"
+	desc = "A tasty sauce made from mothership spices and acid."
+
+/obj/item/weapon/reagent_containers/food/condiment/zammild/New()
+	..()
+	reagents.add_reagent(ZAMMILD, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin
+	name = "Zam's Spicy Sauce"
+	desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin/New()
+	..()
+	reagents.add_reagent(ZAMSPICYTOXIN, 50)
 
 
 /obj/item/weapon/reagent_containers/food/condiment/cream
@@ -580,3 +620,112 @@
 /obj/item/weapon/reagent_containers/food/condiment/chillwax/New()
 	..()
 	reagents.add_reagent(CHILLWAX, 50)
+
+//////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/reagent_containers/food/condiment/small
+	possible_transfer_amounts = list(1, 5)
+	amount_per_transfer_from_this = 1
+	var/trash_type
+
+/obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change()
+	if(is_empty() && trash_type)
+		var/obj/item/trash/trash = new trash_type(get_turf(src))
+		if (ismob(loc))
+			var/mob/M = loc
+			var/hand_index = M.is_holding_item(src)
+			M.drop_item(src, M.loc)
+			if (hand_index)
+				M.put_in_hand(hand_index, trash)
+				M.update_inv_hands()
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
+	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers))
+		return FALSE
+	. = ..()
+
+/obj/item/weapon/reagent_containers/food/condiment/small/is_open_container()
+	return FALSE	// This should prevent most ways the packet could emptied other than by being applied on food.
+					// Worst case scenario, the empty packet will appear on the ground.
+
+//-------------------------------------------------------------------------
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup
+	name = "ketchup packet"
+	desc = "You feel more American already."
+	icon_state = "ketchup_small"
+	condiment_overlay = KETCHUP
+	trash_type = /obj/item/trash/ketchup_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
+	..()
+	reagents.add_reagent(KETCHUP, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo
+	name = "mayonaise packet"
+	desc = "Still not an instrument."
+	icon_state = "mayo_small"
+	condiment_overlay = MAYO
+	trash_type = /obj/item/trash/mayo_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
+	..()
+	reagents.add_reagent(MAYO, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce
+	name = "soy sauce packet"
+	desc = "Tasty soy sauce in a convenient tiny packet."
+	icon_state = "soysauce_small"
+	condiment_overlay = SOYSAUCE
+	trash_type = /obj/item/trash/soysauce_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce/New()
+	..()
+	reagents.add_reagent(SOYSAUCE, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/vinegar
+	name = "malt vinegar packet"
+	desc = "Perfect for smaller portions of fish and chips."
+	icon_state = "vinegar_small"
+	condiment_overlay = VINEGAR
+	trash_type = /obj/item/trash/vinegar_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
+	..()
+	reagents.add_reagent(VINEGAR, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspices
+	name = "Zam Spices Packet"
+	desc = "A tiny packet of mothership spices."
+	icon_state = "zamspices_small"
+	condiment_overlay = ZAMSPICES
+	trash_type = /obj/item/trash/zamspices_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspices/New()
+	..()
+	reagents.add_reagent(ZAMSPICES, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zammild
+	name = "Zam's Mild Sauce Packet"
+	desc = "More portable than the bottle, just as tasty."
+	icon_state = "zammild_small"
+	condiment_overlay = ZAMMILD
+	trash_type = /obj/item/trash/zammild_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zammild/New()
+	..()
+	reagents.add_reagent(ZAMMILD, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
+	name = "Zam's Spicy Sauce Packet"
+	desc = "More portable than the bottle, just as spicy."
+	icon_state = "zamspicytoxin_small"
+	condiment_overlay = ZAMSPICYTOXIN
+	trash_type = /obj/item/trash/zamspicytoxin_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
+	..()
+	reagents.add_reagent(ZAMSPICYTOXIN, 5)

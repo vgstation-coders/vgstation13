@@ -17,7 +17,11 @@ export const Gps = (props, context) => {
     devices,
   } = data;
   return (
-    <Window resizable>
+    <Window
+      title="Global Positioning System"
+      width={470}
+      height={500}
+      resizable>
       {!!emped && (
         <Modal>
           <Flex align="center">
@@ -32,7 +36,8 @@ export const Gps = (props, context) => {
       )}
       <Window.Content scrollable>
         {!transmitting && (
-          <Section title="Settings">
+          <Section
+            title="Settings">
             <Button
               icon="power-off"
               onClick={() => act("turn_on")}>

@@ -31,6 +31,9 @@
 		Things to do to the *old* body prior to the mind transfer.
 	@PostMindTransfer(New_character, Mob/Living, Old_character, Mob/Living)
 		Things to do to the *new* body after the mind transfer is completed.
+
+	@update_perception()
+		Called on Life() to handle the role's additional alphas to the dark plane.
 */
 
 #define ROLE_MIXABLE   			1 // Can be used in mixed mode
@@ -160,11 +163,12 @@
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
-	if(msg_admins)
-		message_admins("[key_name(M)] is now \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 
 	if (!OnPreSetup())
 		return FALSE
+
+	if(msg_admins)
+		message_admins("[key_name(M)] is now \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 	return 1
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M, var/msg_admins = TRUE) //Called on deconvert
@@ -259,6 +263,11 @@
 	return
 
 /datum/role/proc/check_win()
+	return
+
+// called on Life()
+
+/datum/role/proc/update_perception()
 	return
 
 // Create objectives here.
@@ -368,16 +377,20 @@
 	if(objectives.objectives.len > 0)
 		var/count = 1
 		text += "<ul>"
+		var/fully_freeform = TRUE
 		for(var/datum/objective/objective in objectives.GetObjectives())
+			var/freeform = objective.flags & FREEFORM_OBJECTIVE
+			if (!freeform)
+				fully_freeform = FALSE
 			var/successful = objective.IsFulfilled()
-			text += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
-			feedback_add_details("[id]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
+			text += "<B>Objective #[count]</B>: [objective.explanation_text] [freeform ? "" : "[successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"]"
+			feedback_add_details("[id]_objective","[objective.type]|[freeform ? "FREEFORM" : "[successful ? "SUCCESS" : "FAIL"]"]")
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			if (count < objectives.objectives.len)
 				text += "<br>"
 			count++
-		if (!faction)
+		if (!faction && !fully_freeform)
 			if(win)
 				text += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 				feedback_add_details("[id]_success","SUCCESS")
@@ -509,13 +522,13 @@
 		var/mob/mob = M.current
 
 		if (mob)
-			to_chat(mob, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>[message]</span>")
+			to_chat(mob, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span>")
 
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>[message]</span></span>")
+			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] (to [mob]) <span class='[admin_voice_style]'>\"[message]\"</span></span>")
 
 		message_admins("Admin [key_name_admin(usr)] has talked to [key_name(mob)] as [voice_per_admin[user.ckey]].")
-		log_rolespeak("[key_name(usr)] as [voice_per_admin[user.ckey]] to [key_name(mob)]: [message]")
+		log_rolespeak("[key_name(usr)] as [voice_per_admin[user.ckey]] to [key_name(mob)]: \"[message]\"")
 
 	if (href_list["role_set_speaker"])
 		if(!usr.check_rights(R_ADMIN))

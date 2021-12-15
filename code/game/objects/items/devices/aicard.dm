@@ -22,6 +22,10 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to card [M.name] ([M.ckey])</font>")
 
+	for (var/obj/machinery/hologram/holopad/H in holopads)
+		if (H.master == src)
+			H.clear_holo()
+
 	transfer_ai("AICORE", "AICARD", M, user)
 
 	playsound(src, 'sound/machines/paistartup.ogg', 50, 1)

@@ -55,8 +55,6 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 
 /datum/job/geneticist/department = "Medical"
 
-/datum/job/psychiatrist/department = "Medical"
-
 /datum/job/rd/department = "Science"
 /datum/job/rd/head_position = 1
 

@@ -168,7 +168,7 @@ nanoui is used to open and update nano browser uis
 		if(nano.src_object in view(7, nano.user))
 			can_interactive = 1
 	else
-		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user))
+		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user) || OMNI_LINK(nano.user,nano.src_object))
 
 	if (can_interactive)
 		return STATUS_INTERACTIVE // interactive (green visibility)
@@ -194,8 +194,6 @@ nanoui is used to open and update nano browser uis
 			return STATUS_DISABLED // no updates, completely disabled (red visibility)
 		else if (nano.user.restrained() || nano.user.lying)
 			return STATUS_UPDATE // update only (orange visibility)
-		else if (istype(nano.src_object, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
-			return STATUS_INTERACTIVE // Will build in distance checks on the topics for sanity.
 		else if (!(nano.src_object in view(4, nano.user))) // If the src object is not in visable, set status to 0
 			return STATUS_DISABLED // no updates, completely disabled (red visibility)
 		else if (dist <= 1)

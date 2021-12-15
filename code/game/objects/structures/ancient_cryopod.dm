@@ -36,28 +36,23 @@
 			recruiter.display_name = name
 			recruiter.role = ROLE_MINOR
 		// Role set to Yes or Always
-		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 		// Role set to No or Never
-		recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-		recruiter.recruited.Add(src, "recruiter_recruited")
+		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 		recruiter.request_player()
 	else
 		visible_message("<span class='notice'>\The [name] flickers to life and displays an error message: 'Unable to revive occupant, enviromental pressure inadequate for sustaining human life.'</span>")
 
-/obj/machinery/cryopod/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [name] has been activated. You have been added to the list of potential ghosts. ([controls])</span>")
+/obj/machinery/cryopod/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [name] has been activated. You have been added to the list of potential ghosts. ([controls])</span>")
 
-/obj/machinery/cryopod/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [src] has been activated. ([controls])</span>")
+/obj/machinery/cryopod/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] has been activated. ([controls])</span>")
 
-/obj/machinery/cryopod/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
+/obj/machinery/cryopod/proc/recruiter_recruited(mob/dead/observer/player, controls)
+	if(player)
 		qdel(recruiter)
 		recruiter = null
 		visible_message("<span class='notice'>\The [name] opens with a hiss of frigid air!</span>")
@@ -68,7 +63,7 @@
 		var/mob/living/carbon/human/S = new(get_turf(src))
 		var/roll = pick(possible_roles)
 		role = new roll
-		S.ckey = O.ckey
+		S.ckey = player.ckey
 		S.randomise_appearance_for()
 		role.gear_occupant(S)
 		role.special_behavior(S)
@@ -95,7 +90,7 @@
 		M.generate_name()
 	else
 		M.fully_replace_character_name(null,pick(preset_names))
-	
+
 	mob_rename_self(M,title,"Pick your name")
 
 	message_admins("[key_name_admin(M)] has spawned as a [title] from an ancient cryopod.")

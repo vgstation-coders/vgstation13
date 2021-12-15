@@ -1,22 +1,73 @@
 /obj/item/weapon/paper_bin
 	name = "paper bin"
 	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "paper_bin1"
+	icon_state = "paper_bin_"
 	item_state = "sheet-metal"
 	throwforce = 1
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 7
 	pressure_resistance = 10
+	layer = BELOW_OBJ_LAYER
 	var/amount = 30					//How much paper is in the bin.
 	var/list/papers = new/list()	//List of papers put in the bin for reference.
+	var/crayon = null
+	var/image/paper = null
 
 	autoignition_temperature = 519.15 // Kelvin
 
+/obj/item/weapon/paper_bin/New()
+	..()
+	update_icon()
+
+/obj/item/weapon/paper_bin/black
+	crayon = "black"
+	icon_state = "paper_bin_black" //previews for mapper sanity
+
+/obj/item/weapon/paper_bin/blue
+	crayon = "blue"
+	icon_state = "paper_bin_blue"
+
+/obj/item/weapon/paper_bin/red
+	crayon = "red"
+	icon_state = "paper_bin_red"
+
+/obj/item/weapon/paper_bin/white
+	crayon = "sterile"
+	icon_state = "paper_bin_sterile"
+
+/obj/item/weapon/paper_bin/yellow
+	crayon = "yellow"
+	icon_state = "paper_bin_yellow"
+
+/obj/item/weapon/paper_bin/purple
+	crayon = "purple"
+	icon_state = "paper_bin_purple"
+
+/obj/item/weapon/paper_bin/orange
+	crayon = "orange"
+	icon_state = "paper_bin_orange"
+
+/obj/item/weapon/paper_bin/green
+	crayon = "green"
+	icon_state = "paper_bin_green"
+
+/obj/item/weapon/paper_bin/rainbow
+	crayon = "rainbow"
+	icon_state = "paper_bin_rainbow"
+
+/obj/item/weapon/paper_bin/mime
+	crayon = "mime"
+	icon_state = "paper_bin_mime"
 
 /obj/item/weapon/paper_bin/ignite()
 	if(amount || papers.len)
 		..()
+
+/obj/item/weapon/paper_bin/decontaminate()
+	..()
+	crayon = "sterile"
+	update_icon()
 
 /obj/item/weapon/paper_bin/ashify()
 	if(!on_fire)
@@ -72,15 +123,18 @@
 	add_fingerprint(user)
 	return
 
-
-/obj/item/weapon/paper_bin/attackby(obj/item/weapon/paper/i as obj, mob/user as mob)
-	if(!istype(i))
-		return
-
-	if(user.drop_item(i, src))
-		to_chat(user, "<span class='notice'>You put [i] in [src].</span>")
-		papers.Add(i)
+/obj/item/weapon/paper_bin/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/paper) && user.drop_item(I, src))
+		to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+		papers.Add(I)
 		amount++
+		update_icon()
+	else if(istype(I, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = I
+		crayon = C.colourName
+		update_icon()
+	else if (istype(I, /obj/item/weapon/soap))
+		crayon = null
 		update_icon()
 
 /obj/item/weapon/paper_bin/examine(mob/user)
@@ -128,18 +182,24 @@
 
 
 /obj/item/weapon/paper_bin/update_icon()
+	overlays.len = 0
 	if(amount > 0)
 		if(papers.len > 0)
 			var/obj/item/weapon/paper/P = papers[papers.len]
 			if(P.info)
-				icon_state = "paper_bin2"
+				paper = image('icons/obj/bureaucracy.dmi', src, "paper_bin_words")
+				overlays += paper
 			else
-				icon_state = "paper_bin1"
+				paper = image('icons/obj/bureaucracy.dmi', src, "paper_bin_blank")
+				overlays += paper
 		else
-			icon_state = "paper_bin1"
+			paper = image('icons/obj/bureaucracy.dmi', src, "paper_bin_blank")
+			overlays += paper
 	else
-		icon_state = "paper_bin0"
+		paper = null
+		overlays += paper
+
+	icon_state = "paper_bin_[crayon]"
 
 /obj/item/weapon/paper_bin/empty
-	icon_state = "paper_bin0"
 	amount = 0

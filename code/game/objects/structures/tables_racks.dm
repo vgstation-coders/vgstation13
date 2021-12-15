@@ -20,6 +20,7 @@
 	anchored = 1.0
 	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite its density.
+	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
 	var/health = 100
@@ -233,9 +234,9 @@
 			if(6)
 				icon_state = "[initial(icon_state)]_dir3"
 		if (dir_sum in alldirs)
-			dir = dir_sum
+			change_dir(dir_sum)
 		else
-			dir = 2
+			change_dir(SOUTH)
 
 /obj/structure/table/ex_act(severity)
 	switch(severity)
@@ -311,13 +312,10 @@
 		var/mob/M = mover
 		if(M.flying)
 			return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(flipped)
-		if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-			return !density
-		else
-			return 1
+		return bounds_dist(border_dummy, mover) >= 0
 	return 0
 
 /obj/structure/table/Bumped(atom/movable/AM)
@@ -349,21 +347,6 @@
 			return 1
 	return 1
 
-/obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
-
 /obj/structure/table/MouseDropTo(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
 	if(O == user)
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
@@ -381,6 +364,16 @@
 		return
 	return ..()
 
+/obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+	for (var/atom/A in loc)
+		if (A == src)
+			continue
+		if (!A.Cross(victim,get_turf(victim)))
+			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
+			return FALSE
+	victim.forceMove(loc)
+	return TRUE
+
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (!W)
 		return
@@ -391,7 +384,8 @@
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
-					M.forceMove(loc)
+					if (!TryToThrowOnTable(user,M))
+						return
 					if (prob(15))
 						M.Knockdown(5)
 						M.Stun(5)
@@ -403,7 +397,8 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				M.forceMove(loc)
+				if (!TryToThrowOnTable(user,M))
+					return
 				M.Knockdown(5)
 				M.Stun(5)
 				visible_message("<span class='warning'>[user] puts [M] on \the [src].</span>")
@@ -508,11 +503,12 @@
 			spawn(0)
 				A.throw_at(pick(targets),1,1)
 
-	dir = direction
+	change_dir(direction)
 	if(dir != NORTH)
 		plane = ABOVE_HUMAN_PLANE
 	flipped = 1
 	flow_flags |= ON_BORDER
+	setup_border_dummy()
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && !T.flipped)
@@ -529,6 +525,7 @@
 	reset_plane_and_layer()
 	flipped = 0
 	flow_flags &= ~ON_BORDER
+	remove_border_dummy()
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
 		var/obj/structure/table/T = locate() in get_step(src.loc,D)
 		if(T && T.flipped && T.dir == src.dir)
@@ -658,7 +655,8 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.forceMove(loc)
+				if (!TryToThrowOnTable(user,G.affecting))
+					return
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
@@ -703,7 +701,7 @@
 /*
  * Plastic
  */
-obj/structure/table/plastic
+/obj/structure/table/plastic
 	name = "plastic table"
 	desc = "A plastic table perfect for on a space patio."
 	icon_state = "plastictable"
@@ -722,6 +720,7 @@ obj/structure/table/plastic
 	anchored = 1.0
 	throwpass = 1	//You can throw objects over this, despite its density.
 	layer = TABLE_LAYER //So items are always layered over it
+	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
 	var/health = 20
@@ -776,7 +775,7 @@ obj/structure/table/plastic
 /obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return !density
 

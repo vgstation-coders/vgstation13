@@ -93,6 +93,7 @@
 		return 0
 
 /obj/machinery/power/proc/get_powernet()
+	RETURN_TYPE(/datum/powernet)
 	check_rebuild()
 	return powernet
 
@@ -116,7 +117,7 @@
 /obj/machinery/proc/powered(chan = power_channel)
 	if(!src.loc)
 		return 0
-		
+
 	if(battery_dependent && !connected_cell)
 		return 0
 
@@ -145,7 +146,7 @@
 		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
 			connected_cell.charge = 0
 		else
-			connected_cell.use(amount*0.75)				
+			connected_cell.use(amount*0.75)
 	else
 		if(!this_area)
 			return 0						// if not, then not powered.

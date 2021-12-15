@@ -1,8 +1,7 @@
 
 /datum/admins/proc/custom_strike_team(var/mob/user)
-
-	var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
-	var/outfit_type = input(user,"Outfit Type","Equip Outfit","") as null|anything in outfits
+	var/outfit_type = select_loadout()
 	var/datum/striketeam/custom/team = new /datum/striketeam/custom()
-	team.outfit_datum = outfit_type
+	if(outfit_type && ispath(outfit_type))
+		team.outfit_datum = outfit_type
 	team.trigger_strike(user)

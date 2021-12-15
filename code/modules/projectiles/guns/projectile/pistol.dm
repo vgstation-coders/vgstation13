@@ -61,13 +61,12 @@
 	silencer_offset = list(24,7) //please no
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
-	update_icon()
-		..()
-		if(stored_magazine)
-			icon_state = "gyropistolloaded"
-		else
-			icon_state = "gyropistol"
-		return
+/obj/item/weapon/gun/projectile/gyropistol/update_icon()
+	..()
+	if(stored_magazine)
+		icon_state = "gyropistolloaded"
+	else
+		icon_state = "gyropistol"
 
 /obj/item/weapon/gun/projectile/pistol
 	name = "\improper Stechtkin pistol"
@@ -171,19 +170,20 @@
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
-	max_shells = 8
+	max_shells = 0
 	caliber = list(POINT380  = 1)
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	gun_flags = SILENCECOMP | EMPTYCASINGS
+	gun_flags = SILENCECOMP | EMPTYCASINGS | MAG_OVERLAYS
 	silencer_offset = list(24,5)
 	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_PLASTIC = 2000)
 	var/obj/item/gun_part/glock_auto_conversion_kit/conversionkit = null
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
-	icon_state = "[initial(icon_state)][chambered ? "" : "-e"][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
+	icon_state = "[initial(icon_state)][chambered ? "" : "-e"][clowned == CLOWNED ? "-c" : ""]"
+
 	for(var/image/ol in gun_part_overlays)
 		if(ol.icon_state == "auto_attach")
 			var/oldpixelx = ol.pixel_x
@@ -192,7 +192,6 @@
 				overlays -= ol
 				ol.pixel_x = chambered ? 0 : -4
 				overlays += ol
-
 
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(!conversionkit && istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
@@ -204,7 +203,6 @@
 			gun_part_overlays += auto_overlay
 			update_icon()
 			fire_delay = 0
-			desc += "<br>This one seems to have something screwed into it."
 			return 1
 
 	if(conversionkit && A.is_screwdriver(user))
@@ -251,11 +249,46 @@
 		return 1
 	return ..()
 
+/obj/item/weapon/gun/projectile/glock/examine(mob/user)
+	..()
+	if(conversionkit)
+		to_chat(user, "<span class='info'>There's something screwed onto the back.</span>")
+
 /obj/item/weapon/gun/projectile/glock/fancy
 	name = "\improper NT Glock Custom"
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket. <br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
 	icon_state = "secglockfancy"
 	clowned = UNCLOWN
+
+/obj/item/weapon/gun/projectile/glock/flame
+	name = "\improper NT Glock Custom"
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket. <br><span class='notice'>This one has rad flame stickers on it!</span>"
+	icon_state = "secglockflame"
+	spawn_mag = FALSE
+	clowned = UNCLOWN
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/gun/projectile/glock/flame/New()
+	..()
+	conversionkit = new /obj/item/gun_part/glock_auto_conversion_kit(src)
+	var/image/auto_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "auto_attach")
+	overlays += auto_overlay
+	gun_part_overlays += auto_overlay
+	fire_delay = 0
+	magwellmod = mag_type_restricted
+	mag_type_restricted = list()
+	var/obj/item/gun_part/silencer/loudener = new /obj/item/gun_part/silencer/loudencer(src)
+	silenced = loudener
+	var/image/louden_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "[loudener.icon_state]_mounted")
+	louden_overlay.pixel_x += silencer_offset[SILENCER_OFFSET_X]
+	louden_overlay.pixel_y += silencer_offset[SILENCER_OFFSET_Y]
+	overlays += louden_overlay
+	gun_part_overlays += louden_overlay
+	var/obj/item/ammo_storage/magazine/m380auto/extended/fatmag = new(src)
+	stored_magazine = fatmag
+	chamber_round()
+	mag_overlay()
+	update_icon()
 
 /obj/item/weapon/gun/projectile/glock/lockbox
 	max_shells = 0

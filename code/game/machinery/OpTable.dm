@@ -12,7 +12,7 @@
 	var/strapped = 0.0
 	throwpass = 1 //so Adjacent passes.
 	var/rating = 1 //Use this for upgrades some day
-
+	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
 
 /obj/machinery/optable/New()
@@ -60,7 +60,7 @@
 	if(air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0
@@ -113,12 +113,24 @@
 /obj/machinery/optable/process()
 	check_victim()
 
+/obj/machinery/optable/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+	for (var/atom/A in loc)
+		if (A == src)
+			continue
+		if (!A.Cross(victim,get_turf(victim)))
+			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
+			return FALSE
+	victim.forceMove(loc)
+	return TRUE
+
 /obj/machinery/optable/proc/take_victim(mob/living/carbon/C, mob/living/carbon/user as mob)
 	if (victim)
 		to_chat(user, "<span class='bnotice'>The table is already occupied!</span>")
 
+	if (!TryToThrowOnTable(user, C))
+		return
 	C.unlock_from()
-	C.forceMove(loc)
+	C.forceMove(loc) // again in case unlock_from() brought them back where they were
 
 	if (C.client)
 		C.client.perspective = EYE_PERSPECTIVE

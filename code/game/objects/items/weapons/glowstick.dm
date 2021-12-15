@@ -104,11 +104,11 @@
 	update_icon()
 
 /obj/item/clothing/accessory/glowstick/phazon/pickup(mob/user)
-	user.lazy_register_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
+	user.register_event(/event/face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
 
 /obj/item/clothing/accessory/glowstick/phazon/dropped(mob/user)
 	..()
-	user.lazy_unregister_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
+	user.unregister_event(/event/face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
 
 /obj/item/clothing/accessory/glowstick/phazon/attack_self()
 	colorchange()

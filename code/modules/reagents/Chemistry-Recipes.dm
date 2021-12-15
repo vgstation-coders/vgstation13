@@ -129,7 +129,7 @@
 	name = "Peptobismol"
 	id = PEPTOBISMOL
 	result = PEPTOBISMOL
-	required_reagents = list(ANTI_TOXIN = 1, DISCOUNT = 1)
+	required_reagents = list(ANTI_TOXINS = 1, DISCOUNT = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/emp_pulse
@@ -309,7 +309,7 @@
 	name = "Polytrinic acid"
 	id = PACID
 	result = PACID
-	required_reagents = list(SACID = 1, CHLORINE = 1, POTASSIUM = 1)
+	required_reagents = list(SACIDS = 1, CHLORINE = 1, POTASSIUM = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/synaptizine
@@ -425,14 +425,14 @@
 	name = "Dermaline"
 	id = DERMALINE
 	result = DERMALINE
-	required_reagents = list(OXYGEN = 1, PHOSPHORUS = 1, KELOTANE = 1)
+	required_reagents = list(OXYGEN = 1, PHOSPHORUS = 1, KELOTANES = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/dexalinp
 	name = "Dexalin Plus"
 	id = DEXALINP
 	result = DEXALINP
-	required_reagents = list(DEXALIN = 1, CARBON = 1, IRON = 1)
+	required_reagents = list(DEXALINS = 1, CARBON = 1, IRON = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/bicaridine
@@ -562,7 +562,7 @@
 	name = "Trinitrine"
 	id = TRINITRINE
 	result = TRINITRINE
-	required_reagents = list(GLYCEROL = 1, SACID = 1, WATER = 3)
+	required_reagents = list(GLYCEROL = 1, SACIDS = 1, WATER = 3)
 	required_catalysts = list(NITROGEN = 5)
 	result_amount = 5
 
@@ -580,6 +580,43 @@
 	required_reagents = list(SODIUMCHLORIDE = 1)
 	required_catalysts = list(HOLYWATER = 5)
 	result_amount = 1
+
+/datum/chemical_reaction/occult_blood_test
+	name = "Occult Blood Test"
+	id = "occult_blood_test"
+	required_reagents = list(HOLYSALTS = 5)
+	required_catalysts = list(BLOOD = 5)
+	quiet = TRUE
+
+/datum/chemical_reaction/cultcheck/on_reaction(var/datum/reagents/holder, var/created_volume)
+	for(var/datum/reagent/blood/B in holder.reagent_list)
+		var/turf/T = get_turf(holder.my_atom)
+		if ("occult" in B.data)
+			var/datum/mind/M = B.data["occult"]
+			if (M && M.current && iscultist(M.current) && !M.current.isDead()) // checking that the source cultist is alive and still a cultist
+				T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts violently react with the blood and flames lick the air above the [holder.my_atom].</span>")
+				var/red_flames = 0
+				var/orange_flames = 0
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				for (var/datum/role/R in cult.members)
+					var/mob/L = R.antag.current
+					if (isliving(L) && !L.isDead())
+						var/turf/U = get_turf(L)
+						if ((T.z == U.z) && !isshade(L))
+							red_flames++//human or construct on the current Z level
+						else
+							orange_flames++//either a shade or on another Z level
+				if (red_flames)
+					T.visible_message("<span class='notice'>You count <font color='red'><b>[(red_flames > 1) ? "[red_flames] distinct" : "a single"]</b></font> bright red flame[(red_flames > 1) ? "s":""].</span>")
+				if (orange_flames)
+					T.visible_message("<span class='notice'>[red_flames ? "As well as" : "You count"] <font color='orange'><b>[(orange_flames > 1) ? "[orange_flames] distinct" : "a single"]</b></font> dim orange flame[(orange_flames > 1) ? "s":""].</span>")
+				playsound(T, 'sound/effects/bubbles.ogg', 80, 1)
+				T.hotspot_expose(500 * red_flames + 100 * orange_flames, 10)
+				holder.remove_reagent(BLOOD, 5)
+				return
+
+		T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts dissolve into the blood without so much as a reaction.</span>")
+		return
 
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
@@ -685,6 +722,13 @@
 	result = CHLORALHYDRATE
 	required_reagents = list(ETHANOL = 1, CHLORINE = 3, WATER = 1)
 	result_amount = 1
+
+/datum/chemical_reaction/suxameth
+	name = "Suxameth"
+	id = SUX
+	result = SUX
+	required_reagents = list(TOXINS = 1, CHLORINE = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/zombiepowder
 	name = "Zombie Powder"
@@ -869,6 +913,7 @@
 	id = "solidphazon"
 	result = null
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PHAZON = 1)
+	required_catalysts = list(MUTAGEN = 5)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
@@ -942,7 +987,7 @@
 	name = "Nanobots"
 	id = NANOBOTS
 	result = NANOBOTS
-	required_reagents = list(NANITES = 1, URANIUM = 10, GOLD = 10, NUTRIMENT = 10, SILICON = 10)
+	required_reagents = list(ALLNANITES = 1, URANIUM = 10, GOLD = 10, NUTRIMENT = 10, SILICON = 10)
 	result_amount = 2
 
 /datum/chemical_reaction/nanobots2
@@ -972,7 +1017,7 @@
 	name = "FixOVein"
 	id = "fixovein"
 	result = null
-	required_reagents = list(BICARIDINE = 10, CLONEXADONE = 10)
+	required_reagents = list(BICARIDINES = 10, CLONEXADONE = 10)
 	result_amount = 1
 	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
 
@@ -1033,7 +1078,7 @@
 	name = "Metal Foam"
 	id = "metalfoam"
 	result = null
-	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/metalfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1051,7 +1096,7 @@
 	name = "Iron Foam"
 	id = "ironlfoam"
 	result = null
-	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/ironfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1148,7 +1193,7 @@
 	name = "Insecticide"
 	id = INSECTICIDE
 	result = INSECTICIDE
-	required_reagents = list(TOXIN = 1, SALTWATER = 4)
+	required_reagents = list(TOXINS = 1, SALTWATER = 4)
 	result_amount = 5
 
 // Special Reactions for Plasma Beaker
@@ -2228,6 +2273,28 @@
 	result = MAYO
 	required_reagents = list(MUSTARD = 1, SODIUMCHLORIDE = 1, VINEGAR = 4, EGG_YOLK = 4) //there are about fifty different variants for homemade mayo, using the one that sounds best
 	result_amount = 10
+
+/datum/chemical_reaction/bluegoo
+	name = "Blue Goo"
+	id = BLUEGOO
+	result = BLUEGOO
+	required_reagents = list(ZAMSPICES = 3, LOCUTOGEN = 2)
+	result_amount = 5
+
+/datum/chemical_reaction/zammild
+	name = "Zam's Mild Sauce"
+	id = ZAMMILD
+	result = ZAMMILD
+	required_reagents = list(ZAMSPICES = 3, SACIDS = 2)
+	result_amount = 5
+
+/datum/chemical_reaction/zamspicytoxin
+	name = "Zam's Spicy Sauce"
+	id = ZAMSPICYTOXIN
+	result = ZAMSPICYTOXIN
+	required_reagents = list(ZAMMILD = 3, PACIDS = 2)
+	required_catalysts = list(MUTAGEN = 5)
+	result_amount = 3
 
 /datum/chemical_reaction/vinegar
 	name = "Vinegar"
@@ -3370,7 +3437,7 @@
 	name = "Apetrine"
 	id = APETRINE
 	result = APETRINE
-	required_reagents = list(PETRITRICIN = 2, PACID = 3)
+	required_reagents = list(PETRITRICIN = 2, PACIDS = 3)
 	result_amount = 1
 
 /datum/chemical_reaction/potassiumcarbonate
@@ -3759,8 +3826,10 @@
 		var/mob/living/carbon/human/H = holder.my_atom
 		if(created_volume <= 9)
 			for(var/i = 1 to created_volume)
+				var/L = get_turf(holder.my_atom)
+				new /mob/living/simple_animal/hostile/humanoid/skellington(L)
 				var/datum/organ/external/E = pick(H.organs)
-				E.fracture()
+				E.fracture() //Hopefully this means that under 10u the skellingtons still get spawned, but AT 10u you turn into one.
 		else
 			if(isskellington(H) || isskelevox(H) || islich(H))
 				bigBoned(H, created_volume)
@@ -3774,9 +3843,10 @@
 				H.visible_message("<span class='danger'>[H.name]'s skeleton jumps right out of their skin, forcefully!</span>")
 				H.drop_all()
 			gibs(H.loc, H.virus2, H.dna)
-	for(var/i = 1 to created_volume)
-		var/L = get_turf(holder.my_atom)
-		new /mob/living/simple_animal/hostile/humanoid/skellington(L)
+	else
+		for(var/i = 1 to created_volume)
+			var/L = get_turf(holder.my_atom)
+			new /mob/living/simple_animal/hostile/humanoid/skellington(L) //Should spawn skeletons normally if the holder isn't human.
 
 /datum/chemical_reaction/synthskeleton/proc/bigBoned(var/mob/living/carbon/human/theSkel, var/volume)
 	for(var/datum/organ/external/E in theSkel.organs)

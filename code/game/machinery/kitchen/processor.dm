@@ -318,6 +318,23 @@
 		return
 	add_to(O,user)
 
+/obj/machinery/processor/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	var/mob/user = usr
+	if(user.incapacitated() || (user.loc != src))
+		return
+	over_location = get_turf(over_location)
+	if(!istype(over_location) || over_location.density)
+		return
+	if(!Adjacent(over_location))
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	visible_message("[user] climbs out of \the [src].")
+	user.forceMove(loc)
+
 /obj/machinery/processor/proc/warn_full(var/mob/who)
 	to_chat(who, "<span class='warning'>\The [src] is full, it cannot fit anymore.</span>")
 

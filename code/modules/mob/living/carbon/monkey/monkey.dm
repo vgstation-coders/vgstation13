@@ -167,6 +167,7 @@
 	voice_name = "greyling"
 	icon_state = "grey"
 	canWearGlasses = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	languagetoadd = LANGUAGE_GREY
 	greaterform = "Grey"
 
@@ -454,7 +455,7 @@
 				threatcount += 4
 
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 
 	return threatcount
@@ -570,7 +571,7 @@
 /mob/living/carbon/monkey/can_be_infected()
 	return 1
 
-/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble")
+/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	if (greaterform != "Human")
 		return FALSE
 
@@ -610,11 +611,14 @@
 
 	switch (material)
 		if ("marble")
-			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
 		if ("wood")
-			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
 
 	if (new_mannequin)
 		return TRUE
 	return FALSE
 
+/mob/living/carbon/monkey/make_meat(location)
+	var/ourMeat = new meat_type(location, src)
+	return ourMeat

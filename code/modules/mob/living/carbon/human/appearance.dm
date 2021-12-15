@@ -8,21 +8,21 @@
 	var/gender
 
 	// "Proper" to the appearance datum.
-	var/s_tone
+	var/s_tone = 0
 
 	var/h_style = "Bald"
-	var/r_hair
-	var/g_hair
-	var/b_hair
+	var/r_hair = 0
+	var/g_hair = 0
+	var/b_hair = 0
 
-	var/f_style
-	var/r_facial
-	var/g_facial
-	var/b_facial
+	var/f_style = "Shaved"
+	var/r_facial = 0
+	var/g_facial = 0
+	var/b_facial = 0
 
-	var/r_eyes
-	var/g_eyes	
-	var/b_eyes
+	var/r_eyes = 0
+	var/g_eyes = 0
+	var/b_eyes = 0
 
 /mob/living/carbon/human/
 	var/datum/human_appearance/my_appearance
@@ -55,7 +55,7 @@
 		gender = new_gender
 	else
 		gender = pick(MALE, FEMALE)
-	
+
 	s_tone = random_skin_tone(species)
 	h_style = random_hair_style(gender, species)
 	f_style = random_facial_hair_style(gender, species)
@@ -180,51 +180,79 @@
 
 	return list(red, green, blue)
 
-/mob/living/carbon/human/proc/pick_gender(var/mob/user)
-	var/new_gender = alert(user, "Please select gender.", "Character Generation", "Male", "Female")
+/mob/living/carbon/human/proc/pick_gender(var/mob/user, var/title = "Character Generation", var/update_icons = TRUE)
+	var/new_gender = alert(user, "Please select gender.", title, "Male", "Female")
 	if (new_gender)
 		setGender(new_gender == "Male" ? MALE : FEMALE)
-	update_body()
+	if (update_icons)
+		regenerate_icons()
 
-/mob/living/carbon/human/proc/pick_appearance(var/mob/user)
-	var/new_tone = input(user, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
-	if (!new_tone)
-		new_tone = 35
-	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	my_appearance.s_tone =  -src.my_appearance.s_tone + 35
+/mob/living/carbon/human/proc/pick_appearance(var/mob/user, var/title = "Character Generation", var/update_icons_and_dna = TRUE)
+	// SKIN
+	if (species)
+		switch (species.name)
+			if ("Human")
+				var/new_tone = input(user, "Select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", title, "[35-my_appearance.s_tone]")  as text
+				if (!new_tone)
+					new_tone = 35
+				my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+				my_appearance.s_tone =  -my_appearance.s_tone + 35
+			if ("Vox")
+				var/new_tone = input(user, "Select feather color: 1-6 (1=dark green, 2=brown, 3=grey, 4=light green, 5=azure, 6=emerald)", title, "[my_appearance.s_tone]")  as text
+				if (!new_tone)
+					new_tone = 1
+				my_appearance.s_tone = max(min(round(text2num(new_tone)), 6), 1)
+			if ("Grey")
+				var/new_tone = input(user, "Select skin color: 1-4 (1=grey, 2=pale gray, 3=greyish green, 4=greyish blue)", title, "[my_appearance.s_tone]")  as text
+				if (!new_tone)
+					new_tone = 1
+				my_appearance.s_tone = max(min(round(text2num(new_tone)), 4), 1)
+	else
+		var/new_tone = input(user, "Select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", title, "[35-my_appearance.s_tone]")  as text
+		if (!new_tone)
+			new_tone = 35
+		my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+		my_appearance.s_tone =  -my_appearance.s_tone + 35
 
-	var/new_facial = input(user, "Please select facial hair color.", "Character Generation") as color
-	if(new_facial)
-		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
-		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
-		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
+	// EYES
+	var/new_eye_color = input(user, "Select eye color.", title,rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
+	if(new_eye_color)
+		my_appearance.r_eyes = hex2num(copytext(new_eye_color, 2, 4))
+		my_appearance.g_eyes = hex2num(copytext(new_eye_color, 4, 6))
+		my_appearance.b_eyes = hex2num(copytext(new_eye_color, 6, 8))
 
-	var/new_hair = input(user, "Please select hair color.", "Character Generation") as color
-	if(new_facial)
-		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
-		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
-		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
+	// HAIR
+	if (species)
+		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)	//can morph any hair regardless of gender
+		if(valid_hair.len)
+			var/new_style = input(user, "Select hair style", title, my_appearance.h_style) as null|anything in valid_hair
+			if(new_style)
+				my_appearance.h_style = new_style
 
-	var/new_eyes = input(user, "Please select eye color.", "Character Generation") as color
-	if(new_eyes)
-		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
+	var/new_hair_color = input(user, "Select hair color.", title,rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
+	if(new_hair_color)
+		my_appearance.r_hair = hex2num(copytext(new_hair_color, 2, 4))
+		my_appearance.g_hair = hex2num(copytext(new_hair_color, 4, 6))
+		my_appearance.b_hair = hex2num(copytext(new_hair_color, 6, 8))
 
-	//hair
-	var/new_hstyle = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
-	if(new_hstyle)
-		my_appearance.h_style = new_hstyle
+	// BEARD
+	if (species)
+		var/list/valid_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)	//can morph any beard regardless of gender
+		if(valid_facial_hair.len)
+			var/new_style = input(user, "Select a facial hair style", title, my_appearance.f_style) as null|anything in valid_facial_hair
+			if(new_style)
+				my_appearance.f_style = new_style
 
-	// facial hair
-	var/new_fstyle = input(user, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
-	if(new_fstyle)
-		my_appearance.f_style = new_fstyle
+	var/new_beard_color = input(user, "Select facial hair color.", title,rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
+	if(new_beard_color)
+		my_appearance.r_facial = hex2num(copytext(new_beard_color, 2, 4))
+		my_appearance.g_facial = hex2num(copytext(new_beard_color, 4, 6))
+		my_appearance.b_facial = hex2num(copytext(new_beard_color, 6, 8))
 
-	//M.rebuild_appearance()
-	update_hair()
-	update_body()
-	check_dna()
+	if (update_icons_and_dna)
+		regenerate_icons()
+		check_dna_integrity()
+		update_dna_from_appearance()
 
 /datum/human_appearance/send_to_past(var/duration)
 	..()

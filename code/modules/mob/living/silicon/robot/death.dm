@@ -45,7 +45,7 @@
 			visible_message("<span class='warning'>You hear a soft beep.</span>")
 			playsound(src, "sound/effects/kirakrik.ogg", 60)
 			spawn(10)
-				explosion(src.loc, 1, 4, 5, 6)
+				explosion(src.loc, 1, 4, 5, 6, whodunnit = src)
 				gib()
 				return
 	if(!gibbed)

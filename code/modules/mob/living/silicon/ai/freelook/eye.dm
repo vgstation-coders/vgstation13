@@ -17,7 +17,7 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(atom/destination, no_tp=0, harderforce = TRUE, glide_size_override = 0)
+/mob/camera/aiEye/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = TRUE, glide_size_override = 0)
 	if(ai)
 		var/obj/machinery/hologram/holopad/H
 		if(istype(ai.current, /obj/machinery/hologram/holopad))
@@ -152,7 +152,6 @@
 
 	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src
-		client.show_popup_menus = TRUE
 		change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 		see_in_dark = 0
 		see_invisible = SEE_INVISIBLE_LIVING

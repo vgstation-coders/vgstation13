@@ -5,7 +5,7 @@
 	var/state = 0
 	var/material = /obj/item/stack/sheet/metal
 	var/construction_length = 40
-
+	pass_flags_self = PASSGIRDER
 /obj/structure/girder/wood
 	icon_state = "girder_wood"
 	name = "wooden girder"
@@ -13,7 +13,7 @@
 	construction_length = 20
 
 /obj/structure/girder/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSGIRDER))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return ..()
 

@@ -21,6 +21,8 @@
 		/datum/rcd_schematic/pipe/manifold,
 		/datum/rcd_schematic/pipe/valve,
 		/datum/rcd_schematic/pipe/dvalve,
+		/datum/rcd_schematic/pipe/mpvalve,
+		/datum/rcd_schematic/pipe/dpvalve,
 		/datum/rcd_schematic/pipe/cap,
 		/datum/rcd_schematic/pipe/manifold_4w,
 		/datum/rcd_schematic/pipe/mtvalve,
@@ -82,11 +84,11 @@
 
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
-	L.lazy_register_event(/lazy_event/on_clickon, src, .proc/mob_onclickon)
+	L.register_event(/event/clickon, src, .proc/mob_onclickon)
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
 	..()
-	L.lazy_unregister_event(/lazy_event/on_clickon, src, .proc/mob_onclickon)
+	L.unregister_event(/event/clickon, src, .proc/mob_onclickon)
 	hook_key = null
 
 // If the RPD is held, some modifiers are removed.

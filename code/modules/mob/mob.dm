@@ -3,6 +3,7 @@
 
 /mob
 	plane = MOB_PLANE
+	pass_flags_self = PASSMOB
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 
@@ -27,12 +28,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_bumping)
-		on_bumping.holder = null
-	if(on_bumped)
-		on_bumped.holder = null
-	if(on_touched)
-		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -66,13 +61,6 @@
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_bumping)
-	qdel(on_bumped)
-	qdel(on_touched)
-
-	on_bumping = null
-	on_bumped = null
-	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -248,9 +236,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_bumping = new(owner = src)
-	on_bumped = new(owner = src)
-	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -375,7 +360,7 @@
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
-	if(hallucination)
+	if(hallucination || (src in confusion_victims))
 		if(drugged_message)
 			msg = drugged_message
 		if(blind_drugged_message)
@@ -1157,9 +1142,12 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Examine"
 	set category = "IC"
 
-//	if( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
 	if(is_blind(src))
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
+		return
+
+	if (src in confusion_victims)
+		to_chat(src, "<span class='sinister'>[pick("Oh god what's this even?","Paranoia and panic prevent you from calmly observing whatever this is.")]</span>")
 		return
 
 	if(get_dist(A,client.eye) > client.view)
@@ -1385,9 +1373,6 @@ Use this proc preferably at the end of an equipment loadout
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
 
-	for (var/datum/action/camera/action_cam in actions)
-		action_cam.Remove(src)
-
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
 /mob/verb/DisableClick(argu = null as anything, sec = "" as text, number1 = 0 as num, number2 = 0 as num)
@@ -1577,10 +1562,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		lazy_invoke_event(/lazy_event/on_before_move)
+		INVOKE_EVENT(src, /event/before_move)
 	dir = direction
-	lazy_invoke_event(/lazy_event/on_face)
-	lazy_invoke_event(/lazy_event/on_after_move)
+	INVOKE_EVENT(src, /event/face)
+	INVOKE_EVENT(src, /event/after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1602,9 +1587,9 @@ Use this proc preferably at the end of an equipment loadout
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	lazy_invoke_event(/lazy_event/on_before_move)
+	INVOKE_EVENT(src, /event/before_move)
 	..()
-	lazy_invoke_event(/lazy_event/on_after_move)
+	INVOKE_EVENT(src, /event/after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0
@@ -1787,10 +1772,10 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/hasFullAccess()
 	return 0
 
-mob/proc/assess_threat()
+/mob/proc/assess_threat()
 	return 0
 
-mob/proc/on_foot()
+/mob/proc/on_foot()
 	return !(lying || flying || locked_to)
 
 /mob/proc/dexterity_check()//can the mob use computers, guns, and other fine technologies
@@ -2204,11 +2189,14 @@ mob/proc/on_foot()
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE
 
-/mob/proc/turn_into_mannequin(var/material = "marble")
+/mob/proc/turn_into_mannequin(var/material = "marble", var/forever = FALSE)
 	return FALSE
 
 /mob/proc/get_personal_ambience()
 	return list()
+
+/mob/proc/isBloodedAnimal()
+	return FALSE
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

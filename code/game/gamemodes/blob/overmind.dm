@@ -26,11 +26,11 @@
 /mob/camera/blob/New()
 	blob_overminds += src
 	..()
-	lazy_register_event(/lazy_event/on_living_login, src, /mob/camera/blob/proc/add_HUD)
+	register_event(/event/living_login, src, /mob/camera/blob/proc/add_HUD)
 
 /mob/camera/blob/Destroy()
 	blob_overminds -= src
-	lazy_unregister_event(/lazy_event/on_living_login, src, /mob/camera/blob/proc/add_HUD)
+	unregister_event(/event/living_login, src, /mob/camera/blob/proc/add_HUD)
 	..()
 
 /mob/camera/blob/proc/add_HUD(var/mob/user)
@@ -145,7 +145,7 @@
 			rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a> <span class='message'>[message_a]</span></span></i></font>"
 			M.show_message(rendered, 2)
 
-/mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE)
+/mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE, arguments)
 	return
 
 /mob/camera/blob/ex_act()
@@ -195,7 +195,7 @@
 			if(newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
-		lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
+		INVOKE_EVENT(src, /event/moved, "mover" = src)
 		return 0
 
-	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
+	INVOKE_EVENT(src, /event/moved, "mover" = src)

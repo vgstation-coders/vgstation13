@@ -47,7 +47,6 @@
 	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
-	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 	var/list/species_fit = null //This object has a different appearance when worn by these species
 	var/nonplant_seed_type
@@ -187,6 +186,9 @@
 /obj/item/proc/restock() //used for borg recharging
 	return
 
+/obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	return
+
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
 
@@ -278,11 +280,6 @@
 /obj/item/attack_paw(var/mob/user)
 	attack_hand(user)
 
-// Due to storage type consolidation this should get used more now.
-// I have cleaned it up a little, but it could probably use more.  -Sayu
-/obj/item/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	return ..()
-
 /obj/item/proc/talk_into(var/datum/speech/speech, var/channel=null)
 	return
 
@@ -313,6 +310,14 @@
 // called after an item is picked up (loc has already changed)
 /obj/item/proc/pickup(mob/user)
 	return
+
+// called before an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
+/obj/item/proc/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return TRUE
+
+// called while an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
+/obj/item/proc/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return TRUE
 
 // called when this item is removed from a storage item, which is passed on as S. The loc variable is already set to the new destination before this is called.
 /obj/item/proc/on_exit_storage(obj/item/weapon/storage/S as obj)
@@ -956,7 +961,7 @@
 		return
 
 /obj/item/proc/unwield(mob/user)
-	if(flags & MUSTTWOHAND && (src in user))
+	if(flags & MUSTTWOHAND && !(M_STRONG in user.mutations) && (src in user))
 		user.drop_from_inventory(src)
 	if(istype(wielded))
 		wielded.wielding = null
@@ -1562,3 +1567,6 @@ var/global/list/image/blood_overlays = list()
 	if(A && toolsounds)
 		var/tool_sound = pick(toolsounds)
 		playsound(A, tool_sound, volume, TRUE, vary)
+
+/obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
+	return FALSE

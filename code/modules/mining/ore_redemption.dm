@@ -18,6 +18,7 @@
 	)
 	starting_materials = list() //Makes the new datum
 	allowed_types = list(/obj/item/stack/ore)
+	pass_flags_self = PASSGLASS
 	var/stack_amt = 50 //Amount to stack before releasing
 	var/obj/item/weapon/card/id/inserted_id
 	var/credits = 0
@@ -37,7 +38,7 @@
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+	if(!in_T.Enter(mover, mover.loc, TRUE) || !out_T.Enter(mover, mover.loc, TRUE))
 		return
 
 	for(var/atom/movable/A in in_T)
@@ -161,6 +162,6 @@
 /obj/machinery/mineral/ore_redemption/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return !opacity
 	return !density

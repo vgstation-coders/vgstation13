@@ -26,10 +26,7 @@ var/global/global_playlists = list()
 			var/json = file2text(response["CONTENT"])
 			if("/>" in json)
 				continue
-			var/json_reader/reader = new()
-			reader.tokens = reader.ScanJson(json)
-			reader.i = 1
-			var/songdata = reader.read_value()
+			var/songdata = json_decode(json)
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
 			if(playlist.len==0)
@@ -1005,7 +1002,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/adminbus/singularity_pull()
 	return 0
 
-obj/machinery/media/jukebox/holyjuke
+/obj/machinery/media/jukebox/holyjuke
 	name = "Holyjuke"
 	desc = "The Pastor's jukebox. You feel a weight being lifted simply by basking in its presence."
 
@@ -1186,7 +1183,7 @@ obj/machinery/media/jukebox/holyjuke
 	desc = "A go-to for bars all over the sector. Every time you walk in one, you can almost bet it's playing."
 	unformatted = "lilslugger"
 	formatted = "Battle of Lil Slugger"
-obj/item/weapon/vinyl/christmas
+/obj/item/weapon/vinyl/christmas
 	name = "nanovynil - christmas"
 	unformatted = "christmas"
 	formatted = "Christmas Jingles"

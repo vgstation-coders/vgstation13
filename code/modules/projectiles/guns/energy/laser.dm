@@ -295,7 +295,7 @@
 		return 0
 	if(prob(max(0, fire_delay/2-5)))
 		var/turf/T = get_turf(loc)
-		explosion(T, 0, 1, 3, 5)
+		explosion(T, 0, 1, 3, 5, whodunnit = M)
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")

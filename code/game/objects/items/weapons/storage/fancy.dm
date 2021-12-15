@@ -63,7 +63,8 @@
 	storage_slots = 6
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/donut", \
 					"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut", \
-					"/obj/item/weapon/reagent_containers/food/snacks/donutiron")
+					"/obj/item/weapon/reagent_containers/food/snacks/donutiron", \
+					"/obj/item/weapon/reagent_containers/food/snacks/riceball")
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -224,8 +225,9 @@
 	name = "matchbox"
 	desc = "A box of matches. Critical element of a survival kit and equally needed by chain smokers and pyromaniacs."
 	icon = 'icons/obj/cigarettes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	icon_state = "matchbox"
-	item_state = "zippo"
+	item_state = "matchbox"
 	icon_type = "match"
 	plural_type = "es"
 	storage_slots = 21 //3 rows of 7 items
@@ -300,7 +302,7 @@
 	name = "cigarette packet"
 	desc = "The most popular brand of Space Cigarettes, sponsors of the Space Olympics."
 	icon = 'icons/obj/cigarettes.dmi'
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	icon_state = "cigpacket"
 	item_state = "cigpacket"
 	w_class = W_CLASS_TINY

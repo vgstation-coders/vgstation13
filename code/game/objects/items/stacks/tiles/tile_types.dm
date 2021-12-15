@@ -147,7 +147,7 @@
 
 	material = "fabric"
 
-obj/item/stack/tile/slime
+/obj/item/stack/tile/slime
 	name = "tile of slime"
 	desc = "A flat piece of slime made through xenobiology."
 	icon_state = "tile-slime"
