@@ -6,7 +6,6 @@
 	name = "transit tube"
 	icon = 'icons/obj/pipes/transit_tube.dmi'
 	icon_state = "E-W"
-	density = 1
 	layer = ABOVE_OBJ_LAYER
 	anchored = 1.0
 	pixel_x = -8
@@ -15,23 +14,7 @@
 	var/exit_delay = 0
 	var/enter_delay = 1
 
-// A place where tube pods stop, and people can get in or out.
-// Mappers: use "Generate Instances from Directions" for this
-//  one.
-/obj/structure/transit_tube/station
-	name = "transit tube station"
-	icon = 'icons/obj/pipes/transit_tube_station.dmi'
-	icon_state = "closed"
-	exit_delay = 4
-	enter_delay = 4
-	pixel_x = 0
-	pixel_y = 0
-	var/pod_moving = 0
-	var/automatic_launch_time = 100
-	var/open = FALSE
 
-	var/const/OPEN_DURATION = 6
-	var/const/CLOSE_DURATION = 6
 
 /obj/structure/transit_tube/New(var/loc, var/icon_state_override = null, var/dir_override = null)
 	. = ..(loc)
@@ -44,11 +27,65 @@
 
 	if (tube_dirs == null)
 		init_dirs()
+	
+/obj/structure/transit_tube/New(loc)
+	..(loc)
+
+	if(tube_dirs == null)
+		init_dirs()
 
 /obj/structure/transit_tube/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(test_blocked(get_dir(src, mover)))
-		return ..() //If there's an opening on the side they're trying to enter, only let them do so if they can normally pass dense structures.
 	return TRUE //Otherwise, whatever.
+
+// Called to check if a pod should stop upon entering this tube.
+/obj/structure/transit_tube/proc/should_stop_pod(pod, from_dir)
+	return 0
+
+
+
+// Returns a /list of directions this tube section can connect to.
+//  Tubes that have some sort of logic or changing direction might
+//  override it with additional logic.
+/obj/structure/transit_tube/proc/directions()
+	return tube_dirs
+
+
+
+// Searches for an exit direction within 45 degrees of the
+//  specified dir. Returns that direction, or 0 if none match.
+/obj/structure/transit_tube/proc/get_exit(in_dir)
+	var/near_dir = 0
+	var/in_dir_cw = turn(in_dir, -45)
+	var/in_dir_ccw = turn(in_dir, 45)
+
+	for(var/direction in directions())
+		if(direction == in_dir)
+			return direction
+
+		else if(direction == in_dir_cw)
+			near_dir = direction
+
+		else if(direction == in_dir_ccw)
+			near_dir = direction
+
+	return near_dir
+
+
+
+// Return how many BYOND ticks to wait before entering/exiting
+//  the tube section. Default action is to return the value of
+//  a var, which wouldn't need a proc, but it makes it possible
+//  for later tube types to interact in more interesting ways
+//  such as being very fast in one direction, but slow in others
+/obj/structure/transit_tube/proc/exit_delay(pod, to_dir)
+	return exit_delay
+
+/obj/structure/transit_tube/proc/enter_delay(pod, to_dir)
+	return enter_delay
+	
+// Called when a pod stops in this tube section.
+/obj/structure/transit_tube/proc/pod_stopped(pod, from_dir)
+	return	
 
 /obj/structure/transit_tube/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
@@ -94,22 +131,23 @@
 	for(var/obj/structure/transit_tube_pod/pod in loc)
 		pod.show_occupants(user)
 
-// Called to check if a pod should stop upon entering this tube.
-/obj/structure/transit_tube/proc/should_stop_pod(pod, from_dir)
-	return 0
+	
+// Parse the icon_state into a list of directions.
+// This means that mappers can use Dream Maker's built in
+//  "Generate Instances from Icon-states" option to get all
+//  variations. Additionally, as a separate proc, sub-types
+//  can handle it more intelligently.
+/obj/structure/transit_tube/proc/init_dirs()
+	if(icon_state == "auto")
+		// Additional delay, for map loading.
+		spawn(1)
+			init_dirs_automatic()
+	else
+		tube_dirs = parse_dirs(icon_state)
 
-/obj/structure/transit_tube/station/should_stop_pod(pod, from_dir)
-	return 1
+		if(copytext(icon_state, 1, 3) == "D-" || findtextEx(icon_state, "Pass"))
+			density = 0
 
-// Called when a pod stops in this tube section.
-/obj/structure/transit_tube/proc/pod_stopped(pod, from_dir)
-	return
-
-// Returns a /list of directions this tube section can connect to.
-//  Tubes that have some sort of logic or changing direction might
-//  override it with additional logic.
-/obj/structure/transit_tube/proc/directions()
-	return tube_dirs
 
 /obj/structure/transit_tube/proc/has_entrance(from_dir)
 	from_dir = turn(from_dir, 180)
@@ -127,67 +165,9 @@
 
 	return 0
 
-// Searches for an exit direction within 45 degrees of the
-//  specified dir. Returns that direction, or 0 if none match.
-/obj/structure/transit_tube/proc/get_exit(in_dir)
-	var/near_dir = 0
-	var/in_dir_cw = turn(in_dir, -45)
-	var/in_dir_ccw = turn(in_dir, 45)
-
-	for(var/direction in directions())
-		if(direction == in_dir)
-			return direction
-
-		else if(direction == in_dir_cw)
-			near_dir = direction
-
-		else if(direction == in_dir_ccw)
-			near_dir = direction
-
-	return near_dir
 
 /obj/structure/transit_tube/proc/test_blocked(in_dir)	//You can now only squeeze under transit tubes if you can go out the same way you came in.
 	return (get_exit(in_dir) || get_exit(turn(in_dir, 180)))
-
-
-
-// Return how many BYOND ticks to wait before entering/exiting
-//  the tube section. Default action is to return the value of
-//  a var, which wouldn't need a proc, but it makes it possible
-//  for later tube types to interact in more interesting ways
-//  such as being very fast in one direction, but slow in others
-/obj/structure/transit_tube/proc/exit_delay(pod, to_dir)
-	return exit_delay
-
-/obj/structure/transit_tube/proc/enter_delay(pod, to_dir)
-	return enter_delay
-
-
-
-
-
-
-
-
-// Parse the icon_state into a list of directions.
-// This means that mappers can use Dream Maker's built in
-//  "Generate Instances from Icon-states" option to get all
-//  variations. Additionally, as a separate proc, sub-types
-//  can handle it more intelligently.
-/obj/structure/transit_tube/proc/init_dirs()
-	if(icon_state == "auto")
-		// Additional delay, for map loading.
-		spawn(1)
-			init_dirs_automatic()
-
-	else
-		tube_dirs = parse_dirs(icon_state)
-
-		if(findtextEx(icon_state, "Pass"))
-			setDensity(FALSE)
-
-
-
 
 
 
@@ -221,6 +201,7 @@
 
 
 
+
 // Given a list of directions, look a pair that forms a 180 or
 //  135 degree angle, and return a list containing the pair.
 //  If none exist, return list(connected[1], turn(connected[1], 180)
@@ -243,8 +224,6 @@
 /obj/structure/transit_tube/proc/select_automatic_icon_state(directions)
 	if(length(directions) == 2)
 		icon_state = "[dir2text_short(directions[1])]-[dir2text_short(directions[2])]"
-
-
 
 // Uses a list() to cache return values. Since they should
 //  never be edited directly, all tubes with a certain
@@ -321,6 +300,8 @@
 			return "SW"
 		else
 	return
+
+
 
 /obj/structure/transit_tube/proc/iconstate2framedir()
 	switch(icon_state)
