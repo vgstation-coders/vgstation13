@@ -13,7 +13,7 @@
 #define ALL_SHADOWS	 		2
 
 var/light_power_multiplier = 5
-var/light_post_processing = WALL_SHADOWS_ONLY // Use writeglobal to change this
+var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 // We actually see these "pseudo-light atoms" in order to ensure that wall shadows are only seen by people who can see the light.
 // Yes, this is stupid, but it's one of the limitations of TILE_BOUND, which cannot be chosen on an overlay-per-overlay basis.
@@ -241,9 +241,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	for(var/turf/T in view(light_range, src))
 		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
-
-/atom/movable/light/smooth/cast_shadows()
-	return
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
