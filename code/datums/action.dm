@@ -140,6 +140,7 @@
 	if(target)
 		var/obj/item/I = target
 		I.attack_self(owner)
+		owner.delayNextAttack(1)
 	return TRUE
 
 /datum/action/item_action/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
