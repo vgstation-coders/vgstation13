@@ -121,7 +121,7 @@
 			return
 
 	// Handle gas consumption.
-	if(seed.consume_gasses && seed.consume_gasses.len && environment)
+	if(seed.consume_gasses && seed.consume_gasses.len && environment && !seed.gas_benefits)
 		missing_gas = 0
 		for(var/gas in seed.consume_gasses)
 			if(environment[gas] < seed.consume_gasses[gas])
@@ -134,6 +134,16 @@
 			health -= missing_gas * HYDRO_SPEED_MULTIPLIER
 			if(draw_warnings)
 				update_icon_after_process = 1
+			
+	// Handle gas_benefits special case.
+	if(seed.consume_gasses && seed.consume_gasses.len && environment && seed.gas_benefits)
+		for(var/gas in seed.consume_gasses)
+			if(environment[gas] < seed.consume_gasses[gas])
+				continue
+			environment.adjust_gas(gas, -(seed.consume_gasses[gas]), FALSE)
+			seed.absorbed_gas += seed.consume_gasses[gas]
+		environment.update_values()
+		seed.potency_bonus = (seed.absorbed_gas/20)
 
 	// Process it.
 	var/pressure = environment.return_pressure()

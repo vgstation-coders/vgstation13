@@ -11,6 +11,7 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/
 	var/plantname
 	var/potency = -1
+	var/potency_bonus = 0
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
@@ -43,6 +44,7 @@ var/list/special_fruits = list()
 		icon = seed.plant_dmi
 		icon_state = seed.plant_icon_state
 		potency = round(seed.potency)
+		potency_bonus = round(seed.potency_bonus)
 		force = seed.thorny ? 5+seed.carnivorous*3 : 0
 		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
 
@@ -61,7 +63,7 @@ var/list/special_fruits = list()
 			var/list/reagent_data = seed.chems[rid]
 			var/rtotal = reagent_data[1]
 			if(reagent_data.len > 1 && potency > 0)
-				rtotal += round(potency/reagent_data[2])
+				rtotal += round((potency+potency_bonus)/reagent_data[2])
 			totalreagents += rtotal
 
 		if(totalreagents)
@@ -71,7 +73,7 @@ var/list/special_fruits = list()
 				var/list/reagent_data = seed.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
-					rtotal += round(potency/reagent_data[2])
+					rtotal += round((potency+potency_bonus)/reagent_data[2])
 				reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
 
 	if(reagents.total_volume > 0)

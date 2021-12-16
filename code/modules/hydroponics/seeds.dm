@@ -1157,6 +1157,7 @@
 	display_name = "plasma cabbages"
 	plant_dmi = 'icons/obj/hydroponics/cabbageplasma.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage)
+	consume_gasses = list(GAS_PLASMA = 20)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),PLASMA = list(3,5))
 
@@ -1169,6 +1170,7 @@
 	ideal_light = 8
 	water_consumption = 6
 	nutrient_consumption = 0.15
+	gas_benefits = 1
 
 /datum/seed/shand
 	name = "shand"

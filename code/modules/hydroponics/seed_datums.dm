@@ -56,6 +56,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/ligneous = 0				// If 1, requires sharp instrument to harvest. Kudzu with this trait resists sharp items better.
 	var/teleporting = 0				// If 1, causes teleportation when thrown.
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
+	var/gas_benefits = 0
+	var/potency_bonus = 0
+	var/absorbed_gas = 0
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
@@ -658,6 +661,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.ligneous =             ligneous
 	new_seed.teleporting =          teleporting
 	new_seed.juicy =        	    juicy
+	new_seed.gas_benefits =         gas_benefits
+	new_seed.potency_bonus =        potency_bonus
+	new_seed.absorbed_gas =         absorbed_gas
 	new_seed.plant_icon_state =     plant_icon_state
 	new_seed.splat_type =           splat_type
 	new_seed.packet_icon =          packet_icon

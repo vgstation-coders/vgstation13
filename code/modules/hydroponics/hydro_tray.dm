@@ -152,6 +152,8 @@
 	// Reset values.
 	harvest = 0
 	lastproduce = age
+	seed.potency_bonus = 0
+	seed.absorbed_gas = 0
 
 	if(!seed.harvest_repeat)
 		remove_plant()
