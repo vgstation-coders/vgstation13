@@ -137,7 +137,7 @@
 	if(launch_cooldown >= world.time)
 		return
 	for(var/obj/structure/transit_tube_pod/pod in loc)
-		if(!pod.moving && turn(pod.dir, (reverse_launch ? 180 : 0)) in directions())
+		if(!pod.moving && (turn(pod.dir, (reverse_launch ? 180 : 0)) in directions()))
 			spawn(0)
 				pod_moving = 1
 				close_animation()
