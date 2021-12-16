@@ -21,14 +21,6 @@
 
 	..()	
 
-/obj/structure/transit_tube/transit_tube_pod/Bumped(atom/movable/AM)
-	if(icon_state == "open" && ismob(AM))
-		for(var/obj/structure/transit_tube_pod/pod in loc)
-			if(!pod.moving)
-				AM.forceMove(pod)
-				//AM.loc = pod
-				return	
-
 // When destroyed by explosions, properly handle contents.
 /obj/structure/transit_tube_pod/ex_act(severity)
 	switch(severity)

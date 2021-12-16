@@ -14,8 +14,8 @@
 	var/cooldown_delay = 50
 	var/launch_cooldown = 0
 	var/reverse_launch = 0
-	var/const/OPEN_DURATION = 3
-	var/const/CLOSE_DURATION = 3
+	var/const/OPEN_DURATION = 2
+	var/const/CLOSE_DURATION = 2
 
 /obj/structure/transit_tube/station/New()
 	..()
