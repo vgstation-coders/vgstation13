@@ -125,7 +125,7 @@ var/global/lastDecTalkUse = 0
 	var/enc_wrapclass=jointext(filtered_speech.wrapper_classes, ", ")
 	say_testing(src, "render_speech() - wrapper_classes = \[[enc_wrapclass]\]")
 #endif
-	// Below, but formatted nicely.
+	// Below, but formatted nicely, and with the optional color override.
 	/*
 	return {"
 		<span class='[filtered_speech.render_wrapper_classes()]'>
@@ -137,7 +137,15 @@ var/global/lastDecTalkUse = 0
 			[filtered_speech.render_message()]
 		</span>"}
 	*/
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
+	if(filtered_speech.freq_name_override)
+		freqpart = " \[[filtered_speech.freq_name_override]\]"
+	. = "<span class='[filtered_speech.render_wrapper_classes()]'>"
+	if(filtered_speech.freq_color_override)
+		. += "<font color = [filtered_speech.freq_color_override]>"
+	. += "<span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]"
+	if(filtered_speech.freq_color_override)
+		. += "</font color>"
+	. += "</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
 		qdel(filtered_speech)
