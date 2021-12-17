@@ -257,6 +257,16 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
+/datum/design/liberator
+	name = "Liberator"
+	desc = "A laser carbine designed to kill xenofauna, but dramatically reduced effect on human targets."
+	id = "liberator"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 8000, MAT_GLASS = 6000, MAT_PLASTIC = 2000)
+	build_path = /obj/item/weapon/gun/energy/laser/liberator
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
 /datum/design/vector
 	name = "Vector"
 	desc = "A lightweight and compact gun, it has a detachable receiver that contains a recoil mitigation system."
