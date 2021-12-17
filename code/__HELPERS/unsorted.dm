@@ -1944,7 +1944,7 @@ Game Mode config tags:
 	"Supply" = SUP_FREQ
 	)
 
-/proc/update_radio_frequency(var/name, var/freq, var/update_station = TRUE)
+/proc/update_radio_frequency(var/name, var/freq, var/mob/user, var/update_station = TRUE)
 	var/newspan = null
 	if(name in freqs)
 		newspan = freqtospan["[freqs[name]]"]
@@ -1955,8 +1955,8 @@ Game Mode config tags:
 		freqtospan["[freqs[name]]"] = newspan
 	if(update_station)
 		stationchannels[name] = freqs[name]
-	log_admin("Radio frequency [name] is now [freqs[name]]")
-	message_admins("Radio frequency [name] is now [freqs[name]]")
+	log_admin("[update_station ? "World" : "Non-station"] radio frequency [name] is now [freqs[name]][user ? " set by [key_name(user)]": ""]")
+	message_admins("[update_station ? "World" : "Non-station"] radio frequency [name] is now [freqs[name]][user ? " set by [key_name(user)] ([formatJumpTo(user, "JMP")])" : ""]")
 
 /proc/getviewsize(view)
 	if(isnum(view))
