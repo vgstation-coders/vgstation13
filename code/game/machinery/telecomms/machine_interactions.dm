@@ -256,7 +256,7 @@
 						temp = "<font color = [newcolor]>-% New frequency color assigned. %-</font color>"
 
 					var/indx = freq_names.Find(newfreq)
-					if(freq_listening[indx])
+					if(indx && indx <= freq_listening.len && freq_listening[indx])
 						update_radio_frequency(newfreq,freq_listening[indx])
 			else
 				temp = "<font color = #666633>-% Channel name denied. %-</font color>"
@@ -323,7 +323,7 @@
 							if(istype(src,/obj/machinery/telecomms/server))
 								var/obj/machinery/telecomms/server/TSM = src
 								var/indx = freq_listening.Find(newfreq)
-								if(TSM.freq_names[indx])
+								if(indx && indx <= TSM.freq_names.len && TSM.freq_names[indx])
 									update_radio_frequency(TSM.freq_names[indx],newfreq)
 					else
 						temp = "<font color = #666633>-% Encryption key denied. %-</font color>"
