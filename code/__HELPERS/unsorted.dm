@@ -1880,7 +1880,7 @@ Game Mode config tags:
 				continue
 			taken_freqs.Add(chosen_freq)
 			freqs[i] = chosen_freq
-			world.log << "freq [i] is now [chosen_freq]"
+			world.log << "Radio frequency [i] is now [chosen_freq]"
 			freq_found = TRUE
 
 	freqtospan = list(
@@ -1947,16 +1947,16 @@ Game Mode config tags:
 /proc/update_radio_frequency(var/name, var/freq, var/update_station = TRUE)
 	var/newspan = null
 	if(name in freqs)
-		newspan = freqtospan[freqs[name]]
+		newspan = freqtospan["[freqs[name]]"]
 	freqs[name] = freq
 	radiochannels[name] = freqs[name]
-	radiochannelsreverse[freqs[name]] = name
+	radiochannelsreverse["[freqs[name]]"] = name
 	if(newspan)
-		freqtospan[freqs[name]] = newspan
+		freqtospan["[freqs[name]]"] = newspan
 	if(update_station)
 		stationchannels[name] = freqs[name]
-	log_admin("freq [name] is now [freqs[name]]")
-	message_admins("freq [name] is now [freqs[name]]")
+	log_admin("Radio frequency [name] is now [freqs[name]]")
+	message_admins("Radio frequency [name] is now [freqs[name]]")
 
 /proc/getviewsize(view)
 	if(isnum(view))
