@@ -8,11 +8,17 @@
 	mount_reqs = list("simfloor")
 
 /obj/item/mounted/frame/light_fixture/check_buildon(var/atom/A, mob/user)
-	for (var/obj/structure/window/W in A)
-		if (isfullwindow(W))
-			return 1
-		else
-			if (user.dir == opposite_dirs[W.dir]) // At least one border window can support us
+	if (isturf(A))
+		for (var/obj/structure/window/W in A)
+			if (isfullwindow(W))
+				return 1
+			else if (user.dir == opposite_dirs[W.dir]) // At least one border window can support us
+				return 1
+	else
+		if (iswindow(A))
+			if (isfullwindow(A))
+				return 1
+			else if (user.dir == opposite_dirs[A.dir])
 				return 1
 
 	return 0
