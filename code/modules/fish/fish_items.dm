@@ -237,10 +237,22 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail(get_turf(src))
 		qdel(src)
 		return
+	if(O.is_sharp(user))
+		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail(get_turf(src))
+		qdel(src)
+		return
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/attackby(var/obj/item/O, var/mob/user) // extracting the meat from the tail, just makes normal lobster meat
 	if(O.is_wirecutter(user))
+		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		qdel(src)
+		return
+	if(O.is_sharp(user))
 		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		qdel(src)

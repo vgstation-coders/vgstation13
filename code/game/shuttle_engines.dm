@@ -207,7 +207,7 @@
 		spawn()
 			A.process()
 
-		target = get_edge_target_turf(src,reverse_direction(dir))
+		target = get_edge_target_turf(src,opposite_dirs[dir])
 		sleep(6)
 		A = new exhaust_type(T)
 		A.max_range = backward

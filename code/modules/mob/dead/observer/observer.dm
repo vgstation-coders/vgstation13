@@ -86,7 +86,7 @@ var/creating_arena = FALSE
 			icon_state = body.icon_state
 			overlays = body.overlays
 		*/
-		
+
 		if(isSaMMI(body))
 			var/mob/living/silicon/robot/mommi/sammi/SM = body
 			icon = SM.ghost_icon
