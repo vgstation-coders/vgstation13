@@ -105,6 +105,9 @@ var/global/lastDecTalkUse = 0
 	if(speech.frequency)
 		freqpart = " \[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
+		var/override_color = get_radio_color(speech.frequency)
+		if(override_color)
+			speech.freq_color_override = override_color 
 	var/pooled=0
 	var/datum/speech/filtered_speech
 	if(speech.language)
@@ -247,6 +250,11 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	if(returntext)
 		return returntext
 	return "radio"
+
+/proc/get_radio_color(freq)
+	var/returntext = freqtocolor["[freq]"]
+	if(returntext)
+		return returntext
 
 /proc/get_radio_name(freq)
 	var/returntext = radiochannelsreverse["[freq]"]

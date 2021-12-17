@@ -1944,13 +1944,15 @@ Game Mode config tags:
 	"Supply" = SUP_FREQ
 	)
 
-/proc/update_radio_frequency(var/name, var/freq, var/mob/user, var/update_station = TRUE)
+/proc/update_radio_frequency(var/name, var/freq, var/color, var/mob/user, var/update_station = TRUE)
 	var/newspan = null
 	if(name in freqs)
 		newspan = freqtospan["[freqs[name]]"]
 	freqs[name] = freq
 	radiochannels[name] = freqs[name]
 	radiochannelsreverse["[freqs[name]]"] = name
+	if(color)
+		freqtocolor["[freqs[name]]"] = color
 	if(newspan)
 		freqtospan["[freqs[name]]"] = newspan
 	if(update_station)
