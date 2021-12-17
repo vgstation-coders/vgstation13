@@ -672,11 +672,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			if(traffic > 0)
 				totaltraffic += traffic // add current traffic to total traffic
 
-			var/name_override_index = freq_listening.Find(signal.frequency)
-			if(freq_names[name_override_index])
-				signal.data["freq_name_override"] = freq_names[name_override_index]
-				if(freq_names[signal.data["freq_name_override"]])
-					signal.data["freq_color_override"] = freq_names[signal.data["freq_name_override"]]
 			//Is this a test signal? Bypass logging
 			if(signal.data["type"] != 4)
 
@@ -686,6 +681,13 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 				var/datum/comm_log_entry/log = new
 				var/mob/M = signal.data["mob"]
+				var/name_override_index = freq_listening.Find(signal.frequency)
+				if(freq_names[name_override_index])
+					signal.data["freq_name_override"] = freq_names[name_override_index]
+					say_testing(M, "[src] relay_information freq_name_overridde [signal.data["freq_name_override"]]")
+					if(freq_names[signal.data["freq_name_override"]])
+						signal.data["freq_color_override"] = freq_names[signal.data["freq_name_override"]]
+						say_testing(M, "[src] relay_information freq_color_overridde [signal.data["freq_color_override"]]")
 				// Copy the signal.data entries we want
 				log.parameters["mobtype"] = signal.data["mobtype"]
 				log.parameters["job"] = signal.data["job"]
