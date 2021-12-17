@@ -139,9 +139,11 @@ var/global/lastDecTalkUse = 0
 	*/
 	if(filtered_speech.freq_name_override)
 		freqpart = " \[[filtered_speech.freq_name_override]\]"
+		say_testing(src, "render_speech() - freq_name_override = \[[filtered_speech.freq_name_override]\]")
 	. = "<span class='[filtered_speech.render_wrapper_classes()]'>"
 	if(filtered_speech.freq_color_override)
 		. += "<font color = [filtered_speech.freq_color_override]>"
+		say_testing(src, "render_speech() - freq_color_override = \[[filtered_speech.freq_color_override]\]")
 	. += "<span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]"
 	if(filtered_speech.freq_color_override)
 		. += "</font color>"
