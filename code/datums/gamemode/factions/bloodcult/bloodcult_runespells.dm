@@ -1584,7 +1584,7 @@ var/list/confusion_victims = list()
 	//	if (dist <= effect_range+0.5)
 	//		U.color = "red"
 	to_chat(activator, "<span class='notice'>All runes and cult structures in range hide themselves behind a thin layer of reality.</span>")
-	playsound(T, 'sound/effects/conceal.ogg', 50, 0, -4)
+	//playsound(T, 'sound/effects/conceal.ogg', 50, 0, -4)
 
 	for(var/obj/structure/cult/S in range(effect_range,T))
 		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)

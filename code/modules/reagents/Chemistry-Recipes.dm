@@ -129,7 +129,7 @@
 	name = "Peptobismol"
 	id = PEPTOBISMOL
 	result = PEPTOBISMOL
-	required_reagents = list(ANTI_TOXIN = 1, DISCOUNT = 1)
+	required_reagents = list(ANTI_TOXINS = 1, DISCOUNT = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/emp_pulse
@@ -309,7 +309,7 @@
 	name = "Polytrinic acid"
 	id = PACID
 	result = PACID
-	required_reagents = list(SACID = 1, CHLORINE = 1, POTASSIUM = 1)
+	required_reagents = list(SACIDS = 1, CHLORINE = 1, POTASSIUM = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/synaptizine
@@ -425,14 +425,14 @@
 	name = "Dermaline"
 	id = DERMALINE
 	result = DERMALINE
-	required_reagents = list(OXYGEN = 1, PHOSPHORUS = 1, KELOTANE = 1)
+	required_reagents = list(OXYGEN = 1, PHOSPHORUS = 1, KELOTANES = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/dexalinp
 	name = "Dexalin Plus"
 	id = DEXALINP
 	result = DEXALINP
-	required_reagents = list(DEXALIN = 1, CARBON = 1, IRON = 1)
+	required_reagents = list(DEXALINS = 1, CARBON = 1, IRON = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/bicaridine
@@ -562,7 +562,7 @@
 	name = "Trinitrine"
 	id = TRINITRINE
 	result = TRINITRINE
-	required_reagents = list(GLYCEROL = 1, SACID = 1, WATER = 3)
+	required_reagents = list(GLYCEROL = 1, SACIDS = 1, WATER = 3)
 	required_catalysts = list(NITROGEN = 5)
 	result_amount = 5
 
@@ -727,7 +727,7 @@
 	name = "Suxameth"
 	id = SUX
 	result = SUX
-	required_reagents = list(TOXIN = 1, CHLORINE = 1)
+	required_reagents = list(TOXINS = 1, CHLORINE = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/zombiepowder
@@ -987,7 +987,7 @@
 	name = "Nanobots"
 	id = NANOBOTS
 	result = NANOBOTS
-	required_reagents = list(NANITES = 1, URANIUM = 10, GOLD = 10, NUTRIMENT = 10, SILICON = 10)
+	required_reagents = list(ALLNANITES = 1, URANIUM = 10, GOLD = 10, NUTRIMENT = 10, SILICON = 10)
 	result_amount = 2
 
 /datum/chemical_reaction/nanobots2
@@ -1017,7 +1017,7 @@
 	name = "FixOVein"
 	id = "fixovein"
 	result = null
-	required_reagents = list(BICARIDINE = 10, CLONEXADONE = 10)
+	required_reagents = list(BICARIDINES = 10, CLONEXADONE = 10)
 	result_amount = 1
 	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
 
@@ -1078,7 +1078,7 @@
 	name = "Metal Foam"
 	id = "metalfoam"
 	result = null
-	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/metalfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1096,7 +1096,7 @@
 	name = "Iron Foam"
 	id = "ironlfoam"
 	result = null
-	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/ironfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1193,7 +1193,7 @@
 	name = "Insecticide"
 	id = INSECTICIDE
 	result = INSECTICIDE
-	required_reagents = list(TOXIN = 1, SALTWATER = 4)
+	required_reagents = list(TOXINS = 1, SALTWATER = 4)
 	result_amount = 5
 
 // Special Reactions for Plasma Beaker
@@ -2285,14 +2285,14 @@
 	name = "Zam's Mild Sauce"
 	id = ZAMMILD
 	result = ZAMMILD
-	required_reagents = list(ZAMSPICES = 3, SACID = 2)
+	required_reagents = list(ZAMSPICES = 3, SACIDS = 2)
 	result_amount = 5
 
 /datum/chemical_reaction/zamspicytoxin
 	name = "Zam's Spicy Sauce"
 	id = ZAMSPICYTOXIN
 	result = ZAMSPICYTOXIN
-	required_reagents = list(ZAMMILD = 3, PACID = 2)
+	required_reagents = list(ZAMMILD = 3, PACIDS = 2)
 	required_catalysts = list(MUTAGEN = 5)
 	result_amount = 3
 
@@ -3437,7 +3437,7 @@
 	name = "Apetrine"
 	id = APETRINE
 	result = APETRINE
-	required_reagents = list(PETRITRICIN = 2, PACID = 3)
+	required_reagents = list(PETRITRICIN = 2, PACIDS = 3)
 	result_amount = 1
 
 /datum/chemical_reaction/potassiumcarbonate

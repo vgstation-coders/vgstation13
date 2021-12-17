@@ -86,7 +86,7 @@
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     // So we can see in maint better
     if(client && client.darkness_planemaster)
-        client.darkness_planemaster.alpha = 192    
+        client.darkness_planemaster.alpha = 192
     update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/regular_hud_updates()
@@ -118,7 +118,7 @@
 		stat(null, text("Charge stored: [charge]W"))
 		stat(null, text("Max charge stored: [maxcharge]W"))
 
-/mob/living/simple_animal/hostile/pulse_demon/Life()    
+/mob/living/simple_animal/hostile/pulse_demon/Life()
     // Add the regen rate unless it puts us over max health, then just cap it off
     var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
     if(current_cable)
@@ -172,7 +172,7 @@
         moved = TRUE
     if(!is_under_tile() && prob(25))
         spark(src,rand(2,4))
-    if(new_power && !current_power)
+    if(new_power)
         current_power = new_power
         current_cable = null
         loc = new_power
@@ -369,7 +369,7 @@
         // Go in instantly if already compromised, else hijack timer
         if(!R.pulsecompromised)
             to_chat(user,"<span class='notice'>You are now attempting to hijack \the [R]'s targeting module, this will take approximately [user.takeover_time] seconds.</span>")
-            to_chat(R,"<span class='danger'>ALERT: ELECTRIAL MALEVOLANCE DETECTED, TARGETING SYSTEMS HIJACK IN PROGRESS</span>")
+            to_chat(R,"<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACK IN PROGRESS</span>")
             if(do_after(user,src,user.takeover_time*10))
                 if(occupant)
                     to_chat(user,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
@@ -409,7 +409,7 @@
         log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
         log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
         message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
-        
+
     else
         to_chat(src, "You have no hijacked robot to speak with.")
         return 1 //this ensures we don't end up speaking out loud

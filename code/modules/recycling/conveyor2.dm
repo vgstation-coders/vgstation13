@@ -160,7 +160,7 @@
 			var/obj/machinery/conveyor/C = locate() in T
 			if(C && (C.dir & C.dir-1) && !C.smoothed) //found an unsmoothed diagonal conveyor belt
 				var/list/secondarydirections = conveyor_directions(C.dir) //retrieve its dirs
-				if(directions[i] == reverse_direction(secondarydirections[i])) //check if the direction it is pointing is towards/away from us, if necessary reverse it
+				if(directions[i] == opposite_dirs[secondarydirections[i]]) //check if the direction it is pointing is towards/away from us, if necessary reverse it
 					in_reverse = 1
 					C.smoothed = 1
 					C.update_nearby_conveyors() //For diagonal to smooth out the other connected diagonals

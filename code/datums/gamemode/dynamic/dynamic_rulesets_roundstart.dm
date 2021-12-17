@@ -764,7 +764,9 @@ Assign your candidates in choose_candidates() instead.
 	clown.Greet(GREET_ROUNDSTART)
 
 	// And everyone else as mimes.
-	for (var/mob/M2 in (mode.get_ready_players() - M))
+	for (var/mob/M2 in (living_mob_list - M))
+		if (!M2.mind || !M2.client)
+			continue
 		var/datum/role/tag_mode_mime/mime = new
 		mime.AssignToRole(M2.mind,1)
 		mime.Greet(GREET_ROUNDSTART)

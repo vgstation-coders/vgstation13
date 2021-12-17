@@ -1,5 +1,3 @@
-var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
-
 /client
 	var/tmp
 		mloop = 0
