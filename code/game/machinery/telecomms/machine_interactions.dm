@@ -214,6 +214,37 @@
 				change_frequency = 0
 				temp = "<font color = #666633>-% Frequency changing deactivated %-</font color>"
 
+/obj/machinery/telecomms/server/Options_Menu()
+	var/dat= {"</ol>
+			<h2>Frequency Names:</h2>"}
+	if(length(freq_names))
+		dat += "<ul>"
+		for(var/x in freq_names)
+			dat += "<li>[x]<a href='?src=\ref[src];delete_name=[x]'>\[X\]</a></li>"
+		dat += "</ul>"
+	else
+		dat += "<li>NONE</li>"
+	
+	dat += {"<p><a href='?src=\ref[src];input_name=1'>\[Add Frequency Name\]</a></p>
+			<hr />"}
+	return dat
+
+/obj/machinery/telecomms/server/Options_Topic(href, href_list)
+
+	if(href_list["delete_name"])
+		var/x = text2num(href_list["delete"])
+		temp = "<font color = #666633>-% Removed frequency name [x] %-</font color>"
+		freq_names.Remove(x)
+
+	if(href_list["input_name"])
+		var/newfreq = input(usr, "Specify a new frequency name.", src, network) as null|text
+		if(newfreq && canAccess(usr))
+			if(!(newfreq == SYND || newfreq == RAIDER || newfreq == REV_COMM))
+				if(!(newfreq in freq_names))
+					freq_names.Add(newfreq)
+					temp = "<font color = #666633>-% New frequency name assigned: \"[newfreq]\" %-</font color>"
+			else
+				temp = "<font color = #666633>-% Channel name denied. %-</font color>"
 
 /obj/machinery/telecomms/Topic(href, href_list)
 	if(..())

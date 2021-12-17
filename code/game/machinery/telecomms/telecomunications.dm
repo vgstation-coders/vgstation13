@@ -635,6 +635,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/obj/item/device/radio/headset/server_radio = null
 	var/last_signal = 0 	// Last time it sent a signal
 
+	var/list/freq_names = list() // Names to associate each frequency with on broadcast, if any
+
 /obj/machinery/telecomms/server/New()
 	..()
 	Compiler = new()
