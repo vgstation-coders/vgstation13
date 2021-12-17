@@ -37,10 +37,6 @@
 
 	var/list/pre_rendered_shadows = list()
 
-/atom/movable/light/smooth
-	animate_movement = NO_STEPS
-	vis_flags = VIS_INHERIT_ID
-
 /atom/movable/light/shadow
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
@@ -144,9 +140,6 @@
 
 /atom/movable/light/shadow/get_wall_view()
 	return round(TURF_SHADOW_FRACTION*light_range)
-
-/atom/movable/light/smooth/get_wall_view()
-	return 0
 
 // -- Does a basic cheap raycast from the light to the turf.
 // Return true if it can see it.

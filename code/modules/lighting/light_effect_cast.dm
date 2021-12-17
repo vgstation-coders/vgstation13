@@ -45,11 +45,11 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 /atom/movable/light/proc/cast_light_init()
 
 	filters = list()
-	pre_rendered_shadows = list()
 	temp_appearance = list()
 	temp_appearance_shadows = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
+	pre_rendered_shadows = list()
 
 	//cap light range to the max
 	luminosity = 2*light_range
@@ -516,10 +516,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		if (!found_wall_turf_prerender)
 			I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
 			I.icon_state = "[blocking_dirs]-[targ_dir]"
-			I.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
 			I.render_target = turf_shadow_image_identifier
 			pre_rendered_shadows += turf_shadow_image_identifier
 
+	I.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
@@ -532,12 +532,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		temp_appearance += temp_appearance_shadows
 	overlays = temp_appearance
 	temp_appearance = null
-	// Because movable lights do this two-lights-sources thing
-	if ((holder.lighting_flags & MOVABLE_LIGHT) && icon_state == "white")
-		var/list/RGB = rgb2num(light_color)
-		color = rgb(round(RGB[1]/2), round(RGB[2]/2), round(RGB[3]/2))
-	else
-		color = light_color
+	color = light_color
 
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
