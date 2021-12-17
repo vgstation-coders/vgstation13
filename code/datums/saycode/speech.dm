@@ -16,7 +16,6 @@
 	var/list/wrapper_classes=list("game","say")
 	// Custom channel stuff
 	var/freq_color_override = null
-	var/freq_name_override = null
 
 	var/mode = SPEECH_MODE_SAY
 
@@ -52,7 +51,6 @@
 	clone.message_classes=message_classes.Copy()
 	clone.wrapper_classes=wrapper_classes.Copy()
 	clone.freq_color_override = freq_color_override
-	clone.freq_name_override = freq_name_override
 	return clone
 
 /datum/speech/proc/scramble()
@@ -132,7 +130,6 @@
 	signal.data["r_quote"]  = rquote
 	signal.data["l_quote"]  = lquote
 
-	signal.data["freq_name_override"] = freq_name_override
 	signal.data["freq_color_override"] = freq_color_override
 
 	signal.frequency = frequency // Quick frequency set
@@ -164,7 +161,6 @@
 
 	wrapper_classes.Add("radio")
 
-	freq_name_override = signal.data["freq_name_override"]
 	freq_color_override = signal.data["freq_color_override"]
 
 /datum/speech/proc/set_language(var/lang_id)
