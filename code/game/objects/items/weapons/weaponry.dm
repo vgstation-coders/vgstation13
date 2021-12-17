@@ -514,7 +514,7 @@
 			return FALSE
 		if (ismob(blocked) || prob(85 - round(damage * 5)))
 			visible_message("<span class='borange'>[loc] knocks away \the [blocked] with \the [src]!</span>")
-			playsound(usr.loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
+			playsound(loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
 			if(ismovable(blocked))
 				var/atom/movable/M = blocked
 				var/turf/Q = get_turf(M)

@@ -172,7 +172,7 @@
         moved = TRUE
     if(!is_under_tile() && prob(25))
         spark(src,rand(2,4))
-    if(new_power && !current_power)
+    if(new_power)
         current_power = new_power
         current_cable = null
         loc = new_power
@@ -369,7 +369,7 @@
         // Go in instantly if already compromised, else hijack timer
         if(!R.pulsecompromised)
             to_chat(user,"<span class='notice'>You are now attempting to hijack \the [R]'s targeting module, this will take approximately [user.takeover_time] seconds.</span>")
-            to_chat(R,"<span class='danger'>ALERT: ELECTRIAL MALEVOLANCE DETECTED, TARGETING SYSTEMS HIJACK IN PROGRESS</span>")
+            to_chat(R,"<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACK IN PROGRESS</span>")
             if(do_after(user,src,user.takeover_time*10))
                 if(occupant)
                     to_chat(user,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")

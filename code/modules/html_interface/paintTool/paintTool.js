@@ -50,19 +50,11 @@
  * If you'd rather forego this, you may use 'paint_color = "#ffaa22";' instead, at your own peril.
  *
  *
- * --- setStrength() ---
+ * --- setOpacity() ---
  *
  * Updates the tool strenght to that of the 'Tool Strenght' input, sanitizing it's value in the process. Turns
  *  NaNs to 0, rounds the value to the second decimal and clamps it to the min. and max. values.
  * Useful if you wish to let the user modify the strength directly.
- *
- *
- * --- changeStrength(diff) ---
- *
- * Modifies the tool strenght by 'diff', sanitizes the result and updates the value of the 'Tool Strenght' input.
- * 'diff' should be no lower than 0.01, any values lower than that will end up ignored once the result's sanitized.
- * Useful if placing buttons to increase/decrease the tool strenght, rather than modifying it directly.
- *
  *
  * --- hexToRgba(hex), rgbaToHex(r, g, b) ---
  *
