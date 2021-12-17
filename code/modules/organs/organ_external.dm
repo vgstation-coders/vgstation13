@@ -1491,11 +1491,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(B)
 		owner.internal_organs_by_name.Remove("brain")
 		owner.internal_organs.Remove(B)
-
+		src.internal_organs.Remove(B)
 	return B
 
 /datum/organ/external/head/proc/eject_eyes()
-	var/datum/organ/internal/brain/E = owner.internal_organs_by_name["eyes"]
+	var/datum/organ/internal/eyes/E = owner.internal_organs_by_name["eyes"]
 
 	if(E)
 		owner.internal_organs_by_name.Remove("eyes")
@@ -1929,8 +1929,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 					//TODO: ORGAN REMOVAL UPDATE.
 
-					for(var/datum/organ/internal/brain/B in src.internal_organs)
-						src.internal_organs -= B
+
 					var/turf/T = get_turf(src)
 					if(isatom(organ_data.removed_type))
 						var/obj/I = organ_data.removed_type
