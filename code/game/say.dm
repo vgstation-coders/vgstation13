@@ -137,14 +137,21 @@ var/global/lastDecTalkUse = 0
 			[filtered_speech.render_message()]
 		</span>"}
 	*/
+	// All this font_color spam is annoying but it's the only way to work it right.
 	if(filtered_speech.freq_name_override)
 		freqpart = " \[[filtered_speech.freq_name_override]\]"
 		say_testing(src, "render_speech() - freq_name_override = \[[filtered_speech.freq_name_override]\]")
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'>"
+	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>"
 	if(filtered_speech.freq_color_override)
 		. += "<font color = '[filtered_speech.freq_color_override]'>"
 		say_testing(src, "render_speech() - freq_color_override = \[[filtered_speech.freq_color_override]\]")
-	. += "<span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]"
+	. += "[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]"
+	if(filtered_speech.freq_color_override)
+		. += "</font color>"
+	. += "</span>"
+	if(filtered_speech.freq_color_override)
+		. += "<font color = '[filtered_speech.freq_color_override]'>"
+	. += " [filtered_speech.render_message()]"
 	if(filtered_speech.freq_color_override)
 		. += "</font color>"
 	. += "</span>"
