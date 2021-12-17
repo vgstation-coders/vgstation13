@@ -243,13 +243,13 @@
 				if(!(newfreq in freq_names))
 					freq_names.Add(newfreq)
 					temp = "<font color = #666633>-% New frequency name assigned: \"[newfreq]\" %-</font color>"
+		
+					var/newcolor = input(usr, "Specify a new frequency color. Leave blank for defaults.", src, network) as null|color
+					if(newcolor && canAccess(usr))
+						freq_names[newfreq] = newcolor
+						temp = "<font color = [newcolor]>-% New frequency color assigned. %-</font color>"
 			else
 				temp = "<font color = #666633>-% Channel name denied. %-</font color>"
-		
-			var/newcolor = input(usr, "Specify a new frequency color. Leave blank for defaults.", src, network) as null|color
-			if(newcolor && canAccess(usr))
-				freq_names[newfreq] = newcolor
-				temp = "<font color = [newcolor]>-% New frequency color assigned. %-</font color>"
 
 /obj/machinery/telecomms/Topic(href, href_list)
 	if(..())
