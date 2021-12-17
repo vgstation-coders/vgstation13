@@ -1955,6 +1955,8 @@ Game Mode config tags:
 		freqtospan[freqs[name]] = newspan
 	if(update_station)
 		stationchannels[name] = freqs[name]
+	log_admin("freq [name] is now [freqs[name]]")
+	message_admins("freq [name] is now [freqs[name]]")
 
 /proc/getviewsize(view)
 	if(isnum(view))
