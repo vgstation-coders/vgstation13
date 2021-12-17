@@ -83,3 +83,11 @@
 	desc = "Must be a culture thing."
 	density = 0
 	anchored = 1
+
+obj/structure/grue_egg
+	name = "grue egg"
+	desc = "A large egg laid by a grue"
+	icon = 'icons/mob/grue.dmi'
+	icon_state = "moult0"
+	density = 0
+	anchored = 1
