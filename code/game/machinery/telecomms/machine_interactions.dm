@@ -220,7 +220,13 @@
 	if(length(freq_names))
 		dat += "<ul>"
 		for(var/x in freq_names)
-			dat += "<li>[freq_names[x] ? "<font color = [freq_names[x]]>" : ""][x][freq_names[x] ? "</font color>" : ""]<a href='?src=\ref[src];delete_name=[x]'>\[X\]</a></li>"
+			dat += "<li>"
+			if(freq_names[x])
+				dat += "<font color = [freq_names[x]]>"
+			dat += "[x]"
+			if(freq_names[x])
+				dat += "</font color>"
+			dat += "<a href='?src=\ref[src];delete_name=[x]'>\[X\]</a></li>"
 		dat += "</ul>"
 	else
 		dat += "<li>NONE</li>"
