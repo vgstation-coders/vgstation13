@@ -301,3 +301,26 @@
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list(mymob.healths,vampire_blood_display)
+
+/datum/hud/proc/grue_hud()
+
+	mymob.healths = new /obj/abstract/screen
+	mymob.healths.icon = 'icons/mob/screen1_grue.dmi'
+	mymob.healths.icon_state = "health0"
+	mymob.healths.name = "health"
+	mymob.healths.screen_loc = ui_health
+
+	mymob.healths2 = new /obj/abstract/screen
+	mymob.healths2.icon= 'icons/mob/screen1_grue.dmi'
+	mymob.healths2.icon_state= "lightlevel_dim"
+	mymob.healths2.name= "darkness"
+	mymob.healths2.screen_loc=ui_under_health
+
+
+	//vampire_blood_display = new /obj/abstract/screen
+	//vampire_blood_display.name = "darkness"
+	//vampire_blood_display.icon_state = "light_level_dim"
+	//vampire_blood_display.screen_loc = ui_under_health
+
+//	mymob.client.reset_screen()
+	mymob.client.screen += list(mymob.healths,mymob.healths2)

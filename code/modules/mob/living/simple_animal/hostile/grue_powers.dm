@@ -22,7 +22,7 @@
     if(host.shadowpower < upgrade_cost)
         to_chat(host,"<span class='warning'>You cannot afford this upgrade.</span>")
         return FALSE
-    
+
     host.shadowpower -= upgrade_cost
     return TRUE
 
@@ -172,7 +172,7 @@
         add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
         charge -= PDS.purchase_cost
         possible_spells.Remove(PDS)
-    
+
     if(href_list["desc"])
         show_desc = !show_desc
 
@@ -543,4 +543,4 @@
 
         if(PD.move_divide > 1)
             PD.move_divide *= 0.75
-        return temp 
+        return temp
