@@ -1944,6 +1944,18 @@ Game Mode config tags:
 	"Supply" = SUP_FREQ
 	)
 
+/proc/update_radio_frequency(var/name, var/freq, var/update_station = TRUE)
+	var/newspan = null
+	if(name in freqs)
+		newspan = freqtospan[freqs[name]]
+	freqs[name] = freq
+	radiochannels[name] = freqs[name]
+	radiochannelsreverse[freqs[name]] = name
+	if(newspan)
+		freqtospan[freqs[name]] = newspan
+	if(update_station)
+		stationchannels[name] = freqs[name]
+
 /proc/getviewsize(view)
 	if(isnum(view))
 		var/totalviewrange = (view < 0 ? -1 : 1) + 2 * view
