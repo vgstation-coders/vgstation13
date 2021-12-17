@@ -238,7 +238,7 @@
 /obj/machinery/telecomms/server/Options_Topic(href, href_list)
 
 	if(href_list["delete_name"])
-		var/x = text2num(href_list["delete_name"])
+		var/x = href_list["delete_name"]
 		temp = "<font color = #666633>-% Removed frequency name [x] %-</font color>"
 		freq_names.Remove(x)
 
