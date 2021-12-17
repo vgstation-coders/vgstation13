@@ -182,8 +182,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 					icon = 'icons/lighting/shadow_range_5.dmi'
 
 	if (light_type != LIGHT_DIRECTIONAL)
-		pixel_x = -(world.icon_size * light_range)
-		pixel_y = -(world.icon_size * light_range)
+		pixel_x = -(world.icon_size * light_range) + holder.pixel_x
+		pixel_y = -(world.icon_size * light_range) + holder.pixel_y
 
 	// This to avoid TILE_BOUND corner light effects while keeping smooth movement for movable light sources
 	// There are THREE light atoms on an object
