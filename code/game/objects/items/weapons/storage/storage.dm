@@ -602,7 +602,7 @@
 				if(items_to_spawn[item] && isnum(items_to_spawn[item]))
 					amount = items_to_spawn[item]
 				for(var/i = 1, i <= amount, i++)
-					current_item = new item(src)
+					current_item = new picked_item(src)
 					if(current_item)
 						usable_items++
 						total_w_class += current_item.w_class
