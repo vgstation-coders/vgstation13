@@ -36,6 +36,7 @@
 	var/storage_locked = FALSE //you can't interact with the contents of locked storage
 	var/can_add_combinedwclass = FALSE
 	var/can_add_storageslots = FALSE
+	var/can_increase_wclass_stored = FALSE
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
@@ -588,6 +589,7 @@
 	if(items_to_spawn.len)
 		var/total_w_class = 0
 		var/usable_items = 0
+		var/biggest_w_class = 0
 		for(var/item in items_to_spawn)
 			var/picked_item = item
 			var/obj/item/current_item
@@ -603,10 +605,14 @@
 					if(current_item)
 						usable_items++
 						total_w_class += current_item.w_class
+						if(current_item.w_class > biggest_w_class)
+							biggest_w_class = current_item.w_class
 		if(total_w_class > max_combined_w_class && can_add_combinedwclass)
 			max_combined_w_class = total_w_class
 		if(usable_items > storage_slots && can_add_storageslots)
 			storage_slots = usable_items
+		if(biggest_w_class > fits_max_w_class && can_increase_wclass_stored)
+			fits_max_w_class = biggest_w_class
 
 /obj/item/weapon/storage/emp_act(severity)
 	if(!istype(src.loc, /mob/living))
