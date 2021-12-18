@@ -786,8 +786,12 @@
 	icon_state = "box_mug"
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/drinks/mug = 5,
-		subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug),
 	)
+
+/obj/item/weapon/storage/box/mugs/New()
+	..()
+	var/flagmug = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug))
+	new flagmug(src)
 
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
@@ -831,15 +835,12 @@
 		"/obj/item/inflatable/door",
 		"/obj/item/inflatable/wall",
 		"/obj/item/inflatable/shelter")
-	fits_max_w_class = W_CLASS_MEDIUM
-	max_combined_w_class = 21
-
-/obj/item/weapon/storage/box/inflatables/New()
-	..()
-	for(var/i = 1 to 3)
-		new /obj/item/inflatable/door(src)
-	for(var/i = 1 to 4)
-		new /obj/item/inflatable/wall(src)
+	can_add_combinedwclass = TRUE
+	can_increase_wclass_stored = TRUE
+	items_to_spawn = list(
+		/obj/item/inflatable/door = 3,
+		/obj/item/inflatable/wall = 4,
+	)
 
 /obj/item/weapon/storage/box/ornaments
 	name = "box of ornaments"
@@ -888,7 +889,7 @@
 		var/obj/item/weapon/spellbook/oneuse/O = S
 		if(initial(O.disabled_from_bundle))
 			possible_books -= O
-	for(var/i =1; i <= 7; i++)
+	for(var/i =1; i <= BOX_SPACE; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)
 		src.contents += book
@@ -900,60 +901,30 @@
 	name = "box of chrono grenades"
 	desc = "A box of seven experimental chrono grenades."
 	icon_state = "chrono_grenade"
-
-/obj/item/weapon/storage/box/chrono_grenades/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/chronogrenade(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/chronogrenade = BOX_SPACE)
 
 /obj/item/weapon/storage/box/balloons
 	name = "box of balloons"
 	desc = "A box containing seven balloons of various colors."
 	icon_state = "balloon_box"
-
-/obj/item/weapon/storage/box/balloons/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/toy/balloon(src)
+	items_to_spawn = list(/obj/item/toy/balloon = BOX_SPACE)
 
 /obj/item/weapon/storage/box/chrono_grenades/future
 	icon_state = "future_grenade"
-
-/obj/item/weapon/storage/box/chrono_grenades/future/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/chronogrenade/future(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/chronogrenade/future = BOX_SPACE)
 
 /obj/item/weapon/storage/box/balloons/long
 	name = "box of long balloons"
 	desc = "A box containing seven long balloons of various colors."
 	icon_state = "long_balloon_box"
+	items_to_spawn = list(/obj/item/toy/balloon/long = BOX_SPACE)
 
-/obj/item/weapon/storage/box/balloons/long/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	for(var/i = 1 to 7)
-		new /obj/item/toy/balloon/long(src)
-
-/obj/item/weapon/storage/box/balloons/long/living/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	for(var/i = 1 to 7)
-		new /obj/item/toy/balloon/long/living(src)
+/obj/item/weapon/storage/box/balloons/long/living
+	items_to_spawn = list(/obj/item/toy/balloon/long/living = BOX_SPACE)
 
 /obj/item/weapon/storage/box/chrono_grenades/past
 	icon_state = "past_grenade"
-
-/obj/item/weapon/storage/box/chrono_grenades/past/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/chronogrenade/past(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/chronogrenade/past = BOX_SPACE)
 
 // Who organizes this shit?
 
