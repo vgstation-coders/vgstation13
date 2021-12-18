@@ -102,12 +102,11 @@ var/global/lastDecTalkUse = 0
 /atom/movable/proc/render_speech(var/datum/speech/speech)
 	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
 	var/freqpart = ""
+	var/colorpart
 	if(speech.frequency)
 		freqpart = " \[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
-		var/override_color = get_radio_color(speech.frequency)
-		if(override_color)
-			speech.freq_color_override = override_color 
+		colorpart = get_radio_color(speech.frequency)
 	var/pooled=0
 	var/datum/speech/filtered_speech
 	if(speech.language)
@@ -142,17 +141,17 @@ var/global/lastDecTalkUse = 0
 	*/
 	// All this font_color spam is annoying but it's the only way to work it right.
 	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>"
-	if(filtered_speech.freq_color_override)
-		. += "<font color = [filtered_speech.freq_color_override]>"
-		say_testing(src, "render_speech() - freq_color_override = \[[filtered_speech.freq_color_override]\]")
+	if(colorpart)
+		. += "<font color = [colorpart]>"
+		say_testing(src, "render_speech() - colorpart = \[[colorpart]\]")
 	. += "[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]"
-	if(filtered_speech.freq_color_override)
+	if(colorpart)
 		. += "</font color>"
 	. += "</span>"
-	if(filtered_speech.freq_color_override)
-		. += "<font color = [filtered_speech.freq_color_override]>"
+	if(colorpart)
+		. += "<font color = [colorpart]>"
 	. += " [filtered_speech.render_message()]"
-	if(filtered_speech.freq_color_override)
+	if(colorpart)
 		. += "</font color>"
 	. += "</span>"
 	say_testing(src, html_encode(.))
