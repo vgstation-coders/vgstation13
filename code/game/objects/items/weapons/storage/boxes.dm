@@ -609,9 +609,8 @@
 	name = "security essentials"
 	desc = "A box containing essential security officer equipment. It has a piece of paper with the letters SEC written on it taped to one side."
 	icon_state = "largebox_sec"
-	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_MEDIUM
-	max_combined_w_class = 31
+	can_add_combinedwclass = TRUE
 	can_only_hold = list(
 		"/obj/item/device/radio/headset/headset_sec",
 		"/obj/item/clothing/glasses/sunglasses/sechud",
@@ -629,139 +628,100 @@
 		"/obj/item/device/hailer",
 		"/obj/item/device/law_planner",
 	)
-
-/obj/item/weapon/storage/box/large/securitygear/New()
-	..()
-	new /obj/item/device/radio/headset/headset_sec(src)
-	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
-	new glasses(src)
-	new /obj/item/clothing/gloves/black(src)
-	new /obj/item/weapon/storage/belt/security(src)
-	new /obj/item/device/flashlight/tactical(src)
-	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
-	new /obj/item/device/gps/secure(src)
-	new /obj/item/device/flash(src)
-	new /obj/item/weapon/grenade/flashbang(src)
-	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/gun/energy/taser(src)
-	new /obj/item/weapon/reagent_containers/spray/pepper(src)
-	new /obj/item/taperoll/police(src)
-	new /obj/item/device/hailer(src)
-	new /obj/item/device/law_planner(src)
+	items_to_spawn = list(
+		/obj/item/device/radio/headset/headset_sec,
+		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+		/obj/item/clothing/gloves/black,
+		/obj/item/weapon/storage/belt/security,
+		/obj/item/device/flashlight/tactical,
+		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
+		/obj/item/device/gps/secure,
+		/obj/item/device/flash,
+		/obj/item/weapon/grenade/flashbang,
+		/obj/item/weapon/melee/baton/loaded,
+		/obj/item/weapon/gun/energy/taser,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/taperoll/police,
+		/obj/item/device/hailer,
+		/obj/item/device/law_planner,
+	)
 
 /obj/item/weapon/storage/box/large/detectivegear
 	name = "detective essentials"
 	desc = "A box containing essential detective officer equipment. It has a piece of paper with the letters DET written on it taped to one side."
 	icon_state = "largebox_det"
-
-/obj/item/weapon/storage/box/large/detectivegear/New()
-	..()
-	new /obj/item/device/radio/headset/headset_sec(src)
-	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
-	new glasses(src)
-	new /obj/item/clothing/gloves/black(src)
-	new /obj/item/weapon/storage/belt/detective(src)
-	new /obj/item/weapon/switchtool/switchblade(src)
-	new /obj/item/device/gps/secure(src)
-	new /obj/item/ammo_storage/box/c38(src)
-	new /obj/item/ammo_storage/box/c38(src)
-	new /obj/item/ammo_storage/speedloader/c38(src)
-	new /obj/item/weapon/storage/box/evidence(src)
-	new /obj/item/device/detective_scanner(src)
-	new /obj/item/binoculars(src)
-	new /obj/item/weapon/storage/box/surveillance(src)
-	new /obj/item/device/handtv(src)
-	new /obj/item/weapon/reagent_containers/spray/luminol(src)
-	new /obj/item/taperoll/police(src)
+	fits_max_w_class = W_CLASS_MEDIUM
+	can_add_combinedwclass = TRUE
+	items_to_spawn = list(
+		/obj/item/device/radio/headset/headset_sec,
+		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+		/obj/item/clothing/gloves/black,
+		/obj/item/weapon/storage/belt/detective,
+		/obj/item/weapon/switchtool/switchblade,
+		/obj/item/device/gps/secure,
+		/obj/item/ammo_storage/box/c38 = 2,
+		/obj/item/ammo_storage/speedloader/c38,
+		/obj/item/weapon/storage/box/evidence,
+		/obj/item/device/detective_scanner,
+		/obj/item/binoculars,
+		/obj/item/weapon/storage/box/surveillance,
+		/obj/item/device/handtv,
+		/obj/item/weapon/reagent_containers/spray/luminol,
+		/obj/item/taperoll/police,
+	)
 
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
 	desc = "<span class='userdanger'>WARNING: Keep out of reach of children.</span>"
 	icon_state = "mousetraps"
-
-/obj/item/weapon/storage/box/mousetraps/New()
-	..()
-	for(var/i=0,i<6,i++)
-		new /obj/item/device/assembly/mousetrap(src)
+	items_to_spawn = list(/obj/item/device/assembly/mousetrap = 6)
 
 /obj/item/weapon/storage/box/pillbottles
 	name = "box of pill bottles"
 	desc = "It has pictures of pill bottles on its front."
-
-/obj/item/weapon/storage/box/pillbottles/New()
-	..()
-	for(var/i=0,i<7,i++)
-		new /obj/item/weapon/storage/pill_bottle(src)
+	items_to_spawn = list(/obj/item/weapon/storage/pill_bottle = 7)
 
 /obj/item/weapon/storage/box/lethalshells
 	name = "12-gauge slugs"
 	icon_state = "slug_shells"
-	storage_slots = 16
-
-/obj/item/weapon/storage/box/lethalshells/New()
-	..()
-	for(var/i in 1 to 16)
-		new /obj/item/ammo_casing/shotgun(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun = 16)
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "12-gauge beanbag shells"
 	icon_state = "beanbag_shells"
-	storage_slots = 16
-
-/obj/item/weapon/storage/box/beanbagshells/New()
-	..()
-	for(var/i in 1 to 16)
-		new /obj/item/ammo_casing/shotgun/beanbag(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/beanbag = 16)
 
 /obj/item/weapon/storage/box/stunshells
 	name = "12-gauge stun shells"
 	icon_state = "stun_shells"
-	storage_slots = 16
-
-/obj/item/weapon/storage/box/stunshells/New()
-	..()
-	for(var/i in 1 to 16)
-		new /obj/item/ammo_casing/shotgun/stunshell(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/stunshell = 16)
 
 /obj/item/weapon/storage/box/dartshells
 	name = "12-gauge darts"
 	icon_state = "dart_shells"
-	storage_slots = 16
-
-/obj/item/weapon/storage/box/dartshells/New()
-	..()
-	for(var/i in 1 to 16)
-		new /obj/item/ammo_casing/shotgun/dart(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dart = 16)
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "12-gauge 00 buckshot shells"
 	icon_state = "buckshot_shells"
-	storage_slots = 16
-
-/obj/item/weapon/storage/box/buckshotshells/New()
-	..()
-	for(var/i in 1 to 16)
-		new /obj/item/ammo_casing/shotgun/buckshot(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/buckshot = 16)
 
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
-	storage_slots = 16
-
-/obj/item/weapon/storage/box/dragonsbreathshells/New()
-	..()
-	for(var/i in 1 to 16)
-		new /obj/item/ammo_casing/shotgun/dragonsbreath(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dragonsbreath = 16)
 
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
-	storage_slots = 16
-
-/obj/item/weapon/storage/box/fragshells/New()
-	..()
-	for(var/i in 1 to 16)
-		new /obj/item/ammo_casing/shotgun/frag(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
