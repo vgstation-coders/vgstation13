@@ -595,7 +595,7 @@
 			var/obj/item/current_item
 			var/amount = 1
 			if(islist(item))
-				var/list/item_list = list()
+				var/list/item_list = item
 				picked_item = pick(item_list)
 			if(ispath(picked_item, /obj/item))
 				if(items_to_spawn[item] && isnum(items_to_spawn[item]))
