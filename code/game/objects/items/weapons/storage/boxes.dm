@@ -679,7 +679,7 @@
 /obj/item/weapon/storage/box/pillbottles
 	name = "box of pill bottles"
 	desc = "It has pictures of pill bottles on its front."
-	items_to_spawn = list(/obj/item/weapon/storage/pill_bottle = 7)
+	items_to_spawn = list(/obj/item/weapon/storage/pill_bottle = BOX_SPACE)
 
 /obj/item/weapon/storage/box/lethalshells
 	name = "12-gauge slugs"
@@ -727,31 +727,19 @@
 	name = "label roll box"
 	desc = "A box of refill rolls for a hand labeler."
 	icon_state = "labels"
-
-/obj/item/weapon/storage/box/labels/New()
-	..()
-	for(var/i=1; i <= BOX_SPACE; i++)
-		new /obj/item/device/label_roll(src)
+	items_to_spawn = list(/obj/item/device/label_roll = BOX_SPACE)
 
 /obj/item/weapon/storage/box/wreath/wreath_bow
 	name = "wreath (bow) box"
 	desc = "Just add hands for Christmas."
 	icon_state = "wreath_bow"
-
-/obj/item/weapon/storage/box/wreath/wreath_bow/New()
-	..()
-	for(var/i=1; i <= BOX_SPACE; i++)
-		new /obj/item/mounted/frame/wreath/wreath_bow(src)
+	items_to_spawn = list(/obj/item/mounted/frame/wreath/wreath_bow = BOX_SPACE)
 
 /obj/item/weapon/storage/box/wreath/wreath_nobow
 	name = "wreath (holly) box"
 	desc = "Emergency Christmas supplies."
 	icon_state = "wreath_nobow"
-
-/obj/item/weapon/storage/box/wreath/wreath_nobow/New()
-	..()
-	for(var/i=1; i <= BOX_SPACE; i++)
-		new /obj/item/mounted/frame/wreath/wreath_nobow(src)
+	items_to_spawn = list(/obj/item/mounted/frame/wreath/wreath_nobow = BOX_SPACE)
 
 /obj/item/weapon/storage/box/snappops
 	name = "snap pop box"
@@ -760,63 +748,46 @@
 	icon_state = "spbox"
 	storage_slots = 8
 	can_only_hold = list("/obj/item/toy/snappop")
-
-/obj/item/weapon/storage/box/snappops/New()
-	..()
-	for(var/i=1; i <= BOX_SPACE+1; i++)
-		new /obj/item/toy/snappop(src)
+	items_to_spawn = list(/obj/item/toy/snappop = BOX_SPACE)
 
 /obj/item/weapon/storage/box/syndicatefake/space
 	name = "Space Suit and Helmet Replica"
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
-
-/obj/item/weapon/storage/box/syndicatefake/space/New()
-	..()
-	new /obj/item/clothing/suit/syndicatefake(src)
-	new /obj/item/clothing/head/syndicatefake(src)
+	items_to_spawn = list(
+		/obj/item/clothing/suit/syndicatefake,
+		/obj/item/clothing/head/syndicatefake,
+	)
 
 /obj/item/weapon/storage/box/syndicatefake/ninja
 	name = "Ninja Suit and Hood Replica"
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
-
-/obj/item/weapon/storage/box/syndicatefake/ninja/New()
-	..()
-	new /obj/item/clothing/suit/spaceninjafake(src)
-	new /obj/item/clothing/head/spaceninjafake(src)
+	items_to_spawn = list(
+		/obj/item/clothing/suit/spaceninjafake,
+		/obj/item/clothing/head/spaceninjafake,
+	)
 
 /obj/item/weapon/storage/box/autoinjectors
 	name = "box of injectors"
 	desc = "Contains autoinjectors."
 	icon_state = "syringe"
-
-/obj/item/weapon/storage/box/autoinjectors/New()
-	..()
-	for (var/i; i < BOX_SPACE; i++)
-		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/hypospray/autoinjector = BOX_SPACE)
 
 /obj/item/weapon/storage/box/antiviral_syringes
 	name = "box of anti-viral syringes"
 	desc = "Contains anti-viral syringes."
 	icon_state = "syringe"
-
-/obj/item/weapon/storage/box/antiviral_syringes/New()
-	..()
-	for (var/i; i < BOX_SPACE; i++)
-		new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/syringe/antiviral = BOX_SPACE)
 
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
 	desc = "It's a box of mugs."
 	icon_state = "box_mug"
-
-/obj/item/weapon/storage/box/mugs/New()
-	..()
-	for(var/i=0,i<5,i++)
-		new /obj/item/weapon/reagent_containers/food/drinks/mug(src)
-	var/flagmug = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug))
-	new flagmug(src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/drinks/mug = 5,
+		subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug),
+	)
 
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
@@ -825,46 +796,32 @@
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
-	storage_slots=21
 	can_only_hold = list("/obj/item/weapon/light/tube", "/obj/item/weapon/light/bulb")
-	max_combined_w_class = 21
+	can_add_combinedwclass = TRUE
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/weapon/light/bulb = 21)
 	use_to_pickup = 1 // for picking up broken bulbs, not that most people will try
-
-/obj/item/weapon/storage/box/lights/bulbs/New()
-	..()
-	for(var/i = 0; i < 21; i++)
-		new /obj/item/weapon/light/bulb(src)
 
 /obj/item/weapon/storage/box/lights/tubes
 	name = "replacement tubes"
 	icon_state = "lighttube"
-
-/obj/item/weapon/storage/box/lights/tubes/New()
-	..()
-	for(var/i = 0; i < 21; i++)
-		new /obj/item/weapon/light/tube(src)
+	items_to_spawn = list(/obj/item/weapon/light/tube = 21)
 
 /obj/item/weapon/storage/box/lights/mixed
 	name = "replacement lights"
 	icon_state = "lightmixed"
-
-/obj/item/weapon/storage/box/lights/mixed/New()
-	..()
-	for(var/i = 0; i < 14; i++)
-		new /obj/item/weapon/light/tube(src)
-	for(var/i = 0; i < 7; i++)
-		new /obj/item/weapon/light/bulb(src)
+	items_to_spawn = list(
+		/obj/item/weapon/light/tube = 14,
+		/obj/item/weapon/light/bulb = 7,
+	)
 
 /obj/item/weapon/storage/box/lights/he
 	name = "high efficiency lights"
 	icon_state = "lightmixed"
-
-/obj/item/weapon/storage/box/lights/he/New()
-	..()
-	for(var/i = 0; i < 14; i++)
-		new /obj/item/weapon/light/tube/he(src)
-	for(var/i = 0; i < 7; i++)
-		new /obj/item/weapon/light/bulb/he(src)
+	items_to_spawn = list(
+		/obj/item/weapon/light/tube/he = 14,
+		/obj/item/weapon/light/bulb/he = 7,
+	)
 
 /obj/item/weapon/storage/box/inflatables
 	name = "inflatable barrier box"
@@ -890,11 +847,10 @@
 	icon_state = "ornament_box"
 	foldable = null
 	starting_materials = list(MAT_GLASS = 2000)		//needed for autolathe production
+	items_to_spawn = list(/obj/item/ornament = 6)
 
 /obj/item/weapon/storage/box/ornaments/New()
 	..()
-	for(var/i = 1 to 6)
-		new /obj/item/ornament(src)
 	if(prob(10))
 		new /obj/item/ornament/topper(src)
 	else
@@ -904,35 +860,22 @@
 	name = "box of teardrop ornaments"
 	desc = "A box of seven teardrop-shaped glass Christmas ornaments. Color not included."
 	icon_state = "teardrop_ornament_box"
-
-/obj/item/weapon/storage/box/ornaments/teardrop_ornaments/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	for(var/i = 1 to 7)
-		new /obj/item/ornament/teardrop(src)
+	items_to_spawn = list(/obj/item/ornament/teardrop = BOX_SPACE)
 
 /obj/item/weapon/storage/box/botanydisk
 	name = "flora disk box"
 	desc = "A box of flora data disks."
 	icon_state = "botanydisk"
-
-/obj/item/weapon/storage/box/botanydisk/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/disk/botany(src)
+	items_to_spawn = list(/obj/item/weapon/disk/botany = BOX_SPACE)
 
 /obj/item/weapon/storage/box/holobadge
 	name = "holobadge box"
 	desc = "A box containing holobadges."
 	icon_state = "box_badge"
-
-/obj/item/weapon/storage/box/holobadge/New()
-	..()
-	for(var/i = 1 to 4)
-		new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge/cord(src)
-	new /obj/item/clothing/accessory/holobadge/cord(src)
+	items_to_spawn = list(
+		/obj/item/clothing/accessory/holobadge = 4,
+		/obj/item/clothing/accessory/holobadge/cord = 2,
+	)
 
 /obj/item/weapon/storage/box/spellbook
 	name = "Spellbook Bundle"
