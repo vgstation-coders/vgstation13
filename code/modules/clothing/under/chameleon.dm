@@ -6,6 +6,7 @@
 	_color = "black"
 	desc = "It's a plain jumpsuit. It seems to have a small dial on the wrist."
 	origin_tech = Tc_SYNDICATE + "=3"
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.8
 	permeability_coefficient = 0.90
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
