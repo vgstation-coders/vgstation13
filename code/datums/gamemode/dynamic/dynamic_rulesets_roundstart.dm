@@ -60,7 +60,7 @@
 	required_candidates = 4
 	weight = BASE_RULESET_WEIGHT
 	cost = 15
-	var/traitor_threshold = 4
+	var/traitor_threshold = 5
 	var/additional_cost = 5
 	high_population_requirement = 15
 
