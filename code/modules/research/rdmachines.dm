@@ -9,6 +9,7 @@ var/global/list/rnd_machines = list()
 	density			= 1
 	anchored		= 1
 	use_power		= 1
+	pass_flags_self = PASSMACHINE
 	var/busy		= 0
 	var/hacked		= 0
 	var/disabled	= 0
@@ -61,7 +62,7 @@ var/global/list/rnd_machines = list()
 		shocked--
 
 /obj/machinery/r_n_d/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return ..()
 

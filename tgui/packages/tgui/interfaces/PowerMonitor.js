@@ -30,8 +30,9 @@ export const PowerMonitorContent = (props, context) => {
     sortByField,
     setSortByField,
   ] = useLocalState(context, 'sortByField', null);
-  const supply = history.supply[history.supply.length - 1] || 0;
-  const demand = history.demand[history.demand.length - 1] || 0;
+  const { supply, demand } = data;
+  const supplyNum = history.supply[history.supply.length - 1] || 0;
+  const demandNum = history.demand[history.demand.length - 1] || 0;
   const supplyData = history.supply.map((value, i) => [i, value]);
   const demandData = history.demand.map((value, i) => [i, value]);
   const maxValue = Math.max(
@@ -58,20 +59,20 @@ export const PowerMonitorContent = (props, context) => {
             <LabeledList>
               <LabeledList.Item label="Supply">
                 <ProgressBar
-                  value={supply}
+                  value={supplyNum}
                   minValue={0}
-                  maxValue={demand}
+                  maxValue={demandNum}
                   color="teal">
-                  {toFixed(supply / 1000) + ' kW'}
+                  {supply}
                 </ProgressBar>
               </LabeledList.Item>
               <LabeledList.Item label="Draw">
                 <ProgressBar
-                  value={demand}
+                  value={demandNum}
                   minValue={0}
-                  maxValue={supply}
+                  maxValue={supplyNum}
                   color="pink">
-                  {toFixed(demand / 1000) + ' kW'}
+                  {demand}
                 </ProgressBar>
               </LabeledList.Item>
             </LabeledList>

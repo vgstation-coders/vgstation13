@@ -189,7 +189,7 @@
 		to_chat(user, "<span class='warning'>\The [src] needs to be firmly secured to the floor first.</span>")
 		return 1
 
-/obj/machinery/power/emitter/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+/obj/machinery/power/emitter/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	if(active) // You just removed it from the power cable it was on, what did you think would happen?
 		visible_message("<span class='warning'>The [src] gets yanked off of its power source and turns off!</span>")
 		turn_off()
@@ -340,7 +340,7 @@
 		next_beam.set_power(power)
 	update_icon()
 	if(!master)
-		invoke_event(/event/beam_power_change, list("beam" = src))
+		INVOKE_EVENT(src, /event/beam_power_change, "beam" = src)
 
 /obj/effect/beam/emitter/spawn_child()
 	var/obj/effect/beam/emitter/beam = ..()

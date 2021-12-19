@@ -146,7 +146,7 @@
 	if(!in_chamber)
 		in_chamber = new projectile_type(src, max(3+(round(pumps/2)),15))
 		reagents.trans_to(in_chamber, 10)
-	projectile_type.firer = user
+	in_chamber.firer = user
 	Fire(A,user,params, struggle = struggle)
 	if(reagents.total_volume >= 10)
 		in_chamber = new projectile_type(src)

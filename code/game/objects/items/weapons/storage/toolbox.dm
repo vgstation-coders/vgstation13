@@ -39,7 +39,7 @@
 		)*/
 
 
-//see /obj/item/weapon/storage/toolbox/mechanical/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob) override in floorbot.dm
+//see /obj/item/weapon/storage/toolbox/mechanical/attackby(var/obj/item/stack/tile/metal/T, mob/user as mob) override in floorbot.dm
 
 /obj/item/weapon/storage/toolbox/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is [pick("staving","robusting")] \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")

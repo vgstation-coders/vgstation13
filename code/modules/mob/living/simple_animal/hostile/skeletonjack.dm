@@ -12,6 +12,8 @@
 	melee_damage_upper = 15
 	var/obj/structure/candybucket/candy_jack/ourBucket = null
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/skeletonjack/proc/candyEnhance(var/candyAmount)
 	maxHealth += candyAmount //A bunch of bones glued to a pumpkin powered by halloween energy
 	health = maxHealth

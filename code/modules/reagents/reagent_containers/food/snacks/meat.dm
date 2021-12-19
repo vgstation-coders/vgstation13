@@ -32,6 +32,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	name = "monkey meat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey/New(atom/A, var/mob/M)
+	..()
+
+	if(M)
+		name = "[initial(M.name)] [meatword]"
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
 	desc = "Tastes like the tears of the station. Gives off the faint aroma of a valid salad. Just like mom used to make. This revelation horrifies you greatly."
 
@@ -47,6 +53,14 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	name = "human meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/human/New(atom/A, var/mob/M)
+	..()
+	if(ishuman(M))
+		if(uppertext(M.name) == "UNKNOWN")
+			var/mob/living/carbon/human/H = M
+			name = "[lowertext(H.species.name)] [meatword]"
+
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
@@ -69,6 +83,24 @@
 	name = "nymph meat"
 	desc = "A chunk of meat from a diona nymph. It looks dense and fibrous."
 	icon_state = "nymphmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey
+	name = "grey meat"
+	desc = "A slab of greyish meat, slightly acidic in taste."
+	icon_state = "greymeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey/New()
+	..()
+	reagents.add_reagent(SACID, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
+	name = "insectoid meat"
+	desc = "A slab of gooey, white meat. It's still got traces of hardened chitin."
+	icon_state = "insectoidmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	name = "vox meat"
@@ -232,7 +264,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 	return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	if(transformed && istype(destination, /obj/machinery/cooking))
 		revert()
 

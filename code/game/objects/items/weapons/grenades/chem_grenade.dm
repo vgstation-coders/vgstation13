@@ -329,7 +329,7 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade
+/obj/item/weapon/grenade/chem_grenade/exgrenade
 	name = "EX Chem Grenade"
 	desc = "A specially designed large grenade that can hold three containers."
 	icon_state = "ex_grenade"
@@ -337,7 +337,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED) && path != PATH_STAGE_COMPLETE)
 		var/obj/item/device/assembly_holder/det = W
 		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
@@ -557,3 +557,26 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/timer/New()
 	..()
 	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
+
+/obj/item/weapon/grenade/chem_grenade/teargas
+	name = "teargas grenade"
+	desc = "Used for training and crowd control operations. Contents under pressure. Do not directly inhale contents."
+	stage = GRENADE_STAGE_COMPLETE
+	path = PATH_STAGE_CONTAINER_INSERTED
+	
+/obj/item/weapon/grenade/chem_grenade/teargas/New()
+	..()
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B1 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
+
+	B1.reagents.add_reagent(CONDENSEDCAPSAICIN, 60)
+	B1.reagents.add_reagent(POTASSIUM, 40)
+	B2.reagents.add_reagent(PHOSPHORUS, 40)
+	B2.reagents.add_reagent(SUGAR, 40)
+	
+	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
+
+	beakers += B1
+	beakers += B2
+	icon_state = initial(icon_state) +"_locked"
+	

@@ -134,13 +134,13 @@
 		if(3.0)
 			adjustBruteLoss(110)
 
-obj/item/asteroid/basilisk_hide
+/obj/item/asteroid/basilisk_hide
 	name = "basilisk crystals"
 	desc = "You shouldn't ever see this."
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "Diamond ore"
 
-obj/item/asteroid/basilisk_hide/New()
+/obj/item/asteroid/basilisk_hide/New()
 	drop_stack(/obj/item/stack/ore/diamond, loc, 2)
 	..()
 	qdel(src)

@@ -66,21 +66,29 @@
 	qdel(src)
 
 //spawning a single gib
-/proc/spawngib(var/gibType,var/location,var/fleshcolor=DEFAULT_FLESH,var/bloodcolor=DEFAULT_BLOOD,var/list/virus2 = list(), var/datum/dna/MobDNA = null)
+/proc/spawngib(var/gibType,
+				var/location,
+				var/fleshcolor=DEFAULT_FLESH,
+				var/bloodcolor=DEFAULT_BLOOD,
+				var/list/virus2 = list(),
+				var/datum/dna/MobDNA = null)
 	var/obj/effect/decal/cleanable/blood/gibs/gib = new gibType(location)
 
-	if(fleshcolor)
-		gib.fleshcolor = fleshcolor
+	if(!istype(gib, /obj/effect/decal/cleanable))
+		return gib
+
 	if(bloodcolor)
 		gib.basecolor = bloodcolor
-
-	gib.update_icon()
-
 	if(virus2?.len)
 		gib.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
-
 	if(MobDNA)
 		gib.blood_DNA = list()
 		gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.b_type
 
+	if(!istype(gib))
+		return gib
+
+	if(fleshcolor)
+		gib.fleshcolor = fleshcolor
+	gib.update_icon()
 	return gib

@@ -33,9 +33,9 @@
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+	if(!in_T.Enter(mover, mover.loc, TRUE) || !out_T.Enter(mover, mover.loc, TRUE))
 		return
-	
+
 	var/moved = 0
 	for(var/atom/movable/A in in_T)
 		if(A.anchored)
@@ -44,7 +44,7 @@
 		if(!is_type_in_list(A, allowed_types))
 			A.forceMove(out_T)
 			continue
-		
+
 		process_inside(A)
 		moved ++
 		if(moved >= max_moved)

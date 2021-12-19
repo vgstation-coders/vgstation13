@@ -61,7 +61,11 @@
 
 /obj/item/device/radio/initialize()
 	. = ..()
-	frequency = COMMON_FREQ //common chat
+	// Mapped radios may have their frequency set.
+	// This prevents it from getting reset.
+	if(frequency == initial(frequency))
+		frequency = COMMON_FREQ //common chat
+
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
 			frequency = sanitize_frequency(frequency, maxf)
@@ -137,14 +141,14 @@
 		var/new_frequency
 		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+		if(!INVOKE_EVENT(src, /event/radio_new_frequency, "user" = usr, "new_frequency" = new_frequency))
 			set_frequency(new_frequency)
 
 	else if (href_list["freq"])
 		var/new_frequency
 		new_frequency = (frequency + text2num(href_list["freq"]))
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+		if(!INVOKE_EVENT(src, /event/radio_new_frequency, "user" = usr, "new_frequency" = new_frequency))
 			set_frequency(new_frequency)
 
 	else if (href_list["talk"])
@@ -245,6 +249,16 @@
 	say_testing(loc, "talk_into(): frequency set to [speech.frequency]")
 
 	var/turf/position = get_turf(src)
+	
+	//### Radio jammerer function code ###//
+	var/jamming_severity = radio_jamming_severity(position)
+	
+	// Completely silences the message if jamming effect is too severe.
+	// Otherwise distorts it.
+	if (is_completely_jammed(jamming_severity))
+		return
+	if (jamming_severity > 0)
+		speech.message = Gibberish(speech.message, jamming_severity)
 
 	//#### Tagging the signal with all appropriate identity values ####//
 

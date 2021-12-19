@@ -33,6 +33,8 @@
 
 	mob_property_flags = MOB_ROBOTIC
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/hivebot/range
 	name = "Ranged Hivebot"
 	desc = "A biggish robot. This one has a gun!"

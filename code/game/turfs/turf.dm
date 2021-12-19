@@ -4,7 +4,7 @@
 	layer = TURF_LAYER
 	luminosity = 0
 
-	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
+	//for floors, use is_plating(), is_metal_floor() and is_light_floor()
 	var/intact = 1
 	var/turf_flags = 0
 
@@ -56,11 +56,6 @@
 
 	var/explosion_block = 0
 
-	//For shuttles - if 1, the turf's underlay will never be changed when moved
-	//See code/datums/shuttle.dm @ 544
-	var/preserve_underlay = 0
-
-
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 
@@ -80,7 +75,7 @@
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
-		to_chat(user, "It has bullet markings on it.")
+		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
 
 /turf/proc/process()
 	set waitfor = FALSE
@@ -108,66 +103,24 @@
 	return 0
 
 /turf/Exit(atom/movable/mover, atom/target)
-	if(!mover)
-		return 1
-	// First, make sure it can leave its square
-	if(mover.loc == src)
-		// Nothing but border objects stop you from leaving a tile, only one loop is needed
-		for(var/obj/obstacle in src)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
-			if(obstacle in target) //If target is a turf and obstacle is a multitile object so that it covers target as well.
-				continue
-			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
-				/*if(ismob(mover) && mover:client)
-					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
-				mover.to_bump(obstacle, 1)
-				return 0
-	return 1
+	return TRUE
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
-	invoke_event(/event/exited, list("mover" = mover, "location" = src, "newloc" = newloc))
+	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
-/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
-	if (!mover)
-		return 1
-
-	var/list/large_dense = list()
-	//Next, check objects to block entry that are on the border
-	for(var/atom/movable/border_obstacle in src)
-		if(border_obstacle.flow_flags&ON_BORDER)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>ENTER</span>Target(border): checking Cross of [border_obstacle]"*/
-			if(!border_obstacle.Cross(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
-				/*if(ismob(mover) && mover:client)
-					world << "<span class='danger'>ENTER</span>Target(border): We are bumping into [border_obstacle]"*/
-				mover.to_bump(border_obstacle, 1)
-				return 0
-		else
-			large_dense += border_obstacle
-
-	//Then, check the turf itself
-	if (!src.Cross(mover, src))
-		mover.to_bump(src, 1)
-		return 0
-
-	//Finally, check objects/mobs to block entry that are not on the border
-	for(var/atom/movable/obstacle in large_dense)
-		/*if(ismob(mover) && mover:client)
-			world << "<span class='danger'>ENTER</span>target(large_dense): [mover] checking Cross of [obstacle]"*/
-		if(!obstacle.Cross(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>ENTER</span>target(large_dense): checking: We are bumping into [obstacle]"*/
-			mover.to_bump(obstacle, 1)
-			return 0
-	return 1 //Nothing found to block so return success!
-
+/turf/Enter(atom/movable/mover, atom/oldloc, check_contents = FALSE)
+	. = ..()
+	if(check_contents && .)
+		for(var/atom/movable/AM in src)
+			if(!AM.Cross(mover))
+				return FALSE
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
+
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 
@@ -177,7 +130,7 @@
 		A.inertia_dir = 0
 
 	..()
-	invoke_event(/event/entered, list("mover" = A, "location" = src, "oldloc" = OldLoc))
+	INVOKE_EVENT(src, /event/entered, "mover" = A, "location" = src, "oldloc" = OldLoc)
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj in range(1, src))
@@ -251,9 +204,9 @@
 			if(!move_to_z)
 				return
 
-			A.invoke_event(/event/z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			INVOKE_EVENT(A, /event/z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
 			for(var/atom/movable/AA in contents_brought)
-				AA.invoke_event(/event/z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -278,14 +231,14 @@
 					MOB.pulling = was_pulling
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
-					A.loc.Entered(A)
+					A.loc.Entered(A, OldLoc)
 				if (istype(A,/obj/item/projectile))
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			A.invoke_event(/event/post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			INVOKE_EVENT(A, /event/post_z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
 			for(var/atom/movable/AA in contents_brought)
-				AA.invoke_event(/event/post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
@@ -297,7 +250,7 @@
 	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
-/turf/proc/is_plasteel_floor()
+/turf/proc/is_metal_floor()
 	return 0
 /turf/proc/is_light_floor()
 	return 0
@@ -368,8 +321,14 @@
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
-	if(connections)
-		connections.erase_all()
+	//The following two lines are an optimization. Without them, each connection would search connections when erased to remove itself.
+	var/list/connection/connections = src.connections
+	src.connections = null
+
+	for(var/turf/T in connections)
+		connections[T].erase()
+
+	connections = null
 
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)

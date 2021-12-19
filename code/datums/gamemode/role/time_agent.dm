@@ -18,6 +18,7 @@
 	logo_state = "time-logo"
 	default_admin_voice = "The Agency"
 	admin_voice_style = "notice"
+	disallow_job = TRUE
 	var/list/objects_to_delete = list()
 	var/time_elapsed = 0
 	var/action_timer = 60
@@ -147,7 +148,7 @@
 
 /datum/role/time_agent/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
 	if(player.client && get_role_desire_str(player.client.prefs.roles[TIMEAGENT]) != "Never")
-		to_chat(player, "<span class=\"recruit\">\a [src] is going to get shot by his evil twin. ([controls])</span>")
+		to_chat(player, "<span class=\"recruit\">A [src] is being targeted by his evil twin. ([controls])</span>")
 
 
 /datum/role/time_agent/proc/recruiter_recruited(mob/dead/observer/player)
@@ -166,10 +167,11 @@
 
 /datum/role/time_agent/OnPostSetup()
 	.=..()
-	var/mob/living/carbon/human/H = antag.current
-	equip_time_agent(H, src, is_twin)
-	H.forceMove(pick(timeagentstart))
-
+	if(!.)
+		return
+	if(ishuman(antag.current))
+		var/mob/living/carbon/human/H = antag.current
+		equip_time_agent(H, src, is_twin)
 
 /datum/role/time_agent/proc/extract()
 	var/mob/living/carbon/human/H = antag.current

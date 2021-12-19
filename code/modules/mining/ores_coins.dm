@@ -413,12 +413,15 @@
 	var/matrix/flipit = matrix()
 	flipit.Scale(0.2,1)
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	sleep(1.2) //sleeps because otherwise the scale/invert transforms get skipped
 	flipit.Scale(5,1)
 	flipit.Invert()
 	flipit.Turn(rand(1,359))
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	sleep(1.2)
 	flipit.Scale(0.2,1)
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	sleep(1.2)
 	if (pick(0,1))
 		sideup = "heads-up."
 		flipit.Scale(5,1)
@@ -434,6 +437,7 @@
 		flipit.Scale(0.2,1)
 		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
 		sideup = "on the side!"
+	sleep(1.2)
 	if(!thrown)
 		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
 							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \

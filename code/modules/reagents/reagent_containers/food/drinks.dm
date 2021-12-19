@@ -1076,7 +1076,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz
 	name = "Zam Formic Fizz"
-	desc = "Sulphuric Splash is for brainless minions. This is a REAL Grey's drink."
+	desc = "Sulphuric Splash is for brainless minions. This is a REAL grey's drink."
 	icon_state = "Zam_FormicFizz"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz/New()
 	..()
@@ -1098,12 +1098,16 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea
 	name = "Zam Trusty Tea"
-	desc = "All trusty tea is made with real opok juice. Zam's honor!" // It'll use berry juice until opok juice exists. The tea is a lie...
+	desc = "All trusty tea is made with real opok juice. Zam's honor!" // Now with REAL Opok Juice!
 	icon_state = "Zam_TrustyTea"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea/New()
 	..()
-	reagents.add_reagent(ACIDTEA, 30)
-	reagents.add_reagent(BERRYJUICE, 5)
+	if(prob(5))
+		name = "Zam Old Fashioned Tea"
+		desc = "One of the original cans! The design has been discontinued, and it might be worth something to a collector."
+		icon_state = "Zam_TrustyClassic"
+	reagents.add_reagent(ACIDTEA, 25)
+	reagents.add_reagent(OPOKJUICE, 10)
 	reagents.add_reagent(CAFFEINE, 5)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER

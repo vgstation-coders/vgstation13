@@ -408,7 +408,7 @@ emp_act
 		w_uniform.apply_luminol()
 		update_inv_w_uniform(update)
 
-/mob/living/carbon/human/ex_act(var/severity, var/noblind = FALSE)
+/mob/living/carbon/human/ex_act(var/severity, var/child=null, var/mob/whodunnit, var/noblind = FALSE)
 	if(flags & INVULNERABLE)
 		return FALSE
 
@@ -424,6 +424,7 @@ emp_act
 			b_loss += 300
 			if(!prob(gotarmor)) //Percent chance equal to their armor resist to not gib instantly.
 				gib()
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
@@ -441,10 +442,12 @@ emp_act
 		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
 				gib()
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 
 			else if (stat == 2 && !client)
 				gibs(loc, virus2)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				qdel(src)
 				return
 
@@ -484,8 +487,8 @@ emp_act
 	var/damage_blocked = 0
 
 	//INVOKE_EVENT may return null sometimes - this doesn't work nice with bitflags (which is what's being done here). Hence the !! operator - it turns a null into a 0.
-	var/brute_resolved = !!invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = b_loss))
-	var/burn_resolved = !!invoke_event(/event/damaged, list("kind" = BURN, "amount" = f_loss))
+	var/brute_resolved = !!INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = b_loss)
+	var/burn_resolved = !!INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = f_loss)
 	damage_blocked |= (brute_resolved | burn_resolved)
 
 	if(damage_blocked)
@@ -526,6 +529,7 @@ emp_act
 			if(LIMB_LEFT_ARM)
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
 	if(update)
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity]", admin_warn = TRUE)
 		UpdateDamageIcon()
 
 

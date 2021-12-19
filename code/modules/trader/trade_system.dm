@@ -8,7 +8,8 @@ var/datum/subsystem/trade_system/SStrade
 	name       = "Trade System"
 	init_order    = SS_INIT_OBJECT+0.1 //Always initialize just before objects
 	flags = SS_TICKER
-	wait       = SS_WAIT_ENGINES //check in no more than once every thirty seconds
+	wait       = (3*SS_WAIT_ENGINES) //check in no more than once every thirty seconds
+	var/datum/trade_product/flash_sale_target = null //An extra 30% off!
 	var/list/all_twindows = list() //All trade windows
 	var/list/all_trade_merch = list() //The list of all trade products, kept as elements
 	var/list/trade_databank = list() //The above, converted to associative list format for use in UI
@@ -26,6 +27,10 @@ var/datum/subsystem/trade_system/SStrade
 /datum/subsystem/trade_system/fire(resumed = FALSE)
 	if(prob(FLUX_CHANCE))
 		market_flux()
+	restock_chance()
+	flash_sale()
+	for(var/obj/structure/trade_window/TW in all_twindows)
+		nanomanager.update_uis(TW)
 
 /datum/subsystem/trade_system/proc/market_flux(var/update_windows = TRUE)
 	for(var/datum/trade_product/TP in all_trade_merch)
@@ -33,6 +38,38 @@ var/datum/subsystem/trade_system/SStrade
 	if(update_windows)
 		for(var/obj/structure/trade_window/TW in all_twindows)
 			TW.market_flux()
+
+/datum/subsystem/trade_system/proc/flash_sale()
+	//Every 10 in the account gives a 1% chance for a flash sale, up to 100% at 1000
+	flash_sale_target = null
+	var/prestige = trader_account.money
+	if(prestige >= 1000 || prob(round(prestige/10)))
+		var/shuffled = shuffle(all_trade_merch)
+		for(var/datum/trade_product/TP in shuffled)
+			if(TP.totalsold >= TP.maxunits)
+				continue
+			flash_sale_target = TP
+			return
+
+/datum/subsystem/trade_system/proc/restock_chance()
+	//Every 100 in the account gives a 1% chance for a restocked item, up to 10%
+	//In excess of 1000, you get extra rolls, up to three rolls.
+	var/sector_prestige = min(3000,trader_account.money)
+	while(sector_prestige>1000)
+		restock()
+		sector_prestige -= 1000
+	if(sector_prestige && prob(round(sector_prestige/100)))
+		restock()
+
+/datum/subsystem/trade_system/proc/restock()
+	var/list/weighted_restocks = list()
+	for(var/datum/trade_product/TP in all_trade_merch)
+		if(!TP.can_restock())
+			continue
+		weighted_restocks[TP] = TP.restock_weight()
+	var/datum/trade_product/tostock = pickweight(weighted_restocks)
+	if(tostock)
+		tostock.restock()
 
 /datum/subsystem/trade_system/proc/rebuild_databank(mob/user)
 	trade_databank.Cut() //empty the list
@@ -46,6 +83,7 @@ var/datum/subsystem/trade_system/SStrade
 		product_to_list["name"] = TP.name
 		product_to_list["price"] = TP.current_price(user)
 		product_to_list["marketforces"] = round(100*(TP.flux_rate - 1))
+		product_to_list["flashed"] = (TP.isflashed() == 1 ? FALSE : TRUE)
 		product_to_list["category"] = TP.sales_category
 		product_to_list["remaining"] = TP.maxunits - TP.totalsold
 		trade_databank += list(product_to_list)

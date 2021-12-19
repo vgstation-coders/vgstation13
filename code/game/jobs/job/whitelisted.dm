@@ -9,7 +9,7 @@
 	minimal_access = list(access_trade)
 	alt_titles = list("Merchant","Salvage Broker")
 
-	species_whitelist = list("Vox", "Mushroom")
+	species_whitelist = list("Vox", "Mushroom", "Skeletal Vox")
 	species_blacklist = list() //for shrooms
 	must_be_map_enabled = 1
 

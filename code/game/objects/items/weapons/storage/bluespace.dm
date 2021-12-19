@@ -57,7 +57,7 @@
 		message_admins("[key_name_admin(user)] detonated [H] and [src], creating an explosion.")
 		log_game("[key_name(user)] detonated [H] and [src], creating an explosion.")
 		empulse(T,(20),(40))
-		explosion(T, 5, 10, 20, 40, 1)
+		explosion(T, 5, 10, 20, 40, 1, whodunnit = user)
 		user.gib() //Just to be sure
 	else
 		investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")

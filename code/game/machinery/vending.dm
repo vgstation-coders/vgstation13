@@ -20,6 +20,7 @@ var/global/num_vending_terminals = 1
 	anchored = 1
 	density = 1
 	layer = OPEN_DOOR_LAYER //This is below BELOW_OBJ_LAYER because vendors can contain crates/closets
+	pass_flags_self = PASSMACHINE
 	var/health = 100
 	var/maxhealth = 100 //Kicking feature
 	var/active = 1		//No sales pitches if off!
@@ -38,7 +39,7 @@ var/global/num_vending_terminals = 1
 	var/list/premium 	= list()	// No specified amount = only one in stock
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
 	var/list/vouched    = list()	//For voucher-only items. These aren't available in any way without the appropriate voucher.
-	var/list/specials    = list()	//Allows you to lock items to certain holidays, otherwise they don't show up
+	var/list/specials    = list()	//Allows you to lock items to certain holidays/months, otherwise they don't show up
 
 	var/list/custom_stock = list() 	//Custom items are stored inside our contents, but we keep track of them here so we don't vend our component parts or anything.
 
@@ -100,7 +101,7 @@ var/global/num_vending_terminals = 1
 	var/category = CAT_NORMAL //available on holidays, by default, contraband, or premium (requires a coin)
 	var/subcategory = null
 	var/mini_icon = null
-	var/assignedholiday = null //Add an item to the 'specials' list to make it only show up on a certain holiday
+	var/assignedholiday = null //Add an item to the 'specials' list to make it only show up on a certain holiday/month
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
@@ -207,7 +208,7 @@ var/global/num_vending_terminals = 1
 		to_chat(user, "<span class='notice'>Its small, red segmented display reads $[num2septext(currently_vending.price - credits_held)]</span>")
 
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(seconds_electrified > 0)
 		if(istype(mover, /obj/item))
@@ -372,10 +373,13 @@ var/global/num_vending_terminals = 1
 			voucher_records += R
 			R.category=CAT_VOUCH
 		else if (R.assignedholiday)
+			var/curmonth = time2text(world.realtime,"MM")
 			R.category=CAT_HOLIDAY
 			R.display_color = pick("orange", "purple", "navy")
-			if(R.assignedholiday == Holiday)
+			if(Holiday && R.assignedholiday == Holiday )
 				holiday_records += R //only add it to the lists if today's our day
+			if(R.assignedholiday == curmonth)
+				holiday_records += R //only add it to the lists if today's our month
 		else
 			R.category = CAT_NORMAL
 			product_records.Add(R)
@@ -805,7 +809,7 @@ var/global/num_vending_terminals = 1
 	else
 		var/list/display_records = src.product_records.Copy()
 
-		if(Holiday)
+		if(holiday_records.len)
 			display_records += src.holiday_records
 		if(src.extended_inventory)
 			display_records += src.hidden_records
@@ -826,9 +830,10 @@ var/global/num_vending_terminals = 1
 			else
 				categories["default"] += R
 
-		if(Holiday && holiday_records.len)
+		if(holiday_records.len)
 			var/col = pick("orange", "purple", "navy")
-			dat += {"<FONT color = [col]><B>&nbsp;&nbsp;[Holiday] specials</B></font>:<br>"}
+			var/hol = Holiday ? Holiday : time2text(world.realtime,"Month")
+			dat += {"<FONT color = [col]><B>&nbsp;&nbsp;[hol] specials</B></font>:<br>"}
 			for (var/datum/data/vending_product/R in holiday_records)
 				dat += GetProductLine(R)
 			dat += "<br>"
@@ -2022,6 +2027,7 @@ var/global/num_vending_terminals = 1
 	products = list(
 		/obj/item/weapon/handcuffs = 8,
 		/obj/item/weapon/grenade/flashbang = 4,
+		/obj/item/weapon/grenade/chem_grenade/teargas = 4,
 		/obj/item/device/flash = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,
 		/obj/item/weapon/storage/box/evidence = 6,
@@ -2273,7 +2279,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/back/magiccape = 1,
 		)
 	specials = list(
-		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = HALLOWEEN,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = "10", //throughout october
 		)
 
 	pack = /obj/structure/vendomatpack/magivend	//Who's laughing now? wizarditis doesn't do shit anyway. - Deity Link of 2014
@@ -3172,6 +3178,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/card/id/vox/extra = 3,
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
+		/obj/item/device/dses = 1,
 		/obj/item/weapon/storage/box/biscuit = 2,
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
@@ -3183,20 +3190,20 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/crackerbox = 200,
+		/obj/item/device/dses = 200,
 		/obj/item/talonprosthetic = 80,
 		/obj/machinery/vending/sale/trader = 80,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 
-//trade vendor used to be here, now see trade_datums.dm
-
-/obj/machinery/vending/trader/New()
-	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
-	var/list/upgrades = existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper
+/obj/machinery/vending/tradeoutfitter/New()
+	var/list/dses_upgrades = existing_typesof(/obj/item/dses_module)
 	for(var/i = 1 to 3)
-		premium.Add(pick_n_take(upgrades))
+		premium.Add(pick_n_take(dses_upgrades))
 
 	..()
+
+//trade vendor used to be here, now see trade_datums.dm
 
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"
@@ -3649,13 +3656,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 8,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder = 4,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 10,
-		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 8,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos = 8,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
 		)
 	contraband = list(
-		/obj/item/weapon/storage/pill_bottle/zambiscuits = 2,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 6,
@@ -3665,15 +3673,18 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 16,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea = 16,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder = 20,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 16,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos = 16,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 35,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 20,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
 		)
 	premium = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza = 2,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter = 2,
 		)

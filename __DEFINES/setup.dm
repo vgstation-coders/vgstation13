@@ -212,10 +212,11 @@ var/MAX_EXPLOSION_RANGE = 14
 #define ALL ~0
 #define NONE 0
 
-//airflow flags!
+//These go in flow_flags but don't really have anything in particular to do with airflow. Bad name.
 
 #define ON_BORDER 1   // item has priority to check when entering or leaving
 #define IMPASSABLE 2  // item will make things auto_fail on prox checks through it
+#define KEEP_DIR 4 //When moved, object will not turn to face its direction of movement.
 
 
 //sharpness flags
@@ -476,6 +477,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
 #define M_HORNS         208
+#define M_SWEDE			209
+#define M_CHAV			210
 
 // /vg/ muts
 #define M_LOUD		308		// CAUSES INTENSE YELLING
@@ -1072,14 +1075,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define VAMP_FAILURE -1
 
-// Moved from machine_interactions.dm
-#define STATION_Z  1
-#define CENTCOMM_Z 2
-#define TELECOMM_Z 3
-#define DERELICT_Z 4
-#define ASTEROID_Z 5
-#define SPACEPIRATE_Z 6
-
 // canGhost(Read|Write) flags
 #define PERMIT_ALL 1
 
@@ -1276,6 +1271,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define IS_DIONA 1
 #define IS_VOX 2
 #define IS_PLASMA 3
+#define IS_GREY 4
 
 
 //Turf Construction defines
@@ -1773,7 +1769,7 @@ One; Your account number and PIN are required.
 Two; Your ID card, account number and PIN are required.
 You can change this mid-game at an ATM."}
 
-proc/bank_security_num2text(var/num)
+/proc/bank_security_num2text(var/num)
 	switch(num)
 		if(0)
 			return "Zero"
@@ -1795,3 +1791,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))
 
 #define RECOMMENDED_CLIENT_FPS 100
+
+// /datum/reagent/var/sport
+#define SPORTINESS_NONE 1
+#define SPORTINESS_SUGAR 1.2
+#define SPORTINESS_SPORTS_DRINK 5

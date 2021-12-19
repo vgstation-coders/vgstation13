@@ -18,23 +18,24 @@
 
 /datum/component/ai/hunt/process()
 	life_tick++
-	if(parent.invoke_event(/event/comp_ai_cmd_get_busy))
+	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
 		return
-	switch(parent.invoke_event(/event/comp_ai_cmd_get_state))
+	var/result = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_state)
+	switch(result)
 		if(HOSTILE_STANCE_IDLE)
-			var/atom/target = parent.invoke_event(/event/comp_ai_cmd_get_best_target)
+			var/atom/target = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_best_target)
 			if(!isnull(target))
-				parent.invoke_event(/event/comp_ai_cmd_set_target, list("target" = target))
-				parent.invoke_event(/event/comp_ai_cmd_set_state, list("new_state" = HOSTILE_STANCE_ATTACK))
+				INVOKE_EVENT(parent, /event/comp_ai_cmd_set_target, "target" = target)
+				INVOKE_EVENT(parent, /event/comp_ai_cmd_set_state, "new_state" = HOSTILE_STANCE_ATTACK)
 			else
-				parent.invoke_event(/event/comp_ai_cmd_move, list("target" = pick(orange(movement_range, src))))
+				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = pick(orange(movement_range, src)))
 		if(HOSTILE_STANCE_ATTACK)
-			var/atom/target = parent.invoke_event(/event/comp_ai_cmd_get_best_target)
+			var/atom/target = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_best_target)
 			if(!isnull(target))
 				// We're telling the attack modules that we have attack intention. They then individually decide whether to fire.
-				parent.invoke_event(/event/comp_ai_cmd_attack, list("target" = target))
+				INVOKE_EVENT(parent, /event/comp_ai_cmd_attack, "target" = target)
 				var/turf/T = get_turf(target)
 				if(T)
-					parent.invoke_event(/event/comp_ai_cmd_move, list("target" = T))
+					INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = T)
 					return
-			parent.invoke_event(/event/comp_ai_cmd_set_state, list("new_state" = HOSTILE_STANCE_IDLE))
+			INVOKE_EVENT(parent, /event/comp_ai_cmd_set_state, "new_state" = HOSTILE_STANCE_IDLE)

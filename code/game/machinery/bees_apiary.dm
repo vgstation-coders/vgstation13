@@ -22,6 +22,7 @@ var/list/apiaries_list = list()
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
+	pass_flags_self = PASSTABLE
 	var/apiary_icon = "apiary"
 	var/beezeez = 0//beezeez removes 1 toxic and adds 1 nutrilevel per cycle
 	var/nutrilevel = 0//consumed every round based on how many bees the apiary is sustaining.
@@ -128,8 +129,7 @@ var/list/apiaries_list = list()
 /obj/machinery/apiary/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0

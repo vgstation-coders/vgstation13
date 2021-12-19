@@ -18,6 +18,7 @@
 #define VAPORSALT			"vaporsalt"
 #define BUSTANUT 			"bustanut"
 #define ROGAN 			"rogan"
+#define BLUEGOO			"bluegoo"
 #define SLIMEJELLY 			"slimejelly"
 #define BLOOD 			"blood"
 #define VACCINE 			"vaccine"
@@ -157,6 +158,9 @@
 #define CARPPHEROMONES 			"carppheromones"
 #define BLACKPEPPER 			"blackpepper"
 #define CINNAMON 			"cinnamon"
+#define ZAMSPICES			"zamspices"
+#define ZAMMILD				"zammild"
+#define ZAMSPICYTOXIN			"zamspicytoxin"
 #define COCO 			"coco"
 #define AMATOXIN 			"amatoxin"
 #define AMANATIN 			"amanatin"
@@ -189,6 +193,7 @@
 #define PEPTOBISMOL 			"peptobismol"
 #define DRINK 			"drink"
 #define ORANGEJUICE 			"orangejuice"
+#define OPOKJUICE 			"opokjuice"
 #define TOMATOJUICE 			"tomatojuice"
 #define LIMEJUICE 			"limejuice"
 #define CARROTJUICE 			"carrotjuice"
@@ -537,6 +542,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define PETRITRICINCURES list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
 #define WATERS list(WATER, HOLYWATER)
 #define CORES list(SOFTCORES, MEDCORES)
+#define ALLNANITES list(NANITES, AUTISTNANITES)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"

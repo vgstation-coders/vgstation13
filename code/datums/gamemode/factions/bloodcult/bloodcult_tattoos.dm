@@ -1,4 +1,6 @@
 
+// Tattoos are currently unobtainable and being reworked. Blood Daggers and Cult Chat will be available to cultists in other ways until then.
+
 /datum/cult_tattoo
 	var/name = "cult tattoo"
 	var/desc = ""
@@ -29,16 +31,18 @@
 ///////////////////////////
 var/list/blood_communion = list()
 
-/datum/cult_tattoo/bloodpool
+/datum/cult_tattoo/bloodpool // doesn't actually do anything right now beside give you a cool tattoo
 	name = TATTOO_POOL
 	desc = "All blood costs reduced by 20%. Tributes are split with other bearers of this mark."
 	icon_state = "bloodpool"
 	tier = 1
 
+/*
 /datum/cult_tattoo/bloodpool/getTattoo(var/mob/M)
 	..()
 	if (iscultist(M))
 		blood_communion.Add(iscultist(M))
+*/
 
 /datum/cult_tattoo/silent
 	name = TATTOO_SILENT
@@ -46,7 +50,7 @@ var/list/blood_communion = list()
 	icon_state = "silent"
 	tier = 1
 
-/datum/cult_tattoo/dagger
+/datum/cult_tattoo/dagger // now available to all cultists by default
 	name = TATTOO_DAGGER
 	desc = "Materialize a sharp dagger in your hand for a small cost in blood. Use to retrieve."
 	icon_state = "dagger"
@@ -64,7 +68,7 @@ var/list/blood_communion = list()
 //                       //
 ///////////////////////////
 
-/datum/cult_tattoo/holy
+/datum/cult_tattoo/holy // doesn't actually do anything right now beside give you a cool tattoo
 	name = TATTOO_HOLY
 	desc = "Holy water will now only slow you down a bit, and no longer prevent you from casting."
 	icon_state = "holy"
@@ -81,7 +85,7 @@ var/list/blood_communion = list()
 	if (iscultist(M))
 		M.add_spell(new /spell/cult/arcane_dimension, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
-/datum/cult_tattoo/chat
+/datum/cult_tattoo/chat // functionality moved to Spires
 	name = TATTOO_CHAT
 	desc = "Chat with the cult using :x."
 	icon_state = "chat"
@@ -99,6 +103,7 @@ var/list/blood_communion = list()
 	icon_state = "manifest"
 	tier = 3
 
+/*
 /datum/cult_tattoo/manifest/getTattoo(var/mob/M)
 	..()
 	var/mob/living/carbon/human/H = bearer
@@ -121,6 +126,7 @@ var/list/blood_communion = list()
 	H.status_flags &= ~CANPARALYSE
 	H.regenerate_icons()
 	H.update_dna_from_appearance()
+*/
 
 /datum/cult_tattoo/fast
 	name = TATTOO_FAST

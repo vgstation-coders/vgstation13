@@ -25,6 +25,7 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
 )
@@ -46,6 +47,7 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
 )
@@ -1475,9 +1477,9 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 			O.status &= ~ORGAN_ROBOT
 			O.status |= ORGAN_PEG
 		else if(status == "assisted")
-			I.mechassist()
+			I?.mechassist()
 		else if(status == "mechanical")
-			I.mechanize()
+			I?.mechanize()
 		else
 			continue
 	var/datum/species/chosen_species = all_species[species]

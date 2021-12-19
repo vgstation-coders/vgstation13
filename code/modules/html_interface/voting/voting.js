@@ -13,7 +13,7 @@ function clearAll(){
 	clearallup += 1;
 	$("#vote_main").empty();
 	$("#vote_choices").empty();
-	$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=cancel;'>Cancel Vote</a>)");
+	$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=cancel;'>Abort the current vote.</a>)");
 
 }
 

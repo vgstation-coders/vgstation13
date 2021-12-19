@@ -49,7 +49,7 @@
 
 	outfit_datum = /datum/outfit/xenoarchaeologist
 
-datum/job/xenobiologist
+/datum/job/xenobiologist
 	title = "Xenobiologist"
 	faction = "Station"
 	total_positions = 2

@@ -432,6 +432,7 @@
 	// Mice IDs
 	if(namenumbers)
 		name = "[name] ([rand(1, 1000)])"
+		real_name = name
 	if(!_color)
 		_color = pick( list("brown","gray","white") )
 		initIcons()

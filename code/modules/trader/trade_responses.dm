@@ -44,6 +44,13 @@ var/static/list/tw_advice = list("remember, buy low, sell high.", "hey, there's 
 var/static/list/tw_induct_cantspeak = list("If you don't speak the language, this is going to be tough. ", "These words are lost on you, eh? ","This book has what you need to get started. ")
 var/static/list/tw_induct_traditional = list("I dub thee, trader. Here, you get these, too. ", "These are for you. Little gift. ", "Something else - traditional for starting out. ")
 
+var/static/tw_deposit_zero = list("Yeah, yeah, push the button all you like, you've got nothing there.", "Is this supposed to be funny?", "No money on the table.", "Put some cash on the table if you want me to deposit it for you.", "There's nothing here to deposit.", "Hey, contributing to the Shoal isn't a joke!", "Keh, you forget something?")
+var/static/tw_deposit_low = list("Keep the change, eh? Well, I will. ", "Couple bucks here and there adds up. ", "Not much, but in it goes. ", "Keh? Oh, sure, I'll put it in. ", "Just zero out the scraps then, eh? ")
+var/static/tw_deposit_notable = list("This is a good amount. Feel the heft in the creds, yeah? ", "Building up your reputation. Let this deposit be the next brick, eh? ", "That's the way. That's not petty cash. ", "Good cut. Doing well for yourself? ", "Pleasure's all mine. ")
+var/static/tw_deposit_large = list("Keh, keh. Very good! Let's stash that away... ", "Well now, don't mind if I do. Let's just move aaaaall this into the account. ", "Keh, don't tease me, you better not just withdraw this right away! ", "The Shoal appreciates your contributions. ", "A very good pleasure doing business with you. ")
+
+var/static/tw_deposit_firsttime = list("Remember, you can still withdraw this later, if you need.", "This is everyone's money - it's shared. Don't forget the PIN.", "This money will be put to good use - don't worry, you can still take it out!")
+
 /obj/structure/trade_window/proc/greet(mob/living/carbon/human/user)
 	var/buildgreet
 	var/username = user.get_face_name()
@@ -98,15 +105,7 @@ var/static/list/tw_induct_traditional = list("I dub thee, trader. Here, you get 
 		switch(rand(1,20))
 			if(1 to 7) //33% chance to say nothing else.
 			if(8 to 10) //Comment on shoal account
-				switch(trader_account.money)
-					if(0)
-						buildgreet += pick(tw_empty_shoal)
-					if(1 to 499)
-						buildgreet += pick(tw_low_shoal)
-					if(500 to 999)
-						buildgreet += pick(tw_satisfied_shoal)
-					if(1000 to INFINITY)
-						buildgreet += pick(tw_high_shoal)
+				buildgreet += shoal_account_commentary()
 			if(11 to 13) //Comment on sales
 				switch(SStrade.loyal_customers[username])
 					if(0 to 299)
@@ -138,3 +137,40 @@ var/static/list/tw_induct_traditional = list("I dub thee, trader. Here, you get 
 		return replacetext(replacetext(pick(tw_advertise_low_price),"TWPRODUCT",target_product), "TWRATE",readable_rate)
 	else
 		return pick(tw_advertise_generic)
+
+/obj/structure/trade_window/proc/comment_deposit(mob/living/carbon/human/user, value)
+	if(!trader_account.money)
+		say(pick(tw_deposit_firsttime))
+		return
+	var/newtotal = trader_account.money + value
+	var/buildcomment
+	switch(value)
+		if(1 to 49)
+			buildcomment = pick(tw_deposit_low)
+			if(prob(75))
+				buildcomment += shoal_account_commentary(newtotal)
+		if(50 to 199)
+			buildcomment = pick(tw_deposit_notable)
+			if(prob(33))
+				buildcomment += shoal_account_commentary(newtotal)
+		if(200 to INFINITY)
+			buildcomment = pick(tw_deposit_large)
+			if(prob(15))
+				buildcomment += shoal_account_commentary(newtotal)
+	buildcomment = trim(buildcomment)
+	say(buildcomment)
+
+/obj/structure/trade_window/proc/shoal_account_commentary(value = null)
+	if(!value)
+		value = trader_account.money
+	var/reply
+	switch(value)
+		if(0)
+			reply += pick(tw_empty_shoal)
+		if(1 to 499)
+			reply += pick(tw_low_shoal)
+		if(500 to 999)
+			reply += pick(tw_satisfied_shoal)
+		if(1000 to INFINITY)
+			reply += pick(tw_high_shoal)
+	return reply

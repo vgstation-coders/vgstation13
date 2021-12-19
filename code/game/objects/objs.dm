@@ -35,7 +35,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/sheet_amt = 1
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
-	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
+	var/datum/delay_controller/pAImove_delayer
 	var/pAImovement_delay = 0
 
 	// Can we wrench/weld this to a turf with a dense /obj on it?
@@ -83,9 +83,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	P.forceMove(src)
 	integratedpai = P
 	verbs += /obj/proc/remove_pai
+	pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
 
 /obj/attackby(obj/item/weapon/W, mob/user)
-	invoke_event(/event/attackby, list("attacker" = user, "item" = W))
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -184,6 +185,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		verbs -= /obj/proc/remove_pai
 		var/obj/item/device/paicard/P = integratedpai
 		integratedpai = null
+		qdel(pAImove_delayer)
+		pAImove_delayer = null
 		return P
 	return 0
 
@@ -211,6 +214,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/clockworkify()
 	return
+
+/obj/shuttle_rotate(var/angle)
+	..()
+	if(req_access_dir)
+		req_access_dir = turn(req_access_dir, -angle)
 
 /obj/proc/wrenchable()
 	return 0
@@ -273,6 +281,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					is_in_use = 1
 					src.attack_ai(M)
 
+				else if(ispulsedemon(M))
+					is_in_use = 1
+					src.attack_pulsedemon(M)
+
 				else if(!(M in nearby)) // NOT NEARBY
 					// check for TK users
 					if(M.mutations && M.mutations.len)
@@ -298,8 +310,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			if (!M || !M.client || M.machine != src)
 				_using.Remove(M)
 				continue
-			// Not robot or AI, and not nearby?
-			if(!isAI(M) && !isrobot(M) && !(M in nearby))
+			// Not robot or AI, not nearby and not pulse demon?
+			if(!isAI(M) && !isrobot(M) && !(M in nearby) && !ispulsedemon(M))
 				_using.Remove(M)
 				continue
 			is_in_use = 1
@@ -349,14 +361,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return FALSE
 
 /obj/singularity_pull(S, current_size)
-	invoke_event(/event/before_move)
+	INVOKE_EVENT(src, /event/before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
 	else
 		step_towards(src, S)
-	invoke_event(/event/after_move)
+	INVOKE_EVENT(src, /event/after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
@@ -511,7 +523,7 @@ a {
 		return FALSE
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
+			if(isshuttleturf(src.loc) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to this!</span>")
 				return FALSE
 			if(istype(src.loc, /turf/space)) //if on a space tile
@@ -781,3 +793,19 @@ a {
 						H.updatehealth()
 
 				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")
+
+/**
+ * This proc is used for telling whether something can pass by this object in a given direction, for use by the pathfinding system.
+ *
+ * Trying to generate one long path across the station will call this proc on every single object on every single tile that we're seeing if we can move through, likely
+ * multiple times per tile since we're likely checking if we can access said tile from multiple directions, so keep these as lightweight as possible.
+ *
+ * Arguments:
+ * * ID- An ID card representing what access we have (and thus if we can open things like airlocks or windows to pass through them). The ID card's physical location does not matter, just the reference
+ * * to_dir- What direction we're trying to move in, relevant for things like directional windows that only block movement in certain directions
+ * * caller- The movable we're checking pass flags for, if we're making any such checks
+ **/
+/obj/proc/CanAStarPass(obj/item/weapon/card/id/ID, to_dir, atom/movable/caller)
+	if(istype(caller) && (caller.pass_flags & pass_flags_self))
+		return TRUE
+	. = !density

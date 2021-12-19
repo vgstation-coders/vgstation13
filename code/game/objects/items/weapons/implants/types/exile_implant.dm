@@ -11,7 +11,12 @@
 	var/beingDeported = FALSE
 	var/beenSpaced = FALSE
 	var/disablePhrase = ""
-	var/list/zlevels = list(STATION_Z, TELECOMM_Z, DERELICT_Z, ASTEROID_Z, SPACEPIRATE_Z)
+	var/list/zlevels = list()
+
+/obj/item/weapon/implant/exile/New()
+	..()
+	if(!zlevels.len)
+		zlevels = list(map.zMainStation, map.zTCommSat, map.zDerelict, map.zAsteroid, map.zDeepSpace)
 
 /obj/item/weapon/implant/exile/get_data()
 	return {"

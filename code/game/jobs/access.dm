@@ -101,6 +101,8 @@
 /obj/var/req_access_txt = "0"			// A user must have ALL of these accesses to use the object
 /obj/var/list/req_one_access = null
 /obj/var/req_one_access_txt = "0"		// If this list is populated, a user must have at least ONE of these accesses to use the object
+/obj/var/req_access_dir = 0				// The dir the user must be facing to do access checks on
+/obj/var/access_not_dir = TRUE			// Behaviour if the user is not in the access dir
 
 //returns 1 if this mob has sufficient access to use this object
 /obj/proc/allowed(var/mob/M)
@@ -110,6 +112,28 @@
 	if(M.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
+	if(req_access_dir)
+		// A special check that combines dirs specified in this number by chaining the conditions below, for example NORTHEAST would add the north and east conditions together.
+		var/condition = FALSE
+		if((flow_flags & ON_BORDER) && opposite_dirs[req_access_dir] & dir) // For windoors and etc.
+			condition |= M.y == src.y && M.x == src.x
+		if(req_access_dir & NORTH)
+			condition |= M.y > src.y
+		if(req_access_dir & SOUTH)
+			condition |= M.y < src.y
+		if(req_access_dir & EAST)
+			condition |= M.x > src.x
+		if(req_access_dir & WEST)
+			condition |= M.x < src.x
+		if(map.multiz)
+			if(req_access_dir & UP)
+				condition |= M.z > src.z
+			if(req_access_dir & DOWN)
+				condition |= M.z < src.z
+		if(condition)
+			return can_access(ACL,req_access,req_one_access)
+		else
+			return access_not_dir
 	return can_access(ACL,req_access,req_one_access)
 
 /obj/item/proc/GetAccess()
@@ -482,7 +506,7 @@ var/global/list/all_jobs
 	return list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer","BlackOps Commander","Supreme Commander")
 
 
-proc/FindNameFromID(var/mob/living/carbon/human/H)
+/proc/FindNameFromID(var/mob/living/carbon/human/H)
 	ASSERT(istype(H))
 	var/obj/item/weapon/card/id/C = H.get_active_hand()
 	if( istype(C) || istype(C, /obj/item/device/pda) )
@@ -511,5 +535,5 @@ proc/FindNameFromID(var/mob/living/carbon/human/H)
 		if(ID)
 			return ID.registered_name
 
-proc/get_all_job_icons() //For all existing HUD icons
+/proc/get_all_job_icons() //For all existing HUD icons
 	return get_all_jobs() + list("Prisoner", "visitor")

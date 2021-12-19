@@ -108,10 +108,10 @@
 	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
 
-obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
 
-obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(var/mob/living/user)
@@ -310,31 +310,51 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
 	update_icon()
 
-/obj/item/weapon/storage/bag/food/zam_menu1/New()
+/obj/item/weapon/storage/bag/zam_food
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "Zam_foodbag0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
+	name = "Zam Food Bag"
+	desc = "A gift from the mothership to keep your Zam drinks cool and your Zam meals warm. Praise the mothership!"
+	storage_slots = 14
+	fits_max_w_class = 3
+	max_combined_w_class = 28
+	w_class = W_CLASS_MEDIUM
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil")
+
+/obj/item/weapon/storage/bag/zam_food/update_icon()
+	if(contents.len < 1)
+		icon_state = "Zam_foodbag0"
+	else icon_state = "Zam_foodbag1"
+
+/obj/item/weapon/storage/bag/zam_food/zam_menu1/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner1(src)//18 nutriments if microwaved
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped(src)//18 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
-	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
-/obj/item/weapon/storage/bag/food/zam_menu2/New()
+/obj/item/weapon/storage/bag/zam_food/zam_menu2/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner2(src)//15 nutriments if microwaved
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped(src)//15 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
-	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
-/obj/item/weapon/storage/bag/food/zam_menu3/New()
+/obj/item/weapon/storage/bag/zam_food/zam_menu3/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner3(src)//12 nutriments if microwaved
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped(src)//12 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
 // -----------------------------

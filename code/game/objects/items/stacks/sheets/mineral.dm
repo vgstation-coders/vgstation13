@@ -542,7 +542,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	origin_tech = Tc_MATERIALS + "=5"
 	perunit = CC_PER_SHEET_MOLITZ
 
-obj/item/stack/sheet/mineral/gingerbread
+/obj/item/stack/sheet/mineral/gingerbread
 	name = "gingerbread"
 	icon_state = "sheet-gingerbread"
 	force = 5.0

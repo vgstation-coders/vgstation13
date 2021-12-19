@@ -8,7 +8,6 @@
 	layer = BLOB_SHIELD_LAYER
 	spawning = 0
 	destroy_sound = "sound/effects/blobsplat.ogg"
-
 	icon_new = "strong"
 	icon_classic = "blob_idle"
 
@@ -21,7 +20,7 @@
 	return
 
 /obj/effect/blob/shield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSBLOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return 0
 

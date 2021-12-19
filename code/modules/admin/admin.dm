@@ -784,6 +784,7 @@ var/global/floorIsLava = 0
 	if(check_rights(R_FUN,0))
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawnselfdummyoutfit'>Spawn yourself as a Test Dummy with a Custom Outfit</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -885,6 +886,7 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
+			<A href='?src=\ref[src];secretsfun=bloodstone'>Spawn a cult Blood Stone</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
 			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
@@ -1283,6 +1285,14 @@ var/global/floorIsLava = 0
 	if (istype(R) && R.emagged)
 		return TRUE
 	return (M.mind ? M.mind.antag_roles.len : null)
+
+/proc/get_afk_admins()
+	var/admin_number_afk = 0
+	for(var/client/X in admins)
+		if(X.is_afk())
+			admin_number_afk++
+
+	return admin_number_afk
 /*
 /datum/admins/proc/get_sab_desc(var/target)
 	switch(target)
@@ -1319,21 +1329,12 @@ var/global/floorIsLava = 0
 
 		object = copytext(object, 1, variables_start)
 
-	var/list/matches = get_matching_types(object, /atom)
-
-	if(matches.len==0)
+	var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
+	if(!chosen)
 		return
 
-	var/chosen
-	if(matches.len==1)
-		chosen = matches[1]
-	else
-		chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
-		if(!chosen)
-			return
-
-	//preloader is hooked to atom/New(), and is automatically deleted once it 'loads' an object
-	_preloader = new(varchanges, chosen)
+	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
+	_preloader.setup(varchanges, chosen)
 
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
@@ -1463,7 +1464,7 @@ var/global/floorIsLava = 0
 
 var/admin_shuttle_location = 0 // 0 = centcom 13, 1 = station
 
-proc/move_admin_shuttle()
+/proc/move_admin_shuttle()
 	var/area/fromArea
 	var/area/toArea
 	if (admin_shuttle_location == 1)
@@ -1483,7 +1484,7 @@ proc/move_admin_shuttle()
 
 var/alien_ship_location = 1 // 0 = base , 1 = mine
 
-proc/move_alien_ship()
+/proc/move_alien_ship()
 	var/area/fromArea
 	var/area/toArea
 	if (alien_ship_location == 1)
@@ -1499,7 +1500,7 @@ proc/move_alien_ship()
 		alien_ship_location = 1
 	return
 
-proc/formatJumpTo(location, where = "")
+/proc/formatJumpTo(location, where = "")
 	var/turf/loc
 
 	if (isturf(location))
@@ -1512,7 +1513,7 @@ proc/formatJumpTo(location, where = "")
 
 	return "<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc ? loc.x : "mystery"];Y=[loc ? loc.y : "mystery"];Z=[loc ? loc.z : "mystery"]'>[where]</a>"
 
-proc/formatLocation(location)
+/proc/formatLocation(location)
 	var/turf/loc
 
 	if (isturf(location))
@@ -1524,7 +1525,7 @@ proc/formatLocation(location)
 	var/answer = "[istype(A) ? "[A.name]" : "UNKNOWN"] - [istype(loc) ? "[loc.x],[loc.y],[loc.z]" : "UNKNOWN"]"
 	return answer
 
-proc/formatPlayerPanel(var/mob/U,var/text="PP")
+/proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	return "<A HREF='?_src_=holder;adminplayeropts=\ref[U]'>[text]</A>"
 
 //Credit to MrStonedOne from TG for this QoL improvement

@@ -40,6 +40,13 @@
 	hud.name = "reinforce grab"
 	hud.master = src
 
+/obj/item/weapon/grab/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	if(!(giver == assailant) || !giver.Adjacent(affecting) || !receiver.Adjacent(affecting))
+		visible_message("<span class='warning'>[giver] tried to pass [affecting] to [receiver] but couldn't.</span>")
+		return FALSE
+	receiver.grab_mob(affecting)
+	return FALSE
+
 /obj/item/weapon/grab/preattack()
 	if(!assailant || !affecting)
 		return 1 //Cancel attack
@@ -238,8 +245,13 @@
 
 	if(M == assailant && state >= GRAB_AGGRESSIVE)
 		var/can_eat = FALSE
+		// Anti-vore act of 2017
+		var/just_gib = FALSE
+		var/nutriadd = 0
 		if(ishuman(user) && (M_FAT in user.mutations) && ismonkey(affecting))
 			can_eat = TRUE
+			just_gib = TRUE //by order of Chicken
+			nutriadd = 100 //TODO: Adjust to fit what they'd get via the old handle_stomach proc
 		else if(isalien(user) && iscarbon(affecting))
 			can_eat = TRUE
 		if(can_eat)
@@ -257,8 +269,14 @@
 					return
 			user.visible_message("<span class='danger'>[user] devours [affecting]!</span>", \
 				drugged_message="<span class='danger'>[affecting] vanishes in disgust.</span>")
-			affecting.forceMove(user)
-			attacker.stomach_contents.Add(affecting)
+			if(just_gib)
+				affecting.drop_all()
+				affecting.gib()
+				qdel(affecting)
+				attacker.nutrition += nutriadd
+			else
+				affecting.forceMove(user)
+				attacker.stomach_contents.Add(affecting)
 			qdel(src)
 
 

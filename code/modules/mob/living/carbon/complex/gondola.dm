@@ -27,7 +27,7 @@
 	..()
 
 /mob/living/carbon/complex/gondola/Destroy()
-	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
+	if(client && iscultist(src))
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/gondola/shade = new (T)

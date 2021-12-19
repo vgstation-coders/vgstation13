@@ -160,6 +160,11 @@
 		show_text(user, starred = TRUE)
 	return
 
+//Normally ghosts can read at any range, but nobody bothered to actually make attack_ghost not be attack_ai who
+//normally can't read at any range. This fixes it.
+/obj/item/weapon/paper/attack_ghost(mob/user)
+	user.examination(src)
+
 /obj/item/weapon/paper/proc/addtofield(var/id, var/text, var/links = 0)
 	var/locid = 0
 	var/laststart = 1

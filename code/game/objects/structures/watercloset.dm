@@ -595,6 +595,14 @@
 				"<span class='warning'>You have wet \the [O.name], it shocks you!</span>")
 			return
 
+	else if (istype(O, /obj/item/weapon/pen/fountain))
+		..()
+		var/obj/item/weapon/pen/fountain/P = O
+		if (P.bloodied)
+			to_chat(user, "<span class='notice'>You clean the blood out of the nib of \the [P].</span>")
+			P.colour = "black"
+			P.bloodied = FALSE
+
 	if (!isturf(user.loc))
 		return
 
@@ -607,8 +615,9 @@
 			if(O.current_glue_state == GLUE_STATE_TEMP)
 				O.unglue()
 			user.visible_message( \
-				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
-				"<span class='notice'>You wash \a [O] using \the [src].</span>")
+				"<span class='notice'>[user] washes \the [O] using \the [src].</span>", \
+				"<span class='notice'>You wash \the [O] using \the [src].</span>")
+			..()
 
 		busy = FALSE
 

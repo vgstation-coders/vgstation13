@@ -299,21 +299,19 @@ var/global/list/accessable_z_levels = list()
 
 //Returns the lowest turf available on a given Z-level, defaults to space.
 
-proc/get_base_turf(var/z)
-
-
+/proc/get_base_turf(var/z)
 	var/datum/zLevel/L = map.zLevels[z]
 	return L.base_turf
 
 //Area that blueprints should erase to
-proc/get_base_area(var/z)
+/proc/get_base_area(var/z)
 	var/datum/zLevel/L = map.zLevels[z]
 	if(L.base_area)
 		return locate(L.base_area) //this is a type
 	else
 		return get_space_area()
 
-proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
+/proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	var/datum/zLevel/L = map.zLevels[choice]
 	if(update_old_base)
 		var/previous_base_turf = L.base_turf
@@ -327,8 +325,6 @@ proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 			D.base_turf_type = new_base_path
 
 /client/proc/set_base_turf()
-
-
 	set category = "Debug"
 	set name = "Set Base Turf"
 	set desc = "Set the base turf for a z-level. Defaults to space, does not replace existing tiles."

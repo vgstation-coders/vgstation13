@@ -28,7 +28,7 @@
 		imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
 		qdel(src)
 		return
-	if(iscultist(imp_in) && veil_thickness >= CULT_ACT_I)
+	if(iscultist(imp_in))
 		to_chat(imp_in, "<span class='danger'>You feel the corporate tendrils of Nanotrasen trying to invade your mind!</span>")
 		var/mob/living/carbon/host = imp_in
 		if(istype(host))

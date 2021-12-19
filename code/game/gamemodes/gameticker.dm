@@ -115,7 +115,7 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker/proc/StartThematic(var/playlist)
 	if(!theme)
-		theme = new(locate(1,1,CENTCOMM_Z))
+		theme = new(locate(1,1,map.zCentcomm))
 	theme.playlist_id=playlist
 	theme.playing=1
 	theme.update_music()
@@ -164,6 +164,14 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
+
+	gamestart_time = world.time / 10
+
+	init_mind_ui()
+	init_PDAgames_leaderboard()
+	create_characters() //Create player characters and transfer them
+	collect_minds()
+
 	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
@@ -185,12 +193,6 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	gamestart_time = world.time / 10
-
-	init_mind_ui()
-	init_PDAgames_leaderboard()
-	create_characters() //Create player characters and transfer them
-	collect_minds()
 	equip_characters()
 
 	for(var/mob/living/carbon/human/player in player_list)
@@ -255,7 +257,7 @@ var/datum/controller/gameticker/ticker
 				'sound/AI/vox_reminder14.ogg',
 				'sound/AI/vox_reminder15.ogg')
 			for(var/sound in welcome_sentence)
-				play_vox_sound(sound,STATION_Z,null)
+				play_vox_sound(sound,map.zMainStation,null)
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		//mode.Clean_Antags()
@@ -381,20 +383,13 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/create_characters()
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind)
-			if(player.mind.assigned_role=="AI")
-				player.close_spawn_windows()
+			if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
 				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-				player.AIize()
-			else if(player.mind.assigned_role=="Cyborg")
-				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-				player.create_roundstart_cyborg()
-
+				player.create_roundstart_silicon(player.mind.assigned_role)
 			else if(!player.mind.assigned_role)
 				continue
 			else
-				if(player.mind.assigned_role=="Mobile MMI")
-					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-				var/mob/living/carbon/human/new_character = player.create_character()
+				var/mob/living/carbon/human/new_character = player.create_character(0)
 				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
 
