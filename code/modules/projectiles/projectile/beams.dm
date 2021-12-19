@@ -492,35 +492,71 @@ var/list/beam_master = list()
 		var/mob/living/M = target
 		if(ishuman(target))
 			var/mob/living/carbon/human/H = M
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to humans, vox, greys, etc. Having it "disintegrate the flesh" off of species like golems, diona, and plasmamen would be odd
+				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (therefore the ones that actually have animations)
 					return 0
+				if(isgrey(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+
 				if(isvox(H))
-					H.set_species("Skeletal Vox")
-					H.regenerate_icons()
-					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
 
 					if(H.lying)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15) //This should animate based on whether the mob is standing or sitting, and also make the skellington transformation seem more natural
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
 					else
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
 
-					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
 					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+					qdel(H)
+
+				if(isinsectoid(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+
+				if(ishuman(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
 				else
-					H.set_species("Skellington")
-					H.regenerate_icons()
-					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
-
-					if(H.lying)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15) //This should animate based on whether the mob is standing or sitting, and also make the skellington transformation seem more natural
-					else
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
-
-					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+					return 0
 		else
 			return 1
 
@@ -535,35 +571,71 @@ var/list/beam_master = list()
 		var/mob/living/M = target
 		if(ishuman(target))
 			var/mob/living/carbon/human/H = M
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to humans, vox, greys, etc. Having it "disintegrate the flesh" off of species like golems, diona, and plasmamen would be odd
+				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (therefore the ones that actually have animations)
 					return 0
+				if(isgrey(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+
 				if(isvox(H))
-					H.set_species("Skeletal Vox")
-					H.regenerate_icons()
-					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
 
 					if(H.lying)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
 					else
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
 
-					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
 					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+					qdel(H)
+
+				if(isinsectoid(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+
+				if(ishuman(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
 				else
-					H.set_species("Skellington")
-					H.regenerate_icons()
-					H.visible_message("<span class='danger'>[H.name]'s flesh disintegrates into a pile of ash!</span>")
-
-					if(H.lying)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 15)
-					else
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
-
-					H.adjustFireLoss(175) // This makes sure the burn damage doesn't all suddenly disappear
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					H.drop_all() // This helps avoid weird situations where the target was wearing species-specific gear that can't be worn by a skellington
+					return 0
 		else
 			return 1
 
