@@ -17,12 +17,14 @@
 	canWearMasks = 0
 	canWearBack = 0
 	size = SIZE_HUGE
-
 	maxHealth = 1000
 	health = 1000
+	var/fistPower = 0
 
 /mob/living/carbon/monkey/reese/get_unarmed_damage()
-	return rand(5, 15)	//Enough to seriously wound people but unlikely to kill if he's just chasing them around
+	var/punchPow = rand(5, 15) //Enough to seriously wound people but unlikely to kill if he's just chasing them around
+	punchPow += fistPower
+	return punchPow
 
 /mob/living/carbon/monkey/reese/knockout_chance_modifier()
 	return 10	//However he's very good at knocking them over
@@ -69,6 +71,7 @@
 	flags = TIMELESS
 	maxHealth = 1000
 	health = 1000
+	var/turf/theMiddle = null
 
 
 /mob/living/carbon/monkey/malcolm/death(gibbed)
@@ -115,6 +118,8 @@
 	health = 500
 	var/list/deweys = list()
 	var/list/devouredItems = list()
+	var/jumpingBeanActive = FALSE
+	var/deweyEnrage = FALSE
 
 /mob/living/carbon/monkey/dewey/gib(FALSE, FALSE)
 	return
@@ -123,11 +128,16 @@
 	return
 
 /mob/living/carbon/monkey/dewey/death(gibbed)
-	..()
-	for(var/obj/item/ateStuff in devouredItems)
-		ateStuff.forceMove(get_turf(src))
-		devouredItems.Remove(ateStuff)
-	anchored = TRUE
+	if(jumpingBeanActive)
+		health = maxHealth
+		visible_message("<font size='10' color='red'><b>Ole!</b></font>")
+		jumpingBeanActive = FALSE
+	else
+		..()
+		for(var/obj/item/ateStuff in devouredItems)
+			ateStuff.forceMove(get_turf(src))
+			devouredItems.Remove(ateStuff)
+		anchored = TRUE
 
 /mob/living/carbon/monkey/dewey/bonusTackleRange(var/tR = 6)
 	..()
@@ -141,9 +151,9 @@
 	splitDewey()
 
 /mob/living/carbon/monkey/dewey/proc/splitDewey()
-	var/mob/living/simple_animal/hostile/dewey/deweyPolip = new /mob/living/simple_animal/hostile/dewey(get_turf(src))
-	deweys.Add(deweyPolip)
-	deweyPolip.deweyPrime = src
+	var/mob/living/simple_animal/hostile/dewey/deweyPolyp = new /mob/living/simple_animal/hostile/dewey(get_turf(src))
+	deweys.Add(deweyPolyp)
+	deweyPolyp.deweyPrime = src
 
 /mob/living/carbon/monkey/dewey/UnarmedAttack(atom/A)
 	..()
@@ -158,7 +168,27 @@
 		maxHealth += 5
 		health = min(health + 10, maxHealth)
 		visible_message("<span class='warning'>[src] consumes \the [ateItem]!</span>")
+	if(deweyEnrage)
+		C.adjustBruteLoss(5)
+		maxHealth += 5
+		health = min(health + 5, maxHealth)
 
+
+/mob/living/carbon/monkey/dewey/proc/deweyEnrageToggle()
+	if(!deweyEnrage)
+		for(var/mob/living/simple_animal/hostile/dewey/D in deweys)
+			if(!D.deweyEnrage)
+				D.deweyEnrage = TRUE
+				D.icon_state = "dewey_enraged"
+		deweyEnrage = TRUE
+		icon_state = "dewey_enraged"
+	else
+		for(var/mob/living/simple_animal/hostile/dewey/D in deweys)
+			if(D.deweyEnrage)
+				D.deweyEnrage = FALSE
+				D.icon_state = "dewey"
+		deweyEnrage = FALSE
+		icon_state = "dewey"
 
 /mob/living/simple_animal/hostile/dewey
 	name = "Dewey"
@@ -175,6 +205,7 @@
 	can_ventcrawl = TRUE
 	var/list/devouredItems = list()
 	var//mob/living/carbon/monkey/dewey/deweyPrime = null
+	var/deweyEnrage = FALSE
 
 /mob/living/simple_animal/hostile/dewey/New()
 	..()
@@ -185,8 +216,10 @@
 
 /mob/living/simple_animal/hostile/dewey/UnarmedAttack(atom/A)
 	..()
-	if(iscarbon(A))
+	if(!deweyEnrage)
 		deweySnatch(A)
+	else
+		deweyKidnap(A)
 
 /mob/living/simple_animal/hostile/dewey/proc/deweySnatch(var/mob/living/carbon/C)
 	var/obj/item/ateItem = pick(C.held_items)
@@ -198,6 +231,12 @@
 		melee_damage_upper++
 		visible_message("<span class='warning'>[src] consumes \the [ateItem]!</span>")
 
+/mob/living/simple_animal/hostile/dewey/proc/deweyKidnap(var/mob/living/carbon/C)
+	C.Knockdown(3)
+	visible_message("<span class='warning'>[src] grabs hold of [C]!</span>")
+	do_teleport(C, deweyPrime, 1)
+	do_teleport(src, C, 0)
+
 /mob/living/simple_animal/hostile/dewey/death(var/gibbed = FALSE)
 	for(var/obj/item/ateStuff in devouredItems)
 		ateStuff.forceMove(get_turf(src))
@@ -205,5 +244,6 @@
 		deweyPrime.deweys.Remove(src)
 	..()
 	gib()
+
 
 
