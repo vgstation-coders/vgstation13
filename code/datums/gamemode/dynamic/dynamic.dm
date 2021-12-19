@@ -253,7 +253,7 @@ var/stacking_limit = 90
 		var/datum/dynamic_ruleset/midround/DR = rule
 		if (initial(DR.weight))
 			midround_rules += new rule()
-	for(var/mob/living/carbon/human/player in player_list)
+	for(var/mob/living/player in player_list)
 		if(player.mind)
 			roundstart_pop_ready++
 			candidates.Add(player)

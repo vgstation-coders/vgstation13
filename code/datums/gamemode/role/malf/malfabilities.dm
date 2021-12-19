@@ -1,25 +1,29 @@
 /datum/malf_module
 	var/mob/living/silicon/ai/malf 
+	var/cost = 10
+	var/name = "Malf Module"
+	var/desc = "This does something."
+	var/bought = FALSE
 
 /datum/malf_module/New(var/mob/living/silicon/ai/A)
-	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	if(!istype(A) || !istype(M) || !A.mind)
-		return
-	M.purchased_modules += src
 	malf = A
+
+
+/datum/malf_module/proc/purchase()
+	if(bought)
+		return
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	on_purchase()
-	return TRUE
+	M.add_power(-cost)
+	bought = TRUE
 
 /datum/malf_module/proc/on_purchase()
 	return
 
 /datum/malf_module/active
-	var/name = "Malf Module"
-	var/desc = "This does something."
 	var/icon_state = "placeholder"
 	var/activate_cost
 	
-
 /datum/malf_module/active/proc/activate()
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(malf) || !istype(M))
@@ -29,16 +33,17 @@
 		return TRUE
 	return FALSE
 
-/datum/malf_module/active/New(var/mob/living/silicon/ai/A)
-	if(!..())
-		return
+
+/datum/malf_module/active/on_purchase()
 	var/datum/mind_ui/malf_top_panel/malfUI = malf.mind.activeUIs["Malf Top Panel"]
 	if(!istype(malfUI))
 		return
 	
 	var/obj/abstract/mind_ui_element/hoverable/malf_power/E = new /obj/abstract/mind_ui_element/hoverable/malf_power(null, malfUI, src)
+	E.offset_x = malfUI.current_offset
+	E.UpdateUIScreenLoc()
 	malfUI.elements += E
-	malfUI.SortPowers()
+	malfUI.current_offset += 40
 	malfUI.SendToClient()
 	malfUI.Display()
 
@@ -52,6 +57,7 @@
 	activate_cost = 5
 
 /datum/malf_module/active/coreshield/on_purchase()
+	..()
 	malf.vis_contents += new /obj/effect/overlay/ai_shield
 
 /datum/malf_module/active/coreshield/activate()
@@ -71,6 +77,13 @@
 	to_chat(malf, "<span class='warning'>[malf.ai_flags & COREFORTIFY ? "Firewall Activated" : "Firewall Deactivated"].</span>")
 
 //------------------------------------------------
+/datum/malf_module/explosivecore
+	name = "Explosive Core"
+	desc = "core go boom"
+
+/datum/malf_module/explosiveborgs
+	name = "Rigged Cyborgs"
+	desc = "Cyborg boom"
 
 /datum/malf_module/explosivecore/on_purchase()
 	malf.explosive = TRUE
@@ -82,9 +95,11 @@
 
 //------------------------------------------------
 
-//Purchaseable hack abilities
-/datum/malf_module/holopadfaker
-/datum/malf_module/overload
-/datum/malf_module/shunting
+/datum/malf_module/holopadfaker 
+	name = "Lifelike Holograms"
+	desc = "hologram"
 
-//------------------------------------------------
+
+/datum/malf_module/overload
+	name = "Machine Overload"
+	desc = "boom"

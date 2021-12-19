@@ -51,13 +51,14 @@ var/list/ai_list = list()
 
 	var/control_disabled = FALSE // Set to TRUE to stop AI from interacting via Click() -- TLE
 	var/malfhacking = FALSE // More or less a copy of the above var, so that malf AIs can hack and still get new cyborgs -- NeoFite
-	var/mob/living/silicon/shuntedAI/shuntedAI = null
+	var/mob/living/silicon/ai/shuntedAI = null
+	var/mob/living/silicon/ai/parent = null
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
 	var/blackout_active = FALSE
 	var/explosive_cyborgs = FALSE	//Will any cyborgs slaved to the AI exploe when they die?
 
-	var/mob/living/silicon/ai/parent = null
+
 	var/camera_light_on = FALSE
 	var/list/obj/machinery/camera/lit_cameras = list()
 
@@ -161,10 +162,11 @@ var/list/ai_list = list()
 			job = "AI"
 	ai_list += src
 	..()
-	if(prob(25))
-		playsound(src, get_sfx("windows error"), 75, FALSE)
-	else
-		playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
+	if(!safety)
+		if(prob(25))
+			playsound(src, get_sfx("windows error"), 75, FALSE)
+		else
+			playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 
 /mob/living/silicon/ai/verb/toggle_anchor()
 	set category = "AI Commands"
@@ -958,3 +960,4 @@ var/list/ai_list = list()
 			icon_state = "ai-crash"
 		return
 	icon_state = chosen_core_icon_state
+

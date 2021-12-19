@@ -32,9 +32,6 @@ var/global/list/battery_online =	list(
 
 	if(stat & (BROKEN | FORCEDISABLE | EMPED))
 		return
-	if(locate(/mob/living/silicon/shuntedAI) in contents)
-		icon_state = "smes_malf"
-		return
 
 	overlays += battery_online[online + 1]
 

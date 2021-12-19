@@ -22,7 +22,7 @@
 	if(M.currently_hacking_apcs.len >= M.apc_hacklimit)
 		to_chat(malf, "<span class='warning'>Your systems are not capable of hacking more than [M.apc_hacklimit] APCs at a time.</span>")
 		return FALSE
-	if(STATION_Z != z)
+	if(map.zMainStation != z)
 		to_chat(malf, "<span class='warning'>You cannot hack APCs off the main station.</span>")
 		return FALSE
 	return TRUE

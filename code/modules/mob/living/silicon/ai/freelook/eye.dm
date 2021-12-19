@@ -17,7 +17,7 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = TRUE, glide_size_override = 0)
+/mob/camera/aiEye/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = TRUE, glide_size_override = 0, var/holo_bump = FALSE)
 	if(ai)
 		var/obj/machinery/hologram/holopad/H
 		if(istype(ai.current, /obj/machinery/hologram/holopad))
@@ -25,8 +25,16 @@
 		if(!isturf(ai.loc))
 			return
 		if(istype(H))
-			if(!harderforce && get_dist(H, destination) > H.holo_range && H.advancedholo)
+			if(harderforce && H.advancedholo && !holo_bump)  // If we double click while controlling an advanced hologram, remove the hologram.
+				H.clear_holo()
 				return
+			else if(H.advancedholo) // Otherwise, if we're controlling an advanced hologram, check to see if we can enter the tile normally
+				if(destination.density)
+					return
+				for(var/atom/movable/A in destination)
+					if(A.density)
+						return
+
 		if(!isturf(destination))
 			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
 
@@ -39,7 +47,7 @@
 			ai.see_in_dark = 8
 			ai.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
-		if(istype(H))
+		if(istype(H) && !holo_bump)  // move our hologram to our new location (unless our advanced hologram was bumped, in which case we're moving to the hologram)
 			H.move_hologram(harderforce)
 
 		if(ai.camera_light_on)
@@ -100,7 +108,7 @@
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
-	if((user.cooldown && user.cooldown < world.timeofday) || user.eyeobj.humanlike) // 3 seconds
+	if((user.cooldown && user.cooldown < world.timeofday) || user.eyeobj?.humanlike) // 3 seconds
 		user.sprint = initial
 
 	if(user.eyeobj.humanlike)
@@ -115,8 +123,16 @@
 				var/obj/machinery/hologram/holopad/H = user.current
 				if(istype(H))
 					H.holo.dir = direct
-				if(step.Enter(user.eyeobj))
-					user.eyeobj.forceMove(destination = step, harderforce = FALSE)
+				if(step.density)
+					return
+				for(var/atom/movable/A in step)
+					if(A.density)
+						if(A.flow_flags&ON_BORDER)
+							if(!A.Cross(H.holo, H.holo.loc))
+								return
+						else
+							return
+				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
 			else
 				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
 	user.last_movement=world.time

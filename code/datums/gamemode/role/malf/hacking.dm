@@ -66,9 +66,6 @@
 		return
 	if(malf.stat != CONSCIOUS)
 		return
-	if(istype(malf, /mob/living/silicon/shuntedAI) && !istype(malf.loc, /obj/machinery/power/apc))
-		to_chat(malf, "<span class='warning'>Your connection isn't strong enough to hack while outside an APC.</span>")
-		return
 	if(!(stat & (BROKEN|NOPOWER)))
 		if(M == malf_owner)
 			if(!malf_disrupted)

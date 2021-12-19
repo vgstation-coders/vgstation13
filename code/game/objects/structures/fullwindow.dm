@@ -44,6 +44,7 @@
 	spawn()
 		if(!src)
 			return
+		var/junction = 0 //Will be used to determine from which side the window is connected to other windows
 		if(anchored)
 			for(var/obj/structure/window/full/W in orange(src, 1))
 				if(W.anchored && W.density) //Only counts anchored, not-destroyed full-tile windows.

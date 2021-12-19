@@ -204,10 +204,6 @@ Class Procs:
 			component_parts -= AM
 */
 	component_parts = null
-
-	var/mob/M = locate(/mob/living/silicon/shuntedAI) in contents
-	if(M)
-		M.death()
 	for(var/datum/malfhack_ability/MH in hack_abilities)
 		MH.machine = null
 		qdel(MH)

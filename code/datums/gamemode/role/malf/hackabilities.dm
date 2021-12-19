@@ -4,6 +4,7 @@
 	var/icon = "radial_off"				//icon to display in the radial
 	var/icon_toggled = "radial_on"
 	
+	var/required_modtype 
 	var/toggled = FALSE		
 	var/cost = 0
 
@@ -34,6 +35,10 @@
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return FALSE
+	if(required_modtype)
+		var/datum/malf_module/MM = locate(required_modtype) in M.available_modules
+		if(!MM || !MM.bought)
+			return FALSE
 	return TRUE
 
 
@@ -50,7 +55,6 @@
 	toggled = !toggled
 	return TRUE
 	
-
 //---------------------------------------
 
 /datum/malfhack_ability/toggle/disable
@@ -96,18 +100,29 @@
 	var/obj/machinery/power/apc/P = machine
 	if(!istype(P))
 		return
-	
 	var/obj/machinery/hologram/holopad/H  = A.current
 	if(istype(H))
 		H.clear_holo()
 
-	var/mob/living/silicon/shuntedAI/S = new(get_turf(A),A.laws,A)
-	A.mind.transfer_to(S)
-	new /obj/effect/malf_jaunt(S.loc, S, P)
+	var/mob/living/silicon/ai/S = new(get_turf(A),A.laws, null, 1)
+	S.parent = A
+	S.adjustOxyLoss(A.getOxyLoss())
+	S.name = "[A.name] APC Copy"
+	S.add_spell(new /spell/aoe_turf/corereturn, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+
+	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
+		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
+			point.target = machine //the pinpointer will detect the shunted AI
 	S.update_perception()
+	A.mind.transfer_to(S)
+	S.cancel_camera()
+
+	new /obj/effect/malf_jaunt(S.loc, S, P)
 	
 /datum/malfhack_ability/shunt/check_available(var/mob/living/silicon/ai/A)
 	if(!..())
+		return FALSE
+	if(istype(A.loc, /obj/machinery/power/apc)) // Already in an APC
 		return FALSE
 	if(istype(A))
 		return TRUE
@@ -172,6 +187,7 @@
 	desc = "Project a realistic looking hologram from this holopad."
 	icon = "radial_holo"
 	cost = 5
+	required_modtype = /datum/malf_module/holopadfaker
 
 /datum/malfhack_ability/create_lifelike_hologram/activate(var/mob/living/silicon/A)
 	var/obj/machinery/hologram/holopad/C = machine
@@ -180,13 +196,6 @@
 	if(C.create_advanced_holo(A))
 		..()
 
-/datum/malfhack_ability/create_lifelike_hologram/check_available(mob/living/silicon/A)
-	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	if(!istype(A) || !istype(M))
-		return FALSE
-	if(!(locate(/datum/malf_module/holopadfaker) in M.purchased_modules))
-		return FALSE
-	return TRUE
 
 //--------------------------------------------------------
 
@@ -195,6 +204,7 @@
 	desc = "Overload the circuits in this machine, causing an explosion."
 	icon = "radial_overload"
 	cost = 5
+	required_modtype = /datum/malf_module/overload
 
 /datum/malfhack_ability/overload/activate(var/mob/living/silicon/A)
 	machine.visible_message("<span class='warning'>You hear a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>") //highlight this, motherfucker
@@ -204,10 +214,3 @@
 		explosion(get_turf(machine), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 		qdel(machine)
 
-/datum/malfhack_ability/overload/check_available(mob/living/silicon/A)
-	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	if(!istype(A) || !istype(M))
-		return FALSE
-	if(!(locate(/datum/malf_module/overload) in M.purchased_modules))
-		return FALSE
-	return TRUE

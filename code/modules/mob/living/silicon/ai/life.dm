@@ -170,6 +170,9 @@
 	life_handle_malf()
 	life_handle_power_damage()
 
+	if(ismalf(src))
+		client.show_popup_menus = FALSE
+
 	is_ai_powered() ? life_handle_powered_core() : life_handle_unpowered_core()
 
 /mob/living/silicon/ai/proc/is_ai_powered()

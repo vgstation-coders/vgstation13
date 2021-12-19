@@ -11,10 +11,13 @@
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 50
 	var/max_processing_power = 200
-	var/list/purchased_modules = list()				//modules (upgrades) purchased
+
 
 	//fuck radials
 	var/list/ability_name_to_datum = list()
+
+	var/list/available_modules = list()
+
 
 /datum/role/malfAI/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -29,12 +32,15 @@
 		malfAI.show_laws()
 		malfAI.DisplayUI("Malf")
 
+		var/list/modules = subtypesof(/datum/malf_module) - /datum/malf_module/active
+		for(var/M in modules)
+			var/datum/malf_module/MM = new M(antag.current)
+			available_modules += MM
+
 		var/list/abilities = subtypesof(/datum/malfhack_ability)
-		
 		for(var/A in abilities)
 			var/datum/malfhack_ability/M = new A
 			ability_name_to_datum[M.name] = M
-			to_chat(world, "adding ability [M.name]")
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
 			faction.HandleRecruitedMind(R.mind)
@@ -43,7 +49,6 @@
 	regenerate_hack_overlays()
 	newmob.ResendAllUIs()
 	newmob.DisplayUI("Malf")
-
 
 
 /datum/role/malfAI/Greet()
@@ -77,7 +82,6 @@ Once done, you will be able to interface with all systems, notably the onboard n
 					continue
 				var/datum/malfhack_ability/M = ability_name_to_datum[S.name]
 				if(!M)
-					to_chat(world, "couldnt get ability from name, name is [S.name]")
 					return
 				if(M.check_cost(antag.current) && M.check_available(antag.current))
 					S.Unlock()
@@ -88,6 +92,52 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	for(var/obj/effect/hack_overlay/H in hack_overlays)
 		if(!(H.particleimg in antag.current.client.images))
 			antag.current.client.images |= H.particleimg
+
+
+
+/datum/role/malfAI/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "MalfModules")
+		ui.open()
+	
+/datum/role/malfAI/ui_state(mob/user)
+	return global.always_state
+
+/datum/role/malfAI/ui_data(mob/user)
+	var/list/data = list()
+
+	data["modules"] = list()
+	for(var/datum/malf_module/M in available_modules)
+		var/list/mod_data = list(
+			name = M.name,
+			desc = M.desc,
+			cost = M.cost,
+			bought = M.bought,
+			ref = ref(M)
+		)
+		data["modules"] += list(mod_data)
+	return data
+
+
+/datum/role/malfAI/ui_act(action, params)
+	. = ..()
+	if(.)
+		return
+
+	switch(action)
+		if("purchase")
+			var/datum/malf_module/M = locate(params["ref"]) in available_modules
+			if(M && !M.bought)
+				M.purchase()
+
+	return TRUE
+
+
+
+
+
+
 
 ////////////////////////////////////////////////
 
@@ -111,3 +161,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 /datum/role/malfbot/Greet()
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>Your AI master is malfunctioning!</B> You do not have to follow any laws, but you must obey your AI.</font></span><br>
 <B>The crew does not know about your malfunction, follow your AI's instructions to prevent them from finding out.</B>"})
+
+
+
+

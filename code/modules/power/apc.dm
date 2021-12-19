@@ -305,9 +305,6 @@
 		update_state |= UPSTATE_BROKE
 	if(stat & MAINT)
 		update_state |= UPSTATE_MAINT
-	if(locate(/mob/living/silicon/shuntedAI) in contents)
-		update_state |= UPSTATE_SHUNT
-
 	if(opened)
 		if(opened==1)
 			update_state |= UPSTATE_OPENED1
@@ -956,7 +953,7 @@
 	else if (href_list["malfhack"])
 		var/mob/living/silicon/ai/hacker = usr
 		var/datum/role/malfAI/M = hacker.mind.GetRole(MALF)
-		if(STATION_Z != z)
+		if(map.zMainStation != z)
 			to_chat(hacker, "<span class='warning'>You cannot hack APCs off the main station.</span>")
 			return
 		if(get_malf_status(hacker) == 1)
@@ -988,14 +985,6 @@
 					update_icon()
 				else
 
-	else if (href_list["occupyapc"])
-		if(get_malf_status(usr))
-			malfoccupy(usr)
-
-	else if (href_list["deoccupyapc"])
-		if(get_malf_status(usr))
-			malfvacate()
-
 	else if (href_list["toggleaccess"])
 		if(istype(usr, /mob/living/silicon))
 			if(emagged || (stat & (BROKEN|MAINT)))
@@ -1019,12 +1008,6 @@
 
 	src.update()
 	update_icon()
-
-/obj/machinery/power/apc/proc/malfoccupy(var/mob/living/silicon/ai/malf)
-	if(!istype(malf))
-		return
-	occupant = new /mob/living/silicon/shuntedAI(src, malf.laws, malf)
-	malf.mind.transfer_to(occupant)
 
 /*
 	if(istype(malf.loc, /obj/machinery/power/apc)) // Already in an APC
@@ -1066,7 +1049,6 @@
 	if(!src.occupant)
 		return
 	if(src.occupant.parent && src.occupant.parent.stat != 2)
-		src.occupant.mind.transfer_to(src.occupant.parent)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
@@ -1074,16 +1056,17 @@
 				var/mob/living/silicon/ai/A = occupant.parent // the current mob the mind owns
 				if(A.stat != DEAD)
 					point.target = A //The pinpointer tracks the AI back into its core.
-		qdel(src.occupant)
+		new /obj/effect/malf_jaunt(loc, occupant, occupant.parent, TRUE)
 		src.occupant = null
 	else
-		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
 			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
 			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
+		else 
+			to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 
 /obj/machinery/power/apc/can_overload()
 	return 1

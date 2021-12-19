@@ -145,19 +145,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/proc/create_advanced_holo(var/mob/living/silicon/ai/A)
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
-	if(get_dist(A.eyeobj, src) > holo_range)
-		to_chat(A, "<span class='warning'>You must be closer to the holopad to do this.</span>")
+	if(holo)
+		clear_holo()
 		return
-
 	var/list/available_mobs = generate_appearance_list()
 	var/mob_to_copy = input(A, "Who will this hologram look like?", "Creatures") as null|anything in available_mobs
 	if(!mob_to_copy)
 		return 0
-	advancedholo = TRUE
-	holo = new /obj/effect/overlay/hologram/lifelike(get_turf(src), available_mobs[mob_to_copy])
-	holo.set_glide_size(DELAY2GLIDESIZE(1))
-	master = A
-	use_power = 2
 	if(!A.eyeobj)
 		A.make_eyeobj()
 	A.eyeobj.forceMove(get_turf(src))
@@ -165,13 +159,19 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	A.client.CAN_MOVE_DIAGONALLY = FALSE
 	A.eyeobj.humanlike = TRUE
 	A.eyeobj.glide_size = DELAY2GLIDESIZE(1)
+	advancedholo = TRUE
+	holo = new /obj/effect/overlay/hologram/lifelike(get_turf(src), available_mobs[mob_to_copy], A.eyeobj)
+	holo.set_glide_size(DELAY2GLIDESIZE(1))
+	master = A
+	use_power = 2
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/generate_appearance_list()
 	var/list/L = living_mob_list + dead_mob_list
 	var/list/newlist = list()
 	for(var/mob/living/M in L)
-		if(M.z != STATION_Z)
+		if(M.z != map.zMainStation)
 			continue
 		newlist["[M.name]"] = M
 	return newlist
@@ -186,20 +186,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
+	advancedholo = FALSE
+	master.client.CAN_MOVE_DIAGONALLY = TRUE
+	if(master.eyeobj)
+		master.eyeobj.humanlike = FALSE
+	if(master.current == src)
+		master.current = null
+	master = null//Null the master, since no-one is using it now.
+	ray = null
 	qdel(ray)
 	animate(holo, alpha = 0, time = 5)
 	spawn(5)
 		qdel(holo)//Get rid of hologram.
-		advancedholo = FALSE
 		holo = null
-		ray = null
-		master.client.CAN_MOVE_DIAGONALLY = TRUE
-		if(master.eyeobj)
-			master.eyeobj.humanlike = FALSE
-		if(master.current == src)
-			master.current = null
-		master = null//Null the master, since no-one is using it now.
-		return 1
+	return 1
 
 /obj/machinery/hologram/holopad/emp_act()
 	if(holo)
@@ -209,7 +209,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(holo)//If there is a hologram.
 		if(master && !master.stat && master.client && master.eyeobj)//If there is an AI attached, it's not incapacitated, it has a client, and the client eye is centered on the projector.
 			if(!(stat & (FORCEDISABLE|NOPOWER)))//If the  machine has power.
-				if((HOLOPAD_MODE == 0 && (get_dist(master.eyeobj, src) <= holo_range)))
+				if((HOLOPAD_MODE == 0 && (get_dist(master.eyeobj, src) <= holo_range)) || advancedholo)
 					return 1
 
 				else if (HOLOPAD_MODE == 1)
@@ -217,7 +217,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 					var/area/holo_area = get_area(src)
 					var/area/eye_area = get_area(master.eyeobj)
 
-					if(eye_area == holo_area)
+					if(eye_area == holo_area || advancedholo)
 						return 1
 
 		clear_holo()//If not, we want to get rid of the hologram.
@@ -225,7 +225,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
 	if(holo)
-		if (get_dist(master.eyeobj, src) <= holo_range)
+		if (get_dist(master.eyeobj, src) <= holo_range || advancedholo)
+			if(advancedholo)  // reset glide sizes, in case our hologram was bumped
+				set_glide_size(DELAY2GLIDESIZE(1))
+				master.eyeobj.glide_size = DELAY2GLIDESIZE(1)
 			var/turf/T = holo.loc
 			var/turf/dest = get_turf(master.eyeobj)
 			step_to(holo, master.eyeobj) // So it turns.
@@ -250,7 +253,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 					animate(ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
 				else
 					ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
-		else if(!advancedholo || forced)
+		else
 			clear_holo()
 	return 1
 
@@ -351,10 +354,14 @@ Holographic project of everything else.
 	layer = 0
 	icon = 'icons/mob/AI.dmi'
 	icon_state = "holo1"
+	density = 1
+	anchored = 0
+	var/mob/camera/aiEye/eye
 
-/obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy)
+/obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy, var/mob/eyeobj)
 	..()
 	steal_appearance(mob_to_copy)
+	eye = eyeobj
 
 /obj/effect/overlay/hologram/lifelike/proc/steal_appearance(var/mob/living/M)
 	name = M.name
@@ -385,3 +392,7 @@ Holographic project of everything else.
 	..()
 	if(AM && AM.density == TRUE)
 		visible_message("<span class='warning'>The [AM] passes straight through [src]!</span>")
+
+/obj/effect/overlay/hologram/lifelike/Bumped(atom/movable/AM)
+	..()
+	eye.forceMove(get_turf(src), holo_bump = TRUE)

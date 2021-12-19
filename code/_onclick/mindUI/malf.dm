@@ -5,8 +5,6 @@
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/malf_top_panel,
 		/datum/mind_ui/malf_left_panel,
-		/datum/mind_ui/malf_right_panel,
-		/datum/mind_ui/shunt_bottom_panel,
 		)
 
 /datum/mind_ui/malf/Valid()
@@ -27,8 +25,11 @@
 	uniqueID = "Malf Top Panel"
 	y = "TOP"
 	display_with_parent = TRUE
-   	
-
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/malf_tech_tab
+		)
+	var/current_offset = -200
+	
 /datum/mind_ui/malf_top_panel/Valid()
 	var/mob/living/silicon/ai/A = mind.current
 	if (!istype(A))
@@ -37,15 +38,21 @@
 		return TRUE
 	return FALSE
 
-/datum/mind_ui/malf_top_panel/proc/SortPowers()
-	var/space_size = 40		//32 px icon, 8 px spacer
-	var/new_offset = (space_size * Floor(elements.len / 2, 1))*-1
-	if(elements.len % 2 == 0)
-		new_offset += 20
-	for(var/obj/abstract/mind_ui_element/hoverable/malf_power/E in elements)
-		E.offset_x = new_offset
-		E.UpdateUIScreenLoc()
-		new_offset += space_size
+
+/obj/abstract/mind_ui_element/hoverable/malf_tech_tab
+	name = "Tech Tab"
+	icon = 'icons/ui/malf/32x32.dmi'
+	icon_state = "module"
+	layer = MIND_UI_BACK
+	offset_x = 178
+	offset_y = -10
+
+
+/obj/abstract/mind_ui_element/hoverable/malf_tech_tab/Click()
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	M?.tgui_interact(GetUser())
+		
 
 /obj/abstract/mind_ui_element/hoverable/malf_power
 	name = "BROKEN POWER"
@@ -153,272 +160,9 @@
 	UpdateUIScreenLoc()
 
 
-////////////////////////////////////////////////////////////////////
-//																  //
-//						   RIGHT PANEL							  //
-//																  //
-////////////////////////////////////////////////////////////////////
-
-/datum/mind_ui/malf_right_panel
-	uniqueID = "Malf Right Panel"
-	x = "RIGHT"
-	element_types_to_spawn = list(
-		/obj/abstract/mind_ui_element/hoverable/malf_tech_tab,
-		)
-	sub_uis_to_spawn = list(
-		/datum/mind_ui/malf_tech_window,
-		)
-	display_with_parent = TRUE
-
-/datum/mind_ui/malf_right_panel/Valid()
-	var/mob/living/silicon/ai/A = mind.current
-	if (!istype(A))
-		return FALSE
-	if(ismalf(A))
-		return TRUE
-	return FALSE
-
-//------------------------------------------------------------
-
-/obj/abstract/mind_ui_element/hoverable/malf_tech_tab
-	name = "Tech Tab"
-	icon = 'icons/ui/malf/22x64.dmi'
-	icon_state = "techtab"
-	layer = MIND_UI_BACK
-	offset_y = -88
-	var/opened = FALSE
-
-
-/obj/abstract/mind_ui_element/hoverable/malf_tech_tab/Click()
-	var/datum/mind_ui/malf_tech_window/techtree = locate() in parent.subUIs
-	if(techtree)
-		if(opened)
-			SlideUIElement(0, offset_y, 3, MIND_UI_BUTTON)
-			techtree.Hide()
-		else
-			SlideUIElement(-256, offset_y, 3, MIND_UI_BUTTON)
-			techtree.Display()		
-		opened = !opened
-		
-	
-
-////////////////////////////////////////////////////////////////////
-//																  //
-//					      TECH TREE TAB     					  //
-//																  //
-////////////////////////////////////////////////////////////////////
-
-
-/datum/mind_ui/malf_tech_window
-	uniqueID = "Malf Tech Window"
-	x = "RIGHT"
-	element_types_to_spawn = list(
-		/obj/abstract/mind_ui_element/malf_tech_background,
-		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/coreshield,
-		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/explosivecore,
-		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/explosiveborgs,
-		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/holopadfaker,
-		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/overload
-		)
-	display_with_parent = FALSE
-
-//------------------------------------------------------------
-
-/obj/abstract/mind_ui_element/malf_tech_background
-	name = "Tech Window Background"
-	icon = 'icons/ui/malf/256x256.dmi'
-	icon_state = "background"
-	offset_y = -112
-	offset_x = 256
-	layer = MIND_UI_BACK
-
-/obj/abstract/mind_ui_element/malf_tech_background/Appear()
-	invisibility = 0
-	SlideUIElement(0, offset_y, 3, MIND_UI_BACK)
-	
-/obj/abstract/mind_ui_element/malf_tech_background/Hide()
-	SlideUIElement(256, offset_y, 3, MIND_UI_BACK, TRUE)
-	
 
 //------------------------------------------------------------
 
 
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade
-	name = "BROKEN UPGRADE"
-	desc = "This is a broken description."
-	icon = 'icons/ui/malf/32x32.dmi'
-	icon_state = "bg"
-	var/upgrade_icon = ""
-	layer = MIND_UI_BUTTON
-	var/module_type
-	var/purchased = FALSE
-	var/visible_offset_x = 0
-	var/cost
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/New()
-	..()
-	var/image/overlay = image(icon, src, upgrade_icon)
-	overlays += overlay
-	offset_x = visible_offset_x + 256
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/Click()
-	if(purchased)
-		return
-	var/mob/living/silicon/ai/A = GetUser()
-	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	if(!istype(A) || !istype(M))
-		return
-	if (M.processing_power >= cost)
-		M.add_power(-cost)
-		purchased = TRUE
-		UpdateIcon()
-		new module_type(A)
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/UpdateIcon()
-	var/mob/living/silicon/ai/A = GetUser()
-	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	if(!istype(A) || !istype(M))
-		return
-	if (purchased)
-		icon_state = "[base_icon_state]-purchased"
-		color = null
-		return
-	else if(icon_state == "[base_icon_state]-hover")
-		return
-	else if (M.processing_power >= cost)
-		color = null
-	else
-		color = grayscale
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/MouseEntered(location,control,params)
-	if (color == null && !purchased)
-		icon_state = "[base_icon_state]-hover"
-	if(!purchased)
-		openToolTip(GetUser(),src,params,title = name,content = desc,theme = "radial-malf")
-	
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/StopHovering()
-	if(color == null && !purchased)
-		icon_state = base_icon_state
-	closeToolTip(GetUser())
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/Appear()
-	invisibility = 0
-	SlideUIElement(visible_offset_x, offset_y, 3, MIND_UI_BUTTON)
-	UpdateIcon()
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/Hide()
-	SlideUIElement(visible_offset_x + 256, offset_y, 3, MIND_UI_BUTTON, TRUE)
 
 
-//------------------------------------------------------------
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/coreshield
-	name = "Firewall (20)"
-	desc = "Deploy a firewall to reduce damage to your core and make it immune to lasers."
-	upgrade_icon = "coreshield"
-	module_type = /datum/malf_module/active/coreshield
-	cost = 10
-	visible_offset_x = -216
-	offset_y = 104
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/explosivecore
-	name = "Rigged AI Core"
-	desc = "Overclock the central processing unit in your core, causing it to explode on system shutdown."
-	upgrade_icon = "explosivecore"
-	module_type = /datum/malf_module/explosivecore
-	cost = 10
-	offset_y = 104
-	visible_offset_x = -176
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/explosiveborgs
-	name = "Rigged Cyborgs"
-	desc = "Hijack the thermal regulators in your cyborgs, causing it to explode on system shutdown."
-	upgrade_icon = "explosiveborgs"
-	module_type = /datum/malf_module/explosiveborgs
-	cost = 10
-	offset_y = 104 
-	visible_offset_x = -136
-
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/holopadfaker
-	name = "Lifelike Textures"
-	desc = "Modifies the programming in hacked station holopads, allowing you to mimic the appearance and voice of a crewmember."
-	upgrade_icon = "holopadfake"
-	module_type = /datum/malf_module/holopadfaker
-	cost = 10
-	offset_y = 104 
-	visible_offset_x = -96
-
-/obj/abstract/mind_ui_element/hoverable/malf_upgrade/overload
-	name = "Machine Overload"
-	desc = "Allows you to hijack the thermal regulators within station machinery, causing them to explode violently."
-	upgrade_icon = "overload"
-	module_type = /datum/malf_module/overload
-	cost = 10
-	offset_y = 104 
-	visible_offset_x = -56
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////
-//																  //
-//						SHUNT BOTTOM PANEL   					  //
-//																  //
-////////////////////////////////////////////////////////////////////
-
-/datum/mind_ui/shunt_bottom_panel
-	uniqueID = "Shunt Bottom Panel"
-	y = "BOTTOM"
-	display_with_parent = TRUE
-	element_types_to_spawn = list(
-		/obj/abstract/mind_ui_element/hoverable/return_to_core,
-	)
-
-/datum/mind_ui/shunt_bottom_panel/Valid()
-	var/mob/living/silicon/shuntedAI/A = mind.current
-	if (!istype(A))
-		return FALSE
-	if(ismalf(A))
-		return TRUE
-	return FALSE
-
-/obj/abstract/mind_ui_element/hoverable/return_to_core
-	name = "Return To Core"
-	icon = 'icons/ui/malf/192x48.dmi'
-	layer = MIND_UI_BUTTON
-	icon_state = "malf_unshunt"
-	offset_x = -96
-
-/obj/abstract/mind_ui_element/hoverable/return_to_core/Click()
-	var/mob/living/silicon/shuntedAI/S = GetUser()
-	if(!istype(S) || !(color == null))
-		return
-	var/atom/A = S.loc
-	new /obj/effect/malf_jaunt(get_turf(S), S, get_turf(S.core), TRUE)
-	A.update_icon()
-
-/obj/abstract/mind_ui_element/hoverable/return_to_core/UpdateIcon()
-	var/mob/living/silicon/shuntedAI/A = GetUser()
-	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	if(!istype(A) || !istype(M))
-		return
-	if(icon_state == "[base_icon_state]-hover")
-		return
-	if (A.core && !(A.core.stat & DEAD) && !(A.stat & DEAD))
-		if(istype(A.loc, /obj/machinery/power/apc))
-			color = null
-			icon_state = "malf_unshunt"
-		else
-			color = grayscale
-	else
-		color = null
-		icon_state = "malf_unshunt_blocked"
-
-
-/obj/abstract/mind_ui_element/hoverable/return_to_core/StartHovering()
-	if (color == null && icon_state == "malf_unshunt")
-		..()
