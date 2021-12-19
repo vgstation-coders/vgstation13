@@ -502,22 +502,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if (turf_shadow_image_identifier in pre_rendered_shadows)
 		I.render_source = turf_shadow_image_identifier
 	else
-		var/found_wall_turf_prerender = FALSE
-		for (var/atom/movable/light/neighbour in view(2, src))
-			if (neighbour.light_range < light_range)
-				continue
-			if (turf_shadow_image_identifier in neighbour.pre_rendered_shadows)
-				var/rendering_distance = pre_rendered_shadows["[turf_shadow_image_identifier]"]
-				if (get_dist(neighbour, src) + rendering_distance > 3) // That thing is rendered too far away to be of much use
-					continue
-				I.render_target = turf_shadow_image_identifier
-				found_wall_turf_prerender = TRUE
-				break
-		if (!found_wall_turf_prerender)
-			I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-			I.icon_state = "[blocking_dirs]-[targ_dir]"
-			I.render_target = turf_shadow_image_identifier
-			pre_rendered_shadows += turf_shadow_image_identifier
+		I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+		I.icon_state = "[blocking_dirs]-[targ_dir]"
+		I.render_target = turf_shadow_image_identifier
+		pre_rendered_shadows += turf_shadow_image_identifier
 
 	I.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
