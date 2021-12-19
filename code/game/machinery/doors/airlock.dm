@@ -1143,10 +1143,24 @@ About the new airlock wires panel:
 		if(arePowerSystemsOn() && !(stat & NOPOWER))
 			if(level_of_door_opening < 2)
 				return
-			if(M.client)
-				density ? open(1):close(1)
-			else if(density)
-				open(1)
+			if(!M.force_airlock_time)
+				if(M.client)
+					density ? open(1):close(1)
+				else if(density)
+					open(1)
+			else //Simple mobs with a nonzero force_airlock_time take time to force the airlock.
+				to_chat(M, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
+				visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
+						"<span class='notice'>You hear groaning metal and overworked motors.</span>")
+				if(do_after(M,src,M.force_airlock_time))
+					if(locked || welded || jammed) //if it got welded/bolted during the do_after
+						to_chat(M, "<span class='notice'>The airlock won't budge!</span>")
+						return
+					visible_message("<span class='warning'>\The [M] forces \the [src] [density ? "open" : "closed"]!</span>")
+					if(M.client)
+						density ? open(1):close(1)
+					else if(density)
+						open(1)
 		else
 			if(M.client)
 				density ? open(1):close(1)
