@@ -1,30 +1,9 @@
 /mob/living/simple_animal/hostile/grue
-	name = "grue"
-	desc = "A dangerous thing that lives in the dark."
-	icon = 'icons/mob/grue.dmi'
-	icon_state = "grue_living"
-	icon_living = "grue_living"
-	icon_dead = "grue_dead"
 
-	maxHealth = 200											 	//max health
-	health = 200
-//	var/mdl_base=10 //base lower limit for melee damage (used in darkness strength calculations)
-//	var/mdu_base=15 //base upper limit for melee damage (used in darkness strength calculations)
-	melee_damage_lower = 20
-	melee_damage_upper = 30
-	melee_damage_type = BRUTE
-	response_help  = "touches"
-	response_disarm = "pushes"
-	response_harm   = "punches"
-//	attacktext = pick("gnashes","slashes")
-	attacktext = "gnashes"
-	attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
+	icon = 'icons/mob/grue.dmi'
 	speed = 1
 	can_butcher = FALSE
 //	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grue
-	held_items = list()
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
-	force_airlock_time=100 //so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 
 	a_intent=I_HURT //Initialize these
 	m_intent=I_HURT
@@ -32,20 +11,22 @@
 	universal_speak = 0
 	universal_understand = 0
 
+	response_help  = "touches"
+	response_disarm = "pushes"
+	response_harm   = "punches"
+
+	faction = "grue" //Keep grues and grue eggs friendly to each other.
+	force_airlock_time=100 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
+
 	//eyesight related stuff
 	see_in_dark = 8
-
-
-
-
-
 
 	//VARS
 	var/isgrue=1
 	var/shadowpower = 0											 //shadow power absorbed
 	var/maxshadowpower = 1000									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
-	var/ismoulting = 0, //currently moulting (1=is a pupa)
+	var/ismoulting = 0, //currently moulting (1=is a chrysalis)
 	var/moulttime = 60 //time required to moult to a new form
 	var/moulttimer = 100 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
@@ -53,12 +34,13 @@
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
+	var/burnmalus=1														//malus to life drain based on life stage to avoid grues becoming too tanky to light as they mature
 
 	var/pg_mult = 3										 //multiplier for power gained per tick when in dark tile
 	var/pd_mult = 0									  //multiplier for shadow power drained per tick on bright tile (0=disabled)
 	var/hg_mult = 1										//multiplier for health gained per tick when on dark tile
 	var/hd_mult = 3									 //multiplier for health drained per tick on bright tile
-	var/show_desc = TRUE										   //For the ability menu
+//	var/show_desc = TRUE										   //For the ability menu
 
 	var/lifestage=3												 //1=baby grue, 2=grueling, 3=(mature) grue
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
@@ -134,13 +116,13 @@
 //		visible_message("<span class='warning'>\The [src] is in brightness level [current_brightness] with [health] health and [shadowpower] shadowpower.</span>") //debug
 		if(current_brightness<=bright_limit_gain&&!ismoulting) //moulting temporarily stops healing via darkness
 			dark_dim_light=0
-			apply_damage(-1*(lifestage**(1/3))*regenbonus*hg_mult*(bright_limit_gain-current_brightness),BURN) //scale light healing by lifestage**(1/3) boost juveniles and adults heal rates a bit
+			apply_damage(-1*burnmalus*regenbonus*hg_mult*(bright_limit_gain-current_brightness),BURN) //boost juveniles and adults heal rates a bit also using burnmalus
 		else if(current_brightness>bright_limit_drain) 														//lose health in light
 			dark_dim_light=2
 
 			to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
 			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
-			apply_damage((lifestage**(1/3))*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage by lifestage**(1/3) to avoid juveniles and adults from becoming too tanky to light
+			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage by lifestage**(1/3) to avoid juveniles and adults from becoming too tanky to light
 		else
 			dark_dim_light=1
 		if(current_brightness<=bright_limit_gain&&!ismoulting)
@@ -148,10 +130,10 @@
 		else if(current_brightness>bright_limit_drain)
 			shadowpower = max(0,shadowpower-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light
 
-	if(ismoulting)
-		moulttimer--
-		if(moulttimer<=0)
-			complete_moult()
+		if(ismoulting)
+			moulttimer--
+			if(moulttimer<=0)
+				complete_moult()
 
 	regular_hud_updates()
 	standard_damage_overlay_updates()
@@ -161,11 +143,68 @@
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
 	init_language = default_language
+//	if(thislifestage)
+//		lifestage=thislifestage
+//	else
+//		lifestage=3 //default to adult
+	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
+
+/mob/living/simple_animal/hostile/grue/proc/lifestage_updates() //Initialize or update lifestage-dependent stats
+	var/tempHealth=health/maxHealth
+	if(lifestage==1)
+		name = "grue larva"
+		desc = "A scurrying thing that lives in the dark. It is still a larva."
+		icon_state = "gruespawn_living"
+		icon_living = "gruespawn_living"
+		icon_dead = "gruespawn_dead"
+		melee_damage_lower = 1
+		melee_damage_upper = 5
+		attacktext = "bites"
+		maxHealth=50
+		moultcost=100
+		burnmalus=1
+		environment_smash_flags = 0
+		attack_sound = 'sound/weapons/bite.ogg'
+		size = SIZE_SMALL
+		pass_flags = PASSTABLE
+	else if (lifestage==2)
+		name = "grue"
+		desc = "A creeping thing that lives in the dark. It is still a juvenile."
+		icon_state = "grueling_living"
+		icon_living = "grueling_living"
+		icon_dead = "grueling_dead"
+		melee_damage_lower = 10
+		melee_damage_upper = 15
+		attacktext = "chomps"
+		maxHealth=100
+		moultcost=500
+		burnmalus=2**(1/3)
+		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
+		size = SIZE_NORMAL
+		pass_flags = 0
+	else if (lifestage>=3)
+		name = "grue"
+		desc = "A dangerous thing that lives in the dark."
+		icon_state = "grue_living"
+		icon_living = "grue_living"
+		icon_dead = "grue_dead"
+		attacktext = "gnashes"
+		maxHealth = 200
+		moultcost=0 //not needed for adults
+		melee_damage_lower = 20
+		melee_damage_upper = 30
+		melee_damage_type = BRUTE
+		held_items = list()
+		burnmalus=3**(1/3)
+		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
+		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
+		size = SIZE_BIG
+		pass_flags = 0
+	health=tempHealth*maxHealth
 
 
-
-
-//Night vision ala giant spider
+//Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
 
 	if(client)
@@ -211,61 +250,62 @@
 //todo:
 
 
+//chg+add sound effects for egglaying, evolving, attacking, eating, light scalding (for both hatched and egg), etc
 
-//sprite additions while powering up via death essence
-
-//chg+add sound effects for egglaying, evolving, light scalding (for both hatched and egg), etc
-
-//egg spills open/hatches text?
-//chat messages for moulting and such
-//egg hatching
-//moulting/hatching text
 //modify gruevision colors/bloom(no need alpha blend thing?, maybe less red?)
-//add sound to general table smash
-
-
-//tweak values (moult cost, moult time, health stuff, shadowpower stuff)
-//add antag role code ROLE_GRUE
-//flesh out everything in setup.dm ala borers (but antag)
-//dynamic rulesets?
-
-//spawns only in dark/maintenance?
-//deathgasp for chrysalis and for egg
-//progressbars in different color?
-
-//dark field?
-//	but prevents shadowpower and health gain while using it?
-//directional sprites
-
-//message of egglaying etc only visible to others, not self?
-//basic instructive messages about being a grue, and also the life stages
-
-//ability to smash stuff away like flares (kick code?/harm intent?) kick_act in code/game/objects/items.dm
-
 //remove color testing code
 
 
-//set grue size and such
-//remove size descriptor
+//add sound to general table smash
+//ability to smash stuff away like flares (kick code?/harm intent?) kick_act in code/game/objects/items.dm
 
-//speaking/not/speaking/only being able to speak to other grues
+//tweak values (moult cost, moult time, health stuff, shadowpower stuff)
+//eating objectives
 
+//antag banned code?
+
+//deathgasp for chrysalis and for egg
+
+//directional sprites
+//ensure antag objectives even in midround spawn
+//fix/remove new_grueegg variable
+//admin make grue command
+//chrysalis death
 //unconscious while moulting/reduce view while moulting
-//moulting progress bar, etc warning about vulnerability/immobility
-//blind messages while moulting
-
-//change sound effects
-//jumpscare and other sound effects
-//prevent AI grues from attacking grue eggs (isgrue flag or... faction?)
-
-//special names only visible for grues (and grue language)
+//moulting progress bar, etc
+//make moulting take less time but need more shadowpoer/balance this
+//progress messages while moulting
 
 //rearrange code block
 //remove comments
+//check oxygen/heat levels in antag spawn code
 
-//[TEST] egglaying busy thing
+//[TEST]make so egg cant move even when controlled
+//[TEST]moulting/chrysalis text
+//[TEST]warning about vulnerability/immobility
+//[TEST]spawns only in dark/maintenance?
+//[TEST]flesh out everything in setup.dm ala borers (but antag)
+//[TEST]dynamic rulesets?
+//[TEST] add antag role code ROLE_GRUE
+//[TEST] egg spills open/hatches text?
+//[TEST] egg hatching text
+//[TEST] egg hatching
+//[TEST] add living checks for egg recruiting/hatching
+//[TEST] kill egg after hatching
+//[TEST]basic instructive messages about being a grue, and also the life stages
+
 //[TEST] egg recruit ala borer
 
+//[DONE]change egg desc on death
+//[DONE] passtable/hiding as grue larva only?
+//[DONE]change attacksounds for lifestage
+//[DONE]move lifestage updates into new proc
+//[DONE] prevent AI grues from attacking grue eggs (faction?)
+//[DONE]make egg plane lower than humans so people can visually walk over it
+//[DONE]set grue size and such
+//[DONE]ability to walk on same tile as grue eggs without pushing them
+//[DONE] egglaying busy thing
+//[DONE] speaking/not/speaking/only being able to speak to other grues
 //[DONE] melee abilities and strength change with life stage
 //[DONE]greyscale filter or color effects or something?
 //[DONE]infrared/night-vision
@@ -300,32 +340,26 @@
 //[DONE]can't moult message
 //[DONE]get ventcrawl to work
 //[DONE]revoke ventcrawl on higher life stages
-//[OBS]take longer to smash open reinforced tables and stuff
-//[OBS]dont anchor egg,
-//[OBS] grue crumbles to ash?
-//[OBS] fix or remove hiding code (can't go under tables like a mouse)
-//[OBS] resistant to other types of damage, or
-//[OBS]add increased health/shadowpower gain/drain with lifestage as well
-//[OBS]health-scaling light damage calculation?
-//[OBS]egg/chrysalis with natural armor? harmed by light or can only hatch in the dark?
-//[OBS]need to breathe or no?
-//[OBS]ability to destroy or eat objects? and it goes into the stomach,desk lamps etc?
-//[OBS]multiple attack verbs/pick?
-//[OBS] toggle light verb (does this work on light switches?)
-//[OBS] or should not be able to push buttons
-//[OBS]damaged by fire?
-//[OBS]faction grues to avoid them killing each other etc?
-//[OBS]grue crumbles to ash?
-//[OBS]speed up death by light is proc necessary?
-//[OBS]pulling/holding?
-//[OBS] cant or can be pulled while moulting
 
+//[OBS]announce grue spawn centcomm role?
+//[OBS]add lifestage initialization code on new/add to both dynamic rulsets code stuff
 
+//[NEXT VERSION]"cant moult under a table"
+//[NEXT VERSION]generalize grue light sensitivity params (and apply to role spawning code)
+//[NEXT VERSION]no growl/different sound on unsatisfying meal?
+//[NEXT VERSION] move eating updates into new proc
+//[NEXT VERSION] move new moult stat param procs into an update that's also called on New()
+//[NEXT VERSION] progressbars in different color
+//[NEXT VERSION]add butchery products/etc
+//[NEXT VERSION] change drones/screeches/syllables, not when juvenile, etc?
+//[NEXT VERSION]jumpscare and other sound effects
+//[NEXT VERSION]sprite additions while powering up via death essence
+//[NEXT VERSION]special names only visible for grues
 //[NEXT VERSION]render abilities invisible with life stage?
 //[NEXT VERSION]darkpower indicator?
 //[NEXT VERSION]eatencount indicator?
 //[NEXT VERSION]generalize power, powers costs, costs, power menu
-//[NEXT VERSION]animations
+//[NEXT VERSION]animations, incl. egg_trigger
 //[NEXT VERSION]basic AI to avoid light and smash things and moult for npc grues
 //[NEXT VERSION]sprites for dead pupae (need blood color)?
 //[NEXT VERSION]add body part targeting etc for more focused attacks, and relevant text
@@ -336,6 +370,9 @@
 //[NEXT VERSION] grue goo, blood, (color of) gibs, moulting goo, egg casing, meat, etc. (including effects)
 //[NEXT VERSION]add harm intents and such?
 
+//[NEED FEEDBACK]unable to hit grille/window as grue larva
+//[NEED FEEDBACK]dark field?
+//	but prevents shadowpower and health gain while using it?
 //[NEED FEEDBACK]not affected by atmos?
 //[NEED FEEDBACK]consume darkpower to block light?
 //[NEED FEEDBACK]smash machiney monitors and such?
@@ -347,81 +384,21 @@
 //[NEED FEEDBACK]can activate certain things like morgue tray and push light buttons
 
 /mob/living/simple_animal/hostile/grue/gruespawn
-	name = "grue larva"
-	desc = "A scurrying thing that lives in the dark. It is still a larva."
-	icon_state = "gruespawn_living"
-	icon_living = "gruespawn_living"
-	icon_dead = "gruespawn_dead"
-	melee_damage_lower = 1
-	melee_damage_upper = 5
-	attacktext = "bites"
-	maxHealth=50
-	moultcost=100
-	health = 50
 	lifestage=1
-	environment_smash_flags = 0
 
 /mob/living/simple_animal/hostile/grue/grueling
-	name = "grue"
-	desc = "A creeping thing that lives in the dark. It is still a juvenile."
-	icon_state = "grueling_living"
-	icon_living = "grueling_living"
-	icon_dead = "grueling_dead"
-	melee_damage_lower = 10
-	melee_damage_upper = 15
-	attacktext = "chomps"
-	maxHealth=100
-	moultcost=500
-	health = 100
 	lifestage=2
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 
-mob/living/simple_animal/grue_egg
-	var/isgrue=1
-	name = "grue egg"
-	desc = "A large egg laid by a grue."
-	icon = 'icons/mob/grue.dmi'
-	icon_state = "egg_living"
-	icon_living= "egg_living"
-	icon_dead= "egg_dead"
-	maxHealth=25
-	health=25
 
-	//keep it immobile
-	stop_automated_movement = 1
-	wander = 0
-
-	var/bright_limit_gain = 1											//maximum brightness on tile for health regen
-	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health
-	var/hg_mult = 2										//multiplier for health gained per tick when on dark tile
-	var/hd_mult = 3									 //multiplier for health drained per tick on bright tile
-	var/current_brightness=0
-
-/mob/living/simple_animal/grue_egg/Life()
-	..()
-	//process health according to current tile brightness level (as with hatched grues)
-	if (stat!=DEAD)
-		if(isturf(loc))
-			var/turf/T = loc
-			current_brightness=10*T.get_lumcount()
-		else												//else, there's considered to be no light
-			current_brightness=0
-		if(current_brightness<=bright_limit_gain)
-			apply_damage(-1*hg_mult*(bright_limit_gain-current_brightness),BURN) //scale light healing by lifestage**(1/3) boost juveniles and adults heal rates a bit
-		else if(current_brightness>bright_limit_drain) 														//lose health in light
-			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
-			apply_damage(hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage by lifestage**(1/3) to avoid juveniles and adults from becoming too tanky to light
-
-/mob/living/simple_animal/grue_egg/death()
-	desc = "The remnants of a grue egg."
-	..()
 
 //Moulting into more mature forms.
 /mob/living/simple_animal/hostile/grue/verb/moult()
 	set name = "Moult"
 	set desc = "Moult into a new form." //hide if an adult?
 	set category = "Grue"
+	if(!alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
+		return
 	if (lifestage<3)
 		if (shadowpower<moultcost)
 			to_chat(src, "<span class='notice'>You need to bask in shadow more first.</span>")
@@ -446,9 +423,11 @@ mob/living/simple_animal/grue_egg
 		shadowpower-=moultcost
 		lifestage++
 		to_chat(src, "<span class='notice'>You begin moulting.</span>")
+		visible_message("<span class='warning'>\The [src] morphs into a chrysalis...</span>")
 		stat=UNCONSCIOUS //go unconscious while moulting
 		ismoulting=1
 		moulttimer=moulttime//reset moulting timer
+		plane = MOB_PLANE //In case grue moulted while hiding
 		var/tempHealth=health/maxHealth //to scale health level
 		if (lifestage==2)
 			desc = "A small grue chrysalis."
@@ -464,56 +443,36 @@ mob/living/simple_animal/grue_egg
 			icon_living = "moult2"
 			icon_dead = "moult2"
 			maxHealth=50 //vulnerable while moulting
-		health=maxHealth*tempHealth //keep same health percentage
+		health=tempHealth*maxHealth //keep same health percentage
 	else
 		return
 
 /mob/living/simple_animal/hostile/grue/proc/complete_moult()
 	if(ismoulting&&stat!=DEAD)
 		var/tempHealth=health/maxHealth //to scale health level
-		if (lifestage==2)
-			desc = "A creeping thing that lives in the dark. It is still a juvenile."
-			name = "grue"
-			icon_state = "grueling_living"
-			icon_living = "grueling_living"
-			icon_dead = "grueling_dead"
-			maxHealth=100
-			moultcost=500
-			melee_damage_lower = 10
-			melee_damage_upper = 15
-			attacktext = "chomps"
-			environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
-		else if(lifestage==3)
-			desc = "A dangerous thing that lives in the dark."
-			name = "grue"
-			icon_state = "grue_living"
-			icon_living = "grue_living"
-			icon_dead = "grue_dead"
-			attacktext = "gnashes"
-			maxHealth=200
-			moultcost=0 //not needed for adults
-			melee_damage_lower = 20
-			melee_damage_upper = 30
-			environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
-		health=maxHealth*tempHealth //keep same health percent
+		lifestage_updates()
+		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
 		ismoulting=0 //is no longer moulting
+		to_chat(src, "<span class='warning'>You finish moulting!</span>")
+		visible_message("<span class='warning'>The [src] shifts as it morphs into new form!</span>")
 	else
 		return
 
 
 /mob/living/simple_animal/hostile/grue/death(gibbed)
-	playsound(src, 'sound/misc/grue_screech.ogg', 50, 1)
 	if(ismoulting)
 		desc="[desc] This one seems dead and lifeless."
+	else
+		playsound(src, 'sound/misc/grue_screech.ogg', 50, 1)
 	..()
 
 /mob/living/simple_animal/hostile/grue/attack_animal(mob/living/simple_animal/M)
-	if(M==src) //prevent the grue from attacking itself
+	if(M==src) //Prevent the grue from attacking itself, might help avoid misclicks while attempting to smash lights.
 		return
 	else
-		if(prob(20)&&lifestage>1)
-			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1) //occasionally growl while attacking
+//		if(prob(20)&&lifestage>1)
+//			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1) //occasionally growl while attacking
 		M.unarmed_attack_mob(src)
 
 
@@ -546,26 +505,66 @@ mob/living/simple_animal/grue_egg
 	if(eatencharge>=1)
 		busy=1
 		to_chat(src, "<span class='notice'>You start to push out an egg...</span>")
-		visible_message("<span class='warning'>\The [src] tightens up...</span>")
-		var/turf/T = get_turf(src)
-		if(do_after(src, T, 5 SECONDS))
+		visible_message("<span class='warning'>The [src] tightens up...</span>")
+		if(do_after(src, src, 5 SECONDS))
 			to_chat(src, "<span class='notice'>You lay an egg.</span>")
-			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>")
+			visible_message("<span class='warning'>The [src] pushes out an egg!</span>")
 			eatencharge--
 
 //			playsound(T, 'sound/effects/splat.ogg', 50, 1)
 
 
-			var/mob/living/simple_animal/grue_egg/E = new (T)
+			var/mob/living/simple_animal/grue_egg/new_grueegg = new(get_turf(src))
 			busy=0
 
 	else
 		to_chat(src, "You need to feed more first.")
 		return
 
+//Procs for grabbing players.
+/mob/living/simple_animal/hostile/grue/proc/request_player()
+	var/list/candidates=list()
+	for(var/mob/dead/observer/G in get_active_candidates(ROLE_GRUE, poll="Would you like to become a grue?"))
+		if(!G.client)
+			//testing("Client of [G] inexistent")
+			continue
+
+		//#warn Uncomment me.
+		/*if(G.client.holder)
+			//testing("Client of [G] is admin.")
+			continue*/
+
+		if(isantagbanned(G))
+			//testing("[G] is jobbanned.")
+			continue
+
+		candidates += G
+
+	if(!candidates.len)
+		//message_admins("Unable to find a mind for [src.name]")
+		return 0
+
+	shuffle(candidates)
+	for(var/mob/i in candidates)
+		if(!i || !i.client)
+			continue //Dont bother removing them from the list since we only grab one wizard
+		return i
+
+	return 0
+
+/mob/living/simple_animal/hostile/grue/proc/transfer_personality(var/client/candidate)
 
 
+	if(!candidate)
+		return
 
+	src.ckey = candidate.ckey
+	if(src.mind)
+		src.mind.assigned_role = "Grue"
+
+		to_chat(src, "<span class='danger'>You are a grue.</span>")
+		to_chat(src, "<span class='info'>Darkness is your ally, bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
+		to_chat(src, "<span class='info'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
 
 
 //Eating sentient beings.
@@ -616,10 +615,11 @@ mob/living/simple_animal/grue_egg
 		to_chat(clicked_on, "<span class='danger'>You have been eaten by a grue.</span>")
 		clicked_on.gib()
 
-		playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
+//		playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 
 		//Upgrade the grue's stats as it feeds
 		if(clicked_on.mind) //must have a mind to power up the grue
+			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++
 			eatencharge++
 			speed=max(0.2,speed*0.8) //speed cap of 0.2
@@ -653,46 +653,38 @@ mob/living/simple_animal/grue_egg
 
 
 
-//Procs for grabbing players.
-/mob/living/simple_animal/hostile/grue/proc/request_player()
-	var/list/candidates=list()
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_GRUE, poll="Would you like to become a grue?"))
-		if(!G.client)
-			//testing("Client of [G] inexistent")
-			continue
-
-		//#warn Uncomment me.
-		/*if(G.client.holder)
-			//testing("Client of [G] is admin.")
-			continue*/
-
-		if(isantagbanned(G))
-			//testing("[G] is jobbanned.")
-			continue
-
-		candidates += G
-
-	if(!candidates.len)
-		//message_admins("Unable to find a mind for [src.name]")
-		return 0
-
-	shuffle(candidates)
-	for(var/mob/i in candidates)
-		if(!i || !i.client)
-			continue //Dont bother removing them from the list since we only grab one grue at a time
-		return i
-
-	return 0
 
 
 
-
-//Ventcrawling, only for gruespawn
-/mob/living/simple_animal/hostile/grue/gruespawn/verb/ventcrawl()
+//Ventcrawling and hiding, only for gruespawn
+/mob/living/simple_animal/hostile/grue/verb/ventcrawl()
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Object"
-	var/pipe = start_ventcrawl()
-	if(pipe)
-		handle_ventcrawl(pipe)
+	if(lifestage==1)
+		var/pipe = start_ventcrawl()
+		if(pipe)
+			handle_ventcrawl(pipe)
+	else
+		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
 
+/mob/living/simple_animal/hostile/grue/verb/hide()
+	set name = "Hide"
+	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
+	set category = "Object"
+
+	if(lifestage==1)
+		if(isUnconscious())
+			return
+
+		if (locked_to && istype(locked_to, /obj/item/critter_cage))
+			return
+
+		if (plane != HIDING_MOB_PLANE)
+			plane = HIDING_MOB_PLANE
+			to_chat(src, "<span class='notice'>You are now hiding.</span>")
+		else
+			plane = MOB_PLANE
+			to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
+	else
+		to_chat(src, "<span class='notice'>You are too big to do that.</span>")

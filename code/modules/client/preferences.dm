@@ -28,6 +28,7 @@ var/global/list/special_roles = list(
 	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
+	ROLE_GRUE		= 1,
 )
 
 /var/list/antag_roles = list(
@@ -50,6 +51,7 @@ var/global/list/special_roles = list(
 	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
+	ROLE_GRUE		= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -80,6 +82,7 @@ var/list/role_wiki=list(
 	NINJA					= "Space_Ninja",
 	ROLE_MINOR				= "Minor_Roles",
 	ROLE_PRISONER			= "Minor_Roles",
+	ROLE_GRUE				= "Grue",
 )
 
 var/list/special_popup_text2num = list(
