@@ -178,55 +178,37 @@
 	item_state = "byond"
 	storage_slots = 1 //not very useful for storage
 	foldable = /obj/item/trash/byond_box //no free cardboard
-
-/obj/item/weapon/storage/box/byond/New()
-	..()
-	var/obj/item/gibsmedat = pick(
-		/obj/item/weapon/thermometer/byond,
-		/obj/item/clothing/accessory/medal/byond,
-		/obj/item/toy/syndicateballoon/byondballoon,
+	items_to_spawn = list(
+		list(
+			/obj/item/weapon/thermometer/byond,
+			/obj/item/clothing/accessory/medal/byond,
+			/obj/item/toy/syndicateballoon/byondballoon,
+		)
 	)
-	new gibsmedat(src)
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
 	desc = "A box containing white latex gloves. gloves. gloves."
 	icon_state = "latex"
-
-/obj/item/weapon/storage/box/gloves/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/clothing/gloves/latex(src)
+	items_to_spawn = list(/obj/item/clothing/gloves/latex = BOX_SPACE)
 
 /obj/item/weapon/storage/box/bgloves
 	name = "box of black gloves"
 	desc = "A box containing black gloves."
 	icon_state = "bgloves"
-
-/obj/item/weapon/storage/box/bgloves/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/clothing/gloves/black(src)
+	items_to_spawn = list(/obj/item/clothing/gloves/black = BOX_SPACE)
 
 /obj/item/weapon/storage/box/sunglasses
 	name = "box of sunglasses"
 	desc = "A box containing sunglasses."
 	icon_state = "sunglass"
-
-/obj/item/weapon/storage/box/sunglasses/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/clothing/glasses/sunglasses(src)
+	items_to_spawn = list(/obj/item/clothing/glasses/sunglasses = BOX_SPACE)
 
 /obj/item/weapon/storage/box/masks
 	name = "sterile masks"
 	desc = "This box contains sterile masks."
 	icon_state = "sterile"
-
-/obj/item/weapon/storage/box/masks/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/clothing/mask/surgical(src)
+	items_to_spawn = list(/obj/item/clothing/mask/surgical = BOX_SPACE)
 
 
 /obj/item/weapon/storage/box/syringes
@@ -234,134 +216,85 @@
 	desc = "A box containing syringes. A reminder label warns of syringes becoming potential biohazards when not properly sanitized."
 	icon_state = "syringe"
 	item_state = "syringe"
-
-/obj/item/weapon/storage/box/syringes/New()
-	..()
-	for(var/i = 1 to 6)
-		new /obj/item/weapon/reagent_containers/syringe(src)
-	new /obj/item/weapon/reagent_containers/syringe/giant(src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/syringe = 6,
+		/obj/item/weapon/reagent_containers/syringe/giant,
+	)
 
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
 	icon_state = "beaker"
 	item_state = "beaker"
-
-/obj/item/weapon/storage/box/beakers/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/glass/beaker(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/glass/beaker = BOX_SPACE)
 
 /obj/item/weapon/storage/box/injectors
 	name = "\improper DNA injectors"
 	desc = "This box contains injectors, it seems."
 	icon_state = "box_injector"
-
-/obj/item/weapon/storage/box/injectors/New()
-	..()
-	for(var/i = 1 to 3)
-		new /obj/item/weapon/dnainjector/nofail/h2m(src)
-	for(var/i = 1 to 3)
-		new /obj/item/weapon/dnainjector/nofail/m2h(src)
+	items_to_spawn = list(
+		/obj/item/weapon/dnainjector/nofail/h2m = 3,
+		/obj/item/weapon/dnainjector/nofail/m2h = 3,
+	)
 
 /obj/item/weapon/storage/box/blanks
 	name = "box of blank shells"
 	desc = "It has a picture of a gun and several warning symbols on the front."
-
-/obj/item/weapon/storage/box/blanks/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/ammo_casing/shotgun/blank(src)
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/blank = BOX_SPACE)
 
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
 	desc = "<FONT color=red><B>WARNING: Do not use without reading these precautions!</B></FONT>\n<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>\nThe chemicals contained in these devices have been tuned for maximal effectiveness and due to\nextreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN\nFLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.\n\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative\n\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per\n\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered\n\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>\nSOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.\n\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.\nSTUN WARNING: If the intended or unintended target is too close to detonation the resulting sound\n\tand flash have been known to cause extreme sensory overload resulting in temporary\n\tincapacitation.\n<B>DO NOT USE CONTINUALLY</B>\nOperating Directions:\n\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>\n\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>\n\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>\n\t-<B>Never prime another grenade until after the first is detonated</B>\nNote: Usage of this pyrotechnic device without authorization is an extreme offense and can\nresult in severe punishment upwards of <B>10 years in prison per use</B>.\n\nDefault 3 second wait till from prime to detonation. This can be switched with a screwdriver\nto 10 seconds.\n\nCopyright of Nanotrasen Industries- Military Armnaments Division\nThis device was created by Nanotrasen Labs a member of the Expert Advisor Corporation"
 	icon_state = "flashbang"
 	item_state = "flashbang"
-
-/obj/item/weapon/storage/box/flashbangs/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/flashbang(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/flashbang = BOX_SPACE)
 		
 /obj/item/weapon/storage/box/teargas
 	name = "box of teargas grenades (WARNING)"
 	desc = "<FONT color=red><B>WARNING: Do not use without reading these precautions!</B></FONT>\n<B>WARNING: These devices can expose you to chemicals including Lead Salts and Hexavalent Chromium, which are known to the Republic of New California to cause cancer, and Lead Salts, which are known to the Republic of New California to cause birth defects and other reproductive harm.</B>\nThe Tear-Gas™ Grenade is a high volume, continuous discharge grenade. Tear-Gas™ is discharged through four (4) gas ports located on top of the canister and one (1) located on the bottom. It is similar in size to the typical Flash-Bang™ Grenade.\nThe Tear-Gas™ Grenade was designed for training, but may also be used in operations. The Tear-Gas™ Grenade offers the same approximate stunning time as the Flash-Bang™ Grenade. The similar stunning times may make it the appropriate choice for training or simulation deployment of chemical agent canisters. The Tear-Gas™ formulation is considered to be less toxic than Chloral Hydrate (chloral) smoke. The Tear-Gas™ Grenade emits a very red smoke.\nIn operations, it can be utilized as a carrying agent (multiplier) for Flash-Bang™ Grenades or other stunning munitions, or for concealing the movement of security personnel. It may also be used as a distraction to focus attention away from other activities. The device should be deployed utilizing wind advantage.\nIt should NOT be deployed onto rooftops, in crawl spaces, or indoors due to its fire-producing capability. Hand throw or launch. Launching of grenades will provide deploying officers additional standoff situations.\n<B>WARNING: THIS PRODUCT IS TO BE USED ONLY BY AUTHORIZED AND TRAINED LAW ENFORCEMENT, CORRECTIONS, OR MILITARY PERSONNEL. THIS PRODUCT MAY CAUSE SERIOUS INJURY OR DEATH TO YOU OR OTHERS. THIS PRODUCT MAY CAUSE SERIOUS DAMAGE TO PROPERTY. HANDLE, STORE AND USE WITH EXTREME CARE AND CAUTION. USE ONLY AS INSTRUCTED.</B>"
 	icon_state = "flashbang"
 	item_state = "flashbang"
-
-/obj/item/weapon/storage/box/teargas/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/chem_grenade/teargas(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/chem_grenade/teargas = BOX_SPACE)
 
 /obj/item/weapon/storage/box/syndigrenades
 	name = "box of C28E pipe bombs (WARNING)"
 	desc = "A box containing the cream of the crop of throwable syndicate explosive devices. There's instructions on the back explaining that you need to pull the pin and throw it, and a warning that forgetting either step could lead to bad results. A good thing to tell to demolition operatives."
 	icon_state = "syndienade"
-
-/obj/item/weapon/storage/box/syndigrenades/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/syndigrenade(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/syndigrenade = BOX_SPACE)
 
 /obj/item/weapon/storage/box/syndisyringes
 	name = "syndicate mix syringes (WARNING)"
 	desc = "A box containing syndicate mix syringes. A clear warning label instructs that they should not be used on your teammates. Ranged executions galore."
 	icon_state = "syndisyringe"
-
-/obj/item/weapon/storage/box/syndisyringes/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/syringe/syndi(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/syringe/syndi = BOX_SPACE)
 
 /obj/item/weapon/storage/box/smokebombs
 	name = "box of smokebombs"
 	icon_state = "smokebomb"
 	item_state = "flashbang"
-
-/obj/item/weapon/storage/box/smokebombs/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/smokebomb(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/smokebomb = BOX_SPACE)
 
 /obj/item/weapon/storage/box/stickybombs
 	name = "box of stickybombs"
 	icon_state = "stickybomb"
-
-/obj/item/weapon/storage/box/stickybombs/New()
-	..()
-	for(var/i = 1 to 24)
-		new /obj/item/stickybomb(src)
+	items_to_spawn = list(/obj/item/stickybomb = 24)
 
 /obj/item/weapon/storage/box/emps
 	name = "emp grenades"
 	desc = "A box containing EMP grenades."
 	icon_state = "flashbang"
-
-/obj/item/weapon/storage/box/emps/New()
-	..()
-	for(var/i = 1 to 5)
-		new /obj/item/weapon/grenade/empgrenade(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/empgrenade = 5)
 
 /obj/item/weapon/storage/box/wind
 	name = "wind grenades"
 	desc = "A box containing wind grenades."
 	icon_state = "flashbang"
-
-/obj/item/weapon/storage/box/wind/New()
-	..()
-	for(var/i = 1 to 3)
-		new /obj/item/weapon/grenade/chem_grenade/wind(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/chem_grenade/wind = 3)
 
 /obj/item/weapon/storage/box/foam
 	name = "metal foam grenades"
 	desc = "A box containing metal foam grenades."
 	icon_state = "metalfoam"
-
-/obj/item/weapon/storage/box/foam/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/chem_grenade/metalfoam = BOX_SPACE)
 
 /obj/item/weapon/storage/box/boxen
 	name = "boxen ranching kit"
@@ -410,64 +343,35 @@
 	name = "bolas box"
 	desc = "Box of bolases. Make sure to take them out before throwing them."
 	icon_state = "bolas"
-
-/obj/item/weapon/storage/box/bolas/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/legcuffs/bolas(src)
-
+	items_to_spawn = list(/obj/item/weapon/legcuffs/bolas = BOX_SPACE)
 
 /obj/item/weapon/storage/box/rxglasses
 	name = "prescription glasses"
 	desc = "This box contains nerd glasses."
 	icon_state = "glasses"
-
-/obj/item/weapon/storage/box/rxglasses/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/clothing/glasses/regular(src)
+	items_to_spawn = list(/obj/item/clothing/glasses/regular = BOX_SPACE)
 
 /obj/item/weapon/storage/box/drinkingglasses
 	name = "box of drinking glasses"
 	desc = "It has a picture of drinking glasses on it."
-
-/obj/item/weapon/storage/box/drinkingglasses/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = BOX_SPACE)
 
 /obj/item/weapon/storage/box/cdeathalarm_kit
 	name = "Death Alarm Kit"
 	desc = "Box of stuff used to implant death alarms."
 	icon_state = "implant"
 	item_state = "beaker"
-
-/obj/item/weapon/storage/box/cdeathalarm_kit/New()
-	..()
-	new /obj/item/weapon/implanter(src)
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/implantcase/death_alarm(src)
+	items_to_spawn = list(/obj/item/weapon/implantcase/death_alarm = BOX_SPACE)
 
 /obj/item/weapon/storage/box/condimentbottles
 	name = "box of condiment bottles"
 	desc = "It has a large ketchup smear on it."
-
-/obj/item/weapon/storage/box/condimentbottles/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/food/condiment(src)
-
-
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/condiment = BOX_SPACE)
 
 /obj/item/weapon/storage/box/cups
 	name = "box of paper cups"
 	desc = "It has a picture of a paper cup on the front."
-
-/obj/item/weapon/storage/box/cups/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup(src)
-
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/sillycup = BOX_SPACE)
 
 /obj/item/weapon/storage/box/donkpockets
 	name = "box of donk-pockets"
@@ -483,7 +387,6 @@
 
 /obj/item/weapon/storage/box/donkpockets/random_amount/New()
 	pocket_amount = rand(1,6)
-
 	..()
 
 /obj/item/weapon/storage/box/monkeycubes
@@ -492,90 +395,52 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "monkeycubebox"
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube")
-
-/obj/item/weapon/storage/box/monkeycubes/New()
-	..()
-	if(src.type == /obj/item/weapon/storage/box/monkeycubes)
-		for(var/i = 1; i <= 6; i++)
-			new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/farwacubes
 	name = "farwa cube box"
 	desc = "Drymate brand farwa cubes, shipped from Ahdomai. Just add water!"
-
-/obj/item/weapon/storage/box/monkeycubes/farwacubes/New()
-	..()
-	for(var/i = 1; i <= 5; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/farwacube(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/farwacube = 5)
 
 /obj/item/weapon/storage/box/monkeycubes/stokcubes
 	name = "stok cube box"
 	desc = "Drymate brand stok cubes, shipped from Moghes. Just add water!"
-
-/obj/item/weapon/storage/box/monkeycubes/stokcubes/New()
-	..()
-	for(var/i = 1; i <= 5; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/stokcube(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/stokcube = 5)
 
 /obj/item/weapon/storage/box/monkeycubes/neaeracubes
 	name = "neaera cube box"
 	desc = "Drymate brand neaera cubes, shipped from Jargon 4. Just add water!"
-
-/obj/item/weapon/storage/box/monkeycubes/neaeracubes/New()
-	..()
-	for(var/i = 1; i <= 5; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube = 5)
 
 /obj/item/weapon/storage/box/monkeycubes/mousecubes
 	name = "lab mouse cube box"
 	desc = "Drymate brand laboratory mouse cubes, shipped from Yensid. Just add water!"
 	icon_state = "mousecubebox"
-
-/obj/item/weapon/storage/box/monkeycubes/mousecubes/New()
-	..()
-	for(var/i = 1; i <= 5; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube = 5)
 
 /obj/item/weapon/storage/box/monkeycubes/spacecarpcube
 	name = "space carp baby cube box"
 	desc = "Drymate brand space carp baby cubes, shipped from F1SH-1NG. Just add water!"
 	icon_state = "spacecarpcubebox"
-
-/obj/item/weapon/storage/box/monkeycubes/spacecarpcube/New()
-	..()
-	for(var/i = 1; i <= 5; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube = 5)
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"
 	desc = "Contains blank identification cards."
 	icon_state = "id"
-
-/obj/item/weapon/storage/box/ids/New()
-	..()
-	for(var/i = 0, i < 7, i++)
-		new /obj/item/weapon/card/id(src)
+	items_to_spawn = list(/obj/item/weapon/card/id = BOX_SPACE)
 
 /obj/item/weapon/storage/box/seccarts
 	name = "Spare R.O.B.U.S.T. Cartridges"
 	desc = "A box full of R.O.B.U.S.T. Cartridges, used by Security."
 	icon_state = "pda"
-
-/obj/item/weapon/storage/box/seccarts/New()
-	..()
-	for(var/i=0,i<7,i++)
-		new /obj/item/weapon/cartridge/security(src)
-
+	items_to_spawn = list(/obj/item/weapon/cartridge/security = BOX_SPACE)
 
 /obj/item/weapon/storage/box/handcuffs
 	name = "spare handcuffs"
 	desc = "A box full of handcuffs."
 	icon_state = "handcuff"
-
-/obj/item/weapon/storage/box/handcuffs/New()
-	..()
-	for(var/i=0,i<7,i++)
-		new /obj/item/weapon/handcuffs(src)
+	items_to_spawn = list(/obj/item/weapon/handcuffs = BOX_SPACE)
 
 /obj/item/weapon/storage/box/large/securitygear
 	name = "security essentials"
