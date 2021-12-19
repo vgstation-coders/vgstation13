@@ -56,110 +56,82 @@
 	item_state = "Dpacket"
 	w_class = W_CLASS_TINY
 	foldable = null
-
-/obj/item/weapon/storage/box/surveillance/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	for(var/i = 1 to 5)
-		new /obj/item/device/camera_bug(src)
+	items_to_spawn = list(/obj/item/device/camera_bug = 5)
 
 /obj/item/weapon/storage/box/survival
 	name = "survival equipment box"
 	desc = "Makes braving the hazards of space a little bit easier."
 	icon_state = "box_emergency"
 	item_state = "box_emergency"
-
-/obj/item/weapon/storage/box/survival/New()
-	..()
-	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/weapon/tank/emergency_oxygen(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	items_to_spawn = list(
+		/obj/item/clothing/mask/breath,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+	)
 
 /obj/item/weapon/storage/box/survival/vox
 	icon_state = "box_vox"
 	item_state = "box_vox"
-
-/obj/item/weapon/storage/box/survival/vox/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	new /obj/item/clothing/mask/breath/vox(src)
-	new /obj/item/weapon/tank/emergency_nitrogen(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	items_to_spawn = list(
+		/obj/item/clothing/mask/breath/vox,
+		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+	)
 
 /obj/item/weapon/storage/box/survival/plasmaman
 	icon_state = "box_plasmaman"
 	item_state = "box_plasmaman"
-
-/obj/item/weapon/storage/box/survival/plasmaman/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/weapon/tank/emergency_plasma(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	items_to_spawn = list(
+		/obj/item/clothing/mask/breath,
+		/obj/item/weapon/tank/emergency_plasma,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+	)
 
 /obj/item/weapon/storage/box/survival/engineer
 	icon_state = "box_eva"
 	item_state = "box_eva"
-
-/obj/item/weapon/storage/box/survival/engineer/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	items_to_spawn = list(
+		/obj/item/clothing/mask/breath,
+		/obj/item/weapon/tank/emergency_oxygen/engi,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+	)
 
 /obj/item/weapon/storage/box/survival/engineer/vox
 	icon_state = "box_eva"
 	item_state = "box_eva"
-
-/obj/item/weapon/storage/box/survival/engineer/vox/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	new /obj/item/clothing/mask/breath/vox(src)
-	new /obj/item/weapon/tank/emergency_nitrogen/engi(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	items_to_spawn = list(
+		/obj/item/clothing/mask/breath/vox,
+		/obj/item/weapon/tank/emergency_nitrogen/engi,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+	)
 
 /obj/item/weapon/storage/box/survival/engineer/plasmaman
 	icon_state = "box_plasmaman"
 	item_state = "box_plasmaman"
-
-/obj/item/weapon/storage/box/survival/engineer/plasmaman/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/weapon/tank/emergency_plasma/engi(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	items_to_spawn = list(
+		/obj/item/clothing/mask/breath,
+		/obj/item/weapon/tank/emergency_plasma/engi,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+	)
 
 /obj/item/weapon/storage/box/survival/ert
 	icon_state = "box_ERT"
-
-/obj/item/weapon/storage/box/survival/ert/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	new /obj/item/clothing/mask/gas/ert(src)
-	new /obj/item/weapon/tank/emergency_oxygen/double(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	new /obj/item/ammo_storage/magazine/c45(src)
-	new /obj/item/ammo_storage/magazine/c45/rubber(src)
+	items_to_spawn = list(
+		/obj/item/clothing/mask/gas/ert,
+		/obj/item/weapon/tank/emergency_oxygen/double,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+		/obj/item/ammo_storage/magazine/c45,
+		/obj/item/ammo_storage/magazine/c45/rubber,
+	)
 
 /obj/item/weapon/storage/box/survival/nuke
 	icon_state = "box_nuke"
-
-/obj/item/weapon/storage/box/survival/nuke/New()
-	..()
-	for(var/atom/A in src)
-		qdel(A)
-	new /obj/item/clothing/mask/gas/syndicate(src)
-	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	new /obj/item/weapon/reagent_containers/pill/cyanide(src) //For those who hate fun
-	new /obj/item/weapon/reagent_containers/pill/laststand(src) //HOOOOOO HOOHOHOHOHOHO - N3X
+	items_to_spawn = list(
+		/obj/item/clothing/mask/gas/syndicate,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+		/obj/item/weapon/reagent_containers/pill/cyanide, //For those who hate fun
+		/obj/item/weapon/reagent_containers/pill/laststand, //HOOOOOO HOOHOHOHOHOHO - N3X
+	)
 
 /obj/item/weapon/storage/box/survival/nuke/vox/New()
 	. = ..()
