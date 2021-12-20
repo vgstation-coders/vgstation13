@@ -424,11 +424,8 @@
 	return ..()
 
 /obj/item/weapon/card/id/syndicate/proc/can_use(mob/user)
-	if(user && ismob(user))
-		if(user.incapacitated())
-			return 0
-		if(loc == user)
-			return 1
+	if(ismob(user) && !user.incapacitated() && loc == user)
+		return 1
 	return 0
 
 /obj/item/weapon/card/id/syndicate/commando
