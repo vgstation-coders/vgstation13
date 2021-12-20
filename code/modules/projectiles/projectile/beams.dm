@@ -494,10 +494,10 @@ var/list/beam_master = list()
 			var/mob/living/carbon/human/H = M
 			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (therefore the ones that actually have animations)
+				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
 					return 0
 				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -512,7 +512,7 @@ var/list/beam_master = list()
 					qdel(H)
 
 				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -527,7 +527,7 @@ var/list/beam_master = list()
 					qdel(H)
 
 				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -542,11 +542,11 @@ var/list/beam_master = list()
 					qdel(H)
 
 				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+						head_organ.droplimb(1,1) // Their body melts, but the head flies off
 						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
 					else
 						H.drop_all()
@@ -555,8 +555,6 @@ var/list/beam_master = list()
 
 					new /obj/effect/decal/cleanable/ash(get_turf(target))
 					qdel(H)
-				else
-					return 0
 		else
 			return 1
 
@@ -573,10 +571,10 @@ var/list/beam_master = list()
 			var/mob/living/carbon/human/H = M
 			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (therefore the ones that actually have animations)
+				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
 					return 0
 				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -591,7 +589,7 @@ var/list/beam_master = list()
 					qdel(H)
 
 				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -606,7 +604,7 @@ var/list/beam_master = list()
 					qdel(H)
 
 				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -621,7 +619,7 @@ var/list/beam_master = list()
 					qdel(H)
 
 				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates!</span>")
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -634,8 +632,6 @@ var/list/beam_master = list()
 
 					new /obj/effect/decal/cleanable/ash(get_turf(target))
 					qdel(H)
-				else
-					return 0
 		else
 			return 1
 
