@@ -800,7 +800,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		for(var/implant in implants)
 			qdel(implant)
 
-		//Remove damage statuses from limb
 		src.status &= ~ORGAN_BROKEN
 		src.status &= ~ORGAN_BLEEDING
 		src.status &= ~ORGAN_SPLINTED
