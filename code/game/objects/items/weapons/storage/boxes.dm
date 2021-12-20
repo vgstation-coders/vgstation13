@@ -299,45 +299,40 @@
 /obj/item/weapon/storage/box/boxen
 	name = "boxen ranching kit"
 	desc = "Everything you need to engage in your own horrific flesh cloning."
-
-/obj/item/weapon/storage/box/boxen/New()
-	..()
-	new /obj/item/weapon/circuitboard/box_cloner(src)
-	new /obj/item/weapon/reagent_containers/food/snacks/meat/box(src)
-	new /obj/item/weapon/reagent_containers/food/snacks/meat/box(src)
+	items_to_spawn = list(
+		/obj/item/weapon/circuitboard/box_cloner,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/box,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/box,
+	)
 
 /obj/item/weapon/storage/box/trackimp
 	name = "tracking implant kit"
 	desc = "Box full of scum-bag tracking utensils."
 	icon_state = "implant"
-
-/obj/item/weapon/storage/box/trackimp/New()
-	..()
-	for(var/i = 1 to 4)
-		new /obj/item/weapon/implantcase/tracking(src)
-	new /obj/item/weapon/implanter(src)
-	new /obj/item/weapon/implantpad(src)
-	new /obj/item/weapon/locator(src)
-	new /obj/item/device/locator_holomap(src)
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/tracking = 4.
+		/obj/item/weapon/implanter,
+		/obj/item/weapon/implantpad,
+		/obj/item/weapon/locator,
+		/obj/item/device/locator_holomap,
+	)
 
 /obj/item/weapon/storage/box/chemimp
 	name = "chemical implant kit"
 	desc = "Box of stuff used to implant chemicals."
 	icon_state = "implant"
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/chem = 5,
+		/obj/item/weapon/implanter,
+		/obj/item/weapon/implantpad,
+	)
 
-/obj/item/weapon/storage/box/chemimp/New()
-	..()
-	for(var/i = 1 to 5)
-		new /obj/item/weapon/implantcase/chem(src)
-	new /obj/item/weapon/implanter(src)
-	new /obj/item/weapon/implantpad(src)
-
-/obj/item/weapon/storage/box/remeximp/New()
-	..()
-	for(var/i = 1 to 5)
-		new /obj/item/weapon/implantcase/remote(src)
-	new /obj/item/weapon/implanter(src)
-	new /obj/item/weapon/implantpad(src)
+/obj/item/weapon/storage/box/chemimp/remeximp
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/remote = 5,
+		/obj/item/weapon/implanter,
+		/obj/item/weapon/implantpad,
+	)
 
 /obj/item/weapon/storage/box/bolas
 	name = "bolas box"
@@ -802,16 +797,15 @@
 	desc = "A trendy and expensive 'DIY' soda that you have to mix yourself. Tastes like a science fair experiment."
 	icon_state = "box_DIY_soda"
 	vending_cat = "carbonated drinks"
-
-/obj/item/weapon/storage/box/diy_soda/New()
-	..()
-	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater(src)
-	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon(src)
-	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox(src)
-	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime(src)
-	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater(src)
-	new /obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer(src)
-	new /obj/item/weapon/paper/diy_soda(src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater,
+		/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon,
+		/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox,
+		/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime,
+		/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater,
+		/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer,
+		/obj/item/weapon/paper/diy_soda,
+	)
 
 
 //Smart boxes.
