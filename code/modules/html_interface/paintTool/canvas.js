@@ -4,7 +4,7 @@
  */
 
 //--------------------------------
-// Tab selector
+// Buttons, tabs, UI and misc.
 //--------------------------------
 var panelIdList = ["infoPanel", "templatePanel", "exportPanel"];
 function panelSelect(panelId) {
@@ -36,6 +36,12 @@ function toggleClass(id, className) {
 function toggleHelp(helpButton, helpPanel) {
 	toggleClass(helpButton, "linkOn");
 	toggleClass(helpPanel, "hidden");
+}
+
+function toggleGrid() {
+	grid_enabled = !grid_enabled;
+	display_bitmap();
+	toggleClass("grid_button", "linkOn");
 }
 
 //--------------------------------
@@ -320,6 +326,8 @@ function loadTemplate(template) {
 // Exports the current bitmap as a template
 function exportTemplate() {
 	var output = document.getElementById("export-text");
+	
+	// Build basic template
 	var template = {w: width, h: height, rgn: [], bmp: []};
 	var colors = [];
 	for (pixel in bitmap) {
