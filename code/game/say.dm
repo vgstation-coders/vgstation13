@@ -102,9 +102,11 @@ var/global/lastDecTalkUse = 0
 /atom/movable/proc/render_speech(var/datum/speech/speech)
 	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
 	var/freqpart = ""
+	var/colorpart
 	if(speech.frequency)
 		freqpart = " \[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
+		colorpart = get_radio_color(speech.frequency)
 	var/pooled=0
 	var/datum/speech/filtered_speech
 	if(speech.language)
@@ -125,7 +127,7 @@ var/global/lastDecTalkUse = 0
 	var/enc_wrapclass=jointext(filtered_speech.wrapper_classes, ", ")
 	say_testing(src, "render_speech() - wrapper_classes = \[[enc_wrapclass]\]")
 #endif
-	// Below, but formatted nicely.
+	// Below, but formatted nicely, and with the optional color override.
 	/*
 	return {"
 		<span class='[filtered_speech.render_wrapper_classes()]'>
@@ -137,7 +139,21 @@ var/global/lastDecTalkUse = 0
 			[filtered_speech.render_message()]
 		</span>"}
 	*/
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
+	// All this font_color spam is annoying but it's the only way to work it right.
+	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>"
+	if(colorpart)
+		. += "<font color = [colorpart]>"
+		say_testing(src, "render_speech() - colorpart = \[[colorpart]\]")
+	. += "[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]"
+	if(colorpart)
+		. += "</font color>"
+	. += "</span>"
+	if(colorpart)
+		. += "<font color = [colorpart]>"
+	. += " [filtered_speech.render_message()]"
+	if(colorpart)
+		. += "</font color>"
+	. += "</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
 		qdel(filtered_speech)
@@ -233,6 +249,11 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	if(returntext)
 		return returntext
 	return "radio"
+
+/proc/get_radio_color(freq)
+	var/returntext = freqtocolor["[freq]"]
+	if(returntext)
+		return returntext
 
 /proc/get_radio_name(freq)
 	var/returntext = radiochannelsreverse["[freq]"]
