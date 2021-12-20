@@ -360,7 +360,7 @@
 // Clown planet WMD storage
 /obj/item/weapon/storage/secure/safe/clown
 	name="WMD Storage"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/pie == 10)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/pie = 10)
 
 /obj/item/weapon/storage/secure/safe/HoS
 	//items_to_spawn = list(/obj/item/weapon/storage/lockbox/clusterbang) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)
