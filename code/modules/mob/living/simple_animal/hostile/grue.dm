@@ -18,16 +18,13 @@
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
 	force_airlock_time=100 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 
-	//eyesight related stuff
-	see_in_dark = 8
-
 	//VARS
 	var/isgrue=1
 	var/shadowpower = 0											 //shadow power absorbed
 	var/maxshadowpower = 1000									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
 	var/ismoulting = 0, //currently moulting (1=is a chrysalis)
-	var/moulttime = 60 //time required to moult to a new form
+	var/moulttime = 30 //time required to moult to a new form
 	var/moulttimer = 100 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
 
@@ -48,21 +45,26 @@
 	var/dark_dim_light=0 //darkness level currently the grue is currently exposed to, 0=nice and dark, 1=passably dim, 2=too bright
 	var/busy=0 //busy laying an egg
 
+
+	//eyesight related stuff
+	see_in_dark = 8
 	//keeping this here for later color matrix testing
-	var/a_blend_add_test=0
-	var/a_matrix_testing_override = TRUE
+	var/a_use_alpha=1
+	var/a_blend_add_test=255
+
+	var/a_matrix_testing_override = 0 //not used for now
 	var/a_11 = 1
 	var/a_12 = 0
 	var/a_13 = 0
-	var/a_14 = 0
-	var/a_21 = 0
-	var/a_22 = 1
-	var/a_23 = 0
-	var/a_24 = 0
-	var/a_31 = 0
-	var/a_32 = 0
-	var/a_33 = 1
-	var/a_34 = 0
+	var/a_14 = 1
+	var/a_21 = -1
+	var/a_22 = 0.2
+	var/a_23 = 0.2
+	var/a_24 = 1
+	var/a_31 = -1
+	var/a_32 = 0.2
+	var/a_33 = 0.2
+	var/a_34 = 1
 	var/a_41 = 0
 	var/a_42 = 0
 	var/a_43 = 0
@@ -71,6 +73,20 @@
 	var/a_52 = 0
 	var/a_53 = 0
 	var/a_54 = 0
+
+	var/b_matrix_testing_override=0 //not used for now
+	var/b_11 = 1
+	var/b_12 = 0
+	var/b_13 = 0
+	var/b_21 = 0
+	var/b_22 = 1
+	var/b_23 = 0
+	var/b_31 = 0
+	var/b_32 = 0
+	var/b_33 = 1
+	var/b_41 = 0
+	var/b_42 = 0
+	var/b_43 = 0
 
 /mob/living/simple_animal/hostile/grue/regular_hud_updates()
 	..()
@@ -121,7 +137,7 @@
 			dark_dim_light=2
 
 			to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
-			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
+			playsound(src, 'sound/items/flare_on.ogg', 50, 1)
 			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage by lifestage**(1/3) to avoid juveniles and adults from becoming too tanky to light
 		else
 			dark_dim_light=1
@@ -161,7 +177,7 @@
 		melee_damage_upper = 5
 		attacktext = "bites"
 		maxHealth=50
-		moultcost=100
+		moultcost=250
 		burnmalus=1
 		environment_smash_flags = 0
 		attack_sound = 'sound/weapons/bite.ogg'
@@ -203,194 +219,50 @@
 		pass_flags = 0
 	health=tempHealth*maxHealth
 
-
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
 
 	if(client)
-		if(client.darkness_planemaster)
+		if(client.darkness_planemaster&&a_use_alpha)
 			client.darkness_planemaster.blend_mode = BLEND_ADD
 			client.darkness_planemaster.alpha = a_blend_add_test
 		client.color = list(
-					1,0.25,0.25,0.25,
-					0,0,0,0,
-	 				0,0,0,0,
+					1,0,0,1,
+					-1,0.2,0.2,1,
+	 				-1,0.2,0.2,1,
 		 			0,0,0,1,
 		 			0,0,0,0)
 
-		if(a_matrix_testing_override)
+		if(a_matrix_testing_override) //not used for now
 			client.color = list(a_11,a_12,a_13,a_14,
 								a_21,a_22,a_23,a_24,
 		 						a_31,a_32,a_33,a_34,
 			 					a_41,a_42,a_43,a_44,
 			 					a_51,a_52,a_53,a_54)
-
-
+		else if(b_matrix_testing_override) //not used for now
+			colourmatrix = list(b_11, b_12, b_22,
+						 b_21,b_22, b_23,
+						 b_31, b_32, b_33,
+						 b_41, b_42, b_43)
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
 	if(statpanel("Status"))
 //		stat(null, "Intent: [a_intent]")
 //		stat(null, "Move Mode: [m_intent]")
+		if(ismoulting)
+			stat(null, "Moulting progress: [100*(1-moulttimer/moulttime)]%")
 		if(lifestage<3) //not needed for adults
 			stat(null, "Shadow power: [shadowpower]/[maxshadowpower]")
 		if (lifestage>=3)
-			stat(null,"Reproductive energy: [eatencharge]")
+			stat(null, "Reproductive energy: [eatencharge]")
 			stat(null, "Sentient life forms eaten: [eatencount]")
-
-
-
-
-
-
-
-
-
-
-//todo:
-
-
-//chg+add sound effects for egglaying, evolving, attacking, eating, light scalding (for both hatched and egg), etc
-
-//modify gruevision colors/bloom(no need alpha blend thing?, maybe less red?)
-//remove color testing code
-
-
-//add sound to general table smash
-//ability to smash stuff away like flares (kick code?/harm intent?) kick_act in code/game/objects/items.dm
-
-//tweak values (moult cost, moult time, health stuff, shadowpower stuff)
-//eating objectives
-
-//antag banned code?
-
-//deathgasp for chrysalis and for egg
-
-//directional sprites
-//ensure antag objectives even in midround spawn
-//fix/remove new_grueegg variable
-//admin make grue command
-//chrysalis death
-//unconscious while moulting/reduce view while moulting
-//moulting progress bar, etc
-//make moulting take less time but need more shadowpoer/balance this
-//progress messages while moulting
-
-//rearrange code block
-//remove comments
-//check oxygen/heat levels in antag spawn code
-
-//[TEST]make so egg cant move even when controlled
-//[TEST]moulting/chrysalis text
-//[TEST]warning about vulnerability/immobility
-//[TEST]spawns only in dark/maintenance?
-//[TEST]flesh out everything in setup.dm ala borers (but antag)
-//[TEST]dynamic rulesets?
-//[TEST] add antag role code ROLE_GRUE
-//[TEST] egg spills open/hatches text?
-//[TEST] egg hatching text
-//[TEST] egg hatching
-//[TEST] add living checks for egg recruiting/hatching
-//[TEST] kill egg after hatching
-//[TEST]basic instructive messages about being a grue, and also the life stages
-
-//[TEST] egg recruit ala borer
-
-//[DONE]change egg desc on death
-//[DONE] passtable/hiding as grue larva only?
-//[DONE]change attacksounds for lifestage
-//[DONE]move lifestage updates into new proc
-//[DONE] prevent AI grues from attacking grue eggs (faction?)
-//[DONE]make egg plane lower than humans so people can visually walk over it
-//[DONE]set grue size and such
-//[DONE]ability to walk on same tile as grue eggs without pushing them
-//[DONE] egglaying busy thing
-//[DONE] speaking/not/speaking/only being able to speak to other grues
-//[DONE] melee abilities and strength change with life stage
-//[DONE]greyscale filter or color effects or something?
-//[DONE]infrared/night-vision
-//[DONE]change capitalization on panel and elsewhere (UI light indicatior)
-//[DONE]remove shadowpower visuals when adult?
-//[DONE] egg sensitivity to light/smashing
-//[DONE] egg laying
-//[DONE]message to target when eaten "You have been eaten by a grue."
-//[DONE]check for sentient/had mind flag to give power after eating
-//[DONE]egg hatch sprite
-//[DONE]health gain scaling with eatencount
-//[DONE]avoid being able to hit self?
-//[DONE] smash walls and such with increased power?
-//[DONE] relevant upgrades from absorbing power
-//[DONE] dont have grueling/gruespawn names visible (just "grue")?
-//[DONE]set harm intent/clean up status panel
-//[DONE] rename death essence?
-//[DONE]egg killed by light sprite
-//[DONE] generalize door forcing code to add timer
-//[DONE] change to timer for pulling open door
-//[DONE]eating sentients by gibbing their corpse and absorbing power
-//[DONE]light damage via damage proc instead of directly?
-//[DONE]fix attack verbs on smashing stuff/self
-//[DONE]pull open doors in mature form ("You start forcing the airlock open.")
-//[DONE] lay eggs
-//[DONE]remove nullifier code
-//[DONE]evolve logic?
-//[DONE]cant move while moulting
-//[DONE]add moult state stuff and sprite changes,
-//[DONE]chrysalis sprite
-//[DONE]avoid moulting while in pipe (check for being out in the open)
-//[DONE]can't moult message
-//[DONE]get ventcrawl to work
-//[DONE]revoke ventcrawl on higher life stages
-
-//[OBS]announce grue spawn centcomm role?
-//[OBS]add lifestage initialization code on new/add to both dynamic rulsets code stuff
-
-//[NEXT VERSION]"cant moult under a table"
-//[NEXT VERSION]generalize grue light sensitivity params (and apply to role spawning code)
-//[NEXT VERSION]no growl/different sound on unsatisfying meal?
-//[NEXT VERSION] move eating updates into new proc
-//[NEXT VERSION] move new moult stat param procs into an update that's also called on New()
-//[NEXT VERSION] progressbars in different color
-//[NEXT VERSION]add butchery products/etc
-//[NEXT VERSION] change drones/screeches/syllables, not when juvenile, etc?
-//[NEXT VERSION]jumpscare and other sound effects
-//[NEXT VERSION]sprite additions while powering up via death essence
-//[NEXT VERSION]special names only visible for grues
-//[NEXT VERSION]render abilities invisible with life stage?
-//[NEXT VERSION]darkpower indicator?
-//[NEXT VERSION]eatencount indicator?
-//[NEXT VERSION]generalize power, powers costs, costs, power menu
-//[NEXT VERSION]animations, incl. egg_trigger
-//[NEXT VERSION]basic AI to avoid light and smash things and moult for npc grues
-//[NEXT VERSION]sprites for dead pupae (need blood color)?
-//[NEXT VERSION]add body part targeting etc for more focused attacks, and relevant text
-//[NEXT VERSION]ability UI+mirrored with panel like pulsedemon
-//[NEXT VERSION]more detailed messages about being a grue, and also the life stages, or maybe a menu
-//[NEXT VERSION]ui button to eat someone
-//[NEXT VERSION]eggs layable indicator
-//[NEXT VERSION] grue goo, blood, (color of) gibs, moulting goo, egg casing, meat, etc. (including effects)
-//[NEXT VERSION]add harm intents and such?
-
-//[NEED FEEDBACK]unable to hit grille/window as grue larva
-//[NEED FEEDBACK]dark field?
-//	but prevents shadowpower and health gain while using it?
-//[NEED FEEDBACK]not affected by atmos?
-//[NEED FEEDBACK]consume darkpower to block light?
-//[NEED FEEDBACK]smash machiney monitors and such?
-//[NEED FEEDBACK]weaker in light/stronger in dark?
-//[NEED FEEDBACK]invis in full dark?
-//[NEED FEEDBACK]able to push other mobs aside?
-//[NEED FEEDBACK]ability to pick up grue eggs. leaving behind casing/skin on the floor (or not)
-//[NEED FEEDBACK]turn off lamps etc?
-//[NEED FEEDBACK]can activate certain things like morgue tray and push light buttons
 
 /mob/living/simple_animal/hostile/grue/gruespawn
 	lifestage=1
 
 /mob/living/simple_animal/hostile/grue/grueling
 	lifestage=2
-
-
-
 
 //Moulting into more mature forms.
 /mob/living/simple_animal/hostile/grue/verb/moult()
@@ -455,7 +327,7 @@
 		stat=CONSCIOUS //wake up
 		ismoulting=0 //is no longer moulting
 		to_chat(src, "<span class='warning'>You finish moulting!</span>")
-		visible_message("<span class='warning'>The [src] shifts as it morphs into new form!</span>")
+		visible_message("<span class='warning'>The chrysalis shifts as it morphs into a grue!</span>")
 	else
 		return
 
@@ -505,17 +377,14 @@
 	if(eatencharge>=1)
 		busy=1
 		to_chat(src, "<span class='notice'>You start to push out an egg...</span>")
-		visible_message("<span class='warning'>The [src] tightens up...</span>")
+		visible_message("<span class='warning'>[src] tightens up...</span>")
 		if(do_after(src, src, 5 SECONDS))
 			to_chat(src, "<span class='notice'>You lay an egg.</span>")
-			visible_message("<span class='warning'>The [src] pushes out an egg!</span>")
+			visible_message("<span class='warning'>[src] pushes out an egg!</span>")
 			eatencharge--
-
 //			playsound(T, 'sound/effects/splat.ogg', 50, 1)
-
-
 			var/mob/living/simple_animal/grue_egg/new_grueegg = new(get_turf(src))
-			busy=0
+		busy=0
 
 	else
 		to_chat(src, "You need to feed more first.")
@@ -563,8 +432,8 @@
 		src.mind.assigned_role = "Grue"
 
 		to_chat(src, "<span class='danger'>You are a grue.</span>")
-		to_chat(src, "<span class='info'>Darkness is your ally, bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
-		to_chat(src, "<span class='info'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
+		to_chat(src, "<span class='danger'>Darkness is your ally, bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
+		to_chat(src, "<span class='danger'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
 
 
 //Eating sentient beings.
@@ -636,17 +505,17 @@
 //			src.set_light(8,-1*eatencount) //gains shadow aura opon eating someone
 			switch(eatencount)
 				if(3)
-					to_chat(src, "<span class='notice'>You feel power coursing through you! You feel strong enough to smash down most walls... but still hungry</span>")
+					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong enough to smash down most walls... but still hungry...</span>")
 					environment_smash_flags = environment_smash_flags | SMASH_WALLS
 				if(4)
-					to_chat(src, "<span class='notice'>You feel power coursing through you! You feel strong enough to smash down even reinforced walls... but still hungry</span>")
+					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong enough to smash down even reinforced walls... but still hungry...</span>")
 					environment_smash_flags = environment_smash_flags | SMASH_RWALLS
 				else
-					to_chat(src, "<span class='notice'>You feel power coursing through you! You feel stronger... but still hungry...</span>")
+					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel stronger... but still hungry...</span>")
 
 
 		else
-			to_chat(src, "<span class='notice'>That creature didn't quite satisfy your hunger.</span>")
+			to_chat(src, "<span class='notice'>That creature didn't quite satisfy your hunger...</span>")
 
 	else
 		return
