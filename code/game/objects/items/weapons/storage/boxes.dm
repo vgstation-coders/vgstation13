@@ -310,7 +310,7 @@
 	desc = "Box full of scum-bag tracking utensils."
 	icon_state = "implant"
 	items_to_spawn = list(
-		/obj/item/weapon/implantcase/tracking = 4.
+		/obj/item/weapon/implantcase/tracking = 4,
 		/obj/item/weapon/implanter,
 		/obj/item/weapon/implantpad,
 		/obj/item/weapon/locator,
