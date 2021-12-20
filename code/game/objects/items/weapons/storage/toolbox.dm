@@ -53,16 +53,16 @@
 	items_to_spawn = list(
 		/obj/item/tool/crowbar/red,
 		/obj/item/weapon/extinguisher/mini,
+		list( //emergency lighting yay
+			20;/obj/item/device/flashlight,
+			30;/obj/item/weapon/storage/fancy/flares,
+			50;/obj/item/device/flashlight/flare,
+		),
+		/obj/item/device/radio,
 	)
 
 /obj/item/weapon/storage/toolbox/emergency/New()
 	..()
-	var/lighting = pick( //emergency lighting yay
-		20;/obj/item/device/flashlight,
-		30;/obj/item/weapon/storage/fancy/flares,
-		50;/obj/item/device/flashlight/flare)
-	new lighting(src)
-	new /obj/item/device/radio(src)
 	if(prob(5))
 		new /obj/item/airbag(src)
 	if(prob(15))
