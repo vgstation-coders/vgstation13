@@ -245,19 +245,18 @@
 	if(href_list["input_name"])
 		var/newfreq = input(usr, "Specify a new frequency name.", src, network) as null|text
 		if(newfreq && canAccess(usr))
-			if(!(newfreq == SYND || newfreq == RAIDER || newfreq == REV_COMM))
-				if(!(newfreq in freq_names))
-					freq_names.Add(newfreq)
-					temp = "<font color = #666633>-% New frequency name assigned: \"[newfreq]\" %-</font color>"
-		
-					var/newcolor = input(usr, "Specify a new frequency color. Leave blank for defaults.", src, network) as null|color
-					if(newcolor && canAccess(usr))
-						freq_names[newfreq] = newcolor
-						temp = "<font color = [newcolor]>-% New frequency color assigned. %-</font color>"
+			if((!(newfreq == SYND || newfreq == RAIDER || newfreq == REV_COMM)) && (!(newfreq in freq_names)))
+				freq_names.Add(newfreq)
+				temp = "<font color = #666633>-% New frequency name assigned: \"[newfreq]\" %-</font color>"
+	
+				var/newcolor = input(usr, "Specify a new frequency color. Leave blank for defaults.", src, network) as null|color
+				if(newcolor && canAccess(usr))
+					freq_names[newfreq] = newcolor
+					temp = "<font color = [newcolor]>-% New frequency color assigned. %-</font color>"
 
-					var/indx = freq_names.Find(newfreq)
-					if(indx && indx <= freq_listening.len && freq_listening[indx])
-						update_radio_frequency(newfreq, freq_listening[indx], newcolor, usr)
+				var/indx = freq_names.Find(newfreq)
+				if(indx && indx <= freq_listening.len && freq_listening[indx])
+					update_radio_frequency(newfreq, freq_listening[indx], newcolor, usr)
 			else
 				temp = "<font color = #666633>-% Channel name denied. %-</font color>"
 
@@ -315,16 +314,15 @@
 				if(newfreq && canAccess(usr))
 					if(findtext(num2text(newfreq), "."))
 						newfreq *= 10 // shift the decimal one place
-					if(!(newfreq == SYND_FREQ || newfreq == RAID_FREQ || newfreq == REV_FREQ))
-						if(!(newfreq in freq_listening) && newfreq < 10000)
-							freq_listening.Add(newfreq)
-							temp = "<font color = #666633>-% New frequency filter assigned: \"[newfreq] GHz\" %-</font color>"
+					if((!(newfreq == SYND_FREQ || newfreq == RAID_FREQ || newfreq == REV_FREQ)) && (!(newfreq in freq_listening) && newfreq < 10000))
+						freq_listening.Add(newfreq)
+						temp = "<font color = #666633>-% New frequency filter assigned: \"[newfreq] GHz\" %-</font color>"
 
-							if(istype(src,/obj/machinery/telecomms/server))
-								var/obj/machinery/telecomms/server/TSM = src
-								var/indx = freq_listening.Find(newfreq)
-								if(indx && indx <= TSM.freq_names.len && TSM.freq_names[indx])
-									update_radio_frequency(TSM.freq_names[indx], newfreq, TSM.freq_names[TSM.freq_names[indx]], usr)
+						if(istype(src,/obj/machinery/telecomms/server))
+							var/obj/machinery/telecomms/server/TSM = src
+							var/indx = freq_listening.Find(newfreq)
+							if(indx && indx <= TSM.freq_names.len && TSM.freq_names[indx])
+								update_radio_frequency(TSM.freq_names[indx], newfreq, TSM.freq_names[TSM.freq_names[indx]], usr)
 					else
 						temp = "<font color = #666633>-% Encryption key denied. %-</font color>"
 
