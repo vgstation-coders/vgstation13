@@ -11,7 +11,7 @@
 
 	if(disabilities & ANEMIA)
 		var/blood_volume = round(vessel.get_reagent_amount(BLOOD))
-		if((prob(4)) && (blood_volume > BLOOD_VOLUME_SAFE))
+		if((prob(4)) && (blood_volume > BLOOD_VOLUME_SAFE+10))
 			vessel.remove_reagent(BLOOD, 10)
 
 	//If we have the gene for being crazy, have random events.
