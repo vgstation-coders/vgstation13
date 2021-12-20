@@ -172,11 +172,30 @@
 	if(inherit_material)
 		var/datum/material/mat
 		var/datum/materials/materials_list = new
+
+		//Figure out the material
 		if(istype(S, /obj/item/stack/sheet/))
 			var/obj/item/stack/sheet/SS = S
 			mat = materials_list.getMaterial(SS.mat_type)
 		else if(S.material_type)
 			mat = S.material_type
+
+		// Make it recyclable back into the materials it's made out of
+		// Initialize materials list if doesn't exist already
+		if (R.materials == null)
+			R.materials = new /datum/materials(src)
+
+		// Add main materials off the stack
+		R.materials.addRatioFrom(S.materials, req_amount/(S.amount * res_amount))
+
+		// Add extra materials off additional recipe requisites
+		for (var/req in other_reqs)
+			// other_reqs contains typepaths, so create an instance and use it's materials as base
+			// TODO: pull the materials from the actual object that was used to fulfill the other_req
+			var/atom/movable/A = new req
+			if (A.materials)
+				R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
+
 		R.dorfify(mat)
 	return 1
 
@@ -189,8 +208,33 @@
 	src.req_strikes = required_strikes
 
 /datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+	// Figure out main material from stack
+	if(istype(S, /obj/item/stack/sheet/))
+		var/obj/item/stack/sheet/SS = S
+		var/datum/materials/materials_list = new
+		R.material_type = materials_list.getMaterial(SS.mat_type)
+		qdel(materials_list)
+	else if(S.material_type)
+		R.material_type = S.material_type
+
+	// Apply material info to end product for recycling
+	// Initialize materials list if doesn't exist already
+	if (R.materials == null)
+		R.materials = new /datum/materials(src)
+
+	// Add main materials off the stack
+	R.materials.addRatioFrom(S.materials, req_amount/(S.amount * res_amount))
+
+	// Add extra materials off additional recipe requisites
+	for (var/req in other_reqs)
+		// other_reqs contains typepaths, so create an instance and use it's materials as base
+		// TODO: pull the materials from the actual object that was used to fulfill the other_req
+		var/atom/movable/A = new req
+		if (A.materials)
+			R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
+
 	//Yeah nah let's put you in a blacksmith_placeholder
-	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
+	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)
 	I.name = "unforged [R.name]"
 	return 0
 
