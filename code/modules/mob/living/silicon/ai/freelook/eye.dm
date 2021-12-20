@@ -28,7 +28,7 @@
 			if(harderforce && H.advancedholo && !holo_bump)  // If we double click while controlling an advanced hologram, remove the hologram.
 				H.clear_holo()
 				return
-			else if(H.advancedholo) // Otherwise, if we're controlling an advanced hologram, check to see if we can enter the tile normally
+			else if(H.advancedholo && !holo_bump) // Otherwise, if we're controlling an advanced hologram, check to see if we can enter the tile normally
 				if(destination.density)
 					return
 				for(var/atom/movable/A in destination)

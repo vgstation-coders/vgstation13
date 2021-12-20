@@ -148,6 +148,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(holo)
 		clear_holo()
 		return
+	var/obj/macehinry/hologram/holopad/H = A.current
+	if(istype(H) && H.holo)
+		H.clear_holo()
+		return
 	var/list/available_mobs = generate_appearance_list()
 	var/mob_to_copy = input(A, "Who will this hologram look like?", "Creatures") as null|anything in available_mobs
 	if(!mob_to_copy)
@@ -190,6 +194,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	master.client.CAN_MOVE_DIAGONALLY = TRUE
 	if(master.eyeobj)
 		master.eyeobj.humanlike = FALSE
+		master.eyeobj.glide_size = WORLD_ICON_SIZE
 	if(master.current == src)
 		master.current = null
 	master = null//Null the master, since no-one is using it now.
@@ -227,8 +232,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(holo)
 		if (get_dist(master.eyeobj, src) <= holo_range || advancedholo)
 			if(advancedholo)  // reset glide sizes, in case our hologram was bumped
-				set_glide_size(DELAY2GLIDESIZE(1))
-				master.eyeobj.glide_size = DELAY2GLIDESIZE(1)
+				holo.set_glide_size(DELAY2GLIDESIZE(1))
+				master.eyeobj.set_glide_size(DELAY2GLIDESIZE(1))
 			var/turf/T = holo.loc
 			var/turf/dest = get_turf(master.eyeobj)
 			step_to(holo, master.eyeobj) // So it turns.
@@ -362,11 +367,16 @@ Holographic project of everything else.
 	..()
 	steal_appearance(mob_to_copy)
 	eye = eyeobj
+	register_event(/event/after_move, src, /obj/effect/overlay/hologram/lifelike/proc/UpdateEye)
+	set_light(0)
 
 /obj/effect/overlay/hologram/lifelike/proc/steal_appearance(var/mob/living/M)
-	name = M.name
+	name = M.name 
 	appearance = M.appearance
-	var/datum/log/L = new
+	if(M.lying)  // make them stand up if they were lying down
+		pixel_y += 6 * PIXEL_MULTIPLIER
+		transform = transform.Turn(-90)
+	var/datum/log/L = new 
 	M.examine(L)
 	desc = L.log
 	qdel(L)
@@ -388,11 +398,6 @@ Holographic project of everything else.
 /obj/effect/overlay/hologram/lifelike/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("<span class='warning'>The [Proj] passes straight through [src]!</span>")
 
-/obj/effect/overlay/hologram/lifelike/Crossed(atom/movable/AM)
-	..()
-	if(AM && AM.density == TRUE)
-		visible_message("<span class='warning'>The [AM] passes straight through [src]!</span>")
-
-/obj/effect/overlay/hologram/lifelike/Bumped(atom/movable/AM)
-	..()
-	eye.forceMove(get_turf(src), holo_bump = TRUE)
+/obj/effect/overlay/hologram/lifelike/proc/UpdateEye()
+	if(eye && eye.loc != loc)
+		eye.forceMove(loc, holo_bump = TRUE)
