@@ -23,7 +23,6 @@
 	switch(mode)
 		if(0)
 			mode = 1
-			charge_cost = 100
 			fire_sound = 'sound/weapons/ray2.ogg'
 			to_chat(user, "<span class='warning'>\The [src] is now set to microwave.</span>")
 			projectile_type = "/obj/item/projectile/energy/microwaveray"
@@ -34,7 +33,6 @@
 				playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 		if(1)
 			mode = 0
-			charge_cost = 100
 			fire_sound = 'sound/weapons/ray1.ogg'
 			to_chat(user, "<span class='warning'>\The [src] is now set to scorch.</span>")
 			projectile_type = "/obj/item/projectile/beam/scorchray"
@@ -66,7 +64,6 @@
 	switch(mode)
 		if(0)
 			mode = 1
-			charge_cost = 50
 			fire_sound = 'sound/weapons/ray2.ogg'
 			to_chat(user, "<span class='warning'>\The [src] is now set to scramble.</span>")
 			projectile_type = "/obj/item/projectile/energy/scramblerray"
@@ -77,7 +74,6 @@
 				playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 		if(1)
 			mode = 0
-			charge_cost = 50
 			fire_sound = 'sound/weapons/ray1.ogg'
 			to_chat(user, "<span class='warning'>\The [src] is now set to immolate.</span>")
 			projectile_type = "/obj/item/projectile/beam/immolationray"
