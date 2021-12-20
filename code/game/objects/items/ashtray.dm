@@ -89,7 +89,7 @@
 	max_butts = 14
 	health = 24
 	starting_materials = list(MAT_PLASTIC = 50)
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 	empty_desc = "Cheap plastic ashtray."
 	throwforce = 3
 

@@ -5,6 +5,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "sword"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_METAL
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	flags = FPRINT
 	siemens_coefficient = 1
