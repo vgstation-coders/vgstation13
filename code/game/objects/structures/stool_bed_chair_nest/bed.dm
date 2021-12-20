@@ -102,15 +102,15 @@
 				"<span class='notice'>[M] unbuckled \himself!</span>",
 				"You unbuckle yourself from \the [src].",
 				"You hear metal clanking.")
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(H.disabilities & ANEMIA)
+					if(world.time - H.lastAnemia <= 30 SECONDS)
+					else
+						H.sleeping += 2
+						H.visible_message("<span class='alert'>[H] collapses to the ground after standing up too fast.</span>", "<span class='warning'>Your vision swims as you fall over.</span>")
+						H.lastAnemia=world.time
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			if(H.disabilities & ANEMIA)
-				if(world.time - H.lastAnemia <= 30 SECONDS)
-				else
-					H.sleeping += 2
-					H.visible_message("<span class='alert'>[H] collapses to the ground after standing up too fast.</span>", "<span class='warning'>Your vision swims as you fall over.</span>")
-					H.lastAnemia=world.time
 	return TRUE
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
