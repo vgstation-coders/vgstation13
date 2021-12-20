@@ -47,6 +47,10 @@
 		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
 	)
 
+/obj/item/weapon/storage/firstaid/regular/empty
+	name = "First-Aid (empty)"
+	items_to_spawn = list()
+
 /obj/item/weapon/storage/firstaid/toxin
 	name = "toxin first-aid kit"
 	desc = "Used to treat when you have a high amount of toxins in your body."

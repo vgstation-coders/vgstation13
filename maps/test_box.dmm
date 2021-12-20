@@ -45191,16 +45191,7 @@
 /area/science/robotics)
 "bIg" = (
 /obj/structure/table,
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
+/obj/item/weapon/storage/firstaid/regular/empty,/obj/item/weapon/storage/firstaid/regular/empty,m/obj/item/weapon/storage/firstaid/regular/empty,pty = 1;
 	name = "First-Aid (empty)"
 	},
 /obj/item/device/healthanalyzer,
