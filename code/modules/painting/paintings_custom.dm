@@ -18,7 +18,7 @@
 	var/painting_height = 14
 	var/painting_width = 14
 	var/painting_offset_x = 9
-	var/painting_offset_y = 9
+	var/painting_offset_y = 10
 	var/base_color = "#ffffff"
 
 	// Icon to render our painting data on
@@ -150,6 +150,7 @@
 
 /obj/structure/painting/custom/to_item(mob/user)
 	var/obj/item/mounted/frame/painting/custom/P = new(user.loc)
+	unlock_from()
 
 	// Painting info
 	P.set_painting_data(painting_data.Copy())
@@ -167,12 +168,6 @@
 	P.protected_by_glass = protected_by_glass
 	P.materials = new /datum/materials(P)
 	P.materials.addFrom(materials)
-
-	// Fingerprint info
-	P.fingerprints = fingerprints
-	P.fingerprintshidden = fingerprintshidden
-	P.fingerprintslast = fingerprintslast
-	P.fingerprintslastTS = fingerprintslastTS
 
 	P.update_painting()
 	return P
@@ -195,6 +190,7 @@
 	var/protected_by_glass = FALSE
 
 	// Icon to render our painting data on
+	layer = CANVAS_LAYER
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'
@@ -205,7 +201,7 @@
 	var/painting_height = 14
 	var/painting_width = 14
 	var/painting_offset_x = 9
-	var/painting_offset_y = 9
+	var/painting_offset_y = 10
 	var/base_color = "#ffffff"
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
@@ -330,12 +326,6 @@
 	P.materials = new /datum/materials(P)
 	P.materials.addFrom(materials)
 
-	// Fingerprint info
-	P.fingerprints = fingerprints
-	P.fingerprintshidden = fingerprintshidden
-	P.fingerprintslast = fingerprintslast
-	P.fingerprintslastTS = fingerprintslastTS
-
 	P.update_painting()
 	return P
 
@@ -354,7 +344,7 @@
 	painting_height = 14
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 9
+	painting_offset_y = 10
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
@@ -368,7 +358,7 @@
 	painting_height = 14
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 9
+	painting_offset_y = 10
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
@@ -381,7 +371,7 @@
 	painting_height = 24
 	painting_width = 14
 	painting_offset_x = 9
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
@@ -394,7 +384,7 @@
 	painting_height = 24
 	painting_width = 14
 	painting_offset_x = 9
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
@@ -409,7 +399,7 @@
 	painting_height = 24
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
 
@@ -424,6 +414,6 @@
 	painting_height = 24
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
