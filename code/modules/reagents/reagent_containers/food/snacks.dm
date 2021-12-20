@@ -7462,34 +7462,27 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#FF9700"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-	wrapped = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SACID, 10)
-	reagents.add_reagent(LOCUTOGEN, 5)
 	bitesize = 3
+	wrapped = FALSE
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped
-	name = "Blether Noodle Soup"
-	desc = "A hearty grey noodle soup. Great for teaching growing greylings new words! Not to be confused with human alphabet soup."
 	icon_state = "blethernoodlesoup_closed"
-	wrapped = 1
+	wrapped = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/attack_self(mob/user)
 	if(wrapped)
 		Unwrap(user)
 		playsound(user, 'sound/effects/can_open1.ogg', 50, 1)
+		reagents.add_reagent(NUTRIMENT, 6)
+		reagents.add_reagent(SACID, 10)
+		reagents.add_reagent(LOCUTOGEN, 5)
 	else
 		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/proc/Unwrap(mob/user)
-	desc = "A hearty grey noodle soup. Great for teaching growing greylings new words! Not to be confused with human alphabet soup."
-	food_flags = FOOD_MEAT | FOOD_LIQUID
 	icon_state = "blethernoodlesoup_open"
 	to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. An inviting smell wafts out.")
-	wrapped = 0
+	wrapped = FALSE
 
 //You have now exited the ayy food zone. Thanks for visiting.
 
