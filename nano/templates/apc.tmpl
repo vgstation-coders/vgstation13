@@ -166,17 +166,6 @@
 		<div class="item">
 			{{:helper.link('Overload Lighting Circuit', 'lightbulb', {'overload' : 1})}}
 		</div>
-		{{if data.malfStatus > 1}}
-			<div class='notice'>
-				<div class="itemContentSmall">
-					Exclusive Control:
-				</div>
-				<div class="itemContentFull">
-					{{:helper.link('Enabled', 'locked', {'malflock' : 1}, data.malfLocked ? 'selected' : null)}}{{:helper.link('Disabled', 'unlocked', {'malflock' : 1}, data.malfLocked ? null : 'selected')}}
-				</div>
-				<div class="clearBoth"></div>
-			</div>
-		{{/if}}
 	{{/if}}
 
 </div>

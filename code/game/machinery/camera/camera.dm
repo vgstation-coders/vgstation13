@@ -42,6 +42,10 @@ var/list/camera_names=list()
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
 	var/health = CAMERA_MAX_HEALTH
 
+	hack_abilities = list(
+		/datum/malfhack_ability/overload
+	)
+
 /obj/machinery/camera/flawless
 	failure_chance = 0
 

@@ -413,7 +413,7 @@ var/list/boss_mobs = list(
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
 
-//Set by Malf AI Blackout
+//Malf AI global variables
 var/malf_radio_blackout = FALSE
 var/malf_rcd_disable = FALSE
 

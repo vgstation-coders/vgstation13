@@ -44,8 +44,8 @@
 	icon = 'icons/ui/malf/32x32.dmi'
 	icon_state = "module"
 	layer = MIND_UI_BACK
-	offset_x = 178
-	offset_y = -10
+	offset_x = 146
+	offset_y = -6
 
 
 /obj/abstract/mind_ui_element/hoverable/malf_tech_tab/Click()

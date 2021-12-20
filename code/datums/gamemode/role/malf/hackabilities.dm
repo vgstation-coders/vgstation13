@@ -213,4 +213,3 @@
 	spawn(4 SECONDS)
 		explosion(get_turf(machine), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 		qdel(machine)
-

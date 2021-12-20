@@ -100,6 +100,7 @@
 	var/is_critical = 0 // Endgame scenarios will not destroy this APC.
 
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
+	var/obj/effect/fake_camera_image/malfimage
 
 	machine_flags = WIREJACK
 
@@ -950,41 +951,6 @@
 		if(istype(usr, /mob/living/silicon) || isAdminGhost(usr))
 			src.overload_lighting()
 
-	else if (href_list["malfhack"])
-		var/mob/living/silicon/ai/hacker = usr
-		var/datum/role/malfAI/M = hacker.mind.GetRole(MALF)
-		if(map.zMainStation != z)
-			to_chat(hacker, "<span class='warning'>You cannot hack APCs off the main station.</span>")
-			return
-		if(get_malf_status(hacker) == 1)
-			if (M.currently_hacking_apcs.len >= M.apc_hacklimit)
-				to_chat(hacker, "<span class='warning'>You cannot hack any more APCs at this time. Wait for other hack operations to finish.</span>")
-				return 
-			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
-			to_chat(hacker, "Beginning override of APC systems. This will take [time_required/10] seconds.")
-			M.currently_hacking_apcs += src			
-			hacker.handle_regular_hud_updates()
-			sleep(time_required)
-			M.currently_hacking_apcs -= src
-			hacker.clear_alert(name)
-			if(src)
-				if (!aidisabled)
-					malfhack = 1
-					malfai = hacker
-					M.apcs += src
-					hacker.clear_alert(name)
-					locked = 1
-					if(M && map.zMainStation == z)
-						M.apcs++
-					if(usr:parent)
-						src.malfai = usr:parent
-					else
-						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [map.zMainStation == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
-					malfai.handle_regular_hud_updates()
-					update_icon()
-				else
-
 	else if (href_list["toggleaccess"])
 		if(istype(usr, /mob/living/silicon))
 			if(emagged || (stat & (BROKEN|MAINT)))
@@ -992,10 +958,6 @@
 			else
 				locked = !locked
 				update_icon()
-
-	else if (href_list["malflock"])
-		if(get_malf_status(usr))
-			malflocked = !malflocked
 
 	return 1
 
@@ -1384,6 +1346,9 @@
 	if(wires)
 		qdel(wires)
 		wires = null
+
+	if(malfimage)
+		qdel(malfimage)
 
 	..()
 

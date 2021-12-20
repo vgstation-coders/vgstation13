@@ -134,6 +134,11 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	return TRUE
 
 
+/datum/role/malfAI/proc/HasPurchased(var/moduletype)
+	var/datum/malf_module/M = locate(moduletype) in available_modules
+	if(!M)
+		return FALSE
+	return M.bought
 
 
 

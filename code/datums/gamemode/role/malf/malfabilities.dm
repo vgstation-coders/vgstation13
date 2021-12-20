@@ -99,7 +99,38 @@
 	name = "Lifelike Holograms"
 	desc = "hologram"
 
-
 /datum/malf_module/overload
 	name = "Machine Overload"
 	desc = "boom"
+
+/datum/malf_module/apcfaker
+	name = "Fake APC Images"
+	desc = "bing bing"
+
+/datum/malf_module/apcfaker/on_purchase()
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
+	for (var/obj/machinery/power/apc/APC in M.apcs)
+		if(!APC.malfimage)
+			APC.malfimage = new /obj/effect/fake_camera_image(APC.loc)
+			APC.malfimage.pixel_x = APC.pixel_x
+			APC.malfimage.pixel_y = APC.pixel_y
+
+/obj/effect/fake_camera_image
+	name = "mystery image"
+	icon = 'icons/obj/power.dmi'
+	icon_state = "apcfake"
+	opacity = 0
+	mouse_opacity = 0
+	throwforce = 0
+	plane = FAKE_CAMERA_PLANE
+	
+/obj/effect/fake_camera_image/New(var/turf/loc, var/new_icon, var/new_icon_state)
+	..()
+	if(new_icon)
+		icon = icon
+	if(new_icon_state)
+		icon_state = new_icon_state
+
+
+
+

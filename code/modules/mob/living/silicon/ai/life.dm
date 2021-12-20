@@ -170,7 +170,7 @@
 	life_handle_malf()
 	life_handle_power_damage()
 
-	if(ismalf(src))
+	if(ismalf(src) && client)
 		client.show_popup_menus = FALSE
 
 	is_ai_powered() ? life_handle_powered_core() : life_handle_unpowered_core()

@@ -148,7 +148,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(holo)
 		clear_holo()
 		return
-	var/obj/macehinry/hologram/holopad/H = A.current
+	var/obj/machinery/hologram/holopad/H = A.current
 	if(istype(H) && H.holo)
 		H.clear_holo()
 		return
@@ -191,13 +191,15 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
 	advancedholo = FALSE
-	master.client.CAN_MOVE_DIAGONALLY = TRUE
-	if(master.eyeobj)
-		master.eyeobj.humanlike = FALSE
-		master.eyeobj.glide_size = WORLD_ICON_SIZE
-	if(master.current == src)
-		master.current = null
-	master = null//Null the master, since no-one is using it now.
+	if(master)
+		if(client)
+			master.client.CAN_MOVE_DIAGONALLY = TRUE
+		if(master.eyeobj)
+			master.eyeobj.humanlike = FALSE
+			master.eyeobj.glide_size = WORLD_ICON_SIZE
+		if(master.current == src)
+			master.current = null
+		master = null //Null the master, since no-one is using it now.
 	ray = null
 	qdel(ray)
 	animate(holo, alpha = 0, time = 5)
@@ -393,10 +395,10 @@ Holographic project of everything else.
 	)
 
 /obj/effect/overlay/hologram/lifelike/attackby(var/obj/O)
-	visible_message("<span class='warning'>The [O] passes straight through [src]!</span>")
+	visible_message("<span class='warning'>\The [O] passes straight through [src]!</span>")
 
 /obj/effect/overlay/hologram/lifelike/bullet_act(var/obj/item/projectile/Proj)
-	visible_message("<span class='warning'>The [Proj] passes straight through [src]!</span>")
+	visible_message("<span class='warning'>\The [Proj] passes straight through [src]!</span>")
 
 /obj/effect/overlay/hologram/lifelike/proc/UpdateEye()
 	if(eye && eye.loc != loc)

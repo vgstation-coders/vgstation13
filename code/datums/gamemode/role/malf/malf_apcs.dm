@@ -55,6 +55,10 @@
 	malfai = malf
 	M.apcs += src
 	malf.handle_regular_hud_updates()
+	if(M.HasPurchased(/datum/malf_module/apcfaker))
+		malfimage = new /obj/effect/fake_camera_image(loc)
+		malfimage.pixel_y = pixel_y
+		malfimage.pixel_x = pixel_x
 	update_icon()
 
 /obj/machinery/power/apc/proc/clear_malf()
