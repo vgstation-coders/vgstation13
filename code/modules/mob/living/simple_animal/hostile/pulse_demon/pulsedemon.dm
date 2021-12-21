@@ -251,6 +251,9 @@
         if (!speech.message)
             return
         speech.message = buttbottify(speech.message, 3, 9) // 3 times as intense
+        var/obj/machinery/bot/buttbot/BB = current_bot
+        BB.fart()
+		score["buttbotfarts"]++
 
     else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
         to_chat(src, "You have nothing to speak with.")
