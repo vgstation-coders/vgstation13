@@ -22,6 +22,7 @@
 	var/base_color = "#ffffff"
 
 	// Icon to render our painting data on
+	layer = CANVAS_LAYER
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'
@@ -190,7 +191,6 @@
 	var/protected_by_glass = FALSE
 
 	// Icon to render our painting data on
-	layer = CANVAS_LAYER
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'

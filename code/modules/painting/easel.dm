@@ -1,16 +1,18 @@
 /obj/structure/easel
 	name = "easel"
-	desc = ""//TODO: description
+	desc = "Painters' best friend, always there to support their art"
 	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "easel"
 	density = 1
 	var/obj/structure/painting/custom/painting = null
 
-	var/rest_overlay = "easel_rest"
-	var/rest_sprite_height = 2
-	var/rest_default_y = 10
-	var/holder_overlay = "easel_holder"
+	var/rest_overlay = "easel_rest" // Piece the canvas will rest upon
+	var/holder_overlay = "easel_holder" // Piece holding the canvas in place
+
+	var/rest_default_y = 10 // Adjusted for a small (14x14) canvas
 	var/holder_default_y = 24
+
+	var/rest_sprite_height = 2 // How many pixels of the easel rest should sjut out under the canvas
 
 	starting_materials = list(MAT_WOOD = 3*CC_PER_SHEET_WOOD)
 
