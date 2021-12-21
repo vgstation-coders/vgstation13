@@ -40,7 +40,13 @@
 /mob/living/proc/handle_suicide_bomb_cause()
 	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
 	
+	if(custom_message)
+		return "FOR [uppertext(custom_message)]!"
+
 	var/message_say = "FOR NO RAISIN!"
+
+	if(Holiday == APRIL_FOOLS_DAY)
+		return "ALL FOR THE NOOKIE!"
 
 	if(issyndicate(src))
 		message_say = "FOR THE SYNDICATE!"
@@ -52,27 +58,27 @@
 		message_say = "FOR THE CAUSE!"
 	else if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		// faiths
-		if(H.mind.faith.name == "Islam")
-			message_say = "ALLAHU AKBAR!"
-		else if(H.mind.faith.deity_name)
-			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
-		// jobs
-		else
-			switch(H.mind.assigned_role)
-				if("Clown")
-					message_say = "FOR THE HONKMOTHER!"
-				if("Assistant")
-					message_say = "FOR THE GREYTIDE!"
-				if("Janitor")
-					message_say = "I DO IT FOR FREE!"
-				if("Cargo Technician" || "Quartermaster")
-					message_say = "FOR CARGONIA!"
-				if("Trader")
-					message_say = "FOR THE SHOAL!"
+		if(H.mind)
+			// faiths
+			if(H.mind.faith)
+				if(H.mind.faith.name == "Islam")
+					message_say = "ALLAHU AKBAR!"
+				else if(H.mind.faith.deity_name)
+					message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
+			// jobs
+			else if (H.mind.assigned_role)
+				switch(H.mind.assigned_role)
+					if("Clown")
+						message_say = "FOR THE HONKMOTHER!"
+					if("Assistant")
+						message_say = "FOR THE GREYTIDE!"
+					if("Janitor")
+						message_say = "I DO IT FOR FREE!"
+					if("Cargo Technician" || "Quartermaster")
+						message_say = "FOR CARGONIA!"
+					if("Trader")
+						message_say = "FOR THE SHOAL!"
 
-	if(custom_message)
-		message_say = "FOR [uppertext(custom_message)]!"
 	return message_say
 
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
