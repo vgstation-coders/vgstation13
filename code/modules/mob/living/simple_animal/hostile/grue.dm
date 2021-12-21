@@ -26,7 +26,7 @@
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
 	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
 	var/moulttime = 30 //time required to moult to a new form
-	var/moulttimer = 100 //moulting timer
+	var/moulttimer = 30 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
 	var/hatched=0			//whether or not this grue hatched from an egg
 
@@ -265,9 +265,9 @@
 //		stat(null, "Intent: [a_intent]")
 //		stat(null, "Move Mode: [m_intent]")
 		if(ismoulting)
-			stat(null, "Moulting progress: [100*(1-moulttimer/moulttime)]%")
+			stat(null, "Moulting progress: [round(100*(1-moulttimer/moulttime),0.1)]%")
 		if(lifestage<3) //not needed for adults
-			stat(null, "Shadow power: [shadowpower]/[maxshadowpower]")
+			stat(null, "Shadow power: [round(shadowpower,0.1)]/[round(maxshadowpower,0.1)]")
 		if(lifestage>=3)
 			if(config.grue_egglaying)
 				stat(null, "Reproductive energy: [eatencharge]")
@@ -288,7 +288,7 @@
 		return
 	if (lifestage<3)
 		if (shadowpower<moultcost)
-			to_chat(src, "<span class='notice'>You need to bask in shadow more first.</span>")
+			to_chat(src, "<span class='notice'>You need to bask in shadow more first. ([moultcost] shadow power required)</span>")
 			return
 		else if (!isturf(loc))
 			to_chat(src, "<span class='notice'>You need more room to moult.</span>")
