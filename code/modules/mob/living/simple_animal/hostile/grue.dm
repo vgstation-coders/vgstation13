@@ -23,7 +23,7 @@
 	var/shadowpower = 0											 //shadow power absorbed
 	var/maxshadowpower = 1000									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
-	var/ismoulting = 0, //currently moulting (1=is a chrysalis)
+	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
 	var/moulttime = 30 //time required to moult to a new form
 	var/moulttimer = 100 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
