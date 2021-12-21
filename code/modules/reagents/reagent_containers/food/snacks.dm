@@ -7471,15 +7471,19 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/attack_self(mob/user)
 	if(wrapped)
-		Unwrap(playsound(user, 'sound/effects/can_open1.ogg', 50, 1), reagents.add_reagent(NUTRIMENT, 6), reagents.add_reagent(SACID, 10), reagents.add_reagent(LOCUTOGEN, 5))
-		if(user)
-			to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. An inviting smell wafts out.")
+		Unwrap(user)
 	else
 		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/proc/Unwrap(mob/user)
 	icon_state = "blethernoodlesoup_open"
 	wrapped = FALSE
+	playsound(user, 'sound/effects/can_open1.ogg', 50, 1)
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SACID, 10)
+	reagents.add_reagent(LOCUTOGEN, 5)
+	if(user)
+		to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. An inviting smell wafts out.")
 
 //You have now exited the ayy food zone. Thanks for visiting.
 
