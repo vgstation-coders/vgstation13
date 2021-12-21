@@ -299,18 +299,35 @@
 		if(!gameover)
 			gameover = 1
 			temp = "[enemy_name] has fallen! Rejoice!"
+			harm_p2()
 	if ((player_mp <= 0) || (player_hp <= 0))
 		gameover = 1
 		temp = "You have been crushed! GAME OVER"
+		harm_p1()
 
 /datum/arcade_game/space_villain/proc/check_p2_win()
 	if ((enemy_mp <= 0) || (enemy_hp <= 0))
 		if(!gameover)
 			gameover = 1
 			temp = "You have fallen! GAME OVER"
+			harm_p2()
 	if ((player_mp <= 0) || (player_hp <= 0))
 		gameover = 1
 		temp = "The player has been crushed! Rejoice!"
+		harm_p1()
+
+/datum/arcade_game/space_villain/proc/harm_p2()
+	if(istype(playertwo,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = playertwo
+		var/oldhealth = PD.health
+		var/subtract = 50 * (emagged * 3) //Packs a punch to them
+		PD.health -= subtract
+		if(oldhealth - subtract <= 0) //If they die from this
+			//Do stuff. WIP
+
+/datum/arcade_game/space_villain/proc/harm_p1()
+	if(istype(playertwo,/mob/living/simple_animal/hostile/pulse_demon))
+		playerone.electrocute_act(67 * (emagged * 3), src, 1) //And to the player too, if (s)he loses
 
 /datum/arcade_game/space_villain/proc/action_charge()
 	blocked = 1

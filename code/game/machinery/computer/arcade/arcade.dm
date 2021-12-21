@@ -9,6 +9,7 @@
 	emag_cost = 0 // because fun
 	light_color = LIGHT_COLOR_GREEN
 	var/haunted = 0
+	var/mob/playerone
 	var/mob/playertwo
 
 /obj/machinery/computer/arcade/haunted
@@ -45,6 +46,7 @@
 	if(..())
 		return
 	user.set_machine(src)
+	playerone = user
 	var/dat = game.get_dat()
 
 	user << browse(dat, "window=arcade")
