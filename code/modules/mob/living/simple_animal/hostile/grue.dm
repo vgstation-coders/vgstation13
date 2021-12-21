@@ -478,17 +478,16 @@
 //		feed_target.gib()
 		return feed_target
 
-/mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/clicked_on)
-	to_chat(src, "<span class='danger'>You open your mouth wide, preparing to eat [clicked_on]!</span>")
-	if(do_mob(src , clicked_on, 10 SECONDS, 100, 0))
-		to_chat(src, "<span class='danger'>You have eaten [clicked_on]!</span>")
-		to_chat(clicked_on, "<span class='danger'>You have been eaten by a grue.</span>")
-		clicked_on.gib()
+/mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
+	to_chat(src, "<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
+	if(do_mob(src , E, 10 SECONDS, 100, 0))
+		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
+		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 //		playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 
 		//Upgrade the grue's stats as it feeds
-		if(clicked_on.mind) //must have a mind to power up the grue
+		if(E.mind) //must have a mind to power up the grue
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++
 			eatencharge++
@@ -514,9 +513,21 @@
 				else
 					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel stronger... but still hungry...</span>")
 
-
+			//Create a clone-able glob of gore like a slime puddle.
+//			E.dropBorers()
+			for(var/atom/movable/I in E.contents)
+				I.forceMove(E.loc)
+//			anim(target = E, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
+			var/mob/living/gore_pile/G = new(E.loc)
+			if(E.real_name)
+				G.real_name = E.real_name
+				G.name = "glob of [E.real_name] gore"
+				G.desc = "The gory remains of what used to be [G.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
+			G.gored_person = E
+			E.forceMove(G)
 		else
 			to_chat(src, "<span class='notice'>That creature didn't quite satisfy your hunger...</span>")
+		E.gib()
 
 	else
 		return

@@ -80,3 +80,6 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/image/pathogen
 	var/datum/immune_system/immune_system
+
+	var/times_cloned = 0 //How many times this creature has been cloned
+	var/talkcount = 0 // How many times a creature has talked - used for determining who's been the "star" for the purposes of round end credits (may only work correctly for humans)

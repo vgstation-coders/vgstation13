@@ -229,7 +229,8 @@
 		return 1
 	return ..()
 
-/obj/machinery/dna_scannernew/proc/put_in(var/mob/M, var/mob/user)
+/obj/machinery/dna_scannernew/proc/put_in(var/mob/M)
+
 	if(!istype(M))
 		return FALSE
 	if(M.locked_to)
@@ -239,35 +240,35 @@
 	else if(M.anchored)
 		return FALSE
 
-	if(ismanifested(M) || !iscarbon(M))
-		if(user)
-			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that person's genes.</span>")
+	if(ismanifested(M) || (!iscarbon(M) && !istype(M, /mob/living/slime_pile) && !istype(M, /mob/living/gore_pile)))
+		if(usr)
+			to_chat(usr, "<span class='notice'>For some reason, the scanner is unable to read that person's genes.</span>")
 		return
 
-	if(user)
-		if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
+	if(usr)
+		if(!ishigherbeing(usr) && !isrobot(usr)) //No ghosts or mice putting people into the scanner
 			return
-		if(isrobot(user))
-			var/mob/living/silicon/robot/robit = user
+		if(isrobot(usr))
+			var/mob/living/silicon/robot/robit = usr
 			if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
-				to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
+				to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 				return
 
 	for(var/mob/living/carbon/slime/S in range(1,M))
 		if(S.Victim == M)
-			if(user)
-				to_chat(user, "<span class='warning'>[M] will not fit into \the [src] because they have a slime latched onto their head.</span>")
+			if(usr)
+				to_chat(usr, "<span class='warning'>[M] will not fit into \the [src] because they have a slime latched onto their head.</span>")
 			return
 
 	if(occupant)
-		if(user)
-			to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
+		if(usr)
+			to_chat(usr, "<span class='notice'>\The [src] is already occupied!</span>")
 		return FALSE
 
-	if(user && user.pulling == M)
-		user.stop_pulling()
-	if(user)
-		add_fingerprint(user)
+	if(usr && usr.pulling == M)
+		usr.stop_pulling()
+	if(usr)
+		add_fingerprint(usr)
 	M.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	M.forceMove(src)
 	M.reset_view()
@@ -276,11 +277,11 @@
 	if(connected)
 		nanomanager.update_uis(connected)
 
-	if(user)
-		if(M == user)
-			visible_message("[user] climbs into \the [src].")
+	if(usr)
+		if(M == usr)
+			visible_message("[usr] climbs into \the [src].")
 		else
-			visible_message("[user] places [M] into \the [src].")
+			visible_message("[usr] places [M] into \the [src].")
 	else
 		visible_message("\the [M] is placed into \the [src].")
 
