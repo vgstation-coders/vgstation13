@@ -395,7 +395,7 @@
     hud_state = "wiz_tech"
     charge_cost = 10000
     purchase_cost = 150000
-    upgrade_cost = 20000
+    upgrade_cost = 50000
 
 /spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -519,7 +519,7 @@
     abbreviation = "SC"
     desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
     purchase_cost = 500000
-    upgrade_cost = 20000
+    upgrade_cost = 200000
 
 /spell/pulse_demon/sustaincharge/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast

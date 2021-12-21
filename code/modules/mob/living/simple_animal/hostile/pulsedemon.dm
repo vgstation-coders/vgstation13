@@ -190,7 +190,6 @@
             else
                 hijackAPC(current_apc)
         else if(istype(current_power,/obj/machinery/power/battery))
-            var/obj/machinery/power/battery/current_battery = current_power
             to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
     else
         if(new_cable)
