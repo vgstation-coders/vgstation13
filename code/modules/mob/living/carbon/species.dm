@@ -1130,6 +1130,12 @@ var/list/has_died_as_golem = list()
 		S.desc = "The slimy remains of what used to be [S.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
 	S.slime_person = H
 	H.forceMove(S)
+	//Transfer the DNA and mind into the slime puddle.
+	S.dna=H.dna
+	S.mind=H.mind
+//	var/thisbrain=H.internal_organs_by_name["brain"]
+//	H.internal_organs_by_name-=thisbrain
+//	S.internal_organs_by_name+=thisbrain
 
 /datum/species/slime/gib(mob/living/carbon/human/H)
 	..()
@@ -1206,7 +1212,7 @@ var/list/has_died_as_golem = list()
 				O.stabilized = TRUE
 				O.loc = null
 
-/mob/living/gore_pile //serves as the corpse of people eaten by grues
+/mob/living/gore_pile //serves as the corpse of people eaten by grues (unused for now)
 	name = "glob of gore"
 	desc = "A glob of gore."
 	stat = DEAD
@@ -1229,56 +1235,6 @@ var/list/has_died_as_golem = list()
 		else
 			I.Blend(DEFAULT_BLOOD, ICON_ADD)
 		overlays += I
-
-/mob/living/gore_pile/attack_hand(mob/user)
-	if(gored_person)
-		var/datum/organ/external/head = gored_person.get_organ(LIMB_HEAD)
-		var/datum/organ/internal/I = gored_person.internal_organs_by_name["brain"]
-
-		var/obj/item/organ/internal/O
-		if(I && istype(I))
-			O = I.remove(user)
-			if(O && istype(O))
-
-				O.organ_data.rejecting = null
-
-				gored_person.internal_organs_by_name["brain"] = null
-				gored_person.internal_organs_by_name -= "brain"
-				gored_person.internal_organs -= O.organ_data
-				head.internal_organs -= O.organ_data
-				O.removed(gored_person,user)
-				user.put_in_hands(O)
-				to_chat(user, "<span class='notice'>You remove \the [O] from \the [src].</span>")
-		else
-			to_chat(user, "<span class='notice'>You root around inside \the [src], but find nothing.</span>")
-
-/mob/living/gore_pile/attackby(obj/item/I, mob/user)
-	if(gored_person)
-		if(istype(I, /obj/item/organ/internal/brain/))
-			if(gored_person.internal_organs_by_name["brain"])
-				to_chat(user, "<span class='notice'>There is already \a [I] in \the [src].</span>")
-				return
-			if(user.drop_item(I))
-				var/datum/organ/external/head = gored_person.get_organ(LIMB_HEAD)
-				var/obj/item/organ/internal/O = I
-
-				if(istype(O))
-					O.organ_data.transplant_data = list()
-					O.organ_data.transplant_data["species"] =    gored_person.species.name
-					O.organ_data.transplant_data["blood_type"] = gored_person.dna.b_type
-					O.organ_data.transplant_data["blood_DNA"] =  gored_person.dna.unique_enzymes
-
-					O.organ_data.organ_holder = null
-					O.organ_data.owner = gored_person
-					gored_person.internal_organs |= O.organ_data
-					head.internal_organs |= O.organ_data
-					gored_person.internal_organs_by_name[O.organ_tag] = O.organ_data
-					O.organ_data.status |= ORGAN_CUT_AWAY
-					O.replaced(gored_person)
-
-				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
-				O.stabilized = TRUE
-				O.loc = null
 
 /datum/species/insectoid
 	name = "Insectoid"

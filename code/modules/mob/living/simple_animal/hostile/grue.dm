@@ -513,29 +513,27 @@
 				else
 					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel stronger... but still hungry...</span>")
 
-			//Create a clone-able glob of gore like a slime puddle.
-//			E.dropBorers()
-			for(var/atom/movable/I in E.contents)
-				I.forceMove(E.loc)
-//			anim(target = E, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
-			var/mob/living/gore_pile/G = new(E.loc)
-			if(E.real_name)
-				G.real_name = E.real_name
-				G.name = "glob of [E.real_name] gore"
-				G.desc = "The gory remains of what used to be [G.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
-			G.gored_person = E
-			E.forceMove(G)
+			//Create a clone-able glob of gore like a slime puddle. (unused for now)
+////			E.dropBorers()
+//			for(var/atom/movable/I in E.contents)
+//				I.forceMove(E.loc)
+////			anim(target = E, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
+//			var/mob/living/gore_pile/G = new(E.loc)
+//			if(E.real_name)
+//				G.real_name = E.real_name
+//				G.name = "glob of [E.real_name] gore"
+//				G.desc = "The gory remains of what used to be [G.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
+//			G.gored_person = E
+//			E.forceMove(G)
+//			//Transfer DNA and mind into the gore glob
+//			G.dna=E.dna
+//			G.mind=E.mind
 		else
 			to_chat(src, "<span class='notice'>That creature didn't quite satisfy your hunger...</span>")
 		E.gib()
 
 	else
 		return
-
-
-
-
-
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/verb/ventcrawl()
