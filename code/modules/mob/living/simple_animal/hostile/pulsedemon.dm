@@ -126,7 +126,7 @@
     if(current_cable)
         if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
             health -= health_drain_rate
-        else if(health < maxHealth)
+        else if(health < maxHealth && draining)
             current_cable.add_load(amount_per_regen)
             health += health_to_add
     else if(current_power)
@@ -138,7 +138,7 @@
             drainAPC(current_apc)
         if(current_power.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
             health -= health_drain_rate
-        else if(health < maxHealth)
+        else if(health < maxHealth && draining)
             current_cable.add_load(amount_per_regen)
             health += health_to_add
     else if(can_leave_cable) // Health drains if not on cable with leaving ability on
