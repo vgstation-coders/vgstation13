@@ -360,7 +360,7 @@
 
     hud_state = "pd_emag"
     charge_cost = 20000
-    purchase_cost = 100000
+    purchase_cost = 200000
     upgrade_cost = 50000
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
@@ -393,7 +393,7 @@
 
     hud_state = "wiz_tech"
     charge_cost = 10000
-    purchase_cost = 50000
+    purchase_cost = 150000
     upgrade_cost = 20000
 
 /spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
@@ -421,7 +421,7 @@
 
     hud_state = "overload"
     charge_cost = 50000
-    purchase_cost = 200000
+    purchase_cost = 300000
     upgrade_cost = 100000
 
 /spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
@@ -517,7 +517,7 @@
     name = "Self-Sustaining Charge"
     abbreviation = "SC"
     desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
-    purchase_cost = 100000
+    purchase_cost = 500000
     upgrade_cost = 20000
 
 /spell/pulse_demon/sustaincharge/choose_targets(var/mob/user = usr)

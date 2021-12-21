@@ -228,9 +228,10 @@
 
 /obj/machinery/power/relaymove(mob/user, direction)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         var/turf/T = get_turf(src)
         var/turf/T2 = get_step(T,direction)
-        if(locate(/obj/structure/cable) in T2 || can_leave_cable) // Only move out if we're inside it and going in the right direction
+        if(locate(/obj/structure/cable) in T2 || PD.can_leave_cable) // Only move out if we're inside it and going in the right direction
             playsound(src,'sound/weapons/electriczap.ogg',50, 1)
             spark(src,rand(2,4))
             user.forceMove(get_turf(src))
