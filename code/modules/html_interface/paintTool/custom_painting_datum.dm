@@ -34,9 +34,9 @@
 		var/obj/item/toy/crayon/c = held_item
 		max_strength = PENCIL_STRENGTH_MAX
 		min_strength = PENCIL_STRENGTH_MIN
-		palette += c.colour
+		palette += c.mainColour
 		palette += c.shadeColour
-		base_color = c.color
+		base_color = c.mainColour
 
 	// Painting with hair dye sprays
 	if (istype(held_item, /obj/item/weapon/hair_dye))

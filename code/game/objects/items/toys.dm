@@ -537,7 +537,7 @@
 	icon_state = "crayonred"
 	w_class = W_CLASS_TINY
 	attack_verb = list("attacks", "colours", "colors")//teehee
-	var/colour = DEFAULT_BLOOD //RGB
+	var/mainColour = DEFAULT_BLOOD //RGB
 	var/shadeColour = "#220000" //RGB
 	var/uses = 30 //0 for unlimited uses
 	var/instant = 0
