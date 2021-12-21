@@ -1075,7 +1075,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		//Transfer any internal_organs (by name) from the organ item to the body
 		for(var/datum/organ/internal/transfer_by_name in organ.internal_organs)
 			if(transfer_by_name)
-				owner.internal_organs_by_name[transfer_by_name.organ_type] += transfer_by_name
+				owner.internal_organs_by_name[transfer_by_name.organ_type] = transfer_by_name
+				owner.internal_organs_by_name[transfer_by_name.organ_type].owner = owner
 
 
 		//Process attached parts (i.e. if attaching an arm with a hand, this will process the hand)
@@ -1512,6 +1513,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/head/explode()
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
+	eject_eyes()
 	.=..()
 	owner.update_hair()
 
