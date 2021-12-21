@@ -113,6 +113,7 @@
 	var/list/obj/nearbystuff = list() //Check stuff in front of us
 	for(var/obj/O in get_step(loc,dir))
 		nearbystuff += O
+	log_debug("Nearby stuff in front of [src]: [counted_english_list(nearbystuff)]")
 	while(nearbystuff.len)
 		var/obj/chosen_item = pick_n_take(nearbystuff)
 		if(attempt_object_suicide(chosen_item)) 
@@ -123,6 +124,7 @@
 	nearbystuff = list()
 	for(var/obj/O in adjacent_atoms(src)) //Failed that, check anything around us
 		nearbystuff += O
+	log_debug("Nearby stuff around [src]: [counted_english_list(nearbystuff)]")
 	while(nearbystuff.len)
 		var/obj/chosen_item = pick_n_take(nearbystuff)
 		if(attempt_object_suicide(chosen_item)) 
@@ -133,6 +135,7 @@
 	var/obj/item/held_item = get_active_hand() //Failed that too, perform an object in-hand suicide
 	if(!held_item)
 		held_item = get_inactive_hand()
+	log_debug("Held item by [src]: [held_item]")
 	if(!attempt_object_suicide(held_item)) //Failed all of that, go for normal stuff
 		if(Holiday == APRIL_FOOLS_DAY)
 			visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
