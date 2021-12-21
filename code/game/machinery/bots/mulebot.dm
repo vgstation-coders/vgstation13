@@ -682,7 +682,7 @@ var/global/mulebot_count = 0
 
 // player INSIDE mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
-	if(!(..())
+	if(!(..()))
 		unload()
 
 // receive a radio signal
