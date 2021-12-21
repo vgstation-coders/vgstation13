@@ -246,6 +246,11 @@
         log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
         log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
         message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
+    
+    else if(current_bot && istype(current_bot,/obj/machinery/bot/buttbot))
+        if (!speech.message)
+            return
+        speech.message = buttbottify(speech.message, 3, 9) // 3 times as intense
 
     else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
         to_chat(src, "You have nothing to speak with.")
