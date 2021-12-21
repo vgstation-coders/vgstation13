@@ -278,6 +278,7 @@
     if(user.loc != src)
         user.loc = src
         user.current_bot = src
+        PD_occupant = user
         return TRUE
     return FALSE
 
@@ -285,4 +286,9 @@
 /obj/machinery/power/apc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
     if(user.loc != src)
         user.loc = src
+        if(current_bot)
+            current_bot.PD_occupant = null
+        current_robot = null
+        current_bot = null
+        current_weapon = null
         user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
