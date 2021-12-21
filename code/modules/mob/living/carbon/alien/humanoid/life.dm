@@ -68,7 +68,7 @@
 /mob/living/carbon/alien/humanoid/proc/handle_disabilities()
 	if(disabilities & EPILEPSY)
 		if((prob(1) && paralysis < 10))
-			to_chat(src, "<span class='warning'>You have a seizure !</span>")
+			to_chat(src, "<span class='warning'>You have a seizure!</span>")
 			Paralyse(10)
 	if(disabilities & COUGHING)
 		if((prob(5) && paralysis <= 1))
