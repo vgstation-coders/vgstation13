@@ -124,25 +124,23 @@
     // Add the regen rate unless it puts us over max health, then just cap it off
     var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
     if(current_cable)
-        if(current_cable.avail() > amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
-            current_cable.add_load(amount_per_regen)
-            if(health < maxHealth)
-                health += health_to_add
-        else
+        if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
             health -= health_drain_rate
+        else if(health < maxHealth)
+            current_cable.add_load(amount_per_regen)
+            health += health_to_add
     else if(current_power)
-        if(istype(current_power,/obj/machinery/power/battery) && draining)
+        if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
             suckBattery(current_battery)
-        else if(istype(current_power,/obj/machinery/power/apc) && draining)
+        else if(istype(current_power,/obj/machinery/power/apc))
             var/obj/machinery/power/apc/current_apc = current_power
             drainAPC(current_apc)
-        else if(current_power.avail() > amount_per_regen)
-            current_power.add_load(amount_per_regen)
-            if(health < maxHealth)
-                health += health_to_add
-        else
+        if(current_power.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
             health -= health_drain_rate
+        else if(health < maxHealth)
+            current_cable.add_load(amount_per_regen)
+            health += health_to_add
     else if(can_leave_cable) // Health drains if not on cable with leaving ability on
         health -= health_drain_rate
     else
