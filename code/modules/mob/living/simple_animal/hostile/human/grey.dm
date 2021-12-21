@@ -11,6 +11,10 @@
 
 	corpse = /obj/effect/landmark/corpse/grey
 
+/mob/living/simple_animal/hostile/humanoid/grey/New()
+	..()
+	languages += all_languages[LANGUAGE_GREY]
+
 /mob/living/simple_animal/hostile/humanoid/grey/space
 	name = "Grey Explorer"
 	desc = "A thin alien humanoid in a space suit. This one seems to be hostile."
@@ -58,7 +62,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/melee/toolbox/Aggro()
 	..()
-	say(pick("I won't allow you to damage mothership equipment!","Time to apply percussive maintenance!"))
+	say(pick("I won't allow you to damage mothership equipment!","Time to apply percussive maintenance!"), all_languages[LANGUAGE_GREY])
 
 	attacktext = "batters"
 	attack_sound = 'sound/weapons/toolbox.ogg'
@@ -79,7 +83,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/melee/scalpel/Aggro()
 	..()
-	say(pick("I need your organs for testing!","You'll make a fine specimen for an operation!"))
+	say(pick("I need your organs for testing!","You'll make a fine specimen for an operation!"), all_languages[LANGUAGE_GREY])
 
 	attacktext = "slices"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
@@ -98,7 +102,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/space/ranged/Aggro()
 	..()
-	say(pick("Intruder!","You will be disintegrated!"))
+	say(pick("Intruder!","You will be disintegrated!"), all_languages[LANGUAGE_GREY])
 
 	projectilesound = 'sound/weapons/ray1.ogg'
 	ranged = 1
