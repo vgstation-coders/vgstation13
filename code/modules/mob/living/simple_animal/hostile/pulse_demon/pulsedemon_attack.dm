@@ -186,11 +186,13 @@
 
 /obj/machinery/bot/mulebot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
     if(istype(A) && Adjacent(A))
-        if(!A.anchored)
-            load(A)
-            if(is_locking(/datum/locking_category/mulebot))
-                to_chat(user, "You load \the [A] onto \the [src].")
-                return
+        if(ismovable(A))
+            var/atom/movable/AM = A
+            if(!AM.anchored)
+                load(AM)
+                if(is_locking(/datum/locking_category/mulebot))
+                    to_chat(user, "You load \the [AM] onto \the [src].")
+                    return
         var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
         if(load)
             to_chat(user, "You unload \the [load].")
@@ -273,7 +275,11 @@
 
 // Lets you take over a bot to move it around
 /obj/machinery/bot/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    user.loc = src
+    if(user.loc != src)
+        user.loc = src
+        user.current_bot = src
+        return TRUE
+    return FALSE
 
 // Lets you go back into the APC, and also removes cam stuff
 /obj/machinery/power/apc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
