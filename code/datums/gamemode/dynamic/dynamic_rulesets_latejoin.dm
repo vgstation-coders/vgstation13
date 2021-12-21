@@ -254,7 +254,7 @@
 	var/datum/role/grue/newgrue = new
 	newgrue.AssignToRole(ourgrue.mind,1)
 	newgrue.Greet(GREET_DEFAULT)
-	newgrue.ForgeObjectives()
+	newgrue.ForgeObjectives(ourgrue.hatched) //Assign it grue_basic objectives if its a hatched grue
 	newgrue.AnnounceObjectives()
 	return 1
 

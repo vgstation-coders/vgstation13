@@ -1133,9 +1133,6 @@ var/list/has_died_as_golem = list()
 	//Transfer the DNA and mind into the slime puddle.
 	S.dna=H.dna
 	S.mind=H.mind
-//	var/thisbrain=H.internal_organs_by_name["brain"]
-//	H.internal_organs_by_name-=thisbrain
-//	S.internal_organs_by_name+=thisbrain
 
 /datum/species/slime/gib(mob/living/carbon/human/H)
 	..()

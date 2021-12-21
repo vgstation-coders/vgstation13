@@ -60,6 +60,7 @@
 /mob/living/simple_animal/grue_egg/death()
 	name = "grue egg remnants"
 	desc = "The remnants of a grue egg."
+	gender = "plural"
 	qdel(recruiter)
 	recruiter = null
 	..()
@@ -102,7 +103,7 @@
 		return
 //	icon_state="egg_triggered"
 	hatching=1
-	src.visible_message("<span class='notice'>The [name] pulsates!</span>")
+	src.visible_message("<span class='notice'>\The [name] pulsates!</span>")
 	recruiter.request_player()
 
 /mob/living/simple_animal/grue_egg/proc/recruiter_recruiting(mob/dead/observer/player, controls)
@@ -116,8 +117,7 @@
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 
 		var/mob/living/simple_animal/hostile/grue/gruespawn/G = new(get_turf(src))
-//		G.lifestage=1    //should be handled already by New()
-//		G.lifestage_updates
+		G.hatched = 1 //this grue hatched from an egg
 		G.transfer_personality(player.client)
 		// Play hatching noise here.
 		playsound(src.loc, 'sound/effects/splat.ogg', 50, 1)

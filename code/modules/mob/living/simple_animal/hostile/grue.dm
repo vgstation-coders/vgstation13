@@ -1,7 +1,8 @@
 /mob/living/simple_animal/hostile/grue
 
 	icon = 'icons/mob/grue.dmi'
-	speed = 1
+	speed=1
+	var/base_speed=1
 	can_butcher = FALSE
 //	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grue
 
@@ -27,11 +28,16 @@
 	var/moulttime = 30 //time required to moult to a new form
 	var/moulttimer = 100 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
+	var/hatched=0			//whether or not this grue hatched from an egg
 
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
 	var/burnmalus=1														//malus to life drain based on life stage to avoid grues becoming too tanky to light as they mature
+	var/speed_m_dark=1/1.2		//speed multiplier in dark conditions
+	var/speed_m_dim=1/1.1			//speed multiplier in dim conditions
+	var/speed_m_light=1			//speed multiplier in light conditions
+	var/speed_m=1				//active speed multiplier
 
 	var/pg_mult = 3										 //multiplier for power gained per tick when in dark tile
 	var/pd_mult = 0									  //multiplier for shadow power drained per tick on bright tile (0=disabled)
@@ -146,6 +152,14 @@
 		else if(current_brightness>bright_limit_drain)
 			shadowpower = max(0,shadowpower-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light
 
+		//process speed modifiers
+		if(dark_dim_light==0)
+			speed=base_speed*speed_m_dark
+		else if(dark_dim_light==1)
+			speed=base_speed*speed_m_dim
+		else if(dark_dim_light==2)
+			speed=base_speed*speed_m_light
+
 		if(ismoulting)
 			moulttimer--
 			if(moulttimer<=0)
@@ -254,8 +268,9 @@
 			stat(null, "Moulting progress: [100*(1-moulttimer/moulttime)]%")
 		if(lifestage<3) //not needed for adults
 			stat(null, "Shadow power: [shadowpower]/[maxshadowpower]")
-		if (lifestage>=3)
-			stat(null, "Reproductive energy: [eatencharge]")
+		if(lifestage>=3)
+			if(config.grue_egglaying)
+				stat(null, "Reproductive energy: [eatencharge]")
 			stat(null, "Sentient life forms eaten: [eatencount]")
 
 /mob/living/simple_animal/hostile/grue/gruespawn
@@ -353,6 +368,8 @@
 	set name = "Reproduce"
 	set desc = "Spawn offspring in the form of an egg."
 	set category = "Grue"
+	if (!config.grue_egglaying) //Check if egglaying is enabled.
+		return
 	if (lifestage==3) //must be adult
 		if (eatencharge<=0)
 			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
@@ -431,9 +448,8 @@
 	src.ckey = candidate.ckey
 	if(src.mind)
 		src.mind.assigned_role = "Grue"
-
 		to_chat(src, "<span class='danger'>You are a grue.</span>")
-		to_chat(src, "<span class='danger'>Darkness is your ally, bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
+		to_chat(src, "<span class='danger'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
 		to_chat(src, "<span class='danger'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
 
 
@@ -491,7 +507,7 @@
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++
 			eatencharge++
-			speed=max(0.2,speed*0.8) //speed cap of 0.2
+			base_speed=max(0.2,base_speed*0.8) //speed cap of 0.2
 			var/tempHealth=health/maxHealth
 			maxHealth=round(min(1000,maxHealth+50)) //50 more health with a cap of 1000
 			health=tempHealth*maxHealth
