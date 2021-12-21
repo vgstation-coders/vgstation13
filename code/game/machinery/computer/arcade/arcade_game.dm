@@ -323,7 +323,31 @@
 		var/subtract = 50 * (emagged * 3) //Packs a punch to them
 		PD.health -= subtract
 		if(oldhealth - subtract <= 0) //If they die from this
-			//Do stuff. WIP
+			if(emagged && prob(25))
+				var/obj/item/device/powersink/PS = new /obj/item/device/powersink(holder.loc)
+				PS.dev_multi = 6
+			else if(prob(50))
+				if(prob(50))
+					if(prob(50))
+						new /obj/item/clothing/gloves/yellow/power(holder.loc)
+					else
+						new /obj/item/clothing/gloves/golden/insul(holder.loc)
+				else
+					var/obj/item/clothing/gloves/G = new /obj/item/clothing/gloves/yellow(holder.loc)
+					G.cell = new /obj/item/weapon/cell/infinite(G)
+					G.cant_remove_cell = TRUE //No exploiting it outside of this
+			else
+				new /obj/item/clothing/gloves/yellow(holder.loc)
+		else if(prob(50))
+			new /obj/item/clothing/gloves/fyellow(holder.loc)
+		else
+			var/obj/item/clothing/gloves/G = new /obj/item/clothing/gloves/black(holder.loc)
+			G.cell = new /obj/item/weapon/cell/crap/empty(G)
+
+/obj/item/clothing/gloves/golden/insul //Pulse demon defeat arcade version.
+	desc = "An impressive fashion statement. The insides are lined with strange high-tech sacs filled with an unidentified fluid which lubricates the outside, and insulation against electric shocks to stop gold conducting through you. It comes with a cryptic note reading: touch the supermatter."
+	name = "insulated golden gloves"
+	siemens_coefficient = 0
 
 /datum/arcade_game/space_villain/proc/harm_p1()
 	if(istype(playertwo,/mob/living/simple_animal/hostile/pulse_demon))
