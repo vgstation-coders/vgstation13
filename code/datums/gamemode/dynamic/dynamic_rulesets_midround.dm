@@ -372,7 +372,7 @@
 		if(A.name == "Syndicate-Spawn")
 			synd_spawn += get_turf(A)
 			continue
-	
+
 	var/spawnpos = index
 	if(spawnpos > synd_spawn.len)
 		spawnpos = 1
@@ -551,7 +551,7 @@
 	name = "Time Agent Anomaly"
 	role_category = /datum/role/time_agent
 	required_candidates = 1
-	weight = 4
+	weight = BASE_RULESET_WEIGHT * 0.4
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
@@ -600,6 +600,7 @@
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
 	flags = MINOR_RULESET
+	makeBody = FALSE
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
@@ -682,7 +683,7 @@
 		if(A.name == "voxstart")
 			vox_spawn += get_turf(A)
 			continue
-	
+
 	var/spawn_count = index
 	if(spawn_count > vox_spawn.len)
 		spawn_count = 1
