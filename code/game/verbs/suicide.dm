@@ -110,31 +110,30 @@
 	if(suicide_set && mind)
 		mind.suiciding = 1
 
-	var/obj/item/held_item = get_active_hand()
+	var/list/obj/nearbystuff = list() //Check stuff in front of us
+	for(var/obj/O in get_step(loc,dir))
+		nearbystuff += O
+	while(nearbystuff.len)
+		var/obj/chosen_item = pick_n_take(nearbystuff)
+		if(attempt_object_suicide(chosen_item)) 
+			if(istype(chosen_item,/obj/item))
+				var/obj/item/I = chosen_item
+				put_in_hands(I)
+			return
+	nearbystuff = list()
+	for(var/obj/O in adjacent_atoms(src)) //Failed that, check anything around us
+		nearbystuff += O
+	while(nearbystuff.len)
+		var/obj/chosen_item = pick_n_take(nearbystuff)
+		if(attempt_object_suicide(chosen_item)) 
+			if(istype(chosen_item,/obj/item))
+				var/obj/item/I = chosen_item
+				put_in_hands(I)
+			return
+	var/obj/item/held_item = get_active_hand() //Failed that too, perform an object in-hand suicide
 	if(!held_item)
 		held_item = get_inactive_hand()
-	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for stuff in front of us
-		var/list/obj/nearbystuff = list()
-		for(var/obj/O in get_step(loc,dir))
-			nearbystuff += O
-		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item)) 
-				if(istype(chosen_item,/obj/item))
-					var/obj/item/I = chosen_item
-					put_in_hands(I)
-				return
-		nearbystuff = list()
-		for(var/obj/O in adjacent_atoms(src)) //Failed that too, check anything around us
-			nearbystuff += O
-		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item)) 
-				if(istype(chosen_item,/obj/item))
-					var/obj/item/I = chosen_item
-					put_in_hands(I)
-				return
-		//Failed that too, go for normal stuff
+	if(!attempt_object_suicide(held_item)) //Failed all of that, go for normal stuff
 		if(Holiday == APRIL_FOOLS_DAY)
 			visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
 		else
