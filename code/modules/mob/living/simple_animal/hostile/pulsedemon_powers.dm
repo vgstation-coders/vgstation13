@@ -257,6 +257,7 @@
             name = "Self-Sufficient [name]"
 
     charge_cost /= 1.5
+    upgrade_cost *= 1.5
     return temp
 
 /spell/pulse_demon/is_valid_target(var/atom/target)
