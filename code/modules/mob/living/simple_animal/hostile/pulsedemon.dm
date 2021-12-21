@@ -41,6 +41,7 @@
     var/takeover_time = 30                                          //Time spent taking over electronics
     var/show_desc = FALSE                                           //For the ability menu
     var/can_leave_cable = FALSE                                     //For the ability that lets you
+    var/draining = FALSE                                            //For draining power or not
     var/move_divide = 4                                             //For slowing down of above
 
     //TYPES
@@ -74,9 +75,10 @@
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
     add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+    add_spell(new /spell/pulse_demon/toggle_drain, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
     for(var/pd_spell in getAllPulseDemonSpells())
         var/spell/S = new pd_spell
-        if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities)
+        if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities && S.type != /spell/pulse_demon/toggle_drain)
             possible_spells += S
     for(var/pd_upgrade in subtypesof(/datum/pulse_demon_upgrade))
         var/datum/pulse_demon_upgrade/PDU = new pd_upgrade(src)
@@ -129,10 +131,10 @@
         else
             health -= health_drain_rate
     else if(current_power)
-        if(istype(current_power,/obj/machinery/power/battery))
+        if(istype(current_power,/obj/machinery/power/battery) && draining)
             var/obj/machinery/power/battery/current_battery = current_power
             suckBattery(current_battery)
-        else if(istype(current_power,/obj/machinery/power/apc))
+        else if(istype(current_power,/obj/machinery/power/apc) && draining)
             var/obj/machinery/power/apc/current_apc = current_power
             drainAPC(current_apc)
         else if(current_power.avail() > amount_per_regen)
@@ -183,7 +185,6 @@
             if(current_apc.occupant)
                 to_chat(src,"<span class='warning'>Something else that isn't a pulse demon is already in here!</span>")
                 return
-            max_can_absorb = current_apc.cell.maxcharge
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
             else
@@ -191,7 +192,6 @@
         else if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
             to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
-            max_can_absorb = current_battery.output
     else
         if(new_cable)
             current_cable = new_cable
@@ -230,7 +230,7 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/turf/T = get_turf(src)
         var/turf/T2 = get_step(T,direction)
-        if(locate(/obj/structure/cable) in T2) // Only move out if we're inside it and going in the right direction
+        if(locate(/obj/structure/cable) in T2 || can_leave_cable) // Only move out if we're inside it and going in the right direction
             playsound(src,'sound/weapons/electriczap.ogg',50, 1)
             spark(src,rand(2,4))
             user.forceMove(get_turf(src))
@@ -316,17 +316,14 @@
 /obj/machinery/computer/security/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
     return attack_hand(user)
 
-// Lets you be "player two" against a human
-/obj/machinery/computer/arcade/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    playertwo = user
-    var/dat = game.get_p2_dat()
-    user << browse(dat, "window=arcade")
-    onclose(user, "arcade")
-
 // Lets you view from these, and inherit view properties like xray if any
 /obj/machinery/camera/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
     user.loc = src
     user.change_sight(adding = vision_flags)
+
+// Talk ability handled elsewhere
+/obj/item/device/radio/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
+    user.loc = src
 
 // Lets you take over a weapon to fire
 /obj/machinery/recharger/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
@@ -410,8 +407,8 @@
         log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
         message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
 
-    else
-        to_chat(src, "You have no hijacked robot to speak with.")
+    else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
+        to_chat(src, "You have nothing to speak with.")
         return 1 //this ensures we don't end up speaking out loud
 
 // Helper stuff for attacks
@@ -516,6 +513,7 @@
 
 // Called in Life() per tick
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
+    max_can_absorb = current_battery.output
     var/amount_to_drain = charge_absorb_amount
     // Cap conditions
     if(current_battery.charge <= charge_absorb_amount)
@@ -535,6 +533,8 @@
 
 // This too
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
+    // Was too pitiful at normal level, this should now allow a maximum of 400kw from the best power cells, just below 600kw from best SME
+    max_can_absorb = current_apc.cell.maxcharge * 10
     var/amount_to_drain = charge_absorb_amount
     // Cap conditions
     if(current_apc.cell.charge <= charge_absorb_amount)

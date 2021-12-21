@@ -98,7 +98,7 @@
         update_condition_and_cost()
 
 /datum/pulse_demon_upgrade/regencost
-    ability_name = "Lower amount per regen"
+    ability_name = "Lower regeneration amount drain"
     ability_desc = "Drains less power per second to regenerate health."
 
 /datum/pulse_demon_upgrade/regencost/update_condition_and_cost()
@@ -278,6 +278,22 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         PD.powerMenu()
+
+/spell/pulse_demon/toggle_drain
+    name = "Toggle power drain"
+    desc = "Toggles the draining of power while in an APC, battery or cable"
+    abbreviation = "TD"
+    hud_state = "pd_toggle"
+    charge_max = 0
+    level_max = list()
+
+/spell/pulse_demon/toggle_drain/choose_targets(var/mob/user = usr)
+    return list(user) // Self-cast
+
+/spell/pulse_demon/toggle_drain/cast(var/list/targets, var/mob/living/carbon/human/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.draining = !PD.draining
 
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
