@@ -66,6 +66,7 @@
 /datum/arcade_game/space_villain
 	var/enemy_name = "Space Villain"
 	var/temp = "Winners Don't Use Spacedrugs" //Temporary message, for attack messages, etc
+	var/p2_temp = "Winners Don't Use Spacedrugs" //Temporary message, for attack messages, etc
 	var/player_hp = 30 //Player health/attack points
 	var/player_max_hp = 30
 	var/player_mp = 10
@@ -169,7 +170,7 @@
 	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
 
 	dat += {"<center><h4>[enemy_name]</h4></center>
-		<br><center><h3>[temp]</h3></center>
+		<br><center><h3>[p2_temp]</h3></center>
 		<br><center>Health: [enemy_hp] | Magic: [enemy_mp] | Player Health: [player_hp]</center>"}
 	if (gameover)
 		dat += "<center><b><a href='byond://?src=\ref[src];newgame=1'>New Game</a>"
@@ -309,11 +310,11 @@
 	if ((enemy_mp <= 0) || (enemy_hp <= 0))
 		if(!gameover)
 			gameover = 1
-			temp = "You have fallen! GAME OVER"
+			p2_temp = "You have fallen! GAME OVER"
 			harm_p2()
 	if ((player_mp <= 0) || (player_hp <= 0))
 		gameover = 1
-		temp = "The player has been crushed! Rejoice!"
+		p2_temp = "The player has been crushed! Rejoice!"
 		harm_p1()
 
 /datum/arcade_game/space_villain/proc/harm_p2()
@@ -408,7 +409,7 @@
 /datum/arcade_game/space_villain/proc/action_p2charge()
 	blocked = 1
 	var/chargeamt = rand(4,7)
-	temp = "You regain [chargeamt] points"
+	p2_temp = "You regain [chargeamt] points"
 	enemy_mp += chargeamt
 
 	holder.updateUsrDialog()
@@ -420,7 +421,7 @@
 	blocked = 1
 	var/pointamt = rand(1,3)
 	var/healamt = rand(6,8)
-	temp = "You use [pointamt] magic to heal for [healamt] damage!"
+	p2_temp = "You use [pointamt] magic to heal for [healamt] damage!"
 	holder.updateUsrDialog()
 
 	sleep(10)
@@ -434,7 +435,7 @@
 /datum/arcade_game/space_villain/proc/action_p2attack()
 	blocked = 1
 	var/attackamt = rand(2,6)
-	temp = "You attack for [attackamt] damage!"
+	p2_temp = "You attack for [attackamt] damage!"
 	holder.updateUsrDialog()
 
 	sleep(10)
@@ -464,6 +465,7 @@
 		return
 
 	temp = "If you die in the game, you die for real!"
+	p2_temp = "If he dies in the game, he dies for real!"
 	player_hp = 30
 	player_mp = 10
 	enemy_hp = 45
@@ -493,6 +495,7 @@
 
 	if(!emagged && prob(5)) //Bug
 		temp = "|eW R0vnb##[rand(0,9)]#"
+		p2_temp = "|eW R0vnb##[rand(0,9)]#"
 		player_hp = rand(1,30)
 		player_mp = rand(1,10)
 		enemy_hp = rand(1,60)
