@@ -23,7 +23,7 @@
 /datum/faction/wilkersons/proc/manifestMiddle()
 	theMiddle = get_turf(locate(map.center_x, map.center_y, 1))
 	malcolm.theMiddle = theMiddle
-	for(var/turf/M in orange(2, theMiddle)
+	for(var/turf/M in orange(2, theMiddle))
 		if(M.Adjacent(theMiddle))
 			continue
 		new /obj/effect/theMiddle(M)

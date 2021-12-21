@@ -398,6 +398,12 @@
 		mime.AssignToRole(character.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
 
+
+	if(ticker.malcolm_mode_enabled == TRUE)
+		character.mind.assigned_role = "MODE"
+		// -- data
+
+
 	var/turf/T = character.loc
 
 	if(character.mind.assigned_role != "MODE")

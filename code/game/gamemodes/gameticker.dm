@@ -51,6 +51,7 @@ var/datum/controller/gameticker/ticker
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
 
+	var/malcolm_mode_enabled = FALSE
 
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
@@ -675,6 +676,28 @@ var/datum/controller/gameticker/ticker
 	to_chat(world, "<h1>Tag mode has been cancelled.<h1>")
 	dynamic_forced_extended = FALSE
 	forced_roundstart_ruleset = list()
+
+
+// -- Malcolm in the middle
+
+
+/datum/controller/gameticker/proc/malcolm_middle(var/mob/user)
+	malcolm_mode_enabled = TRUE
+	to_chat(world, "<h1>Malcolm mode enabled!<h1>")
+
+	// This is /datum/forced_ruleset thing. This shit exists ONLY for pre-roundstart rulesets. Yes. This is a thing.
+	var/datum/forced_ruleset/malcolm_mode = new
+	malcolm_mode.name = "Malcolm in the Middle"
+	malcolm_mode.calledBy = "[key_name(user)]"
+	forced_roundstart_ruleset += malcolm_mode
+	dynamic_forced_extended = TRUE
+
+/datum/controller/gameticker/proc/cancel_malcolm_middle(var/mob/user)
+	malcolm_mode_enabled = FALSE
+	to_chat(world, "<h1>Malcolm mode has been cancelled.<h1>")
+	dynamic_forced_extended = FALSE
+	forced_roundstart_ruleset = list()
+
 
 /world/proc/has_round_started()
 	return ticker && ticker.current_state >= GAME_STATE_PLAYING

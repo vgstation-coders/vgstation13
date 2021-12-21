@@ -5857,6 +5857,14 @@
 		else
 			toggle_tag_mode(usr)
 
+	else if(href_list["malcolm_middle"])
+		if (!check_rights(R_FUN))
+			to_chat(usr, "You don't have the necessary permissions to do this.")
+			return
+		else
+			toggle_malcolm_mode(usr)
+
+
 /datum/admins/proc/updateRelWindow()
 	var/text = list()
 	text += "<h3>Religions in game</h3>"

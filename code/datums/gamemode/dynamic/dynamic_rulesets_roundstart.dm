@@ -771,3 +771,76 @@ Assign your candidates in choose_candidates() instead.
 		mime.AssignToRole(M2.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//      malcolm in da middle (speical)     	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/malcolm_middle
+	name = "Malcolm in the Middle"
+	role_category = /datum/role/wilkerson
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 3
+	weight = BASE_RULESET_WEIGHT
+	cost = 10
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+	high_population_requirement = 101
+	flags = MINOR_RULESET
+
+
+/datum/dynamic_ruleset/roundstart/malcolm_middle/acceptable(var/population=0, var/threat=0)
+	if (population < 5)
+		log_admin("Cannot accept Malcolm ruleset. Not enough population.")
+		message_admins("Cannot accept Malcolm ruleset. Not enough population.")
+		return FALSE
+	return ..()
+
+/datum/dynamic_ruleset/roundstart/malcolm_middle/execute()
+	var/datum/faction/wilkersons/wilkersons = find_active_faction_by_type(/datum/faction/wilkersons)
+	if (!wilkersons)
+		wilkersons = ticker.mode.CreateFaction(/datum/faction/wilkersons, null, 1)
+	var/list/wilkersons_list = living_mob_list
+	for (var/mob/M in wilkersons_list)
+		if (!M.key)
+			wilkersons_list -= M
+	// Malcolm
+	var/mob/malcolm = pick(wilkersons_list)
+	var/datum/role/wilkerson/malcolm/malc = new
+	malc.AssignToRole(malcolm.mind, 1)
+	wilkersons.HandleNewMind(malc.antag)
+	malc.Greet(GREET_ROUNDSTART)
+	wilkersons_list -= malcolm
+	// Reese
+	var/mob/reese = pick(wilkersons_list)
+	var/datum/role/wilkerson/reese/ree = new
+	ree.AssignToRole(reese.mind, 1)
+	wilkersons.HandleNewMind(ree.antag)
+	ree.Greet(GREET_ROUNDSTART)
+	wilkersons_list -= reese
+	// Dewey
+	var/mob/dewey = pick(wilkersons_list)
+	var/datum/role/wilkerson/dewey/dew = new
+	dew.AssignToRole(reese.mind, 1)
+	wilkersons.HandleNewMind(dew.antag)
+	dew.Greet(GREET_ROUNDSTART)
+	wilkersons_list -= dewey
+
+	// Parents
+	var/i = 1
+	for (var/mob/M in wilkersons_list)
+		if (i % 2)
+			var/datum/role/wilkerson/parents/hal/H = new
+			H.AssignToRole(M.mind, 1)
+			wilkersons.HandleNewMind(H.antag)
+			H.Greet(GREET_ROUNDSTART)
+		else
+			var/datum/role/wilkerson/parents/lois/L = new
+			L.AssignToRole(M.mind, 1)
+			wilkersons.HandleNewMind(L.antag)
+			L.Greet(GREET_ROUNDSTART)
+
+	wilkersons.OnPostSetup()
