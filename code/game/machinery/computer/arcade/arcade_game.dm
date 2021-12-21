@@ -317,8 +317,8 @@
 		harm_p1()
 
 /datum/arcade_game/space_villain/proc/harm_p2()
-	if(istype(playertwo,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = playertwo
+	if(istype(holder.playertwo,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = holder.playertwo
 		var/oldhealth = PD.health
 		var/subtract = 50 * (emagged * 3) //Packs a punch to them
 		PD.health -= subtract
@@ -350,8 +350,8 @@
 	siemens_coefficient = 0
 
 /datum/arcade_game/space_villain/proc/harm_p1()
-	if(istype(playertwo,/mob/living/simple_animal/hostile/pulse_demon))
-		playerone.electrocute_act(67 * (emagged * 3), src, 1) //And to the player too, if (s)he loses
+	if(istype(holder.playertwo,/mob/living/simple_animal/hostile/pulse_demon))
+		holder.playerone.electrocute_act(67 * (emagged * 3), src, 1) //And to the player too, if (s)he loses
 
 /datum/arcade_game/space_villain/proc/action_charge()
 	blocked = 1
