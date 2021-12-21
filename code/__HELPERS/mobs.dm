@@ -129,6 +129,25 @@
 	else
 		return "unknown"
 
+/proc/haircolordesc(voxhair)
+	switch(voxhair)
+		if(1)
+			return "green"
+		if(2)
+			return "azure"
+		if(3)
+			return "brown"
+		if(4)
+			return "emerald"
+		if(5)
+			return "gray"
+		if(6)
+			return "light green"
+		if(7)
+			return "green-brown"
+		else
+			return "unknown"
+
 /proc/age2agedescription(age)
 	switch(age)
 		if(0 to 1)
