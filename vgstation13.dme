@@ -2259,6 +2259,7 @@
 #include "code\modules\projectiles\guns\lawgiver.dm"
 #include "code\modules\projectiles\guns\portalgun.dm"
 #include "code\modules\projectiles\guns\projectile.dm"
+#include "code\modules\projectiles\guns\energy\disintegrator.dm"
 #include "code\modules\projectiles\guns\energy\gravitywell.dm"
 #include "code\modules\projectiles\guns\energy\laser.dm"
 #include "code\modules\projectiles\guns\energy\lasmusket.dm"

@@ -1039,6 +1039,27 @@
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
 
+//////////////////Grey Corpses///////////////////////////
+
+/obj/effect/landmark/corpse/grey
+	name = "Grey"
+	mutantrace = "Grey"
+	corpsegender = G_BOTH
+
+/obj/effect/landmark/corpse/grey/space
+	name = "Grey"
+	mutantrace = "Grey"
+	generate_random_appearance = 1
+	corpsegender = G_BOTH
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpsesuit = /obj/item/clothing/suit/space/grey
+	corpseuniform = /obj/item/clothing/under/color/grey
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe
+	corpseback = /obj/item/weapon/tank/oxygen/red
+	corpsehelmet = /obj/item/clothing/head/helmet/space/grey
+	corpseid = 0
+
 //////////////////Misc Corpses///////////////////////////
 
 /obj/effect/landmark/corpse/roboticist/spessmart
