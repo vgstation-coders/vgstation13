@@ -294,6 +294,24 @@
 	blocked = 0
 	turn = 0
 
+/datum/arcade_game/space_villain/proc/check_p1_win()
+	if ((enemy_mp <= 0) || (enemy_hp <= 0))
+		if(!gameover)
+			gameover = 1
+			temp = "[enemy_name] has fallen! Rejoice!"
+	if ((player_mp <= 0) || (player_hp <= 0))
+		gameover = 1
+		temp = "You have been crushed! GAME OVER"
+
+/datum/arcade_game/space_villain/proc/check_p2_win()
+	if ((enemy_mp <= 0) || (enemy_hp <= 0))
+		if(!gameover)
+			gameover = 1
+			temp = "You have fallen! GAME OVER"
+	if ((player_mp <= 0) || (player_hp <= 0))
+		gameover = 1
+		temp = "The player has been crushed! Rejoice!"
+
 /datum/arcade_game/space_villain/proc/action_charge()
 	blocked = 1
 	var/chargeamt = rand(4,7)
@@ -307,6 +325,8 @@
 	turn = 1
 	if(!holder.playertwo)
 		arcade_action()
+	else
+		check_p1_win()
 
 /datum/arcade_game/space_villain/proc/action_heal()
 	blocked = 1
@@ -324,6 +344,8 @@
 	turn = 1
 	if(!holder.playertwo)
 		arcade_action()
+	else
+		check_p1_win()
 
 /datum/arcade_game/space_villain/proc/action_attack()
 	blocked = 1
@@ -338,6 +360,8 @@
 	turn = 1
 	if(!holder.playertwo)
 		arcade_action()
+	else
+		check_p1_win()
 
 /datum/arcade_game/space_villain/proc/action_p2charge()
 	blocked = 1
@@ -348,6 +372,7 @@
 	holder.updateUsrDialog()
 	sleep(10)
 	turn = 0
+	check_p2_win()
 
 /datum/arcade_game/space_villain/proc/action_p2heal()
 	blocked = 1
@@ -362,6 +387,7 @@
 	blocked = 1
 	holder.updateUsrDialog()
 	turn = 0
+	check_p2_win()
 
 /datum/arcade_game/space_villain/proc/action_p2attack()
 	blocked = 1
@@ -372,6 +398,7 @@
 	sleep(10)
 	player_hp -= attackamt
 	turn = 0
+	check_p2_win()
 
 /datum/arcade_game/space_villain/is_cheater(mob/user)
 	if(emagged && !gameover)
