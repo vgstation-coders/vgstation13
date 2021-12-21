@@ -63,6 +63,16 @@
 				palette += b.paint_color
 			base_color = b.paint_color
 
+	// Normalize palette colors
+	for (var/i = 1; i < palette.len; i++)
+		palette[i] = lowertext(palette[i])
+		if (length(palette[i]) < 9) //If missing alpha channel assume opaque
+			palette[i] += "ff"
+	// Normalize base color
+	base_color = lowertext(base_color)
+	if (length(base_color) < 9) //If missing alpha channel assume opaque
+		base_color += "ff"
+
 
 /datum/painting_utensil/proc/duplicate()
 	var/datum/painting_utensil/dupe = new(null, null)
