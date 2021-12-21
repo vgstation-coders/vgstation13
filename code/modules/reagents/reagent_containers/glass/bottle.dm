@@ -613,7 +613,7 @@ var/datum/disease2/disease/wizarditis = null
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bleachbottle"
 	starting_materials = list(MAT_PLASTIC = 1000)
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 	melt_temperature = MELTPOINT_PLASTIC
 
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/update_icon()

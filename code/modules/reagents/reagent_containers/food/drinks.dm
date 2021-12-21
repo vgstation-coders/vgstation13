@@ -1220,6 +1220,7 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 500)
+	w_type = RECYK_PLASTIC
 	volume = 100
 	amount_per_transfer_from_this = 10
 

@@ -133,6 +133,8 @@
 			var/image/magazine_adjustment = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = mag_sprite)
 			magazine_adjustment.pixel_x -= stored_magazine.magoffsetx
 			magazine_adjustment.pixel_y -= stored_magazine.magoffsety
+			if(stored_magazine.markingcolor)
+				magazine_adjustment.icon += stored_magazine.markingcolor
 			overlays += magazine_adjustment
 			magazine_overlay = magazine_adjustment
 			return
