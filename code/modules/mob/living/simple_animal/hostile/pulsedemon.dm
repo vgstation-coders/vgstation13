@@ -51,6 +51,7 @@
     var/datum/powernet/previous_net                                 // Old net to check against current one for cable view update
     var/obj/machinery/power/current_power                           // Current power machine we're in
     var/mob/living/silicon/robot/current_robot                      // Currently controlled robot
+    var/obj/machinery/bot/current_bot                               // Currently controlled bot
     var/obj/item/weapon/current_weapon                              // Current gun we're controlling
 
     //LISTS
@@ -196,6 +197,7 @@
             current_net = current_cable.get_powernet()
             current_power = null
             current_robot = null
+            current_bot = null
             current_weapon = null
             if(!isturf(loc))
                 loc = get_turf(NewLoc)
@@ -207,6 +209,7 @@
             current_cable = null
             current_power = null
             current_robot = null
+            current_bot = null
             current_weapon = null
 
 /mob/living/simple_animal/hostile/pulse_demon/movement_tally_multiplier()
@@ -282,6 +285,9 @@
             A.attack_robot(current_robot)
         else if(isliving(A))
             ..()
+        
+        else if(current_bot) // Do bot stuff
+            current_bot.attack_integrated_pulsedemon(A)
     else
         spell_channeling.channeled_spell(A) // Handle spell stuff
 
@@ -305,6 +311,39 @@
 // Proc that allows special pulse demon functionality
 /atom/proc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
     return
+
+// Proc that allows special pulse demon functionality when inside a bot
+/atom/proc/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
+    return
+
+/obj/machinery/bot/secbot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
+    if(iscarbon(A))
+        var/mob/living/carbon/M = A
+        if(Adjacent(M))
+            playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+
+            if (istype(M, /mob/living/carbon/human))
+                if (M.stuttering < 10 && (!(M_HULK in M.mutations)))
+                    M.stuttering = 10
+            else
+                M.stuttering = 10
+            M.Stun(10)
+            M.Knockdown(10)
+            if(do_after(2 SECONDS))
+                if (!istype(M))
+                    return
+                if (M.handcuffed)
+                    return
+                M.handcuffed = new /obj/item/weapon/handcuffs(M)
+                M.update_inv_handcuffed()	//update handcuff overlays
+                playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+        else
+            if(src.arrest_message == null)
+                src.speak("Level [src.threatlevel] infraction alert!")
+            else
+                src.speak("[src.arrest_message]")
+            playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
+            visible_message("<b>[src]</b> points at [M.name]!")
 
 // Most machinery just does normal AI attacks
 /obj/machinery/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
@@ -380,6 +419,10 @@
             user.current_robot = R
     else
         to_chat(user,"<span class='warning'>There is no silicon-based occupant inside.</span>")
+
+// Lets you take over a bot to move it around
+/obj/machinery/bot/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
+    user.loc = src
 
 // Lets you go back into the APC, and also removes cam stuff
 /obj/machinery/power/apc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)

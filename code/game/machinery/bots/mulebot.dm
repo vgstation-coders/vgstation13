@@ -682,7 +682,8 @@ var/global/mulebot_count = 0
 
 // player INSIDE mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
-	unload()
+	if(!(..())
+		unload()
 
 // receive a radio signal
 // used for control and beacon reception
