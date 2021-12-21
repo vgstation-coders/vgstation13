@@ -383,7 +383,8 @@
 			visible_message("<span class='warning'>[src] pushes out an egg!</span>")
 			eatencharge--
 //			playsound(T, 'sound/effects/splat.ogg', 50, 1)
-			var/mob/living/simple_animal/grue_egg/new_grueegg = new(get_turf(src))
+//			var/mob/living/simple_animal/grue_egg/new_grueegg = new(get_turf(src))
+			new /mob/living/simple_animal/grue_egg(get_turf(src))
 		busy=0
 
 	else
