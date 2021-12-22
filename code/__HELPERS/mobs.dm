@@ -129,8 +129,8 @@
 	else
 		return "unknown"
 
-/proc/haircolordesc(voxhair)
-	switch(voxhair)
+/proc/haircolordesc(v_hair)
+	switch(v_hair)
 		if(1)
 			return "green"
 		if(2)
