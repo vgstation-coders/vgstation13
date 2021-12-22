@@ -83,4 +83,3 @@
 	desc = "Must be a culture thing."
 	density = 0
 	anchored = 1
-	
