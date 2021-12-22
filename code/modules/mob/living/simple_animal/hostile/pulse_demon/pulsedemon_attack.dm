@@ -49,7 +49,7 @@
             ..()
         
         else if(current_bot) // Do bot stuff
-            current_bot.attack_integrated_pulsedemon(A)
+            current_bot.attack_integrated_pulsedemon(src,A)
     else
         spell_channeling.channeled_spell(A) // Handle spell stuff
 
