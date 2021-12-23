@@ -1166,7 +1166,7 @@ About the new airlock wires panel:
 				density ? open(1):close(1)
 			else if(density)
 				open(1)
-		visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
+			visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
 
 
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open

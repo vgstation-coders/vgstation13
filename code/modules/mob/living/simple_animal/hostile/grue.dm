@@ -80,19 +80,19 @@
 	var/a_53 = 0
 	var/a_54 = 0
 
-	var/b_matrix_testing_override=0 //not used for now
-	var/b_11 = 1
-	var/b_12 = 0
-	var/b_13 = 0
-	var/b_21 = 0
-	var/b_22 = 1
-	var/b_23 = 0
-	var/b_31 = 0
-	var/b_32 = 0
-	var/b_33 = 1
-	var/b_41 = 0
-	var/b_42 = 0
-	var/b_43 = 0
+//	var/b_matrix_testing_override=0 //not used for now
+//	var/b_11 = 1
+//	var/b_12 = 0
+//	var/b_13 = 0
+//	var/b_21 = 0
+//	var/b_22 = 1
+//	var/b_23 = 0
+//	var/b_31 = 0
+//	var/b_32 = 0
+//	var/b_33 = 1
+//	var/b_41 = 0
+//	var/b_42 = 0
+//	var/b_43 = 0
 
 /mob/living/simple_animal/hostile/grue/regular_hud_updates()
 	..()
@@ -209,10 +209,11 @@
 		maxHealth=100
 		moultcost=500
 		burnmalus=2**(1/3)
-		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_NORMAL
 		pass_flags = 0
+		force_airlock_time=120
 	else if (lifestage>=3)
 		name = "grue"
 		desc = "A dangerous thing that lives in the dark."
@@ -231,6 +232,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
+		force_airlock_time=100
 	health=tempHealth*maxHealth
 
 //Grue vision
@@ -253,11 +255,11 @@
 		 						a_31,a_32,a_33,a_34,
 			 					a_41,a_42,a_43,a_44,
 			 					a_51,a_52,a_53,a_54)
-		else if(b_matrix_testing_override) //not used for now
-			colourmatrix = list(b_11, b_12, b_22,
-						 b_21,b_22, b_23,
-						 b_31, b_32, b_33,
-						 b_41, b_42, b_43)
+//		else if(b_matrix_testing_override) //not used for now
+//			colourmatrix = list(b_11, b_12, b_22,
+//						 b_21,b_22, b_23,
+//						 b_31, b_32, b_33,
+//						 b_41, b_42, b_43)
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
@@ -316,7 +318,7 @@
 		moulttimer=moulttime//reset moulting timer
 		plane = MOB_PLANE //In case grue moulted while hiding
 		var/tempHealth=health/maxHealth //to scale health level
-		if (lifestage==2)
+		if(lifestage==2)
 			desc = "A small grue chrysalis."
 			name = "grue chrysalis"
 			icon_state = "moult1"
@@ -341,7 +343,10 @@
 		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
 		ismoulting=0 //is no longer moulting
-		to_chat(src, "<span class='warning'>You finish moulting!</span>")
+		if(lifestage==2)
+			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors./span>")
+		else if(lifestage==3)
+			to_chat(src, "<span class='warning'>You finish moulting! You are now fully-grown, and can eat sentient beings to gain their strength.</span>")
 		visible_message("<span class='warning'>The chrysalis shifts as it morphs into a grue!</span>")
 	else
 		return
