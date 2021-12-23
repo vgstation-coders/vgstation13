@@ -138,7 +138,7 @@
 		L.contaminate()
 		if(prob(knockdown_chance))
 			if(istype(target, /mob/living/carbon/))
-				shake_camera(L, 3, 2)
+				shake_camera(L, 2, 1)
 				L.apply_effect(2, WEAKEN)
 				to_chat(L, "<span class = 'alert'> The force of the bolt knocks you off your feet!")
 		return 1

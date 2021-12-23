@@ -15,7 +15,7 @@
 /obj/item/projectile/bullet/on_hit(var/atom/target, var/blocked = 0)
 	if (..(target, blocked))
 		var/mob/living/L = target
-		shake_camera(L, 3, 2)
+		shake_camera(L, 2, 1)
 		return 1
 	return 0
 
