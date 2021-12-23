@@ -571,7 +571,7 @@
 	alt_title_items_to_collect = list(
 		"Game Master" = list(
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
-		)
+		),
 		"Artist" = list(
 			/obj/item/stack/sheet/wood/bigstack = null     //should spawn on the backpack
 			/obj/item/stack/sheet/wood/bigstack = null
