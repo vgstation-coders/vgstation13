@@ -181,7 +181,7 @@
 	selection_color = "#dddddd"
 	access = list(access_library, access_maint_tunnels)
 	minimal_access = list(access_library)
-	alt_titles = list("Journalist", "Game Master")
+	alt_titles = list("Journalist", "Game Master", "Artist")
 	outfit_datum = /datum/outfit/librarian
 
 /datum/job/iaa
