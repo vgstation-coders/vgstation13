@@ -1451,6 +1451,8 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 	character.my_appearance.g_hair = g_hair
 	character.my_appearance.b_hair = b_hair
 
+	character.my_appearance.v_hair = v_hair
+
 	character.my_appearance.r_facial = r_facial
 	character.my_appearance.g_facial = g_facial
 	character.my_appearance.b_facial = b_facial
