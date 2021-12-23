@@ -577,8 +577,10 @@
 			/obj/item/stack/sheet/wood/bigstack = null
 			/obj/item/weapon/storage/fancy/crayons = null,
 			/obj/item/weapon/chisel = null,
-			/obj/item/weapon/palette = null
+			/obj/item/weapon/palette = null,
+		)
 	)
+	
 
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt
