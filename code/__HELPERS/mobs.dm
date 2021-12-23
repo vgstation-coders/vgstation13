@@ -131,22 +131,22 @@
 
 /proc/haircolordesc(v_hair)
 	switch(v_hair)
-		if(1)
-			return "green"
-		if(2)
-			return "azure"
-		if(3)
-			return "brown"
-		if(4)
-			return "emerald"
-		if(5)
-			return "gray"
-		if(6)
-			return "light green"
-		if(7)
-			return "green-brown"
+		if("Green")
+			return "1"
+		if("Azure")
+			return "2"
+		if("Brown")
+			return "3"
+		if("Emerald")
+			return "4"
+		if("Gray")
+			return "5"
+		if("Light Green")
+			return "6"
+		if("Green-Brown")
+			return "7"
 		else
-			return "unknown"
+			return "7"
 
 /proc/age2agedescription(age)
 	switch(age)

@@ -137,7 +137,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/underwear = 1					//underwear type
 	var/backbag = 2						//backpack type
 	var/h_style = "Bald"				//Hair type
-	var/v_hair = 0						//Hair color for vox
+	var/v_hair = 1						//Hair color for vox
 	var/r_hair = 0						//Hair color
 	var/g_hair = 0						//Hair color
 	var/b_hair = 0						//Hair color
@@ -1041,10 +1041,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							g_hair = hex2num(copytext(new_hair, 4, 6))
 							b_hair = hex2num(copytext(new_hair, 6, 8))
 					if(species == "Vox")
-						var/new_hair_vox = input(user, "Choose your Vox's hair color:\n(1 = Green, 2 = Azure, 3 = Brown, 4 = Emerald, 5 = Gray, 6 = Light Green, 7 = Green-Brown)", "Character Preference") as num|null
+						var/new_hair_vox = input(user, "Choose your character's hair color:", "Character Preference") as null|anything in list("Green", "Azure", "Brown", "Emerald", "Gray", "Light Green", "Green-Brown")
 						if(new_hair_vox)
-							new_hair_vox = clamp(v_hair,1,7)
-							to_chat(user,"Your hair will now be [haircolordesc(v_hair)] in color.")
+							v_hair = haircolordesc(new_hair_vox)
+							to_chat(user,"Your hair will now be [v_hair] in color.")
 					if(species == "Insectoid")
 						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(carapace)
@@ -1055,7 +1055,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							g_hair = clamp(g_hair, 0, 50)
 							b_hair = clamp(b_hair, 0, 35)
 				if("h_style")
-					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
+					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference") as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
 						h_style = new_h_style
 
