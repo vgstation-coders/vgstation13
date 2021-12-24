@@ -131,10 +131,10 @@
             current_cable.add_load(amount_per_regen)
             health += health_to_add
     else if(current_power)
-        if(istype(current_power,/obj/machinery/power/battery))
+        if(istype(current_power,/obj/machinery/power/battery) && draining)
             var/obj/machinery/power/battery/current_battery = current_power
             suckBattery(current_battery)
-        else if(istype(current_power,/obj/machinery/power/apc))
+        else if(istype(current_power,/obj/machinery/power/apc) && draining)
             var/obj/machinery/power/apc/current_apc = current_power
             drainAPC(current_apc)
         if(current_power.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
