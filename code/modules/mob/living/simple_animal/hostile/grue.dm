@@ -343,11 +343,11 @@
 		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
 		ismoulting=0 //is no longer moulting
+		visible_message("<span class='warning'>The chrysalis shifts as it morphs into a grue!</span>")
 		if(lifestage==2)
 			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors./span>")
 		else if(lifestage==3)
 			to_chat(src, "<span class='warning'>You finish moulting! You are now fully-grown, and can eat sentient beings to gain their strength.</span>")
-		visible_message("<span class='warning'>The chrysalis shifts as it morphs into a grue!</span>")
 	else
 		return
 
