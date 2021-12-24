@@ -12,7 +12,7 @@ var/global/list/chef_stuff = list(
 	/obj/structure/dishwasher,
 	/obj/item/cricketfarm,
 	/obj/structure/bed/chair/vehicle/mower,
-	//teppanyaki
+	/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser,
 	//dartboard
 	/obj/item/weapon/reagent_containers/glass/mantinivessel
 	)
@@ -369,3 +369,69 @@ var/list/acceptible_sushi_inputs = list()
 	icon = 'icons/obj/items_weird.dmi'
 	icon_state = "langstroth_item"
 	buildtype = /obj/machinery/apiary/langstroth
+
+/obj/item/dartboard
+	name = "dartboard"
+	desc = "Step right up and test your skill."
+	icon = 'icons/obj/items_weird.dmi"
+	icon_state = "dartboard"
+	layer = BELOW_OBJ_LAYER //above tables but below objects like darts
+	var/lodged = list()
+
+/obj/item/dartboard/Destroy()
+	lodged.Cut()
+	..()
+
+/obj/item/dartboard/attack(atom/A, var/mob/user)
+	if(isturf(A) && A.density)
+		//This is a dense turf, let's mount to it.
+		dir = get_dir(A, user)
+		pixel_x = (dir & 3)? 0 : (dir == 4 ? -24 * PIXEL_MULTIPLIER : 24 * PIXEL_MULTIPLIER)
+		pixel_y = (dir & 3)? (dir ==1 ? -24 * PIXEL_MULTIPLIER: 24 * PIXEL_MULTIPLIER) : 0
+		anchored = TRUE
+		return FALSE
+	else
+		return ..()
+
+/obj/item/dartboard/throw_impact(atom/hit_atom, var/speed, mob/user)
+	if(hit_atom.sharpness < 1)
+		return ..()
+	visible_message("<span class='notice'>\The [hit_atom] lodges in \the [src]!</span>")
+	hit_atom.pixel_x = pixel_x
+	hit_atom.pixel_y = pixel_y
+	lodged += hit_atom
+	score(hit_atom,speed,user)
+
+/obj/item/dartboard/attackby(obj/item/I, mob/user)
+	if(iscrowbar(I))
+		anchored = FALSE
+		dir = SOUTH
+		put_in_hands(user)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		if(lodged.length > 0)
+			visible_message("<span class='warning'>\The [lodged.length>1 ? "things":lodged[1]] fall[lodged.length>1 ? "":"s"] off \the [src].</span>")
+			for(var/atom/movable/AM in lodged)
+				AM.pixel_x = 0
+				AM.pixel_y = 0
+			lodged.Cut()
+	else
+		..()
+
+/obj/item/stack/dart
+	name = "throwing dart"
+	desc = "A dart designed for recreational throwing. It's not very deadly as a weapon."
+	icon_state = "smallknife"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 5
+	throwforce = 10
+	sharpness = 1.2
+	sharpness_flags = SHARP_TIP
+	melt_temperature = MELTPOINT_STEEL
+	hitsound = 'sound/weapons/bladeslice.ogg'
+	max_amount = 3
+
+/obj/item/stack/dart/red
+	icon_state = "dartred"
+
+/obj/item/stack/dart/white
+	icon_state = "dartwhite"

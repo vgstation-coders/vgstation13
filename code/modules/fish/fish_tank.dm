@@ -325,7 +325,7 @@
 					playsound(src,'sound/items/bikehorn.ogg', 80, 1)
 			if("sea devil")
 				if(filth_level > 2.5 && prob(5))
-					//Small chance to eat a random fish that isn't itself.
+					//Small chance to clear some filth, originally ate fish
 					seadevil_eat()
 
 				if(fish_list.len < max_fish && egg_list.len)

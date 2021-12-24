@@ -115,11 +115,6 @@
 	maxunits = 2
 	sales_category = TRADE_VARIETY
 
-/datum/trade_product/condidisp
-	name = "condiment dispenser ancient flatpack"
-	path = /obj/structure/closet/crate/flatpack/ancient/condiment_dispenser
-	baseprice = 100
-
 /datum/trade_product/randommobs
 	name = "dehydrated friend cubes"
 	path = /obj/item/weapon/storage/box/mysterycubes

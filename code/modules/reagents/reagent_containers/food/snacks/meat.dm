@@ -211,7 +211,7 @@
 	desc = "Tastes a bit like nuts, very earthy. Not much of a serving, though."
 	icon_state = "roachmeat"
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/roach/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/New()
 	..()
 	reagents.add_reagent(FLOUR, rand(4,10))
 	bitesize = 5
