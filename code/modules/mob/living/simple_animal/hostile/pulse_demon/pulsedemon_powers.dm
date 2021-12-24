@@ -295,6 +295,7 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         PD.draining = !PD.draining
+        to_chat(user,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
 
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
