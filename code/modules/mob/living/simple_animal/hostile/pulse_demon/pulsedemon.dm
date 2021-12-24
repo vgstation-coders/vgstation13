@@ -41,7 +41,7 @@
     var/takeover_time = 30                                          //Time spent taking over electronics
     var/show_desc = FALSE                                           //For the ability menu
     var/can_leave_cable = FALSE                                     //For the ability that lets you
-    var/draining = FALSE                                            //For draining power or not
+    var/draining = TRUE                                             //For draining power or not
     var/move_divide = 4                                             //For slowing down of above
 
     //TYPES
