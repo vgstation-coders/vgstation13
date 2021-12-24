@@ -11,9 +11,11 @@
 	canmove = 0
 	anchored = 0
 	var/ghost_name
+	var/ghost_gender
 	var/ghost_icon
 	var/ghost_icon_state
 	var/ghost_overlays
+	var/mob/ghost_body
 	var/cellhold = null
 	var/unsafe = 0
 
@@ -229,7 +231,19 @@
 /mob/living/silicon/robot/mommi/sammi/ghost()
 	//if(src.subtype == "sammi")
 	if(client && key)
-		ghostize(1)
+		var/mob/dead/observer/ghost = ghostize(1)
+		if(ghost_body)
+			ghost.mind.current = ghost_body
+		if(ghost_name)
+			ghost.name = ghost_name
+		if(ghost_gender)
+			ghost.gender = ghost_gender
+		if(ghost_icon)
+			ghost.icon = ghost_icon
+		if(ghost_icon_state)
+			ghost.icon_state = ghost_icon_state
+		if(ghost_overlays)
+			ghost.overlays = ghost_overlays
 		//src.mind.current = src.mind.original
 		src.visible_message("<span class=\"warning\">[src] disconnects from the network...attempting to reconnect!</span>")
 		if(icon_state == "sammi_online_a")
@@ -243,16 +257,18 @@
 		var/response = alert(O,"Do you want to take it over?","This SAMMI is mindless","Yes","No")
 		if(response == "Yes")
 			if(!(src.key))
+				ghost_name = O.mind.name
+				ghost_gender = O.gender
+				ghost_icon = O.icon
+				ghost_icon_state = O.icon_state
+				ghost_overlays = O.overlays
+				ghost_body = O.mind.current
 				src.transfer_personality(O.client)
 				src.visible_message("<span class=\"warning\">[src] is connected to the SAMMI network!</span>")
 				if(icon_state == "sammi_offline_a")
 					icon_state = "sammi_online_a"
 				else
 					icon_state = "sammi_online"
-				ghost_name = O.mind.name
-				ghost_icon = O.icon
-				ghost_icon_state = O.icon_state
-				ghost_overlays = O.overlays
 				updateicon()
 			else if(src.key)
 				to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
