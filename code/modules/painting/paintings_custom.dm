@@ -26,6 +26,7 @@
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'
+	var/frame_icon_state = "frame"
 	var/show_on_scoreboard = TRUE
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
