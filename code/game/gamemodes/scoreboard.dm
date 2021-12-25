@@ -26,7 +26,8 @@
 	if(gallery.len)
 		for(var/obj/structure/painting/custom/painting in gallery)
 			var/icon/flat = getFlatIcon(painting)
-			painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] by [painting.painting_data.author] "}
+			if(painting.show_on_scoreboard)
+				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] by [painting.painting_data.author] "}
 		completions += "<h2>Art</h2>"
 		completions += painting_completions
 		completions += "<HR>"

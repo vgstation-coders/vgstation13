@@ -20,6 +20,7 @@
 	// Icon to render our painting data on
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
+	var/show_on_scoreboard = TRUE
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
 
