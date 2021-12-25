@@ -20,6 +20,16 @@
 			completions += "<BR>The following explosive implants were used:<BR>"
 			for(var/entry in score["implant_phrases"])
 				completions += "[entry]<BR>"
+				
+	var/list/gallery = score["global_paintings"]
+	var/painting_completions = ""
+	if(gallery.len)
+		for(var/obj/structure/painting/custom/painting in gallery)
+			var/icon/flat = getFlatIcon(painting)
+			painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] by [painting.painting_data.author] "}
+		completions += "<h2>Art</h2>"
+		completions += painting_completions
+		completions += "<HR>"
 
 	/*//Calls auto_declare_completion_* for all modes
 	for(var/handler in typesof(/datum/gamemode/proc))
