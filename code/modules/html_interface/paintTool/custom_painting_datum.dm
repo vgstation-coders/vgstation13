@@ -240,7 +240,7 @@
 
 		//for DrawBox, (x:1,y:1) is the lower left corner. On bitmap, (x:0,y:0) is the upper left
 		x = 1 + offset_x + x
-		y = 1 + offset_y + bitmap_height - y
+		y = offset_y + bitmap_height - y
 
 		ico.DrawBox(bitmap[pixel + 1], x, y)
 

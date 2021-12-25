@@ -29,9 +29,10 @@ var/global/list/available_paintings = list(
 	//The following paintings either appear under certain conditions or have to be varedited by admins
 	//"narsie", transformed from other paintings by Nar-Sie. Has a chance to spawn on the asteroid in temple ruins.
 	//"justice", spawned in the courtroom/IAA office if there is no courtroom
-	//"blank", crafted with wood, TODO: give a way to players to paint on them
+	//"blank_old", default
 	//"anatomy", TODO: add one in medbay/surgery.
 	//"daddy", TODO: well it's not a painting...so make it its own item...?
+
 
 /obj/item/mounted/frame/painting
 	name = "painting"
@@ -152,7 +153,7 @@ var/global/list/available_paintings = list(
 
 		else
 			name = "painting"
-			desc = "A blank painting."
+			desc = "So perfectly blank you dare not paint on it."
 
 /obj/item/mounted/frame/painting/do_build(turf/on_wall, mob/user)
 	if(!user.drop_item(src))
@@ -193,8 +194,8 @@ var/global/list/available_paintings = list(
 	..()
 
 /obj/item/mounted/frame/painting/blank
-	paint = "blank"
-	// For the code to actually paint see: "code/modules/html_interface/paintTool/blank_canvas.dm"
+	paint = "blank_old"
+	// For the code to actually paint see: "code/modules/painting/paintings_custom.dm"
 
 /obj/item/mounted/frame/painting/narsie
 	paint = "narsie"
@@ -206,7 +207,7 @@ var/global/list/available_paintings = list(
 	name = "painting"
 	desc = "A blank painting."
 	icon = 'icons/obj/paintings.dmi'
-	icon_state = "blank"
+	icon_state = "blank_old"
 	autoignition_temperature = AUTOIGNITION_WOOD
 	anchored = 1
 
@@ -309,7 +310,7 @@ var/global/list/available_paintings = list(
 
 		else
 			name = "painting"
-			desc = "so perfectly blank you dare not paint on it."
+			desc = "So perfectly blank you dare not paint on it."
 
 /obj/structure/painting/attack_hand(mob/user)
 	to_chat(user, "<span class='notice'>You pick up \the [src]...</span>")
