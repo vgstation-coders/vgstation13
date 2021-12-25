@@ -98,6 +98,17 @@
 		user.succumb_proc(0, 1)
 	message = initial(message)
 
+/datum/emote/living/suicide
+	key = "suicide"
+	key_third_person = "suicides"
+	mob_type_blacklist_typelist = list(/mob/living/carbon/brain) // Everyone can release themselves from their mortal coil and taste sweet death
+
+/datum/emote/living/suicide/run_emote(mob/living/user, params)
+	. = ..()
+	if (. && user.stat == UNCONSCIOUS && !params)
+		user.succumb_proc(0, 1)
+		return
+	user.attempt_suicide(0, 1)
 
 /datum/emote/living/carbon/drool
 	key = "drool"
