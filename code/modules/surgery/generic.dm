@@ -371,6 +371,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] cuts off [target]'s [affected.display_name] with \the [tool].</span>", \
 	"<span class='notice'>You cut off [target]'s [affected.display_name] with \the [tool].</span>")
+	affected.open = 0 //Resets surgery status on limb, should prevent conflicting/phantom surgery
 	affected.droplimb(1,0)
 
 /datum/surgery_step/generic/cut_limb/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

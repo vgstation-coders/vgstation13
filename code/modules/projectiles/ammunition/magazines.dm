@@ -13,16 +13,16 @@
 /obj/item/ammo_storage/magazine/attackby(var/atom/A, var/mob/user)
 	if(istype(A,/obj/item/toy/crayon))
 		var/obj/item/toy/crayon/grayon = A
-		if(colored_marking) 
+		if(colored_marking)
 			overlays -= colored_marking
 		var/image/magazine_mark = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-overlay")
 		if(has_icon(magazine_mark.icon, "[initial(icon_state)]-overlay"))
-			magazine_mark.icon += grayon.colour
-			markingcolor = grayon.colour
+			magazine_mark.icon += grayon.mainColour
+			markingcolor = grayon.mainColour
 			overlays += magazine_mark
 			colored_marking = magazine_mark
 			to_chat(user, "<span class='notice'>You add a [grayon.colourName] marking on \the [src] with \the [grayon]. </span>")
-	
+
 	if(istype(A,/obj/item/weapon/soap))
 		if(colored_marking)
 			overlays -= colored_marking

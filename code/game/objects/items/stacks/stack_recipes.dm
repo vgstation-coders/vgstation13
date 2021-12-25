@@ -456,6 +456,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 		new/datum/stack_recipe("landscape canvas",	/obj/item/mounted/frame/painting/custom/landscape,	3,	time = 15									),
 		new/datum/stack_recipe("large canvas",		/obj/item/mounted/frame/painting/custom/large,		5,	time = 15									),
 		new/datum/stack_recipe("palette",			/obj/item/weapon/palette,							3,	time = 15									),
+		new/datum/stack_recipe("easel",				/obj/structure/easel,								3,	time = 15									),
 	)),
 	null,
 	new/datum/stack_recipe("wooden sandals",	/obj/item/clothing/shoes/sandal																),
