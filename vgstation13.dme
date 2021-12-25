@@ -2616,6 +2616,7 @@
 #include "code\modules\spells\changeling\lesser_form.dm"
 #include "code\modules\spells\changeling\rapidregen.dm"
 #include "code\modules\spells\changeling\regenerative_stasis.dm"
+#include "code\modules\spells\changeling\split.dm"
 #include "code\modules\spells\changeling\transform.dm"
 #include "code\modules\spells\changeling\unstun.dm"
 #include "code\modules\spells\changeling\voicechange.dm"

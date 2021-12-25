@@ -56,7 +56,7 @@
 /datum/power/changeling/split
 	name = "Split"
 	desc = "Split your body into two lifeforms."
-	cost = 5
+	cost = 0
 	spellpath = /spell/changeling/split
 	allowduringhorrorform = 0 //this would be terrifying otherwise
 
