@@ -34,9 +34,9 @@
 		var/obj/item/toy/crayon/c = held_item
 		max_strength = PENCIL_STRENGTH_MAX
 		min_strength = PENCIL_STRENGTH_MIN
-		palette += c.colour
+		palette += c.mainColour
 		palette += c.shadeColour
-		base_color = c.color
+		base_color = c.mainColour
 
 	// Painting with hair dye sprays
 	if (istype(held_item, /obj/item/weapon/hair_dye))
@@ -62,6 +62,16 @@
 			if (!(b.paint_color in palette))
 				palette += b.paint_color
 			base_color = b.paint_color
+
+	// Normalize palette colors
+	for (var/i = 1; i < palette.len; i++)
+		palette[i] = lowertext(palette[i])
+		if (length(palette[i]) < 9) //If missing alpha channel assume opaque
+			palette[i] += "ff"
+	// Normalize base color
+	base_color = lowertext(base_color)
+	if (length(base_color) < 9) //If missing alpha channel assume opaque
+		base_color += "ff"
 
 
 /datum/painting_utensil/proc/duplicate()
