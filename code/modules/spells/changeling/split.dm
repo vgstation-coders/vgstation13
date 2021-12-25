@@ -1,6 +1,6 @@
 /spell/changeling/split
 	name = "Split (5)"
-	desc = "We take on the apperance of a species that we have absorbed."
+	desc = "Split your body into two lifeforms."
 	abbreviation = "SP"
 	hud_state = "split"
 
@@ -28,7 +28,6 @@
 	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 	recruiter.request_player()
 
-	//domutcheck(user, null)  //don't know what this does
 	changeling.geneticdamage = 30
 
 	..()
