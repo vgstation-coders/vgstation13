@@ -376,11 +376,8 @@
         for(var/datum/powernet/current_net in powernets)
             // Add all the cables on the powernet to our images, that's why we have this var
             for(var/obj/structure/cable/C in current_net.cables)
-                var/turf/simulated/floor/F = get_turf(C)
-                // Untiled ones only, otherwise redundant
-                if(istype(F,/turf/simulated/floor) && F.floor_tile)
-                    var/image/CI = image(C, C.loc, layer = ABOVE_LIGHTING_LAYER, dir = C.dir)
-                    // Easy visibility here
-                    CI.plane = ABOVE_LIGHTING_PLANE
-                    cables_shown += CI
-                    client.images += CI
+                var/image/CI = image(C, get_turf(C), layer = ABOVE_LIGHTING_LAYER, dir = C.dir)
+                // Easy visibility here
+                CI.plane = ABOVE_LIGHTING_PLANE
+                cables_shown += CI
+                client.images += CI
