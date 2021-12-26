@@ -180,3 +180,26 @@
 	throwforce = 15
 
 	material = "plasteel"
+	
+/obj/item/stack/tile/metal/plasteel/attackby(obj/item/W as obj, mob/user as mob)
+	if(iswelder(W))
+		var/obj/item/tool/weldingtool/WT = W
+		if(amount < 4)
+			to_chat(user, "<span class='warning'>You need at least four tiles to do this.</span>")
+			return
+
+		if(WT.remove_fuel(0,user))
+			var/obj/item/stack/sheet/plasteel/M = new /obj/item/stack/sheet/plasteel
+			M.amount = 1
+			M.forceMove(get_turf(usr))
+			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
+			"<span class='warning'>You hear welding.</span>")
+			var/obj/item/stack/tile/metal/plasteel/R = src
+			src = null
+			var/replace = (user.get_inactive_hand()==R)
+			R.use(4)
+			if (!R && replace)
+				user.put_in_hands(M)
+		return 1
+	return ..()
