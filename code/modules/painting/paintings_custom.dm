@@ -50,6 +50,9 @@
 	// Painting
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
+		if(jobban_isbanned(user, "artist"))
+			to_chat(usr, "<span class='warning'>Try as you might, you cannot possibly work out the intricacies of fine art!</span>")
+			return ..()
 		if (protected_by_glass)
 			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from painting on it.</span>")
 		else

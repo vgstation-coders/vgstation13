@@ -381,7 +381,7 @@
 		output += "<option value='[j]'>[j]</option>"
 	for(var/j in nonhuman_positions)
 		output += "<option value='[j]'>[j]</option>"
-	for(var/j in list("traitor","changeling","operative","revolutionary","cultist","wizard","cluwne"))
+	for(var/j in list("traitor","changeling","operative","revolutionary","cultist","wizard","cluwne","artist"))
 		output += "<option value='[j]'>[j]</option>"
 
 	output += {"</select></td></tr></table>
