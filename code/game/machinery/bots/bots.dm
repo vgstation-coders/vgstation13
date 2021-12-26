@@ -25,6 +25,7 @@
 	plane = MOB_PLANE
 	luminosity = 3
 	use_power = 0
+	pAImovement_delay = 1
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them
