@@ -533,6 +533,8 @@
 	listening = 0
 	for (var/ch_name in channels)
 		channels[ch_name] = 0
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Not inheriting so do it here too
 	..()
 
 /obj/item/device/radio/phone
