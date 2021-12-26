@@ -244,7 +244,7 @@
 		author = copytext(sanitize(url_decode(href_list["author"])), 1, MAX_NAME_LEN)
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
 		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
-		contributing_artists += usr.key
+		contributing_artists += usr.ckey 
 		return TRUE
 
 /datum/custom_painting/proc/render_on(icon/ico, offset_x = src.offset_x, offset_y = src.offset_y)

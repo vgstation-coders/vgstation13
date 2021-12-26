@@ -36,22 +36,32 @@
 
 		var/list/sorted_artists_list = sortList(artworks)
 		var/currentartist = ""
+
 		for(var/artistsandworks in sorted_artists_list) //list of lists of paintings
+			var/tooble = ""
+			var/row1 = ""
+			var/row2 = ""
+			var/list/otherguys = list()
 			var/list/artist_and_their_works = sorted_artists_list[artistsandworks]
 			for(var/obj/structure/painting/custom/painting in artist_and_their_works)
-				if(artistsandworks != currentartist)
-					currentartist = artistsandworks
-					painting_completions += {"<h3>[artistsandworks]</h3>"}
+				otherguys += painting.painting_data.contributing_artists
 				var/title = painting.painting_data.title
 				if(!title)
 					title = "Nameless"
-				var/list/otherguys = uniquelist(painting.painting_data.contributing_artists)
 				var/icon/flat = getFlatIcon(painting)
-				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> "[title]" "}
-				painting_completions += {"CA: [otherguys.Join(", ")]"} //condensing this into a href details button would be nice
-		
+				row1 += {"<td><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'></td>"}
+				row2 += {"<td>"[title]"</td>"}
+			
+			tooble += {"<tr>[row1]</tr><tr>[row2]</tr>"}
+			if(artistsandworks != currentartist)
+				currentartist = artistsandworks
+				painting_completions += {"<h3>[artistsandworks]</h3>"}
+				var/list/artistlist = uniquelist(otherguys)
+				painting_completions += {"Aliases: [artistlist.Join(", ")]"}
+				painting_completions += {"<table>[tooble]</table>"}
+	
 		completions += "<h2>Artisans and their artworks</h2>"
-		completions += painting_completions //would be nice to show these in a table but i'm not sure how row/column manip works
+		completions += painting_completions
 		completions += "<HR>"
 
 	/*//Calls auto_declare_completion_* for all modes
