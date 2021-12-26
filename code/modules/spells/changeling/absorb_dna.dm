@@ -21,7 +21,7 @@
 	if(!istype(T))					//Humans only
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
 		return
-	if(M_NOCLONE in T.mutations)	//No double-absorbing
+	if(M_HUSK in T.mutations)	//No double-absorbing
 		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond useability!</span>")
 		return
 	if(!T.mind)						//No monkeymen
@@ -126,6 +126,6 @@
 	user.updateChangelingHUD()
 
 	T.death(0)
-	T.Drain()
+	T.ChangeToHusk()
 
 	..()
