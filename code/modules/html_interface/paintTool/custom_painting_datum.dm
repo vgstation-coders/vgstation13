@@ -185,7 +185,8 @@
 /datum/custom_painting/proc/interact(mob/user, datum/painting_utensil/p)
 	if(jobban_isbanned(user, "artist"))
 		to_chat(user, "<span class='warning'>Try as you might, you cannot possibly work out the intricacies of fine art!</span>")
-		return ..()
+		return
+
 	var/paint_init_inputs = json_encode(list(
 		"width" = bitmap_width,
 		"height" = bitmap_height,
