@@ -123,12 +123,8 @@
 	process_bot()
 
 /obj/machinery/bot/relaymove(var/mob/user, direction)
-	if(ispulsedemon(user) && on)
-		var/turf/T = get_turf(src)
-		if(T.has_gravity())
-			step(src,direction)
-			return TRUE
-	return FALSE
+	if(ispulsedemon(user))
+		pAImove(user,direction)
 
 // Makes the bot busy while it looks for a target.
 /obj/machinery/bot/proc/find_target()
