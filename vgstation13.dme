@@ -630,7 +630,6 @@
 #include "code\game\gamemodes\events\holidays\Holidays.dm"
 #include "code\game\gamemodes\events\holidays\Other.dm"
 #include "code\game\gamemodes\heist\tools.dm"
-#include "code\game\gamemodes\malfunction\Malf_Modules.dm"
 #include "code\game\gamemodes\meteor\meteor_supply.dm"
 #include "code\game\gamemodes\meteor\meteor_universe.dm"
 #include "code\game\gamemodes\meteor\meteors.dm"

@@ -12,12 +12,11 @@
 	var/processing_power = 50
 	var/max_processing_power = 200
 
+	var/takeover = FALSE 	// ai has won
 
+	var/list/core_upgrades = list()
 	//fuck radials
 	var/list/ability_name_to_datum = list()
-
-	var/list/available_modules = list()
-
 
 /datum/role/malfAI/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -32,15 +31,15 @@
 		malfAI.show_laws()
 		malfAI.DisplayUI("Malf")
 
-		var/list/modules = subtypesof(/datum/malf_module) - /datum/malf_module/active
-		for(var/M in modules)
-			var/datum/malf_module/MM = new M(antag.current)
-			available_modules += MM
-
-		var/list/abilities = subtypesof(/datum/malfhack_ability)
+		var/list/abilities = subtypesof(/datum/malfhack_ability) - typesof(/datum/malfhack_ability/core) - /datum/malfhack_ability/toggle - /datum/malfhack_ability/oneuse
 		for(var/A in abilities)
 			var/datum/malfhack_ability/M = new A
 			ability_name_to_datum[M.name] = M
+
+		var/list/coreabilities = subtypesof(/datum/malfhack_ability/core)
+		for(var/A in coreabilities)
+			var/datum/malfhack_ability/core/M = new A
+			core_upgrades += M
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
 			faction.HandleRecruitedMind(R.mind)
@@ -83,7 +82,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 				var/datum/malfhack_ability/M = ability_name_to_datum[S.name]
 				if(!M)
 					return
-				if(M.check_cost(antag.current) && M.check_available(antag.current))
+				if(M.check_cost(antag.current))
 					S.Unlock()
 				else
 					S.Lock()
@@ -93,7 +92,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		if(!(H.particleimg in antag.current.client.images))
 			antag.current.client.images |= H.particleimg
 
-
+/*
 
 /datum/role/malfAI/tgui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -139,7 +138,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	if(!M)
 		return FALSE
 	return M.bought
-
+*/
 
 
 
@@ -159,7 +158,6 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	var/mob/living/silicon/robot/bot = antag.current
 	var/datum/ai_laws/laws = bot.laws
 	laws.malfunction()
-	bot.show_laws()
 	bot.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	return TRUE
 

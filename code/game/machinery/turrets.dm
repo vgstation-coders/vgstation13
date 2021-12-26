@@ -18,6 +18,7 @@
 
 	var/reqpower = 350							// Amount of power per shot
 	var/shot_delay = 30 						//3 seconds between shots
+	var/last_shot 
 	var/fire_twice = 0
 
 	use_power = 1								// this turret uses and requires power
@@ -28,11 +29,13 @@
 	var/targeting_active = 0
 
 	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/turret_upgrade,
-		/datum/malfhack_ability/oneuse/turret_pulse
+		/datum/malfhack_ability/oneuse/turret_pulse,
+		/datum/malfhack_ability/oneuse/overload_loud,
+		/datum/malfhack_ability/manual_control
 	)
 
+	var/mob/living/silicon/ai/controlling_malf = null
 
 /obj/machinery/turret/New()
 //	targets = new
@@ -159,9 +162,15 @@
 		if(raised && !raising)
 			popDown()
 		return
+
+	if(controlling_malf) // manually controlled by a malf AI
+		if(!raised)
+			popUp()
+			use_power = 2
+		return
+
 	if(!check_target(cur_target)) //if current target fails target check
-		if(fire_twice)
-			src.dir = get_dir(src, cur_target)
+		if(fire_twice)		
 			shootAt(cur_target)
 			cur_target = get_new_target()
 		else
@@ -190,7 +199,6 @@
 
 /obj/machinery/turret/proc/target()
 	while(src && enabled && !stat && check_target(cur_target))
-		src.dir = get_dir(src, cur_target)
 		shootAt(cur_target)
 		sleep(shot_delay)
 	return
@@ -200,10 +208,15 @@
 	var/turf/U = get_turf(target)
 	if (!istype(T) || !istype(U))
 		return
-	
+	if(world.time < last_shot + shot_delay)
+		return
+
+	src.dir = get_dir(src, target)
 	use_power(reqpower)
 
 	playsound(src, installed.fire_sound, 75, 1)
+
+	last_shot = world.time 
 	var/obj/item/projectile/A
 	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
 		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
@@ -336,6 +349,19 @@
 	if (cover!=null) // deletes the cover - no need on keeping it there!
 		qdel(cover)
 		cover = null
+
+
+/obj/machinery/turret/proc/malf_take_control(mob/living/silicon/ai/A)
+	if(!A.eyeobj)
+		A.make_eyeobj()
+	A.eyeobj.forceMove(get_turf(src))
+	A.current = src 
+	controlling_malf = A
+
+/obj/machinery/turret/proc/malf_release_control()
+	if(controlling_malf)
+		controlling_malf.current = null
+		controlling_malf = null
 
 /obj/machinery/turretid
 	name = "turret control switchboard"

@@ -42,9 +42,12 @@ var/list/holopads = list()
 	plane = ABOVE_TURF_PLANE
 	layer = ABOVE_TILE_LAYER
 	machine_flags = SCREWTOGGLE | CROWDESTROY
+
 	hack_abilities = list(
-		/datum/malfhack_ability/create_lifelike_hologram
+		/datum/malfhack_ability/create_lifelike_hologram,
+		/datum/malfhack_ability/oneuse/overload_quiet,
 	)
+
 
 /obj/machinery/hologram/holopad/New()
 	..()
@@ -161,7 +164,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	A.eyeobj.forceMove(get_turf(src))
 	A.current = src
 	A.client.CAN_MOVE_DIAGONALLY = FALSE
-	A.eyeobj.humanlike = TRUE
 	A.eyeobj.glide_size = DELAY2GLIDESIZE(1)
 	advancedholo = TRUE
 	holo = new /obj/effect/overlay/hologram/lifelike(get_turf(src), available_mobs[mob_to_copy], A.eyeobj)
@@ -192,20 +194,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	use_power = 1//Passive power usage.
 	advancedholo = FALSE
 	if(master)
-		if(client)
+		if(master.client)
 			master.client.CAN_MOVE_DIAGONALLY = TRUE
 		if(master.eyeobj)
-			master.eyeobj.humanlike = FALSE
 			master.eyeobj.glide_size = WORLD_ICON_SIZE
 		if(master.current == src)
 			master.current = null
 		master = null //Null the master, since no-one is using it now.
-	ray = null
 	qdel(ray)
-	animate(holo, alpha = 0, time = 5)
+	ray = null
+	var/obj/effect/overlay/hologram/H = holo
+	holo = null
+	animate(H, alpha = 0, time = 5)
 	spawn(5)
-		qdel(holo)//Get rid of hologram.
-		holo = null
+		qdel(H)//Get rid of hologram.
 	return 1
 
 /obj/machinery/hologram/holopad/emp_act()

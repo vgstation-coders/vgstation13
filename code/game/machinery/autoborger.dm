@@ -82,9 +82,8 @@
 		if (belongstomalf)
 			var/datum/role/malfAI/my_malf = belongstomalf.mind?.GetRole(MALF)
 			if (my_malf)
-				var/datum/faction/malf/faction = my_malf.faction
-				faction.apcs++
-				to_chat(belongstomalf, "<span class='good'>Incompatible lifeform biomass reprocessed into computing power.</span><span class='notice'>You have now one more APC.</span>")
+				my_malf.add_power(50)
+				to_chat(belongstomalf, "<span class='good'>Incompatible lifeform biomass reprocessed into computing power.</span>")
 
 		return
 

@@ -32,6 +32,13 @@
 
 	machine_flags = EMAGGABLE | SHUTTLEWRENCH
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_loud,
+		/datum/malfhack_ability/manual_control
+	)
+
+
 /obj/machinery/turret/portable/New()
 	..()
 	icon_state = "[lasercolor]grey_target_prism"

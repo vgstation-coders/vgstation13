@@ -388,14 +388,15 @@
 /mob/living/silicon/robot/show_malf_ai()
 	..()
 	if(connected_ai && connected_ai.mind)
-		var/datum/faction/malf/malf = find_active_faction_by_member(connected_ai.mind.GetRole(MALF))
+		var/datum/role/malfAI/malfrole = connected_ai.mind.GetRole(MALF)
+		var/datum/faction/malf/malf = find_active_faction_by_member(malfrole)
 		if(!malf)
 			malf = find_active_faction_by_type(/datum/faction/malf) //Let's see if there is anything to print at least
 			var/malf_stat = malf.get_statpanel_addition()
 			if(malf_stat && malf_stat != null)
 				stat(null, malf_stat)
-		if(malf.apcs >= 3)
-			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+		if(malfrole.apcs.len >= 3)
+			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malfrole.apcs.len/3), 0)] seconds")
 	return FALSE
 
 // this function displays jetpack pressure in the stat panel

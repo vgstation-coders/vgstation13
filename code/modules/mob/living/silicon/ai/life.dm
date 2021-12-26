@@ -160,8 +160,8 @@
 		return
 
 	if(ai_flags & COREFORTIFY)
-		brute_damage_modifier = 0.25
-		burn_damage_modifier = 0.25
+		brute_damage_modifier = 0.33
+		burn_damage_modifier = 0.33
 	else
 		brute_damage_modifier = 1
 		burn_damage_modifier = 1

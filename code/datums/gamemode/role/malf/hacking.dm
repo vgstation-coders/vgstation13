@@ -10,7 +10,7 @@
 	var/aicontrolbypass = FALSE
 	var/hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/overload
+		/datum/malfhack_ability/oneuse/overload_quiet
 	)
 
 /obj/machinery/proc/initialize_malfhack_abilities()
@@ -24,6 +24,12 @@
 	if(istype(A))
 		hack_interact(user)
 
+/mob/living/silicon/ai/AIRightClick(var/mob/user)
+	var/mob/living/silicon/ai/A = user
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(istype(A) && istype(M) && A == src)
+		upgrade_radial()
+
 /obj/machinery/proc/disable_AI_control()
 	if(aicontrolbypass)
 		return
@@ -31,34 +37,6 @@
 		stat |= NOAICONTROL
 		if(malf_owner)
 			malf_disrupt(MALF_DISRUPT_TIME, TRUE)
-
-/obj/effect/hack_overlay
-	name = "hax particles"
-	icon = 'icons/effects/malf.dmi'
-	icon_state = ""
-	opacity = 0
-	mouse_opacity = 0
-	invisibility = 101
-	throwforce = 0
-	var/image/particleimg 
-	
-
-/obj/effect/hack_overlay/New(var/turf/loc, var/mob/living/silicon/ai/malf, var/obj/machinery/machine)
-	particleimg = image('icons/effects/malf.dmi',src,"hacking")
-	particleimg.plane = HUD_PLANE
-	particleimg.layer = UNDER_HUD_LAYER
-	particleimg.appearance_flags = RESET_COLOR|RESET_ALPHA
-	machine.vis_contents += src
-	machine.hack_overlay = src
-	malf.client.images |= particleimg
-
-	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
-	if(M)
-		M.hack_overlays += src
-	
-
-/obj/effect/hack_overlay/proc/set_icon(var/newstate)
-	particleimg.icon_state = newstate
 
 /obj/machinery/proc/hack_interact(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
@@ -77,7 +55,7 @@
 /obj/machinery/proc/malf_disrupt(var/duration, var/bypassafter = FALSE)
 	if(malf_disrupted || !malf_owner)
 		return
-	hack_overlay.set_icon("disrupted")
+	set_hack_overlay_icon("disrupted")
 	malf_disrupted = TRUE
 	spawn(duration)
 		if(bypassafter)
@@ -126,6 +104,10 @@
 
 /obj/machinery/proc/set_hack_overlay_icon(var/newstate)
 	hack_overlay.set_icon(newstate)
+	
+/obj/machinery/camera/set_hack_overlay_icon(var/newstate)
+	hack_overlay.set_icon("[newstate]-camera")
+
 
 /obj/machinery/proc/set_malf_owner(var/datum/role/malfAI/M)
 	if(!istype(M))
@@ -139,12 +121,17 @@
 	var/list/choice_to_ability = list()
 	var/list/choices = list()
 	for(var/datum/malfhack_ability/A in hack_abilities)
-		var/icon_to_display = A.toggled ? A.icon_toggled : A.icon
+		A.before_radial()
+		var/icon_to_display
+		if(istype(A, /datum/malfhack_ability/toggle))
+			var/datum/malfhack_ability/toggle/AT = A
+			icon_to_display = AT.toggled ? AT.icon_toggled : AT.icon
+		else 
+			icon_to_display = A.icon
 		var/name_to_display = A.name
 		var/locked = FALSE
 		if(!A.check_available(malf))
-			name_to_display = A.name + " (Requires Module)"
-			locked = TRUE
+			continue
 		else if(!A.check_cost(malf))
 			locked = TRUE
 		var/list/C = list(list(A.name, icon_to_display, A.desc, name_to_display, locked))
@@ -158,6 +145,33 @@
 		A.activate(malf)
 
 
+/mob/living/silicon/ai/proc/upgrade_radial()
+	var/datum/role/malfAI/M = mind.GetRole(MALF)
+	if(!M)
+		return
+	var/list/choice_to_ability = list()
+	var/list/choices = list()
+	for(var/datum/malfhack_ability/core/A in M.core_upgrades)
+		A.before_radial()
+		var/icon_to_display = A.icon
+		var/name_to_display = A.name
+		var/locked = FALSE
+		if(!A.check_available(src))
+			continue
+		else if(!A.check_cost(src))
+			locked = TRUE
+		var/list/C = list(list(A.name, icon_to_display, A.desc, name_to_display, locked))
+		choices += C
+		choice_to_ability[A.name] = A
+	var/choice = show_radial_menu(user=src,anchor=src,choices=choices, icon_file='icons/obj/malf_radial.dmi',tooltip_theme="radial-malf",close_other_menus=TRUE)
+	var/datum/malfhack_ability/A = choice_to_ability[choice]
+	if(!A)
+		return
+	else 
+		A.activate(src)
+
+
+
 /obj/machinery/atmospherics/hack_interact(var/mob/living/silicon/malf)
 	return
 
@@ -166,3 +180,62 @@
 	
 /obj/machinery/door/poddoor/hack_interact(mob/living/silicon/malf)
 	return
+
+/obj/machinery/iv_drip/hack_interact(mob/living/silicon/malf)
+	return
+
+/obj/machinery/light/hack_interact(mob/living/silicon/malf)
+	return
+
+/obj/effect/hack_overlay
+	name = ""
+	icon = 'icons/effects/malf.dmi'
+	icon_state = ""
+	opacity = 0
+	mouse_opacity = 1
+	invisibility = 101
+	throwforce = 0
+	var/image/particleimg 
+	var/obj/machinery/machine
+	
+// We want the "hack particles" to be only visible to the AI, but we also want it to be mutable.
+// Since image objects can't be directly added to vis_contents (i think?) they're instead carried by an effect obj
+// An invisible effect object is created, which carries an image object for the "hack particles"
+// The effect object is added to the machines vis_contents and to a list in the malf's role datum.
+
+/obj/effect/hack_overlay/New(var/turf/loc, var/mob/living/silicon/ai/malf, var/obj/machinery/new_machine)
+	machine = new_machine
+	name = new_machine.name
+	particleimg = image('icons/effects/malf.dmi',src,"hacking")
+	particleimg.plane = STATIC_PLANE
+	particleimg.layer = HACK_LAYER
+	if(istype(machine, /obj/machinery/camera))		// layer above static if its a camera
+		particleimg.layer = REACTIVATE_CAMERA_LAYER
+	particleimg.appearance_flags = RESET_COLOR|RESET_ALPHA
+	machine.vis_contents += src
+	machine.hack_overlay = src
+	malf.client.images |= particleimg
+
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
+	if(M)
+		M.hack_overlays += src
+	
+/obj/effect/hack_overlay/proc/set_icon(var/newstate)
+	particleimg.icon_state = newstate
+
+// Any clicks on the overlay should to count as clicks on the machine. This is mostly
+// for convenience, but its necessary for doing things like re-enabling cameras 
+
+/obj/effect/hack_overlay/AIMiddleShiftClick(var/mob/living/silicon/ai/user)
+	machine.AIMiddleShiftClick(user)
+/obj/effect/hack_overlay/AIShiftClick(var/mob/living/silicon/ai/user)
+	machine.AIShiftClick(user)
+/obj/effect/hack_overlay/AICtrlClick(var/mob/living/silicon/ai/user)
+	machine.AICtrlClick(user)
+/obj/effect/hack_overlay/AIRightClick(var/mob/living/silicon/ai/user)
+	machine.AIRightClick(user)
+/obj/effect/hack_overlay/AIAltClick(var/mob/living/silicon/ai/user)
+	machine.AIAltClick(user)
+/obj/effect/hack_overlay/attack_ai(var/mob/living/silicon/ai/user)
+	machine.attack_ai(user)
+	

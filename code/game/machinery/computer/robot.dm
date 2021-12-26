@@ -16,6 +16,12 @@
 	var/stop = 0.0
 	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/explosive_borgs,
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
 	light_color = LIGHT_COLOR_PINK
 
 /obj/machinery/computer/robotics/say_quote(text)

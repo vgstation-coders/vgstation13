@@ -18,6 +18,14 @@ TODO: literally every alarm but SPS alarms.
 	icon_state = "secalert"
 	var/list/saved_security_alerts = list()
 	var/last_alert_time = 0
+	var/muted = FALSE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/trigger_sps,
+		/datum/malfhack_ability/toggle/mute_sps,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/toggle/disable
+	)
 
 	light_color = LIGHT_COLOR_RED
 
@@ -98,6 +106,8 @@ TODO: literally every alarm but SPS alarms.
 
 /obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
+	if(muted)
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
 		return 

@@ -153,16 +153,14 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLANKIES_LAYER				0
 	#define FACEHUGGER_LAYER			1
 
-#define FAKE_CAMERA_PLANE		(7 + FLOAT_PLANE)
+#define HUMAN_PLANE 			(7 + FLOAT_PLANE)			// For Humans that are standing up.
 
-#define HUMAN_PLANE 			(8 + FLOAT_PLANE)			// For Humans that are standing up.
-
-#define MOB_PLANE 				(9 + FLOAT_PLANE)			// For Mobs.
+#define MOB_PLANE 				(8 + FLOAT_PLANE)			// For Mobs.
 
 //	#define MOB_LAYER					4
 	#define SLIME_LAYER					5
 
-#define ABOVE_HUMAN_PLANE 		(10 + FLOAT_PLANE)			// For things that should appear above humans.
+#define ABOVE_HUMAN_PLANE 		(9 + FLOAT_PLANE)			// For things that should appear above humans.
 
 	#define SHADOW_LAYER				0
 	#define VEHICLE_LAYER 				0
@@ -175,7 +173,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CLOSED_CURTAIN_LAYER		5
 	#define CHAT_LAYER					6
 
-#define BLOB_PLANE 				(11 + FLOAT_PLANE)			// For Blobs, which are above humans.
+#define BLOB_PLANE 				(10 + FLOAT_PLANE)			// For Blobs, which are above humans.
 
 	#define BLOB_ROOTS_LAYER			-1
 	#define BLOB_BASE_LAYER				0
@@ -186,7 +184,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLOB_CORE_LAYER				5
 	#define BLOB_SPORE_LAYER			6
 
-#define EFFECTS_PLANE 			(12 + FLOAT_PLANE)			// For special effects.
+#define EFFECTS_PLANE 			(11 + FLOAT_PLANE)			// For special effects.
 
 	#define BELOW_PROJECTILE_LAYER 		3
 	#define PROJECTILE_LAYER 			4
@@ -200,9 +198,11 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define GAS_PLANE 				11					// Gas overlays really hate being in anything except vis_contents when FLOAT_PLANE'D, don't ask
 
-#define GHOST_PLANE 			(13 + FLOAT_PLANE)			// Ghosts show up under lighting, HUD etc.
+#define GHOST_PLANE 			(12 + FLOAT_PLANE)			// Ghosts show up under lighting, HUD etc.
 
 	#define GHOST_LAYER 				1
+
+#define FAKE_CAMERA_PLANE		(13)
 
 #define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
 	#define LIGHTING_LAYER 				0
@@ -226,8 +226,9 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define STATIC_PLANE 			20		// For AI's static.
 
-	#define STATIC_LAYER				1
-	#define REACTIVATE_CAMERA_LAYER		2
+	#define HACK_LAYER 					1
+	#define STATIC_LAYER				2
+	#define REACTIVATE_CAMERA_LAYER		3
 
 #define FULLSCREEN_PLANE		21		// for fullscreen overlays that do not cover the hud.
 
@@ -356,7 +357,6 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 /obj/abstract/screen/plane_master/fakecamera_planemaster
 	plane = FAKE_CAMERA_PLANE
-	blend_mode  = BLEND_MULTIPLY
 	alpha = 0
 
 /obj/abstract/screen/plane_master/fakecamera_planemaster_dummy

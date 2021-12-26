@@ -55,10 +55,9 @@
 	malfai = malf
 	M.apcs += src
 	malf.handle_regular_hud_updates()
-	if(M.HasPurchased(/datum/malf_module/apcfaker))
-		malfimage = new /obj/effect/fake_camera_image(loc)
-		malfimage.pixel_y = pixel_y
-		malfimage.pixel_x = pixel_x
+	malfimage = new /atom/movable/fake_camera_image(loc)
+	malfimage.pixel_y = pixel_y
+	malfimage.pixel_x = pixel_x
 	update_icon()
 
 /obj/machinery/power/apc/proc/clear_malf()
@@ -76,3 +75,41 @@
 		M.apcs -= src
 		malfai.handle_regular_hud_updates()
 	update_icon()
+
+/atom/movable/fake_camera_image
+	name          = ""
+	anchored      = TRUE
+	icon = 'icons/obj/power.dmi'
+	icon_state = "apcfake"
+	plane = FAKE_CAMERA_PLANE
+	mouse_opacity    = 0
+
+/atom/movable/fake_camera_image/New(var/turf/loc, var/new_icon, var/new_icon_state)
+	..()
+	if(new_icon)
+		icon = icon
+	if(new_icon_state)
+		icon_state = new_icon_state
+
+
+
+/spell/aoe_turf/corereturn
+	name = "Return to Core"
+	panel = "Malfunction"
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	hud_state = "unshunt"
+
+/spell/aoe_turf/corereturn/before_target(mob/user)
+	if(istype(user.loc, /obj/machinery/power/apc))
+		return FALSE
+	else
+		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
+		return TRUE
+
+/spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
+	return list(user.loc)
+
+/spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
+	var/obj/machinery/power/apc/apc = targets[1]
+	apc.malfvacate()

@@ -100,7 +100,7 @@
 	var/is_critical = 0 // Endgame scenarios will not destroy this APC.
 
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
-	var/obj/effect/fake_camera_image/malfimage
+	var/atom/movable/fake_camera_image/malfimage
 
 	machine_flags = WIREJACK
 
@@ -963,11 +963,6 @@
 
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
-	if(malfai)
-		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && map.zMainStation == z)
-			operating ? M.apcs++ : M.apcs--
-
 	src.update()
 	update_icon()
 
@@ -1300,9 +1295,9 @@
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && map.zMainStation == z)
-			M.apcs--
+		var/datum/role/malfAI/M = malfai.mind?.GetRole(MALF)
+		if(M && src in M.apcs)
+			M.apcs -= src
 	stat |= BROKEN
 	operating = 0
 	wiresexposed = 0

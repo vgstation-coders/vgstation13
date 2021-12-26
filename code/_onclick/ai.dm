@@ -13,11 +13,12 @@
 	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
 		return
-
 	if(control_disabled || stat)
 		return
 	var/list/modifiers = params2list(params)
 	if(modifiers["shift"] || modifiers["alt"] || modifiers["ctrl"])
+		return
+	if(istype(current, /obj/machinery/turret))
 		return
 	if(ismob(A) || ismecha(A))
 		ai_actual_track(A)
@@ -74,8 +75,13 @@
 	*/
 	if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
 		return
-	A.add_hiddenprint(src)
-	A.attack_ai(src)
+	
+	if(istype(current, /obj/machinery/turret))
+		var/obj/machinery/turret/T = current
+		T.shootAt(A)
+	else 
+		A.add_hiddenprint(src)
+		A.attack_ai(src)
 
 /*
 	AI has no need for the UnarmedAttack() and RangedAttack() procs,
@@ -125,14 +131,13 @@
 /atom/proc/AIRightClick()
 	return
 
-/obj/machinery/power/apc/AICtrlClick() // turns off APCs.
-	if(allowed(usr))
-		Topic("breaker=1", list("breaker"="1"), 0) // 0 meaning no window (consistency! wait...)
-
-
 /atom/proc/AIAltClick(var/mob/living/silicon/ai/user)
 	AltClick(user)
 	return
+	
+/obj/machinery/power/apc/AICtrlClick() // turns off APCs.
+	if(allowed(usr))
+		Topic("breaker=1", list("breaker"="1"), 0) // 0 meaning no window (consistency! wait...)
 
 /obj/machinery/door/firedoor/AIShiftClick(var/mob/living/silicon/ai/user) // Allows examining firelocks
 	examine(user)

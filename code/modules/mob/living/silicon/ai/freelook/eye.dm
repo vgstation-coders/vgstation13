@@ -7,7 +7,6 @@
 	name = "Inactive AI Eye"
 	anchored = TRUE
 
-	var/humanlike = FALSE	//don't pass over dense things like walls while this is false, and move at human speed
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/high_res = 0
@@ -22,6 +21,9 @@
 		var/obj/machinery/hologram/holopad/H
 		if(istype(ai.current, /obj/machinery/hologram/holopad))
 			H = ai.current
+		if(istype(ai.current, /obj/machinery/turret))
+			var/obj/machinery/turret/T = ai.current
+			T.malf_release_control()
 		if(!isturf(ai.loc))
 			return
 		if(istype(H))
@@ -35,7 +37,7 @@
 					if(A.density)
 						return
 
-		if(!isturf(destination))
+		if(!isturf(destination) && destination)
 			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
 
 		forceEnter(destination)
@@ -108,10 +110,16 @@
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
-	if((user.cooldown && user.cooldown < world.timeofday) || user.eyeobj?.humanlike) // 3 seconds
+	var/obj/machinery/turret/T = user.current 
+	var/obj/machinery/hologram/holopad/H = user.current
+
+	if(istype(T))
+		T.malf_release_control()
+
+	if((user.cooldown && user.cooldown < world.timeofday) || istype(H)) // 3 seconds
 		user.sprint = initial
 
-	if(user.eyeobj.humanlike)
+	if(istype(H))
 		user.delayNextMove(1)
 
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
@@ -119,10 +127,8 @@
 		if(step)
 			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 4))
 				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
-			if(user.eyeobj.humanlike)
-				var/obj/machinery/hologram/holopad/H = user.current
-				if(istype(H))
-					H.holo.dir = direct
+			else if(istype(H) && H.advancedholo)
+				H.holo.dir = direct
 				if(step.density)
 					return
 				for(var/atom/movable/A in step)
@@ -138,7 +144,7 @@
 	user.last_movement=world.time
 
 	user.cooldown = world.timeofday + 5
-	if(user.acceleration && !user.eyeobj.humanlike)
+	if(user.acceleration && !istype(H))
 		user.sprint = min(user.sprint + 0.5, max_sprint)
 	else
 		user.sprint = initial
@@ -153,6 +159,9 @@
 	var/obj/machinery/hologram/holopad/H  = current
 	if(istype(H))
 		H.clear_holo()
+	var/obj/machinery/turret/T = current
+	if(istype(T))
+		T.malf_release_control()
 
 	current = null
 	cameraFollow = null

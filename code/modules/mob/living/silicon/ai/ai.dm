@@ -307,16 +307,11 @@ var/list/ai_list = list()
 
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()
-	var/datum/faction/malf/malf = find_active_faction_by_member(src.mind.GetRole(MALF))
-	if(malf && malf.apcs >= 3)
-		stat(null, "Amount of APCS hacked: [malf.apcs]")
-		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-
-
-/mob/proc/remove_malf_spells()
-	for(var/spell/S in spell_list)
-		if(S.panel == MALFUNCTION)
-			remove_spell(S)
+	var/datum/role/malfAI/malf = mind.GetRole(MALF)
+	var/datum/faction/malf/malffac = find_active_faction_by_member(malf)
+	if(malf && malf.apcs.len >= 3)
+		stat(null, "Amount of APCS hacked: [malf.apcs.len]")
+		stat(null, "Time until station control secured: [max(malffac.AI_win_timeleft/(malf.apcs.len/3), 0)] seconds")
 
 /mob/living/silicon/ai/proc/ai_alerts()
 
@@ -811,27 +806,6 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo18"))
 
 	return
-
-/spell/aoe_turf/corereturn
-	name = "Return to Core"
-	panel = MALFUNCTION
-	charge_type = Sp_CHARGES
-	charge_max = 1
-	hud_state = "unshunt"
-
-/spell/aoe_turf/corereturn/before_target(mob/user)
-	if(istype(user.loc, /obj/machinery/power/apc))
-		return FALSE
-	else
-		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
-		return TRUE
-
-/spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
-	return list(user.loc)
-
-/spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
-	var/obj/machinery/power/apc/apc = targets[1]
-	apc.malfvacate()
 
 //Toggles the luminosity and applies it by re-entereing the camera.
 /mob/living/silicon/ai/verb/toggle_camera_light()

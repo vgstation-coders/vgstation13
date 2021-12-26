@@ -43,7 +43,9 @@ var/list/camera_names=list()
 	var/health = CAMERA_MAX_HEALTH
 
 	hack_abilities = list(
-		/datum/malfhack_ability/overload
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/camera_reactivate,
+		/datum/malfhack_ability/oneuse/camera_upgrade
 	)
 
 /obj/machinery/camera/flawless

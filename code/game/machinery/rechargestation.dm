@@ -1,5 +1,6 @@
 /obj/machinery/recharge_station
 	name = "cyborg recharging station"
+	desc = "A large metallic machine for charging cyborgs."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "borgcharger0"
 	density = 1
@@ -17,6 +18,16 @@
 	var/capacitor_stored = 0 //power stored in capacitors, to be instantly transferred to robots when they enter the charger
 	var/capacitor_max = 0 //combined max power the capacitors can hold
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/make_autoborger,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+	)
+	
+	var/autoborger = FALSE
+	var/make_mommis = FALSE
+	var/is_borging = FALSE
+	var/mob/living/silicon/ai/aiowner
 
 /obj/machinery/recharge_station/New()
 	. = ..()
@@ -199,7 +210,10 @@
 		icon_state = "borgcharger"
 	else
 		if(src.occupant)
-			icon_state = "borgcharger1"
+			if(isrobot(occupant) || !autoborger)
+				icon_state = "borgcharger1"
+			else
+				icon_state = "borgchargefuck"
 		else
 			icon_state = "borgcharger0"
 
@@ -211,6 +225,9 @@
 				go_out()
 				return
 			restock_modules()
+		else if(ishuman(occupant) && autoborger && !is_borging)
+			do_autoborg()
+			return
 		charge_cell(occupant.get_cell())
 
 /obj/machinery/recharge_station/proc/charge_cell(var/obj/item/weapon/cell/C)
@@ -233,6 +250,8 @@
 /obj/machinery/recharge_station/proc/go_out()
 	if(!( src.occupant ))
 		return
+	if(ishuman(occupant) && is_borging) // No escaping!
+		return 
 	if(upgrading)
 		to_chat(occupant, "<span class='notice'>The upgrade hasn't completed yet, interface with \the [src] again to halt the process.</span>")
 		return
@@ -282,7 +301,7 @@
 /obj/machinery/recharge_station/proc/mob_enter(mob/living/R)
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
-	if (R.stat == 2 || !R.canmove)
+	if (R.stat == 2)
 		//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
 		return
 	if (src.occupant)
@@ -307,6 +326,9 @@
 				else
 					if(some_cell.maxcharge > RR.cell.maxcharge)
 						to_chat(usr, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
+	else if(ishuman(R) && autoborger && !is_borging)
+		do_autoborg()
+
 
 /obj/machinery/recharge_station/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(occupant)
@@ -329,3 +351,98 @@
 	if(occupant)
 		return occupant.get_cell()
 	return locate(/obj/item/weapon/cell) in upgrade_holder
+
+/obj/machinery/recharge_station/proc/do_autoborg()
+	if(!ishuman(occupant))
+		return
+	var/mob/living/carbon/human/H = occupant
+	if(is_borging)
+		return
+	is_borging = TRUE
+
+	var/limbs_to_ignore = list(/datum/organ/external/head, /datum/organ/external/chest, /datum/organ/external/groin)
+	var/list/limbs = list()
+	for(var/datum/organ/external/E in H.organs)
+		if(!E.is_robotic() && !is_type_in_list(E, limbs_to_ignore)) 
+			limbs += E
+	
+	icon_state = "borgchargerfuck"
+	flick("borgchargerfuckstart", src)
+
+	playsound(src, 'sound/machines/juicer.ogg', 80, 1)
+
+	// Mangle their limbs!
+	for(var/datum/organ/external/E in limbs)
+		if(!src)
+			return
+		if(prob(25))
+			spark(src)
+		if(prob(50))
+			H.audible_scream()
+		shake(1, 3)
+		E.explode()
+		H.handle_regular_hud_updates()
+		sleep(10)
+	
+	if(!src)
+		return
+	
+	var/mob/living/silicon/robot/R
+	if(make_mommis)
+		R = H.MoMMIfy(TRUE, TRUE, aiowner)
+	else 
+		R = H.Robotize(TRUE , TRUE , aiowner)
+	
+	occupant = R
+
+	if(!R)
+		visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
+		if (aiowner)
+			var/datum/role/malfAI/my_malf = aiowner.mind?.GetRole(MALF)
+			if (my_malf)
+				my_malf.add_power(50)
+				to_chat(aiowner, "<span class='good'>Incompatible lifeform biomass reprocessed into computing power.</span>")
+		is_borging = FALSE
+		return
+
+	R.cell.maxcharge = 5000	
+	R.cell.charge = 5000
+	R.SetKnockdown(3)
+
+	R.custom_name = pick(autoborg_silly_names) 
+	R.namepick_uses = 1
+	R.updateicon()
+	R.updatename()
+	flick("borgchargerfuckend", src)
+	playsound(src, 'sound/machines/ding.ogg', 50, 0)
+	spawn(5)
+		icon_state = "borgcharger0"
+		is_borging = FALSE
+		go_out()
+
+
+
+
+/obj/machinery/recharge_station/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if(!isliving(O) || !isliving(user))
+		return
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) 
+		return
+	if(user.incapacitated() || user.lying) 
+		return
+	if(!Adjacent(user) || !user.Adjacent(src)) 
+		return
+	if(O.locked_to)
+		return
+	if(O.anchored)
+		return
+	if(!isrobot(O) && !ishuman(O)) 
+		return
+	if(!isrobot(user) && !ishuman(user))
+		return
+	var/mob/living/L = O
+	if(L.stat == DEAD)
+		to_chat(user, "<span class='warning'>[O] is already dead!</span>")
+		return
+	if(do_after(user, src, 20))
+		mob_enter(O)

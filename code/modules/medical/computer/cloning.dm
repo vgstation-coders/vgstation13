@@ -20,6 +20,13 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
+
 /obj/machinery/computer/cloning/New()
 	..()
 	spawn(5)
@@ -113,7 +120,7 @@
 /obj/machinery/computer/cloning/emag(mob/user)
 	if(!emagged)
 		emagged = 1
-		if(user)
+		if(user && !issilicon(user))
 			user.visible_message("<span class='warning'>[user] slides something into \the [src]'s card-reader.</span>","<span class='warning'>You disable \the [src]'s safety overrides.</span>")
 
 /obj/machinery/computer/cloning/attack_paw(mob/user as mob)

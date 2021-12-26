@@ -85,6 +85,13 @@ var/global/num_vending_terminals = 1
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 	var/credits_held = 0 // How many credits in the machine
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
+
 /atom/movable/proc/product_name()
 	return name
 /obj/item/stack/product_name()

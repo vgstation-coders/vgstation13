@@ -60,6 +60,11 @@
 	machine_flags = SCREWTOGGLE | WIREJACK
 	animation_delay = 5
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+	)
+
 /obj/machinery/door/airlock/Destroy()
 	if(wires)
 		qdel(wires)

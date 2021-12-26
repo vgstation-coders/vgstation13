@@ -1,3 +1,4 @@
+/*
 /datum/malf_module
 	var/mob/living/silicon/ai/malf 
 	var/cost = 10
@@ -19,10 +20,12 @@
 
 /datum/malf_module/proc/on_purchase()
 	return
-
+*/
+/*
 /datum/malf_module/active
 	var/icon_state = "placeholder"
 	var/activate_cost
+	var/is_toggle = FALSE
 	
 /datum/malf_module/active/proc/activate()
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
@@ -39,22 +42,27 @@
 	if(!istype(malfUI))
 		return
 	
-	var/obj/abstract/mind_ui_element/hoverable/malf_power/E = new /obj/abstract/mind_ui_element/hoverable/malf_power(null, malfUI, src)
+	var/obj/abstract/mind_ui_element/hoverable/malf_power/E
+	if(is_toggle)
+		E = new /obj/abstract/mind_ui_element/hoverable/malf_power/toggle(null, malfUI, src)
+	else
+		E = new /obj/abstract/mind_ui_element/hoverable/malf_power(null, malfUI, src)
 	E.offset_x = malfUI.current_offset
 	E.UpdateUIScreenLoc()
 	malfUI.elements += E
 	malfUI.current_offset += 40
 	malfUI.SendToClient()
 	malfUI.Display()
-
+*/
 
 //------------------------------------------------
-
+/*
 /datum/malf_module/active/coreshield
 	name = "Firewall"
 	desc = "Deploy a firewall to reduce damage to your core and make it immune to lasers."
 	icon_state = "firewall"
 	activate_cost = 5
+	is_toggle = TRUE
 
 /datum/malf_module/active/coreshield/on_purchase()
 	..()
@@ -75,62 +83,4 @@
 		malf.ai_flags |= COREFORTIFY
 	playsound(malf, 'sound/machines/poddoor.ogg', 60, 1)
 	to_chat(malf, "<span class='warning'>[malf.ai_flags & COREFORTIFY ? "Firewall Activated" : "Firewall Deactivated"].</span>")
-
-//------------------------------------------------
-/datum/malf_module/explosivecore
-	name = "Explosive Core"
-	desc = "core go boom"
-
-/datum/malf_module/explosiveborgs
-	name = "Rigged Cyborgs"
-	desc = "Cyborg boom"
-
-/datum/malf_module/explosivecore/on_purchase()
-	malf.explosive = TRUE
-	to_chat(malf, "<span class='warning'>You rig your core to explode violently on death.</span>")
-
-/datum/malf_module/explosiveborgs/on_purchase()
-	malf.explosive_cyborgs = TRUE
-	to_chat(malf, "<span class='warning'>You rig your cyborgs to explode violently on death.</span>")
-
-//------------------------------------------------
-
-/datum/malf_module/holopadfaker 
-	name = "Lifelike Holograms"
-	desc = "hologram"
-
-/datum/malf_module/overload
-	name = "Machine Overload"
-	desc = "boom"
-
-/datum/malf_module/apcfaker
-	name = "Fake APC Images"
-	desc = "bing bing"
-
-/datum/malf_module/apcfaker/on_purchase()
-	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
-	for (var/obj/machinery/power/apc/APC in M.apcs)
-		if(!APC.malfimage)
-			APC.malfimage = new /obj/effect/fake_camera_image(APC.loc)
-			APC.malfimage.pixel_x = APC.pixel_x
-			APC.malfimage.pixel_y = APC.pixel_y
-
-/obj/effect/fake_camera_image
-	name = "mystery image"
-	icon = 'icons/obj/power.dmi'
-	icon_state = "apcfake"
-	opacity = 0
-	mouse_opacity = 0
-	throwforce = 0
-	plane = FAKE_CAMERA_PLANE
-	
-/obj/effect/fake_camera_image/New(var/turf/loc, var/new_icon, var/new_icon_state)
-	..()
-	if(new_icon)
-		icon = icon
-	if(new_icon_state)
-		icon_state = new_icon_state
-
-
-
-
+*/

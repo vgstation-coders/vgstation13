@@ -3,7 +3,7 @@
 /datum/mind_ui/malf
 	uniqueID = "Malf"
 	sub_uis_to_spawn = list(
-		/datum/mind_ui/malf_top_panel,
+	//	/datum/mind_ui/malf_top_panel,
 		/datum/mind_ui/malf_left_panel,
 		)
 
@@ -20,7 +20,7 @@
 //							 TOP PANEL							  //
 //																  //
 ////////////////////////////////////////////////////////////////////
-
+/*
 /datum/mind_ui/malf_top_panel
 	uniqueID = "Malf Top Panel"
 	y = "TOP"
@@ -52,8 +52,8 @@
 	var/mob/living/silicon/ai/A = GetUser()
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	M?.tgui_interact(GetUser())
-		
-
+*/
+/*
 /obj/abstract/mind_ui_element/hoverable/malf_power
 	name = "BROKEN POWER"
 	icon = 'icons/ui/malf/32x48.dmi'
@@ -89,6 +89,23 @@
 	if (color == null)
 		..()
 
+/obj/abstract/mind_ui_element/hoverable/malf_power/toggle
+	var/toggled = FALSE
+	var/true_icon_state = ""
+
+/obj/abstract/mind_ui_element/hoverable/malf_power/toggle/New()
+	..()
+	true_icon_state = base_icon_state
+
+/obj/abstract/mind_ui_element/hoverable/malf_power/toggle/Click()
+	..()
+	if(toggled)
+		base_icon_state = true_icon_state
+	else
+		base_icon_state = "[true_icon_state]-toggled"
+	icon_state = "[base_icon_state]-hover"
+	toggled = !toggled
+*/
 ////////////////////////////////////////////////////////////////////
 //																  //
 //						   LEFT PANEL							  //

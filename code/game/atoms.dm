@@ -99,8 +99,7 @@ var/global/list/ghdel_profiling = list()
 //pixelshift - max pixels to shift on each shake
 //speed - The speed of each shake
 //loop - How many shakes to perform
-//directions - How many times to change shake direction
-//Total shaking time is equal to speed * loops * directions
+//Total shaking time is equal to speed * loops
 /atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, speed = 0.2 SECONDS, loops = 3)
 	set waitfor = 0
 	var/initialpixelx = pixel_x

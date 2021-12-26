@@ -22,6 +22,12 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	machinetype = 5
 	delay = 7
 
+	hack_abilities = list(
+		/datum/malfhack_ability/fake_message,
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
 /obj/machinery/telecomms/broadcaster/New()
 	..()
 	component_parts = newlist(

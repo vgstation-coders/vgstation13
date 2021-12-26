@@ -23,10 +23,12 @@
 	usr.ClickOn(src, params)
 
 /mob/living/Click()
+/*
 	if(isAI(usr))
 		var/mob/living/silicon/ai/A = usr
-		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
+		if(!A.aicamera.in_camera_mode && usr != src) //Fix for taking photos of mobs
 			return
+*/
 	..()
 
 /atom/DblClick(location,control,params)
