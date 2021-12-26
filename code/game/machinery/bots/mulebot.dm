@@ -703,15 +703,13 @@ var/global/mulebot_count = 0
 	if(getpAIMovementDelay() < 0)
 		to_chat(user, "There seems to be something wrong with the motor. Have a technician check the wires.")
 		return
-	if(!..())
-		return
 	if(!on)
 		to_chat(user, "You can't move \the [src] while it's turned off.")
 		return
 	var/turf/T = loc
 	if(!T.has_gravity())
 		return
-	step(src, dir)
+	..()
 
 /obj/machinery/bot/mulebot/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/movable/A)
 	if(!istype(A) || !Adjacent(A) || A.anchored)

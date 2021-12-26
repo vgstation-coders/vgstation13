@@ -126,6 +126,15 @@
 	if(ispulsedemon(user))
 		pAImove(user,direction)
 
+/obj/machinery/bot/pAImove(mob/living/user, dir)
+	if(!on)
+		return
+	if(!..())
+		return
+	if(!isturf(loc))
+		return
+	step(src, dir)
+
 // Makes the bot busy while it looks for a target.
 /obj/machinery/bot/proc/find_target()
 	// Let us hurry home to our master.
