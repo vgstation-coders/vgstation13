@@ -197,7 +197,6 @@
             if(!isturf(loc))
                 loc = get_turf(NewLoc)
             controlling_area = null
-            update_cableview()
             if(!moved)
                 forceMove(NewLoc)
         else
