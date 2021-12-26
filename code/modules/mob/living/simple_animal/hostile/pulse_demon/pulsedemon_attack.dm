@@ -279,6 +279,8 @@
         user.loc = src
         user.current_bot = src
         PD_occupant = user
+        if(!pAImove_delayer)
+            pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
         return TRUE
     return FALSE
 
@@ -288,6 +290,9 @@
         user.loc = src
         if(user.current_bot)
             user.current_bot.PD_occupant = null
+            if(user.current_bot.pAImove_delayer && !user.current_bot.integratedpai)
+                qdel(user.current_bot.pAImove_delayer)
+                user.current_bot.pAImove_delayer = null
         user.current_robot = null
         user.current_bot = null
         user.current_weapon = null
