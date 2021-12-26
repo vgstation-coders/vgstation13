@@ -370,8 +370,8 @@
     if(client)
         // Reset this
         for(var/image/current_image in cables_shown)
-            cables_shown -= current_image
             client.images -= current_image
+        cables_shown.Cut()
         // Go through all powernets in the game
         for(var/datum/powernet/current_net in powernets)
             // Add all the cables on the powernet to our images, that's why we have this var
