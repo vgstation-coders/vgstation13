@@ -147,6 +147,14 @@
             F.ReplaceWithLattice()
         visible_message("<span class='warning'>[src] makes an excited booping sound as it begins tearing apart \the [F].</span>")
 
+/obj/machinery/bot/cleanbot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
+    if(istype(A,/turf/simulated/floor) && Adjacent(A))
+        var/turf/simulated/floor/F = A
+        F.wet(800)
+		visible_message("<span class='warning'>Something flies out of \the [src]! He seems to be acting oddly.</span>")
+        if(!(locate(/obj/effect/decal/cleanable/blood/gibs) in F))
+		    new /obj/effect/decal/cleanable/blood/gibs(F)
+
 /obj/machinery/bot/mulebot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
     if(istype(A) && Adjacent(A))
         if(ismovable(A))
@@ -160,6 +168,25 @@
         if(load)
             to_chat(user, "You unload \the [load].")
             unload()
+
+/obj/machinery/bot/medbot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
+    if (Adjacent(A) && iscarbon(A) && on)
+        var/mob/living/carbon/C = A
+        icon_state = "[icon_initial]s"
+        visible_message("<span class='danger'>[src] is trying to inject [C]!</span>")
+        if(do_after(user, C, INJECTION_TIME))
+            C.reagents.add_reagent(TOXIN,injection_amount)
+            visible_message("<span class='danger'>[src] injects [C] with the syringe!</span>")
+            icon_state = "[icon_initial][on]"
+        else
+            icon_state = "[icon_initial][on]"
+
+/obj/machinery/bot/bloodbot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
+    if(ishuman(A) && Adjacent(A) && on)
+        var/mob/living/carbon/H = A
+        if(prob(5))
+            speak(pick("Blaah!","I vant to suck your blood!","I never drink... wine.","The blood is the life.","I must hunt soon!","I hunger!","Death rages.","The night beckons.","Mwa ha ha!"))
+        drink(H)
 
 // Most machinery just does normal AI attacks
 /obj/machinery/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
