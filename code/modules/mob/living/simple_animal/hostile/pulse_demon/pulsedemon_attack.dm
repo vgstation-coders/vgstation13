@@ -94,7 +94,7 @@
             M.Knockdown(10)
             playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
             visible_message("<span class='danger'>[src] is trying to put handcuffs on [M]!</span>")
-            if(do_after(2 SECONDS))
+            if(do_after(user, M, 2 SECONDS))
                 if (!istype(M))
                     return
                 if (M.handcuffed)
@@ -128,7 +128,7 @@
             M.Knockdown(10)
             playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
             visible_message("<span class='danger'>[src] is trying to put handcuffs on [M]!</span>")
-            if(do_after(2 SECONDS))
+            if(do_after(user, M, 2 SECONDS))
                 if (!istype(M))
                     return
                 if (M.handcuffed)
@@ -139,7 +139,7 @@
             shootAt(M)
 
 /obj/machinery/bot/floorbot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
-    if(istype(A,/turf/simulated/floor))
+    if(istype(A,/turf/simulated/floor) && Adjacent(A))
         var/turf/simulated/floor/F = A
         if(prob(99)) // Make the chance of below lower since player controlled and all
             F.break_tile_to_plating()
