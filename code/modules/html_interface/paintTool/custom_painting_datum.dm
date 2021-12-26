@@ -114,6 +114,7 @@
 	var/author = ""
 	var/title = ""
 	var/description = ""
+	var/contributing_artists = list()
 
 /datum/custom_painting/New(parent, bitmap_width, bitmap_height, offset_x=0, offset_y=0, base_color=src.base_color)
 	src.parent = parent
@@ -242,6 +243,7 @@
 		author = copytext(sanitize(url_decode(href_list["author"])), 1, MAX_NAME_LEN)
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
 		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
+		contributing_artists += usr.key
 		return TRUE
 
 /datum/custom_painting/proc/render_on(icon/ico, offset_x = src.offset_x, offset_y = src.offset_y)

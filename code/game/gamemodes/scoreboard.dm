@@ -23,48 +23,51 @@
 				
 	var/list/gallery = score["global_paintings"]
 	var/painting_completions = ""
-	if(gallery.len)
-		var/list/painting_artists = list()
+	if(gallery.len) //the list of all artworks
+		var/list/artworks = list() //list of authors, for sorting later
 		for(var/obj/structure/painting/custom/painting in gallery)
 			if(painting.show_on_scoreboard && !painting.painting_data.is_blank())
 				var/painting_author = painting.painting_data.author
-				if(!painting.painting_data.author)
+				if(!painting_author)
 					painting_author = "Anonymous"
-				to_chat(world,"adding [painting] to list under [painting_author]")
-				painting_artists.Add(painting_author) 
-				painting_artists[painting_author] = painting
-				//painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] by [painting.painting_data.author] "}
-				to_chat(world,"list @ [painting_artists.len]")
-		to_chat(world,"attempting sortTim")
-		var/list/sorted_artists_list = sortList(painting_artists, cmp=/proc/cmp_text_asc)
-		to_chat(world,"sorted_artists_list = [sorted_artists_list], [sorted_artists_list.len]")
-		to_chat(world,"***BEGINNING ARTIST ASSIGNMENT***")
-		var/currentartist = ""
+				if(!artworks[painting_author])
+					artworks[painting_author] = list()
+				artworks[painting_author] += painting
+
+		to_chat(world,"attempting sortNames")
+		var/list/sorted_artists_list = sortList(artworks)
 		for(var/artist in sorted_artists_list)
-			to_chat(world,"sorting artist: [artist]")
-			var/obj/structure/painting/custom/painting = sorted_artists_list[artist]
-			to_chat(world,"÷÷ checking painting: [painting]")
-			to_chat(world,"current artist: [currentartist]")
-			if(artist != currentartist)
-				to_chat(world,"[artist] is not [currentartist]")
-				if(artist == "")
-					artist = "Anonymous"
-				currentartist = artist
-				painting_completions += {"<h3>[artist]</h3>"}
-				to_chat(world,"¥¥ currentartist ([currentartist]) is now [artist]")
-			to_chat(world,"checking for painting")
-			if(painting)
+			to_chat(world,"|¦ [artist] -> [sorted_artists_list[artist]]#[sorted_artists_list[artist].len]")
+
+		to_chat(world,"*** Adding art to scoreboard! ***")
+		var/currentartist = ""
+		for(var/artistsandworks in sorted_artists_list) //list of lists of paintings
+			to_chat(world,"«» [artistsandworks], [sorted_artists_list[artistsandworks]]")
+			var/list/artist_and_their_works = sorted_artists_list[artistsandworks]
+			to_chat(world,"scoreboarding artist: [artist_and_their_works] ¦¦ [sorted_artists_list[artist_and_their_works]]#[artist_and_their_works.len]")
+			for(var/artwork in artist_and_their_works)
+				to_chat(world,"¤¤ [artwork]")
+			for(var/obj/structure/painting/custom/painting in artist_and_their_works)
+				to_chat(world,"÷÷ checking painting: [painting]")
+				to_chat(world,"current artist: [currentartist]")
+				if(artistsandworks != currentartist)
+					to_chat(world,"xx [artistsandworks] is not [currentartist]")
+					currentartist = artistsandworks
+					painting_completions += {"<h3>[artistsandworks]</h3>"}
+					to_chat(world,"¥¥ currentartist ([currentartist]) is now [artistsandworks]")
+				to_chat(world,"adding painting: [painting]")
+				var/title = painting.painting_data.title
+				if(!title)
+					title = "Nameless"
+				var/list/otherguys = uniquelist(painting.painting_data.contributing_artists)
 				var/icon/flat = getFlatIcon(painting)
-				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] "}
-				to_chat(world,"** SUCCESS! ** , added [painting.painting_data.title] to the scoreboard")
-			else
-				to_chat(world,"** FAIL! ** , failed to add :[painting]: to the scoreboard")
+				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> "[title]" "}
+				painting_completions += {"CA: [otherguys.Join(", ")]"} //condensing this into a href details button would be nice
+				to_chat(world,"** SUCCESS! ** , added [title] to the scoreboard")
 		
+		to_chat(world,"=== Art added to scoreboard! ===")
 		completions += "<h2>Artisans and their artworks</h2>"
-		//sort by artist
-		//add <br> before every artist
-		//use <h3> per artist
-		completions += painting_completions
+		completions += painting_completions //would be nice to show these in a table but i'm not sure how row/column manip works
 		completions += "<HR>"
 
 	/*//Calls auto_declare_completion_* for all modes
