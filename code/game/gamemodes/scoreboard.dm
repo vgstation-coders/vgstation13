@@ -34,28 +34,14 @@
 					artworks[painting_author] = list()
 				artworks[painting_author] += painting
 
-		to_chat(world,"attempting sortNames")
 		var/list/sorted_artists_list = sortList(artworks)
-		for(var/artist in sorted_artists_list)
-			to_chat(world,"|¦ [artist] -> [sorted_artists_list[artist]]#[sorted_artists_list[artist].len]")
-
-		to_chat(world,"*** Adding art to scoreboard! ***")
 		var/currentartist = ""
 		for(var/artistsandworks in sorted_artists_list) //list of lists of paintings
-			to_chat(world,"«» [artistsandworks], [sorted_artists_list[artistsandworks]]")
 			var/list/artist_and_their_works = sorted_artists_list[artistsandworks]
-			to_chat(world,"scoreboarding artist: [artist_and_their_works] ¦¦ [sorted_artists_list[artist_and_their_works]]#[artist_and_their_works.len]")
-			for(var/artwork in artist_and_their_works)
-				to_chat(world,"¤¤ [artwork]")
 			for(var/obj/structure/painting/custom/painting in artist_and_their_works)
-				to_chat(world,"÷÷ checking painting: [painting]")
-				to_chat(world,"current artist: [currentartist]")
 				if(artistsandworks != currentartist)
-					to_chat(world,"xx [artistsandworks] is not [currentartist]")
 					currentartist = artistsandworks
 					painting_completions += {"<h3>[artistsandworks]</h3>"}
-					to_chat(world,"¥¥ currentartist ([currentartist]) is now [artistsandworks]")
-				to_chat(world,"adding painting: [painting]")
 				var/title = painting.painting_data.title
 				if(!title)
 					title = "Nameless"
@@ -63,9 +49,7 @@
 				var/icon/flat = getFlatIcon(painting)
 				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> "[title]" "}
 				painting_completions += {"CA: [otherguys.Join(", ")]"} //condensing this into a href details button would be nice
-				to_chat(world,"** SUCCESS! ** , added [title] to the scoreboard")
 		
-		to_chat(world,"=== Art added to scoreboard! ===")
 		completions += "<h2>Artisans and their artworks</h2>"
 		completions += painting_completions //would be nice to show these in a table but i'm not sure how row/column manip works
 		completions += "<HR>"
