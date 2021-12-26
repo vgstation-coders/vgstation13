@@ -27,33 +27,38 @@
 		var/list/painting_artists = list()
 		for(var/obj/structure/painting/custom/painting in gallery)
 			if(painting.show_on_scoreboard && !painting.painting_data.is_blank())
-				to_chat(world,"adding [painting] to list under [painting.painting_data.author]")
+				var/painting_author = painting.painting_data.author
 				if(!painting.painting_data.author)
-					painting.painting_data.author = "Anonymous"
-				painting_artists.Add(painting.painting_data.author,painting) 
+					painting_author = "Anonymous"
+				to_chat(world,"adding [painting] to list under [painting_author]")
+				painting_artists.Add(painting_author) 
+				painting_artists[painting_author] = painting
 				//painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] by [painting.painting_data.author] "}
 				to_chat(world,"list @ [painting_artists.len]")
 		to_chat(world,"attempting sortTim")
-		var/list/sorted_artists_list = sortTim(painting_artists, cmp=/proc/cmp_text_asc, FALSE)
+		var/list/sorted_artists_list = sortList(painting_artists, cmp=/proc/cmp_text_asc)
 		to_chat(world,"sorted_artists_list = [sorted_artists_list], [sorted_artists_list.len]")
+		to_chat(world,"***BEGINNING ARTIST ASSIGNMENT***")
 		var/currentartist = ""
 		for(var/artist in sorted_artists_list)
-			to_chat(world,"sorting [artist]")
+			to_chat(world,"sorting artist: [artist]")
 			var/obj/structure/painting/custom/painting = sorted_artists_list[artist]
-			to_chat(world,"checking [painting]")
-			to_chat(world,"currently sorting [currentartist]")
+			to_chat(world,"÷÷ checking painting: [painting]")
+			to_chat(world,"current artist: [currentartist]")
 			if(artist != currentartist)
 				to_chat(world,"[artist] is not [currentartist]")
 				if(artist == "")
 					artist = "Anonymous"
 				currentartist = artist
 				painting_completions += {"<h3>[artist]</h3>"}
-				to_chat(world,"[artist] is now [currentartist]")
+				to_chat(world,"¥¥ currentartist ([currentartist]) is now [artist]")
 			to_chat(world,"checking for painting")
 			if(painting)
 				var/icon/flat = getFlatIcon(painting)
 				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] "}
-				to_chat(world,"added [painting.painting_data.title] to [painting_completions]")
+				to_chat(world,"** SUCCESS! ** , added [painting.painting_data.title] to the scoreboard")
+			else
+				to_chat(world,"** FAIL! ** , failed to add :[painting]: to the scoreboard")
 		
 		completions += "<h2>Artisans and their artworks</h2>"
 		//sort by artist
