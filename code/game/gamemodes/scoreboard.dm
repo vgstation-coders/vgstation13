@@ -24,11 +24,41 @@
 	var/list/gallery = score["global_paintings"]
 	var/painting_completions = ""
 	if(gallery.len)
+		var/list/painting_artists = list()
 		for(var/obj/structure/painting/custom/painting in gallery)
-			var/icon/flat = getFlatIcon(painting)
-			if(painting.show_on_scoreboard)
-				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] by [painting.painting_data.author] "}
-		completions += "<h2>Art</h2>"
+			if(painting.show_on_scoreboard && !painting.painting_data.is_blank())
+				to_chat(world,"adding [painting] to list under [painting.painting_data.author]")
+				if(!painting.painting_data.author)
+					painting.painting_data.author = "Anonymous"
+				painting_artists.Add(painting.painting_data.author,painting) 
+				//painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] by [painting.painting_data.author] "}
+				to_chat(world,"list @ [painting_artists.len]")
+		to_chat(world,"attempting sortTim")
+		var/list/sorted_artists_list = sortTim(painting_artists, cmp=/proc/cmp_text_asc, FALSE)
+		to_chat(world,"sorted_artists_list = [sorted_artists_list], [sorted_artists_list.len]")
+		var/currentartist = ""
+		for(var/artist in sorted_artists_list)
+			to_chat(world,"sorting [artist]")
+			var/obj/structure/painting/custom/painting = sorted_artists_list[artist]
+			to_chat(world,"checking [painting]")
+			to_chat(world,"currently sorting [currentartist]")
+			if(artist != currentartist)
+				to_chat(world,"[artist] is not [currentartist]")
+				if(artist == "")
+					artist = "Anonymous"
+				currentartist = artist
+				painting_completions += {"<h3>[artist]</h3>"}
+				to_chat(world,"[artist] is now [currentartist]")
+			to_chat(world,"checking for painting")
+			if(painting)
+				var/icon/flat = getFlatIcon(painting)
+				painting_completions += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [painting.painting_data.title] "}
+				to_chat(world,"added [painting.painting_data.title] to [painting_completions]")
+		
+		completions += "<h2>Artisans and their artworks</h2>"
+		//sort by artist
+		//add <br> before every artist
+		//use <h3> per artist
 		completions += painting_completions
 		completions += "<HR>"
 
