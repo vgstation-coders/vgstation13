@@ -226,6 +226,8 @@ Class Procs:
 
 		spawn(10)
 			qdel(pulse2)
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Finally take these out inside APCs and etc.
 	..()
 
 /obj/machinery/suicide_act(var/mob/living/user)

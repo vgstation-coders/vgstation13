@@ -723,6 +723,8 @@
 	return
 
 /obj/machinery/bot/emp_act(severity)
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Not inheriting so do it here too
 	if(flags & INVULNERABLE)
 		return
 	var/was_on = on
