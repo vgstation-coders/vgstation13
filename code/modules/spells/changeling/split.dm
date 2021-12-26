@@ -20,7 +20,7 @@
 			return
 		//owner = user.mind
 		polling_ghosts = TRUE
-		user.visible_message("You begin to generate a new form.")
+		user.visible_message("You are preparing to generate a new form.")
 		if(!recruiter)
 			recruiter = new(src)
 			recruiter.display_name = name
@@ -32,10 +32,14 @@
 		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
 		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
-		recruiter.request_player()
+		var/success = recruiter.request_player()
 		
+		
+		if (success)
+			changeling.splitcount += 1
+		else
+			user.visible_message("You are unable to split at the moment.")
 		changeling.geneticdamage = 30
-		changeling.splitcount += 1
 	else
 		user.visible_message("You are unable to split again.")
 	
@@ -48,36 +52,31 @@
 	to_chat(player, "<span class='recruit'>\A [src] is looking for candidates. ([controls])</span>")
 
 /spell/changeling/split/proc/recruiter_recruited(mob/user, mob/dead/observer/player)
-	if(player)
-		var/turf/this_turf = get_turf(src)
-		var/mob/living/carbon/human/newbody = new(this_turf)
-		newbody.set_species(user,1)
-		newbody.ckey = player.ckey
-		
-		var/datum/role/changeling/newChangeling = new
-		newChangeling.AssignToRole(player.mind,1)
-		newChangeling.geneticdamage = 30
-		
-		//Assign to the hivemind faction
-		var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
-		if(!hivemind)
-			hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
-			hivemind.OnPostSetup()
-		hivemind?.HandleRecruitedRole(newChangeling)
-		newChangeling.ForgeObjectives()
-		newChangeling.Greet(GREET_DEFAULT)
-		
-		user.visible_message("<span class='danger'>[user] splits!</span>")
-		user.regenerate_icons()
-		user.updateChangelingHUD()
-		update_faction_icons()
-		nanomanager.close_uis(src)
-		//update_icon()
-	else 	
-		//chosen_setup = null
-		polling_ghosts = FALSE
-		user.visible_message("You stop generating your new form.")
-		nanomanager.update_uis(src)
-		return
-		
+	polling_ghosts = FALSE
+	var/turf/this_turf = get_turf(src)
+	var/mob/living/carbon/human/newbody = new(this_turf)
+	newbody.set_species(user,1)
+	newbody.ckey = player.ckey
+	
+	var/datum/role/changeling/newChangeling = new
+	newChangeling.AssignToRole(player.mind,1)
+	newChangeling.geneticdamage = 30
+	
+	//Assign to the hivemind faction
+	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
+	if(!hivemind)
+		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
+		hivemind.OnPostSetup()
+	hivemind?.HandleRecruitedRole(newChangeling)
+	newChangeling.ForgeObjectives()
+	newChangeling.Greet(GREET_DEFAULT)
+	
+	user.visible_message("<span class='danger'>[user] splits!</span>")
+	user.regenerate_icons()
+	user.updateChangelingHUD()
+	update_faction_icons()
+	nanomanager.close_uis(src)
+	//update_icon()	
+	//chosen_setup = null
+	
 	return 1
