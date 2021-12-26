@@ -47,8 +47,6 @@
     //TYPES
     var/area/controlling_area                                       // Area controlled from an APC
     var/obj/structure/cable/current_cable                           // Current cable we're on
-    var/datum/powernet/current_net                                  // Powernet for cableview to update
-    var/datum/powernet/previous_net                                 // Old net to check against current one for cable view update
     var/obj/machinery/power/current_power                           // Current power machine we're in
     var/mob/living/silicon/robot/current_robot                      // Currently controlled robot
     var/obj/machinery/bot/current_bot                               // Currently controlled bot
@@ -67,10 +65,7 @@
         current_cable = locate(/obj/structure/cable) in loc
         if(!current_cable)
             death()
-        else
-            current_net = current_cable.get_powernet()
     else
-        current_net = current_power.get_powernet()
         if(istype(current_power,/obj/machinery/power/apc))
             controlling_area = get_area(current_power)
         forceMove(current_power)
@@ -195,8 +190,6 @@
     else
         if(new_cable)
             current_cable = new_cable
-            previous_net = current_net
-            current_net = current_cable.get_powernet()
             current_power = null
             current_robot = null
             current_bot = null
@@ -373,12 +366,14 @@
 
 // Helper for client image managing
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
-    // Make sure we're on a new net and have a client
-    if(client && (current_net != previous_net))
+    // Make sure we have a client
+    if(client)
         // Reset this
         for(var/image/current_image in cables_shown)
+            cables_shown -= current_image
             client.images -= current_image
-        if(current_cable)
+        // Go through all powernets in the game
+        for(var/datum/powernet/current_net in powernets)
             // Add all the cables on the powernet to our images, that's why we have this var
             for(var/obj/structure/cable/C in current_net.cables)
                 var/turf/simulated/floor/F = get_turf(C)

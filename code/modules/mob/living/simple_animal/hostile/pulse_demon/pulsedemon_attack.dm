@@ -97,8 +97,8 @@
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     var/dmg_done = 0
     // Powernet damage
-    if(current_net && current_net.avail)
-        dmg_done = electrocute_mob(M, current_net, src, 1) / 20 //Inverting multiplier of damage done in proc
+    if(current_cable && current_cable.powernet && current_cable.powernet.avail)
+        dmg_done = electrocute_mob(M, current_cable.powernet, src, 1) / 20 //Inverting multiplier of damage done in proc
     // Otherwise use our charge reserve, if any
     else if(charge < 1000)
         to_chat(src,"<span class='warning'>Not enough charge or power on grid to shock with.</span>")
