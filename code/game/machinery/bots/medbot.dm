@@ -637,7 +637,7 @@ var/list/firstaid_exceptions = list(
 /obj/machinery/bot/medbot/getpAIMovementDelay()
 	return 1
 
-/obj/machinery/bot/medbot/pAImove(mob/living/silicon/pai/user, dir)
+/obj/machinery/bot/medbot/pAImove(mob/living/user, dir)
 	if(!on)
 		return
 	if(!..())

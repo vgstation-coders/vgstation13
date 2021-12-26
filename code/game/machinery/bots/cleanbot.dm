@@ -349,7 +349,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 /obj/machinery/bot/cleanbot/getpAIMovementDelay()
 	return 1
 
-/obj/machinery/bot/cleanbot/pAImove(mob/living/silicon/pai/user, dir)
+/obj/machinery/bot/cleanbot/pAImove(mob/living/user, dir)
 	if(!on)
 		return
 	if(!..())

@@ -699,7 +699,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/getpAIMovementDelay()
 	return ((wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) - 1) * 2
 
-/obj/machinery/bot/mulebot/pAImove(mob/living/silicon/pai/user, dir)
+/obj/machinery/bot/mulebot/pAImove(mob/living/user, dir)
 	if(getpAIMovementDelay() < 0)
 		to_chat(user, "There seems to be something wrong with the motor. Have a technician check the wires.")
 		return
