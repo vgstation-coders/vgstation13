@@ -306,9 +306,9 @@
 
 // Still not tangible
 /mob/living/simple_animal/hostile/pulse_demon/attackby(obj/item/W as obj, mob/user as mob)
-    visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
-    shockMob(user,W.siemens_coefficient)
-    return
+    if(!is_under_tile())
+        visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
+        shockMob(user,W.siemens_coefficient)
 
 // In our way
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle)
