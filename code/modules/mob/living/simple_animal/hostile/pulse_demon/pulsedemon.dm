@@ -149,7 +149,7 @@
     ..()
     var/turf/T = get_turf(src)
     spark(src,rand(2,4))
-    empulse(T,4,8)
+    empulse(T,charge/50000,charge/25000)
     playsound(T,"pd_wail_sound",50,1)
     qdel(src) // We vaporise into thin air
 
