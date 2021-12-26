@@ -1,23 +1,6 @@
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
     if(!spell_channeling) // Abort if we're doing spell stuff
-        if(get_area(A) == controlling_area) // Only in APC areas
-            var/list/modifiers = params2list(params) // For doors and other AI stuff
-            if(modifiers["middle"])
-                if(modifiers["shift"])
-                    MiddleShiftClickOn(A)
-                    return
-                else
-                    MiddleClickOn(A)
-                    return
-            if(modifiers["shift"])
-                ShiftClickOn(A)
-                return
-            if(modifiers["alt"]) // alt and alt-gr (rightalt)
-                AltClickOn(A)
-                return
-            if(modifiers["ctrl"])
-                CtrlClickOn(A)
-                return
+        if(get_area(A) == controlling_area && istype(A,/obj/machinery/power/apc)) // Put this first to get back into APCs
             A.attack_pulsedemon(src)
         else if(current_weapon)
             if(istype(current_weapon,/obj/item/weapon/gun))
@@ -45,11 +28,29 @@
                 return
 
             A.attack_robot(current_robot)
-        else if(isliving(A))
-            ..()
-        
         else if(current_bot) // Do bot stuff
             current_bot.attack_integrated_pulsedemon(src,A)
+        else if(get_area(A) == controlling_area) // Only in APC areas
+            var/list/modifiers = params2list(params) // For doors and other AI stuff
+            if(modifiers["middle"])
+                if(modifiers["shift"])
+                    MiddleShiftClickOn(A)
+                    return
+                else
+                    MiddleClickOn(A)
+                    return
+            if(modifiers["shift"])
+                ShiftClickOn(A)
+                return
+            if(modifiers["alt"]) // alt and alt-gr (rightalt)
+                AltClickOn(A)
+                return
+            if(modifiers["ctrl"])
+                CtrlClickOn(A)
+                return
+            A.attack_pulsedemon(src)
+        else if(isliving(A))
+            ..()
     else
         spell_channeling.channeled_spell(A) // Handle spell stuff
 
