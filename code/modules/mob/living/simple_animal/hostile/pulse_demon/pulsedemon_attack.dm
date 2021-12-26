@@ -70,44 +70,6 @@
     if(get_area(A) == controlling_area)
         A.AIMiddleShiftClick(src)
 
-/mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle)
-    if(!is_under_tile() && isliving(obstacle))
-        var/mob/living/L = obstacle
-        shockMob(L) // Shock any mob in our path
-    else
-        return ..()
-
-// ZAP
-/mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
-    if(!is_under_tile())
-        do_attack_animation(target, src)
-        shockMob(target)
-        INVOKE_EVENT(src, /event/unarmed_attack, "attacker" = target, "attacked" = src)
-
-// For AI, also to stop us smashing tables
-/mob/living/simple_animal/hostile/pulse_demon/UnarmedAttack(atom/A)
-    if(isliving(A))
-        var/mob/living/L = A
-        unarmed_attack_mob(L)
-
-// We don't do these
-/mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
-    return
-
-/mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
-    var/dmg_done = 0
-    // Powernet damage
-    if(current_cable && current_cable.powernet && current_cable.powernet.avail)
-        dmg_done = electrocute_mob(M, current_cable.powernet, src, 1) / 20 //Inverting multiplier of damage done in proc
-    // Otherwise use our charge reserve, if any
-    else if(charge < 1000)
-        to_chat(src,"<span class='warning'>Not enough charge or power on grid to shock with.</span>")
-        return
-    else
-        dmg_done = M.electrocute_act(30, src, 1) // Basic attack
-        charge -= 1000
-    add_logs(src, M, "shocked ([dmg_done]dmg)", admin = (src.ckey && M.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
-
 // Proc that allows special pulse demon functionality
 /atom/proc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
     return
