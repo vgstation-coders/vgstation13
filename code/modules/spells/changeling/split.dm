@@ -14,11 +14,17 @@
 	var/datum/recruiter/recruiter = null
 	var/polling_ghosts = FALSE
 	
+/spell/changeling/split/Destroy()
+	owner = null
+	qdel(recruiter)
+	recruiter = null
+	..()
+	
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (changeling.splitcount < 3)
-		user.visible_message("You are preparing to generate a new form.")
+		user.visible_message("[user] is preparing to generate a new form.")
 		Splitting()
 		changeling.geneticdamage = 30
 		if (success)
@@ -28,14 +34,14 @@
 			success = FALSE
 	else
 		user.visible_message("You are unable to split again.")
-	owner = null
 
 /spell/changeling/split/proc/Splitting()
 	if(polling_ghosts)
 		return
 	polling_ghosts = TRUE
+	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if(!recruiter)
-		recruiter = new(src)
+		recruiter = new(changeling)
 		recruiter.display_name = "Changeling"
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
@@ -49,39 +55,39 @@
 	recruiter.Destroy()
 
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
-	to_chat(player, "<span class='recruit'>\A changeling is splitting. You have been added to the list of potential ghosts. ([controls])</span>")
+	to_chat(player, "<span class='recruit'>\ A changeling is splitting. You have been added to the list of potential ghosts. ([controls])</span>")
 
 /spell/changeling/split/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
-	to_chat(player, "<span class='recruit'>\A changeling is splitting. ([controls])</span>")
+	to_chat(player, "<span class='recruit'>\ A changeling is splitting. ([controls])</span>")
 
 /spell/changeling/split/proc/recruiter_recruited(mob/dead/observer/player)
 	if(!player)
 		polling_ghosts = FALSE
-		nanomanager.update_uis(src)
+		//nanomanager.update_uis(src)
 		return
-	var/turf/this_turf = get_turf(src)
+	//var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
+	var/turf/this_turf = get_turf(owner.current.loc)
 	var/mob/living/carbon/human/newbody = new(this_turf)
 	var/datum/role/changeling/newChangeling = new
 	newbody.ckey = player.ckey
 	
-	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
-	if(!changeling)
-		return 0
-	var/datum/dna/split_dna = changeling.GetDNA(owner)
-	if(!split_dna)
+	var/datum/dna/owner_dna = owner.current.dna
+	if(!owner_dna)
 		return 0
 
 	var/oldspecies = newbody.dna.species
-	newbody.dna = split_dna.Clone()
-	newbody.real_name = split_dna.real_name
-	newbody.flavor_text = split_dna.flavor_text
+	newbody.dna = owner_dna.Clone()
+	newbody.real_name = owner.current.real_name
+	newbody.flavor_text = owner.current.flavor_text
 	newbody.UpdateAppearance()
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
 	domutcheck(newbody, null)
 	feedback_add_details("changeling_powers","TR")	//no idea what this does
-	//activate(player)
-	newChangeling.AssignToRole(player.mind,1)
+	activate(player)
+	if(!newChangeling.AssignToRole(player.mind,1))
+		newChangeling.Drop()
+		continue
 	newChangeling.geneticdamage = 30
 	
 	//Assign to the hivemind faction
@@ -90,6 +96,7 @@
 		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 		hivemind.OnPostSetup()
 	hivemind?.HandleRecruitedRole(newChangeling)
+	newChangeling.OnPostSetup()
 	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_DEFAULT)
 	
@@ -98,6 +105,5 @@
 	player.updateChangelingHUD()
 	update_faction_icons()
 	nanomanager.close_uis(src)
-	qdel(src)
 
 
