@@ -228,7 +228,7 @@
 	name = "Detonate Machine"
 	desc = "Massively overload the circuits in this machine, causing a large explosion. The machine will visually shake and spark before exploding."
 	icon = "radial_overload"
-	cost = 10
+	cost = 20
 
 /datum/malfhack_ability/oneuse/overload_loud/activate(var/mob/living/silicon/A)
 	if(!..())
@@ -250,7 +250,7 @@
 	name = "Overload Machine"
 	desc = "Overload the circuits in this machine, causing an explosion after a few seconds."
 	icon = "radial_alertboom"
-	cost = 5
+	cost = 15
 
 /datum/malfhack_ability/oneuse/overload_quiet/activate(var/mob/living/silicon/A)
 	if(!..())
