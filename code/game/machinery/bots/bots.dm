@@ -125,16 +125,18 @@
 
 /obj/machinery/bot/relaymove(var/mob/user, direction)
 	if(ispulsedemon(user))
-		pAImove(user,direction)
+		return pAImove(user,direction)
+	return FALSE
 
 /obj/machinery/bot/pAImove(mob/living/user, dir)
 	if(!on)
-		return
+		return FALSE
 	if(!..())
-		return
+		return FALSE
 	if(!isturf(loc))
-		return
+		return FALSE
 	step(src, dir)
+	return TRUE
 
 // Makes the bot busy while it looks for a target.
 /obj/machinery/bot/proc/find_target()
