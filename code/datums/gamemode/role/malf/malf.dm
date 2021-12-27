@@ -7,7 +7,7 @@
 	var/list/hack_overlays = list()
 	var/list/apcs = list()
 	var/list/currently_hacking_apcs = list()		//any apc's currently being hacked
-	var/apc_hacklimit = 5							//how many apc's can be hacked at a time
+	var/apc_hacklimit = 1							//how many apc's can be hacked at a time
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 50
 	var/max_processing_power = 200

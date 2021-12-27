@@ -1,6 +1,6 @@
-#define MACHINE_HACK_TIME 5 SECONDS
-#define APC_HACK_TIME 7 SECONDS
-#define MALF_DISRUPT_TIME 10 SECONDS
+#define MACHINE_HACK_TIME 60 SECONDS
+#define APC_HACK_TIME 60 SECONDS
+#define MALF_DISRUPT_TIME 30 SECONDS
 
 /obj/machinery
 	var/obj/effect/hack_overlay/hack_overlay
