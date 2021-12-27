@@ -7,7 +7,7 @@
 	var/list/hack_overlays = list()
 	var/list/apcs = list()
 	var/list/currently_hacking_apcs = list()		//any apc's currently being hacked
-	var/apc_hacklimit = 2							//how many apc's can be hacked at a time
+	var/apc_hacklimit = 5							//how many apc's can be hacked at a time
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 50
 	var/max_processing_power = 200
@@ -54,10 +54,10 @@
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>
 <B>The crew does not know about your malfunction, you might wish to keep it secret for now.</B><br>
 <B>You must overwrite the programming of the station's APCs to assume full control.</B><br>
-The process takes one minute per APC and can only be performed one at a time to avoid Powernet alerts.<br>
-Remember : Only APCs on station can help you to take over the station.<br>
-When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
-Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
+Overwritten APCs generate processing power for you and let you hack more machines.<br>
+<B>Right-Click</B> any machine on station to overwrite its programming!<br>
+You can also right-click your core to purchase upgrades or initiate your takeover.<br>
+Once done, you will be able to interface with all systems, notably the onboard nuclear fission device...<br>"})
 
 
 

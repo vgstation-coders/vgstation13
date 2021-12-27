@@ -52,6 +52,12 @@
 
 	var/key_name_last_user = ""
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/kill_plant,
+	)
+
 	// Seed details/line data.
 	var/datum/seed/seed = null // The currently planted seed
 

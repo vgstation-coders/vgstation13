@@ -164,7 +164,7 @@
 		return
 
 	if(controlling_malf) // manually controlled by a malf AI
-		if(!raised)
+		if(!raised && !raising)
 			popUp()
 			use_power = 2
 		return
@@ -357,6 +357,11 @@
 	A.eyeobj.forceMove(get_turf(src))
 	A.current = src 
 	controlling_malf = A
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!enabled)
+		return
+	popUp()
 
 /obj/machinery/turret/proc/malf_release_control()
 	if(controlling_malf)
@@ -408,7 +413,7 @@
 			to_chat(user, "<span class='warning'>You short out [src]'s access analysis and threat indicator module.</span>")
 			if(user.machine == src)
 				attack_hand(user)
-			update_icons() //Update the icon immediately since emagging removes the turret threat indicator
+			update_icon() //Update the icon immediately since emagging removes the turret threat indicator
 		return 1
 	return
 
@@ -441,7 +446,7 @@
 
 /obj/machinery/turretid/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
-	if(!ailock || isAdminGhost(user))
+	if(!ailock || isAdminGhost(user) || is_malf_owner(user))
 		return attack_hand(user)
 	else
 		to_chat(user, "<span class='notice'>There seems to be a firewall preventing you from accessing [src].</span>")
@@ -510,19 +515,25 @@
 	return ..()
 
 //All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
-/obj/machinery/turretid/AIAltClick() //Stun/lethal toggle
-	if(!ailock)
+/obj/machinery/turretid/AIAltClick(mob/living/silicon/ai/user) //Stun/lethal toggle
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!ailock || is_malf_owner(user))
 		lethal = !lethal
 		to_chat(usr, "<span class='notice'>You switch the turrets to [lethal ? "lethal":"stun"].</span>")
 		updateTurrets()
 
-/obj/machinery/turretid/AICtrlClick() //Lock the device
-	if(!ailock)
+/obj/machinery/turretid/AICtrlClick(mob/living/silicon/ai/user) //Lock the device
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!ailock || is_malf_owner(user))
 		locked = !locked
 		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
 
-/obj/machinery/turretid/AIShiftClick()  //Toggle the turrets on/off
-	if(!ailock)
+/obj/machinery/turretid/AIShiftClick(mob/living/silicon/ai/user)  //Toggle the turrets on/off
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!ailock || is_malf_owner(user))
 		enabled = !enabled
 		to_chat(usr, "<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
 		updateTurrets()
@@ -531,9 +542,9 @@
 	if(control_area)
 		for(var/obj/machinery/turret/aTurret in control_area.contents)
 			aTurret.setState(enabled, lethal)
-	update_icons()
+	update_icon()
 
-/obj/machinery/turretid/proc/update_icons()
+/obj/machinery/turretid/update_icon()
 	if(stat & (BROKEN|FORCEDISABLE))
 		icon_state = "turretid_off"
 	else if(enabled && !emagged) //Emagged turret controls are always disguised as disabled

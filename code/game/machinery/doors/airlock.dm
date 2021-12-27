@@ -402,7 +402,7 @@ About the new airlock wires panel:
 		return 1
 	return wires.IsIndexCut(wireIndex)
 
-/obj/machinery/door/airlock/proc/canAIControl()
+/obj/machinery/door/airlock/proc/canAIControl(var/mob/user)
 	return ((src.aiControlDisabled!=1) && (!src.isAllPowerCut()));
 
 /obj/machinery/door/airlock/proc/canAIHack()
@@ -529,7 +529,7 @@ About the new airlock wires panel:
 		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
 	if(isAI(user))
-		if(!src.canAIControl())
+		if(!src.canAIControl(user))
 			if(src.canAIHack())
 				src.attempt_hack(user)
 				return
@@ -712,11 +712,10 @@ About the new airlock wires panel:
 	if (aiHacking)
 		return FALSE
 	else
-		to_chat(user, "Airlock AI control has been blocked. <a href='?src=\ref[src]&hack=1'>Hack it.</a>")
-
+		//to_chat(user, "Airlock AI control has been blocked. <a href='?src=\ref[src]&hack=1'>Hack it.</a>")
+		to_chat(user, "Airlock AI control has been blocked. Hack it!")
 
 /obj/machinery/door/airlock/proc/hack(mob/user as mob)
-
 	if(src.aiHacking==0)
 		src.aiHacking=1
 		spawn(20)
@@ -756,7 +755,7 @@ About the new airlock wires panel:
 			to_chat(user, "Transfer complete. Forcing airlock to execute program.")
 			sleep(50)
 			//disable blocked control
-			src.aiControlDisabled = 2
+			enable_AI_control(TRUE)
 			to_chat(user, "Receiving control information from airlock.")
 			sleep(10)
 			//bring up airlock dialog
@@ -1278,6 +1277,16 @@ About the new airlock wires panel:
 	add_fingerprint(user)
 	return
 
+/obj/machinery/door/airlock/emag_ai(mob/living/silicon/ai/A)
+	if (!operating)
+		operating = -1
+		if(density)
+			door_animate("spark")
+			sleep(6)
+			open(1)
+		operating = -1
+	
+
 /obj/machinery/door/airlock/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
@@ -1472,3 +1481,19 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/airlock/clockwork, CLOCKWORK_DOOR_GLOW)
+
+
+/obj/machinery/door/airlock/disable_AI_control()
+	if(aiControlDisabled == 2)
+		return
+	else
+		aiControlDisabled = 1
+		if(malf_owner)
+			malf_disrupt(MALF_DISRUPT_TIME, TRUE)
+
+/obj/machinery/door/airlock/enable_AI_control(var/bypass = FALSE)
+	if(bypass)
+		aiControlDisabled = 2
+	else 
+		aiControlDisabled = 0
+	

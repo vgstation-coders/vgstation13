@@ -190,6 +190,15 @@
 	spawn(150)
 		mode = 0
 
+/obj/machinery/bot/farmbot/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You short out [src]'s plant identifier circuits.</span>")
+	flick("[src.icon_initial]_broke", src)
+	emagged = 1
+	on = 1
+	icon_state = "[src.icon_initial][src.on]"
+	target = null
+	mode = 0
+	
 /obj/machinery/bot/farmbot/explode()
 	src.on = 0
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)

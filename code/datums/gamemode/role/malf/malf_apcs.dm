@@ -31,7 +31,7 @@
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))
 		return
-	to_chat(malf, "Beginning override of APC systems. This will take [malf_hack_time/10] seconds.")
+	to_chat(malf, "<span class='notice'>Beginning override of APC systems. This will take [malf_hack_time/10] seconds.</span>")
 	M.currently_hacking_apcs += src
 	currently_hacking_ai = malf
 	new /obj/effect/hack_overlay(null, malf, src)
@@ -47,7 +47,7 @@
 		return
 	M.currently_hacking_apcs -= src
 	malf_owner = M
-	to_chat(malf, "APC Hack Complete. The [name] is now under your exclusive control. You now have [M.apcs.len] APCs under your control.")
+	to_chat(malf, "<span class='notice'>APC Hack Complete. The [name] is now under your exclusive control. You now have [M.apcs.len] APCs under your control.</span>")
 	malf.clear_alert(name)
 	locked = TRUE
 	malfhack = TRUE

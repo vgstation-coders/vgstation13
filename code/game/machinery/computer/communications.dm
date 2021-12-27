@@ -89,8 +89,6 @@ var/list/shuttle_log = list()
 	if(..(href, href_list))
 		return
 
-	var/datum/role/malfAI/MR = usr.mind?.GetRole(MALF)
-
 	if(href_list["close"])
 		if(usr.machine == src)
 			usr.unset_machine()
@@ -141,7 +139,7 @@ var/list/shuttle_log = list()
 			setMenuState(usr,COMM_SCREEN_SECLEVEL)
 
 		if("newalertlevel")
-			if(issilicon(usr) && MR != malf_owner)
+			if(issilicon(usr) && !is_malf_owner(usr))
 				return
 			tmp_alertlevel = text2num(href_list["level"])
 			var/mob/M = usr
@@ -173,7 +171,7 @@ var/list/shuttle_log = list()
 				to_chat(usr, "You need to have a valid ID.")
 
 		if("announce")
-			if(authenticated==AUTH_CAPT && !(issilicon(usr) && MR != malf_owner))
+			if(authenticated==AUTH_CAPT && !(issilicon(usr) && !is_malf_owner(usr)))
 				if(message_cooldown)
 					return
 				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
@@ -363,7 +361,7 @@ var/list/shuttle_log = list()
 
 		if("SetPortRestriction")
 
-			if(issilicon(usr) && MR != malf_owner)
+			if(issilicon(usr) && !is_malf_owner(usr))
 				return
 			var/mob/M = usr
 			var/obj/item/weapon/card/id/I = M.get_id_card()

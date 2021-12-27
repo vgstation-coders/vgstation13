@@ -77,8 +77,7 @@
 	return 0
 
 /datum/faction/malf/proc/capture_the_station()
-	to_chat(world, {"<FONT size = 3><B>The AI has won!</B></FONT><br>
-<B>It has fully taken control of [station_name()]'s systems.</B>"})
+	command_alert(/datum/command_alert/malf_win)
 
 	for(var/datum/role/malfAI/M in members)
 		to_chat(M.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>

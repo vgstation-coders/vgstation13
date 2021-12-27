@@ -32,6 +32,14 @@
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/dropper)
 
+	var/rig_meal = 1
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/ruin_meal,
+	)
+
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/microwave,\
 		/obj/item/weapon/stock_parts/micro_laser,\
@@ -370,7 +378,8 @@
 	var/datum/recipe/recipe = select_recipe(available_recipes,src)
 	var/obj/cooked
 
-	if (!recipe)
+	if (!recipe || rig_meal)
+		rig_meal = 0
 		// Handle the silly stuff first
 		for(var/obj/O in contents)
 			if(istype(O,/obj/item/weapon/cell))

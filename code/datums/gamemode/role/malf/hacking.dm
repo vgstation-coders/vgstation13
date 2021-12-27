@@ -30,13 +30,17 @@
 	if(istype(A) && istype(M) && A == src)
 		upgrade_radial()
 
-/obj/machinery/proc/disable_AI_control()
-	if(aicontrolbypass)
+/obj/machinery/proc/disable_AI_control(var/force = FALSE)
+	if(aicontrolbypass && !force)
 		return
 	else
 		stat |= NOAICONTROL
 		if(malf_owner)
 			malf_disrupt(MALF_DISRUPT_TIME, TRUE)
+
+/obj/machinery/proc/enable_AI_control(var/bypass)
+	stat &= ~NOAICONTROL
+	aicontrolbypass = bypass
 
 /obj/machinery/proc/hack_interact(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
@@ -59,8 +63,7 @@
 	malf_disrupted = TRUE
 	spawn(duration)
 		if(bypassafter)
-			aicontrolbypass = TRUE
-			stat &= ~NOAICONTROL
+			enable_AI_control(TRUE)
 		malf_disrupted = FALSE
 		set_hack_overlay_icon("hacked")
 
@@ -75,7 +78,16 @@
 		return
 	sleep(malf_hack_time)
 	set_malf_owner(M)
+	check_for_ai_control()
+
+/obj/machinery/proc/check_for_ai_control()
 	if(stat & NOAICONTROL)	//ai control wire was cut before hack could complete
+		malf_disrupt(MALF_DISRUPT_TIME, TRUE)
+	else
+		set_hack_overlay_icon("hacked")
+
+/obj/machinery/door/airlock/check_for_ai_control()
+	if(aiControlDisabled == 1)
 		malf_disrupt(MALF_DISRUPT_TIME, TRUE)
 	else
 		set_hack_overlay_icon("hacked")
@@ -108,6 +120,13 @@
 /obj/machinery/camera/set_hack_overlay_icon(var/newstate)
 	hack_overlay.set_icon("[newstate]-camera")
 
+/obj/machinery/proc/is_malf_owner(var/mob/user)
+	if(!istype(user))
+		return
+	var/datum/role/malfAI/M = user.mind?.GetRole(MALF)
+	if(M && M == malf_owner)
+		return TRUE
+	return FALSE
 
 /obj/machinery/proc/set_malf_owner(var/datum/role/malfAI/M)
 	if(!istype(M))
@@ -129,6 +148,8 @@
 		else 
 			icon_to_display = A.icon
 		var/name_to_display = A.name
+		if(A.cost > 0)
+			name_to_display = "[A.name] ([A.cost])"
 		var/locked = FALSE
 		if(!A.check_available(malf))
 			continue
@@ -136,7 +157,7 @@
 			locked = TRUE
 		var/list/C = list(list(A.name, icon_to_display, A.desc, name_to_display, locked))
 		choices += C
-		choice_to_ability[A.name] = A
+		choice_to_ability[name_to_display] = A
 	var/choice = show_radial_menu(user=malf,anchor=src,choices=choices, icon_file='icons/obj/malf_radial.dmi',tooltip_theme="radial-malf",close_other_menus=TRUE)
 	var/datum/malfhack_ability/A = choice_to_ability[choice]
 	if(!A)
@@ -155,6 +176,8 @@
 		A.before_radial()
 		var/icon_to_display = A.icon
 		var/name_to_display = A.name
+		if(A.cost > 0)
+			name_to_display = "[A.name] ([A.cost])"
 		var/locked = FALSE
 		if(!A.check_available(src))
 			continue
@@ -162,7 +185,7 @@
 			locked = TRUE
 		var/list/C = list(list(A.name, icon_to_display, A.desc, name_to_display, locked))
 		choices += C
-		choice_to_ability[A.name] = A
+		choice_to_ability[name_to_display] = A
 	var/choice = show_radial_menu(user=src,anchor=src,choices=choices, icon_file='icons/obj/malf_radial.dmi',tooltip_theme="radial-malf",close_other_menus=TRUE)
 	var/datum/malfhack_ability/A = choice_to_ability[choice]
 	if(!A)
@@ -186,6 +209,7 @@
 
 /obj/machinery/light/hack_interact(mob/living/silicon/malf)
 	return
+
 
 /obj/effect/hack_overlay
 	name = ""

@@ -947,6 +947,13 @@
 		update_icon()
 		update()
 
+	else if(href_list["occupyapc"])
+		var/datum/malfhack_ability/shunt/S = locate(/datum/malfhack_ability/shunt) in hack_abilities
+		var/mob/living/silicon/ai/A = usr
+		if(istype(S) && istype(A))
+			if(S.check_available(A))
+				S.activate(A)
+
 	else if (href_list["overload"])
 		if(istype(usr, /mob/living/silicon) || isAdminGhost(usr))
 			src.overload_lighting()

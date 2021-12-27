@@ -305,6 +305,17 @@ var/list/firstaid_exceptions = list(
 		on = 1
 		icon_state = "[icon_initial][on]"
 
+/obj/machinery/bot/medbot/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>")
+	declare_crit = 0
+	steps_per = 5 
+	emagged = 2
+	on = 1
+	icon_state = "[icon_initial][on]"
+	currently_healing = 0
+	target = null
+	locked = 0
+
 /obj/machinery/bot/medbot/can_path()
 	return !(stunned || currently_healing)
 

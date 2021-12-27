@@ -293,11 +293,11 @@
 /datum/malfhack_ability/fake_message/activate(mob/living/silicon/A)
 	if(!machine.hack_overlay) // shouldn't happen
 		return
-	var/fakename = copytext(input(A, "Please enter a name for the message.", "Name?", "") as text|null), 1, MAX_NAME_LEN)
+	var/fakename = copytext(input(A, "Please enter a name for the message.", "Name?", "") as text|null, 1, MAX_NAME_LEN)
 	if(!fakename)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return 
-	var/fakeid = copytext(input(A, "Please enter an ID for the message .", "Occupation?", "Assistant") as text|null)1, MAX_NAME_LEN)
+	var/fakeid = copytext(input(A, "Please enter an ID for the message .", "Occupation?", "Assistant") as text|null, 1, MAX_NAME_LEN)
 	if(!fakeid)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return 
@@ -311,7 +311,7 @@
 	else
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return 
-	var/message = copytext(input(usr, "Please enter a message.", "Message?", "") as text|null),1, MAX_BROADCAST_LEN)	
+	var/message = copytext(input(usr, "Please enter a message.", "Message?", "") as text|null,1, MAX_BROADCAST_LEN)	
 	if(!message)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return 
@@ -476,6 +476,21 @@
 	MF.stage(FACTION_ENDGAME)
 	M.core_upgrades -= src
 
+//--------------------------------------------------------
+
+/datum/malfhack_ability/core/highres 
+	name = "High Resolution Cameras"
+	desc = "Upgrade your camera resolution and download the latest lip reading software."
+	cost = 10
+	icon = "radial_eye"
+
+/datum/malfhack_ability/core/highres/activate(mob/living/silicon/ai/A)
+	if(!..())
+		return
+	A.ai_flags |= HIGHRESCAMS
+	A.eyeobj.high_res = 1
+	to_chat(A, "<span class='warning'>High Resolution camera software installed.</span>")
+	A.update_perception()
 
 //--------------------------------------------------------
 
@@ -485,29 +500,25 @@
 	icon = "radial_emag"
 	cost = 5
 
-/datum/malfhack_ability/oneuse/emag/activate(mob/living/silicon/A)
+/datum/malfhack_ability/oneuse/emag/activate(mob/living/silicon/ai/A)
 	if(!..())
 		return
-	// why are there two emag procs and why do some things (like airlocks) not use them ???!?!?!?!
-	if(istype(machine, /obj/machinery/door/airlock))
-		var/obj/machinery/door/airlock/D = machine
-		D.door_animate("spark")
-		spawn(6)
-			D.open(1)
-			D.operating = -1
-	else if(istype(machine, /obj/machinery/bot))
-		machine.emagged = 2
-		to_chat(A, "<span class='warning'>You cause a malfunction in [machine]'s behavioral matrix.</span>")
-	else
-		machine.emag(A)
-		machine.emag_act(A)
+	machine.emag_ai(A)
+
+// Emag behavior varies from machine to machine 
+// Simply calling emag and/or emag_act 
+// isn't enough for a lot of things, so this can be overridden
+/obj/machinery/proc/emag_ai(mob/living/silicon/ai/A)
+	emag(A)
+	emag_act(A)
+
 
 //--------------------------------------------------------
 
 /datum/malfhack_ability/camera_reactivate
 	name = "Reactivate Camera"
 	desc = "Turn this camera on again."
-	icon = "radial_reactivate"
+	icon = "radial_on"
 	cost = 10
 
 /datum/malfhack_ability/camera_reactivate/activate(mob/living/silicon/A)
@@ -527,7 +538,7 @@
 /datum/malfhack_ability/oneuse/camera_upgrade
 	name = "Upgrade Camera"
 	desc = "Update this camera to the latest software. This makes it immune to EMPs, installs a motion detector, and gives it X-Ray vision."
-	icon = "radial_upgrade"
+	icon = "radial_cams"
 	cost = 10
 
 /datum/malfhack_ability/oneuse/camera_upgrade/activate(mob/living/silicon/A)
@@ -570,7 +581,7 @@
 /datum/malfhack_ability/manual_control
 	name = "Manual Control"
 	desc = "Take manual control of this turret."
-	cost = 10
+	cost = 0
 	icon = "radial_fire"
 
 /datum/malfhack_ability/manual_control/activate(mob/living/silicon/ai/A)
@@ -580,6 +591,7 @@
 	if(!istype(T))
 		return 
 	T.malf_take_control(A)
+
 
 	
 //--------------------------------------------------------
@@ -732,16 +744,18 @@
 	for(var/mob/MM in player_list)
 		if(MM.client)
 			MM << 'sound/machines/Alarm.ogg'
+
 	to_chat(world, "<span class='danger'>Self-destruction signal received. Self-destructing in 10...</span>")
-	
-	N.safety = 0
-	N.explode()
+
+	spawn()
+		N.safety = 0
+		N.explode()
+		MF.stage(FACTION_VICTORY)
 
 	for (var/i=9 to 1 step -1)
 		sleep(10)
 		to_chat(world, "<span class='danger'>[i]...</span>")
 	sleep(50)
-	MF.stage(FACTION_VICTORY)
 
 /datum/malfhack_ability/oneuse/nuke_detonate/check_available(mob/living/silicon/A)
 	var/obj/machinery/nuclearbomb/N = machine
@@ -749,6 +763,92 @@
 	var/datum/faction/malf/MF = find_active_faction_by_member(M)
 	if(!M || !MF || !istype(N))
 		return FALSE
-	if(!M.takeover)
+	if(!M.takeover) 
 		return FALSE
 	return TRUE
+
+
+//--------------------------------------------------------
+
+/datum/malfhack_ability/ruin_meal 
+	name = "Ruin Meal"
+	desc = "Ruin the next meal prepared in this microwave!"
+	cost = 0
+	icon = "radial_trash"
+
+/datum/malfhack_ability/ruin_meal/activate(mob/living/silicon/A)
+	if(!..())
+		return
+	var/obj/machinery/microwave/W = machine
+	if(!istype(W))
+		return
+	W.rig_meal = TRUE
+	to_chat(A, "<span class='warning'>You set the microwave to burn it's next meal.</span>")
+
+
+//--------------------------------------------------------
+
+/datum/malfhack_ability/kill_plant
+	name = "Kill Plant"
+	desc = "Shut off toxin control in this hydroponics tray, killing the plant."
+	cost = 0
+	icon = "radial_kill"
+
+/datum/malfhack_ability/kill_plant/activate(mob/living/silicon/A)
+	if(!..())
+		return
+	var/obj/machinery/portable_atmospherics/hydroponics/H = machine 
+	if(!istype(H))
+		return 
+	H.die()
+
+//--------------------------------------------------------
+
+/datum/malfhack_ability/account_hijack
+	name = "Account Override"
+	desc = "Make purchases under another debit account."
+	cost = 0
+	icon = "radial_pay"
+
+/datum/malfhack_ability/account_hijack/activate(mob/living/silicon/ai/A)
+	if(!..())
+		return
+	var/obj/machinery/computer/supplycomp/S = machine
+	var/obj/machinery/computer/ordercomp/O = machine
+	if(!istype(S) && !istype(O))
+		return
+	var/list/acc_info = list()
+
+
+	var/list/ids = list()
+	for(var/obj/item/weapon/card/id/I in id_cards) 
+		if(!get_card_account(I))
+			return
+		ids[I.registered_name] = I
+
+	var/choice = input(A, "Select an ID to use.", "ID?") as null|anything in ids
+	if(!choice)
+		to_chat(A, "<span class='warning'>Selection cancelled.</span>")
+		return 
+	var/obj/item/weapon/card/id/ID = ids[choice]
+	var/datum/money_account/acct = get_card_account(ID)
+	if(!acct)
+		to_chat(A, "<span class='warning'>No account found for that ID.</span>")
+		return 
+
+
+	acc_info["authorized_name"] = ID.registered_name
+	acc_info["check"] = FALSE
+	acc_info["idname"] = ID.registered_name
+	acc_info["idrank"] = ID.assignment
+	acc_info["account"] = acct
+
+	if(S)
+		S.current_acct_override = acc_info 
+		S.attack_ai(A)
+	else if(O)
+		O.current_acct_override = acc_info
+		O.attack_ai(A)
+
+	
+	

@@ -163,8 +163,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		A.make_eyeobj()
 	A.eyeobj.forceMove(get_turf(src))
 	A.current = src
-	A.client.CAN_MOVE_DIAGONALLY = FALSE
-	A.eyeobj.glide_size = DELAY2GLIDESIZE(1)
 	advancedholo = TRUE
 	holo = new /obj/effect/overlay/hologram/lifelike(get_turf(src), available_mobs[mob_to_copy], A.eyeobj)
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
@@ -194,10 +192,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	use_power = 1//Passive power usage.
 	advancedholo = FALSE
 	if(master)
-		if(master.client)
-			master.client.CAN_MOVE_DIAGONALLY = TRUE
-		if(master.eyeobj)
-			master.eyeobj.glide_size = WORLD_ICON_SIZE
 		if(master.current == src)
 			master.current = null
 		master = null //Null the master, since no-one is using it now.

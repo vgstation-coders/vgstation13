@@ -26,7 +26,7 @@ var/global/no_pin_for_debit = TRUE
 			return D
 
 
-/obj/proc/get_card_account(var/obj/item/weapon/card/I, var/mob/user=null, var/terminal_name="", var/transaction_purpose="", var/require_pin=0)
+/proc/get_card_account(var/obj/item/weapon/card/I, var/mob/user=null, var/terminal_name="", var/transaction_purpose="", var/require_pin=0)
 	if(terminal_name=="")
 		terminal_name=src.name
 	if (istype(I, /obj/item/weapon/card/id))

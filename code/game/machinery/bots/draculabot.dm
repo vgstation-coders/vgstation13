@@ -174,6 +174,14 @@
 		locked = 0
 		visible_message("<span class='danger'>[src]'s panel clicks open.</span>", 1)
 
+/obj/machinery/bot/bloodbot/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You short out the [src]'s morality core.</span>")
+	emagged = 1
+	steps_per = 4
+	on = 1
+	update_icon()
+	locked = 0
+
 /obj/machinery/bot/bloodbot/can_path()
 	return !currently_drawing_blood
 

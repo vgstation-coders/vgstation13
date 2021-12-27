@@ -934,3 +934,8 @@ var/list/ai_list = list()
 		return
 	icon_state = chosen_core_icon_state
 
+/mob/living/silicon/ai/update_perception()
+	if(ai_flags & HIGHRESCAMS)
+		client?.darkness_planemaster.alpha = 150
+	else 
+		client?.darkness_planemaster.alpha = 255

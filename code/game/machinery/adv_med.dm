@@ -210,6 +210,10 @@
 		emagged = 0
 		return 0
 
+/obj/machinery/bodyscanner/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
+	emagged = 1
+
 /obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")

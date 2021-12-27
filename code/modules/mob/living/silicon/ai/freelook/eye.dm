@@ -120,7 +120,12 @@
 		user.sprint = initial
 
 	if(istype(H))
+		CAN_MOVE_DIAGONALLY = FALSE
+		user.eyeobj.glide_size = DELAY2GLIDESIZE(1)
 		user.delayNextMove(1)
+	else 
+		user.eyeobj.glide_size = WORLD_ICON_SIZE
+		CAN_MOVE_DIAGONALLY = TRUE
 
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
