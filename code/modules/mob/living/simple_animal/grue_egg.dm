@@ -1,5 +1,5 @@
 /mob/living/simple_animal/grue_egg
-	var/isgrue=1
+//	var/isgrue=1
 	name = "grue egg"
 	size = SIZE_SMALL
 	desc = "An egg laid by a grue. An embyro hasn't developed yet."
@@ -50,7 +50,7 @@
 		if(current_brightness<=bright_limit_gain)
 			apply_damage(-1*hg_mult*(bright_limit_gain-current_brightness),BURN) //boost juveniles and adults heal rates a bit
 		else if(current_brightness>bright_limit_drain) 														//lose health in light
-			playsound(src, 'sound/items/flare_on.ogg', 50, 1)
+			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
 			apply_damage(hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage a bit to avoid juveniles and adults from becoming too tanky to light
 		if(grown)
 			src.Hatch()

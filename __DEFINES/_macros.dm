@@ -42,7 +42,7 @@
 
 #define ishorrorform(A) (ishuman(A) && istype(A:species, /datum/species/horror))
 
-#define isgrue(A) (ishuman(A) && istype(A:species, /datum/species/grue))
+#define isumbra(A) (ishuman(A) && istype(A:species, /datum/species/umbra))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 

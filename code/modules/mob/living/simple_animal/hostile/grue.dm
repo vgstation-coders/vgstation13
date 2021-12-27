@@ -20,7 +20,7 @@
 	force_airlock_time=100 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 
 	//VARS
-	var/isgrue=1
+//	var/isgrue=1
 	var/shadowpower = 0											 //shadow power absorbed
 	var/maxshadowpower = 1000									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
@@ -143,7 +143,7 @@
 			dark_dim_light=2
 
 			to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
-			playsound(src, 'sound/items/flare_on.ogg', 50, 1)
+			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
 			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage by lifestage**(1/3) to avoid juveniles and adults from becoming too tanky to light
 		else
 			dark_dim_light=1
@@ -348,6 +348,7 @@
 			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors./span>")
 		else if(lifestage==3)
 			to_chat(src, "<span class='warning'>You finish moulting! You are now fully-grown, and can eat sentient beings to gain their strength.</span>")
+		playsound(src, 'sound/effects/lingextends.ogg', 50, 1)
 	else
 		return
 
