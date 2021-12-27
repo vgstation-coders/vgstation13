@@ -41,10 +41,8 @@
 			var/tooble = ""
 			var/row1 = ""
 			var/row2 = ""
-			var/list/otherguys = list()
 			var/list/artist_and_their_works = sorted_artists_list[artistsandworks]
 			for(var/obj/structure/painting/custom/painting in artist_and_their_works)
-				otherguys += painting.painting_data.contributing_artists
 				var/title = painting.painting_data.title
 				if(!title)
 					title = "Nameless"
@@ -56,8 +54,6 @@
 			if(artistsandworks != currentartist)
 				currentartist = artistsandworks
 				painting_completions += {"<h3>[artistsandworks]</h3>"}
-				var/list/artistlist = uniquelist(otherguys)
-				painting_completions += {"Aliases: [artistlist.Join(", ")]"}
 				painting_completions += {"<table>[tooble]</table>"}
 	
 		completions += "<h2>Artisans and their artworks</h2>"
