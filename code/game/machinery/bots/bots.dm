@@ -567,9 +567,10 @@
 			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
 /obj/machinery/bot/emag_ai(mob/living/silicon/ai/A)
-	to_chat(A, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 	locked = 0
-	emagged = 2
+	open = 1
+	emag(A)
+	emag_act(A)
 
 /obj/machinery/bot/npc_tamper_act(mob/living/L)
 	if(on)

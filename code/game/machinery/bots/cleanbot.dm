@@ -165,11 +165,6 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
 		src.oddbutton = 1
 		src.screwloose = 1
-
-/obj/machinery/bot/cleanbot/emag_ai(mob/living/silicon/ai/A)
-	..()
-	oddbutton = 1
-	screwloose = 1
 	
 /obj/machinery/bot/cleanbot/can_path()
 	return !cleaning

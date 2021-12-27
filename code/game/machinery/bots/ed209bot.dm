@@ -241,24 +241,6 @@ Auto Patrol: []"},
 		arrest_type = 1//Don't even try to cuff
 		declare_arrests = 0
 
-/obj/machinery/bot/ed209/emag_ai(mob/living/silicon/ai/A)
-	to_chat(A, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")	
-	if(lasercolor)
-		projectile = /obj/item/projectile/beam/lasertag/omni
-	else
-		projectile = /obj/item/projectile/beam
-	shot_delay = 6
-	declare_arrests = 0
-	arrest_type = 1
-	check_records = 0
-	steps_per = 3
-	on = 1
-	emagged = 1
-	anchored = 0
-	target = null
-	locked = 0
-
-
 
 /obj/machinery/bot/ed209/target_selection()
 	anchored = 0
