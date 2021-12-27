@@ -227,7 +227,7 @@ var/list/shuttle_log = list()
 			if(!ert_reason)
 				to_chat(usr, "<span class='warning'>You are required to give a reason to call an ERT.</span>")
 				return
-			if((!usr.Adjacent(src) && !issilicon(usr)) || usr.incapacitated())
+			if(!usr.Adjacent(src) || usr.incapacitated())
 				return
 			var/datum/striketeam/ert/response_team = new()
 			response_team.trigger_strike(usr,ert_reason,TRUE)
