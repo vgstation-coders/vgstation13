@@ -190,7 +190,7 @@
 
 
 //--------------------------------------------------------
-
+/*
 /datum/malfhack_ability/dump_dispenser_energy
 	name = "Drain Energy"
 	desc = "Drain the energy stored in this dispenser."
@@ -205,7 +205,7 @@
 		return
 	C.energy = 0
 
-
+*/
 //--------------------------------------------------------
 
 /datum/malfhack_ability/create_lifelike_hologram
