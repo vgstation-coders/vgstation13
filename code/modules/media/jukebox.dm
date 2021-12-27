@@ -507,7 +507,7 @@ var/global/list/loopModeNames=list(
 	return
 
 /obj/machinery/media/jukebox/emag_ai(mob/living/silicon/ai/A)
-	to_chat(A, "<span class='warning'>You short out the [src].</span>"))
+	to_chat(A, "<span class='warning'>You short out the [src].</span>")
 	wires.CutWireIndex(JUKE_CONFIG)
 	short()
 	

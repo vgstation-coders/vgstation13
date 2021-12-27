@@ -212,7 +212,7 @@
 	name = "Create Lifelike Hologram"
 	desc = "Project a realistic looking hologram from this holopad."
 	icon = "radial_holo"
-	cost = 5
+	cost = 0
 
 /datum/malfhack_ability/create_lifelike_hologram/activate(var/mob/living/silicon/A)
 	var/obj/machinery/hologram/holopad/C = machine
@@ -228,7 +228,7 @@
 	name = "Detonate Machine"
 	desc = "Massively overload the circuits in this machine, causing a large explosion. The machine will visually shake and spark before exploding."
 	icon = "radial_overload"
-	cost = 5
+	cost = 10
 
 /datum/malfhack_ability/oneuse/overload_loud/activate(var/mob/living/silicon/A)
 	if(!..())
@@ -274,9 +274,13 @@
 /datum/malfhack_ability/toggle/radio_blackout/activate(var/mob/living/silicon/ai/A)
 	if(!..())
 		return
+	var/obj/machinery/telecomms/receiver/R = machine 
+	if(!istype(R))
+		return
 	malf_radio_blackout = !malf_radio_blackout
 	A.blackout_active = malf_radio_blackout
 	toggled = malf_radio_blackout
+	R.blackout_active = malf_radio_blackout
 
 // Since there are multiple machines all toggling a global variable, set toggled to whatever the global variable is set at.
 /datum/malfhack_ability/toggle/radio_blackout/before_radial()
@@ -330,7 +334,7 @@
 /datum/malfhack_ability/fake_announcement
 	name = "Falsify Nanotrasen Announcement"
 	desc = "Forge an official Nanotrasen announcement. You can write your own or use a pre-existing announcement. Beware that some pre-existing announcements may trigger other alerts."
-	cost = 10
+	cost = 5
 	icon = "radial_send"
 
 /datum/malfhack_ability/fake_announcement/activate(var/mob/living/silicon/A)
@@ -407,7 +411,7 @@
 /datum/malfhack_ability/oneuse/apcfaker
 	name = "Fake APC Images"
 	desc = "Reprogram the image processing software within this camera console. Anyone viewing a hacked APC from it will see a normal APC instead."
-	cost = 10
+	cost = 5
 	icon = "radial_apcfake"
 
 /datum/malfhack_ability/oneuse/apcfaker/activate(var/mob/living/silicon/A)
@@ -426,7 +430,7 @@
 /datum/malfhack_ability/oneuse/explosive_borgs
 	name = "Rig Cyborgs"
 	desc = "Disable the hardware safeties on cyborgs slaved to you, causing them to explode violently on shutdown."
-	cost = 10
+	cost = 15
 	icon = "radial_boomborgs"
 
 /datum/malfhack_ability/oneuse/explosive_borgs/activate(var/mob/living/silicon/ai/A)
@@ -519,7 +523,7 @@
 	name = "Reactivate Camera"
 	desc = "Turn this camera on again."
 	icon = "radial_on"
-	cost = 10
+	cost = 5
 
 /datum/malfhack_ability/camera_reactivate/activate(mob/living/silicon/A)
 	if(!..())
@@ -539,7 +543,7 @@
 	name = "Upgrade Camera"
 	desc = "Update this camera to the latest software. This makes it immune to EMPs, installs a motion detector, and gives it X-Ray vision."
 	icon = "radial_cams"
-	cost = 10
+	cost = 5
 
 /datum/malfhack_ability/oneuse/camera_upgrade/activate(mob/living/silicon/A)
 	if(!..())
@@ -564,7 +568,7 @@
 /datum/malfhack_ability/oneuse/make_autoborger
 	name = "Enable Autoborging"
 	desc = "Reprogram this charging station to convert living humans into cyborgs."
-	cost = 10
+	cost = 50
 	icon = "radial_autoborg"
 
 /datum/malfhack_ability/oneuse/make_autoborger/activate(mob/living/silicon/A)
@@ -841,7 +845,7 @@
 		return 
 
 
-	acc_info["authorized_name"] = ID.registered_name
+	acc_info["authorized_name"] = ""
 	acc_info["check"] = FALSE
 	acc_info["idname"] = ID.registered_name
 	acc_info["idrank"] = ID.assignment

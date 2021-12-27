@@ -78,7 +78,8 @@
 	
 	if(istype(current, /obj/machinery/turret))
 		var/obj/machinery/turret/T = current
-		T.shootAt(A)
+		if(T.enabled && T.raised)
+			T.shootAt(A)
 	else 
 		A.add_hiddenprint(src)
 		A.attack_ai(src)

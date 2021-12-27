@@ -68,7 +68,7 @@
 /obj/machinery/proc/malf_undisrupt(var/bypass)
 	malf_disrupted = FALSE
 	set_hack_overlay_icon("hacked")
-	if(bypassafter)
+	if(bypass)
 		enable_AI_control(TRUE)
 
 /obj/machinery/proc/take_control(var/mob/living/silicon/malf)

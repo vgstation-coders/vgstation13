@@ -53,9 +53,9 @@
 /datum/role/malfAI/Greet()
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>
 <B>The crew does not know about your malfunction, you might wish to keep it secret for now.</B><br>
+<B>Right-Click</B> any machine on station to overwrite its programming!<br>
 <B>You must overwrite the programming of the station's APCs to assume full control.</B><br>
 Overwritten APCs generate processing power for you and let you hack more machines.<br>
-<B>Right-Click</B> any machine on station to overwrite its programming!<br>
 You can also right-click your core to purchase upgrades or initiate your takeover.<br>
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device...<br>"})
 

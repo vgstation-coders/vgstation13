@@ -86,13 +86,6 @@ var/list/barsigns = list()
 	var/interval_ticker = 0
 	var/already_fired = FALSE
 
-
-	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/oneuse/emag
-	)
-
 /obj/structure/sign/double/barsign/Destroy()
 	if(viscon)
 		vis_contents -= viscon

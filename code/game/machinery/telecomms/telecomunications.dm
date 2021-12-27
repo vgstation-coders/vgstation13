@@ -289,6 +289,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	idle_power_usage = 30
 	machinetype = 1
 
+	var/blackout_active = FALSE
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet,
@@ -309,6 +310,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	)
 
 	RefreshParts()
+
+/obj/machinery/telecomms/receiver/Destroy()
+	if(blackout_active)
+		malf_radio_blackout = FALSE 
+	..()
 
 /obj/machinery/telecomms/receiver/receive_signal(datum/signal/signal)
 #ifdef SAY_DEBUG

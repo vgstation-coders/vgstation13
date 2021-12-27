@@ -371,7 +371,7 @@ var/global/list/alert_overlays_global = list()
 	if(density)
 		flick("door_spark", src)
 		sleep(6)
-		force_open(user, C)
+		open()
 		sleep(8)
 	blocked = TRUE
 	update_icon()
