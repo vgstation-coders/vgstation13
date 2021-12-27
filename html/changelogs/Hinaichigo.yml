@@ -8,4 +8,4 @@ changes:
 - rscadd: Grues are particularly vulnerable while moulting into a new life stage.
 - rscadd: Egg laying can be toggled as a config option.
 - bugfix: Slime puddles can now be put into cloners and scanned properly.
-- tweak: Renamed humanoid grues to umbra.
+- tweak: Renamed humanoid grue to umbra.
