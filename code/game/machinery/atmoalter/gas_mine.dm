@@ -35,7 +35,7 @@
 	if(stat & NOPOWER)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Lack of power.</span>")
 		return
-	if (!on || stat & FORCEDISABLE)
+	if (!on || (stat & FORCEDISABLE))
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Turned off.</span>")
 		return
 	if(stat & BROKEN)
