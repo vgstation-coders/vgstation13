@@ -8,6 +8,7 @@
 	var/malf_hack_time = MACHINE_HACK_TIME
 	var/malf_disrupted = FALSE
 	var/aicontrolbypass = FALSE
+
 	var/hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet
@@ -16,8 +17,10 @@
 /obj/machinery/proc/initialize_malfhack_abilities()
 	var/list/initialized_abilities = list()
 	for(var/ability in hack_abilities) 
+		if(!ispath(ability))
+			continue
 		initialized_abilities += new ability(src)
-		hack_abilities = initialized_abilities
+	hack_abilities = initialized_abilities
 
 /obj/machinery/AIRightClick(var/mob/user)
 	var/mob/living/silicon/A = user
