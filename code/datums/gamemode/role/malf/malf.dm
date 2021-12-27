@@ -11,9 +11,8 @@
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 50
 	var/max_processing_power = 200
-
 	var/takeover = FALSE 	// ai has won
-
+	var/has_autoborger = FALSE
 	var/list/core_upgrades = list()
 	//fuck radials
 	var/list/ability_name_to_datum = list()

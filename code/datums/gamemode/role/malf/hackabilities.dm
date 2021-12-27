@@ -567,18 +567,29 @@
 
 /datum/malfhack_ability/oneuse/make_autoborger
 	name = "Enable Autoborging"
-	desc = "Reprogram this charging station to convert living humans into cyborgs."
+	desc = "Reprogram this charging station to convert living humans into cyborgs. Only one charger can be converted into an autoborger."
 	cost = 100
 	icon = "radial_autoborg"
 
 /datum/malfhack_ability/oneuse/make_autoborger/activate(mob/living/silicon/A)
 	if(!..())
 		return
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	var/obj/machinery/recharge_station/R = machine
 	if(!istype(R))
 		return
 	R.autoborger = TRUE
 	R.aiowner = A
+	M.has_autoborger = TRUE
+
+/datum/malfhack_ability/oneuse/make_autoborger/check_available(mob/living/silicon/A)
+	if(!..())
+		return FALSE
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(M.has_autoborger)
+		return FALSE
+	return TRUE
+	
 	
 //--------------------------------------------------------
 
