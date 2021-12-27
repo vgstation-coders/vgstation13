@@ -236,7 +236,7 @@ var/list/forbidden_varedit_object_types = list(
 	var/to_continue = TRUE
 	var/list/things_to_return = list()
 	while (to_continue)
-		things_to_return += variable_set(src, acceptsLists = FALSE)
+		mod_list_add(things_to_return)
 		to_continue = (alert("Do you want to add another item to the list? It has currently [things_to_return.len] items.", "Filling a list", "Yes", "No") == "Yes")
 
 	return things_to_return
