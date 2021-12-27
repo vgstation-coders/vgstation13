@@ -16,7 +16,7 @@
 
 	ex_node_offset = 5
 
-obj/machinery/atmospherics/trinary/mixer/update_icon()
+/obj/machinery/atmospherics/trinary/mixer/update_icon()
 	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "intact_off"
 	else if(node2 && node3 && node1)
