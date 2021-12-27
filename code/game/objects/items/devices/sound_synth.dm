@@ -61,10 +61,7 @@
 	if(assblast && assblast["selected_sound"])
 		selected_sound = assblast["selected_sound"]
 		shiftpitch = assblast["shiftpitch"] ? TRUE : FALSE
-		if(assblast["volume"])
-			volume = assblast["volume"]
-		else
-			volume = default_volume
+		volume = assblast["volume"] ? assblast["volume"] : default_volume
 
 /obj/item/device/soundsynth/attack_self(mob/user as mob)
 	if(spam_flag + 2 SECONDS < world.timeofday)
