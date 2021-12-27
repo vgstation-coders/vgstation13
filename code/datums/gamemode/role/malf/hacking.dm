@@ -30,12 +30,12 @@
 	if(istype(A) && istype(M) && A == src)
 		upgrade_radial()
 
-/obj/machinery/proc/disable_AI_control(var/force = FALSE)
-	if(aicontrolbypass && !force)
+/obj/machinery/proc/disable_AI_control(var/disrupt = TRUE)
+	if(aicontrolbypass)
 		return
 	else
 		stat |= NOAICONTROL
-		if(malf_owner)
+		if(malf_owner && disrupt)
 			malf_disrupt(MALF_DISRUPT_TIME, TRUE)
 
 /obj/machinery/proc/enable_AI_control(var/bypass)
@@ -56,16 +56,20 @@
 			take_control(malf)
 
 
-/obj/machinery/proc/malf_disrupt(var/duration, var/bypassafter = FALSE)
+/obj/machinery/proc/malf_disrupt(var/duration, var/bypassafter = FALSE, var/permanent = TRUE)
 	if(malf_disrupted || !malf_owner)
 		return
 	set_hack_overlay_icon("disrupted")
 	malf_disrupted = TRUE
-	spawn(duration)
-		if(bypassafter)
-			enable_AI_control(TRUE)
-		malf_disrupted = FALSE
-		set_hack_overlay_icon("hacked")
+	if(!permanent)
+		spawn(duration)
+			malf_undisrupt(bypassafter)
+
+/obj/machinery/proc/malf_undisrupt(var/bypass)
+	malf_disrupted = FALSE
+	set_hack_overlay_icon("hacked")
+	if(bypassafter)
+		enable_AI_control(TRUE)
 
 /obj/machinery/proc/take_control(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)

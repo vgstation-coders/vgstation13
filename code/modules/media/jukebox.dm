@@ -199,6 +199,12 @@ var/global/list/loopModeNames=list(
 	mech_flags = MECH_SCAN_FAIL
 	emag_cost = 0 // because fun/unlimited uses.
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/media/jukebox/New(loc)
 	..(loc)
 	allowed_modes = loopModeNames.Copy()
@@ -499,6 +505,12 @@ var/global/list/loopModeNames=list(
 		wires.CutWireIndex(JUKE_CONFIG)
 		short()
 	return
+
+/obj/machinery/media/jukebox/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You short out the [src].</span>"))
+	wires.CutWireIndex(JUKE_CONFIG)
+	short()
+	
 
 /obj/machinery/media/jukebox/proc/short()
 	emagged = !emagged

@@ -76,6 +76,17 @@
 		malfai.handle_regular_hud_updates()
 	update_icon()
 
+/obj/machinery/power/apc/disable_AI_control(var/disrupt = TRUE)
+	stat |= NOAICONTROL
+	if(malf_owner && disrupt)
+		to_chat(malf_owner.antag.current, "<span class='danger'>AI Control on [src] has been cut! It will fail to generate any power until AI control is restored.</span>")
+		malf_disrupt(duration = MALF_DISRUPT_TIME, permanent = TRUE) // No fixing this yourself!
+
+/obj/machinery/power/apc/enable_AI_control(var/bypass)
+	stat &= ~NOAICONTROL
+	malf_undisrupt()
+	
+
 /atom/movable/fake_camera_image
 	name          = ""
 	anchored      = TRUE

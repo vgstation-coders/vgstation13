@@ -17,6 +17,11 @@
 
 	machine_flags = EMAGGABLE
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/deployable/barrier/New()
 	..()
 	update_icon()

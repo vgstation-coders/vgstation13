@@ -823,8 +823,12 @@
 	var/list/ids = list()
 	for(var/obj/item/weapon/card/id/I in id_cards) 
 		if(!get_card_account(I))
-			return
+			continue
 		ids[I.registered_name] = I
+
+	if(ids.len == 0)
+		to_chat(A, "<span class='warning'>No IDs found.</span>")
+		return 
 
 	var/choice = input(A, "Select an ID to use.", "ID?") as null|anything in ids
 	if(!choice)

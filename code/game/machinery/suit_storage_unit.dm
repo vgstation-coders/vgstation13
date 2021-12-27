@@ -31,6 +31,12 @@
 
 	machine_flags = SCREWTOGGLE
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 
 //The units themselves/////////////////
 

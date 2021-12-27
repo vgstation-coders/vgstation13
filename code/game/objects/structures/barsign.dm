@@ -87,6 +87,12 @@ var/list/barsigns = list()
 	var/already_fired = FALSE
 
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/structure/sign/double/barsign/Destroy()
 	if(viscon)
 		vis_contents -= viscon
@@ -450,7 +456,7 @@ var/list/barsigns = list()
 
 //You get actual annoying sounds and scrambled symbol fonts If its emag'd
 /obj/structure/sign/double/barsign/emag_act(mob/user)
-	to_chat(user, "<span class='warning'>You use the emag on the bar sign.</span>")
+	to_chat(user, "<span class='warning'>You scramble the sound files on the [src].</span>")
 
 	sound_selection["Rooster"] = 'sound/misc/6amRooster.wav'
 	sound_selection["Wolf"] = 'sound/misc/6pmWolf.wav'

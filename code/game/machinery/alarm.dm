@@ -206,7 +206,6 @@ var/global/list/airalarm_presets = list(
 	var/locked = 1
 	var/datum/wires/alarm/wires = null
 	var/wiresexposed = 0 // If it's been screwdrivered open.
-	var/aidisabled = 0
 	var/AAlarmwires = 31
 	var/shorted = 0
 
@@ -740,7 +739,7 @@ var/global/list/airalarm_presets = list(
 	interact(user)
 
 /obj/machinery/alarm/attack_ai(mob/user)
-	if(aidisabled)
+	if(stat & NOAICONTROL)
 		to_chat(user, "<span class='warning'>AI control of this device has been disabled.</span>")
 		return
 	..()

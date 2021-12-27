@@ -26,6 +26,12 @@
 	var/window_is_opaque = FALSE //The var that helps darken the glass when the door opens/closes
 	var/assembly_type = /obj/structure/windoor_assembly
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 
 /obj/machinery/door/window/New()
 	..()
