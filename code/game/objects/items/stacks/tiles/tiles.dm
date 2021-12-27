@@ -84,8 +84,8 @@
 			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
 			M.amount = 1
 			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
-			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
-			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
+			user.visible_message("<span class='warning'>[src] is shaped into metal sheets by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You shape the [src] into metal sheets with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
 			var/obj/item/stack/tile/metal/R = src
 			src = null
@@ -192,8 +192,8 @@
 			var/obj/item/stack/sheet/plasteel/M = new /obj/item/stack/sheet/plasteel
 			M.amount = 1
 			M.forceMove(get_turf(usr))
-			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
-			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
+			user.visible_message("<span class='warning'>[src] is shaped into plasteel sheets by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You shape the [src] into plasteel sheets with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
 			var/obj/item/stack/tile/metal/plasteel/R = src
 			src = null
