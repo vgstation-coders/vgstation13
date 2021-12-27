@@ -868,6 +868,3 @@
 	else if(O)
 		O.current_acct_override = acc_info
 		O.attack_ai(A)
-
-	
-	
