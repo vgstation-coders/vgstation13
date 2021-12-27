@@ -87,6 +87,9 @@ var paint_opacity = 0.5;
 var minPaintStrength = 0;
 var maxPaintStrength = 1;
 
+//Other options
+var grid_enabled = false;
+
 // Milliseconds to wait since we last moved the mouse in ordder to draw.
 // Ensures all browsers draw lines with the same opacity, instead of letting those that check more often drawing darker lines
 const PAINT_TOOL_MOVEMENT_THROTTLE = 10;
@@ -471,5 +474,25 @@ function display_bitmap() {
 			//Draw a square, scaled up as needed
 			ctx.fillRect(x*scaleX, y*scaleY, scaleX, scaleY);
 		}
+	}
+	
+	if (grid_enabled) {
+		ctx.beginPath();
+		ctx.lineWidth = 1;
+		ctx.setLineDash([6,6]);
+		for (var x = 0; x < width; x++) {
+			ctx.moveTo(x*scaleX+0.5, 0.5);
+			ctx.lineTo(x*scaleX+0.5, height*scaleY+0.5);
+		}
+		for (var y = 0; y < height; y++) {
+			ctx.moveTo(0.5, y*scaleY+0.5);
+			ctx.lineTo(width*scaleX+0.5, y*scaleY+0.5);
+		}
+		ctx.lineDashOffset = 0;
+		ctx.strokeStyle = "#333333";
+		ctx.stroke();
+		ctx.strokeStyle = "#cccccc";
+		ctx.lineDashOffset = 6;
+		ctx.stroke();
 	}
 }

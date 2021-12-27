@@ -5,21 +5,28 @@
 /obj/structure/painting/custom
 	name = "small canvas"
 	desc = "What to draw?"
+	icon_state = "blank"
+	var/base_name = "small canvas"
+	var/base_desc = "What to draw?"
 
 	var/blank = TRUE
-	var/protectedByGlass = FALSE
+	var/protected_by_glass = FALSE
+	var/framed = FALSE
 	var/datum/custom_painting/painting_data
 
 	// Where to render the custom painting. Make sure it matches the icon state!
 	var/painting_height = 14
 	var/painting_width = 14
 	var/painting_offset_x = 9
-	var/painting_offset_y = 9
+	var/painting_offset_y = 10
 	var/base_color = "#ffffff"
 
 	// Icon to render our painting data on
+	layer = CANVAS_LAYER
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
+	var/frame_icon = 'icons/obj/painting_items.dmi'
+	var/frame_icon_state = "frame"
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
 
@@ -36,38 +43,68 @@
 	// Painting
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
-		if (protectedByGlass)
+		if (protected_by_glass)
 			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from painting on it.</span>")
 		else
 			painting_data.interact(user, p)
 
 	// Cleaning
-	if (istype(W, /obj/item/weapon/soap) && !protectedByGlass)
-		if (protectedByGlass)
+	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
+		if (protected_by_glass)
 			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from cleaning it off.</span>")
 		else
 			to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
 			if (do_after(user, src, 20))
 				painting_data.blank_contents()
-				icon = icon(base_icon, base_icon_state)
 				update_painting()
 
-	// Protecting with glass
-	if (istype(W, /obj/item/stack/sheet/glass/glass) && !protectedByGlass)
-		var/obj/item/stack/sheet/glass/glass/GS = W
-		GS.use(1)
-		materials.addAmount(GS.mat_type, GS.perunit)
-		protectedByGlass = TRUE
+	// Framing
+	if (istype(W, /obj/item/stack/sheet/wood) && !framed)
+		framed = TRUE
+		to_chat(usr, "<span class='notice'>You frame \the [name].</span>")
 		update_painting()
-		to_chat(usr, "<span class='warning'>You cover \the [name] with a glass sheet.</span>")
+		var/obj/item/stack/sheet/wood/WS = W
+		WS.use(1)
+		materials.addAmount(WS.mat_type, WS.perunit)
 
-	if (W.is_screwdriver(user) && protectedByGlass)
+	if (iscrowbar(W) && framed)
+		to_chat(usr, "<span class='warning'>You struggle to pop \the [name] out of it's frame.</span>")
+		if (do_after(user, src, 6))
+			if (protected_by_glass)
+				protected_by_glass = FALSE
+				to_chat(usr, "<span class='warning'>\the [name]'s glass cover pops out and breaks!.</span>")
+				playsound(src, "shatter", 50, TRUE)
+				var/obj/item/stack/sheet/glass/glass/GS = new(user.loc, 1)
+				materials.removeAmount(GS.mat_type, GS.perunit)
+				qdel(GS)
+				var/obj/item/weapon/shard/shard = new()
+				shard.forceMove(user.loc)
+			framed = FALSE
+			to_chat(usr, "<span class='notice'>You pop \the [name] out of it's frame.</span>")
+			update_painting()
+			var/obj/item/stack/sheet/wood/WS = new(user.loc, 1)
+			materials.removeAmount(WS.mat_type, WS.perunit)
+			WS.forceMove(user.loc)
+
+	// Protecting with glass
+	if (istype(W, /obj/item/stack/sheet/glass/glass) && !protected_by_glass)
+		if (!framed)
+			to_chat(usr, "<span class='warning'>\the [name] needs a frame to hold the glass sheet.</span>")
+		else
+			var/obj/item/stack/sheet/glass/glass/GS = W
+			GS.use(1)
+			materials.addAmount(GS.mat_type, GS.perunit)
+			protected_by_glass = TRUE
+			update_painting()
+			to_chat(usr, "<span class='notice'>You cover \the [name] with a glass sheet.</span>")
+
+	if (W.is_screwdriver(user) && protected_by_glass)
 		var/obj/item/stack/sheet/glass/glass/GS = new(user.loc, 1)
 		GS.forceMove(user.loc)
 		materials.removeAmount(GS.mat_type, GS.perunit)
-		protectedByGlass = FALSE
+		protected_by_glass = FALSE
 		update_painting()
-		to_chat(usr, "<span class='warning'>You screw off \the [name]'s glass cover .</span>")
+		to_chat(usr, "<span class='notice'>You screw off \the [name]'s glass cover.</span>")
 
 	return ..()
 
@@ -98,9 +135,15 @@
 		if (render)
 			icon = painting_data.render_on(icon(base_icon, base_icon_state))
 	else
-		name = initial(name)
-		desc = initial(desc)
-	desc += protectedByGlass ? "\n A glass sheet protects it from would-be-vandals" : ""
+		name = base_name
+		desc = base_desc
+		icon = icon(base_icon, base_icon_state)
+
+	overlays.Cut()
+	if (framed)
+		overlays += icon(frame_icon, frame_icon_state)
+
+	desc += protected_by_glass ? "\n A glass sheet protects it from would-be-vandals" : ""
 
 /obj/structure/painting/custom/proc/set_painting_data(datum/custom_painting/painting_data)
 	src.painting_data = painting_data
@@ -108,24 +151,24 @@
 
 /obj/structure/painting/custom/to_item(mob/user)
 	var/obj/item/mounted/frame/painting/custom/P = new(user.loc)
+	unlock_from()
 
 	// Painting info
 	P.set_painting_data(painting_data.Copy())
 	P.rendered_icon = icon
+	P.base_name = base_name
+	P.base_desc = base_desc
 	P.base_icon = base_icon
 	P.base_icon_state = base_icon_state
+	P.frame_icon = frame_icon
+	P.frame_icon_state = frame_icon_state
 	P.blank = blank
 
 	// Glass panel info
-	P.protectedByGlass = protectedByGlass
+	P.framed = framed
+	P.protected_by_glass = protected_by_glass
 	P.materials = new /datum/materials(P)
 	P.materials.addFrom(materials)
-
-	// Fingerprint info
-	P.fingerprints = fingerprints
-	P.fingerprintshidden = fingerprintshidden
-	P.fingerprintslast = fingerprintslast
-	P.fingerprintslastTS = fingerprintslastTS
 
 	P.update_painting()
 	return P
@@ -139,21 +182,26 @@
 /obj/item/mounted/frame/painting/custom
 	name = "small canvas"
 	desc = "What to draw?"
+	var/base_name = "small canvas"
+	var/base_desc = "What to draw?"
 	var/blank = TRUE
 	var/datum/custom_painting/painting_data
 
-	var/protectedByGlass = FALSE
+	var/framed = FALSE
+	var/protected_by_glass = FALSE
 
 	// Icon to render our painting data on
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
+	var/frame_icon = 'icons/obj/painting_items.dmi'
+	var/frame_icon_state = "frame"
 	var/rendered_icon
 
 	// Where to render the custom painting. Make sure it matches the structure icon state!
 	var/painting_height = 14
 	var/painting_width = 14
 	var/painting_offset_x = 9
-	var/painting_offset_y = 9
+	var/painting_offset_y = 10
 	var/base_color = "#ffffff"
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
@@ -171,38 +219,65 @@
 	// Painting
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
-		if (protectedByGlass)
+		if (protected_by_glass)
 			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from painting on it.</span>")
 		else
 			painting_data.interact(user, p)
 
 	// Cleaning
-	if (istype(W, /obj/item/weapon/soap) && !protectedByGlass)
-		if (protectedByGlass)
+	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
+		if (protected_by_glass)
 			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from cleaning it off.</span>")
 		else
 			to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
 			if (do_after(user, src, 20))
 				painting_data.blank_contents()
-				rendered_icon = icon(base_icon, base_icon_state)
 				update_painting()
 
-	// Protecting with glass
-	if (istype(W, /obj/item/stack/sheet/glass/glass) && !protectedByGlass)
-		var/obj/item/stack/sheet/glass/glass/GS = W
-		GS.use(1)
-		materials.addAmount(GS.mat_type, GS.perunit)
-		protectedByGlass = TRUE
+	// Framing
+	if (istype(W, /obj/item/stack/sheet/wood) && !framed)
+		framed = TRUE
+		to_chat(usr, "<span class='notice'>You frame \the [name].</span>")
 		update_painting()
-		to_chat(usr, "<span class='warning'>You cover \the [name] with a glass sheet.</span>")
+		var/obj/item/stack/sheet/wood/WS = W
+		WS.use(1)
+		materials.addAmount(WS.mat_type, WS.perunit)
 
-	if (W.is_screwdriver(user) && protectedByGlass)
+	if (iscrowbar(W) && framed)
+		to_chat(usr, "<span class='warning'>You struggle to pop \the [name] out of it's frame.</span>")
+		if (do_after(user, src, 6))
+			if (protected_by_glass)
+				protected_by_glass = FALSE
+				to_chat(usr, "<span class='notice'>\the [name]'s glass cover pops out!</span>")
+				var/obj/item/stack/sheet/glass/glass/GS = new(user.loc, 1)
+				materials.removeAmount(GS.mat_type, GS.perunit)
+				GS.forceMove(user.loc)
+			framed = FALSE
+			to_chat(usr, "<span class='notice'>You pop \the [name] out of it's frame.</span>")
+			update_painting()
+			var/obj/item/stack/sheet/wood/WS = new(user.loc, 1)
+			materials.removeAmount(WS.mat_type, WS.perunit)
+			WS.forceMove(user.loc)
+
+	// Protecting with glass
+	if (istype(W, /obj/item/stack/sheet/glass/glass) && !protected_by_glass)
+		if (!framed)
+			to_chat(usr, "<span class='warning'>\the [name] needs a frame to hold the glass sheet.</span>")
+		else
+			var/obj/item/stack/sheet/glass/glass/GS = W
+			GS.use(1)
+			materials.addAmount(GS.mat_type, GS.perunit)
+			protected_by_glass = TRUE
+			update_painting()
+			to_chat(usr, "<span class='notice'>You cover \the [name] with a glass sheet.</span>")
+
+	if (W.is_screwdriver(user) && protected_by_glass)
 		var/obj/item/stack/sheet/glass/glass/GS = new(user.loc, 1)
 		GS.forceMove(user.loc)
 		materials.removeAmount(GS.mat_type, GS.perunit)
-		protectedByGlass = FALSE
+		protected_by_glass = FALSE
 		update_painting()
-		to_chat(usr, "<span class='warning'>You screw off \the [name]'s glass cover .</span>")
+		to_chat(usr, "<span class='notice'>You screw off \the [name]'s glass cover .</span>")
 
 	return ..()
 
@@ -222,9 +297,9 @@
 		if (render)
 			rendered_icon = painting_data.render_on(icon(base_icon, base_icon_state))
 	else
-		name = initial(name)
-		desc = initial(desc)
-	desc += protectedByGlass ? "\n A glass sheet protects it from would-be-vandals" : ""
+		name = base_name
+		desc = base_desc
+	desc += protected_by_glass ? "\n A glass sheet protects it from would-be-vandals" : ""
 
 /obj/item/mounted/frame/painting/custom/proc/set_painting_data(datum/custom_painting/painting_data)
 	src.painting_data = painting_data
@@ -237,20 +312,19 @@
 	P.set_painting_data(painting_data.Copy())
 	P.icon = rendered_icon ? rendered_icon : icon(base_icon, base_icon_state)
 	P.icon_state = base_icon_state
+	P.base_name = base_name
+	P.base_desc = base_desc
 	P.base_icon = base_icon
 	P.base_icon_state = base_icon_state
+	P.frame_icon = frame_icon
+	P.frame_icon_state = frame_icon_state
 	P.blank = blank
 
 	// Glass panel info
-	P.protectedByGlass = protectedByGlass
+	P.framed = framed
+	P.protected_by_glass = protected_by_glass
 	P.materials = new /datum/materials(P)
 	P.materials.addFrom(materials)
-
-	// Fingerprint info
-	P.fingerprints = fingerprints
-	P.fingerprintshidden = fingerprintshidden
-	P.fingerprintslast = fingerprintslast
-	P.fingerprintslastTS = fingerprintslastTS
 
 	P.update_painting()
 	return P
@@ -264,67 +338,82 @@
 // Blank landscape canvas
 /obj/item/mounted/frame/painting/custom/landscape
 	name = "landscape canvas"
+	base_name = "landscape canvas"
 	base_icon_state = "blank_landscape"
+	frame_icon_state = "frame_landscape"
 	painting_height = 14
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 9
+	painting_offset_y = 10
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 /obj/structure/painting/custom/landscape
 	name = "landscape canvas"
+	base_name = "landscape canvas"
 	icon_state = "blank_landscape"
 	base_icon_state = "blank_landscape"
+	frame_icon_state = "frame_landscape"
+
 	painting_height = 14
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 9
+	painting_offset_y = 10
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 // Blank portrait canvas
 /obj/item/mounted/frame/painting/custom/portrait
 	name = "portrait canvas"
+	base_name = "portrait canvas"
 	base_icon_state = "blank_portrait"
+	frame_icon_state = "frame_portrait"
 	painting_height = 24
 	painting_width = 14
 	painting_offset_x = 9
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 /obj/structure/painting/custom/portrait
 	name = "portrait canvas"
+	base_name = "portrait canvas"
 	icon_state = "blank_portrait"
 	base_icon_state = "blank_portrait"
+	frame_icon_state = "frame_portrait"
 	painting_height = 24
 	painting_width = 14
 	painting_offset_x = 9
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 // Large blank canvas
 /obj/item/mounted/frame/painting/custom/large
 	name = "large canvas"
+	base_name = "large canvas"
 	desc = "The larger the canvas, the more overwhelming it is to put pen to paper and get started."
+	base_desc = "The larger the canvas, the more overwhelming it is to put pen to paper and get started."
 	base_icon_state = "blank_large"
+	frame_icon_state = "frame_large"
 	painting_height = 24
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
 
 /obj/structure/painting/custom/large
 	name = "large canvas"
+	base_name = "large canvas"
 	desc = "The larger the canvas, the more overwhelming it is to put pen to paper and get started."
+	base_desc = "The larger the canvas, the more overwhelming it is to put pen to paper and get started."
 	icon_state = "blank_large"
 	base_icon_state = "blank_large"
+	frame_icon_state = "frame_large"
 	painting_height = 24
 	painting_width = 24
 	painting_offset_x = 4
-	painting_offset_y = 3
+	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
