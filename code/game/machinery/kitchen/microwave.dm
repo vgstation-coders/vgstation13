@@ -32,7 +32,7 @@
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/dropper)
 
-	var/rig_meal = 1
+	var/rig_meal = 0
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
