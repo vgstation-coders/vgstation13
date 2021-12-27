@@ -6,7 +6,6 @@
 	default_volume = 35
 	var/current_phrase = "Rogan?"
 	var/emote_phrase = FALSE
-	var/default_emote = FALSE
 	var/speak_cooldown = 0.6 SECONDS
 	var/tmp/last_speak
 	var/mobsonly = TRUE //Fuck off speaker assemblies
@@ -51,11 +50,6 @@
 		"Build a wonder." = list("say"=37,"selected_sound"='sound/effects/aoe2/37 build a wonder.ogg'),
 		"Give me your extra resources." = list("say"=38,"selected_sound"='sound/effects/aoe2/38 give me your extra resources.ogg'),
 	)
-
-
-/obj/item/device/soundsynth/roganbot/New()
-	..()
-	emote_phrase = default_emote
 
 /obj/item/device/soundsynth/roganbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Should be queued after the original speech completes
