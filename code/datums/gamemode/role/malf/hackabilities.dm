@@ -568,7 +568,7 @@
 /datum/malfhack_ability/oneuse/make_autoborger
 	name = "Enable Autoborging"
 	desc = "Reprogram this charging station to convert living humans into cyborgs."
-	cost = 50
+	cost = 100
 	icon = "radial_autoborg"
 
 /datum/malfhack_ability/oneuse/make_autoborger/activate(mob/living/silicon/A)
