@@ -3,7 +3,6 @@
 	desc = "A sound synthetizer with 38 preset phrases. To activate, say a number from 1 to 38 out loud."
 	flags = HEAR | FPRINT
 	selected_sound = 'sound/effects/aoe2/29 rogan.ogg'
-	default_shiftpitch = FALSE
 	default_volume = 35
 	var/current_phrase = "Rogan?"
 	var/emote_phrase = FALSE
@@ -75,10 +74,7 @@
 	var/list/USA = sound_list[thesoundthatwewant]
 	if(USA && USA["selected_sound"] && USA["say"])
 		current_phrase = thesoundthatwewant
-		if(USA["emote"])
-			emote_phrase = USA["emote"]
-		else
-			emote_phrase = default_emote
+		emote_phrase = USA["emote"] ? TRUE : FALSE
 
 /obj/item/device/soundsynth/roganbot/play()
 	..()
