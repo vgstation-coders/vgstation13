@@ -67,7 +67,7 @@
 		return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(isgrue(H))
+		if(isumbra(H))
 			H.adjustOxyLoss(-50)
 			H.heal_organ_damage(50, 0)
 			H.heal_organ_damage(0, 50)
