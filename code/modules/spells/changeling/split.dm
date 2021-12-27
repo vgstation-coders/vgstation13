@@ -9,6 +9,7 @@
 	required_dna = 1
 	max_genedamage = 0
 	horrorallowed = 0
+	var/success = FALSE
 	var/datum/mind/owner // The mind of the user, to be used by the recruiter
 	var/datum/recruiter/recruiter
 	var/polling_ghosts = FALSE
@@ -19,27 +20,27 @@
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (changeling.splitcount < 3)
-
-		//owner = user.mind
 		polling_ghosts = TRUE
 		user.visible_message("You are preparing to generate a new form.")
 		if(!recruiter)
 			recruiter = new(src)
-			recruiter.display_name = "Changeling"
+			recruiter.display_name = src
 			recruiter.jobban_roles = list("Changeling")
 			recruiter.recruitment_timeout = 30 SECONDS
+			
 		// Role set to Yes or Always
 		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 		// Role set to No or Never
 		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
 		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
-		var/success = recruiter.request_player()
+		recruiter.request_player()
 		
 		if (success)
 			changeling.splitcount += 1
 			user.visible_message("<span class='danger'>[user] splits!</span>")
 			playsound(user, 'sound/effects/flesh_squelch.ogg', 30, 1)
+			success = FALSE
 		else
 			user.visible_message("You are unable to split at the moment.")
 		
@@ -50,7 +51,8 @@
 	owner = null
 	
 	..()
-
+	
+//no clue what this is
 /spell/changeling/split/Topic(href, href_list)
 	. = ..()
 	if(.)
@@ -70,7 +72,7 @@
 	if(player)
 		polling_ghosts = FALSE
 	
-		var/turf/this_turf = get_turf(src)
+		var/turf/this_turf = get_turf(usr.loc)
 		var/mob/living/carbon/human/newbody = new(this_turf)
 		var/datum/role/changeling/newChangeling = new
 		newbody.ckey = player.ckey
@@ -94,7 +96,7 @@
 		//activate(player)
 		newChangeling.AssignToRole(player.mind,1)
 		newChangeling.geneticdamage = 30
-
+		
 		//Assign to the hivemind faction
 		var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
 		if(!hivemind)
@@ -104,12 +106,10 @@
 		newChangeling.ForgeObjectives()
 		newChangeling.Greet(GREET_DEFAULT)
 		
-		playerregenerate_icons()
+		success = TRUE
+		player.regenerate_icons()
 		player.updateChangelingHUD()
 		update_faction_icons()
 		nanomanager.close_uis(src)
-		return 1
-	else
-		return 0
 	
 
