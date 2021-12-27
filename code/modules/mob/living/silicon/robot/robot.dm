@@ -766,8 +766,8 @@
 			cell.occupant.current_robot = src
 			cell.occupant = null
 			to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
-			sleep(20)
-			to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
+			spawn(2 SECONDS)
+				to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 		updateicon()
 
 	else if(iswiretool(W))
