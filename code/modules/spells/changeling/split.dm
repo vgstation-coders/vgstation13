@@ -19,7 +19,7 @@
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (changeling.splitcount < 3)
 		user.visible_message("You are preparing to generate a new form.")
-		Splitting(user)
+		Splitting()
 		changeling.geneticdamage = 30
 		if (success)
 			changeling.splitcount += 1
@@ -37,9 +37,8 @@
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = "Changeling"
-		recruiter.jobban_roles = list("Changeling")
+		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
-		
 	// Role set to Yes or Always
 	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 	// Role set to No or Never
@@ -100,7 +99,5 @@
 	update_faction_icons()
 	nanomanager.close_uis(src)
 	qdel(src)
-	else
-		polling_ghosts = FALSE
 
 
