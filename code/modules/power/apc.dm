@@ -1303,7 +1303,7 @@
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
 		var/datum/role/malfAI/M = malfai.mind?.GetRole(MALF)
-		if(M && src in M.apcs)
+		if(M && (src in M.apcs))
 			M.apcs -= src
 	stat |= BROKEN
 	operating = 0
