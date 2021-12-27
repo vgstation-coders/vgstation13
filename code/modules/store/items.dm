@@ -157,7 +157,7 @@
 /datum/storeitem/roganbot
 	name = "ROGANbot"
 	desc = "Your own personalized assistant to speed up your workplace communication skills! Ages 550 and up."
-	typepath = /obj/item/device/roganbot
+	typepath = /obj/item/device/soundsynth/roganbot
 	cost = 100
 	stock = 1
 	category = "Toys"
