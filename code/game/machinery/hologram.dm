@@ -165,7 +165,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	A.eyeobj.forceMove(get_turf(src))
 	A.current = src
 	advancedholo = TRUE
-	holo = new /obj/effect/overlay/hologram/lifelike(get_turf(src), available_mobs[mob_to_copy], A.eyeobj)
+	holo = new /obj/effect/overlay/hologram/lifelike(get_turf(src), available_mobs[mob_to_copy], A.eyeobj, src)
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	master = A
 	use_power = 2
@@ -215,6 +215,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(holo)//If there is a hologram.
 		if(master && !master.stat && master.client && master.eyeobj)//If there is an AI attached, it's not incapacitated, it has a client, and the client eye is centered on the projector.
 			if(!(stat & (FORCEDISABLE|NOPOWER)))//If the  machine has power.
+				var/turf/T = get_turf(holo)
+				if(T.obscured)
+					clear_holo()
 				if((HOLOPAD_MODE == 0 && (get_dist(master.eyeobj, src) <= holo_range)) || advancedholo)
 					return 1
 
@@ -227,6 +230,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 						return 1
 
 		clear_holo()//If not, we want to get rid of the hologram.
+
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
@@ -362,11 +367,13 @@ Holographic project of everything else.
 	density = 1
 	anchored = 0
 	var/mob/camera/aiEye/eye
+	var/obj/machinery/hologram/holopad/parent 
 
-/obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy, var/mob/eyeobj)
+/obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy, var/mob/eyeobj, var/obj/machinery/hologram/holopad/H)
 	..()
 	steal_appearance(mob_to_copy)
 	eye = eyeobj
+	parent = H
 	register_event(/event/after_move, src, /obj/effect/overlay/hologram/lifelike/proc/UpdateEye)
 	set_light(0)
 
@@ -391,12 +398,15 @@ Holographic project of everything else.
 	"<span class='warning'>[M]'s hand passes straight through [src]!</span>", \
 	"<span class='warning'>Your hand passes straight through [src]!</span>", \
 	)
+	parent.clear_holo()
 
 /obj/effect/overlay/hologram/lifelike/attackby(var/obj/O)
 	visible_message("<span class='warning'>\The [O] passes straight through [src]!</span>")
+	parent.clear_holo()
 
 /obj/effect/overlay/hologram/lifelike/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("<span class='warning'>\The [Proj] passes straight through [src]!</span>")
+	parent.clear_holo()
 
 /obj/effect/overlay/hologram/lifelike/proc/UpdateEye()
 	if(eye && eye.loc != loc)
