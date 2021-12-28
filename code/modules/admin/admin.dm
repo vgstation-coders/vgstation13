@@ -1336,19 +1336,25 @@ var/global/floorIsLava = 0
 	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
 	_preloader.setup(varchanges, chosen)
 
-	if(ispath(chosen,/turf))
-		var/turf/T = get_turf(usr.loc)
-		T.ChangeTurf(chosen)
-	else if(ispath(chosen, /area))
-		var/area/A = locate(chosen)
-		var/turf/T = get_turf(usr.loc)
-
-		T.set_area(A)
-	else
-		new chosen(usr.loc)
+	atomspawn(chosen,usr.loc)
 
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+// Helper function for proc call madness
+/proc/atomspawn(var/type, var/atom/location)
+	if(!ispath(type))
+		return
+	if(ispath(type,/turf))
+		var/turf/T = get_turf(location)
+		T.ChangeTurf(type)
+	else if(ispath(type, /area))
+		var/area/A = locate(type)
+		var/turf/T = get_turf(location)
+
+		T.set_area(A)
+	else
+		new type(location)
 
 /datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
