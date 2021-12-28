@@ -429,6 +429,9 @@
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>\The [src] is unoccupied!</span>")
 		return
+	if(is_borging)
+		to_chat(usr, "<span class='warning'>\The [src] won't budge!</span>")
+		return
 	var/turf/T = get_turf(over_location)
 	if(!istype(T) || T.density)
 		return
@@ -439,8 +442,6 @@
 			if((A == src) || istype(A, /mob))
 				continue
 			return
-	if(occupant != usr)
-		visible_message("<span class='notice'>[usr] pulls [occupant] out of \the [src].</span>")
 	go_out(T)
 	
 
