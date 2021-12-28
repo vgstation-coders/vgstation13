@@ -9,7 +9,6 @@
 	required_dna = 1
 	max_genedamage = 0
 	horrorallowed = 0
-	var/success = FALSE
 	var/datum/mind/owner = null // The mind of the user, to be used by the recruiter
 	var/datum/recruiter/recruiter = null
 	var/polling_ghosts = FALSE
@@ -27,11 +26,6 @@
 		user.visible_message("[user] is preparing to generate a new form.")
 		Splitting()
 		changeling.geneticdamage = 30
-		if (success)
-			changeling.splitcount += 1
-			user.visible_message("<span class='danger'>[user] splits!</span>")
-			playsound(user, 'sound/effects/flesh_squelch.ogg', 30, 1)
-			success = FALSE
 	else
 		user.visible_message("You are unable to split again.")
 
@@ -53,6 +47,13 @@
 	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 	recruiter.request_player()
 
+/spell/changeling/split/proc/checkSplit(var/success)
+	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
+	if (success)
+		changeling.splitcount += 1
+		(owner.current).visible_message("<span class='danger'>[(owner.current)] splits!</span>")
+		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
+
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
 	to_chat(player, "<span class='recruit'>\ A changeling is splitting. You have been added to the list of potential ghosts. ([controls])</span>")
 
@@ -61,6 +62,7 @@
 
 /spell/changeling/split/proc/recruiter_recruited(mob/dead/observer/player)
 	if(!player)
+		checkSplit(FALSE)
 		polling_ghosts = FALSE
 		//nanomanager.update_uis(src)
 		return
@@ -73,27 +75,28 @@
 	newbody.real_name = owner.current.real_name
 	newbody.name = owner.current.name
 	newbody.flavor_text = owner.current.flavor_text
+	newbody.mind.memory = owner.memory
 	newbody.UpdateAppearance()
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
 	domutcheck(newbody, null)
 	
-	var/datum/role/changeling/newChangeling = new(player.mind)
+	var/datum/role/changeling/newChangeling = new(newbody.mind)
 	newChangeling.OnPostSetup()
 	newChangeling.geneticdamage = 50
-	
+
 	//Assign to the hivemind faction
 	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
 	if(!hivemind)
 		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 		hivemind.OnPostSetup()
+	checkSplit(TRUE) //handler for counting splits
 	hivemind?.HandleRecruitedRole(newChangeling)
-	//newChangeling.ForgeObjectives()
+	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_DEFAULT)
 	
-	success = TRUE
-	newbody.regenerate_icons()
 	newbody.updateChangelingHUD()
+	newbody.regenerate_icons()
 	feedback_add_details("changeling_powers","TR")	//no idea what this does
 	update_faction_icons()
 	nanomanager.close_uis(src)
