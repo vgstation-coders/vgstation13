@@ -35,6 +35,11 @@
 	if(changeling.isabsorbing)
 		to_chat(user, "<span class='warning'>We are already absorbing!</span>")
 		return
+		
+	if (T.dna == user.dna)
+		to_chat(user, "<span class='warning'>We have already absorbed their DNA.</span>")
+		return
+		
 	changeling.isabsorbing = 1
 
 	for(var/stage = 1, stage<=3, stage++)
