@@ -206,6 +206,7 @@
 	..(severity)
 
 /obj/machinery/recharge_station/proc/build_icon()
+	overlays = 0
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		icon_state = "borgcharger"
 	else
@@ -213,10 +214,9 @@
 			if(isrobot(occupant) || !autoborger)
 				icon_state = "borgcharger1"
 			else
-				icon_state = "borgchargefuck"
+				icon_state = "borgchargerfuck"
 		else
 			icon_state = "borgcharger0"
-
 /obj/machinery/recharge_station/proc/process_occupant()
 	if(src.occupant)
 		if(isrobot(occupant))
@@ -366,7 +366,7 @@
 		if(!E.is_robotic() && !is_type_in_list(E, limbs_to_ignore)) 
 			limbs += E
 	
-	icon_state = "borgchargerfuck"
+	build_icon()
 	flick("borgchargerfuckstart", src)
 
 	playsound(src, 'sound/machines/juicer.ogg', 80, 1)
@@ -416,7 +416,7 @@
 	flick("borgchargerfuckend", src)
 	playsound(src, 'sound/machines/ding.ogg', 50, 0)
 	spawn(5)
-		icon_state = "borgcharger0"
+		build_icon()
 		is_borging = FALSE
 		go_out()
 
