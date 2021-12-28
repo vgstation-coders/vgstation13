@@ -507,7 +507,6 @@ Assign your candidates in choose_candidates() instead.
 	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
-	var/list/candidates_to_remove = list()
 	for(var/mob/M in candidates)
 		if(M.mind.assigned_role == "AI") // Only AIs readied can become malf
 			assigned.Add(M)
