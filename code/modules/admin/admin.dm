@@ -1333,18 +1333,18 @@ var/global/floorIsLava = 0
 	if(!chosen)
 		return
 
-	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
-	_preloader.setup(varchanges, chosen)
-
-	atomspawn(chosen,usr.loc)
+	atomspawn(chosen, usr.loc, varchanges)
 
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 // Helper function for proc call madness
-/proc/atomspawn(var/type, var/atom/location)
+/proc/atomspawn(var/type, var/atom/location, var/list/varchanges = list())
 	if(!ispath(type))
 		return
+	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
+	_preloader.setup(varchanges, type)
+
 	if(ispath(type,/turf))
 		var/turf/T = get_turf(location)
 		T.ChangeTurf(type)
