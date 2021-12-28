@@ -1332,32 +1332,29 @@ var/global/floorIsLava = 0
 	var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
 	if(!chosen)
 		return
-
-	atomspawn(chosen, usr.loc, varchanges)
+	var/atom/location = usr.loc
+	location.spawn_at(chosen, varchanges)
 
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 // Helper function for proc call madness
-/proc/atomspawn(var/type, var/atom/location, var/list/varchanges = list())
+/atom/proc/spawn_at(var/type, var/list/varchanges = list())
 	if(!ispath(type))
 		return
 	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
 	_preloader.setup(varchanges, type)
 
 	if(ispath(type,/turf))
-		var/turf/T = get_turf(location)
+		var/turf/T = get_turf(src)
 		T.ChangeTurf(type)
 	else if(ispath(type, /area))
 		var/area/A = locate(type)
-		var/turf/T = get_turf(location)
+		var/turf/T = get_turf(src)
 
 		T.set_area(A)
 	else
-		new type(location)
-
-/atom/proc/spawn_at(var/type, var/list/varchanges = list())
-	atomspawn(type,src,varchanges)
+		new type(src)
 
 /datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
