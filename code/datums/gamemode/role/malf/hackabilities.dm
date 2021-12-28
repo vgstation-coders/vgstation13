@@ -441,6 +441,7 @@
 	
 //--------------------------------------------------------
 
+/*
 /datum/malfhack_ability/core/firewall
 	name = "Firewall"
 	desc = "Deploy a firewall to reduce damage to your core and make it immune to lasers."
@@ -452,7 +453,8 @@
 		return
 	A.ai_flags |= COREFORTIFY
 	to_chat(A, "<span class='warning'>Firewall activated.</span>")
-	
+*/
+
 //--------------------------------------------------------
 
 

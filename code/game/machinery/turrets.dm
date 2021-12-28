@@ -29,6 +29,7 @@
 	var/targeting_active = 0
 
 	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/turret_upgrade,
 		/datum/malfhack_ability/oneuse/turret_pulse,
 		/datum/malfhack_ability/oneuse/overload_loud,
