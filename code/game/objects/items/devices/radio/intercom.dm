@@ -42,9 +42,9 @@
 	add_hiddenprint(user)
 	if(isrobot(user))
 		if(user.client && user.client.eye == user)
-			return attack_hand(user)
+			return attack_self(user)
 	else
-		return attack_hand(user)
+		return attack_self(user)
 
 /obj/item/device/radio/intercom/attack_paw(mob/user as mob)
 	return attack_hand(user)
