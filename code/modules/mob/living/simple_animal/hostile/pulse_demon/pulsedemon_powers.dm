@@ -98,7 +98,7 @@
         update_condition_and_cost()
 
 /datum/pulse_demon_upgrade/regencost
-    ability_name = "Lower amount per regen"
+    ability_name = "Lower regeneration amount drain"
     ability_desc = "Drains less power per second to regenerate health."
 
 /datum/pulse_demon_upgrade/regencost/update_condition_and_cost()
@@ -257,6 +257,7 @@
             name = "Self-Sufficient [name]"
 
     charge_cost /= 1.5
+    upgrade_cost *= 1.5
     return temp
 
 /spell/pulse_demon/is_valid_target(var/atom/target)
@@ -278,6 +279,23 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         PD.powerMenu()
+
+/spell/pulse_demon/toggle_drain
+    name = "Toggle power drain"
+    desc = "Toggles the draining of power while in an APC, battery or cable"
+    abbreviation = "TD"
+    hud_state = "pd_toggle"
+    charge_max = 0
+    level_max = list()
+
+/spell/pulse_demon/toggle_drain/choose_targets(var/mob/user = usr)
+    return list(user) // Self-cast
+
+/spell/pulse_demon/toggle_drain/cast(var/list/targets, var/mob/living/carbon/human/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.draining = !PD.draining
+        to_chat(user,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
 
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
@@ -344,7 +362,7 @@
 
     hud_state = "pd_emag"
     charge_cost = 20000
-    purchase_cost = 100000
+    purchase_cost = 200000
     upgrade_cost = 50000
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
@@ -377,8 +395,8 @@
 
     hud_state = "wiz_tech"
     charge_cost = 10000
-    purchase_cost = 50000
-    upgrade_cost = 20000
+    purchase_cost = 150000
+    upgrade_cost = 50000
 
 /spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -405,7 +423,7 @@
 
     hud_state = "overload"
     charge_cost = 50000
-    purchase_cost = 200000
+    purchase_cost = 300000
     upgrade_cost = 100000
 
 /spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
@@ -501,8 +519,8 @@
     name = "Self-Sustaining Charge"
     abbreviation = "SC"
     desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
-    purchase_cost = 100000
-    upgrade_cost = 20000
+    purchase_cost = 500000
+    upgrade_cost = 200000
 
 /spell/pulse_demon/sustaincharge/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast

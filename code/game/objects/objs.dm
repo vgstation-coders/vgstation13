@@ -139,7 +139,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/intenthurt_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the hurt intent hotkey
 	return
 
-/obj/proc/pAImove(mob/living/silicon/pai/user, dir)					//called when integrated pAI attempts to move
+/obj/proc/pAImove(mob/living/user, dir)								//called when integrated pAI attempts to move
 	if(pAImove_delayer.blocked())
 		user.last_movement=world.time
 		return 0
