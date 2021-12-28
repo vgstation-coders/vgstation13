@@ -1356,6 +1356,9 @@ var/global/floorIsLava = 0
 	else
 		new type(location)
 
+/atom/proc/spawn_at(var/type, var/list/varchanges = list())
+	atomspawn(type,src,varchanges)
+
 /datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
 	set desc = "Edit mobs's Job, Roles, and Factions"
