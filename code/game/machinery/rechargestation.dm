@@ -247,7 +247,9 @@
 	capacitor_stored = min(capacitor_stored + (20 * transfer_rate_coeff), capacitor_max)
 	return 1
 
-/obj/machinery/recharge_station/proc/go_out()
+/obj/machinery/recharge_station/proc/go_out(var/turf/T)
+	if(!T)
+		T = get_turf(src)
 	if(!( src.occupant ))
 		return
 	if(ishuman(occupant) && is_borging) // No escaping!
@@ -261,7 +263,7 @@
 		if (occupant.client)
 			occupant.client.eye = occupant.client.mob
 			occupant.client.perspective = MOB_PERSPECTIVE
-		occupant.forceMove(src.loc)
+		occupant.forceMove(T)
 	occupant = null
 	build_icon()
 	src.use_power = 1
@@ -421,7 +423,26 @@
 		go_out()
 
 
-
+/obj/machinery/recharge_station/MouseDropFrom(atom/over_object, src_location, over_location, src_control, over_control, params)
+	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
+		return
+	if(!occupant)
+		to_chat(usr, "<span class='warning'>\The [src] is unoccupied!</span>")
+		return
+	over_location = get_turf(over_location)
+	if(!istype(over_location) || over_location.density)
+		return
+	if(!Adjacent(over_location) || !Adjacent(usr) || !usr.Adjacent(over_location))
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	if(occupant != usr)
+		visible_message("<span class='notice'>[usr] pulls [occupant] out of \the [src].</span>")
+	go_out(over_location)
+	
 
 /obj/machinery/recharge_station/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!isliving(O) || !isliving(user))
