@@ -13,7 +13,7 @@
 
 /obj/item/weapon/gun/procgun/attack_self(mob/user)
     if(!user.check_rights(R_VAREDIT))
-        to_chat(user,"<span class='warning'>You do not have the divine authority to modify what this gun does</span>")
+        to_chat(user,"<span class='warning'>You do not have the divine authority to modify what this gun does.</span>")
         return
 
     procname = input("Proc path to call on target hit, eg: /proc/fake_blood","Path:", null) as text|null

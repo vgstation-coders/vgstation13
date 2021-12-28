@@ -1338,7 +1338,7 @@ var/global/floorIsLava = 0
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-// Helper function for proc call madness
+// Helper functions for proc call madness
 /atom/proc/spawn_at(var/type, var/list/varchanges = list())
 	if(!ispath(type))
 		return
@@ -1355,6 +1355,12 @@ var/global/floorIsLava = 0
 		T.set_area(A)
 	else
 		new type(src)
+
+/atom/proc/spawn_at_turf(var/type, var/list/varchanges = list())
+	if(isarea(src))
+		return
+	var/turf/T = get_turf(src)
+	T.spawn_at(type,varchanges)
 
 /datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
