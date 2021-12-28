@@ -172,7 +172,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	return 1
 
 /obj/machinery/hologram/holopad/proc/generate_appearance_list()
-	var/list/L = living_mob_list + dead_mob_list
+	var/list/L = getmobs()
 	var/list/newlist = list()
 	for(var/mob/living/M in L)
 		if(M.z != map.zMainStation)
