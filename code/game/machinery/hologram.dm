@@ -90,7 +90,7 @@ var/list/holopads = list()
 	This may change in the future but for now will suffice.*/
 	user.cameraFollow = null // Stops tracking
 
-	if(master==user)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
+	if(master==user && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
 	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
@@ -136,6 +136,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	A.current = src
 	master = A//AI is the master.
 	use_power = 2//Active power usage.
+	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	move_hologram()
 	if(A && A.holopadoverlays.len)
 		for(var/image/ol in A.holopadoverlays)
@@ -172,7 +173,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	return 1
 
 /obj/machinery/hologram/holopad/proc/generate_appearance_list()
-	var/list/L = getmobs()
+	var/list/L = sortmobs()
 	var/list/newlist = list()
 	for(var/mob/living/M in L)
 		if(M.z != map.zMainStation)
@@ -186,7 +187,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad0"
 				break
-	visible_message("<span class='warning'>The image of [holo] fades away.</span>")
+	
 	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
@@ -197,11 +198,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		master = null //Null the master, since no-one is using it now.
 	qdel(ray)
 	ray = null
-	var/obj/effect/overlay/hologram/H = holo
-	holo = null
-	animate(H, alpha = 0, time = 5)
-	spawn(5)
-		qdel(H)//Get rid of hologram.
+	if(holo)
+		var/obj/effect/overlay/hologram/H = holo
+		visible_message("<span class='warning'>The image of [holo] fades away.</span>")
+		holo = null
+		animate(H, alpha = 0, time = 5)
+		spawn(5)
+			qdel(H)//Get rid of hologram.
 	return 1
 
 /obj/machinery/hologram/holopad/emp_act()
@@ -229,9 +232,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
 	if(holo)
 		if (get_dist(master.eyeobj, src) <= holo_range || advancedholo)
-			if(advancedholo)  // reset glide sizes, in case our hologram was bumped
-				holo.set_glide_size(DELAY2GLIDESIZE(1))
-				master.eyeobj.set_glide_size(DELAY2GLIDESIZE(1))
+			holo.set_glide_size(DELAY2GLIDESIZE(1))
+			master.eyeobj.set_glide_size(DELAY2GLIDESIZE(1))
 			var/turf/T = holo.loc
 			var/turf/dest = get_turf(master.eyeobj)
 			step_to(holo, master.eyeobj) // So it turns.

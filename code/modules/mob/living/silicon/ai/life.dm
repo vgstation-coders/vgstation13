@@ -209,6 +209,8 @@
 	for(var/obj/machinery/power/apc/A in M.currently_hacking_apcs)	//throw an alert for any APCs being hacked
 		var/obj/abstract/screen/alert/robot/apc_hacking/new_alert = throw_alert(A.name, /obj/abstract/screen/alert/robot/apc_hacking)
 		if(new_alert && istype(new_alert))
-			new_alert.desc = "You are currently hacking the [A.name]. Click this alert to jump to the APC."
+			// Inputting the APC name directly doesn't work right for some reason.
+			var/area/AR = get_area(A)
+			new_alert.desc = "You are currently hacking \the [AR.name] APC. Click this alert to jump to the APC."
 			new_alert.apc = A
 
