@@ -370,7 +370,7 @@
 	
 	build_icon()
 	flick("borgchargerfuckstart", src)
-
+	H.AdjustKnockdown(10)
 	playsound(src, 'sound/machines/juicer.ogg', 80, 1)
 
 	// Mangle their limbs!
