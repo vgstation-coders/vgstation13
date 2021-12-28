@@ -423,25 +423,25 @@
 		go_out()
 
 
-/obj/machinery/recharge_station/MouseDropFrom(atom/over_object, src_location, over_location, src_control, over_control, params)
+/obj/machinery/recharge_station/MouseDropFrom(atom/over_object, src_location, var/atom/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>\The [src] is unoccupied!</span>")
 		return
-	over_location = get_turf(over_location)
-	if(!istype(over_location) || over_location.density)
+	var/turf/T = get_turf(over_location)
+	if(!istype(T) || T.density)
 		return
-	if(!Adjacent(over_location) || !Adjacent(usr) || !usr.Adjacent(over_location))
+	if(!Adjacent(T) || !Adjacent(usr) || !usr.Adjacent(T))
 		return
-	for(var/atom/movable/A in over_location.contents)
+	for(var/atom/movable/A in T.contents)
 		if(A.density)
 			if((A == src) || istype(A, /mob))
 				continue
 			return
 	if(occupant != usr)
 		visible_message("<span class='notice'>[usr] pulls [occupant] out of \the [src].</span>")
-	go_out(over_location)
+	go_out(T)
 	
 
 /obj/machinery/recharge_station/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
