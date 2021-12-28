@@ -506,24 +506,16 @@ Assign your candidates in choose_candidates() instead.
 	high_population_requirement = 60
 	flags = HIGHLANDER_RULESET
 
-// NB : `M` will never be empty as `ready` made sure we have at least one candidate with malf AI on.
-// This candidate will become an AI upon roundstart, eventually replacing other AIs candidates who do not have the preference.
-// You should `not` perform any null checks on M. M being null is a sign of a problem and should runtime.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
-	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
-	if(M.mind.assigned_role != "AI")
-		for(var/mob/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
-			if(player.mind.assigned_role == "AI")
-				//We have located an AI to replace
-				displace_AI(player)
-				message_admins("Displacing AI played by: [key_name(player)].")
-
-	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
-	M.mind.assigned_role = "AI"
-	if(!isAI(M))
-		assigned.Remove(M)
-		M = M.AIize()
-		assigned.Add(M)
+	var/list/candidates_to_remove = list()
+	for(var/mob/M in candidates)
+		if(candidates.len <= 0)
+			break
+		if(M.mind.assigned_role == "AI") // Only AIs readied can become malf
+			assigned.Add(M)
+			candidates_to_remove.Add(M)
+	for(var/mob/M in candidates_to_remove)
+		candidates.Remove(M)
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
@@ -535,26 +527,6 @@ Assign your candidates in choose_candidates() instead.
 	var/datum/role/malfAI/MAI = M.mind.GetRole(MALF)
 	MAI.Greet()
 	return 1
-
-/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
-	old_AI.mind.assigned_role = null
-	var/list/shuffledoccupations = shuffle(job_master.occupations)
-	for(var/level = 3 to 1 step -1)
-		if(old_AI.mind.assigned_role)
-			break
-		for(var/datum/job/job in shuffledoccupations)
-			if(job_master.TryAssignJob(old_AI,level,job))
-				break
-	if(old_AI.mind.assigned_role)
-		return
-	if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
-		job_master.GiveRandomJob(old_AI)
-		return
-	else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
-		job_master.AssignRole(old_AI, "Assistant")
-	else
-		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
-		old_AI.ready = 0
 
 //////////////////////////////////////////////
 //                                          //
