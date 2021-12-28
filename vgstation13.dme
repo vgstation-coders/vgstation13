@@ -500,7 +500,6 @@
 #include "code\datums\gamemode\role\malf\hacking.dm"
 #include "code\datums\gamemode\role\malf\malf.dm"
 #include "code\datums\gamemode\role\malf\malf_apcs.dm"
-#include "code\datums\gamemode\role\malf\malfabilities.dm"
 #include "code\datums\gamemode\role\malf\shunt.dm"
 #include "code\datums\helper_datums\butchering.dm"
 #include "code\datums\helper_datums\command_alerts.dm"
