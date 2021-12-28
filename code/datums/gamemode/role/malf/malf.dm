@@ -66,7 +66,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		for(var/obj/machinery/power/apc/A in apcs)
 			if(!A.malf_disrupted)	
 				count++
-		add_power(count * 0.025)
+		add_power(count * 0.03)
 
 /datum/role/malfAI/proc/add_power(var/amount)
 	if(antag && antag.current)
