@@ -516,6 +516,15 @@ Assign your candidates in choose_candidates() instead.
 			candidates_to_remove.Add(M)
 	for(var/mob/M in candidates_to_remove)
 		candidates.Remove(M)
+	
+	if(!assigned.len) //If no candidates found before, make someone the AI and give them the proper roles.
+		var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
+		M.mind.assigned_role = "AI"
+		if(!isAI(M))
+			assigned.Remove(M)
+			M = M.AIize()
+		assigned.Add(M)
+
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
