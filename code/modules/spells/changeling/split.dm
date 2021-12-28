@@ -39,9 +39,9 @@
 	if(polling_ghosts)
 		return
 	polling_ghosts = TRUE
-	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
+	//var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if(!recruiter)
-		recruiter = new(changeling)
+		recruiter = new(owner.current)
 		recruiter.display_name = "Changeling"
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
@@ -52,7 +52,6 @@
 
 	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 	recruiter.request_player()
-	recruiter.Destroy()
 
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
 	to_chat(player, "<span class='recruit'>\ A changeling is splitting. You have been added to the list of potential ghosts. ([controls])</span>")
@@ -65,30 +64,23 @@
 		polling_ghosts = FALSE
 		//nanomanager.update_uis(src)
 		return
-	//var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	var/turf/this_turf = get_turf(owner.current.loc)
 	var/mob/living/carbon/human/newbody = new(this_turf)
-	var/datum/role/changeling/newChangeling = new
-	newbody.ckey = player.ckey
 	
-	var/datum/dna/owner_dna = owner.current.dna
-	if(!owner_dna)
-		return 0
-
+	newbody.ckey = player.ckey
 	var/oldspecies = newbody.dna.species
-	newbody.dna = owner_dna.Clone()
+	newbody.dna = owner.current.dna.Clone()
 	newbody.real_name = owner.current.real_name
+	newbody.name = owner.current.name
 	newbody.flavor_text = owner.current.flavor_text
 	newbody.UpdateAppearance()
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
 	domutcheck(newbody, null)
-	feedback_add_details("changeling_powers","TR")	//no idea what this does
-	activate(player)
-	if(!newChangeling.AssignToRole(player.mind,1))
-		newChangeling.Drop()
-		continue
-	newChangeling.geneticdamage = 30
+	
+	var/datum/role/changeling/newChangeling = new(player.mind)
+	newChangeling.OnPostSetup()
+	newChangeling.geneticdamage = 50
 	
 	//Assign to the hivemind faction
 	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
@@ -96,14 +88,15 @@
 		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 		hivemind.OnPostSetup()
 	hivemind?.HandleRecruitedRole(newChangeling)
-	newChangeling.OnPostSetup()
-	newChangeling.ForgeObjectives()
+	//newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_DEFAULT)
 	
 	success = TRUE
-	player.regenerate_icons()
-	player.updateChangelingHUD()
+	newbody.regenerate_icons()
+	newbody.updateChangelingHUD()
+	feedback_add_details("changeling_powers","TR")	//no idea what this does
 	update_faction_icons()
 	nanomanager.close_uis(src)
+	recruiter.Destroy()
 
 
