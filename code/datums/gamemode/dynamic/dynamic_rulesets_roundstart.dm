@@ -520,6 +520,7 @@ Assign your candidates in choose_candidates() instead.
 				M = M.AIize()
 			assigned.Add(M)
 			candidates.Remove(M)
+			break
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
