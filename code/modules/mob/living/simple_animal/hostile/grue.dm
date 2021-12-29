@@ -17,7 +17,7 @@
 	response_harm   = "punches"
 
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
-	force_airlock_time=100 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
+	force_airlock_time=100 									//so that juvenile grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 
 	//VARS
 //	var/isgrue=1
@@ -213,7 +213,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_NORMAL
 		pass_flags = 0
-		force_airlock_time=120
+		force_airlock_time=100
 	else if (lifestage>=3)
 		name = "grue"
 		desc = "A dangerous thing that lives in the dark."
@@ -232,7 +232,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
-		force_airlock_time=100
+		force_airlock_time=0
 	health=tempHealth*maxHealth
 
 //Grue vision
