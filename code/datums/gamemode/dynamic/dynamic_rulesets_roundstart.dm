@@ -516,7 +516,7 @@ Assign your candidates in choose_candidates() instead.
 		else if(M.mind.assigned_role == "Cyborg") // If no AIs in the current player list, make a cyborg candidate the AI and give them the proper roles.
 			make_AI(M)
 			break
-	if(!assigned.len) // If neither, just pick the rest as normal
+	if(!ais && !assigned.len) // If neither, just pick the rest as normal
 		var/mob/M2 = pick(candidates)
 		make_AI(M2)
 	return (assigned.len > 0)
