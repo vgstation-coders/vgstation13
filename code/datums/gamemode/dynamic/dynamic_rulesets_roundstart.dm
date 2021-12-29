@@ -510,13 +510,13 @@ Assign your candidates in choose_candidates() instead.
 	var/ais = 0
 	for(var/mob/living/silicon/ai/AI in player_list)
 		ais++
-	if(ais) // If AIs in the game, pick one to be assigned if they're in the candidates
+	if(ais) // If AIs in the current player list, pick one to be assigned if they're in the candidates
 		for(var/mob/M in candidates)
 			if(M.mind.assigned_role == "AI") // Only AIs readied can become malf
 				assigned.Add(M)
 				candidates.Remove(M)
-	else //If no AIs in the game, make someone the AI and give them the proper roles.
-		var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
+	else // If no AIs in the current player list, make someone the AI and give them the proper roles.
+		var/mob/M = progressive_job_search() // dynamic_rulesets.dm. Handles adding the guy to assigned.
 		M.mind.assigned_role = "AI"
 		if(!isAI(M))
 			assigned.Remove(M)
