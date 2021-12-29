@@ -497,7 +497,6 @@ Assign your candidates in choose_candidates() instead.
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
-	job_priority = list("AI","Cyborg")
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
@@ -510,19 +509,17 @@ Assign your candidates in choose_candidates() instead.
 	var/ais = 0
 	for(var/mob/living/silicon/ai/AI in player_list)
 		ais++
-	if(ais) // If AIs in the current player list, pick one to be assigned if they're in the candidates
-		for(var/mob/M in candidates)
-			if(M.mind.assigned_role == "AI") // Only AIs readied can become malf
-				assigned.Add(M)
-				candidates.Remove(M)
-	else // If no AIs in the current player list, make someone the AI and give them the proper roles.
-		var/mob/M = progressive_job_search() // dynamic_rulesets.dm. Handles adding the guy to assigned.
-		M.mind.assigned_role = "AI"
-		if(!isAI(M))
-			assigned.Remove(M)
-			M = M.AIize()
-		assigned.Add(M)
-
+	for(var/mob/M in candidates)
+		if(ais && M.mind.assigned_role == "AI") // If AIs in the current player list, pick one to be assigned if they're in the candidates
+			assigned.Add(M)
+			candidates.Remove(M)
+		else if(M.mind.assigned_role == "Cyborg") // If no AIs in the current player list, make a cyborg candidate the AI and give them the proper roles.
+			M.mind.assigned_role = "AI"
+			if(!isAI(M))
+				assigned.Remove(M)
+				M = M.AIize()
+			assigned.Add(M)
+			candidates.Remove(M)
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
