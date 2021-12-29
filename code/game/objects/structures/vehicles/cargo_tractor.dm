@@ -11,7 +11,7 @@
 	headlights = TRUE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/tractor
 
-/obj/structure/bed/chair/vehicle/tracotr/update_icon()
+/obj/structure/bed/chair/vehicle/tractor/update_icon()
 	for(var/datum/action/vehicle/toggle_headlights/TH in vehicle_actions)
 		if(TH.on)
 			icon_state = "[initial(icon_state)]-on"
