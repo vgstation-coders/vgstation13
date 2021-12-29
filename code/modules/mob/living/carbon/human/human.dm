@@ -1878,6 +1878,7 @@
 		"check_mutations",
 		"lastFart",
 		"lastDab",
+		"lastAnemia",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",

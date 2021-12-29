@@ -124,6 +124,9 @@ var/auxtools_path
 
 	Master.Setup()
 
+	for(var/client/C in clients)
+		C.clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
+
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
 	return ..()

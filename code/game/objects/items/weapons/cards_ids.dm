@@ -414,6 +414,19 @@
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
+	var/copy_appearance = FALSE
+
+/obj/item/weapon/card/id/syndicate/AltClick()
+	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
+		copy_appearance = !copy_appearance
+		to_chat(usr, "<span class='notice'>The [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
+		return
+	return ..()
+
+/obj/item/weapon/card/id/syndicate/proc/can_use(mob/user)
+	if(ismob(user) && !user.incapacitated() && loc == user)
+		return 1
+	return 0
 
 /obj/item/weapon/card/id/syndicate/commando
 	name = "Hacked syndie card"
@@ -425,8 +438,17 @@
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
-		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access.</span>")
+		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access[copy_appearance ? " and appearance" : ""].</span>")
 		access |= I.access
+		if(copy_appearance)
+			registered_name = I.registered_name
+			icon_state = I.icon_state
+			assignment = I.assignment
+			associated_account_number = I.associated_account_number
+			blood_type = I.blood_type
+			dna_hash = I.dna_hash
+			fingerprint_hash = I.fingerprint_hash
+			UpdateName()
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
 	if(!src.registered_name)

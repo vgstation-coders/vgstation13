@@ -41,15 +41,15 @@
     var/takeover_time = 30                                          //Time spent taking over electronics
     var/show_desc = FALSE                                           //For the ability menu
     var/can_leave_cable = FALSE                                     //For the ability that lets you
+    var/draining = TRUE                                             //For draining power or not
     var/move_divide = 4                                             //For slowing down of above
 
     //TYPES
     var/area/controlling_area                                       // Area controlled from an APC
     var/obj/structure/cable/current_cable                           // Current cable we're on
-    var/datum/powernet/current_net                                  // Powernet for cableview to update
-    var/datum/powernet/previous_net                                 // Old net to check against current one for cable view update
     var/obj/machinery/power/current_power                           // Current power machine we're in
     var/mob/living/silicon/robot/current_robot                      // Currently controlled robot
+    var/obj/machinery/bot/current_bot                               // Currently controlled bot
     var/obj/item/weapon/current_weapon                              // Current gun we're controlling
 
     //LISTS
@@ -65,18 +65,16 @@
         current_cable = locate(/obj/structure/cable) in loc
         if(!current_cable)
             death()
-        else
-            current_net = current_cable.get_powernet()
     else
-        current_net = current_power.get_powernet()
         if(istype(current_power,/obj/machinery/power/apc))
             controlling_area = get_area(current_power)
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
     add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+    add_spell(new /spell/pulse_demon/toggle_drain, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
     for(var/pd_spell in getAllPulseDemonSpells())
         var/spell/S = new pd_spell
-        if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities)
+        if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities && S.type != /spell/pulse_demon/toggle_drain)
             possible_spells += S
     for(var/pd_upgrade in subtypesof(/datum/pulse_demon_upgrade))
         var/datum/pulse_demon_upgrade/PDU = new pd_upgrade(src)
@@ -86,7 +84,7 @@
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     // So we can see in maint better
     if(client && client.darkness_planemaster)
-        client.darkness_planemaster.alpha = 192    
+        client.darkness_planemaster.alpha = 192
     update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/regular_hud_updates()
@@ -118,29 +116,27 @@
 		stat(null, text("Charge stored: [charge]W"))
 		stat(null, text("Max charge stored: [maxcharge]W"))
 
-/mob/living/simple_animal/hostile/pulse_demon/Life()    
+/mob/living/simple_animal/hostile/pulse_demon/Life()
     // Add the regen rate unless it puts us over max health, then just cap it off
     var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
     if(current_cable)
-        if(current_cable.avail() > amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
-            current_cable.add_load(amount_per_regen)
-            if(health < maxHealth)
-                health += health_to_add
-        else
+        if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
             health -= health_drain_rate
+        else if(health < maxHealth && draining)
+            current_cable.add_load(amount_per_regen)
+            health += health_to_add
     else if(current_power)
-        if(istype(current_power,/obj/machinery/power/battery))
+        if(istype(current_power,/obj/machinery/power/battery) && draining)
             var/obj/machinery/power/battery/current_battery = current_power
             suckBattery(current_battery)
-        else if(istype(current_power,/obj/machinery/power/apc))
+        else if(istype(current_power,/obj/machinery/power/apc) && draining)
             var/obj/machinery/power/apc/current_apc = current_power
             drainAPC(current_apc)
-        else if(current_power.avail() > amount_per_regen)
-            current_power.add_load(amount_per_regen)
-            if(health < maxHealth)
-                health += health_to_add
-        else
+        if(current_power.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
             health -= health_drain_rate
+        else if(health < maxHealth && draining)
+            current_cable.add_load(amount_per_regen)
+            health += health_to_add
     else if(can_leave_cable) // Health drains if not on cable with leaving ability on
         health -= health_drain_rate
     else
@@ -153,7 +149,7 @@
     ..()
     var/turf/T = get_turf(src)
     spark(src,rand(2,4))
-    empulse(T,4,8)
+    empulse(T,charge/50000,charge/25000)
     playsound(T,"pd_wail_sound",50,1)
     qdel(src) // We vaporise into thin air
 
@@ -172,7 +168,7 @@
         moved = TRUE
     if(!is_under_tile() && prob(25))
         spark(src,rand(2,4))
-    if(new_power && !current_power)
+    if(new_power)
         current_power = new_power
         current_cable = null
         loc = new_power
@@ -183,33 +179,31 @@
             if(current_apc.occupant)
                 to_chat(src,"<span class='warning'>Something else that isn't a pulse demon is already in here!</span>")
                 return
-            max_can_absorb = current_apc.cell.maxcharge
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
             else
                 hijackAPC(current_apc)
-        else if(istype(current_power,/obj/machinery/power/battery))
-            var/obj/machinery/power/battery/current_battery = current_power
+            if(draining)
+                to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
+        else if(istype(current_power,/obj/machinery/power/battery) && draining)
             to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
-            max_can_absorb = current_battery.output
     else
         if(new_cable)
             current_cable = new_cable
-            previous_net = current_net
-            current_net = current_cable.get_powernet()
             current_power = null
             current_robot = null
+            current_bot = null
             current_weapon = null
             if(!isturf(loc))
                 loc = get_turf(NewLoc)
             controlling_area = null
-            update_cableview()
             if(!moved)
                 forceMove(NewLoc)
         else
             current_cable = null
             current_power = null
             current_robot = null
+            current_bot = null
             current_weapon = null
 
 /mob/living/simple_animal/hostile/pulse_demon/movement_tally_multiplier()
@@ -219,178 +213,15 @@
     else
         . *= 1
 
-/mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle)
-    if(!is_under_tile() && isliving(obstacle))
-        var/mob/living/L = obstacle
-        shockMob(L) // Shock any mob in our path
-    else
-        return ..()
-
 /obj/machinery/power/relaymove(mob/user, direction)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         var/turf/T = get_turf(src)
         var/turf/T2 = get_step(T,direction)
-        if(locate(/obj/structure/cable) in T2) // Only move out if we're inside it and going in the right direction
+        if(locate(/obj/structure/cable) in T2 || PD.can_leave_cable) // Only move out if we're inside it and going in the right direction
             playsound(src,'sound/weapons/electriczap.ogg',50, 1)
             spark(src,rand(2,4))
             user.forceMove(get_turf(src))
-
-/mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
-    if(!spell_channeling) // Abort if we're doing spell stuff
-        if(get_area(A) == controlling_area) // Only in APC areas
-            var/list/modifiers = params2list(params) // For doors and other AI stuff
-            if(modifiers["middle"])
-                if(modifiers["shift"])
-                    MiddleShiftClickOn(A)
-                    return
-                else
-                    MiddleClickOn(A)
-                    return
-            if(modifiers["shift"])
-                ShiftClickOn(A)
-                return
-            if(modifiers["alt"]) // alt and alt-gr (rightalt)
-                AltClickOn(A)
-                return
-            if(modifiers["ctrl"])
-                CtrlClickOn(A)
-                return
-            A.attack_pulsedemon(src)
-        else if(current_weapon)
-            if(istype(current_weapon,/obj/item/weapon/gun))
-                var/obj/item/weapon/gun/G = current_weapon
-                G.Fire(A,src) // Shoot at something if we're in a weapon
-        else if(current_robot) // Do APC stuff if in a borg
-            log_admin("[key_name(src)] made [key_name(current_robot)] attack [A]") // Just so admins don't bwoink them in confusion
-            message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] attack [A]</span>")
-            var/list/modifiers = params2list(params)
-            if(modifiers["middle"])
-                if(modifiers["shift"])
-                    MiddleShiftClickOn(A)
-                    return
-                else
-                    MiddleClickOn(A)
-                    return
-            if(modifiers["shift"])
-                ShiftClickOn(A)
-                return
-            if(modifiers["alt"]) // alt and alt-gr (rightalt)
-                AltClickOn(A)
-                return
-            if(modifiers["ctrl"])
-                CtrlClickOn(A)
-                return
-
-            A.attack_robot(current_robot)
-        else if(isliving(A))
-            ..()
-    else
-        spell_channeling.channeled_spell(A) // Handle spell stuff
-
-// Do AI stuff for this
-/mob/living/simple_animal/hostile/pulse_demon/ShiftClickOn(var/atom/A)
-    if(get_area(A) == controlling_area)
-        A.AIShiftClick(src)
-
-/mob/living/simple_animal/hostile/pulse_demon/CtrlClickOn(var/atom/A)
-    if(get_area(A) == controlling_area)
-        A.AICtrlClick(src)
-
-/mob/living/simple_animal/hostile/pulse_demon/AltClickOn(var/atom/A)
-    if(get_area(A) == controlling_area)
-        A.AIAltClick(src)
-
-/mob/living/simple_animal/hostile/pulse_demon/MiddleShiftClickOn(var/atom/A)
-    if(get_area(A) == controlling_area)
-        A.AIMiddleShiftClick(src)
-
-// Proc that allows special pulse demon functionality
-/atom/proc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    return
-
-// Most machinery just does normal AI attacks
-/obj/machinery/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    return attack_ai(user)
-
-// Except cams, which block you from viewing them otherwise
-/obj/machinery/computer/security/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    return attack_hand(user)
-
-// Lets you be "player two" against a human
-/obj/machinery/computer/arcade/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    playertwo = user
-    var/dat = game.get_p2_dat()
-    user << browse(dat, "window=arcade")
-    onclose(user, "arcade")
-
-// Lets you view from these, and inherit view properties like xray if any
-/obj/machinery/camera/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    user.loc = src
-    user.change_sight(adding = vision_flags)
-
-// Lets you take over a weapon to fire
-/obj/machinery/recharger/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    user.loc = src
-    if(charging)
-        to_chat(user,"<span class='notice'>You are now attempting to hijack \the [charging], this will take approximately [user.takeover_time] seconds.</span>")
-        if(do_after(user,src,user.takeover_time*10))
-            to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
-            user.loc = charging
-            user.current_weapon = charging
-    else
-        to_chat(user,"<span class='warning'>There is no weapon charging.</span>")
-
-// Lets you take over a cell to rig, as if injected by plasma
-/obj/machinery/cell_charger/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    user.loc = src
-    if(charging && !charging.rigged && !charging.occupant)
-        to_chat(user,"<span class='notice'>You are now attempting to hijack \the [charging], this will take approximately [user.takeover_time] seconds.</span>")
-        // Go in instantly if already rigged, else hijack timer
-        if(!charging.rigged)
-            if(do_after(user,src,user.takeover_time*10))
-                to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
-                user.loc = charging
-                charging.occupant = user
-                charging.rigged = 1
-        else
-            to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
-            user.loc = charging
-            charging.occupant = user
-    else if(charging)
-        to_chat(user,"<span class='warning'>There is already something in this cell.</span>")
-    else
-        to_chat(user,"<span class='warning'>There is no cell charging.</span>")
-
-// Lets you take over a borg, to override its targeting and speech
-/obj/machinery/recharge_station/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    user.loc = src
-    if(occupant && istype(occupant,/mob/living/silicon/robot))
-        var/mob/living/silicon/robot/R = occupant
-        // Go in instantly if already compromised, else hijack timer
-        if(!R.pulsecompromised)
-            to_chat(user,"<span class='notice'>You are now attempting to hijack \the [R]'s targeting module, this will take approximately [user.takeover_time] seconds.</span>")
-            to_chat(R,"<span class='danger'>ALERT: ELECTRIAL MALEVOLANCE DETECTED, TARGETING SYSTEMS HIJACK IN PROGRESS</span>")
-            if(do_after(user,src,user.takeover_time*10))
-                if(occupant)
-                    to_chat(user,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
-                    R.pulsecompromised = 1
-                    user.loc = R
-                    user.current_robot = R
-                    to_chat(R, "<span class='danger'>ERRORERRORERROR</span>")
-                    sleep(20)
-                    to_chat(R, "<span class='danger'>TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
-        else
-            to_chat(user,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
-            user.loc = R
-            user.current_robot = R
-    else
-        to_chat(user,"<span class='warning'>There is no silicon-based occupant inside.</span>")
-
-// Lets you go back into the APC, and also removes cam stuff
-/obj/machinery/power/apc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    if(user.loc != src)
-        user.loc = src
-        user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 
 // Proc for speaking as a borg
 /mob/living/simple_animal/hostile/pulse_demon/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
@@ -409,9 +240,17 @@
         log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
         log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
         message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
-        
-    else
-        to_chat(src, "You have no hijacked robot to speak with.")
+    
+    else if(current_bot && istype(current_bot,/obj/machinery/bot/buttbot))
+        if (!speech.message)
+            return
+        speech.message = buttbottify(speech.message, 3, 9) // 3 times as intense
+        var/obj/machinery/bot/buttbot/BB = current_bot
+        BB.fart()
+        score["buttbotfarts"]++
+
+    else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
+        to_chat(src, "You have nothing to speak with.")
         return 1 //this ensures we don't end up speaking out loud
 
 // Helper stuff for attacks
@@ -465,6 +304,20 @@
                 visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
         unarmed_attack_mob(M)
 
+// Still not tangible
+/mob/living/simple_animal/hostile/pulse_demon/attackby(obj/item/W as obj, mob/user as mob)
+    if(!is_under_tile())
+        visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
+        shockMob(user,W.siemens_coefficient)
+
+// In our way
+/mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle)
+    if(!is_under_tile() && isliving(obstacle))
+        var/mob/living/L = obstacle
+        shockMob(L) // Shock any mob in our path
+    else
+        return ..()
+
 // ZAP
 /mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
     if(!is_under_tile())
@@ -482,17 +335,18 @@
 /mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
     return
 
-/mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
+// Common function for all
+/mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob, var/siemens_coeff = 1)
     var/dmg_done = 0
     // Powernet damage
-    if(current_net && current_net.avail)
-        dmg_done = electrocute_mob(M, current_net, src, 1) / 20 //Inverting multiplier of damage done in proc
+    if(current_cable && current_cable.powernet && current_cable.powernet.avail)
+        dmg_done = electrocute_mob(M, current_cable.powernet, src, siemens_coeff) / 20 //Inverting multiplier of damage done in proc
     // Otherwise use our charge reserve, if any
     else if(charge < 1000)
         to_chat(src,"<span class='warning'>Not enough charge or power on grid to shock with.</span>")
         return
     else
-        dmg_done = M.electrocute_act(30, src, 1) // Basic attack
+        dmg_done = M.electrocute_act(30, src, siemens_coeff) // Basic attack
         charge -= 1000
     add_logs(src, M, "shocked ([dmg_done]dmg)", admin = (src.ckey && M.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 
@@ -516,9 +370,10 @@
 
 // Called in Life() per tick
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
-    var/amount_to_drain = charge_absorb_amount
+    max_can_absorb = current_battery.output
+    var/amount_to_drain = charge_absorb_amount * 10
     // Cap conditions
-    if(current_battery.charge <= charge_absorb_amount)
+    if(current_battery.charge <= amount_to_drain)
         amount_to_drain = current_battery.charge
     if(maxcharge <= max_can_absorb && charge >= maxcharge)
         maxcharge += amount_to_drain
@@ -535,9 +390,11 @@
 
 // This too
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
+    // Was too pitiful at normal level, this should now allow a maximum of 400kw from the best power cells, just below 600kw from best SME
+    max_can_absorb = current_apc.cell.maxcharge * 10
     var/amount_to_drain = charge_absorb_amount
     // Cap conditions
-    if(current_apc.cell.charge <= charge_absorb_amount)
+    if(current_apc.cell.charge <= amount_to_drain)
         amount_to_drain = current_apc.cell.charge
     if(maxcharge <= max_can_absorb && charge >= maxcharge)
         maxcharge += amount_to_drain
@@ -554,19 +411,18 @@
 
 // Helper for client image managing
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
-    // Make sure we're on a new net and have a client
-    if(client && (current_net != previous_net))
+    // Make sure we have a client
+    if(client)
         // Reset this
         for(var/image/current_image in cables_shown)
             client.images -= current_image
-        if(current_cable)
+        cables_shown.Cut()
+        // Go through all powernets in the game
+        for(var/datum/powernet/current_net in powernets)
             // Add all the cables on the powernet to our images, that's why we have this var
             for(var/obj/structure/cable/C in current_net.cables)
-                var/turf/simulated/floor/F = get_turf(C)
-                // Untiled ones only, otherwise redundant
-                if(istype(F,/turf/simulated/floor) && F.floor_tile)
-                    var/image/CI = image(C, C.loc, layer = ABOVE_LIGHTING_LAYER, dir = C.dir)
-                    // Easy visibility here
-                    CI.plane = ABOVE_LIGHTING_PLANE
-                    cables_shown += CI
-                    client.images += CI
+                var/image/CI = image(C, get_turf(C), layer = ABOVE_LIGHTING_LAYER, dir = C.dir)
+                // Easy visibility here
+                CI.plane = ABOVE_LIGHTING_PLANE
+                cables_shown += CI
+                client.images += CI

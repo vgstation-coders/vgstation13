@@ -536,6 +536,7 @@
 				if(istype(MA,/obj/machinery/computer))
 					var/obj/machinery/computer/CM = MA
 					CM.empproof = empproof // Transfer status to new item
+					src.transfer_fingerprints_to(CM)
 				qdel(src)
 				return 1
 	return 0

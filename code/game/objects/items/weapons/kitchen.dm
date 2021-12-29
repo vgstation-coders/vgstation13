@@ -176,6 +176,8 @@
 	icon_state = "pspoon"
 	melt_temperature = MELTPOINT_PLASTIC
 	bendable = FALSE
+	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
+	w_type = RECYK_PLASTIC
 
 /*
  * Forks
@@ -254,6 +256,8 @@
 	desc = "Yay, no washing up to do."
 	icon_state = "pfork"
 	melt_temperature = MELTPOINT_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/kitchen/utensil/fork/teflon
 	name = "teflon fork"
@@ -295,6 +299,8 @@
 	throwforce = 1
 	sharpness = 0.8
 	melt_temperature = MELTPOINT_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/kitchen/utensil/knife/nazi
 	name = "nazi knife"

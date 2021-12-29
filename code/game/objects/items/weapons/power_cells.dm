@@ -47,6 +47,10 @@
 	name = "\improper Nanotrasen brand rechargeable D battery"
 	maxcharge = 700 //for the ion carbine
 
+/obj/item/weapon/cell/crap/worse
+	name = "\improper Nanotrasen brand rechargeable AAA battery"
+	maxcharge = 250
+
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
@@ -225,7 +229,7 @@
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
 	var/charge_rate = 100
 	var/damaged = FALSE
-	
+
 /obj/item/weapon/cell/rad/empty/New()
 	..()
 	charge = 0
@@ -262,7 +266,7 @@
 		damaged = FALSE //so you don't get the damaged examine if the cell is broken
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
 
-		
+
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
 	if(maxcharge > 0)
@@ -278,7 +282,7 @@
 				charge = 0
 				charge_rate *= severity*0.2
 				damaged = TRUE
-			
+
 /obj/item/weapon/cell/rad/examine(mob/user)
 	..()
 	if(damaged)

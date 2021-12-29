@@ -86,16 +86,10 @@ var/creating_arena = FALSE
 			icon_state = body.icon_state
 			overlays = body.overlays
 		*/
-		
-		if(isSaMMI(body))
-			var/mob/living/silicon/robot/mommi/sammi/SM = body
-			icon = SM.ghost_icon
-			icon_state = SM.ghost_icon_state
-			overlays = SM.ghost_overlays
-		else
-			icon = body.icon
-			icon_state = body.icon_state
-			overlays = body.overlays
+
+		icon = body.icon
+		icon_state = body.icon_state
+		overlays = body.overlays
 
 		// No icon?  Ghost icon time.
 		if(isnull(icon) || isnull(icon_state))
@@ -106,9 +100,6 @@ var/creating_arena = FALSE
 		// END BAY SPOOKY GHOST SPRITES
 
 		gender = body.gender
-		if(isSaMMI(body))
-			var/mob/living/silicon/robot/mommi/sammi/SM2 = body
-			name = SM2.ghost_name
 		if(body.mind && body.mind.name)
 			name = body.mind.name
 		else

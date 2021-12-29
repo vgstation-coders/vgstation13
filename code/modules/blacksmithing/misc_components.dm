@@ -1,5 +1,6 @@
 /obj/item/item_head
 	icon = 'icons/obj/misc_components.dmi'
+	w_type = RECYK_METAL
 	var/obj/item/result
 	var/list/finishing_requirements = list(/obj/item/item_handle) //Things required to finish this object.
 
@@ -17,11 +18,18 @@
 		if(do_after(user, src, 4 SECONDS))
 			if(istype(I, /obj/item/stack))
 				var/obj/item/stack/S = I
+				var/datum/material/stack_material = S.materials
 				if(!S.use(1))
 					return
+				else
+					if (stack_material) // Not all sheets have a material type
+						materials.addAmount(stack_material.id, S.perunit)
 			else
 				if(!user.drop_item(I))
 					return
+				else
+					materials.addFrom(I.materials)
+
 			finishing_requirements.Remove(I.type)
 			gen_quality(quality-I.quality, quality, I.material_type)
 			if(!istype(I, /obj/item/stack))
@@ -30,6 +38,8 @@
 			if(!finishing_requirements.len) //We're done
 				user.drop_item(src)
 				result = new result
+				result.materials = new /datum/materials(result)
+				result.materials.addFrom(materials)
 				var/datum/material/mat = material_type
 				if(mat)
 					result.dorfify(mat, 0, quality)
@@ -61,18 +71,23 @@
 	icon = 'icons/obj/misc_components.dmi'
 	icon_state = "item_handle"
 	desc = "a generic handle, with no purpose."
+	starting_materials = list(MAT_WOOD = 0.5 * CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
 
 /obj/item/sword_handle
 	name = "sword handle"
 	icon = 'icons/obj/misc_components.dmi'
 	icon_state = "sword_handle"
 	desc = "A generic sword handle."
+	starting_materials = list(MAT_WOOD = 0.5 * CC_PER_SHEET_WOOD, MAT_IRON = 0.5 * CC_PER_SHEET_METAL)
+	w_type = RECYK_METAL
 
 /obj/item/cross_guard
 	name = "sword crossguard"
 	icon = 'icons/obj/misc_components.dmi'
 	icon_state = "crossguard"
 	desc = "Used to make sure what you're stabbing doesn't slide all the way to your hand, or your hand slide to the stabby bit."
+	w_type = RECYK_METAL
 
 /obj/item/item_head/sword
 	name = "sword blade"
@@ -106,3 +121,4 @@
 	icon_state = "large_plate"
 	finishing_requirements = list(/obj/item/stack/leather_strip)
 	result = /obj/item/weapon/shield/riot/tower
+	w_type = RECYK_METAL

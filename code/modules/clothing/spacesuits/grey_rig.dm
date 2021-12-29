@@ -49,7 +49,7 @@
 	item_state = "rig_grey_soldier"
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 40, bullet = 15, laser = 50, energy = 15, bomb = 30, bio = 100, rad = 20)
-	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/laser)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/handcuffs, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/soldier
 
 /obj/item/clothing/head/helmet/space/rig/grey/soldier
@@ -68,7 +68,7 @@
 	icon_state = "rig_grey_leader"
 	item_state = "rig_grey_leader"
 	armor = list(melee = 50, bullet = 25, laser = 60, energy = 25, bomb = 40, bio = 100, rad = 50)
-	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/laser, /obj/item/weapon/handcuffs)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/handcuffs, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/leader
 
 

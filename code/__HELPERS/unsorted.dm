@@ -1880,7 +1880,7 @@ Game Mode config tags:
 				continue
 			taken_freqs.Add(chosen_freq)
 			freqs[i] = chosen_freq
-			world.log << "freq [i] is now [chosen_freq]"
+			world.log << "Radio frequency [i] is now [chosen_freq]"
 			freq_found = TRUE
 
 	freqtospan = list(
@@ -1943,6 +1943,22 @@ Game Mode config tags:
 	"Service" = SER_FREQ,
 	"Supply" = SUP_FREQ
 	)
+
+/proc/update_radio_frequency(var/name, var/freq, var/color, var/mob/user, var/update_station = TRUE)
+	var/newspan = null
+	if(name in freqs)
+		newspan = freqtospan["[freqs[name]]"]
+	freqs[name] = freq
+	radiochannels[name] = freqs[name]
+	radiochannelsreverse["[freqs[name]]"] = name
+	if(color)
+		freqtocolor["[freqs[name]]"] = color
+	if(newspan)
+		freqtospan["[freqs[name]]"] = newspan
+	if(update_station)
+		stationchannels[name] = freqs[name]
+	log_admin("[update_station ? "World" : "Non-station"] radio frequency [name] is now [freqs[name]][user ? " set by [key_name(user)]": ""]")
+	message_admins("[update_station ? "World" : "Non-station"] radio frequency [color ? "<font color=[freqtocolor["[freqs[name]]"]]>" : ""][name][color ? "</font color>" : ""] is now [freqs[name]][user ? " set by [key_name(user)] ([formatJumpTo(user, "JMP")])" : ""]")
 
 /proc/getviewsize(view)
 	if(isnum(view))

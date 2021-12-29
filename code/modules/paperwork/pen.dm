@@ -111,7 +111,7 @@
 		text_color = P.colour
 	else if(istype(P, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = P
-		text_color = C.colour
+		text_color = C.mainColour
 
 	return "<span style=\"[style];color:[text_color]\">[t]</span>"
 
@@ -198,6 +198,7 @@
 	pressure_resistance = 2
 
 	var/colour = "black"	//what colour the ink is!
+	var/colour_rgb = "#000000"
 	var/style_type = /datum/writing_style/pen
 	var/nano_style_type = /datum/writing_style/pen/nano_paper
 	var/datum/writing_style/style
@@ -236,16 +237,19 @@
 	desc = "It's a normal blue ink pen."
 	icon_state = "pen_blue"
 	colour = "blue"
+	colour_rgb = "#0000ff"
 
 /obj/item/weapon/pen/red
 	desc = "It's a normal red ink pen."
 	icon_state = "pen_red"
 	colour = "red"
+	colour_rgb = "#ff0000"
 
 /obj/item/weapon/pen/invisible
 	desc = "It's an invisble pen marker."
 	icon_state = "pen"
 	colour = "white"
+	colour_rgb = "#ffffff"
 
 /obj/item/weapon/pen/NT
 	name = "promotional Nanotrasen pen"

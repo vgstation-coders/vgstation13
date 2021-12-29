@@ -62,12 +62,13 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if(species && species.anatomy_flags & NO_BLOOD)
 		return
 
+
 	if(stat != DEAD && bodytemperature >= 170)	//Dead or cryosleep people do not pump the blood.
 
 		var/blood_volume = round(vessel.get_reagent_amount(BLOOD))
 
 		//Blood regeneration if there is some space
-		if(blood_volume < BLOOD_VOLUME_MAX && blood_volume)
+		if(blood_volume < (disabilities & ANEMIA ? BLOOD_VOLUME_SAFE+10 : BLOOD_VOLUME_MAX) && blood_volume)
 			var/datum/reagent/blood/B = locate() in vessel.reagent_list //Grab some blood
 			if(B) // Make sure there's some blood at all
 				B.volume += 0.1 // regenerate blood VERY slowly

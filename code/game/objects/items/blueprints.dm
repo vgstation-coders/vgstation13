@@ -538,7 +538,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	var/turf/home_base = get_step(get_turf(DP), DP.dir)
 	var/obj/docking_port/destination/my_shuttle_home_base = new(home_base)
 	my_shuttle_home_base.name = "[name] home port"
-	my_shuttle_home_base.dir = reverse_direction(DP.dir)
+	my_shuttle_home_base.dir = opposite_dirs[DP.dir]
 
 	var/datum/shuttle/custom/S = new(starting_area = A)
 	S.initialize()

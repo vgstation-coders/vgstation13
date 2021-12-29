@@ -526,11 +526,11 @@ var/quote = ascii2text(34)
 /proc/is_letter(var/thing) // Thing is an ascii number
     return (thing >= 65 && thing <= 122)
 
-/proc/buttbottify(var/message)
+/proc/buttbottify(var/message, var/min = 1, var/max = 3)
 	var/list/split_phrase = splittext(message," ") // Split it up into words.
 
 	var/list/prepared_words = split_phrase.Copy()
-	var/i = rand(1,3)
+	var/i = rand(min,max)
 	for(,i > 0,i--) //Pick a few words to change.
 
 		if (!prepared_words.len)

@@ -450,6 +450,8 @@ var/list/barsigns = list()
 
 //You get actual annoying sounds and scrambled symbol fonts If its emag'd
 /obj/structure/sign/double/barsign/emag_act(mob/user)
+	to_chat(user, "<span class='warning'>You use the emag on the bar sign.</span>")
+
 	sound_selection["Rooster"] = 'sound/misc/6amRooster.wav'
 	sound_selection["Wolf"] = 'sound/misc/6pmWolf.wav'
 	sound_selection["Male Scream"] = 'sound/misc/malescream5.ogg'
@@ -460,7 +462,7 @@ var/list/barsigns = list()
 
 /obj/structure/sign/double/barsign/mining
 	name = "Armok's Bar N Grill"
-	icon_state = "armokbar" 
+	icon_state = "armokbar"
 
 #undef PREMADE_SCREEN
 #undef CUSTOM_SCREEN

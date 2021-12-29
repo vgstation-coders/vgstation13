@@ -96,8 +96,8 @@
 			var/datum/rune_spell/instance = blood_spell
 			if (initial(instance.secret))
 				continue
-			available_runes.Add("\Roman[i]-[initial(instance.name)]")
-			available_runes["\Roman[i]-[initial(instance.name)]"] = instance
+			available_runes.Add("[initial(instance.name)] - \Roman[i]")
+			available_runes["[initial(instance.name)] - \Roman[i]"] = instance
 			i++
 		var/spell_name = input(M,"Remember how to trace a given rune.", "Trace Rune with a Guide", null) as null|anything in available_runes
 

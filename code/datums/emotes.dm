@@ -6,6 +6,7 @@
 /datum/emote
 	var/key = "" //What calls the emote
 	var/key_third_person = "" //This will also call the emote
+	var/key_shorthand = "" //This will also call the emote
 	var/message = "" //Message displayed when emote is used
 	var/message_mime = "" //Message displayed if the user is a mime
 	var/message_alien = "" //Message displayed if the user is a grown alien
@@ -35,6 +36,8 @@
 /datum/emote/New()
 	if(key_third_person)
 		emote_list[key_third_person] = src
+	if(key_shorthand)
+		emote_list[key_shorthand] = src
 	if(!message_mommi)
 		message_mommi = message_robot
 
