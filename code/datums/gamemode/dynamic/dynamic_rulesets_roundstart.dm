@@ -514,14 +514,19 @@ Assign your candidates in choose_candidates() instead.
 			assigned.Add(M)
 			candidates.Remove(M)
 		else if(M.mind.assigned_role == "Cyborg") // If no AIs in the current player list, make a cyborg candidate the AI and give them the proper roles.
-			M.mind.assigned_role = "AI"
-			if(!isAI(M))
-				assigned.Remove(M)
-				M = M.AIize()
-			assigned.Add(M)
-			candidates.Remove(M)
+			make_AI(M)
 			break
+	if(!assigned.len) // If neither, just pick the rest as normal
+		var/mob/M2 = pick(candidates)
+		make_AI(M2)
 	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/malf/proc/make_AI(var/mob/M)
+	M.mind.assigned_role = "AI"
+	if(!isAI(M))
+		M = M.AIize()
+	assigned.Add(M)
+	candidates.Remove(M)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
