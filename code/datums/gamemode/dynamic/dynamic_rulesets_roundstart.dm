@@ -507,12 +507,15 @@ Assign your candidates in choose_candidates() instead.
 	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
+	var/ais = 0
+	for(var/mob/living/silicon/ai/AI in player_list)
+		ais++
 	for(var/mob/M in candidates)
 		if(M.mind.assigned_role == "AI") // Only AIs readied can become malf
 			assigned.Add(M)
 			candidates.Remove(M)
 	
-	if(!assigned.len) //If no candidates found before, make someone the AI and give them the proper roles.
+	if(!ais) //If no AIs in the game, make someone the AI and give them the proper roles.
 		var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
 		M.mind.assigned_role = "AI"
 		if(!isAI(M))
