@@ -44,23 +44,24 @@
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return
-	overlays.len = 0
+
+	// cover
+	var/image/cover = image(icon, src, "malf_gauge_cover")
+	cover.layer = MIND_UI_FRONT
 
 	// gauge
-
 	var/image/gauge = image('icons/ui/malf/18x200.dmi', src, "power")
 	var/matrix/gauge_matrix = matrix()
 	gauge_matrix.Scale(1,M.processing_power/M.max_processing_power)
 	gauge.transform = gauge_matrix
 	gauge.layer = MIND_UI_BUTTON
 	gauge.pixel_y = round(-79 + 100 * (M.processing_power/M.max_processing_power))
+	
+
+	overlays = 0
+	overlays += cover
 	overlays += gauge
 
-	// cover
-
-	var/image/cover = image(icon, src, "malf_gauge_cover")
-	cover.layer = MIND_UI_FRONT
-	overlays += cover
 
 //------------------------------------------------------------
 

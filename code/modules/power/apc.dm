@@ -908,7 +908,7 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if((!aidisabled) && malflocked && usr != malfai) //exclusive control enabled
+	if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
 		to_chat(usr, "Access refused.")
 		return 0
 	if(!can_use(usr, 1))
