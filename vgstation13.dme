@@ -456,6 +456,7 @@
 #include "code\datums\gamemode\objectives\target\killorexile.dm"
 #include "code\datums\gamemode\objectives\target\locate.dm"
 #include "code\datums\gamemode\objectives\target\protection.dm"
+#include "code\datums\gamemode\objectives\target\rearrange.dm"
 #include "code\datums\gamemode\objectives\target\sacrifice.dm"
 #include "code\datums\gamemode\objectives\target\target.dm"
 #include "code\datums\gamemode\objectives\target\nanotrasen\brig.dm"
