@@ -47,8 +47,7 @@
 				for(var/datum/objective/O in T.objectives.GetObjectives())
 					O.force_success = TRUE
 			AppendObjective(/datum/objective/time_agent_extract)
-			for(var/datum/role/time_agent/T in members)
-				T.antag.current.AnnounceObjectives()
+			AnnounceObjectives()
 			return
 		if(FACTION_ENDGAME)
 			return
