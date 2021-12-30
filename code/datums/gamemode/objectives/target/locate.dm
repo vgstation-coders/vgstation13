@@ -34,12 +34,10 @@
 	return TRUE
 
 /datum/objective/target/locate/format_explanation()
-	var/explanation = "Locate "
 	if(objects_to_locate.len)
-		explanation += "[counted_english_list(objects_to_locate)] using your chronocapture device."
+		return "Locate [counted_english_list(objects_to_locate)] using your chronocapture device."
 	else
-		explanation = "No items to locate."
-	return explanation
+		return = "No items to locate."
 
 /datum/objective/target/locate/proc/check(var/list/objects)
 	for(var/atom/A in objects_to_locate)
