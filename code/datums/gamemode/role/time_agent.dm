@@ -73,7 +73,7 @@
 	time_elapsed++
 	if(time_elapsed % action_timer == 0)
 		timer_action(time_elapsed / action_timer)
-	if (antag && antag.current.hud_used)
+	if (antag && antag.current && antag.current.hud_used)
 		if(antag.current.hud_used.countdown_display)
 			antag.current.hud_used.countdown_display.overlays.len = 0
 			var/time_until_next_action = action_timer - (time_elapsed % action_timer)
