@@ -232,11 +232,12 @@
 
 /obj/item/device/jump_charge/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istimeagent(user) && istype(target, /obj/effect/time_anomaly))
-		var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
-		if(R)
-			var/datum/objective/time_agent_extract/TAE = locate() in R.objectives.GetObjectives()
+		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT)
+		if(F)
+			var/datum/objective/time_agent_extract/TAE = locate() in F.objectives.GetObjectives()
 			if(TAE && target == TAE.anomaly)
 				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
+				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
 				R.extract()
 				TAE.anomaly = null
 				qdel(target)
