@@ -2,8 +2,8 @@
 	name = "rearrange object"
 	var/area/destination
 	var/list/objects_in_area = list()
-	obj_min = 1
-	obj_max = 1
+	object_min = 1
+	object_max = 1
 
 /datum/objective/target/locate/rearrange/format_explanation()
 	if(objects_to_locate.len)
