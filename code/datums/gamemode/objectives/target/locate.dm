@@ -37,7 +37,7 @@
 	if(objects_to_locate.len)
 		return "Locate [counted_english_list(objects_to_locate)] using your chronocapture device."
 	else
-		return = "No items to locate."
+		return "No items to locate."
 
 /datum/objective/target/locate/proc/check(var/list/objects)
 	for(var/atom/A in objects_to_locate)
