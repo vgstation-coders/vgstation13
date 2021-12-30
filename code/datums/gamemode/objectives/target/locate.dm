@@ -36,9 +36,9 @@
 /datum/objective/target/locate/format_explanation()
 	var/explanation = "Locate "
 	if(objects_to_locate.len)
-		explanation += counted_english_list(objects_to_locate)
+		explanation += "[counted_english_list(objects_to_locate)] using your chronocapture device."
 	else
-		explanation = "All items located."
+		explanation = "No items to locate."
 	return explanation
 
 /datum/objective/target/locate/proc/check(var/list/objects)
@@ -50,5 +50,4 @@
 				to_chat(owner.current, "<span class='notice'>Remaining items to locate: [capitalize(counted_english_list(objects_to_locate))].</span>")
 			else
 				to_chat(owner.current, "<span class='notice'>All items located!</span>")
-	explanation_text = format_explanation()
 	IsFulfilled()

@@ -52,7 +52,7 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Time Agent.<br>Specifically you are a scientist by the name of John Beckett, having discovered a method to travel through time, and becoming lost to it. <br>\
 			Now, you are forced to take responsibility for maintaining the time stream by the mysterious 'Time Agency'.<br>\
 			You only have a limited amount of time before this timeline is deemed lost, in which case you will be forcibly extracted and the mission considered a failure.<br>\
-			Locate certain time-sensitive objects scattered around the station, so as to locate the time anomaly and use it for extraction.<br>\
+			Locate certain time-sensitive objects scattered around the station and record them with your chronocapture device, so as to locate the time anomaly and use it for extraction.<br>\
 			This may not be the first time you visit this timeline, and it may not be the last.</span>")
 
 	to_chat(antag.current, "<span class='danger'>Remember that the items you are provided with are largely non-expendable. Try not to lose them, especially the jump charge, as it is your ticket home.</span>")
