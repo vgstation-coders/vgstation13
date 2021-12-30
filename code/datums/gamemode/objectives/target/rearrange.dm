@@ -5,20 +5,10 @@
 	obj_max = 1
 
 /datum/objective/target/locate/rearrange/format_explanation()
-	var/explanation = "Move "
 	if(objects_to_locate.len)
-		if(objects_to_locate.len > 1)
-			for(var/i in objects_to_locate)
-				if(i != objects_to_locate[objects_to_locate.len])
-					explanation += "\an [i], "
-				else
-					explanation += "& \an [i]."
-		else
-			explanation += "\an [objects_to_locate[1]]."
-		explanation += "to [destination.name]"
+		return "Move [counted_english_list(objects_to_locate)] to [destination.name]."
 	else
-		explanation = "Item moved."
-	return explanation
+		return "No items to move."
 
 /datum/objective/target/locate/rearrange/find_target()
 	destination = pick(the_station_areas - /area/solar)
@@ -26,11 +16,10 @@
 	return TRUE
 
 /datum/objective/target/locate/rearrange/check(var/list/objects)
-	for(var/A in objects_to_locate)
-		if(is_type_in_list(objects_to_locate[A], objects))
-			var/atom/thing = objects_to_locate[A]
-			if(istype(thing.loc, destination)
-				to_chat(owner.current, "[initial(thing.name)] moved.")
+	for(var/atom/A in objects_to_locate)
+		if(locate(A) in objects)
+			if(istype(get_area(A), destination)
 				objects_to_locate.Remove(A)
-	explanation_text = format_explanation()
+	if(!objects_to_locate.len)
+		to_chat(owner.current, "<span class='notice'>All items moved to [destination.name].</span>")
 	IsFulfilled()
