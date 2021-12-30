@@ -44,7 +44,7 @@
 /datum/objective/target/locate/proc/check(var/list/objects)
 	for(var/atom/A in objects_to_locate)
 		if(locate(A) in objects)
-			to_chat(owner.current, "<span class='notice'>capitalize([initial(A.name)]) located.</span>")
+			to_chat(owner.current, "<span class='notice'>[capitalize(initial(A.name))] located.</span>")
 			objects_to_locate.Remove(A)
 			if(objects_to_locate.len)
 				to_chat(owner.current, "<span class='notice'>Remaining items to locate: [capitalize(counted_english_list(objects_to_locate))].</span>")
