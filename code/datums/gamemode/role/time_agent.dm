@@ -60,7 +60,10 @@
 
 
 /datum/role/time_agent/ForgeObjectives()
-	AppendObjective(/datum/objective/target/locate)
+	if(prob(70))
+		AppendObjective(/datum/objective/target/locate)
+	else
+		AppendObjective(/datum/objective/target/locate/rearrange)
 	if(prob(30))
 		AppendObjective(/datum/objective/target/assassinate)
 	AppendObjective(/datum/objective/freeform/aid)
