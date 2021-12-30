@@ -234,11 +234,12 @@
 	if(istimeagent(user) && istype(target, /obj/effect/time_anomaly))
 		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT)
 		if(F)
-			var/datum/objective/time_agent_extract/TAE = locate() in F.objectives.GetObjectives()
+			var/datum/objective/time_agent_extract/TAE = locate() in F.objective_holder.GetObjectives()
 			if(TAE && target == TAE.anomaly)
 				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
 				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
 				R.extract()
+				TAE.extracted = TRUE
 				TAE.anomaly = null
 				qdel(target)
 		return
