@@ -67,19 +67,15 @@
 
 
 /datum/role/time_agent/process()
-	// var/list/datum/objective/jecties = objectives.GetObjectives()
-	// if(!jecties.len || locate(/datum/objective/time_agent_extract) in objectives.GetObjectives())
-	// 	return //Not set up yet
-	// var/finished = TRUE
-	// for(var/datum/objective/O in objectives.GetObjectives())
-	// 	if(O.IsFulfilled())
-	// 		if(faction)
-	// 			var/datum/faction/time_agent/agency = faction
-	// 			agency.stage(FACTION_ACTIVE)
-	// 		break
-	// if(finished)
-	// 	to_chat(antag.current, "<span class = 'notice'>Objectives complete. Triangulating anomaly location.</span>")
-	// 	AppendObjective(/datum/objective/time_agent_extract)
+	var/list/datum/objective/jecties = objectives.GetObjectives()
+	if(!jecties.len || locate(/datum/objective/time_agent_extract) in jecties)
+		return //Not set up yet
+	var/finished = TRUE
+	for(var/datum/objective/O in jecties)
+		finished &= O.IsFulfilled()
+	if(finished && faction)
+		var/datum/faction/time_agent/agency = faction
+		agency.stage(FACTION_ACTIVE)
 
 	time_elapsed++
 	if(time_elapsed % action_timer == 0)
