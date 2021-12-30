@@ -15,6 +15,7 @@
 	name = TIMEAGENT
 	id = TIMEAGENT
 	required_pref = TIMEAGENT
+	wikiroute = TIMEAGENT
 	logo_state = "time-logo"
 	default_admin_voice = "The Agency"
 	admin_voice_style = "notice"
