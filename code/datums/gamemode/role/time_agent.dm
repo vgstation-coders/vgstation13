@@ -150,18 +150,23 @@
 	if(player.client && get_role_desire_str(player.client.prefs.roles[TIMEAGENT]) != "Never")
 		to_chat(player, "<span class=\"recruit\">A [src] is being targeted by his evil twin. ([controls])</span>")
 
+// For compatiability with the recruiter function callbacks, stops a runtime.
+/datum/role/time_agent/proc/investigation_log(var/subject, var/message)
+	antag.current.investigation_log(subject,message)
 
 /datum/role/time_agent/proc/recruiter_recruited(mob/dead/observer/player)
 	if(player)
 		qdel(eviltwinrecruiter)
 		eviltwinrecruiter = null
-		var/mob/living/carbon/human/H = new /mob/living/carbon/human
+		var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(timeagentstart))
 		H.ckey = player.ckey
 		H.client.changeView()
 		var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind, fac = src.faction)
 		twin.erase_target = src
-		twin.OnPostSetup()
 		twin.Greet(GREET_DEFAULT)
+		twin.ForgeObjectives()
+		twin.OnPostSetup()
+		twin.AnnounceObjectives()
 	else
 		eviltwinrecruiter.request_player()
 

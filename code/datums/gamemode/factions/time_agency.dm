@@ -69,7 +69,7 @@
 
 /obj/structure/button/time_agent/activate(mob/user)
 	var/mob/living/carbon/human/H = user
-	var/datum/role/time_agent/R = H.mind.GetRole(TIMEAGENT)
+	var/datum/role/time_agent/R = H.mind.GetRole(TIMEAGENT) || H.mind.GetRole(TIMEAGENTTWIN)
 	if(R)
 		R.time_elapsed = 59 // increments every tick or so, teleport to station at 60.
 
