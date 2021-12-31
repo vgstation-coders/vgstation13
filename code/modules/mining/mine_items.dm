@@ -403,15 +403,12 @@ proc/move_mining_shuttle()
 		I = M.get_held_item_by_index(GRASP_LEFT_HAND)
 	else if(user.zone_sel.selecting == "r_hand")
 		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
-	if(I && istype(I,src.type) && a_intent == I_HELP)
+	if(I && istype(I,src.type) && user.a_intent == I_HELP)
 		if (prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
+			playsound(user, 'sound/items/trayhit1.ogg', 50, 1)
 		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
-		visible_message( \
-			"<span class='notice'>[src] high shovels [M].</span>", \
-			"<span class='notice'>You high shovel [M].</span>", \
-			)
+			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
+		visible_message("<span class='notice'>[user] high shovels [M].</span>", "<span class='notice'>You high shovel [M].</span>")
 	else
 		..()
 
