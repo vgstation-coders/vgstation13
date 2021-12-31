@@ -32,6 +32,7 @@
 	var/overdose_am = 0
 	var/overdose_tick = 0
 	var/tick = 0
+	var/real_tick = 0 // For advanced reagent scanners
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
@@ -143,6 +144,7 @@
 
 /datum/reagent/proc/metabolize(var/mob/living/M)
 	tick++
+	real_tick++
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
