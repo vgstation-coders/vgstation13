@@ -56,7 +56,6 @@
 	return
 
 /spell/changeling/horrorform/proc/deactivate(var/mob/living/carbon/human/user)
-	..()
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return
