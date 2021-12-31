@@ -3,9 +3,8 @@
 	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
 	abbreviation = "AD"
 	hud_state = "absorbdna"
-	
 	spell_flags = NEEDSHUMAN
-
+	horrorallowed = 0
 	
 
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
@@ -81,8 +80,10 @@
 	for(var/datum/reagent/blood/B in user.vessel.reagent_list)
 		B.volume = min(BLOOD_VOLUME_MAX, avail_blood + B.volume)
 
+	//Steal their wellbeing!
 	if(user.nutrition < 400)
 		user.nutrition = min((user.nutrition + T.nutrition), 400)
+	user.health = user.maxHealth
 
 	changeling.chem_charges += 10
 	changeling.powerpoints += 2

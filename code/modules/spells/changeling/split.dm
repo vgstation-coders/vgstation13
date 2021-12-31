@@ -3,6 +3,7 @@
 	desc = "Split your body into two lifeforms."
 	abbreviation = "SP"
 	hud_state = "split"
+	charge_max = 300
 	cooldown_min = 30 SECONDS
 	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
 	chemcost = 50
@@ -25,9 +26,9 @@
 	if (changeling.splitcount < 2) //<2 is two splits max
 		user.visible_message("[user] is preparing to generate a new form.")
 		Splitting()
-		changeling.geneticdamage = 30
 	else
 		user.visible_message("You are unable to split again.")
+	return
 
 /spell/changeling/split/proc/Splitting()
 	if(polling_ghosts)
@@ -98,9 +99,9 @@
 	
 	newbody.updateChangelingHUD()
 	newbody.regenerate_icons()
-	feedback_add_details("changeling_powers","TR")	//no idea what this does
 	update_faction_icons()
 	nanomanager.close_uis(src)
+	feedback_add_details("changeling_powers","SP")
 	recruiter.Destroy()
 
 

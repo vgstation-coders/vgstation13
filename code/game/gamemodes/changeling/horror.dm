@@ -38,6 +38,4 @@
 
 
 /datum/species/horror/handle_post_spawn(var/mob/living/carbon/human/H)
-	H.my_appearance.h_style = "Bald"
-	H.my_appearance.f_style = "Shaved"
-	H.update_hair()
+	H.make_invisible(HORROR, 2 MINUTES)
