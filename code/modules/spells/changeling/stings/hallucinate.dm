@@ -6,8 +6,7 @@
 
 	chemcost = 15
 	silent = 1
-	charge_max = 45 SECONDS
-	cooldown_min = 45 SECONDS
+	delay = 45 SECONDS
 
 
 /spell/changeling/sting/hallucinate/lingsting(var/mob/user, var/mob/living/target)

@@ -83,19 +83,6 @@
 		O.setGender(FEMALE)
 	else
 		O.setGender(MALE)
-	//Hair
-	//var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, O.species.name)
-	//var/hair = clamp(dna.GetUIValueRange(DNA_UI_HAIR_STYLE, species_hair.len), 1, species_hair.len)
-	//my_appearance.h_style = species_hair[hair]
-
-	//Facial Hair
-	//var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, O.species.name)
-	//var/beard = clamp(dna.GetUIValueRange(DNA_UI_BEARD_STYLE, species_facial_hair.len), 1, species_facial_hair.len)
-	//my_appearance.f_style = species_facial_hair[beard]
-	//O.my_appearance.h_style = pick(species_hair)
-	//O.my_appearance.f_style = pick(species_facial_hair)
-	//user.visible_message("[species_hair][species_facial_hair]")
-	//horrorform removes hair
 	O.update_hair()
 	user.transferImplantsTo(O)
 	user.transferBorers(O)
