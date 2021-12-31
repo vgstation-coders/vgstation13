@@ -412,6 +412,8 @@ Status: []<BR>"},
 	if(check_anomalies || emagged)
 		for(var/obj/effect/blob/B in view(7+emagged*5, src))
 			targets += B
+		for(var/mob/living/simple_animal/hostile/blobspore/BS in view(7+emagged*5, src))
+			targets += BS
 
 	if (targets.len) // if there are targets to shoot
 		new_target = pick(targets)

@@ -190,6 +190,7 @@
 	while(src && enabled && !stat && check_target(cur_target))
 		src.dir = get_dir(src, cur_target)
 		shootAt(cur_target)
+		cur_target = get_new_target()
 		sleep(shot_delay)
 	return
 
@@ -651,6 +652,10 @@
 			pos_targets += M
 		for(var/obj/effect/blob/B in oview(scan_range, src))
 			pos_targets += B
+		for(var/mob/living/simple_animal/hostile/blobspore/BS in oview(scan_range,src))
+			if(BS.stat || BS.lying || (BS in exclude))
+				continue
+			pos_targets += BS
 	if(pos_targets.len)
 		target = pick(pos_targets)
 	return target
