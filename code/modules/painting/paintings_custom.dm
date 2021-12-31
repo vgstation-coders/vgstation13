@@ -27,14 +27,21 @@
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'
 	var/frame_icon_state = "frame"
+	var/show_on_scoreboard = TRUE
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
 
 /obj/structure/painting/custom/New()
 	src.painting_data = new(src, painting_width, painting_height, painting_offset_x, painting_offset_y, base_color)
+	var/list/gallery = score["global_paintings"]
+	if(!gallery.Find(src))
+		gallery += src
 	..()
 
 /obj/structure/painting/custom/Destroy()
+	var/list/gallery = score["global_paintings"]
+	if(gallery.len && gallery.Find(src))
+		gallery -= src
 	qdel(painting_data)
 	painting_data = null
 	..()
