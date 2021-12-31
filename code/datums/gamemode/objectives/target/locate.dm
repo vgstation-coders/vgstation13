@@ -26,34 +26,25 @@
 	var/min = object_min - 1
 	var/max = (object_max >= object_min) ? object_max : (potential_objects.len-1)
 	for(var/i = 0 to rand(min,max))
-		var/pick = pick(potential_objects)
+		var/type = pick(potential_objects)
+		var/atom/pick = new type
 		objects_to_locate.Add(pick)
-		objects_to_locate[pick] = potential_objects[pick]
-		potential_objects.Remove(pick)
+		potential_objects.Remove(type)
 	explanation_text = format_explanation()
 	return TRUE
 
 /datum/objective/target/locate/format_explanation()
-	var/explanation = "Locate "
 	if(objects_to_locate.len)
-		if(objects_to_locate.len > 1)
-			for(var/obj/i in objects_to_locate)
-				var/name = initial(i.name)
-				if(i != objects_to_locate[objects_to_locate.len])
-					explanation += "\an [name], "
-				else
-					explanation += "& \an [name]."
-		else
-			explanation += "\an [objects_to_locate[1]]."
-	else
-		explanation = "All items located."
-	return explanation
+		return "Locate [counted_english_list(objects_to_locate)] using your chronocapture device."
+	return "No items to locate."
 
 /datum/objective/target/locate/proc/check(var/list/objects)
-	for(var/A in objects_to_locate)
-		if(is_type_in_list(objects_to_locate[A], objects))
-			var/atom/thing = objects_to_locate[A]
-			to_chat(owner.current, "[initial(thing.name)] located.")
+	for(var/atom/A in objects_to_locate)
+		if(locate(A) in objects)
+			to_chat(owner.current, "<span class='notice'>[capitalize(initial(A.name))] located.</span>")
 			objects_to_locate.Remove(A)
-	explanation_text = format_explanation()
+			if(objects_to_locate.len)
+				to_chat(owner.current, "<span class='notice'>Remaining items to locate: [capitalize(counted_english_list(objects_to_locate))].</span>")
+			else
+				to_chat(owner.current, "<span class='notice'>All items located!</span>")
 	IsFulfilled()
