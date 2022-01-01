@@ -16,9 +16,9 @@
 	cold_level_2 = 10 //Default 200
 	cold_level_3 = 20 //Default 120
 
-	heat_level_1 = 420 //Default 360 - Higher is better
-	heat_level_2 = 480 //Default 400
-	heat_level_3 = 1100 //Default 1000
+	heat_level_1 = 360 //Default 360 - Higher is better
+	heat_level_2 = 400 //Default 400
+	heat_level_3 = 1000 //Default 1000
 
 
 	warning_low_pressure = 50
@@ -31,11 +31,12 @@
 	punch_throw_range = 10
 
 	throw_mult = 1.5 // +0.5 for hulk
-	fireloss_mult = 2 // double the damage, half the fun
+	fireloss_mult = 3 // triple the damage, triple the fun
 
 	override_icon = 'icons/mob/horror.dmi'
 	has_mutant_race = 0
 
 
 /datum/species/horror/handle_post_spawn(var/mob/living/carbon/human/H)
+	//hide hair and beard
 	H.make_invisible(HORROR, 2 MINUTES)
