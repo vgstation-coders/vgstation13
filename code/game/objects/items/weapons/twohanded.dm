@@ -197,11 +197,8 @@
 	else if(user.zone_sel.selecting == "r_hand")
 		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
 	if(I && istype(I,src.type) && user.a_intent == I_HELP)
-		if (prob(50))
-			playsound(user, 'sound/items/trayhit1.ogg', 50, 1)
-		else
-			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
 		var/lastpart = ", but it feels too similar to doing it with a shovel, and isn't good."
+		playsound(get_turf(user), 'sounds/weapon/Genhit.ogg', 50, 1)
 		visible_message("<span class='bad'>[user] high spears [M][lastpart]</span>", "<span class='bad'>You high spear [M][lastpart]</span>")
 	else
 		..()
