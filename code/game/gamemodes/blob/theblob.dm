@@ -173,13 +173,14 @@ var/list/blob_overminds = list()
 	update_icon()
 	return
 
-/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
+/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj, var/def_zone, var/damage_override = null)
 	. = ..()
+	var/damage = isnull(damage_override) ? Proj.damage : damage_override
 	switch(Proj.damage_type)
 		if(BRUTE)
-			health -= (Proj.damage/brute_resist)
+			health -= (damage/brute_resist)
 		if(BURN)
-			health -= (Proj.damage/fire_resist)
+			health -= (damage/fire_resist)
 
 	update_health()
 	update_icon()

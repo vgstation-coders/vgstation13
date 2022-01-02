@@ -47,6 +47,7 @@
 				for(var/datum/objective/O in T.objectives.GetObjectives())
 					O.force_success = TRUE
 			AppendObjective(/datum/objective/time_agent_extract)
+			AnnounceObjectives()
 			return
 		if(FACTION_ENDGAME)
 			return
@@ -69,7 +70,7 @@
 
 /obj/structure/button/time_agent/activate(mob/user)
 	var/mob/living/carbon/human/H = user
-	var/datum/role/time_agent/R = H.mind.GetRole(TIMEAGENT)
+	var/datum/role/time_agent/R = H.mind.GetRole(TIMEAGENT) || H.mind.GetRole(TIMEAGENTTWIN)
 	if(R)
 		R.time_elapsed = 59 // increments every tick or so, teleport to station at 60.
 

@@ -45,32 +45,21 @@
 
 	return ..()
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/pre_loaded/New() //Comes preloaded with loads of parts for testing
-	..()
-	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
-	for(var/i in 1 to 8)
-		new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	for(var/i in 1 to 8)
-		new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	for(var/i in 1 to 5)
-		new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
-	for(var/i in 1 to 5)
-		new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
-	for(var/i in 1 to 5)
-		new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
-	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/manipulator/nano(src)
-	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/matter_bin/adv(src)
-	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/micro_laser/high(src)
-	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/scanning_module/adv(src)
-	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/capacitor/adv(src)
-	for(var/i in 1 to 8)
-		new /obj/item/weapon/stock_parts/console_screen(src)
+/obj/item/weapon/storage/bag/gadgets/part_replacer/pre_loaded //Comes preloaded with loads of parts for testing
+	items_to_spawn = list(
+		/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace = 3,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico = 8,
+		/obj/item/weapon/stock_parts/matter_bin/adv/super = 8,
+		/obj/item/weapon/stock_parts/micro_laser/high/ultra = 5,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 5,
+		/obj/item/weapon/stock_parts/capacitor/adv/super = 5,
+		/obj/item/weapon/stock_parts/manipulator/nano = 3,
+		/obj/item/weapon/stock_parts/matter_bin/adv = 3,
+		/obj/item/weapon/stock_parts/micro_laser/high = 3,
+		/obj/item/weapon/stock_parts/scanning_module/adv = 3,
+		/obj/item/weapon/stock_parts/capacitor/adv = 3,
+		/obj/item/weapon/stock_parts/console_screen = 8,
+	)
 
 //Takes a tier 1 stock part path and a target rating
 //Returns a part object

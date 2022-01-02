@@ -188,6 +188,9 @@ For vending packs, see vending_packs.dm*/
 	onclose(user, "computer")
 
 /obj/machinery/computer/supplycomp/attackby(obj/item/I as obj, user as mob)
+
+	add_fingerprint(user)
+
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
@@ -207,6 +210,7 @@ For vending packs, see vending_packs.dm*/
 				A.state = 3
 				A.icon_state = "3"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
@@ -221,6 +225,7 @@ For vending packs, see vending_packs.dm*/
 				A.state = 4
 				A.icon_state = "4"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 	else
 		return ..()
