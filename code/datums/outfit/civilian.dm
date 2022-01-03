@@ -546,7 +546,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 		),
-		"Artist" = list(
+		"Curator" = list(
 			slot_head_str = /obj/item/clothing/head/beret,
 		),
 		/datum/species/plasmaman/ = list(
@@ -575,7 +575,7 @@
 		"Game Master" = list(
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
 		),
-		"Artist" = list(
+		"Curator" = list(
 			/obj/item/stack/sheet/wood/bigstack = null,    //should spawn on the backpack
 			/obj/item/stack/sheet/wood/bigstack = null,
 			/obj/item/weapon/storage/fancy/crayons = null,
