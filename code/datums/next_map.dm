@@ -83,8 +83,7 @@
 /datum/next_map/line
 	name = "Frankenline Station"
 	path = "line"
-<<<<<<< HEAD
-	min_players = 20
+	min_players = 25
 	
 /datum/next_map/line/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
@@ -94,9 +93,6 @@
 		warning(msg)
 		return FALSE
 	return ..()
-=======
-	min_players = 25
->>>>>>> a426e956cbeea177c2743895784fc6c25e96e00a
 
 /datum/next_map/lamprey
 	name = "Lamprey Station"
