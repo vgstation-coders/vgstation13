@@ -56,6 +56,7 @@
 			This may not be the first time you visit this timeline, and it may not be the last.</span>")
 
 	to_chat(antag.current, "<span class='danger'>Remember that the items you are provided with are largely non-expendable. Try not to lose them, especially the jump charge, as it is your ticket home.</span>")
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 
 /datum/role/time_agent/ForgeObjectives()
