@@ -12,7 +12,7 @@
 		return "No items to move."
 
 /datum/objective/target/locate/rearrange/find_target()
-	destination = pick(the_station_areas - /area/solar)
+	destination = new pick(the_station_areas - /area/solar)
 	..()
 	return TRUE
 
@@ -22,7 +22,7 @@
 			objects_in_area.Remove(A)
 	for(var/atom/A in objects_to_locate)
 		if(locate(A) in objects)
-			if(istype(get_area(A), destination) && !(locate(A) in objects_in_area)) // Second, to add anything new
+			if(istype(get_area(A), destination.type) && !(locate(A) in objects_in_area)) // Second, to add anything new
 				objects_in_area.Add(A)
 		if(!(locate(A) in objects_in_area)) // Third, once this is all done, check all objects we need in the area, if one isn't there, break out, we aren't done.
 			return
