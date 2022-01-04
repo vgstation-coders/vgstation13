@@ -235,12 +235,12 @@
 
 /obj/item/device/jump_charge/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istimeagent(user) && istype(target, /obj/effect/time_anomaly))
-		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT)
+		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT) || user.mind.GetFactionFromRole(TIMEAGENTTWIN)
 		if(F)
 			var/datum/objective/time_agent_extract/TAE = locate() in F.objective_holder.GetObjectives()
 			if(TAE && target == TAE.anomaly)
 				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
-				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
+				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT) || user.mind.GetRole(TIMEAGENTTWIN)
 				R.extract()
 				TAE.extracted = TRUE
 				TAE.anomaly = null
@@ -336,4 +336,4 @@
 /obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
 	item_paths["Jump Charge"] = /obj/item/device/jump_charge
 	item_paths["Time Anomaly"] = /obj/effect/time_anomaly
-	target = locate(item_paths["Jump Charge"])
+	target = locate(/obj/item/device/jump_charge)
