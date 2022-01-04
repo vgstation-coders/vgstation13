@@ -330,5 +330,10 @@
 					P = null
 	qdel(target)
 
+/obj/item/weapon/pinpointer/advpinpointer/time_agent
+	mode = 2
+
 /obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
 	item_paths["Jump Charge"] = /obj/item/device/jump_charge
+	item_paths["Time Anomaly"] = /obj/effect/time_anomaly
+	target = locate(item_paths["Jump Charge"])
