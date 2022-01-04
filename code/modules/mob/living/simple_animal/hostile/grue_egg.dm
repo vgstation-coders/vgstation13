@@ -1,5 +1,5 @@
 
-mob/living/simple_animal/grue_egg
+/mob/living/simple_animal/grue_egg
 	var/isgrue=1
 	name = "grue egg"
 	size = SIZE_SMALL
