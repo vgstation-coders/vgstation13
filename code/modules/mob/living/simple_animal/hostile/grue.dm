@@ -20,7 +20,6 @@
 	force_airlock_time=100 									//so that juvenile grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 
 	//VARS
-//	var/isgrue=1
 	var/shadowpower = 0											 //shadow power absorbed
 	var/maxshadowpower = 1000									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
@@ -135,8 +134,7 @@
 			current_brightness=10*T.get_lumcount()
 		else												//else, there's considered to be no light
 			current_brightness=0
-//		visible_message("<span class='warning'>\The [src] is in brightness level [current_brightness] with [health] health and [shadowpower] shadowpower.</span>") //debug
-		if(current_brightness<=bright_limit_gain&&!ismoulting) //moulting temporarily stops healing via darkness
+		if(current_brightness<=bright_limit_gain && !ismoulting) //moulting temporarily stops healing via darkness
 			dark_dim_light=0
 			apply_damage(-1*burnmalus*regenbonus*hg_mult*(bright_limit_gain-current_brightness),BURN) //boost juveniles and adults heal rates a bit also using burnmalus
 		else if(current_brightness>bright_limit_drain) 														//lose health in light
@@ -147,7 +145,7 @@
 			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage by lifestage**(1/3) to avoid juveniles and adults from becoming too tanky to light
 		else
 			dark_dim_light=1
-		if(current_brightness<=bright_limit_gain&&!ismoulting)
+		if(current_brightness<=bright_limit_gain && !ismoulting)
 			shadowpower = min(maxshadowpower,shadowpower+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
 		else if(current_brightness>bright_limit_drain)
 			shadowpower = max(0,shadowpower-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light
@@ -173,10 +171,6 @@
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
 	init_language = default_language
-//	if(thislifestage)
-//		lifestage=thislifestage
-//	else
-//		lifestage=3 //default to adult
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
 
 /mob/living/simple_animal/hostile/grue/proc/lifestage_updates() //Initialize or update lifestage-dependent stats
@@ -239,7 +233,7 @@
 /mob/living/simple_animal/hostile/grue/update_perception()
 
 	if(client)
-		if(client.darkness_planemaster&&a_use_alpha)
+		if(client.darkness_planemaster && a_use_alpha)
 			client.darkness_planemaster.blend_mode = BLEND_ADD
 			client.darkness_planemaster.alpha = a_blend_add_test
 		client.color = list(
@@ -249,7 +243,7 @@
 		 			0,0,0,1,
 		 			0,0,0,0)
 
-		if(a_matrix_testing_override) //not used for now
+		if(a_matrix_testing_override)
 			client.color = list(a_11,a_12,a_13,a_14,
 								a_21,a_22,a_23,a_24,
 		 						a_31,a_32,a_33,a_34,
@@ -264,8 +258,6 @@
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
 	if(statpanel("Status"))
-//		stat(null, "Intent: [a_intent]")
-//		stat(null, "Move Mode: [m_intent]")
 		if(ismoulting)
 			stat(null, "Moulting progress: [round(100*(1-moulttimer/moulttime),0.1)]%")
 		if(lifestage<3) //not needed for adults
@@ -308,7 +300,7 @@
 		to_chat(src, "<span class='notice'>You are already fully mature.</span>")
 
 /mob/living/simple_animal/hostile/grue/proc/start_moult()
-	if(stat==CONSCIOUS&&shadowpower>=moultcost&&!ismoulting&&lifestage<3)
+	if(stat==CONSCIOUS && shadowpower>=moultcost && !ismoulting && lifestage<3)
 		shadowpower-=moultcost
 		lifestage++
 		to_chat(src, "<span class='notice'>You begin moulting.</span>")
@@ -337,7 +329,7 @@
 		return
 
 /mob/living/simple_animal/hostile/grue/proc/complete_moult()
-	if(ismoulting&&stat!=DEAD)
+	if(ismoulting && stat!=DEAD)
 		var/tempHealth=health/maxHealth //to scale health level
 		lifestage_updates()
 		health=tempHealth*maxHealth //keep same health percent
@@ -352,22 +344,12 @@
 	else
 		return
 
-
 /mob/living/simple_animal/hostile/grue/death(gibbed)
 	if(ismoulting)
 		desc="[desc] This one seems dead and lifeless."
 	else
 		playsound(src, 'sound/misc/grue_screech.ogg', 50, 1)
 	..()
-
-/mob/living/simple_animal/hostile/grue/attack_animal(mob/living/simple_animal/M)
-	if(M==src) //Prevent the grue from attacking itself, might help avoid misclicks while attempting to smash lights.
-		return
-	else
-//		if(prob(20)&&lifestage>1)
-//			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1) //occasionally growl while attacking
-		M.unarmed_attack_mob(src)
-
 
 //Reproduction via egglaying.
 /mob/living/simple_animal/hostile/grue/verb/reproduce()
@@ -400,18 +382,17 @@
 	if(eatencharge>=1)
 		busy=1
 		to_chat(src, "<span class='notice'>You start to push out an egg...</span>")
-		visible_message("<span class='warning'>[src] tightens up...</span>")
+		visible_message("<span class='warning'>\The [src] tightens up...</span>")
 		if(do_after(src, src, 5 SECONDS))
 			to_chat(src, "<span class='notice'>You lay an egg.</span>")
-			visible_message("<span class='warning'>[src] pushes out an egg!</span>")
+			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>")
 			eatencharge--
 //			playsound(T, 'sound/effects/splat.ogg', 50, 1)
-//			var/mob/living/simple_animal/grue_egg/new_grueegg = new(get_turf(src))
 			new /mob/living/simple_animal/grue_egg(get_turf(src))
 		busy=0
 
 	else
-		to_chat(src, "You need to feed more first.")
+		to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 		return
 
 //Procs for grabbing players.
@@ -419,38 +400,25 @@
 	var/list/candidates=list()
 	for(var/mob/dead/observer/G in get_active_candidates(ROLE_GRUE, poll="Would you like to become a grue?"))
 		if(!G.client)
-			//testing("Client of [G] inexistent")
 			continue
-
-		//#warn Uncomment me.
-		/*if(G.client.holder)
-			//testing("Client of [G] is admin.")
-			continue*/
-
 		if(isantagbanned(G))
-			//testing("[G] is jobbanned.")
 			continue
-
 		candidates += G
-
 	if(!candidates.len)
-		//message_admins("Unable to find a mind for [src.name]")
+		message_admins("Unable to find a mind for [src.name]")
 		return 0
-
 	shuffle(candidates)
 	for(var/mob/i in candidates)
 		if(!i || !i.client)
-			continue //Dont bother removing them from the list since we only grab one wizard
+			continue //Dont bother removing them from the list since we only grab one grue
 		return i
 
 	return 0
 
 /mob/living/simple_animal/hostile/grue/proc/transfer_personality(var/client/candidate)
 
-
 	if(!candidate)
 		return
-
 	src.ckey = candidate.ckey
 	if(src.mind)
 		src.mind.assigned_role = "Grue"
@@ -506,10 +474,8 @@
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
-//		playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
-
 		//Upgrade the grue's stats as it feeds
-		if(E.mind) //must have a mind to power up the grue
+		if(E.mind) //eaten creature must have a mind to power up the grue
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++
 			eatencharge++

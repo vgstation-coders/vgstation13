@@ -9,17 +9,15 @@
 	icon_dead= "egg_dead"
 	maxHealth=25
 	health=25
-
-
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
-
 
 	//keep it immobile
 	stop_automated_movement = 1
 	wander = 0
 	canmove=0
 
-	density = 0 //allow other mobs to walk onto the same tile
+	//allow other mobs to walk onto the same tile
+	density = 0
 	plane=LYING_MOB_PLANE
 
 	var/bright_limit_gain = 1											//maximum brightness on tile for health regen
@@ -28,15 +26,12 @@
 	var/hd_mult = 3									 //multiplier for health drained per tick on bright tile
 	var/current_brightness=0
 
-
 	var/grown = 0
 	var/hatching = 0 // So we don't spam ghosts.
 	var/datum/recruiter/recruiter = null
 	var/child_prefix_index = 1
 	var/last_ping_time = 0
 	var/ping_cooldown = 50
-
-
 
 /mob/living/simple_animal/grue_egg/Life()
 	..()
@@ -55,8 +50,6 @@
 		if(grown)
 			src.Hatch()
 
-
-
 /mob/living/simple_animal/grue_egg/death()
 	name = "grue egg remnants"
 	desc = "The remnants of a grue egg."
@@ -64,7 +57,6 @@
 	qdel(recruiter)
 	recruiter = null
 	..()
-
 
 // Amount of time between retries for recruits. As to not spam ghosts every minute.
 #define GRUE_EGG_RERECRUIT_DELAY 5.0 MINUTES
