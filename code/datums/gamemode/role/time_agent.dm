@@ -338,5 +338,6 @@
 	item_paths["Time Anomaly"] = /obj/effect/time_anomaly
 	target = locate(/obj/item/device/jump_charge)
 	for(var/path in potential_locate_objectives)
-			var/obj/dpath = initial(path)
-			item_paths[initial(dpath.name)] = path
+			var/obj/dpath = new path
+			item_paths[dpath.name] = path
+			qdel(dpath)
