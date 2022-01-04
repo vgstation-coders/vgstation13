@@ -44,7 +44,7 @@
 	var/hd_mult = 3									 //multiplier for health drained per tick on bright tile
 //	var/show_desc = TRUE										   //For the ability menu
 
-	var/lifestage=3												 //1=baby grue, 2=grueling, 3=(mature) grue
+	var/lifestage=GRUE_ADULT												 //1=baby grue, 2=grueling, 3=(mature) grue
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/dark_dim_light=0 //darkness level currently the grue is currently exposed to, 0=nice and dark, 1=passably dim, 2=too bright
@@ -142,7 +142,7 @@
 
 			to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
 			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
-			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage by lifestage**(1/3) to avoid juveniles and adults from becoming too tanky to light
+			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage with lifestage to avoid juveniles and adults from becoming too tanky to light
 		else
 			dark_dim_light=1
 		if(current_brightness<=bright_limit_gain && !ismoulting)
@@ -175,7 +175,7 @@
 
 /mob/living/simple_animal/hostile/grue/proc/lifestage_updates() //Initialize or update lifestage-dependent stats
 	var/tempHealth=health/maxHealth
-	if(lifestage==1)
+	if(lifestage==GRUE_LARVA)
 		name = "grue larva"
 		desc = "A scurrying thing that lives in the dark. It is still a larva."
 		icon_state = "gruespawn_living"
@@ -191,7 +191,7 @@
 		attack_sound = 'sound/weapons/bite.ogg'
 		size = SIZE_SMALL
 		pass_flags = PASSTABLE
-	else if (lifestage==2)
+	else if (lifestage==GRUE_JUVENILE)
 		name = "grue"
 		desc = "A creeping thing that lives in the dark. It is still a juvenile."
 		icon_state = "grueling_living"
@@ -208,7 +208,7 @@
 		size = SIZE_NORMAL
 		pass_flags = 0
 		force_airlock_time=100
-	else if (lifestage>=3)
+	else
 		name = "grue"
 		desc = "A dangerous thing that lives in the dark."
 		icon_state = "grue_living"
@@ -260,18 +260,18 @@
 	if(statpanel("Status"))
 		if(ismoulting)
 			stat(null, "Moulting progress: [round(100*(1-moulttimer/moulttime),0.1)]%")
-		if(lifestage<3) //not needed for adults
+		if(lifestage!=GRUE_ADULT) //not needed for adults
 			stat(null, "Shadow power: [round(shadowpower,0.1)]/[round(maxshadowpower,0.1)]")
-		if(lifestage>=3)
+		if(lifestage==GRUE_ADULT)
 			if(config.grue_egglaying)
 				stat(null, "Reproductive energy: [eatencharge]")
 			stat(null, "Sentient life forms eaten: [eatencount]")
 
 /mob/living/simple_animal/hostile/grue/gruespawn
-	lifestage=1
+	lifestage=GRUE_LARVA
 
 /mob/living/simple_animal/hostile/grue/grueling
-	lifestage=2
+	lifestage=GRUE_JUVENILE
 
 //Moulting into more mature forms.
 /mob/living/simple_animal/hostile/grue/verb/moult()
@@ -280,7 +280,7 @@
 	set category = "Grue"
 	if(!alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
 		return
-	if (lifestage<3)
+	if (lifestage<GRUE_ADULT)
 		if (shadowpower<moultcost)
 			to_chat(src, "<span class='notice'>You need to bask in shadow more first. ([moultcost] shadow power required)</span>")
 			return
@@ -300,24 +300,25 @@
 		to_chat(src, "<span class='notice'>You are already fully mature.</span>")
 
 /mob/living/simple_animal/hostile/grue/proc/start_moult()
-	if(stat==CONSCIOUS && shadowpower>=moultcost && !ismoulting && lifestage<3)
+	if(stat==CONSCIOUS && shadowpower>=moultcost && !ismoulting && lifestage<GRUE_ADULT)
 		shadowpower-=moultcost
-		lifestage++
 		to_chat(src, "<span class='notice'>You begin moulting.</span>")
 		visible_message("<span class='warning'>\The [src] morphs into a chrysalis...</span>")
 		stat=UNCONSCIOUS //go unconscious while moulting
 		ismoulting=1
 		moulttimer=moulttime//reset moulting timer
-		plane = MOB_PLANE //In case grue moulted while hiding
+		plane = MOB_PLANE //In case grue somehow moulted while hiding
 		var/tempHealth=health/maxHealth //to scale health level
-		if(lifestage==2)
+		if(lifestage==GRUE_LARVA)
+			lifestage=GRUE_JUVENILE
 			desc = "A small grue chrysalis."
 			name = "grue chrysalis"
 			icon_state = "moult1"
 			icon_living = "moult1"
 			icon_dead = "moult1"
 			maxHealth=25 //vulnerable while moulting
-		else if(lifestage==3)
+		else if(lifestage==GRUE_JUVENILE)
+			lifestage=GRUE_ADULT
 			desc = "A grue chrysalis."
 			name = "grue chrysalis"
 			icon_state = "moult2"
@@ -336,9 +337,9 @@
 		stat=CONSCIOUS //wake up
 		ismoulting=0 //is no longer moulting
 		visible_message("<span class='warning'>The chrysalis shifts as it morphs into a grue!</span>")
-		if(lifestage==2)
+		if(lifestage==GRUE_JUVENILE)
 			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors./span>")
-		else if(lifestage==3)
+		else if(lifestage==GRUE_ADULT)
 			to_chat(src, "<span class='warning'>You finish moulting! You are now fully-grown, and can eat sentient beings to gain their strength.</span>")
 		playsound(src, 'sound/effects/lingextends.ogg', 50, 1)
 	else
@@ -358,7 +359,7 @@
 	set category = "Grue"
 	if (!config.grue_egglaying) //Check if egglaying is enabled.
 		return
-	if (lifestage==3) //must be adult
+	if (lifestage==GRUE_ADULT) //must be adult
 		if (eatencharge<=0)
 			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 			return
@@ -432,7 +433,7 @@
 	set name = "Eat"
 	set desc = "Eat someone."
 	set category = "Grue"
-	if (lifestage==3) //must be adult
+	if (lifestage==GRUE_ADULT) //must be adult
 		if (!isturf(loc))
 			to_chat(src, "<span class='notice'>You need more room to eat.</span>")
 			return
@@ -492,10 +493,10 @@
 			force_airlock_time=max(0,force_airlock_time-40)
 //			src.set_light(8,-1*eatencount) //gains shadow aura opon eating someone
 			switch(eatencount)
-				if(3)
+				if(GRUE_WALLBREAK)
 					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong enough to smash down most walls... but still hungry...</span>")
 					environment_smash_flags = environment_smash_flags | SMASH_WALLS
-				if(4)
+				if(GRUE_RWALLBREAK)
 					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong enough to smash down even reinforced walls... but still hungry...</span>")
 					environment_smash_flags = environment_smash_flags | SMASH_RWALLS
 				else
@@ -528,7 +529,7 @@
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Object"
-	if(lifestage==1)
+	if(lifestage==GRUE_LARVA)
 		var/pipe = start_ventcrawl()
 		if(pipe)
 			handle_ventcrawl(pipe)
@@ -540,7 +541,7 @@
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Object"
 
-	if(lifestage==1)
+	if(lifestage==GRUE_LARVA)
 		if(isUnconscious())
 			return
 

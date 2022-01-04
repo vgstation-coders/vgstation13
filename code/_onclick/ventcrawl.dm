@@ -134,7 +134,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	return FALSE
 
 /mob/living/simple_animal/hostile/grue/can_ventcrawl()
-	if(lifestage==1)
+	if(lifestage==GRUE_LARVA)
 		return TRUE
 	else
 		to_chat(src, "<span class='notice'>You are too big to fit into the pipe.</span>")

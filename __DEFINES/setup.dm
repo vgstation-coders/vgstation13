@@ -1409,6 +1409,14 @@ var/proccalls = 1
 
 #define UTENSILE_FORK	1
 #define UTENSILE_SPOON	2
+
+//Grue defines
+#define GRUE_LARVA 1
+#define GRUE_JUVENILE 2
+#define GRUE_ADULT 3
+#define GRUE_WALLBREAK 3//Beings to eat before able to break walls
+#define GRUE_RWALLBREAK 4 //Beings to eat before able to break reinforced walls
+
 /*
  *
  *

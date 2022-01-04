@@ -465,7 +465,7 @@
 
 
 	subject.dna.check_integrity()
-	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
+
 	// Borer sanity checks.
 	var/mob/living/simple_animal/borer/B=subject.has_brain_worms()
 	if(B && B.controlling)
@@ -473,10 +473,15 @@
 		subject.do_release_control(1)
 
 	var/datum/dna2/record/R = new /datum/dna2/record()
-	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
-		R.dna = Brain.owner_dna.Clone()
-	else
-		R.dna=subject.dna.Clone()
+
+//Removed this so that slime puddles, etc. can be cloned. Anyway, in practice here a brain's owner's DNA should always correspond to the DNA of the subject that brain exists within.
+//	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
+//	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
+//		R.dna = Brain.owner_dna.Clone()
+//	else
+//		R.dna=subject.dna.Clone()
+	R.dna=subject.dna.Clone()
+
 	R.ckey = subject.ckey
 	R.id= copytext(md5(R.dna.real_name), 2, 6)
 	R.name=R.dna.real_name
