@@ -12,7 +12,8 @@
 		return "No items to move."
 
 /datum/objective/target/locate/rearrange/find_target()
-	destination = new pick(the_station_areas - /area/solar)
+	var/dtype = pick(the_station_areas - /area/solar)
+	destination = new dtype
 	..()
 	return TRUE
 
