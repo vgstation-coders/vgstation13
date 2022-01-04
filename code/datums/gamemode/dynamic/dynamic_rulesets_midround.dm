@@ -858,8 +858,8 @@
 /datum/dynamic_ruleset/midround/from_ghosts/grue
 	name = "Grue Infestation"
 	role_category = /datum/role/grue
-//	enemy_jobs
-//	required_enemies
+	enemy_jobs = list()
+	required_enemies = list()
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 20
@@ -868,6 +868,7 @@
 	logo = "grue-logo"
 	var/grue_spawn_spots=list()
 	var/turf/T
+
 /datum/dynamic_ruleset/midround/from_ghosts/grue/ready(var/forced = 0)
 	grue_spawn_spots=list()
 	var/list/found_vents = list()

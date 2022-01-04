@@ -206,8 +206,8 @@
 /datum/dynamic_ruleset/latejoin/grue
 	name = "Grue Infestation"
 	role_category = /datum/role/grue
-//	enemy_jobs
-//	required_enemies
+	enemy_jobs = list()
+	required_enemies = list()
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 25
@@ -218,6 +218,7 @@
 	repeatable = TRUE
 	var/grue_spawn_spots=list()
 	var/turf/T
+
 /datum/dynamic_ruleset/latejoin/grue/ready(var/forced = 0)
 	grue_spawn_spots=list()
 	var/list/found_vents = list()

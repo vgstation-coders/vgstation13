@@ -3,7 +3,7 @@
 	id = GRUE
 	special_role = GRUE
 	required_pref = ROLE_GRUE
-//	wikiroute = ROLE_GRUE
+	wikiroute = ROLE_GRUE
 	logo_state = "grue-logo"
 	default_admin_voice = "Your Grue Instincts"
 	admin_voice_style = "grue"
@@ -11,9 +11,9 @@
 	var/offspring_born=0
 
 /datum/role/grue/Greet()
-	to_chat(antag.current, "<span class='danger'>You are a grue.</span>")
-	to_chat(antag.current, "<span class='danger'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
-	to_chat(antag.current, "<span class='danger'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
+	to_chat(antag.current, "<span class='warning'>You are a grue.</span>")
+	to_chat(antag.current, "<span class='warning'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
+	to_chat(antag.current, "<span class='warning'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
 
 /datum/role/grue/ForgeObjectives(var/hatched) //Check if they hatched from an egg or spawned in
 	if(hatched) //Assign it grue_basic objectives if its a hatched grue
@@ -24,8 +24,8 @@
 /datum/role/grue/GetScoreboard()
 	. = ..()
 	if(istype(antag.current,/mob/living/simple_animal/hostile/grue))
-		. += "<BR>The grue ate [eatencount] sentient beings."
-//		if(config.grue_egglaying)
-//			.+= " and spawned [offspring_born] offspring."
-//		else
-//			.+= "."
+		. += "<BR>The grue ate [eatencount] sentient beings"
+		if(config.grue_egglaying)
+			.+= " and spawned [offspring_born] offspring."
+		else
+			.+= "."

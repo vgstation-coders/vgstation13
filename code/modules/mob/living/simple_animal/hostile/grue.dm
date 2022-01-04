@@ -454,9 +454,9 @@
 	src.ckey = candidate.ckey
 	if(src.mind)
 		src.mind.assigned_role = "Grue"
-		to_chat(src, "<span class='danger'>You are a grue.</span>")
-		to_chat(src, "<span class='danger'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
-		to_chat(src, "<span class='danger'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
+		to_chat(src, "<span class='warning'>You are a grue.</span>")
+		to_chat(src, "<span class='warning'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
+		to_chat(src, "<span class='warning'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
 
 
 //Eating sentient beings.
