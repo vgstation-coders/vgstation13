@@ -511,9 +511,7 @@ Assign your candidates in choose_candidates() instead.
 // You should `not` perform any null checks on M. M being null is a sign of a problem and should runtime.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
-	to_chat(world, "found an AI candidate")
 	if(M.mind.assigned_role != "AI")
-		to_chat(world, "selected candidate not roundstart AI")
 		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
 			//if(player.mind.assigned_role == "AI")
 			//We have located an AI to replace
@@ -542,21 +540,36 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/displaced)
 	var/mob/new_player/old_AI = new 
 	old_AI.ckey = displaced.ckey
+	old_AI.name = displaced.ckey
+	qdel(displaced)
 	old_AI.mind.assigned_role = null
 	var/list/shuffledoccupations = shuffle(job_master.occupations)
 	for(var/level = 3 to 1 step -1)
+		if(old_AI.mind.assigned_role)
+			break
 		for(var/datum/job/job in shuffledoccupations)
 			if(job_master.TryAssignJob(old_AI,level,job))
 				break
-	if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
-		job_master.GiveRandomJob(old_AI)
-	else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
-		job_master.AssignRole(old_AI, "Assistant")
-	else
+	if(!old_AI.mind.assigned_role) // still no job
+		if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
+			job_master.GiveRandomJob(old_AI)
+		else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
+			job_master.AssignRole(old_AI, "Assistant")
+	if(!old_AI.mind.assigned_role)
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 		old_AI.ready = 0
-		job_master.AssignRole(old_AI, "Assistant")
-	qdel(displaced)
+		return 
+
+	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
+		log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
+		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
+	else
+		var/mob/living/carbon/human/new_character = old_AI.create_character(0)
+		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+		job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+		EquipCustomItems(new_character)
+	qdel(old_AI)
+
 //////////////////////////////////////////////
 //                                          //
 //         BLOB					            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
