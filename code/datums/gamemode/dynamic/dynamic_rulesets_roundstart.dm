@@ -548,18 +548,15 @@ Assign your candidates in choose_candidates() instead.
 		for(var/datum/job/job in shuffledoccupations)
 			if(job_master.TryAssignJob(old_AI,level,job))
 				break
-	if(old_AI.mind.assigned_role)
-		return
 	if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
 		job_master.GiveRandomJob(old_AI)
-		return
 	else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
 		job_master.AssignRole(old_AI, "Assistant")
 	else
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 		old_AI.ready = 0
 		job_master.AssignRole(old_AI, "Assistant")
-
+	qdel(displaced)
 //////////////////////////////////////////////
 //                                          //
 //         BLOB					            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
