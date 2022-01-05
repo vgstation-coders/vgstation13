@@ -517,8 +517,8 @@ Assign your candidates in choose_candidates() instead.
 		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
 			//if(player.mind.assigned_role == "AI")
 			//We have located an AI to replace
-			displace_AI(player)
 			message_admins("Displacing AI played by: [key_name(player)].")
+			displace_AI(player)
 			break
 
 	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
