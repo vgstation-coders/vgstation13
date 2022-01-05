@@ -513,10 +513,9 @@ Assign your candidates in choose_candidates() instead.
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
 	if(M.mind.assigned_role != "AI")
 		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
-			//if(player.mind.assigned_role == "AI")
-			//We have located an AI to replace
-			displace_AI(player)
-			break
+			if(player != M)	// This should always be true but in case something goes terribly terribly wrong we definitely do not want to end up displacing the malf AI
+				displace_AI(player)
+				break		// There will only be one roundstart AI normally. In case of a triple-AI round we only need to displace one AI anyway.
 
 	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
 	M.mind.assigned_role = "AI"
