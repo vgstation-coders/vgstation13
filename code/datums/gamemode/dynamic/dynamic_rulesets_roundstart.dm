@@ -515,7 +515,6 @@ Assign your candidates in choose_candidates() instead.
 		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
 			//if(player.mind.assigned_role == "AI")
 			//We have located an AI to replace
-			message_admins("Displacing AI played by: [key_name(player)].")
 			displace_AI(player)
 			break
 
@@ -557,17 +556,20 @@ Assign your candidates in choose_candidates() instead.
 			job_master.AssignRole(old_AI, "Assistant")
 	if(!old_AI.mind.assigned_role)
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
+		log_admin("([old_AI.ckey]) was displaced by a malf AI and sent back to lobby.")
+		message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 		old_AI.ready = 0
 		return 
 
 	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
-		log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
 	else
 		var/mob/living/carbon/human/new_character = old_AI.create_character(0)
 		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
 		EquipCustomItems(new_character)
+	log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
+	message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 	qdel(old_AI)
 
 //////////////////////////////////////////////
