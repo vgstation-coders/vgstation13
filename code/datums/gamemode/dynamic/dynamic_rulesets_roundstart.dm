@@ -511,12 +511,15 @@ Assign your candidates in choose_candidates() instead.
 // You should `not` perform any null checks on M. M being null is a sign of a problem and should runtime.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
+	to_chat(world, "found an AI candidate")
 	if(M.mind.assigned_role != "AI")
-		for(var/mob/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
-			if(player.mind.assigned_role == "AI")
-				//We have located an AI to replace
-				displace_AI(player)
-				message_admins("Displacing AI played by: [key_name(player)].")
+		to_chat(world, "selected candidate not roundstart AI")
+		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
+			//if(player.mind.assigned_role == "AI")
+			//We have located an AI to replace
+			displace_AI(player)
+			message_admins("Displacing AI played by: [key_name(player)].")
+			break
 
 	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
 	M.mind.assigned_role = "AI"
@@ -536,12 +539,12 @@ Assign your candidates in choose_candidates() instead.
 	MAI.Greet()
 	return 1
 
-/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
+/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/displaced)
+	var/mob/new_player/old_AI = new 
+	old_AI.ckey = displaced.ckey
 	old_AI.mind.assigned_role = null
 	var/list/shuffledoccupations = shuffle(job_master.occupations)
 	for(var/level = 3 to 1 step -1)
-		if(old_AI.mind.assigned_role)
-			break
 		for(var/datum/job/job in shuffledoccupations)
 			if(job_master.TryAssignJob(old_AI,level,job))
 				break
@@ -555,6 +558,7 @@ Assign your candidates in choose_candidates() instead.
 	else
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 		old_AI.ready = 0
+		job_master.AssignRole(old_AI, "Assistant")
 
 //////////////////////////////////////////////
 //                                          //
@@ -656,7 +660,7 @@ Assign your candidates in choose_candidates() instead.
 	if (!..())
 		return FALSE
 	var/head_check = 0
-	for (var/mob/new_player/player in player_list)
+	for (var/mob/player in player_list)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
 	return (head_check >= required_heads)
