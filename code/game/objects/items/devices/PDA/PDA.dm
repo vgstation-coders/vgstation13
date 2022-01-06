@@ -239,6 +239,9 @@ var/global/msg_id = 0
 		cam_under.pixel_y = 8
 		underlays += cam_under
 
+/obj/item/device/pda/say_quote(text)
+	return "beeps, [text]"
+
 /obj/item/device/pda/ert
 	name = "ERT PDA"
 	default_cartridge = /obj/item/weapon/cartridge/security

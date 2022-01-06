@@ -159,6 +159,21 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	var/time = ""
 	var/source_terminal = ""
 
+/datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE)
+	src.target_name = target_name == "" && account ? account.owner_name : target_name
+	src.purpose = purpose
+	src.amount = amount
+	src.date = date != "" ? date : current_date_string
+	src.time = time != "" ? time : worldtime2text()
+	src.source_terminal = source_terminal
+	if(account)
+		account.transaction_log.Add(src)
+		if(account.account_number && send2PDAs)
+			for(var/obj/item/device/pda/PDA in PDAs)
+				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
+				if(app && app.linked_db && PDA.id && Acc == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
+					PDA.Say("[adjusted_wage_gain] added to wages from payout. Total funds: [Acc.money]")
+
 /obj/machinery/account_database
 	name = "accounts database"
 	desc = "Holds transaction logs, account data and all kinds of other financial records."
