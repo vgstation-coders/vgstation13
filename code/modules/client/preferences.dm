@@ -78,6 +78,8 @@ var/list/role_wiki=list(
 	WIZARD					= "Wizard",
 	GRINCH					= "Grinch",
 	NINJA					= "Space_Ninja",
+	TIMEAGENT				= "Time_Agent",
+	PULSEDEMON				= "Pulse_Demon",
 	ROLE_MINOR				= "Minor_Roles",
 	ROLE_PRISONER			= "Minor_Roles",
 )
@@ -667,6 +669,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ASTHMA,      "Asthma")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LACTOSE,     "Lactose Intolerant")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LISP,       "Lisp")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ANEMIA,       "Anemia")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 

@@ -773,6 +773,9 @@
 	storage_slots = 10
 	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")
 
+	starting_materials = list(MAT_GOLD = 2*CC_PER_SHEET_GOLD) // Recipe requires 2 sheets
+	w_type = RECYK_METAL
+
 /*
  * Beer Box
  */

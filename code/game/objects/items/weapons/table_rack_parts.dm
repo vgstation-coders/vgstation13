@@ -194,6 +194,7 @@
 	desc = "Parts for a plastic table for your space patio."
 	icon_state = "plastic_tableparts"
 	starting_materials = list(MAT_PLASTIC = 3750)
+	w_type = RECYK_PLASTIC
 	table_type = /obj/structure/table/plastic
 	sheet_type = /obj/item/stack/sheet/mineral/plastic
 	sheet_amount = 5

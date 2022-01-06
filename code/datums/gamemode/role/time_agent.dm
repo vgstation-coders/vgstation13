@@ -15,6 +15,7 @@
 	name = TIMEAGENT
 	id = TIMEAGENT
 	required_pref = TIMEAGENT
+	wikiroute = TIMEAGENT
 	logo_state = "time-logo"
 	default_admin_voice = "The Agency"
 	admin_voice_style = "notice"
@@ -52,38 +53,27 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Time Agent.<br>Specifically you are a scientist by the name of John Beckett, having discovered a method to travel through time, and becoming lost to it. <br>\
 			Now, you are forced to take responsibility for maintaining the time stream by the mysterious 'Time Agency'.<br>\
 			You only have a limited amount of time before this timeline is deemed lost, in which case you will be forcibly extracted and the mission considered a failure.<br>\
-			Locate certain time-sensitive objects scattered around the station, so as to locate the time anomaly and use it for extraction.<br>\
 			This may not be the first time you visit this timeline, and it may not be the last.</span>")
 
 	to_chat(antag.current, "<span class='danger'>Remember that the items you are provided with are largely non-expendable. Try not to lose them, especially the jump charge, as it is your ticket home.</span>")
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 
 /datum/role/time_agent/ForgeObjectives()
 	AppendObjective(/datum/objective/target/locate)
+	if(prob(30))
+		AppendObjective(/datum/objective/target/locate/rearrange)
 	if(prob(30))
 		AppendObjective(/datum/objective/target/assassinate)
 	AppendObjective(/datum/objective/freeform/aid)
 
 
 /datum/role/time_agent/process()
-	// var/list/datum/objective/jecties = objectives.GetObjectives()
-	// if(!jecties.len || locate(/datum/objective/time_agent_extract) in objectives.GetObjectives())
-	// 	return //Not set up yet
-	// var/finished = TRUE
-	// for(var/datum/objective/O in objectives.GetObjectives())
-	// 	if(O.IsFulfilled())
-	// 		if(faction)
-	// 			var/datum/faction/time_agent/agency = faction
-	// 			agency.stage(FACTION_ACTIVE)
-	// 		break
-	// if(finished)
-	// 	to_chat(antag.current, "<span class = 'notice'>Objectives complete. Triangulating anomaly location.</span>")
-	// 	AppendObjective(/datum/objective/time_agent_extract)
 
 	time_elapsed++
 	if(time_elapsed % action_timer == 0)
 		timer_action(time_elapsed / action_timer)
-	if (antag && antag.current.hud_used)
+	if (antag && antag.current && antag.current.hud_used)
 		if(antag.current.hud_used.countdown_display)
 			antag.current.hud_used.countdown_display.overlays.len = 0
 			var/time_until_next_action = action_timer - (time_elapsed % action_timer)
@@ -150,18 +140,23 @@
 	if(player.client && get_role_desire_str(player.client.prefs.roles[TIMEAGENT]) != "Never")
 		to_chat(player, "<span class=\"recruit\">A [src] is being targeted by his evil twin. ([controls])</span>")
 
+// For compatiability with the recruiter function callbacks, stops a runtime.
+/datum/role/time_agent/proc/investigation_log(var/subject, var/message)
+	antag.current.investigation_log(subject,message)
 
 /datum/role/time_agent/proc/recruiter_recruited(mob/dead/observer/player)
 	if(player)
 		qdel(eviltwinrecruiter)
 		eviltwinrecruiter = null
-		var/mob/living/carbon/human/H = new /mob/living/carbon/human
+		var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(timeagentstart))
 		H.ckey = player.ckey
 		H.client.changeView()
 		var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind, fac = src.faction)
 		twin.erase_target = src
-		twin.OnPostSetup()
 		twin.Greet(GREET_DEFAULT)
+		twin.ForgeObjectives()
+		twin.OnPostSetup()
+		twin.AnnounceObjectives()
 	else
 		eviltwinrecruiter.request_player()
 
@@ -237,12 +232,14 @@
 
 /obj/item/device/jump_charge/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istimeagent(user) && istype(target, /obj/effect/time_anomaly))
-		var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
-		if(R)
-			var/datum/objective/time_agent_extract/TAE = locate() in R.objectives.GetObjectives()
+		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT)
+		if(F)
+			var/datum/objective/time_agent_extract/TAE = locate() in F.objective_holder.GetObjectives()
 			if(TAE && target == TAE.anomaly)
 				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
+				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
 				R.extract()
+				TAE.extracted = TRUE
 				TAE.anomaly = null
 				qdel(target)
 		return

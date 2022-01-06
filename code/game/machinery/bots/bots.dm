@@ -25,8 +25,10 @@
 	plane = MOB_PLANE
 	luminosity = 3
 	use_power = 0
+	pAImovement_delay = 1
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
+	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them
 	var/on = 1
 	var/health = 0 //do not forget to set health for your bot!
 	var/maxhealth = 0
@@ -114,10 +116,27 @@
 		return
 	if (src.integratedpai)
 		return
+	if (src.PD_occupant)
+		return
 	else
 		total_awaiting_beacon = 0
 	process_pathing()
 	process_bot()
+
+/obj/machinery/bot/relaymove(var/mob/user, direction)
+	if(ispulsedemon(user))
+		return pAImove(user,direction)
+	return FALSE
+
+/obj/machinery/bot/pAImove(mob/living/user, dir)
+	if(!on)
+		return FALSE
+	if(!..())
+		return FALSE
+	if(!isturf(loc))
+		return FALSE
+	step(src, dir)
+	return TRUE
 
 // Makes the bot busy while it looks for a target.
 /obj/machinery/bot/proc/find_target()
@@ -706,6 +725,8 @@
 	return
 
 /obj/machinery/bot/emp_act(severity)
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Not inheriting so do it here too
 	if(flags & INVULNERABLE)
 		return
 	var/was_on = on

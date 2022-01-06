@@ -302,6 +302,9 @@
 	var/items_moved = 0
 
 	for(var/atom/movable/A in affecting)
+		if(items_moved >= max_items_moved)
+			break
+
 		if(A.anchored)
 			continue
 
@@ -311,8 +314,6 @@
 			A.forceMove(out_T)
 
 		items_moved++
-		if(items_moved >= max_items_moved)
-			break
 
 /obj/machinery/sorting_machine/attack_ai(mob/user)
 	interact(user)
@@ -375,7 +376,7 @@
 		return MT_UPDATE
 		//Honestly I didn't expect that to fit in, what, 10 lines of code?
 
-//Return 1 if the atom is to be filtered of the line.
+//Return 1 if the atom is to be filtered off the line.
 /obj/machinery/sorting_machine/proc/sort(var/atom/movable/A)
 	return prob(50) //Henk because the base sorting machine shouldn't ever exist anyways.
 
@@ -384,8 +385,8 @@
 /obj/machinery/sorting_machine/recycling
 	name = "Recycling Sorting Machine"
 
-	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics")
-	var/list/types[6]
+	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics", "Plastic")
+	var/list/types[7]
 
 /obj/machinery/sorting_machine/recycling/New()
 	. = ..()
@@ -405,7 +406,44 @@
 	types[RECYK_ELECTRONIC] = "Electronics"
 	types[RECYK_GLASS]      = "Glasses"
 	types[RECYK_METAL]      = "Metals/Minerals"
+	types[RECYK_PLASTIC]    = "Plastic"
 	types[RECYK_MISC]       = "Miscellaneous"
+
+/obj/machinery/sorting_machine/recycling/process()
+	//Before sorting, we'll try and open any box and crate we find
+	if(stat & (BROKEN | NOPOWER))
+		return
+
+	var/turf/in_T = get_step(src, input_dir)
+	var/items_moved = 0
+
+	//Open any closets/crates
+	for(var/obj/structure/closet/C in in_T.contents)
+		//Only open a limited number of closets
+		if(items_moved >= max_items_moved)
+			break
+
+		if(C.open())
+			C.dump_contents()
+			items_moved++
+
+	//Open any storage items (including those that were in closets/cages)
+	for(var/obj/item/weapon/storage/S in in_T.contents)
+		//Only open a limited number of boxes
+		if(items_moved >= max_items_moved)
+			break
+
+		if(S.contents.len > 0)
+			var/S_old_contents = S.contents.len
+			S.mass_remove(in_T)
+
+			//If you just can't empty it out, treat it as normal rubbish
+			if(S.contents.len < S_old_contents)
+				items_moved++
+
+	//We can't start sorting items until we've made sure we've emptied every box and closet
+	if(items_moved == 0)
+		..()
 
 /obj/machinery/sorting_machine/recycling/Topic(href, href_list)
 	. = ..()
@@ -426,6 +464,13 @@
 		return 1
 
 /obj/machinery/sorting_machine/recycling/sort(atom/movable/A)
+	// A closet or crate that can't be opened can't be recycled, regardless of recycle type and selected types
+	if (istype(A, /obj/structure/closet))
+		var/obj/structure/closet/C = A
+		if (!C.can_open())
+			return FALSE
+
+	// Check atom recycle type is in selected types
 	return A.w_type && (types[A.w_type] in selected_types)
 
 /obj/machinery/sorting_machine/recycling/interact(mob/user)

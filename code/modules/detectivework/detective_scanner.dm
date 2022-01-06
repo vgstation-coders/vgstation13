@@ -279,6 +279,14 @@
 
 //shameless copy pasting
 /obj/item/device/detective_scanner/forger/afterattack(atom/A as obj|turf|area, mob/user as mob)
+	if(istype(A,/obj/machinery/computer/secure_data))
+		var/obj/machinery/computer/secure_data/SD = A
+		if (istype(user) && SD.authenticated && (SD.screen == 3.0) && SD.active1)
+			return //already grabbing info from this screen, don't do anything
+	if(istype(A,/obj/machinery/computer/med_data))
+		var/obj/machinery/computer/med_data/MD = A
+		if (istype(user) && MD.authenticated && (MD.screen == 4.0) && MD.active1)
+			return //already grabbing info from this screen, don't do anything
 	var/list/custom_finger = list()
 	var/list/custom_fiber = list()
 	var/list/custom_blood = list()

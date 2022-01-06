@@ -218,6 +218,9 @@
 				doors += P
 
 /obj/machinery/computer/turbine_computer/attackby(obj/item/I as obj, mob/user as mob)
+
+	add_fingerprint(user)
+
 	if(I.is_screwdriver(user))
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
@@ -233,6 +236,7 @@
 				A.state = 3
 				A.icon_state = "3"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
@@ -245,6 +249,7 @@
 				A.state = 4
 				A.icon_state = "4"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 	else
 		src.attack_hand(user)

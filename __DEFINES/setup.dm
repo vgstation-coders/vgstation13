@@ -414,6 +414,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_ASTHMA 128
 #define DISABILITY_FLAG_LACTOSE		256
 #define DISABILITY_FLAG_LISP		512
+#define DISABILITY_FLAG_ANEMIA		1024
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -508,6 +509,7 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define NERVOUS			16
 #define ASTHMA		32
 #define LACTOSE		64
+#define ANEMIA		128
 
 //sdisabilities
 #define BLIND			1
@@ -1095,7 +1097,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define RECYK_BIOLOGICAL 3
 #define RECYK_METAL      4
 #define RECYK_ELECTRONIC 5
-#define RECYK_WOOD		 6
+#define RECYK_WOOD       6
+#define RECYK_PLASTIC    7
 
 ////////////////
 // job.info_flags

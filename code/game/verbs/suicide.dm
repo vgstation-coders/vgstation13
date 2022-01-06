@@ -40,7 +40,13 @@
 /mob/living/proc/handle_suicide_bomb_cause()
 	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
 	
+	if(custom_message)
+		return "FOR [uppertext(custom_message)]!"
+
 	var/message_say = "FOR NO RAISIN!"
+
+	if(Holiday == APRIL_FOOLS_DAY)
+		return "ALL FOR THE NOOKIE!"
 
 	if(issyndicate(src))
 		message_say = "FOR THE SYNDICATE!"
@@ -52,27 +58,27 @@
 		message_say = "FOR THE CAUSE!"
 	else if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		// faiths
-		if(H.mind.faith.name == "Islam")
-			message_say = "ALLAHU AKBAR!"
-		else if(H.mind.faith.deity_name)
-			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
-		// jobs
-		else
-			switch(H.mind.assigned_role)
-				if("Clown")
-					message_say = "FOR THE HONKMOTHER!"
-				if("Assistant")
-					message_say = "FOR THE GREYTIDE!"
-				if("Janitor")
-					message_say = "I DO IT FOR FREE!"
-				if("Cargo Technician" || "Quartermaster")
-					message_say = "FOR CARGONIA!"
-				if("Trader")
-					message_say = "FOR THE SHOAL!"
+		if(H.mind)
+			// faiths
+			if(H.mind.faith)
+				if(H.mind.faith.name == "Islam")
+					message_say = "ALLAHU AKBAR!"
+				else if(H.mind.faith.deity_name)
+					message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
+			// jobs
+			else if (H.mind.assigned_role)
+				switch(H.mind.assigned_role)
+					if("Clown")
+						message_say = "FOR THE HONKMOTHER!"
+					if("Assistant")
+						message_say = "FOR THE GREYTIDE!"
+					if("Janitor")
+						message_say = "I DO IT FOR FREE!"
+					if("Cargo Technician" || "Quartermaster")
+						message_say = "FOR CARGONIA!"
+					if("Trader")
+						message_say = "FOR THE SHOAL!"
 
-	if(custom_message)
-		message_say = "FOR [uppertext(custom_message)]!"
 	return message_say
 
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
@@ -110,31 +116,33 @@
 	if(suicide_set && mind)
 		mind.suiciding = 1
 
-	var/obj/item/held_item = get_active_hand()
+	var/list/obj/nearbystuff = list() //Check stuff in front of us
+	for(var/obj/O in get_step(loc,dir))
+		nearbystuff += O
+	log_debug("Nearby stuff in front of [src]: [counted_english_list(nearbystuff)]")
+	while(nearbystuff.len)
+		var/obj/chosen_item = pick_n_take(nearbystuff)
+		if(attempt_object_suicide(chosen_item)) 
+			if(istype(chosen_item,/obj/item))
+				var/obj/item/I = chosen_item
+				put_in_hands(I)
+			return
+	nearbystuff = list()
+	for(var/obj/O in adjacent_atoms(src)) //Failed that, check anything around us
+		nearbystuff += O
+	log_debug("Nearby stuff around [src]: [counted_english_list(nearbystuff)]")
+	while(nearbystuff.len)
+		var/obj/chosen_item = pick_n_take(nearbystuff)
+		if(attempt_object_suicide(chosen_item)) 
+			if(istype(chosen_item,/obj/item))
+				var/obj/item/I = chosen_item
+				put_in_hands(I)
+			return
+	var/obj/item/held_item = get_active_hand() //Failed that too, perform an object in-hand suicide
 	if(!held_item)
 		held_item = get_inactive_hand()
-	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for stuff in front of us
-		var/list/obj/nearbystuff = list()
-		for(var/obj/O in get_step(loc,dir))
-			nearbystuff += O
-		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item)) 
-				if(istype(chosen_item,/obj/item))
-					var/obj/item/I = chosen_item
-					put_in_hands(I)
-				return
-		nearbystuff = list()
-		for(var/obj/O in adjacent_atoms(src)) //Failed that too, check anything around us
-			nearbystuff += O
-		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item)) 
-				if(istype(chosen_item,/obj/item))
-					var/obj/item/I = chosen_item
-					put_in_hands(I)
-				return
-		//Failed that too, go for normal stuff
+	log_debug("Held item by [src]: [held_item]")
+	if(!attempt_object_suicide(held_item)) //Failed all of that, go for normal stuff
 		if(Holiday == APRIL_FOOLS_DAY)
 			visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
 		else

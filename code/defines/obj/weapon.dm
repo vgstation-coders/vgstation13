@@ -851,11 +851,13 @@
 	body_parts_covered = HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
+	starting_materials = list(MAT_PLASTIC = 2*CC_PER_SHEET_MISC) //Recipe calls for 2 sheets
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_wirecutter(user))
 		to_chat(user, "<span class='info'>You cut apart the cone into plastic.</span>")
-		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, 2, user)
+		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, starting_materials[MAT_PLASTIC]/CC_PER_SHEET_PLASTIC, user)
 		qdel(src)
 		return
 	return ..()

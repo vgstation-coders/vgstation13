@@ -683,6 +683,7 @@
 	bounce_sound = null
 	custom_impact = 1
 	penetration_message = 0
+	var/effect_type = /obj/effect/fire_blast
 	var/has_O2_in_mix = 0
 	var/datum/gas_mixture/gas_jet = null
 	var/max_range = 10
@@ -775,7 +776,7 @@
 	var/initial_burn_damage = burn_strength/100
 	burn_damage = ((((-(10 * (0.9**((initial_burn_damage/10) * 5))) + 10) * 0.4) * 20)/5) //Exponential decay function 20*(y=(-(10*(0.9^(x/10)))+10)*0.4)
 	//assuming the target stays in the fire for its duration, the total burn damage will be roughly 5 * burn_damage
-	new /obj/effect/fire_blast(get_turf(src.loc), burn_damage, stepped_range, 1, jet_pressure, burn_strength)
+	new effect_type(get_turf(src.loc), burn_damage, stepped_range, 1, jet_pressure, burn_strength, 1 SECONDS, firer.loc)
 
 /obj/item/projectile/bullet/fire_plume/process_step()
 	..()
@@ -804,6 +805,7 @@
 	burn_damage = 10
 	jet_pressure = 0
 	gas_jet = null
+	effect_type = /obj/effect/fire_blast/dragonbreath
 
 /obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
 	..()

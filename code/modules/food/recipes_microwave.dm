@@ -1476,6 +1476,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/swimmingcarp_spicy
 
+/datum/recipe/blethernoodlesoup
+	reagents = list(SACIDS = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/spaghetti,
+		/obj/item/weapon/reagent_containers/food/snacks/faggot,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped
+
 // Sandwiches //////////////////////////////////////////////////
 
 /datum/recipe/sandwich

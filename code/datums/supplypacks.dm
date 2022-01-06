@@ -887,6 +887,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/civwinter
 	name = "Civilian Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/prisoner,
+					/obj/item/clothing/suit/storage/wintercoat/janitor,
 					/obj/item/clothing/suit/storage/wintercoat,
 					/obj/item/clothing/suit/storage/wintercoat,
 					/obj/item/clothing/suit/storage/wintercoat,

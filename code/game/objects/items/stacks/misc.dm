@@ -152,6 +152,7 @@
 	singular_name = "chain"
 	irregular_plural = "chains"
 	max_amount = 20
+	w_type = RECYK_METAL
 
 /obj/item/stack/chains/can_stack_with(var/obj/item/other_stack)
 	if(!ispath(other_stack) && istype(other_stack) && other_stack.material_type == material_type)

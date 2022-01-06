@@ -292,6 +292,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	item_state = "grey_sword"
 	force = 4
+	w_type = RECYK_METAL
 
 /obj/item/weapon/rsscimmy
 	name = "rune scimitar"

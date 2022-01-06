@@ -1067,9 +1067,16 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status = organ.status
 		src.brute_dam = organ.brute_dam
 		src.burn_dam = organ.burn_dam
-		owner.internal_organs += organ.internal_organs
+
+		//Transfer any internal_organs from the organ item to the body
 		for(var/datum/organ/internal/transfer in organ.internal_organs)
-			owner.internal_organs_by_name[transfer.organ_type] += transfer
+			if(transfer) //Don't transfer null organs
+				owner.internal_organs += transfer
+		//Transfer any internal_organs (by name) from the organ item to the body
+		for(var/datum/organ/internal/transfer_by_name in organ.internal_organs)
+			if(transfer_by_name)
+				owner.internal_organs_by_name[transfer_by_name.organ_type] = transfer_by_name
+				owner.internal_organs_by_name[transfer_by_name.organ_type].owner = owner
 
 
 		//Process attached parts (i.e. if attaching an arm with a hand, this will process the hand)
@@ -1080,12 +1087,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 			var/datum/organ/external/OE = owner.get_organ(attached.part)
 
 			OE.attach(attached)
-
-		if(organ.organ_data && !owner.internal_organs_by_name[organ.organ_data.organ_type]) //run if the limb has organ_data, and the patient doesn't have that internal organ yet
-			owner.internal_organs_by_name[organ.organ_data.organ_type] = organ.organ_data.Copy() //patient's interal organ (of the same name) is assigned the organ_data's properties from the limb
-			owner.internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type] //patient's internal organ list has organ_data added to it
+		//If the limb we're attaching has organ_data, convert and transfer it to internal_organs (this is for the brain only)
+		if(organ.organ_data && !owner.internal_organs_by_name[organ.organ_data.organ_type]) //If the limb has organ_data, and the patient doesn't have that internal organ yet:
+			owner.internal_organs_by_name[organ.organ_data.organ_type] = organ.organ_data.Copy() //Patient's interal organ (of the same name) is assigned the organ_data's properties from the limb
+			owner.internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type] //Patient's internal organ list has organ_data added to it
 			internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type] //the limb's internal organ list has organ_data added to it
-			owner.internal_organs_by_name[organ.organ_data.organ_type].owner = owner //the patient's new organ's owner is now the patient
+			owner.internal_organs_by_name[organ.organ_data.organ_type].owner = owner //the patient's new organ has its owner set to the patient
 
 
 	else if(istype(I, /obj/item/weapon/peglimb)) //Attaching a peg limb
@@ -1506,6 +1513,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/head/explode()
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
+	eject_eyes()
 	.=..()
 	owner.update_hair()
 

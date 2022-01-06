@@ -71,10 +71,6 @@ interactions:
 	// Paint stuff
 	var/list/datum/painting_utensil/stored_colours = list()
 
-/obj/item/weapon/palette/attack_hand(mob/user)
-	. = ..()
-	ui_interact(user)
-
 /obj/item/weapon/palette/attack_self(mob/user)
 	. = ..()
 	ui_interact(user)

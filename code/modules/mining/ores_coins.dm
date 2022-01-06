@@ -388,6 +388,7 @@
 	force = 1
 	throwforce = 1
 	w_class = W_CLASS_TINY
+	w_type = RECYK_METAL
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?

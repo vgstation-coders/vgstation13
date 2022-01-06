@@ -9,6 +9,7 @@
 	emag_cost = 0 // because fun
 	light_color = LIGHT_COLOR_GREEN
 	var/haunted = 0
+	var/mob/playerone
 	var/mob/playertwo
 
 /obj/machinery/computer/arcade/haunted
@@ -45,10 +46,18 @@
 	if(..())
 		return
 	user.set_machine(src)
+	playerone = user
 	var/dat = game.get_dat()
 
 	user << browse(dat, "window=arcade")
 	onclose(user, "arcade")
+
+// Lets you be "player two" against a human
+/obj/machinery/computer/arcade/attack_ai(mob/user)
+    playertwo = user
+    var/dat = game.get_p2_dat()
+    user << browse(dat, "window=arcade")
+    onclose(user, "arcade")
 
 /obj/machinery/computer/arcade/emag(mob/user)
 	game.emag_act(user)
