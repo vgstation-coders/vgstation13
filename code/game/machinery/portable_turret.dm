@@ -426,9 +426,10 @@ Status: []<BR>"},
 /obj/machinery/turret/portable/target()
 	if (istype(cur_target, /mob/living))
 		var/mob/living/L = cur_target
-		if (L.stat==2)
+		if (L.stat == DEAD)
 			return
-	spawn() popUp()
+	spawn()
+		popUp()
 	dir=get_dir(src, cur_target)
 	shootAt(cur_target)
 
