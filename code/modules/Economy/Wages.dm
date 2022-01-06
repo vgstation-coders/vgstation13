@@ -67,7 +67,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 /proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
 	station_account.money += station_allowance + WageBonuses()
 
-	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]"."Nanotrasen Payroll Server")
+	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server")
 
 
 /proc/wagePayout()
@@ -76,7 +76,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		station_allowance += latejoiner_allowance
 		station_account.money += latejoiner_allowance
 
-		new /datum/transaction(station_account,"Nanotrasen new employee allowance","[latejoiner_allowance]"."Nanotrasen Payroll Server")
+		new /datum/transaction(station_account,"Nanotrasen new employee allowance","[latejoiner_allowance]","Nanotrasen Payroll Server")
 		latejoiner_allowance = 0
 
 	//checking for wage raises/decreases and emptying station account
@@ -90,7 +90,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
-	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]"."Account Database")
+	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database")
 
 	station_account.money = 0
 
@@ -102,12 +102,12 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 				Acc.money += adjusted_wage_gain
 
 				if(adjusted_wage_gain > 0)
-					new /datum/transaction(Acc,"Nanotrasen employee payroll","[adjusted_wage_gain]".station_account.owner_name)
+					new /datum/transaction(Acc,"Nanotrasen employee payroll","[adjusted_wage_gain]",station_account.owner_name)
 
 		else 	//non-station accounts get their money from magic, not that these accounts have any wages anyway
 			Acc.money += Acc.wage_gain
 			if(Acc.wage_gain > 0)
-				new /datum/transaction(Acc,"mysterious transaction","[Acc.wage_gain]"."unknown")
+				new /datum/transaction(Acc,"mysterious transaction","[Acc.wage_gain]","unknown")
 
 	//telling the crew
 	if(payroll_modifier > 1.1)//taking the overhead into account
