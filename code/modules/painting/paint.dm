@@ -256,3 +256,17 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	if(..())
 		return 1
 	M.reagents.remove_reagents_by_type(paint_types, 2)
+
+#define PAINT_CLEANER_THRESHOLD 0.7 // How much of the reagent should be water or some cleaner to clean paint off a canvas or brush
+#define PAINT_CLEANER_AGENT_MULTIPLIER 2 // How effective cleaning products are, compared to water (aka they count as if there was n times water instead)
+
+/proc/get_reagent_paint_cleaning_percent(obj/container)
+	if(container.reagents)
+		var/cleaner_volume = container.reagents.get_reagent_amount(WATER)
+		cleaner_volume += container.reagents.get_reagent_amount(CLEANER) * PAINT_CLEANER_AGENT_MULTIPLIER
+		cleaner_volume += container.reagents.get_reagent_amount("paint_remover") * PAINT_CLEANER_AGENT_MULTIPLIER
+		return min(cleaner_volume > 0 ? cleaner_volume / container.reagents.total_volume : 0, 1)
+	else
+		return 0
+
+#undef PAINT_CLEANER_AGENT_MULTIPLIER
