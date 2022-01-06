@@ -3,8 +3,9 @@
 	icon = 'icons/mob/grue.dmi'
 	speed=1
 	var/base_speed=1
-	can_butcher = FALSE
-//	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grue
+	can_butcher = TRUE
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grue
+	minbodytemp = 0 //immune to cold
 
 	a_intent=I_HURT //Initialize these
 	m_intent=I_HURT
@@ -27,7 +28,8 @@
 	var/moulttime = 30 //time required to moult to a new form
 	var/moulttimer = 30 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
-	var/hatched=0			//whether or not this grue hatched from an egg
+	var/hatched = 0			//whether or not this grue hatched from an egg
+	var/channeling = 0 // channeling an ability that costs shadowpower or not
 
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
@@ -57,41 +59,27 @@
 	var/a_use_alpha=1
 	var/a_blend_add_test=255
 
-	var/a_matrix_testing_override = 0 //not used for now
-	var/a_11 = 1
-	var/a_12 = 0
-	var/a_13 = 0
-	var/a_14 = 1
-	var/a_21 = -1
-	var/a_22 = 0.2
-	var/a_23 = 0.2
-	var/a_24 = 1
-	var/a_31 = -1
-	var/a_32 = 0.2
-	var/a_33 = 0.2
-	var/a_34 = 1
-	var/a_41 = 0
-	var/a_42 = 0
-	var/a_43 = 0
-	var/a_44 = 1
-	var/a_51 = 0
-	var/a_52 = 0
-	var/a_53 = 0
-	var/a_54 = 0
-
-//	var/b_matrix_testing_override=0 //not used for now
-//	var/b_11 = 1
-//	var/b_12 = 0
-//	var/b_13 = 0
-//	var/b_21 = 0
-//	var/b_22 = 1
-//	var/b_23 = 0
-//	var/b_31 = 0
-//	var/b_32 = 0
-//	var/b_33 = 1
-//	var/b_41 = 0
-//	var/b_42 = 0
-//	var/b_43 = 0
+	var/a_matrix_testing_override = 1 //not used for now
+	var/a_11_rr = 1
+	var/a_12_rg = 0
+	var/a_13_rb = 0
+	var/a_14_ra = 1
+	var/a_21_gr = -1
+	var/a_22_gg = 0.2
+	var/a_23_gb = 0.2
+	var/a_24_ga = 1
+	var/a_31_br = -1
+	var/a_32_bg = 0.2
+	var/a_33_bb = 0.2
+	var/a_34_ba = 1
+	var/a_41_ar = 0
+	var/a_42_ag = 0
+	var/a_43_ab = 0
+	var/a_44_aa = 1
+	var/a_51_cr = 0
+	var/a_52_cg = 0
+	var/a_53_cb = 0
+	var/a_54_ca = 0
 
 /mob/living/simple_animal/hostile/grue/regular_hud_updates()
 	..()
@@ -136,7 +124,7 @@
 			current_brightness=0
 		if(current_brightness<=bright_limit_gain && !ismoulting) //moulting temporarily stops healing via darkness
 			dark_dim_light=0
-			apply_damage(-1*burnmalus*regenbonus*hg_mult*(bright_limit_gain-current_brightness),BURN) //boost juveniles and adults heal rates a bit also using burnmalus
+			apply_damage(-1*burnmalus*regenbonus*hg_mult*(bright_limit_gain-current_brightness),BURN) //scale darkness healing for juveniles and adults heal rates a bit
 		else if(current_brightness>bright_limit_drain) 														//lose health in light
 			dark_dim_light=2
 
@@ -145,7 +133,7 @@
 			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage with lifestage to avoid juveniles and adults from becoming too tanky to light
 		else
 			dark_dim_light=1
-		if(current_brightness<=bright_limit_gain && !ismoulting)
+		if(current_brightness<=bright_limit_gain && !ismoulting && !channeling)
 			shadowpower = min(maxshadowpower,shadowpower+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
 		else if(current_brightness>bright_limit_drain)
 			shadowpower = max(0,shadowpower-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light
@@ -191,6 +179,11 @@
 		attack_sound = 'sound/weapons/bite.ogg'
 		size = SIZE_SMALL
 		pass_flags = PASSTABLE
+		//Larval grue spells: moult, ventcrawl, and hide
+		add_spell(new /spell/aoe_turf/grue_hide, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien
+		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+
 	else if (lifestage==GRUE_JUVENILE)
 		name = "grue"
 		desc = "A creeping thing that lives in the dark. It is still a juvenile."
@@ -208,6 +201,8 @@
 		size = SIZE_NORMAL
 		pass_flags = 0
 		force_airlock_time=100
+		//Juvenile grue spells: moult
+		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
 	else
 		name = "grue"
 		desc = "A dangerous thing that lives in the dark."
@@ -227,7 +222,23 @@
 		size = SIZE_BIG
 		pass_flags = 0
 		force_airlock_time=0
+		//Adult grue spells: eat and lay eggs
+		if(config.grue_egglaying)
+			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+
+
 	health=tempHealth*maxHealth
+
+//Basic AI for npc grues.
+//Grues move down darkness gradients when they are in bright light, to try to escape into the dark
+//Grues avoid moving from dim/dark into light
+//Grues prioritize fleeing over attacking when they're in the light
+//Grues will moult in sufficient (deep) darkness
+//Grues will seek out, approach, stop moving, and eat sentients if they are in sufficient (dim or dark) darkness
+//Grues will lay eggs in sufficient (deep) darkness
+
+
 
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
@@ -244,16 +255,11 @@
 		 			0,0,0,0)
 
 		if(a_matrix_testing_override)
-			client.color = list(a_11,a_12,a_13,a_14,
-								a_21,a_22,a_23,a_24,
-		 						a_31,a_32,a_33,a_34,
-			 					a_41,a_42,a_43,a_44,
-			 					a_51,a_52,a_53,a_54)
-//		else if(b_matrix_testing_override) //not used for now
-//			colourmatrix = list(b_11, b_12, b_22,
-//						 b_21,b_22, b_23,
-//						 b_31, b_32, b_33,
-//						 b_41, b_42, b_43)
+			client.color = list(a_11_rr,a_12_rg,a_13_rb,a_14_ra,
+								a_21_gr,a_22_gg,a_23_gb,a_24_ga,
+		 						a_31_br,a_32_bg,a_33_bb,a_34_ba,
+			 					a_41_ar,a_42_ag,a_43_ab,a_44_aa,
+			 					a_51_cr,a_52_cg,a_53_cb,a_54_ca)
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
@@ -274,30 +280,28 @@
 	lifestage=GRUE_JUVENILE
 
 //Moulting into more mature forms.
-/mob/living/simple_animal/hostile/grue/verb/moult()
-	set name = "Moult"
-	set desc = "Moult into a new form." //hide if an adult?
-	set category = "Grue"
-	if(!alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
-		return
-	if (lifestage<GRUE_ADULT)
-		if (shadowpower<moultcost)
-			to_chat(src, "<span class='notice'>You need to bask in shadow more first. ([moultcost] shadow power required)</span>")
-			return
-		else if (!isturf(loc))
-			to_chat(src, "<span class='notice'>You need more room to moult.</span>")
-			return
-		else if (stat==UNCONSCIOUS)
-			to_chat(src, "<span class='notice'>You must be awake to moult.</span>")
-			return
-		else if (busy)
-			to_chat(src, "<span class='notice'>You are already doing something.</span>")
-			return
-		else
-			start_moult()
+/mob/living/simple_animal/hostile/grue/proc/moult()
+	if(alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
+		if (lifestage<GRUE_ADULT)
+			if (shadowpower<moultcost)
+				to_chat(src, "<span class='notice'>You need to bask in shadow more first. ([moultcost] shadow power required)</span>")
+				return
+			else if (!isturf(loc))
+				to_chat(src, "<span class='notice'>You need more room to moult.</span>")
+				return
+			else if (stat==UNCONSCIOUS)
+				to_chat(src, "<span class='notice'>You must be awake to moult.</span>")
+				return
+			else if (busy)
+				to_chat(src, "<span class='notice'>You are already doing something.</span>")
+				return
+			else
+				start_moult()
 
+		else
+			to_chat(src, "<span class='notice'>You are already fully mature.</span>")
 	else
-		to_chat(src, "<span class='notice'>You are already fully mature.</span>")
+		return
 
 /mob/living/simple_animal/hostile/grue/proc/start_moult()
 	if(stat==CONSCIOUS && shadowpower>=moultcost && !ismoulting && lifestage<GRUE_ADULT)
@@ -326,6 +330,10 @@
 			icon_dead = "moult2"
 			maxHealth=50 //vulnerable while moulting
 		health=tempHealth*maxHealth //keep same health percentage
+		//Remove spells to prepare for new lifestage spell list
+		var/list/current_spells = src.spell_list.Copy()
+		for(var/spell/S in current_spells)
+			src.remove_spell(S)
 	else
 		return
 
@@ -338,7 +346,7 @@
 		ismoulting=0 //is no longer moulting
 		visible_message("<span class='warning'>The chrysalis shifts as it morphs into a grue!</span>")
 		if(lifestage==GRUE_JUVENILE)
-			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors./span>")
+			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors.</span>")
 		else if(lifestage==GRUE_ADULT)
 			to_chat(src, "<span class='warning'>You finish moulting! You are now fully-grown, and can eat sentient beings to gain their strength.</span>")
 		playsound(src, 'sound/effects/lingextends.ogg', 50, 1)
@@ -353,12 +361,8 @@
 	..()
 
 //Reproduction via egglaying.
-/mob/living/simple_animal/hostile/grue/verb/reproduce()
-	set name = "Reproduce"
-	set desc = "Spawn offspring in the form of an egg."
-	set category = "Grue"
-	if (!config.grue_egglaying) //Check if egglaying is enabled.
-		return
+/mob/living/simple_animal/hostile/grue/proc/reproduce()
+
 	if (lifestage==GRUE_ADULT) //must be adult
 		if (eatencharge<=0)
 			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
@@ -429,48 +433,10 @@
 
 
 //Eating sentient beings.
-/mob/living/simple_animal/hostile/grue/verb/eat_sentient()
-	set name = "Eat"
-	set desc = "Eat someone."
-	set category = "Grue"
-	if (lifestage==GRUE_ADULT) //must be adult
-		if (!isturf(loc))
-			to_chat(src, "<span class='notice'>You need more room to eat.</span>")
-			return
-		else if (stat==UNCONSCIOUS)
-			to_chat(src, "<span class='notice'>You must be awake to eat.</span>")
-			return
-		else if (busy)
-			to_chat(src, "<span class='notice'>You are already doing something.</span>")
-			return
-		else
-
-			var/toeat=start_feed()
-			if(toeat)
-				handle_feed(toeat)
-	else
-		to_chat(src, "<span class='notice'>You haven't grown enough to do that yet.</span>")
-
-
-/mob/living/simple_animal/hostile/grue/proc/start_feed()
-	var/atom/feed_target
-	var/list/feed_targets = list()
-	for(var/mob/living/carbon/U in range(1))
-		if(Adjacent(U))
-			feed_targets |= U
-	if(!feed_targets || !feed_targets.len)
-		to_chat(src, "<span class='notice'>There is nothing suitable to eat.</span>")
-		return
-	if(feed_targets.len == 1)
-		feed_target = feed_targets[1]
-	else
-		feed_target = input("Eat", "Pick someone to eat.") as null|anything in feed_targets
-	if(feed_target)
-//		feed_target.gib()
-		return feed_target
 
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
 	to_chat(src, "<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
+	busy=1
 	if(do_mob(src , E, 10 SECONDS, 100, 0))
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
@@ -480,15 +446,22 @@
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++
 			eatencharge++
-			base_speed=max(0.2,base_speed*0.8) //speed cap of 0.2
+
+			//increase speed
+			speed_m_dark=max(1/5,speed_m_dark/1.25)	// 20% faster in darkness
+			speed_m_dim=max(1.1/5,speed_m_dim/1.25)	// 20% faster in dim light
+			speed_m_light=max(4/5,speed_m_light/1.05) //slightly faster in bright light
+
+			//increase health
 			var/tempHealth=health/maxHealth
-			maxHealth=round(min(1000,maxHealth+50)) //50 more health with a cap of 1000
+			maxHealth=maxHealth+50 //50 more health
 			health=tempHealth*maxHealth
 
+			//increase damage
 			melee_damage_lower = melee_damage_lower+7
 			melee_damage_upper = melee_damage_upper+7
 
-			regenbonus=min(100,regenbonus+0.5) //increased health regen in darkness
+			regenbonus=regenbonus*1.5 //increased health regen in darkness
 
 			force_airlock_time=max(0,force_airlock_time-40)
 //			src.set_light(8,-1*eatencount) //gains shadow aura opon eating someone
@@ -501,34 +474,18 @@
 					environment_smash_flags = environment_smash_flags | SMASH_RWALLS
 				else
 					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel stronger... but still hungry...</span>")
-
-			//Create a clone-able glob of gore like a slime puddle. (unused for now)
-////			E.dropBorers()
-//			for(var/atom/movable/I in E.contents)
-//				I.forceMove(E.loc)
-////			anim(target = E, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
-//			var/mob/living/gore_pile/G = new(E.loc)
-//			if(E.real_name)
-//				G.real_name = E.real_name
-//				G.name = "glob of [E.real_name] gore"
-//				G.desc = "The gory remains of what used to be [G.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
-//			G.gored_person = E
-//			E.forceMove(G)
-//			//Transfer DNA and mind into the gore glob
-//			G.dna=E.dna
-//			G.mind=E.mind
 		else
-			to_chat(src, "<span class='notice'>That creature didn't quite satisfy your hunger...</span>")
+			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.gib()
+	busy=0
+//Channel a dark aura
+/mob/living/simple_animal/hostile/grue/verb/darkaura()
+//todo
+	return
 
-	else
-		return
 
 //Ventcrawling and hiding, only for gruespawn
-/mob/living/simple_animal/hostile/grue/verb/ventcrawl()
-	set name = "Crawl through Vent"
-	set desc = "Enter an air vent and crawl through the pipe system."
-	set category = "Object"
+/mob/living/simple_animal/hostile/grue/proc/ventcrawl()
 	if(lifestage==GRUE_LARVA)
 		var/pipe = start_ventcrawl()
 		if(pipe)
@@ -536,10 +493,7 @@
 	else
 		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
 
-/mob/living/simple_animal/hostile/grue/verb/hide()
-	set name = "Hide"
-	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
-	set category = "Object"
+/mob/living/simple_animal/hostile/grue/proc/hide()
 
 	if(lifestage==GRUE_LARVA)
 		if(isUnconscious())

@@ -10,6 +10,8 @@
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 
+	var/meatcolor = null //If set, the meat will be colored accordingly (hex string). This can be used to add colored meats for various species without making a new sprite.
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -419,3 +421,12 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.remove_reagent(NUTRIMENT, 2.5)
 	reagents.add_reagent(PLASMA, 5)
 	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/grue/
+	name = "grue meat"
+	desc = "The edibility of this has long been a subject of debate amongst discerning gourmands."
+//	icon_state = "gruemeat"
+
+///obj/item/weapon/reagent_containers/food/snacks/meat/grue/New()
+//	..()
+//	reagents.add_reagent(GRUE_BILE, 5)

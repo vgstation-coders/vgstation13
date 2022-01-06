@@ -29,3 +29,4 @@
 			.+= " and spawned [offspring_born] offspring."
 		else
 			.+= "."
+
