@@ -173,10 +173,10 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
 				if(app && app.linked_db && PDA.id && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
 					var/turf/U = get_turf(PDA)
-					if(!silent)
+					if(!PDA.silent)
 						playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 					for (var/mob/O in hearers(3, U))
-						if(!silent)
+						if(!PDA.silent)
 							O.show_message(text("[bicon(src)] *[PDA.ttone]*"))
 					var/mob/living/L = null
 					if(PDA.loc && isliving(PDA.loc))
