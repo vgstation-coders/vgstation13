@@ -171,8 +171,8 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		if(account.account_number && send2PDAs)
 			for(var/obj/item/device/pda/PDA in PDAs)
 				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
-				if(app && app.linked_db && PDA.id && Acc == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
-					PDA.Say("[adjusted_wage_gain] added to wages from payout. Total funds: [Acc.money]")
+				if(app && app.linked_db && PDA.id && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
+					PDA.say("[adjusted_wage_gain] added to wages from payout. Total funds: [Acc.money]")
 
 /obj/machinery/account_database
 	name = "accounts database"
