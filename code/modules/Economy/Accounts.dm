@@ -172,7 +172,19 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 			for(var/obj/item/device/pda/PDA in PDAs)
 				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
 				if(app && app.linked_db && PDA.id && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
-					PDA.say("[amount] added to wages from payout. Total funds: [account.money]")
+					var/turf/U = get_turf(PDA)
+					if(!silent)
+						playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
+					for (var/mob/O in hearers(3, U))
+						if(!silent)
+							O.show_message(text("[bicon(src)] *[PDA.ttone]*"))
+					var/mob/living/L = null
+					if(PDA.loc && isliving(PDA.loc))
+						L = PDA.loc
+					else
+						L = get_holder_of_type(PDA, /mob/living/silicon)
+					if(L)
+						to_chat(L,"[bicon(PDA)] <b>[amount] added to wages from payout. Total funds: [account.money]</b>")
 
 /obj/machinery/account_database
 	name = "accounts database"
