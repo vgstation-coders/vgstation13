@@ -7055,7 +7055,7 @@
 	pixel_x = -5;
 	pixel_y = 30
 	},
-/obj/item/weapon/storage/box/lights/bulbs,
+/obj/item/weapon/storage/box/lights,
 /turf/simulated/floor/plating,
 /area/mine/west_outpost)
 "aqo" = (
@@ -15387,7 +15387,7 @@
 /area/research_outpost/maintstore2)
 "aJF" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/box/lights/bulbs{
+/obj/item/weapon/storage/box/lights{
 	pixel_x = 5;
 	pixel_y = 5
 	},
@@ -26221,18 +26221,9 @@
 /area/science/chargebay)
 "bDT" = (
 /obj/structure/table,
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
+/obj/item/weapon/storage/firstaid/regular/empty,
+/obj/item/weapon/storage/firstaid/regular/empty,
+/obj/item/weapon/storage/firstaid/regular/empty,
 /obj/item/device/healthanalyzer,
 /obj/item/device/healthanalyzer,
 /obj/item/device/healthanalyzer,

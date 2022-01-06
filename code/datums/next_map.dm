@@ -83,7 +83,7 @@
 /datum/next_map/line
 	name = "Frankenline Station"
 	path = "line"
-	min_players = 20
+	min_players = 25
 
 /datum/next_map/lamprey
 	name = "Lamprey Station"
@@ -167,6 +167,11 @@
 		warning(msg)
 		return FALSE
 	return ..()
+
+/datum/next_map/nerve
+	name = "Nerve Station"
+	path = "nervestation"
+	min_players = 20
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
