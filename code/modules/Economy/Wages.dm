@@ -67,7 +67,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 /proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
 	station_account.money += station_allowance + WageBonuses()
 
-	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server")
+	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
 
 
 /proc/wagePayout()
@@ -76,7 +76,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		station_allowance += latejoiner_allowance
 		station_account.money += latejoiner_allowance
 
-		new /datum/transaction(station_account,"Nanotrasen new employee allowance","[latejoiner_allowance]","Nanotrasen Payroll Server")
+		new /datum/transaction(station_account,"Nanotrasen new employee allowance","[latejoiner_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
 		latejoiner_allowance = 0
 
 	//checking for wage raises/decreases and emptying station account
@@ -90,7 +90,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
-	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database")
+	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database",send2PDAs=FALSE)
 
 	station_account.money = 0
 
