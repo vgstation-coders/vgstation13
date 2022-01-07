@@ -2365,6 +2365,23 @@ var/global/msg_id = 0
 		app.reconnect_database()
 	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
 		return 0 //This sends its own error message
+	var/turf/U = get_turf(src)
+	if(!silent)
+		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
+
+	for (var/mob/O in hearers(3, U))
+		if(!silent)
+			O.show_message(text("[bicon(src)] *[src.ttone]*"))
+
+	var/mob/living/L = null
+	if(src.loc && isliving(src.loc))
+		L = src.loc
+	else
+		L = get_holder_of_type(src, /mob/living/silicon)
+
+	if(L)
+		to_chat(L, "[bicon(src)] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
+
 	tnote["msg_id"] = "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
 	msg_id++
 
@@ -2372,7 +2389,7 @@ var/global/msg_id = 0
 		if(!id.virtual_wallet)
 			id.update_virtual_wallet()
 		id.virtual_wallet.money += arbitrary_sum
-		new /datum/transaction(id.virtual_wallet, "Money transfer", arbitrary_sum, other_pda, creditor_name)
+		new /datum/transaction(id.virtual_wallet, "Money transfer", arbitrary_sum, other_pda, creditor_name, send2PDAs = FALSE)
 		return 1
 	else
 		incoming_transactions |= list(list(creditor_name,arbitrary_sum,other_pda))
