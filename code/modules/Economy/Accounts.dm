@@ -156,21 +156,22 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		account.transaction_log.Add(src)
 		if(account.account_number && send2PDAs && amount)
 			for(var/obj/item/device/pda/PDA in PDAs)
-				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
-				if(app && app.linked_db && PDA.id && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
-					var/turf/U = get_turf(PDA)
-					if(!PDA.silent)
-						playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
-					for (var/mob/O in hearers(3, U))
+				if(PDA.id)
+					var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
+					if(app && app.linked_db && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
+						var/turf/U = get_turf(PDA)
 						if(!PDA.silent)
-							O.show_message(text("[bicon(src)] *[PDA.ttone]*"))
-					var/mob/living/L = null
-					if(PDA.loc && isliving(PDA.loc))
-						L = PDA.loc
-					else
-						L = get_holder_of_type(PDA, /mob/living/silicon)
-					if(L)
-						to_chat(L,"[bicon(PDA)] <b>Money transfer from [source_terminal] ([amount]$).</b>")
+							playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
+						for (var/mob/O in hearers(3, U))
+							if(!PDA.silent)
+								O.show_message(text("[bicon(src)] *[PDA.ttone]*"))
+						var/mob/living/L = null
+						if(PDA.loc && isliving(PDA.loc))
+							L = PDA.loc
+						else
+							L = get_holder_of_type(PDA, /mob/living/silicon)
+						if(L)
+							to_chat(L,"[bicon(PDA)] <b>Money transfer from [source_terminal] ([amount]$).</b>")
 
 /obj/machinery/account_database
 	name = "accounts database"
