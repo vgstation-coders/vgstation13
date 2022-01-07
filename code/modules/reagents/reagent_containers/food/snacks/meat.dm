@@ -22,6 +22,7 @@
 		subjectname = M.name
 
 	if(meatcolor) //If meatcolor is set, use meat_colorless and modify the tone.
+		icon_state="meat_colorless"
 		var/icon/original = icon(icon, icon_state)
 		original.ColorTone(meatcolor)
 		icon = original

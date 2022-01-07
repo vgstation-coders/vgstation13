@@ -398,7 +398,7 @@
 	return
 
 /obj/machinery/computer/cloning/proc/scan_mob(mob/living/subject as mob)
-	if((isnull(subject)) || (!ishuman(subject) && !istype(subject, /mob/living/slime_pile) && !istype(subject, /mob/living/gore_pile)) || (!subject.dna) || (ismanifested(subject)))
+	if((isnull(subject)) || (!ishuman(subject) && !istype(subject, /mob/living/slime_pile)) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
 	if(!subject.has_brain())

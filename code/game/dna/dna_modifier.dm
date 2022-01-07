@@ -240,7 +240,7 @@
 	else if(M.anchored)
 		return FALSE
 
-	if(ismanifested(M) || (!iscarbon(M) && !istype(M, /mob/living/slime_pile) && !istype(M, /mob/living/gore_pile)))
+	if(ismanifested(M) || (!iscarbon(M) && !istype(M, /mob/living/slime_pile)))
 		if(usr)
 			to_chat(usr, "<span class='notice'>For some reason, the scanner is unable to read that person's genes.</span>")
 		return

@@ -1209,30 +1209,6 @@ var/list/has_died_as_golem = list()
 				O.stabilized = TRUE
 				O.loc = null
 
-/mob/living/gore_pile //serves as the corpse of people eaten by grues (unused for now)
-	name = "glob of gore"
-	desc = "A glob of gore."
-	stat = DEAD
-	icon = null //'icons/mob/human_races/r_slime.dmi' - using slime puddles for now
-	icon_state = null //"slime_puddle"
-	density = 0
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/
-	var/mob/living/carbon/human/gored_person
-
-/mob/living/gore_pile/New()
-	..()
-	spawn(1)
-		update_icon()
-
-/mob/living/gore_pile/update_icon()
-	if(gored_person)
-		var/icon/I = new ('icons/mob/human_races/r_slime.dmi', "slime_puddle")
-		if(!isnull(gored_person.blood_color))
-			I.Blend(gored_person.blood_color, ICON_ADD)
-		else
-			I.Blend(DEFAULT_BLOOD, ICON_ADD)
-		overlays += I
-
 /datum/species/insectoid
 	name = "Insectoid"
 	icobase = 'icons/mob/human_races/r_insectoid.dmi'
