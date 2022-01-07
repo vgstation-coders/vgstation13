@@ -20,7 +20,7 @@
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
 	force_airlock_time=100 									//so that juvenile grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 	blood_color2=GRUE_BLOOD
-//	flesh_color="#272728"
+//flesh_color2="#272728"
 
 	//VARS
 	var/shadowpower = 0											 //shadow power absorbed
