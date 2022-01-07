@@ -1138,15 +1138,3 @@
 		var/mob/living/carbon/human/H = mob
 		H.set_species("Human")
 		H.regenerate_icons()
-
-/datum/disease2/effect/lizard
-	name = "Reptile Dysfunction"
-	desc =  "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Unathi."
-	stage = 4
-	badness = EFFECT_DANGER_DEADLY
-
-/datum/disease2/effect/lizard/activate(var/mob/living/mob)
-	if(ishuman(mob) && !isunathi(mob))
-		var/mob/living/carbon/human/H = mob
-		H.set_species("Unathi")
-		H.regenerate_icons()
