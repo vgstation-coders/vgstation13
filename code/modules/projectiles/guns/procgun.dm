@@ -12,7 +12,7 @@
     var/static/list/bad_procs = list("gib","ex_act","singularity_act","death")
 
 /obj/item/weapon/gun/procgun/attack_self(mob/user)
-    if(!user.check_rights(R_VAREDIT))
+    if(!user.check_rights(R_DEBUG))
         to_chat(user,"<span class='warning'>You do not have the divine authority to modify what this gun does.</span>")
         return
 
