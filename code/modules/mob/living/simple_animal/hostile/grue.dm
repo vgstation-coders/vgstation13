@@ -188,9 +188,9 @@
 		size = SIZE_SMALL
 		pass_flags = PASSTABLE
 		//Larval grue spells: moult, ventcrawl, and hide
-		add_spell(new /spell/aoe_turf/grue_hide, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
-		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
-		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+		add_spell(new /spell/aoe_turf/grue_hide, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
 	else if (lifestage==GRUE_JUVENILE)
 		name = "grue"
@@ -210,7 +210,7 @@
 		pass_flags = 0
 		force_airlock_time=100
 		//Juvenile grue spells: moult
-		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 	else
 		name = "grue"
 		desc = "A dangerous thing that lives in the dark."
@@ -232,8 +232,8 @@
 		force_airlock_time=0
 		//Adult grue spells: eat and lay eggs
 		if(config.grue_egglaying)
-			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
-		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
 
 	health=tempHealth*maxHealth
