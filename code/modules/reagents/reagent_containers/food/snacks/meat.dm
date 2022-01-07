@@ -21,7 +21,8 @@
 			name = "[M.name] [meatword]"
 		subjectname = M.name
 
-	if(meatcolor) //If meatcolor is set, modify the tone.
+	if(meatcolor) //If meatcolor is set, set the icon_state to meat_colorless and modify the tone.
+		icon_state = "meat_colorless"
 		var/icon/original = icon(icon, icon_state)
 		original.ColorTone(meatcolor)
 		icon = original
@@ -431,7 +432,6 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "grue meat"
 	desc = "Considered a delicacy by some, its edibility has long been a subject of debate among discerning gourmands."
 	meatcolor = GRUE_BLOOD
-	icon_state="meat_colorless"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/grue/New()
 	..()

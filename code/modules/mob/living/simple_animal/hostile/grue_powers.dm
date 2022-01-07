@@ -50,7 +50,7 @@
 	desc = "Enter an air vent and crawl through the pipe system."
 	user_type = USER_TYPE_GRUE
 	panel = "Grue"
-	hud_state = "grue_hide"
+	hud_state = "grue_vent"
 	override_base = "grue"
 	range = 1
 	charge_type = Sp_RECHARGE
