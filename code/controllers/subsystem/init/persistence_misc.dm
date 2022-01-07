@@ -209,6 +209,38 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	fdel(file(file_path))
 
 
+//stores map votes for code/modules/html_interface/voting/voting.dm
+/datum/persistence_task/map_vote_count
+	execute = TRUE
+	name = "Map Votes"
+	file_path = "data/persistence/mapvotecount.json"
+	
+/datum/persistence_task/map_vote_count/on_init()
+	var/to_read = read_file()
+	if(!to_read)
+		log_debug("[name] task found an empty file on [file_path]")
+		return
+	for(var/list/L in to_read)
+		var/datum/mapvotecount = new(L["map"], L["count"])
+		data += counts
+
+/datum/persistence_task/map_vote_count/on_shutdown()
+	var/list/L = list()
+	for(var/datum/mapvotecount in data)
+		L += list(counts.vars)
+	write_file(L)
+
+/datum/persistence_task/map_vote_count/insert_map(list/counts)
+	data += counts
+	cmp_field = "count"
+	sortTim(data, /proc/cmp_list_by_element_asc)
+
+/datum/persistence_task/map_vote_count/proc/clear_counts()
+	data = list()
+	fdel(file(file_path))
+	
+//Ape-related
+
 /datum/persistence_task/ape_mode
 	execute = TRUE
 	name = "Ape mode"
