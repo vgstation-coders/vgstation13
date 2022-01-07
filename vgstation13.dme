@@ -2753,6 +2753,8 @@
 #include "code\modules\trader\trade_system.dm"
 #include "code\modules\trader\trade_window.dm"
 #include "code\modules\unit_tests\__unit_test_includes.dm"
+#include "code\modules\unit_tests\_unit_test.dm"
+#include "code\modules\unit_tests\icons.dm"
 #include "code\modules\virus2\analyser.dm"
 #include "code\modules\virus2\antibodies.dm"
 #include "code\modules\virus2\centrifuge.dm"

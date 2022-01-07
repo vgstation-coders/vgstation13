@@ -5,6 +5,8 @@
 	var/base_speed=1
 	can_butcher = TRUE
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grue
+	name="grue"
+	real name = "grue"
 	minbodytemp = 150 //resistant to cold
 
 	a_intent=I_HURT //Initialize these
@@ -62,7 +64,7 @@
 	var/a_use_alpha=1
 	var/a_blend_add_test=255
 
-	var/a_matrix_testing_override = 1 //not used for now
+	var/a_matrix_testing_override = 0 //not used for now
 	var/a_11_rr = 1
 	var/a_12_rg = 0
 	var/a_13_rb = 0
