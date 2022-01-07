@@ -397,6 +397,59 @@
 	affect_voice_active = 0
 	..()
 
+/datum/disease2/effect/piglatin
+	name = "Porcus Latinus Syndrome"
+	desc = "Securitas Eunt Domus"
+	stage = 2
+	affect_voice = 1
+	max_count = 1
+	badness = EFFECT_DANGER_HINDRANCE
+	var/list/virus_piglatin_word_list
+
+/datum/disease2/effect/piglatin/activate(var/mob/living/mob,var/multiplier)
+	to_chat(mob, "<span class='warning'>You feel mediterranean</span>")
+	affect_voice_active = 1
+	if(!virus_piglatin_word_list)
+		initialize_word_list()
+
+/datum/disease2/effect/piglatin/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	var/list/word_list = splittext(message," ")		//split message into list of words
+	for(var/i = 1 to word_list.len)
+		var/punct = ""								//take punctuation into account
+		if(findtext(word_list[i], ",", -1))
+			punct = ","
+		if(findtext(word_list[i], ".", -1))
+			punct = "."
+		if(findtext(word_list[i], "!", -1))
+			punct = "!"
+		if(findtext(word_list[i], "?", -1))
+			punct = "?"
+		if(findtext(word_list[i], "~", -1))
+			punct = "~"
+		for(var/x in virus_piglatin_word_list)
+			var/word = word_list[i]
+			if(punct)
+				word = copytext(word_list[i], 1, length(word_list[i]))
+			if(uppertext(word) == uppertext(x))
+				word_list[i] = virus_piglatin_word_list[x] + punct
+			else if(uppertext(word) == uppertext(virus_piglatin_word_list[x]))
+				word_list[i] = x + punct
+
+	message = ""
+	for(var/z = 1 to word_list.len)
+		if(z == word_list.len)
+			message += word_list[z]
+		else
+			message += "[word_list[z]] "
+
+	speech.message = message
+
+
+/datum/disease2/effect/opposite/deactivate(var/mob/living/mob)
+	to_chat(mob, "<span class='warning'>You feel like a barbarian.</span>")
+	affect_voice_active = 0
+	..()
 
 /datum/disease2/effect/spiky_skin
 	name = "Porokeratosis Acanthus"
@@ -698,3 +751,14 @@
 		H.vomit(instant = 1)
 	else
 		H.vomit()
+
+/datum/disease2/effect/antitox
+	name = "Antioxidantisation Syndrome"
+	desc = "A very real syndrome beloved by Super-Food Fans and Essenstial Oil Enthusiasts; encourages the production of anti-toxin within the body."
+	stage = 2
+	badness = EFFECT_DANGER_HELPFUL
+
+/datum/disease2/effect/antitox/activate(var/mob/living/mob)
+	to_chat(mob, "<span class = 'notice'>You feel your toxins being purged!</span>")
+	if (mob.reagents.get_reagent_amount(ANTI_TOXIN) < 1)
+		mob.reagents.add_reagent(ANTI_TOXIN, 1)
