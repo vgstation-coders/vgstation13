@@ -164,7 +164,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 							playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 						for (var/mob/O in hearers(3, U))
 							if(!PDA.silent)
-								O.show_message(text("[bicon(src)] *[PDA.ttone]*"))
+								O.show_message(text("[bicon(PDA)] *[PDA.ttone]*"))
 						var/mob/living/L = null
 						if(PDA.loc && isliving(PDA.loc))
 							L = PDA.loc
