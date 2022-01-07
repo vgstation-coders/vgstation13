@@ -42,6 +42,7 @@
 		ZOMBIEPOWDER = 3,
 		MINDBREAKER = 1,
 		PLASTICIDE = 2,
+		GRUE_BILE = 1,
 	)
 	var/angery = 1
 	var/max_queen_inside = 1

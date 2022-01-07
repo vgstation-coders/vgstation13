@@ -455,6 +455,7 @@
 #define FESTIVE_EGGNOG	"festive_eggnog"
 #define TENDIES			"tendies"
 #define DSYRUP			"dsyrup"
+#define GRUE_BILE		"grue_bile"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

@@ -5,7 +5,7 @@
 	var/base_speed=1
 	can_butcher = TRUE
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grue
-	minbodytemp = 0 //immune to cold
+	minbodytemp = 150 //resistant to cold
 
 	a_intent=I_HURT //Initialize these
 	m_intent=I_HURT
@@ -19,6 +19,8 @@
 
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
 	force_airlock_time=100 									//so that juvenile grues cant easily rush through a light area and quickly force open a door to escape back into the dark
+	blood_color2=GRUE_BLOOD
+//	flesh_color="#272728"
 
 	//VARS
 	var/shadowpower = 0											 //shadow power absorbed
@@ -51,6 +53,7 @@
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/dark_dim_light=0 //darkness level currently the grue is currently exposed to, 0=nice and dark, 1=passably dim, 2=too bright
 	var/busy=0 //busy laying an egg
+
 
 
 	//eyesight related stuff
@@ -237,6 +240,7 @@
 //Grues will moult in sufficient (deep) darkness
 //Grues will seek out, approach, stop moving, and eat sentients if they are in sufficient (dim or dark) darkness
 //Grues will lay eggs in sufficient (deep) darkness
+//Gruees dont attempt to move while "busy" or forcing door open
 
 
 
@@ -354,10 +358,10 @@
 		return
 
 /mob/living/simple_animal/hostile/grue/death(gibbed)
+	if(!gibbed)
+		playsound(src, 'sound/misc/grue_screech.ogg', 50, 1)
 	if(ismoulting)
 		desc="[desc] This one seems dead and lifeless."
-	else
-		playsound(src, 'sound/misc/grue_screech.ogg', 50, 1)
 	..()
 
 //Reproduction via egglaying.
