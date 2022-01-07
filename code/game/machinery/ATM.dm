@@ -107,7 +107,7 @@ log transactions
 			//create a transaction log entry
 			new /datum/transaction(authenticated_account, "Credit deposit", dosh.worth * dosh.amount, machine_id)
 
-			to_chat(user, "<span class='info'>You insert [T.amount] credit\s into \the [src].</span>")
+			to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into \the [src].</span>")
 			src.attack_hand(user)
 			qdel(I)
 	else
