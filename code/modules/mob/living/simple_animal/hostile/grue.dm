@@ -4,9 +4,9 @@
 	speed=1
 	var/base_speed=1
 	can_butcher = TRUE
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grue
-	name="grue"
-	real name = "grue"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue
+	name = "grue"
+	real_name = "grue"
 	minbodytemp = 150 //resistant to cold
 
 	a_intent=I_HURT //Initialize these
@@ -85,6 +85,9 @@
 	var/a_52_cg = 0
 	var/a_53_cb = 0
 	var/a_54_ca = 0
+
+/mob/living/simple_animal/hostile/grue/modMeat(mob/user, var/obj/theMeat)
+	theMeat.name="grue meat"
 
 /mob/living/simple_animal/hostile/grue/regular_hud_updates()
 	..()

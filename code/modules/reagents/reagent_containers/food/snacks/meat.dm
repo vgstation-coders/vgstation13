@@ -428,11 +428,11 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.add_reagent(PLASMA, 5)
 	bitesize = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/grue/
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/
 	name = "grue meat"
 	desc = "Considered a delicacy by some, its edibility has long been a subject of debate amongst discerning gourmands."
 	meatcolor = GRUE_BLOOD
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/grue/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/New()
 	..()
 	reagents.add_reagent(GRUE_BILE, 5)
