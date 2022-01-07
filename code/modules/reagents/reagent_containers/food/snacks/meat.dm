@@ -430,7 +430,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/
 	name = "grue meat"
-	desc = "Considered a delicacy by some, its edibility has long been a subject of debate amongst discerning gourmands."
+	desc = "Considered a delicacy by some, the edibility of this meat has long been a subject of debate amongst discerning gourmands."
 	meatcolor = GRUE_BLOOD
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/New()
