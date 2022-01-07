@@ -146,16 +146,20 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	var/source_terminal = ""
 
 /datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE)
+	// Default to account name if not specified
 	src.target_name = target_name == "" && account ? account.owner_name : target_name
 	src.purpose = purpose
 	src.amount = amount
+	// Get current date and time if not specified
 	src.date = date != "" ? date : current_date_string
 	src.time = time != "" ? time : worldtime2text()
 	src.source_terminal = source_terminal
 	if(account)
 		account.transaction_log.Add(src)
+		// Automatically ignore sending any zero sum transactions, plus variable to skip the search.
 		if(account.account_number && send2PDAs && amount)
 			for(var/obj/item/device/pda/PDA in PDAs)
+				// Only works and does this if ID is in PDA
 				if(PDA.id)
 					var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
 					if(app && app.linked_db && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
