@@ -184,7 +184,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 					else
 						L = get_holder_of_type(PDA, /mob/living/silicon)
 					if(L)
-						to_chat(L,"[bicon(PDA)] <b>[amount] added to wages from payout. Total funds: [account.money]</b>")
+						to_chat(L,"[bicon(PDA)] <b>Money transfer from [source_terminal] ([amount]$).</b>[PDA.id ? "" : " Insert your ID in the PDA to receive the funds."]")
 
 /obj/machinery/account_database
 	name = "accounts database"
