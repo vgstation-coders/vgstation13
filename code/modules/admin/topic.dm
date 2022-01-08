@@ -1524,7 +1524,7 @@
 
 		// now you can! if(M.client && M.client.holder)	return	//admins cannot be banned. Even if they could, the ban doesn't affect them anyway
 
-		var/istemp == alert("Temporary Ban?",,"Yes","No", "Cancel")
+		var/istemp = alert("Temporary Ban?",,"Yes","No", "Cancel")
 		var/mins = 0
 		switch(istemp)
 			if("Yes")
