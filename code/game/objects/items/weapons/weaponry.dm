@@ -11,6 +11,11 @@
 	throw_range = 15
 	attack_verb = list("bans")
 
+/obj/item/weapon/banhammer/ataack_self(var/mob/user)
+	if(user.check_rights(R_BAN))
+		var/obj/item/weapon/banhammer/admin/ABH = new obj/item/weapon/bannhammer/admin(loc)
+		ABH.attack_self(user)
+		qdel(src)
 
 /obj/item/weapon/banhammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
@@ -231,6 +236,43 @@
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
 	force = 999
+	var/istemp = FALSE
+	var/reason = "Griefer"
+	var/mins = 0
+	var/ipban = FALSE
+	var/sticky = FALSE
+	var/bannedby = ""
+
+/obj/item/weapon/banhammer/admin/ataack_self(var/mob/user)
+	if(user.check_rights(R_BAN))
+		bannedby = user.ckey
+		istemp == alert("Temporary Ban?",,"Yes","No") == "Yes"
+		if(istemp)
+			mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
+			if(!mins)
+				mins = 1440
+			if(mins >= 525600)
+				mins = 525599
+		else
+			mins = 0
+		reason = input(usr,"Reason?","reason",reason) as text|null
+		if(!reason)
+			reason = "For no raisin."
+		ipban = alert(usr,"IP ban?",,"Yes","No") == "Yes"
+		if(istemp == "No")
+			sticky = alert(usr,"Sticky Ban [M.ckey]? Use this only if you never intend to unban the player.","Sticky Icky","Yes", "No") == "Yes"
+
+/obj/item/weapon/banhammer/admin/attack(mob/living/M as mob, mob/living/user as mob)
+	. = ..() // Show stuff happen before banning itself.
+	if(user.check_rights(R_BAN))
+		M.GetBanned(reason, bannedby, istemp, mins, ipban, sticky)
+	return .
+
+/obj/item/weapon/banhammer/admin/suicide_act(var/mob/living/user)
+	. = ..()
+	if(user.check_rights(R_BAN))
+		user.GetBanned(reason, bannedby, istemp, mins, ipban, sticky)
+	return .
 
 /obj/item/weapon/melee/bone_hammer
 	name = "bone hammer"
