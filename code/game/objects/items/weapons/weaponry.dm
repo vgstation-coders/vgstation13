@@ -11,7 +11,7 @@
 	throw_range = 15
 	attack_verb = list("bans")
 
-/obj/item/weapon/banhammer/ataack_self(var/mob/user)
+/obj/item/weapon/banhammer/attack_self(var/mob/user)
 	if(user.check_rights(R_BAN))
 		var/obj/item/weapon/banhammer/admin/ABH = new obj/item/weapon/bannhammer/admin(loc)
 		ABH.attack_self(user)
@@ -243,7 +243,7 @@
 	var/sticky = FALSE
 	var/bannedby = ""
 
-/obj/item/weapon/banhammer/admin/ataack_self(var/mob/user)
+/obj/item/weapon/banhammer/admin/attack_self(var/mob/user)
 	if(user.check_rights(R_BAN))
 		bannedby = user.ckey
 		istemp == alert("Temporary Ban?",,"Yes","No") == "Yes"
