@@ -98,18 +98,18 @@ var/savefile/Banlist
 
 
 /mob/proc/GetBanned(reason, bannedby, temp, minutes, address, sticky)
-	AddBan(src.ckey, src.computer_id, reason, bannedby, temp, minutess, address ? lastKnownIP : null)
+	AddBan(src.ckey, src.computer_id, reason, bannedby, temp, minutes, address ? lastKnownIP : null)
 	if(sticky)
 		world.SetConfig("SYSTEM/keyban",src.ckey,"type=sticky&reason=[reason]&message=[reason]&admin=[bannedby]")
 		message_admins("[key_name_admin(usr)] has sticky banned [key_name(src)].")
 		log_admin("[key_name(usr)] has sticky banned [key_name(src)].")
 	to_chat(src, "<span class='warning'><BIG><B>You have been banned by [bannedby].\nReason: [reason].</B></BIG></span>")
-	to_chat(src, "<span class='warning'>This is a [temp ? "temporary" : "permanent"] ban[temp ? ", it will be removed in [mins] minutes" : ""].</span>")
+	to_chat(src, "<span class='warning'>This is a [temp ? "temporary" : "permanent"] ban[temp ? ", it will be removed in [minutes] minutes" : ""].</span>")
 	if(config.banappeals)
 		to_chat(src, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
 	else
 		to_chat(src, "<span class='warning'>No ban appeals URL has been set.</span>")
-	var/thisinfo = temp ? "will be removed in [mins] minutes" : "is a permanent ban"
+	var/thisinfo = temp ? "will be removed in [minutes] minutes" : "is a permanent ban"
 	ban_unban_log_save("[bannedby] has [temp ? "perma" : ""]banned [ckey]. - Reason: [reason] - This [thisinfo].")
 	log_admin("[bannedby] has banned [ckey].\nReason: [reason]\nThis [thisinfo].")
 	message_admins("<span class='warning'>[bannedby] has banned [ckey].\nReason: [reason]\nThis [thisinfo].</span>")

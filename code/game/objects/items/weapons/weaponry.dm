@@ -13,7 +13,7 @@
 
 /obj/item/weapon/banhammer/attack_self(var/mob/user)
 	if(user.check_rights(R_BAN))
-		var/obj/item/weapon/banhammer/admin/ABH = new obj/item/weapon/bannhammer/admin(loc)
+		var/obj/item/weapon/banhammer/admin/ABH = new /obj/item/weapon/bannhammer/admin(loc)
 		ABH.attack_self(user)
 		qdel(src)
 
@@ -260,7 +260,7 @@
 			reason = "For no raisin."
 		ipban = alert(usr,"IP ban?",,"Yes","No") == "Yes"
 		if(istemp == "No")
-			sticky = alert(usr,"Sticky Ban [M.ckey]? Use this only if you never intend to unban the player.","Sticky Icky","Yes", "No") == "Yes"
+			sticky = alert(usr,"Sticky Ban with this weapon? Use this only if you never intend to unban players.","Sticky Icky","Yes", "No") == "Yes"
 
 /obj/item/weapon/banhammer/admin/attack(mob/living/M as mob, mob/living/user as mob)
 	. = ..() // Show stuff happen before banning itself.
