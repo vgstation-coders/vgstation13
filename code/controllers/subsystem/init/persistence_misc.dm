@@ -221,21 +221,21 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		log_debug("[name] task found an empty file on [file_path]")
 		return
 	for(var/list/L in to_read)
-		var/datum/mapvotecount = new(L["map"], L["count"])
+		var/datum/counts = new(L["map"], L["count"])
 		data += counts
 
 /datum/persistence_task/map_vote_count/on_shutdown()
 	var/list/L = list()
-	for(var/datum/mapvotecount in data)
+	for(var/datum/counts in data)
 		L += list(counts.vars)
 	write_file(L)
 
-/datum/persistence_task/map_vote_count/insert_map(list/counts)
+/datum/persistence_task/map_vote_count/proc/insert_map(list/counts)
 	data += counts
 	cmp_field = "count"
 	sortTim(data, /proc/cmp_list_by_element_asc)
 
-/datum/persistence_task/map_vote_count/proc/clear_counts()
+/datum/persistence_task/map_vote_count/proc/clear_records()
 	data = list()
 	fdel(file(file_path))
 	

@@ -49,7 +49,7 @@ var/global/datum/controller/vote/vote = new()
 	var/total_votes    = 0
 	var/vote_threshold = 0.15
 	var/discarded_votes = 0
-	var/weighted        = TRUE // Whether to use weighted voting.
+	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
@@ -112,7 +112,7 @@ var/global/datum/controller/vote/vote = new()
 	discarded_votes = 0
 	discarded_choices.len = 0
 	current_votes.len = 0
-	weighted = FALSE
+	vote_method = null
 	update(1)
 
 /datum/controller/vote/proc/get_result()
@@ -157,25 +157,45 @@ var/global/datum/controller/vote/vote = new()
 
 	//get all options with that many votes and return them in a list
 	. = list()
-	if(weighted)
-		var/list/filteredchoices = choices.Copy()
-		for(var/a in filteredchoices)
-			if(!filteredchoices[a])
-				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
-				continue
-			if(filteredchoices[a] / total_votes < vote_threshold)
-				discarded_votes += filteredchoices[a]
-				filteredchoices -= a
-				discarded_choices += a
-		if(filteredchoices.len)
-			. += pickweight(filteredchoices.Copy())
-	else
-		if(greatest_votes)
-			for(var/option in choices)
-				if(choices[option] == greatest_votes)
-					. += option
+	switch(vote_method)
+		if("WEIGHTED") weighted()
+		if("PERSISTENT")
+			if("map") persistent()
+		if("MAJORITY") majority(greatest_votes)
+		else
+			majority(greatest_votes)
+		return .
 
-	return .
+/datum/controller/vote/proc/majority(var/greatest_votes)
+	for(var/option in choices)
+		if(choices[option] == greatest_votes)
+			. += option
+
+/datum/controller/vote/proc/weighted()
+	var/list/filteredchoices = choices.Copy()
+	for(var/a in filteredchoices)
+		if(!filteredchoices[a])
+			filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+			continue
+		if(filteredchoices[a] / total_votes < vote_threshold)
+			discarded_votes += filteredchoices[a]
+			filteredchoices -= a
+			discarded_choices += a
+	if(filteredchoices.len)
+		. += pickweight(filteredchoices.Copy())
+
+/datum/controller/vote/proc/persistent()
+	var/datum/persistence_task/map_vote_count/task = SSpersistence_misc.tasks[/datum/persistence_task/map_vote_count]
+	task.on_init()
+	for (var/i in task.data)
+		task.data[i]
+		find
+	 assert_eq(task.data[1].map, "ree")
+	assert_eq(task.data[1].count, 2)
+	
+	
+		. += i
+	task.on_shutdown()
 
 /datum/controller/vote/proc/announce_result()
 	stack_trace("Fuck my shit up. Lock is \[[lock]]")
@@ -197,12 +217,18 @@ var/global/datum/controller/vote/vote = new()
 				feedback_set("map vote winner", feedbackanswer)
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
-
-		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] won with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/qualified_votes)]% chance of winning" : null].</b>"
-		for(var/choice in choices)
-			if(. == choice)
-				continue
-			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[(weighted&&choices[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*choices[choice]/qualified_votes)]% chance of winning"]" : null]."
+		if(vote_method == "WEIGHTED")
+			text += "<b>Random Weighted Vote Result: [.] won with [choices[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
+			for(var/choice in choices)
+				if(. == choice)
+					continue
+				text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[choices[choice]? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*choices[choice]/qualified_votes)]% chance of winning"]" : null]."
+		else
+			text += "<b>Vote Result: [.] won with [choices[.]] vote\s.</b>"
+			for(var/choice in choices)
+				if(. == choice)
+					continue
+				text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	log_vote(text)
@@ -278,7 +304,7 @@ var/global/datum/controller/vote/vote = new()
 			return vote
 	return 0
 
-/datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0, var/weighted_vote = 0)
+/datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
 	if(currently_voting)
 		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
 		return
@@ -327,7 +353,6 @@ var/global/datum/controller/vote/vote = new()
 		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
-		weighted  = weighted_vote
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		if(mode == "custom")
@@ -362,16 +387,7 @@ var/global/datum/controller/vote/vote = new()
 				world << sound('sound/voice/Serithi/weneedvote.ogg')
 			if("map")
 				world << sound('sound/misc/rockthevote.ogg')
-				var/thisisstupid = 0
-				if(vote.choices.Find("Island Station"))
-					thisisstupid = 1
-				else if(vote.choices.Find("Island"))
-					thisisstupid = 2
-				if(thisisstupid)
-					if(thisisstupid == 2)
-						vote.choices["Island"] = -15
-					else
-						vote.choices["Island Station"] = -15
+
 		if(mode == "gamemode" && going)
 			going = 0
 			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
