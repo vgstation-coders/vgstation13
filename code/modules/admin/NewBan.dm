@@ -113,7 +113,6 @@ var/savefile/Banlist
 	ban_unban_log_save("[bannedby] has [temp ? "perma" : ""]banned [ckey]. - Reason: [reason] - This [thisinfo].")
 	log_admin("[bannedby] has banned [ckey].\nReason: [reason]\nThis [thisinfo].")
 	message_admins("<span class='warning'>[bannedby] has banned [ckey].\nReason: [reason]\nThis [thisinfo].</span>")
-	feedback_inc(temp ? "ban_tmp_mins" : "ban_perma", temp ? mins : 1)
 	DB_ban_record(temp ? BANTYPE_TEMP : BANTYPE_PERMA, src, temp ? mins : -1, reason)
 
 	del(src.client)

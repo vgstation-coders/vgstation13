@@ -1545,6 +1545,7 @@
 		if(istemp == "No")
 			sticky = alert(usr,"Sticky Ban [M.ckey]? Use this only if you never intend to unban the player.","Sticky Icky","Yes", "No") == "Yes"
 		M.GetBanned(reason, usr.ckey, istemp == "Yes", mins, ipban == "Yes", sticky)
+		feedback_inc(istemp == "Yes" ? "ban_tmp_mins" : "ban_perma", istemp == "Yes" ? mins : 1)
 
 	else if(href_list["stickyunban"])
 		if(!check_rights(R_BAN))
