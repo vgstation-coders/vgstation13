@@ -103,8 +103,9 @@
 	required_reagents = list(SODIUM = 1, WATER = 1)
 
 /datum/chemical_reaction/explosion_potassium/sodium/on_reaction(var/datum/reagents/holder, var/created_volume)
-	..()
-	holder.clear_reagents()
+	if(!(holder.has_reagent(CARBON,3) && holder.has_reagent(WATER,1)))
+		..()
+		holder.clear_reagents()
 	holder.add_reagent(LYE, created_volume)
 
 /datum/chemical_reaction/explosion_potassium/holy/sodium
@@ -290,7 +291,7 @@
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
 	result = SODIUM_POLYACRYLATE
-	required_reagents = list(CARBON = 3, LYE = 1, WATER = 1)
+	required_reagents = list(CARBON = 3, LYE = 2, WATER = 1)
 	result_amount = 8
 
 /datum/chemical_reaction/spoly_absorb_water
