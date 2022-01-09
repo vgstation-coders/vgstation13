@@ -290,7 +290,7 @@
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
 	result = SODIUM_POLYACRYLATE
-	required_reagents = list(CARBON = 3, SODIUM = 1, WATER = 2)
+	required_reagents = list(CARBON = 3, LYE = 1, WATER = 1)
 	result_amount = 8
 
 /datum/chemical_reaction/spoly_absorb_water
