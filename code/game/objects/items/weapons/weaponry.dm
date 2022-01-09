@@ -14,6 +14,7 @@
 /obj/item/weapon/banhammer/attack_self(var/mob/user)
 	if(user.check_rights(R_BAN))
 		var/obj/item/weapon/banhammer/admin/ABH = new /obj/item/weapon/banhammer/admin(loc)
+		user.put_in_hands(ABH)
 		ABH.attack_self(user)
 		qdel(src)
 
