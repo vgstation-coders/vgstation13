@@ -246,7 +246,7 @@
 /obj/item/weapon/banhammer/admin/attack_self(var/mob/user)
 	if(user.check_rights(R_BAN))
 		bannedby = user.ckey
-		istemp == alert("Temporary Ban?",,"Yes","No") == "Yes"
+		istemp = alert("Temporary Ban?",,"Yes","No") == "Yes"
 		if(istemp)
 			mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
 			if(!mins)

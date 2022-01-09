@@ -116,8 +116,8 @@ var/savefile/Banlist
 		message_admins("<span class='warning'>[bannedby] has banned [ckey].\nReason: [reason]\nThis [thisinfo].</span>")
 		usr.client.holder.DB_ban_record(temp ? BANTYPE_TEMP : BANTYPE_PERMA, src, temp ? minutes : -1, reason)
 
-	del(src.client)
-	//del(src)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.
+		del(src.client)
+		//del(src)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.
 
 /proc/AddBan(ckey, computerid, reason, bannedby, temp, minutes, address)
 
