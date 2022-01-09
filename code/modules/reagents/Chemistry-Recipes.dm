@@ -86,7 +86,7 @@
 			e.amount *= 0.5
 	e.start()
 	holder.clear_reagents()
-	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+	holder.add_reagent(POTASH, created_volume)
 
 /datum/chemical_reaction/explosion_potassium/holy
 	id = "holy_explosion_potassium"
@@ -97,11 +97,30 @@
 	..()
 	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 1)
 
+/datum/chemical_reaction/explosion_potassium/sodium
+	name = "Water Sodium Explosion"
+	id = "explosion_sodium"
+	required_reagents = list(SODIUM = 1, WATER = 1)
+
+/datum/chemical_reaction/explosion_potassium/sodium/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	holder.clear_reagents()
+	holder.add_reagent(LYE, created_volume)
+
+/datum/chemical_reaction/explosion_potassium/holy/sodium
+	id = "holy_explosion_sodium"
+	required_reagents = list(SODIUM = 1, HOLYWATER = 1)
+
+/datum/chemical_reaction/explosion_potassium/holy/sodium/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	holder.clear_reagents()
+	holder.add_reagent(LYE, created_volume)
+
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
 	id = "soap"
 	result = null
-	required_reagents = list(POTASSIUM_HYDROXIDE = 20, NUTRIMENT = 5)
+	required_reagents = list(CAUSTICSODAS = 20, NUTRIMENT = 5)
 	required_temp = T0C + 50
 	result_amount = 1
 

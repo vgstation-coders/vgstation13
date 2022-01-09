@@ -747,8 +747,8 @@
 		holder.remove_reagent(PLASMA, REM)
 	if(holder.has_any_reagents(SACIDS))
 		holder.remove_reagents(SACIDS, REM)
-	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
-		holder.remove_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
+	if(holder.has_any_reagents(CAUSTICSODAS))
+		holder.remove_reagents(CAUSTICSODAS, 2 * REM)
 	if(holder.has_reagent(CYANIDE))
 		holder.remove_reagent(CYANIDE, REM)
 	if(holder.has_reagent(AMATOXIN))
@@ -867,9 +867,9 @@
 	M.adjustOxyLoss(4)
 	M.sleeping += 1
 
-/datum/reagent/potassium_hydroxide
-	name = "Potassium Hydroxide"
-	id = POTASSIUM_HYDROXIDE
+/datum/reagent/potash
+	name = "Potash"
+	id = POTASH
 	description = "A corrosive chemical used in making soap and batteries."
 	reagent_state = REAGENT_STATE_SOLID
 	overdose_am = REAGENTS_OVERDOSE
@@ -878,12 +878,17 @@
 	density = 2.12
 	specheatcap = 65.87 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
-/datum/reagent/potassium_hydroxide/on_mob_life(var/mob/living/M)
+/datum/reagent/potash/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
 	M.adjustFireLoss(1.5 * REM)
+
+/datum/reagent/potash/lye
+	name = "Lye"
+	id = LYE
+	description = "Also known as caustic soda, a corrosive chemical used in making soap and treating meat."
 
 //Quiet and lethal, needs at least 4 units in the person before they'll die
 /datum/reagent/chefspecial
@@ -3526,8 +3531,8 @@
 		holder.remove_reagent(PLASMA, REM)
 	if(holder.has_any_reagents(SACIDS))
 		holder.remove_reagents(SACIDS, REM)
-	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
-		holder.remove_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
+	if(holder.has_any_reagents(CAUSTICSODAS))
+		holder.remove_reagents(CAUSTICSODAS, 2 * REM)
 	if(holder.has_reagent(CYANIDE))
 		holder.remove_reagent(CYANIDE, REM)
 	if(holder.has_reagent(AMATOXIN))

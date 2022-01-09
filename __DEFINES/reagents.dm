@@ -29,7 +29,8 @@
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
 #define CYANIDE "cyanide"
-#define POTASSIUM_HYDROXIDE 			"potassium_hydroxide"
+#define POTASH 			"POTASH"
+#define LYE 			"lye"
 #define CHEFSPECIAL 			"chefspecial"
 #define MINTTOXIN 			"minttoxin"
 #define MUTATIONTOXIN 			"mutationtoxin"
@@ -533,6 +534,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
 #define SACIDS list(SACID, FORMIC_ACID)
 #define PACIDS list(PACID, PHENOL)
+#define CAUSTICSODAS list(POTASH, LYE)
 #define NEUROTOXINS list(NEUROTOXIN, CURARE)
 #define TOXINS list(TOXIN, SOLANINE)
 #define CRYPTOBIOLINS list(CRYPTOBIOLIN, PHYSOSTIGMINE)
