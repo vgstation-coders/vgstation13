@@ -113,7 +113,7 @@ var/savefile/Banlist
 	ban_unban_log_save("[bannedby] has [temp ? "perma" : ""]banned [ckey]. - Reason: [reason] - This [thisinfo].")
 	log_admin("[bannedby] has banned [ckey].\nReason: [reason]\nThis [thisinfo].")
 	message_admins("<span class='warning'>[bannedby] has banned [ckey].\nReason: [reason]\nThis [thisinfo].</span>")
-	DB_ban_record(temp ? BANTYPE_TEMP : BANTYPE_PERMA, src, temp ? mins : -1, reason)
+	usr.client.holder.DB_ban_record(temp ? BANTYPE_TEMP : BANTYPE_PERMA, src, temp ? mins : -1, reason)
 
 	del(src.client)
 	//del(src)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.
