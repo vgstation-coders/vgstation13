@@ -46,7 +46,6 @@ var/global/datum/controller/vote/vote = new()
 	
 	//weighted
 	var/vote_threshold = 0.15
-	var/list/voting    = list()
 	var/list/discarded_choices = list()
 	var/discarded_votes = 0
 	
@@ -117,32 +116,22 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
-	var/greatest_votes = 0
 	currently_voting = FALSE
-	for(var/option in choices)
-		var/votes = choices[option]
-		if(votes > greatest_votes)
-			greatest_votes = votes
 	//default-vote for everyone who didn't vote
 	if(!config.vote_no_default && choices.len)
+		//clients with voting initialized
 		var/non_voters = (clients.len - total_votes)
 		if(non_voters > 0)
 			if(mode == "restart")
 				choices["Continue Playing"] += non_voters
-				if(choices["Continue Playing"] >= greatest_votes)
-					greatest_votes = choices["Continue Playing"]
 			if(mode == "gamemode")
 				if(master_mode in choices)
 					choices[master_mode] += non_voters
-					if(choices[master_mode] >= greatest_votes)
-						greatest_votes = choices[master_mode]
 			if(mode == "crew_transfer")
 				var/factor = 0.0107*world.time**0.393 //magical factor between approx. 0.5 and 1.4
 				factor = max(factor,0.5)
 				choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-				greatest_votes = max(choices["Initiate Crew Transfer"], choices["Continue The Round"])
-
 
 	//get all options with that many votes and return them in a list
 	. = list()
@@ -150,12 +139,16 @@ var/global/datum/controller/vote/vote = new()
 		if("WEIGHTED") weighted()
 		if("PERSISTENT")
 			if("map") persistent()
-		if("MAJORITY") majority(greatest_votes)
+		if("MAJORITY") majority()
 		else
-			majority(greatest_votes)
+			majority()
 		return .
 
-/datum/controller/vote/proc/majority(var/greatest_votes)
+/datum/controller/vote/proc/majority()
+	for(var/option in choices)
+		var/votes = choices[option]
+	if(votes > greatest_votes)
+		greatest_votes = votes
 	//sortTim(data, /proc/cmp_list_by_element_asc)
 	//cmp_field = count
 	for(var/option in choices)
@@ -266,7 +259,6 @@ var/global/datum/controller/vote/vote = new()
 		world.Reboot()
 
 /datum/controller/vote/proc/submit_vote(var/mob/user, var/vote)
-	var/mob_ckey = user.ckey
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
@@ -285,19 +277,20 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		//check vote then remove vote
 		if(vote && vote == "cancel_vote")
-			cancel_vote(mob_ckey))
+			cancel_vote(user))
 		//add vote
 		else if(vote && vote != "cancel_vote")
-			var/datum/a = new (mob_ckey, choices)
+			var/datum/a = new (user, choices)
 			add_vote(a)
 			return vote //do we need this?
 		else
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 	return 0
 
-/datum/controller/vote/proc/get_vote(var/ckey as text)
-	if(polldata[ckey])
-		return polldata[ckey].choice
+/datum/controller/vote/proc/get_vote(var/mob/user)
+	var/mob_ckey = user.ckey
+	if(polldata[mob_ckey])
+		return polldata[mob_ckey].choice
 	else
 		return 0
 
