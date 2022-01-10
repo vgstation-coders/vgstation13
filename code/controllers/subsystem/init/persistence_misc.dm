@@ -235,7 +235,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	cmp_field = "count"
 	sortTim(data, /proc/cmp_list_by_element_asc)
 
-/datum/persistence_task/map_vote_count/proc/clear_records()
+/datum/persistence_task/map_vote_count/proc/clear_counts()
 	data = list()
 	fdel(file(file_path))
 	

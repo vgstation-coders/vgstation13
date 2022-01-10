@@ -33,10 +33,7 @@ var/global/datum/controller/vote/vote = new()
 	var/mode           = null
 	var/question       = null
 	var/list/choices   = list()
-	var/list/voted     = list()
-	var/list/voting    = list()
-	var/list/current_votes = list()
-	var/list/discarded_choices = list()
+
 	var/list/ismapvote
 	var/chosen_map
 	name               = "datum"
@@ -46,10 +43,15 @@ var/global/datum/controller/vote/vote = new()
 	var/last_update    = 0
 	var/initialized    = 0
 	var/lastupdate     = 0
-	var/total_votes    = 0
+	
+	//weighted
 	var/vote_threshold = 0.15
+	var/list/voting    = list()
+	var/list/discarded_choices = list()
 	var/discarded_votes = 0
+	
 	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
+	
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
@@ -106,9 +108,7 @@ var/global/datum/controller/vote/vote = new()
 	mode = null
 	question = null
 	choices.len = 0
-	voted.len = 0
 	voting.len = 0
-	total_votes = 0
 	discarded_votes = 0
 	discarded_choices.len = 0
 	current_votes.len = 0
@@ -121,7 +121,6 @@ var/global/datum/controller/vote/vote = new()
 	currently_voting = FALSE
 	for(var/option in choices)
 		var/votes = choices[option]
-		total_votes += votes
 		if(votes > greatest_votes)
 			greatest_votes = votes
 	//default-vote for everyone who didn't vote
@@ -132,24 +131,14 @@ var/global/datum/controller/vote/vote = new()
 				choices["Continue Playing"] += non_voters
 				if(choices["Continue Playing"] >= greatest_votes)
 					greatest_votes = choices["Continue Playing"]
-			else if(mode == "gamemode")
+			if(mode == "gamemode")
 				if(master_mode in choices)
 					choices[master_mode] += non_voters
 					if(choices[master_mode] >= greatest_votes)
 						greatest_votes = choices[master_mode]
-			else if(mode == "crew_transfer")
-				var/factor = 0.5
-				switch(world.time / (10 * 60)) // minutes
-					if(0 to 60)
-						factor = 0.5
-					if(61 to 120)
-						factor = 0.8
-					if(121 to 240)
-						factor = 1
-					if(241 to 300)
-						factor = 1.2
-					else
-						factor = 1.4
+			if(mode == "crew_transfer")
+				var/factor = 0.0107*world.time**0.393 //magical factor between approx. 0.5 and 1.4
+				factor = max(factor,0.5)
 				choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
 				greatest_votes = max(choices["Initiate Crew Transfer"], choices["Continue The Round"])
@@ -167,6 +156,8 @@ var/global/datum/controller/vote/vote = new()
 		return .
 
 /datum/controller/vote/proc/majority(var/greatest_votes)
+	//sortTim(data, /proc/cmp_list_by_element_asc)
+	//cmp_field = count
 	for(var/option in choices)
 		if(choices[option] == greatest_votes)
 			. += option
@@ -279,9 +270,6 @@ var/global/datum/controller/vote/vote = new()
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
-		if (mob_ckey in voted)
-			to_chat(user, "<span class='warning'>You may only vote once.</span>")
-			return 0
 		if (isnum(vote) && (1>vote) || (vote > choices.len))
 			to_chat(user, "<span class='warning'>Illegal vote.</span>")
 			return 0
@@ -295,14 +283,36 @@ var/global/datum/controller/vote/vote = new()
 					if(O.started_as_observer)
 						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 						return 0
-		if(current_votes[mob_ckey])
-			choices[choices[current_votes[mob_ckey]]]--
-		if(vote && vote != "cancel_vote")
-			voted += mob_ckey
-			choices[choices[vote]]++	//check this
-			current_votes[mob_ckey] = vote
-			return vote
+		//check vote then remove vote
+		if(vote && vote == "cancel_vote")
+			cancel_vote(mob_ckey))
+		//add vote
+		else if(vote && vote != "cancel_vote")
+			var/datum/a = new (mob_ckey, choices)
+			add_vote(a)
+			return vote //do we need this?
+		else
+			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 	return 0
+
+/datum/controller/vote/proc/get_vote(var/ckey as text)
+	if(polldata[ckey])
+		return polldata[ckey].choice
+	else
+		return 0
+
+//parameter list input: ckey, choice
+/datum/controller/vote/proc/add_vote(list/a)
+	polldata += a
+
+/datum/controller/vote/proc/cancel_vote(var/ckey as text)
+	polldata -= ckey
+
+/datum/controller/vote/proc/clear_votes()
+	polldata = list()
+	
+/datum/controller/vote/proc/get_total()
+	return polldata.len
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
 	if(currently_voting)
@@ -350,6 +360,9 @@ var/global/datum/controller/vote/vote = new()
 				ismapvote = maps
 			else
 				return 0
+			
+		var/datum/vote = new(L["ckey"], L["choices"])
+		polldata += vote
 		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
@@ -425,10 +438,10 @@ var/global/datum/controller/vote/vote = new()
 	var/list/client_data = list()
 	var/admin = 0
 	var/currvote = 0
-	if(current_votes[user.ckey])
-		currvote = current_votes[user.ckey]
-	client_data[++client_data.len] = (currvote)
-		//interface.callJavascript("current_vote", current_votes[user.ckey])
+	
+	//adds client data 
+	if(get_vote(user.ckey))
+		client_data[++client_data.len] = get_vote(user.ckey)
 	if(user.holder)
 		admin = 1
 		if(user.holder.rights & R_ADMIN)
@@ -473,12 +486,7 @@ var/global/datum/controller/vote/vote = new()
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
 		if ("cancel_vote")
-			var/mob_ckey = usr.ckey
-			if (!(mob_ckey in voted))
-				return
-			voted -= mob_ckey
-			choices[choices[current_votes[mob_ckey]]]--
-			current_votes[mob_ckey] = null
+			cancel_vote(mob_ckey)
 			src.updateFor(usr.client)
 			return 0
 		if("cancel")
