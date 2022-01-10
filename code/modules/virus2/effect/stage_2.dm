@@ -754,7 +754,7 @@
 
 /datum/disease2/effect/antitox
 	name = "Antioxidantisation Syndrome"
-	desc = "A very real syndrome beloved by Super-Food Fans and Essenstial Oil Enthusiasts; encourages the production of anti-toxin within the body."
+	desc = "A very real syndrome beloved by Super-Food Fans and Essential Oil Enthusiasts; encourages the production of anti-toxin within the body."
 	stage = 2
 	badness = EFFECT_DANGER_HELPFUL
 

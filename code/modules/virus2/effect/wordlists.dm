@@ -172,9 +172,3 @@
 	"space"		=	"locus",
 	"spear"		=	"hasta",
 	"sword"		=	"gladius")
-
-
-
-
-
-
