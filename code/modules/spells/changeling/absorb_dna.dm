@@ -3,9 +3,8 @@
 	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
 	abbreviation = "AD"
 	hud_state = "absorbdna"
-	
 	spell_flags = NEEDSHUMAN
-
+	horrorallowed = 0
 	
 
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
@@ -21,7 +20,7 @@
 	if(!istype(T))					//Humans only
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
 		return
-	if(M_NOCLONE in T.mutations)	//No double-absorbing
+	if(M_HUSK in T.mutations)	//No double-absorbing
 		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond useability!</span>")
 		return
 	if(!T.mind)						//No monkeymen
@@ -35,6 +34,11 @@
 	if(changeling.isabsorbing)
 		to_chat(user, "<span class='warning'>We are already absorbing!</span>")
 		return
+		
+	if (T.dna == user.dna)
+		to_chat(user, "<span class='warning'>We have already absorbed their DNA.</span>")
+		return
+		
 	changeling.isabsorbing = 1
 
 	for(var/stage = 1, stage<=3, stage++)
@@ -76,8 +80,10 @@
 	for(var/datum/reagent/blood/B in user.vessel.reagent_list)
 		B.volume = min(BLOOD_VOLUME_MAX, avail_blood + B.volume)
 
+	//Steal their wellbeing!
 	if(user.nutrition < 400)
 		user.nutrition = min((user.nutrition + T.nutrition), 400)
+	user.health = user.maxHealth
 
 	changeling.chem_charges += 10
 	changeling.powerpoints += 2
@@ -88,7 +94,7 @@
 	user.changeling_update_languages(changeling.absorbed_languages)
 
 	//Steal their memories! (using this instead of mind.store_memory so the lings own notes and stuff are always at the bottom)
-	var/newmemory = "<BR><B>[T.real_name]'s memories:</B><BR><BR>[T.mind.memory]__________________________<BR><BR>[user.mind.memory]"
+	var/newmemory = "<BR><B>[T.real_name]'s memories:</B><BR><BR>[T.mind.memory]<BR><BR><B>[user.real_name]'s memories:</B><BR><BR>[user.mind.memory]"
 	user.mind.memory = newmemory
 
 	//Steal their species!
@@ -126,6 +132,6 @@
 	user.updateChangelingHUD()
 
 	T.death(0)
-	T.Drain()
+	T.ChangeToHusk()
 
 	..()

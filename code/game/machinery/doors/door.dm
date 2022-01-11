@@ -231,12 +231,12 @@ var/list/all_doors = list()
 	playsound(H.loc, 'sound/effects/horrorforce2.ogg', 80)
 	visible_message("<span class='danger'>\The [src]'s motors whine as several great tendrils begin trying to force it open!</span>")
 	if(do_after(H, src, 32))
-		open(1)
+		open()
 		visible_message("<span class='danger'>[H.name] forces \the [src] open!</span>")
 
 		// Open firedoors, too.
 		for(var/obj/machinery/door/firedoor/FD in loc)
-			FD.open(1)
+			FD.open()
 	else
 		to_chat(H, "<span class='warning'>You fail to open \the [src].</span>")
 

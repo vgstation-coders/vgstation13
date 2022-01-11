@@ -13,6 +13,7 @@
 	var/list/absorbed_languages = list()
 	var/list/absorbed_chems = list()
 	var/absorbedcount = 0
+	var/splitcount = 0
 	var/chem_charges = 20
 	var/chem_recharge_rate = 0.5
 	var/chem_storage = 50
