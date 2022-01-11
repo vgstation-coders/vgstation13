@@ -279,10 +279,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
-/datum/outfit/hydro/post_equip(var/mob/living/carbon/human/H)
-	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
-
 /datum/outfit/hydro/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/abstract/spawn_all/hydro] = SURVIVAL_BOX
 	return ..()
