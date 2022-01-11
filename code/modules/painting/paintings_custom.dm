@@ -27,14 +27,21 @@
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'
 	var/frame_icon_state = "frame"
+	var/show_on_scoreboard = TRUE
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
 
 /obj/structure/painting/custom/New()
 	src.painting_data = new(src, painting_width, painting_height, painting_offset_x, painting_offset_y, base_color)
+	var/list/gallery = score["global_paintings"]
+	if(!gallery.Find(src))
+		gallery += src
 	..()
 
 /obj/structure/painting/custom/Destroy()
+	var/list/gallery = score["global_paintings"]
+	if(gallery.len && gallery.Find(src))
+		gallery -= src
 	qdel(painting_data)
 	painting_data = null
 	..()
@@ -48,6 +55,29 @@
 		else
 			painting_data.interact(user, p)
 
+	// Pouring
+	if (istype(W, /obj/item/weapon/reagent_containers))
+		if (protected_by_glass)
+			return FALSE //Let the reagent container's afterattack handle things
+
+		var/obj/item/weapon/reagent_containers/container = W
+		if (container.is_open_container() && container.reagents && !container.reagents.is_empty())
+			to_chat(usr, "<span class='warning'>You start splashing \the [container]'s contents over \the [name].</span>")
+			if (do_after(user, src, 10))
+				// Reagent mix is strong enough to clean the canvas, do so
+				var/cleaner_percent = get_reagent_paint_cleaning_percent(container)
+				if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)
+					painting_data.blank_contents()
+					to_chat(usr, "<span class='warning'>You wash the paint off \the [name]!</span>")
+
+				// Reagent mix is opaque enough to paint the canvas, do so
+				else
+					painting_data.bucket_fill(mix_color_from_reagents(container.reagents.reagent_list))
+				container.reagents.remove_any(5)
+				update_painting(TRUE)
+
+			return TRUE
+
 	// Cleaning
 	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
 		if (protected_by_glass)
@@ -56,7 +86,7 @@
 			to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
 			if (do_after(user, src, 20))
 				painting_data.blank_contents()
-				update_painting()
+				update_painting(TRUE)
 
 	// Framing
 	if (istype(W, /obj/item/stack/sheet/wood) && !framed)
@@ -224,6 +254,28 @@
 		else
 			painting_data.interact(user, p)
 
+	// Pouring
+	if (istype(W, /obj/item/weapon/reagent_containers))
+		if (protected_by_glass)
+			return FALSE //Let the reagent container's afterattack handle things
+
+		var/obj/item/weapon/reagent_containers/container = W
+		if (container.is_open_container() && container.reagents && !container.reagents.is_empty())
+			to_chat(usr, "<span class='warning'>You start pouring \the [container]'s contents over \the [name].</span>")
+			if (do_after(user, src, 10))
+				// Reagent mix is strong enough to clean the canvas, do so
+				var/cleaner_percent = get_reagent_paint_cleaning_percent(container)
+				if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)
+					painting_data.blank_contents()
+					to_chat(usr, "<span class='warning'>You wash the paint off \the [name]!</span>")
+
+				// Reagent mix is opaque enough to paint the canvas, do so
+				else
+					painting_data.bucket_fill(mix_color_from_reagents(container.reagents.reagent_list))
+					container.reagents.remove_any(5)
+				update_painting(TRUE)
+			return TRUE
+
 	// Cleaning
 	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
 		if (protected_by_glass)
@@ -232,7 +284,7 @@
 			to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
 			if (do_after(user, src, 20))
 				painting_data.blank_contents()
-				update_painting()
+				update_painting(TRUE)
 
 	// Framing
 	if (istype(W, /obj/item/stack/sheet/wood) && !framed)

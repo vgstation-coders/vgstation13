@@ -37,6 +37,7 @@ var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuck
 var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jinglebell2.ogg', 'sound/items/jinglebell3.ogg')
 var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/disappear_2.ogg', 'sound/effects/disappear_3.ogg')
 var/list/pd_wail_sound = list('sound/voice/pdwail1.ogg', 'sound/voice/pdwail2.ogg', 'sound/voice/pdwail3.ogg')
+var/list/procgun_sound = list('sound/weapons/procgun1.ogg', 'sound/weapons/procgun2.ogg')
 var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
@@ -240,6 +241,8 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(disappear_sound)
 			if ("pd_wail_sound")
 				soundin = pick(pd_wail_sound)
+			if ("procgun_sound")
+				soundin = pick(procgun_sound)
 			if ("trayhit")
 				soundin = pick(trayhit_sound)
 			//if ("gunshot") soundin = pick(gun_sound)

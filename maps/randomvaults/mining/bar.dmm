@@ -32,7 +32,7 @@
 "aN" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor/plating,/area/mining_bar)
 "aO" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 4},/turf/simulated/floor/carpet,/area/mining_bar)
 "aP" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 4; on = 0; scrub_CO2 = 0; scrub_Toxins = 0},/turf/simulated/floor/carpet,/area/mining_bar)
-"aQ" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/mob/living/silicon/robot/NPC/dusky,/turf/simulated/floor/carpet,/area/mining_bar)
+"aQ" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/mob/living/simple_animal/robot/NPC/dusky,/turf/simulated/floor/carpet,/area/mining_bar)
 "aR" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
 "aS" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor/carpet,/area/mining_bar)
 "aT" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101.325; on = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)

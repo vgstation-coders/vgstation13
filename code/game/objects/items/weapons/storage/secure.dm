@@ -225,7 +225,13 @@
 		casecuff = null
 		storage_locked = FALSE
 	..()
-	
+
+/obj/item/weapon/storage/secure/briefcase/paperpen
+	items_to_spawn = list(
+		/obj/item/weapon/paper,
+		/obj/item/weapon/pen,
+	)
+
 /obj/item/weapon/storage/secure/briefcase/paperpen/dropped(mob/user)
 	..()
 	if(casecuff)
@@ -239,11 +245,6 @@
 		casecuff.on_restraint_removal(uncuffed) //for syndicuffs
 		casecuff = null
 		storage_locked = FALSE
-
-/obj/item/weapon/storage/secure/briefcase/paperpen/New()
-	..()
-	new /obj/item/weapon/paper(src)
-	new /obj/item/weapon/pen(src)
 
 /obj/item/weapon/storage/secure/briefcase/attack_hand(mob/user as mob)
 	if ((src.loc == user) && (src.code_locked == 1))
@@ -317,14 +318,14 @@
 
 		return*/
 
-/obj/item/weapon/storage/secure/briefcase/assassin/New()
-	..()
-	for(var/i = 1 to 3)
-		new /obj/item/weapon/spacecash/c1000(src)
-	new /obj/item/weapon/gun/energy/crossbow(src)
-	new /obj/item/weapon/gun/projectile/mateba(src)
-	new /obj/item/ammo_storage/box/a357(src)
-	new /obj/item/weapon/c4(src)
+/obj/item/weapon/storage/secure/briefcase/assassin
+	items_to_spawn = list(
+		/obj/item/weapon/spacecash/c1000 = 3,
+		/obj/item/weapon/gun/energy/crossbow,
+		/obj/item/weapon/gun/projectile/mateba,
+		/obj/item/ammo_storage/box/a357,
+		/obj/item/weapon/c4,
+	)
 
 // -----------------------------
 //        Secure Safe
@@ -344,11 +345,10 @@
 	anchored = 1.0
 	density = 0
 	cant_hold = list("/obj/item/weapon/storage/secure/briefcase")
-
-/obj/item/weapon/storage/secure/safe/New()
-	..()
-	new /obj/item/weapon/paper(src)
-	new /obj/item/weapon/pen(src)
+	items_to_spawn = list(
+		/obj/item/weapon/paper,
+		/obj/item/weapon/pen,
+	)
 
 /obj/item/weapon/storage/secure/safe/attack_hand(mob/user as mob)
 	if(!code_locked)
@@ -360,11 +360,7 @@
 // Clown planet WMD storage
 /obj/item/weapon/storage/secure/safe/clown
 	name="WMD Storage"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/pie = 10)
 
-/obj/item/weapon/storage/secure/safe/clown/New()
-	for(var/i=0;i<10;i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/pie(src)
-
-/obj/item/weapon/storage/secure/safe/HoS/New()
-	..()
-	//new /obj/item/weapon/storage/lockbox/clusterbang(src) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)
+/obj/item/weapon/storage/secure/safe/HoS
+	//items_to_spawn = list(/obj/item/weapon/storage/lockbox/clusterbang) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)

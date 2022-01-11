@@ -137,6 +137,7 @@
 	return TRUE
 
 /obj/item/weapon/gun/energy/laser/captain
+	name ="captain's laser gun"
 	icon_state = "caplaser"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')

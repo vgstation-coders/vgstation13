@@ -369,7 +369,7 @@
 "hf" = (/obj/structure/rack,/obj/item/stack/sheet/metal{pixel_x = 5; pixel_y = 5},/obj/item/stack/sheet/glass/glass,/obj/item/weapon/storage/belt/utility{pixel_x = 3; pixel_y = 3},/obj/machinery/alarm{dir = 1; pixel_y = -22},/turf/simulated/floor/plating,/area/awaymission/leviathan/research/mining)
 "hg" = (/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/plating,/area/awaymission/leviathan/research/mining)
 "hh" = (/obj/machinery/portable_atmospherics/canister/plasma,/turf/simulated/floor/plating,/area/awaymission/leviathan/research/mining)
-"hi" = (/obj/structure/rack,/obj/item/weapon/storage/box/lights/bulbs{pixel_x = 5; pixel_y = 5},/obj/item/weapon/storage/box/lights/tubes{pixel_x = -5; pixel_y = 5},/obj/item/weapon/storage/box/lights/mixed,/obj/machinery/light/small,/turf/simulated/floor/plating,/area/awaymission/leviathan/research/mining)
+"hi" = (/obj/structure/rack,/obj/item/weapon/storage/box/lights{pixel_x = 5; pixel_y = 5},/obj/item/weapon/storage/box/lights/tubes{pixel_x = -5; pixel_y = 5},/obj/item/weapon/storage/box/lights/mixed,/obj/machinery/light/small,/turf/simulated/floor/plating,/area/awaymission/leviathan/research/mining)
 "hj" = (/turf/simulated/floor{icon_state = "dark vault full"},/area/awaymission/leviathan/research)
 "hk" = (/obj/machinery/atmospherics/pipe/simple/cyan/hidden,/obj/machinery/door/airlock/external{id_tag = "riso1"; name = "Access Airlock"; req_access_txt = "47"},/turf/simulated/floor,/area/awaymission/leviathan/research)
 "hl" = (/turf/simulated/floor{dir = 8; icon_state = "warning"},/area/awaymission/leviathan/research)

@@ -56,6 +56,7 @@
 			This may not be the first time you visit this timeline, and it may not be the last.</span>")
 
 	to_chat(antag.current, "<span class='danger'>Remember that the items you are provided with are largely non-expendable. Try not to lose them, especially the jump charge, as it is your ticket home.</span>")
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 
 /datum/role/time_agent/ForgeObjectives()
@@ -69,68 +70,71 @@
 
 /datum/role/time_agent/process()
 
-	time_elapsed++
-	if(time_elapsed % action_timer == 0)
-		timer_action(time_elapsed / action_timer)
-	if (antag && antag.current && antag.current.hud_used)
-		if(antag.current.hud_used.countdown_display)
-			antag.current.hud_used.countdown_display.overlays.len = 0
-			var/time_until_next_action = action_timer - (time_elapsed % action_timer)
-			var/first = round(time_until_next_action/10)
-			var/second = time_until_next_action % 10
-			var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
-			var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
-			I1.pixel_x += 10 * PIXEL_MULTIPLIER
-			I2.pixel_x += 17 * PIXEL_MULTIPLIER
-			I1.pixel_y -= 11 * PIXEL_MULTIPLIER
-			I2.pixel_y -= 11 * PIXEL_MULTIPLIER
-			antag.current.hud_used.countdown_display.overlays += I1
-			antag.current.hud_used.countdown_display.overlays += I2
-		else
-			antag.current.hud_used.countdown_time_agent()
+	if (antag && antag.current)
+		time_elapsed++
+		if(time_elapsed % action_timer == 0)
+			timer_action(time_elapsed / action_timer)
+		if (antag.current.hud_used)
+			if(antag.current.hud_used.countdown_display)
+				antag.current.hud_used.countdown_display.overlays.len = 0
+				var/time_until_next_action = action_timer - (time_elapsed % action_timer)
+				var/first = round(time_until_next_action/10)
+				var/second = time_until_next_action % 10
+				var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
+				var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
+				I1.pixel_x += 10 * PIXEL_MULTIPLIER
+				I2.pixel_x += 17 * PIXEL_MULTIPLIER
+				I1.pixel_y -= 11 * PIXEL_MULTIPLIER
+				I2.pixel_y -= 11 * PIXEL_MULTIPLIER
+				antag.current.hud_used.countdown_display.overlays += I1
+				antag.current.hud_used.countdown_display.overlays += I2
+			else
+				antag.current.hud_used.countdown_time_agent()
 
 /datum/role/time_agent/proc/timer_action(severity)
-	var/mob/living/carbon/human/H = antag.current
-	switch(severity)
-		if(1)
-			spawn_rand_maintenance(H)
-			spawn()
-				showrift(H,1)
-		if(2)
-			// send the time agent specifically to the past, future, and stop time on him for 30 sec or so
-			H.timeslip += 30
-		if(3)
-			switch(pick(list(1,2)))
-				if(1)
-					wormhole_event()
-					H.teleportitis += 30
-				if(2)
-					// what could possibly go wrong
-					generate_ion_law()
-					generate_ion_law()
-					generate_ion_law()
-					command_alert(/datum/command_alert/ion_storm)
-					empulse(H.loc, 4, 10)
-					// also maybe make the AI actively malicious to time travellers
-		if(4)
-			eviltwinrecruiter = new(src)
-			eviltwinrecruiter.display_name = "time agent twin"
-			eviltwinrecruiter.role = TIMEAGENT
-			eviltwinrecruiter.jobban_roles = list("syndicate")
-			eviltwinrecruiter.logging = TRUE
+	if(antag && antag.current)
+		var/mob/living/carbon/human/H = antag.current
+		switch(severity)
+			if(1)
+				spawn_rand_maintenance(H)
+				spawn()
+					showrift(H,1)
+			if(2)
+				// send the time agent specifically to the past, future, and stop time on him for 30 sec or so
+				H.timeslip += 30
+			if(3)
+				switch(pick(list(1,2)))
+					if(1)
+						wormhole_event()
+						H.teleportitis += 30
+					if(2)
+						// what could possibly go wrong
+						generate_ion_law()
+						generate_ion_law()
+						generate_ion_law()
+						command_alert(/datum/command_alert/ion_storm)
+						empulse(H.loc, 4, 10)
+						// also maybe make the AI actively malicious to time travellers
+			if(4)
+				if(!H.stat)
+					eviltwinrecruiter = new(src)
+					eviltwinrecruiter.display_name = "time agent twin"
+					eviltwinrecruiter.role = TIMEAGENT
+					eviltwinrecruiter.jobban_roles = list("syndicate")
+					eviltwinrecruiter.logging = TRUE
 
-			// A player has their role set to Yes or Always
-			eviltwinrecruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
-			// ", but No or Never
-			eviltwinrecruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+					// A player has their role set to Yes or Always
+					eviltwinrecruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+					// ", but No or Never
+					eviltwinrecruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-			eviltwinrecruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+					eviltwinrecruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
-			eviltwinrecruiter.request_player()
-		if(5 to INFINITY)
-			// time_elapsed += 30
-			// var/datum/organ/internal/teleorgan = pick(H.internal_organs)
-			return
+					eviltwinrecruiter.request_player()
+			if(5 to INFINITY)
+				// time_elapsed += 30
+				// var/datum/organ/internal/teleorgan = pick(H.internal_organs)
+				return
 
 /datum/role/time_agent/proc/recruiter_recruiting(mob/dead/observer/player, controls)
 	to_chat(player, "<span class=\"recruit\">You are a possible candidate for \a [src]'s evil twin. Get ready. ([controls])</span>")
@@ -144,20 +148,21 @@
 	antag.current.investigation_log(subject,message)
 
 /datum/role/time_agent/proc/recruiter_recruited(mob/dead/observer/player)
-	if(player)
-		qdel(eviltwinrecruiter)
-		eviltwinrecruiter = null
-		var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(timeagentstart))
-		H.ckey = player.ckey
-		H.client.changeView()
-		var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind, fac = src.faction)
-		twin.erase_target = src
-		twin.Greet(GREET_DEFAULT)
-		twin.ForgeObjectives()
-		twin.OnPostSetup()
-		twin.AnnounceObjectives()
-	else
-		eviltwinrecruiter.request_player()
+	if(antag && antag.current && !antag.current.stat)
+		if(player)
+			qdel(eviltwinrecruiter)
+			eviltwinrecruiter = null
+			var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(timeagentstart))
+			H.ckey = player.ckey
+			H.client.changeView()
+			var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind, fac = src.faction)
+			twin.erase_target = src
+			twin.Greet(GREET_DEFAULT)
+			twin.ForgeObjectives()
+			twin.OnPostSetup()
+			twin.AnnounceObjectives()
+		else
+			eviltwinrecruiter.request_player()
 
 /datum/role/time_agent/OnPostSetup()
 	.=..()
@@ -231,12 +236,12 @@
 
 /obj/item/device/jump_charge/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istimeagent(user) && istype(target, /obj/effect/time_anomaly))
-		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT)
+		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT) || user.mind.GetFactionFromRole(TIMEAGENTTWIN)
 		if(F)
 			var/datum/objective/time_agent_extract/TAE = locate() in F.objective_holder.GetObjectives()
 			if(TAE && target == TAE.anomaly)
 				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
-				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT)
+				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT) || user.mind.GetRole(TIMEAGENTTWIN)
 				R.extract()
 				TAE.extracted = TRUE
 				TAE.anomaly = null
@@ -326,5 +331,14 @@
 					P = null
 	qdel(target)
 
+/obj/item/weapon/pinpointer/advpinpointer/time_agent
+	mode = 2
+
 /obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
 	item_paths["Jump Charge"] = /obj/item/device/jump_charge
+	item_paths["Time Anomaly"] = /obj/effect/time_anomaly
+	target = locate(/obj/item/device/jump_charge)
+	for(var/path in potential_locate_objects)
+		var/obj/dpath = new path
+		item_paths[dpath.name] = path
+		qdel(dpath)

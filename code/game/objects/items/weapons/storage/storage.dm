@@ -16,6 +16,7 @@
 	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect even if can_only_hold is set)
 	var/list/fits_ignoring_w_class = new/list() //List of objects which will fit in this item, regardless of size. Doesn't restrict to ONLY items of these types, and doesn't ignore max_combined_w_class. (in effect even if can_only_hold isn set)
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
+	var/list/items_to_spawn = new/list() //Preset list of items to spawn
 	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 0 //The number of storage slots in this container.
@@ -33,6 +34,9 @@
 	var/list/no_storage_slot = new/list()//if the item is equipped in a slot that is contained in this list, the item will act purely as a clothing item and not a storage item (ie plastic bags over head)
 	var/rustle_sound = "rustle"
 	var/storage_locked = FALSE //you can't interact with the contents of locked storage
+	var/can_add_combinedwclass = FALSE
+	var/can_add_storageslots = FALSE
+	var/can_increase_wclass_stored = FALSE
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
@@ -581,6 +585,35 @@
 	src.xtra.icon_state = "xtra_inv"
 	src.xtra.layer = HUD_ITEM_LAYER
 	src.xtra.alpha = 210
+
+	if(items_to_spawn.len)
+		var/total_w_class = 0
+		var/usable_items = 0
+		var/biggest_w_class = 0
+		for(var/item in items_to_spawn)
+			var/picked_item = item
+			var/obj/item/current_item
+			var/amount = 1
+			if(islist(item))
+				var/list/item_list = item
+				if(item_list.len)
+					picked_item = pick(item_list)
+			if(ispath(picked_item, /obj/item))
+				if(items_to_spawn[item] && isnum(items_to_spawn[item]))
+					amount = items_to_spawn[item]
+				for(var/i = 1, i <= amount, i++)
+					current_item = new picked_item(src)
+					if(current_item)
+						usable_items++
+						total_w_class += current_item.w_class
+						if(current_item.w_class > biggest_w_class)
+							biggest_w_class = current_item.w_class
+		if(total_w_class > max_combined_w_class && can_add_combinedwclass)
+			max_combined_w_class = total_w_class
+		if(usable_items > storage_slots && can_add_storageslots)
+			storage_slots = usable_items
+		if(biggest_w_class > fits_max_w_class && can_increase_wclass_stored)
+			fits_max_w_class = biggest_w_class
 
 /obj/item/weapon/storage/emp_act(severity)
 	if(!istype(src.loc, /mob/living))
