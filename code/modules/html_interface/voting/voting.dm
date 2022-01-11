@@ -91,9 +91,8 @@ var/global/datum/controller/vote/vote = new()
 
 		if(time_remaining <= 0)
 			result()
-			for(var/client/C in voting)
+			for(var/client/C in polldata.user)
 				if(C)
-					//nanomanager.close_user_uis(C.mob, src)
 					src.interface.hide(C)
 			src.reset()
 		else
@@ -107,10 +106,8 @@ var/global/datum/controller/vote/vote = new()
 	mode = null
 	question = null
 	choices.len = 0
-	voting.len = 0
 	discarded_votes = 0
 	discarded_choices.len = 0
-	current_votes.len = 0
 	vote_method = null
 	update(1)
 
@@ -118,8 +115,16 @@ var/global/datum/controller/vote/vote = new()
 	//get the highest number of votes
 	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
+	var/list/tally
+	for var/mob/c in polldata.choice
+		if(c)
+			tally[c] +1
+		else
+			
+	
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
+		var/total_votes = polldata.choices.len
 		var/non_voters = (clients.len - total_votes)
 		if(non_voters > 0)
 			if(mode == "restart")
@@ -145,10 +150,13 @@ var/global/datum/controller/vote/vote = new()
 		return .
 
 /datum/controller/vote/proc/majority()
+	var/list/tallies
+	var/greatest_votes = 0
+	//change choices[option] to tallies for each map
 	for(var/option in choices)
 		var/votes = choices[option]
-	if(votes > greatest_votes)
-		greatest_votes = votes
+		if(votes > greatest_votes)
+			greatest_votes = votes
 	//sortTim(data, /proc/cmp_list_by_element_asc)
 	//cmp_field = count
 	for(var/option in choices)
@@ -169,13 +177,10 @@ var/global/datum/controller/vote/vote = new()
 		. += pickweight(filteredchoices.Copy())
 
 /datum/controller/vote/proc/persistent()
-	var/datum/persistence_task/map_vote_count/task = SSpersistence_misc.tasks[/datum/persistence_task/map_vote_count]
 	task.on_init()
-	for (var/i in task.data)
-		task.data[i]
-		find
-	 assert_eq(task.data[1].map, "ree")
-	assert_eq(task.data[1].count, 2)
+	for (var/i in polldata)
+		polldata[i].user
+		//find
 	
 	
 		. += i
@@ -186,7 +191,6 @@ var/global/datum/controller/vote/vote = new()
 	var/list/winners = get_result()
 	var/text
 	var/feedbackanswer
-	var/qualified_votes = total_votes - discarded_votes
 	currently_voting = FALSE
 	if(winners.len > 0)
 		if(winners.len > 1)
@@ -202,6 +206,7 @@ var/global/datum/controller/vote/vote = new()
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
 		if(vote_method == "WEIGHTED")
+			var/qualified_votes = total_votes - discarded_votes
 			text += "<b>Random Weighted Vote Result: [.] won with [choices[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
 			for(var/choice in choices)
 				if(. == choice)
@@ -277,7 +282,7 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		//check vote then remove vote
 		if(vote && vote == "cancel_vote")
-			cancel_vote(user))
+			cancel_vote(user)
 		//add vote
 		else if(vote && vote != "cancel_vote")
 			var/datum/a = new (user, choices)
@@ -288,9 +293,8 @@ var/global/datum/controller/vote/vote = new()
 	return 0
 
 /datum/controller/vote/proc/get_vote(var/mob/user)
-	var/mob_ckey = user.ckey
-	if(polldata[mob_ckey])
-		return polldata[mob_ckey].choice
+	if(polldata[user])
+		return polldata[user].choice
 	else
 		return 0
 
@@ -298,8 +302,9 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/add_vote(list/a)
 	polldata += a
 
-/datum/controller/vote/proc/cancel_vote(var/ckey as text)
-	polldata -= ckey
+/datum/controller/vote/proc/cancel_vote(var/mob/user)
+	var/mob_ckey = user.ckey
+	polldata -= var/mob_ckey
 
 /datum/controller/vote/proc/clear_votes()
 	polldata = list()
@@ -466,6 +471,7 @@ var/global/datum/controller/vote/vote = new()
 		status_data[++status_data.len] = 0
 
 	var/list/choices_list = list()
+	//what the hell is this
 	if(mode)
 		for(var/i = 1; i <= choices.len; i++)
 			choices_list[++choices_list.len] = list(i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
