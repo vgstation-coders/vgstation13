@@ -506,7 +506,7 @@
 	desc = "A belt used to hold most gardening supplies such as min-hoes and spades."
 	icon_state = "botanybelt"
 	item_state = "botanybelt"
-	storage_slots = 8
+	storage_slots = 14
 	fits_max_w_class = W_CLASS_MEDIUM
 	can_only_hold = list(
 		"/obj/item/weapon/storage/bag/plants",
@@ -517,7 +517,9 @@
 		"/obj/item/weapon/minihoe",
 		"/obj/item/weapon/hatchet",
 		"/obj/item/weapon/bee_net",
-		"/obj/item/weapon/gun/energy/floragun")
+		"/obj/item/weapon/gun/energy/floragun",
+		"/obj/item/weapon/fishtools/",
+		"/obj/item/fish_eggs")
 
 /obj/item/weapon/storage/belt/leather
 	name = "leather belt"
