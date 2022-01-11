@@ -180,6 +180,24 @@
 	name="Security Belt"
 	result=/obj/item/weapon/storage/belt/security
 
+/datum/biogen_recipe/leather/minebelt
+	cost=350
+	id="minebelt"
+	name="Mining Gear Belt"
+	result=/obj/item/weapon/storage/belt/mining
+
+/datum/biogen_recipe/leather/janibelt
+	cost=350
+	id="janibelt"
+	name="Janibelt"
+	result=/obj/item/weapon/storage/belt/janitor
+
+/datum/biogen_recipe/leather/hydrobelt
+	cost=350
+	id="hydrobelt"
+	name="Botany Gear Belt"
+	result=/obj/item/weapon/storage/belt/botanist
+
 /datum/biogen_recipe/leather/briefcase
 	cost=400
 	id="briefcase"
