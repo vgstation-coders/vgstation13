@@ -576,8 +576,7 @@
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
 		),
 		"Curator" = list(
-			/obj/item/stack/sheet/wood/bigstack = null,    //should spawn on the backpack
-			/obj/item/stack/sheet/wood/bigstack = null,
+			/obj/item/stack/sheet/wood/biggerstack = null,    //should spawn on the backpack
 			/obj/item/weapon/storage/fancy/crayons = null,
 			/obj/item/weapon/chisel = null,
 			/obj/item/weapon/palette = null,
