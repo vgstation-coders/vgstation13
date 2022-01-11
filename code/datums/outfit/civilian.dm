@@ -545,9 +545,9 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-		),
-		"Curator" = list(
-			slot_head_str = /obj/item/clothing/head/beret,
+			slot_head_str = list(
+				"Curator" = /obj/item/clothing/head/beret,
+			),
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,
