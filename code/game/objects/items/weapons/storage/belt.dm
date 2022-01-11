@@ -518,7 +518,7 @@
 		"/obj/item/weapon/hatchet",
 		"/obj/item/weapon/bee_net",
 		"/obj/item/weapon/gun/energy/floragun",
-		"/obj/item/weapon/fishtools/",
+		"/obj/item/weapon/fishtools",
 		"/obj/item/fish_eggs")
 
 /obj/item/weapon/storage/belt/leather
