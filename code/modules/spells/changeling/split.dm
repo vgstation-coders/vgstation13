@@ -51,7 +51,7 @@
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (success)
 		changeling.splitcount += 1
-		changeling.absorbcount = max(0,changeling.absorbcount-1)
+		changeling.absorbedcount = max(0,changeling.absorbedcount-1)
 		(owner.current).visible_message("<span class='danger'>[(owner.current)] splits!</span>")
 		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
