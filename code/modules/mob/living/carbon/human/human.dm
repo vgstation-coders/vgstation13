@@ -330,8 +330,12 @@
 	var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
 	if(istype(WC))
 		if(!WC.attack_cooldown)
-			WC.crush(src,species.blood_color)
+			WC.crush(src)
 			blood = 1
+	var/obj/mecha/MC = AM
+	if(istype(MC))
+		MC.StepOnCreature(src)
+		blood = 1
 	var/obj/machinery/bot/cleanbot/roomba/R = AM
 	if(istype(R))
 		if(R.armed)

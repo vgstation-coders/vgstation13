@@ -95,6 +95,10 @@
 	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
 	var/paintable = 0
 
+	var/step_damage = 15 //For stepping on mobs
+	var/step_coolingdown = FALSE
+	var/step_over_cooldown = 3 SECONDS //Similar to mulebot
+
 /obj/mecha/get_cell()
 	return cell
 
@@ -412,6 +416,26 @@
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
 	return result
+
+/obj/mecha/proc/StepOnCreature(var/mob/living/H)
+	if(step_over_cooldown && !H.lying) // Has to be on floor for this, mechs can't knock people over as easily.
+		return
+	src.visible_message("<span class='warning'>[src] steps on [H]!</span>")
+	playsound(src, 'sound/effects/splat.ogg', 50, 1)
+	var/damage = rand(step_damage/3,step_damage) // Even higher than mulebots since big and heavy.
+	H.apply_damage(2*damage, BRUTE, LIMB_HEAD)
+	H.apply_damage(2*damage, BRUTE, LIMB_CHEST)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_LEFT_LEG)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_RIGHT_LEG)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_LEFT_ARM)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_RIGHT_ARM)
+	if(step_over_cooldown)
+		step_over_coolingdown()
+
+/obj/mecha/proc/step_over_coolingdown()
+	step_coolingdown = TRUE
+	spawn(step_over_cooldown)
+		step_coolingdown = FALSE
 
 /obj/mecha/to_bump(atom/obstacle)
 	.=..()
