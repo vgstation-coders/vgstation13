@@ -38,9 +38,10 @@
 	if(C.geneticdamage > max_genedamage)
 		to_chat(C.antag.current, "<span class='warning'>Our genomes are still reassembling. We need time to recover first.</span>")
 		return FALSE
-	if(C.absorbed_dna.len < required_dna)
+	if(C.absorbedcount < required_dna)
 		to_chat(C.antag.current, "<span class='warning'>We require at least [required_dna] samples of compatible DNA.</span>")
 		return FALSE
+		
 	if(!horrorallowed && ishorrorform(C.antag.current))
 		to_chat(C.antag.current, "<span class='warning'>You are not permitted to taint our purity. You cannot do this as a Horror.</span>")
 		return FALSE
