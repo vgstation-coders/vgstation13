@@ -483,8 +483,10 @@
 	desc = "It's a small, disease-ridden rodent."
 	icon_state = "mouse_plague"
 	infectable = TRUE
+	min_oxy = 0
+	maxHealth = 15
+	health = 15
 
-//TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/Tom
 	name = "Tom"
 	namenumbers = FALSE
