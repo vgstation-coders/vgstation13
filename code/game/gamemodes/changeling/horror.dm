@@ -31,7 +31,7 @@
 	punch_throw_range = 10
 
 	throw_mult = 1.5 // +0.5 for hulk
-	fireloss_mult = 3 // triple the damage, triple the fun
+	fireloss_mult = 2 // triple the damage, half the fun
 
 	override_icon = 'icons/mob/horror.dmi'
 	has_mutant_race = 0
