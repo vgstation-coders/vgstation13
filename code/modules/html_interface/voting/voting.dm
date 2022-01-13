@@ -44,11 +44,6 @@ var/global/datum/controller/vote/vote = new()
 	var/initialized    = 0
 	var/lastupdate     = 0
 	
-	//weighted
-	var/vote_threshold = 0.15
-	var/list/discarded_choices = list()
-	var/discarded_votes = 0
-	
 	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
 	
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
@@ -106,8 +101,6 @@ var/global/datum/controller/vote/vote = new()
 	mode = null
 	question = null
 	choices.len = 0
-	discarded_votes = 0
-	discarded_choices.len = 0
 	vote_method = null
 	update(1)
 
@@ -116,16 +109,14 @@ var/global/datum/controller/vote/vote = new()
 	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
 	var/list/tally
+	var/non_voters = 0
 	for var/mob/c in polldata.choice
 		if(c)
-			tally[c] +1
+			tally[c]++
 		else
-			
-	
+			non_voters++
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
-		var/total_votes = polldata.choices.len
-		var/non_voters = (clients.len - total_votes)
 		if(non_voters > 0)
 			if(mode == "restart")
 				choices["Continue Playing"] += non_voters
@@ -137,60 +128,90 @@ var/global/datum/controller/vote/vote = new()
 				factor = max(factor,0.5)
 				choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-
-	//get all options with that many votes and return them in a list
-	. = list()
+	//pick winner
 	switch(vote_method)
-		if("WEIGHTED") weighted()
+		if("MAJORITY")
+			. = majority(tally)
+		if("WEIGHTED")
+			. = weighted(tally)
 		if("PERSISTENT")
-			if("map") persistent()
-		if("MAJORITY") majority()
+			if("map") 
+				. = persistent(tally)
 		else
-			majority()
+			. = majority(tally)
 		return .
 
-/datum/controller/vote/proc/majority()
-	var/list/tallies
-	var/greatest_votes = 0
-	//change choices[option] to tallies for each map
-	for(var/option in choices)
-		var/votes = choices[option]
-		if(votes > greatest_votes)
-			greatest_votes = votes
-	//sortTim(data, /proc/cmp_list_by_element_asc)
-	//cmp_field = count
-	for(var/option in choices)
-		if(choices[option] == greatest_votes)
-			. += option
+/datum/controller/vote/proc/majority(var/list/tally)
+	var/text
+	var/feedbackanswer
+	if (tally.len > 0)
+		if (tally[1])
+			var/winners = list()
+			var/greatest_votes = 0
 
-/datum/controller/vote/proc/weighted()
-	var/list/filteredchoices = choices.Copy()
-	for(var/a in filteredchoices)
-		if(!filteredchoices[a])
-			filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
-			continue
-		if(filteredchoices[a] / total_votes < vote_threshold)
-			discarded_votes += filteredchoices[a]
-			filteredchoices -= a
-			discarded_choices += a
-	if(filteredchoices.len)
-		. += pickweight(filteredchoices.Copy())
+			tally = sortTim(tally, /proc/cmp_list_by_element_asc,1)
+			greatest_votes = tally[1]
+			for (var/i in tally)
+				if (i == greatest_votes)//must be true a least once 
+					winners += i
+			if (winners > 1)
+				text = "<b>Vote Tied Between:</b><br>"
+				for(var/option in winners)
+					text += "\t[option]<br>"
+					feedbackanswer = jointext(winners, " ")
+			. = pick(winners)
+		if(mode == "map")
+			if(!feedbackanswer)
+				feedbackanswer = .
+				feedback_set("map vote winner", feedbackanswer)
+			else
+				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
+		text += "<b>Vote Result: [.] won with [greatest_votes] vote\s.</b>"
+		for(var/choice in tally)
+			if(. != choice)
+				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"]."
+	else
+		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+	return text
 
-/datum/controller/vote/proc/persistent()
-	task.on_init()
-	for (var/i in polldata)
-		polldata[i].user
-		//find
+/datum/controller/vote/proc/weighted(var/list/filteredchoices)
+	var/vote_threshold = 0.15
+	var/list/discarded_choices = list()
+	var/discarded_votes = 0
+	var/total_votes = get_total()
+	var/text
+	if (tally.len > 0)
+		for(var/a in filteredchoices)
+			if(!filteredchoices[a])
+				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+				continue
+			if(filteredchoices[a] / total_votes < vote_threshold)
+				discarded_votes += filteredchoices[a]
+				filteredchoices -= a
+				discarded_choices += a
+		if(filteredchoices.len)
+			. = pickweight(filteredchoices.Copy())
+		var/qualified_votes = total_votes - discarded_votes
+			if (tally[1])
+			text += "<b>Random Weighted Vote Result: [.] won with [choices[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
+			for(var/choice in choices)
+				if(. != choice)
+					text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(choices[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*choices[choice]/qualified_votes)]% chance of winning"]" : null]."
+	else
+		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+	return text
+
+/datum/controller/vote/proc/persistent(var/list/tally)
+	//task.on_init()
+	//for (var/i in polldata)
+	//	polldata[i].user
+	//find
 	
-	
-		. += i
-	task.on_shutdown()
+	majority(tally)
+	//task.on_shutdown()
 
 /datum/controller/vote/proc/announce_result()
 	stack_trace("Fuck my shit up. Lock is \[[lock]]")
-	var/list/winners = get_result()
-	var/text
-	var/feedbackanswer
 	currently_voting = FALSE
 	if(winners.len > 0)
 		if(winners.len > 1)
@@ -224,7 +245,6 @@ var/global/datum/controller/vote/vote = new()
 	to_chat(world, "<font color='purple'>[text]</font>")
 
 /datum/controller/vote/proc/result()
-	. = announce_result()
 	var/restart = 0
 	currently_voting = FALSE
 	if(.)
@@ -251,8 +271,6 @@ var/global/datum/controller/vote/vote = new()
 					watchdog.chosen_map = ismapvote[.]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 					//testing("Vote picked [chosen_map]")
-
-
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
 		feedback_set_details("end_error","restart vote")
@@ -293,8 +311,8 @@ var/global/datum/controller/vote/vote = new()
 	return 0
 
 /datum/controller/vote/proc/get_vote(var/mob/user)
-	if(polldata[user])
-		return polldata[user].choice
+	if(polldata[user.ckey])
+		return polldata[user.ckey].choice
 	else
 		return 0
 
@@ -310,7 +328,8 @@ var/global/datum/controller/vote/vote = new()
 	polldata = list()
 	
 /datum/controller/vote/proc/get_total()
-	return polldata.len
+	var/total = polldata.choices.len
+	return total
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
 	if(currently_voting)
@@ -439,7 +458,7 @@ var/global/datum/controller/vote/vote = new()
 	
 	//adds client data 
 	if(get_vote(user.ckey))
-		client_data[++client_data.len] = get_vote(user.ckey)
+		client_data[++client_data.len] = get_vote(user)
 	if(user.holder)
 		admin = 1
 		if(user.holder.rights & R_ADMIN)
