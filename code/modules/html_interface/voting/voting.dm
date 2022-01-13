@@ -33,7 +33,7 @@ var/global/datum/controller/vote/vote = new()
 	var/mode           = null
 	var/question       = null
 	var/list/choices   = list()
-
+	var/list/voting    = list()
 	var/list/ismapvote
 	var/chosen_map
 	name               = "datum"
@@ -45,8 +45,9 @@ var/global/datum/controller/vote/vote = new()
 	var/lastupdate     = 0
 	
 	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
-	
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
+	
+	var/polldata = list() //check this
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
@@ -63,10 +64,7 @@ var/global/datum/controller/vote/vote = new()
 	if (vote != src)
 		if (istype(vote))
 			qdel(vote)
-
 		vote = src
-//datum/controller/vote/proc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
-//	return
 
 /datum/controller/vote/proc/process()	//called by master_controller
 	if (lock)
@@ -110,7 +108,7 @@ var/global/datum/controller/vote/vote = new()
 	//default-vote for everyone who didn't vote
 	var/list/tally
 	var/non_voters = 0
-	for var/mob/c in polldata.choice
+	for (var/mob/c in polldata.vote)
 		if(c)
 			tally[c]++
 		else
@@ -119,41 +117,38 @@ var/global/datum/controller/vote/vote = new()
 		//clients with voting initialized
 		if(non_voters > 0)
 			if(mode == "restart")
-				choices["Continue Playing"] += non_voters
+				tally["Continue Playing"] += non_voters
 			if(mode == "gamemode")
 				if(master_mode in choices)
-					choices[master_mode] += non_voters
+					tally[master_mode] += non_voters
 			if(mode == "crew_transfer")
 				var/factor = 0.0107*world.time**0.393 //magical factor between approx. 0.5 and 1.4
 				factor = max(factor,0.5)
-				choices["Initiate Crew Transfer"] = round(choices["Initiate Crew Transfer"] * factor)
+				tally["Initiate Crew Transfer"] = round(tally["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-	//pick winner
-	switch(vote_method)
+	switch(vote_method) //pick winner based on vote method
 		if("MAJORITY")
-			. = majority(tally)
+			return majority(tally)
 		if("WEIGHTED")
-			. = weighted(tally)
+			return weighted(tally)
 		if("PERSISTENT")
 			if("map") 
-				. = persistent(tally)
+				return persistent(tally)
 		else
-			. = majority(tally)
-		return .
+			return  majority(tally)
 
 /datum/controller/vote/proc/majority(var/list/tally)
 	var/text
 	var/feedbackanswer
+	var/greatest_votes = 0
 	if (tally.len > 0)
 		if (tally[1])
 			var/winners = list()
-			var/greatest_votes = 0
-
 			tally = sortTim(tally, /proc/cmp_list_by_element_asc,1)
 			greatest_votes = tally[1]
-			for (var/i in tally)
-				if (i == greatest_votes)//must be true a least once 
-					winners += i
+			for (var/choice in tally)
+				if (choice  == greatest_votes)//must be true a least once 
+					winners += choice 
 			if (winners > 1)
 				text = "<b>Vote Tied Between:</b><br>"
 				for(var/option in winners)
@@ -174,12 +169,14 @@ var/global/datum/controller/vote/vote = new()
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
 
-/datum/controller/vote/proc/weighted(var/list/filteredchoices)
+/datum/controller/vote/proc/weighted(var/list/tally)
 	var/vote_threshold = 0.15
 	var/list/discarded_choices = list()
 	var/discarded_votes = 0
 	var/total_votes = get_total()
 	var/text
+	var/list/filteredchoices = choices.Copy()
+	var/qualified_votes
 	if (tally.len > 0)
 		for(var/a in filteredchoices)
 			if(!filteredchoices[a])
@@ -191,12 +188,11 @@ var/global/datum/controller/vote/vote = new()
 				discarded_choices += a
 		if(filteredchoices.len)
 			. = pickweight(filteredchoices.Copy())
-		var/qualified_votes = total_votes - discarded_votes
-			if (tally[1])
-			text += "<b>Random Weighted Vote Result: [.] won with [choices[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
-			for(var/choice in choices)
-				if(. != choice)
-					text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(choices[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*choices[choice]/qualified_votes)]% chance of winning"]" : null]."
+		qualified_votes = total_votes - discarded_votes
+		text += "<b>Random Weighted Vote Result: [.] won with [choices[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
+		for(var/choice in choices)
+			if(. != choice)
+				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
@@ -212,37 +208,10 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/announce_result()
 	stack_trace("Fuck my shit up. Lock is \[[lock]]")
+	var/result = get_result()
 	currently_voting = FALSE
-	if(winners.len > 0)
-		if(winners.len > 1)
-			text = "<b>Vote Tied Between:</b><br>"
-			for(var/option in winners)
-				text += "\t[option]<br>"
-			feedbackanswer = jointext(winners, " ")
-		. = pick(winners)
-		if(mode == "map")
-			if(!feedbackanswer)
-				feedbackanswer = .
-				feedback_set("map vote winner", feedbackanswer)
-			else
-				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
-		if(vote_method == "WEIGHTED")
-			var/qualified_votes = total_votes - discarded_votes
-			text += "<b>Random Weighted Vote Result: [.] won with [choices[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
-			for(var/choice in choices)
-				if(. == choice)
-					continue
-				text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[choices[choice]? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*choices[choice]/qualified_votes)]% chance of winning"]" : null]."
-		else
-			text += "<b>Vote Result: [.] won with [choices[.]] vote\s.</b>"
-			for(var/choice in choices)
-				if(. == choice)
-					continue
-				text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s."
-	else
-		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
-	log_vote(text)
-	to_chat(world, "<font color='purple'>[text]</font>")
+	log_vote(result)
+	to_chat(world, "<font color='purple'>[result]</font>")
 
 /datum/controller/vote/proc/result()
 	var/restart = 0
@@ -270,7 +239,6 @@ var/global/datum/controller/vote/vote = new()
 					chosen_map = "maps/voting/" + ismapvote[.] + "/vgstation13.dmb"
 					watchdog.chosen_map = ismapvote[.]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
-					//testing("Vote picked [chosen_map]")
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
 		feedback_set_details("end_error","restart vote")
@@ -303,32 +271,32 @@ var/global/datum/controller/vote/vote = new()
 			cancel_vote(user)
 		//add vote
 		else if(vote && vote != "cancel_vote")
-			var/datum/a = new (user, choices)
-			add_vote(a)
+			add_vote(user, vote)
 			return vote //do we need this?
 		else
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 	return 0
 
 /datum/controller/vote/proc/get_vote(var/mob/user)
-	if(polldata[user.ckey])
-		return polldata[user.ckey].choice
+	if(polldata[user])
+		return polldata[user].vote
 	else
 		return 0
 
 //parameter list input: ckey, choice
-/datum/controller/vote/proc/add_vote(list/a)
-	polldata += a
+/datum/controller/vote/proc/add_vote(var/list/L)	
+	var/datum/vote = new(L["user"], L["vote"])
+	polldata += vote
 
 /datum/controller/vote/proc/cancel_vote(var/mob/user)
 	var/mob_ckey = user.ckey
-	polldata -= var/mob_ckey
+	polldata -= user
 
 /datum/controller/vote/proc/clear_votes()
 	polldata = list()
 	
 /datum/controller/vote/proc/get_total()
-	var/total = polldata.choices.len
+	var/total = polldata.vote.len
 	return total
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
@@ -377,9 +345,7 @@ var/global/datum/controller/vote/vote = new()
 				ismapvote = maps
 			else
 				return 0
-			
-		var/datum/vote = new(L["ckey"], L["choices"])
-		polldata += vote
+
 		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
@@ -454,7 +420,7 @@ var/global/datum/controller/vote/vote = new()
 	interface.show(user)
 	var/list/client_data = list()
 	var/admin = 0
-	var/currvote = 0
+	//var/currvote = 0
 	
 	//adds client data 
 	if(get_vote(user.ckey))
@@ -504,7 +470,7 @@ var/global/datum/controller/vote/vote = new()
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
 		if ("cancel_vote")
-			cancel_vote(mob_ckey)
+			cancel_vote(usr)
 			src.updateFor(usr.client)
 			return 0
 		if("cancel")
