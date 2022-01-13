@@ -418,7 +418,7 @@
 	return result
 
 /obj/mecha/proc/StepOnCreature(var/mob/living/H)
-	if(step_coolingdown && !H.lying) // Has to be on floor for this, mechs can't knock people over as easily.
+	if(step_coolingdown || !H.lying) // Has to be on floor for this, mechs can't knock people over as easily.
 		return
 	src.visible_message("<span class='warning'>[src] steps on [H]!</span>")
 	playsound(src, 'sound/effects/splat.ogg', 50, 1)
