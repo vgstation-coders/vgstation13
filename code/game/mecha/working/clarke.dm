@@ -23,6 +23,7 @@
 		"veteranclarke"
 	)
 	paintable = 1
+	step_damage = 0
 
 /obj/mecha/working/clarke/New()
 	..()

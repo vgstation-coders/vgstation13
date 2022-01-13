@@ -22,6 +22,7 @@
 		"darkgygax_old",
 		"pobeda"
 	)
+	step_damage = 10
 
 /obj/mecha/combat/gygax/dark
 	desc = "A lightweight exosuit used by Nanotrasen Death Squads. A significantly upgraded Gygax security mech."

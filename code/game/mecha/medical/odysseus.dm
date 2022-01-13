@@ -18,6 +18,7 @@
 		"paramed",
 		"urinetrouble"
 	)
+	step_damage = 0
 
 /obj/mecha/medical/odysseus/New()
 	..()
