@@ -97,7 +97,7 @@
 
 	var/step_damage = 10 //For stepping on mobs
 	var/step_coolingdown = FALSE
-	var/step_over_cooldown = 3 SECONDS //Similar to mulebot
+	var/step_over_cooldown = 5 SECONDS //Higher than average
 
 /obj/mecha/get_cell()
 	return cell
