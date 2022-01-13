@@ -96,7 +96,7 @@
 			if(findtext(input_reagent,"'s blood"))
 				bloodonly = 1
 				input_reagent = replacetext(input_reagent,"'s blood","")
-			if(input_reagent == L.name || input_reagent in mob_name_parts)
+			if(input_reagent == L.name || (input_reagent in mob_name_parts))
 				mobfound = L
 				break
 		// Then searches through the list of all reagents and ignores case, plus converts spaces into either nothing or underscores for IDs
