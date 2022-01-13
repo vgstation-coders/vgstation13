@@ -7964,6 +7964,13 @@
 	glass_name = "\improper Changeling Stab"
 	glass_desc = "Stabs, but metaphorically."
 
+/datum/reagent/ethanol/drink/changelingsting/stab/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(tick < 1)
+		M.Knockdown(1)
+
 /datum/reagent/ethanol/drink/erikasurprise
 	name = "Erika Surprise"
 	id = ERIKASURPRISE
