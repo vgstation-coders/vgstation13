@@ -484,6 +484,8 @@
 	icon_state = "mouse_plague"
 	infectable = TRUE
 	min_oxy = 0
+	maxHealth = 15
+	health = 15
 
 /mob/living/simple_animal/mouse/Tom
 	name = "Tom"
