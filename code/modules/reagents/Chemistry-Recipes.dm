@@ -3903,5 +3903,27 @@
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/random
+	name = "Random chemical"
+	id = "random"
+	result = null
+	required_reagents = list(NOTHING = 10, PHAZON = 10)
+	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
+	result_amount = 1
+
+/datum/chemical_reaction/random/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	if(prob(50)) // Half chance to start another chemical reaction
+		var/our_id = pick(chemical_reactions_list)
+		var/datum/chemical_reaction/new_reaction = chemical_reactions_list[our_id]
+		for(var/reagent1 in new_reaction.required_reagents)
+			holder.add_reagent(reagent1, new_reaction.required_reagents[reagent1])
+		for(var/reagent2 in new_reaction.required_catalysts)
+			holder.add_reagent(reagent2, new_reaction.required_catalysts[reagent2])
+	else // Or else just spawn a new chem
+		var/list/blocked_chems = list(ADMINORDRAZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
+		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
+		holder.add_reagent(pick(allowed_reagents),created_volume)
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
