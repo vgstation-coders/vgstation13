@@ -107,7 +107,7 @@
 				input_reagent = reagent_id
 				chemfound = TRUE
 				break
-		if(mobfound && mobfound.reagents && !mobfound.status_flags & GODMODE && !mobfound.flags & INVULNERABLE)
+		if(mobfound && mobfound.reagents && !(mobfound.status_flags & GODMODE) && !(mobfound.flags & INVULNERABLE))
 			// Take half from each unless only taking blood, then take all from blood instead
 			mobfound.take_blood(X, (min(amount, energy * 10, space)) / (2 - bloodonly))
 			if(!bloodonly)
