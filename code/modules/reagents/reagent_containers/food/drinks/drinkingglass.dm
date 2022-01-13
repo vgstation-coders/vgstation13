@@ -50,7 +50,7 @@
 			isGlass = R.glass_isGlass
 
 			if(istype(R,/datum/reagent/ethanol/drink/changelingsting/stab))
-				available_drinks = typesof(/datum/reagent/drink) + typesof(/datum/reagent/ethanol/drink)
+				available_drinks = subtypesof(/datum/reagent/drink) + subtypesof(/datum/reagent/ethanol/drink)
 				available_drinks = shuffle(available_drinks)
 				randomize()
 			else if(R.glass_icon_state)
