@@ -46,8 +46,6 @@ var/global/datum/controller/vote/vote = new()
 	
 	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
-	
-	var/polldata = list() //check this
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
@@ -84,7 +82,7 @@ var/global/datum/controller/vote/vote = new()
 
 		if(time_remaining <= 0)
 			result()
-			for(var/client/C in polldata.user)
+			for(var/client/C in voting)
 				if(C)
 					src.interface.hide(C)
 			src.reset()
@@ -277,19 +275,22 @@ var/global/datum/controller/vote/vote = new()
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 	return 0
 
-/datum/controller/vote/proc/get_vote(var/mob/user)
+/datum/controller/data
+	var/list/user
+	var/list/vote
+
+/datum/controller/data/proc/get_vote(var/mob/user)
 	if(polldata[user])
 		return polldata[user].vote
 	else
 		return 0
 
-//parameter list input: ckey, choice
-/datum/controller/vote/proc/add_vote(var/list/L)	
+/datum/controller/data/proc/add_vote(var/list/L)	
 	var/datum/vote = new(L["user"], L["vote"])
 	polldata += vote
 
 /datum/controller/vote/proc/cancel_vote(var/mob/user)
-	var/mob_ckey = user.ckey
+	//var/mob_ckey = user.ckey
 	polldata -= user
 
 /datum/controller/vote/proc/clear_votes()
@@ -423,13 +424,15 @@ var/global/datum/controller/vote/vote = new()
 	//var/currvote = 0
 	
 	//adds client data 
-	if(get_vote(user.ckey))
-		client_data[++client_data.len] = get_vote(user)
+	if(get_vote(user))
+		//client_data[++client_data.len] = get_vote(user)
+		client_data += get_vote(user)
 	if(user.holder)
 		admin = 1
 		if(user.holder.rights & R_ADMIN)
 			admin = 2
-	client_data[++client_data.len] = (admin)
+	//client_data[++client_data.len] = (admin)
+	client_data += admin
 	interface.callJavaScript("client_data", client_data, user)
 	src.updateFor(user, interface)
 
@@ -443,24 +446,25 @@ var/global/datum/controller/vote/vote = new()
 		return
 	last_update = world.time
 	status_data.len = 0
-	status_data[++status_data.len] = mode
-	status_data[++status_data.len] = question
-	status_data[++status_data.len] = time_remaining
+	status_data += mode
+	status_data += question
+	status_data += time_remaining
 	if(config.allow_vote_restart)
-		status_data[++status_data.len] = 1
+		status_data += 1
 	else
-		status_data[++status_data.len] = 0
+		status_data += 0
 	if(config.allow_vote_mode)
-		status_data[++status_data.len] = 1
+		status_data += 1
 	else
-		status_data[++status_data.len] = 0
+		status_data += 0
 
-	var/list/choices_list = list()
-	//what the hell is this
+	//var/list/choices_list = list()
 	if(mode)
 		for(var/i = 1; i <= choices.len; i++)
-			choices_list[++choices_list.len] = list(i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
-	data = choices_list
+			//index, choice, choice count
+			//choices_list[++choices_list.len] = list(i, choices[i], (!isnull(tally[choices[i]]) ? tally[choices[i]] : 0))
+	//data = choices_list
+			data += new(i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
 	if(refresh && interface)
 		updateFor()
 
