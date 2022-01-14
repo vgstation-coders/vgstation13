@@ -26,16 +26,16 @@
 			if(M.dry)
 				M.dry=0
 		M.virus2 |= virus_copylist(mob.virus2)
-		if(istype(mob.wear_mask, /obj/item/clothing/mask/cigarette))
+		if(istype(mob.wear_mask, /obj/item/clothing/mask/cigarette) && !mob.is_wearing_item(/obj/item/clothing/head/helmet/space))
 			var/obj/item/clothing/mask/cigarette/I = mob.get_item_by_slot(slot_wear_mask)
 			if(prob(20))
 				var/turf/Q = get_turf(mob)
 				var/turf/endLocation
 				var/spitForce = pick(0,1,2,3)
 				endLocation = get_ranged_target_turf(Q, mob.dir, spitForce)
+				to_chat(mob, "<span class ='warning'>You sneezed \the [mob.wear_mask] out of your mouth!</span>")
 				mob.drop_item(I)
 				I.throw_at(endLocation,spitForce,1)
-				to_chat(mob, "<span class ='warning'>You sneezed your cigarette out of your mouth!</span>")
 
 
 /datum/disease2/effect/gunck
