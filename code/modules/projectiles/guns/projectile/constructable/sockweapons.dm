@@ -3,7 +3,6 @@
 	desc = "Cleans the spirit."
 	icon = 'icons/obj/sockweapon.dmi'
 	hitsound = "sound/weapons/punch1.ogg"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 5
 	throwforce = 0
 	throw_speed = 1
@@ -16,7 +15,6 @@
 	desc = "Rebuilds the body."
 	icon = 'icons/obj/sockweapon.dmi'
 	hitsound = "sound/effects/woodhit.ogg"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 15
 	throwforce = 10
 	throw_speed = 1
