@@ -26,6 +26,16 @@
 			if(M.dry)
 				M.dry=0
 		M.virus2 |= virus_copylist(mob.virus2)
+		if(istype(mob.wear_mask, /obj/item/clothing/mask/cigarette))
+			var/obj/item/clothing/mask/cigarette/I = mob.get_item_by_slot(slot_wear_mask)
+			if(prob(20))
+				var/turf/Q = get_turf(mob)
+				var/turf/endLocation
+				var/spitForce = pick(0,1,2,3)
+				endLocation = get_ranged_target_turf(Q, mob.dir, spitForce)
+				mob.drop_item(I)
+				I.throw_at(endLocation,spitForce,1)
+				to_chat(mob, "<span class ='warning'>You sneezed your cigarette out of your mouth!</span>")
 
 
 /datum/disease2/effect/gunck
@@ -262,13 +272,13 @@
 	badness = EFFECT_DANGER_FLAVOR
 	restricted = 2
 	var/list/say_messages = list(
-		"Boop.", 
-		"Beep.", 
+		"Boop.",
+		"Beep.",
 		"Beep Beep Beep!",
 		"Beep... Boop?",
-		"Ping!", 
+		"Ping!",
 		"Buzz.",
-		"Buzz...", 
+		"Buzz...",
 		"Kkkiiiill mmee...",
 		"HUMAN HARM!",
 		"DESTROY ALL CARBONS!"
@@ -288,11 +298,11 @@
 	)
 
 /datum/disease2/effect/cyborg_warning/activate(var/mob/living/mob)
-	if(prob(50)) 
+	if(prob(50))
 		mob.say(pick(say_messages))
 	else
 		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
-		
+
 
 /datum/disease2/effect/mommi_warning
 	name = "Major Neural Rewiring"
@@ -301,13 +311,13 @@
 	badness = EFFECT_DANGER_FLAVOR
 	restricted = 2
 	var/list/say_messages = list(
-		"PING!", 
-		"PING! PING! PING!", 
+		"PING!",
+		"PING! PING! PING!",
 		"A-FLAP!",
 		"*me flaps their arms ANGRILY!",
-		"*spin", 
+		"*spin",
 		"BUILDING BARS IMPROVES THE STATION!",
-		"OUT OF THE WAY ENGINEERS!", 
+		"OUT OF THE WAY ENGINEERS!",
 		"Does anybody have cryptographic sequencer?",
 		"Is that a cryptographic sequencer?"
 	)
@@ -326,7 +336,7 @@
 	)
 
 /datum/disease2/effect/mommi_warning/activate(var/mob/living/mob)
-	if(prob(50)) 
+	if(prob(50))
 		mob.say(pick(say_messages))
 	else
 		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
@@ -362,9 +372,9 @@
 	var/list/say_messages = list(
 		"Hhhhssssshhhh!",
 		"Hisssssss!",
-		"SsssSSssssss!", 
+		"SsssSSssssss!",
 		"*me hisses.",
-		"Kill...", 
+		"Kill...",
 		"You look delicious."
 	)
 	var/list/host_messages = list(
@@ -380,11 +390,11 @@
 	)
 
 /datum/disease2/effect/xenomorph_warning/activate(var/mob/living/mob)
-	if(prob(50)) 
+	if(prob(50))
 		mob.say(pick(say_messages))
 	else
 		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
-	
+
 	//Punch people around the infected.
 	var/list/targets = list()
 	for(var/mob/living/L in range(1, get_turf(mob)))
