@@ -3,6 +3,10 @@
 var/const/TOUCH = 1
 var/const/INGEST = 2
 
+#define NO_REACTION 0
+#define NON_DISCRETE_REACTION 1
+#define DISCRETE_REACTION 2
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 /datum/reagents
@@ -386,8 +390,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					continue
 
 				var/datum/chemical_reaction/C = reaction
-				if(handle_reaction(C))
-					reaction_occured = 1
+				switch(handle_reaction(C))
+					if(NON_DISCRETE_REACTION)
+						reaction_occured = 1
+						break
+					if(DISCRETE_REACTION)
+						break
 
 	while(reaction_occured)
 	update_total()
@@ -486,9 +494,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 		C.on_reaction(src, created_volume)
 		if(C.react_discretely)
-			return FALSE //We want to exit without continuing the loop.
-		return TRUE
-	return FALSE
+			return DISCRETE_REACTION //We want to exit without continuing the loop.
+		return NON_DISCRETE_REACTION
+	return NO_REACTION
 
 /datum/reagents/proc/isolate_reagent(var/reagent)
 	for(var/A in reagent_list)
@@ -1027,3 +1035,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		playsound(my_atom, 'sound/effects/bubbles.ogg', 50, 1)
 
 	return add_reagent(reagent_id, total_amount_converted)
+
+#undef NO_REACTION
+#undef NON_DISCRETE_REACTION
+#undef DISCRETE_REACTION
