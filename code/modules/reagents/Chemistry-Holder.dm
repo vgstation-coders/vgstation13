@@ -390,12 +390,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					continue
 
 				var/datum/chemical_reaction/C = reaction
-				switch(handle_reaction(C))
-					if(NON_DISCRETE_REACTION)
+				if(handle_reaction(C))
+					if(handle_reaction(C) == NON_DISCRETE_REACTION)
 						reaction_occured = 1
-						break
-					if(DISCRETE_REACTION)
-						break
+					break
 
 	while(reaction_occured)
 	update_total()
