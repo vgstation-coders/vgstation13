@@ -386,105 +386,109 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					continue
 
 				var/datum/chemical_reaction/C = reaction
-				var/total_required_reagents = C.required_reagents.len
-				var/total_matching_reagents = 0
-				var/total_required_catalysts = C.required_catalysts.len
-				var/total_matching_catalysts= 0
-				var/matching_container = 0
-				var/required_conditions = 0
-				var/list/multipliers = new/list()
-				var/required_temp = C.required_temp
-				var/is_cold_recipe = C.is_cold_recipe
-				var/meets_temp_requirement = 0
-				var/quiet = C.quiet
-
-				if(C.react_discretely)
-					multipliers += 1 //Only once
-
-				for(var/B in C.required_reagents)
-					if(islist(B))
-						var/list/L = B
-						for(var/D in L)
-							if(!has_reagent(D, C.required_reagents[B]))
-								continue
-							total_matching_reagents++
-							multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
-							break
-					else
-						if(!has_reagent(B, C.required_reagents[B]))
-							break
-						total_matching_reagents++
-						multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
-				for(var/B in C.required_catalysts)
-					if(!has_reagent(B, C.required_catalysts[B]))
-						break
-					total_matching_catalysts++
-
-				if(!C.required_container)
-					matching_container = 1
-
-				else
-					if(istype(my_atom, C.required_container))
-						matching_container = 1
-
-				if(C.required_condition_check(src))
-					required_conditions = 1
-
-				if(required_temp == 0 || (is_cold_recipe && chem_temp <= required_temp) || (!is_cold_recipe && chem_temp >= required_temp))
-					meets_temp_requirement = 1
-
-				if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions && meets_temp_requirement)
-					var/multiplier = min(multipliers)
-					var/preserved_data = null
-					for(var/B in C.required_reagents)
-						if(islist(B))
-							var/list/L = B
-							for(var/D in L)
-								if(!preserved_data)
-									preserved_data = get_data(D)
-								remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
-						else
-							if(!preserved_data)
-								preserved_data = get_data(B)
-							remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
-
-					chem_temp += C.reaction_temp_change
-
-					var/created_volume = C.result_amount*multiplier
-					if(C.result)
-						feedback_add_details("chemical_reaction","[C.result][created_volume]")
-						multiplier = max(multiplier, 1) //this shouldnt happen ...
-						add_reagent(C.result, created_volume, null, chem_temp)
-						if (preserved_data)
-							set_data(C.result, preserved_data)
-
-						//add secondary products
-						for(var/S in C.secondary_results)
-							add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier, reagtemp = chem_temp)
-
-					if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade) && !quiet)
-						my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
-						//Logging inside chem_grenade.dm, prime()
-					else if	(istype(my_atom, /mob/living/carbon/human) && !quiet)
-						my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
-						//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
-					else
-						if(!quiet)
-							my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
-						C.log_reaction(src, created_volume)
-
-					if(!quiet && !(my_atom.flags & SILENTCONTAINER))
-						playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
-
-					C.on_reaction(src, created_volume)
-					if(C.react_discretely)
-						break //We want to exit without continuing the loop.
+				if(handle_reaction(C))
 					reaction_occured = 1
-					break
 
 	while(reaction_occured)
 	update_total()
 	return 0
+
+/datum/reagents/proc/handle_reaction(var/datum/chemical_reaction/C, var/requirement_override = FALSE, var/multiplier_override = 1)
+	var/total_required_reagents = C.required_reagents.len
+	var/total_matching_reagents = 0
+	var/total_required_catalysts = C.required_catalysts.len
+	var/total_matching_catalysts= 0
+	var/matching_container = 0
+	var/required_conditions = 0
+	var/list/multipliers = new/list()
+	var/required_temp = C.required_temp
+	var/is_cold_recipe = C.is_cold_recipe
+	var/meets_temp_requirement = 0
+	var/quiet = C.quiet
+
+	if(C.react_discretely || requirement_override)
+		multipliers += 1 //Only once
+
+	for(var/B in C.required_reagents)
+		if(islist(B))
+			var/list/L = B
+			for(var/D in L)
+				if(!has_reagent(D, C.required_reagents[B]))
+					continue
+				total_matching_reagents++
+				multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
+				break
+		else
+			if(!has_reagent(B, C.required_reagents[B]))
+				break
+			total_matching_reagents++
+			multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
+	for(var/B in C.required_catalysts)
+		if(!has_reagent(B, C.required_catalysts[B]))
+			break
+		total_matching_catalysts++
+
+	if(!C.required_container)
+		matching_container = 1
+
+	else
+		if(istype(my_atom, C.required_container))
+			matching_container = 1
+
+	if(C.required_condition_check(src))
+		required_conditions = 1
+
+	if(required_temp == 0 || (is_cold_recipe && chem_temp <= required_temp) || (!is_cold_recipe && chem_temp >= required_temp))
+		meets_temp_requirement = 1
+
+	if((total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions && meets_temp_requirement) || requirement_override)
+		var/multiplier = min(multipliers) * multiplier_override
+		var/preserved_data = null
+		for(var/B in C.required_reagents)
+			if(islist(B))
+				var/list/L = B
+				for(var/D in L)
+					if(!preserved_data)
+						preserved_data = get_data(D)
+					remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
+			else
+				if(!preserved_data)
+					preserved_data = get_data(B)
+				remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
+
+		chem_temp += C.reaction_temp_change
+
+		var/created_volume = C.result_amount*multiplier
+		if(C.result)
+			feedback_add_details("chemical_reaction","[C.result][created_volume]")
+			multiplier = max(multiplier, 1) //this shouldnt happen ...
+			add_reagent(C.result, created_volume, null, chem_temp)
+			if (preserved_data)
+				set_data(C.result, preserved_data)
+
+			//add secondary products
+			for(var/S in C.secondary_results)
+				add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier, reagtemp = chem_temp)
+
+		if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade) && !quiet)
+			my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
+			//Logging inside chem_grenade.dm, prime()
+		else if	(istype(my_atom, /mob/living/carbon/human) && !quiet)
+			my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
+			//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
+		else
+			if(!quiet)
+				my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
+			C.log_reaction(src, created_volume)
+
+		if(!quiet && !(my_atom.flags & SILENTCONTAINER))
+			playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+
+		C.on_reaction(src, created_volume)
+		if(C.react_discretely)
+			return FALSE //We want to exit without continuing the loop.
+		return TRUE
+	return FALSE
 
 /datum/reagents/proc/isolate_reagent(var/reagent)
 	for(var/A in reagent_list)

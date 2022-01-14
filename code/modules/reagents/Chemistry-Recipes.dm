@@ -3915,11 +3915,9 @@
 	..()
 	if(prob(50)) // Half chance to start another chemical reaction
 		var/our_id = pick(chemical_reactions_list)
-		var/datum/chemical_reaction/new_reaction = chemical_reactions_list[our_id]
-		for(var/reagent1 in new_reaction.required_reagents)
-			holder.add_reagent(reagent1, new_reaction.required_reagents[reagent1])
-		for(var/reagent2 in new_reaction.required_catalysts)
-			holder.add_reagent(reagent2, new_reaction.required_catalysts[reagent2])
+		var/list/our_reactions = chemical_reactions_list[our_id]
+		for(var/datum/chemical_reaction/new_reaction in our_reactions)
+			holder.handle_reaction(new_reaction,TRUE,created_volume)
 	else // Or else just spawn a new chem
 		var/list/blocked_chems = list(ADMINORDRAZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
