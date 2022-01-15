@@ -20,7 +20,7 @@
 	throw_speed = 1
 	throw_range = 7
 	attack_verb = list("socks")
-	w_class = W_CLASS_TINY
+	w_class = W_CLASS_MEDIUM
 
 /obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -41,3 +41,20 @@
 			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
 			user.put_in_hands(I)
 			qdel(src)
+
+/obj/item/weapon/soap_sock/attack_self(mob/user as mob)
+	if(user.a_intent == I_GRAB)
+		to_chat(user, "You remove the soap from \the [src].")
+		user.drop_item(src, force_drop = 1)
+		user.put_in_hands(new /obj/item/weapon/soap(user))
+		user.put_in_hands(new /obj/item/clothing/shoes/kneesocks(user))
+		qdel(src)
+
+/obj/item/weapon/brick_sock/attack_self(mob/user as mob)
+	if(user.a_intent == I_GRAB)
+		to_chat(user, "You remove the brick from \the [src].")
+		user.drop_item(src, force_drop = 1)
+		user.put_in_hands(new /obj/item/stack/sheet/mineral/brick(user))
+//		drop_stack(/obj/item/stack/sheet/mineral/brick, user.loc, 1, user)
+		user.put_in_hands(new /obj/item/clothing/shoes/kneesocks(user))
+		qdel(src)
