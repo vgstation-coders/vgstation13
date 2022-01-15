@@ -20,6 +20,8 @@
 	density = 0
 	plane=LYING_MOB_PLANE
 
+
+	var/mob/living/simple_animal/parent_grue														//which grue laid this egg, if any
 	var/bright_limit_gain = 1											//maximum brightness on tile for health regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health
 	var/hg_mult = 2										//multiplier for health gained per tick when on dark tile
@@ -107,6 +109,12 @@
 /mob/living/simple_animal/grue_egg/proc/recruiter_recruited(mob/dead/observer/player)
 	if(player)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
+
+		if(parent_grue) //if the egg hatches successfully, increment the objective spawncount of the parent grue
+			if(parent_grue.mind && parent_grue.mind.GetRole(GRUE))
+				var/datum/role/grue/G1 = parent_grue.mind.GetRole(GRUE)
+				if(G1)
+					G1.spawncount++
 
 		var/mob/living/simple_animal/hostile/grue/gruespawn/G = new(get_turf(src))
 		G.hatched = 1 //this grue hatched from an egg

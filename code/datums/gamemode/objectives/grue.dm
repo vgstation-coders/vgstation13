@@ -14,11 +14,30 @@
 /datum/objective/grue/eat_sentients/PostAppend()
 	. = ..()
 	eat_objective = rand(2,3)
-	explanation_text = "Eat [eat_objective] sentient beings."
+	explanation_text = "Eat [eat_objective] sentient being[(eat_objective>1) ? "" : "s"]."
 
 /datum/objective/grue/eat_sentients/IsFulfilled()
 	if (..())
 		return TRUE
-	var/datum/role/grue/G = owner.GetRole(GRUE)
-	return G.eatencount >= eat_objective
+	var/datum/role/grue/G = owner.GetRole(ROLE_GRUE)
+	return (G.eatencount >= eat_objective)
+
+/datum/objective/grue/spawn_offspring
+	explanation_text = "Lay eggs and spawn offspring."
+	name = "Spawn Offspring"
+	var/spawn_objective = 2
+
+/datum/objective/grue/spawn_offspring/PostAppend()
+	. = ..()
+	spawn_objective = rand(1,2)
+	explanation_text = "Lay [(spawn_objective>1) ? "an egg" : "eggs"] and spawn [spawn_objective] offspring."
+
+/datum/objective/grue/spawn_offspring/IsFulfilled()
+	if (..())
+		return TRUE
+	var/datum/role/grue/G = owner.GetRole(ROLE_GRUE)
+	return (G.spawncount >= spawn_objective)
+
+
+
 

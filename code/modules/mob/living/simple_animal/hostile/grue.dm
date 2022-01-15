@@ -53,6 +53,7 @@
 	var/lifestage=GRUE_ADULT												 //1=baby grue, 2=grueling, 3=(mature) grue
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
+	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
 	var/dark_dim_light=0 //darkness level currently the grue is currently exposed to, 0=nice and dark, 1=passably dim, 2=too bright
 	var/busy=0 //busy laying an egg
 
@@ -229,7 +230,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
-		force_airlock_time=0
+		force_airlock_time=50
 		//Adult grue spells: eat and lay eggs
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -280,7 +281,7 @@
 		if(lifestage==GRUE_ADULT)
 			if(config.grue_egglaying)
 				stat(null, "Reproductive energy: [eatencharge]")
-			stat(null, "Sentient life forms eaten: [eatencount]")
+			stat(null, "Sentient organisms eaten: [eatencount]")
 
 /mob/living/simple_animal/hostile/grue/gruespawn
 	lifestage=GRUE_LARVA
@@ -402,7 +403,8 @@
 			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>")
 			eatencharge--
 //			playsound(T, 'sound/effects/splat.ogg', 50, 1)
-			new /mob/living/simple_animal/grue_egg(get_turf(src))
+			var/mob/living/simple_animal/grue_egg/E = new /mob/living/simple_animal/grue_egg(get_turf(src))
+			E.parent_grue=src //mark this grue as the parent of the egg
 		busy=0
 
 	else
@@ -434,12 +436,13 @@
 	if(!candidate)
 		return
 	src.ckey = candidate.ckey
-	if(src.mind)
-		src.mind.assigned_role = "Grue"
-		to_chat(src, "<span class='warning'>You are a grue.</span>")
-		to_chat(src, "<span class='warning'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
-		to_chat(src, "<span class='warning'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
-
+	if(hatched && src.mind) //Assign it grue_basic objectives if its a hatched grue
+		var/datum/role/grue/hatchRole = new /datum/role/grue
+		mind.assigned_role = "Grue"
+		hatchRole.AssignToRole(mind,1)
+		hatchRole.Greet(GREET_DEFAULT)
+		hatchRole.ForgeObjectives(hatched)
+		hatchRole.AnnounceObjectives()
 
 //Eating sentient beings.
 
@@ -453,7 +456,13 @@
 		//Upgrade the grue's stats as it feeds
 		if(E.mind) //eaten creature must have a mind to power up the grue
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
-			eatencount++
+			eatencount++					//for the status display
+
+			if(mind && mind.GetRole(GRUE)) //also increment the counter for objectives
+				var/datum/role/grue/G = mind.GetRole(GRUE)
+				if(G)
+					G.eatencount++
+
 			eatencharge++
 
 			//increase speed
@@ -472,7 +481,7 @@
 
 			regenbonus=regenbonus*1.5 //increased health regen in darkness
 
-			force_airlock_time=max(0,force_airlock_time-40)
+			force_airlock_time=max(0,force_airlock_time-20)
 //			src.set_light(8,-1*eatencount) //gains shadow aura opon eating someone
 			switch(eatencount)
 				if(GRUE_WALLBREAK)

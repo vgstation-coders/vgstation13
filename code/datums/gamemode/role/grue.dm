@@ -8,7 +8,7 @@
 	default_admin_voice = "Your Grue Instincts"
 	admin_voice_style = "grue"
 	var/eatencount=0
-	var/offspring_born=0
+	var/spawncount=0
 
 /datum/role/grue/Greet()
 	to_chat(antag.current, "<span class='warning'>You are a grue.</span>")
@@ -20,13 +20,15 @@
 		AppendObjective(/datum/objective/grue/grue_basic)
 	else
 		AppendObjective(/datum/objective/grue/eat_sentients)
+		if(prob(50) && config.grue_egglaying)
+			AppendObjective(/datum/objective/grue/spawn_offspring)
 
 /datum/role/grue/GetScoreboard()
 	. = ..()
 	if(istype(antag.current,/mob/living/simple_animal/hostile/grue))
 		. += "<BR>The grue ate [eatencount] sentient beings"
 		if(config.grue_egglaying)
-			.+= " and spawned [offspring_born] offspring."
+			.+= " and spawned [spawncount] offspring."
 		else
 			.+= "."
 
