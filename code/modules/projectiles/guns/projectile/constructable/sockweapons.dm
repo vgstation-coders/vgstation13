@@ -55,6 +55,5 @@
 		to_chat(user, "You remove the brick from \the [src].")
 		user.drop_item(src, force_drop = 1)
 		user.put_in_hands(new /obj/item/stack/sheet/mineral/brick(user))
-//		drop_stack(/obj/item/stack/sheet/mineral/brick, user.loc, 1, user)
 		user.put_in_hands(new /obj/item/clothing/shoes/kneesocks(user))
 		qdel(src)
