@@ -23,7 +23,7 @@
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
-	if (changeling.splitcount < 2) //<2 is two splits max
+	if (changeling.splitcount < 2 && !issilicon(user)) //<2 is two splits max
 		user.visible_message("[user] is preparing to generate a new form.")
 		Splitting()
 	else
