@@ -464,7 +464,7 @@ var/global/datum/controller/vote/vote = new()
 			//index, choice, choice count
 			//choices_list[++choices_list.len] = list(i, choices[i], (!isnull(tally[choices[i]]) ? tally[choices[i]] : 0))
 	//data = choices_list
-			data += new(i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
+			data += list(list(list((i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0)))
 	if(refresh && interface)
 		updateFor()
 
