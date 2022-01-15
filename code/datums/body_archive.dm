@@ -8,6 +8,7 @@ var/list/body_archives = list()
 	// those of the source mind
 	var/name
 	var/key
+	var/rank
 
 	// just an empty list where you can store extra data, such as human DNA records
 	var/list/data = list()
@@ -21,17 +22,20 @@ var/list/body_archives = list()
 	mob_type = source.type
 	name = source.mind.name
 	key = source.mind.key
+	rank = source.mind.assigned_role
 	log_debug("[key_name(source)] has has had their body ([mob_type]) archived.")
 	source.archive_body(src)
 
 /datum/body_archive/proc/spawn_copy(var/turf/T)//admin toy
 	var/mob/temp_mob = new mob_type(T)
-	temp_mob.actually_reset_body(src, FALSE, TRUE, null, null)
+	var/spawn_naked = ishuman(M) && alert("Keep current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
+	temp_mob.actually_reset_body(src, FALSE, spawn_naked, null, null)
 	qdel(temp_mob)
 
 /datum/body_archive/proc/spawn_transfer(var/turf/T)//admin toy
 	var/mob/temp_mob = new mob_type(T)
-	temp_mob.actually_reset_body(src, FALSE, FALSE, null, get_mind_by_key(src.key))
+	var/spawn_naked = ishuman(M) && alert("Let them get their current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
+	temp_mob.actually_reset_body(src, FALSE, spawn_naked, null, get_mind_by_key(src.key))
 	qdel(temp_mob)
 
 ////////////////////////////////////////////////////////////////////
@@ -189,11 +193,11 @@ var/list/body_archives = list()
 			if (transfered_held_item)
 				old_mob.drop_item(transfered_held_item,loc,TRUE)
 				H.put_in_hands(transfered_held_item)
-	else if(our_mind && !spawn_naked)
-		var/datum/job/J = GetJob(our_mind.assigned_role)
+	else if(!spawn_naked)
+		var/datum/job/J = GetJob(archive.rank)
 		if(J)
 			J.equip(H, J.priority)
-		H.job = our_mind.assigned_role
+		H.job = archive.rank
 
 	//Maybe putting some pants on too
 	H.underwear = archive.data["underwear"]
