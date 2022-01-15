@@ -1,5 +1,6 @@
 /mob/living/simple_animal/hostile/grue
 
+	//Instead of initializing them here, many values that vary with life stage are set via the lifestage_updates proc, which is called during New() and also after moulting.
 	icon = 'icons/mob/grue.dmi'
 	speed=1
 	var/base_speed=1
@@ -20,7 +21,7 @@
 	response_harm   = "punches"
 
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
-	force_airlock_time=100 									//so that juvenile grues cant easily rush through a light area and quickly force open a door to escape back into the dark
+	force_airlock_time=50 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 	blood_color2=GRUE_BLOOD
 //flesh_color2="#272728"
 
