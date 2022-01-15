@@ -239,17 +239,6 @@
 
 	health=tempHealth*maxHealth
 
-//Basic AI for npc grues.
-//Grues move down darkness gradients when they are in bright light, to try to escape into the dark
-//Grues avoid moving from dim/dark into light
-//Grues prioritize fleeing over attacking when they're in the light
-//Grues will moult in sufficient (deep) darkness
-//Grues will seek out, approach, stop moving, and eat sentients if they are in sufficient (dim or dark) darkness
-//Grues will lay eggs in sufficient (deep) darkness
-//Gruees dont attempt to move while "busy" or forcing door open
-
-
-
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
 

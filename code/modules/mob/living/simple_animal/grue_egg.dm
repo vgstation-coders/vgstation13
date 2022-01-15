@@ -97,7 +97,6 @@
 		return
 //	icon_state="egg_triggered"
 	hatching=1
-	src.visible_message("<span class='notice'>\The [name] pulsates!</span>")
 	recruiter.request_player()
 
 /mob/living/simple_animal/grue_egg/proc/recruiter_recruiting(mob/dead/observer/player, controls)
@@ -123,7 +122,6 @@
 		playsound(src.loc, 'sound/effects/splat.ogg', 50, 1)
 		src.death()
 	else
-		src.visible_message("<span class='notice'>\The [name] calms down.</span>")
 		hatching = 0
 		spawn (GRUE_EGG_RERECRUIT_DELAY)
 			Grow() // Reset egg, check for hatchability.
