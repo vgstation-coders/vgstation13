@@ -56,6 +56,7 @@
 		to_chat(C, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")
 		to_chat(C, "<span class = 'notice'>Click the action button to revive.</span>")
 		var/datum/action/lingrevive/revive_action = new()
+		changeling.absorbedcount = max(0,changeling.absorbedcount-1)
 		revive_action.Grant(C)
 
 	..()
