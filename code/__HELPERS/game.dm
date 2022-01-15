@@ -190,6 +190,12 @@
 			return M
 	return null
 
+/proc/get_mind_by_key(var/key)
+	for(var/datum/mind/M in ticker.minds)
+		if(lowertext(M.key) == lowertext(key))
+			return M
+	return null
+
 // Comment out when done testing shit.
 //#define DEBUG_ROLESELECT
 

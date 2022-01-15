@@ -29,6 +29,11 @@ var/list/body_archives = list()
 	temp_mob.actually_reset_body(src, FALSE, null, null)
 	qdel(temp_mob)
 
+/datum/body_archive/proc/spawn_transfer(var/turf/T)//admin toy
+	var/mob/temp_mob = new mob_type(T)
+	temp_mob.actually_reset_body(src, FALSE, null, get_mind_by_key(src.key))
+	qdel(temp_mob)
+
 ////////////////////////////////////////////////////////////////////
 //																  //
 //							MOB PROCS							  //
