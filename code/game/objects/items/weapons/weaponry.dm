@@ -13,10 +13,10 @@
 
 /obj/item/weapon/banhammer/attack_self(var/mob/user)
 	if(user.check_rights(R_BAN))
+		qdel(src)
 		var/obj/item/weapon/banhammer/admin/ABH = new /obj/item/weapon/banhammer/admin(loc)
 		user.put_in_hands(ABH)
 		ABH.attack_self(user)
-		qdel(src)
 
 /obj/item/weapon/banhammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
