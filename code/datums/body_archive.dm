@@ -28,13 +28,13 @@ var/list/body_archives = list()
 
 /datum/body_archive/proc/spawn_copy(var/turf/T)//admin toy
 	var/mob/temp_mob = new mob_type(T)
-	var/spawn_naked = ishuman(M) && alert("Keep current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
+	var/spawn_naked = ishuman(temp_mob) && alert("Keep current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
 	temp_mob.actually_reset_body(src, FALSE, spawn_naked, null, null)
 	qdel(temp_mob)
 
 /datum/body_archive/proc/spawn_transfer(var/turf/T)//admin toy
 	var/mob/temp_mob = new mob_type(T)
-	var/spawn_naked = ishuman(M) && alert("Let them get their current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
+	var/spawn_naked = ishuman(temp_mob) && alert("Let them get their current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
 	temp_mob.actually_reset_body(src, FALSE, spawn_naked, null, get_mind_by_key(src.key))
 	qdel(temp_mob)
 
