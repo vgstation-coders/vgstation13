@@ -20,7 +20,7 @@
 
 /datum/lawgiver_mode/stun
 	name = "stun"
-	voice_triggers = list("stun", "taser")
+	voice_triggers = list("stun", "taser", "detain")
 	firing_mode = LAWGIVER_STUN
 	fire_sound = 'sound/weapons/Taser.ogg'
 	projectile_type = /obj/item/projectile/energy/electrode
