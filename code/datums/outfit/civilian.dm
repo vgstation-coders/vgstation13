@@ -583,7 +583,7 @@
 			/obj/item/weapon/palette = null,
 		)
 	)
-	
+
 
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt
@@ -591,6 +591,38 @@
 
 /datum/outfit/librarian/post_equip(var/mob/living/carbon/human/H)
 	..()
+	if(H.mind.role_alt_title == "Game Master") //Roll 1d4 to determine if character gets a disability, for each disability
+		var/casual = 0
+		if(prob(25))
+			H.dna.SetSEState(ASTHMABLOCK, 1, 1)
+			casual++
+		if(prob(25))
+			H.dna.SetSEState(GLASSESBLOCK,1,1)
+			casual++
+		if(prob(25))
+			H.mutations += M_FAT
+			H.overeatduration = 600
+			casual++
+		if(prob(25))
+			H.dna.SetSEState(LISPBLOCK, 1, 1)
+			casual++
+		H.dna.UpdateSE()
+		domutcheck(H, null, 1)
+		if(H.gender == "female")
+			casual = max(casual - 2, 0)
+		switch(casual)
+			if(0)
+				to_chat(H, "<span class='notice'>You are pretty much a 'normal'. Your interests in anything game-related lies in only whatever is popular at the time, and you have never peered any deeper. You are either at the beginning of a great journey, or you have to leave.</span>")
+			if(1)
+				to_chat(H, "<span class='notice'>You are a bit odd compared to the average person, but you have an okay grasp on games. Slowly making your way across the Great Stairs of Game Mastering, you feel your knowledge expand, slowly making your way down the Game Iceberg.</span>")
+			if(2)
+				to_chat(H, "<span class='notice'>If you were to be on a hierarchy, 'middle' would suit you when it comes to Game Masters. You're halfway to the peak, compared to a 'normal' you are very knowledgeable about anything game-related, but you know this isn't over yet.</span>")
+			if(3)
+				to_chat(H, "<span class='warning'>On the grand scale of things, you are a powerful Game Master. Dozens of fictive worlds have been created by your mind, thousands of encounters have been acted by your voice, and dice have been rolled tens of thousands of times by your greasy hands. You have 'made it', and your knowledge of games is unparalleled. But, much like forbidden lore, there is a higher, final hypothetical stage to reach, but the effects of which might strip you of your humanity...</span>")
+			if(4)
+				to_chat(H, "<span class='danger'>You are the apex Game Master. Every lesser Game Master secretly aspires to be you, as you are the ideal form of one. Having attained wizard status eons ago, you are not only a master of masters, but also a faithful defender of your virginity. You have almost nothing to share with 'normals' anymore, and they are innately repulsed by your awesome, god-like mastery of anything game-related. As far as you are concerned, you are an Elder God of the Game Master world and your grotesque physique mirrors that.</span>")
+			else
+				to_chat(H, "<span class='sinister'>Much like the horrors that pepper your settings, you are unknowable.")
 	var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
 	H.put_in_hands(P)
 	var/list/new_languages = list()
