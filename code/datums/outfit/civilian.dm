@@ -612,7 +612,7 @@
 			casual = max(casual - 2, 0)
 		switch(casual)
 			if(0)
-				to_chat(H, "<span class='notice'>You are pretty much a 'normal'. Your interests in anything game-related lies in only whatever is popular at the time, and you have never peered any deeper. You are either at the beginning of a great journey, or you have to leave.</span>")
+				to_chat(H, "<span class='notice'>You are pretty much normal. Your interests in anything game-related lies in only whatever is popular at the time, and you have never peered any deeper. You are either at the beginning of a great journey, or you have to leave.</span>")
 			if(1)
 				to_chat(H, "<span class='notice'>You are a bit odd compared to the average person, but you have an okay grasp on games. Slowly making your way across the Great Stairs of Game Mastering, you feel your knowledge expand, slowly making your way down the Game Iceberg.</span>")
 			if(2)
