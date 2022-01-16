@@ -47,7 +47,7 @@
 		if(current_brightness<=bright_limit_gain)
 			apply_damage(-1*hg_mult*(bright_limit_gain-current_brightness),BURN) //boost juveniles and adults heal rates a bit
 		else if(current_brightness>bright_limit_drain) 														//lose health in light
-			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
+			playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
 			apply_damage(hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage a bit to avoid juveniles and adults from becoming too tanky to light
 		if(grown)
 			src.Hatch()

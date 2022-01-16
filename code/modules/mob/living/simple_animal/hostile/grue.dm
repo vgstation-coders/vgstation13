@@ -139,7 +139,7 @@
 			dark_dim_light=2
 
 			to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
-			playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
+			playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
 			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage with lifestage to avoid juveniles and adults from becoming too tanky to light
 		else
 			dark_dim_light=1
@@ -349,7 +349,7 @@
 			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors.</span>")
 		else if(lifestage==GRUE_ADULT)
 			to_chat(src, "<span class='warning'>You finish moulting! You are now fully-grown, and can eat sentient beings to gain their strength.</span>")
-		playsound(src, 'sound/effects/lingextends.ogg', 50, 1)
+		playsound(src, 'sound/effects/grue_moult.ogg', 50, 1)
 	else
 		return
 
