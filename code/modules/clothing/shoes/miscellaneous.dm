@@ -225,6 +225,7 @@
 		"Laughter" = 'sound/effects/laughtrack.ogg',
 		"Mecha step" = 'sound/mecha/mechstep.ogg',
 		"Fart" = 'sound/misc/fart.ogg',
+		"Dramatic" = 'goon/sound/effects/dramatic.ogg',
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
 
