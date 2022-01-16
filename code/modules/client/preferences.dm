@@ -555,6 +555,9 @@ var/const/MAX_SAVE_SLOTS = 16
 		else if(job.species_blacklist.Find(src.species))
 			prefLevelLabel = "Unavailable"
 			prefLevelColor = "gray"
+		else if(job.gender_blacklist.Find(src.gender))
+			prefLevelLabel = "[uppertext(src.gender)]"
+			prefLevelColor = "gray"
 		else
 			switch(jobs[job.title])
 				if(JOB_PREF_HIGH)
@@ -752,6 +755,9 @@ var/const/MAX_SAVE_SLOTS = 16
 
 			to_chat(user, "<span class='notice'>Only the following species can have this job: [allowed_species]. Your species is ([src.species]).</span>")
 			return
+	if(job.gender_blacklist.len)
+		if(job.gender_blacklist.Find(src.gender))
+			to_chat(user, "<span class='notice'>Your gender ([src.gender]) cannot have this job.</span>")
 
 	var/new_value = jobs[job.title]
 	if(increase)
