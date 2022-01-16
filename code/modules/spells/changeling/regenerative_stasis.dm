@@ -5,7 +5,7 @@
 	hud_state = "regenstasis"
 
 	spell_flags = NEEDSHUMAN | STATALLOWED
-
+	horrorallowed = 0
 	chemcost = 20
 	required_dna = 1
 

@@ -14,14 +14,7 @@
 		var/datum/money_account/D = pick(all_money_accounts)
 		D.money += winner_sum
 
-		var/datum/transaction/T = new()
-		T.target_name = "Tau Ceti Daily Grand Slam -Stellar- Lottery"
-		T.purpose = "Winner!"
-		T.amount = winner_sum
-		T.date = current_date_string
-		T.time = worldtime2text()
-		T.source_terminal = "Biesel TCD Terminal #[rand(111,333)]"
-		D.transaction_log.Add(T)
+		new /datum/transaction(D, "Winner!", winner_sum, "Biesel TCD Terminal #[rand(111,333)]", "Tau Ceti Daily Grand Slam -Stellar- Lottery")
 	else
 		kill()
 

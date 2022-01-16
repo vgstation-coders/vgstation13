@@ -7,7 +7,7 @@
 	if(!C)
 		return
 
-	if(!(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
+	if(!ishorrorform(C.antag.current) && !(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
 		C.antag.current.add_spell(new /spell/changeling/evolve, "changeling_spell_ready", /obj/abstract/screen/movable/spell_master/changeling	)
 
 	if(ismonkey(C.antag.current) && !(locate(/spell/changeling/higherform) in C.antag.current.spell_list))	//let them un-monkey themself. If they don't have any spare genomes theyre screwed, though
@@ -18,6 +18,7 @@
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H))
+		H.species.fireloss_mult = 3
 		dna.flavor_text = H.flavor_text
 		if(!(M_HUSK in H.mutations))
 			C.absorbed_dna |= dna		

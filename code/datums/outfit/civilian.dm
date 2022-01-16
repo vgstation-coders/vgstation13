@@ -546,6 +546,9 @@
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 		),
+		"Curator" = list(
+			slot_head_str = /obj/item/clothing/head/beret,
+		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
@@ -571,8 +574,16 @@
 	alt_title_items_to_collect = list(
 		"Game Master" = list(
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
+		),
+		"Curator" = list(
+			/obj/item/stack/sheet/wood/bigstack = null,    //should spawn on the backpack
+			/obj/item/stack/sheet/wood/bigstack = null,
+			/obj/item/weapon/storage/fancy/crayons = null,
+			/obj/item/weapon/chisel = null,
+			/obj/item/weapon/palette = null,
 		)
 	)
+	
 
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt

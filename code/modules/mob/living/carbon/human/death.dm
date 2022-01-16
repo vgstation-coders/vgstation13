@@ -176,8 +176,3 @@
 	update_mutantrace()
 	vessel.remove_reagent(BLOOD,vessel.get_reagent_amount(BLOOD))
 	return
-
-/mob/living/carbon/human/proc/Drain()
-	ChangeToHusk()
-	mutations |= M_NOCLONE
-	return

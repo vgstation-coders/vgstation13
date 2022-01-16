@@ -312,14 +312,8 @@
 					var/transaction_amount = nano2dollar(total_coins)
 					D.money += transaction_amount
 
-					var/datum/transaction/T = new()
-					T.target_name = "[D.owner_name] (via [src.name]([petname]))"
-					T.purpose = "Nanocoin Transfer (from [src.name]([petname]))"
-					T.amount = "[transaction_amount]"
-					T.source_terminal = "Nanocoin Mines"
-					T.date = current_date_string
-					T.time = worldtime2text()
-					D.transaction_log.Add(T)
+					new /datum/transaction(D, "Nanocoin Transfer (from [src.name]([petname]))", "[transaction_amount]",\
+											"Nanocoin Mines", "[D.owner_name] (via [src.name]([petname]))")
 
 					total_coins = 0
 				else
