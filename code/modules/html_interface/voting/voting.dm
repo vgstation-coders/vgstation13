@@ -82,7 +82,7 @@ var/global/datum/controller/vote/vote = new()
 
 		if(time_remaining <= 0)
 			result()
-			for(var/client/C in voting)
+			for(var/client/C in poll.user)
 				if(C)
 					src.interface.hide(C)
 			src.reset()
@@ -106,7 +106,7 @@ var/global/datum/controller/vote/vote = new()
 	//default-vote for everyone who didn't vote
 	var/list/tally
 	var/non_voters = 0
-	for (var/mob/c in polldata.vote)
+	for (var/mob/c in poll.vote)
 		if(c)
 			tally[c]++
 		else
@@ -197,8 +197,8 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/persistent(var/list/tally)
 	//task.on_init()
-	//for (var/i in polldata)
-	//	polldata[i].user
+	//for (var/i in poll)
+	//	poll.user
 	//find
 	
 	majority(tally)
@@ -280,8 +280,8 @@ var/global/datum/controller/vote/vote = new()
 	var/list/vote
 
 /datum/controller/data/proc/get_vote(var/mob/user)
-	if(polldata[user])
-		return polldata[user].vote
+	if(poll.user[user])
+		return poll.vote
 	else
 		return 0
 
@@ -330,7 +330,7 @@ var/global/datum/controller/vote/vote = new()
 				question = html_encode(input(usr,"What is the vote for?") as text|null)
 				if(!question)
 					return 0
-				for(var/i=1,i<=10,i++)
+				for(var/i in 1 to 10)
 					var/option = capitalize(html_encode(input(usr,"Please enter an option or hit cancel to finish") as text|null))
 					if(!option || mode || !usr.client)
 						break
@@ -393,7 +393,7 @@ var/global/datum/controller/vote/vote = new()
 		return 1
 	return 0
 
-/datum/controller/vote/proc/updateFor(hclient_or_mob)
+/datum/controller/vote/proc/updateFor(hclient_or_mob, interface)
 	// This check will succeed if updateFor is called after showing to the player, but will fail
 	// on regular updates. Since we only really need this once we don't care if it fails.
 
@@ -402,7 +402,6 @@ var/global/datum/controller/vote/vote = new()
 	if(data.len)
 		for (var/list/L in data)
 			interface.callJavaScript("update_choices", L, hclient_or_mob)
-
 
 /datum/controller/vote/proc/interact(client/user)
 	set waitfor = FALSE // So we don't wait for each individual client's assets to be sent.
@@ -417,7 +416,7 @@ var/global/datum/controller/vote/vote = new()
 		else
 			CRASH("The user [M.name] of type [M.type] has been passed as a mob reference without a client to voting.interact()")
 
-	voting |= user
+	//voting |= user
 	interface.show(user)
 	var/list/client_data = list()
 	var/admin = 0
@@ -426,16 +425,17 @@ var/global/datum/controller/vote/vote = new()
 	//adds client data 
 	if(get_vote(user))
 		//client_data[++client_data.len] = get_vote(user)
-		client_data += get_vote(user)
+		client_data += list(get_vote(user))
+	else
+		client_data += list(0)
 	if(user.holder)
 		admin = 1
 		if(user.holder.rights & R_ADMIN)
 			admin = 2
 	//client_data[++client_data.len] = (admin)
-	client_data += admin
+	client_data += list(admin)
 	interface.callJavaScript("client_data", client_data, user)
 	src.updateFor(user, interface)
-
 
 /datum/controller/vote/proc/update(refresh = 0)
 	if(!interface)
@@ -446,28 +446,24 @@ var/global/datum/controller/vote/vote = new()
 		return
 	last_update = world.time
 	status_data.len = 0
-	status_data += mode
-	status_data += question
-	status_data += time_remaining
+	status_data += list(mode)
+	status_data += list(question)
+	status_data += list(time_remaining)
 	if(config.allow_vote_restart)
-		status_data += 1
+		status_data += list(1)
 	else
-		status_data += 0
+		status_data += list(0)
 	if(config.allow_vote_mode)
-		status_data += 1
+		status_data += list(1)
 	else
-		status_data += 0
+		status_data += list(0)
 
-	//var/list/choices_list = list()
 	if(mode)
-		for(var/i = 1; i <= choices.len; i++)
-			//index, choice, choice count
-			//choices_list[++choices_list.len] = list(i, choices[i], (!isnull(tally[choices[i]]) ? tally[choices[i]] : 0))
-	//data = choices_list
-			data += list(list(list((i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0)))
+		for(var/i in 1 to choices.len)
+			//[[index, choice, choice count],...]
+			data += list(list((i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
 	if(refresh && interface)
 		updateFor()
-
 
 /datum/controller/vote/Topic(href,href_list[],hsrc)
 	if(!usr || !usr.client)
