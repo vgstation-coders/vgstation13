@@ -1,8 +1,9 @@
 /obj/item/weapon/soap_sock
 	name = "soap in a sock"
 	desc = "Cleans the spirit."
-	icon = 'icons/obj/sockweapon.dmi'
-	hitsound = "sound/weapons/punch1.ogg"
+	icon = 'icons/obj/soapsock.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sockweapon_left.dmi', "right_hand" = 'icons/mob/in-hand/right/sockweapon_right.dmi')
+	hitsound = "sound/effects/bodyfall.ogg"
 	force = 5
 	throwforce = 0
 	throw_speed = 1
@@ -13,7 +14,8 @@
 /obj/item/weapon/brick_sock
 	name = "brick in a sock"
 	desc = "Rebuilds the body."
-	icon = 'icons/obj/sockweapon.dmi'
+	icon = 'icons/obj/bricksock.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sockweapon_left.dmi', "right_hand" = 'icons/mob/in-hand/right/sockweapon_right.dmi')
 	hitsound = "sound/effects/woodhit.ogg"
 	force = 15
 	throwforce = 10
