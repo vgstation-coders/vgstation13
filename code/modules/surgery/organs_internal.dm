@@ -37,6 +37,7 @@
 	return ..() && embryo && affected.open == 3 && target_zone == LIMB_CHEST
 
 /datum/surgery_step/internal/remove_embryo/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
 	var/msg = "[user] starts to pull something out from [target]'s ribcage with \the [tool]."
 	var/self_msg = "You start to pull something out from [target]'s ribcage with \the [tool]."
 	user.visible_message(msg, self_msg)
@@ -100,6 +101,7 @@
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I && I.damage > 0)
 			if(I.robotic < 2)
+				playsound(target, 'sound/items/bandage.ogg', 65, 1)
 				user.visible_message("[user] starts treating damage to [target]'s [I.name] with [tool_name].", \
 				"You start treating damage to [target]'s [I.name] with [tool_name]." )
 
@@ -194,6 +196,7 @@
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I && I.damage > 0)
 			if(I.robotic >= 2)
+				playsound(target, 'sound/items/bonegel.ogg', 80, 1)
 				user.visible_message("[user] starts mending the damage to [target]'s [I.name]'s mechanisms.", \
 				"You start mending the damage to [target]'s [I.name]'s mechanisms." )
 
@@ -278,7 +281,7 @@
 /datum/surgery_step/internal/detatch_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-
+	playsound(target, 'sound/items/scalpel.ogg', 75, 1)
 	user.visible_message("[user] starts to separate [target]'s [target.op_stage.current_organ] with \the [tool].", \
 	"You start to separate [target]'s [target.op_stage.current_organ] with \the [tool]." )
 	target.custom_pain("The pain in your [affected.display_name] is living hell!",1, scream=TRUE)
@@ -333,6 +336,7 @@
 	return ..()
 
 /datum/surgery_step/internal/remove_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
 	user.visible_message("[user] starts removing [target]'s [target.op_stage.current_organ] with \the [tool].", \
 	"You start removing [target]'s [target.op_stage.current_organ] with \the [tool].")
 	target.custom_pain("Someone's ripping out your [target.op_stage.current_organ]!",1, scream=TRUE)
@@ -494,6 +498,7 @@
 	return ..()
 
 /datum/surgery_step/internal/attach_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/fixovein.ogg', 70, 1)
 	user.visible_message("[user] begins reattaching [target]'s [target.op_stage.current_organ] with \the [tool].", \
 	"You start reattaching [target]'s [target.op_stage.current_organ] with \the [tool].")
 	target.custom_pain("Someone's digging needles into your [target.op_stage.current_organ]!",1, scream=TRUE)

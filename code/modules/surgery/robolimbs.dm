@@ -39,6 +39,7 @@
 
 /datum/surgery_step/limb/cut/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	playsound(target, 'sound/items/scalpel.ogg', 75, 1)
 	user.visible_message("[user] starts cutting away flesh where [target]'s [affected.display_name] used to be with \the [tool].", \
 	"You start cutting away flesh where [target]'s [affected.display_name] used to be with \the [tool].")
 	..()
@@ -75,6 +76,7 @@
 
 /datum/surgery_step/limb/mend/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	playsound(target, 'sound/items/retractor.ogg', 85, 1)
 	user.visible_message("[user] is beginning to reposition flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].", \
 	"You start repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].")
 	..()
@@ -119,6 +121,7 @@
 
 /datum/surgery_step/limb/prepare/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	playsound(target, 'sound/items/cautery.ogg', 50, 1)
 	user.visible_message("[user] starts adjusting area around [target]'s [affected.display_name] with \the [tool].", \
 	"You start adjusting area around [target]'s [affected.display_name] with \the [tool].")
 	..()

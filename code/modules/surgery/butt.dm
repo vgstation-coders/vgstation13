@@ -28,6 +28,7 @@
 
 
 /datum/surgery_step/butt/slice_cheek/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
 	user.visible_message("[user] begins to slice [target]'s ass cheek with \the [tool].", \
 	"You begin to slice [target]'s ass cheek with \the [tool].")
 	target.custom_pain("You haven't felt a pain like this since college!",1, scream=TRUE)
@@ -71,6 +72,7 @@
 
 
 /datum/surgery_step/butt/seperate_anus/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/scalpel.ogg', 75, 1)
 	user.visible_message("[user] starts shortening the end of [target]'s anus with \the [tool].", \
 	"You start shortening the end of [target]'s anus with \the [tool].")
 	target.custom_pain("It feels like that hamster is chewing its way out!",1, scream=TRUE)
@@ -104,6 +106,7 @@
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SEPARATE_ANUS
 
 /datum/surgery_step/butt/saw_hip/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
 	user.visible_message("[user] begins to cut off ends of [target]'s hip with \the [tool].", \
 	"You begin to cut off ends of [target]'s hip with \the [tool].")
 	target.custom_pain("THE PAIN!",1, scream=TRUE)
@@ -143,9 +146,10 @@
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SAW_HIP
 
 /datum/surgery_step/butt/cauterize_butt/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/cautery.ogg', 50, 1)
 	user.visible_message("[user] begins to cauterize [target]'s ass with \the [tool].", \
 	"You begin to cauterize [target]'s ass with \the [tool].")
-	target.custom_pain("IT BUURNS!",1, scream=TRUE)
+	target.custom_pain("IT BUUURNS!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/butt/cauterize_butt/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -189,6 +193,7 @@
 
 
 /datum/surgery_step/butt_replace/peel/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/retractor.ogg', 85, 1)
 	user.visible_message("[user] peels back tattered flesh where [target]'s butt used to be with \the [tool].", \
 	"You start peeling back tattered flesh where [target]'s butt used to be with \the [tool].")
 	..()
@@ -219,6 +224,7 @@
 
 
 /datum/surgery_step/butt_replace/hips/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/bonegel.ogg', 80, 1)
 	user.visible_message("[user] starts to mend [target]'s shortened hip bones with \the [tool].", \
 	"You start to mend [target]'s shortened hip bones with with \the [tool].")
 	..()
@@ -250,6 +256,7 @@
 
 
 /datum/surgery_step/butt_replace/shape/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/fixovein.ogg', 70, 1)
 	user.visible_message("[user] is beginning to reshape [target]'s anus and gluteal tendons with \the [tool].", \
 	"You start to reshape [target]'s anus and gluteal tendons with \the [tool].")
 	..()
@@ -324,6 +331,7 @@
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SAW_HIP && target.op_stage.butt_replace
 
 /datum/surgery_step/butt_replace/cauterize/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/cautery.ogg', 50, 1)
 	user.visible_message("[user] begins to cauterize [target]'s ass with \the [tool].", \
 	"You begin to cauterize [target]'s ass with \the [tool].")
 	..()
