@@ -271,6 +271,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		var/datum/reagent/C = new /datum/reagent/blood/changeling_blood
 		C.holder = (container? container.reagents : null)
 		C.volume = B.volume
+		C.color = B.color
 		B.volume = 0
 		if (container)
 			container.reagents.reagent_list |= C
