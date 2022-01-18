@@ -22,7 +22,7 @@
 	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 0 && affected.status & ORGAN_BROKEN
 
 /datum/surgery_step/glue_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(tool!=/obj/item/tool/bonegel)
+	if(!istype(tool, /obj/item/tool/bonegel))
 		playsound(target, 'sound/items/Screwdriver.ogg', 10, 1)
 	else
 		playsound(target, 'sound/items/bonegel.ogg', 80, 1)
@@ -138,7 +138,7 @@
 	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 2
 
 /datum/surgery_step/finish_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(tool!=/obj/item/tool/bonegel)
+	if(!istype(tool, /obj/item/tool/bonegel))
 		playsound(target, 'sound/items/Screwdriver.ogg', 10, 1)
 	else
 		playsound(target, 'sound/items/bonegel.ogg', 80, 1)

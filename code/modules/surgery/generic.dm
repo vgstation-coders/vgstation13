@@ -370,7 +370,7 @@
 
 /datum/surgery_step/generic/cut_limb/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(tool!=/obj/item/tool/circular_saw)
+	if(!istype(tool, /obj/item/tool/circular_saw))
 		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
 	else
 		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)

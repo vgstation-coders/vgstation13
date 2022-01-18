@@ -42,7 +42,7 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	if(tool!=/obj/item/tool/circular_saw)
+	if(!istype(tool, /obj/item/tool/circular_saw))
 		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
 	else
 		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
@@ -219,7 +219,7 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	if(tool!=/obj/item/tool/bonegel)
+	if(!istype(tool, /obj/item/tool/bonegel))
 		playsound(target, 'sound/items/Screwdriver.ogg', 10, 1)
 	else
 		playsound(target, 'sound/items/bonegel.ogg', 80, 1)

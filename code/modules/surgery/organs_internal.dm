@@ -195,7 +195,7 @@
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I && I.damage > 0)
 			if(I.robotic >= 2)
-				if(tool!=/obj/item/tool/screwdriver)
+				if(!istype(tool, /obj/item/tool/screwdriver))
 					playsound(target, 'sound/items/bonegel.ogg', 80, 1)
 				else
 					playsound(target, 'sound/items/Screwdriver.ogg', 10, 1)

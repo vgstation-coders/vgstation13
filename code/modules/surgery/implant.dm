@@ -50,7 +50,7 @@
 
 /datum/surgery_step/cavity/make_space/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(tool!=/obj/item/tool/surgicaldrill)
+	if(!istype(tool, /obj/item/tool/surgicaldrill))
 		playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
 	else
 		playsound(target, 'sound/items/surgicaldrill.ogg', 70, 1)
