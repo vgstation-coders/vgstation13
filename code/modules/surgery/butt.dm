@@ -28,7 +28,7 @@
 
 
 /datum/surgery_step/butt/slice_cheek/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(tool!=/obj/item/tool/circularsaw)
+	if(tool!=/obj/item/tool/circular_saw)
 		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
 	else
 		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
@@ -109,7 +109,7 @@
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SEPARATE_ANUS
 
 /datum/surgery_step/butt/saw_hip/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(tool!=/obj/item/tool/circularsaw)
+	if(tool!=/obj/item/tool/circular_saw)
 		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
 	else
 		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
