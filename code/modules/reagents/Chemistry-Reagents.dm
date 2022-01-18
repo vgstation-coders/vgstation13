@@ -390,9 +390,8 @@
 	if(prob(40))
 		M.heal_organ_damage(5 * REM, 0)
 
-/datum/reagent/changeling_blood
+/datum/reagent/blood/changeling_blood
 	name = "Blood"
-	flags = CHEMFLAG_OBSCURING
 	id = CHANGELINGBLOOD
 
 /datum/reagent/blood

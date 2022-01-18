@@ -270,8 +270,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if (mind.GetRole(CHANGELING))
 		var/datum/reagent/C = new /datum/reagent/changeling_blood
 		C.holder = (container? container.reagents : null)
-		C.volume = 1
-		B.volume -= 1
+		C.volume = B.volume
+		B.volume = 0
 		if (container)
 			container.reagents.reagent_list |= C
 	if(container)

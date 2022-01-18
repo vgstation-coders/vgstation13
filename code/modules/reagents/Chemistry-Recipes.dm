@@ -3914,7 +3914,7 @@
 	var/location = get_turf(holder.my_atom)
 	var/atom/thing = holder.my_atom
 	thing.visible_message("<span class='warning'>The blood shrieks!</span>")
-	playsound(location,'sound/machines/hiss.ogg',20, 1)
+	playsound(location,'sound/voice/hiss6.ogg',20, 1)
 	holder.clear_reagents()
 
 #undef ALERT_AMOUNT_ONLY
