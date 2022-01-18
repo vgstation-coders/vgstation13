@@ -254,21 +254,17 @@ By design, d1 is the smallest direction and d2 is the highest
 	//investigate_log("was cut by [key_name(usr, usr.client)] in [user.loc.loc]","wires")
 
 	var/message = "A wire has been cut "
-	var/atom/A = user
+	var/area/my_area = user ? get_area(user) : get_area(T)
 
-	if(A)
-		var/turf/Z = get_turf(A)
-		var/area/my_area = get_area(Z)
+	if(my_area)
+		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) [user ? "(<A HREF='?_src_=vars;Vars=\ref[user]'>VV</A>)" : ""]"}
 
-		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"}
+	if(user)
+		message += " - Cut By: [user.real_name] ([user.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[user]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
+		log_game("[user.real_name] ([user.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
 
-		var/mob/M = get_holder_of_type(A, /mob) //Why is this here? The use already IS a mob...
-
-		if(M)
-			message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
-			log_game("[M.real_name] ([M.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
-
-	message_admins(message, 0, 1)
+	if(powernet.load)
+		message_admins(message, 0, 1)
 
 	qdel(src)
 
