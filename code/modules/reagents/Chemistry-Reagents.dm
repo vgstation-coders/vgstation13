@@ -393,6 +393,7 @@
 /datum/reagent/blood/changeling_blood
 	name = "Blood"
 	id = CHANGELINGBLOOD
+	custom_metabolism = 0 //does not leave your body
 
 /datum/reagent/blood
 	name = "Blood"

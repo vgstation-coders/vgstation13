@@ -3908,7 +3908,7 @@
 	id = CHANGELINGBLOOD
 	result = null
 	required_reagents = list(CHANGELINGBLOOD = 0.1)
-	required_temp = T0C + 88
+	required_temp = T0C + 120
 
 /datum/chemical_reaction/changeling_blood/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
