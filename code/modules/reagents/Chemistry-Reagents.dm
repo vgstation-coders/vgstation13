@@ -9630,3 +9630,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#571212" //like a dark red
 	density = 1.00 //basically water
 	specheatcap = 4.184
+
+/datum/reagent/changeling_blood
+	name = null
+	id = CHANGELINGBLOOD

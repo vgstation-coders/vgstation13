@@ -21,6 +21,7 @@
 #define BLUEGOO			"bluegoo"
 #define SLIMEJELLY 			"slimejelly"
 #define BLOOD 			"blood"
+#define CHANGELINGBLOOD "changeling_blood"
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"

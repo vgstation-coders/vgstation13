@@ -3902,6 +3902,20 @@
 	result = LOCUTOGEN
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
 	result_amount = 3
+	
+/datum/chemical_reaction/changeling_blood
+	name = null
+	id = CHANGELINGBLOOD
+	result = null
+	required_reagents = list(CHANGELINGBLOOD = 0.1)
+	required_temp = T0C + 88
+
+/datum/chemical_reaction/changeling_blood/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	var/atom/thing = holder.my_atom
+	thing.visible_message("<span class='warning'>The blood shrieks!</span>")
+	playsound(location,'sound/machines/hiss.ogg',20, 1)
+	holder.clear_reagents()
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

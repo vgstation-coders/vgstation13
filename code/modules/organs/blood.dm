@@ -235,7 +235,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		B = new /datum/reagent/blood
 	B.holder = (container? container.reagents : null)
 	B.volume += amount
-
+	
 	//set reagent data
 	if (!B.data["virus2"])
 		B.data["virus2"] = list()
@@ -268,6 +268,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if(container)
 		container.reagents.reagent_list |= B
+		if (mind.GetRole(CHANGELING))
+			container.reagents.reagent_list |= CHANGELINGBLOOD
 		container.reagents.update_total()
 		container.on_reagent_change()
 		container.reagents.handle_reactions()
