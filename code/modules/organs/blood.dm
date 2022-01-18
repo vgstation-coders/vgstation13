@@ -268,7 +268,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	
 	//take sample of changeling blood if mob is changeling
 	if (mind.GetRole(CHANGELING))
-		var/datum/reagent/C = new /datum/reagent/changeling_blood
+		var/datum/reagent/C = new /datum/reagent/blood/changeling_blood
 		C.holder = (container? container.reagents : null)
 		C.volume = B.volume
 		B.volume = 0
