@@ -390,6 +390,11 @@
 	if(prob(40))
 		M.heal_organ_damage(5 * REM, 0)
 
+/datum/reagent/changeling_blood
+	name = "Blood"
+	flags = CHEMFLAG_OBSCURING
+	id = CHANGELINGBLOOD
+
 /datum/reagent/blood
 	name = "Blood"
 	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
@@ -9630,7 +9635,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#571212" //like a dark red
 	density = 1.00 //basically water
 	specheatcap = 4.184
-
-/datum/reagent/changeling_blood
-	name = null
-	id = CHANGELINGBLOOD

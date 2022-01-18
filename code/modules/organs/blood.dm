@@ -265,11 +265,17 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if (iscultist(src))
 		B.data["occult"] = mind
-
+	
+	//take sample of changeling blood if mob is changeling
+	if (mind.GetRole(CHANGELING))
+		var/datum/reagent/C = new /datum/reagent/changeling_blood
+		C.holder = (container? container.reagents : null)
+		C.volume = 1
+		B.volume -= 1
+		if (container)
+			container.reagents.reagent_list |= C
 	if(container)
 		container.reagents.reagent_list |= B
-		if (mind.GetRole(CHANGELING))
-			container.reagents.reagent_list |= CHANGELINGBLOOD
 		container.reagents.update_total()
 		container.on_reagent_change()
 		container.reagents.handle_reactions()
