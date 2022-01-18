@@ -256,12 +256,15 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/message = "A wire has been cut "
 	var/area/my_area = user ? get_area(user) : get_area(T)
 
+	if(powernet.load)
+		message += "with a load of [powernet.load] and avail of [powernet.avail] spanning [powernet.cables.len] cables "
+
 	if(my_area)
 		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) [user ? "(<A HREF='?_src_=vars;Vars=\ref[user]'>VV</A>)" : ""]"}
 
 	if(user)
 		message += " - Cut By: [user.real_name] ([user.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[user]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
-		log_game("[user.real_name] ([user.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
+		log_game("[user.real_name] ([user.key]) cut a wire in [my_area.name] with a load of [powernet.load] and avail of [powernet.avail] spanning [powernet.cables.len] cables ([T.x],[T.y],[T.z])")
 
 	if(powernet.load)
 		message_admins(message, 0, 1)
