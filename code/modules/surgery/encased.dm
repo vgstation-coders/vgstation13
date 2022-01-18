@@ -42,7 +42,10 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
+	if(tool!=/obj/item/tool/circularsaw)
+		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
+	else
+		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
 	user.visible_message("[user] begins to cut through [target]'s [affected.encased] with \the [tool].", \
 	"You begin to cut through [target]'s [affected.encased] with \the [tool].")
 	target.custom_pain("Something hurts horribly in your [affected.display_name]!",1, scream=TRUE)
@@ -216,7 +219,10 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	playsound(target, 'sound/items/bonegel.ogg', 80, 1)
+	if(tool!=/obj/item/tool/bonegel)
+		playsound(target, 'sound/items/Screwdriver.ogg', 10, 1)
+	else
+		playsound(target, 'sound/items/bonegel.ogg', 80, 1)
 	var/msg = "[user] starts applying \the [tool] to [target]'s [affected.encased]."
 	var/self_msg = "You start applying \the [tool] to [target]'s [affected.encased]."
 	user.visible_message(msg, self_msg)

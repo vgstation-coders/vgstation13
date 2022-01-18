@@ -50,7 +50,10 @@
 
 /datum/surgery_step/cavity/make_space/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/surgicaldrill.ogg', 70, 1)
+	if(tool!=/obj/item/tool/surgicaldrill)
+		playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
+	else
+		playsound(target, 'sound/items/surgicaldrill.ogg', 70, 1)
 	user.visible_message("[user] starts making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool].",
 	"You start making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool]." )
 	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)

@@ -28,7 +28,10 @@
 
 
 /datum/surgery_step/butt/slice_cheek/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
+	if(tool!=/obj/item/tool/circularsaw)
+		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
+	else
+		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
 	user.visible_message("[user] begins to slice [target]'s ass cheek with \the [tool].", \
 	"You begin to slice [target]'s ass cheek with \the [tool].")
 	target.custom_pain("You haven't felt a pain like this since college!",1, scream=TRUE)
@@ -106,7 +109,10 @@
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SEPARATE_ANUS
 
 /datum/surgery_step/butt/saw_hip/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
+	if(tool!=/obj/item/tool/circularsaw)
+		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
+	else
+		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
 	user.visible_message("[user] begins to cut off ends of [target]'s hip with \the [tool].", \
 	"You begin to cut off ends of [target]'s hip with \the [tool].")
 	target.custom_pain("THE PAIN!",1, scream=TRUE)
@@ -224,7 +230,10 @@
 
 
 /datum/surgery_step/butt_replace/hips/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/bonegel.ogg', 80, 1)
+	if(tool!=/obj/item/tool/bonegel)
+		playsound(target, 'sound/items/Screwdriver.ogg', 10, 1)
+	else
+		playsound(target, 'sound/items/bonegel.ogg', 80, 1)
 	user.visible_message("[user] starts to mend [target]'s shortened hip bones with \the [tool].", \
 	"You start to mend [target]'s shortened hip bones with with \the [tool].")
 	..()

@@ -370,7 +370,10 @@
 
 /datum/surgery_step/generic/cut_limb/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
+	if(tool!=/obj/item/tool/circularsaw)
+		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
+	else
+		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
 	user.visible_message("[user] is beginning to cut off [target]'s [affected.display_name] with \the [tool]." , \
 	"You are beginning to cut off [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("Your [affected.display_name] is being ripped apart!",1, scream=TRUE)

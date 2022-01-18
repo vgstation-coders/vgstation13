@@ -99,7 +99,10 @@
 	return ..() && (istype(target) && target.core_removal_stage == 2 && target.cores > 0) //This is being passed a human as target, unsure why.
 
 /datum/surgery_step/slime/saw_core/begin_step(mob/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
+	if(tool!=/obj/item/tool/circularsaw)
+		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
+	else
+		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
 	user.visible_message("[user] starts cutting out one of [target]'s cores with \the [tool].", \
 	"You start cutting out one of [target]'s cores with \the [tool].")
 

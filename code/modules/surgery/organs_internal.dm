@@ -101,7 +101,6 @@
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I && I.damage > 0)
 			if(I.robotic < 2)
-				playsound(target, 'sound/items/bandage.ogg', 65, 1)
 				user.visible_message("[user] starts treating damage to [target]'s [I.name] with [tool_name].", \
 				"You start treating damage to [target]'s [I.name] with [tool_name]." )
 
@@ -196,7 +195,10 @@
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I && I.damage > 0)
 			if(I.robotic >= 2)
-				playsound(target, 'sound/items/bonegel.ogg', 80, 1)
+				if(tool!=/obj/item/tool/screwdriver)
+					playsound(target, 'sound/items/bonegel.ogg', 80, 1)
+				else
+					playsound(target, 'sound/items/Screwdriver.ogg', 10, 1)
 				user.visible_message("[user] starts mending the damage to [target]'s [I.name]'s mechanisms.", \
 				"You start mending the damage to [target]'s [I.name]'s mechanisms." )
 
