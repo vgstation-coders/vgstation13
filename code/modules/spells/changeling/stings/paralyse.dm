@@ -13,4 +13,5 @@
 
 	to_chat(target, "<span class='userdanger'>Your muscles begin to painfully tighten.</span>")
 	target.Knockdown(20)
+	target.setStunned(20)
 	feedback_add_details("changeling_powers", "PS")
