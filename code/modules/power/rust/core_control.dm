@@ -11,6 +11,8 @@
 	//currently viewed
 	var/obj/machinery/power/rust_core/cur_viewed_device
 
+/obj/machinery/computer/rust_core_control/attack_ai(mob/user)
+	attack_hand(user)
 
 /obj/machinery/computer/rust_core_control/attack_hand(mob/user)
 	. = ..()

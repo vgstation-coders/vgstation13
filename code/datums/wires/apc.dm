@@ -56,11 +56,13 @@ var/const/APC_WIRE_AI_CONTROL = 8
 						A.updateDialog()
 
 		if (APC_WIRE_AI_CONTROL)
-			A.disable_AI_control(disrupt = FALSE)
+			if (A.aidisabled == 0)
+				A.aidisabled = 1
 
-			spawn(10)
-				if(A && !IsIndexCut(APC_WIRE_AI_CONTROL))
-					A.enable_AI_control()
+				spawn(10)
+					if(A && !IsIndexCut(APC_WIRE_AI_CONTROL))
+						A.aidisabled = 0
+						A.updateDialog()
 
 	A.updateDialog()
 
@@ -81,6 +83,10 @@ var/const/APC_WIRE_AI_CONTROL = 8
 
 		if(APC_WIRE_AI_CONTROL)
 
-			mended ? A.enable_AI_control() : A.disable_AI_control()
-
+			if(!mended)
+				if (A.aidisabled == 0)
+					A.aidisabled = 1
+			else
+				if (A.aidisabled == 1)
+					A.aidisabled = 0
 	A.updateDialog()

@@ -102,7 +102,7 @@
 	if(stat & BROKEN)
 		icon_state = "broken"
 	else
-		if (stat & (FORCEDISABLE|NOPOWER))
+		if (stat & NOPOWER)
 			spawn(rand(0, 15))
 				icon_state = "c_unpowered"
 		else

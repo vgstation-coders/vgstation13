@@ -38,7 +38,7 @@
 	update_icon()
 
 /obj/machinery/rust/gyrotron/proc/start_emitting()
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
+	if(stat & (NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
 		return
 
 	emitting = 1
@@ -83,13 +83,13 @@
 
 /obj/machinery/rust/gyrotron/power_change()
 	. =..()
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN))
 		stop_emitting()
 
 	update_icon()
 
 /obj/machinery/rust/gyrotron/update_icon()
-	if(!(stat & (FORCEDISABLE | NOPOWER | BROKEN)) && emitting)
+	if(!(stat & (NOPOWER | BROKEN)) && emitting)
 		icon_state = "emitter-on"
 	else
 		icon_state = "emitter-off"

@@ -14,6 +14,8 @@
 
 	interact(user)
 
+/obj/machinery/computer/rust_core_monitor/attack_ai(var/mob/user)
+	attack_hand(user)
 
 /obj/machinery/computer/rust_core_monitor/interact(var/mob/user)
 	if(linked_core)

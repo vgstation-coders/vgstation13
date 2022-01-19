@@ -139,7 +139,7 @@
 	if(!research_queue.len)
 		return
 	while(research_queue[1])
-		if(stat&(NOPOWER|BROKEN|FORCEDISABLE))
+		if(stat&(NOPOWER|BROKEN))
 			return 0
 		var/datum/design/current_design = research_queue[1]
 		if(!researchDesign(current_design))
@@ -189,7 +189,7 @@
 
 
 /obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(src.stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(src.stat & (BROKEN|NOPOWER))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user) || !Adjacent(user))
 		return

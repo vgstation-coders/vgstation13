@@ -36,10 +36,14 @@
 /obj/machinery/computer/smelting/process()
 	updateUsrDialog()
 
+/obj/machinery/computer/smelting/attack_ai(mob/user)
+	add_hiddenprint(user)
+	interact(user)
+
 /obj/machinery/computer/smelting/attack_hand(mob/user)
 	add_fingerprint(user)
 
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) && id) //Power out/this thing is broken, but at least allow the guy to take his ID out if it's still in there.
+	if(stat & (NOPOWER | BROKEN) && id) //Power out/this thing is broken, but at least allow the guy to take his ID out if it's still in there.
 		id.forceMove(get_turf(src))
 		user.put_in_hands(id)
 
@@ -49,7 +53,7 @@
 	interact(user)
 
 /obj/machinery/computer/smelting/interact(mob/user)
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN)) //It's broken ya derp.
+	if(stat & (NOPOWER | BROKEN)) //It's broken ya derp.
 		if(user.machine == src)
 			user.unset_machine(src)
 		return
@@ -234,7 +238,7 @@
 	radio_connection.post_signal(src, signal)
 
 /obj/machinery/computer/smelting/receive_signal(datum/signal/signal)
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || !signal || !signal.data["tag"] || signal.data["tag"] != smelter_tag)
+	if(stat & (NOPOWER | BROKEN) || !signal || !signal.data["tag"] || signal.data["tag"] != smelter_tag)
 		return
 
 	if(signal.data["type"] != "smelter") //So I can forgo sanity, henk.
@@ -287,7 +291,7 @@
 	update_icon()
 
 /obj/machinery/mineral/processing_unit/update_icon()
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || !on)
+	if(stat & (NOPOWER | BROKEN) || !on)
 		icon_state = "furnace_o"
 		set_light(0)
 	else if(on)
@@ -390,7 +394,7 @@
 		qdel(A)
 
 /obj/machinery/mineral/processing_unit/process()
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN))
 		return
 
 	var/turf/in_T = get_step(src, in_dir)
@@ -431,7 +435,7 @@
 	broadcast_status()
 
 /obj/machinery/mineral/processing_unit/receive_signal(datum/signal/signal)
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || !signal.data["tag"] || signal.data["tag"] != id_tag)
+	if(stat & (NOPOWER | BROKEN) || !signal.data["tag"] || signal.data["tag"] != id_tag)
 		return
 
 	if(signal.data["sigtype"] == "status")

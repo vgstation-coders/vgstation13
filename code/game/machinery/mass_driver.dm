@@ -16,12 +16,6 @@ var/list/mass_drivers = list()
 	id_tag = "default"
 	var/drive_range = 50 //this is mostly irrelevant since current mass drivers throw into space, but you could make a lower-range mass driver for interstation transport or something I guess.
 
-	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/oneuse/emag
-	)
-
 /obj/machinery/mass_driver/New()
 	..()
 	mass_drivers += src
@@ -67,7 +61,7 @@ var/list/mass_drivers = list()
 	</ul>"}
 
 /obj/machinery/mass_driver/proc/drive(amount)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	use_power(500*power)
 	var/O_limit = 0
@@ -90,7 +84,7 @@ var/list/mass_drivers = list()
 	return
 
 /obj/machinery/mass_driver/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	drive()
 	..(severity)

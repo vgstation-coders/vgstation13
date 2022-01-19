@@ -63,12 +63,6 @@ var/list/shuttle_log = list()
 	var/message_cooldown = 0
 	var/centcomm_message_cooldown = 0
 	var/tmp_alertlevel = 0
-	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/fake_announcement,
-		/datum/malfhack_ability/oneuse/emag,
-	)
 
 	// Blob stuff
 	var/defcon_1_enabled = FALSE
@@ -139,7 +133,7 @@ var/list/shuttle_log = list()
 			setMenuState(usr,COMM_SCREEN_SECLEVEL)
 
 		if("newalertlevel")
-			if(issilicon(usr) && !is_malf_owner(usr))
+			if(issilicon(usr))
 				return
 			tmp_alertlevel = text2num(href_list["level"])
 			var/mob/M = usr
@@ -171,11 +165,11 @@ var/list/shuttle_log = list()
 				to_chat(usr, "You need to have a valid ID.")
 
 		if("announce")
-			if(authenticated==AUTH_CAPT && !(issilicon(usr) && !is_malf_owner(usr)))
+			if(authenticated==AUTH_CAPT && !issilicon(usr))
 				if(message_cooldown)
 					return
 				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
-				if(message_cooldown || !input || (!usr.Adjacent(src) && !issilicon(usr)))
+				if(message_cooldown || !input || !usr.Adjacent(src))
 					return
 				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
 				var/turf/T = get_turf(usr)
@@ -227,7 +221,7 @@ var/list/shuttle_log = list()
 			if(!ert_reason)
 				to_chat(usr, "<span class='warning'>You are required to give a reason to call an ERT.</span>")
 				return
-			if(!usr.Adjacent(src) || usr.incapacitated())
+			if(!Adjacent(usr) || usr.incapacitated())
 				return
 			var/datum/striketeam/ert/response_team = new()
 			response_team.trigger_strike(usr,ert_reason,TRUE)
@@ -320,7 +314,7 @@ var/list/shuttle_log = list()
 					to_chat(usr, "<span class='warning'>Arrays recycling.  Please stand by for a few seconds.</span>")
 					return
 				var/input = stripped_input(usr, "Please choose a message to transmit to Centcomm via quantum entanglement.  Please be aware that this process is very expensive, and abuse will lead to... termination.  Transmission does not guarantee a response. There is a 30 second delay before you may send another message, be clear, full and concise.", "To abort, send an empty message.", "")
-				if(!input || (!usr.Adjacent(src) && !issilicon(usr)))
+				if(!input || !(usr in view(1,src)))
 					return
 				Centcomm_announce(input, usr)
 				to_chat(usr, "<span class='notice'>Message transmitted.</span>")
@@ -360,19 +354,18 @@ var/list/shuttle_log = list()
 			update_icon()
 
 		if("SetPortRestriction")
-
-			if(issilicon(usr) && !is_malf_owner(usr))
+			if(issilicon(usr))
 				return
 			var/mob/M = usr
 			var/obj/item/weapon/card/id/I = M.get_id_card()
-			if (I || isAdminGhost(usr) || issilicon(usr))
-				if(isAdminGhost(usr) || issilicon(usr) || (access_hos in I.access) || ((access_heads in I.access) && security_level >= SEC_LEVEL_RED))
+			if (I || isAdminGhost(usr))
+				if(isAdminGhost(usr) || (access_hos in I.access) || ((access_heads in I.access) && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
 						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be announced to the crew, as well as transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
 						if(!reason)
 							to_chat(usr, "You must provide some reason for closing the docking port.")
 							return
-						if(!(usr in view(1,src)) && !issilicon(usr))
+						if(!(usr in view(1,src)))
 							return
 						command_alert("The trading port is now on lockdown. Third party traders are no longer free to dock their shuttles with the station. Reason given:\n\n[reason]", "Trading Port - Now on Lockdown", 1)
 						world << sound('sound/AI/trading_port_closed.ogg')
@@ -405,6 +398,10 @@ var/list/shuttle_log = list()
 		if("ViewShuttleLog")
 			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
 	return 1
+
+/obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
+	src.add_hiddenprint(user)
+	return src.attack_hand(user)
 
 /obj/machinery/computer/communications/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)
@@ -522,7 +519,7 @@ var/list/shuttle_log = list()
 	icon_state = "[emagged ? "[initial_icon]-emag" : "[initial_icon]"]"
 	if(stat & BROKEN)
 		icon_state = "[initial_icon]b"
-	else if(stat & (FORCEDISABLE|NOPOWER))
+	else if(stat & NOPOWER)
 		icon_state = "[initial_icon]0"
 
 

@@ -43,7 +43,7 @@
 		spawn(0) qdel(src)
 		return PROCESS_KILL
 
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		icon_state = "meter0"
 		return 0
 
@@ -119,12 +119,15 @@
 	..()
 	attack_hand(user)
 
+/obj/machinery/meter/attack_ai(var/mob/user)
+	attack_hand(user)
+
 /obj/machinery/meter/attack_ghost(var/mob/user)
 	attack_hand(user)
 
 // Why the FUCK was this Click()?
 /obj/machinery/meter/attack_hand(var/mob/user)
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		return 1
 
 	var/t = null

@@ -61,7 +61,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	update_icon()
 
 /obj/machinery/requests_console/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & NOPOWER)
 		if(icon_state != "req_comp_off")
 			icon_state = "req_comp_off"
 	else
@@ -215,12 +215,12 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 			if(10)	//send announcement
 				dat += text("<B>Station wide announcement</B><BR><BR>")
-				if(announceAuth || is_malf_owner(user))
+				if(announceAuth)
 					dat += text("<b>Authentication accepted</b><BR><BR>")
 				else
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 				dat += text("<b>Message: </b>[message] <A href='?src=\ref[src];writeAnnouncement=1'>Write</A><BR><BR>")
-				if ((announceAuth || is_malf_owner(user)) && message)
+				if (announceAuth && message)
 					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 

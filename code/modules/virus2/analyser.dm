@@ -99,9 +99,7 @@
 	if(stat & (BROKEN))
 		to_chat(user, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return
-	if(stat & (FORCEDISABLE))
-		to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
-		return
+
 	if(stat & (NOPOWER))
 		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
 		if (dish)
@@ -148,7 +146,7 @@
 	playsound(loc, "sound/machines/heps.ogg", 50, 1)
 
 	if(do_after(user, src, 5 SECONDS))
-		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		if(stat & (BROKEN|NOPOWER))
 			return
 		alert_noise()
 		if (dish.contained_virus.addToDB())
@@ -179,13 +177,13 @@
 	overlays.len = 0
 	icon_state = "analyser"
 
-	if (stat & (NOPOWER|FORCEDISABLE))
+	if (stat & (NOPOWER))
 		icon_state = "analyser0"
 
 	if (stat & (BROKEN))
 		icon_state = "analyserb"
 
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		set_light(0)
 	else
 		set_light(2,1)
@@ -213,9 +211,7 @@
 	if(stat & (BROKEN))
 		to_chat(usr, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return
-	if(stat & (FORCEDISABLE))
-		to_chat(usr, "<span class='notice'>\The [src] is unresponsive.</span>")
-		return
+
 	if(stat & (NOPOWER))
 		to_chat(usr, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
 		return
@@ -233,7 +229,7 @@
 		P.update_icon()
 
 /obj/machinery/disease2/diseaseanalyser/process()
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		scanner = null
 		return
 

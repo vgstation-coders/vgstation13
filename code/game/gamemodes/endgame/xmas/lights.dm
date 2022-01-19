@@ -53,7 +53,7 @@
 
 /obj/machinery/xmas_light/update_icon()
 	overlays.len = 0
-	if (stat & (FORCEDISABLE|NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
 	overlays += lights

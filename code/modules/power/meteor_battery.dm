@@ -107,7 +107,7 @@
 	return new_target
 
 /obj/machinery/meteor_battery/process()
-	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN))
 		return
 	if(src.cover==null)
 		src.cover = new /obj/machinery/turretcover(src.loc)

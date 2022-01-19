@@ -52,12 +52,6 @@
 
 	var/key_name_last_user = ""
 
-	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/kill_plant,
-	)
-
 	// Seed details/line data.
 	var/datum/seed/seed = null // The currently planted seed
 
@@ -424,6 +418,7 @@
 		remove_dead(user)
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_ai(mob/user as mob)
+
 	return //Until we find something smart for you to do, please steer clear. Thanks
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_robot(mob/user as mob)

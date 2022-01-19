@@ -20,7 +20,7 @@
 
 /obj/machinery/anomaly/hyperspectral/update_icon()
 	overlays.Cut()
-	if (stat & (NOPOWER | BROKEN | FORCEDISABLE))
+	if (stat & (NOPOWER | BROKEN))
 		return
 
 	overlays += "hyperspectral_on"

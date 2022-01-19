@@ -50,6 +50,9 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 			scancount += SP.rating-1
 	cooldown_time = initial(cooldown_time) - 300*scancount
 
+/obj/machinery/faxmachine/attack_ai(mob/user as mob)
+	return attack_hand(user)
+
 /obj/machinery/faxmachine/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
@@ -197,9 +200,6 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	if(stat & BROKEN)
 		to_chat(user, "<span class = 'warning'>\The [src] is broken!</span>")
 		return
-	if(stat & FORCEDISABLE)
-		to_chat(user, "<span class = 'warning'>\The [src] is unresponsive!</span>")
-		return
 	if(istype(O, /obj/item/weapon/paper))
 		if(!tofax)
 			if(user.drop_item(O, src))
@@ -254,7 +254,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 
 		if(centcomm || F.department == dpt )
-			if(! (F.stat & (BROKEN|NOPOWER|FORCEDISABLE) ) )
+			if(! (F.stat & (BROKEN|NOPOWER) ) )
 
 				flick("faxreceive", F)
 

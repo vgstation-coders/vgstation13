@@ -34,7 +34,7 @@
 	power_change()
 
 /obj/machinery/computer/process()
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		return 0
 	return 1
 
@@ -96,7 +96,7 @@
 		icon_state = "[initial(icon_state)]b"
 
 	// Powered
-	else if(stat & (FORCEDISABLE|NOPOWER))
+	else if(stat & NOPOWER)
 		icon_state = "[initial(icon_state)]0"
 
 /obj/machinery/computer/power_change()

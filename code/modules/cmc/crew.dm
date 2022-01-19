@@ -100,11 +100,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	deactivateAll()
 	..()
 
+/obj/machinery/computer/crew/attack_ai(mob/user)
+	attack_hand(user)
+
 /obj/machinery/computer/crew/attack_hand(mob/user)
 	. = ..()
 	if(.)
 		return
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	initializeUser(user)
 
@@ -112,7 +115,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
 	else
-		if(stat & (FORCEDISABLE|NOPOWER))
+		if(stat & NOPOWER)
 			src.icon_state = "c_unpowered"
 			stat |= NOPOWER
 		else
@@ -137,7 +140,7 @@ GENERAL PROCS
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
-	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER|FORCEDISABLE))) //sanity
+	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
 		deactivateAll()
 		return
 

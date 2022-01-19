@@ -780,7 +780,7 @@
 	. = do_after_default_checks(arglist(args))
 	if(.)
 		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
-		target.shake_animation(3, 3, 0.2, 15)
+		target.shake_animation()
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"

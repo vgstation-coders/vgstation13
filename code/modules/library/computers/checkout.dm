@@ -22,12 +22,6 @@
 	pass_flags = PASSTABLE
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
 
-	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/oneuse/emag
-	)
-
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user as mob)
 	if(..())
 		return

@@ -34,7 +34,6 @@ var/list/mind_ui_ID2type = list()
 		var/datum/mind_ui/ui = activeUIs[mind_ui]
 		ui.RemoveFromClient()
 
-
 /datum/mind/proc/DisplayUI(var/ui_ID)
 	var/datum/mind_ui/ui
 	if (ui_ID in activeUIs)
@@ -44,10 +43,7 @@ var/list/mind_ui_ID2type = list()
 			return
 		var/ui_type = mind_ui_ID2type[ui_ID]
 		ui = new ui_type(src)
-	if(!ui.Valid())
-		ui.Hide()
-	else
-		ui.Display()
+	ui.Display()
 
 /datum/mind/proc/HideUI(var/ui_ID)
 	if (ui_ID in activeUIs)
@@ -85,11 +81,6 @@ var/list/mind_ui_ID2type = list()
 	if (client)
 		var/obj/abstract/mind_ui_element/element = locate(element_type) in client.screen
 		if (element)
-			element.UpdateIcon()
-
-/mob/proc/UpdateAllElementIcons()
-	if (client)
-		for (var/obj/abstract/mind_ui_element/element in client.screen)
 			element.UpdateIcon()
 
 
@@ -160,7 +151,7 @@ var/list/mind_ui_ID2type = list()
 		var/mob/M = mind.current
 		if (!M.client)
 			return
-		
+
 		mind.current.client.screen -= elements
 
 // Makes every element visible
@@ -178,10 +169,7 @@ var/list/mind_ui_ID2type = list()
 		element.Appear()
 	for (var/datum/mind_ui/child in subUIs)
 		if (child.display_with_parent)
-			if(child.Valid())
-				child.Display()
-			else
-				child.Hide()
+			child.Display()
 
 /datum/mind_ui/proc/Hide(var/override = FALSE)
 	active = FALSE
@@ -293,21 +281,6 @@ var/list/mind_ui_ID2type = list()
 		I.pixel_x = (i - 1) * 6
 		result.overlays += I
 	return result
-
-/obj/abstract/mind_ui_element/proc/SlideUIElement(var/new_x = 0, var/new_y = 0, var/duration, var/layer = MIND_UI_BACK, var/hide_after = FALSE)
-	invisibility = 101
-	var/image/ui_image = image(icon, src, icon_state, layer)
-	ui_image.overlays = overlays
-	var/mob/U = GetUser()
-	U.client.images |= ui_image
-	animate(ui_image, pixel_x = new_x - offset_x, pixel_y = new_y - offset_y,  time = duration)
-	spawn(duration)
-		offset_x = new_x
-		offset_y = new_y
-		UpdateUIScreenLoc()
-		U.client.images -= ui_image
-		if(!hide_after)
-			invisibility = 0
 
 /obj/abstract/mind_ui_element/failsafe
 	icon_state = "blank"

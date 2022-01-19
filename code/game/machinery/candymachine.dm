@@ -13,13 +13,8 @@
 	emagged = 0
 	use_power = 0
 
-	hack_abilities = list(
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/oneuse/emag
-	)
-
 /obj/machinery/sweet/attackby(var/obj/O as obj, var/mob/user as mob)
-	if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if (stat & (NOPOWER|BROKEN))
 		return ..()
 
 	if(istype(O, /obj/item/weapon/coin/pomf))

@@ -33,7 +33,7 @@
 
 /obj/machinery/anomaly/power_change()
 	..()
-	if (stat & (FORCEDISABLE|NOPOWER) && scan_process)
+	if (stat & NOPOWER && scan_process)
 		stop()
 	else
 		update_icon()
@@ -41,7 +41,7 @@
 /obj/machinery/anomaly/process()
 	//First we deal with the machine's task
 	if(scan_process)
-		if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		if (stat & (NOPOWER|BROKEN))
 			stop()
 		else
 			use_power = MACHINE_POWER_USE_ACTIVE
@@ -151,7 +151,7 @@
 
 
 /obj/machinery/anomaly/AltClick(var/mob/user)
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & (NOPOWER|FORCEDISABLE))
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
 		return
 
 	eject(user)
@@ -160,14 +160,14 @@
 	if (!anchored)
 		return ..()
 
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & (NOPOWER|FORCEDISABLE))
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
 		return
 
 	start(user)
 
 
 /obj/machinery/anomaly/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
-	if (stat & (FORCEDISABLE|NOPOWER))
+	if (stat & NOPOWER)
 		return
 
 	var/list/data[0]

@@ -164,8 +164,6 @@
 
 		if(!use_auto_lights)
 			return
-		if(stat & FORCEDISABLE)
-			return
 		set_light(light_range_on, light_power_on)
 
 	else

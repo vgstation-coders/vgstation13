@@ -433,18 +433,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "malfdelta"
 	alertlevel = "delta"
 
-/datum/command_alert/malf_win 
-	name = "AI Malfunctioning Win"
-	alert = 'sound/effects/static/static4.ogg'
-
-/datum/command_alert/malf_win/announce()
-	alert = pick(static_list)
-	alert_title = Gibberish("ERROR: SYSTEM OVERRIDE", 90)
-	message = Gibberish("Warning: Device safeties disabled, decontamination procedure unlocked. Activate device to contain outbreak.", 90)
-	..()
-
-
-
 /////////////METEOR STORM
 
 /datum/command_alert/meteor_round

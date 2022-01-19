@@ -236,7 +236,7 @@
 
 
 /obj/machinery/detector/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
 	if(prob(75/severity))
