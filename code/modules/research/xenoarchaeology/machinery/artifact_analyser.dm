@@ -62,7 +62,7 @@ var/anomaly_report_num = 0
 /obj/machinery/artifact_analyser/interact(mob/user)
 	if(..())
 		return
-	if(stat & (NOPOWER|BROKEN) || get_dist(src, user) > 1)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || get_dist(src, user) > 1)
 		user.unset_machine(src)
 		return
 

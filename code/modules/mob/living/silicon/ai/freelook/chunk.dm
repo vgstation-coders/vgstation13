@@ -109,6 +109,7 @@
 					continue
 				if(m.ai.client)
 					m.ai.client.images -= t.obscured
+			qdel(t.obscured)
 
 	for(var/turf in visRemoved)
 		var/turf/t = turf
