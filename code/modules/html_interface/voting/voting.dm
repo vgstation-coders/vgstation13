@@ -1,43 +1,43 @@
-var/global/datum/controller/poll/poll = new()
+var/global/datum/controller/vote/vote = new()
 #define vote_head "<script type=\"text/javascript\" src=\"3-jquery.timers.js\"></script><script type=\"text/javascript\" src=\"libraries.min.js\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\"html_interface_icons.css\" /><link rel=\"stylesheet\" type=\"text/css\" href=\"voting.css\" /><script type=\"text/javascript\" src=\"voting.js\"></script>"
 
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
 
-/datum/html_interface/nanotrasen/poll/registerResources()
+/datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
 
 	register_asset("voting.js", 'voting.js')
 	register_asset("voting.css", 'voting.css')
 
-/datum/html_interface/nanotrasen/poll/sendAssets(var/client/client)
+/datum/html_interface/nanotrasen/vote/sendAssets(var/client/client)
 	..()
 
 	send_asset(client, "voting.js")
 	send_asset(client, "voting.css")
 
-/datum/html_interface/nanotrasen/poll/Topic(href, href_list[])
+/datum/html_interface/nanotrasen/vote/Topic(href, href_list[])
 	..()
 	if(href_list["html_interface_action"] == "onclose")
 
 		var/datum/html_interface_client/hclient = getClient(usr.client)
 		if (istype(hclient))
 			src.hide(hclient)
-			poll.cancel_vote(usr)
+			vote.cancel_vote(usr)
 
 
-/datum/controller/poll
+/datum/controller/vote
 	var/initiator      = null
 	var/started_time   = null
 	var/time_remaining = 0
 	var/mode           = null
 	var/question       = null
-	var/list/ismappoll
+	var/list/ismapvote
 	var/chosen_map
 	name               = "datum"
-	var/datum/html_interface/nanotrasen/poll/interface
+	var/datum/html_interface/nanotrasen/vote/interface
 	
-	//poll data
+	//vote data
 	var/list/voters	//assoc. list: user.ckey, choices
 	var/list/tally //assoc. list: choices, count
 	var/list/choices = list() //choices
@@ -47,28 +47,28 @@ var/global/datum/controller/poll/poll = new()
 	var/initialized    = 0
 	var/lastupdate     = 0
 	
-	var/poll_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
+	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
 
-/datum/controller/poll/New()
+/datum/controller/vote/New()
 	. = ..()
 	src.voters = list()
 	src.tally = list()
 	src.status_data = list()
 	spawn(5)
 		if(!src.interface)
-			src.interface = new/datum/html_interface/nanotrasen/poll(src, "Voting Panel", 400, 400, vote_head)
+			src.interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
 			src.interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
 		initialized = 1
-	if (poll != src)
-		if (istype(poll))
-			qdel(poll)
-		poll = src
+	if (vote != src)
+		if (istype(vote))
+			qdel(vote)
+		vote = src
 
-/datum/controller/poll/proc/process()	//called by master_controller
+/datum/controller/vote/proc/process()	//called by master_controller
 	if (lock)
 		return
 	if(mode)
@@ -82,7 +82,7 @@ var/global/datum/controller/poll/poll = new()
 
 		// Calculate how much time is remaining by comparing current time, to time of vote start,
 		// plus vote duration
-		time_remaining = (ismappoll && ismappoll.len) ? (round((started_time + 600 - world.time)/10)) : (round((started_time + config.vote_period - world.time)/10))
+		time_remaining = (ismapvote && ismapvote.len) ? (round((started_time + 600 - world.time)/10)) : (round((started_time + config.vote_period - world.time)/10))
 
 		if(time_remaining <= 0)
 			result()
@@ -96,7 +96,7 @@ var/global/datum/controller/poll/poll = new()
 
 		lock = FALSE
 
-/datum/controller/poll/proc/reset()
+/datum/controller/vote/proc/reset()
 	initiator = null
 	time_remaining = 0
 	mode = null
@@ -104,10 +104,10 @@ var/global/datum/controller/poll/poll = new()
 	choices.len = 0
 	voters.len = 0
 	tally.len = 0
-	poll_method = null
+	vote_method = null
 	update(1)
 
-/datum/controller/poll/proc/get_result()
+/datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
@@ -127,7 +127,7 @@ var/global/datum/controller/poll/poll = new()
 				factor = max(factor,0.5)
 				tally["Initiate Crew Transfer"] = round(tally["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-	switch(poll_method) //pick winner based on poll method
+	switch(vote_method) //pick winner based on vote_method
 		if("MAJORITY")
 			return majority()
 		if("WEIGHTED")
@@ -138,7 +138,7 @@ var/global/datum/controller/poll/poll = new()
 		else
 			return  majority()
 
-/datum/controller/poll/proc/majority()
+/datum/controller/vote/proc/majority()
 	var/text
 	var/feedbackanswer
 	var/greatest_votes = 0
@@ -170,7 +170,7 @@ var/global/datum/controller/poll/poll = new()
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
 
-/datum/controller/poll/proc/weighted()
+/datum/controller/vote/proc/weighted()
 	var/vote_threshold = 0.15
 	var/list/discarded_choices = list()
 	var/discarded_votes = 0
@@ -198,23 +198,23 @@ var/global/datum/controller/poll/poll = new()
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
 
-/datum/controller/poll/proc/persistent()
+/datum/controller/vote/proc/persistent()
 	//task.on_init()
-	//for (var/i in poll)
-	//	poll.user
+	//for (var/i in vote)
+	//	vote.user
 	//find
 	
 	majority()
 	//task.on_shutdown()
 
-/datum/controller/poll/proc/announce_result()
+/datum/controller/vote/proc/announce_result()
 	stack_trace("Fuck my shit up. Lock is \[[lock]]")
 	var/result = get_result()
 	currently_voting = FALSE
 	log_vote(result)
 	to_chat(world, "<font color='purple'>[result]</font>")
 
-/datum/controller/poll/proc/result()
+/datum/controller/vote/proc/result()
 	var/restart = 0
 	currently_voting = FALSE
 	if(.)
@@ -237,8 +237,8 @@ var/global/datum/controller/poll/poll = new()
 					init_shift_change(null, 1)
 			if("map")
 				if(.)
-					chosen_map = "maps/voting/" + ismappoll[.] + "/vgstation13.dmb"
-					watchdog.chosen_map = ismappoll[.]
+					chosen_map = "maps/voting/" + ismapvote[.] + "/vgstation13.dmb"
+					watchdog.chosen_map = ismapvote[.]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
@@ -250,7 +250,7 @@ var/global/datum/controller/poll/poll = new()
 		log_game("Rebooting due to restart vote")
 		world.Reboot()
 
-/datum/controller/poll/proc/submit_vote(var/mob/user, var/vote)
+/datum/controller/vote/proc/submit_vote(var/mob/user, var/vote)
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
@@ -269,35 +269,35 @@ var/global/datum/controller/poll/poll = new()
 						return 0
 		//check vote then remove vote
 		if(vote && vote == "cancel_vote")
-			poll.cancel_vote(user)
+			vote.cancel_vote(user)
 		//add vote
 		else if(vote && vote != "cancel_vote")
-			poll.add_vote(user, vote)
+			vote.add_vote(user, vote)
 			return vote //do we need this?
 		else
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 	return 0
 
-/datum/controller/poll/proc/get_vote(var/mob/user)
+/datum/controller/vote/proc/get_vote(var/mob/user)
 	//returns voter's choice
 	if(voters[user.ckey])
 		return voters[user.ckey]
 	else
 		return 0
 
-/datum/controller/poll/proc/add_vote(var/mob/user, var/vote)
+/datum/controller/vote/proc/add_vote(var/mob/user, var/vote)
 	//adds voter's choice and adds to tally
 	var/list/L = list()
 	L[user.key] = vote
 	voters += L
 	tally[vote]++	
 
-/datum/controller/poll/proc/cancel_vote(var/mob/user)
+/datum/controller/vote/proc/cancel_vote(var/mob/user)
 	if (voters[user.ckey])
 		tally[voters[user.ckey]]--
 		voters -= user.ckey	
 	
-/datum/controller/poll/proc/get_total()
+/datum/controller/vote/proc/get_total()
 	var/total = 0
 	//loop through choices in tally for count and add them up
 	for (var/c in tally)
@@ -305,19 +305,19 @@ var/global/datum/controller/poll/poll = new()
 			total += tally[c]
 	return total
 
-/datum/controller/poll/proc/initiate_poll(var/poll_type, var/initiator_key, var/popup = 0)
+/datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
 	if(currently_voting)
 		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
 		return
 	currently_voting = TRUE
 	if(!mode)
 		if(started_time != null && !check_rights(R_ADMIN))
-			var/next_allowed_time = (started_time + config.poll_delay)
+			var/next_allowed_time = (started_time + config.vote_delay)
 			if(next_allowed_time > world.time)
 				return 0
 
 		reset()
-		switch(poll_type)
+		switch(vote_type)
 			if("restart")
 				choices.Add("Restart Round","Continue Playing")
 				question = "Restart the round?"
@@ -332,7 +332,7 @@ var/global/datum/controller/poll/poll = new()
 				question = "End the shift?"
 				choices.Add("Initiate Crew Transfer", "Continue The Round")
 			if("custom")
-				question = html_encode(input(usr,"What is the poll for?") as text|null)
+				question = html_encode(input(usr,"What is the vote for?") as text|null)
 				if(!question)
 					return 0
 				for(var/i in 1 to 10)
@@ -346,16 +346,16 @@ var/global/datum/controller/poll/poll = new()
 				for(var/key in maps)
 					choices.Add(key)
 				if(!choices.len)
-					to_chat(world, "<span class='danger'>Failed to initiate map poll, no maps found.</span>")
+					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
-				ismappoll = maps
+				ismapvote = maps
 			else
 				return 0
 
-		mode = poll_type
+		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
-		var/text = "[capitalize(mode)] poll started by [initiator]."
+		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		if(mode == "custom")
 			text += "<br>[question]"
@@ -364,7 +364,7 @@ var/global/datum/controller/poll/poll = new()
 		update(1)
 		if(popup)
 			for(var/client/C in clients)
-				if(poll_type == "map" && !C.holder)
+				if(vote_type == "map" && !C.holder)
 					if(C.mob)
 						var/mob/M = C.mob
 						//Do not prompt non-admin new players or round start observers for a map vote - Pomf
@@ -379,8 +379,8 @@ var/global/datum/controller/poll/poll = new()
 			if(istype(usr) && usr.client)
 				interact(usr.client)
 
-		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[poll]'>Click here</a> or type 'vote' to place your votes.<br>You have [ismappoll && ismappoll.len ? "60" : config.vote_period/10] seconds to vote.</font>")
-		switch(poll_type)
+		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[vote]'>Click here</a> or type 'vote' to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
+		switch(vote_type)
 			if("crew_transfer")
 				world << sound('sound/voice/Serithi/Shuttlehere.ogg')
 			if("gamemode")
@@ -394,24 +394,24 @@ var/global/datum/controller/poll/poll = new()
 			going = 0
 			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
 
-		time_remaining = (ismappoll && ismappoll.len ? 60 : round(config.vote_period/10))
+		time_remaining = (ismapvote && ismapvote.len ? 60 : round(config.vote_period/10))
 		return 1
 	return 0
 
-/datum/controller/poll/proc/updateFor(hclient_or_mob, poll/interface)
+/datum/controller/vote/proc/updateFor(hclient_or_mob, interface)
 	// This check will succeed if updateFor is called after showing to the player, but will fail
 	// on regular updates. Since we only really need this once we don't care if it fails.
 
-	poll/interface.callJavaScript("clearAll", new/list(), hclient_or_mob)
-	poll/interface.callJavaScript("update_mode", status_data, hclient_or_mob)
-	if(poll.tally.len)
+	interface.callJavaScript("clearAll", new/list(), hclient_or_mob)
+	interface.callJavaScript("update_mode", status_data, hclient_or_mob)
+	if(vote.tally.len)
 		var/i = 1
-		for (var/list/L in poll.tally)
+		for (var/list/L in vote.tally)
 			L.Insert(0,i++)
 			var/list/anguish = list(L)
-			poll.interface.callJavaScript("update_choices", anguish, hclient_or_mob)
+			interface.callJavaScript("update_choices", anguish, hclient_or_mob)
 
-/datum/controller/poll/proc/interact(client/user)
+/datum/controller/vote/proc/interact(client/user)
 	set waitfor = FALSE // So we don't wait for each individual client's assets to be sent.
 
 	if(!user || !initialized)
@@ -445,9 +445,9 @@ var/global/datum/controller/poll/poll = new()
 	interface.callJavaScript("client_data", client_data, user)
 	src.updateFor(user, interface)
 
-/datum/controller/poll/proc/update(refresh = 0)
+/datum/controller/vote/proc/update(refresh = 0)
 	if(!interface)
-		interface = new/datum/html_interface/nanotrasen/poll(src, "Voting Panel", 400, 400, vote_head)
+		interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
 		interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
 
 	if(world.time < last_update + 2)
@@ -473,7 +473,7 @@ var/global/datum/controller/poll/poll = new()
 	if(refresh && interface)
 		updateFor()
 
-/datum/controller/poll/Topic(href,href_list[],hsrc)
+/datum/controller/vote/Topic(href,href_list[],hsrc)
 	if(!usr || !usr.client)
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
@@ -483,10 +483,10 @@ var/global/datum/controller/poll/poll = new()
 			return 0
 		if("cancel")
 			if(usr.client.holder)
-				if(alert("Are you sure you want to cancel this poll? This will not display the results, and for a map poll, re-use the current map.","Confirm","Yes","No") != "Yes")
+				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
 					return
-				log_admin("[key_name(usr)] has cancelled a poll currently taking place. Poll type: [mode], question, [question].")
-				message_admins("[key_name(usr)] has cancelled a poll currently taking place. Poll type: [mode], question, [question].")
+				log_admin("[key_name(usr)] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
+				message_admins("[key_name(usr)] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				reset()
 				update()
 				currently_voting = FALSE
@@ -500,16 +500,16 @@ var/global/datum/controller/poll/poll = new()
 				update()
 		if("restart")
 			if(config.allow_vote_restart || usr.client.holder)
-				initiate_poll("restart",usr.key)
+				initiate_vote("restart",usr.key)
 		if("gamemode")
 			if(config.allow_vote_mode || usr.client.holder)
-				initiate_poll("gamemode",usr.key)
+				initiate_vote("gamemode",usr.key)
 		if("crew_transfer")
 			if(config.allow_vote_restart || usr.client.holder)
-				initiate_poll("crew_transfer",usr.key)
+				initiate_vote("crew_transfer",usr.key)
 		if("custom")
 			if(usr.client.holder)
-				initiate_poll("custom",usr.key)
+				initiate_vote("custom",usr.key)
 		else
 			submit_vote(usr.key, round(text2num(href_list["vote"])))
 	usr.vote()
@@ -518,8 +518,8 @@ var/global/datum/controller/poll/poll = new()
 /mob/verb/vote()
 	set category = "OOC"
 	set name = "Vote"
-	if(poll)
-		if(!poll.initialized)
+	if(vote)
+		if(!vote.initialized)
 			to_chat(usr, "<span class='info'>The voting controller isn't fully initialized yet.</span>")
 		else
-			poll.interact(usr.client)
+			vote.interact(usr.client)
