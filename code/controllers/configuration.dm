@@ -35,7 +35,7 @@
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives
-	var/vote_delay = 6000				// minimum time between voting sessions (deciseconds, 10 minute default)
+	var/poll_delay = 6000				// minimum time between polling sessions (deciseconds, 10 minute default)
 	var/vote_period = 600				// length of voting period (deciseconds, default 1 minute)
 	var/vote_no_default = 0				// vote does not default to nochange/norestart (tbi)
 	var/vote_no_dead = 0				// dead people can't vote (tbi)
@@ -201,8 +201,8 @@
 	var/discord_password
 	var/kill_phrase = "All your bases are belong to us."
 
-	// Weighted Votes
-	var/weighted_votes = 0
+	// Poll methods
+	var/poll_method = null
 
 	// Dynamic Mode
 	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
@@ -366,8 +366,8 @@
 				if ("default_no_vote")
 					config.vote_no_default = 1
 
-				if ("vote_delay")
-					config.vote_delay = text2num(value)
+				if ("poll_delay")
+					config.poll_delay = text2num(value)
 
 				if ("vote_period")
 					config.vote_period = text2num(value)
@@ -629,8 +629,8 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
-				if("weighted_votes")
-					weighted_votes = TRUE
+				if("poll_method")
+					poll_method = value
 
 				if ("kill_phrase")
 					kill_phrase = value

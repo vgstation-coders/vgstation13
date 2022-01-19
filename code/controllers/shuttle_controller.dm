@@ -178,10 +178,10 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if (voting_cache)
 		return
 	voting_cache = 1
-	if(config.map_voting && vote)
+	if(config.map_voting && poll)
 		for(var/client/C in clients)
 			spawn
-				vote.interface.sendAssets(C)
+				poll.interface.sendAssets(C)
 
 /datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
 	var/frequency = get_rand_frequency()

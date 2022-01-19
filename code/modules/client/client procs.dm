@@ -485,9 +485,9 @@
 
 
 /client/proc/send_html_resources()
-	while(!vote || !vote.interface)
+	while(!poll || !poll.interface)
 		sleep(1)
-	vote.interface.sendAssets(src)
+	poll.interface.sendAssets(src)
 	var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
 	send_asset_list(src, E.assets)
 	var/datum/asset/simple/F = new/datum/asset/simple/other_fonts()

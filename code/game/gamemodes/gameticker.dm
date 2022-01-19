@@ -85,7 +85,7 @@ var/datum/controller/gameticker/ticker
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
-				vote.process()
+				poll.process()
 				watchdog.check_for_update()
 				//if(watchdog.waiting)
 //					to_chat(world, "<span class='notice'>Server update detected, restarting momentarily.</span>")
@@ -452,10 +452,10 @@ var/datum/controller/gameticker/ticker
 
 			gameend_time = world.time / 10
 			if(config.map_voting)
-				//testing("Vote picked [chosen_map]")
-				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
-				var/options = jointext(vote.choices, " ")
-				feedback_set("map vote choices", options)
+				//testing("Poll picked [chosen_map]")
+				poll.initiate_poll("map","The Server", popup = 1)
+				var/options = jointext(poll.choices, " ")
+				feedback_set("map poll choices", options)
 
 			else
 				var/list/maps = get_votable_maps()
@@ -463,7 +463,7 @@ var/datum/controller/gameticker/ticker
 				for(var/key in maps)
 					choices.Add(key)
 				var/mapname=pick(choices)
-				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
+				poll.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
 				watchdog.chosen_map = mapname
 				log_game("Server chose [watchdog.chosen_map]!")
 
@@ -492,7 +492,7 @@ var/datum/controller/gameticker/ticker
 			if (watchdog.waiting)
 				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
 				if(config.map_voting)
-					sleep(restart_timeout) //waiting for a mapvote to end
+					sleep(restart_timeout) //waiting for a mappoll to end
 				if(!delay_end)
 					watchdog.signal_ready()
 				else

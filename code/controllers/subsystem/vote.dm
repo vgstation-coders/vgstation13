@@ -1,16 +1,16 @@
-var/datum/subsystem/vote/SSvote
+var/datum/subsystem/poll/SSpoll
 
 
-/datum/subsystem/vote
-	name     = "Vote"
+/datum/subsystem/poll
+	name     = "Poll"
 	flags    = SS_NO_INIT
 	wait     = 1 SECONDS
-	priority = SS_PRIORITY_VOTE
+	priority = SS_PRIORITY_POLL
 	flags    = SS_FIRE_IN_LOBBY | SS_KEEP_TIMING
 
-/datum/subsystem/vote/New()
-	NEW_SS_GLOBAL(SSvote)
+/datum/subsystem/poll/New()
+	NEW_SS_GLOBAL(SSpoll)
 
 
-/datum/subsystem/vote/fire(resumed = FALSE)
-	vote.process()
+/datum/subsystem/poll/fire(resumed = FALSE)
+	poll.process()
