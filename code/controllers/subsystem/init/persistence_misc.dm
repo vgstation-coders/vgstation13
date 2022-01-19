@@ -230,7 +230,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		L += list(counts.vars)
 	write_file(L)
 
-/datum/persistence_task/map_vote_count/proc/insert_map(list/counts)
+/datum/persistence_task/map_vote_count/proc/insert_counts(list/counts)
 	data += counts
 	cmp_field = "count"
 	sortTim(data, /proc/cmp_list_by_element_asc)

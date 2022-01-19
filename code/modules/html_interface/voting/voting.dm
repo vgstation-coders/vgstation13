@@ -104,15 +104,13 @@ var/global/datum/controller/vote/vote = new()
 	choices.len = 0
 	voters.len = 0
 	tally.len = 0
-	vote_method = null
 	update(1)
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
-	var/non_voters = 0
-	non_voters = get_total() //fix this
+	var/non_voters = clients.len - get_total()
 
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
@@ -144,13 +142,13 @@ var/global/datum/controller/vote/vote = new()
 	var/greatest_votes = 0
 	if (tally.len > 0)
 		if (tally[1])
-			var/winners = list()
+			var/list/winners = list()
 			tally = sortTim(tally, /proc/cmp_list_by_element_asc,1)
-			greatest_votes = tally[1]
-			for (var/choice in tally)
-				if (choice  == greatest_votes)//must be true a least once
-					winners += choice
-			if (winners > 1)
+			greatest_votes = tally[tally[1]]
+			for (var/c in tally)
+				if (c  == greatest_votes)//must be true a least once
+					winners += c
+			if (winners.len > 1)
 				text = "<b>Vote Tied Between:</b><br>"
 				for(var/option in winners)
 					text += "\t[option]<br>"
@@ -163,9 +161,9 @@ var/global/datum/controller/vote/vote = new()
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
 		text += "<b>Vote Result: [.] won with [greatest_votes] vote\s.</b>"
-		for(var/choice in tally)
-			if(. != choice)
-				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"]."
+		for(var/c in tally)
+			if(. != c)
+				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
@@ -178,7 +176,7 @@ var/global/datum/controller/vote/vote = new()
 	var/text
 	var/list/filteredchoices = tally.Copy()
 	var/qualified_votes
-	if (tally.len > 0)
+	if (total_votes > 0)
 		for(var/a in filteredchoices)
 			if(!filteredchoices[a])
 				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
@@ -190,7 +188,7 @@ var/global/datum/controller/vote/vote = new()
 		if(filteredchoices.len)
 			. = pickweight(filteredchoices.Copy())
 		qualified_votes = total_votes - discarded_votes
-		text += "<b>Random Weighted Vote Result: [.] won with [choices[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
+		text += "<b>Random Weighted Vote Result: [.] won with [tally[.]] vote\s and a [round(100*choices[.]/qualified_votes)]% chance of winning.</b>"
 		for(var/choice in choices)
 			if(. != choice)
 				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
@@ -199,13 +197,16 @@ var/global/datum/controller/vote/vote = new()
 	return text
 
 /datum/controller/vote/proc/persistent()
-	//task.on_init()
-	//for (var/i in vote)
-	//	vote.user
-	//find
-
+	var/datum/persistence_task/map_vote_count/task = SSpersistence_misc.tasks[/datum/persistence_task/map_vote_count]
+	task.file_path = "data/persistence/mapvotecount.json"
+	task.on_init()
+	task.insert_counts(tally)
+	tally.len = 0
+	for(var/L in task.data)
+		tally[L] += L[L]
 	majority()
-	//task.on_shutdown()
+	task.data[1].count = 0
+	task.on_shutdown()
 
 /datum/controller/vote/proc/announce_result()
 	stack_trace("Fuck my shit up. Lock is \[[lock]]")
@@ -281,10 +282,10 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/get_vote(var/mob/user)
 	//returns voter's choice
-	if(voters[user.ckey])
-		return voters[user.ckey]
-	else
-		return 0
+	if(user)
+		if(voters[user.ckey])
+			return voters[user.ckey]
+	return 0
 
 /datum/controller/vote/proc/add_vote(var/mob/user, var/vote)
 	//adds voter's choice and adds to tally
@@ -358,6 +359,9 @@ var/global/datum/controller/vote/vote = new()
 		started_time = world.time
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
+		//initialize tally
+		for (var/c in choices)
+			tally[c] = 0
 		if(mode == "custom")
 			text += "<br>[question]"
 
@@ -408,10 +412,10 @@ var/global/datum/controller/vote/vote = new()
 	if(vote.tally.len)
 		var/i = 1
 		for (var/list/L in vote.tally)
-			L.Insert(0,i++)
-			var/list/anguish = list(L)
-			interface.callJavaScript("update_choices", anguish, hclient_or_mob)
-
+			L.Insert(1,i++)	//append index for javascript
+			to_chat(world,"L[i] : L[L[i]]")
+			interface.callJavaScript("update_choices", L, hclient_or_mob)
+			
 /datum/controller/vote/proc/interact(client/user)
 	set waitfor = FALSE // So we don't wait for each individual client's assets to be sent.
 
@@ -425,15 +429,12 @@ var/global/datum/controller/vote/vote = new()
 		else
 			CRASH("The user [M.name] of type [M.type] has been passed as a mob reference without a client to voting.interact()")
 
-	//voting |= user
 	interface.show(user)
 	var/list/client_data = list()
 	var/admin = 0
-	//var/currvote = 0
 
 	//adds client data
 	if(get_vote(user))
-		//client_data[++client_data.len] = get_vote(user)
 		client_data += list(get_vote(user))
 	else
 		client_data += list(0)
@@ -441,7 +442,6 @@ var/global/datum/controller/vote/vote = new()
 		admin = 1
 		if(user.holder.rights & R_ADMIN)
 			admin = 2
-	//client_data[++client_data.len] = (admin)
 	client_data += list(admin)
 	interface.callJavaScript("client_data", client_data, user)
 	src.updateFor(user, interface)
