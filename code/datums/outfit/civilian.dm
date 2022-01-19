@@ -545,9 +545,9 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-		),
-		"Curator" = list(
-			slot_head_str = /obj/item/clothing/head/beret,
+			slot_head_str = list(
+				"Curator" = /obj/item/clothing/head/beret,
+			),
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,
@@ -576,8 +576,7 @@
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
 		),
 		"Curator" = list(
-			/obj/item/stack/sheet/wood/bigstack = null,    //should spawn on the backpack
-			/obj/item/stack/sheet/wood/bigstack = null,
+			/obj/item/stack/sheet/wood/biggerstack = null,    //should spawn on the backpack
 			/obj/item/weapon/storage/fancy/crayons = null,
 			/obj/item/weapon/chisel = null,
 			/obj/item/weapon/palette = null,
