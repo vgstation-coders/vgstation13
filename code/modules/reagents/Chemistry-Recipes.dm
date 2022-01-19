@@ -3663,6 +3663,13 @@
 	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/black_food_coloring
+	name = "Black Food Coloring"
+	id = BLACKCOLOR
+	result = BLACKCOLOR
+	required_reagents = list(COLORFUL_REAGENT = 1, CARBON = 1)
+	result_amount = 2
+	
 /datum/chemical_reaction/degeneratecalcium
 	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
