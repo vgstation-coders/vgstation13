@@ -135,21 +135,21 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/explosive/remote/Hear()
 	return
 
-/obj/item/weapon/implant/explosive/remote/activate()
+/obj/item/weapon/implant/explosive/remote/activate(mob/user)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return
 	if(iscarbon(imp_in))
 		var/mob/M = imp_in
 
-		message_admins("Remote explosive implant triggered in [M] ([M.key]). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>) ")
-		log_game("Remote explosive implant triggered in [M] ([M.key]).")
+		message_admins("Remote explosive implant triggered in [M] ([M.key])[user ? "by [user] ([user.key])": ""]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>) ")
+		log_game("Remote explosive implant triggered in [M] ([M.key])[user ? "by [user] ([user.key])": ""].")
 
 		to_chat(M, "You hear a faint *beep*.")
 
 		var/turf/T = get_turf(M)
 
 		M.gib()
-		explosion(T, 1, 1, 3, 4, whodunnit = M)
+		explosion(T, 1, 1, 3, 4, whodunnit = user)
 		T.hotspot_expose(3500, 125, surfaces = 1)
 
 		qdel(src)
