@@ -201,9 +201,6 @@
 	var/discord_password
 	var/kill_phrase = "All your bases are belong to us."
 
-	// Voting method
-	var/vote_method = "WEIGHTED"
-
 	// Dynamic Mode
 	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
 
@@ -629,8 +626,6 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
-				if("vote_method")
-					vote_method = value
 
 				if ("kill_phrase")
 					kill_phrase = value
