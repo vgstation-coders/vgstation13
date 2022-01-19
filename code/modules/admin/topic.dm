@@ -634,6 +634,14 @@
 
 		archive.spawn_copy(get_turf(usr))
 
+	else if(href_list["bodyarchivepanel_spawntransfer"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawntransfer"])
+
+		archive.spawn_transfer(get_turf(usr))
+
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
 			return
