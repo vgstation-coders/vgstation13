@@ -173,7 +173,7 @@
 	if (framed)
 		overlays += icon(frame_icon, frame_icon_state)
 
-	desc += protected_by_glass ? "\n A glass sheet protects it from would-be-vandals" : ""
+	desc += protected_by_glass ? "\n A glass sheet protects it from would-be-vandals." : ""
 
 /obj/structure/painting/custom/proc/set_painting_data(datum/custom_painting/painting_data)
 	src.painting_data = painting_data
@@ -329,7 +329,7 @@
 		materials.removeAmount(GS.mat_type, GS.perunit)
 		protected_by_glass = FALSE
 		update_painting()
-		to_chat(usr, "<span class='notice'>You screw off \the [name]'s glass cover .</span>")
+		to_chat(usr, "<span class='notice'>You screw off \the [name]'s glass cover.</span>")
 
 	return ..()
 

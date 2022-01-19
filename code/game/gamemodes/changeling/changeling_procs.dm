@@ -18,7 +18,7 @@
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H))
-		H.species.fireloss_mult = 3
+		H.species.fireloss_mult = 2
 		dna.flavor_text = H.flavor_text
 		if(!(M_HUSK in H.mutations))
 			C.absorbed_dna |= dna		

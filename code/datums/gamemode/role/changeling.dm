@@ -14,6 +14,7 @@
 	var/list/absorbed_chems = list()
 	var/absorbedcount = 0
 	var/splitcount = 0
+	//chem points
 	var/chem_charges = 20
 	var/chem_recharge_rate = 0.5
 	var/chem_storage = 50
@@ -23,7 +24,7 @@
 	var/isabsorbing = 0
 	var/isreviving = 0
 
-	powerpoints = 5
+	powerpoints = 5	//evolve points
 
 	var/mimicing = ""
 

@@ -272,6 +272,7 @@
 #define BEEPSKYSMASH 			"beepskysmash"
 #define DOCTORSDELIGHT 			"doctorsdelight"
 #define CHANGELINGSTING 			"changelingsting"
+#define CHANGELINGSTAB 			"changelingstab"
 #define IRISHCREAM 			"irishcream"
 #define MANLYDORF 			"manlydorf"
 #define LONGISLANDICEDTEA 			"longislandicedtea"

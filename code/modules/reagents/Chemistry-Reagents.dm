@@ -7318,13 +7318,6 @@
 	if(M.confused != 0)
 		M.remove_confused(5)
 
-/datum/reagent/ethanol/drink/changelingsting
-	name = "Changeling Sting"
-	id = CHANGELINGSTING
-	description = "Milder than the name suggests. Not that you've ever been stung."
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#2E6671" //rgb: 46, 102, 113
-
 /datum/reagent/ethanol/drink/irish_cream
 	name = "Irish Cream"
 	id = IRISHCREAM
@@ -7968,6 +7961,19 @@
 		return 1
 
 	M.dizziness += 5
+
+/datum/reagent/ethanol/drink/changelingsting/stab
+	name = "Changeling Stab"
+	id = CHANGELINGSTAB
+	description = "A bit less mild than the sting. Not that you've ever been stabbed either, surely."
+	glass_name = "\improper Changeling Stab"
+	glass_desc = "Stabs, but metaphorically."
+
+/datum/reagent/ethanol/drink/changelingsting/stab/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(tick <= 1) // The stab itself
+		M.SetKnockdown(max(M.knockdown,2))
 
 /datum/reagent/ethanol/drink/erikasurprise
 	name = "Erika Surprise"
