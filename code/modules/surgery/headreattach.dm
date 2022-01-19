@@ -31,7 +31,7 @@
 	return ..() && target.op_stage.head_reattach == 0
 
 /datum/surgery_step/head/peel/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/retractor.ogg', 85, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts peeling back tattered flesh where [target]'s head used to be with \the [tool].", \
 	"You start peeling back tattered flesh where [target]'s head used to be with \the [tool].")
 	..()
@@ -69,7 +69,7 @@
 
 /datum/surgery_step/head/shape/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/fixovein.ogg', 70, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] is beginning to reshape [target]'s esophagal and vocal region with \the [tool].", \
 	"You start to reshape [target]'s [affected.display_name] esophagal and vocal region with \the [tool].")
 	..()
@@ -103,7 +103,7 @@
 	return ..() && target.op_stage.head_reattach == 2
 
 /datum/surgery_step/head/suture/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/hemostat.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] is stapling and suturing flesh into place in [target]'s esophagal and vocal region with \the [tool].", \
 	"You start to staple and suture flesh into place in [target]'s esophagal and vocal region with \the [tool].")
 	..()
@@ -145,7 +145,7 @@
 	return ..() && target.op_stage.head_reattach == 3
 
 /datum/surgery_step/head/prepare/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/cautery.ogg', 50, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts adjusting area around [target]'s neck with \the [tool].", \
 	"You start adjusting area around [target]'s neck with \the [tool].")
 	..()

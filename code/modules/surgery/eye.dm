@@ -40,7 +40,7 @@
 	return ..() && target.op_stage.eyes == 0
 
 /datum/surgery_step/eye/cut_open/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		playsound(target, 'sound/items/scalpel.ogg', 75, 1)
+		tool.playsurgerysound(target, 75)
 		user.visible_message("[user] starts to separate the corneas on [target]'s eyes with \the [tool].", \
 		"You start to separate the corneas on [target]'s eyes with \the [tool].")
 		..()
@@ -74,7 +74,7 @@
 	return ..() && target.op_stage.eyes == 1
 
 /datum/surgery_step/eye/lift_eyes/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/retractor.ogg', 85, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts lifting corneas from [target]'s eyes with \the [tool].", \
 	"You start lifting corneas from [target]'s eyes with \the [tool].")
 	..()
@@ -148,7 +148,7 @@
 	return ..() && target.op_stage.eyes == 3
 
 /datum/surgery_step/eye/cauterize/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/cautery.ogg', 50, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] is beginning to cauterize the incision around [target]'s eyes with \the [tool]." , \
 	"You are beginning to cauterize the incision around [target]'s eyes with \the [tool].")
 

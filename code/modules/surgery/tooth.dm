@@ -30,7 +30,7 @@
 
 
 /datum/surgery_step/tooth_replace/mend_roots/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/fixovein.ogg', 70, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts mending the blood vessels and nerves in the empty sockets of [target]'s jaw with \the [tool].", \
 	"You start mending the blood vessels and nerves in the sockets of [target]'s jaw with \the [tool].")
 	..()
@@ -125,7 +125,7 @@
 
 
 /datum/surgery_step/tooth_extract/set_jaws/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/bonesetter.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts setting [target]'s jaw in place with \the [tool] to prepare for tooth extraction", \
 	"You start setting [target]'s jaw in place with \the [tool] to prepare for tooth extraction.")
 	..()
@@ -171,7 +171,7 @@
 
 
 /datum/surgery_step/tooth_extract/pull_tooth/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/hemostat.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts pulling one of [target]'s teeth out with \the [tool].", \
 	"You start pulling one of [target]'s teeth out with \the [tool].")
 	..()
@@ -209,7 +209,7 @@
 
 
 /datum/surgery_step/tooth_extract/reset/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/bonesetter.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts putting [target]'s jaw back into place with \the [tool].", \
 	"You start putting [target]'s jaw back into place with \the [tool].")
 	..()

@@ -70,7 +70,7 @@
 	return ..() && istype(target) && target.core_removal_stage == 1
 
 /datum/surgery_step/slime/cut_innards/begin_step(mob/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
-	playsound(target, 'sound/items/scalpel.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts cutting [target]'s silky innards apart with \the [tool].", \
 	"You start cutting [target]'s silky innards apart with \the [tool].")
 
@@ -99,10 +99,7 @@
 	return ..() && (istype(target) && target.core_removal_stage == 2 && target.cores > 0) //This is being passed a human as target, unsure why.
 
 /datum/surgery_step/slime/saw_core/begin_step(mob/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
-	if(!istype(tool, /obj/item/tool/circular_saw))
-		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
-	else
-		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts cutting out one of [target]'s cores with \the [tool].", \
 	"You start cutting out one of [target]'s cores with \the [tool].")
 

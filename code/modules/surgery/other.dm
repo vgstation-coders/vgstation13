@@ -32,7 +32,7 @@
 
 /datum/surgery_step/fix_vein/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/fixovein.ogg', 70, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts patching the damaged vein in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start patching the damaged vein in [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("The pain in [affected.display_name] is unbearable!",1, scream=TRUE)
@@ -92,7 +92,7 @@
 
 /datum/surgery_step/fix_dead_tissue/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/scalpel.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts cutting away necrotic tissue in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start cutting away necrotic tissue in [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("The pain in [affected.display_name] is unbearable!",1, scream=TRUE)

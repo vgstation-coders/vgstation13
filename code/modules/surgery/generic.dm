@@ -53,7 +53,7 @@
 
 /datum/surgery_step/generic/cut_with_laser/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/cautery.ogg', 50, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts the bloodless incision on [target]'s [affected.display_name] with \the [tool].", \
 	"You start the bloodless incision on [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("You feel a horrible, searing pain in your [affected.display_name]!",1, scream=TRUE)
@@ -103,7 +103,7 @@
 
 /datum/surgery_step/generic/incision_manager/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/retractor.ogg', 85, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts to construct a prepared incision on and within [target]'s [affected.display_name] with \the [tool].", \
 	"You start to construct a prepared incision on and within [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("You feel a horrible, searing pain in your [affected.display_name] as it is pushed apart!",1, scream=TRUE)
@@ -166,7 +166,7 @@
 
 /datum/surgery_step/generic/cut_open/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/scalpel.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts the incision on [target]'s [affected.display_name] with \the [tool].", \
 	"You start the incision on [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("You feel a horrible pain as if from a sharp knife in your [affected.display_name]!",1, scream=TRUE)
@@ -210,7 +210,7 @@
 
 /datum/surgery_step/generic/clamp_bleeders/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/hemostat.ogg', 75, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts clamping bleeders in [target]'s [affected.display_name] with \the [tool].", \
 	"You start clamping bleeders in [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("The pain in your [affected.display_name] is maddening!",1, scream=TRUE)
@@ -252,7 +252,7 @@
 
 /datum/surgery_step/generic/retract_skin/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/retractor.ogg', 85, 1)
+	tool.playsurgerysound(target, 75)
 	var/msg = "[user] starts to pry open the incision on [target]'s [affected.display_name] with \the [tool]."
 	var/self_msg = "You start to pry open the incision on [target]'s [affected.display_name] with \the [tool]."
 	if (target_zone == LIMB_CHEST)
@@ -322,7 +322,7 @@
 
 /datum/surgery_step/generic/cauterize/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/cautery.ogg', 50, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] is beginning to cauterize the incision on [target]'s [affected.display_name] with \the [tool]." , \
 	"You are beginning to cauterize the incision on [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("Your [affected.display_name] is being burned!",1, scream=TRUE)
@@ -370,10 +370,7 @@
 
 /datum/surgery_step/generic/cut_limb/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(!istype(tool, /obj/item/tool/circular_saw))
-		playsound(target, 'sound/items/hatchetsurgery.ogg', 75, 1)
-	else
-		playsound(target, 'sound/items/circularsaw.ogg', 85, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] is beginning to cut off [target]'s [affected.display_name] with \the [tool]." , \
 	"You are beginning to cut off [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("Your [affected.display_name] is being ripped apart!",1, scream=TRUE)

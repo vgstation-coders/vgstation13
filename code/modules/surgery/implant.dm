@@ -98,7 +98,7 @@
 
 /datum/surgery_step/cavity/close_space/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/cautery.ogg', 50, 1)
+	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts mending [target]'s [get_cavity(affected)] cavity wall with \the [tool].",
 	"You start mending [target]'s [get_cavity(affected)] cavity wall with \the [tool]." )
 	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
