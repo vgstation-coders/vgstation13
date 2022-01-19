@@ -5,6 +5,8 @@
 	hud_state = "regenstasis"
 
 	spell_flags = NEEDSHUMAN | STATALLOWED
+	charge_max = 8 MINUTES
+	cooldown_min = 8 MINUTES
 	horrorallowed = 0
 	chemcost = 20
 	required_dna = 1

@@ -41,7 +41,7 @@
 
 /datum/power/changeling/change_species
 	name = "Change Species"
-	desc = "We take on the apperance of a species that we have absorbed."
+	desc = "We take on the appearance of a species that we have absorbed."
 	cost = 0
 	spellpath = /spell/changeling/changespecies
 	allowduringhorrorform = 0
