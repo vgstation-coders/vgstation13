@@ -36,17 +36,17 @@ var/global/datum/controller/vote/vote = new()
 	var/chosen_map
 	name               = "datum"
 	var/datum/html_interface/nanotrasen/vote/interface
-	
+
 	//vote data
 	var/list/voters	//assoc. list: user.ckey, choices
 	var/list/tally //assoc. list: choices, count
 	var/list/choices = list() //choices
-	
+
 	var/list/status_data
 	var/last_update    = 0
 	var/initialized    = 0
 	var/lastupdate     = 0
-	
+
 	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
@@ -113,7 +113,7 @@ var/global/datum/controller/vote/vote = new()
 	//default-vote for everyone who didn't vote
 	var/non_voters = 0
 	non_voters = get_total() //fix this
-	
+
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
 		if(non_voters > 0)
@@ -133,7 +133,7 @@ var/global/datum/controller/vote/vote = new()
 		if("WEIGHTED")
 			return weighted()
 		if("PERSISTENT")
-			if(mode == "map") 
+			if(mode == "map")
 				return persistent()
 		else
 			return  majority()
@@ -148,8 +148,8 @@ var/global/datum/controller/vote/vote = new()
 			tally = sortTim(tally, /proc/cmp_list_by_element_asc,1)
 			greatest_votes = tally[1]
 			for (var/choice in tally)
-				if (choice  == greatest_votes)//must be true a least once 
-					winners += choice 
+				if (choice  == greatest_votes)//must be true a least once
+					winners += choice
 			if (winners > 1)
 				text = "<b>Vote Tied Between:</b><br>"
 				for(var/option in winners)
@@ -203,7 +203,7 @@ var/global/datum/controller/vote/vote = new()
 	//for (var/i in vote)
 	//	vote.user
 	//find
-	
+
 	majority()
 	//task.on_shutdown()
 
@@ -215,6 +215,7 @@ var/global/datum/controller/vote/vote = new()
 	to_chat(world, "<font color='purple'>[result]</font>")
 
 /datum/controller/vote/proc/result()
+	. = announce_result()
 	var/restart = 0
 	currently_voting = FALSE
 	if(.)
@@ -269,10 +270,10 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		//check vote then remove vote
 		if(vote && vote == "cancel_vote")
-			vote.cancel_vote(user)
+			cancel_vote(user)
 		//add vote
 		else if(vote && vote != "cancel_vote")
-			vote.add_vote(user, vote)
+			add_vote(user, vote)
 			return vote //do we need this?
 		else
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
@@ -290,13 +291,13 @@ var/global/datum/controller/vote/vote = new()
 	var/list/L = list()
 	L[user.key] = vote
 	voters += L
-	tally[vote]++	
+	tally[vote]++
 
 /datum/controller/vote/proc/cancel_vote(var/mob/user)
 	if (voters[user.ckey])
 		tally[voters[user.ckey]]--
-		voters -= user.ckey	
-	
+		voters -= user.ckey
+
 /datum/controller/vote/proc/get_total()
 	var/total = 0
 	//loop through choices in tally for count and add them up
@@ -398,7 +399,7 @@ var/global/datum/controller/vote/vote = new()
 		return 1
 	return 0
 
-/datum/controller/vote/proc/updateFor(hclient_or_mob, interface)
+/datum/controller/vote/proc/updateFor(hclient_or_mob)
 	// This check will succeed if updateFor is called after showing to the player, but will fail
 	// on regular updates. Since we only really need this once we don't care if it fails.
 
@@ -429,8 +430,8 @@ var/global/datum/controller/vote/vote = new()
 	var/list/client_data = list()
 	var/admin = 0
 	//var/currvote = 0
-	
-	//adds client data 
+
+	//adds client data
 	if(get_vote(user))
 		//client_data[++client_data.len] = get_vote(user)
 		client_data += list(get_vote(user))
