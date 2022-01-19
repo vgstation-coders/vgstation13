@@ -312,6 +312,8 @@
 		else
 			PFW.HandleRecruitedRole(newWizard)
 		M.forceMove(pick(wizardstart))
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		newWizard.AssignToRole(M.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
@@ -472,6 +474,8 @@ Assign your candidates in choose_candidates() instead.
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
 		M.forceMove(synd_spawn[spawnpos])
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
