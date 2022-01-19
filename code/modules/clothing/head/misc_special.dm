@@ -220,6 +220,19 @@
 	wear_override.Blend(earbit, ICON_OVERLAY)
 	user.update_inv_head()
 
+/obj/item/clothing/head/kitty/cow
+	name = "cow ears"
+	desc = "A pair of cow ears. Moo!"
+	icon_state = "cow"
+
+/obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
+	if(!istype(user))
+		return
+	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "cow")
+	wear_override.Blend(rgb(user.my_appearance.r_hair, user.my_appearance.g_hair, user.my_appearance.b_hair), ICON_ADD)
+
+	user.update_inv_head()
+
 /obj/item/clothing/head/kitty/collectable
 	desc = "A pair of black kitty ears. Meow!"
 	haircolored = FALSE
