@@ -238,6 +238,8 @@
 	if (M)
 		var/datum/role/wizard/newWizard = new
 		M.forceMove(pick(wizardstart))
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
