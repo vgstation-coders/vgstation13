@@ -3912,10 +3912,12 @@
 
 /datum/chemical_reaction/changeling_blood/New()
     ..()
-    required_temp += 400 + rand(1, 1200)
+	//welders are limited to ~3500K.
+	//roughly 50% chance of failing when using welder
+    required_temp += 3300 + 3300*rand(-1, 1)
 
 /datum/chemical_reaction/changeling_blood
-	name = null
+	name = "Blood"
 	id = CHANGELINGBLOOD
 	result = null
 	required_reagents = list(CHANGELINGBLOOD = 1)
@@ -3925,7 +3927,7 @@
 	var/location = get_turf(holder.my_atom)
 	var/atom/thing = holder.my_atom
 	thing.visible_message("<span class='warning'>The blood shrieks!</span>")
-	playsound(location,'sound/voice/hiss6.ogg',20, 1)
+	playsound(location,'sound/voice/hiss6.ogg',100, 1)
 	holder.clear_reagents()
 
 /datum/chemical_reaction/random
