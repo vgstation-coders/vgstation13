@@ -55,7 +55,7 @@
 
 
 
-/client/proc/debug_controller(controller in list("Air", "Cameras", "Configuration", "Emergency Shuttle", "failsafe", "Garbage", "Jobs", "Master", "pAI", "Radio", "Sun", "Ticker", "Poll"))
+/client/proc/debug_controller(controller in list("Air", "Cameras", "Configuration", "Emergency Shuttle", "failsafe", "Garbage", "Jobs", "Master", "pAI", "Radio", "Sun", "Ticker", "Vote"))
 	set category = "Debug"
 	set name = "debug controller"
 	set desc = "debug the various periodic loop controllers for the game (be careful!)."
@@ -97,38 +97,38 @@
 		if("Cameras")
 			debug_variables(cameranet)
 			feedback_add_details("admin_verb","DCameras")
-		if("Poll")
-			debug_variables(poll)
-			feedback_add_details("admin_verb","DprocessPoll")
+		if("Vote")
+			debug_variables(vote)
+			feedback_add_details("admin_verb","DprocessVote")
 
 	message_admins("Admin [key_name_admin(usr)] is debugging the [controller] controller.")
 
 /client/proc/rigvote()
 	set category = "Debug"
-	set name = "Rig Poll"
-	set desc = "easily rig an ongoing poll"
+	set name = "Rig Vote"
+	set desc = "easily rig an ongoing vote"
 
-	if(!poll)
+	if(!vote)
 		return
 	var/winner
-	if(poll.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
-		winner = input(usr,"Choose a result.","Choose a result.", poll.choices[1]) as null|anything in poll.choices
+	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
+		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
 		if(!winner)
 			return
-		poll.choices[winner] = ARBITRARILY_LARGE_NUMBER
+		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	else
-		if(poll.ismappoll)
+		if(vote.ismapvote)
 			var/all_maps = get_all_maps()
 			winner = input(usr, "Pick a map.") as null|anything in all_maps
 			if(!winner)
 				return
 			var/path = all_maps[winner]
-			poll.ismappoll[winner] = path
+			vote.ismapvote[winner] = path
 			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
 		else
 			winner = input(usr,"Add a result.","Add a result","") as text|null
 		if(!winner)
 			return
-		poll.choices[winner] = ARBITRARILY_LARGE_NUMBER
-	message_admins("Admin [key_name_admin(usr)] rigged the votes for [winner].")
-	log_admin("Admin [key_name(usr)] rigged the votes for [winner]. Choices were [poll.choices.Join(", ")]")
+		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
+	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")
