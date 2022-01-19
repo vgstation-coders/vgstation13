@@ -118,21 +118,24 @@
 	return
 
 
+//step_x and step_y are passed to forceMove() below because of weird BYOND behavior related to objects with large hitboxes.
+//If more bugs due to this behavior crop up, perhaps forceMove() should be changed so that not changing the step_x/y vars is the default.
+//A better solution here would be to just... make this not work this way at all
 /obj/effect/accelerated_particle/proc/move(var/lag)
 	if(!loc)
 		return 0
 	if(target)
 		if(movetotarget)
 			if(!step_towards(src,target))
-				src.forceMove(get_step(src, get_dir(src,target)))
+				src.forceMove(get_step(src, get_dir(src,target)), step_x, step_y)
 			if(get_dist(src,target) < 1)
 				movetotarget = 0
 		else
 			if(!step(src, get_step_away(src,source)))
-				src.forceMove(get_step(src, get_step_away(src,source)))
+				src.forceMove(get_step(src, get_step_away(src,source)), step_x, step_y)
 	else
 		if(!step(src,dir))
-			src.forceMove(get_step(src,dir))
+			src.forceMove(get_step(src,dir), step_x, step_y)
 	movement_range--
 	if(movement_range <= 0)
 		qdel(src)
