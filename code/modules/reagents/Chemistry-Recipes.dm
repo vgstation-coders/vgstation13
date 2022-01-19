@@ -3902,13 +3902,17 @@
 	result = LOCUTOGEN
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
 	result_amount = 3
-	
+
+/datum/chemical_reaction/changeling_blood/New()
+    ..()
+    required_temp += 400 + rand(1, 1200)
+
 /datum/chemical_reaction/changeling_blood
 	name = null
 	id = CHANGELINGBLOOD
 	result = null
 	required_reagents = list(CHANGELINGBLOOD = 1)
-	required_temp = T0C + 300 + rand(1, 1023)
+	required_temp = T0C
 
 /datum/chemical_reaction/changeling_blood/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
