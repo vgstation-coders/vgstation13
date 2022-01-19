@@ -2969,6 +2969,13 @@
 	required_reagents = list(SCREWDRIVERCOCKTAIL = 1, LIMEJUICE = 1, LEMONJUICE = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/changelingstab
+	name = "Changeling Stab"
+	id = CHANGELINGSTAB
+	result = CHANGELINGSTAB
+	required_reagents = list(CHANGELINGSTING = 1, NOTHING = 1, KARMOTRINE = 3)
+	result_amount = 5
+
 /datum/chemical_reaction/aloe
 	name = "Aloe"
 	id = ALOE
