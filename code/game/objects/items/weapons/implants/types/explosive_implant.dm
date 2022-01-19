@@ -111,6 +111,14 @@
 	desc = "Injects \"chemicals\"."
 	icon_state = "implant"
 
+/obj/item/weapon/implant/explosive/remote/New()
+	..()
+	remote_implants.Add(src)
+
+/obj/item/weapon/implant/explosive/remote/Destroy()
+	remote_implants.Remove(src)
+	..()
+
 /obj/item/weapon/implant/explosive/remote/get_data()
 	return {"
 <b>Implant Specifications:</b><BR>
