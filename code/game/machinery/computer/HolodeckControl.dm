@@ -94,6 +94,9 @@
 	alpha_area = /area/holodeck/dungeon_holodeck_alpha
 	map_element_type = /datum/map_element/dungeon/holodeck/olympics
 
+/obj/machinery/computer/HolodeckControl/attack_ai(mob/user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/HolodeckControl/attack_paw(mob/user)
 	return
@@ -101,7 +104,7 @@
 /obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
 	if (!istype(user) || user.stat != DEAD )
 		return
-	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN|MAINT))
 		return
 	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
 		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")

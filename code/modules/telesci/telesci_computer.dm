@@ -104,7 +104,7 @@
 		return 1
 
 /obj/machinery/computer/telescience/process()
-	if(!cell || (stat & (BROKEN|NOPOWER|FORCEDISABLE)) || !anchored)
+	if(!cell || (stat & (BROKEN|NOPOWER)) || !anchored)
 		return
 
 	var/used = cell.give(100)
@@ -136,14 +136,14 @@
 		icon_state = "teleportb"
 		return
 
-	if(stat & (NOPOWER|FORCEDISABLE))
+	if(stat & NOPOWER)
 		src.icon_state = "teleport0"
 
 	else
 		icon_state = initial(icon_state)
 
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	if(!isAdminGhost(user) && (user.stat || user.restrained()))
 		return
@@ -187,6 +187,9 @@
 
 /obj/machinery/computer/telescience/attack_paw(mob/user)
 	to_chat(user, "You are too primitive to use this computer.")
+
+/obj/machinery/computer/telescience/attack_ai(mob/user)
+	return src.attack_hand(user)
 
 /obj/machinery/computer/telescience/attack_hand(mob/user)
 	ui_interact(user)

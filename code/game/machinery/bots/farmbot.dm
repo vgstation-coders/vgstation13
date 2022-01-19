@@ -190,7 +190,6 @@
 	spawn(150)
 		mode = 0
 
-
 /obj/machinery/bot/farmbot/explode()
 	src.on = 0
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)

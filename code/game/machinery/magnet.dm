@@ -136,7 +136,7 @@
 
 
 /obj/machinery/magnetic_module/process()
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & NOPOWER)
 		on = 0
 
 	// Sanity checks:
@@ -253,8 +253,13 @@
 			if(M.freq == frequency && M.code == code)
 				magnets.Add(M)
 
+
+/obj/machinery/magnetic_controller/attack_ai(mob/user as mob)
+	src.add_hiddenprint(user)
+	return src.attack_hand(user)
+
 /obj/machinery/magnetic_controller/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	user.set_machine(src)
 	var/dat = "<B>Magnetic Control Console</B><BR><BR>"
@@ -350,7 +355,7 @@
 
 	while(moving && rpath.len >= 1)
 
-		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		if(stat & (BROKEN|NOPOWER))
 			break
 
 		looping = 1

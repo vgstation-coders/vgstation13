@@ -84,6 +84,9 @@
 
 // Interactions ////////////////////////////////////////////////
 
+/obj/machinery/cooking/icemachine/attack_ai(mob/user)
+	return attack_hand(user)
+
 /obj/machinery/cooking/icemachine/attack_paw(mob/user)
 	return attack_hand(user)
 

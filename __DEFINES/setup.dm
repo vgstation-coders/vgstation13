@@ -533,12 +533,10 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 // bitflags for machine stat variable
 #define BROKEN		1
 #define NOPOWER		2
-#define POWEROFF	4		// unused
-#define MAINT		8		// under maintaince
+#define POWEROFF	4		// tbd
+#define MAINT		8			// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
-#define FORCEDISABLE 32 	//disabled either via wire pulse, grid check, or malf ai
-#define NOAICONTROL 	64		//ai control disable
-
+#define FORCEDISABLE 32 //forced to be off, such as by a random event
 
 //bitflags for door switches.
 #define OPEN	1

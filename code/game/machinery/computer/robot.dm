@@ -16,23 +16,21 @@
 	var/stop = 0.0
 	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
 
-	hack_abilities = list(
-		/datum/malfhack_ability/oneuse/explosive_borgs,
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet
-	)
-
 	light_color = LIGHT_COLOR_PINK
 
 /obj/machinery/computer/robotics/say_quote(text)
 	return "beeps, [text]"
 
 /obj/machinery/computer/robotics/proc/speak(var/message)
-	if(stat & (NOPOWER|FORCEDISABLE))	//sanity
+	if(stat & NOPOWER)	//sanity
 		return
 	if (!message)
 		return
 	say(message)
+
+/obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
@@ -208,7 +206,7 @@
 /obj/machinery/computer/robotics/update_icon()
 	..()
 
-	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
+	if(stat & (BROKEN | NOPOWER))
 		return
 
 	if (cyborg_detonation_time != 0 && cyborg_detonation_time > world.time)

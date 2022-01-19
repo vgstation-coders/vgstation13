@@ -50,10 +50,10 @@
 	update_icon()
 
 /obj/machinery/mommi_spawner/proc/canSpawn()
-	return !(stat & (FORCEDISABLE|NOPOWER)) && !building && metal >= metalPerMoMMI
+	return !(stat & NOPOWER) && !building && metal >= metalPerMoMMI
 
 /obj/machinery/mommi_spawner/process()
-	if(stat & (FORCEDISABLE|NOPOWER) || building || metal >= metalPerMoMMI)
+	if(stat & NOPOWER || building || metal >= metalPerMoMMI)
 		return
 	metal += metalPerTick
 	if(metal >= metalPerMoMMI)
@@ -167,7 +167,7 @@
 		M.Namepick()
 
 /obj/machinery/mommi_spawner/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & NOPOWER)
 		icon_state="mommispawner-nopower"
 	else if(metal < metalPerMoMMI)
 		icon_state="mommispawner-recharging"

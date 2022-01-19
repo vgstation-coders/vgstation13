@@ -14,13 +14,17 @@
 
 /obj/machinery/computer/aifixer/attackby(I as obj, user as mob)
 	if(istype(I, /obj/item/device/aicard))
-		if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		if(stat & (NOPOWER|BROKEN))
 			to_chat(user, "This terminal isn't functioning right now, get it working!")
 			return
 		var/obj/item/card = I
 		card.transfer_ai("AIFIXER","AICARD",src,user)
 		return
 	return ..()
+
+/obj/machinery/computer/aifixer/attack_ai(var/mob/user as mob)
+	src.add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/aifixer/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
@@ -108,7 +112,7 @@
 	..()
 	overlays = 0
 	// Broken / Unpowered
-	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
+	if(stat & (BROKEN | NOPOWER))
 		return
 
 	if (occupant)

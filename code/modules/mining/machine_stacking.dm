@@ -18,12 +18,16 @@
 	if(ticker)
 		initialize()
 
+/obj/machinery/computer/stacking_unit/attack_ai(mob/user)
+	add_hiddenprint(user)
+	interact(user)
+
 /obj/machinery/computer/stacking_unit/attack_hand(mob/user)
 	add_fingerprint(user)
 	interact(user)
 
 /obj/machinery/computer/stacking_unit/interact(mob/user)
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN))
 		return
 
 	if(!stacker_data)
@@ -90,7 +94,7 @@
 	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/computer/stacking_unit/receive_signal(datum/signal/signal)
-	if(stat & (FORCEDISABLE | NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN))
 		return
 
 	if(!signal.data["tag"] || signal.data["tag"] != stacker_tag)
@@ -163,7 +167,7 @@
 	RefreshParts()
 
 /obj/machinery/mineral/stacking_machine/update_icon()
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN))
 		icon_state = "stacker_o"
 	else
 		icon_state = "stacker"
@@ -253,7 +257,7 @@
 	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/mineral/stacking_machine/receive_signal(var/datum/signal/signal)
-	if(stat & (FORCEDISABLE | NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN))
 		return
 
 	if(!signal.data["tag"] || signal.data["tag"] != id_tag)

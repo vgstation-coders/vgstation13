@@ -71,7 +71,7 @@
 	interact(user)
 
 /obj/machinery/artifact_harvester/interact(var/mob/user as mob)
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		return
 	user.set_machine(src)
 	var/dat = "<B>Artifact Power Harvester</B><BR>"
@@ -121,7 +121,7 @@
 	onclose(user, "artharvester")
 
 /obj/machinery/artifact_harvester/process()
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		return
 
 	if(harvesting > 0)
@@ -394,7 +394,7 @@
 	icon_state = "harvester"
 	set_light(0)
 
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		return
 
 	if (harvesting != 0)

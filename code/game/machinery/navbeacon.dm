@@ -133,7 +133,7 @@ var/list/navbeacons = list()
 			to_chat(user, "You must open the cover first!")
 
 /obj/machinery/navbeacon/attack_ai(var/mob/user)
-	add_hiddenprint(user)
+	src.add_hiddenprint(user)
 	interact(user, 1)
 
 /obj/machinery/navbeacon/attack_paw()

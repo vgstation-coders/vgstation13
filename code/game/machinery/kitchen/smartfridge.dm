@@ -110,7 +110,7 @@
 	return -75 //slow
 
 /obj/machinery/smartfridge/process()
-	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN) || !anchored)
 		return
 
 	for(var/obj/item/I in contents)
@@ -376,7 +376,7 @@
 		update_nearby_tiles()
 
 /obj/machinery/smartfridge/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if((stat & (FORCEDISABLE|NOPOWER)) || (contents.len >= MAX_N_OF_ITEMS))
+	if((stat & NOPOWER) || (contents.len >= MAX_N_OF_ITEMS))
 		return FALSE
 	if(accept_check(AM))
 		piles = sortList(piles)
@@ -400,7 +400,7 @@
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & NOPOWER)
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
 		return 1
 	if(contents.len >= MAX_N_OF_ITEMS)
@@ -423,6 +423,9 @@
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
+/obj/machinery/smartfridge/attack_ai(mob/user as mob)
+	return src.attack_hand(user)
+
 /obj/machinery/smartfridge/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
@@ -441,7 +444,7 @@
 ********************/
 
 /obj/machinery/smartfridge/interact(mob/user as mob)
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & NOPOWER)
 		return
 
 	var/dat = list()

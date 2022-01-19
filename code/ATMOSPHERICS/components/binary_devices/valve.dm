@@ -117,6 +117,10 @@
 
 	machine_flags = MULTITOOL_MENU
 
+/obj/machinery/atmospherics/binary/valve/digital/attack_ai(mob/user as mob)
+	src.add_hiddenprint(user)
+	return src.attack_hand(user)
+
 //Radio remote control
 
 /obj/machinery/atmospherics/binary/valve/digital/proc/set_frequency(new_frequency)

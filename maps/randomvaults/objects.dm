@@ -710,7 +710,7 @@
 	if(surplus() < active_power_usage)
 		powered = 0
 
-	if(powered && stat & (NOPOWER))
+	if(powered && stat & NOPOWER)
 		stat &= ~NOPOWER
 		update_icon()
 	else if (!powered && !(stat & NOPOWER))

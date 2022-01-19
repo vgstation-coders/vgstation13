@@ -65,6 +65,9 @@
 /obj/machinery/egg_incubator/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
+/obj/machinery/egg_incubator/attack_ai(mob/user as mob)
+	return src.attack_hand(user)
+
 /obj/machinery/egg_incubator/attack_hand(mob/user as mob)
 	if(..())
 		return 1

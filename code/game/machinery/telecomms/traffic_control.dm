@@ -32,7 +32,7 @@
 
 /obj/machinery/computer/telecomms/traffic/process()
 
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		stop_editing()
 		return
 
@@ -86,7 +86,7 @@
 
 
 /obj/machinery/computer/telecomms/traffic/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	user.set_machine(src)
 	var/dat = "<TITLE>Telecommunication Traffic Control</TITLE><center><b>Telecommunications Traffic Control</b></center>"

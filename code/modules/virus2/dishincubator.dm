@@ -176,9 +176,7 @@
 	if (stat & (BROKEN))
 		to_chat(user, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return
-	if(stat & (FORCEDISABLE))
-		to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
-		return
+
 	if (stat & (NOPOWER))
 		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
 		for (var/i in 1 to dish_data.len)
@@ -236,7 +234,7 @@
 
 
 /obj/machinery/disease2/incubator/process()
-	if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
 	if (on)
@@ -284,7 +282,7 @@
 	overlays.len = 0
 	icon_state = "incubator"
 
-	if (stat & (NOPOWER|FORCEDISABLE))
+	if (stat & (NOPOWER))
 		icon_state = "incubator0"
 
 	if (stat & (BROKEN))
@@ -295,7 +293,7 @@
 	else
 		light_color = "#6496FA"
 
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		set_light(0)
 	else
 		if (on)
@@ -334,7 +332,7 @@
 	overlays += dish_content
 
 	//updating the light indicators
-	if (dish.contained_virus && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+	if (dish.contained_virus && !(stat & (BROKEN|NOPOWER)))
 		var/image/grown_gauge = image(icon,"incubator_growth7")
 		grown_gauge.plane = ABOVE_LIGHTING_PLANE
 		grown_gauge.layer = ABOVE_LIGHTING_LAYER

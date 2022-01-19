@@ -215,6 +215,11 @@
 	update_icon()
 	return
 
+// ai as human but can't flush
+/obj/machinery/disposal/attack_ai(mob/user as mob)
+	src.add_hiddenprint(user)
+	ui_interact(user)
+
 // human interact with machine
 /obj/machinery/disposal/attack_hand(mob/user as mob)
 	if(user && user.loc == src)
@@ -313,7 +318,7 @@
 		overlays += image('icons/obj/pipes/disposal.dmi', "dispover-handle")
 
 	// only handle is shown if no power
-	if(stat & (FORCEDISABLE|NOPOWER) || mode == -1)
+	if(stat & NOPOWER || mode == -1)
 		return
 
 	// 	check for items in disposal - occupied light
@@ -350,7 +355,7 @@
 		spawn(0)
 			flush()
 
-	if(stat & (FORCEDISABLE|NOPOWER))			// won't charge if no power
+	if(stat & NOPOWER)			// won't charge if no power
 		return
 
 	use_power(100)		// base power usage

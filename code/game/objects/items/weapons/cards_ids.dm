@@ -180,9 +180,6 @@
 		return
 	target.emag_act(user)
 
-
-var/list/global/id_cards = list()
-
 /obj/item/weapon/card/id
 	name = "identification card"
 	desc = "A card used to provide ID and determine access across the station. Features a virtual wallet accessible by PDA."
@@ -209,16 +206,10 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/New()
 	..()
 
-	id_cards += src
-
 	if(virtual_wallet)
 		update_virtual_wallet()
 	if(ishuman(loc))
 		SetOwnerDNAInfo(loc)
-
-/obj/item/weapon/card/id/Destroy()
-	id_cards -= src 
-	..()
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()

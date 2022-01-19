@@ -174,7 +174,6 @@ Class Procs:
 /obj/machinery/New()
 	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
-	initialize_malfhack_abilities()
 	//if(ticker) initialize()
 	return ..()
 
@@ -204,10 +203,6 @@ Class Procs:
 			component_parts -= AM
 */
 	component_parts = null
-	for(var/datum/malfhack_ability/MH in hack_abilities)
-		MH.machine = null
-		qdel(MH)
-	qdel(hack_overlay)
 
 	..()
 
@@ -219,7 +214,6 @@ Class Procs:
 	return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
-	malf_disrupt(MALF_DISRUPT_TIME)
 	if(use_power && stat == 0)
 		use_power(7500/severity)
 
@@ -394,7 +388,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return 1
 	if(href_list["close"])
 		return
@@ -427,11 +421,9 @@ Class Procs:
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
 		if(user.client && user.client.eye == user)
-			return attack_hand(user)
+			return src.attack_hand(user)
 	else
-		if(stat & NOAICONTROL)
-			return
-		return attack_hand(user)
+		return src.attack_hand(user)
 
 /obj/machinery/attack_ghost(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -445,7 +437,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
-	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN|MAINT))
 		return 1
 
 	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
@@ -457,7 +449,6 @@ Class Procs:
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
-
 /*
 	//distance checks are made by atom/proc/DblClick
 	if ((get_dist(src, user) > 1 || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
@@ -789,7 +780,7 @@ Class Procs:
 			scan = null
 
 /obj/machinery/proc/is_operational()
-	return !(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
+	return !(stat & (NOPOWER|BROKEN|MAINT))
 
 
 /obj/machinery/proc/setOutputLocation(user)

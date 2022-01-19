@@ -37,8 +37,6 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/update_icon(var/adjacent_procd)
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
-	else if(stat & FORCEDISABLE)
-		icon_state = "intact_malflocked"
 	else if (pump_stalled)
 		icon_state="intact_stalled"
 	else if(node1 && node2)
@@ -47,7 +45,7 @@ Thus, the two variables affect pump operation are set in New():
 
 /obj/machinery/atmospherics/binary/volume_pump/process()
 	. = ..()
-	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || !on || transfer_rate < 1)
+	if((stat & (NOPOWER|BROKEN)) || !on || transfer_rate < 1)
 		return
 
 // Pump mechanism just won't do anything if the pressure is too high/too low

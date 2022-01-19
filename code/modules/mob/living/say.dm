@@ -342,7 +342,7 @@ var/list/headset_modes = list(
 	talkcount++
 	. = ..()
 
-/proc/say_test(var/text)
+/mob/living/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))
 	if (ending == "?")
 		return "1"
@@ -607,7 +607,7 @@ var/list/headset_modes = list(
 		return "gibbers"
 	return ..()
 
-/atom/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)
+/mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)
 	//speech bubble
 	var/list/tracking_speech_bubble_recipients = list()
 	var/list/static_speech_bubble_recipients = list()

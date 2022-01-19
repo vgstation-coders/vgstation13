@@ -145,11 +145,6 @@
 	alpha = 150
 	blend_mode = 4
 
-/obj/abstract/screen/fullscreen/hackview_border
-	icon_state = "malfview"
-	layer = HALLUCINATION_LAYER
-	alpha = 255
-
 /obj/abstract/screen/fullscreen/conversion_border
 	icon_state = "conversionoverlay"
 	layer = HALLUCINATION_LAYER

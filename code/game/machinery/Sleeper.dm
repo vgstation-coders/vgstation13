@@ -32,15 +32,9 @@
 	var/cools = 0
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 
-	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/oneuse/emag
-	)
-
 /obj/machinery/sleeper/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)) && occupant)
+	if(!(stat & (BROKEN|NOPOWER)) && occupant)
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
@@ -220,7 +214,7 @@
 	for(var/obj/OO in src)
 		OO.forceMove(loc)
 	add_fingerprint(user)
-	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	update_icon()
 
@@ -365,7 +359,7 @@
 	return
 
 /obj/machinery/sleeper/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
 	if(occupant)
@@ -500,7 +494,7 @@
 		for(var/obj/O in src)
 			qdel(O)
 		add_fingerprint(usr)
-		if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+		if(!(stat & (BROKEN|NOPOWER)))
 			set_light(light_range_on, light_power_on)
 		update_icon()
 		return
@@ -508,12 +502,12 @@
 
 
 /obj/machinery/sleeper/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && !(stat & (FORCEDISABLE|NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
 		if(wakeup(usr))
 			visible_message("<span class='notice'>\The [src] pings softly: 'Initiating wake-up cycle...' </span>")
 
 /obj/machinery/sleeper/process()
-	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN))
 		return
 	updateUsrDialog()
 	return

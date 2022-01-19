@@ -88,7 +88,7 @@
 	if(stat & BROKEN)
 		icon_state = "[initial_icon]b"
 		remove_overlays()
-	else if(stat & (FORCEDISABLE|NOPOWER))
+	else if(stat & NOPOWER)
 		icon_state = "[initial_icon]0"
 		remove_overlays()
 	else

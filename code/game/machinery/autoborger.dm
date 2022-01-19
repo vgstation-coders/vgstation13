@@ -36,7 +36,7 @@
 
 /obj/machinery/autoborger/update_icon()
 	..()
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE) || cooldown_time > world.time)
+	if(stat & (BROKEN|NOPOWER) || cooldown_time > world.time)
 		icon_state = "separator-AO0"
 	else
 		icon_state = initial(icon_state)
@@ -60,7 +60,7 @@
 			AM.forceMove(src.loc)
 
 /obj/machinery/autoborger/proc/do_borging(var/mob/living/carbon/human/H)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	if(cooldown_state)
 		return
@@ -82,8 +82,9 @@
 		if (belongstomalf)
 			var/datum/role/malfAI/my_malf = belongstomalf.mind?.GetRole(MALF)
 			if (my_malf)
-				my_malf.add_power(50)
-				to_chat(belongstomalf, "<span class='good'>Incompatible lifeform biomass reprocessed into computing power.</span>")
+				var/datum/faction/malf/faction = my_malf.faction
+				faction.apcs++
+				to_chat(belongstomalf, "<span class='good'>Incompatible lifeform biomass reprocessed into computing power.</span><span class='notice'>You have now one more APC.</span>")
 
 		return
 

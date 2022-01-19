@@ -17,11 +17,6 @@
 
 	machine_flags = EMAGGABLE
 
-	hack_abilities = list(
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/oneuse/emag
-	)
-
 /obj/machinery/deployable/barrier/New()
 	..()
 	update_icon()
@@ -76,7 +71,7 @@
 			take_damage(25)
 
 /obj/machinery/deployable/barrier/emp_act(var/severity)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(stat & (BROKEN|NOPOWER))
 		return
 	if(prob(50/severity))
 		anchored = !anchored

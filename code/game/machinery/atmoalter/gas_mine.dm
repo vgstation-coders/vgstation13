@@ -35,7 +35,7 @@
 	if(stat & NOPOWER)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Lack of power.</span>")
 		return
-	if (!on || (stat & FORCEDISABLE))
+	if (!on)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Turned off.</span>")
 		return
 	if(stat & BROKEN)
@@ -66,6 +66,9 @@
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
 
+/obj/machinery/atmospherics/miner/attack_ai(var/mob/user)
+	return attack_hand(user)
+
 /obj/machinery/atmospherics/miner/attack_hand(var/mob/user)
 	..()
 	if(!Adjacent(user))
@@ -83,7 +86,7 @@
 
 /obj/machinery/atmospherics/miner/update_icon()
 	src.overlays = 0
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & NOPOWER)
 		return
 	if(on)
 		var/new_icon_state="on"
@@ -96,7 +99,7 @@
 		overlays += I
 
 /obj/machinery/atmospherics/miner/process()
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & NOPOWER)
 		return
 	if (!on)
 		return

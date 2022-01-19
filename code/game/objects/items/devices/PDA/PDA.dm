@@ -2341,7 +2341,7 @@ var/global/msg_id = 0
 	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
 	if(!app.linked_db)
 		app.reconnect_database() //Make one attempt to reconnect
-	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (FORCEDISABLE|BROKEN|NOPOWER))
+	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
 		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 		return 0
 	if(istype(user,/mob/living/carbon/human))
@@ -2360,7 +2360,7 @@ var/global/msg_id = 0
 	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
 	if(!app.linked_db)
 		app.reconnect_database()
-	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (FORCEDISABLE|BROKEN|NOPOWER))
+	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
 		return 0 //This sends its own error message
 	var/turf/U = get_turf(src)
 	if(!silent)

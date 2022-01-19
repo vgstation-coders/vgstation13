@@ -32,14 +32,6 @@
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/dropper)
 
-	var/rig_meal = 0
-
-	hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable,
-		/datum/malfhack_ability/oneuse/overload_quiet,
-		/datum/malfhack_ability/ruin_meal,
-	)
-
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/microwave,\
 		/obj/item/weapon/stock_parts/micro_laser,\
@@ -235,8 +227,6 @@
 	if(isAdminGhost(user))
 		user.set_machine(src)
 		interact(user)
-		return
-	..()
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -363,7 +353,7 @@
 ************************************/
 
 /obj/machinery/microwave/proc/cook()
-	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN))
 		return
 	if(operating)
 		return
@@ -378,8 +368,7 @@
 	var/datum/recipe/recipe = select_recipe(available_recipes,src)
 	var/obj/cooked
 
-	if (!recipe || rig_meal)
-		rig_meal = 0
+	if (!recipe)
 		// Handle the silly stuff first
 		for(var/obj/O in contents)
 			if(istype(O,/obj/item/weapon/cell))
@@ -465,7 +454,7 @@
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
-		if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		if (stat & (NOPOWER|BROKEN))
 			return 0
 		use_power(500)
 		sleep(10/speed_multiplier)
@@ -578,7 +567,7 @@
 	return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		return ..()
 	if(!anchored)
 		return ..()

@@ -35,6 +35,7 @@
 		TryToSwitchState(user)
 	return
 
+
 /obj/machinery/door/mineral/attack_ai(mob/user as mob) //those aren't really machinery, they're just big fucking slabs of a mineral
 	if(isAI(user)) //so the AI can't open it
 		return

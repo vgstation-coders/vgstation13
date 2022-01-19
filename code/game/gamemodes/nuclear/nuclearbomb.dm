@@ -24,11 +24,6 @@ var/list/nuclear_bombs = list()
 	flags = FPRINT
 	use_power = 0
 
-	hack_abilities = list(
-		/datum/malfhack_ability/oneuse/nuke_detonate,
-		/datum/malfhack_ability/oneuse/nuke_bolt,
-	)
-
 /obj/machinery/nuclearbomb/New()
 	..()
 	nuclear_bombs += src

@@ -25,7 +25,7 @@
 
 /obj/machinery/artifact_scanpad/update_icon()
 	icon_state = "xenoarch_scanner0"
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+	if(stat & (NOPOWER|BROKEN))
 		return
 
 	if (analyser_console?.scan_in_progress)
