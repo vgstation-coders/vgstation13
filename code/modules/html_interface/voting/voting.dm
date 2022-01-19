@@ -133,7 +133,7 @@ var/global/datum/controller/poll/poll = new()
 		if("WEIGHTED")
 			return weighted()
 		if("PERSISTENT")
-			if("map") 
+			if(mode == "map") 
 				return persistent()
 		else
 			return  majority()
@@ -398,16 +398,17 @@ var/global/datum/controller/poll/poll = new()
 		return 1
 	return 0
 
-/datum/controller/poll/proc/updateFor(hclient_or_mob, poll.interface)
+/datum/controller/poll/proc/updateFor(hclient_or_mob, poll/interface)
 	// This check will succeed if updateFor is called after showing to the player, but will fail
 	// on regular updates. Since we only really need this once we don't care if it fails.
 
-	poll.interface.callJavaScript("clearAll", new/list(), hclient_or_mob)
-	poll.interface.callJavaScript("update_mode", status_data, hclient_or_mob)
+	poll/interface.callJavaScript("clearAll", new/list(), hclient_or_mob)
+	poll/interface.callJavaScript("update_mode", status_data, hclient_or_mob)
 	if(poll.tally.len)
 		var/i = 1
 		for (var/list/L in poll.tally)
-			var/list/anguish = list(L.Insert(0,i++))
+			L.Insert(0,i++)
+			var/list/anguish = list(L)
 			poll.interface.callJavaScript("update_choices", anguish, hclient_or_mob)
 
 /datum/controller/poll/proc/interact(client/user)
