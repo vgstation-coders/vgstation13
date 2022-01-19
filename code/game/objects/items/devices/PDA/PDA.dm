@@ -1759,14 +1759,7 @@ var/global/msg_id = 0
 				else
 					playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
 
-				var/datum/transaction/T = new()
-				T.target_name = user.name
-				T.purpose = "Currency printed"
-				T.amount = "-[amount]"
-				T.source_terminal = src.name
-				T.date = current_date_string
-				T.time = worldtime2text()
-				id.virtual_wallet.transaction_log.Add(T)
+				new /datum/transaction(id.virtual_wallet, "Currency printed", "-[amount]", src.name, user.name)
 
 		if("104")//PDA_APP_STATIONMAP
 			var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
@@ -2196,14 +2189,7 @@ var/global/msg_id = 0
 					return
 
 			id.virtual_wallet.money -= amount
-			var/datum/transaction/T = new()
-			T.target_name = P.owner
-			T.purpose = "Money transfer"
-			T.amount = "-[amount]"
-			T.source_terminal = src.name
-			T.date = current_date_string
-			T.time = worldtime2text()
-			id.virtual_wallet.transaction_log.Add(T)
+			new /datum/transaction(id.virtual_wallet, "Money transfer", "-[amount]", src.name, P.owner)
 
 		if("Send Honk")//Honk virus
 			if(istype(cartridge, /obj/item/weapon/cartridge/clown))//Cartridge checks are kind of unnecessary since everything is done through switch.
@@ -2400,14 +2386,7 @@ var/global/msg_id = 0
 		if(!id.virtual_wallet)
 			id.update_virtual_wallet()
 		id.virtual_wallet.money += arbitrary_sum
-		var/datum/transaction/T = new()
-		T.target_name = creditor_name
-		T.purpose = "Money transfer"
-		T.amount = arbitrary_sum
-		T.source_terminal = other_pda
-		T.date = current_date_string
-		T.time = worldtime2text()
-		id.virtual_wallet.transaction_log.Add(T)
+		new /datum/transaction(id.virtual_wallet, "Money transfer", arbitrary_sum, other_pda, creditor_name, send2PDAs = FALSE)
 		return 1
 	else
 		incoming_transactions |= list(list(creditor_name,arbitrary_sum,other_pda))
@@ -2415,26 +2394,18 @@ var/global/msg_id = 0
 
 //Receive money transferred from another PDA
 /obj/item/device/pda/proc/receive_incoming_transactions(var/obj/item/weapon/card/id/ID_card)
-	for(var/transac in incoming_transactions)
-		if(!id.virtual_wallet)
-			id.update_virtual_wallet()
-		id.virtual_wallet.money += transac[2]
-		var/datum/transaction/T = new()
-		T.target_name = transac[1]
-		T.purpose = "Money transfer"
-		T.amount = transac[2]
-		T.source_terminal = transac[3]
-		T.date = current_date_string
-		T.time = worldtime2text()
-		id.virtual_wallet.transaction_log.Add(T)
-
-	incoming_transactions = list()
-
 	var/mob/living/L = null
 	if(src.loc && isliving(src.loc))
 		L = src.loc
 	to_chat(L, "[bicon(src)]<span class='notice'> <b>Transactions successfully received! </b></span>")
 
+	for(var/transac in incoming_transactions)
+		if(!id.virtual_wallet)
+			id.update_virtual_wallet()
+		id.virtual_wallet.money += transac[2]
+		new /datum/transaction(id.virtual_wallet, "Money transfer", transac[2], transac[3], transac[1])
+
+	incoming_transactions = list()
 
 /obj/item/device/pda/proc/remove_id()
 	if (id)

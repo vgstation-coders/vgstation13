@@ -5,7 +5,7 @@
 	hud_state = "hivedownload"
 
 	spell_flags = NEEDSHUMAN
-
+	horrorallowed = 0
 	chemcost = 20
 	required_dna = 1
 

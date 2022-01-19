@@ -30,6 +30,7 @@
 	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
 	cost = 0
 	spellpath = /spell/changeling/absorbdna
+	allowduringhorrorform = 0
 
 /datum/power/changeling/transform
 	name = "Transform"
@@ -40,7 +41,7 @@
 
 /datum/power/changeling/change_species
 	name = "Change Species"
-	desc = "We take on the apperance of a species that we have absorbed."
+	desc = "We take on the appearance of a species that we have absorbed."
 	cost = 0
 	spellpath = /spell/changeling/changespecies
 	allowduringhorrorform = 0
@@ -52,6 +53,21 @@
 	cost = 0
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/regenerate
+	
+/datum/power/changeling/split
+	name = "Split"
+	desc = "Split your body into two lifeforms."
+	helptext = "Find somewhere safe to split, as you will be vulnerable afterward."
+	cost = 0
+	spellpath = /spell/changeling/split
+	allowduringhorrorform = 0 //this would be terrifying otherwise
+	
+/datum/power/changeling/horror_form
+	name = "Horror Form"
+	desc = "This costly evolution allows us to transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
+	cost = 10
+	spellpath = /spell/changeling/horrorform
+	allowduringhorrorform = 0
 
 // Hivemind
 
@@ -61,6 +77,7 @@
 	helptext = "Allows other changelings to absorb the DNA you channel from the airwaves. Will not help them towards their absorb objectives."
 	cost = 0
 	spellpath = /spell/changeling/hiveupload
+	allowduringhorrorform = 0
 
 /datum/power/changeling/hive_download
 	name = "Hive Absorb"
@@ -68,6 +85,7 @@
 	helptext = "Allows you to absorb a single DNA and use it. Does not count towards your absorb objective."
 	cost = 0
 	spellpath = /spell/changeling/hivedownload
+	allowduringhorrorform = 0
 
 /datum/power/changeling/lesser_form
 	name = "Lesser Form"
@@ -75,12 +93,6 @@
 	cost = 1
 	spellpath = /spell/changeling/lesserform
 	allowduringhorrorform = 0
-
-/datum/power/changeling/horror_form
-	name = "Horror Form"
-	desc = "This costly evolution allows us to transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
-	cost = 15
-	spellpath = /spell/changeling/horrorform
 
 /datum/power/changeling/deaf_sting
 	name = "Deaf Sting"
@@ -110,6 +122,7 @@
 	helptext = "Will turn your voice into the name that you enter."
 	cost = 3
 	spellpath = /spell/changeling/voicechange
+	allowduringhorrorform = 0
 
 /datum/power/changeling/extractdna
 	name = "Extract DNA"
@@ -221,6 +234,7 @@
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
 	cost = 3
 	allowduringlesserform = 1
+	allowduringhorrorform = 0
 
 /datum/power/changeling/DigitalCamoflague/add_power(var/datum/role/R)
 	. = ..()

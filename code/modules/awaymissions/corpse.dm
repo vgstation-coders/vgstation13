@@ -333,6 +333,7 @@
 	corpsegloves = /obj/item/clothing/gloves/botanic_leather
 	corpsehelmet = /obj/item/clothing/head/greenbandana
 	corpseback = /obj/item/weapon/storage/backpack
+	corpsebelt = /obj/item/weapon/storage/belt/botanist
 	corpseradio = /obj/item/device/radio/headset
 	corpseid = 1
 	corpseidjob = "Botanist"
