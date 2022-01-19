@@ -124,7 +124,7 @@
 			to_chat(R, "<span class='good'>You hear a voice in your head saying: '[warning]'</span>")
 
 		else if(href_list["explode"])
-			var/obj/item/weapon/implant/explosve/remote/I = locate(href_list["explode"])
+			var/obj/item/weapon/implant/explosive/remote/I = locate(href_list["explode"])
 			if(istype(I))
 				I.activate(usr)
 
