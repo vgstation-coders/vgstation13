@@ -153,6 +153,7 @@
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"
+	O.mind.assigned_role = "AI"
 	mob_rename_self(O,"ai", null, 1)
 	. = O
 	if(del_mob)
@@ -184,6 +185,7 @@
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
+	O.mind.assigned_role = "Cyborg"
 	qdel(src)
 	return O
 
@@ -211,6 +213,7 @@
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
+	O.mind.assigned_role = "Mobile MMI"
 	qdel(src)
 	return O
 

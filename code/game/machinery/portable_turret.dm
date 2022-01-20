@@ -409,6 +409,12 @@ Status: []<BR>"},
 				if(check_target(L))
 					targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
+	if(check_anomalies || emagged)
+		for(var/obj/effect/blob/B in view(7+emagged*5, src))
+			targets += B
+		for(var/mob/living/simple_animal/hostile/blobspore/BS in view(7+emagged*5, src))
+			targets += BS
+
 	if (targets.len) // if there are targets to shoot
 		new_target = pick(targets)
 
@@ -420,11 +426,13 @@ Status: []<BR>"},
 /obj/machinery/turret/portable/target()
 	if (istype(cur_target, /mob/living))
 		var/mob/living/L = cur_target
-		if (L.stat!=2)
-			spawn() popUp()
-			dir=get_dir(src, cur_target)
-			shootAt(cur_target)
-	return
+		if (L.stat == DEAD)
+			return
+	spawn()
+		popUp()
+	dir=get_dir(src, cur_target)
+	shootAt(cur_target)
+
 
 /obj/machinery/turret/portable/popUp() // pops the turret up
 	if(!enabled)

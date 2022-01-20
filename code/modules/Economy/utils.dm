@@ -67,32 +67,16 @@ var/global/no_pin_for_debit = TRUE
 
 		//create entries in the two account transaction logs
 		transaction_purpose = copytext(sanitize(transaction_purpose),1,MAX_MESSAGE_LEN)
-		var/datum/transaction/T
+		var/targname
 		if(dest)
-			T = new()
-			T.target_name = owner_name + ( authorized_name ? " charged as [authorized_name]" : "")
+			targname = owner_name + ( authorized_name ? " charged as [authorized_name]" : "")
 			if(terminal_name!="")
-				T.target_name += " (via [terminal_name])"
-			T.purpose = transaction_purpose
-			T.amount = "[transaction_amount]"
-			T.source_terminal = terminal_name
-			T.date = current_date_string
-			T.time = worldtime2text()
-			dest.transaction_log.Add(T)
-		//
-		T = new()
-		T.target_name = ((!dest) ? dest_name : dest.owner_name) + ( authorized_name ? " as [authorized_name]" : "")
+				targname += " (via [terminal_name])"
+			new /datum/transaction(dest, transaction_purpose, "[transaction_amount]", terminal_name, targname)
+		targname = ((!dest) ? dest_name : dest.owner_name) + ( authorized_name ? " as [authorized_name]" : "")
 		if(terminal_name!="")
-			T.target_name += " (via [terminal_name])"
-		T.purpose = transaction_purpose
-		if(transaction_amount < 0)
-			T.amount = "[-1*transaction_amount]"
-		else
-			T.amount = "-[transaction_amount]"
-		T.source_terminal = terminal_name
-		T.date = current_date_string
-		T.time = worldtime2text()
-		transaction_log.Add(T)
+			targname += " (via [terminal_name])"
+		new /datum/transaction(src, transaction_purpose, transaction_amount < 0 ? "[-1*transaction_amount]" : "-[transaction_amount]", terminal_name, targname)
 		return 1
 	else
 		to_chat(usr, "<span class='warning'>Not enough funds in account.</span>")

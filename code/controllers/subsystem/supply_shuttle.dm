@@ -179,13 +179,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
 					var/obj/item/weapon/paper/slip = A
 					if(slip.stamped && slip.stamped.len) //yes, the clown stamp will work. clown is the highest authority on the station, it makes sense
-						var/datum/transaction/T = new()
-						T.target_name = "Central Command Administration"
-						T.purpose = "Purchase confirmation (Stamped Slip) [A]"
-						T.amount = credits_per_slip
-						T.date = current_date_string
-						T.time = worldtime2text()
-						cargo_acct.transaction_log.Add(T)
+						new /datum/transaction(cargo_acct,"Purchase confirmation (Stamped Slip) [A]", credits_per_slip, "",\
+												"Central Command Administration", send2PDAs = FALSE)
 						cargo_acct.money += credits_per_slip
 						find_slip = 0
 					qdel(A)
@@ -211,13 +206,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			qdel(MA)
 
 	if (recycled_crates)
-		var/datum/transaction/T = new()
-		T.target_name = "Central Command Recycling"
-		T.purpose = "[recycled_crates] recycled crate[recycled_crates > 1 ? "s" : ""]"
-		T.amount = credits_per_crate*recycled_crates
-		T.date = current_date_string
-		T.time = worldtime2text()
-		cargo_acct.transaction_log.Add(T)
+		new /datum/transaction(cargo_acct, "[recycled_crates] recycled crate[recycled_crates > 1 ? "s" : ""]",\
+								credits_per_crate*recycled_crates, "", "Central Command Recycling", send2PDAs=FALSE)
 		cargo_acct.money += credits_per_crate*recycled_crates
 
 /datum/subsystem/supply_shuttle/proc/buy()

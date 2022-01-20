@@ -5,6 +5,7 @@
 	hud_state = "fatsting"
 
 	silent = 1
+	chemcost = 5
 	delay = 15 SECONDS
 
 /spell/changeling/sting/fat/lingsting(var/mob/user, var/mob/living/target)
@@ -25,6 +26,8 @@
 	hud_state = "unfatsting"
 
 	silent = 1
+	chemcost = 5
+	delay = 15 SECONDS
 
 /spell/changeling/sting/unfat/lingsting(var/mob/user, var/mob/living/target)
 	if(!target)

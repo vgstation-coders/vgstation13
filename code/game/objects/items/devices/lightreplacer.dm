@@ -41,7 +41,7 @@
 
 	//Quality = switchcount for created bulbs. Higher switchcount = higher chance to burn out on switch.
 	//Efficiency = multiplied by autolathe base glass for lights
-	var/prod_quality = 30 
+	var/prod_quality = 30
 	var/prod_eff = 1.5
 
 	//Options for advanced replacer, put in the base type for sanity purposes
@@ -137,9 +137,9 @@
 		data["waste"]["amount"]++
 
 	data["resources"] = list(
-		"glass" = glass, 
-		"glass_max" = glass_max, 
-		"cardboard" = cardboard, 
+		"glass" = glass,
+		"glass_max" = glass_max,
+		"cardboard" = cardboard,
 		"cardboard_max" = cardboard_max)
 
 	data["settings"] = list(
@@ -200,7 +200,7 @@
 		switch(href_list["fold"])
 			if("supply")
 				if(!supply) //Topic is technically asynchronous, I believe, so this sanity is a good idea
-					supply = new(src)
+					supply = new /obj/item/weapon/storage/box/lights/empty(src)
 					cardboard--
 					if(usr)
 						to_chat(usr, "<span class='notice'>\The [src] constructs a new supply container.</span>")
@@ -208,17 +208,17 @@
 					return 1
 			if("waste")
 				if(!waste) //Topic is technically asynchronous, I believe, so this sanity is a good idea
-					waste = new(src)
+					waste = new /obj/item/weapon/storage/box/lights/empty(src)
 					cardboard--
 					if(usr)
 						to_chat(usr, "<span class='notice'>\The [src] constructs a new waste container.</span>")
 						attack_self(usr)
 					return 1
-		
+
 	if(href_list["recycle"])
 		recycle_waste()
 		return 1
-		
+
 	if(href_list["settings"])
 		switch(href_list["settings"])
 			if("shape")
@@ -244,7 +244,7 @@
 			return 1
 		recharge(usr)
 		return 1
-	
+
 	if(href_list["dump"])
 		if(!istype(src, /obj/item/device/lightreplacer/borg))
 			return 1
@@ -470,21 +470,21 @@
 
 /obj/item/device/lightreplacer/borg/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/weapon/storage/box/lights(src)
+	waste = new /obj/item/weapon/storage/box/lights/empty(src)
 	add_glass(5 * CC_PER_SHEET_GLASS, 2)
 
 /obj/item/device/lightreplacer/loaded/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights/tubes
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/weapon/storage/box/lights/tubes(src)
+	waste = new /obj/item/weapon/storage/box/lights/empty(src)
 
 /obj/item/device/lightreplacer/loaded/he/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights/he
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/weapon/storage/box/lights/he(src)
+	waste = new /obj/item/weapon/storage/box/lights/empty(src)
 
 /obj/item/device/lightreplacer/loaded/mixed/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights/mixed
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/weapon/storage/box/lights/mixed(src)
+	waste = new /obj/item/weapon/storage/box/lights/empty(src)
