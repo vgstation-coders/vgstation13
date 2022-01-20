@@ -25,8 +25,6 @@
 	var/access_mime = 0
 	var/access_janitor = 0
 	var/access_reagent_scanner = 0
-	var/access_remote_door = 0 //Control some blast doors remotely!!
-	var/remote_door_id = ""
 	var/access_status_display = 0
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
@@ -95,6 +93,9 @@
 	stored_data = null
 
 	..()
+
+/datum/pda_app/cart
+	can_purchase = FALSE
 
 /obj/item/weapon/cartridge/engineering
 	name = "\improper Power-ON Cartridge"
@@ -273,8 +274,25 @@
 
 /obj/item/weapon/cartridge/syndicatedoor
 	name = "\improper Doorman Cartridge"
-	access_remote_door = 1
-	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
+	starting_apps = list(/datum/pda_app/cart/remote_door)
+
+/datum/pda_app/cart/remote_door
+	name = "Toggle Remote Door"
+	desc = "Toggles a remote pod door somewhere, preferably on a tightly secure shuttle of sorts."
+	price = 0
+	has_screen = FALSE
+	icon = "pda_rdoor"
+	var/remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
+
+/datum/pda_app/cart/remote_door/on_select(var/mob/user)
+	for(var/obj/machinery/door/poddoor/M in poddoors)
+		if(M.id_tag == remote_door_id)
+			if(M.density)
+				M.open()
+				to_chat(user, "<span class='notice'>The shuttle's outer airlock is now open!</span>")
+			else
+				M.close()
+				to_chat(user, "<span class='notice'>The shuttle's outer airlock is now closed!</span>")
 
 /obj/item/weapon/cartridge/trader
 	name = "\improper Trader Cartridge"

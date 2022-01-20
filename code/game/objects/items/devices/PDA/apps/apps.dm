@@ -24,7 +24,7 @@
 	var/has_screen = TRUE
 	var/obj/item/device/pda/pda_device = null
 	var/icon = null	//name of the icon that appears in front of the app name on the PDA, example: "pda_game.png"
-	var/no_refresh = 0
+	var/no_refresh = FALSE
 	var/can_purchase = TRUE //if this can be bought from a PDA terminal
 	var/assets_type = null //for asset sending
 
@@ -46,6 +46,9 @@
 		pda_device.categorised_applications[category] = null
 	pda_device.applications.Remove(src)
 	pda_device = null
+
+/datum/pda_app/proc/on_select(var/mob/user)
+	return
 
 /datum/pda_app/proc/get_dat()
 	return ""
@@ -74,11 +77,14 @@
 			usr.unset_machine()
 			usr << browse(null, "window=pda")
 	else
-		no_refresh = 0
+		no_refresh = FALSE
 
 /datum/pda_app/Destroy()
 	onUninstall()
 	..()
 
-/datum/pda_app/game
-	category = "Games"
+/proc/get_all_installable_apps()
+	. = list()
+	for(var/datum/pda_app/app in (subtypesof(/datum/pda_app) - /datum/pda_app/cart))
+		if(app.can_purchase)
+			. += app

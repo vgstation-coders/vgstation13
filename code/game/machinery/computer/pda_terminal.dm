@@ -26,7 +26,7 @@
 
 	var/list/notinstalled = list()
 
-	for(var/app in (typesof(/datum/pda_app) - /datum/pda_app))
+	for(var/app in get_all_installable_apps())
 		if(!(locate(app) in pda_hardware.applications))
 			notinstalled += app
 

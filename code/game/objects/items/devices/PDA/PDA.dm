@@ -239,7 +239,7 @@ var/global/msg_id = 0
 
 /obj/item/device/pda/heads/nt_captain/New()
 	starting_apps.Cut()
-	starting_apps = subtypesof(/datum/pda_app) - /datum/pda_app/game
+	starting_apps = get_all_installable_apps()
 	..()
 
 /obj/item/device/pda/heads/nt_supreme
@@ -248,7 +248,7 @@ var/global/msg_id = 0
 
 /obj/item/device/pda/heads/nt_supreme/New()
 	starting_apps.Cut()
-	starting_apps = subtypesof(/datum/pda_app) - /datum/pda_app/game
+	starting_apps = get_all_installable_apps()
 	..()
 
 /obj/item/device/pda/heads/hop
@@ -309,7 +309,7 @@ var/global/msg_id = 0
 
 /obj/item/device/pda/captain/New()
 	starting_apps.Cut()
-	starting_apps = subtypesof(/datum/pda_app) - /datum/pda_app/game
+	starting_apps = get_all_installable_apps()
 	..()
 
 /obj/item/device/pda/cargo
@@ -802,8 +802,6 @@ var/global/msg_id = 0
 						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
 					if (cartridge.access_atmos)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Gas Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
-					if (cartridge.access_remote_door)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
 					if (cartridge.access_trader)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
 					if (cartridge.access_robotics)
@@ -876,7 +874,7 @@ var/global/msg_id = 0
 					dat += tnote[note]
 					var/icon/img = imglist[note]
 					if(img)
-						usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
+						user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
 						dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 				dat += "<br>"
 
@@ -921,14 +919,14 @@ var/global/msg_id = 0
 				dat += {"<span class='pda_icon pda_mule'></span><b>M.U.L.E. bot Interlink V1.0</h4> </b><br/>"}
 				dat += "<ul>"
 				for (var/obj/machinery/bot/mulebot/mule in bots_list)
-					if (mule.z != usr.z)
+					if (mule.z != user.z)
 						continue
 					dat += {"<li>
 							<i>[mule]</i>: [mule.return_status()] in [get_area_name(mule)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=summon;user=\ref[usr]'>[mule.summoned ? "Halt" : "Summon"] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=switch_power;user=\ref[usr]'>Turn [mule.on ? "off" : "on"] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=return_home;user=\ref[usr]'>Send home</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=[cartridge.saved_destination];user=\ref[usr]'>Send to:</a> <a href='?src=\ref[cartridge];change_destination=1'>[cartridge.saved_destination] - EDIT</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=[cartridge.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[cartridge];change_destination=1'>[cartridge.saved_destination] - EDIT</a> <br/>
 							</li>"}
 				dat += "</ul>"
 			if (PDA_MODE_BEEPSKY)
@@ -938,21 +936,21 @@ var/global/msg_id = 0
 				dat += {"<span class='pda_icon pda_cuffs'></span><b>Securitron Interlink</b><br/>"}
 				dat += {"<ul>"}
 				for (var/obj/machinery/bot/secbot/seccie in bots_list)
-					if (seccie.z != usr.z)
+					if (seccie.z != user.z)
 						continue
 					dat += {"<li>
 							<i>[seccie]</i>: [seccie.return_status()] in [get_area_name(seccie)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[usr]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=switch_power;user=\ref[usr]'>Turn [seccie.on ? "off" : "on"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[usr]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
-							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[usr]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[user]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=switch_power;user=\ref[user]'>Turn [seccie.on ? "off" : "on"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[user]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
+							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[user]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
 							</li>"}
 				for (var/obj/machinery/bot/ed209/seccie in bots_list)
 					dat += {"<li>
 							<i>[seccie]</i>: [seccie.return_status()] in [get_area_name(seccie)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[usr]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[usr]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
-							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[usr]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[user]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[user]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
+							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[user]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
 							</li>"}
 				dat += {"</ul>"}
 
@@ -963,13 +961,13 @@ var/global/msg_id = 0
 				dat += {"<span class='pda_icon pda_bucket'></span><b>C.L.E.A.N bot Interlink V1.0</b> <br/>"}
 				dat += "<ul>"
 				for (var/obj/machinery/bot/cleanbot/clean in bots_list)
-					if (clean.z != usr.z)
+					if (clean.z != user.z)
 						continue
 					dat += {"<li>
 							<i>[clean]</i>: [clean.return_status()] in [get_area_name(clean)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=summon;user=\ref[usr]'>[clean.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=switch_power;user=\ref[usr]'>Turn [clean.on ? "off" : "on"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=auto_patrol;user=\ref[usr]'>[clean.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=summon;user=\ref[user]'>[clean.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=switch_power;user=\ref[user]'>Turn [clean.on ? "off" : "on"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=auto_patrol;user=\ref[user]'>[clean.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
 							</li>"}
 				dat += "</ul>"
 			if (PDA_MODE_FLOORBOTS)
@@ -979,13 +977,13 @@ var/global/msg_id = 0
 				dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
 				dat += "<ul>"
 				for (var/obj/machinery/bot/floorbot/floor in bots_list)
-					if (floor.z != usr.z)
+					if (floor.z != user.z)
 						continue
 					dat += {"<li>
 							<i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=summon;user=\ref[usr]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=switch_power;user=\ref[usr]'>Turn [floor.on ? "off" : "on"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=auto_patrol;user=\ref[usr]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
 							</li>"}
 				dat += "</ul>"
 			if (PDA_MODE_MEDBOTS)
@@ -995,12 +993,12 @@ var/global/msg_id = 0
 				dat += {"<span class='pda_icon pda_medical'></span><b>M.E.D bot Interlink V1.0</b> <br/>"}
 				dat += "<ul>"
 				for (var/obj/machinery/bot/medbot/med in bots_list)
-					if (med.z != usr.z)
+					if (med.z != user.z)
 						continue
 					dat += {"<li>
 							<i>[med]</i>: [med.return_status()] in [get_area_name(med)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=summon;user=\ref[usr]'>[med.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=switch_power;user=\ref[usr]'>Turn [med.on ? "off" : "on"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=summon;user=\ref[user]'>[med.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=switch_power;user=\ref[user]'>Turn [med.on ? "off" : "on"]</a> <br/>
 							</li>"}
 				dat += "</ul>"
 
@@ -1016,7 +1014,7 @@ var/global/msg_id = 0
 					else
 						var/i = 0
 						for(var/obj/item/weapon/photo/PH in CM.stored_photos)
-							usr << browse_rsc(PH.img, "tmp_photo_gallery_[i].png")
+							user << browse_rsc(PH.img, "tmp_photo_gallery_[i].png")
 							var/displaylength = 192
 							switch(PH.photo_size)
 								if(5)
@@ -1033,7 +1031,7 @@ var/global/msg_id = 0
 		send_asset_list(user.client, assets_to_send.assets)
 
 	if(current_app && current_app.pda_device) // Taking it from a PDA app instead
-		dat += current_app.get_dat()
+		dat += current_app.get_dat(user)
 	else if(!current_app.pda_device)
 		dat += "<br><h4>ERROR #0x327AA0EF: App failed to start. Please report this issue to your vendor of purchase.</h4>"
 
@@ -1056,7 +1054,7 @@ var/global/msg_id = 0
 
 	//Looking for master was kind of pointless since PDAs don't appear to have one.
 	//if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ) )
-	var/no_refresh = 0
+	var/no_refresh = FALSE
 	if ((href_list["choice"] != "1") || (href_list["choice"] == "1" && href_list["appChoice"] != "5"))//The holomap app
 		var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
 		if (map_app && map_app.holomap)
@@ -1130,24 +1128,14 @@ var/global/msg_id = 0
 //APPLICATIONS FUNCTIONS===========================
 		if("appMode")
 			current_app = locate(href_list["appChoice"]) in applications
+			current_app.on_select(U)
+			no_refresh = current_app.no_refresh //If set in on_select
+			current_app.no_refresh = FALSE //Resets for next time
 			if(current_app.has_screen)
 				mode = PDA_MODE_APP
-		
-			if(istype(current_app,/datum/pda_app/station_map))
-				var/datum/pda_app/station_map/app = current_app
-				if (app && app.holomap)
-					app.holomap.prevent_close = 1
-					spawn(2)
-						app.holomap.prevent_close = 0
-					if(!app.holomap.watching_mob)
-						app.holomap.attack_self(U)
-					no_refresh = 1
-					var/turf/T = get_turf(src)
-					if(!app.holomap.bogus)
-						to_chat(U,"[bicon(src)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
 
-				if(current_app.assets_type && usr.client)
-					assets_to_send = new current_app.assets_type()
+			if(current_app.assets_type && usr.client)
+				assets_to_send = new current_app.assets_type()
 
 //MAIN FUNCTIONS===================================
 
@@ -1357,17 +1345,6 @@ var/global/msg_id = 0
 
 
 //SYNDICATE FUNCTIONS===================================
-
-		if("Toggle Door")
-			if(cartridge && cartridge.access_remote_door)
-				for(var/obj/machinery/door/poddoor/M in poddoors)
-					if(M.id_tag == cartridge.remote_door_id)
-						if(M.density)
-							M.open()
-							to_chat(U, "<span class='notice'>The shuttle's outer airlock is now open!</span>")
-						else
-							M.close()
-							to_chat(U, "<span class='notice'>The shuttle's outer airlock is now closed!</span>")
 
 		if("Detonate")//Detonate PDA
 			if(istype(cartridge, /obj/item/weapon/cartridge/syndicate))

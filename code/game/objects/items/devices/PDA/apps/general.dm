@@ -28,7 +28,7 @@
 	if(href_list["restartAlarm"])
 		if(restart_alarm())
 			to_chat(usr, "[bicon(pda_device)]<span class='info'>The PDA confirms your [lasttimer] second timer.</span>")
-			no_refresh = 1
+			no_refresh = TRUE
 	refresh_pda()
 
 /datum/pda_app/alarm/proc/set_alarm(var/await)

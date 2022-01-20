@@ -2,9 +2,10 @@
 //   Spess Pets, by Deity Link, based on Tamagotchi    //
 /////////////////////////////////////////////////////////
 
-/datum/pda_app/game/spesspets
+/datum/pda_app/spesspets
 	name = "Spess Pets"
 	desc = "A virtual pet simulator. For when you don't have the balls to own a real pet. Includes multi-PDA interactions and Nanocoin mining."
+	category = "Games"
 	price = 10
 	menu = PDA_APP_SPESSPETS
 	icon = "pda_egg"
@@ -47,25 +48,25 @@
 	var/isvisiting = 0
 	var/list/visited = list()
 
-/datum/pda_app/game/spesspets/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/spesspets/onInstall(var/obj/item/device/pda/device)
 	..()
 	petID = num2text(rand(000000,999999))
 	reconnect_database()
 
-/datum/pda_app/game/spesspets/proc/reconnect_database()
+/datum/pda_app/spesspets/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		if((DB.z == pda_device.loc.z) || (DB.z == map.zMainStation))
 			if((DB.stat == 0) && DB.activated )
 				linked_db = DB
 				break
 
-/datum/pda_app/game/spesspets/Destroy()
+/datum/pda_app/spesspets/Destroy()
 	linked_db = null
 	challenged = null
 	visited = null
 	..()
 
-/datum/pda_app/game/spesspets/get_dat()
+/datum/pda_app/spesspets/get_dat()
 	var/dat = {"<h4><span class='pda_icon [icon]'></span> Spess Pets</h4>
 		<br>Name = [petname]<br>Level = [level]<br>
 		<div style="position: relative; left: 0; top: 0;">
@@ -129,7 +130,7 @@
 		dat += {"<br>nanocoins: [total_coins]"}
 	return dat
 
-/datum/pda_app/game/spesspets/Topic(href, href_list)
+/datum/pda_app/spesspets/Topic(href, href_list)
 	if(..())
 		return
 
@@ -181,7 +182,7 @@
 
 	refresh_pda()
 
-/datum/pda_app/game/spesspets/proc/game_tick(var/mob/user)
+/datum/pda_app/spesspets/proc/game_tick(var/mob/user)
 	if (game_state == 1)
 		hatching++
 		if(hatching > 1200)
@@ -242,7 +243,7 @@
 			game_tick(user)
 
 
-/datum/pda_app/game/spesspets/proc/game_update(var/mob/user)
+/datum/pda_app/spesspets/proc/game_update(var/mob/user)
 	if(istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
 		if(C.machine && istype(C.machine,/obj/item/device/pda))
@@ -256,12 +257,12 @@
 				user.unset_machine()
 				user << browse(null, "window=pda")
 
-/datum/pda_app/game/spesspets/proc/button_hatch()
+/datum/pda_app/spesspets/proc/button_hatch()
 	game_state = 2
 	level = 1
 	last_spoken = "[petname] is born!"
 
-/datum/pda_app/game/spesspets/proc/next_egg()
+/datum/pda_app/spesspets/proc/next_egg()
 	switch(race)
 		if("Corgegg")
 			race = "Borgegg"
@@ -277,7 +278,7 @@
 			petname = "Ianitchi"
 	last_spoken = race
 
-/datum/pda_app/game/spesspets/proc/previous_egg()
+/datum/pda_app/spesspets/proc/previous_egg()
 	switch(race)
 		if("Corgegg")
 			race = "Syndegg"
@@ -293,7 +294,7 @@
 			petname = "PunPunitchi"
 	last_spoken = race
 
-/datum/pda_app/game/spesspets/proc/button_talk()
+/datum/pda_app/spesspets/proc/button_talk()
 	var/talk_line = ""
 	switch(race)
 		if("Corgegg")
@@ -349,7 +350,7 @@
 	last_spoken = "<b>[petname]</b> says: \"[talk_line]\""
 
 
-/datum/pda_app/game/spesspets/proc/button_walk()
+/datum/pda_app/spesspets/proc/button_walk()
 	if(!walk_target || ((world.time - last_walk_start) > 36000))
 		last_walk_start = world.time
 		var/list/valid_area_types = list()
@@ -407,7 +408,7 @@
 			last_spoken = "Looks like [petname] wants to go visit [walk_target.name]!"
 
 
-/datum/pda_app/game/spesspets/proc/button_feed()
+/datum/pda_app/spesspets/proc/button_feed()
 	if(ishungry)
 		ishungry = 0
 		var/food = "meat"
@@ -426,19 +427,19 @@
 			exp += 900
 
 
-/datum/pda_app/game/spesspets/proc/button_clean()
+/datum/pda_app/spesspets/proc/button_clean()
 	if(isdirty)
 		isdirty = 0
 		last_spoken = "You clean up [petname]!"
 
 
-/datum/pda_app/game/spesspets/proc/button_heal()
+/datum/pda_app/spesspets/proc/button_heal()
 	if(ishurt)
 		ishurt = 0
 		last_spoken = "You bandage up [petname]!"
 
 
-/datum/pda_app/game/spesspets/proc/button_fight()
+/datum/pda_app/spesspets/proc/button_fight()
 	isfighting = 1
 	var/chance_to_win = 50
 	if((level >= 11) && (level <= 15))
@@ -448,13 +449,13 @@
 	var/turf/T = get_turf(pda_device)
 	var/list/possible_challengers = list()
 	for(var/obj/item/device/pda/check_pda in PDAs)
-		var/datum/pda_app/game/spesspets/pet_app = locate(/datum/pda_app/game/spesspets) in check_pda.applications
+		var/datum/pda_app/spesspets/pet_app = locate(/datum/pda_app/spesspets) in check_pda.applications
 		if(pet_app && (pet_app.game_state == 2) && !pet_app.isfighting && (!challenged[pet_app.petID] || (world.time - challenged[pet_app.petID] >= 6000)))
 			var/turf/T2 = get_turf(check_pda)
 			if(T2 in range(T,3))
 				possible_challengers += pet_app
 	if(possible_challengers.len)
-		var/datum/pda_app/game/spesspets/challenger = pick(possible_challengers)
+		var/datum/pda_app/spesspets/challenger = pick(possible_challengers)
 		challenged[challenger.petID] = world.time
 		last_spoken = "[petname] runs accross [challenger.petname] (level [challenger.level])"
 		challenger.last_spoken = "[challenger.petname] runs accross [petname] (level [level])"
@@ -497,7 +498,7 @@
 
 
 
-/datum/pda_app/game/spesspets/proc/button_visit()
+/datum/pda_app/spesspets/proc/button_visit()
 	isvisiting = 1
 	var/chance_to_get_along = 50
 	if((level >= 6) && (level <= 10))
@@ -505,13 +506,13 @@
 	var/turf/T = get_turf(pda_device)
 	var/list/possible_visitors = list()
 	for(var/obj/item/device/pda/check_pda in PDAs)
-		var/datum/pda_app/game/spesspets/pet_app = locate(/datum/pda_app/game/spesspets) in check_pda.applications
+		var/datum/pda_app/spesspets/pet_app = locate(/datum/pda_app/spesspets) in check_pda.applications
 		if(pet_app && (pet_app.game_state == 2) && !pet_app.isvisiting &&(!visited[pet_app.petID] || (world.time - visited[pet_app.petID] >= 6000)))
 			var/turf/T2 = get_turf(check_pda)
 			if(T2 in range(T,3))
 				possible_visitors += pet_app
 	if(possible_visitors.len)
-		var/datum/pda_app/game/spesspets/visitor = pick(possible_visitors)
+		var/datum/pda_app/spesspets/visitor = pick(possible_visitors)
 		visited[visitor.petID] = world.time
 		last_spoken = "[petname] meets [visitor.petname]"
 		visitor.last_spoken = "[visitor.petname] meets [petname]"
@@ -537,7 +538,7 @@
 
 
 
-/datum/pda_app/game/spesspets/proc/button_work()
+/datum/pda_app/spesspets/proc/button_work()
 	if(ishungry)
 		last_spoken = "[petname] cannot go to work without having lunch first!"
 		return
@@ -551,7 +552,7 @@
 	isatwork = 600
 
 
-/datum/pda_app/game/spesspets/proc/button_cash()
+/datum/pda_app/spesspets/proc/button_cash()
 	if(!pda_device.id)
 		last_spoken = "<i>Insert an ID card linked to collect the nanocoins at the current rates.</i>"
 	else
@@ -576,7 +577,7 @@
 		else
 			last_spoken = {"<i>Unable to connect to accounts database. The database is either nonexistent, inoperative, or too far away.</i>"}
 
-/datum/pda_app/game/spesspets/proc/button_rates()
+/datum/pda_app/spesspets/proc/button_rates()
 	last_spoken = "<i>At the current rates you will get [nanocoins_rates] dollars per nanocoins.</i>"
 
 

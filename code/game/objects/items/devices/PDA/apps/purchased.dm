@@ -83,6 +83,18 @@
 	if (istype(device))
 		holomap = new(device)
 
+/datum/pda_app/station_map/on_select(var/mob/user)
+	if (holomap)
+		holomap.prevent_close = 1
+		spawn(2)
+			holomap.prevent_close = 0
+		if(!holomap.watching_mob)
+			holomap.attack_self(user)
+		no_refresh = TRUE
+		var/turf/T = get_turf(pda_device)
+		if(!holomap.bogus)
+			to_chat(user,"[bicon(pda_device)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
+
 /datum/pda_app/station_map/Destroy()
 	if (holomap)
 		qdel(holomap)

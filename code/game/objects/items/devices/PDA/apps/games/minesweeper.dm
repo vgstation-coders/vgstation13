@@ -4,9 +4,10 @@
 
 ///////////MINESWEEPER//////////////////////////////////////////////////////////////
 
-/datum/pda_app/game/minesweeper
+/datum/pda_app/minesweeper
 	name = "Minesweeper"
 	desc = "A video game. This old classic from Earth made it all the way to the far reaches of space! Includes station leaderboard."
+	category = "Games"
 	price = 5
 	menu = PDA_APP_MINESWEEPER
 	icon = "pda_game"
@@ -15,15 +16,15 @@
 	var/datum/minesweeper_game/minesweeper_game = null
 
 
-/datum/pda_app/game/minesweeper/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/minesweeper/onInstall(var/obj/item/device/pda/device)
 	..()
 	minesweeper_game = new()
 
-/datum/pda_app/game/minesweeper/Destroy()
+/datum/pda_app/minesweeper/Destroy()
 	minesweeper_game = null
 	..()
 
-/datum/pda_app/game/minesweeper/get_dat()
+/datum/pda_app/minesweeper/get_dat()
 	var/dat = {"<h4><span class='pda_icon [icon]'></span> Minesweeper</h4><br>
 			<div style="position: relative; left: 0; top: 0;">
 			<img src="minesweeper_bg_[minesweeper_game.current_difficulty].png" style="position: relative; top: 0; left: 0;"/>
@@ -104,7 +105,7 @@
 		dat += {"<br>[minesweeper_game.current_difficulty] difficulty highscore held by <b>[minesweeper_best_players[minesweeper_game.current_difficulty]]</b> (in <b>[minesweeper_station_highscores[minesweeper_game.current_difficulty]]</b> seconds)"}
 	return dat
 
-/datum/pda_app/game/minesweeper/Topic(href, href_list)
+/datum/pda_app/minesweeper/Topic(href, href_list)
 	if(..())
 		return
 	if(href_list["mineNewGame"])
@@ -161,13 +162,13 @@
 		ingame = 0
 	refresh_pda()
 
-/datum/pda_app/game/minesweeper/proc/game_tick(var/mob/user)
+/datum/pda_app/minesweeper/proc/game_tick(var/mob/user)
 	sleep(1)	//to give the game the time to process all tiles if many are dug at once.
 	if(minesweeper_game.gameover && (minesweeper_game.face == "win"))
 		save_score()
 	game_update(user)
 
-/datum/pda_app/game/minesweeper/proc/game_update(var/mob/user)
+/datum/pda_app/minesweeper/proc/game_update(var/mob/user)
 	if(istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
 		if(C.machine && istype(C.machine,/obj/item/device/pda))
@@ -181,7 +182,7 @@
 				user.unset_machine()
 				user << browse(null, "window=pda")
 
-/datum/pda_app/game/minesweeper/proc/save_score()
+/datum/pda_app/minesweeper/proc/save_score()
 	if(minesweeper_game.current_difficulty == "custom")
 		return
 	if(minesweeper_game.end_timer < minesweeper_station_highscores[minesweeper_game.current_difficulty])
