@@ -60,9 +60,15 @@
 
 /obj/item/weapon/cartridge/New()
 	. = ..()
+	if(isPDA(loc))	
+		var/obj/item/device/pda/P = loc
+		for(var/datum/pda_app/app in applications)
+			app.onInstall(P)
 	if (radio_type)
 		radio = new radio_type(src)
-		radio.hostpda = loc
+		if(isPDA(loc))
+			var/obj/item/device/pda/P = loc
+			radio.hostpda = P
 		if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 			radio.initialize()
 
