@@ -3914,14 +3914,14 @@
     ..()
 	//welders are limited to ~3500K.
 	//roughly 50% chance of failing when using welder
-    required_temp += 3300 + 3300*rand(-1, 1)
+    required_temp += 3300 + 3.3*rand(-1000, 1000)
 
 /datum/chemical_reaction/changeling_blood
 	name = "Blood"
 	id = CHANGELINGBLOOD
 	result = null
 	required_reagents = list(CHANGELINGBLOOD = 1)
-	required_temp = T0C
+	required_temp = T0C + 40
 
 /datum/chemical_reaction/changeling_blood/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
