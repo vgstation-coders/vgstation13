@@ -1253,6 +1253,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 ////////////////////////
 ////PDA APPS DEFINES////
 ////////////////////////
+#define PDA_APP_MODE			100
 #define PDA_APP_ALARM			100
 #define PDA_APP_RINGER			101
 #define PDA_APP_SPAMFILTER		102

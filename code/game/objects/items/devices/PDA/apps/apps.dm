@@ -1,18 +1,5 @@
 ///PDA apps by Deity Link///
 
-//Menu values
-var/global/list/pda_app_menus = list(
-	PDA_APP_ALARM,
-	PDA_APP_RINGER,
-	PDA_APP_SPAMFILTER,
-	PDA_APP_BALANCECHECK,
-	PDA_APP_STATIONMAP,
-	PDA_APP_NEWSREADER,
-	PDA_APP_SNAKEII,
-	PDA_APP_MINESWEEPER,
-	PDA_APP_SPESSPETS,
-	)
-
 /datum/pda_app
 	var/name = "Template Application"
 	var/desc = "Template Description"

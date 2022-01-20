@@ -78,7 +78,9 @@ var/global/msg_id = 0
 	var/MM = null
 	var/DD = null
 
-	var/list/applications = list()
+	var/list/datum/pda_app/applications = list()
+	var/datum/pda_app/current_app = null
+	var/datum/asset/simple/assets_to_send = null
 
 	var/list/incoming_transactions = list()
 
@@ -838,7 +840,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 					dat += {"<ul>"}
 					for(var/datum/pda_app/app in applications)
 						if(app.menu)
-							dat += {"<li><a href='byond://?src=\ref[src];choice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
+							dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 					dat += {"</ul>"}
 
 				if (cartridge)
@@ -1047,26 +1049,6 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 					<b>Did you know...</b><br>
 					<li>[didyouknow]</li><br>"}
 
-			if (PDA_APP_ALARM)
-				var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
-				if(app)
-					dat += app.get_dat()
-
-			if (PDA_APP_RINGER)
-				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
-				if(app)
-					dat += app.get_dat()
-
-			if (PDA_APP_SPAMFILTER)
-				var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
-				if(app)
-					dat += app.get_dat()
-
-			if (PDA_APP_BALANCECHECK)
-				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
-				if(app)
-					dat += app.get_dat()
-
 			if (PDA_MODE_DELIVERY_BOT)
 				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/mule))
 					dat += {"<span class='pda_icon pda_mule'></span>Commlink bot error <br/>"}
@@ -1157,37 +1139,18 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=switch_power;user=\ref[usr]'>Turn [med.on ? "off" : "on"]</a> <br/>
 							</li>"}
 				dat += "</ul>"
-			if (PDA_APP_NEWSREADER)
-				var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
-				if(app)
-					dat += app.get_dat()
 
 			if (PDA_APP_SNAKEII)
 				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
-					var/datum/asset/simple/C = new/datum/asset/simple/pda_snake()
-					send_asset_list(user.client, C.assets)
-
-				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
-				if(app)
-					dat += app.get_dat()
+					assets_to_send = new/datum/asset/simple/pda_snake()
 
 			if (PDA_APP_MINESWEEPER)
 				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
-					var/datum/asset/simple/C = new/datum/asset/simple/pda_mine()
-					send_asset_list(user.client, C.assets)
-
-				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-				if(app)
-					dat += app.get_dat()
+					assets_to_send = new/datum/asset/simple/pda_mine()
 
 			if (PDA_APP_SPESSPETS)
 				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
-					var/datum/asset/simple/C = new/datum/asset/simple/pda_spesspets()
-					send_asset_list(user.client, C.assets)
-
-				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-				if(app)
-					dat += app.get_dat()
+					assets_to_send = new/datum/asset/simple/pda_spesspets()
 
 			if(1998) //Viewing photos
 				dat += {"<h4>View Photos</h4>"}
@@ -1213,6 +1176,12 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 							i++
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
 				dat += cart
+
+	if(assets_to_send && user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
+		send_asset_list(user.client, assets_to_send.assets)
+
+	if(current_app) // Taking it from a PDA app instead
+		dat += current_app.get_dat()
 
 	dat += "</body></html>"
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
@@ -1246,13 +1215,15 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 	add_fingerprint(U)
 	U.set_machine(src)
+	current_app = null // Reset to make it something else
+	assets_to_send = null // Reset to make it something else
 
 	switch(href_list["choice"])
 
 //BASIC FUNCTIONS===================================
 		if("Refresh")//Refresh, goes to the end of the proc.
 		if("Return")//Return
-			if((mode<=9) || (mode==1998) || (locate(mode) in pda_app_menus))
+			if((mode<=9) || (mode==1998) || (mode==PDA_APP_MODE))
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
@@ -1301,78 +1272,51 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 			mode = PDA_MODE_DELIVERY_BOT
 
 //APPLICATIONS FUNCTIONS===========================
-		if("alarm")
-			mode = PDA_APP_ALARM
-		if("101")//PDA_APP_RINGER
-			mode = PDA_APP_RINGER
-		if("102")//PDA_APP_SPAMFILTER
-			mode = PDA_APP_SPAMFILTER
-		if("103")//PDA_APP_BALANCECHECK
-			mode = PDA_APP_BALANCECHECK
+		if("appMode")
+			var/appType = href_list["appChoice"]
+			if(appType != "104") //Holomaps are exempt, see below
+				mode = PDA_APP_MODE
+			switch(appType)
+				if("alarm")
+					current_app = locate(/datum/pda_app/alarm) in applications
+				if("101")//PDA_APP_RINGER
+					current_app = locate(/datum/pda_app/ringer) in applications
+				if("102")//PDA_APP_SPAMFILTER
+					current_app = locate(/datum/pda_app/spam_filter) in applications
+				if("103")//PDA_APP_BALANCECHECK
+					current_app = locate(/datum/pda_app/balance_check) in applications
 
-		if("104")//PDA_APP_STATIONMAP
-			var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
-			if (app && app.holomap)
-				app.holomap.prevent_close = 1
-				spawn(2)
-					app.holomap.prevent_close = 0
-				if(!app.holomap.watching_mob)
-					app.holomap.attack_self(U)
-				no_refresh = 1
-				var/turf/T = get_turf(src)
-				if(!app.holomap.bogus)
-					to_chat(U,"[bicon(src)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
+				if("104")//PDA_APP_STATIONMAP
+					var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
+					if (app && app.holomap)
+						app.holomap.prevent_close = 1
+						spawn(2)
+							app.holomap.prevent_close = 0
+						if(!app.holomap.watching_mob)
+							app.holomap.attack_self(U)
+						no_refresh = 1
+						var/turf/T = get_turf(src)
+						if(!app.holomap.bogus)
+							to_chat(U,"[bicon(src)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
 
-		/* Old Station Map Stuff
-		if(PDA_APP_STATIONMAP)
-			mode = PDA_APP_STATIONMAP
+				if("108")//PDA_APP_NEWSREADER
+					current_app = locate(/datum/pda_app/newsreader) in applications
 
-		if("minimapMarker")
-			var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
-			switch(href_list["mMark"])
-				if("x")
-					var/new_x = input("Please input desired X coordinate.", "Station Map App", app.markx) as num
-					var/x_validate=new_x+WORLD_X_OFFSET[map.zMainStation]
-					if(x_validate < (world.maxx/2 - PDA_MINIMAP_WIDTH/2) || x_validate > (world.maxx/2 + PDA_MINIMAP_WIDTH/2))
-						to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
-					else
-						app.markx = new_x
-				if("y")
-					var/new_y = input("Please input desired Y coordinate.", "Station Map App", app.marky) as num
-					var/y_validate=new_y+WORLD_Y_OFFSET[map.zMainStation]
-					if(y_validate < (world.maxy/2 - PDA_MINIMAP_WIDTH/2) || y_validate > (world.maxy/2 + PDA_MINIMAP_WIDTH/2))
-						to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
-					else
-						app.marky = new_y
-				if("add")
-					var/marker_name = copytext(sanitize(input("Give a name to your marker", "Station Map App", "default marker") as null|text),1,MAX_NAME_LEN)
-					var/datum/minimap_marker/mkr = new/datum/minimap_marker()
-					mkr.x = app.markx
-					mkr.y = app.marky
-					mkr.name = marker_name
-					app.markers += mkr
-					mkr.num = app.markers.len
+		//GAME FUNCTIONS====================================
+				if("105")//PDA_APP_SNAKEII
+					if(usr.client)
+						assets_to_send = new/datum/asset/simple/pda_snake()
+					current_app = locate(/datum/pda_app/snake) in applications
 
-		if("removeMarker")
-			var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
-			var/to_remove = text2num(href_list["rMark"])
-			var/datum/minimap_marker/mkr = app.markers[to_remove]
-			qdel(mkr)
-			mkr = null
-		*/
-		if("108")//PDA_APP_NEWSREADER
-			mode = PDA_APP_NEWSREADER
+				if("106")//PDA_APP_MINESWEEPER
+					if(usr.client)
+						assets_to_send = new/datum/asset/simple/pda_mine()
+					current_app = locate(/datum/pda_app/minesweeper) in applications
 
-//GAME FUNCTIONS====================================
-
-		if("105")//PDA_APP_SNAKEII
-			mode = PDA_APP_SNAKEII
-
-		if("106")//PDA_APP_MINESWEEPER
-			mode = PDA_APP_MINESWEEPER
-
-		if("107")//PDA_APP_SPESSPETS
-			mode = PDA_APP_SPESSPETS
+				if("107")//PDA_APP_SPESSPETS
+					if(usr.client)
+						assets_to_send = new/datum/asset/simple/pda_spesspets()
+					current_app = locate(/datum/pda_app/spesspets) in applications
 
 //MAIN FUNCTIONS===================================
 
