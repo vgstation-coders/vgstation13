@@ -1215,6 +1215,8 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 	add_fingerprint(U)
 	U.set_machine(src)
+	var/datum/pda_app/old_app = current_app
+	var/datum/asset/simple/old_assets = assets_to_send
 	current_app = null // Reset to make it something else
 	assets_to_send = null // Reset to make it something else
 
@@ -1222,6 +1224,8 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 //BASIC FUNCTIONS===================================
 		if("Refresh")//Refresh, goes to the end of the proc.
+			current_app = old_app //To keep it around afterwards.
+			assets_to_send = old_assets //Same here.
 		if("Return")//Return
 			if((mode<=9) || (mode==1998) || (mode==PDA_APP_MODE))
 				mode = 0
