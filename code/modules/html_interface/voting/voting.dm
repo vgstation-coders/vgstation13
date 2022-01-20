@@ -206,7 +206,7 @@ var/global/datum/controller/vote/vote = new()
 	task.on_init()
 	task.insert_counts(tally)
 	tally.len = 0
-	for(var/L in task.data)
+	for(var/list/L in task.data)
 		tally[L] += L[L]
 	majority()
 	task.data[1].count = 0
