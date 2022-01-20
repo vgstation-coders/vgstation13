@@ -353,6 +353,76 @@ var/global/list/pda_app_menus = list(
 	var/datum/feed_channel/viewing_channel
 	var/screen = NEWSREADER_CHANNEL_LIST
 
+/datum/pda_app/newsreader/get_dat()
+	var/dat = ""
+	switch(screen)
+		if (NEWSREADER_CHANNEL_LIST)
+			dat += {"<h4>Station Feed Channels</h4>"}
+			if(news_network.wanted_issue)
+				dat+= "<HR><b><A href='?src=\ref[src];viewWanted=1'>Read Wanted Issue</A></b><HR>"
+			if(isemptylist(news_network.network_channels))
+				dat+="<br><i>No active channels found...</i>"
+			else
+				for(var/datum/feed_channel/channel in news_network.network_channels)
+					if(channel.is_admin_channel)
+						dat+="<b><a href='?src=\ref[src];readChannel=\ref[channel]'>[channel.channel_name]</a></b><br>"
+					else
+						dat+="<a href='?src=\ref[src];readChannel=\ref[channel]'>[channel.channel_name]</a> [(channel.censored) ? ("***") : ""]<br>"
+		if (NEWSREADER_VIEW_CHANNEL)
+			dat+="<b>[viewing_channel.channel_name]: </b><font size=1>\[created by: <b>[viewing_channel.author]</b>\]</font><HR>"
+			if(viewing_channel.censored)
+				dat += {"<B>ATTENTION: </B></font>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<br>
+					No further feed story additions are allowed while the D-Notice is in effect.<br><br>"}
+			else
+				if( isemptylist(viewing_channel.messages) )
+					dat+="<i>No feed messages found in channel...</i><br>"
+				else
+					var/i = 0
+					for(var/datum/feed_message/message in viewing_channel.messages)
+						i++
+						dat+="-[message.body] <br>"
+						if(message.img)
+							usr << browse_rsc(message.img_pda, "tmp_photo_pda[i].png")
+
+							dat+="<a href='?src=\ref[src];showPhotoInfo=\ref[message]'><img src='tmp_photo_pda[i].png' width = '192'></a><br>"
+						dat+="<font size=1>\[Story by <b>[message.author]</b>\]</font><HR>"
+
+			dat += {"<br><a href='?src=\ref[src];viewChannels=1'>Back</a>"}
+		if (NEWSREADER_WANTED_SHOW)
+			dat += {"<B>-- STATIONWIDE WANTED ISSUE --</B><BR><FONT SIZE=2>\[Submitted by: <b>[news_network.wanted_issue.backup_author]</b>\]</FONT><HR>
+				<B>Criminal</B>: [news_network.wanted_issue.author]<BR>
+				<B>Description</B>: [news_network.wanted_issue.body]<BR>
+				<B>Photo:</B>: "}
+			if(news_network.wanted_issue.img_pda)
+				usr << browse_rsc(news_network.wanted_issue.img_pda, "tmp_photow_pda.png")
+				dat+="<BR><img src='tmp_photow_pda.png' width = '180'>"
+			else
+				dat+="None"
+
+			dat += {"<br><a href='?src=\ref[src];viewChannels=1'>Back</a>"}
+	return dat
+
+/datum/pda_app/newsreader/Topic(href, href_list)
+	if(..())
+		return
+	if(href_list["readChannel"])
+		var/datum/feed_channel/channel = locate(href_list["readChannel"])
+		if (channel)
+			viewing_channel = channel
+			screen = NEWSREADER_VIEW_CHANNEL
+
+	if(href_list["viewChannels"])
+		screen = NEWSREADER_CHANNEL_LIST
+
+	if(href_list["viewWanted"])
+		screen = NEWSREADER_WANTED_SHOW
+
+	if(href_list["showPhotoInfo"])
+		var/datum/feed_message/FM = locate(href_list["showPhotoInfo"])
+		if(istype(FM) && FM.img_info)
+			usr.show_message("<span class='info'>[FM.img_info]</span>", MESSAGE_SEE)
+	refresh_pda()
+
 /datum/pda_app/newsreader/proc/newsAlert(var/channel_name)
 	if(pda_device.silent)
 		return
