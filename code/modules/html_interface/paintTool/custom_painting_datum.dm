@@ -150,10 +150,13 @@
 	src.parent = parent
 	mp_handler.set_parent(parent)
 
-/datum/custom_painting/proc/blank_contents()
+/datum/custom_painting/proc/bucket_fill(var/color)
 	bitmap = list()
 	for (var/i = 0, i < bitmap_height * bitmap_width, i++)
-		bitmap += base_color
+		bitmap += color
+
+/datum/custom_painting/proc/blank_contents()
+	bucket_fill(base_color)
 
 /datum/custom_painting/proc/is_blank()
 	if (author || title || description)
@@ -244,7 +247,7 @@
 		author = copytext(sanitize(url_decode(href_list["author"])), 1, MAX_NAME_LEN)
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
 		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
-		contributing_artists += usr.ckey 
+		contributing_artists += usr.ckey
 		return TRUE
 
 /datum/custom_painting/proc/render_on(icon/ico, offset_x = src.offset_x, offset_y = src.offset_y)

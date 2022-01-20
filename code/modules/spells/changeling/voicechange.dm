@@ -5,7 +5,7 @@
 	hud_state = "mimicvoice"
 
 	spell_flags = NEEDSHUMAN
-
+	horrorallowed = 0
 	chemcost = 10
 	required_dna = 1
 

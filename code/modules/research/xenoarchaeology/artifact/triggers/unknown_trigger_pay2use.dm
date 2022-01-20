@@ -167,14 +167,7 @@
 			to_chat(M, "[bicon(my_artifact)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
 
 			//create an entry on the buy's account's transaction log
-			var/datum/transaction/T = new()
-			T.target_name = "[my_artifact.artifact_id]"
-			T.purpose = "Purchase of [dosh * 2] seconds of activation."
-			T.amount = "-[transaction_amount]"
-			T.source_terminal = my_artifact.artifact_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			D.transaction_log.Add(T)
+			new /datum/transaction(D, "Purchase of [dosh * 2] seconds of activation.", "-[transaction_amount]", my_artifact.artifact_id, "[my_artifact.artifact_id]")
 
 			// Vend the item
 			time_left += bought_time
