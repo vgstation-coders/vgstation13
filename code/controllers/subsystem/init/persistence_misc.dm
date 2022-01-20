@@ -223,6 +223,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	for(var/list/L in to_read)
 		var/datum/controller/vote/c = new(L["map"], L["count"])
 		data += c
+	data.Remove(data[1])	//remove previous round winner
 
 /datum/persistence_task/map_vote_count/on_shutdown()
 	var/list/L = list()

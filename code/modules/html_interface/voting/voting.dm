@@ -209,7 +209,6 @@ var/global/datum/controller/vote/vote = new()
 	for(var/list/L in task.data)
 		tally[L] += L[L]
 	majority()
-	task.data[1].count = 0
 	task.on_shutdown()
 
 /datum/controller/vote/proc/announce_result()
