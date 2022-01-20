@@ -78,7 +78,10 @@ var/global/msg_id = 0
 	var/MM = null
 	var/DD = null
 
+	//All applications in this PDA
 	var/list/datum/pda_app/applications = list()
+	//Associative list with header to file under and list of apps underneath, built from header defined in app.
+	var/list/categorised_applications = list("Miscellaneous Applications" = list())
 	var/datum/pda_app/current_app = null
 	var/datum/asset/simple/assets_to_send = null
 
@@ -740,7 +743,8 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	for(var/A in applications)
 		applications -= A
 		qdel(A)
-	for(var/app_type in subtypesof(/datum/pda_app))
+	var/app_types = subtypesof(/datum/pda_app) - /datum/pda_app/game
+	for(var/app_type in app_types)
 		var/datum/pda_app/app = new app_type()
 		app.onInstall(src)
 
@@ -834,16 +838,24 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 						dat += "<li><a href='byond://?src=\ref[src];choice=42'><span class='pda_icon pda_status'></span> Set Status Display</a></li>"
 
 				dat += "</ul>"
-				dat += {"<h4>Applications</h4>"}
 
 				if(applications.len == 0)
-					dat += {"<i>No application currently installed.</i>"}
-				else
+					dat += {"<h4>No application currently installed.</h4>"}
+				else if(categorised_applications.len == 0)
+					dat += {"<h4>Unsorted Applications</h4>"}
 					dat += {"<ul>"}
 					for(var/datum/pda_app/app in applications)
 						if(app.menu)
 							dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 					dat += {"</ul>"}
+				else
+					for(var/category_title in categorised_applications)
+						dat += {"<h4>[category_title]</h4>"}
+						dat += {"<ul>"}
+						for(var/datum/pda_app/app in categorised_applications[category_title])
+							if(app && app.menu)
+								dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
+						dat += {"</ul>"}
 
 				if (cartridge)
 					if (cartridge.access_engine || cartridge.access_atmos)
@@ -1300,17 +1312,17 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 				if("105")//PDA_APP_SNAKEII
 					if(usr.client)
 						assets_to_send = new/datum/asset/simple/pda_snake()
-					current_app = locate(/datum/pda_app/snake) in applications
+					current_app = locate(/datum/pda_app/game/snake) in applications
 
 				if("106")//PDA_APP_MINESWEEPER
 					if(usr.client)
 						assets_to_send = new/datum/asset/simple/pda_mine()
-					current_app = locate(/datum/pda_app/minesweeper) in applications
+					current_app = locate(/datum/pda_app/game/minesweeper) in applications
 
 				if("107")//PDA_APP_SPESSPETS
 					if(usr.client)
 						assets_to_send = new/datum/asset/simple/pda_spesspets()
-					current_app = locate(/datum/pda_app/spesspets) in applications
+					current_app = locate(/datum/pda_app/game/spesspets) in applications
 
 //MAIN FUNCTIONS===================================
 

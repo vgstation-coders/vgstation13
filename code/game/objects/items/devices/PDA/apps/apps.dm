@@ -3,6 +3,7 @@
 /datum/pda_app
 	var/name = "Template Application"
 	var/desc = "Template Description"
+	var/category = "Miscellaneous Applications" //for category building
 	var/price = 10
 	var/menu = 0	//keep it at 0 if your app doesn't need its own menu on the PDA
 	var/obj/item/device/pda/pda_device = null
@@ -13,6 +14,9 @@
 	if(istype(device))
 		pda_device = device
 		pda_device.applications += src
+		if(!(category in pda_device.categorised_applications))
+			pda_device.categorised_applications[category] = list() //Creates the associative list for this if it doesn't exist.
+		pda_device.categorised_applications[category] += src //Adds this app to the appropriate category if it does.
 
 /datum/pda_app/proc/get_dat()
 	return ""
@@ -46,6 +50,9 @@
 		pda_device.applications -= src
 	pda_device = null
 	..()
+
+/datum/pda_app/game
+	category = "Games"
 
 /////////////////////////////////////////////////
 

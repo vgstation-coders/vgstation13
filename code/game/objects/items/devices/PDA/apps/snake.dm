@@ -2,7 +2,7 @@
 //   Snake II, by Deity Link, based on the original game from the year 2000, installed on Nokia phones, most notably the Nokia 3310   //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/datum/pda_app/snake
+/datum/pda_app/game/snake
 	name = "Snake II"
 	desc = "A video game. This old classic from Earth made it all the way to the far reaches of space! Includes station leaderboard."
 	price = 3
@@ -15,7 +15,7 @@
 	var/paused = 0
 	var/labyrinth = 0
 
-/datum/pda_app/snake/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/game/snake/onInstall(var/obj/item/device/pda/device)
 	..()
 	for(var/x=1;x<=PDA_APP_SNAKEII_MAXSPEED;x++)
 		highscores += x
@@ -27,11 +27,11 @@
 
 	snake_game = new()
 
-/datum/pda_app/snake/Destroy()
+/datum/pda_app/game/snake/Destroy()
 	snake_game = null
 	..()
 
-/datum/pda_app/snake/get_dat()
+/datum/pda_app/game/snake/get_dat()
 	var/dat = {"<h4><span class='pda_icon [icon]'></span> Snake II  <a href='byond://?src=\ref[src];snakeVolume=-1'><b>-</b></a><img src="snake_volume[volume].png"/><a href='byond://?src=\ref[src];snakeVolume=1'><b>+</b></a></h4>
 		<br>
 		<div style="position: relative; left: 0; top: 0;">
@@ -164,7 +164,7 @@
 		"}
 	return dat
 
-/datum/pda_app/snake/Topic(href, href_list)
+/datum/pda_app/game/snake/Topic(href, href_list)
 	if(..())
 		return
 	if(href_list["snakeNewGame"])
@@ -203,7 +203,7 @@
 		volume = min(6,volume)
 	refresh_pda()
 
-/datum/pda_app/snake/proc/game_tick(var/mob/user)
+/datum/pda_app/game/snake/proc/game_tick(var/mob/user)
 	snake_game.game_tick(user.dir)
 
 	game_update(user)
@@ -220,7 +220,7 @@
 			game_over(user)
 
 
-/datum/pda_app/snake/proc/game_update(var/mob/user)
+/datum/pda_app/game/snake/proc/game_update(var/mob/user)
 	if(istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
 		if(C.machine && istype(C.machine,/obj/item/device/pda))
@@ -241,7 +241,7 @@
 	else
 		pause(user)
 
-/datum/pda_app/snake/proc/game_over(var/mob/user)
+/datum/pda_app/game/snake/proc/game_over(var/mob/user)
 	playsound(pda_device, 'sound/misc/pda_snake_over.ogg', volume * 5, 0)
 	for(var/i=1;i <= 4;i++)
 		for(var/datum/snake/body/B in snake_game.snakeparts)
@@ -264,7 +264,7 @@
 
 	game_update(user)
 
-/datum/pda_app/snake/proc/pause(var/mob/user)
+/datum/pda_app/game/snake/proc/pause(var/mob/user)
 	if(ingame)
 		if(!paused)
 			paused = 1
@@ -272,7 +272,7 @@
 			paused = 0
 			game_tick(user)
 
-/datum/pda_app/snake/proc/save_score()
+/datum/pda_app/game/snake/proc/save_score()
 	var/list/templist = highscores[snake_game.level]
 	templist[labyrinth+1] = max(templist[labyrinth+1], snake_game.snakescore)
 
