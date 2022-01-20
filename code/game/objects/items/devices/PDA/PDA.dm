@@ -14,7 +14,7 @@
 // Don't ask.
 #define PDA_MODE_BEEPSKY 46
 #define PDA_MODE_DELIVERY_BOT 48
-#define PDA_MODE_APP 100
+#define PDA_MODE_APP 1
 #define PDA_MODE_JANIBOTS 1000 // Initially I wanted to make it a "FUCK" "OLD" "CODERS" defines, but it would actually take some memory as string prototypes, so let's not.
 #define PDA_MODE_FLOORBOTS 1001
 #define PDA_MODE_MEDBOTS 1002
@@ -80,7 +80,7 @@ var/global/msg_id = 0
 	//All applications in this PDA
 	var/list/datum/pda_app/applications = list()
 	//Associative list with header to file under and list of apps underneath, built from header defined in app.
-	var/list/categorised_applications = list("Miscellaneous Applications" = list())
+	var/list/categorised_applications = list("General Functions" = list())
 	var/list/starting_apps = list(/datum/pda_app/alarm,/datum/pda_app/notekeeper,/datum/pda_app/events,/datum/pda_app/manifest,/datum/pda_app/balance_check)
 	var/datum/pda_app/current_app = null
 	var/datum/asset/simple/assets_to_send = null
@@ -701,7 +701,6 @@ var/global/msg_id = 0
 				if(alarm_app)
 					dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[alarm_app]'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
 				dat += {"<br><br>
-					<h4>General Functions</h4>
 					<ul>
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
@@ -822,6 +821,8 @@ var/global/msg_id = 0
 						dat += {"<li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
 							<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li>"}
 				dat += "</ul>"
+
+			//(1) is for the app screen, and not here
 
 			if (2)
 
@@ -1054,7 +1055,7 @@ var/global/msg_id = 0
 	//Looking for master was kind of pointless since PDAs don't appear to have one.
 	//if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ) )
 	var/no_refresh = 0
-	if ((href_list["choice"] != "100") || (href_list["choice"] == 100 && href_list["appChoice"] != "5"))//The holomap app
+	if ((href_list["choice"] != "1") || (href_list["choice"] == "1" && href_list["appChoice"] != "5"))//The holomap app
 		var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
 		if (map_app && map_app.holomap)
 			map_app.holomap.stopWatching()

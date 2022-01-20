@@ -18,7 +18,7 @@
 /datum/pda_app
 	var/name = "Template Application"
 	var/desc = "Template Description"
-	var/category = "Miscellaneous Applications" //for category building
+	var/category = "General Functions" //for category building
 	var/price = 10
 	var/menu = TRUE //set it to false if your app doesn't need its own menu on the PDA
 	var/has_screen = TRUE
