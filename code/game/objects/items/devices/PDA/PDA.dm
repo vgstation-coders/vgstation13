@@ -1049,107 +1049,23 @@ var/global/msg_id = 0
 
 			if (PDA_APP_ALARM)
 				var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
-				dat += {"<h4>Alarm Application</h4>"}
 				if(app)
-					dat += {"
-					The alarm is currently <a href='byond://?src=\ref[src];choice=toggleAlarm'>[app.status ? "ON" : "OFF"]</a><br>
-					Current Time:[worldtime2text()]<BR>
-					Alarm Time: [app.target ? "[worldtime2text(app.target)]" : "Unset"] <a href='byond://?src=\ref[src];choice=setAlarm'>SET</a><BR>
-					"}
+					dat += app.get_dat()
 
 			if (PDA_APP_RINGER)
 				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
-				dat += {"<h4>Ringer Application</h4>"}
 				if(app)
-					dat += {"
-					Status: <a href='byond://?src=\ref[src];choice=toggleDeskRinger'>[app.status ? "On" : "Off"]</a><br>
-					Frequency:
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=-10'>-</a>
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=-2'>-</a>
-						[format_frequency(app.frequency)]
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=2'>+</a>
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=10'>+</a><br>
-						<br>
-					"}
+					dat += app.get_dat()
 
 			if (PDA_APP_SPAMFILTER)
 				var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
-				dat += {"<h4>Spam Filtering Application</h4>"}
 				if(app)
-					dat += {"
-					<ul>
-					<li>[(app.function == 2) ? "<b>Block the spam.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=2'>Block the spam.</a>"]</li>
-					<li>[(app.function == 1) ? "<b>Conceal the spam.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=1'>Conceal the spam.</a>"]</li>
-					<li>[(app.function == 0) ? "<b>Do nothing.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=0'>Do nothing.</a>"]</li>
-					</ul>
-					"}
+					dat += app.get_dat()
 
 			if (PDA_APP_BALANCECHECK)
 				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
-				dat += {"<h4><span class='pda_icon [app.icon]'></span> Virtual Wallet and Balance Check Application</h4>"}
 				if(app)
-					if(!id)
-						dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}
-					else
-						if(!id.virtual_wallet)
-							id.update_virtual_wallet()
-						dat += {"<hr>
-							<h5>Virtual Wallet</h5>
-							Owner: <b>[id.virtual_wallet.owner_name]</b><br>
-							Balance: <b>[id.virtual_wallet.money]</b>$  <u><a href='byond://?src=\ref[src];choice=printCurrency'><span class='pda_icon [app.icon]'></span>Print Currency</a></u>
-							<h6>Transaction History</h6>
-							On [MM]/[DD]/[game_year]:
-							<ul>
-							"}
-						var/list/v_log = list()
-						for(var/e in id.virtual_wallet.transaction_log)
-							v_log += e
-						for(var/datum/transaction/T in reverseRange(v_log))
-							dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
-						dat += {"</ul><hr>"}
-						if(!(app.linked_db))
-							app.reconnect_database()
-						if(app.linked_db)
-							if(app.linked_db.activated)
-								var/datum/money_account/D = app.linked_db.attempt_account_access(id.associated_account_number, 0, 2, 0)
-								if(D)
-									dat += {"
-										<h5>Bank Account</h5>
-										Owner: <b>[D.owner_name]</b><br>
-										Balance: <b>[D.money]</b>$
-										<h6>Transaction History</h6>
-										On [MM]/[DD]/[game_year]:
-										<ul>
-										"}
-									var/list/t_log = list()
-									for(var/e in D.transaction_log)
-										t_log += e
-									for(var/datum/transaction/T in reverseRange(t_log))
-										if(T.purpose == "Account creation")//always the last element of the reverse transaction_log
-											dat += {"</ul>
-												On [(DD == 1) ? "[((MM-2)%12)+1]" : "[MM]"]/[((DD-2)%30)+1]/[(DD == MM == 1) ? "[game_year - 1]" : "[game_year]"]:
-												<ul>
-												<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>
-												</ul>"}
-										else
-											dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
-									if(!D.transaction_log.len)
-										dat += {"</ul>"}
-								else
-									dat += {"
-										<h5>Bank Account</h5>
-										<i>Unable to access bank account. Either its security settings don't allow remote checking or the account is nonexistent.</i>
-										"}
-							else
-								dat += {"
-									<h5>Bank Account</h5>
-									<i>Unfortunately your station's Accounts Database doesn't allow remote access. Negociate with your HoP or Captain to solve this issue.</i>
-									"}
-						else
-							dat += {"
-								<h5>Bank Account</h5>
-								<i>Unable to connect to accounts database. The database is either nonexistent, inoperative, or too far away.</i>
-								"}
+					dat += app.get_dat()
 
 			if (PDA_MODE_DELIVERY_BOT)
 				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/mule))
@@ -1702,64 +1618,12 @@ var/global/msg_id = 0
 //APPLICATIONS FUNCTIONS===========================
 		if("alarm")
 			mode = PDA_APP_ALARM
-		if("toggleAlarm")
-			var/datum/pda_app/ringer/app = locate(/datum/pda_app/alarm) in applications
-			if(app)
-				app.status = !(app.status)
-		if("setAlarm")
-			var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
-			if(app)
-				var/nutime = round(input("How long before the alarm triggers, in seconds?", "Alarm", 1) as num)
-				if(app.set_alarm(nutime))
-					to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [nutime] second timer.</span>")
-		if("restartAlarm")
-			var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
-			if(app && app.restart_alarm())
-				to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [app.lasttimer] second timer.</span>")
-				no_refresh = 1
 		if("101")//PDA_APP_RINGER
 			mode = PDA_APP_RINGER
-		if("toggleDeskRinger")
-			var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
-			if(app)
-				app.status = !(app.status)
-		if("ringerFrequency")
-			var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
-			if(app)
-				var/i = app.frequency + text2num(href_list["rfreq"])
-				if(i < MINIMUM_FREQUENCY)
-					i = 1201
-				if(i > MAXIMUM_FREQUENCY)
-					i = 1599
-				app.frequency = i
 		if("102")//PDA_APP_SPAMFILTER
 			mode = PDA_APP_SPAMFILTER
-		if("setFilter")
-			var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
-			if(app)
-				app.function = text2num(href_list["filter"])
 		if("103")//PDA_APP_BALANCECHECK
 			mode = PDA_APP_BALANCECHECK
-		if("printCurrency")
-			var/mob/user = usr
-			var/amount = round(input("How much money do you wish to print?", "Currency Printer", 0) as num)
-			if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
-				to_chat(user, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
-				return
-			if(amount > id.virtual_wallet.money)
-				amount = id.virtual_wallet.money
-			if(amount > 10000) // prevent crashes
-				to_chat(user, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
-				amount = 10000
-
-			if(withdraw_arbitrary_sum(user,amount))
-				id.virtual_wallet.money -= amount
-				if(prob(50))
-					playsound(src, 'sound/items/polaroid1.ogg', 50, 1)
-				else
-					playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
-
-				new /datum/transaction(id.virtual_wallet, "Currency printed", "-[amount]", src.name, user.name)
 
 		if("104")//PDA_APP_STATIONMAP
 			var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
@@ -2335,25 +2199,6 @@ var/global/msg_id = 0
 		else
 			U.unset_machine()
 			U << browse(null, "window=pda")
-
-//Convert money from the virtual wallet into physical bills
-/obj/item/device/pda/proc/withdraw_arbitrary_sum(var/mob/user,var/arbitrary_sum)
-	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
-	if(!app.linked_db)
-		app.reconnect_database() //Make one attempt to reconnect
-	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
-		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
-		return 0
-	if(istype(user,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = user
-		if(istype(H.wear_id,/obj/item/weapon/storage/wallet))
-			dispense_cash(arbitrary_sum,H.wear_id)
-			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
-			return 1
-	var/list/L = dispense_cash(arbitrary_sum,get_turf(src))
-	for(var/obj/I in L)
-		user.put_in_hands(I)
-	return 1
 
 //Receive money transferred from another PDA
 /obj/item/device/pda/proc/receive_funds(var/creditor_name,var/arbitrary_sum,var/other_pda)
