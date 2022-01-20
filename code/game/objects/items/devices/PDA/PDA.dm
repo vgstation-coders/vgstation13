@@ -81,7 +81,7 @@ var/global/msg_id = 0
 	var/list/datum/pda_app/applications = list()
 	//Associative list with header to file under and list of apps underneath, built from header defined in app.
 	var/list/categorised_applications = list("Miscellaneous Applications" = list())
-	var/list/starting_apps = list(/datum/pda_app/alarm,/datum/pda_app/notekeeper,/datum/pda_app/events,/datum/pda_app/balance_check)
+	var/list/starting_apps = list(/datum/pda_app/alarm,/datum/pda_app/notekeeper,/datum/pda_app/events,/datum/pda_app/manifest,/datum/pda_app/balance_check)
 	var/datum/pda_app/current_app = null
 	var/datum/asset/simple/assets_to_send = null
 
@@ -373,15 +373,9 @@ var/global/msg_id = 0
 	icon_state = "pda-libb"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a WGW-11 series e-reader."
 	silent = 1 //Quiet in the library!
-	starting_apps = list(
-		/datum/pda_app/alarm,
-		/datum/pda_app/notekeeper,
-		/datum/pda_app/events,
-		/datum/pda_app/balance_check,
-		/datum/pda_app/newsreader
-	)
 
 /obj/item/device/pda/librarian/New()
+	starting_apps += /datum/pda_app/newsreader
 	..()
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
 	if(app)
@@ -448,10 +442,8 @@ var/global/msg_id = 0
 	detonate = 0
 
 /obj/item/device/pda/ai/New()
+	starting_apps += /datum/pda_app/spam_filter
 	..()
-	var/datum/pda_app/spam_filter/app = new /datum/pda_app/spam_filter()
-	app.onInstall(src)
-
 
 /obj/item/device/pda/ai/proc/set_name_and_job(newname as text, newjob as text)
 	owner = newname
@@ -713,7 +705,6 @@ var/global/msg_id = 0
 					<ul>
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
-					<li><a href='byond://?src=\ref[src];choice=41'><span class='pda_icon pda_notes'></span> View Crew Manifest</a></li>
 					"}
 
 				if (cartridge)
@@ -921,14 +912,6 @@ var/global/msg_id = 0
 						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
 
-			if (41) //Allows everyone to access crew
-
-				dat += {"<h4><span class='pda_icon pda_notes'></span> Crew Manifest</h4>
-					Entries cannot be modified from this terminal.<br><br>"}
-				if(data_core)
-					dat += data_core.get_manifest(1) // make it monochrome
-				dat += "<br>"
-
 			if (PDA_MODE_DELIVERY_BOT)
 				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/mule))
 					dat += {"<span class='pda_icon pda_mule'></span>Commlink bot error <br/>"}
@@ -1125,8 +1108,6 @@ var/global/msg_id = 0
 
 		if("0")//Hub
 			mode = 0
-		if("1")//Notes
-			mode = 1
 		if("2")//Messenger
 			mode = 2
 		if("21")//Read messeges
@@ -1135,8 +1116,6 @@ var/global/msg_id = 0
 			mode = 3
 		if("4")//Redirects to hub
 			mode = 0
-		if("41")
-			mode = 41
 
 //Fuck this shit this file makes no sense FUNCTIONS===
 

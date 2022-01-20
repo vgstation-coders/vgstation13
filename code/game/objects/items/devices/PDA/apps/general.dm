@@ -228,6 +228,20 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
         <b>Did you know...</b><br>
         <li>pick(facts)</li><br>"}
 
+/datum/pda_app/manifest
+	name = "View Crew Manifest"
+	desc = "Find out which captain you should call a comdom."
+	price = 0
+	icon = "pda_notes"
+
+/datum/pda_app/manifest/get_dat()
+    var/dat = {"<h4><span class='pda_icon pda_notes'></span> Crew Manifest</h4>
+        Entries cannot be modified from this terminal.<br><br>"}
+    if(data_core)
+        dat += data_core.get_manifest(1) // make it monochrome
+    dat += "<br>"
+    return dat
+
 /datum/pda_app/balance_check
 	name = "Virtual Wallet and Balance Check"
 	desc = "Connects to the Account Database to check the balance history the inserted ID card."
