@@ -1140,18 +1140,6 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 							</li>"}
 				dat += "</ul>"
 
-			if (PDA_APP_SNAKEII)
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
-					assets_to_send = new/datum/asset/simple/pda_snake()
-
-			if (PDA_APP_MINESWEEPER)
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
-					assets_to_send = new/datum/asset/simple/pda_mine()
-
-			if (PDA_APP_SPESSPETS)
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
-					assets_to_send = new/datum/asset/simple/pda_spesspets()
-
 			if(1998) //Viewing photos
 				dat += {"<h4>View Photos</h4>"}
 				if(!cartridge || !istype(cartridge,/obj/item/weapon/cartridge/camera))
