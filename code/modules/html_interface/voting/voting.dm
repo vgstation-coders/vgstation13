@@ -101,6 +101,7 @@ var/global/datum/controller/vote/vote = new()
 		lock = FALSE
 
 /datum/controller/vote/proc/reset()
+	currently_voting = FALSE
 	initiator = null
 	time_remaining = 0
 	mode = null
@@ -212,16 +213,16 @@ var/global/datum/controller/vote/vote = new()
 	task.on_shutdown()
 
 /datum/controller/vote/proc/announce_result()
+	currently_voting = FALSE
 	stack_trace("Fuck my shit up. Lock is \[[lock]]")
 	var/result = get_result()
-	currently_voting = FALSE
 	log_vote(result)
 	to_chat(world, "<font color='purple'>[result]</font>")
 
 /datum/controller/vote/proc/result()
 	. = announce_result()
-	var/restart = 0
 	currently_voting = FALSE
+	var/restart = 0
 	if(.)
 		switch(mode)
 			if("restart")
@@ -486,7 +487,7 @@ var/global/datum/controller/vote/vote = new()
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
 		if ("cancel_vote")
-			cancel_vote(usr)
+			cancel_vote(key_name(usr))
 			src.updateFor(usr.client)
 			return 0
 		if("cancel")
