@@ -1186,68 +1186,8 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-				dat += {"<h4><span class='pda_icon [app.icon]'></span> Spess Pets</h4>"}
 				if(app)
-					dat += {"<br>Name = [app.petname]<br>Level = [app.level]<br>
-						<div style="position: relative; left: 0; top: 0;">
-						<img src="spesspets_bg.png" style="position: relative; top: 0; left: 0;"/>
-						"}
-					switch(app.game_state)
-						if(0)	//First Statup
-							dat += {"<br><a href='byond://?src=\ref[src];choice=eggPrev'><img src="spesspets_arrow_left.png"></a><a href='byond://?src=\ref[src];choice=eggNext'><img src="spesspets_arrow_right.png"></a>"}
-
-							dat += {"<a href='byond://?src=\ref[src];choice=eggChose'><img src="spesspets_egg0.png" style="position: absolute; top: 32px; left: 32px;"/></a>"}
-							dat += {"</div>"}
-						if(1)	//Hatching
-							var/eggstate = 0
-							if(app.hatching > 1200)
-								eggstate = 3
-							else if(app.hatching > 600)
-								eggstate = 2
-							else if(app.hatching > 300)
-								eggstate = 1
-							dat += {"<img src="spesspets_egg[eggstate].png" style="position: absolute; top: 32px; left: 32px;"/>"}
-							if(eggstate >= 2)
-								dat += {"<a href='byond://?src=\ref[src];choice=eggHatch'><img src="spesspets_hatch.png" style="position: absolute; top: 64px; left: 0px;"/></a>"}
-
-						if(2)	//Normal
-							if(app.ishungry)
-								dat += {"<img src="spesspets_hunger.png" style="position: absolute; top: 32px; left: 64px;"/>"}
-							if(app.isdirty)
-								dat += {"<img src="spesspets_dirty.png" style="position: absolute; top: 32px; left: 96px;"/>"}
-							if(app.ishurt)
-								dat += {"<img src="spesspets_hurt.png" style="position: absolute; top: 32px; left: 128px;"/>"}
-							if(app.isatwork)
-								dat += {"<img src="spesspets_mine.png" style="position: absolute; top: 32px; left: 32px;"/>"}
-							else
-								dat += {"<img src="spesspets_[app.race].png" style="position: absolute; top: 0px; left: 0px;"/>"}
-								if(app.issleeping)
-									dat += {"<img src="spesspets_sleep.png" style="position: absolute; top: 0px; left: 32px;"/>"}
-								else
-									dat += {"<a href='byond://?src=\ref[src];choice=eggTalk'><img src="spesspets_talk.png" style="position: absolute; top: 96px; left: 0px;"/></a>"}
-									dat += {"<a href='byond://?src=\ref[src];choice=eggWalk'><img src="spesspets_walk.png" style="position: absolute; top: 96px; left: 32px;"/></a>"}
-									if(app.ishungry)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggFeed'><img src="spesspets_feed.png" style="position: absolute; top: 96px; left: 64px;"/></a>"}
-									if(app.isdirty)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggClean'><img src="spesspets_clean.png" style="position: absolute; top: 96px; left: 96px;"/></a>"}
-									if(app.ishurt)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggHeal'><img src="spesspets_heal.png" style="position: absolute; top: 112px; left: 0px;"/></a>"}
-									dat += {"<a href='byond://?src=\ref[src];choice=eggFight'><img src="spesspets_fight.png" style="position: absolute; top: 112px; left: 32px;"/></a>"}
-									dat += {"<a href='byond://?src=\ref[src];choice=eggVisit'><img src="spesspets_visit.png" style="position: absolute; top: 112px; left: 64px;"/></a>"}
-									if(app.level >= 16)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggWork'><img src="spesspets_work.png" style="position: absolute; top: 112px; left: 96px;"/></a>"}
-							if(app.total_coins)
-								dat += {"<a href='byond://?src=\ref[src];choice=eggRate'><img src="spesspets_rate.png" style="position: absolute; top: 96px; left: 128px;"/></a>"}
-							if(app.total_coins)
-								dat += {"<a href='byond://?src=\ref[src];choice=eggCash'><img src="spesspets_cash.png" style="position: absolute; top: 112px; left: 128px;"/></a>"}
-
-							dat += {"</div>"}
-						if(3)	//Dead
-							dat += {"</div>"}
-					if(app.last_spoken != "")
-						dat += {"<br><br><br><br>[app.last_spoken]"}
-					if(app.total_coins)
-						dat += {"<br>nanocoins: [app.total_coins]"}
+					dat += app.get_dat()
 
 			if(1998) //Viewing photos
 				dat += {"<h4>View Photos</h4>"}
@@ -1433,66 +1373,6 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 		if("107")//PDA_APP_SPESSPETS
 			mode = PDA_APP_SPESSPETS
-
-		if("eggPrev")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.previous_egg()
-
-		if("eggNext")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.next_egg()
-
-		if("eggChose")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.petname = copytext(sanitize(input(usr, "What do you want to name your new pet?", "Name your new pet", "[app.petname]") as null|text),1,MAX_NAME_LEN)
-			if(app.petname && (alert(usr, "[app.petname] will be your pet's new name - are you sure?", "Confirm Pet's name: ", "Yes", "No") == "Yes"))
-				app.game_state = 1
-				app.game_tick(usr)
-				app.last_spoken = ""
-
-		if("eggHatch")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_hatch()
-
-		if("eggTalk")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_talk()
-
-		if("eggWalk")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_walk()
-
-		if("eggFeed")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_feed()
-
-		if("eggClean")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_clean()
-
-		if("eggHeal")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_heal()
-
-		if("eggFight")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_fight()
-
-		if("eggVisit")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_visit()
-
-		if("eggWork")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_work()
-
-		if("eggRate")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_rates()
-
-		if("eggCash")
-			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-			app.button_cash()
 
 //MAIN FUNCTIONS===================================
 

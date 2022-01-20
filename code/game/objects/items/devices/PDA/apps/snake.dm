@@ -165,6 +165,8 @@
 	return dat
 
 /datum/pda_app/snake/Topic(href, href_list)
+	if(..())
+		return
 	if(href_list["snakeNewGame"])
 		ingame = 1
 		snake_game.game_start()
@@ -199,6 +201,7 @@
 		volume += text2num(href_list["snakeVolume"])
 		volume = max(0,volume)
 		volume = min(6,volume)
+	refresh_pda()
 
 /datum/pda_app/snake/proc/game_tick(var/mob/user)
 	snake_game.game_tick(user.dir)
