@@ -38,8 +38,8 @@ var/global/datum/controller/vote/vote = new()
 	var/datum/html_interface/nanotrasen/vote/interface
 
 	//vote data
-	var/list/voters	//assoc. list: user.ckey, choices
-	var/list/tally //assoc. list: choices, count
+	var/list/voters		//assoc. list: user.ckey, choices
+	var/list/tally		//assoc. list: choices, count
 	var/list/choices = list() //choices
 	var/choice
 	var/count
@@ -286,21 +286,26 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/get_vote(var/mob/user)
 	//returns voter's choice
 	if(user)
-		if(voters[user.ckey])
-			return voters[user.ckey]
+		to_chat(world, "get: [user] : [voters[user]]")
+		if(voters[user])
+			to_chat(world, "get: [voters[user]] passed/returned")
+			return voters[user]
 	return 0
 
 /datum/controller/vote/proc/add_vote(var/mob/user, var/vote)
-	//adds voter's choice and adds to tally
+	//adds voter's choice and adds to tally. vote was passed as numbers
 	var/list/L = list()
-	L[user.key] = vote
-	voters += L
-	tally[vote]++
+	L[user] = choices[vote]
+	if(!voters[user])
+		tally[choices[vote]]++
+		voters += L
 
 /datum/controller/vote/proc/cancel_vote(var/mob/user)
-	if (voters[user.ckey])
-		tally[voters[user.ckey]]--
-		voters -= user.ckey
+	to_chat(world, "cancel: [user] : [voters[user]]")
+	if (voters[user])
+		tally[voters[user]]--
+		voters -= user
+		to_chat(world, "vote removed successfully")
 
 /datum/controller/vote/proc/get_total()
 	var/total = 0
@@ -412,11 +417,9 @@ var/global/datum/controller/vote/vote = new()
 
 	interface.callJavaScript("clearAll", new/list(), hclient_or_mob)
 	interface.callJavaScript("update_mode", status_data, hclient_or_mob)
-	if(vote.tally.len)
-		var/i = 1
-		for (var/list/L in vote.tally)
-			L.Insert(1,i++)	//append index for javascript
-			to_chat(world,"L[i] : L[L[i]]")
+	if(tally.len)
+		for (var/i = 1; i <= tally.len; i++)
+			var/list/L = list(i, tally[i], tally[tally[i]])
 			interface.callJavaScript("update_choices", L, hclient_or_mob)
 			
 /datum/controller/vote/proc/interact(client/user)
@@ -438,6 +441,7 @@ var/global/datum/controller/vote/vote = new()
 
 	//adds client data
 	if(get_vote(user))
+		to_chat(world, "adding client data")
 		client_data += list(get_vote(user))
 	else
 		client_data += list(0)
