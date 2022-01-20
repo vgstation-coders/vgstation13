@@ -36,6 +36,7 @@
 	var/fax_pings = FALSE
 
 	var/list/datum/pda_app/applications = list()
+	var/list/starting_apps = list()
 
 	// -- Crime against OOP variable (controls what is shown on PDA call to cartridge)
 	var/mode = null
@@ -60,9 +61,11 @@
 
 /obj/item/weapon/cartridge/New()
 	. = ..()
-	if(isPDA(loc))	
-		var/obj/item/device/pda/P = loc
-		for(var/datum/pda_app/app in applications)
+	for(var/type in starting_apps)
+		var/datum/pda_app/app = new type()
+		applications += app
+		if(isPDA(loc))
+			var/obj/item/device/pda/P = loc
 			app.onInstall(P)
 	if (radio_type)
 		radio = new radio_type(src)
