@@ -514,6 +514,7 @@
 		"/obj/item/weapon/reagent_containers/syringe",
 		"/obj/item/weapon/reagent_containers/dropper",
 		"/obj/item/weapon/reagent_containers/spray",
+		"/obj/item/weapon/reagent_containers/glass/bucket",
 		"/obj/item/device/analyzer/plant_analyzer",
 		"/obj/item/tool/wirecutters/clippers",
 		"/obj/item/weapon/plantspray",
