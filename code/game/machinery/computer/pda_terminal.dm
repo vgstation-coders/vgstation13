@@ -32,11 +32,12 @@
 
 	for(var/app in notinstalled)
 		var/datum/pda_app/appli = new app()
-		formatted.Add(list(list(
-			"app" = get_app_name(appli),
-			"app_name" = get_display_name(appli),
-			"app_desc" = get_display_desc(appli),
-			)))
+		if(appli.can_purchase)
+			formatted.Add(list(list(
+				"app" = get_app_name(appli),
+				"app_name" = get_display_name(appli),
+				"app_desc" = get_display_desc(appli),
+				)))
 
 	return formatted
 

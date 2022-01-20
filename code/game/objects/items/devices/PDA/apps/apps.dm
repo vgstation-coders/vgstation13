@@ -1,14 +1,32 @@
 ///PDA apps by Deity Link///
+#define PDA_APP_ALARM			1
+#define PDA_APP_RINGER			2
+#define PDA_APP_SPAMFILTER		3
+#define PDA_APP_BALANCECHECK	4
+#define PDA_APP_STATIONMAP		5
+#define PDA_APP_NEWSREADER		6
+#define PDA_APP_NOTEKEEPER		7
+
+#define PDA_APP_SNAKEII			101
+#define PDA_APP_MINESWEEPER		102
+#define PDA_APP_SPESSPETS		103
+
+#define NEWSREADER_CHANNEL_LIST	0
+#define NEWSREADER_VIEW_CHANNEL	1
+#define NEWSREADER_WANTED_SHOW	2
 
 /datum/pda_app
 	var/name = "Template Application"
 	var/desc = "Template Description"
 	var/category = "Miscellaneous Applications" //for category building
 	var/price = 10
-	var/menu = 0	//keep it at 0 if your app doesn't need its own menu on the PDA
+	var/menu = TRUE //set it to false if your app doesn't need its own menu on the PDA
+	var/has_screen = TRUE
 	var/obj/item/device/pda/pda_device = null
 	var/icon = null	//name of the icon that appears in front of the app name on the PDA, example: "pda_game.png"
 	var/no_refresh = 0
+	var/can_purchase = TRUE //if this can be bought from a PDA terminal
+	var/assets_type = null //for asset sending
 
 /datum/pda_app/proc/onInstall(var/obj/item/device/pda/device)
 	if(istype(device))
@@ -60,7 +78,6 @@
 	name = "Ringer"
 	desc = "Set the frequency to that of a desk bell to be notified anytime someone presses it."
 	price = 10
-	menu = PDA_APP_RINGER
 	icon = "pda_bell"
 	var/frequency = 1457	//	1200 < frequency < 1600 , always end with an odd number.
 	var/status = 1			//	0=off 1=on
@@ -96,7 +113,7 @@
 	name = "Alarm"
 	desc = "Set a time for a personal alarm to trigger."
 	price = 0
-	//menu = PDA_APP_ALARM Don't uncomment, it's listed elsewhere by the clock
+	menu = FALSE // It's listed elsewhere by the clock
 	icon = "pda_clock"
 	var/target = 0
 	var/status = 1			//	0=off 1=on
@@ -151,6 +168,7 @@
 	name = "PDA Flashlight Enhancer"
 	desc = "Slightly increases the luminosity of your PDA's flashlight."
 	price = 60
+	menu = FALSE
 	icon = "pda_flashlight"
 
 /datum/pda_app/light_upgrade/onInstall()
@@ -163,7 +181,6 @@
 	name = "Spam Filter"
 	desc = "Spam messages won't ring your PDA anymore. Enjoy the quiet."
 	price = 30
-	menu = PDA_APP_SPAMFILTER
 	icon = "pda_mail"
 	var/function = 1	//0=do nothing 1=conceal the spam 2=block the spam
 
@@ -189,7 +206,6 @@
 	desc = "Connects to the Account Database to check the balance history the inserted ID card."
 	price = 0
 	icon = "pda_money"
-	menu = PDA_APP_BALANCECHECK
 	var/obj/machinery/account_database/linked_db
 
 /datum/pda_app/balance_check/onInstall()
@@ -323,7 +339,7 @@
 	name = "Station Holo-Map ver. 2.0"
 	desc = "Displays a holo-map of the station. Useful for finding your way."
 	price = 50
-	menu = PDA_APP_STATIONMAP
+	has_screen = FALSE
 	icon = "pda_map"
 	var/obj/item/device/station_map/holomap = null
 
@@ -342,7 +358,6 @@
 	name = "Newsreader"
 	desc = "Access to the latest news from the comfort of your pocket."
 	price = 40
-	menu = PDA_APP_NEWSREADER
 	icon = "pda_news"
 	var/datum/feed_channel/viewing_channel
 	var/screen = NEWSREADER_CHANNEL_LIST
@@ -424,3 +439,36 @@
 	playsound(T, 'sound/machines/twobeep.ogg', 50, 1)
 	for (var/mob/O in hearers(3, T))
 		O.show_message(text("[bicon(pda_device)] [channel_name ? "Breaking news from [channel_name]" : "Attention! Wanted issue distributed!"]!"))
+
+/datum/pda_app/notekeeper
+	name = "Notekeeper"
+	desc = "For when your mind isn't focused enough to keep them."
+	price = 0
+	icon = "pda_notes"
+	var/note = "Congratulations, your station has chosen the Thinktronic 5230 Personal Data Assistant!" //Current note in the notepad function
+	var/notehtml = ""
+
+/datum/pda_app/notekeeper/get_dat()
+	return "<h4><span class='pda_icon pda_notes'></span> Notekeeper V2.1</h4> <a href='byond://?src=\ref[src];Edit=1'>Edit</a><br>[note]"
+
+/datum/pda_app/notekeeper/Topic(href, href_list)
+	if(..())
+		return
+	var/mob/living/U = usr
+	if (href_list["Edit"])
+		var/n = input(U, "Please enter message", name, notehtml) as message
+		if (in_range(pda_device, U) && pda_device.loc == U)
+			n = copytext(adminscrub(n), 1, MAX_MESSAGE_LEN)
+			if (pda_device.current_app == src)
+				note = replacetext(n, "\n", "<BR>")
+				notehtml = n
+
+				var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
+				log_say("[pda_device] notes - [U] changed the text to: [log]")
+				for(var/mob/dead/observer/M in player_list)
+					if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
+						M.show_message("<span class='game say'>[pda_device] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")
+		else
+			U << browse(null, "window=pda")
+			return
+	refresh_pda()

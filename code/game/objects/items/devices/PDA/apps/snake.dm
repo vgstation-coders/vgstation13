@@ -8,6 +8,7 @@
 	price = 3
 	menu = PDA_APP_SNAKEII
 	icon = "pda_game"
+	assets_type = /datum/asset/simple/pda_snake
 	var/volume = 6
 	var/datum/snake_game/snake_game = null
 	var/list/highscores = list()

@@ -14,6 +14,7 @@
 // Don't ask.
 #define PDA_MODE_BEEPSKY 46
 #define PDA_MODE_DELIVERY_BOT 48
+#define PDA_MODE_APP 100
 #define PDA_MODE_JANIBOTS 1000 // Initially I wanted to make it a "FUCK" "OLD" "CODERS" defines, but it would actually take some memory as string prototypes, so let's not.
 #define PDA_MODE_FLOORBOTS 1001
 #define PDA_MODE_MEDBOTS 1002
@@ -56,8 +57,6 @@ var/global/msg_id = 0
 	var/lock_code = "" // Lockcode to unlock uplink
 	var/honkamt = 0 //How many honks left when infected with honk.exe
 	var/mimeamt = 0 //How many silence left when infected with mime.exe
-	var/note = "Congratulations, your station has chosen the Thinktronic 5230 Personal Data Assistant!" //Current note in the notepad function
-	var/notehtml = ""
 	var/cart = "" //A place to stick cartridge menu information
 	var/detonate = 1 // Can the PDA be blown up?
 	var/hidden = 0 // Is the PDA hidden from the PDA list?
@@ -82,6 +81,7 @@ var/global/msg_id = 0
 	var/list/datum/pda_app/applications = list()
 	//Associative list with header to file under and list of apps underneath, built from header defined in app.
 	var/list/categorised_applications = list("Miscellaneous Applications" = list())
+	var/list/starting_apps = list(/datum/pda_app/alarm,/datum/pda_app/notekeeper,/datum/pda_app/balance_check)
 	var/datum/pda_app/current_app = null
 	var/datum/asset/simple/assets_to_send = null
 
@@ -207,10 +207,9 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 /obj/item/device/pda/New()
 	..()
-	var/datum/pda_app/balance_check/app = new /datum/pda_app/balance_check()
-	app.onInstall(src)
-	var/datum/pda_app/alarm/app2 = new /datum/pda_app/alarm()
-	app2.onInstall(src)
+	for(var/app_type in starting_apps)
+		var/datum/pda_app/app = new app_type()
+		app.onInstall(src)
 
 	PDAs += src
 	if(default_cartridge)
@@ -362,16 +361,18 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	ownjob = "Nanotrasen Navy Captain"
 
 /obj/item/device/pda/heads/nt_captain/New()
+	starting_apps.Cut()
+	starting_apps = subtypesof(/datum/pda_app) - /datum/pda_app/game
 	..()
-	get_all_apps()
 
 /obj/item/device/pda/heads/nt_supreme
 	name = "Nanotrasen Supreme Commander PDA"
 	ownjob = "Nanotrasen Supreme Commander"
 
 /obj/item/device/pda/heads/nt_supreme/New()
+	starting_apps.Cut()
+	starting_apps = subtypesof(/datum/pda_app) - /datum/pda_app/game
 	..()
-	get_all_apps()
 
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
@@ -430,8 +431,9 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	//toff = 1
 
 /obj/item/device/pda/captain/New()
+	starting_apps.Cut()
+	starting_apps = subtypesof(/datum/pda_app) - /datum/pda_app/game
 	..()
-	get_all_apps()
 
 /obj/item/device/pda/cargo
 	name = "Cargo PDA"
@@ -493,27 +495,37 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	name = "Librarian PDA"
 	icon_state = "pda-libb"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a WGW-11 series e-reader."
-	note = "Congratulations, your station has chosen the Thinktronic 5290 WGW-11 Series E-reader and Personal Data Assistant!"
 	silent = 1 //Quiet in the library!
-
+	starting_apps = list(/datum/pda_app/alarm,/datum/pda_app/notekeeper,/datum/pda_app/balance_check,/datum/pda_app/newsreader)
 
 /obj/item/device/pda/librarian/New()
 	..()
-	var/datum/pda_app/newsreader/app = new /datum/pda_app/newsreader()
-	app.onInstall(src)
+	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
+	if(app)
+		app.note = "Congratulations, your station has chosen the Thinktronic 5290 WGW-11 Series E-reader and Personal Data Assistant!"
 
 /obj/item/device/pda/clear
 	icon_state = "pda-transp"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a special edition with a transparent case."
-	note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
+
+/obj/item/device/pda/clear/New()
+	..()
+	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
+	if(app)
+		app.note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
 
 /obj/item/device/pda/trader
 	name = "Trader PDA"
 	desc = "Much good for trade."
-	note = "Congratulations, your statio RUNTIME FAULT AT 0x3ae46dc1"
 	icon_state = "pda-trader"
 	default_cartridge = /obj/item/weapon/cartridge/trader
 	show_overlays = FALSE
+
+/obj/item/device/pda/trader/New()
+	..()
+	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
+	if(app)
+		app.note = "Congratulations, your statio RUNTIME FAULT AT 0x3ae46dc1"
 
 /obj/item/device/pda/chef
 	name = "Chef PDA"
@@ -739,15 +751,6 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
  *	The Actual PDA
  */
 
-/obj/item/device/pda/proc/get_all_apps()
-	for(var/A in applications)
-		applications -= A
-		qdel(A)
-	var/app_types = subtypesof(/datum/pda_app) - /datum/pda_app/game
-	for(var/app_type in app_types)
-		var/datum/pda_app/app = new app_type()
-		app.onInstall(src)
-
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
 		if(user.incapacitated())
@@ -812,19 +815,19 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	else
 		switch (mode)
 			if (0)
-				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.3</h2>
+				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.4</h2>
 					Owner: [owner], [ownjob]<br>"}
 				dat += text("ID: <A href='?src=\ref[src];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
 				dat += text("<br><A href='?src=\ref[src];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
 
 
 				dat += "Station Time: [worldtime2text()]"
-				if(locate(/datum/pda_app/alarm) in applications)
-					dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=alarm'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
+				var/datum/pda_app/alarm/alarm_app = locate(/datum/pda_app/alarm) in applications
+				if(alarm_app)
+					dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[alarm_app]'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
 				dat += {"<br><br>
 					<h4>General Functions</h4>
 					<ul>
-					<li><a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_notes'></span> Notekeeper</a></li>
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=50'><span class='pda_icon pda_clock'></span> Current Events</a></li>"}
@@ -846,15 +849,15 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 					dat += {"<ul>"}
 					for(var/datum/pda_app/app in applications)
 						if(app.menu)
-							dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
+							dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 					dat += {"</ul>"}
 				else
 					for(var/category_title in categorised_applications)
 						dat += {"<h4>[category_title]</h4>"}
 						dat += {"<ul>"}
 						for(var/datum/pda_app/app in categorised_applications[category_title])
-							if(app && app.menu)
-								dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
+							if(app.menu)
+								dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 						dat += {"</ul>"}
 
 				if (cartridge)
@@ -946,12 +949,6 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 						dat += {"<li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
 							<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li>"}
 				dat += "</ul>"
-
-			if (1)
-
-				dat += {"<h4><span class='pda_icon pda_notes'></span> Notekeeper V2.1</h4>
-					<a href='byond://?src=\ref[src];choice=Edit'> Edit</a><br>"}
-				dat += note
 
 			if (2)
 
@@ -1205,7 +1202,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	//Looking for master was kind of pointless since PDAs don't appear to have one.
 	//if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ) )
 	var/no_refresh = 0
-	if (href_list["choice"] != "104")//PDA_APP_STATIONMAP
+	if ((href_list["choice"] != "100") || (href_list["choice"] == 100 && href_list["appChoice"] != "5"))//The holomap app
 		var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
 		if (map_app && map_app.holomap)
 			map_app.holomap.stopWatching()
@@ -1229,7 +1226,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 			current_app = old_app //To keep it around afterwards.
 			assets_to_send = old_assets //Same here.
 		if("Return")//Return
-			if((mode<=9) || (mode==1998) || (mode==PDA_APP_MODE))
+			if((mode<=9) || (mode==1998) || (mode==PDA_MODE_APP))
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
@@ -1279,50 +1276,25 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 //APPLICATIONS FUNCTIONS===========================
 		if("appMode")
-			var/appType = href_list["appChoice"]
-			if(appType != "104") //Holomaps are exempt, see below
-				mode = PDA_APP_MODE
-			switch(appType)
-				if("alarm")
-					current_app = locate(/datum/pda_app/alarm) in applications
-				if("101")//PDA_APP_RINGER
-					current_app = locate(/datum/pda_app/ringer) in applications
-				if("102")//PDA_APP_SPAMFILTER
-					current_app = locate(/datum/pda_app/spam_filter) in applications
-				if("103")//PDA_APP_BALANCECHECK
-					current_app = locate(/datum/pda_app/balance_check) in applications
+			current_app = locate(href_list["appChoice"]) in applications
+			if(current_app.has_screen)
+				mode = PDA_MODE_APP
+		
+			if(istype(current_app,/datum/pda_app/station_map))
+				var/datum/pda_app/station_map/app = current_app
+				if (app && app.holomap)
+					app.holomap.prevent_close = 1
+					spawn(2)
+						app.holomap.prevent_close = 0
+					if(!app.holomap.watching_mob)
+						app.holomap.attack_self(U)
+					no_refresh = 1
+					var/turf/T = get_turf(src)
+					if(!app.holomap.bogus)
+						to_chat(U,"[bicon(src)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
 
-				if("104")//PDA_APP_STATIONMAP
-					var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
-					if (app && app.holomap)
-						app.holomap.prevent_close = 1
-						spawn(2)
-							app.holomap.prevent_close = 0
-						if(!app.holomap.watching_mob)
-							app.holomap.attack_self(U)
-						no_refresh = 1
-						var/turf/T = get_turf(src)
-						if(!app.holomap.bogus)
-							to_chat(U,"[bicon(src)] Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)")
-
-				if("108")//PDA_APP_NEWSREADER
-					current_app = locate(/datum/pda_app/newsreader) in applications
-
-		//GAME FUNCTIONS====================================
-				if("105")//PDA_APP_SNAKEII
-					if(usr.client)
-						assets_to_send = new/datum/asset/simple/pda_snake()
-					current_app = locate(/datum/pda_app/game/snake) in applications
-
-				if("106")//PDA_APP_MINESWEEPER
-					if(usr.client)
-						assets_to_send = new/datum/asset/simple/pda_mine()
-					current_app = locate(/datum/pda_app/game/minesweeper) in applications
-
-				if("107")//PDA_APP_SPESSPETS
-					if(usr.client)
-						assets_to_send = new/datum/asset/simple/pda_spesspets()
-					current_app = locate(/datum/pda_app/game/spesspets) in applications
+				if(current_app.assets_type && usr.client)
+					assets_to_send = new current_app.assets_type()
 
 //MAIN FUNCTIONS===================================
 
@@ -1393,22 +1365,6 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
-		if ("Edit")
-			var/n = input(U, "Please enter message", name, notehtml) as message
-			if (in_range(src, U) && loc == U)
-				n = copytext(adminscrub(n), 1, MAX_MESSAGE_LEN)
-				if (mode == 1)
-					note = replacetext(n, "\n", "<BR>")
-					notehtml = n
-
-					var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
-					log_say("[src] notes - [U] changed the text to: [log]")
-					for(var/mob/dead/observer/M in player_list)
-						if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
-							M.show_message("<span class='game say'>[src] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")
-			else
-				U << browse(null, "window=pda")
-				return
 		if("Toggle Messenger")
 			toff = !toff
 		if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
@@ -2028,8 +1984,10 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 		playsound(loc, "polaroid", 75, 1, -3)
 
 	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
-		note = A:info
-		to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
+		var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
+		if(app)
+			app.note = A:info
+			to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
 
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)

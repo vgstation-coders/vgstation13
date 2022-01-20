@@ -8,6 +8,7 @@
 	price = 10
 	menu = PDA_APP_SPESSPETS
 	icon = "pda_egg"
+	assets_type = /datum/asset/simple/pda_spesspets
 	var/obj/machinery/account_database/linked_db
 
 	var/game_state = 0	//0 = First Startup; 1 = Egg Chosen; 2 = Egg Hatched (normal status); 3 = Pet Dead

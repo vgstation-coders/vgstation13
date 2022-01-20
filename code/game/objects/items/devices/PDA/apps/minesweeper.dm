@@ -10,6 +10,7 @@
 	price = 5
 	menu = PDA_APP_MINESWEEPER
 	icon = "pda_game"
+	assets_type = /datum/asset/simple/pda_mine
 	var/ingame = 0
 	var/datum/minesweeper_game/minesweeper_game = null
 
