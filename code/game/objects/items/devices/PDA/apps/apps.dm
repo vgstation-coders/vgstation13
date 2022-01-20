@@ -36,6 +36,17 @@
 			pda_device.categorised_applications[category] = list() //Creates the associative list for this if it doesn't exist.
 		pda_device.categorised_applications[category] += src //Adds this app to the appropriate category if it does.
 
+/datum/pda_app/proc/onUninstall()
+	var/list/affiliated_apps = pda_device.categorised_applications[category]
+	if(islist(affiliated_apps)) //Too much sanity checking, maybe
+		affiliated_apps.Remove(src)
+		if(!affiliated_apps || !affiliated_apps.len)
+			pda_device.categorised_applications.Remove(category)
+	else
+		pda_device.categorised_applications[category] = null
+	pda_device.applications.Remove(src)
+	pda_device = null
+
 /datum/pda_app/proc/get_dat()
 	return ""
 
@@ -45,6 +56,8 @@
 
 	var/mob/living/U = usr
 
+	if(!pda_device) // Need this for functionality
+		return TRUE
 	if (!pda_device.can_use(U)) //From PDA, double check here
 		U.unset_machine()
 		U << browse(null, "window=pda")
@@ -64,9 +77,7 @@
 		no_refresh = 0
 
 /datum/pda_app/Destroy()
-	if(pda_device.applications)
-		pda_device.applications -= src
-	pda_device = null
+	onUninstall()
 	..()
 
 /datum/pda_app/game

@@ -35,6 +35,8 @@
 	var/access_camera = 0
 	var/fax_pings = FALSE
 
+	var/list/datum/pda_app/applications = list()
+
 	// -- Crime against OOP variable (controls what is shown on PDA call to cartridge)
 	var/mode = null
 	var/menu

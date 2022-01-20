@@ -1032,8 +1032,10 @@ var/global/msg_id = 0
 	if(assets_to_send && user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 		send_asset_list(user.client, assets_to_send.assets)
 
-	if(current_app) // Taking it from a PDA app instead
+	if(current_app && current_app.pda_device) // Taking it from a PDA app instead
 		dat += current_app.get_dat()
+	else if(!current_app.pda_device)
+		dat += "<br><h4>ERROR #0x327AA0EF: App failed to start. Please report this issue to your vendor of purchase.</h4>"
 
 	dat += "</body></html>"
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
@@ -1095,6 +1097,8 @@ var/global/msg_id = 0
 			name = "PDA-[owner] ([ownjob])"
 		if("Eject")//Ejects the cart, only done from hub.
 			if (!isnull(cartridge))
+				for(var/datum/pda_app/app in cartridge.applications)
+					app.onUninstall()
 				var/turf/T = loc
 				if(ismob(T))
 					T = T.loc
@@ -1707,6 +1711,8 @@ var/global/msg_id = 0
 			update_icon()
 			if(cartridge.radio)
 				cartridge.radio.hostpda = src
+			for(var/datum/pda_app/app in cartridge.applications)
+				app.onInstall(src)
 
 	else if(istype(C, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/idcard = C
