@@ -206,7 +206,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	..()
 	var/datum/pda_app/balance_check/app = new /datum/pda_app/balance_check()
 	app.onInstall(src)
-	var/datum/pda_app/balance_check/app2 = new /datum/pda_app/alarm()
+	var/datum/pda_app/alarm/app2 = new /datum/pda_app/alarm()
 	app2.onInstall(src)
 
 	PDAs += src
@@ -814,8 +814,10 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 				dat += text("<br><A href='?src=\ref[src];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
 
 
-				dat += {"Station Time: [worldtime2text()] <a href='byond://?src=\ref[src];choice=alarm'><span class='pda_icon pda_clock'></span> Set Alarm</a>
-					<br><br>
+				dat += "Station Time: [worldtime2text()]"
+				if(locate(/datum/pda_app/alarm) in applications)
+					dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=alarm'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
+				dat += {"<br><br>
 					<h4>General Functions</h4>
 					<ul>
 					<li><a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_notes'></span> Notekeeper</a></li>
