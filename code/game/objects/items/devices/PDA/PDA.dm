@@ -1309,87 +1309,8 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-				dat += {"<h4><span class='pda_icon [app.icon]'></span> Minesweeper</h4>"}
 				if(app)
-					dat += {"<br>
-						<div style="position: relative; left: 0; top: 0;">
-						<img src="minesweeper_bg_[app.minesweeper_game.current_difficulty].png" style="position: relative; top: 0; left: 0;"/>
-						"}
-					if(!app.ingame)
-						for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-							dat += {"<a href='byond://?src=\ref[src];choice=mineNewGame;mTile=\ref[T]'><img src="minesweeper_tile_full.png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
-					else
-						for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-							var/mine_icon = ""
-							if(T.dug)
-								if(T.mined)
-									mine_icon = "minesweeper_tile_mine_splode"
-								else if(T.num)
-									mine_icon = "minesweeper_tile_[T.num]"
-								else
-									mine_icon = "minesweeper_tile_empty"
-
-							else
-								if(T.mined && app.minesweeper_game.gameover)
-									if(T.flagged == 1)
-										mine_icon = "minesweeper_tile_flag"
-									else
-										mine_icon = "minesweeper_tile_mine_unsplode"
-								else if(T.flagged == 1)
-									if(app.minesweeper_game.gameover)
-										mine_icon = "minesweeper_tile_mine_wrong"
-									else
-										mine_icon = "minesweeper_tile_flag"
-								else if(T.flagged == 2)
-									mine_icon = "minesweeper_tile_question"
-								else
-									mine_icon = "minesweeper_tile_full"
-							if(T.selected && !app.minesweeper_game.gameover)
-								mine_icon += "_selected"
-							dat += {"<a href='byond://?src=\ref[src];choice=mineDig;mTile=\ref[T]'><img src="[mine_icon].png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
-						dat += {"<a href='byond://?src=\ref[src];choice=mineFlag'><img src="minesweeper_flag.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 16px;"/></a>"}
-						dat += {"<a href='byond://?src=\ref[src];choice=mineQuestion'><img src="minesweeper_question.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 48px;"/></a>"}
-					dat += {"<a href='byond://?src=\ref[src];choice=mineSettings'><img src="minesweeper_settings.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 96px;"/></a>"}
-
-					dat += {"<img src="minesweeper_frame_smiley.png" style="position: absolute; top: -33px; left: [(app.minesweeper_game.columns * 8)+3]px;"/></a>"}
-					dat += {"<a href='byond://?src=\ref[src];choice=mineReset'><img src="minesweeper_smiley_[app.minesweeper_game.face].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 8)+4]px;"/></a>"}
-
-					dat += {"<img src="minesweeper_frame_counter.png" style="position: absolute; top: -33px; left: 21px;"/>"}
-					var/mine_counter = app.minesweeper_game.initial_mines
-					for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-						if(T.flagged == 1)
-							mine_counter--
-					dat += {"<img src="minesweeper_counter_[round(mine_counter / 100) % 10].png" style="position: absolute; top: -32px; left: 22px;"/>"}
-					dat += {"<img src="minesweeper_counter_[round(mine_counter / 10) % 10].png" style="position: absolute; top: -32px; left: 35px;"/>"}
-					dat += {"<img src="minesweeper_counter_[mine_counter % 10].png" style="position: absolute; top: -32px; left: 48px;"/>"}
-
-					dat += {"<img src="minesweeper_frame_counter.png" style="position: absolute; top: -33px; left: [(app.minesweeper_game.columns * 16)-30]px;"/>"}
-					var/time_counter = round((world.time - app.minesweeper_game.timer)/10)
-					time_counter = min(999,time_counter)
-					if(!app.ingame || app.minesweeper_game.gameover)
-						time_counter = app.minesweeper_game.end_timer
-					dat += {"<img src="minesweeper_counter_[round(time_counter / 100) % 10].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 16)-29]px;"/>"}
-					dat += {"<img src="minesweeper_counter_[round(time_counter / 10) % 10].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 16)-16]px;"/>"}
-					dat += {"<img src="minesweeper_counter_[time_counter % 10].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 16)-3]px;"/>"}
-
-					dat += {"<img src="minesweeper_border_cornertopleft.png" style="position: absolute; top: -16px; left: 0px;"/>"}
-					dat += {"<img src="minesweeper_border_cornerbotleft.png" style="position: absolute; top: [(app.minesweeper_game.rows * 16)]px; left: 0px;"/>"}
-					dat += {"<img src="minesweeper_border_cornertopright.png" style="position: absolute; top: -16px; left: [(app.minesweeper_game.columns * 16) + 16]px;"/>"}
-					dat += {"<img src="minesweeper_border_cornerbotright.png" style="position: absolute; top: [(app.minesweeper_game.rows * 16)]px; left: [(app.minesweeper_game.columns * 16) + 16]px;"/>"}
-					for(var/x=1;x<=app.minesweeper_game.columns;x++)
-						dat += {"<img src="minesweeper_border_top.png" style="position: absolute; top: -16px; left: [16*x]px;"/>"}
-					for(var/x=1;x<=app.minesweeper_game.columns;x++)
-						dat += {"<img src="minesweeper_border_bot.png" style="position: absolute; top: [(app.minesweeper_game.rows * 16)]px; left: [16*x]px;"/>"}
-					for(var/y=0;y<app.minesweeper_game.rows;y++)
-						dat += {"<img src="minesweeper_border_left.png" style="position: absolute; top: [16*y]px; left: 0px;"/>"}
-					for(var/y=0;y<app.minesweeper_game.rows;y++)
-						dat += {"<img src="minesweeper_border_right.png" style="position: absolute; top: [16*y]px; left: [(app.minesweeper_game.columns * 16) + 16]px;"/>"}
-
-
-					dat += {"</div>"}
-					if(app.minesweeper_game.current_difficulty != "custom")
-						dat += {"<br>[app.minesweeper_game.current_difficulty] difficulty highscore held by <b>[minesweeper_best_players[app.minesweeper_game.current_difficulty]]</b> (in <b>[minesweeper_station_highscores[app.minesweeper_game.current_difficulty]]</b> seconds)"}
-
+					dat = app.get_dat()
 
 			if (PDA_APP_SPESSPETS)
 				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
@@ -1686,65 +1607,6 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 		if("106")//PDA_APP_MINESWEEPER
 			mode = PDA_APP_MINESWEEPER
-
-		if("mineNewGame")
-			var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-			var/datum/mine_tile/T = locate(href_list["mTile"])
-			app.ingame = 1
-			app.minesweeper_game.game_start(T)
-			app.game_tick(usr)
-
-		if("mineDig")
-			var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-			var/datum/mine_tile/T = locate(href_list["mTile"])
-			app.minesweeper_game.dig_tile(T)
-			app.game_tick(usr)
-
-		if("mineFlag")
-			var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-			if(!app.minesweeper_game.gameover)
-				for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-					if(!T.dug && T.selected)
-						if(!T.flagged)
-							T.flagged = 1
-						else if(T.flagged == 2)
-							T.flagged = 1
-						else
-							T.flagged = 0
-
-		if("mineQuestion")
-			var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-			if(!app.minesweeper_game.gameover)
-				for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-					if(!T.dug && T.selected)
-						if(!T.flagged)
-							T.flagged = 2
-						else if(T.flagged == 1)
-							T.flagged = 2
-						else
-							T.flagged = 0
-
-		if("mineSettings")
-			var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-			if(alert(usr, "Changing the settings will reset the game, are you sure?", "Minesweeper Settings", "Yes", "No") != "Yes")
-				return
-			var/list/difficulties = list(
-				"beginner",
-				"intermediate",
-				"expert",
-				"custom",
-				)
-			var/choice = input("What Difficulty?", "Minesweeper Settings") in difficulties
-			app.minesweeper_game.set_difficulty(choice)
-			app.ingame = 0
-
-		if("mineReset")
-			var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-			app.minesweeper_game.face = "press"
-			app.game_update(usr)
-			sleep(5)
-			app.minesweeper_game.reset_game()
-			app.ingame = 0
 
 		if("107")//PDA_APP_SPESSPETS
 			mode = PDA_APP_SPESSPETS
