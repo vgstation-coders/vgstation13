@@ -41,6 +41,8 @@ var/global/datum/controller/vote/vote = new()
 	var/list/voters	//assoc. list: user.ckey, choices
 	var/list/tally //assoc. list: choices, count
 	var/list/choices = list() //choices
+	var/choice
+	var/count
 
 	var/list/status_data
 	var/last_update    = 0
@@ -58,6 +60,8 @@ var/global/datum/controller/vote/vote = new()
 	src.voters = list()
 	src.tally = list()
 	src.status_data = list()
+	src.choice = choice
+	src.count = count
 	spawn(5)
 		if(!src.interface)
 			src.interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
