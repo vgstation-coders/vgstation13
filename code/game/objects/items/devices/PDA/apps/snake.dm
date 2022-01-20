@@ -31,6 +31,175 @@
 	snake_game = null
 	..()
 
+/datum/pda_app/snake/get_dat()
+	var/dat = {"<h4><span class='pda_icon [icon]'></span> Snake II  <a href='byond://?src=\ref[src];snakeVolume=-1'><b>-</b></a><img src="snake_volume[volume].png"/><a href='byond://?src=\ref[src];snakeVolume=1'><b>+</b></a></h4>
+		<br>
+		<div style="position: relative; left: 0; top: 0;">
+		<img src="snake_background.png" style="position: relative; top: 0; left: 0;"/>
+		"}
+	if(!ingame)
+		dat += {"<a href='byond://?src=\ref[src];snakeNewGame=1'><img src="snake_newgame.png" style="position: absolute; top: 50px; left: 100px;"/></a>"}
+		dat += {"<img src="snake_highscore.png" style="position: absolute; top: 90px; left: 50px;"/>"}
+		var/list/templist = highscores[snake_game.level]
+		var/list/winnerlist = snake_station_highscores[snake_game.level]
+		dat += {"<img src="snake_[round(templist[labyrinth+1] / 1000) % 10].png" style="position: absolute; top: 90px; left: 210px;"/>"}
+		dat += {"<img src="snake_[round(templist[labyrinth+1] / 100) % 10].png" style="position: absolute; top: 90px; left: 226px;"/>"}
+		dat += {"<img src="snake_[round(templist[labyrinth+1] / 10) % 10].png" style="position: absolute; top: 90px; left: 242px;"/>"}
+		dat += {"<img src="snake_[templist[labyrinth+1] % 10].png" style="position: absolute; top: 90px; left: 258px;"/>"}
+		dat += {"<img src="snake_station.png" style="position: absolute; top: 130px; left: 50px;"/>"}
+		dat += {"<img src="snake_[round(winnerlist[labyrinth+1] / 1000) % 10].png" style="position: absolute; top: 130px; left: 178px;"/>"}
+		dat += {"<img src="snake_[round(winnerlist[labyrinth+1] / 100) % 10].png" style="position: absolute; top: 130px; left: 194px;"/>"}
+		dat += {"<img src="snake_[round(winnerlist[labyrinth+1] / 10) % 10].png" style="position: absolute; top: 130px; left: 210px;"/>"}
+		dat += {"<img src="snake_[winnerlist[labyrinth+1] % 10].png" style="position: absolute; top: 130px; left: 226px;"/>"}
+		var/list/snakebestlist = snake_best_players[snake_game.level]
+		dat += "<br>(Station Highscore held by <B>[snakebestlist[labyrinth+1]]</B>)"
+		dat += "<br>Set speed: "
+		for(var/x=1;x<=9;x++)
+			if(x == snake_game.level)
+				dat += "<B>[x]</B>, "
+			else
+				dat += "<a href='byond://?src=\ref[src];snakeLevel=[x]'>[x]</a>, "
+		dat += "<br>Set labyrinth: [!labyrinth ? "<b>None</b>" : "<a href='byond://?src=\ref[src];snakeLabyrinth=1;lType=0'>None</a>"], "
+		for(var/x=1;x<=7;x++)
+			if(x == labyrinth)
+				dat += "<B>[x]</B>, "
+			else
+				dat += "<a href='byond://?src=\ref[src];snakeLabyrinth=1;lType=[x]'>[x]</a>, "
+		dat += "<br>Gyroscope (orient yourself to control): "
+		dat += "<a href='byond://?src=\ref[src];snakeGyro=1'>[snake_game.gyroscope ? "ON" : "OFF"]</a>"
+	else
+		if(labyrinth)
+			dat += {"<img src="snake_maze[labyrinth].png" style="position: absolute; top: 0px; left: 0px;"/>"}
+		for(var/datum/snake/body/B in snake_game.snakeparts)
+			var/body_dir = ""
+			if(B.life == 1)
+				switch(B.dir)
+					if(EAST)
+						body_dir = "pda_snake_bodytail_east"
+					if(WEST)
+						body_dir = "pda_snake_bodytail_west"
+					if(NORTH)
+						body_dir = "pda_snake_bodytail_north"
+					if(SOUTH)
+						body_dir = "pda_snake_bodytail_south"
+			else if(B.life > 1)
+				if(B.corner)
+					switch(B.dir)
+						if(EAST)
+							switch(B.corner)
+								if(SOUTH)
+									body_dir = "pda_snake_bodycorner_eastsouth2"
+								if(NORTH)
+									body_dir = "pda_snake_bodycorner_eastnorth2"
+						if(WEST)
+							switch(B.corner)
+								if(SOUTH)
+									body_dir = "pda_snake_bodycorner_westsouth2"
+								if(NORTH)
+									body_dir = "pda_snake_bodycorner_westnorth2"
+						if(NORTH)
+							switch(B.corner)
+								if(EAST)
+									body_dir = "pda_snake_bodycorner_eastnorth"
+								if(WEST)
+									body_dir = "pda_snake_bodycorner_westnorth"
+						if(SOUTH)
+							switch(B.corner)
+								if(EAST)
+									body_dir = "pda_snake_bodycorner_eastsouth"
+								if(WEST)
+									body_dir = "pda_snake_bodycorner_westsouth"
+				else
+					switch(B.dir)
+						if(EAST)
+							body_dir = "pda_snake_body_east"
+						if(WEST)
+							body_dir = "pda_snake_body_west"
+						if(NORTH)
+							body_dir = "pda_snake_body_north"
+						if(SOUTH)
+							body_dir = "pda_snake_body_south"
+
+				if(B.isfull)
+					body_dir += "_full"
+			if(!B.flicking)
+				dat += {"<img src="[body_dir].png" style="position: absolute; top: [(B.y * 16 * -1) + 152]px; left: [B.x * 16 - 16]px;"/>"}
+
+		dat += {"<img src="pda_snake_egg.png" style="position: absolute; top: [(snake_game.next_egg.y * 16 * -1) + 152]px; left: [snake_game.next_egg.x * 16 - 16]px;"/>"}
+
+		if(snake_game.next_bonus.life > 0)
+			dat += {"<img src="pda_snake_bonus[snake_game.next_bonus.bonustype].png" style="position: absolute; top: [(snake_game.next_bonus.y * 16 * -1) + 152]px; left: [snake_game.next_bonus.x * 16 - 8]px;"/>"}
+			dat += {"<img src="pda_snake_bonus[snake_game.next_bonus.bonustype].png" style="position: absolute; top: [(180 * -1) + 152]px; left: [280 - 8]px;"/>"}
+			dat += {"<img src="snake_[round(snake_game.next_bonus.life / 10) % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [302 - 8]px;"/>"}
+			dat += {"<img src="snake_[snake_game.next_bonus.life % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [318 - 8]px;"/>"}
+
+		dat += {"<img src="snake_[round(snake_game.snakescore / 1000) % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [2 - 8]px;"/>"}
+		dat += {"<img src="snake_[round(snake_game.snakescore / 100) % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [18 - 8]px;"/>"}
+		dat += {"<img src="snake_[round(snake_game.snakescore / 10) % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [34 - 8]px;"/>"}
+		dat += {"<img src="snake_[snake_game.snakescore % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [50 - 8]px;"/>"}
+
+		var/head_dir = ""
+		switch(snake_game.head.dir)
+			if(EAST)
+				head_dir = "pda_snake_head_east"
+			if(WEST)
+				head_dir = "pda_snake_head_west"
+			if(NORTH)
+				head_dir = "pda_snake_head_north"
+			if(SOUTH)
+				head_dir = "pda_snake_head_south"
+		if(snake_game.head.open_mouth)
+			head_dir += "_open"
+		if(!snake_game.head.flicking)
+			dat += {"<img src="[head_dir].png" style="position: absolute; top: [(snake_game.head.y * 16 * -1) + 152]px; left: [snake_game.head.x * 16 - 16]px;"/>"}
+		if(paused)
+			dat += {"<a href='byond://?src=\ref[src];snakeUnPause=1'><img src="snake_pause.png" style="position: absolute; top: 50px; left: 128px;"/></a>"}
+	dat += {"</div>"}
+
+	dat += {"<h5>Controls</h5>
+		<a href='byond://?src=\ref[src];snakeUp=1'><img src="pda_snake_arrow_north.png"></a>
+		<br><a href='byond://?src=\ref[src];snakeLeft=1'><img src="pda_snake_arrow_west.png"></a>
+		<a href='byond://?src=\ref[src];snakeRight=1'><img src="pda_snake_arrow_east.png"></a>
+		<br><a href='byond://?src=\ref[src];snakeDown=1'><img src="pda_snake_arrow_south.png"></a>
+		"}
+	return dat
+
+/datum/pda_app/snake/Topic(href, href_list)
+	if(href_list["snakeNewGame"])
+		ingame = 1
+		snake_game.game_start()
+		game_tick(usr)
+
+	if(href_list["snakeUp"])
+		snake_game.lastinput = NORTH
+
+	if(href_list["snakeLeft"])
+		snake_game.lastinput = WEST
+
+	if(href_list["snakeRight"])
+		snake_game.lastinput = EAST
+
+	if(href_list["snakeDown"])
+		snake_game.lastinput = SOUTH
+
+	if(href_list["snakeUnPause"])
+		pause(usr)
+
+	if(href_list["snakeLabyrinth"])
+		labyrinth = text2num(href_list["lType"])
+		snake_game.set_labyrinth(text2num(href_list["lType"]))
+
+	if(href_list["snakeLevel"])
+		snake_game.level = text2num(href_list["snakeLevel"])
+
+	if(href_list["snakeGyro"])
+		snake_game.gyroscope = !snake_game.gyroscope
+
+	if(href_list["snakeVolume"])
+		volume += text2num(href_list["snakeVolume"])
+		volume = max(0,volume)
+		volume = min(6,volume)
+
 /datum/pda_app/snake/proc/game_tick(var/mob/user)
 	snake_game.game_tick(user.dir)
 
