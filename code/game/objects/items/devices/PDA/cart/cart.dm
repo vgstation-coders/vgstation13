@@ -36,11 +36,6 @@
 	var/mode = null
 	var/menu
 
-	// -- Various crimes against object oriented programming
-	var/obj/machinery/computer/powermonitor/powmonitor = null // Power Monitor
-	var/list/powermonitors = list()
-	var/obj/machinery/computer/station_alert/alertmonitor = null // Alert Monitor
-	var/list/alertmonitors = list()
 	var/list/stored_data = list()
 
 	// Bot destination
@@ -74,13 +69,7 @@
 	if(radio)
 		qdel(radio)
 		radio = null
-
-	powmonitor = null
-	powermonitors = null
-	alertmonitor = null
-	alertmonitors = null
 	stored_data = null
-
 	..()
 
 /datum/pda_app/cart
@@ -158,103 +147,6 @@ Code:
 [radio:code]
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=1'>+</a>
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=5'>+</a><br>"}
-
-		if (43) //Muskets' and Rockdtben's power monitor :D
-			menu = "<h4><span class='pda_icon pda_power'></span> Please select a Power Monitoring Computer</h4><BR>No Power Monitoring Computer detected in the vicinity.<BR>"
-			var/powercount = 0
-			var/found = 0
-
-			for(var/obj/machinery/computer/powermonitor/pMon in power_machines)
-				if(!(pMon.stat & (NOPOWER|BROKEN)))
-					var/turf/T = get_turf(src)
-					if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
-						if(!found)
-							menu = "<h4><span class='pda_icon pda_power'></span> Please select a Power Monitoring Computer</h4><BR>"
-							found = 1
-							menu += "<FONT SIZE=-1>"
-						powercount++
-						menu += "<a href='byond://?src=\ref[src];choice=Power Select;target=[powercount]'> [pMon] </a><BR>"
-						powermonitors += "\ref[pMon]"
-			if(found)
-				menu += "</FONT>"
-
-		if (433) //Muskets' and Rockdtben's power monitor :D
-			if(!powmonitor)
-				menu = "<h4><span class='pda_icon pda_power'></span> Power Monitor </h4><BR>"
-				menu += "No connection<BR>"
-			else
-				menu = "<h4><span class='pda_icon pda_power'></span> [powmonitor] </h4><BR>"
-				var/list/L = list()
-				for(var/obj/machinery/power/terminal/term in powmonitor.connected_powernet.nodes)
-					if(istype(term.master, /obj/machinery/power/apc))
-						var/obj/machinery/power/apc/A = term.master
-						L += A
-
-
-				menu += {"<PRE>Total power: [powmonitor.connected_powernet.avail] W<BR>Total load:  [num2text(powmonitor.connected_powernet.viewload,10)] W<BR>
-					<FONT SIZE=-1>"}
-				if(L.len > 0)
-					menu += "Area                           Eqp./Lgt./Env.  Load   Cell<HR>"
-
-					var/list/S = list(" Off","AOff","  On", " AOn")
-					var/list/chg = list("N","C","F")
-
-					for(var/obj/machinery/power/apc/A in L)
-						var/area/APC_area = get_area(A)
-						menu += copytext(add_tspace(APC_area.name, 30), 1, 30)
-						menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 6)]  [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
-
-				menu += "</FONT></PRE>"
-
-		if (53)
-			menu = "<h4><span class='pda_icon pda_alert'></span> Please select an Alert Computer</h4><BR>No Alert Computer detected in the vicinity.<BR>"
-			alertmonitor = null
-			alertmonitors = list()
-
-			var/alertcount = 0
-			var/found = 0
-
-			for(var/obj/machinery/computer/station_alert/aMon in machines)
-				if(!(aMon.stat & (NOPOWER|BROKEN)))
-					var/turf/T = get_turf(src)
-					if(T.z == aMon.z)//the application may only detect station alert computers on its Z-level.
-						if(!found)
-							menu = "<h4><span class='pda_icon pda_alert'></span> Please select an Alert Computer</h4><BR>"
-							found = 1
-							menu += "<FONT SIZE=-1>"
-						alertcount++
-						menu += "<a href='byond://?src=\ref[src];choice=Alert Select;target=[alertcount]'> [aMon] </a><BR>"
-						alertmonitors += "\ref[aMon]"
-			if(found)
-				menu += "</FONT>"
-
-		if (533)
-			if(!alertmonitor)
-				menu = "<h4><span class='pda_icon pda_alert'></span> Alert Monitor </h4><BR>"
-				menu += "No connection<BR>"
-			else
-				menu = "<h4><span class='pda_icon pda_alert'></span> [alertmonitor] </h4><BR>"
-				for (var/cat in alertmonitor.alarms)
-					menu += text("<B>[]</B><BR>\n", cat)
-					var/list/L = alertmonitor.alarms[cat]
-					if (L.len)
-						for (var/alarm in L)
-							var/list/alm = L[alarm]
-							var/area/A = alm[1]
-							var/list/sources = alm[3]
-
-							menu += {"<NOBR>
-								&bull;
-								[A.name]"}
-
-							if (sources.len > 1)
-								menu += text(" - [] sources", sources.len)
-							menu += "</NOBR><BR>\n"
-					else
-						menu += "-- All Systems Nominal<BR>\n"
-					menu += "<BR>\n"
-
-				menu += "</FONT></PRE>"
 
 		if (47) //quartermaster order records
 
@@ -398,20 +290,6 @@ Code:
 			radio:code = round(radio:code)
 			radio:code = min(100, radio:code)
 			radio:code = max(1, radio:code)
-
-		if("Power Select")
-			var/pnum = text2num(href_list["target"])
-			powmonitor = locate(powermonitors[pnum])
-			if(istype(powmonitor))
-				loc:mode = 433
-				mode = 433
-
-		if("Alert Select")
-			var/pnum = text2num(href_list["target"])
-			alertmonitor = locate(alertmonitors[pnum])
-			if(istype(alertmonitor))
-				loc:mode = 533
-				mode = 533
 
 	generate_menu()
 	print_to_host(menu)

@@ -95,6 +95,9 @@
 	access_atmos = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/power_monitor,
+        /datum/pda_app/cart/alert_monitor,
+        /datum/pda_app/cart/scanner/atmos,
         /datum/pda_app/cart/scanner/mechanic,
     )
 	radio_type = /obj/item/radio/integrated/signal/bot/floorbot
@@ -129,11 +132,14 @@
 	access_atmos = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/power_monitor,
+        /datum/pda_app/cart/alert_monitor,
         /datum/pda_app/cart/scanner/mechanic,
         /datum/pda_app/cart/medical_records,
         /datum/pda_app/cart/scanner/medical,
 		/datum/pda_app/cart/security_records,
 		/datum/pda_app/cart/scanner/hailer,
-        /datum/pda_app/cart/scanner/reagent
+        /datum/pda_app/cart/scanner/reagent,
+        /datum/pda_app/cart/scanner/atmos,
     )
 	fax_pings = TRUE
