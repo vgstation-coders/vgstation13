@@ -709,8 +709,6 @@ var/global/msg_id = 0
 				if (cartridge)
 					if (cartridge.access_clown)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Honk'><span class='pda_icon pda_honk'></span> Honk Synthesizer</a></li>"
-					if(cartridge.access_status_display)
-						dat += "<li><a href='byond://?src=\ref[src];choice=42'><span class='pda_icon pda_status'></span> Set Status Display</a></li>"
 
 				dat += "</ul>"
 
@@ -1030,10 +1028,11 @@ var/global/msg_id = 0
 	if(assets_to_send && user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 		send_asset_list(user.client, assets_to_send.assets)
 
-	if(current_app && current_app.pda_device) // Taking it from a PDA app instead
-		dat += current_app.get_dat(user)
-	else if(!current_app.pda_device)
-		dat += "<br><h4>ERROR #0x327AA0EF: App failed to start. Please report this issue to your vendor of purchase.</h4>"
+	if(current_app)
+		if(current_app.pda_device) // Taking it from a PDA app instead
+			dat += current_app.get_dat(user)
+		else if(!current_app.pda_device)
+			dat += "<br><h4>ERROR #0x327AA0EF: App failed to start. Please report this issue to your vendor of purchase.</h4>"
 
 	dat += "</body></html>"
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal

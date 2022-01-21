@@ -37,15 +37,16 @@
 		pda_device.categorised_applications[category] += src //Adds this app to the appropriate category if it does.
 
 /datum/pda_app/proc/onUninstall()
-	var/list/affiliated_apps = pda_device.categorised_applications[category]
-	if(islist(affiliated_apps)) //Too much sanity checking, maybe
-		affiliated_apps.Remove(src)
-		if(!affiliated_apps || !affiliated_apps.len)
-			pda_device.categorised_applications.Remove(category)
-	else
-		pda_device.categorised_applications[category] = null
-	pda_device.applications.Remove(src)
-	pda_device = null
+	if(pda_device)
+		var/list/affiliated_apps = pda_device.categorised_applications[category]
+		if(islist(affiliated_apps)) //Too much sanity checking, maybe
+			affiliated_apps.Remove(src)
+			if(!affiliated_apps || !affiliated_apps.len)
+				pda_device.categorised_applications.Remove(category)
+		else
+			pda_device.categorised_applications[category] = null
+		pda_device.applications.Remove(src)
+		pda_device = null
 
 /datum/pda_app/proc/on_select(var/mob/user)
 	return
@@ -85,6 +86,8 @@
 
 /proc/get_all_installable_apps()
 	. = list()
-	for(var/datum/pda_app/app in (subtypesof(/datum/pda_app) - /datum/pda_app/cart))
+	for(var/apptype in (subtypesof(/datum/pda_app) - /datum/pda_app/cart))
+		var/datum/pda_app/app = new apptype()
 		if(app.can_purchase)
-			. += app
+			. += apptype
+		qdel(app)
