@@ -1,7 +1,6 @@
 /obj/item/weapon/cartridge/head
 	name = "\improper Easy-Record DELUXE"
 	icon_state = "cart-h"
-	access_manifest = 1
 	starting_apps = list(/datum/pda_app/cart/status_display)
 
 /datum/pda_app/cart/status_display
@@ -71,7 +70,6 @@
 /obj/item/weapon/cartridge/hop
 	name = "\improper HumanResources9001"
 	icon_state = "cart-h"
-	access_manifest = 1
 	access_quartermaster = 1
 	access_janitor = 1
 	access_security = 1
@@ -82,7 +80,6 @@
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
 	icon_state = "cart-hos"
-	access_manifest = 1
 	access_security = 1
 	starting_apps = list(/datum/pda_app/cart/status_display)
 	radio_type = /obj/item/radio/integrated/signal/bot/beepsky
@@ -90,7 +87,6 @@
 /obj/item/weapon/cartridge/ce
 	name = "\improper Power-On DELUXE"
 	icon_state = "cart-ce"
-	access_manifest = 1
 	access_mechanic = 1
 	access_engine = 1
 	access_atmos = 1
@@ -100,7 +96,6 @@
 /obj/item/weapon/cartridge/cmo
 	name = "\improper Med-U DELUXE"
 	icon_state = "cart-cmo"
-	access_manifest = 1
 	access_reagent_scanner = 1
 	access_medical = 1
 	starting_apps = list(/datum/pda_app/cart/status_display)
@@ -109,7 +104,6 @@
 /obj/item/weapon/cartridge/rd
 	name = "\improper Signal Ace DELUXE"
 	icon_state = "cart-rd"
-	access_manifest = 1
 	access_robotics = 1
 	access_atmos = 1
 	starting_apps = list(/datum/pda_app/cart/status_display)
@@ -119,7 +113,6 @@
 	name = "\improper Value-PAK Cartridge"
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
-	access_manifest = 1
 	access_engine = 1
 	access_mechanic = 1
 	access_security = 1

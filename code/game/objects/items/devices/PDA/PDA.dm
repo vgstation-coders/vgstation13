@@ -1347,12 +1347,14 @@ var/global/msg_id = 0
 							var/difficulty = 0
 
 							if(P.cartridge)
-								difficulty += P.cartridge.access_medical
-								difficulty += P.cartridge.access_security
+								if(locate(/datum/pda_app/cart/medical_records) in P.cartridge)
+									difficulty += 1
+								if(locate(/datum/pda_app/cart/security_records) in P.cartridge)
+									difficulty += 1
 								difficulty += P.cartridge.access_engine
 								difficulty += P.cartridge.access_clown
 								difficulty += P.cartridge.access_janitor
-								difficulty += P.cartridge.access_manifest * 2
+								difficulty += 2
 							else
 								difficulty += 2
 
@@ -1671,7 +1673,11 @@ var/global/msg_id = 0
 			if(cartridge.radio)
 				cartridge.radio.hostpda = src
 			for(var/datum/pda_app/app in cartridge.applications)
-				app.onInstall(src)
+				if(istype(app,/datum/pda_app/cart))
+					var/datum/pda_app/cart/cart_app = app
+					cart_app.onInstall(src,cartridge)
+				else
+					app.onInstall(src)
 
 	else if(istype(C, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/idcard = C

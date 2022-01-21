@@ -85,7 +85,6 @@
 	icon_state = "cart-s"
 	access_security = 1
 	access_medical = 1
-	access_manifest = 1
 	starting_apps = list(
 		/datum/pda_app/cart/medical_records,
 		/datum/pda_app/cart/scanner/medical,

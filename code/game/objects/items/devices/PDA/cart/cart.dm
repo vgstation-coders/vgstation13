@@ -20,7 +20,6 @@
 	var/access_atmos = 0
 	var/access_mechanic = 0
 	var/access_medical = 0
-	var/access_manifest = 1 // Make all jobs able to access the manifest
 	var/access_clown = 0
 	var/access_mime = 0
 	var/access_janitor = 0
@@ -53,10 +52,13 @@
 	. = ..()
 	for(var/type in starting_apps)
 		var/datum/pda_app/app = new type()
-		applications += app
-		if(isPDA(loc))
+		if(istype(app) && isPDA(loc))
 			var/obj/item/device/pda/P = loc
-			app.onInstall(P)
+			if(istype(app,/datum/pda_app/cart))
+				var/datum/pda_app/cart/cart_app = app
+				cart_app.onInstall(P,src)
+			else
+				app.onInstall(P)
 	if (radio_type)
 		radio = new radio_type(src)
 		if(isPDA(loc))
@@ -86,6 +88,19 @@
 /datum/pda_app/cart
 	can_purchase = FALSE
 	price = 0
+	var/obj/item/weapon/cartridge/cart_device = null
+
+/datum/pda_app/cart/onInstall(var/obj/item/device/pda/device,var/obj/item/weapon/cartridge/device2)
+	..(device)
+	if(device2)
+		cart_device = device2
+		cart_device.applications += src
+
+/datum/pda_app/cart/onUninstall()
+	if(cart_device)
+		cart_device.applications.Remove(src)
+		cart_device = null
+	..()
 
 /datum/pda_app/cart/scanner
 	var/base_name = "Scanner"
