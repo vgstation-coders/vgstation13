@@ -72,6 +72,7 @@ var/global/msg_id = 0
 	var/list/starting_apps = list(
 		/datum/pda_app/alarm,
 		/datum/pda_app/notekeeper,
+		/datum/pda_app/multimessage,
 		/datum/pda_app/events,
 		/datum/pda_app/manifest,
 		/datum/pda_app/balance_check,
@@ -193,7 +194,6 @@ var/global/msg_id = 0
 				dat += {"<br><br>
 					<ul>
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
-					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
 					</ul>
 					"}
 
@@ -409,25 +409,6 @@ var/global/msg_id = 0
 		if("viewPhoto")
 			var/obj/item/weapon/photo/PH = locate(href_list["image"])
 			PH.show(U)
-		if("Multimessage")
-			var/list/department_list = list("security","engineering","medical","research","cargo","service")
-			var/target = input("Select a department", "CAMO Service") as null|anything in department_list
-			if(!target)
-				return
-			var/t = input(U, "Please enter message", "Message to [target]", null) as text|null
-			t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
-			if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
-				return
-			if (last_text && world.time < last_text + 5)
-				return
-			last_text = world.time
-			for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
-				if(multicaster.check_status())
-					multicaster.multicast(target,src,usr,t)
-					tnote["msg_id"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
-					msg_id++
-					return
-			to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")
 
 		if("transferFunds")
 			if(!id)
