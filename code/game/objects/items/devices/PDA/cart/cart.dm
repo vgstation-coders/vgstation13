@@ -86,7 +86,19 @@
 /datum/pda_app/cart
 	can_purchase = FALSE
 	price = 0
-	
+
+/datum/pda_app/cart/scanner
+	var/base_name = "Scanner"
+	has_screen = FALSE
+	var/app_scanmode = SCANMODE_NONE
+
+/datum/pda_app/cart/scanner/on_select(var/mob/user)
+	if(pda_device.scanmode == app_scanmode)
+		pda_device.scanmode = SCANMODE_NONE
+	else
+		pda_device.scanmode = app_scanmode
+	name = "[pda_device.scanmode == app_scanmode ? "Disable" : "Enable" ] [base_name]"
+
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
 		return

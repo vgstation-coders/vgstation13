@@ -751,9 +751,7 @@ var/global/msg_id = 0
 
 					if (cartridge.access_medical)
 
-						dat += {"<h4>Medical Functions</h4>
-							<ul>
-							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>"}
+						dat += {"<h4>Medical Functions</h4><ul>"}
 
 						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/medbot))
 							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_MEDBOTS]'><span class='pda_icon pda_medical'></span> Medical Bot Access</a></li>
@@ -763,10 +761,7 @@ var/global/msg_id = 0
 
 					if (cartridge.access_security)
 
-						dat += {"<h4>Security Functions</h4>
-							<ul>
-							<li><a href='byond://?src=\ref[src];choice=Integrated Hailer'><span class='pda_icon pda_signaler'></span> [scanmode == SCANMODE_HAILER ? "Disable" : "Enable"] Integrated Hailer</a></li>
-							"}
+						dat += {"<h4>Security Functions</h4><ul>"}
 
 						if(istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/beepsky))
 
@@ -1143,11 +1138,6 @@ var/global/msg_id = 0
 			else
 				fon = 1
 				set_light(f_lum)
-		if("Medical Scan")
-			if(scanmode == SCANMODE_MEDICAL)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_medical))
-				scanmode = SCANMODE_MEDICAL
 		if("Reagent Scan")
 			if(scanmode == SCANMODE_REAGENT)
 				scanmode = SCANMODE_NONE
@@ -1158,11 +1148,6 @@ var/global/msg_id = 0
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_engine))
 				scanmode = SCANMODE_HALOGEN
-		if("Integrated Hailer")
-			if(scanmode == SCANMODE_HAILER)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_security))
-				scanmode = SCANMODE_HAILER
 		if("Honk")
 			if ( !(last_honk && world.time < last_honk + 20) )
 				playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)

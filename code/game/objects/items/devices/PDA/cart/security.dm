@@ -1,8 +1,9 @@
 /obj/item/weapon/cartridge/security
 	name = "\improper R.O.B.U.S.T. Cartridge"
 	icon_state = "cart-s"
+	access_security = 1
 	radio_type = /obj/item/radio/integrated/signal/bot/beepsky
-	starting_apps = list(/datum/pda_app/cart/security_records)
+	starting_apps = list(/datum/pda_app/cart/security_records,/datum/pda_app/cart/scanner/hailer)
 
 /datum/pda_app/cart/security_records
 	name = "Security Records"
@@ -71,16 +72,30 @@
 			active1 = R
 			active2 = S
 
+/datum/pda_app/cart/scanner/hailer
+	name = "Enable Integrated Hailer"
+	base_name = "Integrated Hailer"
+	desc = "Used to hail a secbot to a location."
+	category = "Security Functions"
+	icon = "pda_signaler"
+	app_scanmode = SCANMODE_HAILER
+
 /obj/item/weapon/cartridge/detective
 	name = "\improper D.E.T.E.C.T. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
 	access_medical = 1
 	access_manifest = 1
-	starting_apps = list(/datum/pda_app/cart/medical_records,/datum/pda_app/cart/security_records)
+	starting_apps = list(
+		/datum/pda_app/cart/medical_records,
+		/datum/pda_app/cart/scanner/medical,
+		/datum/pda_app/cart/security_records,
+		/datum/pda_app/cart/scanner/hailer,
+		)
 
 /obj/item/weapon/cartridge/lawyer
 	name = "\improper P.R.O.V.E. Cartridge"
 	icon_state = "cart-s"
 	fax_pings = TRUE
-	starting_apps = list(/datum/pda_app/cart/security_records)
+	access_security = 1
+	starting_apps = list(/datum/pda_app/cart/security_records,/datum/pda_app/cart/scanner/hailer)
