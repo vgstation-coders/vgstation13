@@ -21,7 +21,6 @@
 	var/sting_range = 1
 	var/changelingID = "Changeling"
 	var/geneticdamage = 0
-	var/isabsorbing = 0
 
 	powerpoints = 5	//evolve points
 
