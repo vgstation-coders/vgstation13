@@ -28,9 +28,22 @@
 				to_chat(user, "<span class='notice'>The shuttle's outer airlock is now closed!</span>")
 
 /obj/item/weapon/cartridge/trader
-	name = "\improper Trader Cartridge"
-	icon_state = "cart-vox"
-	access_trader = 1
+    name = "\improper Trader Cartridge"
+    icon_state = "cart-vox"
+    starting_apps = list(/datum/pda_app/cart/send_shuttle)
+
+/datum/pda_app/cart/send_shuttle
+    name = "Send Trader Shuttle"
+    desc = "Sends a shuttle to either your outpost or the station."
+    category = "Utilities"
+    has_screen = FALSE
+    icon = "pda_rdoor"
+
+/datum/pda_app/cart/send_shuttle/on_select(var/mob/user)
+    if(pda_device && pda_device.id && can_access(pda_device.id.access,list(access_trade)))
+        var/obj/machinery/computer/shuttle_control/C = global.trade_shuttle.control_consoles[1] //There should be exactly one
+        if(C) //Just send it; this has all relevant checks
+            global.trade_shuttle.travel_to(pick(global.trade_shuttle.docking_ports - global.trade_shuttle.current_port),C,user)
 
 /obj/item/weapon/cartridge/camera
 	name = "\improper Camera Cartridge"

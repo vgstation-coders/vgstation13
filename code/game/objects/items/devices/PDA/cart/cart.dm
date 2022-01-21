@@ -14,8 +14,6 @@
 	// -- Various "access" crap
 	var/access_clown = 0
 	var/access_mime = 0
-	var/access_trader = 0
-	var/access_robotics = 0
 	var/access_camera = 0
 	var/fax_pings = FALSE
 

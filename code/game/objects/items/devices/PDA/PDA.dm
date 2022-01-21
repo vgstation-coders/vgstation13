@@ -729,16 +729,6 @@ var/global/msg_id = 0
 					<h4>Utilities</h4>
 					<ul>"}
 				if (cartridge)
-					//if (cartridge.access_janitor)
-					//if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
-					//if (cartridge.access_reagent_scanner)
-					//if (cartridge.access_engine)
-					//if (cartridge.access_atmos)
-					//if (cartridge.access_remote_door)
-					if (cartridge.access_trader)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
-					if (cartridge.access_robotics)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Cyborg Analyzer'><span class='pda_icon pda_medical'></span> [scanmode == SCANMODE_ROBOTICS ? "Disable" : "Enable"] Cyborg Analyzer</a></li>"
 					if (cartridge.access_camera)
 						dat += "<li><a href='byond://?src=\ref[src];choice=PDA Camera'> [scanmode == SCANMODE_CAMERA ? "Disable" : "Enable"] Camera</a></li>"
 						dat += "<li><a href='byond://?src=\ref[src];choice=Show Photos'>Show Photos</a></li>"
@@ -985,11 +975,6 @@ var/global/msg_id = 0
 			if ( !(last_honk && world.time < last_honk + 20) )
 				playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
 				last_honk = world.time
-		if("Cyborg Analyzer")
-			if(scanmode == SCANMODE_ROBOTICS)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_robotics))
-				scanmode = SCANMODE_ROBOTICS
 		if("PDA Camera")
 			if(scanmode == SCANMODE_CAMERA)
 				scanmode = SCANMODE_NONE
@@ -1135,15 +1120,6 @@ var/global/msg_id = 0
 			if(photo)
 				U.put_in_hands(photo)
 				photo = null
-
-
-//TRADER FUNCTIONS======================================
-		if("Send Shuttle")
-			if(cartridge && cartridge.access_trader && id && can_access(id.access,list(access_trade)))
-				var/obj/machinery/computer/shuttle_control/C = global.trade_shuttle.control_consoles[1] //There should be exactly one
-				if(C)
-					global.trade_shuttle.travel_to(pick(global.trade_shuttle.docking_ports - global.trade_shuttle.current_port),C,U) //Just send it; this has all relevant checks
-
 
 //SYNDICATE FUNCTIONS===================================
 

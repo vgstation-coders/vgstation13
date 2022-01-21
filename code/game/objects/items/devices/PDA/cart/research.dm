@@ -2,7 +2,14 @@
 	name = "\improper R.O.B.U.T.T. Cartridge"
 	desc = "Allows you to use your pda as a cyborg analyzer."
 	icon_state = "cart-robo"
-	access_robotics = 1
+	starting_apps = list(/datum/pda_app/cart/scanner/robotics)
+
+/datum/pda_app/cart/scanner/robotics
+    base_name = "Cyborg analyzer"
+    desc = "Use a built in cyborg analyzer."
+    category = "Utilities"
+    icon = "pda_medical"
+    app_scanmode = SCANMODE_ROBOTICS
 
 /obj/item/weapon/cartridge/signal
     name = "\improper Generic signaler cartridge"
