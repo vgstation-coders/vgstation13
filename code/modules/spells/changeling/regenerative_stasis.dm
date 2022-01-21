@@ -9,48 +9,31 @@
 	cooldown_min = 8 MINUTES
 	horrorallowed = 0
 	chemcost = 20
-	required_dna = 1
 
 /spell/changeling/regenerate/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-
-	if(changeling.isreviving)
-		to_chat(changeling.antag.current, "<span class='warning'>We are already regenerating!</span>")
-		return
-
 	var/mob/living/carbon/C = user
-
+	
 	if(C.mind && C.mind.suiciding)			//no reviving from suicides
 		to_chat(C, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?")
 		return
-
+	if(M_HUSK in C.mutations)
+		to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
+		return
+	
 	if(user.stat != DEAD)
-		if(M_HUSK in C.mutations)
-			to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
-			return
-		if(!C.stat && alert("Are we sure we wish to fake our death?",,"Yes","No") == "No")//Confirmation for living changelings if they want to fake their death
-			return
-
-		to_chat(C, "<span class='notice'>We will attempt to regenerate our form.</span>")
-
 		C.status_flags |= FAKEDEATH		//play dead
 		C.update_canmove()
-		changeling.isreviving = TRUE
-
 		C.emote("deathgasp", message = TRUE)
 		C.tod = worldtime2text()
 		var/time_to_take = rand(800, 1200)
-		to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
-		sleep(time_to_take)
-		to_chat(C, "<span class='warning'>We are now ready to regenerate.</span>")
-
-		feedback_add_details("changeling_powers","FD")
 	else
 		var/time_to_take = 1200
-		to_chat(C, "<span class='notice'>We begin to regenerate. This will take [round((time_to_take/10))] seconds.</span>")
-		changeling.isreviving = TRUE
-		sleep(time_to_take)
-		to_chat(C, "<span class='warning'>We are now ready to regenerate.</span>")
+		
+	to_chat(C, "<span class='notice'>We begin to regenerating. This will take [round((time_to_take/10))] seconds.</span>")
+	feedback_add_details("changeling_powers","FD")	
+	sleep(time_to_take)
+	to_chat(C, "<span class='warning'>We are now ready to awaken from stasis.</span>")
 
 	if(C.client && cast_check())
 		to_chat(C, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")
@@ -84,5 +67,4 @@
 			changeling.absorbed_dna.Remove(C.dna)
 	C.regenerate_icons()
 	feedback_add_details("changeling_powers","RJ")
-	changeling.isreviving = FALSE
 	Remove(owner)

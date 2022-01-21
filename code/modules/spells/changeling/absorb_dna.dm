@@ -5,11 +5,12 @@
 	hud_state = "absorbdna"
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
-	
+	charge_max = 15 SECONDS
+	cooldown_min = 15 SECONDS
+
 
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-
 	//You need to be grabbing the target
 	var/obj/item/weapon/grab/G = user.get_active_hand()
 	if(!istype(G))
@@ -34,12 +35,10 @@
 	if(changeling.isabsorbing)
 		to_chat(user, "<span class='warning'>We are already absorbing!</span>")
 		return
-		
+
 	if (T.dna == user.dna)
 		to_chat(user, "<span class='warning'>We have already absorbed their DNA.</span>")
 		return
-		
-	changeling.isabsorbing = 1
 
 	for(var/stage in 1 to 3)
 		switch(stage)
@@ -57,14 +56,12 @@
 				var/datum/organ/external/affecting = T.get_organ(user.zone_sel.selecting)
 				if(affecting.take_damage(39,0,1,"large organic needle"))
 					T.UpdateDamageIcon(1)
-
-
 		feedback_add_details("changeling_powers","A[stage]")
-		if(!do_mob(user, T, 150))
+		if(!do_mob(user, T, 150, 10, 0))
 			to_chat(user, "<span class='warning'>Our absorption of [T] has been interrupted!</span>")
-			changeling.isabsorbing = 0
 			return
-
+	usr.add_blood(T)
+	
 	to_chat(user, "<span class='notice'>We have absorbed [T]!</span>")
 	user.visible_message("<span class='danger'>[user] sucks the fluids from [T]!</span>")
 	to_chat(T, "<span class='danger'>You have been absorbed by the changeling!</span>")
@@ -105,7 +102,7 @@
 
 		if(Tchangeling)
 			if(Tchangeling.absorbed_dna)
-				for(var/dna_data in Tchangeling.absorbed_dna)	
+				for(var/dna_data in Tchangeling.absorbed_dna)
 					if(dna_data in changeling.absorbed_dna)
 						continue
 					changeling.absorbed_dna += dna_data
@@ -118,7 +115,7 @@
 						continue
 					else
 						Tp.add_power(changeling)
-						
+
 			user.make_changeling()
 			changeling.chem_charges += Tchangeling.chem_charges
 			changeling.powerpoints += Tchangeling.powerpoints
@@ -127,10 +124,10 @@
 			Tchangeling.absorbedcount = 0
 
 	changeling.absorbedcount++
-	changeling.isabsorbing = 0
 	user.updateChangelingHUD()
 
 	T.death(0)
 	T.ChangeToHusk()
-
+	T.add_fingerprint(usr)
+	
 	..()

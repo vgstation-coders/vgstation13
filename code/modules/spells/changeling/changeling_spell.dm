@@ -39,7 +39,7 @@
 		to_chat(C.antag.current, "<span class='warning'>Our genomes are still reassembling. We need time to recover first.</span>")
 		return FALSE
 	if(C.absorbedcount < required_dna)
-		to_chat(C.antag.current, "<span class='warning'>We require at least [required_dna] samples of compatible DNA.</span>")
+		to_chat(C.antag.current, "<span class='warning'>We require at least [required_dna] sample of compatible DNA.</span>")
 		return FALSE
 		
 	if(!horrorallowed && ishorrorform(C.antag.current))
