@@ -10,12 +10,12 @@
 	starting_apps = list(/datum/pda_app/cart/remote_door)
 
 /datum/pda_app/cart/remote_door
-	name = "Toggle Remote Door"
-	desc = "Toggles a remote pod door somewhere, preferably on a tightly secure shuttle of sorts."
-	price = 0
-	has_screen = FALSE
-	icon = "pda_rdoor"
-	var/remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
+    name = "Toggle Remote Door"
+    desc = "Toggles a remote pod door somewhere, preferably on a tightly secure shuttle of sorts."
+    category = "Utilities"
+    has_screen = FALSE
+    icon = "pda_rdoor"
+    var/remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
 
 /datum/pda_app/cart/remote_door/on_select(var/mob/user)
 	for(var/obj/machinery/door/poddoor/M in poddoors)

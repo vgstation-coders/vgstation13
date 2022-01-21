@@ -68,13 +68,15 @@
 	frequency.post_signal(pda_device, status_signal)
 
 /obj/item/weapon/cartridge/hop
-	name = "\improper HumanResources9001"
-	icon_state = "cart-h"
-	access_quartermaster = 1
-	access_janitor = 1
-	starting_apps = list(/datum/pda_app/cart/status_display)
-	fax_pings = TRUE
-	radio_type = /obj/item/radio/integrated/signal/bot/mule
+    name = "\improper HumanResources9001"
+    icon_state = "cart-h"
+    access_quartermaster = 1
+    starting_apps = list(
+        /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/custodial_locator,
+    )
+    fax_pings = TRUE
+    radio_type = /obj/item/radio/integrated/signal/bot/mule
 
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
@@ -134,10 +136,9 @@
         /datum/pda_app/cart/scanner/mechanic,
         /datum/pda_app/cart/medical_records,
         /datum/pda_app/cart/scanner/medical,
-        /datum/pda_app/cart/medbot,
 		/datum/pda_app/cart/security_records,
 		/datum/pda_app/cart/scanner/hailer,
-		/datum/pda_app/cart/secbot,
+        /datum/pda_app/cart/custodial_locator,
         /datum/pda_app/cart/scanner/reagent,
         /datum/pda_app/cart/scanner/atmos,
     )

@@ -12,12 +12,9 @@
 #define SCANMODE_CAMERA		9
 
 // Don't ask.
-#define PDA_MODE_BEEPSKY 46
 #define PDA_MODE_DELIVERY_BOT 48
 #define PDA_MODE_APP 1
-#define PDA_MODE_JANIBOTS 1000 // Initially I wanted to make it a "FUCK" "OLD" "CODERS" defines, but it would actually take some memory as string prototypes, so let's not.
 #define PDA_MODE_FLOORBOTS 1001
-#define PDA_MODE_MEDBOTS 1002
 
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
@@ -755,10 +752,7 @@ var/global/msg_id = 0
 					<h4>Utilities</h4>
 					<ul>"}
 				if (cartridge)
-					if (cartridge.access_janitor)
-						dat += "<li><a href='byond://?src=\ref[src];choice=49'><span class='pda_icon pda_bucket'></span> Custodial Locator</a></li>"
-						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/janitor))
-							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_JANIBOTS]'><span class='pda_icon pda_bucket'></span> Cleaner Bot Access</a></li>"}
+					//if (cartridge.access_janitor)
 					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
 						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
 					//if (cartridge.access_reagent_scanner)
@@ -891,23 +885,6 @@ var/global/msg_id = 0
 							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"] <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=[cartridge.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[cartridge];change_destination=1'>[cartridge.saved_destination] - EDIT</a> <br/>
-							</li>"}
-				dat += "</ul>"
-
-			if (PDA_MODE_JANIBOTS)
-				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/janitor))
-					dat += {"<span class='pda_icon pda_bucket'></span>Commlink bot error <br/>"}
-					return
-				dat += {"<span class='pda_icon pda_bucket'></span><b>C.L.E.A.N bot Interlink V1.0</b> <br/>"}
-				dat += "<ul>"
-				for (var/obj/machinery/bot/cleanbot/clean in bots_list)
-					if (clean.z != user.z)
-						continue
-					dat += {"<li>
-							<i>[clean]</i>: [clean.return_status()] in [get_area_name(clean)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=summon;user=\ref[user]'>[clean.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=switch_power;user=\ref[user]'>Turn [clean.on ? "off" : "on"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=auto_patrol;user=\ref[user]'>[clean.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
 							</li>"}
 				dat += "</ul>"
 			if (PDA_MODE_FLOORBOTS)
@@ -1267,13 +1244,14 @@ var/global/msg_id = 0
 							var/difficulty = 0
 
 							if(P.cartridge)
-								if(locate(/datum/pda_app/cart/medical_records) in P.cartridge)
+								if(locate(/datum/pda_app/cart/medical_records) in P.cartridge.applications)
 									difficulty += 1
-								if(locate(/datum/pda_app/cart/security_records) in P.cartridge)
+								if(locate(/datum/pda_app/cart/security_records) in P.cartridge.applications)
 									difficulty += 1
 								difficulty += P.cartridge.access_engine
 								difficulty += P.cartridge.access_clown
-								difficulty += P.cartridge.access_janitor
+								if(locate(/datum/pda_app/cart/custodial_locator) in P.cartridge.applications)
+									difficulty += 1
 								difficulty += 2
 							else
 								difficulty += 2

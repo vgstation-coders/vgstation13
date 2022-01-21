@@ -94,7 +94,7 @@
 /datum/pda_app/cart/medbot/get_dat(var/mob/user)
     var/dat = ""
     if (!cart_device)
-        dat += {"<span class='pda_icon pda_cuffs'></span> Could not find radio peripheral connection <br/>"}
+        dat += {"<span class='pda_icon pda_medical'></span> Could not find radio peripheral connection <br/>"}
         return
     if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/medbot))
         dat += {"<span class='pda_icon pda_medical'></span> Commlink bot error <br/>"}
