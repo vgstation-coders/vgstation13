@@ -11,7 +11,6 @@
 	chemcost = 20
 
 /spell/changeling/regenerate/cast(var/list/targets, var/mob/living/carbon/human/user)
-	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	var/mob/living/carbon/C = user
 	
 	if(C.mind && C.mind.suiciding)			//no reviving from suicides
@@ -20,15 +19,15 @@
 	if(M_HUSK in C.mutations)
 		to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 		return
-	
+	var/time_to_take = 0
 	if(user.stat != DEAD)
 		C.status_flags |= FAKEDEATH		//play dead
 		C.update_canmove()
 		C.emote("deathgasp", message = TRUE)
 		C.tod = worldtime2text()
-		var/time_to_take = rand(800, 1200)
+		time_to_take = rand(800, 1200)
 	else
-		var/time_to_take = 1200
+		time_to_take = 1200
 		
 	to_chat(C, "<span class='notice'>We begin to regenerating. This will take [round((time_to_take/10))] seconds.</span>")
 	feedback_add_details("changeling_powers","FD")	
