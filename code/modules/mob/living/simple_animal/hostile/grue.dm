@@ -439,7 +439,7 @@
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
 	to_chat(src, "<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
 	busy=1
-	if(do_mob(src , E, 10 SECONDS, 100, 0))
+	if(do_mob(src , E, 5 SECONDS, 100, 0))
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
@@ -459,11 +459,6 @@
 			speed_m_dark=max(1/5,speed_m_dark/1.25)	// 20% faster in darkness
 			speed_m_dim=max(1.1/5,speed_m_dim/1.25)	// 20% faster in dim light
 			speed_m_light=max(4/5,speed_m_light/1.05) //slightly faster in bright light
-
-			//increase health
-			var/tempHealth=health/maxHealth
-			maxHealth=maxHealth+50 //50 more health
-			health=tempHealth*maxHealth
 
 			//increase damage
 			melee_damage_lower = melee_damage_lower+7

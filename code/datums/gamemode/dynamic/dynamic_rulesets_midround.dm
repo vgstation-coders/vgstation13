@@ -867,22 +867,22 @@
 	high_population_requirement = 10
 	logo = "grue-logo"
 	var/grue_spawn_spots=list()
-	var/turf/T
+	var/turf/thisturf
 
 /datum/dynamic_ruleset/midround/from_ghosts/grue/ready(var/forced = 0)
 	grue_spawn_spots=list()
 	var/list/found_vents = list()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
-		T=get_turf(v)
-		if(!v.welded && v.z == map.zMainStation && v.canSpawnMice==1&&T.get_lumcount()<=0.1&&istype(get_area(v),/area/maintenance)) // Same as spiders but with additional check for being in the dark and in maintenance.
-			found_vents.Add(v)
+	for(var/obj/machinery/atmospherics/unary/vent_pump/thisvent in atmos_machines)
+		thisturf=get_turf(thisvent)
+		if(!thisvent.welded && thisvent.z == map.zMainStation && thisvent.canSpawnMice==1&&thisturf.get_lumcount()<=0.1&&istype(get_area(thisvent),/area/maintenance)) // Same as spiders but with additional check for being in the dark and in maintenance.
+			found_vents.Add(thisvent)
 	if(found_vents.len)
 		while(found_vents.len > 0)
-			var/obj/machinery/atmospherics/unary/vent_pump/v = pick(found_vents)
-			found_vents -= v
+			var/obj/machinery/atmospherics/unary/vent_pump/thisvent = pick(found_vents)
+			found_vents -= thisvent
 			for (var/mob/M in player_list)
-				if (isliving(M) && (get_dist(M,v) > 7))//trying to find just one vent that is far out of view of any player
-					grue_spawn_spots+=get_turf(v)
+				if (isliving(M) && (get_dist(M,thisvent) > 7))//trying to find just one vent that is far out of view of any player
+					grue_spawn_spots+=get_turf(thisvent)
 	if(!grue_spawn_spots)
 		log_admin("Cannot accept Grue ruleset, no suitable spawn locations found.")
 		message_admins("Cannot accept Grue ruleset, no spawn locations found.")

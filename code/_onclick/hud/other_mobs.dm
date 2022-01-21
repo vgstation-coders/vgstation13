@@ -316,11 +316,4 @@
 	mymob.healths2.name= "darkness"
 	mymob.healths2.screen_loc=ui_under_health
 
-
-	//vampire_blood_display = new /obj/abstract/screen
-	//vampire_blood_display.name = "darkness"
-	//vampire_blood_display.icon_state = "light_level_dim"
-	//vampire_blood_display.screen_loc = ui_under_health
-
-//	mymob.client.reset_screen()
 	mymob.client.screen += list(mymob.healths,mymob.healths2)
