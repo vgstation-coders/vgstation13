@@ -753,7 +753,6 @@ var/global/msg_id = 0
 
 						dat += {"<h4>Medical Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=44'><span class='pda_icon pda_medical'></span> Medical Records</a></li>
 							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>"}
 
 						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/medbot))
@@ -766,7 +765,6 @@ var/global/msg_id = 0
 
 						dat += {"<h4>Security Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>
 							<li><a href='byond://?src=\ref[src];choice=Integrated Hailer'><span class='pda_icon pda_signaler'></span> [scanmode == SCANMODE_HAILER ? "Disable" : "Enable"] Integrated Hailer</a></li>
 							"}
 

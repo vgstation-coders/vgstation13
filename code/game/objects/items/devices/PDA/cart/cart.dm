@@ -39,11 +39,6 @@
 	var/mode = null
 	var/menu
 
-	// -- Records
-	var/datum/data/record/active1 = null //General
-	var/datum/data/record/active2 = null //Medical
-	var/datum/data/record/active3 = null //Security
-
 	// -- Various crimes against object oriented programming
 	var/obj/machinery/computer/powermonitor/powmonitor = null // Power Monitor
 	var/list/powermonitors = list()
@@ -80,9 +75,6 @@
 		qdel(radio)
 		radio = null
 
-	active1 = null
-	active2 = null
-	active3 = null
 	powmonitor = null
 	powermonitors = null
 	alertmonitor = null
@@ -93,6 +85,7 @@
 
 /datum/pda_app/cart
 	can_purchase = FALSE
+	price = 0
 	
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
@@ -234,86 +227,6 @@ Code:
 
 				menu += "</FONT></PRE>"
 
-		if (44) //medical records //This thing only displays a single screen so it's hard to really get the sub-menu stuff working.
-			menu = "<h4><span class='pda_icon pda_medical'></span> Medical Record List</h4>"
-			if(!isnull(data_core.general))
-				for (var/datum/data/record/R in sortRecord(data_core.general))
-					menu += "<a href='byond://?src=\ref[src];choice=Medical Records;target=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
-			menu += "<br>"
-		if(441)
-			menu = "<h4><span class='pda_icon pda_medical'></span> Medical Record</h4>"
-
-			if (istype(active1, /datum/data/record) && (active1 in data_core.general))
-
-				menu += {"Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>
-					Sex: [active1.fields["sex"]]<br>
-					Age: [active1.fields["age"]]<br>
-					Rank: [active1.fields["rank"]]<br>
-					Fingerprint: [active1.fields["fingerprint"]]<br>
-					Physical Status: [active1.fields["p_stat"]]<br>
-					Mental Status: [active1.fields["m_stat"]]<br>"}
-			else
-				menu += "<b>Record Lost!</b><br>"
-
-
-			menu += {"<br>
-				<h4><span class='pda_icon pda_medical'></span> Medical Data</h4>"}
-			if (istype(active2, /datum/data/record) && (active2 in data_core.medical))
-
-				menu += {"Blood Type: [active2.fields["b_type"]]<br><br>
-					Minor Disabilities: [active2.fields["mi_dis"]]<br>
-					Details: [active2.fields["mi_dis_d"]]<br><br>
-					Major Disabilities: [active2.fields["ma_dis"]]<br>
-					Details: [active2.fields["ma_dis_d"]]<br><br>
-					Allergies: [active2.fields["alg"]]<br>
-					Details: [active2.fields["alg_d"]]<br><br>
-					Current Diseases: [active2.fields["cdi"]]<br>
-					Details: [active2.fields["cdi_d"]]<br><br>
-					Important Notes: [active2.fields["notes"]]<br>"}
-			else
-				menu += "<b>Record Lost!</b><br>"
-
-			menu += "<br>"
-		if (45) //security records
-			menu = "<h4><span class='pda_icon pda_cuffs'></span> Security Record List</h4>"
-			if(!isnull(data_core.general))
-				for (var/datum/data/record/R in sortRecord(data_core.general))
-					menu += "<a href='byond://?src=\ref[src];choice=Security Records;target=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
-
-			menu += "<br>"
-		if(451)
-			menu = "<h4><span class='pda_icon pda_cuffs'></span> Security Record</h4>"
-
-			if (istype(active1, /datum/data/record) && (active1 in data_core.general))
-
-				menu += {"Name: [active1.fields["name"]] ID: [active1.fields["id"]]<br>
-					Sex: [active1.fields["sex"]]<br>
-					Age: [active1.fields["age"]]<br>
-					Rank: [active1.fields["rank"]]<br>
-					Fingerprint: [active1.fields["fingerprint"]]<br>
-					Physical Status: [active1.fields["p_stat"]]<br>
-					Mental Status: [active1.fields["m_stat"]]<br>"}
-			else
-				menu += "<b>Record Lost!</b><br>"
-
-
-			menu += {"<br>
-				<h4><span class='pda_icon pda_cuffs'></span> Security Data</h4>"}
-			if (istype(active3, /datum/data/record) && (active3 in data_core.security))
-
-				menu += {"Criminal Status: [active3.fields["criminal"]]<br>
-					Important Notes:<br>
-					[active3.fields["notes"]]
-					Comments/Log:<br>"}
-				var/counter = 1
-				while(active3.fields["com_[counter]"])
-					menu += "[active3.fields["com_[counter]"]]<BR>"
-					counter++
-
-			else
-				menu += "<b>Record Lost!</b><br>"
-
-			menu += "<br>"
 		if (47) //quartermaster order records
 
 			menu = {"<h4><span class='pda_icon pda_crate'></span> Supply Record Interlink</h4>
@@ -442,32 +355,6 @@ Code:
 		return
 
 	switch(href_list["choice"])
-		if("Medical Records")
-			var/datum/data/record/R = locate(href_list["target"])
-			var/datum/data/record/M = locate(href_list["target"])
-			loc:mode = 441
-			mode = 441
-			if (R in data_core.general)
-				for (var/datum/data/record/E in data_core.medical)
-					if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
-						M = E
-						break
-				active1 = R
-				active2 = M
-
-		if("Security Records")
-			var/datum/data/record/R = locate(href_list["target"])
-			var/datum/data/record/S = locate(href_list["target"])
-			loc:mode = 451
-			mode = 451
-			if (R in data_core.general)
-				for (var/datum/data/record/E in data_core.security)
-					if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
-						S = E
-						break
-				active1 = R
-				active3 = S
-
 		if("Send Signal")
 			spawn( 0 )
 				radio:send_signal("ACTIVATE")

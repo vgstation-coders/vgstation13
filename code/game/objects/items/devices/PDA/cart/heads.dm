@@ -7,7 +7,6 @@
 /datum/pda_app/cart/status_display
 	name = "Set Status Display"
 	desc = "Change the message displayed on status displays throughout the station."
-	price = 0
 	icon = "pda_status"
 	var/message1
 	var/message2
