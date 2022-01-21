@@ -210,34 +210,30 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 
 //stores map votes for code/modules/html_interface/voting/voting.dm
-/datum/persistence_task/map_vote_count
+/datum/persistence_task/vote
 	execute = TRUE
-	name = "Map Votes"
-	file_path = "data/persistence/mapvotecount.json"
+	name = "Persistent votes"
+	file_path = "data/persistence/votes.json"
 	
-/datum/persistence_task/map_vote_count/on_init()
+/datum/persistence_task/vote/on_init()
 	var/to_read = read_file()
 	if(!to_read)
 		log_debug("[name] task found an empty file on [file_path]")
 		return
 	for(var/list/L in to_read)
-		var/datum/controller/vote/c = new(L["map"], L["count"])
-		data += c
+		data += L
 	if (data.len > 1)
 		data.Remove(data[1])	//remove previous round winner
 
-/datum/persistence_task/map_vote_count/on_shutdown()
-	var/list/L = list()
-	for(var/datum/controller/vote/c in data)
-		L += list(c.vars)
-	write_file(L)
+/datum/persistence_task/vote/on_shutdown()
+	write_file(data)
 
-/datum/persistence_task/map_vote_count/proc/insert_counts(list/count)
-	data += count
-	cmp_field = "count"
-	sortTim(data, /proc/cmp_list_by_element_asc)
+/datum/persistence_task/vote/proc/insert_counts(var/list/tally)
+	for(var/i = 1; i <= tally.len; i++)
+		data[tally[i]] += tally[tally[i]]
+	sortTim(data, /proc/cmp_numeric_dsc,1)
 
-/datum/persistence_task/map_vote_count/proc/clear_counts()
+/datum/persistence_task/vote/proc/clear_counts()
 	data = list()
 	fdel(file(file_path))
 	
