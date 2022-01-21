@@ -450,10 +450,10 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 							scan_data += "- [data]<br>"
 
 					var/is_scanner = istype(scanning, /obj/item/device/detective_scanner)
-					if(istype(scanning, /obj/item/device/pda))
+					/*if(istype(scanning, /obj/item/device/pda))
 						var/obj/item/device/pda/the_pda = scanning
-						if(the_pda.cartridge && the_pda.cartridge.access_security)
-							is_scanner = TRUE
+						if(the_pda.cartridge && (locate(/datum/pda_app/cart/scanner/hailer) in the_pda.cartridge.applications))
+							is_scanner = TRUE*/
 
 					if(is_scanner)
 						scan_data += "<br><b>Data transfered from \the [scanning] to Database.</b><br>"
@@ -504,14 +504,14 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				var/list/data = D.stored[atom]
 				add_data_master(atom,data[1],data[2],data[3],data[4])
 		D.stored = list()
-	else if(istype(W, /obj/item/device/pda))
+	/*else if(istype(W, /obj/item/device/pda))
 		var/obj/item/device/pda/the_pda = W
-		if(the_pda.cartridge && the_pda.cartridge.access_security)
+		if(the_pda.cartridge && (locate(/datum/pda_app/cart/scanner/hailer) in the_pda.cartridge.applications))
 			if(the_pda.cartridge.stored_data)
 				for(var/atom in the_pda.cartridge.stored_data)
 					var/list/data = the_pda.cartridge.stored_data[atom]
 					add_data_master(atom,data[1],data[2],data[3],data[4])
-			the_pda.cartridge.stored_data = list()
+			the_pda.cartridge.stored_data = list()*/
 	return
 
 /obj/machinery/computer/forensic_scanning/proc/add_data(var/atom/scanned_atom)

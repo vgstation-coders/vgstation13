@@ -10,7 +10,7 @@
 	var/message1
 	var/message2
 
-/datum/pda_app/cart/status_display/get_dat()
+/datum/pda_app/cart/status_display/get_dat(var/mob/user)
 	return {"<h4><span class='pda_icon pda_status'></span> Station Status Display Interlink</h4>
 		\[ <A HREF='?src=\ref[src];Status=blank'>Clear</A> \]<BR>
 		\[ <A HREF='?src=\ref[src];Status=shuttle'>Shuttle ETA</A> \]<BR>
@@ -72,7 +72,6 @@
 	icon_state = "cart-h"
 	access_quartermaster = 1
 	access_janitor = 1
-	access_security = 1
 	starting_apps = list(/datum/pda_app/cart/status_display)
 	fax_pings = TRUE
 	radio_type = /obj/item/radio/integrated/signal/bot/mule
@@ -80,7 +79,6 @@
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
 	icon_state = "cart-hos"
-	access_security = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
 		/datum/pda_app/cart/security_records,
@@ -127,7 +125,6 @@
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
 	access_engine = 1
-	access_security = 1
 	access_medical = 1
 	access_atmos = 1
 	starting_apps = list(

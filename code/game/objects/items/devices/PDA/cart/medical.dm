@@ -17,7 +17,7 @@
     var/datum/data/record/active1 = null //General
     var/datum/data/record/active2 = null //Medical
 
-/datum/pda_app/cart/medical_records/get_dat()
+/datum/pda_app/cart/medical_records/get_dat(var/mob/user)
     var/menu = ""
     switch(mode)
         if (0) //This thing only displays a single screen so it's hard to really get the sub-menu stuff working.
@@ -63,6 +63,8 @@
     return menu
 
 /datum/pda_app/cart/medical_records/Topic(href, href_list)
+    if(..())
+        return
     if(href_list["Medical Records"])
         var/datum/data/record/R = locate(href_list["Medical Records"])
         var/datum/data/record/M = locate(href_list["Medical Records"])
@@ -74,6 +76,7 @@
                     break
             active1 = R
             active2 = M
+    refresh_pda()
 
 /datum/pda_app/cart/scanner/medical
     base_name = "Medical Scanner"

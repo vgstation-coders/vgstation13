@@ -8,7 +8,7 @@
 	var/status = 1			//	0=off 1=on
 	var/lasttimer = 0
 
-/datum/pda_app/alarm/get_dat()
+/datum/pda_app/alarm/get_dat(var/mob/user)
 	return {"
 		<h4>Alarm Application</h4>
 		The alarm is currently <a href='byond://?src=\ref[src];toggleAlarm=1'>[status ? "ON" : "OFF"]</a><br>
@@ -61,7 +61,7 @@
 	var/note = "Congratulations, your station has chosen the Thinktronic 5230 Personal Data Assistant!" //Current note in the notepad function
 	var/notehtml = ""
 
-/datum/pda_app/notekeeper/get_dat()
+/datum/pda_app/notekeeper/get_dat(var/mob/user)
 	return "<h4><span class='pda_icon pda_notes'></span> Notekeeper V2.1</h4> <a href='byond://?src=\ref[src];Edit=1'>Edit</a><br>[note]"
 
 /datum/pda_app/notekeeper/Topic(href, href_list)
@@ -215,7 +215,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	currentevent3 = pick(currentevents3)
 	onthisday = pick(history)
 
-/datum/pda_app/events/get_dat()
+/datum/pda_app/events/get_dat(var/mob/user)
     return {"<h4><span class='pda_icon pda_clock'></span> Current Events</h4>
         Station Time: <b>[worldtime2text()]</b>.<br>
         Empire Date: <b>[pda_device.MM]/[pda_device.DD]/[game_year]</b>.<br><br>
@@ -234,7 +234,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	price = 0
 	icon = "pda_notes"
 
-/datum/pda_app/manifest/get_dat()
+/datum/pda_app/manifest/get_dat(var/mob/user)
     var/dat = {"<h4><span class='pda_icon pda_notes'></span> Crew Manifest</h4>
         Entries cannot be modified from this terminal.<br><br>"}
     if(data_core)
@@ -253,7 +253,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	..()
 	reconnect_database()
 
-/datum/pda_app/balance_check/get_dat()
+/datum/pda_app/balance_check/get_dat(var/mob/user)
 	var/dat = {"<h4><span class='pda_icon [icon]'></span> Virtual Wallet and Balance Check Application</h4>"}
 	if(!pda_device.id)
 		dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}

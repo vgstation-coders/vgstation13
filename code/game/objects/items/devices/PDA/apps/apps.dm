@@ -51,7 +51,7 @@
 /datum/pda_app/proc/on_select(var/mob/user)
 	return
 
-/datum/pda_app/proc/get_dat()
+/datum/pda_app/proc/get_dat(var/mob/user)
 	return ""
 
 /datum/pda_app/Topic(href, href_list)

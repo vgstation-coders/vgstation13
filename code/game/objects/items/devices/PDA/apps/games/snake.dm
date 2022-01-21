@@ -33,7 +33,7 @@
 	snake_game = null
 	..()
 
-/datum/pda_app/snake/get_dat()
+/datum/pda_app/snake/get_dat(var/mob/user)
 	var/dat = {"<h4><span class='pda_icon [icon]'></span> Snake II  <a href='byond://?src=\ref[src];snakeVolume=-1'><b>-</b></a><img src="snake_volume[volume].png"/><a href='byond://?src=\ref[src];snakeVolume=1'><b>+</b></a></h4>
 		<br>
 		<div style="position: relative; left: 0; top: 0;">

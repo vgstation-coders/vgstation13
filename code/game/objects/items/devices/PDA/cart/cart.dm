@@ -15,7 +15,6 @@
 	var/radio_type = null
 
 	// -- Various "access" crap
-	var/access_security = 0
 	var/access_engine = 0
 	var/access_atmos = 0
 	var/access_medical = 0
@@ -36,7 +35,7 @@
 	var/mode = null
 	var/menu
 
-	var/list/stored_data = list()
+	//var/list/stored_data = list()
 
 	// Bot destination
 	var/saved_destination = "No destination"
@@ -69,7 +68,7 @@
 	if(radio)
 		qdel(radio)
 		radio = null
-	stored_data = null
+	//stored_data = null
 	..()
 
 /datum/pda_app/cart

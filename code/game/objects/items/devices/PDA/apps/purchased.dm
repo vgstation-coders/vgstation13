@@ -6,7 +6,7 @@
 	var/frequency = 1457	//	1200 < frequency < 1600 , always end with an odd number.
 	var/status = 1			//	0=off 1=on
 
-/datum/pda_app/ringer/get_dat()
+/datum/pda_app/ringer/get_dat(var/mob/user)
 	return {"
 	<h4>Ringer Application</h4>
 	Status: <a href='byond://?src=\ref[src];toggleDeskRinger=1'>[status ? "On" : "Off"]</a><br>
@@ -53,7 +53,7 @@
 	icon = "pda_mail"
 	var/function = 1	//0=do nothing 1=conceal the spam 2=block the spam
 
-/datum/pda_app/spam_filter/get_dat()
+/datum/pda_app/spam_filter/get_dat(var/mob/user)
 	return {"
 		<h4>Spam Filtering Application</h4>
 		<ul>
@@ -109,7 +109,7 @@
 	var/datum/feed_channel/viewing_channel
 	var/screen = NEWSREADER_CHANNEL_LIST
 
-/datum/pda_app/newsreader/get_dat()
+/datum/pda_app/newsreader/get_dat(var/mob/user)
 	var/dat = ""
 	switch(screen)
 		if (NEWSREADER_CHANNEL_LIST)

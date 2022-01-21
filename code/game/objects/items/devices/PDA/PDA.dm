@@ -751,16 +751,7 @@ var/global/msg_id = 0
 						else
 							dat += {"</ul>"}
 
-					if (cartridge.access_security)
-
-						dat += {"<h4>Security Functions</h4><ul>"}
-
-						if(istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/beepsky))
-
-							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_BEEPSKY]'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
-								</ul>"}
-						else
-							dat += "</ul>"
+					//if (cartridge.access_security)
 					if(cartridge.access_quartermaster)
 
 						dat += {"<h4>Quartermaster Functions:</h4>
@@ -779,9 +770,11 @@ var/global/msg_id = 0
 							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_JANIBOTS]'><span class='pda_icon pda_bucket'></span> Cleaner Bot Access</a></li>"}
 					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
 						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
+					//if (cartridge.access_reagent_scanner)
 					if (cartridge.access_engine)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
 					//if (cartridge.access_atmos)
+					//if (cartridge.access_remote_door)
 					if (cartridge.access_trader)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
 					if (cartridge.access_robotics)
@@ -909,30 +902,6 @@ var/global/msg_id = 0
 							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=[cartridge.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[cartridge];change_destination=1'>[cartridge.saved_destination] - EDIT</a> <br/>
 							</li>"}
 				dat += "</ul>"
-			if (PDA_MODE_BEEPSKY)
-				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/beepsky))
-					dat += {"<span class='pda_icon pda_cuffs'></span> Commlink bot error <br/>"}
-					return
-				dat += {"<span class='pda_icon pda_cuffs'></span><b>Securitron Interlink</b><br/>"}
-				dat += {"<ul>"}
-				for (var/obj/machinery/bot/secbot/seccie in bots_list)
-					if (seccie.z != user.z)
-						continue
-					dat += {"<li>
-							<i>[seccie]</i>: [seccie.return_status()] in [get_area_name(seccie)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[user]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=switch_power;user=\ref[user]'>Turn [seccie.on ? "off" : "on"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[user]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
-							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[user]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
-							</li>"}
-				for (var/obj/machinery/bot/ed209/seccie in bots_list)
-					dat += {"<li>
-							<i>[seccie]</i>: [seccie.return_status()] in [get_area_name(seccie)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[user]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[user]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
-							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[user]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
-							</li>"}
-				dat += {"</ul>"}
 
 			if (PDA_MODE_JANIBOTS)
 				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/janitor))

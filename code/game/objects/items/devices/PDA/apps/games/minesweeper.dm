@@ -24,7 +24,7 @@
 	minesweeper_game = null
 	..()
 
-/datum/pda_app/minesweeper/get_dat()
+/datum/pda_app/minesweeper/get_dat(var/mob/user)
 	var/dat = {"<h4><span class='pda_icon [icon]'></span> Minesweeper</h4><br>
 			<div style="position: relative; left: 0; top: 0;">
 			<img src="minesweeper_bg_[minesweeper_game.current_difficulty].png" style="position: relative; top: 0; left: 0;"/>

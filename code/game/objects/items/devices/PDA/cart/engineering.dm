@@ -17,7 +17,7 @@
     var/obj/machinery/computer/powermonitor/powmonitor = null // Power Monitor
     var/list/powermonitors = list()
 
-/datum/pda_app/cart/power_monitor/get_dat()
+/datum/pda_app/cart/power_monitor/get_dat(var/mob/user)
     var/menu = ""
     switch(mode)
         if (0) //Muskets' and Rockdtben's power monitor :D
@@ -69,11 +69,14 @@
     return menu
 
 /datum/pda_app/cart/power_monitor/Topic(href, href_list)
+    if(..())
+        return
     if(href_list["Power Select"])
         var/pnum = text2num(href_list["Power Select"])
         powmonitor = locate(powermonitors[pnum])
         if(istype(powmonitor))
             mode = 1
+    refresh_pda()
 
 /datum/pda_app/cart/alert_monitor
     name = "Alert Monitor"
@@ -84,7 +87,7 @@
     var/obj/machinery/computer/station_alert/alertmonitor = null // Alert Monitor
     var/list/alertmonitors = list()
 
-/datum/pda_app/cart/alert_monitor/get_dat()
+/datum/pda_app/cart/alert_monitor/get_dat(var/mob/user)
     var/menu = ""
     switch(mode)
         if (0)
@@ -139,11 +142,14 @@
     return menu
 
 /datum/pda_app/cart/alert_monitor/Topic(href, href_list)
+    if(..())
+        return
     if(href_list["Alert Select"])
         var/pnum = text2num(href_list["Alert Select"])
         alertmonitor = locate(alertmonitors[pnum])
         if(istype(alertmonitor))
             mode = 1
+    refresh_pda()
 
 /obj/item/weapon/cartridge/atmos
     name = "\improper BreatheDeep Cartridge"

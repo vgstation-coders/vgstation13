@@ -66,7 +66,7 @@
 	visited = null
 	..()
 
-/datum/pda_app/spesspets/get_dat()
+/datum/pda_app/spesspets/get_dat(var/mob/user)
 	var/dat = {"<h4><span class='pda_icon [icon]'></span> Spess Pets</h4>
 		<br>Name = [petname]<br>Level = [level]<br>
 		<div style="position: relative; left: 0; top: 0;">
