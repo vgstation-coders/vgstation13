@@ -83,6 +83,7 @@
         /datum/pda_app/cart/status_display,
 		/datum/pda_app/cart/security_records,
 		/datum/pda_app/cart/scanner/hailer,
+		/datum/pda_app/cart/secbot,
     )
 	radio_type = /obj/item/radio/integrated/signal/bot/beepsky
 
@@ -103,11 +104,11 @@
 /obj/item/weapon/cartridge/cmo
 	name = "\improper Med-U DELUXE"
 	icon_state = "cart-cmo"
-	access_medical = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
         /datum/pda_app/cart/medical_records,
         /datum/pda_app/cart/scanner/medical,
+        /datum/pda_app/cart/medbot,
         /datum/pda_app/cart/scanner/reagent
     )
 	radio_type = /obj/item/radio/integrated/signal/bot/medbot
@@ -125,7 +126,6 @@
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
 	access_engine = 1
-	access_medical = 1
 	access_atmos = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
@@ -134,8 +134,10 @@
         /datum/pda_app/cart/scanner/mechanic,
         /datum/pda_app/cart/medical_records,
         /datum/pda_app/cart/scanner/medical,
+        /datum/pda_app/cart/medbot,
 		/datum/pda_app/cart/security_records,
 		/datum/pda_app/cart/scanner/hailer,
+		/datum/pda_app/cart/secbot,
         /datum/pda_app/cart/scanner/reagent,
         /datum/pda_app/cart/scanner/atmos,
     )

@@ -741,16 +741,7 @@ var/global/msg_id = 0
 							dat += {"</ul>"}
 
 					//if (cartridge.access_mechanic)
-					if (cartridge.access_medical)
-
-						dat += {"<h4>Medical Functions</h4><ul>"}
-
-						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/medbot))
-							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_MEDBOTS]'><span class='pda_icon pda_medical'></span> Medical Bot Access</a></li>
-								</ul>"}
-						else
-							dat += {"</ul>"}
-
+					//if (cartridge.access_medical)
 					//if (cartridge.access_security)
 					if(cartridge.access_quartermaster)
 
@@ -933,21 +924,6 @@ var/global/msg_id = 0
 							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
 							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
-							</li>"}
-				dat += "</ul>"
-			if (PDA_MODE_MEDBOTS)
-				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/medbot))
-					dat += {"<span class='pda_icon pda_medical'></span> Commlink bot error <br/>"}
-					return
-				dat += {"<span class='pda_icon pda_medical'></span><b>M.E.D bot Interlink V1.0</b> <br/>"}
-				dat += "<ul>"
-				for (var/obj/machinery/bot/medbot/med in bots_list)
-					if (med.z != user.z)
-						continue
-					dat += {"<li>
-							<i>[med]</i>: [med.return_status()] in [get_area_name(med)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=summon;user=\ref[user]'>[med.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=switch_power;user=\ref[user]'>Turn [med.on ? "off" : "on"]</a> <br/>
 							</li>"}
 				dat += "</ul>"
 

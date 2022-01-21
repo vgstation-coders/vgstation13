@@ -1,11 +1,11 @@
 /obj/item/weapon/cartridge/medical
-	name = "\improper Med-U Cartridge"
-	icon_state = "cart-m"
-	access_medical = 1
-	radio_type = /obj/item/radio/integrated/signal/bot/medbot
-	starting_apps = list(
+    name = "\improper Med-U Cartridge"
+    icon_state = "cart-m"
+    radio_type = /obj/item/radio/integrated/signal/bot/medbot
+    starting_apps = list(
         /datum/pda_app/cart/medical_records,
         /datum/pda_app/cart/scanner/medical,
+        /datum/pda_app/cart/medbot,
     )
 
 /datum/pda_app/cart/medical_records
@@ -84,6 +84,33 @@
     category = "Medical Functions"
     icon = "pda_scanner"
     app_scanmode = SCANMODE_MEDICAL
+
+/datum/pda_app/cart/medbot
+	name = "Medical Bot Access"
+	desc = "Used to control a medbot."
+	category = "Medical Functions"
+	icon = "pda_medical"
+
+/datum/pda_app/cart/medbot/get_dat(var/mob/user)
+    var/dat = ""
+    if (!cart_device)
+        dat += {"<span class='pda_icon pda_cuffs'></span> Could not find radio peripheral connection <br/>"}
+        return
+    if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/medbot))
+        dat += {"<span class='pda_icon pda_medical'></span> Commlink bot error <br/>"}
+        return
+    dat += {"<span class='pda_icon pda_medical'></span><b>M.E.D bot Interlink V1.0</b> <br/>"}
+    dat += "<ul>"
+    for (var/obj/machinery/bot/medbot/med in bots_list)
+        if (med.z != user.z)
+            continue
+        dat += {"<li>
+                <i>[med]</i>: [med.return_status()] in [get_area_name(med)] <br/>
+                <a href='?src=\ref[cart_device.radio];bot=\ref[med];command=summon;user=\ref[user]'>[med.summoned ? "Halt" : "Summon"]</a> <br/>
+                <a href='?src=\ref[cart_device.radio];bot=\ref[med];command=switch_power;user=\ref[user]'>Turn [med.on ? "off" : "on"]</a> <br/>
+                </li>"}
+    dat += "</ul>"
+    return dat
 
 /obj/item/weapon/cartridge/chemistry
 	name = "\improper ChemWhiz Cartridge"

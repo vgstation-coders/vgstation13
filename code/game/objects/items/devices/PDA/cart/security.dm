@@ -2,7 +2,11 @@
 	name = "\improper R.O.B.U.S.T. Cartridge"
 	icon_state = "cart-s"
 	radio_type = /obj/item/radio/integrated/signal/bot/beepsky
-	starting_apps = list(/datum/pda_app/cart/security_records,/datum/pda_app/cart/scanner/hailer)
+	starting_apps = list(
+		/datum/pda_app/cart/security_records,
+		/datum/pda_app/cart/scanner/hailer,
+		/datum/pda_app/cart/secbot,
+	)
 
 /datum/pda_app/cart/security_records
 	name = "Security Records"
@@ -89,6 +93,9 @@
 
 /datum/pda_app/cart/secbot/get_dat(var/mob/user)
 	var/dat = ""
+	if (!cart_device)
+		dat += {"<span class='pda_icon pda_cuffs'></span> Could not find radio peripheral connection <br/>"}
+		return
 	if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/beepsky))
 		dat += {"<span class='pda_icon pda_cuffs'></span> Commlink bot error <br/>"}
 		return
@@ -117,16 +124,21 @@
 /obj/item/weapon/cartridge/detective
 	name = "\improper D.E.T.E.C.T. Cartridge"
 	icon_state = "cart-s"
-	access_medical = 1
 	starting_apps = list(
 		/datum/pda_app/cart/medical_records,
 		/datum/pda_app/cart/scanner/medical,
+        /datum/pda_app/cart/medbot,
 		/datum/pda_app/cart/security_records,
 		/datum/pda_app/cart/scanner/hailer,
+		/datum/pda_app/cart/secbot,
 	)
 
 /obj/item/weapon/cartridge/lawyer
 	name = "\improper P.R.O.V.E. Cartridge"
 	icon_state = "cart-s"
 	fax_pings = TRUE
-	starting_apps = list(/datum/pda_app/cart/security_records,/datum/pda_app/cart/scanner/hailer)
+	starting_apps = list(
+		/datum/pda_app/cart/security_records,
+		/datum/pda_app/cart/scanner/hailer,
+		/datum/pda_app/cart/secbot,
+	)

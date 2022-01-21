@@ -17,7 +17,6 @@
 	// -- Various "access" crap
 	var/access_engine = 0
 	var/access_atmos = 0
-	var/access_medical = 0
 	var/access_clown = 0
 	var/access_mime = 0
 	var/access_janitor = 0
