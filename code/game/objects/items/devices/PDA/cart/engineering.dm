@@ -28,7 +28,7 @@
 
             for(var/obj/machinery/computer/powermonitor/pMon in power_machines)
                 if(!(pMon.stat & (NOPOWER|BROKEN)))
-                    var/turf/T = get_turf(src)
+                    var/turf/T = get_turf(pda_device)
                     if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
                         if(!found)
                             menu = "<h4><span class='pda_icon pda_power'></span> Please select a Power Monitoring Computer</h4><BR>"
@@ -101,7 +101,7 @@
 
             for(var/obj/machinery/computer/station_alert/aMon in machines)
                 if(!(aMon.stat & (NOPOWER|BROKEN)))
-                    var/turf/T = get_turf(src)
+                    var/turf/T = get_turf(pda_device)
                     if(T.z == aMon.z)//the application may only detect station alert computers on its Z-level.
                         if(!found)
                             menu = "<h4><span class='pda_icon pda_alert'></span> Please select an Alert Computer</h4><BR>"

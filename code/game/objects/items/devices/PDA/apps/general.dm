@@ -433,7 +433,8 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 
 /datum/pda_app/light/onUninstall()
 	fon = 0
-	pda_device.set_light(0)
+	if(pda_device)
+		pda_device.set_light(0)
 	..()
 
 /datum/pda_app/light/on_select(var/mob/user)

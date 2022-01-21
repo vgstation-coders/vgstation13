@@ -21,7 +21,7 @@
 
 /datum/pda_app/cart/custodial_locator/get_dat(var/mob/user)
     var/menu = "<h4><span class='pda_icon pda_bucket'></span> Persistent Custodial Object Locator</h4>"
-    var/turf/cl = get_turf(src)
+    var/turf/cl = get_turf(pda_device)
     if (!cl)
         menu += "ERROR: Unable to determine current location."
     else
@@ -203,6 +203,7 @@
         var/datum/supply_order/SO = S
         menu += "<li>#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]</li>"
     menu += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management."
+    return menu
 
 /datum/pda_app/cart/mulebot
 	name = "Delivery Bot Control"

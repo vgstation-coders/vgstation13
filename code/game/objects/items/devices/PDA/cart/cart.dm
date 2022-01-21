@@ -26,6 +26,7 @@
 	. = ..()
 	for(var/type in starting_apps)
 		var/datum/pda_app/app = new type()
+		applications += app
 		if(istype(app) && isPDA(loc))
 			var/obj/item/device/pda/P = loc
 			if(istype(app,/datum/pda_app/cart))
@@ -62,11 +63,9 @@
 	..(device)
 	if(device2)
 		cart_device = device2
-		cart_device.applications += src
 
 /datum/pda_app/cart/onUninstall()
 	if(cart_device)
-		cart_device.applications.Remove(src)
 		cart_device = null
 	..()
 
