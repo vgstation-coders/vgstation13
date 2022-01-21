@@ -49,7 +49,7 @@ var/global/datum/controller/vote/vote = new()
 	var/initialized    = 0
 	var/lastupdate     = 0
 
-	var/vote_method = "PERSISTENT"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
+	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
