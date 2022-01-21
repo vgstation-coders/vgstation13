@@ -73,7 +73,6 @@
 			active2 = S
 
 /datum/pda_app/cart/scanner/hailer
-	name = "Enable Integrated Hailer"
 	base_name = "Integrated Hailer"
 	desc = "Used to hail a secbot to a location."
 	category = "Security Functions"
@@ -90,7 +89,7 @@
 		/datum/pda_app/cart/scanner/medical,
 		/datum/pda_app/cart/security_records,
 		/datum/pda_app/cart/scanner/hailer,
-		)
+	)
 
 /obj/item/weapon/cartridge/lawyer
 	name = "\improper P.R.O.V.E. Cartridge"

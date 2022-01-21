@@ -743,12 +743,7 @@ var/global/msg_id = 0
 						else
 							dat += {"</ul>"}
 
-					if (cartridge.access_mechanic)
-						dat += {"<h4>Mechanic Functions</h4>
-							<ul>
-							<li><a href='byond://?src=\ref[src];choice=Device Analyzer'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyzer</a></li>
-							</ul>"}
-
+					//if (cartridge.access_mechanic)
 					if (cartridge.access_medical)
 
 						dat += {"<h4>Medical Functions</h4><ul>"}
@@ -787,8 +782,6 @@ var/global/msg_id = 0
 							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_JANIBOTS]'><span class='pda_icon pda_bucket'></span> Cleaner Bot Access</a></li>"}
 					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
 						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
-					if (cartridge.access_reagent_scanner)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Reagent Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_REAGENT ? "Disable" : "Enable"] Reagent Scanner</a></li>"
 					if (cartridge.access_engine)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
 					if (cartridge.access_atmos)
@@ -1138,11 +1131,6 @@ var/global/msg_id = 0
 			else
 				fon = 1
 				set_light(f_lum)
-		if("Reagent Scan")
-			if(scanmode == SCANMODE_REAGENT)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_reagent_scanner))
-				scanmode = SCANMODE_REAGENT
 		if("Halogen Counter")
 			if(scanmode == SCANMODE_HALOGEN)
 				scanmode = SCANMODE_NONE
@@ -1157,15 +1145,6 @@ var/global/msg_id = 0
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_atmos))
 				scanmode = SCANMODE_ATMOS
-		if("Device Analyzer")
-			if(scanmode == SCANMODE_DEVICE)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_mechanic))
-				if(!dev_analys)
-					dev_analys = new(src) //let's create that device analyzer
-					dev_analys.cant_drop = 1
-					dev_analys.max_designs = 5
-				scanmode = SCANMODE_DEVICE
 		if("Cyborg Analyzer")
 			if(scanmode == SCANMODE_ROBOTICS)
 				scanmode = SCANMODE_NONE
@@ -1828,6 +1807,8 @@ var/global/msg_id = 0
 
 		if (SCANMODE_DEVICE)
 			if(dev_analys) //let's use this instead. Much neater
+				dev_analys.cant_drop = 1
+				dev_analys.max_designs = 5
 				if(A.Adjacent(user))
 					return dev_analys.preattack(A, user, 1)
 

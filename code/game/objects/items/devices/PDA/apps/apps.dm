@@ -86,7 +86,7 @@
 
 /proc/get_all_installable_apps()
 	. = list()
-	for(var/apptype in (subtypesof(/datum/pda_app) - /datum/pda_app/cart))
+	for(var/apptype in subtypesof(/datum/pda_app))
 		var/datum/pda_app/app = new apptype()
 		if(app.can_purchase)
 			. += apptype

@@ -81,24 +81,34 @@
 	name = "\improper R.O.B.U.S.T. DELUXE"
 	icon_state = "cart-hos"
 	access_security = 1
-	starting_apps = list(/datum/pda_app/cart/status_display)
+	starting_apps = list(
+        /datum/pda_app/cart/status_display,
+		/datum/pda_app/cart/security_records,
+		/datum/pda_app/cart/scanner/hailer,
+    )
 	radio_type = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/item/weapon/cartridge/ce
 	name = "\improper Power-On DELUXE"
 	icon_state = "cart-ce"
-	access_mechanic = 1
 	access_engine = 1
 	access_atmos = 1
-	starting_apps = list(/datum/pda_app/cart/status_display)
+	starting_apps = list(
+        /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/scanner/mechanic,
+    )
 	radio_type = /obj/item/radio/integrated/signal/bot/floorbot
 
 /obj/item/weapon/cartridge/cmo
 	name = "\improper Med-U DELUXE"
 	icon_state = "cart-cmo"
-	access_reagent_scanner = 1
 	access_medical = 1
-	starting_apps = list(/datum/pda_app/cart/status_display)
+	starting_apps = list(
+        /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/medical_records,
+        /datum/pda_app/cart/scanner/medical,
+        /datum/pda_app/cart/scanner/reagent
+    )
 	radio_type = /obj/item/radio/integrated/signal/bot/medbot
 
 /obj/item/weapon/cartridge/rd
@@ -114,10 +124,16 @@
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
 	access_engine = 1
-	access_mechanic = 1
 	access_security = 1
 	access_medical = 1
-	access_reagent_scanner = 1
 	access_atmos = 1
-	starting_apps = list(/datum/pda_app/cart/status_display)
+	starting_apps = list(
+        /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/scanner/mechanic,
+        /datum/pda_app/cart/medical_records,
+        /datum/pda_app/cart/scanner/medical,
+		/datum/pda_app/cart/security_records,
+		/datum/pda_app/cart/scanner/hailer,
+        /datum/pda_app/cart/scanner/reagent
+    )
 	fax_pings = TRUE

@@ -18,12 +18,10 @@
 	var/access_security = 0
 	var/access_engine = 0
 	var/access_atmos = 0
-	var/access_mechanic = 0
 	var/access_medical = 0
 	var/access_clown = 0
 	var/access_mime = 0
 	var/access_janitor = 0
-	var/access_reagent_scanner = 0
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
 	var/access_trader = 0
@@ -106,6 +104,10 @@
 	var/base_name = "Scanner"
 	has_screen = FALSE
 	var/app_scanmode = SCANMODE_NONE
+
+/datum/pda_app/cart/scanner/New()
+	..()
+	name = "[pda_device.scanmode == app_scanmode ? "Disable" : "Enable" ] [base_name]"
 
 /datum/pda_app/cart/scanner/on_select(var/mob/user)
 	if(pda_device.scanmode == app_scanmode)

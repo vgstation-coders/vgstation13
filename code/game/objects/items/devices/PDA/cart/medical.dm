@@ -3,7 +3,10 @@
 	icon_state = "cart-m"
 	access_medical = 1
 	radio_type = /obj/item/radio/integrated/signal/bot/medbot
-	starting_apps = list(/datum/pda_app/cart/medical_records,/datum/pda_app/cart/scanner/medical)
+	starting_apps = list(
+        /datum/pda_app/cart/medical_records,
+        /datum/pda_app/cart/scanner/medical,
+    )
 
 /datum/pda_app/cart/medical_records
     name = "Medical Records"
@@ -73,9 +76,8 @@
             active2 = M
 
 /datum/pda_app/cart/scanner/medical
-    name = "Enable Medical Scanner"
     base_name = "Medical Scanner"
-    desc = "Use a built in health analyser."
+    desc = "Use a built in health analyzer."
     category = "Medical Functions"
     icon = "pda_scanner"
     app_scanmode = SCANMODE_MEDICAL
@@ -83,4 +85,11 @@
 /obj/item/weapon/cartridge/chemistry
 	name = "\improper ChemWhiz Cartridge"
 	icon_state = "cart-chem"
-	access_reagent_scanner = 1
+	starting_apps = list(/datum/pda_app/cart/scanner/reagent)
+
+/datum/pda_app/cart/scanner/reagent
+    base_name = "Reagent Scanner"
+    desc = "Use a built in reagent scanner."
+    category = "Utilities"
+    icon = "pda_reagent"
+    app_scanmode = SCANMODE_REAGENT

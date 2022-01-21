@@ -1,7 +1,7 @@
 /obj/item/weapon/cartridge/chef
 	name = "\improper ChefBuddy Cartridge"
 	icon_state = "cart-chef"
-	access_reagent_scanner = 1
+	starting_apps = list(/datum/pda_app/cart/scanner/reagent)
 
 /obj/item/weapon/cartridge/janitor
 	name = "\improper CustodiPRO Cartridge"
