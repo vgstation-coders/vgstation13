@@ -730,8 +730,7 @@ var/global/msg_id = 0
 					<ul>"}
 				if (cartridge)
 					//if (cartridge.access_janitor)
-					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
-						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
+					//if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
 					//if (cartridge.access_reagent_scanner)
 					//if (cartridge.access_engine)
 					//if (cartridge.access_atmos)
@@ -929,9 +928,6 @@ var/global/msg_id = 0
 				mode = round(mode/10)//TODO: fix this shit up
 				if(mode==4)//Fix for cartridges. Redirects to hub.
 					mode = 0
-				else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
-					cartridge.mode = mode
-					cartridge.unlock()
 		if ("Authenticate")//Checks for ID
 			id_check(U, 1)
 		if("UpdateInfo")
@@ -1220,15 +1216,6 @@ var/global/msg_id = 0
 					pai.attack_self(U)
 				if("2")		// Eject pAI device
 					U.put_in_hands(pai)
-
-//LINK FUNCTIONS===================================
-
-		else//Cartridge menu linking
-			mode = text2num(href_list["choice"])
-			if(cartridge)
-				cartridge.mode = mode
-				cartridge.unlock()
-
 
 //EXTRA FUNCTIONS===================================
 

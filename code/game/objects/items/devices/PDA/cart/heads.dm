@@ -122,6 +122,7 @@
 	access_robotics = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/signaler,
         /datum/pda_app/cart/scanner/atmos,
     )
 	radio_type = /obj/item/radio/integrated/signal
