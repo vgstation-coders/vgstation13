@@ -11,9 +11,6 @@
 #define SCANMODE_HAILER		8
 #define SCANMODE_CAMERA		9
 
-// Don't ask.
-#define PDA_MODE_APP 1
-
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
 #define PDA_MINIMAP_OFFSET_Y	233
@@ -45,7 +42,6 @@ var/global/msg_id = 0
 	var/toff = 0 //If 1, messenger disabled
 	var/list/tnote = list() //Current Texts
 	var/last_text //No text spamming
-	var/last_honk //Also no honk spamming that's bad too
 	var/ttone = "beep" //The ringtone!
 	var/lock_code = "" // Lockcode to unlock uplink
 	var/honkamt = 0 //How many honks left when infected with honk.exe
@@ -198,13 +194,8 @@ var/global/msg_id = 0
 					<ul>
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
+					</ul>
 					"}
-
-				if (cartridge)
-					if (cartridge.access_clown)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Honk'><span class='pda_icon pda_honk'></span> Honk Synthesizer</a></li>"
-
-				dat += "</ul>"
 
 				if(applications.len == 0)
 					dat += {"<h4>No application currently installed.</h4>"}
@@ -245,12 +236,15 @@ var/global/msg_id = 0
 				if(photo)
 					dat += " | <a href='byond://?src=\ref[src];choice=Eject Photo'><span class='pda_icon pda_eject'></span>Eject Photo</a>"
 				dat += "<br>"
-				if (istype(cartridge, /obj/item/weapon/cartridge/syndicate))
-					dat += "<b>[cartridge:shock_charges] detonation charges left.</b><HR>"
-				if (istype(cartridge, /obj/item/weapon/cartridge/clown))
-					dat += "<b>[cartridge:honk_charges] viral files left.</b><HR>"
-				if (istype(cartridge, /obj/item/weapon/cartridge/mime))
-					dat += "<b>[cartridge:mime_charges] viral files left.</b><HR>"
+				var/datum/pda_app/cart/virus/detonate/DV = locate(/datum/pda_app/cart/virus/detonate) in applications
+				if(DV)
+					dat += "<b>[DV.charges] detonation charges left.</b><HR>"
+				var/datum/pda_app/cart/virus/honk/HV = locate(/datum/pda_app/cart/virus/honk) in applications
+				if(HV)
+					dat += "<b>[HV.charges] viral files left.</b><HR>"
+				var/datum/pda_app/cart/virus/silent/SV = locate(/datum/pda_app/cart/virus/silent) in applications
+				if(SV)
+					dat += "<b>[SV.charges] viral files left.</b><HR>"
 
 
 				dat += {"<h4><span class='pda_icon pda_menu'></span> Detected PDAs</h4>
@@ -266,12 +260,12 @@ var/global/msg_id = 0
 						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
 						if (id && !istype(P,/obj/item/device/pda/ai))
 							dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
-						if (istype(cartridge, /obj/item/weapon/cartridge/syndicate) && P.detonate)
-							dat += " (<a href='byond://?src=\ref[src];choice=Detonate;target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
-						if (istype(cartridge, /obj/item/weapon/cartridge/clown))
-							dat += " (<a href='byond://?src=\ref[src];choice=Send Honk;target=\ref[P]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
-						if (istype(cartridge, /obj/item/weapon/cartridge/mime))
-							dat += " (<a href='byond://?src=\ref[src];choice=Send Silence;target=\ref[P]'>*Send Virus*</a>)"
+						if (DV && P.detonate)
+							dat += " (<a href='byond://?src=\ref[src];target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
+						if (HV)
+							dat += " (<a href='byond://?src=\ref[HV];target=\ref[P]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
+						if (SV)
+							dat += " (<a href='byond://?src=\ref[SV];target=\ref[P]'>*Send Virus*</a>)"
 						dat += "</li>"
 						count++
 				dat += "</ul>"
@@ -380,16 +374,10 @@ var/global/msg_id = 0
 			no_refresh = current_app.no_refresh //If set in on_select
 			current_app.no_refresh = FALSE //Resets for next time
 			if(current_app.has_screen)
-				mode = PDA_MODE_APP
+				mode = 1
 
 			if(current_app.assets_type && usr.client)
 				assets_to_send = new current_app.assets_type()
-
-//MAIN FUNCTIONS===================================
-		if("Honk")
-			if ( !(last_honk && world.time < last_honk + 20) )
-				playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
-				last_honk = world.time
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
@@ -490,101 +478,10 @@ var/global/msg_id = 0
 			id.virtual_wallet.money -= amount
 			new /datum/transaction(id.virtual_wallet, "Money transfer", "-[amount]", src.name, P.owner)
 
-		if("Send Honk")//Honk virus
-			if(istype(cartridge, /obj/item/weapon/cartridge/clown))//Cartridge checks are kind of unnecessary since everything is done through switch.
-				var/obj/item/device/pda/P = locate(href_list["target"])//Leaving it alone in case it may do something useful, I guess.
-				if(!isnull(P))
-					if (!P.toff && cartridge:honk_charges > 0)
-						cartridge:honk_charges--
-						U.show_message("<span class='notice'>Virus sent!</span>", 1)
-						P.honkamt = (rand(15,20))
-				else
-					to_chat(U, "PDA not found.")
-			else
-				U << browse(null, "window=pda")
-				return
-		if("Send Silence")//Silent virus
-			if(istype(cartridge, /obj/item/weapon/cartridge/mime))
-				var/obj/item/device/pda/P = locate(href_list["target"])
-				if(!isnull(P))
-					if (!P.toff && cartridge:mime_charges > 0)
-						cartridge:mime_charges--
-						U.show_message("<span class='notice'>Virus sent!</span>", 1)
-						P.silent = 1
-						P.ttone = "silence"
-				else
-					to_chat(U, "PDA not found.")
-			else
-				U << browse(null, "window=pda")
-				return
 		if("Eject Photo")
 			if(photo)
 				U.put_in_hands(photo)
 				photo = null
-
-//SYNDICATE FUNCTIONS===================================
-
-		if("Detonate")//Detonate PDA
-			if(istype(cartridge, /obj/item/weapon/cartridge/syndicate))
-				var/obj/item/device/pda/P = locate(href_list["target"])
-				if(isnull(P))
-					to_chat(U, "PDA not found.")
-				else
-					var/pass = FALSE
-					for (var/obj/machinery/message_server/MS in message_servers)
-						if(MS.is_functioning())
-							pass = TRUE
-							break
-					if(!pass)
-						to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
-					else
-						if (!P.toff && cartridge:shock_charges > 0)
-
-							var/difficulty = 0
-
-							if(P.cartridge)
-								if(locate(/datum/pda_app/cart/medical_records) in P.cartridge.applications)
-									difficulty += 1
-								if(locate(/datum/pda_app/cart/security_records) in P.cartridge.applications)
-									difficulty += 1
-								if(locate(/datum/pda_app/cart/power_monitor) in P.cartridge.applications)
-									difficulty += 1
-								difficulty += P.cartridge.access_clown
-								if(locate(/datum/pda_app/cart/custodial_locator) in P.cartridge.applications)
-									difficulty += 1
-								difficulty += 2
-							else
-								difficulty += 2
-
-							if(P.get_component(/datum/component/uplink))
-								U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
-								U << browse(null, "window=pda")
-								create_message(null, P, null, null, pick(syndicate_code_phrase)) //friendly fire
-								log_admin("[key_name(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed")
-								message_admins("[key_name_admin(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed", 1)
-								cartridge:shock_charges--
-							else if (!P.detonate || prob(difficulty * 2))
-								U.show_message("<span class='warning'>An error flashes on your [src]; [pick("Encryption","Connection","Verification","Handshake","Detonation","Injection")] error!</span>", 1)
-								U << browse(null, "window=pda")
-								var/list/garble = list()
-								var/randomword
-								for(garble = list(), garble.len<10,garble.Add(randomword))
-									randomword = pick("stack.Insert","KillProcess(","-DROP TABLE","kernel = "," / 0",";",";;","{","(","((","<"," ","-", "null", " * 1.#INF")
-								var/message = english_list(garble, "", "", "", "")
-								create_message(null, P, null, null, message) //the jig is up
-								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge but failed")
-								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge but failed", 1)
-								cartridge:shock_charges--
-							else
-								U.show_message("<span class='notice'>Success!</span>", 1)
-								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded")
-								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded", 1)
-								cartridge:shock_charges--
-								P.explode(U)
-			else
-				U.unset_machine()
-				U << browse(null, "window=pda")
-				return
 
 //pAI FUNCTIONS===================================
 		if("pai")
@@ -1092,10 +989,10 @@ var/global/msg_id = 0
 		if (M.Slip(8, 5, 1))
 			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
 
-			if ((istype(M, /mob/living/carbon/human) && (M.real_name != src.owner) && (istype(src.cartridge, /obj/item/weapon/cartridge/clown))))
-				var/obj/item/weapon/cartridge/clown/honkcartridge = src.cartridge
-				if (honkcartridge.honk_charges < 5)
-					honkcartridge.honk_charges++
+			if (istype(M, /mob/living/carbon/human) && M.real_name != src.owner)
+				var/datum/pda_app/cart/virus/honk/HV = locate(/datum/pda_app/cart/virus/honk) in applications
+				if (HV && HV.charges < 5)
+					HV.charges++
 
 /obj/item/device/pda/proc/available_pdas()
 	var/list/names = list()

@@ -122,16 +122,50 @@
     return dat
 
 /obj/item/weapon/cartridge/clown
-	name = "\improper Honkworks 5.0"
-	icon_state = "cart-clown"
-	access_clown = 1
-	var/honk_charges = 5
+    name = "\improper Honkworks 5.0"
+    icon_state = "cart-clown"
+    starting_apps = list(
+        /datum/pda_app/cart/honk,
+        /datum/pda_app/cart/virus/honk,
+    )
+
+/datum/pda_app/cart/honk
+    name = "Honk Synthesizer"
+    desc = "HONK!"
+    has_screen = FALSE
+    icon = "pda_honk"
+    var/last_honk //No honk spamming
+
+/datum/pda_app/cart/honk/on_select(var/mob/user)
+    if (!(last_honk && world.time < last_honk + 20))
+        playsound(get_turf(pda_device), 'sound/items/bikehorn.ogg', 50, 1)
+        last_honk = world.time
+
+/datum/pda_app/cart/virus/honk
+    name = "Honk Virus"
+    desc = "HONK!"
+    icon = "pda_honk"
+
+/datum/pda_app/cart/virus/honk/infect(var/obj/item/device/pda/P,var/mob/U)
+    charges--
+    U.show_message("<span class='notice'>Virus sent!</span>", 1)
+    P.honkamt = (rand(15,20))
 
 /obj/item/weapon/cartridge/mime
-	name = "\improper Gestur-O 1000"
-	icon_state = "cart-mi"
-	access_mime = 1
-	var/mime_charges = 5
+    name = "\improper Gestur-O 1000"
+    icon_state = "cart-mi"
+    starting_apps = list(/datum/pda_app/cart/virus/silent)
+
+/datum/pda_app/cart/virus/silent
+    name = "Silent Virus"
+    desc = "..."
+
+/datum/pda_app/cart/virus/silent/infect(var/obj/item/device/pda/P,var/mob/U)
+    charges--
+    U.show_message("<span class='notice'>Virus sent!</span>", 1)
+    P.silent = 1
+    P.ttone = "silence"
+
 /*
 /obj/item/weapon/cartridge/botanist
 	name = "\improper Green Thumb v4.20"

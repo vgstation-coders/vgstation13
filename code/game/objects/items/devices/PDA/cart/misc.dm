@@ -5,6 +5,81 @@
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/shock_charges = 4
 
+/datum/pda_app/cart/virus
+    name = "Virus"
+    desc = "Sends to 5 PDAs"
+    menu = FALSE //Shows up elsewhere
+    var/charges = 5
+
+/datum/pda_app/cart/virus/Topic(href, href_list)
+    if(..())
+        return
+    var/mob/living/U = usr
+    if(href_list["target"])
+        var/obj/item/device/pda/P = locate(href_list["target"])//Leaving it alone in case it may do something useful, I guess.
+        if(!isnull(P))
+            var/pass = FALSE
+            for (var/obj/machinery/message_server/MS in message_servers)
+                if(MS.is_functioning())
+                    pass = TRUE
+                    break
+            if(!pass)
+                to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
+            else if (!P.toff && charges > 0)
+                infect(P,U)
+        else
+            to_chat(U, "PDA not found.")
+    refresh_pda()
+
+/datum/pda_app/cart/virus/proc/infect(var/obj/item/device/pda/P,var/mob/U)
+    return
+
+/datum/pda_app/cart/virus/detonate
+    name = "Detonate PDA"
+    desc = "And maybe a leg too in the process"
+    icon = "pda_boom"
+
+/datum/pda_app/cart/virus/detonate/infect(var/obj/item/device/pda/P,var/mob/U)
+    var/difficulty = 0
+
+    if(locate(/datum/pda_app/cart/medical_records) in P.cartridge.applications)
+        difficulty += 1
+    if(locate(/datum/pda_app/cart/security_records) in P.cartridge.applications)
+        difficulty += 1
+    if(locate(/datum/pda_app/cart/power_monitor) in P.cartridge.applications)
+        difficulty += 1
+    if(locate(/datum/pda_app/cart/honk) in P.cartridge.applications)
+        difficulty += 1
+    if(locate(/datum/pda_app/cart/custodial_locator) in P.cartridge.applications)
+        difficulty += 1
+    difficulty += 2
+
+    if(P.get_component(/datum/component/uplink))
+        U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
+        U << browse(null, "window=pda")
+        pda_device.create_message(null, P, null, null, pick(syndicate_code_phrase)) //friendly fire
+        log_admin("[key_name(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed")
+        message_admins("[key_name_admin(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed", 1)
+        charges--
+    else if (!P.detonate || prob(difficulty * 2))
+        U.show_message("<span class='warning'>An error flashes on your [src]; [pick("Encryption","Connection","Verification","Handshake","Detonation","Injection")] error!</span>", 1)
+        U << browse(null, "window=pda")
+        var/list/garble = list()
+        var/randomword
+        for(garble = list(), garble.len<10,garble.Add(randomword))
+            randomword = pick("stack.Insert","KillProcess(","-DROP TABLE","kernel = "," / 0",";",";;","{","(","((","<"," ","-", "null", " * 1.#INF")
+        var/message = english_list(garble, "", "", "", "")
+        pda_device.create_message(null, P, null, null, message) //the jig is up
+        log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge but failed")
+        message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge but failed", 1)
+        charges--
+    else
+        U.show_message("<span class='notice'>Success!</span>", 1)
+        log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded")
+        message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded", 1)
+        charges--
+        P.explode(U)
+
 /obj/item/weapon/cartridge/syndicatedoor
 	name = "\improper Doorman Cartridge"
 	starting_apps = list(/datum/pda_app/cart/remote_door)
@@ -71,13 +146,17 @@
     base_name = "Camera"
     desc = "Used to take pictures with a camera."
     category = "Utilities"
-    icon = "pda_signaler" //Placeholder
     app_scanmode = SCANMODE_CAMERA
 
 /datum/pda_app/cart/scanner/camera/on_select(var/mob/user)
     ..(user)
     if(cart_device)
         cart_device.update_icon() //To make it look the part
+
+/datum/pda_app/cart/show_photos
+    name = "Show Photos"
+    desc = "Used to show photos taken with a camera."
+    category = "Utilities"
 
 /datum/pda_app/cart/show_photos/get_dat(var/mob/user)
     var/dat = {"<h4>View Photos</h4>"}

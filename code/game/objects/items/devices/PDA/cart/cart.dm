@@ -10,10 +10,8 @@
 	// -- What we use to communicate with bots
 	var/obj/item/radio/integrated/radio = null
 	var/radio_type = null
-
-	// -- Various "access" crap
-	var/access_clown = 0
-	var/access_mime = 0
+	
+	// -- For the IAA and etc
 	var/fax_pings = FALSE
 
 	var/list/datum/pda_app/applications = list()
