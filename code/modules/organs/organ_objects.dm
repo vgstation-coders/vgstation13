@@ -290,11 +290,11 @@
 	prosthetic_name = "vox visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/vox
 
-/obj/item/organ/internal/eyes/grue
-	name = "grue eyeballs"
+/obj/item/organ/internal/eyes/umbra
+	name = "umbra eyeballs"
 //	icon_state = "eyes"
-	prosthetic_name = "grue visual prosthesis"
-	organ_type = /datum/organ/internal/eyes/grue
+	prosthetic_name = "umbra visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/umbra
 
 /obj/item/organ/internal/eyes/mushroom
 	name = "mushroom eyeballs"

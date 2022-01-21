@@ -902,6 +902,7 @@ SEE_PIXELS	256
 #define ROLE_ALIEN			"xenomorph"
 #define ROLE_STRIKE			"striketeam"
 #define ROLE_PRISONER		"prisoner"
+#define ROLE_GRUE			"grue"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -1311,6 +1312,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_INSECT "Insectoid"
 #define LANGUAGE_DEATHSQUAD "Deathsquad"
 #define LANGUAGE_CLOWN "Clown"
+#define LANGUAGE_GRUE "Grue"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1362,7 +1364,7 @@ var/proccalls = 1
 #define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
-#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
+#define CHANNEL_UMBRA				1021	//only ever used to allow the ambient umbra sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
@@ -1407,6 +1409,14 @@ var/proccalls = 1
 
 #define UTENSILE_FORK	1
 #define UTENSILE_SPOON	2
+
+//Grue defines
+#define GRUE_LARVA 1
+#define GRUE_JUVENILE 2
+#define GRUE_ADULT 3
+#define GRUE_WALLBREAK 3//Beings to eat before able to break walls
+#define GRUE_RWALLBREAK 4 //Beings to eat before able to break reinforced walls
+
 /*
  *
  *
@@ -1632,6 +1642,7 @@ var/proccalls = 1
 #define INSECT_BLOOD	"#EBECE6"
 #define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
 #define GHOUL_BLOOD		"#7FFF00"
+#define GRUE_BLOOD		"#272728"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
