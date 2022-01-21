@@ -740,13 +740,7 @@ var/global/msg_id = 0
 					//if (cartridge.access_mechanic)
 					//if (cartridge.access_medical)
 					//if (cartridge.access_security)
-					if(cartridge.access_quartermaster)
-
-						dat += {"<h4>Quartermaster Functions:</h4>
-							<ul>
-							<li><a href='byond://?src=\ref[src];choice=47'><span class='pda_icon pda_crate'></span> Supply Records</A></li>
-							<li><a href='byond://?src=\ref[src];choice=delivery_bot'><span class='pda_icon pda_mule'></span> Delivery Bot Control</A></li>
-							</ul>"}
+					//if (cartridge.access_quartermaster)
 
 				dat += {"</ul>
 					<h4>Utilities</h4>
@@ -869,24 +863,6 @@ var/global/msg_id = 0
 						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
 
-			if (PDA_MODE_DELIVERY_BOT)
-				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/mule))
-					dat += {"<span class='pda_icon pda_mule'></span>Commlink bot error <br/>"}
-					return
-				// Building the data in the list
-				dat += {"<span class='pda_icon pda_mule'></span><b>M.U.L.E. bot Interlink V1.0</h4> </b><br/>"}
-				dat += "<ul>"
-				for (var/obj/machinery/bot/mulebot/mule in bots_list)
-					if (mule.z != user.z)
-						continue
-					dat += {"<li>
-							<i>[mule]</i>: [mule.return_status()] in [get_area_name(mule)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=[cartridge.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[cartridge];change_destination=1'>[cartridge.saved_destination] - EDIT</a> <br/>
-							</li>"}
-				dat += "</ul>"
 			if (PDA_MODE_FLOORBOTS)
 				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/floorbot))
 					dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}

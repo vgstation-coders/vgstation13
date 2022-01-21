@@ -70,10 +70,11 @@
 /obj/item/weapon/cartridge/hop
     name = "\improper HumanResources9001"
     icon_state = "cart-h"
-    access_quartermaster = 1
     starting_apps = list(
         /datum/pda_app/cart/status_display,
         /datum/pda_app/cart/custodial_locator,
+        /datum/pda_app/cart/supply_records,
+        /datum/pda_app/cart/mulebot,
     )
     fax_pings = TRUE
     radio_type = /obj/item/radio/integrated/signal/bot/mule
@@ -138,6 +139,7 @@
         /datum/pda_app/cart/scanner/medical,
 		/datum/pda_app/cart/security_records,
 		/datum/pda_app/cart/scanner/hailer,
+        /datum/pda_app/cart/supply_records,
         /datum/pda_app/cart/custodial_locator,
         /datum/pda_app/cart/scanner/reagent,
         /datum/pda_app/cart/scanner/atmos,

@@ -19,7 +19,6 @@
 	var/access_atmos = 0
 	var/access_clown = 0
 	var/access_mime = 0
-	var/access_quartermaster = 0
 	var/access_hydroponics = 0
 	var/access_trader = 0
 	var/access_robotics = 0
@@ -145,23 +144,6 @@ Code:
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=1'>+</a>
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=5'>+</a><br>"}
 
-		if (47) //quartermaster order records
-
-			menu = {"<h4><span class='pda_icon pda_crate'></span> Supply Record Interlink</h4>
-				<BR><B>Supply shuttle</B><BR>
-				Location: [SSsupply_shuttle.moving ? "Moving to station ([SSsupply_shuttle.eta] Mins.)":SSsupply_shuttle.at_station ? "Station":"Dock"]<BR>
-				Current approved orders: <BR><ol>"}
-			for(var/S in SSsupply_shuttle.shoppinglist)
-				var/datum/supply_order/SO = S
-				menu += "<li>#[SO.ordernum] - [SO.object.name] approved by [SO.orderedby] [SO.comment ? "([SO.comment])":""]</li>"
-
-			menu += {"</ol>
-				Current requests: <BR><ol>"}
-			for(var/S in SSsupply_shuttle.requestlist)
-				var/datum/supply_order/SO = S
-				menu += "<li>#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]</li>"
-			menu += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management."
-
 /obj/item/weapon/cartridge/Topic(href, href_list)
 	if (..())
 		return
@@ -169,13 +151,6 @@ Code:
 	if (!usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
 		usr.unset_machine()
 		usr << browse(null, "window=pda")
-		return
-
-	if (href_list["change_destination"])
-		var/new_dest = stripped_input(usr, "Set the new destination", "New mulebot destination")
-		if (!new_dest)
-			return
-		saved_destination = new_dest
 		return
 
 	switch(href_list["choice"])
