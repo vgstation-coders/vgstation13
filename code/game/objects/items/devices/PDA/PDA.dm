@@ -191,11 +191,14 @@ var/global/msg_id = 0
 				var/datum/pda_app/alarm/alarm_app = locate(/datum/pda_app/alarm) in applications
 				if(alarm_app)
 					dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[alarm_app]'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
-				dat += {"<br><br>
-					<ul>
-					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
-					</ul>
-					"}
+				dat += "<br><br><ul><li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li></ul>"
+
+				if (pai)
+					if(pai.loc != src)
+						pai = null
+					else
+						dat += {"<ul><li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
+							<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li></ul>"}
 
 				if(applications.len == 0)
 					dat += {"<h4>No application currently installed.</h4>"}
@@ -214,15 +217,6 @@ var/global/msg_id = 0
 							if(app.menu)
 								dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 						dat += {"</ul>"}
-
-				if (pai)
-					if(pai.loc != src)
-						pai = null
-					else
-
-						dat += {"<li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
-							<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li>"}
-				dat += "</ul>"
 
 			//(1) is for the app screen, and not here
 

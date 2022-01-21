@@ -962,6 +962,7 @@
 #include "code\game\objects\items\devices\PDA\radio.dm"
 #include "code\game\objects\items\devices\PDA\apps\apps.dm"
 #include "code\game\objects\items\devices\PDA\apps\general.dm"
+#include "code\game\objects\items\devices\PDA\apps\messenger.dm"
 #include "code\game\objects\items\devices\PDA\apps\purchased.dm"
 #include "code\game\objects\items\devices\PDA\apps\games\minesweeper.dm"
 #include "code\game\objects\items\devices\PDA\apps\games\snake.dm"
