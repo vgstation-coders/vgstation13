@@ -10,8 +10,10 @@
 	radio_type = /obj/item/radio/integrated/signal
 
 /obj/item/weapon/cartridge/signal/toxins
-	name = "\improper Signal Ace 2"
-	desc = "Complete with integrated radio signaler!"
-	icon_state = "cart-tox"
-	access_atmos = 1
-	radio_type = /obj/item/radio/integrated/signal
+    name = "\improper Signal Ace 2"
+    desc = "Complete with integrated radio signaler!"
+    icon_state = "cart-tox"
+    starting_apps = list(
+        /datum/pda_app/cart/scanner/atmos,
+    )
+    radio_type = /obj/item/radio/integrated/signal

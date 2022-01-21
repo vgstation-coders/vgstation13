@@ -12,9 +12,7 @@
 #define SCANMODE_CAMERA		9
 
 // Don't ask.
-#define PDA_MODE_DELIVERY_BOT 48
 #define PDA_MODE_APP 1
-#define PDA_MODE_FLOORBOTS 1001
 
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
@@ -727,21 +725,6 @@ var/global/msg_id = 0
 								dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 						dat += {"</ul>"}
 
-				if (cartridge)
-					if (cartridge.access_engine || cartridge.access_atmos)
-						dat += {"<h4>Engineering Functions</h4><ul>"}
-
-						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/floorbot))
-							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_FLOORBOTS]'><span class='pda_icon pda_atmos'></span> Floor Bot Access</a></li>
-									</ul>"}
-						else
-							dat += {"</ul>"}
-
-					//if (cartridge.access_mechanic)
-					//if (cartridge.access_medical)
-					//if (cartridge.access_security)
-					//if (cartridge.access_quartermaster)
-
 				dat += {"</ul>
 					<h4>Utilities</h4>
 					<ul>"}
@@ -750,8 +733,7 @@ var/global/msg_id = 0
 					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
 						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
 					//if (cartridge.access_reagent_scanner)
-					if (cartridge.access_engine)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
+					//if (cartridge.access_engine)
 					//if (cartridge.access_atmos)
 					//if (cartridge.access_remote_door)
 					if (cartridge.access_trader)
@@ -862,23 +844,6 @@ var/global/msg_id = 0
 								dat += "OTHER: [round(unknown_level)]%<br>"
 						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
-
-			if (PDA_MODE_FLOORBOTS)
-				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/floorbot))
-					dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}
-					return
-				dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
-				dat += "<ul>"
-				for (var/obj/machinery/bot/floorbot/floor in bots_list)
-					if (floor.z != user.z)
-						continue
-					dat += {"<li>
-							<i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
-							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
-							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
-							</li>"}
-				dat += "</ul>"
 
 			if(1998) //Viewing photos
 				dat += {"<h4>View Photos</h4>"}
@@ -999,11 +964,6 @@ var/global/msg_id = 0
 		if("4")//Redirects to hub
 			mode = 0
 
-//Fuck this shit this file makes no sense FUNCTIONS===
-
-		if ("delivery_bot")
-			mode = PDA_MODE_DELIVERY_BOT
-
 //APPLICATIONS FUNCTIONS===========================
 		if("appMode")
 			current_app = locate(href_list["appChoice"]) in applications
@@ -1025,20 +985,10 @@ var/global/msg_id = 0
 			else
 				fon = 1
 				set_light(f_lum)
-		if("Halogen Counter")
-			if(scanmode == SCANMODE_HALOGEN)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_engine))
-				scanmode = SCANMODE_HALOGEN
 		if("Honk")
 			if ( !(last_honk && world.time < last_honk + 20) )
 				playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
 				last_honk = world.time
-		if("Gas Scan")
-			if(scanmode == SCANMODE_ATMOS)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_atmos))
-				scanmode = SCANMODE_ATMOS
 		if("Cyborg Analyzer")
 			if(scanmode == SCANMODE_ROBOTICS)
 				scanmode = SCANMODE_NONE
@@ -1224,7 +1174,8 @@ var/global/msg_id = 0
 									difficulty += 1
 								if(locate(/datum/pda_app/cart/security_records) in P.cartridge.applications)
 									difficulty += 1
-								difficulty += P.cartridge.access_engine
+								if(locate(/datum/pda_app/cart/power_monitor) in P.cartridge.applications)
+									difficulty += 1
 								difficulty += P.cartridge.access_clown
 								if(locate(/datum/pda_app/cart/custodial_locator) in P.cartridge.applications)
 									difficulty += 1

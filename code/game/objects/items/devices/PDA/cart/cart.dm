@@ -15,8 +15,6 @@
 	var/radio_type = null
 
 	// -- Various "access" crap
-	var/access_engine = 0
-	var/access_atmos = 0
 	var/access_clown = 0
 	var/access_mime = 0
 	var/access_hydroponics = 0

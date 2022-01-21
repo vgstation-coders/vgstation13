@@ -1,11 +1,12 @@
 /obj/item/weapon/cartridge/engineering
     name = "\improper Power-ON Cartridge"
     icon_state = "cart-e"
-    access_engine = 1
     radio_type = /obj/item/radio/integrated/signal/bot/floorbot
     starting_apps = list(
         /datum/pda_app/cart/power_monitor,
         /datum/pda_app/cart/alert_monitor,
+        /datum/pda_app/cart/scanner/engineer,
+        /datum/pda_app/cart/floorbot,
     )
 
 /datum/pda_app/cart/power_monitor
@@ -151,14 +152,47 @@
             mode = 1
     refresh_pda()
 
+/datum/pda_app/cart/floorbot
+	name = "Floor Bot Access"
+	desc = "Used to control a floorbot."
+	category = "Engineering Functions"
+	icon = "pda_atmos"
+
+/datum/pda_app/cart/floorbot/get_dat(var/mob/user)
+    var/dat = ""
+    if (!cart_device)
+        dat += {"<span class='pda_icon pda_atmos'></span> Could not find radio peripheral connection <br/>"}
+        return
+    if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/floorbot))
+        dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}
+        return
+    dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
+    dat += "<ul>"
+    for (var/obj/machinery/bot/floorbot/floor in bots_list)
+        if (floor.z != user.z)
+            continue
+        dat += {"<li>
+                <i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
+                <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
+                <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
+                Auto-patrol: <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
+                </li>"}
+    dat += "</ul>"
+
+/datum/pda_app/cart/scanner/engineer
+    base_name = "Halogen counter"
+    desc = "Used to measure rads in an area."
+    category = "Utilities"
+    icon = "pda_reagent"
+    app_scanmode = SCANMODE_HALOGEN
+
 /obj/item/weapon/cartridge/atmos
     name = "\improper BreatheDeep Cartridge"
     icon_state = "cart-a"
-    access_atmos = 1
     starting_apps = list(
         /datum/pda_app/cart/power_monitor,
         /datum/pda_app/cart/alert_monitor,
-        /datum/pda_app/cart/scanner/atmos
+        /datum/pda_app/cart/scanner/atmos,
     )
 
 /datum/pda_app/cart/scanner/atmos
@@ -171,10 +205,8 @@
 /obj/item/weapon/cartridge/mechanic
     name = "\improper Screw-E Cartridge"
     icon_state = "cart-mech"
-    access_engine = 1 //for the power monitor, but may remove later
     starting_apps = list(
         /datum/pda_app/cart/power_monitor,
-        /datum/pda_app/cart/alert_monitor,
         /datum/pda_app/cart/scanner/mechanic
     )
 

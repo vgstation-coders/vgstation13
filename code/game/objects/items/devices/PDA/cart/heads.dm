@@ -93,12 +93,12 @@
 /obj/item/weapon/cartridge/ce
 	name = "\improper Power-On DELUXE"
 	icon_state = "cart-ce"
-	access_engine = 1
-	access_atmos = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
         /datum/pda_app/cart/power_monitor,
         /datum/pda_app/cart/alert_monitor,
+        /datum/pda_app/cart/floorbot,
+        /datum/pda_app/cart/scanner/engineer,
         /datum/pda_app/cart/scanner/atmos,
         /datum/pda_app/cart/scanner/mechanic,
     )
@@ -120,16 +120,16 @@
 	name = "\improper Signal Ace DELUXE"
 	icon_state = "cart-rd"
 	access_robotics = 1
-	access_atmos = 1
-	starting_apps = list(/datum/pda_app/cart/status_display)
+	starting_apps = list(
+        /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/scanner/atmos,
+    )
 	radio_type = /obj/item/radio/integrated/signal
 
 /obj/item/weapon/cartridge/captain
 	name = "\improper Value-PAK Cartridge"
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
-	access_engine = 1
-	access_atmos = 1
 	starting_apps = list(
         /datum/pda_app/cart/status_display,
         /datum/pda_app/cart/power_monitor,
@@ -142,6 +142,7 @@
         /datum/pda_app/cart/supply_records,
         /datum/pda_app/cart/custodial_locator,
         /datum/pda_app/cart/scanner/reagent,
+        /datum/pda_app/cart/scanner/engineer,
         /datum/pda_app/cart/scanner/atmos,
     )
 	fax_pings = TRUE
