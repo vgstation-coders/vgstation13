@@ -32,10 +32,6 @@
 		to_chat(user, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
 		return
 
-	if(changeling.isabsorbing)
-		to_chat(user, "<span class='warning'>We are already absorbing!</span>")
-		return
-
 	if (T.dna == user.dna)
 		to_chat(user, "<span class='warning'>We have already absorbed their DNA.</span>")
 		return
