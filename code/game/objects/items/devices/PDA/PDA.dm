@@ -314,7 +314,7 @@ var/global/msg_id = 0
 	//Looking for master was kind of pointless since PDAs don't appear to have one.
 	//if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ) )
 	var/no_refresh = FALSE
-	if ((href_list["choice"] != "1") || (href_list["choice"] == "1" && href_list["appChoice"] != "5"))//The holomap app
+	if ((href_list["choice"] != "1") || (href_list["choice"] == "1" && !istype(href_list["appChoice"],/datum/pda_app/station_map)))//The holomap app
 		var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
 		if (map_app && map_app.holomap)
 			map_app.holomap.stopWatching()
@@ -493,7 +493,7 @@ var/global/msg_id = 0
 
 //EXTRA FUNCTIONS===================================
 
-	if (mode == 2||mode == 21)//To clear message overlays.
+	if (mode == 2||mode == 3)//To clear message overlays.
 		overlays.len = 0
 
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
