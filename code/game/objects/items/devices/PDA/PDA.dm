@@ -41,8 +41,6 @@ var/global/msg_id = 0
 
 	//Secondary variables
 	var/scanmode = SCANMODE_NONE //used for various PDA scanning functions
-	var/fon = 0 //Is the flashlight function on?
-	var/f_lum = 2 //Luminosity for the flashlight function
 	var/silent = 0 //To beep or not to beep, that is the question
 	var/toff = 0 //If 1, messenger disabled
 	var/list/tnote = list() //Current Texts
@@ -52,7 +50,6 @@ var/global/msg_id = 0
 	var/lock_code = "" // Lockcode to unlock uplink
 	var/honkamt = 0 //How many honks left when infected with honk.exe
 	var/mimeamt = 0 //How many silence left when infected with mime.exe
-	var/cart = "" //A place to stick cartridge menu information
 	var/detonate = 1 // Can the PDA be blown up?
 	var/hidden = 0 // Is the PDA hidden from the PDA list?
 	var/reply = null //Where are replies directed? For multicaster. Most set this to self in new.
@@ -76,7 +73,15 @@ var/global/msg_id = 0
 	var/list/datum/pda_app/applications = list()
 	//Associative list with header to file under and list of apps underneath, built from header defined in app.
 	var/list/categorised_applications = list("General Functions" = list())
-	var/list/starting_apps = list(/datum/pda_app/alarm,/datum/pda_app/notekeeper,/datum/pda_app/events,/datum/pda_app/manifest,/datum/pda_app/balance_check)
+	var/list/starting_apps = list(
+		/datum/pda_app/alarm,
+		/datum/pda_app/notekeeper,
+		/datum/pda_app/events,
+		/datum/pda_app/manifest,
+		/datum/pda_app/balance_check,
+		/datum/pda_app/atmos_scan,
+		/datum/pda_app/light,
+	)
 	var/datum/pda_app/current_app = null
 	var/datum/asset/simple/assets_to_send = null
 
@@ -725,11 +730,6 @@ var/global/msg_id = 0
 								dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 						dat += {"</ul>"}
 
-				dat += {"</ul>
-					<h4>Utilities</h4>
-					<ul>"}
-				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
-					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
 				if (pai)
 					if(pai.loc != src)
 						pai = null
@@ -796,41 +796,6 @@ var/global/msg_id = 0
 						user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
 						dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 				dat += "<br>"
-
-			if (3)
-				dat += "<h4><span class='pda_icon pda_atmos'></span> Atmospheric Readings</h4>"
-
-				if (isnull(user.loc))
-					dat += "Unable to obtain a reading.<br>"
-				else
-					var/datum/gas_mixture/environment = user.loc.return_air()
-
-					if(!environment)
-						dat += "No gasses detected.<br>"
-
-					else
-						var/pressure = environment.return_pressure()
-						var/total_moles = environment.total_moles()
-
-						dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
-
-						if (total_moles)
-							var/o2_level = environment[GAS_OXYGEN]/total_moles
-							var/n2_level = environment[GAS_NITROGEN]/total_moles
-							var/co2_level = environment[GAS_CARBON]/total_moles
-							var/plasma_level = environment[GAS_PLASMA]/total_moles
-							var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
-
-							dat += {"Nitrogen: [round(n2_level*100)]%<br>
-								Oxygen: [round(o2_level*100)]%<br>
-								Carbon Dioxide: [round(co2_level*100)]%<br>
-								Plasma: [round(plasma_level*100)]%<br>"}
-							if(unknown_level > 0.01)
-								dat += "OTHER: [round(unknown_level)]%<br>"
-						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
-				dat += "<br>"
-			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
-				dat += cart
 
 	if(assets_to_send && user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 		send_asset_list(user.client, assets_to_send.assets)
@@ -936,14 +901,6 @@ var/global/msg_id = 0
 				assets_to_send = new current_app.assets_type()
 
 //MAIN FUNCTIONS===================================
-
-		if("Light")
-			if(fon)
-				fon = 0
-				set_light(0)
-			else
-				fon = 1
-				set_light(f_lum)
 		if("Honk")
 			if ( !(last_honk && world.time < last_honk + 20) )
 				playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)

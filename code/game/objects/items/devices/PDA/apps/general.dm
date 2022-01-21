@@ -375,3 +375,73 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 /datum/pda_app/balance_check/Destroy()
 	linked_db = null
 	..()
+
+/datum/pda_app/atmos_scan
+	name = "Atmospheric Scan"
+	desc = "Provides a readout of atmospheric data around the user."
+	category = "Utilities"
+	price = 0
+	icon = "pda_atmos"
+
+/datum/pda_app/atmos_scan/get_dat(var/mob/user)
+	var/dat = "<h4><span class='pda_icon pda_atmos'></span> Atmospheric Readings</h4>"
+
+	if (isnull(user.loc))
+		dat += "Unable to obtain a reading.<br>"
+	else
+		var/datum/gas_mixture/environment = user.loc.return_air()
+
+		if(!environment)
+			dat += "No gasses detected.<br>"
+
+		else
+			var/pressure = environment.return_pressure()
+			var/total_moles = environment.total_moles()
+
+			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
+
+			if (total_moles)
+				var/o2_level = environment[GAS_OXYGEN]/total_moles
+				var/n2_level = environment[GAS_NITROGEN]/total_moles
+				var/co2_level = environment[GAS_CARBON]/total_moles
+				var/plasma_level = environment[GAS_PLASMA]/total_moles
+				var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
+
+				dat += {"Nitrogen: [round(n2_level*100)]%<br>
+					Oxygen: [round(o2_level*100)]%<br>
+					Carbon Dioxide: [round(co2_level*100)]%<br>
+					Plasma: [round(plasma_level*100)]%<br>"}
+				if(unknown_level > 0.01)
+					dat += "OTHER: [round(unknown_level)]%<br>"
+			dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
+	return dat
+
+/datum/pda_app/light
+	name = "Flashlight"
+	desc = "Turns on the PDA flashlight."
+	category = "Utilities"
+	price = 0
+	has_screen = FALSE
+	icon = "pda_flashlight"
+	var/fon = 0 //Is the flashlight function on?
+	var/f_lum = 2 //Luminosity for the flashlight function
+
+/datum/pda_app/light/onInstall()
+	..()
+	name = "[fon ? "Disable" : "Enable"] Flashlight"
+	f_lum = pda_device && (locate(/datum/pda_app/light_upgrade) in pda_device.applications) ? 3 : 2
+
+/datum/pda_app/light/onUninstall()
+	fon = 0
+	pda_device.set_light(0)
+	..()
+
+/datum/pda_app/light/on_select(var/mob/user)
+	if(pda_device)
+		if(fon)
+			fon = 0
+			pda_device.set_light(0)
+		else
+			fon = 1
+			pda_device.set_light(f_lum)
+	name = "[fon ? "Disable" : "Enable"] Flashlight"

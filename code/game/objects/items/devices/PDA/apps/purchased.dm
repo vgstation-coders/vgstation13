@@ -42,9 +42,11 @@
 
 /datum/pda_app/light_upgrade/onInstall()
 	..()
-	pda_device.f_lum = 3
-	if(pda_device.fon)
-		pda_device.set_light(pda_device.f_lum)
+	var/datum/pda_app/light/app = locate(/datum/pda_app/light) in pda_device.applications
+	if(app)
+		app.f_lum = 3
+		if(app.fon)
+			pda_device.set_light(app.f_lum)
 
 /datum/pda_app/spam_filter
 	name = "Spam Filter"
