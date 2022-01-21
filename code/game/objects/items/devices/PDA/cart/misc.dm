@@ -46,11 +46,14 @@
             global.trade_shuttle.travel_to(pick(global.trade_shuttle.docking_ports - global.trade_shuttle.current_port),C,user)
 
 /obj/item/weapon/cartridge/camera
-	name = "\improper Camera Cartridge"
-	icon_state = "cart-gbcam"
-	access_camera = 1
-	var/obj/item/device/camera/cartridge/cart_cam = null
-	var/list/obj/item/weapon/photo/stored_photos = list()
+    name = "\improper Camera Cartridge"
+    icon_state = "cart-gbcam"
+    starting_apps = list(
+        /datum/pda_app/cart/scanner/camera,
+        /datum/pda_app/cart/show_photos,
+    )
+    var/obj/item/device/camera/cartridge/cart_cam = null
+    var/list/obj/item/weapon/photo/stored_photos = list()
 
 /obj/item/weapon/cartridge/camera/New()
 	..()
@@ -63,3 +66,50 @@
 		qdel(PH)
 	stored_photos = list()
 	..()
+
+/datum/pda_app/cart/scanner/camera
+    base_name = "Camera"
+    desc = "Used to take pictures with a camera."
+    category = "Utilities"
+    icon = "pda_signaler" //Placeholder
+    app_scanmode = SCANMODE_CAMERA
+
+/datum/pda_app/cart/scanner/camera/on_select(var/mob/user)
+    ..(user)
+    if(cart_device)
+        cart_device.update_icon() //To make it look the part
+
+/datum/pda_app/cart/show_photos/get_dat(var/mob/user)
+    var/dat = {"<h4>View Photos</h4>"}
+    if(!cart_device || !istype(cart_device,/obj/item/weapon/cartridge/camera))
+        dat += {"No camera found!"}
+    else
+        dat += {"<a href='byond://?src=\ref[src];Clear Photos=1'>Delete All Photos</a><hr>"}
+        var/obj/item/weapon/cartridge/camera/CM = cart_device
+        if(!CM.stored_photos.len)
+            dat += {"None found."}
+        else
+            var/i = 0
+            for(var/obj/item/weapon/photo/PH in CM.stored_photos)
+                user << browse_rsc(PH.img, "tmp_photo_gallery_[i].png")
+                var/displaylength = 192
+                switch(PH.photo_size)
+                    if(5)
+                        displaylength = 320
+                    if(7)
+                        displaylength = 448
+
+                dat += {"<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><hr>"}
+                i++
+    return dat
+
+/datum/pda_app/cart/show_photos/Topic(href, href_list)
+    if(..() || !cart_device)
+        return
+    if(href_list["Clear Photos"])
+        if(cart_device && istype(cart_device, /obj/item/weapon/cartridge/camera))
+            var/obj/item/weapon/cartridge/camera/CM = cart_device
+            for(var/obj/item/weapon/photo/PH in CM.stored_photos)
+                qdel(PH)
+            CM.stored_photos = list()
+    refresh_pda()

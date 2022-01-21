@@ -106,7 +106,7 @@ var/global/msg_id = 0
 /obj/item/device/pda/update_icon()
 	underlays.Cut()
 	underlays = list()
-	if (cartridge && cartridge.access_camera)
+	if (istype(cartridge,/obj/item/weapon/cartridge/camera))
 		var/image/cam_under
 		if(scanmode == SCANMODE_CAMERA)
 			cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam2")
@@ -728,10 +728,6 @@ var/global/msg_id = 0
 				dat += {"</ul>
 					<h4>Utilities</h4>
 					<ul>"}
-				if (cartridge)
-					if (cartridge.access_camera)
-						dat += "<li><a href='byond://?src=\ref[src];choice=PDA Camera'> [scanmode == SCANMODE_CAMERA ? "Disable" : "Enable"] Camera</a></li>"
-						dat += "<li><a href='byond://?src=\ref[src];choice=Show Photos'>Show Photos</a></li>"
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
 				if (pai)
@@ -833,29 +829,6 @@ var/global/msg_id = 0
 								dat += "OTHER: [round(unknown_level)]%<br>"
 						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
-
-			if(1998) //Viewing photos
-				dat += {"<h4>View Photos</h4>"}
-				if(!cartridge || !istype(cartridge,/obj/item/weapon/cartridge/camera))
-					dat += {"No camera found!"}
-				else
-					dat += {"<a href='byond://?src=\ref[src];choice=Clear Photos'>Delete All Photos</a><hr>"}
-					var/obj/item/weapon/cartridge/camera/CM = cartridge
-					if(!CM.stored_photos.len)
-						dat += {"None found."}
-					else
-						var/i = 0
-						for(var/obj/item/weapon/photo/PH in CM.stored_photos)
-							user << browse_rsc(PH.img, "tmp_photo_gallery_[i].png")
-							var/displaylength = 192
-							switch(PH.photo_size)
-								if(5)
-									displaylength = 320
-								if(7)
-									displaylength = 448
-
-							dat += {"<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><hr>"}
-							i++
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
 				dat += cart
 
@@ -912,7 +885,7 @@ var/global/msg_id = 0
 			current_app = old_app //To keep it around afterwards.
 			assets_to_send = old_assets //Same here.
 		if("Return")//Return
-			if((mode<=9) || (mode==1998) || (mode==PDA_MODE_APP))
+			if(mode<=9)
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
@@ -975,20 +948,6 @@ var/global/msg_id = 0
 			if ( !(last_honk && world.time < last_honk + 20) )
 				playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
 				last_honk = world.time
-		if("PDA Camera")
-			if(scanmode == SCANMODE_CAMERA)
-				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_camera))
-				scanmode = SCANMODE_CAMERA
-			update_icon()
-		if("Show Photos")
-			mode = 1998
-		if("Clear Photos")
-			if(cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
-				var/obj/item/weapon/cartridge/camera/CM = cartridge
-				for(var/obj/item/weapon/photo/PH in CM.stored_photos)
-					qdel(PH)
-				CM.stored_photos = list()
 
 //MESSENGER/NOTE FUNCTIONS===================================
 

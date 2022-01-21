@@ -14,7 +14,6 @@
 	// -- Various "access" crap
 	var/access_clown = 0
 	var/access_mime = 0
-	var/access_camera = 0
 	var/fax_pings = FALSE
 
 	var/list/datum/pda_app/applications = list()

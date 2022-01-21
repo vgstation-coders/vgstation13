@@ -19,7 +19,7 @@
     category = "Utilities"
     icon = "pda_bucket"
 
-/datum/pda_app/cart/custodial_locator/get_dat()
+/datum/pda_app/cart/custodial_locator/get_dat(var/mob/user)
     var/menu = "<h4><span class='pda_icon pda_bucket'></span> Persistent Custodial Object Locator</h4>"
     var/turf/cl = get_turf(src)
     if (!cl)
@@ -154,7 +154,7 @@
     category = "Quartermaster Functions"
     icon = "pda_crate"
 
-/datum/pda_app/cart/supply_records/get_dat()
+/datum/pda_app/cart/supply_records/get_dat(var/mob/user)
     var/menu = {"<h4><span class='pda_icon pda_crate'></span> Supply Record Interlink</h4>
         <BR><B>Supply shuttle</B><BR>
         Location: [SSsupply_shuttle.moving ? "Moving to station ([SSsupply_shuttle.eta] Mins.)":SSsupply_shuttle.at_station ? "Station":"Dock"]<BR>
