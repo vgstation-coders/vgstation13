@@ -958,6 +958,7 @@
 #include "code\game\objects\items\devices\whistle.dm"
 #include "code\game\objects\items\devices\PDA\emoji.dm"
 #include "code\game\objects\items\devices\PDA\PDA.dm"
+#include "code\game\objects\items\devices\PDA\PDA_types.dm"
 #include "code\game\objects\items\devices\PDA\radio.dm"
 #include "code\game\objects\items\devices\PDA\apps\apps.dm"
 #include "code\game\objects\items\devices\PDA\apps\general.dm"
