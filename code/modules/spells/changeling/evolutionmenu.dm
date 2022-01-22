@@ -12,5 +12,6 @@
 
 /spell/changeling/evolve/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
+	
 	changeling.power_holder.PowerMenu()
 
