@@ -182,7 +182,8 @@
 	refresh_pda()
 
 /datum/pda_app/newsreader/proc/newsAlert(var/channel_name)
-	if(pda_device.silent)
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda_device.applications
+	if(app.silent)
 		return
 	var/turf/T = get_turf(pda_device)
 	playsound(T, 'sound/machines/twobeep.ogg', 50, 1)

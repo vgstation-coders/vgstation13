@@ -163,8 +163,10 @@
 /datum/pda_app/cart/virus/silent/infect(var/obj/item/device/pda/P,var/mob/U)
     charges--
     U.show_message("<span class='notice'>Virus sent!</span>", 1)
-    P.silent = 1
-    P.ttone = "silence"
+    var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
+    if(app)
+        app.silent = 1
+        app.ttone = "silence"
 
 /*
 /obj/item/weapon/cartridge/botanist

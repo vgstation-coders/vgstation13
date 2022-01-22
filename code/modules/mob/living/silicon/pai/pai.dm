@@ -101,7 +101,9 @@
 		pda.ownjob = "Personal Assistant"
 		pda.owner = text("[]", src)
 		pda.name = pda.owner + " (" + pda.ownjob + ")"
-		pda.toff = 1
+		var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda.applications
+		if(app)
+			app.toff = 1
 
 	add_language(LANGUAGE_GALACTIC_COMMON, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)

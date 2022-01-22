@@ -23,9 +23,10 @@
                 if(MS.is_functioning())
                     pass = TRUE
                     break
+            var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
             if(!pass)
                 to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
-            else if (!P.toff && charges > 0)
+            else if (!app.toff && charges > 0)
                 infect(P,U)
         else
             to_chat(U, "PDA not found.")
@@ -57,7 +58,9 @@
     if(P.get_component(/datum/component/uplink))
         U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
         U << browse(null, "window=pda")
-        pda_device.create_message(null, P, null, null, pick(syndicate_code_phrase)) //friendly fire
+        var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
+        if(app)
+            app.create_message(null, P, null, null, pick(syndicate_code_phrase)) //friendly fire
         log_admin("[key_name(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed")
         message_admins("[key_name_admin(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed", 1)
         charges--
@@ -69,7 +72,9 @@
         for(garble = list(), garble.len<10,garble.Add(randomword))
             randomword = pick("stack.Insert","KillProcess(","-DROP TABLE","kernel = "," / 0",";",";;","{","(","((","<"," ","-", "null", " * 1.#INF")
         var/message = english_list(garble, "", "", "", "")
-        pda_device.create_message(null, P, null, null, message) //the jig is up
+        var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
+        if(app)
+            app.create_message(null, P, null, null, message) //the jig is up
         log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge but failed")
         message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge but failed", 1)
         charges--

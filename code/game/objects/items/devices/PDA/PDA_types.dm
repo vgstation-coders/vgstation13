@@ -9,10 +9,11 @@
 	icon_state = "pda-m"
 
 /obj/item/device/pda/medical/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_medbay
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_medbay
 
 /obj/item/device/pda/viro
 	name = "Virology PDA"
@@ -20,10 +21,11 @@
 	icon_state = "pda-v"
 
 /obj/item/device/pda/viro/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_medbay
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_medbay
 
 /obj/item/device/pda/engineering
 	name = "Engineering PDA"
@@ -36,10 +38,11 @@
 	icon_state = "pda-s"
 
 /obj/item/device/pda/security/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_brig
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_brig
 
 /obj/item/device/pda/detective
 	name = "Detective PDA"
@@ -47,9 +50,8 @@
 	icon_state = "pda-det"
 
 /obj/item/device/pda/detective/New()
+	starting_apps += /datum/pda_app/light_upgrade
 	..()
-	var/datum/pda_app/light_upgrade/app = new /datum/pda_app/light_upgrade()
-	app.onInstall(src)
 
 /obj/item/device/pda/warden
 	name = "Warden PDA"
@@ -57,42 +59,61 @@
 	icon_state = "pda-warden"
 
 /obj/item/device/pda/warden/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_brig
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_brig
 
 /obj/item/device/pda/janitor
 	name = "Janitor PDA"
 	default_cartridge = /obj/item/weapon/cartridge/janitor
 	icon_state = "pda-j"
-	ttone = "slip"
+
+/obj/item/device/pda/janitor/New()
+	..()
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(app)
+		app.ttone = "slip"
 
 /obj/item/device/pda/toxins
 	name = "Science PDA"
 	default_cartridge = /obj/item/weapon/cartridge/signal/toxins
 	icon_state = "pda-tox"
-	ttone = "boom"
 
 /obj/item/device/pda/toxins/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_rnd
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_rnd
+	var/datum/pda_app/messenger/app2 = locate(/datum/pda_app/messenger) in applications
+	if(app2)
+		app2.ttone = "boom"
 
 /obj/item/device/pda/clown
 	name = "Clown PDA"
 	default_cartridge = /obj/item/weapon/cartridge/clown
 	icon_state = "pda-clown"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings."
-	ttone = "honk"
+
+/obj/item/device/pda/clown/New()
+	..()
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(app)
+		app.ttone = "honk"
 
 /obj/item/device/pda/mime
 	name = "Mime PDA"
 	default_cartridge = /obj/item/weapon/cartridge/mime
 	icon_state = "pda-mime"
-	silent = 1
-	ttone = "silence"
+
+obj/item/device/pda/mime/New()
+	..()
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(app)
+		app.silent = TRUE
+		app.ttone = "silence"
 
 /obj/item/device/pda/heads
 	name = "Head of department PDA"
@@ -135,10 +156,11 @@
 	icon_state = "pda-hop"
 
 /obj/item/device/pda/heads/hop/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_hop
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_hop
 
 /obj/item/device/pda/heads/hos
 	name = "Head of Security PDA"
@@ -146,10 +168,12 @@
 	icon_state = "pda-hos"
 
 /obj/item/device/pda/heads/hos/New()
+	starting_apps += /datum/pda_app/ringer
+	starting_apps += /datum/pda_app/light_upgrade
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_brig
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_brig
 
 /obj/item/device/pda/heads/ce
 	name = "Chief Engineer PDA"
@@ -162,10 +186,11 @@
 	icon_state = "pda-cmo"
 
 /obj/item/device/pda/heads/cmo/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_medbay
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_medbay
 
 /obj/item/device/pda/heads/rd
 	name = "Research Director PDA"
@@ -173,17 +198,17 @@
 	icon_state = "pda-rd"
 
 /obj/item/device/pda/heads/rd/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_rnd
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_rnd
 
 /obj/item/device/pda/captain
 	name = "Captain PDA"
 	default_cartridge = /obj/item/weapon/cartridge/captain
 	icon_state = "pda-c"
 	detonate = 0
-	//toff = 1
 
 /obj/item/device/pda/captain/New()
 	starting_apps.Cut()
@@ -196,10 +221,11 @@
 	icon_state = "pda-cargo"
 
 /obj/item/device/pda/cargo/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_cargo
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_cargo
 
 /obj/item/device/pda/quartermaster
 	name = "Quartermaster PDA"
@@ -207,10 +233,11 @@
 	icon_state = "pda-q"
 
 /obj/item/device/pda/quartermaster/New()
+	starting_apps += /datum/pda_app/ringer
 	..()
-	var/datum/pda_app/ringer/app = new /datum/pda_app/ringer()
-	app.onInstall(src)
-	app.frequency = deskbell_freq_cargo
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_cargo
 
 /obj/item/device/pda/shaftminer
 	name = "Mining PDA"
@@ -228,13 +255,23 @@
 /obj/item/device/pda/chaplain
 	name = "Chaplain PDA"
 	icon_state = "pda-holy"
-	ttone = "holy"
+
+/obj/item/device/pda/chaplain/New()
+	..()
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(app)
+		app.ttone = "..."
 
 /obj/item/device/pda/lawyer
 	name = "Lawyer PDA"
 	default_cartridge = /obj/item/weapon/cartridge/lawyer
 	icon_state = "pda-lawyer"
-	ttone = "..."
+
+/obj/item/device/pda/lawyer/New()
+	..()
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(app)
+		app.ttone = "..."
 
 /obj/item/device/pda/botanist
 	name = "Botany PDA"
@@ -250,7 +287,6 @@
 	name = "Librarian PDA"
 	icon_state = "pda-libb"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a WGW-11 series e-reader."
-	silent = 1 //Quiet in the library!
 
 /obj/item/device/pda/librarian/New()
 	starting_apps += /datum/pda_app/newsreader
@@ -258,6 +294,9 @@
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
 	if(app)
 		app.note = "Congratulations, your station has chosen the Thinktronic 5290 WGW-11 Series E-reader and Personal Data Assistant!"
+	var/datum/pda_app/messenger/app2 = locate(/datum/pda_app/messenger) in applications
+	if(app2)
+		app2.silent = TRUE //Quiet in the library!
 
 /obj/item/device/pda/clear
 	icon_state = "pda-transp"
@@ -316,12 +355,14 @@
 /obj/item/device/pda/ai
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "pda_server-on"
-	ttone = "data"
 	detonate = 0
 
 /obj/item/device/pda/ai/New()
 	starting_apps += /datum/pda_app/spam_filter
 	..()
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(app)
+		app.ttone = "data"
 
 /obj/item/device/pda/ai/proc/set_name_and_job(newname as text, newjob as text)
 	owner = newname
@@ -335,11 +376,15 @@
 	var/list/plist = list()
 	var/list/namecounts = list()
 
-	if(usr.stat == 2)
+	if(usr.isDead())
 		to_chat(usr, "You can't send PDA messages because you are dead!")
 		return
 
-	if(src.aiPDA.toff)
+	var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in aiPDA.applications
+	if(!message_app)
+		to_chat(usr, "You don't have a messenger to speak with!")
+		return
+	if(message_app.toff)
 		to_chat(usr, "Turn on your receiver in order to send messages.")
 		return
 
@@ -383,7 +428,7 @@
 				aiPDA.photo.blueprints = q.fields["blueprints"]
 				break
 
-	aiPDA.create_message(src, selected)
+	message_app.create_message(src, selected)
 	aiPDA.photo = null
 
 //AI verb and proc for sending PDA messages.
@@ -393,6 +438,10 @@
 	set src in usr
 	if(usr.isDead())
 		to_chat(usr, "You can't send PDA messages because you are dead!")
+		return
+	var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in applications
+	if(!message_app)
+		to_chat(usr, "You don't have a messenger to speak with!")
 		return
 	var/list/plist = available_pdas()
 	if (plist)
@@ -429,7 +478,7 @@
 					photo.blueprints = q.fields["blueprints"]
 					break
 
-		create_message(usr, selected)
+		message_app.create_message(usr, selected)
 		photo = null
 
 
@@ -440,8 +489,12 @@
 	if(usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
-	toff = !toff
-	to_chat(usr, "<span class='notice'>PDA sender/receiver toggled [(toff ? "Off" : "On")]!</span>")
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(!app)
+		to_chat(usr, "You don't have a messenger to toggle!")
+		return
+	app.toff = !app.toff
+	to_chat(usr, "<span class='notice'>PDA sender/receiver toggled [(app.toff ? "Off" : "On")]!</span>")
 
 
 /obj/item/device/pda/ai/verb/cmd_toggle_pda_silent()
@@ -451,8 +504,12 @@
 	if(usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
-	silent=!silent
-	to_chat(usr, "<span class='notice'>PDA ringer toggled [(silent ? "Off" : "On")]!</span>")
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(!app)
+		to_chat(usr, "You don't have a messenger to toggle!")
+		return
+	app.silent=!app.silent
+	to_chat(usr, "<span class='notice'>PDA ringer toggled [(app.silent ? "Off" : "On")]!</span>")
 
 
 /obj/item/device/pda/ai/verb/cmd_show_message_log()
@@ -462,10 +519,14 @@
 	if(usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(!app)
+		to_chat(usr, "You don't have a messenger to read!")
+		return
 	var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
-	for(var/note in tnote)
-		dat += tnote[note]
-		var/icon/img = imglist[note]
+	for(var/note in app.tnote)
+		dat += app.tnote[note]
+		var/icon/img = app.imglist[note]
 		if(img)
 			usr << browse_rsc(img, "tmp_photo_[note].png")
 			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
@@ -476,11 +537,15 @@
 	if(usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in aiPDA.applications
+	if(!app)
+		to_chat(usr, "You don't have a messenger to read!")
+		return
 	if(!isnull(aiPDA))
 		var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
-		for(var/note in aiPDA.tnote)
-			dat += aiPDA.tnote[note]
-			var/icon/img = aiPDA.imglist[note]
+		for(var/note in app.tnote)
+			dat += app.tnote[note]
+			var/icon/img = app.imglist[note]
 			if(img)
 				usr << browse_rsc(img, "tmp_photo_[note].png")
 				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
@@ -495,6 +560,8 @@
 		playsound(loc, 'sound/items/bikehorn.ogg', 30, 1)
 	return
 
-
-/obj/item/device/pda/ai/pai
-	ttone = "assist"
+/obj/item/device/pda/ai/pai/New()
+	..()
+	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
+	if(app)
+		app.ttone = "assist"

@@ -38,17 +38,11 @@ var/global/msg_id = 0
 
 	//Secondary variables
 	var/scanmode = SCANMODE_NONE //used for various PDA scanning functions
-	var/silent = 0 //To beep or not to beep, that is the question
-	var/toff = 0 //If 1, messenger disabled
-	var/list/tnote = list() //Current Texts
-	var/last_text //No text spamming
-	var/ttone = "beep" //The ringtone!
 	var/lock_code = "" // Lockcode to unlock uplink
 	var/honkamt = 0 //How many honks left when infected with honk.exe
 	var/mimeamt = 0 //How many silence left when infected with mime.exe
 	var/detonate = 1 // Can the PDA be blown up?
 	var/hidden = 0 // Is the PDA hidden from the PDA list?
-	var/reply = null //Where are replies directed? For multicaster. Most set this to self in new.
 	var/show_overlays = TRUE
 
 	var/obj/item/weapon/card/id/id = null //Making it possible to slot an ID card into the PDA so it can function as both.
@@ -56,7 +50,6 @@ var/global/msg_id = 0
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/weapon/photo/photo = null	// A slot for a photo
-	var/list/icon/imglist = list() // Viewable message photos
 	var/obj/item/device/analyzer/atmos_analys = new
 	var/obj/item/device/robotanalyzer/robo_analys = new
 	var/obj/item/device/hailer/integ_hailer = new
@@ -72,6 +65,7 @@ var/global/msg_id = 0
 	var/list/starting_apps = list(
 		/datum/pda_app/alarm,
 		/datum/pda_app/notekeeper,
+		/datum/pda_app/messenger,
 		/datum/pda_app/multimessage,
 		/datum/pda_app/events,
 		/datum/pda_app/manifest,
@@ -81,8 +75,6 @@ var/global/msg_id = 0
 	)
 	var/datum/pda_app/current_app = null
 	var/datum/asset/simple/assets_to_send = null
-
-	var/list/incoming_transactions = list()
 
 /obj/item/device/pda/New()
 	..()
@@ -220,65 +212,6 @@ var/global/msg_id = 0
 
 			//(1) is for the app screen, and not here
 
-			if (2)
-
-				dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-					<a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
-					<a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
-					<a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
-					<a href='byond://?src=\ref[src];choice=21'><span class='pda_icon pda_mail'></span> Messages</a>"}
-				if(photo)
-					dat += " | <a href='byond://?src=\ref[src];choice=Eject Photo'><span class='pda_icon pda_eject'></span>Eject Photo</a>"
-				dat += "<br>"
-				var/datum/pda_app/cart/virus/detonate/DV = locate(/datum/pda_app/cart/virus/detonate) in applications
-				if(DV)
-					dat += "<b>[DV.charges] detonation charges left.</b><HR>"
-				var/datum/pda_app/cart/virus/honk/HV = locate(/datum/pda_app/cart/virus/honk) in applications
-				if(HV)
-					dat += "<b>[HV.charges] viral files left.</b><HR>"
-				var/datum/pda_app/cart/virus/silent/SV = locate(/datum/pda_app/cart/virus/silent) in applications
-				if(SV)
-					dat += "<b>[SV.charges] viral files left.</b><HR>"
-
-
-				dat += {"<h4><span class='pda_icon pda_menu'></span> Detected PDAs</h4>
-					<ul>"}
-				var/count = 0
-
-				if (!toff)
-					for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
-						if (P == src)
-							continue
-						if(P.hidden)
-							continue
-						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
-						if (id && !istype(P,/obj/item/device/pda/ai))
-							dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
-						if (DV && P.detonate)
-							dat += " (<a href='byond://?src=\ref[src];target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
-						if (HV)
-							dat += " (<a href='byond://?src=\ref[HV];target=\ref[P]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
-						if (SV)
-							dat += " (<a href='byond://?src=\ref[SV];target=\ref[P]'>*Send Virus*</a>)"
-						dat += "</li>"
-						count++
-				dat += "</ul>"
-				if (count == 0)
-					dat += "None detected.<br>"
-
-			if(3)
-
-				dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-					<a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
-					<h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
-				for(var/note in tnote)
-					dat += tnote[note]
-					var/icon/img = imglist[note]
-					if(img)
-						user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
-						dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
-				dat += "<br>"
-
 	if(assets_to_send && user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 		send_asset_list(user.client, assets_to_send.assets)
 
@@ -332,7 +265,7 @@ var/global/msg_id = 0
 			current_app = old_app //To keep it around afterwards.
 			assets_to_send = old_assets //Same here.
 		if("Return")//Return
-			mode = mode == 3 ? 2 : 0
+			mode = 0
 		if ("Authenticate")//Checks for ID
 			id_check(U, 1)
 		if("UpdateInfo")
@@ -351,15 +284,10 @@ var/global/msg_id = 0
 					cartridge.radio.hostpda = null
 				cartridge = null
 				update_icon()
-
-//MENU FUNCTIONS===================================
-
-		if("0")//Hub
-			mode = 0
-		if("2")//Messenger
-			mode = 2
-		if("3")//Read messages
-			mode = 3
+		if("Eject Photo")
+			if(photo)
+				U.put_in_hands(photo)
+				photo = null
 
 //APPLICATIONS FUNCTIONS===========================
 		if("appMode")
@@ -372,91 +300,6 @@ var/global/msg_id = 0
 
 			if(current_app.assets_type && usr.client)
 				assets_to_send = new current_app.assets_type()
-
-//MESSENGER/NOTE FUNCTIONS===================================
-
-		if("Toggle Messenger")
-			toff = !toff
-		if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
-			silent = !silent
-		if("Clear")//Clears messages
-			imglist.Cut()
-			tnote.Cut()
-		if("Ringtone")
-			var/t = input(U, "Please enter new ringtone", name, ttone) as text
-			if (loc == U)
-				if (t)
-					if(INVOKE_EVENT(src, /event/pda_change_ringtone, "user" = U, "new_ringtone" = t))
-						to_chat(U, "The PDA softly beeps.")
-						U << browse(null, "window=pda")
-						src.mode = 0
-					else
-						t = copytext(sanitize(t), 1, 20)
-						ttone = t
-					return
-			else
-				U << browse(null, "window=pda")
-				return
-		if("Message")
-			var/obj/item/device/pda/P = locate(href_list["target"])
-			src.create_message(U, P)
-		if("viewPhoto")
-			var/obj/item/weapon/photo/PH = locate(href_list["image"])
-			PH.show(U)
-
-		if("transferFunds")
-			if(!id)
-				return
-			var/obj/machinery/message_server/useMS = null
-			if(message_servers)
-				for (var/obj/machinery/message_server/MS in message_servers)
-					if(MS.is_functioning())
-						useMS = MS
-						break
-			if(!useMS)
-				to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Messaging server is not responding.'</span>")
-				return
-			var/obj/item/device/pda/P = locate(href_list["target"])
-			var/datum/signal/signal = src.telecomms_process()
-
-			var/useTC = 0
-			if(signal)
-				if(signal.data["done"])
-					useTC = 1
-					var/turf/pos = get_turf(P)
-					if(pos.z in signal.data["level"])
-						useTC = 2
-
-			if(!useTC) // only send the message if it's stable
-				to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Unable to receive signal from local subspace comms. PDA outside of comms range.'</span>")
-				return
-			if(useTC != 2) // Does our recepient have a broadcaster on their level?
-				to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Unable to receive handshake signal from recipient PDA. Recipient PDA outside of comms range.'</span>")
-				return
-
-			var/amount = round(input("How much money do you wish to transfer to [P.owner]?", "Money Transfer", 0) as num)
-			if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
-				to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
-				return
-			if(amount > id.virtual_wallet.money)
-				amount = id.virtual_wallet.money
-
-			switch(P.receive_funds(owner,amount,name))
-				if(1)
-					to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete!'</span>")
-				if(2)
-					to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete! The recipient will earn the funds once he enters his ID in his PDA.'</span>")
-				else
-					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, transaction canceled'</span>")
-					return
-
-			id.virtual_wallet.money -= amount
-			new /datum/transaction(id.virtual_wallet, "Money transfer", "-[amount]", src.name, P.owner)
-
-		if("Eject Photo")
-			if(photo)
-				U.put_in_hands(photo)
-				photo = null
 
 //pAI FUNCTIONS===================================
 		if("pai")
@@ -482,58 +325,6 @@ var/global/msg_id = 0
 			U.unset_machine()
 			U << browse(null, "window=pda")
 
-//Receive money transferred from another PDA
-/obj/item/device/pda/proc/receive_funds(var/creditor_name,var/arbitrary_sum,var/other_pda)
-	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
-	if(!app.linked_db)
-		app.reconnect_database()
-	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
-		return 0 //This sends its own error message
-	var/turf/U = get_turf(src)
-	if(!silent)
-		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
-
-	for (var/mob/O in hearers(3, U))
-		if(!silent)
-			O.show_message(text("[bicon(src)] *[src.ttone]*"))
-
-	var/mob/living/L = null
-	if(src.loc && isliving(src.loc))
-		L = src.loc
-	else
-		L = get_holder_of_type(src, /mob/living/silicon)
-
-	if(L)
-		to_chat(L, "[bicon(src)] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
-
-	tnote["msg_id"] = "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
-	msg_id++
-
-	if(id)
-		if(!id.virtual_wallet)
-			id.update_virtual_wallet()
-		id.virtual_wallet.money += arbitrary_sum
-		new /datum/transaction(id.virtual_wallet, "Money transfer", arbitrary_sum, other_pda, creditor_name, send2PDAs = FALSE)
-		return 1
-	else
-		incoming_transactions |= list(list(creditor_name,arbitrary_sum,other_pda))
-		return 2
-
-//Receive money transferred from another PDA
-/obj/item/device/pda/proc/receive_incoming_transactions(var/obj/item/weapon/card/id/ID_card)
-	var/mob/living/L = null
-	if(src.loc && isliving(src.loc))
-		L = src.loc
-	to_chat(L, "[bicon(src)]<span class='notice'> <b>Transactions successfully received! </b></span>")
-
-	for(var/transac in incoming_transactions)
-		if(!id.virtual_wallet)
-			id.update_virtual_wallet()
-		id.virtual_wallet.money += transac[2]
-		new /datum/transaction(id.virtual_wallet, "Money transfer", transac[2], transac[3], transac[1])
-
-	incoming_transactions = list()
-
 /obj/item/device/pda/proc/remove_id()
 	if (id)
 		if (ismob(loc))
@@ -543,112 +334,6 @@ var/global/msg_id = 0
 		else
 			id.forceMove(get_turf(src))
 		id = null
-
-/obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage)
-	if(!reply_to)
-		reply_to = src
-	if (!istype(P)||P.toff)
-		return
-	var/t = null
-	if(overridemessage)
-		t = overridemessage
-	if(multicast_message)
-		t = multicast_message
-	if(!t)
-		t = input(U, "Please enter message", "Message to [P]", null) as text|null
-		t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
-		if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
-			return
-
-		if (last_text && world.time < last_text + 5)
-			return
-		last_text = world.time
-	// check if telecomms I/O route 1459 is stable
-	//var/telecomms_intact = telecomms_process(P.owner, owner, t)
-	var/obj/machinery/message_server/useMS = null
-	if(message_servers)
-		for (var/obj/machinery/message_server/MS in message_servers)
-		//PDAs are now dependant on the Message Server.
-			if(MS.is_functioning())
-				useMS = MS
-				break
-
-	var/datum/signal/signal = src.telecomms_process()
-
-	var/useTC = 0
-	if(signal)
-		if(signal.data["done"])
-			useTC = 1
-			var/turf/pos = get_turf(P)
-			if(pos.z in signal.data["level"])
-				useTC = 2
-				//Let's make this barely readable
-				if(signal.data["compression"] > 0)
-					t = Gibberish(t, signal.data["compression"] + 50)
-
-	if(useMS && useTC) // only send the message if it's stable
-		if(useTC != 2) // Does our recepient have a broadcaster on their level?
-			to_chat(U, "ERROR: Cannot reach recepient.")
-			return
-
-		var/obj/item/weapon/photo/current_photo = null
-
-		if(photo)
-			current_photo = photo
-
-		if(cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
-			var/obj/item/weapon/cartridge/camera/CM = cartridge
-			if(CM.stored_photos.len)
-				current_photo = input(U, "Photos found in [cartridge]. Please select one", "Cartridge Photo Selection") as null|anything in CM.stored_photos
-
-		if(current_photo)
-			imglist["[msg_id]"] = current_photo.img
-			P.imglist["[msg_id]"] = current_photo.img
-
-		useMS.send_pda_message("[P.owner]","[owner]","[t]",imglist["[msg_id]"])
-
-		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
-		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
-		msg_id++
-		for(var/mob/dead/observer/M in player_list)
-			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
-					[U.real_name][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span>\
-					[photo ? " (<a href='byond://?src=\ref[P];choice=viewPhoto;image=\ref[photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>" : ""]")
-
-
-		if (prob(15)&&!multicast_message) //Give the AI a chance of intercepting the message
-			var/who = src.owner
-			if(prob(50))
-				who = P:owner
-			for(var/mob/living/silicon/ai/ai in mob_list)
-				// Allows other AIs to intercept the message but the AI won't intercept their own message.
-				if(ai.aiPDA != P && ai.aiPDA != src)
-					ai.show_message("<i>Intercepted message from <b>[who]</b>: [t]</i>")
-
-		if (!P.silent)
-			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
-		for (var/mob/O in hearers(3, P.loc))
-			if(!P.silent)
-				O.show_message(text("[bicon(P)] *[P.ttone]*"))
-		//Search for holder of the PDA.
-		var/mob/living/L = null
-		if(P.loc && isliving(P.loc))
-			L = P.loc
-		//Maybe they are a pAI!
-		else
-			L = get_holder_of_type(P, /mob/living/silicon)
-
-		if(L)
-			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" [photo ? "(<a href='byond://?src=\ref[P];choice=viewPhoto;image=\ref[photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)" : ""] (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
-		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
-		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
-		P.overlays.len = 0
-		if(P.show_overlays)
-			P.overlays += image('icons/obj/pda.dmi', "pda-r")
-	else
-		to_chat(U, "[bicon(src)] <span class='notice'>ERROR: Messaging server is not responding.</span>")
-
 
 /obj/item/device/pda/verb/verb_remove_id()
 	set category = "Object"
@@ -717,8 +402,9 @@ var/global/msg_id = 0
 			if(user.drop_item(I, src))
 				id = I
 				user.put_in_hands(old_id)
-	if(id && incoming_transactions.len)
-		receive_incoming_transactions(id)
+	var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in applications
+	if(message_app && id && message_app.incoming_transactions.len)
+		message_app.receive_incoming_transactions(id)
 	return
 
 // access to status display signals
@@ -756,8 +442,9 @@ var/global/msg_id = 0
 				if( can_use(user) )//If they can still act.
 					id_check(user, 2)
 					to_chat(user, "<span class='notice'>You put \the [C] into \the [src]'s slot.</span>")
-					if(incoming_transactions.len)
-						receive_incoming_transactions(id)
+					var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in applications
+					if(message_app && message_app.incoming_transactions.len)
+						message_app.receive_incoming_transactions(id)
 					updateSelfDialog()//Update self dialog on success.
 			return	//Return in case of failed check or when successful.
 		updateSelfDialog()//For the non-input related code.
@@ -974,7 +661,8 @@ var/global/msg_id = 0
 	var/list/plist = list()
 	var/list/namecounts = list()
 
-	if (toff)
+	var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in applications
+	if (!message_app || message_app.toff)
 		to_chat(usr, "Turn on your receiver in order to send messages.")
 		return
 
@@ -985,8 +673,10 @@ var/global/msg_id = 0
 			continue
 		else if (P == src)
 			continue
-		else if (P.toff)
-			continue
+		else
+			var/datum/pda_app/messenger/other_messenger = locate(/datum/pda_app/messenger) in P.applications
+			if(other_messenger.toff)
+				continue
 
 		var/name = P.owner
 		if (name in names)
@@ -1031,7 +721,8 @@ var/global/msg_id = 0
 	. = list()
 	// Returns a list of PDAs which can be viewed from another PDA/message monitor.
 	for(var/obj/item/device/pda/P in PDAs)
-		if(!P.owner || P.toff || P.hidden)
+		var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
+		if(!P.owner || !app || app.toff || P.hidden)
 			continue
 		. += P
 	return .

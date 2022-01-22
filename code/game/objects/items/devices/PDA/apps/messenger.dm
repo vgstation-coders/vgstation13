@@ -173,7 +173,7 @@
 
 	for (var/mob/O in hearers(3, U))
 		if(!silent)
-			O.show_message(text("[bicon(pda_device)] *[pda_device.ttone]*"))
+			O.show_message(text("[bicon(pda_device)] *[ttone]*"))
 
 	var/mob/living/L = null
 	if(pda_device.loc && isliving(pda_device.loc))
@@ -297,11 +297,11 @@
                 if(ai.aiPDA != P && ai.aiPDA != src)
                     ai.show_message("<i>Intercepted message from <b>[who]</b>: [t]</i>")
 
-        if (!P.silent)
+        if (!P_app.silent)
             playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
         for (var/mob/O in hearers(3, P.loc))
-            if(!P.silent)
-                O.show_message(text("[bicon(P)] *[P.ttone]*"))
+            if(!P_app.silent)
+                O.show_message(text("[bicon(P)] *[P_app.ttone]*"))
         //Search for holder of the PDA.
         var/mob/living/L = null
         if(P.loc && isliving(P.loc))
@@ -328,22 +328,24 @@
     icon = "pda_mail"
 
 /datum/pda_app/multimessage/on_select(var/mob/user)
-	var/list/department_list = list("security","engineering","medical","research","cargo","service")
-	var/target = input("Select a department", "CAMO Service") as null|anything in department_list
-	if(!target)
-		return
-	var/t = input(user, "Please enter message", "Message to [target]", null) as text|null
-	t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
-	//If no message, messaging is off, and we're either out of range or not in usr
-	if (!t || pda_device.toff || (!in_range(pda_device, user) && pda_device.loc != user))
-		return
-	if (pda_device.last_text && world.time < pda_device.last_text + 5)
-		return
-	pda_device.last_text = world.time
-	for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
-		if(multicaster.check_status())
-			multicaster.multicast(target,pda_device,user,t)
-			pda_device.tnote["msg_id"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
-			msg_id++
-			return
-	to_chat(user, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")
+    var/list/department_list = list("security","engineering","medical","research","cargo","service")
+    var/target = input("Select a department", "CAMO Service") as null|anything in department_list
+    if(!target)
+        return
+    var/t = input(user, "Please enter message", "Message to [target]", null) as text|null
+    t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+
+    var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in pda_device.applications
+    //If no message or messenger, messaging is off, and we're either out of range or not in usr
+    if (!message_app ||!t || message_app.toff || (!in_range(pda_device, user) && pda_device.loc != user))
+        return
+    if (message_app.last_text && world.time < message_app.last_text + 5)
+        return
+    message_app.last_text = world.time
+    for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
+        if(multicaster.check_status())
+            multicaster.multicast(target,pda_device,user,t)
+            message_app.tnote["msg_id"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
+            msg_id++
+            return
+    to_chat(user, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")
