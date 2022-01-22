@@ -10,36 +10,41 @@
 	horrorallowed = 0
 	chemcost = 20
 
+/spell/changeling/regenerate/cast_check(skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.)
+		return FALSE
+	if(user.mind && user.mind.suiciding)			//no reviving from suicides
+		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?")
+		return FALSE
+	if(M_HUSK in user.mutations)
+		to_chat(user, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
+		return FALSE
+	if(inuse)
+		return FALSE
+
 /spell/changeling/regenerate/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/mob/living/carbon/C = user
+	var/delay = 0 SECONDS
+	inuse = TRUE
 	
-	if(C.mind && C.mind.suiciding)			//no reviving from suicides
-		to_chat(C, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?")
-		return
-	if(M_HUSK in C.mutations)
-		to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
-		return
-	var/time_to_take = 0
 	if(user.stat != DEAD)
 		C.status_flags |= FAKEDEATH		//play dead
 		C.update_canmove()
 		C.emote("deathgasp", message = TRUE)
 		C.tod = worldtime2text()
-		time_to_take = rand(800, 1200)
+		delay = 120 SECONDS
 	else
-		time_to_take = 1200
-		
-	to_chat(C, "<span class='notice'>We begin to regenerating. This will take [round((time_to_take/10))] seconds.</span>")
-	feedback_add_details("changeling_powers","FD")	
-	sleep(time_to_take)
-	to_chat(C, "<span class='warning'>We are now ready to awaken from stasis.</span>")
-
+		delay = rand(80 SECONDS, 120 SECONDS)
+	to_chat(C, "<span class='warning'>We are now in stasis. You must wait [delay/10] seconds.</span>")
+	sleep(delay)
+	// If he didn't log out + if we didn't get revived/smitted in the meantime already
 	if(C.client && cast_check())
-		to_chat(C, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")
+		to_chat(C, "<span class='warning'>We are now ready to awaken from stasis.</span>")
 		to_chat(C, "<span class = 'notice'>Click the action button to revive.</span>")
 		var/datum/action/lingrevive/revive_action = new()
 		revive_action.Grant(C)
-
+	feedback_add_details("changeling_powers","FD")
 	..()
 
 /datum/action/lingrevive
@@ -51,12 +56,12 @@
 /datum/action/lingrevive/Trigger()
 	var/datum/role/changeling/changeling = owner.mind.GetRole(CHANGELING)
 	var/mob/living/carbon/C = owner
+
 	dead_mob_list -= C
 	living_mob_list |= list(C)
 	C.stat = CONSCIOUS
 	C.tod = null
 	C.revive(0)
-	to_chat(C, "<span class='notice'>We have regenerated.</span>")
 	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
 	C.status_flags &= ~(FAKEDEATH)
 	C.update_canmove()
@@ -67,3 +72,6 @@
 	C.regenerate_icons()
 	feedback_add_details("changeling_powers","RJ")
 	Remove(owner)
+
+/spell/changeling/regenerate/after_cast(list/targets,var/mob/living/carbon/human/user)
+	inuse = FALSE

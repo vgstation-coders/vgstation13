@@ -5,37 +5,46 @@
 	hud_state = "absorbdna"
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
-	charge_max = 15 SECONDS
-	cooldown_min = 15 SECONDS
+	
+	charge_max = 5 SECONDS
+	cooldown_min = 5 SECONDS
 
+/spell/changeling/absorbdna/cast_check(skipcharge = 0,mob/user = usr, var/list/targets)
+	. = ..()
+	if (!.)
+		return FALSE
+	
+	var/obj/item/weapon/grab/G = user.get_active_hand() //You need to be grabbing the target
 
-/spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
-	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	//You need to be grabbing the target
-	var/obj/item/weapon/grab/G = user.get_active_hand()
 	if(!istype(G))
 		to_chat(user, "<span class='warning'>We must be grabbing a creature in our active hand to absorb them.</span>")
-		return
-
+		return FALSE
+		
 	var/mob/living/carbon/human/T = G.affecting
 	if(!istype(T))					//Humans only
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
-		return
+		return FALSE
 	if(M_HUSK in T.mutations)	//No double-absorbing
 		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond useability!</span>")
-		return
+		return FALSE
 	if(!T.mind)						//No monkeymen
 		to_chat(user, "<span class='warning'>This creature's DNA is useless to us!</span>")
-		return
-
+		return FALSE
 	if(G.state != GRAB_KILL)		//Kill-Grabs only
 		to_chat(user, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
-		return
-
+		return FALSE
 	if (T.dna == user.dna)
 		to_chat(user, "<span class='warning'>We have already absorbed their DNA.</span>")
-		return
+		return FALSE
+	if(inuse)
+		return FALSE
 
+/spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
+	var/obj/item/weapon/grab/G = user.get_active_hand() //You need to be grabbing the target
+	var/mob/living/carbon/human/T = G.affecting
+	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
+	var/absorbtime = 15 SECONDS
+	inuse = TRUE
 	for(var/stage in 1 to 3)
 		switch(stage)
 			if(1)
@@ -52,12 +61,13 @@
 				var/datum/organ/external/affecting = T.get_organ(user.zone_sel.selecting)
 				if(affecting.take_damage(39,0,1,"large organic needle"))
 					T.UpdateDamageIcon(1)
+
 		feedback_add_details("changeling_powers","A[stage]")
-		if(!do_mob(user, T, 150, 10, 0))
+		if(!do_mob(user, T, absorbtime)
 			to_chat(user, "<span class='warning'>Our absorption of [T] has been interrupted!</span>")
 			return
 	usr.add_blood(T)
-	
+
 	to_chat(user, "<span class='notice'>We have absorbed [T]!</span>")
 	user.visible_message("<span class='danger'>[user] sucks the fluids from [T]!</span>")
 	to_chat(T, "<span class='danger'>You have been absorbed by the changeling!</span>")
@@ -67,7 +77,6 @@
 	T.dna.real_name = T.real_name //Set this again, just to be sure that it's properly set.
 	T.dna.flavor_text = T.flavor_text
 	changeling.absorbed_dna |= T.dna
-
 
 	var/avail_blood = T.vessel.get_reagent_amount(BLOOD)
 	for(var/datum/reagent/blood/B in user.vessel.reagent_list)
@@ -118,12 +127,15 @@
 			Tchangeling.chem_charges = 0
 			Tchangeling.powerpoints = 0
 			Tchangeling.absorbedcount = 0
-
+			
+	spell_do_after(user)
 	changeling.absorbedcount++
 	user.updateChangelingHUD()
 
 	T.death(0)
 	T.ChangeToHusk()
-	T.add_fingerprint(usr)
-	
+
 	..()
+
+/spell/changeling/absorbdna/after_cast(list/targets,var/mob/living/carbon/human/user)
+	inuse = FALSE

@@ -18,7 +18,7 @@
 	hud_state = "wiz_disint"
 
 	spell_flags = 0
-
+	var/inuse = FALSE
 	var/chemcost = 0
 	var/max_genedamage = 100
 	var/horrorallowed = 1

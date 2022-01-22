@@ -41,8 +41,8 @@
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		var/C = round(changeling.chem_charges)
 		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>\
-				C:<font color='#EAB67B'>[C]</font><br>\
-				G:<font color='#FF2828'>[changeling.absorbedcount]</font><br>\
+				C:   <font color='#EAB67B'>[C]</font><br>\
+				DNA:<font color='#FF2828'>[changeling.absorbedcount]</font><br>\
 				[changeling.geneticdamage ? "GD: <font color='#8b0000'>[changeling.geneticdamage]</font>" : ""]\
 				</div>"
 	return
