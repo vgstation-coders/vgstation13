@@ -478,7 +478,7 @@ var/global/datum/controller/vote/vote = new()
 		status_data += list(1)
 	else
 		status_data += list(0)
-		
+
 	if(refresh && interface)
 		updateFor()
 

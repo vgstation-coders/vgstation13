@@ -56,7 +56,7 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap){
 	}
 
 	if(admin > 0 || allow_map > 0){
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (allow_map?"Votable":"Compiled") + "</a>)" : ""))));
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (allow_map?"Compiled":"Votable") + "</a>)" : ""))));
 	}
 
 	if(mode != null && mode != ""){
