@@ -87,6 +87,9 @@ var/list/pda_multicasters = list()
 	hidden = 1
 	starting_apps = list(/datum/pda_app/messenger/camo)
 
+/datum/pda_app/messenger/camo
+	can_purchase = FALSE
+
 /datum/pda_app/messenger/camo/create_message(var/mob/living/U,var/obj/item/device/pda/P,var/multicast_message = null)
 	..()
 	last_text = 0 //CAMO can text as much as it pleases

@@ -13,7 +13,6 @@
     desc = "Access the crew medical records history."
     category = "Medical Functions"
     icon = "pda_medical"
-    var/mode = 0
     var/datum/data/record/active1 = null //General
     var/datum/data/record/active2 = null //Medical
 

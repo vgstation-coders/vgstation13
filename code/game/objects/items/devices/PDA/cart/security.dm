@@ -13,7 +13,6 @@
 	desc = "Access the crew security records history."
 	category = "Security Functions"
 	icon = "pda_cuffs"
-	var/mode = 0
 	var/datum/data/record/active1 = null //General
 	var/datum/data/record/active2 = null //Security
 

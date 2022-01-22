@@ -3,7 +3,6 @@
     desc = "Allows the PDA to send messages, images and funds to other PDAs, if possible."
     price = 0
     icon = "pda_mail"
-    var/mode = 0
     var/silent = 0 //To beep or not to beep, that is the question
     var/toff = 0 //If 1, messenger disabled
     var/list/tnote = list() //Current Texts
@@ -21,8 +20,6 @@
                 <a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
                 <a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
                 <a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_mail'></span> Messages</a>"}
-            if(pda_device.photo)
-                dat += " | <a href='byond://?src=\ref[src];choice=Eject Photo'><span class='pda_icon pda_eject'></span>Eject Photo</a>"
             dat += "<br>"
             var/datum/pda_app/cart/virus/detonate/DV = locate(/datum/pda_app/cart/virus/detonate) in pda_device.applications
             if(DV)
@@ -49,7 +46,7 @@
                     if (pda_device.id && !istype(P,/obj/item/device/pda/ai))
                         dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
                     if (DV && P.detonate)
-                        dat += " (<a href='byond://?src=\ref[src];target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
+                        dat += " (<a href='byond://?src=\ref[DV];target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
                     if (HV)
                         dat += " (<a href='byond://?src=\ref[HV];target=\ref[P]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
                     if (SV)
@@ -76,7 +73,7 @@
     if(..())
         return
     var/mob/living/U = usr
-    switch(href_list["Choice"])
+    switch(href_list["choice"])
         if("1")
             mode = 1
         if("Toggle Messenger")
@@ -161,6 +158,7 @@
 
             pda_device.id.virtual_wallet.money -= amount
             new /datum/transaction(pda_device.id.virtual_wallet, "Money transfer", "-[amount]", pda_device.name, P.owner)
+    refresh_pda()
 
 //Receive money transferred from another PDA
 /datum/pda_app/messenger/proc/receive_funds(var/creditor_name,var/arbitrary_sum,var/other_pda)
@@ -169,7 +167,7 @@
 		app.reconnect_database()
 	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
 		return 0 //This sends its own error message
-	var/turf/U = get_turf(src)
+	var/turf/U = get_turf(pda_device)
 	if(!silent)
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 

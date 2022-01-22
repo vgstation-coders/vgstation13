@@ -161,6 +161,8 @@ var/global/msg_id = 0
 	"}
 	if (cartridge && !app_menu)
 		dat += "<a href='byond://?src=\ref[src];choice=Eject'><span class='pda_icon pda_eject'></span> Eject [cartridge]</a> | "
+	if(photo)
+		dat += "<a href='byond://?src=\ref[src];choice=Eject Photo'><span class='pda_icon pda_eject'></span>Eject Photo</a> | "
 	if (app_menu)
 		dat += "<a href='byond://?src=\ref[src];choice=Return'><span class='pda_icon pda_menu'></span> Return</a> | "
 
@@ -181,7 +183,7 @@ var/global/msg_id = 0
 		var/datum/pda_app/alarm/alarm_app = locate(/datum/pda_app/alarm) in applications
 		if(alarm_app)
 			dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[alarm_app]'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
-		dat += "<br><br><ul><li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li></ul>"
+		dat += "<br><br>"
 
 		if (pai)
 			if(pai.loc != src)
@@ -249,19 +251,18 @@ var/global/msg_id = 0
 
 	add_fingerprint(U)
 	U.set_machine(src)
-	var/datum/pda_app/old_app = current_app
-	var/datum/asset/simple/old_assets = assets_to_send
-	current_app = null // Reset to make it something else
-	assets_to_send = null // Reset to make it something else
 
 	switch(href_list["choice"])
 
 //BASIC FUNCTIONS===================================
 		if("Refresh")//Refresh, goes to the end of the proc.
-			current_app = old_app //To keep it around afterwards.
-			assets_to_send = old_assets //Same here.
 		if("Return")//Return
-			app_menu = FALSE
+			if(app_menu && current_app && current_app.mode)
+				current_app.mode = FALSE //Returns an app to the main screen if not at one
+			else
+				current_app = null
+				assets_to_send = null
+				app_menu = FALSE //Or back to the main menu
 		if ("Authenticate")//Checks for ID
 			id_check(U, 1)
 		if("UpdateInfo")

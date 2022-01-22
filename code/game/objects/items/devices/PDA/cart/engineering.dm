@@ -14,7 +14,6 @@
     desc = "Access any power monitoring computer on the station."
     category = "Engineering Functions"
     icon = "pda_power"
-    var/mode = 0
     var/obj/machinery/computer/powermonitor/powmonitor = null // Power Monitor
     var/list/powermonitors = list()
 
@@ -84,7 +83,6 @@
     desc = "Access any alert monitoring computer on the station."
     category = "Engineering Functions"
     icon = "pda_alert"
-    var/mode = 0
     var/obj/machinery/computer/station_alert/alertmonitor = null // Alert Monitor
     var/list/alertmonitors = list()
 

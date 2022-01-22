@@ -15,6 +15,7 @@
 	var/no_refresh = FALSE
 	var/can_purchase = TRUE //if this can be bought from a PDA terminal
 	var/assets_type = null //for asset sending
+	var/mode = 0 //for apps with multiple screens
 
 /datum/pda_app/proc/onInstall(var/obj/item/device/pda/device)
 	if(istype(device))
