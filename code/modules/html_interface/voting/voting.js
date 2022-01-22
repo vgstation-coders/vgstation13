@@ -3,7 +3,8 @@ var question = null;
 var time_left = 0;
 var allow_restart = 0;
 var allow_mode = 0 ;
-var allow_map = 0;
+var toggle_map = 0;
+var toggle_vote_method = 0;
 var selected_vote = 0;
 var admin = 0;
 var updates = 0;
@@ -29,12 +30,13 @@ function client_data(selection, privs){
 	admin = parseInt(privs) || 0;
 }
 
-function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap){
+function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, vmethod){
 	mode = newMode;
 	question = newQuestion;
 	allow_mode = parseInt(vmode) || 0;
 	allow_restart = parseInt(vrestart) || 0;
-	allow_map = parseInt(vmap) || 0;
+	toggle_map = parseInt(vmap) || 0;
+	toggle_vote_method = parseInt(vmethod) || 0;
 	time_left = parseInt(newTimeleft) || 0;
 	$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemLabel'></div>").html("Time Left")).append($("<div class='itemContent'></div>").html(displayBar(time_left, 0, 60, (time_left >= 50) ? 'good' : (time_left >= 25) ? 'average' : 'bad', '<center>' + time_left + '</center>'))));
 	$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemLabel'></div>").html("<br />Question")).append($("<div class='itemContentMedium'></div>").append($("<div class='statusDisplay'></div>").text(question))));
@@ -52,11 +54,14 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap){
 	}
 
 	if(admin > 0){
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=custom'>Custom</a>")));
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=custom'>Custom Vote</a>")));
 	}
 
-	if(admin > 0 || allow_map > 0){
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (allow_map?"Compiled":"Votable") + "</a>)" : ""))));
+	if(admin > 0){
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (toggle_map?"All Compiled":"Votable") + "</a>)" : ""))));
+	}
+	if(admin > 0){
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=toggle_vote_method'>" + (toggle_vote_method?"Majority":"Weighted") + "</a>)" )));
 	}
 
 	if(mode != null && mode != ""){

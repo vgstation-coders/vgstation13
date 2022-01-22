@@ -49,7 +49,6 @@ var/global/datum/controller/vote/vote = new()
 	var/initialized    = 0
 	var/lastupdate     = 0
 
-	var/vote_method = "WEIGHTED"		//choose the method for voting: "WEIGHTED", "MAJORITY", "PERSISTENT".
 	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
@@ -130,14 +129,15 @@ var/global/datum/controller/vote/vote = new()
 				factor = max(factor,0.5)
 				tally["Initiate Crew Transfer"] = round(tally["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-	switch(vote_method) //pick winner based on vote_method
-		if("MAJORITY")
-			return majority()
-		if("WEIGHTED")
+	//choose the method for voting: "WEIGHTED" = 0, "MAJORITY" = 1		
+	switch(config.toggle_vote_method)
+		if(0)
 			return weighted()
-		if("PERSISTENT")
+		if(1)
+			return majority()
+		if(2)
 			if(mode == "map")
-				return persistent()
+				return  majority()//return persistent()
 			else
 				return  majority()
 		else
@@ -201,7 +201,7 @@ var/global/datum/controller/vote/vote = new()
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
-
+/*
 /datum/controller/vote/proc/persistent()
 	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
 	task.file_path = "data/persistence/votes.json"
@@ -212,7 +212,7 @@ var/global/datum/controller/vote/vote = new()
 		tally[task.data[i]] += task.data[task.data[i]]
 	majority()
 	task.on_shutdown()
-
+*/
 /datum/controller/vote/proc/announce_result()
 	currently_voting = FALSE
 	var/result = get_result()
@@ -356,7 +356,7 @@ var/global/datum/controller/vote/vote = new()
 			if("map")
 				var/list/maps
 				question = "What should the next map be?"
-				if (config.allow_vote_map)
+				if (config.toggle_maps)
 					maps = get_all_maps()
 				else
 					maps = get_votable_maps()
@@ -477,7 +477,11 @@ var/global/datum/controller/vote/vote = new()
 		status_data += list(1)
 	else
 		status_data += list(0)
-	if(config.allow_vote_map)
+	if(config.toggle_maps)
+		status_data += list(1)
+	else
+		status_data += list(0)
+	if(config.toggle_vote_method)
 		status_data += list(1)
 	else
 		status_data += list(0)
@@ -528,8 +532,12 @@ var/global/datum/controller/vote/vote = new()
 				initiate_vote("map",user)
 		if("toggle_map")
 			if(user.client.holder)
-				config.allow_vote_map = !config.allow_vote_map
-				update()		
+				config.toggle_maps = !config.toggle_maps
+				update()
+		if("toggle_vote_method")
+			if(user.client.holder)
+				config.toggle_vote_method = !config.toggle_vote_method
+				update()
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
 	user.vote()
