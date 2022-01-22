@@ -14,6 +14,12 @@
 	// -- For the IAA and etc
 	var/fax_pings = FALSE
 
+	// -- For scanners
+	var/obj/item/device/analyzer/atmos_analys = new
+	var/obj/item/device/robotanalyzer/robo_analys = new
+	var/obj/item/device/hailer/integ_hailer = new
+	var/obj/item/device/device_analyser/dev_analys = new
+
 	var/list/datum/pda_app/applications = list()
 	var/list/starting_apps = list()
 
@@ -49,7 +55,22 @@
 	if(radio)
 		qdel(radio)
 		radio = null
-	//stored_data = null
+
+	if(atmos_analys)
+		qdel(atmos_analys)
+		atmos_analys = null
+
+	if(robo_analys)
+		qdel(robo_analys)
+		robo_analys = null
+
+	if(dev_analys)
+		qdel(dev_analys)
+		dev_analys = null
+
+	if(integ_hailer)
+		qdel(integ_hailer)
+		dev_analys = null
 	..()
 
 /datum/pda_app/cart

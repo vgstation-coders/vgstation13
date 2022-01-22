@@ -84,10 +84,10 @@
 	icon = "pda_signaler"
 
 /datum/pda_app/cart/scanner/hailer/afterattack(atom/A, mob/user, proximity_flag)
-	if(!pda_device.integ_hailer)
+	if(!cart_device.integ_hailer)
 		return
-	pda_device.integ_hailer.cant_drop = 1
-	pda_device.integ_hailer.afterattack(A, user, proximity_flag)
+	cart_device.integ_hailer.cant_drop = 1
+	cart_device.integ_hailer.afterattack(A, user, proximity_flag)
 
 /datum/pda_app/cart/secbot
 	name = "Security Bot Access"

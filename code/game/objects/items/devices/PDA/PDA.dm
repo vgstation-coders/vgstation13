@@ -11,7 +11,7 @@ var/global/msg_id = 0
 
 /obj/item/device/pda
 	name = "\improper PDA"
-	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by a pre-programmed ROM cartridge. Can download additional applications from PDA terminals."
+	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by applications on ROM cartridge. Can download additional applications from PDA terminals."
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pda"
 	item_state = "electronic"
@@ -38,10 +38,6 @@ var/global/msg_id = 0
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/weapon/photo/photo = null	// A slot for a photo
-	var/obj/item/device/analyzer/atmos_analys = new
-	var/obj/item/device/robotanalyzer/robo_analys = new
-	var/obj/item/device/hailer/integ_hailer = new
-	var/obj/item/device/device_analyser/dev_analys = new
 
 	var/MM = null
 	var/DD = null
@@ -525,18 +521,6 @@ var/global/msg_id = 0
 			cartridge.radio.hostpda = null
 		qdel(cartridge)
 		cartridge = null
-
-	if(atmos_analys)
-		qdel(atmos_analys)
-		atmos_analys = null
-
-	if(robo_analys)
-		qdel(robo_analys)
-		robo_analys = null
-
-	if(dev_analys)
-		qdel(dev_analys)
-		dev_analys = null
 
 	for(var/A in applications)
 		qdel(A)

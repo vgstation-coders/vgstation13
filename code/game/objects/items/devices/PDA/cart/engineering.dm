@@ -210,11 +210,11 @@
     icon = "pda_reagent"
 
 /datum/pda_app/cart/scanner/atmos/afterattack(atom/A, mob/user, proximity_flag)
-    if(!pda_device.atmos_analys || !proximity_flag)
+    if(!cart_device.atmos_analys || !proximity_flag)
         return
-    pda_device.atmos_analys.cant_drop = 1
-    if(!A.attackby(pda_device.atmos_analys, user))
-        pda_device.atmos_analys.afterattack(A, user, 1)
+    cart_device.atmos_analys.cant_drop = 1
+    if(!A.attackby(cart_device.atmos_analys, user))
+        cart_device.atmos_analys.afterattack(A, user, 1)
 
 /obj/item/weapon/cartridge/mechanic
     name = "\improper Screw-E Cartridge"
@@ -231,8 +231,8 @@
     icon = "pda_scanner"
 
 /datum/pda_app/cart/scanner/mechanic/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
-    if(pda_device.dev_analys)
-        pda_device.dev_analys.cant_drop = 1
-        pda_device.dev_analys.max_designs = 5
+    if(cart_device.dev_analys)
+        cart_device.dev_analys.cant_drop = 1
+        cart_device.dev_analys.max_designs = 5
         if(A.Adjacent(user))
-            return pda_device.dev_analys.preattack(A, user, 1)
+            return cart_device.dev_analys.preattack(A, user, 1)
