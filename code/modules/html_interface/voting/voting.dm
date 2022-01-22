@@ -351,8 +351,12 @@ var/global/datum/controller/vote/vote = new()
 						break
 					choices.Add(option)
 			if("map")
+				var/list/maps
 				question = "What should the next map be?"
-				var/list/maps = get_votable_maps()
+				if (config.allow_vote_mode)
+					maps = get_votable_maps()
+				else
+					maps = get_all_maps()
 				for(var/key in maps)
 					choices.Add(key)
 				if(!choices.len)
@@ -421,7 +425,7 @@ var/global/datum/controller/vote/vote = new()
 		for (var/i = 1; i <= tally.len; i++)
 			var/list/L = list(i, tally[i], tally[tally[i]])
 			interface.callJavaScript("update_choices", L, hclient_or_mob)
-			
+
 /datum/controller/vote/proc/interact(client/user)
 	set waitfor = FALSE // So we don't wait for each individual client's assets to be sent.
 
@@ -472,11 +476,11 @@ var/global/datum/controller/vote/vote = new()
 		status_data += list(1)
 	else
 		status_data += list(0)
+	if(config.allow_vote_map)
+		status_data += list(1)
+	else
+		status_data += list(0)
 
-	//if(mode)
-	//	for(var/i in 1 to choices.len)
-	//		//[[index, choice, choice count],...]
-	//		data += list(list((i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
 	if(refresh && interface)
 		updateFor()
 
@@ -520,7 +524,11 @@ var/global/datum/controller/vote/vote = new()
 				initiate_vote("custom",user)
 		if("map")
 			if(user.client.holder)
-				initiate_vote("map",user)		
+				initiate_vote("map",user)
+		if("toggle_map")
+			if(user.client.holder)
+				config.allow_vote_map = !config.allow_vote_map
+				update()
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
 	user.vote()
