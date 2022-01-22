@@ -41,7 +41,7 @@ var/global/msg_id = 0
 	var/obj/item/device/analyzer/atmos_analys = new
 	var/obj/item/device/robotanalyzer/robo_analys = new
 	var/obj/item/device/hailer/integ_hailer = new
-	var/obj/item/device/device_analyser/dev_analys = null
+	var/obj/item/device/device_analyser/dev_analys = new
 
 	var/MM = null
 	var/DD = null
@@ -478,24 +478,6 @@ var/global/msg_id = 0
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
 	if(istype(C) && scanning_app)
-		/*if(SCANMODE_FORENSIC)
-			if (!istype(C:dna, /datum/dna))
-				to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
-			else if(!istype(C, /mob/living/carbon/monkey))
-				if(!isnull(C:gloves))
-					to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
-			else
-				to_chat(user, text("<span class='notice'>[C]'s Fingerprints: [md5(C.dna.uni_identity)]</span>"))
-			if ( !(C:blood_DNA) )
-				to_chat(user, "<span class='notice'>No blood found on [C]</span>")
-				if(C:blood_DNA)
-					qdel(C:blood_DNA)
-					C:blood_DNA = null
-			else
-				to_chat(user, "<span class='notice'>Blood found on [C]. Analysing...</span>")
-				spawn(15)
-					for(var/blood in C:blood_DNA)
-						to_chat(user, "<span class='notice'>Blood type: [C:blood_DNA[blood]]\nDNA: [blood]</span>")*/
 		scanning_app.attack(C,user)
 
 /obj/item/device/pda/afterattack(atom/A, mob/user, proximity_flag)

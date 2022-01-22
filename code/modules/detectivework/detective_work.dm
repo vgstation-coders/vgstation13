@@ -452,7 +452,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					var/is_scanner = istype(scanning, /obj/item/device/detective_scanner)
 					/*if(istype(scanning, /obj/item/device/pda))
 						var/obj/item/device/pda/the_pda = scanning
-						if(the_pda.cartridge && (locate(/datum/pda_app/cart/scanner/hailer) in the_pda.cartridge.applications))
+						if(istype(the_pda.scanning_app,/datum/pda_app/cart/scanner/detective))
 							is_scanner = TRUE*/
 
 					if(is_scanner)
@@ -506,12 +506,13 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 		D.stored = list()
 	/*else if(istype(W, /obj/item/device/pda))
 		var/obj/item/device/pda/the_pda = W
-		if(the_pda.cartridge && (locate(/datum/pda_app/cart/scanner/hailer) in the_pda.cartridge.applications))
-			if(the_pda.cartridge.stored_data)
-				for(var/atom in the_pda.cartridge.stored_data)
-					var/list/data = the_pda.cartridge.stored_data[atom]
+		istype(the_pda.scanning_app,/datum/pda_app/cart/scanner/detective)
+			var/datum/pda_app/cart/scanner/detective/D = the_pda.scanning_app
+			if(D.stored_data)
+				for(var/atom in D)
+					var/list/data = D[atom]
 					add_data_master(atom,data[1],data[2],data[3],data[4])
-			the_pda.cartridge.stored_data = list()*/
+			D.stored_data = list()*/
 	return
 
 /obj/machinery/computer/forensic_scanning/proc/add_data(var/atom/scanned_atom)

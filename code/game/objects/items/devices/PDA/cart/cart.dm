@@ -17,8 +17,6 @@
 	var/list/datum/pda_app/applications = list()
 	var/list/starting_apps = list()
 
-	//var/list/stored_data = list()
-
 	// Bot destination
 	var/saved_destination = "No destination"
 
@@ -75,13 +73,19 @@
 
 /datum/pda_app/cart/scanner/onInstall(var/obj/item/device/pda/device,var/obj/item/weapon/cartridge/device2)
 	..(device,device2)
-	name = "[pda_device.scanning_app == src ? "Disable" : "Enable" ] [base_name]"
+	update_name()
 
 /datum/pda_app/cart/scanner/on_select(var/mob/user)
-	if(pda_device.scanning_app == src)
-		pda_device.scanning_app = null
-	else
-		pda_device.scanning_app = src
+	if(pda_device)
+		if(pda_device.scanning_app == src)
+			pda_device.scanning_app = null
+		else
+			pda_device.scanning_app = src
+		update_name() // To be extra sure
+		for(var/datum/pda_app/cart/scanner/SC in pda_device.applications)
+			SC.update_name()
+
+/datum/pda_app/cart/scanner/proc/update_name()
 	name = "[pda_device.scanning_app == src ? "Disable" : "Enable" ] [base_name]"
 
 /datum/pda_app/cart/scanner/proc/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
