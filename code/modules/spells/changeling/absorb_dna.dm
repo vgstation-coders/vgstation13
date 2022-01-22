@@ -41,7 +41,7 @@
 		
 	changeling.isabsorbing = 1
 
-	for(var/stage = 1, stage<=3, stage++)
+	for(var/stage in 1 to 3)
 		switch(stage)
 			if(1)
 				to_chat(user, "<span class='notice'>This creature is compatible. We must hold still...</span>")
@@ -85,7 +85,6 @@
 		user.nutrition = min((user.nutrition + T.nutrition), 400)
 	user.health = user.maxHealth
 
-	changeling.chem_charges += 10
 	changeling.powerpoints += 2
 
 	//Steal all of their languages!

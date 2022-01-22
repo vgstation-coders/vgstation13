@@ -1,6 +1,6 @@
 /datum/outfit/special
 	use_pref_bag = FALSE
-	give_disabilities_equipment = FALSE
+	give_disabilities_equipment = TRUE
 	equip_survival_gear = FALSE
 
 // No id in most cases.

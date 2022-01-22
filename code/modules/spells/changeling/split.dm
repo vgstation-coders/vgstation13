@@ -23,7 +23,7 @@
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
-	if (changeling.splitcount < 2) //<2 is two splits max
+	if (changeling.splitcount < 2 && !issilicon(user)) //<2 is two splits max
 		user.visible_message("[user] is preparing to generate a new form.")
 		Splitting()
 	else
@@ -51,6 +51,7 @@
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (success)
 		changeling.splitcount += 1
+		changeling.absorbedcount = max(0,changeling.absorbedcount-1)
 		(owner.current).visible_message("<span class='danger'>[(owner.current)] splits!</span>")
 		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else

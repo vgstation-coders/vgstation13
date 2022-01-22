@@ -644,6 +644,16 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 
+/obj/item/weapon/storage/bag/potion/dice_potion_bundle
+	name = "Lucky potion bundle"
+	desc = "A bundle of potions for a lucky individual"
+
+/obj/item/weapon/storage/bag/potion/dice_potion_bundle/New()
+	..()
+	for(var/i = 1 to 5)
+		var/potiontype = pick(existing_typesof(/obj/item/potion))
+		new potiontype(src)
+
 /obj/item/weapon/storage/bag/ammo_pouch
 	name = "ammunition pouch"
 	desc = "Designed to hold stray magazines and spare bullets."

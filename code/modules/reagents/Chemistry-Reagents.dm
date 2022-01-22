@@ -7313,13 +7313,6 @@
 	if(M.confused != 0)
 		M.remove_confused(5)
 
-/datum/reagent/ethanol/drink/changelingsting
-	name = "Changeling Sting"
-	id = CHANGELINGSTING
-	description = "Milder than the name suggests. Not that you've ever been stung."
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#2E6671" //rgb: 46, 102, 113
-
 /datum/reagent/ethanol/drink/irish_cream
 	name = "Irish Cream"
 	id = IRISHCREAM
@@ -7963,6 +7956,19 @@
 		return 1
 
 	M.dizziness += 5
+
+/datum/reagent/ethanol/drink/changelingsting/stab
+	name = "Changeling Stab"
+	id = CHANGELINGSTAB
+	description = "A bit less mild than the sting. Not that you've ever been stabbed either, surely."
+	glass_name = "\improper Changeling Stab"
+	glass_desc = "Stabs, but metaphorically."
+
+/datum/reagent/ethanol/drink/changelingsting/stab/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(tick <= 1) // The stab itself
+		M.SetKnockdown(max(M.knockdown,2))
 
 /datum/reagent/ethanol/drink/erikasurprise
 	name = "Erika Surprise"
@@ -9630,3 +9636,26 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#571212" //like a dark red
 	density = 1.00 //basically water
 	specheatcap = 4.184
+
+/datum/reagent/grue_bile
+	name = "Grue Bile"
+	id = GRUE_BILE
+	description = "A noxious substance produced in the body of a grue."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = GRUE_BLOOD
+	custom_metabolism = 0.01
+	density = 1.25
+	specheatcap = 2.2
+	pain_resistance = -25 //increases pain a bit
+
+
+/datum/reagent/grue_bile/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.adjustToxLoss(0.1) //Does some toxin damage
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
+		if(E && !istype(E, /datum/organ/internal/eyes/umbra)) //doesn't harm umbra eyes
+			E.damage += 0.5

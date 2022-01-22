@@ -2969,6 +2969,13 @@
 	required_reagents = list(SCREWDRIVERCOCKTAIL = 1, LIMEJUICE = 1, LEMONJUICE = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/changelingstab
+	name = "Changeling Stab"
+	id = CHANGELINGSTAB
+	result = CHANGELINGSTAB
+	required_reagents = list(CHANGELINGSTING = 1, NOTHING = 1, KARMOTRINE = 3)
+	result_amount = 5
+
 /datum/chemical_reaction/aloe
 	name = "Aloe"
 	id = ALOE
@@ -3656,6 +3663,13 @@
 	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/black_food_coloring
+	name = "Black Food Coloring"
+	id = BLACKCOLOR
+	result = BLACKCOLOR
+	required_reagents = list(COLORFUL_REAGENT = 1, CARBON = 1)
+	result_amount = 2
+	
 /datum/chemical_reaction/degeneratecalcium
 	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
@@ -3902,6 +3916,25 @@
 	result = LOCUTOGEN
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/random
+	name = "Random chemical"
+	id = "random"
+	result = null
+	required_reagents = list(NOTHING = 10, PHAZON = 10)
+	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
+	result_amount = 1
+
+/datum/chemical_reaction/random/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	if(prob(50)) // Half chance to start another chemical reaction
+		var/our_id = pick(chemical_reactions_list)
+		var/datum/chemical_reaction/new_reaction = pick(chemical_reactions_list[our_id])
+		holder.handle_reaction(new_reaction,TRUE,created_volume)
+	else // Or else just spawn a new chem
+		var/list/blocked_chems = list(ADMINORDRAZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
+		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
+		holder.add_reagent(pick(allowed_reagents),created_volume)
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
