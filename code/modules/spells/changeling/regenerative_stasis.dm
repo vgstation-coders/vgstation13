@@ -28,7 +28,7 @@
 	var/delay = 0 SECONDS
 	inuse = TRUE
 	
-	if(user.stat != DEAD)
+	if(C.stat != DEAD)
 		C.status_flags |= FAKEDEATH		//play dead
 		C.update_canmove()
 		C.emote("deathgasp", message = TRUE)
@@ -39,13 +39,13 @@
 	to_chat(C, "<span class='warning'>We are now in stasis. You must wait [delay/10] seconds.</span>")
 	sleep(delay)
 	// If he didn't log out + if we didn't get revived/smitted in the meantime already
-	if(C.client && cast_check())
+	if(C.client && (C.stat == DEAD || C.status_flags & FAKEDEATH) && !isbrain(C))
 		to_chat(C, "<span class='warning'>We are now ready to awaken from stasis.</span>")
 		to_chat(C, "<span class = 'notice'>Click the action button to revive.</span>")
 		var/datum/action/lingrevive/revive_action = new()
 		revive_action.Grant(C)
+		
 	feedback_add_details("changeling_powers","FD")
-	..()
 
 /datum/action/lingrevive
 	name = "Return to Life"
