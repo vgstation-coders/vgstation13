@@ -142,6 +142,7 @@ var/global/datum/controller/vote/vote = new()
 				return  majority()
 		else
 			return  majority()
+		
 /datum/controller/vote/proc/majority()
 	var/text
 	var/feedbackanswer
