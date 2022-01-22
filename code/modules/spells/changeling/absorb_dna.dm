@@ -5,7 +5,7 @@
 	hud_state = "absorbdna"
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
-	
+
 	charge_max = 5 SECONDS
 	cooldown_min = 5 SECONDS
 
@@ -13,13 +13,13 @@
 	. = ..()
 	if (!.)
 		return FALSE
-	
+
 	var/obj/item/weapon/grab/G = user.get_active_hand() //You need to be grabbing the target
 
 	if(!istype(G))
 		to_chat(user, "<span class='warning'>We must be grabbing a creature in our active hand to absorb them.</span>")
 		return FALSE
-		
+
 	var/mob/living/carbon/human/T = G.affecting
 	if(!istype(T))					//Humans only
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
@@ -63,7 +63,7 @@
 					T.UpdateDamageIcon(1)
 
 		feedback_add_details("changeling_powers","A[stage]")
-		if(!do_mob(user, T, absorbtime)
+		if(!do_mob(user, T, absorbtime))
 			to_chat(user, "<span class='warning'>Our absorption of [T] has been interrupted!</span>")
 			return
 	usr.add_blood(T)
@@ -127,7 +127,7 @@
 			Tchangeling.chem_charges = 0
 			Tchangeling.powerpoints = 0
 			Tchangeling.absorbedcount = 0
-			
+
 	spell_do_after(user)
 	changeling.absorbedcount++
 	user.updateChangelingHUD()
