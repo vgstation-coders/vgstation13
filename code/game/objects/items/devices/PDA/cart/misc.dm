@@ -176,7 +176,7 @@
     if(!cart_device || !istype(cart_device,/obj/item/weapon/cartridge/camera))
         dat += {"No camera found!"}
     else
-        dat += {"<a href='byond://?src=\ref[src];Clear Photos=1'>Delete All Photos</a><hr>"}
+        dat += {"<a href='byond://?src=\ref[src];Clear Photos=1'>Delete All Photos</a><br><br>"}
         var/obj/item/weapon/cartridge/camera/CM = cart_device
         if(!CM.stored_photos.len)
             dat += {"None found."}
@@ -191,7 +191,7 @@
                     if(7)
                         displaylength = 448
 
-                dat += {"<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><hr>"}
+                dat += {"<div style='float: left'> <img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /> </div>"}
                 i++
     return dat
 
