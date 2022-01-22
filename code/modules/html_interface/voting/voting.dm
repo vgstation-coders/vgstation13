@@ -351,10 +351,12 @@ var/global/datum/controller/vote/vote = new()
 						break
 					choices.Add(option)
 			if("map")
+				var/list/maps
 				question = "What should the next map be?"
-				var/list/maps = get_votable_maps()
-				for(var/key in maps)
-					choices.Add(key)
+				if (config.allow_vote_map)
+					maps = get_votable_maps()
+				else
+					maps = get_all_maps()
 				if(!choices.len)
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
@@ -472,11 +474,10 @@ var/global/datum/controller/vote/vote = new()
 		status_data += list(1)
 	else
 		status_data += list(0)
-
-	//if(mode)
-	//	for(var/i in 1 to choices.len)
-	//		//[[index, choice, choice count],...]
-	//		data += list(list((i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
+	if(config.allow_vote_map)
+		status_data += list(1)
+	else
+		status_data += list(0)
 	if(refresh && interface)
 		updateFor()
 
@@ -520,7 +521,11 @@ var/global/datum/controller/vote/vote = new()
 				initiate_vote("custom",user)
 		if("map")
 			if(user.client.holder)
-				initiate_vote("map",user)		
+				initiate_vote("map",user)
+		if("toggle_map")
+			if(user.client.holder)
+				config.allow_vote_map = !config.allow_vote_map
+				update()		
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
 	user.vote()
