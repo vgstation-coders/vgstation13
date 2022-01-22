@@ -208,7 +208,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data = list()
 	fdel(file(file_path))
 
-
+/*
 //stores map votes for code/modules/html_interface/voting/voting.dm
 /datum/persistence_task/vote
 	execute = TRUE
@@ -236,7 +236,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/vote/proc/clear_counts()
 	data = list()
 	fdel(file(file_path))
-	
+*/	
 //Ape-related
 
 /datum/persistence_task/ape_mode
