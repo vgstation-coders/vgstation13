@@ -108,7 +108,7 @@
 	default_cartridge = /obj/item/weapon/cartridge/mime
 	icon_state = "pda-mime"
 
-obj/item/device/pda/mime/New()
+/obj/item/device/pda/mime/New()
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)
