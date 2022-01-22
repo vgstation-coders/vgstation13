@@ -354,9 +354,9 @@ var/global/datum/controller/vote/vote = new()
 				var/list/maps
 				question = "What should the next map be?"
 				if (config.allow_vote_map)
-					maps = get_votable_maps()
-				else
 					maps = get_all_maps()
+				else
+					maps = get_votable_maps()
 				if(!choices.len)
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
@@ -478,6 +478,7 @@ var/global/datum/controller/vote/vote = new()
 		status_data += list(1)
 	else
 		status_data += list(0)
+		
 	if(refresh && interface)
 		updateFor()
 
