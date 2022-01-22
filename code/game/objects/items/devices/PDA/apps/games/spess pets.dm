@@ -7,7 +7,6 @@
 	desc = "A virtual pet simulator. For when you don't have the balls to own a real pet. Includes multi-PDA interactions and Nanocoin mining."
 	category = "Games"
 	price = 10
-	menu = PDA_APP_SPESSPETS
 	icon = "pda_egg"
 	assets_type = /datum/asset/simple/pda_spesspets
 	var/obj/machinery/account_database/linked_db
@@ -251,7 +250,7 @@
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
 			if(get_dist(user_loc,pda_loc) <= 1)
-				if(pda_device.mode == PDA_APP_SPESSPETS)
+				if((locate(src.type) in pda_device.applications) && pda_device.app_menu)
 					pda_device.attack_self(C)
 			else
 				user.unset_machine()

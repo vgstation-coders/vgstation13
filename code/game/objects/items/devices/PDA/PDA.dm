@@ -34,7 +34,7 @@ var/global/msg_id = 0
 	var/owner = null
 	var/default_cartridge = 0 // Access level defined by cartridge
 	var/obj/item/weapon/cartridge/cartridge = null //current cartridge
-	var/mode = 0 //Controls what menu the PDA will display. 0 is hub; the rest are either built in or based on cartridge.
+	var/app_menu = FALSE //Controls if the PDA is displaying an app or the menu
 
 	//Secondary variables
 	var/scanmode = SCANMODE_NONE //used for various PDA scanning functions
@@ -159,9 +159,9 @@ var/global/msg_id = 0
 	<body>
 	<link rel="stylesheet" type="text/css" href="pda.css"/> <!--This stylesheet contains all the PDA icons in base 64!-->
 	"}
-	if ((!isnull(cartridge)) && (mode == 0))
+	if (cartridge && !app_menu)
 		dat += "<a href='byond://?src=\ref[src];choice=Eject'><span class='pda_icon pda_eject'></span> Eject [cartridge]</a> | "
-	if (mode)
+	if (app_menu)
 		dat += "<a href='byond://?src=\ref[src];choice=Return'><span class='pda_icon pda_menu'></span> Return</a> | "
 
 	dat += {"<a href='byond://?src=\ref[src];choice=Refresh'><span class='pda_icon pda_refresh'></span> Refresh</a>
@@ -170,47 +170,43 @@ var/global/msg_id = 0
 
 		dat += {"Warning: No owner information entered.  Please swipe card.<br><br>
 			<a href='byond://?src=\ref[src];choice=Refresh'><span class='pda_icon pda_refresh'></span> Retry</a>"}
-	else
-		switch (mode)
-			if (0)
-				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.4</h2>
-					Owner: [owner], [ownjob]<br>"}
-				dat += text("ID: <A href='?src=\ref[src];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
-				dat += text("<br><A href='?src=\ref[src];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
+	else if(!app_menu)
+		dat += {"<h2>PERSONAL DATA ASSISTANT v.1.4</h2>
+			Owner: [owner], [ownjob]<br>"}
+		dat += text("ID: <A href='?src=\ref[src];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
+		dat += text("<br><A href='?src=\ref[src];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
 
 
-				dat += "Station Time: [worldtime2text()]"
-				var/datum/pda_app/alarm/alarm_app = locate(/datum/pda_app/alarm) in applications
-				if(alarm_app)
-					dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[alarm_app]'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
-				dat += "<br><br><ul><li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li></ul>"
+		dat += "Station Time: [worldtime2text()]"
+		var/datum/pda_app/alarm/alarm_app = locate(/datum/pda_app/alarm) in applications
+		if(alarm_app)
+			dat +=  "<a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[alarm_app]'><span class='pda_icon pda_clock'></span> Set Alarm</a>"
+		dat += "<br><br><ul><li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li></ul>"
 
-				if (pai)
-					if(pai.loc != src)
-						pai = null
-					else
-						dat += {"<ul><li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
-							<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li></ul>"}
+		if (pai)
+			if(pai.loc != src)
+				pai = null
+			else
+				dat += {"<ul><li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
+					<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li></ul>"}
 
-				if(applications.len == 0)
-					dat += {"<h4>No application currently installed.</h4>"}
-				else if(categorised_applications.len == 0)
-					dat += {"<h4>Unsorted Applications</h4>"}
-					dat += {"<ul>"}
-					for(var/datum/pda_app/app in applications)
-						if(app.menu)
-							dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
-					dat += {"</ul>"}
-				else
-					for(var/category_title in categorised_applications)
-						dat += {"<h4>[category_title]</h4>"}
-						dat += {"<ul>"}
-						for(var/datum/pda_app/app in categorised_applications[category_title])
-							if(app.menu)
-								dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
-						dat += {"</ul>"}
-
-			//(1) is for the app screen, and not here
+		if(applications.len == 0)
+			dat += {"<h4>No application currently installed.</h4>"}
+		else if(categorised_applications.len == 0)
+			dat += {"<h4>Unsorted Applications</h4>"}
+			dat += {"<ul>"}
+			for(var/datum/pda_app/app in applications)
+				if(app.menu)
+					dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
+			dat += {"</ul>"}
+		else
+			for(var/category_title in categorised_applications)
+				dat += {"<h4>[category_title]</h4>"}
+				dat += {"<ul>"}
+				for(var/datum/pda_app/app in categorised_applications[category_title])
+					if(app.menu)
+						dat += {"<li><a href='byond://?src=\ref[src];choice=appMode;appChoice=\ref[app]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
+				dat += {"</ul>"}
 
 	if(assets_to_send && user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 		send_asset_list(user.client, assets_to_send.assets)
@@ -265,7 +261,7 @@ var/global/msg_id = 0
 			current_app = old_app //To keep it around afterwards.
 			assets_to_send = old_assets //Same here.
 		if("Return")//Return
-			mode = 0
+			app_menu = FALSE
 		if ("Authenticate")//Checks for ID
 			id_check(U, 1)
 		if("UpdateInfo")
@@ -296,7 +292,7 @@ var/global/msg_id = 0
 			no_refresh = current_app.no_refresh //If set in on_select
 			current_app.no_refresh = FALSE //Resets for next time
 			if(current_app.has_screen)
-				mode = 1
+				app_menu = TRUE
 
 			if(current_app.assets_type && usr.client)
 				assets_to_send = new current_app.assets_type()
@@ -311,8 +307,9 @@ var/global/msg_id = 0
 
 //EXTRA FUNCTIONS===================================
 
-	if (mode == 2||mode == 3)//To clear message overlays.
+	if (app_menu)//To clear message overlays.
 		overlays.len = 0
+		update_icon()
 
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
 		honkamt--

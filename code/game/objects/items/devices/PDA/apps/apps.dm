@@ -1,16 +1,4 @@
-///PDA apps by Deity Link///
-#define PDA_APP_ALARM			1
-#define PDA_APP_RINGER			2
-#define PDA_APP_SPAMFILTER		3
-#define PDA_APP_BALANCECHECK	4
-#define PDA_APP_STATIONMAP		5
-#define PDA_APP_NEWSREADER		6
-#define PDA_APP_NOTEKEEPER		7
-
-#define PDA_APP_SNAKEII			101
-#define PDA_APP_MINESWEEPER		102
-#define PDA_APP_SPESSPETS		103
-
+///PDA apps by Deity Link, actual dat being held by them with Topic() on_select proc calls by kanef///
 #define NEWSREADER_CHANNEL_LIST	0
 #define NEWSREADER_VIEW_CHANNEL	1
 #define NEWSREADER_WANTED_SHOW	2

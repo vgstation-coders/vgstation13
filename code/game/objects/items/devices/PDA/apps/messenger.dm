@@ -77,6 +77,8 @@
         return
     var/mob/living/U = usr
     switch(href_list["Choice"])
+        if("1")
+            mode = 1
         if("Toggle Messenger")
             toff = !toff
         if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status

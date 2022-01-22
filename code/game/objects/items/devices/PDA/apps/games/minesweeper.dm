@@ -9,7 +9,6 @@
 	desc = "A video game. This old classic from Earth made it all the way to the far reaches of space! Includes station leaderboard."
 	category = "Games"
 	price = 5
-	menu = PDA_APP_MINESWEEPER
 	icon = "pda_game"
 	assets_type = /datum/asset/simple/pda_mine
 	var/ingame = 0
@@ -176,7 +175,7 @@
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
 			if(get_dist(user_loc,pda_loc) <= 1)
-				if(pda_device.mode == PDA_APP_MINESWEEPER)
+				if((locate(src.type) in pda_device.applications) && pda_device.app_menu)
 					pda_device.attack_self(C)
 			else
 				user.unset_machine()
