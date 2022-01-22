@@ -51,7 +51,7 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode){
 	if(admin > 0)
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=custom'>Custom</a>")));
 	if(admin > 0)
-	$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (allow_mode?"Votable":"Compiled") + "</a>)" : ""))));
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (allow_mode?"Votable":"Compiled") + "</a>)" : ""))));
 
 	if(mode != null && mode != ""){
 		$("#vote_main").hide();
