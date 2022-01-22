@@ -284,12 +284,15 @@ var/global/datum/controller/vote/vote = new()
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 	return 0
 
-/datum/controller/vote/proc/get_vote(var/mob/user)
+/datum/controller/vote/proc/get_vote(var/mob/user, var/num = FALSE)
 	var/mob_ckey = user.ckey
 	//returns voter's choice
 	if(mob_ckey)
 		if(voters[mob_ckey])
-			return voters[mob_ckey]
+			if(num)
+				return choices.Find(voters[mob_ckey])
+			else
+				return voters[mob_ckey]
 	return 0
 
 /datum/controller/vote/proc/add_vote(var/mob/user, var/vote)
@@ -443,7 +446,7 @@ var/global/datum/controller/vote/vote = new()
 
 	//adds client data
 	if(get_vote(user))
-		client_data += list(get_vote(user))
+		client_data += list(get_vote(user,TRUE))
 	else
 		client_data += list(0)
 	if(user.holder)
