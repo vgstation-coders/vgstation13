@@ -79,10 +79,15 @@
 
 /datum/pda_app/cart/scanner/hailer
 	base_name = "Integrated Hailer"
-	desc = "Used to hail a secbot to a location."
+	desc = "Used to hail a criminal to a you."
 	category = "Security Functions"
 	icon = "pda_signaler"
-	app_scanmode = SCANMODE_HAILER
+
+/datum/pda_app/cart/scanner/hailer/afterattack(atom/A, mob/user, proximity_flag)
+	if(!pda_device.integ_hailer)
+		return
+	pda_device.integ_hailer.cant_drop = 1
+	pda_device.integ_hailer.afterattack(A, user, proximity_flag)
 
 /datum/pda_app/cart/secbot
 	name = "Security Bot Access"

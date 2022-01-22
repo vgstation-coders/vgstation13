@@ -182,7 +182,17 @@
     desc = "Used to measure rads in an area."
     category = "Utilities"
     icon = "pda_reagent"
-    app_scanmode = SCANMODE_HALOGEN
+
+/datum/pda_app/cart/scanner/engineer/attack(mob/living/carbon/C, mob/living/user as mob)
+    if(istype(C))
+        for (var/mob/O in viewers(C, null))
+            O.show_message("<span class='warning'>[user] has analyzed [C]'s radiation levels!</span>", 1)
+
+        user.show_message("<span class='notice'>Analyzing Results for [C]:</span>")
+        if(C.radiation)
+            user.show_message("<span class='good'>Radiation Level: </span>[C.radiation]")
+        else
+            user.show_message("<span class='notice'>No radiation detected.</span>")
 
 /obj/item/weapon/cartridge/atmos
     name = "\improper BreatheDeep Cartridge"
@@ -198,7 +208,13 @@
     desc = "Used to scan gases in the air."
     category = "Utilities"
     icon = "pda_reagent"
-    app_scanmode = SCANMODE_ATMOS
+
+/datum/pda_app/cart/scanner/atmos/afterattack(atom/A, mob/user, proximity_flag)
+    if(!pda_device.atmos_analys || !proximity_flag)
+        return
+    pda_device.atmos_analys.cant_drop = 1
+    if(!A.attackby(pda_device.atmos_analys, user))
+        pda_device.atmos_analys.afterattack(A, user, 1)
 
 /obj/item/weapon/cartridge/mechanic
     name = "\improper Screw-E Cartridge"
@@ -213,4 +229,10 @@
     desc = "Use a built in device analyzer."
     category = "Mechanic Functions"
     icon = "pda_scanner"
-    app_scanmode = SCANMODE_DEVICE
+
+/datum/pda_app/cart/scanner/mechanic/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
+    if(pda_device.dev_analys)
+        pda_device.dev_analys.cant_drop = 1
+        pda_device.dev_analys.max_designs = 5
+        if(A.Adjacent(user))
+            return pda_device.dev_analys.preattack(A, user, 1)

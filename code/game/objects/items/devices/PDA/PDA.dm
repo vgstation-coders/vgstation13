@@ -1,16 +1,5 @@
 #define MAX_DESIGNS 10
 
-#define SCANMODE_NONE		0
-#define SCANMODE_MEDICAL	1
-#define SCANMODE_FORENSIC	2
-#define SCANMODE_REAGENT	3
-#define SCANMODE_HALOGEN	4
-#define SCANMODE_ATMOS		5
-#define SCANMODE_DEVICE		6
-#define SCANMODE_ROBOTICS	7
-#define SCANMODE_HAILER		8
-#define SCANMODE_CAMERA		9
-
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
 #define PDA_MINIMAP_OFFSET_Y	233
@@ -37,7 +26,6 @@ var/global/msg_id = 0
 	var/app_menu = FALSE //Controls if the PDA is displaying an app or the menu
 
 	//Secondary variables
-	var/scanmode = SCANMODE_NONE //used for various PDA scanning functions
 	var/lock_code = "" // Lockcode to unlock uplink
 	var/honkamt = 0 //How many honks left when infected with honk.exe
 	var/mimeamt = 0 //How many silence left when infected with mime.exe
@@ -74,6 +62,7 @@ var/global/msg_id = 0
 		/datum/pda_app/light,
 	)
 	var/datum/pda_app/current_app = null
+	var/datum/pda_app/cart/scanner/scanning_app = null
 	var/datum/asset/simple/assets_to_send = null
 
 /obj/item/device/pda/New()
@@ -102,7 +91,7 @@ var/global/msg_id = 0
 	underlays = list()
 	if (istype(cartridge,/obj/item/weapon/cartridge/camera))
 		var/image/cam_under
-		if(scanmode == SCANMODE_CAMERA)
+		if(istype(scanning_app,/datum/pda_app/cart/scanner/camera))
 			cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam2")
 		else
 			cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam")
@@ -271,12 +260,15 @@ var/global/msg_id = 0
 		if("Eject")//Ejects the cart, only done from hub.
 			if (!isnull(cartridge))
 				for(var/datum/pda_app/app in cartridge.applications)
+					if(current_app == app)
+						current_app = null
+					if(scanning_app == app)
+						scanning_app = null
 					app.onUninstall()
 				var/turf/T = loc
 				if(ismob(T))
 					T = T.loc
 				U.put_in_hands(cartridge)
-				scanmode = SCANMODE_NONE
 				if (cartridge.radio)
 					cartridge.radio.hostpda = null
 				cartridge = null
@@ -485,99 +477,40 @@ var/global/msg_id = 0
 	return 0
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
-	if(istype(C))
-		switch(scanmode)
-
-			if(SCANMODE_MEDICAL)
-				healthanalyze(C,user,1)
-
-			if(SCANMODE_FORENSIC)
-				if (!istype(C:dna, /datum/dna))
+	if(istype(C) && scanning_app)
+		/*if(SCANMODE_FORENSIC)
+			if (!istype(C:dna, /datum/dna))
+				to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
+			else if(!istype(C, /mob/living/carbon/monkey))
+				if(!isnull(C:gloves))
 					to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
-				else if(!istype(C, /mob/living/carbon/monkey))
-					if(!isnull(C:gloves))
-						to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
-				else
-					to_chat(user, text("<span class='notice'>[C]'s Fingerprints: [md5(C.dna.uni_identity)]</span>"))
-				if ( !(C:blood_DNA) )
-					to_chat(user, "<span class='notice'>No blood found on [C]</span>")
-					if(C:blood_DNA)
-						qdel(C:blood_DNA)
-						C:blood_DNA = null
-				else
-					to_chat(user, "<span class='notice'>Blood found on [C]. Analysing...</span>")
-					spawn(15)
-						for(var/blood in C:blood_DNA)
-							to_chat(user, "<span class='notice'>Blood type: [C:blood_DNA[blood]]\nDNA: [blood]</span>")
-
-			if(SCANMODE_HALOGEN)
-				for (var/mob/O in viewers(C, null))
-					O.show_message("<span class='warning'>[user] has analyzed [C]'s radiation levels!</span>", 1)
-
-				user.show_message("<span class='notice'>Analyzing Results for [C]:</span>")
-				if(C.radiation)
-					user.show_message("<span class='good'>Radiation Level: </span>[C.radiation]")
-				else
-					user.show_message("<span class='notice'>No radiation detected.</span>")
+			else
+				to_chat(user, text("<span class='notice'>[C]'s Fingerprints: [md5(C.dna.uni_identity)]</span>"))
+			if ( !(C:blood_DNA) )
+				to_chat(user, "<span class='notice'>No blood found on [C]</span>")
+				if(C:blood_DNA)
+					qdel(C:blood_DNA)
+					C:blood_DNA = null
+			else
+				to_chat(user, "<span class='notice'>Blood found on [C]. Analysing...</span>")
+				spawn(15)
+					for(var/blood in C:blood_DNA)
+						to_chat(user, "<span class='notice'>Blood type: [C:blood_DNA[blood]]\nDNA: [blood]</span>")*/
+		scanning_app.attack(C,user)
 
 /obj/item/device/pda/afterattack(atom/A, mob/user, proximity_flag)
-	if(scanmode == SCANMODE_ATMOS)
-		if(!atmos_analys || !proximity_flag)
-			return
-		atmos_analys.cant_drop = 1
-		if(!A.attackby(atmos_analys, user))
-			atmos_analys.afterattack(A, user, 1)
+	if(scanning_app)
+		scanning_app.afterattack(A,user,proximity_flag)
 
-	else if(scanmode == SCANMODE_ROBOTICS)
-		if(!robo_analys || !proximity_flag)
-			return
-		robo_analys.cant_drop = 1
-		if(!A.attackby(robo_analys, user))
-			robo_analys.afterattack(A, user, 1)
-
-	else if(scanmode == SCANMODE_HAILER)
-		if(!integ_hailer)
-			return
-		integ_hailer.cant_drop = 1
-		integ_hailer.afterattack(A, user, proximity_flag)
-
-	else if (scanmode == SCANMODE_CAMERA && cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
-		var/obj/item/weapon/cartridge/camera/CM = cartridge
-		if(!CM.cart_cam)
-			return
-		CM.cart_cam.captureimage(A, user, proximity_flag)
-		to_chat(user, "<span class='notice'>New photo added to camera.</span>")
-		playsound(loc, "polaroid", 75, 1, -3)
-
-	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
+	else if (!scanning_app && istype(A, /obj/item/weapon/paper) && owner)
 		var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
 		if(app)
 			app.note = A:info
 			to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
 
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
-	switch(scanmode)
-		if(SCANMODE_REAGENT)
-			if(!A.Adjacent(user))
-				return
-			if(!isnull(A.reagents))
-				if(A.reagents.reagent_list.len > 0)
-					var/reagents_length = A.reagents.reagent_list.len
-					to_chat(user, "<span class='notice'>[reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found.</span>")
-					for (var/datum/reagent/re in A.reagents.reagent_list)
-						to_chat(user, "<span class='notice'>\t [re]: [re.volume] units</span>")
-				else
-					to_chat(user, "<span class='notice'>No active chemical agents found in [A].</span>")
-			else
-				to_chat(user, "<span class='notice'>No significant chemical agents found in [A].</span>")
-			. = 1
-
-		if (SCANMODE_DEVICE)
-			if(dev_analys) //let's use this instead. Much neater
-				dev_analys.cant_drop = 1
-				dev_analys.max_designs = 5
-				if(A.Adjacent(user))
-					return dev_analys.preattack(A, user, 1)
+	if(scanning_app)
+		return scanning_app.preattack(A,user)
 
 /obj/item/device/pda/proc/explode(var/mob/user) //This needs tuning.
 	var/turf/T = get_turf(src.loc)

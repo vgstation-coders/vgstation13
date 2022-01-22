@@ -9,7 +9,13 @@
     desc = "Use a built in cyborg analyzer."
     category = "Utilities"
     icon = "pda_medical"
-    app_scanmode = SCANMODE_ROBOTICS
+
+/datum/pda_app/cart/scanner/robotics/afterattack(atom/A, mob/user, proximity_flag)
+    if(!pda_device.robo_analys || !proximity_flag)
+        return
+    pda_device.robo_analys.cant_drop = 1
+    if(!A.attackby(pda_device.robo_analys, user))
+        pda_device.robo_analys.afterattack(A, user, 1)
 
 /obj/item/weapon/cartridge/signal
     name = "\improper Generic signaler cartridge"

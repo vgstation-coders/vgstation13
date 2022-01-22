@@ -82,8 +82,11 @@
     desc = "Use a built in health analyzer."
     category = "Medical Functions"
     icon = "pda_scanner"
-    app_scanmode = SCANMODE_MEDICAL
 
+/datum/pda_app/cart/scanner/medical/attack(mob/living/carbon/C, mob/living/user as mob)
+    if(istype(C))
+        healthanalyze(C,user,1)
+            
 /datum/pda_app/cart/medbot
 	name = "Medical Bot Access"
 	desc = "Used to control a medbot."
@@ -121,4 +124,18 @@
     desc = "Use a built in reagent scanner."
     category = "Utilities"
     icon = "pda_reagent"
-    app_scanmode = SCANMODE_REAGENT
+
+/datum/pda_app/cart/scanner/reagent/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
+	if(!A.Adjacent(user))
+		return
+	if(!isnull(A.reagents))
+		if(A.reagents.reagent_list.len > 0)
+			var/reagents_length = A.reagents.reagent_list.len
+			to_chat(user, "<span class='notice'>[reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found.</span>")
+			for (var/datum/reagent/re in A.reagents.reagent_list)
+				to_chat(user, "<span class='notice'>\t [re]: [re.volume] units</span>")
+		else
+			to_chat(user, "<span class='notice'>No active chemical agents found in [A].</span>")
+	else
+		to_chat(user, "<span class='notice'>No significant chemical agents found in [A].</span>")
+	return 1

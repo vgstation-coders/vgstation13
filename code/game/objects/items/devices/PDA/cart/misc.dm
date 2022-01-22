@@ -151,12 +151,20 @@
     base_name = "Camera"
     desc = "Used to take pictures with a camera."
     category = "Utilities"
-    app_scanmode = SCANMODE_CAMERA
 
 /datum/pda_app/cart/scanner/camera/on_select(var/mob/user)
     ..(user)
     if(cart_device)
         cart_device.update_icon() //To make it look the part
+
+/datum/pda_app/cart/scanner/camera/afterattack(atom/A, mob/user, proximity_flag)
+	if (cart_device && istype(cart_device, /obj/item/weapon/cartridge/camera))
+		var/obj/item/weapon/cartridge/camera/CM = cart_device
+		if(!CM.cart_cam)
+			return
+		CM.cart_cam.captureimage(A, user, proximity_flag)
+		to_chat(user, "<span class='notice'>New photo added to camera.</span>")
+		playsound(pda_device.loc, "polaroid", 75, 1, -3)
 
 /datum/pda_app/cart/show_photos
     name = "Show Photos"

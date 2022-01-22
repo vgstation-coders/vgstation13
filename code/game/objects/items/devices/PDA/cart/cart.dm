@@ -72,15 +72,23 @@
 /datum/pda_app/cart/scanner
 	var/base_name = "Scanner"
 	has_screen = FALSE
-	var/app_scanmode = SCANMODE_NONE
 
 /datum/pda_app/cart/scanner/onInstall(var/obj/item/device/pda/device,var/obj/item/weapon/cartridge/device2)
 	..(device,device2)
-	name = "[pda_device.scanmode == app_scanmode ? "Disable" : "Enable" ] [base_name]"
+	name = "[pda_device.scanning_app == src ? "Disable" : "Enable" ] [base_name]"
 
 /datum/pda_app/cart/scanner/on_select(var/mob/user)
-	if(pda_device.scanmode == app_scanmode)
-		pda_device.scanmode = SCANMODE_NONE
+	if(pda_device.scanning_app == src)
+		pda_device.scanning_app = null
 	else
-		pda_device.scanmode = app_scanmode
-	name = "[pda_device.scanmode == app_scanmode ? "Disable" : "Enable" ] [base_name]"
+		pda_device.scanning_app = src
+	name = "[pda_device.scanning_app == src ? "Disable" : "Enable" ] [base_name]"
+
+/datum/pda_app/cart/scanner/proc/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
+	return
+
+/datum/pda_app/cart/scanner/proc/attack(mob/living/carbon/C, mob/living/user as mob)
+	return
+
+/datum/pda_app/cart/scanner/proc/afterattack(atom/A, mob/user, proximity_flag)
+	return
