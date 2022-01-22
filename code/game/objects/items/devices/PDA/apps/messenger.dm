@@ -246,19 +246,18 @@
 
     var/datum/signal/signal = pda_device.telecomms_process()
 
-    var/useTC = 0
+    var/useTC = FALSE
     if(signal)
         if(signal.data["done"])
-            useTC = 1
             var/turf/pos = get_turf(P)
             if(pos.z in signal.data["level"])
-                useTC = 2
+                useTC = TRUE
                 //Let's make this barely readable
                 if(signal.data["compression"] > 0)
                     t = Gibberish(t, signal.data["compression"] + 50)
 
     if(useMS && useTC) // only send the message if it's stable
-        if(useTC != 2) // Does our recepient have a broadcaster on their level?
+        if(!useTC) // Does our recepient have a broadcaster on their level?
             to_chat(U, "ERROR: Cannot reach recepient.")
             return
 
@@ -344,8 +343,16 @@
     message_app.last_text = world.time
     for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
         if(multicaster.check_status())
-            multicaster.multicast(target,pda_device,user,t)
-            message_app.tnote["msg_id"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
-            msg_id++
-            return
+            var/datum/signal/signal = pda_device.telecomms_process()
+            if(signal)
+                if(signal.data["done"])
+                    var/turf/pos = get_turf(multicaster)
+                    if(pos.z in signal.data["level"])
+                        //Let's make this barely readable
+                        if(signal.data["compression"] > 0)
+                            t = Gibberish(t, signal.data["compression"] + 50)
+                        multicaster.multicast(target,pda_device,user,t)
+                        message_app.tnote["msg_id"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
+                        msg_id++
+                        return
     to_chat(user, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")
