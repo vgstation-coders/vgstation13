@@ -297,12 +297,12 @@ var/global/list/accessable_z_levels = list()
 //Returns the lowest turf available on a given Z-level, defaults to space.
 
 /proc/get_base_turf(var/z)
-	var/datum/zLevel/L = map.zLevels[1]
+	var/datum/zLevel/L = map.zLevels[z]
 	return L.base_turf
 
 //Area that blueprints should erase to
 /proc/get_base_area(var/z)
-	var/datum/zLevel/L = map.zLevels[1]
+	var/datum/zLevel/L = map.zLevels[z]
 	if(L.base_area)
 		return locate(L.base_area) //this is a type
 	else
