@@ -134,6 +134,7 @@
     )
     var/obj/item/device/camera/cartridge/cart_cam = null
     var/list/obj/item/weapon/photo/stored_photos = list()
+    var/photo_number = 0
 
 /obj/item/weapon/cartridge/camera/New()
 	..()
@@ -154,8 +155,8 @@
 
 /datum/pda_app/cart/scanner/camera/on_select(var/mob/user)
     ..(user)
-    if(cart_device)
-        cart_device.update_icon() //To make it look the part
+    if(pda_device)
+        pda_device.update_icon() //To make it look the part
 
 /datum/pda_app/cart/scanner/camera/afterattack(atom/A, mob/user, proximity_flag)
 	if (cart_device && istype(cart_device, /obj/item/weapon/cartridge/camera))
@@ -204,4 +205,5 @@
             for(var/obj/item/weapon/photo/PH in CM.stored_photos)
                 qdel(PH)
             CM.stored_photos = list()
+            CM.photo_number = 0
     refresh_pda()
