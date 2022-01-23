@@ -202,18 +202,7 @@ var/global/datum/controller/vote/vote = new()
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
-/*
-/datum/controller/vote/proc/persistent()
-	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
-	task.file_path = "data/persistence/votes.json"
-	task.on_init()
-	task.insert_counts(tally)
-	tally.len = 0
-	for(var/i = 1; i <= task.data.len; i++)
-		tally[task.data[i]] += task.data[task.data[i]]
-	majority()
-	task.on_shutdown()
-*/
+
 /datum/controller/vote/proc/announce_result()
 	currently_voting = FALSE
 	var/result = get_result()

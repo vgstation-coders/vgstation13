@@ -208,35 +208,6 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data = list()
 	fdel(file(file_path))
 
-/*
-//stores map votes for code/modules/html_interface/voting/voting.dm
-/datum/persistence_task/vote
-	execute = TRUE
-	name = "Persistent votes"
-	file_path = "data/persistence/votes.json"
-	
-/datum/persistence_task/vote/on_init()
-	var/to_read = read_file()
-	if(!to_read)
-		log_debug("[name] task found an empty file on [file_path]")
-		return
-	for(var/list/L in to_read)
-		data += L
-	if (data.len > 1)
-		data.Remove(data[1])	//remove previous round winner
-
-/datum/persistence_task/vote/on_shutdown()
-	write_file(data)
-
-/datum/persistence_task/vote/proc/insert_counts(var/list/tally)
-	for(var/i = 1; i <= tally.len; i++)
-		data[tally[i]] += tally[tally[i]]
-	sortTim(data, /proc/cmp_numeric_dsc,1)
-
-/datum/persistence_task/vote/proc/clear_counts()
-	data = list()
-	fdel(file(file_path))
-*/	
 //Ape-related
 
 /datum/persistence_task/ape_mode
