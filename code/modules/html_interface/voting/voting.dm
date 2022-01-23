@@ -129,7 +129,7 @@ var/global/datum/controller/vote/vote = new()
 				factor = max(factor,0.5)
 				tally["Initiate Crew Transfer"] = round(tally["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-	//choose the method for voting: "WEIGHTED" = 0, "MAJORITY" = 1		
+	//choose the method for voting
 	switch(config.toggle_vote_method)
 		if(0)
 			return weighted()
@@ -137,43 +137,13 @@ var/global/datum/controller/vote/vote = new()
 			return majority()
 		if(2)
 			if(mode == "map")
-				return  majority()//return persistent()
+				return persistent()
 			else
 				return  majority()
+		if(3)
+			return random()
 		else
 			return  majority()
-		
-/datum/controller/vote/proc/majority()
-	var/text
-	var/feedbackanswer
-	var/greatest_votes = 0
-	if (tally.len > 0)
-		if (tally[1])
-			var/list/winners = list()
-			sortTim(tally, /proc/cmp_numeric_dsc,1)
-			greatest_votes = tally[tally[1]]
-			for (var/c in tally)
-				if (tally[c]  == greatest_votes)//must be true a least once
-					winners += c
-			if (winners.len > 1)
-				text = "<b>Vote Tied Between:</b><br>"
-				for(var/option in winners)
-					text += "\t[option]<br>"
-					feedbackanswer = jointext(winners, " ")
-			. = pick(winners)
-		if(mode == "map")
-			if(!feedbackanswer)
-				feedbackanswer = .
-				feedback_set("map vote winner", feedbackanswer)
-			else
-				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
-		text += "<b>Vote Result: [.] won with [greatest_votes] vote\s.</b>"
-		for(var/c in tally)
-			if(. != c)
-				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
-	else
-		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
-	return text
 
 /datum/controller/vote/proc/weighted()
 	var/vote_threshold = 0.15
@@ -201,6 +171,59 @@ var/global/datum/controller/vote/vote = new()
 				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+	return text
+
+/datum/controller/vote/proc/majority()
+	var/text
+	var/feedbackanswer
+	var/greatest_votes = 0
+	if (tally.len > 0)
+		if (tally[1])
+			var/list/winners = list()
+			sortTim(tally, /proc/cmp_numeric_dsc,1)
+			greatest_votes = tally[tally[1]]
+			for (var/c in tally)
+				if (tally[c]  == greatest_votes)//must be true a least once
+					winners += c
+			if (winners.len > 1)
+				text = "<b>Vote Tied Between:</b><br>"
+				for(var/option in winners)
+					text += "\t[option]<br>"
+					feedbackanswer = jointext(winners, " ")
+			. = pick(winners)
+		if(mode == "map")
+			if(!feedbackanswer)
+				feedbackanswer = .
+				feedback_set("map vote winner", feedbackanswer)
+			else
+				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
+		text += "<b>Majority Vote Result: [.] won with [greatest_votes] vote\s.</b>"
+		for(var/c in tally)
+			if(. != c)
+				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
+	else
+		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+	return text
+
+/datum/controller/vote/proc/persistent()
+	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
+	task.file_path = "data/persistence/votes.json"
+	task.on_init()
+	task.insert_counts(tally)
+	tally.len = 0
+	for(var/i = 1; i <= task.data.len; i++)
+		tally[task.data[i]] += task.data[task.data[i]]
+
+	task.on_shutdown()
+	return majority()
+
+/datum/controller/vote/proc/random()
+	var/text
+	if (choices.len > 1)
+		. = choices[rand(1, choices.len)]
+		text = "<b>Random Vote Result: [.] was picked at random.</b>"
+	else
+		text = "<b>Vote Result: Inconclusive - No choices!</b>"
 	return text
 
 /datum/controller/vote/proc/announce_result()
@@ -416,7 +439,7 @@ var/global/datum/controller/vote/vote = new()
 		for (var/i = 1; i <= tally.len; i++)
 			var/list/L = list(i, tally[i], tally[tally[i]])
 			interface.callJavaScript("update_choices", L, hclient_or_mob)
-			
+
 /datum/controller/vote/proc/interact(client/user)
 	set waitfor = FALSE // So we don't wait for each individual client's assets to be sent.
 
@@ -471,10 +494,7 @@ var/global/datum/controller/vote/vote = new()
 		status_data += list(1)
 	else
 		status_data += list(0)
-	if(config.toggle_vote_method)
-		status_data += list(1)
-	else
-		status_data += list(0)
+	status_data += list(config.toggle_vote_method)
 
 	if(refresh && interface)
 		updateFor()
@@ -526,12 +546,14 @@ var/global/datum/controller/vote/vote = new()
 				update()
 		if("toggle_vote_method")
 			if(user.client.holder)
-				config.toggle_vote_method = !config.toggle_vote_method
+				if (config.toggle_vote_method >= 3)
+					config.toggle_vote_method = 0
+				else
+					config.toggle_vote_method++
 				update()
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
 	user.vote()
-
 
 /mob/verb/vote()
 	var/mob/user = usr
