@@ -42,7 +42,7 @@
 
 #define ishorrorform(A) (ishuman(A) && istype(A:species, /datum/species/horror))
 
-#define isgrue(A) (ishuman(A) && istype(A:species, /datum/species/grue))
+#define isumbra(A) (ishuman(A) && istype(A:species, /datum/species/umbra))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
@@ -75,6 +75,8 @@
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
 
 #define ispulsedemon(A) (istype(A, /mob/living/simple_animal/hostile/pulse_demon))
+
+#define isgrue(A) (istype(A, /mob/living/simple_animal/hostile/grue))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 

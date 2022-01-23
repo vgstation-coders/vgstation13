@@ -38,6 +38,7 @@ var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jingleb
 var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/disappear_2.ogg', 'sound/effects/disappear_3.ogg')
 var/list/pd_wail_sound = list('sound/voice/pdwail1.ogg', 'sound/voice/pdwail2.ogg', 'sound/voice/pdwail3.ogg')
 var/list/procgun_sound = list('sound/weapons/procgun1.ogg', 'sound/weapons/procgun2.ogg')
+var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -242,5 +243,7 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(pd_wail_sound)
 			if ("procgun_sound")
 				soundin = pick(procgun_sound)
+			if ("trayhit")
+				soundin = pick(trayhit_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

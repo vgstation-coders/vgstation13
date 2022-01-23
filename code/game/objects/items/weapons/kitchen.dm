@@ -530,12 +530,8 @@
 		M.Knockdown(1)
 		M.Stun(1)
 		user.take_organ_damage(2)
-		if(prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-			return
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1) //sound playin'
-			return //it always returns, but I feel like adding an extra return just for safety's sakes. EDIT; Oh well I won't :3
+		playsound(M, "trayhit", 50, 1) //sound playin'
+		return //it always returns, but I feel like adding an extra return just for safety's sakes. EDIT; Oh well I won't :3
 
 	var/mob/living/carbon/human/H = M      ///////////////////////////////////// /Let's have this ready for later.
 
@@ -563,16 +559,10 @@
 			M.take_organ_damage(3)
 		else
 			M.take_organ_damage(5)
-		if(prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-			for(var/mob/O in viewers(M, null))
-				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
-			return
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //we applied the damage, we played the sound, we showed the appropriate messages. Time to return and stop the proc
-			for(var/mob/O in viewers(M, null))
-				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
-			return
+		playsound(M, "trayhit", 50, 1)  //we applied the damage, we played the sound, we showed the appropriate messages. Time to return and stop the proc
+		for(var/mob/O in viewers(M, null))
+			O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
+		return
 
 
 
@@ -591,14 +581,9 @@
 			if (istype(location, /turf/simulated))     //Addin' blood! At least on the floor and item :v
 				location.add_blood(H)
 
-		if(prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-			for(var/mob/O in viewers(M, null))
-				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //sound playin'
-			for(var/mob/O in viewers(M, null))
-				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
+		playsound(M, "trayhit", 50, 1)  //sound playin'
+		for(var/mob/O in viewers(M, null))
+			O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
 		if(prob(10))
 			M.Stun(rand(1,3))
 			M.take_organ_damage(3)
@@ -615,14 +600,9 @@
 			if (istype(location, /turf/simulated))
 				location.add_blood(H)
 
-		if(prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-			for(var/mob/O in viewers(M, null))
-				O.show_message(text("<span class='danger'>[] slams [] in the face with the tray!</span>", user, M), 1)
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //sound playin' again
-			for(var/mob/O in viewers(M, null))
-				O.show_message(text("<span class='danger'>[] slams [] in the face with the tray!</span>", user, M), 1)
+		playsound(M, "trayhit", 50, 1)  //sound playin' again
+		for(var/mob/O in viewers(M, null))
+			O.show_message(text("<span class='danger'>[] slams [] in the face with the tray!</span>", user, M), 1)
 		if(prob(30))
 			M.Stun(rand(2,4))
 			M.take_organ_damage(4)
@@ -761,8 +741,5 @@
 				step(I, pick(alldirs))
 
 /obj/item/weapon/tray/proc/whoops()
-	if(prob(50))
-		playsound(src, 'sound/items/trayhit1.ogg', 35, 1)
-	else
-		playsound(src, 'sound/items/trayhit2.ogg', 35, 1)
+	playsound(src, "trayhit", 35, 1)
 	send_items_flying()
