@@ -61,7 +61,7 @@
 	living_mob_list |= list(C)
 	C.stat = CONSCIOUS
 	C.tod = null
-	C.revive(0)
+	C.rejuvenate(0)
 	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
 	C.status_flags &= ~(FAKEDEATH)
 	C.update_canmove()
