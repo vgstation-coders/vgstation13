@@ -28,7 +28,7 @@
 	..()
 	if(istype(W, /obj/item/weapon/soap))
 		to_chat(user, "<span class='notice'>You place a bar of soap into \the [src].</span>")
-		if(do_after(user, src, 10))
+		if(do_after(user, src, 1 SECONDS))
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/soap_sock/I = new (get_turf(user))
 			user.put_in_hands(I)
