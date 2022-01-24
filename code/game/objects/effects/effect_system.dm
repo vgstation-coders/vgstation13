@@ -158,7 +158,7 @@ steam.start() -- spawns the effect
 	if(istype(T))
 		T.hotspot_expose(1000, 100, surfaces = 1)
 
-/obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
+/obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=2)
 	move_dir=travel_dir
 	energy=rand(1,max_energy)
 	processing_objects.Add(src)
