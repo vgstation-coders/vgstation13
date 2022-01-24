@@ -4374,7 +4374,7 @@
 	filling_color = "#4A75F4"
 	base_crumb_chance = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
+/obj/item/weapon/reagent_containers/food/snacks/vox_nuggets/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 1
