@@ -577,7 +577,7 @@ var/global/list/disease2_list = list()
 	ticks += speed
 
 //This proc is what governs how a disease mutates when it's in a pathogenic incubator (or with a lower chance inside an irradiated individual)
-/datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1,var/focused_stage)
+/datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1)
 	mutatechance *= mutation_modifier
 
 	var/mob/living/body = null
