@@ -142,7 +142,7 @@
 
 /datum/food_processor_process/mob/voxchicken
 	input = /mob/living/carbon/monkey/vox
-	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
+	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
 
 /datum/food_processor_process/mob/voxchicken/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
