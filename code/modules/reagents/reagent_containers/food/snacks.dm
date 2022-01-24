@@ -4381,7 +4381,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick
 	name = "Vox drumstick"
-	desc = "I can't stand cold food. unlike you, I ain't never ate from a trash can."
+	desc = "I can't stand cold food. Unlike you, I ain't never ate from a trash can."
 	icon_state = "chicken_drumstick"
 	food_flags = FOOD_MEAT
 	filling_color = "#4A75F4"
