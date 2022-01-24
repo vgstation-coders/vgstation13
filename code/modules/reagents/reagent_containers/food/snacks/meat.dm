@@ -125,6 +125,16 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken
+	name = "vox chicken meat"
+	desc = "Why is it blue?"
+	icon_state = "raw_vox_chicken"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/raw_vox_chicken/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 1
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
 	name = "crab meat"
 	desc = "Something killed the crab, and this is the result."
