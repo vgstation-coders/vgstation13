@@ -16,7 +16,7 @@
 	override_base = "vamp"
 	hud_state = "vampire_rejuv"
 
-	var/blood_cost = 1
+	var/blood_cost = 0
 
 /spell/rejuvenate/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
