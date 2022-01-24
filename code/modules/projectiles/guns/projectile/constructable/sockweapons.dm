@@ -36,7 +36,7 @@
 			qdel(W)
 	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
 		var/obj/item/stack/sheet/mineral/brick/S = W
-		to_chat(user, "You place a brick into \the [src].")
+		to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
 		if(do_after(user, src, 10))
 			S.use(1)
 			user.drop_item(src, force_drop = 1)
