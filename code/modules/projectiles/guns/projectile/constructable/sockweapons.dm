@@ -44,7 +44,7 @@
 			user.put_in_hands(I)
 			qdel(src)
 
-/obj/item/weapon/soap_sock/attack_self(mob/user as mob)
+/obj/item/weapon/soap_sock/attack_self(mob/user)
 	if(user.a_intent == I_GRAB)
 		to_chat(user, "You remove the soap from \the [src].")
 		user.drop_item(src, force_drop = 1)
