@@ -127,10 +127,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken
 	name = "vox chicken meat"
-	desc = "Why is it blue?"
+	desc = "Vox, man. No discussion."
 	icon_state = "raw_vox_chicken"
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/raw_vox_chicken/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 1
