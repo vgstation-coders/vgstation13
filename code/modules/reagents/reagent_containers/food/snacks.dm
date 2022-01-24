@@ -4362,6 +4362,8 @@
 	reagents.add_reagent(TENDIES, 3)
 	bitesize = 2
 
+//////////////////VOX CHICKEN//////////////////
+
 /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
 	name = "Vox Nuggets"
 	desc = "Looks awful and off-colour, you wish you'd gone to Cluckin' Bell instead."
@@ -4369,12 +4371,25 @@
 	item_state = "kfc_bucket"
 	trash = /obj/item/trash/chicken_bucket
 	food_flags = FOOD_MEAT
-	filling_color = "#D8753E"
+	filling_color = "#4A75F4"
 	base_crumb_chance = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick
+	name = "Vox drumstick"
+	desc = "I’ll have two number 9s, a number 9 large, a number 6 with extra dip, a number 7, two number 45s, one with cheese, and a large soda."
+	icon_state = "chicken_drumstick"
+	food_flags = FOOD_MEAT
+	filling_color = "#4A75F4"
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 1
 
 //////////////////CURRY//////////////////
