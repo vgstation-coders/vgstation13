@@ -46,7 +46,7 @@
 
 /obj/item/weapon/soap_sock/attack_self(mob/user)
 	if(user.a_intent == I_GRAB)
-		to_chat(user, "You remove the soap from \the [src].")
+		to_chat(user, "<span class='notice'>You remove the soap from \the [src].</span>")
 		user.drop_item(src, force_drop = 1)
 		user.put_in_hands(new /obj/item/weapon/soap(user))
 		user.put_in_hands(new /obj/item/clothing/shoes/kneesocks(user))
