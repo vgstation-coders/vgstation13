@@ -1,5 +1,5 @@
 /spell/rejuvenate
-	name = "Rejuvenate (1)"
+	name = "Rejuvenate"
 	desc = "Flush your system with spare blood to remove any incapacitating effects."
 	abbreviation = "RJ"
 
