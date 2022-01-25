@@ -763,7 +763,7 @@
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
 
-	if(paxban_isbanned(src))
+	if(paxban_isbanned(ckey))
 		var/obj/item/weapon/implant/I = new /obj/item/weapon/implant/peace(new_character)
 		if(!I.insert(new_character, LIMB_HEAD))
 			stack_trace("implant/insert() failed")
