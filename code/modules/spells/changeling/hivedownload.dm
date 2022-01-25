@@ -7,7 +7,6 @@
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
 	chemcost = 20
-	required_dna = 1
 
 /spell/changeling/hivedownload/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
