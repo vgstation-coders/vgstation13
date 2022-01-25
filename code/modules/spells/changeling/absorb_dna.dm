@@ -78,20 +78,14 @@
 	T.dna.flavor_text = T.flavor_text
 	changeling.absorbed_dna |= T.dna
 
-	var/avail_blood = T.vessel.get_reagent_amount(BLOOD)
-	for(var/datum/reagent/blood/B in user.vessel.reagent_list)
-		B.volume = min(BLOOD_VOLUME_MAX, avail_blood + B.volume)
-
 	//Steal their wellbeing!
 	if(user.nutrition < 400)
 		user.nutrition = min((user.nutrition + T.nutrition), 400)
 	user.health = user.maxHealth
-
 	changeling.powerpoints += 2
 
 	//Steal all of their languages!
 	changeling.absorbed_languages |= T.languages
-
 	user.changeling_update_languages(changeling.absorbed_languages)
 
 	//Steal their memories! (using this instead of mind.store_memory so the lings own notes and stuff are always at the bottom)
@@ -127,8 +121,6 @@
 			Tchangeling.chem_charges = 0
 			Tchangeling.powerpoints = 0
 			Tchangeling.absorbedcount = 0
-
-	spell_do_after(user)
 	changeling.absorbedcount++
 	user.updateChangelingHUD()
 
