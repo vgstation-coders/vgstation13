@@ -5,6 +5,9 @@
 *.lk
 info.json
 
+# Temporary file created by the build system
+*.m.dme
+
 # WinMerge backups
 *.bak
 
@@ -75,3 +78,5 @@ Thumbs.db
 # Linux users can compile this themselves
 libvg.so
 
+# Bootstrapped node installation for the tgui build system
+.cache

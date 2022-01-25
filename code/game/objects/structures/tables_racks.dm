@@ -356,10 +356,7 @@
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
 		M.Stun(1)
-		if (prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
+		playsound(M, "trayhit", 50, 1)
 		M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
 		return
 	return ..()

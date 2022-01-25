@@ -965,7 +965,7 @@ var/list/arcane_tomes = list()
 		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		qdel(src)
 	else
-		playsound(loc, 'sound/items/trayhit1.ogg', 70, 1)
+		playsound(loc, "trayhit", 70, 1)
 
 /obj/item/weapon/melee/soulblade/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile))

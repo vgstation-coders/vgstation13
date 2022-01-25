@@ -455,6 +455,7 @@
 /obj/structure/mannequin/proc/freeCaptive()
 	if (!captured)
 		return
+	captured.sdisabilities &= ~MUTE
 	captured.timestopped = 0
 	captured.forceMove(loc)
 	for(var/cloth in clothing)
@@ -501,7 +502,6 @@
 			continue
 		captured.put_in_hands(tool)
 	held_items.len = 0
-
 	captured.dir = dir
 	captured.apply_damage(additional_damage)
 
