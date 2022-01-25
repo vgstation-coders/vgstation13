@@ -12,8 +12,8 @@ var/paxban_keylist[0]
 
 /proc/paxban_loadbanfile()
 	if(!SSdbcore.Connect())
-		world.log << "Database connection failed. Skipping ooc ban loading"
-		diary << "Database connection failed. Skipping ooc ban loading"
+		world.log << "Database connection failed. Skipping pax ban loading"
+		diary << "Database connection failed. Skipping pax ban loading"
 		return
 
 	//OOC permabans

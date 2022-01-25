@@ -926,50 +926,47 @@
 			to_chat(usr, "This mob has no ckey")
 			return
 		var/paxbanned = paxban_isbanned("[M.ckey]")
-		if(paxbanned)
-			switch(alert("Reason: Remove pax ban?","Please Confirm","Yes","No"))
+		if(paxbanned && alert("Remove pax ban?","Please Confirm","Yes","No") == "Yes")
+			ban_unban_log_save("[key_name(usr)] removed [key_name(M)]'s pax ban")
+			log_admin("[key_name(usr)] removed [key_name(M)]'s pax ban")
+			feedback_inc("ban_pax_unban", 1)
+			DB_ban_unban(M.ckey, BANTYPE_PAX_PERMA)
+			pax_unban(M)
+			message_admins("<span class='notice'>[key_name_admin(usr)] removed [key_name_admin(M)]'s PAX ban</span>", 1)
+			to_chat(M, "<span class='warning'><BIG><B>[usr.client.ckey] has removed your PAX ban.</B></BIG></span>")
+		else if(alert("Pax ban [M.ckey]?","Please Confirm","Yes","No") == "Yes")
+			var/temp = alert("Temporary Ban?",,"Yes","No", "Cancel")
+			var/mins = 0
+			switch(temp)
 				if("Yes")
-					ban_unban_log_save("[key_name(usr)] removed [key_name(M)]'s pax ban")
-					log_admin("[key_name(usr)] removed [key_name(M)]'s pax ban")
-					feedback_inc("ban_pax_unban", 1)
-					DB_ban_unban(M.ckey, BANTYPE_PAX_PERMA)
-					pax_unban(M)
-					message_admins("<span class='notice'>[key_name_admin(usr)] removed [key_name_admin(M)]'s PAX ban</span>", 1)
-					to_chat(M, "<span class='warning'><BIG><B>[usr.client.ckey] has removed your PAX ban.</B></BIG></span>")
-		else
-			if(alert("Pax ban [M.ckey]?","Please Confirm","Yes","No") == "Yes")
-				var/temp = alert("Temporary Ban?",,"Yes","No", "Cancel")
-				var/mins = 0
-				switch(temp)
-					if("Yes")
-						mins = input(usr,"How long (in minutes)?","PAX Ban time",1440) as num|null
-						if(!mins)
-							return
-						if(mins >= 525600)
-							mins = 525599
-					if("Cancel")
+					mins = input(usr,"How long (in minutes)?","PAX Ban time",1440) as num|null
+					if(!mins)
 						return
-				var/istemp = temp == "Yes"
-				var/reason = input(usr,"Reason?","reason","Greytider") as text|null
-				if(!reason)
+					if(mins >= 525600)
+						mins = 525599
+				if("Cancel")
 					return
-				to_chat(M, "<span class='warning'><BIG><B>You have been PAX banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
-				to_chat(M, "<span class='warning'>This is a [istemp ? "temporary" : "permanent"] pax ban[istemp ? ", it will be removed in [mins] minutes." : ""]</span>")
-				if(config.banappeals)
-					to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
-				else
-					to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
-				var/resolvetext = istemp ? "This will be removed in [mins] minutes." : "This is a permanent pax ban."
-				ban_unban_log_save("[usr.client.ckey] has [istemp ? "temp-" : "perma-"]pax banned [M.ckey]. - Reason: [reason] - [resolvetext]")
-				feedback_inc(istemp ? "ban_pax_tmp" : "ban_pax_perma",1)
-				DB_ban_record(istemp ? BANTYPE_PAX_TEMP : BANTYPE_PAX_PERMA, M, istemp ? mins : -1, reason)
-				if(istemp)
-					feedback_inc("ban_pax_tmp_mins",mins)
-				log_admin("[usr.client.ckey] has pax banned [M.ckey].\nReason: [reason]\n[resolvetext]")
-				message_admins("<span class='warning'>[usr.client.ckey] has pax banned [M.ckey].\nReason: [reason]\n[resolvetext]</span>")
-				pax_ban(M)
-			else
+			var/istemp = temp == "Yes"
+			var/reason = input(usr,"Reason?","reason","Greytider") as text|null
+			if(!reason)
 				return
+			to_chat(M, "<span class='warning'><BIG><B>You have been PAX banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
+			to_chat(M, "<span class='warning'>This is a [istemp ? "temporary" : "permanent"] pax ban[istemp ? ", it will be removed in [mins] minutes" : ""].</span>")
+			if(config.banappeals)
+				to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
+			else
+				to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
+			var/resolvetext = istemp ? "This will be removed in [mins] minutes." : "This is a permanent pax ban."
+			ban_unban_log_save("[usr.client.ckey] has [istemp ? "temp-" : "perma-"]pax banned [M.ckey]. - Reason: [reason] - [resolvetext]")
+			feedback_inc(istemp ? "ban_pax_tmp" : "ban_pax_perma",1)
+			DB_ban_record(istemp ? BANTYPE_PAX_TEMP : BANTYPE_PAX_PERMA, M, istemp ? mins : -1, reason)
+			if(istemp)
+				feedback_inc("ban_pax_tmp_mins",mins)
+			log_admin("[usr.client.ckey] has pax banned [M.ckey].\nReason: [reason]\n[resolvetext]")
+			message_admins("<span class='warning'>[usr.client.ckey] has pax banned [M.ckey].\nReason: [reason]\n[resolvetext]</span>")
+			pax_ban(M)
+		else
+			return
 
 	else if(href_list["appearanceban"])
 		if(!check_rights(R_BAN))
