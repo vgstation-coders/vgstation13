@@ -57,6 +57,11 @@
 		return FALSE
 	return ..()
 
+/obj/item/weapon/implant/proc/remove(mob/user)
+	if(paxban_isbanned(user.ckey))
+		return
+	..()
+
 /obj/item/weapon/implant/peace/implanted(mob/implanter)
 	processing_objects += src
 	to_chat(imp_in, "<span class='warning'>You feel your desire to harm anyone slowly drift away...</span>")

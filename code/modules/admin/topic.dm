@@ -946,7 +946,7 @@
 								return
 							if(mins >= 525600)
 								mins = 525599
-							var/reason = input(usr,"Reason?","reason","Shinposting") as text|null
+							var/reason = input(usr,"Reason?","reason","Greytider") as text|null
 							if(!reason)
 								return
 							ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [mins] minutes.")
