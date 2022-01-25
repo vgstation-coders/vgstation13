@@ -57,7 +57,7 @@
 		return FALSE
 	return ..()
 
-/obj/item/weapon/implant/proc/remove(mob/user)
+/obj/item/weapon/implant/peace/remove(mob/user)
 	if(paxban_isbanned(user.ckey))
 		return
 	..()
