@@ -176,6 +176,7 @@
 	damage_type = TOX
 	weaken = 5
 	stun = 5
+	bumped = 1
 
 /obj/item/projectile/energy/rad
 	name = "radiation bolt"
