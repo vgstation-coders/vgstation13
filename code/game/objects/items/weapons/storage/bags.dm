@@ -683,3 +683,22 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/slime_extract","/obj/item/weapon/slimenutrient","/obj/item/weapon/slimesteroid", "/obj/item/weapon/slimepotion", "/obj/item/weapon/slimepotion2", "/obj/item/weapon/slimesteroid2", "/obj/item/weapon/slimeres", "/obj/item/weapon/slimedupe")
 	display_contents_with_number = TRUE
+
+
+
+// -----------------------------
+//          Book Bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/bookbag
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "bookbag"
+	name = "book bag"
+	desc = "A bag designed to hold books."
+	item_state = "satchel"
+	storage_slots = 25
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy","/obj/item/weapon/spellbook" )
+	display_contents_with_number = TRUE
