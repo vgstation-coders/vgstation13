@@ -535,7 +535,7 @@ its easier to just keep the beam vertical.
 /atom/proc/singularity_pull()
 	return
 
-/atom/proc/emag_act()
+/atom/proc/emag_act(var/mob/user)
 	return
 
 /atom/proc/slime_act()
