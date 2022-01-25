@@ -763,11 +763,6 @@
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
 
-	if(paxban_isbanned(ckey))
-		var/obj/item/weapon/implant/I = new /obj/item/weapon/implant/peace(new_character)
-		if(!I.insert(new_character, LIMB_HEAD))
-			stack_trace("implant/insert() failed")
-
 	new_character.key = key		//Manually transfer the key to log them in
 
 	for(var/datum/religion/R in ticker.religions)
