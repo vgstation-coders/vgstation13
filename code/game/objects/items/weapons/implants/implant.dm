@@ -34,6 +34,8 @@
 // Implement `handle_removal` to make something happen once the implant is removed.
 /obj/item/weapon/implant/proc/remove(mob/user)
 	SHOULD_NOT_OVERRIDE(TRUE)
+	if(paxban_isbanned(user.ckey) && istype(src,/obj/item/weapon/implant/peace))
+		return
 	handle_removal(user)
 	if(part)
 		part.implants -= src
