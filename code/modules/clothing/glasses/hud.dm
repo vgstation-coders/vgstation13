@@ -25,6 +25,16 @@
 		process_med_hud(M)
 
 
+/obj/item/clothing/glasses/hud/health/cmo
+	name = "Advanced Health Scanner HUD"
+	prescription = 1
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status. The tinted glass protects the wearer from bright flashes of light. "
+	icon_state = "cmohud"
+	eyeprot = 1
+	mech_flags = MECH_SCAN_FAIL
+
+
+
 /obj/item/clothing/glasses/hud/security
 	name = "Security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
