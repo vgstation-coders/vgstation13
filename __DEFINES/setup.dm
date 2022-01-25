@@ -411,10 +411,11 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_BLIND       16
 #define DISABILITY_FLAG_MUTE		32
 #define DISABILITY_FLAG_VEGAN		64
-#define DISABILITY_FLAG_ASTHMA 128
+#define DISABILITY_FLAG_ASTHMA 		128
 #define DISABILITY_FLAG_LACTOSE		256
 #define DISABILITY_FLAG_LISP		512
 #define DISABILITY_FLAG_ANEMIA		1024
+#define DISABILITY_FLAG_PACIFIST	2048
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -507,9 +508,10 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define COUGHING		4
 #define TOURETTES		8
 #define NERVOUS			16
-#define ASTHMA		32
-#define LACTOSE		64
-#define ANEMIA		128
+#define ASTHMA			32
+#define LACTOSE			64
+#define ANEMIA			128
+#define PACIFIST		256
 
 //sdisabilities
 #define BLIND			1
@@ -1700,7 +1702,7 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
-#define DNA_SE_LENGTH 58
+#define DNA_SE_LENGTH 60
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"
