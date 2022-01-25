@@ -2104,6 +2104,7 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(paxban_isbanned(ckey))
+		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
 		return TRUE
 
 	if (runescape_pvp)
