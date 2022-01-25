@@ -39,7 +39,9 @@
 		to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
 		if(do_after(user, src, 10))
 			S.use(1)
-			user.drop_item(src, force_drop = 1)
+			if(!user.drop_item(src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [src].</span>")
+				return
 			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
 			user.put_in_hands(I)
 			qdel(src)
