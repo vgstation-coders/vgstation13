@@ -97,7 +97,7 @@
 			return
 		if (istype(A,/obj/machinery/power/supermatter/))
 			var/obj/machinery/power/supermatter/collided_SM = A
-			collided_SM.power += energy * 1.5 //multiplier to make comparable to emitters
+			collided_SM.power += energy * 2 //multiplier to make comparable to emitters
 			return
 	return
 
