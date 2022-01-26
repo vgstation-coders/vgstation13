@@ -71,7 +71,7 @@
 	var/a_11_rr = 1
 	var/a_12_rg = 0
 	var/a_13_rb = 0
-	var/a_14_ra = 1
+	var/a_14_ra = 0
 	var/a_21_gr = -1
 	var/a_22_gg = 0.2
 	var/a_23_gb = 0.2
@@ -249,7 +249,7 @@
 			client.darkness_planemaster.blend_mode = BLEND_ADD
 			client.darkness_planemaster.alpha = a_blend_add_test
 		client.color = list(
-					1,0,0,1,
+					1,0,0,0,
 					-1,0.2,0.2,1,
 	 				-1,0.2,0.2,1,
 		 			0,0,0,1,
@@ -482,11 +482,6 @@
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.gib()
 	busy=0
-//Channel a dark aura
-/mob/living/simple_animal/hostile/grue/verb/darkaura()
-//todo
-	return
-
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()
