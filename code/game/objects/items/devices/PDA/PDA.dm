@@ -842,7 +842,7 @@ var/global/msg_id = 0
 					dat += {"</ul>"}
 
 				if (cartridge)
-					if (cartridge.access_engine || cartridge.access_atmos)
+					if (cartridge.access_engine_major || cartridge.access_atmos)
 						dat += {"<h4>Engineering Functions</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=43'><span class='pda_icon pda_power'></span> Power Monitor</a></li>
@@ -907,7 +907,7 @@ var/global/msg_id = 0
 						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
 					if (cartridge.access_reagent_scanner)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Reagent Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_REAGENT ? "Disable" : "Enable"] Reagent Scanner</a></li>"
-					if (cartridge.access_engine)
+					if (cartridge.access_engine_major)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
 					if (cartridge.access_atmos)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Gas Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
@@ -2031,7 +2031,7 @@ var/global/msg_id = 0
 		if("Halogen Counter")
 			if(scanmode == SCANMODE_HALOGEN)
 				scanmode = SCANMODE_NONE
-			else if((!isnull(cartridge)) && (cartridge.access_engine))
+			else if((!isnull(cartridge)) && (cartridge.access_engine_major))
 				scanmode = SCANMODE_HALOGEN
 		if("Integrated Hailer")
 			if(scanmode == SCANMODE_HAILER)
@@ -2266,7 +2266,7 @@ var/global/msg_id = 0
 							if(P.cartridge)
 								difficulty += P.cartridge.access_medical
 								difficulty += P.cartridge.access_security
-								difficulty += P.cartridge.access_engine
+								difficulty += P.cartridge.access_engine_major
 								difficulty += P.cartridge.access_clown
 								difficulty += P.cartridge.access_janitor
 								difficulty += P.cartridge.access_manifest * 2

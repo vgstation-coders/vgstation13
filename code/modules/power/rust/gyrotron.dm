@@ -13,7 +13,7 @@
 	var/rate = 10
 	var/mega_energy = 0.001
 
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 
 	use_power = 1
 	idle_power_usage = 10

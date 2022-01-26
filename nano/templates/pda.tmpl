@@ -84,7 +84,7 @@ Used In File(s): \code\game\objects\items\devices\PDA\PDA.dm
                 </div>
                 <br>
             {{/if}}
-            {{if data.cartridge.access.access_engine == 1}}
+            {{if data.cartridge.access.access_engine_major == 1}}
                 <div class="item">
                     <div class="itemLabelNarrow">
                         <b>Engineering</b>:
@@ -153,7 +153,7 @@ Used In File(s): \code\game\objects\items\devices\PDA\PDA.dm
                     {{if data.cartridge.access.access_reagent_scanner==1}}
                         {{:helper.link(data.scanmode == 3 ? 'Disable Reagent Scanner' : 'Enable Reagent Scanner', 'gear', {'choice' : "Reagent Scan"}, null, 'fixedLeftWider')}}
                     {{/if}}
-                    {{if data.cartridge.access.access_engine==1}}
+                    {{if data.cartridge.access.access_engine_major==1}}
                         {{:helper.link(data.scanmode == 4 ? 'Disable Halogen Counter' : 'Enable Halogen Counter', 'gear', {'choice' : "Halogen Counter"}, null, 'fixedLeftWider')}}
                     {{/if}}
                     {{if data.cartridge.access.access_atmos==1}}

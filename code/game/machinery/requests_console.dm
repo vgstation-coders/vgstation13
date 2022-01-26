@@ -468,7 +468,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
 		if(screen == 5)
 			var/obj/item/weapon/card/id/ID = O.GetID()
-			if (hackState || ID.access.Find(access_engine_equip))
+			if (hackState || ID.access.Find(access_engine_minor))
 				announceAuth = 1
 			else
 				announceAuth = 0

@@ -16,7 +16,7 @@
 
 	// -- Various "access" crap
 	var/access_security = 0
-	var/access_engine = 0
+	var/access_engine_major = 0
 	var/access_atmos = 0
 	var/access_mechanic = 0
 	var/access_medical = 0
@@ -88,7 +88,7 @@
 /obj/item/weapon/cartridge/engineering
 	name = "\improper Power-ON Cartridge"
 	icon_state = "cart-e"
-	access_engine = 1
+	access_engine_major = 1
 	radio_type = /obj/item/radio/integrated/signal/bot/floorbot
 
 /obj/item/weapon/cartridge/atmos
@@ -100,7 +100,7 @@
 	name = "\improper Screw-E Cartridge"
 	icon_state = "cart-mech"
 	access_mechanic = 1
-	access_engine = 1 //for the power monitor, but may remove later
+	access_engine_major = 1 //for the power monitor, but may remove later
 
 /obj/item/weapon/cartridge/medical
 	name = "\improper Med-U Cartridge"
@@ -217,7 +217,7 @@
 	access_manifest = 1
 	access_mechanic = 1
 	access_status_display = 1
-	access_engine = 1
+	access_engine_major = 1
 	access_atmos = 1
 	radio_type = /obj/item/radio/integrated/signal/bot/floorbot
 
@@ -244,7 +244,7 @@
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
 	access_manifest = 1
-	access_engine = 1
+	access_engine_major = 1
 	access_mechanic = 1
 	access_security = 1
 	access_medical = 1
@@ -280,7 +280,7 @@
 /obj/item/weapon/cartridge/camera/New()
 	..()
 	cart_cam = new /obj/item/device/camera/cartridge(src)
-	
+
 /obj/item/weapon/cartridge/camera/Destroy()
 	qdel(cart_cam)
 	cart_cam = null
@@ -288,7 +288,7 @@
 		qdel(PH)
 	stored_photos = list()
 	..()
-	
+
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
 		return

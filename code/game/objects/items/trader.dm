@@ -559,7 +559,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/structure/largecrate/secure/magmaw
 	name = "engineering livestock crate"
 	desc = "An access-locked crate containing a magmaw. Handlers are advised to stand back when administering plasma to the animal."
-	req_access = list(access_engine)
+	req_access = list(access_engine_minor)
 	mob_path = /mob/living/simple_animal/hostile/asteroid/magmaw
 	bonus_path = null //originally was /obj/item/stack/sheet/mineral/plasma resulting in immediate FIRE
 
@@ -1538,7 +1538,7 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 	var/mode = OMNIMODE_TOOL
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)

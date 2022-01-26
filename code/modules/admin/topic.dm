@@ -4327,7 +4327,7 @@
 				for(var/obj/machinery/door/airlock/maintenance/M in all_doors)
 					if (access_maint_tunnels in M.req_access)
 						M.req_access = list()
-						M.req_one_access = list(access_brig,access_engine)
+						M.req_one_access = list(access_brig,access_engine_major)
 				message_admins("[key_name_admin(usr)] made all maint doors engineering and brig access-only.")
 			if("infinite_sec")
 				var/datum/job/J = job_master.GetJob("Security Officer")
