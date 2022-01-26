@@ -8,6 +8,10 @@
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	_color = "yellow"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	slot_flags = SLOT_GLOVES | SLOT_ID
+
+/obj/item/clothing/gloves/yellow/GetAccess()
+	return get_all_accesses()
 
 /obj/item/clothing/gloves/yellow/power //fuck you don't relative path this
 	var/next_shock = 0
