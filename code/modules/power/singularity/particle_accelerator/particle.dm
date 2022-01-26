@@ -75,6 +75,7 @@
 	if (A)
 		if(ismob(A))
 			toxmob(A)
+			return
 		if(istype(A,/obj/machinery/the_singularitygen))
 			var/obj/machinery/the_singularitygen/TSG = A
 			TSG.energy += energy
@@ -97,7 +98,7 @@
 			return
 		if (istype(A,/obj/machinery/power/supermatter/))
 			var/obj/machinery/power/supermatter/collided_SM = A
-			collided_SM.power += energy * 2 //multiplier to make comparable to emitters
+			collided_SM.power += energy * 2.5 //multiplier to make comparable to emitters
 			return
 	return
 
