@@ -1,13 +1,12 @@
 /spell/changeling/hiveupload
 	name = "Hivemind Channel (10)"
-	desc = "We can channel a DNA into the airwaves, allowing our fellow changelings to absorb it and transform into it as if they acquired the DNA themselves."
+	desc = "We can channel DNA into the airwaves, allowing our fellow changelings to absorb it and transform into it as if they acquired the DNA themselves."
 	abbreviation = "HC"
 	hud_state = "hiveupload"
 
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
 	chemcost = 10
-	required_dna = 1
 
 /spell/changeling/hiveupload/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
