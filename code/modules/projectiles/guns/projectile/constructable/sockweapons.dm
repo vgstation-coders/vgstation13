@@ -29,7 +29,10 @@
 	if(istype(W, /obj/item/weapon/soap))
 		to_chat(user, "<span class='notice'>You place a bar of soap into \the [src].</span>")
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src, force_drop = 1)
+			user.drop_item(src)
+			if(!user.drop_item(src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [src].</span>")
+				return
 			var/obj/item/weapon/soap_sock/I = new (get_turf(user))
 			user.put_in_hands(I)
 			qdel(src)
@@ -37,7 +40,7 @@
 	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
 		var/obj/item/stack/sheet/mineral/brick/S = W
 		to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
-		if(do_after(user, src, 10))
+		if(do_after(user, src, 1 SECONDS))
 			S.use(1)
 			if(!user.drop_item(src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [src].</span>")
