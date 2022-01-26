@@ -58,6 +58,7 @@
 	var/dark_dim_light=0 //darkness level currently the grue is currently exposed to, 0=nice and dark, 1=passably dim, 2=too bright
 	var/busy=0 //busy laying an egg
 
+	var/eattime= 5 SECONDS //how long it takes to eat someone
 
 
 	//eyesight related stuff
@@ -439,7 +440,7 @@
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
 	to_chat(src, "<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
 	busy=1
-	if(do_mob(src , E, 5 SECONDS, 100, 0))
+	if(do_mob(src , E, 5 eattime, eattime, 0)) //check on every tick
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
