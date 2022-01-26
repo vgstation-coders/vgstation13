@@ -285,7 +285,7 @@
 	..()
 	if(!emagged)
 		if(modulo_steps == 1)
-			to_chat(user, "<span class='warning'Aww shucks! Looks like someone beat you to the punch, for these shoes already play a sound every step! Perhaps it was the result of a very special day, or maybe it was tampered with by a very bored god. Either way, you are a fool!</span>")
+			to_chat(user, "<span class='warning'>Aww shucks! Looks like someone beat you to the punch, for these shoes already play a sound every step! Perhaps it was the result of a very special day, or maybe it was tampered with by a very bored god. Either way, you are a fool!</span>")
 			to_chat(user, "<span class='good'>However, here is a consolation banana.</span>")
 			var/dat = {"<html><div><span style="color:#ff0000;">H</span><span style="color:#99ff00;">O</span><span style="color:#0000ff;">N</span><span style="color:#00ff80;">K</span><span style="color:#0066ff;">!</span></html></div>"}
 			to_chat(user, dat)
