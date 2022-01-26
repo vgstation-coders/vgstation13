@@ -250,6 +250,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		hologram_hud()
 	else if(isgrinch(mymob))
 		grinch_hud()
+	else if(isgrue(mymob))
+		grue_hud()
 
 	var/datum/role/cultist/C = iscultist(mymob)
 	if (C)

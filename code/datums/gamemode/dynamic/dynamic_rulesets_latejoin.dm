@@ -160,7 +160,7 @@
 	requirements = list(5,5,15,15,20,20,20,20,40,70)
 	high_population_requirement = 10
 	logo = "pulsedemon-logo"
-	
+
 	repeatable = TRUE
 	var/list/cables_to_spawn_at = list()
 
@@ -197,6 +197,67 @@
 	newpd.AnnounceObjectives()
 	return 1
 
+//////////////////////////////////////////////
+//                                          //
+//                   GRUE                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/grue
+	name = "Grue Infestation"
+	role_category = /datum/role/grue
+	enemy_jobs = list()
+	required_enemies = list()
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 25
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+	logo = "grue-logo"
+
+	repeatable = TRUE
+	var/grue_spawn_spots=list()
+	var/turf/thisturf
+
+/datum/dynamic_ruleset/latejoin/grue/ready(var/forced = 0)
+	grue_spawn_spots=list()
+	var/list/found_vents = list()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/thisvent in atmos_machines)
+		thisturf=get_turf(thisvent)
+		if(!thisvent.welded && thisvent.z == map.zMainStation && thisvent.canSpawnMice==1&&thisturf.get_lumcount()<=0.1&&istype(get_area(thisvent),/area/maintenance)) // Same as spiders but with additional check for being in the dark and in maintenance.
+			found_vents.Add(thisvent)
+	if(found_vents.len)
+		while(found_vents.len > 0)
+			var/obj/machinery/atmospherics/unary/vent_pump/thisvent = pick(found_vents)
+			found_vents -= thisvent
+			for (var/mob/M in player_list)
+				if (isliving(M) && (get_dist(M,thisvent) > 7))//trying to find just one vent that is far out of view of any player
+					grue_spawn_spots+=get_turf(thisvent)
+	if(!grue_spawn_spots)
+		log_admin("Cannot accept Grue ruleset, no suitable spawn locations found.")
+		message_admins("Cannot accept Grue ruleset, no spawn locations found.")
+		return 0
+
+	return ..()
+
+/datum/dynamic_ruleset/latejoin/grue/execute()
+	var/mob/M = pick(assigned)
+	var/turf/oldloc = get_turf(M)
+	M.forceMove(null)
+	if(!latejoinprompt(M,src))
+		message_admins("[M.key] has opted out of becoming a grue.")
+		M.forceMove(oldloc)
+		return 0
+	var/our_spawnspot = pick(grue_spawn_spots)
+	M.forceMove(our_spawnspot)
+	var/mob/living/simple_animal/hostile/grue/gruespawn/ourgrue = new(our_spawnspot)
+	M.Postmorph(ourgrue)
+	var/datum/role/grue/newgrue = new
+	newgrue.AssignToRole(ourgrue.mind,1)
+	newgrue.Greet(GREET_DEFAULT)
+	newgrue.ForgeObjectives(ourgrue.hatched) //Assign it grue_basic objectives if its a hatched grue
+	newgrue.AnnounceObjectives()
+	return 1
 
 //////////////////////////////////////////////
 //                                          //

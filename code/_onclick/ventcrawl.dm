@@ -133,6 +133,13 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	to_chat(src, "<span class='notice'>You can't quite fit in the pipe.</span>")
 	return FALSE
 
+/mob/living/simple_animal/hostile/grue/can_ventcrawl()
+	if(lifestage==GRUE_LARVA)
+		return TRUE
+	else
+		to_chat(src, "<span class='notice'>You are too big to fit into the pipe.</span>")
+	return FALSE
+
 /mob/living/var/ventcrawl_layer = PIPING_LAYER_DEFAULT
 
 /mob/living/proc/handle_ventcrawl(var/atom/clicked_on)

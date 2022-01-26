@@ -596,7 +596,7 @@ Class Procs:
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
 			emag(user)
-			return
+			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)

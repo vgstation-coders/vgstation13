@@ -175,7 +175,7 @@
 	if(!istype(L))
 		return
 
-	put_in(L)
+	put_in(L,user)
 
 /obj/machinery/dna_scannernew/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
@@ -239,9 +239,9 @@
 	else if(M.anchored)
 		return FALSE
 
-	if(ismanifested(M) || !iscarbon(M))
+	if(ismanifested(M) || (!iscarbon(M) && !istype(M, /mob/living/slime_pile)))
 		if(user)
-			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that person's genes.</span>")
+			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that organisms's genes.</span>")
 		return
 
 	if(user)

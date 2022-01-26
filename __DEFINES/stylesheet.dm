@@ -86,6 +86,7 @@ h1.alert, h2.alert		{color: #000000;}
 .maroon					{color: #800000;}
 .clown 					{color: #ff9fef; font-family: Comic Sans MS, Comic Sans, cursive;}
 .borer					{color: #800080; font-weight: bold;}
+.grue					{color: #272728; font-weight: bold;}
 
 /* If you're adding a new class here, add it to browserOutput.css too! */
 
