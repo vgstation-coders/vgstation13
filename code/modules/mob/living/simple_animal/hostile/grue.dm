@@ -440,7 +440,7 @@
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
 	to_chat(src, "<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
 	busy=1
-	if(do_mob(src , E, 5 eattime, eattime, 0)) //check on every tick
+	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
