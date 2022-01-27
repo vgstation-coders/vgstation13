@@ -68,7 +68,7 @@
 		)
 
 	duration = 3 SECONDS
-	digging = 1
+	digging = TRUE
 
 /datum/surgery_step/eye/lift_eyes/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.eyes == 1
@@ -102,7 +102,7 @@
 		)
 
 	duration = 8 SECONDS
-	digging = 1
+	digging = TRUE
 
 /datum/surgery_step/eye/mend_eyes/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.eyes == 2

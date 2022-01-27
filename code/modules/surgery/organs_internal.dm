@@ -22,7 +22,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 	blood_level = 2
-	digging = 1
+	digging = TRUE
 
 	duration = 8 SECONDS
 

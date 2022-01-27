@@ -41,7 +41,7 @@
 		)
 
 	duration = 6 SECONDS
-	digging = 1
+	digging = TRUE
 
 /datum/surgery_step/cavity/make_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
