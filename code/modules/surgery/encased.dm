@@ -42,7 +42,6 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] begins to cut through [target]'s [affected.encased] with \the [tool].", \
 	"You begin to cut through [target]'s [affected.encased] with \the [tool].")
 	target.custom_pain("Something hurts horribly in your [affected.display_name]!",1, scream=TRUE)
@@ -94,7 +93,6 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	tool.playsurgerysound(target, 75)
 	var/msg = "[user] starts to force open the [affected.encased] in [target]'s [affected.display_name] with \the [tool]."
 	var/self_msg = "You start to force open the [affected.encased] in [target]'s [affected.display_name] with \the [tool]."
 	user.visible_message(msg, self_msg)
@@ -155,7 +153,6 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	tool.playsurgerysound(target, 75)
 	var/msg = "[user] starts bending [target]'s [affected.encased] back into place with \the [tool]."
 	var/self_msg = "You start bending [target]'s [affected.encased] back into place with \the [tool]."
 	user.visible_message(msg, self_msg)
@@ -216,7 +213,6 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	tool.playsurgerysound(target, 75)
 	var/msg = "[user] starts applying \the [tool] to [target]'s [affected.encased]."
 	var/self_msg = "You start applying \the [tool] to [target]'s [affected.encased]."
 	user.visible_message(msg, self_msg)

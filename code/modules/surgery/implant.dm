@@ -41,6 +41,7 @@
 		)
 
 	duration = 6 SECONDS
+	digging = 1
 
 /datum/surgery_step/cavity/make_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
@@ -50,9 +51,7 @@
 
 /datum/surgery_step/cavity/make_space/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(!istype(tool, /obj/item/tool/surgicaldrill))
-		playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
-	else
+	if(istype(tool, /obj/item/tool/surgicaldrill))
 		playsound(target, 'sound/items/surgicaldrill.ogg', 70, 1)
 	user.visible_message("[user] starts making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool].",
 	"You start making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool]." )
@@ -98,7 +97,6 @@
 
 /datum/surgery_step/cavity/close_space/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts mending [target]'s [get_cavity(affected)] cavity wall with \the [tool].",
 	"You start mending [target]'s [get_cavity(affected)] cavity wall with \the [tool]." )
 	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
@@ -188,7 +186,6 @@
 
 /datum/surgery_step/cavity/implant_removal/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
 	user.visible_message("[user] starts poking around inside the incision on [target]'s [affected.display_name] with \the [tool].",
 	"You start poking around inside the incision on [target]'s [affected.display_name] with \the [tool]." )
 	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)

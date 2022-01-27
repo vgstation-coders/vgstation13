@@ -20,7 +20,6 @@
 	return !(affected.status & ORGAN_CUT_AWAY) && (sponge && sponge.damage > 0 && sponge.damage <= 20) && affected.open == 3 && target_zone == LIMB_HEAD
 
 /datum/surgery_step/brain/bone_chips/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts taking bone chips out of [target]'s brain with \the [tool].", \
 	"You start taking bone chips out of [target]'s brain with \the [tool].")
 	..()
@@ -55,7 +54,6 @@
 	return !(affected.status & ORGAN_CUT_AWAY) && (sponge && sponge.damage > 20) && affected.open == 3 && target_zone == LIMB_HEAD
 
 /datum/surgery_step/brain/hematoma/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts mending hematoma in [target]'s brain with \the [tool].", \
 	"You start mending hematoma in [target]'s brain with \the [tool].")
 	..()

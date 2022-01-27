@@ -18,7 +18,6 @@
 	return target_zone == LIMB_GROIN && hasorgans(target) && affected.open >= 2 && affected.stage == 0
 
 /datum/surgery_step/prepare_genitals/begin_step(mob/user, mob/living/carbon/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("<span class='notice'>[user] prepares [target]'s genitals for reshaping.</span>")
 
 /datum/surgery_step/prepare_genitals/end_step(mob/user, mob/living/carbon/target, target_zone, obj/item/tool)
@@ -56,7 +55,6 @@
 	return target_zone == LIMB_GROIN && hasorgans(target) && target.op_stage.genitals == 1
 
 /datum/surgery_step/reshape_genitals/begin_step(mob/user, mob/living/carbon/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	if(target.gender == FEMALE)
 		user.visible_message("<span class='notice'>[user] begins to reshape [target]'s genitals to look more masculine.</span>")
 	else

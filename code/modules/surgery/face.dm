@@ -37,7 +37,6 @@
 	return ..() && target_zone == "mouth" && target.op_stage.face == 0 && check_anesthesia(target)
 
 /datum/surgery_step/generic/cut_face/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts to cut open [target]'s face and neck with \the [tool].", \
 	"You start to cut open [target]'s face and neck with \the [tool].")
 	..()
@@ -70,7 +69,6 @@
 	return ..() && target.op_stage.face == 1
 
 /datum/surgery_step/face/mend_vocal/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts mending [target]'s vocal cords with \the [tool].", \
 	"You start mending [target]'s vocal cords with \the [tool].")
 	..()
@@ -101,7 +99,6 @@
 	return ..() && target.op_stage.face == 2
 
 /datum/surgery_step/face/fix_face/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] starts pulling skin on [target]'s face back in place with \the [tool].", \
 	"You start pulling skin on [target]'s face back in place with \the [tool].")
 	..()
@@ -141,7 +138,6 @@
 	return ..() && target.op_stage.face > 0
 
 /datum/surgery_step/face/cauterize/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] is beginning to cauterize the incision on [target]'s face and neck with \the [tool]." , \
 	"You are beginning to cauterize the incision on [target]'s face and neck with \the [tool].")
 	..()

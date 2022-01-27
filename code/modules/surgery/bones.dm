@@ -22,7 +22,6 @@
 	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 0 && affected.status & ORGAN_BROKEN
 
 /datum/surgery_step/glue_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	if (affected.stage == 0)
 		user.visible_message("[user] starts applying medication to the damaged bones in [target]'s [affected.display_name] with \the [tool]." , \
@@ -57,7 +56,6 @@
 	return affected.name != LIMB_HEAD && (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 1
 
 /datum/surgery_step/set_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] is beginning to set the bone in [target]'s [affected.display_name] in place with \the [tool]." , \
 		"You are beginning to set the bone in [target]'s [affected.display_name] in place with \the [tool].")
@@ -97,7 +95,6 @@
 	return affected.name == LIMB_HEAD && (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN))&& affected.stage == 1
 
 /datum/surgery_step/mend_skull/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	user.visible_message("[user] is beginning piece together [target]'s skull with \the [tool]."  , \
 		"You are beginning piece together [target]'s skull with \the [tool].")
 	..()
@@ -135,7 +132,6 @@
 	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 2
 
 /datum/surgery_step/finish_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts to finish mending the damaged bones in [target]'s [affected.display_name] with \the [tool].", \
 	"You start to finish mending the damaged bones in [target]'s [affected.display_name] with \the [tool].")
@@ -174,7 +170,6 @@
 	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage <= 5 && affected.status & ORGAN_BROKEN
 
 /datum/surgery_step/bone_mender/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	tool.playsurgerysound(target, 75)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	if (affected.stage <= 5)
 		user.visible_message("[user] starts grasping the damaged bone edges in [target]'s [affected.display_name] with \the [tool]." , \
