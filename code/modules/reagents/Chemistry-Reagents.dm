@@ -49,6 +49,8 @@
 	var/mug_icon_state = null
 	var/mug_name = null
 	var/mug_desc = null
+	var/addiction_increase = 0 //for addiction and tolerance, if set above 0, will increase each by that amount on tick.
+	var/tolerance_increase = 0
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -173,6 +175,8 @@
 				C.absorbed_chems.Add(id)
 				to_chat(M, "<span class = 'notice'>We have learned [src].</span>")
 
+	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
+		return 1
 	if(is_overdosing())
 		on_overdose(M)
 
@@ -180,6 +184,11 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
+	
+	if(addiction_increase && M.addicted_chems)
+		M.addicted_chems.add_reagent(src.id, addiction_increase)
+	if(tolerance_increase)
+		M.tolerated_chems[src.id] += tolerance_increase
 
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
@@ -198,8 +207,26 @@
 /datum/reagent/proc/on_introduced(var/data)
 	return
 
-/datum/reagent/proc/on_removal(var/data)
+/datum/reagent/proc/on_removal(var/amount)
 	return 1
+
+//Called every tick when listed as an addicted chemical
+/datum/reagent/proc/on_withdrawal(var/mob/living/M)
+	if(!holder)
+		return 1
+	if(!M)
+		M = holder.my_atom //Try to find the mob through the holder
+	if(!istype(M)) //Still can't find it, abort
+		return 1
+	if(M.addicted_chems)
+		M.addicted_chems.remove_reagent(src.id, custom_metabolism)
+	tick++
+	real_tick++
+
+//Has to be a reagents datum for on_withdrawal()
+/mob/living/var/datum/reagents/addicted_chems
+//Associative lists for tolerance formatted like (REAGENT_ID = amount)
+/mob/living/var/list/tolerated_chems = list()
 
 //Completely unimplemented as of 2021, commenting out
 ///datum/reagent/proc/on_move(var/mob/M)
@@ -3201,6 +3228,8 @@
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 1.79
 	specheatcap = 0.70
+	addiction_increase = 0.001 // Low metabolism so low values for both
+	tolerance_increase = 0.001
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
@@ -3208,7 +3237,12 @@
 		return 1
 
 	if(prob(5) && M.stat == CONSCIOUS)
-		M.emote(pick("twitch","blink_r","shiver"))
+		M.emote(pick("twitch","blink_r","shiver")) //See movement_tally_multiplier for the rest
+
+/datum/reagent/hyperzine/on_withdrawal(var/mob/living/M)
+	if(..())
+		return 1
+	M.drowsyness += 1 //See movement_tally_multiplier for the rest
 
 /datum/reagent/hyperzine/on_overdose(var/mob/living/M)
 	if(ishuman(M) && M.get_heart()) // Got a heart?

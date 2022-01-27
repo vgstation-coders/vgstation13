@@ -17,6 +17,7 @@
 		meat_amount = size
 
 	immune_system = new (src)
+	addicted_chems = new /datum/reagents(1000)
 
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
