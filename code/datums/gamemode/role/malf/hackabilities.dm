@@ -784,25 +784,6 @@
 		return FALSE
 	return TRUE
 
-
-//--------------------------------------------------------
-
-/datum/malfhack_ability/ruin_meal 
-	name = "Ruin Meal"
-	desc = "Ruin the next meal prepared in this microwave!"
-	cost = 0
-	icon = "radial_trash"
-
-/datum/malfhack_ability/ruin_meal/activate(mob/living/silicon/A)
-	if(!..())
-		return
-	var/obj/machinery/microwave/W = machine
-	if(!istype(W))
-		return
-	W.rig_meal = TRUE
-	to_chat(A, "<span class='warning'>You set the microwave to burn it's next meal.</span>")
-
-
 //--------------------------------------------------------
 
 /datum/malfhack_ability/kill_plant
