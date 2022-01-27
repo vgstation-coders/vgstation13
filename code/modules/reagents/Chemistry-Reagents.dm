@@ -50,7 +50,7 @@
 	var/mug_name = null
 	var/mug_desc = null
 	var/addiction_increase = 0 //for addiction and tolerance, if set above 0, will increase each by that amount on tick.
-	var/tolerance_increase = 0
+	var/tolerance_increase = REAGENTS_METABOLISM/10
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -3228,8 +3228,8 @@
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 1.79
 	specheatcap = 0.70
-	addiction_increase = 0.001 // Low metabolism so low values for both
-	tolerance_increase = 0.001
+	addiction_increase = 0.005 // Low metabolism so low values for both
+	tolerance_increase = 0.003
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
@@ -5127,6 +5127,8 @@
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	var/has_had_heart_explode = 0
+	addiction_increase = REAGENTS_METABOLISM/5
+	tolerance_increase = REAGENTS_METABOLISM/10
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -5158,6 +5160,11 @@
 					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
 					H.adjustOxyLoss(60)
 					H.adjustBruteLoss(30)
+
+/datum/reagent/cornoil/on_withdrawal(var/mob/living/M)
+	if(..())
+		return 1
+	M.nutrition = max(0, M.nutrition - max(8,(nutriment_factor*tick)/50))
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
