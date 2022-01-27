@@ -122,7 +122,6 @@
 			radiation = round(radiation/2,1)*/
 	M.apply_radiation((radiation*3),RAD_EXTERNAL)
 	M.updatehealth()
-//	to_chat(M, "<span class='warning'>You feel odd.</span>")
 	return
 
 
