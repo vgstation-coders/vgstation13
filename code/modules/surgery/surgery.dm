@@ -17,6 +17,8 @@
 	var/can_infect = 0
 	//How much blood this step can get on surgeon. 1 - hands, 2 - full body.
 	var/blood_level = 0
+	//Whether or not the sound played will be a digging sound or the surgery sound designated by the tools used.
+	var/digging = FALSE
 
 	//returns how well tool is suited for this step
 /datum/surgery_step/proc/tool_quality(obj/item/tool)
@@ -79,6 +81,12 @@
 		tool.icon_state = "[initial(tool.icon_state)]_on"
 		spawn(duration * tool.toolspeed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 			tool.icon_state = "[initial(tool.icon_state)]_off"
+
+	if(digging)
+		playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
+	else
+		tool.playsurgerysound(target, 75, 1)
+
 	return
 
 	// does stuff to end the step, which is normally print a message + do whatever this step changes

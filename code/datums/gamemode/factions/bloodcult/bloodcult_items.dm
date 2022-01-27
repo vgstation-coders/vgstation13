@@ -1055,6 +1055,7 @@ var/list/arcane_tomes = list()
 	var/mob/originator = null
 	var/stacks = 0
 	var/absorbed = 0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/weapon/melee/blood_dagger/Destroy()
 	var/turf/T = get_turf(src)

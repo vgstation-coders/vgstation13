@@ -22,6 +22,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 	blood_level = 2
+	digging = TRUE
 
 	duration = 8 SECONDS
 
@@ -278,7 +279,6 @@
 /datum/surgery_step/internal/detatch_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-
 	user.visible_message("[user] starts to separate [target]'s [target.op_stage.current_organ] with \the [tool].", \
 	"You start to separate [target]'s [target.op_stage.current_organ] with \the [tool]." )
 	target.custom_pain("The pain in your [affected.display_name] is living hell!",1, scream=TRUE)
@@ -333,6 +333,7 @@
 	return ..()
 
 /datum/surgery_step/internal/remove_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
 	user.visible_message("[user] starts removing [target]'s [target.op_stage.current_organ] with \the [tool].", \
 	"You start removing [target]'s [target.op_stage.current_organ] with \the [tool].")
 	target.custom_pain("Someone's ripping out your [target.op_stage.current_organ]!",1, scream=TRUE)
