@@ -24,6 +24,7 @@
 	force_airlock_time=50 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 	blood_color2=GRUE_BLOOD
 //flesh_color2="#272728"
+	see_in_dark = 8
 
 	//VARS
 	var/shadowpower = 0											 //shadow power absorbed
@@ -59,35 +60,6 @@
 	var/busy=0 //busy laying an egg
 
 	var/eattime= 5 SECONDS //how long it takes to eat someone
-
-
-	//eyesight related stuff
-	see_in_dark = 8
-	//keeping this here for later color matrix testing
-	var/a_use_alpha=1
-	var/a_blend_add_test=255
-
-	var/a_matrix_testing_override = 0 //not used for now
-	var/a_11_rr = 1
-	var/a_12_rg = 0
-	var/a_13_rb = 0
-	var/a_14_ra = 0
-	var/a_21_gr = -1
-	var/a_22_gg = 0.2
-	var/a_23_gb = 0.2
-	var/a_24_ga = 1
-	var/a_31_br = -1
-	var/a_32_bg = 0.2
-	var/a_33_bb = 0.2
-	var/a_34_ba = 1
-	var/a_41_ar = 0
-	var/a_42_ag = 0
-	var/a_43_ab = 0
-	var/a_44_aa = 1
-	var/a_51_cr = 0
-	var/a_52_cg = 0
-	var/a_53_cb = 0
-	var/a_54_ca = 0
 
 /mob/living/simple_animal/hostile/grue/modMeat(mob/user, var/obj/theMeat)
 	theMeat.name="grue meat"
@@ -245,22 +217,22 @@
 /mob/living/simple_animal/hostile/grue/update_perception()
 
 	if(client)
-		if(client.darkness_planemaster && a_use_alpha)
+		if(client.darkness_planemaster)
 			client.darkness_planemaster.blend_mode = BLEND_ADD
-			client.darkness_planemaster.alpha = a_blend_add_test
+			client.darkness_planemaster.alpha = 255
+			client.darkness_planemaster.color = list(
+						1,0,0,0.5,
+						0,1,0,0.5,
+	 					0,0,1,0.5,
+		 				0,0,0,1,
+		 				0,0,0,1)
+
 		client.color = list(
 					1,0,0,0,
-					-1,0.2,0.2,1,
-	 				-1,0.2,0.2,1,
+					-1,0.2,0.2,0,
+	 				-1,0.2,0.2,0,
 		 			0,0,0,1,
 		 			0,0,0,0)
-
-		if(a_matrix_testing_override)
-			client.color = list(a_11_rr,a_12_rg,a_13_rb,a_14_ra,
-								a_21_gr,a_22_gg,a_23_gb,a_24_ga,
-		 						a_31_br,a_32_bg,a_33_bb,a_34_ba,
-			 					a_41_ar,a_42_ag,a_43_ab,a_44_aa,
-			 					a_51_cr,a_52_cg,a_53_cb,a_54_ca)
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
