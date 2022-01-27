@@ -1569,9 +1569,9 @@ var/global/list/image/blood_overlays = list()
 		var/tool_sound = pick(toolsounds)
 		playsound(A, tool_sound, volume, TRUE, vary)
 
-/obj/item/proc/playsurgerysound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
+/obj/item/proc/playsurgerysound(atom/A, var/volume = 75)
 	if(A && surgerysound)
-		playsound(A, surgerysound, volume, TRUE, vary)
+		playsound(A, surgerysound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
