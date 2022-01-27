@@ -169,13 +169,12 @@ Subject's pulse: ??? BPM"})
 	if(!silent)
 		user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", ignore_self = TRUE)
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
-	var/fake_oxy = max(rand(1, 40), M.getOxyLoss(), (300 - (M.getToxLoss() + M.getFireLoss() + M.getBruteLoss())))
 	var/OX = M.getOxyLoss() > 50   ? "<b>[M.getOxyLoss()]</b>"   : M.getOxyLoss()
 	var/TX = M.getToxLoss() > 50   ? "<b>[M.getToxLoss()]</b>"   : M.getToxLoss()
 	var/BU = M.getFireLoss() > 50  ? "<b>[M.getFireLoss()]</b>"  : M.getFireLoss()
 	var/BR = M.getBruteLoss() > 50 ? "<b>[M.getBruteLoss()]</b>" : M.getBruteLoss()
 	if(M.status_flags & FAKEDEATH)
-		OX = fake_oxy > 50 ? "<b>[fake_oxy]</b>" : fake_oxy
+		OX = "<b>[300]</b>" 
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[(M.health - M.halloss)/M.maxHealth*100]% Healthy"]</span>"
@@ -207,9 +206,6 @@ Subject's pulse: ??? BPM"})
 				message += organ_msg
 		else
 			message += "<br><span class='notice'>No limb damage detected.</span>"
-
-	if(M.status_flags & FAKEDEATH)
-		OX = fake_oxy > 50 ? "<span class='notice'><b>Severe oxygen deprivation detected</b></span>" : "Subject bloodstream oxygen level normal"
 
 	if(hardcore_mode_on && ishuman(M) && eligible_for_hardcore_mode(M))
 		var/mob/living/carbon/human/H = M
