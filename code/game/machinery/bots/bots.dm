@@ -76,6 +76,12 @@
 
 	var/commanding_radio = /obj/item/radio/integrated/signal/bot
 
+	// Queue of directions. Just like shift-clicking on age of empires 2. It'll go to the next direction after it's finished with this one
+	// It's a list of lists. These lists are coordinates
+	// Mulebots contain an extra fourth parameter used to load/unload at that position.
+	var/list/destinations_queue = list()
+	var/MAX_QUEUE_LENGTH = 15 // Maximum length of our queue
+
 // Adding the bots to global lists; initialize if not.
 /obj/machinery/bot/New()
 	. = ..()
@@ -497,6 +503,39 @@
 			else
 				turn_on()
 			return 1
+		if ("go_to")
+			handle_goto_command(signal)
+			return TRUE
+
+/datum/bot/order
+	var/turf/destination
+
+/datum/bot/order/New(var/turf/place_to_go)
+	destination = place_to_go
+
+/datum/bot/order/mule
+	var/atom/thing_to_load
+	var/unload_here = FALSE
+
+/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE)
+	destination = place_to_go
+	thing_to_load = thing
+	unload_here = _unload_here
+
+/datum/bot/order/mule/unload
+
+/obj/machinery/bot/proc/handle_goto_command(var/datum/signal/signal)
+	var/turf/location = locate(text2num(signal.data["x"]), text2num(signal.data["y"]), text2num(signal.data["z"]))
+	if(!location)
+		return FALSE
+	var/datum/bot/order/order = new /datum/bot/order(location)
+	queue_destination(order)
+
+/obj/machinery/bot/proc/queue_destination(coordinates)
+	if(destinations_queue.len > MAX_QUEUE_LENGTH)
+		return FALSE
+	destinations_queue += coordinates
+	return TRUE
 
 /obj/machinery/bot/proc/return_status()
 	return "Idle"
