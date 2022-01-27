@@ -38,8 +38,8 @@
 		delay = rand(80 SECONDS, 120 SECONDS)
 	to_chat(C, "<span class='warning'>We are now in stasis. You must wait [delay/10] seconds.</span>")
 	sleep(delay)
-	// If he didn't log out + if we didn't get revived/smitted in the meantime already
-	if(C.client && (C.stat == DEAD || C.status_flags & FAKEDEATH))
+	//if we didn't get revived/smitted in the meantime already
+	if(C.stat == DEAD || C.status_flags & FAKEDEATH)
 		to_chat(C, "<span class='warning'>We are now ready to awaken from stasis.</span>")
 		to_chat(C, "<span class = 'notice'>Click the action button to revive.</span>")
 		var/datum/action/lingrevive/revive_action = new()
