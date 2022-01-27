@@ -4,7 +4,7 @@
  * Navigates via floor navbeacons
  * Remote Controlled from QM's PDA
  *
- * Hello, the path algorithm now uses 
+ * Hello, the path algorithm now uses
  *
  *
  *
@@ -485,8 +485,6 @@ var/global/mulebot_count = 0
 // called to load a crate
 /obj/machinery/bot/mulebot/proc/load(var/atom/movable/C)
 	initialize()
-	to_chat(world, "[C] y [C?.type]")
-	to_chat(world, "[wires.LoadCheck()] : [!is_type_in_list(C,can_load)]")
 	if(wires.LoadCheck() && !is_type_in_list(C,can_load))
 		src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
@@ -611,10 +609,14 @@ var/global/mulebot_count = 0
 		awaiting_beacon = 0
 		return 1
 	// -- Command signals --
-	var/target_bot = signal.data["target"]
-	/*if (target_bot != "\ref[src]")
-		return*/
+	if (signal.data["assigned_mulebot"])
+		var/obj/machinery/bot/mulebot/chosen_mulebot = locate(signal.data["assigned_mulebot"])
+		if (chosen_mulebot != src)
+			return
 	var/command = signal.data["command"]
+	if (!auto_pickup)
+		auto_pickup = signal.data["auto_pickup"]
+
 	execute_signal_command(signal, command)
 
 // starts bot moving to home
@@ -842,7 +844,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/process_astar_path()
 	if(gcDestroyed)
 		return FALSE
-	
+
 	Move(path[1])
 	if(get_turf(src) != path[1])
 		if(on_path_step_fail(path[1]))
@@ -901,7 +903,7 @@ var/global/mulebot_count = 0
 	destinations_queue += order
 	return TRUE
 
-/obj/item/proc/is_pointer()
+/obj/item/proc/is_pointer(var/mob/user)
 	return FALSE
 
 /obj/item/proc/point_to(atom)
@@ -911,30 +913,58 @@ var/global/mulebot_count = 0
 #define UNLOAD_HERE 1
 
 /obj/item/mulebot_laser
+	name = "mulebot laser pointing device"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "airprojector"
 	var/mode = LOAD_OR_MOVE_HERE
 	var/datum/radio_frequency/radio_connection
 	var/frequency = 1447
-	var/obj/machinery/bot/mulebot/mulebot
+	var/obj/machinery/bot/mulebot/my_mulebot
 	var/obj/item/radio/integrated/signal/bot/mule/radio
 
 /obj/item/mulebot_laser/New()
+	. = ..()
+	laser_pointers_list += src
 	radio = new()
 	radio_connection = radio_controller.add_object(src, frequency)
 
+/obj/item/mulebot_laser/Destroy()
+	. = ..()
+	laser_pointers_list -= src
+	qdel(radio)
+	radio = null
+	my_mulebot = null
+
 /obj/item/mulebot_laser/attack_self(mob/user)
-	to_chat(user, "You change the mode to [mode]")
+	var/mode_txt
+	switch (mode)
+		if (LOAD_OR_MOVE_HERE)
+			mode_txt = "loading"
+		if (UNLOAD_HERE)
+			mode_txt = "unloading"
+	to_chat(user, "<span class='notice'>You change the mode to [mode_txt].</span>")
 	mode = !mode
 
-/obj/item/mulebot_laser/is_pointer()
-	return TRUE
+/obj/item/mulebot_laser/verb/clear_assigned_mulebot()
+	if (usr.incapacitated())
+		return
+	my_mulebot = null
+	to_chat(usr, "<span='notice'>Cleared assigned mulebot.</span>")
 
-/obj/item/mulebot_laser/point_to(var/atom/atom)
+/obj/item/mulebot_laser/is_pointer(var/mob/user)
+	return !user.incapacitated()
+
+/obj/item/mulebot_laser/point_to(var/atom/atom, var/mob/user)
 	var/turf/tile = get_turf(atom)
 	if(!tile)
 		return
-	
+
+	var/obj/machinery/bot/mulebot/MB = locate() in tile
+	if (MB && !my_mulebot)
+		my_mulebot = MB
+		to_chat(user, "<span class='notice'>\The [MB] will now be your assigned mulebot. Use the verb to select another.</span>")
+		return
+
 	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = SIGNAL_RADIO
 	signal.source = radio
@@ -948,10 +978,14 @@ var/global/mulebot_count = 0
 		signal.data["thing_to_load"] = isturf(atom) ? null : atom
 		point_effect(/obj/effect/decal/point/cargo_unload, tile, atom)
 	else if(!isturf(atom))
+		signal.data["auto_pickup"] = TRUE
 		signal.data["thing_to_load"] = atom
 		point_effect(/obj/effect/decal/point/cargo_load, tile, atom)
 	else
 		point_effect(/obj/effect/decal/point/go_here, tile, atom)
+
+	if (my_mulebot)
+		signal.data["assigned_mulebot"] = "[\ref(my_mulebot)]"
 
 	radio_connection.post_signal(src, signal, filter = RADIO_MULEBOT)
 
