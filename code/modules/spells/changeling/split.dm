@@ -7,7 +7,7 @@
 	cooldown_min = 30 SECONDS
 	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
 	chemcost = 50
-	required_dna = 1
+	required_dna = 2
 	max_genedamage = 0
 	horrorallowed = 0
 	var/datum/mind/owner = null // The mind of the user, to be used by the recruiter
@@ -51,7 +51,6 @@
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (success)
 		changeling.splitcount += 1
-		changeling.absorbedcount = max(0,changeling.absorbedcount-1)
 		(owner.current).visible_message("<span class='danger'>[(owner.current)] splits!</span>")
 		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
