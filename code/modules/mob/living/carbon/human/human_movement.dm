@@ -65,7 +65,7 @@
 			. *= NO_SHOES_SLOWDOWN
 		if(addicted_chems.has_any_reagents(HYPERZINES))
 			var/datum/reagent/R = addicted_chems.get_reagent_by_type(/datum/reagent/hyperzine)
-			. *= max(2,R.tick/10)
+			. *= min(2,R.volume/5)
 	if(M_FAT in mutations) // hyperzine can't save you, fatty!
 		. *= 1.5
 	if(M_RUN in mutations)

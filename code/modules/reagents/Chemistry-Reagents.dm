@@ -1136,6 +1136,8 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 5.23
 	specheatcap = 0.62
+	addiction_increase = 0.1
+	tolerance_increase = 0.05
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
@@ -1150,6 +1152,13 @@
 
 	if(prob(7))
 		M.emote(pick("twitch", "drool", "moan", "giggle"), null, null, TRUE)
+
+/datum/reagent/space_drugs/on_withdrawal(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M) && prob(min(100,volume)))
+		var/mob/living/carbon/human/H = M
+		H.vomit()
 
 /datum/reagent/holywater
 	name = "Holy Water"
@@ -2053,6 +2062,8 @@
 	custom_metabolism = 0.05
 	density = 1.26
 	specheatcap = 24.59
+	addiction_increase = 0.01
+	tolerance_increase = 0.005
 
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
 
@@ -2072,6 +2083,9 @@
 							"<span class='numb'>You nod to yourself... it's nothing, it just feels good to nod a little...</span>", \
 							"<span class='numb'>Hello?... Is there anybody in there?...</span>", \
 							"<span class='numb'>You feel... comfortably numb.</span>"))
+
+
+//Withdrawal effects in update_pain_level()
 
 /datum/reagent/virus_food
 	name = "Virus Food"
@@ -3242,7 +3256,8 @@
 /datum/reagent/hyperzine/on_withdrawal(var/mob/living/M)
 	if(..())
 		return 1
-	M.drowsyness += 1 //See movement_tally_multiplier for the rest
+	if(prob(50))
+		M.drowsyness = max(M.drowsyness, volume/2) //See movement_tally_multiplier for the rest
 
 /datum/reagent/hyperzine/on_overdose(var/mob/living/M)
 	if(ishuman(M) && M.get_heart()) // Got a heart?
@@ -5128,7 +5143,6 @@
 	color = "#302000" //rgb: 48, 32, 0
 	var/has_had_heart_explode = 0
 	addiction_increase = REAGENTS_METABOLISM/5
-	tolerance_increase = REAGENTS_METABOLISM/10
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -5164,7 +5178,7 @@
 /datum/reagent/cornoil/on_withdrawal(var/mob/living/M)
 	if(..())
 		return 1
-	M.nutrition = max(0, M.nutrition - max(8,(nutriment_factor*tick)/50))
+	M.nutrition = max(0, M.nutrition - max(8,nutriment_factor*volume))
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -6291,6 +6305,8 @@
 	custom_metabolism = FOOD_METABOLISM
 	density = 0.79
 	specheatcap = 2.46
+	addiction_increase = FOOD_METABOLISM/5
+	tolerance_increase = FOOD_METABOLISM/10
 	var/dizzy_adj = 3
 	var/slurr_adj = 3
 	var/confused_adj = 2
@@ -6344,6 +6360,15 @@
 			else if(istype(L))
 				L.take_damage(0.05, 0.5)
 			H.adjustToxLoss(0.5)
+
+/datum/reagent/ethanol/on_withdrawal(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(2))
+		M.eye_blurry = 5
+		to_chat(M,"<span class='warning'>Your head hurts</span>")
+		if(prob(50))
+			M.drowsyness++
 
 /datum/reagent/ethanol/reaction_obj(var/obj/O, var/volume)
 

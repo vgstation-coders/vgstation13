@@ -37,6 +37,10 @@
 				if(organ.status & ORGAN_SPLINTED)
 					pain_level -= 25
 
+	if(addicted_chems.has_any_reagents(OXYCODONE))
+		var/datum/reagent/R = addicted_chems.get_reagent_by_type(/datum/reagent/oxycodone)
+		pain_level += min(50,R.volume*5)
+
 	if(pain_level < 0)
 		pain_level = 0
 
