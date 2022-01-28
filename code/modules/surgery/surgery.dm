@@ -84,7 +84,7 @@
 
 	if((M_CLUMSY in user.mutations) && prob(20))
 		var/clownsound = null
-		clownsound = pick( list("toysqueak","partyhorn","bikehorn") )
+		clownsound = pick( list("toysqueak","partyhorn","bikehorn","quack") )
 		playsound(target, "sound/items/[clownsound].ogg", 75, 2)
 	else
 		if(digging)
