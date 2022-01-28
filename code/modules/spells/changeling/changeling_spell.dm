@@ -32,6 +32,9 @@
 	if (!C)     //only changelings allowed
 		message_admins("[user.real_name] has a changeling spell... and they aren't a changeling!")
 		return FALSE
+	if issilicon(user)
+		to_chat(C.antag.current, "<span class='warning'>You must be an organic lifeform.</span>")
+		return FALSE
 	if (C.chem_charges < chemcost)
 		to_chat(C.antag.current, "<span class='warning'>We do not have enough chemicals stored! We require at least [chemcost] units of chemicals.</span>")
 		return FALSE
