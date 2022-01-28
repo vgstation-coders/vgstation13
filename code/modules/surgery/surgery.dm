@@ -82,10 +82,15 @@
 		spawn(duration * tool.toolspeed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 			tool.icon_state = "[initial(tool.icon_state)]_off"
 
-	if(digging)
-		playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
+	if((M_CLUMSY in user.mutations) && prob(20))
+		var/clownsound = null
+		clownsound = pick( list("toysqueak","partyhorn","bikehorn") )
+		playsound(target, "sound/items/[clownsound].ogg", 75, 2)
 	else
-		tool.playsurgerysound(target, 75, 1)
+		if(digging)
+			playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
+		else
+			tool.playsurgerysound(target, 75, 1)
 
 	return
 
