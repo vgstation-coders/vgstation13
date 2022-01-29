@@ -55,7 +55,7 @@
 	sleep(duration)
 	feedback_add_details("changeling_powers","HF")
 	
-/spell/changeling/regenerate/after_cast(list/targets,var/mob/living/carbon/human/user)
+/spell/changeling/horrorform/after_cast(list/targets,var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return
