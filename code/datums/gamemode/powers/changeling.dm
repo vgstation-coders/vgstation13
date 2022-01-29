@@ -255,14 +255,14 @@
 	helptext = "The blade can be retracted by using the same spell used to manifest it. It has a chance to deflect projectiles."
 	cost = 3
 	spellpath = /spell/changeling/armblade
-
+/*
 /datum/power/changeling/chemsting
 	name = "Chemical Sting"
 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to inject into another lifeform or ourselves if needs be."
 	helptext = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
 	cost = 1
 	spellpath = /spell/changeling/changeling_chemsting
-
+*/
 ///datum/power/changeling/chemspit
 //	name = "Chemical Spit"
 // 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to fire like projectile venom in our facing direction."
