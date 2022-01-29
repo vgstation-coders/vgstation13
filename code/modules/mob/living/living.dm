@@ -18,6 +18,7 @@
 
 	immune_system = new (src)
 	addicted_chems = new /datum/reagents(1000)
+	addicted_chems.my_atom = src
 
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)

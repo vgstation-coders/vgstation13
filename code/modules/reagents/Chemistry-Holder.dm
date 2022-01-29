@@ -369,7 +369,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(M.addicted_chems)
 		for(var/B in M.addicted_chems.reagent_list)
 			var/datum/reagent/R2 = B
-			if(M && R2 && !has_reagent(R2))
+			if(M && R2 && !has_reagent_type(R2.type))
 				R2.on_withdrawal(M)
 	for(var/reagent_id in M.tolerated_chems)
 		if(!has_reagent(reagent_id))
