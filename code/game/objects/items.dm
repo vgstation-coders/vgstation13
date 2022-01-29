@@ -72,6 +72,7 @@
 	var/image/pathogen
 
 	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
+	var/surgerysound = null
 	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much.
 
 	var/crit_chance = CRIT_CHANCE_RANGED
@@ -1567,6 +1568,10 @@ var/global/list/image/blood_overlays = list()
 	if(A && toolsounds)
 		var/tool_sound = pick(toolsounds)
 		playsound(A, tool_sound, volume, TRUE, vary)
+
+/obj/item/proc/playsurgerysound(atom/A, var/volume = 75)
+	if(A && surgerysound)
+		playsound(A, surgerysound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
