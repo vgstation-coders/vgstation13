@@ -381,10 +381,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					var/reagent_efficiency = 1
 					if(reagent_id in L.reagent_efficiencies)
 						reagent_efficiency = L.reagent_efficiencies[reagent_id]
-					M.tolerated_chems[reagent_id] = max(0, M.tolerated_chems[reagent_id] - (R3.custom_metabolism * L.efficiency * reagent_efficiency * R3.tolerance_increase))
+					M.tolerated_chems[reagent_id] = max(0, M.tolerated_chems[reagent_id] - (L.efficiency * reagent_efficiency * R3.tolerance_increase))
 					return
 			// If we aren't human, we don't have a liver, so just remove tolerance the old fashioned way.
-			M.tolerated_chems[reagent_id] = max(0, M.tolerated_chems[reagent_id] - (R3.custom_metabolism * R3.tolerance_increase))
+			M.tolerated_chems[reagent_id] = max(0, M.tolerated_chems[reagent_id] - R3.tolerance_increase)
 	update_total()
 
 /datum/reagents/proc/update_aerosol(var/mob/M)

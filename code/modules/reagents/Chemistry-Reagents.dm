@@ -49,8 +49,8 @@
 	var/mug_icon_state = null
 	var/mug_name = null
 	var/mug_desc = null
-	var/addiction_increase = 0 //for addiction and tolerance, if set above 0, will increase each by that amount on tick.
-	var/tolerance_increase = REAGENTS_METABOLISM/10
+	var/addictive = FALSE
+	var/tolerance_increase = REAGENTS_METABOLISM/10  //for tolerance, if set above 0, will increase each by that amount on tick.
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -185,8 +185,8 @@
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
 	
-	if(addiction_increase && M.addicted_chems)
-		M.addicted_chems.add_reagent(src.id, addiction_increase)
+	if(addictive && M.addicted_chems)
+		M.addicted_chems.add_reagent(src.id, custom_metabolism)
 	if(tolerance_increase)
 		M.tolerated_chems[src.id] += tolerance_increase
 
@@ -1136,7 +1136,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 5.23
 	specheatcap = 0.62
-	addiction_increase = 0.1
+	addictive = TRUE
 	tolerance_increase = 0.05
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
@@ -1156,7 +1156,7 @@
 /datum/reagent/space_drugs/on_withdrawal(var/mob/living/M)
 	if(..())
 		return 1
-	if(ishuman(M) && prob(min(100,volume)))
+	if(ishuman(M) && prob(min(100,volume/10)))
 		var/mob/living/carbon/human/H = M
 		H.vomit()
 
@@ -2062,7 +2062,7 @@
 	custom_metabolism = 0.05
 	density = 1.26
 	specheatcap = 24.59
-	addiction_increase = 0.01
+	addictive = TRUE
 	tolerance_increase = 0.005
 
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
@@ -3242,7 +3242,7 @@
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 1.79
 	specheatcap = 0.70
-	addiction_increase = 0.005 // Low metabolism so low values for both
+	addictive = TRUE
 	tolerance_increase = 0.003
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
@@ -3256,8 +3256,8 @@
 /datum/reagent/hyperzine/on_withdrawal(var/mob/living/M)
 	if(..())
 		return 1
-	if(prob(50))
-		M.drowsyness = max(M.drowsyness, volume/2) //See movement_tally_multiplier for the rest
+	if(prob(min(100,volume/5)))
+		M.drowsyness = max(M.drowsyness, min(10,volume/10)) //See movement_tally_multiplier for the rest
 
 /datum/reagent/hyperzine/on_overdose(var/mob/living/M)
 	if(ishuman(M) && M.get_heart()) // Got a heart?
@@ -5141,8 +5141,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	addictive = TRUE
 	var/has_had_heart_explode = 0
-	addiction_increase = REAGENTS_METABOLISM/5
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -5178,7 +5178,7 @@
 /datum/reagent/cornoil/on_withdrawal(var/mob/living/M)
 	if(..())
 		return 1
-	M.nutrition = max(0, M.nutrition - max(8,nutriment_factor*volume))
+	M.nutrition = max(0, M.nutrition - max(8,nutriment_factor*volume/10))
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -6305,7 +6305,7 @@
 	custom_metabolism = FOOD_METABOLISM
 	density = 0.79
 	specheatcap = 2.46
-	addiction_increase = FOOD_METABOLISM/5
+	addictive = TRUE
 	tolerance_increase = FOOD_METABOLISM/10
 	var/dizzy_adj = 3
 	var/slurr_adj = 3
