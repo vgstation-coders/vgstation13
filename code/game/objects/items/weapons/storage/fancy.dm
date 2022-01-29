@@ -645,9 +645,6 @@
 	. = ..()
 	if(!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
-		if(istype(src.loc,/mob/living/carbon))
-			var/mob/living/carbon/C = src.loc
-			C.u_equip(src, 0)
 		qdel(src)
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/update_icon(var/itemremoved = 0)
@@ -674,9 +671,6 @@
 	. = ..()
 	if(!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
-		if(istype(src.loc,/mob/living/carbon))
-			var/mob/living/carbon/C = src.loc
-			C.u_equip(src, 0)
 		qdel(src)
 
 /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket/update_icon(var/itemremoved = 0)
