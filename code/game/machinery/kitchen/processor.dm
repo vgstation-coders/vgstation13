@@ -136,15 +136,21 @@
 	input = /mob/living/simple_animal/chicken
 	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
 
-
 /datum/food_processor_process/mob/chicken/process(loc, what)
+	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
+	..()
+
+/datum/food_processor_process/mob/voxchicken
+	input = /mob/living/carbon/monkey/vox
+	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+
+/datum/food_processor_process/mob/voxchicken/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 	..()
 
 /datum/food_processor_process/mob/chick
 	input = /mob/living/simple_animal/chick
 	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
-
 
 /datum/food_processor_process/mob/chick/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
@@ -153,7 +159,6 @@
 /datum/food_processor_process/mob/human
 	input = /mob/living/carbon/human
 	output = null
-
 
 /datum/food_processor_process/mob/human/process(loc, what)
 	var/mob/living/carbon/human/target = what
