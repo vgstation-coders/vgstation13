@@ -640,7 +640,6 @@
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick(src)
-	return
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
@@ -670,7 +669,6 @@
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick(src)
-	return
 
 /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
