@@ -119,21 +119,21 @@
 	name = "chicken meat"
 	desc = "This better be delicious."
 	icon_state = "raw_chicken"
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
-	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken
 	name = "vox chicken meat"
 	desc = "Vox, man. No discussion."
 	icon_state = "raw_vox_chicken"
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
-	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
 	name = "crab meat"
