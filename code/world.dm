@@ -91,6 +91,7 @@ var/auxtools_path
 		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
+	paxban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()

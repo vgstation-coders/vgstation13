@@ -680,6 +680,8 @@ var/list/liftable_structures = list(\
 #define BANTYPE_APPEARANCE	6
 #define BANTYPE_OOC_PERMA	7
 #define BANTYPE_OOC_TEMP	8
+#define BANTYPE_PAX_PERMA	9
+#define BANTYPE_PAX_TEMP	10
 
 #define SEE_INVISIBLE_MINIMUM 5
 
@@ -1445,6 +1447,8 @@ var/proccalls = 1
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
+
+#define paxban_isbanned(key) paxban_keylist.Find("[ckey(key)]")
 
 //message modes. you're not supposed to mess with these.
 #define MODE_HEADSET "headset"
