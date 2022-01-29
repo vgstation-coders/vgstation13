@@ -2,6 +2,259 @@
 //   Spess Pets, by Deity Link, based on Tamagotchi    //
 /////////////////////////////////////////////////////////
 
+/datum/pda_app/spesspets
+	name = "Spess Pets"
+	desc = "A virtual pet simulator. For when you don't have the balls to own a real pet. Includes multi-PDA interactions and Nanocoin mining."
+	category = "Games"
+	price = 10
+	icon = "pda_egg"
+	assets_type = /datum/asset/simple/pda_spesspets
+	var/obj/machinery/account_database/linked_db
+
+	var/game_state = 0	//0 = First Startup; 1 = Egg Chosen; 2 = Egg Hatched (normal status); 3 = Pet Dead
+	var/petname = "Ianitchi"
+	var/petID = "000000"
+	var/level = 0
+	var/exp = 0
+	var/race = "Corgegg"//Race set here for sanity purposes, the player chooses the race himself
+
+	var/hatching = 0
+
+	var/ishungry = 0
+	var/isdirty = 0
+
+	var/ishurt = 0
+
+	var/ishappy = 0
+	var/isatwork = 0
+	var/issleeping = 0
+
+	var/last_spoken = "Corgegg"
+
+	var/area/walk_target = null
+	var/last_walk_start = 0
+
+	var/total_happiness = 0
+	var/total_hunger = 0
+	var/total_dirty = 0
+	var/walk_completed = 0
+
+	var/next_coin = 0
+	var/total_coins = 0
+
+	var/isfighting = 0
+	var/list/challenged = list()
+	var/isvisiting = 0
+	var/list/visited = list()
+
+/datum/pda_app/spesspets/onInstall(var/obj/item/device/pda/device)
+	..()
+	petID = num2text(rand(000000,999999))
+	reconnect_database()
+
+/datum/pda_app/spesspets/proc/reconnect_database()
+	for(var/obj/machinery/account_database/DB in account_DBs)
+		if((DB.z == pda_device.loc.z) || (DB.z == map.zMainStation))
+			if((DB.stat == 0) && DB.activated )
+				linked_db = DB
+				break
+
+/datum/pda_app/spesspets/Destroy()
+	linked_db = null
+	challenged = null
+	visited = null
+	..()
+
+/datum/pda_app/spesspets/get_dat(var/mob/user)
+	var/dat = {"<h4><span class='pda_icon [icon]'></span> Spess Pets</h4>
+		<br>Name = [petname]<br>Level = [level]<br>
+		<div style="position: relative; left: 0; top: 0;">
+		<img src="spesspets_bg.png" style="position: relative; top: 0; left: 0;"/>
+		"}
+	switch(game_state)
+		if(0)	//First Statup
+			dat += {"<br><a href='byond://?src=\ref[src];eggPrev=1'><img src="spesspets_arrow_left.png"></a><a href='byond://?src=\ref[src];eggNext=1'><img src="spesspets_arrow_right.png"></a>"}
+
+			dat += {"<a href='byond://?src=\ref[src];eggChose=1'><img src="spesspets_egg0.png" style="position: absolute; top: 32px; left: 32px;"/></a>"}
+			dat += {"</div>"}
+		if(1)	//Hatching
+			var/eggstate = 0
+			if(hatching > 1200)
+				eggstate = 3
+			else if(hatching > 600)
+				eggstate = 2
+			else if(hatching > 300)
+				eggstate = 1
+			dat += {"<img src="spesspets_egg[eggstate].png" style="position: absolute; top: 32px; left: 32px;"/>"}
+			if(eggstate >= 2)
+				dat += {"<a href='byond://?src=\ref[src];eggHatch=1'><img src="spesspets_hatch.png" style="position: absolute; top: 64px; left: 0px;"/></a>"}
+
+		if(2)	//Normal
+			if(ishungry)
+				dat += {"<img src="spesspets_hunger.png" style="position: absolute; top: 32px; left: 64px;"/>"}
+			if(isdirty)
+				dat += {"<img src="spesspets_dirty.png" style="position: absolute; top: 32px; left: 96px;"/>"}
+			if(ishurt)
+				dat += {"<img src="spesspets_hurt.png" style="position: absolute; top: 32px; left: 128px;"/>"}
+			if(isatwork)
+				dat += {"<img src="spesspets_mine.png" style="position: absolute; top: 32px; left: 32px;"/>"}
+			else
+				dat += {"<img src="spesspets_[race].png" style="position: absolute; top: 0px; left: 0px;"/>"}
+				if(issleeping)
+					dat += {"<img src="spesspets_sleep.png" style="position: absolute; top: 0px; left: 32px;"/>"}
+				else
+					dat += {"<a href='byond://?src=\ref[src];eggTalk=1'><img src="spesspets_talk.png" style="position: absolute; top: 96px; left: 0px;"/></a>"}
+					dat += {"<a href='byond://?src=\ref[src];eggWalk=1'><img src="spesspets_walk.png" style="position: absolute; top: 96px; left: 32px;"/></a>"}
+					if(ishungry)
+						dat += {"<a href='byond://?src=\ref[src];eggFeed=1'><img src="spesspets_feed.png" style="position: absolute; top: 96px; left: 64px;"/></a>"}
+					if(isdirty)
+						dat += {"<a href='byond://?src=\ref[src];eggClean=1'><img src="spesspets_clean.png" style="position: absolute; top: 96px; left: 96px;"/></a>"}
+					if(ishurt)
+						dat += {"<a href='byond://?src=\ref[src];eggHeal=1'><img src="spesspets_heal.png" style="position: absolute; top: 112px; left: 0px;"/></a>"}
+					dat += {"<a href='byond://?src=\ref[src];eggFight=1'><img src="spesspets_fight.png" style="position: absolute; top: 112px; left: 32px;"/></a>"}
+					dat += {"<a href='byond://?src=\ref[src];eggVisit=1'><img src="spesspets_visit.png" style="position: absolute; top: 112px; left: 64px;"/></a>"}
+					if(level >= 16)
+						dat += {"<a href='byond://?src=\ref[src];eggWork=1'><img src="spesspets_work.png" style="position: absolute; top: 112px; left: 96px;"/></a>"}
+			if(total_coins)
+				dat += {"<a href='byond://?src=\ref[src];eggRate=1'><img src="spesspets_rate.png" style="position: absolute; top: 96px; left: 128px;"/></a>"}
+			if(total_coins)
+				dat += {"<a href='byond://?src=\ref[src];eggCash=1'><img src="spesspets_cash.png" style="position: absolute; top: 112px; left: 128px;"/></a>"}
+
+			dat += {"</div>"}
+		if(3)	//Dead
+			dat += {"</div>"}
+	if(last_spoken != "")
+		dat += {"<br><br><br><br>[last_spoken]"}
+	if(total_coins)
+		dat += {"<br>nanocoins: [total_coins]"}
+	return dat
+
+/datum/pda_app/spesspets/Topic(href, href_list)
+	if(..())
+		return
+
+	if(href_list["eggPrev"])
+		previous_egg()
+
+	if(href_list["eggNext"])
+		next_egg()
+
+	if(href_list["eggChose"])
+		petname = copytext(sanitize(input(usr, "What do you want to name your new pet?", "Name your new pet", "[petname]") as null|text),1,MAX_NAME_LEN)
+		if(petname && (alert(usr, "[petname] will be your pet's new name - are you sure?", "Confirm Pet's name: ", "Yes", "No") == "Yes"))
+			game_state = 1
+			game_tick(usr)
+			last_spoken = ""
+
+	if(href_list["eggHatch"])
+		button_hatch()
+
+	if(href_list["eggTalk"])
+		button_talk()
+
+	if(href_list["eggWalk"])
+		button_walk()
+
+	if(href_list["eggFeed"])
+		button_feed()
+
+	if(href_list["eggClean"])
+		button_clean()
+
+	if(href_list["eggHeal"])
+		button_heal()
+
+	if(href_list["eggFight"])
+		button_fight()
+
+	if(href_list["eggVisit"])
+		button_visit()
+
+	if(href_list["eggWork"])
+		button_work()
+
+	if(href_list["eggRate"])
+		button_rates()
+
+	if(href_list["eggCash"])
+		button_cash()
+
+	refresh_pda()
+
+/datum/pda_app/spesspets/proc/game_tick(var/mob/user)
+	if (game_state == 1)
+		hatching++
+		if(hatching > 1200)
+			last_spoken = "Help him hatch already you piece of fuck!"
+		else if(hatching > 600)
+			last_spoken = "Looks like the pet is trying to hatch from the egg!"
+		else if(hatching > 300)
+			last_spoken = "Did the egg just move?"
+		else
+			last_spoken = "The egg stands still."
+
+	if (game_state == 2)
+		if(isatwork)
+			isatwork--
+			next_coin--
+			if(next_coin <= 0)
+				total_coins++
+				next_coin = rand(10,15)
+				if(ishappy)
+					next_coin = rand(5,7)
+			if(!isatwork)
+				issleeping = 600
+
+		if(issleeping)
+			issleeping--
+		if(ishappy)
+			ishappy--
+			total_happiness++
+		if(ishungry)
+			total_hunger++
+		if(isdirty)
+			total_dirty++
+
+		if(ishurt)
+			ishurt++
+			if(ishurt >= 600)
+				game_state = 3
+
+		var/new_exp = 0
+		if(!isdirty)
+			new_exp = 1
+			if(ishappy)
+				new_exp = new_exp*2
+			if(ishurt)
+				new_exp = new_exp/2
+		exp += new_exp
+
+		if(exp > 900)
+			level++
+			exp = 0
+			if(level >= 50)
+				game_state = 3
+
+	game_update(user)
+
+	if(game_state < 3)
+		spawn(10)
+			game_tick(user)
+
+
+/datum/pda_app/spesspets/proc/game_update(var/mob/user)
+	if(istype(user,/mob/living/carbon))
+		var/mob/living/carbon/C = user
+		if(C.machine && istype(C.machine,/obj/item/device/pda))
+			var/obj/item/device/pda/pda_device = C.machine
+			var/turf/user_loc = get_turf(user)
+			var/turf/pda_loc = get_turf(pda_device)
+			if(get_dist(user_loc,pda_loc) <= 1)
+				if((locate(src.type) in pda_device.applications) && pda_device.app_menu)
+					pda_device.attack_self(C)
+			else
+				user.unset_machine()
+				user << browse(null, "window=pda")
 
 /datum/pda_app/spesspets/proc/button_hatch()
 	game_state = 2

@@ -281,7 +281,9 @@ var/list/camera_messages = list()
 			info = X.info
 		else
 			var/obj/item/device/pda/P = W
-			info = P.notehtml
+			var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in P.applications
+			if(app)
+				info = app.notehtml
 
 		var/key = "\ref[W]"
 		if(camera_messages.len > MAX_CAMERA_MESSAGES)

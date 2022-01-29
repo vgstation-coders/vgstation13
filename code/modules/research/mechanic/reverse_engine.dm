@@ -77,8 +77,8 @@
 		return
 	if(istype(O, /obj/item/device/pda))
 		var/obj/item/device/pda/PDA = O
-		if(PDA.dev_analys)
-			var/obj/item/device/device_analyser/DA = PDA.dev_analys
+		if(PDA.cartridge.dev_analys)
+			var/obj/item/device/device_analyser/DA = PDA.cartridge.dev_analys
 			for(var/datum/design/loop_design in DA.loaded_designs)
 				AddDesign(loop_design, DA.loaded_designs, user)
 			return 1
