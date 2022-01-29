@@ -2103,6 +2103,10 @@ Use this proc preferably at the end of an equipment loadout
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(paxban_isbanned(ckey))
+		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
+		return TRUE
+
 	if (runescape_pvp)
 		var/area/A = get_area(src)
 		if (!istype(A, /area/maintenance) && !is_type_in_list(A,non_standard_maint_areas))
