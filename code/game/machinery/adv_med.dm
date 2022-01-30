@@ -381,6 +381,10 @@
 		"external_organs" = H.organs.Copy(),
 		"internal_organs" = H.internal_organs.Copy()
 		)
+	if (H.status_flags & FAKEDEATH)
+		health_data["stat"] = 2
+		health_data["oxyloss"] = 200
+		health_data["health"] = 0
 	return health_data
 
 
