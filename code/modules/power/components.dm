@@ -237,8 +237,8 @@
 	var/idle_usage = 0 // watts
 	var/active_usage = 0
 
-/datum/power_connection/consumer/New(var/loc,var/obj/parent)
-	..(loc,parent)
+/datum/power_connection/consumer/New(var/obj/parent)
+	..(parent)
 
 /datum/power_connection/consumer/process()
 	if(use_power)

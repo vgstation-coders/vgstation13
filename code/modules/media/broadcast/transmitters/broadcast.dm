@@ -27,7 +27,7 @@
 /obj/machinery/media/transmitter/broadcast/New()
 	..()
 	wires = new(src)
-	power_connection=new(src,LIGHT)
+	power_connection=new(src)
 	power_connection.idle_usage=idle_power_usage
 	power_connection.active_usage=active_power_usage
 
@@ -198,10 +198,10 @@
 	if(on)
 		overlays += image(icon = icon, icon_state = "broadcaster on")
 		set_light(3) // OH FUUUUCK
-		use_power = MACHINE_POWER_USE_ACTIVE
+		power_connection.use_power = MACHINE_POWER_USE_ACTIVE
 	else
 		set_light(1) // Only the tile we're on.
-		use_power = MACHINE_POWER_USE_IDLE
+		power_connection.use_power = MACHINE_POWER_USE_IDLE
 	if(sources.len)
 		overlays += image(icon = icon, icon_state = "broadcaster linked")
 
