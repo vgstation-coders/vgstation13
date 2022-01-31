@@ -9,7 +9,7 @@
 	density = 1
 	req_access = list(access_engine_minor)
 
-	use_power = MACHINE_POWER_USE_MANUAL
+	use_power = MACHINE_POWER_USE_GRID
 	idle_power_usage = 10
 	active_power_usage = 300
 

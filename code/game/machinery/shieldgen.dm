@@ -319,7 +319,7 @@
 		var/storedpower = 0
 		flags = FPRINT
 		siemens_coefficient = 1
-		use_power = MACHINE_POWER_USE_MANUAL
+		use_power = MACHINE_POWER_USE_GRID
 
 		machine_flags = WRENCHMOVE | FIXED2WORK
 

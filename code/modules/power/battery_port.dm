@@ -4,7 +4,7 @@
 	icon_state = "battery_port"
 	density = 0
 	anchored = 1
-	use_power = MACHINE_POWER_USE_MANUAL
+	use_power = MACHINE_POWER_USE_GRID
 
 	var/obj/machinery/power/battery/portable/connected = null
 

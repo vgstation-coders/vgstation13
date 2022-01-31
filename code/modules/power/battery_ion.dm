@@ -7,7 +7,7 @@
 	icon_state = "port_smes"
 	density = 1
 	anchored = 0
-	use_power = MACHINE_POWER_USE_MANUAL
+	use_power = MACHINE_POWER_USE_GRID
 
 	capacity = 3e6
 

@@ -53,7 +53,7 @@ var/global/list/battery_online =	list(
 	icon_state = "smes"
 	density = 1
 	anchored = 1
-	use_power = MACHINE_POWER_USE_MANUAL
+	use_power = MACHINE_POWER_USE_GRID
 
 	var/output = 50000
 	var/lastout = 0

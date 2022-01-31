@@ -14,7 +14,7 @@
 	light_range_on = 2
 	light_power_on = 2
 
-	use_power = MACHINE_POWER_USE_MANUAL
+	use_power = MACHINE_POWER_USE_GRID
 
 	var/obj/item/weapon/cell/cell
 	var/power_load = 1000 //A bit ugly. How much power this machine needs per tick. Equivalent to one minute on 30k W battery, two second ticks
