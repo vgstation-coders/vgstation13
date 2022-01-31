@@ -231,27 +231,27 @@
 ///////////////////////////
 
 /datum/power_connection/consumer
-	var/enabled=0
+	var/enabled = 0
 
-	var/use=0 // 1=idle, 2=active
-	var/idle_usage=1 // watts
-	var/active_usage=2
+	var/use_power = MACHINE_POWER_USE_NONE // 1=idle, 2=active
+	var/idle_usage = 0 // watts
+	var/active_usage = 0
 
 /datum/power_connection/consumer/New(var/loc,var/obj/parent)
 	..(loc,parent)
 
 /datum/power_connection/consumer/process()
-	if(use)
+	if(use_power)
 		auto_use_power()
 
 /datum/power_connection/consumer/proc/auto_use_power()
 	if(!powered(channel))
 		return 0
 
-	switch (use)
-		if (1)
+	switch (use_power)
+		if (MACHINE_POWER_USE_IDLE)
 			use_power(idle_usage, channel)
-		if (2)
+		if (MACHINE_POWER_USE_ACTIVE)
 			use_power(active_usage, channel)
 
 	return 1
@@ -311,8 +311,7 @@
 	return 1
 
 
-// returns true if the area has power on given channel (or doesn't require power)
-// defaults to power_channel
+// returns true if a machine can be powered through this cable
 /datum/power_connection/consumer/cable/powered(chan = channel)
 	if(!parent || !parent.loc)
 		return 0

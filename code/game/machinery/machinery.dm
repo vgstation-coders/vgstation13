@@ -262,9 +262,9 @@ Class Procs:
 
 /obj/machinery/proc/auto_use_power()
 	switch (use_power)
-		if (1)
+		if (MACHINE_POWER_USE_IDLE)
 			use_power(idle_power_usage, power_channel)
-		if (2)
+		if (MACHINE_POWER_USE_ACTIVE)
 			use_power(active_power_usage, power_channel)
 
 	return 1
