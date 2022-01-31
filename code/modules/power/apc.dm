@@ -48,7 +48,7 @@
 	desc = "A control terminal for the area's electrical systems."
 	icon_state = "apc0"
 	anchored = 1
-	use_power = MACHINE_POWER_USE_NONE
+	use_power = MACHINE_POWER_USE_MANUAL
 	req_access = list(access_engine_minor)
 	var/spooky=0
 	var/pulsecompromising=0
