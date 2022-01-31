@@ -2893,7 +2893,7 @@
 	name = "Pink Lady"
 	id = PINKLADY
 	result = PINKLADY
-	required_reagents = list(GIN = 3, CHERRY = 1)
+	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
 	result_amount = 4
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////

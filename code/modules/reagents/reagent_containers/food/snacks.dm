@@ -711,6 +711,7 @@
 	desc = "A fresh strawberry dipped in melted chocolate."
 	icon_state = "chocostrawberry"
 	food_flags = FOOD_SWEET
+	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/chocostrawberry/New()
 	..()
