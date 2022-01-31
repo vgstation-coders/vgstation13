@@ -148,6 +148,9 @@
 /datum/power_connection/proc/connect()
 	var/turf/T = get_turf(parent)
 
+	if (!T)
+		return 0
+
 	var/obj/structure/cable/C = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
 
 	if(!C || !C.get_powernet())
@@ -300,6 +303,9 @@
 /datum/power_connection/consumer/cable/connect()
 	// OVERRIDES!
 	var/turf/T = get_turf(parent)
+
+	if (!T)
+		return 0
 
 	cable = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
 

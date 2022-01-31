@@ -38,7 +38,6 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/d2 = 1								// cable direction 2 (see above)
 	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	layer = WIRE_LAYER
-	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"
 	color = "red"
 
@@ -111,15 +110,6 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	cable_list -= src
 
-	if(istype(attached))
-		attached.set_light(0)
-		attached.icon_state = "powersink0"
-		attached.mode = 0
-		processing_objects.Remove(attached)
-		attached.anchored = 0
-		attached.attached = null
-
-	attached = null
 
 	..()								// then go ahead and delete the cable
 

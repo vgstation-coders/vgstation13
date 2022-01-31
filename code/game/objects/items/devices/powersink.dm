@@ -21,20 +21,30 @@
 	var/mode = 0		// 0 = off, 1=clamped (off), 2=operating
 	var/dev_multi = 3	// dude bombs
 
+	var/datum/power_connection/consumer/cable/power_connection = null
 
-	var/obj/structure/cable/attached		// the attached cable
+/obj/item/device/powersink/New()
+	. = ..()
+	power_connection = new(src)
+
+/obj/item/device/powersink/Destroy()
+	set_light(0)
+	processing_objects.Remove(src)
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	. = ..()
 
 /obj/item/device/powersink/attackby(var/obj/item/I, var/mob/user)
 	if(I.is_screwdriver(user))
 		if(mode == 0)
 			var/turf/T = loc
 			if(isturf(T) && !T.intact)
-				attached = locate() in T
-				if(!attached)
+				if(!(locate(/obj/structure/cable) in T))
 					to_chat(user, "No exposed cable here to attach to.")
 					return
 				else
-					attached.attached = src
+					power_connection.connect()
 					anchored = 1
 					mode = 1
 					to_chat(user, "You attach the device to the cable.")
@@ -52,8 +62,7 @@
 			anchored = 0
 			mode = 0
 			to_chat(user, "You detach the device from the cable.")
-			attached.attached = null
-			attached = null
+			power_connection.disconnect()
 			for(var/mob/M in viewers(user))
 				if(M == user)
 					continue
@@ -64,13 +73,6 @@
 			return
 	else
 		..()
-
-/obj/item/device/powersink/Destroy()
-	set_light(0)
-	processing_objects.Remove(src)
-	attached?.attached = null
-	attached = null
-	..()
 
 /obj/item/device/powersink/attack_paw()
 	return
@@ -107,15 +109,15 @@
 			processing_objects.Remove(src)
 
 /obj/item/device/powersink/process()
-	if(attached)
-		var/datum/powernet/PN = attached.get_powernet()
+	if(power_connection.connected)
+		var/datum/powernet/PN = power_connection.get_powernet()
 		if(PN)
 			set_light(12)
 
 			// found a powernet, so drain up to max power from it
 
-			var/drained = min ( drain_rate, PN.avail )
-			PN.load += drained
+			var/drained = min (drain_rate, PN.avail)
+			power_connection.add_load(drained)
 			power_drained += drained
 
 			// if tried to drain more than available on powernet

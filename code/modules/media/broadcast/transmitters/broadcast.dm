@@ -25,9 +25,9 @@
 	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/media/transmitter/broadcast/New()
-	..()
+	. = ..()
 	wires = new(src)
-	power_connection=new(src)
+	power_connection = new(src)
 	power_connection.idle_usage=idle_power_usage
 	power_connection.active_usage=active_power_usage
 
@@ -38,7 +38,7 @@
 	if(power_connection)
 		qdel(power_connection)
 		power_connection = null
-	..()
+	. = ..()
 
 /obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)
 	if(power_connection.powered())

@@ -315,13 +315,27 @@
 		var/locked = 1
 		var/destroyed = 0
 //		var/maxshieldload = 200
-		var/obj/structure/cable/attached		// the attached cable
+		var/datum/power_connection/consumer/cable/power_connection = null
 		var/storedpower = 0
 		flags = FPRINT
 		siemens_coefficient = 1
 		use_power = MACHINE_POWER_USE_GRID
 
 		machine_flags = WRENCHMOVE | FIXED2WORK
+
+/obj/machinery/shieldwallgen/New()
+	power_connection = new(src)
+	. = ..()
+
+/obj/machinery/shieldwallgen/Destroy()
+	src.cleanup(1)
+	src.cleanup(2)
+	src.cleanup(4)
+	src.cleanup(8)
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	. = ..()
 
 /obj/machinery/shieldwallgen/free_access
 	req_access = null
@@ -330,20 +344,16 @@
 	if(!anchored)
 		power = 0
 		return 0
-	var/turf/T = src.loc
 
-	if(!T)
+	if (!(power_connection.connected || power_connection.connect()))
 		return
-	var/obj/structure/cable/C = T.get_cable_node()
-	var/datum/powernet/PN
-	if(C)
-		PN = C.powernet		// find the powernet of the connected cable
 
+	var/datum/powernet/PN = power_connection.get_powernet()
 	if(!PN)
 		power = 0
 		return 0
 
-	var/surplus = max(PN.avail-PN.load, 0)
+	var/surplus = max(PN.avail - PN.load, 0)
 	var/shieldload = min(rand(50,200), surplus)
 	if(shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
 		power = 0
@@ -352,7 +362,7 @@
 		power = 1	// IVE GOT THE POWER!
 		if(PN) //runtime errors fixer. They were caused by PN.newload trying to access missing network in case of working on stored power.
 			storedpower += shieldload
-			PN.load += shieldload //uses powernet power.
+			power_connection.add_load(shieldload) //uses powernet power.
 //		message_admins("[PN.load]", 1)
 //		use_power(250) //uses APC power
 
@@ -505,14 +515,6 @@
 		for(var/obj/machinery/shieldwallgen/G in T)
 			if(!G.active)
 				return
-
-/obj/machinery/shieldwallgen/Destroy()
-	src.cleanup(1)
-	src.cleanup(2)
-	src.cleanup(4)
-	src.cleanup(8)
-	attached = null
-	..()
 
 /obj/machinery/shieldwallgen/bullet_act(var/obj/item/projectile/Proj)
 	storedpower -= Proj.damage

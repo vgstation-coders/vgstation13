@@ -464,14 +464,22 @@
 
 	search_objects = 1
 	var/obj/item/weapon/cell/cell = null
+	var/datum/power_connection/consumer/cable/power_connection = null
 	var/latched = 0
+
+/mob/living/simple_animal/hostile/syphoner/New()
+	. = ..()
+	cell = new /obj/item/weapon/cell/super/empty(src)
+	power_connection = new(src)
+
+/mob/living/simple_animal/hostile/syphoner/Destroy()
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	. = ..()
 
 /mob/living/simple_animal/hostile/syphoner/get_cell()
 	return cell
-
-/mob/living/simple_animal/hostile/syphoner/New()
-	..()
-	cell = new /obj/item/weapon/cell/super/empty(src)
 
 /mob/living/simple_animal/hostile/syphoner/update_icon()
 	if(latched)
@@ -519,10 +527,10 @@
 	if(istype(target, /obj/structure/cable))
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
-			var/datum/powernet/PN = C.get_powernet()
+			var/datum/powernet/PN = power_connection.get_powernet()
 			if(cell && PN && PN.avail > 0 && cell.percent() < 100)
 				var/drained = min (rand(500,1500), PN.avail )
-				PN.load += drained
+				power_connection.add_load(drained)
 				cell.give(drained/10)
 			else
 				visible_message("<span class = 'notice'>\The [src] detaches from \the [C]</span>")
@@ -533,6 +541,7 @@
 		else if (latched)
 			//How did we get here? Let's just quietly unlock and forget all about this
 			unlatch()
+
 	if(istype(target, /obj/item/weapon/cell))
 		var/obj/item/weapon/cell/C = target
 		if(C.percent() < 100)
@@ -542,6 +551,7 @@
 
 /mob/living/simple_animal/hostile/syphoner/proc/unlatch()
 	latched = 0
+	power_connection.disconnect()
 	unlock_from()
 	update_icon()
 
@@ -550,6 +560,7 @@
 		return
 	latched = 1
 	A.lock_atom(src, /datum/locking_category/cable_lock)
+	power_connection.connect()
 	update_icon()
 
 /mob/living/simple_animal/hostile/syphoner/death(var/gibbed = FALSE)
