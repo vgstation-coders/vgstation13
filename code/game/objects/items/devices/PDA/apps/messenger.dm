@@ -87,7 +87,7 @@
             var/t = input(U, "Please enter new ringtone", name, ttone) as text
             if (pda_device.loc == U)
                 if (t)
-                    if(INVOKE_EVENT(src, /event/pda_change_ringtone, "user" = U, "new_ringtone" = t))
+                    if(INVOKE_EVENT(pda_device, /event/pda_change_ringtone, "user" = U, "new_ringtone" = t))
                         to_chat(U, "The PDA softly beeps.")
                         U << browse(null, "window=pda")
                         src.mode = 0
