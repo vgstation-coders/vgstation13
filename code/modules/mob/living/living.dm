@@ -18,9 +18,9 @@
 
 	immune_system = new (src)
 
-/mob/living/create_reagents()
-	..()
-	addicted_chems = new /datum/reagents(1000)
+/mob/living/create_reagents(const/max_vol)
+	..(max_vol)
+	addicted_chems = new /datum/reagents(max_vol)
 	addicted_chems.my_atom = src
 	tolerated_chems = list()
 
