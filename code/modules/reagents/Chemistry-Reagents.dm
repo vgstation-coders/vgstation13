@@ -226,7 +226,7 @@
 //Has to be a reagents datum for on_withdrawal()
 /mob/living/var/datum/reagents/addicted_chems
 //Associative lists for tolerance formatted like (REAGENT_ID = amount)
-/mob/living/var/list/tolerated_chems = list()
+/mob/living/var/list/tolerated_chems
 
 //Completely unimplemented as of 2021, commenting out
 ///datum/reagent/proc/on_move(var/mob/M)
