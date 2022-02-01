@@ -350,6 +350,8 @@ var/global/datum/controller/vote/vote = new()
 					maps = get_all_maps()
 				else
 					maps = get_votable_maps()
+				for(var/map in maps)
+					choices.Add(map)
 				if(!choices.len)
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
