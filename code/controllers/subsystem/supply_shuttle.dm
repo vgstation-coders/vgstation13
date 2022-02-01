@@ -320,8 +320,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 		//manifest finalisation
 
-		slip.info += {"</ul><br>
-			CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"}
+		slip.info += {"</ul><br>"}
 		if (SP.contraband)
 			slip.forceMove(null)	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
 		shoppinglist.Remove(S)
