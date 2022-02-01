@@ -171,6 +171,32 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if(MA.anchored && !ismecha(MA))
 			continue
 
+		for(var/datum/cargo_forwarding/CF in cargo_forwards)
+			if(MA == CF.associated_crate)
+				var/crate_tampered = FALSE
+				if(istype(MA,/obj/structure/closet))
+					var/obj/structure/closet/CL = MA
+					if(CL.broken || CL.opened) //Someone broke into the crate lock or opened it?
+						crate_tampered = TRUE
+				var/list/containtypes = list()
+				if(!crate_tampered)
+					for(var/obj/A in MA)
+						if(!(A.type in CF.contains)) //Foreign object
+							crate_tampered = TRUE
+							break
+						containtypes += A.type
+				if(!crate_tampered)
+					var/list/containcheck = CF.contains.Copy()
+					for(var/type in CF.contains)
+						if(type in containtypes)
+							containcheck.Remove(type)
+					if(containcheck.len) //Something was taken out!
+						crate_tampered = TRUE
+				CF.Pay(crate_tampered)
+				for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
+					S.say("Cargo crate forwarded [crate_tampered ? "unsuccessfully! Pay docked." : "successfully!"]")
+					playsound(S, 'sound/machines/info.ogg', 50, 1)
+
 		if(istype(MA,/obj/structure/closet/crate))
 			recycled_crates++
 
@@ -211,7 +237,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		cargo_acct.money += credits_per_crate*recycled_crates
 
 /datum/subsystem/supply_shuttle/proc/buy()
-	if(!shoppinglist.len)
+	if(!shoppinglist.len && !forwarding_on)
 		return
 
 	var/area/shuttle = cargo_shuttle.linked_area
@@ -297,6 +323,57 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if (SP.contraband)
 			slip.forceMove(null)	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
 		shoppinglist.Remove(S)
+
+	if(forwarding_on)
+		var/list/datum/cargo_forwarding/new_forwards = list()
+		for(var/i = 0, i < rand(1,3), i++)
+			var/datum/cargo_forwarding/from_supplypack/SCF = new
+			new_forwards.Add(SCF)
+		for(var/datum/cargo_forwarding/CF in new_forwards)
+			if(!clear_turfs.len)
+				break
+			var/i = rand(1,clear_turfs.len)
+			var/turf/pickedloc = clear_turfs[i]
+			clear_turfs.Cut(i,i+1)
+
+			var/atom/A = new CF.containertype(pickedloc)
+			CF.associated_crate = A
+			A.name = "[CF.containername]"
+
+			var/obj/item/weapon/paper/manifest/slip = new /obj/item/weapon/paper/manifest(A)
+			CF.contains += slip.type
+			var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+			var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+			var/vox_name = ""
+			for(var/j = 1 to rand(3,8))
+				vox_name += pick(vox_name_syllables)
+			vox_name = capitalize(vox_name)
+			var/insect_name
+			for(var/k = 1 to rand(2,3))
+				insect_name += pick(insectoid_name_syllables)
+			insect_name = capitalize(insect_name)
+			var/thename = pick(male_name,female_name,vox_name,insect_name)
+			slip.name = "Shipping Manifest for [thename]'s Order"
+			slip.info = {"<h3>[command_name()] Shipping Manifest for [thename]'s Order</h3><hr><br>
+				Order #[rand(1,1000)]<br>
+				Destination: [new_station_name(TRUE)]<br>
+				[rand(1,10)] PACKAGES IN THIS SHIPMENT<br>
+				CONTENTS:<br><ul>"}
+			if(CF.access && istype(A, /obj/structure/closet))
+				A:req_access = CF.access
+			if(CF.one_access && istype(A, /obj/structure/closet))
+				A:req_one_access = CF.one_access
+				
+			for(var/typepath in CF.contains)
+				if(!typepath)
+					continue
+				var/atom/B2 = new typepath(A)
+				if(CF.amount && B2:amount)
+					B2:amount = CF.amount
+				slip.info += "<li>[B2.name]</li>" //add the item to the manifest
+			
+			slip.info += {"</ul><br>
+			CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"}
 
 /datum/subsystem/supply_shuttle/proc/forbidden_atoms_check(atom/A)
 	var/contents = get_contents_in_object(A)
