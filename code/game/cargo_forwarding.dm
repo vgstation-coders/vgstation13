@@ -109,4 +109,14 @@
                 our_amount = 1
             for(var/j in 1 to our_amount)
                 contains += i
+    //Sadly cannot use switch here
+    if(istype(ordertype,/datum/centcomm_order/department/engineering))
+        containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
+        access = list(access_engine)
+    else if(istype(ordertype,/datum/centcomm_order/department/medical))
+        containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/medsec : /obj/structure/largecrate
+        access = list(access_medical)
+    else if(istype(ordertype,/datum/centcomm_order/department/science))
+        containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
+        access = list(access_science)
     qdel(ourorder)
