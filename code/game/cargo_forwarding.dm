@@ -104,6 +104,18 @@
             containername = thing.name
             qdel(thing)
         if(isnum(amount))
-            for(var/j in 1 to amount)
-                contains += i
+            if(istype(i,/obj/item/stack))
+                var/amount_left = amount
+                while(amount_left > 0)
+                    var/obj/item/stack/S = i
+                    if(amount_left >= S.max_amount)
+                        S.amount = S.max_amount
+                        amount_left -= S.max_amount
+                    else
+                        S.amount = amount_left
+                        amount_left = 0
+                    contains += S
+            else
+                for(var/j in 1 to amount)
+                    contains += i
     qdel(ourorder)
