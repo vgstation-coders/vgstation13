@@ -288,7 +288,9 @@ For vending packs, see vending_packs.dm*/
 		var/timeleft = ((CF.time_created + (CF.time_limit MINUTES)) - world.time)
 		var/mm = text2num(time2text(timeleft, "mm")) // Set the minute
 		var/ss = text2num(time2text(timeleft, "ss")) // Set the second
-		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss)))
+		var/weighedtext = CF.weighed ? "Yes" : "No"
+		var/stampedtext = CF.associated_manifest.stamped && CF.associated_manifest.stamped.len ? "Yes" : "No"
+		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss, "weighed" = weighedtext, "stamped" = stampedtext)))
 	data["forwards"] = forward_list
 	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
 
