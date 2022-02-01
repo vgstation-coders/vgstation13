@@ -278,9 +278,17 @@ For vending packs, see vending_packs.dm*/
 			displayworth = "[O.worth]$"
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "extra" = O.extra_requirements, "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = displayworth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
+
 	data["forwarding"] = SSsupply_shuttle.forwarding_on
-	data["forwards"] = SSsupply_shuttle.cargo_forwards
+	var/forward_list[0]
+	for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
+		var/displayworth = CF.worth
+		if (isnum(CF.worth))
+			displayworth = "[CF.worth]$"
+		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "time_limit" = CF.time_limit)))
+	data["forwards"] = forward_list
 	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
+
 	var/datum/money_account/account = current_acct["account"]
 	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
