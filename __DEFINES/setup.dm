@@ -533,10 +533,12 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 // bitflags for machine stat variable
 #define BROKEN		1
 #define NOPOWER		2
-#define POWEROFF	4		// tbd
-#define MAINT		8			// under maintaince
+#define POWEROFF	4		// unused
+#define MAINT		8		// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
-#define FORCEDISABLE 32 //forced to be off, such as by a random event
+#define FORCEDISABLE 32 	//disabled either via wire pulse, grid check, or malf ai
+#define NOAICONTROL 	64		//ai control disable
+
 
 //bitflags for door switches.
 #define OPEN	1
@@ -680,6 +682,8 @@ var/list/liftable_structures = list(\
 #define BANTYPE_APPEARANCE	6
 #define BANTYPE_OOC_PERMA	7
 #define BANTYPE_OOC_TEMP	8
+#define BANTYPE_PAX_PERMA	9
+#define BANTYPE_PAX_TEMP	10
 
 #define SEE_INVISIBLE_MINIMUM 5
 
@@ -1447,6 +1451,8 @@ var/proccalls = 1
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
+
+#define paxban_isbanned(key) paxban_keylist.Find("[ckey(key)]")
 
 //message modes. you're not supposed to mess with these.
 #define MODE_HEADSET "headset"

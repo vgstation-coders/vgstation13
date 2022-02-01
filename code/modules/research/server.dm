@@ -110,7 +110,7 @@
 		C.files.RefreshResearch()
 
 /obj/machinery/r_n_d/server/proc/produce_heat(heat_amt)
-	if(!(stat & (NOPOWER|BROKEN))) //Blatently stolen from space heater.
+	if(!(stat & (NOPOWER|BROKEN|FORCEDISABLE))) //Blatently stolen from space heater.
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
@@ -235,7 +235,7 @@
 	return
 
 /obj/machinery/computer/rdservercontrol/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	user.set_machine(src)
 	var/dat = ""

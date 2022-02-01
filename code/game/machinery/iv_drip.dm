@@ -178,9 +178,6 @@
 	src.attached = null
 	src.update_icon()
 
-/obj/machinery/iv_drip/attack_ai(mob/living/user)
-	attack_hand(user)
-
 /obj/machinery/iv_drip/verb/toggle_mode()
 	set name = "Toggle Mode"
 	set category = "Object"

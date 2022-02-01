@@ -585,6 +585,12 @@
 		if(user)
 			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
+/obj/machinery/bot/emag_ai(mob/living/silicon/ai/A)
+	locked = 0
+	open = 1
+	emag(A)
+	emag_act(A)
+
 /obj/machinery/bot/npc_tamper_act(mob/living/L)
 	if(on)
 		turn_off()
@@ -747,10 +753,6 @@
 		if (was_on)
 			turn_on()
 
-
-/obj/machinery/bot/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	src.attack_hand(user)
 
 
 /obj/machinery/bot/cultify()
