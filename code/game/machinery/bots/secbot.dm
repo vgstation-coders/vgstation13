@@ -50,6 +50,11 @@
 
 	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
 /obj/machinery/bot/secbot/power_change()
 	..()
 	if(src.on)

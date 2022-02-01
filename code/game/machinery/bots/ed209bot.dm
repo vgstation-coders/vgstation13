@@ -241,6 +241,7 @@ Auto Patrol: []"},
 		arrest_type = 1//Don't even try to cuff
 		declare_arrests = 0
 
+
 /obj/machinery/bot/ed209/target_selection()
 	anchored = 0
 	threatlevel = 0

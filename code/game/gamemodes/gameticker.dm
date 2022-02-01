@@ -122,6 +122,8 @@ var/datum/controller/gameticker/ticker
 	theme.update_icon()
 
 /datum/controller/gameticker/proc/StopThematic()
+	if(!theme)
+		return
 	theme.playing=0
 	theme.update_music()
 	theme.update_icon()

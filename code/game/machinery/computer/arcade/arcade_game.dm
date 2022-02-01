@@ -445,7 +445,7 @@
 
 /datum/arcade_game/space_villain/is_cheater(mob/user)
 	if(emagged && !gameover)
-		if(holder.stat & (NOPOWER|BROKEN))
+		if(holder.stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		else if(user in cheaters)
 			to_chat(usr, "<span class='danger'>[enemy_name] throws a bomb at you for trying to cheat him again.</span>")
