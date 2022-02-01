@@ -14,7 +14,7 @@
     var/one_access = null // See above
     var/worth = 0 // Payed out for forwarding
     var/cargo_contribution = 0.1
-    var/obj/associated_crate = null // For ease of checking
+    var/atom/associated_crate = null // For ease of checking
     var/obj/item/weapon/paper/manifest/associated_manifest = null // Same here
     var/origin_station_name = "" // Some fluff
     var/origin_sender_name = ""
@@ -78,19 +78,21 @@
 
 /obj/machinery/crate_weigher
     name = "crate weigher"
-	desc = "Weighs crates, and adds relevant info to a shipping manifest."
-	icon = 'icons/obj/machinery/crate_weigher.dmi'
-	icon_state = "up"
-	anchored = 0
+    desc = "Weighs crates, and adds relevant info to a shipping manifest."
+    icon = 'icons/obj/machines/crate_weigher.dmi'
+    icon_state = "up"
+    anchored = 0
     density = 0
-	use_power = 1
-	idle_power_usage = 0
-	active_power_usage = 50
-	power_channel = EQUIP
-	machine_flags = 0
-	ghost_read = 0 // Deactivate ghost touching.
-	ghost_write = 0
+    use_power = 1
+    idle_power_usage = 0
+    active_power_usage = 50
+    power_channel = EQUIP
+    machine_flags = 0
+    ghost_read = 0 // Deactivate ghost touching.
+    ghost_write = 0
     var/obj/item/weapon/paper/manifest/current_manifest = null
+    var/next_sound = 0
+    var/sound_delay = 20
 
 /obj/machinery/crate_weigher/attackby(var/obj/item/W, mob/user)
     if(istype(W,/obj/item/weapon/paper/manifest) && !current_manifest)
@@ -105,6 +107,39 @@
     if(current_manifest)
         current_manifest.forceMove(get_turf(src))
         current_manifest = null
+
+/obj/machinery/crate_weigher/Crossed(atom/movable/A)
+    if(istype(A,/obj/structure)) //Ideally crate types stay these
+        icon_state = "down"
+        if (world.time > next_sound)
+            playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
+            next_sound = world.time + sound_delay
+        sleep(20)
+        if(current_manifest && get_turf(A) == get_turf(src))
+            var/calculated_weight = 0
+            playsound(src, 'sound/machines/chime.ogg', 50, 1)
+            for(var/atom/movable/thing in A)
+                if(isitem(A))
+                    var/obj/item/I = A
+                    calculated_weight += I.w_class
+                else if(ismob(A))
+                    var/mob/M = A
+                    calculated_weight += M.size
+                else
+                    calculated_weight += 5
+            current_manifest.info += "Total object weight: [calculated_weight]kg<br>CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"
+            current_manifest.forceMove(get_turf(src))
+            current_manifest = null
+            for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
+                if(A == CF.associated_crate)
+                    CF.weighed = TRUE
+
+/obj/machinery/crate_weigher/Uncrossed(atom/movable/A)
+    if(istype(A,/obj/structure)) //Ideally crate types stay these
+        icon_state = "up"
+        if (world.time > next_sound)
+            playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
+            next_sound = world.time + sound_delay
 
 /datum/cargo_forwarding/from_supplypack/New()
     ..()
