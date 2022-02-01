@@ -60,6 +60,8 @@
 	U.set_machine(pda_device)
 
 /datum/pda_app/proc/refresh_pda()
+	if(!pda_device)
+		return
 	if(!no_refresh)
 		if(usr.machine == pda_device)
 			pda_device.attack_self(usr)

@@ -278,13 +278,13 @@
         useMS.send_pda_message("[P.owner]","[pda_device.owner]","[t]",imglist["[msg_id]"])
 
         tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
-        P_app.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[pda_device.owner]</a> ([pda_device.ownjob]):</b></i><br>[t]<br>"
+        P_app.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P_app];choice=Message;target=\ref[reply_to]'>[pda_device.owner]</a> ([pda_device.ownjob]):</b></i><br>[t]<br>"
         msg_id++
         for(var/mob/dead/observer/M in player_list)
             if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
                 M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
                     [U.real_name][U.real_name == pda_device.owner ? "" : " (as [pda_device.owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span>\
-                    [pda_device.photo ? " (<a href='byond://?src=\ref[P];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>" : ""]")
+                    [pda_device.photo ? " (<a href='byond://?src=\ref[P_app];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>" : ""]")
 
 
         if (prob(15)&&!multicast_message) //Give the AI a chance of intercepting the message
@@ -310,7 +310,7 @@
             L = get_holder_of_type(P, /mob/living/silicon)
 
         if(L)
-            L.show_message("[bicon(P)] <b>Message from [pda_device.owner] ([pda_device.ownjob]), </b>\"[t]\" [pda_device.photo ? "(<a href='byond://?src=\ref[P];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)" : ""] (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
+            L.show_message("[bicon(P)] <b>Message from [pda_device.owner] ([pda_device.ownjob]), </b>\"[t]\" [pda_device.photo ? "(<a href='byond://?src=\ref[P_app];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)" : ""] (<a href='byond://?src=\ref[P_app];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
         U.show_message("[bicon(pda_device)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
         log_pda("[key_name(usr)] (PDA: [pda_device.name]) sent \"[t]\" to [P.name]")
         P.overlays.len = 0
