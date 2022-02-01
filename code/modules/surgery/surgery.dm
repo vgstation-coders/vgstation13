@@ -83,9 +83,12 @@
 			tool.icon_state = "[initial(tool.icon_state)]_off"
 
 	if((M_CLUMSY in user.mutations) && prob(20))
-		var/clownsound = null
-		clownsound = pick( list("toysqueak","partyhorn","bikehorn","quack") )
-		playsound(target, "sound/items/[clownsound].ogg", 75, 2)
+		if ((istype(tool, /obj/item/tool/circular_saw)) || (istype(tool, /obj/item/tool/surgicaldrill)))
+			return
+		else
+			var/clownsound = null
+			clownsound = pick("toysqueak","partyhorn","bikehorn","quack")
+			playsound(target, "sound/items/[clownsound].ogg", 75, 2)
 	else
 		if(digging)
 			playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
