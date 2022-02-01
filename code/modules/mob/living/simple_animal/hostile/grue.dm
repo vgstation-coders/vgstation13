@@ -52,7 +52,7 @@
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
-	var/dark_dim_light=0 //darkness level currently the grue is currently exposed to, 0=nice and dark, 1=passably dim, 2=too bright
+	var/dark_dim_light=GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
 	var/busy=0 //busy attempting to lay an egg or eat
 
 	var/eattime= 5 SECONDS //how long it takes to eat someone
