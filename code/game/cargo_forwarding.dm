@@ -3,13 +3,13 @@
     var/forwarding_on = FALSE
 
 /datum/cargo_forwarding
-    var/name = null
+    var/name = ""
     var/datum/money_account/acct // account we pay to
     var/acct_by_string = ""
     var/list/contains = list()
-    var/amount = null
+    var/amount = 1
     var/containertype = null
-    var/containername = null
+    var/containername = ""
     var/access = null // See code/game/jobs/access.dm
     var/one_access = null // See above
     var/worth = 0 // Payed out for forwarding
@@ -19,6 +19,7 @@
     var/origin_station_name = "" // Some fluff
     var/origin_sender_name = ""
     var/time_limit = 5 // In minutes
+    var/time_created = 0 // To check time left
 
 /datum/cargo_forwarding/New()
     ..()
@@ -32,6 +33,7 @@
         origin_station_name = new_station_name(TRUE)
     while(origin_station_name == station_name)
 
+    time_created = world.time
     time_limit = rand(5,15) + 2 //2 minutes is spent transiting it and it gets created at the start of that
 
     var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))

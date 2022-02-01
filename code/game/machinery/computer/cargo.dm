@@ -286,7 +286,8 @@ For vending packs, see vending_packs.dm*/
 		if (isnum(CF.worth))
 			displayworth = "[CF.worth]$"
 		var/timelimit = CF.time_limit - 2 //2 minutes is spent transiting it and it gets created at the start of that
-		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "time_limit" = timelimit)))
+		var/timeleft = ((CF.time_created + CF.time_limit) - world.time) / 10 //In seconds
+		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "time_limit" = timelimit, "time_left" = timeleft)))
 	data["forwards"] = forward_list
 	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
 
