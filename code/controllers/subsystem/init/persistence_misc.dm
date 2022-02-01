@@ -208,7 +208,6 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data = list()
 	fdel(file(file_path))
 
-//Ape-related
 
 /datum/persistence_task/ape_mode
 	execute = TRUE
