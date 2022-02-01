@@ -320,7 +320,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 		//manifest finalisation
 
-		slip.info += {"</ul><br>"}
+		slip.info += {"</ul><br>
+			CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"}
 		if (SP.contraband)
 			slip.forceMove(null)	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
 		shoppinglist.Remove(S)
@@ -373,8 +374,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 			
-			CF.associated_manifest.info += {"</ul><br>
-			CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"}
+			CF.associated_manifest.info += {"</ul><br>"}
 
 /datum/subsystem/supply_shuttle/proc/forbidden_atoms_check(atom/A)
 	var/contents = get_contents_in_object(A)
