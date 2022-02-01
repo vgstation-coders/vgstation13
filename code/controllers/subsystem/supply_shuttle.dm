@@ -195,9 +195,6 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 					if(containcheck.len) //Something was taken out!
 						crate_tampered = TRUE
 				CF.Pay(crate_tampered)
-				for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
-					S.say("Cargo crate forwarded [crate_tampered ? "unsuccessfully! Pay docked." : "successfully!"]")
-					playsound(S, 'sound/machines/info.ogg', 50, 1)
 
 		if(istype(MA,/obj/structure/closet/crate))
 			recycled_crates++

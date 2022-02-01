@@ -1,5 +1,6 @@
-var/list/datum/cargo_forwarding/cargo_forwards = list()
-var/forwarding_on = FALSE
+/datum/subsystem/supply_shuttle
+    var/list/datum/cargo_forwarding/cargo_forwards = list()
+    var/forwarding_on = FALSE
 
 /datum/cargo_forwarding
     var/name = null
@@ -17,6 +18,7 @@ var/forwarding_on = FALSE
     var/obj/item/weapon/paper/manifest/associated_manifest = null // Same here
     var/origin_station_name = "" // Some fluff
     var/origin_sender_name = ""
+    var/time_limit = 5 // In minutes
 
 /datum/cargo_forwarding/New()
     ..()
@@ -30,6 +32,8 @@ var/forwarding_on = FALSE
         origin_station_name = new_station_name(TRUE)
     while(origin_station_name == station_name)
 
+    time_limit = rand(5,15)
+
     var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
     var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
     var/vox_name = ""
@@ -42,10 +46,14 @@ var/forwarding_on = FALSE
     insect_name = capitalize(insect_name)
     origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
 
-    cargo_forwards.Add(src)
+    SSsupply_shuttle.cargo_forwards.Add(src)
+
+    spawn(time_limit MINUTES) //Still an order after the time limit?
+        if(src)
+            Pay(TRUE)
 
 /datum/cargo_forwarding/Destroy()
-    cargo_forwards.Remove(src)
+    SSsupply_shuttle.cargo_forwards.Remove(src)
     acct = null
     ..()
 
@@ -58,6 +66,10 @@ var/forwarding_on = FALSE
     if (cargo_contribution > 0 && acct_by_string != "Cargo")//cargo gets some extra coin from everything shipped
         var/datum/money_account/cargo_acct = department_accounts["Cargo"]
         cargo_acct.charge(round(-worth/10),null,"Contribution for cargo crate fowarding ([name])",dest_name = name)
+    
+    for(var/obj/machinery/computer/supplycomp/S in SSsupply_shuttle.supply_consoles)
+        S.say("Cargo crate forwarded [crate_tampered ? "unsuccessfully! Reward docked." : "successfully!"]")
+        playsound(S, 'sound/machines/info.ogg', 50, 1)
     
     qdel(src)
 
