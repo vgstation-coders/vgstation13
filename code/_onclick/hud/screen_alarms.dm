@@ -359,7 +359,7 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/robot/apc_hacking
 	icon_state = "hacking"
 	name = "Overriding APC"
-	desc = "You are currently an APC. Click this alert to jump to the APC."
+	desc = "You are currently hacking an APC. Click this alert to jump to the APC."
 	var/obj/machinery/power/apc/apc = null
 
 /obj/abstract/screen/alert/robot/apc_hacking/Click()
