@@ -685,8 +685,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.add_reagent(SUGAR, 6)
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(SUGAR, 15)
 
 /obj/item/weapon/reagent_containers/food/snacks/candyheart
 	name = "candyheart"

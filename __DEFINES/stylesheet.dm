@@ -87,7 +87,7 @@ h1.alert, h2.alert		{color: #000000;}
 .clown 					{color: #ff9fef; font-family: Comic Sans MS, Comic Sans, cursive;}
 .borer					{color: #800080; font-weight: bold;}
 .grue					{color: #272728; font-weight: bold;}
-.valentines				{color: #db5b8c; font-weight: bold; font-family: 'Comic Sans';}
+.valentines				{color: #db5b8c; font-weight: bold; font-family: Comic Sans MS, Comic Sans, cursive;}
 
 /* If you're adding a new class here, add it to browserOutput.css too! */
 
