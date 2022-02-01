@@ -330,8 +330,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		var/list/datum/cargo_forwarding/new_forwards = list()
 		var/amount_forwarded = rand(1,3)
 		for(var/i = 0, i < amount_forwarded, i++)
-			var/datum/cargo_forwarding/from_supplypack/SCF = new
-			new_forwards.Add(SCF)
+			if(prob(50))
+				var/datum/cargo_forwarding/from_supplypack/SCF = new
+				new_forwards.Add(SCF)
+			else
+				var/datum/cargo_forwarding/from_centcomm_order/OCF = new
+				new_forwards.Add(OCF)
 		for(var/datum/cargo_forwarding/CF in new_forwards)
 			if(!clear_turfs.len)
 				break

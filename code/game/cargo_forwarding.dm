@@ -87,9 +87,17 @@
     worth = ourpack.cost
     qdel(ourpack)
 
-/*/datum/cargo_forwarding/from_centcomm_order/New()
+/datum/cargo_forwarding/from_centcomm_order/New()
     ..()
     var/ordertype = pick(get_all_orders())
     var/datum/centcomm_order/ourorder = new ordertype
     name = ourorder.name
-    worth = ourorder.worth*/
+    worth = ourorder.worth
+    containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
+    for(var/i in ourorder.requested)
+        var/amount = ourorder.requested[i]
+        containername = ourorder.name_override[i]
+        if(isnum(amount))
+            for(var/j in 1 to amount)
+                contains += i
+    qdel(ourorder)
