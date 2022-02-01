@@ -26,9 +26,9 @@ var/forwarding_on = FALSE
         acct = station_account
         acct_by_string = station_name()
     
-    do
+    do // This check prevents the station name being our own, do while so that it runs once to generate a name in the first place.
         origin_station_name = new_station_name(TRUE)
-    while(origin_station_name != station_name)
+    while(origin_station_name == station_name)
 
     var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
     var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
