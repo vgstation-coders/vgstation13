@@ -108,6 +108,7 @@ For vending packs, see vending_packs.dm*/
 
 #define SCR_MAIN 1
 #define SCR_CENTCOM 2
+#define SCR_FORWARD 3
 
 /obj/machinery/computer/supplycomp
 	name = "Supply shuttle console"
@@ -446,7 +447,7 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		var/result = text2num(href_list["screen"])
-		if(result == SCR_MAIN || result == SCR_CENTCOM)
+		if(result == SCR_MAIN || result == SCR_CENTCOM || result == SCR_FORWARD)
 			screen = result
 		return 1
 	else if (href_list["close"])
