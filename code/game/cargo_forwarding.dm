@@ -35,7 +35,7 @@
     while(origin_station_name == station_name)
 
     time_created = world.time
-    time_limit = rand(5,15) + 2 //2 minutes is spent transiting it and it gets created at the start of that
+    time_limit = rand(7,17) //2 minutes is spent transiting it and it gets created at the start of that, so really 5-15
 
     var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
     var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
