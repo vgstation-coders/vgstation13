@@ -58,6 +58,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	centcomm_last_order = world.time
 	centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
+
+	if(config.cargo_forwarding_on_roundstart)
+		forwarding_on = TRUE
 	..()
 
 /datum/subsystem/supply_shuttle/fire(resumed = FALSE)

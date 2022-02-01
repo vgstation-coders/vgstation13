@@ -280,6 +280,7 @@ For vending packs, see vending_packs.dm*/
 	data["centcomm_orders"] = centcomm_list
 	data["forwarding"] = SSsupply_shuttle.forwarding_on
 	data["forwards"] = SSsupply_shuttle.cargo_forwards
+	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
 	var/datum/money_account/account = current_acct["account"]
 	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
