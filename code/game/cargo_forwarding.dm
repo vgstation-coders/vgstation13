@@ -81,6 +81,7 @@
     desc = "Weighs crates, and adds relevant info to a shipping manifest."
     icon = 'icons/obj/machines/crate_weigher.dmi'
     icon_state = "up"
+    layer = OPEN_DOOR_LAYER // Below the crates
     anchored = 0
     density = 0
     use_power = 1
