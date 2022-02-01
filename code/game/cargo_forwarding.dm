@@ -97,15 +97,18 @@
 
 /obj/machinery/crate_weigher/attackby(var/obj/item/W, mob/user)
     if(istype(W,/obj/item/weapon/paper/manifest) && !current_manifest)
+        if (!user.drop_item(W, src))
+            return
         current_manifest = W
-        W.forceMove(src)
+        to_chat(user,"<span class='notice'>You add \the [W] to \the [src]</span>")
     else
         return ..()
 
-/obj/machinery/crate_weigher/attack_hand(var/obj/item/W, mob/user)
+/obj/machinery/crate_weigher/attack_hand(mob/user)
     if(..())
         return
     if(current_manifest)
+        to_chat(user,"<span class='notice'>You remove \the [current_manifest] from \the [src]</span>")
         current_manifest.forceMove(get_turf(src))
         current_manifest = null
 
@@ -115,10 +118,9 @@
         if (world.time > next_sound)
             playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
             next_sound = world.time + sound_delay
-        sleep(20)
+        sleep(10)
         if(current_manifest && get_turf(A) == get_turf(src))
             var/calculated_weight = 0
-            playsound(get_turf(src), 'sound/machines/chime.ogg', 50, 1)
             for(var/atom/movable/thing in A)
                 if(isitem(A))
                     var/obj/item/I = A
@@ -128,6 +130,8 @@
                     calculated_weight += M.size
                 else
                     calculated_weight += 5
+            playsound(get_turf(src), 'sound/machines/chime.ogg', 50, 1)
+            visible_message("<span class='notice'>\the [src] prints out the weighed [current_manifest]</span>")
             current_manifest.info += "<br>Total object weight: [calculated_weight]kg<br>CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"
             current_manifest.forceMove(get_turf(src))
             current_manifest = null
