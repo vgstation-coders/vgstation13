@@ -14,7 +14,7 @@
     var/one_access = null // See above
     var/worth = 0 // Payed out for forwarding
     var/cargo_contribution = 0.1
-    var/atom/associated_crate = null // For ease of checking
+    var/obj/associated_crate = null // For ease of checking
     var/obj/item/weapon/paper/manifest/associated_manifest = null // Same here
     var/origin_station_name = "" // Some fluff
     var/origin_sender_name = ""
@@ -75,6 +75,36 @@
         playsound(S, 'sound/machines/info.ogg', 50, 1)
     
     qdel(src)
+
+/obj/machinery/crate_weigher
+    name = "crate weigher"
+	desc = "Weighs crates, and adds relevant info to a shipping manifest."
+	icon = 'icons/obj/machinery/crate_weigher.dmi'
+	icon_state = "up"
+	anchored = 0
+    density = 0
+	use_power = 1
+	idle_power_usage = 0
+	active_power_usage = 50
+	power_channel = EQUIP
+	machine_flags = 0
+	ghost_read = 0 // Deactivate ghost touching.
+	ghost_write = 0
+    var/obj/item/weapon/paper/manifest/current_manifest = null
+
+/obj/machinery/crate_weigher/attackby(var/obj/item/W, mob/user)
+    if(istype(W,/obj/item/weapon/paper/manifest) && !current_manifest)
+        current_manifest = W
+        W.forceMove(src)
+    else
+        return ..()
+
+/obj/machinery/crate_weigher/attack_hand(var/obj/item/W, mob/user)
+    if(..())
+        return
+    if(current_manifest)
+        current_manifest.forceMove(get_turf(src))
+        current_manifest = null
 
 /datum/cargo_forwarding/from_supplypack/New()
     ..()
