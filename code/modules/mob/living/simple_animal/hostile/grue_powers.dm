@@ -1,23 +1,3 @@
-//move eat, ventcrawl, hide, moult, egglay, dark aura to spells
-
-///spell/grue
-//    name = "Grue Ability"
-//    desc = "A template grue ability."
-//    abbreviation = "GA"
-//    still_recharging_msg = "<span class='warning'>Your body is still <span>"
-
-//    user_type = USER_TYPE_GRUE
-//    school = "grue"
-//    spell_flags = 0
-//    level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
-
-//    override_base = "grue"
-//    hud_state = "grue_icon_base"
-//    charge_max = 20 SECONDS
-//    cooldown_min = 1 SECONDS
-//    var/sp_cost = 0 //shadow power cost to use the spell
-//    var/re_cost = 0 //reproductive power cost to use the spell
-
 /spell/targeted/grue_eat
 	name = "Eat"
 	desc = "Eat someone."
@@ -58,7 +38,6 @@
 
 /spell/aoe_turf/grue_ventcrawl/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.ventcrawl()
-
 
 /spell/aoe_turf/grue_hide
 	name = "Hide"

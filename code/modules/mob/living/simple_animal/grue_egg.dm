@@ -24,8 +24,8 @@
 	var/mob/living/simple_animal/parent_grue														//which grue laid this egg, if any
 	var/bright_limit_gain = 1											//maximum brightness on tile for health regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health
-	var/hg_mult = 2										//multiplier for health gained per tick when on dark tile
-	var/hd_mult = 3									 //multiplier for health drained per tick on bright tile
+	var/hg_mult = 1										//multiplier for health gained per tick when on dark tile
+	var/hd_mult = 4									 //multiplier for health drained per tick on bright tile
 	var/current_brightness=0
 
 	var/grown = 0
@@ -34,6 +34,11 @@
 	var/child_prefix_index = 1
 	var/last_ping_time = 0
 	var/ping_cooldown = 50
+
+	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue egg is exposed to light
+	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue egg is exposed to light, but this effect dissipates after going back into darkness
+
+	var/dark_dim_light = 0
 
 /mob/living/simple_animal/grue_egg/Life()
 	..()
@@ -45,12 +50,17 @@
 		else												//else, there's considered to be no light
 			current_brightness=0
 		if(current_brightness<=bright_limit_gain)
-			apply_damage(-1*hg_mult*(bright_limit_gain-current_brightness),BURN) //boost juveniles and adults heal rates a bit
+			dark_dim_light=0
+			apply_damage(-1 * (bright_limit_gain-current_brightness) * hg_mult * (maxHealth/200),BURN)
 		else if(current_brightness>bright_limit_drain) 														//lose health in light
+			dark_dim_light=2
 			playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
-			apply_damage(hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage a bit to avoid juveniles and adults from becoming too tanky to light
+			apply_damage((current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * (maxHealth/200),BURN)
+		else
+			dark_dim_light=1
 		if(grown)
 			src.Hatch()
+		accum_light_expos_mult=max(1,accum_light_expos_mult+accum_light_expos_gain_dark_dim_light[dark_dim_light+1])//modify light damage multiplier based on how long the grue egg has been in light recently
 
 /mob/living/simple_animal/grue_egg/death()
 	name = "grue egg remnants"

@@ -1398,8 +1398,10 @@ var/proccalls = 1
 #define GRUE_JUVENILE 2
 #define GRUE_ADULT 3
 #define GRUE_WALLBREAK 3//Beings to eat before able to break walls
-#define GRUE_RWALLBREAK 4 //Beings to eat before able to break reinforced walls
-
+#define GRUE_RWALLBREAK 5 //Beings to eat before able to break reinforced walls
+#define GRUE_DARK 0 //dark enough for healing
+#define GRUE_DIM 1	//light level neither heals nor burns
+#define GRUE_LIGHT 2//bright enough to burn
 /*
  *
  *

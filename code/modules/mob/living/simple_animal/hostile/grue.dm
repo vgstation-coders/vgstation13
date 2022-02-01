@@ -28,7 +28,7 @@
 
 	//VARS
 	var/shadowpower = 0											 //shadow power absorbed
-	var/maxshadowpower = 1000									   //max shadowpower
+	var/maxshadowpower = 250									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
 	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
 	var/moulttime = 30 //time required to moult to a new form
@@ -40,16 +40,12 @@
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
-	var/burnmalus=1														//malus to life drain based on life stage to avoid grues becoming too tanky to light as they mature
-	var/speed_m_dark=1/1.2		//speed multiplier in dark conditions
-	var/speed_m_dim=1/1.1			//speed multiplier in dim conditions
-	var/speed_m_light=1			//speed multiplier in light conditions
-	var/speed_m=1				//active speed multiplier
+	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
 
-	var/pg_mult = 3										 //multiplier for power gained per tick when in dark tile
+	var/pg_mult = 3										 //multiplier for power gained per tick when on dark tile
 	var/pd_mult = 0									  //multiplier for shadow power drained per tick on bright tile (0=disabled)
-	var/hg_mult = 1										//multiplier for health gained per tick when on dark tile
-	var/hd_mult = 3									 //multiplier for health drained per tick on bright tile
+	var/hg_mult = 1										//base multiplier for health gained per tick when on dark tile
+	var/hd_mult = 2									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
 //	var/show_desc = TRUE										   //For the ability menu
 
 	var/lifestage=GRUE_ADULT												 //1=baby grue, 2=grueling, 3=(mature) grue
@@ -57,9 +53,20 @@
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
 	var/dark_dim_light=0 //darkness level currently the grue is currently exposed to, 0=nice and dark, 1=passably dim, 2=too bright
-	var/busy=0 //busy laying an egg
+	var/busy=0 //busy attempting to lay an egg or eat
 
 	var/eattime= 5 SECONDS //how long it takes to eat someone
+
+	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
+	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue is exposed to light, but this effect dissipates after going back into darkness
+	var/list/speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //speed modifiers based on light condition
+
+
+	//AI related:
+	stop_automated_movement = 1 //has custom light-related wander movement
+	wander=0
+
+
 
 /mob/living/simple_animal/hostile/grue/modMeat(mob/user, var/obj/theMeat)
 	theMeat.name="grue meat"
@@ -103,31 +110,38 @@
 		if(isturf(loc))
 			var/turf/T = loc
 			current_brightness=10*T.get_lumcount()
-		else												//else, there's considered to be no light
+		else												//else, there's considered to be no light (vents, lockers, etc.)
 			current_brightness=0
-		if(current_brightness<=bright_limit_gain && !ismoulting) //moulting temporarily stops healing via darkness
-			dark_dim_light=0
-			apply_damage(-1*burnmalus*regenbonus*hg_mult*(bright_limit_gain-current_brightness),BURN) //scale darkness healing for juveniles and adults heal rates a bit
-		else if(current_brightness>bright_limit_drain) 														//lose health in light
-			dark_dim_light=2
 
-			to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
-			playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
-			apply_damage(burnmalus*hd_mult*(current_brightness-bright_limit_drain),BURN)								//scale light damage with lifestage to avoid juveniles and adults from becoming too tanky to light
-		else
-			dark_dim_light=1
-		if(current_brightness<=bright_limit_gain && !ismoulting && !channeling)
-			shadowpower = min(maxshadowpower,shadowpower+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
+		if(current_brightness<=bright_limit_gain)
+			dark_dim_light=GRUE_DARK
 		else if(current_brightness>bright_limit_drain)
-			shadowpower = max(0,shadowpower-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light
+			dark_dim_light=GRUE_LIGHT
+		else
+			dark_dim_light=GRUE_DIM
 
-		//process speed modifiers
-		if(dark_dim_light==0)
-			speed=base_speed*speed_m_dark
-		else if(dark_dim_light==1)
-			speed=base_speed*speed_m_dim
-		else if(dark_dim_light==2)
-			speed=base_speed*speed_m_light
+
+
+		switch(dark_dim_light)
+			if(GRUE_DARK) //dark
+				if(!ismoulting) //moulting temporarily stops healing via darkness
+					apply_damage(get_dark_heal(),BURN) //heal in dark
+//			if(1) //dim
+			if(GRUE_LIGHT) //light
+				apply_damage(get_light_damage(),BURN) //burn in light
+				to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
+				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
+
+
+		accum_light_expos_mult=max(1,accum_light_expos_mult+accum_light_expos_gain_dark_dim_light[dark_dim_light+1])//modify light damage multiplier based on how long the grue's been in light recently
+
+		//handle shadow power gain or drain
+		sp_adjust()
+
+
+		//update speed modifier based on light condition
+		speed=base_speed*speed_m_dark_dim_light[dark_dim_light+1]
+
 
 		if(ismoulting)
 			moulttimer--
@@ -137,12 +151,80 @@
 	regular_hud_updates()
 	standard_damage_overlay_updates()
 
+
+	if((stat!=DEAD) && (stat!=UNCONSCIOUS) && !busy && !ismoulting && !client && !mind && ckey==null) //Checks for AI
+		grue_ai()
+
+
+
+
+
+//AI stuff:
+/mob/living/simple_animal/hostile/grue/proc/grue_ai()
+
+	//Moulting
+	if(lifestage!=GRUE_ADULT && (shadowpower>=moultcost) && dark_dim_light==GRUE_DARK)
+		start_moult()
+
+	//Eating
+	if(lifestage==GRUE_ADULT && stance==HOSTILE_STANCE_IDLE && dark_dim_light<GRUE_LIGHT)
+		var/list/feed_targets = list()
+		for(var/mob/living/carbon/C in range(1,get_turf(src)))
+			feed_targets += C
+		if(feed_targets.len)
+			handle_feed(pick(feed_targets))
+
+	//Egglaying
+	if(lifestage==GRUE_ADULT && eatencharge>0 && dark_dim_light==GRUE_DARK)
+		reproduce()
+
+	//Movement
+	//
+	//Wandering behavior
+	if((!client||deny_client_move) && !busy && !ismoulting && !anchored && (ckey == null) && !(flags & INVULNERABLE))
+		if(canmove)
+			turns_since_move++
+			if(turns_since_move >= turns_per_move)
+				if(!(stop_automated_movement_when_pulled && pulledby))
+					INVOKE_EVENT(src, /event/before_move)
+					var/list/potential_dests=list() //any potential wander destinations
+					var/list/respite_dests=list() //any potential wander destinations leading out of the light into dark/dim
+					for(var/thiscardinal in 1 to cardinal.len)
+						var/potential_dest = get_step(src, cardinal[thiscardinal])
+						if(dark_dim_light==GRUE_LIGHT)//always prioritize wandering to a dark/dim tile if in light
+							if(get_ddl(potential_dest)<GRUE_LIGHT)
+								respite_dests+=potential_dest
+							else
+								potential_dests+=potential_dest
+						else //never wander from a dark/dim tile into light
+							if(get_ddl(potential_dest)<GRUE_LIGHT)
+								potential_dests+=potential_dest
+					var/ourdest
+					if(respite_dests.len)
+						ourdest=(pick(respite_dests))
+					else if(potential_dests.len)
+						ourdest=(pick(potential_dests))
+					if(ourdest)
+						wander_move(ourdest)
+						turns_since_move = 0
+						INVOKE_EVENT(src, /event/after_move)
+
 /mob/living/simple_animal/hostile/grue/New()
 	..()
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
+
+/mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
+	var/thisturf_brightness=10*thisturf.get_lumcount()
+	if(thisturf_brightness<=bright_limit_gain)
+		return GRUE_DARK
+	else if(thisturf_brightness>bright_limit_drain)
+		return GRUE_LIGHT
+	else
+		return GRUE_DIM
+
 
 /mob/living/simple_animal/hostile/grue/proc/lifestage_updates() //Initialize or update lifestage-dependent stats
 	var/tempHealth=health/maxHealth
@@ -156,8 +238,9 @@
 		melee_damage_upper = 5
 		attacktext = "bites"
 		maxHealth=50
+		maxshadowpower = 250
 		moultcost=250
-		burnmalus=1
+		lightresist=1
 		environment_smash_flags = 0
 		attack_sound = 'sound/weapons/bite.ogg'
 		size = SIZE_SMALL
@@ -177,8 +260,9 @@
 		melee_damage_upper = 15
 		attacktext = "chomps"
 		maxHealth=100
+		maxshadowpower = 500
 		moultcost=500
-		burnmalus=2**(1/3)
+		lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_NORMAL
@@ -194,12 +278,13 @@
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
 		maxHealth = 200
+		maxshadowpower = 1000
 		moultcost=0 //not needed for adults
 		melee_damage_lower = 20
 		melee_damage_upper = 30
 		melee_damage_type = BRUTE
 		held_items = list()
-		burnmalus=3**(1/3)
+		lightresist=0.7
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
@@ -242,9 +327,9 @@
 		if(lifestage!=GRUE_ADULT) //not needed for adults
 			stat(null, "Shadow power: [round(shadowpower,0.1)]/[round(maxshadowpower,0.1)]")
 		if(lifestage==GRUE_ADULT)
+			stat(null, "Sentient organisms eaten: [eatencount]")
 			if(config.grue_egglaying)
 				stat(null, "Reproductive energy: [eatencharge]")
-			stat(null, "Sentient organisms eaten: [eatencount]")
 
 /mob/living/simple_animal/hostile/grue/gruespawn
 	lifestage=GRUE_LARVA
@@ -279,8 +364,7 @@
 /mob/living/simple_animal/hostile/grue/proc/start_moult()
 	if(stat==CONSCIOUS && shadowpower>=moultcost && !ismoulting && lifestage<GRUE_ADULT)
 		shadowpower-=moultcost
-		to_chat(src, "<span class='notice'>You begin moulting.</span>")
-		visible_message("<span class='warning'>\The [src] morphs into a chrysalis...</span>")
+		visible_message("<span class='warning'>\The [src] morphs into a chrysalis...</span>","<span class='notice'>You begin moulting.</span>")
 		stat=UNCONSCIOUS //go unconscious while moulting
 		ismoulting=1
 		moulttimer=moulttime//reset moulting timer
@@ -317,11 +401,7 @@
 		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
 		ismoulting=0 //is no longer moulting
-		visible_message("<span class='warning'>The chrysalis shifts as it morphs into a grue!</span>")
-		if(lifestage==GRUE_JUVENILE)
-			to_chat(src, "<span class='warning'>You finish moulting! You are now a juvenile, and are strong enough to force open doors.</span>")
-		else if(lifestage==GRUE_ADULT)
-			to_chat(src, "<span class='warning'>You finish moulting! You are now fully-grown, and can eat sentient beings to gain their strength.</span>")
+		visible_message("<span class='warning'>The chrysalis shifts and morphs into a grue!</span>","<span class='warning'>You finish moulting! You are now [lifestage==GRUE_JUVENILE ? "a juvenile, and are strong enough to force open doors." : "fully-grown, and can eat sentient beings to gain their strength."]</span>")
 		playsound(src, 'sound/effects/grue_moult.ogg', 50, 1)
 	else
 		return
@@ -332,6 +412,27 @@
 	if(ismoulting)
 		desc="[desc] This one seems dead and lifeless."
 	..()
+
+
+
+//procs for light-related burning and healing, and shadowpower updates:
+
+/mob/living/simple_animal/hostile/grue/proc/get_light_damage()
+	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * lightresist * (maxHealth/200) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, lifestage-dependent resistance, and normalize by max health,
+
+
+/mob/living/simple_animal/hostile/grue/proc/get_dark_heal()
+	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * (maxHealth/200)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, and normalize by max health.
+
+/mob/living/simple_animal/hostile/grue/proc/sp_adjust()
+	switch(dark_dim_light)
+		if(0) //if dark
+			if(!ismoulting && !channeling)
+				shadowpower = min(maxshadowpower,shadowpower+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
+		if(2) //if light
+			shadowpower = max(0,shadowpower-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0
+
+
 
 //Reproduction via egglaying.
 /mob/living/simple_animal/hostile/grue/proc/reproduce()
@@ -359,13 +460,10 @@
 
 	if(eatencharge>=1)
 		busy=1
-		to_chat(src, "<span class='notice'>You start to push out an egg...</span>")
-		visible_message("<span class='warning'>\The [src] tightens up...</span>")
+		visible_message("<span class='warning'>\The [src] tightens up...</span>","<span class='notice'>You start to push out an egg...</span>")
 		if(do_after(src, src, 5 SECONDS))
-			to_chat(src, "<span class='notice'>You lay an egg.</span>")
-			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>")
+			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>","<span class='notice'>You lay an egg.</span>")
 			eatencharge--
-//			playsound(T, 'sound/effects/splat.ogg', 50, 1)
 			var/mob/living/simple_animal/grue_egg/E = new /mob/living/simple_animal/grue_egg(get_turf(src))
 			E.parent_grue=src //mark this grue as the parent of the egg
 		busy=0
@@ -410,7 +508,7 @@
 //Eating sentient beings.
 
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
-	to_chat(src, "<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
+	visible_message("<span class='danger'>\The [src] opens its mouth wide...</span>","<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
 	busy=1
 	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
@@ -426,12 +524,11 @@
 				if(G)
 					G.eatencount++
 
-			eatencharge++
+			eatencharge++ //can be spent on egg laying
 
 			//increase speed
-			speed_m_dark=max(1/5,speed_m_dark/1.25)	// 20% faster in darkness
-			speed_m_dim=max(1.1/5,speed_m_dim/1.25)	// 20% faster in dim light
-			speed_m_light=max(4/5,speed_m_light/1.05) //slightly faster in bright light
+			speed_m_dark_dim_light[1]=max(1/2,speed_m_dark_dim_light[1]/1.2)//faster in darkness
+			speed_m_dark_dim_light[2]=max(5/8,speed_m_dark_dim_light[2]/1.2)//faster in dim light
 
 			//increase damage
 			melee_damage_lower = melee_damage_lower+7
@@ -440,7 +537,7 @@
 			regenbonus=regenbonus*1.5 //increased health regen in darkness
 
 			force_airlock_time=max(0,force_airlock_time-20)
-//			src.set_light(8,-1*eatencount) //gains shadow aura opon eating someone
+
 			switch(eatencount)
 				if(GRUE_WALLBREAK)
 					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong enough to smash down most walls... but still hungry...</span>")
@@ -481,3 +578,4 @@
 			to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
 	else
 		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
+
