@@ -177,8 +177,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		for(var/datum/cargo_forwarding/CF in cargo_forwards)
 			if(MA == CF.associated_crate)
 				var/crate_tampered = FALSE
-				if(!CF.associated_manifest || get_area(MA) != get_area(CF.associated_manifest) || !CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len)
-					crate_tampered = TRUE //Manifest was not stamped, or got destroyed or went missing
+				if(!CF.associated_manifest || get_area(MA) != get_area(CF.associated_manifest) || !CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len || !CF.weighed)
+					crate_tampered = TRUE //Manifest was not stamped, or got destroyed or went missing, or crate was not weighed.
 				if(!crate_tampered && istype(MA,/obj/structure/closet))
 					var/obj/structure/closet/CL = MA
 					if(CL.broken || CL.opened) //Someone broke into the crate lock or opened it?

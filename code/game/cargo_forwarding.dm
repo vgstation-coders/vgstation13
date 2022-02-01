@@ -20,6 +20,7 @@
     var/origin_sender_name = ""
     var/time_limit = 5 // In minutes
     var/time_created = 0 // To check time left
+    var/weighed = TRUE // Crate weighed?
 
 /datum/cargo_forwarding/New()
     ..()
