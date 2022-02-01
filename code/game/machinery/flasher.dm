@@ -59,7 +59,7 @@ var/list/obj/machinery/flasher/flashers = list()
 			user.visible_message("<span class='warning'>[user] has connected the [src]'s flashbulb!</span>", "<span class='warning'>You connect the [src]'s flashbulb!</span>")
 
 //Let the AI trigger them directly.
-/obj/machinery/flasher/attack_ai()
+/obj/machinery/flasher/attack_ai(var/mob/user)
 	if (src.anchored)
 		return src.flash()
 	else
@@ -108,7 +108,7 @@ var/list/obj/machinery/flasher/flashers = list()
 
 
 /obj/machinery/flasher/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if(prob(75/severity))
@@ -137,9 +137,6 @@ var/list/obj/machinery/flasher/flashers = list()
 			user.show_message(text("<span class='warning'>[src] is now secured.</span>"))
 			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
 
-/obj/machinery/flasher_button/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/flasher_button/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -149,7 +146,7 @@ var/list/obj/machinery/flasher/flashers = list()
 
 /obj/machinery/flasher_button/attack_hand(mob/user as mob)
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(active)
 		return

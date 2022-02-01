@@ -16,12 +16,30 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+/mob/camera/aiEye/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = TRUE, glide_size_override = 0, var/holo_bump = FALSE)
 	if(ai)
+		var/obj/machinery/hologram/holopad/H
+		if(istype(ai.current, /obj/machinery/hologram/holopad))
+			H = ai.current
+		if(istype(ai.current, /obj/machinery/turret))
+			var/obj/machinery/turret/T = ai.current
+			T.malf_release_control()
 		if(!isturf(ai.loc))
 			return
-		if(!isturf(destination))
+		if(istype(H))
+			if(harderforce && H.advancedholo && !holo_bump)  // If we double click while controlling an advanced hologram, remove the hologram.
+				H.clear_holo()
+				return
+			else if(H.advancedholo && !holo_bump) // Otherwise, if we're controlling an advanced hologram, check to see if we can enter the tile normally
+				if(destination.density)
+					return
+				for(var/atom/movable/A in destination)
+					if(A.density)
+						return
+
+		if(!isturf(destination) && destination)
 			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
+
 		forceEnter(destination)
 
 		cameranet.visibility(src)
@@ -31,10 +49,8 @@
 			ai.see_in_dark = 8
 			ai.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
-		//Holopad
-		if(istype(ai.current, /obj/machinery/hologram/holopad))
-			var/obj/machinery/hologram/holopad/H = ai.current
-			H.move_hologram()
+		if(istype(H) && !holo_bump)  // move our hologram to our new location (unless our advanced hologram was bumped, in which case we're moving to the hologram)
+			H.move_hologram(harderforce)
 
 		if(ai.camera_light_on)
 			ai.light_cameras()
@@ -94,19 +110,46 @@
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
-	if(user.cooldown && user.cooldown < world.timeofday) // 3 seconds
+	var/obj/machinery/turret/T = user.current 
+	var/obj/machinery/hologram/holopad/H = user.current
+
+	if(istype(T))
+		T.malf_release_control()
+
+	if((user.cooldown && user.cooldown < world.timeofday) || istype(H)) // 3 seconds
 		user.sprint = initial
+
+	if(istype(H))
+		CAN_MOVE_DIAGONALLY = FALSE
+		user.eyeobj.glide_size = DELAY2GLIDESIZE(1)
+		user.delayNextMove(1)
+	else 
+		user.eyeobj.glide_size = WORLD_ICON_SIZE
+		CAN_MOVE_DIAGONALLY = TRUE
 
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
 		if(step)
 			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 4))
 				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
-			user.eyeobj.forceMove(step)
+			else if(istype(H) && H.advancedholo)
+				H.holo.dir = direct
+				if(step.density)
+					return
+				for(var/atom/movable/A in step)
+					if(A.density)
+						if(A.flow_flags&ON_BORDER)
+							if(!A.Cross(H.holo, H.holo.loc))
+								return
+						else
+							return
+				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
+			else
+				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
 	user.last_movement=world.time
 
 	user.cooldown = world.timeofday + 5
-	if(user.acceleration)
+	if(user.acceleration && !istype(H))
 		user.sprint = min(user.sprint + 0.5, max_sprint)
 	else
 		user.sprint = initial
@@ -118,6 +161,12 @@
 
 /mob/living/silicon/ai/proc/view_core()
 
+	var/obj/machinery/hologram/holopad/H  = current
+	if(istype(H))
+		H.clear_holo()
+	var/obj/machinery/turret/T = current
+	if(istype(T))
+		T.malf_release_control()
 
 	current = null
 	cameraFollow = null

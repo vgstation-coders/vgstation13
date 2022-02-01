@@ -7,7 +7,7 @@ For vending packs, see vending_packs.dm*/
 
 // returns an associate list of information needed for cargo consoles.  returns 0 if ID or account is missing
 
-#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
+#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER|FORCEDISABLE))
 #define MENTION_DB_OFFLINE to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
 #define USE_ACCOUNT_ON_ID acc_info["account"] = user.get_worn_id_account(0, user)
 #define USE_CARGO_ACCOUNT acc_info["account"] = department_accounts["Cargo"]
@@ -121,8 +121,16 @@ For vending packs, see vending_packs.dm*/
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/list/current_acct
+	var/list/current_acct_override 
 	var/screen = SCR_MAIN
 	light_color = LIGHT_COLOR_BROWN
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/account_hijack,
+		/datum/malfhack_ability/oneuse/emag,
+	)
 
 /obj/machinery/computer/supplycomp/New()
 	..()
@@ -137,9 +145,6 @@ For vending packs, see vending_packs.dm*/
 	..()
 
 
-/obj/machinery/computer/supplycomp/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/supplycomp/proc/check_restriction(mob/user)
 	if(!user)
@@ -178,7 +183,10 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return
 
-	current_acct = get_account_info(user, linked_db)
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else 
+		current_acct = get_account_info(user, linked_db)
 
 	user.set_machine(src)
 	post_signal("supply")
@@ -229,6 +237,12 @@ For vending packs, see vending_packs.dm*/
 				qdel(src)
 	else
 		return ..()
+
+/obj/machinery/computer/supplycomp/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>Special supplies unlocked.</span>")
+	hacked = 1
+	can_order_contraband = 1
+
 
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!current_acct)
@@ -302,7 +316,10 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return 1
 	add_fingerprint(usr)
-	current_acct = get_account_info(usr, linked_db)
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else 
+		current_acct = get_account_info(usr, linked_db)
 	var/idname
 	var/datum/money_account/account
 	if(!current_acct && !href_list["close"])
@@ -434,7 +451,10 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		SSsupply_shuttle.requisition = text2num(href_list["requisition_status"])
-		current_acct = get_account_info(usr, linked_db)
+		if(current_acct_override)
+			current_acct = current_acct_override
+		else 
+			current_acct = get_account_info(usr, linked_db)
 		return 1
 	else if (href_list["screen"])
 		if(!check_restriction(usr))
@@ -445,6 +465,7 @@ For vending packs, see vending_packs.dm*/
 		return 1
 	else if (href_list["close"])
 		current_acct = null
+		current_acct_override = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
@@ -472,7 +493,14 @@ For vending packs, see vending_packs.dm*/
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/list/current_acct
+	var/list/current_acct_override
 	light_color = LIGHT_COLOR_BROWN
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/account_hijack,
+	)
 
 /obj/machinery/computer/ordercomp/New()
 	. = ..()
@@ -481,15 +509,13 @@ For vending packs, see vending_packs.dm*/
 /obj/machinery/computer/ordercomp/initialize()
 	reconnect_database()
 
-/obj/machinery/computer/ordercomp/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/ordercomp/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	current_acct = get_account_info(user, linked_db)
-
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else 
+		current_acct = get_account_info(user, linked_db)
 	user.set_machine(src)
 	ui_interact(user)
 	onclose(user, "computer")
@@ -551,7 +577,10 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return 1
 	add_fingerprint(usr)
-	current_acct = get_account_info(usr, linked_db)
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else 
+		current_acct = get_account_info(usr, linked_db)
 	var/idname
 	var/datum/money_account/account
 	if(!current_acct && !href_list["close"])
@@ -638,6 +667,7 @@ For vending packs, see vending_packs.dm*/
 		return 1
 	else if (href_list["close"])
 		current_acct = null
+		current_acct_override = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1

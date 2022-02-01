@@ -21,6 +21,12 @@
 
 	pass_flags = PASSTABLE
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/disk_duplicator/New()
 	. = ..()
 	component_parts = newlist(

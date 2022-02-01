@@ -35,6 +35,10 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/hide = 0				// Is it a hidden machine?
 	var/listening_level = 0	// 0 = auto set in New() - this is the z level that the machine is listening to.
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+	)
 
 /obj/machinery/telecomms/proc/relay_information(datum/signal/signal, filter, copysig, amount = 20)
 	// relay signal to all linked machinery that are of type [filter]. If signal has been sent [amount] times, stop sending
@@ -192,7 +196,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/proc/update_power()
 	if(toggled)
-		if(stat & (BROKEN|NOPOWER|EMPED) || get_integrity() <= 0) // if powered, on. if not powered, off. if too damaged, off
+		if(stat & (BROKEN|NOPOWER|EMPED|FORCEDISABLE) || get_integrity() <= 0) // if powered, on. if not powered, off. if too damaged, off
 			on = FALSE
 		else
 			on = TRUE
@@ -260,7 +264,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 /obj/machinery/telecomms/proc/produce_heat()
 	if(!heating_power)
 		return
-	if(!(stat & (NOPOWER|BROKEN))) //Blatently stolen from space heater.
+	if(!(stat & (NOPOWER|BROKEN|FORCEDISABLE))) //Blatently stolen from space heater.
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
@@ -285,6 +289,14 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	idle_power_usage = 30
 	machinetype = 1
 
+	var/blackout_active = FALSE
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/toggle/radio_blackout
+	)
+
+
 /obj/machinery/telecomms/receiver/New()
 	..()
 
@@ -298,6 +310,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	)
 
 	RefreshParts()
+
+/obj/machinery/telecomms/receiver/Destroy()
+	if(blackout_active)
+		malf_radio_blackout = FALSE 
+	..()
 
 /obj/machinery/telecomms/receiver/receive_signal(datum/signal/signal)
 #ifdef SAY_DEBUG

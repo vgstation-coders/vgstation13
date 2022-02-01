@@ -96,7 +96,7 @@
 	if(!allowed(usr) && !emagged)
 		to_chat(usr,"<span class='warning'>Access denied.</span>")
 		return
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	var/datum/climate/C = map.climate
 	var/datum/weather/CW = C.current_weather
@@ -104,7 +104,7 @@
 	var/feedback = NOFIRE
 	var/usedcost = 0
 
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		feedback = POWER_ERROR
 	else
 		if(href_list["disrupt"])

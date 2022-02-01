@@ -199,6 +199,12 @@ var/global/list/loopModeNames=list(
 	mech_flags = MECH_SCAN_FAIL
 	emag_cost = 0 // because fun/unlimited uses.
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/media/jukebox/New(loc)
 	..(loc)
 	allowed_modes = loopModeNames.Copy()
@@ -219,9 +225,6 @@ var/global/list/loopModeNames=list(
 		wires = null
 	..()
 
-/obj/machinery/media/jukebox/attack_ai(var/mob/user)
-	attack_hand(user)
-
 /obj/machinery/media/jukebox/attack_paw(var/mob/user)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
@@ -240,7 +243,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/power_change()
 	..()
-	if(emagged && !(stat & (NOPOWER|BROKEN)) && !any_power_cut())
+	if(emagged && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && !any_power_cut())
 		playing = 1
 		if(current_song)
 			update_music()
@@ -252,7 +255,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN) || !anchored || any_power_cut())
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || !anchored || any_power_cut())
 		if(stat & BROKEN)
 			icon_state = "[state_base]-broken"
 		else
@@ -270,7 +273,7 @@ var/global/list/loopModeNames=list(
 	return world.time > last_reload + JUKEBOX_RELOAD_COOLDOWN
 
 /obj/machinery/media/jukebox/attack_hand(var/mob/user)
-	if(stat & NOPOWER || any_power_cut())
+	if(stat & (FORCEDISABLE|NOPOWER) || any_power_cut())
 		to_chat(usr, "<span class='warning'>You don't see anything to mess with.</span>")
 		return
 	if(stat & BROKEN && playlist!=null)
@@ -502,6 +505,12 @@ var/global/list/loopModeNames=list(
 		wires.CutWireIndex(JUKE_CONFIG)
 		short()
 	return
+
+/obj/machinery/media/jukebox/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You short out the [src].</span>")
+	wires.CutWireIndex(JUKE_CONFIG)
+	short()
+	
 
 /obj/machinery/media/jukebox/proc/short()
 	emagged = !emagged
@@ -778,7 +787,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/kick_act(mob/living/H)
 	..()
-	if(stat & NOPOWER || any_power_cut())
+	if(stat & (FORCEDISABLE|NOPOWER) || any_power_cut())
 		return
 	playing=!playing
 	update_music()
@@ -790,7 +799,7 @@ var/global/list/loopModeNames=list(
 	if(istype(user,/mob/living/simple_animal/construct/armoured))
 		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 		shake(1, 3)
-		if(stat & NOPOWER || any_power_cut())
+		if(stat & (FORCEDISABLE|NOPOWER) || any_power_cut())
 			return
 		playing=!playing
 		update_music()
