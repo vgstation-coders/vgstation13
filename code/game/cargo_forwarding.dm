@@ -120,3 +120,19 @@
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
         access = list(access_science)
     qdel(ourorder)
+
+/datum/cargo_forwarding/misc/janicart
+    name = "Janicart"
+    contains = list(/obj/structure/bed/chair/vehicle/janicart,/obj/item/key/janicart)
+    amount = 1
+    containertype = /obj/structure/largecrate
+    containername = "Janicart"
+    worth = 100
+
+/datum/cargo_forwarding/misc/gokart
+    name = "Go-kart"
+    contains = list(/obj/structure/bed/chair/vehicle/gokart,/obj/item/key/gokart)
+    amount = 1
+    containertype = /obj/structure/largecrate
+    containername = "Go-kart"
+    worth = 200
