@@ -5,9 +5,8 @@
 	hud_state = "mimicvoice"
 
 	spell_flags = NEEDSHUMAN
-
+	horrorallowed = 0
 	chemcost = 10
-	required_dna = 1
 
 /spell/changeling/voicechange/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)

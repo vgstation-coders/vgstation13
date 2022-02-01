@@ -11,6 +11,12 @@
 	throw_range = 15
 	attack_verb = list("bans")
 
+/obj/item/weapon/banhammer/attack_self(var/mob/user)
+	if(user.check_rights(R_BAN))
+		qdel(src)
+		var/obj/item/weapon/banhammer/admin/ABH = new /obj/item/weapon/banhammer/admin(loc)
+		user.put_in_hands(ABH)
+		ABH.attack_self(user)
 
 /obj/item/weapon/banhammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
@@ -231,6 +237,43 @@
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
 	force = 999
+	var/istemp = FALSE
+	var/reason = "Griefer"
+	var/mins = 0
+	var/ipban = FALSE
+	var/sticky = FALSE
+	var/bannedby = ""
+
+/obj/item/weapon/banhammer/admin/attack_self(var/mob/user)
+	if(user.check_rights(R_BAN))
+		bannedby = user.ckey
+		istemp = alert("Temporary Ban?",,"Yes","No") == "Yes"
+		if(istemp)
+			mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
+			if(!mins)
+				mins = 1440
+			if(mins >= 525600)
+				mins = 525599
+		else
+			mins = 0
+		reason = input(usr,"Reason?","reason",reason) as text|null
+		if(!reason)
+			reason = "For no raisin."
+		ipban = alert(usr,"IP ban?",,"Yes","No") == "Yes"
+		if(istemp == "No")
+			sticky = alert(usr,"Sticky Ban with this weapon? Use this only if you never intend to unban players.","Sticky Icky","Yes", "No") == "Yes"
+
+/obj/item/weapon/banhammer/admin/attack(mob/living/M as mob, mob/living/user as mob)
+	. = ..() // Show stuff happen before banning itself.
+	if(user.check_rights(R_BAN))
+		M.GetBanned(reason, bannedby, istemp, mins, ipban, sticky)
+	return .
+
+/obj/item/weapon/banhammer/admin/suicide_act(var/mob/living/user)
+	. = ..()
+	if(user.check_rights(R_BAN))
+		user.GetBanned(reason, bannedby, istemp, mins, ipban, sticky)
+	return .
 
 /obj/item/weapon/melee/bone_hammer
 	name = "bone hammer"
@@ -456,6 +499,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
+	w_type = RECYK_METAL
 
 /obj/item/weapon/pitchfork
 	name = "pitchfork"
@@ -467,6 +511,7 @@
 	sharpness = 2
 	sharpness = SHARP_TIP
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	w_type = RECYK_METAL
 
 /obj/item/weapon/baseball_bat
 	name = "baseball bat"
@@ -482,6 +527,7 @@
 	throw_speed = 1
 	throw_range = 7
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
 
 /obj/item/weapon/baseball_bat/update_wield(mob/user)
 	..()
@@ -514,7 +560,7 @@
 			return FALSE
 		if (ismob(blocked) || prob(85 - round(damage * 5)))
 			visible_message("<span class='borange'>[loc] knocks away \the [blocked] with \the [src]!</span>")
-			playsound(usr.loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
+			playsound(loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
 			if(ismovable(blocked))
 				var/atom/movable/M = blocked
 				var/turf/Q = get_turf(M)
@@ -552,6 +598,7 @@
 	throw_speed = 1
 	throw_range = 7
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
 
 /obj/item/weapon/spiked_bat/update_wield(mob/user)
 	..()

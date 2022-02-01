@@ -400,11 +400,8 @@
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/computer/cloning/proc/scan_mob(mob/living/carbon/human/subject as mob)
-	if(istype(subject, /mob/living/slime_pile))
-		var/mob/living/slime_pile/S = subject
-		subject = S.slime_person
-	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (ismanifested(subject)))
+/obj/machinery/computer/cloning/proc/scan_mob(mob/living/subject as mob)
+	if((isnull(subject)) || (!ishuman(subject) && !istype(subject, /mob/living/slime_pile)) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
 	if(!subject.has_brain())
@@ -471,7 +468,7 @@
 
 
 	subject.dna.check_integrity()
-	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
+
 	// Borer sanity checks.
 	var/mob/living/simple_animal/borer/B=subject.has_brain_worms()
 	if(B && B.controlling)
@@ -479,10 +476,15 @@
 		subject.do_release_control(1)
 
 	var/datum/dna2/record/R = new /datum/dna2/record()
-	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
-		R.dna = Brain.owner_dna.Clone()
-	else
-		R.dna=subject.dna.Clone()
+
+//Removed this so that slime puddles, etc. can be cloned. Anyway, in practice here a brain's owner's DNA should always correspond to the DNA of the subject that brain exists within.
+//	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
+//	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
+//		R.dna = Brain.owner_dna.Clone()
+//	else
+//		R.dna=subject.dna.Clone()
+	R.dna=subject.dna.Clone()
+
 	R.ckey = subject.ckey
 	R.id= copytext(md5(R.dna.real_name), 2, 6)
 	R.name=R.dna.real_name

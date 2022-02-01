@@ -71,10 +71,6 @@ interactions:
 	// Paint stuff
 	var/list/datum/painting_utensil/stored_colours = list()
 
-/obj/item/weapon/palette/attack_hand(mob/user)
-	. = ..()
-	ui_interact(user)
-
 /obj/item/weapon/palette/attack_self(mob/user)
 	. = ..()
 	ui_interact(user)
@@ -134,7 +130,6 @@ interactions:
 				if (!PB.paint_color)
 					PB.paint_color = colour.base_color
 					to_chat(usr, "<span class='notice'>You apply the color to \the [PB].</span>")
-					PB.update_icon()
 				else
 					to_chat(usr, "<span class='notice'>You start mixing colours...</span>")
 					var/strengh = input("How much do you want to mix the colours? 0.5 is for an even mixing. Values toward 0 get a stronger shade of the colour in the palette, value toward 1 get a stronger shade of the colour in the pencil.", "Strenght of mixing", 0.5) as null|num
@@ -146,6 +141,7 @@ interactions:
 					colour.palette = list(blend_rgb)
 					colour.base_color = blend_rgb
 					PB.paint_color = blend_rgb
+				PB.update_icon()
 			if ("duplicate")
 				var/datum/painting_utensil/PU_new = colour.duplicate()
 				stored_colours += PU_new
@@ -192,15 +188,20 @@ interactions:
 	ryb["b"] = (tmpRgb[3] + tmpRgb[2] - min(tmpRgb[1], tmpRgb[2]))/2
 
 	// Normalize
-	var/n = max(ryb["r"], ryb["y"], ryb["b"])/max(tmpRgb[1], tmpRgb[2], tmpRgb[3])
-	if (n > 0.000001) // Should be zero, but floating point error could be an issue
-		ryb["r"] /= n;
-		ryb["y"] /= n;
-		ryb["b"] /= n;
-
+	var/tmpMax = max(tmpRgb[1], tmpRgb[2], tmpRgb[3])
+	if (tmpMax > 0) // Avoid division by zero
+		var/n = max(ryb["r"], ryb["y"], ryb["b"])/tmpMax
+		if (n > 0.000001) // Should be zero, but floating point error could be an issue
+			ryb["r"] /= n;
+			ryb["y"] /= n;
+			ryb["b"] /= n;
+	else
+		ryb["r"] = 0;
+		ryb["y"] = 0;
+		ryb["b"] = 0;
 
 	// Add black component, and round floating point errors
-	i = min(255 - rgb["r"], 255 - rgb["g"], 255 - rgb["b"])
+	i = min(255 - rgb[1], 255 - rgb[2], 255 - rgb[3])
 	ryb["r"] = round(ryb["r"] + i)
 	ryb["y"] = round(ryb["y"] + i)
 	ryb["b"] = round(ryb["b"] + i)
@@ -232,14 +233,20 @@ interactions:
 	 */
 
 	// Normalize
-	var/n = max(rgb[1], rgb[2], rgb[3])/max(tmpRyb["r"], tmpRyb["y"], tmpRyb["b"])
-	if (n > 0.000001) // Should be zero, but floating point error could be an issue
-		rgb[1] /= n;
-		rgb[2] /= n;
-		rgb[3] /= n;
+	var/tmpMax = max(tmpRyb["r"], tmpRyb["y"], tmpRyb["b"])
+	if (tmpMax > 0) // Avoid division by zero
+		var/n = max(rgb[1], rgb[2], rgb[3])/max(tmpRyb["r"], tmpRyb["y"], tmpRyb["b"])
+		if (n > 0.000001) // Should be zero, but floating point error could be an issue
+			rgb[1] /= n;
+			rgb[2] /= n;
+			rgb[3] /= n;
+	else
+		rgb[1] = 0;
+		rgb[2] = 0;
+		rgb[3] = 0;
 
 	// Add white component, and round floating point errors
-	i = max(0, min(255 - ryb["r"], 255 - ryb["y"], 255 - ryb["b"]))
+	i = min(255 - ryb["r"], 255 - ryb["y"], 255 - ryb["b"])
 	rgb[1] = round(rgb[1] + i)
 	rgb[2] = round(rgb[2] + i)
 	rgb[3] = round(rgb[3] + i)

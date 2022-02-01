@@ -124,6 +124,7 @@
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+		src.transfer_fingerprints_to(A)
 		if(!CC)
 			CC = new circuit( A )
 		else

@@ -16,9 +16,9 @@
 	cold_level_2 = 10 //Default 200
 	cold_level_3 = 20 //Default 120
 
-	heat_level_1 = 420 //Default 360 - Higher is better
-	heat_level_2 = 480 //Default 400
-	heat_level_3 = 1100 //Default 1000
+	heat_level_1 = 360 //Default 360 - Higher is better
+	heat_level_2 = 400 //Default 400
+	heat_level_3 = 1000 //Default 1000
 
 
 	warning_low_pressure = 50
@@ -38,6 +38,5 @@
 
 
 /datum/species/horror/handle_post_spawn(var/mob/living/carbon/human/H)
-	H.my_appearance.h_style = "Bald"
-	H.my_appearance.f_style = "Shaved"
-	H.update_hair()
+	//hide hair and beard
+	H.make_invisible(HORROR, 2 MINUTES)

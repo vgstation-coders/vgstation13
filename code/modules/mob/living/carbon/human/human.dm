@@ -76,8 +76,9 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc, "Grue")
+/mob/living/carbon/human/umbra/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Umbra")
+	faction = "grue" //Umbras are friendly with grues
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
@@ -1878,6 +1879,7 @@
 		"check_mutations",
 		"lastFart",
 		"lastDab",
+		"lastAnemia",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -2263,7 +2265,7 @@
 			return list(
 		if ("Golem")
 			return list(
-		if ("Grue")
+		if ("Umbra")
 			return list(
 		if ("Slime")
 			return list(

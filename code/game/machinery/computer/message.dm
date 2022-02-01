@@ -405,11 +405,7 @@
 					//Select Receiver
 					if("Recepient")
 						//Get out list of viable PDAs
-						var/list/obj/item/device/pda/sendPDAs = list()
-						for(var/obj/item/device/pda/P in PDAs)
-							if(!P.owner || P.toff || P.hidden)
-								continue
-							sendPDAs += P
+						var/list/obj/item/device/pda/sendPDAs = get_viewable_pdas()
 						if(PDAs && PDAs.len > 0)
 							customrecepient = input(usr, "Select a PDA from the list.") as null|anything in sortNames(sendPDAs)
 						else
@@ -439,20 +435,24 @@
 							message = "<span class='notice'>NOTICE: No message entered!</span>"
 							return src.attack_hand(usr)
 
+
+						var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in customrecepient.applications
+						if(!message_app) //Shouldn't show up but just in case we need to explain it, also to prevent the below runtiming
+							message = "<span class='notice'>NOTICE: This PDA does not have a messenger, somehow.</span>"
+							return src.attack_hand(usr)
+
 						var/obj/item/device/pda/PDARec = null
-						for (var/obj/item/device/pda/P in PDAs)
-							if (!P.owner || P.toff || P.hidden)
-								continue
+						for (var/obj/item/device/pda/P in get_viewable_pdas())
 							if(P.owner == customsender)
 								PDARec = P
 						//Sender isn't faking as someone who exists
 						if(isnull(PDARec))
 							src.linkedServer.send_pda_message("[customrecepient.owner]", "[customsender]","[custommessage]")
-							customrecepient.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[customrecepient];choice=Message;target=\ref[src]'>[customsender]</a> ([customjob]):</b></i><br>[custommessage]<br>"
-							if (!customrecepient.silent)
+							message_app.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[customrecepient];choice=Message;target=\ref[src]'>[customsender]</a> ([customjob]):</b></i><br>[custommessage]<br>"
+							if (!message_app.silent)
 								playsound(customrecepient.loc, 'sound/machines/twobeep.ogg', 50, 1)
 								for (var/mob/O in hearers(3, customrecepient.loc))
-									O.show_message(text("[bicon(customrecepient)] *[customrecepient.ttone]*"))
+									O.show_message(text("[bicon(customrecepient)] *[message_app.ttone]*"))
 								if( customrecepient.loc && ishuman(customrecepient.loc) )
 									var/mob/living/carbon/human/H = customrecepient.loc
 									to_chat(H, "[bicon(customrecepient)] <b>Message from [customsender] ([customjob]), </b>\"[custommessage]\" (<a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)")
@@ -463,11 +463,11 @@
 						//Sender is faking as someone who exists
 						else
 							src.linkedServer.send_pda_message("[customrecepient.owner]", "[PDARec.owner]","[custommessage]")
-							customrecepient.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[customrecepient];choice=Message;target=\ref[PDARec]'>[PDARec.owner]</a> ([customjob]):</b></i><br>[custommessage]<br>"
-							if (!customrecepient.silent)
+							message_app.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[customrecepient];choice=Message;target=\ref[PDARec]'>[PDARec.owner]</a> ([customjob]):</b></i><br>[custommessage]<br>"
+							if (!message_app.silent)
 								playsound(customrecepient.loc, 'sound/machines/twobeep.ogg', 50, 1)
 								for (var/mob/O in hearers(3, customrecepient.loc))
-									O.show_message(text("[bicon(customrecepient)] *[customrecepient.ttone]*"))
+									O.show_message(text("[bicon(customrecepient)] *[message_app.ttone]*"))
 								if( customrecepient.loc && ishuman(customrecepient.loc) )
 									var/mob/living/carbon/human/H = customrecepient.loc
 									to_chat(H, "[bicon(customrecepient)] <b>Message from [PDARec.owner] ([customjob]), </b>\"[custommessage]\" (<a href='byond://?src=\ref[customrecepient];choice=Message;skiprefresh=1;target=\ref[PDARec]'>Reply</a>)")

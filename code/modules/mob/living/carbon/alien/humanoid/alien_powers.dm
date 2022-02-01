@@ -177,7 +177,7 @@ Doesn't work on other aliens/AI.*/
 		user.visible_message("<span class='alien'>\The [user] spits neurotoxin at [visible_message_target] !</span>", "<span class='alien'>You spit neurotoxin at [visible_message_target] !</span>")
 	else
 		user.visible_message("<span class='alien'>\The [user] spits a salvo of neurotoxin !</span>", "<span class='alien'>You spit out neurotoxin !</span>")
-
+	user.apply_inertia(get_dir(target, user))
 	. = ..()
 
 /spell/aoe_turf/conjure/choice/alienresin

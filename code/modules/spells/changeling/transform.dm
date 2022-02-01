@@ -1,20 +1,24 @@
 /spell/changeling/transform
 	name = "Transform (5)"
-	desc = "We take on the apperance and voice of one we have absorbed."
+	desc = "We take on the appearance and voice of the DNA we have collected."
 	abbreviation = "TF"
 	hud_state = "transform"
 
 	spell_flags = NEEDSHUMAN
 
 	chemcost = 5
-	required_dna = 1
 	horrorallowed = 0
 	max_genedamage = 0
+
+/spell/changeling/transform/cast_check(skipcharge = 0,mob/user = usr, var/list/targets)
+	. = ..()
+	if (!.)
+		return FALSE
 
 /spell/changeling/transform/cast(var/list/targets, var/mob/living/carbon/human/user)
 
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-
+	
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		if(DNA == user.dna)

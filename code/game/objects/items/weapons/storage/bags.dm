@@ -107,6 +107,8 @@
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
 	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
+	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
@@ -639,6 +641,16 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
 	..()
 	for(var/i = 1 to 10)
+		var/potiontype = pick(existing_typesof(/obj/item/potion))
+		new potiontype(src)
+
+/obj/item/weapon/storage/bag/potion/dice_potion_bundle
+	name = "Lucky potion bundle"
+	desc = "A bundle of potions for a lucky individual"
+
+/obj/item/weapon/storage/bag/potion/dice_potion_bundle/New()
+	..()
+	for(var/i = 1 to 5)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 

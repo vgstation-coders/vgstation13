@@ -303,6 +303,9 @@
 	return
 
 /obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+
+	add_fingerprint(user)
+
 	if(D.is_screwdriver(user))
 		D.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
@@ -317,6 +320,7 @@
 				A.state = 3
 				A.icon_state = "3"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
@@ -328,6 +332,7 @@
 				A.state = 4
 				A.icon_state = "4"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)

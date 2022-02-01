@@ -133,6 +133,7 @@
 			return
 
 		// Make the MoMMI!
+		log_admin("([user.ckey]/[user]) became a MoMMI as a ghost.")
 		var/mob/living/silicon/robot/mommi/M = new mommi_type(loc)
 		M.key = user.key
 

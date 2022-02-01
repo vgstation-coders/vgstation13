@@ -232,6 +232,8 @@ Class Procs:
 
 		spawn(10)
 			qdel(pulse2)
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Finally take these out inside APCs and etc.
 	..()
 
 /obj/machinery/suicide_act(var/mob/living/user)
@@ -603,7 +605,7 @@ Class Procs:
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
 			emag(user)
-			return
+			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)

@@ -68,18 +68,19 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
-#define TIMEAGENT "time agent"
+#define TIMEAGENT "Time Agent"
 #define TIMEAGENTTWIN "time agent twin"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define GIANTSPIDER "giant spider"
-#define PULSEDEMON "pulse demon"
+#define PULSEDEMON "Pulse Demon"
 #define STREAMER "streamer"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"
 #define CLOWN_LING "clown ling"
 #define TAG_MIME "tag mime"
 #define JUDGE "judge"
+#define GRUE "grue"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -273,7 +274,7 @@
 #define SYNDICATE_VALIDATED	1
 #define SYNDICATE_CANCELED	2
 
-#define DOUBLE_AGENT_TC_REWARD	5
+#define DOUBLE_AGENT_TC_REWARD	8
 
 #define BASE_RULESET_WEIGHT 10
 #define ADDITIONAL_RULESET_WEIGHT 1.4

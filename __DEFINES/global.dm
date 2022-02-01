@@ -286,6 +286,8 @@ var/list/score=list(
 
 	"money_leaderboard" = list(),
 	"implant_phrases" = list(),
+	
+	"global_paintings" = list(),
 )
 
 var/list/isolated_antibodies = list(

@@ -8,7 +8,7 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
 	log_reagents = 0 //transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd].
@@ -241,6 +241,11 @@
 	user.set_machine(src)
 	interact(user)
 
+/obj/machinery/microwave/emag(mob/user)
+	..()
+	emagged = 1
+	to_chat(user, "<span class='warning'>You mess up \the [src]'s circuitry.</span>")
+
 /*******************
 *   Microwave Menu
 ********************/
@@ -455,7 +460,10 @@
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
-		cooked = recipe.make_food(src)
+		if(!emagged)
+			cooked = recipe.make_food(src)
+		else
+			cooked = fail()
 		stop()
 		if(cooked)
 			cooked.forceMove(src.loc)
@@ -559,6 +567,8 @@
 	src.reagents.clear_reagents()
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
+	if(emagged || Holiday == APRIL_FOOLS_DAY)
+		playsound(src, "goon/sound/effects/dramatic.ogg", 100, 0)
 	return ffuu
 
 /obj/machinery/microwave/proc/empty()

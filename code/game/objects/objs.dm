@@ -139,7 +139,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/intenthurt_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the hurt intent hotkey
 	return
 
-/obj/proc/pAImove(mob/living/silicon/pai/user, dir)					//called when integrated pAI attempts to move
+/obj/proc/pAImove(mob/living/user, dir)								//called when integrated pAI attempts to move
 	if(pAImove_delayer.blocked())
 		user.last_movement=world.time
 		return 0
@@ -281,6 +281,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					is_in_use = 1
 					src.attack_ai(M)
 
+				else if(ispulsedemon(M))
+					is_in_use = 1
+					src.attack_pulsedemon(M)
+
 				else if(!(M in nearby)) // NOT NEARBY
 					// check for TK users
 					if(M.mutations && M.mutations.len)
@@ -306,8 +310,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			if (!M || !M.client || M.machine != src)
 				_using.Remove(M)
 				continue
-			// Not robot or AI, and not nearby?
-			if(!isAI(M) && !isrobot(M) && !(M in nearby))
+			// Not robot or AI, not nearby and not pulse demon?
+			if(!isAI(M) && !isrobot(M) && !(M in nearby) && !ispulsedemon(M))
 				_using.Remove(M)
 				continue
 			is_in_use = 1

@@ -129,7 +129,7 @@
 	maxHealth = 45
 	melee_damage_lower = 0
 	melee_damage_upper = 1 //Aaahhh my toe
-	attack_sound = "sound/items/trayhit2.ogg"
+	attack_sound = "trayhit"
 	speak_emote = list("whirrs")
 	emote_hear = list("whirrs")
 	emote_see = list("whirrs")

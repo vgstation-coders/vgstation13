@@ -50,19 +50,11 @@
  * If you'd rather forego this, you may use 'paint_color = "#ffaa22";' instead, at your own peril.
  *
  *
- * --- setStrength() ---
+ * --- setOpacity() ---
  *
  * Updates the tool strenght to that of the 'Tool Strenght' input, sanitizing it's value in the process. Turns
  *  NaNs to 0, rounds the value to the second decimal and clamps it to the min. and max. values.
  * Useful if you wish to let the user modify the strength directly.
- *
- *
- * --- changeStrength(diff) ---
- *
- * Modifies the tool strenght by 'diff', sanitizes the result and updates the value of the 'Tool Strenght' input.
- * 'diff' should be no lower than 0.01, any values lower than that will end up ignored once the result's sanitized.
- * Useful if placing buttons to increase/decrease the tool strenght, rather than modifying it directly.
- *
  *
  * --- hexToRgba(hex), rgbaToHex(r, g, b) ---
  *
@@ -94,6 +86,9 @@ var paint_color = "#000000";
 var paint_opacity = 0.5;
 var minPaintStrength = 0;
 var maxPaintStrength = 1;
+
+//Other options
+var grid_enabled = false;
 
 // Milliseconds to wait since we last moved the mouse in ordder to draw.
 // Ensures all browsers draw lines with the same opacity, instead of letting those that check more often drawing darker lines
@@ -479,5 +474,25 @@ function display_bitmap() {
 			//Draw a square, scaled up as needed
 			ctx.fillRect(x*scaleX, y*scaleY, scaleX, scaleY);
 		}
+	}
+	
+	if (grid_enabled) {
+		ctx.beginPath();
+		ctx.lineWidth = 1;
+		ctx.setLineDash([6,6]);
+		for (var x = 0; x < width; x++) {
+			ctx.moveTo(x*scaleX+0.5, 0.5);
+			ctx.lineTo(x*scaleX+0.5, height*scaleY+0.5);
+		}
+		for (var y = 0; y < height; y++) {
+			ctx.moveTo(0.5, y*scaleY+0.5);
+			ctx.lineTo(width*scaleX+0.5, y*scaleY+0.5);
+		}
+		ctx.lineDashOffset = 0;
+		ctx.strokeStyle = "#333333";
+		ctx.stroke();
+		ctx.strokeStyle = "#cccccc";
+		ctx.lineDashOffset = 6;
+		ctx.stroke();
 	}
 }

@@ -205,7 +205,7 @@ var/stacking_limit = 90
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 
 	var/rst_pop = 0
-	for(var/mob/living/carbon/human/player in player_list)
+	for(var/mob/living/player in player_list)
 		if(player.mind)
 			rst_pop++
 	if (rst_pop >= high_pop_limit)
@@ -338,7 +338,7 @@ var/stacking_limit = 90
 		extra_rulesets_amount = 0
 	else
 		var/rst_pop = 0
-		for(var/mob/living/carbon/human/player in player_list)
+		for(var/mob/living/player in player_list)
 			if(player.mind)
 				rst_pop++
 		if (rst_pop > high_pop_limit)

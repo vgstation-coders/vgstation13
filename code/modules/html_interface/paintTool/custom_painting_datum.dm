@@ -34,9 +34,9 @@
 		var/obj/item/toy/crayon/c = held_item
 		max_strength = PENCIL_STRENGTH_MAX
 		min_strength = PENCIL_STRENGTH_MIN
-		palette += c.colour
+		palette += c.mainColour
 		palette += c.shadeColour
-		base_color = c.color
+		base_color = c.mainColour
 
 	// Painting with hair dye sprays
 	if (istype(held_item, /obj/item/weapon/hair_dye))
@@ -62,6 +62,16 @@
 			if (!(b.paint_color in palette))
 				palette += b.paint_color
 			base_color = b.paint_color
+
+	// Normalize palette colors
+	for (var/i = 1; i < palette.len; i++)
+		palette[i] = lowertext(palette[i])
+		if (length(palette[i]) < 9) //If missing alpha channel assume opaque
+			palette[i] += "ff"
+	// Normalize base color
+	base_color = lowertext(base_color)
+	if (length(base_color) < 9) //If missing alpha channel assume opaque
+		base_color += "ff"
 
 
 /datum/painting_utensil/proc/duplicate()
@@ -104,6 +114,7 @@
 	var/author = ""
 	var/title = ""
 	var/description = ""
+	var/contributing_artists = list()
 
 /datum/custom_painting/New(parent, bitmap_width, bitmap_height, offset_x=0, offset_y=0, base_color=src.base_color)
 	src.parent = parent
@@ -139,10 +150,13 @@
 	src.parent = parent
 	mp_handler.set_parent(parent)
 
-/datum/custom_painting/proc/blank_contents()
+/datum/custom_painting/proc/bucket_fill(var/color)
 	bitmap = list()
 	for (var/i = 0, i < bitmap_height * bitmap_width, i++)
-		bitmap += base_color
+		bitmap += color
+
+/datum/custom_painting/proc/blank_contents()
+	bucket_fill(base_color)
 
 /datum/custom_painting/proc/is_blank()
 	if (author || title || description)
@@ -172,6 +186,10 @@
 	interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
 
 /datum/custom_painting/proc/interact(mob/user, datum/painting_utensil/p)
+	if(jobban_isbanned(user, "artist"))
+		to_chat(user, "<span class='warning'>Try as you might, you cannot possibly work out the intricacies of fine art!</span>")
+		return
+
 	var/paint_init_inputs = json_encode(list(
 		"width" = bitmap_width,
 		"height" = bitmap_height,
@@ -229,6 +247,7 @@
 		author = copytext(sanitize(url_decode(href_list["author"])), 1, MAX_NAME_LEN)
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
 		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
+		contributing_artists += usr.ckey
 		return TRUE
 
 /datum/custom_painting/proc/render_on(icon/ico, offset_x = src.offset_x, offset_y = src.offset_y)
@@ -240,7 +259,7 @@
 
 		//for DrawBox, (x:1,y:1) is the lower left corner. On bitmap, (x:0,y:0) is the upper left
 		x = 1 + offset_x + x
-		y = 1 + offset_y + bitmap_height - y
+		y = offset_y + bitmap_height - y
 
 		ico.DrawBox(bitmap[pixel + 1], x, y)
 

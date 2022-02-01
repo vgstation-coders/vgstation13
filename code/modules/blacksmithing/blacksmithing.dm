@@ -9,6 +9,8 @@
 /obj/item/smithing_placeholder
 	name = "placeholder"
 	desc = "An incomplete object, that requires forging and striking."
+	w_type = RECYK_METAL
+	starting_materials = list()
 	var/obj/result
 	var/malleable = FALSE
 	var/strikes_required
@@ -16,19 +18,20 @@
 
 /obj/item/smithing_placeholder/Destroy()
 	result = null
+	materials = null
 	..()
 
 /obj/item/smithing_placeholder/New(loc, var/obj/item/stack/S, var/obj/R, var/required_strikes)
 	..()
-	if(istype(S, /obj/item/stack/sheet/))
-		var/obj/item/stack/sheet/SS = S
-		var/datum/materials/materials_list = new
-		material_type = materials_list.getMaterial(SS.mat_type)
-		qdel(materials_list)
-	else if(S.material_type)
-		material_type = S.material_type
+	// Copy materials from result
+	material_type = R.material_type
+	materials.addFrom(R.materials)
+
+	//Stores recipe result in...
 	result = R
-	R.forceMove(null)
+	R.forceMove(null) //...nullspace?
+
+	// Makes it look like a metal sheet
 	var/obj/item/stack/sheet/mineral/M = material_type.sheettype
 	appearance = initial(M.appearance)
 	desc = initial(desc)

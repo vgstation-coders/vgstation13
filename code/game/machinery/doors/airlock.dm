@@ -53,7 +53,7 @@
 	var/pitch = 30
 	penetration_dampening = 10
 	var/image/shuttle_warning_lights
-
+	var/list/remote_control_access = list(/mob/living/silicon, /mob/living/simple_animal/hostile/pulse_demon) //Mobs with access to directly controlling the airlock
 	explosion_block = 1
 
 	emag_cost = 1 // in MJ
@@ -780,7 +780,7 @@ About the new airlock wires panel:
 	if(!nowindow)
 		..()
 	if(!isAdminGhost(usr))
-		if(usr.stat || usr.restrained() || (usr.size < SIZE_SMALL))
+		if((usr.stat || usr.restrained()) || (!ispulsedemon(usr) && usr.size < SIZE_SMALL))
 			//testing("Returning: Not adminghost, stat=[usr.stat], restrained=[usr.restrained()], small=[usr.small]")
 			return
 	add_fingerprint(usr)
@@ -795,7 +795,7 @@ About the new airlock wires panel:
 			usr.unset_machine()
 			return
 
-	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl() && operating != -1))
+	if(isAdminGhost(usr) || (is_type_in_list(usr, remote_control_access) && src.canAIControl() && operating != -1))
 		//AI
 		//aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door, 8 door safties, 9 door speed
 		//aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door,  8 door safties, 9 door speed
@@ -1147,16 +1147,30 @@ About the new airlock wires panel:
 		if(arePowerSystemsOn() && !(stat & (FORCEDISABLE|NOPOWER)))
 			if(level_of_door_opening < 2)
 				return
-			if(M.client)
-				density ? open(1):close(1)
-			else if(density)
-				open(1)
+			if(!M.force_airlock_time)
+				if(M.client)
+					density ? open(1):close(1)
+				else if(density)
+					open(1)
+			else //Simple mobs with a nonzero force_airlock_time take time to force the airlock.
+				to_chat(M, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
+				visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
+						"<span class='notice'>You hear groaning metal and overworked motors.</span>")
+				if(do_after(M,src,M.force_airlock_time))
+					if(locked || welded || jammed) //if it got welded/bolted during the do_after
+						to_chat(M, "<span class='notice'>The airlock won't budge!</span>")
+						return
+					visible_message("<span class='warning'>\The [M] forces \the [src] [density ? "open" : "closed"]!</span>")
+					if(M.client)
+						density ? open(1):close(1)
+					else if(density)
+						open(1)
 		else
 			if(M.client)
 				density ? open(1):close(1)
 			else if(density)
 				open(1)
-		visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
+			visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
 
 
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open

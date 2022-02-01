@@ -13,6 +13,7 @@
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 5.0
 	throwforce = 15.0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 	item_state = "shard-glassnew"
 	starting_materials = list(MAT_GLASS = 3750)

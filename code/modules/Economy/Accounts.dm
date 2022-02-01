@@ -27,16 +27,9 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		station_account.wage_gain = 0//Salary money is taken from this account, so no more getting money out of nowhere.
 
 		//create an entry in the account transaction log for when it was created
-		var/datum/transaction/T = new()
-		T.target_name = station_account.owner_name
-		T.purpose = "Account creation"
-		T.amount = 0
-		T.date = "2nd April, [game_year]"
-		T.time = "11:24"
-		T.source_terminal = "Biesel GalaxyNet Terminal #277"
+		new /datum/transaction(station_account,"Account creation",0,"Biesel GalaxyNet Terminal #277",date = "2nd April, [game_year]",time = "11:24")
 
 		//add the account
-		station_account.transaction_log.Add(T)
 		all_money_accounts.Add(station_account)
 
 /proc/create_department_account(department, var/recieves_wage = 0)
@@ -52,16 +45,10 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		station_allowance += DEPARTMENT_START_WAGE + round(DEPARTMENT_START_WAGE/10)//overhead of 10%
 
 	//create an entry in the account transaction log for when it was created
-	var/datum/transaction/T = new()
-	T.target_name = department_account.owner_name
-	T.purpose = "Account creation"
-	T.amount = department_account.money
-	T.date = "2nd April, [game_year]"
-	T.time = "11:24"
-	T.source_terminal = "Biesel GalaxyNet Terminal #277"
+	new /datum/transaction(department_account, "Account creation", department_account.money, "Biesel GalaxyNet Terminal #277",\
+							date = "2nd April, [game_year]", time = "11:24", send2PDAs = FALSE)
 
 	//add the account
-	department_account.transaction_log.Add(T)
 	all_money_accounts.Add(department_account)
 
 	all_station_accounts.Add(department_account)
@@ -82,23 +69,22 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	M.security_level = security_pref
 	M.hidden = makehidden
 
+	var/ourdate = ""
+	var/ourtime = ""
+	var/ourterminal = ""
 	//create an entry in the account transaction log for when it was created
-	var/datum/transaction/T = new()
-	T.target_name = new_owner_name
-	T.purpose = "Account creation"
-	T.amount = starting_funds
 	if(!source_db)
 		//set a random date, time and location some time over the past few decades
-		var/DD = text2num(time2text(world.timeofday, "DD"))											//For muh lore we'll pretend that Nanotrasen changed its account policy
-		T.date = "[(DD == 1) ? "31" : "[DD-1]"] [time2text(world.timeofday, "Month")], [game_year]"	//shortly before the events of the round,
-		T.time = "[rand(0,24)]:[rand(11,59)]"														//prompting everyone to get a new account one day prior.
-		T.source_terminal = "NTGalaxyNet Terminal #[multinum_display(rand(111,1111),4)]"								//The point being to partly to justify the transaction history being empty at the beginning of the round.
+		var/DD = text2num(time2text(world.timeofday, "DD"))	//For muh lore we'll pretend that Nanotrasen changed its account policy
+		ourdate = "[(DD == 1) ? "31" : "[DD-1]"] [time2text(world.timeofday, "Month")], [game_year]"	//shortly before the events of the round,
+		ourtime = "[rand(0,24)]:[rand(11,59)]"	//prompting everyone to get a new account one day prior.
+		ourterminal = "NTGalaxyNet Terminal #[multinum_display(rand(111,1111),4)]"	//The point being to partly to justify the transaction history being empty at the beginning of the round.
 
 		M.account_number = rand(11111, 99999)
 	else
-		T.date = current_date_string
-		T.time = worldtime2text()
-		T.source_terminal = source_db.machine_id
+		ourdate = current_date_string
+		ourtime = worldtime2text()
+		ourterminal = source_db.machine_id
 
 		M.account_number = next_account_number
 		next_account_number += rand(1,25)
@@ -127,7 +113,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		R.stamps += "<HR><i>This paper has been stamped by the Accounts Database.</i>"
 
 	//add the account
-	M.transaction_log.Add(T)
+	new /datum/transaction(M,"Account creation",starting_funds,ourterminal,new_owner_name,ourdate,ourtime)
 	all_money_accounts.Add(M)
 	if (isStationAccount)
 		all_station_accounts.Add(M)
@@ -158,6 +144,39 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	var/date = ""
 	var/time = ""
 	var/source_terminal = ""
+
+/datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE)
+	// Default to account name if not specified
+	src.target_name = target_name == "" && account ? account.owner_name : target_name
+	src.purpose = purpose
+	src.amount = amount
+	// Get current date and time if not specified
+	src.date = date != "" ? date : current_date_string
+	src.time = time != "" ? time : worldtime2text()
+	src.source_terminal = source_terminal
+	if(account)
+		account.transaction_log.Add(src)
+		// Automatically ignore sending any zero sum transactions, plus variable to skip the search.
+		if(account.account_number && send2PDAs && amount)
+			for(var/obj/item/device/pda/PDA in PDAs)
+				// Only works and does this if ID is in PDA
+				if(PDA.id)
+					var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
+					if(app && app.linked_db && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
+						var/turf/U = get_turf(PDA)
+						var/datum/pda_app/messenger/app2 = locate(/datum/pda_app/messenger) in PDA.applications
+						if(app2 && !app2.silent)
+							playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
+						for (var/mob/O in hearers(3, U))
+							if(app2 && !app2.silent)
+								O.show_message(text("[bicon(PDA)] *[app2.ttone]*"))
+						var/mob/living/L = null
+						if(PDA.loc && isliving(PDA.loc))
+							L = PDA.loc
+						else
+							L = get_holder_of_type(PDA, /mob/living/silicon)
+						if(L)
+							to_chat(L,"[bicon(PDA)] <b>Money transfer from [source_terminal] ([amount]$).</b>")
 
 /obj/machinery/account_database
 	name = "accounts database"
@@ -350,14 +369,8 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 					station_account.money -= starting_funds
 					if(starting_funds >0)
 						//Create a transaction log entry if you need to
-						var/datum/transaction/T = new()
-						T.target_name = account_name
-						T.purpose = "New account funds initialisation"
-						T.amount = "([starting_funds])"
-						T.date = current_date_string
-						T.time = worldtime2text()
-						T.source_terminal = machine_id
-						station_account.transaction_log.Add(T)
+						new /datum/transaction(station_account, "New account funds initialisation", "([starting_funds])",\
+												machine_id, account_name, send2PDAs = FALSE)
 					create_account(account_name, starting_funds, src)
 					creating_new_account = 0
 			if("insert_card")
@@ -411,17 +424,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 			D.money += amount
 
 			//create a transaction log entry
-			var/datum/transaction/T = new()
-			T.target_name = source_name
-			T.purpose = purpose
-			if(amount < 0)
-				T.amount = "-[amount]"
-			else
-				T.amount = "[amount]"
-			T.date = current_date_string
-			T.time = worldtime2text()
-			T.source_terminal = terminal_id
-			D.transaction_log.Add(T)
+			new /datum/transaction(D, purpose, "[abs(amount)]", terminal_id, source_name)
 
 			return 1
 

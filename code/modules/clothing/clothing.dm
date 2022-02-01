@@ -339,6 +339,7 @@
 	sterility = 50
 	var/wired = 0
 	var/obj/item/weapon/cell/cell = 0
+	var/cant_remove_cell = FALSE
 	var/clipped = 0
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES

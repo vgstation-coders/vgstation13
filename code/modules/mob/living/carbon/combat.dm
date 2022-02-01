@@ -79,7 +79,7 @@
 
 /mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)
 	if(!incapacitated())
-		for(var/obj/item/weapon/I in held_items)
+		for(var/obj/item/I in held_items)
 			if(I.IsShield() && I.on_block(damage, A))
 				return 1
 
@@ -154,7 +154,7 @@
 		if(!throwing)
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
-			playsound(src, 'sound/items/trayhit1.ogg', 75, 1)
+			playsound(src, "trayhit", 75, 1)
 			var/tPain = rand(5,15)
 			adjustBruteLoss(tPain)
 			Knockdown(tPain/2)

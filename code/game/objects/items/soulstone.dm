@@ -21,6 +21,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=4"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	surgerysound = 'sound/items/scalpel.ogg'
 
 	var/mob/living/simple_animal/shade/shade = null
 
@@ -169,6 +170,7 @@
 	item_state = "shard-soulstone"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shards.dmi', "right_hand" = 'icons/mob/in-hand/right/shards.dmi')
 	sharpness_flags = 0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
 	..()

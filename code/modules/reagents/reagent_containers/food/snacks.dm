@@ -4330,11 +4330,11 @@
 	food_flags = FOOD_MEAT
 	filling_color = "#D8753E"
 	base_crumb_chance = 3
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
-	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick
 	name = "chicken drumstick"
@@ -4343,11 +4343,11 @@
 	food_flags = FOOD_MEAT
 	filling_color = "#D8753E"
 	base_crumb_chance = 0
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
-	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders
 	name = "Chicken Tenders"
@@ -4355,12 +4355,44 @@
 	icon_state = "tendies"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 3
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders/New()
 	..()
 	reagents.add_reagent(CORNOIL, 3)
 	reagents.add_reagent(TENDIES, 3)
-	bitesize = 2
+
+
+//////////////////VOX CHICKEN//////////////////
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+	name = "Vox Nuggets"
+	desc = "Looks awful and off-colour, you wish you'd gone to Cluckin' Bell instead."
+	icon_state = "vox_nuggets"
+	item_state = "kfc_bucket"
+	trash = /obj/item/trash/chicken_bucket
+	food_flags = FOOD_MEAT
+	filling_color = "#4A75F4"
+	base_crumb_chance = 3
+	bitesize = 1
+
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_nuggets/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick
+	name = "Vox drumstick"
+	desc = "I can't stand cold food. Unlike you, I ain't never ate from a trash can."
+	icon_state = "chicken_drumstick"
+	food_flags = FOOD_MEAT
+	filling_color = "#4A75F4"
+	base_crumb_chance = 0
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 
 //////////////////CURRY//////////////////
@@ -5230,7 +5262,7 @@
 	slot_flags = SLOT_MASK
 	throwforce = 1
 	autoignition_temperature = 0
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
@@ -7452,6 +7484,38 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 9)
 	reagents.add_reagent(ZAMSPICYTOXIN, 5)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup
+	name = "Blether Noodle Soup"
+	desc = "A hearty grey noodle soup. Great for teaching growing greylings new words! Not to be confused with human alphabet soup."
+	icon_state = "blethernoodlesoup_open"
+	trash = /obj/item/weapon/reagent_containers/glass/soupcan
+	food_flags = FOOD_MEAT | FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#FF9700"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+	bitesize = 3
+	wrapped = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped
+	icon_state = "blethernoodlesoup_closed"
+	wrapped = TRUE
+
+/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/proc/Unwrap(mob/user)
+	icon_state = "blethernoodlesoup_open"
+	wrapped = FALSE
+	playsound(user, 'sound/effects/can_open1.ogg', 50, 1)
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SACID, 10)
+	reagents.add_reagent(LOCUTOGEN, 5)
+	if(user)
+		to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. An inviting smell wafts out.")
 
 //You have now exited the ayy food zone. Thanks for visiting.
 
