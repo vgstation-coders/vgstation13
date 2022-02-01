@@ -197,7 +197,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 					<br>
 					{{for data.forwards}}
 						<div class="line">
-							TODO
+							{{:value.name}}<br>
+							From {{:value.origin_station_name}}, belonging to {{:value.origin_sender_name}}.<br>
+							Worth {{:value.worth}} on forwarding.<br>
 						</div>
 					{{empty}}
 						No active forwards.

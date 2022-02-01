@@ -12,9 +12,11 @@ var/forwarding_on = FALSE
     var/access = null // See code/game/jobs/access.dm
     var/one_access = null // See above
     var/worth = 0 // Payed out for forwarding
-    var/manifest = ""
     var/cargo_contribution = 0.1
     var/atom/associated_crate = null // For ease of checking
+    var/obj/item/weapon/paper/manifest/associated_manifest = null // Same here
+    var/origin_station_name = "" // Some fluff
+    var/origin_sender_name = ""
 
 /datum/cargo_forwarding/New()
     ..()
@@ -23,16 +25,23 @@ var/forwarding_on = FALSE
     else
         acct = station_account
         acct_by_string = station_name()
-
-    if(contains.len)
-        manifest += "<ul>"
-        for(var/path in contains)
-            if(!path)
-                continue
-            var/atom/movable/AM = path
-            manifest += "<li>[initial(AM.name)]</li>"
-        manifest += "</ul>"
     
+    do
+        origin_station_name = new_station_name(TRUE)
+    while(origin_station_name != station_name)
+
+    var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+    var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+    var/vox_name = ""
+    for(var/j = 1 to rand(3,8))
+        vox_name += pick(vox_name_syllables)
+    vox_name = capitalize(vox_name)
+    var/insect_name
+    for(var/k = 1 to rand(2,3))
+        insect_name += pick(insectoid_name_syllables)
+    insect_name = capitalize(insect_name)
+    origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
+
     cargo_forwards.Add(src)
 
 /datum/cargo_forwarding/Destroy()
@@ -64,7 +73,6 @@ var/forwarding_on = FALSE
     access = ourpack.access
     one_access = ourpack.one_access
     worth = ourpack.cost
-    manifest = ourpack.manifest
     qdel(ourpack)
 
 /*/datum/cargo_forwarding/from_centcomm_order/New()
