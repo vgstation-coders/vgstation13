@@ -94,7 +94,7 @@
     worth = ourorder.worth
     containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
     for(var/i in ourorder.requested)
-        var/amount = ourorder.requested[i]
+        amount = ourorder.requested[i]
         if(ourorder.name_override && ourorder.name_override.len)
             name = ourorder.name_override[i]
             containername = ourorder.name_override[i]
@@ -104,18 +104,9 @@
             containername = thing.name
             qdel(thing)
         if(isnum(amount))
+            var/our_amount = amount
             if(istype(i,/obj/item/stack))
-                var/amount_left = amount
-                while(amount_left > 0)
-                    var/obj/item/stack/S = i
-                    if(amount_left >= S.max_amount)
-                        S.amount = S.max_amount
-                        amount_left -= S.max_amount
-                    else
-                        S.amount = amount_left
-                        amount_left = 0
-                    contains += S
-            else
-                for(var/j in 1 to amount)
-                    contains += i
+                our_amount = 1
+            for(var/j in 1 to our_amount)
+                contains += i
     qdel(ourorder)

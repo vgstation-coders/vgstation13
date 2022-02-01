@@ -363,8 +363,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				if(!typepath)
 					continue
 				var/atom/B2 = new typepath(A)
-				if(CF.amount && B2:amount)
-					B2:amount = CF.amount
+				if(istype(B2,/obj/item/stack))
+					var/obj/item/stack/S = B2
+					if(CF.amount && S.amount)
+						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 			
 			CF.associated_manifest.info += {"</ul><br>
