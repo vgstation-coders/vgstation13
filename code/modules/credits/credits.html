@@ -191,7 +191,7 @@
 		lastinterval = setInterval(function () {
 			bottom = bottom + 1;
 			div.style.bottom = bottom + "px";
-			if(bottom > 6000){ //RUNAWAY CREDIT ALART - no seriously this might keep going if the server doesn't start back up
+			if(bottom > 1200){ // Clear the credits screen once the container scrolls past this arbitrary amount of pixels
 				//debugMe()
 				clearInterval(lastinterval);
 				commitSuicide();
