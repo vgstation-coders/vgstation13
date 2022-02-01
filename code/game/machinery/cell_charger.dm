@@ -22,6 +22,12 @@
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/cell_charger/get_cell()
 	return charging
 
@@ -51,7 +57,7 @@
 /obj/machinery/cell_charger/proc/updateicon()
 	icon_state = "ccharger[charging ? 1 : 0]"
 
-	if(charging && !(stat & (BROKEN|NOPOWER)) )
+	if(charging && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)) )
 		var/newlevel = 	round(charging.percent() * 4.0 / 99)
 //		to_chat(world, "nl: [newlevel]")
 
@@ -96,7 +102,11 @@
 		emagged = 1 //Congratulations, you've done it
 		user.visible_message("<span class='warning'>[user] swipes a card into \the [src]'s charging port.</span>", \
 		"<span class='warning'>You hear fizzling coming from \the [src] and a wire turns red hot as you swipe the electromagnetic card. Better not use it anymore.</span>")
-		return
+
+/obj/machinery/cell_charger/emag_ai(mob/living/silicon/ai/A)
+	if(!emagged)
+		emagged = 1
+		to_chat(A, "<span class='warning'>You short out the [src].</span>")
 
 /obj/machinery/cell_charger/attack_robot(mob/user as mob)
 	if(isMoMMI(user) && Adjacent(user)) //To be able to remove cells from the charger
@@ -124,11 +134,8 @@
 		return FALSE
 	. = ..()
 
-/obj/machinery/cell_charger/attack_ai(mob/user)
-	return
-
 /obj/machinery/cell_charger/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(charging)
 		charging.emp_act(severity)
@@ -137,7 +144,7 @@
 
 /obj/machinery/cell_charger/process()
 //	to_chat(world, "ccpt [charging] [stat]")
-	if(!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
+	if(!charging || (stat & (BROKEN|NOPOWER|FORCEDISABLE)) || !anchored)
 		return
 
 	if(charging.give(transfer_rate*transfer_rate_coeff * (transfer_efficiency+transfer_efficiency_bonus) * (emagged ? 0.25 : 1)))//Inefficiency (Joule effect + other shenanigans)  //Lose most of it if emagged

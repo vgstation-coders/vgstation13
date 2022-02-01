@@ -22,7 +22,7 @@
 	var/changelingID = "Changeling"
 	var/geneticdamage = 0
 
-	powerpoints = 5	//evolve points
+	powerpoints = 4	//evolve points
 
 	var/mimicing = ""
 

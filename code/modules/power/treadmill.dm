@@ -29,6 +29,11 @@
 		/obj/item/weapon/stock_parts/console_screen
 	)
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+	
 /obj/machinery/power/treadmill/New()
 	..()
 	setup_border_dummy()

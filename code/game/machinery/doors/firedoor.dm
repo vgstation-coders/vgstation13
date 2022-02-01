@@ -93,6 +93,12 @@ var/global/list/alert_overlays_global = list()
 		"cold"
 	)
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
+
 /obj/machinery/door/firedoor/New(loc, new_dir)
 	. = ..()
 	change_dir(new_dir)
@@ -354,12 +360,19 @@ var/global/list/alert_overlays_global = list()
 			flick("door_spark", src)
 			sleep(6)
 			force_open(user, C)
-			sleep(8)
 		blocked = TRUE
 		update_icon()
 		return
 
 	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/emag_ai(mob/living/silicon/ai/A)
+	if(density)
+		flick("door_spark", src)
+		sleep(6)
+		open()
+	blocked = TRUE
+	update_icon()
 
 /obj/machinery/door/firedoor/attack_animal(var/mob/living/simple_animal/M as mob)
 	M.delayNextAttack(8)
@@ -580,7 +593,7 @@ var/global/list/alert_overlays_global = list()
 			update_icon()
 
 /obj/machinery/door/firedoor/proc/latetoggle()
-	if(operating || stat & NOPOWER || !nextstate)
+	if(operating || stat & (FORCEDISABLE|NOPOWER) || !nextstate)
 		return
 
 	switch(nextstate)

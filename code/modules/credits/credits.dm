@@ -134,6 +134,14 @@ var/global/datum/credits/end_credits = new
 	if(change_credits_song)
 		determine_round_end_song()
 	for(var/client/C in clients)
+		C.clear_credits()
+	// This is intended to wait until clients have had a chance to load and
+	// run the page sent by clear_credits.
+	// If players get errors about "setAudio", consider increasing this or
+	// implementing a way for the page to signal to the server that it is done loading,
+	// and only call credits_audio for that client after that.
+	sleep(2 SECONDS)
+	for(var/client/C in clients)
 		C.credits_audio(preload_only = TRUE) //Credits preference set to "No Reruns" should still preload, since we still don't know if the episode is a rerun. If audio time comes and the episode is a rerun, then we can start preloading the jingle instead.
 
 /*

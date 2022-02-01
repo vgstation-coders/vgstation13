@@ -82,7 +82,7 @@
 	if(user.nutrition < 400)
 		user.nutrition = min((user.nutrition + T.nutrition), 400)
 	user.health = user.maxHealth
-	changeling.powerpoints += 2
+	changeling.powerpoints += 3
 
 	//Steal all of their languages!
 	changeling.absorbed_languages |= T.languages

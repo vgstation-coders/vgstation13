@@ -122,7 +122,7 @@
 	set_voltage(450+lasercount*100)
 
 /obj/machinery/mech_bay_recharge_port/proc/start_charge(var/obj/recharging_mecha)
-	if(stat&(NOPOWER|BROKEN))
+	if(stat&(NOPOWER|BROKEN|FORCEDISABLE))
 		to_mech(recharging_mecha,"<span class='rose'>Power port not responding. Terminating.</span>")
 		return 0
 	else
@@ -208,7 +208,7 @@
 	light_color = LIGHT_COLOR_PINK
 
 /obj/machinery/computer/mech_bay_power_console/proc/mecha_in(var/obj/O)
-	if(stat&(NOPOWER|BROKEN))
+	if(stat&(FORCEDISABLE|NOPOWER|BROKEN))
 		to_mech(O,"<span class='rose'>Control console not responding. Terminating...</span>")
 		return
 	if(recharge_port && autostart)
