@@ -32,7 +32,7 @@
         origin_station_name = new_station_name(TRUE)
     while(origin_station_name == station_name)
 
-    time_limit = rand(5,15)
+    time_limit = rand(5,15) + 2 //2 minutes is spent transiting it and it gets created at the start of that
 
     var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
     var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
