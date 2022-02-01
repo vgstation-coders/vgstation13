@@ -327,9 +327,16 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		shoppinglist.Remove(S)
 
 	if(forwarding_on)
+		if(!clear_turfs.len)
+			return
+		var/i = rand(1,clear_turfs.len)
+		var/turf/pickedloc = clear_turfs[i]
+		clear_turfs.Cut(i,i+1)
+		new /obj/machinery/crate_weigher(pickedloc)
+
 		var/list/datum/cargo_forwarding/new_forwards = list()
 		var/amount_forwarded = rand(1,3)
-		for(var/i = 0, i < amount_forwarded, i++)
+		for(var/j in 0 to amount_forwarded)
 			if(prob(75)) // Normal orderable stuff
 				var/datum/cargo_forwarding/from_supplypack/SCF = new
 				new_forwards.Add(SCF)
@@ -344,8 +351,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		for(var/datum/cargo_forwarding/CF in new_forwards)
 			if(!clear_turfs.len)
 				break
-			var/i = rand(1,clear_turfs.len)
-			var/turf/pickedloc = clear_turfs[i]
+			i = rand(1,clear_turfs.len)
+			pickedloc = clear_turfs[i]
 			clear_turfs.Cut(i,i+1)
 
 			var/atom/A = new CF.containertype(pickedloc)
@@ -374,7 +381,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 			
-			CF.associated_manifest.info += {"</ul><br>"}
+			CF.associated_manifest.info += {"</ul>"}
 
 /datum/subsystem/supply_shuttle/proc/forbidden_atoms_check(atom/A)
 	var/contents = get_contents_in_object(A)

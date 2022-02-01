@@ -20,7 +20,7 @@
     var/origin_sender_name = ""
     var/time_limit = 5 // In minutes
     var/time_created = 0 // To check time left
-    var/weighed = TRUE // Crate weighed?
+    var/weighed = FALSE // Crate weighed?
 
 /datum/cargo_forwarding/New()
     ..()
@@ -117,7 +117,7 @@
         sleep(20)
         if(current_manifest && get_turf(A) == get_turf(src))
             var/calculated_weight = 0
-            playsound(src, 'sound/machines/chime.ogg', 50, 1)
+            playsound(get_turf(src), 'sound/machines/chime.ogg', 50, 1)
             for(var/atom/movable/thing in A)
                 if(isitem(A))
                     var/obj/item/I = A
@@ -127,7 +127,7 @@
                     calculated_weight += M.size
                 else
                     calculated_weight += 5
-            current_manifest.info += "Total object weight: [calculated_weight]kg<br>CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"
+            current_manifest.info += "<br>Total object weight: [calculated_weight]kg<br>CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"
             current_manifest.forceMove(get_turf(src))
             current_manifest = null
             for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
