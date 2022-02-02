@@ -110,23 +110,27 @@
 	hacked = TRUE
 
 /datum/pda_app/cart/access_change/get_dat(var/mob/user)
-	var/dat = "{
+	var/dat = {"
 		<h4><span class='pda_icon pda_money'></span> Remote access change</h4>
 		Target identity: <a href='?src=\ref[src];select_pda=1'>[selected_pda ? selected_pda.name : "Select a PDA"]</a><br>
-		}"
+		"}
 	if(!hacked)
 		dat += "Authorized identity: [pda_device.id ? pda_device.id.name : "None"]<br>"
 	if(selected_pda && selected_pda.id && ((pda_device.id && can_access(pda_device.id.GetAccess(),list(access_change_ids),null)) || hacked))
-		dat += "{
-			Registered name: <a href='?src=\ref[src];edit_name=1'>[selected_pda.id.registered_name]</a><br>
-			Account number: <a href='?src=\ref[src];edit_account=1'>[selected_pda.id.associated_account_number]</a><br>
-			Assignment: <a href='?src=\ref[src];edit_job=1'>[selected_pda.id.assignment]</a><br>
-			}"
+		var/obj/item/weapon/card/id/selected_id = selected_pda.id
+		dat += {"
+			Registered name: <a href='?src=\ref[src];edit_name=1'>[selected_id.registered_name]</a><br>
+			Account number: <a href='?src=\ref[src];edit_account=1'>[selected_id.associated_account_number]</a><br>
+			Assignment: <a href='?src=\ref[src];edit_job=1'>[selected_id.assignment || "Set assignment"]</a><br>
+			"}
 		for(var/i = 1; i <= 7; i++)
 			dat += "<div style='float: left'><b>[get_region_accesses_name(i)]</b><br>"
 			for(var/access in get_region_accesses(i))
 				var/aname = get_access_desc(access)
-				dat += "<a href='?src=\ref[src];access=[access]'>[aname]</a><br>"
+				if (!selected_id.access || !selected_id.access.len || !(access in selected_id.access))
+					dat += "<a href='?src=\ref[src];access=[access]'>[aname]</a><br>"
+				else
+					dat += "<b><a href='?src=\ref[src];access=[access]'>[aname]</a></b><br>"
 			dat += "<br></div>"
 	return dat
 
@@ -149,7 +153,7 @@
 		if(hacked && istype(selected_id,/obj/item/weapon/card/id/syndicate)) // Little easter egg
 			var/datum/component/uplink/UL = selected_pda.get_component(/datum/component/uplink)
 			if(UL)
-				U.show_message("[bicon(selected_pda)] <b>The PDA softly beeps: [UL.unlock_code]</b>", 2)
+				to_chat(U,"The PDA softly beeps: [UL.unlock_code]")
 				refresh_pda()
 				return
 		var/thing_changed = null
@@ -194,7 +198,7 @@
 			var/access_type = text2num(href_list["access"])
 			if(access_type in get_all_accesses())
 				thing_changed = "access"
-				if(!access_type in selected_id.access)
+				if(!(access_type in selected_id.access))
 					selected_id.access += access_type
 					new_thing = "Added [get_access_desc(access_type)]"
 				else
@@ -203,9 +207,9 @@
 		if(!hacked && thing_changed)
 			var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in selected_pda.applications
 			if (P_app && !P_app.toff && !P_app.silent)
-				playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
-				for (var/mob/O in hearers(3, P.loc))
-						O.show_message(text("[bicon(P)] *[P_app.ttone]*"))
+				playsound(selected_pda.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				for (var/mob/O in hearers(3, selected_pda.loc))
+					O.show_message(text("[bicon(selected_pda)] *[P_app.ttone]*"))
 				//Search for holder of the PDA.
 				var/mob/living/L = null
 				if(selected_pda.loc && isliving(selected_pda.loc))
