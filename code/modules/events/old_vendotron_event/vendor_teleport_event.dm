@@ -19,16 +19,20 @@
 	fancyEntrance(chosenVend)
 
 /datum/event/old_vendotron_teleport/proc/vendSpawnDecide()
-	var/list/dontReplace = list(
-		/obj/machinery/vending/voxseeds,
-		/obj/machinery/vending/tradeoutfitter,
-		/obj/machinery/vending/sale/trader,
-		/obj/machinery/vending/sale,	//Oh boy can't wait to start sell- oh nooooo
-		/obj/machinery/vending/old_vendotron,
+	var/list/canReplace = list(
+		/obj/machinery/vending/coffee,
+		/obj/machinery/vending/snack,
+		/obj/machinery/vending/cola,
+		/obj/machinery/vending/cigarette,
+		/obj/machinery/vending/discount,
+		/obj/machinery/vending/groans,
+		/obj/machinery/vending/nuka,
+		/obj/machinery/vending/sovietsoda,
+		/obj/machinery/vending/zamsnax,
 	)
 	var/list/possibleVends = list()
 	for(var/obj/machinery/vending/aVendor in all_machines)
-		if(is_type_in_list(aVendor, dontReplace))
+		if(!is_type_in_list(aVendor, canReplace))
 			continue
 		if(aVendor.loc.z != STATION_Z)
 			continue
