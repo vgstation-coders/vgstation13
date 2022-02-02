@@ -21,7 +21,6 @@
 	response_harm   = "punches"
 
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
-	force_airlock_time=3 SECONDS 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 	blood_color2=GRUE_BLOOD
 //flesh_color2="#272728"
 	see_in_dark = 8
@@ -40,13 +39,16 @@
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
+	var/base_regenbonus=1
 	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
+
+	var/base_melee_dam_up = 5				//base melee damage upper
+	var/base_melee_dam_lw = 3				//base melee damage lower
 
 	var/pg_mult = 10/3										 //multiplier for power gained per tick when on dark tile
 	var/pd_mult = 0									  //multiplier for shadow power drained per tick on bright tile (0=disabled)
 	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
 	var/hd_mult = 2									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
-//	var/show_desc = TRUE										   //For the ability menu
 
 	var/lifestage=GRUE_ADULT												 //1=baby grue, 2=grueling, 3=(mature) grue
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
@@ -58,11 +60,13 @@
 	var/eattime= 5 SECONDS //how long it takes to eat someone
 	var/digest = 0 //how many seconds of healing left after feeding
 	var/digest_heal = -3 //how much health restored per second after feeding (negative heals)
+	var/digest_sp = 10 //how much shadow power gained per second after feeding
 
 
 	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
 	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue is exposed to light, but this effect dissipates after going back into darkness
 	var/list/speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //speed modifiers based on light condition
+	var/list/base_speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //base speed modifiers based on light condition
 
 
 	//AI related:
@@ -126,6 +130,7 @@
 		//apply eating-based healing before processing light-based damage or healing
 		if(digest)
 			apply_damage(digest_heal,BRUTE)
+			shadowpower=min(maxshadowpower,shadowpower+digest_sp)
 			digest--
 
 		switch(dark_dim_light)
@@ -241,8 +246,8 @@
 		icon_state = "gruespawn_living"
 		icon_living = "gruespawn_living"
 		icon_dead = "gruespawn_dead"
-		melee_damage_lower = 1
-		melee_damage_upper = 5
+		base_melee_dam_up = 5				//base melee damage upper
+		base_melee_dam_lw = 3				//base melee damage lower
 		attacktext = "bites"
 		maxHealth=50
 		maxshadowpower = 100
@@ -263,20 +268,21 @@
 		icon_state = "grueling_living"
 		icon_living = "grueling_living"
 		icon_dead = "grueling_dead"
-		melee_damage_lower = 10
-		melee_damage_upper = 15
+		base_melee_dam_up = 15				//base melee damage upper
+		base_melee_dam_lw = 10				//base melee damage lower
 		attacktext = "chomps"
 		maxHealth=100
-		maxshadowpower = 300
-		moultcost = 300
+		maxshadowpower = 500
+		moultcost = 500
 		lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_NORMAL
 		pass_flags = 0
-		force_airlock_time=5 SECONDS
-		//Juvenile grue spells: moult
+		//Juvenile grue spells: eat and moult
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+
 	else
 		name = "grue"
 		desc = "A dangerous thing that lives in the dark."
@@ -285,10 +291,10 @@
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
 		maxHealth = 200
-		maxshadowpower = 500
+		maxshadowpower = 1000
 		moultcost=0 //not needed for adults
-		melee_damage_lower = 20
-		melee_damage_upper = 30
+		base_melee_dam_up = 30				//base melee damage upper
+		base_melee_dam_lw = 20				//base melee damage lower
 		melee_damage_type = BRUTE
 		held_items = list()
 		lightresist=0.7
@@ -296,7 +302,6 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
-		force_airlock_time=3 SECONDS
 		//Adult grue spells: eat and lay eggs
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -304,6 +309,7 @@
 
 
 	health=tempHealth*maxHealth
+	grue_stat_updates()
 
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
@@ -333,10 +339,10 @@
 			stat(null, "Moulting progress: [round(100*(1-moulttimer/moulttime),0.1)]%")
 		if(lifestage!=GRUE_ADULT) //not needed for adults
 			stat(null, "Shadow power: [round(shadowpower,0.1)]/[round(maxshadowpower,0.1)]")
-		if(lifestage==GRUE_ADULT)
+		if(lifestage>=GRUE_JUVENILE)
 			stat(null, "Sentient organisms eaten: [eatencount]")
-			if(config.grue_egglaying)
-				stat(null, "Reproductive energy: [eatencharge]")
+		if(config.grue_egglaying && lifestage==GRUE_ADULT)
+			stat(null, "Reproductive energy: [eatencharge]")
 
 /mob/living/simple_animal/hostile/grue/gruespawn
 	lifestage=GRUE_LARVA
@@ -408,7 +414,12 @@
 		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
 		ismoulting=0 //is no longer moulting
-		visible_message("<span class='warning'>The chrysalis shifts and morphs into a grue!</span>","<span class='warning'>You finish moulting! You are now [lifestage==GRUE_JUVENILE ? "a juvenile, and are strong enough to force open doors." : "fully-grown, and can eat sentient beings to gain their strength."]</span>")
+		var/hintstring=""
+		if(lifestage==GRUE_JUVENILE)
+			hintstring="a juvenile, and can eat sentient beings to gain their strength"
+		else if(lifestage==GRUE_ADULT)
+			hintstring="fully-grown[config.grue_egglaying ? ", and can lay eggs to spawn offspring" : ""]"
+		visible_message("<span class='warning'>The chrysalis shifts and morphs into a grue!</span>","<span class='warning'>You finish moulting! You are now [hintstring].</span>")
 		playsound(src, 'sound/effects/grue_moult.ogg', 50, 1)
 	else
 		return
@@ -523,44 +534,50 @@
 
 		digest+=25 //add 25 seconds of increased healing
 
-
 		//Upgrade the grue's stats as it feeds
 		if(E.mind) //eaten creature must have a mind to power up the grue
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
-			eatencount++					//for the status display
-
+			eatencount++					//makes the grue stronger
 			if(mind && mind.GetRole(GRUE)) //also increment the counter for objectives
 				var/datum/role/grue/G = mind.GetRole(GRUE)
 				if(G)
 					G.eatencount++
-
 			eatencharge++ //can be spent on egg laying
-
-			//increase speed
-			speed_m_dark_dim_light[1]=max(1/2,speed_m_dark_dim_light[1]/1.2)//faster in darkness
-			speed_m_dark_dim_light[2]=max(5/8,speed_m_dark_dim_light[2]/1.2)//faster in dim light
-
-			//increase damage
-			melee_damage_lower = melee_damage_lower+7
-			melee_damage_upper = melee_damage_upper+7
-
-			regenbonus=regenbonus*1.5 //increased health regen in darkness
-
-			force_airlock_time=max(0,force_airlock_time-10) //remove 1 second from force_airlock_time, making it instant after 3 sentients eaten
-
-			switch(eatencount)
-				if(GRUE_WALLBREAK)
-					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong enough to smash down most walls... but still hungry...</span>")
-					environment_smash_flags = environment_smash_flags | SMASH_WALLS
-				if(GRUE_RWALLBREAK)
-					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong enough to smash down even reinforced walls... but still hungry...</span>")
-					environment_smash_flags = environment_smash_flags | SMASH_RWALLS
-				else
-					to_chat(src, "<span class='warning'>You feel power coursing through you! You feel stronger... but still hungry...</span>")
+			grue_stat_updates(1)
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.gib()
 	busy=0
+
+/mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = 0) //update stats, called by lifestage_updates() as well as handle_feed()
+
+	//health regen in darkness
+	regenbonus = base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
+
+	//melee damage
+	melee_damage_lower = base_melee_dam_lw + (7 * eatencount)
+	melee_damage_upper = base_melee_dam_up + (7 * eatencount)
+
+	//speed bonus in dark and dim conditions
+	speed_m_dark_dim_light[1]=max(1/2,base_speed_m_dark_dim_light[1]/(1.2 ** eatencount))//faster in darkness
+	speed_m_dark_dim_light[2]=max(5/8,base_speed_m_dark_dim_light[2]/(1.2 ** eatencount))//faster in dim light
+
+
+	if(lifestage==GRUE_ADULT)
+		if(eatencount>=GRUE_WALLBREAK)
+			environment_smash_flags = environment_smash_flags | SMASH_WALLS
+		if(eatencount>=GRUE_RWALLBREAK)
+			environment_smash_flags = environment_smash_flags | SMASH_RWALLS
+
+	if(feed_verbose)
+		var/wallhintstring="er"
+		if(lifestage==GRUE_ADULT) //juveniles that feed up to at least GRUE_WALLBREAK will still gain the ability to smash walls once they moult into adults, but they wont get the hint message
+			if(eatencount==GRUE_WALLBREAK)
+				wallhintstring=" enough to smash down most walls"
+			if(eatencount==GRUE_RWALLBREAK)
+				wallhintstring=" enough to smash down even reinforced walls"
+		to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong[wallhintstring]... but still hungry...</span>")
+
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()
