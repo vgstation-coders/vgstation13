@@ -272,7 +272,8 @@ emp_act
 				if(prob((final_force + 10)))
 					apply_effect(5, WEAKEN, armor)
 					visible_message("<span class='danger'>[src] has been knocked down!</span>")
-
+				if(prob(final_force * 10))	//Very high chance
+					spitOutItem()
 				if(bloody)
 					bloody_body(src)
 

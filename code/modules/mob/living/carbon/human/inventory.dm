@@ -489,6 +489,8 @@
 				src.u_equip(W,0)
 			W.forceMove(src.back)
 			return
+		if(slot_mouth)
+			src.wear_mouth = W
 		else
 			to_chat(src, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. Report this to a coder!</span>")
 			return

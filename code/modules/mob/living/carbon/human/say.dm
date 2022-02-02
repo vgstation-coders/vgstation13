@@ -4,10 +4,17 @@
 	var/list/muteletters_check = list()
 	var/hangman_phrase = ""
 
+
 /mob/living/carbon/human/say(var/message)
 	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message) && !findtext(message, "*", 1, 2))
 		species.silent_speech(src,message)
 	else
+		to_chat(world, "SAY before hasfullmouth")
+		if(hasMouthFull)
+			to_chat(world, "SAY in full mouth")
+			spitOutItem()
+			to_chat(world, "SAY after spit out")
+			message = "MmmmMmmggmm"
 		..()
 
 // This is obsolete if the human is using a language.

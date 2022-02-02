@@ -282,6 +282,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_in_backpack 16
 #define slot_legcuffed 17
 #define slot_legs 18
+#define slot_mouth 19
 
 //slots, but in string format.
 #define slot_back_str "1"
@@ -302,6 +303,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_in_backpack_str "16"
 #define slot_legcuffed_str "17"
 #define slot_legs_str "18"
+#define slot_mouth_str "19"
 
 #define ACCESSORY_ITEM "accessory item"
 #define SURVIVAL_BOX "Survival Box"

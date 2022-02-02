@@ -1477,7 +1477,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	encased = "skull"
 
 	w_class = W_CLASS_SMALL
-	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears)
+	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears, slot_mouth)
 
 /datum/organ/external/head/generate_dropped_organ(current_organ)
 	if(!current_organ)

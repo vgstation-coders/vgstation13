@@ -287,7 +287,7 @@ Proc for attack log creation, because really why not
 			L = list(LIMB_CHEST, LIMB_GROIN, LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
 		if(slot_gloves, slot_handcuffed) //Gloves
 			L = list(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
-		if(slot_wear_mask, slot_ears, slot_glasses, slot_head)
+		if(slot_wear_mask, slot_ears, slot_glasses, slot_head, slot_mouth)
 			L = list(LIMB_HEAD)
 		if(slot_shoes)
 			L = list(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)

@@ -268,8 +268,17 @@
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	if(can_pickup(user) && !user.put_in_active_hand(src))
-		forceMove(get_turf(user))
+	if(can_pickup(user))
+		if(ishuman(user))
+			to_chat(world, "Is human in pickup")
+			var/mob/living/carbon/human/H = user
+			if(H.attack_type == ATTACK_BITE && H.can_bite(src))
+				to_chat(world, "attack bite and can bite")
+				H.putItemInMouth(src)
+				to_chat(world, "after put in mouth PICKUP")
+				return
+		if(!user.put_in_active_hand(src))
+			forceMove(get_turf(user))
 
 	//transfers diseases between the mob and the item
 	disease_contact(user)
@@ -742,6 +751,13 @@
 					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return CAN_EQUIP
 				return CANNOT_EQUIP
+			if(slot_mouth)
+				H.enableSpitting(src)
+				H.hasMouthFull = TRUE
+				return CAN_EQUIP
+			//-->>>>		//RIGHT HERE//	<<<<----//
+
+
 		return CANNOT_EQUIP //Unsupported slot
 		//END HUMAN
 
@@ -1570,3 +1586,4 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
+

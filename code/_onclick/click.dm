@@ -153,7 +153,9 @@
 				delayNextAttack(10)
 			if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
 				return
-			UnarmedAttack(A, 1, params)
+			if(!biteCheck(A))
+				to_chat(world, "CLICK after bite check")
+				UnarmedAttack(A, 1, params)
 
 	//Clicked on a non-adjacent atom
 	else

@@ -259,6 +259,14 @@ var/list/animals_with_wings = list(
 	message = "sneezes."
 	emote_type = EMOTE_AUDIBLE
 
+/datum/emote/living/carbon/sneeze/run_emote(mob/user, params)
+	. = ..()
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.hasMouthFull)
+			var/turf/T = get_turf(get_step(H, H.dir))
+			H.spitOutItem(TRUE, FALSE, T, 2)
+
 /datum/emote/living/smug
 	key = "smug"
 	key_third_person = "smugs"

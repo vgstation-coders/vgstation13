@@ -42,6 +42,13 @@
 	..()
 	return
 
+/obj/item/weapon/shard/mouth_act(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		H.adjustBruteLossByPart(rand(25, 50), LIMB_HEAD, src)	//don't eat glass, dummy
+		to_chat(H, "<span class='big warning'>All you can taste is pain!</span>")
+		H.adjustHalLoss(70)
+
 /obj/item/weapon/shard/plasma
 	name = "plasma shard"
 	desc = "A shard of plasma glass. Considerably tougher then normal glass shards. Apparently not tough enough to be a window."

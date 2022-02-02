@@ -283,15 +283,27 @@
 		user.visible_message("<span class='danger'>[user] stabs [target] with \the [src]!</span>", "<span class='danger'>You stab [target] with \the [src]!</span>")
 		target.take_organ_damage(3)// 7 is the same as crowbar punch
 
+	harmSyringeInject(target)
+
+/obj/item/weapon/reagent_containers/syringe/mouth_act(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/external/ouchMouth = H.get_organ(LIMB_HEAD)
+		ouchMouth.take_damage(pick(3, 10))	//Tongue or roof of the mouth? Probably the same as a normal harm syringe. Riiiiight between the teeth or back of the throat? Ouch
+		harmSyringeInject(user)
+
+
+/obj/item/weapon/reagent_containers/syringe/proc/harmSyringeInject(var/mob/living/carbon/target)
 	// Break the syringe and transfer some of the reagents to the target
-	src.reagents.reaction(target, INGEST)
+	reagents.reaction(target, INGEST)
 	var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5)), 0) //nerfed by popular demand.
-	src.reagents.trans_to(target, syringestab_amount_transferred)
-	src.desc += " It is broken."
-	src.mode = SYRINGE_BROKEN
-	src.add_blood(target)
-	src.add_fingerprint(usr)
-	src.update_icon()
+	reagents.trans_to(target, syringestab_amount_transferred)
+	desc += " It is broken."
+	mode = SYRINGE_BROKEN
+	add_blood(target)
+	add_fingerprint(usr)
+	update_icon()
+
 
 /obj/item/weapon/reagent_containers/syringe/restock()
 	if(mode == 2) //SYRINGE_BROKEN
