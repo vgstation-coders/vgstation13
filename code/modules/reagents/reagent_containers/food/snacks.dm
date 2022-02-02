@@ -685,7 +685,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SUGAR, 15)
 
 /obj/item/weapon/reagent_containers/food/snacks/candyheart
@@ -695,13 +695,9 @@
 /obj/item/weapon/reagent_containers/food/snacks/candyheart/New()
 	..()
 
-	var/heartphrase = null
-	if(!heartphrase)
-		heartphrase = pick( list("SO FINE","B TRU","U ROCK","HELLO","SOUL MATE","ME + U","2 CUTE","SWEET LUV","IM URS","XOXO","B MINE","LUV BUG","I &lt;3 U","PDA ME") )
+	var/heartphrase = pick( list("SO FINE","B TRU","U ROCK","HELLO","SOUL MATE","ME + U","2 CUTE","SWEET LUV","IM URS","XOXO","B MINE","LUV BUG","I &lt;3 U","PDA ME") )
 
-	var/heartcolor = null
-	if(!heartcolor)
-		heartcolor = pick( list("p","b","w","y","g") )
+	var/heartcolor = pick( list("p","b","w","y","g") )
 
 	icon_state = "conversationheart_[heartcolor]"
 	desc = "Chalky sugar in the form of a heart.<br/>This one says, <span class='valentines'>\"[heartphrase]\"</span>."
