@@ -176,28 +176,26 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 		for(var/datum/cargo_forwarding/CF in cargo_forwards)
 			if(MA == CF.associated_crate)
-				var/crate_tampered = FALSE
-				if(!CF.associated_manifest || get_area(MA) != get_area(CF.associated_manifest) || !CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len || !CF.weighed)
-					crate_tampered = TRUE //Manifest was not stamped, or got destroyed or went missing, or crate was not weighed.
-				if(!crate_tampered && istype(MA,/obj/structure/closet))
+				var/reason = null
+				if(!CF.weighed)
+					reason = "Crate not weighed"
+				if(!CF.associated_manifest || !(CF.associated_manifest in shuttle))
+					reason = "Manifest is missing"
+				if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
+					reason = "Manifest was not stamped"
+				if(istype(MA,/obj/structure/closet))
 					var/obj/structure/closet/CL = MA
-					if(CL.broken || CL.opened) //Someone broke into the crate lock or opened it?
-						crate_tampered = TRUE
-				var/list/containtypes = list()
-				if(!crate_tampered)
-					for(var/obj/A in MA)
-						if(!(A.type in CF.contains)) //Foreign object
-							crate_tampered = TRUE
-							break
-						containtypes += A.type
-				if(!crate_tampered)
-					var/list/containcheck = CF.contains.Copy()
-					for(var/type in CF.contains)
-						if(type in containtypes)
-							containcheck.Remove(type)
-					if(containcheck.len) //Something was taken out!
-						crate_tampered = TRUE
-				CF.Pay(crate_tampered)
+					if(CL.broken)
+						reason = "Crate broken into"
+				for(var/atom/A in MA)
+					if(!(A in CF.initial_contents))
+						reason = "Foreign object in crate"
+						break
+				for(var/atom/A in CF.initial_contents)
+					if(!(A in MA))
+						reason = "Object missing from crate"
+						break
+				CF.Pay(reason)
 
 		if(istype(MA,/obj/structure/closet/crate))
 			recycled_crates++
@@ -380,6 +378,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 					if(CF.amount && S.amount)
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
+				CF.initial_contents += B2
 			
 			CF.associated_manifest.info += {"</ul>"}
 

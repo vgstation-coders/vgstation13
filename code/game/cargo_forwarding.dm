@@ -21,6 +21,7 @@
     var/time_limit = 5 // In minutes
     var/time_created = 0 // To check time left
     var/weighed = FALSE // Crate weighed?
+    var/list/atom/initial_contents = list() // for easier atom checking
 
 /datum/cargo_forwarding/New()
     ..()
@@ -60,8 +61,8 @@
     acct = null
     ..()
 
-/datum/cargo_forwarding/proc/Pay(var/crate_tampered = FALSE)
-    if(crate_tampered)
+/datum/cargo_forwarding/proc/Pay(var/reason) //Reason for crate denial
+    if(reason)
         worth *= -0.5 //Deduct a penalty instead
 
     acct.charge(-worth,null,"Payment for cargo crate fowarding ([name])",dest_name = name)
@@ -71,7 +72,7 @@
         cargo_acct.charge(round(-worth/10),null,"Contribution for cargo crate fowarding ([name])",dest_name = name)
     
     for(var/obj/machinery/computer/supplycomp/S in SSsupply_shuttle.supply_consoles)
-        S.say("Cargo crate forwarded [crate_tampered ? "unsuccessfully! Reward docked." : "successfully!"]")
+        S.say("[name] forwarded [reason ? "unsuccessfully! [reason]. Reward docked." : "successfully!"]")
         playsound(S, 'sound/machines/info.ogg', 50, 1)
     
     qdel(src)
