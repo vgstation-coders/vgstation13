@@ -204,7 +204,7 @@
 				else
 					selected_id.access -= access_type
 					new_thing = "Removed [get_access_desc(access_type)]"
-		if(!hacked && thing_changed)
+		if((!hacked && thing_changed) || (hacked && prob(20)))
 			var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in selected_pda.applications
 			if (P_app && !P_app.toff && !P_app.silent)
 				playsound(selected_pda.loc, 'sound/machines/twobeep.ogg', 50, 1)
