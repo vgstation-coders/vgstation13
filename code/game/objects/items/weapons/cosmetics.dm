@@ -264,14 +264,59 @@
 /obj/item/weapon/hair_dye/proc/color_hair(mob/living/carbon/human/H, var/facial = 0)
 	if(!H)
 		return
-	if(facial)
-		H.my_appearance.r_facial = color_r
-		H.my_appearance.g_facial = color_g
-		H.my_appearance.b_facial = color_b
+	if(isvox(H))
+		var/list/voxhaircolorlist = list()
+
+		voxhaircolorlist["brown"] = list(162,107,56)
+		voxhaircolorlist["greenbrown"] = list(147, 126, 61)
+		voxhaircolorlist["lightgreen"] = list(132, 138, 64)
+		voxhaircolorlist["azure"] = list(112, 126, 93)
+		voxhaircolorlist["green"] = list(87, 123, 119)
+		voxhaircolorlist["emerald"] = list(65, 136, 98) //299
+		voxhaircolorlist["grey"] = list(192, 192, 192) //876
+		
+		to_chat(world,"vhcl: [voxhaircolorlist] - [voxhaircolorlist.len]")
+		var/list/closest = ARBITRARILY_LARGE_NUMBER //10000
+		var/voxcolor = 0
+		//var/ex = 0
+		to_chat(world,"ALN: [closest]")
+		for(var/rgbcolorset in voxhaircolorlist)
+			//ex++
+			//to_chat(world,"current go: [ex]")
+			to_chat(world,"Checking: [voxhaircolorlist[rgbcolorset]]")
+			var/rgb = voxhaircolorlist[rgbcolorset]
+			to_chat(world,"running: [rgb]")
+			//var/diff = (color_r - rgb[1]) + (color_g - rgb[2]) + (color_b - rgb[3])
+			var/diff = (max(color_r,rgb[1]) - min(color_r,rgb[1])) + (max(color_r,rgb[2]) - min(color_r,rgb[2])) + (max(color_r,rgb[3]) - min(color_r,rgb[3]))
+			to_chat(world,"Is [diff] < [closest]? [diff < closest]")
+			if(diff < closest)
+				closest = diff
+				//voxcolor = ex
+				var/butt = get_key_by_element(voxhaircolorlist, rgb)
+				voxcolor = voxhaircolorlist.Find(butt)
+				to_chat(world,"closest: [closest]")
+				to_chat(world,"voxcolor: [voxcolor]")
+		
+		H.my_appearance.v_hair = voxcolor
+		
+		//v_hair
+		//1=dark green, 2=brown, 3=greenbrown, 4=lightgreen, 5=azure, 6=emerald 7=gray
+		//162, 107, 56
+		//147, 126, 61
+		//132, 138, 64
+		//112, 126, 93
+		//87, 123, 119
+		//65, 136, 98
+		//192, 192, 192
 	else
-		H.my_appearance.r_hair = color_r
-		H.my_appearance.g_hair = color_g
-		H.my_appearance.b_hair = color_b
+		if(facial)
+			H.my_appearance.r_facial = color_r
+			H.my_appearance.g_facial = color_g
+			H.my_appearance.b_facial = color_b
+		else
+			H.my_appearance.r_hair = color_r
+			H.my_appearance.g_hair = color_g
+			H.my_appearance.b_hair = color_b
 	H.update_hair()
 	if(H.species.anatomy_flags & RGBSKINTONE)
 		H.update_body()
