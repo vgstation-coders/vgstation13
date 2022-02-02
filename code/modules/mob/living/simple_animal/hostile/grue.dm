@@ -42,7 +42,7 @@
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
 	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
 
-	var/pg_mult = 2										 //multiplier for power gained per tick when on dark tile
+	var/pg_mult = 10/3										 //multiplier for power gained per tick when on dark tile
 	var/pd_mult = 0									  //multiplier for shadow power drained per tick on bright tile (0=disabled)
 	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
 	var/hd_mult = 2									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
@@ -267,8 +267,8 @@
 		melee_damage_upper = 15
 		attacktext = "chomps"
 		maxHealth=100
-		maxshadowpower = 200
-		moultcost = 200
+		maxshadowpower = 300
+		moultcost = 300
 		lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
