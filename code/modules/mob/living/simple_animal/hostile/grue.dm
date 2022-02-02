@@ -21,7 +21,7 @@
 	response_harm   = "punches"
 
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
-	force_airlock_time=50 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
+	force_airlock_time=3 SECONDS 									//so that grues cant easily rush through a light area and quickly force open a door to escape back into the dark
 	blood_color2=GRUE_BLOOD
 //flesh_color2="#272728"
 	see_in_dark = 8
@@ -31,7 +31,7 @@
 	var/maxshadowpower = 250									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
 	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
-	var/moulttime = 30 //time required to moult to a new form
+	var/moulttime = 30 //time required to moult to a new form (seconds)
 	var/moulttimer = 30 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
 	var/hatched = 0			//whether or not this grue hatched from an egg
@@ -267,7 +267,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_NORMAL
 		pass_flags = 0
-		force_airlock_time=100
+		force_airlock_time=5 SECONDS
 		//Juvenile grue spells: moult
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 	else
@@ -289,7 +289,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
-		force_airlock_time=50
+		force_airlock_time=3 SECONDS
 		//Adult grue spells: eat and lay eggs
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -536,7 +536,7 @@
 
 			regenbonus=regenbonus*1.5 //increased health regen in darkness
 
-			force_airlock_time=max(0,force_airlock_time-20)
+			force_airlock_time=max(0,force_airlock_time-10) //remove 1 second from force_airlock_time, making it instant after 3 sentients eaten
 
 			switch(eatencount)
 				if(GRUE_WALLBREAK)
