@@ -139,8 +139,7 @@
 	if(href_list["select_pda"])
 		var/list/pda_with_id = list()
 		for(var/obj/item/device/pda/pda_id in sortNames(get_viewable_pdas()))
-			var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in pda_id.applications
-			if (P_app && !P_app.toff && pda_id.id) //PDA needs messenger installed and on, and an ID in it
+			if (pda_id.id)
 				pda_with_id += pda_id
 		if(!pda_with_id.len)
 			return
