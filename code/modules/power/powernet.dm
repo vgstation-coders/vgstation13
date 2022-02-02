@@ -3,12 +3,16 @@
 	var/list/obj/structure/cable/cables = list()	// all cables & junctions
 	var/list/obj/machinery/power/nodes = list()		// all connected machines
 	var/list/datum/power_connection/components = list()		// all connected components
-	var/list/load = new()				// the current load on the powernet, increased by each machine at processing
+	var/list/load = new()		// the current load on the powernet, increased by each machine at processing
 	var/newavail = 0			// what available power was gathered last tick, then becomes...
 	var/avail = 0				// ...the current available power in the powernet
 	var/viewload = 0			// the load as it appears on the power console (gradually updated)
 	var/number = 0
 	var/netexcess = 0			// excess power on the powernet (typically avail-load)
+
+	var/unsatisfied_priority = 1	// First load priority that did not reach full satisfaction last tick. Loads before it are 100% satisfied, loads after are 0% satisfied
+	var/satisfaction = 0			// Satisfaction percent of the unsatisfied_priority
+
 
 ////////////////////////////////////////////
 // POWERNET DATUM PROCS
@@ -100,12 +104,28 @@
 		sum += i
 	return sum
 
+/datum/powernet/proc/get_satisfaction(var/priority)
+	if (!unsatisfied_priority || unsatisfied_priority < priority)
+		return 1 // 100%
+	if (unsatisfied_priority == priority)
+		return satisfaction
+	return 0 // 0%
+
+
 // handles the power changes in the powernet
 // called every ticks by the powernet controller
 // all powernets will have been rebuilt by the time this is called
 /datum/powernet/proc/reset()
 	// see if there's a surplus of power remaining in the powernet and stores unused power in the SMES
-	netexcess = avail - get_load()
+	netexcess = avail
+	for (var/i in 1 to load.len)
+		if (netexcess > load[i])
+			netexcess -= load[i]
+		else
+			unsatisfied_priority = i
+			satisfaction = min (netexcess / load[i], 1)
+			netexcess = 0
+			break
 
 	if(netexcess > 100 && nodes && nodes.len) // if there was excess power last cycle
 		for(var/obj/machinery/power/battery/B in nodes) // find the SMESes in the network

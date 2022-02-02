@@ -99,6 +99,12 @@
 	else
 		return 0
 
+/datum/power_connection/proc/get_satisfaction(var/priority = power_priority)
+	if (get_powernet())
+		return powernet.get_satisfaction(priority)
+	else
+		return 0
+
 /datum/power_connection/proc/get_powernet()
 	check_rebuild()
 	return powernet

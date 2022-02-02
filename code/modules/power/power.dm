@@ -93,6 +93,12 @@
 	else
 		return 0
 
+/obj/machinery/power/proc/get_satisfaction(var/priority = power_priority)
+	if (get_powernet())
+		return powernet.get_satisfaction(priority)
+	else
+		return 0
+
 /obj/machinery/power/proc/get_powernet()
 	RETURN_TYPE(/datum/powernet)
 	check_rebuild()
