@@ -579,7 +579,7 @@
 		to_chat(src, "<span class='warning'>You feel power coursing through you! You feel strong[wallhintstring]... but still hungry...</span>")
 
 	if(lifestage==GRUE_JUVENILE)
-		force_airlock_time=max(0,30-(10*eatencount))
+		force_airlock_time=30 * (eatencount==0) //takes 3 seconds if they haven't eaten, but is instant if they have
 	else
 		force_airlock_time=0
 
