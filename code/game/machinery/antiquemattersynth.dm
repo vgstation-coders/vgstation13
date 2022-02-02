@@ -46,6 +46,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	req_access = list(access_engine_minor)
 
 	var/consumption = 0 //How much are we set to draw off the net? Clamped between 0 and 2 GIGAWATT (2,000,000,000 Watts)
+	var/old_consumption = 0 //How much did we request the previous tick?
 	var/on = 0
 	var/charge = 0 //How much we've stored. Also capped at 2 GIGAWATT.
 	var/charged_last_tick = 0
@@ -73,11 +74,13 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	if(charge >= 2*GIGAWATT)
 		charge = min(charge, 2*GIGAWATT)
 		return //We can't get more charged than this!
-	if(avail()>consumption)
+
+	if(get_satisfaction() == 1.0)
 		charged_last_tick = 1
-		charge += consumption
-		add_load(consumption)
+		charge += old_consumption
 		nanomanager.update_uis(src)
+	old_consumption = consumption
+	add_load(old_consumption)
 
 /obj/machinery/power/antiquesynth/attack_ai(mob/user)
 	if(isAdminGhost(user))
