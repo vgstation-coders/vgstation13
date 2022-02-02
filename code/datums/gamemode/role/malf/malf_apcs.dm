@@ -47,13 +47,13 @@
 		return
 	M.currently_hacking_apcs -= src
 	malf_owner = M
-	to_chat(malf, "<span class='notice'>APC Hack Complete. The [name] is now under your exclusive control. You now have [M.apcs.len] APCs under your control.</span>")
 	malf.clear_alert(name)
 	locked = TRUE
 	malfhack = TRUE
 	currently_hacking_ai = null
 	malfai = malf
 	M.apcs += src
+	to_chat(malf, "<span class='notice'>APC Hack Complete. The [name] is now under your exclusive control. You now have [M.apcs.len] APCs under your control.</span>")
 	malf.handle_regular_hud_updates()
 	malfimage = new /atom/movable/fake_camera_image(loc)
 	malfimage.pixel_y = pixel_y
