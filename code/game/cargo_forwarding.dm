@@ -234,3 +234,4 @@
             name = SM.name
             containername = SM.name
             worth = (SM.size * SM.size) * 10
+            initial_contents += SM
