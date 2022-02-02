@@ -328,6 +328,12 @@ By design, d1 is the smallest direction and d2 is the highest
 	else
 		return 0
 
+/obj/structure/cable/proc/get_satisfaction(var/priority = POWER_PRIORITY_NORMAL)
+	if (get_powernet())
+		return powernet.get_satisfaction(priority)
+	else
+		return 0
+
 /obj/structure/cable/proc/check_rebuild()
 	if(!build_status)
 		return
