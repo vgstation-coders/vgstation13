@@ -364,6 +364,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 			var/atom/A = new CF.containertype(pickedloc)
 			CF.associated_crate = A
+			CF.post_creation()
 			A.name = "[CF.containername]"
 
 			CF.associated_manifest = new /obj/item/weapon/paper/manifest(get_turf(A))
@@ -377,7 +378,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				A:req_access = CF.access
 			if(CF.one_access && istype(A, /obj/structure/closet))
 				A:req_one_access = CF.one_access
-				
+			
+			for(var/atom/thing in CF.associated_crate) // Something already put in here?
+				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
+				CF.initial_contents += thing
 			for(var/typepath in CF.contains)
 				if(!typepath)
 					continue
@@ -388,8 +392,6 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 				CF.initial_contents += B2
-
-			CF.post_creation()
 			
 			CF.associated_manifest.info += {"</ul>"}
 
