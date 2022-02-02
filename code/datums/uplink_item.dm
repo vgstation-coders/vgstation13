@@ -1113,6 +1113,14 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Captain", "Head of Personnel")
 
+/datum/uplink_item/jobspecific/command/remoteidchanger
+	name = "Hacked HumanResources9001 DX cartridge"
+	desc = "Allows remote changing of the details (including name, account number, job title and access) of any ID inside any PDA that can be messaged. The hacked version of this cartridge bypasses any notification to the target of an access change."
+	item = /obj/item/weapon/cartridge/hop/dx/antag
+	cost = 20
+	discounted_cost = 12
+	jobs_with_discount = list("Captain", "Head of Personnel")
+
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"
 

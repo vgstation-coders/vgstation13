@@ -79,6 +79,74 @@
     fax_pings = TRUE
     radio_type = /obj/item/radio/integrated/signal/bot/mule
 
+/obj/item/weapon/cartridge/hop/dx
+    name = "\improper HumanResources9001 DX"
+    starting_apps = list(
+        /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/custodial_locator,
+        /datum/pda_app/cart/supply_records,
+        /datum/pda_app/cart/mulebot,
+        /datum/pda_app/cart/access_change,
+    )
+
+/obj/item/weapon/cartridge/hop/dx/antag
+    starting_apps = list(
+        /datum/pda_app/cart/status_display,
+        /datum/pda_app/cart/custodial_locator,
+        /datum/pda_app/cart/supply_records,
+        /datum/pda_app/cart/mulebot,
+        /datum/pda_app/cart/access_change/antag,
+    )
+
+/datum/pda_app/cart/access_change
+    name = "Remote Access Change"
+    desc = "Remotely changes the access of an ID in a selected PDA"
+    category = "Utilities"
+	icon = "pda_money"
+	var/hacked = FALSE
+	var/obj/item/device/pda/selected_pda = null
+
+/datum/pda_app/cart/access_change/antag
+	hacked = TRUE
+
+/datum/pda_app/cart/access_change/get_dat(var/mob/user)
+	var/dat = "{
+		<h4><span class='pda_icon pda_money'></span> Remote access change</h4>
+		Target identity: <a href='?src=\ref[src];select_pda=1'>[selected_pda ? selected_pda.name : "Select a PDA"]</a><br>
+		}"
+	if(!hacked)
+		dat += "Authorized identity: [pda_device.id ? pda_device.id.name : "None"]<br>"
+	if(selected_pda)
+		dat += "Registered name:  <a href='?src=\ref[src];edit_name'>[selected_pda.id.registered_name]</a><br>"
+		for(var/i = 1; i <= 7; i++)
+			dat += "<div style='float: left'><b>[get_region_accesses_name(i)]</b><br>"
+			for(var/access in get_region_accesses(i))
+				var/aname = get_access_desc(access)
+				dat += "<a href='?src=\ref[src];access=[access]'>[aname]</a><br>"
+			dat += "<br></div>"
+	return dat
+
+/datum/pda_app/cart/access_change/Topic(href, href_list)
+	if(..())
+		return
+	var/mob/living/U = usr
+	if(!istype(U))
+		return
+	if(href_list["select_pda"])
+		var/list/pda_with_id = list()
+		for(var/obj/item/device/pda/pda_id in sortNames(get_viewable_pdas()))
+			if(pda_id.id)
+				pda_with_id += pda_id
+		if(!pda_with_id.len)
+			return
+		selected_pda = input(U, "Select a PDA to modify the ID of", "PDA Selection") as null|anything in pda_with_id
+	if(selected_pda && selected_pda.id)
+		if(href_list["edit_name"])
+			selected_pda.id.registered_name = input(U, "Enter a new name", "ID rename", selected_pda.id.registered_name) as text
+		if(href_list["access"])
+			return
+	refresh_pda()
+
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
 	icon_state = "cart-hos"
