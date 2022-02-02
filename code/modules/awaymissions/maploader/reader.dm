@@ -331,8 +331,10 @@ var/list/map_dimension_cache = list()
 	//finally instance all remainings objects/mobs
 	if(overwrite)
 		var/turf/T_old = locate(xcrd,ycrd,zcrd)
-		for(var/atom/thing in T_old)
-			qdel(T_old)
+		for(var/i in 1 to 5) // Do a few passes of this
+			for(var/atom/movable/thing in T_old)
+				if(!istype(thing,/mob/dview)) // Doesn't like this
+					qdel(thing)
 	for(index=1,index < first_turf_index,index++)
 		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
