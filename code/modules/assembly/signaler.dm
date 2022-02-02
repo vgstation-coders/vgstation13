@@ -52,7 +52,7 @@
 			qdel(src)
 	
 	if(issignaler(W))
-		var/obj/item/assembly/signaler/signaler2 = W
+		var/obj/item/device/assembly/signaler/signaler2 = W
 		if(secured && signaler2.secured)
 			code = signaler2.code
 			set_frequency(signaler2.frequency)
