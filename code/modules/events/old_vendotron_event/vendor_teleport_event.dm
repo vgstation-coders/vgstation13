@@ -34,7 +34,7 @@
 	for(var/obj/machinery/vending/aVendor in all_machines)
 		if(!is_type_in_list(aVendor, canReplace))
 			continue
-		if(aVendor.loc.z != STATION_Z)
+		if(aVendor.loc.z != map.zMainStation)
 			continue
 		possibleVends.Add(aVendor)
 	if(!possibleVends.len)	//Copy paste from infestation
