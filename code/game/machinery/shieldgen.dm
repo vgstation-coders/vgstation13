@@ -314,9 +314,11 @@
 		var/recalc = 0
 		var/locked = 1
 		var/destroyed = 0
+		var/shieldload = 0
 //		var/maxshieldload = 200
 		var/datum/power_connection/consumer/cable/power_connection = null
 		var/storedpower = 0
+		var/storedpower_consumption = 50
 		flags = FPRINT
 		siemens_coefficient = 1
 		use_power = MACHINE_POWER_USE_GRID
@@ -325,7 +327,6 @@
 
 /obj/machinery/shieldwallgen/New()
 	power_connection = new(src)
-	power_connection.power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	. = ..()
 
 /obj/machinery/shieldwallgen/Destroy()
@@ -342,30 +343,25 @@
 	req_access = null
 
 /obj/machinery/shieldwallgen/proc/power()
-	if(!anchored)
-		power = 0
-		return 0
-
-	if (!(power_connection.connected || power_connection.connect()))
+	if (!anchored)
+		power = FALSE
 		return
 
-	var/datum/powernet/PN = power_connection.get_powernet()
-	if(!PN)
-		power = 0
-		return 0
+	if((power_connection.connected || power_connection.connect()))
+		// Store whatever power we've received this tick
+		storedpower += shieldload * power_connection.get_satisfaction()
 
-	var/surplus = max(PN.avail - PN.get_load(), 0)
-	var/shieldload = min(rand(50,200), surplus)
-	if(shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
-		power = 0
-		return 0
+		// Request power for next tick
+		shieldload = rand(storedpower_consumption, storedpower_consumption * 4)
+		power_connection.add_load(shieldload)
+
+	// Attemp to consume stored power. If enough, we're powered,
+	if (storedpower >= storedpower_consumption)
+		storedpower -= storedpower_consumption
+		clamp(storedpower, 0, maxstoredpower)
+		power = TRUE
 	else
-		power = 1	// IVE GOT THE POWER!
-		if(PN) //runtime errors fixer. They were caused by PN.newload trying to access missing network in case of working on stored power.
-			storedpower += shieldload
-			power_connection.add_load(shieldload) //uses powernet power.
-//		message_admins("[PN.load]", 1)
-//		use_power(250) //uses APC power
+		power = FALSE
 
 /obj/machinery/shieldwallgen/attack_hand(mob/user as mob)
 	if(!anchored)
@@ -397,12 +393,6 @@
 /obj/machinery/shieldwallgen/process()
 	spawn(100)
 		power()
-		if(power)
-			storedpower -= 50 //this way it can survive longer and survive at all
-	if(storedpower >= maxstoredpower)
-		storedpower = maxstoredpower
-	if(storedpower <= 0)
-		storedpower = 0
 //	if(shieldload >= maxshieldload) //there was a loop caused by specifics of process(), so this was needed.
 //		shieldload = maxshieldload
 
@@ -484,7 +474,6 @@
 	. = ..()
 	if(!.)
 		return
-	power()
 
 /obj/machinery/shieldwallgen/attack_ghost(mob/user)
 	if(isAdminGhost(user))
