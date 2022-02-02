@@ -241,7 +241,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				21		// For the Head-Up Display
+#define HUD_PLANE 				22		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 			0
 	#define HUD_BASE_LAYER		 		1
@@ -253,7 +253,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
 
-#define ABOVE_HUD_PLANE 		22		// For being above the Head-Up Display
+#define ABOVE_HUD_PLANE 		23		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()
