@@ -38,17 +38,22 @@
     time_created = world.time
     time_limit = rand(7,17) //2 minutes is spent transiting it and it gets created at the start of that, so really 5-15
 
-    var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
-    var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
-    var/vox_name = ""
-    for(var/j = 1 to rand(3,8))
-        vox_name += pick(vox_name_syllables)
-    vox_name = capitalize(vox_name)
-    var/insect_name
-    for(var/k = 1 to rand(2,3))
-        insect_name += pick(insectoid_name_syllables)
-    insect_name = capitalize(insect_name)
-    origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
+    var/list/player_names = list()
+    for(var/mob/M in player_list)
+        player_names += M.name
+    do // Same as station check, but with names
+        var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+        var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+        var/vox_name = ""
+        for(var/j = 1 to rand(3,8))
+            vox_name += pick(vox_name_syllables)
+        vox_name = capitalize(vox_name)
+        var/insect_name
+        for(var/k = 1 to rand(2,3))
+            insect_name += pick(insectoid_name_syllables)
+        insect_name = capitalize(insect_name)
+        origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
+    while(origin_sender_name in player_names)
 
     SSsupply_shuttle.cargo_forwards.Add(src)
 
