@@ -24,7 +24,7 @@
 	var/mob/living/simple_animal/parent_grue														//which grue laid this egg, if any
 	var/bright_limit_gain = 1											//maximum brightness on tile for health regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health
-	var/hg_mult = 1										//multiplier for health gained per tick when on dark tile
+	var/hg_mult = 2										//multiplier for health gained per tick when on dark tile
 	var/hd_mult = 4									 //multiplier for health drained per tick on bright tile. eggs are more sensitive to light than hatched grues
 	var/current_brightness=0
 

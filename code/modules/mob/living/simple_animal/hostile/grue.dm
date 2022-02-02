@@ -28,7 +28,7 @@
 
 	//VARS
 	var/shadowpower = 0											 //shadow power absorbed
-	var/maxshadowpower = 250									   //max shadowpower
+	var/maxshadowpower = 200									   //max shadowpower
 	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
 	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
 	var/moulttime = 30 //time required to moult to a new form (seconds)
@@ -42,9 +42,9 @@
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
 	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
 
-	var/pg_mult = 3										 //multiplier for power gained per tick when on dark tile
+	var/pg_mult = 2										 //multiplier for power gained per tick when on dark tile
 	var/pd_mult = 0									  //multiplier for shadow power drained per tick on bright tile (0=disabled)
-	var/hg_mult = 1										//base multiplier for health gained per tick when on dark tile
+	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
 	var/hd_mult = 2									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
 //	var/show_desc = TRUE										   //For the ability menu
 
@@ -56,6 +56,9 @@
 	var/busy=0 //busy attempting to lay an egg or eat
 
 	var/eattime= 5 SECONDS //how long it takes to eat someone
+	var/digest = 0 //how many seconds of healing left after feeding
+	var/digest_heal = -3 //how much health restored per second after feeding (negative heals)
+
 
 	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
 	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue is exposed to light, but this effect dissipates after going back into darkness
@@ -120,7 +123,10 @@
 		else
 			dark_dim_light=GRUE_DIM
 
-
+		//apply eating-based healing before processing light-based damage or healing
+		if(digest)
+			apply_damage(digest_heal,BRUTE)
+			digest--
 
 		switch(dark_dim_light)
 			if(GRUE_DARK) //dark
@@ -134,6 +140,7 @@
 
 
 		accum_light_expos_mult=max(1,accum_light_expos_mult+accum_light_expos_gain_dark_dim_light[dark_dim_light+1])//modify light damage multiplier based on how long the grue's been in light recently
+
 
 		//handle shadow power gain or drain
 		sp_adjust()
@@ -238,8 +245,8 @@
 		melee_damage_upper = 5
 		attacktext = "bites"
 		maxHealth=50
-		maxshadowpower = 250
-		moultcost=250
+		maxshadowpower = 100
+		moultcost=100
 		lightresist=1
 		environment_smash_flags = 0
 		attack_sound = 'sound/weapons/bite.ogg'
@@ -260,8 +267,8 @@
 		melee_damage_upper = 15
 		attacktext = "chomps"
 		maxHealth=100
-		maxshadowpower = 500
-		moultcost=500
+		maxshadowpower = 200
+		moultcost = 200
 		lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
@@ -278,7 +285,7 @@
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
 		maxHealth = 200
-		maxshadowpower = 1000
+		maxshadowpower = 500
 		moultcost=0 //not needed for adults
 		melee_damage_lower = 20
 		melee_damage_upper = 30
@@ -513,6 +520,9 @@
 	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
+
+		digest+=25 //add 25 seconds of increased healing
+
 
 		//Upgrade the grue's stats as it feeds
 		if(E.mind) //eaten creature must have a mind to power up the grue
