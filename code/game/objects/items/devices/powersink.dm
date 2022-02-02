@@ -16,6 +16,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_SYNDICATE + "=5"
 	var/drain_rate = 600000		// amount of power to drain per tick
+	var/apc_drain_rate = 50 	// amount of power to drain out of each apc per tick if there's not enough power on the grid
 	var/power_drained = 0 		// has drained this much power
 	var/max_power = 1e8		// maximum power that can be drained before exploding
 	var/mode = 0		// 0 = off, 1=clamped (off), 2=operating
@@ -116,9 +117,8 @@
 			set_light(12)
 
 			// found a powernet, so drain up to max power from it
-
-			var/drained = min (drain_rate, PN.avail)
-			power_connection.add_load(drained)
+			power_connection.add_load(drain_rate) // request power for next tick
+			var/drained = power_connection.get_satisfaction() * drain_rate // check how much out of our previous tick's request we've actually drained
 			power_drained += drained
 
 			// if tried to drain more than available on powernet
@@ -128,8 +128,8 @@
 					if(istype(T.master, /obj/machinery/power/apc))
 						var/obj/machinery/power/apc/A = T.master
 						if(A.operating && A.cell)
-							A.cell.charge = max(0, A.cell.charge - 50)
-							power_drained += 50
+							A.cell.charge = max(0, A.cell.charge - apc_drain_rate)
+							power_drained += apc_drain_rate
 							if(A.charging == 2)
 								A.charging = 1
 
