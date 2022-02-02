@@ -219,10 +219,13 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if(!to_read)
 		log_debug("[name] task found an empty file on [file_path]")
 		return
-	for(var/list/L in to_read)
-		data += L
-	if (data.len > 1)
-		data.Remove(data[1])	//remove previous round winner
+	else
+		var/q = to_read.len
+		for(var/i = 1; i < q; i++)
+			to_chat(world,"to_read:[to_read[i]]")
+			data[to_read[i]] = to_read[to_read[i]]
+		if (data.len > 1)
+			data.Remove(data[1])	//remove previous round winner
 
 /datum/persistence_task/vote/on_shutdown()
 	write_file(data)

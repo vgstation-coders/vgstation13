@@ -197,7 +197,7 @@ var/global/datum/controller/vote/vote = new()
 				feedback_set("map vote winner", feedbackanswer)
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
-		text += "<b>Majority Vote Result: [.] won with [greatest_votes] vote\s.</b>"
+		text += "<b>Vote Result: [.] won with [greatest_votes] vote\s.</b>"
 		for(var/c in tally)
 			if(. != c)
 				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
@@ -205,15 +205,12 @@ var/global/datum/controller/vote/vote = new()
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
 
+
+
 /datum/controller/vote/proc/persistent()
 	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
-	task.file_path = "data/persistence/votes.json"
 	task.on_init()
 	task.insert_counts(tally)
-	tally.len = 0
-	for(var/i = 1; i <= task.data.len; i++)
-		tally[task.data[i]] += task.data[task.data[i]]
-
 	task.on_shutdown()
 	return majority()
 
@@ -373,6 +370,8 @@ var/global/datum/controller/vote/vote = new()
 					maps = get_all_maps()
 				else
 					maps = get_votable_maps()
+				for (var/map in maps)
+					choices.Add(map)
 				if(!choices.len)
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
@@ -386,8 +385,18 @@ var/global/datum/controller/vote/vote = new()
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		//initialize tally
-		for (var/c in choices)
-			tally[c] = 0
+		if(config.toggle_vote_method == 2 && vote_type == "map")
+			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
+			task.file_path = "data/persistence/votes.json"
+			task.on_init()
+			for(var/i = 1; i <= choices.len; i++)
+				if(task.data.[choices[i]])
+					tally[choices[i]] = 0
+				else
+					tally[choices[i]] += task.data[choices[i]]
+		else
+			for (var/c in choices)
+				tally[c] = 0
 		if(mode == "custom")
 			text += "<br>[question]"
 
