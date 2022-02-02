@@ -54,7 +54,7 @@
 
     spawn(time_limit MINUTES) //Still an order after the time limit?
         if(src)
-            Pay(TRUE)
+            Pay("Time ran out")
 
 /datum/cargo_forwarding/Destroy()
     SSsupply_shuttle.cargo_forwards.Remove(src)
