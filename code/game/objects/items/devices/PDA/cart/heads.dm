@@ -177,7 +177,12 @@
 							if (R)
 								R.fields["override_dept"] = new_dept
 		if(href_list["access"])
-			return
+			var/access_type = text2num(href_list["access"])
+			if(access_type in get_all_accesses())
+				if(!access_type in selected_id.access)
+					selected_id.access += access_type
+				else
+					selected_id.access -= access_type
 		if(!hacked)
 			inform_change()
 	refresh_pda()
