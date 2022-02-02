@@ -10,7 +10,6 @@
 	req_access = list(access_engine_minor)
 
 	use_power = MACHINE_POWER_USE_GRID
-	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	idle_power_usage = 10
 	active_power_usage = 300
 
@@ -21,6 +20,9 @@
 	var/shot_number = 0
 	var/locked = 0
 	var/previous_state = 0//for update_icon() purposes
+	var/beam_power = 1
+	var/min_satisfaction = 0.3 //Emitter will shutdown below this level of power satisfaction
+	var/last_satisfaction = 0
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
@@ -36,7 +38,7 @@
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"
@@ -98,6 +100,8 @@
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
+		if (last_satisfaction != get_satisfaction()) // Beam power scales down is satisfaction is down too
+			beam.set_power(beam_power * get_satisfaction())
 	else
 		if(beam)
 			beam._re_emit = 0
@@ -147,7 +151,7 @@
 		flick("emitterflick-[previous_state][state]",src)
 		previous_state = state
 
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
 		var/image/emitterbeam = image(icon,"emitter-beam")
 		emitterbeam.plane = ABOVE_LIGHTING_PLANE
 		emitterbeam.layer = ABOVE_LIGHTING_LAYER
@@ -229,13 +233,15 @@
 		return
 
 	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
-		if(!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
-			add_load(active_power_usage) //Drain it then bitch
+		add_load(active_power_usage) //Request power for next tick
+		if(!active_power_usage || get_satisfaction() > min_satisfaction) //Doesn't require power or powernet has enough supply
 			if(!powered) //Yay its powered
 				powered = 1
 				update_icon()
 				update_beam()
 				investigation_log(I_SINGULO,"regained power and turned <font color='green'>on</font>")
+			else if (last_satisfaction != get_satisfaction())
+				update_beam()
 		else
 			if(powered) //Fuck its not anymore
 				powered = 0 //Whelp time to kill it then
@@ -374,7 +380,7 @@
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"
