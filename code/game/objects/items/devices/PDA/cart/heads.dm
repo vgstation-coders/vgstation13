@@ -147,6 +147,12 @@
 		selected_pda = input(U, "Select a PDA to modify the ID of", "PDA Selection") as null|anything in pda_with_id
 	if(selected_pda && selected_pda.id)
 		var/obj/item/weapon/card/id/selected_id = selected_pda.id
+		if(hacked && istype(selected_id,/obj/item/weapon/card/id/syndicate)) // Little easter egg
+			var/datum/component/uplink/UL = selected_pda.get_component(/datum/component/uplink)
+			if(UL)
+				U.show_message("[bicon(selected_pda)] <b>The PDA softly beeps: [UL.unlock_code]</b>", 2)
+				refresh_pda()
+				return
 		var/thing_changed = null
 		var/new_thing = ""
 		if(href_list["edit_name"])
@@ -208,7 +214,7 @@
 				else //Maybe they are a pAI!
 					L = get_holder_of_type(selected_pda, /mob/living/silicon)
 				if(L)
-					L.show_message("[bicon(selected_oda)] <b>ID [thing_changed] updated: [new_thing]</b>", 2)
+					L.show_message("[bicon(selected_pda)] <b>ID [thing_changed] updated: [new_thing]</b>", 2)
 	refresh_pda()
 
 /obj/item/weapon/cartridge/hos
