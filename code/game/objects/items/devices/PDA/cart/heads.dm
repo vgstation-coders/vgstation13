@@ -117,7 +117,10 @@
 	if(!hacked)
 		dat += "Authorized identity: [pda_device.id ? pda_device.id.name : "None"]<br>"
 	if(selected_pda)
-		dat += "Registered name:  <a href='?src=\ref[src];edit_name'>[selected_pda.id.registered_name]</a><br>"
+		dat += "{
+			Registered name: <a href='?src=\ref[src];edit_name'>[selected_pda.id.registered_name]</a><br>
+			Registered account: <a href='?src=\ref[src];edit_account'>[selected_pda.id.associated_account_number]</a><br>
+			}"
 		for(var/i = 1; i <= 7; i++)
 			dat += "<div style='float: left'><b>[get_region_accesses_name(i)]</b><br>"
 			for(var/access in get_region_accesses(i))
@@ -141,8 +144,21 @@
 			return
 		selected_pda = input(U, "Select a PDA to modify the ID of", "PDA Selection") as null|anything in pda_with_id
 	if(selected_pda && selected_pda.id)
+		var/obj/item/weapon/card/id/selected_id = selected_pda.id
 		if(href_list["edit_name"])
-			selected_pda.id.registered_name = input(U, "Enter a new name", "ID rename", selected_pda.id.registered_name) as text
+			selected_id.registered_name = input(U, "Enter a new name", "ID rename", selected_id.registered_name) as text
+		if(href_list["edit_account"])
+			var/account_num = input(U, "Enter a new account number", "Account number change", selected_id.associated_account_number) as num
+			var/datum/money_account/MA = get_money_account(account_num)
+			if(!MA)
+				to_chat(usr, "<span class='warning'>That account number was invalid.</span>")
+				refresh_pda()
+				return
+			if(MA.hidden)
+				to_chat(usr, "<span class='warning'>That account number is reserved.</span>")
+				refresh_pda()
+				return
+			selected_id.associated_account_number = account_num
 		if(href_list["access"])
 			return
 	refresh_pda()
