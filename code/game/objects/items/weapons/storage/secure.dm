@@ -15,7 +15,7 @@
 	var/icon_locking = "secureb"
 	var/icon_sparking = "securespark"
 	var/icon_opened = "secure0"
-	var/locked = 1
+	var/code_locked = 1
 	var/code = ""
 	var/l_code = null
 	var/l_set = 0
@@ -32,18 +32,18 @@
 	to_chat(user, "<span class='info'>The service panel is [src.open ? "open" : "closed"].</span>")
 
 /obj/item/weapon/storage/secure/AltClick()
-	if(!locked)
+	if(!code_locked)
 		..()
 
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(locked)
+	if(code_locked)
 		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
 			emagged = 1
 			src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
 			sleep(6)
 			overlays.len = 0
 			overlays += image('icons/obj/storage/storage.dmi', icon_locking)
-			locked = 0
+			code_locked = 0
 			to_chat(user, "You short out the lock on [src].")
 			return
 
@@ -78,7 +78,7 @@
 
 
 /obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
-	if (locked)
+	if (code_locked)
 		if(Adjacent(usr))
 			src.add_fingerprint(usr)
 		return
@@ -90,7 +90,7 @@
 
 /obj/item/weapon/storage/secure/proc/showInterface(mob/user)
 	user.set_machine(src)
-	var/dat = text("<TT><B>[]</B><BR>\n\nLock Status: []",src, (src.locked ? "LOCKED" : "UNLOCKED"))
+	var/dat = text("<TT><B>[]</B><BR>\n\nLock Status: []",src, (src.code_locked ? "LOCKED" : "UNLOCKED"))
 	var/message = "Code"
 	if ((src.l_set == 0) && (!src.emagged) && (!src.l_setshort))
 		dat += text("<p>\n<b>5-DIGIT PASSCODE NOT SET.<br>ENTER NEW PASSCODE.</b>")
@@ -99,7 +99,7 @@
 	if (src.l_setshort)
 		dat += text("<p>\n<font color=red><b>ALERT: MEMORY SYSTEM ERROR - 6040 201</b></font>")
 	message = text("[]", src.code)
-	if (!src.locked)
+	if (!src.code_locked)
 		message = "*****"
 	dat += {"<HR><br/>>[message]<BR>\n
 		<A href='?src=\ref[src];type=1'>1</A>-<A href='?src=\ref[src];type=2'>2</A>-<A href='?src=\ref[src];type=3'>3</A><BR>\n
@@ -118,7 +118,7 @@
 				src.l_code = src.code
 				src.l_set = 1
 			else if ((src.code == src.l_code) && (src.emagged == 0) && (src.l_set == 1))
-				src.locked = 0
+				src.code_locked = 0
 				src.overlays = null
 				overlays += image('icons/obj/storage/storage.dmi', icon_opened)
 				src.code = null
@@ -126,7 +126,7 @@
 				src.code = "ERROR"
 		else
 			if ((href_list["type"] == "R") && (src.emagged == 0) && (!src.l_setshort))
-				src.locked = 1
+				src.code_locked = 1
 				src.overlays = null
 				src.code = null
 				src.close(usr)
@@ -156,16 +156,100 @@
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
 	hitsound = "swing_hit"
+	var/obj/item/weapon/handcuffs/casecuff = null
 
-/obj/item/weapon/storage/secure/briefcase/paperpen/New()
+
+/obj/item/weapon/storage/secure/briefcase/MouseDropFrom(over_object, src_location, over_location)
+	if(istype(over_object, /mob/living/carbon/human))
+		var/mob/living/carbon/human/target = over_object
+		if(target.is_holding_item(src) && !target.stat && !target.restrained())
+			if(cant_drop && !casecuff) //so you can't bypass glue this way
+				..()
+				return
+			if(casecuff)
+				playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
+				target.visible_message("<span class='notice'>\The [target] uncuffs \the [src] from \his wrist.</span>", "<span class='notice'>You uncuff \the [src] from your wrist.</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
+				casecuff.forceMove(target) //Exited() gets called, stuff happens there
+			else 
+				if(!target.mutual_handcuffs && target.find_held_item_by_type(/obj/item/weapon/handcuffs)) //need handcuffs in their hands to do this
+					var/cuffslot = target.find_held_item_by_type(/obj/item/weapon/handcuffs)
+					var/obj/item/weapon/handcuffs/cuffinhand = target.held_items[cuffslot]
+					if(target.drop_item(cuffinhand, src))
+						casecuff = cuffinhand
+						playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
+						target.visible_message("<span class='notice'>\The [target] cuffs \the [src] to \his wrist with \the [casecuff].</span>", "<span class='notice'>You cuff \the [src] to your wrist with \the [casecuff].</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
+						if(istype(casecuff, /obj/item/weapon/handcuffs/syndicate))
+							var/obj/item/weapon/handcuffs/syndicate/syncuff = casecuff
+							if(syncuff.mode == SYNDICUFFS_ON_APPLY && !syncuff.charge_detonated)
+								if(syncuff.charge_detonated) //this is bad but syndicuffs are not meant for this sort of stuff
+									return
+								syncuff.charge_detonated = TRUE
+								sleep(3)
+								explosion(get_turf(target), 0, 1, 3, 0)
+								qdel(casecuff)
+								casecuff = null
+								return
+						canremove = 0 //can't drop the case
+						cant_drop = 1
+						casecuff.canremove = 0 //can't strip the cuffs off either
+						casecuff.cant_drop = 1 //but it'll fall off if their wrist falls off :)
+						target.mutual_handcuffs = casecuff
+						casecuff.invisibility = INVISIBILITY_MAXIMUM
+						var/obj/abstract/Overlays/O = target.obj_overlays[HANDCUFF_LAYER]
+						O.icon = 'icons/obj/cuffs.dmi'
+						O.icon_state = "singlecuff[cuffslot]"
+						O.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
+						O.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
+						target.obj_to_plane_overlay(O,HANDCUFF_LAYER)
+						close_all()
+						storage_locked = TRUE
+				else
+					to_chat(target, "<span class='warning'>You can't cuff \the [src] to your wrist without something to cuff with.</span>")
+	
+	if(code_locked)
+		if(Adjacent(usr))
+			src.add_fingerprint(usr)
+		return
 	..()
-	new /obj/item/weapon/paper(src)
-	new /obj/item/weapon/pen(src)
+	
+/obj/item/weapon/storage/secure/briefcase/Exited(atom/movable/Obj) //the casecuffs are stored invisibly in the case
+	if(casecuff && Obj == casecuff)  //when stripped, they get forcemoved from the case, that's why this works
+		var/mob/living/carbon/human/target = loc
+		target.mutual_handcuffs = null
+		target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
+		casecuff.invisibility = initial(casecuff.invisibility)
+		canremove = 1 
+		cant_drop = 0
+		casecuff.forceMove(target.loc) //otherwise the cuff copy ghosts show up
+		casecuff.on_restraint_removal(target) //for syndicuffs
+		casecuff = null
+		storage_locked = FALSE
+	..()
+
+/obj/item/weapon/storage/secure/briefcase/paperpen
+	items_to_spawn = list(
+		/obj/item/weapon/paper,
+		/obj/item/weapon/pen,
+	)
+
+/obj/item/weapon/storage/secure/briefcase/paperpen/dropped(mob/user)
+	..()
+	if(casecuff)
+		var/mob/living/carbon/human/uncuffed = user
+		uncuffed.mutual_handcuffs = null
+		uncuffed.overlays -= uncuffed.obj_overlays[HANDCUFF_LAYER]
+		casecuff.invisibility = 0
+		casecuff.forceMove(user.loc)
+		canremove = 1 
+		cant_drop = 0
+		casecuff.on_restraint_removal(uncuffed) //for syndicuffs
+		casecuff = null
+		storage_locked = FALSE
 
 /obj/item/weapon/storage/secure/briefcase/attack_hand(mob/user as mob)
-	if ((src.loc == user) && (src.locked == 1))
+	if ((src.loc == user) && (src.code_locked == 1))
 		to_chat(user, "<span class='warning'>[src] is locked and cannot be opened!</span>")
-	else if ((src.loc == user) && (!src.locked))
+	else if ((src.loc == user) && (!src.code_locked))
 		if(!stealthy(user))
 			playsound(src, "rustle", 50, 1, -5)
 		if (user.s_active)
@@ -188,7 +272,7 @@
 	update_icon()
 
 /obj/item/weapon/storage/secure/briefcase/update_icon()
-	if(locked || emagged)
+	if(code_locked || emagged)
 		item_state = "secure-r"
 	else
 		item_state = "secure-g"
@@ -234,14 +318,14 @@
 
 		return*/
 
-/obj/item/weapon/storage/secure/briefcase/assassin/New()
-	..()
-	for(var/i = 1 to 3)
-		new /obj/item/weapon/spacecash/c1000(src)
-	new /obj/item/weapon/gun/energy/crossbow(src)
-	new /obj/item/weapon/gun/projectile/mateba(src)
-	new /obj/item/ammo_storage/box/a357(src)
-	new /obj/item/weapon/c4(src)
+/obj/item/weapon/storage/secure/briefcase/assassin
+	items_to_spawn = list(
+		/obj/item/weapon/spacecash/c1000 = 3,
+		/obj/item/weapon/gun/energy/crossbow,
+		/obj/item/weapon/gun/projectile/mateba,
+		/obj/item/ammo_storage/box/a357,
+		/obj/item/weapon/c4,
+	)
 
 // -----------------------------
 //        Secure Safe
@@ -261,14 +345,13 @@
 	anchored = 1.0
 	density = 0
 	cant_hold = list("/obj/item/weapon/storage/secure/briefcase")
-
-/obj/item/weapon/storage/secure/safe/New()
-	..()
-	new /obj/item/weapon/paper(src)
-	new /obj/item/weapon/pen(src)
+	items_to_spawn = list(
+		/obj/item/weapon/paper,
+		/obj/item/weapon/pen,
+	)
 
 /obj/item/weapon/storage/secure/safe/attack_hand(mob/user as mob)
-	if(!locked)
+	if(!code_locked)
 		if(user.s_active)
 			user.s_active.close(user) //Close and re-open
 		show_to(user)
@@ -277,11 +360,7 @@
 // Clown planet WMD storage
 /obj/item/weapon/storage/secure/safe/clown
 	name="WMD Storage"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/pie = 10)
 
-/obj/item/weapon/storage/secure/safe/clown/New()
-	for(var/i=0;i<10;i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/pie(src)
-
-/obj/item/weapon/storage/secure/safe/HoS/New()
-	..()
-	//new /obj/item/weapon/storage/lockbox/clusterbang(src) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)
+/obj/item/weapon/storage/secure/safe/HoS
+	//items_to_spawn = list(/obj/item/weapon/storage/lockbox/clusterbang) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)

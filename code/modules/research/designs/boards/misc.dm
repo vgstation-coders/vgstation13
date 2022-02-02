@@ -87,7 +87,6 @@
 	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	circuitboard/ecb/access_controller
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/ecb/advanced_airlock_controller
 
@@ -162,3 +161,15 @@
 	category = "Hardsuit_Upgrades"
 	materials = list(MAT_GLASS = 2000, MAT_GOLD = 1000, MAT_PLASMA = 1000)
 	build_path = /obj/item/rig_module/rad_shield/adv
+
+//Transit tube module
+
+/datum/design/transit_pod
+	name = "Circuit Design (Transit Pod Mainboard)"
+	desc = "Allows for the construction of a transit tube pod."
+	id = "transitpod_main"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/mecha/transitpod

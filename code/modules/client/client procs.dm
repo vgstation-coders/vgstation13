@@ -137,18 +137,6 @@
 
 	TopicData = null							//Prevent calls to client.Topic from connect
 
-	//Admin Authorisation
-	holder = admin_datums[ckey]
-	if(holder)
-		admins += src
-		holder.owner = src
-
-	var/static/list/localhost_addresses = list("127.0.0.1","::1")
-	if(config.localhost_autoadmin)
-		if((!address && !world.port) || (address in localhost_addresses))
-			var/datum/admins/D = new /datum/admins("Host", R_HOST, src.ckey)
-			D.associate(src)
-
 	if(connection != "seeker")			//Invalid connection type.
 		if(connection == "web")
 			if(!holder)
@@ -201,11 +189,6 @@
 	if( (world.address == address || !address) && !host )
 		host = key
 		world.update_status()
-
-	if(holder)
-		add_admin_verbs()
-		admin_memo_show()
-		holder.add_menu_items()
 
 	log_client_to_db()
 
@@ -294,12 +277,25 @@
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
-	if(holder && prefs.toggles & AUTO_DEADMIN)
-		message_admins("[src] was automatically de-admined.")
-		deadmin()
-		verbs += /client/proc/readmin
-		deadmins += ckey
-		to_chat(src, "<span class='interface'>You are now de-admined.</span>")
+	//Admin Authorisation
+	var/static/list/localhost_addresses = list("127.0.0.1","::1")
+	if(config.localhost_autoadmin)
+		if((!address && !world.port) || (address in localhost_addresses))
+			holder = new /datum/admins("Host", R_HOST, src.ckey)
+	else
+		holder = admin_datums[ckey]
+
+	if(holder)
+		if(prefs.toggles & AUTO_DEADMIN)
+			message_admins("[src] was automatically de-admined.")
+			deadmin()
+			verbs += /client/proc/readmin
+			deadmins += ckey
+			to_chat(src, "<span class='interface'>You are now de-admined.</span>")
+		else
+			holder.associate(src)
+			admin_memo_show()
+
 	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
 	//////////////
 	//DISCONNECT//

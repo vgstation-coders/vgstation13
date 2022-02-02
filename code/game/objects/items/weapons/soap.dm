@@ -68,6 +68,14 @@
 		qdel(target)
 		on_successful_use(user)
 
+	else if(istype(target,/obj/effect/rune))
+		var/obj/effect/rune/R = target
+		if (!R.activated)
+			user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
+				"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
+			qdel(target)
+			on_successful_use(user)
+
 	else if(istype(target,/turf/simulated))
 		var/turf/simulated/T = target
 		var/list/cleanables = list()
@@ -76,6 +84,10 @@
 			if(!istype(CC) || !CC)
 				continue
 			cleanables += CC
+
+		for(var/obj/effect/rune/R in T)
+			if(!R.activated)
+				cleanables += R
 
 		for(var/obj/effect/decal/cleanable/CC in get_turf(user)) //Get all nearby decals drawn on this wall and erase them
 			if(CC.on_wall == target)

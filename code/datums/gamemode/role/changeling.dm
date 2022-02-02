@@ -13,16 +13,16 @@
 	var/list/absorbed_languages = list()
 	var/list/absorbed_chems = list()
 	var/absorbedcount = 0
+	var/splitcount = 0
+	//chem points
 	var/chem_charges = 20
 	var/chem_recharge_rate = 0.5
 	var/chem_storage = 50
 	var/sting_range = 1
 	var/changelingID = "Changeling"
 	var/geneticdamage = 0
-	var/isabsorbing = 0
-	var/isreviving = 0
 
-	powerpoints = 5
+	powerpoints = 4	//evolve points
 
 	var/mimicing = ""
 

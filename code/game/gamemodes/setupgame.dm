@@ -33,6 +33,7 @@ var/SMALLSIZEBLOCK = 0
 // Goon Stuff
 ///////////////////////////////
 // Disabilities
+var/ANEMIABLOCK = 0
 var/LISPBLOCK = 0
 var/MUTEBLOCK = 0
 var/RADBLOCK = 0
@@ -141,6 +142,7 @@ var/LACTOSEBLOCK = 0
 	/////////////////////////////////////////////
 
 	// Disabilities
+	ANEMIABLOCK    = getAssignedBlock("ANEMIA",     numsToAssign)
 	LISPBLOCK      = getAssignedBlock("LISP",       numsToAssign)
 	MUTEBLOCK      = getAssignedBlock("MUTE",       numsToAssign)
 	RADBLOCK       = getAssignedBlock("RAD",        numsToAssign)

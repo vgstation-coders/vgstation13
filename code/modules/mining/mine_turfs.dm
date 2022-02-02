@@ -176,7 +176,7 @@ var/list/icon_state_to_appearance = list()
 	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
 	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
 
-turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	mineral_turfs -= src
 	return ..(N, tell_universe, 1, allow)
 
@@ -215,6 +215,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	. = ..()
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
+		if(H.gloves)
+			var/obj/item/clothing/gloves/G = H.gloves
+			if(istype(G,/obj/item/clothing/gloves/mining))
+				G.Touch(AM,H,1)
+				return
 		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
 			attackby(H.get_active_hand(), H)
 		else if(istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
@@ -560,7 +565,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				var/obj/item/stack/rods/R = new(src)
 				R.amount = rand(5,25)
 			if(2)
-				var/obj/item/stack/tile/plasteel/R = new(src)
+				var/obj/item/stack/tile/metal/R = new(src)
 				R.amount = rand(1,5)
 			if(3)
 				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal((src))

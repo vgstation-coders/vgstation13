@@ -393,7 +393,7 @@
 	if(ourVendor)
 		ourVendor.forceMove(loc)
 	else
-		explosion(loc, 1,2,2)
+		explosion(loc, 1,2,2, whodunnit = src)
 	..(gibbed)
 	qdel(src)
 

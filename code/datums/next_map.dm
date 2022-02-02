@@ -75,6 +75,25 @@
 		return FALSE
 	return ..()
 
+/datum/next_map/island
+	name = "Island Station"
+	path = "Island"
+	min_players = 25
+	
+/datum/next_map/line
+	name = "Frankenline Station"
+	path = "line"
+	min_players = 25
+	
+/datum/next_map/line/is_votable()
+	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
+	if (MM != 10)
+		var/msg = "Skipping map [name] as this is no longer the Halloween season."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
 /datum/next_map/lamprey
 	name = "Lamprey Station"
 	path = "Lamprey"
@@ -151,32 +170,17 @@
 		warning(msg)
 		return FALSE
 
-	var/avg_temp = 0
-	var/avg_divide = 0
-	for(var/obj/machinery/alarm/alarm in machines)
-		var/turf/simulated/location = alarm.loc
-		if(!istype(location))
-			continue
-		var/datum/gas_mixture/environment = location.return_air()
-		if(!environment)
-			continue
-		avg_temp += environment.temperature
-		avg_divide++
-
-	if(avg_divide)
-		avg_temp /= avg_divide // quick and easy way to get the mean, was calculating both values along the way
-	else
-		var/msg = "Skipping map [name] as no suitable air alarms were found to get average temperature."
-		message_admins(msg)
-		warning(msg)
-		return FALSE
-
-	if(avg_temp > T0C)
+	if(get_station_avg_temp() >= T0C)
 		var/msg = "Skipping map [name] as station average temperature is above 0C."
 		message_admins(msg)
 		warning(msg)
 		return FALSE
 	return ..()
+
+/datum/next_map/nerve
+	name = "Nerve Station"
+	path = "nervestation"
+	min_players = 20
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()

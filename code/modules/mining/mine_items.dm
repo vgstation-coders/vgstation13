@@ -196,7 +196,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_LARGE
 	sharpness = 0.6
 	sharpness_flags = SHARP_TIP
-	starting_materials = list(MAT_IRON = 3750) //one sheet, but where can you make them?
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5) // Blacksmithing recipe
 	w_type = RECYK_METAL
 	toolspeed = 0.4 //moving the delay to an item var so R&D can make improved picks. --NEO
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
@@ -226,6 +226,7 @@ proc/move_mining_shuttle()
 	toolspeed = 0.3
 	origin_tech = Tc_MATERIALS + "=3"
 	desc = "This makes no metallurgic sense."
+	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/jackhammer
 	name = "sonic jackhammer"
@@ -256,6 +257,7 @@ proc/move_mining_shuttle()
 	toolspeed = 0.2
 	origin_tech = Tc_MATERIALS + "=4"
 	desc = "This makes no metallurgic sense."
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/plasmacutter
 	name = "plasma torch"
@@ -344,7 +346,8 @@ proc/move_mining_shuttle()
 	toolspeed = 0.1
 	sharpness = 1.2
 	origin_tech = Tc_MATERIALS + "=6;" + Tc_ENGINEERING + "=4"
-	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
+	desc = "A pickaxe with a diamond coated pick head, this is just like minecraft."
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 3.9, MAT_DIAMOND = CC_PER_SHEET_DIAMOND * 0.1, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5) // Letting miners recycle their diamond pickaxes into 4 diamond sheets would be a tad bit much, so let's make it mostly iron with diamond bits
 
 /obj/item/weapon/pickaxe/drill
 	name = "mining drill" // Can dig sand as well!
@@ -394,6 +397,18 @@ proc/move_mining_shuttle()
 	toolspeed = 0.4
 	diggables = DIG_SOIL //soil only
 
+/obj/item/weapon/pickaxe/shovel/attack(var/mob/living/M, var/mob/user)
+	var/obj/item/I
+	if(user.zone_sel.selecting == "l_hand")
+		I = M.get_held_item_by_index(GRASP_LEFT_HAND)
+	else if(user.zone_sel.selecting == "r_hand")
+		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
+	if(I && istype(I,src.type) && user.a_intent == I_HELP)
+		playsound(get_turf(user), "trayhit", 50, 1)
+		visible_message("<span class='notice'>[user] high shovels [M].</span>", "<span class='notice'>You high shovel [M].</span>")
+	else
+		..()
+
 /obj/item/weapon/pickaxe/shovel/spade
 	name = "spade"
 	desc = "A small tool for digging and moving dirt."
@@ -434,7 +449,7 @@ proc/move_mining_shuttle()
 
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)
-	if(!device_turf || device_turf.z == CENTCOMM_Z || device_turf.z > map.zLevels.len)
+	if(!device_turf || device_turf.z == map.zCentcomm || device_turf.z > map.zLevels.len)
 		to_chat(user, "<span class='notice'>You're having difficulties getting [src] to work.</span>")
 		return
 	else

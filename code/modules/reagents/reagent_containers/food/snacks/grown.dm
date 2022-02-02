@@ -405,6 +405,13 @@ var/list/special_fruits = list()
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
 	fragrance = INCENSE_LEAFY
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage
+	name = "plasma cabbage"
+	desc = "Not to be confused with red cabbage."
+	potency = 25
+	filling_color = "#99335C"
+	plantname = "plasmacabbage"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"

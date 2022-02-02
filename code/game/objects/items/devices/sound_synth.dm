@@ -39,7 +39,8 @@
 	"YEET" = "selected_sound=sound/effects/yeet.ogg&shiftpitch=1&volume=50",
 	"Time Stop" = "selected_sound=sound/effects/theworld3.ogg&shiftpitch=0&volume=80",
 	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80",
-	"SPS" = "selected_sound=sound/items/fake_SPS.ogg&shiftpitch=0&volume=100"
+	"SPS" = "selected_sound=sound/items/fake_SPS.ogg&shiftpitch=0&volume=100",
+	"Dramatic" = "selected_sound=goon/sound/effects/dramatic.ogg&shiftpitch=0&volume=80"
 	)
 
 /obj/item/device/soundsynth/verb/pick_sound()

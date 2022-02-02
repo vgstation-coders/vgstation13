@@ -533,11 +533,13 @@
 /obj/item/device/camera/cartridge/printpicture(mob/user, icon/temp, mobs, flag) //Add photos to cart
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	host_cart.stored_photos += P
+	host_cart.photo_number++
 	temp = ImagePDA(temp)
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
 	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
+	P.name = "photo [host_cart.photo_number]"
 	P.icon = ic
 	P.img = temp
 	P.info = mobs

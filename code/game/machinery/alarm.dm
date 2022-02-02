@@ -1595,4 +1595,21 @@ var/global/list/firealarms = list() //shrug
 		update_icon()
 	return ..()
 
+/proc/get_station_avg_temp()
+	var/avg_temp = 0
+	var/avg_divide = 0
+	for(var/obj/machinery/alarm/alarm in machines)
+		var/turf/simulated/location = alarm.loc
+		if(!istype(location))
+			continue
+		var/datum/gas_mixture/environment = location.return_air()
+		if(!environment)
+			continue
+		avg_temp += environment.temperature
+		avg_divide++
+
+	if(avg_divide)
+		return avg_temp / avg_divide
+	return T0C
+
 #undef CHECKED_GAS

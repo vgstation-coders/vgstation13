@@ -241,7 +241,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = amount))
 		return 0
 
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
@@ -253,7 +253,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = OXY, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = OXY, "amount" = amount))
 		return 0
 
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
@@ -270,7 +270,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = TOX, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = TOX, "amount" = amount))
 		return 0
 
 	var/mult = 1
@@ -294,7 +294,7 @@
 		return 0	//godmode
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = amount))
 		return 0
 
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
@@ -306,7 +306,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = CLONE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = CLONE, "amount" = amount))
 		return 0
 
 	if(ishuman(src))
@@ -328,7 +328,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = BRAIN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRAIN, "amount" = amount))
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
@@ -713,9 +713,9 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
-							invoke_event(/event/before_move)
+							INVOKE_EVENT(src, /event/before_move)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
-							invoke_event(/event/after_move)
+							INVOKE_EVENT(src, /event/after_move)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 					else
@@ -736,6 +736,13 @@ Thanks.
 
 	if(T != loc)
 		handle_hookchain(Dir)
+
+	if(client && client.eye && istype(client.eye,/turf/simulated/wall))
+		var/turf/simulated/wall/W = client.eye
+		if (!Adjacent(W))
+			client.eye = src
+			client.perspective = MOB_PERSPECTIVE
+			W.peeper = null
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
@@ -783,7 +790,7 @@ Thanks.
 
 	var/turf/T = get_turf(src)
 
-	invoke_event(/event/resist, list("user" = src))
+	INVOKE_EVENT(src, /event/resist, "user" = src)
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
@@ -954,7 +961,7 @@ Thanks.
 
 			else if(iscarbon(L))
 				var/mob/living/carbon/C = L
-				if(C.handcuffed)
+				if(C.restrained())
 					if(isalienadult(C) || (M_HULK in usr.mutations))
 						C.visible_message("<span class='warning'>[C] is trying to forcefully unbuckle!</span>",
 						                   "<span class='warning'>You attempt to forcefully unbuckle (This will take around five seconds).</span>")
@@ -1124,124 +1131,89 @@ Thanks.
 				ExtinguishMob()
 			return
 
-	//breaking out of handcuffs
-		if(CM.handcuffed && CM.canmove)
-			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
-				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
-								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
-				spawn(0)
-					if(do_after(CM, CM, 50))
-						if(!CM.handcuffed || CM.locked_to)
-							return
-						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.handcuffed]!</span>",
-										   "<span class='notice'>You successfully break \the [CM.handcuffed].</span>")
-						if(!isalien(CM))
-							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-						var/obj/item/cuffs = CM.handcuffed
-						CM.drop_from_inventory(cuffs)
-						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
-							qdel(cuffs)
-					else
-						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
-
-
-			else
-				var/obj/item/HC = CM.handcuffed
-				var/resist_time = HC.restraint_resist_time
-				if(!(resist_time))
-					resist_time = 2 MINUTES //Default
-				CM.visible_message("<span class='danger'>[CM] attempts to remove \the [HC]!</span>",
-								   "<span class='warning'>You attempt to remove \the [HC] (this will take around [(resist_time)/600] minutes and you need to stand still).</span>",
-								   self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
-				spawn(0)
-					if(do_after(CM,CM, resist_time))
-						if(!CM.handcuffed || CM.locked_to)
-							return // time leniency for lag which also might make this whole thing pointless but the server
-						CM.visible_message("<span class='danger'>[CM] manages to remove \the [HC]!</span>",
-										   "<span class='notice'>You successfully remove \the [HC].</span>",
-										   self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
-						CM.drop_from_inventory(HC)
-					else
-						CM.simple_message("<span class='warning'>Your attempt to remove \the [HC] was interrupted.</span>",
-							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
-
-		else if(CM.legcuffed && CM.canmove)
-			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
-				CM.visible_message("<span class='danger'>[CM] is trying to break the legcuffs!</span>",
-								   "<span class='warning'>You attempt to break your legcuffs. (This will take around five seconds and you need to stand still).</span>")
-				spawn(0)
-					if(do_after(CM, CM, 50))
-						if(!CM.legcuffed || CM.locked_to)
-							return
-						CM.visible_message("<span class='danger'>[CM] manages to break the legcuffs!</span>",
-										   "<span class='notice'>You successfully break your legcuffs.</span>")
-						if(!isalien(CM))
-							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-						qdel(CM.legcuffed)
-						CM.legcuffed = null
-						CM.update_inv_legcuffed()
-					else
-						to_chat(CM, "<span class='warning'>Your legcuffing breaking attempt was interrupted.</span>")
-			else
-				var/obj/item/weapon/legcuffs/HC = CM.legcuffed
-				var/breakouttime = HC.breakouttime
-				if(!(breakouttime))
-					breakouttime = 1200 //Default
-				CM.visible_message("<span class='danger'>[CM] attempts to remove [HC]!</span>",
-								   "<span class='warning'>You attempt to remove [HC]. (This will take around [(breakouttime)/600] minutes and you need to stand still).</span>")
-				spawn(0)
-					if(do_after(CM, CM, breakouttime))
-						if(!CM.legcuffed || CM.locked_to)
-							return // time leniency for lag which also might make this whole thing pointless but the server
-						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
-										   "<span class='notice'>You successfully remove [HC].</span>")
-						CM.legcuffed.forceMove(usr.loc)
-						CM.legcuffed = null
-						CM.update_inv_legcuffed()
-					else
-						to_chat(CM, "<span class='warning'>Your unlegcuffing attempt was interrupted.</span>")
-		else if(CM.mutual_handcuffs && CM.canmove)
-			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
-				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
-								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
-				spawn(0)
-					if(do_after(CM, CM, 50))
-						if(!CM.mutual_handcuffs || CM.locked_to)
-							return
-						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.mutual_handcuffs]!</span>",
-										   "<span class='notice'>You successfully break \the [CM.mutual_handcuffs].</span>")
-						if(!isalien(CM))
-							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-						var/obj/item/cuffs = CM.mutual_handcuffs
-						CM.drop_from_inventory(cuffs)
-						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
-							qdel(cuffs)
-					else
-						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
-
-
-			else
-				var/obj/item/HC = CM.mutual_handcuffs
-				var/resist_time = 1 MINUTES // 1 minute since it's only one cuff
-				CM.visible_message("<span class='danger'>[CM] attempts to remove \the [HC]!</span>",
-								   "<span class='warning'>You attempt to remove \the [HC] (this will take around [(resist_time)/600] minutes and you need to stand still).</span>",
-								   self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
-				spawn(0)
-					if(do_after(CM,CM, resist_time))
-						if(!CM.mutual_handcuffs || CM.locked_to)
-							return // time leniency for lag which also might make this whole thing pointless but the server
-						CM.visible_message("<span class='danger'>[CM] manages to remove \the [HC]!</span>",
-										   "<span class='notice'>You successfully remove \the [HC].</span>",
-										   self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
-						CM.drop_from_inventory(HC)
-					else
-						CM.simple_message("<span class='warning'>Your attempt to remove \the [HC] was interrupted.</span>",
-							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
+		CM.resist_restraints()
 
 	//unsticking from a rooting trap, such as a sticky web or a blood nail
 	if (istype(L.locked_to, /obj/effect/rooting_trap/))
 		var/obj/effect/rooting_trap/RT = L.locked_to
 		RT.unstick_attempt(L)
+
+/mob/living/carbon/proc/resist_restraints()
+	if(!canmove)
+		return
+	var/is_hulk = isalienadult(src) || (M_HULK in mutations)
+	var/obj/item/cuffs
+	var/resist_time
+	var/var_to_check // TOOD: Improve this once Lummox releases pointers?
+	var/do_after_callback
+	if(handcuffed)
+		cuffs = handcuffed
+		resist_time = is_hulk ? 5 SECONDS : cuffs.restraint_resist_time
+		if(!resist_time)
+			resist_time = 2 MINUTES //Default
+		var_to_check = "handcuffed"
+	else if(legcuffed)
+		cuffs = legcuffed
+		var/obj/item/weapon/legcuffs/legcuffs = cuffs
+		resist_time = is_hulk ? 5 SECONDS : legcuffs.breakouttime
+		if(!resist_time)
+			resist_time = 2 MINUTES // Default
+		var_to_check = "legcuffed"
+	else if(mutual_handcuffs)
+		cuffs = mutual_handcuffs
+		resist_time = is_hulk ? 5 SECONDS : 1 MINUTES // 1 minute since it's only one cuff
+		var_to_check = "mutual_handcuffs"
+	else if(is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit))
+		cuffs = get_item_by_slot(slot_wear_suit)
+		if(is_hulk)
+			resist_time = 5 SECONDS
+		else
+			do_after_callback = new /callback(GLOBAL_PROC, /proc/strait_jacket_resist_do_after)
+			resist_time = 2 MINUTES // Default
+			var/left_arm = get_organ(LIMB_LEFT_ARM)
+			var/right_arm = get_organ(LIMB_RIGHT_ARM)
+			for(var/datum/organ/external/arm in list(left_arm, right_arm))
+				if(!arm.is_existing() || arm.is_broken())
+					resist_time -= 30 SECONDS
+		var_to_check = "wear_suit"
+	else
+		return
+
+	visible_message("<span class='danger'>[src] attempts to [is_hulk ? "break" : "remove"] \the [cuffs]!</span>",
+					"<span class='warning'>You attempt to [is_hulk ? "break" : "remove"] \the [cuffs] (this will take around [resist_time / 10] seconds and you need to stand still).</span>",
+					self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
+	spawn(0)
+		if(do_after(src, src, resist_time, custom_checks = do_after_callback))
+			if(vars[var_to_check] != cuffs || locked_to)
+				return
+			drop_from_inventory(cuffs)
+			if(is_hulk)
+				visible_message("<span class='danger'>[src] manages to break \the [cuffs]!</span>",
+								"<span class='notice'>You successfully break \the [cuffs].</span>")
+				if(!isalien(src))
+					say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+				qdel(cuffs)
+			else
+				visible_message("<span class='danger'>[src] manages to remove \the [cuffs]!</span>",
+								"<span class='notice'>You successfully remove \the [cuffs].</span>",
+								self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
+		else
+			simple_message("<span class='warning'>Your attempt at [is_hulk ? "breaking" : "removing"] \the [cuffs] was interrupted.</span>",
+							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
+
+/proc/strait_jacket_resist_do_after(mob/living/carbon/user)
+	var/left_arm = user.get_organ(LIMB_LEFT_ARM)
+	var/right_arm = user.get_organ(LIMB_RIGHT_ARM)
+	for(var/datum/organ/external/arm in list(left_arm, right_arm))
+		if(!arm)
+			// Not a humanoid or something
+			continue
+		if(!arm.is_existing() || arm.is_broken() || !arm.is_organic())
+			continue
+		if(prob(5))
+			arm.fracture()
+			return FALSE
+	return TRUE
 
 /mob/living/verb/lay_down()
 	set name = "Rest"
@@ -1423,9 +1395,9 @@ Thanks.
 					AM.set_glide_size(src.glide_size)
 					if (ismob(AM))
 						var/mob/M = AM
-						invoke_event(/event/before_move)
+						INVOKE_EVENT(src, /event/before_move)
 						step(M, t)
-						invoke_event(/event/after_move)
+						INVOKE_EVENT(src, /event/after_move)
 					else
 						step(AM, t)
 				now_pushing = 0
@@ -1929,3 +1901,50 @@ Thanks.
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_death(src)
+
+//Brain slug proc for voluntary removal of control.
+/mob/living/proc/release_control()
+	set category = "Alien"
+	set name = "Release Control"
+	set desc = "Release control of your host's body."
+
+	do_release_control(0)
+
+/mob/living/proc/do_release_control(var/rptext=1)
+	var/mob/living/simple_animal/borer/B = has_brain_worms()
+
+	if(!B)
+		return
+
+	if(B.controlling)
+		if(rptext)
+			to_chat(src, "<span class='danger'>You withdraw your probosci, releasing control of [B.host_brain]</span>")
+			to_chat(B.host_brain, "<span class='danger'>Your vision swims as the alien parasite releases control of your body.</span>")
+		B.ckey = ckey
+		B.controlling = 0
+	if(B.host_brain.ckey)
+		ckey = B.host_brain.ckey
+		B.host_brain.ckey = null
+		B.host_brain.name = "host brain"
+		B.host_brain.real_name = "host brain"
+
+	//reset name if the borer changed it
+	fully_replace_character_name(null, B.host_name)
+
+	verbs -= /mob/living/proc/release_control
+	verbs -= /mob/living/proc/punish_host
+
+//Brain slug proc for tormenting the host.
+/mob/living/proc/punish_host()
+	set category = "Alien"
+	set name = "Torment host"
+	set desc = "Punish your host with agony."
+
+	var/mob/living/simple_animal/borer/B = has_brain_worms()
+
+	if(!B)
+		return
+
+	if(B.host_brain.ckey)
+		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
+		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")

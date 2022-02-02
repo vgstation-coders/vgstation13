@@ -51,12 +51,16 @@
 	if(stat & BROKEN)
 		icon_state = "grey_target_prism"
 	else
-		if( powered() )
+		if( powered() )	
 			if (src.enabled)
 				if(istype(installed,/obj/item/weapon/gun/energy/gun))
 					var/obj/item/weapon/gun/energy/gun/EG = installed
 					if(EG.mode == 1)
 						icon_state = "orange_target_prism"
+					else
+						icon_state = "target_prism"
+				else if(istype(installed,/obj/item/weapon/gun/energy/pulse_rifle/destroyer))
+					icon_state = "blue_target_prism"
 				else
 					icon_state = "target_prism"
 			else
@@ -90,7 +94,7 @@
 	if(T && (T in view(7,src)))
 		if( ismob(T) )
 			var/mob/M = T
-			if((M.flags & INVULNERABLE) || M.faction == faction)
+			if((M.flags & INVULNERABLE) || (faction && M.faction == faction))
 				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
@@ -119,6 +123,8 @@
 			var/mob/living/simple_animal/A = T
 			if( !A.stat )
 				return 1
+		else if(istype(T, /obj/effect/blob))
+			return 1
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
@@ -133,6 +139,8 @@
 	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
 		if(check_target(V))
 			new_targets += V
+	for(var/obj/effect/blob/B in view(7, src))
+		new_targets += B
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
@@ -157,7 +165,6 @@
 		else
 			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
-//		to_chat(world, "[cur_target]")
 		if(!raising)
 			if(!raised)
 				popUp()
@@ -183,6 +190,7 @@
 	while(src && enabled && !stat && check_target(cur_target))
 		src.dir = get_dir(src, cur_target)
 		shootAt(cur_target)
+		cur_target = get_new_target()
 		sleep(shot_delay)
 	return
 
@@ -642,6 +650,12 @@
 			if(M.stat || M.lying || (M in exclude))
 				continue
 			pos_targets += M
+		for(var/obj/effect/blob/B in oview(scan_range, src))
+			pos_targets += B
+		for(var/mob/living/simple_animal/hostile/blobspore/BS in oview(scan_range,src))
+			if(BS.stat || BS.lying || (BS in exclude))
+				continue
+			pos_targets += BS
 	if(pos_targets.len)
 		target = pick(pos_targets)
 	return target

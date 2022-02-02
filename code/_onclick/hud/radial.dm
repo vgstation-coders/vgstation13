@@ -92,7 +92,7 @@
 
 	var/recursion = FALSE
 
-/datum/radial_menu/New(var/mob/user, var/atom/anchor, var/icon_file, var/tooltip_theme, var/radius, var/min_angle)
+/datum/radial_menu/New(var/mob/user, var/atom/anchor, var/icon_file, var/tooltip_theme, var/radius, var/min_angle, var/starting_angle, var/ending_angle)
 	if (user && user.client)
 		current_user = user.client
 	if (anchor)
@@ -105,6 +105,10 @@
 		src.radius = radius
 	if(min_angle)
 		src.min_angle = min_angle
+	if(starting_angle)
+		src.starting_angle = starting_angle
+	if(ending_angle)
+		src.ending_angle = ending_angle
 
 	current_user.radial_menus += anchor
 
@@ -397,7 +401,7 @@
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/recursive = FALSE)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/starting_angle,var/ending_angle,var/recursive = FALSE)
 	if(!user || !anchor || !length(choices))
 		return
 
@@ -407,7 +411,7 @@
 
 	var/menu_type = choose_radial_menu_type_for_anchor(anchor)
 
-	var/datum/radial_menu/menu = new menu_type(user, anchor, icon_file, tooltip_theme, radius, min_angle)
+	var/datum/radial_menu/menu = new menu_type(user, anchor, icon_file, tooltip_theme, radius, min_angle, starting_angle, ending_angle)
 
 	if(istype(custom_check))
 		menu.custom_check = custom_check

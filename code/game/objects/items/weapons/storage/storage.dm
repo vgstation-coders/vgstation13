@@ -16,6 +16,7 @@
 	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect even if can_only_hold is set)
 	var/list/fits_ignoring_w_class = new/list() //List of objects which will fit in this item, regardless of size. Doesn't restrict to ONLY items of these types, and doesn't ignore max_combined_w_class. (in effect even if can_only_hold isn set)
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
+	var/list/items_to_spawn = new/list() //Preset list of items to spawn
 	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 0 //The number of storage slots in this container.
@@ -32,6 +33,10 @@
 	var/internal_store = 0
 	var/list/no_storage_slot = new/list()//if the item is equipped in a slot that is contained in this list, the item will act purely as a clothing item and not a storage item (ie plastic bags over head)
 	var/rustle_sound = "rustle"
+	var/storage_locked = FALSE //you can't interact with the contents of locked storage
+	var/can_add_combinedwclass = FALSE
+	var/can_add_storageslots = FALSE
+	var/can_increase_wclass_stored = FALSE
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
@@ -40,10 +45,10 @@
 	playsound(src, rustle_sound, 50, 1, -5)
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
-	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src) || distance_interact(usr)))
+	if(!storage_locked && over_object == usr && (in_range(src, usr) || is_holder_of(usr, src) || distance_interact(usr)))
 		show_to(usr)
 		return
-	if(ishuman(usr) || ismonkey(usr) || isrobot(usr) && is_holder_of(usr, src))
+	if(!storage_locked && ishuman(usr) || ismonkey(usr) || isrobot(usr) && is_holder_of(usr, src))
 		if(istype(over_object, /obj/structure/table) && usr.Adjacent(over_object) && Adjacent(usr))
 			var/mob/living/L = usr
 			if(istype(L) && !(L.incapacitated() || L.lying))
@@ -54,12 +59,14 @@
 	return ..()
 
 /obj/item/weapon/storage/AltClick(mob/user)
-	if(!(in_range(src, user) || is_holder_of(user, src) || distance_interact(user)))
+	if(storage_locked || !(in_range(src, user) || is_holder_of(user, src) || distance_interact(user)))
 		return ..()
 	show_to(user)
 
 /obj/item/weapon/storage/examine(mob/user)
 	..()
+	if(storage_locked)
+		to_chat(user, "<span class='info'>\The [src] seems to be locked.</span>")
 	if(isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //phantom mask users
 		var/mob/dead/observer/ghost = user
 		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
@@ -243,6 +250,9 @@
 		if(!stop_messages)
 			to_chat(usr, "<span class = 'notice'>No matter how hard you try, you can't seem to manage to fit \the [src] inside of itself.</span>")
 		return //No putting ourselves into ourselves
+	if(storage_locked)
+		to_chat(usr, "<span class = 'notice'>You can't seem to get \the [src] to open.</span>")
+		return
 	if(!istype(W))
 		return //Not an item
 	if(!W.can_be_stored(src)) //Snowflake item-side whether this item can be stored within our item.
@@ -449,9 +459,17 @@
 			to_chat(user, "<span class='notice'>You're a robot. No.</span>")
 			return //Robots can't interact with storage items.
 
+	if(istype(W, /obj/item/weapon/storage_key))
+		var/obj/item/weapon/storage_key/stkey = W
+		if(stkey.type_limit.len && !stkey.type_limit.Find(src))
+			to_chat(user, "<span class='notice'>\The [stkey] doesn't work on \the [src].</span>")
+			return
+		storage_locked = !storage_locked
+		to_chat(user, "<span class='notice'>You [(storage_locked)? "" : "un"]lock \the [src] with \the [stkey].</span>")
+		return
 
 	if(!can_be_inserted(W))
-		return
+		return TRUE
 
 	if(istype(W, /obj/item/weapon/tray))
 		var/obj/item/weapon/tray/T = W
@@ -495,7 +513,7 @@
 			if(maxloc.loc)
 				maxloc = maxloc.loc
 
-	if (maxloc == user)
+	if (maxloc == user && !storage_locked)
 		show_to(user)
 		src.add_fingerprint(user)
 		return
@@ -567,6 +585,35 @@
 	src.xtra.icon_state = "xtra_inv"
 	src.xtra.layer = HUD_ITEM_LAYER
 	src.xtra.alpha = 210
+
+	if(items_to_spawn.len)
+		var/total_w_class = 0
+		var/usable_items = 0
+		var/biggest_w_class = 0
+		for(var/item in items_to_spawn)
+			var/picked_item = item
+			var/obj/item/current_item
+			var/amount = 1
+			if(islist(item))
+				var/list/item_list = item
+				if(item_list.len)
+					picked_item = pick(item_list)
+			if(ispath(picked_item, /obj/item))
+				if(items_to_spawn[item] && isnum(items_to_spawn[item]))
+					amount = items_to_spawn[item]
+				for(var/i = 1, i <= amount, i++)
+					current_item = new picked_item(src)
+					if(current_item)
+						usable_items++
+						total_w_class += current_item.w_class
+						if(current_item.w_class > biggest_w_class)
+							biggest_w_class = current_item.w_class
+		if(total_w_class > max_combined_w_class && can_add_combinedwclass)
+			max_combined_w_class = total_w_class
+		if(usable_items > storage_slots && can_add_storageslots)
+			storage_slots = usable_items
+		if(biggest_w_class > fits_max_w_class && can_increase_wclass_stored)
+			fits_max_w_class = biggest_w_class
 
 /obj/item/weapon/storage/emp_act(severity)
 	if(!istype(src.loc, /mob/living))
@@ -707,3 +754,10 @@
 
 /obj/item/weapon/storage/proc/is_full()
 	return (storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() >= max_combined_w_class)
+
+/obj/item/weapon/storage_key
+	name = "storage key"
+	desc = "Might open what you want opened, or lock what you want locked."
+	var/list/type_limit = list()
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "sword0"

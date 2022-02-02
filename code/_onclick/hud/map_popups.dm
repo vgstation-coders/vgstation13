@@ -17,6 +17,7 @@
 	layer = PLATING_PLANE
 	plane = PLATING_PLANE
 	globalscreen = TRUE
+	icon = null
 
 /**
  * A generic background object.

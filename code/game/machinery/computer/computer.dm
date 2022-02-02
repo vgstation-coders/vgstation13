@@ -10,7 +10,7 @@
 	var/processing = 0
 	var/empproof = FALSE // For plasma glass builds
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
-
+	pass_flags_self = PASSMACHINE
 	use_auto_lights = 1
 	light_power_on = 1
 	light_range_on = 3
@@ -25,7 +25,7 @@
 		initialize()
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return ..()
 
@@ -124,6 +124,7 @@
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+		src.transfer_fingerprints_to(A)
 		if(!CC)
 			CC = new circuit( A )
 		else

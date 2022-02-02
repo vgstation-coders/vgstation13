@@ -33,7 +33,7 @@
 	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE|TALKED_BEFORE
+	spell_flags = SELECTABLE|TALKED_BEFORE|INCLUDEUSER
 	override_base = "genetic"
 	hud_state = "gen_project"
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)

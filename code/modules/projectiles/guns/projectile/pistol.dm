@@ -61,13 +61,12 @@
 	silencer_offset = list(24,7) //please no
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
-	update_icon()
-		..()
-		if(stored_magazine)
-			icon_state = "gyropistolloaded"
-		else
-			icon_state = "gyropistol"
-		return
+/obj/item/weapon/gun/projectile/gyropistol/update_icon()
+	..()
+	if(stored_magazine)
+		icon_state = "gyropistolloaded"
+	else
+		icon_state = "gyropistol"
 
 /obj/item/weapon/gun/projectile/pistol
 	name = "\improper Stechtkin pistol"
@@ -184,7 +183,7 @@
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][chambered ? "" : "-e"][clowned == CLOWNED ? "-c" : ""]"
-		
+
 	for(var/image/ol in gun_part_overlays)
 		if(ol.icon_state == "auto_attach")
 			var/oldpixelx = ol.pixel_x
@@ -249,7 +248,7 @@
 		Fire(M,M)
 		return 1
 	return ..()
-	
+
 /obj/item/weapon/gun/projectile/glock/examine(mob/user)
 	..()
 	if(conversionkit)
@@ -260,7 +259,7 @@
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket. <br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
 	icon_state = "secglockfancy"
 	clowned = UNCLOWN
-	
+
 /obj/item/weapon/gun/projectile/glock/flame
 	name = "\improper NT Glock Custom"
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket. <br><span class='notice'>This one has rad flame stickers on it!</span>"
@@ -268,8 +267,8 @@
 	spawn_mag = FALSE
 	clowned = UNCLOWN
 	w_class = W_CLASS_MEDIUM
-	
-/obj/item/weapon/gun/projectile/glock/flame/New()	
+
+/obj/item/weapon/gun/projectile/glock/flame/New()
 	..()
 	conversionkit = new /obj/item/gun_part/glock_auto_conversion_kit(src)
 	var/image/auto_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "auto_attach")

@@ -14,6 +14,14 @@
 				paired_to = V
 				V.mykey = src
 
+/obj/item/key/dropped(mob/user)
+	..()
+	if(locate(/obj/structure/table) in loc.contents)
+		desc = "Why did they get left upon the table? [user] wanted to."
+
+/obj/item/key/pickup(mob/user)
+	desc = initial(desc)
+
 /obj/item/key/Destroy()
 	if(paired_to)
 		paired_to.mykey = null
@@ -416,6 +424,15 @@
 /obj/structure/bed/chair/vehicle/proc/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
 	// Transfer salvagables here.
 	return
+
+/obj/structure/bed/chair/vehicle/to_bump(var/atom/movable/obstacle)
+	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
+		return
+
+	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
+		if(!obstacle.anchored)
+			obstacle.Move(get_step(obstacle,src.dir))
+	..()
 
 /obj/structure/bed/chair/vehicle/unlock_atom(var/atom/movable/AM)
 	. = ..()

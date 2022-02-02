@@ -33,25 +33,20 @@
 
 	autoignition_temperature = 0 //Not actually paper
 	fire_fuel = 0
-
-/obj/item/weapon/storage/bible/booze/New()
-	. = ..()
-	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	new /obj/item/weapon/spacecash(src)
-	new /obj/item/weapon/spacecash(src)
-	new /obj/item/weapon/spacecash(src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/drinks/beer = 2,
+		/obj/item/weapon/spacecash = 3,
+	)
 
 //Even more "Special" Bible with a nicer gift on introduction
 /obj/item/weapon/storage/bible/traitor_gun
 
 	autoignition_temperature = 0 //Not actually paper
 	fire_fuel = 0
-
-/obj/item/weapon/storage/bible/traitor_gun/New()
-	. = ..()
-	new /obj/item/weapon/gun/projectile/luger/small(src)
-	new /obj/item/ammo_storage/magazine/mc9mm(src)
+	items_to_spawn = list(
+		/obj/item/weapon/gun/projectile/luger/small,
+		/obj/item/ammo_storage/magazine/mc9mm,
+	)
 
 //What happens when you slap things with the Bible in general
 /obj/item/weapon/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)
@@ -273,11 +268,10 @@
 	deconvertee.Dizzy(30)
 	deconvertee.stuttering = max(deconvertee.stuttering, 10)
 	deconvertee.Jitter(30)
-	if (!deconvertee.checkTattoo(TATTOO_HOLY))
-		if (!bible.my_rel.leadsThisReligion(deconverter))
-			deconvertee.Knockdown(5)
-		else
-			deconvertee.Knockdown(10)
+	if (!bible.my_rel.leadsThisReligion(deconverter))
+		deconvertee.Knockdown(5)
+	else
+		deconvertee.Knockdown(10)
 
 	if (istype(bible.my_rel, /datum/religion/cult))
 		cult_chaplain = TRUE

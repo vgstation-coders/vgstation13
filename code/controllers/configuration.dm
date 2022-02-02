@@ -69,12 +69,11 @@
 	var/usewhitelist = 0
 	var/kick_inactive = 0				//force disconnect for inactive players
 	var/load_jobs_from_txt = 0
-	var/ToRban = 0
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
 
-	
+
 	var/multiz_render_cap = 8			//how far down open spaces will render
 	var/multiz_bottom_cap = 16			//how far down open spaces will detect for a bottom
 
@@ -180,6 +179,8 @@
 	var/default_ooc_color = "#002eb8"
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
+
+	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
 
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
@@ -391,6 +392,9 @@
 				if ("no_respawn_as_hobo")
 					config.respawn_as_hobo = 0
 
+				if ("no_grue_egglaying")
+					config.grue_egglaying = 0
+
 				if ("servername")
 					config.server_name = value
 
@@ -504,9 +508,6 @@
 				if("humans_need_surnames")
 					humans_need_surnames = 1
 
-				if("tor_ban")
-					ToRban = 1
-
 				if("automute_on")
 					automute_on = 1
 
@@ -581,7 +582,7 @@
 				if("bsql_thread_limit")
 					bsql_thread_limit = text2num(value)
 
-				
+
 				if("multiz_render_cap")
 					multiz_render_cap = text2num(value)
 				if("multiz_bottom_cap")

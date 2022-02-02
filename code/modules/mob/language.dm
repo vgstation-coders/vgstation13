@@ -296,6 +296,19 @@
 	space_chance = 80
 	syllables = list("squeak")
 
+/datum/language/grue
+	name = LANGUAGE_GRUE
+	desc = "The sounds grues use to communicate with one another."
+	speech_verb = "roars"
+	ask_verb = "roars"
+	exclaim_verb = "roars"
+	whisper_verb = "hisses"
+	key = "g"
+	flags = RESTRICTED
+	native = 1
+	syllables = list("BWAAGH","BWOOGH","GRAAH","WAAGH","ROOHR","SWOOH","KROOH","KRAAH")
+	space_chance = 100
+
 /datum/language/martian
 	name = LANGUAGE_MARTIAN
 	desc = "Complex warbles and burbles used by the odd squid people."

@@ -86,6 +86,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define WIRE_LAYER					6
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
+	#define PULSEDEMON_LAYER			9
 
 #define FLOOR_PLANE 			(-3 + FLOAT_PLANE)
 
@@ -133,6 +134,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BELOW_OBJ_LAYER				2
 	#define MACHINERY_LAYER				2.5
 	// OBJ_LAYER 	 					3
+	#define CANVAS_LAYER				3.1					// So that canvas always appear above easels
+	#define EASEL_OVERLAY_LAYER			3.2					// So that the easel bits that hold a canvas in place always appear above a canvas
 	#define ABOVE_OBJ_LAYER				4
 	#define SIDE_WINDOW_LAYER			5
 	#define FULL_WINDOW_LAYER			6

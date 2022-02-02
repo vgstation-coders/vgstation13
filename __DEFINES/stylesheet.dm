@@ -49,6 +49,7 @@ h1.alert, h2.alert		{color: #000000;}
 .userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
 .warning				{color: #ff0000;	font-style: italic;}
 .sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
+.sinisterbig			{color: #800080;	font-weight: bold;	font-style: italic;	font-size: 120%} /* /vg/ */
 .blob					{color: #006221;	font-weight: bold;	font-style: italic;}
 .numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
 .confirm				{color: #00af3b;}
@@ -85,6 +86,7 @@ h1.alert, h2.alert		{color: #000000;}
 .maroon					{color: #800000;}
 .clown 					{color: #ff9fef; font-family: Comic Sans MS, Comic Sans, cursive;}
 .borer					{color: #800080; font-weight: bold;}
+.grue					{color: #272728; font-weight: bold;}
 
 /* If you're adding a new class here, add it to browserOutput.css too! */
 

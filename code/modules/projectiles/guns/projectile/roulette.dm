@@ -25,6 +25,7 @@
 		/obj/item/projectile/hookshot,
 		/obj/item/projectile/bullet/blastwave,
 		/obj/item/projectile/beam/lightning,
+		/obj/item/projectile/beam/procjectile,
 		/obj/item/projectile/beam/lightning/spell,
 		/obj/item/projectile/rocket/nikita,
 		/obj/item/projectile/test,

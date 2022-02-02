@@ -70,11 +70,12 @@ var/list/locator_holomap_cache = list()
 	var/datum/tracker_holomap/holomap_datum
 
 	var/bogus = 0
-	var/lastZ = STATION_Z
+	var/lastZ
 
 /obj/item/device/locator_holomap/New()
 	..()
 	holomap_datum = new()
+	lastZ = map.zMainStation
 
 
 /obj/item/device/locator_holomap/Destroy()
@@ -144,7 +145,7 @@ var/list/locator_holomap_cache = list()
 				holomap_cache[holomap_bgmap] = holomap_datum.station_map
 			holomap_datum.station_map = holomap_cache[holomap_bgmap]
 			holomap_datum.station_map.overlays.len = 0
-		if(T.z == STATION_Z || T.z == ASTEROID_Z || T.z == DERELICT_Z)
+		if(T.z == map.zMainStation || T.z == map.zAsteroid || T.z == map.zDerelict)
 			holomap_datum.station_outline = image(holoMiniMaps[T.z])
 			holomap_datum.station_outline.color = "#FFDEDE"
 			holomap_datum.station_outline.alpha = 200
@@ -260,7 +261,7 @@ var/list/locator_holomap_cache = list()
 		holomap_cache[holomap_bgmap] = station_map
 	station_map = holomap_cache[holomap_bgmap]
 	station_map.overlays.len = 0
-	if(T.z == STATION_Z || T.z == ASTEROID_Z || T.z == DERELICT_Z)
+	if(T.z == map.zMainStation || T.z == map.zAsteroid || T.z == map.zDerelict)
 		station_outline = image(holoMiniMaps[T.z])
 		station_outline.color = "#FFDEDE"
 		station_outline.alpha = 200

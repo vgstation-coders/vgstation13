@@ -25,8 +25,10 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
+	ROLE_GRUE		= 1,
 )
 
 /var/list/antag_roles = list(
@@ -46,8 +48,10 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
+	ROLE_GRUE		= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -76,8 +80,11 @@ var/list/role_wiki=list(
 	WIZARD					= "Wizard",
 	GRINCH					= "Grinch",
 	NINJA					= "Space_Ninja",
+	TIMEAGENT				= "Time_Agent",
+	PULSEDEMON				= "Pulse_Demon",
 	ROLE_MINOR				= "Minor_Roles",
 	ROLE_PRISONER			= "Minor_Roles",
+	ROLE_GRUE				= "Grue",
 )
 
 var/list/special_popup_text2num = list(
@@ -665,6 +672,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ASTHMA,      "Asthma")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LACTOSE,     "Lactose Intolerant")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LISP,       "Lisp")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ANEMIA,       "Anemia")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -1475,9 +1483,9 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 			O.status &= ~ORGAN_ROBOT
 			O.status |= ORGAN_PEG
 		else if(status == "assisted")
-			I.mechassist()
+			I?.mechassist()
 		else if(status == "mechanical")
-			I.mechanize()
+			I?.mechanize()
 		else
 			continue
 	var/datum/species/chosen_species = all_species[species]

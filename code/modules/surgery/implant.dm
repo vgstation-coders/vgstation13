@@ -6,9 +6,9 @@
 
 /datum/surgery_step/cavity
 	priority = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
+/datum/surgery_step/cavity/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
 
 /datum/surgery_step/cavity/proc/get_max_wclass(datum/organ/external/affected)
 	switch (affected.name)
@@ -41,15 +41,18 @@
 		)
 
 	duration = 6 SECONDS
+	digging = TRUE
 
 /datum/surgery_step/cavity/make_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
-		to_chat(user, "<span class='warning'>This isn't a human!.</span>")
+		to_chat(user, "<span class='warning'>This isn't a human!</span>")
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	return ..() && !affected.cavity && !affected.hidden
 
 /datum/surgery_step/cavity/make_space/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(istype(tool, /obj/item/tool/surgicaldrill))
+		playsound(target, 'sound/items/surgicaldrill.ogg', 70, 1)
 	user.visible_message("[user] starts making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool].",
 	"You start making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool]." )
 	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
@@ -124,7 +127,7 @@
 
 /datum/surgery_step/cavity/place_item/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
-		to_chat(user, "<span class='warning'>This isn't a human!.</span>")
+		to_chat(user, "<span class='warning'>This isn't a human!</span>")
 		return 0
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/can_fit = !affected.hidden && affected.cavity && tool.w_class <= get_max_wclass(affected)

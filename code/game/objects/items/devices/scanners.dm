@@ -130,7 +130,8 @@ BREATHALYZER
 				var/datum/disease2/disease/D = I.virus2[ID]
 				if(ID in virusDB)
 					var/datum/data/record/V = virusDB[ID]
-					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
+					var/nickname = V.fields["nickname"]
+					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][nickname ? " [nickname]" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
 				else
 					to_chat(user,"<span class='warning'>Warning: Unknown [D.form] detected on \the [src].</span>")
 		else
@@ -149,7 +150,7 @@ BREATHALYZER
 		to_chat(user, last_reading)
 
 //Note : Used directly by other objects. Could benefit of OOP, maybe ?
-proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, var/skip_checks = 0, var/silent = 0)
+/proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, var/skip_checks = 0, var/silent = 0)
 	var/message = ""
 	if(!skip_checks)
 		if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
@@ -540,7 +541,7 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && isnum(R.data) && !isNonTimeDataReagent(R) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
+				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%, time in system: [R.real_tick*2] seconds" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else

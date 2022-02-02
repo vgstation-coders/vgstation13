@@ -39,7 +39,7 @@
 		)*/
 
 
-//see /obj/item/weapon/storage/toolbox/mechanical/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob) override in floorbot.dm
+//see /obj/item/weapon/storage/toolbox/mechanical/attackby(var/obj/item/stack/tile/metal/T, mob/user as mob) override in floorbot.dm
 
 /obj/item/weapon/storage/toolbox/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is [pick("staving","robusting")] \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -50,11 +50,13 @@
 	name = "emergency toolbox"
 	icon_state = "toolbox_red"
 	item_state = "toolbox_red"
+	items_to_spawn = list(
+		/obj/item/tool/crowbar/red,
+		/obj/item/weapon/extinguisher/mini,
+	)
 
 /obj/item/weapon/storage/toolbox/emergency/New()
 	..()
-	new /obj/item/tool/crowbar/red(src)
-	new /obj/item/weapon/extinguisher/mini(src)
 	var/lighting = pick( //emergency lighting yay
 		20;/obj/item/device/flashlight,
 		30;/obj/item/weapon/storage/fancy/flares,
@@ -70,28 +72,29 @@
 	name = "mechanical toolbox"
 	icon_state = "toolbox_blue"
 	item_state = "toolbox_blue"
-
-/obj/item/weapon/storage/toolbox/mechanical/New()
-	..()
-	new /obj/item/tool/screwdriver(src)
-	new /obj/item/tool/wrench(src)
-	new /obj/item/tool/weldingtool(src)
-	new /obj/item/tool/crowbar(src)
-	new /obj/item/device/analyzer(src)
-	new /obj/item/tool/wirecutters(src)
+	items_to_spawn = list(
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wrench,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/crowbar,
+		/obj/item/device/analyzer,
+		/obj/item/tool/wirecutters,
+	)
 
 /obj/item/weapon/storage/toolbox/electrical
 	name = "electrical toolbox"
 	icon_state = "toolbox_yellow"
 	item_state = "toolbox_yellow"
+	items_to_spawn = list(
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wirecutters,
+		/obj/item/device/t_scanner,
+		/obj/item/tool/crowbar,
+	)
 
 /obj/item/weapon/storage/toolbox/electrical/New()
 	..()
 	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
-	new /obj/item/tool/screwdriver(src)
-	new /obj/item/tool/wirecutters(src)
-	new /obj/item/device/t_scanner(src)
-	new /obj/item/tool/crowbar(src)
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/stack/cable_coil(src,30,color)
 	if(prob(5))
@@ -105,28 +108,32 @@
 	item_state = "toolbox_syndi"
 	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
 	force = 20
+	items_to_spawn = list(
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wrench,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/wirecutters,
+		/obj/item/device/multitool,
+	)
 
 /obj/item/weapon/storage/toolbox/syndicate/New()
 	..()
 	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
-	new /obj/item/tool/screwdriver(src)
-	new /obj/item/tool/wrench(src)
-	new /obj/item/tool/weldingtool(src)
-	new /obj/item/tool/crowbar(src)
 	new /obj/item/stack/cable_coil(src,30,color)
-	new /obj/item/tool/wirecutters(src)
-	new /obj/item/device/multitool(src)
 
 /obj/item/weapon/storage/toolbox/robotics
 	name = "robotics toolbox"
+	items_to_spawn = list(
+		/obj/item/device/robotanalyzer,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/wrench,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wirecutters,
+	)
 
 /obj/item/weapon/storage/toolbox/robotics/New()
 	..()
 	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
-	new /obj/item/device/robotanalyzer(src)
-	new /obj/item/tool/crowbar(src)
-	new /obj/item/tool/wrench(src)
-	new /obj/item/tool/weldingtool(src)
-	new /obj/item/tool/screwdriver(src)
-	new /obj/item/tool/wirecutters(src)
 	new /obj/item/stack/cable_coil(src,30,color)

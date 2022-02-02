@@ -73,7 +73,10 @@
 			to_chat(user, "<span class='rose'>You can't open this flatpack while others are stacked on top of it!</span>")
 			return
 		user.visible_message("<span class='notice'>[user] begins to open the flatpack...</span>", "<span class='notice'>You begin to open the flatpack...</span>")
-		if(do_after(user, src, rand(10,40)))
+		var/unpack_time = rand(1 SECONDS, 4 SECONDS)
+		if(M_SWEDE in user.mutations)
+			unpack_time = 0
+		if(do_after(user, src, unpack_time))
 			if(machine)
 				to_chat(user, "<span class='notice'>[bicon(src)] You successfully unpack \the [machine]!</span>")
 				if(assembling == UNASSEMBLED)

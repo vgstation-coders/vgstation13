@@ -6,13 +6,13 @@
 /datum/surgery_step/face
 	priority = 2
 	can_infect = 0
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
-			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected)
-			return 0
-		return target_zone == "mouth"
+/datum/surgery_step/face/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected)
+		return 0
+	return target_zone == "mouth"
 
 
 ///////CUT FACE/////////
@@ -69,9 +69,9 @@
 	return ..() && target.op_stage.face == 1
 
 /datum/surgery_step/face/mend_vocal/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		user.visible_message("[user] starts mending [target]'s vocal cords with \the [tool].", \
-		"You start mending [target]'s vocal cords with \the [tool].")
-		..()
+	user.visible_message("[user] starts mending [target]'s vocal cords with \the [tool].", \
+	"You start mending [target]'s vocal cords with \the [tool].")
+	..()
 
 /datum/surgery_step/face/mend_vocal/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='notice'>[user] mends [target]'s vocal cords with \the [tool].</span>", \

@@ -15,7 +15,6 @@
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
-	var/empty = 0
 
 
 /obj/item/weapon/storage/firstaid/fire
@@ -23,120 +22,89 @@
 	desc = "It's an emergency medical kit for when the toxins lab <i>-spontaneously-</i> burns down."
 	icon_state = "ointment"
 	item_state = "firstaid-ointment"
+	items_to_spawn = list(
+		/obj/item/device/healthanalyzer,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
+		/obj/item/stack/medical/ointment = 2,
+		/obj/item/weapon/reagent_containers/pill/kelotane = 3,
+	)
 
 /obj/item/weapon/storage/firstaid/fire/empty
-	empty = 1
+	items_to_spawn = list()
 
 /obj/item/weapon/storage/firstaid/fire/New()
 	..()
-	if (empty)
-		return
-
 	icon_state = pick("ointment","firefirstaid")
-
-	new /obj/item/device/healthanalyzer(src)
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
-	new /obj/item/stack/medical/ointment(src)
-	new /obj/item/stack/medical/ointment(src)
-	new /obj/item/weapon/reagent_containers/pill/kelotane(src)
-	new /obj/item/weapon/reagent_containers/pill/kelotane(src)
-	new /obj/item/weapon/reagent_containers/pill/kelotane(src)
-	return
 
 
 /obj/item/weapon/storage/firstaid/regular
 	icon_state = "firstaid"
+	items_to_spawn = list(
+		/obj/item/stack/medical/bruise_pack = 2,
+		/obj/item/clothing/suit/spaceblanket,
+		/obj/item/stack/medical/ointment = 2,
+		/obj/item/device/healthanalyzer,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
+	)
 
-/obj/item/weapon/storage/firstaid/regular/New()
-	..()
-	if (empty)
-		return
-	new /obj/item/stack/medical/bruise_pack(src)
-	new /obj/item/stack/medical/bruise_pack(src)
-	new /obj/item/clothing/suit/spaceblanket(src)
-	new /obj/item/stack/medical/ointment(src)
-	new /obj/item/stack/medical/ointment(src)
-	new /obj/item/device/healthanalyzer(src)
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
-	return
+/obj/item/weapon/storage/firstaid/regular/empty
+	name = "First-Aid (empty)"
+	items_to_spawn = list()
 
 /obj/item/weapon/storage/firstaid/toxin
 	name = "toxin first-aid kit"
 	desc = "Used to treat when you have a high amount of toxins in your body."
 	icon_state = "antitoxin"
 	item_state = "firstaid-toxin"
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/syringe/antiviral,
+		/obj/item/weapon/reagent_containers/syringe/antitoxin = 2,
+		/obj/item/weapon/reagent_containers/pill/antitox = 3,
+		/obj/item/device/healthanalyzer,
+	)
 
 /obj/item/weapon/storage/firstaid/toxin/empty
-	empty = 1
+	items_to_spawn = list()
 
 /obj/item/weapon/storage/firstaid/toxin/New()
 	..()
-	if (empty)
-		return
-
 	icon_state = pick("antitoxin","antitoxfirstaid","antitoxfirstaid2","antitoxfirstaid3")
 
-	new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
-	new /obj/item/weapon/reagent_containers/pill/antitox(src)
-	new /obj/item/weapon/reagent_containers/pill/antitox(src)
-	new /obj/item/weapon/reagent_containers/pill/antitox(src)
-	new /obj/item/device/healthanalyzer(src)
-	return
 
 /obj/item/weapon/storage/firstaid/o2
 	name = "oxygen deprivation first-aid kit"
 	desc = "A box full of oxygen goodies."
 	icon_state = "o2"
 	item_state = "firstaid-oxy"
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/dexalin = 4,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
+		/obj/item/weapon/reagent_containers/syringe/inaprovaline,
+		/obj/item/device/healthanalyzer,
+	)
 
 /obj/item/weapon/storage/firstaid/o2/empty
-	empty = 1
-
-/obj/item/weapon/storage/firstaid/o2/New()
-	..()
-	if (empty)
-		return
-	for (var/i = 1 to 4)
-		new /obj/item/weapon/reagent_containers/pill/dexalin(src)
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
-	new /obj/item/weapon/reagent_containers/syringe/inaprovaline(src)
-	new /obj/item/device/healthanalyzer(src)
-	return
+	items_to_spawn = list()
 
 /obj/item/weapon/storage/firstaid/adv
 	name = "advanced first-aid kit"
 	desc = "Contains advanced medical treatments."
 	icon_state = "advfirstaid"
 	item_state = "firstaid-advanced"
-
-/obj/item/weapon/storage/firstaid/adv/New()
-	..()
-	if (empty)
-		return
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
-	new /obj/item/stack/medical/advanced/bruise_pack(src)
-	new /obj/item/stack/medical/advanced/bruise_pack(src)
-	new /obj/item/stack/medical/advanced/bruise_pack(src)
-	new /obj/item/stack/medical/advanced/ointment(src)
-	new /obj/item/stack/medical/advanced/ointment(src)
-	new /obj/item/stack/medical/splint(src)
-	return
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
+		/obj/item/stack/medical/advanced/bruise_pack = 3,
+		/obj/item/stack/medical/advanced/ointment = 2,
+		/obj/item/stack/medical/splint,
+	)
 
 /obj/item/weapon/storage/firstaid/internalbleed
 	name = "internal bleeding first-aid kit"
 	desc = "Used to stabilize patients suffering from internal bleeding."
 	icon_state = "internalbleedfirstaid"
 	item_state = "firstaid-internalbleed"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector = 4)
 
-
-/obj/item/weapon/storage/firstaid/internalbleed/New()
-	..()
-	if (empty)
-		return
-	for (var/i = 1 to 4)
-		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
 
 /*
  * Pill Bottles
@@ -211,31 +179,19 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 /obj/item/weapon/storage/pill_bottle/kelotane
 	name = "pill bottle (kelotane)"
 	desc = "Contains pills used to treat burns."
-
-/obj/item/weapon/storage/pill_bottle/kelotane/New()
-	..()
-	for (var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/pill/kelotane(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/pill/kelotane = 7)
 
 
 /obj/item/weapon/storage/pill_bottle/antitox
 	name = "pill bottle (Anti-toxin)"
 	desc = "Contains pills used to counter toxins."
-
-/obj/item/weapon/storage/pill_bottle/antitox/New()
-	..()
-	for (var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/pill/antitox(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/pill/antitox = 7)
 
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline
 	name = "pill bottle (inaprovaline)"
 	desc = "Contains pills used to stabilize patients."
-
-/obj/item/weapon/storage/pill_bottle/inaprovaline/New()
-	..()
-	for (var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/pill/inaprovaline(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/pill/inaprovaline = 7)
 
 
 /obj/item/weapon/storage/pill_bottle/dice
@@ -243,18 +199,20 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	desc = "Contains all the luck you'll ever need."
 	icon = 'icons/obj/dice.dmi'
 	icon_state = "dicebag"
+	items_to_spawn = list(
+		/obj/item/weapon/dice/d4,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice/d8,
+		/obj/item/weapon/dice/d10,
+		/obj/item/weapon/dice/d00,
+		/obj/item/weapon/dice/d12,
+		/obj/item/weapon/dice/d20,
+	)
 
 /obj/item/weapon/storage/pill_bottle/dice/New()
 	..()
 	overlays -= colour_overlay
 	colour_overlay = null
-	new /obj/item/weapon/dice/d4(src)
-	new /obj/item/weapon/dice(src)
-	new /obj/item/weapon/dice/d8(src)
-	new /obj/item/weapon/dice/d10(src)
-	new /obj/item/weapon/dice/d00(src)
-	new /obj/item/weapon/dice/d12(src)
-	new /obj/item/weapon/dice/d20(src)
 
 /obj/item/weapon/storage/pill_bottle/dice/with_die/New()
 	. = ..()
@@ -264,59 +222,45 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 /obj/item/weapon/storage/pill_bottle/hyperzine
 	name = "pill bottle (hyperzine)"
 	desc = "Contains pills used to keep you active."
-
-/obj/item/weapon/storage/pill_bottle/hyperzine/New()
-	..()
-	for (var/i = 1 to 6)
-		new /obj/item/weapon/reagent_containers/pill/hyperzine(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/pill/hyperzine = 6)
 
 
 /obj/item/weapon/storage/pill_bottle/creatine
 	name = "Workout Supplements"
 	desc = "Because working out is far too much effort."
-
-/obj/item/weapon/storage/pill_bottle/creatine/New()
-	..()
-	new /obj/item/weapon/reagent_containers/pill/creatine_safe(src)
-	for (var/i = 1 to 5)
-		new /obj/item/weapon/reagent_containers/pill/creatine_supplement (src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/creatine_safe,
+		/obj/item/weapon/reagent_containers/pill/creatine_supplement = 5,
+	)
 
 
 /obj/item/weapon/storage/pill_bottle/nanobot
 	name = "Experimental Medication"
 	desc = "Hazardous.  Warranty voided if consumed."
-
-/obj/item/weapon/storage/pill_bottle/nanobot/New()
-	..()
-	for (var/i = 1 to 5)
-		new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/pill/nanobot = 6)
 
 /obj/item/weapon/storage/pill_bottle/radiation
 	name = "pill bottle (radiation treatment)"
 	desc = "Contains pills used to treat radiation sickness."
-
-/obj/item/weapon/storage/pill_bottle/radiation/New()
-	..()
-	for(var/i = 1 to 3)
-		new /obj/item/weapon/reagent_containers/pill/hyronalin(src)
-		new /obj/item/weapon/reagent_containers/pill/arithrazine(src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/hyronalin = 3,
+		/obj/item/weapon/reagent_containers/pill/arithrazine = 3,
+	)
 
 /obj/item/weapon/storage/pill_bottle/sweets
 	name = "bag of sweets"
 	desc = "Tasty!"
 	icon = 'icons/obj/candymachine.dmi'
 	icon_state = "candybag"
-	var/spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/sweet = 10)
 
 /obj/item/weapon/storage/pill_bottle/sweets/New()
 	..()
 	overlays -= colour_overlay
 	colour_overlay = null
-	for (var/i = 1 to 10)
-		new spawn_type(src)
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
-	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/sweet/strange = 10)
 
 /obj/item/weapon/storage/pill_bottle/lollipops
 	name = "bag of lollipops"
@@ -326,32 +270,26 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	max_combined_w_class = 4
 	storage_slots = 4
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/lollipop","/obj/item/trash/lollipopstick")
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/lollipop = 4)
 
 /obj/item/weapon/storage/pill_bottle/lollipops/New()
 	..()
-	for (var/i = 1 to 4)
-		new /obj/item/weapon/reagent_containers/food/snacks/lollipop(src)
 	overlays = null
 
 /obj/item/weapon/storage/pill_bottle/zambiscuits
 	name = "Zam Biscuit Package"
-	desc = "A package of Zam biscuits, popular fare for hungry Grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "zambiscuits"
 	storage_slots = 3
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit", "/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical")
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 3)
 
 /obj/item/weapon/storage/pill_bottle/zambiscuits/New()
 	..()
-	for (var/i = 1 to 3)
-		new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
 	overlays = null
 
 /obj/item/weapon/storage/pill_bottle/nanofloxacin
 	name = "pill bottle (nanofloxacin)"
 	desc = "Contains pills used to exterminate pathogen. May also exterminate yourself if taken in larger doses."
-
-/obj/item/weapon/storage/pill_bottle/nanofloxacin/New()
-	..()
-	for (var/i = 1 to 12)
-		new /obj/item/weapon/reagent_containers/pill/nanofloxacin(src)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/pill/nanofloxacin = 12)

@@ -19,6 +19,7 @@
 		initialize()
 
 /obj/item/seeds/initialize()
+	..()
 	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
@@ -47,7 +48,7 @@
 /obj/item/seeds/random
 	seed_type = null
 
-/obj/item/seeds/random/New()
+/obj/item/seeds/random/initialize()
 	seed = SSplant.create_random_seed()
 	seed_type = seed.name
 	..()
@@ -100,6 +101,10 @@
 	name = "packet of cabbage seeds"
 	seed_type = "cabbage"
 	vending_cat = "vegetables"
+	
+/obj/item/seeds/plasmacabbageseed
+	name = "packet of plasma cabbage seeds"
+	seed_type = "plasmacabbage"
 
 /obj/item/seeds/shandseed
 	name = "packet of S'randar's hand seeds"
@@ -783,7 +788,7 @@
 	production = 6
 	yield = 6
 	potency = 5
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SPIRITBREAKER = list(10))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SPIRITBREAKER = list(1,10,1))
 
 
 /datum/seed/ambrosia/deus
@@ -1132,12 +1137,32 @@
 	display_name = "cabbages"
 	plant_dmi = 'icons/obj/hydroponics/cabbage.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
+	mutants = list("plasmacabbage")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
 	lifespan = 50
 	maturation = 3
 	production = 5
+	yield = 4
+	potency = 10
+	growth_stages = 1
+	ideal_light = 8
+	water_consumption = 6
+	nutrient_consumption = 0.15
+
+/datum/seed/plasmacabbage
+	name = "plasmacabbage"
+	seed_name = "plasma cabbage"
+	display_name = "plasma cabbages"
+	plant_dmi = 'icons/obj/hydroponics/cabbageplasma.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage)
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10),PLASMA = list(3,5))
+
+	lifespan = 30
+	maturation = 3
+	production = 6
 	yield = 4
 	potency = 10
 	growth_stages = 1
@@ -1453,7 +1478,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,20))
-		
+
 	lifespan = 60
 	maturation = 6
 	production = 6

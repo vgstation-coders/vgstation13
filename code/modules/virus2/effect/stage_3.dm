@@ -73,14 +73,18 @@
 	desc = "Causes the infected to begin coughing up eggs of the poultry variety."
 	stage = 3
 	badness = EFFECT_DANGER_ANNOYING
+	var/eggspawn = /obj/item/weapon/reagent_containers/food/snacks/egg
 
 /datum/disease2/effect/chickenpox/activate(var/mob/living/mob)
+	var/mob/living/carbon/human/H = mob
+	if(H.species.name == "Vox")
+		eggspawn = /obj/item/weapon/reagent_containers/food/snacks/egg/vox
 	if (prob(30))
 		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
 	if (prob(15))
 		mob.emote("me",1,"vomits up a chicken egg!")
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
-		new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(mob))
+		new eggspawn(get_turf(mob))
 
 
 /datum/disease2/effect/confusion
@@ -309,7 +313,7 @@
 					affected.put_in_hands(fake_katana)
 				given_katana = 1
 
-datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
+/datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
 	if (ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
@@ -362,7 +366,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	if(prob(15))
 		to_chat(mob, "Your feet feel slippy!")
 
-datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
+/datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
 
@@ -648,12 +652,10 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		if(I.name != "brain" && !I.robotic)
 			valid_internal_organs += I
 
-	if(prob(75) || valid_external_organs.len)
-
+	if(prob(75) && valid_external_organs.len)
 		var/datum/organ/external/E = pick(valid_external_organs)
 		E.robotize()
 		H.update_body()
-
 	else if(valid_internal_organs.len)
 
 		var/datum/organ/internal/I = pick(valid_internal_organs)

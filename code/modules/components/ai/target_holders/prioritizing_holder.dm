@@ -34,8 +34,8 @@
 
 /datum/component/ai/target_holder/prioritizing/cmd_get_best_target()
 	targets.Cut() // Clear first
-	for(var/atom/target in parent.invoke_event(/event/comp_ai_cmd_find_targets))
-		parent.invoke_event(/event/comp_ai_cmd_add_target, list("target" = target))
+	for(var/atom/target in INVOKE_EVENT(parent, /event/comp_ai_cmd_find_targets))
+		INVOKE_EVENT(parent, /event/comp_ai_cmd_add_target, "target" = target)
 	for(var/priority in 1 to max_priority)
 		var/list/priority_targets = targets["[priority]"]
 		if(priority_targets == null)

@@ -175,6 +175,15 @@
 	screen_loc = ui_alien_master
 	length = 9
 
+/obj/abstract/screen/movable/spell_master/grue
+	name = "Grue Abilities"
+	icon_state = "grue_spell_ready"
+
+	open_state = "grue_open"
+	closed_state = "grue_closed"
+
+	screen_loc = ui_alien_master
+
 /obj/abstract/screen/movable/spell_master/malf
 	name = "Malfunction Modules"
 	icon_state = "malf_spell_ready"
@@ -231,6 +240,15 @@
 
 	open_state = "ling-open"
 	closed_state = "ling-closed"
+
+	screen_loc = ui_alien_master
+
+/obj/abstract/screen/movable/spell_master/pulse_demon
+	name = "Pulse Demon Abilities"
+	icon_state = "pulsedemon_spell_ready"
+
+	open_state = "pd_open"
+	closed_state = "pd_closed"
 
 	screen_loc = ui_alien_master
 

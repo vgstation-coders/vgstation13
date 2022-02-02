@@ -2,6 +2,63 @@
 
 	mode.declare_completion()
 	completions += "[mode.dat]<HR>"
+	
+	var/list/boombox = score["implant_phrases"]
+	var/synphra = score["syndiphrases"]
+	var/synspo = score["syndisponses"]
+	if(synphra || synspo || boombox.len)
+		completions += "<h2><font color='red'>Syndicate</font> Specials</h2>"
+		if(synphra)
+			completions += "<BR>The Syndicate code phrases were:<BR>"
+			completions += "<font color='red'>[syndicate_code_phrase.Join(", ")]</font><BR>"
+			completions += "The phrases were used [synphra] time[synphra > 1 ? "s" : ""]!"
+		if(synspo)
+			completions += "<BR>The Syndicate code responses were:<BR>"
+			completions += "<font color='red'>[syndicate_code_response.Join(", ")]</font><BR>"
+			completions += "The responses were used [synspo] time[synspo > 1 ? "s" : ""]!"
+		if(boombox.len)
+			completions += "<BR>The following explosive implants were used:<BR>"
+			for(var/entry in score["implant_phrases"])
+				completions += "[entry]<BR>"
+				
+	var/list/gallery = score["global_paintings"]
+	var/painting_completions = ""
+	if(gallery.len) //the list of all artworks
+		var/list/artworks = list() //list of authors, for sorting later
+		for(var/obj/structure/painting/custom/painting in gallery)
+			if(painting.show_on_scoreboard && !painting.painting_data.is_blank())
+				var/painting_author = painting.painting_data.author
+				if(!painting_author)
+					painting_author = "Anonymous"
+				if(!artworks[painting_author])
+					artworks[painting_author] = list()
+				artworks[painting_author] += painting
+
+		var/list/sorted_artists_list = sortList(artworks)
+		var/currentartist = ""
+
+		for(var/artistsandworks in sorted_artists_list) //list of lists of paintings
+			var/tooble = ""
+			var/row1 = ""
+			var/row2 = ""
+			var/list/artist_and_their_works = sorted_artists_list[artistsandworks]
+			for(var/obj/structure/painting/custom/painting in artist_and_their_works)
+				var/title = painting.painting_data.title
+				if(!title)
+					title = "Nameless"
+				var/icon/flat = getFlatIcon(painting)
+				row1 += {"<td><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'></td>"}
+				row2 += {"<td>"[title]"</td>"}
+			
+			tooble += {"<tr>[row1]</tr><tr>[row2]</tr>"}
+			if(artistsandworks != currentartist)
+				currentartist = artistsandworks
+				painting_completions += {"<h3>[artistsandworks]</h3>"}
+				painting_completions += {"<table>[tooble]</table>"}
+	
+		completions += "<h2>Artisans and their artworks</h2>"
+		completions += painting_completions
+		completions += "<HR>"
 
 	/*//Calls auto_declare_completion_* for all modes
 	for(var/handler in typesof(/datum/gamemode/proc))
@@ -236,13 +293,13 @@
 
 	//Check how many uncleaned mess are on the station. We can't run through cleanable for reasons, so yeah, long
 	for(var/obj/effect/decal/cleanable/M in decals)
-		if(M.z != STATION_Z) //Won't work on multi-Z stations, but will do for now
+		if(M.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
 			continue
 		if(M.messcheck())
 			score["mess"]++
 
 	for(var/obj/item/trash/T in trash_items)
-		if(T.z != STATION_Z) //Won't work on multi-Z stations, but will do for now
+		if(T.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
 			continue
 		var/area/A = get_area(T)
 		if(istype(A,/area/surface/junkyard))

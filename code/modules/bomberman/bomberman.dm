@@ -304,7 +304,7 @@ var/global/list/bombermangear = list()
 	sleep(5)
 	qdel(src)
 
-obj/structure/bomberflame/Destroy()
+/obj/structure/bomberflame/Destroy()
 	..()
 	bombermangear -= src
 

@@ -7,8 +7,8 @@
 	priority = 1 //this is more important than anything else!
 	can_infect = 0
 	blood_level = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return target_zone == LIMB_GROIN && hasorgans(target)
+/datum/surgery_step/butt/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	return target_zone == LIMB_GROIN && hasorgans(target)
 
 
 //And thus begins the madness.
@@ -145,7 +145,7 @@
 /datum/surgery_step/butt/cauterize_butt/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] begins to cauterize [target]'s ass with \the [tool].", \
 	"You begin to cauterize [target]'s ass with \the [tool].")
-	target.custom_pain("IT BUURNS!",1, scream=TRUE)
+	target.custom_pain("IT BUUURNS!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/butt/cauterize_butt/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

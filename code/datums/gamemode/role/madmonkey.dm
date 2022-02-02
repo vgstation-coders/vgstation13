@@ -37,7 +37,7 @@
 	admin_voice_style = "rough"
 	var/countdown = 60
 
-datum/role/madmonkey/Greet(var/greeting,var/custom)
+/datum/role/madmonkey/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 

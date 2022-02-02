@@ -10,12 +10,12 @@
 /datum/event/unlink_from_centcomm/end()
 	link_to_centcomm()
 
-proc/link_to_centcomm()
+/proc/link_to_centcomm()
 	if(!map.linked_to_centcomm)
 		map.linked_to_centcomm = 1
 		command_alert(/datum/command_alert/command_link_restored)
 
-proc/unlink_from_centcomm()
+/proc/unlink_from_centcomm()
 	if(map.linked_to_centcomm)
 		command_alert(/datum/command_alert/command_link_lost)
 		map.linked_to_centcomm = 0

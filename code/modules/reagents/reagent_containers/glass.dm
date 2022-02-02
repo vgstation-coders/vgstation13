@@ -91,6 +91,10 @@
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+		if(istype(W, /obj/item/weapon/pen/fountain))
+			var/obj/item/weapon/pen/fountain/P = W
+			if(P.bloodied)
+				..()
 		set_tiny_label(user)
 	attempt_heating(W, user)
 
@@ -436,6 +440,32 @@
 	..()
 	reagents.add_reagent(WATER, 150)
 	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/soupcan
+	name = "soup can"
+	desc = "A used can of blether noodle soup. At least it fed a hungry greyling."
+	icon_state = "soupcan"
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_METAL
+	flags = OPENCONTAINER
+
+/obj/item/weapon/reagent_containers/glass/soupcan/attack_self()
+	if(is_open_container())
+		to_chat(usr, "<span class = 'notice'>You can't reseal the can's lid.")
+
+/obj/item/weapon/reagent_containers/glass/soupcan/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/soupcan/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug

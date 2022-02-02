@@ -91,7 +91,7 @@
 			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
 			dismantle_wall()
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -291,7 +291,7 @@
 					"<span class='notice'>You pry off [src]'s internal cover.</span>")
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 
-					var/pdiff = performWallPressureCheck(loc)
+					var/pdiff = performWallPressureCheck(src)
 					if(pdiff)
 						investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 						message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -334,7 +334,7 @@
 		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 50))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")

@@ -523,7 +523,12 @@ var/list/uplink_items = list()
 	cost = 1
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
-
+	
+/datum/uplink_item/device_tools/radio_jammer
+	name = "Radio Jammer"
+	desc = "A device that disrupts all radio communication in nearby area. Guaranteed radio silence at point blank range, but effectiveness decreases with range. Requires a power cell for operation. Batteries and screwdriver not included."
+	item = /obj/item/device/radio_jammer
+	cost = 8
 
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
@@ -582,7 +587,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/trophybelt
  	name = "Trophy Belt"
- 	desc = "An unremarkable leather belt specially crafted to hold whole heads in storage, perfect for serial killers with something to prove. Comes with seven storage slots. Will not accept brains, so behead mindfully."
+ 	desc = "An unremarkable leather belt specially crafted to hold whole heads and limbs in storage, perfect for serial killers and maimers with something to prove. Will not accept brains, so behead mindfully."
  	item = /obj/item/weapon/storage/belt/skull
  	cost = 4
 
@@ -664,7 +669,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
 	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room."
-	item = /obj/item/weapon/storage/box/remeximp
+	item = /obj/item/weapon/storage/box/chemimp/remeximp
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")
@@ -767,10 +772,18 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical/viruscollection
 	name = "Deadly Syndrome Collection"
-	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
+	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected, and a GNA forging disk for masking deadly syndromes in the database."
 	item = /obj/item/weapon/storage/lockbox/diskettebox/syndisease
 	cost = 20
 	discounted_cost = 12
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
+/datum/uplink_item/jobspecific/medical/symptomforger
+	name = "GNA Database Forger Disk"
+	desc = "A disk that looks almost exactly like a normal GNA disk, with the exception of being able to copy the symptom from any other normal one to splice into a disk. Splicing this in does not affect the disease, but instead creates a forged symptom onto the database, obscuring the original effect."
+	item = /obj/item/weapon/disk/disease/spoof
+	cost = 12
+	discounted_cost = 6
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/medical/syndietape_viro

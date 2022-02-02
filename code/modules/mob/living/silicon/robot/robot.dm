@@ -57,6 +57,7 @@
 
 	var/opened = FALSE
 	var/emagged = FALSE
+	var/pulsecompromised = FALSE //Used for pulsedemons
 	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
 	var/locked = TRUE
@@ -456,7 +457,7 @@
 	return FALSE
 
 
-/mob/living/silicon/robot/ex_act(severity)
+/mob/living/silicon/robot/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		to_chat(src, "The bus' robustness protects you from the explosion.")
 		return
@@ -468,15 +469,18 @@
 			if(!isDead())
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
 				gib()
 				return
 		if(2.0)
 			if(!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 		if(3.0)
 			if(!isDead())
 				adjustBruteLoss(30)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	updatehealth()
 
@@ -723,6 +727,7 @@
 		var/datum/robot_component/C = components["power cell"]
 		if(wiresexposed)
 			to_chat(user, "Close the panel first.")
+			return
 		else if(cell)
 			to_chat(user, "You swap the power cell within with the new cell in your hand.")
 			var/obj/item/weapon/cell/oldpowercell = cell
@@ -754,6 +759,15 @@
 			C.install()
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
+		if(cell.occupant)
+			to_chat(cell.occupant,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+			pulsecompromised = 1
+			cell.occupant.loc = src
+			cell.occupant.current_robot = src
+			cell.occupant = null
+			to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
+			spawn(2 SECONDS)
+				to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 		updateicon()
 
 	else if(iswiretool(W))
@@ -1151,7 +1165,7 @@
 			var/turf/tile = loc
 			if(isturf(tile))
 				tile.clean_blood()
-				for(var/A in tile)
+				for(var/atom/A in tile)
 					if(istype(A, /obj/effect))
 						if(iscleanaway(A))
 							qdel(A)

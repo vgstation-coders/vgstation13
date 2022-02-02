@@ -26,20 +26,20 @@
 
 /datum/component/ai/human_brain/process()
 	life_tick++
-	if(parent.invoke_event(/event/comp_ai_cmd_get_busy))
+	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
 		return
 	if(!ishuman(parent))
 		return
 	var/mob/living/carbon/human/H = parent
 
 	if(H.stat != CONSCIOUS || !H.canmove || !isturf(H.loc))
-		parent.invoke_event(/event/comp_ai_cmd_move, list("target" = 0))
+		INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
 		return
 
-	current_target = parent.invoke_event(/event/comp_ai_cmd_get_best_target)
+	current_target = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_best_target)
 	if(!isnull(current_target))
 		personal_desires.Add(DESIRE_CONFLICT)
-		parent.invoke_event(/event/comp_ai_cmd_set_target, list("target" = current_target))
+		INVOKE_EVENT(parent, /event/comp_ai_cmd_set_target, "target" = current_target)
 		if(IsBetterWeapon(H))
 			personal_desires.Add(DESIRE_HAVE_WEAPON)
 		if(IsBetterWeapon(H, H.contents))
@@ -51,18 +51,18 @@
 	if(I)
 		if(H.Adjacent(I))
 			AcquireItem(H, I)
-			parent.invoke_event(/event/comp_ai_cmd_move, list("target" = 0))
+			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
 		else
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
-				parent.invoke_event(/event/comp_ai_cmd_move, list("target" = get_turf(I)))
+				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = get_turf(I))
 		return
 
 	if(!isnull(current_target))
-		parent.invoke_event(/event/comp_ai_cmd_attack, list("target" = current_target))
+		INVOKE_EVENT(parent, /event/comp_ai_cmd_attack, "target" = current_target)
 		var/turf/T = get_turf(current_target)
 		if(T)
 			if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
-				parent.invoke_event(/event/comp_ai_cmd_move, list("target" = T))
+				INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = T)
 		return
 	else
 		personal_desires.Remove(DESIRE_CONFLICT)
@@ -78,7 +78,7 @@
 			else
 				dir = turn(lastdir, 180)
 		if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
-			parent.invoke_event(/event/comp_ai_cmd_move, list("target" = dir))
+			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = dir)
 			lastdir = dir
 
 /datum/component/ai/human_brain/proc/AssessNeeds(mob/living/carbon/human/H)

@@ -199,7 +199,7 @@ var/global/list/damage_icon_parts = list()
 
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
-	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isgrue(src) && mind.special_role != HIGHLANDER // Part of the species.
+	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isumbra(src) && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (M_SKELETON in src.mutations)
 
 	var/g = "m"
@@ -1081,7 +1081,7 @@ var/global/list/damage_icon_parts = list()
 				var/image/dyn_overlay = wear_suit.dynamic_overlay["[SUIT_LAYER]"]
 				O.overlays += dyn_overlay
 
-		if(istype(wear_suit, /obj/item/clothing/suit/straight_jacket) )
+		if(istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
 			drop_from_inventory(handcuffed)
 			drop_hands()
 
@@ -1403,7 +1403,7 @@ var/global/list/damage_icon_parts = list()
 	if(is_slot_hidden(W.body_parts_covered, (HIDEEARS), 0, W.body_parts_visible_override))
 		update_inv_ears()
 
-proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0, var/visibility_override = 0)
+/proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0, var/visibility_override = 0)
 	if(!clothes)
 		return 0
 	var/true_body_parts_covered = clothes

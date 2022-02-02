@@ -19,6 +19,9 @@
 					break
 	else
 		anomaly = time_anomaly_list[1]
+	for(var/obj/item/weapon/pinpointer/advpinpointer/time_agent/TAP in pinpointer_list)
+		if(anomaly)
+			TAP.target = anomaly
 	explanation_text = format_explanation()
 	return TRUE
 

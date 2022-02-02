@@ -145,6 +145,7 @@ Class Procs:
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
+	var/pulsecompromised = 0 //Used for pulsedemons
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -225,6 +226,8 @@ Class Procs:
 
 		spawn(10)
 			qdel(pulse2)
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Finally take these out inside APCs and etc.
 	..()
 
 /obj/machinery/suicide_act(var/mob/living/user)
@@ -381,9 +384,7 @@ Class Procs:
 	return TRUE
 
 /obj/machinery/proc/is_in_range(var/mob/user)
-	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		return FALSE
-	return TRUE
+	return (in_range(src, user) && isturf(loc)) || issilicon(user) || ispulsedemon(user)
 
 /obj/machinery/Topic(href, href_list)
 	..()
@@ -520,7 +521,7 @@ Class Procs:
 		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(toggleitem.is_screwdriver(user))
+	if(toggleitem?.is_screwdriver(user))
 		toggleitem.playtoolsound(loc, 50)
 	update_icon()
 	return 1
@@ -595,7 +596,7 @@ Class Procs:
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
 			emag(user)
-			return
+			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
@@ -660,7 +661,7 @@ Class Procs:
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
 	return 1
 
-/obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
+/obj/machinery/proc/shock(mob/living/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
 	if(!istype(user) || !user.Adjacent(src))

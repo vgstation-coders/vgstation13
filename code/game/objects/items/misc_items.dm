@@ -64,6 +64,8 @@
 	desc = "A neatly folded-up plastic bag, making it easier to store."
 	icon_state = "folded_bag"
 	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_PLASTIC)//Same as plastic bag
+	w_type = RECYK_PLASTIC
 
 /obj/item/folded_bag/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>You unfold \the [src].</span>")
@@ -106,3 +108,5 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "spring"
 	desc = "A piece of woven metal capable of high elasticity."
+	w_type = RECYK_METAL
+	starting_materials = list(MAT_IRON = 1 * CC_PER_SHEET_METAL)

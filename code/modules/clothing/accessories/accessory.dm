@@ -312,7 +312,7 @@
 	slot_flags = SLOT_BELT
 	var/stored_name = null
 	starting_materials = list(MAT_PLASTIC = 50)
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 
 /obj/item/clothing/accessory/assistantcard/attack_self(mob/user as mob)
 	if(!stored_name)

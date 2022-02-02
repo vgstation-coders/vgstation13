@@ -10,6 +10,8 @@
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 
+	var/meatcolor //If set, the meat will be colored accordingly (hex string). This can be used to add colored meats for various species without making a new sprite.
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -18,6 +20,12 @@
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
 		subjectname = M.name
+
+	if(meatcolor) //If meatcolor is set, set the icon_state to meat_colorless and modify the tone.
+		icon_state = "meat_colorless"
+		var/icon/original = icon(icon, icon_state)
+		original.ColorTone(meatcolor)
+		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
@@ -31,6 +39,12 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	name = "monkey meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey/New(atom/A, var/mob/M)
+	..()
+
+	if(M)
+		name = "[initial(M.name)] [meatword]"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
 	desc = "Tastes like the tears of the station. Gives off the faint aroma of a valid salad. Just like mom used to make. This revelation horrifies you greatly."
@@ -48,12 +62,20 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	name = "human meat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/human/New(atom/A, var/mob/M)
+	..()
+	if(ishuman(M))
+		if(uppertext(M.name) == "UNKNOWN")
+			var/mob/living/carbon/human/H = M
+			name = "[lowertext(H.species.name)] [meatword]"
+
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/human/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
 		return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(isgrue(H))
+		if(isumbra(H))
 			H.adjustOxyLoss(-50)
 			H.heal_organ_damage(50, 0)
 			H.heal_organ_damage(0, 50)
@@ -70,6 +92,24 @@
 	desc = "A chunk of meat from a diona nymph. It looks dense and fibrous."
 	icon_state = "nymphmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey
+	name = "grey meat"
+	desc = "A slab of greyish meat, slightly acidic in taste."
+	icon_state = "greymeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey/New()
+	..()
+	reagents.add_reagent(SACID, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
+	name = "insectoid meat"
+	desc = "A slab of gooey, white meat. It's still got traces of hardened chitin."
+	icon_state = "insectoidmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 5)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	name = "vox meat"
 	desc = "Considering its Avian origin, tastes unsurprisingly like chicken."
@@ -79,11 +119,21 @@
 	name = "chicken meat"
 	desc = "This better be delicious."
 	icon_state = "raw_chicken"
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken
+	name = "vox chicken meat"
+	desc = "Vox, man. No discussion."
+	icon_state = "raw_vox_chicken"
 	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
 	name = "crab meat"
@@ -232,7 +282,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 	return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	if(transformed && istype(destination, /obj/machinery/cooking))
 		revert()
 
@@ -387,3 +437,12 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.remove_reagent(NUTRIMENT, 2.5)
 	reagents.add_reagent(PLASMA, 5)
 	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/
+	name = "grue meat"
+	desc = "Considered a delicacy by some, the edibility of this meat has long been a subject of debate amongst discerning gourmands."
+	meatcolor = GRUE_BLOOD
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/New()
+	..()
+	reagents.add_reagent(GRUE_BILE, 5)

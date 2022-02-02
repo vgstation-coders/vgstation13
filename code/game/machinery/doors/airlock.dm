@@ -25,7 +25,6 @@
 	power_channel = ENVIRON
 
 	custom_aghost_alerts=1
-
 	var/aiControlDisabled = 0 //If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock. If -1, the control is enabled but the AI had bypassed it earlier, so if it is disabled again the AI would have no trouble getting back in.
 	var/hackProof = 0 // if 1, this door can't be hacked by the AI
 	var/secondsMainPowerLost = 0 //The number of seconds until power is restored.
@@ -54,7 +53,7 @@
 	var/pitch = 30
 	penetration_dampening = 10
 	var/image/shuttle_warning_lights
-
+	var/list/remote_control_access = list(/mob/living/silicon, /mob/living/simple_animal/hostile/pulse_demon) //Mobs with access to directly controlling the airlock
 	explosion_block = 1
 
 	emag_cost = 1 // in MJ
@@ -777,7 +776,7 @@ About the new airlock wires panel:
 	if(!nowindow)
 		..()
 	if(!isAdminGhost(usr))
-		if(usr.stat || usr.restrained() || (usr.size < SIZE_SMALL))
+		if((usr.stat || usr.restrained()) || (!ispulsedemon(usr) && usr.size < SIZE_SMALL))
 			//testing("Returning: Not adminghost, stat=[usr.stat], restrained=[usr.restrained()], small=[usr.small]")
 			return
 	add_fingerprint(usr)
@@ -792,7 +791,7 @@ About the new airlock wires panel:
 			usr.unset_machine()
 			return
 
-	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl() && operating != -1))
+	if(isAdminGhost(usr) || (is_type_in_list(usr, remote_control_access) && src.canAIControl() && operating != -1))
 		//AI
 		//aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door, 8 door safties, 9 door speed
 		//aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door,  8 door safties, 9 door speed
@@ -1144,16 +1143,30 @@ About the new airlock wires panel:
 		if(arePowerSystemsOn() && !(stat & NOPOWER))
 			if(level_of_door_opening < 2)
 				return
-			if(M.client)
-				density ? open(1):close(1)
-			else if(density)
-				open(1)
+			if(!M.force_airlock_time)
+				if(M.client)
+					density ? open(1):close(1)
+				else if(density)
+					open(1)
+			else //Simple mobs with a nonzero force_airlock_time take time to force the airlock.
+				to_chat(M, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
+				visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
+						"<span class='notice'>You hear groaning metal and overworked motors.</span>")
+				if(do_after(M,src,M.force_airlock_time))
+					if(locked || welded || jammed) //if it got welded/bolted during the do_after
+						to_chat(M, "<span class='notice'>The airlock won't budge!</span>")
+						return
+					visible_message("<span class='warning'>\The [M] forces \the [src] [density ? "open" : "closed"]!</span>")
+					if(M.client)
+						density ? open(1):close(1)
+					else if(density)
+						open(1)
 		else
 			if(M.client)
 				density ? open(1):close(1)
 			else if(density)
 				open(1)
-		visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
+			visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
 
 
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
@@ -1176,21 +1189,9 @@ About the new airlock wires panel:
 			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
 
-	if((I.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT && density)
-		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
-		"<span class='notice'>You begin slicing through \the [src].</span>", \
-		"<span class='warning'>You hear slicing noises.</span>")
-		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-
-		if(do_after(user, src, 200))
-			if(!istype(src))
-				return
-			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
-			"<span class='notice'>You slice through \the [src].</span>", \
-			"<span class='warning'>You hear slicing noises.</span>")
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			bashed_in(user, FALSE)
-
+	if(!being_cut && (I.sharpness_flags & CUT_AIRLOCK) && density)
+		attempt_slicing(user)
+		return
 	if(istype(I, /obj/item/weapon/batteringram))
 		var/obj/item/weapon/batteringram/B = I
 		if(!B.can_ram(user))
@@ -1286,7 +1287,7 @@ About the new airlock wires panel:
 	add_fingerprint(user)
 	return
 
-/obj/machinery/door/airlock/proc/bashed_in(var/mob/user, var/throw_circuit = TRUE)
+/obj/machinery/door/airlock/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
 	var/obj/structure/door_assembly/DA = revert(user,throw_circuit ? user.dir : null)
@@ -1319,6 +1320,10 @@ About the new airlock wires panel:
 		else if(req_one_access && req_one_access.len)
 			A.conf_access = req_one_access
 			A.one_access = 1
+		if(req_access_dir)
+			A.dir_access = req_access_dir
+		if(access_not_dir)
+			A.access_nodir = access_not_dir
 	else
 		A = electronics
 		electronics = null

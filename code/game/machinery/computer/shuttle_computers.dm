@@ -425,7 +425,7 @@
 			shuttle.linked_port.z + custom_z
 			)
 
-			if(!dest || dest.z == CENTCOMM_Z || (!istype(dest, /turf/space) && !shuttle.destroy_everything))
+			if(!dest || dest.z == map.zCentcomm || (!istype(dest, /turf/space) && !shuttle.destroy_everything))
 				to_chat(usr, "Error! Bad coordinates.")
 				return
 			if(istype(disk.destination, /obj/docking_port/destination/coord))

@@ -62,7 +62,7 @@
 				L.client.images -= pathogen
 		pathogen = null
 
-	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE && (timeofdeath == 0 || timeofdeath >= world.time - DEATH_SHADEOUT_TIMER))
+	if(client && iscultist(src) && (timeofdeath == 0 || timeofdeath >= world.time - DEATH_SHADEOUT_TIMER))
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/shade = new (T)
@@ -175,9 +175,4 @@
 	update_body(0)
 	update_mutantrace()
 	vessel.remove_reagent(BLOOD,vessel.get_reagent_amount(BLOOD))
-	return
-
-/mob/living/carbon/human/proc/Drain()
-	ChangeToHusk()
-	mutations |= M_NOCLONE
 	return

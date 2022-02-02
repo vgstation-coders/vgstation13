@@ -187,15 +187,18 @@
 				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
 			else
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode()
+			explode(Proj.firer)
 	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
-	var/obj/item/tool/weldingtool/welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
-	if(welder)
+	var/has_welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
+	if(has_welder)
+		var/obj/item/tool/weldingtool/welder = user.held_items[has_welder]
 		welder.setWelding(1)
 		if(welder.welding)
 			var/message_say = user.handle_suicide_bomb_cause()
+			if(!user.Adjacent(src))
+				return
 			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
 			user.say(message_say)
 			welder.afterattack(src,user,1)
@@ -227,15 +230,15 @@
 			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = car.occupant
 				H.audible_scream("fueltank_crash")
-			explode()
+			explode(car.occupant)
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode()
+/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
 	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4)
+		explosion(src.loc,1,2,4, whodunnit = user)
 	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3)
+		explosion(src.loc,0,1,3, whodunnit = user)
 	else
-		explosion(src.loc,-1,1,2)
+		explosion(src.loc,-1,1,2, whodunnit = user)
 	if(src)
 		qdel(src)
 
@@ -502,7 +505,6 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
-	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
 	var/health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood

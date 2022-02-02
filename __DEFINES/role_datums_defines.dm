@@ -39,7 +39,6 @@
 #define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
-#define CHIEF_CULTIST "chief cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
 #define NUKE_OP_LEADER "nuclear operative leader"
@@ -69,17 +68,19 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
-#define TIMEAGENT "time agent"
+#define TIMEAGENT "Time Agent"
 #define TIMEAGENTTWIN "time agent twin"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define GIANTSPIDER "giant spider"
+#define PULSEDEMON "Pulse Demon"
 #define STREAMER "streamer"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"
 #define CLOWN_LING "clown ling"
 #define TAG_MIME "tag mime"
 #define JUDGE "judge"
+#define GRUE "grue"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -111,15 +112,6 @@
 #define FACTION_VICTORY		5
 
 #define MALF_CHOOSING_NUKE	4
-
-#define CULT_MENDED		-1
-#define CULT_PROLOGUE	0
-#define CULT_ACT_I		1
-#define CULT_ACT_II		2
-#define CULT_ACT_III	3
-#define CULT_ACT_IV		4
-#define CULT_EPILOGUE	5
-
 
 //////////////////////////////////CULT STUFF////////////////////////////////////
 
@@ -163,7 +155,7 @@
 #define RITUALABORT_CONCEAL	"conceal"
 #define RITUALABORT_NEAR	"near"
 #define RITUALABORT_MISSING	"missing"
-#define RITUALABORT_OUTPOST "outpost"
+#define RITUALABORT_OVERCROWDED "overcrowded"
 
 #define TATTOO_POOL		"Blood Communion"
 #define TATTOO_SILENT	"Silent Casting"
@@ -186,6 +178,8 @@
 #define	RUNE_CAN_IMBUE	1
 #define	RUNE_CANNOT		2
 
+#define RUNE_STAND	1
+
 #define	MAX_TALISMAN_PER_TOME	5
 
 #define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
@@ -196,6 +190,7 @@
 #define CONVERSION_ACCEPT	1
 #define CONVERSION_BANNED	2
 #define CONVERSION_MINDLESS	3
+#define CONVERSION_OVERCROWDED	4
 
 #define CONVERTIBLE_ALWAYS	1
 #define CONVERTIBLE_CHOICE	2
@@ -207,11 +202,17 @@
 #define DECONVERSION_ACCEPT	1
 #define DECONVERSION_REFUSE 2
 
+#define CULTIST_ROLE_NONE		0
+#define CULTIST_ROLE_ACOLYTE	1
+#define CULTIST_ROLE_HERALD		2
+#define CULTIST_ROLE_MENTOR		3
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // -- Objectives flags
 
 #define FACTION_OBJECTIVE 1
+#define FREEFORM_OBJECTIVE 2
 
 // -- Cult 2.0 states
 #define CULT_PRELUDE 		0 // First objective
@@ -273,7 +274,7 @@
 #define SYNDICATE_VALIDATED	1
 #define SYNDICATE_CANCELED	2
 
-#define DOUBLE_AGENT_TC_REWARD	5
+#define DOUBLE_AGENT_TC_REWARD	8
 
 #define BASE_RULESET_WEIGHT 10
 #define ADDITIONAL_RULESET_WEIGHT 1.4

@@ -25,6 +25,8 @@
 	var/scare_played = 0 //Did we rape everyone's ears yet ?
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent //Graciously stolen from spider code
 
+	blooded = FALSE
+
 /mob/living/simple_animal/scp_173/New()
 	. = ..()
 	flags |= INVULNERABLE
@@ -252,7 +254,7 @@
 			snap_neck(M)
 			break
 
-/mob/living/simple_animal/scp_173/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/mob/living/simple_animal/scp_173/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 
 	..()
 	check_snap_neck()

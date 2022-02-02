@@ -76,8 +76,9 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc, "Grue")
+/mob/living/carbon/human/umbra/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Umbra")
+	faction = "grue" //Umbras are friendly with grues
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
@@ -310,7 +311,7 @@
 /mob/living/carbon/human/restrained()
 	if (..())
 		return TRUE
-	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
+	if (istype(wear_suit, /obj/item/clothing/suit/strait_jacket))
 		return TRUE
 	return FALSE
 
@@ -1734,7 +1735,7 @@
 /mob/living/carbon/human/proc/is_bulky()
 	return species.anatomy_flags & IS_BULKY
 
-mob/living/carbon/human/isincrit()
+/mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
 
@@ -1878,6 +1879,7 @@ mob/living/carbon/human/isincrit()
 		"check_mutations",
 		"lastFart",
 		"lastDab",
+		"lastAnemia",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -2055,21 +2057,38 @@ mob/living/carbon/human/isincrit()
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	var/mob/living/H = speech.speaker
-	var/hangman_answer = speech.message
-	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
-	hangman_answer = replacetext(hangman_answer,"?","")
-	hangman_answer = replacetext(hangman_answer,"!","")
-	if(muted_letters && muted_letters.len && length(hangman_answer) == 1) // If we're working with a hangman cursed individuel and we only said a letter
-		if(hangman_answer in muteletters_check) // Correct answer?
-			muted_letters.Remove(hangman_answer) // Baleet it
-			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
-			H.hangman_score++ // Add to score
-		else if(muteletter_tries)
-			muteletter_tries-- //Reduce the attempts left before...
-			visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
-		else
-			set_muted_letters(min(0,26-(muted_letters.len+1))) // It gets scrambled and lengthened!
-			visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
+	if(muted_letters && muted_letters.len) // If we're working with a hangman cursed individual
+		var/hangman_answer = speech.message
+		hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation and uppercase
+		hangman_answer = replacetext(hangman_answer,"?","")
+		hangman_answer = replacetext(hangman_answer,"!","")
+		if(hangman_phrase != "" && hangman_answer == hangman_phrase) // Whole phrase guessed right?
+			for(var/letter in muteletters_check)
+				muted_letters.Remove(letter) // Wipe checked letters from muted ones
+				muteletters_check.Remove(letter) // And the list itself
+				H.hangman_score++ // Add to score
+			H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\".</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\".</span>")
+			hangman_phrase = ""
+		hangman_answer = uppertext(hangman_answer)
+		if(length(hangman_answer) == 1) // If we only said a letter
+			if(hangman_answer in muteletters_check) // Correct answer?
+				muted_letters.Remove(hangman_answer) // Baleet it
+				muteletters_check.Remove(hangman_answer) // Here too
+				var/obscured_answer = hangman_phrase
+				for(var/letter in muted_letters)
+					obscured_answer = replacetext(obscured_answer, letter, "_")
+				if(muteletters_check.len)
+					H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer].</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer].</span>")
+				else
+					H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\".</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\".</span>")
+					hangman_phrase = ""
+				H.hangman_score++ // Add to score
+			else if(muteletter_tries)
+				muteletter_tries-- //Reduce the attempts left before...
+				visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
+			else
+				set_muted_letters(max(0,26-(muted_letters.len+1))) // It gets scrambled and lengthened!
+				visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
@@ -2246,7 +2265,7 @@ mob/living/carbon/human/isincrit()
 			return list(
 		if ("Golem")
 			return list(
-		if ("Grue")
+		if ("Umbra")
 			return list(
 		if ("Slime")
 			return list(

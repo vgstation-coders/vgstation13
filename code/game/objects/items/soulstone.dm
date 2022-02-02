@@ -21,6 +21,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=4"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	surgerysound = 'sound/items/scalpel.ogg'
 
 	var/mob/living/simple_animal/shade/shade = null
 
@@ -68,13 +69,6 @@
 			if(old_cult?.is_sacrifice_target(M.mind))
 				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 				return
-
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			if (cult)
-				var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
-				if (O && (M == O.sacrifice_target || (M.mind && M.mind == O.sacrifice_mind)))
-					to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
-					return
 
 			var/datum/soul_capture/capture_datum = new()
 			capture_datum.init_datum(user, M, src)
@@ -125,9 +119,13 @@
 			//Is our user a cultist? Then you're a cultist too now!
 			if (iscultist(user))
 				if(!iscultist(target))
+					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+					if (cult && !cult.CanConvert())
+						to_chat(user, "<span class='danger'>The cult has too many members already.</span>")
+						return
+
 					var/datum/role/cultist/newCultist = new
 					newCultist.AssignToRole(target.mind,1)
-					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 					if (!cult)
 						cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 					cult.HandleRecruitedRole(newCultist)
@@ -172,6 +170,7 @@
 	item_state = "shard-soulstone"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shards.dmi', "right_hand" = 'icons/mob/in-hand/right/shards.dmi')
 	sharpness_flags = 0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
 	..()
@@ -210,6 +209,23 @@
 		blade = TRUE
 	if (istype(receptacle, /obj/item/soulstone/gem))
 		gem = TRUE
+
+	var/mob/victim
+	if (iscarbon(target))
+		victim = target
+	else if (istype(target, /obj/item/organ/external/head))
+		var/obj/item/organ/external/head/target_head = target
+		victim = target_head.brainmob
+
+	if (victim)
+		//First off let's check that the cult isn't bypassing its convertee cap
+		if (iscultist(user))
+			if (!iscultist(victim))
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (cult && !cult.CanConvert())
+					if (!blade || victim.isDead())
+						to_chat(user, "<span class='danger'>The cult has too many members already, \the [soul_receptacle] won't let you take their soul.</span>")
+					return
 
 	if (iscarbon(target))
 		init_body(target,user)
@@ -664,7 +680,8 @@
 	if (istype(user, /mob/living/simple_animal/construct/builder))
 		new /obj/item/soulstone/gem(loc)
 		var/obj/structure/constructshell/cult/alt/newshell = new (loc)
-		newshell.fingerprints = fingerprints.Copy()
+		if (fingerprints)
+			newshell.fingerprints = fingerprints.Copy()
 		qdel(src)
 		return 1
 	if (istype(user, /mob/living/simple_animal/shade))

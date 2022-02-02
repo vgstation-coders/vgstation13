@@ -23,12 +23,6 @@
 	light_color = LIGHT_COLOR_CYAN
 	light_range_on = 3
 	light_power_on = 2
-	power_change()
-		..()
-		if(!(stat & (BROKEN|NOPOWER)) && occupant)
-			set_light(light_range_on, light_power_on)
-		else
-			set_light(0)
 	var/on = FALSE
 	var/target_time = 0
 	var/setting
@@ -37,6 +31,13 @@
 	var/drag_delay = 20
 	var/cools = 0
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
+
+/obj/machinery/sleeper/power_change()
+	..()
+	if(!(stat & (BROKEN|NOPOWER)) && occupant)
+		set_light(light_range_on, light_power_on)
+	else
+		set_light(0)
 
 /obj/machinery/sleeper/New()
 	..()

@@ -239,166 +239,106 @@
 
 /obj/item/weapon/storage/box/syndie_kit/imp_freedom
 	name = "Freedom Implant (with injector)"
-
-/obj/item/weapon/storage/box/syndie_kit/imp_freedom/New()
-	..()
-	var/obj/item/weapon/implanter/O = new(src)
-	O.imp = new /obj/item/weapon/implant/freedom(O)
-	O.update()
-	return
+	items_to_spawn = list(/obj/item/weapon/implanter/freedom)
 
 /obj/item/weapon/storage/box/syndie_kit/imp_compress
 	name = "box (C)"
-
-/obj/item/weapon/storage/box/syndie_kit/imp_compress/New()
-	new /obj/item/weapon/implanter/compressed(src)
-	..()
-	return
+	items_to_spawn = list(/obj/item/weapon/implanter/compressed)
 
 /obj/item/weapon/storage/box/syndie_kit/imp_explosive
 	name = "box (E)"
-
-/obj/item/weapon/storage/box/syndie_kit/imp_explosive/New()
-	new /obj/item/weapon/implanter/explosive(src)
-	..()
-	return
+	items_to_spawn = list(/obj/item/weapon/implanter/explosive)
 
 /obj/item/weapon/storage/box/syndie_kit/imp_uplink
 	name = "Uplink Implant (with injector)"
-
-/obj/item/weapon/storage/box/syndie_kit/imp_uplink/New()
-	..()
-	var/obj/item/weapon/implanter/O = new(src)
-	O.imp = new /obj/item/weapon/implant/uplink(O)
-	O.update()
-	return
+	items_to_spawn = list(/obj/item/weapon/implanter/uplink)
 
 /obj/item/weapon/storage/box/syndie_kit/space
 	name = "Space Suit and Helmet"
-
-/obj/item/weapon/storage/box/syndie_kit/space/New()
-	..()
-	new /obj/item/clothing/suit/space/syndicate(src)
-	new /obj/item/clothing/head/helmet/space/syndicate(src)
-	return
+	items_to_spawn = list(
+		/obj/item/clothing/suit/space/syndicate,
+		/obj/item/clothing/head/helmet/space/syndicate,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/surveillance
 	name = "box (S)"
-
-/obj/item/weapon/storage/box/syndie_kit/surveillance/New()
-	..()
-	new /obj/item/device/handtv(src)
-	new /obj/item/weapon/storage/box/surveillance(src)
-	return
+	items_to_spawn = list(
+		/obj/item/device/handtv,
+		/obj/item/weapon/storage/box/surveillance,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/conversion
 	name = "box (CK)"
-
-/obj/item/weapon/storage/box/syndie_kit/conversion/New()
-	..()
-	new /obj/item/weapon/conversion_kit(src)
-	new /obj/item/ammo_storage/box/a357(src)
-	return
+	items_to_spawn = list(
+		/obj/item/weapon/conversion_kit,
+		/obj/item/ammo_storage/box/a357,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/greytide
 	name = "box (GT)"
-
-/obj/item/weapon/storage/box/syndie_kit/greytide/New()
-	..()
-	new /obj/item/weapon/implanter/traitor(src)
-	new /obj/item/weapon/implanter/traitor(src)
-	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
+	items_to_spawn = list(
+		/obj/item/weapon/implanter/traitor = 2,
+		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/boolets
 	name = "Shotgun shells"
-
-/obj/item/weapon/storage/box/syndie_kit/boolets/New()
-	..()
-	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
-	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
-	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
-	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
-	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
-	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fakebeanbag = 6)
 
 /obj/item/weapon/storage/box/syndie_kit/ammo
 	name = "box (spare ammo)"
+	items_to_spawn = list(/obj/item/ammo_storage/speedloader/a357)
 
-/obj/item/weapon/storage/box/syndie_kit/ammo/New()
-	..()
-	new /obj/item/ammo_storage/speedloader/a357(src)
-	return
-
-obj/item/weapon/storage/box/syndie_kit/cheaptide
+/obj/item/weapon/storage/box/syndie_kit/cheaptide
 	name = "box (CT)"
-
-/obj/item/weapon/storage/box/syndie_kit/cheaptide/New()
-	..()
-	new /obj/item/weapon/implanter/traitor(src)
-	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
+	items_to_spawn = list(
+		/obj/item/weapon/implanter/traitor,
+		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/flaregun
 	name = "box (modified flare gun)"
-
-/obj/item/weapon/storage/box/syndie_kit/flaregun/New()
-	..()
-	new /obj/item/weapon/gun/projectile/flare/syndicate(src)
-	new /obj/item/ammo_storage/box/flare(src)
-	return
+	items_to_spawn = list(
+		/obj/item/weapon/gun/projectile/flare/syndicate,
+		/obj/item/ammo_storage/box/flare,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/explosive_hug
 	name = "box (C)"
-
-/obj/item/weapon/storage/box/syndie_kit/explosive_hug/New()
-	..()
-	new /obj/item/weapon/reagent_containers/glass/bottle/antisocial(src)
-	new /obj/item/weapon/reagent_containers/syringe(src)
-	return
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/antisocial,
+		/obj/item/weapon/reagent_containers/syringe,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
 	name = "box (C)"
-
-/obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine/New()
-	..()
-	new /obj/item/weapon/reagent_containers/glass/bottle/hypozine(src)
-	new /obj/item/weapon/reagent_containers/syringe(src)
-	return
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/hypozine,
+		/obj/item/weapon/reagent_containers/syringe,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "spbox"
-	storage_slots = 8
+	can_add_storageslots = TRUE
 	can_only_hold = list("/obj/item/toy/snappop")
-
-/obj/item/weapon/storage/box/syndie_kit/smokebombs/New()
-	..()
-	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/toy/snappop/smokebomb(src)
+	items_to_spawn = list(/obj/item/toy/snappop/smokebomb = 8)
 
 /obj/item/weapon/storage/box/syndie_kit/molotovs/
 	name = "box (molotovs)"
-
-/obj/item/weapon/storage/box/syndie_kit/molotovs/New()
-	..()
-	for(var/i = 1 to 6)
-		new /obj/item/weapon/reagent_containers/food/drinks/molotov(src)
-	new /obj/item/weapon/lighter/red(src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/drinks/molotov = 6,
+		/obj/item/weapon/lighter/red,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ //Exactly what it sounds like.
 	name = "box (E&G)"
-
-/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/New()
-	..()
-	new /obj/item/weapon/glue(src)
-	new /obj/item/weapon/card/emag(src)
-	new /obj/item/weapon/glue(src)
-	new /obj/item/weapon/card/emag(src)
-	new /obj/item/weapon/glue(src)
-	new /obj/item/weapon/card/emag(src)
-	new /obj/item/weapon/glue(src)
-	return
+	items_to_spawn = list(
+		/obj/item/weapon/glue = 4,
+		/obj/item/weapon/card/emag = 3,
+	)
 
 
 //Syndicate Experimental Gear
@@ -416,11 +356,10 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 
 /obj/item/weapon/storage/box/syndie_kit/cratesender
 	name = "box (CS)"
-
-/obj/item/weapon/storage/box/syndie_kit/cratesender/New()
-	..()
-	new /obj/item/device/telepad_beacon(src)
-	new /obj/item/weapon/rcs/salvage/syndicate(src)
+	items_to_spawn = list(
+		/obj/item/device/telepad_beacon,
+		/obj/item/weapon/rcs/salvage/syndicate,
+	)
 
 
 //Elite Syndicate Bundles
@@ -428,87 +367,72 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 
 /obj/item/weapon/storage/box/syndie_kit/sniper
 	name = "Sniper"
-
-/obj/item/weapon/storage/box/syndie_kit/sniper/New()
-	..()
-	new /obj/item/device/radio/headset/headset_earmuffs/syndie(src)
-	new /obj/item/weapon/gun/projectile/hecate(src)
-	new /obj/item/clothing/accessory/storage/webbing(src)
-	new /obj/item/ammo_storage/box/BMG50(src)
-	new /obj/item/ammo_storage/box/BMG50(src)
-	new /obj/item/ammo_storage/box/BMG50(src)
-	new /obj/item/clothing/glasses/thermal/syndi(src)
+	items_to_spawn = list(
+		/obj/item/device/radio/headset/headset_earmuffs/syndie,
+		/obj/item/weapon/gun/projectile/hecate,
+		/obj/item/clothing/accessory/storage/webbing,
+		/obj/item/ammo_storage/box/BMG50 = 3,
+		/obj/item/clothing/glasses/thermal/syndi,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/spotter
 	name = "Spotter"
-
-/obj/item/weapon/storage/box/syndie_kit/spotter/New()
-	..()
-	new /obj/item/device/radio/headset/headset_earmuffs/syndie(src)
-	new /obj/item/binoculars(src)
-	new /obj/item/weapon/gun/projectile/deagle/camo(src)
-	new /obj/item/clothing/accessory/holster/handgun(src)
-	new /obj/item/ammo_storage/box/a50(src)
-	new /obj/item/clothing/glasses/thermal/syndi(src)
+	items_to_spawn = list(
+		/obj/item/device/radio/headset/headset_earmuffs/syndie,
+		/obj/item/binoculars,
+		/obj/item/weapon/gun/projectile/deagle/camo,
+		/obj/item/clothing/accessory/holster/handgun,
+		/obj/item/ammo_storage/box/a50,
+		/obj/item/clothing/glasses/thermal/syndi,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/scammer
 	name = "Legitimate Businessman"
+	items_to_spawn = list(
+		/obj/item/clothing/mask/gas/voice,
+		/obj/item/weapon/storage/briefcase/false_bottomed/smg,
+		/obj/item/clothing/under/chameleon,
+		/obj/item/clothing/shoes/syndigaloshes,
+		/obj/item/weapon/card/id/syndicate,
+		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+		/obj/item/device/reportintercom,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/scammer/New()
 	..()
-	new /obj/item/clothing/mask/gas/voice(src)
-	new /obj/item/weapon/storage/briefcase/false_bottomed/smg(src)
-	new /obj/item/clothing/under/chameleon(src)
-	new /obj/item/clothing/shoes/syndigaloshes(src)
-	new /obj/item/weapon/card/id/syndicate(src)
-	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
-	new /obj/item/device/reportintercom(src)
 	dispense_cash(10000, src)
 
 /obj/item/weapon/storage/box/syndie_kit/shootershotty
 	name = "Shotgun"
-
-/obj/item/weapon/storage/box/syndie_kit/shootershotty/New()
-	..()
-	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
-	new /obj/item/clothing/shoes/combat(src)
-	new /obj/item/clothing/gloves/neorussian/fingerless(src)
-	new /obj/item/clothing/under/sl_suit/armored(src)
-	new /obj/item/clothing/suit/armor/hos/jensen(src)
-	new /obj/item/clothing/glasses/sunglasses/prescription(src)
-	new /obj/item/clothing/head/beanie/black(src)
-	new /obj/item/clothing/accessory/storage/bandolier(src)
-	new /obj/item/weapon/gun/projectile/shotgun/pump/combat(src)
-	new /obj/item/weapon/storage/box/buckshotshells(src)
-	new /obj/item/weapon/storage/box/buckshotshells(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	items_to_spawn = list(
+		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
+		/obj/item/clothing/shoes/combat,
+		/obj/item/clothing/gloves/neorussian/fingerless,
+		/obj/item/clothing/under/sl_suit/armored,
+		/obj/item/clothing/suit/armor/hos/jensen,
+		/obj/item/clothing/glasses/sunglasses/prescription,
+		/obj/item/clothing/head/beanie/black,
+		/obj/item/clothing/accessory/storage/bandolier,
+		/obj/item/weapon/gun/projectile/shotgun/pump/combat,
+		/obj/item/weapon/storage/box/buckshotshells = 2,
+		/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel = 4,
+	)
 
 /obj/item/weapon/storage/box/syndie_kit/shooteruzis
 	name = "Dual Uzis"
-
-/obj/item/weapon/storage/box/syndie_kit/shooteruzis/New()
-	..()
-	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
-	new /obj/item/clothing/shoes/combat(src)
-	new /obj/item/clothing/gloves/neorussian/fingerless(src)
-	new /obj/item/clothing/under/syndicate(src)
-	new /obj/item/clothing/suit/armor/hos/jensen(src)
-	new /obj/item/clothing/glasses/sunglasses/prescription(src)
-	new /obj/item/clothing/head/soft/black(src)
-	new /obj/item/clothing/accessory/storage/webbing(src)
-	new /obj/item/weapon/gun/projectile/automatic/microuzi(src)
-	new /obj/item/weapon/gun/projectile/automatic/microuzi(src)
-	new /obj/item/ammo_storage/box/c9mm(src)
-	new /obj/item/ammo_storage/box/c9mm(src)
-	new /obj/item/ammo_storage/box/c9mm(src)
-	new /obj/item/ammo_storage/box/c9mm(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+	items_to_spawn = list(
+		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
+		/obj/item/clothing/shoes/combat,
+		/obj/item/clothing/gloves/neorussian/fingerless,
+		/obj/item/clothing/under/syndicate,
+		/obj/item/clothing/suit/armor/hos/jensen,
+		/obj/item/clothing/glasses/sunglasses/prescription,
+		/obj/item/clothing/head/soft/black,
+		/obj/item/clothing/accessory/storage/webbing,
+		/obj/item/weapon/gun/projectile/automatic/microuzi = 2,
+		/obj/item/ammo_storage/box/c9mm = 4,
+		/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel = 4,
+	)
 
 /obj/item/weapon/storage/box/syndicate_team/New()
 	..()

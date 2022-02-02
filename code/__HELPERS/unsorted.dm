@@ -608,7 +608,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return locate(x, y, A.z)
 
 //returns random gauss number
-proc/GaussRand(var/sigma)
+/proc/GaussRand(var/sigma)
   var/x,y,rsq
   do
     x=2*rand()-1
@@ -618,7 +618,7 @@ proc/GaussRand(var/sigma)
   return sigma*y*sqrt(-2*log(rsq)/rsq)
 
 //returns random gauss number, rounded to 'roundto'
-proc/GaussRandRound(var/sigma,var/roundto)
+/proc/GaussRandRound(var/sigma,var/roundto)
 	return round(GaussRand(sigma),roundto)
 
 //Step-towards method of determining whether one atom can see another. Similar to viewers()
@@ -1080,10 +1080,10 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	return copiedobjs
 
 //chances are 1:value. anyprob(1) will always return true
-proc/anyprob(value)
+/proc/anyprob(value)
 	return (rand(1,value)==value)
 
-proc/view_or_range(distance = world.view , center = usr , type)
+/proc/view_or_range(distance = world.view , center = usr , type)
 	switch(type)
 		if("view")
 			. = view(distance,center)
@@ -1091,7 +1091,7 @@ proc/view_or_range(distance = world.view , center = usr , type)
 			. = range(distance,center)
 	return
 
-proc/oview_or_orange(distance = world.view , center = usr , type)
+/proc/oview_or_orange(distance = world.view , center = usr , type)
 	switch(type)
 		if("view")
 			. = oview(distance,center)
@@ -1099,7 +1099,7 @@ proc/oview_or_orange(distance = world.view , center = usr , type)
 			. = orange(distance,center)
 	return
 
-proc/get_mob_with_client_list()
+/proc/get_mob_with_client_list()
 	var/list/mobs = list()
 	for(var/mob/M in mob_list)
 		if (M.client)
@@ -1294,7 +1294,7 @@ var/list/WALLITEMS = list(
 					return 1
 	return 0
 
-proc/rotate_icon(file, state, step = 1, aa = FALSE)
+/proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	var/icon/base = icon(file, state)
 
 	var/w
@@ -1880,7 +1880,7 @@ Game Mode config tags:
 				continue
 			taken_freqs.Add(chosen_freq)
 			freqs[i] = chosen_freq
-			world.log << "freq [i] is now [chosen_freq]"
+			world.log << "Radio frequency [i] is now [chosen_freq]"
 			freq_found = TRUE
 
 	freqtospan = list(
@@ -1943,6 +1943,22 @@ Game Mode config tags:
 	"Service" = SER_FREQ,
 	"Supply" = SUP_FREQ
 	)
+
+/proc/update_radio_frequency(var/name, var/freq, var/color, var/mob/user, var/update_station = TRUE)
+	var/newspan = null
+	if(name in freqs)
+		newspan = freqtospan["[freqs[name]]"]
+	freqs[name] = freq
+	radiochannels[name] = freqs[name]
+	radiochannelsreverse["[freqs[name]]"] = name
+	if(color)
+		freqtocolor["[freqs[name]]"] = color
+	if(newspan)
+		freqtospan["[freqs[name]]"] = newspan
+	if(update_station)
+		stationchannels[name] = freqs[name]
+	log_admin("[update_station ? "World" : "Non-station"] radio frequency [name] is now [freqs[name]][user ? " set by [key_name(user)]": ""]")
+	message_admins("[update_station ? "World" : "Non-station"] radio frequency [color ? "<font color=[freqtocolor["[freqs[name]]"]]>" : ""][name][color ? "</font color>" : ""] is now [freqs[name]][user ? " set by [key_name(user)] ([formatJumpTo(user, "JMP")])" : ""]")
 
 /proc/getviewsize(view)
 	if(isnum(view))

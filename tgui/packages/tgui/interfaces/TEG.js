@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import { useBackend } from '../backend';
-import { LabeledList, Section, ProgressBar, Flex } from '../components';
+import { Box, LabeledList, Section, ProgressBar, Flex } from '../components';
 import { Window } from '../layouts';
 
 export const TEG = (props, context) => {
@@ -28,9 +28,18 @@ export const TEG = (props, context) => {
   return (
     <Window
       title="thermoelectric generator"
-      width={755}
-      height={200}>
+      width={560}
+      height={240}>
       <Window.Content>
+        <Box style={{ display: "table", margin: "0 auto" }}>
+          <Section>
+            <LabeledList>
+              <LabeledList.Item label="Total output">
+                {output}
+              </LabeledList.Item>
+            </LabeledList>
+          </Section>
+        </Box>
         <Flex>
           {first_flow_cap !== undefined
         && <Flex.Item>
@@ -70,17 +79,6 @@ export const TEG = (props, context) => {
             </LabeledList>
           </Section>
         </Flex.Item>}
-          <Flex.Item grow={1}>
-            <Section title="Stats">
-              <LabeledList>
-                <LabeledList.Item
-                  key="output"
-                  label="Total output">
-                  {output}
-                </LabeledList.Item>
-              </LabeledList>
-            </Section>
-          </Flex.Item>
           {second_flow_cap !== undefined
         && <Flex.Item>
           <Section title={vertical ? "Bottom circulator" : "Right circulator"}>

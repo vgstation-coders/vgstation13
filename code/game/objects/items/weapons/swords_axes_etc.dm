@@ -292,6 +292,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	item_state = "grey_sword"
 	force = 4
+	w_type = RECYK_METAL
 
 /obj/item/weapon/rsscimmy
 	name = "rune scimitar"
@@ -328,9 +329,9 @@
 	if(prob(1))
 		to_chat(user, "<span class='notice'>You hit [pick("a good and caring parent", "a criminal", "someone everyone will miss",
 		"someone no one will miss", "a thief", "an abusive parent", "a space communist", "an alcoholic", "an adventurer")].</span>")
-	explosion(target, 0, 0, 1)
+	explosion(target, 0, 0, 1, whodunnit = user)
 
 /obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
 	..()
-	explosion(get_turf(src), 0, 2, 3)
+	explosion(get_turf(src), 0, 2, 3, whodunnit = user)
 	qdel(src)

@@ -8,18 +8,26 @@
 	<div class="itemLabel">
 		Credits in Shoal fund:
 	</div>
-	<div class="itemContent">
+	<div class="itemContentSmall">
 		{{:data.shoalmoney}} ({{:data.shoaldiscount}}% price)
+	</div>
+	<div class="itemContentSmall">
+		{{:helper.link("Deposit to Account", 'arrowthick-1-s', {'deposit' : 1})}}
 	</div>
 	<div class="itemLabel">
 		Past business:
 	</div>
-	<div class="itemContent">
-		{{:data.pastbusiness}} ({{:data.pastdiscount}}% price)
+	<div class="itemContentSmall">
+		{{:data.pastbusiness}} ({{:data.pastdiscount}}% price) 
+	</div>
+	<div class="itemContentSmall">
+		{{if data.pastbusiness == "Admin"}}
+			{{:helper.link("Admin: Add New", null, {'additem' : 1},null, 'yellowButton')}}
+		{{/if}}
 	</div>
 </div>
 {{for data.categories}}
-	<div class="itemContent">
+	<div class="itemContentSmall">
 		{{:helper.link(value.category, 'folder-collapsed', {'category' : value.category}, value.category == data.selectedCategory ? 'selected' : null)}}
 	</div>
 {{for}}
@@ -28,7 +36,11 @@
 	{{for data.databank}}
 		{{if value.category == data.selectedCategory}}
 			<div class="item">
-				{{:helper.link(value.name, 'cart', {'product' : value.name})}} {{:value.price}} credits ({{:value.marketforces}}% market forces)
+				{{if value.flashed}}
+					{{:helper.link(value.name, 'cart', {'product' : value.name})}} {{:value.price}} credits ({{:value.marketforces}}% market) <div class="average">(-30% Flash Sale!)</div>
+				{{else}}
+					{{:helper.link(value.name, 'cart', {'product' : value.name})}} {{:value.price}} credits ({{:value.marketforces}}% market)
+				{{/if}}
 			</div>
 		{{/if}}
 	{{for}}

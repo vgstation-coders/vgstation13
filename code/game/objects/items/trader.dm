@@ -190,7 +190,7 @@
 			say("That is enough for [crackers_to_dispense] crackers!")
 			if(crackers_to_dispense > 100)
 				visible_message("<span class = 'warning'>\The [src]'s matter fabrication unit overloads!</span>")
-				explosion(loc, 0, prob(15), 2, 0)
+				explosion(loc, 0, prob(15), 2, 0, whodunnit = user)
 				qdel(src)
 				return
 			for(var/x = 1 to crackers_to_dispense)
@@ -452,7 +452,7 @@ var/global/list/alcatraz_stuff = list(
 	var/datum/organ/external/active_hand = user.get_active_hand_organ()
 	if(active_hand)
 		active_hand.explode()
-	explosion(user, -1, 0, 2)
+	explosion(user, -1, 0, 2, whodunnit = user)
 	qdel(src)
 
 /obj/item/clothing/head/helmet/donutgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
@@ -602,7 +602,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/key/security/spare/New()
 	..()
 	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station",
-		 "Snow Station", "NRV Horizon", "Synergy Station", "Lamprey Station")
+		 "Snow Station", "Synergy Station", "Lamprey Station")
 	map_names -= map.nameLong
 	home_map = pick(map_names)
 
@@ -634,6 +634,56 @@ var/global/list/alcatraz_stuff = list(
 	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
 
+/obj/item/weapon/depocket_wand/suit
+	name = "suit sensing wand"
+	desc = "Used by medical staff to ensure compliance with vitals tracking regulations and to save vocal cord wear from demanding it over communications systems."
+	var/wand_mode = 3
+
+/obj/item/weapon/depocket_wand/suit/attack_self(mob/user)
+	var/static/list/modes = list("Off", "Binary sensors", "Vitals tracker", "Tracking beacon")
+	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[wand_mode + 1]) in modes
+	if(user.incapacitated())
+		return
+	wand_mode = modes.Find(switchMode) - 1
+
+	switch(wand_mode)
+		if(0)
+			to_chat(user, "<span class='notice'>\The [src] will now disable suit remote sensing equipment.</span>")
+		if(1)
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report whether the wearer is live or dead.</span>")
+		if(2)
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report vital lifesigns.</span>")
+		if(3)
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report vital lifesigns as well as coordinate positions.</span>")
+
+/obj/item/weapon/depocket_wand/suit/scan(mob/living/carbon/human/H, mob/living/user)
+	var/obj/item/clothing/under/suit = H.w_uniform
+	if(!suit)
+		to_chat(user, "<span class='warning'>\The [H] is not wearing a suit.</span>")
+		return
+	if(!suit.has_sensor)
+		to_chat(user, "<span class='warning'>\The [H]'s suit does not have sensors.</span>")
+		return
+	if(suit.has_sensor >= 2)
+		to_chat(user, "<span class='warning'>\The [H]'s suit sensor controls are locked.</span>")
+		return
+	suit.sensor_mode = wand_mode
+	switch(suit.sensor_mode)
+		if(0)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to disable suit remote sensing equipment with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to disable suit remote sensing equipment.</span>")
+		if(1)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to whether the wearer is live or dead with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report whether the wearer is live or dead.</span>")
+		if(2)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to report vital lifesigns with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report vital lifesigns.</span>")
+		if(3)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to report vital lifesigns as well as coordinate positions with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report vital lifesigns as well as coordinate positions.</span>")
+	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [wand_mode] by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Set [H.name]'s suit sensors ([H.ckey]).</font>")
+	log_attack("[user.name] ([user.ckey]) has set [H.name]'s suit sensors ([H.ckey]) to [wand_mode].")
 
 
 #define VAMP_FLASH_CD 50
@@ -646,7 +696,7 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "vamphead0"
 	flags = HEAR | FPRINT
 	force = 7
-	var/obj/effect/decal/cleanable/blood/located_blood
+	var/obj/effect/located_blood
 	var/flash_last_used = 0
 	var/scream_last_used = 0
 
@@ -686,8 +736,10 @@ var/global/list/alcatraz_stuff = list(
 											"There. The blood is close...",
 											"Do you hear its call?")
 			to_chat(loc,"<B>[src]</B> [pick("murmurs","shrieks","hisses","groans","complains")], \"<span class='sinister'>[pick(blood_phrases)]</span>\"")*/
-			update_icon()
-			return
+
+	for(var/obj/effect/rune/R in range(5,loc))
+		located_blood = R
+
 	update_icon()
 
 /obj/item/device/vampirehead/on_enter_storage(obj/item/weapon/storage/S)
@@ -835,6 +887,8 @@ var/global/list/alcatraz_stuff = list(
 	has_lock_type = null
 
 var/global/list/yantar_stuff = list(
+	//3 of a kind
+	/obj/item/weapon/depocket_wand/suit,/obj/item/weapon/depocket_wand/suit,/obj/item/weapon/depocket_wand/suit,
 	//1 of a kind
 	/obj/item/weapon/storage/trader_chemistry,
 	/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer,
@@ -1725,6 +1779,22 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 /obj/item/weapon/paper/permissionslip/New()
 	..()
 	info = "The purchaser or purchasers of this or any other Circuitry Circus Education Toy Booster Pack <i>TM</i> recognizes, accepts, and is bound to the terms and conditions found within any Circuitry Circus Education Toy Starter Pack <i>TM</i>. This includes but is not limited to: <BR>the relinquishment of any state, country, nation, or planetary given rights protecting those of select ages from legal action based on misuse of the product.<BR>All: injuries, dismemberments, trauma (mental or physical), diseases, invasive species, deaths, memory loss, time loss, genetic recombination, or quantum displacement is the sole responsibility of the owner of the Circuitry Circus Education Toy Booster Pack <i>TM</i> <BR><BR>Please ask for your parent or guardian's permission before playing. Have fun."
+
+
+//Mystery upgrades////////////
+
+/obj/item/weapon/storage/box/mystery_upgrade
+	name = "random cyborg upgrade pack"
+	desc = "Magnetic gripper not included. Ever."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "circuit"
+
+/obj/item/weapon/storage/box/mystery_upgrade/New()
+	..()
+	var/list/legalCircuits = existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper //Moved from old trade vendor
+	for(var/i = 1 to 3)
+		var/boosterPack = pick(legalCircuits)
+		new boosterPack(src)
 
 
 //Mystery material//////////////////////

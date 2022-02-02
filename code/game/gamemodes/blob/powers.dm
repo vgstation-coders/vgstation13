@@ -311,7 +311,7 @@
 		return
 
 	delayNextAttack(5)
-	OB.expand(T, 0, src, manual = TRUE)
+	OB.expand(T, 0) //Doesn't give source because we don't care about passive restraint
 
 
 /mob/camera/blob/verb/rally_spores_power()

@@ -29,9 +29,10 @@ var/global/list/available_paintings = list(
 	//The following paintings either appear under certain conditions or have to be varedited by admins
 	//"narsie", transformed from other paintings by Nar-Sie. Has a chance to spawn on the asteroid in temple ruins.
 	//"justice", spawned in the courtroom/IAA office if there is no courtroom
-	//"blank", crafted with wood, TODO: give a way to players to paint on them
+	//"blank_old", default
 	//"anatomy", TODO: add one in medbay/surgery.
 	//"daddy", TODO: well it's not a painting...so make it its own item...?
+
 
 /obj/item/mounted/frame/painting
 	name = "painting"
@@ -152,7 +153,7 @@ var/global/list/available_paintings = list(
 
 		else
 			name = "painting"
-			desc = "A blank painting."
+			desc = "So perfectly blank you dare not paint on it."
 
 /obj/item/mounted/frame/painting/do_build(turf/on_wall, mob/user)
 	if(!user.drop_item(src))
@@ -164,9 +165,7 @@ var/global/list/available_paintings = list(
 	add_fingerprint(user)
 
 	//declaring D because otherwise if P gets 'deconstructed' we lose our reference to P.resulting_poster
-	var/obj/structure/painting/P = new(user.loc)
-	P.icon_state = paint
-	P.update_painting()
+	var/obj/structure/painting/P = to_structure(on_wall, user)
 
 	transfer_fingerprints(src, P)
 
@@ -184,12 +183,19 @@ var/global/list/available_paintings = list(
 
 	qdel(src)
 
-/obj/item/mounted/frame/painting/blank
-	paint = "blank"
+/obj/item/mounted/frame/painting/proc/to_structure(turf/on_wall, mob/user)
+	var/obj/structure/painting/P = new /obj/structure/painting(user.loc)
+	P.icon_state = paint
+	P.update_painting()
+	return P
 
 /obj/item/mounted/frame/painting/cultify()
 	new /obj/item/mounted/frame/painting/narsie(loc)
 	..()
+
+/obj/item/mounted/frame/painting/blank
+	paint = "blank_old"
+	// For the code to actually paint see: "code/modules/painting/paintings_custom.dm"
 
 /obj/item/mounted/frame/painting/narsie
 	paint = "narsie"
@@ -201,7 +207,7 @@ var/global/list/available_paintings = list(
 	name = "painting"
 	desc = "A blank painting."
 	icon = 'icons/obj/paintings.dmi'
-	icon_state = "blank"
+	icon_state = "blank_old"
 	autoignition_temperature = AUTOIGNITION_WOOD
 	anchored = 1
 
@@ -304,16 +310,14 @@ var/global/list/available_paintings = list(
 
 		else
 			name = "painting"
-			desc = "a blank painting."
+			desc = "So perfectly blank you dare not paint on it."
 
 /obj/structure/painting/attack_hand(mob/user)
 	to_chat(user, "<span class='notice'>You pick up \the [src]...</span>")
 
 	add_fingerprint(user)
 
-	var/obj/item/mounted/frame/painting/P = new(loc)
-	P.paint = icon_state
-	P.update_painting()
+	var/obj/item/mounted/frame/painting/P = to_item(user)
 
 	transfer_fingerprints(src, P)
 
@@ -321,6 +325,12 @@ var/global/list/available_paintings = list(
 
 	P.attack_hand(user)
 	qdel(src)
+
+/obj/structure/painting/proc/to_item(mob/user)
+	var/obj/item/mounted/frame/painting/P = new(loc)
+	P.paint = icon_state
+	P.update_painting()
+	return P
 
 /obj/structure/painting/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")

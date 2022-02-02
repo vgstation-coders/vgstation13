@@ -9,7 +9,7 @@
  */
 
 //slower then jointext, but correctly processes associative lists.
-proc/tg_jointext(list/list, glue = ",")
+/proc/tg_jointext(list/list, glue = ",")
 	if(!istype(list) || !list.len)
 		return
 	for(var/i=1 to list.len)
