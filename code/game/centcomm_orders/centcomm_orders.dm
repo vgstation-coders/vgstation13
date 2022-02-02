@@ -262,7 +262,7 @@ var/global/current_centcomm_order_id=124901
 
 ///////////////////////////////////////
 
-/proc/create_weighted_order()
+/proc/get_weighted_order()
 	var/list/active_with_role = get_dept_pop()
 
 	var/list/department_weights = list(
@@ -323,8 +323,7 @@ var/global/current_centcomm_order_id=124901
 	if (!orders.len)
 		return
 
-	var/chosen_order = pick(orders)
-	SSsupply_shuttle.add_centcomm_order(new chosen_order)
+	return pick(orders)
 
 
 /proc/get_dept_pop()

@@ -168,7 +168,7 @@
 
 /datum/cargo_forwarding/from_centcomm_order/New()
     ..()
-    var/ordertype = pick(get_all_orders())
+    var/ordertype = get_weighted_order()
     var/datum/centcomm_order/ourorder = new ordertype
     worth = ourorder.worth
     containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate

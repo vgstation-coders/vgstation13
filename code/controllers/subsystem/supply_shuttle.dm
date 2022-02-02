@@ -80,7 +80,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		//Centcomm uses the crew manifest to determine how many people actually are on the station.
 		var/new_orders = 1 + round(data_core.general.len / 10)
 		for (var/i = 1 to new_orders)
-			create_weighted_order()
+			var/ordertype = get_weighted_order()
+			add_centcomm_order(new ordertype)
 
 		//If the are less than 1 order per 5 crew members, the next order will come sooner, otherwise later.
 		var/new_cooldown = 1 + round(data_core.general.len / 5)
@@ -327,14 +328,22 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if(forwarding_on)
 		if(!clear_turfs.len)
 			return
+		
+		var/cargomen = 0 // How many people are working in cargo?
+		for(var/datum/data/record/t in sortRecord(data_core.general))
+			if((t.fields["real_rank"] in cargo_positions) || (t.fields["override_dept"] == "Cargo"))
+				cargomen++ // Go through manifest and find out
+		if(!cargomen)
+			cargomen = 1 // Just send one crate if no cargo
+
 		var/i = rand(1,clear_turfs.len)
 		var/turf/pickedloc = clear_turfs[i]
 		clear_turfs.Cut(i,i+1)
 		new /obj/machinery/crate_weigher(pickedloc)
 
 		var/list/datum/cargo_forwarding/new_forwards = list()
-		var/amount_forwarded = rand(1,3)
-		for(var/j in 0 to amount_forwarded)
+		var/amount_forwarded = rand(1,cargomen)
+		for(var/j in 1 to amount_forwarded)
 			if(prob(75)) // Normal orderable stuff
 				var/datum/cargo_forwarding/from_supplypack/SCF = new
 				new_forwards.Add(SCF)
