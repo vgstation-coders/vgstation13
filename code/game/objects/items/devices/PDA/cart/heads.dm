@@ -143,7 +143,7 @@
 	if(href_list["select_pda"])
 		var/list/pda_with_id = list()
 		for(var/obj/item/device/pda/pda_id in sortNames(get_viewable_pdas()))
-			if (pda_id.id)
+			if (pda_id.id && pda_id != pda_device) // No modifying your own
 				pda_with_id += pda_id
 		if(!pda_with_id.len)
 			return
