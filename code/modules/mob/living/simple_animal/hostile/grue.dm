@@ -137,10 +137,13 @@
 			if(GRUE_DARK) //dark
 				if(!ismoulting) //moulting temporarily stops healing via darkness
 					apply_damage(get_dark_heal(),BURN) //heal in dark
-//			if(1) //dim
 			if(GRUE_LIGHT) //light
-				apply_damage(get_light_damage(),BURN) //burn in light
-				to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
+				var/thisdmg=get_light_damage()
+				apply_damage(thisdmg,BURN) //burn in light
+				if(thisdmg>(maxHealth/7))
+					to_chat(src, "<span class='danger'>The burning light sears your flesh!</span>")
+				else
+					to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
 				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
 
 
