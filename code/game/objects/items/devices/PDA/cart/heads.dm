@@ -116,7 +116,7 @@
 		}"
 	if(!hacked)
 		dat += "Authorized identity: [pda_device.id ? pda_device.id.name : "None"]<br>"
-	if(selected_pda && ((pda_device.id && can_access(pda_device.id.GetAccess(),list(access_change_ids),null)) || hacked))
+	if(selected_pda && selected_pda.id && ((pda_device.id && can_access(pda_device.id.GetAccess(),list(access_change_ids),null)) || hacked))
 		dat += "{
 			Registered name: <a href='?src=\ref[src];edit_name=1'>[selected_pda.id.registered_name]</a><br>
 			Account number: <a href='?src=\ref[src];edit_account=1'>[selected_pda.id.associated_account_number]</a><br>
@@ -147,8 +147,13 @@
 		selected_pda = input(U, "Select a PDA to modify the ID of", "PDA Selection") as null|anything in pda_with_id
 	if(selected_pda && selected_pda.id)
 		var/obj/item/weapon/card/id/selected_id = selected_pda.id
+		var/thing_changed = null
+		var/new_thing = ""
 		if(href_list["edit_name"])
-			selected_id.registered_name = input(U, "Enter a new name", "ID rename", selected_id.registered_name) as text
+			var/newname = input(U, "Enter a new name", "ID rename", selected_id.registered_name) as text
+			selected_id.registered_name = newname
+			thing_changed = "name"
+			new_thing = newname
 		if(href_list["edit_account"])
 			var/account_num = input(U, "Enter a new account number", "Account number change", selected_id.associated_account_number) as num
 			var/datum/money_account/MA = get_money_account(account_num)
@@ -161,6 +166,8 @@
 				refresh_pda()
 				return
 			selected_id.associated_account_number = account_num
+			thing_changed = "account_number"
+			new_thing = account_num
 		if(href_list["edit_job"])
 			var/temp_t = input("Enter a custom job assignment.","Assignment") as null|text
 			if(temp_t)
@@ -168,6 +175,8 @@
 				//let custom jobs function as an impromptu alt title, mainly for sechuds
 				if(temp_t && selected_id)
 					selected_id.assignment = temp_t
+					thing_changed = "assignment"
+					new_thing = temp_t
 			if (!(temp_t in all_jobs_txt))
 				var/new_dept = input("Choose the departement this job belongs to.") as null|anything in departement_list
 				if (new_dept)
@@ -179,30 +188,28 @@
 		if(href_list["access"])
 			var/access_type = text2num(href_list["access"])
 			if(access_type in get_all_accesses())
+				thing_changed = "access"
 				if(!access_type in selected_id.access)
 					selected_id.access += access_type
+					new_thing = "Added [get_access_desc(access_type)]"
 				else
 					selected_id.access -= access_type
-		if(!hacked)
-			inform_change()
+					new_thing = "Removed [get_access_desc(access_type)]"
+		if(!hacked && thing_changed)
+			var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in selected_pda.applications
+			if (P_app && !P_app.toff && !P_app.silent)
+				playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				for (var/mob/O in hearers(3, P.loc))
+						O.show_message(text("[bicon(P)] *[P_app.ttone]*"))
+				//Search for holder of the PDA.
+				var/mob/living/L = null
+				if(selected_pda.loc && isliving(selected_pda.loc))
+					L = selected_pda.loc
+				else //Maybe they are a pAI!
+					L = get_holder_of_type(selected_pda, /mob/living/silicon)
+				if(L)
+					L.show_message("[bicon(selected_oda)] <b>ID [thing_changed] updated: [new_thing]</b>", 2)
 	refresh_pda()
-
-/datum/pda_app/cart/access_change/proc/inform_change()
-	if(selected_pda)
-		var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in selected_pda.applications
-		if (P_app && !P_app.toff && !P_app.silent)
-			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
-			for (var/mob/O in hearers(3, P.loc))
-					O.show_message(text("[bicon(P)] *[P_app.ttone]*"))
-			//Search for holder of the PDA.
-			var/mob/living/L = null
-			if(selected_pda.loc && isliving(selected_pda.loc))
-				L = selected_pda.loc
-			//Maybe they are a pAI!
-			else
-				L = get_holder_of_type(selected_pda, /mob/living/silicon)
-			if(L)
-				L.show_message("[bicon(selected_oda)] <b>ID details updated.</b>", 2)
 
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
