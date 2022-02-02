@@ -59,6 +59,11 @@
 	if(connected_to)
 		connected_to.add_load(amount, priority)
 
+/obj/machinery/power/battery/smes/get_satisfaction(var/priority = power_priority)
+	if(connected_to)
+		return connected_to.get_satisfaction(priority)
+	return 0
+
 /obj/machinery/power/battery/portable/surplus()
 	if(connected_to)
 		return connected_to.surplus()

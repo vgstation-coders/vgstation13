@@ -72,6 +72,11 @@
 		return 1
 	return 0
 
+/obj/machinery/power/battery/smes/get_satisfaction(var/priority = power_priority)
+	if(terminal && terminal.get_powernet())
+		return terminal.get_satisfaction(priority)
+	return 0
+
 /obj/machinery/power/battery_port/surplus()
 	if(terminal)
 		return terminal.surplus()

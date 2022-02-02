@@ -124,6 +124,12 @@ var/list/smes_list = list()
 	if(terminal)
 		terminal.add_load(amount, priority)
 
+/obj/machinery/power/battery/smes/get_satisfaction(var/priority = power_priority)
+	if(terminal && terminal.get_powernet())
+		return terminal.get_satisfaction(priority)
+	else
+		return 0
+
 /obj/machinery/power/battery/smes/infinite
 	name = "magical power storage unit"
 	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit. Magically produces power."

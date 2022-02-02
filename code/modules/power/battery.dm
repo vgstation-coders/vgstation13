@@ -59,6 +59,7 @@ var/global/list/battery_online =	list(
 	var/output = 50000
 	var/lastout = 0
 	var/loadcharge = 0
+	var/old_loadcharge = 0
 	var/loaddemand = 0
 	var/capacity = 5e6 //Max stored charge
 	var/charge = 1e6 //Stored charge
@@ -107,15 +108,16 @@ var/global/list/battery_online =	list(
 	var/_chargedisplay = chargedisplay()
 
 	// Input
-	var/excess = surplus()
-
 	if (charging)
+		old_loadcharge = loadcharge
+		loadcharge = min((capacity - charge) / SMESRATE, chargelevel) // Request charging at set rate, limited to spare capacity
+		add_load(loadcharge) // Add the load to the terminal side network
+
 		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
 		// Auto charge mode lets batteries take any amount of available power, limited by charge level
-		if((chargemode == BATTERY_MANUAL_CHARGE && excess >= chargelevel)||(chargemode == BATTERY_AUTO_CHARGE && excess > 0)) // If there's power available, try to charge
-			loadcharge = min((capacity - charge) / SMESRATE, excess, chargelevel) // Charge at set rate, limited to spare capacity
-			charge += loadcharge * SMESRATE // Increase the charge
-			add_load(loadcharge) // Add the load to the terminal side network
+		if((chargemode == BATTERY_MANUAL_CHARGE && get_satisfaction() == 1.0) || (chargemode == BATTERY_AUTO_CHARGE && get_satisfaction() > 0)) // If there's power available, try to charge
+			var/power = old_loadcharge * get_satisfaction()
+			charge += power * SMESRATE // Increase the charge
 
 		else
 			charging = FALSE
@@ -127,7 +129,7 @@ var/global/list/battery_online =	list(
 				charging = TRUE
 				chargecount = 0
 
-			if ((chargemode == BATTERY_MANUAL_CHARGE && excess >= chargelevel) || (chargemode == BATTERY_AUTO_CHARGE && excess > 0))
+			if ((chargemode == BATTERY_MANUAL_CHARGE && get_satisfaction() == 1.0) || (chargemode == BATTERY_AUTO_CHARGE && get_satisfaction() > 0))
 				chargecount++
 			else
 				chargecount = 0
@@ -195,7 +197,7 @@ var/global/list/battery_online =	list(
 	data["storedCapacity"] = round(100.0*charge/capacity, 0.1)
 	data["charging"] = charging
 	data["chargeMode"] = chargemode
-	data["chargeLoad"] = round(loadcharge)
+	data["chargeLoad"] = round(old_loadcharge * get_satisfaction())
 	data["chargeLevel"] = chargelevel
 	data["chargeMax"] = max_input
 	data["outputOnline"] = online
