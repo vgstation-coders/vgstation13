@@ -29,7 +29,7 @@
 		if(my_effect.activated)
 			Triggered(0, "NOPOWERNET", 0)
 		return
-	else if(PN.avail < power_load) //Cannot drain enough power
+	else if(power_connection.get_satisfaction() < 1.0) //Cannot drain enough power
 		if(my_effect.activated)
 			Triggered(0, "NOTENOUGHELECTRICITY", 0)
 		return
