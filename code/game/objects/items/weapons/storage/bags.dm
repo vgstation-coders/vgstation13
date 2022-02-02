@@ -700,5 +700,5 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 3
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy","/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano" )
-	display_contents_with_number = TRUE
+	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy","/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner","obj/item/weapon/pen")
+	
