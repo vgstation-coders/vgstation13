@@ -112,10 +112,10 @@
 /datum/pda_app/cart/access_change/get_dat(var/mob/user)
 	var/dat = {"
 		<h4><span class='pda_icon pda_money'></span> Remote access change</h4>
-		Target identity: <a href='?src=\ref[src];select_pda=1'>[selected_pda && selected_pda.id ? selected_pda.id.name : "Select a PDA"]</a><br>
+		Target identity: <a href='?src=\ref[src];select_pda=1'>[selected_pda && selected_pda.id ? selected_pda.id.registered_name : "Select a PDA"]</a><br>
 		"}
 	if(!hacked)
-		dat += "Authorized identity: [pda_device.id ? pda_device.id.name : "None"]<br>"
+		dat += "Authorized identity: [pda_device.id ? pda_device.id.registered_name : "None"]<br>"
 	if(selected_pda && selected_pda.id && ((pda_device.id && can_access(pda_device.id.GetAccess(),list(access_change_ids),null)) || hacked))
 		var/obj/item/weapon/card/id/selected_id = selected_pda.id
 		dat += {"
