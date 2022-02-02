@@ -116,7 +116,7 @@
 		}"
 	if(!hacked)
 		dat += "Authorized identity: [pda_device.id ? pda_device.id.name : "None"]<br>"
-	if(selected_pda)
+	if(selected_pda && ((pda_device.id && can_access(pda_device.id.GetAccess(),list(access_change_ids),null)) || hacked))
 		dat += "{
 			Registered name: <a href='?src=\ref[src];edit_name'>[selected_pda.id.registered_name]</a><br>
 			Registered account: <a href='?src=\ref[src];edit_account'>[selected_pda.id.associated_account_number]</a><br>
