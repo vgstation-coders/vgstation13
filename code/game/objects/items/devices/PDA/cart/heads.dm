@@ -99,9 +99,9 @@
     )
 
 /datum/pda_app/cart/access_change
-    name = "Remote Access Change"
-    desc = "Remotely changes the access of an ID in a selected PDA"
-    category = "Utilities"
+	name = "Remote Access Change"
+	desc = "Remotely changes the access of an ID in a selected PDA"
+	category = "Utilities"
 	icon = "pda_money"
 	var/hacked = FALSE
 	var/obj/item/device/pda/selected_pda = null
@@ -118,8 +118,9 @@
 		dat += "Authorized identity: [pda_device.id ? pda_device.id.name : "None"]<br>"
 	if(selected_pda && ((pda_device.id && can_access(pda_device.id.GetAccess(),list(access_change_ids),null)) || hacked))
 		dat += "{
-			Registered name: <a href='?src=\ref[src];edit_name'>[selected_pda.id.registered_name]</a><br>
-			Registered account: <a href='?src=\ref[src];edit_account'>[selected_pda.id.associated_account_number]</a><br>
+			Registered name: <a href='?src=\ref[src];edit_name=1'>[selected_pda.id.registered_name]</a><br>
+			Account number: <a href='?src=\ref[src];edit_account=1'>[selected_pda.id.associated_account_number]</a><br>
+			Assignment: <a href='?src=\ref[src];edit_job=1'>[selected_pda.id.assignment]</a><br>
 			}"
 		for(var/i = 1; i <= 7; i++)
 			dat += "<div style='float: left'><b>[get_region_accesses_name(i)]</b><br>"
@@ -138,7 +139,8 @@
 	if(href_list["select_pda"])
 		var/list/pda_with_id = list()
 		for(var/obj/item/device/pda/pda_id in sortNames(get_viewable_pdas()))
-			if(pda_id.id)
+			var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in pda_id.applications
+			if (P_app && !P_app.toff && pda_id.id) //PDA needs messenger installed and on, and an ID in it
 				pda_with_id += pda_id
 		if(!pda_with_id.len)
 			return
@@ -151,17 +153,51 @@
 			var/account_num = input(U, "Enter a new account number", "Account number change", selected_id.associated_account_number) as num
 			var/datum/money_account/MA = get_money_account(account_num)
 			if(!MA)
-				to_chat(usr, "<span class='warning'>That account number was invalid.</span>")
+				to_chat(U, "<span class='warning'>That account number was invalid.</span>")
 				refresh_pda()
 				return
 			if(MA.hidden)
-				to_chat(usr, "<span class='warning'>That account number is reserved.</span>")
+				to_chat(U, "<span class='warning'>That account number is reserved.</span>")
 				refresh_pda()
 				return
 			selected_id.associated_account_number = account_num
+		if(href_list["edit_job"])
+			var/temp_t = input("Enter a custom job assignment.","Assignment") as null|text
+			if(temp_t)
+				temp_t = copytext(sanitize(temp_t),1,45)
+				//let custom jobs function as an impromptu alt title, mainly for sechuds
+				if(temp_t && selected_id)
+					selected_id.assignment = temp_t
+			if (!(temp_t in all_jobs_txt))
+				var/new_dept = input("Choose the departement this job belongs to.") as null|anything in departement_list
+				if (new_dept)
+					for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
+						if (L.len)
+							var/datum/data/record/R = find_record("name", selected_id.registered_name, L)
+							if (R)
+								R.fields["override_dept"] = new_dept
 		if(href_list["access"])
 			return
+		if(!hacked)
+			inform_change()
 	refresh_pda()
+
+/datum/pda_app/cart/access_change/proc/inform_change()
+	if(selected_pda)
+		var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in selected_pda.applications
+		if (P_app && !P_app.toff && !P_app.silent)
+			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
+			for (var/mob/O in hearers(3, P.loc))
+					O.show_message(text("[bicon(P)] *[P_app.ttone]*"))
+			//Search for holder of the PDA.
+			var/mob/living/L = null
+			if(selected_pda.loc && isliving(selected_pda.loc))
+				L = selected_pda.loc
+			//Maybe they are a pAI!
+			else
+				L = get_holder_of_type(selected_pda, /mob/living/silicon)
+			if(L)
+				L.show_message("[bicon(selected_oda)] <b>ID details updated.</b>", 2)
 
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
