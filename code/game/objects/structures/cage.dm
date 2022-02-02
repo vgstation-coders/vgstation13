@@ -256,6 +256,12 @@
 
 	return checked in get_locked(/datum/locking_category/cage)
 
+/obj/structure/cage/random_mob/New()
+	..()
+	var/mobtype = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)))
+	var/mob/living/simple_animal/ourmob = new mobtype
+	add_mob(ourmob)
+
 #undef C_OPENED
 #undef C_CLOSED
 

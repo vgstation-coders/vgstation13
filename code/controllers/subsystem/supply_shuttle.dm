@@ -388,6 +388,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 				CF.initial_contents += B2
+
+			CF.post_creation()
 			
 			CF.associated_manifest.info += {"</ul>"}
 

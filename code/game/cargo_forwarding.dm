@@ -82,6 +82,9 @@
     
     qdel(src)
 
+/datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle
+    return
+
 /obj/machinery/crate_weigher
     name = "crate weigher"
     desc = "Weighs crates, and adds relevant info to a shipping manifest."
@@ -215,3 +218,19 @@
     containertype = /obj/structure/largecrate
     containername = "Go-kart"
     worth = 200
+
+/datum/cargo_forwarding/misc/random_mob
+    name = "Unknown creature"
+    contains = list()
+    amount = 1
+    containertype = /obj/structure/cage/random_mob
+    containername = "cage"
+    worth = 50
+
+/datum/cargo_forwarding/misc/random_mob/post_creation()
+    if(istype(associated_crate,/obj/structure/cage/random_mob))
+        var/obj/structure/cage/random_mob/RM = associated_crate
+        for(var/mob/living/simple_animal/SM in RM)
+            name = SM.name
+            containername = SM.name
+            worth = (SM.size * SM.size) * 10
