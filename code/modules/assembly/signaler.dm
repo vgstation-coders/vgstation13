@@ -56,7 +56,9 @@
 		if(secured && signaler2.secured)
 			code = signaler2.code
 			set_frequency(signaler2.frequency)
-			to_chat(user, "You transfer the frequency and code of \the [signaler2.name] to \the [name]")
+			to_chat(user, "<span class='notice'>You transfer the frequency and code of \the [signaler2.name] to \the [name].</span>")
+		else
+			to_chat(user, "<span class='warning'>Re-secure the signaler first!</span>")
 
 /obj/item/device/assembly/signaler/activate()
 	if(cooldown > 0)
