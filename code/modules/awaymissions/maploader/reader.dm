@@ -323,7 +323,8 @@ var/list/map_dimension_cache = list()
 			var/image/new_underlay = image(icon = null) //Because just image() doesn't work, and neither does image(appearance=...)
 
 			new_underlay.appearance = initial(underlying_turf.appearance)
-			T.underlays.Add(new_underlay)
+			if(T)
+				T.underlays.Add(new_underlay)
 			turf_index++
 
 	spawned_atoms.Add(T)
@@ -331,10 +332,9 @@ var/list/map_dimension_cache = list()
 	//finally instance all remainings objects/mobs
 	if(overwrite)
 		var/turf/T_old = locate(xcrd,ycrd,zcrd)
-		for(var/i in 1 to 5) // Do a few passes of this
+		while(T_old.contents.len)
 			for(var/atom/movable/thing in T_old)
-				if(!istype(thing,/mob/dview)) // Doesn't like this
-					qdel(thing)
+				qdel(thing)
 	for(index=1,index < first_turf_index,index++)
 		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
