@@ -11,6 +11,8 @@
 	attack_verb = list("socks")
 	w_class = W_CLASS_TINY
 
+	var/obj/item/weapon/soap_sock/base_soap = null
+
 /obj/item/weapon/brick_sock
 	name = "brick in a sock"
 	desc = "Rebuilds the body."
@@ -24,37 +26,12 @@
 	attack_verb = list("socks")
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W, /obj/item/weapon/soap))
-		to_chat(user, "<span class='notice'>You place a bar of soap into \the [src].</span>")
-		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(src))
-				to_chat(user, "<span class='warning'>You can't let go of \the [src].</span>")
-				return
-			var/obj/item/weapon/soap_sock/I = new (get_turf(user))
-			user.put_in_hands(I)
-			qdel(src)
-			qdel(W)
-	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
-		var/obj/item/stack/sheet/mineral/brick/S = W
-		to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
-		if(do_after(user, src, 1 SECONDS))
-			S.use(1)
-			if(!user.drop_item(src))
-				to_chat(user, "<span class='warning'>You can't let go of \the [src].</span>")
-				return
-			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
-			user.put_in_hands(I)
-			qdel(src)
-
 /obj/item/weapon/soap_sock/attack_self(mob/user)
 	if(user.a_intent == I_GRAB)
 		to_chat(user, "<span class='notice'>You remove the soap from \the [src].</span>")
 		user.drop_item(src, force_drop = 1)
-		user.put_in_hands(new /obj/item/weapon/soap(user))
 		user.put_in_hands(new /obj/item/clothing/shoes/kneesocks(user))
+		user.put_in_hands(src.base_soap)
 		qdel(src)
 
 /obj/item/weapon/brick_sock/attack_self(mob/user)

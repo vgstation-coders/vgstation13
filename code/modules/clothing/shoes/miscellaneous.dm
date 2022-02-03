@@ -408,6 +408,34 @@
 	icon_state = "kneesock"
 	item_state = "kneesock"
 	species_fit = list(INSECT_SHAPED)
+	var/obj/item/weapon/soap/base_soap = null
+
+/obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/soap))
+		to_chat(user, "<span class='notice'>You place \the [W] into \the [src].</span>")
+		if(do_after(user, src, 1 SECONDS))
+			user.drop_item(src)
+			if(!user.drop_item(W))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+				return
+			var/obj/item/weapon/soap_sock/I = new (get_turf(user))
+			user.put_in_hands(I)
+			W.transfer_fingerprints_to(I)
+			I.base_soap = W
+			W.forceMove(null)
+			qdel(src)
+	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
+		var/obj/item/stack/sheet/mineral/brick/S = W
+		to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
+		if(do_after(user, src, 1 SECONDS))
+			if(!user.drop_item(src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+				return
+			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
+			S.use(1)
+			user.put_in_hands(I)
+			qdel(src)
 
 /obj/item/clothing/shoes/jestershoes
 	name = "Jester Shoes"
