@@ -148,19 +148,18 @@ var/global/datum/controller/vote/vote = new()
 	var/feedbackanswer
 	var/greatest_votes = 0
 	if (tally.len > 0)
-		if (tally[1])
-			var/list/winners = list()
-			sortTim(tally, /proc/cmp_numeric_dsc,1)
-			greatest_votes = tally[tally[1]]
-			for (var/c in tally)
-				if (tally[c]  == greatest_votes)//must be true a least once
-					winners += c
-			if (winners.len > 1)
-				text = "<b>Vote Tied Between:</b><br>"
-				for(var/option in winners)
-					text += "\t[option]<br>"
-					feedbackanswer = jointext(winners, " ")
-			. = pick(winners)
+		var/list/winners = list()
+		sortTim(tally, /proc/cmp_numeric_dsc,1)
+		greatest_votes = tally[tally[1]]
+		for (var/c in tally)
+			if (tally[c]  == greatest_votes)//must be true a least once
+				winners += c
+		if (winners.len > 1)
+			text = "<b>Vote Tied Between:</b><br>"
+			for(var/option in winners)
+				text += "\t[option]<br>"
+				feedbackanswer = jointext(winners, " ")
+		. = tally[1]
 		if(mode == "map")
 			if(!feedbackanswer)
 				feedbackanswer = .
