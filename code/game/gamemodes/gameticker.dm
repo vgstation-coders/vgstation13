@@ -478,7 +478,7 @@ var/datum/controller/gameticker/ticker
 			declare_completion()
 
 			gameend_time = world.time / 10
-			if(config.map_voting)
+			if(config.map_voting && player_list.len)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
 				var/options = jointext(vote.choices, " ")
@@ -508,7 +508,7 @@ var/datum/controller/gameticker/ticker
 			end_credits.on_round_end()
 
 			if(blackbox)
-				if(config.map_voting)
+				if(config.map_voting && player_list.len)
 					spawn(restart_timeout + 1)
 						blackbox.save_all_data_to_sql()
 				else
@@ -517,8 +517,8 @@ var/datum/controller/gameticker/ticker
 			stat_collection.Process()
 
 			if (watchdog.waiting)
-				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
-				if(config.map_voting)
+				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting && player_list.len ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
+				if(config.map_voting && player_list.len)
 					sleep(restart_timeout) //waiting for a mapvote to end
 				if(!delay_end)
 					watchdog.signal_ready()
