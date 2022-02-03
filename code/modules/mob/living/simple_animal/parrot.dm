@@ -317,6 +317,7 @@
 				parrot_state = PARROT_SWOOP //The parrot just got a disarm, it WILL move, now to pick a direction..
 
 				parrot_state |= PARROT_FLEE	//Don't let the item be caught
+				playsound(M, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				if(prob(50))
 					drop_held_item(pick(0,1)) // May or may not prime grenades
 			if(I_HURT)
