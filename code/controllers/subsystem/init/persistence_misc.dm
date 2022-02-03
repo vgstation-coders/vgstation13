@@ -215,25 +215,22 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	file_path = "data/persistence/votes.json"
 	
 /datum/persistence_task/vote/on_init()
-	var/to_read = read_file()
+	var/list/to_read = read_file()
 	if(!to_read)
 		log_debug("[name] task found an empty file on [file_path]")
 		return
-	else
-		var/q = to_read.len
-		for(var/i = 1; i < q; i++)
-			to_chat(world,"to_read:[to_read[i]]")
-			data[to_read[i]] = to_read[to_read[i]]
-		if (data.len > 1)
-			data.Remove(data[1])	//remove previous round winner
+	for(var/i = 1; i <= to_read.len; i++)
+		data[to_read[i]] = to_read[to_read[i]]
 
 /datum/persistence_task/vote/on_shutdown()
 	write_file(data)
 
 /datum/persistence_task/vote/proc/insert_counts(var/list/tally)
-	for(var/i = 1; i <= tally.len; i++)
-		data[tally[i]] += tally[tally[i]]
-	sortTim(data, /proc/cmp_numeric_dsc,1)
+	sortTim(tally, /proc/cmp_numeric_dsc,1)
+	//reset the winner
+	data[tally[1]] = 0
+	for(var/i = 2; i <= tally.len; i++)
+		data[tally[i]] = tally[tally[i]]
 
 /datum/persistence_task/vote/proc/clear_counts()
 	data = list()
