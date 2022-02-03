@@ -266,48 +266,24 @@
 		return
 	if(isvox(H))
 		var/list/voxhaircolorlist = list()
-
+		voxhaircolorlist["green"] = list(87, 123, 119)
 		voxhaircolorlist["brown"] = list(162,107,56)
-		voxhaircolorlist["greenbrown"] = list(147, 126, 61)
+		voxhaircolorlist["grey"] = list(192, 192, 192)
 		voxhaircolorlist["lightgreen"] = list(132, 138, 64)
 		voxhaircolorlist["azure"] = list(112, 126, 93)
-		voxhaircolorlist["green"] = list(87, 123, 119)
-		voxhaircolorlist["emerald"] = list(65, 136, 98) //299
-		voxhaircolorlist["grey"] = list(192, 192, 192) //876
+		voxhaircolorlist["emerald"] = list(65, 136, 98)
+		voxhaircolorlist["greenbrown"] = list(147, 126, 61)
 		
-		to_chat(world,"vhcl: [voxhaircolorlist] - [voxhaircolorlist.len]")
-		var/list/closest = ARBITRARILY_LARGE_NUMBER //10000
+		var/list/closest = ARBITRARILY_LARGE_NUMBER
 		var/voxcolor = 0
-		//var/ex = 0
-		to_chat(world,"ALN: [closest]")
 		for(var/rgbcolorset in voxhaircolorlist)
-			//ex++
-			//to_chat(world,"current go: [ex]")
-			to_chat(world,"Checking: [voxhaircolorlist[rgbcolorset]]")
 			var/rgb = voxhaircolorlist[rgbcolorset]
-			to_chat(world,"running: [rgb]")
-			//var/diff = (color_r - rgb[1]) + (color_g - rgb[2]) + (color_b - rgb[3])
 			var/diff = (max(color_r,rgb[1]) - min(color_r,rgb[1])) + (max(color_r,rgb[2]) - min(color_r,rgb[2])) + (max(color_r,rgb[3]) - min(color_r,rgb[3]))
-			to_chat(world,"Is [diff] < [closest]? [diff < closest]")
 			if(diff < closest)
 				closest = diff
-				//voxcolor = ex
-				var/butt = get_key_by_element(voxhaircolorlist, rgb)
-				voxcolor = voxhaircolorlist.Find(butt)
-				to_chat(world,"closest: [closest]")
-				to_chat(world,"voxcolor: [voxcolor]")
-		
+				var/haircolor = get_key_by_element(voxhaircolorlist, rgb)
+				voxcolor = voxhaircolorlist.Find(haircolor)
 		H.my_appearance.v_hair = voxcolor
-		
-		//v_hair
-		//1=dark green, 2=brown, 3=greenbrown, 4=lightgreen, 5=azure, 6=emerald 7=gray
-		//162, 107, 56
-		//147, 126, 61
-		//132, 138, 64
-		//112, 126, 93
-		//87, 123, 119
-		//65, 136, 98
-		//192, 192, 192
 	else
 		if(facial)
 			H.my_appearance.r_facial = color_r
