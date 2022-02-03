@@ -108,7 +108,7 @@
 //Removes returns a new list which only contains elements from the original list of a certain type
 /proc/prune_list_to_type(list/L, datum/A, var/exclude_type = FALSE)
 	if(!L || !L.len || !A)
-		return 0
+		return list()
 	if(!ispath(A))
 		A = A.type
 	var/list/nu = L.Copy()
