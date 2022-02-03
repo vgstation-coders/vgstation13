@@ -275,7 +275,7 @@
 		base_melee_dam_up = 20				//base melee damage upper
 		base_melee_dam_lw = 15				//base melee damage lower
 		attacktext = "chomps"
-		maxHealth=100
+		maxHealth=150
 		nutrienergy=0 //starts out hungry
 		maxnutrienergy = 100
 		moultcost = 100
@@ -295,7 +295,7 @@
 		icon_living = "grue_living"
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
-		maxHealth = 200
+		maxHealth = 250
 		maxnutrienergy = 500
 		moultcost=0 //not needed for adults
 		base_melee_dam_up = 30				//base melee damage upper
@@ -444,11 +444,11 @@
 //procs for light-related burning and healing, and nutrienergy updates:
 
 /mob/living/simple_animal/hostile/grue/proc/get_light_damage()
-	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * lightresist * (maxHealth/200) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, lifestage-dependent resistance, and normalize by max health,
+	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * lightresist * (maxHealth/250) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, lifestage-dependent resistance, and normalize by max health,
 
 
 /mob/living/simple_animal/hostile/grue/proc/get_dark_heal()
-	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * (maxHealth/200)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, and normalize by max health.
+	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * (maxHealth/250)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, and normalize by max health.
 
 /mob/living/simple_animal/hostile/grue/proc/nutri_adjust()
 	switch(dark_dim_light)

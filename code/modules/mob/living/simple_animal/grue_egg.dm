@@ -51,11 +51,11 @@
 			current_brightness=0
 		if(current_brightness<=bright_limit_gain)
 			dark_dim_light=GRUE_DARK
-			apply_damage(-1 * (bright_limit_gain-current_brightness) * hg_mult * (maxHealth/200),BURN)
+			apply_damage(-1 * (bright_limit_gain-current_brightness) * hg_mult * (maxHealth/250),BURN)
 		else if(current_brightness>bright_limit_drain) 														//lose health in light
 			dark_dim_light=GRUE_LIGHT
 			playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
-			apply_damage((current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * (maxHealth/200),BURN)
+			apply_damage((current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * (maxHealth/250),BURN)
 		else
 			dark_dim_light=GRUE_DIM
 		if(grown)
