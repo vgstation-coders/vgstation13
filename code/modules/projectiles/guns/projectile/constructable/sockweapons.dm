@@ -10,6 +10,7 @@
 	throw_range = 7
 	attack_verb = list("socks")
 	w_class = W_CLASS_TINY
+
 	var/obj/item/weapon/soap_sock/base_soap = null
 
 /obj/item/weapon/brick_sock
