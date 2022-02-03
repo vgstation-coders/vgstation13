@@ -48,7 +48,7 @@
 	var/pg_mult = 0										 //multiplier for power gained per tick when on dark tile
 	var/pd_mult = 0									  //multiplier for nutrienergy drained per tick on bright tile (0=disabled)
 	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
-	var/hd_mult = 2									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
+	var/hd_mult = 3									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
 
 	var/lifestage=GRUE_ADULT												 //1=baby grue, 2=grueling, 3=(mature) grue
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
