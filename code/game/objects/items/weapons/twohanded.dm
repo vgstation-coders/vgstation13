@@ -190,6 +190,19 @@
 		var/obj/structure/headpole/H = new (get_turf(src), W, src)
 		user.drop_item(W, H, force_drop = 1)
 
+/obj/item/weapon/spear/attack(var/mob/living/M, var/mob/user)
+	var/obj/item/I
+	if(user.zone_sel.selecting == "l_hand")
+		I = M.get_held_item_by_index(GRASP_LEFT_HAND)
+	else if(user.zone_sel.selecting == "r_hand")
+		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
+	if(I && istype(I,src.type) && user.a_intent == I_HELP)
+		playsound(get_turf(user), 'sound/weapons/Genhit.ogg', 50, 1)
+		visible_message("<span class='bad'>[user] high spears [M], but it feels too similar to doing it with a shovel, and isn't good.</span>",\
+						"<span class='bad'>You high spear [M], but it feels too similar to doing it with a shovel, and isn't good.</span>")
+	else
+		..()
+
 /obj/item/weapon/spear/wooden
 	name = "steel spear"
 	desc = "An ancient weapon of an ancient design, with a smooth wooden handle and a sharp steel blade."

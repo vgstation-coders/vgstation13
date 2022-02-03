@@ -469,7 +469,7 @@
 		return
 
 	if(!can_be_inserted(W))
-		return
+		return TRUE
 
 	if(istype(W, /obj/item/weapon/tray))
 		var/obj/item/weapon/tray/T = W

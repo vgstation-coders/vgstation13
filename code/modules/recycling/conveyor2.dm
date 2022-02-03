@@ -49,7 +49,7 @@
 		return
 	else if(!operable)
 		operating = 0
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		operating = 0
 	else
 		operating = 1
@@ -225,7 +225,7 @@
 		return
 	if(!operable)
 		operating = 0
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		operating = 0
 	var/disp_op = operating
 	if(in_reverse && disp_op!=0)
@@ -235,7 +235,7 @@
 	// machine process
 	// move items to the target location
 /obj/machinery/conveyor/process()
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 	if(!operating)
 		return

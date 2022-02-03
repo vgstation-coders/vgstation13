@@ -154,7 +154,7 @@
 		if(!throwing)
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
-			playsound(src, 'sound/items/trayhit1.ogg', 75, 1)
+			playsound(src, "trayhit", 75, 1)
 			var/tPain = rand(5,15)
 			adjustBruteLoss(tPain)
 			Knockdown(tPain/2)

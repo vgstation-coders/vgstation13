@@ -91,6 +91,7 @@ var/auxtools_path
 		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
+	paxban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
@@ -123,9 +124,6 @@ var/auxtools_path
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
-
-	for(var/client/C in clients)
-		C.clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 

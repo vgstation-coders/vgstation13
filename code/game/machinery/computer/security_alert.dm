@@ -18,6 +18,14 @@ TODO: literally every alarm but SPS alarms.
 	icon_state = "secalert"
 	var/list/saved_security_alerts = list()
 	var/last_alert_time = 0
+	var/muted = FALSE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/trigger_sps,
+		/datum/malfhack_ability/toggle/mute_sps,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/toggle/disable
+	)
 
 	light_color = LIGHT_COLOR_RED
 
@@ -35,10 +43,6 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/computer/security_alerts/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/security_alerts/attack_ghost(mob/user as mob)
 	ui_interact(user)
 
@@ -49,7 +53,7 @@ TODO: literally every alarm but SPS alarms.
 
 /obj/machinery/computer/security_alerts/update_icon(var/showalert = FALSE)
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		overlays.Cut()
 		return
 	else
@@ -61,7 +65,7 @@ TODO: literally every alarm but SPS alarms.
 
 
 /obj/machinery/computer/security_alerts/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER)) 
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE)) 
 		return
 
 	if(!ui) 
@@ -101,7 +105,9 @@ TODO: literally every alarm but SPS alarms.
 	onclose(user, "security_alert")
 
 /obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
+	if(muted)
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
 		return 

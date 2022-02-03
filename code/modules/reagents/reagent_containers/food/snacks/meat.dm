@@ -10,6 +10,8 @@
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 
+	var/meatcolor //If set, the meat will be colored accordingly (hex string). This can be used to add colored meats for various species without making a new sprite.
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -18,6 +20,12 @@
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
 		subjectname = M.name
+
+	if(meatcolor) //If meatcolor is set, set the icon_state to meat_colorless and modify the tone.
+		icon_state = "meat_colorless"
+		var/icon/original = icon(icon, icon_state)
+		original.ColorTone(meatcolor)
+		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
@@ -67,7 +75,7 @@
 		return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(isgrue(H))
+		if(isumbra(H))
 			H.adjustOxyLoss(-50)
 			H.heal_organ_damage(50, 0)
 			H.heal_organ_damage(0, 50)
@@ -111,11 +119,21 @@
 	name = "chicken meat"
 	desc = "This better be delicious."
 	icon_state = "raw_chicken"
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken
+	name = "vox chicken meat"
+	desc = "Vox, man. No discussion."
+	icon_state = "raw_vox_chicken"
 	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
 	name = "crab meat"
@@ -419,3 +437,12 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.remove_reagent(NUTRIMENT, 2.5)
 	reagents.add_reagent(PLASMA, 5)
 	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/
+	name = "grue meat"
+	desc = "Considered a delicacy by some, the edibility of this meat has long been a subject of debate amongst discerning gourmands."
+	meatcolor = GRUE_BLOOD
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/New()
+	..()
+	reagents.add_reagent(GRUE_BILE, 5)

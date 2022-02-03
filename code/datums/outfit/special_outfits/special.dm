@@ -1,6 +1,6 @@
 /datum/outfit/special
 	use_pref_bag = FALSE
-	give_disabilities_equipment = FALSE
+	give_disabilities_equipment = TRUE
 	equip_survival_gear = FALSE
 
 // No id in most cases.
@@ -663,7 +663,6 @@
 			slot_head_str = /obj/item/clothing/head/wizard/red,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe/red,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_l_store_str = /obj/item/weapon/spellbook,
 		),
 	)
 

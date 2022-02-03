@@ -205,17 +205,17 @@
 
 /datum/command_alert/blob_defcon_3
 	name = "Biohazard Alert (level 5) DEFCON 3"
-	alert_title = "Biohazard Alert 5 DEFON 3"
+	alert_title = "Biohazard Alert 5 DEFCON 3"
 	message = "Accelerated growth of Biohazard Alert Level 5. DEFCON protocol engaged. Code Red is activated."
 
 /datum/command_alert/blob_defcon_2
 	name = "Biohazard Alert (level 5) DEFCON 2"
-	alert_title = "Biohazard Alert 5 DEFON 2"
+	alert_title = "Biohazard Alert 5 DEFCON 2"
 	message = "Accelerated growth of Biohazard Alert Level 5. Additional DEFCON provisions engaged. Additional reinforcements available. Cyborg units can switch a new module."
 
 /datum/command_alert/blob_defcon_1
 	name = "Biohazard Alert (level 5) DEFCON 1"
-	alert_title = "Biohazard Alert 5 DEFON 1"
+	alert_title = "Biohazard Alert 5 DEFCON 1"
 	message = "Accelerated growth of Biohazard Alert Level 5. Terminal DEFCON provisions engaged. Increased access to all personnel. Additional equipment may be transfered from Communications Consoles."
 
 /// REVS
@@ -432,6 +432,18 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	message = "Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core."
 	theme = "malfdelta"
 	alertlevel = "delta"
+
+/datum/command_alert/malf_win 
+	name = "AI Malfunctioning Win"
+	alert = 'sound/effects/static/static4.ogg'
+
+/datum/command_alert/malf_win/announce()
+	alert = pick(static_list)
+	alert_title = Gibberish("ERROR: SYSTEM OVERRIDE", 90)
+	message = Gibberish("Warning: Device safeties disabled, decontamination procedure unlocked. Activate device to contain outbreak.", 90)
+	..()
+
+
 
 /////////////METEOR STORM
 

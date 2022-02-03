@@ -94,8 +94,14 @@
 
 /obj/machinery/power/shuttle_rotate(angle)
 	..()
-	if(terminal.dir != get_dir(terminal.loc, src))
+	if(terminal && terminal.dir != get_dir(terminal.loc, src))
 		terminal.dir = get_dir(terminal.loc, src)
+
+/obj/machinery/power/apc/shuttle_rotate(angle)
+	..()
+	tdir = dir
+	if(terminal && terminal.dir != tdir)
+		terminal.dir = tdir
 
 /obj/machinery/power/proc/can_attach_terminal(mob/user)
 	return user.loc != src.loc && (get_dir(user, src) in cardinal) && !terminal

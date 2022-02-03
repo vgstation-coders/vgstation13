@@ -50,7 +50,7 @@
 
 /obj/machinery/bodyscanner/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)) && occupant)
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)) && occupant)
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
@@ -104,7 +104,7 @@
 	for(var/obj/OO in src)
 		OO.forceMove(loc)
 	add_fingerprint(user)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -174,7 +174,7 @@
 	for(var/obj/O in src)
 		qdel(O)
 	src.add_fingerprint(usr)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -210,6 +210,10 @@
 		emagged = 0
 		return 0
 
+/obj/machinery/bodyscanner/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
+	emagged = 1
+
 /obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
@@ -238,7 +242,7 @@
 	update_icon()
 	src.add_fingerprint(user)
 	qdel(G)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -275,7 +279,7 @@
 
 
 /obj/machinery/bodyscanner/process()
-	if (stat & (BROKEN | NOPOWER | MAINT | EMPED))
+	if (stat & (BROKEN | NOPOWER | MAINT | EMPED | FORCEDISABLE))
 		use_power = 0
 		return
 	if (occupant)
@@ -287,10 +291,6 @@
 		use_power = 1
 
 /obj/machinery/bodyscanner/attack_paw(mob/user)
-	return attack_hand(user)
-
-/obj/machinery/bodyscanner/attack_ai(mob/user)
-	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/bodyscanner/attack_hand(mob/user)
@@ -381,6 +381,10 @@
 		"external_organs" = H.organs.Copy(),
 		"internal_organs" = H.internal_organs.Copy()
 		)
+	if (H.status_flags & FAKEDEATH)
+		health_data["stat"] = 2
+		health_data["oxyloss"] = 200
+		health_data["health"] = 0
 	return health_data
 
 

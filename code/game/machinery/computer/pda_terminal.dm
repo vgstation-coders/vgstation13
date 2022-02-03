@@ -26,17 +26,18 @@
 
 	var/list/notinstalled = list()
 
-	for(var/app in (typesof(/datum/pda_app) - /datum/pda_app))
+	for(var/app in get_all_installable_apps())
 		if(!(locate(app) in pda_hardware.applications))
 			notinstalled += app
 
 	for(var/app in notinstalled)
 		var/datum/pda_app/appli = new app()
-		formatted.Add(list(list(
-			"app" = get_app_name(appli),
-			"app_name" = get_display_name(appli),
-			"app_desc" = get_display_desc(appli),
-			)))
+		if(appli.can_purchase)
+			formatted.Add(list(list(
+				"app" = get_app_name(appli),
+				"app_name" = get_display_name(appli),
+				"app_desc" = get_display_desc(appli),
+				)))
 
 	return formatted
 
@@ -60,9 +61,6 @@
 
 	nanomanager.update_uis(src)
 	attack_hand(user)
-
-/obj/machinery/computer/pda_terminal/attack_ai(var/mob/user)
-	return attack_hand(user)
 
 /obj/machinery/computer/pda_terminal/attack_paw(var/mob/user)
 	return attack_hand(user)

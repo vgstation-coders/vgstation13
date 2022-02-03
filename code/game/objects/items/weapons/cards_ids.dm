@@ -180,6 +180,9 @@
 		return
 	target.emag_act(user)
 
+
+var/list/global/id_cards = list()
+
 /obj/item/weapon/card/id
 	name = "identification card"
 	desc = "A card used to provide ID and determine access across the station. Features a virtual wallet accessible by PDA."
@@ -206,10 +209,16 @@
 /obj/item/weapon/card/id/New()
 	..()
 
+	id_cards += src
+
 	if(virtual_wallet)
 		update_virtual_wallet()
 	if(ishuman(loc))
 		SetOwnerDNAInfo(loc)
+
+/obj/item/weapon/card/id/Destroy()
+	id_cards -= src 
+	..()
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -258,16 +267,7 @@
 	if(!virtual_wallet)
 		return 0
 	virtual_wallet.money += added_funds
-	var/datum/transaction/T = new()
-	if(user)
-		T.target_name = user.name
-	T.purpose = "Currency deposit"
-	T.amount = added_funds
-	if(source)
-		T.source_terminal = source.name
-	T.date = current_date_string
-	T.time = worldtime2text()
-	virtual_wallet.transaction_log.Add(T)
+	new /datum/transaction(virtual_wallet, "Currency deposit", added_funds, source ? source.name : "", user ? user.name : "")
 	return 1
 
 /obj/item/weapon/card/id/proc/UpdateName()

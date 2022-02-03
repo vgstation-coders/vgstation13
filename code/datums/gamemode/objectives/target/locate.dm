@@ -10,25 +10,29 @@
 		return FALSE
 	return TRUE
 
+var/list/potential_locate_objects = list(/obj/item/weapon/bikehorn/rubberducky,
+	/obj/item/weapon/hand_tele,
+	/obj/item/weapon/gun/energy/laser/captain,
+	/obj/item/weapon/aiModule/freeform/core,
+	/obj/item/weapon/gun/lawgiver,
+	/obj/item/weapon/circuitboard/aiupload,
+	/obj/item/clothing/gloves/yellow,
+	/obj/item/weapon/reagent_containers/hypospray,
+	/obj/item/weapon/disk/nuclear,
+	/obj/item/weapon/reagent_containers/glass/bucket,
+)
+
 /datum/objective/target/locate/find_target()
-	var/list/potential_objects = list(/obj/item/weapon/bikehorn/rubberducky,
-			/obj/item/weapon/hand_tele,
-			/obj/item/weapon/gun/energy/laser/captain,
-			/obj/item/weapon/aiModule/freeform/core,
-			/obj/item/weapon/gun/lawgiver,
-			/obj/item/weapon/circuitboard/aiupload,
-			/obj/item/clothing/gloves/yellow,
-			/obj/item/weapon/reagent_containers/hypospray,
-			/obj/item/weapon/disk/nuclear,
-			/obj/item/weapon/reagent_containers/glass/bucket,
-			)
-	potential_objects = shuffle(potential_objects)
+	var/list/potential_objects = shuffle(potential_locate_objects)
 	var/min = object_min - 1
 	var/max = (object_max >= object_min) ? object_max : (potential_objects.len-1)
 	for(var/i = 0 to rand(min,max))
 		var/type = pick(potential_objects)
-		var/atom/pick = new type
-		objects_to_locate.Add(pick)
+		if(type == /obj/item/weapon/disk/nuclear) // Singleton item, behaves differently.
+			objects_to_locate.Add(nukedisk)
+		else
+			var/atom/pick = new type
+			objects_to_locate.Add(pick)
 		potential_objects.Remove(type)
 	explanation_text = format_explanation()
 	return TRUE
