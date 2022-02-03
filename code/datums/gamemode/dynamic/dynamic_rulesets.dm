@@ -358,7 +358,7 @@
 	if(alert(user,"The gamemode is trying to select you for [src], do you want this?",,"Yes","No") == "Yes")
 		return 1
 	user.forceMove(oldloc)
-	message_admins("[M.key] has opted out of [src].")
+	message_admins("[user.key] has opted out of [src].")
 	return 0
 
 /datum/dynamic_ruleset/proc/generate_ruleset_body(mob/applicant)
