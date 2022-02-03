@@ -221,6 +221,11 @@
 			else if(!client)
 				msg += "[t_He] [t_has] a vacant, braindead stare...\n"
 
+	if(wear_mouth)
+		if(distance <= 1 && !skipface)
+			msg += "<span class='info'>[t_He] very clearly [t_has] something in [t_his] mouth.</span>\n"
+
+
 	// Religions
 	if (ismob(user) && user.mind && user.mind.faith && user.mind.faith.leadsThisReligion(user) && mind)
 		if (src.mind.faith == user.mind.faith)
