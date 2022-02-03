@@ -364,6 +364,7 @@ var/list/map_dimension_cache = list()
 /dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate)
 	if(!path)
 		return
+	var/start_time = world.timeofday
 	var/atom/instance
 	_preloader.setup(attributes, path)
 
@@ -381,6 +382,10 @@ var/list/map_dimension_cache = list()
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
 
+	var/time_took = (world.timeofday - start_time) / 10
+	if(time_took >= 1)
+		log_debug("DMM SUITE: Slow instancing of [instance] at ([x],[y],[z]), took [time_took] seconds.")
+	
 	return instance
 
 //text trimming (both directions) helper proc
