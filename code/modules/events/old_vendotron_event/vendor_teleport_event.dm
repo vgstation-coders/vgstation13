@@ -19,7 +19,7 @@
 	fancyEntrance(chosenVend)
 
 /datum/event/old_vendotron_teleport/proc/vendSpawnDecide()
-	var/list/canReplace = list(
+	var/static/list/canReplace = list(
 		/obj/machinery/vending/coffee,
 		/obj/machinery/vending/snack,
 		/obj/machinery/vending/cola,
