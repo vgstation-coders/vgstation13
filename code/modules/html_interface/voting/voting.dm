@@ -386,7 +386,7 @@ var/global/datum/controller/vote/vote = new()
 		if(config.toggle_vote_method == 2 && vote_type == "map")
 			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
 			for(var/i = 1; i <= choices.len; i++)
-				if(isnull(task.data.[choices[i]]))
+				if(isnull(task.data[choices[i]]))
 					tally[choices[i]] = 0
 				else
 					tally[choices[i]] = task.data[choices[i]]
