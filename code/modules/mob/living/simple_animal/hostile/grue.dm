@@ -26,15 +26,15 @@
 	see_in_dark = 8
 
 	//VARS
-	var/shadowpower = 0											 //shadow power absorbed
-	var/maxshadowpower = 200									   //max shadowpower
-	var/moultcost = 0 											//shadow power needed to moult into next stage (irrelevant for adults)
+	var/nutrienergy = 0											 //nutritive energy absorbed
+	var/maxnutrienergy = 200									   //max nutrienergy
+	var/moultcost = 0 											//nutritive energy needed to moult into next stage (irrelevant for adults)
 	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
 	var/moulttime = 30 //time required to moult to a new form (seconds)
 	var/moulttimer = 30 //moulting timer
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
 	var/hatched = 0			//whether or not this grue hatched from an egg
-	var/channeling = 0 // channeling an ability that costs shadowpower or not
+	var/channeling = 0 // channeling an ability that costs nutrienergy or not
 
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
@@ -45,8 +45,8 @@
 	var/base_melee_dam_up = 5				//base melee damage upper
 	var/base_melee_dam_lw = 3				//base melee damage lower
 
-	var/pg_mult = 10/3										 //multiplier for power gained per tick when on dark tile
-	var/pd_mult = 0									  //multiplier for shadow power drained per tick on bright tile (0=disabled)
+	var/pg_mult = 0										 //multiplier for power gained per tick when on dark tile
+	var/pd_mult = 0									  //multiplier for nutrienergy drained per tick on bright tile (0=disabled)
 	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
 	var/hd_mult = 2									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
 
@@ -60,7 +60,7 @@
 	var/eattime= 5 SECONDS //how long it takes to eat someone
 	var/digest = 0 //how many seconds of healing left after feeding
 	var/digest_heal = -3 //how much health restored per second after feeding (negative heals)
-	var/digest_sp = 10 //how much shadow power gained per second after feeding
+	var/digest_sp = 4 //how much nutritive energy gained per second after feeding
 
 
 	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
@@ -112,7 +112,7 @@
 /mob/living/simple_animal/hostile/grue/Life()
 	..()
 
-	//process shadow power and health according to current tile brightness level
+	//process nutrienergy and health according to current tile brightness level
 	if (stat!=DEAD)
 		if(isturf(loc))
 			var/turf/T = loc
@@ -130,7 +130,7 @@
 		//apply eating-based healing before processing light-based damage or healing
 		if(digest)
 			apply_damage(digest_heal,BRUTE)
-			shadowpower=min(maxshadowpower,shadowpower+digest_sp)
+			nutrienergy=min(maxnutrienergy,nutrienergy+digest_sp)
 			digest--
 
 		switch(dark_dim_light)
@@ -150,8 +150,8 @@
 		accum_light_expos_mult=max(1,accum_light_expos_mult+accum_light_expos_gain_dark_dim_light[dark_dim_light+1])//modify light damage multiplier based on how long the grue's been in light recently
 
 
-		//handle shadow power gain or drain
-		sp_adjust()
+		//handle nutrienergy gain or drain
+		nutri_adjust()
 
 
 		//update speed modifier based on light condition
@@ -178,11 +178,11 @@
 /mob/living/simple_animal/hostile/grue/proc/grue_ai()
 
 	//Moulting
-	if(lifestage!=GRUE_ADULT && (shadowpower>=moultcost) && dark_dim_light==GRUE_DARK)
+	if(lifestage!=GRUE_ADULT && (nutrienergy>=moultcost) && dark_dim_light==GRUE_DARK)
 		start_moult()
 
 	//Eating
-	if(lifestage==GRUE_ADULT && stance==HOSTILE_STANCE_IDLE && dark_dim_light<GRUE_LIGHT)
+	if(lifestage>=GRUE_JUVENILE && stance==HOSTILE_STANCE_IDLE && dark_dim_light<GRUE_LIGHT)
 		var/list/feed_targets = list()
 		for(var/mob/living/carbon/C in range(1,get_turf(src)))
 			feed_targets += C
@@ -253,8 +253,9 @@
 		base_melee_dam_lw = 3				//base melee damage lower
 		attacktext = "bites"
 		maxHealth=50
-		maxshadowpower = 100
-		moultcost=100
+		nutrienergy=50 //starts out ready to moult
+		maxnutrienergy = 50
+		moultcost=50
 		lightresist=1
 		environment_smash_flags = 0
 		attack_sound = 'sound/weapons/bite.ogg'
@@ -271,12 +272,13 @@
 		icon_state = "grueling_living"
 		icon_living = "grueling_living"
 		icon_dead = "grueling_dead"
-		base_melee_dam_up = 15				//base melee damage upper
-		base_melee_dam_lw = 10				//base melee damage lower
+		base_melee_dam_up = 20				//base melee damage upper
+		base_melee_dam_lw = 15				//base melee damage lower
 		attacktext = "chomps"
 		maxHealth=100
-		maxshadowpower = 500
-		moultcost = 500
+		nutrienergy=0 //starts out hungry
+		maxnutrienergy = 100
+		moultcost = 100
 		lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
@@ -294,7 +296,7 @@
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
 		maxHealth = 200
-		maxshadowpower = 1000
+		maxnutrienergy = 500
 		moultcost=0 //not needed for adults
 		base_melee_dam_up = 30				//base melee damage upper
 		base_melee_dam_lw = 20				//base melee damage lower
@@ -341,7 +343,7 @@
 		if(ismoulting)
 			stat(null, "Moulting progress: [round(100*(1-moulttimer/moulttime),0.1)]%")
 		if(lifestage!=GRUE_ADULT) //not needed for adults
-			stat(null, "Shadow power: [round(shadowpower,0.1)]/[round(maxshadowpower,0.1)]")
+			stat(null, "Nutritive energy: [round(nutrienergy,0.1)]/[round(maxnutrienergy,0.1)]")
 		if(lifestage>=GRUE_JUVENILE)
 			stat(null, "Sentient organisms eaten: [eatencount]")
 		if(config.grue_egglaying && lifestage==GRUE_ADULT)
@@ -357,8 +359,11 @@
 /mob/living/simple_animal/hostile/grue/proc/moult()
 	if(alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
 		if (lifestage<GRUE_ADULT)
-			if (shadowpower<moultcost)
-				to_chat(src, "<span class='notice'>You need to bask in shadow more first. ([moultcost] shadow power required)</span>")
+			if (nutrienergy<moultcost && !digest)
+				to_chat(src, "<span class='notice'>You need to feed more first.</span>")
+				return
+			if (nutrienergy<moultcost && digest)
+				to_chat(src, "<span class='notice'>You are still digesting.</span>")
 				return
 			else if (!isturf(loc))
 				to_chat(src, "<span class='notice'>You need more room to moult.</span>")
@@ -378,8 +383,8 @@
 		return
 
 /mob/living/simple_animal/hostile/grue/proc/start_moult()
-	if(stat==CONSCIOUS && shadowpower>=moultcost && !ismoulting && lifestage<GRUE_ADULT)
-		shadowpower-=moultcost
+	if(stat==CONSCIOUS && nutrienergy>=moultcost && !ismoulting && lifestage<GRUE_ADULT)
+		nutrienergy-=moultcost
 		visible_message("<span class='warning'>\The [src] morphs into a chrysalis...</span>","<span class='notice'>You begin moulting.</span>")
 		stat=UNCONSCIOUS //go unconscious while moulting
 		ismoulting=1
@@ -436,7 +441,7 @@
 
 
 
-//procs for light-related burning and healing, and shadowpower updates:
+//procs for light-related burning and healing, and nutrienergy updates:
 
 /mob/living/simple_animal/hostile/grue/proc/get_light_damage()
 	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * lightresist * (maxHealth/200) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, lifestage-dependent resistance, and normalize by max health,
@@ -445,13 +450,13 @@
 /mob/living/simple_animal/hostile/grue/proc/get_dark_heal()
 	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * (maxHealth/200)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, and normalize by max health.
 
-/mob/living/simple_animal/hostile/grue/proc/sp_adjust()
+/mob/living/simple_animal/hostile/grue/proc/nutri_adjust()
 	switch(dark_dim_light)
 		if(0) //if dark
 			if(!ismoulting && !channeling)
-				shadowpower = min(maxshadowpower,shadowpower+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
+				nutrienergy = min(maxnutrienergy,nutrienergy+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
 		if(2) //if light
-			shadowpower = max(0,shadowpower-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0
+			nutrienergy = max(0,nutrienergy-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0
 
 
 
@@ -535,7 +540,7 @@
 		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
-		digest+=25 //add 25 seconds of increased healing
+		digest+=25 //add 25 seconds of increased healing + nutrition gain
 
 		//Upgrade the grue's stats as it feeds
 		if(E.mind) //eaten creature must have a mind to power up the grue
