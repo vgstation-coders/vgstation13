@@ -409,7 +409,6 @@
 	icon_state = "kneesock"
 	item_state = "kneesock"
 	species_fit = list(INSECT_SHAPED)
-	var/obj/item/weapon/soap/base_soap = null
 
 /obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
 	..()
