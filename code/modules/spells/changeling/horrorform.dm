@@ -21,11 +21,24 @@
 	if(istype(user.loc, /obj/machinery/atmospherics))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
 		return FALSE
-	if(istype(user.loc,/mob))
-		to_chat(user, "<span class='warning'>You can't change right now!</span>")
-		return FALSE
 
 /spell/changeling/horrorform/cast(var/list/targets, var/mob/living/carbon/human/user)
+	..()
+	if (istype(user.loc,/mob))
+		to_chat(usr, "<span class='warning'>You can't change right now!</span>")
+		return 1
+	activate(usr)
+	sleep(duration)
+
+/spell/changeling/horrorform/after_cast(list/targets, var/mob/living/carbon/human/user)
+	to_chat(usr, "You are feeling weak. Seek somewhere safe.")
+	sleep(100)	//10 seconds before deactivate
+	deactivate(usr)
+
+	return
+
+
+/spell/changeling/horrorform/proc/activate(var/mob/living/carbon/human/user)
 	//scale health so they don't get free heals all the time
 	user.maxHealth = horrorFormMaxHealth
 	user.setToxLoss(user.getToxLoss()*horrorFormMaxHealth/100)
@@ -52,23 +65,22 @@
 	user.delayNextAttack(0)
 	user.icon = null
 	user.make_changeling()
-	sleep(duration)
-	feedback_add_details("changeling_powers","HF")
 	
-/spell/changeling/horrorform/after_cast(list/targets,var/mob/living/carbon/human/user)
+	return
+
+/spell/changeling/horrorform/proc/deactivate(var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
+
 	//take random DNA
 	var/datum/dna/chosen_dna = changeling.GetDNA(pick(names))
 	if(!chosen_dna)
 		return
-	
-	to_chat(usr, "You are feeling weak. Seek somewhere safe.")
-	sleep(100)	//10 seconds before deactivate
+
 	user.visible_message("<span class='danger'>[user] transforms!</span>")
 	user.dna = chosen_dna.Clone()
 
@@ -112,5 +124,8 @@
 	user.mind.transfer_to(O)
 	O.make_changeling()
 	O.changeling_update_languages(changeling.absorbed_languages)
+	feedback_add_details("changeling_powers","HF")
 
 	qdel(user)
+	
+	return
