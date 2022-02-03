@@ -18,5 +18,6 @@
 
 /datum/gamemode/sandbox/process()
 	. = ..()
-	if(!living_players.len && world.time > 15 MINUTES) //if nobody is around and alive in the current round and enough time has passed
-		ticker.station_nolife_cinematic()
+	if(!player_list.len && world.time > 15 MINUTES) //if nobody is around in the current round and enough time has passed
+		CallHook("Reboot",list())
+		world.Reboot()
