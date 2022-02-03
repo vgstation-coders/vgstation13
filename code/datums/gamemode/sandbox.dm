@@ -15,3 +15,8 @@
 /datum/gamemode/sandbox/latespawn(var/mob/mob)
 	mob.CanBuild()
 	to_chat(mob, "<B>Build your own station with the sandbox-panel command!</B>")
+
+/datum/gamemode/sandbox/process()
+	. = ..()
+	if(!living_players.len && world.time > 15 MINUTES) //if nobody is around and alive in the current round and enough time has passed
+		ticker.station_nolife_cinematic()
