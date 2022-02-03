@@ -1620,6 +1620,7 @@
 #include "code\modules\food\customizables.dm"
 #include "code\modules\food\icecreamvat.dm"
 #include "code\modules\food\recipes_microwave.dm"
+#include "code\modules\games\cards\lotto.dm"
 #include "code\modules\games\cards\playing_cards.dm"
 #include "code\modules\games\cards\wizard_cards.dm"
 #include "code\modules\games\cards\une\une_cards.dm"
