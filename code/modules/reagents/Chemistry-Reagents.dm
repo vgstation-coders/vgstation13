@@ -2075,9 +2075,6 @@
 							"<span class='numb'>Hello?... Is there anybody in there?...</span>", \
 							"<span class='numb'>You feel... comfortably numb.</span>"))
 
-
-//Withdrawal effects in update_pain_level()
-
 /datum/reagent/virus_food
 	name = "Virus Food"
 	id = VIRUSFOOD
