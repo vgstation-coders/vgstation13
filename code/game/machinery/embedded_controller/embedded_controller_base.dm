@@ -135,12 +135,6 @@
 	update_icon()
 	src.updateDialog()
 
-
-/obj/machinery/embedded_controller/attack_ai(mob/user as mob)
-	if(build<2)
-		return 1
-	src.ui_interact(user)
-
 /obj/machinery/embedded_controller/attack_paw(mob/user as mob)
 	attack_hand(user)
 	return

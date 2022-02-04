@@ -193,7 +193,7 @@ var/global/mulebot_count = 0
 
 
 /obj/machinery/bot/mulebot/attack_ai(var/mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	user.set_machine(src)
 	interact(user, 1)
 

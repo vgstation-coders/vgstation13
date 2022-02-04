@@ -11,19 +11,32 @@
 	duration = 2 MINUTES
 	var/horrorFormMaxHealth = 700
 
+/spell/changeling/horrorform/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) 
+		return FALSE
+	if(istype(user.loc, /obj/mecha))
+		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
+		return FALSE
+	if(istype(user.loc, /obj/machinery/atmospherics))
+		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
+		return FALSE
+
 /spell/changeling/horrorform/cast(var/list/targets, var/mob/living/carbon/human/user)
 	..()
 	if (istype(user.loc,/mob))
 		to_chat(usr, "<span class='warning'>You can't change right now!</span>")
 		return 1
-	activate(user)
-	
+	activate(usr)
 	sleep(duration)
+
+/spell/changeling/horrorform/after_cast(list/targets, var/mob/living/carbon/human/user)
 	to_chat(usr, "You are feeling weak. Seek somewhere safe.")
 	sleep(100)	//10 seconds before deactivate
-	deactivate(user)
+	deactivate(usr)
 
-	return	
+	return
+
 
 /spell/changeling/horrorform/proc/activate(var/mob/living/carbon/human/user)
 	//scale health so they don't get free heals all the time
@@ -116,15 +129,3 @@
 	qdel(user)
 	
 	return
-	
-/spell/changeling/horrorform/cast_check(var/skipcharge = 0, var/mob/user = usr)
-	. = ..()
-	if (!.) 
-		return FALSE
-	if(istype(user.loc, /obj/mecha))
-		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
-		return FALSE
-	if(istype(user.loc, /obj/machinery/atmospherics))
-		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
-		return FALSE
-

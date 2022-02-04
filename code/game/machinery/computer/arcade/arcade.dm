@@ -12,6 +12,12 @@
 	var/mob/playerone
 	var/mob/playertwo
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag,
+	)
+
 /obj/machinery/computer/arcade/haunted
 	desc = "Still doesn't support pinball, but does support spookiness."
 	light_color = LIGHT_COLOR_PURPLE
@@ -63,7 +69,7 @@
 	game.emag_act(user)
 
 /obj/machinery/computer/arcade/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		..(severity)
 		return
 	game.emp_act(severity)
@@ -81,7 +87,7 @@
 
 /obj/machinery/computer/arcade/kick_act()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	game.kick_act()

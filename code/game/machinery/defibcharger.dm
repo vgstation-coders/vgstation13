@@ -43,7 +43,7 @@
 	return attack_hand(user)
 
 /obj/machinery/recharger/defibcharger/wallcharger/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		..(severity)
 		return
 
@@ -61,7 +61,7 @@
 
 
 /obj/machinery/recharger/defibcharger/wallcharger/process()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
 
 	if(charging)

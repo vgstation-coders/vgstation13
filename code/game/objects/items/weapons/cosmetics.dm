@@ -264,14 +264,35 @@
 /obj/item/weapon/hair_dye/proc/color_hair(mob/living/carbon/human/H, var/facial = 0)
 	if(!H)
 		return
-	if(facial)
-		H.my_appearance.r_facial = color_r
-		H.my_appearance.g_facial = color_g
-		H.my_appearance.b_facial = color_b
+	if(isvox(H))
+		var/list/voxhaircolorlist = list()
+		voxhaircolorlist["green"] = list(87, 123, 119)
+		voxhaircolorlist["brown"] = list(162,107,56)
+		voxhaircolorlist["grey"] = list(192, 192, 192)
+		voxhaircolorlist["lightgreen"] = list(132, 138, 64)
+		voxhaircolorlist["azure"] = list(112, 126, 93)
+		voxhaircolorlist["emerald"] = list(65, 136, 98)
+		voxhaircolorlist["greenbrown"] = list(147, 126, 61)
+		
+		var/list/closest = ARBITRARILY_LARGE_NUMBER
+		var/voxcolor = 0
+		for(var/rgbcolorset in voxhaircolorlist)
+			var/rgb = voxhaircolorlist[rgbcolorset]
+			var/diff = (max(color_r,rgb[1]) - min(color_r,rgb[1])) + (max(color_r,rgb[2]) - min(color_r,rgb[2])) + (max(color_r,rgb[3]) - min(color_r,rgb[3]))
+			if(diff < closest)
+				closest = diff
+				var/haircolor = get_key_by_element(voxhaircolorlist, rgb)
+				voxcolor = voxhaircolorlist.Find(haircolor)
+		H.my_appearance.v_hair = voxcolor
 	else
-		H.my_appearance.r_hair = color_r
-		H.my_appearance.g_hair = color_g
-		H.my_appearance.b_hair = color_b
+		if(facial)
+			H.my_appearance.r_facial = color_r
+			H.my_appearance.g_facial = color_g
+			H.my_appearance.b_facial = color_b
+		else
+			H.my_appearance.r_hair = color_r
+			H.my_appearance.g_hair = color_g
+			H.my_appearance.b_hair = color_b
 	H.update_hair()
 	if(H.species.anatomy_flags & RGBSKINTONE)
 		H.update_body()

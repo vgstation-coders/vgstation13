@@ -533,10 +533,12 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 // bitflags for machine stat variable
 #define BROKEN		1
 #define NOPOWER		2
-#define POWEROFF	4		// tbd
-#define MAINT		8			// under maintaince
+#define POWEROFF	4		// unused
+#define MAINT		8		// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
-#define FORCEDISABLE 32 //forced to be off, such as by a random event
+#define FORCEDISABLE 32 	//disabled either via wire pulse, grid check, or malf ai
+#define NOAICONTROL 	64		//ai control disable
+
 
 //bitflags for door switches.
 #define OPEN	1
@@ -680,6 +682,8 @@ var/list/liftable_structures = list(\
 #define BANTYPE_APPEARANCE	6
 #define BANTYPE_OOC_PERMA	7
 #define BANTYPE_OOC_TEMP	8
+#define BANTYPE_PAX_PERMA	9
+#define BANTYPE_PAX_TEMP	10
 
 #define SEE_INVISIBLE_MINIMUM 5
 
@@ -1250,26 +1254,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define TOTAL_LAYERS			23
 //////////////////////////////////
 
-
-////////////////////////
-////PDA APPS DEFINES////
-////////////////////////
-#define PDA_APP_ALARM			100
-#define PDA_APP_RINGER			101
-#define PDA_APP_SPAMFILTER		102
-#define PDA_APP_BALANCECHECK	103
-#define PDA_APP_STATIONMAP		104
-#define PDA_APP_SNAKEII			105
-#define PDA_APP_MINESWEEPER		106
-#define PDA_APP_SPESSPETS		107
-#define PDA_APP_NEWSREADER		108
-
+//Snake stuff so leaderboard can see it too
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
-
-#define NEWSREADER_CHANNEL_LIST	0
-#define NEWSREADER_VIEW_CHANNEL	1
-#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
@@ -1462,6 +1449,8 @@ var/proccalls = 1
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
+
+#define paxban_isbanned(key) paxban_keylist.Find("[ckey(key)]")
 
 //message modes. you're not supposed to mess with these.
 #define MODE_HEADSET "headset"

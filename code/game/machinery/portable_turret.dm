@@ -32,6 +32,13 @@
 
 	machine_flags = EMAGGABLE | SHUTTLEWRENCH
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_loud,
+		/datum/malfhack_ability/manual_control
+	)
+
+
 /obj/machinery/turret/portable/New()
 	..()
 	icon_state = "[lasercolor]grey_target_prism"
@@ -69,11 +76,6 @@
 /obj/machinery/turret/portable/Destroy()
 	qdel(installed)
 	..()
-
-
-/obj/machinery/turret/portable/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/turret/portable/attack_hand(mob/user as mob)
 	. = ..()
@@ -744,7 +746,6 @@ Status: []<BR>"},
 	machine_flags = SHUTTLEWRENCH
 
 /obj/machinery/turretcover/portable/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
 	return host.attack_ai(user)
 
 /obj/machinery/turretcover/portable/attackby(obj/item/W as obj, mob/user as mob)

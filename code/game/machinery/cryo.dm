@@ -120,7 +120,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
 
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		on = 0
 
 	if(!node1)
@@ -639,7 +639,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(panel_open)
 		to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
 		return
-	if (usr.isUnconscious() || stat & (NOPOWER|BROKEN))
+	if (usr.isUnconscious() || stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	put_mob(usr)
 

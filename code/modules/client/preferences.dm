@@ -142,6 +142,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/underwear = 1					//underwear type
 	var/backbag = 2						//backpack type
 	var/h_style = "Bald"				//Hair type
+	var/v_hair = 1						//Hair color for vox
 	var/r_hair = 0						//Hair color
 	var/g_hair = 0						//Hair color
 	var/b_hair = 0						//Hair color
@@ -1044,6 +1045,11 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
 							b_hair = hex2num(copytext(new_hair, 6, 8))
+					if(species == "Vox")
+						var/new_hair_vox = input(user, "Choose your character's hair color:", "Character Preference") as null|anything in list("Green", "Azure", "Brown", "Emerald", "Gray", "Light Green", "Green-Brown")
+						if(new_hair_vox)
+							v_hair = haircolordesc(new_hair_vox)
+							to_chat(user,"Your hair will now be [new_hair_vox] in color.")
 					if(species == "Insectoid")
 						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(carapace)
@@ -1054,7 +1060,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							g_hair = clamp(g_hair, 0, 50)
 							b_hair = clamp(b_hair, 0, 35)
 				if("h_style")
-					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
+					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference") as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
 						h_style = new_h_style
 
@@ -1449,6 +1455,8 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 	character.my_appearance.r_hair = r_hair
 	character.my_appearance.g_hair = g_hair
 	character.my_appearance.b_hair = b_hair
+
+	character.my_appearance.v_hair = v_hair
 
 	character.my_appearance.r_facial = r_facial
 	character.my_appearance.g_facial = g_facial

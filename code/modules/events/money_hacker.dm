@@ -15,7 +15,7 @@
 /datum/event/money_hacker/setup()
 	if(all_money_accounts.len)
 		for(var/obj/machinery/account_database/DB in account_DBs)
-			if( DB.z == map.zMainStation && !(DB.stat&NOPOWER) && DB.activated )
+			if( DB.z == map.zMainStation && !(DB.stat&(FORCEDISABLE|NOPOWER)) && DB.activated )
 				affected_db = DB
 				break
 	if(affected_db)
@@ -66,7 +66,7 @@
 /datum/event/money_hacker/tick()
 	if(world.time > time_start + time_duration)
 		var/message
-		if(affected_account && affected_db && affected_db.activated && !(affected_db.stat & (NOPOWER|BROKEN)) )
+		if(affected_account && affected_db && affected_db.activated && !(affected_db.stat & (FORCEDISABLE|NOPOWER|BROKEN)) )
 			//hacker wins
 			message = "The hack attempt has succeeded."
 
