@@ -5,7 +5,7 @@
 /datum/cargo_forwarding
     var/name = ""
     var/datum/money_account/acct // account we pay to
-    var/acct_by_string = ""
+    var/acct_by_string = "Cargo"
     var/list/contains = list()
     var/amount = 1
     var/containertype = null
@@ -175,6 +175,7 @@
     var/datum/centcomm_order/ourorder = new ordertype
     worth = ourorder.worth
     containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
+    acct_by_string = ourorder.acct_by_string
     for(var/i in ourorder.requested)
         amount = ourorder.requested[i]
         if(ourorder.name_override && ourorder.name_override.len)
