@@ -659,6 +659,8 @@
 	name = "seasonal cookie"
 	desc = "Charming holiday sugar cookies, just like Mom used to make."
 	icon = 'icons/obj/food_seasonal.dmi'
+	base_crumb_chance = 5
+	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
 	..()
@@ -668,13 +670,50 @@
 
 	if(!cookiecutter)
 		switch(NM)
+			if(2)
+				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
 			if(12)
 				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
 			if(10)
 				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
 			else
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer") )
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
 	icon_state = "[cookiecutter]"
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/candyheart
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SUGAR, 15)
+
+/obj/item/weapon/reagent_containers/food/snacks/candyheart
+	name = "candyheart"
+	icon = 'icons/obj/food.dmi'
+
+/obj/item/weapon/reagent_containers/food/snacks/candyheart/New()
+	..()
+
+	var/heartphrase = pick( list("SO FINE","B TRU","U ROCK","HELLO","SOUL MATE","ME + U","2 CUTE","SWEET LUV","IM URS","XOXO","B MINE","LUV BUG","I &lt;3 U","PDA ME") )
+
+	var/heartcolor = pick( list("p","b","w","y","g") )
+
+	icon_state = "conversationheart_[heartcolor]"
+	desc = "Chalky sugar in the form of a heart.<br/>This one says, <span class='valentines'>\"[heartphrase]\"</span>."
+
+/obj/item/weapon/reagent_containers/food/snacks/chocostrawberry
+	name = "chocolate strawberry"
+	desc = "A fresh strawberry dipped in melted chocolate."
+	icon_state = "chocostrawberry"
+	food_flags = FOOD_SWEET
+	bitesize = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/chocostrawberry/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(SUGAR, 5)
+	reagents.add_reagent(COCO, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
 	name = "gingerbread man"
