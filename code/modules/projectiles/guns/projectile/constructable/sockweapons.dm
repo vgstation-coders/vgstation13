@@ -10,8 +10,8 @@
 	throw_range = 7
 	attack_verb = list("socks")
 	w_class = W_CLASS_TINY
-
 	var/obj/item/weapon/soap_sock/base_soap = null
+	var/obj/item/weapon/soap_sock/base_sock = null
 
 /obj/item/weapon/brick_sock
 	name = "brick in a sock"
@@ -25,12 +25,13 @@
 	throw_range = 7
 	attack_verb = list("socks")
 	w_class = W_CLASS_MEDIUM
+	var/obj/item/weapon/brick_sock/base_sock = null
 
 /obj/item/weapon/soap_sock/attack_self(mob/user)
 	if(user.a_intent == I_GRAB)
 		to_chat(user, "<span class='notice'>You remove the soap from \the [src].</span>")
 		user.drop_item(src, force_drop = 1)
-		user.put_in_hands(new /obj/item/clothing/shoes/kneesocks(user))
+		user.put_in_hands(src.base_sock)
 		user.put_in_hands(src.base_soap)
 		qdel(src)
 
@@ -39,5 +40,5 @@
 		to_chat(user, "<span class='notice'>You remove the brick from \the [src].</span>")
 		user.drop_item(src, force_drop = 1)
 		user.put_in_hands(new /obj/item/stack/sheet/mineral/brick(user))
-		user.put_in_hands(new /obj/item/clothing/shoes/kneesocks(user))
+		user.put_in_hands(src.base_sock)
 		qdel(src)
