@@ -59,6 +59,8 @@
 		return 1
 	if(!istype(M))
 		return 1
+	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
+		return 1
 
 	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
 	src = null
@@ -96,8 +98,13 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
+	
+	if(tolerance_increase)
+		M.tolerated_chems[src.id] += tolerance_increase
 
 /datum/reagent/proc/reaction_dropper_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
+		return 1
 	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
 	src = null
 	if(M.reagents)
@@ -107,6 +114,9 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
+	
+	if(tolerance_increase)
+		M.tolerated_chems[src.id] += tolerance_increase
 
 /datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
 	reaction_obj(O, volume)
