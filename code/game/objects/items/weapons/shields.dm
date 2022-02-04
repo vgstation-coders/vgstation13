@@ -45,7 +45,10 @@
 	starting_materials = list()
 
 /obj/item/weapon/shield/riot/buckler/IsShield()
-	return prob(33) //Only attempt to block 1/3 of attacks
+	if(prob(33)) //Only attempt to block 1/3 of attacks
+		return 1
+	else
+		..()
 
 /obj/item/weapon/shield/riot/buckler/on_block(damage, atom/blocked)
 	if(damage > 10)
