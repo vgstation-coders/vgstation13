@@ -2,6 +2,23 @@
 	if(grab_check(target))
 		return
 
+	if(zone_sel.selecting == "mouth")
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+			if(H.check_body_part_coverage(MOUTH))
+				to_chat(src, "<span class='notice'>Their mouth is blocked!</span>")
+				return
+			var/spitItOutISaidSpitItOut = 10
+			if(H.a_intent != I_HELP)
+				spitItOutISaidSpitItOut = 25
+			visible_message("<span class='danger'>[src] is fishing around in [H]'s mouth!</span>")
+			if(do_after(src, target, spitItOutISaidSpitItOut))
+				if(H.spitOutItem())
+					to_chat(src, "<span class='notice'>You yank something out of [H]'s mouth!</span>")
+				else
+					to_chat(src, "<span class='notice'>You found nothing in [H]'s mouth.</span>")
+			return
+
 	if (is_pacified(VIOLENCE_DEFAULT,target))
 		return
 
