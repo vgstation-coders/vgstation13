@@ -65,20 +65,20 @@ proc/obj/item/toy/lotto_ticket/scratch(input_price)
 //Tier 1 card
 /obj/item/toy/lotto_ticket/gold_rush
 	name = "Gold Rush lottery ticket"
-	desc = "A cheap scratch-off lottery ticket. 5 possible prizes of up to 250,000 credits!"
+	desc = "A cheap scratch-off lottery ticket. Win up to 100,000 credits!"
 	icon_state = "lotto_1"
 	ticket_price = 5 //EV 4.55, ER -0.45
 
 //Tier 2 card
 /obj/item/toy/lotto_ticket/diamond_hands
 	name = "Diamond Hands lottery ticket"
-	desc = "A mid-price scratch-off lottery ticket. 4 possible prizes of up to 500,000 credits!"
+	desc = "A mid-price scratch-off lottery ticket. Win up to 400,000 credits!"
 	icon_state = "lotto_2"
 	ticket_price = 20 //EV 18.20, ER -1.80
 
 //Tier 3 card
 /obj/item/toy/lotto_ticket/phazon_fortune
 	name = "Phazon Fortune lottery ticket"
-	desc = "An expensive scratch-off lottery ticket. 2 possible prizes of up to 1,000,000 credits!"
+	desc = "An expensive scratch-off lottery ticket. Win up to 1,000,000 credits!"
 	icon_state = "lotto_3"
 	ticket_price = 50 //EV 45.50, ER -4.50
