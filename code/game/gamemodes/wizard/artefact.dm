@@ -356,6 +356,12 @@
 		spawn(5 SECONDS)	//But they fought with expert timing
 			blinding = TRUE
 
+/obj/item/clothing/shoes/blindingspeed/rangeTackleBonus()
+	return 2
+
+/obj/item/clothing/shoes/blindingspeed/offenseTackleBonus()
+	return 30
+
 /obj/item/clothing/shoes/blindingspeed/unequipped(mob/living/carbon/human/H, var/from_slot = null)
 	..()
 	if(from_slot == slot_shoes && istype(H))
