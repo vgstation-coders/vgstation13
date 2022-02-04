@@ -60,6 +60,8 @@ var/datum/controller/gameticker/ticker
 		path = "sound/music/aprilfools/"
 	else if(SNOW_THEME)
 		path = "sound/music/xmas/"
+	else if(map.nameShort == "castle")
+		path = "sound/music/castle/"
 	var/list/filenames = flist(path)
 	for(var/filename in filenames)
 		if(copytext(filename, length(filename)) == "/")
