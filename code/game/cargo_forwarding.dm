@@ -70,11 +70,11 @@
     if(reason)
         worth *= -0.5 //Deduct a penalty instead
 
-    acct.charge(-worth,null,"Payment for cargo crate fowarding ([name])",dest_name = name)
+    acct.charge(-worth,null,"[reason ? "Deduction" : "Payment"] for cargo crate fowarding ([name])",dest_name = name)
 
     if (cargo_contribution > 0 && acct_by_string != "Cargo")//cargo gets some extra coin from everything shipped
         var/datum/money_account/cargo_acct = department_accounts["Cargo"]
-        cargo_acct.charge(round(-worth/10),null,"Contribution for cargo crate fowarding ([name])",dest_name = name)
+        cargo_acct.charge(round(-worth/10),null,"[reason ? "Deducted c" : "C"]ontribution for cargo crate fowarding ([name])",dest_name = name)
     
     for(var/obj/machinery/computer/supplycomp/S in SSsupply_shuttle.supply_consoles)
         S.say("[name] forwarded [reason ? "unsuccessfully! [reason]. Reward docked." : "successfully!"]")
@@ -156,7 +156,6 @@
             next_sound = world.time + sound_delay
 
 /datum/cargo_forwarding/from_supplypack/New()
-    ..()
     var/packtype = pick(subtypesof(/datum/supply_packs))
     var/datum/supply_packs/ourpack = new packtype
     name = ourpack.name
@@ -167,10 +166,10 @@
     access = ourpack.access
     one_access = ourpack.one_access
     worth = ourpack.cost
+    ..()
     qdel(ourpack)
 
 /datum/cargo_forwarding/from_centcomm_order/New()
-    ..()
     var/ordertype = get_weighted_order()
     var/datum/centcomm_order/ourorder = new ordertype
     worth = ourorder.worth
@@ -202,6 +201,7 @@
     else if(istype(ordertype,/datum/centcomm_order/department/science))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
         access = list(access_science)
+    ..()
     qdel(ourorder)
 
 /datum/cargo_forwarding/misc/janicart
