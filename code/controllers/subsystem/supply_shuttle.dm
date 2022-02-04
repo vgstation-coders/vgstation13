@@ -336,13 +336,18 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if(!cargomen)
 			cargomen = 1 // Just send one crate if no cargo
 
+		var/datum/money_account/our_account = department_accounts["Cargo"]
+		var/multiplier = log(10, (our_account.money / (DEPARTMENT_START_FUNDS / 10) ) ) // So that starting funds equal a 1x multiplier
+		var/amount_forwarded = rand(0,round(cargomen * multiplier))
+		if(!amount_forwarded)
+			return // Skip this if nothing to send
+
 		var/i = rand(1,clear_turfs.len)
 		var/turf/pickedloc = clear_turfs[i]
 		clear_turfs.Cut(i,i+1)
 		new /obj/machinery/crate_weigher(pickedloc)
 
 		var/list/datum/cargo_forwarding/new_forwards = list()
-		var/amount_forwarded = rand(1,cargomen)
 		for(var/j in 1 to amount_forwarded)
 			if(prob(75)) // Normal orderable stuff
 				var/datum/cargo_forwarding/from_supplypack/SCF = new
