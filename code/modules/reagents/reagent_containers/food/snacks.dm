@@ -195,6 +195,16 @@
 		return
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
+	if(ishuman(eater))
+		var/mob/living/carbon/human/H = eater
+		if(H.wear_mouth)
+			if(H.a_intent == I_HURT && prob(10))
+				to_chat(H, "<span class='danger'>You try to cram more in your mouth and start choking on \the [wear_mouth]!</span>")
+				H.adjustOxyLoss(20)
+				H.Knockdown(2)
+			else
+				to_chat(H, "<span class='notice'>You can't eat \the [src] with \a [wear_mouth] in your mouth!</span>")
+			return
 
 	before_consume(eater)
 

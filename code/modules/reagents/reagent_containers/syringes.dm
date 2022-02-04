@@ -285,12 +285,14 @@
 
 	harmSyringeInject(target)
 
-/obj/item/weapon/reagent_containers/syringe/mouth_act(mob/user)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		var/datum/organ/external/ouchMouth = H.get_organ(LIMB_HEAD)
-		ouchMouth.take_damage(pick(3, 10))	//Tongue or roof of the mouth? Probably the same as a normal harm syringe. Riiiiight between the teeth or back of the throat? Ouch
-		harmSyringeInject(user)
+/obj/item/weapon/reagent_containers/syringe/mouth_act(mob/user, mInitial = FALSE, mConstant = FALSE)
+	..()
+	if(mInitial)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			var/datum/organ/external/ouchMouth = H.get_organ(LIMB_HEAD)
+			ouchMouth.take_damage(pick(3, 10))	//Tongue or roof of the mouth? Probably the same as a normal harm syringe. Riiiiight between the teeth or back of the throat? Ouch
+			harmSyringeInject(user)
 
 
 /obj/item/weapon/reagent_containers/syringe/proc/harmSyringeInject(var/mob/living/carbon/target)

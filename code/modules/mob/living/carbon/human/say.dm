@@ -10,7 +10,7 @@
 		species.silent_speech(src,message)
 	else
 		to_chat(world, "SAY before hasfullmouth")
-		if(hasMouthFull)
+		if(wear_mouth)
 			to_chat(world, "SAY in full mouth")
 			spitOutItem()
 			to_chat(world, "SAY after spit out")

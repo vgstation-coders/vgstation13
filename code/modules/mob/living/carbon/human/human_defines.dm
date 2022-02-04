@@ -43,7 +43,6 @@
 	var/used_skillpoints = 0
 	var/skill_specialization = null
 	var/list/skills = null
-	var/hasMouthFull = FALSE
 
 	var/icon/stand_icon = null
 	var/icon/lying_icon = null

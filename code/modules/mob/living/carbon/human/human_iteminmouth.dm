@@ -19,7 +19,7 @@
 	set name = "Spit Out"
 	set category = "IC"
 
-	if(!hasMouthFull)
+	if(!wear_mouth)
 		return FALSE
 	if(a_intent == I_HURT)
 		var/turf/T = get_turf(get_step(src, dir))
@@ -38,7 +38,7 @@
 	to_chat(world, "Start bite check")
 	if(attack_type == ATTACK_BITE)
 		to_chat(world, "ATTACK BITE")
-		if(hasMouthFull)
+		if(wear_mouth)
 			to_chat(world, "has mouth full")
 			spitOutItem(TRUE, FALSE, get_turf(A))
 			to_chat(world, "After spit out")
@@ -57,13 +57,13 @@
 	return FALSE
 
 /mob/living/carbon/human/proc/putItemInMouth(var/obj/item/mItem)
-	if(hasMouthFull)
+	if(wear_mouth)
 		to_chat(src, "<span class='warning'>You already have something in your mouth.</span>")
 	else if(mItem.w_class == W_CLASS_TINY)
 		to_chat(world, "It's tiny")
 		if(equip_to_slot_if_possible(mItem, slot_mouth))
 			to_chat(world, "after equip to slot")
-			mItem.mouth_act(src)	//I don't want to hear any giggling in the back of the class
+			mItem.mouth_act(src, TRUE)	//I don't want to hear any giggling in the back of the class
 			visible_message("<span class='warning'>[src] puts \the [mItem] in their mouth!.</span>")
 		else
 			to_chat(src, "<span class='warning'>You couldn't get \the [src] into your mouth!.</span>")
@@ -111,7 +111,6 @@
 	to_chat(world, "in mouth is [inMouth]")
 	u_equip(inMouth, slot_mouth)
 	to_chat(world, "After u_equip")
-	hasMouthFull = FALSE
 
 
 //Item procs/////////////
@@ -123,6 +122,24 @@
 		var/mob/living/carbon/human/H = user
 		H.putItemInMouth(src)
 
-/obj/item/proc/mouth_act(mob/user)	//If something does something while held in your mouth, like a wad of paper
-	to_chat(world, "mouth act")
-	return
+
+//mInitial is intended for one time effects, generally when putting something in your mouth. mConstant is called on human/life()
+/obj/item/proc/mouth_act(mob/user, var/mInitial = FALSE, var/mConstant = FALSE)	//If something does something while held in your mouth, like a wad of paper
+	if(mInitial)
+		if(sharpness_flags & SHARP_TIP)
+			if(ishuman(user))
+				var/mob/living/carbon/human/H = user
+				H.adjustBruteLossByPart(sharpness * 20, LIMB_HEAD)	//Generally like 10-30 damage
+				to_chat(H, "<span class='warning'>\The [src] is stabbing your mouth!</span>")
+	else if(mConstant)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(sharpness_flags & SHARP_BLADE || sharpness_flags & SERRATED_BLADE)
+				var/chanceToCut = sharpness * 10
+				if(prob(chanceToCut))
+				H.adjustBruteLossByPart(sharpness * 3)
+			if(is_hot())
+				H.adjustFireLossByPart(1, LIMB_HEAD)
+				if(prob(H.getFireLoss()))
+					H.adjust_fire_stacks(1)
+					H.IgniteMob()

@@ -42,12 +42,14 @@
 	..()
 	return
 
-/obj/item/weapon/shard/mouth_act(mob/user)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		H.adjustBruteLossByPart(rand(25, 50), LIMB_HEAD, src)	//don't eat glass, dummy
-		to_chat(H, "<span class='big warning'>All you can taste is pain!</span>")
-		H.adjustHalLoss(70)
+/obj/item/weapon/shard/mouth_act(mob/user, mInitial = FALSE, mConstant = FALSE)
+	..()
+	if(mInitial)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.adjustBruteLossByPart(rand(20, 40), LIMB_HEAD, src)	//don't eat glass, dummy
+			to_chat(H, "<span class='big warning'>All you can taste is pain!</span>")
+			H.adjustHalLoss(60)
 
 /obj/item/weapon/shard/plasma
 	name = "plasma shard"

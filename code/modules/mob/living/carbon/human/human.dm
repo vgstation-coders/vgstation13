@@ -728,13 +728,15 @@
 
 			if(gcDestroyed)
 				return
-			if(hasMouthFull)
+			if(wear_mouth)
 				if(!spitOutItem())
 					Stun(10)
-					reagents.add_reagent(VOMIT, 10)	//How horrifying
-					adjustToxLoss(10)
+					Knockdown(10)
+					reagents.add_reagent(VOMIT, 15)	//How horrifying
+					adjustToxLoss(20)
+					adjustOxyLoss(25)
 					playsound(loc, 'sound/effects/splat.ogg', 25, 1)
-					visible_message("<span class='warning'>[src] vomits in their own mouth!</span>")
+					visible_message("<span class='big warning'>[src] vomits in their own mouth!</span>")
 			else
 				Stun(5)
 

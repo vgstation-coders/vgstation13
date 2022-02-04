@@ -207,6 +207,11 @@
 /mob/proc/audible_cough()
 	emote("coughs", message = TRUE, ignore_status = TRUE)
 
+/mob/living/carbon/human/audible_cough()
+	..()
+	if(wear_mouth)
+		spitOutItem()
+
 /mob/proc/audible_scream(var/arguments)
 	if(isvox(src) || isskelevox(src))
 		emote("shrieks", message = TRUE, ignore_status = TRUE, arguments = arguments)
@@ -217,4 +222,7 @@
 	else
 		emote("screams", message = TRUE, ignore_status = TRUE, arguments = arguments) // So it's forced
 
-
+/mob/living/carbon/human/audible_scream(var/arguments)
+	..(arguments)
+	if(wear_mouth)
+		spitOutItem()

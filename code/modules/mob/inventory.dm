@@ -541,6 +541,10 @@
 				if(B.contents.len < B.storage_slots && W.w_class <= B.fits_max_w_class)
 					W.forceMove(B)
 					equipped = 1
+		if(slot_mouth)
+			if(!src.wear_mouth)
+				src.wear_mouth = W
+				equipped = 1
 
 	if(equipped)
 		W.hud_layerise()

@@ -753,7 +753,6 @@
 				return CANNOT_EQUIP
 			if(slot_mouth)
 				H.enableSpitting(src)
-				H.hasMouthFull = TRUE
 				return CAN_EQUIP
 			//-->>>>		//RIGHT HERE//	<<<<----//
 

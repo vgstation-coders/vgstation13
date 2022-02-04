@@ -263,7 +263,7 @@ var/list/animals_with_wings = list(
 	. = ..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.hasMouthFull)
+		if(H.wear_mouth)
 			var/turf/T = get_turf(get_step(H, H.dir))
 			H.spitOutItem(TRUE, FALSE, T, 2)
 

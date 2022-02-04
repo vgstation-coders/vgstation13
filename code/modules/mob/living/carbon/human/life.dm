@@ -172,6 +172,8 @@ var/global/list/organ_damage_overlays = list(
 		handle_spaghetti(10)
 	else //Otherwise 5% -kanef
 		handle_spaghetti(5)
+	if(wear_mouth)
+		wear_mouth.mouth_act(src, FALSE, TRUE)
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000)) //We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		cycle = "DEAD"
 		return //We go ahead and process them 5 times for HUD images and other stuff though.

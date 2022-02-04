@@ -312,6 +312,10 @@ emp_act
 
 			drugged_message = "<span class='info'>The tooth fairy takes some of \the [src]'s teeth out!</span>",\
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
+	if(wear_mouth)
+		to_chat(src, "<span class='danger'>\The [wear_mouth] falls out of your mouth!</span>")
+		spitOutItem()
+
 
 /mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage) //When our foot is hurt, for example by kicking something stationary
 	//note: as per can_kick() in human.dm, kicking requires both feet intact
