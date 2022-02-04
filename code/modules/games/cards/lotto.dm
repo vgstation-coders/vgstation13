@@ -13,7 +13,7 @@
 	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 
-/proc/obj/item/toy/lotto_ticket/scratch(var/input_price)
+/obj/item/toy/lotto_ticket/proc/scratch(var/input_price)
 	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
 	var/list/problist = list(0.0001, 0.0002, 0.001, 0.002, 0.01, 0.02, 0.04, 0.2, 1, 2.5, 5, 10, 12.5, 17, 20, 25)
 	var/tuning_value = 1/5 //Used to adjust expected values.
