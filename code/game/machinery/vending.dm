@@ -3706,3 +3706,37 @@ var/global/num_vending_terminals = 1
 		return pick(grey_slogans)
 	else
 		return pick(product_slogans)
+
+/obj/machinery/vending/lotto
+	name = "\improper Lotto Tickets"
+	desc = "Wall-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed at Cargo."
+	product_slogans = list(
+		"Feeling lucky?",
+		"Money won is twice as sweet as money earned.",
+		"The greatest risk is not taking one."
+	)
+	product_ads = list(
+		"Quit while you’re ahead. All the best gamblers do.",
+		"If there weren’t luck involved, I would win every time.",
+		"Better an ounce of luck than a pound of gold.",
+		"Behind bad luck comes good luck."
+	)
+	vend_reply = "Good luck!"
+	icon_state = "Lotto"
+	icon_vend = "Lotto-vend"
+	products = list(
+		/obj/item/toy/lotto_ticket/gold_rush = 20,
+		/obj/item/toy/lotto_ticket/diamond_hands = 20,
+		/obj/item/toy/lotto_ticket/phazon_fortune = 20
+		)
+	contraband = list(
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 1
+		)
+	prices = list(
+		/obj/item/toy/lotto_ticket/gold_rush = 5,
+		/obj/item/toy/lotto_ticket/diamond_hands = 20,
+		/obj/item/toy/lotto_ticket/phazon_fortune = 50,
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 100
+		)
+
+	pack = /obj/structure/vendomatpack/lotto
