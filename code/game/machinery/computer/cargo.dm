@@ -121,7 +121,7 @@ For vending packs, see vending_packs.dm*/
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/list/current_acct
-	var/list/current_acct_override 
+	var/list/current_acct_override
 	var/screen = SCR_MAIN
 	light_color = LIGHT_COLOR_BROWN
 
@@ -185,7 +185,7 @@ For vending packs, see vending_packs.dm*/
 
 	if(current_acct_override)
 		current_acct = current_acct_override
-	else 
+	else
 		current_acct = get_account_info(user, linked_db)
 
 	user.set_machine(src)
@@ -235,6 +235,13 @@ For vending packs, see vending_packs.dm*/
 				A.anchored = 1
 				src.transfer_fingerprints_to(A)
 				qdel(src)
+	if(istype(I, /obj/item/toy/lotto_ticket))
+		var/obj/item/toy/lotto_ticket/T = I
+		for(var/mob/V in hearers(src))
+			V.show_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Lottery account!\"")
+		dispense_cash(T.winnings, get_turf(src))
+		playsound(src, "polaroid", 50, 1)
+		qdel(T)
 	else
 		return ..()
 
@@ -318,7 +325,7 @@ For vending packs, see vending_packs.dm*/
 	add_fingerprint(usr)
 	if(current_acct_override)
 		current_acct = current_acct_override
-	else 
+	else
 		current_acct = get_account_info(usr, linked_db)
 	var/idname
 	var/datum/money_account/account
@@ -453,7 +460,7 @@ For vending packs, see vending_packs.dm*/
 		SSsupply_shuttle.requisition = text2num(href_list["requisition_status"])
 		if(current_acct_override)
 			current_acct = current_acct_override
-		else 
+		else
 			current_acct = get_account_info(usr, linked_db)
 		return 1
 	else if (href_list["screen"])
@@ -514,7 +521,7 @@ For vending packs, see vending_packs.dm*/
 		return
 	if(current_acct_override)
 		current_acct = current_acct_override
-	else 
+	else
 		current_acct = get_account_info(user, linked_db)
 	user.set_machine(src)
 	ui_interact(user)
@@ -579,7 +586,7 @@ For vending packs, see vending_packs.dm*/
 	add_fingerprint(usr)
 	if(current_acct_override)
 		current_acct = current_acct_override
-	else 
+	else
 		current_acct = get_account_info(usr, linked_db)
 	var/idname
 	var/datum/money_account/account

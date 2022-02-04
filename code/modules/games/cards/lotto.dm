@@ -5,22 +5,33 @@
 	w_class = W_CLASS_TINY
 	var/obj/item/toy/lotto_ticket/revealed = 0
 	var/obj/item/toy/lotto_ticket/iswinner = 0
-	var/obj/item/toy/lotto_ticket/wintext = ""
-	var/obj/item/toy/lotto_ticket/win_count = 0
-	var/obj/item/toy/lotto_ticket/total_winnings = 0
+	var/obj/item/toy/lotto_ticket/ticket_price
+	var/obj/item/toy/lotto_ticket/winnings = 0
 
 /obj/item/toy/lotto_ticket/New()
 	..()
 	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 
+proc/obj/item/toy/lotto_ticket/scratch(input_price)
+	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
+	var/list/problist = list(prob(1)*prob(1)*prob(1),prob(1)*prob(1)*prob(2),prob(1)*prob(1)*prob(10),prob(1)*prob(1)*prob(20),prob(1)*prob(1),prob(1)*prob(2),prob(1)*prob(4),prob(1)*prob(20),prob(1),prob(3),prob(5),prob(10),prob(13),prob(17),prob(20),prob(25))
+	var/tuning_value = 1/5 //Used to adjust expected values.
+	for(var/prize = 1 to problist.len)
+		if(problist[prize])
+			return(prizelist[prize]*input_price*tuning_value)
+
 /obj/item/toy/lotto_ticket/attackby(obj/item/weapon/S as obj, mob/user as mob)
 	if(!src.revealed == 1)
 		if(S.is_sharp() || istype(S, /obj/item/weapon/coin))
-			src.revealed = 1
-			src.update_icon()
-			to_chat(user, "<span class='notice'>You scratch off the film covering the prizes.</span>")
-			return
+			if(do_after(user, src, 1 SECONDS))
+				src.revealed = 1
+				src.update_icon()
+				to_chat(user, "<span class='notice'>You scratch off the film covering the prizes.</span>")
+				winnings = scratch(ticket_price)
+				if(winnings > 0)
+					src.iswinner = 1
+				return
 		else
 			to_chat(user, "<span class='notice'>You need to use something sharp to scratch the ticket.</span>")
 			return
@@ -33,7 +44,7 @@
 		if(revealed == 1)
 			..()
 			if(iswinner == 1)
-				to_chat(user, "<span class='notice'>This one is a winner! You found [win_count] matches for a total of [total_winnings] credits.</span>")
+				to_chat(user, "<span class='notice'>This one is a winner! You've won [winnings] credits.</span>")
 			else
 				to_chat(user, "<span class='notice'>No wins on this one.</span>")
 		else
@@ -56,90 +67,18 @@
 	name = "Gold Rush lottery ticket"
 	desc = "A cheap scratch-off lottery ticket. 5 possible prizes of up to 250,000 credits!"
 	icon_state = "lotto_1"
-
-/obj/item/toy/lotto_ticket/gold_rush/New()
-	..()
-	var/available_prizes = 5 //Expected return = 4.75, expected gain = -.25
-	var/prizelist = list(1,2,3,4,5,10,20,50,100,500,1000,5000,10000,50000)
-	var/problist = list(10,10,10,1,1,.1,.1,.1,.01,.01,.001,.001,.0001,.0001)
-	var/list/won_list
-	for(var/i = 1 to available_prizes)
-		var/prize_index = 1
-		for(var/prize_prob in problist)
-			prize_index += 1
-			if(prob(prize_prob))
-				won_list += prizelist[prize_index]
-				break
-	for(var/win in won_list)
-		total_winnings += win
-		win_count += 1
-	if(total_winnings > 0)
-		iswinner = 1
+	ticket_price = 5 //EV 4.55, ER -0.45
 
 //Tier 2 card
 /obj/item/toy/lotto_ticket/diamond_hands
 	name = "Diamond Hands lottery ticket"
 	desc = "A mid-price scratch-off lottery ticket. 4 possible prizes of up to 500,000 credits!"
 	icon_state = "lotto_2"
-
-/obj/item/toy/lotto_ticket/diamond_hands/New()
-	..()
-	var/available_prizes = 4 //Expected return = 9.88, expected gain = -.12
-	var/prizelist = list(2,4,6,8,10,20,40,100,200,1000,2000,10000,20000,125000)
-	var/problist = list(10,10,10,2,2,.2,.2,.2,.02,.02,.002,.002,.0002,.0002)
-	var/won_list
-
-	//hold my beer
-	var/x
-	var/y
-	var/z
-	for(x=1 to)
-		if(iswinner == 1)
-			break
-		for(y=1 to)
-			if(iswinner == 1)
-				break
-			for(z=1 to 3)
-				if(iswinner == 1)
-					break
-				if(prob(x)*prob(y)*prob(z))
-					return
-	elseif(prob(1)*prob(1)*prob(2))
-
-	for(var/i = 1 to available_prizes)
-		var/prize_index = 1
-		for(var/prize_prob in problist)
-			prize_index += 1
-			if(prob(prize_prob))
-				won_list += prizelist[prize_index]
-				break
-	for(var/win in won_list)
-		total_winnings += win
-		win_count += 1
-	if(total_winnings > 0)
-		iswinner = 1
+	ticket_price = 20 //EV 18.20, ER -1.80
 
 //Tier 3 card
 /obj/item/toy/lotto_ticket/phazon_fortune
 	name = "Phazon Fortune lottery ticket"
 	desc = "An expensive scratch-off lottery ticket. 2 possible prizes of up to 1,000,000 credits!"
 	icon_state = "lotto_3"
-
-/obj/item/toy/lotto_ticket/phazon_fortune/New()
-	..()
-	var/available_prizes = 2 //Expected return = 22, expected gain = 2
-	var/prizelist = list(5,10,15,20,25,50,100,250,500,2500,5000,25000,50000,500000)
-	var/problist = list(10,10,10,4,4,.4,.4,.4,.04,.04,.004,.004,.0004,100)
-	var/list/won_list
-	for(var/i = 1 to available_prizes)
-		var/prize_index = 1
-		for(var/prize_prob in problist)
-			prize_index += 1
-			if(prob(prize_prob))
-				won_list += prizelist[prize_index]
-				break
-	for(var/win in won_list)
-		total_winnings += win
-		win_count += 1
-	if(total_winnings > 0)
-		iswinner = 1
+	ticket_price = 50 //EV 45.50, ER -4.50
