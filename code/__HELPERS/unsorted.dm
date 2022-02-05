@@ -844,7 +844,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		Location = get_turf(user)
 	else
 		Location = user.loc
-	var/dir = user.dir
 	var/holding = user.get_active_hand()
 	var/target_location = target.loc
 	var/image/progbar
@@ -869,9 +868,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		sleep(delayfraction)
 		var/success
 		if(custom_checks)
-			success = custom_checks.invoke(user, dir, use_user_turf, Location, target, target_location, needhand, holding)
+			success = custom_checks.invoke(user, use_user_turf, Location, target, target_location, needhand, holding)
 		else
-			success = do_after_default_checks(user, dir, use_user_turf, Location, target, target_location, needhand, holding)
+			success = do_after_default_checks(user, use_user_turf, Location, target, target_location, needhand, holding)
 		if(!success)
 			if(progbar)
 				stop_progress_bar(user, progbar)
