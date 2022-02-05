@@ -10,6 +10,9 @@
 #define CENTCOMM_ORDER_DELAY_MIN (20 MINUTES)
 #define CENTCOMM_ORDER_DELAY_MAX (40 MINUTES)
 
+#define CARGO_FORWARD_DELAY_MIN (5 MINUTES)
+#define CARGO_FORWARD_DELAY_MAX (15 MINUTES)
+
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 /datum/subsystem/supply_shuttle
@@ -39,6 +42,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/requisition = 0 //Are orders being paid for by the department? 0 = no; 1 = auto; possible future: allow with pin?
 	var/centcomm_order_cooldown = 9999
 	var/centcomm_last_order = 0
+	var/cargo_forward_cooldown = 0
+	var/cargo_last_forward = 0
 
 /datum/subsystem/supply_shuttle/New()
 	NEW_SS_GLOBAL(SSsupply_shuttle)
@@ -328,7 +333,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if(forwarding_on)
 		if(!clear_turfs.len)
 			return
-		
+		if (world.time < (cargo_last_forward + cargo_forward_cooldown))
+			return
 		var/cargomen = 0 // How many people are working in cargo?
 		for(var/datum/data/record/t in sortRecord(data_core.general))
 			if((t.fields["real_rank"] in cargo_positions) || (t.fields["override_dept"] == "Cargo"))
@@ -341,6 +347,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		var/amount_forwarded = rand(0,round(cargomen * multiplier))
 		if(!amount_forwarded)
 			return // Skip this if nothing to send
+
+		cargo_last_forward = world.time // Only set these if a successful forward is about to happen
+		cargo_forward_cooldown = rand(CARGO_FORWARD_DELAY_MIN,CARGO_FORWARD_DELAY_MAX)
 
 		var/i = rand(1,clear_turfs.len)
 		var/turf/pickedloc = clear_turfs[i]
@@ -480,3 +489,6 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 #undef CENTCOMM_ORDER_DELAY_MIN
 #undef CENTCOMM_ORDER_DELAY_MAX
+
+#undef CARGO_FORWARD_DELAY_MIN
+#undef CARGO_FORWARD_DELAY_MAX
