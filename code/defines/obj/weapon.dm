@@ -771,7 +771,7 @@
 		return FALSE
 
 // Used by do_after to play the sound and animation repeatedly while bashing stuff down
-/obj/item/weapon/batteringram/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+/obj/item/weapon/batteringram/proc/on_do_after(mob/user, dir, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	. = do_after_default_checks(arglist(args))
 	if(.)
 		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)

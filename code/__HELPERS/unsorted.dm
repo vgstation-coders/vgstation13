@@ -795,13 +795,15 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 
 // Returns TRUE if the checks passed
-/proc/do_after_default_checks(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+/proc/do_after_default_checks(mob/user, old_dir, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	if(!user)
 		return FALSE
 	if(user.isStunned())
 		return FALSE
-	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
-	if(user_loc_to_check != user_original_location && !istype(user_loc_to_check,/turf/space/))
+	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc	
+	if(old_dir != user.dir && istype(user_loc_to_check,/turf/space/))
+		return FALSE
+	if(user_loc_to_check != user_original_location)
 		return FALSE
 	if(target.loc != target_original_location && !istype(user_loc_to_check,/turf/space/))
 		return FALSE
@@ -843,6 +845,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		Location = get_turf(user)
 	else
 		Location = user.loc
+	var/dir = user.dir
 	var/holding = user.get_active_hand()
 	var/target_location = target.loc
 	var/image/progbar
@@ -867,9 +870,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		sleep(delayfraction)
 		var/success
 		if(custom_checks)
-			success = custom_checks.invoke(user, use_user_turf, Location, target, target_location, needhand, holding)
+			success = custom_checks.invoke(user, dir, use_user_turf, Location, target, target_location, needhand, holding)
 		else
-			success = do_after_default_checks(user, use_user_turf, Location, target, target_location, needhand, holding)
+			success = do_after_default_checks(user, dir, use_user_turf, Location, target, target_location, needhand, holding)
 		if(!success)
 			if(progbar)
 				stop_progress_bar(user, progbar)
