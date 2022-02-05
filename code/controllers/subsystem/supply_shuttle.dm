@@ -238,10 +238,28 @@ var/list/fulfilled_forwards_stations = list()
 			if(O.CheckFulfilled())
 				fulfilled_requests_types += O.type
 				fulfilled_requests_stations += station_name
+				var/list/positions_to_check = list()
+				switch(O.acct_by_string)
+					if("Cargo")
+						positions_to_check = CARGO_POSITIONS
+					if("Engineering")
+						positions_to_check = ENGINEERING_POSITIONS
+					if("Medical")
+						positions_to_check = MEDICAL_POSITIONS
+					if("Science")
+						positions_to_check = SCIENCE_POSITIONS
+					if("Civilian")
+						positions_to_check = CIVILIAN_POSITIONS
+				var/list/possible_names = list()
 				for(var/mob/M in player_list)
-					if(isliving(M))
-						fulfilled_requests_names += M.name
-						break
+					if(isliving(M) && positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
+						possible_names += M.name
+					else if(isliving(M))
+						possible_names += M.name
+				if(possible_names && possible_names.len)
+					fulfilled_requests_names += pick(possible_names)
+				else
+					fulfilled_requests_names += "Unknown" // Have to put something here so the index thing works
 				if (!istype(O, /datum/centcomm_order/per_unit))
 					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)

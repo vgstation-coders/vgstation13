@@ -83,10 +83,28 @@
     if(!reason) // Only make this forward move on properly to another station if fulfilled (persistence)
         fulfilled_forwards_types += src.type
         fulfilled_forwards_stations += station_name()
+        var/list/positions_to_check = list()
+        switch(src.acct_by_string)
+            if("Cargo")
+                positions_to_check = CARGO_POSITIONS
+            if("Engineering")
+                positions_to_check = ENGINEERING_POSITIONS
+            if("Medical")
+                positions_to_check = MEDICAL_POSITIONS
+            if("Science")
+                positions_to_check = SCIENCE_POSITIONS
+            if("Civilian")
+                positions_to_check = CIVILIAN_POSITIONS
+        var/list/possible_names = list()
         for(var/mob/M in player_list)
-            if(isliving(M))
-                fulfilled_forwards_names += M.name
-                break
+            if(isliving(M) && positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
+                possible_names += M.name
+            else if(isliving(M))
+                possible_names += M.name
+        if(possible_names && possible_names.len)
+            fulfilled_forwards_names += pick(possible_names)
+        else
+            fulfilled_forwards_names += origin_sender_name
     qdel(src)
 
 /datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle
