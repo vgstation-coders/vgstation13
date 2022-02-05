@@ -82,7 +82,7 @@
 /* Tier 5 (/vg/) */
 /datum/power/vampire/mature
 	cost = 400
-	granttext = "You have reached physical maturity. You are more vulnerable to holy things, and your vision has been improved greatly."
+	granttext = "You have reached physical maturity. You are more vulnerable to holy things, and your vision has been improved greatly. You drain blood from people twice as fast and you no longer need to take their masks off."
 	store_in_memory = TRUE
 
 /* Tier 6 (/vg/) */

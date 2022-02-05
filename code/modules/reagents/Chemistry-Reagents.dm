@@ -7084,6 +7084,14 @@
 	M.drowsyness = max(0, M.drowsyness - 7)
 	M.Jitter(1)
 
+/datum/reagent/ethanol/drink/pinklady
+	name = "Pink Lady"
+	id = PINKLADY
+	description = "A pink alcoholic beverage made primarily from gin."
+	color = "#ff6a8f"
+	glass_icon_state = "pinklady"
+	glass_desc = "A delightful blush-pink cocktail, garnished with a cherry and the rind of a lemon."
+
 /////////////////////////////////////////////////////////////////Cocktail Entities//////////////////////////////////////////////
 
 /datum/reagent/ethanol/drink/bilk

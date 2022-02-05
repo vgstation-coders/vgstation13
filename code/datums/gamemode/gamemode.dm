@@ -258,7 +258,7 @@
 	for(var/datum/role/R in orphaned_roles)
 		if (R.check_win())
 			return 1
-	if(emergency_shuttle.location==2 || ticker.station_was_nuked)
+	if(emergency_shuttle.location==2 || ticker.station_was_nuked || ticker.no_life_on_station)
 		return 1
 	return 0
 
