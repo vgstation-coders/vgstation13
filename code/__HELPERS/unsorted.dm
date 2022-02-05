@@ -795,7 +795,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 
 // Returns TRUE if the checks passed
-/proc/do_after_default_checks(mob/user, old_dir, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+/proc/do_after_default_checks(mob/living/carbon/user, old_dir, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	if(!user)
 		return FALSE
 	if(user.isStunned())
@@ -803,10 +803,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc	
 	if(old_dir != user.dir && istype(user_loc_to_check,/turf/space/))
 		return FALSE
-	if(user_loc_to_check != user_original_location)
-		return FALSE
-	if(target.loc != target_original_location && !istype(user_loc_to_check,/turf/space/))
-		return FALSE
+	if (!(istype(user_loc_to_check,/turf/space/) && user.handcuffed))
+		if(user_loc_to_check != user_original_location)
+			return FALSE
+		if(target.loc != target_original_location)
+			return FALSE
 	if(needhand)
 		if(originally_held_item)
 			if(!user.is_holding_item(originally_held_item))
