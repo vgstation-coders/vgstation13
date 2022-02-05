@@ -81,7 +81,7 @@
         playsound(S, 'sound/machines/info.ogg', 50, 1)
     
     if(!reason) // Only make this forward move on properly to another station if fulfilled (persistence)
-        fulfilled_forwards_types += src.type
+        fulfilled_forwards_types += "[src.type]"
         fulfilled_forwards_stations += station_name()
         var/list/positions_to_check = list()
         switch(src.acct_by_string)
@@ -199,7 +199,7 @@
     var/previous_index = 0
     if(previous_requests_types && previous_requests_types.len)
         previous_index = rand(1,previous_requests_types.len)
-        ordertype = previous_requests_types[previous_index]
+        ordertype = new text2path(previous_requests_types[previous_index])
         previous_requests_types.Remove(previous_requests_types[previous_index]) // Must be the index to remove a specific one
     else
         ordertype = get_weighted_order()

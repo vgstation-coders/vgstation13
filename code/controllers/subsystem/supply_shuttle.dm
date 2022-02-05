@@ -244,7 +244,7 @@ var/list/previous_forwards_stations = list()
 		// PAY UP BITCHES
 		for(var/datum/centcomm_order/O in centcomm_orders)
 			if(O.CheckFulfilled())
-				fulfilled_requests_types += O.type
+				fulfilled_requests_types += "[O.type]"
 				fulfilled_requests_stations += station_name
 				var/list/positions_to_check = list()
 				switch(O.acct_by_string)
@@ -397,7 +397,7 @@ var/list/previous_forwards_stations = list()
 				if(!previous_forwards_types || !previous_forwards_types.len) // Break out if nothing sent
 					break
 				var/previous_index = rand(1,previous_forwards_types.len)
-				var/forwardtype = previous_forwards_types[previous_index]
+				var/forwardtype = text2path(previous_forwards_types[previous_index])
 				var/datum/cargo_forwarding/CF = new forwardtype
 				new_forwards.Add(CF)
 				previous_forwards_types.Remove(previous_forwards_types[previous_index]) // Must be the index to remove a specific one
