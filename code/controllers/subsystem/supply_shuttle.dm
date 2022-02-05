@@ -23,6 +23,14 @@ var/list/fulfilled_forwards_types = list()
 var/list/fulfilled_forwards_names = list()
 var/list/fulfilled_forwards_stations = list()
 
+var/list/previous_requests_types = list()
+var/list/previous_requests_names = list()
+var/list/previous_requests_stations = list()
+
+var/list/previous_forwards_types = list()
+var/list/previous_forwards_names = list()
+var/list/previous_forwards_stations = list()
+
 /datum/subsystem/supply_shuttle
 	name       = "Supply Shuttle"
 	init_order = SS_INIT_SUPPLY_SHUTTLE
@@ -383,22 +391,22 @@ var/list/fulfilled_forwards_stations = list()
 		cargo_last_forward = world.time // Only set these if a successful forward is about to happen
 		cargo_forward_cooldown = rand(CARGO_FORWARD_DELAY_MIN,CARGO_FORWARD_DELAY_MAX)
 
-		var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/forwards_fulfilled) // Do it like this to prevent picking something already sent here
-		var/list/previous_forwards_types = data["fulfilled_forwards_types"]
 		var/list/datum/cargo_forwarding/new_forwards = list()
-
 		if(prob(50) && previous_forwards_types && previous_forwards_types.len) // Keep it just a chance to get the previous round's forwards so we don't just end up with those
 			for(var/k in 1 to amount_forwarded)
 				var/previous_index = rand(1,previous_forwards_types.len)
 				var/forwardtype = previous_forwards_types[previous_index]
 				var/datum/cargo_forwarding/CF = new forwardtype
 				new_forwards.Add(CF)
-				var/list/previous_forwards_stations = data["fulfilled_forwards_stations"]
+				previous_forwards_types.Remove(previous_forwards_types[previous_index]) // Must be the index to remove a specific one
 				if(previous_forwards_stations && previous_forwards_stations.len)
-					CF.origin_station_name = previous_index && previous_index < previous_forwards_stations.len ? previous_forwards_stations[previous_index] : pick(previous_forwards_stations)
-				var/list/previous_forwards_names = data["fulfilled_forwards_names"]
+					var/index_to_pick = previous_index && previous_index < previous_forwards_stations.len ? previous_index : rand(1,previous_forwards_stations.len)
+					CF.origin_station_name = previous_forwards_stations[index_to_pick]
+					previous_forwards_stations.Remove(previous_forwards_stations[index_to_pick])
 				if(previous_forwards_names && previous_forwards_names.len)
-					CF.origin_sender_name = previous_index && previous_index < previous_forwards_names.len ? previous_forwards_names[previous_index] : pick(previous_forwards_names)
+					var/index_to_pick = previous_index && previous_index < previous_forwards_names.len ? previous_index : rand(1,previous_forwards_names.len)
+					CF.origin_sender_name = previous_forwards_names[index_to_pick]
+					previous_forwards_names.Remove(previous_forwards_names[index_to_pick])
 		else
 			for(var/j in 1 to amount_forwarded)
 				if(prob(75)) // Normal orderable stuff

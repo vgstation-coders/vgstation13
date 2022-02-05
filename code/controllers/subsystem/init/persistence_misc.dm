@@ -122,9 +122,15 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/requests_fulfilled/on_init()
 	data = read_file()
+	previous_requests_types = data["fulfilled_requests_types"]
+	previous_requests_names = data["fulfilled_requests_names"]
+	previous_requests_stations = data["fulfilled_requests_stations"]
 
 /datum/persistence_task/requests_fulfilled/on_shutdown()
-	write_file(list("fulfilled_requests_types" = fulfilled_requests_types, "fulfilled_requests_names" = fulfilled_requests_names, "fulfilled_requests_stations" = fulfilled_requests_stations))
+	var/list/all_request_types = previous_requests_types.Copy() + fulfilled_requests_types.Copy()
+	var/list/all_request_names = previous_requests_names.Copy() + fulfilled_requests_names.Copy()
+	var/list/all_request_stations = previous_requests_stations.Copy() + fulfilled_requests_stations.Copy()
+	write_file(list("fulfilled_requests_types" = all_request_types, "fulfilled_requests_names" = all_request_names, "fulfilled_requests_stations" = all_request_stations))
 
 /datum/persistence_task/forwards_fulfilled
 	execute = TRUE
@@ -133,9 +139,15 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/forwards_fulfilled/on_init()
 	data = read_file()
+	previous_forwards_types = data["fulfilled_forwards_types"]
+	previous_forwards_names = data["fulfilled_forwards_names"]
+	previous_forwards_stations = data["fulfilled_forwards_stations"]
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
-	write_file(list("fulfilled_forwards_types" = fulfilled_forwards_types, "fulfilled_forwards_names" = fulfilled_forwards_names, "fulfilled_forwards_stations" = fulfilled_forwards_stations))
+	var/list/all_forward_types = previous_forwards_types.Copy() + fulfilled_forwards_types.Copy()
+	var/list/all_forward_names = previous_forwards_names.Copy() + fulfilled_forwards_names.Copy()
+	var/list/all_forward_stations = previous_forwards_stations.Copy() + fulfilled_forwards_stations.Copy()
+	write_file(list("fulfilled_forwards_types" = all_forward_types, "fulfilled_forwards_names" = all_forward_names, "fulfilled_forwards_stations" = all_forward_stations))
 
 /datum/persistence_task/round_end_data
 	execute = TRUE
