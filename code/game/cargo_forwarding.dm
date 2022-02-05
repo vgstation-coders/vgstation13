@@ -170,7 +170,15 @@
     qdel(ourpack)
 
 /datum/cargo_forwarding/from_centcomm_order/New()
-    var/ordertype = get_weighted_order()
+    var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/requestes_fulfilled) // Do it like this to prevent picking something already sent here
+    var/list/previous_requests_types = data["fulfilled_requests_types"]
+    var/ordertype = null
+    var/previous_index = 0
+    if(previous_requests_types && previous_requests_types.len)
+        previous_index = rand(1,previous_requests_types.len)
+        ordertype = previous_requests_types[previous_index]
+    else
+        ordertype = get_weighted_order()
     var/datum/centcomm_order/ourorder = new ordertype
     worth = ourorder.worth
     containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
@@ -202,6 +210,12 @@
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
         access = list(access_science)
     ..()
+    var/list/previous_requests_stations = data["fulfilled_requests_stations"]
+    if(previous_requests_stations && previous_requests_stations.len)
+        origin_station_name = previous_index && previous_index < previous_requests_stations.len ? previous_requests_stations[previous_index] : pick(previous_requests_stations)
+    var/list/previous_requests_names = data["fulfilled_requests_names"]
+    if(previous_requests_names && previous_requests_names.len)
+        origin_sender_name = previous_index && previous_index < previous_requests_names.len ? previous_requests_names[previous_index] : pick(previous_requests_names)
     qdel(ourorder)
 
 /datum/cargo_forwarding/misc/janicart

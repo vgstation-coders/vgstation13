@@ -15,6 +15,10 @@
 
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
+var/list/fulfilled_requests_types = list() // For persistence
+var/list/fulfilled_requests_names = list()
+var/list/fulfilled_requests_stations = list()
+
 /datum/subsystem/supply_shuttle
 	name       = "Supply Shuttle"
 	init_order = SS_INIT_SUPPLY_SHUTTLE
@@ -228,6 +232,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		// PAY UP BITCHES
 		for(var/datum/centcomm_order/O in centcomm_orders)
 			if(O.CheckFulfilled())
+				fulfilled_requests_types += O.type
+				fulfilled_requests_stations += station_name
+				for(var/mob/M in player_list)
+					if(isliving(M))
+						fulfilled_requests_names += M.name
+						break
 				if (!istype(O, /datum/centcomm_order/per_unit))
 					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)
