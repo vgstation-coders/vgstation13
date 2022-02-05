@@ -415,7 +415,6 @@
 	if(istype(W, /obj/item/weapon/soap))
 		to_chat(user, "<span class='notice'>You place \the [W] into \the [src].</span>")
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(W)
 			user.drop_item(src)
 			if(!user.drop_item(W))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
@@ -431,14 +430,13 @@
 		var/obj/item/stack/sheet/mineral/brick/S = W
 		to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(S)
 			user.drop_item(src)
 			if(!user.drop_item(S))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
 			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
 			S.use(1)
-			if(S.use(1) == 0)
+			if(!S.use(1))
 				return
 			I.base_sock = src
 			src.forceMove(I)
