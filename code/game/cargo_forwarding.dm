@@ -238,10 +238,14 @@
         var/index_to_pick = previous_index && previous_index < previous_forwards_names.len ? previous_index : rand(1,previous_requests_names.len)
         origin_station_name = previous_requests_stations[index_to_pick]
         previous_requests_stations.Remove(previous_requests_stations[index_to_pick])
+    else if(!previous_requests_types || !previous_requests_types.len)
+        previous_requests_stations.Cut()
     if(previous_requests_names && previous_requests_names.len)
         var/index_to_pick = previous_index && previous_index < previous_forwards_names.len ? previous_index : rand(1,previous_requests_names.len)
         origin_sender_name = previous_requests_names[index_to_pick]
         previous_requests_names.Remove(previous_requests_names[index_to_pick])
+    else if(!previous_requests_types || !previous_requests_types.len)
+        previous_requests_names.Cut()
     qdel(ourorder)
 
 /datum/cargo_forwarding/misc/janicart

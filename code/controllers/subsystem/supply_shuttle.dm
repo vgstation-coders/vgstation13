@@ -403,10 +403,14 @@ var/list/previous_forwards_stations = list()
 					var/index_to_pick = previous_index && previous_index < previous_forwards_stations.len ? previous_index : rand(1,previous_forwards_stations.len)
 					CF.origin_station_name = previous_forwards_stations[index_to_pick]
 					previous_forwards_stations.Remove(previous_forwards_stations[index_to_pick])
+				else if(!previous_forwards_types || !previous_forwards_types.len) // Cut the other fluff info list if the main type one is empty, to prevent desync with indices
+					previous_forwards_names.Cut()
 				if(previous_forwards_names && previous_forwards_names.len)
 					var/index_to_pick = previous_index && previous_index < previous_forwards_names.len ? previous_index : rand(1,previous_forwards_names.len)
 					CF.origin_sender_name = previous_forwards_names[index_to_pick]
 					previous_forwards_names.Remove(previous_forwards_names[index_to_pick])
+				else if(!previous_forwards_types || !previous_forwards_types.len)
+					previous_forwards_stations.Cut()
 		else
 			for(var/j in 1 to amount_forwarded)
 				if(prob(75)) // Normal orderable stuff
