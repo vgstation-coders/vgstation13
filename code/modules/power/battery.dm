@@ -53,7 +53,7 @@ var/global/list/battery_online =	list(
 	icon_state = "smes"
 	density = 1
 	anchored = 1
-	use_power = MACHINE_POWER_USE_GRID
+	use_power = MACHINE_POWER_USE_NONE
 	power_priority = POWER_PRIORITY_SMES_RECHARGE
 
 	var/output = 50000
@@ -109,9 +109,6 @@ var/global/list/battery_online =	list(
 
 	// Input
 	if (charging)
-		old_loadcharge = loadcharge
-		loadcharge = min((capacity - charge) / SMESRATE, chargelevel) // Request charging at set rate, limited to spare capacity
-		add_load(loadcharge) // Add the load to the terminal side network
 
 		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
 		// Auto charge mode lets batteries take any amount of available power, limited by charge level
@@ -123,6 +120,9 @@ var/global/list/battery_online =	list(
 			charging = FALSE
 			chargecount = 0
 
+		loadcharge = min((capacity - charge) / SMESRATE, chargelevel) // Request charging at set rate, limited to spare capacity
+		add_load(loadcharge) // Add the load to the terminal side network
+		old_loadcharge = loadcharge
 	else
 		if (chargemode)
 			if (chargecount > rand(3, 6))

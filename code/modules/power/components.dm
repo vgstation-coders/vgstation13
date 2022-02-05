@@ -129,7 +129,7 @@
 		return 0
 
 	// If you're using a consumer, you need power.
-	//if(!use_power)
+	//if(use_power == MACHINE_POWER_USE_NONE)
 	//	return 1
 	var/area/parent_area = get_area(parent)
 	if(!parent_area)
@@ -252,7 +252,7 @@
 	..(parent)
 
 /datum/power_connection/consumer/process()
-	if(use_power)
+	if(use_power != MACHINE_POWER_USE_NONE)
 		auto_use_power()
 
 /datum/power_connection/consumer/proc/auto_use_power()
@@ -331,7 +331,7 @@
 		return 0
 
 	// If you're using a consumer, you need power.
-	//if(!use_power)
+	//if(use_power == MACHINE_POWER_USE_NONE)
 	//	return 1
 
 	if(isnull(powernet) || !powernet || !cable)

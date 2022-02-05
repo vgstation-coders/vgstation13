@@ -41,7 +41,7 @@
 	speed_bonus = round(capcount/2,1)
 
 /obj/machinery/egg_incubator/update_icon()
-	if(use_power==2)
+	if(use_power==MACHINE_POWER_USE_ACTIVE)
 		icon_state = active_state
 	else
 		icon_state = initial(icon_state)

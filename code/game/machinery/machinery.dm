@@ -220,7 +220,7 @@ Class Procs:
 
 /obj/machinery/emp_act(severity)
 	malf_disrupt(MALF_DISRUPT_TIME)
-	if(use_power && stat == 0)
+	if(use_power != MACHINE_POWER_USE_NONE && stat == 0)
 		use_power(7500/severity)
 
 		var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( src.loc )
@@ -305,6 +305,33 @@ Class Procs:
 		if(!use_auto_lights)
 			return
 		set_light(0)
+
+// returns true if the machine is powered (or doesn't require power).
+// performs basic checks every machine should do, then
+/obj/machinery/proc/powered(chan = power_channel)
+	if(!src.loc)
+		return FALSE
+
+	if(battery_dependent && !connected_cell)
+		return FALSE
+
+	if(connected_cell)
+		if(connected_cell.charge > 0)
+			return TRUE
+		else
+			return FALSE
+
+	if(use_power == MACHINE_POWER_USE_NONE)
+		return TRUE
+
+	if((machine_flags & FIXED2WORK) && !anchored)
+		return FALSE
+
+	var/area/this_area = get_area(src)
+	if(!this_area)
+		return FALSE
+
+	return this_area.powered(chan)
 
 /obj/machinery/proc/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	if("set_id" in href_list)

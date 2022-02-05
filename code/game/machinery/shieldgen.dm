@@ -321,7 +321,7 @@
 		var/storedpower_consumption = 50
 		flags = FPRINT
 		siemens_coefficient = 1
-		use_power = MACHINE_POWER_USE_GRID
+		use_power = MACHINE_POWER_USE_NONE
 
 		machine_flags = WRENCHMOVE | FIXED2WORK
 
@@ -358,7 +358,7 @@
 	// Attemp to consume stored power. If enough, we're powered,
 	if (storedpower >= storedpower_consumption)
 		storedpower -= storedpower_consumption
-		clamp(storedpower, 0, maxstoredpower)
+		storedpower = clamp(storedpower, 0, maxstoredpower)
 		power = TRUE
 	else
 		power = FALSE

@@ -119,34 +119,8 @@
 /obj/machinery/power/proc/disconnect_terminal() // machines without a terminal will just return, no harm no fowl.
 	return
 
-// returns true if the area has power on given channel (or doesn't require power)
-// defaults to power_channel
-/obj/machinery/proc/powered(chan = power_channel)
-	if(!src.loc)
-		return 0
-
-	if(battery_dependent && !connected_cell)
-		return 0
-
-	if(connected_cell)
-		if(connected_cell.charge > 0)
-			return 1
-		else
-			return 0
-
-	if(!use_power)
-		return 1
-	var/area/this_area = get_area(src)
-	if(!this_area)
-		return 0						// if not, then not powered.
-
-	if((machine_flags & FIXED2WORK) && !anchored)
-		return 0
-
-	return this_area.powered(chan)		// return power status of the area.
-
 /obj/machinery/power/can_overload()
-	return 0
+	return FALSE
 
 // connect the machine to a powernet if a node cable is present on the turf
 /obj/machinery/power/proc/connect_to_network()

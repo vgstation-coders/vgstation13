@@ -9,7 +9,8 @@
 	density = 1
 	req_access = list(access_engine_minor)
 
-	use_power = MACHINE_POWER_USE_GRID
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	idle_power_usage = 10
 	active_power_usage = 300
 
@@ -129,13 +130,16 @@
 				on = !active
 
 		if(!isnull(on) && anchored && state == 2 && on != active)
-			active = on
+			if (active != on)
+				if (on)
+					turn_on()
+				else
+					turn_off()
+
 			var/statestr = on ? "on":"off"
 			// Spammy message_admins("Emitter turned [statestr] by radio signal ([signal.data["command"]] @ [frequency]) in [formatJumpTo(src)]",0,1)
 			log_game("Emitter turned [statestr] by radio signal ([signal.data["command"]] @ [frequency]) in ([x],[y],[z])")
 			investigation_log(I_SINGULO,"turned <font color='orange'>[statestr]</font> by radio signal ([signal.data["command"]] @ [frequency])")
-			update_icon()
-			update_beam()
 
 /obj/machinery/power/emitter/Destroy()
 	qdel(beam)
@@ -206,7 +210,7 @@
 	shot_number = 0
 	fire_delay = 100
 	update_icon()
-	update_beam()
+	//update_beam()
 
 /obj/machinery/power/emitter/proc/turn_off()
 	active = 0
@@ -232,8 +236,10 @@
 		update_beam()
 		return
 
-	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
+	if (active)
 		add_load(active_power_usage) //Request power for next tick
+
+	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
 		if(!active_power_usage || get_satisfaction() > min_satisfaction) //Doesn't require power or powernet has enough supply
 			if(!powered) //Yay its powered
 				powered = 1

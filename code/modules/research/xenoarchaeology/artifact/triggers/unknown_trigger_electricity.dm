@@ -16,9 +16,6 @@
 
 /datum/artifact_trigger/electricity/CheckTrigger()
 
-	var/turf/T = get_turf(my_artifact)
-	var/obj/structure/cable/cable = locate() in T
-
 	if(!power_connection.connected && !power_connection.connect())
 		if(my_effect.activated)
 			Triggered(0, "NOCABLE", 0)

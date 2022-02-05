@@ -387,7 +387,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	else
 		if(src.construction_state < 3)//Was taken apart, update state
 			update_state()
-			if(use_power)
+			if(use_power != MACHINE_POWER_USE_NONE)
 				use_power = MACHINE_POWER_USE_NONE
 		src.construction_state = temp_state
 		if(src.construction_state >= 3)

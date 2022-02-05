@@ -75,7 +75,7 @@
 		if(stat & (FORCEDISABLE|NOPOWER))
 			icon_state = "[reference]w"
 			return
-		else if(use_power)
+		else if(use_power != MACHINE_POWER_USE_NONE)
 			if(assembled)
 				icon_state = "[reference]p"
 		else

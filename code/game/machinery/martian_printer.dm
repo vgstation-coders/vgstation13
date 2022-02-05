@@ -53,7 +53,7 @@
 		stat |= NOPOWER
 
 /obj/machinery/mob_printer/proc/canSpawn()
-	if(!use_power)
+	if(use_power == MACHINE_POWER_USE_NONE)
 		return !building //Can be varedited to not need power.
 	return !(stat & (FORCEDISABLE|NOPOWER)) && !building
 

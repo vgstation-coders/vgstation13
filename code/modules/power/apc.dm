@@ -32,6 +32,11 @@
 
 #define APC_UPDATE_ICON_COOLDOWN 100 // 10 seconds
 
+#define APC_CHANNEL_STATUS_OFF 		0
+#define APC_CHANNEL_STATUS_AUTO_OFF 1
+#define APC_CHANNEL_STATUS_ON 		2
+#define APC_CHANNEL_STATUS_AUTO_ON 	3
+
 
 // the Area Power Controller (APC), formerly Power Distribution Unit (PDU)
 // one per area, needs wire conection to power network through a terminal
@@ -48,7 +53,7 @@
 	desc = "A control terminal for the area's electrical systems."
 	icon_state = "apc0"
 	anchored = 1
-	use_power = MACHINE_POWER_USE_GRID
+	use_power = MACHINE_POWER_USE_NONE
 	req_access = list(access_engine_minor)
 	var/spooky=0
 	var/pulsecompromising=0
@@ -1117,7 +1122,7 @@
 		drain_cell()
 
 		// Set power channels on or off depending on how much charge we have left
-		process_autoset()
+		process_autoset(this_area)
 
 		// Turn charging on or off as needed
 		process_chargemode()
@@ -1131,15 +1136,24 @@
 			this_area.poweralert(0, src)
 
 	// Calculate how much power is needed, and request it for next tick
-	lastused_light = this_area.usage(LIGHT)
-	lastused_light += this_area.usage(STATIC_LIGHT)
-	lastused_equip = this_area.usage(EQUIP)
-	lastused_light += this_area.usage(STATIC_EQUIP)
-	lastused_environ = this_area.usage(ENVIRON)
-	lastused_light += this_area.usage(STATIC_ENVIRON)
+	lastused_light = 0
+	if (lighting != APC_CHANNEL_STATUS_OFF && lighting != APC_CHANNEL_STATUS_AUTO_OFF)
+		lastused_light += this_area.usage(LIGHT)
+		lastused_light += this_area.usage(STATIC_LIGHT)
+
+	lastused_equip = 0
+	if (equipment != APC_CHANNEL_STATUS_OFF && equipment != APC_CHANNEL_STATUS_AUTO_OFF)
+		lastused_equip += this_area.usage(EQUIP)
+		lastused_equip += this_area.usage(STATIC_EQUIP)
+
+	lastused_environ = 0
+	if (environ != APC_CHANNEL_STATUS_OFF && environ != APC_CHANNEL_STATUS_AUTO_OFF)
+		lastused_environ += this_area.usage(ENVIRON)
+		lastused_environ += this_area.usage(STATIC_ENVIRON)
+
 	this_area.clear_usage()
 
-	lastused_total = (lighting ? lastused_light : 0) + (equipment ? lastused_equip : 0) + (environ ? lastused_environ: 0)
+	lastused_total = lastused_light + lastused_equip + lastused_environ
 	add_load(lastused_total)
 
 	// update icon & area power if anything changed
@@ -1156,7 +1170,7 @@
 			var/recharge_power = recharge_load * get_satisfaction(power_recharge_priority)
 			cell.give(recharge_power * CELLRATE)
 
-			recharge_load = cell.maxcharge * CHARGELEVEL / CELLRATE
+			recharge_load = min(cell.maxcharge - cell.charge, cell.maxcharge * CHARGELEVEL) / CELLRATE
 			add_load(recharge_load, power_recharge_priority)
 
 		// If there's no power at all to recharge with, stop
@@ -1170,6 +1184,7 @@
 
 	else // There's not enough charge in the cell to cover power debt! Shut it down
 		turn_charging_off()
+		cell.use(cell.charge)
 		// This turns everything off in the case that there is still a charge left on the battery, just not enough to run the room.
 		lighting = autoset(lighting, 0)
 		equipment = autoset(equipment, 0)
@@ -1183,7 +1198,7 @@
 
 	if(chargemode)
 		if(!charging)
-			if(get_satisfaction(power_recharge_priority) > 1)
+			if(get_satisfaction(power_recharge_priority) > 0)
 				chargecount++
 			else
 				turn_charging_off()
@@ -1200,40 +1215,40 @@
 	chargecount = 0
 	recharge_load = 0
 
-/obj/machinery/power/apc/proc/process_autoset()
+/obj/machinery/power/apc/proc/process_autoset(var/area/this_area )
 	// Allow the APC to operate as normal if the cell can charge
-		if(charging && longtermpower < 10)
-			longtermpower += 1
-		else if(longtermpower > -10)
-			longtermpower -= 2
+	if(charging && longtermpower < 10)
+		longtermpower += 1
+	else if(longtermpower > -10)
+		longtermpower -= 2
 
-		if(cell.charge <= 0)								// zero charge, turn all off
-			equipment = autoset(equipment, 0)
-			lighting = autoset(lighting, 0)
-			environ = autoset(environ, 0)
-			if(this_area.poweralm && make_alerts)
-				this_area.poweralert(0, src)
+	if(cell.charge <= 0)								// zero charge, turn all off
+		equipment = autoset(equipment, 0)
+		lighting = autoset(lighting, 0)
+		environ = autoset(environ, 0)
+		if(this_area.poweralm && make_alerts)
+			this_area.poweralert(0, src)
 
-		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 2)
-			environ = autoset(environ, 1)
-			if(this_area.poweralm && make_alerts)
-				this_area.poweralert(0, src)
+	else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
+		equipment = autoset(equipment, 2)
+		lighting = autoset(lighting, 2)
+		environ = autoset(environ, 1)
+		if(this_area.poweralm && make_alerts)
+			this_area.poweralert(0, src)
 
-		else if(cell.percent() < 30 && longtermpower < 0)	// <30%, turn off equipment
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 1)
-			environ = autoset(environ, 1)
-			if(this_area.poweralm && make_alerts)
-				this_area.poweralert(0, src)
+	else if(cell.percent() < 30 && longtermpower < 0)	// <30%, turn off equipment
+		equipment = autoset(equipment, 2)
+		lighting = autoset(lighting, 1)
+		environ = autoset(environ, 1)
+		if(this_area.poweralm && make_alerts)
+			this_area.poweralert(0, src)
 
-		else												// otherwise all can be on
-			equipment = autoset(equipment, 1)
-			lighting = autoset(lighting, 1)
-			environ = autoset(environ, 1)
-			if(cell.percent() > 35 && !this_area.poweralm && make_alerts) // 35% to prevent spamming alerts if it fluctuates
-				this_area.poweralert(1, src)
+	else												// otherwise all can be on
+		equipment = autoset(equipment, 1)
+		lighting = autoset(lighting, 1)
+		environ = autoset(environ, 1)
+		if(cell.percent() > 35 && !this_area.poweralm && make_alerts) // 35% to prevent spamming alerts if it fluctuates
+			this_area.poweralert(1, src)
 
 // val 0=off, 1=off(auto) 2=on 3=on(auto)
 // on 0=off, 1=on, 2=autooff

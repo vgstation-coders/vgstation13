@@ -1,7 +1,6 @@
 #define MACHINE_POWER_USE_NONE   0
 #define MACHINE_POWER_USE_IDLE   1
 #define MACHINE_POWER_USE_ACTIVE 2
-#define MACHINE_POWER_USE_GRID	 3
 
 // AI (i.e. game AI, not the AI player) controlled bots
 #define BOT_PATROL 1

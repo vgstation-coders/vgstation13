@@ -38,7 +38,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "scanner_0old"
 
-	use_power = MACHINE_POWER_USE_GRID
+	use_power = MACHINE_POWER_USE_IDLE
 	power_priority = POWER_PRIORITY_EXCESS
 	density = 1
 	anchored = 0

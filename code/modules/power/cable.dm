@@ -45,7 +45,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
 	var/oldavail = 0
 	var/oldnewavail = 0
-	var/list/oldload = list()
+	var/list/oldload = new(POWER_PRIORITY_EXCESS)
 
 /obj/structure/cable/supports_holomap()
 	return TRUE
@@ -99,6 +99,9 @@ By design, d1 is the smallest direction and d2 is the highest
 		hide(T.intact)
 
 	cable_list += src		//add it to the global cable list
+
+	for (var/i in 1 to oldload.len)
+		oldload[i] = 0
 
 /obj/structure/cable/initialize()
 	..()

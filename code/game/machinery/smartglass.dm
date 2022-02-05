@@ -49,7 +49,7 @@
 /obj/machinery/smartglass_electronics/proc/toggle_smart_transparency()
 	smart_transparency = !smart_transparency
 	Ourwindow.smart_toggle()
-	if (use_power == 1)
+	if (use_power == MACHINE_POWER_USE_IDLE)
 		use_power = MACHINE_POWER_USE_ACTIVE
 	else
 		use_power = MACHINE_POWER_USE_IDLE
