@@ -394,6 +394,8 @@ var/list/previous_forwards_stations = list()
 		var/list/datum/cargo_forwarding/new_forwards = list()
 		if(prob(50) && previous_forwards_types && previous_forwards_types.len) // Keep it just a chance to get the previous round's forwards so we don't just end up with those
 			for(var/k in 1 to amount_forwarded)
+				if(!previous_forwards_types || !previous_forwards_types.len) // Break out if nothing sent
+					break
 				var/previous_index = rand(1,previous_forwards_types.len)
 				var/forwardtype = previous_forwards_types[previous_index]
 				var/datum/cargo_forwarding/CF = new forwardtype
@@ -411,7 +413,7 @@ var/list/previous_forwards_stations = list()
 					previous_forwards_names.Remove(previous_forwards_names[index_to_pick])
 				else if(!previous_forwards_types || !previous_forwards_types.len)
 					previous_forwards_stations.Cut()
-		else
+		if(!new_forwards.len) // If we got nothing from the above
 			for(var/j in 1 to amount_forwarded)
 				if(prob(75)) // Normal orderable stuff
 					var/datum/cargo_forwarding/from_supplypack/SCF = new
