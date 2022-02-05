@@ -80,6 +80,13 @@
         S.say("[name] forwarded [reason ? "unsuccessfully! [reason]. Reward docked." : "successfully!"]")
         playsound(S, 'sound/machines/info.ogg', 50, 1)
     
+    if(!reason) // Only make this forward move on properly to another station if fulfilled (persistence)
+        fulfilled_forwards_types += src.type
+        fulfilled_forwards_stations += station_name()
+        for(var/mob/M in player_list)
+            if(isliving(M))
+                fulfilled_forwards_names += M.name
+                break
     qdel(src)
 
 /datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle
@@ -170,7 +177,7 @@
     qdel(ourpack)
 
 /datum/cargo_forwarding/from_centcomm_order/New()
-    var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/requestes_fulfilled) // Do it like this to prevent picking something already sent here
+    var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/requests_fulfilled) // Do it like this to prevent picking something already sent here
     var/list/previous_requests_types = data["fulfilled_requests_types"]
     var/ordertype = null
     var/previous_index = 0

@@ -115,16 +115,27 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		data["YY"] = time2text(world.realtime,"YY")
 		write_file(data)
 
-/datum/persistence_task/requestes_fulfilled
+/datum/persistence_task/requests_fulfilled
 	execute = TRUE
 	name = "Centcomm requests fulfilled"
 	file_path = "data/persistence/fulfilled_centcomm_requests.json"
 
-/datum/persistence_task/requestes_fulfilled/on_init()
+/datum/persistence_task/requests_fulfilled/on_init()
 	data = read_file()
 
-/datum/persistence_task/requestes_fulfilled/on_shutdown()
+/datum/persistence_task/requests_fulfilled/on_shutdown()
 	write_file(list("fulfilled_requests_types" = fulfilled_requests_types, "fulfilled_requests_names" = fulfilled_requests_names, "fulfilled_requests_stations" = fulfilled_requests_stations))
+
+/datum/persistence_task/forwards_fulfilled
+	execute = TRUE
+	name = "Cargo forwards fulfilled"
+	file_path = "data/persistence/fulfilled_cargo_forwards.json"
+
+/datum/persistence_task/forwards_fulfilled/on_init()
+	data = read_file()
+
+/datum/persistence_task/forwards_fulfilled/on_shutdown()
+	write_file(list("fulfilled_forwards_types" = fulfilled_forwards_types, "fulfilled_forwards_names" = fulfilled_forwards_names, "fulfilled_forwards_stations" = fulfilled_forwards_stations))
 
 /datum/persistence_task/round_end_data
 	execute = TRUE
