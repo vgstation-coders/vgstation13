@@ -1802,3 +1802,10 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define SPORTINESS_NONE 1
 #define SPORTINESS_SUGAR 1.2
 #define SPORTINESS_SPORTS_DRINK 5
+
+//Breakable items
+#define BREAKABLE_ALL 7			//Item can break by being hit or thrown.
+#define BREAKABLE_HIT 3 		//Item can break by being hit with either an empty hand or a weapon.
+#define BREAKABLE_HIT_EMPTY 1	//Item can break by being hit with an empty hand.
+#define BREAKABLE_HIT_WEAPON 2	//Item can break by being hit with a weapon.
+#define BREAKABLE_THROW 4		//Item can break by being thrown and hitting something.
