@@ -435,7 +435,6 @@
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
 			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
-			S.use(1)
 			if(!S.use(1))
 				return
 			I.base_sock = src
