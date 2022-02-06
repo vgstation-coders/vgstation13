@@ -24,8 +24,8 @@
 	var/breakable = FALSE //breakable (by smashing it using the following flags)
 	var/breakable_flags = 0 /*possible flags include BREAKABLE_ALL | BREAKABLE_HIT | BREAKABLE_HIT_EMPTY | BREAKABLE_HIT_WEAPON | BREAKABLE_THROW
 							BREAKABLE_HIT encompasses both BREAKABLE_HIT_EMPTY and BREAKABLE_HIT_WEAPON */
-	var/health= 15 //structural integrity of the item, akin to HP.
-	var/health_max = 15
+	var/struct_integ= 15 //structural integrity of the item, akin to HP. at 0, the item breaks.
+	var/struct_integ_max= 15
 	var/damage_armor = 5 //attacks of this much damage or below will glance off
 	var/damage_resist = 5 //attacks stronger than damage_armor will have their damage reduced by this much
 	var/damaged_text	//Addendum to the description when it's damaged eg. damaged_text of "It is dented." null will skip this addendum.
@@ -49,8 +49,8 @@
 
 /obj/item/proc/take_damage(var/incoming_damage)
 	var/thisdmg=(incoming_damage>max(damage_armor,damage_resist)) * (incoming_damage-damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
-	health-=thisdmg
-	if(health<=0)
+	struct_integ-=thisdmg
+	if(struct_integ<=0)
 		on_broken()
 		qdel(src)
 	if(!thisdmg)
@@ -138,7 +138,7 @@
 	desc = "This flashlight looks particularly flimsy."
 	breakable = 1
 	breakable_flags = BREAKABLE_HIT
-	health = 30
+	struct_integ = 30
 	damaged_text = "It has gone bad."
 	breaks_text = "crumbles apart"
 	breaks_sound = 'sound/misc/balloon_pop.ogg'
