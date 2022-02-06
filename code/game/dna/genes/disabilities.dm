@@ -168,3 +168,13 @@
 /datum/dna/gene/disability/anemia/New()
 	..()
 	block = ANEMIABLOCK
+
+/datum/dna/gene/disability/pacifist
+	name = "Pacifism"
+	activation_message = "You feel no need to fight anymore."
+	deactivation_message = "You feel warlike again."
+	disability = PACIFIST
+
+/datum/dna/gene/disability/pacifist/New()
+	..()
+	block = PACIFISTBLOCK

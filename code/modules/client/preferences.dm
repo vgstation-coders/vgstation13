@@ -674,8 +674,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LACTOSE,     "Lactose Intolerant")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LISP,       "Lisp")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ANEMIA,       "Anemia")
-	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
-	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_PACIFIST,       "Pacifism")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes")
 
 
 	HTML += {"</ul>
@@ -1507,10 +1507,8 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 		character.sdisabilities|=DEAF
 	if(disabilities & DISABILITY_FLAG_BLIND)
 		character.sdisabilities|=BLIND
-	/*if(disabilities & DISABILITY_FLAG_COUGHING)
-		character.sdisabilities|=COUGHING
 	if(disabilities & DISABILITY_FLAG_TOURETTES)
-		character.sdisabilities|=TOURETTES Still working on it. - Angelite */
+		character.sdisabilities|=TOURETTES
 
 	if(underwear > underwear_m.len || underwear < 1)
 		underwear = 0 //I'm sure this is 100% unnecessary, but I'm paranoid... sue me. //HAH NOW NO MORE MAGIC CLONING UNDIES
