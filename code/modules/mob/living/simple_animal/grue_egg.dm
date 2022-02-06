@@ -22,11 +22,6 @@
 
 
 	var/mob/living/simple_animal/parent_grue														//which grue laid this egg, if any
-	var/bright_limit_gain = 1											//maximum brightness on tile for health regen
-	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health
-	var/hg_mult = 2										//multiplier for health gained per tick when on dark tile
-	var/hd_mult = 4									 //multiplier for health drained per tick on bright tile. eggs are more sensitive to light than hatched grues
-	var/current_brightness=0
 
 	var/grown = 0
 	var/hatching = 0 // So we don't spam ghosts.
@@ -35,32 +30,33 @@
 	var/last_ping_time = 0
 	var/ping_cooldown = 50
 
-	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue egg is exposed to light
-	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue egg is exposed to light, but this effect dissipates after going back into darkness
-
-	var/dark_dim_light = GRUE_DARK //darkness level currently the egg is currently exposed to, GRUE_DARK=nice and dark (heals the egg), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the egg)
+	var/datum/grue_calc/egg/lightparams = new /datum/grue_calc/egg //used for light-related calculations
 
 /mob/living/simple_animal/grue_egg/Life()
 	..()
+
 	//process health according to current tile brightness level (as with hatched grues)
 	if (stat!=DEAD)
-		if(isturf(loc))
-			var/turf/T = loc
-			current_brightness=10*T.get_lumcount()
-		else												//else, there's considered to be no light
-			current_brightness=0
-		if(current_brightness<=bright_limit_gain)
-			dark_dim_light=GRUE_DARK
-			apply_damage(-1 * (bright_limit_gain-current_brightness) * hg_mult * (maxHealth/250),BURN)
-		else if(current_brightness>bright_limit_drain) 														//lose health in light
-			dark_dim_light=GRUE_LIGHT
-			playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
-			apply_damage((current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * (maxHealth/250),BURN)
-		else
-			dark_dim_light=GRUE_DIM
+
+		lightparams.ddl_update(src)
+
+		switch(lightparams.dark_dim_light)
+			if(GRUE_DARK) //dark
+					apply_damage(lightparams.get_dark_heal(src),BURN) //heal in dark
+			if(GRUE_LIGHT) //light
+				var/thisdmg=lightparams.get_light_damage(src)
+				apply_damage(thisdmg,BURN) //burn in light
+				if(thisdmg>(maxHealth/7))
+					to_chat(src, "<span class='danger'>The burning light sears you!</span>")
+				else
+					to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
+				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
+
+		//update accum_light_expos_mult for light damage
+		lightparams.alem_adjust()
+
 		if(grown)
 			src.Hatch()
-		accum_light_expos_mult=max(1,accum_light_expos_mult+accum_light_expos_gain_dark_dim_light[dark_dim_light+1])//modify light damage multiplier based on how long the grue egg has been in light recently
 
 /mob/living/simple_animal/grue_egg/death()
 	name = "grue egg remnants"
@@ -76,7 +72,7 @@
 /mob/living/simple_animal/grue_egg/New()
 	..()
 	last_ping_time = world.time
-	spawn(rand(300,450))//the egg takes a while to be ready to hatch
+	spawn(rand(30 SECONDS,45 SECONDS))//the egg takes a while to be ready to hatch
 		Grow()
 
 /mob/living/simple_animal/grue_egg/proc/Grow()

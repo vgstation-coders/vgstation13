@@ -32,29 +32,17 @@
 	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
 	var/moulttime = 30 //time required to moult to a new form (seconds)
 	var/moulttimer = 30 //moulting timer
-	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
 	var/hatched = 0			//whether or not this grue hatched from an egg
 	var/channeling = 0 // channeling an ability that costs nutrienergy or not
 
-	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
-	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
-	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
-	var/base_regenbonus=1
-	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
-
 	var/base_melee_dam_up = 5				//base melee damage upper
 	var/base_melee_dam_lw = 3				//base melee damage lower
-
-	var/pg_mult = 0										 //multiplier for power gained per tick when on dark tile
-	var/pd_mult = 0									  //multiplier for nutrienergy drained per tick on bright tile (0=disabled)
-	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
-	var/hd_mult = 3									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
 
 	var/lifestage=GRUE_ADULT												 //1=baby grue, 2=grueling, 3=(mature) grue
 	var/eatencount=0												//number of sentient carbons eaten, makes the grue more powerful
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
-	var/dark_dim_light=GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
+
 	var/busy=0 //busy attempting to lay an egg or eat
 
 	var/eattime= 5 SECONDS //how long it takes to eat someone
@@ -62,16 +50,81 @@
 	var/digest_heal = -3 //how much health restored per second after feeding (negative heals)
 	var/digest_sp = 4 //how much nutritive energy gained per second after feeding
 
-
-	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
-	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue is exposed to light, but this effect dissipates after going back into darkness
-	var/list/speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //speed modifiers based on light condition
-	var/list/base_speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //base speed modifiers based on light condition
-
+	var/datum/grue_calc/grue/lightparams = new /datum/grue_calc/grue //used for light-related calculations
 
 	//AI related:
 	stop_automated_movement = 1 //has custom light-related wander movement
 	wander=0
+
+
+/datum/grue_calc //used for light-related calculations
+	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
+	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
+	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
+	var/hd_mult = 3									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
+	var/dark_dim_light=GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
+	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
+	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
+	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue is exposed to light, but this effect dissipates after going back into darkness
+
+/datum/grue_calc/proc/ddl_update(var/mob/living/G)
+	if(isturf(G.loc))
+		var/turf/T = G.loc
+		current_brightness=10*T.get_lumcount()
+	else												//else, there's considered to be no light (vents, lockers, etc.)
+		current_brightness=0
+	if(current_brightness<=bright_limit_gain)
+		dark_dim_light=GRUE_DARK
+	else if(current_brightness>bright_limit_drain)
+		dark_dim_light=GRUE_LIGHT
+	else
+		dark_dim_light=GRUE_DIM
+
+
+////Procs for light-related burning and healing, and nutrienergy updates:
+
+////Shared by both grues and grue eggs:
+/datum/grue_calc/proc/alem_adjust() //update multiplier for exposure-scaling light damage
+	accum_light_expos_mult=max(1,accum_light_expos_mult+accum_light_expos_gain_dark_dim_light[dark_dim_light+1]) //modify light damage multiplier based on how long the grue's been in light recently
+
+////Grue specific:
+/datum/grue_calc/grue/proc/get_light_damage(var/mob/living/simple_animal/hostile/grue/G) //specific to grues and not grue eggs
+	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * lightresist * (G.maxHealth/250) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, lifestage-dependent resistance, and normalize by max health,
+
+/datum/grue_calc/grue/proc/get_dark_heal(var/mob/living/simple_animal/hostile/grue/G) //specific to grues and not grue eggs
+	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * (G.maxHealth/250)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, and normalize by max health.
+
+/datum/grue_calc/grue //specific to grues and not their eggs
+	var/pg_mult = 0										 //multiplier for nutrienergy gained per tick when on dark tile (0=disabled)
+	var/pd_mult = 0									  //multiplier for nutrienergy drained per tick on bright tile (0=disabled)
+	var/list/speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //speed modifiers based on light condition
+	var/list/base_speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //base speed modifiers based on light condition
+	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
+	var/base_regenbonus=1
+	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
+
+/datum/grue_calc/grue/proc/nutri_adjust(var/mob/living/simple_animal/hostile/grue/G)
+	switch(dark_dim_light)
+		if(GRUE_DARK)
+			if(!G.ismoulting && !G.channeling)
+				G.nutrienergy = min(G.maxnutrienergy,G.nutrienergy+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
+		if(GRUE_LIGHT)
+			G.nutrienergy = max(0,G.nutrienergy-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0
+
+/datum/grue_calc/grue/proc/speed_adjust(var/mob/living/simple_animal/hostile/grue/G)
+	G.speed=G.base_speed*speed_m_dark_dim_light[dark_dim_light+1]
+
+////Egg specific:
+/datum/grue_calc/egg
+	hd_mult = 5		//eggs are more sensitive to light than hatched grues
+
+
+//eggs have slightly simpler light damage and healing calculations due to having less multipliers
+/datum/grue_calc/egg/proc/get_light_damage(var/mob/living/E)
+	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * (E.maxHealth/250) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, and normalize by max health,
+
+/datum/grue_calc/egg/proc/get_dark_heal(var/mob/living/E)
+	return -1 * (bright_limit_gain-current_brightness) * hg_mult * (E.maxHealth/250)							//scale dark healing by: how dark it is, the base multiplier, and normalize by max health.
 
 
 
@@ -99,13 +152,13 @@
 		else
 			healths.icon_state = "health6"
 //darkness level indicator
-		if (dark_dim_light==0)
+		if (lightparams.dark_dim_light==GRUE_DARK)
 			healths2.icon_state= "lightlevel_dark"
 			healths2.name="nice and dark"
-		else if (dark_dim_light==1)
+		else if (lightparams.dark_dim_light==GRUE_DIM)
 			healths2.icon_state= "lightlevel_dim"
 			healths2.name="adequately dim"
-		else if (dark_dim_light==2)
+		else if (lightparams.dark_dim_light==GRUE_LIGHT)
 			healths2.icon_state= "lightlevel_bright"
 			healths2.name="painfully bright"
 
@@ -114,18 +167,8 @@
 
 	//process nutrienergy and health according to current tile brightness level
 	if (stat!=DEAD)
-		if(isturf(loc))
-			var/turf/T = loc
-			current_brightness=10*T.get_lumcount()
-		else												//else, there's considered to be no light (vents, lockers, etc.)
-			current_brightness=0
 
-		if(current_brightness<=bright_limit_gain)
-			dark_dim_light=GRUE_DARK
-		else if(current_brightness>bright_limit_drain)
-			dark_dim_light=GRUE_LIGHT
-		else
-			dark_dim_light=GRUE_DIM
+		lightparams.ddl_update(src)
 
 		//apply eating-based healing before processing light-based damage or healing
 		if(digest)
@@ -133,12 +176,12 @@
 			nutrienergy=min(maxnutrienergy,nutrienergy+digest_sp)
 			digest--
 
-		switch(dark_dim_light)
+		switch(lightparams.dark_dim_light)
 			if(GRUE_DARK) //dark
 				if(!ismoulting) //moulting temporarily stops healing via darkness
-					apply_damage(get_dark_heal(),BURN) //heal in dark
+					apply_damage(lightparams.get_dark_heal(src),BURN) //heal in dark
 			if(GRUE_LIGHT) //light
-				var/thisdmg=get_light_damage()
+				var/thisdmg=lightparams.get_light_damage(src)
 				apply_damage(thisdmg,BURN) //burn in light
 				if(thisdmg>(maxHealth/7))
 					to_chat(src, "<span class='danger'>The burning light sears your flesh!</span>")
@@ -147,15 +190,16 @@
 				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
 
 
-		accum_light_expos_mult=max(1,accum_light_expos_mult+accum_light_expos_gain_dark_dim_light[dark_dim_light+1])//modify light damage multiplier based on how long the grue's been in light recently
+		//update accum_light_expos_mult for light damage
+		lightparams.alem_adjust()
 
 
-		//handle nutrienergy gain or drain
-		nutri_adjust()
+		//handle light-based nutrienergy gain or drain
+		lightparams.nutri_adjust(src)
 
 
 		//update speed modifier based on light condition
-		speed=base_speed*speed_m_dark_dim_light[dark_dim_light+1]
+		lightparams.speed_adjust(src)
 
 
 		if(ismoulting)
@@ -178,11 +222,11 @@
 /mob/living/simple_animal/hostile/grue/proc/grue_ai()
 
 	//Moulting
-	if(lifestage!=GRUE_ADULT && (nutrienergy>=moultcost) && dark_dim_light==GRUE_DARK)
+	if(lifestage!=GRUE_ADULT && (nutrienergy>=moultcost) && lightparams.dark_dim_light==GRUE_DARK)
 		start_moult()
 
 	//Eating
-	if(lifestage>=GRUE_JUVENILE && stance==HOSTILE_STANCE_IDLE && dark_dim_light<GRUE_LIGHT)
+	if(lifestage>=GRUE_JUVENILE && stance==HOSTILE_STANCE_IDLE && lightparams.dark_dim_light<GRUE_LIGHT)
 		var/list/feed_targets = list()
 		for(var/mob/living/carbon/C in range(1,get_turf(src)))
 			feed_targets += C
@@ -190,7 +234,7 @@
 			handle_feed(pick(feed_targets))
 
 	//Egglaying
-	if(lifestage==GRUE_ADULT && eatencharge>0 && dark_dim_light==GRUE_DARK)
+	if(lifestage==GRUE_ADULT && eatencharge>0 && lightparams.dark_dim_light==GRUE_DARK)
 		reproduce()
 
 	//Movement
@@ -206,7 +250,7 @@
 					var/list/respite_dests=list() //any potential wander destinations leading out of the light into dark/dim
 					for(var/thiscardinal in 1 to cardinal.len)
 						var/potential_dest = get_step(src, cardinal[thiscardinal])
-						if(dark_dim_light==GRUE_LIGHT)//always prioritize wandering to a dark/dim tile if in light
+						if(lightparams.dark_dim_light==GRUE_LIGHT)//always prioritize wandering to a dark/dim tile if in light
 							if(get_ddl(potential_dest)<GRUE_LIGHT)
 								respite_dests+=potential_dest
 							else
@@ -232,9 +276,9 @@
 
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()
-	if(thisturf_brightness<=bright_limit_gain)
+	if(thisturf_brightness<=lightparams.bright_limit_gain)
 		return GRUE_DARK
-	else if(thisturf_brightness>bright_limit_drain)
+	else if(thisturf_brightness>lightparams.bright_limit_drain)
 		return GRUE_LIGHT
 	else
 		return GRUE_DIM
@@ -255,7 +299,7 @@
 		nutrienergy=50 //starts out ready to moult
 		maxnutrienergy = 50
 		moultcost=50
-		lightresist=1
+		lightparams.lightresist=1
 		environment_smash_flags = 0
 		attack_sound = 'sound/weapons/bite.ogg'
 		size = SIZE_SMALL
@@ -278,7 +322,7 @@
 		nutrienergy=0 //starts out hungry
 		maxnutrienergy = 100
 		moultcost = 100
-		lightresist=0.85
+		lightparams.lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
@@ -301,7 +345,7 @@
 		base_melee_dam_lw = 20				//base melee damage lower
 		melee_damage_type = BRUTE
 		held_items = list()
-		lightresist=0.7
+		lightparams.lightresist=0.7
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
@@ -438,27 +482,6 @@
 		desc="[desc] This one seems dead and lifeless."
 	..()
 
-
-
-//procs for light-related burning and healing, and nutrienergy updates:
-
-/mob/living/simple_animal/hostile/grue/proc/get_light_damage()
-	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * lightresist * (maxHealth/250) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, lifestage-dependent resistance, and normalize by max health,
-
-
-/mob/living/simple_animal/hostile/grue/proc/get_dark_heal()
-	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * (maxHealth/250)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, and normalize by max health.
-
-/mob/living/simple_animal/hostile/grue/proc/nutri_adjust()
-	switch(dark_dim_light)
-		if(GRUE_DARK)
-			if(!ismoulting && !channeling)
-				nutrienergy = min(maxnutrienergy,nutrienergy+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
-		if(GRUE_LIGHT)
-			nutrienergy = max(0,nutrienergy-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0
-
-
-
 //Reproduction via egglaying.
 /mob/living/simple_animal/hostile/grue/proc/reproduce()
 
@@ -559,15 +582,15 @@
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = 0) //update stats, called by lifestage_updates() as well as handle_feed()
 
 	//health regen in darkness
-	regenbonus = base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
+	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
 
 	//melee damage
 	melee_damage_lower = base_melee_dam_lw + (7 * eatencount)
 	melee_damage_upper = base_melee_dam_up + (7 * eatencount)
 
 	//speed bonus in dark and dim conditions
-	speed_m_dark_dim_light[1]=max(1/2,base_speed_m_dark_dim_light[1]/(1.2 ** eatencount))//faster in darkness
-	speed_m_dark_dim_light[2]=max(5/8,base_speed_m_dark_dim_light[2]/(1.2 ** eatencount))//faster in dim light
+	lightparams.speed_m_dark_dim_light[1]=max(1/2,lightparams.base_speed_m_dark_dim_light[1]/(1.2 ** eatencount))//faster in darkness
+	lightparams.speed_m_dark_dim_light[2]=max(5/8,lightparams.base_speed_m_dark_dim_light[2]/(1.2 ** eatencount))//faster in dim light
 
 
 	if(lifestage==GRUE_ADULT)
