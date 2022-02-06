@@ -65,7 +65,6 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	//Maybe I'll add more?
 
 /obj/machinery/power/antiquesynth/process()
-	charged_last_tick = 0
 	if(!on)
 		return
 	if(!anchored || !get_powernet())
@@ -78,6 +77,9 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	if(get_satisfaction() == 1.0)
 		charged_last_tick = 1
 		charge += old_consumption
+		nanomanager.update_uis(src)
+	else if (charged_last_tick != 0)
+		charged_last_tick = 0
 		nanomanager.update_uis(src)
 	old_consumption = consumption
 	add_load(old_consumption)
