@@ -730,9 +730,6 @@
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_ANEMIA)
 		new_character.dna.SetSEState(ANEMIABLOCK, 1, 1)
-	
-	if(client.prefs.disabilities & DISABILITY_FLAG_PACIFIST)
-		new_character.dna.SetSEState(PACIFISTBLOCK, 1, 1)
 
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
