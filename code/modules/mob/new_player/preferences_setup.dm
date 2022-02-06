@@ -22,7 +22,7 @@
 
 /datum/preferences/proc/randomize_hair_color(var/target = "hair")
 	if(species == "Vox")
-		v_hair = rand(1,7)
+		r_hair = rand(1,7)
 	if(prob (75) && target == "facial") // Chance to inherit hair color
 		r_facial = r_hair
 		g_facial = g_hair
@@ -246,9 +246,9 @@
 	var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
 	if(species == "Vox")
 		if(hair_style)
-			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[v_hair]_s")
+			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[r_hair]_s")
 			if(hair_style.additional_accessories)
-				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[v_hair]_acc"), ICON_OVERLAY)
+				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[r_hair]_acc"), ICON_OVERLAY)
 			eyes_s.Blend(hair_s, ICON_OVERLAY)
 	else if(hair_style)
 		var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
