@@ -141,6 +141,9 @@
 		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 		to_chat(src, "<span class='warning'>You may only spawn again as a mouse more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
 		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
+		return
 
 	var/response = alert(src, "Are you -sure- you want to become a mouse?","Are you sure you want to squeek?","Squeek!","Nope!")
 	if(response != "Squeek!")
@@ -497,6 +500,9 @@
 		var/timedifference_text
 		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 		to_chat(src, "<span class='warning'>You may only spawn again as a mouse or MoMMI more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
+		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
 		return
 
 	//find a viable mouse candidate
