@@ -352,9 +352,13 @@
 			return 0
 	return ..()
 
-/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user, var/ruleset)
-	if(alert(user,"The gamemode is trying to select you for [ruleset], do you want this?",,"Yes","No") == "Yes")
+/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user)
+	var/turf/oldloc = get_turf(user)
+	user.forceMove(null)
+	if(alert(user,"The gamemode is trying to select you for [src], do you want this?",,"Yes","No") == "Yes")
 		return 1
+	user.forceMove(oldloc)
+	message_admins("[user.key] has opted out of [src].")
 	return 0
 
 /datum/dynamic_ruleset/proc/generate_ruleset_body(mob/applicant)
