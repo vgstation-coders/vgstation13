@@ -167,7 +167,7 @@
 	standard_damage_overlay_updates()
 
 
-	if((stat!=DEAD) && (stat!=UNCONSCIOUS) && !busy && !ismoulting && !client && !mind && ckey==null) //Checks for AI
+	if((stat==CONSCIOUS) && !busy && !ismoulting && !client && !mind && !ckey) //Checks for AI
 		grue_ai()
 
 
@@ -222,7 +222,6 @@
 					if(ourdest)
 						wander_move(ourdest)
 						turns_since_move = 0
-						INVOKE_EVENT(src, /event/after_move)
 
 /mob/living/simple_animal/hostile/grue/New()
 	..()
@@ -452,10 +451,10 @@
 
 /mob/living/simple_animal/hostile/grue/proc/nutri_adjust()
 	switch(dark_dim_light)
-		if(0) //if dark
+		if(GRUE_DARK)
 			if(!ismoulting && !channeling)
 				nutrienergy = min(maxnutrienergy,nutrienergy+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
-		if(2) //if light
+		if(GRUE_LIGHT)
 			nutrienergy = max(0,nutrienergy-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0
 
 
@@ -618,4 +617,3 @@
 			to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
 	else
 		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
-
