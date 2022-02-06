@@ -11,7 +11,7 @@
 	var/s_tone = 0
 
 	var/h_style = "Bald"
-	var/r_hair = 1
+	var/r_hair = 0
 	var/g_hair = 0
 	var/b_hair = 0
 
