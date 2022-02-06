@@ -19,8 +19,8 @@
 	var/breakable = 0 //1: breakable (by smashing it using the following flags
 	var/breakable_flags = 0 /*possible flags include BREAKABLE_ALL | BREAKABLE_HIT | BREAKABLE_HIT_EMPTY | BREAKABLE_HIT_WEAPON | BREAKABLE_THROW
 							BREAKABLE_HIT encompasses both BREAKABLE_HIT_EMPTY and BREAKABLE_HIT_WEAPON */
-	var/struct_integ = 15 //structural integrity of the item, akin to HP. First value is the current integrity.
-	var/struct_integ_max =15
+	var/struct_integ = 15 //structural integrity of the item, akin to HP.
+	var/struct_integ_max = 15
 	var/damage_armor = 5 //attacks of this much damage or below will glance off
 	var/damage_resist = 5 //attacks stronger than damage_armor will have their damage reduced by this much
 	var/damaged_text = "" //Addendum to the description when it's damaged eg. damaged_text of "It is dented." Empty string "" will skip this addendum.
