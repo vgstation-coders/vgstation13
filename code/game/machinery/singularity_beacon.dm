@@ -148,6 +148,8 @@
 	if(cell && cell.charge < cell.maxcharge && cell.charge > 0)
 		power_draw = cell.maxcharge - cell.charge
 		power_connection.add_load(power_draw) // request cell recharge power for next tick
+	else
+		power_draw = 0
 
 	// Try using the power we've been alloted this tick
 	if (power_received < power_load) // We didn't receive enough to cover costs, move to battery

@@ -16,6 +16,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_SYNDICATE + "=5"
 	var/drain_rate = 600000		// amount of power to drain per tick
+	var/last_drain = 0			// amount we tried to drain last tick
 	var/apc_drain_rate = 50 	// amount of power to drain out of each apc per tick if there's not enough power on the grid
 	var/power_drained = 0 		// has drained this much power
 	var/max_power = 1e8		// maximum power that can be drained before exploding
@@ -97,7 +98,7 @@
 			icon_state = "powersink1"
 			playsound(src, 'sound/effects/phasein.ogg', 30, 1)
 			processing_objects.Add(src)
-
+			last_drain = 0
 		if(2)  //This switch option wasn't originally included. It exists now. --NeoFite
 			to_chat(user, "You deactivate the device!")
 			for(var/mob/M in viewers(user))
@@ -117,9 +118,10 @@
 			set_light(12)
 
 			// found a powernet, so drain up to max power from it
-			power_connection.add_load(drain_rate) // request power for next tick
-			var/drained = power_connection.get_satisfaction() * drain_rate // check how much out of our previous tick's request we've actually drained
+			var/drained = power_connection.get_satisfaction() * last_drain // check how much out of our previous tick's request we've actually drained
 			power_drained += drained
+			last_drain = drain_rate
+			power_connection.add_load(last_drain) // request power for next tick
 
 			// if tried to drain more than available on powernet
 			// now look for APCs and drain their cells
@@ -127,9 +129,10 @@
 				for(var/obj/machinery/power/terminal/T in PN.nodes)
 					if(istype(T.master, /obj/machinery/power/apc))
 						var/obj/machinery/power/apc/A = T.master
-						if(A.operating && A.cell)
-							A.cell.charge = max(0, A.cell.charge - apc_drain_rate)
-							power_drained += apc_drain_rate
+						if(A.operating && A.cell && A.cell.charge > 0)
+							var/apc_drained = min(A.cell.charge, apc_drain_rate)
+							A.cell.charge -= apc_drained
+							power_drained += apc_drained
 							if(A.charging == 2)
 								A.charging = 1
 
