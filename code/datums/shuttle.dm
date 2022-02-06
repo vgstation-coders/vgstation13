@@ -704,6 +704,7 @@
 		new_turf.icon = old_turf.icon
 		new_turf.plane = old_turf.plane
 		new_turf.layer = old_turf.layer
+		new_turf.color = old_turf.color
 
 		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
 		// Floor turfs create their `floor_tile` in New() if it's null.
