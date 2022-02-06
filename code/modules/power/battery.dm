@@ -56,24 +56,35 @@ var/global/list/battery_online =	list(
 	use_power = MACHINE_POWER_USE_NONE
 	power_priority = POWER_PRIORITY_SMES_RECHARGE
 
-	var/output = 50000
-	var/lastout = 0
-	var/loadcharge = 0
-	var/old_loadcharge = 0
-	var/loaddemand = 0
-	var/capacity = 5e6 //Max stored charge
-	var/charge = 1e6 //Stored charge
+	// Input
 	var/charging = FALSE //Are we currently taking charge in?
 	var/chargemode = BATTERY_NO_CHARGE //Are we set to charge or not? Not the same as charging
 	var/chargecount = 0 //How long we've spent since not charging
-	var/chargelevel = 50000
-	var/online = 1
+
+	var/chargelevel = 50000 // How much we're set to recharge
 	var/max_input = 200000
+
+	var/charge = 1e6 //Stored charge
+	var/capacity = 5e6 //Max stored charge
+
+	var/chargeload = 0 // How much power we requested this tick for recharging
+	var/chargereceived = 0 // How much power out of what we requested last tick we received this tick
+
+	// Output
+	var/online = TRUE // Are we currently outputting power?
+
+	var/outputlevel = 50000 // How much we're set to output
 	var/max_output = 200000
 
-	var/name_tag = ""
+	var/output = 0 // How much we've outputted this tick
+	var/lastout = 0 // How much we outputted last tick
 
-	var/infinite_power = 0 //makes the machine just generate power itself
+	var/lastexcess = 0 // How much excess was restored to this smes last tick
+	var/loaddemand = 0 // How much of what we outputted last tick ended up being used
+
+	// Misc
+	var/name_tag = ""
+	var/infinite_power = FALSE //makes the machine just generate power itself
 
 	//Holders for powerout event.
 	var/last_output = 0
@@ -108,21 +119,21 @@ var/global/list/battery_online =	list(
 	var/_chargedisplay = chargedisplay()
 
 	// Input
+	chargereceived = 0
 	if (charging)
 
 		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
 		// Auto charge mode lets batteries take any amount of available power, limited by charge level
 		if((chargemode == BATTERY_MANUAL_CHARGE && get_satisfaction() == 1.0) || (chargemode == BATTERY_AUTO_CHARGE && get_satisfaction() > 0)) // If there's power available, try to charge
-			var/power = old_loadcharge * get_satisfaction()
-			charge += power * SMESRATE // Increase the charge
+			chargereceived = chargeload * get_satisfaction()
+			charge += chargereceived * SMESRATE // Increase the charge
 
 		else
 			charging = FALSE
 			chargecount = 0
 
-		loadcharge = min((capacity - charge) / SMESRATE, chargelevel) // Request charging at set rate, limited to spare capacity
-		add_load(loadcharge) // Add the load to the terminal side network
-		old_loadcharge = loadcharge
+		chargeload = min((capacity - charge) / SMESRATE, chargelevel) // Request charging at set rate, limited to spare capacity
+		add_load(chargeload) // Add the load to the terminal side network
 	else
 		if (chargemode)
 			if (chargecount > rand(3, 6))
@@ -136,17 +147,21 @@ var/global/list/battery_online =	list(
 		else
 			chargecount = 0
 
+	loaddemand = lastout - lastexcess
+	lastexcess = 0
+
 	// Output
 	if (online && get_powernet()) // how can discharge be real if our powernet isn't real
-		lastout = min(charge / SMESRATE, output) // Limit output to that stored
+		lastout = output
+		output = min(charge / SMESRATE, outputlevel) // Limit output to that stored
 
-		charge -= lastout * SMESRATE // Reduce the storage (may be recovered in /restore() if excessive)
+		charge -= output * SMESRATE // Reduce the storage (may be recovered in /restore() if excessive)
 
-		add_avail(lastout) // Add output to powernet (smes side)
+		add_avail(output) // Add output to powernet (smes side)
 
 		if (charge < 0.0001)
 			online = FALSE
-			lastout = 0
+			output = 0
 
 	// Only update icon if state changed
 	if(_charging != charging || _online != online || _chargedisplay != chargedisplay())
@@ -165,19 +180,17 @@ var/global/list/battery_online =	list(
 
 	var/_chargedisplay = chargedisplay()
 
-	var/excess = powernet.netexcess // This was how much wasn't used on the network last ptick, minus any removed by other SMESes
+	lastexcess = powernet.netexcess // This was how much wasn't used on the network last ptick, minus any removed by other SMESes
 
-	excess = min(lastout, excess) // Clamp it to how much was actually output by this SMES last ptick
+	lastexcess = min(lastout, lastexcess) // Clamp it to how much was actually output by this SMES last ptick
 
-	excess = min((capacity - charge) / SMESRATE, excess) // For safety, also limit recharge by space capacity of SMES (shouldn't happen)
+	lastexcess = min((capacity - charge) / SMESRATE, lastexcess) // For safety, also limit recharge by space capacity of SMES (shouldn't happen)
 
 	// Now recharge this amount
 
-	charge += excess * SMESRATE // Restore unused power
+	charge += lastexcess * SMESRATE // Restore unused power
 
-	powernet.netexcess -= excess // Remove the excess from the powernet, so later SMESes don't try to use it
-
-	loaddemand = lastout - excess
+	powernet.netexcess -= lastexcess // Remove the excess from the powernet, so later SMESes don't try to use it
 
 	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
 		update_icon()
@@ -197,11 +210,11 @@ var/global/list/battery_online =	list(
 	data["storedCapacity"] = round(100.0*charge/capacity, 0.1)
 	data["charging"] = charging
 	data["chargeMode"] = chargemode
-	data["chargeLoad"] = round(old_loadcharge * get_satisfaction())
+	data["chargeLoad"] = round(chargereceived)
 	data["chargeLevel"] = chargelevel
 	data["chargeMax"] = max_input
 	data["outputOnline"] = online
-	data["outputLevel"] = output
+	data["outputLevel"] = outputlevel
 	data["outputMax"] = max_output
 	data["outputLoad"] = round(loaddemand)
 	data["hasInput"] = get_terminal() ? 1 : 0;
@@ -266,14 +279,14 @@ var/global/list/battery_online =	list(
 	else if( href_list["output"] )
 		switch( href_list["output"] )
 			if("min")
-				output = 0
+				outputlevel = 0
 			if("max")
-				output = max_output		//30000
+				outputlevel = max_output		//30000
 			if("set")
-				output = input(usr, "Enter new output level (0-[max_output])", "SMES Output Power Control", output) as num
-		output = max(0, min(max_output, output))	// clamp to range
+				outputlevel = input(usr, "Enter new output level (0-[max_output])", "SMES Output Power Control", outputlevel) as num
+		outputlevel = max(0, min(max_output, outputlevel))	// clamp to range
 
-	investigation_log(I_SINGULO,"input/output; [chargelevel>output?"<font color='green'>":"<font color='red'>"][chargelevel]/[output]</font> | Output-mode: [online?"<font color='green'>on</font>":"<font color='red'>off</font>"] | Input-mode: [chargemode?"<font color='green'>auto</font>":"<font color='red'>off</font>"] by [usr.key]")
+	investigation_log(I_SINGULO,"input/output; [chargelevel>outputlevel?"<font color='green'>":"<font color='red'>"][chargelevel]/[outputlevel]</font> | Output-mode: [online?"<font color='green'>on</font>":"<font color='red'>off</font>"] | Input-mode: [chargemode?"<font color='green'>auto</font>":"<font color='red'>off</font>"] by [usr.key]")
 
 	return 1
 
@@ -321,7 +334,7 @@ var/global/list/battery_online =	list(
 		update_icon()
 	else //Screw up power input/output
 		chargelevel = rand(0, max_input)
-		output = rand(0, max_output)
+		outputlevel = rand(0, max_output)
 
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
 	var/href = "<A href='?src=\ref[S];rate control=1;[V]"

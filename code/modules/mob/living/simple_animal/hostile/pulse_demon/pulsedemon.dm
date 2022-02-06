@@ -374,7 +374,6 @@
 // Called in Life() per tick
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
 	max_can_absorb = current_battery.outputlevel
-	max_can_absorb = current_battery.output
 	var/amount_to_drain = charge_absorb_amount * 10
 	// Cap conditions
 	if(current_battery.charge <= amount_to_drain)
