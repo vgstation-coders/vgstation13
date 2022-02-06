@@ -281,7 +281,7 @@
 		lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
-		size = SIZE_NORMAL
+		size = SIZE_BIG
 		pass_flags = 0
 		//Juvenile grue spells: eat and moult
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
