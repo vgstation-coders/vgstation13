@@ -42,7 +42,7 @@
 
 		switch(lightparams.dark_dim_light)
 			if(GRUE_DARK) //dark
-					apply_damage(lightparams.get_dark_heal(src),BURN) //heal in dark
+				apply_damage(lightparams.get_dark_heal(src),BURN) //heal in dark
 			if(GRUE_LIGHT) //light
 				var/thisdmg=lightparams.get_light_damage(src)
 				apply_damage(thisdmg,BURN) //burn in light
