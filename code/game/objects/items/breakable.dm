@@ -23,13 +23,13 @@
 	var/breakable = FALSE //breakable (by smashing it using the following flags)
 	var/breakable_flags = 0 /*possible flags include BREAKABLE_ALL | BREAKABLE_HIT | BREAKABLE_HIT_EMPTY | BREAKABLE_HIT_WEAPON | BREAKABLE_THROW
 							BREAKABLE_HIT encompasses both BREAKABLE_HIT_EMPTY and BREAKABLE_HIT_WEAPON */
-	var/struct_integ = 15 //structural integrity of the item, akin to HP.
-	var/struct_integ_max = 15
+	var/health= 15 //structural integrity of the item, akin to HP.
+	var/health_max = 15
 	var/damage_armor = 5 //attacks of this much damage or below will glance off
 	var/damage_resist = 5 //attacks stronger than damage_armor will have their damage reduced by this much
-	var/damaged_text	//Addendum to the description when it's damaged eg. damaged_text of "It is dented." Empty string "" will skip this addendum.
-	var/breaks_text		//Visible message when the items breaks. eg. "breaks apart" Empty string skips this.
-	var/breaks_sound	//path to audible sound when the item breaks. Empty string skips this.
+	var/damaged_text	//Addendum to the description when it's damaged eg. damaged_text of "It is dented." null will skip this addendum.
+	var/breaks_text		//Visible message when the items breaks. eg. "breaks apart" null skips this.
+	var/breaks_sound	//path to audible sound when the item breaks. null skips this.
 	var/list/breakable_fragments //List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard
 
 /obj/item/proc/on_broken() //Called right before an object breaks
