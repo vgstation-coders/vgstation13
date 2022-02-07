@@ -45,7 +45,7 @@
 
 	var/busy=FALSE //busy attempting to lay an egg or eat
 
-	var/eattime= 5 SECONDS //how long it takes to eat someone
+	var/eattime= 3.5 SECONDS //how long it takes to eat someone
 	var/digest = 0 //how many life ticks of healing left after feeding
 	var/digest_heal = -7.5 //how much health restored per life tick after feeding (negative heals)
 	var/digest_sp = 10 //how much nutritive energy gained per life tick after feeding
@@ -126,7 +126,8 @@
 /datum/grue_calc/egg/proc/get_dark_heal(var/mob/living/E)
 	return -1 * (bright_limit_gain-current_brightness) * hg_mult * (E.maxHealth/250)							//scale dark healing by: how dark it is, the base multiplier, and normalize by max health.
 
-
+/mob/living/simple_animal/hostile/grue/has_hand_check()
+	return TRUE //Skip checking for hands so that grues can pull things.
 
 /mob/living/simple_animal/hostile/grue/modMeat(mob/user, var/obj/theMeat)
 	theMeat.name="grue meat"
