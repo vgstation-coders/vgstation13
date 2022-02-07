@@ -222,7 +222,7 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	var/list/roundstart_wizards = list()
-	var/wizard_threshold = 2
+	var/wizard_threshold = 1
 
 /datum/dynamic_ruleset/roundstart/wizard/choose_candidates()
 	var/num_wizards = min(round(mode.roundstart_pop_ready / 10) + 1, candidates.len)
@@ -230,7 +230,7 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		// Above 2 wizards, we start to cost a bit more.
+		// Above 1 wizard, we start to cost a bit more.
 		if (i > wizard_threshold)
 			if ((mode.threat > cost))
 				mode.spend_threat(cost)
