@@ -28,7 +28,6 @@
 		Splitting()
 	else
 		user.visible_message("You are unable to split again.")
-	user.updateChangelingHUD()
 
 /spell/changeling/split/proc/Splitting()
 	if(polling_ghosts)
@@ -89,7 +88,7 @@
 
 	//Assign to the hivemind faction
 	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
-	hivemind?.HandleRecruitedRole(newChangeling)
+	hivemind.HandleRecruitedRole(newChangeling)
 
 	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_DEFAULT)
