@@ -54,7 +54,6 @@
 		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
 		(owner.current).visible_message("[(owner.current)] was unable to split at this time.")
-		changeling.chem_charges = max(40, changeling.chem_charges)
 
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
 	to_chat(player, "<span class='recruit'>\ A changeling is splitting. You have been added to the list of potential ghosts. ([controls])</span>")
@@ -79,9 +78,9 @@
 	newbody.name = owner.current.name
 	newbody.flavor_text = owner.current.flavor_text
 	newbody.mind.memory = owner.memory
-	newbody.UpdateAppearance()
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
+	newbody.UpdateAppearance()
 	domutcheck(newbody, null)
 	var/datum/role/changeling/newChangeling = new(newbody.mind)
 	newChangeling.OnPostSetup()
