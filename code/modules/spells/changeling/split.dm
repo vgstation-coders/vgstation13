@@ -71,7 +71,7 @@
 	if(!player)
 		checkSplit(FALSE) 
 		polling_ghosts = FALSE
-		recruiter.Destroy()
+		qdel(recruiter)
 		return
 	var/turf/this_turf = get_turf(owner.current.loc)
 	var/mob/living/carbon/human/newbody = new(this_turf)
