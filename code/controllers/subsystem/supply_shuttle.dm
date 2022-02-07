@@ -201,7 +201,7 @@ var/list/previous_forwards_stations = list()
 				var/reason = null
 				if(!CF.weighed)
 					reason = "Crate not weighed"
-				if(!CF.associated_manifest || !(CF.associated_manifest in shuttle))
+				if(!CF.associated_manifest || !(get_area(CF.associated_manifest) == shuttle))
 					reason = "Manifest is missing"
 				if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
 					reason = "Manifest was not stamped"
@@ -374,6 +374,7 @@ var/list/previous_forwards_stations = list()
 		if(!clear_turfs.len)
 			return
 		if (world.time < (cargo_last_forward + cargo_forward_cooldown))
+			log_debug("CARGO FORWARDING: Order happened before cooldown, no forwards.")
 			return
 		var/cargomen = 0 // How many people are working in cargo?
 		for(var/datum/data/record/t in sortRecord(data_core.general))
@@ -385,6 +386,7 @@ var/list/previous_forwards_stations = list()
 		var/datum/money_account/our_account = department_accounts["Cargo"]
 		var/multiplier = log(10, (our_account.money / (DEPARTMENT_START_FUNDS / 10) ) ) // So that starting funds equal a 1x multiplier
 		var/amount_forwarded = rand(0,round(cargomen * multiplier))
+		log_debug("CARGO FORWARDING: [amount_forwarded] crates forwarded[!amount_forwarded ? ", nothing sent" : ""].")
 		if(!amount_forwarded)
 			return // Skip this if nothing to send
 
@@ -413,7 +415,10 @@ var/list/previous_forwards_stations = list()
 					previous_forwards_names.Remove(previous_forwards_names[index_to_pick])
 				else if(!previous_forwards_types || !previous_forwards_types.len)
 					previous_forwards_stations.Cut()
+				log_debug("CARGO FORWARDING: Persistence crate [forwardtype] loaded, from [CF.origin_sender_name] of [CF.origin_station_name].")
 		if(new_forwards.len < amount_forwarded) // If we got nothing or not the entire amount from the above
+			if(new_forwards.len)
+				log_debug("CARGO FORWARDING: [new_forwards.len] crates of [amount_forwarded] were persistence crates, now loading them as normal.")
 			for(var/j in 1 to (amount_forwarded - new_forwards.len))
 				if(prob(75)) // Normal orderable stuff
 					var/datum/cargo_forwarding/from_supplypack/SCF = new

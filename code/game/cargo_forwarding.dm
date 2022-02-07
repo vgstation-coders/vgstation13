@@ -199,7 +199,7 @@
     var/previous_index = 0
     if(previous_requests_types && previous_requests_types.len)
         previous_index = rand(1,previous_requests_types.len)
-        ordertype = new text2path(previous_requests_types[previous_index])
+        ordertype = text2path(previous_requests_types[previous_index])
         previous_requests_types.Remove(previous_requests_types[previous_index]) // Must be the index to remove a specific one
     else
         ordertype = get_weighted_order()
