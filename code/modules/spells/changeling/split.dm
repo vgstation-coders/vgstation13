@@ -20,11 +20,6 @@
 	recruiter = null
 	..()
 
-/spell/changeling/split/cast_check(skipcharge = 0,mob/user = usr, var/list/targets)
-	. = ..()
-	if (!.)
-		return FALSE
-
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
@@ -33,6 +28,7 @@
 		Splitting()
 	else
 		user.visible_message("You are unable to split again.")
+	user.updateChangelingHUD()
 
 /spell/changeling/split/proc/Splitting()
 	if(polling_ghosts)

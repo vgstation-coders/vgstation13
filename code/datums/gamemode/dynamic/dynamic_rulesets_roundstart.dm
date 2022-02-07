@@ -146,7 +146,7 @@
 		if(!hivemind)
 			hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 			hivemind.OnPostSetup()
-		hivemind?.HandleRecruitedRole(newChangeling)
+		hivemind.HandleRecruitedRole(newChangeling)
 
 		newChangeling.ForgeObjectives()
 		newChangeling.Greet(GREET_ROUNDSTART)
