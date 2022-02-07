@@ -131,16 +131,11 @@
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
-	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
+	var/num_changelings = min(1, candidates.len)
 	for (var/i = 1 to num_changelings)
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		if (i > changeling_threshold)
-			if ((mode.threat > cost))
-				mode.spend_threat(cost)
-			else
-				break
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
