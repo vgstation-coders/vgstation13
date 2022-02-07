@@ -130,11 +130,9 @@
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
-	var/num_changelings = 1
-	for (var/i = 1 to num_changelings)
-		var/mob/M = pick(candidates)
-		assigned += M
-		candidates -= M
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
