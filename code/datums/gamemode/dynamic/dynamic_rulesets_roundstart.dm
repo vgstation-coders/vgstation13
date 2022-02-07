@@ -222,6 +222,21 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	var/list/roundstart_wizards = list()
+	var/wizard_threshold = 2
+
+/datum/dynamic_ruleset/roundstart/wizard/choose_candidates()
+	var/num_wizards = min(round(mode.roundstart_pop_ready / 10) + 1, candidates.len)
+	for (var/i = 1 to num_wizards)
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		// Above 2 wizards, we start to cost a bit more.
+		if (i > wizard_threshold)
+			if ((mode.threat > cost))
+				mode.spend_threat(cost)
+			else
+				break
+	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
@@ -251,7 +266,7 @@
 //         CIVIL WAR OF CASTERS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-
+/*
 /datum/dynamic_ruleset/roundstart/cwc
 	name = "Civil War of Casters"
 	role_category = /datum/role/wizard
@@ -268,7 +283,7 @@
 //	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
 
-/*
+
 /datum/dynamic_ruleset/roundstart/cwc/process()
 	..()
 	if (wizard_cd)
@@ -286,7 +301,7 @@
 		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
 		RM.cost = 0
 		mode.picking_specific_rule(RM,TRUE) //forced
-*/
+
 
 /datum/dynamic_ruleset/roundstart/cwc/choose_candidates()
 	for(var/wizards_number = 1 to total_wizards)
@@ -314,7 +329,7 @@
 		newWizard.AssignToRole(M.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
-
+*/
 //////////////////////////////////////////////
 //                                          //
 //                BLOOD CULT                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -302,12 +302,12 @@
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
-	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
-		message_admins("Rejected Ragin' Mages as there was a Civil War.")
-		return 0 //This is elegantly skipped by specific ruleset.
-		//This means that all ragin mages in CWC will be called only by that ruleset.
-	else
-		return ..()
+//	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
+//		message_admins("Rejected Ragin' Mages as there was a Civil War.")
+//		return 0 //This is elegantly skipped by specific ruleset.
+//		//This means that all ragin mages in CWC will be called only by that ruleset.
+//	else
+//		return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
 	if(wizardstart.len == 0)
