@@ -127,7 +127,6 @@
 	cost = 18
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 	high_population_requirement = 30
-	var/changeling_threshold = 1
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
