@@ -369,7 +369,7 @@
 	if(!hivemind)
 		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 		hivemind.OnPostSetup()
-	hivemind?.HandleRecruitedRole(newChangeling)
+	hivemind.HandleRecruitedRole(newChangeling)
 	return 1
 
 /datum/dynamic_ruleset/latejoin/changeling/previous_rounds_odds_reduction(var/result)
