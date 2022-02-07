@@ -125,7 +125,7 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 18
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 	var/changeling_threshold = 1
 
