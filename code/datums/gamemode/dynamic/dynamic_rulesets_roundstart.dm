@@ -217,7 +217,7 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
-	weight = BASE_RULESET_WEIGHT/2
+	weight = BASE_RULESET_WEIGHT
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -246,8 +246,7 @@
 	return ..()
 
 /datum/dynamic_ruleset/roundstart/wizard/execute()
-	var/mob/M = pick(assigned)
-	if (M)
+	for (var/mob/M in assigned)
 		var/datum/role/wizard/newWizard = new
 		M.forceMove(pick(wizardstart))
 		if(!isjusthuman(M))
