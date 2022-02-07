@@ -29,11 +29,11 @@
 	var/nutrienergy = 0											 //nutritive energy absorbed
 	var/maxnutrienergy = 200									   //max nutrienergy
 	var/moultcost = 0 											//nutritive energy needed to moult into next stage (irrelevant for adults)
-	var/ismoulting = 0 //currently moulting (1=is a chrysalis)
+	var/ismoulting = FALSE //currently moulting (TRUE=is a chrysalis)
 	var/moulttime = 30 //time required to moult to a new form (seconds)
 	var/moulttimer = 30 //moulting timer
-	var/hatched = 0			//whether or not this grue hatched from an egg
-	var/channeling = 0 // channeling an ability that costs nutrienergy or not
+	var/hatched = FALSE			//whether or not this grue hatched from an egg
+	var/channeling = FALSE // channeling an ability that costs nutrienergy or not
 
 	var/base_melee_dam_up = 5				//base melee damage upper
 	var/base_melee_dam_lw = 3				//base melee damage lower
@@ -43,7 +43,7 @@
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
 
-	var/busy=0 //busy attempting to lay an egg or eat
+	var/busy=FALSE //busy attempting to lay an egg or eat
 
 	var/eattime= 5 SECONDS //how long it takes to eat someone
 	var/digest = 0 //how many seconds of healing left after feeding
@@ -53,8 +53,8 @@
 	var/datum/grue_calc/grue/lightparams = new /datum/grue_calc/grue //used for light-related calculations
 
 	//AI related:
-	stop_automated_movement = 1 //has custom light-related wander movement
-	wander=0
+	stop_automated_movement = TRUE //has custom light-related wander movement
+	wander = FALSE
 
 
 /datum/grue_calc //used for light-related calculations
@@ -109,7 +109,7 @@
 			if(!G.ismoulting && !G.channeling)
 				G.nutrienergy = min(G.maxnutrienergy,G.nutrienergy+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
 		if(GRUE_LIGHT)
-			G.nutrienergy = max(0,G.nutrienergy-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0
+			G.nutrienergy = max(0,G.nutrienergy-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0)
 
 /datum/grue_calc/grue/proc/speed_adjust(var/mob/living/simple_animal/hostile/grue/G)
 	G.speed=G.base_speed*speed_m_dark_dim_light[dark_dim_light+1]
@@ -430,7 +430,7 @@
 		nutrienergy-=moultcost
 		visible_message("<span class='warning'>\The [src] morphs into a chrysalis...</span>","<span class='notice'>You begin moulting.</span>")
 		stat=UNCONSCIOUS //go unconscious while moulting
-		ismoulting=1
+		ismoulting=TRUE
 		moulttimer=moulttime//reset moulting timer
 		plane = MOB_PLANE //In case grue somehow moulted while hiding
 		var/tempHealth=health/maxHealth //to scale health level
@@ -464,7 +464,7 @@
 		lifestage_updates()
 		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
-		ismoulting=0 //is no longer moulting
+		ismoulting=FALSE //is no longer moulting
 		var/hintstring=""
 		if(lifestage==GRUE_JUVENILE)
 			hintstring="a juvenile, and can eat sentient beings to gain their strength"
@@ -507,14 +507,14 @@
 /mob/living/simple_animal/hostile/grue/proc/handle_reproduce()
 
 	if(eatencharge>=1)
-		busy=1
+		busy=TRUE
 		visible_message("<span class='warning'>\The [src] tightens up...</span>","<span class='notice'>You start to push out an egg...</span>")
 		if(do_after(src, src, 5 SECONDS))
 			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>","<span class='notice'>You lay an egg.</span>")
 			eatencharge--
 			var/mob/living/simple_animal/grue_egg/E = new /mob/living/simple_animal/grue_egg(get_turf(src))
 			E.parent_grue=src //mark this grue as the parent of the egg
-		busy=0
+		busy=FALSE
 
 	else
 		to_chat(src, "<span class='notice'>You need to feed more first.</span>")
@@ -557,7 +557,7 @@
 
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
 	visible_message("<span class='danger'>\The [src] opens its mouth wide...</span>","<span class='danger'>You open your mouth wide, preparing to eat \the [E]!</span>")
-	busy=1
+	busy=TRUE
 	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
 		to_chat(src, "<span class='danger'>You have eaten \the [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
@@ -577,7 +577,7 @@
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.gib()
-	busy=0
+	busy=FALSE
 
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = 0) //update stats, called by lifestage_updates() as well as handle_feed()
 
@@ -595,9 +595,9 @@
 
 	if(lifestage==GRUE_ADULT)
 		if(eatencount>=GRUE_WALLBREAK)
-			environment_smash_flags = environment_smash_flags | SMASH_WALLS
+			environment_smash_flags |= SMASH_WALLS
 		if(eatencount>=GRUE_RWALLBREAK)
-			environment_smash_flags = environment_smash_flags | SMASH_RWALLS
+			environment_smash_flags |= SMASH_RWALLS
 
 	if(feed_verbose)
 		var/wallhintstring="er"

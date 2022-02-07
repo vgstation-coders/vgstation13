@@ -12,9 +12,9 @@
 	faction = "grue" //Keep grues and grue eggs friendly to each other.
 
 	//keep it immobile
-	stop_automated_movement = 1
-	wander = 0
-	canmove=0
+	stop_automated_movement = TRUE
+	wander = FALSE
+	canmove = FALSE
 
 	//allow other mobs to walk onto the same tile
 	density = 0
@@ -23,8 +23,8 @@
 
 	var/mob/living/simple_animal/parent_grue														//which grue laid this egg, if any
 
-	var/grown = 0
-	var/hatching = 0 // So we don't spam ghosts.
+	var/grown = FALSE
+	var/hatching = FALSE // So we don't spam ghosts.
 	var/datum/recruiter/recruiter = null
 	var/child_prefix_index = 1
 	var/last_ping_time = 0
@@ -78,7 +78,7 @@
 /mob/living/simple_animal/grue_egg/proc/Grow()
 	if(stat==DEAD)
 		return
-	grown = 1
+	grown = TRUE
 	icon_state = "egg_living"
 	icon_living= "egg_living"
 	desc = "An egg laid by a grue. An embryo floats inside."
@@ -102,7 +102,7 @@
 	if(stat==DEAD)
 		return
 //	icon_state="egg_triggered"
-	hatching=1
+	hatching=TRUE
 	recruiter.request_player()
 
 /mob/living/simple_animal/grue_egg/proc/recruiter_recruiting(mob/dead/observer/player, controls)
@@ -122,13 +122,13 @@
 					G1.spawncount++
 
 		var/mob/living/simple_animal/hostile/grue/gruespawn/G = new(get_turf(src))
-		G.hatched = 1 //this grue hatched from an egg
+		G.hatched = TRUE //this grue hatched from an egg
 		G.transfer_personality(player.client)
 		// Play hatching noise here.
 		playsound(src.loc, 'sound/effects/splat.ogg', 50, 1)
 		src.death()
 	else
-		hatching = 0
+		hatching = FALSE
 		spawn (GRUE_EGG_RERECRUIT_DELAY)
 			Grow() // Reset egg, check for hatchability.
 
