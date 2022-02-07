@@ -102,6 +102,6 @@
 	update_faction_icons()
 
 	feedback_add_details("changeling_powers","SP")
-	recruiter.Destroy()
+	qdel(recruiter)
 
 
