@@ -273,7 +273,7 @@
 		voxhaircolorlist["azure"] = list(112, 126, 93)
 		voxhaircolorlist["emerald"] = list(65, 136, 98)
 		voxhaircolorlist["greenbrown"] = list(147, 126, 61)
-		
+
 		var/list/closest = ARBITRARILY_LARGE_NUMBER
 		var/voxcolor = 0
 		for(var/rgbcolorset in voxhaircolorlist)
@@ -283,7 +283,7 @@
 				closest = diff
 				var/haircolor = get_key_by_element(voxhaircolorlist, rgb)
 				voxcolor = voxhaircolorlist.Find(haircolor)
-		H.my_appearance.v_hair = voxcolor
+		H.my_appearance.r_hair = voxcolor
 	else
 		if(facial)
 			H.my_appearance.r_facial = color_r
