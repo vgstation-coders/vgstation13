@@ -361,6 +361,8 @@
 
 /datum/dynamic_ruleset/latejoin/changeling/execute()
 	var/mob/M = pick(assigned)
+	if(!latejoinprompt(M))
+		return 0
 	var/datum/role/changeling/newChangeling = new
 	newChangeling.AssignToRole(M.mind,1)
 	newChangeling.ForgeObjectives()
