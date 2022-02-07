@@ -30,8 +30,8 @@
 	var/maxnutrienergy = 200									   //max nutrienergy
 	var/moultcost = 0 											//nutritive energy needed to moult into next stage (irrelevant for adults)
 	var/ismoulting = FALSE //currently moulting (TRUE=is a chrysalis)
-	var/moulttime = 30 //time required to moult to a new form (seconds)
-	var/moulttimer = 30 //moulting timer
+	var/moulttime = 15 //time required to moult to a new form (life ticks)
+	var/moulttimer = 15 //moulting timer
 	var/hatched = FALSE			//whether or not this grue hatched from an egg
 	var/channeling = FALSE // channeling an ability that costs nutrienergy or not
 
@@ -45,10 +45,10 @@
 
 	var/busy=FALSE //busy attempting to lay an egg or eat
 
-	var/eattime= 5 SECONDS //how long it takes to eat someone
-	var/digest = 0 //how many seconds of healing left after feeding
-	var/digest_heal = -3 //how much health restored per second after feeding (negative heals)
-	var/digest_sp = 4 //how much nutritive energy gained per second after feeding
+	var/eattime= 3.5 SECONDS //how long it takes to eat someone
+	var/digest = 0 //how many life ticks of healing left after feeding
+	var/digest_heal = -7.5 //how much health restored per life tick after feeding (negative heals)
+	var/digest_sp = 10 //how much nutritive energy gained per life tick after feeding
 
 	var/datum/grue_calc/grue/lightparams = new /datum/grue_calc/grue //used for light-related calculations
 
@@ -245,11 +245,10 @@
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby))
-					INVOKE_EVENT(src, /event/before_move)
 					var/list/potential_dests=list() //any potential wander destinations
 					var/list/respite_dests=list() //any potential wander destinations leading out of the light into dark/dim
-					for(var/thiscardinal in 1 to cardinal.len)
-						var/potential_dest = get_step(src, cardinal[thiscardinal])
+					for(var/direction in cardinal)
+						var/potential_dest = get_step(src, direction)
 						if(lightparams.dark_dim_light==GRUE_LIGHT)//always prioritize wandering to a dark/dim tile if in light
 							if(get_ddl(potential_dest)<GRUE_LIGHT)
 								respite_dests+=potential_dest
@@ -260,9 +259,9 @@
 								potential_dests+=potential_dest
 					var/ourdest
 					if(respite_dests.len)
-						ourdest=(pick(respite_dests))
+						ourdest=pick(respite_dests)
 					else if(potential_dests.len)
-						ourdest=(pick(potential_dests))
+						ourdest=pick(potential_dests)
 					if(ourdest)
 						wander_move(ourdest)
 						turns_since_move = 0
@@ -402,7 +401,7 @@
 /mob/living/simple_animal/hostile/grue/proc/moult()
 	if(alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
 		if (lifestage<GRUE_ADULT)
-			if (nutrienergy<moultcost && !digest)
+			if (nutrienergy<moultcost && (digest*digest_sp<(moultcost-nutrienergy)))
 				to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 				return
 			if (nutrienergy<moultcost && digest)
@@ -562,7 +561,7 @@
 		to_chat(src, "<span class='danger'>You have eaten \the [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
-		digest+=25 //add 25 seconds of increased healing + nutrition gain
+		digest+=10 //add 10 life ticks (20 seconds) of increased healing + nutrition gain
 
 		//Upgrade the grue's stats as it feeds
 		if(E.mind) //eaten creature must have a mind to power up the grue
