@@ -343,7 +343,7 @@ For vending packs, see vending_packs.dm*/
 		if(!map.linked_to_centcomm)
 			to_chat(usr, "<span class='warning'>You aren't able to establish contact with central command, so the shuttle won't move.</span>")
 		else if(!SSsupply_shuttle.can_move())
-			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.</span>")
+			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport sapient organisms, classified nuclear weaponry or homing beacons.</span>")
 		else if(!check_restriction(usr))
 			to_chat(usr, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 

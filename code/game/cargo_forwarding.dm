@@ -204,7 +204,6 @@
     else
         ordertype = get_weighted_order()
     var/datum/centcomm_order/ourorder = new ordertype
-    worth = ourorder.worth
     containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
     acct_by_string = ourorder.acct_by_string
     for(var/i in ourorder.requested)
@@ -222,7 +221,12 @@
             if(istype(i,/obj/item/stack))
                 our_amount = 1
             for(var/j in 1 to our_amount)
-                contains += i
+                contains += i        
+        if(istype(ordertype,/datum/centcomm_order/per_unit))
+            var/datum/centcomm_order/per_unit/PU = ourorder
+            worth = PU.unit_prices[PU.unit_prices[i]] * amount
+        else
+            worth = ourorder.worth
     //Sadly cannot use switch here
     if(istype(ordertype,/datum/centcomm_order/department/engineering))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
