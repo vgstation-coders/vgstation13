@@ -45,7 +45,7 @@
 
 	var/busy=FALSE //busy attempting to lay an egg or eat
 
-	var/eattime= 3.5 SECONDS //how long it takes to eat someone
+	var/eattime= 5 SECONDS //how long it takes to eat someone
 	var/digest = 0 //how many life ticks of healing left after feeding
 	var/digest_heal = -7.5 //how much health restored per life tick after feeding (negative heals)
 	var/digest_sp = 10 //how much nutritive energy gained per life tick after feeding
