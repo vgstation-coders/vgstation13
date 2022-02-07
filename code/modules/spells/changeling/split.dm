@@ -10,15 +10,9 @@
 	required_dna = 2
 	max_genedamage = 0
 	horrorallowed = 0
-	var/datum/mind/owner = null // The mind of the user, to be used by the recruiter
+	var/datum/mind/owner // The mind of the user, to be used by the recruiter
 	var/datum/recruiter/recruiter = null
 	var/polling_ghosts = FALSE
-	
-/spell/changeling/split/Destroy()
-	owner = null
-	qdel(recruiter)
-	recruiter = null
-	..()
 
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
 	owner = user.mind
@@ -32,6 +26,7 @@
 /spell/changeling/split/proc/Splitting()
 	if(polling_ghosts)
 		return
+
 	polling_ghosts = TRUE
 	if(!recruiter)
 		recruiter = new(owner.current)
@@ -67,29 +62,30 @@
 		checkSplit(FALSE) 
 		polling_ghosts = FALSE
 		qdel(recruiter)
-		return
+		return FALSE
+		
 	var/turf/this_turf = get_turf(owner.current.loc)
 	var/mob/living/carbon/human/newbody = new(this_turf)
+	var/datum/role/changeling/newChangeling = new(newbody.mind)
 
+	polling_ghosts = FALSE
 	newbody.ckey = player.ckey
-	var/oldspecies = newbody.dna.species
 	newbody.dna = owner.current.dna.Clone()
+	newbody.set_species(newbody.dna.species, 0)
 	newbody.real_name = owner.current.real_name
 	newbody.name = owner.current.name
 	newbody.flavor_text = owner.current.flavor_text
 	newbody.mind.memory = owner.memory
 	newbody.UpdateAppearance()
-	if(oldspecies != newbody.dna.species)
-		newbody.set_species(newbody.dna.species, 0)
+
 	domutcheck(newbody, null)
-	var/datum/role/changeling/newChangeling = new(newbody.mind)
+	
 	newChangeling.OnPostSetup()
 	newChangeling.geneticdamage = 50
 
 	//Assign to the hivemind faction
 	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
 	hivemind.HandleRecruitedRole(newChangeling)
-
 	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_DEFAULT)
 	
