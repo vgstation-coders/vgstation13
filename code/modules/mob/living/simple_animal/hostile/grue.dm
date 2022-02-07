@@ -556,10 +556,10 @@
 //Eating sentient beings.
 
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
-	visible_message("<span class='danger'>\The [src] opens its mouth wide...</span>","<span class='danger'>You open your mouth wide, preparing to eat [E]!</span>")
+	visible_message("<span class='danger'>\The [src] opens its mouth wide...</span>","<span class='danger'>You open your mouth wide, preparing to eat \the [E]!</span>")
 	busy=1
 	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
-		to_chat(src, "<span class='danger'>You have eaten [E]!</span>")
+		to_chat(src, "<span class='danger'>You have eaten \the [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 		digest+=25 //add 25 seconds of increased healing + nutrition gain
