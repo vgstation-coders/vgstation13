@@ -666,7 +666,7 @@
 	..()
 
 	var/NM = time2text(world.realtime,"Month")
-	var/cookiecutter = null
+	var/cookiecutter
 
 	if(!cookiecutter)
 		switch(NM)
