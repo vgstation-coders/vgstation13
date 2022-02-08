@@ -19,11 +19,10 @@ var/global/datum/controller/vote/vote = new()
 /datum/html_interface/nanotrasen/vote/Topic(href, href_list[])
 	..()
 	if(href_list["html_interface_action"] == "onclose")
-		var/mob/user = usr
-		var/datum/html_interface_client/hclient = getClient(user.client)
+		var/datum/html_interface_client/hclient = getClient(usr.client)
 		if (istype(hclient))
 			src.hide(hclient)
-			vote.cancel_vote(user)
+			vote.cancel_vote(usr)
 
 
 /datum/controller/vote
