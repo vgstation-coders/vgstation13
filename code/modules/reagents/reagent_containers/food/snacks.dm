@@ -670,7 +670,7 @@
 
 	if(!cookiecutter)
 		switch(NM)
-			if(2)
+			if(02)
 				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
 			if(12)
 				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
@@ -689,7 +689,7 @@
 	reagents.add_reagent(SUGAR, 15)
 
 /obj/item/weapon/reagent_containers/food/snacks/candyheart
-	name = "candyheart"
+	name = "candy heart"
 	icon = 'icons/obj/food.dmi'
 
 /obj/item/weapon/reagent_containers/food/snacks/candyheart/New()
