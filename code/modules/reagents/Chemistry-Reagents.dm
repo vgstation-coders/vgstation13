@@ -9665,5 +9665,5 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
-		if(E && !istype(E, /datum/organ/internal/eyes/umbra)) //doesn't harm umbra eyes
+		if(E && !istype(E, /datum/organ/internal/eyes/umbra) && !E.robotic) //doesn't harm umbra or robotic eyes
 			E.damage += 0.5
