@@ -413,7 +413,6 @@
 /obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/weapon/soap))
-		to_chat(user, "<span class='notice'>You place \the [W] into \the [src].</span>")
 		if(do_after(user, src, 1 SECONDS))
 			user.drop_item(src)
 			if(!user.drop_item(W))
@@ -426,9 +425,9 @@
 			W.forceMove(I)
 			src.forceMove(I)
 			user.put_in_hands(I)
+			to_chat(user, "<span class='notice'>You place \the [W] into \the [src].</span>")
 	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
 		var/obj/item/stack/sheet/mineral/brick/S = W
-		to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
 		if(do_after(user, src, 1 SECONDS))
 			user.drop_item(src)
 			if(!user.drop_item(S))
@@ -440,6 +439,7 @@
 			I.base_sock = src
 			src.forceMove(I)
 			user.put_in_hands(I)
+			to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
 
 /obj/item/clothing/shoes/jestershoes
 	name = "Jester Shoes"
