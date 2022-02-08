@@ -661,7 +661,7 @@ var/stacking_limit = 90
 	
 	if(living_players.len) //if anybody is around and alive in the current round
 		last_time_of_population = world.time
-	if(last_time_of_population && world.time - last_time_of_population > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without it
+	else if(last_time_of_population && world.time - last_time_of_population > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without it
 		ticker.station_nolife_cinematic()
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
