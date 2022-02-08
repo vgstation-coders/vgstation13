@@ -665,16 +665,16 @@
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
 	..()
 
-	var/NM = time2text(world.realtime,"MM")
+	var/NM = time2text(world.realtime,"Month")
 	var/cookiecutter = null
 
 	if(!cookiecutter)
 		switch(NM)
-			if(02)
+			if("February")
 				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
-			if(12)
+			if("December")
 				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
-			if(10)
+			if("October")
 				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
 			else
 				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
