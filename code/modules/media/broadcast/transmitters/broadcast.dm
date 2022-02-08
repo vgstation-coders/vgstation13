@@ -252,7 +252,7 @@
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on && anchored)
-		if(integrity<=0 || count_rad_wires()==0) //Shut down if too damaged OR if no rad wires
+		if(integrity<=0 || count_rad_wires()==0 || power_connection.get_satisfaction() < 1.0) //Shut down if too damaged, no rad wires or not properly powered
 			on=0
 			update_on()
 

@@ -10,7 +10,7 @@
 	//For powernet rebuilding
 	var/channel = EQUIP // EQUIP, ENVIRON or LIGHT.
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
-	var/connected = 0
+	var/connected = FALSE
 	var/datum/powernet/powernet = null
 
 	var/power_priority = POWER_PRIORITY_NORMAL
@@ -153,30 +153,31 @@
 	parent_area.use_power(amount, chan)
 
 // connect the machine to a powernet if a node cable is present on the turf
-/datum/power_connection/proc/connect()
+/datum/power_connection/proc/connect(var/obj/structure/cable/C)
 	var/turf/T = get_turf(parent)
 
 	if (!T)
-		return 0
+		return FALSE
 
-	var/obj/structure/cable/C = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
+	if (!C)
+		C = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
 
 	if(!C || !C.get_powernet())
-		return 0
+		return FALSE
 
 	C.powernet.add_connection(src)
-	connected=1
-	return 1
+	connected = TRUE
+	return TRUE
 
 // remove and disconnect the machine from its current powernet
 /datum/power_connection/proc/disconnect()
-	connected=0
+	connected = FALSE
 	if(!get_powernet())
 		build_status = 0
-		return 0
+		return FALSE
 
 	powernet.remove_component(src)
-	return 1
+	return TRUE
 
 // returns all the cables WITHOUT a powernet in neighbors turfs,
 // pointing towards the turf the machine is located at
@@ -308,36 +309,38 @@
 	add_load(watts)
 
 // connect the machine to a powernet if a node cable is present on the turf
-/datum/power_connection/consumer/cable/connect()
+/datum/power_connection/consumer/cable/connect(var/obj/structure/cable/C)
 	// OVERRIDES!
 	var/turf/T = get_turf(parent)
 
 	if (!T)
-		return 0
+		return FALSE
 
-	cable = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
+	if (!C)
+		C = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
 
-	if(!cable || !cable.get_powernet())
-		return 0
+	if(!C || !C.get_powernet())
+		return FALSE
 
+	cable = C
 	cable.powernet.add_connection(src)
-	connected=1
-	return 1
+	connected = TRUE
+	return TRUE
 
 
 // returns true if a machine can be powered through this cable
 /datum/power_connection/consumer/cable/powered(chan = channel)
 	if(!parent || !parent.loc)
-		return 0
+		return FALSE
 
 	// If you're using a consumer, you need power.
 	//if(use_power == MACHINE_POWER_USE_NONE)
 	//	return 1
 
 	if(isnull(powernet) || !powernet || !cable)
-		return 0						// if not, then not powered.
+		return FALSE					// if not, then not powered.
 
 	if((machine_flags & FIXED2WORK) && !parent.anchored)
-		return 0
+		return FALSE
 
-	return 1 // We have a powernet and a cable, so we're okay.
+	return TRUE // We have a powernet and a cable, so we're okay.

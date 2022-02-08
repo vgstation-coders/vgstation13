@@ -466,6 +466,7 @@
 	var/obj/item/weapon/cell/cell = null
 	var/datum/power_connection/consumer/cable/power_connection = null
 	var/latched = 0
+	var/draining = 0 //How much we're attempting to drain from the powernet
 
 /mob/living/simple_animal/hostile/syphoner/New()
 	. = ..()
@@ -530,9 +531,9 @@
 		if(latched && locked_to && locked_to == C)
 			var/datum/powernet/PN = power_connection.get_powernet()
 			if(cell && PN && PN.avail > 0 && cell.percent() < 100)
-				var/drained = min (rand(500,1500), PN.avail )
-				power_connection.add_load(drained)
-				cell.give(drained/10)
+				cell.give(draining * power_connection.get_satisfaction()/10)
+				draining = rand(500,1500)
+				power_connection.add_load(draining)
 			else
 				visible_message("<span class = 'notice'>\The [src] detaches from \the [C]</span>")
 				unlatch()
@@ -561,7 +562,8 @@
 		return
 	latched = 1
 	A.lock_atom(src, /datum/locking_category/cable_lock)
-	power_connection.connect()
+	if (istype(A, /obj/structure/cable))
+		power_connection.connect(A)
 	update_icon()
 
 /mob/living/simple_animal/hostile/syphoner/death(var/gibbed = FALSE)
