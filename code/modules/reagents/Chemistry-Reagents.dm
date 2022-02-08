@@ -7084,6 +7084,14 @@
 	M.drowsyness = max(0, M.drowsyness - 7)
 	M.Jitter(1)
 
+/datum/reagent/ethanol/drink/pinklady
+	name = "Pink Lady"
+	id = PINKLADY
+	description = "A pink alcoholic beverage made primarily from gin."
+	color = "#ff6a8f"
+	glass_icon_state = "pinklady"
+	glass_desc = "A delightful blush-pink cocktail, garnished with a cherry and the rind of a lemon."
+
 /////////////////////////////////////////////////////////////////Cocktail Entities//////////////////////////////////////////////
 
 /datum/reagent/ethanol/drink/bilk
@@ -9657,5 +9665,5 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
-		if(E && !istype(E, /datum/organ/internal/eyes/umbra)) //doesn't harm umbra eyes
+		if(E && !istype(E, /datum/organ/internal/eyes/umbra) && !E.robotic) //doesn't harm umbra or robotic eyes
 			E.damage += 0.5
