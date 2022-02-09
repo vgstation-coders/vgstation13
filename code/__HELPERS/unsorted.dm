@@ -795,7 +795,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 
 // Returns TRUE if the checks passed
-/proc/do_after_default_checks(mob/living/carbon/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+/proc/do_after_default_checks(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	if(!user)
 		return FALSE
 	if(user.isStunned())
