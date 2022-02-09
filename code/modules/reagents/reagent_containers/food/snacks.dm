@@ -668,16 +668,15 @@
 	var/NM = time2text(world.realtime,"Month")
 	var/cookiecutter
 
-	if(!cookiecutter)
-		switch(NM)
-			if("February")
-				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
-			if("December")
-				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
-			if("October")
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
-			else
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+	switch(NM)
+		if("February")
+			cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+		if("December")
+			cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
+		if("October")
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+		else
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
 	icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
