@@ -49,7 +49,7 @@
 				user.languages += tongue
 				qdel(src)
 
-/obj/item/dictionary/proc/on_do_after(mob/user, dir, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+/obj/item/dictionary/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	if(prob(35))
 		practice(user)
 	return do_after_default_checks(arglist(args))
