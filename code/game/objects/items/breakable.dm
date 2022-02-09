@@ -6,7 +6,6 @@
 //Break upon being bitten
 //Break upon being used AS a weapon
 //Getting hurt when holding an item as it breaks
-//Break upon being shot by, and blocking or slowing, a projectile, if density = TRUE
 //Damage considerations for the strength of the weapon wielder
 //Make breakability into a component
 //Generalize to /obj
@@ -44,7 +43,7 @@
 
 /obj/item/proc/drop_fragments(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Separate proc in case special stuff happens with a given item's fragments. Parameters are for throwing the fragments.
 	if(breakable_fragments.len)
-		var/oneeach=(isnull(fragment_amounts || breakable_fragments.len != fragment_amounts.len)) //default to 1 of each fragment type if fragement_amounts isn't specified or there's a length mismatch
+		var/oneeach=(isnull(fragment_amounts) || breakable_fragments.len != fragment_amounts.len) //default to 1 of each fragment type if fragement_amounts isn't specified or there's a length mismatch
 		var/numtodrop
 		var/thisfragment
 		for(var/frag_ind in 1 to breakable_fragments.len)
@@ -187,6 +186,10 @@
 #define W_CLASS_GIANT 20
 */
 
+
+//TODO: fix bullet marks on the floor when it hits an item
+
+
 //Item being hit by a projectile
 
 /obj/item/bullet_act(var/obj/item/projectile/proj)
@@ -195,7 +198,8 @@
 		take_damage(proj.damage)
 		var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (w_class ** 3)))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the weight class of the item.
 		if(impact_power)
-			throw_at(proj.original, impact_power, proj.projectile_speed)
+			//Throw the item in the direction the projectile was traveling
+			throw_at(get_edge_target_turf(loc, proj.dir), impact_power, proj.projectile_speed)
 		else
 			break_item()
 
@@ -345,6 +349,7 @@
 	damage_armor = 0
 	damage_resist = 0
 	breaks_text = "falls apart into dust"
+	density = 1
 	breakable_fragments = list(/obj/item/weapon/pen/fountain/test, /obj/item/weapon/kitchen/utensil/knife/)
 	fragment_amounts = list(1,3)
 
@@ -357,6 +362,7 @@
 	damaged_examine_text = "Somehow it has a crack in it..."
 	damage_armor = BREAKARMOR_INVINCIBLE
 	damage_resist = 0
+	density = 1
 	breaks_text = "implodes"
 	breakable_fragments = list(/obj/item/weapon/reagent_containers/food/snacks/hotdog)
 
