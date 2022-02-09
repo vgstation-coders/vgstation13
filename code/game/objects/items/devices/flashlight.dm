@@ -93,7 +93,7 @@
 					M.flash_eyes(visual = 1)
 					to_chat(user, "<span class='notice'>[M]'s pupils narrow.</span>")
 			if(M.times_cloned)
-				to_chat(user, "<span class='notice'>[src] highlights [M.times_cloned] dots on [M]'s sclerae!</span>")
+				to_chat(user, "<span class='notice'>[src] highlights [M.times_cloned] dot[M.times_cloned != 1 ? "s" : ""] on [M]'s sclerae!</span>")
 	else
 		return ..()
 
