@@ -24,14 +24,15 @@
 	//Destructability parameters:
 	var/breakable_flags = 0 /*possible flags include BREAKABLE_ALL | BREAKABLE_HIT | BREAKABLE_MELEE_UNARMED | BREAKABLE_MELEE_WEAPON | BREAKABLE_THROW
 							BREAKABLE_HIT encompasses both BREAKABLE_MELEE_UNARMED and BREAKABLE_MELEE_WEAPON */
-	var/health_item= 15 //structural integrity of the item. at 0, the item breaks.
+	var/health_item= 15 //Structural integrity of the item. at 0, the item breaks.
 	var/health_item_max= 15
-	var/damage_armor = 5 //attacks of this much damage or below will glance off
-	var/damage_resist = 5 //attacks stronger than damage_armor will have their damage reduced by this much
+	var/damage_armor = 5 //Attacks of this much damage or below will glance off
+	var/damage_resist = 5 //Attacks stronger than damage_armor will have their damage reduced by this much
 	var/damaged_examine_text	//Addendum to the description when it's damaged eg. damaged_examine_text of "It is dented." null will skip this addendum.
-	var/take_hit_text //Message when the item is damaged but not fully broken. eg. "chipping" becomes "..., chipping it!"
+	var/take_hit_text 	//String or list of strings when the item is damaged but not fully broken. eg. "chipping" becomes "..., chipping it!"
 	var/breaks_text		//Visible message when the items breaks. eg. "breaks apart" null skips this.
-	var/breaks_sound	//path to audible sound when the item breaks. null skips this.
+	var/breaks_sound	//Path to audible sound when the item breaks. null skips this.
+	var/glances_text	//String or list of strings when the item is attacked but the attack glances off. eg. "bounces" becomes "but it bounces off!"
 	var/list/breakable_fragments //List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
 
@@ -65,8 +66,7 @@
 	..()
 	if(health_item<health_item_max && damaged_examine_text)
 		user.simple_message("<span class='info'> [damaged_examine_text]</span>",\
-			"<span class='info'> It seems kinda messed up somehow.</span>")
-
+			"<span class='notice'> It seems kinda messed up somehow.</span>")
 /obj/item/proc/transfer_item_blood_data(obj/item/A,obj/item/B)	//Transfers blood data from one item to another.
 	if(!A || !B)
 		return
@@ -90,10 +90,12 @@
 	if(glanced)
 		if(suppress_glance_text)
 			return "!"
+		else if(glances_text)
+			return ", but it [pick(glances_text)] off!"
 		else
 			return ", but it [pick("bounces","gleams","glances")] off!"
 	else if(health_item > 0 && !isnull(take_hit_text))
-		return ", [take_hit_text] it!"
+		return ", [pick(take_hit_text)] it!"
 	else
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The item shatters!"
 
@@ -266,7 +268,7 @@
 	health_item_max = 30
 	damaged_examine_text = "It has gone bad."
 	breaks_text = "crumbles apart"
-	take_hit_text ="cracking"
+	take_hit_text = "cracking"
 	breaks_sound = 'sound/misc/balloon_pop.ogg'
 	breakable_fragments = list(/obj/item/weapon/shard, /obj/item/weapon/reagent_containers/food/snacks/hotdog, /obj/item/weapon/reagent_containers/food/snacks/hotdog)
 
@@ -278,7 +280,7 @@
 	health_item_max = 30
 	damaged_examine_text = "It's seen better days."
 	breaks_text = "splinters into little bits"
-	take_hit_text = "denting"
+	take_hit_text = list("denting","cracking")
 	breaks_sound = 'sound/items/trayhit1.ogg'
 	breakable_fragments = list(/obj/item/weapon/shard, /obj/item/weapon/kitchen/utensil/knife/large/test)
 
