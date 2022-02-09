@@ -1805,9 +1805,9 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 //Breakable items
 #define BREAKABLE_ALL 15			//Item can break by being hit, or when used to hit something as a melee or a thrown weapon.
-#define BREAKABLE_MELEE	3			//Item can break by being hit with either an unarmed attack or a weapon.
-#define BREAKABLE_MELEE_UNARMED 1	//Item can break by being hit with an empty hand, kick, etc.
-#define BREAKABLE_MELEE_WEAPON 2	//Item can break by being hit with a weapon.
+#define BREAKABLE_HIT	3			//Item can break by being hit with either an unarmed attack or a weapon.
+#define BREAKABLE_UNARMED 1			//Item can break by being hit with an unarmed attack.
+#define BREAKABLE_WEAPON 2			//Item can break by being hit with a weapon. This includes projectiles.
 #define BREAKABLE_AS_ALL 12			//Item can break when it's used as a melee weapon, or when it ballistically collides with something.
 #define BREAKABLE_AS_THROWN 4		//Item can break when it ballistically collides with something.
 #define BREAKABLE_AS_MELEE 8		//Item can break when it's used as a melee weapon to hit something.
