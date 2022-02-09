@@ -3,27 +3,24 @@
 /////////////////////
 //Areas for expansion:
 /////////////////////
-//Specify multiple copies of a given fragment type with a number
 //Break upon being bitten
 //Break upon being used AS a weapon
 //Getting hurt when holding an item as it breaks
-//Hurting yourself when hitting an item bare-handed
 //Break upon being shot by, and blocking or slowing, a projectile, if density = TRUE
 //Damage considerations for the strength of the weapon wielder
 //Make breakability into a component
-//Specifying glance text
 //Generalize to /obj
 //Sounds when the item is hit.
 //If the item has contents or reagents or components, spill them when it breaks
-//Generalize momentum transfer from thrown item to fragments, out of kick-specific context.
 //Integrate existing shrapnel system into fragments.
+//Integrate with existing health system for other things like closets.
 /////////////////////
 
 /obj/item
 
 	//Destructability parameters:
-	var/breakable_flags = 0 /*possible flags include BREAKABLE_ALL | BREAKABLE_HIT | BREAKABLE_MELEE_UNARMED | BREAKABLE_MELEE_WEAPON | BREAKABLE_THROW
-							BREAKABLE_HIT encompasses both BREAKABLE_MELEE_UNARMED and BREAKABLE_MELEE_WEAPON */
+	var/breakable_flags = 0 /*possible flags include BREAKABLE_ALL | BREAKABLE_HIT | BREAKABLE_UNARMED | BREAKABLE_WEAPON | BREAKABLE_THROW
+							BREAKABLE_HIT encompasses both BREAKABLE_UNARMED and BREAKABLE_WEAPON */
 	var/health_item= 15 //Structural integrity of the item. at 0, the item breaks.
 	var/health_item_max= 15
 	var/damage_armor = 5 //Attacks of this much damage or below will glance off
@@ -135,7 +132,7 @@
 	if(isobserver(user) || !Adjacent(user) || user.is_in_modules(src))
 		return
 
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_MELEE_WEAPON)
+	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON)
 		if(!isnull(breakable_exclude)) //Check that the weapon isn't specifically excluded from hitting this item
 			for(var/obj/item/this_excl in breakable_exclude)
 				if(istype(W,this_excl))
@@ -155,7 +152,7 @@
 
 //Simple animals attacking the item
 /obj/item/attack_animal(mob/living/simple_animal/M)
-	if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_MELEE_UNARMED)
+	if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_UNARMED)
 		M.do_attack_animation(src, M)
 		M.delayNextAttack(1 SECONDS)
 		var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper))
@@ -178,6 +175,14 @@
 			take_damage(speed/2)
 		else
 			take_damage(speed)
+		break_item()
+
+//Item being hit by a projectile
+
+/obj/item/bullet_act(var/obj/item/projectile/proj)
+	. = ..()
+	if(breakable_flags & BREAKABLE_WEAPON)
+		take_damage(proj.damage)
 		break_item()
 
 
