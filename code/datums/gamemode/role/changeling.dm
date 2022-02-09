@@ -61,7 +61,7 @@
 	to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Changeling.</span>")
 	to_chat(antag.current, "<span class='danger'>Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</span>")
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-	if (antag.current.mind && (antag.current.mind.assigned_role == "Clown" || antag.current.mind.assigned_role == "Jester"))
+	if (antag.current.mind && (antag.current.mind.assigned_role == "Clown")
 		to_chat(antag.current, "You have evolved beyond your clownish nature, allowing you to wield weapons without harming yourself.")
 		antag.current.mutations.Remove(M_CLUMSY)
 
