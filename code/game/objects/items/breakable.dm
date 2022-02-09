@@ -177,13 +177,27 @@
 			take_damage(speed)
 		break_item()
 
+/*
+//WEIGHT CLASSES
+#define W_CLASS_TINY 1
+#define W_CLASS_SMALL 2
+#define W_CLASS_MEDIUM 3
+#define W_CLASS_LARGE 4
+#define W_CLASS_HUGE 5
+#define W_CLASS_GIANT 20
+*/
+
 //Item being hit by a projectile
 
 /obj/item/bullet_act(var/obj/item/projectile/proj)
 	. = ..()
 	if(breakable_flags & BREAKABLE_WEAPON)
 		take_damage(proj.damage)
-		break_item()
+		var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (w_class ** 3)))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the weight class of the item.
+		if(impact_power)
+			throw_at(proj.original, impact_power, proj.projectile_speed)
+		else
+			break_item()
 
 
 

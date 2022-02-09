@@ -1274,7 +1274,7 @@ var/global/list/image/blood_overlays = list()
 
 	//Attempt to damage the item if it's breakable here.
 	var/glanced
-	if(breakable_flags & BREAKABLE_MELEE_UNARMED)
+	if(breakable_flags & BREAKABLE_UNARMED)
 		glanced=!take_damage(kick_power)
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
