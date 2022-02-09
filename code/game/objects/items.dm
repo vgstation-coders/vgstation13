@@ -1272,21 +1272,35 @@ var/global/list/image/blood_overlays = list()
 
 	var/kick_power = max((H.get_strength() * 10 - (w_class ** 2)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
 
-	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
+	//Attempt to damage the item if it's breakable here.
+	var/glanced
+	var/broken
+	if(breakable_flags & BREAKABLE_MELEE_UNARMED)
+		glanced=!take_damage(kick_power)
+		if(health_item<=0)
+			broken=TRUE
+	else
+		broken=FALSE
+
+	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
 
 	if(kick_power > 6) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
 			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
-
 			while(loc)
 				if(!throwing)
 					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
 					break
 				sleep(5)
-
+		if(!broken)
+			throw_at(T, kick_power, 1)
+		else
+			break_item(T, kick_power, 1) //Break the item and pass the kick parameters into it to propel the fragments.
+	else
+		break_item() //Check for the item breaking anyway even if it didn't get propelled.
 	Crossed(H) //So you can't kick shards while naked without suffering
-	throw_at(T, kick_power, 1)
+
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
