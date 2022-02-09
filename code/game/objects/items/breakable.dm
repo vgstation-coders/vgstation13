@@ -107,6 +107,13 @@
 	else
 		return FALSE //Return FALSE if the item wasn't broken
 
+/obj/item/throw_at(var/atom/target, var/range, var/speed, var/override , var/fly_speed) //Called when an item is thrown, and checks if it's broken or not. If it is broken the fragments are thrown instead, otherwise the item is thrown normally.
+	if(breakable_flags && break_item(target,range,speed,override,fly_speed))
+		return
+	else
+		..()
+
+
 /////////////////////
 
 //Breaking items:

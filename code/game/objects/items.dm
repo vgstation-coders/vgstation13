@@ -1274,13 +1274,8 @@ var/global/list/image/blood_overlays = list()
 
 	//Attempt to damage the item if it's breakable here.
 	var/glanced
-	var/broken
 	if(breakable_flags & BREAKABLE_MELEE_UNARMED)
 		glanced=!take_damage(kick_power)
-		if(health_item<=0)
-			broken=TRUE
-	else
-		broken=FALSE
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
 
@@ -1293,10 +1288,7 @@ var/global/list/image/blood_overlays = list()
 					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
 					break
 				sleep(5)
-		if(!broken)
-			throw_at(T, kick_power, 1)
-		else
-			break_item(T, kick_power, 1) //Break the item and pass the kick parameters into it to propel the fragments.
+		throw_at(T, kick_power, 1)
 	else
 		break_item() //Check for the item breaking anyway even if it didn't get propelled.
 	Crossed(H) //So you can't kick shards while naked without suffering
