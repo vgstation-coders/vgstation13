@@ -7,7 +7,7 @@
 	cooldown_min = 30 SECONDS
 	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
 	chemcost = 40
-	required_dna = 2
+	required_dna = 1
 	max_genedamage = 0
 	horrorallowed = 0
 	var/datum/mind/owner = null // The mind of the user, to be used by the recruiter
@@ -23,7 +23,7 @@
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
-	if (changeling.splitcount < 2) //two splits max
+	if (changeling.splitcount < 1)
 		user.visible_message("[user] is preparing to generate a new form.")
 		Splitting()
 	else
