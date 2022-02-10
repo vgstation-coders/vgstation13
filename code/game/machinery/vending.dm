@@ -180,7 +180,9 @@ var/global/num_vending_terminals = 1
 	if(wires)
 		qdel(wires)
 		wires = null
+	..()
 
+/obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
 		if(is_custom_machine)
 			var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
@@ -200,7 +202,6 @@ var/global/num_vending_terminals = 1
 
 	if(coinbox)
 		coinbox.forceMove(get_turf(src))
-	..()
 
 /obj/machinery/vending/examine(var/mob/user)
 	..()
@@ -315,10 +316,12 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/ex_act(severity)
 	switch(severity)
 		if(1.0)
+			dump_vendpack_and_coinbox()
 			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
+				dump_vendpack_and_coinbox()
 				qdel(src)
 				return
 		if(3.0)
@@ -330,6 +333,7 @@ var/global/num_vending_terminals = 1
 	if(prob(75))
 		malfunction()
 	else
+		dump_vendpack_and_coinbox()
 		qdel(src)
 
 /obj/machinery/vending/emp_act(severity)
