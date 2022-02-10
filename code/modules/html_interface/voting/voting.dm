@@ -166,8 +166,8 @@ var/global/datum/controller/vote/vote = new()
 				feedbackanswer = winner
 				feedback_set("map vote winner", feedbackanswer)
 			else
-				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
-		text += "<b>Vote Result: [.] won with [greatest_votes] vote\s.</b>"
+				feedback_set("map vote tie", "[feedbackanswer] chosen: [winner]")
+		text += "<b>Vote Result: [winner] won with [greatest_votes] vote\s.</b>"
 		for(var/c in tally)
 			if(winner != c)
 				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
