@@ -1270,7 +1270,7 @@ var/global/list/image/blood_overlays = list()
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 
-	var/kick_power = max((H.get_strength() * 10 - (w_class ** 2)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+	var/kick_power = max((H.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
 
 	//Attempt to damage the item if it's breakable here.
 	var/glanced

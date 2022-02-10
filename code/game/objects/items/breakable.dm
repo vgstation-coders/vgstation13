@@ -1,16 +1,22 @@
 //Breakable items
 
 /////////////////////
-//Areas for expansion:
+//Todo:
 /////////////////////
 //Break upon being bitten
 //Break upon being used AS a weapon
 //Getting hurt when holding an item as it breaks
+//Sounds when the item is hit.
+//If the item has reagents or components, spill them when it breaks
+//Stop conflict with hitting a box and also putting the item into the box.
+/////////////////////
+//
+/////////////////////
+//Areas for expansion:
+/////////////////////
 //Damage considerations for the strength of the weapon wielder
 //Make breakability into a component
 //Generalize to /obj
-//Sounds when the item is hit.
-//If the item has contents or reagents or components, spill them when it breaks
 //Integrate existing shrapnel system into fragments.
 //Integrate with existing health system for other things like closets.
 /////////////////////
@@ -34,8 +40,8 @@
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
 
 /obj/item/proc/on_broken(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Called right before an object breaks.
-	if(breakable_fragments.len)
-		drop_fragments(target,range,speed,override,fly_speed)
+	drop_fragments(target,range,speed,override,fly_speed)
+	drop_contents(target,range,speed,override,fly_speed)
 	if(breaks_text)
 		visible_message("<span class='warning'>\The [src] [breaks_text]!</span>")
 	if(breaks_sound)
@@ -59,6 +65,14 @@
 				transfer_item_blood_data(src,O)
 				if(target && range && speed) //Propel the fragment if specified.
 					O.throw_at(target,range,speed,override,fly_speed)
+
+/obj/item/proc/drop_contents(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Drop the contents of the item and propel them if the item itself received a propulsive blow.
+	if(contents.len)
+		for(var/obj/item/thiscontent in contents)
+			thiscontent.loc = src.loc
+			if(target && range && speed) //Propel the content if specified.
+				thiscontent.throw_at(target,range,speed,override,fly_speed)
+
 
 
 
@@ -121,7 +135,6 @@
 	else
 		..()
 
-
 /////////////////////
 
 //Breaking items:
@@ -144,7 +157,7 @@
 		break_item()
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE)
-			W.take_damage(W.force)
+			W.take_damage(min(W.force, BREAKARMOR_MEDIUM)) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
 			W.break_item()
 	else
 		..()
@@ -170,38 +183,36 @@
 		return
 	if(isturf(loc))
 		//Unless the item falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
+		var/thisdmg = 5 * w_class / speed //impact damage scales with the weight class and speed of the item. since a smaller speed is faster, it's a divisor.
 		if(istype(hit_atom, /turf/simulated/floor))
-			take_damage(speed/2)
+			take_damage(thisdmg/2)
 		else
-			take_damage(speed)
+			take_damage(thisdmg)
 		break_item()
-
-/*
-//WEIGHT CLASSES
-#define W_CLASS_TINY 1
-#define W_CLASS_SMALL 2
-#define W_CLASS_MEDIUM 3
-#define W_CLASS_LARGE 4
-#define W_CLASS_HUGE 5
-#define W_CLASS_GIANT 20
-*/
-
-
-//TODO: fix bullet marks on the floor when it hits an item
-
 
 //Item being hit by a projectile
 
 /obj/item/bullet_act(var/obj/item/projectile/proj)
-	. = ..()
+	.=..()
 	if(breakable_flags & BREAKABLE_WEAPON)
 		take_damage(proj.damage)
-		var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (w_class ** 3)))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the weight class of the item.
-		if(impact_power)
-			//Throw the item in the direction the projectile was traveling
-			throw_at(get_edge_target_turf(loc, proj.dir), impact_power, proj.projectile_speed)
-		else
-			break_item()
+	var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (get_total_scaled_w_class(3))))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the total weight class of the item.
+	if(impact_power)
+		//Throw the item in the direction the projectile was traveling
+		var/propel_dir = get_dir(proj.starting, proj.target)
+		var/turf/T = get_edge_target_turf(loc, propel_dir)
+		throw_at(T, impact_power, proj.projectile_speed)
+	else if(breakable_flags & BREAKABLE_WEAPON)
+		break_item()
+
+/obj/item/proc/get_total_scaled_w_class(var/scalepower=3) //Returns a scaled sum of the weight class of the item itself and all of its contents, if any.
+	//scalepower raises the w_class of each item to that exponent before adding it to the total. This helps avoid things like a container full of tiny objects being heavier than it should.
+	var/total_w_class = (w_class ** scalepower)
+	if(!isnull(contents) && contents.len)
+		for(var/obj/item/thiscontent in contents)
+			total_w_class += (thiscontent.w_class ** scalepower)
+	return total_w_class
+
 
 
 
@@ -365,6 +376,42 @@
 	density = 1
 	breaks_text = "implodes"
 	breakable_fragments = list(/obj/item/weapon/reagent_containers/food/snacks/hotdog)
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/test
+	name = "huge breakable flask"
+	desc = "A huge flask that could break at any time, under the right conditions."
+	breakable_flags = BREAKABLE_ALL
+	health_item = 1
+	health_item_max = 1
+	damaged_examine_text = "It has a big crack down the side."
+	damage_armor = BREAKARMOR_NOARMOR
+	damage_resist = 0
+	density = 1
+	breaks_text = "shatters"
+
+/obj/item/weapon/storage/box/survival/test
+	name = "breakable survival box"
+	desc = "A box that holds survival equipment, but is also somewhat fragile."
+	icon_state = "box_emergency"
+	item_state = "box_emergency"
+	breakable_flags = BREAKABLE_ALL
+	health_item = 10
+	health_item_max = 10
+	density = 1
+	damaged_examine_text = "It's all banged up."
+	damage_armor = BREAKARMOR_NOARMOR
+	damage_resist = 0
+	breaks_text = "blows apart"
+//	breakable_fragments = list(/obj/item/weapon/storage/box/survival/test)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
+		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
+		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
+	)
+
+
+
+
 
 
 /////////////////////
