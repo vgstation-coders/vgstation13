@@ -1,41 +1,27 @@
-//Breakable items
-
 /////////////////////
-//Todo:
-/////////////////////
-//Break upon being used AS a weapon
-//Sounds when the item is hit.
-/////////////////////
-//
-/////////////////////
-//Areas for expansion:
-/////////////////////
-//Damage considerations for the strength of the weapon wielder
-//Getting hurt when holding an item as it breaks
-//Getting hurt when kicking or biting an item and also accounting for it breaking
-//Make breakability into a component
-//Generalize to /obj
-//Integrate existing shrapnel system into fragments.
-//Integrate with existing health system for other things like closets.
+// Breakable Items //
+//  by Hinaichigo  //
 /////////////////////
 
 /obj/item
 
-	//Destructability parameters:
-	var/breakable_flags = 0 /*possible flags include BREAKABLE_ALL | BREAKABLE_HIT | BREAKABLE_UNARMED | BREAKABLE_WEAPON | BREAKABLE_THROW
-							BREAKABLE_HIT encompasses both BREAKABLE_UNARMED and BREAKABLE_WEAPON */
-	var/health_item= 15 //Structural integrity of the item. at 0, the item breaks.
+	//Breakability:
+	var/breakable_flags = 0 /*Possible flags include BREAKABLE_ALL, BREAKABLE_HIT, BREAKABLE_UNARMED, BREAKABLE_WEAPON, BREAKABLE_AS_ALL, BREAKABLE_AS_THROWN, BREAKABLE_AS_MELEE, and BREAKABLE_NOMOB.
+							See setup.dm for explanations of each.*/
+	var/health_item= 15 //Structural integrity of the item. At 0, the item breaks.
 	var/health_item_max= 15
-	var/damage_armor = 5 //Attacks of this much damage or below will glance off
-	var/damage_resist = 5 //Attacks stronger than damage_armor will have their damage reduced by this much
+	var/damage_armor = BREAKARMOR_WEAK //Attacks of this much damage or below will glance off
+	var/damage_resist = BREAKARMOR_WEAK //Attacks stronger than damage_armor will have their damage reduced by this much
+	//Fragmentation:
 	var/list/breakable_fragments //List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard.
-	var/list/fragment_amounts //List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakabe_fragments
+	var/list/fragment_amounts //List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakable_fragments
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
 	//Text:
-	var/damaged_examine_text	//Addendum to the description when it's damaged eg. damaged_examine_text of "It is dented." null will skip this addendum.
+	var/damaged_examine_text	//Addendum to the description when it's damaged eg. damaged_examine_text of "It is dented."
 	var/take_hit_text 	//String or list of strings when the item is damaged but not fully broken. eg. "chipping" becomes "..., chipping it!"
-	var/breaks_text		//Visible message when the items breaks. eg. "breaks apart" null skips this.
+	var/take_hit_text2	//String or list of strings for contexts like "cracks" becomes "the ... cracks!"
 	var/glances_text	//String or list of strings when the item is attacked but the attack glances off. eg. "bounces" becomes "but it bounces off!"
+	var/breaks_text		//Visible message when the items breaks. eg. "breaks apart"
 	//Sounds:
 	var/breaks_sound	//Path to audible sound when the item breaks apart.
 	var/damaged_sound	//Path to audible sound when the item is damaged but not fully destroyed.
@@ -89,14 +75,16 @@
 			reagents.reaction(hit_atom, TOUCH)
 		reagents.reaction(get_turf(src), TOUCH) //Then spill it onto the floor.
 
-/obj/item/proc/take_damage(var/incoming_damage)
+/obj/item/proc/take_damage(var/incoming_damage, var/mute = TRUE)
 	var/thisdmg=(incoming_damage>max(damage_armor,damage_resist)) * (incoming_damage-damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
 	health_item-=thisdmg
 	play_hit_sounds(thisdmg)
 	if(!thisdmg)
 		return 0 //return 0 if the item took no damage (glancing attack)
 	else
-		damaged_icon_updates()
+		if(health_item>0) //Only if the item isn't ready to break.
+			message_take_hit(mute)
+		damaged_updates()
 		return 1 //return 1 if the item took damage
 
 /obj/item/proc/play_hit_sounds(var/thisdmg, var/hear_glanced = TRUE, var/hear_damaged = TRUE) //Plays any relevant sounds whenever the item is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
@@ -107,8 +95,11 @@
 	else if(!isnull(glanced_sound) && hear_glanced)
 		playsound(src, glanced_sound, 50, 1)
 
+/obj/item/proc/message_take_hit(var/mute = FALSE) //Give a visible message when the item takes damage.
+	if(!isnull(take_hit_text2) && !mute)
+		visible_message("<span class='warning'>\The [src] [pick(take_hit_text2)]!</span>")
 
-/obj/item/proc/damaged_icon_updates() //Put any damage-related icon changes here.
+/obj/item/proc/damaged_updates() //Put any damage-related changes to name, desc, icon, etc. here.
 	return
 
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
@@ -184,7 +175,7 @@
 		break_item()
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE)
-			W.take_damage(min(W.force, BREAKARMOR_MEDIUM)) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
+			W.take_damage(min(W.force, BREAKARMOR_MEDIUM),FALSE) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
 			W.break_item()
 		return
 	else
@@ -215,13 +206,13 @@
 		if(istype(hit_atom, /turf/simulated/floor))
 			take_damage(thisdmg/2)
 		else
-			take_damage(thisdmg)
+			take_damage(thisdmg, FALSE) //Be verbose about the item taking damage.
 	break_item(null,null,null,null,null,hit_atom)
 
 //Item being hit by a projectile
 
 /obj/item/bullet_act(var/obj/item/projectile/proj)
-	.=..()
+	..()
 	if(breakable_flags & BREAKABLE_WEAPON)
 		take_damage(proj.damage)
 	var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (get_total_scaled_w_class(3))))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the total weight class of the item.
@@ -240,8 +231,6 @@
 		for(var/obj/item/thiscontent in contents)
 			total_w_class += (thiscontent.w_class ** scalepower)
 	return total_w_class
-
-
 
 //Biting the item
 
@@ -273,11 +262,4 @@
 	else
 		..()
 
-
-
-
-/*
-//Items being used to hit a mob
-*/
-
-
+/////////////////////

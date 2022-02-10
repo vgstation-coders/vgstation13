@@ -208,6 +208,7 @@
 	var/is_crit = I.on_attack(M,user)
 	if (is_crit == CRITICAL_HIT)
 		power *= CRIT_MULTIPLIER
+
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
 		if(originator)
@@ -219,7 +220,6 @@
 			if("brute")
 				if(istype(src, /mob/living/carbon/slime))
 					M.adjustBrainLoss(power)
-
 				else
 					if(istype(M, /mob/living/carbon/monkey))
 						var/mob/living/carbon/monkey/K = M
@@ -236,9 +236,18 @@
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					to_chat(M, "Aargh it burns!")
+
+	//Break the item if applicable.
+	if(power && (I.breakable_flags & BREAKABLE_AS_MELEE) && !(I.breakable_flags & BREAKABLE_NOMOB))
+		take_damage(min(power, BREAKARMOR_MEDIUM), FALSE) //Cap recoil damage at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used. Be verbose about the item being damaged if applicable.
+		break_item()
+
+
+
 		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
+
 
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)

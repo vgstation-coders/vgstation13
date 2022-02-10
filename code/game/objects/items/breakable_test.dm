@@ -36,6 +36,8 @@
 	damaged_examine_text = "It's seen much better days."
 	damage_armor = BREAKARMOR_NOARMOR
 	damage_resist = 0
+	take_hit_text = "chipping"
+	take_hit_text2 = "chips"
 	breaks_text = "falls apart into dust"
 	breakable_fragments = list(/obj/item/weapon/shard, /obj/item/weapon/kitchen/utensil/knife/large/test/weak)
 
@@ -90,12 +92,15 @@
 	icon_state = "beaker"
 	item_state = "beaker"
 	breakable_flags = BREAKABLE_ALL
-	health_item = 1
-	health_item_max = 1
+	health_item = 20
+	health_item_max = 20
 	damaged_examine_text = "It has a big crack down the side."
 	damage_armor = BREAKARMOR_NOARMOR
 	damage_resist = 0
 	breaks_text = "shatters"
+	take_hit_text = list("cracking","chipping")
+	take_hit_text2 = list("cracks","chips")
+	glances_text = list("glances","bounces")
 	starting_materials = list(MAT_GLASS = 500)
 	origin_tech = Tc_MATERIALS + "=1"
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
@@ -118,99 +123,9 @@
 	damage_armor = BREAKARMOR_NOARMOR
 	damage_resist = 0
 	breaks_text = "blows apart"
-//	breakable_fragments = list(/obj/item/weapon/storage/box/survival/test)
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
 		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
 		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
 	)
-
-
-
-
-
-
-/////////////////////
-
-
-
-
-//Unused:
-
-/*
-#define USER_TYPE_HUMAN	 1 //User is a carbon/human
-#define USER_TYPE_BEAST  2 //User is a simple_animal
-#define USER_TYPE_ALIEN  3 //User is a carbon/alien
-#define USER_TYPE_ROBOT  4 //User is a silicon
-#define USER_TYPE_OTHER  5 //User is another type of mob/living
-*/
-
-/*
-/obj/item/proc/user_type_check(mob/living/user)
-	if(istype(user, /mob/living/carbon/human))
-		return USER_TYPE_HUMAN
-	else if(istype(user, /mob/living/simple_animal))
-		return USER_TYPE_BEAST
-	else if(istype(user, /mob/living/carbon/alien/humanoid))
-		return USER_TYPE_ALIEN
-	else if(istype(user, /mob/living/silicon))
-		return USER_TYPE_ROBOT
-	else
-		return USER_TYPE_OTHER
-*/
-
-/*
-/obj/item/proc/item_attack_unarmed(mob/living/user)
-	user.do_attack_animation(src,user)
-	user.delayNextAttack(1 SECONDS)
-	var/glanced
-	switch(user_type_check(user))
-		if(USER_TYPE_HUMAN)
-			glanced=!take_damage(user.get_unarmed_damage())
-			var/mob/living/carbon/human/H = user
-			H.visible_message("<span class='warning'>\The [H] [H.species.attack_verb] \the [src][generate_break_text(glanced)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced)]</span>")
-		if(USER_TYPE_BEAST)
-			var/mob/living/simple_animal/M = user
-			glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper))
-			M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced)]</span>")
-		if(USER_TYPE_ALIEN)
-			glanced=!take_damage(user.get_unarmed_damage())
-			user.visible_message("<span class='warning'>\The [user] [pick("slashes","claws")] \the [src][generate_break_text(glanced)]</span>","<span class='notice'>You [pick("slash","claw")] \the [src][generate_break_text(glanced)]</span>")
-		if(USER_TYPE_ROBOT)
-			return ..()				//not setup for now
-		if(USER_TYPE_OTHER)
-			return ..()				//not setup for now
-	break_item()
-*/
-
-/*
-//Aliens
-/obj/item/attack_alien(mob/living/carbon/alien/humanoid/user)
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_MELEE_UNARMED)
-		user.do_attack_animation(src, user)
-		user.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(user.get_unarmed_damage())
-		user.visible_message("<span class='warning'>\The [user] [pick("slashes","claws")] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [pick("slash","claw")] \the [src][generate_break_text(glanced)]</span>")
-		break_item()
-	else
-		..()
-
-*/
-
-/*
-//Empty-handed attacks
-/obj/item/attack_hand(mob/living/carbon/human/user)
-	if(isobserver(user) || !Adjacent(user))
-		return
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_MELEE_UNARMED)
-		user.do_attack_animation(src, user)
-		user.delayNextAttack(1 SECONDS)
-		add_fingerprint(user)
-		var/glanced=!take_damage(user.get_unarmed_damage())
-		user.visible_message("<span class='warning'>\The [user] [user.species.attack_verb] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced,TRUE)]</span>")
-		break_item()
-	else
-		..()
-*/
-
 /////////////////////
