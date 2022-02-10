@@ -122,12 +122,23 @@
     idle_power_usage = 0
     active_power_usage = 50
     power_channel = EQUIP
-    machine_flags = 0
+    machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
     ghost_read = 0 // Deactivate ghost touching.
     ghost_write = 0
     var/obj/item/weapon/paper/manifest/current_manifest = null
     var/next_sound = 0
     var/sound_delay = 20
+
+/obj/machinery/crate_weigher/New()
+    . = ..()
+
+    component_parts = newlist(
+        /obj/item/weapon/circuitboard/crate_weigher,
+        /obj/item/weapon/stock_parts/manipulator,
+        /obj/item/weapon/stock_parts/micro_laser,
+    )
+
+    RefreshParts()
 
 /obj/machinery/crate_weigher/attackby(var/obj/item/W, mob/user)
     if(istype(W,/obj/item/weapon/paper/manifest) && !current_manifest)
@@ -179,6 +190,17 @@
         if (world.time > next_sound)
             playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
             next_sound = world.time + sound_delay
+
+/obj/item/weapon/circuitboard/crate_weigher
+    name = "Circuit Board (Crate Weigher)"
+    desc = "A circuit board used to run a crate weighing machine."
+    build_path = /obj/machinery/crate_weigher
+    board_type = MACHINE
+    origin_tech = Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2"
+    req_components = list(
+                            /obj/item/weapon/stock_parts/manipulator = 1,
+                            /obj/item/weapon/stock_parts/micro_laser = 1,
+                        )
 
 /datum/cargo_forwarding/from_supplypack/New()
     var/packtype = pick(subtypesof(/datum/supply_packs))
@@ -283,3 +305,16 @@
             name = SM.name
             containername = SM.name
             worth = (SM.size * SM.size) * 10
+
+/datum/cargo_forwarding/misc/vendotron_stack
+    name = "Old vendotron stack of packs"
+    contains = list(/obj/structure/vendomatpack/vendotron)
+    amount = 1
+    containertype = /obj/structure/stackopacks
+    containername = "Old vendotron stack of packs"
+    worth = 200
+
+/obj/structure/vendomatpack/vendotron
+    name = "old vendotron recharge pack"
+    targetvendomat = /obj/machinery/vending/old_vendotron
+    icon_state = "generic"
