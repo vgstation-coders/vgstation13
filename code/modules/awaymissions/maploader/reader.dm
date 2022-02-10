@@ -323,7 +323,7 @@ var/list/map_dimension_cache = list()
 	//instanciate the last /turf
 	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd,rotate)
 
-	if(T && first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
+	if(first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
 		var/turf_index = first_turf_index
 		while(turf_index < last_turf_index)
 			var/turf/underlying_turf = members[turf_index]
