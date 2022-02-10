@@ -208,7 +208,7 @@ var/global/datum/controller/vote/vote = new()
 	to_chat(world, "<font color='purple'>[result]</font>")
 
 /datum/controller/vote/proc/result()
-	. = announce_result()
+	announce_result()
 	currently_voting = FALSE
 	var/restart = 0
 	if(.)
