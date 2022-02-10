@@ -307,7 +307,7 @@ var/list/map_dimension_cache = list()
 	if(overwrite) //make this come first so lighting overlays don't die
 		var/turf/T_old = locate(xcrd,ycrd,zcrd)
 		var/static/list/blacklisted_types = list(/mob/dead/observer,/mob/dview,/atom/movable/lighting_overlay)
-		for(var/atom/movable/thing in T_old.contents)
+		for(var/atom/thing as anything in T_old.contents)
 			if(!is_type_in_list(thing.type,blacklisted_types))
 				qdel(thing)
 
@@ -323,15 +323,14 @@ var/list/map_dimension_cache = list()
 	//instanciate the last /turf
 	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd,rotate)
 
-	if(first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
+	if(T && first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
 		var/turf_index = first_turf_index
 		while(turf_index < last_turf_index)
 			var/turf/underlying_turf = members[turf_index]
 			var/image/new_underlay = image(icon = null) //Because just image() doesn't work, and neither does image(appearance=...)
 
 			new_underlay.appearance = initial(underlying_turf.appearance)
-			if(T)
-				T.underlays.Add(new_underlay)
+			T.underlays.Add(new_underlay)
 			turf_index++
 
 	spawned_atoms.Add(T)
