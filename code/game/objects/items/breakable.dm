@@ -91,7 +91,11 @@
 	if(!thisdmg)
 		return 0 //return 0 if the item took no damage (glancing attack)
 	else
+		damaged_icon_updates()
 		return 1 //return 1 if the item took damage
+
+/obj/item/proc/damaged_icon_updates() //Put any damage-related icon changes here.
+	return
 
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	..()
