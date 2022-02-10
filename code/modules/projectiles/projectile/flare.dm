@@ -20,12 +20,3 @@
 		qdel(src)
 		var/obj/item/device/flashlight/flare/newflare = new(newloc)
 		newflare.Light() //to get the thing lit
-		
-
-	return ..()
-
-/*
-/obj/item/projectile/flare/on_hit(var/atom/hit)
-	..()
-	qdel(src) // to stop the flare spawning on death when it does damage
-*/
