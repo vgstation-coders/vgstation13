@@ -153,8 +153,8 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		var/oursubtype = null
 		if(i < previous_forwards_subtypes.len)
 			oursubtype = previous_forwards_subtypes[i]
-		var/ourtype = previous_forwards_types[i]
-		if(ispath(ourtype))
+		var/ourtype = text2path(previous_forwards_types[i])
+		if(ispath(ourtype,/datum/cargo_forwarding))
 			previous_forwards += new ourtype(ourname, ourstation, oursubtype)
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
