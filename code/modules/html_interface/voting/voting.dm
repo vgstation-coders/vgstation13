@@ -138,9 +138,9 @@ var/global/datum/controller/vote/vote = new()
 			if(mode == "map")
 				return  majority()//return persistent()
 			else
-				return  majority()
+				return majority()
 		else
-			return  majority()
+			return majority()
 		
 /datum/controller/vote/proc/majority()
 	var/text
