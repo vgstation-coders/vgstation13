@@ -19,17 +19,13 @@ var/list/fulfilled_requests_types = list() // For persistence
 var/list/fulfilled_requests_names = list()
 var/list/fulfilled_requests_stations = list()
 
-var/list/fulfilled_forwards_types = list()
-var/list/fulfilled_forwards_names = list()
-var/list/fulfilled_forwards_stations = list()
-
 var/list/previous_requests_types = list()
 var/list/previous_requests_names = list()
 var/list/previous_requests_stations = list()
 
-var/list/previous_forwards_types = list()
-var/list/previous_forwards_names = list()
-var/list/previous_forwards_stations = list()
+var/list/datum/cargo_forwarding/fulfilled_forwards = list()
+
+var/list/datum/cargo_forwarding/previous_forwards = list()
 
 /datum/subsystem/supply_shuttle
 	name       = "Supply Shuttle"
@@ -394,28 +390,15 @@ var/list/previous_forwards_stations = list()
 		cargo_forward_cooldown = rand(CARGO_FORWARD_DELAY_MIN,CARGO_FORWARD_DELAY_MAX)
 
 		var/list/datum/cargo_forwarding/new_forwards = list()
-		if(prob(50) && previous_forwards_types && previous_forwards_types.len) // Keep it just a chance to get the previous round's forwards so we don't just end up with those
+		if(prob(50) && previous_forwards && previous_forwards.len) // Keep it just a chance to get the previous round's forwards so we don't just end up with those
 			for(var/k in 1 to amount_forwarded)
-				if(!previous_forwards_types || !previous_forwards_types.len) // Break out if nothing sent
+				if(!previous_forwards || !previous_forwards.len) // Break out if nothing sent
 					break
-				var/previous_index = rand(1,previous_forwards_types.len)
-				var/forwardtype = text2path(previous_forwards_types[previous_index])
-				var/datum/cargo_forwarding/CF = new forwardtype
+				var/previous_index = rand(1,previous_forwards.len)
+				var/datum/cargo_forwarding/CF = previous_forwards[previous_index]
 				new_forwards.Add(CF)
-				previous_forwards_types.Remove(previous_forwards_types[previous_index]) // Must be the index to remove a specific one
-				if(previous_forwards_stations && previous_forwards_stations.len)
-					var/index_to_pick = previous_index && previous_index < previous_forwards_stations.len ? previous_index : rand(1,previous_forwards_stations.len)
-					CF.origin_station_name = previous_forwards_stations[index_to_pick]
-					previous_forwards_stations.Remove(previous_forwards_stations[index_to_pick])
-				else if(!previous_forwards_types || !previous_forwards_types.len) // Cut the other fluff info list if the main type one is empty, to prevent desync with indices
-					previous_forwards_names.Cut()
-				if(previous_forwards_names && previous_forwards_names.len)
-					var/index_to_pick = previous_index && previous_index < previous_forwards_names.len ? previous_index : rand(1,previous_forwards_names.len)
-					CF.origin_sender_name = previous_forwards_names[index_to_pick]
-					previous_forwards_names.Remove(previous_forwards_names[index_to_pick])
-				else if(!previous_forwards_types || !previous_forwards_types.len)
-					previous_forwards_stations.Cut()
-				log_debug("CARGO FORWARDING: Persistence crate [forwardtype] loaded, from [CF.origin_sender_name] of [CF.origin_station_name].")
+				previous_forwards.Remove(previous_forwards[previous_index]) // Must be the index to remove a specific one
+				log_debug("CARGO FORWARDING: Persistence crate [CF.type] loaded, from [CF.origin_sender_name] of [CF.origin_station_name].")
 		if(new_forwards.len < amount_forwarded) // If we got nothing or not the entire amount from the above
 			if(new_forwards.len)
 				log_debug("CARGO FORWARDING: [new_forwards.len] crates of [amount_forwarded] were persistence crates, now loading them as normal.")

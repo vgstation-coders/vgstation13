@@ -21,9 +21,10 @@
     var/time_limit = 5 // In minutes
     var/time_created = 0 // To check time left
     var/weighed = FALSE // Crate weighed?
-    var/list/atom/initial_contents = list() // for easier atom checking
+    var/list/atom/initial_contents = list() // For easier atom checking
+    var/initialised_type = null // Thing initialised from
 
-/datum/cargo_forwarding/New()
+/datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = "")
     ..()
     if (acct_by_string)
         acct = department_accounts[acct_by_string]
@@ -31,29 +32,35 @@
         acct = station_account
         acct_by_string = station_name()
     
-    do // This check prevents the station name being our own, do while so that it runs once to generate a name in the first place.
-        origin_station_name = new_station_name(TRUE)
-    while(origin_station_name == station_name)
+    if(station && station != "")
+        origin_station_name = station
+    else
+        do // This check prevents the station name being our own, do while so that it runs once to generate a name in the first place.
+            origin_station_name = new_station_name(TRUE)
+        while(origin_station_name == station_name)
 
     time_created = world.time
     time_limit = rand(7,17) //2 minutes is spent transiting it and it gets created at the start of that, so really 5-15
 
-    var/list/player_names = list()
-    for(var/mob/M in player_list)
-        player_names += M.name
-    do // Same as station check, but with names
-        var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
-        var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
-        var/vox_name = ""
-        for(var/j = 1 to rand(3,8))
-            vox_name += pick(vox_name_syllables)
-        vox_name = capitalize(vox_name)
-        var/insect_name
-        for(var/k = 1 to rand(2,3))
-            insect_name += pick(insectoid_name_syllables)
-        insect_name = capitalize(insect_name)
-        origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
-    while(origin_sender_name in player_names)
+    if(sender && sender != "")
+        origin_sender_name = sender
+    else
+        var/list/player_names = list()
+        for(var/mob/M in player_list)
+            player_names += M.name
+        do // Same as station check, but with names
+            var/male_name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+            var/female_name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+            var/vox_name = ""
+            for(var/j = 1 to rand(3,8))
+                vox_name += pick(vox_name_syllables)
+            vox_name = capitalize(vox_name)
+            var/insect_name
+            for(var/k = 1 to rand(2,3))
+                insect_name += pick(insectoid_name_syllables)
+            insect_name = capitalize(insect_name)
+            origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
+        while(origin_sender_name in player_names)
 
     SSsupply_shuttle.cargo_forwards.Add(src)
 
@@ -81,8 +88,6 @@
         playsound(S, 'sound/machines/info.ogg', 50, 1)
     
     if(!reason) // Only make this forward move on properly to another station if fulfilled (persistence)
-        fulfilled_forwards_types += "[src.type]"
-        fulfilled_forwards_stations += station_name()
         var/list/positions_to_check = list()
         switch(src.acct_by_string)
             if("Cargo")
@@ -102,9 +107,9 @@
             else if(isliving(M))
                 possible_names += M.name
         if(possible_names && possible_names.len)
-            fulfilled_forwards_names += pick(possible_names)
-        else
-            fulfilled_forwards_names += origin_sender_name
+            origin_sender_name = pick(possible_names)
+        origin_station_name = station_name()
+        fulfilled_forwards += src
     qdel(src)
 
 /datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle
@@ -202,9 +207,9 @@
                             /obj/item/weapon/stock_parts/micro_laser = 1,
                         )
 
-/datum/cargo_forwarding/from_supplypack/New()
-    var/packtype = pick(subtypesof(/datum/supply_packs))
-    var/datum/supply_packs/ourpack = new packtype
+/datum/cargo_forwarding/from_supplypack/New(var/sender = "", var/station = "", var/supply_type = "")
+    initialised_type = ispath(text2path(supply_type),/datum/supply_packs) ? supply_type : pick(subtypesof(/datum/supply_packs))
+    var/datum/supply_packs/ourpack = new initialised_type
     name = ourpack.name
     contains = ourpack.contains.Copy()
     amount = ourpack.amount
@@ -216,16 +221,17 @@
     ..()
     qdel(ourpack)
 
-/datum/cargo_forwarding/from_centcomm_order/New()
-    var/ordertype = null
+/datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = "")
     var/previous_index = 0
-    if(previous_requests_types && previous_requests_types.len)
+    if(ispath(text2path(supply_type),/datum/centcomm_order))
+        initialised_type = supply_type
+    else if(previous_requests_types && previous_requests_types.len)
         previous_index = rand(1,previous_requests_types.len)
-        ordertype = text2path(previous_requests_types[previous_index])
+        initialised_type = text2path(previous_requests_types[previous_index])
         previous_requests_types.Remove(previous_requests_types[previous_index]) // Must be the index to remove a specific one
     else
-        ordertype = get_weighted_order()
-    var/datum/centcomm_order/ourorder = new ordertype
+        initialised_type = get_weighted_order()
+    var/datum/centcomm_order/ourorder = new initialised_type
     containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
     acct_by_string = ourorder.acct_by_string
     for(var/i in ourorder.requested)
@@ -244,30 +250,30 @@
                 our_amount = 1
             for(var/j in 1 to our_amount)
                 contains += i        
-        if(istype(ordertype,/datum/centcomm_order/per_unit))
+        if(istype(initialised_type,/datum/centcomm_order/per_unit))
             var/datum/centcomm_order/per_unit/PU = ourorder
             worth = PU.unit_prices[PU.unit_prices[i]] * amount
         else
             worth = ourorder.worth
     //Sadly cannot use switch here
-    if(istype(ordertype,/datum/centcomm_order/department/engineering))
+    if(istype(initialised_type,/datum/centcomm_order/department/engineering))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
         access = list(access_engine)
-    else if(istype(ordertype,/datum/centcomm_order/department/medical))
+    else if(istype(initialised_type,/datum/centcomm_order/department/medical))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/medsec : /obj/structure/largecrate
         access = list(access_medical)
-    else if(istype(ordertype,/datum/centcomm_order/department/science))
+    else if(istype(initialised_type,/datum/centcomm_order/department/science))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
         access = list(access_science)
     ..()
     if(previous_requests_stations && previous_requests_stations.len)
-        var/index_to_pick = previous_index && previous_index < previous_forwards_names.len ? previous_index : rand(1,previous_requests_names.len)
+        var/index_to_pick = previous_index && previous_index < previous_requests_names.len ? previous_index : rand(1,previous_requests_names.len)
         origin_station_name = previous_requests_stations[index_to_pick]
         previous_requests_stations.Remove(previous_requests_stations[index_to_pick])
     else if(!previous_requests_types || !previous_requests_types.len)
         previous_requests_stations.Cut()
     if(previous_requests_names && previous_requests_names.len)
-        var/index_to_pick = previous_index && previous_index < previous_forwards_names.len ? previous_index : rand(1,previous_requests_names.len)
+        var/index_to_pick = previous_index && previous_index < previous_requests_names.len ? previous_index : rand(1,previous_requests_names.len)
         origin_sender_name = previous_requests_names[index_to_pick]
         previous_requests_names.Remove(previous_requests_names[index_to_pick])
     else if(!previous_requests_types || !previous_requests_types.len)

@@ -139,15 +139,36 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/forwards_fulfilled/on_init()
 	data = read_file()
-	previous_forwards_types = data["fulfilled_forwards_types"]
-	previous_forwards_names = data["fulfilled_forwards_names"]
-	previous_forwards_stations = data["fulfilled_forwards_stations"]
+	var/list/previous_forwards_types = data["fulfilled_forwards_types"]
+	var/list/previous_forwards_subtypes = data["fulfilled_forwards_types"]
+	var/list/previous_forwards_names = data["fulfilled_forwards_names"]
+	var/list/previous_forwards_stations = data["fulfilled_forwards_stations"]
+	for(var/i = 1 to previous_forwards_types.len)
+		var/ourname = null
+		if(i < previous_forwards_names.len)
+			ourname = previous_forwards_names[i]
+		var/ourstation = null
+		if(i < previous_forwards_stations.len)
+			ourstation = previous_forwards_stations[i]
+		var/oursubtype = null
+		if(i < previous_forwards_subtypes.len)
+			oursubtype = previous_forwards_subtypes[i]
+		var/ourtype = previous_forwards_types[i]
+		if(ispath(ourtype))
+			previous_forwards += new ourtype(ourname, ourstation, oursubtype)
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
-	var/list/all_forward_types = previous_forwards_types.Copy() + fulfilled_forwards_types.Copy()
-	var/list/all_forward_names = previous_forwards_names.Copy() + fulfilled_forwards_names.Copy()
-	var/list/all_forward_stations = previous_forwards_stations.Copy() + fulfilled_forwards_stations.Copy()
-	write_file(list("fulfilled_forwards_types" = all_forward_types, "fulfilled_forwards_names" = all_forward_names, "fulfilled_forwards_stations" = all_forward_stations))
+	var/list/all_forwards = previous_forwards.Copy() + fulfilled_forwards.Copy()
+	var/list/all_forwards_types = list()
+	var/list/all_forwards_names = list()
+	var/list/all_forwards_stations = list()
+	var/list/all_forwards_subtypes = list()
+	for(var/datum/cargo_forwarding/forward in all_forwards)
+		all_forwards_types += forward.type
+		all_forwards_subtypes += forward.initialised_type
+		all_forwards_names += forward.origin_sender_name
+		all_forwards_stations += forward.origin_station_name
+	write_file(list("fulfilled_forwards_types" = all_forwards_types, "fulfilled_forwards_subtypes" = all_forwards_subtypes, "fulfilled_forwards_names" = all_forwards_names, "fulfilled_forwards_stations" = all_forwards_stations))
 
 /datum/persistence_task/round_end_data
 	execute = TRUE
