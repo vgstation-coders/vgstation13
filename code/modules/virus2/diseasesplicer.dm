@@ -90,7 +90,7 @@
 /obj/machinery/computer/diseasesplicer/attack_hand(var/mob/user)
 	. = ..()
 
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		eject_dish()
 		return
 
@@ -100,7 +100,7 @@
 	ui_interact(user)
 
 /obj/machinery/computer/diseasesplicer/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(scanning || splicing || burning)
 		use_power = 2
@@ -173,7 +173,7 @@
 			dish_content.color = dish.contained_virus.color
 		overlays += dish_content
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if (dish && dish.contained_virus)

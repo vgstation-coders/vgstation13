@@ -22,8 +22,14 @@
 	machine_flags = FIXED2WORK | EMAGGABLE | WRENCHMOVE
 	mech_flags = MECH_SCAN_FAIL
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained())
 		return
@@ -60,7 +66,7 @@
 		ui.open()
 
 /obj/machinery/chem_dispenser/scp_294/Topic(href, href_list)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return 0 // don't update UIs attached to this object
 
 	if(href_list["ejectBeaker"])

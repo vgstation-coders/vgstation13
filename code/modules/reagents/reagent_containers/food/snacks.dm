@@ -659,22 +659,60 @@
 	name = "seasonal cookie"
 	desc = "Charming holiday sugar cookies, just like Mom used to make."
 	icon = 'icons/obj/food_seasonal.dmi'
+	base_crumb_chance = 5
+	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
 	..()
 
-	var/NM = time2text(world.realtime,"MM")
-	var/cookiecutter = null
+	var/NM = time2text(world.realtime,"Month")
+	var/cookiecutter
 
-	if(!cookiecutter)
-		switch(NM)
-			if(12)
-				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
-			if(10)
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
-			else
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer") )
+	switch(NM)
+		if("February")
+			cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+		if("December")
+			cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
+		if("October")
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+		else
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
 	icon_state = "[cookiecutter]"
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/candyheart
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SUGAR, 15)
+
+/obj/item/weapon/reagent_containers/food/snacks/candyheart
+	name = "candy heart"
+	icon = 'icons/obj/food.dmi'
+
+/obj/item/weapon/reagent_containers/food/snacks/candyheart/New()
+	..()
+
+	var/heartphrase = pick( list("SO FINE","B TRU","U ROCK","HELLO","SOUL MATE","ME + U","2 CUTE","SWEET LUV","IM URS","XOXO","B MINE","LUV BUG","I &lt;3 U","PDA ME","U LEAVE ME BREATHLESS") )
+
+	var/heartcolor = pick( list("p","b","w","y","g") )
+
+	icon_state = "conversationheart_[heartcolor]"
+	desc = "Chalky sugar in the form of a heart.<br/>This one says, <span class='valentines'>\"[heartphrase]\"</span>."
+
+/obj/item/weapon/reagent_containers/food/snacks/chocostrawberry
+	name = "chocolate strawberry"
+	desc = "A fresh strawberry dipped in melted chocolate."
+	icon_state = "chocostrawberry"
+	food_flags = FOOD_SWEET
+	bitesize = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/chocostrawberry/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(SUGAR, 5)
+	reagents.add_reagent(COCO, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
 	name = "gingerbread man"
@@ -4330,11 +4368,11 @@
 	food_flags = FOOD_MEAT
 	filling_color = "#D8753E"
 	base_crumb_chance = 3
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
-	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick
 	name = "chicken drumstick"
@@ -4343,11 +4381,11 @@
 	food_flags = FOOD_MEAT
 	filling_color = "#D8753E"
 	base_crumb_chance = 0
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
-	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders
 	name = "Chicken Tenders"
@@ -4355,12 +4393,44 @@
 	icon_state = "tendies"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 3
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders/New()
 	..()
 	reagents.add_reagent(CORNOIL, 3)
 	reagents.add_reagent(TENDIES, 3)
-	bitesize = 2
+
+
+//////////////////VOX CHICKEN//////////////////
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+	name = "Vox Nuggets"
+	desc = "Looks awful and off-colour, you wish you'd gone to Cluckin' Bell instead."
+	icon_state = "vox_nuggets"
+	item_state = "kfc_bucket"
+	trash = /obj/item/trash/chicken_bucket
+	food_flags = FOOD_MEAT
+	filling_color = "#4A75F4"
+	base_crumb_chance = 3
+	bitesize = 1
+
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_nuggets/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick
+	name = "Vox drumstick"
+	desc = "I can't stand cold food. Unlike you, I ain't never ate from a trash can."
+	icon_state = "chicken_drumstick"
+	food_flags = FOOD_MEAT
+	filling_color = "#4A75F4"
+	base_crumb_chance = 0
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 
 //////////////////CURRY//////////////////

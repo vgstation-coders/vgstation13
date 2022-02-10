@@ -110,7 +110,7 @@
 		return
 	var/tRange = calcTackleRange()
 	isTackling = TRUE
-	knockdown = max(knockdown, 3)	//Not using the Knockdown() proc as it created odd behaviour with hulks and another knockdown immune
+	knockdown = max(knockdown, 2)	//Not using the Knockdown() proc as it created odd behaviour with hulks or other knockdown immune mobs
 	update_canmove()
 	throw_at(A, tRange, 1)
 
@@ -124,26 +124,32 @@
 				add_attacklogs(src, hit_atom, "tackled")
 				var/mob/living/L = hit_atom
 				visible_message("<span class='warning'>[src] tackles [L]!</span>")
-
 				var/tackleDefense = L.calcTackleDefense(src)
 				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
 				var/rngDefense = rand(tackleDefense/2, tackleDefense)
 				var/tKnock = max(0, rngDefense - rngForce)
-				tKnock /= 10	//Numbers were inflated a digit to allow flexibility, now they need to be smaller
-				Knockdown(min(4, tKnock)) //To prevent eternity knockdown from tackling an 8 riot shield martian or something
-				tKnock = max(0, rngForce - rngDefense)	//Calculating their knockdown, they might not get knocked down at all
-				if(tKnock)
-					tKnock /= 10
-					L.Knockdown(min(3, tKnock))
-					if(M_HORNS in mutations)
-						tKnock += 5
-					L.adjustBruteLoss(tKnock)
-					for (var/obj/held in L.held_items)
-						var/dir = pick(alldirs)
-						var/turf/target = get_turf(src)
-						for(var/i in 1 to 3)
-							target = get_step(target, dir)
-						L.throw_item(target, held)
+				if(isrobot(L))
+					var/mob/living/silicon/robot/R = L
+					R.tip(get_dir(src, R))
+					visible_message("<span class='warning'>[src] collides with [R], tipping it over!</span>")
+					tackleGetHurt(0, 3)
+					AdjustStunned(3)	//Mostly a mercy to borgs but something something metal casing + skull
+				else
+					tKnock /= 10	//Numbers were inflated a digit to allow flexibility, now they need to be smaller
+					Knockdown(min(4, tKnock)) //To prevent eternity knockdown from tackling an 8 riot shield martian or something
+					tKnock = max(0, rngForce - rngDefense)	//Calculating their knockdown, they might not get knocked down at all
+					if(tKnock)
+						tKnock /= 10
+						L.Knockdown(min(3, tKnock))
+						if(M_HORNS in mutations)
+							tKnock += 5
+						L.adjustBruteLoss(tKnock)
+						for (var/obj/held in L.held_items)
+							var/dir = pick(alldirs)
+							var/turf/target = get_turf(src)
+							for(var/i in 1 to 3)
+								target = get_step(target, dir)
+							L.throw_item(target, held)
 			spawn(3)	//Just to let throw_impact stop throwing a tantrum
 				isTackling = FALSE
 	..()
@@ -154,10 +160,17 @@
 		if(!throwing)
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
-			playsound(src, 'sound/items/trayhit1.ogg', 75, 1)
-			var/tPain = rand(5,15)
-			adjustBruteLoss(tPain)
-			Knockdown(tPain/2)
+			tackleGetHurt()
+
+/mob/living/carbon/proc/tackleGetHurt(var/hurtAmount = 0, var/knockAmount = 0, var/hurtSound = "trayhit")
+	if(!hurtAmount)
+		hurtAmount = rand(5,15)
+	if(!knockAmount)
+		knockAmount = hurtAmount/2
+	playsound(src, hurtSound, 75, 1)
+	adjustBruteLoss(hurtAmount)
+	Knockdown(knockAmount)
+
 
 /mob/living/carbon/calcTackleRange(var/tR = 0)
 	tR += bonusTackleRange()
@@ -165,6 +178,11 @@
 		tR += 1	//Avoiding tR++ for readability and ease of editing later
 	if(M_RUN in mutations)
 		tR += 1
+	if(spell_list.len)
+		var/spell/targeted/leap/leapTackle = locate(/spell/targeted/leap) in spell_list
+		if(leapTackle && leapTackle.charge_counter >= leapTackle.charge_max)
+			tR += 2
+			leapTackle.take_charge()
 	return tR
 
 /mob/living/carbon/calcTackleForce(var/tForce = 50)

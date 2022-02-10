@@ -431,6 +431,14 @@
 	reagents = list(FLOUR = 5, SUGAR = 5, SPRINKLES = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
 
+/datum/recipe/candyheart
+	reagents = list(SUGAR = 5, CORNOIL = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
+
+/datum/recipe/chocostrawberry
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar, /obj/item/weapon/reagent_containers/food/snacks/grown/berries)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chocostrawberry
+
 /datum/recipe/gingerbread_man
 	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
@@ -2250,6 +2258,22 @@
 	reagents = list(CORNOIL = 3)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders
+
+/datum/recipe/vox_nuggets
+	reagents = list(KETCHUP = 5)
+	items = list(
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+
+/datum/recipe/vox_chicken_drumstick
+	items = list(
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+		)
+	result = /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket
 
 /datum/recipe/crab_sticks
 	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)

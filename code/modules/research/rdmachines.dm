@@ -32,6 +32,12 @@ var/global/list/rnd_machines = list()
 
 	var/datum/wires/rnd/wires = null
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+	)
+
+
 /obj/machinery/r_n_d/New()
 	rnd_machines |= src
 	..()

@@ -7,6 +7,7 @@
 	origin_tech = Tc_COMBAT + "=1"
 	var/armed = 0
 	wires = WIRE_PULSE
+	surgerysound = 'sound/items/fixovein.ogg'
 
 /obj/item/device/assembly/mousetrap/examine(mob/user)
 	..()

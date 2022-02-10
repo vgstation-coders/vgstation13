@@ -41,7 +41,7 @@
 		overlay.layer = ABOVE_LIGHTING_LAYER
 
 	overlays.Cut()
-	if((stat & NOPOWER) || buildstage != 2)
+	if((stat & (FORCEDISABLE|NOPOWER)) || buildstage != 2)
 		icon_state = "light-p"
 		set_light(0)
 	else
@@ -149,7 +149,7 @@
 	updateicon()
 
 /obj/machinery/light_switch/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|FORCEDISABLE))
 		..(severity)
 		return
 	power_change()

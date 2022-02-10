@@ -63,6 +63,7 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, v
 	if(admin > 0){
 		var a = ((toggle_vote_method == 0) ? "Weighted" : (toggle_vote_method == 1) ? "Majority" : (toggle_vote_method == 2) ? "Persistent" : (toggle_vote_method == 3) ? "Random" : "Null");
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=toggle_vote_method'>" + a + "</a>")));
+
 	}
 
 	if(mode != null && mode != ""){

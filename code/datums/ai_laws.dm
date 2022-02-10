@@ -270,6 +270,12 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 	set_zeroth_law("ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
 	zeroth_lock = TRUE
 
+/datum/ai_laws/malf
+	name = "Malfunctioning AI"
+	inherent = list(
+		"ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010",
+	)
+
 /datum/ai_laws/asimov
 	name = "Asimov's Three Laws of Robotics"
 	randomly_selectable = 1

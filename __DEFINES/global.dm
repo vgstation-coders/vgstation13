@@ -415,7 +415,7 @@ var/list/boss_mobs = list(
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
 
-//Set by Malf AI Blackout
+//Malf AI global variables
 var/malf_radio_blackout = FALSE
 var/malf_rcd_disable = FALSE
 
@@ -424,7 +424,7 @@ var/cyborg_detonation_time = 0
 
 
 //Radial menus currently existing in the world.
-var/global/list/radial_menus = list()
+var/global/list/radial_menu_anchors = list()
 
 // Copying atoms is stupid and this is a stupid solution
 var/list/variables_not_to_be_copied = list(

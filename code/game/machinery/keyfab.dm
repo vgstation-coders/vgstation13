@@ -33,7 +33,7 @@
 /obj/machinery/keyfab/update_icon()
 	..()
 	//_ is off, 0 is powered but not running, 1 is running, 2 is ready, 3 is error.
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = initial(icon_state)
 		return
 	icon_state = "[initial(icon_state)][busy]"
@@ -42,7 +42,7 @@
 	..()
 	if(ishigherbeing(user))
 		src.add_fingerprint(user)
-		if((stat & (BROKEN|NOPOWER)))
+		if((stat & (FORCEDISABLE|BROKEN|NOPOWER)))
 			to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
 			return
 		if(istype(K, /obj/item/key/snowmobile/universal)) //FUTURE FEATURE? Change this to /obj/item/key and play with line 90 to allow all kinds of keys to be created. Would require redoing keys slightly to use VIN as a unique ID and having keys match that VIN.
@@ -60,7 +60,7 @@
 	..()
 	if(ishigherbeing(user))
 		src.add_fingerprint(user)
-		if((stat & (BROKEN|NOPOWER)))
+		if((stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 			to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
 			return
 		switch(busy)
@@ -81,7 +81,7 @@
 	busy = BUSY
 	update_icon()
 	sleep(build_time)
-	if((stat & (BROKEN|NOPOWER)))
+	if((stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		update_icon()
 		busy = NOTBUSY
 		return

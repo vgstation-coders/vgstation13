@@ -339,35 +339,23 @@ var/list/global_singularity_pool
 	return 1
 
 /obj/machinery/singularity/proc/eat()
-	// This is causing issues. Do not renable - N3X
-	// Specifically, eat() builds up in the background from taking too long and eventually crashes the singo.
-	//set background = BACKGROUND_ENABLED
-	//var/ngrabbed=0
-	//Note on June 27, 2019. Apparently it IS being used, so... go wild!
+	var/ngrabbed=0
 	var/turf/T = get_turf(src)
 	for(var/z0 in GetOpenConnectedZlevels(T))
 		var/z_dist = abs(z0 - T.z)
 		if(z_dist <= grav_pull)
-			for(var/atom/X in orange(grav_pull - z_dist, locate(T.x,T.y,z0)))
+			for(var/atom/X in orange(grav_pull - z_dist, z0 == T.z ? src : locate(T.x,T.y,z0)))
 				if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 					continue
 				if (current_size > 11 && X.type == /turf/unsimulated/wall/supermatter) // galaxy end ongoing
 					continue
-				// Caps grabbing shit at 100 items.
-				//if(ngrabbed==100)
-					//warning("Singularity eat() capped at [ngrabbed]")
-					//return
-				//if(!isturf(X))//a stage five singularity has a grav pull of 10, that means it covers 441 turfs (21x21) at every ticks.
-					//ngrabbed++
 				try
-					var/dist = get_dist(X, src)
-					var/obj/machinery/singularity/S = src
-					if(!istype(src))
-						return
+					var/dist = get_z_dist(X, src)
 					if(dist > consume_range)
-						X.singularity_pull(S, current_size)
+						X.singularity_pull(src, current_size)
 					else if(dist <= consume_range)
-						consume(X)
+						if(consume(X))
+							ngrabbed++
 				catch(var/exception/e)
 					error("Singularity eat() caught exception:")
 					error(e)
@@ -376,12 +364,9 @@ var/list/global_singularity_pool
 						throw e //So ALL debug information is sent to the runtime log
 
 					continue
+	if(ngrabbed)
+		investigation_log(I_SINGULO, "at ([src.x],[src.y],[src.z]) ([get_area(src)]) eat() ate [ngrabbed] item[ngrabbed != 1 ? "s" : ""].")
 
-	//for(var/turf/T in trange(grav_pull, src)) // TODO: Create a similar trange for orange to prevent snowflake of self check.
-	//	consume(T)
-
-	//testing("Singularity eat() ate [ngrabbed] items.")
-	return
 /*
  * Singulo optimization.
  * Jump out whenever we've made a decision.
@@ -407,7 +392,7 @@ var/list/global_singularity_pool
 /obj/machinery/singularity/proc/consume(const/atom/A)
 	var/gain = A.singularity_act(current_size,src)
 	src.energy += gain
-	return
+	return gain
 
 /*
  * Some modifications have been done in here. The Singularity's movement is now biased instead of truly random

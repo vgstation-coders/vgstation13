@@ -433,7 +433,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(newname)
 		host_name = host.real_name //store the old host name in the borer
 		host.fully_replace_character_name(null, newname)
-	host.verbs += /mob/living/carbon/proc/release_control
+	host.verbs += /mob/living/proc/release_control
 	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host
 	host.verbs += /mob/living/carbon/proc/spawn_larvae
@@ -657,8 +657,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		host.reset_view(null)
 		host.machine = null
 
-		host.verbs -= /mob/living/carbon/proc/release_control
-		host.verbs -= /mob/living/carbon/proc/punish_host
+		host.verbs -= /mob/living/proc/release_control
+		host.verbs -= /mob/living/proc/punish_host
 
 		// Remove any unlocks that affect the host.
 		for(var/uid in research.unlocked.Copy())

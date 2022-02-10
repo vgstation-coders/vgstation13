@@ -193,6 +193,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/base_name = "cigarette"
 	var/base_icon = "cig"
 	var/burn_on_end = FALSE
+	surgerysound = 'sound/items/cautery.ogg'
 
 /obj/item/clothing/mask/cigarette/New()
 	..()
@@ -807,6 +808,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
 	var/base_icon = "lighter"
+	surgerysound = 'sound/items/cautery.ogg'
 
 /obj/item/weapon/lighter/New()
 	..()

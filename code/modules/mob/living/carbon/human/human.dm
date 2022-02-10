@@ -76,8 +76,9 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc, "Grue")
+/mob/living/carbon/human/umbra/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Umbra")
+	faction = "grue" //Umbras are friendly with grues
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
@@ -1846,6 +1847,11 @@
 		species.anatomy_flags = rand(0,65535)
 	if(prob(5))
 		species.chem_flags = rand(0,65535)
+	if(prob(15))
+		species.tackleRange = max(0, rand(species.tackleRange-2, species.tackleRange+2))	//Leaving this with no upper limit is a choice I'm making today. God help us tomorrow.
+	if(prob(15))
+		species.tacklePower = max(0, rand(species.tacklePower*0.5, species.tacklePower*1.5))
+
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
@@ -2264,7 +2270,7 @@
 			return list(
 		if ("Golem")
 			return list(
-		if ("Grue")
+		if ("Umbra")
 			return list(
 		if ("Slime")
 			return list(

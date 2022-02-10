@@ -72,7 +72,7 @@
 	if(active)
 		icon_state = "[reference]p[strength]"
 	else
-		if(stat & NOPOWER)
+		if(stat & (FORCEDISABLE|NOPOWER))
 			icon_state = "[reference]w"
 			return
 		else if(use_power)
@@ -147,7 +147,7 @@
 
 /obj/machinery/particle_accelerator/control_box/power_change()
 	..()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		active = 0
 		use_power = 0
 	else if(!stat && construction_state <= 3)
@@ -246,7 +246,7 @@
 
 
 /obj/machinery/particle_accelerator/control_box/interact(mob/user)
-	if((get_dist(src, user) > 1) || (stat & (BROKEN|NOPOWER)))
+	if((get_dist(src, user) > 1) || (stat & (FORCEDISABLE|BROKEN|NOPOWER)))
 		if(!istype(user, /mob/living/silicon) && !isAdminGhost(user))
 			if(!user.mutations || user.mutations.len || !(M_TK in user.mutations))
 				user.unset_machine()

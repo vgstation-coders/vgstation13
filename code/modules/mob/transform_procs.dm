@@ -159,6 +159,8 @@
 	if(del_mob)
 		qdel(src)
 
+	O.show_intro_text()
+
 /mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	if(!Premorph(delete_items))
 		return

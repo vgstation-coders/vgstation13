@@ -2889,6 +2889,13 @@
 	required_reagents = list(PLASMA = 1, SNOWWHITE = 4, BERRYJUICE = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/pinklady
+	name = "Pink Lady"
+	id = PINKLADY
+	result = PINKLADY
+	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
+	result_amount = 4
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten

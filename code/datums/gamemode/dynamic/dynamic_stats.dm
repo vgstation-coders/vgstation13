@@ -121,18 +121,8 @@
 	victory = F.check_win()
 
 /datum/stat/faction/malf
-	var/list/datum/stat/malf_module_purchase/modules = list()
 	var/shunted = FALSE
 
-/datum/stat/malf_module_purchase
-	var/typepath = null
-	var/module_name = null
-	var/cost = null
-
-/datum/stat/malf_module_purchase/New(var/datum/AI_Module/M)
-	typepath = M.type
-	module_name = M.module_name
-	cost = M.cost
 
 /datum/stat/faction/blob
 	// count of all blob tiles grown, includes structures built on top of blob tiles
