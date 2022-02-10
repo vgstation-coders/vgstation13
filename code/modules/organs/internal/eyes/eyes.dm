@@ -4,6 +4,7 @@
 	parent_organ = LIMB_HEAD
 	organ_type = "eyes"
 	removed_type = /obj/item/organ/internal/eyes
+	w_class = W_CLASS_TINY
 
 	var/welding_proof=0
 	var/eyeprot=0

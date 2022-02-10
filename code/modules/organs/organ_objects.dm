@@ -141,6 +141,8 @@
 	if(!organ_data)
 		organ_data = new organ_type
 
+	w_class = organ_data.w_class
+
 	if(robotic)
 		organ_data.robotic = robotic
 
