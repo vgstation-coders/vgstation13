@@ -3,7 +3,6 @@
 /////////////////////
 //Todo:
 /////////////////////
-//Break upon being bitten
 //Break upon being used AS a weapon
 //Sounds when the item is hit.
 /////////////////////
@@ -226,23 +225,43 @@
 			total_w_class += (thiscontent.w_class ** scalepower)
 	return total_w_class
 
+
+
+//Biting the item
+
+/obj/item/bite_act(mob/living/carbon/human/biter)
+	if(breakable_flags & BREAKABLE_UNARMED && biter.can_bite(src))
+		var/thisdmg = BREAKARMOR_FLIMSY
+		if(biter.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
+			thisdmg += 4
+
+		var/attacktype = "bite"
+		var/attacktype2 = "bites"
+		var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in biter.butchering_drops
+
+		if(T.amount == 0)
+			attacktype = "gum"
+			attacktype2 = "gums"
+			thisdmg = 1
+
+		biter.do_attack_animation(src, biter)
+		biter.delayNextAttack(1 SECONDS)
+		var/glanced=!take_damage(thisdmg)
+		biter.visible_message("<span class='warning'>\The [biter] [loc == biter ? "[attacktype2] down on" : "leans over and [attacktype2]"] \the [src]!</span>",
+		"<span class='notice'>You [loc == biter ? "[attacktype] down on" : "lean over and [attacktype]"] \the [src][glanced ? "... ouch!" : "[generate_break_text()]"]</span>")
+		if(glanced)
+			//Damage the biter's mouth.
+			biter.apply_damage(BREAKARMOR_FLIMSY, BRUTE, TARGET_MOUTH)
+		else
+			break_item()
+	else
+		..()
+
+
+
+
 /*
 //Items being used to hit a mob
 */
-
-
-
-//TODO:
-
-
-/*
-//Biting the item
-/obj/item/bite_act(mob/living/carbon/human/biter)
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_MELEE_UNARMED)
-	else
-		..()
-*/
-
-
 
 
