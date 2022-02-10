@@ -800,10 +800,10 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		return FALSE
 	if(user.isStunned())
 		return FALSE
-	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
-	if(user_loc_to_check != user_original_location && !istype(user_loc_to_check,/turf/space/))
+	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc	
+	if(user_loc_to_check != user_original_location)
 		return FALSE
-	if(target.loc != target_original_location && !istype(user_loc_to_check,/turf/space/))
+	if(target.loc != target_original_location)
 		return FALSE
 	if(needhand)
 		if(originally_held_item)
