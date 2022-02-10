@@ -3740,3 +3740,28 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/lotto
+
+/obj/machinery/vending/lotto/attackby(obj/item/I as obj, user as mob)
+	add_fingerprint(user)
+	if(istype(I, /obj/item/toy/lotto_ticket))
+		var/obj/item/toy/lotto_ticket/T = I
+		if(!T.iswinner)
+			playsound(src, "buzz-sigh", 50, 1)
+			for(var/mob/V in hearers(src))
+				V.visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
+			return
+		else
+			if(T.winnings <= 10000)
+				for(var/mob/V in hearers(src))
+					V.visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund!\"")
+				dispense_cash(T.winnings, get_turf(src))
+				playsound(src, "polaroid", 50, 1)
+			else
+				var/mob/living/carbon/human/H = user
+				var/account_num = H?.mind?.initial_account?.account_number
+				var/datum/money_account/account = get_money_account_global(account_num)
+				account.money += T.winnings
+				playsound(src, "ping", 50, 1)
+				for(var/mob/V in hearers(src))
+					V.visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund into your account!\"")
+			qdel(T)

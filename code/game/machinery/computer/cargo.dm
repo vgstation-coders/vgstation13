@@ -235,13 +235,6 @@ For vending packs, see vending_packs.dm*/
 				A.anchored = 1
 				src.transfer_fingerprints_to(A)
 				qdel(src)
-	if(istype(I, /obj/item/toy/lotto_ticket))
-		var/obj/item/toy/lotto_ticket/T = I
-		for(var/mob/V in hearers(src))
-			V.show_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Lottery account!\"")
-		dispense_cash(T.winnings, get_turf(src))
-		playsound(src, "polaroid", 50, 1)
-		qdel(T)
 	else
 		return ..()
 
