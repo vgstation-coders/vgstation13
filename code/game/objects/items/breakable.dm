@@ -5,16 +5,15 @@
 /////////////////////
 //Break upon being bitten
 //Break upon being used AS a weapon
-//Getting hurt when holding an item as it breaks
 //Sounds when the item is hit.
-//If the item has reagents or components, spill them when it breaks
-//Stop conflict with hitting a box and also putting the item into the box.
 /////////////////////
 //
 /////////////////////
 //Areas for expansion:
 /////////////////////
 //Damage considerations for the strength of the weapon wielder
+//Getting hurt when holding an item as it breaks
+//Getting hurt when kicking or biting an item and also accounting for it breaking
 //Make breakability into a component
 //Generalize to /obj
 //Integrate existing shrapnel system into fragments.
@@ -157,7 +156,7 @@
 	if(isobserver(user) || !Adjacent(user) || user.is_in_modules(src))
 		return
 
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON)
+	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && loc != user) //Smash items on the ground, but not in your inventory.
 		if(!isnull(breakable_exclude)) //Check that the weapon isn't specifically excluded from hitting this item
 			for(var/obj/item/this_excl in breakable_exclude)
 				if(istype(W,this_excl))
@@ -172,6 +171,7 @@
 		if(W.breakable_flags & BREAKABLE_AS_MELEE)
 			W.take_damage(min(W.force, BREAKARMOR_MEDIUM)) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
 			W.break_item()
+		return
 	else
 		..()
 
