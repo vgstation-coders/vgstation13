@@ -33,6 +33,7 @@ var/global/datum/controller/vote/vote = new()
 	var/question       = null
 	var/list/ismapvote
 	var/chosen_map
+	var/winner 		 	= null
 	name               = "datum"
 	var/datum/html_interface/nanotrasen/vote/interface
 
@@ -100,6 +101,7 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/reset()
 	currently_voting = FALSE
+	winner = null
 	initiator = null
 	time_remaining = 0
 	mode = null
@@ -136,11 +138,11 @@ var/global/datum/controller/vote/vote = new()
 			return majority()
 		if(2)
 			if(mode == "map")
-				return  majority()//return persistent()
+				return majority()//return persistent()
 			else
-				return  majority()
+				return majority()
 		else
-			return  majority()
+			return majority()
 		
 /datum/controller/vote/proc/majority()
 	var/text
@@ -158,16 +160,16 @@ var/global/datum/controller/vote/vote = new()
 			for(var/option in winners)
 				text += "\t[option]<br>"
 				feedbackanswer = jointext(winners, " ")
-		. = tally[1]
+		winner = tally[1]
 		if(mode == "map")
 			if(!feedbackanswer)
-				feedbackanswer = .
+				feedbackanswer = winner
 				feedback_set("map vote winner", feedbackanswer)
 			else
-				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
-		text += "<b>Vote Result: [.] won with [greatest_votes] vote\s.</b>"
+				feedback_set("map vote tie", "[feedbackanswer] chosen: [winner]")
+		text += "<b>Vote Result: [winner] won with [greatest_votes] vote\s.</b>"
 		for(var/c in tally)
-			if(. != c)
+			if(winner != c)
 				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
@@ -191,11 +193,11 @@ var/global/datum/controller/vote/vote = new()
 				filteredchoices -= a
 				discarded_choices += a
 		if(filteredchoices.len)
-			. = pickweight(filteredchoices.Copy())
+			winner = pickweight(filteredchoices.Copy())
 		qualified_votes = total_votes - discarded_votes
-		text += "<b>Random Weighted Vote Result: [.] won with [tally[.]] vote\s and a [round(100*tally[.]/qualified_votes)]% chance of winning.</b>"
+		text += "<b>Random Weighted Vote Result: [winner] won with [tally[winner]] vote\s and a [round(100*tally[winner]/qualified_votes)]% chance of winning.</b>"
 		for(var/choice in choices)
-			if(. != choice)
+			if(winner != choice)
 				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
@@ -208,31 +210,31 @@ var/global/datum/controller/vote/vote = new()
 	to_chat(world, "<font color='purple'>[result]</font>")
 
 /datum/controller/vote/proc/result()
-	. = announce_result()
+	announce_result()
 	currently_voting = FALSE
 	var/restart = 0
-	if(.)
+	if(winner)
 		switch(mode)
 			if("restart")
-				if(. == "Restart Round")
+				if(winner == "Restart Round")
 					restart = 1
 			if("gamemode")
-				if(master_mode != .)
-					world.save_mode(.)
+				if(master_mode != winner)
+					world.save_mode(winner)
 					if(ticker && ticker.mode)
 						restart = 1
 					else
-						master_mode = .
+						master_mode = winner
 				if(!going)
 					going = 1
 					to_chat(world, "<span class='red'><b>The round will start soon.</b></span>")
 			if("crew_transfer")
-				if(. == "Initiate Crew Transfer")
+				if(winner == "Initiate Crew Transfer")
 					init_shift_change(null, 1)
 			if("map")
-				if(.)
-					chosen_map = "maps/voting/" + ismapvote[.] + "/vgstation13.dmb"
-					watchdog.chosen_map = ismapvote[.]
+				if(winner)
+					chosen_map = "maps/voting/" + ismapvote[winner] + "/vgstation13.dmb"
+					watchdog.chosen_map = ismapvote[winner]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
