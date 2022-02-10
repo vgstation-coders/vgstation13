@@ -274,7 +274,7 @@
         previous_requests_names.Cut()
     qdel(ourorder)
 
-/datum/cargo_forwarding/misc/janicart
+/datum/cargo_forwarding/janicart
     name = "Janicart"
     contains = list(/obj/structure/bed/chair/vehicle/janicart,/obj/item/key/janicart)
     amount = 1
@@ -282,7 +282,7 @@
     containername = "Janicart"
     worth = 100
 
-/datum/cargo_forwarding/misc/gokart
+/datum/cargo_forwarding/gokart
     name = "Go-kart"
     contains = list(/obj/structure/bed/chair/vehicle/gokart,/obj/item/key/gokart)
     amount = 1
@@ -290,7 +290,7 @@
     containername = "Go-kart"
     worth = 200
 
-/datum/cargo_forwarding/misc/random_mob
+/datum/cargo_forwarding/random_mob
     name = "Unknown creature"
     contains = list()
     amount = 1
@@ -298,7 +298,7 @@
     containername = "cage"
     worth = 50
 
-/datum/cargo_forwarding/misc/random_mob/post_creation()
+/datum/cargo_forwarding/random_mob/post_creation()
     if(istype(associated_crate,/obj/structure/cage/random_mob))
         var/obj/structure/cage/random_mob/RM = associated_crate
         for(var/mob/living/simple_animal/SM in RM)
@@ -306,7 +306,7 @@
             containername = SM.name
             worth = (SM.size * SM.size) * 10
 
-/datum/cargo_forwarding/misc/vendotron_stack
+/datum/cargo_forwarding/vendotron_stack
     name = "Old vendotron stack of packs"
     contains = list(/obj/structure/vendomatpack/vendotron)
     amount = 1

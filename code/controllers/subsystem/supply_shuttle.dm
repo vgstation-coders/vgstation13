@@ -420,17 +420,16 @@ var/list/previous_forwards_stations = list()
 			if(new_forwards.len)
 				log_debug("CARGO FORWARDING: [new_forwards.len] crates of [amount_forwarded] were persistence crates, now loading them as normal.")
 			for(var/j in 1 to (amount_forwarded - new_forwards.len))
-				if(prob(75)) // Normal orderable stuff
-					var/datum/cargo_forwarding/from_supplypack/SCF = new
-					new_forwards.Add(SCF)
-				else
-					if(prob(75)) // Centcomm orders
-						var/datum/cargo_forwarding/from_centcomm_order/OCF = new
-						new_forwards.Add(OCF)
-					else // Rare goodies not usually obtainable
-						var/cratetype = pick(subtypesof(/datum/cargo_forwarding/misc))
-						var/datum/cargo_forwarding/misc/MCF = new cratetype
-						new_forwards.Add(MCF)
+				var/cratetype = pick(
+					750;/datum/cargo_forwarding/from_supplypack,
+					150;/datum/cargo_forwarding/from_centcomm_order,
+					40;/datum/cargo_forwarding/janicart,
+					40;/datum/cargo_forwarding/gokart,
+					10;/datum/cargo_forwarding/random_mob,
+					10;/datum/cargo_forwarding/vendotron_stack,
+				)
+				var/datum/cargo_forwarding/NCF = new cratetype
+				new_forwards.Add(NCF)
 
 		for(var/datum/cargo_forwarding/CF in new_forwards)
 			if(!clear_turfs.len)
