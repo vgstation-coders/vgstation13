@@ -120,10 +120,10 @@
 	else
 		if(vote.ismapvote)
 			var/compiled_maps = get_compiled_maps()
-			winner = input(usr, "Pick a map.") as null|anything in all_maps
+			winner = input(usr, "Pick a map.") as null|anything in compiled_maps
 			if(!winner)
 				return
-			var/path = all_maps[winner]
+			var/path = compiled_maps[winner]
 			vote.ismapvote[winner] = path
 			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
 		else
