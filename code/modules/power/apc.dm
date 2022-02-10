@@ -582,6 +582,7 @@
 					"<span class='warning'>You hear welding.</span>")
 			if(cell)
 				cell.forceMove(loc)
+				cell = null
 			qdel(src)
 			return
 	else if (istype(W, /obj/item/mounted/frame/apc_frame) && opened && emagged)
