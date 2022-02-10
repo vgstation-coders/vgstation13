@@ -904,6 +904,7 @@
 #include "code\game\objects\items\blueprints.dm"
 #include "code\game\objects\items\bodybag.dm"
 #include "code\game\objects\items\breakable.dm"
+#include "code\game\objects\items\breakable_test.dm"
 #include "code\game\objects\items\candle.dm"
 #include "code\game\objects\items\changeling_vial.dm"
 #include "code\game\objects\items\contraband.dm"

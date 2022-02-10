@@ -39,9 +39,15 @@
 	var/list/fragment_amounts //List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakabe_fragments
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
 
-/obj/item/proc/on_broken(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Called right before an object breaks.
+/obj/item/proc/on_broken(var/atom/target, var/range, var/speed, var/override, var/fly_speed, var/atom/hit_atom) //Called right before an object breaks.
+	//Drop and and propel any fragments:
 	drop_fragments(target,range,speed,override,fly_speed)
+	//Drop and propel any contents:
 	drop_contents(target,range,speed,override,fly_speed)
+	//Spill any reagents:
+	spill_reagents(hit_atom)
+	if(!isnull(reagents))
+		reagents.reaction(hit_atom)
 	if(breaks_text)
 		visible_message("<span class='warning'>\The [src] [breaks_text]!</span>")
 	if(breaks_sound)
@@ -73,8 +79,11 @@
 			if(target && range && speed) //Propel the content if specified.
 				thiscontent.throw_at(target,range,speed,override,fly_speed)
 
-
-
+/obj/item/proc/spill_reagents(var/atom/hit_atom) //Spill any reagents contained within the item onto the floor, and the atom it hit when it broke, if applicable.
+	if(!isnull(reagents))
+		if(!isnull(hit_atom) && hit_atom != get_turf(src)) //If it hit something other than the floor, spill it onto that.
+			reagents.reaction(hit_atom, TOUCH)
+		reagents.reaction(get_turf(src), TOUCH) //Then spill it onto the floor.
 
 /obj/item/proc/take_damage(var/incoming_damage)
 	var/thisdmg=(incoming_damage>max(damage_armor,damage_resist)) * (incoming_damage-damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
@@ -121,9 +130,9 @@
 	else
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The item shatters!"
 
-/obj/item/proc/break_item(var/atom/target, var/range, var/speed, var/override , var/fly_speed) //Breaks the item if its health_item is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be thrown upon breaking.
+/obj/item/proc/break_item(var/atom/target, var/range, var/speed, var/override , var/fly_speed, var/hit_atom) //Breaks the item if its health_item is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be thrown upon breaking.
 	if(health_item<=0)
-		on_broken(target,range,speed,override,fly_speed)
+		on_broken(target,range,speed,override,fly_speed,hit_atom)
 		qdel(src)
 		return TRUE //Return TRUE if the item was broken
 	else
@@ -181,14 +190,14 @@
 		return
 	if(breakable_flags & BREAKABLE_NOMOB && istype(hit_atom, /mob)) //Don't break when it hits a mob if it's flagged with BREAKABLE_NOMOB
 		return
-	if(isturf(loc))
+	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
 		//Unless the item falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
 		var/thisdmg = 5 * w_class / speed //impact damage scales with the weight class and speed of the item. since a smaller speed is faster, it's a divisor.
 		if(istype(hit_atom, /turf/simulated/floor))
 			take_damage(thisdmg/2)
 		else
 			take_damage(thisdmg)
-		break_item()
+	break_item(null,null,null,null,null,hit_atom)
 
 //Item being hit by a projectile
 
@@ -213,13 +222,13 @@
 			total_w_class += (thiscontent.w_class ** scalepower)
 	return total_w_class
 
+/*
+//Items being used to hit a mob
+*/
 
 
 
 //TODO:
-/*
-//Items being used to hit a mob
-*/
 
 
 /*
@@ -230,188 +239,6 @@
 		..()
 */
 
-//Unused:
-
-/*
-#define USER_TYPE_HUMAN	 1 //User is a carbon/human
-#define USER_TYPE_BEAST  2 //User is a simple_animal
-#define USER_TYPE_ALIEN  3 //User is a carbon/alien
-#define USER_TYPE_ROBOT  4 //User is a silicon
-#define USER_TYPE_OTHER  5 //User is another type of mob/living
-*/
-
-/*
-/obj/item/proc/user_type_check(mob/living/user)
-	if(istype(user, /mob/living/carbon/human))
-		return USER_TYPE_HUMAN
-	else if(istype(user, /mob/living/simple_animal))
-		return USER_TYPE_BEAST
-	else if(istype(user, /mob/living/carbon/alien/humanoid))
-		return USER_TYPE_ALIEN
-	else if(istype(user, /mob/living/silicon))
-		return USER_TYPE_ROBOT
-	else
-		return USER_TYPE_OTHER
-*/
-
-/*
-/obj/item/proc/item_attack_unarmed(mob/living/user)
-	user.do_attack_animation(src,user)
-	user.delayNextAttack(1 SECONDS)
-	var/glanced
-	switch(user_type_check(user))
-		if(USER_TYPE_HUMAN)
-			glanced=!take_damage(user.get_unarmed_damage())
-			var/mob/living/carbon/human/H = user
-			H.visible_message("<span class='warning'>\The [H] [H.species.attack_verb] \the [src][generate_break_text(glanced)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced)]</span>")
-		if(USER_TYPE_BEAST)
-			var/mob/living/simple_animal/M = user
-			glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper))
-			M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced)]</span>")
-		if(USER_TYPE_ALIEN)
-			glanced=!take_damage(user.get_unarmed_damage())
-			user.visible_message("<span class='warning'>\The [user] [pick("slashes","claws")] \the [src][generate_break_text(glanced)]</span>","<span class='notice'>You [pick("slash","claw")] \the [src][generate_break_text(glanced)]</span>")
-		if(USER_TYPE_ROBOT)
-			return ..()				//not setup for now
-		if(USER_TYPE_OTHER)
-			return ..()				//not setup for now
-	break_item()
-*/
-
-/*
-//Aliens
-/obj/item/attack_alien(mob/living/carbon/alien/humanoid/user)
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_MELEE_UNARMED)
-		user.do_attack_animation(src, user)
-		user.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(user.get_unarmed_damage())
-		user.visible_message("<span class='warning'>\The [user] [pick("slashes","claws")] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [pick("slash","claw")] \the [src][generate_break_text(glanced)]</span>")
-		break_item()
-	else
-		..()
-
-*/
-
-/*
-//Empty-handed attacks
-/obj/item/attack_hand(mob/living/carbon/human/user)
-	if(isobserver(user) || !Adjacent(user))
-		return
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_MELEE_UNARMED)
-		user.do_attack_animation(src, user)
-		user.delayNextAttack(1 SECONDS)
-		add_fingerprint(user)
-		var/glanced=!take_damage(user.get_unarmed_damage())
-		user.visible_message("<span class='warning'>\The [user] [user.species.attack_verb] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced,TRUE)]</span>")
-		break_item()
-	else
-		..()
-*/
-
-/////////////////////
-
-
-/////////////////////
-//Testing items
-/obj/item/device/flashlight/test
-	name = "breakable flashlight"
-	desc = "This flashlight looks particularly flimsy."
-	breakable_flags = BREAKABLE_ALL
-	health_item = 30
-	health_item_max = 30
-	damaged_examine_text = "It has gone bad."
-	breaks_text = "crumbles apart"
-	take_hit_text = "cracking"
-	breaks_sound = 'sound/misc/balloon_pop.ogg'
-	breakable_fragments = list(/obj/item/weapon/shard, /obj/item/weapon/reagent_containers/food/snacks/hotdog)
-	fragment_amounts = list(2,1) //Will break into 2 shards, 1 hotdog.
-
-/obj/item/weapon/kitchen/utensil/knife/large/test
-	name = "breakable knife"
-	desc = "This knife looks like it could break under pressure."
-	breakable_flags = BREAKABLE_ALL
-	health_item = 30
-	health_item_max = 30
-	damaged_examine_text = "It's seen better days."
-	breaks_text = "splinters into little bits"
-	take_hit_text = list("denting","cracking")
-	breaks_sound = 'sound/items/trayhit1.ogg'
-	breakable_fragments = list(/obj/item/weapon/shard, /obj/item/weapon/kitchen/utensil/knife/large/test)
-
-/obj/item/weapon/kitchen/utensil/knife/large/test/weak
-	name = "flimsy breakable knife"
-	desc = "This flimsy knife looks like it could fall apart at any time."
-	breakable_flags = BREAKABLE_ALL
-	health_item = 0.1
-	health_item_max = 1
-	damaged_examine_text = "It's seen much better days."
-	damage_armor = BREAKARMOR_NOARMOR
-	damage_resist = 0
-	breaks_text = "falls apart into dust"
-	breakable_fragments = list(/obj/item/weapon/shard, /obj/item/weapon/kitchen/utensil/knife/large/test/weak)
-
-/obj/item/weapon/pen/fountain/test
-	name = "breakable fountain pen"
-	desc = "This pen looks really weak."
-	breakable_flags = BREAKABLE_ALL
-	health_item = 10
-	health_item_max = 10
-	damaged_examine_text = "It's seen much better days."
-	damage_armor = 0
-	damage_resist = 0
-	breaks_text = "falls apart into dust"
-	density = 1
-	breakable_fragments = list(/obj/item/weapon/pen/fountain/test, /obj/item/weapon/kitchen/utensil/knife/)
-	fragment_amounts = list(1,3)
-
-/obj/item/weapon/pen/fountain/test/strong
-	name = "invincible fountain pen"
-	desc = "This pen looks really, really tough."
-	breakable_flags = BREAKABLE_ALL
-	health_item = 10
-	health_item_max = 10
-	damaged_examine_text = "Somehow it has a crack in it..."
-	damage_armor = BREAKARMOR_INVINCIBLE
-	damage_resist = 0
-	density = 1
-	breaks_text = "implodes"
-	breakable_fragments = list(/obj/item/weapon/reagent_containers/food/snacks/hotdog)
-
-/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/test
-	name = "huge breakable flask"
-	desc = "A huge flask that could break at any time, under the right conditions."
-	breakable_flags = BREAKABLE_ALL
-	health_item = 1
-	health_item_max = 1
-	damaged_examine_text = "It has a big crack down the side."
-	damage_armor = BREAKARMOR_NOARMOR
-	damage_resist = 0
-	density = 1
-	breaks_text = "shatters"
-
-/obj/item/weapon/storage/box/survival/test
-	name = "breakable survival box"
-	desc = "A box that holds survival equipment, but is also somewhat fragile."
-	icon_state = "box_emergency"
-	item_state = "box_emergency"
-	breakable_flags = BREAKABLE_ALL
-	health_item = 10
-	health_item_max = 10
-	density = 1
-	damaged_examine_text = "It's all banged up."
-	damage_armor = BREAKARMOR_NOARMOR
-	damage_resist = 0
-	breaks_text = "blows apart"
-//	breakable_fragments = list(/obj/item/weapon/storage/box/survival/test)
-	items_to_spawn = list(
-		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
-		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
-		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
-	)
 
 
 
-
-
-
-/////////////////////
