@@ -55,8 +55,6 @@ var/list/map_dimension_cache = list()
  *
  */
 /dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
-	
-	var/start_time = world.timeofday
 
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
@@ -206,8 +204,6 @@ var/list/map_dimension_cache = list()
 			break
 		sleep(-1)
 
-	log_debug("DMM SUITE: [map_element ? map_element.name : dmm_file] took [(world.timeofday - start_time) / 10] seconds to load in")
-
 	return spawned_atoms
 
 /**
@@ -236,8 +232,6 @@ var/list/map_dimension_cache = list()
 	- Accepts a text string containing a comma separated list of type paths of the
 		same construction as those contained in a .dmm file, and instantiates them.
 	*/
-
-	var/start_time = world.timeofday
 
 	var/list/members = list()//will contain all members (paths) in model (in our example : /turf/unsimulated/wall and /area/mine/explored)
 	var/list/members_attributes = list()//will contain lists filled with corresponding variables, if any (in our example : list(icon_state = "rock") and list())
@@ -351,9 +345,6 @@ var/list/map_dimension_cache = list()
 		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
 
-	var/time_took = (world.timeofday - start_time) / 10
-	if(time_took >= 1)
-		log_debug("DMM SUITE: Slow parse of grid at ([xcrd],[ycrd],[zcrd]), took [time_took] seconds to load in.")
 	return spawned_atoms
 
 ////////////////
@@ -364,7 +355,6 @@ var/list/map_dimension_cache = list()
 /dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate)
 	if(!path)
 		return
-	var/start_time = world.timeofday
 	var/atom/instance
 	_preloader.setup(attributes, path)
 
@@ -381,10 +371,6 @@ var/list/map_dimension_cache = list()
 
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
-
-	var/time_took = (world.timeofday - start_time) / 10
-	if(time_took >= 1)
-		log_debug("DMM SUITE: Slow instancing of [instance] at ([x],[y],[z]), took [time_took] seconds.")
 	
 	return instance
 
