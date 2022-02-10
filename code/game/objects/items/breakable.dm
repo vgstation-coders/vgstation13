@@ -28,14 +28,18 @@
 	var/health_item_max= 15
 	var/damage_armor = 5 //Attacks of this much damage or below will glance off
 	var/damage_resist = 5 //Attacks stronger than damage_armor will have their damage reduced by this much
-	var/damaged_examine_text	//Addendum to the description when it's damaged eg. damaged_examine_text of "It is dented." null will skip this addendum.
-	var/take_hit_text 	//String or list of strings when the item is damaged but not fully broken. eg. "chipping" becomes "..., chipping it!"
-	var/breaks_text		//Visible message when the items breaks. eg. "breaks apart" null skips this.
-	var/breaks_sound	//Path to audible sound when the item breaks. null skips this.
-	var/glances_text	//String or list of strings when the item is attacked but the attack glances off. eg. "bounces" becomes "but it bounces off!"
 	var/list/breakable_fragments //List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard.
 	var/list/fragment_amounts //List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakabe_fragments
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
+	//Text:
+	var/damaged_examine_text	//Addendum to the description when it's damaged eg. damaged_examine_text of "It is dented." null will skip this addendum.
+	var/take_hit_text 	//String or list of strings when the item is damaged but not fully broken. eg. "chipping" becomes "..., chipping it!"
+	var/breaks_text		//Visible message when the items breaks. eg. "breaks apart" null skips this.
+	var/glances_text	//String or list of strings when the item is attacked but the attack glances off. eg. "bounces" becomes "but it bounces off!"
+	//Sounds:
+	var/breaks_sound	//Path to audible sound when the item breaks apart.
+	var/damaged_sound	//Path to audible sound when the item is damaged but not fully destroyed.
+	var/glanced_sound	//Path to audible sound when the item recives a glancing attack not strong enough to damage it.
 
 /obj/item/proc/on_broken(var/atom/target, var/range, var/speed, var/override, var/fly_speed, var/atom/hit_atom) //Called right before an object breaks.
 	//Drop and and propel any fragments:
@@ -50,6 +54,8 @@
 		visible_message("<span class='warning'>\The [src] [breaks_text]!</span>")
 	if(breaks_sound)
 		playsound(src, breaks_sound, 50, 1)
+	else if(damaged_sound)
+		playsound(src, damaged_sound, 50, 1)
 
 /obj/item/proc/drop_fragments(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Separate proc in case special stuff happens with a given item's fragments. Parameters are for throwing the fragments.
 	if(breakable_fragments.len)
@@ -86,11 +92,21 @@
 /obj/item/proc/take_damage(var/incoming_damage)
 	var/thisdmg=(incoming_damage>max(damage_armor,damage_resist)) * (incoming_damage-damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
 	health_item-=thisdmg
+	play_hit_sounds(thisdmg)
 	if(!thisdmg)
 		return 0 //return 0 if the item took no damage (glancing attack)
 	else
 		damaged_icon_updates()
 		return 1 //return 1 if the item took damage
+
+/obj/item/proc/play_hit_sounds(var/thisdmg, var/hear_glanced = TRUE, var/hear_damaged = TRUE) //Plays any relevant sounds whenever the item is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
+	if(health_item<=0) //Don't play a sound here if the item is ready to break, because sounds are also played by on_broken().
+		return
+	if(thisdmg && !isnull(damaged_sound) && hear_damaged)
+		playsound(src, damaged_sound, 50, 1)
+	else if(!isnull(glanced_sound) && hear_glanced)
+		playsound(src, glanced_sound, 50, 1)
+
 
 /obj/item/proc/damaged_icon_updates() //Put any damage-related icon changes here.
 	return

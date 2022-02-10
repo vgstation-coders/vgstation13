@@ -12,6 +12,8 @@
 	breaks_sound = 'sound/misc/balloon_pop.ogg'
 	breakable_fragments = list(/obj/item/weapon/shard, /obj/item/weapon/reagent_containers/food/snacks/hotdog)
 	fragment_amounts = list(2,1) //Will break into 2 shards, 1 hotdog.
+	damaged_sound = 'sound/effects/grillehit.ogg'
+	glanced_sound = 'sound/items/trayhit1.ogg'
 
 /obj/item/weapon/kitchen/utensil/knife/large/test
 	name = "breakable knife"
@@ -210,8 +212,5 @@
 	else
 		..()
 */
-
-
-/*
 
 /////////////////////
