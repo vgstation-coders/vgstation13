@@ -3741,7 +3741,7 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/lotto
 
-/obj/machinery/vending/lotto/attackby(obj/item/I as obj, user as mob)
+/obj/machinery/vending/lotto/attackby(obj/item/I, user)
 	add_fingerprint(user)
 	if(istype(I, /obj/item/toy/lotto_ticket))
 		var/obj/item/toy/lotto_ticket/T = I
