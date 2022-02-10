@@ -24,7 +24,6 @@ var/global/datum/controller/vote/vote = new()
 			src.hide(hclient)
 			vote.cancel_vote(usr)
 
-
 /datum/controller/vote
 	var/initiator      = null
 	var/started_time   = null
@@ -95,7 +94,6 @@ var/global/datum/controller/vote/vote = new()
 			src.reset()
 		else
 			update(1)
-
 		lock = FALSE
 
 /datum/controller/vote/proc/reset()
@@ -178,7 +176,6 @@ var/global/datum/controller/vote/vote = new()
 	var/feedbackanswer
 	var/greatest_votes = 0
 	if (tally.len > 0)
-
 		var/list/winners = list()
 		sortTim(tally, /proc/cmp_numeric_dsc,1)
 		greatest_votes = tally[tally[1]]
@@ -205,8 +202,6 @@ var/global/datum/controller/vote/vote = new()
 		text += "<b>Vote Result: Inconclusive - No choices!</b>"
 	return text
 
-
-
 /datum/controller/vote/proc/persistent()
 	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
 	task.insert_counts(tally)
@@ -220,34 +215,6 @@ var/global/datum/controller/vote/vote = new()
 		text = "<b>Random Vote Result: [.] was picked at random.</b>"
 	else
 		text = "<b>Vote Result: Inconclusive - No choices!</b>"
-
-/datum/controller/vote/proc/weighted()
-	var/vote_threshold = 0.15
-	var/list/discarded_choices = list()
-	var/discarded_votes = 0
-	var/total_votes = get_total()
-	var/text
-	var/list/filteredchoices = tally.Copy()
-	var/qualified_votes
-	if (total_votes > 0)
-		for(var/a in filteredchoices)
-			if(!filteredchoices[a])
-				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
-				continue
-			if(filteredchoices[a] / total_votes < vote_threshold)
-				discarded_votes += filteredchoices[a]
-				filteredchoices -= a
-				discarded_choices += a
-		if(filteredchoices.len)
-			. = pickweight(filteredchoices.Copy())
-		qualified_votes = total_votes - discarded_votes
-		text += "<b>Random Weighted Vote Result: [.] won with [tally[.]] vote\s and a [round(100*tally[.]/qualified_votes)]% chance of winning.</b>"
-		for(var/choice in choices)
-			if(. != choice)
-				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
-	else
-		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
-	return text
 
 /datum/controller/vote/proc/announce_result()
 	currently_voting = FALSE
