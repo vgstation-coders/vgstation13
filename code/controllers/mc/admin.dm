@@ -119,7 +119,7 @@
 		vote.tally[winner] = ARBITRARILY_LARGE_NUMBER
 	else
 		if(vote.ismapvote)
-			var/all_maps = get_all_maps()
+			var/compiled_maps = get_compiled_maps()
 			winner = input(usr, "Pick a map.") as null|anything in all_maps
 			if(!winner)
 				return

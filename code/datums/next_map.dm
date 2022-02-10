@@ -198,11 +198,11 @@
 
 	return votable_maps
 
-/proc/get_all_maps()
-	var/list/all_maps = list()
+/proc/get_compiled_maps()
+	var/list/compiled_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
-		var/datum/next_map/map = new map_path
+		var/datum/next_map/candidate = new map_path
 		if(map.is_compiled())
-			all_maps += map.name
-			all_maps[map.name] = map.path
-	return all_maps
+			compiled_maps += map.name
+			compiled_maps[map.name] = map.path
+	return compiled_maps
