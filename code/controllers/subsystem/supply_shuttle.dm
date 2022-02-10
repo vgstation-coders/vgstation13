@@ -431,17 +431,12 @@ var/list/previous_forwards_stations = list()
 						var/cratetype = pick(subtypesof(/datum/cargo_forwarding/misc))
 						var/datum/cargo_forwarding/misc/MCF = new cratetype
 						new_forwards.Add(MCF)
-		
-		var/i = rand(1,clear_turfs.len)
-		var/turf/pickedloc = clear_turfs[i]
-		clear_turfs.Cut(i,i+1)
-		new /obj/machinery/crate_weigher(pickedloc)
 
 		for(var/datum/cargo_forwarding/CF in new_forwards)
 			if(!clear_turfs.len)
 				break
-			i = rand(1,clear_turfs.len)
-			pickedloc = clear_turfs[i]
+			var/i = rand(1,clear_turfs.len)
+			var/turf/pickedloc = clear_turfs[i]
 			clear_turfs.Cut(i,i+1)
 
 			var/atom/A = new CF.containertype(pickedloc)
