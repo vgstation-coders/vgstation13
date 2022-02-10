@@ -215,6 +215,7 @@ var/global/datum/controller/vote/vote = new()
 		text = "<b>Random Vote Result: [.] was picked at random.</b>"
 	else
 		text = "<b>Vote Result: Inconclusive - No choices!</b>"
+	return text
 
 /datum/controller/vote/proc/announce_result()
 	currently_voting = FALSE
