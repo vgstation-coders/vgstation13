@@ -3,10 +3,11 @@
 	desc = "A scratch-off lotto ticket."
 	icon = 'icons/obj/toy.dmi'
 	w_class = W_CLASS_TINY
-	var/obj/item/toy/lotto_ticket/revealed = 0
-	var/obj/item/toy/lotto_ticket/iswinner = 0
-	var/obj/item/toy/lotto_ticket/ticket_price
-	var/obj/item/toy/lotto_ticket/winnings = 0
+	var/revealed = FALSE
+	var/iswinner = FALSE
+	var/ticket_price
+	var/winnings = 0
+	var/flashed = FALSE
 
 /obj/item/toy/lotto_ticket/New()
 	..()
@@ -48,12 +49,12 @@
 	if(!revealed)
 		if(S.is_sharp() || istype(S, /obj/item/weapon/coin))
 			if(do_after(user, src, 1 SECONDS))
-				src.revealed = 1
+				src.revealed = TRUE
 				src.update_icon()
 				to_chat(user, "<span class='notice'>You scratch off the film covering the prizes.</span>")
 				winnings = scratch(ticket_price)
 				if(winnings)
-					src.iswinner = 1
+					src.iswinner = TRUE
 		else
 			to_chat(user, "<span class='notice'>You need to use something sharp to scratch the ticket.</span>")
 	else
@@ -62,13 +63,11 @@
 /obj/item/toy/lotto_ticket/examine(mob/user)
 	if(user.range_check(src))
 		if(revealed)
-			..()
 			if(iswinner)
 				to_chat(user, "<span class='notice'>This one is a winner! You've won [winnings] credits.</span>")
 			else
 				to_chat(user, "<span class='notice'>No wins on this one.</span>")
 		else
-			..()
 			to_chat(user, "<span class='notice'>It hasn't been scratched off yet.</span>")
 	else
 		..() //Only show a regular description if it is too far away to read.
@@ -119,12 +118,14 @@
 
 /obj/item/toy/lotto_ticket/supermatter_surprise/attackby(obj/item/weapon/S, mob/user)
 	..()
-	to_chat(user, "<span class='notice'>Removing the film emits a brilliant flash of light!</span>")
-	//Radiation emission code taken from Jukebox
-	emitted_harvestable_radiation(get_turf(src), 20, range = 5)	//Standing by a juke applies a dose of 17 rads to humans so we'll round based on that. 1/5th the power of a freshly born stage 1 singularity.
-	for(var/mob/living/carbon/M in view(src,3))
-		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful.
-		M.apply_radiation(round(rads/2),RAD_EXTERNAL) //Distance/rads: 1 = 18, 2 = 14, 3 = 12
-	var/flash_turf = get_turf(src)
-	for(var/mob/living/M in get_hearers_in_view(3, flash_turf))
-		flash(get_turf(M), M)
+	if(!flashed)
+		to_chat(user, "<span class='notice'>Removing the film emits a brilliant flash of light!</span>")
+		//Radiation emission code taken from Jukebox
+		emitted_harvestable_radiation(get_turf(src), 20, range = 5)	//Standing by a juke applies a dose of 17 rads to humans so we'll round based on that. 1/5th the power of a freshly born stage 1 singularity.
+		for(var/mob/living/carbon/M in view(src,3))
+			var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful.
+			M.apply_radiation(round(rads/2),RAD_EXTERNAL) //Distance/rads: 1 = 18, 2 = 14, 3 = 12
+		var/flash_turf = get_turf(src)
+		for(var/mob/living/M in get_hearers_in_view(3, flash_turf))
+			flash(get_turf(M), M)
+		flashed = TRUE
