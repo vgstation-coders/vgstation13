@@ -50,7 +50,7 @@
 	var/mug_name = null
 	var/mug_desc = null
 	var/addictive = FALSE
-	var/tolerance_increase = REAGENTS_METABOLISM/10  //for tolerance, if set above 0, will increase each by that amount on tick.
+	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -1146,7 +1146,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 5.23
 	specheatcap = 0.62
-	tolerance_increase = 0.05
+
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
@@ -2064,7 +2064,7 @@
 	custom_metabolism = 0.05
 	density = 1.26
 	specheatcap = 24.59
-	tolerance_increase = 0.005
+
 
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
 
@@ -3240,7 +3240,7 @@
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 1.79
 	specheatcap = 0.70
-	tolerance_increase = 0.003
+
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
@@ -6290,7 +6290,6 @@
 	custom_metabolism = FOOD_METABOLISM
 	density = 0.79
 	specheatcap = 2.46
-	tolerance_increase = FOOD_METABOLISM/10
 	var/dizzy_adj = 3
 	var/slurr_adj = 3
 	var/confused_adj = 2
