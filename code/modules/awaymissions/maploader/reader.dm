@@ -304,18 +304,14 @@ var/list/map_dimension_cache = list()
 
 	members.Remove(members[index])
 
-	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
 	if(overwrite) //make this come first so lighting overlays don't die
 		var/turf/T_old = locate(xcrd,ycrd,zcrd)
 		var/static/list/blacklisted_types = list(/mob/dead/observer,/mob/dview,/atom/movable/lighting_overlay)
-		var/list/truncated_contents = T_old.contents.Copy()
-		while(truncated_contents.len)
-			truncated_contents = T_old.contents.Copy()
-			for(var/type in blacklisted_types)
-				truncated_contents = prune_list_to_type(truncated_contents,type,TRUE)
-			for(var/atom/movable/thing in truncated_contents)
+		for(var/atom/movable/thing in T_old.contents)
+			if(!is_type_in_list(thing.type,blacklisted_types))
 				qdel(thing)
 
+	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
 	var/first_turf_index = 1
 	while(!ispath(members[first_turf_index],/turf)) //find first /turf object in members
 		first_turf_index++
