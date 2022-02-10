@@ -110,13 +110,12 @@
 
 	if(!vote)
 		return
-
 	var/winner
 	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
 		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
 		if(!winner)
 			return
-		vote.tally[winner] = ARBITRARILY_LARGE_NUMBER
+		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	else
 		if(vote.ismapvote)
 			var/all_maps = get_all_maps()
@@ -130,6 +129,6 @@
 			winner = input(usr,"Add a result.","Add a result","") as text|null
 		if(!winner)
 			return
-		vote.tally[winner]  = ARBITRARILY_LARGE_NUMBER
+		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
-	log_admin("Admin [key_name(usr)] rigged the vote for [winner].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")

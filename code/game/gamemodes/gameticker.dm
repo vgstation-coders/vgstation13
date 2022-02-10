@@ -484,7 +484,7 @@ var/datum/controller/gameticker/ticker
 			gameend_time = world.time / 10
 			if(config.map_voting && player_list.len)
 				//testing("Vote picked [chosen_map]")
-				vote.initiate_vote("map","The Server", popup = 1)
+				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
 
