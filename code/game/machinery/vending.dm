@@ -182,6 +182,7 @@ var/global/num_vending_terminals = 1
 		wires = null
 	if(coinbox)
 		qdel(coinbox)
+		coinbox = null
 	..()
 
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
