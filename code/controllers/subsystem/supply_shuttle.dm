@@ -16,11 +16,7 @@
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 var/list/fulfilled_requests_info = list() // For persistence
-
-var/list/previous_requests_info = list()
-
 var/list/datum/cargo_forwarding/fulfilled_forwards = list()
-
 var/list/datum/cargo_forwarding/previous_forwards = list()
 
 /datum/subsystem/supply_shuttle
@@ -257,7 +253,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 					else
 						possible_names += M.name
 				var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
-				fulfilled_requests_info += list(list("[O.type]",station_name,ourname))
+				fulfilled_requests_info += list(list("/datum/cargo_forwarding/from_centcomm_order", ourname, station_name(), "[O.type]"))
 				if (!istype(O, /datum/centcomm_order/per_unit))
 					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)

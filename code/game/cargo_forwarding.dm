@@ -222,14 +222,8 @@
     qdel(ourpack)
 
 /datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = null)
-    var/list/ourinfo = list()
-    var/is_from_previous = prob(50)
-    if(previous_requests_info && previous_requests_info.len && is_from_previous)
-        ourinfo = previous_requests_info[rand(1,previous_requests_info.len)]
     if(ispath(supply_type,/datum/centcomm_order))
         initialised_type = supply_type
-    else if(ourinfo && ourinfo.len >= 1 && is_from_previous)
-        initialised_type = text2path(ourinfo[1])
     else
         initialised_type = get_weighted_order()
     var/datum/centcomm_order/ourorder = new initialised_type
@@ -267,12 +261,6 @@
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
         access = list(access_science)
     ..()
-    if(ourinfo && ourinfo.len >= 2 && is_from_previous)
-        origin_station_name = ourinfo[2]
-    if(ourinfo && ourinfo.len >= 3 && is_from_previous)
-        origin_sender_name = ourinfo[3]
-    if(ourinfo)
-        previous_requests_info.Remove(ourinfo)
     qdel(ourorder)
 
 /datum/cargo_forwarding/janicart
