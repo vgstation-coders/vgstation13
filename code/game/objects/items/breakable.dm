@@ -140,7 +140,7 @@
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The item shatters!"
 
 /obj/item/proc/break_item(var/atom/target, var/range, var/speed, var/override , var/fly_speed, var/hit_atom) //Breaks the item if its health_item is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be thrown upon breaking.
-	if(health_item<=0)
+	if(breakable_flags && health_item<=0)
 		on_broken(target,range,speed,override,fly_speed,hit_atom)
 		qdel(src)
 		return TRUE //Return TRUE if the item was broken
