@@ -126,17 +126,17 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	for(var/i = 1 to previous_forwards_formatted.len)
 		var/list/formatted_vars = list(previous_forwards_formatted[i])
 		var/ourtype = null
-		if(formatted_vars[1])
-			ourtype = text2path(formatted_vars[1])
+		if(formatted_vars["type"])
+			ourtype = text2path(formatted_vars["type"])
 		var/ourname = null
-		if(formatted_vars[2])
-			ourname = formatted_vars[2]
+		if(formatted_vars["sender"])
+			ourname = formatted_vars["sender"]
 		var/ourstation = null
-		if(formatted_vars[3])
-			ourstation = formatted_vars[3]
+		if(formatted_vars["station"])
+			ourstation = formatted_vars["station"]
 		var/oursubtype = null
-		if(formatted_vars[4])
-			oursubtype = text2path(formatted_vars[4])
+		if(formatted_vars["subtype"])
+			oursubtype = text2path(formatted_vars["subtype"])
 		if(ispath(ourtype,/datum/cargo_forwarding))
 			previous_forwards += new ourtype(ourname, ourstation, oursubtype)
 
@@ -144,7 +144,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	var/list/all_forwards = previous_forwards.Copy() + fulfilled_forwards.Copy()
 	var/list/all_forwards_formatted = list()
 	for(var/datum/cargo_forwarding/forward in all_forwards)
-		all_forwards_formatted += list(list(forward.type, forward.origin_sender_name, forward.origin_station_name, forward.initialised_type))
+		all_forwards_formatted += list(list("type" = forward.type, "sender" = forward.origin_sender_name, "station" = forward.origin_station_name, "subtype" = forward.initialised_type))
 	write_file(list("fulfilled_forwards" = all_forwards_formatted))
 
 /datum/persistence_task/round_end_data
