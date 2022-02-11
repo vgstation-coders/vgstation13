@@ -252,7 +252,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 					else
 						possible_names += M.name
 				var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
-				fulfilled_forwards += new /datum/cargo_forwarding/from_centcomm_order(ourname, station_name(), O.type, TRUE))
+				fulfilled_forwards += new /datum/cargo_forwarding/from_centcomm_order(ourname, station_name(), O.type, TRUE)
 				if (!istype(O, /datum/centcomm_order/per_unit))
 					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)
