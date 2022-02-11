@@ -81,7 +81,8 @@ var/list/map_dimension_cache = list()
 	//first let's map model keys (e.g "aa") to their contents (e.g /turf/space{variables})
 	///////////////////////////////////////////////////////////////////////////////////////
 	var/list/grid_models = list()
-	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
+	//the length of the model key (e.g "aa" or "aba")
+	var/key_len = length(copytext(tfile, findtext(tfile, quote), findtext(tfile, quote, findtext(tfile, quote) + 1, 0))) - 1
 	if(!key_len)
 		key_len = 1
 
