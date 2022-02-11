@@ -85,6 +85,13 @@ var/global/num_vending_terminals = 1
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 	var/credits_held = 0 // How many credits in the machine
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
+
 /atom/movable/proc/product_name()
 	return name
 /obj/item/stack/product_name()
@@ -180,7 +187,12 @@ var/global/num_vending_terminals = 1
 	if(wires)
 		qdel(wires)
 		wires = null
+	if(coinbox)
+		qdel(coinbox)
+		coinbox = null
+	..()
 
+/obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
 		if(is_custom_machine)
 			var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
@@ -200,7 +212,6 @@ var/global/num_vending_terminals = 1
 
 	if(coinbox)
 		coinbox.forceMove(get_turf(src))
-	..()
 
 /obj/machinery/vending/examine(var/mob/user)
 	..()
@@ -218,7 +229,7 @@ var/global/num_vending_terminals = 1
 	return ..()
 
 /obj/machinery/vending/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if(user.incapacitated() || user.lying)
@@ -315,10 +326,12 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/ex_act(severity)
 	switch(severity)
 		if(1.0)
+			dump_vendpack_and_coinbox()
 			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
+				dump_vendpack_and_coinbox()
 				qdel(src)
 				return
 		if(3.0)
@@ -330,10 +343,11 @@ var/global/num_vending_terminals = 1
 	if(prob(75))
 		malfunction()
 	else
+		dump_vendpack_and_coinbox()
 		qdel(src)
 
 /obj/machinery/vending/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	switch(severity)
 		if(1.0)
@@ -651,10 +665,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/vending/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
 	var/micon = !isnull(P.mini_icon) ? "<td class='fridgeIcon cropped'>[P.mini_icon]</td>" : ""
 	var/dat = {"[micon]<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
@@ -707,7 +717,7 @@ var/global/num_vending_terminals = 1
 			return null
 
 /obj/machinery/vending/proc/TurnOff(var/ticks) //Turn off for a while. 10 ticks = 1 second
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	stat |= NOPOWER
@@ -721,7 +731,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/update_vicon()
 	if(stat & (BROKEN))
 		src.icon_state = "[initial(icon_state)]-broken"
-	else if (stat & (NOPOWER))
+	else if (stat & (NOPOWER|FORCEDISABLE))
 		src.icon_state = "[initial(icon_state)]-off"
 	else
 		src.icon_state = "[initial(icon_state)]"
@@ -761,7 +771,7 @@ var/global/num_vending_terminals = 1
 		to_chat(user, "<span class='notice'>The glass in \the [src] is broken, it refuses to work.</span>")
 		return
 
-	if(stat & (NOPOWER))
+	if(stat & (NOPOWER|FORCEDISABLE))
 		to_chat(user, "<span class='notice'>\The [src] is dark and unresponsive.</span>")
 		return
 
@@ -1099,7 +1109,7 @@ var/global/num_vending_terminals = 1
 		src.updateUsrDialog()
 
 /obj/machinery/vending/process()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if(!src.active)
@@ -1134,7 +1144,7 @@ var/global/num_vending_terminals = 1
 	return pick(product_slogans)
 
 /obj/machinery/vending/proc/speak(var/message, var/mob/living/M)
-	if(stat & NOPOWER)
+	if(stat & (NOPOWER|FORCEDISABLE))
 		return
 
 	if(!message)

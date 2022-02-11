@@ -66,7 +66,9 @@
 	if (stat & (BROKEN))
 		to_chat(user, "<span class='warning'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return FALSE
-
+	if(stat & (FORCEDISABLE))
+		to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
+		return
 	if (stat & NOPOWER)
 		to_chat(user, "<span class='warning'>\The [src] is not powered, please check the area power controller before continuing.</span>")
 		return FALSE
@@ -121,13 +123,13 @@
 	overlays.len = 0
 	icon_state = "centrifuge"
 
-	if (stat & (NOPOWER))
+	if (stat & (NOPOWER|FORCEDISABLE))
 		icon_state = "centrifuge0"
 
 	if (stat & (BROKEN))
 		icon_state = "centrifugeb"
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		set_light(0)
 	else
 		if (on)
@@ -166,7 +168,7 @@
 
 /obj/machinery/disease2/centrifuge/proc/add_vial_sprite(var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/slot)
 	var/spin = on
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		spin = FALSE
 	overlays += "centrifuge_vial[slot][spin ? "_moving" : ""]"
 	if (vial.reagents.total_volume)
@@ -182,7 +184,9 @@
 	if (stat & (BROKEN))
 		to_chat(user, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return
-
+	if(stat & (FORCEDISABLE))
+		to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
+		return
 	if (stat & (NOPOWER))
 		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
 		for (var/i = 1 to vial_data.len)
@@ -265,7 +269,7 @@
 
 
 /obj/machinery/disease2/centrifuge/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	if(on)

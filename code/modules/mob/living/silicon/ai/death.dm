@@ -46,7 +46,9 @@
 
 	if(explosive && !gibbed && !istype(loc, /obj/machinery/power/apc))
 		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
-		playsound(src, 'sound/machines/Alarm_short.ogg', 75, FALSE)
+		shake_animation(5, 5, 0.2, 15)
+		spark(src)
+		playsound(src, 'sound/machines/Alarm_short.ogg', 100, FALSE)
 		spawn(30)
 			explosion(src.loc, 2, 5, 8, 10, whodunnit = src)
 			gibbed = TRUE

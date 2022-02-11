@@ -431,6 +431,14 @@
 	reagents = list(FLOUR = 5, SUGAR = 5, SPRINKLES = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
 
+/datum/recipe/candyheart
+	reagents = list(SUGAR = 5, CORNOIL = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
+
+/datum/recipe/chocostrawberry
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar, /obj/item/weapon/reagent_containers/food/snacks/grown/berries)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chocostrawberry
+
 /datum/recipe/gingerbread_man
 	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)

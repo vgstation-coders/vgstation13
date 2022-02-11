@@ -3,6 +3,7 @@
 	icon_state = "cart"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
 	mech_flags = MECH_SCAN_ILLEGAL
+	starting_apps = list(/datum/pda_app/cart/virus/detonate)
 	var/shock_charges = 4
 
 /datum/pda_app/cart/virus

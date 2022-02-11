@@ -235,12 +235,12 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	. = ..()
 	if(.)
 		return
-	if(isAdminGhost(user) || (ishuman(user) && !user.stat && get_dist(src,user) <= 1))
+	if(isAdminGhost(user) || is_malf_owner(user) || (ishuman(user) && !user.stat && get_dist(src,user) <= 1))
 		var/dat = "<b>Accounts Database</b><br>"
 
 		dat += {"<i>[machine_id]</i><br>
 			Confirm identity: <a href='?src=\ref[src];choice=insert_card'>[held_card ? held_card : "-----"]</a><br>"}
-		if(access_level > 0 || isAdminGhost(user))
+		if(access_level > 0 || isAdminGhost(user) || is_malf_owner(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
 				Combined department and personnel budget is currently [station_allowance] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}

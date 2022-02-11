@@ -106,14 +106,14 @@
 			L[T] = MAX_VALUE //Set them equal to the max value which is unlikely to collide with any other pregenerated value
 
 //Removes returns a new list which only contains elements from the original list of a certain type
-/proc/prune_list_to_type(list/L, datum/A)
+/proc/prune_list_to_type(list/L, datum/A, var/exclude_type = FALSE)
 	if(!L || !L.len || !A)
-		return 0
+		return list()
 	if(!ispath(A))
 		A = A.type
 	var/list/nu = L.Copy()
 	for(var/element in nu)
-		if(!istype(element,A))
+		if(istype(element,A) == exclude_type)
 			nu -= element
 	return nu
 

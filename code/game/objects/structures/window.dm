@@ -39,8 +39,8 @@ var/list/one_way_windows
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 	var/disperse_coeff = 0.95
 	var/is_fulltile = FALSE
-/obj/structure/window/New(loc)
 
+/obj/structure/window/New(loc)
 	..(loc)
 	flow_flags |= ON_BORDER | KEEP_DIR
 	setup_border_dummy()
@@ -52,6 +52,7 @@ var/list/one_way_windows
 	if(one_way)
 		one_way = !one_way
 		toggle_one_way()
+
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)

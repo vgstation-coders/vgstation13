@@ -18,6 +18,12 @@
 
 	immune_system = new (src)
 
+/mob/living/create_reagents(const/max_vol)
+	..(max_vol)
+	addicted_chems = new /datum/reagents(max_vol)
+	addicted_chems.my_atom = src
+	tolerated_chems = list()
+
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -1143,42 +1149,36 @@ Thanks.
 		return
 	var/is_hulk = isalienadult(src) || (M_HULK in mutations)
 	var/obj/item/cuffs
-	var/resist_time
+	var/resist_time = 2 MINUTES
 	var/var_to_check // TOOD: Improve this once Lummox releases pointers?
 	var/do_after_callback
 	if(handcuffed)
 		cuffs = handcuffed
-		resist_time = is_hulk ? 5 SECONDS : cuffs.restraint_resist_time
-		if(!resist_time)
-			resist_time = 2 MINUTES //Default
+		resist_time = cuffs.restraint_resist_time
 		var_to_check = "handcuffed"
 	else if(legcuffed)
 		cuffs = legcuffed
 		var/obj/item/weapon/legcuffs/legcuffs = cuffs
-		resist_time = is_hulk ? 5 SECONDS : legcuffs.breakouttime
-		if(!resist_time)
-			resist_time = 2 MINUTES // Default
+		resist_time = legcuffs.breakouttime
 		var_to_check = "legcuffed"
 	else if(mutual_handcuffs)
 		cuffs = mutual_handcuffs
-		resist_time = is_hulk ? 5 SECONDS : 1 MINUTES // 1 minute since it's only one cuff
+		resist_time = cuffs.restraint_resist_time/2 //it's only one cuff
 		var_to_check = "mutual_handcuffs"
 	else if(is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit))
 		cuffs = get_item_by_slot(slot_wear_suit)
-		if(is_hulk)
-			resist_time = 5 SECONDS
-		else
+		if(!is_hulk)
 			do_after_callback = new /callback(GLOBAL_PROC, /proc/strait_jacket_resist_do_after)
-			resist_time = 2 MINUTES // Default
 			var/left_arm = get_organ(LIMB_LEFT_ARM)
 			var/right_arm = get_organ(LIMB_RIGHT_ARM)
 			for(var/datum/organ/external/arm in list(left_arm, right_arm))
 				if(!arm.is_existing() || arm.is_broken())
-					resist_time -= 30 SECONDS
+					resist_time = max(0, resist_time - 30 SECONDS)
 		var_to_check = "wear_suit"
 	else
 		return
-
+	if(is_hulk)
+		resist_time = 5 SECONDS
 	visible_message("<span class='danger'>[src] attempts to [is_hulk ? "break" : "remove"] \the [cuffs]!</span>",
 					"<span class='warning'>You attempt to [is_hulk ? "break" : "remove"] \the [cuffs] (this will take around [resist_time / 10] seconds and you need to stand still).</span>",
 					self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")

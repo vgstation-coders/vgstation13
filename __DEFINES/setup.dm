@@ -533,10 +533,12 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 // bitflags for machine stat variable
 #define BROKEN		1
 #define NOPOWER		2
-#define POWEROFF	4		// tbd
-#define MAINT		8			// under maintaince
+#define POWEROFF	4		// unused
+#define MAINT		8		// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
-#define FORCEDISABLE 32 //forced to be off, such as by a random event
+#define FORCEDISABLE 32 	//disabled either via wire pulse, grid check, or malf ai
+#define NOAICONTROL 	64		//ai control disable
+
 
 //bitflags for door switches.
 #define OPEN	1
@@ -1400,8 +1402,10 @@ var/proccalls = 1
 #define GRUE_JUVENILE 2
 #define GRUE_ADULT 3
 #define GRUE_WALLBREAK 3//Beings to eat before able to break walls
-#define GRUE_RWALLBREAK 4 //Beings to eat before able to break reinforced walls
-
+#define GRUE_RWALLBREAK 5 //Beings to eat before able to break reinforced walls
+#define GRUE_DARK 0 //dark enough for healing
+#define GRUE_DIM 1	//light level neither heals nor burns
+#define GRUE_LIGHT 2//bright enough to burn
 /*
  *
  *
@@ -1698,7 +1702,7 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
-#define DNA_SE_LENGTH 58
+#define DNA_SE_LENGTH 59
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"

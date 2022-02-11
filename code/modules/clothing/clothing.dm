@@ -290,6 +290,9 @@
 /obj/item/clothing/proc/defenseTackleBonus()
 	return
 
+/obj/item/clothing/proc/rangeTackleBonus()
+	return
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"

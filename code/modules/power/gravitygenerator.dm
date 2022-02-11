@@ -67,14 +67,12 @@
 /obj/machinery/computer/gravity_control_computer/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/computer/gravity_control_computer/attack_ai(mob/user as mob)
-	return attack_hand(user)
 
 /obj/machinery/computer/gravity_control_computer/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	add_fingerprint(user)
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		return
 
 	updatemodules()

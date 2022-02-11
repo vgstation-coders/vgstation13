@@ -26,7 +26,7 @@
 	if(!customname)
 		customname = "Nanotrasen Update"
 	for (var/obj/machinery/computer/communications/C in machines)
-		if(! (C.stat & (BROKEN|NOPOWER) ) )
+		if(! (C.stat & (FORCEDISABLE|BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
 			P.name = "'[command_name()] Update.'"
 			P.info = input

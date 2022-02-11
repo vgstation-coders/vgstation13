@@ -457,6 +457,7 @@
 #define TENDIES			"tendies"
 #define DSYRUP			"dsyrup"
 #define GRUE_BILE		"grue_bile"
+#define PINKLADY		"pinklady"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
