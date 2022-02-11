@@ -584,6 +584,9 @@
 					"<span class='warning'>[src] has been cut from the wall by [user.name] with the weldingtool.</span>",\
 					"You cut the APC frame from the wall.",\
 					"<span class='warning'>You hear welding.</span>")
+			if(cell)
+				cell.forceMove(loc)
+				cell = null
 			qdel(src)
 			return
 	else if (istype(W, /obj/item/mounted/frame/apc_frame) && opened && emagged)
@@ -1275,9 +1278,6 @@
 /obj/machinery/power/apc/ex_act(severity)
 	switch(severity)
 		if(1)
-			if(cell)
-				qdel(cell)
-				cell = null
 			qdel(src)
 		if(2)
 			if(prob(50))
@@ -1342,7 +1342,7 @@
 		malfvacate(1)
 
 	if(cell)
-		cell.forceMove(loc)
+		qdel(cell)
 		cell = null
 
 	if(wires)
