@@ -202,6 +202,6 @@
 	var/list/compiled_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
 		var/datum/next_map/candidate = new map_path
-		if(candidate.is_compiled())
+		if(candidate.is_enabled && candidate.is_compiled())
 			compiled_maps[candidate.name] = candidate.path
 	return compiled_maps
