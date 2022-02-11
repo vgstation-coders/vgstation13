@@ -257,7 +257,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 					else
 						possible_names += M.name
 				var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
-				fulfilled_requests_info += list("[O.type]",station_name,ourname)
+				fulfilled_requests_info += list(list("[O.type]",station_name,ourname))
 				if (!istype(O, /datum/centcomm_order/per_unit))
 					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)
@@ -378,7 +378,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 			var/datum/money_account/our_account = department_accounts["Cargo"]
 			var/multiplier = log(10, (our_account.money / (DEPARTMENT_START_FUNDS / 10) ) ) // So that starting funds equal a 1x multiplier
 			amount_forwarded = rand(0,round(cargomen * multiplier))
-			log_debug("CARGO FORWARDING: [amount_forwarded] crates forwarded[!amount_forwarded ? ", nothing sent" : ""].")
+		log_debug("CARGO FORWARDING: [amount_forwarded] crates forwarded[!amount_forwarded ? ", nothing sent" : ""].")
 		if(!amount_forwarded)
 			return // Skip this if nothing to send
 

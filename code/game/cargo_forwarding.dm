@@ -223,11 +223,12 @@
 
 /datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = null)
     var/list/ourinfo = list()
+    var/is_from_previous = prob(50)
     if(previous_requests_info && previous_requests_info.len)
         ourinfo = previous_requests_info[rand(1,previous_requests_info.len)]
     if(ispath(supply_type,/datum/centcomm_order))
         initialised_type = supply_type
-    else if(ourinfo && ourinfo.len >= 1)
+    else if(ourinfo && ourinfo.len >= 1 && is_from_previous)
         initialised_type = text2path(ourinfo[1])
     else
         initialised_type = get_weighted_order()
@@ -250,25 +251,25 @@
                 our_amount = 1
             for(var/j in 1 to our_amount)
                 contains += i        
-        if(istype(initialised_type,/datum/centcomm_order/per_unit))
+        if(istype(ourorder,/datum/centcomm_order/per_unit))
             var/datum/centcomm_order/per_unit/PU = ourorder
             worth = PU.unit_prices[PU.unit_prices[i]] * amount
         else
             worth = ourorder.worth
     //Sadly cannot use switch here
-    if(istype(initialised_type,/datum/centcomm_order/department/engineering))
+    if(istype(ourorder,/datum/centcomm_order/department/engineering))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
         access = list(access_engine)
-    else if(istype(initialised_type,/datum/centcomm_order/department/medical))
+    else if(istype(ourorder,/datum/centcomm_order/department/medical))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/medsec : /obj/structure/largecrate
         access = list(access_medical)
-    else if(istype(initialised_type,/datum/centcomm_order/department/science))
+    else if(istype(ourorder,/datum/centcomm_order/department/science))
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
         access = list(access_science)
     ..()
-    if(ourinfo && ourinfo.len >= 2)
+    if(ourinfo && ourinfo.len >= 2 && is_from_previous)
         origin_station_name = ourinfo[2]
-    if(ourinfo && ourinfo.len >= 3)
+    if(ourinfo && ourinfo.len >= 3 && is_from_previous)
         origin_sender_name = ourinfo[3]
     if(ourinfo)
         previous_requests_info.Remove(ourinfo)
