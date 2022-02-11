@@ -1,24 +1,156 @@
-"a" = (/turf/unsimulated/floor/snow,/area)
-"b" = (/turf/simulated/floor/grass,/area)
-"l" = (/turf/unsimulated/floor/snow/permafrost,/area)
-"m" = (/obj/structure/table/woodentable,/obj/item/potion/healing{pixel_x = -4; pixel_y = 4},/obj/item/potion/deception,/turf/simulated/floor/grass,/area)
-"n" = (/obj/effect/decal/cleanable/campfire,/obj/machinery/cooking/grill/spit,/turf/simulated/floor/grass,/area)
-"r" = (/obj/item/weapon/staff/broom,/obj/item/clothing/head/witchwig{name = "witch hat"},/obj/structure/table/woodentable,/turf/simulated/floor/grass,/area)
-"t" = (/obj/item/weapon/stool/piano{dir = 4; name = "stool"},/turf/simulated/floor/grass,/area)
-"B" = (/obj/structure/flora/ausbushes/fullgrass,/turf/simulated/floor/grass,/area)
-"D" = (/obj/structure/flora/ausbushes/lavendergrass,/obj/structure/flora/ausbushes/lavendergrass,/obj/structure/flora/ausbushes/sparsegrass,/turf/simulated/floor/grass,/area)
-"G" = (/obj/structure/flora/ausbushes/sparsegrass,/turf/simulated/floor/grass,/area)
-"H" = (/obj/structure/flora/grass/both,/turf/unsimulated/floor/snow,/area)
-"N" = (/obj/structure/reagent_dispensers/cauldron/witch,/turf/simulated/floor/grass,/area)
-"V" = (/obj/structure/flora/grass/brown,/turf/unsimulated/floor/snow,/area)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/snow,
+/area)
+"b" = (
+/turf/simulated/floor/grass,
+/area)
+"l" = (
+/turf/unsimulated/floor/snow/permafrost,
+/area)
+"m" = (
+/obj/structure/table/woodentable,
+/obj/item/potion/healing{
+	pixel_x = -4;
+	pixel_y = 4
+	},
+/obj/item/potion/deception,
+/turf/simulated/floor/grass,
+/area)
+"n" = (
+/obj/effect/decal/cleanable/campfire,
+/obj/machinery/cooking/grill/spit,
+/turf/simulated/floor/grass,
+/area)
+"r" = (
+/obj/item/weapon/staff/broom,
+/obj/item/clothing/head/witchwig{
+	name = "witch hat"
+	},
+/obj/structure/table/woodentable,
+/turf/simulated/floor/grass,
+/area)
+"t" = (
+/obj/item/weapon/stool/piano{
+	dir = 4;
+	name = "stool"
+	},
+/turf/simulated/floor/grass,
+/area)
+"B" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/turf/simulated/floor/grass,
+/area)
+"D" = (
+/obj/structure/flora/ausbushes/lavendergrass,
+/obj/structure/flora/ausbushes/lavendergrass,
+/obj/structure/flora/ausbushes/sparsegrass,
+/turf/simulated/floor/grass,
+/area)
+"G" = (
+/obj/structure/flora/ausbushes/sparsegrass,
+/turf/simulated/floor/grass,
+/area)
+"H" = (
+/obj/structure/flora/grass/both,
+/turf/unsimulated/floor/snow,
+/area)
+"N" = (
+/obj/structure/reagent_dispensers/cauldron/witch,
+/turf/simulated/floor/grass,
+/area)
+"V" = (
+/obj/structure/flora/grass/brown,
+/turf/unsimulated/floor/snow,
+/area)
 
 (1,1,1) = {"
-aallllHaa
-allbDllaa
-llrmbGbll
-lBtNnbbbl
-lbGbbbbBl
-llbbbBbla
-aVlBbllaa
-aalllaaVa
+a
+a
+l
+l
+l
+l
+a
+a
+"}
+(2,1,1) = {"
+a
+l
+l
+B
+b
+l
+V
+a
+"}
+(3,1,1) = {"
+l
+l
+r
+t
+G
+b
+l
+l
+"}
+(4,1,1) = {"
+l
+b
+m
+N
+b
+b
+B
+l
+"}
+(5,1,1) = {"
+l
+D
+b
+n
+b
+b
+b
+l
+"}
+(6,1,1) = {"
+l
+l
+G
+b
+b
+B
+l
+a
+"}
+(7,1,1) = {"
+H
+l
+b
+b
+b
+b
+l
+a
+"}
+(8,1,1) = {"
+a
+a
+l
+b
+B
+l
+a
+V
+"}
+(9,1,1) = {"
+a
+a
+l
+l
+l
+a
+a
+a
 "}
