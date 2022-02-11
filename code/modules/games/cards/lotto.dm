@@ -119,13 +119,14 @@
 /obj/item/toy/lotto_ticket/supermatter_surprise/attackby(obj/item/weapon/S, mob/user)
 	..()
 	if(!flashed)
-		to_chat(user, "<span class='notice'>Removing the film emits a brilliant flash of light!</span>")
-		//Radiation emission code taken from Jukebox
-		emitted_harvestable_radiation(get_turf(src), 20, range = 5)	//Standing by a juke applies a dose of 17 rads to humans so we'll round based on that. 1/5th the power of a freshly born stage 1 singularity.
-		for(var/mob/living/carbon/M in view(src,3))
-			var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful.
-			M.apply_radiation(round(rads/2),RAD_EXTERNAL) //Distance/rads: 1 = 18, 2 = 14, 3 = 12
-		var/flash_turf = get_turf(src)
-		for(var/mob/living/M in get_hearers_in_view(3, flash_turf))
-			flash(get_turf(M), M)
-		flashed = TRUE
+		if(S.is_sharp() || istype(S, /obj/item/weapon/coin))
+			to_chat(user, "<span class='notice'>Removing the film emits a brilliant flash of light!</span>")
+			//Radiation emission code taken from Jukebox
+			emitted_harvestable_radiation(get_turf(src), 20, range = 5)	//Standing by a juke applies a dose of 17 rads to humans so we'll round based on that. 1/5th the power of a freshly born stage 1 singularity.
+			for(var/mob/living/carbon/M in view(src,3))
+				var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful.
+				M.apply_radiation(round(rads/2),RAD_EXTERNAL) //Distance/rads: 1 = 18, 2 = 14, 3 = 12
+			var/flash_turf = get_turf(src)
+			for(var/mob/living/M in get_hearers_in_view(3, flash_turf))
+				flash(get_turf(M), M)
+			flashed = TRUE
