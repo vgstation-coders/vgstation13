@@ -222,13 +222,13 @@
     qdel(ourpack)
 
 /datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = null)
-    var/previous_index = 0
+    var/list/ourinfo = list()
+    if(previous_requests_info && previous_requests_info.len)
+        ourinfo = previous_requests_info[rand(1,previous_requests_info.len)]
     if(ispath(supply_type,/datum/centcomm_order))
         initialised_type = supply_type
-    else if(previous_requests_types && previous_requests_types.len)
-        previous_index = rand(1,previous_requests_types.len)
-        initialised_type = text2path(previous_requests_types[previous_index])
-        previous_requests_types.Remove(previous_requests_types[previous_index]) // Must be the index to remove a specific one
+    else if(ourinfo && ourinfo.len >= 1)
+        initialised_type = text2path(ourinfo[1])
     else
         initialised_type = get_weighted_order()
     var/datum/centcomm_order/ourorder = new initialised_type
@@ -266,18 +266,12 @@
         containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
         access = list(access_science)
     ..()
-    if(previous_requests_stations && previous_requests_stations.len)
-        var/index_to_pick = previous_index && previous_index < previous_requests_names.len ? previous_index : rand(1,previous_requests_names.len)
-        origin_station_name = previous_requests_stations[index_to_pick]
-        previous_requests_stations.Remove(previous_requests_stations[index_to_pick])
-    else if(!previous_requests_types || !previous_requests_types.len)
-        previous_requests_stations.Cut()
-    if(previous_requests_names && previous_requests_names.len)
-        var/index_to_pick = previous_index && previous_index < previous_requests_names.len ? previous_index : rand(1,previous_requests_names.len)
-        origin_sender_name = previous_requests_names[index_to_pick]
-        previous_requests_names.Remove(previous_requests_names[index_to_pick])
-    else if(!previous_requests_types || !previous_requests_types.len)
-        previous_requests_names.Cut()
+    if(ourinfo && ourinfo.len >= 2)
+        origin_station_name = ourinfo[2]
+    if(ourinfo && ourinfo.len >= 3)
+        origin_sender_name = ourinfo[3]
+    if(ourinfo)
+        previous_requests_info.Remove(ourinfo)
     qdel(ourorder)
 
 /datum/cargo_forwarding/janicart

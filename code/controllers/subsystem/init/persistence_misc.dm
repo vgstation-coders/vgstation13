@@ -122,15 +122,11 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/requests_fulfilled/on_init()
 	data = read_file()
-	previous_requests_types = data["fulfilled_requests_types"]
-	previous_requests_names = data["fulfilled_requests_names"]
-	previous_requests_stations = data["fulfilled_requests_stations"]
+	previous_requests_info = data["fulfilled_requests"]
 
 /datum/persistence_task/requests_fulfilled/on_shutdown()
-	var/list/all_request_types = previous_requests_types.Copy() + fulfilled_requests_types.Copy()
-	var/list/all_request_names = previous_requests_names.Copy() + fulfilled_requests_names.Copy()
-	var/list/all_request_stations = previous_requests_stations.Copy() + fulfilled_requests_stations.Copy()
-	write_file(list("fulfilled_requests_types" = all_request_types, "fulfilled_requests_names" = all_request_names, "fulfilled_requests_stations" = all_request_stations))
+	var/list/all_requests_info = previous_requests_info.Copy() + fulfilled_requests_info.Copy()
+	write_file(list("fulfilled_requests" = all_requests_info))
 
 /datum/persistence_task/forwards_fulfilled
 	execute = TRUE

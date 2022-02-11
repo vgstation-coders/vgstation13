@@ -15,13 +15,9 @@
 
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
-var/list/fulfilled_requests_types = list() // For persistence
-var/list/fulfilled_requests_names = list()
-var/list/fulfilled_requests_stations = list()
+var/list/fulfilled_requests_info = list() // For persistence
 
-var/list/previous_requests_types = list()
-var/list/previous_requests_names = list()
-var/list/previous_requests_stations = list()
+var/list/previous_requests_info = list()
 
 var/list/datum/cargo_forwarding/fulfilled_forwards = list()
 
@@ -240,8 +236,6 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 		// PAY UP BITCHES
 		for(var/datum/centcomm_order/O in centcomm_orders)
 			if(O.CheckFulfilled())
-				fulfilled_requests_types += "[O.type]"
-				fulfilled_requests_stations += station_name
 				var/list/positions_to_check = list()
 				switch(O.acct_by_string)
 					if("Cargo")
@@ -255,15 +249,13 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 					if("Civilian")
 						positions_to_check = CIVILIAN_POSITIONS
 				var/list/possible_names = list()
-				for(var/mob/M in player_list)
-					if(isliving(M) && positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
+				for(var/mob/living/M in player_list)
+					if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
 						possible_names += M.name
-					else if(isliving(M))
+					else
 						possible_names += M.name
-				if(possible_names && possible_names.len)
-					fulfilled_requests_names += pick(possible_names)
-				else
-					fulfilled_requests_names += "Unknown" // Have to put something here so the index thing works
+				var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
+				fulfilled_requests_info += list("[O.type]",station_name,ourname)
 				if (!istype(O, /datum/centcomm_order/per_unit))
 					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)
