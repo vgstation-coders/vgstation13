@@ -253,7 +253,6 @@ var/list/map_dimension_cache = list()
 /dmm_suite/proc/flip_map_key_axis(var/model as text, var/key_len as num)
 	var/list/lines = splittext(model,"\n")
 	lines.Remove("")
-	world.log << json_encode(lines)
 	var/linelength = 0
 	var/list/keys_by_line = list()
 	for(var/line in lines)
