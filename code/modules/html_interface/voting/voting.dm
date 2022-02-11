@@ -33,6 +33,7 @@ var/global/datum/controller/vote/vote = new()
 	var/question       = null
 	var/list/ismapvote
 	var/chosen_map
+	var/winner 		 	= null
 	name               = "datum"
 	var/datum/html_interface/nanotrasen/vote/interface
 
@@ -99,6 +100,7 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/reset()
 	currently_voting = FALSE
+	winner = null
 	initiator = null
 	time_remaining = 0
 	mode = null
@@ -211,8 +213,9 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/random()
 	var/text
+
 	if (choices.len > 1)
-		. = choices[rand(1, choices.len)]
+		. = pick(choices)
 		text = "<b>Random Vote Result: [winner] was picked at random.</b>"
 	else
 		text = "<b>Vote Result: Inconclusive - No choices!</b>"
@@ -244,10 +247,10 @@ var/global/datum/controller/vote/vote = new()
 					going = 1
 					to_chat(world, "<span class='red'><b>The round will start soon.</b></span>")
 			if("crew_transfer")
-				if(. == "Initiate Crew Transfer")
+				if(winner == "Initiate Crew Transfer")
 					init_shift_change(null, 1)
 			if("map")
-				if(.)
+				if(winner)
 					chosen_map = "maps/voting/" + ismapvote[winner] + "/vgstation13.dmb"
 					watchdog.chosen_map = ismapvote[winner]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
