@@ -133,16 +133,16 @@ var/list/map_dimension_cache = list()
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
 
 		/*var/zgrid = ""
-		for(var/xpos=zpos; xpos != 0 || xpos < findtext(tfile,"\n(1,1,",zpos+1,0); xpos = findtext(tfile,"\n(",xpos+1,0))
+		for(var/xpos=zpos; xpos != findtext(tfile,"\n(1,1,",zpos+1,0); xpos = findtext(tfile,"\n(",xpos+1,0))
 			var/xgrid = ""
-			for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != 0 || ypos < findtext(tfile,"\n"+quote,xpos,0); ypos = findtext(tfile,"\n",ypos+1,0))
-				var/ygrid = copytext(tfile,ypos,findtext(tfile,"\n",ypos+1,0))
+			for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != findtext(tfile,"\n"+quote,xpos,0); ypos = findtext(tfile,"\n",ypos+1,0))
+				var/ygrid = copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
 				if(length(ygrid) == key_len) //The thing that determines if we're working with TGM or not, best attempt at distinguishing
 					xgrid += ygrid
 				else
 					xgrid += (ygrid + "\n")
-				if(!findtext(xgrid,"\n"))
-					xgrid += "\n"
+			if(!findtext(xgrid,"\n"))
+				xgrid += "\n"
 			zgrid += xgrid*/
 
 		var/zgrid = copytext(tfile,findtext(tfile,quote+"\n",zpos,0)+2,findtext(tfile,"\n"+quote,zpos,0)+1) //copy the whole map grid
