@@ -56,6 +56,7 @@ var/list/map_dimension_cache = list()
  */
 /dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
 
+	var/loaded_as_tgm = FALSE // Was this map loaded as a TGM? (important for flipping keys)
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
 
@@ -92,6 +93,7 @@ var/list/map_dimension_cache = list()
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
 		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
 		if(tline == "//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE")//tgm header, ignore this
+			loaded_as_tgm = TRUE
 			continue
 		if(tline == "")//we reached the map "layout"
 			if(model_key != "")
@@ -152,8 +154,9 @@ var/list/map_dimension_cache = list()
 		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
-		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : y_depth + y_offset
-		var/y_check = rotate == 0 || rotate == 180 ? y_depth + y_offset : map_width + x_offset
+		var/parse_rotate = loaded_as_tgm ? ((rotate + 90) % 360) : rotate //And this is why we have that var, because of the way keys are read
+		var/x_check = parse_rotate == 0 || parse_rotate == 180 ? map_width + x_offset : y_depth + y_offset
+		var/y_check = parse_rotate == 0 || parse_rotate == 180 ? y_depth + y_offset : map_width + x_offset
 		if(world.maxx < x_check)
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
@@ -188,7 +191,7 @@ var/list/map_dimension_cache = list()
 				xcrd_flip--
 				xcrd_flip_rotate--
 				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
-				switch(rotate)
+				switch(parse_rotate)
 					if(0)
 						spawned_atoms |= parse_grid(grid_models[parse_key],xcrd,ycrd,zcrd+z_offset,rotate,overwrite)
 					if(90)
