@@ -85,14 +85,26 @@ var/list/map_dimension_cache = list()
 	if(!key_len)
 		key_len = 1
 
+	var/model_contents = ""
+	var/model_key = ""
 	//proceed line by line
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
 		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
-		if(copytext(tline,1,2) != quote)//we reached the map "layout"
+		if(tline == "//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE")//tgm header, ignore this
+			continue
+		if(tline == "")//we reached the map "layout"
+			if(model_key != "")
+				grid_models[model_key] = model_contents
 			break
-		var/model_key = copytext(tline,2,2+key_len)
-		var/model_contents = copytext(tline,findtext(tfile,"=")+3,length(tline))
-		grid_models[model_key] = model_contents
+		if(copytext(tline,1,2) == quote)
+			if(model_key != "")
+				grid_models[model_key] = model_contents
+			model_key = copytext(tline,2,2+key_len)
+			model_contents = ""
+		var/model_line = replacetext(tline,"\"[model_key]\" = (","")
+		model_line = replacetext(model_line,")","")
+		model_line = replacetext(model_line,"\t","")
+		model_contents += model_line
 		if (remove_lag)
 			CHECK_TICK
 		else
@@ -163,16 +175,16 @@ var/list/map_dimension_cache = list()
 				xcrd_rotate++
 				xcrd_flip--
 				xcrd_flip_rotate--
-				var/model_key = copytext(grid_line,mpos,mpos+key_len)
+				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
 				switch(rotate)
 					if(0)
-						spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset,rotate,overwrite)
+						spawned_atoms |= parse_grid(grid_models[parse_key],xcrd,ycrd,zcrd+z_offset,rotate,overwrite)
 					if(90)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_rotate,xcrd_flip_rotate,zcrd+z_offset,rotate,overwrite)
+						spawned_atoms |= parse_grid(grid_models[parse_key],ycrd_rotate,xcrd_flip_rotate,zcrd+z_offset,rotate,overwrite)
 					if(180)
-						spawned_atoms |= parse_grid(grid_models[model_key],xcrd_flip,ycrd_flip,zcrd+z_offset,rotate,overwrite)
+						spawned_atoms |= parse_grid(grid_models[parse_key],xcrd_flip,ycrd_flip,zcrd+z_offset,rotate,overwrite)
 					if(270)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_flip_rotate,xcrd_rotate,zcrd+z_offset,rotate,overwrite)
+						spawned_atoms |= parse_grid(grid_models[parse_key],ycrd_flip_rotate,xcrd_rotate,zcrd+z_offset,rotate,overwrite)
 				if (remove_lag)
 					CHECK_TICK
 			if(map_element)
