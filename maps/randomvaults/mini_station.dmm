@@ -1,318 +1,3762 @@
-"aa" = (/turf/space,/area)
-"ab" = (/turf/simulated/wall/r_wall,/area/vault/mini_station)
-"ac" = (/turf/simulated/wall,/area/vault/mini_station_construction)
-"ad" = (/turf/simulated/floor/engine,/area/vault/mini_station_engineering)
-"ae" = (/obj/structure/lattice,/turf/space,/area)
-"af" = (/obj/machinery/door/airlock/glass,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"ag" = (/obj/machinery/atmospherics/miner/nitrogen,/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"ah" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"aj" = (/obj/structure/lattice,/obj/structure/grille,/turf/space,/area)
-"ak" = (/obj/machinery/alarm{dir = 4; pixel_x = -22},/turf/simulated/floor{dir = 8; icon_state = "green"},/area/vault/mini_station_botany)
-"al" = (/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_engineering)
-"am" = (/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_engineering)
-"an" = (/turf/simulated/floor,/area/vault/mini_station)
-"ao" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_engineering)
-"ap" = (/obj/structure/catwalk,/obj/machinery/power/solar/panel/tracker,/turf/space,/area/vault/mini_station_entrance)
-"aq" = (/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"ar" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered{dir = 8; icon_state = "hoff"},/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 8},/turf/simulated/floor,/area/vault/mini_station)
-"au" = (/obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden{dir = 1; icon_state = "adapter_4"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"av" = (/obj/machinery/portable_atmospherics/canister,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"aw" = (/obj/machinery/atmospherics/unary/portables_connector,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"ax" = (/obj/machinery/portable_atmospherics/canister/air,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"ay" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"az" = (/obj/machinery/portable_atmospherics/canister/air,/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"aB" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"aC" = (/obj/machinery/alarm{dir = 4; pixel_x = -22},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"aD" = (/obj/machinery/light{dir = 1},/obj/machinery/constructable_frame/machine_frame,/turf/simulated/floor,/area/vault/mini_station_construction)
-"aE" = (/obj/machinery/bot/cleanbot/roomba,/obj/structure/cable{d2 = 2; icon_state = "0-2"},/obj/machinery/power/apc{dir = 4; pixel_x = 24},/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/turf/simulated/floor,/area/vault/mini_station_construction)
-"aF" = (/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{dir = 1; icon_state = "adapter_2"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"aG" = (/obj/machinery/door/airlock/glass,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/turf/simulated/floor,/area/vault/mini_station_construction)
-"aH" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 10; tag = ""},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"aI" = (/obj/machinery/power/solar/panel{id_tag = "derelictsolar"; name = "Derelict Solar Array"},/turf/simulated/floor/airless{icon_state = "solarpanel"},/area/vault/mini_station_entrance)
-"aJ" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered,/obj/machinery/atmospherics/unary/vent_pump/on/layered,/turf/simulated/floor,/area/vault/mini_station)
-"aK" = (/obj/structure/catwalk,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/turf/space,/area/vault/mini_station_entrance)
-"aO" = (/obj/machinery/door/airlock/external,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"aP" = (/obj/structure/sign/atmosplaque,/turf/simulated/wall,/area/vault/mini_station_construction)
-"aQ" = (/obj/structure/catwalk,/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/space,/area/vault/mini_station_entrance)
-"aR" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered{dir = 1; icon_state = "hoff"},/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 1},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"aS" = (/obj/structure/catwalk,/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/space,/area/vault/mini_station_entrance)
-"aT" = (/obj/machinery/light,/turf/simulated/floor,/area/vault/mini_station_entrance)
-"aU" = (/obj/structure/sign/directions/engineering{dir = 1; icon_state = "direction_eng"},/turf/simulated/wall,/area/vault/mini_station_engineering)
-"aV" = (/obj/structure/catwalk,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/space,/area/vault/mini_station_entrance)
-"aW" = (/obj/structure/catwalk,/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/space,/area/vault/mini_station_entrance)
-"aX" = (/obj/structure/catwalk,/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/space,/area/vault/mini_station_entrance)
-"aZ" = (/obj/effect/decal/warning_stripes{icon_state = "nitrogen"},/obj/machinery/atmospherics/unary/vent_pump/high_volume{canSpawnMice = 0; dir = 4; external_pressure_bound = 0; frequency = 1443; icon_state = "in"; id_tag = "voxx"; internal_pressure_bound = 2000; on = 1; pressure_checks = 2; pump_direction = 0},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"ba" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"bb" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_construction)
-"bd" = (/obj/machinery/light{dir = 4},/turf/simulated/floor,/area/vault/mini_station_construction)
-"be" = (/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 8},/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{dir = 8},/turf/simulated/floor,/area/vault/mini_station)
-"bf" = (/obj/structure/catwalk,/obj/structure/cable,/turf/space,/area/vault/mini_station_entrance)
-"bg" = (/obj/machinery/atmospherics/miner/oxygen,/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"bh" = (/obj/machinery/alarm{dir = 1; pixel_y = -24},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/turf/simulated/floor,/area/vault/mini_station_construction)
-"bi" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 10; tag = ""},/turf/simulated/floor,/area/vault/mini_station_construction)
-"bk" = (/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"bm" = (/obj/structure/catwalk,/turf/space,/area/vault/mini_station_entrance)
-"bn" = (/obj/machinery/light_switch{pixel_x = -23},/turf/simulated/floor{dir = 10; icon_state = "blue"},/area/vault/mini_station_medbay)
-"bo" = (/obj/structure/catwalk,/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/space,/area/vault/mini_station_entrance)
-"bp" = (/obj/machinery/telecomms/relay/preset/ruskie,/turf/simulated/floor/engine,/area/vault/mini_station_engineering)
-"bt" = (/obj/structure/sign/greencross,/turf/simulated/wall,/area/vault/mini_station_medbay)
-"bu" = (/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_medbay)
-"bv" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"bx" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/grille,/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/mini_station_engineering)
-"by" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{dir = 1; icon_state = "brown"},/area/vault/mini_station_engineering)
-"bz" = (/obj/structure/table/woodentable,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/storage/box/drinkingglasses{pixel_y = 12},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"bA" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_medbay)
-"bB" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/mini_station_medbay)
-"bC" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"bF" = (/obj/structure/bed/chair/wood/normal{dir = 4; icon_state = "wooden_chair"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"bH" = (/obj/structure/closet/radiation,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{dir = 8; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"bI" = (/obj/structure/sign/directions/medical,/turf/simulated/wall,/area/vault/mini_station_botany)
-"bJ" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor,/area/vault/mini_station)
-"bK" = (/obj/machinery/suit_storage_unit/engie,/turf/simulated/floor{dir = 1; icon_state = "brown"},/area/vault/mini_station_engineering)
-"bL" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{dir = 5; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"bM" = (/obj/machinery/botany/editor,/turf/simulated/floor{dir = 9; icon_state = "green"},/area/vault/mini_station_botany)
-"bN" = (/obj/machinery/botany/extractor,/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/turf/simulated/floor{dir = 1; icon_state = "green"},/area/vault/mini_station_botany)
-"bO" = (/obj/machinery/vending/hydronutrients,/turf/simulated/floor{dir = 1; icon_state = "green"},/area/vault/mini_station_botany)
-"bP" = (/obj/machinery/vending/hydroseeds,/turf/simulated/floor{dir = 5; icon_state = "green"},/area/vault/mini_station_botany)
-"bR" = (/obj/machinery/optable,/turf/simulated/floor{dir = 10; icon_state = "blue"},/area/vault/mini_station_medbay)
-"bS" = (/obj/structure/closet/wardrobe/medic_white,/obj/item/stack/sheet/bone,/turf/simulated/floor{dir = 2; icon_state = "blue"},/area/vault/mini_station_medbay)
-"bT" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station)
-"bU" = (/obj/machinery/light{dir = 8},/obj/item/weapon/bikehorn,/turf/simulated/floor/engine,/area/vault/mini_station_engineering)
-"bV" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 6; tag = ""},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 6; tag = ""},/turf/simulated/floor,/area/vault/mini_station)
-"bX" = (/obj/machinery/light{dir = 4},/obj/machinery/atmospherics/unary/vent_scrubber/layered{dir = 8; icon_state = "hoff"},/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 8},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"bY" = (/obj/machinery/power/apc{dir = 4; pixel_x = 24},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor{dir = 4; icon_state = "green"},/area/vault/mini_station_botany)
-"bZ" = (/obj/effect/landmark/corpse/engineer,/turf/simulated/floor/engine,/area/vault/mini_station_engineering)
-"ca" = (/obj/machinery/media/jukebox/dj{autoplay = 0},/turf/simulated/floor/engine,/area/vault/mini_station_engineering)
-"cc" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"ce" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/machinery/atmospherics/unary/vent_pump/on/layered,/obj/machinery/atmospherics/unary/vent_scrubber/layered,/turf/simulated/floor{dir = 2; icon_state = "blue"},/area/vault/mini_station_medbay)
-"cf" = (/obj/machinery/vending/tool,/obj/machinery/light,/turf/simulated/floor{dir = 2; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"ch" = (/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,/turf/simulated/floor{dir = 9; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"ci" = (/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"cj" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{dir = 8; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"cl" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"cn" = (/obj/machinery/power/solar/control,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"co" = (/obj/structure/bed/chair/wood/normal{dir = 8; icon_state = "wooden_chair"},/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"cp" = (/obj/machinery/light{dir = 8},/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor{dir = 8; icon_state = "green"},/area/vault/mini_station_botany)
-"cq" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"cs" = (/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor{dir = 4; icon_state = "green"},/area/vault/mini_station_botany)
-"ct" = (/obj/machinery/light{dir = 8; icon_state = "ltube1"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"cu" = (/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/obj/structure/closet/emcloset,/turf/simulated/floor,/area/vault/mini_station_entrance)
-"cv" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor{dir = 4; icon_state = "green"},/area/vault/mini_station_botany)
-"cw" = (/turf/simulated/floor,/area/vault/mini_station_engineering)
-"cx" = (/obj/machinery/vending/engineering,/turf/simulated/floor{dir = 10; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"cy" = (/obj/item/weapon/switchtool/engineering/mech,/obj/item/stack/sheet/mineral/plasma,/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light_switch{pixel_x = -23},/turf/simulated/floor{dir = 8; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"cz" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/turf/simulated/floor,/area/vault/mini_station)
-"cA" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"cB" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"cC" = (/obj/item/claypot,/turf/simulated/floor{dir = 8; icon_state = "green"},/area/vault/mini_station_botany)
-"cD" = (/obj/machinery/reagentgrinder{pixel_x = 6; pixel_y = 6},/obj/structure/table{pixel_x = 0; pixel_y = 0},/turf/simulated/floor,/area/vault/mini_station_medbay)
-"cE" = (/obj/machinery/power/battery/smes,/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"cF" = (/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor{dir = 8; icon_state = "green"},/area/vault/mini_station_botany)
-"cH" = (/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"cI" = (/obj/structure/table/woodentable,/obj/item/ashtray/bronze,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"cJ" = (/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"cK" = (/obj/structure/bed/chair/wood/normal{dir = 4; icon_state = "wooden_chair"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 9; tag = "icon-intact (NORTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 9; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"cL" = (/obj/machinery/light{dir = 8},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"cM" = (/obj/machinery/door/airlock/multi_tile/glass{dir = 2; icon_state = "door_closed"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/turf/simulated/floor,/area/vault/mini_station_medbay)
-"cN" = (/obj/machinery/door/airlock/external,/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"cO" = (/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"cP" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station)
-"cQ" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/mini_station)
-"cR" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"cS" = (/obj/machinery/vending/discount,/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/mini_station)
-"cT" = (/obj/machinery/vending/snack,/turf/simulated/floor,/area/vault/mini_station)
-"cU" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_botany)
-"cV" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_botany)
-"cW" = (/obj/item/weapon/storage/toolbox/mechanical,/obj/item/stack/sheet/metal/bigstack,/obj/item/stack/sheet/plasteel/bigstack,/obj/item/stack/sheet/glass/glass/bigstack,/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/machinery/alarm{dir = 4; pixel_x = -22},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{dir = 8; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"cX" = (/obj/machinery/power/apc{dir = 4; pixel_x = 24},/obj/machinery/power/terminal{dir = 4},/obj/structure/cable,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"cY" = (/obj/machinery/light/small{dir = 8; icon_state = "lbulb1"},/obj/machinery/alarm{dir = 4; pixel_x = -22},/turf/simulated/floor{dir = 8; icon_state = "blue"},/area/vault/mini_station_medbay)
-"cZ" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light_switch{pixel_x = -23},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"da" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"db" = (/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"dc" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/minisat{dir = 4; icon_state = "docking_station"},/obj/machinery/door/firedoor/border_only{dir = 4; name = "Firelock West"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"dd" = (/obj/effect/landmark/hobostart,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"de" = (/turf/simulated/floor{dir = 8; icon_state = "blue"},/area/vault/mini_station_medbay)
-"df" = (/obj/machinery/light,/obj/machinery/seed_extractor,/turf/simulated/floor{icon_state = "green"},/area/vault/mini_station_botany)
-"dp" = (/obj/structure/sign/directions/evac{dir = 4; icon_state = "direction_evac"},/turf/simulated/wall,/area/vault/mini_station_engineering)
-"ee" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered{dir = 8; icon_state = "hoff"},/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 8},/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"eP" = (/obj/machinery/light_switch{pixel_x = -23},/turf/simulated/floor,/area/vault/mini_station)
-"eR" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station)
-"eS" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"fa" = (/obj/machinery/chem_dispenser,/turf/simulated/floor{dir = 4; icon_state = "blue"},/area/vault/mini_station_medbay)
-"fg" = (/obj/machinery/light{dir = 8; icon_state = "ltube1"},/obj/machinery/atmospherics/pipe/simple/supply/visible,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"fw" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_engineering)
-"fC" = (/obj/structure/grille,/obj/structure/window/full/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 4},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"fT" = (/obj/structure/catwalk,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/space,/area/vault/mini_station_entrance)
-"gH" = (/obj/structure/sign/botany,/turf/simulated/wall,/area/vault/mini_station_botany)
-"hj" = (/turf/simulated/wall,/area/vault/mini_station_botany)
-"hs" = (/obj/structure/table/glass,/obj/machinery/chem_dispenser/soda_dispenser/mapping,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"hZ" = (/obj/machinery/portable_atmospherics/hydroponics,/obj/machinery/light_switch{pixel_x = -23},/turf/simulated/floor{dir = 8; icon_state = "green"},/area/vault/mini_station_botany)
-"im" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_botany)
-"iQ" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_medbay)
-"iU" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_construction)
-"jz" = (/turf/simulated/floor,/area/vault/mini_station_medbay)
-"kw" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"kK" = (/obj/structure/rack,/obj/item/weapon/pickaxe/shovel,/obj/item/device/flashlight/lantern,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/pickaxe/shovel,/obj/item/weapon/pickaxe/shovel,/obj/item/device/flashlight/lantern,/obj/item/device/flashlight/lantern,/obj/machinery/light,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"lO" = (/obj/machinery/light{dir = 8},/obj/machinery/alarm{dir = 4; pixel_x = -22},/turf/simulated/floor,/area/vault/mini_station)
-"mK" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 9; icon_state = "blue"},/area/vault/mini_station_medbay)
-"mN" = (/obj/structure/closet/walllocker/defiblocker/east,/turf/simulated/floor{dir = 4; icon_state = "blue"},/area/vault/mini_station_medbay)
-"mQ" = (/obj/structure/closet/secure_closet/hydroponics,/obj/item/weapon/storage/box/botanydisk,/turf/simulated/floor{dir = 10; icon_state = "green"},/area/vault/mini_station_botany)
-"nc" = (/obj/machinery/alarm{dir = 1; pixel_y = -24},/obj/machinery/bodyscanner{dir = 4; icon_state = "body_scanner_0"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"nA" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"nL" = (/obj/structure/table/glass,/obj/item/weapon/folder/yellow,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"nS" = (/obj/machinery/suit_storage_unit/medical,/turf/simulated/floor{dir = 6; icon_state = "blue"},/area/vault/mini_station_medbay)
-"on" = (/turf/simulated/wall,/area/vault/mini_station_engineering)
-"ot" = (/obj/machinery/vending/engivend,/turf/simulated/floor{dir = 2; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"oH" = (/obj/machinery/newscaster{dir = 4; pixel_x = -28},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"pf" = (/obj/machinery/biogenerator,/turf/simulated/floor{icon_state = "green"},/area/vault/mini_station_botany)
-"pi" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_botany)
-"pk" = (/turf/simulated/wall,/area/vault/mini_station_medbay)
-"pL" = (/turf/simulated/floor,/area/vault/mini_station_entrance)
-"pP" = (/obj/machinery/sleeper,/obj/machinery/light{dir = 8},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"pY" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"qk" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered{dir = 1; icon_state = "hoff"},/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 1},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"qm" = (/obj/structure/bed/chair/wood/normal{dir = 4; icon_state = "wooden_chair"},/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"qA" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered,/obj/machinery/atmospherics/unary/vent_pump/on/layered,/turf/simulated/floor,/area/vault/mini_station_construction)
-"qD" = (/obj/machinery/door/airlock/glass,/obj/machinery/door/firedoor/border_only{name = "Firelock South"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_medbay)
-"qI" = (/obj/item/device/rcd/matter/engineering/pre_loaded,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"qX" = (/obj/machinery/vending/building,/turf/simulated/floor{dir = 6; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"rA" = (/obj/machinery/vending/coffee,/turf/simulated/floor,/area/vault/mini_station)
-"so" = (/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/item/weapon/switchtool/surgery,/obj/item/weapon/storage/firstaid/toxin,/obj/item/stack/sheet/charcoal,/obj/machinery/power/apc{dir = 4; pixel_x = 24},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 6; icon_state = "blue"},/area/vault/mini_station_medbay)
-"st" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"sD" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"sT" = (/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_medbay)
-"te" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/mini_station)
-"tg" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 1; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 1; icon_state = "map"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 4; icon_state = "green"},/area/vault/mini_station_botany)
-"tp" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/turf/simulated/floor{dir = 6; icon_state = "green"},/area/vault/mini_station_botany)
-"tH" = (/turf/simulated/wall/r_wall,/area/vault/mini_station_medbay)
-"ui" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/mini_station_construction)
-"uj" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered,/obj/machinery/atmospherics/unary/vent_pump/on/layered,/turf/simulated/floor,/area/vault/mini_station_botany)
-"uF" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 9; tag = "icon-intact (NORTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 9; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"vn" = (/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{dir = 8},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"vv" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered,/obj/machinery/atmospherics/unary/vent_pump/on/layered,/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"wb" = (/obj/machinery/sleeper,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"wr" = (/obj/machinery/light_switch{pixel_x = -23},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"wy" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"wB" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"; tag = ""},/turf/simulated/floor,/area/vault/mini_station)
-"xe" = (/obj/machinery/door/airlock/glass,/obj/machinery/door/firedoor/border_only{name = "Firelock South"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"xz" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"xJ" = (/obj/item/weapon/circuitboard/circuit_imprinter,/turf/simulated/floor,/area/vault/mini_station_construction)
-"xK" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"xO" = (/turf/simulated/floor,/area/vault/mini_station_construction)
-"ya" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"; tag = ""},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"ye" = (/obj/item/weapon/storage/toolbox/electrical,/obj/item/blueprints/construction_permit,/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/item/weapon/disk/shuttle_coords/vault/minisat,/turf/simulated/floor{dir = 8; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"yx" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor,/area/vault/mini_station)
-"yW" = (/obj/structure/closet/emcloset,/turf/simulated/floor,/area/vault/mini_station)
-"zb" = (/turf/simulated/wall/r_wall,/area/vault/mini_station_entrance)
-"zo" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"zs" = (/obj/machinery/bioprinter/prosthetics,/obj/machinery/light{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/mini_station_medbay)
-"Ak" = (/obj/machinery/constructable_frame/machine_frame,/turf/simulated/floor,/area/vault/mini_station_construction)
-"Am" = (/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/item/weapon/storage/firstaid,/obj/item/weapon/thermometer,/obj/item/weapon/storage/box/beakers,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/mini_station_medbay)
-"At" = (/obj/structure/grille,/obj/structure/window/full/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma,/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 4},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"AD" = (/obj/structure/cable{d2 = 2; icon_state = "0-2"},/obj/machinery/power/apc{dir = 4; pixel_x = 24},/turf/simulated/floor,/area/vault/mini_station)
-"AW" = (/obj/effect/decal/warning_stripes{icon_state = "oxygen"},/obj/machinery/atmospherics/unary/vent_pump/high_volume{canSpawnMice = 0; dir = 4; external_pressure_bound = 0; frequency = 1443; icon_state = "in"; id_tag = "voxx"; internal_pressure_bound = 2000; on = 1; pressure_checks = 2; pump_direction = 0},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"Bi" = (/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/item/weapon/storage/firstaid/fire,/obj/item/weapon/reagent_containers/glass/beaker,/turf/simulated/floor{dir = 5; icon_state = "blue"},/area/vault/mini_station_medbay)
-"Bq" = (/obj/structure/table/glass,/obj/machinery/microwave,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Bt" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"BA" = (/obj/machinery/door/airlock/external,/obj/machinery/door/firedoor/border_only{name = "Firelock South"},/turf/simulated/floor/plating,/area/vault/mini_station_entrance)
-"BD" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"Ca" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Cs" = (/obj/machinery/vending/cola,/turf/simulated/floor,/area/vault/mini_station)
-"Dx" = (/turf/simulated/wall/r_wall,/area/vault/mini_station_kitchen)
-"DL" = (/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 10; tag = "icon-intact (SOUTHWEST)"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"DQ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 2; icon_state = "blue"},/area/vault/mini_station_medbay)
-"ES" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_construction)
-"ET" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"Fc" = (/turf/simulated/wall,/area/vault/mini_station_kitchen)
-"FG" = (/obj/machinery/power/apc{dir = 4; pixel_x = 24},/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"FH" = (/obj/machinery/vending/groans,/turf/simulated/floor,/area/vault/mini_station)
-"FM" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_medbay)
-"Gi" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/mini_station_botany)
-"GH" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station)
-"Hu" = (/obj/structure/bed/chair/wood/normal{dir = 8; icon_state = "wooden_chair"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"HX" = (/obj/machinery/door/airlock/multi_tile/glass{dir = 8; icon_state = "door_closed"},/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"IJ" = (/obj/machinery/suit_storage_unit/standard_unit,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Jw" = (/obj/structure/closet/secure_closet/engineering_electrical,/obj/item/device/lightreplacer/loaded,/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"Jx" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 9; tag = "icon-intact (NORTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 9; tag = ""},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"Ki" = (/obj/structure/table/glass,/obj/machinery/light{dir = 4},/obj/item/tool/crowbar,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Kr" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 6; tag = ""},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 6; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station)
-"Kv" = (/obj/machinery/bioprinter,/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/turf/simulated/floor{dir = 9; icon_state = "blue"},/area/vault/mini_station_medbay)
-"KD" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"KF" = (/obj/structure/table/woodentable,/obj/item/clothing/mask/cigarette,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Le" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_botany)
-"LF" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 4; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 4; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station)
-"LJ" = (/obj/machinery/light{dir = 4},/turf/simulated/floor,/area/vault/mini_station)
-"LN" = (/obj/structure/table/glass,/obj/item/weapon/storage/fancy,/obj/machinery/light{dir = 4},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"LO" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/mini_station_construction)
-"Mh" = (/turf/simulated/wall/r_wall,/area/vault/mini_station_construction)
-"MC" = (/obj/item/device/rcd/rpd,/turf/simulated/floor,/area/vault/mini_station_engineering)
-"Nn" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/table/glass,/obj/item/tool/bonesetter/bone_mender{pixel_x = -3; pixel_y = 4},/obj/item/stack/medical/advanced/bruise_pack{pixel_x = 3; pixel_y = -9; pixel_z = 1},/turf/simulated/floor{dir = 2; icon_state = "blue"},/area/vault/mini_station_medbay)
-"NL" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station)
-"NQ" = (/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Oc" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/turf/simulated/floor,/area/vault/mini_station_medbay)
-"Oy" = (/obj/structure/closet/emcloset,/obj/item/weapon/switchtool/swiss_army_knife,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"OZ" = (/obj/machinery/atmospherics/trinary/mixer/mirrored{dir = 8; icon_state = "intactm_on"; name = "Gas mixer (N2/O2)"; node1_concentration = 0.8; node2_concentration = 0.2; on = 1; target_pressure = 4500},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"Pp" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor{dir = 8; icon_state = "yellow"},/area/vault/mini_station_engineering)
-"PA" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"; tag = ""},/turf/simulated/floor,/area/vault/mini_station_botany)
-"PC" = (/obj/machinery/alarm{dir = 4; pixel_x = -22},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Qp" = (/turf/simulated/wall/r_wall,/area/vault/mini_station_engineering)
-"QE" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"QO" = (/obj/machinery/door/airlock/glass,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/turf/simulated/floor,/area/vault/mini_station_botany)
-"RR" = (/obj/structure/bed/chair/wood/normal{dir = 8; icon_state = "wooden_chair"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Se" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 6; tag = ""},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 6; tag = ""},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station)
-"Ss" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Tt" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 9; tag = ""},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 9; tag = "icon-intact (NORTHWEST)"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station)
-"TE" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/mini_station)
-"Uf" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_construction)
-"Uj" = (/obj/structure/window/reinforced{dir = 4; icon_state = "rwindow"},/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_kitchen)
-"UY" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 10; tag = ""},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Vc" = (/obj/machinery/bodyscanner,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Vz" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 10; tag = ""},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Wu" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station)
-"WJ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 8; icon_state = "green"},/area/vault/mini_station_botany)
-"WR" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d2 = 2; icon_state = "0-2"},/obj/machinery/power/apc{dir = 4; pixel_x = 24},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"WX" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"Xr" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"XE" = (/obj/machinery/light_switch{pixel_x = -23},/turf/simulated/floor,/area/vault/mini_station_construction)
-"XM" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"XS" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"XZ" = (/turf/simulated/floor,/area/vault/mini_station_botany)
-"Yz" = (/obj/item/weapon/circuitboard/rdconsole,/turf/simulated/floor,/area/vault/mini_station_construction)
-"Zh" = (/obj/structure/grille,/obj/structure/window/full/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
-"Zp" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/turf/simulated/floor,/area/vault/mini_station)
-"Zs" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered{dir = 8; icon_state = "hoff"},/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/mini_station_medbay)
-"ZA" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor,/area/vault/mini_station_engineering)
-"ZW" = (/obj/machinery/chem_master,/turf/simulated/floor{dir = 5; icon_state = "blue"},/area/vault/mini_station_medbay)
-"ZX" = (/obj/structure/table/glass,/obj/machinery/chem_dispenser/booze_dispenser/mapping,/turf/simulated/floor,/area/vault/mini_station_kitchen)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area)
+"ab" = (
+/turf/simulated/wall/r_wall,
+/area/vault/mini_station)
+"ac" = (
+/turf/simulated/wall,
+/area/vault/mini_station_construction)
+"ad" = (
+/turf/simulated/floor/engine,
+/area/vault/mini_station_engineering)
+"ae" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"af" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"ag" = (
+/obj/machinery/atmospherics/miner/nitrogen,
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"ah" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"aj" = (
+/obj/structure/lattice,
+/obj/structure/grille,
+/turf/space,
+/area)
+"ak" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"al" = (
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_engineering)
+"am" = (
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_engineering)
+"an" = (
+/turf/simulated/floor,
+/area/vault/mini_station)
+"ao" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_engineering)
+"ap" = (
+/obj/structure/catwalk,
+/obj/machinery/power/solar/panel/tracker,
+/turf/space,
+/area/vault/mini_station_entrance)
+"aq" = (
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"ar" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 8;
+	icon_state = "hoff"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"au" = (
+/obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden{
+	dir = 1;
+	icon_state = "adapter_4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"av" = (
+/obj/machinery/portable_atmospherics/canister,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"aw" = (
+/obj/machinery/atmospherics/unary/portables_connector,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"ax" = (
+/obj/machinery/portable_atmospherics/canister/air,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"ay" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"az" = (
+/obj/machinery/portable_atmospherics/canister/air,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"aB" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 5;
+	tag = "icon-intact (NORTHEAST)"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"aC" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"aD" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/constructable_frame/machine_frame,
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"aE" = (
+/obj/machinery/bot/cleanbot/roomba,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"aF" = (
+/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{
+	dir = 1;
+	icon_state = "adapter_2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"aG" = (
+/obj/machinery/door/airlock/glass,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"aH" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 10;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"aI" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vault/mini_station_entrance)
+"aJ" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"aK" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2";
+	pixel_y = 0
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"aO" = (
+/obj/machinery/door/airlock/external,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"aP" = (
+/obj/structure/sign/atmosplaque,
+/turf/simulated/wall,
+/area/vault/mini_station_construction)
+"aQ" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"aR" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 1;
+	icon_state = "hoff"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"aS" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"aT" = (
+/obj/machinery/light,
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"aU" = (
+/obj/structure/sign/directions/engineering{
+	dir = 1;
+	icon_state = "direction_eng"
+	},
+/turf/simulated/wall,
+/area/vault/mini_station_engineering)
+"aV" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2";
+	pixel_y = 0
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"aW" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"aX" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"aZ" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "nitrogen"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/high_volume{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 0;
+	frequency = 1443;
+	icon_state = "in";
+	id_tag = "voxx";
+	internal_pressure_bound = 2000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"ba" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"bb" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"bd" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"be" = (
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 8
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"bf" = (
+/obj/structure/catwalk,
+/obj/structure/cable,
+/turf/space,
+/area/vault/mini_station_entrance)
+"bg" = (
+/obj/machinery/atmospherics/miner/oxygen,
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"bh" = (
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -24
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 5;
+	tag = "icon-intact (NORTHEAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 5;
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"bi" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 10;
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"bk" = (
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"bm" = (
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/mini_station_entrance)
+"bn" = (
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"bo" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"bp" = (
+/obj/machinery/telecomms/relay/preset/ruskie,
+/turf/simulated/floor/engine,
+/area/vault/mini_station_engineering)
+"bt" = (
+/obj/structure/sign/greencross,
+/turf/simulated/wall,
+/area/vault/mini_station_medbay)
+"bu" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_medbay)
+"bv" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"bx" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_engineering)
+"by" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "brown"
+	},
+/area/vault/mini_station_engineering)
+"bz" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/fancy/cigarettes,
+/obj/item/weapon/storage/box/drinkingglasses{
+	pixel_y = 12
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"bA" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_medbay)
+"bB" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"bC" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"bF" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 4;
+	icon_state = "wooden_chair"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"bH" = (
+/obj/structure/closet/radiation,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"bI" = (
+/obj/structure/sign/directions/medical,
+/turf/simulated/wall,
+/area/vault/mini_station_botany)
+"bJ" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"bK" = (
+/obj/machinery/suit_storage_unit/engie,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "brown"
+	},
+/area/vault/mini_station_engineering)
+"bL" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"bM" = (
+/obj/machinery/botany/editor,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"bN" = (
+/obj/machinery/botany/extractor,
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = 24
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"bO" = (
+/obj/machinery/vending/hydronutrients,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"bP" = (
+/obj/machinery/vending/hydroseeds,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"bR" = (
+/obj/machinery/optable,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"bS" = (
+/obj/structure/closet/wardrobe/medic_white,
+/obj/item/stack/sheet/bone,
+/turf/simulated/floor{
+	dir = 2;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"bT" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"bU" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/item/weapon/bikehorn,
+/turf/simulated/floor/engine,
+/area/vault/mini_station_engineering)
+"bV" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 6;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 6;
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"bX" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 8;
+	icon_state = "hoff"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"bY" = (
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"bZ" = (
+/obj/effect/landmark/corpse/engineer,
+/turf/simulated/floor/engine,
+/area/vault/mini_station_engineering)
+"ca" = (
+/obj/machinery/media/jukebox/dj{
+	autoplay = 0
+	},
+/turf/simulated/floor/engine,
+/area/vault/mini_station_engineering)
+"cc" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"ce" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/turf/simulated/floor{
+	dir = 2;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"cf" = (
+/obj/machinery/vending/tool,
+/obj/machinery/light,
+/turf/simulated/floor{
+	dir = 2;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"ch" = (
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"ci" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"cj" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"cl" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"cn" = (
+/obj/machinery/power/solar/control,
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"co" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 8;
+	icon_state = "wooden_chair"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"cp" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/hydroponics,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"cq" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"cs" = (
+/obj/machinery/portable_atmospherics/hydroponics,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"ct" = (
+/obj/machinery/light{
+	dir = 8;
+	icon_state = "ltube1"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"cu" = (
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = 24
+	},
+/obj/structure/closet/emcloset,
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"cv" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"cw" = (
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"cx" = (
+/obj/machinery/vending/engineering,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"cy" = (
+/obj/item/weapon/switchtool/engineering/mech,
+/obj/item/stack/sheet/mineral/plasma,
+/obj/structure/table{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"cz" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 5
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 5;
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"cA" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"cB" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"cC" = (
+/obj/item/claypot,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"cD" = (
+/obj/machinery/reagentgrinder{
+	pixel_x = 6;
+	pixel_y = 6
+	},
+/obj/structure/table{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_medbay)
+"cE" = (
+/obj/machinery/power/battery/smes,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"cF" = (
+/obj/machinery/portable_atmospherics/hydroponics,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"cH" = (
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"cI" = (
+/obj/structure/table/woodentable,
+/obj/item/ashtray/bronze,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"cJ" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"cK" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 4;
+	icon_state = "wooden_chair"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 9;
+	tag = "icon-intact (NORTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 9;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"cL" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"cM" = (
+/obj/machinery/door/airlock/multi_tile/glass{
+	dir = 2;
+	icon_state = "door_closed"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_medbay)
+"cN" = (
+/obj/machinery/door/airlock/external,
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"cO" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"cP" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station)
+"cQ" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"cR" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"cS" = (
+/obj/machinery/vending/discount,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"cT" = (
+/obj/machinery/vending/snack,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"cU" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"cV" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 5;
+	tag = "icon-intact (NORTHEAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 5;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"cW" = (
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/sheet/plasteel/bigstack,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/structure/table{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"cX" = (
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/obj/machinery/power/terminal{
+	dir = 4
+	},
+/obj/structure/cable,
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"cY" = (
+/obj/machinery/light/small{
+	dir = 8;
+	icon_state = "lbulb1"
+	},
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"cZ" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"da" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"db" = (
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"dc" = (
+/obj/machinery/door/airlock/external,
+/obj/docking_port/destination/vault/minisat{
+	dir = 4;
+	icon_state = "docking_station"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock West"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"dd" = (
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"de" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"df" = (
+/obj/machinery/light,
+/obj/machinery/seed_extractor,
+/turf/simulated/floor{
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"dp" = (
+/obj/structure/sign/directions/evac{
+	dir = 4;
+	icon_state = "direction_evac"
+	},
+/turf/simulated/wall,
+/area/vault/mini_station_engineering)
+"ee" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 8;
+	icon_state = "hoff"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"eP" = (
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"eR" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"eS" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 5;
+	tag = "icon-intact (NORTHEAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 5;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"fa" = (
+/obj/machinery/chem_dispenser,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"fg" = (
+/obj/machinery/light{
+	dir = 8;
+	icon_state = "ltube1"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/visible,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"fw" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_engineering)
+"fC" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"fT" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2";
+	pixel_y = 0
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/space,
+/area/vault/mini_station_entrance)
+"gH" = (
+/obj/structure/sign/botany,
+/turf/simulated/wall,
+/area/vault/mini_station_botany)
+"hj" = (
+/turf/simulated/wall,
+/area/vault/mini_station_botany)
+"hs" = (
+/obj/structure/table/glass,
+/obj/machinery/chem_dispenser/soda_dispenser/mapping,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"hZ" = (
+/obj/machinery/portable_atmospherics/hydroponics,
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"im" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"iQ" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_medbay)
+"iU" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"jz" = (
+/turf/simulated/floor,
+/area/vault/mini_station_medbay)
+"kw" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"kK" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/obj/machinery/light,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"lO" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"mK" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"mN" = (
+/obj/structure/closet/walllocker/defiblocker/east,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"mQ" = (
+/obj/structure/closet/secure_closet/hydroponics,
+/obj/item/weapon/storage/box/botanydisk,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"nc" = (
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -24
+	},
+/obj/machinery/bodyscanner{
+	dir = 4;
+	icon_state = "body_scanner_0"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"nA" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"nL" = (
+/obj/structure/table/glass,
+/obj/item/weapon/folder/yellow,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"nS" = (
+/obj/machinery/suit_storage_unit/medical,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"on" = (
+/turf/simulated/wall,
+/area/vault/mini_station_engineering)
+"ot" = (
+/obj/machinery/vending/engivend,
+/turf/simulated/floor{
+	dir = 2;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"oH" = (
+/obj/machinery/newscaster{
+	dir = 4;
+	pixel_x = -28
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"pf" = (
+/obj/machinery/biogenerator,
+/turf/simulated/floor{
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"pi" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"pk" = (
+/turf/simulated/wall,
+/area/vault/mini_station_medbay)
+"pL" = (
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"pP" = (
+/obj/machinery/sleeper,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"pY" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"qk" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 1;
+	icon_state = "hoff"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"qm" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 4;
+	icon_state = "wooden_chair"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"qA" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"qD" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/turf/simulated/floor,
+/area/vault/mini_station_medbay)
+"qI" = (
+/obj/item/device/rcd/matter/engineering/pre_loaded,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"qX" = (
+/obj/machinery/vending/building,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"rA" = (
+/obj/machinery/vending/coffee,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"so" = (
+/obj/structure/table{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/item/weapon/switchtool/surgery,
+/obj/item/weapon/storage/firstaid/toxin,
+/obj/item/stack/sheet/charcoal,
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"st" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"sD" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"sT" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_medbay)
+"te" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"tg" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 1;
+	icon_state = "map"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 1;
+	icon_state = "map"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"tp" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"tH" = (
+/turf/simulated/wall/r_wall,
+/area/vault/mini_station_medbay)
+"ui" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"uj" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"uF" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 9;
+	tag = "icon-intact (NORTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 9;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"vn" = (
+/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"vv" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered,
+/obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"wb" = (
+/obj/machinery/sleeper,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"wr" = (
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"wy" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"wB" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"xe" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"xz" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"xJ" = (
+/obj/item/weapon/circuitboard/circuit_imprinter,
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"xK" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"xO" = (
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"ya" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"ye" = (
+/obj/item/weapon/storage/toolbox/electrical,
+/obj/item/blueprints/construction_permit,
+/obj/structure/table{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/item/weapon/disk/shuttle_coords/vault/minisat,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"yx" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"yW" = (
+/obj/structure/closet/emcloset,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"zb" = (
+/turf/simulated/wall/r_wall,
+/area/vault/mini_station_entrance)
+"zo" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"zs" = (
+/obj/machinery/bioprinter/prosthetics,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"Ak" = (
+/obj/machinery/constructable_frame/machine_frame,
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"Am" = (
+/obj/structure/table{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/item/weapon/storage/firstaid,
+/obj/item/weapon/thermometer,
+/obj/item/weapon/storage/box/beakers,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"At" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"AD" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"AW" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "oxygen"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/high_volume{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 0;
+	frequency = 1443;
+	icon_state = "in";
+	id_tag = "voxx";
+	internal_pressure_bound = 2000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"Bi" = (
+/obj/structure/table{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/item/weapon/storage/firstaid/fire,
+/obj/item/weapon/reagent_containers/glass/beaker,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"Bq" = (
+/obj/structure/table/glass,
+/obj/machinery/microwave,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Bt" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"BA" = (
+/obj/machinery/door/airlock/external,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_entrance)
+"BD" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"Ca" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	icon_state = "map"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Cs" = (
+/obj/machinery/vending/cola,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"Dx" = (
+/turf/simulated/wall/r_wall,
+/area/vault/mini_station_kitchen)
+"DL" = (
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"DQ" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 2;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"ES" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_construction)
+"ET" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"Fc" = (
+/turf/simulated/wall,
+/area/vault/mini_station_kitchen)
+"FG" = (
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"FH" = (
+/obj/machinery/vending/groans,
+/turf/simulated/floor,
+/area/vault/mini_station)
+"FM" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_medbay)
+"Gi" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"GH" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station)
+"Hu" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 8;
+	icon_state = "wooden_chair"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"HX" = (
+/obj/machinery/door/airlock/multi_tile/glass{
+	dir = 8;
+	icon_state = "door_closed"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"IJ" = (
+/obj/machinery/suit_storage_unit/standard_unit,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Jw" = (
+/obj/structure/closet/secure_closet/engineering_electrical,
+/obj/item/device/lightreplacer/loaded,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"Jx" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 9;
+	tag = "icon-intact (NORTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 9;
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"Ki" = (
+/obj/structure/table/glass,
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/item/tool/crowbar,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Kr" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 6;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 6;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"Kv" = (
+/obj/machinery/bioprinter,
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = 24
+	},
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"KD" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"KF" = (
+/obj/structure/table/woodentable,
+/obj/item/clothing/mask/cigarette,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Le" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"LF" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 4;
+	icon_state = "map"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 4;
+	icon_state = "map"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"LJ" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"LN" = (
+/obj/structure/table/glass,
+/obj/item/weapon/storage/fancy,
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"LO" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"Mh" = (
+/turf/simulated/wall/r_wall,
+/area/vault/mini_station_construction)
+"MC" = (
+/obj/item/device/rcd/rpd,
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"Nn" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/table/glass,
+/obj/item/tool/bonesetter/bone_mender{
+	pixel_x = -3;
+	pixel_y = 4
+	},
+/obj/item/stack/medical/advanced/bruise_pack{
+	pixel_x = 3;
+	pixel_y = -9;
+	pixel_z = 1
+	},
+/turf/simulated/floor{
+	dir = 2;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"NL" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station)
+"NQ" = (
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Oc" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_medbay)
+"Oy" = (
+/obj/structure/closet/emcloset,
+/obj/item/weapon/switchtool/swiss_army_knife,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"OZ" = (
+/obj/machinery/atmospherics/trinary/mixer/mirrored{
+	dir = 8;
+	icon_state = "intactm_on";
+	name = "Gas mixer (N2/O2)";
+	node1_concentration = 0.8;
+	node2_concentration = 0.2;
+	on = 1;
+	target_pressure = 4500
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"Pp" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellow"
+	},
+/area/vault/mini_station_engineering)
+"PA" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"PC" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Qp" = (
+/turf/simulated/wall/r_wall,
+/area/vault/mini_station_engineering)
+"QE" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"QO" = (
+/obj/machinery/door/airlock/glass,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"RR" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 8;
+	icon_state = "wooden_chair"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Se" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 6;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 6;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"Ss" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Tt" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 9;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 9;
+	tag = "icon-intact (NORTHWEST)"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"TE" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/mini_station)
+"Uf" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"Uj" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/turf/simulated/floor/plating,
+/area/vault/mini_station_kitchen)
+"UY" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 10;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Vc" = (
+/obj/machinery/bodyscanner,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Vz" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 10;
+	tag = ""
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Wu" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"WJ" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "green"
+	},
+/area/vault/mini_station_botany)
+"WR" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"WX" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"Xr" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 5;
+	tag = "icon-intact (NORTHEAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 5;
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
+"XE" = (
+/obj/machinery/light_switch{
+	pixel_x = -23
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"XM" = (
+/obj/machinery/door/airlock/glass,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"XS" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_entrance)
+"XZ" = (
+/turf/simulated/floor,
+/area/vault/mini_station_botany)
+"Yz" = (
+/obj/item/weapon/circuitboard/rdconsole,
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
+"Zh" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	name = "o2 floor";
+	nitrogen = 0;
+	oxygen = 100000
+	},
+/area/vault/mini_station_engineering)
+"Zp" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/media/receiver/boombox/wallmount/muzak{
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/mini_station)
+"Zs" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/layered{
+	dir = 8;
+	icon_state = "hoff"
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"ZA" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/vault/mini_station_engineering)
+"ZW" = (
+/obj/machinery/chem_master,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "blue"
+	},
+/area/vault/mini_station_medbay)
+"ZX" = (
+/obj/structure/table/glass,
+/obj/machinery/chem_dispenser/booze_dispenser/mapping,
+/turf/simulated/floor,
+/area/vault/mini_station_kitchen)
 
 (1,1,1) = {"
-aeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeajajajajajajajajajaj
-aeQpQpQpQpalamaoQpQpMhMhMhESMhMhMhaeaeaeaeaeaeapaeaeaeaeaj
-aeQpaqaqZhavawawaxazacAkaDAkAkaEMhMhaeaaaIaIaIaKaIaIaIaeaj
-aeQpagaZAtDLauaFMCqIaPYzxJqAxOiUxOESaeaaaQaSaSaVaWaWaXaeaj
-aeQpQpQpQpfgaBbaccccaGUfUfbbUfLObdMhaeaaaIaIaIbfaIaIaIaeaj
-aeQpbgAWfCOZvnahETeeacXExObhuiuibiMhaeaaaaaaaabmaaaaaaaeaj
-aeQpQpQpQpQponXMononhjhjhjhjhjhjcqzbaeaeaIaIaIboaIaIaIaeaj
-aeQpadadbpbxchbybKbLhjbMbNbObPhjWRzbzbaeaQaSaSaVaWaWaXaeaj
-aeQpbUadadafcjxzBDbXhjakXZGibYhjsDcucAaeaIaIaIaKaIaIaIaeaj
-aeQpbZadcafwbHclcccnhjcpXZpicshjctpLBtaeaeaeaebfaeaeaeaeae
-aeQpQpQpQpQpcycBaycEhjhZujpicshjaCpLcHcicicicJcNcOcicicicR
-aeaeabcScToncWQEcccXhjcFLepicshjcZaHaObCbCbCbCdadbdbdbdbdc
-aaaeabaJADonyeZAccnAQOWJcVPAtgcUuFyabkcicicicJBAcOcicicicR
-aaaeabbJSebvPpJxcwJwhjcCXZXZcvgHXSaRBtaeaeaeaeboaeaeaeaeae
-aaaeNLczLFoncxotcfqXhjmQpfdftphjXSaTpYaeaIaIaIaKaIaIaIaeaj
-aaaeTEanbTaUononondpbIhjhjhjimhjxezbzbaeaQaSaSfTaWaWaXaeaj
-aaaeGHanyxWuWuWuWuWuWuWuZpKrTtWuwBcPaeaeaIaIaIbfaIaIaIaeaj
-aaaeablOeRcQarananbVcQcQcQtecQbeLJabaeaaaaaaaabmaaaaaaaeaj
-aaaeabePbTananananbJanananCsFHyWrAcPaeaeaIaIaIboaIaIaIaeaj
-aeaeDxHXzoFcFcFcHXSsFcFcFcpkpkpkpktHtHaeaQaSaSfTaWaWaXaeaj
-aeDxDxNQCaVzhsFcNQWXwyvvOypkKvzsAmBiFMaeaIaIaIaKaIaIaIaeaj
-aeDxwbddkwWXLNFcPCWXNQWXFGpkbnceDQsotHaeaeaeaeapaeaeaeaeaj
-aeUjNQNQqkWXZXFcoHqmKFcoUYbtbuqDsTiQtHaeajajajajajajajajaj
-aeDxpPddKDXrxKstxKcKcIHueSbAmKbBZsZWtHaeaaaaaaaaaaaaaaaaaa
-aeUjNQNQNQNQnLFccLbFbzRRNQcMdecDjzfaFMaeaaaaaaaaaaaaaaaaaa
-aeDxwbddNQNQKiFcwrNQNQNQNQpkcYOcjzmNtHaeaaaaaaaaaaaaaaaaaa
-aeDxDxVcncNQBqFcIJkKIJkKIJpkbRNnbSnStHaeaaaaaaaaaaaaaaaaaa
-aeaeDxDxDxUjDxDxDxDxUjDxDxtHtHFMtHtHtHaeaaaaaaaaaaaaaaaaaa
-aaaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaaaaaaaaaaaaaaaaaa
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+aa
+"}
+(2,1,1) = {"
+ae
+Qp
+Qp
+Qp
+Qp
+Qp
+Qp
+Qp
+Qp
+Qp
+Qp
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+Dx
+Dx
+Uj
+Dx
+Uj
+Dx
+Dx
+ae
+ae
+"}
+(3,1,1) = {"
+ae
+Qp
+aq
+ag
+Qp
+bg
+Qp
+ad
+bU
+bZ
+Qp
+ab
+ab
+ab
+NL
+TE
+GH
+ab
+ab
+Dx
+Dx
+wb
+NQ
+pP
+NQ
+wb
+Dx
+Dx
+ae
+"}
+(4,1,1) = {"
+ae
+Qp
+aq
+aZ
+Qp
+AW
+Qp
+ad
+ad
+ad
+Qp
+cS
+aJ
+bJ
+cz
+an
+an
+lO
+eP
+HX
+NQ
+dd
+NQ
+dd
+NQ
+dd
+Vc
+Dx
+ae
+"}
+(5,1,1) = {"
+ae
+Qp
+Zh
+At
+Qp
+fC
+Qp
+bp
+ad
+ca
+Qp
+cT
+AD
+Se
+LF
+bT
+yx
+eR
+bT
+zo
+Ca
+kw
+qk
+KD
+NQ
+NQ
+nc
+Dx
+ae
+"}
+(6,1,1) = {"
+ae
+al
+av
+DL
+fg
+OZ
+Qp
+bx
+af
+fw
+Qp
+on
+on
+bv
+on
+aU
+Wu
+cQ
+an
+Fc
+Vz
+WX
+WX
+Xr
+NQ
+NQ
+NQ
+Uj
+ae
+"}
+(7,1,1) = {"
+ae
+am
+aw
+au
+aB
+vn
+on
+ch
+cj
+bH
+cy
+cW
+ye
+Pp
+cx
+on
+Wu
+ar
+an
+Fc
+hs
+LN
+ZX
+xK
+nL
+Ki
+Bq
+Dx
+ae
+"}
+(8,1,1) = {"
+ae
+ao
+aw
+aF
+ba
+ah
+XM
+by
+xz
+cl
+cB
+QE
+ZA
+Jx
+ot
+on
+Wu
+an
+an
+Fc
+Fc
+Fc
+Fc
+st
+Fc
+Fc
+Fc
+Dx
+ae
+"}
+(9,1,1) = {"
+ae
+Qp
+ax
+MC
+cc
+ET
+on
+bK
+BD
+cc
+ay
+cc
+cc
+cw
+cf
+on
+Wu
+an
+an
+HX
+NQ
+PC
+oH
+xK
+cL
+wr
+IJ
+Dx
+ae
+"}
+(10,1,1) = {"
+ae
+Qp
+az
+qI
+cc
+ee
+on
+bL
+bX
+cn
+cE
+cX
+nA
+Jw
+qX
+dp
+Wu
+bV
+bJ
+Ss
+WX
+WX
+qm
+cK
+bF
+NQ
+kK
+Dx
+ae
+"}
+(11,1,1) = {"
+ae
+Mh
+ac
+aP
+aG
+ac
+hj
+hj
+hj
+hj
+hj
+hj
+QO
+hj
+hj
+bI
+Wu
+cQ
+an
+Fc
+wy
+NQ
+KF
+cI
+bz
+NQ
+IJ
+Uj
+ae
+"}
+(12,1,1) = {"
+ae
+Mh
+Ak
+Yz
+Uf
+XE
+hj
+bM
+ak
+cp
+hZ
+cF
+WJ
+cC
+mQ
+hj
+Wu
+cQ
+an
+Fc
+vv
+WX
+co
+Hu
+RR
+NQ
+kK
+Dx
+ae
+"}
+(13,1,1) = {"
+ae
+Mh
+aD
+xJ
+Uf
+xO
+hj
+bN
+XZ
+XZ
+uj
+Le
+cV
+XZ
+pf
+hj
+Zp
+cQ
+an
+Fc
+Oy
+FG
+UY
+eS
+NQ
+NQ
+IJ
+Dx
+ae
+"}
+(14,1,1) = {"
+ae
+ES
+Ak
+qA
+bb
+bh
+hj
+bO
+Gi
+pi
+pi
+pi
+PA
+XZ
+df
+hj
+Kr
+te
+Cs
+pk
+pk
+pk
+bt
+bA
+cM
+pk
+pk
+tH
+ae
+"}
+(15,1,1) = {"
+ae
+Mh
+Ak
+xO
+Uf
+ui
+hj
+bP
+bY
+cs
+cs
+cs
+tg
+cv
+tp
+im
+Tt
+cQ
+FH
+pk
+Kv
+bn
+bu
+mK
+de
+cY
+bR
+tH
+ae
+"}
+(16,1,1) = {"
+ae
+Mh
+aE
+iU
+LO
+ui
+hj
+hj
+hj
+hj
+hj
+hj
+cU
+gH
+hj
+hj
+Wu
+be
+yW
+pk
+zs
+ce
+qD
+bB
+cD
+Oc
+Nn
+FM
+ae
+"}
+(17,1,1) = {"
+ae
+Mh
+Mh
+xO
+bd
+bi
+cq
+WR
+sD
+ct
+aC
+cZ
+uF
+XS
+XS
+xe
+wB
+LJ
+rA
+pk
+Am
+DQ
+sT
+Zs
+jz
+jz
+bS
+tH
+ae
+"}
+(18,1,1) = {"
+ae
+ae
+Mh
+ES
+Mh
+Mh
+zb
+zb
+cu
+pL
+pL
+aH
+ya
+aR
+aT
+zb
+cP
+ab
+cP
+tH
+Bi
+so
+iQ
+ZW
+fa
+mN
+nS
+tH
+ae
+"}
+(19,1,1) = {"
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+zb
+cA
+Bt
+cH
+aO
+bk
+Bt
+pY
+zb
+ae
+ae
+ae
+tH
+FM
+tH
+tH
+tH
+FM
+tH
+tH
+tH
+ae
+"}
+(20,1,1) = {"
+aj
+ae
+aa
+aa
+aa
+aa
+ae
+ae
+ae
+ae
+ci
+bC
+ci
+ae
+ae
+ae
+ae
+aa
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+"}
+(21,1,1) = {"
+aj
+ae
+aI
+aQ
+aI
+aa
+aI
+aQ
+aI
+ae
+ci
+bC
+ci
+ae
+aI
+aQ
+aI
+aa
+aI
+aQ
+aI
+ae
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(22,1,1) = {"
+aj
+ae
+aI
+aS
+aI
+aa
+aI
+aS
+aI
+ae
+ci
+bC
+ci
+ae
+aI
+aS
+aI
+aa
+aI
+aS
+aI
+ae
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(23,1,1) = {"
+aj
+ae
+aI
+aS
+aI
+aa
+aI
+aS
+aI
+ae
+cJ
+bC
+cJ
+ae
+aI
+aS
+aI
+aa
+aI
+aS
+aI
+ae
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(24,1,1) = {"
+aj
+ap
+aK
+aV
+bf
+bm
+bo
+aV
+aK
+bf
+cN
+da
+BA
+bo
+aK
+fT
+bf
+bm
+bo
+fT
+aK
+ap
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(25,1,1) = {"
+aj
+ae
+aI
+aW
+aI
+aa
+aI
+aW
+aI
+ae
+cO
+db
+cO
+ae
+aI
+aW
+aI
+aa
+aI
+aW
+aI
+ae
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(26,1,1) = {"
+aj
+ae
+aI
+aW
+aI
+aa
+aI
+aW
+aI
+ae
+ci
+db
+ci
+ae
+aI
+aW
+aI
+aa
+aI
+aW
+aI
+ae
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(27,1,1) = {"
+aj
+ae
+aI
+aX
+aI
+aa
+aI
+aX
+aI
+ae
+ci
+db
+ci
+ae
+aI
+aX
+aI
+aa
+aI
+aX
+aI
+ae
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(28,1,1) = {"
+aj
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ci
+db
+ci
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+aj
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(29,1,1) = {"
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+ae
+cR
+dc
+cR
+ae
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aa
+aa
+aa
+aa
+aa
+aa
 "}

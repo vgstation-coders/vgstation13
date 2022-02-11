@@ -1,60 +1,836 @@
-"a" = (/turf/space,/area)
-"b" = (/turf/unsimulated/mineral,/area/vault/icetruck)
-"c" = (/obj/item/weapon/rack_parts,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"d" = (/obj/item/weapon/barricade_kit,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"e" = (/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"f" = (/mob/living/simple_animal/hostile/bear/polarbear,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"g" = (/obj/item/weapon/reagent_containers/food/snacks/icecream,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"h" = (/obj/effect/landmark/corpse/doctor,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"i" = (/obj/effect/decal/cleanable/cobweb2,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"j" = (/obj/item/weapon/paper,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"k" = (/obj/effect/landmark/corpse/doctor,/obj/item/weapon/folder/white,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"l" = (/obj/effect/decal/cleanable/campfire,/obj/item/toy/gasha/snowflake,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"m" = (/obj/effect/landmark/corpse/scientist,/obj/item/weapon/lighter,/obj/item/weapon/lipstick/purple,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"n" = (/obj/item/tool/crowbar,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"o" = (/obj/item/weapon/extinguisher/foam,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"p" = (/obj/item/stack/ore/diamond,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"q" = (/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"r" = (/turf/unsimulated/floor/asteroid,/area/vault/icetruck)
-"s" = (/obj/item/weapon/rack_parts,/turf/unsimulated/floor/asteroid,/area/vault/icetruck)
-"t" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/vault/icetruck)
-"u" = (/obj/machinery/space_heater/air_conditioner,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
-"w" = (/obj/structure/sink{dir = 8; pixel_x = -12; pixel_y = 2},/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
-"x" = (/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
-"y" = (/obj/structure/sink{dir = 4; pixel_x = 11},/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
-"z" = (/obj/structure/sink{dir = 4; pixel_x = 11},/obj/item/weapon/reagent_containers/food/drinks/ice,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
-"A" = (/obj/structure/closet/secure_closet/freezer/fridge,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
-"B" = (/obj/item/weapon/reagent_containers/food/drinks/ice,/obj/item/weapon/reagent_containers/food/drinks/ice,/obj/item/weapon/reagent_containers/food/drinks/ice,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"C" = (/obj/machinery/cooking/icemachine,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"D" = (/obj/machinery/cooking/icemachine,/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/gun/energy/temperature,/obj/item/weapon/gun/energy/temperature,/obj/item/weapon/gun/energy/temperature,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"E" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/icetruck)
-"G" = (/turf/simulated/wall/shuttle,/area/vault/icetruck)
-"H" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/icetruck)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/space,
+/area)
+"b" = (
+/turf/unsimulated/mineral,
+/area/vault/icetruck)
+"c" = (
+/obj/item/weapon/rack_parts,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"d" = (
+/obj/item/weapon/barricade_kit,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"e" = (
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"f" = (
+/mob/living/simple_animal/hostile/bear/polarbear,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"g" = (
+/obj/item/weapon/reagent_containers/food/snacks/icecream,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"h" = (
+/obj/effect/landmark/corpse/doctor,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"i" = (
+/obj/effect/decal/cleanable/cobweb2,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"j" = (
+/obj/item/weapon/paper,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"k" = (
+/obj/effect/landmark/corpse/doctor,
+/obj/item/weapon/folder/white,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"l" = (
+/obj/effect/decal/cleanable/campfire,
+/obj/item/toy/gasha/snowflake,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"m" = (
+/obj/effect/landmark/corpse/scientist,
+/obj/item/weapon/lighter,
+/obj/item/weapon/lipstick/purple,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"n" = (
+/obj/item/tool/crowbar,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"o" = (
+/obj/item/weapon/extinguisher/foam,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"p" = (
+/obj/item/stack/ore/diamond,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"q" = (
+/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"r" = (
+/turf/unsimulated/floor/asteroid,
+/area/vault/icetruck)
+"s" = (
+/obj/item/weapon/rack_parts,
+/turf/unsimulated/floor/asteroid,
+/area/vault/icetruck)
+"t" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area/vault/icetruck)
+"u" = (
+/obj/machinery/space_heater/air_conditioner,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor2"
+	},
+/area/vault/icetruck)
+"w" = (
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor2"
+	},
+/area/vault/icetruck)
+"x" = (
+/turf/simulated/floor/shuttle{
+	icon_state = "floor2"
+	},
+/area/vault/icetruck)
+"y" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor2"
+	},
+/area/vault/icetruck)
+"z" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/obj/item/weapon/reagent_containers/food/drinks/ice,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor2"
+	},
+/area/vault/icetruck)
+"A" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor2"
+	},
+/area/vault/icetruck)
+"B" = (
+/obj/item/weapon/reagent_containers/food/drinks/ice,
+/obj/item/weapon/reagent_containers/food/drinks/ice,
+/obj/item/weapon/reagent_containers/food/drinks/ice,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"C" = (
+/obj/machinery/cooking/icemachine,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"D" = (
+/obj/machinery/cooking/icemachine,
+/obj/item/weapon/reagent_containers/food/snacks/icecream,
+/obj/item/weapon/gun/energy/temperature,
+/obj/item/weapon/gun/energy/temperature,
+/obj/item/weapon/gun/energy/temperature,
+/turf/unsimulated/floor/snow,
+/area/vault/icetruck)
+"E" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/vault/icetruck)
+"G" = (
+/turf/simulated/wall/shuttle,
+/area/vault/icetruck)
+"H" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/space,
+/area/vault/icetruck)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaa
-abaaaaaaabbbbbbbbaaabbaaa
-aaaaaabbbbbbbbbbbaaaabaaa
-aaaabbbbbbbbccbbbbaaaaaaa
-aaaabbbdeeefeeegbbbbaaaaa
-aaabbbbeeefheeeeibbbbbaaa
-aaabbbbeejeeefeeebaaaaaaa
-aaabbeeekfleemfenbbbaaaaa
-aaabboeefeeeeeeepbbbbaaaa
-aaabbeeeeeeeeeeebbbbbaaaa
-aaaabbbqeerreeebbbbbaaaaa
-aaabbbbbbbscbbbbbbbbaabaa
-aaaaabbatueeubbbbaaaaaaaa
-aaaaabbaGwexyGbaaaaaaaaaa
-aaaaaaaaGwxxzGaaaabbaaaaa
-aaaaaaaaGAeGBGaaaabbaaaaa
-aaaaaaaaGCCGDGaaaaaaaaaaa
-aaaaaaaaEGGGGHaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaa
-aaabbaaaaaaaaaaaaaaaaaaaa
-aaabbaaaaaaaaaaaaaaaaaaaa
-aaaabaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaabaaaaaaaaabaa
-aaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaabaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(4,1,1) = {"
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+a
+b
+a
+a
+a
+a
+a
+a
+a
+b
+b
+a
+a
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+b
+b
+b
+a
+a
+a
+"}
+(6,1,1) = {"
+a
+a
+a
+b
+b
+b
+b
+e
+o
+e
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(7,1,1) = {"
+a
+a
+b
+b
+b
+b
+b
+e
+e
+e
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(8,1,1) = {"
+a
+a
+b
+b
+d
+e
+e
+e
+e
+e
+q
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(9,1,1) = {"
+a
+a
+b
+b
+e
+e
+e
+k
+f
+e
+e
+b
+t
+G
+G
+G
+G
+E
+a
+a
+a
+a
+a
+a
+a
+"}
+(10,1,1) = {"
+a
+b
+b
+b
+e
+e
+j
+f
+e
+e
+e
+b
+u
+w
+w
+A
+C
+G
+a
+a
+a
+a
+a
+a
+a
+"}
+(11,1,1) = {"
+a
+b
+b
+b
+e
+f
+e
+l
+e
+e
+r
+s
+e
+e
+x
+e
+C
+G
+a
+a
+a
+a
+a
+a
+a
+"}
+(12,1,1) = {"
+a
+b
+b
+b
+f
+h
+e
+e
+e
+e
+r
+c
+e
+x
+x
+G
+G
+G
+a
+a
+a
+a
+a
+a
+a
+"}
+(13,1,1) = {"
+a
+b
+b
+c
+e
+e
+e
+e
+e
+e
+e
+b
+u
+y
+z
+B
+D
+G
+a
+a
+a
+a
+b
+a
+a
+"}
+(14,1,1) = {"
+a
+b
+b
+c
+e
+e
+f
+m
+e
+e
+e
+b
+b
+G
+G
+G
+G
+H
+a
+a
+a
+a
+a
+a
+a
+"}
+(15,1,1) = {"
+a
+b
+b
+b
+e
+e
+e
+f
+e
+e
+e
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(16,1,1) = {"
+a
+b
+b
+b
+g
+e
+e
+e
+e
+e
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(17,1,1) = {"
+a
+b
+b
+b
+b
+i
+e
+n
+p
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(18,1,1) = {"
+a
+a
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(19,1,1) = {"
+a
+a
+a
+a
+b
+b
+a
+b
+b
+b
+b
+b
+a
+a
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+b
+"}
+(20,1,1) = {"
+a
+a
+a
+a
+b
+b
+a
+b
+b
+b
+b
+b
+a
+a
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(21,1,1) = {"
+a
+b
+a
+a
+a
+b
+a
+a
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(22,1,1) = {"
+a
+b
+b
+a
+a
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(23,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+a
+a
+"}
+(24,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(25,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}
