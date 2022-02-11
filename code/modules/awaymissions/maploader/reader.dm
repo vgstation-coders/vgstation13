@@ -147,6 +147,8 @@ var/list/map_dimension_cache = list()
 				xgrid += "\n"
 			zgrid += xgrid
 	
+		if(loaded_as_tgm)
+			zgrid = flip_map_key_axis(zgrid,key_len) //Necessary to get the axes right
 		var/z_depth = length(zgrid) //Length of the whole block (with multiple lines in them)
 
 		//if exceeding the world max x or y, increase it
@@ -231,6 +233,39 @@ var/list/map_dimension_cache = list()
 		sleep(-1)
 
 	return spawned_atoms
+
+/**
+ * Flips the keys of a map to parse the grid on, necessary for loading TGM files properly
+ *
+ * WORKING :
+ *
+ * 1) Splits model text into lines
+ *
+ * 2) Splits lines into keys by length
+ *
+ * 3) Iterates over length of keys in line to add the nth element of each line into a model, then a newline after each one, flipping it
+ *
+ * RETURNS :
+ *
+ * The map keys with a flipped axis
+ *
+ */
+/dmm_suite/proc/flip_map_key_axis(var/model as text, var/key_len as num)
+	var/list/lines = splittext(model,"\n")
+	var/linelength = 0
+	var/list/keys_by_line = list()
+	for(var/line in lines)
+		var/list/current_key_line = list()
+		for(var/copypos = 1, copypos < length(line), copypos += key_len)
+			current_key_line.Add(list(copytext(line, copypos, copypos + key_len)))
+		keys_by_line.Add(list(current_key_line))
+		linelength = current_key_line.len
+	var/newmodel = ""
+	for(var/i in 1 to linelength)
+		for(var/list/formatted_line in keys_by_line)
+			newmodel += formatted_line[i]
+		newmodel += "\n"
+	return newmodel
 
 /**
  * Fill a given tile with its area/turf/objects/mobs
