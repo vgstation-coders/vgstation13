@@ -193,8 +193,10 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 				var/reason = null
 				if(!CF.weighed)
 					reason = "Crate not weighed"
-				if(!CF.associated_manifest || !(get_area(CF.associated_manifest) == shuttle))
-					reason = "Manifest is missing"
+				if(!CF.associated_manifest)
+					reason = "Manifest was destroyed"
+				if(CF.associated_manifest && !(get_area(CF.associated_manifest) == shuttle))
+					reason = "Manifest was not shipped"
 				if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
 					reason = "Manifest was not stamped"
 				if(istype(MA,/obj/structure/closet))
