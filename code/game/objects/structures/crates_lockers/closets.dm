@@ -86,11 +86,6 @@
 	..()
 	take_contents()
 
-// Fix for #383 - C4 deleting fridges with corpses
-/obj/structure/closet/Destroy()
-	dump_contents()
-	..()
-
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
@@ -340,6 +335,7 @@
 			for(var/atom/movable/A in src)//pulls everything else out of the locker and hits it with an explosion
 				A.forceMove(src.loc)
 				A.ex_act(severity++)
+			dump_contents()
 			qdel(src)
 		if(2)
 			if(prob(50))
@@ -350,6 +346,7 @@
 				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity++)
+				dump_contents()
 				qdel(src)
 		if(3)
 			if(prob(5))
@@ -360,6 +357,7 @@
 				for(var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity++)
+				dump_contents()
 				qdel(src)
 
 /obj/structure/closet/shuttle_act()
@@ -376,8 +374,7 @@
 		broken = 1
 		if(has_electronics)
 			dump_electronics()
-		for(var/atom/movable/A as mob|obj in src)
-			A.forceMove(src.loc)
+		dump_contents()
 		qdel(src)
 
 	return
@@ -428,8 +425,7 @@
 		broken = 1
 		if(has_electronics)
 			dump_electronics()
-		for(var/atom/movable/A as mob|obj in src)
-			A.forceMove(src.loc)
+		dump_contents()
 		qdel(src)
 
 // this should probably use dump_contents()
@@ -439,8 +435,7 @@
 		broken = 1
 		if(has_electronics)
 			dump_electronics()
-		for(var/atom/movable/A as mob|obj in src)
-			A.forceMove(src.loc)
+		dump_contents()
 		qdel(src)
 
 /obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -463,6 +458,7 @@
 				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
 			if(has_electronics)
 				dump_electronics()
+			dump_contents()
 			qdel(src)
 			return
 
@@ -473,6 +469,7 @@
 				M.show_message("<span class='notice'>\The [src] has been dismantled by [user] with \the [WT].</span>", 1)
 			if(has_electronics)
 				dump_electronics()
+			dump_contents()
 			qdel(src)
 			return
 

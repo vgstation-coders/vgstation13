@@ -46,6 +46,7 @@ var/stacking_limit = 90
 	var/list/living_antags = list()
 	var/list/dead_players = list()
 	var/list/list_observers = list()
+	var/last_time_of_population = 0
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
@@ -658,7 +659,9 @@ var/stacking_limit = 90
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
 	
-	if(!living_players.len && world.time > 15 MINUTES) //if nobody is around and alive in the current round and enough time has passed
+	if(living_players.len) //if anybody is around and alive in the current round
+		last_time_of_population = world.time
+	else if(last_time_of_population && world.time - last_time_of_population > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without it
 		ticker.station_nolife_cinematic()
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()

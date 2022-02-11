@@ -32,6 +32,8 @@
 	var/allow_admin_ooccolor = 0		// Allows admins with relevant permissions to have their own ooc colour
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
+	var/toggle_maps = 0					// Change from votable maps = 0 to all compiled maps = 1
+	var/toggle_vote_method = 0			// Toggle voting methods: Weighted = 0, Majority = 1
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives
@@ -203,9 +205,6 @@
 	var/discord_password
 	var/kill_phrase = "All your bases are belong to us."
 
-	// Weighted Votes
-	var/weighted_votes = 0
-
 	// Dynamic Mode
 	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
 
@@ -352,7 +351,6 @@
 
 				if ("allow_vote_mode")
 					config.allow_vote_mode = 1
-
 				if ("allow_admin_jump")
 					config.allow_admin_jump = 1
 
@@ -634,8 +632,6 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
-				if("weighted_votes")
-					weighted_votes = TRUE
 
 				if ("kill_phrase")
 					kill_phrase = value

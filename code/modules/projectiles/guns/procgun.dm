@@ -9,7 +9,13 @@
     fire_sound = "procgun_sound"
     var/procname
     var/list/procargs = list()
-    var/static/list/bad_procs = list("gib","ex_act","singularity_act","death")
+    var/static/list/bad_procs = list(
+        "gib",
+        "ex_act",
+        "singularity_act",
+        "shuttle_act",
+        "death",
+    )
 
 /obj/item/weapon/gun/procgun/attack_self(mob/user)
     if(!user.check_rights(R_DEBUG))
@@ -56,7 +62,7 @@
     var/list/procargs = list()
 
 /obj/item/projectile/beam/procjectile/to_bump(atom/A)
-    if(procname)
+    if(procname && hascall(A, procname))
         spawn(1)
             call(A,procname)(arglist(procargs))
     return ..()

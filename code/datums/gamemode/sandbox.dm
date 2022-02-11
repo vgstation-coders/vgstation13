@@ -1,5 +1,6 @@
 /datum/gamemode/sandbox
 	name = "sandbox"
+	var/last_time_of_players = 0
 
 
 /datum/gamemode/sandbox/Setup()
@@ -18,6 +19,8 @@
 
 /datum/gamemode/sandbox/process()
 	. = ..()
-	if(!player_list.len && world.time > 15 MINUTES) //if nobody is around in the current round and enough time has passed
+	if(player_list.len) //if anybody is in the current round
+		last_time_of_players = world.time
+	if(last_time_of_players && world.time - last_time_of_players > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without them
 		CallHook("Reboot",list())
 		world.Reboot()
