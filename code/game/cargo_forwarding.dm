@@ -24,7 +24,7 @@
     var/list/atom/initial_contents = list() // For easier atom checking
     var/initialised_type = null // Thing initialised from
 
-/datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = "")
+/datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = null)
     ..()
     if (acct_by_string)
         acct = department_accounts[acct_by_string]
@@ -207,8 +207,8 @@
                             /obj/item/weapon/stock_parts/micro_laser = 1,
                         )
 
-/datum/cargo_forwarding/from_supplypack/New(var/sender = "", var/station = "", var/supply_type = "")
-    initialised_type = ispath(text2path(supply_type),/datum/supply_packs) ? supply_type : pick(subtypesof(/datum/supply_packs))
+/datum/cargo_forwarding/from_supplypack/New(var/sender = "", var/station = "", var/supply_type = null)
+    initialised_type = ispath(supply_type,/datum/supply_packs) ? supply_type : pick(subtypesof(/datum/supply_packs))
     var/datum/supply_packs/ourpack = new initialised_type
     name = ourpack.name
     contains = ourpack.contains.Copy()
@@ -221,9 +221,9 @@
     ..()
     qdel(ourpack)
 
-/datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = "")
+/datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = null)
     var/previous_index = 0
-    if(ispath(text2path(supply_type),/datum/centcomm_order))
+    if(ispath(supply_type,/datum/centcomm_order))
         initialised_type = supply_type
     else if(previous_requests_types && previous_requests_types.len)
         previous_index = rand(1,previous_requests_types.len)
