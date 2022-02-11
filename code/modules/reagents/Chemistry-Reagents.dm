@@ -99,8 +99,8 @@
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
 	
-	if(tolerance_increase)
-		M.tolerated_chems[src.id] += tolerance_increase
+	if(self.tolerance_increase)
+		M.tolerated_chems[self.id] += self.tolerance_increase
 
 /datum/reagent/proc/reaction_dropper_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
@@ -115,8 +115,8 @@
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
 	
-	if(tolerance_increase)
-		M.tolerated_chems[src.id] += tolerance_increase
+	if(self.tolerance_increase)
+		M.tolerated_chems[self.id] += self.tolerance_increase
 
 /datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
 	reaction_obj(O, volume)
