@@ -87,6 +87,9 @@
 	..()
 	for(var/path in actions_types)
 		new path(src)
+	if(health_item_max)
+		if(isnull(health_item))
+			health_item = health_item_max //Set health_item to health_item_max if the former isn't specified.
 
 /obj/item/Destroy()
 	infected_items -= src

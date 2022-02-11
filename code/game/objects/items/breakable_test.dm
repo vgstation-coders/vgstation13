@@ -92,7 +92,6 @@
 	icon_state = "beaker"
 	item_state = "beaker"
 	breakable_flags = BREAKABLE_ALL
-	health_item = 20
 	health_item_max = 20
 	damaged_examine_text = "It has a big crack down the side."
 	damage_armor = BREAKARMOR_NOARMOR
