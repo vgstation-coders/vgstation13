@@ -12,10 +12,10 @@
 	var/health_item_max		//Maximum structural integrity of the item.
 	var/damage_armor		//Attacks of this much damage or below will glance off
 	var/damage_resist		//Attacks stronger than damage_armor will have their damage reduced by this much
+	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
 	//Fragmentation:
 	var/list/breakable_fragments //List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard.
 	var/list/fragment_amounts //List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakable_fragments
-	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
 	//Text:
 	var/damaged_examine_text	//Addendum to the description when it's damaged eg. damaged_examine_text of "It is dented."
 	var/take_hit_text 	//String or list of strings when the item is damaged but not fully broken. eg. "chipping" becomes "..., chipping it!"
