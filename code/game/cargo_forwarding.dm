@@ -24,7 +24,7 @@
     var/list/atom/initial_contents = list() // For easier atom checking
     var/initialised_type = null // Thing initialised from
 
-/datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = null)
+/datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = null, var/do_not_add = FALSE)
     ..()
     if (acct_by_string)
         acct = department_accounts[acct_by_string]
@@ -62,7 +62,8 @@
             origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
         while(origin_sender_name in player_names)
 
-    SSsupply_shuttle.cargo_forwards.Add(src)
+    if(!do_not_add)
+        SSsupply_shuttle.cargo_forwards.Add(src)
 
     spawn(time_limit MINUTES) //Still an order after the time limit?
         if(src)

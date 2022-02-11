@@ -145,7 +145,6 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	var/list/all_forwards_formatted = list()
 	for(var/datum/cargo_forwarding/forward in all_forwards)
 		all_forwards_formatted += list(list(forward.type, forward.origin_sender_name, forward.origin_station_name, forward.initialised_type))
-	all_forwards_formatted += fulfilled_requests_info.Copy()
 	write_file(list("fulfilled_forwards" = all_forwards_formatted))
 
 /datum/persistence_task/round_end_data
