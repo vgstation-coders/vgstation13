@@ -107,6 +107,7 @@
 	if(health_item<health_item_max && damaged_examine_text)
 		user.simple_message("<span class='info'> [damaged_examine_text]</span>",\
 			"<span class='notice'> It seems kinda messed up somehow.</span>")
+
 /obj/item/proc/transfer_item_blood_data(obj/item/A,obj/item/B)	//Transfers blood data from one item to another.
 	if(!A || !B)
 		return
