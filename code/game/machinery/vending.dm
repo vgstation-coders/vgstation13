@@ -3753,3 +3753,5 @@ var/global/num_vending_terminals = 1
 			dispense_cash(T.winnings, get_turf(src))
 			playsound(src, "polaroid", 50, 1)
 			qdel(T)
+	else
+		..()
