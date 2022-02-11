@@ -224,7 +224,7 @@
 /datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = null)
     var/list/ourinfo = list()
     var/is_from_previous = prob(50)
-    if(previous_requests_info && previous_requests_info.len)
+    if(previous_requests_info && previous_requests_info.len && is_from_previous)
         ourinfo = previous_requests_info[rand(1,previous_requests_info.len)]
     if(ispath(supply_type,/datum/centcomm_order))
         initialised_type = supply_type
