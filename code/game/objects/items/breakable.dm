@@ -6,12 +6,12 @@
 /obj/item
 
 	//Breakability:
-	var/breakable_flags = 0 /*Possible flags include BREAKABLE_ALL, BREAKABLE_HIT, BREAKABLE_UNARMED, BREAKABLE_WEAPON, BREAKABLE_AS_ALL, BREAKABLE_AS_THROWN, BREAKABLE_AS_MELEE, and BREAKABLE_NOMOB.
+	var/breakable_flags /*Possible flags include BREAKABLE_ALL, BREAKABLE_HIT, BREAKABLE_UNARMED, BREAKABLE_WEAPON, BREAKABLE_AS_ALL, BREAKABLE_AS_THROWN, BREAKABLE_AS_MELEE, and BREAKABLE_NOMOB.
 							See setup.dm for explanations of each.*/
-	var/health_item= 15 //Structural integrity of the item. At 0, the item breaks.
-	var/health_item_max= 15
-	var/damage_armor = BREAKARMOR_WEAK //Attacks of this much damage or below will glance off
-	var/damage_resist = BREAKARMOR_WEAK //Attacks stronger than damage_armor will have their damage reduced by this much
+	var/health_item 		//Structural integrity of the item. At 0, the item breaks.
+	var/health_item_max		//Maximum structural integrity of the item.
+	var/damage_armor		//Attacks of this much damage or below will glance off
+	var/damage_resist		//Attacks stronger than damage_armor will have their damage reduced by this much
 	//Fragmentation:
 	var/list/breakable_fragments //List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard.
 	var/list/fragment_amounts //List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakable_fragments
