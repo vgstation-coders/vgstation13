@@ -2,6 +2,7 @@
 // Breakable Items //
 //  by Hinaichigo  //
 /////////////////////
+
 /obj/item
 	//Breakability:
 	var/breakable_flags /*Possible flags include BREAKABLE_ALL, BREAKABLE_HIT, BREAKABLE_UNARMED, BREAKABLE_WEAPON, BREAKABLE_AS_ALL, BREAKABLE_AS_THROWN, BREAKABLE_AS_MELEE, and BREAKABLE_NOMOB.
