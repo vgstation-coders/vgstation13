@@ -91,14 +91,14 @@
 
 	var/surprise_number = rand(1, min(list_of_surprises.len, max_secret_rooms))
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed, TRUE)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded [result] out of [surprise_number] mining surprises.</span>")
 
 /proc/generate_hoboshack()
 	var/list/list_of_shacks = get_map_element_objects(/datum/map_element/hoboshack)
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed, TRUE)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
 
