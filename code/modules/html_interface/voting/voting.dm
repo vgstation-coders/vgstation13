@@ -28,7 +28,6 @@ var/global/datum/controller/vote/vote = new()
 	var/initiator      = null
 	var/started_time   = null
 	var/time_remaining = 0
-	var/winner 			= null
 	var/mode           = null
 	var/question       = null
 	var/list/ismapvote
@@ -213,7 +212,6 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/random()
 	var/text
-
 	if (choices.len > 1)
 		. = pick(choices)
 		text = "<b>Random Vote Result: [winner] was picked at random.</b>"
