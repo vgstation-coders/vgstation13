@@ -3747,11 +3747,9 @@ var/global/num_vending_terminals = 1
 		var/obj/item/toy/lotto_ticket/T = I
 		if(!T.iswinner)
 			playsound(src, "buzz-sigh", 50, 1)
-			for(var/mob/V in hearers(src))
-				V.visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
+			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
 		else
-			for(var/mob/V in hearers(src))
-				V.visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund!\"")
+			visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund!\"")
 			dispense_cash(T.winnings, get_turf(src))
 			playsound(src, "polaroid", 50, 1)
 			qdel(T)

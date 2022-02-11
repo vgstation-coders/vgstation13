@@ -7,7 +7,6 @@
 	var/iswinner = FALSE
 	var/ticket_price
 	var/winnings = 0
-	var/flashed = FALSE
 
 /obj/item/toy/lotto_ticket/New()
 	..()
@@ -104,6 +103,7 @@
 	desc = "An extremely expensive scratch-off lottery ticket. Guaranteed win up to 100,000 credits!"
 	icon_state = "lotto_4"
 	ticket_price = 100
+	var/flashed = FALSE
 
 /obj/item/toy/lotto_ticket/supermatter_surprise/scratch()
 	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
