@@ -73,6 +73,7 @@
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
 	var/cargo_forwarding_on_roundstart = 0
+	var/cargo_forwarding_amount_override = 0
 
 
 	var/multiz_render_cap = 8			//how far down open spaces will render
@@ -278,6 +279,9 @@
 
 				if ("cargo_forwarding_on_roundstart")
 					cargo_forwarding_on_roundstart = 1
+				
+				if ("cargo_forwarding_amount_override")
+					cargo_forwarding_amount_override = text2num(value)
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1

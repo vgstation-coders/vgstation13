@@ -364,17 +364,19 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 		if (world.time < (cargo_last_forward + cargo_forward_cooldown))
 			log_debug("CARGO FORWARDING: Order happened before cooldown, no forwards.")
 			return
-		var/cargomen = 0 // How many people are working in cargo?
-		for(var/datum/data/record/t in sortRecord(data_core.general))
-			if((t.fields["real_rank"] in cargo_positions) || (t.fields["override_dept"] == "Cargo"))
-				cargomen++ // Go through manifest and find out
-		if(!cargomen)
-			cargomen = 1 // Just send one crate if no cargo
+		var/amount_forwarded = config.cargo_forwarding_amount_override // Override in server config for debugging
+		if(!amount_forwarded) // If nothing from override
+			var/cargomen = 0 // How many people are working in cargo?
+			for(var/datum/data/record/t in sortRecord(data_core.general))
+				if((t.fields["real_rank"] in cargo_positions) || (t.fields["override_dept"] == "Cargo"))
+					cargomen++ // Go through manifest and find out
+			if(!cargomen)
+				cargomen = 1 // Just send one crate if no cargo
 
-		var/datum/money_account/our_account = department_accounts["Cargo"]
-		var/multiplier = log(10, (our_account.money / (DEPARTMENT_START_FUNDS / 10) ) ) // So that starting funds equal a 1x multiplier
-		var/amount_forwarded = rand(0,round(cargomen * multiplier))
-		log_debug("CARGO FORWARDING: [amount_forwarded] crates forwarded[!amount_forwarded ? ", nothing sent" : ""].")
+			var/datum/money_account/our_account = department_accounts["Cargo"]
+			var/multiplier = log(10, (our_account.money / (DEPARTMENT_START_FUNDS / 10) ) ) // So that starting funds equal a 1x multiplier
+			amount_forwarded = rand(0,round(cargomen * multiplier))
+			log_debug("CARGO FORWARDING: [amount_forwarded] crates forwarded[!amount_forwarded ? ", nothing sent" : ""].")
 		if(!amount_forwarded)
 			return // Skip this if nothing to send
 
