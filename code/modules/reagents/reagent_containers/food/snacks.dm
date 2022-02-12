@@ -665,19 +665,18 @@
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
 	..()
 
-	var/NM = time2text(world.realtime,"MM")
-	var/cookiecutter = null
+	var/NM = time2text(world.realtime,"Month")
+	var/cookiecutter
 
-	if(!cookiecutter)
-		switch(NM)
-			if(2)
-				cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
-			if(12)
-				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
-			if(10)
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
-			else
-				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+	switch(NM)
+		if("February")
+			cookiecutter = pick( list("heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
+		if("December")
+			cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
+		if("October")
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+		else
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer","heart","jamheart","frostingheartpink","frostingheartwhite","frostingheartred") )
 	icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
@@ -689,13 +688,13 @@
 	reagents.add_reagent(SUGAR, 15)
 
 /obj/item/weapon/reagent_containers/food/snacks/candyheart
-	name = "candyheart"
+	name = "candy heart"
 	icon = 'icons/obj/food.dmi'
 
 /obj/item/weapon/reagent_containers/food/snacks/candyheart/New()
 	..()
 
-	var/heartphrase = pick( list("SO FINE","B TRU","U ROCK","HELLO","SOUL MATE","ME + U","2 CUTE","SWEET LUV","IM URS","XOXO","B MINE","LUV BUG","I &lt;3 U","PDA ME") )
+	var/heartphrase = pick( list("SO FINE","B TRU","U ROCK","HELLO","SOUL MATE","ME + U","2 CUTE","SWEET LUV","IM URS","XOXO","B MINE","LUV BUG","I &lt;3 U","PDA ME","U LEAVE ME BREATHLESS") )
 
 	var/heartcolor = pick( list("p","b","w","y","g") )
 

@@ -91,10 +91,12 @@
 	return ..()
 
 /datum/dynamic_ruleset/latejoin/raginmages/execute()
+	var/mob/M = pick(assigned)
+	if(!latejoinprompt(M))
+		return 0
 	var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
 	if (!federation)
 		federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
-	var/mob/M = pick(assigned)
 	var/datum/role/wizard/newWizard = new
 	M.forceMove(pick(wizardstart))
 	newWizard.AssignToRole(M.mind,1)
@@ -126,11 +128,7 @@
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(assigned)
-	var/turf/oldloc = get_turf(M)
-	M.forceMove(null)
-	if(!latejoinprompt(M,src))
-		message_admins("[M.key] has opted out of becoming a ninja.")
-		M.forceMove(oldloc)
+	if(!latejoinprompt(M))
 		return 0
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
 	if (!spoider)
@@ -180,11 +178,7 @@
 
 /datum/dynamic_ruleset/latejoin/pulse_demon/execute()
 	var/mob/M = pick(assigned)
-	var/turf/oldloc = get_turf(M)
-	M.forceMove(null)
-	if(!latejoinprompt(M,src))
-		message_admins("[M.key] has opted out of becoming a pulse demon.")
-		M.forceMove(oldloc)
+	if(!latejoinprompt(M))
 		return 0
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
 	M.forceMove(get_turf(our_cable))
@@ -244,11 +238,7 @@
 
 /datum/dynamic_ruleset/latejoin/grue/execute()
 	var/mob/M = pick(assigned)
-	var/turf/oldloc = get_turf(M)
-	M.forceMove(null)
-	if(!latejoinprompt(M,src))
-		message_admins("[M.key] has opted out of becoming a grue.")
-		M.forceMove(oldloc)
+	if(!latejoinprompt(M))
 		return 0
 	var/our_spawnspot = pick(grue_spawn_spots)
 	M.forceMove(our_spawnspot)
@@ -337,11 +327,7 @@
 
 /datum/dynamic_ruleset/latejoin/time_agent/execute()
 	var/mob/M = pick(assigned)
-	var/turf/oldloc = get_turf(M)
-	M.forceMove(null)
-	if(!latejoinprompt(M,src))
-		message_admins("[M.key] has opted out of becoming a time agent.")
-		M.forceMove(oldloc)
+	if(!latejoinprompt(M))
 		return 0
 	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
 	if (!agency)
@@ -351,3 +337,40 @@
 	newagent.AssignToRole(M.mind,1)
 	agency.HandleRecruitedRole(newagent)
 	newagent.Greet(GREET_DEFAULT)
+
+//////////////////////////////////////////////
+//                                          //
+//               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/changeling
+	name = "Changelings"
+	role_category = /datum/role/changeling
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	high_population_requirement = 30
+	repeatable = FALSE
+
+/datum/dynamic_ruleset/latejoin/changeling/execute()
+	var/mob/M = pick(assigned)
+	var/datum/role/changeling/newChangeling = new
+	newChangeling.AssignToRole(M.mind,1)
+	newChangeling.ForgeObjectives()
+	newChangeling.Greet(GREET_LATEJOIN)
+	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
+	if(!hivemind)
+		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
+		hivemind.OnPostSetup()
+	hivemind.HandleRecruitedRole(newChangeling)
+	return 1
+
+/datum/dynamic_ruleset/latejoin/changeling/previous_rounds_odds_reduction(var/result)
+	return result

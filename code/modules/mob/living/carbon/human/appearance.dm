@@ -10,8 +10,6 @@
 	// "Proper" to the appearance datum.
 	var/s_tone = 0
 
-	var/v_hair = 7
-
 	var/h_style = "Bald"
 	var/r_hair = 0
 	var/g_hair = 0
@@ -43,7 +41,6 @@
 	new_looks.h_style = h_style
 	new_looks.r_hair = r_hair
 	new_looks.g_hair = g_hair
-	new_looks.v_hair = v_hair
 	new_looks.f_style = f_style
 	new_looks.r_facial = r_facial
 	new_looks.g_facial = g_facial

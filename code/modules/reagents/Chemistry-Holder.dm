@@ -356,7 +356,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return total_transfered
 */
 
-/datum/reagents/proc/metabolize(var/mob/M, var/alien)
+/datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
 	if(M && chem_temp != M.bodytemperature)
 		chem_temp = M.bodytemperature
 		handle_reactions()
@@ -366,6 +366,25 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			R.on_mob_life(M, alien)
 			if(R)
 				R.metabolize(M)
+	if(M.addicted_chems)
+		for(var/B in M.addicted_chems.reagent_list)
+			var/datum/reagent/R2 = B
+			if(M && R2 && !has_reagent_type(R2.type))
+				R2.on_withdrawal(M)
+	for(var/reagent_id in M.tolerated_chems)
+		if(!has_reagent(reagent_id))
+			var/datum/reagent/R3 = chemical_reagents_list[reagent_id]
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+				if(L)
+					var/reagent_efficiency = 1
+					if(reagent_id in L.reagent_efficiencies)
+						reagent_efficiency = L.reagent_efficiencies[reagent_id]
+					M.tolerated_chems[reagent_id] = max(0, M.tolerated_chems[reagent_id] - (L.efficiency * reagent_efficiency * R3.tolerance_increase))
+					return
+			// If we aren't human, we don't have a liver, so just remove tolerance the old fashioned way.
+			M.tolerated_chems[reagent_id] = max(0, M.tolerated_chems[reagent_id] - R3.tolerance_increase)
 	update_total()
 
 /datum/reagents/proc/update_aerosol(var/mob/M)

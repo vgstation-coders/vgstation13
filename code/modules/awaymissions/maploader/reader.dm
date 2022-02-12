@@ -55,6 +55,7 @@ var/list/map_dimension_cache = list()
  *
  */
 /dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
+
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
 
@@ -303,8 +304,14 @@ var/list/map_dimension_cache = list()
 
 	members.Remove(members[index])
 
-	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
+	if(overwrite) //make this come first so lighting overlays don't die
+		var/turf/T_old = locate(xcrd,ycrd,zcrd)
+		var/static/list/blacklisted_types = list(/mob/dead/observer,/mob/dview,/atom/movable/lighting_overlay)
+		for(var/atom/thing as anything in T_old.contents)
+			if(!is_type_in_list(thing.type,blacklisted_types))
+				qdel(thing)
 
+	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
 	var/first_turf_index = 1
 	while(!ispath(members[first_turf_index],/turf)) //find first /turf object in members
 		first_turf_index++
@@ -329,10 +336,6 @@ var/list/map_dimension_cache = list()
 	spawned_atoms.Add(T)
 
 	//finally instance all remainings objects/mobs
-	if(overwrite)
-		var/turf/T_old = locate(xcrd,ycrd,zcrd)
-		for(var/atom/thing in T_old)
-			qdel(T_old)
 	for(index=1,index < first_turf_index,index++)
 		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
@@ -363,7 +366,7 @@ var/list/map_dimension_cache = list()
 
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
-
+	
 	return instance
 
 //text trimming (both directions) helper proc
