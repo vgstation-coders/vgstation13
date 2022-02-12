@@ -116,10 +116,12 @@
 			origin_sender_name = pick(possible_names)
 		origin_station_name = station_name()
 		fulfilled_forwards += src
-	if(delete_crate)
+	if(delete_crate && associated_crate)
+		associated_crate.associated_forward = null
 		qdel(associated_crate)
 		associated_crate = null
-	if(delete_manifest)
+	if(delete_manifest && associated_manifest)
+		associated_manifest.associated_forward = null
 		qdel(associated_manifest)
 		associated_manifest = null
 	qdel(src)
