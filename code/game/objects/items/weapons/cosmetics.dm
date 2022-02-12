@@ -540,7 +540,7 @@
 					to_chat(H, "<span class='notice'>You don't see anything.</span>")
 					return
 				else
-					return
+					//do nothing
 		handle_hair(H)
 
 /obj/item/weapon/pocket_mirror/proc/handle_hair(mob/user, var/mob/living/carbon/human/H = null)
