@@ -123,8 +123,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/forwards_fulfilled/on_init()
 	data = read_file()
 	var/list/previous_forwards_formatted = data["fulfilled_forwards"]
-	for(var/i = 1 to previous_forwards_formatted.len)
-		var/list/formatted_vars = list(previous_forwards_formatted[i])
+	for(var/list/formatted_vars in previous_forwards_formatted)
 		var/ourtype = null
 		if(formatted_vars["type"])
 			ourtype = text2path(formatted_vars["type"])
@@ -138,7 +137,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		if(formatted_vars["subtype"])
 			oursubtype = text2path(formatted_vars["subtype"])
 		if(ispath(ourtype,/datum/cargo_forwarding))
-			SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype)
+			SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype, TRUE)
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
 	var/list/all_forwards = SSsupply_shuttle.previous_forwards.Copy() + SSsupply_shuttle.fulfilled_forwards.Copy()

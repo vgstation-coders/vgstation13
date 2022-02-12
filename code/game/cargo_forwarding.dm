@@ -93,7 +93,7 @@
 		S.say("[name] forwarded [reason ? "unsuccessfully! [reason]. Reward docked." : "successfully!"]")
 		playsound(S, 'sound/machines/info.ogg', 50, 1)
 
-	if(!reason) // Only make this forward move on properly to another station if fulfilled (persistence)
+	if(!reason && prob(50)) // Only make this forward move on properly to another station with a chance if fulfilled (persistence)
 		var/list/positions_to_check = list()
 		switch(src.acct_by_string)
 			if("Cargo")
@@ -106,13 +106,15 @@
 				positions_to_check = SCIENCE_POSITIONS
 			if("Civilian")
 				positions_to_check = CIVILIAN_POSITIONS
+		var/list/possible_position_names = list()
 		var/list/possible_names = list()
-		for(var/mob/M in player_list)
-			if(isliving(M) && positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
-				possible_names += M.name
-			else if(isliving(M))
-				possible_names += M.name
-		if(possible_names && possible_names.len)
+		for(var/mob/living/M in player_list)
+			if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
+				possible_position_names += M.name
+			possible_names += M.name
+		if(possible_position_names && possible_position_names.len)
+			origin_sender_name = pick(possible_position_names)
+		else if(possible_names && possible_names.len)
 			origin_sender_name = pick(possible_names)
 		origin_station_name = station_name()
 		SSsupply_shuttle.fulfilled_forwards += src

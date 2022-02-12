@@ -219,26 +219,27 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	// PAY UP
 	for(var/datum/centcomm_order/O in centcomm_orders)
 		if(O.CheckFulfilled())
-			var/list/positions_to_check = list()
-			switch(O.acct_by_string)
-				if("Cargo")
-					positions_to_check = CARGO_POSITIONS
-				if("Engineering")
-					positions_to_check = ENGINEERING_POSITIONS
-				if("Medical")
-					positions_to_check = MEDICAL_POSITIONS
-				if("Science")
-					positions_to_check = SCIENCE_POSITIONS
-				if("Civilian")
-					positions_to_check = CIVILIAN_POSITIONS
-			var/list/possible_names = list()
-			for(var/mob/living/M in player_list)
-				if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
-					possible_names += M.name
-				else
-					possible_names += M.name
-			var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
-			fulfilled_forwards += new /datum/cargo_forwarding/from_centcomm_order(ourname, station_name(), O.type, TRUE)
+			if(prob(50)) // Make this a chance, don't always make them show up as forwards
+				var/list/positions_to_check = list()
+				switch(O.acct_by_string)
+					if("Cargo")
+						positions_to_check = CARGO_POSITIONS
+					if("Engineering")
+						positions_to_check = ENGINEERING_POSITIONS
+					if("Medical")
+						positions_to_check = MEDICAL_POSITIONS
+					if("Science")
+						positions_to_check = SCIENCE_POSITIONS
+					if("Civilian")
+						positions_to_check = CIVILIAN_POSITIONS
+				var/list/possible_names = list()
+				for(var/mob/living/M in player_list)
+					if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
+						possible_names += M.name
+					else
+						possible_names += M.name
+				var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
+				fulfilled_forwards += new /datum/cargo_forwarding/from_centcomm_order(ourname, station_name(), O.type, TRUE)
 			if (!istype(O, /datum/centcomm_order/per_unit))
 				O.Pay()//per_unit payments are handled by CheckFulfilled()
 			centcomm_orders.Remove(O)
