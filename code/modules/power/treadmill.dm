@@ -76,7 +76,7 @@
 		if(emagged && ishuman(runner))
 			runner.bodytemperature += 1
 			if(runner.bodytemperature > T0C + 100)
-				switch(rand(1,100))
+				switch(rand(1,20))
 					if(1 to 5)
 						runner.emote("collapse")
 					if(5 to 10)

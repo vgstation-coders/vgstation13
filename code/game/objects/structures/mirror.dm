@@ -53,7 +53,7 @@
 	if(!can_use(user, target))
 		return
 	if(user.hallucinating())
-		switch(rand(1,100))
+		switch(rand(1,50))
 			if(1 to 20)
 				to_chat(user, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
 				user.Knockdown(4)

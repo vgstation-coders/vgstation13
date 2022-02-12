@@ -525,7 +525,7 @@
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
 		if(user.hallucinating())
-			switch(rand(1,100))
+			switch(rand(1,50))
 				if(1 to 20)
 					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
 					H.Knockdown(4)

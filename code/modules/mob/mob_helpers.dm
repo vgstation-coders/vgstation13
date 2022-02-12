@@ -277,10 +277,10 @@
 				newletter="ah"
 			if(lowertext(newletter)=="c")
 				newletter="k"
-		switch(rand(1,15))
+		switch(rand(1,10))
 			if(1,3,5,8)
 				newletter="[lowertext(newletter)]"
-			if(2,4,6,15)
+			if(2,4,6,9,10)
 				newletter="[uppertext(newletter)]"
 			if(7)
 				newletter+="'"
