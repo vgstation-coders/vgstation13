@@ -186,12 +186,16 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 		for(var/datum/cargo_forwarding/CF in cargo_forwards)
 			if(MA == CF.associated_crate)
 				var/reason = null
+				var/specific_reason = FALSE // For debug logs
 				if(!CF.weighed)
 					reason = "Crate not weighed"
-				if(!CF.associated_manifest)
-					reason = "Manifest was destroyed"
-				if(CF.associated_manifest && !(get_area(CF.associated_manifest) == shuttle))
-					reason = "Manifest was not shipped"
+				if(!CF.associated_manifest || get_area(CF.associated_manifest) != shuttle)
+					reason = "Manifest is missing"
+					specific_reason = TRUE
+					if(!CF.associated_manifest)
+						log_debug("CARGO FORWARDING: [CF] denied: Manifest was destroyed")
+					else
+						log_debug("CARGO FORWARDING: [CF] denied: Manifest was not on shuttle")
 				if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
 					reason = "Manifest was not stamped"
 				if(istype(MA,/obj/structure/closet))
@@ -206,6 +210,8 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 					if(!(A in MA))
 						reason = "Object missing from crate"
 						break
+				if(!specific_reason)
+					log_debug("CARGO FORWARDING: [CF] denied: [reason]")
 				CF.Pay(reason)
 
 		if(istype(MA,/obj/structure/closet/crate))
@@ -428,7 +434,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 				A:req_access = CF.access
 			if(CF.one_access && istype(A, /obj/structure/closet))
 				A:req_one_access = CF.one_access
-			
+
 			for(var/atom/thing in CF.associated_crate) // Something already put in here?
 				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
 				CF.initial_contents += thing
@@ -442,7 +448,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 				CF.initial_contents += B2
-			
+
 			CF.associated_manifest.info += {"</ul>"}
 
 /datum/subsystem/supply_shuttle/proc/forbidden_atoms_check(atom/A)
