@@ -23,6 +23,8 @@
 	var/weighed = FALSE // Crate weighed?
 	var/list/atom/initial_contents = list() // For easier atom checking
 	var/initialised_type = null // Thing initialised from
+	var/delete_crate = FALSE // Flags for shuttle
+	var/delete_manifest = FALSE
 
 /obj
 	var/datum/cargo_forwarding/associated_forward = null // Associated cargo forward
@@ -114,6 +116,12 @@
 			origin_sender_name = pick(possible_names)
 		origin_station_name = station_name()
 		fulfilled_forwards += src
+	if(delete_crate)
+		qdel(associated_crate)
+		associated_crate = null
+	if(delete_manifest)
+		qdel(associated_manifest)
+		associated_manifest = null
 	qdel(src)
 
 /datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle

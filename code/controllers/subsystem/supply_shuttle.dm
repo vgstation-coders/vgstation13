@@ -179,47 +179,19 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 
 	var/recycled_crates = 0
 
-	var/list/delete_after = list() // Hotfix for manifests
 	for(var/atom/movable/MA in cargo_shuttle.linked_area)
 		if(MA.anchored && !ismecha(MA))
 			continue
 
-		for(var/datum/cargo_forwarding/CF in cargo_forwards)
-			if(MA == CF.associated_crate)
-				var/reason = null
-				var/specific_reason = FALSE // For debug logs
-				if(!CF.weighed)
-					reason = "Crate not weighed"
-				if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
-					reason = "Manifest is missing"
-					specific_reason = TRUE
-					if(!CF.associated_manifest)
-						log_debug("CARGO FORWARDING: [CF] denied: Manifest was destroyed")
-					else
-						log_debug("CARGO FORWARDING: [CF] denied: Manifest was in [get_area(CF.associated_manifest)], not in [cargo_shuttle.linked_area]")
-				if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
-					reason = "Manifest was not stamped"
-				if(istype(MA,/obj/structure/closet))
-					var/obj/structure/closet/CL = MA
-					if(CL.broken)
-						reason = "Crate broken into"
-				var/list/atom/foreign_atoms = list()
-				for(var/atom/A in MA)
-					if(!(A in CF.initial_contents))
-						foreign_atoms += A
-				if(foreign_atoms && foreign_atoms.len)
-					reason = "Foreign objects in crate ([counted_english_list(foreign_atoms)])"
-				var/list/atom/missing_atoms = list()
-				for(var/atom/A in CF.initial_contents)
-					if(!(A in MA))
-						missing_atoms += A
-				if(missing_atoms && missing_atoms.len)
-					reason = "[counted_english_list(missing_atoms)] missing from crate"
-				if(!specific_reason && reason)
-					log_debug("CARGO FORWARDING: [CF] denied: [reason]")
-				CF.Pay(reason)
-			if(MA == CF.associated_manifest)
-				delete_after.Add(MA)
+		if(isobj(MA))
+			var/obj/O = MA
+			if(O.associated_forward)
+				if(O.associated_forward.associated_crate == src)
+					O.associated_forward.delete_crate = TRUE
+					continue
+				if(O.associated_forward.associated_manifest == src)
+					O.associated_forward.delete_manifest = TRUE
+					continue
 
 		if(istype(MA,/obj/structure/closet/crate))
 			recycled_crates++
@@ -243,7 +215,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 		else
 			SellObjToOrders(MA,0)
 
-		if(MA && !(MA in delete_after))
+		if(MA)
 			qdel(MA)
 
 	// PAY UP
@@ -276,8 +248,46 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 				S.say("Central Command request fulfilled!")
 				playsound(S, 'sound/machines/info.ogg', 50, 1)
 
-	for(var/atom/movable/MA2 in delete_after)
-		qdel(MA2)
+	for(var/datum/cargo_forwarding/CF in cargo_forwards)
+		var/reason = null
+		var/specific_reason = FALSE // For debug logs
+		if(!CF.associated_crate || get_area(CF.associated_crate) != cargo_shuttle.linked_area)
+			reason = "Crate is missing"
+			specific_reason = TRUE
+			if(!CF.associated_manifest)
+				log_debug("CARGO FORWARDING: [CF] denied: Crate was destroyed")
+			else
+				log_debug("CARGO FORWARDING: [CF] denied: Crate was in [get_area(CF.associated_crate)], not in [cargo_shuttle.linked_area]")
+		if(!CF.weighed)
+			reason = "Crate not weighed"
+		if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
+			reason = "Manifest is missing"
+			specific_reason = TRUE
+			if(!CF.associated_manifest)
+				log_debug("CARGO FORWARDING: [CF] denied: Manifest was destroyed")
+			else
+				log_debug("CARGO FORWARDING: [CF] denied: Manifest was in [get_area(CF.associated_manifest)], not in [cargo_shuttle.linked_area]")
+		if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
+			reason = "Manifest was not stamped"
+		if(istype(CF.associated_crate,/obj/structure/closet))
+			var/obj/structure/closet/CL = CF.associated_crate
+			if(CL.broken)
+				reason = "Crate broken into"
+		var/list/atom/foreign_atoms = list()
+		for(var/atom/A in CF.associated_crate)
+			if(!(A in CF.initial_contents))
+				foreign_atoms += A
+		if(foreign_atoms && foreign_atoms.len)
+			reason = "Foreign objects in crate ([counted_english_list(foreign_atoms)])"
+		var/list/atom/missing_atoms = list()
+		for(var/atom/A in CF.initial_contents)
+			if(!(A in CF.associated_crate))
+				missing_atoms += A
+		if(missing_atoms && missing_atoms.len)
+			reason = "[counted_english_list(missing_atoms)] missing from crate"
+		if(!specific_reason && reason)
+			log_debug("CARGO FORWARDING: [CF] denied: [reason]")
+		CF.Pay(reason)
 
 	if (recycled_crates)
 		new /datum/transaction(cargo_acct, "[recycled_crates] recycled crate[recycled_crates > 1 ? "s" : ""]",\
