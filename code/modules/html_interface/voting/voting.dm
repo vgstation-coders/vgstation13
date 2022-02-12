@@ -516,12 +516,13 @@ var/global/datum/controller/vote/vote = new()
 		if("cancel")
 			if(user.client.holder)
 				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
+					currently_voting = FALSE
 					return
 				log_admin("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				message_admins("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				reset()
 				update()
-				currently_voting = FALSE
+				
 		if("toggle_restart")
 			if(user.client.holder)
 				config.allow_vote_restart = !config.allow_vote_restart
