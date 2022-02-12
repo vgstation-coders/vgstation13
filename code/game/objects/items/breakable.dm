@@ -33,8 +33,6 @@
 	drop_contents(target,range,speed,override,fly_speed)
 	//Spill any reagents:
 	spill_reagents(hit_atom)
-	if(!isnull(reagents))
-		reagents.reaction(hit_atom)
 	if(breaks_text)
 		visible_message("<span class='warning'>\The [src] [breaks_text]!</span>")
 	if(breaks_sound)
