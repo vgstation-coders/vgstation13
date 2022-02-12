@@ -233,12 +233,16 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 					if("Civilian")
 						positions_to_check = CIVILIAN_POSITIONS
 				var/list/possible_names = list()
+				var/list/possible_position_names = list()
 				for(var/mob/living/M in player_list)
 					if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
-						possible_names += M.name
-					else
-						possible_names += M.name
-				var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
+						possible_position_names += M.name
+					possible_names += M.name
+				var/ourname = "Unknown"
+				if(possible_position_names && possible_position_names.len)
+					ourname = pick(possible_position_names)
+				else if(possible_names && possible_names.len)
+					ourname = pick(possible_names)
 				fulfilled_forwards += new /datum/cargo_forwarding/from_centcomm_order(ourname, station_name(), O.type, TRUE)
 			if (!istype(O, /datum/centcomm_order/per_unit))
 				O.Pay()//per_unit payments are handled by CheckFulfilled()
