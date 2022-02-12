@@ -187,6 +187,7 @@
 	for(var/map_path in subtypesof(/datum/next_map))
 		var/datum/next_map/candidate = new map_path
 		if(candidate.is_enabled && candidate.is_votable())
+			votable_maps += candidate.name
 			votable_maps[candidate.name] = candidate.path
 
 	var/list/maplist = get_list_of_keys(votable_maps)
@@ -202,5 +203,6 @@
 	for(var/map_path in subtypesof(/datum/next_map))
 		var/datum/next_map/map = new map_path
 		if(map.is_compiled())
+			all_maps += map.name
 			all_maps[map.name] = map.path
 	return all_maps
