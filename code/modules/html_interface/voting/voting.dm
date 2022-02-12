@@ -96,7 +96,10 @@ var/global/datum/controller/vote/vote = new()
 		else
 			time_remaining = round((started_time + config.vote_period - world.time)/10)
 
-		if(time_remaining <= 0)
+		if(time_remaining <= 0 || player_list.len < 1)
+			//if no players, select at random
+			if(player_list.len < 1)
+				config.toggle_vote_method = 3
 			result()
 			for(var/ckey in voters) //hide voting interface using ckeys
 				var/client/C = directory[ckey]
@@ -126,7 +129,7 @@ var/global/datum/controller/vote/vote = new()
 				factor = max(factor,0.5)
 				tally["Initiate Crew Transfer"] = round(tally["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-	//choose the method for voting: "WEIGHTED" = 0, "MAJORITY" = 1		
+	//choose the method for voting: "WEIGHTED" = 0, "MAJORITY" = 1, RANDOM = 3
 	switch(config.toggle_vote_method)
 		if(0)
 			return weighted()
@@ -137,6 +140,8 @@ var/global/datum/controller/vote/vote = new()
 				return majority()//return persistent()
 			else
 				return majority()
+		if (3)
+			return random()
 		else
 			return  majority()
 
@@ -197,6 +202,14 @@ var/global/datum/controller/vote/vote = new()
 				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+	return text
+
+/datum/controller/vote/proc/random()
+if (choices.len > 1)
+		winner = pick(choices)
+		text = "<b>Random Vote Result: [winner] was picked at random.</b>"
+	else
+		text = "<b>Vote Result: Inconclusive - No choices!</b>"
 	return text
 
 /datum/controller/vote/proc/result()
