@@ -124,7 +124,7 @@
 		associated_manifest.associated_forward = null
 		qdel(associated_manifest)
 		associated_manifest = null
-	qdel(src)
+	SSsupply_shuttle.cargo_forwards.Remove(src)
 
 /datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle
 	return
