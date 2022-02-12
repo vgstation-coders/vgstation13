@@ -166,7 +166,7 @@ var/global/datum/controller/vote/vote = new()
 		if(filteredchoices.len)
 			winner = pickweight(filteredchoices.Copy())
 		qualified_votes = total_votes - discarded_votes
-		text += "<b>Random Weighted Vote Result: [.] won with [tally[.]] vote\s and a [round(100*tally[.]/qualified_votes)]% chance of winning.</b>"
+		text += "<b>Random Weighted Vote Result: [winner] won with [tally[winner]] vote\s and a [round(100*tally[winner]/qualified_votes)]% chance of winning.</b>"
 		for(var/choice in choices)
 			if(winner != choice)
 				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
@@ -322,6 +322,7 @@ var/global/datum/controller/vote/vote = new()
 	return total
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
+	reset()
 	var/mob/user = usr
 	if(currently_voting)
 		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
