@@ -243,37 +243,38 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 		else
 			SellObjToOrders(MA,0)
 
-		// PAY UP BITCHES
-		for(var/datum/centcomm_order/O in centcomm_orders)
-			if(O.CheckFulfilled())
-				var/list/positions_to_check = list()
-				switch(O.acct_by_string)
-					if("Cargo")
-						positions_to_check = CARGO_POSITIONS
-					if("Engineering")
-						positions_to_check = ENGINEERING_POSITIONS
-					if("Medical")
-						positions_to_check = MEDICAL_POSITIONS
-					if("Science")
-						positions_to_check = SCIENCE_POSITIONS
-					if("Civilian")
-						positions_to_check = CIVILIAN_POSITIONS
-				var/list/possible_names = list()
-				for(var/mob/living/M in player_list)
-					if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
-						possible_names += M.name
-					else
-						possible_names += M.name
-				var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
-				fulfilled_forwards += new /datum/cargo_forwarding/from_centcomm_order(ourname, station_name(), O.type, TRUE)
-				if (!istype(O, /datum/centcomm_order/per_unit))
-					O.Pay()//per_unit payments are handled by CheckFulfilled()
-				centcomm_orders.Remove(O)
-				for(var/obj/machinery/computer/supplycomp/S in supply_consoles)//juiciness!
-					S.say("Central Command request fulfilled!")
-					playsound(S, 'sound/machines/info.ogg', 50, 1)
 		if(MA && !(MA in delete_after))
 			qdel(MA)
+
+	// PAY UP
+	for(var/datum/centcomm_order/O in centcomm_orders)
+		if(O.CheckFulfilled())
+			var/list/positions_to_check = list()
+			switch(O.acct_by_string)
+				if("Cargo")
+					positions_to_check = CARGO_POSITIONS
+				if("Engineering")
+					positions_to_check = ENGINEERING_POSITIONS
+				if("Medical")
+					positions_to_check = MEDICAL_POSITIONS
+				if("Science")
+					positions_to_check = SCIENCE_POSITIONS
+				if("Civilian")
+					positions_to_check = CIVILIAN_POSITIONS
+			var/list/possible_names = list()
+			for(var/mob/living/M in player_list)
+				if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
+					possible_names += M.name
+				else
+					possible_names += M.name
+			var/ourname = possible_names && possible_names.len ? pick(possible_names) : "Unknown"
+			fulfilled_forwards += new /datum/cargo_forwarding/from_centcomm_order(ourname, station_name(), O.type, TRUE)
+			if (!istype(O, /datum/centcomm_order/per_unit))
+				O.Pay()//per_unit payments are handled by CheckFulfilled()
+			centcomm_orders.Remove(O)
+			for(var/obj/machinery/computer/supplycomp/S in supply_consoles)//juiciness!
+				S.say("Central Command request fulfilled!")
+				playsound(S, 'sound/machines/info.ogg', 50, 1)
 
 	for(var/atom/movable/MA2 in delete_after)
 		qdel(MA2)
@@ -374,7 +375,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 		if(!clear_turfs.len)
 			return
 		if (world.time < (cargo_last_forward + cargo_forward_cooldown))
-			log_debug("CARGO FORWARDING: Order happened before cooldown, no forwards.")
+			log_debug("CARGO FORWARDING: Order happened before cooldown, no forwards. ([((cargo_last_forward + cargo_forward_cooldown) - world.time) / 10] seconds left)")
 			return
 		var/amount_forwarded = config.cargo_forwarding_amount_override // Override in server config for debugging
 		if(!amount_forwarded) // If nothing from override
