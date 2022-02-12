@@ -15,9 +15,6 @@
 
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
-var/list/datum/cargo_forwarding/fulfilled_forwards = list() // For persistence
-var/list/datum/cargo_forwarding/previous_forwards = list()
-
 /datum/subsystem/supply_shuttle
 	name       = "Supply Shuttle"
 	init_order = SS_INIT_SUPPLY_SHUTTLE
@@ -47,6 +44,8 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 	var/centcomm_last_order = 0
 	var/cargo_forward_cooldown = 0
 	var/cargo_last_forward = 0
+	var/list/datum/cargo_forwarding/fulfilled_forwards = list() // For persistence
+	var/list/datum/cargo_forwarding/previous_forwards = list()
 
 /datum/subsystem/supply_shuttle/New()
 	NEW_SS_GLOBAL(SSsupply_shuttle)

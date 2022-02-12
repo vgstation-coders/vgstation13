@@ -138,10 +138,10 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		if(formatted_vars["subtype"])
 			oursubtype = text2path(formatted_vars["subtype"])
 		if(ispath(ourtype,/datum/cargo_forwarding))
-			previous_forwards += new ourtype(ourname, ourstation, oursubtype)
+			SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype)
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
-	var/list/all_forwards = previous_forwards.Copy() + fulfilled_forwards.Copy()
+	var/list/all_forwards = SSsupply_shuttle.previous_forwards.Copy() + SSsupply_shuttle.fulfilled_forwards.Copy()
 	var/list/all_forwards_formatted = list()
 	for(var/datum/cargo_forwarding/forward in all_forwards)
 		all_forwards_formatted += list(list("type" = forward.type, "sender" = forward.origin_sender_name, "station" = forward.origin_station_name, "subtype" = forward.initialised_type))
