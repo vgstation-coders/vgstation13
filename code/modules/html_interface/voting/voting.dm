@@ -37,7 +37,7 @@ var/global/datum/controller/vote/vote = new()
 	var/datum/html_interface/nanotrasen/vote/interface
 
 	//vote data
-	var/list/voters		//assoc. list: user.ckey, choices
+	var/list/voters		//assoc. list: user.ckey, choice
 	var/list/tally		//assoc. list: choices, count
 	var/list/choices = list() //choices
 	var/choice
@@ -110,11 +110,9 @@ var/global/datum/controller/vote/vote = new()
 	update(1)
 
 /datum/controller/vote/proc/get_result()
-	//get the highest number of votes
-	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
 	var/non_voters = clients.len - get_total()
-
+	currently_voting = FALSE
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
 		if(non_voters > 0)
@@ -213,22 +211,19 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/random()
 	var/text
 	if (choices.len > 1)
-		. = pick(choices)
+		winner = pick(choices)
 		text = "<b>Random Vote Result: [winner] was picked at random.</b>"
 	else
 		text = "<b>Vote Result: Inconclusive - No choices!</b>"
 	return text
 
-/datum/controller/vote/proc/announce_result()
-	currently_voting = FALSE
+/datum/controller/vote/proc/result()
 	var/result = get_result()
+	var/restart = 0
+
+	currently_voting = FALSE
 	log_vote(result)
 	to_chat(world, "<font color='purple'>[result]</font>")
-
-/datum/controller/vote/proc/result()
-	announce_result()
-	currently_voting = FALSE
-	var/restart = 0
 	if(winner)
 		switch(mode)
 			if("restart")
