@@ -220,6 +220,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		log_debug("[name] task found an empty file on [file_path]")
 		return
 	for(var/i = 1; i <= to_read.len; i++)
+		data += to_read[i]
 		data[to_read[i]] = to_read[to_read[i]]
 
 /datum/persistence_task/vote/on_shutdown()
@@ -228,8 +229,10 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/vote/proc/insert_counts(var/list/tally)
 	sortTim(tally, /proc/cmp_numeric_dsc,1)
 	//reset the winner
+	data += tally[1]
 	data[tally[1]] = 0
 	for(var/i = 2; i <= tally.len; i++)
+		data += tally[i]
 		data[tally[i]] = tally[tally[i]]
 
 /datum/persistence_task/vote/proc/clear_counts()
