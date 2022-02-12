@@ -437,9 +437,6 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 			if(CF.one_access && istype(A, /obj/structure/closet))
 				A:req_one_access = CF.one_access
 
-			for(var/atom/thing in CF.associated_crate) // Something already put in here?
-				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
-				CF.initial_contents += thing
 			for(var/typepath in CF.contains)
 				if(!typepath)
 					continue
@@ -450,6 +447,10 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 				CF.initial_contents += B2
+			for(var/atom/thing in CF.associated_crate) // Something in here that was not generated?
+				if(!thing in CF.initial_contents)
+					CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
+					CF.initial_contents += thing
 
 			CF.associated_manifest.info += {"</ul>"}
 
