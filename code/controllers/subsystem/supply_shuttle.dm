@@ -429,37 +429,35 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 			var/turf/pickedloc = clear_turfs[i]
 			clear_turfs.Cut(i,i+1)
 
-			var/atom/A = new CF.containertype(pickedloc)
-			CF.associated_crate = A
+			CF.associated_crate = new CF.containertype(pickedloc)
+			CF.associated_crate.associated_forward = CF
 			CF.post_creation()
-			A.name = "[CF.containername]"
+			CF.associated_crate.name = "[CF.containername]"
 
-			CF.associated_manifest = new /obj/item/weapon/paper/manifest(get_turf(A))
+			CF.associated_manifest = new /obj/item/weapon/paper/manifest(get_turf(CF.associated_crate))
+			CF.associated_manifest.associated_forward = CF
 			CF.associated_manifest.name = "Shipping Manifest for [CF.origin_sender_name]'s Order"
 			CF.associated_manifest.info = {"<h3>[command_name()] Shipping Manifest for [CF.origin_sender_name]'s Order</h3><hr><br>
 				Order #[rand(1,1000)]<br>
 				Destination: [CF.origin_station_name]<br>
 				[amount_forwarded] PACKAGES IN THIS SHIPMENT<br>
 				CONTENTS:<br><ul>"}
-			if(CF.access && istype(A, /obj/structure/closet))
-				A:req_access = CF.access
-			if(CF.one_access && istype(A, /obj/structure/closet))
-				A:req_one_access = CF.one_access
+			if(CF.access && istype(CF.associated_crate, /obj/structure/closet))
+				CF.associated_crate:req_access = CF.access
+			if(CF.one_access && istype(CF.associated_crate, /obj/structure/closet))
+				CF.associated_crate:req_one_access = CF.one_access
 
 			for(var/typepath in CF.contains)
 				if(!typepath)
 					continue
-				var/atom/B2 = new typepath(A)
+				var/atom/B2 = new typepath(CF.associated_crate)
 				if(istype(B2,/obj/item/stack))
 					var/obj/item/stack/S = B2
 					if(CF.amount && S.amount)
 						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
-				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
-				CF.initial_contents += B2
-			for(var/atom/thing in CF.associated_crate) // Something in here that was not generated?
-				if(!(thing in CF.initial_contents))
-					CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
-					CF.initial_contents += thing
+			for(var/atom/thing in CF.associated_crate)
+				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
+				CF.initial_contents += thing
 
 			CF.associated_manifest.info += {"</ul>"}
 

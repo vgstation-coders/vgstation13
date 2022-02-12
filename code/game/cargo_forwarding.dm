@@ -14,7 +14,7 @@
 	var/one_access = null // See above
 	var/worth = 0 // Payed out for forwarding
 	var/cargo_contribution = 0.1
-	var/atom/associated_crate = null // For ease of checking
+	var/obj/structure/associated_crate = null // For ease of checking
 	var/obj/item/weapon/paper/manifest/associated_manifest = null // Same here
 	var/origin_station_name = "" // Some fluff
 	var/origin_sender_name = ""
@@ -23,6 +23,9 @@
 	var/weighed = FALSE // Crate weighed?
 	var/list/atom/initial_contents = list() // For easier atom checking
 	var/initialised_type = null // Thing initialised from
+
+/obj
+	var/datum/cargo_forwarding/associated_forward = null // Associated cargo forward
 
 /datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = null, var/do_not_add = FALSE)
 	..()
@@ -209,8 +212,13 @@
 						)
 
 /datum/cargo_forwarding/from_supplypack/New(var/sender = "", var/station = "", var/supply_type = null, var/do_not_add = FALSE)
-	initialised_type = ispath(supply_type,/datum/supply_packs) ? supply_type : pick(subtypesof(/datum/supply_packs))
-	var/datum/supply_packs/ourpack = new initialised_type
+	var/datum/supply_packs/ourpack = null
+	while(!ourpack) //Don't load the holiday ones
+		initialised_type = ispath(supply_type,/datum/supply_packs) ? supply_type : pick(subtypesof(/datum/supply_packs))
+		ourpack = new initialised_type
+		if(ourpack.require_holiday  && (Holiday != ourpack.require_holiday))
+			qdel(ourpack)
+			ourpack = null
 	name = ourpack.name
 	contains = ourpack.contains.Copy()
 	amount = ourpack.amount
@@ -248,7 +256,7 @@
 				contains += i
 		if(istype(ourorder,/datum/centcomm_order/per_unit))
 			var/datum/centcomm_order/per_unit/PU = ourorder
-			worth = PU.unit_prices[PU.unit_prices[i]] * amount
+			worth = PU.unit_prices[i] * amount
 		else
 			worth = ourorder.worth
 	//Sadly cannot use switch here
