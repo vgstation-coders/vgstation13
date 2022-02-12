@@ -218,21 +218,21 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define OPEN_OVERLAY_PLANE	(15 + FLOAT_PLANE) // This one won't behave either
+#define OPEN_OVERLAY_PLANE	(16 + FLOAT_PLANE) // This one won't behave either
 
-#define BASE_PLANE 				(16 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define BASE_PLANE 				(17 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	17
+#define MISC_HUD_MARKERS_PLANE	18
 
-#define ANTAG_HUD_PLANE		 	18
+#define ANTAG_HUD_PLANE		 	19
 
-#define STATIC_PLANE 			19		// For AI's static.
+#define STATIC_PLANE 			20		// For AI's static.
 
 	#define HACK_LAYER 					1
 	#define STATIC_LAYER				2
 	#define REACTIVATE_CAMERA_LAYER		3
 
-#define FULLSCREEN_PLANE		20		// for fullscreen overlays that do not cover the hud.
+#define FULLSCREEN_PLANE		21		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 		0
 	#define DAMAGE_HUD_LAYER 			1
@@ -241,7 +241,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				21		// For the Head-Up Display
+#define HUD_PLANE 				22		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 			0
 	#define HUD_BASE_LAYER		 		1
@@ -253,7 +253,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
 
-#define ABOVE_HUD_PLANE 		22		// For being above the Head-Up Display
+#define ABOVE_HUD_PLANE 		23		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()
