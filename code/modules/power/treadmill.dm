@@ -76,7 +76,7 @@
 		if(emagged && ishuman(runner))
 			runner.bodytemperature += 1
 			if(runner.bodytemperature > T0C + 100)
-				switch(rand(1,20))
+				switch(rand(1,100))
 					if(1 to 5)
 						runner.emote("collapse")
 					if(5 to 10)
@@ -85,6 +85,8 @@
 						to_chat(runner,"<span class='warning'>Your legs really hurt!</span>")
 						runner.apply_damage(5, BRUTE, LIMB_LEFT_LEG)
 						runner.apply_damage(5, BRUTE, LIMB_RIGHT_LEG)
+					else
+						to_chat(runner,"<span class='warning'>You really should take a rest!</span>")
 				runner.bodytemperature = max(T0C + 100,cached_temp)
 	else
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
