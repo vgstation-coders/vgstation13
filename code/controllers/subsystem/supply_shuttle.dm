@@ -172,14 +172,13 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 
 /datum/subsystem/supply_shuttle/proc/sell()
 
-	var/area/shuttle = cargo_shuttle.linked_area
-	if(!shuttle)
+	if(!cargo_shuttle || !cargo_shuttle.linked_area)
 		return
 
 	var/datum/money_account/cargo_acct = department_accounts["Cargo"]
 
 	var/recycled_crates = 0
-	for(var/atom/movable/MA in shuttle)
+	for(var/atom/movable/MA in cargo_shuttle.linked_area)
 		if(MA.anchored && !ismecha(MA))
 			continue
 
@@ -189,28 +188,32 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 				var/specific_reason = FALSE // For debug logs
 				if(!CF.weighed)
 					reason = "Crate not weighed"
-				if(!CF.associated_manifest || get_area(CF.associated_manifest) != shuttle)
+				if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
 					reason = "Manifest is missing"
 					specific_reason = TRUE
 					if(!CF.associated_manifest)
 						log_debug("CARGO FORWARDING: [CF] denied: Manifest was destroyed")
 					else
-						log_debug("CARGO FORWARDING: [CF] denied: Manifest was not on shuttle")
+						log_debug("CARGO FORWARDING: [CF] denied: Manifest was in [get_area(CF.associated_manifest)], not in [cargo_shuttle.linked_area]")
 				if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
 					reason = "Manifest was not stamped"
 				if(istype(MA,/obj/structure/closet))
 					var/obj/structure/closet/CL = MA
 					if(CL.broken)
 						reason = "Crate broken into"
+				var/list/atom/foreign_atoms = list()
 				for(var/atom/A in MA)
 					if(!(A in CF.initial_contents))
-						reason = "Foreign object in crate"
-						break
+						foreign_atoms += A
+				if(foreign_atoms && foreign_atoms.len)
+					reason = "Foreign objects in crate ([counted_english_list(foreign_atoms)])"
+				var/list/atom/missing_atoms = list()
 				for(var/atom/A in CF.initial_contents)
 					if(!(A in MA))
-						reason = "Object missing from crate"
-						break
-				if(!specific_reason)
+						missing_atoms += A
+				if(missing_atoms && missing_atoms.len)
+					reason = "[counted_english_list(missing_atoms)] missing from crate"
+				if(!specific_reason && reason)
 					log_debug("CARGO FORWARDING: [CF] denied: [reason]")
 				CF.Pay(reason)
 
@@ -277,13 +280,12 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 	if(!shoppinglist.len && !forwarding_on)
 		return
 
-	var/area/shuttle = cargo_shuttle.linked_area
-	if(!shuttle)
+	if(!cargo_shuttle || !cargo_shuttle.linked_area)
 		return
 
 	var/list/clear_turfs = list()
 
-	for(var/turf/T in shuttle)
+	for(var/turf/T in cargo_shuttle.linked_area)
 		if(T.density)
 			continue
 		var/contcount
