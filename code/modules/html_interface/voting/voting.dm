@@ -384,11 +384,14 @@ var/global/datum/controller/vote/vote = new()
 			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
+					tally += choices[i]
 					tally[choices[i]] = 0
 				else
+					tally += choices[i]
 					tally[choices[i]] = task.data[choices[i]]
 		else
 			for (var/c in choices)
+				tally += c
 				tally[c] = 0
 		if(mode == "custom")
 			text += "<br>[question]"
