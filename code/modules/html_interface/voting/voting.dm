@@ -31,45 +31,51 @@ var/global/datum/controller/vote/vote = new()
 	var/time_remaining = 0
 	var/mode           = null
 	var/question       = null
-	var/list/ismapvote
-	var/chosen_map
-	var/winner 		 	= null
-	name               = "datum"
+	var/currently_voting = FALSE // If we are already voting, don't allow another one
 	var/datum/html_interface/nanotrasen/vote/interface
 
 	//vote data
 	var/list/voters		//assoc. list: user.ckey, choices
 	var/list/tally		//assoc. list: choices, count
 	var/list/choices = list() //choices
-	var/choice
-	var/count
+	var/list/map_paths	//assoc. list: map.name, map.path from next_map.dm
+	var/winner 		 	= null
 
 	var/list/status_data
 	var/last_update    = 0
 	var/initialized    = 0
 	var/lastupdate     = 0
 
-	var/currently_voting = FALSE // If we are already voting, don't allow another one
-
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
+	name               = "datum"
 
 /datum/controller/vote/New()
 	. = ..()
 	src.voters = list()
 	src.tally = list()
 	src.status_data = list()
-	src.choice = choice
-	src.count = count
+
 	spawn(5)
 		if(!src.interface)
-			src.interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
+			src.interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", VOTE_SCREEN_WIDTH, VOTE_SCREEN_HEIGHT, vote_head)
 			src.interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
 		initialized = 1
 	if (vote != src)
 		if (istype(vote))
 			qdel(vote)
 		vote = src
+
+/datum/controller/vote/proc/reset()
+	currently_voting = FALSE
+	initiator = null
+	time_remaining = 0
+	mode = null
+	question = null
+	choices.len = 0
+	voters.len = 0
+	tally.len = 0
+	update(1)
 
 /datum/controller/vote/proc/process()	//called by master_controller
 	if (lock)
@@ -85,7 +91,10 @@ var/global/datum/controller/vote/vote = new()
 
 		// Calculate how much time is remaining by comparing current time, to time of vote start,
 		// plus vote duration
-		time_remaining = (ismapvote && ismapvote.len) ? (round((started_time + 600 - world.time)/10)) : (round((started_time + config.vote_period - world.time)/10))
+		if (currently_voting)
+			time_remaining = round((started_time + 600 - world.time)/10) 
+		else
+			time_remaining = round((started_time + config.vote_period - world.time)/10)
 
 		if(time_remaining <= 0)
 			result()
@@ -99,24 +108,15 @@ var/global/datum/controller/vote/vote = new()
 
 		lock = FALSE
 
-/datum/controller/vote/proc/reset()
-	currently_voting = FALSE
-	winner = null
-	initiator = null
-	time_remaining = 0
-	mode = null
-	question = null
-	choices.len = 0
-	voters.len = 0
-	tally.len = 0
-	update(1)
-
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
 	var/non_voters = clients.len - get_total()
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
 		if(non_voters > 0)
@@ -142,7 +142,39 @@ var/global/datum/controller/vote/vote = new()
 			else
 				return majority()
 		else
+<<<<<<< Updated upstream
 			return majority()
+=======
+			return  majority()
+
+/datum/controller/vote/proc/weighted()
+	var/vote_threshold = 0.15
+	var/list/discarded_choices = list()
+	var/discarded_votes = 0
+	var/total_votes = get_total()
+	var/text
+	var/list/filteredchoices = tally.Copy()
+	var/qualified_votes
+	if (total_votes > 0)
+		for(var/a in filteredchoices)
+			if(!filteredchoices[a])
+				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+				continue
+			if(filteredchoices[a] / total_votes < vote_threshold)
+				discarded_votes += filteredchoices[a]
+				filteredchoices -= a
+				discarded_choices += a
+		if(filteredchoices.len)
+			winner = pickweight(filteredchoices.Copy())
+		qualified_votes = total_votes - discarded_votes
+		text += "<b>Random Weighted Vote Result: [winner] won with [tally[winner]] vote\s and a [round(100*tally[winner]/qualified_votes)]% chance of winning.</b>"
+		for(var/choice in choices)
+			if(winner != choice)
+				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
+	else
+		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+	return text
+>>>>>>> Stashed changes
 		
 /datum/controller/vote/proc/majority()
 	var/text
@@ -203,9 +235,16 @@ var/global/datum/controller/vote/vote = new()
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
 
+<<<<<<< Updated upstream
 /datum/controller/vote/proc/announce_result()
 	currently_voting = FALSE
 	var/result = get_result()
+=======
+/datum/controller/vote/proc/result()
+	currently_voting = FALSE
+	var/result = get_result()
+	var/restart = 0
+>>>>>>> Stashed changes
 	log_vote(result)
 	to_chat(world, "<font color='purple'>[result]</font>")
 
@@ -232,10 +271,9 @@ var/global/datum/controller/vote/vote = new()
 				if(winner == "Initiate Crew Transfer")
 					init_shift_change(null, 1)
 			if("map")
-				if(winner)
-					chosen_map = "maps/voting/" + ismapvote[winner] + "/vgstation13.dmb"
-					watchdog.chosen_map = ismapvote[winner]
-					log_game("Players voted and chose.... [watchdog.chosen_map]!")
+				//sets path of vgstation13.dmb according to map winner
+				watchdog.map_path = map_paths[winner]
+				log_game("Players voted and chose.... [watchdog.map_path]!")
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
 		feedback_set_details("end_error","restart vote")
@@ -355,7 +393,7 @@ var/global/datum/controller/vote/vote = new()
 				if(!choices.len)
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
-				ismapvote = maps
+				map_paths = maps
 			else
 				return 0
 
@@ -389,7 +427,7 @@ var/global/datum/controller/vote/vote = new()
 			if(istype(user) && user.client)
 				interact(user.client)
 
-		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[vote]'>Click here</a> or type 'vote' to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
+		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[vote]'>Click here</a> or type 'vote' to place your votes.<br>You have [config.vote_period/10] seconds to vote.</font>")
 		switch(vote_type)
 			if("crew_transfer")
 				world << sound('sound/voice/Serithi/Shuttlehere.ogg')
@@ -404,7 +442,7 @@ var/global/datum/controller/vote/vote = new()
 			going = 0
 			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
 
-		time_remaining = (ismapvote && ismapvote.len ? 60 : round(config.vote_period/10))
+		time_remaining = round(config.vote_period/10)
 		return 1
 	return 0
 
@@ -493,12 +531,13 @@ var/global/datum/controller/vote/vote = new()
 		if("cancel")
 			if(user.client.holder)
 				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
+					currently_voting = FALSE
 					return
+				currently_voting = FALSE
 				log_admin("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				message_admins("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				reset()
 				update()
-				currently_voting = FALSE
 		if("toggle_restart")
 			if(user.client.holder)
 				config.allow_vote_restart = !config.allow_vote_restart
@@ -543,4 +582,34 @@ var/global/datum/controller/vote/vote = new()
 		if(!vote.initialized)
 			to_chat(user, "<span class='info'>The voting controller isn't fully initialized yet.</span>")
 		else
+<<<<<<< Updated upstream
 			vote.interact(user.client)
+=======
+			vote.interact(user.client)
+
+/client/proc/rigvote()
+	set category = "Debug"
+	set name = "Rig Vote"
+	set desc = "easily rig an ongoing vote"
+
+	var/winner
+	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
+		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
+		if(!winner)
+			return
+		vote.tally[winner] = ARBITRARILY_LARGE_NUMBER
+	else
+		if(vote.mode == "map")
+			var/all_maps = get_all_maps()
+			winner = input(usr, "Pick a map.") as null|anything in all_maps
+			if(!winner)
+				return
+			to_chat(usr,"<span class='info'>Set path as [vote.map_paths[winner]]. Hope that's right...</span>")
+		else
+			winner = input(usr,"Add a result.","Add a result","") as text|null
+		if(!winner)
+			return
+		vote.tally[winner]  = ARBITRARILY_LARGE_NUMBER
+	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [winner].")
+>>>>>>> Stashed changes
