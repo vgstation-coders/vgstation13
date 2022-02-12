@@ -277,16 +277,18 @@
 				newletter="ah"
 			if(lowertext(newletter)=="c")
 				newletter="k"
-		switch(rand(1,10))
+		switch(rand(1,15))
 			if(1,3,5,8)
 				newletter="[lowertext(newletter)]"
-			if(2,4,6,9,10)
+			if(2,4,6,9)
 				newletter="[uppertext(newletter)]"
 			if(7)
 				newletter+="'"
 			//if(9,10)	newletter="<b>[newletter]</b>"
 			//if(11,12)	newletter="<big>[newletter]</big>"
 			//if(13)	newletter="<small>[newletter]</small>"
+			else
+				//do nothing
 		newphrase+="[newletter]";counter-=1
 	return newphrase
 
