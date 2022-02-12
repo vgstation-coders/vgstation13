@@ -78,10 +78,10 @@ var/global/datum/controller/vote/vote = new()
 	update(1)
 
 /datum/controller/vote/proc/process()	//called by master_controller
-	if (lock)
-		return
-	if(mode)
-		lock = TRUE
+//	if (lock)
+//		return
+	if(mode && currently_voting)
+		//lock = TRUE
 		// No more change mode votes after the game has started.
 		// 3 is GAME_STATE_PLAYING, but that #define is undefined for some reason
 		if(mode == "gamemode" && ticker.current_state >= 2)
@@ -106,17 +106,13 @@ var/global/datum/controller/vote/vote = new()
 		else
 			update(1)
 
-		lock = FALSE
+//		lock = FALSE
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
 	var/non_voters = clients.len - get_total()
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
 		if(non_voters > 0)
@@ -142,9 +138,6 @@ var/global/datum/controller/vote/vote = new()
 			else
 				return majority()
 		else
-<<<<<<< Updated upstream
-			return majority()
-=======
 			return  majority()
 
 /datum/controller/vote/proc/weighted()
@@ -174,7 +167,6 @@ var/global/datum/controller/vote/vote = new()
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
->>>>>>> Stashed changes
 		
 /datum/controller/vote/proc/majority()
 	var/text
@@ -207,51 +199,14 @@ var/global/datum/controller/vote/vote = new()
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
 
-/datum/controller/vote/proc/weighted()
-	var/vote_threshold = 0.15
-	var/list/discarded_choices = list()
-	var/discarded_votes = 0
-	var/total_votes = get_total()
-	var/text
-	var/list/filteredchoices = tally.Copy()
-	var/qualified_votes
-	if (total_votes > 0)
-		for(var/a in filteredchoices)
-			if(!filteredchoices[a])
-				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
-				continue
-			if(filteredchoices[a] / total_votes < vote_threshold)
-				discarded_votes += filteredchoices[a]
-				filteredchoices -= a
-				discarded_choices += a
-		if(filteredchoices.len)
-			winner = pickweight(filteredchoices.Copy())
-		qualified_votes = total_votes - discarded_votes
-		text += "<b>Random Weighted Vote Result: [winner] won with [tally[winner]] vote\s and a [round(100*tally[winner]/qualified_votes)]% chance of winning.</b>"
-		for(var/choice in choices)
-			if(winner != choice)
-				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
-	else
-		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
-	return text
-
-<<<<<<< Updated upstream
-/datum/controller/vote/proc/announce_result()
-	currently_voting = FALSE
-	var/result = get_result()
-=======
 /datum/controller/vote/proc/result()
 	currently_voting = FALSE
 	var/result = get_result()
 	var/restart = 0
->>>>>>> Stashed changes
+
 	log_vote(result)
 	to_chat(world, "<font color='purple'>[result]</font>")
 
-/datum/controller/vote/proc/result()
-	announce_result()
-	currently_voting = FALSE
-	var/restart = 0
 	if(winner)
 		switch(mode)
 			if("restart")
@@ -404,6 +359,7 @@ var/global/datum/controller/vote/vote = new()
 		choices = shuffle(choices)
 		//initialize tally
 		for (var/c in choices)
+			tally += c
 			tally[c] = 0
 		if(mode == "custom")
 			text += "<br>[question]"
@@ -528,15 +484,17 @@ var/global/datum/controller/vote/vote = new()
 			cancel_vote(user)
 			src.updateFor(user.client)
 			return 0
-		if("cancel")
+		if("abort")
 			if(user.client.holder)
 				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
-					currently_voting = FALSE
 					return
-				currently_voting = FALSE
 				log_admin("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				message_admins("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				reset()
+				update()
+		if("rig")
+			if(user.client.holder)
+				rigvote()
 				update()
 		if("toggle_restart")
 			if(user.client.holder)
@@ -582,34 +540,25 @@ var/global/datum/controller/vote/vote = new()
 		if(!vote.initialized)
 			to_chat(user, "<span class='info'>The voting controller isn't fully initialized yet.</span>")
 		else
-<<<<<<< Updated upstream
-			vote.interact(user.client)
-=======
 			vote.interact(user.client)
 
-/client/proc/rigvote()
-	set category = "Debug"
-	set name = "Rig Vote"
-	set desc = "easily rig an ongoing vote"
-
-	var/winner
-	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
-		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
-		if(!winner)
+/datum/controller/vote/proc/rigvote()
+	var/rigged_choice = null
+	if(choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
+		winner = input(usr,"Choose a result.","Choose a result.", choices[1]) as null|anything in vote.choices
+		if(!rigged_choice)
 			return
-		vote.tally[winner] = ARBITRARILY_LARGE_NUMBER
+		vote.tally[rigged_choice] = ARBITRARILY_LARGE_NUMBER
 	else
-		if(vote.mode == "map")
+		if(mode == "map")
 			var/all_maps = get_all_maps()
-			winner = input(usr, "Pick a map.") as null|anything in all_maps
-			if(!winner)
+			rigged_choice = input(usr, "Pick a map.") as null|anything in all_maps
+			if(!rigged_choice)
 				return
-			to_chat(usr,"<span class='info'>Set path as [vote.map_paths[winner]]. Hope that's right...</span>")
 		else
-			winner = input(usr,"Add a result.","Add a result","") as text|null
-		if(!winner)
+			rigged_choice = input(usr,"Add a result.","Add a result","") as text|null
+		if(!rig)
 			return
-		vote.tally[winner]  = ARBITRARILY_LARGE_NUMBER
-	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
-	log_admin("Admin [key_name(usr)] rigged the vote for [winner].")
->>>>>>> Stashed changes
+		tally[rigged_choice]  = ARBITRARILY_LARGE_NUMBER
+	message_admins("Admin [key_name_admin(usr)] rigged the vote for [rigged_choice].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [rigged_choice].")

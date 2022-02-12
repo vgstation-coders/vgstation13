@@ -15,7 +15,8 @@ function clearAll(){
 	clearallup += 1;
 	$("#vote_main").empty();
 	$("#vote_choices").empty();
-	$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=cancel;'>Abort the current vote.</a>)");
+	$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=abort;'>Abort the current vote.</a>)");
+	$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=rig;'>Rig the current vote.</a>)");
 
 }
 
