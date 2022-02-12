@@ -374,8 +374,9 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 	if(forwarding_on)
 		if(!clear_turfs.len)
 			return
-		if (world.time < (cargo_last_forward + cargo_forward_cooldown))
-			log_debug("CARGO FORWARDING: Order happened before cooldown, no forwards. ([((cargo_last_forward + cargo_forward_cooldown) - world.time) / 10] seconds left)")
+		var/cooldown_left = (cargo_last_forward + cargo_forward_cooldown) - world.time
+		if (cooldown_left > 0)
+			log_debug("CARGO FORWARDING: Order happened before cooldown, no forwards. ([time2text(cooldown_left, "mm")] minutes [time2text(cooldown_left, "ss")] seconds left)")
 			return
 		var/amount_forwarded = config.cargo_forwarding_amount_override // Override in server config for debugging
 		if(!amount_forwarded) // If nothing from override
