@@ -229,10 +229,8 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/vote/proc/insert_counts(var/list/tally)
 	sortTim(tally, /proc/cmp_numeric_dsc,1)
 	//reset the winner
-	data += tally[1]
 	data[tally[1]] = 0
 	for(var/i = 2; i <= tally.len; i++)
-		data += tally[i]
 		data[tally[i]] = tally[tally[i]]
 
 /datum/persistence_task/vote/proc/clear_counts()
