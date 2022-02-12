@@ -86,7 +86,7 @@
 						runner.apply_damage(5, BRUTE, LIMB_LEFT_LEG)
 						runner.apply_damage(5, BRUTE, LIMB_RIGHT_LEG)
 					else
-						to_chat(runner,"<span class='warning'>You really should take a rest!</span>")
+						//do nothing
 				runner.bodytemperature = max(T0C + 100,cached_temp)
 	else
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
