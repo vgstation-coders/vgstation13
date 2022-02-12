@@ -178,6 +178,8 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 	var/datum/money_account/cargo_acct = department_accounts["Cargo"]
 
 	var/recycled_crates = 0
+
+	var/list/delete_after = list() // Hotfix for manifests
 	for(var/atom/movable/MA in cargo_shuttle.linked_area)
 		if(MA.anchored && !ismecha(MA))
 			continue
@@ -216,6 +218,8 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 				if(!specific_reason && reason)
 					log_debug("CARGO FORWARDING: [CF] denied: [reason]")
 				CF.Pay(reason)
+			if(MA == CF.associated_manifest)
+				delete_after.Add(MA)
 
 		if(istype(MA,/obj/structure/closet/crate))
 			recycled_crates++
@@ -268,8 +272,11 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 				for(var/obj/machinery/computer/supplycomp/S in supply_consoles)//juiciness!
 					S.say("Central Command request fulfilled!")
 					playsound(S, 'sound/machines/info.ogg', 50, 1)
-		if(MA)
+		if(MA && !(MA in delete_after))
 			qdel(MA)
+
+	for(var/atom/movable/MA2 in delete_after)
+		qdel(MA2)
 
 	if (recycled_crates)
 		new /datum/transaction(cargo_acct, "[recycled_crates] recycled crate[recycled_crates > 1 ? "s" : ""]",\
