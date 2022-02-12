@@ -86,7 +86,10 @@ var/global/datum/controller/vote/vote = new()
 		// plus vote duration
 		time_remaining = (ismapvote && ismapvote.len) ? (round((started_time + 600 - world.time)/10)) : (round((started_time + config.vote_period - world.time)/10))
 
-		if(time_remaining <= 0)
+		if(time_remaining <= 0 || player_list.len < 1)
+			//if no players, select at random
+			if(player_list.len < 1)
+				config.toggle_vote_method = 3
 			result()
 			for(var/ckey in voters) //hide voting interface using ckeys
 				var/client/C = directory[ckey]
