@@ -448,7 +448,7 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 				CF.associated_manifest.info += "<li>[B2.name]</li>" //add the item to the manifest
 				CF.initial_contents += B2
 			for(var/atom/thing in CF.associated_crate) // Something in here that was not generated?
-				if(!thing in CF.initial_contents)
+				if(!(thing in CF.initial_contents))
 					CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
 					CF.initial_contents += thing
 
