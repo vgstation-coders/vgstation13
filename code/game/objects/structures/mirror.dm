@@ -53,7 +53,7 @@
 	if(!can_use(user, target))
 		return
 	if(user.hallucinating())
-		switch(rand(1,50))
+		switch(rand(1,100))
 			if(1 to 20)
 				to_chat(user, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
 				user.Knockdown(4)
@@ -67,7 +67,8 @@
 			if(41 to 50)
 				to_chat(user, "<span class='notice'>You don't see anything.</span>")
 				return
-
+			else
+				//do nothing
 	var/which = alert(user, "What would you like to change?", "Appearance", "Hair", "Beard", "Undies")
 
 	if(!which || !can_use(user, target))
