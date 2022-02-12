@@ -188,10 +188,9 @@ var/list/datum/cargo_forwarding/previous_forwards = list()
 			if(O.associated_forward)
 				if(O.associated_forward.associated_crate == src)
 					O.associated_forward.delete_crate = TRUE
-					continue
 				if(O.associated_forward.associated_manifest == src)
 					O.associated_forward.delete_manifest = TRUE
-					continue
+				continue
 
 		if(istype(MA,/obj/structure/closet/crate))
 			recycled_crates++
