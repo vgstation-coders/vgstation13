@@ -73,6 +73,36 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2022.02.13</h2>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">One changeling now only spawns roundstart (now works properly). Fixed Split: can now happen once max, cost reduced from 50 to 40, but chems are now actually spent when using it.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Internal organs can now fit in storage easier.</li>
+				<li class="tweak">Space hobo shacks can no longer be filled with goliaths or other foreign objects from nearby mine features.</li>
+			</ul>
+			<h2 class="date">2022.02.11</h2>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Changeling can now be latejoined</li>
+			</ul>
+			<h2 class="date">2022.02.10</h2>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Reverts the reagent tolerances added in PR #31994, does not touch the framework itself.</li>
+			</ul>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">can cancel progress bar actions in space again</li>
+				<li class="bugfix">fixed voting</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Reagents can now have the property to become addicting or build up a tolerance when consumed. Addiction causes withdrawal affects while tracked when the reagent is not in system and tolerance increases the minimum amount needed to affect a mob, without changing the overdose threshold.</li>
+				<li class="rscadd">Penlights can now find out how many times someone has been cloned by shining it at their eyes.</li>
+			</ul>
 			<h2 class="date">2022.02.09</h2>
 			<h3 class="author">Eneocho updated:</h3>
 			<ul class="changes bgimages16">
@@ -1753,67 +1783,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Emitters no longer leave their beam in place when teleported away, instead instantly shutting off.</li>
 				<li class="tweak">The biomass, spacevine and powercreep random events no longer spawn their infestations in the arrivals shuttle hallway.</li>
 				<li class="bugfix">Synergy now has an actual bluespace rift spawn point, for supermatter cascade endgames.</li>
-			</ul>
-			<h2 class="date">2021.09.04</h2>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The shuttle engine fire no longer constantly says it bounces/gleams off the windows in front.</li>
-			</ul>
-			<h2 class="date">2021.09.03</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Attempting to join with a job alt-title that&#39;s been removed no longer spawns you half-naked.</li>
-				<li class="tweak">Foam looks better.</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Using a condiment bottle on a cauldron now transfers to it instead of from it. (eneocho &amp; kurfurst)</li>
-				<li class="tweak">The Biogenerator now indicates more clearly how many units of reagents you&#39;re printing. (eneocho)</li>
-				<li class="bugfix">Fixed open soda cans appearing closed when removed from a Chem Master. (DamianX)</li>
-				<li class="rscadd">Plates can now be stacked up, whether they are dirty or clean. You can clean a whole stack at once using soap. Be careful not to slip while carrying them.</li>
-				<li class="rscadd">You can remove plates from a stack either with an Alt Click, or a Mouse Drag onto yourself. Alternatively, clicking a stack with a food item will add a plate to it in your hand directly.</li>
-				<li class="rscadd">The Dinnerware now provides 5 stacks of 10 plates each, for a total of 50 plates, up from 20.</li>
-				<li class="rscadd">Plates now inflict 5 brute damage when thrown. They also have a 70 percent chance of shattering this way. Throwing a whole stack applies the chance to each individual plate but the damage isn&#39;t increased.</li>
-				<li class="rscadd">Infected food will transmit its diseases to custom snacks it is added to, including plates. The dirty plate will keep those diseases as well, so there is now some purpose to cleaning them up before using them again.</li>
-				<li class="imageadd">Plates have been removed from the sprites of most food items that had them.</li>
-				<li class="imageadd">Plates now have in-hand icons. Placing food on plates will give them the in-hand icon of the food item used.</li>
-				<li class="rscadd">Plates can be set up to look different depending on the food item, and have the item appear at an offset, which is useful for sprites that have visible pixels going below where the plate should be, such as for the dripping cheese on cheesy meat loafs.</li>
-				<li class="bugfix">Fixed custom sandwiches made using sliced nova bread not using the correct sprite nor carrying the nova bread&#39;s reagents. (eneocho)</li>
-				<li class="bugfix">Animated food items no longer stop animating when placed on a plate, such as for birthday cake slices.</li>
-				<li class="rscadd">Eating food without a fork now has a chance of spawning some crumbs under you. The crumbs are colored depending on the food item eaten.</li>
-				<li class="tweak">You now take 2 minutes to free yourself from a strange present, up from it being instant. (saulmyers)</li>
-				<li class="bugfix">Fixed slime brains getting deleted when re-inserted into their puddles. (chaklet)</li>
-				<li class="bugfix">Fixed being able to use glass sheets on grilles diagonally. (repertor)</li>
-				<li class="bugfix">Fixed meteors being invisible while fired at the station. (gurfan)</li>
-				<li class="imageadd">Added and polished in-hand icons for all cigarette-related items. Every lighters, match, box, cig, and even ashtrays are now visible in your hands.</li>
-				<li class="bugfix">You will no longer crush your pipe into an ashtray, unless on harm intent. On other intents you will simply empty its content and put it out.</li>
-				<li class="rscadd">Cigarettes and Pipes now warn you about 5 seconds prior that they&#39;re about to go out, letting you extinguish them of your own accord. Blunts specifically will burn your lips for 1 burn damage if you let them go out while still on your lips or hands.</li>
-				<li class="rscadd">You now get a message when trying to cut a pipe out of an ear of corn, telling you that you gotta eat it first.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The omnitool (from the cloud ix crate) now properly allows you to remote control any APC or air alarm as though you were a silicon, as long as you have the appropriate access. This means it will be &#34;unlocked&#34; even remotely when the omnitool is in your active hand.</li>
-				<li class="bugfix">Fixed the bugs with using the omnitool at range.</li>
-				<li class="tweak">Airshield projectors will not deploy an airshield when aimed at a storage container (like a backpack), table, or rack if adjacent to that object (includes wearing).</li>
-				<li class="tweak">Ninjas now need to wear their suit to use hologram projectors.</li>
-				<li class="tweak">Ninjas need to wait 2 deciseconds between throwing ninja stars, raised to 1 second if not wearing their suit. Additionally, they only get double throwing power when using the suit.</li>
-			</ul>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Toy swords now come in more colours than just blue.</li>
-				<li class="rscadd">Toy swords can now be combined to make toy dual sabers.</li>
-				<li class="rscadd">Ghosts can now view the full OOC crew manifest, with borgs and AIs.</li>
-			</ul>
-			<h2 class="date">2021.09.02</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed the gatling welder being in the wrong hand when facing left or right. (cloutcode)</li>
-				<li class="bugfix">Fixed Immovable Monoliths being tilted.</li>
-				<li class="bugfix">Ctrl plus Arrow no longer rotates chairs that aren&#39;t meant to rotate.</li>
-			</ul>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Items will now no longer break windows (including full ones) if their force is below a minimum damage threshold. Normal windows have a minimum of none, reinforced have 5, plasma have 10 and reinforced plasma have 15.</li>
 			</ul>
 		</div>
 		<!--

@@ -127,20 +127,12 @@
 	cost = 18
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
-	var/changeling_threshold = 1
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
-	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
-	for (var/i = 1 to num_changelings)
-		var/mob/M = pick(candidates)
-		assigned += M
-		candidates -= M
-		if (i > changeling_threshold)
-			if ((mode.threat > cost))
-				mode.spend_threat(cost)
-			else
-				break
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
@@ -152,7 +144,7 @@
 		if(!hivemind)
 			hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 			hivemind.OnPostSetup()
-		hivemind?.HandleRecruitedRole(newChangeling)
+		hivemind.HandleRecruitedRole(newChangeling)
 
 		newChangeling.ForgeObjectives()
 		newChangeling.Greet(GREET_ROUNDSTART)

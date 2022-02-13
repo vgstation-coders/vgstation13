@@ -54,8 +54,6 @@
 	var/grasp_id = 0 //Does this organ affect other grasping organs?
 	var/can_grasp = 0 //Can this organ actually grasp something?
 
-	var/w_class = W_CLASS_LARGE
-
 
 /datum/organ/external/New(var/datum/organ/external/P)
 	if(P)
@@ -1251,7 +1249,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	has_fat = 1
 	vital = 1
 	encased = "ribcage"
-	w_class = W_CLASS_MEDIUM
 
 /datum/organ/external/groin
 	name = LIMB_GROIN
@@ -1261,7 +1258,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
 	vital = 1
-	w_class = W_CLASS_MEDIUM
 
 //=====Legs======
 
@@ -1273,7 +1269,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = LEG_LEFT
 	icon_position = LEFT
-	w_class = W_CLASS_SMALL
 
 /datum/organ/external/l_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1310,8 +1305,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
 
-	w_class = W_CLASS_SMALL
-
 //This proc is same as l_leg/can_stand()
 /datum/organ/external/r_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1347,7 +1340,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_arm"
 	max_damage = 75
 	min_broken_damage = 30
-	w_class = W_CLASS_SMALL
 	body_part = ARM_LEFT
 
 	grasp_id = GRASP_LEFT_HAND
@@ -1368,7 +1360,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_arm"
 	max_damage = 75
 	min_broken_damage = 30
-	w_class = W_CLASS_SMALL
 	body_part = ARM_RIGHT
 
 	grasp_id = GRASP_RIGHT_HAND
@@ -1392,7 +1383,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = FOOT_LEFT
 	icon_position = LEFT
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
 /datum/organ/external/l_foot/generate_dropped_organ(current_organ)
@@ -1412,7 +1402,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = FOOT_RIGHT
 	icon_position = RIGHT
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
 /datum/organ/external/r_foot/generate_dropped_organ(current_organ)
@@ -1433,7 +1422,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_RIGHT_HAND
 	can_grasp = 1
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 
 /datum/organ/external/r_hand/generate_dropped_organ(current_organ)
@@ -1454,7 +1442,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_LEFT_HAND
 	can_grasp = 1
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 
 /datum/organ/external/l_hand/generate_dropped_organ(current_organ)
@@ -1476,7 +1463,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	vital = 1
 	encased = "skull"
 
-	w_class = W_CLASS_SMALL
 	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears)
 
 /datum/organ/external/head/generate_dropped_organ(current_organ)
@@ -1608,7 +1594,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
 	src.species = source.species || H.species
-	w_class = source.w_class
 	cancer_stage = source.cancer_stage
 	wounds = source.wounds.Copy()
 	burn_dam = source.burn_dam
@@ -1729,6 +1714,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "left arm"
 	icon_state = LIMB_LEFT_ARM
 	part = LIMB_LEFT_ARM
+	w_class = W_CLASS_SMALL
 /obj/item/organ/external/l_arm/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
@@ -1740,16 +1726,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "left foot"
 	icon_state = LIMB_LEFT_FOOT
 	part = LIMB_LEFT_FOOT
+	w_class = W_CLASS_TINY
 
 /obj/item/organ/external/l_hand
 	name = "left hand"
 	icon_state = LIMB_LEFT_HAND
 	part = LIMB_LEFT_HAND
+	w_class = W_CLASS_TINY
 
 /obj/item/organ/external/l_leg
 	name = "left leg"
 	icon_state = LIMB_LEFT_LEG
 	part = LIMB_LEFT_LEG
+	w_class = W_CLASS_SMALL
 /obj/item/organ/external/l_leg/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
@@ -1761,6 +1750,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "right arm"
 	icon_state = LIMB_RIGHT_ARM
 	part = LIMB_RIGHT_ARM
+	w_class = W_CLASS_SMALL
 /obj/item/organ/external/r_arm/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
@@ -1772,16 +1762,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "right foot"
 	icon_state = LIMB_RIGHT_FOOT
 	part = LIMB_RIGHT_FOOT
+	w_class = W_CLASS_TINY
 
 /obj/item/organ/external/r_hand
 	name = "right hand"
 	icon_state = LIMB_RIGHT_HAND
 	part = LIMB_RIGHT_HAND
+	w_class = W_CLASS_TINY
 
 /obj/item/organ/external/r_leg
 	name = "right leg"
 	icon_state = LIMB_RIGHT_LEG
 	part = LIMB_RIGHT_LEG
+	w_class = W_CLASS_SMALL
 /obj/item/organ/external/r_leg/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
@@ -1794,6 +1787,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = LIMB_HEAD
 	icon_state = "head_m"
 	part = LIMB_HEAD
+	w_class = W_CLASS_SMALL
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
 	var/mob/living/carbon/human/origin_body = null

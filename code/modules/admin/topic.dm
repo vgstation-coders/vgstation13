@@ -193,12 +193,12 @@
 					return
 				banduration = null
 				banjob = null
-			if(BANTYPE_OOC_PERMA || BANTYPE_PAX_PERMA)
+			if(BANTYPE_OOC_PERMA,  BANTYPE_PAX_PERMA)
 				if(!banckey || !banreason)
 					to_chat(usr, "Not enough parameters (Requires ckey and reason)")
 					return
 				banduration = null
-			if(BANTYPE_OOC_TEMP || BANTYPE_PAX_TEMP)
+			if(BANTYPE_OOC_TEMP, BANTYPE_PAX_TEMP)
 				if(!banckey || !banreason || !banduration)
 					to_chat(usr, "Not enough parameters (Requires ckey, reason, and duration)")
 					return

@@ -91,14 +91,14 @@
 
 	var/surprise_number = rand(1, min(list_of_surprises.len, max_secret_rooms))
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded [result] out of [surprise_number] mining surprises.</span>")
 
 /proc/generate_hoboshack()
 	var/list/list_of_shacks = get_map_element_objects(/datum/map_element/hoboshack)
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
 
@@ -118,7 +118,7 @@
 //POPULATION_SCARCE is cheaper but may not do the job as well
 //NOTE: Vaults may be placed partially outside of the area. Only the lower left corner is guaranteed to be in the area
 
-/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE, filter_function)
+/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE, filter_function, var/overwrites = FALSE)
 	var/list/area_turfs
 
 	if(ispath(A, /area))
@@ -209,7 +209,7 @@
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
 			valid_spawn_points.Remove(block(t1, t2))
 
-		if(ME.load(vault_x, vault_y, vault_z, vault_rotate))
+		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
 			spawned.Add(ME)
 			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
 			if(!ME.can_rotate)
