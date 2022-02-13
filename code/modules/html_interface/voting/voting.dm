@@ -559,7 +559,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/rigvote()
 	var/rigged_choice = null
 	if(choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
-		winner = input(usr,"Choose a result.","Choose a result.", choices[1]) as null|anything in vote.choices
+		winner = input(usr,"Choose a result.","Choose a result.", choices[1]) as null|anything in choices
 		if(!rigged_choice)
 			return
 		vote.tally[rigged_choice] = ARBITRARILY_LARGE_NUMBER
