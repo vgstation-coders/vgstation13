@@ -113,7 +113,7 @@
 
 /obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
 	name = "Coordinates to the Mecha Graveyard"
-	desc = "Here lay the dead steel of lost mechas, so says some gypsy."
+	desc = "Here lay the dead steel of lost mechas, so says some gypsy. Plug this into your shuttle navigation console."
 	destination = /obj/docking_port/destination/vault/mecha_graveyard
 
 	allowed_shuttles = list() // before this change the vox trader couldn't go to the graveyard
