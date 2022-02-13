@@ -16,7 +16,6 @@
 	var/rejecting            // Is this organ already being rejected?
 	var/obj/item/organ/internal/organ_holder
 	var/datum/dna/owner_dna
-	var/w_class = W_CLASS_SMALL
 
 
 /datum/organ/internal/Destroy()
@@ -231,7 +230,6 @@
 	parent_organ = LIMB_GROIN
 	organ_type = "appendix"
 	removed_type = /obj/item/organ/internal/appendix
-	w_class = W_CLASS_TINY
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
 	if(!removed_type)
