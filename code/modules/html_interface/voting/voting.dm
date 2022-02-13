@@ -205,6 +205,7 @@ var/global/datum/controller/vote/vote = new()
 	return text
 
 /datum/controller/vote/proc/random()
+	var/text
 	if (choices.len > 1)
 		winner = pick(choices)
 		text = "<b>Random Vote Result: [winner] was picked at random.</b>"
@@ -570,7 +571,7 @@ var/global/datum/controller/vote/vote = new()
 				return
 		else
 			rigged_choice = input(usr,"Add a result.","Add a result","") as text|null
-		if(!rig)
+		if(!rigged_choice)
 			return
 		tally[rigged_choice]  = ARBITRARILY_LARGE_NUMBER
 	message_admins("Admin [key_name_admin(usr)] rigged the vote for [rigged_choice].")
