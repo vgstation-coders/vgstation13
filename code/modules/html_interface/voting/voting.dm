@@ -47,7 +47,7 @@ var/global/datum/controller/vote/vote = new()
 	var/lastupdate     = 0
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
-	var/lock = FALSE
+	//var/lock = FALSE
 	name               = "datum"
 
 /datum/controller/vote/New()
@@ -560,7 +560,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/rigvote()
 	var/rigged_choice = null
 	if(choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
-		winner = input(usr,"Choose a result.","Choose a result.", choices[1]) as null|anything in choices
+		rigged_choice = input(usr,"Choose a result.","Choose a result.", choices[1]) as null|anything in choices
 		if(!rigged_choice)
 			return
 		vote.tally[rigged_choice] = ARBITRARILY_LARGE_NUMBER
