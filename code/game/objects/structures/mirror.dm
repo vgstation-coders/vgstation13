@@ -67,8 +67,7 @@
 			if(41 to 50)
 				to_chat(user, "<span class='notice'>You don't see anything.</span>")
 				return
-			else
-				//do nothing
+
 	var/which = alert(user, "What would you like to change?", "Appearance", "Hair", "Beard", "Undies")
 
 	if(!which || !can_use(user, target))

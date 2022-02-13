@@ -161,8 +161,6 @@
 	width  = 0
 	height = 0
 
-	var/overwriting = FALSE
-
 /datum/map_element/customizable/vault_placement/pre_load()
 	if(usr && (!width || !height))
 		width  = input(usr, "Enter the area's width (4-400). The starting point is the lower left corner. Enter an invalid value to cancel.", "Vault Generator", 100) as num
@@ -175,12 +173,10 @@
 			height = 0
 			return
 
-		overwriting = input(usr, "Do you want these vaults to overwrite their area?", "Vault Overwriting", "Yes", "No") == "Yes"
-
 /datum/map_element/customizable/vault_placement/initialize()
 	if(!location)
 		return
 	if(!width || !height)
 		return
 
-	populate_area_with_vaults(block(location, locate(location.x + width, location.y + height, location.z)), overwrites=overwriting)
+	populate_area_with_vaults(block(location, locate(location.x + width, location.y + height, location.z)))

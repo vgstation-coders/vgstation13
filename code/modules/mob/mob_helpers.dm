@@ -287,8 +287,6 @@
 			//if(9,10)	newletter="<b>[newletter]</b>"
 			//if(11,12)	newletter="<big>[newletter]</big>"
 			//if(13)	newletter="<small>[newletter]</small>"
-			else
-				//do nothing
 		newphrase+="[newletter]";counter-=1
 	return newphrase
 

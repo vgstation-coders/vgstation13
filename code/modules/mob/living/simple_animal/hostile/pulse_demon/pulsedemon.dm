@@ -298,7 +298,7 @@
         switch(M.a_intent)
             if(I_HELP)
                 visible_message("<span class ='notice'>[M] [response_help] [src].</span>")
-            if(I_GRAB,I_DISARM)
+            if(I_GRAB||I_DISARM)
                 visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
             if(I_HURT)
                 visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
