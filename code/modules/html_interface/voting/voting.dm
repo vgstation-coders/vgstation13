@@ -47,7 +47,7 @@ var/global/datum/controller/vote/vote = new()
 	var/lastupdate     = 0
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
-	//var/lock = FALSE
+	var/lock = FALSE
 	name               = "datum"
 
 /datum/controller/vote/New()
@@ -78,8 +78,8 @@ var/global/datum/controller/vote/vote = new()
 	update(1)
 
 /datum/controller/vote/proc/process()	//called by master_controller
-//	if (lock)
-//		return
+	if (lock)
+		return
 	if(mode && currently_voting)
 		//lock = TRUE
 		// No more change mode votes after the game has started.
@@ -109,7 +109,7 @@ var/global/datum/controller/vote/vote = new()
 		else
 			update(1)
 
-//		lock = FALSE
+		lock = FALSE
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
@@ -534,6 +534,7 @@ var/global/datum/controller/vote/vote = new()
 		if("map")
 			if(user.client.holder)
 				initiate_vote("map",user)
+				update()
 		if("toggle_map")
 			if(user.client.holder)
 				config.toggle_maps = !config.toggle_maps
