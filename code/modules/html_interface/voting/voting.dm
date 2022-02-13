@@ -137,7 +137,7 @@ var/global/datum/controller/vote/vote = new()
 			return majority()
 		if(2)
 			if(mode == "map")
-				return majority()//return persistent()
+				return majority()
 			else
 				return majority()
 		if (3)
@@ -240,9 +240,10 @@ var/global/datum/controller/vote/vote = new()
 				if(winner == "Initiate Crew Transfer")
 					init_shift_change(null, 1)
 			if("map")
-				//sets path of vgstation13.dmb according to map winner
+				//logging
 				watchdog.map_path = map_paths[winner]
 				log_game("Players voted and chose.... [watchdog.map_path]!")
+				
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
 		feedback_set_details("end_error","restart vote")
