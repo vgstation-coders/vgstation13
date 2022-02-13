@@ -212,7 +212,7 @@ var/auxtools_path
 		var/filename = "vgstation13.dmb"
 		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
 		if(fexists(map_path))
-			//testing("Fcopy failed, deleting and copying")
+			//copy file to main folder
 			if(!fcopy(map_path, filename))
 				fdel(filename)
 				fcopy(map_path, filename)

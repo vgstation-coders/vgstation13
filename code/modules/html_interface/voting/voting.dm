@@ -205,7 +205,7 @@ var/global/datum/controller/vote/vote = new()
 	return text
 
 /datum/controller/vote/proc/random()
-if (choices.len > 1)
+	if (choices.len > 1)
 		winner = pick(choices)
 		text = "<b>Random Vote Result: [winner] was picked at random.</b>"
 	else
