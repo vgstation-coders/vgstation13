@@ -72,9 +72,9 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, v
 		}
 		else{
 			$("#vote_admin").hide();
+		}
 		$("#vote_choices").show();
 		$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=cancel_vote'>Cancel your vote</a>")));
-		}
 	}
 	else{
 		$("#vote_main").show();
