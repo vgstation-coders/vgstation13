@@ -47,7 +47,7 @@ var/global/datum/controller/vote/vote = new()
 	var/lastupdate     = 0
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
-	var/lock = FALSE
+	//var/lock = FALSE
 	name               = "datum"
 
 /datum/controller/vote/New()
@@ -78,9 +78,9 @@ var/global/datum/controller/vote/vote = new()
 	update(1)
 
 /datum/controller/vote/proc/process()	//called by master_controller
-	if (lock)
-		return
-	if(mode && currently_voting)
+	//if (lock)
+	//	return
+	if(mode)
 		//lock = TRUE
 		// No more change mode votes after the game has started.
 		// 3 is GAME_STATE_PLAYING, but that #define is undefined for some reason
@@ -91,7 +91,7 @@ var/global/datum/controller/vote/vote = new()
 
 		// Calculate how much time is remaining by comparing current time, to time of vote start,
 		// plus vote duration
-		if (currently_voting)
+		if (choices.len)
 			time_remaining = round((started_time + 600 - world.time)/10) 
 		else
 			time_remaining = round((started_time + config.vote_period - world.time)/10)
@@ -108,8 +108,9 @@ var/global/datum/controller/vote/vote = new()
 			src.reset()
 		else
 			update(1)
-
-		lock = FALSE
+	else
+		return
+		//lock = FALSE
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
