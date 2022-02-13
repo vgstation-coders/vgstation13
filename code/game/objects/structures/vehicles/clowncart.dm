@@ -189,7 +189,7 @@
 					to_chat(user, "<span class='notice'>Set to draw graffiti!</span>")
 				if("rune")
 					to_chat(user, "<span class='notice'>Set to draw runes!</span>")
-				if("" || "nothing")
+				if("", "nothing")
 					to_chat(user, "<span class='warning'>No longer drawing anything.</span>")
 				if("paint")
 					to_chat(user, "<span class='notice'>Set to paint the floor!</span>")
