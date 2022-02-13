@@ -238,7 +238,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 					if(positions_to_check && positions_to_check.len && (M.mind.assigned_role in positions_to_check))
 						possible_position_names += M.name
 					possible_names += M.name
-				var/ourname = "Unknown"
+				var/ourname = ""
 				if(possible_position_names && possible_position_names.len)
 					ourname = pick(possible_position_names)
 				else if(possible_names && possible_names.len)

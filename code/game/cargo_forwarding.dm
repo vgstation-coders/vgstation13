@@ -39,10 +39,12 @@
 
 	if(station && station != "")
 		origin_station_name = station
-	else
+	else if(prob(50))
 		do // This check prevents the station name being our own, do while so that it runs once to generate a name in the first place.
 			origin_station_name = new_station_name(TRUE)
 		while(origin_station_name == station_name)
+	else // Sometimes they're just from centcomm directly, lorewise
+		origin_station_name = "Central Command"
 
 	time_created = world.time
 	time_limit = rand(7,17) //2 minutes is spent transiting it and it gets created at the start of that, so really 5-15
@@ -64,7 +66,7 @@
 			for(var/k = 1 to rand(2,3))
 				insect_name += pick(insectoid_name_syllables)
 			insect_name = capitalize(insect_name)
-			origin_sender_name = pick(male_name,female_name,vox_name,insect_name)
+			origin_sender_name = origin_station_name == "Central Command" ? pick(male_name,female_name) : pick(male_name,female_name,vox_name,insect_name)
 		while(origin_sender_name in player_names)
 
 	if(!do_not_add)
