@@ -67,8 +67,8 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, v
 		$("#vote_main").hide();
 		if(admin > 0){
 			$("#vote_admin").show();
-			$("#vote_admin").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=abort'>Abort the current vote.</a>")));
-			$("#vote_admin").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=rig'>Rig the current vote.</a>")));
+			$("#vote_admin").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=abort'>Abort the current vote</a>")));
+			$("#vote_admin").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=rig'>Rig the current vote</a>")));
 		}
 		else{
 			$("#vote_admin").hide();
