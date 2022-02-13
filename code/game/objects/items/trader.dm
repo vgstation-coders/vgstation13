@@ -116,6 +116,8 @@
 	desc = "Here lay the dead steel of lost mechas, so says some gypsy."
 	destination = /obj/docking_port/destination/vault/mecha_graveyard
 
+	allowed_shuttles = list() // before this change the vox trader couldn't go to the graveyard
+
 /obj/docking_port/destination/vault/mecha_graveyard
 	areaname = "mecha graveyard"
 
