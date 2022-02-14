@@ -7,8 +7,8 @@
 	//Breakability:
 	var/breakable_flags /*Possible flags include BREAKABLE_ALL, BREAKABLE_HIT, BREAKABLE_UNARMED, BREAKABLE_WEAPON, BREAKABLE_AS_ALL, BREAKABLE_AS_THROWN, BREAKABLE_AS_MELEE, and BREAKABLE_NOMOB.
 							See setup.dm for explanations of each.*/
-	var/health_item 		//Structural integrity of the item. At 0, the item breaks. Defaults to health_item_max.
-	var/health_item_max		//Maximum structural integrity of the item.
+	var/health_item 		//Structural integrity of the item. At 0, the item breaks. Defaults to health_item_max if unset.
+	var/health_item_max		//Maximum structural integrity of the item. Defaults to health_item if unset.
 	var/damage_armor		//Attacks of this much damage or below will glance off.
 	var/damage_resist		//Attacks stronger than damage_armor will have their damage reduced by this much.
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
