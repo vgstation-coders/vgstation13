@@ -731,7 +731,7 @@
 			var/cash = num2text(entry.cash, 12)
 			var/list/split_date = splittext(entry.date, "-")
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
-			if(split_date[2] != text2num(time2text(world.timeofday, "MM")))
+			if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
 				leaderboard.clear_records()
 				break
 	round_end_info = dat
