@@ -330,7 +330,7 @@
 
 	//--Supply--
 	var/shipping = score["stuffshipped"] * 100 //Centcom Orders fulfilled
-	var/forwarded = score["stuffforwarded"] * 100 //Cargo crates forwarded
+	var/forwarded = score["stuffforwarded"] * 50 //Cargo crates forwarded
 	var/plasmashipped = score["plasmashipped"] * 0.5 //Plasma Sheets shipped
 	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 
