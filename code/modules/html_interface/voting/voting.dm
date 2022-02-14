@@ -3,6 +3,10 @@ var/global/datum/controller/vote/vote = new()
 
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
+#define WEIGHTED 1
+#define MAJORITY 2
+#define PERSISTENT 3
+#define RANDOM 4
 
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
@@ -89,7 +93,7 @@ var/global/datum/controller/vote/vote = new()
 		if(time_remaining <= 0 || player_list.len < 1)
 			//if no players, select at random
 			if(player_list.len < 1)
-				config.toggle_vote_method = 3
+				config.toggle_vote_method = RANDOM
 			result()
 			for(var/ckey in voters) //hide voting interface using ckeys
 				var/client/C = directory[ckey]
@@ -132,16 +136,16 @@ var/global/datum/controller/vote/vote = new()
 
 	//choose the method for voting
 	switch(config.toggle_vote_method)
-		if(1)
+		if(WEIGHTED)
 			return weighted()
-		if(2)
+		if(MAJORITY)
 			return majority()
-		if(3)
+		if(PERSISTENT)
 			if(mode == "map")
 				return persistent()
 			else
 				return  majority()
-		if(4)
+		if(RANDOM)
 			return random()
 		else
 			return  majority()
@@ -380,7 +384,7 @@ var/global/datum/controller/vote/vote = new()
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		//initialize tally
-		if(config.toggle_vote_method == 2 && vote_type == "map")
+		if(config.toggle_vote_method == 3 && vote_type == "map")
 			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
