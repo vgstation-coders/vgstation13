@@ -189,13 +189,6 @@
 		if(candidate.is_enabled && candidate.is_votable())
 			votable_maps += candidate.name
 			votable_maps[candidate.name] = candidate.path
-
-	var/list/maplist = get_list_of_keys(votable_maps)
-	var/msg = "A map vote was initiated with these options: [english_list(maplist)]."
-	send2maindiscord(msg)
-	send2mainirc(msg)
-	send2ickdiscord(config.kill_phrase) // This the magic kill phrase
-
 	return votable_maps
 
 /proc/get_all_maps()

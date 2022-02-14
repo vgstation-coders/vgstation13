@@ -365,6 +365,10 @@ var/global/datum/controller/vote/vote = new()
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
 				map_paths = maps
+				var/msg = "A map vote was initiated with these options: [english_list(get_list_of_keys(maps))]."
+				send2maindiscord(msg)
+				send2mainirc(msg)
+				send2ickdiscord(config.kill_phrase) // This the magic kill phrase
 			else
 				return 0
 
