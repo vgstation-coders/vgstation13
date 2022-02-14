@@ -28,6 +28,7 @@
 		Splitting()
 	else
 		user.visible_message("You are unable to split again.")
+	..()
 
 /spell/changeling/split/proc/Splitting()
 	if(polling_ghosts)
@@ -54,6 +55,7 @@
 		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
 		(owner.current).visible_message("[(owner.current)] was unable to split at this time.")
+		changeling.chem_charges = max(changeling.chem_charges, chemcost)
 
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
 	to_chat(player, "<span class='recruit'>\ A changeling is splitting. You have been added to the list of potential ghosts. ([controls])</span>")
@@ -101,5 +103,3 @@
 
 	feedback_add_details("changeling_powers","SP")
 	qdel(recruiter)
-
-
