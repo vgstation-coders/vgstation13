@@ -2,7 +2,7 @@
 
 	mode.declare_completion()
 	completions += "[mode.dat]<HR>"
-	
+
 	var/list/boombox = score["implant_phrases"]
 	var/synphra = score["syndiphrases"]
 	var/synspo = score["syndisponses"]
@@ -20,7 +20,7 @@
 			completions += "<BR>The following explosive implants were used:<BR>"
 			for(var/entry in score["implant_phrases"])
 				completions += "[entry]<BR>"
-				
+
 	var/list/gallery = score["global_paintings"]
 	var/painting_completions = ""
 	if(gallery.len) //the list of all artworks
@@ -49,13 +49,13 @@
 				var/icon/flat = getFlatIcon(painting)
 				row1 += {"<td><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'></td>"}
 				row2 += {"<td>"[title]"</td>"}
-			
+
 			tooble += {"<tr>[row1]</tr><tr>[row2]</tr>"}
 			if(artistsandworks != currentartist)
 				currentartist = artistsandworks
 				painting_completions += {"<h3>[artistsandworks]</h3>"}
 				painting_completions += {"<table>[tooble]</table>"}
-	
+
 		completions += "<h2>Artisans and their artworks</h2>"
 		completions += painting_completions
 		completions += "<HR>"
@@ -330,6 +330,7 @@
 
 	//--Supply--
 	var/shipping = score["stuffshipped"] * 100 //Centcom Orders fulfilled
+	var/forwarded = score["stuffforwarded"] * 100 //Cargo crates forwarded
 	var/plasmashipped = score["plasmashipped"] * 0.5 //Plasma Sheets shipped
 	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 
@@ -391,6 +392,7 @@
 	//Good Things
 	score["crewscore"] += plasmashipped
 	score["crewscore"] += shipping
+	score["crewscore"] += forwarded
 	score["crewscore"] += harvests
 	score["crewscore"] += mining
 	score["crewscore"] += eventpoints
@@ -581,6 +583,7 @@
 	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR>
 	<B>Plasma Shipped:</B> [score["plasmashipped"]] ([score["plasmashipped"] * 0.5] Points)<BR>
 	<B>Centcom Orders Fulfilled:</B> [score["stuffshipped"]] ([score["stuffshipped"] * 100] Points)<BR>
+	<B>Cargo Crates Forwarded:</B> [score["stuffforwarded"]] ([score["stuffforwarded"] * 50] Points)<BR>
 	<B>Ore Smelted:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Isolated Vaccines:</B> [score["disease_vaccine"]] ([score["disease_vaccine_score"]] Points)<BR>

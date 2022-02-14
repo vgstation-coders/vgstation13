@@ -219,6 +219,7 @@ var/list/score=list(
 	"crewscore"      = 0, //This is the overall var/score for the whole round
 	"plasmashipped"   = 0,//How much plasma has been sent to centcom?
 	"stuffshipped"   = 0, //How many centcom orders have cargo fulfilled?
+	"stuffforwarded"   = 0, //How many cargo forwards have been fulfilled?
 	"stuffharvested" = 0, //How many harvests have hydroponics done (per crop)?
 	"oremined"       = 0, //How many chunks of ore were smelted
 	"eventsendured"  = 0, //How many random events did the station endure?
@@ -286,7 +287,7 @@ var/list/score=list(
 
 	"money_leaderboard" = list(),
 	"implant_phrases" = list(),
-	
+
 	"global_paintings" = list(),
 )
 

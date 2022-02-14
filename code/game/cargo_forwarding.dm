@@ -120,6 +120,7 @@
 			origin_sender_name = pick(possible_names)
 		origin_station_name = station_name()
 		SSsupply_shuttle.fulfilled_forwards += src
+		score["stuffforwarded"]++
 	if(delete_crate && associated_crate)
 		associated_crate.associated_forward = null
 		qdel(associated_crate)
