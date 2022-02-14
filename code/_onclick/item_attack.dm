@@ -240,7 +240,7 @@
 	//Break the item if applicable.
 	if(power && (I.breakable_flags & BREAKABLE_AS_MELEE) && !(I.breakable_flags & BREAKABLE_NOMOB))
 		take_damage(min(power, BREAKARMOR_MEDIUM), FALSE) //Cap recoil damage at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used. Be verbose about the item being damaged if applicable.
-		break_item()
+		break_item(null, null, null, null, null, M) //Break the item and spill any reagents onto the target.
 
 
 

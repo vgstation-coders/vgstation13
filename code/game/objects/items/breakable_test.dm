@@ -82,7 +82,7 @@
 
 /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/test/New()
 	..()
-	reagents.add_reagent(BLOOD, 250)
+	reagents.add_reagent(PACID, 250)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/test
@@ -106,7 +106,7 @@
 
 /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/test/New()
 	..()
-	reagents.add_reagent(BLOOD, 50)
+	reagents.add_reagent(PACID, 50)
 	update_icon()
 
 /obj/item/weapon/storage/box/survival/test
