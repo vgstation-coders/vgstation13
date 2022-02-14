@@ -7,6 +7,8 @@
 	var/iswinner = FALSE
 	var/ticket_price
 	var/winnings = 0
+	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
+	var/list/problist = list(0.0001, 0.0002, 0.001, 0.002, 0.01, 0.02, 0.04, 0.2, 1, 2.5, 5, 10, 12.5, 17, 20, 25)
 
 /obj/item/toy/lotto_ticket/New()
 	..()
@@ -14,8 +16,6 @@
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 
 /obj/item/toy/lotto_ticket/proc/scratch(var/input_price)
-	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
-	var/list/problist = list(0.0001, 0.0002, 0.001, 0.002, 0.01, 0.02, 0.04, 0.2, 1, 2.5, 5, 10, 12.5, 17, 20, 25)
 	var/tuning_value = 1/5 //Used to adjust expected values.
 	var/profit = 0
 	for(var/prize = 1 to problist.len)
@@ -61,6 +61,7 @@
 
 /obj/item/toy/lotto_ticket/examine(mob/user)
 	if(user.range_check(src))
+		..()
 		if(revealed)
 			if(iswinner)
 				to_chat(user, "<span class='notice'>This one is a winner! You've won [winnings] credits.</span>")
@@ -106,8 +107,6 @@
 	var/flashed = FALSE
 
 /obj/item/toy/lotto_ticket/supermatter_surprise/scratch()
-	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
-	var/list/problist = list(0.0001, 0.0002, 0.001, 0.002, 0.01, 0.02, 0.04, 0.2, 1, 2.5, 5, 10, 12.5, 17, 20, 25)
 	var/input_price = 5
 	var/profit = 0
 	while(!profit)
