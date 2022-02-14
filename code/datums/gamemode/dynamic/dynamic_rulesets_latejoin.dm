@@ -355,7 +355,7 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 20
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 	repeatable = FALSE
 
@@ -363,7 +363,6 @@
 	var/mob/M = pick(assigned)
 	var/datum/role/changeling/newChangeling = new
 	newChangeling.AssignToRole(M.mind,1)
-	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_LATEJOIN)
 	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
 	if(!hivemind)

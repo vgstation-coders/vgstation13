@@ -270,7 +270,7 @@
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
 	if(maxcharge > 0)
-		switch(rand(3))
+		switch(rand(0,2))
 			if(0)
 				charge_rate *= severity*0.2
 				damaged = TRUE

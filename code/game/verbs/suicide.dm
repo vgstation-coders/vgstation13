@@ -74,7 +74,7 @@
 						message_say = "FOR THE GREYTIDE!"
 					if("Janitor")
 						message_say = "I DO IT FOR FREE!"
-					if("Cargo Technician" || "Quartermaster")
+					if("Cargo Technician", "Quartermaster")
 						message_say = "FOR CARGONIA!"
 					if("Trader")
 						message_say = "FOR THE SHOAL!"
