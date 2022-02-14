@@ -363,7 +363,6 @@
 	var/mob/M = pick(assigned)
 	var/datum/role/changeling/newChangeling = new
 	newChangeling.AssignToRole(M.mind,1)
-	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_LATEJOIN)
 	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
 	if(!hivemind)
