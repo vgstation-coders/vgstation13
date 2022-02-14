@@ -135,7 +135,6 @@ var/list/map_dimension_cache = list()
 	var/xcrd_flip_rotate=x_offset
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
-
 		zcrd++
 		if(zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
@@ -151,16 +150,13 @@ var/list/map_dimension_cache = list()
 					xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
 				i++
 
-		var/zgrid = jointext(xy_grids,"\n")
-		var/z_depth = length(zgrid) //Length of the whole block (with multiple lines in them)
-
 		//if exceeding the world max x or y, increase it
-		var/x_depth = length(copytext(zgrid,1,findtext(zgrid,"\n",2,0))) //This is the length of an encoded line (like "aaaaaaaaBBBBaaaaccccaaa")
-		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
+		var/x_depth = length(xy_grids[1])
+		var/map_height = xy_grids.len
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
-		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : y_depth + y_offset
-		var/y_check = rotate == 0 || rotate == 180 ? y_depth + y_offset : map_width + x_offset
+		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_height + y_offset
+		var/y_check = rotate == 0 || rotate == 180 ? map_height + y_offset : map_width + x_offset
 		if(world.maxx < x_check)
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
@@ -176,14 +172,12 @@ var/list/map_dimension_cache = list()
 			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
-		ycrd = y_offset + y_depth
+		ycrd = y_offset + map_height
 		ycrd_rotate = x_offset + map_width
 		ycrd_flip = y_offset + 1
 		ycrd_flip_rotate = x_offset + 1
 
-		for(var/gpos=1;gpos!=0;gpos=findtext(zgrid,"\n",gpos,0)+1)
-			var/grid_line = copytext(zgrid,gpos,findtext(zgrid,"\n",gpos,0))
-
+		for(var/grid_line in xy_grids)
 			//fill the current square using the model map
 			xcrd=x_offset
 			xcrd_rotate=y_offset
@@ -209,10 +203,6 @@ var/list/map_dimension_cache = list()
 			if(map_element)
 				map_element.width = xcrd - x_offset
 
-			//reached end of current map
-			if(gpos+x_depth+1>z_depth)
-				break
-
 			ycrd--
 			ycrd_rotate--
 			ycrd_flip++
@@ -224,7 +214,7 @@ var/list/map_dimension_cache = list()
 				sleep(-1)
 
 		if(map_element)
-			map_element.height = y_depth
+			map_element.height = map_height
 
 			if(!map_element.location)
 				//Set location to the lower left corner, if it hasn't already been set
