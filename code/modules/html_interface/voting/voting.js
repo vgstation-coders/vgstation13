@@ -15,8 +15,7 @@ function clearAll(){
 	clearallup += 1;
 	$("#vote_main").empty();
 	$("#vote_choices").empty();
-	$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=cancel;'>Abort the current vote.</a>)");
-
+	$("#vote_admin").empty();
 }
 
 function fuck(){
@@ -61,19 +60,22 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, v
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (toggle_map?"All Compiled":"Votable") + "</a>)" : ""))));
 	}
 	if(admin > 0){
-		var a = ((toggle_vote_method == 0) ? "Weighted" : (toggle_vote_method == 1) ? "Majority" : (toggle_vote_method == 2) ? "Persistent" : (toggle_vote_method == 3) ? "Random" : "Null");
+		var a = ((toggle_vote_method == 1) ? "Weighted" : (toggle_vote_method == 2) ? "Majority" : (toggle_vote_method == 3) ? "Persistent" : (toggle_vote_method == 4) ? "Random" : "Null");
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=toggle_vote_method'>" + a + "</a>")));
 
 	}
 
 	if(mode != null && mode != ""){
 		$("#vote_main").hide();
+		if(admin > 0){
+			$("#vote_admin").show();
+			$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=cancel;'>Abort the current vote.</a>)");
+		}
+		else{
+			$("#vote_admin").hide();
+		}
 		$("#vote_choices").show();
 		$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a "  +  "href='?src=" + hSrc + ";vote=cancel_vote" + "'>Cancel your vote</a>")));
-		if(admin > 0)
-			$("#vote_admin").show();
-		else
-			$("#vote_admin").hide();
 	}
 	else{
 		$("#vote_main").show();

@@ -220,7 +220,6 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		log_debug("[name] task found an empty file on [file_path]")
 		return
 	for(var/i = 1; i <= to_read.len; i++)
-		data += to_read[i]
 		data[to_read[i]] = to_read[to_read[i]]
 
 /datum/persistence_task/vote/on_shutdown()

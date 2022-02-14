@@ -132,16 +132,16 @@ var/global/datum/controller/vote/vote = new()
 
 	//choose the method for voting
 	switch(config.toggle_vote_method)
-		if(0)
-			return weighted()
 		if(1)
-			return majority()
+			return weighted()
 		if(2)
+			return majority()
+		if(3)
 			if(mode == "map")
 				return persistent()
 			else
 				return  majority()
-		if(3)
+		if(4)
 			return random()
 		else
 			return  majority()
@@ -552,10 +552,7 @@ var/global/datum/controller/vote/vote = new()
 				update()
 		if("toggle_vote_method")
 			if(user.client.holder)
-				if (config.toggle_vote_method >= 3)
-					config.toggle_vote_method = 0
-				else
-					config.toggle_vote_method++
+				config.toggle_vote_method = config.toggle_vote_method % 4 + 1
 
 				update()
 		else
