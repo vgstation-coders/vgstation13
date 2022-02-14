@@ -116,6 +116,10 @@
 	desc = "Here lay the dead steel of lost mechas, so says some gypsy."
 	destination = /obj/docking_port/destination/vault/mecha_graveyard
 
+/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard/New()
+	..()
+	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
+
 /obj/docking_port/destination/vault/mecha_graveyard
 	areaname = "mecha graveyard"
 

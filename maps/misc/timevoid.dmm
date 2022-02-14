@@ -1,19 +1,165 @@
-"a" = (/turf/simulated/wall/invulnerable,/area/timevoid)
-"b" = (/turf/simulated/floor/arcade,/area/timevoid)
-"c" = (/obj/effect/landmark{name = "timeagentstart"},/turf/simulated/floor/arcade,/area/timevoid)
-"v" = (/obj/effect/decal/timeagentporter,/turf/simulated/floor/arcade,/area/timevoid)
-"L" = (/obj/structure/button/time_agent,/turf/simulated/wall/invulnerable,/area/timevoid)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/invulnerable,
+/area/timevoid)
+"b" = (
+/turf/simulated/floor/arcade,
+/area/timevoid)
+"c" = (
+/obj/effect/landmark{
+	name = "timeagentstart"
+	},
+/turf/simulated/floor/arcade,
+/area/timevoid)
+"v" = (
+/obj/effect/decal/timeagentporter,
+/turf/simulated/floor/arcade,
+/area/timevoid)
+"L" = (
+/obj/structure/button/time_agent,
+/turf/simulated/wall/invulnerable,
+/area/timevoid)
 
 (1,1,1) = {"
-aaaaaLaaaaa
-abbbbvbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbcbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbbbbbba
-aaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(3,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(4,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(5,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(6,1,1) = {"
+L
+v
+b
+b
+b
+c
+b
+b
+b
+b
+a
+"}
+(7,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(8,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(9,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(10,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(11,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}

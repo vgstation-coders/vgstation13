@@ -1,41 +1,453 @@
-"a" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area/dojo)
-"b" = (/obj/structure/sign/vacuum,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area/dojo)
-"c" = (/obj/structure/button/ninja/launcher,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area/dojo)
-"d" = (/obj/structure/sign/chinese/restricted_area,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area/dojo)
-"e" = (/obj/structure/button/ninja/teleporter,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area/dojo)
-"f" = (/turf/simulated/floor/engine/acoustic,/area/dojo)
-"g" = (/obj/effect/decal/ninjaporter,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"h" = (/obj/item/weapon/stool/cushion,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"i" = (/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake{pixel_x = 8; pixel_y = -6},/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago{pixel_x = -8; pixel_y = -6},/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi{pixel_x = 8; pixel_y = 8},/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura{pixel_x = -8; pixel_y = 8},/turf/simulated/floor/engine/acoustic,/area/dojo)
-"j" = (/obj/effect/landmark{name = "ninjastart"},/turf/simulated/floor/engine/acoustic,/area/dojo)
-"k" = (/obj/structure/punching_bag/captain,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"l" = (/turf/simulated/wall,/area/dojo)
-"m" = (/obj/machinery/door/airlock{desc = "Great for practicing your ninja skills."},/turf/simulated/floor/engine/acoustic,/area/dojo)
-"n" = (/turf/simulated/wall/r_wall,/area/dojo)
-"o" = (/obj/machinery/door/airlock/vault{desc = "Great for practicing your ninja skills."; locked = 1; name = "Vault Door"},/turf/simulated/floor/engine/acoustic,/area/dojo)
-"p" = (/obj/effect/decal,/obj/effect/decal/arrow{dir = 8},/turf/simulated/floor/engine/acoustic,/area/dojo)
-"q" = (/mob/living/silicon/robot/dummy,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"r" = (/obj/structure/sign/ninjaglove,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area/dojo)
-"s" = (/obj/item/weapon/gun/energy/tag/blue,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"t" = (/obj/item/weapon/cell/crap,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"u" = (/obj/item/weapon/stool/cushion{pixel_y = 16},/turf/simulated/floor/engine/acoustic,/area/dojo)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/dojo)
+"b" = (
+/obj/structure/sign/vacuum,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/dojo)
+"c" = (
+/obj/structure/button/ninja/launcher,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/dojo)
+"d" = (
+/obj/structure/sign/chinese/restricted_area,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/dojo)
+"e" = (
+/obj/structure/button/ninja/teleporter,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/dojo)
+"f" = (
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"g" = (
+/obj/effect/decal/ninjaporter,
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"h" = (
+/obj/item/weapon/stool/cushion,
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"i" = (
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake{
+	pixel_x = 8;
+	pixel_y = -6
+	},
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago{
+	pixel_x = -8;
+	pixel_y = -6
+	},
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi{
+	pixel_x = 8;
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura{
+	pixel_x = -8;
+	pixel_y = 8
+	},
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"j" = (
+/obj/effect/landmark{
+	name = "ninjastart"
+	},
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"k" = (
+/obj/structure/punching_bag/captain,
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"l" = (
+/turf/simulated/wall,
+/area/dojo)
+"m" = (
+/obj/machinery/door/airlock{
+	desc = "Great for practicing your ninja skills."
+	},
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"n" = (
+/turf/simulated/wall/r_wall,
+/area/dojo)
+"o" = (
+/obj/machinery/door/airlock/vault{
+	desc = "Great for practicing your ninja skills.";
+	locked = 1;
+	name = "Vault Door"
+	},
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"p" = (
+/obj/effect/decal,
+/obj/effect/decal/arrow{
+	dir = 8
+	},
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"q" = (
+/mob/living/silicon/robot/dummy,
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"r" = (
+/obj/structure/sign/ninjaglove,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/dojo)
+"s" = (
+/obj/item/weapon/gun/energy/tag/blue,
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"t" = (
+/obj/item/weapon/cell/crap,
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
+"u" = (
+/obj/item/weapon/stool/cushion{
+	pixel_y = 16
+	},
+/turf/simulated/floor/engine/acoustic,
+/area/dojo)
 
 (1,1,1) = {"
-aaabcbaaaaadedaaa
-afffgfffffffgfffa
-afffffffffffffffa
-afffffffffffffffa
-afffffffffffffffa
-afffffffffffffffa
-afffffffffffffffa
-afhfffffffffffqpa
-afifffffjfffffspr
-afuffffffffffftpa
-afffffffffffffffa
-afffffffffffffffa
-afffffffffffffffa
-affkffffflmnolffa
-afffffffffffffffa
-afffffffffffffffa
-aaaaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+a
+"}
+(3,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+h
+i
+u
+f
+f
+f
+f
+f
+f
+a
+"}
+(4,1,1) = {"
+b
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+k
+f
+f
+a
+"}
+(5,1,1) = {"
+c
+g
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+a
+"}
+(6,1,1) = {"
+b
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+a
+"}
+(7,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+a
+"}
+(8,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+a
+"}
+(9,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+f
+j
+f
+f
+f
+f
+f
+f
+f
+a
+"}
+(10,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+l
+f
+f
+a
+"}
+(11,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+m
+f
+f
+a
+"}
+(12,1,1) = {"
+d
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+n
+f
+f
+a
+"}
+(13,1,1) = {"
+e
+g
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+o
+f
+f
+a
+"}
+(14,1,1) = {"
+d
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+f
+l
+f
+f
+a
+"}
+(15,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+q
+s
+t
+f
+f
+f
+f
+f
+f
+a
+"}
+(16,1,1) = {"
+a
+f
+f
+f
+f
+f
+f
+p
+p
+p
+f
+f
+f
+f
+f
+f
+a
+"}
+(17,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+r
+a
+a
+a
+a
+a
+a
+a
+a
 "}

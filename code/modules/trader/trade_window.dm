@@ -23,7 +23,6 @@
 
 /obj/structure/trade_window/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	processing_objects += src
 

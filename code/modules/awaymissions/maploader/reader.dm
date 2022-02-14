@@ -56,7 +56,6 @@ var/list/map_dimension_cache = list()
  */
 /dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
 
-	var/loaded_as_tgm = FALSE // Was this map loaded as a TGM? (important for flipping keys)
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
 
@@ -92,8 +91,7 @@ var/list/map_dimension_cache = list()
 	//proceed line by line
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
 		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
-		if(tline == "//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE")//tgm header, ignore this
-			loaded_as_tgm = TRUE
+		if(copytext(tline,1,3) == "//")//ignore comments
 			continue
 		if(tline == "")//we reached the map "layout"
 			if(model_key != "")
@@ -135,20 +133,17 @@ var/list/map_dimension_cache = list()
 			world.maxz = zcrd+z_offset
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
 
-		var/zgrid = ""
+		var/list/xy_grids = list()
 		for(var/xpos=zpos; xpos != findtext(tfile,"\n(1,1,",zpos+1,0); xpos = findtext(tfile,"\n(",xpos+1,0))
-			var/xgrid = ""
+			var/i = 1
 			for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != findtext(tfile,"\n"+quote,xpos,0)+1; ypos = findtext(tfile,"\n",ypos+1,0)+1)
-				var/ygrid = copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
-				if(length(ygrid) != key_len) //The thing that determines if we're working with TGM or not, best attempt at distinguishing
-					ygrid += "\n"
-				xgrid += ygrid
-			if(!findtext(xgrid,"\n"))
-				xgrid += "\n"
-			zgrid += xgrid
-	
-		if(loaded_as_tgm)
-			zgrid = flip_map_key_axis(zgrid,key_len) //Necessary to get the axes right
+				if(i > xy_grids.len)
+					xy_grids += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+				else
+					xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+				i++
+
+		var/zgrid = jointext(xy_grids,"\n")
 		var/z_depth = length(zgrid) //Length of the whole block (with multiple lines in them)
 
 		//if exceeding the world max x or y, increase it
@@ -233,40 +228,6 @@ var/list/map_dimension_cache = list()
 		sleep(-1)
 
 	return spawned_atoms
-
-/**
- * Flips the keys of a map to parse the grid on, necessary for loading TGM files properly
- *
- * WORKING :
- *
- * 1) Splits model text into lines
- *
- * 2) Splits lines into keys by length
- *
- * 3) Iterates over length of keys in line to add the nth element of each line into a model, then a newline after each one, flipping it
- *
- * RETURNS :
- *
- * The map keys with a flipped axis
- *
- */
-/dmm_suite/proc/flip_map_key_axis(var/model as text, var/key_len as num)
-	var/list/lines = splittext(model,"\n")
-	lines.Remove("")
-	var/linelength = 0
-	var/list/keys_by_line = list()
-	for(var/line in lines)
-		var/list/current_key_line = list()
-		for(var/copypos = 1, copypos < length(line), copypos += key_len)
-			current_key_line.Add(list(copytext(line, copypos, copypos + key_len)))
-		keys_by_line.Add(list(current_key_line))
-		linelength = current_key_line.len
-	var/newmodel = ""
-	for(var/i in 1 to linelength)
-		for(var/list/formatted_line in keys_by_line)
-			newmodel += formatted_line[i]
-		newmodel += "\n"
-	return newmodel
 
 /**
  * Fill a given tile with its area/turf/objects/mobs
@@ -428,7 +389,7 @@ var/list/map_dimension_cache = list()
 
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
-	
+
 	return instance
 
 //text trimming (both directions) helper proc
