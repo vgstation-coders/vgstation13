@@ -18,7 +18,9 @@ var/list/map_dimension_cache = list()
 	var/tfile_len = length(tfile)
 	var/lpos = 1 // the models definition index
 
-	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
+	var/quote_index = findtext(tfile, quote)
+	//the length of the model key (e.g "aa" or "aba")
+	var/key_len = length(copytext(tfile, quote_index, findtext(tfile, quote, quote_index + 1, 0))) - 1
 	if(!key_len)
 		key_len = 1
 
@@ -26,11 +28,21 @@ var/list/map_dimension_cache = list()
 	//Another way to do this would be to search for this string: (1,1,1) = {" , but if some joker varedited that into the map it would break bigly
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
 		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
-		if(copytext(tline,1,2) != quote)//we reached the map "layout"
+		if(tline == "")//we reached the map "layout"
 			break
 
 	var/zpos = findtext(tfile, "\n(1,1,", lpos, 0)
-	var/zgrid = copytext(tfile, findtext(tfile, quote+"\n", zpos, 0)+2, findtext(tfile,"\n"+quote, zpos, 0)+1) //copy the whole map grid
+	var/list/xy_grids = list()
+	for(var/xpos=zpos; xpos != findtext(tfile,"\n(1,1,",zpos+1,0); xpos = findtext(tfile,"\n(",xpos+1,0))
+		var/i = 1
+		for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != findtext(tfile,"\n"+quote,xpos,0)+1; ypos = findtext(tfile,"\n",ypos+1,0)+1)
+			if(i > xy_grids.len)
+				xy_grids += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+			else
+				xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+			i++
+
+	var/zgrid = jointext(xy_grids,"\n")
 	var/x_depth = length(copytext(zgrid, 1, findtext(zgrid, "\n", 2, 0))) //Length of an encoded line (like "aaaaaaaaAAAAAAAAAAAA")
 	var/map_width = x_depth / key_len //Divide length of the encoded line by the length of the key to get the map's width
 	var/map_height= length(zgrid) / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
@@ -81,8 +93,9 @@ var/list/map_dimension_cache = list()
 	//first let's map model keys (e.g "aa") to their contents (e.g /turf/space{variables})
 	///////////////////////////////////////////////////////////////////////////////////////
 	var/list/grid_models = list()
+	var/quote_index = findtext(tfile, quote)
 	//the length of the model key (e.g "aa" or "aba")
-	var/key_len = length(copytext(tfile, findtext(tfile, quote), findtext(tfile, quote, findtext(tfile, quote) + 1, 0))) - 1
+	var/key_len = length(copytext(tfile, quote_index, findtext(tfile, quote, quote_index + 1, 0))) - 1
 	if(!key_len)
 		key_len = 1
 
