@@ -42,12 +42,7 @@ var/list/map_dimension_cache = list()
 				xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
 			i++
 
-	var/zgrid = jointext(xy_grids,"\n")
-	var/x_depth = length(copytext(zgrid, 1, findtext(zgrid, "\n", 2, 0))) //Length of an encoded line (like "aaaaaaaaAAAAAAAAAAAA")
-	var/map_width = x_depth / key_len //Divide length of the encoded line by the length of the key to get the map's width
-	var/map_height= length(zgrid) / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
-
-	var/return_list = list(map_width, map_height)
+	var/return_list = list((length(xy_grids[1]) / key_len), xy_grids.len) //Width and height
 	map_dimension_cache[hash] = return_list
 
 	return return_list
