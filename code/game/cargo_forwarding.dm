@@ -74,6 +74,7 @@
 
 	spawn(time_limit MINUTES) //Still an order after the time limit?
 		if(src)
+			log_debug("CARGO FORWARDING: [src] denied: Time ran out")
 			Pay("Time ran out")
 
 /datum/cargo_forwarding/Destroy()
