@@ -331,6 +331,7 @@
 	//--Supply--
 	var/shipping = score["stuffshipped"] * 100 //Centcom Orders fulfilled
 	var/forwarded = score["stuffforwarded"] * 50 //Cargo crates forwarded
+	var/not_forwarded = score["stuffnotforwarded"] * 25 //Cargo crates not forwarded
 	var/plasmashipped = score["plasmashipped"] * 0.5 //Plasma Sheets shipped
 	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 
@@ -434,6 +435,7 @@
 	score["crewscore"] -= messpoints
 	score["crewscore"] -= litter
 	score["crewscore"] -= plaguepoints
+	score["crewscore"] -= not_forwarded
 	score["arenafights"] = arena_rounds
 
 	var/transfer_total = 0
@@ -597,6 +599,7 @@
 	<B>AIs Destroyed:</B> [score["deadaipenalty"]] ([find_active_faction_by_type(/datum/faction/malf) ? score["deadaipenalty"] * 1000 : score["deadaipenalty"] * -1000] Points)<BR>
 	<B>Uncleaned Messes:</B> [score["mess"]] (-[score["mess"]] Points)<BR>
 	<B>Trash on Station:</B> [score["litter"]] (-[score["litter"]] Points)<BR>
+	<B>Cargo Crates Not Forwarded:</B> [score["stuffnotforwarded"]] (-[score["stuffnotforwarded"] * 25] Points)<BR>
 	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerloss"] * 50] Points)<BR>
 	<B>Bad diseases in living mobs:</B> [score["disease_bad"]] (-[score["disease_bad"] * 50] Points)<BR><BR>
 
