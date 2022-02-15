@@ -200,7 +200,7 @@
 		return
 	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
 		//Unless the item falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
-		var/thisdmg = 5 * w_class / speed //impact damage scales with the weight class and speed of the item. since a smaller speed is faster, it's a divisor.
+		var/thisdmg = 5 * get_total_scaled_w_class(1) / speed //impact damage scales with the weight class and speed of the item. since a smaller speed is faster, it's a divisor.
 		if(istype(hit_atom, /turf/simulated/floor))
 			take_damage(thisdmg/2)
 		else
