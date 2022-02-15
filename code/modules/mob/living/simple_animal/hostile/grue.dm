@@ -643,7 +643,6 @@
 	else
 		channeling_flags &= !GRUE_DRAINLIGHT
 		set_light(0)
-//		playsound(src, aawwww, 50, 1)
 		if(nutrienergy)
 			if(!mute)
 				to_chat(src, "<span class='notice'>You stop draining light.</span>")
