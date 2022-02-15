@@ -34,7 +34,6 @@
 	var/moulttimer = 15 //moulting timer
 	var/hatched = FALSE			//whether or not this grue hatched from an egg
 	var/channeling_flags = 0 // channeling the drain light ability or not
-	var/drainlight_cost = 2 //Cost per tick of the drain light ability.
 
 	var/base_melee_dam_up = 5				//base melee damage upper
 	var/base_melee_dam_lw = 3				//base melee damage lower
@@ -209,12 +208,14 @@
 			if(moulttimer<=0)
 				complete_moult()
 
-
-	//expend nutrienergy on draining light and stop draining light if the grue runs out of nutrienergy
+/*
+	//stop draining light if the grue runs out of nutrienergy
 	if(channeling_flags & GRUE_DRAINLIGHT)
-		nutrienergy = max(0,nutrienergy-drainlight_cost)
+		nutrienergy = max(0,nutrienergy) //Just in case it went below 0.
 		if(!nutrienergy)
-			drainlight(FALSE)
+			for(var/spell/aoe_turf/grue_drainlight/S in spell_list)
+				S.stop_casting(null, src)
+*/
 
 	regular_hud_updates()
 	standard_damage_overlay_updates()

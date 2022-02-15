@@ -46,7 +46,7 @@
 	panel = "Grue"
 	hud_state = "grue_hide"
 	override_base = "grue"
-	range = SELFCAST
+	range = 0
 	charge_type = Sp_RECHARGE
 	charge_max = 0
 
@@ -60,7 +60,7 @@
 	panel = "Grue"
 	hud_state = "grue_egg"
 	override_base = "grue"
-	range = SELFCAST
+	range = 0
 	charge_type = Sp_RECHARGE
 	charge_max = 0
 
@@ -88,10 +88,10 @@
 	user_type = USER_TYPE_GRUE
 	panel = "Grue"
 	override_base = "grue"
-	range = SELFCAST
+	range = 0
 	charge_type = Sp_GRADUAL | Sp_HOLDVAR
 	holder_var_type = "nutrienergy"
-	holder_var_amount = 1/60 //Around 0.5 nutrienergy per second.
+	holder_var_amount = 0.1 //Around 1 nutrienergy per second.
 	holder_var_name = "nutritive energy"
 	still_recharging_msg = "<span class='notice'>You need to feed more first.</span>"
 
@@ -104,4 +104,5 @@
 /spell/aoe_turf/grue_drainlight/stop_casting(list/targets, mob/living/simple_animal/hostile/grue/user, var/mute=FALSE)
 	user.drainlight(FALSE, mute)
 	playsound(user, null, 50, channel = CHANNEL_UMBRA)
+	..()
 

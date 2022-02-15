@@ -273,6 +273,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/stop_casting(list/targets, mob/user)
+	if(gradual_casting)
+		gradual_casting = FALSE
 	return
 
 /spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow
