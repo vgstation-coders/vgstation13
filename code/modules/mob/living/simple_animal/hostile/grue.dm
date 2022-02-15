@@ -208,15 +208,6 @@
 			if(moulttimer<=0)
 				complete_moult()
 
-/*
-	//stop draining light if the grue runs out of nutrienergy
-	if(channeling_flags & GRUE_DRAINLIGHT)
-		nutrienergy = max(0,nutrienergy) //Just in case it went below 0.
-		if(!nutrienergy)
-			for(var/spell/aoe_turf/grue_drainlight/S in spell_list)
-				S.stop_casting(null, src)
-*/
-
 	regular_hud_updates()
 	standard_damage_overlay_updates()
 
