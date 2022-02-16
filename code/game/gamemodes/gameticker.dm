@@ -573,7 +573,7 @@ var/datum/controller/gameticker/ticker
 	if(!ooc_allowed)
 		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
 		ooc_allowed = TRUE
-	score.process()
+	score.main()
 	return 1
 
 /datum/controller/gameticker/proc/bomberman_declare_completion()
