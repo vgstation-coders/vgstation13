@@ -68,6 +68,6 @@
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
 		if(!mind.suiciding) //Cowards don't count
-			score["deadaipenalty"] += 1
+			score.deadaipenalty += 1
 
 	return ..(gibbed)

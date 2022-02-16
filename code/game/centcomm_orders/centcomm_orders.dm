@@ -122,7 +122,7 @@ var/global/current_centcomm_order_id=124901
 	for(var/typepath in requested)
 		if(!(typepath in fulfilled) || fulfilled[typepath] < requested[typepath])
 			return FALSE
-	score["stuffshipped"]++
+	score.stuffshipped++
 	return TRUE
 
 /datum/centcomm_order/proc/Pay(var/complete = TRUE)
@@ -195,7 +195,7 @@ var/global/current_centcomm_order_id=124901
 	if(toPay)
 		if(complete)
 			acct.charge(-toPay,null,"Complete payment for per-unit order #[id]",dest_name = name)
-			score["stuffshipped"]++
+			score.stuffshipped++
 		else
 			acct.charge(-toPay,null,"Partial payment for per-unit order #[id]",dest_name = name)
 

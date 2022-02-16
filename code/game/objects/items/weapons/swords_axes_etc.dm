@@ -76,7 +76,8 @@
 			M.LAssailant = user
 			M.assaulted_by(user)
 		src.add_fingerprint(user)
-
+		if(M.job == "Clown")
+			score.clownabuse++
 		for(var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
@@ -188,6 +189,8 @@
 			else
 				target.LAssailant = user
 				target.assaulted_by(user)
+			if(target.job == "Clown")
+				score.clownabuse++
 		return
 	else
 		return ..()

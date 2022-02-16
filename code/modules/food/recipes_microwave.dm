@@ -39,7 +39,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/bagel
 
 /datum/recipe/bagel/make_food(obj/container)
-	score["bagelscooked"]++
+	score.bagelscooked++
 	return ..()
 
 // Burgers /////////////////////////////////////////////////////

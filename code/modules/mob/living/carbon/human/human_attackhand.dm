@@ -82,6 +82,8 @@
 		LAssailant = M
 		assaulted_by(M)
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
+	if(src.job == "Clown")
+		score.clownabuse++
 	return
 
 //KICKS
@@ -181,6 +183,8 @@
 		LAssailant = M
 		assaulted_by(M)
 	log_attack("[src.name] ([src.ckey]) kicked by [M.name] ([M.ckey])")
+	if(src.job == "Clown")
+		score.clownabuse++
 
 /mob/living/carbon/human/proc/attack_hand_contact_diseases(var/mob/living/carbon/human/M, var/datum/organ/external/affecting_override = null, var/kick = FALSE, var/bite = FALSE)
 	var/datum/organ/external/S

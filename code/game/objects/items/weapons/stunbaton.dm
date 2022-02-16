@@ -215,6 +215,8 @@
 		else
 			M.LAssailant = user
 			M.assaulted_by(user)
+		if(L.job == "Clown")
+			score.clownabuse++
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
 	if(prob(50))
