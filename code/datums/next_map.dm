@@ -100,7 +100,7 @@
 	is_enabled = FALSE
 
 /datum/next_map/lamprey/is_votable()
-	if(score.crewscore < -20000)
+	if(score.crewscore > -20000)
 		var/msg = "Skipping map [name], station requires lower than -20000 score (is [score.crewscore])."
 		message_admins(msg)
 		warning(msg)
