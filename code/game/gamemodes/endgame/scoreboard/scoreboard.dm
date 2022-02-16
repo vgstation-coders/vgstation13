@@ -1,6 +1,6 @@
 var/global/datum/controller/gameticker/scoreboard/score = new()
 
-datum/controller/gameticker/scoreboard/New()
+/datum/controller/gameticker/scoreboard/New()
 	. = ..()
 
 /datum/controller/gameticker/scoreboard

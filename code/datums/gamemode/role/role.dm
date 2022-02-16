@@ -483,7 +483,7 @@
 </fieldset>
 "}
 */
-datum/role/proc/GetScoreboard()
+/datum/role/proc/GetScoreboard()
 	return Declare()
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
