@@ -88,7 +88,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 	ticker.mode.declare_completion()
 	dat += "[ticker.mode.dat]<HR>" //figure this out
-	dat += {"<BR><h2>Round Statistics and Score</h2>"}
+
 	//populate scores
 	dat += medbay_score()
 	dat += engineering_score()
