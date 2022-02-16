@@ -338,7 +338,7 @@
 /datum/role/proc/GetFaction()
 	return faction
 
-/datum/role/proc/GetScoreboard()
+/datum/role/proc/Declare()
 	var/win = 1
 	var/text = ""
 	var/mob/M
@@ -483,7 +483,8 @@
 </fieldset>
 "}
 */
-
+datum/role/proc/GetScoreboard()
+	return Declare()
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
@@ -704,7 +705,7 @@
 		dat += "[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo_slave)]' style='position: relative; top: 10;'/> " : "" ] <b>[ckey]</b> as <b>[former_minions[ckey]]</b> <br/>"
 	return jointext(dat, "")
 
-/datum/role/greytide_leader/GetScoreboard()
+/datum/role/greytide_leader/Declare()
 	if (!(former_minions.len))
 		return ..()
 	// else...

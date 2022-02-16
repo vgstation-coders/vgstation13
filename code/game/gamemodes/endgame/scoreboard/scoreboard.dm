@@ -1,7 +1,7 @@
 var/global/datum/controller/gameticker/scoreboard/score = new()
 
-//datum/controller/gameticker/scoreboard/New()
-//	. = ..()
+datum/controller/gameticker/scoreboard/New()
+	. = ..()
 
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
@@ -113,11 +113,11 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	
 	to_chat(world, "<b>The crew's final score is:</b>")
 	to_chat(world, "<b><font size='4'>[score.crewscore]</font></b>")
+
 	for(var/mob/E in player_list)
 		E.display_round_end_scoreboard()
 	
 	mode.send2servers()
-	
 	return
 
 /datum/controller/gameticker/scoreboard/proc/display(var/dat)
