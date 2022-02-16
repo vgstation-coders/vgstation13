@@ -1,7 +1,7 @@
 var/global/datum/controller/gameticker/scoreboard/score = new()
 
-/datum/controller/gameticker/scoreboard/New()
-	. = ..()
+///datum/controller/gameticker/scoreboard/New()
+//	. = ..()
 
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
@@ -86,8 +86,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
 
-	mode.declare_completion()
-	dat += "[mode.dat]<HR>" //figure this out
+	ticker.mode.declare_completion()
+	dat += "[ticker.mode.dat]<HR>" //figure this out
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
 	//populate scores
 	dat += medbay_score()
@@ -117,7 +117,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	for(var/mob/E in player_list)
 		E.display_round_end_scoreboard()
 	
-	mode.send2servers()
+	ticker.mode.send2servers()
 	return
 
 /datum/controller/gameticker/scoreboard/proc/display(var/dat)
