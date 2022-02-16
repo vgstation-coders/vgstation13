@@ -1,4 +1,4 @@
-/datum/controller/gameticker/scoreboard/proc/medbay_score()
+/datum/controller/gameticker/scoreboard/proc/medbay_score(var/dat = "")
 	for (var/ID in disease2_list)
 		var/disease_spread_count = 0
 		var/datum/disease2/disease/D = disease2_list[ID]
@@ -55,7 +55,9 @@
 	score.crewscore += score.disease_vaccine_score
 	score.crewscore += score.disease_effects
 
-/datum/controller/gameticker/scoreboard/proc/engineering_score(var/completions)
+	return dat
+
+/datum/controller/gameticker/scoreboard/proc/engineering_score(var/dat = "")
 	var/skip_power_loss = 0
 	for(var/datum/event/grid_check/check in events)
 		if(check.activeFor > check.startWhen && check.activeFor < check.endWhen)
@@ -84,14 +86,9 @@
 	score.crewscore -= score.powerloss * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	score.crewscore += score.powerbonus
 	//score.crewscore -= atmos
+	return dat
 
-/datum/controller/gameticker/scoreboard/proc/service_score()
-	//Clown, fix this dumb shit
-	for(var/mob/living/carbon/human/I in mob_list)
-		if(I.job == "Clown")
-			for(var/thing in I.attack_log)
-				if(findtext(thing, "<font color='orange'>")) //I just dropped 10 IQ points from seeing this
-					score.clownabuse++
+/datum/controller/gameticker/scoreboard/proc/service_score(var/dat = "")
 	//Janitor
 	//Check how many uncleaned mess are on the station. We can't run through cleanable for reasons, so yeah, long
 	for(var/obj/effect/decal/cleanable/M in decals)
@@ -116,16 +113,19 @@
 	score.crewscore -= score.mess //If there are any messes, let's count them
 	score.crewscore -= score.litter //Every item listed under /obj/item/trash will cost one point if it exists
 	score.crewscore += score.messbonus //Congrats, not even a dirt patch or chips bag anywhere
+	return dat
 
-/datum/controller/gameticker/scoreboard/proc/supply_score()
+/datum/controller/gameticker/scoreboard/proc/supply_score(var/dat = "")
 	score.crewscore += score.stuffshipped * 100 //Centcom Orders fulfilled
 	score.crewscore += score.plasmashipped * 0.5 //Plasma Sheets shipped
 	score.crewscore += score.oremined //Not actually counted at mining, but at processing. One ore smelted is one point
+	return dat
 
-/datum/controller/gameticker/scoreboard/proc/science_score()
+/datum/controller/gameticker/scoreboard/proc/science_score(var/dat = "")
 	//var/researchpoints = score.scores["researchdone"] * 20 //One discovered design is 20 points. You'll usually find hundreds
 	score.crewscore += score.slimes * 20 //How many slimes were harvested
 	score.crewscore += score.artifacts * 400 //How many large artifacts were analyzed and activated
+	return dat
 
 /datum/controller/gameticker/scoreboard/proc/silicon_score()
 	var/ai_completions = ""

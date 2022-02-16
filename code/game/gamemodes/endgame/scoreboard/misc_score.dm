@@ -1,5 +1,4 @@
-/datum/controller/gameticker/scoreboard/proc/misc_score()
-	var/completions
+/datum/controller/gameticker/scoreboard/proc/misc_score(var/completions = "")
 	var/list/gallery = score.global_paintings
 	var/painting_completions = ""
 	if(gallery.len) //the list of all artworks
