@@ -103,8 +103,8 @@
 		if(istype(A,/area/surface/junkyard))
 			continue
 		score.litter++
-	if(!(score.mess && score.litter)) //Not a single mess or litter on station
-		score.messbonus = 10000
+	if(score.mess < 5 && score.litter < 5) //Not a single mess or litter on station
+		score.messbonus = 5000
 
 	//crewscore
 	score.crewscore += score.meals * 5 //Every item cooked (needs to fire make_food()) awards five points
