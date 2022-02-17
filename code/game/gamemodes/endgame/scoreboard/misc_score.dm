@@ -1,7 +1,6 @@
 /datum/controller/gameticker/scoreboard/proc/misc_score(var/completions = "")
 	score.crewscore -= round(turfssingulod/2)
 
-
 	var/list/gallery = score.global_paintings
 	var/painting_completions = ""
 	if(gallery.len) //the list of all artworks
