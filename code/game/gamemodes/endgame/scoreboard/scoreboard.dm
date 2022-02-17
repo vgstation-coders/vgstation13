@@ -147,6 +147,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>
 	<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>
 	<B>Station Power Issues:</B> [score.powerloss] (-[score.powerloss * 50] Points)<BR>
+	<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>
 	<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR><BR>
 
 	<U>THE WEIRD</U><BR>"}
