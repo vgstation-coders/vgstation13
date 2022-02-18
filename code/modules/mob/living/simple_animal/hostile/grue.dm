@@ -33,7 +33,7 @@
 	var/moulttime = 15 //time required to moult to a new form (life ticks)
 	var/moulttimer = 15 //moulting timer
 	var/hatched = FALSE			//whether or not this grue hatched from an egg
-	var/channeling = FALSE // channeling an ability that costs nutrienergy or not
+	var/channeling_flags = 0 // channeling the drain light ability or not
 
 	var/base_melee_dam_up = 5				//base melee damage upper
 	var/base_melee_dam_lw = 3				//base melee damage lower
@@ -60,7 +60,7 @@
 /datum/grue_calc //used for light-related calculations
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
-	var/hg_mult = 2										//base multiplier for health gained per tick when on dark tile
+	var/hg_mult = 3										//base multiplier for health gained per tick when on dark tile
 	var/hd_mult = 3									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
 	var/dark_dim_light=GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
@@ -92,7 +92,7 @@
 	return (current_brightness-bright_limit_drain) * accum_light_expos_mult * hd_mult * lightresist * (G.maxHealth/250) 	//scale light damage by: how bright the light is, amount of recent light exposure, the base multiplier, lifestage-dependent resistance, and normalize by max health,
 
 /datum/grue_calc/grue/proc/get_dark_heal(var/mob/living/simple_animal/hostile/grue/G) //specific to grues and not grue eggs
-	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * (G.maxHealth/250)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, and normalize by max health.
+	return -1 * (bright_limit_gain-current_brightness) * hg_mult * regenbonus * !(G.channeling_flags & GRUE_DRAINLIGHT) * (G.maxHealth/250)							//scale dark healing by: how dark it is, the base multiplier, the bonus based on sentient beings eaten, disable if draining light, and normalize by max health.
 
 /datum/grue_calc/grue //specific to grues and not their eggs
 	var/pg_mult = 0										 //multiplier for nutrienergy gained per tick when on dark tile (0=disabled)
@@ -106,8 +106,8 @@
 /datum/grue_calc/grue/proc/nutri_adjust(var/mob/living/simple_animal/hostile/grue/G)
 	switch(dark_dim_light)
 		if(GRUE_DARK)
-			if(!G.ismoulting && !G.channeling)
-				G.nutrienergy = min(G.maxnutrienergy,G.nutrienergy+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark
+			if(!G.ismoulting && !(G.channeling_flags & GRUE_DRAINLIGHT)) //Don't gain power in the dark if the grue is moulting or channeling drain light.
+				G.nutrienergy = min(G.maxnutrienergy,G.nutrienergy+pg_mult*(bright_limit_gain-current_brightness))	   //gain power in dark (disabled while pd_mult = 0)
 		if(GRUE_LIGHT)
 			G.nutrienergy = max(0,G.nutrienergy-pd_mult*(current_brightness-bright_limit_drain))				  //drain power in light (disabled while pd_mult = 0)
 
@@ -283,7 +283,6 @@
 	else
 		return GRUE_DIM
 
-
 /mob/living/simple_animal/hostile/grue/proc/lifestage_updates() //Initialize or update lifestage-dependent stats
 	var/tempHealth=health/maxHealth
 	if(lifestage==GRUE_LARVA)
@@ -320,7 +319,7 @@
 		attacktext = "chomps"
 		maxHealth=150
 		nutrienergy=0 //starts out hungry
-		maxnutrienergy = 100
+		maxnutrienergy = 500
 		moultcost = 100
 		lightparams.lightresist=0.85
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_STRONG
@@ -339,7 +338,7 @@
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
 		maxHealth = 250
-		maxnutrienergy = 500
+		maxnutrienergy = 1000
 		moultcost=0 //not needed for adults
 		base_melee_dam_up = 30				//base melee damage upper
 		base_melee_dam_lw = 20				//base melee damage lower
@@ -350,11 +349,11 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
-		//Adult grue spells: eat and lay eggs
+		//Adult grue spells: eat, lay eggs, and drain light
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
-
 
 	health=tempHealth*maxHealth
 	grue_stat_updates()
@@ -385,8 +384,7 @@
 	if(statpanel("Status"))
 		if(ismoulting)
 			stat(null, "Moulting progress: [round(100*(1-moulttimer/moulttime),0.1)]%")
-		if(lifestage!=GRUE_ADULT) //not needed for adults
-			stat(null, "Nutritive energy: [round(nutrienergy,0.1)]/[round(maxnutrienergy,0.1)]")
+		stat(null, "Nutritive energy: [round(nutrienergy,0.1)]/[round(maxnutrienergy,0.1)]")
 		if(lifestage>=GRUE_JUVENILE)
 			stat(null, "Sentient organisms eaten: [eatencount]")
 		if(config.grue_egglaying && lifestage==GRUE_ADULT)
@@ -480,6 +478,8 @@
 		playsound(src, 'sound/misc/grue_screech.ogg', 50, 1)
 	if(ismoulting)
 		desc="[desc] This one seems dead and lifeless."
+	for(var/spell/aoe_turf/grue_drainlight/S in spell_list)
+		S.stop_casting(null, src, TRUE)
 	..()
 
 //Reproduction via egglaying.
@@ -592,6 +592,10 @@
 	lightparams.speed_m_dark_dim_light[1]=max(1/2,lightparams.base_speed_m_dark_dim_light[1]/(1.2 ** eatencount))//faster in darkness
 	lightparams.speed_m_dark_dim_light[2]=max(5/8,lightparams.base_speed_m_dark_dim_light[2]/(1.2 ** eatencount))//faster in dim light
 
+	//update light drain power in case the grue fed while channeling it
+	if(channeling_flags & GRUE_DRAINLIGHT)
+		drainlight_set()
+
 
 	if(lifestage==GRUE_ADULT)
 		if(eatencount>=GRUE_WALLBREAK)
@@ -612,6 +616,36 @@
 		force_airlock_time=30 * (eatencount==0) //takes 3 seconds if they haven't eaten, but is instant if they have
 	else
 		force_airlock_time=0
+
+
+//Drain the light from the surrounding area.
+
+/mob/living/simple_animal/hostile/grue/proc/drainlight(var/activating = TRUE, var/mute = FALSE)
+	if(activating)
+		if(nutrienergy)
+			channeling_flags |= GRUE_DRAINLIGHT
+			drainlight_set()
+			if(!mute)
+				to_chat(src, "<span class='notice'>You focus on draining the light from the surrounding space.</span>")
+			return TRUE
+		else
+			if(!mute)
+				to_chat(src, "<span class='notice'>You need to feed more first.</span>")
+	else
+		channeling_flags &= !GRUE_DRAINLIGHT
+		set_light(0)
+		if(nutrienergy)
+			if(!mute)
+				to_chat(src, "<span class='notice'>You stop draining light.</span>")
+		else
+			if(!mute)
+				to_chat(src, "<span class='warning'>You are too hungry to keep draining light...")
+	return FALSE
+
+/mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
+	set_light(7 + eatencount, -3 * eatencount, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
+
+
 
 
 //Ventcrawling and hiding, only for gruespawn

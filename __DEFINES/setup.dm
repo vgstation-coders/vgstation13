@@ -1406,6 +1406,7 @@ var/proccalls = 1
 #define GRUE_DARK 0 //dark enough for healing
 #define GRUE_DIM 1	//light level neither heals nor burns
 #define GRUE_LIGHT 2//bright enough to burn
+#define GRUE_DRAINLIGHT 1 //Channeling the drain light ability
 /*
  *
  *

@@ -26,9 +26,10 @@
 /datum/role/grue/GetScoreboard()
 	. = ..()
 	if(istype(antag.current,/mob/living/simple_animal/hostile/grue))
-		. += "<BR>The grue ate [eatencount] sentient being[eatencount==1 ? "" : "s"]"
+		. += "The grue ate [eatencount] sentient being[eatencount==1 ? "" : "s"]"
 		if(config.grue_egglaying)
-			.+= " and spawned [spawncount] offspring."
+			. += " and spawned [spawncount] offspring."
 		else
-			.+= "."
+			. += "."
+		. += "<BR>"
 
