@@ -87,6 +87,10 @@
 			score.hangmanname = player.real_name
 			score.hangmanjob = player.job
 			score.hangmankey = player.key
+		else if(I.job == "Clown")
+			for(var/thing in I.attack_log)
+				if(findtext(thing, "<font color='orange'>")) //I just dropped 10 IQ points from seeing this
+					score["clownabuse"]++
 
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	leaderboard.insert_records(rich_escapes)
