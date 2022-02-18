@@ -160,8 +160,6 @@
 		else
 			src.LAssailant = M
 			assaulted_by(M)
-		if(src.job == "Clown")
-			score.clownabuse++
 /*
 	Ear and eye protection
 
