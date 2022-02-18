@@ -277,12 +277,17 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	dat += "<b>TOP 5 RICHEST ESCAPEES:</b><br>"
 	if(!leaderboard.data.len)
-		dat += "Nobody has set up a rich escape yet."
+		dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
 	else
 		var/i = 1
 		for(var/datum/record/money/entry in leaderboard.data)
 			var/cash = num2text(entry.cash, 12)
-			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+			var/list/split_date = splittext(entry.date, "-")
+			if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
+				leaderboard.clear_records()
+				break
+			else
+				dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 
 	return dat
 
