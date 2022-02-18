@@ -246,8 +246,6 @@ Proc for attack log creation, because really why not
 		else
 			target.LAssailant = user
 			target.assaulted_by(user)
-		if(target.job == "Clown")
-			score.clownabuse++
 	if(admin)
 		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 
