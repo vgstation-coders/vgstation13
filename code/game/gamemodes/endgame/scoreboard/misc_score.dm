@@ -87,7 +87,7 @@
 			score.hangmanname = player.real_name
 			score.hangmanjob = player.job
 			score.hangmankey = player.key
-		else if(player.job == "Clown")
+		if(player.job == "Clown")
 			for(var/thing in player.attack_log)
 				if(findtext(thing, "<font color='orange'>")) //I just dropped 10 IQ points from seeing this
 					score.clownabuse++
