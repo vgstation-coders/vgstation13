@@ -1,8 +1,5 @@
 var/global/datum/controller/gameticker/scoreboard/score = new()
 
-///datum/controller/gameticker/scoreboard/New()
-//	. = ..()
-
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
 	var/plasmashipped		= 0 //How much plasma has been sent to centcom?
