@@ -82,8 +82,7 @@
 		LAssailant = M
 		assaulted_by(M)
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
-	if(src.job == "Clown")
-		score.clownabuse++
+
 	return
 
 //KICKS
