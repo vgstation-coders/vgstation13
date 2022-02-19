@@ -110,7 +110,7 @@
 		return
 
 	if(in_throw_mode)
-		if(!get_active_hand() && (a_intent == I_GRAB || a_intent == I_DISARM))
+		if(!get_active_hand() && (a_intent == I_DISARM))
 			doTackle(A)
 		else
 			throw_item(A)
