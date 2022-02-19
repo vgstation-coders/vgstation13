@@ -87,21 +87,21 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "[ticker.mode.dat]<HR>" //figure this out
 
 	//populate scores
-	dat += medbay_score()
-	dat += engineering_score()
-	dat += service_score()
-	dat += supply_score()
-	dat += science_score()
+	dat += medbay_score(dat)
+	dat += engineering_score(dat)
+	dat += service_score(dat)
+	dat += supply_score(dat)
+	dat += science_score(dat)
 	if(NO)
 		dat += nuke_op_score(NO)
 	if(RV)
 		dat += revolution_score(RV)
 	if(TR)
 		dat += syndicate_score(TR)
-	dat += silicon_score()
-	dat += misc_score()
+	dat += silicon_score(dat)
+	dat += misc_score(dat)
 	
-	dat += display()
+	dat += display(dat)
 	
 	round_end_info = dat
 	round_end_info_no_img = remove_images(dat)
