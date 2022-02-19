@@ -10,7 +10,7 @@
 	opacity = 0
 	anchored = 1
 
-/obj/structure/shuttle/window/shuttle_rotate(angle) //WOW
+/obj/structure/shuttle/window/map_element_rotate(angle) //WOW
 	src.transform = turn(src.transform, angle)
 
 /obj/structure/shuttle/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -46,13 +46,13 @@
 	name = "shuttle engine pre-igniter"
 	var/obj/structure/shuttle/engine/propulsion/DIY/connected_engine
 	anchored = FALSE
-	
+
 /obj/structure/shuttle/engine/heater/DIY/proc/try_connect()
-	if(!anchored) 
+	if(!anchored)
 		desc = initial(desc)
 		return FALSE
 	disconnect()
-	
+
 	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in range(1,src))
 		if(D.anchored && !D.heater && D.dir == dir && D.loc == get_step(src,dir))
 			D.heater = src
@@ -62,17 +62,17 @@
 			return TRUE
 	desc = initial(desc)
 	return FALSE
-	
+
 /obj/structure/shuttle/engine/heater/DIY/proc/disconnect()
 	if(connected_engine)
 		connected_engine.heater = null // prevent infinite recursion and subsequent serb CPU fire
 		connected_engine.disconnect()
 	connected_engine = null
 	src.desc = initial(src.desc)
-			
+
 /obj/structure/shuttle/engine/heater/DIY/attackby(obj/item/I, mob/user)
 	if(I.is_wrench(user) && wrenchAnchor(user, I, 5 SECONDS))
-		return TRUE			
+		return TRUE
 	return ..()
 
 /obj/structure/shuttle/engine/heater/DIY/canAffixHere(var/mob/user)
@@ -83,7 +83,7 @@
 			return ..()
 	to_chat(user, "<span class = 'warning'>There is no engine within range of \the [src] it can connect to.</span>")
 	return FALSE
-	
+
 /obj/structure/shuttle/engine/heater/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
 	.=..()
 	if(.)
@@ -98,13 +98,13 @@
 	name = "shuttle engine"
 	var/obj/structure/shuttle/engine/heater/DIY/heater = null
 	anchored = FALSE
-	
+
 /obj/structure/shuttle/engine/propulsion/DIY/proc/disconnect()
 	if(heater)
 		heater.disconnect()
 	heater = null
 	desc = initial(desc)
-	
+
 /obj/structure/shuttle/engine/propulsion/DIY/proc/try_connect()
 	if(!anchored)
 		desc = initial(desc)
@@ -119,7 +119,7 @@
 			return TRUE
 	desc = initial(desc)
 	return FALSE
-	
+
 // find and rectify black-swan type weirdness, i.e. varedit / singuloo unanchoring the engine parts or a push wizard teleporting them away
 // the shuttle should NOT work if one of the heaters has been magicked halfway across the station, so check for it!
 /obj/structure/shuttle/engine/propulsion/DIY/proc/retard_checks()
@@ -131,7 +131,7 @@
 	if(loc != get_step(heater,heater.dir)) // we're not next to the heater anymore
 		disconnect()
 		return
-		
+
 /obj/structure/shuttle/engine/propulsion/DIY/attackby(obj/item/I, mob/user)
 	if(I.is_wrench(user))
 		return wrenchAnchor(user, I, 5 SECONDS)

@@ -9,11 +9,13 @@
 
 /obj/machinery/atmospherics/unary/New()
 	..()
-	initialize_directions = dir
+	update_dir()
 	air_contents = new
 	air_contents.temperature = T0C
 	air_contents.volume = starting_volume
 
+/obj/machinery/atmospherics/unary/update_dir()
+	initialize_directions = dir
 
 /obj/machinery/atmospherics/unary/get_node(node_id)
 	switch(node_id)
