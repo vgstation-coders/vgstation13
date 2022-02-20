@@ -2,7 +2,7 @@ body
 {
 	padding: 0;
 	margin: 0;
-	background-color: #272727;
+	background: #272727 url(uiNotitleBackground.png) 50% 0 repeat-x;
 	font-size: 12px;
 	color: #ffffff;
 	line-height: 170%;
@@ -158,8 +158,7 @@ h4
 {
 	clear: both;
 	padding: 6px 8px 6px 8px;
-	border-bottom: 2px solid #161616;
-	background: #383838;
+	background: #272727 url(uiTitleBackground.png) 50% 0 repeat-x repeat-y;
 	color: #98B0C3;
 	font-size: 16px;
 }
@@ -175,6 +174,7 @@ h4
 {
 	clear: both;
 	padding: 8px;
+	background: url(uiContentBackground.png) 50% 0 repeat-x;
 	font-family: Verdana, Geneva, sans-serif;
 }
 
