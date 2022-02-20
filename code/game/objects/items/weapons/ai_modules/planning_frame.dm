@@ -73,7 +73,7 @@
 	if(src.modules.len == 0)
 		to_chat(user, "<i>No modules have been inserted!</i>")
 		return
-	src.laws.show_laws(user)
+	src.laws.show_laws(user,FALSE)
 
 /obj/item/weapon/planning_frame/verb/dry_run()
 	set name = "Dry Run"

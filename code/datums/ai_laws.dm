@@ -84,10 +84,10 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 /datum/ai_laws/proc/clear_ion_laws()
 	src.ion = list()
 
-/datum/ai_laws/proc/show_laws(var/who)
+/datum/ai_laws/proc/show_laws(var/who, var/show_locked_zero = TRUE)
 
 
-	if (src.zeroth)
+	if (zeroth && (!zeroth_lock || show_locked_zero))
 		to_chat(who, "0. <span class='warning'>[src.zeroth]</span>")
 
 	for (var/index = 1, index <= src.ion.len, index++)
