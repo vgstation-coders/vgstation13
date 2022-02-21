@@ -755,7 +755,7 @@
 	..()
 	plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	base_icon_state = icon_state
-
+	update()
 
 // pipe is deleted
 // ensure if holder is present, it is expelled
