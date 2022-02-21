@@ -63,8 +63,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	return 0
 
 /turf/simulated/open/can_place_cables()
-	var/obj/structure/catwalk/support = locate() in src
-	return !isnull(support)
+	return TRUE
 
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
