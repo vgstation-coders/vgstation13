@@ -183,8 +183,33 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	C.cableColor(_color)
 
 	//Set up the new cable
-	C.d1 = 0 //It's a O-X node cable
-	C.d2 = dirn
+	if(isopenspace(F))
+		C.d1 = dirn
+		C.d2 = DOWN // It's an X-32 node cable
+		var/turf/simulated/current_turf = F
+		while(GetBelow(current_turf) && use(1)) // Toss this down the open space for as much as we can
+			current_turf = GetBelow(current_turf)
+			var/obj/structure/cable/C2 = new /obj/structure/cable(current_turf)
+			C2.cableColor(_color)
+			if(isopenspace(current_turf) && use(1))
+				C2.d1 = UP
+				C2.d2 = DOWN
+			else
+				C2.d1 = 0
+				C2.d2 = UP
+				break
+			C2.add_fingerprint(user)
+			C2.update_icon()
+
+			//Create a new powernet with the cable, if needed it will be merged later
+			var/datum/powernet/PN2 = new /datum/powernet
+			PN2.add_cable(C2)
+
+			C2.mergeConnectedNetworks(UP)   //Merge the powernet with above powernets
+			C2.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
+	else
+		C.d1 = 0 //It's a O-X node cable
+		C.d2 = dirn
 	C.add_fingerprint(user)
 	C.update_icon()
 
