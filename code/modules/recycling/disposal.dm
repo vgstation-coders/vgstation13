@@ -786,6 +786,10 @@
 /obj/structure/disposalpipe/proc/nextdir(var/fromdir)
 	return dpdir & (~turn(fromdir, 180))
 
+/obj/structure/disposalpipe/map_element_rotate(var/angle)
+	..()
+	update()
+
 // transfer the holder through this pipe segment
 // overriden for special behaviour
 //
@@ -1027,14 +1031,12 @@
 /obj/structure/disposalpipe/segment/no_deconstruct
 	deconstructable = FALSE
 
-/obj/structure/disposalpipe/segment/New()
+/obj/structure/disposalpipe/segment/update()
 	..()
 	if(icon_state == "pipe-s")
 		dpdir = dir | turn(dir, 180)
 	else
 		dpdir = dir | turn(dir, -90)
-
-	update()
 
 //a three-way junction with dir being the dominant direction
 /obj/structure/disposalpipe/junction
@@ -1043,7 +1045,7 @@
 /obj/structure/disposalpipe/junction/no_deconstruct
 	deconstructable = FALSE
 
-/obj/structure/disposalpipe/junction/New()
+/obj/structure/disposalpipe/junction/update()
 	..()
 	if(icon_state == "pipe-j1")
 		dpdir = dir | turn(dir, -90) | turn(dir,180)
@@ -1051,8 +1053,6 @@
 		dpdir = dir | turn(dir, 90) | turn(dir,180)
 	else // pipe-y
 		dpdir = dir | turn(dir,90) | turn(dir, -90)
-	update()
-	return
 
 // next direction to move
 // if coming in from secondary dirs, then next is primary dir
@@ -1120,6 +1120,10 @@
 	updatedir()
 	updatedesc()
 	update()
+
+/obj/structure/disposalpipe/sortjunction/map_element_rotate(var/angle)
+	..()
+	updatedir()
 
 /obj/structure/disposalpipe/sortjunction/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I, /obj/item/device/destTagger))

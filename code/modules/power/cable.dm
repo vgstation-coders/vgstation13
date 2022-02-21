@@ -132,7 +132,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(powernet)
 		powernet.set_to_build() // update the powernets
 
-/obj/structure/cable/shuttle_rotate(angle)
+/obj/structure/cable/map_element_rotate(angle)
 	if(d1)
 		d1 = turn(d1, -angle)
 	if(d2)
