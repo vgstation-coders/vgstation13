@@ -542,7 +542,7 @@
 	return occupants
 
 /proc/get_refill_area(var/obj/docking_port/destination/D)
-	if(ispath(D.refill_area))
+	if(ispath(D?.refill_area))
 		return locate(D.refill_area)
 	else
 		return get_space_area()
