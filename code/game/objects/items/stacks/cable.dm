@@ -197,6 +197,15 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 			else
 				C2.d1 = 0
 				C2.d2 = UP
+				C2.add_fingerprint(user)
+				C2.update_icon()
+
+				//Create a new powernet with the cable, if needed it will be merged later
+				var/datum/powernet/PN2 = new /datum/powernet
+				PN2.add_cable(C2)
+
+				C2.mergeConnectedNetworks(UP)   //Merge the powernet with above powernets
+				C2.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
 				break
 			C2.add_fingerprint(user)
 			C2.update_icon()
