@@ -204,7 +204,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 				var/datum/powernet/PN2 = new /datum/powernet
 				PN2.add_cable(C2)
 
-				C2.mergeConnectedNetworks(UP)   //Merge the powernet with above powernets
+				C2.mergeZConnectedNetworks()   //Merge the powernet with above powernets
 				C2.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
 				break
 			C2.add_fingerprint(user)
@@ -214,7 +214,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 			var/datum/powernet/PN2 = new /datum/powernet
 			PN2.add_cable(C2)
 
-			C2.mergeConnectedNetworks(UP)   //Merge the powernet with above powernets
+			C2.mergeZConnectedNetworks()   //Merge the powernet with above powernets
 			C2.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
 	else
 		C.d1 = 0 //It's a O-X node cable
@@ -226,11 +226,15 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	var/datum/powernet/PN = new /datum/powernet
 	PN.add_cable(C)
 
-	C.mergeConnectedNetworks(C.d2)   //Merge the powernet with adjacents powernets
+
+	C.mergeConnectedNetworks(C.d2 == DOWN ? C.d1 : C.d2)   //Merge the powernet with adjacents powernets
 	C.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
 
 	if(C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
 		C.mergeDiagonalsNetworks(C.d2)
+
+	if(C.d2 == UP || C.d2 == DOWN) //If the cable goes to another z-level, check the others 2 possible directions
+		C.mergeZConnectedNetworks()
 
 	use(1)
 
