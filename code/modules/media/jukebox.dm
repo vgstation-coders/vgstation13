@@ -510,7 +510,7 @@ var/global/list/loopModeNames=list(
 	to_chat(A, "<span class='warning'>You short out the [src].</span>")
 	wires.CutWireIndex(JUKE_CONFIG)
 	short()
-	
+
 
 /obj/machinery/media/jukebox/proc/short()
 	emagged = !emagged
@@ -560,7 +560,7 @@ var/global/list/loopModeNames=list(
 		return
 	if(..())
 		return 1
-	if(emagged)
+	if(emagged && !isAdminGhost(usr))
 		to_chat(usr, "<span class='warning'>You touch the bluescreened menu. Nothing happens. You feel dumber.</span>")
 		return
 

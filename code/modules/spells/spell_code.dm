@@ -29,6 +29,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
+	var/holder_var_name		//Name of the holder var on the UI.
 	var/insufficient_holder_msg //Override for still recharging msg for holder variables
 	var/datum/special_var_holder //if a holder var is stored on a different object or a datum
 
@@ -123,7 +124,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	spawn while(charge_counter < charge_max)
 		if(holder && !holder.timestopped)
 			if(gradual_casting)
-				if(charge_counter <= 0)
+				if(charge_type & Sp_HOLDVAR) //If the spell is both Sp_GRADUAL and Sp_HOLDVAR, decrement the holder var instead.
+					if(holder.vars[holder_var_type] <= 0)
+						holder.vars[holder_var_type] = 0 //Assumes the minimum of the holder var is 0.
+						gradual_casting = FALSE
+						stop_casting(null, holder)
+					else
+						holder.vars[holder_var_type] -= holder_var_amount
+				else if(charge_counter <= 0)
 					charge_counter = 0
 					gradual_casting = FALSE
 					stop_casting(null, holder)
@@ -265,6 +273,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/stop_casting(list/targets, mob/user)
+	if(gradual_casting)
+		gradual_casting = FALSE
 	return
 
 /spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow

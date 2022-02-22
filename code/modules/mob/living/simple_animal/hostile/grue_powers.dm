@@ -80,3 +80,29 @@
 
 /spell/aoe_turf/grue_moult/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.moult()
+
+/spell/aoe_turf/grue_drainlight
+	name = "Drain Light"
+	desc = "Drain the light from the surrounding area."
+	hud_state = "grue_drainlight"
+	user_type = USER_TYPE_GRUE
+	panel = "Grue"
+	override_base = "grue"
+	range = 0
+	charge_type = Sp_GRADUAL | Sp_HOLDVAR
+	holder_var_type = "nutrienergy"
+	holder_var_amount = 0.1 //Around 1 nutrienergy per second.
+	holder_var_name = "nutritive energy"
+	still_recharging_msg = "<span class='notice'>You need to feed more first.</span>"
+
+
+/spell/aoe_turf/grue_drainlight/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
+	playsound(user, 'sound/effects/grue_drainlight.ogg', 50, 1)
+	user.drainlight(TRUE)
+	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_UMBRA)
+
+/spell/aoe_turf/grue_drainlight/stop_casting(list/targets, mob/living/simple_animal/hostile/grue/user, var/mute=FALSE)
+	user.drainlight(FALSE, mute)
+	playsound(user, null, 50, channel = CHANNEL_UMBRA)
+	..()
+

@@ -362,11 +362,11 @@ var/list/map_dimension_cache = list()
 
 	// Stolen from shuttlecode but very good to reuse here
 	if(rotate && instance)
-		instance.shuttle_rotate(rotate)
+		instance.map_element_rotate(rotate)
 
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
-	
+
 	return instance
 
 //text trimming (both directions) helper proc
