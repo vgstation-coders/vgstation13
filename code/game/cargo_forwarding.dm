@@ -152,7 +152,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
-	var/print_delay = 1 SECOND
+	var/print_delay = 1 SECONDS
 	var/obj/item/weapon/paper/manifest/current_manifest = null
 	var/next_sound = 0
 	var/sound_delay = 20
@@ -176,7 +176,7 @@
 	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
 		laser_quality += ML.rating
 	active_power_usage = 50 / manipulator_quality
-	print_delay = (1 SECOND) / laser_quality
+	print_delay = (1 SECONDS) / laser_quality
 
 /obj/machinery/crate_weigher/attackby(var/obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/paper/manifest) && !current_manifest)
