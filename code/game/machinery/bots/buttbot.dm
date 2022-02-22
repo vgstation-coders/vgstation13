@@ -65,7 +65,9 @@ Here it is: Buttbot.
 		sleep(rand(1,3))
 		say(buttbottify(message), language)
 		fart()
-		score.buttbotfarts++
+		score["buttbotfarts"]++
+
+
 
 /obj/machinery/bot/buttbot/explode()
 	src.on = 0

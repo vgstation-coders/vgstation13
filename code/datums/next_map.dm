@@ -33,7 +33,7 @@
 	is_enabled = FALSE
 
 /datum/next_map/bagel/is_votable()
-	if(score.bagelscooked < bagel_requirement)
+	if(score["bagelscooked"] < bagel_requirement)
 		var/msg = "Skipping map [name], fewer than [bagel_requirement] bagels made."
 		message_admins(msg)
 		warning(msg)
@@ -100,8 +100,9 @@
 	is_enabled = FALSE
 
 /datum/next_map/lamprey/is_votable()
-	if(score.crewscore > -20000)
-		var/msg = "Skipping map [name], station requires lower than -20000 score (is [score.crewscore])."
+	var/crew_score = score["crewscore"] // So that we can use this in the admin messaging
+	if(crew_score > -20000)
+		var/msg = "Skipping map [name], station requires lower than -20000 score (is [crew_score])."
 		message_admins(msg)
 		warning(msg)
 		return FALSE

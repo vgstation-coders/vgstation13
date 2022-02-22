@@ -59,7 +59,7 @@
 	if(!reagentreference || !reagentreference.total_volume) //Are we done eating (determined by the amount of reagents left, here 0)
 		user.visible_message("<span class='notice'>[user] finishes eating \the [src].</span>", \
 		"<span class='notice'>You finish eating \the [src].</span>")
-		score.foodeaten++ //For post-round score
+		score["foodeaten"]++ //For post-round score
 
 		//Drop our item before we delete it, to clear any references of ourselves in people's hands or whatever.
 		var/old_loc = loc
