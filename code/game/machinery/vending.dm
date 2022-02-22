@@ -3749,10 +3749,10 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/lotto
 
 
-/proc/obj/machinery/vending/lotto/AnnounceWinner(var/mob/living/carbon/human/character, var/winnings)
+/proc/obj/machinery/vending/lotto/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend,var/mob/living/carbon/human/character, var/winnings)
 		var/rank = character.mind.role_alt_title
 		var/datum/speech/speech = announcement_intercom.create_speech("[character.real_name],[rank ? " [rank]," : " visitor," ] has won [winnings] credits in the lottery!", transmitter=announcement_intercom)
-		speech.speaker = src
+		speech.speaker = lottovend
 		speech.name = "Lottery Tickets Vendor"
 		speech.job = "Automated Announcement"
 		speech.as_name = "Lottery Tickets Vendor"
@@ -3773,7 +3773,7 @@ var/global/num_vending_terminals = 1
 			dispense_cash(T.winnings, get_turf(src))
 			playsound(src, "polaroid", 50, 1)
 			if(T.winnings >= 10000)
-				AnnounceWinner(user,T.winnings)
+				AnnounceWinner(src,user,T.winnings)
 			qdel(T)
 	else
 		..()
