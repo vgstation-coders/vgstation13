@@ -152,6 +152,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
+	var/print_delay = 1 SECOND
 	var/obj/item/weapon/paper/manifest/current_manifest = null
 	var/next_sound = 0
 	var/sound_delay = 20
@@ -166,6 +167,16 @@
 	)
 
 	RefreshParts()
+
+/obj/machinery/crate_weigher/RefreshParts()
+	var/manipulator_quality = 0
+	var/laser_quality = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		manipulator_quality += M.rating
+	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+		laser_quality += ML.rating
+	active_power_usage = 50 / manipulator_quality
+	print_delay = (1 SECOND) / laser_quality
 
 /obj/machinery/crate_weigher/attackby(var/obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/paper/manifest) && !current_manifest)
@@ -190,7 +201,7 @@
 		if (world.time > next_sound)
 			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
 			next_sound = world.time + sound_delay
-		sleep(10)
+		sleep(print_delay)
 		if(current_manifest && get_turf(A) == get_turf(src))
 			var/calculated_weight = 0
 			for(var/atom/movable/thing in A)
