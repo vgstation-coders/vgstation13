@@ -168,13 +168,15 @@
 	if(trim(lowertext(new_ringtone)) != trim(lowertext(unlock_code)))
 		return
 	locked = FALSE
-	tgui_interact(user)
+	if(user)
+		tgui_interact(user)
 	return TRUE
 
 /datum/component/uplink/proc/on_radio_new_frequency(mob/user, new_frequency)
 	if(new_frequency != unlock_frequency)
 		return
 	locked = FALSE
-	tgui_interact(user)
+	if(user)
+		tgui_interact(user)
 	return TRUE
 
