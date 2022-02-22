@@ -120,9 +120,9 @@ var/list/all_GPS_list = list()
 		return
 	switch(action)
 		if("turn_on")
-			if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
+			if(emped || !Adjacent(usr) || usr.incapacitated())
 				return FALSE
-			transmitting = TRUE
+			transmitting = !transmitting
 			update_icon()
 			return TRUE
 		if("set_tag")
@@ -181,9 +181,9 @@ var/list/all_GPS_list = list()
 	if(..())
 		return FALSE
 	if(href_list["turn_on"])
-		if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
+		if(emped || !Adjacent(usr) || usr.incapacitated())
 			return FALSE
-		transmitting = TRUE
+		transmitting = !transmitting
 		update_icon()
 		return TRUE
 	if(href_list["tag"])

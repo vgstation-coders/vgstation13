@@ -11,21 +11,11 @@ Used In File(s): \code\modules\telesci\gps.dm
 {{/if}}
 <h3>Settings</h3>
 {{if !data.transmitting}}
-	This unit is currently <span class="bad">OFFLINE.</span>
 	{{:helper.link('Turn on', 'power', {'turn_on': '1'})}}
 {{else}}
-	<div class="item">
-		<div class="itemLabel">Tag:</div>
-		<div class="itemContent">
-			{{:helper.link(data.gpstag, 'pencil', {'tag' : '1'}, null)}}
-		</div>
-	</div>
-	<div class="item">
-		<div class="itemLabel">Auto-refresh:</div>
-		<div class="itemContent">
-			{{:helper.link(data.autorefresh ? 'On' : 'Off', 'refresh', {'toggle_refresh' : '1'}, null)}}
-		</div>
-	</div>
+	{{:helper.link('Turn off', 'power', {'turn_on': '1'})}}
+	{{:helper.link('Auto-update', 'refresh', {'toggle_refresh' : '1'}, data.autorefresh ? 'selected' : null)}}
+	{{:helper.link(data.gpstag, 'pencil', {'tag' : '1'}, null)}}
 
 	<h3>Detected signals</h3>
 	<div class="item">

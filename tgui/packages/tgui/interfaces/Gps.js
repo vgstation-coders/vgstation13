@@ -46,6 +46,11 @@ export const Gps = (props, context) => {
           </Section>
         ) || (
           <Section title="Settings">
+            <Button
+              icon="power-off"
+              onClick={() => act("turn_on")}>
+              Turn off
+            </Button>
             <ButtonCheckbox
               checked={autorefresh}
               onClick={() => act('toggle_refresh')}>
