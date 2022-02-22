@@ -53,7 +53,7 @@
 	to_chat(usr, "The implanted explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
 	addHear()
 	source.register_event(/event/emote, src, .proc/trigger)
-	score["implant_phrases"] += "[usr.real_name] ([get_key(usr)]) rigged [imp_in.real_name] to explode on the phrase <font color='red'>\"[phrase]\"</font>!"
+	score.implant_phrases += "[usr.real_name] ([get_key(usr)]) rigged [imp_in.real_name] to explode on the phrase <font color='red'>\"[phrase]\"</font>!"
 	return 1
 
 /obj/item/weapon/implant/explosive/emp_act(severity)

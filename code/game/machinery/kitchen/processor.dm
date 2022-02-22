@@ -110,7 +110,7 @@
 		S.forceMove(loc)
 		S.visible_message("<span class='notice'>[S] crawls free of the processor!</span>")
 		return
-	score["slimes"]++
+	score.slimes++
 	for(var/i = 1, i <= C, i++)
 		new S.coretype(loc)
 		feedback_add_details("slime_core_harvested","[replacetext(S.colour," ","_")]")

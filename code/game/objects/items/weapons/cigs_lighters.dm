@@ -360,7 +360,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	lit = 1 //All checks that could have stopped the cigarette are done, let us begin
-	score["tobacco"]++
+	score.tobacco++
 
 	flags &= ~NOREACT //Allow reagents to react after being lit
 	clothing_flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
@@ -717,7 +717,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
 		lit = 1
-		score["tobacco"]++
+		score.tobacco++
 		damtype = BURN
 		update_brightness()
 		var/turf/T = get_turf(src)

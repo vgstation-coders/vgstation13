@@ -51,7 +51,7 @@
 				for(var/O in B.stored_ores)
 					var/amount = B.stored_ores[O]
 					SmeltOreType(O, amount)
-					score["oremined"] += amount
+					score.oremined += amount
 		else
 			for(var/i = 0; i < 10; i++)
 				var/obj/item/stack/ore/O = locate() in in_T
@@ -59,7 +59,7 @@
 					continue //Skip slag for now.
 				if(O)
 					SmeltMineral(O)
-					score["oremined"] += O.amount
+					score.oremined += O.amount
 				else
 					break
 

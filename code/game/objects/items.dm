@@ -1353,7 +1353,6 @@ var/global/list/image/blood_overlays = list()
 	else
 		M.LAssailant = user
 		M.assaulted_by(user)
-
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
 

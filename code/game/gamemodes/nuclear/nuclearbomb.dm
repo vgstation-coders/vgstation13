@@ -241,7 +241,7 @@ var/list/nuclear_bombs = list()
 					else
 						src.icon_state = "nuclearbomb1"
 						bomb_set = 0
-						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						score.nukedefuse = min(src.timeleft, score.nukedefuse)
 						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 						if (istype(dynamic_mode))
 							dynamic_mode.update_stillborn_rulesets()
@@ -250,7 +250,7 @@ var/list/nuclear_bombs = list()
 					if(safety)
 						src.timing = 0
 						bomb_set = 0
-						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						score.nukedefuse = min(src.timeleft, score.nukedefuse)
 						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 						if (istype(dynamic_mode))
 							dynamic_mode.update_stillborn_rulesets()
