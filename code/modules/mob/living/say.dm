@@ -194,10 +194,10 @@ var/list/headset_modes = list(
 	if(src.mind && (src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER)))
 		for(var/syn in syndicate_code_phrase)
 			if(findtext(speech.message, syn))
-				score["syndiphrases"] += 1
+				score.syndiphrases += 1
 		for(var/syn in syndicate_code_response)
 			if(findtext(speech.message, syn))
-				score["syndisponses"] += 1
+				score.syndisponses += 1
 
 	var/message_range = 7
 	treat_speech(speech)

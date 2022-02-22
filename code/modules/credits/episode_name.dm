@@ -30,10 +30,10 @@
 		if(15)
 			thename += ": THE SEASON FINALE"
 		if(16 to 40)
-			if(score["time"] > 60 * 60 * 3) //3 hours
+			if(score.time > 60 * 60 * 3) //3 hours
 				thename += ": THE FEATURE LENGTH PRESENTATION"
 		if(41 to 65)
-			if(score["time"] > 0 && score["time"] < 60 * 30) //30 min
+			if(score.time > 0 && score.time < 60 * 30) //30 min
 				thename += ": ABRIDGED"
 		else
 			for(var/client/C in clients)
@@ -59,20 +59,20 @@
 	"THE CURIOUS CASE OF [uppr_name]", "ONE HELL OF A PARTY", "FOR YOUR CONSIDERATION", "PRESS YOUR LUCK", "A STATION CALLED [uppr_name]", "CRIME AND PUNISHMENT", "MY DINNER WITH [uppr_name]", "UNFINISHED BUSINESS", "THE ONLY STATION THAT'S NOT ON FIRE (YET)", "SOMEONE'S GOTTA DO IT", "THE [uppr_name] MIX-UP", "PILOT", "PROLOGUE", "FINALE", "UNTITLED", "THE END")]")
 	episode_names += new /datum/episode_name("[pick("SPACE", "SEXY", "DRAGON", "WARLOCK", "LAUNDRY", "GUN", "ADVERTISING", "DOG", "CARBON MONOXIDE", "NINJA", "WIZARD", "SOCRATIC", "JUVENILE DELIQUENCY", "POLITICALLY MOTIVATED", "RADTACULAR SICKNASTY", "CORPORATE", "MEGA")] [pick("QUEST", "FORCE", "ADVENTURE")]", weight=25)
 
-	switch(score["crewscore"])
+	switch(score.crewscore)
 		if(-INFINITY to -2000)
-			episode_names += new /datum/episode_name("[pick("THE CREW'S PUNISHMENT", "A PUBLIC RELATIONS NIGHTMARE", "[uppr_name]: A NATIONAL CONCERN", "WITH APOLOGIES TO THE CREW", "THE CREW BITES THE DUST", "THE CREW BLOWS IT", "THE CREW GIVES UP THE DREAM", "THE CREW IS DONE FOR", "THE CREW SHOULD NOT BE ALLOWED ON TV", "THE END OF [uppr_name] AS WE KNOW IT")]", "Extremely low score of [score["crewscore"]].", 250)
+			episode_names += new /datum/episode_name("[pick("THE CREW'S PUNISHMENT", "A PUBLIC RELATIONS NIGHTMARE", "[uppr_name]: A NATIONAL CONCERN", "WITH APOLOGIES TO THE CREW", "THE CREW BITES THE DUST", "THE CREW BLOWS IT", "THE CREW GIVES UP THE DREAM", "THE CREW IS DONE FOR", "THE CREW SHOULD NOT BE ALLOWED ON TV", "THE END OF [uppr_name] AS WE KNOW IT")]", "Extremely low score of [score.crewscore].", 250)
 		if(4500 to INFINITY)
-			episode_names += new /datum/episode_name("[pick("THE CREW'S DAY OUT", "THIS SIDE OF PARADISE", "[uppr_name]: A SITUATION COMEDY", "THE CREW'S LUNCH BREAK", "THE CREW'S BACK IN BUSINESS", "THE CREW'S BIG BREAK", "THE CREW SAVES THE DAY", "THE CREW RULES THE WORLD", "THE ONE WITH ALL THE SCIENCE AND PROGRESS AND PROMOTIONS AND ALL THE COOL AND GOOD THINGS", "THE TURNING POINT")]", "High score of [score["crewscore"]].", 250)
+			episode_names += new /datum/episode_name("[pick("THE CREW'S DAY OUT", "THIS SIDE OF PARADISE", "[uppr_name]: A SITUATION COMEDY", "THE CREW'S LUNCH BREAK", "THE CREW'S BACK IN BUSINESS", "THE CREW'S BIG BREAK", "THE CREW SAVES THE DAY", "THE CREW RULES THE WORLD", "THE ONE WITH ALL THE SCIENCE AND PROGRESS AND PROMOTIONS AND ALL THE COOL AND GOOD THINGS", "THE TURNING POINT")]", "High score of [score.crewscore].", 250)
 
 	if(istype(ticker.mode, /datum/gamemode/dynamic))
 		var/datum/gamemode/dynamic/mode = ticker.mode
 		switch(mode.threat_level)
 			if(0 to 35)
 				episode_names += new /datum/episode_name("[pick("THE DAY [uppr_name] STOOD STILL", "MUCH ADO ABOUT NOTHING", "WHERE SILENCE HAS LEASE", "RED HERRING", "HOME ALONE", "GO BIG OR GO [uppr_name]", "PLACEBO EFFECT", "ECHOES", "SILENT PARTNERS", "WITH FRIENDS LIKE THESE...", "EYE OF THE STORM", "BORN TO BE MILD", "STILL WATERS")]", "Low threat level of [mode.threat_level]%.", 150)
-				if(score["crewscore"] < -1000)
-					episode_names += new /datum/episode_name/rare("[pick("HOW OH HOW DID IT ALL GO SO WRONG?!", "EXPLAIN THIS ONE TO THE EXECUTIVES", "THE CREW GOES ON SAFARI", "OUR GREATEST ENEMY", "THE INSIDE JOB", "MURDER BY PROXY")]", "Low threat level of [mode.threat_level]%... but the crew still had a very low score.", score["crewscore"]/150*-2)
-				if(score["time"] > 60 * 60 * 3) //3 hours
+				if(score.crewscore < -1000)
+					episode_names += new /datum/episode_name/rare("[pick("HOW OH HOW DID IT ALL GO SO WRONG?!", "EXPLAIN THIS ONE TO THE EXECUTIVES", "THE CREW GOES ON SAFARI", "OUR GREATEST ENEMY", "THE INSIDE JOB", "MURDER BY PROXY")]", "Low threat level of [mode.threat_level]%... but the crew still had a very low score.", score.crewscore/150*-2)
+				if(score.time > 60 * 60 * 3) //3 hours
 					episode_names += new /datum/episode_name/rare("THE LONG NIGHT", "Low threat level of [mode.threat_level]%, and the round lasted over three hours.", 300)
 			if(35 to 60)
 				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppr_name]!", "THE [uppr_name] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA", "THE PRANK THAT WENT WAY TOO FAR", "A HOUSE DIVIDED", "[uppr_name] TO THE RESCUE!", "ESCAPE FROM [uppr_name]", \
@@ -80,9 +80,9 @@
 			if(60 to 100)
 				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppr_name]", "BATTLE OF [uppr_name]", \
 				"THE SHOWDOWN", "MANHUNT", "THE ONE WITH ALL THE FIGHTING", "THE RECKONING OF [uppr_name]", "THERE GOES THE NEIGHBORHOOD", "THE THIN RED LINE", "ONE DAY FROM RETIREMENT")]", "High threat level of [mode.threat_level]%.", 250)
-				if(score["crewscore"] > 3000)
-					episode_names += new /datum/episode_name/rare("[pick("THE OPPORTUNITY OF A LIFETIME", "DRASTIC MEASURES", "DEUS EX", "THE SHOW MUST GO ON", "TRIAL BY FIRE", "A STITCH IN TIME", "ALL'S FAIR IN LOVE AND WAR", "COME HELL OR HIGH HEAVEN", "REVERSAL OF FORTUNE", "DOUBLE TOIL AND DOUBLE TROUBLE")]", "High threat level of [mode.threat_level]%... but the crew still had a very high score!", score["crewscore"]/50)
-				if(score["time"] > 60 * 55 && score["time"] < 60 * 65) //55-65 minutes
+				if(score.crewscore > 3000)
+					episode_names += new /datum/episode_name/rare("[pick("THE OPPORTUNITY OF A LIFETIME", "DRASTIC MEASURES", "DEUS EX", "THE SHOW MUST GO ON", "TRIAL BY FIRE", "A STITCH IN TIME", "ALL'S FAIR IN LOVE AND WAR", "COME HELL OR HIGH HEAVEN", "REVERSAL OF FORTUNE", "DOUBLE TOIL AND DOUBLE TROUBLE")]", "High threat level of [mode.threat_level]%... but the crew still had a very high score!", score.crewscore/50)
+				if(score.time > 60 * 55 && score.time < 60 * 65) //55-65 minutes
 					episode_names += new /datum/episode_name/rare("RUSH HOUR", "High threat level of [mode.threat_level]%, and the round lasted just about an hour.", 500)
 				if(get_station_avg_temp() < T0C)
 					episode_names += new /datum/episode_name/rare("A COLD DAY IN HELL", "Station temperature was below 0C this round and threat was high", 1000)
@@ -101,8 +101,8 @@
 		else
 			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear) in mode.executed_rules))
 				episode_names += new /datum/episode_name/rare("[pick("THE CREW SOLVES THE NUCLEAR CRISIS", "BLAST, FOILED AGAIN", "FISSION MAILED", 50;"I OPENED THE WINDOW, AND IN FLEW COPS")]", "The crew defeated the nuclear operatives.", 350)
-			if(score["nukedefuse"] < 30)
-				episode_names += new /datum/episode_name/rare("[score["nukedefuse"]] SECOND[score["nukedefuse"] == 1 ? "" : "S"] TO MIDNIGHT", "The nuke was defused with [score["nukedefuse"]] seconds remaining.", (30 - score["nukedefuse"]) * 100)
+			if(score.nukedefuse < 30)
+				episode_names += new /datum/episode_name/rare("[score.nukedefuse] SECOND[score.nukedefuse == 1 ? "" : "S"] TO MIDNIGHT", "The nuke was defused with [score.nukedefuse] seconds remaining.", (30 - score.nukedefuse) * 100)
 
 	if(narsie_list.len > 0)
 		episode_names += new /datum/episode_name/rare("[pick("NAR-SIE'S DAY OUT", "NAR-SIE'S VACATION", "THE CREW LEARNS ABOUT SACRED GEOMETRY", "REALM OF THE MAD GOD", "THE ONE WITH THE ELDRITCH HORROR", 50;"STUDY HARD, BUT PART-SIE HARDER")]", "Nar-Sie is loose!", 500)
@@ -110,49 +110,49 @@
 
 	if(SNOW_THEME)
 		episode_names += new /datum/episode_name("A VERY [pick("NANOTRASEN", "EXPEDITIONARY", "SECURE", "PLASMA", "MARTIAN")] CHRISTMAS", "'Tis the season.", 1000)
-	if(score["gunsspawned"] > 0)
-		episode_names += new /datum/episode_name/rare("[pick("GUNS, GUNS EVERYWHERE", "THUNDER GUN EXPRESS", "THE CREW GOES AMERICA ALL OVER EVERYBODY'S ASS")]", "[score["gunsspawned"]] guns were spawned this round.", min(750, score["gunsspawned"]*25))
-	if(score["dimensionalpushes"] > 6)
-		episode_names += new /datum/episode_name/rare("THE CREW GETS PUSHED TOO FAR", "[score["dimensionalpushes"]] things were dimensionalpush'd this round.", min(1500, score["dimensionalpushes"]*35))
-	if(score["assesblasted"] > 4)
-		episode_names += new /datum/episode_name/rare("A SONG OF ASS AND FIRE", "[score["assesblasted"]] people were magically assblasted this round.", min(1500, score["assesblasted"]*100))
-	if(score["assesblasted"] > 3 && score["random_soc"] > 4)
-		episode_names += new /datum/episode_name/rare("WINDS OF CHANGE", "A combination of asses blasted, and the staff of change.", min(1500, score["assesblasted"]*75 + score["random_soc"]*75))
-	if(score["greasewiz"] > 7 && score["lightningwiz"] > 7)
-		episode_names += new /datum/episode_name/rare("GREASED LIGHTNING", "A combination of the Grease and Lightning spells.", min(1500, score["greasewiz"]*45 + score["lightningwiz"]*45))
-	if(score["lightningwiz"] > 12)
-		episode_names += new /datum/episode_name/rare("[pick("SHOCK AND AWE", "SHOCK THERAPY")]", "[score["lightningwiz"]] people were shocked this round.", min(1500, score["lightningwiz"]*75))
-	if(score["heartattacks"] > 4)
-		episode_names += new /datum/episode_name/rare("MY HEART WILL GO ON", "[score["heartattacks"]] hearts were reanimated and burst out of someone's chest this round.", min(1500, score["heartattacks"]*250))
-	if(score["richestcash"] > 30000)
-		episode_names += new /datum/episode_name/rare("[pick("WAY OF THE WALLET", "THE IRRESISTIBLE RISE OF [uppertext(score["richestname"])]", "PRETTY PENNY", "IT'S THE ECONOMY, STUPID")]", "Scrooge Mc[score["richestkey"]] racked up [score["richestcash"]] credits this round.", min(450, score["richestcash"]/500))
-	if(score["deadaipenalty"] > 3)
-		episode_names += new /datum/episode_name/rare("THE ONE WHERE [score["deadaipenalty"]] AIS DIE", "That's a lot of dead AIs.", min(1500, score["deadaipenalty"]*300))
-	if(score["lawchanges"] > 12)
-		episode_names += new /datum/episode_name/rare("[pick("THE CREW LEARNS ABOUT LAWSETS", 15;"THE UPLOAD RAILROAD", 15;"FREEFORM", 15;"ASIMOV SAYS")]", "There were [score["lawchanges"]] law changes this round.", min(750, score["lawchanges"]*25))
-	if(score["slips"] > 100)
-		episode_names += new /datum/episode_name/rare("THE CREW GOES BANANAS", "[score["slips"]] people slipped this round.", min(500, score["slips"]/2))
-	if(score["buttbotfarts"] > 100)
-		episode_names += new /datum/episode_name/rare("DO BUTTBOTS DREAM OF ELECTRIC FARTS?", "[score["buttbotfarts"]] messages were mimicked by buttbots this round.", min(500, score["buttbotfarts"]/3))
-	if(score["clownabuse"] > 75)
-		episode_names += new /datum/episode_name/rare("EVERYBODY LOVES A CLOWN", "[score["clownabuse"]] instances of clown abuse this round.", min(350, score["clownabuse"]*2))
-	if(score["maxpower"] > HUNDRED_MEGAWATTS && (locate(/mob/living/silicon/robot/mommi) in mob_list))
-		episode_names += new /datum/episode_name/rare("WHAT HAPPENS WHEN YOU MIX MOMMIS AND COMMERCIAL-GRADE PACKING FOAM", "There was a powergrid with [score["maxpower"]]W, and 1 or more MoMMIs playing.", 250)
-	if(score["turfssingulod"] > 200)
-		episode_names += new /datum/episode_name/rare("[pick("THE SINGULARITY GETS LOOSE", "THE SINGULARITY GETS LOOSE (AGAIN)", "CONTAINMENT FAILURE", "THE GOOSE IS LOOSE", 50;"THE CREW'S ENGINE SUCKS", 50;"THE CREW GOES DOWN THE DRAIN")]", "The Singularity ate [score["turfssingulod"]] turfs this round.", min(1000, score["turfssingulod"]/2)) //no "singularity's day out" please we already have enough
-	if(score["shardstouched"] > 0)
-		episode_names += new /datum/episode_name/rare("[pick("HIGH EFFECT ENGINEERING", 25;"THE CREW'S ENGINE BLOWS", 25;"NEVER GO SHARD TO SHARD")]", "This is what happens when two shards touch.", min(2000, score["shardstouched"]*750))
-	if(score["kudzugrowth"] > 150)
-		episode_names += new /datum/episode_name/rare("[pick("REAP WHAT YOU SOW", "OUT OF THE WOODS", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]*2))
-	if(score["disease"] >= score["escapees"] && score["escapees"] > 5)
-		episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score["disease"]] disease points this round.", min(500, (score["disease"]*25) * (score["disease"]/score["escapees"])))
+	if(score.gunsspawned > 0)
+		episode_names += new /datum/episode_name/rare("[pick("GUNS, GUNS EVERYWHERE", "THUNDER GUN EXPRESS", "THE CREW GOES AMERICA ALL OVER EVERYBODY'S ASS")]", "[score.gunsspawned] guns were spawned this round.", min(750, score.gunsspawned*25))
+	if(score.dimensionalpushes > 6)
+		episode_names += new /datum/episode_name/rare("THE CREW GETS PUSHED TOO FAR", "[score.dimensionalpushes] things were dimensionalpush'd this round.", min(1500, score.dimensionalpushes*35))
+	if(score.assesblasted > 4)
+		episode_names += new /datum/episode_name/rare("A SONG OF ASS AND FIRE", "[score.assesblasted] people were magically assblasted this round.", min(1500, score.assesblasted*100))
+	if(score.assesblasted > 3 && score.random_soc > 4)
+		episode_names += new /datum/episode_name/rare("WINDS OF CHANGE", "A combination of asses blasted, and the staff of change.", min(1500, score.assesblasted*75 + score.random_soc*75))
+	if(score.greasewiz > 7 && score.lightningwiz > 7)
+		episode_names += new /datum/episode_name/rare("GREASED LIGHTNING", "A combination of the Grease and Lightning spells.", min(1500, score.greasewiz*45 + score.lightningwiz*45))
+	if(score.lightningwiz > 12)
+		episode_names += new /datum/episode_name/rare("[pick("SHOCK AND AWE", "SHOCK THERAPY")]", "[score.lightningwiz] people were shocked this round.", min(1500, score.lightningwiz*75))
+	if(score.heartattacks > 4)
+		episode_names += new /datum/episode_name/rare("MY HEART WILL GO ON", "[score.heartattacks] hearts were reanimated and burst out of someone's chest this round.", min(1500, score.heartattacks*250))
+	if(score.richestcash > 30000)
+		episode_names += new /datum/episode_name/rare("[pick("WAY OF THE WALLET", "THE IRRESISTIBLE RISE OF [uppertext(score.richestname)]", "PRETTY PENNY", "IT'S THE ECONOMY, STUPID")]", "Scrooge Mc[score.richestkey] racked up [score.richestcash] credits this round.", min(450, score.richestcash/500))
+	if(score.deadaipenalty > 3)
+		episode_names += new /datum/episode_name/rare("THE ONE WHERE [score.deadaipenalty] AIS DIE", "That's a lot of dead AIs.", min(1500, score.deadaipenalty*300))
+	if(score.lawchanges > 12)
+		episode_names += new /datum/episode_name/rare("[pick("THE CREW LEARNS ABOUT LAWSETS", 15;"THE UPLOAD RAILROAD", 15;"FREEFORM", 15;"ASIMOV SAYS")]", "There were [score.lawchanges] law changes this round.", min(750, score.lawchanges*25))
+	if(score.slips > 100)
+		episode_names += new /datum/episode_name/rare("THE CREW GOES BANANAS", "[score.slips] people slipped this round.", min(500, score.slips/2))
+	if(score.buttbotfarts > 100)
+		episode_names += new /datum/episode_name/rare("DO BUTTBOTS DREAM OF ELECTRIC FARTS?", "[score.buttbotfarts	] messages were mimicked by buttbots this round.", min(500, score.buttbotfarts/3))
+	if(score.clownabuse > 75)
+		episode_names += new /datum/episode_name/rare("EVERYBODY LOVES A CLOWN", "[score.clownabuse] instances of clown abuse this round.", min(350, score.clownabuse*2))
+	if(score.maxpower > HUNDRED_MEGAWATTS && (locate(/mob/living/silicon/robot/mommi) in mob_list))
+		episode_names += new /datum/episode_name/rare("WHAT HAPPENS WHEN YOU MIX MOMMIS AND COMMERCIAL-GRADE PACKING FOAM", "There was a powergrid with [score.maxpower]W, and 1 or more MoMMIs playing.", 250)
+	if(score.turfssingulod > 200)
+		episode_names += new /datum/episode_name/rare("[pick("THE SINGULARITY GETS LOOSE", "THE SINGULARITY GETS LOOSE (AGAIN)", "CONTAINMENT FAILURE", "THE GOOSE IS LOOSE", 50;"THE CREW'S ENGINE SUCKS", 50;"THE CREW GOES DOWN THE DRAIN")]", "The Singularity ate [score.turfssingulod] turfs this round.", min(1000, score.turfssingulod/2)) //no "singularity's day out" please we already have enough
+	if(score.shardstouched > 0)
+		episode_names += new /datum/episode_name/rare("[pick("HIGH EFFECT ENGINEERING", 25;"THE CREW'S ENGINE BLOWS", 25;"NEVER GO SHARD TO SHARD")]", "This is what happens when two shards touch.", min(2000, score.shardstouched*750))
+	if(score.kudzugrowth > 150)
+		episode_names += new /datum/episode_name/rare("[pick("REAP WHAT YOU SOW", "OUT OF THE WOODS", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score.kudzugrowth] tiles worth of Kudzu were grown in total this round.", min(1500, score.kudzugrowth*2))
+	if(score.disease >= score.escapees && score.escapees > 5)
+		episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score.disease] disease points this round.", min(500, (score.disease*25) * (score.disease/score.escapees)))
 	var/list/p_hotspot = SSair.processing_parts[SSAIR_HOTSPOT]
 	if(p_hotspot.len > 200) // List of turfs on fire length
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[p_hotspot.len] turfs were on fire by the end of the round.", min(1000, p_hotspot.len/2))
-	if(score["largeexplosions"] >= 6)
-		episode_names += new /datum/episode_name/rare("THE CREW HAS A BLAST", "[score["largeexplosions"]] large explosions happened this round.", min(1000, score["largeexplosions"]*100))
-	if(score["shuttlebombed"] >= score["escapees"] && score["escapees"] > 5)
-		episode_names += new /datum/episode_name/rare("ON A WING AND A PRAYER", "The shuttle was bombed but [score["escapees"]] people escaped anyways.", min(1000, score["shuttlebombed"]*200))
+	if(score.largeexplosions >= 6)
+		episode_names += new /datum/episode_name/rare("THE CREW HAS A BLAST", "[score.largeexplosions] large explosions happened this round.", min(1000, score.largeexplosions*100))
+	if(score.shuttlebombed >= score.escapees && score.escapees > 5)
+		episode_names += new /datum/episode_name/rare("ON A WING AND A PRAYER", "The shuttle was bombed but [score.escapees] people escaped anyways.", min(1000, score.shuttlebombed*200))
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
@@ -166,10 +166,10 @@
 			episode_names += new /datum/episode_name/rare("[pick("WHERE NO DOG HAS GONE BEFORE", "IAN SAYS", "IAN'S DAY OUT", "EVERY DOG HAS ITS DAY", "THE ONE WITH THE MAGIC PUPPY")]", "You know what you did.", 1000)
 			break
 
-	if(score["greasewiz"] > 4)
+	if(score.greasewiz > 4)
 		for(var/mob/living/carbon/monkey/M in mob_list)
 			if(M.spell_list.len && (locate(/spell/targeted/grease) in M.spell_list))
-				episode_names += new /datum/episode_name/rare("GREASE MONKEY", "A successful Grease wizard got monkeyed.", score["greasewiz"]*100)
+				episode_names += new /datum/episode_name/rare("GREASE MONKEY", "A successful Grease wizard got monkeyed.", score.greasewiz*100)
 				break
 
 	if(ticker && ticker.shuttledocked_time != -1 && emergency_shuttle.location == map.zCentcomm)
@@ -185,15 +185,15 @@
 					human_escapees |= M
 
 			if(ticker.shuttledocked_time - ticker.gamestart_time < SHUTTLEARRIVETIME + SHUTTLEGRACEPERIOD + 60) //shuttle docked in less than 16 minutes!!
-				episode_names += new /datum/episode_name/rare("[pick("THE CAPTAIN STUBS THEIR TOE", "QUICK GETAWAY", "A MOST EFFICIENT APOCALYPSE", "THE CREW'S [round(score["time"]/60)] MINUTES OF FAME", "ON SECOND THOUGHT, LET'S NOT GO TO [uppr_name]. 'TIS A SILLY PLACE.")]", "This round was about as short as they come.", 750)
-				if(score["escapees"] == 0)
+				episode_names += new /datum/episode_name/rare("[pick("THE CAPTAIN STUBS THEIR TOE", "QUICK GETAWAY", "A MOST EFFICIENT APOCALYPSE", "THE CREW'S [round(score.time/60)] MINUTES OF FAME", "ON SECOND THOUGHT, LET'S NOT GO TO [uppr_name]. 'TIS A SILLY PLACE.")]", "This round was about as short as they come.", 750)
+				if(score.escapees == 0)
 					episode_names += new /datum/episode_name/rare("DRY RUN", "This round was as short as they come, and there were no escapees.", 2500)
-			if(score["deadcrew"] == 0)
-				episode_names += new /datum/episode_name/rare("[pick("EMPLOYEE TRANSFER", "LIVE LONG AND PROSPER", "PEACE AND QUIET IN [uppr_name]", "THE ONE WITHOUT ALL THE FIGHTING", "THE CREW TRIES TO KILL A FLY FOR [round(score["time"]/60)] MINUTES")]", "No-one died this round.", 2500) //in practice, this one is very very very rare, so if it happens let's pick it more often
-			if(score["escapees"] == 0 && ticker && ticker.shuttledocked_time != -1)
+			if(score.deadcrew == 0)
+				episode_names += new /datum/episode_name/rare("[pick("EMPLOYEE TRANSFER", "LIVE LONG AND PROSPER", "PEACE AND QUIET IN [uppr_name]", "THE ONE WITHOUT ALL THE FIGHTING", "THE CREW TRIES TO KILL A FLY FOR [round(score.time/60)] MINUTES")]", "No-one died this round.", 2500) //in practice, this one is very very very rare, so if it happens let's pick it more often
+			if(score.escapees == 0 && ticker && ticker.shuttledocked_time != -1)
 				episode_names += new /datum/episode_name("[pick("DEAD SPACE", "THE CREW GOES MISSING", "LOST IN TRANSLATION", "[uppr_name]: DELETED SCENES", "WHAT HAPPENS IN [uppr_name], STAYS IN [uppr_name]", "MISSING IN ACTION", "SCOOBY-DOO, WHERE'S THE CREW?")]", "There were no escapees on the shuttle.", 300)
-			if(score["escapees"] < 6 && score["escapees"] > 0 && score["deadcrew"] > score["escapees"]*2)
-				episode_names += new /datum/episode_name("[pick("AND THEN THERE WERE FEWER", "THE 'FUN' IN 'FUNERAL'", "FREEDOM RIDE OR DIE", "THINGS WE LOST IN [uppr_name]", "GONE WITH [uppr_name]", "LAST TANGO IN [uppr_name]", "GET BUSY LIVING OR GET BUSY DYING", "THE CREW FUCKING DIES", "WISH YOU WERE HERE")]", "[score["deadcrew"]] people died this round.", 400)
+			if(score.escapees < 6 && score.escapees > 0 && score.deadcrew > score.escapees*2)
+				episode_names += new /datum/episode_name("[pick("AND THEN THERE WERE FEWER", "THE 'FUN' IN 'FUNERAL'", "FREEDOM RIDE OR DIE", "THINGS WE LOST IN [uppr_name]", "GONE WITH [uppr_name]", "LAST TANGO IN [uppr_name]", "GET BUSY LIVING OR GET BUSY DYING", "THE CREW FUCKING DIES", "WISH YOU WERE HERE")]", "[score.deadcrew] people died this round.", 400)
 
 			var/clowncount = 0
 			var/mimecount = 0
@@ -264,8 +264,8 @@
 					episode_names += new /datum/episode_name/rare("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*250))
 				if(voxcount / human_escapees.len > 0.6 && emergency_shuttle.was_early_launched)
 					episode_names += new /datum/episode_name/rare("EARLY BIRD GETS THE WORM", "Most or all of the survivors were Vox, and the shuttle timer was shortened.", 1500)
-				if(voxcount / human_escapees.len > 0.6 && score["shuttlebombed"] > 3)
-					episode_names += new /datum/episode_name/rare("SITTING DUCKS", "Most or all of the survivors were Vox, and the shuttle was bombed.", min(1500,score["shuttlebombed"]*3))
+				if(voxcount / human_escapees.len > 0.6 && score.shuttlebombed > 3)
+					episode_names += new /datum/episode_name/rare("SITTING DUCKS", "Most or all of the survivors were Vox, and the shuttle was bombed.", min(1500,score.shuttlebombed*3))
 				if(dionacount / human_escapees.len > 0.6)
 					episode_names += new /datum/episode_name/rare("[pick("ALL BARK AND NO BITE", "THE CREW GETS STUMPED")]", "Most of the survivors were Diona.", min(1500, dionacount*350))
 				if(baldycount / human_escapees.len > 0.6 && human_escapees.len > 3)
@@ -298,7 +298,7 @@
 						chance += 250
 					episode_names += new /datum/episode_name/rare("HAIL TO THE CHEF", "The Chef was the only survivor in the shuttle.", chance)
 					if(p_hotspot.len > 200) // List of turfs on fire length
-						episode_names += new /datum/episode_name/rare("IF YOU CAN'T STAND THE HEAT...", "The Chef was the only survivor in the shuttle and [score["turfsonfire"]] turfs were on fire.", min(chance, score["turfsonfire"]/2))
+						episode_names += new /datum/episode_name/rare("IF YOU CAN'T STAND THE HEAT...", "The Chef was the only survivor in the shuttle and [score.turfsonfire] turfs were on fire.", min(chance, score.turfsonfire/2))
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Clown")
 					var/chance = 250
 					if(H.is_wearing_item(/obj/item/clothing/mask/gas/clown_hat))
@@ -384,7 +384,7 @@
 				var/shoecount = 0
 				for(var/obj/item/clothing/shoes/S in shuttle) //they gotta be on the floor
 					shoecount++
-				if(shoecount > 5 || score["shoesnatches"] > 10)
+				if(shoecount > 5 || score.shoesnatches > 10)
 					episode_names += new /datum/episode_name/rare("THE SOLE SURVIVOR", "There was only one survivor in the shuttle, and they didn't forget their shoes.", 2500) //I'm not sorry
 
 				var/headcount = 0
@@ -407,7 +407,8 @@
 					livingmobcount += 1
 				if(wolfcount == 1 && livingmobcount == 1)
 					episode_names += new /datum/episode_name/rare("LONE WOLF", "...", 1500)
-			else //more than 0 human escapees
+			else 
+				//more than 0 human escapees
 				var/braindamage_total = 0
 				var/all_retarded = TRUE
 				for(var/mob/living/carbon/human/H in human_escapees)
@@ -449,7 +450,7 @@
 				episode_names += new /datum/episode_name/rare("REALM OF THE RAD GOD", "Someone dragged \a [SM] onto the shuttle.", 1500)
 				break
 
-			if(score["random_soc"] > 7)
+			if(score.random_soc > 7)
 				var/list/nasty_things = list()
 				var/list/adjectives = list()
 

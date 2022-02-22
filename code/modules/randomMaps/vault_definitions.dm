@@ -66,6 +66,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/hivebot_factory
 	file_path = "maps/randomvaults/hivebot_factory.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/pretty_rad_clubhouse
 	file_path = "maps/randomvaults/pretty_rad_clubhouse.dmm"
@@ -186,6 +187,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/zoo_truck
 	file_path = "maps/randomvaults/zoo_truck.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/syndiecargo
 	file_path = "maps/randomvaults/syndiecargo.dmm"

@@ -1732,7 +1732,7 @@ Thanks.
 	stop_pulling()
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
-	score["slips"]++
+	score.slips++
 	return 1
 
 ///////////////////////DISEASE STUFF///////////////////////////////////////////////////////////////////

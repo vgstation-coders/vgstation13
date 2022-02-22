@@ -77,7 +77,7 @@ var/list/event_last_fired = list()
 	//and start working via the constructor.
 	new picked_event
 
-	score["eventsendured"]++
+	score.eventsendured++
 
 	message_admins("[picked_event] firing. Time to have fun.")
 

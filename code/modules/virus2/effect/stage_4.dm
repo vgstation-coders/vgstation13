@@ -556,7 +556,7 @@
 				spawn_turfs.Add(get_turf(H))
 			var/mob/living/simple_animal/hostile/heart_attack/HA = new(pick(spawn_turfs))
 			HA.update_heart(blown_heart,H.dna,virus_copylist(H.virus2))
-			score["heartattacks"]++
+			score.heartattacks++
 			qdel(blown_heart)
 
 /datum/disease2/effect/wizarditis
