@@ -3749,7 +3749,7 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/lotto
 
 
-/proc/obj/machinery/vending/lotto/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend, var/mob/living/carbon/human/character, var/winnings)
+/proc/obj/machinery/vending/lotto/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend,var/mob/living/carbon/human/character, var/winnings)
 		var/rank = character.mind.role_alt_title
 		var/datum/speech/speech = announcement_intercom.create_speech("[character.real_name],[rank ? " [rank]," : " visitor," ] has won [winnings] credits in the lottery!", transmitter=announcement_intercom)
 		speech.speaker = lottovend
