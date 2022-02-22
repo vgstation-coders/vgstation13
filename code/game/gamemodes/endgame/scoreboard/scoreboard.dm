@@ -78,7 +78,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/implant_phrases = list()
 	var/list/global_paintings = list()
 
-/datum/controller/gameticker/scoreboard/proc/main(var/dat = "")
+/datum/controller/gameticker/scoreboard/proc/main(var/dat)
 	var/datum/faction/syndicate/traitor/TR = find_active_faction_by_type(/datum/faction/syndicate/traitor)
 	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
@@ -87,21 +87,21 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "[ticker.mode.dat]<HR>" //figure this out
 
 	//populate scores
-	dat += medbay_score(dat)
-	dat += engineering_score(dat)
-	dat += service_score(dat)
-	dat += supply_score(dat)
-	dat += science_score(dat)
+	dat = medbay_score(dat)
+	dat = engineering_score(dat)
+	dat = service_score(dat)
+	dat = supply_score(dat)
+	dat = science_score(dat)
 	if(NO)
 		dat += nuke_op_score(NO)
 	if(RV)
 		dat += revolution_score(RV)
 	if(TR)
 		dat += syndicate_score(TR)
-	dat += silicon_score(dat)
-	dat += misc_score(dat)
+	dat += silicon_score()
+	dat = misc_score(dat)
 	
-	dat += display(dat)
+	dat = display(dat)
 	
 	round_end_info = dat
 	round_end_info_no_img = remove_images(dat)
