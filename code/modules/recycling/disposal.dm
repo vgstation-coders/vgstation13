@@ -1408,12 +1408,16 @@
 
 /obj/structure/disposalpipe/trunk/New()
 	. = ..()
-	dpdir = dir
+	update_dir()
 
 	spawn(1)
 		getlinked()
 
 	update()
+
+/obj/structure/disposalpipe/trunk/update_dir()
+	dpdir = dir
+	..()
 
 /obj/structure/disposalpipe/trunk/proc/getlinked()
 	disposal = locate() in loc
