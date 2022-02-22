@@ -118,6 +118,8 @@
 /datum/controller/gameticker/scoreboard/proc/supply_score(var/dat = "")
 	score.crewscore += score.stuffshipped * 100 //Centcom Orders fulfilled
 	score.crewscore += score.plasmashipped * 0.5 //Plasma Sheets shipped
+	score.crewscore += score.stuffforwarded * 50 //Cargo Crates forwarded
+	score.crewscore -= score.stuffnotforwarded * 25 //Cargo Crates not forwarded
 	score.crewscore += score.oremined //Not actually counted at mining, but at processing. One ore smelted is one point
 	return dat
 
@@ -168,7 +170,7 @@
 	score.crewscore += (siliconpoints*multi)
 	if(score.deadaipenalty)
 		score.crewscore += 1000*multi //Give a harsh punishment for killing the AI
-	
+
 	if(ai_completions)
 		completions += "<h2>Silicons Laws</h2>"
 		completions += ai_completions
