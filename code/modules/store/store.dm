@@ -73,8 +73,7 @@ var/global/datum/store/centcomm_store
 	if(!charge(user,item.cost,item,merchcomp))
 		return 0
 	// Give them the item.
-	var/atom/movable/ouritem = item.deliver(user,merchcomp)
-	item.post_delivery(ouritem)
+	item.deliver(user,merchcomp)
 	if(item.stock != -1)
 		item.stock--
 	return 1
