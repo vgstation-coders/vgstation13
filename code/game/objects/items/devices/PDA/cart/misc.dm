@@ -88,7 +88,7 @@
         P.explode(U)
 
 /obj/item/weapon/cartridge/syndifake
-	name = "\improper F.R.A.M.E. PDA Cartridge"
+	name = "\improper F.R.A.M.E. Cartridge"
 	icon_state = "cart"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
 	mech_flags = MECH_SCAN_ILLEGAL
