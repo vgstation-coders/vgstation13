@@ -158,7 +158,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.turfssingulod > 0)
 		dat += "<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>"
 	if(score.disease_bad > 0)
-		"<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR><BR>"
+		dat += "<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR><BR>"
 
 	dat += "<U>THE WEIRD</U><BR>"
 /*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
@@ -246,8 +246,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
 
-	dat += "<HR><BR>
-	dat += <B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
+	dat += "<HR><BR>"
+	dat += "<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
 	score.rating = "A Rating"
 
 	switch(score.crewscore)
