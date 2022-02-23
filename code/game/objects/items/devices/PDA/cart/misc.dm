@@ -135,14 +135,12 @@
 		else
 			new_uplink.telecrystals = 0
 		var/datum/component/uplink/our_uplink = pda_device.get_component(/datum/component/uplink)
-		if(!our_uplink && ismob(pda_device.loc))
-			var/mob/M = pda_device.loc
-			if(M.mind)
-				our_uplink = M.mind.find_syndicate_uplink()
+		if(!our_uplink && U.mind)
+			our_uplink = U.mind.find_syndicate_uplink()
 		if(our_uplink)
 			new_uplink.unlock_code = our_uplink.unlock_code
+		new_uplink.locked = FALSE
 		U.show_message("<span class='notice'>Success! Unlock the PDA by entering [new_uplink.unlock_code] into it.</span>", 1)
-		INVOKE_EVENT(P, /event/pda_change_ringtone, "user" = null, "new_ringtone" = new_uplink.unlock_code)
 
 /obj/item/weapon/cartridge/syndicatedoor
 	name = "\improper Doorman Cartridge"
