@@ -3716,7 +3716,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/lotto
 	name = "\improper Lotto Tickets"
-	desc = "Wall-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed at Cargo."
+	desc = "Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed at Cargo."
 	product_slogans = list(
 		"Feeling lucky?",
 		"Money won is twice as sweet as money earned.",
