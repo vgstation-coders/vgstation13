@@ -15,8 +15,20 @@
 		var/obj/item/weapon/storage/S = thing
 		user.put_in_hands(S)
 		if(station_does_not_tip)
+			var/list/additional_types = list(
+				IRRADIATEDBEANS,
+				MUTATEDBEANS,
+				CHEESYGLOOP,
+				DIABEETUSOL,
+				HORSEMEAT,
+				BEFF,
+				TOXICWASTE,
+				MOONROCKS,
+			)
+			if(istype(S,/obj/item/weapon/storage/bag/zam_food/))
+				additional_types.Add(WATER) //Bad for greys
 			for(var/obj/item/weapon/reagent_containers/food/snacks/F in S)
-				F.make_poisonous()
+				F.make_poisonous(additional_types)
 
 //If this returns FALSE, then the button simply will not appear for the user in question.
 /datum/storeitem/proc/available_to_user(mob/user)
