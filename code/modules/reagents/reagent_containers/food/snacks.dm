@@ -149,7 +149,7 @@
 				EFFECT_DANGER_DEADLY	= 0,
 				)
 
-			new_virus.origin = "Poisoned Pizza"
+			new_virus.origin = "Poisoned [name]"
 
 			new_virus.makerandom(list(40,60),list(20,90),anti,bad,src)
 
