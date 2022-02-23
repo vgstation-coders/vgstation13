@@ -293,7 +293,7 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/banana/B = new()
 			B.name = "consolation banana"
 			B.desc = "This one seems to be enchanted..."
-			B.potency = 9001 //Honk
+			B.potency = 1337 //Honk
 			user.put_in_hands(B)
 		else
 			to_chat(user, "<span class='warning'>You overload the audio cogitators of \the [src], causing them to play a sound on every step!</span>")
