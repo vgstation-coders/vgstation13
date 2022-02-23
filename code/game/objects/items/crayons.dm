@@ -223,7 +223,7 @@ var/global/list/all_graffitis = list(
 		user.visible_message("<span class='notice'>[user] bites a chunk out of \the [src].</span>", \
 			"<span class='notice'>You bite a chunk out of \the [src].</span>")
 		user.nutrition += 5
-		score["foodeaten"]++
+		score.foodeaten++
 		if(ispath(text2path("/datum/reagent/paint/[colourName]")) && M.reagents)
 			M.reagents.add_reagent("paint_[colourName]", 10)
 		if(uses)

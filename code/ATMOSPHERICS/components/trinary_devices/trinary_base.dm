@@ -32,7 +32,7 @@
 
 /obj/machinery/atmospherics/trinary/New()
 	..()
-	initialize_directions()
+	update_dir()
 	air1 = new
 	air2 = new
 	air3 = new
@@ -40,7 +40,7 @@
 	air2.volume = starting_volume
 	air3.volume = starting_volume
 
-/obj/machinery/atmospherics/trinary/proc/initialize_directions()
+/obj/machinery/atmospherics/trinary/update_dir()
 	switch(dir)
 		if(NORTH)
 			initialize_directions = SOUTH|NORTH|EAST
@@ -50,6 +50,7 @@
 			initialize_directions = WEST|EAST|SOUTH
 		if(WEST)
 			initialize_directions = EAST|WEST|NORTH
+	..()
 
 /obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if(!(pipe.dir in list(NORTH, SOUTH, EAST, WEST)) && src.mirror) //because the dir isn't in the right set, we want to make the mirror kind

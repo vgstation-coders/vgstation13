@@ -21,7 +21,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 		return
 	icon_state = "off"
 
-/obj/machinery/gateway/shuttle_rotate()
+/obj/machinery/gateway/map_element_rotate()
 	return
 
 

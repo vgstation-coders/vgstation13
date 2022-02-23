@@ -13,7 +13,7 @@
 
 	if(mind) //To make sure we're gibbing a player, who knows
 		if(!mind.suiciding) //I don't know how that could happen, but you can't be too sure
-			score["deadsilicon"] += 1
+			score.deadsilicon += 1
 
 	living_mob_list -= src
 	dead_mob_list -= src
@@ -75,7 +75,7 @@
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
 		if(!mind.suiciding)
-			score["deadsilicon"] += 1
+			score.deadsilicon += 1
 
 	sql_report_cyborg_death(src)
 

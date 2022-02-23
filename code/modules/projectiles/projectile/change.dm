@@ -25,7 +25,7 @@
 			type = null
 
 		if(ishuman(M) && type == null)
-			score["random_soc"]++ //Just for scorekeeping. Humans that were hit by a random-type bolt.
+			score.random_soc++ //Just for scorekeeping. Humans that were hit by a random-type bolt.
 
 		var/randomize = type == null? pick(available_staff_transforms):type
 

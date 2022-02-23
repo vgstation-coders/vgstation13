@@ -70,7 +70,7 @@
 			while(R.checkIngredients(ore)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
 					ore.removeAmount(ore_id, R.ingredients[ore_id])
-					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+					score.oremined += 1 //Count this ore piece as processed for the scoreboard
 
 				new R.yieldtype(get_turf(loc))
 				sheets_this_tick++

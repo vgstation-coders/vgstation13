@@ -77,7 +77,7 @@
 				if(istype(holder, /obj/machinery/artifact))
 					var/obj/machinery/artifact/A = holder
 					if (A.analyzed)
-						score["artifacts"]++
+						score.artifacts++
 
 			spawn(20 SECONDS)
 				isolated = 0
