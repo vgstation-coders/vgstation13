@@ -117,8 +117,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	return
 
 /datum/controller/gameticker/scoreboard/proc/display()
-	var/dat = "<BR><h2>Round Statistics and Score</h2>"
-	dat += "<B><U>GENERAL STATS</U></B><BR>
+	var/dat = "<h2>Round Statistics and Score</h2>"
+	dat += "<B><U>GENERAL STATS</U></B><BR>"
 	dat += "<U>THE GOOD:</U><BR>"
 	dat += "<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score.time * 0.2)] Points)<BR>"
 	dat += "<B>Shuttle Escapees:</B> [score.escapees] ([score.escapees * 100] Points)<BR>"
@@ -133,9 +133,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Plasma Shipped:</B> [score.plasmashipped] ([score.plasmashipped * 0.5] Points)<BR>"
 	if(score.stuffshipped > 0)
 		dat += "<B>Centcom Orders Fulfilled:</B> [score.stuffshipped] ([score.stuffshipped * 100] Points)<BR>"
-	if(score.oresmined > 0)
+	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
-	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>
+	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
@@ -161,12 +161,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		"<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR><BR>"
 
 	dat += "<U>THE WEIRD</U><BR>"
-/*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"}
+/*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
 	var/profit = totalfunds - 100000
 	if (profit > 0)
 		dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
 	else if (profit < 0)
-		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"}*/
+		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"*/
 	if(score.foodeaten > 0)
 		dat += "<B>Food Eaten:</b> [score.foodeaten]<BR>"
 	if(score.clownabuse > 0)
@@ -246,8 +246,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
 
-	dat += {"<HR><BR>
-	<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"}
+	dat += "<HR><BR>
+	dat += <B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
 	score.rating = "A Rating"
 
 	switch(score.crewscore)
