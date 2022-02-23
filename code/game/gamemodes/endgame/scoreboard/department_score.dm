@@ -7,21 +7,17 @@
 			disease_score += text2num(E.badness)
 
 		//diseases only count if the mob is still alive
-		if (disease_score <3)
-			for (var/mob/living/L in mob_list)
-				if (ID in L.virus2)
-					disease_spread_count++
-					if (L.stat != DEAD)
-						score.disease_good++
-		else
-			for (var/mob/living/L in mob_list)
-				if(!L.mind) //No ballooning the negative score with infected monkeymen
-					continue
-				if (ID in L.virus2)
-					disease_spread_count++
-					if (L.stat != DEAD)
-						score.disease_bad++
-
+		
+		for (var/mob/living/L in player_list)
+			if (L.stat == DEAD)
+				continue
+			if (!(ID in L.virus2))
+				continue
+			disease_spread_count++
+			if (disease_score <3)
+				score.disease_good++
+			else
+				score.disease_bad++
 		if (disease_spread_count > score.disease_most_count)
 			score.disease_most_count = disease_spread_count
 			score.disease_most = ID
@@ -123,39 +119,40 @@
 
 /datum/controller/gameticker/scoreboard/proc/silicon_score()
 	var/ai_completions = ""
-	var/completions
-	for(var/mob/living/silicon/ai/ai in mob_list)
-		var/icon/flat = getFlatIcon(ai)
-		if(ai.stat != 2)
-			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
-		else
-			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
-		ai_completions += "<br>[ai.write_laws()]"
-
-		if (ai.connected_robots.len)
-			var/robolist = "<br><b>The AI's loyal minions were:</b> "
-			for(var/mob/living/silicon/robot/robo in ai.connected_robots)
-				if (!robo.connected_ai || !isMoMMI(robo)) // Don't report MoMMIs or unslaved robutts
-					continue
-				robolist += "[robo.name][robo.stat?" (Deactivated) (Played by: [get_key(robo)]), ":" (Played by: [get_key(robo)]), "]"
-			ai_completions += "[robolist]"
-
-	for (var/mob/living/silicon/robot/robo in mob_list)
-		if(!robo)
-			continue
-		var/icon/flat = getFlatIcon(robo)
-		if (!robo.connected_ai)
-			if (robo.stat != 2)
-				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
+	var/robot_completions = ""
+	var/pai_completions = ""
+	var/completions = ""
+	for(var/mob/living/silicon/player in player_list)
+		var/icon/flat = getFlatIcon(player)
+		if(istype(player, /mob/living/silicon/ai))
+			var/mob/living/silicon/ai/ai = player
+			if(ai.stat != DEAD)
+				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
 			else
-				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
-		else
-			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
-		ai_completions += "<br>[robo.write_laws()]"
+				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
+			ai_completions += "<br>[ai.write_laws()]"
 
-	for(var/mob/living/silicon/pai/pAI in mob_list)
-		var/icon/flat = getFlatIcon(pAI)
-		ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
+			if (ai.connected_robots.len)
+				ai_completions += "<br><b>The AI's loyal minions were:</b> "
+				for(var/mob/living/silicon/robot/robot in ai.connected_robots)
+					if (!robot.connected_ai || !isMoMMI(robot)) // Don't report MoMMIs or unslaved borgs
+						continue
+					ai_completions += "[robot.name][robot.stat?" (Deactivated) (Played by: [get_key(robot)]), ":" (Played by: [get_key(robot)]), "]"
+
+		else if(istype(player, /mob/living/silicon/robot))
+			var/mob/living/silicon/robot/robot = player
+			if (!robot.connected_ai)
+				if (robot.stat != DEAD)
+					robot_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robot.name] (Played by: [get_key(robot)]) survived as an AI-less [isMoMMI(robot)?"MoMMI":"borg"]! Its laws were:</b>"}
+				else
+					robot_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robot.name] (Played by: [get_key(robot)]) was unable to survive the rigors of being a [isMoMMI(robot)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
+			else
+				robot_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robot.name] (Played by: [get_key(robot)]) [robot.stat!=DEAD?"survived":"perished"] as a [isMoMMI(robot)?"MoMMI":"cyborg"] slaved to [robot.connected_ai]! Its laws were:</b>"}
+			robot_completions += "<br>[player.write_laws()]"
+
+		else if(istype(player, /mob/living/silicon/pai))
+			var/mob/living/silicon/pai/pAI = player
+			pai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=DEAD?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
 
 	var/siliconpoints = score.deadsilicon * 500 //Silicons certainly aren't either
 	var/multi = find_active_faction_by_type(/datum/faction/malf) ? 1 : -1 //Dead silicons on malf are good
@@ -163,8 +160,11 @@
 	if(score.deadaipenalty)
 		score.crewscore += 1000*multi //Give a harsh punishment for killing the AI
 	
-	if(ai_completions)
+	if(ai_completions || robot_completions || pai_completions)
 		completions += "<h2>Silicons Laws</h2>"
 		completions += ai_completions
+		completions += robot_completions
+		completions += pai_completions
 		completions += "<HR>"
-		return completions
+		
+	return completions
