@@ -141,6 +141,8 @@
 			new_uplink.unlock_code = our_uplink.unlock_code
 		new_uplink.locked = FALSE
 		U.show_message("<span class='notice'>Success! Unlock the PDA by entering [new_uplink.unlock_code] into it.</span>", 1)
+		if(U.mind)
+			U.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([P.name]).")
 
 /obj/item/weapon/cartridge/syndicatedoor
 	name = "\improper Doorman Cartridge"
