@@ -111,58 +111,60 @@
 /obj/item/weapon/reagent_containers/food/snacks/proc/make_poisonous(var/list/additional_poisons)
 	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
-	if(prob(50))
-		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
-		var/datum/disease2/disease/new_virus = new virus_choice
+	var/static/list/possible_poisons = list(
+		BLEACH,
+		PLASMA,
+		TOXIN,
+		SOLANINE,
+		PLASTICIDE,
+		RADIUM,
+		CRYPTOBIOLIN,
+		IMPEDREZENE,
+		SOYSAUCE,
+		MINDBREAKER,
+		SPIRITBREAKER,
+		MUTAGEN,
+		BLOOD,
+	)
+	if(additional_poisons && additional_poisons.len)
+		possible_poisons += additional_poisons.Copy()
+	while(reagents.total_volume < original_total_volume)
+		var/ourpoison = pick(possible_poisons)
+		if(ourpoison == BLOOD)
+			var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+			var/datum/disease2/disease/new_virus = new virus_choice
 
-		var/list/anti = list(
-			ANTIGEN_BLOOD	= 0,
-			ANTIGEN_COMMON	= 1,
-			ANTIGEN_RARE	= 2,
-			ANTIGEN_ALIEN	= 0,
+			var/list/anti = list(
+				ANTIGEN_BLOOD	= 0,
+				ANTIGEN_COMMON	= 1,
+				ANTIGEN_RARE	= 2,
+				ANTIGEN_ALIEN	= 0,
+				)
+			var/list/bad = list(
+				EFFECT_DANGER_HELPFUL	= 0,
+				EFFECT_DANGER_FLAVOR	= 0,
+				EFFECT_DANGER_ANNOYING	= 1,
+				EFFECT_DANGER_HINDRANCE	= 2,
+				EFFECT_DANGER_HARMFUL	= 4,
+				EFFECT_DANGER_DEADLY	= 0,
+				)
+
+			new_virus.origin = "Poisoned Pizza"
+
+			new_virus.makerandom(list(40,60),list(20,90),anti,bad,src)
+
+			var/list/blood_data = list(
+				"viruses" = null,
+				"blood_DNA" = null,
+				"blood_type" = "O-",
+				"resistances" = null,
+				"trace_chem" = null,
+				"virus2" = list()
 			)
-		var/list/bad = list(
-			EFFECT_DANGER_HELPFUL	= 0,
-			EFFECT_DANGER_FLAVOR	= 0,
-			EFFECT_DANGER_ANNOYING	= 1,
-			EFFECT_DANGER_HINDRANCE	= 2,
-			EFFECT_DANGER_HARMFUL	= 4,
-			EFFECT_DANGER_DEADLY	= 0,
-			)
-
-		new_virus.origin = "Poisoned Pizza"
-
-		new_virus.makerandom(list(40,60),list(20,90),anti,bad,src)
-
-		var/list/blood_data = list(
-			"viruses" = null,
-			"blood_DNA" = null,
-			"blood_type" = "O-",
-			"resistances" = null,
-			"trace_chem" = null,
-			"virus2" = list()
-		)
-		blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
-		reagents.add_reagent(BLOOD, original_total_volume, blood_data)
-	else
-		var/static/list/possible_poisons = list(
-			BLEACH,
-			PLASMA,
-			TOXIN,
-			SOLANINE,
-			PLASTICIDE,
-			RADIUM,
-			CRYPTOBIOLIN,
-			IMPEDREZENE,
-			SOYSAUCE,
-			MINDBREAKER,
-			SPIRITBREAKER,
-			MUTAGEN,
-		)
-		if(additional_poisons && additional_poisons.len)
-			possible_poisons += additional_poisons.Copy()
-		while(reagents.total_volume < original_total_volume)
-			reagents.add_reagent(pick(possible_poisons), rand(5, 10))
+			blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+			reagents.add_reagent(ourpoison, rand(5, 10), blood_data)
+		else
+			reagents.add_reagent(ourpoison, rand(5, 10))
 
 /obj/item/weapon/reagent_containers/food/snacks/should_qdel_if_empty()
 	return TRUE
