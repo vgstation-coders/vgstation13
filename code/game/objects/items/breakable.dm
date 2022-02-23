@@ -5,16 +5,15 @@
 
 /obj/item
 	//Breakability:
-	var/breakable_flags /*Possible flags include BREAKABLE_ALL, BREAKABLE_HIT, BREAKABLE_UNARMED, BREAKABLE_WEAPON, BREAKABLE_AS_ALL, BREAKABLE_AS_THROWN, BREAKABLE_AS_MELEE, and BREAKABLE_NOMOB.
-							See setup.dm for explanations of each.*/
+	var/breakable_flags 	//Flags for different situations the item can break in. See breakable_defines.dm for the full list and explanations of each.
 	var/health_item 		//Structural integrity of the item. At 0, the item breaks. Defaults to health_item_max if unset.
 	var/health_item_max		//Maximum structural integrity of the item. Defaults to health_item if unset.
 	var/damage_armor		//Attacks of this much damage or below will glance off.
 	var/damage_resist		//Attacks stronger than damage_armor will have their damage reduced by this much.
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
 	//Fragmentation:
-	var/list/breakable_fragments //List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard.
-	var/list/fragment_amounts //List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakable_fragments.
+	var/list/breakable_fragments	//List of objects that will be produced when the item is broken apart. eg. /obj/weapon/item/shard.
+	var/list/fragment_amounts		//List of the number of fragments of each item type in breakable_fragments to be dropped. Should be either null (1 each) or the same length as breakable_fragments.
 	//Text:
 	var/damaged_examine_text	//Addendum to the description when it's damaged eg. damaged_examine_text of "It is dented."
 	var/take_hit_text 	//String or list of strings when the item is damaged but not fully broken. eg. "chipping" becomes "..., chipping it!"
@@ -62,7 +61,7 @@
 /obj/item/proc/drop_contents(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Drop the contents of the item and propel them if the item itself received a propulsive blow.
 	if(contents.len)
 		for(var/obj/item/thiscontent in contents)
-			thiscontent.loc = src.loc
+			thiscontent.forceMove(src.loc)
 			if(target && range && speed) //Propel the content if specified.
 				thiscontent.throw_at(target,range,speed,override,fly_speed)
 

@@ -1802,22 +1802,3 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define SPORTINESS_NONE 1
 #define SPORTINESS_SUGAR 1.2
 #define SPORTINESS_SPORTS_DRINK 5
-
-//Breakable items
-#define BREAKABLE_ALL 15			//Item can break by being hit, or when used to hit something as a melee or a thrown weapon.
-#define BREAKABLE_HIT	3			//Item can break by being hit with either an unarmed attack or a weapon.
-#define BREAKABLE_UNARMED 1			//Item can break by being hit with an unarmed attack.
-#define BREAKABLE_WEAPON 2			//Item can break by being hit with a weapon. This includes projectiles.
-#define BREAKABLE_AS_ALL 12			//Item can break when it's used as a melee weapon, or when it ballistically collides with something.
-#define BREAKABLE_AS_THROWN 4		//Item can break when it ballistically collides with something.
-#define BREAKABLE_AS_MELEE 8		//Item can break when it's used as a melee weapon to hit something.
-#define BREAKABLE_NOMOB	32			//Item won't break when it's used to hit or collides with a mob. Overrides other flags.
-
-//Standard damage_armor levels for breakable items. Note that if an attack exceeds damage_armor it does full damage unless lessened by damage_resist.
-#define BREAKARMOR_NOARMOR 0		//Plastically deforms at the slightest application of force.
-#define BREAKARMOR_FLIMSY 2 		//Can only resist the weakest of attacks
-#define BREAKARMOR_WEAK 5			//Can resist weak attacks
-#define BREAKARMOR_MEDIUM 10		//Resistant to most attacks
-#define BREAKARMOR_STRONG 20		//Only very powerful attacks will cause any damage
-#define BREAKARMOR_UNYIELDING 50	//Anything but a devastatingly powerful attack will glance off harmlessly
-#define BREAKARMOR_INVINCIBLE INFINITY	//Any power the world could conjure would be as a summer breeze against a stone wall

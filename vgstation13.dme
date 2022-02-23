@@ -22,6 +22,7 @@
 #include "__DEFINES\atoms.dm"
 #include "__DEFINES\blob.dm"
 #include "__DEFINES\bots.dm"
+#include "__DEFINES\breakable_defines.dm"
 #include "__DEFINES\callback.dm"
 #include "__DEFINES\cameranet.dm"
 #include "__DEFINES\carbon_defines.dm"
