@@ -296,7 +296,6 @@ var/list/nuclear_bombs = list()
 	playsound(src,'sound/machines/Alarm.ogg',100,0,5)
 	if (ticker)
 		ticker.explosion_in_progress = 1
-	sleep(100)
 
 	enter_allowed = 0
 
