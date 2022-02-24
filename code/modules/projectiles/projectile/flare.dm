@@ -20,3 +20,4 @@
 		qdel(src)
 		var/obj/item/device/flashlight/flare/newflare = new(newloc)
 		newflare.Light() //to get the thing lit
+	..()
