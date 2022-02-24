@@ -6,8 +6,6 @@
 /obj/item
 	//Breakability:
 	var/breakable_flags 	//Flags for different situations the item can break in. See breakable_defines.dm for the full list and explanations of each.
-	var/health_item 		//Structural integrity of the item. At 0, the item breaks. Defaults to health_item_max if unset.
-	var/health_item_max		//Maximum structural integrity of the item. Defaults to health_item if unset.
 	var/damage_armor		//Attacks of this much damage or below will glance off.
 	var/damage_resist		//Attacks stronger than damage_armor will have their damage reduced by this much.
 	var/list/breakable_exclude //List of objects that won't be used to hit the item even on harm intent, so as to allow for other interactions.
@@ -73,18 +71,18 @@
 
 /obj/item/proc/take_damage(var/incoming_damage, var/mute = TRUE)
 	var/thisdmg=(incoming_damage>max(damage_armor,damage_resist)) * (incoming_damage-damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
-	health_item-=thisdmg
+	health-=thisdmg
 	play_hit_sounds(thisdmg)
 	if(!thisdmg)
 		return 0 //return 0 if the item took no damage (glancing attack)
 	else
-		if(health_item>0) //Only if the item isn't ready to break.
+		if(health>0) //Only if the item isn't ready to break.
 			message_take_hit(mute)
 		damaged_updates()
 		return 1 //return 1 if the item took damage
 
 /obj/item/proc/play_hit_sounds(var/thisdmg, var/hear_glanced = TRUE, var/hear_damaged = TRUE) //Plays any relevant sounds whenever the item is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
-	if(health_item<=0) //Don't play a sound here if the item is ready to break, because sounds are also played by on_broken().
+	if(health<=0) //Don't play a sound here if the item is ready to break, because sounds are also played by on_broken().
 		return
 	if(thisdmg && !isnull(damaged_sound) && hear_damaged)
 		playsound(src, damaged_sound, 50, 1)
@@ -100,7 +98,7 @@
 
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	..()
-	if(health_item<health_item_max && damaged_examine_text)
+	if(health<maxHealth && damaged_examine_text)
 		user.simple_message("<span class='info'> [damaged_examine_text]</span>",\
 			"<span class='notice'> It seems kinda messed up somehow.</span>")
 
@@ -131,13 +129,13 @@
 			return ", but it [pick(glances_text)] off!"
 		else
 			return ", but it [pick("bounces","gleams","glances")] off!"
-	else if(health_item > 0 && !isnull(take_hit_text))
+	else if(health > 0 && !isnull(take_hit_text))
 		return ", [pick(take_hit_text)] it!"
 	else
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The item shatters!"
 
-/obj/item/proc/break_item(var/atom/target, var/range, var/speed, var/override , var/fly_speed, var/hit_atom) //Breaks the item if its health_item is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be thrown upon breaking.
-	if(breakable_flags && health_item<=0)
+/obj/item/proc/break_item(var/atom/target, var/range, var/speed, var/override , var/fly_speed, var/hit_atom) //Breaks the item if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be thrown upon breaking.
+	if(breakable_flags && health<=0)
 		on_broken(target,range,speed,override,fly_speed,hit_atom)
 		qdel(src)
 		return TRUE //Return TRUE if the item was broken

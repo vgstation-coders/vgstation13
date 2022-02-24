@@ -4,8 +4,8 @@
 	name = "breakable flashlight"
 	desc = "This flashlight looks particularly flimsy."
 	breakable_flags = BREAKABLE_ALL
-	health_item = 30
-	health_item_max = 30
+	health = 30
+	maxHealth = 30
 	damaged_examine_text = "It has gone bad."
 	breaks_text = "crumbles apart"
 	take_hit_text = "cracking"
@@ -19,8 +19,8 @@
 	name = "breakable knife"
 	desc = "This knife looks like it could break under pressure."
 	breakable_flags = BREAKABLE_ALL
-	health_item = 30
-	health_item_max = 30
+	health = 30
+	maxHealth = 30
 	damaged_examine_text = "It's seen better days."
 	breaks_text = "splinters into little bits"
 	take_hit_text = list("denting","cracking")
@@ -31,8 +31,8 @@
 	name = "flimsy breakable knife"
 	desc = "This flimsy knife looks like it could fall apart at any time."
 	breakable_flags = BREAKABLE_ALL
-	health_item = 0.1
-	health_item_max = 1
+	health = 0.1
+	maxHealth = 1
 	damaged_examine_text = "It's seen much better days."
 	damage_armor = BREAKARMOR_NOARMOR
 	damage_resist = 0
@@ -45,8 +45,8 @@
 	name = "breakable fountain pen"
 	desc = "This pen looks really weak."
 	breakable_flags = BREAKABLE_ALL
-	health_item = 10
-	health_item_max = 10
+	health = 10
+	maxHealth = 10
 	damaged_examine_text = "It's seen much better days."
 	damage_armor = 0
 	damage_resist = 0
@@ -59,8 +59,8 @@
 	name = "invincible fountain pen"
 	desc = "This pen looks really, really tough."
 	breakable_flags = BREAKABLE_ALL
-	health_item = 10
-	health_item_max = 10
+	health = 10
+	maxHealth = 10
 	damaged_examine_text = "Somehow it has a crack in it..."
 	damage_armor = BREAKARMOR_INVINCIBLE
 	damage_resist = 0
@@ -72,8 +72,8 @@
 	name = "huge breakable flask"
 	desc = "A huge flask that could break at any time, under the right conditions."
 	breakable_flags = BREAKABLE_ALL
-	health_item = 1
-	health_item_max = 1
+	health = 1
+	maxHealth = 1
 	damaged_examine_text = "It has a big crack down the side."
 	damage_armor = BREAKARMOR_NOARMOR
 	damage_resist = 0
@@ -92,7 +92,7 @@
 	icon_state = "beaker"
 	item_state = "beaker"
 	breakable_flags = BREAKABLE_ALL
-	health_item_max = 20
+	maxHealth = 20
 	damaged_examine_text = "It has a big crack down the side."
 	damage_armor = BREAKARMOR_NOARMOR
 	damage_resist = 0
@@ -115,8 +115,8 @@
 	icon_state = "box_emergency"
 	item_state = "box_emergency"
 	breakable_flags = BREAKABLE_ALL
-	health_item = 10
-	health_item_max = 10
+	health = 10
+	maxHealth = 10
 	density = 1
 	damaged_examine_text = "It's all banged up."
 	damage_armor = BREAKARMOR_NOARMOR

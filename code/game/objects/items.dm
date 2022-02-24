@@ -6,7 +6,8 @@
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	var/r_speed = 1.0
-	var/health = null
+	var/health		//Structural integrity of the item. If breakable_flags are set, at 0, the item breaks; defaults to maxHealth.
+	var/maxHealth	//Maximum structural integrity of the item. If breakable_flags are set, defaults to health.
 	var/hitsound = null
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
@@ -87,11 +88,11 @@
 	..()
 	for(var/path in actions_types)
 		new path(src)
-	if(breakable_flags)	//Initialize health_item and health_item_max to the same value if only one is specified.
-		if(isnull(health_item) && health_item_max)
-			health_item = health_item_max
-		else if(isnull(health_item_max) && health_item)
-			health_item_max = health_item
+	if(breakable_flags)	//Initialize health and maxHealth to the same value if only one is specified.
+		if(isnull(health) && maxHealth)
+			health = maxHealth
+		else if(isnull(maxHealth) && health)
+			maxHealth = health
 
 /obj/item/Destroy()
 	infected_items -= src
