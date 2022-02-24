@@ -56,7 +56,7 @@ var/global/datum/controller/vote/vote = new()
 	src.tally = list()
 	src.status_data = list()
 
-	spawn()
+	spawn(5)
 		if(!src.interface)
 			src.interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", VOTE_SCREEN_WIDTH, VOTE_SCREEN_HEIGHT, vote_head)
 			src.interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
