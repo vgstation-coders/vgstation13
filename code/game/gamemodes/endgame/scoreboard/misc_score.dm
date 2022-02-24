@@ -1,4 +1,5 @@
-/datum/controller/gameticker/scoreboard/proc/misc_score(var/completions = "")
+/datum/controller/gameticker/scoreboard/proc/misc_score()
+	var/completions = ""
 	score.crewscore -= round(turfssingulod/2)
 
 	var/list/gallery = score.global_paintings
