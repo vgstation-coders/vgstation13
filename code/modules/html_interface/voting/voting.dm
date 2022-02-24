@@ -47,7 +47,7 @@ var/global/datum/controller/vote/vote = new()
 	var/lastupdate     = 0
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
-	//var/lock = FALSE
+	var/lock = FALSE
 	name               = "datum"
 
 /datum/controller/vote/New()
@@ -56,7 +56,7 @@ var/global/datum/controller/vote/vote = new()
 	src.tally = list()
 	src.status_data = list()
 
-	spawn(5)
+	spawn()
 		if(!src.interface)
 			src.interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", VOTE_SCREEN_WIDTH, VOTE_SCREEN_HEIGHT, vote_head)
 			src.interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
@@ -78,10 +78,10 @@ var/global/datum/controller/vote/vote = new()
 	update(1)
 
 /datum/controller/vote/proc/process()	//called by master_controller
-	//if (lock)
-	//	return
+	if (lock)
+		return
 	if(mode)
-		//lock = TRUE
+		lock = TRUE
 		// No more change mode votes after the game has started.
 		// 3 is GAME_STATE_PLAYING, but that #define is undefined for some reason
 		if(mode == "gamemode" && ticker.current_state >= 2)
@@ -109,8 +109,8 @@ var/global/datum/controller/vote/vote = new()
 		else
 			update(1)
 	else
+		lock = FALSE
 		return
-		//lock = FALSE
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
