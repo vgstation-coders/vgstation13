@@ -1,160 +1,1492 @@
-"aa" = (/turf/space,/area)
-"ab" = (/obj/structure/lattice,/turf/space,/area)
-"ac" = (/obj/structure/grille,/turf/space,/area/vault/rust)
-"ad" = (/obj/structure/lattice,/obj/structure/grille,/turf/space,/area/vault/rust)
-"ae" = (/obj/structure/grille,/obj/structure/lattice,/turf/space,/area/vault/rust)
-"af" = (/obj/structure/lattice,/obj/item/stack/sheet/metal,/turf/space,/area)
-"ag" = (/obj/item/weapon/shard/plasma,/turf/space,/area)
-"ah" = (/turf/simulated/wall/r_wall,/area/vault/rust)
-"ai" = (/obj/machinery/door/poddoor/vault_rust,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aj" = (/obj/machinery/door/poddoor/vault_rust,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"ak" = (/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"al" = (/turf/simulated/floor/engine/airless,/area/vault/rust)
-"am" = (/obj/item/stack/sheet/metal,/turf/space,/area)
-"an" = (/obj/structure/girder/displaced,/turf/space,/area)
-"ao" = (/turf/simulated/wall,/area/vault/rust)
-"ap" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aq" = (/obj/item/stack/sheet/metal,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"ar" = (/obj/structure/lattice,/obj/machinery/rust/gyrotron{name = "girotron"},/turf/space,/area/vault/rust)
-"as" = (/obj/structure/girder/displaced,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"at" = (/obj/item/stack/rods,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"au" = (/obj/effect/decal/cleanable/soot,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"av" = (/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"aw" = (/obj/item/stack/rods,/turf/space,/area/vault/rust)
-"ax" = (/obj/item/stack/rods,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"ay" = (/obj/item/weapon/shard/plasma,/turf/space,/area/vault/rust)
-"az" = (/obj/item/weapon/shard/plasma,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aA" = (/turf/space,/area/vault/rust)
-"aB" = (/obj/structure/lattice,/obj/item/stack/rods,/turf/space,/area/vault/rust)
-"aC" = (/obj/machinery/power/rust_fuel_injector{dir = 4; name = "toplivnyy inzhektor"},/obj/structure/cable{icon_state = "0-2"; d2 = 2},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"aD" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aE" = (/obj/item/stack/rods,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aF" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/machinery/power/rust_core/rust_vault,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"aG" = (/obj/structure/grille,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aH" = (/obj/item/stack/rods,/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aI" = (/obj/structure/lattice,/turf/space,/area/vault/rust)
-"aJ" = (/obj/structure/lattice,/obj/item/stack/tile/metal,/turf/space,/area/vault/rust)
-"aK" = (/obj/item/weapon/fuel_assembly/trilithium,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aL" = (/obj/item/weapon/shard/plasma,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"aM" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aN" = (/obj/structure/grille,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"aO" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/space,/area/vault/rust)
-"aP" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aQ" = (/obj/item/stack/tile/metal,/turf/space,/area)
-"aR" = (/obj/item/weapon/fuel_assembly/trilithium,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"aS" = (/obj/effect/decal/cleanable/soot,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aT" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"aU" = (/obj/item/stack/rods,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aV" = (/obj/machinery/atmospherics/pipe/manifold4w/insulated/hidden,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"aW" = (/obj/item/weapon/shard/plasma,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"aX" = (/obj/structure/girder,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"aY" = (/obj/structure/lattice,/obj/item/stack/rods,/turf/space,/area)
-"aZ" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"ba" = (/obj/item/weapon/shard/plasma,/obj/item/weapon/fuel_assembly/trilithium,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bb" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/obj/item/weapon/shard/plasma,/turf/simulated/floor/engine/airless,/area/vault/rust)
-"bc" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/engine/airless,/area/vault/rust)
-"bd" = (/obj/item/stack/sheet/metal,/turf/space,/area/vault/rust)
-"be" = (/obj/item/stack/rods,/turf/space,/area)
-"bf" = (/obj/structure/catwalk,/turf/space,/area/vault/rust)
-"bg" = (/obj/item/stack/sheet/metal,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bh" = (/obj/item/stack/rcd_ammo,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bi" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/obj/structure/grille,/obj/structure/window/reinforced/plasma,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bj" = (/obj/structure/window/reinforced/plasma,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bk" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/obj/structure/grille,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bl" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bm" = (/obj/structure/cable,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bn" = (/obj/effect/decal/cleanable/soot,/obj/item/tool/screwdriver,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bo" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bp" = (/obj/item/device/rcd/matter/engineering/rust_vault,/obj/item/weapon/table_parts,/obj/item/device/rcd/rpd/rust_vault,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bq" = (/obj/machinery/door_control/vault_rust{dir = 1; pixel_y = 24},/obj/effect/decal/cleanable/ash,/obj/machinery/light_construct{dir = 1},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"br" = (/obj/machinery/computer/rust_core_control{name = "komp'yuternoye upravleniye tokamak yadro"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bs" = (/obj/machinery/computer/rust_core_monitor{name = "tokamak yadro komp'yuternogo monitoringa"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bt" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/obj/machinery/computer/rust_gyrotron_controller{name = "girotron pul't distantsionnogo upravleniya"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bu" = (/obj/structure/grille,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bv" = (/obj/item/stack/sheet/metal,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bw" = (/obj/item/stack/sheet/metal,/turf/simulated/floor/plating/airless,/area/vault/rust)
-"bx" = (/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"by" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bz" = (/obj/item/tool/wrench,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bA" = (/obj/effect/decal/cleanable/soot,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bB" = (/obj/machinery/portable_atmospherics/canister/plasma,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bC" = (/obj/structure/lattice,/obj/machinery/power/battery/portable{name = "blok pitaniya portativnogo khraneniya"},/turf/space,/area/vault/rust)
-"bD" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bE" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bF" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/obj/effect/decal/cleanable/ash,/obj/item/stack/rcd_ammo,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bG" = (/obj/item/stack/tile/metal,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bH" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/obj/item/weapon/stool,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bI" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bJ" = (/obj/item/stack/sheet/metal,/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bK" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bL" = (/obj/item/weapon/shard,/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{dir = 4},/turf/space,/area)
-"bM" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/obj/structure/catwalk,/turf/space,/area/vault/rust)
-"bN" = (/obj/structure/lattice,/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/turf/space,/area)
-"bO" = (/obj/item/stack/cable_coil/random,/turf/space,/area)
-"bP" = (/obj/structure/cable{icon_state = "0-2"; d2 = 2},/obj/item/stack/rods,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bQ" = (/obj/item/stack/tile/metal,/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/blood/gibs/robot,/obj/item/stack/rcd_ammo,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bR" = (/obj/machinery/atmospherics/binary/circulator{dir = 4; name = "rasprostranitel'"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bS" = (/obj/structure/cable,/obj/machinery/power/generator/rust_vault{dir = 4},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bT" = (/obj/machinery/atmospherics/binary/circulator{name = "rasprostranitel'"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bU" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"bV" = (/obj/machinery/power/terminal,/obj/structure/cable,/obj/effect/decal/warning_stripes{tag = "icon-loading_area"; icon_state = "loading_area"; dir = 2},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bW" = (/obj/effect/decal/cleanable/blood/gibs/robot,/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bX" = (/obj/effect/decal/cleanable/soot,/obj/machinery/atmospherics/pipe/manifold/insulated/hidden,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bY" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 4},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"bZ" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 9},/obj/item/stack/tile/metal,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"ca" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/blood/oil/streak,/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cb" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 5},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cc" = (/obj/machinery/portable_atmospherics/canister/plasma,/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cd" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"ce" = (/obj/structure/lattice,/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{dir = 4},/turf/space,/area)
-"cf" = (/obj/structure/grille,/obj/structure/lattice,/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/turf/space,/area/vault/rust)
-"cg" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/machinery/power/battery_port/rust_vault,/obj/machinery/power/battery/portable{name = "blok pitaniya portativnogo khraneniya"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"ch" = (/obj/machinery/light_construct,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/obj/machinery/power/battery_port/rust_vault,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"ci" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/obj/machinery/power/battery_port/rust_vault,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cj" = (/obj/effect/decal/cleanable/soot,/obj/machinery/atmospherics/unary/portables_connector{dir = 1},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"ck" = (/obj/structure/dispenser/empty,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cl" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cm" = (/obj/machinery/power/apc/frame/rust_vault{pixel_y = -24},/obj/structure/cable,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"cn" = (/obj/machinery/light_construct,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"co" = (/obj/machinery/atmospherics/binary/msgs/rust_vault,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cp" = (/obj/item/stack/rods,/obj/structure/catwalk,/turf/space,/area/vault/rust)
-"cq" = (/obj/item/stack/tile/metal,/turf/space,/area/vault/rust)
-"cr" = (/obj/machinery/vending/engineering{name = "Robco instrumental'shchik"},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"cs" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/decal/warning_stripes{dir = 2; icon_state = "radiation-w"},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"ct" = (/obj/structure/closet/secure_closet/engineering_personal,/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cu" = (/obj/structure/closet/secure_closet/engineering_welding,/turf/simulated/floor/damaged/airless,/area/vault/rust)
-"cv" = (/obj/machinery/power/battery/portable{name = "blok pitaniya portativnogo khraneniya"},/turf/space,/area/vault/rust)
-"cw" = (/obj/item/stack/rods,/obj/item/stack/tile/metal,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"cx" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/space,/area/vault/rust)
-"cy" = (/obj/item/weapon/table_parts,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"cz" = (/obj/item/stack/tile/metal,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
-"cA" = (/obj/item/weapon/shard,/turf/simulated/floor/plating/airless/damaged,/area/vault/rust)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area)
+"ab" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"ac" = (
+/obj/structure/grille,
+/turf/space,
+/area/vault/rust)
+"ad" = (
+/obj/structure/lattice,
+/obj/structure/grille,
+/turf/space,
+/area/vault/rust)
+"ae" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/turf/space,
+/area/vault/rust)
+"af" = (
+/obj/structure/lattice,
+/obj/item/stack/sheet/metal,
+/turf/space,
+/area)
+"ag" = (
+/obj/item/weapon/shard/plasma,
+/turf/space,
+/area)
+"ah" = (
+/turf/simulated/wall/r_wall,
+/area/vault/rust)
+"ai" = (
+/obj/machinery/door/poddoor/vault_rust,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aj" = (
+/obj/machinery/door/poddoor/vault_rust,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"ak" = (
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"al" = (
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"am" = (
+/obj/item/stack/sheet/metal,
+/turf/space,
+/area)
+"an" = (
+/obj/structure/girder/displaced,
+/turf/space,
+/area)
+"ao" = (
+/turf/simulated/wall,
+/area/vault/rust)
+"ap" = (
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aq" = (
+/obj/item/stack/sheet/metal,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"ar" = (
+/obj/structure/lattice,
+/obj/machinery/rust/gyrotron{
+	name = "girotron"
+	},
+/turf/space,
+/area/vault/rust)
+"as" = (
+/obj/structure/girder/displaced,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"at" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"au" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"av" = (
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"aw" = (
+/obj/item/stack/rods,
+/turf/space,
+/area/vault/rust)
+"ax" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"ay" = (
+/obj/item/weapon/shard/plasma,
+/turf/space,
+/area/vault/rust)
+"az" = (
+/obj/item/weapon/shard/plasma,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aA" = (
+/turf/space,
+/area/vault/rust)
+"aB" = (
+/obj/structure/lattice,
+/obj/item/stack/rods,
+/turf/space,
+/area/vault/rust)
+"aC" = (
+/obj/machinery/power/rust_fuel_injector{
+	dir = 4;
+	name = "toplivnyy inzhektor"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"aD" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aE" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aF" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/power/rust_core/rust_vault,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"aG" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aH" = (
+/obj/item/stack/rods,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aI" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault/rust)
+"aJ" = (
+/obj/structure/lattice,
+/obj/item/stack/tile/metal,
+/turf/space,
+/area/vault/rust)
+"aK" = (
+/obj/item/weapon/fuel_assembly/trilithium,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aL" = (
+/obj/item/weapon/shard/plasma,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"aM" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aN" = (
+/obj/structure/grille,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"aO" = (
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/space,
+/area/vault/rust)
+"aP" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aQ" = (
+/obj/item/stack/tile/metal,
+/turf/space,
+/area)
+"aR" = (
+/obj/item/weapon/fuel_assembly/trilithium,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"aS" = (
+/obj/effect/decal/cleanable/soot,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aT" = (
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"aU" = (
+/obj/item/stack/rods,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aV" = (
+/obj/machinery/atmospherics/pipe/manifold4w/insulated/hidden,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"aW" = (
+/obj/item/weapon/shard/plasma,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"aX" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"aY" = (
+/obj/structure/lattice,
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"aZ" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"ba" = (
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/fuel_assembly/trilithium,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bb" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/item/weapon/shard/plasma,
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"bc" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/rust)
+"bd" = (
+/obj/item/stack/sheet/metal,
+/turf/space,
+/area/vault/rust)
+"be" = (
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"bf" = (
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/rust)
+"bg" = (
+/obj/item/stack/sheet/metal,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bh" = (
+/obj/item/stack/rcd_ammo,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bi" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bj" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bk" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bl" = (
+/obj/effect/decal/cleanable/ash,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bm" = (
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bn" = (
+/obj/effect/decal/cleanable/soot,
+/obj/item/tool/screwdriver,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bo" = (
+/obj/effect/decal/cleanable/ash,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bp" = (
+/obj/item/device/rcd/matter/engineering/rust_vault,
+/obj/item/weapon/table_parts,
+/obj/item/device/rcd/rpd/rust_vault,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bq" = (
+/obj/machinery/door_control/vault_rust{
+	dir = 1;
+	pixel_y = 24
+	},
+/obj/effect/decal/cleanable/ash,
+/obj/machinery/light_construct{
+	dir = 1
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"br" = (
+/obj/machinery/computer/rust_core_control{
+	name = "komp'yuternoye upravleniye tokamak yadro"
+	},
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bs" = (
+/obj/machinery/computer/rust_core_monitor{
+	name = "tokamak yadro komp'yuternogo monitoringa"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bt" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/machinery/computer/rust_gyrotron_controller{
+	name = "girotron pul't distantsionnogo upravleniya"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bu" = (
+/obj/structure/grille,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bv" = (
+/obj/item/stack/sheet/metal,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bw" = (
+/obj/item/stack/sheet/metal,
+/turf/simulated/floor/plating/airless,
+/area/vault/rust)
+"bx" = (
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"by" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bz" = (
+/obj/item/tool/wrench,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bA" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bB" = (
+/obj/machinery/portable_atmospherics/canister/plasma,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bC" = (
+/obj/structure/lattice,
+/obj/machinery/power/battery/portable{
+	name = "blok pitaniya portativnogo khraneniya"
+	},
+/turf/space,
+/area/vault/rust)
+"bD" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bE" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bF" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/cleanable/ash,
+/obj/item/stack/rcd_ammo,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bG" = (
+/obj/item/stack/tile/metal,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bH" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/item/weapon/stool,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bI" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bJ" = (
+/obj/item/stack/sheet/metal,
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bK" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bL" = (
+/obj/item/weapon/shard,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
+	dir = 4
+	},
+/turf/space,
+/area)
+"bM" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/rust)
+"bN" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/turf/space,
+/area)
+"bO" = (
+/obj/item/stack/cable_coil/random,
+/turf/space,
+/area)
+"bP" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bQ" = (
+/obj/item/stack/tile/metal,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/obj/item/stack/rcd_ammo,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bR" = (
+/obj/machinery/atmospherics/binary/circulator{
+	dir = 4;
+	name = "rasprostranitel'"
+	},
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bS" = (
+/obj/structure/cable,
+/obj/machinery/power/generator/rust_vault{
+	dir = 4
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bT" = (
+/obj/machinery/atmospherics/binary/circulator{
+	name = "rasprostranitel'"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bU" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"bV" = (
+/obj/machinery/power/terminal,
+/obj/structure/cable,
+/obj/effect/decal/warning_stripes{
+	dir = 2;
+	icon_state = "loading_area";
+	tag = "icon-loading_area"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bW" = (
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/obj/effect/decal/cleanable/blood/oil/streak,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bX" = (
+/obj/effect/decal/cleanable/soot,
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bY" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"bZ" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 9
+	},
+/obj/item/stack/tile/metal,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"ca" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/blood/oil/streak,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cb" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 5
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cc" = (
+/obj/machinery/portable_atmospherics/canister/plasma,
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cd" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"ce" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
+	dir = 4
+	},
+/turf/space,
+/area)
+"cf" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/turf/space,
+/area/vault/rust)
+"cg" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/machinery/power/battery_port/rust_vault,
+/obj/machinery/power/battery/portable{
+	name = "blok pitaniya portativnogo khraneniya"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"ch" = (
+/obj/machinery/light_construct,
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/machinery/power/battery_port/rust_vault,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"ci" = (
+/obj/effect/decal/warning_stripes{
+	dir = 5;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/obj/machinery/power/battery_port/rust_vault,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cj" = (
+/obj/effect/decal/cleanable/soot,
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"ck" = (
+/obj/structure/dispenser/empty,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cl" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cm" = (
+/obj/machinery/power/apc/frame/rust_vault{
+	pixel_y = -24
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"cn" = (
+/obj/machinery/light_construct,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"co" = (
+/obj/machinery/atmospherics/binary/msgs/rust_vault,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cp" = (
+/obj/item/stack/rods,
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/rust)
+"cq" = (
+/obj/item/stack/tile/metal,
+/turf/space,
+/area/vault/rust)
+"cr" = (
+/obj/machinery/vending/engineering{
+	name = "Robco instrumental'shchik"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (EAST)"
+	},
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"cs" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 2;
+	icon_state = "radiation-w"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"ct" = (
+/obj/structure/closet/secure_closet/engineering_personal,
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (NORTH)"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cu" = (
+/obj/structure/closet/secure_closet/engineering_welding,
+/turf/simulated/floor/damaged/airless,
+/area/vault/rust)
+"cv" = (
+/obj/machinery/power/battery/portable{
+	name = "blok pitaniya portativnogo khraneniya"
+	},
+/turf/space,
+/area/vault/rust)
+"cw" = (
+/obj/item/stack/rods,
+/obj/item/stack/tile/metal,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"cx" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/space,
+/area/vault/rust)
+"cy" = (
+/obj/item/weapon/table_parts,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"cz" = (
+/obj/item/stack/tile/metal,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
+"cA" = (
+/obj/item/weapon/shard,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/rust)
 
 (1,1,1) = {"
-aaaaabacadaeaeaaaaaaabaaaaaaaaaaaaaaaaabababaeaeaeaa
-aaabababababaaaaafabababababababababababaaaaaaaaaaaa
-aaaaabaaabaaaaaaagaaahaiajajahaaaaaaaaabaaaaaaaaaaaa
-aaababaaabaaaaaaaaakahalalakahahaaamanabaaaaaaabaaaa
-aaaaabaeaoaoaoaoahapalalaqalalapahaoakarasababababab
-aeababaaaoatauavahalawalaxalayakakazaAaAaBaaaaabaaaa
-aaabaaaaawakaCavaDakaEakaFalalalaGakaHaIaIamaaabaaaa
-aaabaaaaaJaJaKaLaMalaNaEaOakawalaGaLaPaEaIaQababaaaa
-aaaeaaaaasaRaSavahapalaTaUaVaWahahaAaIaIaXaaaaaYaaaa
-aaaaaaaaaoataZbaavakahbbbcbbahahavakakbdaXaabebfaaaa
-aaaaaaaaaoavaSbgavbhahbibjbkapavavavakblakaaaaabaaaa
-aaabababaoaAbmbnbobpbqbrbsbtbuavavbvauavaoababababaa
-aaaeaaamaXaBavavbvbwbxavakbyaLauavbzbAbBaoaaaabfabad
-aaabaaanbCaIaAbDavbAbEbFbGbHbIbhauavbJbKbKbLaabMbNaa
-aaabbObeaAbPaAbQaubhakbRbAaubSbTauboavaubUaaaaabaaaa
-aaabaaaaaobVbVbVbWaqakbXbYbZcacbbKbAakcccdcecfbNabaa
-aaabamaaaocgchcicjaAakckclavcmavbAavcncoaoaaaacpaaaa
-aaabaaaaaoaoaoaIaIaBaoaoaZaoaoaoakaIaoaoaoaaabbfabaa
-aaababababaaaaabcqaIaAcrcsctcuakaAaaababaaaaabababaa
-aaaaaaaaaaabababcvaIakbAaAakavakaoabaaababaaabbfaaaa
-aaaaaaaaaaaaabaaaoakcwaIbAaAakcxaoabaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaoaAakcyaEaAczakaAaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaababaoaAcAakaAaAaAakbAabaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaoaAaAakaAaIaIaIaAaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaIaAaAaIaAaAaoaIaoaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabaaaaabaaaaaaababaaaaaaaaaaaaaaaaaa
+aa
+aa
+aa
+aa
+aa
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+ab
+aa
+ab
+aa
+ab
+ab
+ab
+ae
+aa
+aa
+ab
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(3,1,1) = {"
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+ab
+aa
+aa
+bO
+aa
+am
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(4,1,1) = {"
+ac
+ab
+aa
+aa
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+am
+an
+be
+aa
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(5,1,1) = {"
+ad
+ab
+ab
+ab
+ao
+ao
+aw
+aJ
+as
+ao
+ao
+ao
+aX
+bC
+aA
+ao
+ao
+ao
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(6,1,1) = {"
+ae
+ab
+aa
+aa
+ao
+at
+ak
+aJ
+aR
+at
+av
+aA
+aB
+aI
+bP
+bV
+cg
+ao
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(7,1,1) = {"
+ae
+aa
+aa
+aa
+ao
+au
+aC
+aK
+aS
+aZ
+aS
+bm
+av
+aA
+aA
+bV
+ch
+ao
+aa
+ab
+ab
+aa
+ab
+aa
+aa
+aa
+"}
+(8,1,1) = {"
+aa
+aa
+aa
+aa
+ao
+av
+av
+aL
+av
+ba
+bg
+bn
+av
+bD
+bQ
+bV
+ci
+aI
+ab
+ab
+aa
+aa
+ab
+aa
+aa
+aa
+"}
+(9,1,1) = {"
+aa
+af
+ag
+aa
+ah
+ah
+aD
+aM
+ah
+av
+av
+bo
+bv
+av
+au
+bW
+cj
+aI
+cq
+cv
+ao
+ao
+ao
+ao
+aI
+ab
+"}
+(10,1,1) = {"
+aa
+ab
+aa
+ak
+ap
+al
+ak
+al
+ap
+ak
+bh
+bp
+bw
+bA
+bh
+aq
+aA
+aB
+aI
+aI
+ak
+aA
+aA
+aA
+aA
+aa
+"}
+(11,1,1) = {"
+ab
+ab
+ah
+ah
+al
+aw
+aE
+aN
+al
+ah
+ah
+bq
+bx
+bE
+ak
+ak
+ak
+ao
+aA
+ak
+cw
+ak
+cA
+aA
+aA
+aa
+"}
+(12,1,1) = {"
+aa
+ab
+ai
+al
+al
+al
+ak
+aE
+aT
+bb
+bi
+br
+av
+bF
+bR
+bX
+ck
+ao
+cr
+bA
+aI
+cy
+ak
+ak
+aI
+ab
+"}
+(13,1,1) = {"
+aa
+ab
+aj
+al
+aq
+ax
+aF
+aO
+aU
+bc
+bj
+bs
+ak
+bG
+bA
+bY
+cl
+aZ
+cs
+aA
+bA
+aE
+aA
+aA
+aA
+aa
+"}
+(14,1,1) = {"
+aa
+ab
+aj
+ak
+al
+al
+al
+ak
+aV
+bb
+bk
+bt
+by
+bH
+au
+bZ
+av
+ao
+ct
+ak
+aA
+aA
+aA
+aI
+aA
+aa
+"}
+(15,1,1) = {"
+aa
+ab
+ah
+ah
+al
+ay
+al
+aw
+aW
+ah
+ap
+bu
+aL
+bI
+bS
+ca
+cm
+ao
+cu
+av
+ak
+cz
+aA
+aI
+ao
+aa
+"}
+(16,1,1) = {"
+aa
+ab
+aa
+ah
+ap
+ak
+al
+al
+ah
+ah
+av
+av
+au
+bh
+bT
+cb
+av
+ao
+ak
+ak
+cx
+ak
+ak
+aI
+aI
+ab
+"}
+(17,1,1) = {"
+aa
+ab
+aa
+aa
+ah
+ak
+aG
+aG
+ah
+av
+av
+av
+av
+au
+au
+bK
+bA
+ak
+aA
+ao
+ao
+aA
+bA
+aA
+ao
+ab
+"}
+(18,1,1) = {"
+aa
+ab
+aa
+am
+ao
+az
+ak
+aL
+aA
+ak
+av
+bv
+bz
+av
+bo
+bA
+av
+aI
+aa
+ab
+ab
+aa
+ab
+aa
+aa
+aa
+"}
+(19,1,1) = {"
+aa
+ab
+aa
+an
+ak
+aA
+aH
+aP
+aI
+ak
+ak
+au
+bA
+bJ
+av
+ak
+cn
+ao
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(20,1,1) = {"
+ab
+ab
+ab
+ab
+ar
+aA
+aI
+aE
+aI
+bd
+bl
+av
+bB
+bK
+au
+cc
+co
+ao
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(21,1,1) = {"
+ab
+aa
+aa
+aa
+as
+aB
+aI
+aI
+aX
+aX
+ak
+ao
+ao
+bK
+bU
+cd
+ao
+ao
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(22,1,1) = {"
+ab
+aa
+aa
+aa
+ab
+aa
+am
+aQ
+aa
+aa
+aa
+ab
+aa
+bL
+aa
+ce
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(23,1,1) = {"
+ae
+aa
+aa
+aa
+ab
+aa
+aa
+ab
+aa
+be
+aa
+ab
+aa
+aa
+aa
+cf
+aa
+ab
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(24,1,1) = {"
+ae
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+aY
+bf
+ab
+ab
+bf
+bM
+ab
+bN
+cp
+bf
+ab
+bf
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(25,1,1) = {"
+ae
+aa
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+bN
+aa
+ab
+aa
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(26,1,1) = {"
+aa
+aa
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}
