@@ -86,7 +86,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
 
 	ticker.mode.declare_completion()
-	dat += "[ticker.mode.dat]<HR>" //figure this out
+	dat += "[ticker.mode.dat]<HR>"
 
 	//populate scores
 	dat += medbay_score()
@@ -119,50 +119,73 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	return
 
 /datum/controller/gameticker/scoreboard/proc/display()
-	var/dat = {"<BR><h2>Round Statistics and Score</h2>"}
-	dat += {"<B><U>GENERAL STATS</U></B><BR>
+	var/dat = "<h2>Round Statistics and Score</h2>"
+	dat += "<B><U>GENERAL STATS</U></B><BR>"
+	dat += "<U>THE GOOD:</U><BR>"
+	dat += "<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score.time * 0.2)] Points)<BR>"
+	dat += "<B>Shuttle Escapees:</B> [score.escapees] ([score.escapees * 100] Points)<BR>"
+	if(score.eventsendured > 0)
+		dat += "<B>Random Events Endured:</B> [score.eventsendured] ([score.eventsendured * 200] Points)<BR>"
+	if(score.meals > 0)
+		dat += "<B>Meals Prepared:</B> [score.meals] ([score.meals * 5] Points)<BR>"
+	if(score.stuffharvested > 0)
+		dat += "<B>Hydroponics Harvests:</B> [score.stuffharvested] ([score.stuffharvested] Points)<BR>"
+	dat += "<B>Ultra-Clean Station:</B> [score.messbonus ? "Yes" : "No"] ([score.messbonus] Points)<BR>"
+	if(score.plasmashipped > 0)
+		dat += "<B>Plasma Shipped:</B> [score.plasmashipped] ([score.plasmashipped * 0.5] Points)<BR>"
+	if(score.stuffshipped > 0)
+		dat += "<B>Centcom Orders Fulfilled:</B> [score.stuffshipped] ([score.stuffshipped * 100] Points)<BR>"
+	if(score.stuffforwarded > 0)
+		dat += "<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>"
+	if(score.oremined > 0)
+		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
+	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
+	if (score.disease_vaccine_score > 0)
+		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
+	if (score.disease_extracted > 0)
+		dat += "<B>Extracted Symptoms:</B> [score.disease_extracted] ([score.disease_effects] Points)<BR>"
+	if (score.slimes > 0)
+		dat += "<B>Harvested Slimes:</B> [score.slimes] ([score.slimes * 20] Points)<BR><BR>"
+	if (score.artifacts > 0)
+		dat += "<B>Analyzed & Activated Large Artifacts:</B> [score.artifacts] ([score.artifacts * 400] Points)<BR><BR>"
 
-	<U>THE GOOD:</U><BR>
-	<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score.time * 0.2)] Points)<BR>
-	<B>Shuttle Escapees:</B> [score.escapees] ([score.escapees * 100] Points)<BR>
-	<B>Random Events Endured:</B> [score.eventsendured] ([score.eventsendured * 200] Points)<BR>
-	<B>Meals Prepared:</B> [score.meals] ([score.meals * 5] Points)<BR>
-	<B>Hydroponics Harvests:</B> [score.stuffharvested] ([score.stuffharvested] Points)<BR>
-	<B>Ultra-Clean Station:</B> [score.messbonus ? "Yes" : "No"] ([score.messbonus] Points)<BR>
-	<B>Plasma Shipped:</B> [score.plasmashipped] ([score.plasmashipped * 0.5] Points)<BR>
-	<B>Centcom Orders Fulfilled:</B> [score.stuffshipped] ([score.stuffshipped * 100] Points)<BR>
-	<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>
-	<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>
-	<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>
-	<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>
-	<B>Extracted Symptoms:</B> [score.disease_extracted] ([score.disease_effects] Points)<BR>
-	<B>Harvested Slimes:</B> [score.slimes] ([score.slimes * 20] Points)<BR><BR>
-	<B>Analyzed & Activated Large Artifacts:</B> [score.artifacts] ([score.artifacts * 400] Points)<BR><BR>
+	dat += "<U>THE BAD:</U><BR>"
+	if (score.deadcrew > 0)
+		dat += "<B>Dead Crewmen:</B> [score.deadcrew] (-[score.deadcrew * 250] Points)<BR>"
+	if (score.deadsilicon > 0)
+		dat += "<B>Destroyed Silicons:</B> [score.deadsilicon] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadsilicon * 500 : score.deadsilicon * -500] Points)<BR>"
+	if (score.deadaipenalty > 0)
+		dat += "<B>AIs Destroyed:</B> [score.deadaipenalty] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadaipenalty * 1000 : score.deadaipenalty * -1000] Points)<BR>"
+	dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
+	dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
+	if(score.stuffnotforwarded > 0)
+		dat += "<B>Cargo Crates Not Forwarded:</B> [score.stuffnotforwarded] (-[score.stuffnotforwarded * 25] Points)<BR>"
+	if (score.powerloss > 0)
+		dat += "<B>Station Power Issues:</B> [score.powerloss] (-[score.powerloss * 50] Points)<BR>"
+	if(score.turfssingulod > 0)
+		dat += "<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>"
+	if(score.disease_bad > 0)
+		dat += "<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR><BR>"
 
-	<U>THE BAD:</U><BR>
-	<B>Dead Crewmen:</B> [score.deadcrew] (-[score.deadcrew * 250] Points)<BR>
-	<B>Destroyed Silicons:</B> [score.deadsilicon] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadsilicon * 500 : score.deadsilicon * -500] Points)<BR>
-	<B>AIs Destroyed:</B> [score.deadaipenalty] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadaipenalty * 1000 : score.deadaipenalty * -1000] Points)<BR>
-	<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>
-	<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>
-	<B>Cargo Crates Not Forwarded:</B> [score.stuffnotforwarded] (-[score.stuffnotforwarded * 25] Points)<BR>
-	<B>Station Power Issues:</B> [score.powerloss] (-[score.powerloss * 50] Points)<BR>
-	<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>
-	<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR><BR>
-
-	<U>THE WEIRD</U><BR>"}
-/*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"}
+	dat += "<U>THE WEIRD</U><BR>"
+/*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
 	var/profit = totalfunds - 100000
 	if (profit > 0)
 		dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
 	else if (profit < 0)
-		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"}*/
-	dat += "<B>Food Eaten:</b> [score.foodeaten]<BR>"
-	dat += "<B>Times a Clown was Abused:</B> [score.clownabuse]<BR>"
-	dat += "<B>Number of Times Someone was Slipped: </B> [score.slips]<BR>"
-	dat += "<B>Number of Explosions This Shift:</B> [score.explosions]<BR>"
-	dat += "<B>Number of Arena Rounds:</B> [score.arenafights]<BR>"
-	dat += "<B>Total money transferred:</B> [score.totaltransfer]<BR>"
+		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"*/
+	if(score.foodeaten > 0)
+		dat += "<B>Food Eaten:</b> [score.foodeaten]<BR>"
+	if(score.clownabuse > 0)
+		dat += "<B>Times a Clown was Abused:</B> [score.clownabuse]<BR>"
+	if(score.slips > 0)
+		dat += "<B>Number of Times Someone was Slipped: </B> [score.slips]<BR>"
+	if(score.explosions > 0)
+		dat += "<B>Number of Explosions This Shift:</B> [score.explosions]<BR>"
+	if(score.arenafights > 0)
+		dat += "<B>Number of Arena Rounds:</B> [score.arenafights]<BR>"
+	if(score.totaltransfer > 0)
+		dat += "<B>Total money transferred:</B> [score.totaltransfer]<BR>"
 	if(score.dimensionalpushes > 0)
 		dat += "<B>Dimensional Pushes:</B> [score.dimensionalpushes]<BR>"
 	if(score.assesblasted > 0)
@@ -230,9 +253,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
 
-	dat += {"<HR><BR>
-
-	<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"}
+	dat += "<HR><BR>"
+	dat += "<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
 	score.rating = "A Rating"
 
 	switch(score.crewscore)
