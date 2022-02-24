@@ -154,7 +154,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>AIs Destroyed:</B> [score.deadaipenalty] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadaipenalty * 1000 : score.deadaipenalty * -1000] Points)<BR>"
 	dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
 	dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
-	dat += "<B>Station Power Issues:</B> [score.powerloss] (-[score.powerloss * 50] Points)<BR>"
+	if (score.station_powerloss > 0)
+		dat += "<B>Station Power Issues:</B> [score.powerloss] (-[score.powerloss * 50] Points)<BR>"
 	if(score.turfssingulod > 0)
 		dat += "<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>"
 	if(score.disease_bad > 0)
