@@ -247,7 +247,7 @@
         speech.message = buttbottify(speech.message, 3, 9) // 3 times as intense
         var/obj/machinery/bot/buttbot/BB = current_bot
         BB.fart()
-        score["buttbotfarts"]++
+        score.buttbotfarts++
 
     else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
         to_chat(src, "You have nothing to speak with.")
@@ -298,7 +298,7 @@
         switch(M.a_intent)
             if(I_HELP)
                 visible_message("<span class ='notice'>[M] [response_help] [src].</span>")
-            if(I_GRAB||I_DISARM)
+            if(I_GRAB,I_DISARM)
                 visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
             if(I_HURT)
                 visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")

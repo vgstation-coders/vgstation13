@@ -277,7 +277,13 @@
 	if(spell.charge_type & Sp_CHARGES)
 		dat += "<br>Has [spell.charge_counter] charge\s left"
 	if(spell.charge_type & Sp_HOLDVAR)
-		dat += "<br>Requires [spell.holder_var_amount] [spell.holder_var_type]"
+		dat += "<br>Requires [spell.charge_type & Sp_GRADUAL ? "" : "[spell.holder_var_amount]"] "
+		if(spell.holder_var_name)
+			dat += "[spell.holder_var_name]"
+		else
+			dat += "[spell.holder_var_type]"
+		if(spell.charge_type & Sp_GRADUAL)
+			dat += " to sustain"
 	switch(spell.range)
 		if(1)
 			dat += "<br>Range: Adjacency"

@@ -69,20 +69,20 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, v
 		$("#vote_main").hide();
 		if(admin > 0){
 			$("#vote_admin").show();
-			$("#vote_admin").html("<br />(<a href='?src="+hSrc+";vote=cancel;'>Abort the current vote.</a>)");
+			$("#vote_admin").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=abort'>Abort the current vote</a>")));
+			$("#vote_admin").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=rig'>Rig the current vote</a>")));
 		}
 		else{
 			$("#vote_admin").hide();
 		}
 		$("#vote_choices").show();
-		$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a "  +  "href='?src=" + hSrc + ";vote=cancel_vote" + "'>Cancel your vote</a>")));
+		$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=cancel_vote'>Cancel your vote</a>")));
 	}
 	else{
 		$("#vote_main").show();
 		$("#vote_choices").hide();
 		$("#vote_admin").hide();
 	}
-
 }
 
 function update_choices(ID, choice, votes){

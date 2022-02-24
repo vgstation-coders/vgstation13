@@ -755,7 +755,8 @@
 	..()
 	plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	base_icon_state = icon_state
-
+	update_dir()
+	update()
 
 // pipe is deleted
 // ensure if holder is present, it is expelled
@@ -1027,14 +1028,12 @@
 /obj/structure/disposalpipe/segment/no_deconstruct
 	deconstructable = FALSE
 
-/obj/structure/disposalpipe/segment/New()
-	..()
-	if(icon_state == "pipe-s")
+/obj/structure/disposalpipe/segment/update_dir()
+	if(base_icon_state == "pipe-s")
 		dpdir = dir | turn(dir, 180)
 	else
 		dpdir = dir | turn(dir, -90)
-
-	update()
+	..()
 
 //a three-way junction with dir being the dominant direction
 /obj/structure/disposalpipe/junction
@@ -1043,16 +1042,14 @@
 /obj/structure/disposalpipe/junction/no_deconstruct
 	deconstructable = FALSE
 
-/obj/structure/disposalpipe/junction/New()
-	..()
-	if(icon_state == "pipe-j1")
+/obj/structure/disposalpipe/junction/update_dir()
+	if(base_icon_state == "pipe-j1")
 		dpdir = dir | turn(dir, -90) | turn(dir,180)
-	else if(icon_state == "pipe-j2")
+	else if(base_icon_state == "pipe-j2")
 		dpdir = dir | turn(dir, 90) | turn(dir,180)
 	else // pipe-y
 		dpdir = dir | turn(dir,90) | turn(dir, -90)
-	update()
-	return
+	..()
 
 // next direction to move
 // if coming in from secondary dirs, then next is primary dir
@@ -1097,17 +1094,20 @@
 	if(sort_tag)
 		desc += "\nIt's tagged with [sort_tag]."
 
-/obj/structure/disposalpipe/sortjunction/proc/updatedir()
+/obj/structure/disposalpipe/sortjunction/update_dir()
 	posdir = dir
 	negdir = turn(posdir, 180)
 
-	if(icon_state == "pipe-j1s")
+	if(base_icon_state == "pipe-j1s")
 		sortdir = turn(posdir, -90)
 	else
 		icon_state = "pipe-j2s"
+		base_icon_state = "pipe-j2s"
 		sortdir = turn(posdir, 90)
 
 	dpdir = sortdir | posdir | negdir
+
+	..()
 
 /obj/structure/disposalpipe/sortjunction/New()
 	. = ..()
@@ -1117,7 +1117,7 @@
 	else if(sort_tag)
 		sort_tag = uppertext(sort_tag)
 
-	updatedir()
+	update_dir()
 	updatedesc()
 	update()
 
@@ -1350,14 +1350,15 @@
 	posdir = dir
 	negdir = turn(posdir, 180)
 
-	if(icon_state == "pipe-j1ms")
+	if(base_icon_state == "pipe-j1ms")
 		sortdir = turn(posdir, -90)
 	else
 		icon_state = "pipe-j2ms"
+		base_icon_state = "pipe-j2ms"
 		sortdir = turn(posdir, 90)
 	dpdir = sortdir | posdir | negdir
 
-	. = ..()
+	..()
 
 // next direction to move
 // if coming in from negdir, then next is primary dir or sortdir
@@ -1407,12 +1408,16 @@
 
 /obj/structure/disposalpipe/trunk/New()
 	. = ..()
-	dpdir = dir
+	update_dir()
 
 	spawn(1)
 		getlinked()
 
 	update()
+
+/obj/structure/disposalpipe/trunk/update_dir()
+	dpdir = dir
+	..()
 
 /obj/structure/disposalpipe/trunk/proc/getlinked()
 	disposal = locate() in loc

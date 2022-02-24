@@ -377,7 +377,6 @@ var/list/admin_verbs_mod = list(
 		/client/proc/ticklag,
 		/client/proc/cmd_admin_grantfullaccess,
 		/client/proc/kaboom,
-		/client/proc/rigvote,
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
@@ -1211,10 +1210,11 @@ var/list/admin_verbs_mod = list(
 			if(rotate == null)
 				return
 
-			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees.")
-			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees")
+			var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
+			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)[rotatetext].")
+			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)[rotatetext].")
 			load_dungeon(ME, rotate, TRUE)
-			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"] rotated by [rotate] degrees")
+			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
 			return
 
 
@@ -1223,10 +1223,12 @@ var/list/admin_verbs_mod = list(
 		return
 	var/overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
 
-	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord] rotated by [rotate] degrees")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord] rotated by [rotate] degrees")
-	ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE) //Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"] rotated by [rotate] degrees")
+	var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
+	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+	//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
+	ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE)
+	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
 
 /client/proc/create_awaymission()
 	set category = "Admin"

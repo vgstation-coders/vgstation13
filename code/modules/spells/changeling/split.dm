@@ -1,13 +1,13 @@
 /spell/changeling/split
-	name = "Split (50)"
+	name = "Split (40)"
 	desc = "Split your body into two lifeforms."
 	abbreviation = "SP"
 	hud_state = "split"
 	charge_max = 300
 	cooldown_min = 30 SECONDS
 	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
-	chemcost = 50
-	required_dna = 2
+	chemcost = 40
+	required_dna = 1
 	max_genedamage = 0
 	horrorallowed = 0
 	var/datum/mind/owner = null // The mind of the user, to be used by the recruiter
@@ -16,19 +16,19 @@
 	
 /spell/changeling/split/Destroy()
 	owner = null
-	//qdel(recruiter)
+	qdel(recruiter)
 	recruiter = null
 	..()
-	
+
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
-	if (changeling.splitcount < 2) //<2 is two splits max
+	if (changeling.splitcount < 1)
 		user.visible_message("[user] is preparing to generate a new form.")
 		Splitting()
 	else
 		user.visible_message("You are unable to split again.")
-	return
+	..()
 
 /spell/changeling/split/proc/Splitting()
 	if(polling_ghosts)
@@ -55,6 +55,7 @@
 		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
 		(owner.current).visible_message("[(owner.current)] was unable to split at this time.")
+		changeling.chem_charges = max(changeling.chem_charges, chemcost)
 
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
 	to_chat(player, "<span class='recruit'>\ A changeling is splitting. You have been added to the list of potential ghosts. ([controls])</span>")
@@ -66,11 +67,12 @@
 	if(!player)
 		checkSplit(FALSE) 
 		polling_ghosts = FALSE
-		nanomanager.update_uis(src)
+		qdel(recruiter)
 		return
+	polling_ghosts = FALSE
 	var/turf/this_turf = get_turf(owner.current.loc)
 	var/mob/living/carbon/human/newbody = new(this_turf)
-	
+
 	newbody.ckey = player.ckey
 	var/oldspecies = newbody.dna.species
 	newbody.dna = owner.current.dna.Clone()
@@ -78,11 +80,10 @@
 	newbody.name = owner.current.name
 	newbody.flavor_text = owner.current.flavor_text
 	newbody.mind.memory = owner.memory
-	newbody.UpdateAppearance()
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
+	newbody.UpdateAppearance()
 	domutcheck(newbody, null)
-	
 	var/datum/role/changeling/newChangeling = new(newbody.mind)
 	newChangeling.OnPostSetup()
 	newChangeling.geneticdamage = 50
@@ -92,16 +93,13 @@
 	if(!hivemind)
 		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 		hivemind.OnPostSetup()
-	checkSplit(TRUE) //handles counting splits
-	hivemind?.HandleRecruitedRole(newChangeling)
+	hivemind.HandleRecruitedRole(newChangeling)
+
 	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_DEFAULT)
 	
-	newbody.updateChangelingHUD()
-	newbody.regenerate_icons()
+	checkSplit(TRUE) //handles counting splits
 	update_faction_icons()
-	nanomanager.close_uis(src)
+
 	feedback_add_details("changeling_powers","SP")
-	recruiter.Destroy()
-
-
+	qdel(recruiter)

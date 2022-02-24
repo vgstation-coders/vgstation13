@@ -337,3 +337,39 @@
 	newagent.AssignToRole(M.mind,1)
 	agency.HandleRecruitedRole(newagent)
 	newagent.Greet(GREET_DEFAULT)
+
+//////////////////////////////////////////////
+//                                          //
+//               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/changeling
+	name = "Changelings"
+	role_category = /datum/role/changeling
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
+	high_population_requirement = 30
+	repeatable = FALSE
+
+/datum/dynamic_ruleset/latejoin/changeling/execute()
+	var/mob/M = pick(assigned)
+	var/datum/role/changeling/newChangeling = new
+	newChangeling.AssignToRole(M.mind,1)
+	newChangeling.Greet(GREET_LATEJOIN)
+	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
+	if(!hivemind)
+		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
+		hivemind.OnPostSetup()
+	hivemind.HandleRecruitedRole(newChangeling)
+	return 1
+
+/datum/dynamic_ruleset/latejoin/changeling/previous_rounds_odds_reduction(var/result)
+	return result

@@ -486,7 +486,6 @@ var/datum/controller/gameticker/ticker
 				vote.initiate_vote("map","The Server", popup = 1)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
-
 		spawn(50)
 			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
@@ -561,7 +560,7 @@ var/datum/controller/gameticker/ticker
 	if(!ooc_allowed)
 		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
 		ooc_allowed = TRUE
-	scoreboard()
+	score.main()
 	return 1
 
 /datum/controller/gameticker/proc/bomberman_declare_completion()

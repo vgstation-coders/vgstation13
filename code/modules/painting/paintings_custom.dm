@@ -33,13 +33,13 @@
 
 /obj/structure/painting/custom/New()
 	src.painting_data = new(src, painting_width, painting_height, painting_offset_x, painting_offset_y, base_color)
-	var/list/gallery = score["global_paintings"]
+	var/list/gallery = score.global_paintings
 	if(!gallery.Find(src))
 		gallery += src
 	..()
 
 /obj/structure/painting/custom/Destroy()
-	var/list/gallery = score["global_paintings"]
+	var/list/gallery = score.global_paintings
 	if(gallery.len && gallery.Find(src))
 		gallery -= src
 	qdel(painting_data)
