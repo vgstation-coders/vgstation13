@@ -195,7 +195,7 @@
 	..()
 	if(!(breakable_flags & BREAKABLE_AS_THROWN))
 		return
-	if(breakable_flags & BREAKABLE_NOMOB && istype(hit_atom, /mob)) //Don't break when it hits a mob if it's flagged with BREAKABLE_NOMOB
+	if(!(breakable_flags & BREAKABLE_MOB) && istype(hit_atom, /mob)) //Don't break when it hits a mob if it's not flagged with BREAKABLE_MOB
 		return
 	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
 		//Unless the item falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.

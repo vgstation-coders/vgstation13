@@ -3,10 +3,10 @@
 #define BREAKABLE_WEAPON (1<<1)		//Item can break by being hit with a weapon. This includes projectiles.
 #define BREAKABLE_AS_THROWN (1<<2)	//Item can break when it ballistically collides with something.
 #define BREAKABLE_AS_MELEE (1<<3)	//Item can break when it's used as a melee weapon to hit something.
-#define BREAKABLE_NOMOB (1<<4)		//Item won't break when it's used to hit or collides with a mob. Overrides other flags.
-#define BREAKABLE_HIT ( BREAKABLE_UNARMED | BREAKABLE_WEAPON )			//Item can break by being hit with either an unarmed attack or a weapon.
-#define BREAKABLE_AS_ALL ( BREAKABLE_AS_THROWN | BREAKABLE_AS_MELEE )	//Item can break when it's used as a melee weapon, or when it ballistically collides with something.
-#define BREAKABLE_ALL ( BREAKABLE_HIT | BREAKABLE_AS_ALL )				//Item can break by being hit, or when used to hit something as a melee or a thrown weapon.
+#define BREAKABLE_MOB (1<<4)		//Item can break when it's used to hit or collides with a mob. If disabled, overrides other flags.
+#define BREAKABLE_HIT ( BREAKABLE_UNARMED | BREAKABLE_WEAPON )	//Item can break by being hit with either an unarmed attack or a weapon.
+#define BREAKABLE_AS_ALL ( BREAKABLE_AS_THROWN | BREAKABLE_AS_MELEE | BREAKABLE_MOB )	//Item can break when it's used as a melee weapon, or when it ballistically collides with something.
+#define BREAKABLE_ALL ALL			//Item can break by being hit, or when used to hit something as a melee or a thrown weapon.
 
 
 //Standard damage_armor levels for breakable items. Note that if an attack exceeds damage_armor it does full damage unless lessened by damage_resist.
