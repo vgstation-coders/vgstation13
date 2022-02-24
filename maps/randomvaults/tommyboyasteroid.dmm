@@ -1,55 +1,829 @@
-"a" = (/turf/space,/area)
-"b" = (/turf/unsimulated/mineral/random/high_chance,/area/vault/tommyboyasteroid)
-"c" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/tommyboyasteroid)
-"d" = (/turf/unsimulated/mineral/random/high_chance,/turf/unsimulated/mineral/gibtonite,/area/vault/tommyboyasteroid)
-"e" = (/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"f" = (/obj/effect/decal/cleanable/dirt,/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"g" = (/obj/effect/decal/cleanable/dirt,/obj/effect/alien/weeds,/mob/living/simple_animal/hostile/alien/sentinel,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"h" = (/obj/effect/decal/cleanable/dirt,/obj/effect/alien/weeds,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"i" = (/obj/effect/decal/remains/xeno,/obj/effect/decal/cleanable/dirt,/obj/effect/alien/weeds,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"j" = (/obj/effect/decal/cleanable/dirt,/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor/shuttle,/area/vault/tommyboyasteroid)
-"k" = (/obj/effect/decal/cleanable/dirt,/obj/effect/alien/resin/wall,/obj/effect/alien/weeds,/turf/unsimulated/floor/asteroid/plating,/area/vault/tommyboyasteroid)
-"m" = (/obj/effect/decal/cleanable/dirt,/obj/effect/alien/weeds/node,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"o" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/asteroid/plating,/area/vault/tommyboyasteroid)
-"p" = (/obj/item/weapon/shard{icon_state = "small"},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/asteroid/plating,/area/vault/tommyboyasteroid)
-"q" = (/obj/effect/decal/cleanable/dirt,/obj/item/clothing/head/helmet/space/ancient{desc = "While still in a servicable condition, nothing on this helmet is readable anymore."},/turf/simulated/floor/shuttle,/area/vault/tommyboyasteroid)
-"r" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle,/area/vault/tommyboyasteroid)
-"t" = (/obj/effect/decal/cleanable/dirt,/obj/item/clothing/under/color/blue{desc = "A mostly torn label adorns the back. You can read the first and third letters, which are 'N' and 'S' respectively. The front had a nametag at once, now all the remains is the abbreviation 'Maj.'"; name = "ancient blue jumpsuit"},/obj/effect/alien/weeds,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"u" = (/obj/effect/decal/remains/human,/obj/effect/decal/cleanable/dirt,/obj/effect/alien/weeds,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"v" = (/obj/structure/grille/broken,/obj/item/stack/rods,/obj/item/weapon/shard,/obj/item/weapon/shard{icon_state = "small"},/obj/effect/decal/cleanable/dirt,/obj/effect/alien/resin/wall,/obj/effect/alien/weeds,/turf/unsimulated/floor/asteroid/plating,/area/vault/tommyboyasteroid)
-"w" = (/obj/machinery/computer/shuttle,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/paper/tommyboy,/turf/unsimulated/floor/asteroid/plating,/area/vault/tommyboyasteroid)
-"x" = (/obj/effect/decal/cleanable/dirt,/obj/effect/alien/resin/wall,/turf/unsimulated/floor/asteroid/plating,/area/vault/tommyboyasteroid)
-"y" = (/obj/effect/decal/cleanable/dirt,/obj/effect/alien/resin/wall,/turf/simulated/floor/shuttle,/area/vault/tommyboyasteroid)
-"z" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"A" = (/obj/effect/decal/cleanable/dirt,/obj/structure/shuttle/diag_wall/smooth,/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"B" = (/obj/effect/decal/cleanable/dirt,/obj/structure/bed,/obj/item/clothing/suit/space/syndicate/orange{desc = "The labels are faded beyond recognition, except for the second letter on the back logo, 'A'."; name = "ancient orange space suit"},/turf/simulated/floor/shuttle,/area/vault/tommyboyasteroid)
-"C" = (/obj/effect/decal/cleanable/dirt,/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/unsimulated/floor/asteroid/cave,/area/vault/tommyboyasteroid)
-"D" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/wall/shuttle,/area/vault/tommyboyasteroid)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/space,
+/area)
+"b" = (
+/turf/unsimulated/mineral/random/high_chance,
+/area/vault/tommyboyasteroid)
+"c" = (
+/turf/unsimulated/mineral/random/high_chance_clown,
+/area/vault/tommyboyasteroid)
+"d" = (
+/turf/unsimulated/mineral/random/high_chance,
+/turf/unsimulated/mineral/gibtonite,
+/area/vault/tommyboyasteroid)
+"e" = (
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"f" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"g" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/weeds,
+/mob/living/simple_animal/hostile/alien/sentinel,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"h" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/weeds,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"i" = (
+/obj/effect/decal/remains/xeno,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/weeds,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"j" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/vault/tommyboyasteroid)
+"k" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/resin/wall,
+/obj/effect/alien/weeds,
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/tommyboyasteroid)
+"m" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/weeds/node,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"o" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/tommyboyasteroid)
+"p" = (
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/tommyboyasteroid)
+"q" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/clothing/head/helmet/space/ancient{
+	desc = "While still in a servicable condition, nothing on this helmet is readable anymore."
+	},
+/turf/simulated/floor/shuttle,
+/area/vault/tommyboyasteroid)
+"r" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/shuttle,
+/area/vault/tommyboyasteroid)
+"t" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/clothing/under/color/blue{
+	desc = "A mostly torn label adorns the back. You can read the first and third letters, which are 'N' and 'S' respectively. The front had a nametag at once, now all the remains is the abbreviation 'Maj.'";
+	name = "ancient blue jumpsuit"
+	},
+/obj/effect/alien/weeds,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"u" = (
+/obj/effect/decal/remains/human,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/weeds,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"v" = (
+/obj/structure/grille/broken,
+/obj/item/stack/rods,
+/obj/item/weapon/shard,
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/resin/wall,
+/obj/effect/alien/weeds,
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/tommyboyasteroid)
+"w" = (
+/obj/machinery/computer/shuttle,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/paper/tommyboy,
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/tommyboyasteroid)
+"x" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/resin/wall,
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/tommyboyasteroid)
+"y" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/alien/resin/wall,
+/turf/simulated/floor/shuttle,
+/area/vault/tommyboyasteroid)
+"z" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"A" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"B" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/bed,
+/obj/item/clothing/suit/space/syndicate/orange{
+	desc = "The labels are faded beyond recognition, except for the second letter on the back logo, 'A'.";
+	name = "ancient orange space suit"
+	},
+/turf/simulated/floor/shuttle,
+/area/vault/tommyboyasteroid)
+"C" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid/cave,
+/area/vault/tommyboyasteroid)
+"D" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/wall/shuttle,
+/area/vault/tommyboyasteroid)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaabbbaaa
-aaaaaaaaaaaaaaaaaabcccbaa
-aaaaaabdbaaaaaaaaabcdccba
-aaaaabbbbbbeeeaaaabcccbba
-aaaabbbcbbbbeeeebaabbbaaa
-aaabbbbbbbbbdcebbbaaaaaaa
-aaaebbdbbbbbbbbbbbbbaaaaa
-aaeecbbbbbbbbbbcbbbbbbaaa
-aaebbbbbbghhhbbbbbdbcbaaa
-aaebbbbchihfkDbbDbbDbbbaa
-abbbbdbbhhmDopdoqpbrDbbaa
-abbbbbbtuhhvwrxroryrxzbba
-abdbbbbhhhhDjByrpdxobzzza
-abbbbbbhhmiADbDDbbDDCzbza
-abbbcbbbhhghbbbcbbbdbcbba
-abbbbbbbbbbbbbbbbbbbbbbaa
-abdbeeebbdbcbbbbbbbbbaaaa
-aaaeeeeeebbbbbbbbaaaaaaaa
-aaaaaeeeeeebbbbbaaabbbaaa
-aaaaaaaaaaaaaaaaaabccbaaa
-aaaaaaaaaaaaaaaaaaadcbaaa
-aaaaaaaaaaaaaaaaaaabbaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+e
+e
+e
+b
+b
+d
+b
+b
+b
+d
+a
+a
+a
+a
+a
+a
+"}
+(4,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+b
+e
+e
+b
+b
+b
+b
+b
+b
+b
+b
+b
+e
+a
+a
+a
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+a
+a
+a
+a
+b
+b
+b
+c
+b
+b
+b
+b
+b
+b
+c
+b
+e
+e
+a
+a
+a
+a
+a
+"}
+(6,1,1) = {"
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+b
+b
+d
+b
+b
+b
+b
+b
+e
+e
+e
+a
+a
+a
+a
+"}
+(7,1,1) = {"
+a
+a
+a
+a
+b
+b
+b
+b
+d
+b
+b
+b
+b
+b
+b
+b
+b
+b
+e
+e
+e
+a
+a
+a
+a
+"}
+(8,1,1) = {"
+a
+a
+a
+a
+d
+b
+c
+b
+b
+b
+b
+c
+b
+t
+h
+h
+b
+b
+b
+e
+e
+a
+a
+a
+a
+"}
+(9,1,1) = {"
+a
+a
+a
+a
+b
+b
+b
+b
+b
+b
+b
+h
+h
+u
+h
+h
+h
+b
+b
+e
+e
+a
+a
+a
+a
+"}
+(10,1,1) = {"
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+g
+i
+h
+h
+h
+m
+h
+b
+d
+b
+e
+a
+a
+a
+a
+"}
+(11,1,1) = {"
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+h
+h
+m
+h
+h
+i
+g
+b
+b
+b
+e
+a
+a
+a
+a
+"}
+(12,1,1) = {"
+a
+a
+a
+a
+a
+e
+b
+b
+b
+b
+h
+f
+D
+v
+D
+A
+h
+b
+c
+b
+b
+a
+a
+a
+a
+"}
+(13,1,1) = {"
+a
+a
+a
+a
+a
+e
+e
+d
+b
+b
+h
+k
+o
+w
+j
+D
+b
+b
+b
+b
+b
+a
+a
+a
+a
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+e
+e
+c
+b
+b
+b
+D
+p
+r
+B
+b
+b
+b
+b
+b
+b
+a
+a
+a
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+a
+e
+e
+b
+b
+b
+b
+d
+x
+y
+D
+b
+b
+b
+b
+b
+a
+a
+a
+a
+"}
+(16,1,1) = {"
+a
+a
+a
+a
+a
+a
+e
+b
+b
+c
+b
+b
+o
+r
+r
+D
+c
+b
+b
+b
+b
+a
+a
+a
+a
+"}
+(17,1,1) = {"
+a
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+D
+q
+o
+p
+b
+b
+b
+b
+b
+a
+a
+a
+a
+a
+"}
+(18,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+p
+r
+d
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+"}
+(19,1,1) = {"
+a
+a
+a
+b
+b
+b
+a
+a
+b
+b
+d
+b
+b
+y
+x
+D
+b
+b
+b
+a
+a
+b
+a
+a
+a
+"}
+(20,1,1) = {"
+a
+a
+b
+c
+c
+c
+b
+a
+b
+b
+b
+D
+r
+r
+o
+D
+d
+b
+b
+a
+b
+c
+d
+b
+a
+"}
+(21,1,1) = {"
+a
+a
+b
+c
+d
+c
+b
+a
+a
+b
+c
+b
+D
+x
+b
+C
+b
+b
+b
+a
+b
+c
+c
+b
+a
+"}
+(22,1,1) = {"
+a
+a
+b
+c
+c
+c
+b
+a
+a
+b
+b
+b
+b
+z
+z
+z
+c
+b
+a
+a
+b
+b
+b
+a
+a
+"}
+(23,1,1) = {"
+a
+a
+a
+b
+c
+b
+a
+a
+a
+a
+a
+b
+b
+b
+z
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+"}
+(24,1,1) = {"
+a
+a
+a
+a
+b
+b
+a
+a
+a
+a
+a
+a
+a
+b
+z
+z
+b
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(25,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}

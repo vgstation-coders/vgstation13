@@ -1,4 +1,5 @@
-/datum/controller/gameticker/scoreboard/proc/syndicate_score(var/datum/faction/syndicate/traitor/TR, var/completions)
+/datum/controller/gameticker/scoreboard/proc/syndicate_score(var/datum/faction/syndicate/traitor/TR)
+	var/completions
 	var/list/boombox = score.implant_phrases
 	var/synphra = score.syndiphrases
 	var/synspo = score.syndisponses
@@ -16,6 +17,7 @@
 			completions += "<BR>The following explosive implants were used:<BR>"
 			for(var/entry in score.implant_phrases)
 				completions += "[entry]<BR>"
+	return completions
 
 /datum/controller/gameticker/scoreboard/proc/nuke_op_score(var/datum/faction/syndicate/nuke_op/NO)
 	var/foecount = 0
@@ -38,7 +40,7 @@
 			oparrested++
 		else if(M.current.stat == DEAD)
 			opkilled++
-	for(var/mob/living/C in mob_list)
+	for(var/mob/living/C in player_list)
 		if(!istype(C,/mob/living/carbon/human) || !istype(C,/mob/living/silicon/robot) || !istype(C,/mob/living/silicon/ai))
 			continue
 		if(C.stat == DEAD)
@@ -157,8 +159,8 @@
 			revarrested++
 		else if (M.current.stat == DEAD)
 			revkilled++
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.mind)
+	for(var/mob/living/player in player_list)
+		if (istype(player, /mob/living/carbon/human))
 			var/role = player.mind.assigned_role
 			if(role in list("Captain", "Head of Security", "Head of Personnel", "Chief Engineer", "Research Director"))
 				if(player.stat == DEAD)
@@ -169,9 +171,9 @@
 				if(locate(/datum/role/revolutionary) in player.mind.antag_roles)
 					continue
 				loycount++
-	for(var/mob/living/silicon/X in mob_list)
-		if (X.stat != DEAD)
-			loycount++
+		else if(istype(player, /mob/living/silicon))
+			if (player.stat != DEAD)
+				loycount++
 	//if(score.scores["traitorswon"])
 		//score.scores["crewscore"] -= 10000
 	if(foecount == revarrested)

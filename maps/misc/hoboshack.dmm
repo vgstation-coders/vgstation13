@@ -1,60 +1,567 @@
-"af" = (/obj/machinery/portable_atmospherics/canister/oxygen,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"cu" = (/obj/structure/closet/cabinet,/obj/effect/decal/cleanable/cobweb2,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/stack/sheet/glass/glass/bigstack,/obj/item/stack/sheet/metal/bigstack,/obj/item/stack/rods,/obj/item/stack/sheet/wood/bigstack,/turf/simulated/floor/wood,/area/shack)
-"gK" = (/obj/structure/toilet{dir = 8},/obj/machinery/light/small{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "showroomfloor"},/area/shack)
-"is" = (/obj/structure/mirror{pixel_y = 32},/obj/machinery/atmospherics/unary/vent_pump{on = 1},/turf/simulated/floor{icon_state = "showroomfloor"},/area/shack)
-"kz" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"kI" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken4"},/area/shack)
-"lF" = (/turf/simulated/wall/mineral/wood,/area/shack)
-"lQ" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"mi" = (/obj/machinery/atmospherics/unary/tank/air{dir = 8},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"mM" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"mQ" = (/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/machinery/power/apc{cell_type = 0; icon_state = "apc1"; opened = 1; pixel_y = -24},/obj/item/weapon/cell/potato,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"no" = (/obj/machinery/power/port_gen/pacman{anchored = 1},/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/obj/item/stack/sheet/mineral/plasma{amount = 30},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"pC" = (/obj/effect/decal/cleanable/generic,/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"rN" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"sE" = (/obj/structure/sink{dir = 4; pixel_x = 11},/turf/simulated/floor{icon_state = "showroomfloor"},/area/shack)
-"uP" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "showroomfloor"},/area/shack)
-"uX" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"vp" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = 1},/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = 1},/obj/machinery/door/mineral/wood{name = "Wooden Door"},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"wk" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"wm" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = 1},/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken"},/area/shack)
-"wq" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = 1},/obj/machinery/door/mineral/wood{name = "Wooden Door"},/turf/simulated/floor/wood,/area/shack)
-"wK" = (/obj/structure/table/woodentable,/obj/machinery/microwave{pixel_y = 6},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"zr" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"zH" = (/turf/simulated/wall/r_rock/porous,/area/shack)
-"Bt" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden,/obj/effect/decal/cleanable/generic,/turf/simulated/floor/wood,/area/shack)
-"BF" = (/obj/machinery/light/small{dir = 8},/obj/item/anvil,/obj/item/weapon/reagent_containers/glass/bucket/water_filled,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"Cp" = (/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"Ds" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"EH" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/toy/cards,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"Fy" = (/obj/structure/bed/chair/wood/normal{dir = 4},/obj/effect/decal/cleanable/dirt,/obj/effect/landmark/hobostart,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"Fz" = (/obj/structure/safe,/obj/abstract/map/spawner/safe/medical,/obj/abstract/map/spawner/safe/food,/turf/simulated/floor/wood,/area/shack)
-"Gw" = (/obj/structure/bed,/obj/machinery/light/small{dir = 4},/obj/effect/landmark/hobostart,/turf/simulated/floor/wood,/area/shack)
-"Gx" = (/obj/structure/forge,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"Hg" = (/obj/structure/bed/chair/wood/normal{dir = 8},/obj/effect/decal/cleanable/dirt,/obj/effect/landmark/hobostart,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
-"Kr" = (/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Lo" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Od" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/grille/broken,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"QD" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Rz" = (/obj/machinery/light/small{dir = 4},/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Ts" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/effect/decal/cleanable/generic,/obj/item/blueprints/construction_permit,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Tw" = (/obj/structure/rack,/obj/item/weapon/pickaxe/shovel,/obj/item/device/flashlight/lantern,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/pickaxe/shovel,/obj/item/weapon/pickaxe/shovel,/obj/item/device/flashlight/lantern,/obj/item/device/flashlight/lantern,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"WD" = (/obj/structure/table/woodentable,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/stack/cable_coil,/obj/item/stack/cable_coil,/obj/item/stack/cable_coil,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"XL" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/door/mineral/wood{name = "Wooden Door"},/turf/simulated/floor/wood,/area/shack)
-"Yn" = (/obj/machinery/door/window{dir = 2},/obj/machinery/door/window{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Yt" = (/obj/structure/ore_box,/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
-"Zu" = (/obj/structure/table/woodentable,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/box/donkpockets,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"ZK" = (/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"af" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"cu" = (
+/obj/structure/closet/cabinet,
+/obj/effect/decal/cleanable/cobweb2,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/stack/rods,
+/obj/item/stack/sheet/wood/bigstack,
+/turf/simulated/floor/wood,
+/area/shack)
+"gK" = (
+/obj/structure/toilet{
+	dir = 8
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"is" = (
+/obj/structure/mirror{
+	pixel_y = 32
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"kz" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"kI" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken4"
+	},
+/area/shack)
+"lF" = (
+/turf/simulated/wall/mineral/wood,
+/area/shack)
+"lQ" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"mi" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"mM" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"mQ" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/item/weapon/cell/potato,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"no" = (
+/obj/machinery/power/port_gen/pacman{
+	anchored = 1
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"pC" = (
+/obj/effect/decal/cleanable/generic,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"rN" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"sE" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"uP" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/shack)
+"uX" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"vp" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"wk" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"wm" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/shack)
+"wq" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"wK" = (
+/obj/structure/table/woodentable,
+/obj/machinery/microwave{
+	pixel_y = 6
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"zr" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"zH" = (
+/turf/simulated/wall/r_rock/porous,
+/area/shack)
+"Bt" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/wood,
+/area/shack)
+"BF" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/obj/item/anvil,
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"Cp" = (
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"Ds" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"EH" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/item/toy/cards,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"Fy" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"Fz" = (
+/obj/structure/safe,
+/obj/abstract/map/spawner/safe/medical,
+/obj/abstract/map/spawner/safe/food,
+/turf/simulated/floor/wood,
+/area/shack)
+"Gw" = (
+/obj/structure/bed,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/wood,
+/area/shack)
+"Gx" = (
+/obj/structure/forge,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"Hg" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/landmark/hobostart,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/shack)
+"Kr" = (
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Lo" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Od" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"QD" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Rz" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Ts" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/generic,
+/obj/item/blueprints/construction_permit,
+/obj/item/weapon/circuitboard/airlock,
+/obj/item/weapon/circuitboard/airlock,
+/obj/item/weapon/circuitboard/airlock,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Tw" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/pickaxe/hand,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/device/flashlight/lantern,
+/obj/item/device/flashlight/lantern,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"WD" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/stack/cable_coil,
+/obj/item/stack/cable_coil,
+/obj/item/stack/cable_coil,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"XL" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
+/turf/simulated/floor/wood,
+/area/shack)
+"Yn" = (
+/obj/machinery/door/window{
+	dir = 2
+	},
+/obj/machinery/door/window{
+	dir = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"Yt" = (
+/obj/structure/ore_box,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/mine/explored)
+"Zu" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/wallet/random,
+/obj/item/weapon/storage/box/donkpockets,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/shack)
+"ZK" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/mine/explored)
 
 (1,1,1) = {"
-zHzHzHzHzHzHzHzHzHzH
-zHafkzLoTsmilFisgKzH
-zHlQwkmMmQnolFuPsEzH
-zHvplFlFlFlFlFwqlFlF
-zHlQTwWDZuwKlFwmculF
-lFzrrNuXuXpCXLBtkIlF
-lFBFFyEHHgRzlFFzGwlF
-lFGxCpCpCpKrlFlFDslF
-lFlFOdQDlFYnlFYtYtZK
-ZKZKZKZKZKZKZKZKZKZK
+zH
+zH
+zH
+zH
+zH
+lF
+lF
+lF
+lF
+ZK
+"}
+(2,1,1) = {"
+zH
+af
+lQ
+vp
+lQ
+zr
+BF
+Gx
+lF
+ZK
+"}
+(3,1,1) = {"
+zH
+kz
+wk
+lF
+Tw
+rN
+Fy
+Cp
+Od
+ZK
+"}
+(4,1,1) = {"
+zH
+Lo
+mM
+lF
+WD
+uX
+EH
+Cp
+QD
+ZK
+"}
+(5,1,1) = {"
+zH
+Ts
+mQ
+lF
+Zu
+uX
+Hg
+Cp
+lF
+ZK
+"}
+(6,1,1) = {"
+zH
+mi
+no
+lF
+wK
+pC
+Rz
+Kr
+Yn
+ZK
+"}
+(7,1,1) = {"
+zH
+lF
+lF
+lF
+lF
+XL
+lF
+lF
+lF
+ZK
+"}
+(8,1,1) = {"
+zH
+is
+uP
+wq
+wm
+Bt
+Fz
+lF
+Yt
+ZK
+"}
+(9,1,1) = {"
+zH
+gK
+sE
+lF
+cu
+kI
+Gw
+Ds
+Yt
+ZK
+"}
+(10,1,1) = {"
+zH
+zH
+zH
+lF
+lF
+lF
+lF
+lF
+ZK
+ZK
 "}
