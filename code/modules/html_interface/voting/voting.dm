@@ -108,9 +108,7 @@ var/global/datum/controller/vote/vote = new()
 			src.reset()
 		else
 			update(1)
-	else
 		lock = FALSE
-		return
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
