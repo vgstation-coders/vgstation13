@@ -8,7 +8,6 @@
 #define BREAKABLE_AS_ALL ( BREAKABLE_AS_THROWN | BREAKABLE_AS_MELEE | BREAKABLE_MOB )	//Item can break when it's used as a melee weapon, or when it ballistically collides with something.
 #define BREAKABLE_ALL ALL			//Item can break by being hit, or when used to hit something as a melee or a thrown weapon.
 
-
 //Standard damage_armor levels for breakable items. Note that if an attack exceeds damage_armor it does full damage unless lessened by damage_resist.
 #define BREAKARMOR_NOARMOR 0			//Plastically deforms at the slightest application of force.
 #define BREAKARMOR_FLIMSY 2 			//Can only resist the weakest of attacks
