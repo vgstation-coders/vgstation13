@@ -293,7 +293,7 @@ var/list/nuclear_bombs = list()
 	src.yes_code = 0
 	src.safety = 1
 	src.icon_state = "nuclearbomb3"
-	playsound(src,'sound/machines/Alarm.ogg',100,0,5)
+	world << sound('sound/machines/Alarm.ogg')
 	if (ticker)
 		ticker.explosion_in_progress = 1
 
