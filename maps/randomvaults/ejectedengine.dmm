@@ -1,326 +1,3677 @@
-"aa" = (/turf/space,/area)
-"ab" = (/mob/living/simple_animal/hostile/retaliate/malf_drone/vault,/turf/space,/area)
-"ac" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/space,/area)
-"ad" = (/obj/item/stack/cable_coil/cut,/turf/space,/area)
-"ae" = (/obj/machinery/atmospherics/unary/vent{dir = 4},/turf/space,/area)
-"af" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall,/area/vault/ejectedengine)
-"ag" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
-"ah" = (/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 1},/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
-"ai" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
-"aj" = (/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
-"ak" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 6; icon_state = "intact"; tag = "icon-intact (SOUTHEAST)"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
-"al" = (/obj/machinery/atmospherics/unary/vent{dir = 8},/turf/space,/area)
-"am" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 5; icon_state = "intact"; tag = "icon-intact (NORTHEAST)"},/turf/space,/area)
-"an" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/space,/area)
-"ao" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/SMES)
-"ap" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/SMES)
-"aq" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 5; icon_state = "intact"; tag = "icon-intact (NORTHEAST)"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/SMES)
-"ar" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/SMES)
-"as" = (/turf/simulated/wall,/area/vault/ejectedengine)
-"at" = (/turf/simulated/wall/r_wall,/area/vault/ejectedengine/burnroom)
-"au" = (/obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber{dir = 1},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"av" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 6},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"aw" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 10},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"ax" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/obj/machinery/camera/noview,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"ay" = (/turf/simulated/wall,/area/vault/ejectedengine/burnroom)
-"az" = (/turf/simulated/wall,/area/vault/ejectedengine/SMES)
-"aA" = (/turf/simulated/wall/r_wall,/area/vault/ejectedengine/SMES)
-"aB" = (/obj/machinery/atmospherics/unary/vent_pump,/obj/machinery/alarm{pixel_y = 24},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aC" = (/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aD" = (/obj/machinery/camera/noview,/obj/machinery/light/burnt{dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aE" = (/obj/machinery/power/apc/no_alerts{dir = 1; pixel_y = 24},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aF" = (/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/obj/machinery/computer/powermonitor,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aG" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall/r_wall,/area/vault/ejectedengine/SMES)
-"aH" = (/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"aI" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"aJ" = (/obj/machinery/camera/noview,/obj/machinery/alarm{pixel_y = 24},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aK" = (/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/machinery/computer/ejectedengine/engine,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aL" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/obj/machinery/computer/ejectedengine/shield,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aM" = (/obj/item/weapon/extinguisher,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aN" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/SMES)
-"aO" = (/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/obj/machinery/power/terminal{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aP" = (/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/obj/machinery/power/battery/smes{charge = 5e+006},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aQ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aR" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aS" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light_switch{pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aT" = (/obj/machinery/light/burnt{dir = 8},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aU" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aV" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aW" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating,/area/vault/ejectedengine/SMES)
-"aX" = (/obj/structure/cable,/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/obj/machinery/power/terminal{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aY" = (/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/obj/structure/cable,/obj/machinery/power/battery/smes{charge = 5e+006},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"aZ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"ba" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bb" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/airlock/engineering{icon_state = "door_locked"; locked = 1; name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bc" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bd" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"be" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/vault/ejectedengine/SMES)
-"bf" = (/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/structure/cable,/obj/machinery/power/battery/smes{charge = 5e+006},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bg" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bh" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bi" = (/obj/machinery/firealarm{dir = 4; pixel_x = 24},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bj" = (/obj/structure/girder,/turf/simulated/floor/plating/airless/damaged,/area/vault/ejectedengine)
-"bk" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 5},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bl" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 9},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bm" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bn" = (/obj/machinery/firealarm{dir = 4; pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bo" = (/obj/structure/grille,/turf/space,/area/vault/ejectedengine)
-"bp" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bq" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light_switch{pixel_y = -24},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"br" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bs" = (/obj/structure/cable,/obj/machinery/computer/powermonitor,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bt" = (/obj/machinery/atmospherics/unary/vent/visible,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bu" = (/obj/machinery/door/firedoor/red,/obj/machinery/door/window{base_state = "right"; dir = 2; icon_state = "right"; req_access = list(10)},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bv" = (/obj/machinery/door/firedoor/red,/obj/machinery/door/window{dir = 2; req_access = list(10)},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bw" = (/obj/machinery/door/firedoor/red,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/window{dir = 2; req_access = list(10)},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bx" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/wall,/area/vault/ejectedengine/SMES)
-"by" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/wall,/area/vault/ejectedengine/SMES)
-"bz" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/wall,/area/vault/ejectedengine/SMES)
-"bA" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/wall,/area/vault/ejectedengine/generator)
-"bB" = (/obj/machinery/atmospherics/pipe/simple/general/visible,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bC" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/door/firedoor/red,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"bD" = (/obj/machinery/atmospherics/unary/vent_scrubber/on{dir = 4},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bE" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bF" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
-"bG" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bH" = (/obj/machinery/atmospherics/binary/valve{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bI" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/machinery/meter,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bJ" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 8},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bK" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bL" = (/obj/machinery/atmospherics/unary/vent_pump,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bM" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bN" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 9; icon_state = "intact"; tag = "icon-intact (NORTHWEST)"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"bO" = (/turf/simulated/wall,/area/vault/ejectedengine/generator)
-"bP" = (/obj/structure/grille,/turf/space,/area)
-"bQ" = (/obj/structure/grille/broken,/obj/spacepod/random,/turf/space,/area)
-"bR" = (/obj/structure/grille/broken,/turf/space,/area)
-"bS" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"bT" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"bU" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/general/visible,/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"bV" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"bW" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
-"bX" = (/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"bY" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 4; on = 0; scrub_CO2 = 0; scrub_Toxins = 0},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"bZ" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/item/tool/crowbar,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ca" = (/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cb" = (/obj/machinery/light/burnt{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cc" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall,/area/vault/ejectedengine/generator)
-"cd" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ce" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 6},/turf/space,/area)
-"cf" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 10},/turf/space,/area)
-"cg" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 5; icon_state = "intact"; tag = "icon-intact (NORTHEAST)"},/turf/simulated/wall,/area/vault/ejectedengine/monitoring)
-"ch" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/turf/simulated/wall,/area/vault/ejectedengine/monitoring)
-"ci" = (/obj/machinery/alarm{dir = 4; pixel_x = -22},/obj/item/tool/wrench,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cj" = (/obj/machinery/light{dir = 1},/obj/machinery/atmospherics/binary/valve,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"ck" = (/obj/machinery/light_switch{pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cl" = (/turf/simulated/wall,/area/vault/ejectedengine/monitoring)
-"cm" = (/turf/simulated/wall/r_wall,/area/vault/ejectedengine/generator)
-"cn" = (/obj/machinery/camera/noview{dir = 4},/obj/effect/glowshroom/single,/obj/machinery/light/burnt{dir = 8},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"co" = (/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cp" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/item/trash/chips,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cq" = (/obj/machinery/light_switch{pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cr" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 9},/turf/space,/area)
-"cs" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 5},/turf/space,/area)
-"ct" = (/obj/structure/grille,/obj/machinery/door/poddoor{id_tag = "engine_ignite"; name = "Blast Door"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"cu" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"cv" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 1},/obj/machinery/portable_atmospherics/scrubber,/obj/machinery/camera/noview{dir = 4},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cw" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cx" = (/obj/machinery/atmospherics/pipe/simple/general/visible,/obj/machinery/meter,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cy" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/machinery/computer/station_alert,/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cz" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
-"cA" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/machinery/atmospherics/pipe/simple/general/visible,/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
-"cB" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{dir = 1},/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
-"cC" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 6},/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cD" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/effect/landmark/corpse/engineer/old,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cE" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cF" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/machinery/firealarm{dir = 4; pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"cG" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall,/area/vault/ejectedengine/generator)
-"cH" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/turf/space,/area)
-"cI" = (/obj/machinery/air_sensor{frequency = 1553; id_tag = "engine_sensor"; output = 63},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"cJ" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"cK" = (/obj/item/clothing/head/welding,/obj/machinery/ignition_switch{id_tag = "engine_ignite"; pixel_x = 8; pixel_y = 24},/obj/machinery/door_control{id_tag = "engine_ignite"; name = "Blast Door Control"; pixel_x = -8; pixel_y = 24},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cL" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cM" = (/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cN" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cO" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cP" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"cQ" = (/obj/machinery/door/firedoor/red,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cR" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cS" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light/burnt{dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cT" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/machinery/alarm{pixel_y = 24},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cU" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cV" = (/obj/machinery/firealarm{pixel_y = 24},/obj/machinery/camera/noview,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cW" = (/obj/machinery/atmospherics/unary/portables_connector,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cX" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 5},/obj/machinery/meter,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light/burnt{dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cY" = (/obj/machinery/door/firedoor/red,/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light_switch{pixel_y = 24},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cZ" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"da" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"db" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 6},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dc" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/item/trash/chips,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dd" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 10},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"de" = (/obj/machinery/atmospherics/pipe/simple/general/visible,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/glowshroom/single,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"df" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/generator)
-"dg" = (/obj/machinery/camera/noview{dir = 4},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"dh" = (/obj/machinery/igniter{icon_state = "igniter0"; id_tag = "engine_ignite"; on = 0},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"di" = (/obj/machinery/igniter{icon_state = "igniter0"; id_tag = "engine_ignite"; on = 0},/mob/living/carbon/monkey{icon_state = "rathen1"; name = "Mr. Rathen"; real_name = "Mr. Rathen"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"dj" = (/obj/machinery/atmospherics/unary/vent/visible{dir = 4},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"dk" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"dl" = (/obj/machinery/light/burnt{dir = 8},/obj/machinery/atmospherics/binary/valve{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dm" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/machinery/meter,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dn" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 8},/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"do" = (/obj/item/device/t_scanner,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dp" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dq" = (/obj/machinery/door/firedoor/red,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dr" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"ds" = (/obj/machinery/atmospherics/binary/volume_pump,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dt" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 5},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"du" = (/obj/machinery/atmospherics/binary/volume_pump{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dv" = (/obj/machinery/door/firedoor/red,/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dw" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 6},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dx" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dy" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 10},/obj/effect/glowshroom/single,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dz" = (/obj/machinery/atmospherics/pipe/simple/general/visible,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dA" = (/obj/machinery/atmospherics/pipe/simple/general/visible,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dB" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/ejectedengine/generator)
-"dC" = (/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/machinery/computer/powermonitor,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dD" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dE" = (/obj/machinery/atmospherics/unary/portables_connector,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dF" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dG" = (/obj/machinery/atmospherics/unary/portables_connector,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dH" = (/obj/machinery/atmospherics/unary/portables_connector,/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dI" = (/obj/machinery/power/apc/no_alerts{pixel_y = -24},/obj/structure/cable,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dJ" = (/obj/machinery/firealarm{dir = 1; pixel_y = -25},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dK" = (/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 8},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dL" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/machinery/meter,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dM" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/machinery/light,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dN" = (/obj/machinery/door/firedoor/red,/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"dO" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dP" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/item/device/radio,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dQ" = (/obj/machinery/atmospherics/pipe/simple/general/visible,/obj/machinery/meter,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dR" = (/obj/machinery/atmospherics/binary/circulator{anchored = 1; dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dS" = (/obj/machinery/power/generator{anchored = 1; dir = 4},/obj/structure/cable,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dT" = (/obj/machinery/atmospherics/binary/circulator{anchored = 1},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"dU" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{dir = 1},/turf/space,/area)
-"dV" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/ejectedengine/monitoring)
-"dW" = (/obj/structure/cable,/obj/machinery/computer/general_air_control{frequency = 1553; name = "Engine Monitoring Console"; sensors = list("engine_sensor" = "Engine Sensor")},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dX" = (/obj/machinery/atmospherics/pipe/simple/general/visible,/obj/machinery/meter,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dY" = (/obj/machinery/atmospherics/unary/portables_connector,/obj/machinery/portable_atmospherics/scrubber,/obj/structure/cable,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"dZ" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
-"ea" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/ejectedengine/burnroom)
-"eb" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 4},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light/burnt{dir = 8},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ec" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ed" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ee" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 5},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ef" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 10},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"eg" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"eh" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 6},/turf/simulated/floor/plating,/area/vault/ejectedengine/generator)
-"ei" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/turf/space,/area)
-"ej" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"ek" = (/obj/machinery/light/burnt,/obj/machinery/atmospherics/binary/valve,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"el" = (/obj/machinery/power/apc/no_alerts{dir = 4; pixel_x = 24},/obj/structure/cable,/turf/simulated/floor,/area/vault/ejectedengine/monitoring)
-"em" = (/obj/machinery/atmospherics/unary/vent/visible{dir = 1},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"en" = (/obj/machinery/alarm{dir = 4; pixel_x = -22},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"eo" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 5},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ep" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/turf/simulated/floor/plating,/area/vault/ejectedengine/generator)
-"eq" = (/obj/machinery/camera/noview{dir = 4},/obj/machinery/power/apc/no_alerts{dir = 8; pixel_x = -24},/obj/structure/cable,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"er" = (/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 1},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"es" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 10},/turf/simulated/floor/plating,/area/vault/ejectedengine/generator)
-"et" = (/obj/effect/glowshroom/single,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"eu" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ev" = (/obj/structure/closet/wardrobe/yellow,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ew" = (/obj/structure/rack,/obj/item/clothing/gloves/yellow/power,/obj/item/clothing/suit/fire,/obj/item/clothing/mask/gas,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ex" = (/obj/item/device/multitool,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ey" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 1},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ez" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 5},/turf/simulated/floor/plating,/area/vault/ejectedengine/generator)
-"eA" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/obj/structure/grille,/turf/space,/area/vault/ejectedengine)
-"eB" = (/turf/simulated/wall,/area/vault/ejectedengine/gasstorage)
-"eC" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/door/firedoor/red,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eD" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/ejectedengine/gasstorage)
-"eE" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/wall,/area/vault/ejectedengine/gasstorage)
-"eF" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"eG" = (/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eH" = (/obj/effect/glowshroom/single,/obj/item/clothing/head/welding,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eI" = (/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"eJ" = (/obj/machinery/power/apc/no_alerts{dir = 1; pixel_y = 24},/obj/structure/cable,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eK" = (/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"eL" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eM" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eN" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eO" = (/obj/machinery/camera/noview{dir = 8},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/machinery/light/burnt{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eP" = (/obj/machinery/door/poddoor{id_tag = "engine_gas"; name = "Engine Blast Door"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eQ" = (/obj/machinery/door/firedoor/red,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eR" = (/obj/machinery/mass_driver{dir = 8; id_tag = "engine_gas"},/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eS" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eT" = (/obj/machinery/camera/noview{dir = 4},/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/machinery/driver_button{id_tag = "engine_gas"; pixel_x = -25; pixel_y = 0},/obj/machinery/light/burnt{dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eU" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eV" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eW" = (/obj/effect/glowshroom/single,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eX" = (/obj/machinery/mass_driver{dir = 8; id_tag = "engine_gas"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eY" = (/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eZ" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fa" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fb" = (/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fc" = (/obj/machinery/alarm{dir = 8; pixel_x = 24},/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fd" = (/turf/simulated/wall/r_wall{d_state = 1; icon_state = "r_wall-1"},/area/vault/ejectedengine/gasstorage)
-"fe" = (/obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"ff" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/obj/machinery/camera/noview{dir = 1},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"fg" = (/obj/machinery/atmospherics/unary/vent_pump,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fh" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fi" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fj" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/structure/boulder,/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fk" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fl" = (/turf/unsimulated/mineral,/area/vault/ejectedengine/gasstorage)
-"fm" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall/r_wall,/area/vault/ejectedengine/burnroom)
-"fn" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"fo" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/door/firedoor/red,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"fp" = (/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fq" = (/obj/effect/glowshroom/single,/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fr" = (/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fs" = (/turf/unsimulated/mineral/cerenkite,/area/vault/ejectedengine/gasstorage)
-"ft" = (/obj/structure/grille/broken,/turf/space,/area/vault/ejectedengine)
-"fu" = (/obj/machinery/atmospherics/pipe/manifold/general/hidden,/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
-"fv" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 9; icon_state = "intact"; tag = "icon-intact (NORTHWEST)"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
-"fw" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area/vault/ejectedengine)
-"fx" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"fy" = (/obj/machinery/atmospherics/unary/vent_scrubber/on{dir = 8},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"fz" = (/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fA" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fB" = (/obj/structure/boulder,/turf/simulated/floor/damaged,/area/vault/ejectedengine/gasstorage)
-"fC" = (/obj/machinery/artifact,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fD" = (/obj/item/bluespace_crystal/flawless,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fE" = (/obj/structure/closet/welded,/obj/effect/landmark/corpse/civilian,/turf/space,/area)
-"fF" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"fG" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fH" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 5; icon_state = "intact"; tag = "icon-intact (NORTHEAST)"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area)
+"ab" = (
+/mob/living/simple_animal/hostile/retaliate/malf_drone/vault,
+/turf/space,
+/area)
+"ac" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/turf/space,
+/area)
+"ad" = (
+/obj/item/stack/cable_coil/cut,
+/turf/space,
+/area)
+"ae" = (
+/obj/machinery/atmospherics/unary/vent{
+	dir = 4
+	},
+/turf/space,
+/area)
+"af" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine)
+"ag" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
+"ah" = (
+/obj/machinery/atmospherics/pipe/manifold/general/visible{
+	dir = 1
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
+"ai" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 10
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
+"aj" = (
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
+"ak" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 6;
+	icon_state = "intact";
+	tag = "icon-intact (SOUTHEAST)"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
+"al" = (
+/obj/machinery/atmospherics/unary/vent{
+	dir = 8
+	},
+/turf/space,
+/area)
+"am" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 5;
+	icon_state = "intact";
+	tag = "icon-intact (NORTHEAST)"
+	},
+/turf/space,
+/area)
+"an" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/turf/space,
+/area)
+"ao" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/SMES)
+"ap" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 10
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/SMES)
+"aq" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 5;
+	icon_state = "intact";
+	tag = "icon-intact (NORTHEAST)"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/SMES)
+"ar" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/SMES)
+"as" = (
+/turf/simulated/wall,
+/area/vault/ejectedengine)
+"at" = (
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/burnroom)
+"au" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber{
+	dir = 1
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"av" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 6
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"aw" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 10
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"ax" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/obj/machinery/camera/noview,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"ay" = (
+/turf/simulated/wall,
+/area/vault/ejectedengine/burnroom)
+"az" = (
+/turf/simulated/wall,
+/area/vault/ejectedengine/SMES)
+"aA" = (
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/SMES)
+"aB" = (
+/obj/machinery/atmospherics/unary/vent_pump,
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aC" = (
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aD" = (
+/obj/machinery/camera/noview,
+/obj/machinery/light/burnt{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aE" = (
+/obj/machinery/power/apc/no_alerts{
+	dir = 1;
+	pixel_y = 24
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aF" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/computer/powermonitor,
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aG" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/SMES)
+"aH" = (
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"aI" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"aJ" = (
+/obj/machinery/camera/noview,
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aK" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/computer/ejectedengine/engine,
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aL" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/computer/ejectedengine/shield,
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aM" = (
+/obj/item/weapon/extinguisher,
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aN" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/SMES)
+"aO" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/power/terminal{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aP" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/power/battery/smes{
+	charge = 5e+006
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aQ" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aR" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aS" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light_switch{
+	pixel_x = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aT" = (
+/obj/machinery/light/burnt{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aU" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aV" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aW" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/SMES)
+"aX" = (
+/obj/structure/cable,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/power/terminal{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aY" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/structure/cable,
+/obj/machinery/power/battery/smes{
+	charge = 5e+006
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"aZ" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"ba" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bb" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/airlock/engineering{
+	icon_state = "door_locked";
+	locked = 1;
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bc" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bd" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"be" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/SMES)
+"bf" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable,
+/obj/machinery/power/battery/smes{
+	charge = 5e+006
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bg" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bh" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bi" = (
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bj" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/ejectedengine)
+"bk" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 5
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bl" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 9
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bm" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bn" = (
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bo" = (
+/obj/structure/grille,
+/turf/space,
+/area/vault/ejectedengine)
+"bp" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bq" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/light_switch{
+	pixel_y = -24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"br" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bs" = (
+/obj/structure/cable,
+/obj/machinery/computer/powermonitor,
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bt" = (
+/obj/machinery/atmospherics/unary/vent/visible,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bu" = (
+/obj/machinery/door/firedoor/red,
+/obj/machinery/door/window{
+	base_state = "right";
+	dir = 2;
+	icon_state = "right";
+	req_access = list(10)
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bv" = (
+/obj/machinery/door/firedoor/red,
+/obj/machinery/door/window{
+	dir = 2;
+	req_access = list(10)
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bw" = (
+/obj/machinery/door/firedoor/red,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/door/window{
+	dir = 2;
+	req_access = list(10)
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/SMES)
+"bx" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/SMES)
+"by" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/SMES)
+"bz" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/SMES)
+"bA" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/generator)
+"bB" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bC" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/machinery/door/firedoor/red,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"bD" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bE" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bF" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/burnroom)
+"bG" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bH" = (
+/obj/machinery/atmospherics/binary/valve{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bI" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/machinery/meter,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bJ" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bK" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bL" = (
+/obj/machinery/atmospherics/unary/vent_pump,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bM" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bN" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 9;
+	icon_state = "intact";
+	tag = "icon-intact (NORTHWEST)"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"bO" = (
+/turf/simulated/wall,
+/area/vault/ejectedengine/generator)
+"bP" = (
+/obj/structure/grille,
+/turf/space,
+/area)
+"bQ" = (
+/obj/structure/grille/broken,
+/obj/spacepod/random,
+/turf/space,
+/area)
+"bR" = (
+/obj/structure/grille/broken,
+/turf/space,
+/area)
+"bS" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"bT" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"bU" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"bV" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"bW" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/burnroom)
+"bX" = (
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"bY" = (
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	dir = 4;
+	on = 0;
+	scrub_CO2 = 0;
+	scrub_Toxins = 0
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"bZ" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/item/tool/crowbar,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ca" = (
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cb" = (
+/obj/machinery/light/burnt{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cc" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/generator)
+"cd" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ce" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 6
+	},
+/turf/space,
+/area)
+"cf" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 10
+	},
+/turf/space,
+/area)
+"cg" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 5;
+	icon_state = "intact";
+	tag = "icon-intact (NORTHEAST)"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/monitoring)
+"ch" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 10
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/monitoring)
+"ci" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/obj/item/tool/wrench,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cj" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/atmospherics/binary/valve,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"ck" = (
+/obj/machinery/light_switch{
+	pixel_x = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cl" = (
+/turf/simulated/wall,
+/area/vault/ejectedengine/monitoring)
+"cm" = (
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/generator)
+"cn" = (
+/obj/machinery/camera/noview{
+	dir = 4
+	},
+/obj/effect/glowshroom/single,
+/obj/machinery/light/burnt{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"co" = (
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cp" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/item/trash/chips,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cq" = (
+/obj/machinery/light_switch{
+	pixel_x = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cr" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 9
+	},
+/turf/space,
+/area)
+"cs" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 5
+	},
+/turf/space,
+/area)
+"ct" = (
+/obj/structure/grille,
+/obj/machinery/door/poddoor{
+	id_tag = "engine_ignite";
+	name = "Blast Door"
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"cu" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"cv" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/scrubber,
+/obj/machinery/camera/noview{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cw" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cx" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/obj/machinery/meter,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cy" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/machinery/computer/station_alert,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cz" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/burnroom)
+"cA" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/burnroom)
+"cB" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/burnroom)
+"cC" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 6
+	},
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cD" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/engineer/old,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cE" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cF" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"cG" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 10
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/generator)
+"cH" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
+/turf/space,
+/area)
+"cI" = (
+/obj/machinery/air_sensor{
+	frequency = 1553;
+	id_tag = "engine_sensor";
+	output = 63
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"cJ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"cK" = (
+/obj/item/clothing/head/welding,
+/obj/machinery/ignition_switch{
+	id_tag = "engine_ignite";
+	pixel_x = 8;
+	pixel_y = 24
+	},
+/obj/machinery/door_control{
+	id_tag = "engine_ignite";
+	name = "Blast Door Control";
+	pixel_x = -8;
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cL" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cM" = (
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cN" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cO" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cP" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"cQ" = (
+/obj/machinery/door/firedoor/red,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cR" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cS" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/light/burnt{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cT" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cU" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cV" = (
+/obj/machinery/firealarm{
+	pixel_y = 24
+	},
+/obj/machinery/camera/noview,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cW" = (
+/obj/machinery/atmospherics/unary/portables_connector,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cX" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 5
+	},
+/obj/machinery/meter,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/light/burnt{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cY" = (
+/obj/machinery/door/firedoor/red,
+/obj/machinery/atmospherics/pipe/manifold/general/visible{
+	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/light_switch{
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"cZ" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"da" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"db" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 6
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dc" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/item/trash/chips,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dd" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 10
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"de" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/glowshroom/single,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"df" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/generator)
+"dg" = (
+/obj/machinery/camera/noview{
+	dir = 4
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"dh" = (
+/obj/machinery/igniter{
+	icon_state = "igniter0";
+	id_tag = "engine_ignite";
+	on = 0
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"di" = (
+/obj/machinery/igniter{
+	icon_state = "igniter0";
+	id_tag = "engine_ignite";
+	on = 0
+	},
+/mob/living/carbon/monkey{
+	icon_state = "rathen1";
+	name = "Mr. Rathen";
+	real_name = "Mr. Rathen"
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"dj" = (
+/obj/machinery/atmospherics/unary/vent/visible{
+	dir = 4
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"dk" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"dl" = (
+/obj/machinery/light/burnt{
+	dir = 8
+	},
+/obj/machinery/atmospherics/binary/valve{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dm" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/machinery/meter,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dn" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/old/plasma,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"do" = (
+/obj/item/device/t_scanner,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dp" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dq" = (
+/obj/machinery/door/firedoor/red,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dr" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"ds" = (
+/obj/machinery/atmospherics/binary/volume_pump,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dt" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 5
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"du" = (
+/obj/machinery/atmospherics/binary/volume_pump{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dv" = (
+/obj/machinery/door/firedoor/red,
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dw" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 6
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dx" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dy" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 10
+	},
+/obj/effect/glowshroom/single,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dz" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dA" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dB" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/generator)
+"dC" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/computer/powermonitor,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dD" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dE" = (
+/obj/machinery/atmospherics/unary/portables_connector,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dF" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dG" = (
+/obj/machinery/atmospherics/unary/portables_connector,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dH" = (
+/obj/machinery/atmospherics/unary/portables_connector,
+/obj/machinery/light/burnt,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dI" = (
+/obj/machinery/power/apc/no_alerts{
+	pixel_y = -24
+	},
+/obj/structure/cable,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dJ" = (
+/obj/machinery/firealarm{
+	dir = 1;
+	pixel_y = -25
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dK" = (
+/obj/machinery/atmospherics/pipe/manifold/general/visible{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dL" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/machinery/meter,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dM" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/machinery/light,
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dN" = (
+/obj/machinery/door/firedoor/red,
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/burnroom)
+"dO" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dP" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/item/device/radio,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dQ" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/obj/machinery/meter,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dR" = (
+/obj/machinery/atmospherics/binary/circulator{
+	anchored = 1;
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dS" = (
+/obj/machinery/power/generator{
+	anchored = 1;
+	dir = 4
+	},
+/obj/structure/cable,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dT" = (
+/obj/machinery/atmospherics/binary/circulator{
+	anchored = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"dU" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
+	dir = 1
+	},
+/turf/space,
+/area)
+"dV" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/monitoring)
+"dW" = (
+/obj/structure/cable,
+/obj/machinery/computer/general_air_control{
+	frequency = 1553;
+	name = "Engine Monitoring Console";
+	sensors = list("engine_sensor" = "Engine Sensor")
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dX" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/obj/machinery/meter,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dY" = (
+/obj/machinery/atmospherics/unary/portables_connector,
+/obj/machinery/portable_atmospherics/scrubber,
+/obj/structure/cable,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"dZ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction,
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/burnroom)
+"ea" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/burnroom)
+"eb" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light/burnt{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ec" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ed" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/atmospherics/pipe/manifold/general/visible{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ee" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 5
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ef" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 10
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"eg" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"eh" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 6
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/generator)
+"ei" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/turf/space,
+/area)
+"ej" = (
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"ek" = (
+/obj/machinery/light/burnt,
+/obj/machinery/atmospherics/binary/valve,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"el" = (
+/obj/machinery/power/apc/no_alerts{
+	dir = 4;
+	pixel_x = 24
+	},
+/obj/structure/cable,
+/turf/simulated/floor,
+/area/vault/ejectedengine/monitoring)
+"em" = (
+/obj/machinery/atmospherics/unary/vent/visible{
+	dir = 1
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"en" = (
+/obj/machinery/alarm{
+	dir = 4;
+	pixel_x = -22
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"eo" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 5
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ep" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/generator)
+"eq" = (
+/obj/machinery/camera/noview{
+	dir = 4
+	},
+/obj/machinery/power/apc/no_alerts{
+	dir = 8;
+	pixel_x = -24
+	},
+/obj/structure/cable,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"er" = (
+/obj/machinery/atmospherics/pipe/manifold/general/visible{
+	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"es" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 10
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/generator)
+"et" = (
+/obj/effect/glowshroom/single,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"eu" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ev" = (
+/obj/structure/closet/wardrobe/yellow,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ew" = (
+/obj/structure/rack,
+/obj/item/clothing/gloves/yellow/power,
+/obj/item/clothing/suit/fire,
+/obj/item/clothing/mask/gas,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ex" = (
+/obj/item/device/multitool,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ey" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light/burnt,
+/turf/simulated/floor,
+/area/vault/ejectedengine/generator)
+"ez" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 5
+	},
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/generator)
+"eA" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/obj/structure/grille,
+/turf/space,
+/area/vault/ejectedengine)
+"eB" = (
+/turf/simulated/wall,
+/area/vault/ejectedengine/gasstorage)
+"eC" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/machinery/door/firedoor/red,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eD" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/ejectedengine/gasstorage)
+"eE" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/wall,
+/area/vault/ejectedengine/gasstorage)
+"eF" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/gasstorage)
+"eG" = (
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eH" = (
+/obj/effect/glowshroom/single,
+/obj/item/clothing/head/welding,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eI" = (
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"eJ" = (
+/obj/machinery/power/apc/no_alerts{
+	dir = 1;
+	pixel_y = 24
+	},
+/obj/structure/cable,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eK" = (
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/gasstorage)
+"eL" = (
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eM" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eN" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eO" = (
+/obj/machinery/camera/noview{
+	dir = 8
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/machinery/light/burnt{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eP" = (
+/obj/machinery/door/poddoor{
+	id_tag = "engine_gas";
+	name = "Engine Blast Door"
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"eQ" = (
+/obj/machinery/door/firedoor/red,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"eR" = (
+/obj/machinery/mass_driver{
+	dir = 8;
+	id_tag = "engine_gas"
+	},
+/obj/machinery/portable_atmospherics/canister/old/plasma,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"eS" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"eT" = (
+/obj/machinery/camera/noview{
+	dir = 4
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/driver_button{
+	id_tag = "engine_gas";
+	pixel_x = -25;
+	pixel_y = 0
+	},
+/obj/machinery/light/burnt{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eU" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/machinery/portable_atmospherics/canister/old/oxygen,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eV" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eW" = (
+/obj/effect/glowshroom/single,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"eX" = (
+/obj/machinery/mass_driver{
+	dir = 8;
+	id_tag = "engine_gas"
+	},
+/obj/machinery/portable_atmospherics/canister/old/oxygen,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"eY" = (
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"eZ" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/machinery/portable_atmospherics/canister/old/oxygen,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"fa" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"fb" = (
+/obj/machinery/portable_atmospherics/canister/old/oxygen,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"fc" = (
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fd" = (
+/turf/simulated/wall/r_wall{
+	d_state = 1;
+	icon_state = "r_wall-1"
+	},
+/area/vault/ejectedengine/gasstorage)
+"fe" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"ff" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/obj/machinery/camera/noview{
+	dir = 1
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/burnroom)
+"fg" = (
+/obj/machinery/atmospherics/unary/vent_pump,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"fh" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"fi" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fj" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/obj/structure/boulder,
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fk" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 10
+	},
+/obj/machinery/portable_atmospherics/canister/old/plasma,
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fl" = (
+/turf/unsimulated/mineral,
+/area/vault/ejectedengine/gasstorage)
+"fm" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/burnroom)
+"fn" = (
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"fo" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "10"
+	},
+/obj/machinery/door/firedoor/red,
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"fp" = (
+/obj/machinery/portable_atmospherics/canister/old/plasma,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"fq" = (
+/obj/effect/glowshroom/single,
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fr" = (
+/obj/machinery/portable_atmospherics/canister/old/plasma,
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fs" = (
+/turf/unsimulated/mineral/cerenkite,
+/area/vault/ejectedengine/gasstorage)
+"ft" = (
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/ejectedengine)
+"fu" = (
+/obj/machinery/atmospherics/pipe/manifold/general/hidden,
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
+"fv" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 9;
+	icon_state = "intact";
+	tag = "icon-intact (NORTHWEST)"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
+"fw" = (
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating/airless/damaged,
+/area/vault/ejectedengine)
+"fx" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/gasstorage)
+"fy" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 8
+	},
+/turf/simulated/floor/engine/old,
+/area/vault/ejectedengine/gasstorage)
+"fz" = (
+/obj/machinery/light/burnt,
+/turf/simulated/floor,
+/area/vault/ejectedengine/gasstorage)
+"fA" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fB" = (
+/obj/structure/boulder,
+/turf/simulated/floor/damaged,
+/area/vault/ejectedengine/gasstorage)
+"fC" = (
+/obj/machinery/artifact,
+/turf/unsimulated/floor/asteroid,
+/area/vault/ejectedengine/gasstorage)
+"fD" = (
+/obj/item/bluespace_crystal/flawless,
+/turf/unsimulated/floor/asteroid,
+/area/vault/ejectedengine/gasstorage)
+"fE" = (
+/obj/structure/closet/welded,
+/obj/effect/landmark/corpse/civilian,
+/turf/space,
+/area)
+"fF" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine/gasstorage)
+"fG" = (
+/obj/structure/crystal,
+/turf/unsimulated/floor/asteroid,
+/area/vault/ejectedengine/gasstorage)
+"fH" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 5;
+	icon_state = "intact";
+	tag = "icon-intact (NORTHEAST)"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/ejectedengine)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacaaaaaaacaaadaaaaaaaaaaaaaaaaaa
-aaaaaeafafagagahaiajajajajajajajajajajajakahagagafafafalaaamanaoapaqaoaraoapaaaaaaaaaaaaaa
-aaaaasajatatatauauavawavawavaxawavawavawauauatatatatayazazazazaAaBaCaDaEaFaGaaaaaaaaabaaaa
-aaasajataHaHaHavawaIaIaIaIaIaHaIaIaIaIaIavawaHaHaHatataJaKaLaMaNaOaPaQaRaSaGaaaaaaaaaaaaaa
-aaasataHaHavawaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIavawaHaHataTaCaUaVaWaXaYaZaVbabbadaaaaaaaaaaaa
-aaasataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIaIaIaHaHatbcbdaCaCbeaXbfbgbhbiaGaaabaaaaaaaaaa
-aabjataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIbkblbkbmawatatataCbnbxbpbqbhbrbsaGaaaaaaaaaaabaa
-aaasatavawaIaIaIaIaIbkblbkblbtbkblbkblaIaIaHaHaHaHaIaHaHatbubvazazazbwbxbybzbAadaaaaaaaaaa
-aaasataIaIaIaIaIaIaIaHaHaHaHbBaHaHaHaHaIaIaHaybCayaIbDbEbFbGbGbHbIbJbKbLbMbNbObobobQbRbPbP
-aaasataIbkblbkblbkblaHbtbSbTbUbTbVaHaHbkblaHbWbXbWaIbYbEbFbZbHbIbJcabKcbcccdbOcecfcecfaabP
-asasataIaHaHaHaHaHaHaHcgchcicjckclclaHbtbtbtbWbXbWbkbmawatcmcncacocacpcqccaacecrcscrcscfbP
-asatataIaHayctctctctcuclcvcwcxcwcyclczcAcAcAaybCayczczcBatcmcCbGbGcDcEcFcGbOcHcecfcecfcHbP
-asataHaIaHayaHaHaHcIcJcKcLcMcNcMcOcPcQcRcScRcTcUcVcWcWcXcYcZdadbbGdccEdddedfcHcHcscrcscrbP
-ajatdgaIaHaydhdidhdjdkdldmdndocMcLdpdqbXbXbXdrbXbXdsdtdudvdwcEdxdbdybKdzdAdBcHcHaaaaaaaabP
-asataHaIaHayaHaHaHaHcJdCdDcMdEdFdDdpdqdGdHdGdIbXdJdKdLdMdNdOdPcadQdRdSdTdAdfdUcHcecfcecfbR
-asatataIaHayctctctctdVcldWcMdXcLdYclczcAcAcAaybCaydZczeaatcmebecedeeefeeegeheicscrcscrcHbP
-asasataIaHaHaHaHaHaHaHclclejekelcgchaHememembWbXbWaIaHaHatbOencadzcaeobIcEepcecfcecfcecrbP
-aaasataIavawavawavawaHaHbSbTbUbTbVemaHavawaHbWbXbWaIaHaHatbOeqcaeobGbGbGeresdUcscrcscraabP
-aaasataIaIaIaIaIaIaIaHaHaHaHbBaHaHaHaHaIaIaHaybCayaIaHaHatbOetcaeuevewexeyezeAftbobPbPbPbP
-aaasatbkblaIaIaIaIaIavawavawemavawavawaIaIaHaHaHaHaIaHaHateBeCeCeBeDeDeDeEeFadaaaaaaaaaaaa
-aaasataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIavawavbmblaHatateBeGeGeHeGeGeIeJeKaaaaaaaaaaaaaa
-aaasataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIaIaIatatatateBeBeLeIeMeNeNeNeOeKaaaaaaaaaaaaaa
-aaasataHaHbkblaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIbkblePeQeReSeBeTeNeUeVeGeIeGeWeKaaaaaaaaaaaaaa
-aaasajataHaHaHbkblaIaIaIaIaIaHaIaIaIaIaIbkblaHaHePeQeXeYeDeGeWeZfafbeGeGfcfdaaaaaaaaaaaaaa
-aaaaasajatatatfefebkblbkblbkffblbkblbkblfefeaHaHePeQeReYeDeGeIeGfgfhfifjfkflflaaaaaaaaaaaa
-aaaaaaasasajajfmfmatatatatatatatatatatatfmfmajajajeKfneYfoeGeGfpeVfqfrflflfsflflaaaaaaaaaa
-aaaaaaaaaaaeagfufvajajfwajajajajajajajajfHfuagalaefxfyeYfoeGeWfzfAfBflfsfCfDflflaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaasajasaafEaaaaaaaaaaaaaaeKeKeKeKeKeKeKfFfdflflfGfsflaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaaflflflflaaaaaaaaaaaa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+as
+as
+as
+aj
+as
+as
+as
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+aa
+aa
+as
+as
+as
+bj
+as
+as
+as
+as
+at
+at
+at
+at
+at
+as
+as
+as
+as
+as
+as
+as
+as
+aa
+aa
+aa
+aa
+aa
+"}
+(3,1,1) = {"
+aa
+ae
+as
+aj
+at
+at
+at
+at
+at
+at
+at
+at
+aH
+dg
+aH
+at
+at
+at
+at
+at
+at
+at
+at
+aj
+as
+aa
+aa
+aa
+aa
+"}
+(4,1,1) = {"
+aa
+af
+aj
+at
+aH
+aH
+aH
+av
+aI
+aI
+aI
+aI
+aI
+aI
+aI
+aI
+aI
+aI
+aI
+bk
+aH
+aH
+aH
+at
+aj
+as
+aa
+aa
+aa
+"}
+(5,1,1) = {"
+aa
+af
+at
+aH
+aH
+aH
+aH
+aw
+aI
+bk
+aH
+aH
+aH
+aH
+aH
+aH
+aH
+av
+aI
+bl
+aH
+aH
+aH
+aH
+at
+as
+aa
+aa
+aa
+"}
+(6,1,1) = {"
+aa
+ag
+at
+aH
+av
+aI
+aI
+aI
+aI
+bl
+aH
+ay
+ay
+ay
+ay
+ay
+aH
+aw
+aI
+aI
+aI
+aI
+bk
+aH
+at
+aj
+ae
+aa
+aa
+"}
+(7,1,1) = {"
+aa
+ag
+at
+aH
+aw
+aI
+aI
+aI
+aI
+bk
+aH
+ct
+aH
+dh
+aH
+ct
+aH
+av
+aI
+aI
+aI
+aI
+bl
+aH
+at
+aj
+ag
+aa
+aa
+"}
+(8,1,1) = {"
+aa
+ah
+au
+av
+aI
+aI
+aI
+aI
+aI
+bl
+aH
+ct
+aH
+di
+aH
+ct
+aH
+aw
+aI
+aI
+aI
+aI
+aI
+bk
+fe
+fm
+fu
+aa
+aa
+"}
+(9,1,1) = {"
+aa
+ai
+au
+aw
+aI
+aI
+aI
+aI
+aI
+bk
+aH
+ct
+aH
+dh
+aH
+ct
+aH
+av
+aI
+aI
+aI
+aI
+aI
+bl
+fe
+fm
+fv
+aa
+aa
+"}
+(10,1,1) = {"
+aa
+aj
+av
+aI
+aI
+aI
+aI
+aI
+aI
+bl
+aH
+ct
+cI
+dj
+aH
+ct
+aH
+aw
+aI
+aI
+aI
+aI
+aI
+aI
+bk
+at
+aj
+aa
+aa
+"}
+(11,1,1) = {"
+aa
+aj
+aw
+aI
+aI
+aI
+aI
+bk
+aH
+aH
+aH
+cu
+cJ
+dk
+cJ
+dV
+aH
+aH
+aH
+av
+aI
+aI
+aI
+aI
+bl
+at
+aj
+aa
+aa
+"}
+(12,1,1) = {"
+aa
+aj
+av
+aI
+aI
+aI
+aI
+bl
+aH
+bt
+cg
+cl
+cK
+dl
+dC
+cl
+cl
+aH
+aH
+aw
+aI
+aI
+aI
+aI
+bk
+at
+fw
+aa
+aa
+"}
+(13,1,1) = {"
+aa
+aj
+aw
+aI
+aI
+aI
+aI
+bk
+aH
+bS
+ch
+cv
+cL
+dm
+dD
+dW
+cl
+bS
+aH
+av
+aI
+aI
+aI
+aI
+bl
+at
+aj
+aa
+aa
+"}
+(14,1,1) = {"
+aa
+aj
+av
+aI
+aI
+aI
+aI
+bl
+aH
+bT
+ci
+cw
+cM
+dn
+cM
+cM
+ej
+bT
+aH
+aw
+aI
+aI
+aI
+aI
+bk
+at
+aj
+as
+aa
+"}
+(15,1,1) = {"
+aa
+aj
+ax
+aH
+aH
+aH
+aH
+bt
+bB
+bU
+cj
+cx
+cN
+do
+dE
+dX
+ek
+bU
+bB
+em
+aH
+aH
+aH
+aH
+ff
+at
+aj
+aj
+aa
+"}
+(16,1,1) = {"
+aa
+aj
+aw
+aI
+aI
+aI
+aI
+bk
+aH
+bT
+ck
+cw
+cM
+cM
+dF
+cL
+el
+bT
+aH
+av
+aI
+aI
+aI
+aI
+bl
+at
+aj
+as
+aa
+"}
+(17,1,1) = {"
+aa
+aj
+av
+aI
+aI
+aI
+aI
+bl
+aH
+bV
+cl
+cy
+cO
+cL
+dD
+dY
+cg
+bV
+aH
+aw
+aI
+aI
+aI
+aI
+bk
+at
+aj
+aa
+aa
+"}
+(18,1,1) = {"
+aa
+aj
+aw
+aI
+aI
+aI
+aI
+bk
+aH
+aH
+cl
+cl
+cP
+dp
+dp
+cl
+ch
+em
+aH
+av
+aI
+aI
+aI
+aI
+bl
+at
+aj
+fE
+aa
+"}
+(19,1,1) = {"
+aa
+aj
+av
+aI
+aI
+aI
+aI
+bl
+aH
+aH
+aH
+cz
+cQ
+dq
+dq
+cz
+aH
+aH
+aH
+aw
+aI
+aI
+aI
+aI
+bk
+at
+aj
+aa
+aa
+"}
+(20,1,1) = {"
+aa
+aj
+aw
+aI
+aI
+aI
+aI
+aI
+aI
+bk
+bt
+cA
+cR
+bX
+dG
+cA
+em
+av
+aI
+aI
+aI
+aI
+aI
+aI
+bl
+at
+aj
+aa
+aa
+"}
+(21,1,1) = {"
+aa
+ak
+au
+av
+aI
+aI
+aI
+aI
+aI
+bl
+bt
+cA
+cS
+bX
+dH
+cA
+em
+aw
+aI
+aI
+aI
+aI
+aI
+bk
+fe
+fm
+fH
+aa
+aa
+"}
+(22,1,1) = {"
+aa
+ah
+au
+aw
+aI
+aI
+bk
+aH
+aH
+aH
+bt
+cA
+cR
+bX
+dG
+cA
+em
+aH
+aH
+aH
+av
+aI
+aI
+bl
+fe
+fm
+fu
+aa
+aa
+"}
+(23,1,1) = {"
+aa
+ag
+at
+aH
+av
+aI
+bl
+aH
+ay
+bW
+bW
+ay
+cT
+dr
+dI
+ay
+bW
+bW
+ay
+aH
+aw
+aI
+bk
+aH
+aH
+aj
+ag
+aa
+aa
+"}
+(24,1,1) = {"
+aa
+ag
+at
+aH
+aw
+aI
+bk
+aH
+bC
+bX
+bX
+bC
+cU
+bX
+bX
+bC
+bX
+bX
+bC
+aH
+av
+aI
+bl
+aH
+aH
+aj
+al
+aa
+aa
+"}
+(25,1,1) = {"
+aa
+af
+at
+aH
+aH
+aH
+bm
+aH
+ay
+bW
+bW
+ay
+cV
+bX
+dJ
+ay
+bW
+bW
+ay
+aH
+bm
+at
+eP
+eP
+eP
+aj
+ae
+aa
+aa
+"}
+(26,1,1) = {"
+aa
+af
+at
+at
+aH
+aH
+aw
+aI
+aI
+aI
+bk
+cz
+cW
+ds
+dK
+dZ
+aI
+aI
+aI
+aI
+bl
+at
+eQ
+eQ
+eQ
+eK
+fx
+eK
+aa
+"}
+(27,1,1) = {"
+aa
+af
+ay
+at
+at
+at
+at
+aH
+bD
+bY
+bm
+cz
+cW
+dt
+dL
+cz
+aH
+aH
+aH
+aH
+aH
+at
+eR
+eX
+eR
+fn
+fy
+eK
+aa
+"}
+(28,1,1) = {"
+aa
+al
+az
+aJ
+aT
+bc
+at
+aH
+bE
+bE
+aw
+cB
+cX
+du
+dM
+ea
+aH
+aH
+aH
+aH
+at
+at
+eS
+eY
+eY
+eY
+eY
+eK
+aa
+"}
+(29,1,1) = {"
+ab
+aa
+az
+aK
+aC
+bd
+at
+at
+bF
+bF
+at
+at
+cY
+dv
+dN
+at
+at
+at
+at
+at
+at
+eB
+eB
+eD
+eD
+fo
+fo
+eK
+aa
+"}
+(30,1,1) = {"
+ac
+am
+az
+aL
+aU
+aC
+aC
+bu
+bG
+bZ
+cm
+cm
+cZ
+dw
+dO
+cm
+bO
+bO
+bO
+eB
+eB
+eB
+eT
+eG
+eG
+eG
+eG
+eK
+aa
+"}
+(31,1,1) = {"
+aa
+an
+az
+aM
+aV
+aC
+bn
+bv
+bG
+bH
+cn
+cC
+da
+cE
+dP
+eb
+en
+eq
+et
+eC
+eG
+eL
+eN
+eW
+eI
+eG
+eW
+eK
+aa
+"}
+(32,1,1) = {"
+aa
+ao
+aA
+aN
+aW
+be
+bx
+az
+bH
+bI
+ca
+bG
+db
+dx
+ca
+ec
+ca
+ca
+ca
+eC
+eG
+eI
+eU
+eZ
+eG
+fp
+fz
+eK
+aa
+"}
+(33,1,1) = {"
+aa
+ap
+aB
+aO
+aX
+aX
+bp
+az
+bI
+bJ
+co
+bG
+bG
+db
+dQ
+ed
+dz
+eo
+eu
+eB
+eH
+eM
+eV
+fa
+fg
+eV
+fA
+fF
+ad
+"}
+(34,1,1) = {"
+ac
+aq
+aC
+aP
+aY
+bf
+bq
+az
+bJ
+ca
+ca
+cD
+dc
+dy
+dR
+ee
+ca
+bG
+ev
+eD
+eG
+eN
+eG
+fb
+fh
+fq
+fB
+fd
+aa
+"}
+(35,1,1) = {"
+aa
+ao
+aD
+aQ
+aZ
+bg
+bh
+bw
+bK
+bK
+cp
+cE
+cE
+bK
+dS
+ef
+eo
+bG
+ew
+eD
+eG
+eN
+eI
+eG
+fi
+fr
+fl
+fl
+aa
+"}
+(36,1,1) = {"
+ad
+ar
+aE
+aR
+aV
+bh
+br
+bx
+bL
+cb
+cq
+cF
+dd
+dz
+dT
+ee
+bI
+bG
+ex
+eD
+eI
+eN
+eG
+eG
+fj
+fl
+fs
+fl
+fl
+"}
+(37,1,1) = {"
+aa
+ao
+aF
+aS
+ba
+bi
+bs
+by
+bM
+cc
+cc
+cG
+de
+dA
+dA
+eg
+cE
+er
+ey
+eE
+eJ
+eO
+eW
+fc
+fk
+fl
+fC
+fG
+fl
+"}
+(38,1,1) = {"
+aa
+ap
+aG
+aG
+bb
+aG
+aG
+bz
+bN
+cd
+aa
+bO
+df
+dB
+df
+eh
+ep
+es
+ez
+eF
+eK
+eK
+eK
+fd
+fl
+fs
+fD
+fs
+fl
+"}
+(39,1,1) = {"
+aa
+aa
+aa
+aa
+ad
+aa
+aa
+bA
+bO
+bO
+ce
+cH
+cH
+cH
+dU
+ei
+ce
+dU
+eA
+ad
+aa
+aa
+aa
+aa
+fl
+fl
+fl
+fl
+fl
+"}
+(40,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+aa
+ad
+bo
+ce
+cr
+ce
+cH
+cH
+cH
+cs
+cf
+cs
+ft
+aa
+aa
+aa
+aa
+aa
+aa
+fl
+fl
+aa
+aa
+"}
+(41,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bo
+cf
+cs
+cf
+cs
+aa
+ce
+cr
+ce
+cr
+bo
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(42,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bQ
+ce
+cr
+ce
+cr
+aa
+cf
+cs
+cf
+cs
+bP
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(43,1,1) = {"
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+bR
+cf
+cs
+cf
+cs
+aa
+ce
+cr
+ce
+cr
+bP
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(44,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+aa
+bP
+aa
+cf
+cH
+cr
+aa
+cf
+cH
+cr
+aa
+bP
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(45,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bP
+bP
+bP
+bP
+bP
+bP
+bR
+bP
+bP
+bP
+bP
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}

@@ -10,11 +10,25 @@
 	var/category = "Misc"
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
+	var/thing = new typepath(merchcomp.loc)
 	if(istype(typepath,/obj/item/weapon/storage))
-		var/thing = new typepath(merchcomp.loc)
-		user.put_in_hands(thing)
-	else
-		new typepath(merchcomp.loc)
+		var/obj/item/weapon/storage/S = thing
+		user.put_in_hands(S)
+		if(station_does_not_tip)
+			var/list/additional_types = list(
+				IRRADIATEDBEANS,
+				MUTATEDBEANS,
+				CHEESYGLOOP,
+				DIABEETUSOL,
+				HORSEMEAT,
+				BEFF,
+				TOXICWASTE,
+				MOONROCKS,
+			)
+			if(istype(S,/obj/item/weapon/storage/bag/zam_food/))
+				additional_types.Add(WATER) //Bad for greys
+			for(var/obj/item/weapon/reagent_containers/food/snacks/F in S)
+				F.make_poisonous(additional_types)
 
 //If this returns FALSE, then the button simply will not appear for the user in question.
 /datum/storeitem/proc/available_to_user(mob/user)

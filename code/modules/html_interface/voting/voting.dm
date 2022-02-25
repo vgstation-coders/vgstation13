@@ -49,7 +49,7 @@ var/global/datum/controller/vote/vote = new()
 	var/initialized    = 0
 	var/lastupdate     = 0
 
-	//shitcode is breaking because it's sleeping and the SS doesn't like it.
+	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
 	name               = "datum"
 
