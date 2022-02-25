@@ -1,100 +1,907 @@
-"aa" = (/turf/space,/area)
-"ab" = (/obj/item/stack/sheet/metal,/turf/space,/area)
-"ac" = (/turf/simulated/wall,/area/vault/asteroid)
-"ad" = (/turf/space,/area/vault/asteroid)
-"ae" = (/obj/item/stack/sheet/metal,/turf/space,/area/vault/asteroid)
-"af" = (/obj/item/stack/tile/metal,/turf/simulated/floor/plating/airless,/area/vault/asteroid)
-"ag" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "platingdmg1"},/area/vault/asteroid)
-"ah" = (/turf/simulated/floor/plating/airless,/area/vault/asteroid)
-"ai" = (/obj/structure/lattice,/turf/space,/area/vault/asteroid)
-"aj" = (/obj/structure/cult/forge,/turf/simulated/floor/plating/airless{broken = 1; icon_state = "panelscorched"},/area/vault/asteroid)
-"ak" = (/turf/simulated/floor/plating/airless{broken = 1; icon_state = "panelscorched"},/area/vault/asteroid)
-"al" = (/obj/structure/catwalk,/turf/space,/area/vault/asteroid)
-"am" = (/obj/item/stack/tile/metal,/turf/simulated/floor/plating/airless{broken = 1; icon_state = "platingdmg1"},/area/vault/asteroid)
-"an" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/plating,/area/vault/asteroid)
-"ao" = (/obj/structure/lattice,/turf/space,/area)
-"ap" = (/turf/simulated/wall/r_wall,/area/vault/asteroid)
-"aq" = (/obj/structure/reagent_dispensers/bloodkeg,/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/vault/asteroid)
-"ar" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/obj/item/weapon/reagent_containers/food/drinks/ice{pixel_x = 12; pixel_y = 2},/turf/simulated/floor/wood,/area/vault/asteroid)
-"as" = (/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/vault/asteroid)
-"at" = (/obj/item/weapon/stool,/turf/simulated/floor/wood,/area/vault/asteroid)
-"au" = (/turf/simulated/floor/wood,/area/vault/asteroid)
-"av" = (/obj/structure/bookcase,/turf/simulated/floor/wood,/area/vault/asteroid)
-"aw" = (/obj/structure/bookcase,/mob/living/simple_animal/hostile/scarybat/book/woody,/turf/simulated/floor/wood,/area/vault/asteroid)
-"ax" = (/obj/effect/decal/cleanable/cockroach_remains,/obj/structure/cult_legacy/pylon,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/plating,/area/vault/asteroid)
-"ay" = (/obj/item/trash/cigbutt,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/plating,/area/vault/asteroid)
-"az" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/decal/cleanable/cockroach_remains,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aA" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/plating,/area/vault/asteroid)
-"aB" = (/obj/item/weapon/shard{icon_state = "small"},/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood,/turf/simulated/floor/wood,/area/vault/asteroid)
-"aC" = (/obj/item/weapon/stool,/turf/simulated/floor/carpet,/area/vault/asteroid)
-"aD" = (/turf/simulated/floor/carpet,/area/vault/asteroid)
-"aE" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken6"},/area/vault/asteroid)
-"aF" = (/obj/effect/decal/cleanable/spiderling_remains,/obj/structure/table/woodentable,/obj/item/candle,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aG" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aH" = (/obj/machinery/door/window/brigdoor{dir = 8; id_tag = ""; name = "Cell 1"; req_access_txt = "2"},/turf/simulated/floor/plating,/area/vault/asteroid)
-"aI" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aJ" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/wood,/area/vault/asteroid)
-"aK" = (/obj/item/weapon/reagent_containers/food/snacks/meat/roach,/obj/item/weapon/stool,/obj/effect/decal/remains/xeno{desc = "They look like the remains of something... unholy. They have a strange aura about them."},/turf/simulated/floor/plating,/area/vault/asteroid)
-"aL" = (/obj/item/weapon/storage/fancy/cigarettes,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aM" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/asteroid)
-"aN" = (/obj/item/weapon/shard/plasma,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aO" = (/obj/item/stack/rods,/turf/space,/area)
-"aP" = (/turf/simulated/floor/plating,/area/vault/asteroid)
-"aQ" = (/obj/effect/decal/cleanable/spiderling_remains,/obj/item/weapon/storage/fancy/matchbox/empty,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aR" = (/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/vomit,/turf/simulated/floor/wood,/area/vault/asteroid)
-"aS" = (/obj/structure/cult_legacy/pylon,/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken"},/area/vault/asteroid)
-"aT" = (/obj/structure/cult_legacy/pylon,/turf/simulated/floor/wood,/area/vault/asteroid)
-"aU" = (/obj/effect/decal/cleanable/spiderling_remains,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aV" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/decal/remains/human,/obj/item/weapon/handcuffs,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aW" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/effect/decal/cleanable/blood/writing{desc = "It looks like a writing in blood. The blood seems to have dried a long time ago."; maptext = "<span style='color:#A10808;font-size:9pt;font-family:Bloody;' align='center' valign='top'>veniam petimus</span>"},/obj/effect/spider/stickyweb,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aX" = (/obj/item/stack/medical/bruise_pack/tajaran,/obj/item/stack/medical/ointment/tajaran,/turf/simulated/floor/wood,/area/vault/asteroid)
-"aY" = (/obj/structure/cage/autoclose,/obj/item/trash/cigbutt,/mob/living/simple_animal/hostile/giant_spider/hunter,/turf/simulated/floor/plating,/area/vault/asteroid)
-"aZ" = (/obj/machinery/door/window/brigdoor{dir = 8; id_tag = ""; name = "Cell 2"; req_access_txt = "2"},/obj/effect/spider/stickyweb,/turf/simulated/floor/plating,/area/vault/asteroid)
-"ba" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/effect/decal/cleanable/spiderling_remains,/obj/effect/spider/stickyweb,/turf/simulated/floor/plating,/area/vault/asteroid)
-"bb" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/wall,/area/vault/asteroid)
-"bc" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/wall,/area/vault/asteroid)
-"bd" = (/obj/effect/decal/cleanable/cockroach_remains,/obj/effect/landmark/corpse/civilian,/mob/living/simple_animal/cockroach,/mob/living/simple_animal/cockroach,/mob/living/simple_animal/cockroach,/mob/living/simple_animal/cockroach,/turf/simulated/floor/plating,/area/vault/asteroid)
-"be" = (/obj/structure/window/barricade{dir = 8},/turf/simulated/floor/plating,/area/vault/asteroid)
-"bf" = (/obj/effect/decal/cleanable/spiderling_remains,/obj/item/trash/cigbutt,/turf/simulated/floor/plating,/area/vault/asteroid)
-"bg" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/decal/cleanable/spiderling_remains,/obj/effect/spider/stickyweb,/turf/simulated/floor/plating,/area/vault/asteroid)
-"bh" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/effect/spider/stickyweb,/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,/obj/effect/decal/cleanable/cockroach_remains,/turf/simulated/floor/plating,/area/vault/asteroid)
-"bi" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
-"bj" = (/turf/simulated/floor{dir = 5; icon_state = "stage_stairs"},/area/vault/asteroid)
-"bk" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area)
-"bl" = (/obj/structure/window/reinforced/plasma,/obj/structure/cage,/turf/simulated/floor/plating,/area/vault/asteroid)
-"bm" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/wall/r_wall,/area/vault/asteroid)
-"bn" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/wall/r_wall,/area/vault/asteroid)
-"bo" = (/obj/structure/cult_legacy/pylon,/obj/structure/window/reinforced/plasma,/turf/simulated/floor/plating,/area/vault/asteroid)
-"bp" = (/obj/structure/window/reinforced/plasma,/obj/item/weapon/paper/crumpled/bloody{info = "Only one artifact is real, all the others are fake. Don't make the same mistake that I did..."},/obj/effect/decal/remains/human,/turf/simulated/floor/plating,/area/vault/asteroid)
-"bq" = (/turf/simulated/floor{icon_state = "dark"},/area/vault/asteroid)
-"br" = (/obj/structure/cult_legacy/talisman,/obj/effect/landmark/catechizer_spawn,/turf/simulated/floor{icon_state = "dark"},/area/vault/asteroid)
-"bs" = (/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault/asteroid)
-"bt" = (/obj/structure/constructshell/cult,/turf/simulated/floor/carpet,/area/vault/asteroid)
-"bu" = (/mob/living/simple_animal/hostile/faithless{faction = "mimic"; name = "The Guardian"},/turf/simulated/floor/carpet,/area/vault/asteroid)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area)
+"ab" = (
+/obj/item/stack/sheet/metal,
+/turf/space,
+/area)
+"ac" = (
+/turf/simulated/wall,
+/area/vault/asteroid)
+"ad" = (
+/turf/space,
+/area/vault/asteroid)
+"ae" = (
+/obj/item/stack/sheet/metal,
+/turf/space,
+/area/vault/asteroid)
+"af" = (
+/obj/item/stack/tile/metal,
+/turf/simulated/floor/plating/airless,
+/area/vault/asteroid)
+"ag" = (
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "platingdmg1"
+	},
+/area/vault/asteroid)
+"ah" = (
+/turf/simulated/floor/plating/airless,
+/area/vault/asteroid)
+"ai" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault/asteroid)
+"aj" = (
+/obj/structure/cult/forge,
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "panelscorched"
+	},
+/area/vault/asteroid)
+"ak" = (
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "panelscorched"
+	},
+/area/vault/asteroid)
+"al" = (
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/asteroid)
+"am" = (
+/obj/item/stack/tile/metal,
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "platingdmg1"
+	},
+/area/vault/asteroid)
+"an" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"ao" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"ap" = (
+/turf/simulated/wall/r_wall,
+/area/vault/asteroid)
+"aq" = (
+/obj/structure/reagent_dispensers/bloodkeg,
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"ar" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/item/weapon/reagent_containers/food/drinks/ice{
+	pixel_x = 12;
+	pixel_y = 2
+	},
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"as" = (
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"at" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"au" = (
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"av" = (
+/obj/structure/bookcase,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"aw" = (
+/obj/structure/bookcase,
+/mob/living/simple_animal/hostile/scarybat/book/woody,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"ax" = (
+/obj/effect/decal/cleanable/cockroach_remains,
+/obj/structure/cult_legacy/pylon,
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"ay" = (
+/obj/item/trash/cigbutt,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"az" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/cockroach_remains,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aA" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aB" = (
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"aC" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/carpet,
+/area/vault/asteroid)
+"aD" = (
+/turf/simulated/floor/carpet,
+/area/vault/asteroid)
+"aE" = (
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken6"
+	},
+/area/vault/asteroid)
+"aF" = (
+/obj/effect/decal/cleanable/spiderling_remains,
+/obj/structure/table/woodentable,
+/obj/item/candle,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aG" = (
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aH" = (
+/obj/machinery/door/window/brigdoor{
+	dir = 8;
+	id_tag = "";
+	name = "Cell 1";
+	req_access_txt = "2"
+	},
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aI" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aJ" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"aK" = (
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+/obj/item/weapon/stool,
+/obj/effect/decal/remains/xeno{
+	desc = "They look like the remains of something... unholy. They have a strange aura about them."
+	},
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aL" = (
+/obj/item/weapon/storage/fancy/cigarettes,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aM" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aN" = (
+/obj/item/weapon/shard/plasma,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aO" = (
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"aP" = (
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aQ" = (
+/obj/effect/decal/cleanable/spiderling_remains,
+/obj/item/weapon/storage/fancy/matchbox/empty,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aR" = (
+/obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"aS" = (
+/obj/structure/cult_legacy/pylon,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/vault/asteroid)
+"aT" = (
+/obj/structure/cult_legacy/pylon,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"aU" = (
+/obj/effect/decal/cleanable/spiderling_remains,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aV" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/effect/decal/remains/human,
+/obj/item/weapon/handcuffs,
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aW" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood/writing{
+	desc = "It looks like a writing in blood. The blood seems to have dried a long time ago.";
+	maptext = "<span style='color:#A10808;font-size:9pt;font-family:Bloody;' align='center' valign='top'>veniam petimus</span>"
+	},
+/obj/effect/spider/stickyweb,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aX" = (
+/obj/item/stack/medical/bruise_pack/tajaran,
+/obj/item/stack/medical/ointment/tajaran,
+/turf/simulated/floor/wood,
+/area/vault/asteroid)
+"aY" = (
+/obj/structure/cage/autoclose,
+/obj/item/trash/cigbutt,
+/mob/living/simple_animal/hostile/giant_spider/hunter,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"aZ" = (
+/obj/machinery/door/window/brigdoor{
+	dir = 8;
+	id_tag = "";
+	name = "Cell 2";
+	req_access_txt = "2"
+	},
+/obj/effect/spider/stickyweb,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"ba" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/spiderling_remains,
+/obj/effect/spider/stickyweb,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bb" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/wall,
+/area/vault/asteroid)
+"bc" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/simulated/wall,
+/area/vault/asteroid)
+"bd" = (
+/obj/effect/decal/cleanable/cockroach_remains,
+/obj/effect/landmark/corpse/civilian,
+/mob/living/simple_animal/cockroach,
+/mob/living/simple_animal/cockroach,
+/mob/living/simple_animal/cockroach,
+/mob/living/simple_animal/cockroach,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"be" = (
+/obj/structure/window/barricade{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bf" = (
+/obj/effect/decal/cleanable/spiderling_remains,
+/obj/item/trash/cigbutt,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bg" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/spiderling_remains,
+/obj/effect/spider/stickyweb,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bh" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/effect/spider/stickyweb,
+/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
+/obj/effect/decal/cleanable/cockroach_remains,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bi" = (
+/obj/structure/lattice,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/space,
+/area)
+"bj" = (
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "stage_stairs"
+	},
+/area/vault/asteroid)
+"bk" = (
+/obj/structure/lattice,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/space,
+/area)
+"bl" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/cage,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bm" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/asteroid)
+"bn" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/asteroid)
+"bo" = (
+/obj/structure/cult_legacy/pylon,
+/obj/structure/window/reinforced/plasma,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bp" = (
+/obj/structure/window/reinforced/plasma,
+/obj/item/weapon/paper/crumpled/bloody{
+	info = "Only one artifact is real, all the others are fake. Don't make the same mistake that I did..."
+	},
+/obj/effect/decal/remains/human,
+/turf/simulated/floor/plating,
+/area/vault/asteroid)
+"bq" = (
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/asteroid)
+"br" = (
+/obj/structure/cult_legacy/talisman,
+/obj/effect/landmark/catechizer_spawn,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/asteroid)
+"bs" = (
+/obj/effect/decal/remains/human,
+/turf/simulated/floor/carpet,
+/area/vault/asteroid)
+"bt" = (
+/obj/structure/constructshell/cult,
+/turf/simulated/floor/carpet,
+/area/vault/asteroid)
+"bu" = (
+/mob/living/simple_animal/hostile/faithless{
+	faction = "mimic";
+	name = "The Guardian"
+	},
+/turf/simulated/floor/carpet,
+/area/vault/asteroid)
 
 (1,1,1) = {"
-aaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaacacacacacadadaeadacacacacacacaa
-aaaaaaacafagahahaiaeadaiahafajafagacaa
-aaaaaaacahakahahalaiaialamahagakahacaa
-aaaaaaacacanacacadadadadacacacanacacaa
-aaaaaaaaaoalaoaaaaaaaaaaaaaaaoalaoaaaa
-acacacacacanacacacacacaaaaapapanapapaa
-acaqarasatauauavawavacaaaaapaxayazaAaa
-acauaBaCaDaDaDaDaEauacaaaaapaFaGaHaIaa
-acaJauaDaDaDaDaDauauacaaaoapaKaLaMaNaO
-acaJauaDaDaDaDaDauaJanalalanaPaQapapaa
-acaRaSaDaDaDaDaDaTauacaaaoapaUaPaVaWaa
-acaXauauauauauauauauacapapapaYaPaZbaaa
-acacacacbbanbcacacacacapbdanbebfbgbhaa
-aaaaaaaabibjbkaaaaaaaaapapapblblapapaa
-aaaaaaaabibjbkaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaabibjbkaaaaaaaaaaaaaaaaaaaaaaaa
-apapapapbmbjbnapapapapaaaaaaaaaaaaaaaa
-apboapboapanapboapbpapaaaaaaaaaaaaaaaa
-apbqbqbqbqbqbqbqbqbqapaaaaaaaaaaaaaaaa
-apbrbqaDaDbsaDaDbqbrapaaaaaaaaaaaaaaaa
-apbqbqbtbsbubsbtbqbqapaaaaaaaaaaaaaaaa
-apbrbqaDaDbsaDaDbqbrapaaaaaaaaaaaaaaaa
-apapapapapapapapapapapaaaaaaaaaaaaaaaa
+aa
+aa
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+aa
+aa
+aa
+ap
+ap
+ap
+ap
+ap
+ap
+ap
+"}
+(2,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ac
+aq
+au
+aJ
+aJ
+aR
+aX
+ac
+aa
+aa
+aa
+ap
+bo
+bq
+br
+bq
+br
+ap
+"}
+(3,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ac
+ar
+aB
+au
+au
+aS
+au
+ac
+aa
+aa
+aa
+ap
+ap
+bq
+bq
+bq
+bq
+ap
+"}
+(4,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+aa
+ac
+as
+aC
+aD
+aD
+aD
+au
+ac
+aa
+aa
+aa
+ap
+bo
+bq
+aD
+bt
+aD
+ap
+"}
+(5,1,1) = {"
+aa
+ac
+af
+ah
+ac
+ao
+ac
+at
+aD
+aD
+aD
+aD
+au
+bb
+bi
+bi
+bi
+bm
+ap
+bq
+aD
+bs
+aD
+ap
+"}
+(6,1,1) = {"
+aa
+ac
+ag
+ak
+an
+al
+an
+au
+aD
+aD
+aD
+aD
+au
+an
+bj
+bj
+bj
+bj
+an
+bq
+bs
+bu
+bs
+ap
+"}
+(7,1,1) = {"
+ab
+ac
+ah
+ah
+ac
+ao
+ac
+au
+aD
+aD
+aD
+aD
+au
+bc
+bk
+bk
+bk
+bn
+ap
+bq
+aD
+bs
+aD
+ap
+"}
+(8,1,1) = {"
+aa
+ac
+ah
+ah
+ac
+aa
+ac
+av
+aD
+aD
+aD
+aD
+au
+ac
+aa
+aa
+aa
+ap
+bo
+bq
+aD
+bt
+aD
+ap
+"}
+(9,1,1) = {"
+aa
+ad
+ai
+al
+ad
+aa
+ac
+aw
+aE
+au
+au
+aT
+au
+ac
+aa
+aa
+aa
+ap
+ap
+bq
+bq
+bq
+bq
+ap
+"}
+(10,1,1) = {"
+aa
+ad
+ae
+ai
+ad
+aa
+ac
+av
+au
+au
+aJ
+au
+au
+ac
+aa
+aa
+aa
+ap
+bp
+bq
+br
+bq
+br
+ap
+"}
+(11,1,1) = {"
+aa
+ae
+ad
+ai
+ad
+aa
+ac
+ac
+ac
+ac
+an
+ac
+ac
+ac
+aa
+aa
+aa
+ap
+ap
+ap
+ap
+ap
+ap
+ap
+"}
+(12,1,1) = {"
+aa
+ad
+ai
+al
+ad
+aa
+aa
+aa
+aa
+aa
+al
+aa
+ap
+ap
+ap
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(13,1,1) = {"
+aa
+ac
+ah
+am
+ac
+aa
+aa
+aa
+aa
+ao
+al
+ao
+ap
+bd
+ap
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(14,1,1) = {"
+aa
+ac
+af
+ah
+ac
+aa
+ap
+ap
+ap
+ap
+an
+ap
+ap
+an
+ap
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(15,1,1) = {"
+aa
+ac
+aj
+ag
+ac
+ao
+ap
+ax
+aF
+aK
+aP
+aU
+aY
+be
+bl
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(16,1,1) = {"
+aa
+ac
+af
+ak
+an
+al
+an
+ay
+aG
+aL
+aQ
+aP
+aP
+bf
+bl
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(17,1,1) = {"
+aa
+ac
+ag
+ah
+ac
+ao
+ap
+az
+aH
+aM
+ap
+aV
+aZ
+bg
+ap
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(18,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+aa
+ap
+aA
+aI
+aN
+ap
+aW
+ba
+bh
+ap
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(19,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aO
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}

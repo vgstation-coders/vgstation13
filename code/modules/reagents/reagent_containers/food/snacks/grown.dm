@@ -405,7 +405,7 @@ var/list/special_fruits = list()
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
 	fragrance = INCENSE_LEAFY
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage
 	name = "plasma cabbage"
 	desc = "Not to be confused with red cabbage."
@@ -589,6 +589,12 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
 	return TRUE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/banana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	var/obj/item/weapon/bananapeel/peel = new
+	peel.potency = potency
+	trash = peel
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
 	name = "bluespace banana"
