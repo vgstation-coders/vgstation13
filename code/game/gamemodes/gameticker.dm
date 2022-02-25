@@ -528,7 +528,6 @@ var/datum/controller/gameticker/ticker
 			else
 				to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 				delay_end = 2
-			file("profile_test.json") << world.Profile(PROFILE_STOP,"json")
 	return 1
 
 /datum/controller/gameticker/proc/init_PDAgames_leaderboard()
