@@ -96,6 +96,10 @@
 "ap" = (
 /obj/structure/catwalk,
 /obj/machinery/power/solar/panel/tracker,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
 /turf/space,
 /area/vault/mini_station_entrance)
 "aq" = (
@@ -138,6 +142,9 @@
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
+	},
+/obj/machinery/power/terminal{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/mini_station_engineering)
@@ -231,6 +238,10 @@
 /obj/machinery/power/solar/panel{
 	id_tag = "derelictsolar";
 	name = "Derelict Solar Array"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "solarpanel"
@@ -1021,6 +1032,10 @@
 /area/vault/mini_station_medbay)
 "cE" = (
 /obj/machinery/power/battery/smes,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "yellow"
@@ -1033,6 +1048,12 @@
 	icon_state = "green"
 	},
 /area/vault/mini_station_botany)
+"cG" = (
+/obj/structure/catwalk,
+/obj/machinery/power/solar/panel/tracker,
+/obj/structure/cable,
+/turf/space,
+/area/vault/mini_station_entrance)
 "cH" = (
 /obj/structure/window/reinforced{
 	dir = 8;
@@ -1248,10 +1269,14 @@
 /obj/machinery/power/terminal{
 	dir = 4
 	},
-/obj/structure/cable,
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -1719,6 +1744,7 @@
 "qA" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered,
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/obj/item/weapon/circuitboard/protolathe,
 /turf/simulated/floor,
 /area/vault/mini_station_construction)
 "qD" = (
@@ -2183,6 +2209,10 @@
 	},
 /turf/simulated/floor,
 /area/vault/mini_station_kitchen)
+"Cj" = (
+/obj/item/weapon/circuitboard/destructive_analyzer,
+/turf/simulated/floor,
+/area/vault/mini_station_construction)
 "Cs" = (
 /obj/machinery/vending/cola,
 /turf/simulated/floor,
@@ -2240,6 +2270,16 @@
 "Fc" = (
 /turf/simulated/wall,
 /area/vault/mini_station_kitchen)
+"Ff" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vault/mini_station_entrance)
 "FG" = (
 /obj/machinery/power/apc{
 	dir = 4;
@@ -2423,10 +2463,10 @@
 /area/vault/mini_station)
 "LN" = (
 /obj/structure/table/glass,
-/obj/item/weapon/storage/fancy,
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/item/weapon/storage/fancy/donut_box,
 /turf/simulated/floor,
 /area/vault/mini_station_kitchen)
 "LO" = (
@@ -2793,7 +2833,7 @@
 /turf/simulated/floor,
 /area/vault/mini_station_botany)
 "Yz" = (
-/obj/item/weapon/circuitboard/rdconsole,
+/obj/item/weapon/circuitboard/rdconsole/derelict,
 /turf/simulated/floor,
 /area/vault/mini_station_construction)
 "Zh" = (
@@ -3299,7 +3339,7 @@ ae
 ae
 Mh
 Ak
-xO
+Cj
 Uf
 ui
 hj
@@ -3486,11 +3526,11 @@ aj
 ae
 aI
 aQ
-aI
+Ff
 aa
 aI
 aQ
-aI
+Ff
 ae
 ci
 bC
@@ -3498,11 +3538,11 @@ ci
 ae
 aI
 aQ
-aI
+Ff
 aa
 aI
 aQ
-aI
+Ff
 ae
 aj
 aa
@@ -3517,11 +3557,11 @@ aj
 ae
 aI
 aS
-aI
+Ff
 aa
 aI
 aS
-aI
+Ff
 ae
 ci
 bC
@@ -3529,11 +3569,11 @@ ci
 ae
 aI
 aS
-aI
+Ff
 aa
 aI
 aS
-aI
+Ff
 ae
 aj
 aa
@@ -3548,11 +3588,11 @@ aj
 ae
 aI
 aS
-aI
+Ff
 aa
 aI
 aS
-aI
+Ff
 ae
 cJ
 bC
@@ -3560,11 +3600,11 @@ cJ
 ae
 aI
 aS
-aI
+Ff
 aa
 aI
 aS
-aI
+Ff
 ae
 aj
 aa
@@ -3596,7 +3636,7 @@ bm
 bo
 fT
 aK
-ap
+cG
 aj
 aa
 aa
@@ -3610,11 +3650,11 @@ aj
 ae
 aI
 aW
-aI
+Ff
 aa
 aI
 aW
-aI
+Ff
 ae
 cO
 db
@@ -3622,11 +3662,11 @@ cO
 ae
 aI
 aW
-aI
+Ff
 aa
 aI
 aW
-aI
+Ff
 ae
 aj
 aa
@@ -3641,11 +3681,11 @@ aj
 ae
 aI
 aW
-aI
+Ff
 aa
 aI
 aW
-aI
+Ff
 ae
 ci
 db
@@ -3653,11 +3693,11 @@ ci
 ae
 aI
 aW
-aI
+Ff
 aa
 aI
 aW
-aI
+Ff
 ae
 aj
 aa
@@ -3672,11 +3712,11 @@ aj
 ae
 aI
 aX
-aI
+Ff
 aa
 aI
 aX
-aI
+Ff
 ae
 ci
 db
@@ -3684,11 +3724,11 @@ ci
 ae
 aI
 aX
-aI
+Ff
 aa
 aI
 aX
-aI
+Ff
 ae
 aj
 aa
