@@ -39,7 +39,7 @@
 						dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
 
 					for(var/datum/pda_app/cart/virus/V in pda_device.applications)
-						if (!(istype(V,/datum/pda_app/cart/virus/detonate)) || (istype(V,/datum/pda_app/cart/virus/detonate) && P.detonate))
+						if (P.accepted_viruses && P.accepted_viruses.len && (V.type in P.accepted_viruses))
 							dat += " (<a href='byond://?src=\ref[V];target=\ref[P]'>[V.icon ? "<span class='pda_icon [V.icon]'></span>" : ""]*[V.name]*</a>)"
 					dat += "</li>"
 					count++

@@ -66,7 +66,7 @@
         log_admin("[key_name(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed")
         message_admins("[key_name_admin(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed", 1)
         charges--
-    else if (!P.detonate || prob(difficulty * 2))
+    else if (!(src.type in P.accepted_viruses) || prob(difficulty * 2))
         U.show_message("<span class='warning'>An error flashes on your [src]; [pick("Encryption","Connection","Verification","Handshake","Detonation","Injection")] error!</span>", 1)
         U << browse(null, "window=pda")
         var/list/garble = list()
