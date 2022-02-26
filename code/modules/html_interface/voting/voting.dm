@@ -323,7 +323,6 @@ var/global/datum/controller/vote/vote = new()
 	return total
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
-	reset()
 	var/mob/user = usr
 	if(currently_voting)
 		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
