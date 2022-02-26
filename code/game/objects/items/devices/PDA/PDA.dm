@@ -29,7 +29,12 @@ var/global/msg_id = 0
 	var/lock_code = "" // Lockcode to unlock uplink
 	var/honkamt = 0 //How many honks left when infected with honk.exe
 	var/mimeamt = 0 //How many silence left when infected with mime.exe
-	var/detonate = 1 // Can the PDA be blown up?
+	var/list/accepted_viruses = list(
+		/datum/pda_app/cart/virus/honk,
+		/datum/pda_app/cart/virus/silent,
+		/datum/pda_app/cart/virus/detonate,
+		/datum/pda_app/cart/virus/fake_uplink,
+	) //What kind of viruses can this PDA be sent?
 	var/hidden = 0 // Is the PDA hidden from the PDA list?
 	var/show_overlays = TRUE
 
