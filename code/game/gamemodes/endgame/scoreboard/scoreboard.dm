@@ -79,7 +79,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/global_paintings = list()
 
 /datum/controller/gameticker/scoreboard/proc/main(var/dat)
-	var/datum/faction/syndicate/traitor/TR = find_active_faction_by_type(/datum/faction/syndicate/traitor)
 	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
 
@@ -96,8 +95,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += nuke_op_score(NO)
 	if(RV)
 		dat += revolution_score(RV)
-	if(TR)
-		dat += syndicate_score(TR)
+	dat += syndicate_score()
 	dat += silicon_score()
 	dat += misc_score()
 	dat += display()
@@ -141,11 +139,11 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if (score.disease_extracted > 0)
 		dat += "<B>Extracted Symptoms:</B> [score.disease_extracted] ([score.disease_effects] Points)<BR>"
 	if (score.slimes > 0)
-		dat += "<B>Harvested Slimes:</B> [score.slimes] ([score.slimes * 20] Points)<BR><BR>"
+		dat += "<B>Harvested Slimes:</B> [score.slimes] ([score.slimes * 20] Points)<BR>"
 	if (score.artifacts > 0)
-		dat += "<B>Analyzed & Activated Large Artifacts:</B> [score.artifacts] ([score.artifacts * 400] Points)<BR><BR>"
+		dat += "<B>Analyzed & Activated Large Artifacts:</B> [score.artifacts] ([score.artifacts * 400] Points)<BR>"
 
-	dat += "<U>THE BAD:</U><BR>"
+	dat += "<BR><U>THE BAD:</U><BR>"
 	if (score.deadcrew > 0)
 		dat += "<B>Dead Crewmen:</B> [score.deadcrew] (-[score.deadcrew * 250] Points)<BR>"
 	if (score.deadsilicon > 0)
@@ -159,9 +157,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.turfssingulod > 0)
 		dat += "<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>"
 	if(score.disease_bad > 0)
-		dat += "<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR><BR>"
+		dat += "<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR>"
 
-	dat += "<U>THE WEIRD</U><BR>"
+	dat += "<BR><U>THE WEIRD</U><BR>"
 /*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
 	var/profit = totalfunds - 100000
 	if (profit > 0)

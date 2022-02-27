@@ -1,4 +1,4 @@
-/datum/controller/gameticker/scoreboard/proc/syndicate_score(var/datum/faction/syndicate/traitor/TR)
+/datum/controller/gameticker/scoreboard/proc/syndicate_score()
 	var/completions
 	var/list/boombox = score.implant_phrases
 	var/synphra = score.syndiphrases
@@ -126,7 +126,7 @@
 	<B>Number of Operatives:</B> [foecount]<BR>
 	<B>Number of Surviving Crew:</B> [crewcount]<BR>
 	<B>Final Location of Nuke:</B> [bombdat]<BR>
-	<B>Final Location of Disk:</B> [diskdat]<BR><BR>
+	<B>Final Location of Disk:</B> [diskdat]<BR>
 	<B>Operatives Arrested:</B> [oparrested] ([oparrested * 1000] Points)<BR>
 	<B>Operatives Killed:</B> [opkilled] ([opkilled * 250] Points)<BR>
 	<B>All Operatives Arrested:</B> [alloparrested ? "Yes" : "No"] ([oparrested * 2000])<BR>
@@ -187,7 +187,7 @@
 	<B>Number of Surviving Revolution Heads:</B> [foecount]<BR>
 	<B>Number of Surviving Command Staff:</B> [comcount]<BR>
 	<B>Number of Surviving Revolutionaries:</B> [revcount]<BR>
-	<B>Number of Surviving Loyal Crew:</B> [loycount]<BR><BR>
+	<B>Number of Surviving Loyal Crew:</B> [loycount]<BR>
 	<B>Revolution Heads Arrested:</B> [revarrested] ([revarrested * 1000] Points)<BR>
 	<B>Revolution Heads Slain:</B> [revkilled] ([revkilled * 500] Points)<BR>
 	<B>Command Staff Slain:</B> [deadcommand] (-[deadcommand * 500] Points)<BR>
