@@ -125,7 +125,7 @@ var/global/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
 	"Nanotrasen CEO John P. Nanotrasen and Discount Dan's CEO Discount Dan have been photographed buying a new friend necklace. The Syndicate issued a statement that 'That's totally gay.'",
 	"Discount Dan has been photographed this evening hunting the endangered albino space panda. When questioned, he replied that the endangered animal was 'Good eats'.",
 	"Nanotrasen's head programmer quit this evening when people did not respond well to his new features on NTOS. Said features included the ability to instantly transmit pictures of your butt to people by blinking.",
-	"Nanotrasen CEO John P. Nanotrasen was photographed this morning celebrating his birthday will well deserved hookers and blow.",
+	"Nanotrasen CEO John P. Nanotrasen was photographed this morning celebrating his birthday with well deserved hookers and blow.",
 	"Discount Dan's stock has risen 20 points today after CEO Discount Dan promised to include a free toy in every 'Happy Dan' meal. In other news, we have over 300 confirmed reports of broken teeth and lead poisoning in children 6 and under.",
 	"Discount Dan has come under fire today after trying to hug a plasmaman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
 	"Nanotrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
