@@ -4,13 +4,13 @@
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
 	mech_flags = MECH_SCAN_ILLEGAL
 	starting_apps = list(/datum/pda_app/cart/virus/detonate)
-	var/shock_charges = 4
 
 /datum/pda_app/cart/virus
-    name = "Virus"
-    desc = "Sends to 5 PDAs"
-    menu = FALSE //Shows up elsewhere
-    var/charges = 5
+	name = "Send Virus"
+	desc = "Sends to 5 PDAs"
+	menu = FALSE //Shows up elsewhere
+	var/charges = 5
+	var/virus_type = "viral files"
 
 /datum/pda_app/cart/virus/Topic(href, href_list)
     if(..())
@@ -37,9 +37,10 @@
     return
 
 /datum/pda_app/cart/virus/detonate
-    name = "Detonate PDA"
-    desc = "And maybe a leg too in the process"
-    icon = "pda_boom"
+	name = "Detonate"
+	desc = "And maybe a leg too in the process"
+	icon = "pda_boom"
+	virus_type = "detonation charges"
 
 /datum/pda_app/cart/virus/detonate/infect(var/obj/item/device/pda/P,var/mob/U)
     var/difficulty = 0
@@ -65,7 +66,7 @@
         log_admin("[key_name(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed")
         message_admins("[key_name_admin(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed", 1)
         charges--
-    else if (!P.detonate || prob(difficulty * 2))
+    else if (!(src.type in P.accepted_viruses) || prob(difficulty * 2))
         U.show_message("<span class='warning'>An error flashes on your [src]; [pick("Encryption","Connection","Verification","Handshake","Detonation","Injection")] error!</span>", 1)
         U << browse(null, "window=pda")
         var/list/garble = list()
@@ -85,6 +86,63 @@
         message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded", 1)
         charges--
         P.explode(U)
+
+/obj/item/weapon/cartridge/syndifake
+	name = "\improper F.R.A.M.E. Cartridge"
+	icon_state = "cart"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
+	mech_flags = MECH_SCAN_ILLEGAL
+	starting_apps = list(/datum/pda_app/cart/virus/fake_uplink)
+	var/uses = 0
+
+/obj/item/weapon/cartridge/syndifake/attackby(var/obj/item/W, var/mob/user)
+	if(..())
+		return
+	if(istype(W, /obj/item/stack/telecrystal))
+		var/obj/item/stack/telecrystal/crystals = W
+		uses += crystals.amount
+		to_chat(user, "<span class='notice'>You insert [crystals.amount] telecrystal[crystals.amount > 1 ? "s" : ""] into the cartridge.</span>")
+		crystals.use(crystals.amount)
+
+/obj/item/weapon/cartridge/syndifake/attack_self(var/mob/user)
+	if(..())
+		return
+	if(uses)
+		var/obj/item/stack/telecrystal/crystals = new(user.loc, uses)
+		to_chat(user, "<span class='notice'>You remove [crystals.amount] telecrystal[crystals.amount > 1 ? "s" : ""] from the cartridge.</span>")
+		uses = 0
+		user.put_in_hands(crystals)
+
+/datum/pda_app/cart/virus/fake_uplink
+	name = "Send Uplink"
+	desc = "Frame someone as a tator"
+	icon = "pda_boom"
+	virus_type = "fake uplinks"
+
+/datum/pda_app/cart/virus/fake_uplink/infect(var/obj/item/device/pda/P,var/mob/U)
+	if(P.get_component(/datum/component/uplink))
+		U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
+		U << browse(null, "window=pda")
+		var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
+		if(app)
+			app.create_message(null, P, null, null, pick(syndicate_code_phrase)) //friendly fire
+		charges--
+	else
+		var/datum/component/uplink/new_uplink = P.add_component(/datum/component/uplink)
+		if(istype(cart_device,/obj/item/weapon/cartridge/syndifake))
+			var/obj/item/weapon/cartridge/syndifake/SF = cart_device
+			new_uplink.telecrystals = SF.uses
+		else
+			new_uplink.telecrystals = 0
+		var/datum/component/uplink/our_uplink = pda_device.get_component(/datum/component/uplink)
+		if(!our_uplink && U.mind)
+			our_uplink = U.mind.find_syndicate_uplink()
+		if(our_uplink)
+			new_uplink.unlock_code = our_uplink.unlock_code
+		new_uplink.locked = FALSE
+		U.show_message("<span class='notice'>Success! Unlock the PDA by entering [new_uplink.unlock_code] into it.</span>", 1)
+		if(U.mind)
+			U.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([P.name]).")
 
 /obj/item/weapon/cartridge/syndicatedoor
 	name = "\improper Doorman Cartridge"
@@ -140,7 +198,7 @@
 /obj/item/weapon/cartridge/camera/New()
 	..()
 	cart_cam = new /obj/item/device/camera/cartridge(src)
-	
+
 /obj/item/weapon/cartridge/camera/Destroy()
 	qdel(cart_cam)
 	cart_cam = null
