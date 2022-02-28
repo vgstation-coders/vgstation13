@@ -189,7 +189,7 @@ var/list/headset_modes = list(
 		return
 
 	//parse the language code and consume it
-	
+
 	//but first, scoreboard for syndiphrases stuff
 	if(src.mind && (src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER)))
 		for(var/syn in syndicate_code_phrase)
@@ -276,10 +276,10 @@ var/list/headset_modes = list(
 	//checking for syndie codephrases if person is a tator
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
 		for(var/T in syndicate_code_phrase)
-			rendered_message = replacetext(html_decode(rendered_message), T, "<b style='color: red;'>[html_encode(T)]</b>")
+			rendered_message = replacetext(rendered_message, html_encode(T), "<b style='color: red;'>[html_encode(T)]</b>")
 
 		for(var/T in syndicate_code_response)
-			rendered_message = replacetext(html_decode(rendered_message), T, "<i style='color: red;'>[html_encode(T)]</i>")
+			rendered_message = replacetext(rendered_message, html_encode(T), "<i style='color: red;'>[html_encode(T)]</i>")
 
 	//AI mentions
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
