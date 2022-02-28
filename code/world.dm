@@ -216,7 +216,6 @@ var/auxtools_path
 			if(!fcopy(map_path, filename))
 				fdel(filename)
 				fcopy(map_path, filename)
-			sleep(60)
 			
 	pre_shutdown()
 	..()
