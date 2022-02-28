@@ -207,5 +207,5 @@
 
 /obj/item/weapon/gun/projectile/shotgun/nt12/widowmaker2000
 	name = "\improper Widowmaker 2000"
-	desc = "Also known as the \"Colt Widowmaker M2000 SMG shotgun\"."
+	desc = "I used the shotgun. You know why? Because the shotgun doesn't miss, and unlike the shitty hybrid taser it stops a criminal in their tracks in two hits. Bang, bang, and they're fucking done. I use four shots just to make damn sure. Because, once again, I'm not there to coddle a buncha criminal scum sucking faggots, I'm there to 1) Survive the fucking round. 2) Guard the armory. So you can absolutely get fucked. If I get unbanned, which I won't, you can guarantee I will continue to use the shotgun to apprehend criminals. Because it's quick, clean and effective as fuck. Why in the seven hells would I fuck around with the disabler shots, which take half a clip just to bring someone down, or with the taser bolts which are slow as balls, impossible to aim and do about next to jack shit, fuck all. The shotgun is the superior law enforcement weapon. Because it stops crime. And it stops crime by reducing the number of criminals roaming the fucking halls."
 	w_class = W_CLASS_MEDIUM
