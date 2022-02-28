@@ -121,14 +121,13 @@ var/intercom_range_display_status = 0
 
 	feedback_add_details("admin_verb","mIRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/var/show_mc_tab = FALSE
-
 /client/proc/enable_debug_verbs()
 	set category = "Debug"
 	set name = "Debug verbs"
+
 	if(!check_rights(R_DEBUG))
 		return
-	show_mc_tab = TRUE
+
 	src.verbs += /client/proc/do_not_use_these 			//-errorage
 	src.verbs += /client/proc/camera_view 				//-errorage
 	src.verbs += /client/proc/sec_camera_report 		//-errorage
@@ -146,7 +145,6 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/ticklag	//allows you to set the ticklag.
 	src.verbs += /client/proc/cmd_admin_grantfullaccess
 	src.verbs += /client/proc/kaboom
-	src.verbs += /client/proc/rigvote
 	src.verbs += /client/proc/splash
 	src.verbs += /client/proc/cmd_admin_areatest
 	src.verbs += /client/proc/cmd_admin_rejuvenate

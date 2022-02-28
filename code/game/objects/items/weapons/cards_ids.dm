@@ -180,6 +180,9 @@
 		return
 	target.emag_act(user)
 
+
+var/list/global/id_cards = list()
+
 /obj/item/weapon/card/id
 	name = "identification card"
 	desc = "A card used to provide ID and determine access across the station. Features a virtual wallet accessible by PDA."
@@ -206,10 +209,16 @@
 /obj/item/weapon/card/id/New()
 	..()
 
+	id_cards += src
+
 	if(virtual_wallet)
 		update_virtual_wallet()
 	if(ishuman(loc))
 		SetOwnerDNAInfo(loc)
+
+/obj/item/weapon/card/id/Destroy()
+	id_cards -= src 
+	..()
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -258,16 +267,7 @@
 	if(!virtual_wallet)
 		return 0
 	virtual_wallet.money += added_funds
-	var/datum/transaction/T = new()
-	if(user)
-		T.target_name = user.name
-	T.purpose = "Currency deposit"
-	T.amount = added_funds
-	if(source)
-		T.source_terminal = source.name
-	T.date = current_date_string
-	T.time = worldtime2text()
-	virtual_wallet.transaction_log.Add(T)
+	new /datum/transaction(virtual_wallet, "Currency deposit", added_funds, source ? source.name : "", user ? user.name : "")
 	return 1
 
 /obj/item/weapon/card/id/proc/UpdateName()
@@ -414,6 +414,19 @@
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
+	var/copy_appearance = FALSE
+
+/obj/item/weapon/card/id/syndicate/AltClick()
+	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
+		copy_appearance = !copy_appearance
+		to_chat(usr, "<span class='notice'>The [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
+		return
+	return ..()
+
+/obj/item/weapon/card/id/syndicate/proc/can_use(mob/user)
+	if(ismob(user) && !user.incapacitated() && loc == user)
+		return 1
+	return 0
 
 /obj/item/weapon/card/id/syndicate/commando
 	name = "Hacked syndie card"
@@ -425,8 +438,17 @@
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
-		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access.</span>")
+		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access[copy_appearance ? " and appearance" : ""].</span>")
 		access |= I.access
+		if(copy_appearance)
+			registered_name = I.registered_name
+			icon_state = I.icon_state
+			assignment = I.assignment
+			associated_account_number = I.associated_account_number
+			blood_type = I.blood_type
+			dna_hash = I.dna_hash
+			fingerprint_hash = I.fingerprint_hash
+			UpdateName()
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
 	if(!src.registered_name)

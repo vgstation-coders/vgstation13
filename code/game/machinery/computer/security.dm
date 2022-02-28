@@ -28,20 +28,25 @@
 		if(usr.drop_item(O, src))
 			scan = O
 			to_chat(user, "You insert \the [O].")
-	if (istype(user) && authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 3.0) && active1)
-		var/obj/item/weapon/photo/id/photo_id = O
-		if (photo_id.four_sides)
-			if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
-				if (user && !user.incapacitated() && Adjacent(user) && photo_id && (photo_id == user.get_active_hand()) && authenticated && (screen == 3.0) && active1)
-					active1.fields["photo"] = photo_id.four_sides
-					visible_message("<span class='notice'>[bicon(src)] Database updated.</span>")
-					playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
-					updateUsrDialog()
+	if (istype(user) && authenticated && (screen == 3.0) && active1)
+		if(istype(O, /obj/item/weapon/photo/id))
+			var/obj/item/weapon/photo/id/photo_id = O
+			if (photo_id.four_sides)
+				if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
+					if (user && !user.incapacitated() && Adjacent(user) && photo_id && (photo_id == user.get_active_hand()) && authenticated && (screen == 3.0) && active1)
+						active1.fields["photo"] = photo_id.four_sides
+						visible_message("<span class='notice'>[bicon(src)] Database updated.</span>")
+						playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
+						updateUsrDialog()
+		if(istype(O,/obj/item/device/detective_scanner/forger))
+			var/obj/item/device/detective_scanner/forger/F = O
+			if(active1.fields["fingerprint"])
+				var/list/customprints = list()
+				var/print = active1.fields["fingerprint"]
+				to_chat(user,"<span class='notice'>You scan the fingerprints from the active record and add them to the custom fingerprints. It will be tied to the next applicable scanned item.</span>")
+				customprints[print] = print
+				F.custom_forgery[1] = customprints ? customprints.Copy() : null
 	..()
-
-/obj/machinery/computer/secure_data/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/secure_data/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -552,7 +557,7 @@ What a mess.*/
 	return
 
 /obj/machinery/computer/secure_data/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 

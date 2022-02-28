@@ -41,6 +41,7 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
+	var/no_life_on_station
 	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
@@ -60,6 +61,8 @@ var/datum/controller/gameticker/ticker
 		path = "sound/music/aprilfools/"
 	else if(SNOW_THEME)
 		path = "sound/music/xmas/"
+	else if(map.nameShort == "castle")
+		path = "sound/music/castle/"
 	var/list/filenames = flist(path)
 	for(var/filename in filenames)
 		if(copytext(filename, length(filename)) == "/")
@@ -122,6 +125,8 @@ var/datum/controller/gameticker/ticker
 	theme.update_icon()
 
 /datum/controller/gameticker/proc/StopThematic()
+	if(!theme)
+		return
 	theme.playing=0
 	theme.update_music()
 	theme.update_icon()
@@ -379,6 +384,32 @@ var/datum/controller/gameticker/ticker
 		qdel(temp_buckle)	//release everybody
 	return
 
+/datum/controller/gameticker/proc/station_nolife_cinematic(var/override = null)
+	if( cinematic )
+		return	//already a cinematic in progress!
+
+	for (var/datum/html_interface/hi in html_interfaces)
+		hi.closeAll()
+
+	//initialise our cinematic screen object
+	cinematic = new(src)
+	cinematic.icon = 'icons/effects/station_explosion.dmi'
+	cinematic.icon_state = "station_nolife"
+	cinematic.plane = HUD_PLANE
+	cinematic.mouse_opacity = 0
+	cinematic.screen_loc = "1,0"
+
+	//actually turn everything off
+	power_failure(0)
+
+	//If its actually the end of the round, wait for it to end.
+	//Otherwise if its a verb it will continue on afterwards.
+	sleep(300)
+
+	if(cinematic)
+		qdel(cinematic)		//end the cinematic
+
+	no_life_on_station = TRUE
 
 /datum/controller/gameticker/proc/create_characters()
 	for(var/mob/new_player/player in player_list)
@@ -453,21 +484,9 @@ var/datum/controller/gameticker/ticker
 			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
-				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
+				vote.initiate_vote("map","The Server", popup = 1)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
-
-			else
-				var/list/maps = get_votable_maps()
-				var/list/choices=list()
-				for(var/key in maps)
-					choices.Add(key)
-				var/mapname=pick(choices)
-				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
-				watchdog.chosen_map = mapname
-				log_game("Server chose [watchdog.chosen_map]!")
-
-
 		spawn(50)
 			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
@@ -481,7 +500,7 @@ var/datum/controller/gameticker/ticker
 			end_credits.on_round_end()
 
 			if(blackbox)
-				if(config.map_voting)
+				if(config.map_voting && player_list.len)
 					spawn(restart_timeout + 1)
 						blackbox.save_all_data_to_sql()
 				else
@@ -490,8 +509,8 @@ var/datum/controller/gameticker/ticker
 			stat_collection.Process()
 
 			if (watchdog.waiting)
-				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
-				if(config.map_voting)
+				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting && player_list.len ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
+				if(config.map_voting && player_list.len)
 					sleep(restart_timeout) //waiting for a mapvote to end
 				if(!delay_end)
 					watchdog.signal_ready()
@@ -542,7 +561,7 @@ var/datum/controller/gameticker/ticker
 	if(!ooc_allowed)
 		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
 		ooc_allowed = TRUE
-	scoreboard()
+	score.main()
 	return 1
 
 /datum/controller/gameticker/proc/bomberman_declare_completion()

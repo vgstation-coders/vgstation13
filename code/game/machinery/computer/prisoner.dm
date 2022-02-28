@@ -15,10 +15,6 @@
 
 	light_color = LIGHT_COLOR_RED
 
-/obj/machinery/computer/prisoner/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/prisoner/attack_paw(var/mob/user as mob)
 	return
 
@@ -124,9 +120,9 @@
 			to_chat(R, "<span class='good'>You hear a voice in your head saying: '[warning]'</span>")
 
 		else if(href_list["explode"])
-			var/obj/item/weapon/implant/I = locate(href_list["explode"])
+			var/obj/item/weapon/implant/explosive/remote/I = locate(href_list["explode"])
 			if(istype(I))
-				I.activate()
+				I.activate(usr)
 
 		src.add_fingerprint(usr)
 	src.updateUsrDialog()

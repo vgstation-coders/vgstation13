@@ -7,11 +7,9 @@
 	..()
 	create_reagents(50)
 	chemical_implants.Add(src)
-	remote_implants.Add(src)
 
 /obj/item/weapon/implant/chem/Destroy()
 	chemical_implants.Remove(src)
-	remote_implants.Remove(src)
 	..()
 
 /obj/item/weapon/implant/chem/get_data()

@@ -39,8 +39,8 @@ var/list/one_way_windows
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 	var/disperse_coeff = 0.95
 	var/is_fulltile = FALSE
-/obj/structure/window/New(loc)
 
+/obj/structure/window/New(loc)
 	..(loc)
 	flow_flags |= ON_BORDER | KEEP_DIR
 	setup_border_dummy()
@@ -52,6 +52,7 @@ var/list/one_way_windows
 	if(one_way)
 		one_way = !one_way
 		toggle_one_way()
+
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
@@ -104,7 +105,11 @@ var/list/one_way_windows
 
 	if(health <= 0)
 		if(M) //Did someone pass a mob ? If so, perform a pressure check
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = 0
+			if(flow_flags & ON_BORDER)
+				pdiff = performWallPressureCheckFromTurfList(list(get_step(loc, dir), loc))
+			else
+				pdiff = performWallPressureCheck(loc)
 			if(pdiff > 0)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
@@ -188,7 +193,7 @@ var/list/one_way_windows
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return TRUE
 	if(istype(mover) && mover.checkpass(pass_flags_self))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
-		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | reverse_direction(dir)))
+		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | opposite_dirs[dir]))
 			dim_beam(mover)
 		return TRUE
 	if(!density)
@@ -453,7 +458,11 @@ var/list/one_way_windows
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					//Perform pressure check since window no longer blocks air
-					var/pdiff = performWallPressureCheck(src.loc)
+					var/pdiff = 0
+					if(flow_flags & ON_BORDER)
+						pdiff = performWallPressureCheckFromTurfList(list(get_step(loc, dir), loc))
+					else
+						pdiff = performWallPressureCheck(loc)
 					if(pdiff > 0)
 						message_admins("Window with pdiff [pdiff] deanchored by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(loc)]!")
 						log_admin("Window with pdiff [pdiff] deanchored by [user.real_name] ([user.ckey]) at [loc]!")
@@ -608,7 +617,7 @@ var/list/one_way_windows
 		for(var/obj/structure/window/W in get_step(T,direction))
 			W.update_icon()
 
-/obj/structure/window/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/structure/window/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_icons(T)

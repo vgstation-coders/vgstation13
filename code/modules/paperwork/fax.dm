@@ -50,9 +50,6 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 			scancount += SP.rating-1
 	cooldown_time = initial(cooldown_time) - 300*scancount
 
-/obj/machinery/faxmachine/attack_ai(mob/user as mob)
-	return attack_hand(user)
-
 /obj/machinery/faxmachine/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
@@ -200,6 +197,9 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	if(stat & BROKEN)
 		to_chat(user, "<span class = 'warning'>\The [src] is broken!</span>")
 		return
+	if(stat & FORCEDISABLE)
+		to_chat(user, "<span class = 'warning'>\The [src] is unresponsive!</span>")
+		return
 	if(istype(O, /obj/item/weapon/paper))
 		if(!tofax)
 			if(user.drop_item(O, src))
@@ -239,7 +239,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 //why the fuck doesnt the thing show as orange
 	var/admin_msg = "Receiving '[sentname]' to <b>[centcomm_dpt]</b> via secure connection..."
 	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: [admin_msg] <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
-	send_prayer_to_admins(msg, admin_msg, 'sound/effects/fax.ogg', "Centcomm Fax", key_name(Sender, 1), get_turf(Sender))
+	send_prayer_to_admins(msg, admin_msg, 'sound/effects/fax.ogg', "Centcomm Fax", key_name(Sender), get_turf(Sender))
 
 	for (var/obj/machinery/faxmachine/fax in allfaxes)
 		if (fax.z == map.zCentcomm)
@@ -254,7 +254,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 
 		if(centcomm || F.department == dpt )
-			if(! (F.stat & (BROKEN|NOPOWER) ) )
+			if(! (F.stat & (BROKEN|NOPOWER|FORCEDISABLE) ) )
 
 				flick("faxreceive", F)
 

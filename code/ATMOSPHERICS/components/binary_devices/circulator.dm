@@ -97,7 +97,7 @@
 		update_icon()
 
 /obj/machinery/atmospherics/binary/circulator/update_icon()
-	if(!linked_generator || linked_generator.stat & (NOPOWER | BROKEN))	//These get power from the TeG itself.
+	if(!linked_generator || linked_generator.stat & (NOPOWER | BROKEN | FORCEDISABLE))	//These get power from the TeG itself.
 		icon_state = "circ-p"
 
 	else if(last_pressure_delta > 0 && recent_moles_transferred > 0)

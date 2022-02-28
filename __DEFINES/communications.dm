@@ -41,3 +41,6 @@ var/list/radiochannelsreverse = list()
 
 //Only the channels that someone in the main station should have access to normally.
 var/list/stationchannels = list()
+
+//For custom stuff
+var/list/freqtocolor = list()

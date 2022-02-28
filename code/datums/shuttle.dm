@@ -542,7 +542,7 @@
 	return occupants
 
 /proc/get_refill_area(var/obj/docking_port/destination/D)
-	if(ispath(D.refill_area))
+	if(ispath(D?.refill_area))
 		return locate(D.refill_area)
 	else
 		return get_space_area()
@@ -704,6 +704,7 @@
 		new_turf.icon = old_turf.icon
 		new_turf.plane = old_turf.plane
 		new_turf.layer = old_turf.layer
+		new_turf.color = old_turf.color
 
 		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
 		// Floor turfs create their `floor_tile` in New() if it's null.
@@ -716,7 +717,7 @@
 			modern.floor_tile = ancient.floor_tile
 			ancient.floor_tile = null
 		if(rotate)
-			new_turf.shuttle_rotate(rotate)
+			new_turf.map_element_rotate(rotate)
 
 		//*****Move air*****
 
@@ -787,7 +788,7 @@
 		AM.forceMove(new_turf)
 
 	if(rotate)
-		AM.shuttle_rotate(rotate)
+		AM.map_element_rotate(rotate)
 
 /proc/setup_shuttles()
 	world.log << "Setting up all shuttles..."

@@ -63,7 +63,8 @@
 	storage_slots = 6
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/donut", \
 					"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut", \
-					"/obj/item/weapon/reagent_containers/food/snacks/donutiron")
+					"/obj/item/weapon/reagent_containers/food/snacks/donutiron", \
+					"/obj/item/weapon/reagent_containers/food/snacks/riceball")
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -639,19 +640,42 @@
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick(src)
-	return
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	if(!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
-		if(istype(src.loc,/mob/living/carbon))
-			var/mob/living/carbon/C = src.loc
-			C.u_equip(src, 0)
 		qdel(src)
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/update_icon(var/itemremoved = 0)
 	return
+
+
+/obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket
+	name = "vox chicken bucket"
+	desc = "I’ll have two number 9s, a number 9 large, a number 6 with extra dip, a number 7, two number 45s, one with cheese, and a large soda."
+	icon_state = "vox_drumstick_bucket"
+	item_state = "kfc_bucket"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+	icon_type = "drumstick"
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick")
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type=RECYK_MISC
+
+/obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick(src)
+
+/obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
+	. = ..()
+	if(!contents.len)
+		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
+		qdel(src)
+
+/obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket/update_icon(var/itemremoved = 0)
+	return
+
 
 /obj/item/weapon/storage/fancy/food_box
 	name = "food box"
@@ -771,6 +795,9 @@
 	box_type = "plate"
 	storage_slots = 10
 	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")
+
+	starting_materials = list(MAT_GOLD = 2*CC_PER_SHEET_GOLD) // Recipe requires 2 sheets
+	w_type = RECYK_METAL
 
 /*
  * Beer Box

@@ -42,6 +42,12 @@ var/list/camera_names=list()
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
 	var/health = CAMERA_MAX_HEALTH
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/camera_reactivate,
+		/datum/malfhack_ability/oneuse/camera_upgrade
+	)
+
 /obj/machinery/camera/flawless
 	failure_chance = 0
 
@@ -281,7 +287,9 @@ var/list/camera_messages = list()
 			info = X.info
 		else
 			var/obj/item/device/pda/P = W
-			info = P.notehtml
+			var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in P.applications
+			if(app)
+				info = app.notehtml
 
 		var/key = "\ref[W]"
 		if(camera_messages.len > MAX_CAMERA_MESSAGES)
@@ -400,7 +408,7 @@ var/list/camera_messages = list()
 		T = get_ranged_target_turf(src, direction, 1)
 
 		if (istype(T))
-			dir = reverse_direction(direction)
+			dir = opposite_dirs[direction]
 			break
 
 //Return a working camera that can see a given mob

@@ -97,7 +97,7 @@
 
 	spawn(1) // Plants will sometimes be spawned in the turf adjacent to the one they need to end up in, for the sake of correct dir/etc being set.
 		SSplant.add_plant(src)
-		score["kudzugrowth"]++
+		score.kudzugrowth++
 		// Some plants eat through plating.
 		if(seed.chems && !isnull(seed.chems[PHENOL]))
 			var/turf/T = get_turf(src)

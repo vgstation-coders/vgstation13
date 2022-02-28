@@ -76,7 +76,6 @@
 			M.LAssailant = user
 			M.assaulted_by(user)
 		src.add_fingerprint(user)
-
 		for(var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
@@ -292,6 +291,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	item_state = "grey_sword"
 	force = 4
+	w_type = RECYK_METAL
 
 /obj/item/weapon/rsscimmy
 	name = "rune scimitar"

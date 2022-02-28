@@ -56,7 +56,28 @@ var/list/all_doors = list()
 	var/soundeffect = 'sound/machines/airlock.ogg'
 	var/soundpitch = 30
 
+	var/being_cut = FALSE
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
+
+/obj/machinery/door/proc/bashed_in(mob/user)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+	new /obj/effect/decal/cleanable/dirt(get_turf(src))
+	qdel(src)
+
+/obj/machinery/door/proc/attempt_slicing(mob/user)
+	being_cut = TRUE
+	user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+	"<span class='notice'>You begin slicing through \the [src].</span>", \
+	"<span class='warning'>You hear slicing noises.</span>")
+	playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+
+	if(do_after(user, src, 20 SECONDS))
+		user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+		"<span class='notice'>You slice through \the [src].</span>", \
+		"<span class='warning'>You hear slicing noises.</span>")
+		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+		bashed_in(user, FALSE)
+	being_cut = FALSE
 
 /obj/machinery/door/projectile_check()
 	if(opacity)
@@ -86,7 +107,7 @@ var/list/all_doors = list()
 	if (ismob(AM))
 		var/mob/M = AM
 
-		if(!M.restrained() && (M.size > SIZE_TINY))
+		if(!M.restrained() && (M.size > SIZE_TINY) && !isSaMMI(M))
 			bump_open(M)
 
 		return
@@ -210,12 +231,12 @@ var/list/all_doors = list()
 	playsound(H.loc, 'sound/effects/horrorforce2.ogg', 80)
 	visible_message("<span class='danger'>\The [src]'s motors whine as several great tendrils begin trying to force it open!</span>")
 	if(do_after(H, src, 32))
-		open(1)
+		open()
 		visible_message("<span class='danger'>[H.name] forces \the [src] open!</span>")
 
 		// Open firedoors, too.
 		for(var/obj/machinery/door/firedoor/FD in loc)
-			FD.open(1)
+			FD.open()
 	else
 		to_chat(H, "<span class='warning'>You fail to open \the [src].</span>")
 
@@ -424,7 +445,7 @@ var/list/all_doors = list()
 	update_freelok_sight()
 	return 1
 
-/obj/machinery/door/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/machinery/door/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_tiles(T)

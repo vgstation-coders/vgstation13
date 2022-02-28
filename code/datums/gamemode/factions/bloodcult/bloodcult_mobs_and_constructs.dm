@@ -561,7 +561,12 @@ var/list/astral_projections = list()
 	death()
 
 /mob/living/simple_animal/astral_projection/ex_act(var/severity)
-	death()
+	if(tangibility)
+		death()
+
+/mob/living/simple_animal/astral_projection/shuttle_act()
+	if(tangibility)
+		death()
 
 //called once when we are created, shapes our appearance in the image of our anchor
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)

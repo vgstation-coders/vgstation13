@@ -175,7 +175,7 @@
 	if(!istype(L))
 		return
 
-	put_in(L)
+	put_in(L,user)
 
 /obj/machinery/dna_scannernew/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
@@ -239,9 +239,9 @@
 	else if(M.anchored)
 		return FALSE
 
-	if(ismanifested(M) || !iscarbon(M))
+	if(ismanifested(M) || (!iscarbon(M) && !istype(M, /mob/living/slime_pile)))
 		if(user)
-			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that person's genes.</span>")
+			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that organisms's genes.</span>")
 		return
 
 	if(user)
@@ -911,12 +911,12 @@
 		var/which = text2num(href_list["changeBlockLabel"])
 		var/datum/block_label/label = labels[which]
 		var/text = copytext(sanitize(input(usr, "New Label:", "Edit Label", label.name) as text|null),1,MAX_NAME_LEN)
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(text) //you can color the tab without a label, sure why not
 			label.name = text
 		var/newcolor = input("Select Tab Color", "Edit Label", label.color) as color
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(newcolor)
 			label.color = newcolor

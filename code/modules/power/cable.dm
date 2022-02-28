@@ -120,18 +120,19 @@ By design, d1 is the smallest direction and d2 is the highest
 		attached.attached = null
 
 	attached = null
+
 	..()								// then go ahead and delete the cable
 
 /obj/structure/cable/proc/reset_plane() //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	plane = ABOVE_PLATING_PLANE
 
-/obj/structure/cable/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/structure/cable/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	.=..()
 
 	if(powernet)
 		powernet.set_to_build() // update the powernets
 
-/obj/structure/cable/shuttle_rotate(angle)
+/obj/structure/cable/map_element_rotate(angle)
 	if(d1)
 		d1 = turn(d1, -angle)
 	if(d2)
@@ -254,21 +255,20 @@ By design, d1 is the smallest direction and d2 is the highest
 	//investigate_log("was cut by [key_name(usr, usr.client)] in [user.loc.loc]","wires")
 
 	var/message = "A wire has been cut "
-	var/atom/A = user
+	var/area/my_area = user ? get_area(user) : get_area(T)
 
-	if(A)
-		var/turf/Z = get_turf(A)
-		var/area/my_area = get_area(Z)
+	if(powernet.load)
+		message += "with a load of [powernet.load] and avail of [powernet.avail] spanning [powernet.cables.len] cables "
 
-		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"}
+	if(my_area)
+		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) [user ? "(<A HREF='?_src_=vars;Vars=\ref[user]'>VV</A>)" : ""]"}
 
-		var/mob/M = get_holder_of_type(A, /mob) //Why is this here? The use already IS a mob...
+	if(user)
+		message += " - Cut By: [user.real_name] ([user.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[user]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
+		log_game("[user.real_name] ([user.key]) cut a wire in [my_area.name] with a load of [powernet.load] and avail of [powernet.avail] spanning [powernet.cables.len] cables ([T.x],[T.y],[T.z])")
 
-		if(M)
-			message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
-			log_game("[M.real_name] ([M.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
-
-	message_admins(message, 0, 1)
+	if(powernet.load)
+		message_admins(message, 0, 1)
 
 	qdel(src)
 

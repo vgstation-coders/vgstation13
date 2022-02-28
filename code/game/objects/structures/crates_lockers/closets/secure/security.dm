@@ -30,7 +30,7 @@
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/clothing/under/dress/dress_cap,
-		/obj/item/device/gps/secure,
+		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/elite/command,
 	)
 
@@ -55,7 +55,7 @@
 		/obj/item/weapon/storage/box/ids = 2,
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/device/flash,
-		/obj/item/device/gps/secure,
+		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/civilian,
 	)
 
@@ -121,6 +121,7 @@
 		/obj/item/weapon/shield/riot,
 		/obj/item/weapon/storage/lockbox/loyalty,
 		/obj/item/weapon/storage/box/flashbangs,
+		/obj/item/weapon/storage/box/teargas,
 		/obj/item/weapon/storage/lockbox/lawgiver/with_magazine,
 		/obj/item/clothing/accessory/holster/handgun/waist,
 		/obj/item/weapon/melee/telebaton,
@@ -154,6 +155,7 @@
 		/obj/item/clothing/head/warden,
 		/obj/item/clothing/head/warden/cowboy,
 		/obj/item/weapon/storage/box/flashbangs,
+		/obj/item/weapon/storage/box/teargas,
 		/obj/item/weapon/storage/box/bolas,
 		/obj/item/weapon/batteringram,
 		/obj/item/weapon/storage/box/large/securitygear,

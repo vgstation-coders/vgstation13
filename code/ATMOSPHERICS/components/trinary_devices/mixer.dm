@@ -17,7 +17,7 @@
 	ex_node_offset = 5
 
 /obj/machinery/atmospherics/trinary/mixer/update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "intact_off"
 	else if(node2 && node3 && node1)
 		icon_state = "intact_[on?("on"):("off")]"
@@ -137,7 +137,7 @@
 
 /obj/machinery/atmospherics/trinary/mixer/mirrored/update_icon()
 	..()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "intactm_off"
 	else if(node2 && node3 && node1)
 		icon_state = "intactm_[on?("on"):("off")]"

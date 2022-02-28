@@ -21,6 +21,7 @@
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
 	var/starch_cell = 0
+	var/mob/living/simple_animal/hostile/pulse_demon/occupant
 
 /obj/item/weapon/cell/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -45,6 +46,10 @@
 /obj/item/weapon/cell/crap/better
 	name = "\improper Nanotrasen brand rechargeable D battery"
 	maxcharge = 700 //for the ion carbine
+
+/obj/item/weapon/cell/crap/worse
+	name = "\improper Nanotrasen brand rechargeable AAA battery"
+	maxcharge = 250
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
@@ -224,7 +229,7 @@
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
 	var/charge_rate = 100
 	var/damaged = FALSE
-	
+
 /obj/item/weapon/cell/rad/empty/New()
 	..()
 	charge = 0
@@ -261,11 +266,11 @@
 		damaged = FALSE //so you don't get the damaged examine if the cell is broken
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
 
-		
+
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
 	if(maxcharge > 0)
-		switch(rand(3))
+		switch(rand(0,2))
 			if(0)
 				charge_rate *= severity*0.2
 				damaged = TRUE
@@ -277,7 +282,7 @@
 				charge = 0
 				charge_rate *= severity*0.2
 				damaged = TRUE
-			
+
 /obj/item/weapon/cell/rad/examine(mob/user)
 	..()
 	if(damaged)

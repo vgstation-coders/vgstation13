@@ -92,7 +92,7 @@
 				intercepttext += "<b>[M.name]</b>, the <b>[M.mind.assigned_role]</b> <br>"
 
 	for (var/obj/machinery/computer/communications/comm in machines)
-		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+		if (!(comm.stat & (BROKEN | NOPOWER | FORCEDISABLE)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
 			intercept.name = "paper- '[command_name()] Status Summary'"
 			intercept.info = intercepttext
@@ -141,7 +141,7 @@
 	intercepttext += "</body></html>"
 
 	for (var/obj/machinery/computer/communications/comm in machines)
-		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+		if (!(comm.stat & (BROKEN | NOPOWER | FORCEDISABLE)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
 			intercept.name = "paper- '[command_name()] Status Summary'"
 			intercept.info = intercepttext
@@ -161,18 +161,17 @@
 
 	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
 	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
-	if(WPF && PFW)  //Are there wizwar factions?
-		if(WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
-			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/datum/outfit/special/wizard/red/W = new
-			W.apprentice = apprentice
-			W.equip(wizard_mob, strip = TRUE, delete = TRUE)
-		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
-			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/datum/outfit/special/wizard/W = new
-			W.apprentice = apprentice
-			W.equip(wizard_mob, strip = TRUE, delete = TRUE)
-	else //No wizwar, give them normal robes
+	if(WPF && WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
+		wizard_mob.add_spell(new /spell/targeted/absorb)
+		var/datum/outfit/special/wizard/red/W = new
+		W.apprentice = apprentice
+		W.equip(wizard_mob, strip = TRUE, delete = TRUE)
+	else if(PFW && PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
+		wizard_mob.add_spell(new /spell/targeted/absorb)
+		var/datum/outfit/special/wizard/W = new
+		W.apprentice = apprentice
+		W.equip(wizard_mob, strip = TRUE, delete = TRUE)
+	else //Not part of the war? Give them normal robes
 		var/datum/outfit/special/wizard/W = new
 		W.apprentice = apprentice
 		W.equip(wizard_mob, strip = TRUE, delete = TRUE)

@@ -461,3 +461,38 @@
 
 /obj/item/projectile/swap/advanced
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+
+/obj/item/projectile/energy/microwaveray
+	name = "microwave ray"
+	icon_state = "microwaveray"
+	damage = 15
+	damage_type = BURN
+	flag = "energy"
+	fire_sound = 'sound/weapons/ray2.ogg'
+
+/obj/item/projectile/energy/microwaveray/on_hit(var/atom/target, var/blocked = 0)//These two could likely check temp protection on the mob
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = M
+			to_chat(M, "<span class='warning'>You are heated by the microwave ray's energy!</span>")
+			H.eye_blurry = max(M.eye_blurry, 5)
+			M.bodytemperature += 120
+
+/obj/item/projectile/energy/scramblerray
+	name = "scrambler ray"
+	icon_state = "scramblerray"
+	flag = "energy"
+	nodamage = 1
+	fire_sound = 'sound/weapons/ray2.ogg'
+
+/obj/item/projectile/energy/scramblerray/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = M
+			to_chat(M, "<span class='warning'>The scrambler ray's energy makes you feel lightheaded and sick!</span>")
+			H.eye_blurry = max(M.eye_blurry, 5)
+			M.adjustBrainLoss(2)
+			H.drop_item()
+			H.vomit(0,1)

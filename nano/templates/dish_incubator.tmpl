@@ -60,6 +60,11 @@
 				<td>
 					str={{:value.minor_mutations_strength}}|rob={{:value.minor_mutations_robustness}}|eff={{:value.minor_mutations_effects}}
 				</td>
+				{{if data.can_focus}}
+					<td>
+					{{:helper.link('Focus', 'location-arrow', {'changefocus' : index+1}, null, 'wide')}}
+					</td>
+				{{/if}}
 			{{/if}}
 		</tr>
 	{{/for}}

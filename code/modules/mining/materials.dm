@@ -88,6 +88,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 			if(zero_after)
 				mats.storage[mat_id] = 0
 
+/datum/materials/proc/addRatioFrom(var/datum/materials/mats, var/ratio)
+	if(mats == null)
+		return
+	for(var/mat_id in storage)
+		if(mats.storage[mat_id]>0)
+			storage[mat_id] += mats.storage[mat_id] * abs(ratio)
+
 //Used to remove all materials from a given materials datum, and transfer it to ours
 /datum/materials/proc/removeFrom(var/datum/materials/mats)
 	src.addFrom(mats,zero_after=1)

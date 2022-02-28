@@ -1434,7 +1434,7 @@ Use this proc preferably at the end of an equipment loadout
 	..()
 
 	statpanel("Status") //Default tab
-	if(client && client.show_mc_tab && client.holder && client.inactivity < 1200)
+	if(client && client.holder && client.inactivity < 1200)
 		if(statpanel("MC"))
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
@@ -1794,7 +1794,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/shuttle_act()
 	return
 
-/mob/shuttle_rotate(angle)
+/mob/map_element_rotate(angle)
 	src.dir = turn(src.dir, -angle) //rotating pixel_x and pixel_y is bad
 
 /mob/can_shuttle_move()
@@ -2103,6 +2103,10 @@ Use this proc preferably at the end of an equipment loadout
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(paxban_isbanned(ckey))
+		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
+		return TRUE
+
 	if (runescape_pvp)
 		var/area/A = get_area(src)
 		if (!istype(A, /area/maintenance) && !is_type_in_list(A,non_standard_maint_areas))

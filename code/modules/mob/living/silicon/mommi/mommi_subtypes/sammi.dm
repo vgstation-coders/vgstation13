@@ -10,6 +10,12 @@
 	prefix = "Stationary Assembler MMI"
 	canmove = 0
 	anchored = 0
+	var/ghost_name
+	var/ghost_gender
+	var/ghost_icon
+	var/ghost_icon_state
+	var/ghost_overlays
+	var/mob/ghost_body
 	var/cellhold = null
 	var/unsafe = 0
 
@@ -99,7 +105,11 @@
 	return TRUE
 
 /mob/living/silicon/robot/mommi/sammi/update_canmove()
+	canmove = 0
 	return 0
+
+/mob/living/silicon/robot/mommi/sammi/can_ventcrawl()
+	return FALSE
 
 /mob/living/silicon/robot/mommi/sammi/ventcrawl()
 	return 0
@@ -108,84 +118,84 @@
 	return 0
 
 /mob/living/silicon/robot/mommi/sammi/attackby(obj/item/W, mob/user)
-    if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
-        if(wiresexposed)
-            to_chat(user, "Close the wiring panel first.")
-        else if(cell)
-            to_chat(user, "There is a power cell already installed.")
-        else
-            user.drop_item(W, src)
-            if(anchored)
-                cell = W
-            else
-                cellhold = W
-            to_chat(user, "You insert the power cell.")
-    //			chargecount = 0
-        updateicon()
+	if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
+		if(wiresexposed)
+			to_chat(user, "Close the wiring panel first.")
+		else if(cell)
+			to_chat(user, "There is a power cell already installed.")
+		else
+			user.drop_item(W, src)
+			if(anchored)
+				cell = W
+			else
+				cellhold = W
+			to_chat(user, "You insert the power cell.")
+	//			chargecount = 0
+		updateicon()
 
-    else if (iswirecutter(W) || istype(W, /obj/item/device/multitool))
-        if (wiresexposed)
-            wires.Interact(user)
-        else
-            //to_chat(user, "You can't reach the wiring.")
-            if(opened)
-                change_sammi_law(user)
-            else
-                to_chat(user, "The console's cover is closed.")
+	else if (iswirecutter(W) || istype(W, /obj/item/device/multitool))
+		if (wiresexposed)
+			wires.Interact(user)
+		else
+			//to_chat(user, "You can't reach the wiring.")
+			if(opened)
+				change_sammi_law(user)
+			else
+				to_chat(user, "The console's cover is closed.")
 
-    else if(W.is_wrench(user)) // Need to make this not bludgeon them
-        W.playtoolsound(loc, 50)
-        if(anchored)
-            to_chat(user, "<span class='notice'>You unbolt the SAMMI from the floor.</span>")
-            anchored = 0
-            cellhold = cell
-            cell = null
-            if(icon_state == "sammi_offline_a")
-                icon_state = "sammi_offline"
-            else
-                icon_state = "sammi_online"
-            updateicon()
+	else if(W.is_wrench(user)) // Need to make this not bludgeon them
+		W.playtoolsound(loc, 50)
+		if(anchored)
+			to_chat(user, "<span class='notice'>You unbolt the SAMMI from the floor.</span>")
+			anchored = 0
+			cellhold = cell
+			cell = null
+			if(icon_state == "sammi_offline_a")
+				icon_state = "sammi_offline"
+			else
+				icon_state = "sammi_online"
+			updateicon()
 
-        else
-            to_chat(user, "<span class='notice'>You anchor the SAMMI to the floor.</span>")
-            anchored = 1
-            cell = cellhold
-            cellhold = null
-            if(icon_state == "sammi_offline")
-                icon_state = "sammi_offline_a"
-            else
-                icon_state = "sammi_online_a"
-            updateicon()
+		else
+			to_chat(user, "<span class='notice'>You anchor the SAMMI to the floor.</span>")
+			anchored = 1
+			cell = cellhold
+			cellhold = null
+			if(icon_state == "sammi_offline")
+				icon_state = "sammi_offline_a"
+			else
+				icon_state = "sammi_online_a"
+			updateicon()
 
-        return 0
+		return 0
 
-    else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-        if(emagged)//still allow them to open the cover
-            to_chat(user, "The interface seems slightly damaged")
-        if(opened)
+	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+		if(emagged)//still allow them to open the cover
+			to_chat(user, "The interface seems slightly damaged")
+		if(opened)
 
-            if(can_access(user.GetAccess(),20))//cmagged
-                var/cmw = "Yes"
-                cmw = alert(user, "Are you sure you want to disable this SAMMIs safety protocols?", "You sure?", "Yes", "No")
-                if(cmw == "Yes")
-                    emag_act(user, 0)
-        else
-            if(allowed(usr))
-                locked = !locked
-                to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface.")
-                if(can_diagnose())
-                    to_chat(src, "<span class='info' style=\"font-family:Courier\">Interface [ locked ? "locked" : "unlocked"].</span>")
-                updateicon()
-            else
-                to_chat(user, "<span class='warning'>Access denied.</span>")
+			if(can_access(user.GetAccess(),20))//cmagged
+				var/cmw = "Yes"
+				cmw = alert(user, "Are you sure you want to disable this SAMMIs safety protocols?", "You sure?", "Yes", "No")
+				if(cmw == "Yes")
+					emag_act(user, 0)
+		else
+			if(allowed(usr))
+				locked = !locked
+				to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface.")
+				if(can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Interface [ locked ? "locked" : "unlocked"].</span>")
+				updateicon()
+			else
+				to_chat(user, "<span class='warning'>Access denied.</span>")
 
-    else
-        return ..()
+	else
+		return ..()
 
 /mob/living/silicon/robot/mommi/sammi/attack_hand(mob/user)
 	add_fingerprint(user)
 
-	if(opened && !wiresexposed && (!isMoMMI(user)))
+	if(opened && !wiresexposed && user != src)
 
 		if(cell || cellhold)
 			if(cellhold)
@@ -221,7 +231,19 @@
 /mob/living/silicon/robot/mommi/sammi/ghost()
 	//if(src.subtype == "sammi")
 	if(client && key)
-		ghostize(1)
+		var/mob/dead/observer/ghost = ghostize(1)
+		if(ghost_body)
+			ghost.mind.current = ghost_body
+		if(ghost_name)
+			ghost.name = ghost_name
+		if(ghost_gender)
+			ghost.gender = ghost_gender
+		if(ghost_icon)
+			ghost.icon = ghost_icon
+		if(ghost_icon_state)
+			ghost.icon_state = ghost_icon_state
+		if(ghost_overlays)
+			ghost.overlays = ghost_overlays
 		//src.mind.current = src.mind.original
 		src.visible_message("<span class=\"warning\">[src] disconnects from the network...attempting to reconnect!</span>")
 		if(icon_state == "sammi_online_a")
@@ -235,6 +257,12 @@
 		var/response = alert(O,"Do you want to take it over?","This SAMMI is mindless","Yes","No")
 		if(response == "Yes")
 			if(!(src.key))
+				ghost_name = O.mind.name
+				ghost_gender = O.gender
+				ghost_icon = O.icon
+				ghost_icon_state = O.icon_state
+				ghost_overlays = O.overlays
+				ghost_body = O.mind.current
 				src.transfer_personality(O.client)
 				src.visible_message("<span class=\"warning\">[src] is connected to the SAMMI network!</span>")
 				if(icon_state == "sammi_offline_a")

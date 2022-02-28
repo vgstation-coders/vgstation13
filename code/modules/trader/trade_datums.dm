@@ -129,6 +129,13 @@
 	restocks_left = 2
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/randomupgrades
+	name = "assorted cyborg upgrade pack"
+	path = /obj/item/weapon/storage/box/mystery_upgrade
+	baseprice = 60
+	restocks_left = 2
+	sales_category = TRADE_VARIETY
+
 /datum/trade_product/randommats
 	name = "surplus material scrap box"
 	path = /obj/item/weapon/storage/box/large/mystery_material

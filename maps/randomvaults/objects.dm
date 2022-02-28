@@ -710,7 +710,7 @@
 	if(surplus() < active_power_usage)
 		powered = 0
 
-	if(powered && stat & NOPOWER)
+	if(powered && stat & (NOPOWER))
 		stat &= ~NOPOWER
 		update_icon()
 	else if (!powered && !(stat & NOPOWER))
@@ -983,3 +983,11 @@
 /area/vault/mini_station_construction
 	name = "NT Microstation Construction Room"
 	icon_state = "construction"
+
+/obj/item/device/pda/clown/broken
+	name = "Antique Clown PDA"
+	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings. This one has been stepped on for too many times, and appears to be completely unresponsive."
+	starting_apps = list()
+
+/obj/item/device/pda/clown/broken/attack_self(mob/user)
+	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function

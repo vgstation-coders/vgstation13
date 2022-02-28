@@ -557,3 +557,26 @@
 /obj/item/weapon/grenade/chem_grenade/timer/New()
 	..()
 	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
+
+/obj/item/weapon/grenade/chem_grenade/teargas
+	name = "teargas grenade"
+	desc = "Used for training and crowd control operations. Contents under pressure. Do not directly inhale contents."
+	stage = GRENADE_STAGE_COMPLETE
+	path = PATH_STAGE_CONTAINER_INSERTED
+	
+/obj/item/weapon/grenade/chem_grenade/teargas/New()
+	..()
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B1 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
+
+	B1.reagents.add_reagent(CONDENSEDCAPSAICIN, 60)
+	B1.reagents.add_reagent(POTASSIUM, 40)
+	B2.reagents.add_reagent(PHOSPHORUS, 40)
+	B2.reagents.add_reagent(SUGAR, 40)
+	
+	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
+
+	beakers += B1
+	beakers += B2
+	icon_state = initial(icon_state) +"_locked"
+	

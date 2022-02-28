@@ -46,6 +46,7 @@ var/stacking_limit = 90
 	var/list/living_antags = list()
 	var/list/dead_players = list()
 	var/list/list_observers = list()
+	var/last_time_of_population = 0
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
@@ -167,8 +168,8 @@ var/stacking_limit = 90
 	. = ..()
 
 /datum/gamemode/dynamic/send2servers()
-	send2mainirc("A round of [name] has ended - [living_players.len] survivors, [dead_players.len] ghosts. Final crew score: [score["crewscore"]]. ([score["rating"]])")
-	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts. Final crew score: **[score["crewscore"]]**. ([score["rating"]])")
+	send2mainirc("A round of [name] has ended - [living_players.len] survivors, [dead_players.len] ghosts. Final crew score: [score.crewscore]. ([score.rating])")
+	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts. Final crew score: **[score.crewscore]**. ([score.rating])")
 	send2mainirc("Dynamic mode Roundstart Threat: [starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""], Midround Threat: [midround_starting_threat][(midround_starting_threat!=midround_threat_level)?" ([midround_threat_level])":""], rulesets: [jointext(rules_text, ", ")].")
 	send2maindiscord("Dynamic mode Roundstart Threat: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, Midround Threat: **[midround_starting_threat][(midround_starting_threat!=midround_threat_level)?" ([midround_threat_level])":""]**, rulesets: [jointext(rules_text, ", ")]")
 
@@ -205,7 +206,7 @@ var/stacking_limit = 90
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 
 	var/rst_pop = 0
-	for(var/mob/living/carbon/human/player in player_list)
+	for(var/mob/living/player in player_list)
 		if(player.mind)
 			rst_pop++
 	if (rst_pop >= high_pop_limit)
@@ -253,7 +254,7 @@ var/stacking_limit = 90
 		var/datum/dynamic_ruleset/midround/DR = rule
 		if (initial(DR.weight))
 			midround_rules += new rule()
-	for(var/mob/living/carbon/human/player in player_list)
+	for(var/mob/living/player in player_list)
 		if(player.mind)
 			roundstart_pop_ready++
 			candidates.Add(player)
@@ -338,7 +339,7 @@ var/stacking_limit = 90
 		extra_rulesets_amount = 0
 	else
 		var/rst_pop = 0
-		for(var/mob/living/carbon/human/player in player_list)
+		for(var/mob/living/player in player_list)
 			if(player.mind)
 				rst_pop++
 		if (rst_pop > high_pop_limit)
@@ -657,6 +658,11 @@ var/stacking_limit = 90
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
+	
+	if(living_players.len) //if anybody is around and alive in the current round
+		last_time_of_population = world.time
+	else if(last_time_of_population && world.time - last_time_of_population > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without it
+		ticker.station_nolife_cinematic()
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0

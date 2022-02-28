@@ -12,6 +12,7 @@
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
+	surgerysound = 'sound/items/retractor.ogg'
 
 /obj/item/tool/retractor/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -25,6 +26,7 @@
 	force = 7.5
 	toolspeed = 0.5
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
+	surgerysound = 'sound/items/hemostat.ogg'
 
 /obj/item/tool/retractor/manager/New()
 	..()
@@ -45,6 +47,8 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "pinches")
+	surgerysound = 'sound/items/hemostat.ogg'
+
 
 /obj/item/tool/hemostat/pico //Removes implanted things with 100% success as well.
 	name = "precision grasper"
@@ -77,6 +81,8 @@
 	hitsound = "sound/weapons/welderattack.ogg"
 	heat_production = 500
 	source_temperature = TEMPERATURE_HOTMETAL
+	surgerysound = 'sound/items/cautery.ogg'
+
 
 /obj/item/tool/cautery/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -131,6 +137,7 @@
 	w_class = W_CLASS_MEDIUM
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("drills")
+	surgerysound = 'sound/items/surgicaldrill.ogg'
 
 /obj/item/tool/surgicaldrill/diamond
 	name = "diamond surgical drill"
@@ -166,6 +173,7 @@
 	w_type = RECYK_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	surgerysound = 'sound/items/scalpel.ogg'
 
 
 /obj/item/tool/scalpel/laser
@@ -282,6 +290,7 @@
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
+	surgerysound = 'sound/items/circularsaw.ogg'
 
 	crit_chance = 2*CRIT_CHANCE_MELEE
 
@@ -312,6 +321,7 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
+	surgerysound = 'sound/items/bonegel.ogg'
 
 /obj/item/tool/bonegel/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")//Don't eat glue kids.
@@ -331,6 +341,7 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
+	surgerysound = 'sound/items/fixovein.ogg'
 
 /obj/item/tool/FixOVein/clot
 	name = "capillary laying operation tool" //C.L.O.T.
@@ -395,6 +406,7 @@
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	w_type = RECYK_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
+	surgerysound = 'sound/items/bonesetter.ogg'
 
 
 //allows you to replace the bone setter in switchtools with it being a setter child rather than a bonegel child

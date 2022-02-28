@@ -138,7 +138,7 @@ var/area/space_area
 
 	// Determine what the highest DL reported by air alarms is
 	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+		if((AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)
@@ -178,7 +178,7 @@ var/area/space_area
 			UpdateFirelocks()
 		atmosalm = danger_level
 		for (var/obj/machinery/alarm/AA in src)
-			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.update_icon()
 		return 1
 	return 0
@@ -188,7 +188,7 @@ var/area/space_area
 
 	// Determine what the highest DL reported by air alarms is
 	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+		if((AA.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)
@@ -446,10 +446,9 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
-	INVOKE_EVENT(src, /event/comp_ai_cmd_area_enter, "enterer" = Obj)
+	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
@@ -457,7 +456,7 @@ var/area/space_area
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
-	INVOKE_EVENT(src, /event/comp_ai_cmd_area_exit, "exiter" = Obj)
+	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
 
 /area/proc/subjectDied(target)

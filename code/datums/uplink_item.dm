@@ -300,6 +300,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
 
+/datum/uplink_item/stealthy_weapons/framecart
+	name = "F.R.A.M.E PDA Cartridge"
+	desc = "When inserted into a PDA, gives you four charges allowing you to create a fake uplink on a PDAs of crewmembers who have messaging enabled. This will also use the same unlock code as your uplink if applicable, or else generate a new one. TC can also be inserted into the cartridge to send to the PDA"
+	item = /obj/item/weapon/cartridge/syndifake
+	cost = 6
+
 /datum/uplink_item/stealthy_weapons/knuckles
 	name = "Spiked Knuckles"
 	desc = "A pair of spiked metal knuckles that can be worn directly on your hands in place of gloves, dramatically increasing damage done by your punches without giving any obvious signs to observers unless they inspect you more closely."
@@ -524,6 +530,11 @@ var/list/uplink_items = list()
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
 
+/datum/uplink_item/device_tools/radio_jammer
+	name = "Radio Jammer"
+	desc = "A device that disrupts all radio communication in nearby area. Guaranteed radio silence at point blank range, but effectiveness decreases with range. Requires a power cell for operation. Batteries and screwdriver not included."
+	item = /obj/item/device/radio_jammer
+	cost = 8
 
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
@@ -664,7 +675,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
 	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room."
-	item = /obj/item/weapon/storage/box/remeximp
+	item = /obj/item/weapon/storage/box/chemimp/remeximp
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")

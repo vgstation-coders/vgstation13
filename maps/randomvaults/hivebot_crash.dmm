@@ -1,99 +1,745 @@
-"aa" = (/turf/space,/area)
-"ab" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/vault/hive_shuttle)
-"ad" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"ae" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/grille/broken,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"af" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"ah" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/space,/area/vault/hive_shuttle)
-"aj" = (/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"ak" = (/obj/machinery/computer/arcade,/obj/machinery/light_construct{dir = 1},/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"al" = (/obj/structure/closet/wardrobe/black,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"am" = (/obj/structure/closet/wardrobe/xenos,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"an" = (/obj/structure/closet/wardrobe/mixed,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"ao" = (/obj/structure/closet/wardrobe/grey,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"ap" = (/obj/machinery/light_construct{dir = 1},/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"ar" = (/obj/structure/shuttle/engine/propulsion{dir = 4},/turf/space,/area/vault/hive_shuttle)
-"at" = (/obj/structure/computerframe,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"au" = (/obj/structure/bed/chair{dir = 8},/obj/machinery/light_construct{dir = 4},/obj/effect/landmark/corpse/engineer,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"av" = (/obj/structure/bed/chair{dir = 8},/obj/effect/landmark/corpse/civilian,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"aw" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"ax" = (/obj/structure/shuttle/engine/heater{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"ay" = (/obj/structure/shuttle/engine/propulsion/right{dir = 4},/turf/space,/area/vault/hive_shuttle)
-"az" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/shuttle/plating,/area/vault/hive_shuttle)
-"aA" = (/obj/structure/bed/chair{dir = 8},/obj/effect/landmark/corpse/civilian,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aB" = (/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aC" = (/obj/structure/shuttle/engine/heater{dir = 4},/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aD" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aE" = (/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aF" = (/obj/structure/bed/chair{dir = 8},/obj/effect/landmark/corpse/civilian,/obj/effect/decal/cleanable/blood,/turf/simulated/floor/shuttle/airless,/area/vault/hive_shuttle)
-"aG" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/hive_shuttle)
-"aH" = (/obj/machinery/light_construct,/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aI" = (/obj/item/stack/rods,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aJ" = (/obj/machinery/light_construct,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aK" = (/obj/structure/shuttle/engine/propulsion/left{dir = 4},/turf/space,/area/vault/hive_shuttle)
-"aL" = (/obj/item/stack/tile/metal,/obj/structure/grille/broken,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aM" = (/obj/item/stack/rods,/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aN" = (/turf/simulated/wall/shuttle,/area/vault/hive_shuttle)
-"aO" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/hive_shuttle)
-"aP" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"},/area/vault/hive_shuttle)
-"aQ" = (/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"aR" = (/obj/item/stack/tile/metal,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"aS" = (/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"aT" = (/obj/item/stack/tile/metal,/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"aU" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 8; icon_state = "diagonalWall3"},/area/vault/hive_shuttle)
-"aV" = (/turf/simulated/wall/shuttle/unsmoothed{dir = 1; icon_state = "wall3"},/area/vault/hive_shuttle)
-"aW" = (/obj/item/stack/rods,/obj/item/robot_parts/robot_component/actuator,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"aX" = (/obj/structure/girder/displaced,/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"aY" = (/obj/item/robot_parts/robot_component/actuator,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"aZ" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 1; icon_state = "diagonalWall3"},/area/vault/hive_shuttle)
-"ba" = (/obj/structure/rack,/obj/item/robot_parts/robot_component/actuator,/obj/item/robot_parts/robot_component/actuator,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bb" = (/obj/item/robot_parts/robot_component/binary_communication_device,/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bc" = (/obj/item/robot_parts/robot_component/camera,/obj/item/robot_parts/robot_component/actuator,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"bd" = (/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"be" = (/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bf" = (/obj/structure/rack,/obj/item/robot_parts/robot_component/binary_communication_device,/obj/item/robot_parts/robot_component/binary_communication_device,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"bg" = (/obj/structure/rack,/obj/item/robot_parts/robot_component/camera,/obj/item/robot_parts/robot_component/camera,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bh" = (/obj/item/robot_parts/robot_component/armour,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
-"bi" = (/obj/item/stack/rods,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bj" = (/obj/item/robot_parts/robot_component/binary_communication_device,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bk" = (/obj/effect/decal/cleanable/blood/oil/streak,/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bl" = (/obj/structure/rack,/obj/item/robot_parts/robot_component/diagnosis_unit,/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bm" = (/obj/machinery/r_n_d/fabricator/mech{output_dir = 4},/turf/space,/area/vault/hive_shuttle)
-"bn" = (/obj/machinery/r_n_d/fabricator/mech{output_dir = 8},/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bo" = (/obj/item/robot_parts/robot_component/camera,/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bp" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bq" = (/obj/machinery/r_n_d/fabricator/mech{output_dir = 4},/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"br" = (/obj/item/robot_parts/robot_component/armour,/obj/effect/decal/cleanable/blood/gibs/robot,/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bs" = (/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bt" = (/obj/item/robot_parts/robot_component/armour,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bu" = (/obj/item/robot_parts/robot_component/camera,/obj/item/robot_parts/robot_component/binary_communication_device,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bv" = (/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bw" = (/obj/machinery/computer/rdconsole/robotics,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bx" = (/obj/item/robot_parts/robot_component/binary_communication_device,/obj/structure/rack,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/plasteel{amount = 50},/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"by" = (/obj/structure/rack,/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/stack/cable_coil,/obj/item/stack/cable_coil,/obj/item/stack/cable_coil,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bz" = (/obj/machinery/computer/aifixer,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bA" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/shuttle/plating/airless,/area/vault/hive_shuttle)
-"bB" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "diagonalWall3"},/area/vault/hive_shuttle)
-"bC" = (/obj/structure/shuttle/engine/propulsion/left,/turf/space,/area/vault/hive_shuttle)
-"bD" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/vault/hive_shuttle)
-"bE" = (/obj/structure/shuttle/engine/propulsion/right,/turf/space,/area/vault/hive_shuttle)
-"bF" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 4; icon_state = "diagonalWall3"},/area/vault/hive_shuttle)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area)
+"ab" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area/vault/hive_shuttle)
+"ad" = (
+/obj/machinery/door/unpowered/shuttle,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"ae" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille/broken,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"af" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"ah" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/space,
+/area/vault/hive_shuttle)
+"aj" = (
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"ak" = (
+/obj/machinery/computer/arcade,
+/obj/machinery/light_construct{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"al" = (
+/obj/structure/closet/wardrobe/black,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"am" = (
+/obj/structure/closet/wardrobe/xenos,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"an" = (
+/obj/structure/closet/wardrobe/mixed,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"ao" = (
+/obj/structure/closet/wardrobe/grey,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"ap" = (
+/obj/machinery/light_construct{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"ar" = (
+/obj/structure/shuttle/engine/propulsion{
+	dir = 4
+	},
+/turf/space,
+/area/vault/hive_shuttle)
+"at" = (
+/obj/structure/computerframe,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"au" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/obj/machinery/light_construct{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/engineer,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"av" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"aw" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"ax" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"ay" = (
+/obj/structure/shuttle/engine/propulsion/right{
+	dir = 4
+	},
+/turf/space,
+/area/vault/hive_shuttle)
+"az" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating,
+/area/vault/hive_shuttle)
+"aA" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aB" = (
+/mob/living/simple_animal/hostile/hivebot,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aC" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aD" = (
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aE" = (
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aF" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/obj/effect/landmark/corpse/civilian,
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/shuttle/airless,
+/area/vault/hive_shuttle)
+"aG" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/vault/hive_shuttle)
+"aH" = (
+/obj/machinery/light_construct,
+/mob/living/simple_animal/hostile/hivebot,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aI" = (
+/obj/item/stack/rods,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aJ" = (
+/obj/machinery/light_construct,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aK" = (
+/obj/structure/shuttle/engine/propulsion/left{
+	dir = 4
+	},
+/turf/space,
+/area/vault/hive_shuttle)
+"aL" = (
+/obj/item/stack/tile/metal,
+/obj/structure/grille/broken,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aM" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"aN" = (
+/turf/simulated/wall/shuttle,
+/area/vault/hive_shuttle)
+"aO" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/space,
+/area/vault/hive_shuttle)
+"aP" = (
+/turf/simulated/wall/shuttle/unsmoothed{
+	icon_state = "wall3"
+	},
+/area/vault/hive_shuttle)
+"aQ" = (
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"aR" = (
+/obj/item/stack/tile/metal,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"aS" = (
+/mob/living/simple_animal/hostile/hivebot,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"aT" = (
+/obj/item/stack/tile/metal,
+/obj/effect/decal/cleanable/blood/oil/streak,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"aU" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 8;
+	icon_state = "diagonalWall3"
+	},
+/area/vault/hive_shuttle)
+"aV" = (
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/vault/hive_shuttle)
+"aW" = (
+/obj/item/stack/rods,
+/obj/item/robot_parts/robot_component/actuator,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"aX" = (
+/obj/structure/girder/displaced,
+/obj/item/robot_parts/robot_component/diagnosis_unit,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"aY" = (
+/obj/item/robot_parts/robot_component/actuator,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"aZ" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "diagonalWall3"
+	},
+/area/vault/hive_shuttle)
+"ba" = (
+/obj/structure/rack,
+/obj/item/robot_parts/robot_component/actuator,
+/obj/item/robot_parts/robot_component/actuator,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bb" = (
+/obj/item/robot_parts/robot_component/binary_communication_device,
+/obj/effect/decal/cleanable/blood/oil/streak,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bc" = (
+/obj/item/robot_parts/robot_component/camera,
+/obj/item/robot_parts/robot_component/actuator,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"bd" = (
+/obj/item/robot_parts/robot_component/diagnosis_unit,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"be" = (
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bf" = (
+/obj/structure/rack,
+/obj/item/robot_parts/robot_component/binary_communication_device,
+/obj/item/robot_parts/robot_component/binary_communication_device,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"bg" = (
+/obj/structure/rack,
+/obj/item/robot_parts/robot_component/camera,
+/obj/item/robot_parts/robot_component/camera,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bh" = (
+/obj/item/robot_parts/robot_component/armour,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/plating/airless,
+/area/vault/hive_shuttle)
+"bi" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bj" = (
+/obj/item/robot_parts/robot_component/binary_communication_device,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bk" = (
+/obj/effect/decal/cleanable/blood/oil/streak,
+/mob/living/simple_animal/hostile/hivebot,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bl" = (
+/obj/structure/rack,
+/obj/item/robot_parts/robot_component/diagnosis_unit,
+/obj/item/robot_parts/robot_component/diagnosis_unit,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bm" = (
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 4
+	},
+/turf/space,
+/area/vault/hive_shuttle)
+"bn" = (
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 8
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bo" = (
+/obj/item/robot_parts/robot_component/camera,
+/obj/item/robot_parts/robot_component/diagnosis_unit,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bp" = (
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bq" = (
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 4
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"br" = (
+/obj/item/robot_parts/robot_component/armour,
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/obj/effect/decal/cleanable/blood/oil/streak,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bs" = (
+/obj/item/robot_parts/robot_component/diagnosis_unit,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bt" = (
+/obj/item/robot_parts/robot_component/armour,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bu" = (
+/obj/item/robot_parts/robot_component/camera,
+/obj/item/robot_parts/robot_component/binary_communication_device,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bv" = (
+/obj/effect/decal/cleanable/blood/oil/streak,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bw" = (
+/obj/machinery/computer/rdconsole/robotics,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bx" = (
+/obj/item/robot_parts/robot_component/binary_communication_device,
+/obj/structure/rack,
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/plasteel{
+	amount = 50
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"by" = (
+/obj/structure/rack,
+/obj/item/stack/sheet/glass/glass{
+	amount = 50
+	},
+/obj/item/stack/sheet/glass/glass{
+	amount = 50
+	},
+/obj/item/stack/sheet/glass/glass{
+	amount = 50
+	},
+/obj/item/device/flash/synthetic,
+/obj/item/device/flash/synthetic,
+/obj/item/device/flash/synthetic,
+/obj/item/device/flash/synthetic,
+/obj/item/device/flash/synthetic,
+/obj/item/device/flash/synthetic,
+/obj/item/stack/cable_coil,
+/obj/item/stack/cable_coil,
+/obj/item/stack/cable_coil,
+/obj/item/weapon/cell/super/empty,
+/obj/item/weapon/cell/super/empty,
+/obj/item/weapon/cell/super/empty,
+/obj/item/weapon/cell/super/empty,
+/obj/item/weapon/cell/super/empty,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bz" = (
+/obj/machinery/computer/aifixer,
+/turf/simulated/floor/engine/airless,
+/area/vault/hive_shuttle)
+"bA" = (
+/obj/structure/shuttle/engine/heater,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/airless,
+/area/vault/hive_shuttle)
+"bB" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	icon_state = "diagonalWall3"
+	},
+/area/vault/hive_shuttle)
+"bC" = (
+/obj/structure/shuttle/engine/propulsion/left,
+/turf/space,
+/area/vault/hive_shuttle)
+"bD" = (
+/obj/structure/shuttle/engine/propulsion,
+/turf/space,
+/area/vault/hive_shuttle)
+"bE" = (
+/obj/structure/shuttle/engine/propulsion/right,
+/turf/space,
+/area/vault/hive_shuttle)
+"bF" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 4;
+	icon_state = "diagonalWall3"
+	},
+/area/vault/hive_shuttle)
 
 (1,1,1) = {"
-aaaaaaabaNadaNaNaeafaNaNadaNah
-abaNaNaNajajakalamanaoapajaNay
-aNatauaNajavawavajavajavajaxar
-azatajajajaAajavaBavawavajaCar
-aNatauaNajavaDaAaEaFaDavajaCar
-aGaNaNaNajajaHaIaEaEaIaJaEaNaK
-aaaaaaaGaNadaNaEaLaMaEaNadaNaO
-aaaaaaaaaaaaaPaQaRaSaTaPaaaaaa
-aaaaaaaaaaaUaVaWaXaYaQaVaZaaaa
-aaaaaaaaaaaPbabbbcbdbebfaPaaaa
-aaaaaaaaaaaPbgbhbibjbkblaPaaaa
-aaaaaaaaaaaPbmbebobpbtbnaPaaaa
-aaaaaaaaaaaPbqbeaSbrbsbnaPaaaa
-aaaaaaaaaaaPbqbebtbubvbnaPaaaa
-aaaaaaaaaaaPbwbebxbybtbzaPaaaa
-aaaaaaaaaaaPaPbAbAbAbAaPaPaaaa
-aaaaaaaaaabBbCbDbDbDbDbEbFaaaa
+aa
+ab
+aN
+az
+aN
+aG
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+aN
+at
+at
+at
+aN
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(3,1,1) = {"
+aa
+aN
+au
+aj
+au
+aN
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(4,1,1) = {"
+ab
+aN
+aN
+aj
+aN
+aN
+aG
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(5,1,1) = {"
+aN
+aj
+aj
+aj
+aj
+aj
+aN
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(6,1,1) = {"
+ad
+aj
+av
+aA
+av
+aj
+ad
+aa
+aU
+aP
+aP
+aP
+aP
+aP
+aP
+aP
+bB
+"}
+(7,1,1) = {"
+aN
+ak
+aw
+aj
+aD
+aH
+aN
+aP
+aV
+ba
+bg
+bm
+bq
+bq
+bw
+aP
+bC
+"}
+(8,1,1) = {"
+aN
+al
+av
+av
+aA
+aI
+aE
+aQ
+aW
+bb
+bh
+be
+be
+be
+be
+bA
+bD
+"}
+(9,1,1) = {"
+ae
+am
+aj
+aB
+aE
+aE
+aL
+aR
+aX
+bc
+bi
+bo
+aS
+bt
+bx
+bA
+bD
+"}
+(10,1,1) = {"
+af
+an
+av
+av
+aF
+aE
+aM
+aS
+aY
+bd
+bj
+bp
+br
+bu
+by
+bA
+bD
+"}
+(11,1,1) = {"
+aN
+ao
+aj
+aw
+aD
+aI
+aE
+aT
+aQ
+be
+bk
+bt
+bs
+bv
+bt
+bA
+bD
+"}
+(12,1,1) = {"
+aN
+ap
+av
+av
+av
+aJ
+aN
+aP
+aV
+bf
+bl
+bn
+bn
+bn
+bz
+aP
+bE
+"}
+(13,1,1) = {"
+ad
+aj
+aj
+aj
+aj
+aE
+ad
+aa
+aZ
+aP
+aP
+aP
+aP
+aP
+aP
+aP
+bF
+"}
+(14,1,1) = {"
+aN
+aN
+ax
+aC
+aC
+aN
+aN
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(15,1,1) = {"
+ah
+ay
+ar
+ar
+ar
+aK
+aO
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}

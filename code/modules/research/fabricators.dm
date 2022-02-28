@@ -152,7 +152,7 @@
 
 /obj/machinery/r_n_d/fabricator/process()
 	..()
-	if(busy || being_built || stat&(NOPOWER|BROKEN))
+	if(busy || being_built || stat&(NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(stopped)
 		if(auto_make && last_made && !queue.len)
@@ -290,7 +290,7 @@
 
 //The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
 /obj/machinery/r_n_d/fabricator/proc/build_part_loop()
-	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN) || queue.len == 0)
+	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN|FORCEDISABLE) || queue.len == 0)
 		return
 	var/datum/design/D = queue_pop()
 	if(!build_part(D))
@@ -498,7 +498,7 @@
 	return round(/*TechTotal(part)*/(part.MatTotal()/FAB_MAT_BASEMOD)*build_time*time_coeff, roundto)
 
 /obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(!isAdminGhost(user) && (user.stat || user.restrained()))
 		return

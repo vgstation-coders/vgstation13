@@ -634,18 +634,6 @@ var/list/firstaid_exceptions = list(
 	if(..())
 		overlays -= image('icons/obj/aibots.dmi', "medibot_pai_overlay")
 
-/obj/machinery/bot/medbot/getpAIMovementDelay()
-	return 1
-
-/obj/machinery/bot/medbot/pAImove(mob/living/silicon/pai/user, dir)
-	if(!on)
-		return
-	if(!..())
-		return
-	if(!isturf(loc))
-		return
-	step(src, dir)
-
 /obj/machinery/bot/medbot/on_integrated_pai_click(mob/living/silicon/pai/user, mob/living/carbon/A)
 	if(!Adjacent(A))
 		return

@@ -19,6 +19,7 @@
 	var/power_drained = 0 		// has drained this much power
 	var/max_power = 1e8		// maximum power that can be drained before exploding
 	var/mode = 0		// 0 = off, 1=clamped (off), 2=operating
+	var/dev_multi = 3	// dude bombs
 
 
 	var/obj/structure/cable/attached		// the attached cable
@@ -134,5 +135,5 @@
 			playsound(src, 'sound/effects/screech.ogg', 100, 1, 1)
 		if(power_drained >= max_power)
 			processing_objects.Remove(src)
-			explosion(src.loc, 3,6,9,12)
+			explosion(src.loc, 1 * dev_multi, 2 * dev_multi, 3 * dev_multi, 4 * dev_multi)
 			qdel(src)

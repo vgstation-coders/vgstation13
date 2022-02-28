@@ -32,6 +32,8 @@
 	var/allow_admin_ooccolor = 0		// Allows admins with relevant permissions to have their own ooc colour
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
+	var/toggle_maps = 0					// Change from votable maps = 0 to all compiled maps = 1
+	var/toggle_vote_method = 0			// Toggle voting methods: Weighted = 0, Majority = 1
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives
@@ -180,6 +182,8 @@
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
+	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
+
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
@@ -200,9 +204,6 @@
 	var/discord_url
 	var/discord_password
 	var/kill_phrase = "All your bases are belong to us."
-
-	// Weighted Votes
-	var/weighted_votes = 0
 
 	// Dynamic Mode
 	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
@@ -350,7 +351,6 @@
 
 				if ("allow_vote_mode")
 					config.allow_vote_mode = 1
-
 				if ("allow_admin_jump")
 					config.allow_admin_jump = 1
 
@@ -389,6 +389,9 @@
 
 				if ("no_respawn_as_hobo")
 					config.respawn_as_hobo = 0
+
+				if ("no_grue_egglaying")
+					config.grue_egglaying = 0
 
 				if ("servername")
 					config.server_name = value
@@ -629,8 +632,6 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
-				if("weighted_votes")
-					weighted_votes = TRUE
 
 				if ("kill_phrase")
 					kill_phrase = value

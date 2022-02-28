@@ -345,6 +345,12 @@
 	to_drop.dropped(src)
 
 	if(to_drop && to_drop.loc)
+		if(mind)
+			var/datum/role/R = mind.GetRole(TIMEAGENT)
+			if(R)
+				var/datum/objective/target/locate/rearrange/L = locate() in R.objectives.GetObjectives()
+				if(L)
+					L.check(list(to_drop))
 		return 1
 	return 0
 

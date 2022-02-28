@@ -25,8 +25,10 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
+	ROLE_GRUE		= 1,
 )
 
 /var/list/antag_roles = list(
@@ -46,8 +48,10 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	TIMEAGENT		= 1,
+	PULSEDEMON		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
+	ROLE_GRUE		= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -76,8 +80,11 @@ var/list/role_wiki=list(
 	WIZARD					= "Wizard",
 	GRINCH					= "Grinch",
 	NINJA					= "Space_Ninja",
+	TIMEAGENT				= "Time_Agent",
+	PULSEDEMON				= "Pulse_Demon",
 	ROLE_MINOR				= "Minor_Roles",
 	ROLE_PRISONER			= "Minor_Roles",
+	ROLE_GRUE				= "Grue",
 )
 
 var/list/special_popup_text2num = list(
@@ -665,6 +672,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ASTHMA,      "Asthma")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LACTOSE,     "Lactose Intolerant")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LISP,       "Lisp")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ANEMIA,       "Anemia")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -1036,6 +1044,11 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
 							b_hair = hex2num(copytext(new_hair, 6, 8))
+					if(species == "Vox")
+						var/new_hair_vox = input(user, "Choose your character's hair color:", "Character Preference") as null|anything in list("Green", "Azure", "Brown", "Emerald", "Gray", "Light Green", "Green-Brown")
+						if(new_hair_vox)
+							r_hair = haircolordesc(new_hair_vox)
+							to_chat(user,"Your hair will now be [new_hair_vox] in color.")
 					if(species == "Insectoid")
 						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(carapace)
@@ -1046,7 +1059,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							g_hair = clamp(g_hair, 0, 50)
 							b_hair = clamp(b_hair, 0, 35)
 				if("h_style")
-					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
+					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference") as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
 						h_style = new_h_style
 

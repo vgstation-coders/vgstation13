@@ -199,7 +199,7 @@ var/global/list/damage_icon_parts = list()
 
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
-	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isgrue(src) && mind.special_role != HIGHLANDER // Part of the species.
+	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isumbra(src) && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (M_SKELETON in src.mutations)
 
 	var/g = "m"
@@ -348,11 +348,16 @@ var/global/list/damage_icon_parts = list()
 	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(),HIDEHEADHAIR))) //If the hair is hidden, don't draw it
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
-			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
-			if(hair_style.do_colouration)
-				hair_s.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
-			if(hair_style.additional_accessories)
-				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
+			var/icon/hair_s
+			if(isvox(src))
+
+				hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[my_appearance.r_hair]_[hair_suffix]")
+			else
+				hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
+				if(hair_style.do_colouration)
+					hair_s.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
+				if(hair_style.additional_accessories)
+					hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 			face_standing.Blend(hair_s, ICON_OVERLAY)
 //		else
 			//warning("Invalid my_appearance.h_style for [species.name]: [my_appearance.h_style]")

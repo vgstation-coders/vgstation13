@@ -366,9 +366,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/weapon/reagent_containers/glass/paint/blue,
 	/obj/item/weapon/reagent_containers/glass/paint/yellow,
 	/obj/item/weapon/reagent_containers/glass/paint/purple,
+	/obj/item/weapon/reagent_containers/glass/paint/cyan,
 	/obj/item/weapon/reagent_containers/glass/paint/black,
 	/obj/item/weapon/reagent_containers/glass/paint/white,
 	/obj/item/weapon/reagent_containers/glass/paint/remover,
+	/obj/item/weapon/painting_brush,
+	/obj/item/mounted/frame/painting/custom,
+	/obj/item/mounted/frame/painting/custom,
+	/obj/item/mounted/frame/painting/custom/landscape,
+	/obj/item/mounted/frame/painting/custom/portrait,
+	/obj/item/mounted/frame/painting/custom/large,
 	/obj/item/mounted/poster,
 	/obj/item/stack/package_wrap/gift,
 	/obj/item/stack/package_wrap/gift,
@@ -880,6 +887,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/civwinter
 	name = "Civilian Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/prisoner,
+					/obj/item/clothing/suit/storage/wintercoat/janitor,
 					/obj/item/clothing/suit/storage/wintercoat,
 					/obj/item/clothing/suit/storage/wintercoat,
 					/obj/item/clothing/suit/storage/wintercoat,
@@ -2613,4 +2621,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 25
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Zam Snax stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/lotto
+	name = "Lotto Ticket stack of packs"
+	contains = list(/obj/structure/vendomatpack/lotto,
+					/obj/structure/vendomatpack/lotto)
+	cost = 20
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Lotto Ticket stack of packs"
 	group = "Vending Machine packs"

@@ -170,6 +170,14 @@
 			//usr.next_move = world.time+2
 	return 1
 
+/obj/abstract/screen/nocontext/MouseEntered(location, control, params)
+	usr?.client?.show_popup_menus = FALSE
+
+/obj/abstract/screen/nocontext/MouseExited(location, control, params)
+	if(ismalf(usr))
+		return
+	usr?.client?.show_popup_menus = TRUE
+
 /obj/abstract/screen/gun
 	name = "gun"
 	icon = 'icons/mob/screen1.dmi'

@@ -372,7 +372,7 @@
 		if(A.name == "Syndicate-Spawn")
 			synd_spawn += get_turf(A)
 			continue
-	
+
 	var/spawnpos = index
 	if(spawnpos > synd_spawn.len)
 		spawnpos = 1
@@ -551,7 +551,7 @@
 	name = "Time Agent Anomaly"
 	role_category = /datum/role/time_agent
 	required_candidates = 1
-	weight = 4
+	weight = BASE_RULESET_WEIGHT * 0.4
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
@@ -600,6 +600,7 @@
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
 	flags = MINOR_RULESET
+	makeBody = FALSE
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
@@ -682,7 +683,7 @@
 		if(A.name == "voxstart")
 			vox_spawn += get_turf(A)
 			continue
-	
+
 	var/spawn_count = index
 	if(spawn_count > vox_spawn.len)
 		spawn_count = 1
@@ -807,6 +808,99 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
+
+//////////////////////////////////////////////
+//                                          //
+//                PULSE DEMON               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon
+	name = "Pulse Demon Infiltration"
+	role_category = /datum/role/pulse_demon
+	enemy_jobs = list("Station Engineer","Chief Engineer")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+	logo = "pulsedemon-logo"
+	var/list/cables_to_spawn_at = list()
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/ready(var/forced = 0)
+	for(var/datum/powernet/PN in powernets)
+		for(var/obj/structure/cable/C in PN.cables)
+			var/turf/simulated/floor/F = get_turf(C)
+			// Cable to spawn at must be on a floor, not tiled over, on the main station, powered and in maint
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation && istype(get_area(C),/area/maintenance) && C.powernet.avail)
+				cables_to_spawn_at.Add(C)
+	if(!cables_to_spawn_at.len)
+		log_admin("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		message_admins("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		return 0
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/generate_ruleset_body(var/mob/applicant)
+	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
+	applicant.forceMove(get_turf(our_cable))
+	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
+	PD.key = applicant.key
+	return PD
+
+//////////////////////////////////////////////
+//                                          //
+//                   GRUE                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/grue
+	name = "Grue Infestation"
+	role_category = /datum/role/grue
+	enemy_jobs = list()
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(70,60,50,40,30,20,10,10,10,10)
+	high_population_requirement = 10
+	logo = "grue-logo"
+	repeatable = TRUE
+	var/list/grue_spawn_spots=list()
+
+/datum/dynamic_ruleset/midround/from_ghosts/grue/ready(var/forced = 0)
+	grue_spawn_spots=list()
+	var/list/found_vents = list()
+	var/turf/thisturf
+	var/vent_visible=0 //used to check if vent is visible by a living player
+	for(var/obj/machinery/atmospherics/unary/vent_pump/thisvent in atmos_machines)
+		thisturf=get_turf(thisvent)
+		if(!thisvent.welded && thisvent.z == map.zMainStation && thisvent.canSpawnMice==1&&thisturf.get_lumcount()<=0.1 && thisvent.network) // Check that the vent isn't welded, is on the main z-level, can spawn mice, is in the dark, and is connected to a pipe network.
+			if(thisvent.network.normal_members.len > 50) //only accept vents with suitably large networks
+				found_vents.Add(thisvent)
+	if(found_vents.len)
+		while(found_vents.len > 0)
+			var/obj/machinery/atmospherics/unary/vent_pump/thisvent = pick(found_vents)
+			found_vents -= thisvent
+			vent_visible=0
+			for (var/mob/M in player_list)
+				if (isliving(M) && (get_dist(M,thisvent) <= 7)) //make sure vent is not in default view range of any living player
+					vent_visible=1
+			if(!vent_visible)
+				grue_spawn_spots+=get_turf(thisvent)
+	if(!grue_spawn_spots.len)
+		log_admin("Cannot accept Grue ruleset, no suitable spawn locations found.")
+		message_admins("Cannot accept Grue ruleset, no spawn locations found.")
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/grue/generate_ruleset_body(var/mob/applicant)
+	var/our_spawnspot= pick(grue_spawn_spots)
+	applicant.forceMove(our_spawnspot)
+	var/mob/living/simple_animal/hostile/grue/gruespawn/ourgrue = new(our_spawnspot)
+	ourgrue.key = applicant.key
+	grue_spawn_spots=list()
+	return ourgrue
 
 //////////////////////////////////////////////
 //                                          //

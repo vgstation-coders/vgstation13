@@ -2,25 +2,23 @@
 	name = "Armok's Bar and Grill"
 	icon_state = "bar"
 
-/mob/living/silicon/robot/NPC
+/mob/living/simple_animal/robot/NPC
 	flags = HEAR_ALWAYS | PROXMOVE //For hearer events
+	icon = 'icons/mob/robots.dmi'
 
-/mob/living/silicon/robot/NPC/updatename()
-	return
-
-/mob/living/silicon/robot/NPC/New()
+/mob/living/simple_animal/robot/NPC/New()
 	..()
 	initialize_NPC_components()
 
-/mob/living/silicon/robot/NPC/proc/initialize_NPC_components()
+/mob/living/simple_animal/robot/NPC/proc/initialize_NPC_components()
 	add_component(/datum/component/controller/movement/astar)
 
-/mob/living/silicon/robot/NPC/dusky
+/mob/living/simple_animal/robot/NPC/dusky
 	name = "Dusky"
 	desc = "A little rusted at the creases, but this barbot is still happy to serve so long as the generator is running"
 	icon_state = "kodiak-service"
 
-/mob/living/silicon/robot/NPC/dusky/initialize_NPC_components()
+/mob/living/simple_animal/robot/NPC/dusky/initialize_NPC_components()
 	..()
 	var/datum/component/ai/target_finder/simple_view/SV = add_component(/datum/component/ai/target_finder/simple_view)
 	SV.range = 3

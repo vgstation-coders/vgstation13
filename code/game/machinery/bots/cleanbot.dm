@@ -165,7 +165,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
 		src.oddbutton = 1
 		src.screwloose = 1
-
+	
 /obj/machinery/bot/cleanbot/can_path()
 	return !cleaning
 
@@ -345,18 +345,6 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 /*
  *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
 */
-
-/obj/machinery/bot/cleanbot/getpAIMovementDelay()
-	return 1
-
-/obj/machinery/bot/cleanbot/pAImove(mob/living/silicon/pai/user, dir)
-	if(!on)
-		return
-	if(!..())
-		return
-	if(!isturf(loc))
-		return
-	step(src, dir)
 
 /obj/machinery/bot/cleanbot/on_integrated_pai_click(mob/living/silicon/pai/user, atom/target)
 	if(!Adjacent(target))
