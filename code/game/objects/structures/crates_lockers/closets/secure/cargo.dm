@@ -39,6 +39,7 @@
 		/obj/item/clothing/mask/gas,
 		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/clothing/head/soft,
+		/obj/item/weapon/extinguisher,
 		/obj/item/mounted/poster/cargo,
 		/obj/item/mounted/poster/cargo,
 		/obj/item/mounted/poster/cargo,
