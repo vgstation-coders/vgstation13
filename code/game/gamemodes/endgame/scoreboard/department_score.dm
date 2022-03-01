@@ -21,13 +21,6 @@
 		if (disease_spread_count > score.disease_most_count)
 			score.disease_most_count = disease_spread_count
 			score.disease_most = ID
-	/*for(var/mob/living/carbon/human/I in mob_list)
-
-		if(I.viruses) //Do this guy have any viruses ?
-			for(var/datum/disease/D in I.viruses) //Alright, start looping through those viruses
-				score.scores["disease"]++ //One point for every disease
-	*/
-	//var/beneficialpoints = score.scores["disease_good"] * 20
 	score.disease_vaccine = ""
 	for (var/antigen in all_antigens)
 		if (isolated_antibodies[antigen] == 1)
@@ -42,12 +35,9 @@
 				score.disease_vaccine_score += 400
 		else
 			score.disease_vaccine += "-"
-
-	if (score.disease_vaccine_score == 2320)
-		score.disease_vaccine_score = 3000 // panacea bonus
-
 	//crewscore
 	score.crewscore -= score.disease_bad * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
+	score.crewscore += score.disease_good * 20
 	score.crewscore += score.disease_vaccine_score
 	score.crewscore += score.disease_effects
 
@@ -66,20 +56,12 @@
 	for(var/datum/powernet/PN in powernets)
 		if(PN.avail > score.maxpower)
 			score.maxpower = PN.avail
-	//var/atmos
-	//if(score.scores["airloss"] != 0)
-		//atmos = score.scores["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
-	//if(!atmos) //No air alarms anywhere
-		//score.crewscore += 5000 //Give the Atmospheric Technicians a good pat on the back for caring
-		//score.scores["atmosbonus"] = 1
-
 	if(!score.powerloss) //No APCs with bad power
 		score.powerbonus = 2500
 
 	//crewscore
 	score.crewscore -= score.powerloss * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	score.crewscore += score.powerbonus
-	//score.crewscore -= atmos
 
 /datum/controller/gameticker/scoreboard/proc/service_score()
 	//Janitor

@@ -116,7 +116,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 /datum/controller/gameticker/scoreboard/proc/display()
 	var/dat = "<h2>Round Statistics and Score</h2>"
-	dat += "<B><U>GENERAL STATS</U></B><BR>"
 	dat += "<U>THE GOOD:</U><BR>"
 	dat += "<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score.time * 0.2)] Points)<BR>"
 	dat += "<B>Shuttle Escapees:</B> [score.escapees] ([score.escapees * 100] Points)<BR>"
@@ -138,6 +137,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
 		dat += "<B>Extracted Symptoms:</B> [score.disease_extracted] ([score.disease_effects] Points)<BR>"
+	
+	if(score.disease_good > 0)
+		dat += "<B>Good diseases in living mobs:</B> [score.disease_good] ([score.disease_good * 20] Points)<BR>"
 	if (score.slimes > 0)
 		dat += "<B>Harvested Slimes:</B> [score.slimes] ([score.slimes * 20] Points)<BR>"
 	if (score.artifacts > 0)
@@ -303,7 +305,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 				break
 			else
 				dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
-
 	return dat
 
 /mob/proc/display_round_end_scoreboard()
