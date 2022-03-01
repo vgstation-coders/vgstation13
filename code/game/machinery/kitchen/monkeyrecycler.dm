@@ -69,7 +69,7 @@
 		var/grabbed = G.affecting
 		if(isliving(grabbed))
 			var/mob/living/target = grabbed
-			if(ishuman(target) && !emagged)
+			if((ishuman(target) || issilicon(target)) && !emagged)
 				to_chat(user, "<span class='warning'>\the [target] is too sapient for the recycler.</span>")
 				return
 			if(target.stat == CONSCIOUS && !can_recycle_live)
@@ -87,12 +87,12 @@
 				playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 				use_power(500)
 				src.grinded[ourtype]++
-				to_chat(user, "<span class='notice'>The machine now has [grinded[ourtype]] worth of material stored for this animal.</span>")
+				to_chat(user, "<span class='notice'>The machine now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
 		else
 			to_chat(user, "<span class='warning'>The machine only accepts animals!</span>")
 	else if(isliving(O))
 		var/mob/living/target = O
-		if(ishuman(target) && !emagged)
+		if((ishuman(target) || issilicon(target)) && !emagged)
 			to_chat(user, "<span class='warning'>\the [target] is too sapient for the recycler.</span>")
 			return
 		if(target.stat == CONSCIOUS && !can_recycle_live)
@@ -104,11 +104,12 @@
 		else
 			var/ourtype = target.type
 			qdel(target)
+			target = null
 			to_chat(user, "<span class='notice'>You stuff \the [target] in the machine.</span>")
 			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 			use_power(500)
 			src.grinded[ourtype]++
-			to_chat(user, "<span class='notice'>The machine now has [grinded[ourtype]] worth of material stored for this animal.</span>")
+			to_chat(user, "<span class='notice'>The machine now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
 	if(..())
@@ -126,7 +127,7 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/MW = new(src.loc)
 		MW.contained_mob = pickedtype
 		MW.name = "processed cube"
-		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded[pickedtype]] animals worth of material left.</span>")
+		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded[pickedtype]] animals worth of material of this type left.</span>")
 	else
 		to_chat(user, "<span class='warning'>The machine needs at least [minimum_animals] same type animal\s worth of material to produce an animal cube.</span>")
 	return
