@@ -149,8 +149,6 @@ var/stacking_limit = 90
 /datum/gamemode/dynamic/GetScoreboard()
 
 	dat += "<h2>Dynamic Mode - Roundstart Threat = <font color='red'>[threat_level]%</font>, Midround Threat = <font color='red'>[midround_threat_level]%</font></h2>"
-	//dat += "<a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
-
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
 			var/ruletype = ""
@@ -162,6 +160,7 @@ var/stacking_limit = 90
 				ruletype = "midround"
 			dat += "([ruletype]) - <b>[DR.name]</b>[DR.calledBy ? " (called by [DR.calledBy])" : ""]<br>"
 			rules_text += "[ruletype] - **[DR.name]** [DR.calledBy ? " (called by [DR.calledBy])" : ""]"
+		//dat += "<a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
 	else
 		dat += "(extended)"
 		rules_text += "None"
