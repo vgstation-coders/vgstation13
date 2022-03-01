@@ -57,7 +57,7 @@
 		else
 			var/ourtype = target.type
 			for(var/datum/body_archive/archive in body_archives)
-				if(archive.key = target.key)
+				if(archive.key == target.key)
 					ref_body_archives.Add(archive)
 			qdel(target)
 			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
