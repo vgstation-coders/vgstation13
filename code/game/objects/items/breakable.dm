@@ -39,7 +39,7 @@
 
 /obj/item/proc/drop_fragments(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Separate proc in case special stuff happens with a given item's fragments. Parameters are for throwing the fragments.
 	if(breakable_fragments.len)
-		var/oneeach=(isnull(fragment_amounts) || breakable_fragments.len != fragment_amounts.len) //default to 1 of each fragment type if fragement_amounts isn't specified or there's a length mismatch
+		var/oneeach=(isnull(fragment_amounts) || breakable_fragments.len != fragment_amounts.len) //default to 1 of each fragment type if fragment_amounts isn't specified or there's a length mismatch
 		var/numtodrop
 		var/thisfragment
 		for(var/frag_ind in 1 to breakable_fragments.len)
