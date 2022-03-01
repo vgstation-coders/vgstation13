@@ -49,7 +49,7 @@
 		var/mob/living/target = AM
 		if(target.stat == CONSCIOUS && !can_recycle_live)
 			return FALSE
-		if(ishuman(target) && !emagged)
+		if((target.key || target.ckey) && !emagged)
 			return FALSE
 		if(target.abiotic())
 			return FALSE
@@ -69,7 +69,7 @@
 		var/grabbed = G.affecting
 		if(isliving(grabbed))
 			var/mob/living/target = grabbed
-			if((ishuman(target) || issilicon(target)) && !emagged)
+			if((target.key || target.ckey) && !emagged)
 				to_chat(user, "<span class='warning'>\the [target] is too sapient for the recycler.</span>")
 				return
 			if(target.stat == CONSCIOUS && !can_recycle_live)
@@ -92,7 +92,7 @@
 			to_chat(user, "<span class='warning'>The machine only accepts animals!</span>")
 	else if(isliving(O))
 		var/mob/living/target = O
-		if((ishuman(target) || issilicon(target)) && !emagged)
+		if((target.key || target.ckey) && !emagged)
 			to_chat(user, "<span class='warning'>\the [target] is too sapient for the recycler.</span>")
 			return
 		if(target.stat == CONSCIOUS && !can_recycle_live)
