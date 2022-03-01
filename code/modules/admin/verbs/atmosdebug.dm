@@ -15,17 +15,17 @@
 
 	//Manifolds
 	for (var/obj/machinery/atmospherics/pipe/manifold/pipe in atmos_machines)
-		if ((!pipe.node1 || !pipe.node2 || !pipe.node3) && (!pipe in AL))
+		if ((!pipe.node1 || !pipe.node2 || !pipe.node3) && !(pipe in AL))
 			AL += pipe
 
 	//4-way Manifolds
 	for (var/obj/machinery/atmospherics/pipe/manifold4w/pipe in atmos_machines)
-		if ((!pipe.node1 || !pipe.node2 || !pipe.node3 || !pipe.node4) && (!pipe in AL))
+		if ((!pipe.node1 || !pipe.node2 || !pipe.node3 || !pipe.node4) && !(pipe in AL))
 			AL += pipe
 
 	//Pipes
 	for (var/obj/machinery/atmospherics/pipe/simple/pipe in atmos_machines)
-		if ((!pipe.node1 || !pipe.node2) && (!pipe in AL))
+		if ((!pipe.node1 || !pipe.node2) && !(pipe in AL))
 			AL += pipe
 
 	var/output = {"<B>PLUMBING ANOMALIES REPORT</B><HR>
