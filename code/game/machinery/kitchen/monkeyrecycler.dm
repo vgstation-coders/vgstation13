@@ -132,12 +132,13 @@
 		if(ref_body_archives.len)
 			for(var/datum/body_archive/BA in ref_body_archives)
 				if(BA.mob_type == pickedtype)
-					var/mob/living/M = new(MW)
-					M = M.actually_reset_body(archive = BA, our_mind = get_mind_by_key(BA.key))
+					var/mob/living/temp_M = new
+					var/mob/living/M = temp_M.actually_reset_body(archive = BA, our_mind = get_mind_by_key(BA.key))
 					M.forceMove(MW)
 					MW.contained_mob = M
 					MW.name = "[MW] cube"
 					ref_body_archives.Remove(BA)
+					qdel(temp_M)
 					break
 		else
 			MW.contained_mob = pickedtype
