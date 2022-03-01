@@ -13,6 +13,7 @@
 	var/minimum_animals = 3 //How many do we need to grind?
 	var/list/grinded = list(/mob/living/carbon/monkey = 0) //How many of each type are grinded?
 	var/can_recycle_live = FALSE //Can we recycle a live mob?
+	var/list/datum/body_archive/ref_body_archives = list() //Body archives of all processed mobs
 
 /obj/machinery/monkey_recycler/New()
 	. = ..()
@@ -55,6 +56,9 @@
 			return FALSE
 		else
 			var/ourtype = target.type
+			for(var/datum/body_archive/archive in body_archives)
+				if(archive.key = target.key)
+					ref_body_archives.Add(archive)
 			qdel(target)
 			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 			use_power(500)
@@ -125,8 +129,19 @@
 		playsound(src, 'sound/machines/hiss.ogg', 50, 1)
 		grinded[pickedtype] -= minimum_animals
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/MW = new(src.loc)
-		MW.contained_mob = pickedtype
-		MW.name = "processed cube"
+		if(ref_body_archives.len)
+			for(var/datum/body_archive/BA in ref_body_archives)
+				if(BA.mob_type == pickedtype)
+					var/mob/living/M = new
+					M = M.reset_body(BA)
+					M.forceMove(MW)
+					MW.contained_mob = M
+					MW.name = "[MW] cube"
+					ref_body_archives.Remove(BA)
+					break
+		else
+			MW.contained_mob = pickedtype
+			MW.name = "processed cube"
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded[pickedtype]] animals worth of material of this type left.</span>")
 	else
 		to_chat(user, "<span class='warning'>The machine needs at least [minimum_animals] same type animal\s worth of material to produce an animal cube.</span>")
