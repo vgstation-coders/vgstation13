@@ -137,7 +137,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
 		dat += "<B>Extracted Symptoms:</B> [score.disease_extracted] ([score.disease_effects] Points)<BR>"
-	
 	if(score.disease_good > 0)
 		dat += "<B>Good diseases in living mobs:</B> [score.disease_good] ([score.disease_good * 20] Points)<BR>"
 	if (score.slimes > 0)
@@ -223,9 +222,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		var/list/L = ME.process_scoreboard()
 		if(!L || !L.len)
 			continue
-
 		dat += "<br><u>[ME.name ? uppertext(ME.name) : "UNKNOWN SPACE STRUCTURE"]</u><br>"
-
 		for(var/score_value in L)
 			dat += "<b>[score_value]</b>[L[score_value] ? "<b>:</b> [L[score_value]]" : ""]<br>"
 			score.crewscore += L[score_value]
@@ -233,7 +230,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 	if(arena_top_score)
 		dat += "<B>Best Arena Fighter (won [arena_top_score] rounds!):</B> [score.arenabest]<BR>"
-
 	if(score.escapees)
 		if(score.dmgestdamage)
 			dat += "<B>Most Battered Escapee:</B> [score.dmgestname], [score.dmgestjob]: [score.dmgestdamage] damage ([score.dmgestkey])<BR>"
@@ -241,7 +237,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			dat += "<B>Richest Escapee:</B> [score.richestname], [score.richestjob]: $[score.richestcash] ([score.richestkey])<BR>"
 	else
 		dat += "The station wasn't evacuated or there were no survivors!<BR>"
-
 	dat += "<B>Department Leaderboard:</B><BR>"
 	var/list/dept_leaderboard = get_dept_leaderboard()
 	for (var/i = 1 to dept_leaderboard.len)
