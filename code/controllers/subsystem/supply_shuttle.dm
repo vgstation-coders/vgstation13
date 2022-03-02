@@ -471,6 +471,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			for(var/atom/thing in CF.associated_crate)
 				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
 				CF.initial_contents += thing
+				if(istype(CF.initialised_type,/datum/centcomm_order))
+					var/datum/centcomm_order/CO = new CF.initialised_type
+					CO.BuildToExtraChecks(thing) //make the thing in the crate more like a fulfilled centcomm order
+					qdel(CO)
 
 			CF.associated_manifest.info += {"</ul>"}
 

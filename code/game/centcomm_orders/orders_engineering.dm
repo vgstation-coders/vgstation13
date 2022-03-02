@@ -40,6 +40,9 @@
 		return 0
 	return 1
 
+/datum/centcomm_order/department/engineering/portable_smes/BuildToExtraChecks(var/obj/machinery/power/battery/portable/P)
+	if (istype(P))
+		P.charge = P.capacity
 
 //----------------------------------------------Atmospherics----------------------------------------------------
 

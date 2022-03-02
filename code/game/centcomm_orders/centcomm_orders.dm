@@ -95,6 +95,10 @@ var/global/current_centcomm_order_id=124901
 /datum/centcomm_order/proc/ExtraChecks(var/atom/movable/AM)
 	return 1
 
+// For cargo crate forwarding
+/datum/centcomm_order/proc/BuildToExtraChecks(var/atom/movable/AM)
+	return
+
 /datum/centcomm_order/proc/CheckShuttleObject(var/obj/O, var/in_crate, var/preserve = FALSE)
 	if(must_be_in_crate && !in_crate)
 		return 0
