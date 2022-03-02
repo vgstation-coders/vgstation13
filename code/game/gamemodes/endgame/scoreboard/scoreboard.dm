@@ -286,20 +286,17 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<B><U>RATING:</U></B> [score.rating]<br><br>"
 
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
-	dat += "<b>TOP 5 RICHEST ESCAPEES:</b><br>"
-	if(!leaderboard.data.len)
-		dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
-	else
-		var/i = 1
-		for(var/datum/record/money/entry in leaderboard.data)
-			var/cash = num2text(entry.cash, 12)
-			var/list/split_date = splittext(entry.date, "-")
-			if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
-				leaderboard.clear_records()
-				dat += "No rich escapees yet!"
-				break
-			else
-				dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
+	var/i = 1
+	for(var/datum/record/money/entry in leaderboard.data)
+		var/cash = num2text(entry.cash, 12)
+		var/list/split_date = splittext(entry.date, "-")
+		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
+			leaderboard.clear_records()
+			dat += "No rich escapees yet!"
+			break
+		else
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 	return dat
 
 /mob/proc/display_round_end_scoreboard()
