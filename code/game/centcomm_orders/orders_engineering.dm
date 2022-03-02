@@ -70,3 +70,9 @@
 	if ((GM.gas?.len == 1) && (GAS_PLASMA in GM.gas) && (GM.return_temperature() < 2) && (GM.pressure > 1000))
 		return 1
 	return 0
+
+/datum/centcomm_order/department/engineering/cold_canister/BuildToExtraChecks(var/obj/machinery/portable_atmospherics/canister/C)
+	if (istype(C))
+		// Just below 1K
+		C.air_contents.adjust_gas_temp(GAS_PLASMA, (C.maximum_pressure * C.filled) * C.air_contents.volume / (R_IDEAL_GAS_EQUATION * 1.9), 1.9)
+		C.update_icon()

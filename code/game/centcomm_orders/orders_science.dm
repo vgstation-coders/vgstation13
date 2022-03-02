@@ -61,6 +61,12 @@
 			return 1
 	return 0
 
+/datum/centcomm_order/department/science/technology/BuildToExtraChecks(var/obj/item/weapon/disk/tech_disk/TD)
+	if (istype(TD))
+		var/datum/tech/DT = new required_tech
+		DT.level = required_level
+		TD.stored = DT
+
 
 //Component Design Disk, with a set blueprint required
 /datum/centcomm_order/department/science/design
