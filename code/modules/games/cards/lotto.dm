@@ -5,7 +5,7 @@
 	w_class = W_CLASS_TINY
 	var/revealed = FALSE
 	var/iswinner = FALSE
-	var/prize_multiplyer
+	var/prize_multiplier
 	var/winnings = 0
 	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
 	var/list/problist = list(0.0001, 0.0002, 0.001, 0.002, 0.01, 0.02, 0.04, 0.2, 1, 2.5, 5, 10, 12.5, 17, 20, 25)
@@ -15,12 +15,12 @@
 	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 
-/obj/item/toy/lotto_ticket/proc/scratch(var/input_prize_multiplyer)
+/obj/item/toy/lotto_ticket/proc/scratch(var/input_prize_multiplier)
 	var/tuning_value = 1/5 //Used to adjust expected values.
 	var/profit = 0
 	for(var/prize = 1 to problist.len)
 		if(prob(problist[prize]))
-			profit = prizelist[prize]*input_prize_multiplyer*tuning_value
+			profit = prizelist[prize]*input_prize_multiplier*tuning_value
 			return profit
 
 //Flash code taken from Blinder
@@ -54,7 +54,7 @@
 				src.revealed = TRUE
 				src.update_icon()
 				to_chat(user, "<span class='notice'>You scratch off the film covering the prizes.</span>")
-				winnings = scratch(prize_multiplyer)
+				winnings = scratch(prize_multiplier)
 				if(winnings)
 					src.iswinner = TRUE
 		else
@@ -84,21 +84,21 @@
 	name = "Gold Rush lottery ticket"
 	desc = "A cheap scratch-off lottery ticket. Win up to 100,000 credits!"
 	icon_state = "lotto_1"
-	prize_multiplyer = 5 //EV 4.55, ER -0.45
+	prize_multiplier = 5 //EV 4.55, ER -0.45
 
 //Tier 2 card
 /obj/item/toy/lotto_ticket/diamond_hands
 	name = "Diamond Hands lottery ticket"
 	desc = "A mid-price scratch-off lottery ticket. Win up to 400,000 credits!"
 	icon_state = "lotto_2"
-	prize_multiplyer = 20 //EV 18.20, ER -1.80
+	prize_multiplier = 20 //EV 18.20, ER -1.80
 
 //Tier 3 card
 /obj/item/toy/lotto_ticket/phazon_fortune
 	name = "Phazon Fortune lottery ticket"
 	desc = "An expensive scratch-off lottery ticket. Win up to 1,000,000 credits!"
 	icon_state = "lotto_3"
-	prize_multiplyer = 50 //EV 45.50, ER -4.50
+	prize_multiplier = 50 //EV 45.50, ER -4.50
 
 
 //Emag card
@@ -109,12 +109,12 @@
 	var/flashed = FALSE
 
 /obj/item/toy/lotto_ticket/supermatter_surprise/scratch()
-	var/input_prize_multiplyer = 50
+	var/input_prize_multiplier = 50
 	var/profit = 0
 	while(!profit)
 		for(var/prize = 1 to problist.len)
 			if(prob(problist[prize]))
-				profit = prizelist[prize]*input_prize_multiplyer
+				profit = prizelist[prize]*input_prize_multiplier
 				return profit
 
 /obj/item/toy/lotto_ticket/supermatter_surprise/attackby(obj/item/weapon/S, mob/user)
