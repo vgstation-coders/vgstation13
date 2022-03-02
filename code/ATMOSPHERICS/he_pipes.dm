@@ -231,6 +231,7 @@
 	radiation_capacity = 24000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/update_dir()
+	..()
 	switch(dir)
 		if(NORTH)
 			initialize_directions_he = EAST|SOUTH|WEST
