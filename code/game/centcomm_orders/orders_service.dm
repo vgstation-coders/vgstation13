@@ -205,7 +205,7 @@
 
 /datum/centcomm_order/per_unit/department/civilian/honeycomb/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H)
 	if (istype(H) && flavor)
-		F.reagents.add_reagent(flavor,F.reagents.maximum_volume)
+		H.reagents.add_reagent(flavor,H.reagents.maximum_volume)
 
 /datum/centcomm_order/department/civilian/salmon/New()
 	..()

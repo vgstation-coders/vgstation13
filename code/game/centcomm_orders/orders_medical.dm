@@ -94,6 +94,10 @@
 				return 1
 	return 0
 
+/datum/centcomm_order/department/medical/vaccine/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+	if (istype(V))
+		V.reagents.add_reagent(VACCINE,V.reagents.maximum_volume)
+
 //Dangerous Disease Vial
 /datum/centcomm_order/department/medical/harmful_disease/New()
 	..()
@@ -122,8 +126,11 @@
 			if (D.strength >= 80)
 				if (D.get_total_badness() >= 13)
 					return 1
-
 	return 0
+
+/datum/centcomm_order/department/medical/harmful_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+	if (istype(V))
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume)
 
 //Beneficial Disease Vial
 /datum/centcomm_order/department/medical/beneficial_disease/New()
@@ -154,6 +161,10 @@
 				return 1
 
 	return 0
+
+/datum/centcomm_order/department/medical/beneficial_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+	if (istype(V))
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume)
 
 //Specific GNA Disks
 /datum/centcomm_order/department/medical/gna_disk
