@@ -83,7 +83,10 @@ var/list/pda_multicasters = list()
 	name = "Centralized Autonomous Messaging Operator"
 	owner = "CAMO"
 	ownjob = "CAMO"
-	detonate = 0
+	accepted_viruses = list(
+		/datum/pda_app/cart/virus/honk,
+		/datum/pda_app/cart/virus/silent,
+	)
 	hidden = 1
 	starting_apps = list(/datum/pda_app/messenger/camo)
 
