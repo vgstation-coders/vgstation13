@@ -487,7 +487,7 @@ var/datum/controller/gameticker/ticker
 				vote.initiate_vote("map","The Server", popup = 1)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
-		spawn(50)
+
 			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
 				if(!delay_end && !watchdog.waiting)
@@ -528,7 +528,6 @@ var/datum/controller/gameticker/ticker
 			else
 				to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 				delay_end = 2
-
 	return 1
 
 /datum/controller/gameticker/proc/init_PDAgames_leaderboard()
