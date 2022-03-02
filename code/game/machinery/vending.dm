@@ -3737,13 +3737,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/lotto_ticket/phazon_fortune = 20
 		)
 	contraband = list(
-		/obj/item/toy/lotto_ticket/supermatter_surprise = 1
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 5
 		)
 	prices = list(
 		/obj/item/toy/lotto_ticket/gold_rush = 5,
-		/obj/item/toy/lotto_ticket/diamond_hands = 20,
-		/obj/item/toy/lotto_ticket/phazon_fortune = 50,
-		/obj/item/toy/lotto_ticket/supermatter_surprise = 100
+		/obj/item/toy/lotto_ticket/diamond_hands = 10,
+		/obj/item/toy/lotto_ticket/phazon_fortune = 20,
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 50
 		)
 
 	pack = /obj/structure/vendomatpack/lotto
@@ -3761,7 +3761,7 @@ var/global/num_vending_terminals = 1
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
 		qdel(speech)
 
-/obj/machinery/vending/lotto/attackby(obj/item/I, user)
+/obj/machinery/vending/lotto/attackby(obj/item/I, var/mob/living/user)
 	add_fingerprint(user)
 	if(istype(I, /obj/item/toy/lotto_ticket))
 		var/obj/item/toy/lotto_ticket/T = I
@@ -3774,6 +3774,7 @@ var/global/num_vending_terminals = 1
 			playsound(src, "polaroid", 50, 1)
 			if(T.winnings >= 10000)
 				AnnounceWinner(src,user,T.winnings)
+				log_admin("([user.ckey]/[user]) won a large lottery prize of [T.winnings] credits.")
 			qdel(T)
 	else
 		..()
