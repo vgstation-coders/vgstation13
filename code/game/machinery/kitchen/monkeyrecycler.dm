@@ -132,7 +132,7 @@
 		if(ref_body_archives.len)
 			for(var/datum/body_archive/BA in ref_body_archives)
 				if(BA.mob_type == pickedtype)
-					var/mob/living/temp_M = new
+					var/mob/living/temp_M = new pickedtype
 					var/mob/living/M = temp_M.actually_reset_body(archive = BA, our_mind = get_mind_by_key(BA.key))
 					M.forceMove(MW)
 					MW.contained_mob = M
@@ -141,8 +141,9 @@
 					qdel(temp_M)
 					break
 		else
-			MW.contained_mob = pickedtype
-			MW.name = "processed cube"
+			var/mob/living/MW_mob = new pickedtype(MW)
+			MW.contained_mob = MW_mob
+			MW.name = "[MW_mob] cube"
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded[pickedtype]] animals worth of material of this type left.</span>")
 	else
 		to_chat(user, "<span class='warning'>The machine needs at least [minimum_animals] same type animal\s worth of material to produce an animal cube.</span>")
