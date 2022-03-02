@@ -160,7 +160,7 @@ var/stacking_limit = 90
 				ruletype = "midround"
 			dat += "([ruletype]) - <b>[DR.name]</b>[DR.calledBy ? " (called by [DR.calledBy])" : ""]<br>"
 			rules_text += "[ruletype] - **[DR.name]** [DR.calledBy ? " (called by [DR.calledBy])" : ""]"
-		dat += "<a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
+		dat += "<BR><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
 	else
 		dat += "(extended)"
 		rules_text += "None"
