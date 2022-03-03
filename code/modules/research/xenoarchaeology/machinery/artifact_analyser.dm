@@ -196,7 +196,7 @@ var/anomaly_report_num = 0
 	updateDialog()
 
 //hardcoded responses, oh well
-/obj/machinery/artifact_analyser/proc/get_scan_info(var/atom/movable/AM)
+/proc/get_scan_info(var/atom/movable/AM)
 	switch(AM.type)
 		if(/obj/machinery/auto_cloner)
 			return "Automated cloning pod - appears to rely on organic nanomachines with a self perpetuating \

@@ -489,6 +489,25 @@
 			return 1
 	return 0
 
+/datum/centcomm_order/department/science/artifact/BuildToExtraChecks(var/obj/structure/anomaly_container/AC)
+	if (istype(AC))
+		var/obj/machinery/artifact/AF = new(AC)
+		AC.contained = AF
+		if(AF.primary_effect)
+			AF.primary_effect.triggered = 1
+		AC.report = new /obj/item/weapon/paper/anomaly(AC)
+		var/obj/item/weapon/paper/anomaly/AR = AC.report
+		AR.artifact = AF
+		AR.info = "<b>[src] analysis report for [AF]</b><br>"
+		AR.info += "<br>"
+		AR.info += "[bicon(AF)] [get_scan_info(AF)]"
+		AR.stamped = list(/obj/item/weapon/stamp)
+		AR.overlays = list("paper_stamp-qm")
+		var/art_id = generate_artifact_id()
+		excavated_large_artifacts[art_id] = AF
+		AR.name = "Exotic Anomaly Report ([art_id])"
+		AC.update_icon()
+
 //Full Supermatter. yes, the round-ending one.
 /datum/centcomm_order/department/science/supermatter
 	hidden = TRUE
