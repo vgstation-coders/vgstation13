@@ -259,19 +259,22 @@
 	..()
 	qdel(ourpack)
 
+/datum/cargo_forwarding/from_centcomm_order
+	var/datum/centcomm_order/initialised_order
+
 /datum/cargo_forwarding/from_centcomm_order/New(var/sender = "", var/station = "", var/supply_type = null, var/do_not_add = FALSE)
 	if(ispath(supply_type,/datum/centcomm_order))
 		initialised_type = supply_type
 	else
 		initialised_type = get_weighted_order()
-	var/datum/centcomm_order/ourorder = new initialised_type
-	containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
-	acct_by_string = ourorder.acct_by_string
-	for(var/i in ourorder.requested)
-		amount = ourorder.requested[i]
-		if(ourorder.name_override && ourorder.name_override.len)
-			name = ourorder.name_override[i]
-			containername = ourorder.name_override[i]
+	initialised_order = new initialised_type
+	containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
+	acct_by_string = initialised_order.acct_by_string
+	for(var/i in initialised_order.requested)
+		amount = initialised_order.requested[i]
+		if(initialised_order.name_override && initialised_order.name_override.len)
+			name = initialised_order.name_override[i]
+			containername = initialised_order.name_override[i]
 		else
 			var/atom/thing = new i
 			name = thing.name
@@ -283,23 +286,22 @@
 				our_amount = 1
 			for(var/j in 1 to our_amount)
 				contains += i
-		if(istype(ourorder,/datum/centcomm_order/per_unit))
-			var/datum/centcomm_order/per_unit/PU = ourorder
+		if(istype(initialised_order,/datum/centcomm_order/per_unit))
+			var/datum/centcomm_order/per_unit/PU = initialised_order
 			worth = PU.unit_prices[i] * amount
 		else
-			worth = ourorder.worth
+			worth = initialised_order.worth
 	//Sadly cannot use switch here
-	if(istype(ourorder,/datum/centcomm_order/department/engineering))
-		containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
+	if(istype(initialised_order,/datum/centcomm_order/department/engineering))
+		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
 		access = list(access_engine)
-	else if(istype(ourorder,/datum/centcomm_order/department/medical))
-		containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/medsec : /obj/structure/largecrate
+	else if(istype(initialised_order,/datum/centcomm_order/department/medical))
+		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/medsec : /obj/structure/largecrate
 		access = list(access_medical)
-	else if(istype(ourorder,/datum/centcomm_order/department/science))
-		containertype = ourorder.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
+	else if(istype(initialised_order,/datum/centcomm_order/department/science))
+		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
 		access = list(access_science)
 	..()
-	qdel(ourorder)
 
 /datum/cargo_forwarding/janicart
 	name = "Janicart"
