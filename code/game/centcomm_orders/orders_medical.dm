@@ -263,7 +263,7 @@
 		Disk.stage = req_stage
 		if(!Disk.effect)
 			var/effect_type = null
-			while(!effect_type || !(effect_type in already_generated))
+			while(!effect_type || (effect_type in already_generated))
 				effect_type = pick(subtypesof(/datum/disease2/effect))
 			Disk.effect = new effect_type
 			already_generated += effect_type
