@@ -96,7 +96,8 @@
 
 /datum/centcomm_order/department/medical/vaccine/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
 	if (istype(V))
-		V.reagents.add_reagent(VACCINE,V.reagents.maximum_volume)
+		var/list/vac_data = list("antigen" = list(required_vac))
+		V.reagents.add_reagent(VACCINE,V.reagents.maximum_volume,vac_data)
 
 //Dangerous Disease Vial
 /datum/centcomm_order/department/medical/harmful_disease/New()
@@ -130,7 +131,37 @@
 
 /datum/centcomm_order/department/medical/harmful_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
 	if (istype(V))
-		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume)
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+		var/datum/disease2/disease/new_virus = new virus_choice
+
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 0,
+			ANTIGEN_COMMON	= 2,
+			ANTIGEN_RARE	= 1,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 0,
+			EFFECT_DANGER_FLAVOR	= 0,
+			EFFECT_DANGER_ANNOYING	= 1,
+			EFFECT_DANGER_HINDRANCE	= 2,
+			EFFECT_DANGER_HARMFUL	= 4,
+			EFFECT_DANGER_DEADLY	= 2,
+			)
+
+		while(new_virus.get_total_badness() < 13)
+			new_virus.makerandom(list(80,90),list(20,90),anti,bad,src)
+
+		var/list/blood_data = list(
+			"viruses" = null,
+			"blood_DNA" = null,
+			"blood_type" = "O-",
+			"resistances" = null,
+			"trace_chem" = null,
+			"virus2" = list()
+		)
+		blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blooddata)
 
 //Beneficial Disease Vial
 /datum/centcomm_order/department/medical/beneficial_disease/New()
@@ -164,7 +195,37 @@
 
 /datum/centcomm_order/department/medical/beneficial_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
 	if (istype(V))
-		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume)
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+		var/datum/disease2/disease/new_virus = new virus_choice
+
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 0,
+			ANTIGEN_COMMON	= 2,
+			ANTIGEN_RARE	= 1,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 2,
+			EFFECT_DANGER_FLAVOR	= 1,
+			EFFECT_DANGER_ANNOYING	= 0,
+			EFFECT_DANGER_HINDRANCE	= 0,
+			EFFECT_DANGER_HARMFUL	= 0,
+			EFFECT_DANGER_DEADLY	= 0,
+			)
+
+		while(new_virus.get_total_badness() > 2)
+			new_virus.makerandom(list(80,90),list(20,90),anti,bad,src)
+
+		var/list/blood_data = list(
+			"viruses" = null,
+			"blood_DNA" = null,
+			"blood_type" = "O-",
+			"resistances" = null,
+			"trace_chem" = null,
+			"virus2" = list()
+		)
+		blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blooddata)
 
 //Specific GNA Disks
 /datum/centcomm_order/department/medical/gna_disk
