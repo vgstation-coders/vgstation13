@@ -230,6 +230,7 @@
 //Specific GNA Disks
 /datum/centcomm_order/department/medical/gna_disk
 	var/already_goten = list()
+	var/already_generated = list()
 	var/req_stage
 	request_consoles_to_notify = list(
 		"Chief Medical Officer's Desk",
@@ -256,6 +257,16 @@
 		already_goten += Disk.effect.type
 		return 1
 	return 0
+
+/datum/centcomm_order/department/medical/gna_disk/BuildToExtraChecks(var/obj/item/weapon/disk/disease/Disk)
+	if (istype(Disk))
+		Disk.stage = req_stage
+		if(!Disk.effect)
+			var/effect_type = null
+			while(!effect_type || !(effect_type in already_generated))
+				effect_type = pick(subtypesof(/datum/disease2/effect))
+			Disk.effect = new effect_type
+			already_generated += effect_type
 
 //----------------------------------------------Genetics----------------------------------------------------
 
