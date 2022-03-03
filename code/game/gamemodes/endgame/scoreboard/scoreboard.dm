@@ -116,7 +116,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 /datum/controller/gameticker/scoreboard/proc/display()
 	var/dat = "<h2>Round Statistics and Score</h2>"
-	dat += "<B><U>GENERAL STATS</U></B><BR>"
 	dat += "<U>THE GOOD:</U><BR>"
 	dat += "<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score.time * 0.2)] Points)<BR>"
 	dat += "<B>Shuttle Escapees:</B> [score.escapees] ([score.escapees * 100] Points)<BR>"
@@ -138,6 +137,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
 		dat += "<B>Extracted Symptoms:</B> [score.disease_extracted] ([score.disease_effects] Points)<BR>"
+	if(score.disease_good > 0)
+		dat += "<B>Good diseases in living mobs:</B> [score.disease_good] ([score.disease_good * 20] Points)<BR>"
 	if (score.slimes > 0)
 		dat += "<B>Harvested Slimes:</B> [score.slimes] ([score.slimes * 20] Points)<BR>"
 	if (score.artifacts > 0)
@@ -221,9 +222,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		var/list/L = ME.process_scoreboard()
 		if(!L || !L.len)
 			continue
-
 		dat += "<br><u>[ME.name ? uppertext(ME.name) : "UNKNOWN SPACE STRUCTURE"]</u><br>"
-
 		for(var/score_value in L)
 			dat += "<b>[score_value]</b>[L[score_value] ? "<b>:</b> [L[score_value]]" : ""]<br>"
 			score.crewscore += L[score_value]
@@ -231,7 +230,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 	if(arena_top_score)
 		dat += "<B>Best Arena Fighter (won [arena_top_score] rounds!):</B> [score.arenabest]<BR>"
-
 	if(score.escapees)
 		if(score.dmgestdamage)
 			dat += "<B>Most Battered Escapee:</B> [score.dmgestname], [score.dmgestjob]: [score.dmgestdamage] damage ([score.dmgestkey])<BR>"
@@ -239,7 +237,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			dat += "<B>Richest Escapee:</B> [score.richestname], [score.richestjob]: $[score.richestcash] ([score.richestkey])<BR>"
 	else
 		dat += "The station wasn't evacuated or there were no survivors!<BR>"
-
 	dat += "<B>Department Leaderboard:</B><BR>"
 	var/list/dept_leaderboard = get_dept_leaderboard()
 	for (var/i = 1 to dept_leaderboard.len)
@@ -289,21 +286,17 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<B><U>RATING:</U></B> [score.rating]<br><br>"
 
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
-	dat += "<b>TOP 5 RICHEST ESCAPEES:</b><br>"
-	if(!leaderboard.data.len)
-		dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
-	else
-		var/i = 1
-		for(var/datum/record/money/entry in leaderboard.data)
-			var/cash = num2text(entry.cash, 12)
-			var/list/split_date = splittext(entry.date, "-")
-			if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
-				leaderboard.clear_records()
-				dat += "No rich escapees yet!"
-				break
-			else
-				dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
-
+	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
+	var/i = 1
+	for(var/datum/record/money/entry in leaderboard.data)
+		var/cash = num2text(entry.cash, 12)
+		var/list/split_date = splittext(entry.date, "-")
+		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
+			leaderboard.clear_records()
+			dat += "No rich escapees yet!"
+			break
+		else
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 	return dat
 
 /mob/proc/display_round_end_scoreboard()
