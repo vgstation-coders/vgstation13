@@ -109,6 +109,11 @@
 		return 1
 	return 0
 
+/datum/centcomm_order/department/science/design/BuildToExtraChecks(var/obj/item/weapon/disk/design_disk/DD)
+	if (istype(DD))
+		var/datum/design/DDS = new required_comp
+		DD.blueprint = DDS
+
 //Protolathe orders
 /datum/centcomm_order/department/science/nuclear_gun/New()
 	..()
@@ -334,6 +339,26 @@
 		return 0
 	return 1
 
+/datum/centcomm_order/department/science/bomb/BuildToExtraChecks(var/obj/item/device/transfer_valve/TTV)
+	if (istype(TTV))
+		var/obj/item/weapon/tank/plasma/PT = new(TTV)
+		var/obj/item/weapon/tank/oxygen/OT = new(TTV)
+
+		TTV.tank_one = PT
+		TTV.tank_two = OT
+
+		//This is just an arbitrary mix that works fairly well.
+		PT.air_contents.temperature = T0C + 170
+		OT.air_contents.temperature = T0C - 100
+
+		for(var/obj/item/weapon/tank/T in list(PT, OT))
+			T.master = TTV
+			var/datum/gas_mixture/G = T.air_contents
+			G.update_values()
+			G.multiply(((40 / 7) * required_dev) * ONE_ATMOSPHERE / G.pressure) //Should give an epicentre in the range.
+
+		TTV.update_icon()
+
 //----------------------------------------------Xenobiology----------------------------------------------------
 
 //High-tier slime cores
@@ -519,3 +544,15 @@
 	if (S.bstate)
 		return 1
 	return 0
+
+/datum/centcomm_order/department/science/skeleton/BuildToExtraChecks(var/obj/structure/skeleton/S)
+	if (istype(S))
+		for(var/i in 1 to 3)
+			S.contents.Add(new/obj/item/weapon/fossil/bone)
+		S.contents.Add(new/obj/item/weapon/fossil/skull)
+		S.bnum = S.breq
+		S.icon_state = "skel"
+		S.bstate = 1
+		S.setDensity(TRUE)
+		S.name = "alien skeleton display"
+		S.desc = "A creature made of [src.contents.len-1] assorted bones and a skull. The plaque reads \'[plaque_contents]\'."
