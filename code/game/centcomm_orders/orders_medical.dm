@@ -161,7 +161,7 @@
 			"virus2" = list()
 		)
 		blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
-		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blooddata)
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blood_data)
 
 //Beneficial Disease Vial
 /datum/centcomm_order/department/medical/beneficial_disease/New()
@@ -225,7 +225,7 @@
 			"virus2" = list()
 		)
 		blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
-		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blooddata)
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blood_data)
 
 //Specific GNA Disks
 /datum/centcomm_order/department/medical/gna_disk

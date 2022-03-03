@@ -555,4 +555,4 @@
 		S.bstate = 1
 		S.setDensity(TRUE)
 		S.name = "alien skeleton display"
-		S.desc = "A creature made of [src.contents.len-1] assorted bones and a skull. The plaque reads \'[plaque_contents]\'."
+		S.desc = "A creature made of [S.contents.len-1] assorted bones and a skull. The plaque reads \'[S.plaque_contents]\'."
