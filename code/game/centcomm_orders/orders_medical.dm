@@ -225,6 +225,13 @@
 		return 1
 	return 0
 
+/datum/centcomm_order/department/medical/clean_se/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+
 //Specific Superpowers
 /datum/centcomm_order/department/medical/xray/New()
 	..()
@@ -250,6 +257,14 @@
 			return bstate
 	return 0
 
+/datum/centcomm_order/department/medical/xray/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,XRAYBLOCK)
+
 /datum/centcomm_order/department/medical/hulk/New()
 	..()
 	request_consoles_to_notify = list(
@@ -273,6 +288,14 @@
 			var/bstate = R.dna.GetSEState(HULKBLOCK)
 			return bstate
 	return 0
+
+/datum/centcomm_order/department/medical/hulk/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,HULKBLOCK)
 
 /datum/centcomm_order/department/medical/telepathy/New()
 	..()
@@ -298,6 +321,14 @@
 			return bstate
 	return 0
 
+/datum/centcomm_order/department/medical/telepathy/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,REMOTETALKBLOCK)
+
 /datum/centcomm_order/department/medical/remoteview/New()
 	..()
 	request_consoles_to_notify = list(
@@ -321,4 +352,12 @@
 			var/bstate = R.dna.GetSEState(REMOTEVIEWBLOCK)
 			return bstate
 	return 0
+
+/datum/centcomm_order/department/medical/remoteview/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,REMOTEVIEWBLOCK)
 
