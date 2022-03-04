@@ -316,64 +316,70 @@ var/global/msg_id = 0
 			U.unset_machine()
 			U << browse(null, "window=pda")
 
-/obj/item/device/pda/proc/remove_id()
-	if (id)
-		if (ismob(loc))
-			var/mob/M = loc
-			M.put_in_hands(id)
-			to_chat(usr, "<span class='notice'>You remove \the [id] from the [name].</span>")
-		else
-			id.forceMove(get_turf(src))
-		id = null
+/// Returns TRUE on success.
+/obj/item/device/pda/verb/remove_id(mob/user)
+	if(issilicon(user))
+		return FALSE
+
+	if(user.incapacitated())
+		to_chat(user, "<span class='notice'>You cannot do this while restrained.</span>")
+		return FALSE
+
+	if(!in_range(src, user))
+		to_chat(user, "<span class='notice'>You are too far away.</span>")
+		return FALSE
+
+	if(!id)
+		to_chat(user, "<span class='notice'>This PDA does not have an ID in it.</span>")
+		return FALSE
+	user.put_in_hands(id)
+	id = null
+	return TRUE
 
 /obj/item/device/pda/verb/verb_remove_id()
 	set category = "Object"
 	set name = "Remove id"
 	set src in usr
 
-	if(issilicon(usr))
-		return
+	remove_id(usr)
 
-	if ( can_use(usr) )
-		if(id)
-			remove_id()
-		else
-			to_chat(usr, "<span class='notice'>This PDA does not have an ID in it.</span>")
-	else
-		to_chat(usr, "<span class='notice'>You cannot do this while restrained.</span>")
-
-/obj/item/device/pda/CtrlClick()
-	if ( can_use(usr) ) // Checks that the PDA is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
-		verb_remove_pen(usr)
+/obj/item/device/pda/AltClick()
+	if(remove_id(usr))
 		return
 	return ..()
+
+/// Returns TRUE on success.
+/obj/item/device/pda/proc/remove_pen(mob/user)
+	if(issilicon(user))
+		return FALSE
+
+	if(user.incapacitated())
+		to_chat(user, "<span class='notice'>You cannot do this while restrained.</span>")
+		return FALSE
+
+	if(!in_range(src, user))
+		to_chat(user, "<span class='notice'>You are too far away.</span>")
+		return FALSE
+
+	var/obj/item/weapon/pen/O = locate() in src
+	if(!O)
+		to_chat(user, "<span class='notice'>This PDA does not have a pen in it.</span>")
+		return FALSE
+
+	user.put_in_hands(O)
+	to_chat(user, "<span class='notice'>You remove \the [O] from \the [src].</span>")
+	return TRUE
+
 
 /obj/item/device/pda/verb/verb_remove_pen()
 	set category = "Object"
 	set name = "Remove pen"
 	set src in usr
 
-	if(issilicon(usr))
-		return
+	remove_pen(usr)
 
-	if ( can_use(usr) )
-		var/obj/item/weapon/pen/O = locate() in src
-		if(O)
-			if (istype(loc, /mob))
-				var/mob/M = loc
-				if(M.get_active_hand() == null)
-					M.put_in_hands(O)
-					to_chat(usr, "<span class='notice'>You remove \the [O] from \the [src].</span>")
-					return
-			O.forceMove(get_turf(src))
-		else
-			to_chat(usr, "<span class='notice'>This PDA does not have a pen in it.</span>")
-	else
-		to_chat(usr, "<span class='notice'>You cannot do this while restrained.</span>")
-
-/obj/item/device/pda/AltClick()
-	if ( can_use(usr) ) // Checks that the PDA is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
-		verb_remove_id(usr)
+/obj/item/device/pda/CtrlClick()
+	if(remove_pen(usr))
 		return
 	return ..()
 
@@ -429,14 +435,13 @@ var/global/msg_id = 0
 			to_chat(user, "<span class='notice'>Card scanned.</span>")
 		else
 			//Basic safety check. If either both objects are held by user or PDA is on ground and card is in hand.
-			if(((src in user.contents) && (C in user.contents)) || (istype(loc, /turf) && in_range(src, user) && (C in user.contents)) )
-				if( can_use(user) )//If they can still act.
-					id_check(user, 2)
-					to_chat(user, "<span class='notice'>You put \the [C] into \the [src]'s slot.</span>")
-					var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in applications
-					if(message_app && message_app.incoming_transactions.len)
-						message_app.receive_incoming_transactions(id)
-					updateSelfDialog()//Update self dialog on success.
+			if(in_range(src, user))
+				id_check(user, 2)
+				to_chat(user, "<span class='notice'>You put \the [C] into \the [src]'s slot.</span>")
+				var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in applications
+				if(message_app && message_app.incoming_transactions.len)
+					message_app.receive_incoming_transactions(id)
+				updateSelfDialog()//Update self dialog on success.
 			return	//Return in case of failed check or when successful.
 		updateSelfDialog()//For the non-input related code.
 	else if(istype(C, /obj/item/device/paicard) && !src.pai)
