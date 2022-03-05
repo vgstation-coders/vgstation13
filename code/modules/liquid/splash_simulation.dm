@@ -166,6 +166,25 @@ var/list/datum/puddle/puddles = list()
 		if(50 to INFINITY)
 			icon_state = "7"*/
 
+/obj/effect/decal/cleanable/puddle/relativewall()
+	if(volume > 50)
+		var/junction=findSmoothingNeighbors()
+		icon_state = "puddle[junction]"
+	else
+		icon_state = "puddle0"
+
+/obj/effect/decal/cleanable/puddle/canSmoothWith()
+	var/static/list/smoothables = list(
+		obj/effect/decal/cleanable/puddle,
+	)
+	return smoothables
+
+/obj/effect/decal/cleanable/puddle/isSmoothableNeighbor(obj/effect/decal/cleanable/puddle/A)
+	if (istype(A) && A.volume < 50)
+		return 0
+
+	return ..()
+
 /turf/proc/can_accept_liquid(from_direction)
 	return 0
 /turf/proc/can_leave_liquid(from_direction)
