@@ -23,11 +23,11 @@
 	var/damaged_sound	//Path to audible sound when the item is damaged but not fully destroyed.
 	var/glanced_sound	//Path to audible sound when the item recives a glancing attack not strong enough to damage it.
 
-/obj/item/proc/on_broken(var/atom/target, var/range, var/speed, var/override, var/fly_speed, var/atom/hit_atom) //Called right before an object breaks.
+/obj/item/proc/on_broken(var/datum/throwparams/propelparams, var/atom/hit_atom) //Called right before an object breaks.
 	//Drop and and propel any fragments:
-	drop_fragments(target,range,speed,override,fly_speed)
+	drop_fragments(propelparams)
 	//Drop and propel any contents:
-	drop_contents(target,range,speed,override,fly_speed)
+	drop_contents(propelparams)
 	//Spill any reagents:
 	spill_reagents(hit_atom)
 	if(breaks_text)
@@ -37,8 +37,8 @@
 	else if(damaged_sound)
 		playsound(src, damaged_sound, 50, 1)
 
-/obj/item/proc/drop_fragments(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Separate proc in case special stuff happens with a given item's fragments. Parameters are for throwing the fragments.
-	if(breakable_fragments.len)
+/obj/item/proc/drop_fragments(var/datum/throwparams/propelparams) //Seperate proc in case special stuff happens with a given item's fragments. Parameters are for throwing the fragments.
+	if(breakable_fragments?.len)
 		var/oneeach=(isnull(fragment_amounts) || breakable_fragments.len != fragment_amounts.len) //default to 1 of each fragment type if fragment_amounts isn't specified or there's a length mismatch
 		var/numtodrop
 		var/thisfragment
@@ -53,15 +53,15 @@
 				//Transfer fingerprints, fibers, and bloodstains to the fragment.
 				transfer_fingerprints(src,O)
 				transfer_item_blood_data(src,O)
-				if(target && range && speed) //Propel the fragment if specified.
-					O.throw_at(target,range,speed,override,fly_speed)
+				if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed) //Propel the fragment if specified.
+					O.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
 
-/obj/item/proc/drop_contents(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Drop the contents of the item and propel them if the item itself received a propulsive blow.
+/obj/item/proc/drop_contents(var/datum/throwparams/propelparams) //Drop the contents of the item and propel them if the item itself received a propulsive blow.
 	if(contents.len)
 		for(var/obj/item/thiscontent in contents)
 			thiscontent.forceMove(src.loc)
-			if(target && range && speed) //Propel the content if specified.
-				thiscontent.throw_at(target,range,speed,override,fly_speed)
+			if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed) //Propel the content if specified.
+				thiscontent.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
 
 /obj/item/proc/spill_reagents(var/atom/hit_atom) //Spill any reagents contained within the item onto the floor, and the atom it hit when it broke, if applicable.
 	if(!isnull(reagents))
@@ -69,7 +69,7 @@
 			reagents.reaction(hit_atom, TOUCH)
 		reagents.reaction(get_turf(src), TOUCH) //Then spill it onto the floor.
 
-/obj/item/proc/take_damage(var/incoming_damage, var/mute = TRUE)
+/obj/item/proc/take_damage(var/incoming_damage, var/mute = TRUE, var/skip_break = FALSE)
 	var/thisdmg=(incoming_damage>max(damage_armor,damage_resist)) * (incoming_damage-damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
 	health-=thisdmg
 	play_hit_sounds(thisdmg)
@@ -79,6 +79,8 @@
 		if(health>0) //Only if the item isn't ready to break.
 			message_take_hit(mute)
 		damaged_updates()
+		if(!skip_break)
+			try_break()
 		return 1 //return 1 if the item took damage
 
 /obj/item/proc/play_hit_sounds(var/thisdmg, var/hear_glanced = TRUE, var/hear_damaged = TRUE) //Plays any relevant sounds whenever the item is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
@@ -134,82 +136,101 @@
 	else
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The item shatters!"
 
-/obj/item/proc/break_item(var/atom/target, var/range, var/speed, var/override , var/fly_speed, var/hit_atom) //Breaks the item if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be thrown upon breaking.
+/obj/item/proc/try_break(var/datum/throwparams/propelparams, var/hit_atom) //Breaks the item if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be thrown upon breaking.
 	if(breakable_flags && health<=0)
-		on_broken(target,range,speed,override,fly_speed,hit_atom)
+		on_broken(propelparams, hit_atom)
 		qdel(src)
 		return TRUE //Return TRUE if the item was broken
 	else
 		return FALSE //Return FALSE if the item wasn't broken
 
+
+/datum/throwparams //throw_at() input parameters as a datum to make function inputs neater
+	var/throw_target
+	var/throw_range
+	var/throw_speed
+	var/throw_override
+	var/throw_fly_speed
+
+/datum/throwparams/New(var/target, var/range, var/speed, var/override, var/fly_speed)
+	throw_target = target
+	throw_range = range
+	throw_speed = speed
+	throw_override = override
+	throw_fly_speed = fly_speed
+
+
 /obj/item/throw_at(var/atom/target, var/range, var/speed, var/override , var/fly_speed) //Called when an item is thrown, and checks if it's broken or not. If it is broken the fragments are thrown instead, otherwise the item is thrown normally.
-	if(breakable_flags && break_item(target,range,speed,override,fly_speed))
-		return
-	else
-		..()
+	if(breakable_flags)
+		var/datum/throwparams/propelparams = new /datum/throwparams(target, range, speed, override, fly_speed)
+		if(try_break(propelparams))
+		 return
+	..()
+
+/obj/item/proc/breakable_check_weapon(var/obj/item/this_weapon) //Check if a weapon isn't excluded from being used to attempt to break an item.
+	if(breakable_exclude)
+		for(var/obj/item/this_excl in breakable_exclude)
+			if(istype(this_weapon, this_excl))
+				return FALSE
+	return TRUE
 
 /////////////////////
 
 //Breaking items:
 
 //Attacking the item with a wielded weapon or other item
+
 /obj/item/attackby(obj/item/W, mob/user)
 	if(isobserver(user) || !Adjacent(user) || user.is_in_modules(src))
 		return
-
-	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && loc != user) //Smash items on the ground, but not in your inventory.
-		if(!isnull(breakable_exclude)) //Check that the weapon isn't specifically excluded from hitting this item
-			for(var/obj/item/this_excl in breakable_exclude)
-				if(istype(W,this_excl))
-					return ..()
+	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && breakable_check_weapon(W) && isturf(loc)) //Smash items on the ground, but not in your inventory.
 		user.do_attack_animation(src, W)
 		user.delayNextAttack(1 SECONDS)
 		add_fingerprint(user)
-		var/glanced=!take_damage(W.force)
+		var/glanced=!take_damage(W.force, skip_break = TRUE)
 		user.visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You hit \the [src] with \the [W][generate_break_text(glanced)]<span>")
-		break_item()
+		try_break()
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE)
 			W.take_damage(min(W.force, BREAKARMOR_MEDIUM),FALSE) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
-			W.break_item()
-		return
 	else
 		..()
 
 //Simple animals attacking the item
+
 /obj/item/attack_animal(mob/living/simple_animal/M)
 	if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_UNARMED)
 		M.do_attack_animation(src, M)
 		M.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper))
+		var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper), skip_break = TRUE)
 		M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced)]</span>")
-		break_item()
+		try_break()
 	else
 		..()
 
 //Item ballistically colliding with something
 
-/obj/item/throw_impact(atom/hit_atom, var/speed, mob/user)
+/obj/item/throw_impact(atom/impacted_atom, var/speed, mob/user)
 	..()
 	if(!(breakable_flags & BREAKABLE_AS_THROWN))
 		return
-	if(!(breakable_flags & BREAKABLE_MOB) && istype(hit_atom, /mob)) //Don't break when it hits a mob if it's not flagged with BREAKABLE_MOB
+	if(!(breakable_flags & BREAKABLE_MOB) && istype(impacted_atom, /mob)) //Don't break when it hits a mob if it's not flagged with BREAKABLE_MOB
 		return
 	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
 		//Unless the item falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
 		var/thisdmg = 5 * get_total_scaled_w_class(1) / speed //impact damage scales with the weight class and speed of the item. since a smaller speed is faster, it's a divisor.
-		if(istype(hit_atom, /turf/simulated/floor))
-			take_damage(thisdmg/2)
+		if(istype(impacted_atom, /turf/simulated/floor))
+			take_damage(thisdmg/2, skip_break = TRUE)
 		else
-			take_damage(thisdmg, FALSE) //Be verbose about the item taking damage.
-	break_item(null,null,null,null,null,hit_atom)
+			take_damage(thisdmg, mute = FALSE, skip_break = TRUE) //Be verbose about the item taking damage.
+		try_break(hit_atom = impacted_atom)
 
 //Item being hit by a projectile
 
 /obj/item/bullet_act(var/obj/item/projectile/proj)
 	..()
 	if(breakable_flags & BREAKABLE_WEAPON)
-		take_damage(proj.damage)
+		take_damage(proj.damage, skip_break = TRUE)
 	var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (get_total_scaled_w_class(3))))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the total weight class of the item.
 	if(impact_power)
 		//Throw the item in the direction the projectile was traveling
@@ -217,7 +238,7 @@
 		var/turf/T = get_edge_target_turf(loc, propel_dir)
 		throw_at(T, impact_power, proj.projectile_speed)
 	else if(breakable_flags & BREAKABLE_WEAPON)
-		break_item()
+		try_break()
 
 /obj/item/proc/get_total_scaled_w_class(var/scalepower=3) //Returns a scaled sum of the weight class of the item itself and all of its contents, if any.
 	//scalepower raises the w_class of each item to that exponent before adding it to the total. This helps avoid things like a container full of tiny objects being heavier than it should.
@@ -246,14 +267,13 @@
 
 		biter.do_attack_animation(src, biter)
 		biter.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(thisdmg)
+		var/glanced=!take_damage(thisdmg, skip_break = TRUE)
 		biter.visible_message("<span class='warning'>\The [biter] [loc == biter ? "[attacktype2] down on" : "leans over and [attacktype2]"] \the [src]!</span>",
 		"<span class='notice'>You [loc == biter ? "[attacktype] down on" : "lean over and [attacktype]"] \the [src][glanced ? "... ouch!" : "[generate_break_text()]"]</span>")
+		try_break()
 		if(glanced)
 			//Damage the biter's mouth.
 			biter.apply_damage(BREAKARMOR_FLIMSY, BRUTE, TARGET_MOUTH)
-		else
-			break_item()
 	else
 		..()
 

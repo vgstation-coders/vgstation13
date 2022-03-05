@@ -1281,7 +1281,7 @@ var/global/list/image/blood_overlays = list()
 	//Attempt to damage the item if it's breakable here.
 	var/glanced
 	if(breakable_flags & BREAKABLE_UNARMED)
-		glanced=!take_damage(kick_power)
+		glanced=!take_damage(kick_power, skip_break = TRUE)
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
 
@@ -1296,7 +1296,7 @@ var/global/list/image/blood_overlays = list()
 				sleep(5)
 		throw_at(T, kick_power, 1)
 	else
-		break_item() //Check for the item breaking anyway even if it didn't get propelled.
+		try_break() //Check for the item breaking anyway even if it didn't get propelled.
 	Crossed(H) //So you can't kick shards while naked without suffering
 
 

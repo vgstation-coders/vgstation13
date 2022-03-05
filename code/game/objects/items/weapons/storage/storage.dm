@@ -365,12 +365,15 @@
 	if(!istype(W))
 		return 0
 
-	//Allow smashing of storage items on harm intent without also putting the weapon into the container.
-	var/mob/user = usr
-	if (user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && loc != user)
-		return 0
+
 
 	if(usr) //WHYYYYY
+
+		//Allow smashing of storage items on harm intent without also putting the weapon into the container.
+		var/mob/user = usr
+		if (user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && breakable_check_weapon(W) && isturf(loc))
+			return 0
+
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
