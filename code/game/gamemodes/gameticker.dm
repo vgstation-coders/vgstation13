@@ -482,24 +482,12 @@ var/datum/controller/gameticker/ticker
 			declare_completion()
 
 			gameend_time = world.time / 10
-			if(config.map_voting && player_list.len)
+			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
 
-			else
-				var/list/maps = get_votable_maps()
-				var/list/choices=list()
-				for(var/key in maps)
-					choices.Add(key)
-				var/mapname=pick(choices)
-				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
-				watchdog.chosen_map = mapname
-				log_game("Server chose [watchdog.chosen_map]!")
-
-
-		spawn(50)
 			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
 				if(!delay_end && !watchdog.waiting)
@@ -540,7 +528,6 @@ var/datum/controller/gameticker/ticker
 			else
 				to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 				delay_end = 2
-
 	return 1
 
 /datum/controller/gameticker/proc/init_PDAgames_leaderboard()
@@ -573,7 +560,7 @@ var/datum/controller/gameticker/ticker
 	if(!ooc_allowed)
 		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
 		ooc_allowed = TRUE
-	scoreboard()
+	score.main()
 	return 1
 
 /datum/controller/gameticker/proc/bomberman_declare_completion()

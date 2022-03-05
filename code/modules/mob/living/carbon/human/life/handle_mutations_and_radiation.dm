@@ -167,11 +167,6 @@
 						adjustBrainLoss(rand(1,3))
 					else
 						victim.take_damage(rand(1,5)*rad_multiplier,silent = 0)
-			if(prob(0.5*major_rad_multiplier))
-				//Become uncloneable
-				if(!(M_NOCLONE in mutations))
-					to_chat(src, "<span class = 'blob'>You feel something twist and break.</span>")
-					mutations |= M_NOCLONE
 		if(rad_tick > RADDOSECRITICAL)
 			if(prob(2*major_rad_multiplier))
 				//Minor limb mutation

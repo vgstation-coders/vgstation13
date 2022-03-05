@@ -12278,6 +12278,11 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /turf/simulated/floor,
 /area/mine/production)
 "aCw" = (
@@ -12289,6 +12294,11 @@
 "aCx" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
 	},
 /turf/simulated/floor,
 /area/mine/production)
@@ -12349,11 +12359,21 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "aCG" = (
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/zpipe/up/supply,
+/obj/structure/cable{
+	d1 = 8;
+	d2 = 16;
+	icon_state = "8-16"
+	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "aCI" = (
@@ -12922,6 +12942,11 @@
 "aEO" = (
 /obj/machinery/atmospherics/pipe/zpipe/up/supply/hidden{
 	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 16;
+	icon_state = "1-16"
 	},
 /turf/simulated/floor,
 /area/mine/production)
@@ -16213,16 +16238,23 @@
 	},
 /area/medical/virology_break)
 "aLy" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
 	},
-/obj/structure/z_ladder/up,
-/turf/simulated/floor{
-	icon_state = "white"
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/area/medical/virology)
+/turf/simulated/floor,
+/area/mine/production)
 "aLz" = (
 /obj/machinery/atmospherics/pipe/zpipe/up/supply/hidden,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 16;
+	icon_state = "2-16"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16307,6 +16339,11 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16366,6 +16403,11 @@
 /area/medical/virology_break)
 "aLQ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16376,6 +16418,16 @@
 	name = "Emergency NanoMed";
 	pixel_y = -32;
 	req_access_txt = "0"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -16391,6 +16443,11 @@
 	pixel_x = 2;
 	pixel_y = 6
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16401,6 +16458,11 @@
 	pixel_x = -1;
 	pixel_y = 12
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16409,6 +16471,11 @@
 /obj/machinery/light_switch{
 	pixel_y = -30
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16416,6 +16483,14 @@
 "aLV" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/green,
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 27
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16436,6 +16511,11 @@
 	locked = 1;
 	name = "Virology Interior Airlock";
 	req_access_txt = "39"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -16500,6 +16580,11 @@
 "aMg" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -16681,6 +16766,11 @@
 	dir = 2;
 	pixel_y = 0
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16843,6 +16933,11 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16920,14 +17015,6 @@
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
 "aNg" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
@@ -17023,11 +17110,6 @@
 	},
 /area/mine/explored)
 "aNt" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/binary/valve{
 	dir = 4
 	},
@@ -17164,13 +17246,13 @@
 	},
 /area/medical/virology)
 "aNF" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
 /turf/simulated/floor/plating,
 /area/medical/virology_break)
@@ -17239,11 +17321,6 @@
 	},
 /area/medical/virology)
 "aNL" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
@@ -32555,8 +32632,18 @@
 /turf/simulated/floor,
 /area/supply/storage)
 "cbr" = (
-/obj/machinery/light/small,
-/turf/simulated/floor/plating,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
 /area/medical/virology)
 "cbs" = (
 /obj/effect/decal/warning_stripes{
@@ -33371,6 +33458,11 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "whitehall"
@@ -37370,6 +37462,11 @@
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/zpipe/down/supply{
 	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 32;
+	icon_state = "4-32"
 	},
 /turf/simulated/open,
 /area/science/hallway)
@@ -81411,8 +81508,15 @@
 /turf/simulated/floor,
 /area/crew_quarters/fitness)
 "kzf" = (
-/obj/structure/z_ladder,
-/turf/simulated/floor/plating,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
 /area/medical/virology)
 "kzu" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -82853,6 +82957,11 @@
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/zpipe/down/supply/hidden{
 	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 32;
+	icon_state = "1-32"
 	},
 /turf/simulated/open,
 /area/medical/virology_break)
@@ -86834,6 +86943,11 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor,
 /area/supply/miningdock)
 "muV" = (
@@ -89476,11 +89590,6 @@
 /turf/simulated/floor/plating,
 /area/security/checkpoint2)
 "nsp" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/small{
 	dir = 8
 	},
@@ -95707,18 +95816,20 @@
 /turf/simulated/floor,
 /area/supply/miningdock)
 "pvS" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
+/obj/machinery/power/apc{
+	dir = 1;
+	pixel_y = 24
 	},
-/turf/simulated/floor/plating,
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
 /area/medical/virology)
 "pvX" = (
 /obj/structure/closet/secure_closet/exile,
@@ -103473,14 +103584,6 @@
 	},
 /turf/simulated/floor/airless,
 /area/derelict/hallway/primary)
-"ssK" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/plating,
-/area/medical/virology)
 "ssL" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -107355,11 +107458,6 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
 "tIR" = (
@@ -109070,22 +109168,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/hallway/primary/central)
-"ush" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/medical/virology)
 "usl" = (
 /obj/machinery/computer/prisoner,
 /obj/machinery/light{
@@ -116232,17 +116314,6 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/central)
-"wPK" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
-	},
-/turf/simulated/floor/plating,
-/area/medical/virology)
 "wPQ" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -119245,6 +119316,11 @@
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/zpipe/down/supply/hidden{
 	dir = 1
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 32;
+	icon_state = "1-32"
 	},
 /turf/simulated/open,
 /area/supply/miningdock)
@@ -149333,7 +149409,7 @@ atK
 awj
 axr
 azz
-aCw
+aLy
 aEN
 azz
 azz
@@ -169607,9 +169683,9 @@ aLI
 aLQ
 aLX
 aMg
-aNj
+cbr
 aMD
-aMY
+kzf
 aNl
 aNx
 aMk
@@ -170213,7 +170289,7 @@ aLq
 aMi
 aMi
 aMi
-aMW
+pvS
 aNk
 aNz
 aNI
@@ -170515,7 +170591,7 @@ aLq
 aMk
 aMl
 aMF
-aLy
+aMW
 aNk
 aNA
 aNJ
@@ -260508,13 +260584,13 @@ aNF
 kXn
 lBW
 aLq
-qIF
-qIF
-aLZ
-aLZ
-aLZ
-aLZ
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -260810,13 +260886,13 @@ aMA
 aLq
 aLq
 aLq
-qIF
-qIF
-aLZ
-wPK
-aMt
-aMt
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -261110,15 +261186,15 @@ aMP
 aMP
 aNL
 nsp
-aMP
+aMS
 tIt
-usu
-usu
-ush
-ssK
-kzf
-cbr
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -261414,13 +261490,13 @@ aNT
 xkE
 hCQ
 jIC
-qIF
-qIF
-aML
-aMt
-aMt
-aMt
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -261716,13 +261792,13 @@ aOk
 aMq
 aMq
 aMq
-qIF
-qIF
-aLZ
-aLZ
-pvS
-aLZ
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp

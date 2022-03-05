@@ -135,7 +135,7 @@
 			O.reagents.trans_to(result_obj, O.reagents.total_volume)
 		qdel(O)
 	container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
-	score["meals"]++
+	score.meals++
 	return result_obj
 
 

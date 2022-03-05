@@ -241,7 +241,7 @@ var/list/nuclear_bombs = list()
 					else
 						src.icon_state = "nuclearbomb1"
 						bomb_set = 0
-						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						score.nukedefuse = min(src.timeleft, score.nukedefuse)
 						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 						if (istype(dynamic_mode))
 							dynamic_mode.update_stillborn_rulesets()
@@ -250,7 +250,7 @@ var/list/nuclear_bombs = list()
 					if(safety)
 						src.timing = 0
 						bomb_set = 0
-						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						score.nukedefuse = min(src.timeleft, score.nukedefuse)
 						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 						if (istype(dynamic_mode))
 							dynamic_mode.update_stillborn_rulesets()
@@ -293,10 +293,9 @@ var/list/nuclear_bombs = list()
 	src.yes_code = 0
 	src.safety = 1
 	src.icon_state = "nuclearbomb3"
-	playsound(src,'sound/machines/Alarm.ogg',100,0,5)
+	world << sound('sound/machines/Alarm.ogg')
 	if (ticker)
 		ticker.explosion_in_progress = 1
-	sleep(100)
 
 	enter_allowed = 0
 

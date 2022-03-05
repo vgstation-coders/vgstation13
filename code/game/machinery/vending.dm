@@ -3713,3 +3713,76 @@ var/global/num_vending_terminals = 1
 		return pick(grey_slogans)
 	else
 		return pick(product_slogans)
+
+/obj/machinery/vending/lotto
+	name = "\improper Lotto Tickets"
+	desc = "Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here."
+	product_slogans = list(
+		"Feeling lucky?",
+		"Money won is twice as sweet as money earned.",
+		"The greatest risk is not taking one."
+	)
+	product_ads = list(
+		"Quit while you’re ahead. All the best gamblers do.",
+		"If there weren’t luck involved, I would win every time.",
+		"Better an ounce of luck than a pound of gold.",
+		"Behind bad luck comes good luck."
+	)
+	vend_reply = "Good luck!"
+	icon_state = "Lotto"
+	icon_vend = "Lotto-vend"
+	products = list(
+		/obj/item/toy/lotto_ticket/gold_rush = 20,
+		/obj/item/toy/lotto_ticket/diamond_hands = 20,
+		/obj/item/toy/lotto_ticket/phazon_fortune = 20
+		)
+	contraband = list(
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 1
+		)
+	prices = list(
+		/obj/item/toy/lotto_ticket/gold_rush = 5,
+		/obj/item/toy/lotto_ticket/diamond_hands = 20,
+		/obj/item/toy/lotto_ticket/phazon_fortune = 50,
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 100
+		)
+
+	pack = /obj/structure/vendomatpack/lotto
+
+
+/obj/machinery/vending/lotto/proc/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend, var/mob/living/carbon/human/character, var/winnings)
+		var/rank = character.mind.role_alt_title
+		var/datum/speech/speech = announcement_intercom.create_speech("[character.real_name],[rank ? " [rank]," : " visitor," ] has won [winnings] credits in the lottery!", transmitter=announcement_intercom)
+		speech.speaker = lottovend
+		speech.name = "Lottery Tickets Vendor"
+		speech.job = "Automated Announcement"
+		speech.as_name = "Lottery Tickets Vendor"
+		speech.frequency = COMMON_FREQ
+
+		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
+		qdel(speech)
+
+/obj/machinery/vending/lotto/attackby(obj/item/I, user)
+	add_fingerprint(user)
+	if(istype(I, /obj/item/toy/lotto_ticket))
+		var/obj/item/toy/lotto_ticket/T = I
+		if(!T.iswinner)
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
+		else
+			visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund!\"")
+			dispense_cash(T.winnings, get_turf(src))
+			playsound(src, "polaroid", 50, 1)
+			if(T.winnings >= 10000)
+				AnnounceWinner(src,user,T.winnings)
+			qdel(T)
+	else
+		..()
+
+/obj/machinery/vending/lotto/throw_item()
+	var/mob/living/target = locate() in view(7, src)
+
+	if (!target)
+		return 0
+	for(var/i = 0 to rand(3,12))
+		var/obj/I = new /obj/item/weapon/paper(get_turf(src))
+		I.throw_at(target, 16, 3)

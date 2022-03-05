@@ -208,7 +208,11 @@
 	name = "Captain PDA"
 	default_cartridge = /obj/item/weapon/cartridge/captain
 	icon_state = "pda-c"
-	detonate = 0
+	accepted_viruses = list(
+		/datum/pda_app/cart/virus/honk,
+		/datum/pda_app/cart/virus/silent,
+		/datum/pda_app/cart/virus/fake_uplink,
+	)
 
 /obj/item/device/pda/captain/New()
 	starting_apps.Cut()
@@ -355,7 +359,10 @@
 /obj/item/device/pda/ai
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "pda_server-on"
-	detonate = 0
+	accepted_viruses = list(
+		/datum/pda_app/cart/virus/honk,
+		/datum/pda_app/cart/virus/silent,
+	)
 
 /obj/item/device/pda/ai/New()
 	starting_apps += /datum/pda_app/spam_filter

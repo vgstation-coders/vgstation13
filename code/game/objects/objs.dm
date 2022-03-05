@@ -215,7 +215,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/clockworkify()
 	return
 
-/obj/shuttle_rotate(var/angle)
+/obj/map_element_rotate(var/angle)
 	..()
 	if(req_access_dir)
 		req_access_dir = turn(req_access_dir, -angle)
@@ -615,7 +615,7 @@ a {
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
 			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
-		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA)
+		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM)
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.

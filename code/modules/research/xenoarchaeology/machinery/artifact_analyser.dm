@@ -144,7 +144,7 @@ var/anomaly_report_num = 0
 			if (!A.analyzed)
 				A.analyzed = TRUE
 				if (istype(A.primary_effect) && A.primary_effect.triggered)
-					score["artifacts"]++
+					score.artifacts++
 
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)

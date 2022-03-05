@@ -142,7 +142,6 @@
         last_honk = world.time
 
 /datum/pda_app/cart/virus/honk
-    name = "Honk Virus"
     desc = "HONK!"
     icon = "pda_honk"
 
@@ -157,7 +156,6 @@
     starting_apps = list(/datum/pda_app/cart/virus/silent)
 
 /datum/pda_app/cart/virus/silent
-    name = "Silent Virus"
     desc = "..."
 
 /datum/pda_app/cart/virus/silent/infect(var/obj/item/device/pda/P,var/mob/U)

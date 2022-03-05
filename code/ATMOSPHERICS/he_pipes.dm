@@ -31,7 +31,7 @@
 				node.update_icon(1)
 
 	// BubbleWrap
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/New()
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/update_dir()
 	..()
 	initialize_directions_he = initialize_directions	// The auto-detection from /pipe is good enough for a simple HE pipe
 	// BubbleWrap END
@@ -164,19 +164,19 @@
 	thermal_conductivity = WALL_HEAT_TRANSFER_COEFFICIENT
 
 	// BubbleWrap
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/New()
-	.. ()
-	switch ( dir )
-		if ( SOUTH )
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/update_dir()
+	..()
+	switch (dir)
+		if (SOUTH)
 			initialize_directions = NORTH
 			initialize_directions_he = SOUTH
-		if ( NORTH )
+		if (NORTH)
 			initialize_directions = SOUTH
 			initialize_directions_he = NORTH
-		if ( EAST )
+		if (EAST)
 			initialize_directions = WEST
 			initialize_directions_he = EAST
-		if ( WEST )
+		if (WEST)
 			initialize_directions = EAST
 			initialize_directions_he = WEST
 	// BubbleWrap END
@@ -230,8 +230,8 @@
 	var/obj/machinery/atmospherics/node3
 	radiation_capacity = 24000
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/New()
-	.. ()
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/update_dir()
+	..()
 	switch(dir)
 		if(NORTH)
 			initialize_directions_he = EAST|SOUTH|WEST
@@ -308,8 +308,8 @@
 	var/obj/machinery/atmospherics/node4
 	radiation_capacity = 24000
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/New()
-	.. ()
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/update_dir()
+	..()
 	initialize_directions_he = NORTH|SOUTH|EAST|WEST
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)

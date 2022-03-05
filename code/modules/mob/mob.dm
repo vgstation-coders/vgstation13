@@ -1794,7 +1794,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/shuttle_act()
 	return
 
-/mob/shuttle_rotate(angle)
+/mob/map_element_rotate(angle)
 	src.dir = turn(src.dir, -angle) //rotating pixel_x and pixel_y is bad
 
 /mob/can_shuttle_move()

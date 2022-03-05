@@ -59,7 +59,7 @@
 /turf/simulated/wall/shuttle/unsmoothed/relativewall()
 	return
 
-/turf/simulated/shuttle/wall/unsmoothed/shuttle_rotate(angle)
+/turf/simulated/shuttle/wall/unsmoothed/map_element_rotate(angle)
 	src.transform = turn(src.transform, angle)
 
 /turf/simulated/wall/shuttle/unsmoothed/black

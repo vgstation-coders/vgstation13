@@ -132,7 +132,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(powernet)
 		powernet.set_to_build() // update the powernets
 
-/obj/structure/cable/shuttle_rotate(angle)
+/obj/structure/cable/map_element_rotate(angle)
 	if(d1)
 		d1 = turn(d1, -angle)
 	if(d2)
@@ -384,6 +384,42 @@ By design, d1 is the smallest direction and d2 is the highest
 			else
 				C.powernet.add_cable(src) // else, we simply connect to the matching cable powernet
 
+// merge with the powernets of power objects in the given direction above or below
+/obj/structure/cable/proc/mergeZConnectedNetworks()
+	var/turf/T = GetAbove(src) // go up
+
+	if(T)
+		for(var/obj/structure/cable/C in T)
+			if(!C)
+				continue
+			if(src == C)
+				continue
+			if(C.d1 == DOWN || C.d2 == DOWN) // we've got a z-matching cable
+				if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
+					var/datum/powernet/newPN = new /datum/powernet/
+					newPN.add_cable(C)
+				if(powernet) //if we already have a powernet, then merge the two powernets
+					merge_powernets(powernet,C.powernet)
+				else
+					C.powernet.add_cable(src) //else, we simply connect to the matching cable powernet
+
+	T = GetBelow(src) // go down
+
+	if(T)
+		for(var/obj/structure/cable/C in T)
+			if(!C)
+				continue
+			if(src == C)
+				continue
+			if(C.d1 == UP || C.d2 == UP) // we've got a z-matching cable
+				if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
+					var/datum/powernet/newPN = new /datum/powernet/
+					newPN.add_cable(C)
+				if(powernet) // if we already have a powernet, then merge the two powernets
+					merge_powernets(powernet, C.powernet)
+				else
+					C.powernet.add_cable(src) // else, we simply connect to the matching cable powernet
+
 // merge with the powernets of power objects in the given direction
 /obj/structure/cable/proc/mergeConnectedNetworks(var/direction)
 	var/fdir = (!direction) ? 0 : turn(direction, 180) // flip the direction, to match with the source position on its turf
@@ -481,6 +517,16 @@ By design, d1 is the smallest direction and d2 is the highest
 			. += power_list(T, src, d1 ^ 12, powernetless_only) // get diagonally matching cables
 
 	. += power_list(loc, src, d1, powernetless_only) // get on turf matching cables
+
+	// multi z
+	if(d1 == UP || d2 == UP)
+		T = GetAbove(src)
+		if(T)
+			. += power_list(T, src, DOWN, powernetless_only) // get on turf matching cables
+	if(d1 == DOWN || d2 == DOWN)
+		T = GetBelow(src)
+		if(T)
+			. += power_list(T, src, UP, powernetless_only) // get on turf matching cables
 
 	// do the same on the second direction (which can't be 0)
 	T = get_step(src, d2)

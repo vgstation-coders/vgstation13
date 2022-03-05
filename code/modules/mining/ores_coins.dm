@@ -369,7 +369,7 @@
 			while(R.checkIngredients(materials)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
 					materials.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
-					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+					score.oremined += 1 //Count this ore piece as processed for the scoreboard
 					if(istype(loc,/obj/structure/forge))
 						drop_stack(R.yieldtype,loc.loc)
 					else

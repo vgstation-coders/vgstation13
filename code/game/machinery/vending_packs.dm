@@ -306,3 +306,9 @@
 	name = "Zam Snax recharge pack"
 	targetvendomat = /obj/machinery/vending/zamsnax
 	icon_state = "ZAMsnax"
+
+/obj/structure/vendomatpack/lotto
+	name = "Lotto Ticket recharge pack"
+	targetvendomat = /obj/machinery/vending/lotto
+	icon_state = "sale"
+

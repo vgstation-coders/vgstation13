@@ -12,62 +12,52 @@
     var/list/incoming_transactions = list()
 
 /datum/pda_app/messenger/get_dat(var/mob/user)
-    var/dat = ""
-    switch(mode)
-        if (0)
-            dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-                <a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
-                <a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
-                <a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
-                <a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_mail'></span> Messages</a>"}
-            dat += "<br>"
-            var/datum/pda_app/cart/virus/detonate/DV = locate(/datum/pda_app/cart/virus/detonate) in pda_device.applications
-            if(DV)
-                dat += "<b>[DV.charges] detonation charges left.</b><HR>"
-            var/datum/pda_app/cart/virus/honk/HV = locate(/datum/pda_app/cart/virus/honk) in pda_device.applications
-            if(HV)
-                dat += "<b>[HV.charges] viral files left.</b><HR>"
-            var/datum/pda_app/cart/virus/silent/SV = locate(/datum/pda_app/cart/virus/silent) in pda_device.applications
-            if(SV)
-                dat += "<b>[SV.charges] viral files left.</b><HR>"
+	var/dat = ""
+	switch(mode)
+		if (0)
+			dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
+				<a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
+				<a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
+				<a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
+				<a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_mail'></span> Messages</a>"}
+			dat += "<br>"
+			for(var/datum/pda_app/cart/virus/V in pda_device.applications)
+				dat += "<b>[V.charges] [V.virus_type] left.</b><HR>"
 
+			dat += {"<h4><span class='pda_icon pda_menu'></span> Detected PDAs</h4>
+				<ul>"}
+			var/count = 0
 
-            dat += {"<h4><span class='pda_icon pda_menu'></span> Detected PDAs</h4>
-                <ul>"}
-            var/count = 0
+			if (!toff)
+				for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
+					if (P == src)
+						continue
+					if(P.hidden)
+						continue
+					dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
+					if (pda_device.id && !istype(P,/obj/item/device/pda/ai))
+						dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
 
-            if (!toff)
-                for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
-                    if (P == src)
-                        continue
-                    if(P.hidden)
-                        continue
-                    dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
-                    if (pda_device.id && !istype(P,/obj/item/device/pda/ai))
-                        dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
-                    if (DV && P.detonate)
-                        dat += " (<a href='byond://?src=\ref[DV];target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
-                    if (HV)
-                        dat += " (<a href='byond://?src=\ref[HV];target=\ref[P]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
-                    if (SV)
-                        dat += " (<a href='byond://?src=\ref[SV];target=\ref[P]'>*Send Virus*</a>)"
-                    dat += "</li>"
-                    count++
-            dat += "</ul>"
-            if (count == 0)
-                dat += "None detected.<br>"
-        if(1)
-            dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-                <a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
-                <h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
-            for(var/note in tnote)
-                dat += tnote[note]
-                var/icon/img = imglist[note]
-                if(img)
-                    user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
-                    dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
-            dat += "<br>"
-    return dat
+					for(var/datum/pda_app/cart/virus/V in pda_device.applications)
+						if (P.accepted_viruses && P.accepted_viruses.len && (V.type in P.accepted_viruses))
+							dat += " (<a href='byond://?src=\ref[V];target=\ref[P]'>[V.icon ? "<span class='pda_icon [V.icon]'></span>" : ""]*[V.name]*</a>)"
+					dat += "</li>"
+					count++
+			dat += "</ul>"
+			if (count == 0)
+				dat += "None detected.<br>"
+		if(1)
+			dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
+				<a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
+				<h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
+			for(var/note in tnote)
+				dat += tnote[note]
+				var/icon/img = imglist[note]
+				if(img)
+					user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
+					dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+			dat += "<br>"
+	return dat
 
 /datum/pda_app/messenger/Topic(href, href_list)
     if(..())

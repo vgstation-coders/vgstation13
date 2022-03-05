@@ -1,161 +1,2036 @@
-"ak" = (/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/machinery/power/apc{cell_type = 0; coverlocked = 0; dir = 1; icon_state = "apc1"; locked = 0; opened = 1; pixel_y = 24},/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning_corner"; tag = "icon-warning_corner (EAST)"},/turf/simulated/floor/dark,/area/vault/amelab)
-"av" = (/obj/effect/blob/shield{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"aS" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small{dir = 8},/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"bb" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor,/area/vault/amelab)
-"bZ" = (/obj/machinery/atmospherics/binary/valve{dir = 4},/obj/structure/cable/yellow{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating,/area/vault/amelab)
-"ci" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/amelab)
-"co" = (/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,/turf/simulated/wall/r_wall,/area/vault/amelab/lab)
-"cU" = (/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 8; tag = "icon-pathmarker (WEST)"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"dh" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/amelab)
-"ds" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/amelab)
-"dX" = (/obj/structure/closet/cabinet,/obj/item/clothing/head/pajamahat/blue,/obj/item/clothing/under/pj/blue,/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
-"ei" = (/obj/structure/cable/yellow{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/effect/decal/warning_stripes/pathmarkers/yellow,/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 4; tag = "icon-pathmarker (EAST)"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"ev" = (/obj/effect/decal/cleanable/dirt,/obj/structure/rack,/obj/machinery/light/small,/obj/item/stack/sheet/metal{amount = 10},/obj/item/stack/sheet/mineral/plasma{amount = 30},/turf/simulated/floor/plating,/area/vault/amelab)
-"eT" = (/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 1},/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{dir = 1},/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/dark,/area/vault/amelab)
-"gh" = (/obj/item/weapon/paper_bin/black{pixel_x = -3; pixel_y = 7},/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"gk" = (/turf/simulated/wall/r_wall,/area/vault/amelab)
-"gT" = (/obj/structure/closet/secure_closet/engineering_electrical,/obj/machinery/alarm{pixel_y = 24},/obj/machinery/light{dir = 4},/turf/simulated/floor/dark,/area/vault/amelab)
-"hu" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/structure/rack,/obj/machinery/light,/obj/item/clothing/suit/storage/hazardvest,/obj/item/device/multitool,/turf/simulated/floor/plating/airless,/area/vault/amelab/lab)
-"hH" = (/obj/structure/closet/emcloset,/obj/item/tool/crowbar/red,/turf/simulated/floor/dark,/area/vault/amelab)
-"hK" = (/obj/machinery/suit_storage_unit/engie/empty,/turf/simulated/floor/dark,/area/vault/amelab)
-"hN" = (/obj/structure/cable/yellow{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/dark,/area/vault/amelab)
-"iG" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
-"jj" = (/obj/structure/lattice,/obj/structure/girder/reinforced,/turf/space,/area/vault/amelab)
-"jk" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/alarm{pixel_y = 24},/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/amelab)
-"jo" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/dark,/area/vault/amelab)
-"jH" = (/obj/machinery/door/airlock/maintenance_hatch{name = "Emergency Power Cell Storage"},/turf/simulated/floor/plating,/area/vault/amelab)
-"jK" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/amelab)
-"jR" = (/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{dir = 4},/obj/machinery/atmospherics/unary/vent_pump/on/layered{canSpawnMice = 0; dir = 4},/obj/machinery/computer/security/telescreen/entertainment{pixel_y = 32},/turf/simulated/floor,/area/vault/amelab)
-"kr" = (/obj/machinery/alarm{pixel_y = 24},/obj/machinery/suit_storage_unit/engie/empty,/turf/simulated/floor/dark,/area/vault/amelab)
-"kI" = (/obj/machinery/door/airlock/maintenance_hatch{name = "Maintenance"},/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating,/area/vault/amelab)
-"kQ" = (/obj/machinery/door/airlock/external{name = "Nanotrasen Exerimental AME Lab"},/obj/docking_port/destination/vault/amelab{dir = 2},/turf/unsimulated/floor{name = "plating"},/area/vault/amelab)
-"lW" = (/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{dir = 4},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/dark,/area/vault/amelab)
-"mM" = (/obj/machinery/door/airlock/maintenance_hatch{name = "Extra Jar Storage"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating,/area/vault/amelab)
-"mY" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/dark,/area/vault/amelab)
-"na" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/turf/simulated/floor,/area/vault/amelab)
-"no" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"ny" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 4; tag = "icon-map (EAST)"},/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 4; tag = "icon-map (EAST)"},/turf/simulated/floor,/area/vault/amelab)
-"nW" = (/obj/structure/closet/cabinet,/obj/item/clothing/head/pajamahat/red,/obj/item/clothing/under/pj/red,/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
-"oI" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/wall/r_wall,/area/vault/amelab/lab)
-"pn" = (/turf/simulated/wall/r_wall,/area/vault/amelab/lab)
-"qc" = (/obj/effect/blob/node{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"qP" = (/obj/machinery/door/airlock/external,/turf/unsimulated/floor{name = "plating"},/area/vault/amelab)
-"rg" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor/dark,/area/vault/amelab)
-"rj" = (/obj/structure/catwalk,/turf/space,/area/vault/amelab)
-"rE" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning_corner"; tag = "icon-warning_corner (NORTH)"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/dark,/area/vault/amelab)
-"so" = (/obj/machinery/light{dir = 4},/obj/machinery/vending/coffee,/turf/simulated/floor/dark,/area/vault/amelab)
-"sM" = (/obj/item/weapon/stool{pixel_y = 8},/turf/simulated/floor,/area/vault/amelab)
-"sT" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/effect/decal/cleanable/blood/oil,/turf/simulated/floor/plating/airless,/area/vault/amelab/lab)
-"tp" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 10; tag = ""},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 4; tag = "icon-map (EAST)"},/turf/simulated/floor,/area/vault/amelab)
-"uh" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area/vault/amelab)
-"uj" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
-"uA" = (/obj/effect/blob/shield{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; dir = 4; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"uH" = (/obj/structure/lattice,/obj/structure/grille,/turf/space,/area/vault/amelab)
-"vs" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/mob/living/simple_animal/hostile/blobspore{icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter containment jar"},/obj/machinery/atmospherics/unary/vent{dir = 1},/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = "icon-platingdmg1"},/area/vault/amelab/lab)
-"vM" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/light{dir = 4},/obj/machinery/newscaster{dir = 4; pixel_x = -28},/turf/simulated/floor,/area/vault/amelab)
-"wv" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/amelab)
-"wx" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 10},/turf/simulated/wall/r_wall,/area/vault/amelab/lab)
-"wy" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets/random_amount,/turf/simulated/floor,/area/vault/amelab)
-"xe" = (/obj/machinery/door/airlock/glass{name = "Break Room"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/amelab)
-"yK" = (/obj/structure/extinguisher_cabinet{dir = 2; pixel_y = 30},/obj/machinery/light{dir = 8},/obj/structure/sign/nosmoking_2{pixel_x = -28},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/amelab)
-"zI" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/amelab)
-"Af" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating/airless,/area/vault/amelab/lab)
-"Ah" = (/obj/machinery/vending/wallmed1{name = "Emergency NanoMed"; pixel_x = -28},/obj/machinery/light{dir = 8},/obj/structure/closet/crate/bin,/obj/item/trash/used_tray,/obj/item/trash/chips,/obj/item/trash/lollipopstick,/obj/item/weapon/reagent_containers/food/snacks/donkpocket{bitecount = 1},/obj/item/weapon/reagent_containers/food/drinks/sillycup{icon_state = "coffee"; name = "\improper coffee cup"},/turf/simulated/floor{dir = 4; icon_state = "yellow"},/area/vault/amelab)
-"AO" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/mob/living/simple_animal/hostile/blobspore{icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter containment jar"},/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = "icon-platingdmg1"},/area/vault/amelab/lab)
-"AW" = (/obj/structure/sign/securearea,/turf/simulated/wall/r_wall,/area/vault/amelab)
-"AX" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical{pixel_y = 5},/obj/machinery/light{dir = 4},/turf/simulated/floor/dark,/area/vault/amelab)
-"Bw" = (/obj/structure/grille{opacity = 1},/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = "icon-platingdmg1"},/area/vault/amelab/lab)
-"Cr" = (/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"Cx" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/amelab)
-"CN" = (/obj/structure/bed,/obj/item/weapon/bedsheet/orange,/obj/machinery/computer/security/telescreen/entertainment{pixel_y = 32},/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
-"Dn" = (/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 4; tag = "icon-pathmarker (EAST)"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"DI" = (/obj/structure/sign/securearea{name = "ENGINEERING ACCESS"},/turf/simulated/wall/r_wall,/area/vault/amelab/lab)
-"DS" = (/obj/effect/decal{alpha = 150; icon = 'icons/logos.dmi'; icon_state = "nano-logo"},/turf/simulated/floor/dark,/area/vault/amelab)
-"DV" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 1; tag = "icon-map (NORTH)"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/dark,/area/vault/amelab)
-"Eg" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/power/port_gen/pacman,/obj/structure/cable/yellow,/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/plating,/area/vault/amelab)
-"Ek" = (/obj/effect/decal/cleanable/dirt,/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/obj/machinery/power/terminal{dir = 4},/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"Et" = (/obj/machinery/door/airlock{id_tag = "Dorm2"; name = "Dorm 2"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/amelab)
-"Fm" = (/obj/machinery/door/airlock/glass{name = "EVA"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/dark,/area/vault/amelab)
-"Fw" = (/turf/unsimulated/floor{name = "plating"},/area/vault/amelab)
-"Fz" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/airlock/engineering{name = "Antimatter Engine Lab"},/obj/item/tape/atmos{icon_state = "atmos_door"},/turf/simulated/floor/plating,/area/vault/amelab)
-"FC" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden,/obj/machinery/meter,/turf/simulated/floor/plating,/area/vault/amelab)
-"GM" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor,/area/vault/amelab)
-"GP" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/dark,/area/vault/amelab)
-"Hm" = (/obj/structure/table,/obj/item/weapon/storage/bag/clipboard/amelab{pixel_x = 3},/turf/simulated/floor,/area/vault/amelab)
-"HV" = (/obj/machinery/artifact_analyser,/obj/item/weapon/disk/hdd/anomaly{name = "Encrypted HDD (AME-8078)"; pixel_x = -2; pixel_y = -3},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"IZ" = (/obj/effect/blob/normal{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"Jw" = (/turf/simulated/wall,/area/vault/amelab)
-"JI" = (/obj/structure/catwalk,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/space,/area/vault/amelab)
-"JP" = (/obj/structure/cable/yellow{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/effect/decal/warning_stripes/pathmarkers/yellow,/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 8; tag = "icon-pathmarker (WEST)"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"Ky" = (/obj/effect/blob/shield{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; dir = 1; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"Kz" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/turf/simulated/floor/plating,/area/vault/amelab)
-"KK" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/amelab)
-"KO" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/item/weapon/anodevice,/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 8; tag = "icon-pathmarker (WEST)"},/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 4; tag = "icon-pathmarker (EAST)"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"LT" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/obj/machinery/computer/powermonitor,/turf/simulated/floor/plating/airless,/area/vault/amelab/lab)
-"Me" = (/obj/machinery/door/airlock{id_tag = "Dorm1"; name = "Dorm 1"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/amelab)
-"ME" = (/obj/structure/rack,/obj/item/weapon/cell/high/empty{pixel_x = -3; pixel_y = 3},/obj/item/weapon/anobattery,/obj/item/weapon/cell/high/empty{pixel_x = 3; pixel_y = -3},/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"MU" = (/obj/structure/grille/broken,/turf/space,/area/vault/amelab)
-"Nn" = (/obj/structure/table,/obj/item/device/multitool{pixel_x = 5},/obj/item/device/radio{pixel_x = -6; pixel_y = 6},/obj/item/tool/screwdriver{pixel_x = 12; pixel_y = 5},/turf/simulated/floor/dark,/area/vault/amelab)
-"ND" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 10; tag = ""},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/structure/table,/obj/machinery/microwave{pixel_x = -3; pixel_y = 6},/turf/simulated/floor,/area/vault/amelab)
-"Op" = (/obj/structure/catwalk,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/space,/area/vault/amelab)
-"Os" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/amelab)
-"OH" = (/obj/machinery/atmospherics/unary/tank/air,/turf/simulated/floor/plating,/area/vault/amelab)
-"OY" = (/obj/structure/rack,/obj/item/weapon/am_containment{pixel_x = -6; pixel_y = 3},/obj/item/weapon/am_containment,/obj/item/weapon/am_containment{pixel_x = 6; pixel_y = -2},/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"Qs" = (/obj/effect/blob/normal{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; dir = 1; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"QU" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/amelab)
-"Rz" = (/obj/machinery/atmospherics/unary/vent_scrubber/on{dir = 4},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"RB" = (/obj/structure/closet/crate{density = 0; icon_state = "crateopen"; name = "AME Shielding Crate"; opened = 1},/obj/item/weapon/storage/box{desc = "It's just a box, although with an interesting design."; icon = 'icons/obj/machines/new_ame.dmi'},/turf/simulated/floor/dark,/area/vault/amelab)
-"RX" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/obj/structure/cable/yellow{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/dark,/area/vault/amelab)
-"Sk" = (/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"Sx" = (/obj/item/weapon/am_containment/huge,/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"SA" = (/obj/effect/blob/factory{asleep = 1; desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."; icon = 'icons/mob/blob/blob_AME_64x64.dmi'; looks = "AME_new"; name = "antimatter reactor section"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"SJ" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/decal/warning_stripes/pathmarkers/yellow,/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 1; tag = "icon-pathmarker (NORTH)"},/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"SM" = (/turf/space,/area/vault/amelab)
-"TS" = (/obj/structure/rack,/obj/item/weapon/tank/oxygen,/obj/item/taperoll/atmos,/obj/item/clothing/mask/gas,/turf/simulated/floor/plating,/area/vault/amelab)
-"Ug" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor/dark,/area/vault/amelab)
-"Uh" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 9},/turf/simulated/wall/r_wall,/area/vault/amelab/lab)
-"US" = (/obj/effect/decal/cleanable/dirt,/obj/item/device/am_shielding_container,/obj/machinery/light/small{dir = 8},/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"Vg" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 9},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/amelab)
-"Vn" = (/obj/machinery/atmospherics/unary/vent,/obj/structure/catwalk,/turf/space,/area/vault/amelab)
-"Vu" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/amelab)
-"VK" = (/obj/structure/rack,/obj/item/clothing/suit/bio_suit/anomaly,/obj/item/clothing/head/bio_hood/anomaly,/obj/item/clothing/mask/breath,/obj/item/clothing/glasses/science,/obj/item/clothing/gloves/latex,/obj/machinery/light,/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor/plating/airless,/area/vault/amelab/lab)
-"VP" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/amelab)
-"Wf" = (/obj/machinery/atmospherics/unary/vent_pump/on/layered{canSpawnMice = 0; dir = 4},/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{dir = 4},/obj/machinery/light/small{dir = 8},/obj/machinery/alarm{dir = 1; pixel_y = -22},/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
-"Wu" = (/obj/machinery/power/battery_port,/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"Wx" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/obj/effect/blob/core/ame_lab,/turf/simulated/floor/engine/airless,/area/vault/amelab/lab)
-"WE" = (/obj/structure/catwalk,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 10},/turf/space,/area/vault/amelab)
-"WH" = (/obj/structure/bed,/obj/item/weapon/bedsheet/orange,/obj/machinery/computer/security/telescreen/entertainment{pixel_y = 32},/obj/item/weapon/disk/shuttle_coords/vault/amelab,/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/amelab)
-"WI" = (/obj/effect/decal/cleanable/cobweb2,/obj/structure/closet/crate{density = 0; icon_state = "crateopen"; name = "portable SMES crate"; opened = 1},/obj/item/weapon/stock_parts/capacitor{pixel_x = -4; pixel_y = -1},/obj/item/weapon/stock_parts/capacitor{pixel_x = -2; pixel_y = 3},/obj/item/weapon/stock_parts/capacitor{pixel_x = 4; pixel_y = 3},/obj/item/weapon/stock_parts/capacitor{pixel_y = 4},/obj/item/weapon/stock_parts/micro_laser{pixel_x = 4; pixel_y = -2},/obj/item/weapon/stock_parts/micro_laser{pixel_x = 5},/obj/item/weapon/stock_parts/micro_laser{pixel_x = -3},/obj/item/weapon/stock_parts/micro_laser{pixel_y = 3},/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/circuitboard/port_smes,/turf/simulated/floor/plating,/area/vault/amelab/lab)
-"WM" = (/obj/machinery/atmospherics/unary/vent_pump/on/layered,/obj/machinery/atmospherics/unary/vent_scrubber/on/layered,/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/dark,/area/vault/amelab)
-"Xc" = (/obj/structure/lattice,/turf/space,/area/vault/amelab)
-"Xz" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/amelab)
-"XC" = (/obj/structure/lattice,/obj/structure/lattice,/obj/structure/grille,/turf/space,/area/vault/amelab)
-"YN" = (/turf/simulated/floor/dark,/area/vault/amelab)
-"Zf" = (/obj/structure/catwalk,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 5},/turf/space,/area/vault/amelab)
-"ZP" = (/obj/structure/table,/obj/effect/decal/cleanable/cobweb,/obj/machinery/cell_charger,/turf/simulated/floor/plating,/area/vault/amelab)
-"ZY" = (/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating,/area/vault/amelab/lab)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ak" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/apc{
+	cell_type = 0;
+	coverlocked = 0;
+	dir = 1;
+	icon_state = "apc1";
+	locked = 0;
+	opened = 1;
+	pixel_y = 24
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (EAST)"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"av" = (
+/obj/effect/blob/shield{
+	asleep = 1;
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility.";
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter reactor section"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"aS" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"bb" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor,
+/area/vault/amelab)
+"bZ" = (
+/obj/machinery/atmospherics/binary/valve{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"ci" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"co" = (
+/obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
+/turf/simulated/wall/r_wall,
+/area/vault/amelab/lab)
+"cU" = (
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"dh" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"ds" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"dX" = (
+/obj/structure/closet/cabinet,
+/obj/item/clothing/head/pajamahat/blue,
+/obj/item/clothing/under/pj/blue,
+/turf/simulated/floor/carpet{
+	icon_state = "carpetnoconnect"
+	},
+/area/vault/amelab)
+"ei" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/yellow,
+/obj/effect/decal/warning_stripes/pathmarkers/yellow{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"ev" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/rack,
+/obj/machinery/light/small,
+/obj/item/stack/sheet/metal{
+	amount = 10
+	},
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"eT" = (
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	dir = 1
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"gh" = (
+/obj/item/weapon/paper_bin/black{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"gk" = (
+/turf/simulated/wall/r_wall,
+/area/vault/amelab)
+"gT" = (
+/obj/structure/closet/secure_closet/engineering_electrical,
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"hu" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/rack,
+/obj/machinery/light,
+/obj/item/clothing/suit/storage/hazardvest,
+/obj/item/device/multitool,
+/turf/simulated/floor/plating/airless,
+/area/vault/amelab/lab)
+"hH" = (
+/obj/structure/closet/emcloset,
+/obj/item/tool/crowbar/red,
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"hK" = (
+/obj/machinery/suit_storage_unit/engie/empty,
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"hN" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"iG" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor/carpet{
+	icon_state = "carpetnoconnect"
+	},
+/area/vault/amelab)
+"jj" = (
+/obj/structure/lattice,
+/obj/structure/girder/reinforced,
+/turf/space,
+/area/vault/amelab)
+"jk" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"jo" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"jH" = (
+/obj/machinery/door/airlock/maintenance_hatch{
+	name = "Emergency Power Cell Storage"
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"jK" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"jR" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	canSpawnMice = 0;
+	dir = 4
+	},
+/obj/machinery/computer/security/telescreen/entertainment{
+	pixel_y = 32
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"kr" = (
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/obj/machinery/suit_storage_unit/engie/empty,
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"kI" = (
+/obj/machinery/door/airlock/maintenance_hatch{
+	name = "Maintenance"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"kQ" = (
+/obj/machinery/door/airlock/external{
+	name = "Nanotrasen Exerimental AME Lab"
+	},
+/obj/docking_port/destination/vault/amelab{
+	dir = 2
+	},
+/turf/unsimulated/floor{
+	name = "plating"
+	},
+/area/vault/amelab)
+"lW" = (
+/obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"mM" = (
+/obj/machinery/door/airlock/maintenance_hatch{
+	name = "Extra Jar Storage"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"mY" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"na" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 5;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 5;
+	tag = "icon-intact (NORTHEAST)"
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"no" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"ny" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-map (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-map (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"nW" = (
+/obj/structure/closet/cabinet,
+/obj/item/clothing/head/pajamahat/red,
+/obj/item/clothing/under/pj/red,
+/turf/simulated/floor/carpet{
+	icon_state = "carpetnoconnect"
+	},
+/area/vault/amelab)
+"oI" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/wall/r_wall,
+/area/vault/amelab/lab)
+"pn" = (
+/turf/simulated/wall/r_wall,
+/area/vault/amelab/lab)
+"qc" = (
+/obj/effect/blob/node{
+	asleep = 1;
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility.";
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter reactor section"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"qP" = (
+/obj/machinery/door/airlock/external,
+/turf/unsimulated/floor{
+	name = "plating"
+	},
+/area/vault/amelab)
+"rg" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"rj" = (
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/amelab)
+"rE" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"so" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/machinery/vending/coffee,
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"sM" = (
+/obj/item/weapon/stool{
+	pixel_y = 8
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"sT" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/cleanable/blood/oil,
+/turf/simulated/floor/plating/airless,
+/area/vault/amelab/lab)
+"tp" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 10;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-map (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"uh" = (
+/obj/structure/lattice,
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/amelab)
+"uj" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor/carpet{
+	icon_state = "carpetnoconnect"
+	},
+/area/vault/amelab)
+"uA" = (
+/obj/effect/blob/shield{
+	asleep = 1;
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility.";
+	dir = 4;
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter reactor section"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"uH" = (
+/obj/structure/lattice,
+/obj/structure/grille,
+/turf/space,
+/area/vault/amelab)
+"vs" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/mob/living/simple_animal/hostile/blobspore{
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter containment jar"
+	},
+/obj/machinery/atmospherics/unary/vent{
+	dir = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg1";
+	tag = "icon-platingdmg1"
+	},
+/area/vault/amelab/lab)
+"vM" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/machinery/newscaster{
+	dir = 4;
+	pixel_x = -28
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"wv" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/amelab)
+"wx" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/amelab/lab)
+"wy" = (
+/obj/structure/table,
+/obj/item/weapon/storage/box/donkpockets/random_amount,
+/turf/simulated/floor,
+/area/vault/amelab)
+"xe" = (
+/obj/machinery/door/airlock/glass{
+	name = "Break Room"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"yK" = (
+/obj/structure/extinguisher_cabinet{
+	dir = 2;
+	pixel_y = 30
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/structure/sign/nosmoking_2{
+	pixel_x = -28
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/amelab)
+"zI" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"Af" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/amelab/lab)
+"Ah" = (
+/obj/machinery/vending/wallmed1{
+	name = "Emergency NanoMed";
+	pixel_x = -28
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/structure/closet/crate/bin,
+/obj/item/trash/used_tray,
+/obj/item/trash/chips,
+/obj/item/trash/lollipopstick,
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket{
+	bitecount = 1
+	},
+/obj/item/weapon/reagent_containers/food/drinks/sillycup{
+	icon_state = "coffee";
+	name = "\improper coffee cup"
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellow"
+	},
+/area/vault/amelab)
+"AO" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/mob/living/simple_animal/hostile/blobspore{
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter containment jar"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg1";
+	tag = "icon-platingdmg1"
+	},
+/area/vault/amelab/lab)
+"AW" = (
+/obj/structure/sign/securearea,
+/turf/simulated/wall/r_wall,
+/area/vault/amelab)
+"AX" = (
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/mechanical{
+	pixel_y = 5
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Bw" = (
+/obj/structure/grille{
+	opacity = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg1";
+	tag = "icon-platingdmg1"
+	},
+/area/vault/amelab/lab)
+"Cr" = (
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"Cx" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"CN" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/orange,
+/obj/machinery/computer/security/telescreen/entertainment{
+	pixel_y = 32
+	},
+/turf/simulated/floor/carpet{
+	icon_state = "carpetnoconnect"
+	},
+/area/vault/amelab)
+"Dn" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/yellow{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/yellow{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"DI" = (
+/obj/structure/sign/securearea{
+	name = "ENGINEERING ACCESS"
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/amelab/lab)
+"DS" = (
+/obj/effect/decal{
+	alpha = 150;
+	icon = 'icons/logos.dmi';
+	icon_state = "nano-logo"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"DV" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 1;
+	tag = "icon-map (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Eg" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/power/port_gen/pacman,
+/obj/structure/cable/yellow,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"Ek" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/terminal{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"Et" = (
+/obj/machinery/door/airlock{
+	id_tag = "Dorm2";
+	name = "Dorm 2"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"Fm" = (
+/obj/machinery/door/airlock/glass{
+	name = "EVA"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Fw" = (
+/turf/unsimulated/floor{
+	name = "plating"
+	},
+/area/vault/amelab)
+"Fz" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/door/airlock/engineering{
+	name = "Antimatter Engine Lab"
+	},
+/obj/item/tape/atmos{
+	icon_state = "atmos_door"
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"FC" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/machinery/meter,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"GM" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/turf/simulated/floor,
+/area/vault/amelab)
+"GP" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Hm" = (
+/obj/structure/table,
+/obj/item/weapon/storage/bag/clipboard/amelab{
+	pixel_x = 3
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"HV" = (
+/obj/machinery/artifact_analyser,
+/obj/item/weapon/disk/hdd/anomaly{
+	name = "Encrypted HDD (AME-8078)";
+	pixel_x = -2;
+	pixel_y = -3
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"IZ" = (
+/obj/effect/blob/normal{
+	asleep = 1;
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility.";
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter reactor section"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"Jw" = (
+/turf/simulated/wall,
+/area/vault/amelab)
+"JI" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/space,
+/area/vault/amelab)
+"JP" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/yellow,
+/obj/effect/decal/warning_stripes/pathmarkers/yellow{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"Ky" = (
+/obj/effect/blob/shield{
+	asleep = 1;
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility.";
+	dir = 1;
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter reactor section"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"Kz" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"KK" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"KO" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/item/weapon/anodevice,
+/obj/effect/decal/warning_stripes/pathmarkers/yellow{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/yellow{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"LT" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/computer/powermonitor,
+/turf/simulated/floor/plating/airless,
+/area/vault/amelab/lab)
+"Me" = (
+/obj/machinery/door/airlock{
+	id_tag = "Dorm1";
+	name = "Dorm 1"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"ME" = (
+/obj/structure/rack,
+/obj/item/weapon/cell/high/empty{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/weapon/anobattery,
+/obj/item/weapon/cell/high/empty{
+	pixel_x = 3;
+	pixel_y = -3
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"MU" = (
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/amelab)
+"Nn" = (
+/obj/structure/table,
+/obj/item/device/multitool{
+	pixel_x = 5
+	},
+/obj/item/device/radio{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/tool/screwdriver{
+	pixel_x = 12;
+	pixel_y = 5
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"ND" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 10;
+	tag = ""
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 10;
+	tag = "icon-intact (SOUTHWEST)"
+	},
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_x = -3;
+	pixel_y = 6
+	},
+/turf/simulated/floor,
+/area/vault/amelab)
+"Op" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/space,
+/area/vault/amelab)
+"Os" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"OH" = (
+/obj/machinery/atmospherics/unary/tank/air,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"OY" = (
+/obj/structure/rack,
+/obj/item/weapon/am_containment{
+	pixel_x = -6;
+	pixel_y = 3
+	},
+/obj/item/weapon/am_containment,
+/obj/item/weapon/am_containment{
+	pixel_x = 6;
+	pixel_y = -2
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"Qs" = (
+/obj/effect/blob/normal{
+	asleep = 1;
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility.";
+	dir = 1;
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter reactor section"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"QU" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/turf/simulated/floor,
+/area/vault/amelab)
+"Rz" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"RB" = (
+/obj/structure/closet/crate{
+	density = 0;
+	icon_state = "crateopen";
+	name = "AME Shielding Crate";
+	opened = 1
+	},
+/obj/item/weapon/storage/box{
+	desc = "It's just a box, although with an interesting design.";
+	icon = 'icons/obj/machines/new_ame.dmi'
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"RX" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Sk" = (
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"Sx" = (
+/obj/item/weapon/am_containment/huge,
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"SA" = (
+/obj/effect/blob/factory{
+	asleep = 1;
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility.";
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi';
+	looks = "AME_new";
+	name = "antimatter reactor section"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"SJ" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/yellow,
+/obj/effect/decal/warning_stripes/pathmarkers/yellow{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"SM" = (
+/turf/space,
+/area/vault/amelab)
+"TS" = (
+/obj/structure/rack,
+/obj/item/weapon/tank/oxygen,
+/obj/item/taperoll/atmos,
+/obj/item/clothing/mask/gas,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"Ug" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-intact (EAST)"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Uh" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/turf/simulated/wall/r_wall,
+/area/vault/amelab/lab)
+"US" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/am_shielding_container,
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"Vg" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"Vn" = (
+/obj/machinery/atmospherics/unary/vent,
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/amelab)
+"Vu" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"VK" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/bio_suit/anomaly,
+/obj/item/clothing/head/bio_hood/anomaly,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/glasses/science,
+/obj/item/clothing/gloves/latex,
+/obj/machinery/light,
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/amelab/lab)
+"VP" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
+/turf/simulated/floor,
+/area/vault/amelab)
+"Wf" = (
+/obj/machinery/atmospherics/unary/vent_pump/on/layered{
+	canSpawnMice = 0;
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
+	dir = 4
+	},
+/obj/machinery/light/small{
+	dir = 8
+	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
+/turf/simulated/floor/carpet{
+	icon_state = "carpetnoconnect"
+	},
+/area/vault/amelab)
+"Wu" = (
+/obj/machinery/power/battery_port,
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"Wx" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/effect/blob/core/ame_lab,
+/turf/simulated/floor/engine/airless,
+/area/vault/amelab/lab)
+"WE" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
+/turf/space,
+/area/vault/amelab)
+"WH" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/orange,
+/obj/machinery/computer/security/telescreen/entertainment{
+	pixel_y = 32
+	},
+/obj/item/weapon/disk/shuttle_coords/vault/amelab,
+/turf/simulated/floor/carpet{
+	icon_state = "carpetnoconnect"
+	},
+/area/vault/amelab)
+"WI" = (
+/obj/effect/decal/cleanable/cobweb2,
+/obj/structure/closet/crate{
+	density = 0;
+	icon_state = "crateopen";
+	name = "portable SMES crate";
+	opened = 1
+	},
+/obj/item/weapon/stock_parts/capacitor{
+	pixel_x = -4;
+	pixel_y = -1
+	},
+/obj/item/weapon/stock_parts/capacitor{
+	pixel_x = -2;
+	pixel_y = 3
+	},
+/obj/item/weapon/stock_parts/capacitor{
+	pixel_x = 4;
+	pixel_y = 3
+	},
+/obj/item/weapon/stock_parts/capacitor{
+	pixel_y = 4
+	},
+/obj/item/weapon/stock_parts/micro_laser{
+	pixel_x = 4;
+	pixel_y = -2
+	},
+/obj/item/weapon/stock_parts/micro_laser{
+	pixel_x = 5
+	},
+/obj/item/weapon/stock_parts/micro_laser{
+	pixel_x = -3
+	},
+/obj/item/weapon/stock_parts/micro_laser{
+	pixel_y = 3
+	},
+/obj/item/weapon/stock_parts/console_screen,
+/obj/item/weapon/stock_parts/console_screen,
+/obj/item/weapon/circuitboard/port_smes,
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
+"WM" = (
+/obj/machinery/atmospherics/unary/vent_pump/on/layered,
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Xc" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault/amelab)
+"Xz" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"XC" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/obj/structure/grille,
+/turf/space,
+/area/vault/amelab)
+"YN" = (
+/turf/simulated/floor/dark,
+/area/vault/amelab)
+"Zf" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
+/turf/space,
+/area/vault/amelab)
+"ZP" = (
+/obj/structure/table,
+/obj/effect/decal/cleanable/cobweb,
+/obj/machinery/cell_charger,
+/turf/simulated/floor/plating,
+/area/vault/amelab)
+"ZY" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/amelab/lab)
 
 (1,1,1) = {"
-SMSMSMSMSMSMjjXcuhuHuHAWuHuHuHAWuHuHuHuHuHSMSMSMSMSMSMSM
-SMSMSMSMSMSMSMSMSMSMSMXcSMSMSMXcSMSMSMSMuHSMSMSMSMSMSMSM
-SMSMSMSMSMSMSMSMSMSMSMXcSMSMSMXcSMSMSMSMuhSMSMSMSMSMSMSM
-SMSMSMSMSMSMMUSMSMSMpnpnpnpnpnpnpnSMSMSMXCSMSMSMSMSMSMSM
-SMSMSMSMSMSMXcSMSMpnpnnoSkSkSknopnpnSMSMuHSMSMSMSMSMSMSM
-SMSMSMSMSMSMuhSMSMpnHVcUQsKyKyQsRzwxXcXcAWSMSMSMSMSMSMSM
-SMSMSMJwJwJwJwVnSMpnSxeiWxqcSAuARzcoWESMXcSMSMSMSMSMSMSM
-SMSMSMdhdXCNJwKzpnpnSkSJIZavavIZRzUhZfOpWESMSMSMSMSMSMSM
-SMSMSMJwWfujEttppnpnpnDnKOJPSkSkpnpnpnpnJISMSMSMSMSMSMSM
-rjXcXcJwJwJwJwQUpnMEpnhusTAfLTVKpnOYWIpnZfWESMSMSMSMSMSM
-SMSMSMdhnWWHJwvMpnCrpnpnpnFzDIpnpnUSghpnpnoIpnpnSMSMSMSM
-SMSMSMJwWfiGMenypnaSCrjHakhNrEmMZYZYEkWupnvsAOBwrjSMSMSM
-SMSMSMJwJwJwJwGMpnpnpngkYNmYYNgkpnpnpnpnpnpnpnpngkSMSMSM
-SMSMSMSMSMOsjRVPjkNDJwyKYNWMYNgTJwrgkrhKJwZPOHOHgkSMSMSM
-SMSMSMSMSMKKsMHmsMnaxewvUgRXGPGPFmDVlWjokIbZFCVggkXcXcrj
-SMSMSMSMSMdssMwysMbbJwAhYNDSYNsoJweTNnAXJwEgevTSgkSMSMSM
-SMSMrjXcXcJwciCxXzJwJwJwRBYNhHJwJwciCxXzgkgkgkgkgkSMSMSM
-SMSMSMSMSMXcSMSMSMSMXcJwJwqPJwJwXcSMSMSMSMSMXcSMSMSMSMSM
-SMSMSMSMSMXcSMSMSMSMSMrjjKFwjKrjSMSMSMSMSMSMXcSMSMSMSMSM
-SMSMSMSMSMrjSMSMSMSMSMrjVuFwVurjSMSMSMSMSMSMrjSMSMSMSMSM
-SMSMSMSMSMSMSMSMSMSMSMrjzIkQzIrjSMSMSMSMSMSMSMSMSMSMSMSM
-SMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+rj
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+"}
+(2,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+Xc
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+"}
+(3,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+Xc
+SM
+SM
+SM
+SM
+SM
+SM
+rj
+SM
+SM
+SM
+SM
+SM
+"}
+(4,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+Jw
+dh
+Jw
+Jw
+dh
+Jw
+Jw
+SM
+SM
+SM
+Xc
+SM
+SM
+SM
+SM
+SM
+"}
+(5,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+Jw
+dX
+Wf
+Jw
+nW
+Wf
+Jw
+SM
+SM
+SM
+Xc
+SM
+SM
+SM
+SM
+SM
+"}
+(6,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+Jw
+CN
+uj
+Jw
+WH
+iG
+Jw
+Os
+KK
+ds
+Jw
+Xc
+Xc
+rj
+SM
+SM
+"}
+(7,1,1) = {"
+jj
+SM
+SM
+MU
+Xc
+uh
+Jw
+Jw
+Et
+Jw
+Jw
+Me
+Jw
+jR
+sM
+sM
+ci
+SM
+SM
+SM
+SM
+SM
+"}
+(8,1,1) = {"
+Xc
+SM
+SM
+SM
+SM
+SM
+Vn
+Kz
+tp
+QU
+vM
+ny
+GM
+VP
+Hm
+wy
+Cx
+SM
+SM
+SM
+SM
+SM
+"}
+(9,1,1) = {"
+uh
+SM
+SM
+SM
+SM
+SM
+SM
+pn
+pn
+pn
+pn
+pn
+pn
+jk
+sM
+sM
+Xz
+SM
+SM
+SM
+SM
+SM
+"}
+(10,1,1) = {"
+uH
+SM
+SM
+SM
+pn
+pn
+pn
+pn
+pn
+ME
+Cr
+aS
+pn
+ND
+na
+bb
+Jw
+SM
+SM
+SM
+SM
+SM
+"}
+(11,1,1) = {"
+uH
+SM
+SM
+pn
+pn
+HV
+Sx
+Sk
+pn
+pn
+pn
+Cr
+pn
+Jw
+xe
+Jw
+Jw
+Xc
+SM
+SM
+SM
+SM
+"}
+(12,1,1) = {"
+AW
+Xc
+Xc
+pn
+no
+cU
+ei
+SJ
+Dn
+hu
+pn
+jH
+gk
+yK
+wv
+Ah
+Jw
+Jw
+rj
+rj
+rj
+SM
+"}
+(13,1,1) = {"
+uH
+SM
+SM
+pn
+Sk
+Qs
+Wx
+IZ
+KO
+sT
+pn
+ak
+YN
+YN
+Ug
+YN
+RB
+Jw
+jK
+Vu
+zI
+SM
+"}
+(14,1,1) = {"
+uH
+SM
+SM
+pn
+Sk
+Ky
+qc
+av
+JP
+Af
+Fz
+hN
+mY
+WM
+RX
+DS
+YN
+qP
+Fw
+Fw
+kQ
+SM
+"}
+(15,1,1) = {"
+uH
+SM
+SM
+pn
+Sk
+Ky
+SA
+av
+Sk
+LT
+DI
+rE
+YN
+YN
+GP
+YN
+hH
+Jw
+jK
+Vu
+zI
+SM
+"}
+(16,1,1) = {"
+AW
+Xc
+Xc
+pn
+no
+Qs
+uA
+IZ
+Sk
+VK
+pn
+mM
+gk
+gT
+GP
+so
+Jw
+Jw
+rj
+rj
+rj
+SM
+"}
+(17,1,1) = {"
+uH
+SM
+SM
+pn
+pn
+Rz
+Rz
+Rz
+pn
+pn
+pn
+ZY
+pn
+Jw
+Fm
+Jw
+Jw
+Xc
+SM
+SM
+SM
+SM
+"}
+(18,1,1) = {"
+uH
+SM
+SM
+SM
+pn
+wx
+co
+Uh
+pn
+OY
+US
+ZY
+pn
+rg
+DV
+eT
+ci
+SM
+SM
+SM
+SM
+SM
+"}
+(19,1,1) = {"
+uH
+SM
+SM
+SM
+SM
+Xc
+WE
+Zf
+pn
+WI
+gh
+Ek
+pn
+kr
+lW
+Nn
+Cx
+SM
+SM
+SM
+SM
+SM
+"}
+(20,1,1) = {"
+uH
+SM
+SM
+SM
+SM
+Xc
+SM
+Op
+pn
+pn
+pn
+Wu
+pn
+hK
+jo
+AX
+Xz
+SM
+SM
+SM
+SM
+SM
+"}
+(21,1,1) = {"
+uH
+uH
+uh
+XC
+uH
+AW
+Xc
+WE
+JI
+Zf
+pn
+pn
+pn
+Jw
+kI
+Jw
+gk
+SM
+SM
+SM
+SM
+SM
+"}
+(22,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+WE
+oI
+vs
+pn
+ZP
+bZ
+Eg
+gk
+SM
+SM
+SM
+SM
+SM
+"}
+(23,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+pn
+AO
+pn
+OH
+FC
+ev
+gk
+Xc
+Xc
+rj
+SM
+SM
+"}
+(24,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+pn
+Bw
+pn
+OH
+Vg
+TS
+gk
+SM
+SM
+SM
+SM
+SM
+"}
+(25,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+rj
+gk
+gk
+gk
+gk
+gk
+SM
+SM
+SM
+SM
+SM
+"}
+(26,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+Xc
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+"}
+(27,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+Xc
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+"}
+(28,1,1) = {"
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+SM
+rj
+SM
+SM
+SM
+SM
+SM
+SM
+SM
 "}

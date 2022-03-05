@@ -75,7 +75,7 @@
 					if(/obj/structure/closet/secure_closet/RD)
 						new /obj/item/clothing/suit/storage/wintercoat/medical/science(S)
 
-					if(/obj/structure/closet/secure_closet/medical3 || /obj/structure/closet/secure_closet/paramedic)
+					if(/obj/structure/closet/secure_closet/medical3, /obj/structure/closet/secure_closet/paramedic)
 						new /obj/item/clothing/suit/storage/wintercoat/medical(S)
 						new /obj/item/clothing/suit/storage/wintercoat/medical(S)
 
@@ -85,7 +85,7 @@
 					if(/obj/structure/closet/secure_closet/engineering_chief)
 						new /obj/item/clothing/suit/storage/wintercoat/engineering/ce(S)
 
-					if(/obj/structure/closet/secure_closet/engineering_personal || /obj/structure/closet/secure_closet/engineering_mechanic)
+					if(/obj/structure/closet/secure_closet/engineering_personal, /obj/structure/closet/secure_closet/engineering_mechanic)
 						new /obj/item/clothing/suit/storage/wintercoat/engineering(S)
 						new /obj/item/clothing/suit/storage/wintercoat/engineering(S)
 

@@ -208,29 +208,16 @@ var/auxtools_path
 		return
 
 	if(config.map_voting)
-		//testing("we have done a map vote")
-		if(fexists(vote.chosen_map))
-			//testing("[vote.chosen_map] exists")
-			var/start = 1
-			var/pos = findtext(vote.chosen_map, "/", start)
-			var/lastpos = pos
-			//testing("First slash [lastpos]")
-			while(pos > 0)
-				lastpos = pos
-				pos = findtext(vote.chosen_map, "/", start)
-				start = pos + 1
-				//testing("Next slash [pos]")
-			var/filename = copytext(vote.chosen_map, lastpos + 1, 0)
-			//testing("Found [filename]")
-
-			if(!fcopy(vote.chosen_map, filename))
-				//testing("Fcopy failed, deleting and copying")
+		//get filename
+		var/filename = "vgstation13.dmb"
+		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
+		if(fexists(map_path))
+			//copy file to main folder
+			if(!fcopy(map_path, filename))
 				fdel(filename)
-				fcopy(vote.chosen_map, filename)
-			sleep(60)
-
+				fcopy(map_path, filename)
+			
 	pre_shutdown()
-
 	..()
 
 /world/proc/pre_shutdown()
