@@ -17,7 +17,7 @@
 /area/vault/gingerbread_house)
 "au" = (
 /obj/effect/overlay/puddle,
-/obj/effect/liquid,
+/obj/effect/decal/cleanable/puddle,
 /turf/simulated/floor/mineral/gingerbread_floor,
 /area/vault/gingerbread_house)
 "aG" = (

@@ -5,17 +5,17 @@ var/liquid_delay = 4
 var/list/datum/puddle/puddles = list()
 
 /datum/puddle
-	var/list/obj/effect/liquid/liquid_objects = list()
+	var/list/obj/effect/decal/cleanable/puddle/puddle_objects = list()
 
 /datum/puddle/proc/process()
 //	to_chat(world, "DEBUG: Puddle process!")
-	for(var/obj/effect/liquid/L in liquid_objects)
+	for(var/obj/effect/decal/cleanable/puddle/L in puddle_objects)
 		L.spread()
 
-	for(var/obj/effect/liquid/L in liquid_objects)
+	for(var/obj/effect/decal/cleanable/puddle/L in puddle_objects)
 		L.apply_calculated_effect()
 
-	if(liquid_objects.len == 0)
+	if(puddle_objects.len == 0)
 		qdel(src)
 
 /datum/puddle/New()
@@ -24,7 +24,7 @@ var/list/datum/puddle/puddles = list()
 
 /datum/puddle/Del()
 	puddles -= src
-	for(var/obj/O in liquid_objects)
+	for(var/obj/O in puddle_objects)
 		qdel(O)
 		O = null
 	..()
@@ -48,36 +48,36 @@ var/list/datum/puddle/puddles = list()
 	if(volume <= 0)
 		return
 
-	var/obj/effect/liquid/L = new/obj/effect/liquid(epicenter)
+	var/obj/effect/decal/cleanable/puddle/L = new/obj/effect/decal/cleanable/puddle(epicenter)
 	L.volume = volume
-	L.update_icon2()
+	L.update_icon()
 	var/datum/puddle/P = new/datum/puddle()
-	P.liquid_objects.Add(L)
+	P.puddle_objects.Add(L)
 	L.controller = P
 
 
 
 
-/obj/effect/liquid
-	icon = 'icons/effects/liquid.dmi'
-	icon_state = "0"
-	name = "liquid"
+/obj/effect/decal/cleanable/puddle
+	icon = 'icons/effects/puddle.dmi'
+	icon_state = "puddle0"
+	name = "puddle"
 	var/volume = 0
 	var/new_volume = 0
 	var/datum/puddle/controller
 
-/obj/effect/liquid/New()
+/obj/effect/decal/cleanable/puddle/New()
 	..()
 	if( !isturf(loc) )
 		qdel(src)
 		return
 
-	for( var/obj/effect/liquid/L in loc )
+	for( var/obj/effect/decal/cleanable/puddle/L in loc )
 		if(L != src)
 			qdel(L)
 			L = null
 
-/obj/effect/liquid/proc/spread()
+/obj/effect/decal/cleanable/puddle/proc/spread()
 
 
 //	to_chat(world, "DEBUG: liquid spread!")
@@ -96,16 +96,16 @@ var/list/datum/puddle/puddles = list()
 		if(!T.can_accept_liquid(turn(direction,180))) //Check if this liquid can enter the tile
 			spread_directions.Remove(direction)
 			continue
-		var/obj/effect/liquid/L = locate(/obj/effect/liquid) in T
+		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
 		if(L)
 			if(L.volume >= src.volume)
 				spread_directions.Remove(direction)
 				continue
 			surrounding_volume += L.volume //If liquid already exists, add it's volume to our sum
 		else
-			var/obj/effect/liquid/NL = new(T) //Otherwise create a new object which we'll spread to.
+			var/obj/effect/decal/cleanable/puddle/NL = new(T) //Otherwise create a new object which we'll spread to.
 			NL.controller = src.controller
-			controller.liquid_objects.Add(NL)
+			controller.puddle_objects.Add(NL)
 
 	if(!spread_directions.len)
 //		to_chat(world, "ERROR: No candidate to spread to.")
@@ -124,31 +124,31 @@ var/list/datum/puddle/puddles = list()
 		if(!T)
 //			to_chat(world, "ERROR: Map edge 2!")
 			continue //Map edge
-		var/obj/effect/liquid/L = locate(/obj/effect/liquid) in T
+		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
 		if(L)
 			src.volume -= volume_per_tile //Remove the volume from this tile
 			L.new_volume = L.new_volume + volume_per_tile //Add it to the volume to the other tile
 
-/obj/effect/liquid/proc/apply_calculated_effect()
+/obj/effect/decal/cleanable/puddle/proc/apply_calculated_effect()
 	volume += new_volume
 
 	if(volume < LIQUID_TRANSFER_THRESHOLD)
 		qdel(src)
 		return
 	new_volume = 0
-	update_icon2()
+	update_icon()
 
-/obj/effect/liquid/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/obj/effect/decal/cleanable/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
-/obj/effect/liquid/Destroy()
-	src.controller.liquid_objects.Remove(src)
+/obj/effect/decal/cleanable/puddle/Destroy()
+	src.controller.puddle_objects.Remove(src)
 	..()
 
-/obj/effect/liquid/proc/update_icon2()
+/obj/effect/decal/cleanable/puddle/update_icon()
 	//icon_state = num2text( max(1,min(7,(floor(volume),10)/10)) )
 
-	switch(volume)
+	/*switch(volume)
 		if(0 to 0.1)
 			qdel(src)
 		if(0.1 to 5)
@@ -164,7 +164,7 @@ var/list/datum/puddle/puddles = list()
 		if(40 to 50)
 			icon_state = "6"
 		if(50 to INFINITY)
-			icon_state = "7"
+			icon_state = "7"*/
 
 /turf/proc/can_accept_liquid(from_direction)
 	return 0
