@@ -269,6 +269,7 @@
 
 /mob/living/simple_animal/hostile/grue/New()
 	..()
+	change_sight(adding = SEE_MOBS)
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
 	init_language = default_language
