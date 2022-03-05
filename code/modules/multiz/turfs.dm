@@ -23,6 +23,7 @@
 	icon_state = ""
 	desc = "\..."
 	density = 0
+	intact = 0 //No seriously, that's not a joke. Allows cable to be laid properLY on catwalks
 	plane = OPENSPACE_PLANE_START
 	//pathweight = 100000 //For lack of pathweights, mobdropping meta inc
 	dynamic_lighting = 0 // Someday lets do proper lighting z-transfer.  Until then we are leaving this off so it looks nicer.
@@ -60,6 +61,9 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	if(locate(/obj/structure/catwalk) in src || locate(/obj/structure/lattice) in src)
 		return get_gravity()
 	return 0
+
+/turf/simulated/open/can_place_cables()
+	return TRUE
 
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z

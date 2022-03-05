@@ -18,12 +18,17 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor/plating,
-/area/crew_quarters/bar)
+/area/crew_quarters/casino)
 "ag" = (
 /obj/structure/stairs/west,
 /turf/simulated/floor/plating,
-/area/crew_quarters/bar)
+/area/crew_quarters/casino)
 "ah" = (
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
@@ -176,6 +181,11 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
 "aL" = (
@@ -216,6 +226,11 @@
 	d2 = 4;
 	icon_state = "2-4";
 	tag = ""
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
@@ -840,6 +855,26 @@
 /obj/item/weapon/tank/jetpack/carbondioxide,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
+"kG" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
+"ru" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 16;
+	icon_state = "4-16"
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
+"tf" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "wX" = (
 /turf/simulated/floor/plating,
 /area)
@@ -849,12 +884,32 @@
 	},
 /turf/simulated/floor/plating,
 /area)
+"EX" = (
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
 "GO" = (
 /obj/structure/window/reinforced{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area)
+"He" = (
+/obj/structure/cable/yellow{
+	d1 = 8;
+	d2 = 32;
+	icon_state = "8-32"
+	},
+/obj/structure/catwalk,
+/turf/simulated/open,
+/area/crew_quarters/bar)
+"Jh" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "Kl" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -865,6 +920,20 @@
 /obj/structure/stairs/north,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
+"Tb" = (
+/turf/simulated/wall/r_wall,
+/area/crew_quarters/casino)
+"VU" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
 "WI" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -6274,11 +6343,11 @@ aa
 (28,1,2) = {"
 ab
 ac
-ad
-ad
-ad
-ad
-ad
+Tb
+Tb
+Tb
+Tb
+Tb
 ai
 ai
 ai
@@ -6336,11 +6405,11 @@ aa
 (29,1,2) = {"
 ab
 ac
-ad
-ae
-ae
+Tb
+ru
+EX
 ag
-ad
+Tb
 aj
 ai
 ai
@@ -6398,11 +6467,11 @@ aa
 (30,1,2) = {"
 ab
 ac
-ad
+Tb
 af
-ae
-ae
-ad
+EX
+EX
+Tb
 ai
 ai
 ai
@@ -6460,11 +6529,11 @@ aa
 (31,1,2) = {"
 ab
 ac
-ad
-ae
-ae
-ae
-ah
+Tb
+VU
+EX
+EX
+kG
 ai
 ai
 ai
@@ -6522,11 +6591,11 @@ aa
 (32,1,2) = {"
 ab
 ac
-ad
-ad
-ad
-ad
-ad
+Tb
+Tb
+Tb
+Tb
+Tb
 ai
 ai
 ai
@@ -9872,7 +9941,7 @@ at
 at
 aw
 ad
-ae
+tf
 aQ
 aT
 ad
@@ -9934,7 +10003,7 @@ at
 at
 aw
 ad
-ae
+Jh
 aR
 aU
 ah
@@ -10058,7 +10127,7 @@ at
 at
 aw
 ad
-aL
+He
 aL
 aL
 bb
