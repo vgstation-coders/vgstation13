@@ -434,7 +434,6 @@ var/global/msg_id = 0
 			name = "PDA-[owner] ([ownjob])"
 			to_chat(user, "<span class='notice'>Card scanned.</span>")
 		else
-			//Basic safety check. If either both objects are held by user or PDA is on ground and card is in hand.
 			if(in_range(src, user))
 				id_check(user, 2)
 				to_chat(user, "<span class='notice'>You put \the [C] into \the [src]'s slot.</span>")
