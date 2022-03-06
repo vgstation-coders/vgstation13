@@ -4,6 +4,7 @@
 var/liquid_delay = 4
 
 var/list/datum/puddle/puddles = list()
+var/static/list/burnable_reagents = list(FUEL,PLASMA)
 
 /datum/puddle
 	var/list/obj/effect/overlay/puddle/puddle_objects = list()
@@ -101,12 +102,16 @@ var/list/datum/puddle/puddles = list()
 	update_icon()
 
 /obj/effect/overlay/puddle/getFireFuel() // Copied over from old fuel overlay system and adjusted
-	if(on_turf && on_turf.reagents)
-		return on_turf.reagents.get_reagent_amount(FUEL) + on_turf.reagents.get_reagent_amount(PLASMA)
+	var/total_fuel = 0
+	if(turf_on && turf_on.reagents)
+		for(var/id in burnable_reagents)
+			total_fuel += turf_on.reagents.get_reagent_amount(id)
+	return total_fuel
 
 /obj/effect/overlay/puddle/burnFireFuel(var/used_fuel_ratio, var/used_reactants_ratio)
-	if(on_turf && on_turf.reagents)
-		on_turf.reagents.remove_reagents(list(PLASMA,FUEL), used_fuel_ratio * used_reactants_ratio * 5) // liquid fuel burns 5 times as quick
+	if(turf_on && turf_on.reagents)
+		for(var/id in burnable_reagents)
+			turf_on.reagents.remove_reagent(id, turf_on.reagents.get_reagent_amount(id) * used_fuel_ratio * used_reactants_ratio * 5) // liquid fuel burns 5 times as quick
 
 /obj/effect/overlay/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
@@ -198,7 +203,7 @@ var/list/datum/puddle/puddles = list()
 /obj/effect/overlay/puddle/mapping/initialize()
 	var/datum/reagent/R = chemical_reagents_list[reagent_type]
 	if(R)
-		R.reaction_turf(get_turf(src), volume)
+		R.reactiturf_on(get_turf(src), volume)
 
 /obj/effect/overlay/puddle/mapping/water
 	reagent_type = WATER
