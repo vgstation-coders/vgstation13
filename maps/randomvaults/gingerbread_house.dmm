@@ -16,8 +16,7 @@
 /turf/simulated/floor/mineral/gingerbread_dirt_tile,
 /area/vault/gingerbread_house)
 "au" = (
-/obj/effect/overlay/puddle,
-/obj/effect/decal/cleanable/puddle,
+/obj/effect/decal/cleanable/puddle/mapping/water,
 /turf/simulated/floor/mineral/gingerbread_floor,
 /area/vault/gingerbread_house)
 "aG" = (
