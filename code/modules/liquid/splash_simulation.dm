@@ -129,28 +129,12 @@ var/list/datum/puddle/puddles = list()
 /obj/effect/decal/cleanable/puddle/update_icon()
 	if(turf_on && turf_on.reagents)
 		color = mix_color_from_reagents(turf_on.reagents.reagent_list)
-		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list) / 2
+		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list)
+		// Absolute scaling with volume, Scale() would give relative.
+		transform = matrix(min(1, turf_on.reagents.total_volume / MAX_PUDDLE_VOLUME),0,0,0,min(1, turf_on.reagents.total_volume / MAX_PUDDLE_VOLUME),0)
 
 	relativewall()
 	relativewall_neighbours()
-
-	/*switch(volume)
-		if(0 to 0.1)
-			qdel(src)
-		if(0.1 to 5)
-			icon_state = "1"
-		if(5 to 10)
-			icon_state = "2"
-		if(10 to 20)
-			icon_state = "3"
-		if(20 to 30)
-			icon_state = "4"
-		if(30 to 40)
-			icon_state = "5"
-		if(40 to 50)
-			icon_state = "6"
-		if(50 to INFINITY)
-			icon_state = "7"*/
 
 /obj/effect/decal/cleanable/puddle/relativewall()
 	if(turf_on && turf_on.reagents && turf_on.reagents.total_volume >= MAX_PUDDLE_VOLUME)
