@@ -2115,9 +2115,7 @@
 	},
 /area/awaymission/tomb/tomb_of_rafid)
 "gv" = (
-/obj/effect/overlay/puddle/mapping/fuel{
-	name = "oil"
-	},
+/obj/effect/overlay/puddle/mapping/fuel,
 /obj/structure/grille/invulnerable,
 /turf/simulated/floor/plating,
 /area/awaymission/tomb/tomb_of_rafid)
@@ -2167,15 +2165,11 @@
 	},
 /area/awaymission/tomb/sewers)
 "gC" = (
-/obj/effect/overlay/puddle/mapping/fuel{
-	name = "oil"
-	},
+/obj/effect/overlay/puddle/mapping/fuel,
 /turf/simulated/floor/mineral/gold,
 /area/awaymission/tomb/tomb_of_rafid)
 "gD" = (
-/obj/effect/overlay/puddle/mapping/fuel{
-	name = "oil"
-	},
+/obj/effect/overlay/puddle/mapping/fuel,
 /turf/simulated/floor{
 	icon_state = "yellow_tint"
 	},
@@ -2248,9 +2242,7 @@
 	},
 /area/awaymission/tomb/tomb_of_rafid)
 "gN" = (
-/obj/effect/overlay/puddle/mapping/fuel{
-	name = "oil"
-	},
+/obj/effect/overlay/puddle/mapping/fuel,
 /turf/unsimulated/wall/rock,
 /area/awaymission/tomb/tomb_of_rafid)
 "gO" = (
@@ -2268,9 +2260,7 @@
 /area/awaymission/tomb/sewers)
 "gQ" = (
 /obj/machinery/door/mineral/gold,
-/obj/effect/overlay/puddle/mapping/fuel{
-	name = "oil"
-	},
+/obj/effect/overlay/puddle/mapping/fuel,
 /turf/simulated/floor/mineral/gold,
 /area/awaymission/tomb/tomb_of_rafid)
 "gR" = (
@@ -2366,9 +2356,7 @@
 /turf/simulated/floor/mineral/gold,
 /area/awaymission/tomb/tomb_of_rafid)
 "hg" = (
-/obj/effect/overlay/puddle/mapping/fuel{
-	name = "oil"
-	},
+/obj/effect/overlay/puddle/mapping/fuel,
 /obj/structure/button{
 	name = "entrance button (1)";
 	one_time = 1;
