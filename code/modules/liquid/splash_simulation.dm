@@ -4,7 +4,7 @@
 var/liquid_delay = 4
 
 var/list/datum/puddle/puddles = list()
-var/static/list/burnable_reagents = list(FUEL,PLASMA)
+var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 
 /datum/puddle
 	var/list/obj/effect/overlay/puddle/puddle_objects = list()
