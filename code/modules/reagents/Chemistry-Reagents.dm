@@ -2351,6 +2351,7 @@
 	description = "A compound used to clean things. Now with 50% more sodium hypochlorite!"
 	reagent_state = REAGENT_STATE_LIQUID
 	creates_puddle = FALSE //It cleans so... no
+	evaporation_rate = 50
 	color = "#A5F0EE" //rgb: 165, 240, 238
 	density = 0.76
 	specheatcap = 60.17
