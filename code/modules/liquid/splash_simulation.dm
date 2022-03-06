@@ -21,27 +21,6 @@ var/list/datum/puddle/puddles = list()
 		O = null
 	..()
 
-/client/proc/splash()
-	set category = "Debug"
-	set name = "Create puddle"
-
-	var/volume = input("Volume?","Volume?", 0 ) as num
-	if(!isnum(volume))
-		return
-	if(volume <= PUDDLE_TRANSFER_THRESHOLD)
-		return
-	var/turf/T = get_turf(src.mob)
-	if(!isturf(T))
-		return
-	var/reagent = input("Reagent ID?","Reagent ID?", WATER) as text
-	if(!reagent)
-		return
-	var/datum/reagent/R = chemical_reagents_list[reagent]
-	if(!R)
-		to_chat(src.mob, "<span class='warning'>Reagent not found: [reagent]</span>")
-		return
-	R.reaction_turf(T, volume)
-
 
 
 /obj/effect/decal/cleanable/puddle

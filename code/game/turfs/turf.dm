@@ -86,6 +86,9 @@
 	// For an entire cubic space, 1000 reagents
 	create_reagents(1000)
 
+/turf/on_reagent_change()
+	reagents.reaction(src, none_splashed=TRUE)
+
 /turf/initialize()
 	..()
 	if(loc)

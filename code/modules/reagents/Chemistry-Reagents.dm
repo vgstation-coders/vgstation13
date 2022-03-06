@@ -38,6 +38,9 @@
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
+	var/puddle_color = null // If it needs to look different as a puddle
+	var/puddle_alpha = 0 // See above
+	var/invisible_puddle = FALSE //Override for above, if() check won't recognise zero
 	var/dupeable = TRUE	//whether the reagent can be duplicated by standard reagent duplication methods such as a service borg shaker or odysseus
 	var/flags = 0
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
