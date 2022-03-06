@@ -155,9 +155,13 @@
 	var/datum/reagent/self = src
 	src = null
 
-	if(T.reagents)
+	if(T.reagents && self.reagent_state == REAGENT_STATE_LIQUID)
 		T.reagents.add_reagent(self.id, volume)
-		new /obj/effect/decal/cleanable/puddle(T)
+		var/obj/effect/decal/cleanable/puddle/P = locate(/obj/effect/decal/cleanable/puddle) in T
+		if(P)
+			P.update_icon()
+		else
+			new /obj/effect/decal/cleanable/puddle(T)
 
 /datum/reagent/proc/metabolize(var/mob/living/M)
 	tick++

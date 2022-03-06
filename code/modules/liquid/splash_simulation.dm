@@ -86,6 +86,8 @@ var/list/datum/puddle/puddles = list()
 		if(!T.can_accept_liquid(turn(direction,180))) //Check if this liquid can enter the tile
 			spread_directions.Remove(direction)
 			continue
+		if(T.reagents)
+			surrounding_volume += T.reagents.total_volume //If liquid already exists, add it's volume to our sum
 
 	if(!spread_directions.len)
 		log_debug("Puddle had no candidate to spread to.")
@@ -105,20 +107,16 @@ var/list/datum/puddle/puddles = list()
 			log_debug("Puddle reached map edge.")
 			continue
 
+		turf_on.reagents.trans_to(T,volume_per_tile)
+		T.reagents.reaction(T)
 		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
 		if(L)
-			surrounding_volume += T.reagents.total_volume //If liquid already exists, add it's volume to our sum
 			L.update_icon()
 			if(L.controller != src.controller)
 				L.controller.puddle_objects.Remove(L)
 				if(L.controller.puddle_objects.len <= 0)
 					qdel(L.controller)
 				L.controller = src.controller
-		else
-			var/obj/effect/decal/cleanable/puddle/NL = new(T) //Otherwise create a new object which we'll spread to.
-			NL.controller = src.controller
-			controller.puddle_objects.Add(NL)
-		turf_on.reagents.trans_to(T,volume_per_tile)
 	update_icon()
 
 /obj/effect/decal/cleanable/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
