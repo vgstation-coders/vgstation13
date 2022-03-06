@@ -113,6 +113,13 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		for(var/id in burnable_reagents)
 			turf_on.reagents.remove_reagent(id, turf_on.reagents.get_reagent_amount(id) * used_fuel_ratio * used_reactants_ratio * 5) // liquid fuel burns 5 times as quick
 
+/obj/effect/overlay/puddle/Crossed(atom/movable/AM)
+	var/turf/T = get_turf(AM)
+	if(T && T.reagents)
+		T.reagents.reaction(AM, volume_multiplier = 0.1) //Only targeting feet here
+	else
+		return ..()
+
 /obj/effect/overlay/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
