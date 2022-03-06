@@ -672,7 +672,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if(slipperiness > P.wet)
 			P.wet = slipperiness
 	else
-		new /obj/effect/overlay/wetfloor(src, slipperiness, delay)
+		new /obj/effect/overlay/wetfloor(src, slipperiness)
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
 	var/obj/effect/overlay/wetfloor/P = is_wet()
