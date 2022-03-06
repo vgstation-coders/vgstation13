@@ -22,6 +22,8 @@
 	var/description = ""
 	var/datum/reagents/holder = null
 	var/reagent_state = REAGENT_STATE_SOLID
+	var/creates_puddle = TRUE //For liquids that have the option not to, like paint.
+	var/evaporation_rate = 1 //For when on floors
 	var/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
@@ -155,8 +157,9 @@
 	var/datum/reagent/self = src
 	src = null
 
-	if(T.reagents && self.reagent_state == REAGENT_STATE_LIQUID)
-		T.reagents.add_reagent(self.id, volume)
+	if(T.reagents && self.reagent_state == REAGENT_STATE_LIQUID && self.creates_puddle)
+		if(volume)
+			T.reagents.add_reagent(self.id, volume)
 		var/obj/effect/decal/cleanable/puddle/P = locate(/obj/effect/decal/cleanable/puddle) in T
 		if(P)
 			P.update_icon()

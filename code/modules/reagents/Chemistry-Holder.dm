@@ -577,13 +577,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0)
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0, var/none_splashed = FALSE)
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
 				var/amount_splashed = R.volume+volume_modifier
 				if (amount_override)
 					amount_splashed = amount_override
+				if (none_splashed) // Annoying workaround for it not being able to be zero from above
+					amount_splashed = 0
 				if(ismob(A))
 					if(isanimal(A))
 						R.reaction_animal(A, TOUCH, amount_splashed)

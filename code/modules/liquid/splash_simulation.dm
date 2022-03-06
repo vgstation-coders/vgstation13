@@ -37,6 +37,9 @@ var/list/datum/puddle/puddles = list()
 	if(!reagent)
 		return
 	var/datum/reagent/R = chemical_reagents_list[reagent]
+	if(!R)
+		to_chat(src.mob, "<span class='warning'>Reagent not found: [reagent]</span>")
+		return
 	R.reaction_turf(T, volume)
 
 
@@ -102,7 +105,7 @@ var/list/datum/puddle/puddles = list()
 			continue
 
 		turf_on.reagents.trans_to(T, average_volume)
-		T.reagents.reaction(T)
+		T.reagents.reaction(T, none_splashed = TRUE) //Already transferred it here, don't go making it.
 		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
 		if(L)
 			L.update_icon()
