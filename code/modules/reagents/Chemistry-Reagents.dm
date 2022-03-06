@@ -696,6 +696,13 @@
 		T.assume_air(lowertemp)
 		qdel(hotspot)
 
+/datum/reagent/water/on_removal(var/amount)
+	if(!..(amount))
+		return 0
+	if(isturf(holder.my_atom))
+		var/turf/T = holder.my_atom
+		T.dry()
+
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
 
 	var/datum/reagent/self = src
@@ -763,6 +770,13 @@
 	if(volume >= 1)
 		T.wet(TURF_WET_LUBE)
 	else
+		T.dry(TURF_WET_LUBE)
+
+/datum/reagent/lube/on_removal(var/amount)
+	if(!..(amount))
+		return 0
+	if(isturf(holder.my_atom))
+		var/turf/T = holder.my_atom
 		T.dry(TURF_WET_LUBE)
 
 /datum/reagent/sodium_polyacrylate
@@ -5208,6 +5222,13 @@
 		lowertemp.react()
 		T.assume_air(lowertemp)
 		qdel(hotspot)
+
+/datum/reagent/cornoil/on_removal(var/amount)
+	if(!..(amount))
+		return 0
+	if(isturf(holder.my_atom))
+		var/turf/T = holder.my_atom
+		T.dry()
 
 /datum/reagent/enzyme
 	name = "Universal Enzyme"
