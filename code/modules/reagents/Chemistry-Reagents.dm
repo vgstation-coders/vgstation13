@@ -680,10 +680,11 @@
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
 
+	var/datum/reagent/self = src
 	if(..())
 		return 1
 
-	if(T.reagents && T.reagents.volume >= 3) //Hardcoded
+	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 3) //Hardcoded
 		T.wet()
 	else
 		T.dry()
@@ -764,10 +765,11 @@
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 
+	var/datum/reagent/self = src
 	if(..())
 		return 1
 
-	if(T.reagents && T.reagents.volume >= 1)
+	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 1)
 		T.wet(TURF_WET_LUBE)
 	else
 		T.dry(TURF_WET_LUBE)
@@ -1221,10 +1223,10 @@
 		O.bless()
 
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
-
+	var/datum/reagent/self = src
 	if(..())
 		return 1
-	if(volume >= 5)
+	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 5)
 		T.bless()
 
 /datum/reagent/holywater/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
@@ -5208,10 +5210,11 @@
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
+	var/datum/reagent/self = src
 	if(..())
 		return 1
 
-	if(T.reagents && T.reagents.volume >= 3)
+	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 3)
 		T.wet()
 	else
 		T.dry()
