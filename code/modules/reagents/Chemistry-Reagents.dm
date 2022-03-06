@@ -608,6 +608,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 128
+	invisible_puddle = TRUE
 	specheatcap = 4.184
 	density = 1
 	glass_desc = "The father of all refreshments."
@@ -743,6 +744,7 @@
 	description = "Lubricant is a substance introduced between two moving surfaces to reduce the friction and wear between them. giggity."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
+	invisible_puddle = TRUE
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388
