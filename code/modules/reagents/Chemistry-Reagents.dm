@@ -699,8 +699,8 @@
 /datum/reagent/water/on_removal(var/amount)
 	if(!..(amount))
 		return 0
-	if(isturf(holder.my_atom))
-		var/turf/T = holder.my_atom
+	if(istype(holder.my_atom,/turf/simulated))
+		var/turf/simulated/T = holder.my_atom
 		T.dry()
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
@@ -775,8 +775,8 @@
 /datum/reagent/lube/on_removal(var/amount)
 	if(!..(amount))
 		return 0
-	if(isturf(holder.my_atom))
-		var/turf/T = holder.my_atom
+	if(istype(holder.my_atom,/turf/simulated))
+		var/turf/simulated/T = holder.my_atom
 		T.dry(TURF_WET_LUBE)
 
 /datum/reagent/sodium_polyacrylate
@@ -5226,8 +5226,8 @@
 /datum/reagent/cornoil/on_removal(var/amount)
 	if(!..(amount))
 		return 0
-	if(isturf(holder.my_atom))
-		var/turf/T = holder.my_atom
+	if(istype(holder.my_atom,/turf/simulated))
+		var/turf/simulated/T = holder.my_atom
 		T.dry()
 
 /datum/reagent/enzyme
