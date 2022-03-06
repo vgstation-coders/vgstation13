@@ -203,11 +203,10 @@ var/list/datum/puddle/puddles = list()
 	var/reagent_type = ""
 	var/volume = 50
 
-/obj/effect/decal/cleanable/puddle/mapping/New()
+/obj/effect/decal/cleanable/puddle/mapping/initialize()
 	var/datum/reagent/R = chemical_reagents_list[reagent_type]
 	if(R)
 		R.reaction_turf(T, volume)
-	..()
 
 /obj/effect/decal/cleanable/puddle/mapping/water
 	reagent_type = WATER
