@@ -1,4 +1,4 @@
-#define LIQUID_TRANSFER_THRESHOLD 0.05
+#define PUDDLE_TRANSFER_THRESHOLD 0.05
 
 var/liquid_delay = 4
 
@@ -24,12 +24,12 @@ var/list/datum/puddle/puddles = list()
 	var/volume = input("Volume?","Volume?", 0 ) as num
 	if(!isnum(volume))
 		return
-	if(volume <= LIQUID_TRANSFER_THRESHOLD)
+	if(volume <= PUDDLE_TRANSFER_THRESHOLD)
 		return
 	var/turf/T = get_turf(src.mob)
 	if(!isturf(T))
 		return
-	var/reagent = input("Reagent ID?","Reagent ID?", WATER) as num
+	var/reagent = input("Reagent ID?","Reagent ID?", WATER) as text
 	if(!reagent)
 		return
 	trigger_splash(T, reagent, volume)
@@ -40,10 +40,14 @@ var/list/datum/puddle/puddles = list()
 
 	var/obj/effect/decal/cleanable/puddle/L = new/obj/effect/decal/cleanable/puddle(epicenter)
 	epicenter.reagents.add_reagent(reagent_id, volume)
-	L.update_icon()
-	var/datum/puddle/P = new/datum/puddle()
-	P.puddle_objects.Add(L)
-	L.controller = P
+	var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
+	if(L)
+		L.update_icon()
+	else
+		var/datum/puddle/P = new/datum/puddle()
+		var/obj/effect/decal/cleanable/puddle/NL = new(T) //Otherwise create a new object which we'll spread to.
+		NL.controller = P
+		controller.puddle_objects.Add(NL)
 
 
 
@@ -71,10 +75,11 @@ var/list/datum/puddle/puddles = list()
 
 /obj/effect/decal/cleanable/puddle/process()
 	turf_on = get_turf(src)
-	if(!turf_on || (turf_on.reagents && turf_on.reagents.total_volume < LIQUID_TRANSFER_THRESHOLD))
+	if(!turf_on || (turf_on.reagents && turf_on.reagents.total_volume < PUDDLE_TRANSFER_THRESHOLD))
 		qdel(src)
 		return
-	spread()
+	if(turf_on.reagents.total_volume > 50)
+		spread()
 
 /obj/effect/decal/cleanable/puddle/proc/spread()
 	var/surrounding_volume = 0
@@ -98,7 +103,7 @@ var/list/datum/puddle/puddles = list()
 
 	var/average_volume = (turf_on.reagents.total_volume + surrounding_volume) / (spread_directions.len + 1) //Average amount of volume on this and the surrounding tiles.
 	var/volume_difference = turf_on.reagents.total_volume - average_volume //How much more/less volume this tile has than the surrounding tiles.
-	if(volume_difference <= (spread_directions.len*LIQUID_TRANSFER_THRESHOLD)) //If we have less than the threshold excess liquid - then there is nothing to do as other tiles will be giving us volume.or the liquid is just still.
+	if(volume_difference <= (spread_directions.len*PUDDLE_TRANSFER_THRESHOLD)) //If we have less than the threshold excess liquid - then there is nothing to do as other tiles will be giving us volume.or the liquid is just still.
 		log_debug("Puddle transfer volume was lower than THRESHOLD, no spread occured.")
 		return
 
@@ -137,7 +142,12 @@ var/list/datum/puddle/puddles = list()
 	..()
 
 /obj/effect/decal/cleanable/puddle/update_icon()
-	//icon_state = num2text( max(1,min(7,(floor(volume),10)/10)) )
+	if(turf_on && turf_on.reagents)
+		color = mix_color_from_reagents(turf_on.reagents.reagent_list)
+		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list) / 2
+
+	relativewall()
+	relativewall_neighbours()
 
 	/*switch(volume)
 		if(0 to 0.1)
@@ -219,5 +229,3 @@ var/list/datum/puddle/puddles = list()
 
 /obj/machinery/door/liquid_pass()
 	return !density
-
-#undef LIQUID_TRANSFER_THRESHOLD
