@@ -77,6 +77,8 @@ var/list/datum/puddle/puddles = list()
 		return
 
 	var/average_volume = excess_volume / spread_directions.len //How much would be taken from our tile to fill each
+	for(var/datum/reagent/R in turf_on.reagents.reagent_list)
+		average_volume = min(R.viscosity, average_volume) //Capped by viscosity
 	if(average_volume <= (spread_directions.len * PUDDLE_TRANSFER_THRESHOLD))
 		return //If this is lower than the transfer threshold, break out
 

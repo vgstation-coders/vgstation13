@@ -24,6 +24,7 @@
 	var/reagent_state = REAGENT_STATE_SOLID
 	var/creates_puddle = TRUE //For liquids that have the option not to, like paint.
 	var/evaporation_rate = 1 //For when on floors
+	var/viscosity = INFINITY //Maximum amount that can spread on puddles
 	var/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
