@@ -81,6 +81,11 @@
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
 
+/turf/New()
+	..()
+	// For an entire cubic space, 1000 reagents
+	create_reagents(1000)
+
 /turf/initialize()
 	..()
 	if(loc)
