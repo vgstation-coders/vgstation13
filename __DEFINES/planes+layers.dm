@@ -120,6 +120,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLOOD_LAYER					17
 	#define GIBS_OVERLAY_LAYER			18 //Holy fuck I'm so fucking mad it took me this long to figure it out. If you suspect an overlay isn't showing TRY GIVING IT A REALLY HIGH LAYER
 	#define CREEPER_LAYER				19
+	#define PUDDLE_LAYER				20
 	#define WEED_LAYER					420
 
 #define NOIR_BLOOD_PLANE 		(1 + FLOAT_PLANE)		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.

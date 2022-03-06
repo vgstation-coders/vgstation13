@@ -26,6 +26,8 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	icon = 'icons/effects/puddle.dmi'
 	icon_state = "puddle0"
 	name = "puddle"
+	plane = ABOVE_TURF_PLANE
+	layer = PUDDLE_LAYER
 	var/datum/puddle/controller
 	var/turf/turf_on
 
