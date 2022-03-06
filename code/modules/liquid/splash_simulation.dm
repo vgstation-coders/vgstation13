@@ -207,9 +207,10 @@ var/list/datum/puddle/puddles = list()
 	var/datum/reagent/R = chemical_reagents_list[reagent_type]
 	if(R)
 		R.reaction_turf(T, volume)
+	..()
 
 /obj/effect/decal/cleanable/puddle/mapping/water
-	var/reagent_type = WATER
+	reagent_type = WATER
 
 /obj/effect/decal/cleanable/puddle/mapping/fuel
-	var/reagent_type = FUEL
+	reagent_type = FUEL
