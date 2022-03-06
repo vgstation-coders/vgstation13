@@ -203,7 +203,7 @@ var/static/list/burnable_reagents = list(FUEL,PLASMA)
 /obj/effect/overlay/puddle/mapping/initialize()
 	var/datum/reagent/R = chemical_reagents_list[reagent_type]
 	if(R)
-		R.reactiturf_on(get_turf(src), volume)
+		R.reaction_turf(get_turf(src), volume)
 
 /obj/effect/overlay/puddle/mapping/water
 	reagent_type = WATER
