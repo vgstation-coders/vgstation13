@@ -2305,15 +2305,6 @@
 		var/turf/T = get_turf(O)
 		self.reaction_turf(T, volume)
 
-
-/datum/reagent/fuel/reaction_turf(var/turf/simulated/T, var/volume)
-
-	if(..())
-		return 1
-
-	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in T))
-		new /obj/effect/decal/cleanable/liquid_fuel(T, volume)
-
 /datum/reagent/fuel/on_mob_life(var/mob/living/M)
 
 	if(..())

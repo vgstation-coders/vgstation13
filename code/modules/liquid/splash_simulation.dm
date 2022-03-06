@@ -100,6 +100,14 @@ var/list/datum/puddle/puddles = list()
 				L.controller = src.controller
 	update_icon()
 
+/obj/effect/overlay/puddle/getFireFuel() // Copied over from old fuel overlay system and adjusted
+	if(on_turf && on_turf.reagents)
+		return on_turf.reagents.get_reagent_amount(FUEL) + on_turf.reagents.get_reagent_amount(PLASMA)
+
+/obj/effect/overlay/puddle/burnFireFuel(var/used_fuel_ratio, var/used_reactants_ratio)
+	if(on_turf && on_turf.reagents)
+		on_turf.reagents.remove_reagents(list(PLASMA,FUEL), used_fuel_ratio * used_reactants_ratio * 5) // liquid fuel burns 5 times as quick
+
 /obj/effect/overlay/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
