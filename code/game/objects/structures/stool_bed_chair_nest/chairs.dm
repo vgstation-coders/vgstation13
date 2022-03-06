@@ -379,7 +379,7 @@
 
 	if(istype(T, /turf/simulated))
 		var/turf/simulated/TS = T
-		var/obj/effect/overlay/puddle/P = TS.is_wet()
+		var/obj/effect/overlay/wetfloor/P = TS.is_wet()
 		if(P && P.wet == TURF_WET_LUBE)
 			user.unlock_from(src)
 			T.Entered(user) //bye bye

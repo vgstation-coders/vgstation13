@@ -1055,7 +1055,7 @@ var/global/list/yantar_stuff = list(
 				break
 			reagents.add_reagent(C.reagent,1)
 		qdel(C)
-	for(var/obj/effect/overlay/puddle/P in T)
+	for(var/obj/effect/overlay/wetfloor/P in T)
 		if(reagents.is_full())
 			visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
 			break

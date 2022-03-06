@@ -477,7 +477,7 @@
 		return
 	holy = 1
 	..()
-	new /obj/effect/overlay/holywaterpuddle(src)
+	new /obj/effect/overlay/holywetfloor(src)
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs

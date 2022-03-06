@@ -2022,7 +2022,7 @@
 		crawlcounter = 1
 	else
 		crawlcounter++
-	for(var/obj/effect/overlay/puddle/P in target)
+	for(var/obj/effect/overlay/wetfloor/P in target)
 		if(P.wet == TURF_WET_WATER && prob(20))
 			to_chat(src, "<span class='warning'>Your hands slip and make no progress!</span>")
 			return FALSE

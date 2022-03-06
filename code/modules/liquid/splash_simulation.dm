@@ -6,9 +6,9 @@ var/liquid_delay = 4
 var/list/datum/puddle/puddles = list()
 
 /datum/puddle
-	var/list/obj/effect/decal/cleanable/puddle/puddle_objects = list()
+	var/list/obj/effect/overlay/puddle/puddle_objects = list()
 
-/datum/puddle/New(var/obj/effect/decal/cleanable/puddle/P)
+/datum/puddle/New(var/obj/effect/overlay/puddle/P)
 	..()
 	puddles += src
 	if(P)
@@ -23,21 +23,21 @@ var/list/datum/puddle/puddles = list()
 
 
 
-/obj/effect/decal/cleanable/puddle
+/obj/effect/overlay/puddle
 	icon = 'icons/effects/puddle.dmi'
 	icon_state = "puddle0"
 	name = "puddle"
 	var/datum/puddle/controller
 	var/turf/turf_on
 
-/obj/effect/decal/cleanable/puddle/New()
+/obj/effect/overlay/puddle/New()
 	..()
 	turf_on = get_turf(src)
 	if(!turf_on)
 		qdel(src)
 		return
 
-	for( var/obj/effect/decal/cleanable/puddle/L in loc )
+	for( var/obj/effect/overlay/puddle/L in loc )
 		if(L != src)
 			qdel(L)
 			L = null
@@ -46,7 +46,7 @@ var/list/datum/puddle/puddles = list()
 	processing_objects.Add(src)
 	update_icon()
 
-/obj/effect/decal/cleanable/puddle/process()
+/obj/effect/overlay/puddle/process()
 	turf_on = get_turf(src)
 	if(!turf_on || (turf_on.reagents && turf_on.reagents.total_volume < PUDDLE_TRANSFER_THRESHOLD))
 		qdel(src)
@@ -57,7 +57,7 @@ var/list/datum/puddle/puddles = list()
 		if(turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
 
-/obj/effect/decal/cleanable/puddle/proc/spread()
+/obj/effect/overlay/puddle/proc/spread()
 	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME
 	var/list/spread_directions = cardinal
 	for(var/direction in spread_directions)
@@ -88,7 +88,7 @@ var/list/datum/puddle/puddles = list()
 
 		turf_on.reagents.trans_to(T, average_volume)
 		T.reagents.reaction(T, none_splashed = TRUE) //Already transferred it here, don't go making it.
-		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
+		var/obj/effect/overlay/puddle/L = locate(/obj/effect/overlay/puddle) in T
 		if(L)
 			L.update_icon()
 			if(L.controller != src.controller)
@@ -98,17 +98,17 @@ var/list/datum/puddle/puddles = list()
 				L.controller = src.controller
 	update_icon()
 
-/obj/effect/decal/cleanable/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/obj/effect/overlay/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
-/obj/effect/decal/cleanable/puddle/Destroy()
+/obj/effect/overlay/puddle/Destroy()
 	src.controller.puddle_objects.Remove(src)
 	if(turf_on && turf_on.reagents)
 		turf_on.reagents.clear_reagents()
 	processing_objects.Remove(src)
 	..()
 
-/obj/effect/decal/cleanable/puddle/update_icon()
+/obj/effect/overlay/puddle/update_icon()
 	if(turf_on && turf_on.reagents)
 		color = mix_color_from_reagents(turf_on.reagents.reagent_list)
 		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list)
@@ -118,20 +118,20 @@ var/list/datum/puddle/puddles = list()
 	relativewall()
 	relativewall_neighbours()
 
-/obj/effect/decal/cleanable/puddle/relativewall()
+/obj/effect/overlay/puddle/relativewall()
 	if(turf_on && turf_on.reagents && turf_on.reagents.total_volume >= MAX_PUDDLE_VOLUME)
 		var/junction=findSmoothingNeighbors()
 		icon_state = "puddle[junction]"
 	else
 		icon_state = "puddle0"
 
-/obj/effect/decal/cleanable/puddle/canSmoothWith()
+/obj/effect/overlay/puddle/canSmoothWith()
 	var/static/list/smoothables = list(
-		/obj/effect/decal/cleanable/puddle,
+		/obj/effect/overlay/puddle,
 	)
 	return smoothables
 
-/obj/effect/decal/cleanable/puddle/isSmoothableNeighbor(atom/A)
+/obj/effect/overlay/puddle/isSmoothableNeighbor(atom/A)
 	var/turf/T = get_turf(A)
 	if(T && T.reagents && T.reagents.total_volume < MAX_PUDDLE_VOLUME)
 		return
@@ -181,17 +181,17 @@ var/list/datum/puddle/puddles = list()
 /obj/machinery/door/liquid_pass()
 	return !density
 
-/obj/effect/decal/cleanable/puddle/mapping
+/obj/effect/overlay/puddle/mapping
 	var/reagent_type = ""
 	var/volume = 50
 
-/obj/effect/decal/cleanable/puddle/mapping/initialize()
+/obj/effect/overlay/puddle/mapping/initialize()
 	var/datum/reagent/R = chemical_reagents_list[reagent_type]
 	if(R)
 		R.reaction_turf(get_turf(src), volume)
 
-/obj/effect/decal/cleanable/puddle/mapping/water
+/obj/effect/overlay/puddle/mapping/water
 	reagent_type = WATER
 
-/obj/effect/decal/cleanable/puddle/mapping/fuel
+/obj/effect/overlay/puddle/mapping/fuel
 	reagent_type = FUEL

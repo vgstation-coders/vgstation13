@@ -656,7 +656,7 @@
 				regenerate_icons()
 
 
-/mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
+/mob/living/carbon/ApplySlip(var/obj/effect/overlay/wetfloor/P)
 	if (!..())
 		return FALSE
 

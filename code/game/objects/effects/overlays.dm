@@ -70,7 +70,7 @@
 	icon_state = "bluespacify"
 	layer = LIGHTING_LAYER
 
-/obj/effect/overlay/puddle
+/obj/effect/overlay/wetfloor
 	name = "Puddle"
 	icon = 'icons/effects/water.dmi'
 	icon_state = "wet_floor"
@@ -79,21 +79,21 @@
 	var/lifespan
 	mouse_opacity = 0
 
-/obj/effect/overlay/puddle/New(var/turf/T, var/new_wet, var/new_lifespan)
+/obj/effect/overlay/wetfloor/New(var/turf/T, var/new_wet, var/new_lifespan)
 	..()
 	wet = new_wet
 	lifespan = world.time + new_lifespan
 	processing_objects.Add(src)
 
-/obj/effect/overlay/puddle/Destroy()
+/obj/effect/overlay/wetfloor/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/effect/overlay/puddle/process()
+/obj/effect/overlay/wetfloor/process()
 	if(world.time >= lifespan)
 		qdel(src)
 
-/obj/effect/overlay/puddle/Crossed(atom/movable/AM)
+/obj/effect/overlay/wetfloor/Crossed(atom/movable/AM)
 
 	if (!isliving(AM))
 		return ..()
@@ -101,7 +101,7 @@
 	if (!L.ApplySlip(src))
 		return ..()
 
-/obj/effect/overlay/holywaterpuddle
+/obj/effect/overlay/holywetfloor
 	name = "Puddle"
 	icon = 'icons/effects/water.dmi'
 	icon_state = "holy_floor"
@@ -109,12 +109,12 @@
 	mouse_opacity = 0
 	var/lifespan
 
-/obj/effect/overlay/holywaterpuddle/New(var/turf/T)
+/obj/effect/overlay/holywetfloor/New(var/turf/T)
 	. = ..()
 	lifespan = world.time + HOLYWATER_DURATION
 	processing_objects.Add(src)
 
-/obj/effect/overlay/holywaterpuddle/process()
+/obj/effect/overlay/holywetfloor/process()
 	if(world.time >= lifespan)
 		qdel(src)
 
