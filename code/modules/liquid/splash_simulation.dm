@@ -1,4 +1,5 @@
 #define PUDDLE_TRANSFER_THRESHOLD 0.05
+#define MAX_PUDDLE_VOLUME 50
 
 var/liquid_delay = 4
 
@@ -68,11 +69,11 @@ var/list/datum/puddle/puddles = list()
 	if(!turf_on || (turf_on.reagents && turf_on.reagents.total_volume < PUDDLE_TRANSFER_THRESHOLD))
 		qdel(src)
 		return
-	if(turf_on.reagents.total_volume > 50)
+	if(turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 		spread()
 
 /obj/effect/decal/cleanable/puddle/proc/spread()
-	var/surrounding_volume = 0
+	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME
 	var/list/spread_directions = cardinal
 	for(var/direction in spread_directions)
 		var/turf/T = get_step(src,direction)
@@ -86,20 +87,13 @@ var/list/datum/puddle/puddles = list()
 		if(!T.can_accept_liquid(turn(direction,180))) //Check if this liquid can enter the tile
 			spread_directions.Remove(direction)
 			continue
-		if(T.reagents)
-			surrounding_volume += T.reagents.total_volume //If liquid already exists, add it's volume to our sum
 
 	if(!spread_directions.len)
-		log_debug("Puddle had no candidate to spread to.")
 		return
 
-	var/average_volume = (turf_on.reagents.total_volume + surrounding_volume) / (spread_directions.len + 1) //Average amount of volume on this and the surrounding tiles.
-	var/volume_difference = turf_on.reagents.total_volume - average_volume //How much more/less volume this tile has than the surrounding tiles.
-	if(volume_difference <= (spread_directions.len*PUDDLE_TRANSFER_THRESHOLD)) //If we have less than the threshold excess liquid - then there is nothing to do as other tiles will be giving us volume.or the liquid is just still.
-		log_debug("Puddle transfer volume was lower than THRESHOLD, no spread occured.")
-		return
-
-	var/volume_per_tile = volume_difference / spread_directions.len
+	var/average_volume = excess_volume / spread_directions.len //How much would be taken from our tile to fill each
+	if(average_volume <= (spread_directions.len * PUDDLE_TRANSFER_THRESHOLD))
+		return //If this is lower than the transfer threshold, break out
 
 	for(var/direction in spread_directions)
 		var/turf/T = get_step(src,direction)
@@ -107,7 +101,7 @@ var/list/datum/puddle/puddles = list()
 			log_debug("Puddle reached map edge.")
 			continue
 
-		turf_on.reagents.trans_to(T,volume_per_tile)
+		turf_on.reagents.trans_to(T, average_volume)
 		T.reagents.reaction(T)
 		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
 		if(L)
@@ -156,7 +150,7 @@ var/list/datum/puddle/puddles = list()
 			icon_state = "7"*/
 
 /obj/effect/decal/cleanable/puddle/relativewall()
-	if(turf_on && turf_on.reagents && turf_on.reagents.total_volume >= 50)
+	if(turf_on && turf_on.reagents && turf_on.reagents.total_volume >= MAX_PUDDLE_VOLUME)
 		var/junction=findSmoothingNeighbors()
 		icon_state = "puddle[junction]"
 	else
@@ -170,7 +164,7 @@ var/list/datum/puddle/puddles = list()
 
 /obj/effect/decal/cleanable/puddle/isSmoothableNeighbor(atom/A)
 	var/turf/T = get_turf(A)
-	if(T && T.reagents && T.reagents.total_volume < 50)
+	if(T && T.reagents && T.reagents.total_volume < MAX_PUDDLE_VOLUME)
 		return
 
 	return ..()
