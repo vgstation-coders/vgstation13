@@ -581,7 +581,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
-				var/amount_splashed = R.volume+volume_modifier*volume_multiplier
+				var/amount_splashed = (R.volume+volume_modifier)*volume_multiplier
 				if (amount_override)
 					amount_splashed = amount_override
 				if (none_splashed) // Annoying workaround for it not being able to be zero from above
@@ -597,7 +597,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.reaction_obj(A, amount_splashed)
 		if(INGEST)
 			for(var/datum/reagent/R in reagent_list)
-				var/amount_splashed = R.volume+volume_modifier*volume_multiplier
+				var/amount_splashed = (R.volume+volume_modifier)*volume_multiplier
 				if (amount_override)
 					amount_splashed = amount_override
 				if(ismob(A))
