@@ -683,7 +683,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 3) //Hardcoded
+	if(T.volume >= 3) //Hardcoded
 		T.wet()
 	else
 		T.dry()
@@ -767,7 +767,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 1)
+	if(T.volume >= 1)
 		T.wet(TURF_WET_LUBE)
 	else
 		T.dry(TURF_WET_LUBE)
@@ -5211,7 +5211,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 3)
+	if(T.volume >= 3)
 		T.wet()
 	else
 		T.dry()
