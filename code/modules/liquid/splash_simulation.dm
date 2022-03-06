@@ -55,6 +55,7 @@ var/list/datum/puddle/puddles = list()
 	var/datum/puddle/P = new/datum/puddle()
 	P.puddle_objects.Add(L)
 	L.controller = P
+	P.process()
 
 
 
