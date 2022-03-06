@@ -7,9 +7,11 @@ var/list/datum/puddle/puddles = list()
 /datum/puddle
 	var/list/obj/effect/decal/cleanable/puddle/puddle_objects = list()
 
-/datum/puddle/New()
+/datum/puddle/New(var/obj/effect/decal/cleanable/puddle/P)
 	..()
 	puddles += src
+	if(P)
+		puddle_objects.Add(P)
 
 /datum/puddle/Del()
 	puddles -= src
@@ -33,22 +35,8 @@ var/list/datum/puddle/puddles = list()
 	var/reagent = input("Reagent ID?","Reagent ID?", WATER) as text
 	if(!reagent)
 		return
-	create_puddle(T, reagent, volume)
-
-/proc/create_puddle(turf/epicenter as turf, reagent_id as text, volume as num)
-	if(!epicenter || volume <= 0 || !reagent_id)
-		return
-
-	var/obj/effect/decal/cleanable/puddle/L = new/obj/effect/decal/cleanable/puddle(epicenter)
-	epicenter.reagents.add_reagent(reagent_id, volume)
-	var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in epicenter
-	if(L)
-		L.update_icon()
-	else
-		var/datum/puddle/P = new/datum/puddle()
-		var/obj/effect/decal/cleanable/puddle/NL = new(epicenter) //Otherwise create a new object which we'll spread to.
-		NL.controller = P
-		NL.controller.puddle_objects.Add(NL)
+	var/datum/reagent/R = chemical_reagents_list[reagent]
+	R.reaction_turf(T, volume)
 
 
 
@@ -71,6 +59,7 @@ var/list/datum/puddle/puddles = list()
 			qdel(L)
 			L = null
 
+	controller = new/datum/puddle(src)
 	processing_objects.Add(src)
 	update_icon()
 

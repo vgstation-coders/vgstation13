@@ -98,7 +98,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -114,7 +114,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -152,7 +152,12 @@
 	if(!istype(T))
 		return 1
 
+	var/datum/reagent/self = src
 	src = null
+
+	if(T.reagents)
+		T.reagents.add_reagent(self.id, volume)
+		new /obj/effect/decal/cleanable/puddle(T)
 
 /datum/reagent/proc/metabolize(var/mob/living/M)
 	tick++
@@ -194,7 +199,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
-	
+
 	if(addictive && M.addicted_chems)
 		M.addicted_chems.add_reagent(src.id, custom_metabolism)
 	if(tolerance_increase)
