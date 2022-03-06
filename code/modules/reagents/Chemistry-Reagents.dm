@@ -2334,6 +2334,7 @@
 	id = CLEANER
 	description = "A compound used to clean things. Now with 50% more sodium hypochlorite!"
 	reagent_state = REAGENT_STATE_LIQUID
+	creates_puddle = FALSE //It cleans so... no
 	color = "#A5F0EE" //rgb: 165, 240, 238
 	density = 0.76
 	specheatcap = 60.17
@@ -5291,6 +5292,7 @@
 	id = PANCAKE
 	description = "A mix of flour, milk, butter, and egg yolk. ready to be cooked into delicious pancakes."
 	reagent_state = REAGENT_STATE_LIQUID
+	creates_puddle = FALSE
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	color = "#E6C968" //rgb: 90, 78, 40
 
@@ -9340,6 +9342,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = IRONROT
 	description = "A mutated fungal compound that causes rapid rotting in iron infrastructures."
 	reagent_state = REAGENT_STATE_LIQUID
+	creates_puddle = FALSE
 	color = "#005200" //moldy green
 
 /datum/reagent/ironrot/reaction_turf(var/turf/simulated/T, var/volume)
