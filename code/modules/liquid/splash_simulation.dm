@@ -72,8 +72,11 @@ var/list/datum/puddle/puddles = list()
 	if(!turf_on || (turf_on.reagents && turf_on.reagents.total_volume < PUDDLE_TRANSFER_THRESHOLD))
 		qdel(src)
 		return
-	if(turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
-		spread()
+	if(turf_on.reagents)
+		for(var/datum/reagent/R in turf_on.reagents.reagent_list)
+			turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
+		if(turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
+			spread()
 
 /obj/effect/decal/cleanable/puddle/proc/spread()
 	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME
