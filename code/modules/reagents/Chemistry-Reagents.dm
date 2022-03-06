@@ -409,6 +409,7 @@
 	name = "Blue Goo"
 	id = BLUEGOO
 	description = "A viscous blue substance of unknown origin."
+	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#64D2E6"
 	custom_metabolism = 0.01
@@ -427,6 +428,7 @@
 	name = "Slime Jelly"
 	id = SLIMEJELLY
 	description = "A gooey semi-liquid produced from one of the deadliest lifeforms in existence. SO REAL."
+	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#801E28" //rgb: 128, 30, 40
 	density = 0.8
@@ -745,6 +747,7 @@
 	name = "Space Lube"
 	id = LUBE
 	description = "Lubricant is a substance introduced between two moving surfaces to reduce the friction and wear between them. giggity."
+	viscosity = 25
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
 	invisible_puddle = TRUE
@@ -891,6 +894,7 @@
 	name = "Plasticide"
 	id = PLASTICIDE
 	description = "Liquid plastic, do not eat."
+	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
@@ -1587,6 +1591,7 @@
 	name = "Honey"
 	id = HONEY
 	description = "A golden yellow syrup, loaded with sugary sweetness."
+	viscosity = 1
 	color = "#FEAE00"
 	alpha = 200
 	nutriment_factor = 15 * REAGENTS_METABOLISM
@@ -2320,6 +2325,7 @@
 	name = "Vomit"
 	id = VOMIT
 	description = "Stomach acid mixed with partially digested chunks of food."
+	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
 	density = 1.35
@@ -4370,6 +4376,7 @@
 	name = "Ketchup"
 	id = KETCHUP
 	description = "Ketchup, catsup, whatever. It's tomato paste."
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
@@ -4378,6 +4385,7 @@
 	name = "Mustard"
 	id = MUSTARD
 	description = "A spicy yellow paste."
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
@@ -4386,6 +4394,7 @@
 	name = "Relish"
 	id = RELISH
 	description = "A pickled cucumber jam. Tasty!"
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#336600" //rgb: 51, 102, 0
@@ -4402,6 +4411,7 @@
 	name = "Mayonnaise"
 	id = MAYO
 	description = "A substance of unspeakable suffering."
+	viscosity = 4
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#FAF0E6" //rgb: 51, 102, 0
@@ -4426,6 +4436,7 @@
 	name = "Zam's Spicy Sauce"
 	id = ZAMSPICYTOXIN
 	description = "A dangerously flavorful sauce made from mothership spices and powerful acid."
+	viscosity = 20
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 6 * REAGENTS_METABOLISM
 	color = "#D35A0D" //rgb: 211, 90, 13
@@ -4509,6 +4520,7 @@
 	name = "Egg Yolk"
 	id = EGG_YOLK
 	description = "A chicken before it could become a chicken."
+	viscosity = 25
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ffcd42"
@@ -5303,6 +5315,7 @@
 	name = "pancake mix"
 	id = PANCAKE
 	description = "A mix of flour, milk, butter, and egg yolk. ready to be cooked into delicious pancakes."
+	viscosity = 20
 	reagent_state = REAGENT_STATE_LIQUID
 	creates_puddle = FALSE
 	nutriment_factor = 15 * REAGENTS_METABOLISM
@@ -5342,6 +5355,7 @@
 	name = "Cherry Jelly"
 	id = CHERRYJELLY
 	description = "Totally the best. Only to be spread on foods with excellent lateral symmetry."
+	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#801E28" //rgb: 128, 30, 40
@@ -5357,6 +5371,7 @@
 	name = "Discount Dan's Special Sauce"
 	id = DISCOUNT
 	description = "You can almost feel your liver failing, just by looking at it."
+	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	nutriment_factor = 4 * REAGENTS_METABOLISM
@@ -5405,6 +5420,7 @@
 	name = "Irradiated Beans"
 	id = IRRADIATEDBEANS
 	description = "You can almost taste the lead sheet behind it!"
+	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
@@ -5421,6 +5437,7 @@
 	name = "Toxic Waste"
 	id = TOXICWASTE
 	description = "A type of sludge."
+	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
@@ -5438,6 +5455,7 @@
 	name = "Re-Fried Beans"
 	id = REFRIEDBEANS
 	description = "Mmm.."
+	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
@@ -5446,6 +5464,7 @@
 	name = "Mutated Beans"
 	id = MUTATEDBEANS
 	description = "Mutated flavor."
+	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
@@ -5462,6 +5481,7 @@
 	name = "Beff"
 	id = BEFF
 	description = "What's beff? Find out!"
+	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
@@ -5470,6 +5490,7 @@
 	name = "Horse Meat"
 	id = HORSEMEAT
 	description = "Tastes excellent in lasagna."
+	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 3 * REAGENTS_METABOLISM
@@ -5478,6 +5499,7 @@
 	name = "Moon Rocks"
 	id = MOONROCKS
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
+	viscosity = 25
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
@@ -5493,6 +5515,7 @@
 	name = "Off-Color Cheese"
 	id = OFFCOLORCHEESE
 	description = "American Cheese."
+	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
@@ -5509,6 +5532,7 @@
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
 	description = "That green isn't organic."
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
@@ -5528,6 +5552,7 @@
 	name = "Glowing Ramen Noodles"
 	id = GLOWINGRAMEN
 	description = "That glow 'aint healthy."
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
@@ -5544,6 +5569,7 @@
 	name = "Deep Fried Ramen Noodles"
 	id = DEEPFRIEDRAMEN
 	description = "Ramen, deep fried."
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
@@ -5573,6 +5599,7 @@
 	name = "Clotting Agent"
 	id = CLOTTING_AGENT
 	description = "Concentrated blood platelets, capable of stemming bleeding."
+	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#a00000" //rgb: 160, 0, 0
 	custom_metabolism = 0.1
@@ -5581,6 +5608,7 @@
 	name = "Biofoam"
 	id = BIOFOAM
 	description = "A fast-hardening, biocompatible foam used to stem internal bleeding for a short time."
+	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
@@ -8670,6 +8698,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Gravy"
 	id = GRAVY
 	description = "Aww, come on Double D, I don't say 'gravy' all the time."
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#E7A568"
@@ -8686,6 +8715,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Cheesy Gloop"
 	id = CHEESYGLOOP
 	description = "This fatty, viscous substance is found only within the cheesiest of cheeses. Has the potential to cause heart stoppage."
+	viscosity = 1
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFF00" //rgb: 255, 255, 0
 	overdose_am = 5
@@ -9086,6 +9116,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Mucus"
 	id = MUCUS
 	description = "A slippery aqueous secretion produced by, and covering, mucous membranes.  Problematic for Asthmatics."
+	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E"
 	custom_metabolism = 0.01
@@ -9434,6 +9465,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Ectoplasm"
 	id = ECTOPLASM
 	description = "Pure, distilled spooky"
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#21d389b4"
 	density = 0.05
@@ -9707,6 +9739,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Delightful Mix"
 	id = DSYRUP
 	description = "This syrupy stuff is everyone's favorite tricord additive."
+	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#571212" //like a dark red
 	density = 1.00 //basically water
@@ -9716,6 +9749,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Grue Bile"
 	id = GRUE_BILE
 	description = "A noxious substance produced in the body of a grue."
+	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	color = GRUE_BLOOD
 	custom_metabolism = 0.01
