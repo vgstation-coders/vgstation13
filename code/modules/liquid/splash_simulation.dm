@@ -77,42 +77,29 @@ var/list/datum/puddle/puddles = list()
 	spread()
 
 /obj/effect/decal/cleanable/puddle/proc/spread()
-
-
-//	to_chat(world, "DEBUG: liquid spread!")
 	var/surrounding_volume = 0
 	var/list/spread_directions = cardinal
 	for(var/direction in spread_directions)
 		var/turf/T = get_step(src,direction)
 		if(!T)
 			spread_directions.Remove(direction)
-//			to_chat(world, "ERROR: Map edge!")
-			continue //Map edge
+			log_debug("Puddle reached map edge.")
+			continue
 		if(!turf_on.can_leave_liquid(direction)) //Check if this liquid can leave the tile in the direction
 			spread_directions.Remove(direction)
 			continue
 		if(!T.can_accept_liquid(turn(direction,180))) //Check if this liquid can enter the tile
 			spread_directions.Remove(direction)
 			continue
-		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
-		if(L)
-			if(T.reagents.total_volume >= turf_on.reagents.total_volume)
-				spread_directions.Remove(direction)
-				continue
-			surrounding_volume += T.reagents.total_volume //If liquid already exists, add it's volume to our sum
-		else
-			var/obj/effect/decal/cleanable/puddle/NL = new(T) //Otherwise create a new object which we'll spread to.
-			NL.controller = src.controller
-			controller.puddle_objects.Add(NL)
 
 	if(!spread_directions.len)
-//		to_chat(world, "ERROR: No candidate to spread to.")
-		return //No suitable candidate to spread to
+		log_debug("Puddle had no candidate to spread to.")
+		return
 
 	var/average_volume = (turf_on.reagents.total_volume + surrounding_volume) / (spread_directions.len + 1) //Average amount of volume on this and the surrounding tiles.
 	var/volume_difference = turf_on.reagents.total_volume - average_volume //How much more/less volume this tile has than the surrounding tiles.
 	if(volume_difference <= (spread_directions.len*LIQUID_TRANSFER_THRESHOLD)) //If we have less than the threshold excess liquid - then there is nothing to do as other tiles will be giving us volume.or the liquid is just still.
-//		to_chat(world, "ERROR: transfer volume lower than THRESHOLD!")
+		log_debug("Puddle transfer volume was lower than THRESHOLD, no spread occured.")
 		return
 
 	var/volume_per_tile = volume_difference / spread_directions.len
@@ -120,12 +107,24 @@ var/list/datum/puddle/puddles = list()
 	for(var/direction in spread_directions)
 		var/turf/T = get_step(src,direction)
 		if(!T)
-//			to_chat(world, "ERROR: Map edge 2!")
-			continue //Map edge
-		if(!(locate(/obj/effect/decal/cleanable/puddle) in T))
-			new /obj/effect/decal/cleanable/puddle(T)
+			log_debug("Puddle reached map edge.")
+			continue
+
+		var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
+		if(L)
+			surrounding_volume += T.reagents.total_volume //If liquid already exists, add it's volume to our sum
+			L.update_icon()
+			if(L.controller != src.controller)
+				L.controller.puddle_objects.Remove(L)
+				if(L.controller.puddle_objects.len <= 0)
+					qdel(L.controller)
+				L.controller = src.controller
+		else
+			var/obj/effect/decal/cleanable/puddle/NL = new(T) //Otherwise create a new object which we'll spread to.
+			NL.controller = src.controller
+			controller.puddle_objects.Add(NL)
 		turf_on.reagents.trans_to(T,volume_per_tile)
-		update_icon()
+	update_icon()
 
 /obj/effect/decal/cleanable/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
