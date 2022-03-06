@@ -1,8 +1,6 @@
 #define PUDDLE_TRANSFER_THRESHOLD 0.05
 #define MAX_PUDDLE_VOLUME 50
 
-var/liquid_delay = 4
-
 var/list/datum/puddle/puddles = list()
 var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 
