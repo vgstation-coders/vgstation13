@@ -681,7 +681,9 @@
 		return 1
 
 	if(volume >= 3) //Hardcoded
-		T.wet(800)
+		T.wet()
+	else
+		T.dry()
 
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
@@ -755,7 +757,9 @@
 		return 1
 
 	if(volume >= 1)
-		T.wet(800, TURF_WET_LUBE)
+		T.wet(TURF_WET_LUBE)
+	else
+		T.dry(TURF_WET_LUBE)
 
 /datum/reagent/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
@@ -5189,7 +5193,9 @@
 		return 1
 
 	if(volume >= 3)
-		T.wet(800)
+		T.wet()
+	else
+		T.dry()
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())

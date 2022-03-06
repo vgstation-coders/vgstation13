@@ -76,22 +76,11 @@
 	icon_state = "wet_floor"
 	anchored = 1
 	var/wet = TURF_WET_LUBE
-	var/lifespan
 	mouse_opacity = 0
 
-/obj/effect/overlay/wetfloor/New(var/turf/T, var/new_wet, var/new_lifespan)
+/obj/effect/overlay/wetfloor/New(var/turf/T, var/new_wet)
 	..()
 	wet = new_wet
-	lifespan = world.time + new_lifespan
-	processing_objects.Add(src)
-
-/obj/effect/overlay/wetfloor/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/effect/overlay/wetfloor/process()
-	if(world.time >= lifespan)
-		qdel(src)
 
 /obj/effect/overlay/wetfloor/Crossed(atom/movable/AM)
 
@@ -113,6 +102,10 @@
 	. = ..()
 	lifespan = world.time + HOLYWATER_DURATION
 	processing_objects.Add(src)
+
+/obj/effect/overlay/holywetfloor/Destroy()
+	processing_objects.Remove(src)
+	..()
 
 /obj/effect/overlay/holywetfloor/process()
 	if(world.time >= lifespan)

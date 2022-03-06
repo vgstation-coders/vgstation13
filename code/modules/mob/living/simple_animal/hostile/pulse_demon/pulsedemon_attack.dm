@@ -151,7 +151,8 @@
     if(istype(A,/turf/simulated/floor) && Adjacent(A))
         var/turf/simulated/floor/F = A
         if(prob(50))
-            F.wet(800)
+			if(F.reagents)
+				F.reagents.add_reagent(WATER,40)
         if(prob(50))
             visible_message("<span class='warning'>Something flies out of \the [src]! He seems to be acting oddly.</span>")
             if(!(locate(/obj/effect/decal/cleanable/blood/gibs) in F))
