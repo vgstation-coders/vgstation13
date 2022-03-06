@@ -199,9 +199,8 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	var/volume = 50
 
 /obj/effect/overlay/puddle/mapping/initialize()
-	var/datum/reagent/R = chemical_reagents_list[reagent_type]
-	if(R)
-		R.reaction_turf(get_turf(src), volume)
+	if(turf_on && turf_on.reagents)
+		turf_on.reagents.add_reagent(reagent_type,volume)
 
 /obj/effect/overlay/puddle/mapping/water
 	reagent_type = WATER
