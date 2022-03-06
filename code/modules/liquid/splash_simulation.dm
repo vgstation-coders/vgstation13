@@ -20,6 +20,7 @@ var/list/datum/puddle/puddles = list()
 
 /client/proc/splash()
 	set category = "Debug"
+	set name = "Create puddle"
 
 	var/volume = input("Volume?","Volume?", 0 ) as num
 	if(!isnum(volume))
@@ -32,22 +33,22 @@ var/list/datum/puddle/puddles = list()
 	var/reagent = input("Reagent ID?","Reagent ID?", WATER) as text
 	if(!reagent)
 		return
-	trigger_splash(T, reagent, volume)
+	create_puddle(T, reagent, volume)
 
-/proc/trigger_splash(turf/epicenter as turf, reagent_id as text, volume as num)
+/proc/create_puddle(turf/epicenter as turf, reagent_id as text, volume as num)
 	if(!epicenter || volume <= 0 || !reagent_id)
 		return
 
 	var/obj/effect/decal/cleanable/puddle/L = new/obj/effect/decal/cleanable/puddle(epicenter)
 	epicenter.reagents.add_reagent(reagent_id, volume)
-	var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in T
+	var/obj/effect/decal/cleanable/puddle/L = locate(/obj/effect/decal/cleanable/puddle) in epicenter
 	if(L)
 		L.update_icon()
 	else
 		var/datum/puddle/P = new/datum/puddle()
-		var/obj/effect/decal/cleanable/puddle/NL = new(T) //Otherwise create a new object which we'll spread to.
+		var/obj/effect/decal/cleanable/puddle/NL = new(epicenter) //Otherwise create a new object which we'll spread to.
 		NL.controller = P
-		controller.puddle_objects.Add(NL)
+		NL.controller.puddle_objects.Add(NL)
 
 
 
