@@ -3765,6 +3765,10 @@ var/global/num_vending_terminals = 1
 	add_fingerprint(user)
 	if(istype(I, /obj/item/toy/lotto_ticket))
 		var/obj/item/toy/lotto_ticket/T = I
+		if(!T.revealed)
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket cannot be read until the film is scratched off.\"")
+			return
 		if(!T.iswinner)
 			playsound(src, "buzz-sigh", 50, 1)
 			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")

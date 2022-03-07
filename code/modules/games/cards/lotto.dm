@@ -46,8 +46,8 @@
 
 /obj/item/toy/lotto_ticket/attackby(obj/item/weapon/S, mob/user)
 	if(!revealed)
-		if(!user.is_holding_item(src))
-			to_chat(user, "<span class='notice'>The film is too tough to scratch without holding the ticket in your hand!</span>")
+		if(!user.is_holding_item(src) && istype(src,/obj/item/toy/lotto_ticket/supermatter_surprise))
+			to_chat(user, "<span class='notice'>The special film is too tough to scratch without holding the ticket in your hand!</span>")
 			return 1
 		if(S.is_sharp() || istype(S, /obj/item/weapon/coin))
 			if(do_after(user, src, 1 SECONDS))
