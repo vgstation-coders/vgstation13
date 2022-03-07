@@ -1,26 +1,11 @@
 #define PUDDLE_TRANSFER_THRESHOLD 0.05
 #define MAX_PUDDLE_VOLUME 50
 
-var/list/datum/puddle/puddles = list()
+var/list/obj/effect/overlay/puddle/puddles = list()
 var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 
-/datum/puddle
-	var/list/obj/effect/overlay/puddle/puddle_objects = list()
-
-/datum/puddle/New(var/obj/effect/overlay/puddle/P)
-	..()
-	puddles += src
-	if(P)
-		puddle_objects.Add(P)
-
-/datum/puddle/Del()
-	puddles -= src
-	for(var/obj/O in puddle_objects)
-		qdel(O)
-		O = null
-	..()
-
-
+/turf
+	var/obj/effect/overlay/puddle/current_puddle = null
 
 /obj/effect/overlay/puddle
 	icon = 'icons/effects/puddle.dmi'
@@ -28,7 +13,6 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	name = "puddle"
 	plane = ABOVE_TURF_PLANE
 	layer = PUDDLE_LAYER
-	var/datum/puddle/controller
 	var/turf/turf_on
 
 /obj/effect/overlay/puddle/New()
@@ -38,12 +22,9 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		qdel(src)
 		return
 
-	for( var/obj/effect/overlay/puddle/L in loc )
-		if(L != src)
-			qdel(L)
-			L = null
-
-	controller = new/datum/puddle(src)
+	if(turf_on.current_puddle)
+		qdel(turf_on.current_puddle)
+	turf_on.current_puddle = src
 	processing_objects.Add(src)
 	update_icon()
 
@@ -91,14 +72,8 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 
 		turf_on.reagents.trans_to(T, average_volume)
 		T.reagents.reaction(T, none_splashed = TRUE) //Already transferred it here, don't go making it.
-		var/obj/effect/overlay/puddle/L = locate(/obj/effect/overlay/puddle) in T
-		if(L)
-			L.update_icon()
-			if(L.controller != src.controller)
-				L.controller.puddle_objects.Remove(L)
-				if(L.controller.puddle_objects.len <= 0)
-					qdel(L.controller)
-				L.controller = src.controller
+		if(T.current_puddle)
+			T.current_puddle.update_icon()
 	update_icon()
 
 /obj/effect/overlay/puddle/getFireFuel() // Copied over from old fuel overlay system and adjusted
@@ -114,20 +89,31 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 			turf_on.reagents.remove_reagent(id, turf_on.reagents.get_reagent_amount(id) * used_fuel_ratio * used_reactants_ratio * 5) // liquid fuel burns 5 times as quick
 
 /obj/effect/overlay/puddle/Crossed(atom/movable/AM)
-	var/turf/T = get_turf(AM)
-	if(T && T.reagents)
-		T.reagents.reaction(AM, volume_multiplier = 0.1) //Only targeting feet here
+	if(turf_on.reagents)
+		turf_on.reagents.reaction(AM, volume_multiplier = 0.1) //Only targeting feet here
 	else
 		return ..()
 
+// Overly gimmicky proc for if we want player controlled puddles for whatever reason
 /obj/effect/overlay/puddle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	return 0
+	if(turf_on && turf_on.reagents)
+		var/lowest_viscosity = turf_on.reagents.total_volume
+		for(var/datum/reagent/R in turf_on.reagents.reagent_list)
+			lowest_viscosity = min(R.viscosity, lowest_viscosity) //Capped by viscosity
+		turf_on.reagents.trans_to(NewLoc, lowest_viscosity)
+		if(isturf(NewLoc))
+			var/turf/T = NewLoc
+			if(T.reagents && T.reagents.total_volume >= 50)
+				qdel(T.current_puddle)
+				T.current_puddle = src
+				turf_on = NewLoc
+				return ..()
 
 /obj/effect/overlay/puddle/Destroy()
-	src.controller.puddle_objects.Remove(src)
 	if(turf_on && turf_on.reagents)
 		turf_on.reagents.clear_reagents()
 	processing_objects.Remove(src)
+	turf_on.current_puddle = null
 	..()
 
 /obj/effect/overlay/puddle/update_icon()
@@ -138,7 +124,6 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		transform = matrix(min(1, turf_on.reagents.total_volume / MAX_PUDDLE_VOLUME),0,0,0,min(1, turf_on.reagents.total_volume / MAX_PUDDLE_VOLUME),0)
 
 	relativewall()
-	relativewall_neighbours()
 
 /obj/effect/overlay/puddle/relativewall()
 	if(turf_on && turf_on.reagents && turf_on.reagents.total_volume >= MAX_PUDDLE_VOLUME)

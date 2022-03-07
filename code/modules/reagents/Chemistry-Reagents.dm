@@ -164,9 +164,8 @@
 	if(T.reagents && self.reagent_state == REAGENT_STATE_LIQUID && self.creates_puddle)
 		if(volume)
 			T.reagents.add_reagent(self.id, volume)
-		var/obj/effect/overlay/puddle/P = locate(/obj/effect/overlay/puddle) in T
-		if(P)
-			P.update_icon()
+		if(T.current_puddle)
+			T.current_puddle.update_icon()
 		else
 			new /obj/effect/overlay/puddle(T)
 
