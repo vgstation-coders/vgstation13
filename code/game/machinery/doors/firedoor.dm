@@ -65,8 +65,12 @@ var/global/list/alert_overlays_global = list()
 	opacity = 0
 	density = 0
 	layer = BELOW_TABLE_LAYER
+
+	open_plane = OBJ_PLANE
 	open_layer = BELOW_TABLE_LAYER
-	closed_layer = ABOVE_DOOR_LAYER
+
+	closed_plane = ABOVE_HUMAN_PLANE
+	closed_layer = CLOSED_FIREDOOR_LAYER
 
 	dir = 2
 
@@ -464,6 +468,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
+	plane = open_plane
 	layer = open_layer
 	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
@@ -507,6 +512,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
+	plane = closed_plane
 	layer = closed_layer
 
 /obj/machinery/door/firedoor/update_icon()

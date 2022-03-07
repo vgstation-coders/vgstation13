@@ -173,7 +173,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 	// OBJ_LAYER 	 					3
 	// ABOVE_OBJ_LAYER					4
 	#define CLOSED_CURTAIN_LAYER		5
-	#define CHAT_LAYER					6
+	#define CLOSED_FIREDOOR_LAYER		6
+	#define CHAT_LAYER					7
 
 #define BLOB_PLANE 				(10 + FLOAT_PLANE)			// For Blobs, which are above humans.
 
