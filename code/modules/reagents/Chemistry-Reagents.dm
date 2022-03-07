@@ -2308,6 +2308,7 @@
 	description = "Required for welders. Flamable."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#660000" //rgb: 102, 0, 0
+	puddle_color = "#6D5757" //rgb: 109, 87, 87 to make it look like legacy fuel puddles, grabbed from the old sprite
 	puddle_alpha = 128
 	density = 1.1
 	specheatcap = 0.68
