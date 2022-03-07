@@ -23,7 +23,7 @@
 	var/datum/reagents/holder = null
 	var/reagent_state = REAGENT_STATE_SOLID
 	var/creates_puddle = TRUE //For liquids that have the option not to, like paint.
-	var/evaporation_rate = 1 //For when on floors
+	var/evaporation_rate = 0 //For when on floors
 	var/viscosity = INFINITY //Maximum amount that can spread on puddles
 	var/data = null
 	var/volume = 0
@@ -611,8 +611,8 @@
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 128
 	puddle_color = "#77c2ff"
-	puddle_alpha = 64
 	invisible_puddle = TRUE
+	evaporation_rate = 1
 	specheatcap = 4.184
 	density = 1
 	glass_desc = "The father of all refreshments."
@@ -2308,8 +2308,7 @@
 	description = "Required for welders. Flamable."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#660000" //rgb: 102, 0, 0
-	puddle_color = "#6D5757" //rgb: 109, 87, 87
-	puddle_alpha = 61 //both values are to make it look like legacy fuel puddles, grabbed from the old sprite
+	puddle_alpha = 128
 	density = 1.1
 	specheatcap = 0.68
 	glass_icon_state = "dr_gibb_glass"

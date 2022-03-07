@@ -1,5 +1,6 @@
 #define PUDDLE_TRANSFER_THRESHOLD 0.05
 #define MAX_PUDDLE_VOLUME 50
+#define CIRCLE_PUDDLE_VOLUME 40 //39.26899 technically but this is close enough
 
 var/list/obj/effect/overlay/puddle/puddles = list()
 var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
@@ -35,7 +36,8 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		return
 	if(turf_on.reagents)
 		for(var/datum/reagent/R in turf_on.reagents.reagent_list)
-			turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
+			if(R.evaporation_rate)
+				turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
 		if(turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
 
@@ -103,7 +105,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		turf_on.reagents.trans_to(NewLoc, lowest_viscosity)
 		if(isturf(NewLoc))
 			var/turf/T = NewLoc
-			if(T.reagents && T.reagents.total_volume >= 50)
+			if(T.reagents && T.reagents.total_volume >= MAX_PUDDLE_VOLUME)
 				qdel(T.current_puddle)
 				T.current_puddle = src
 				turf_on = NewLoc
@@ -117,16 +119,19 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	..()
 
 /obj/effect/overlay/puddle/update_icon()
-	if(turf_on && turf_on.reagents)
-		color = mix_color_from_reagents(turf_on.reagents.reagent_list)
-		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list)
+	if(turf_on && turf_on.reagents && turf_on.reagents.reagent_list.len)
+		color = mix_color_from_reagents(turf_on.reagents.reagent_list,TRUE)
+		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list,TRUE)
 		// Absolute scaling with volume, Scale() would give relative.
-		transform = matrix(min(1, turf_on.reagents.total_volume / MAX_PUDDLE_VOLUME),0,0,0,min(1, turf_on.reagents.total_volume / MAX_PUDDLE_VOLUME),0)
+		transform = matrix(min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0, 0, 0, min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0)
+	else // Sanity
+		qdel(src)
 
 	relativewall()
 
 /obj/effect/overlay/puddle/relativewall()
-	if(turf_on && turf_on.reagents && turf_on.reagents.total_volume >= MAX_PUDDLE_VOLUME)
+	// Circle value as to have some breathing room
+	if(turf_on && turf_on.reagents && turf_on.reagents.total_volume >= CIRCLE_PUDDLE_VOLUME)
 		var/junction=findSmoothingNeighbors()
 		icon_state = "puddle[junction]"
 	else
@@ -138,9 +143,8 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	)
 	return smoothables
 
-/obj/effect/overlay/puddle/isSmoothableNeighbor(atom/A)
-	var/turf/T = get_turf(A)
-	if(T && T.reagents && T.reagents.total_volume < MAX_PUDDLE_VOLUME)
+/obj/effect/overlay/puddle/isSmoothableNeighbor(var/obj/effect/overlay/puddle/A)
+	if(istype(A) && A.turf_on && A.turf_on.reagents && A.turf_on.reagents.total_volume < CIRCLE_PUDDLE_VOLUME)
 		return
 
 	return ..()
