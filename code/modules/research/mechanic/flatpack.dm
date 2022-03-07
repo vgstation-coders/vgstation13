@@ -157,7 +157,7 @@
 			return
 		if(!user.Adjacent(src) || !user.Adjacent(dropping))
 			return
-		if(!try_add_stack(stacking))
+		if(!try_add_stack(stacking, user))
 			return
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")
@@ -169,11 +169,11 @@
 		return FALSE
 	if(assembling == ASSEMBLING || other.assembling == ASSEMBLING)
 		if(user)
-			to_chat(user, "You can't stack opened flatpacks.")
+			to_chat(user, "<span class='warning'>You can't stack opened flatpacks.</span>")
 		return FALSE
 	if((stacked.len + other.stacked.len + 2) >= MAX_FLATPACK_STACKS) //how many flatpacks we can in a stack (including the bases)
 		if(user)
-			to_chat(user, "You can't stack flatpacks that high.")
+			to_chat(user, "<span class='warning'>You can't stack flatpacks that high.</span>")
 		return FALSE
 	add_stack(other)
 	return TRUE
