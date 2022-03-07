@@ -444,16 +444,19 @@ var/list/ai_list = list()
 			if(!isDead())
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
+				if((src.key || src.ckey) && whodunnit)
+					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
 		if(2.0)
 			if(!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
+				if((src.key || src.ckey) && whodunnit)
+					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 		if(3.0)
 			if(!isDead())
 				adjustBruteLoss(30)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
+				if((src.key || src.ckey) && whodunnit)
+					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	updatehealth()
 
@@ -937,5 +940,5 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/update_perception()
 	if(ai_flags & HIGHRESCAMS)
 		client?.darkness_planemaster.alpha = 150
-	else 
+	else
 		client?.darkness_planemaster.alpha = 255
