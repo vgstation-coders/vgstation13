@@ -588,7 +588,7 @@
 	plant_dmi = 'icons/obj/hydroponics/deathberry.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
-	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5), CYTISINE = list(1))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5), CYTISINE = list(1,5))
 
 	yield = 3
 	potency = 50
