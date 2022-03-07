@@ -610,7 +610,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 128
-	puddle_color = "#77c2ff"
+	puddle_color = "#6da7ff"
 	invisible_puddle = TRUE
 	evaporation_rate = 1
 	specheatcap = 4.184
