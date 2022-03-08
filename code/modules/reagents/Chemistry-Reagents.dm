@@ -41,7 +41,6 @@
 	var/alpha = 255
 	var/puddle_color = null // If it needs to look different as a puddle
 	var/puddle_alpha = 0 // See above
-	var/invisible_puddle = FALSE //Override for above, if() check won't recognise zero
 	var/dupeable = TRUE	//whether the reagent can be duplicated by standard reagent duplication methods such as a service borg shaker or odysseus
 	var/flags = 0
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
@@ -611,7 +610,6 @@
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 128
 	puddle_color = "#6da7ff"
-	invisible_puddle = TRUE
 	evaporation_rate = 1
 	specheatcap = 4.184
 	density = 1
@@ -745,7 +743,7 @@
 	viscosity = 25
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
-	invisible_puddle = TRUE
+	puddle_alpha = 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388

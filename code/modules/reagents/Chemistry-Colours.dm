@@ -37,8 +37,6 @@
 	var/total_alpha = 0
 
 	for(var/datum/reagent/reagent in reagent_list)
-		if(reagent.invisible_puddle)
-			continue
 		total_alpha += (puddle && reagent.puddle_alpha ? reagent.puddle_alpha : reagent.alpha)
 
 	alpha = total_alpha / reagent_list.len
