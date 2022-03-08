@@ -70,26 +70,6 @@
 	icon_state = "bluespacify"
 	layer = LIGHTING_LAYER
 
-/obj/effect/overlay/wetfloor
-	name = "Puddle"
-	icon = 'icons/effects/water.dmi'
-	icon_state = "wet_floor"
-	anchored = 1
-	var/wet = TURF_WET_LUBE
-	mouse_opacity = 0
-
-/obj/effect/overlay/wetfloor/New(var/turf/T, var/new_wet)
-	..()
-	wet = new_wet
-
-/obj/effect/overlay/wetfloor/Crossed(atom/movable/AM)
-
-	if (!isliving(AM))
-		return ..()
-	var/mob/living/L = AM
-	if (!L.ApplySlip(src))
-		return ..()
-
 /obj/effect/overlay/holywetfloor
 	name = "Puddle"
 	icon = 'icons/effects/water.dmi'

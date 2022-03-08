@@ -680,15 +680,8 @@
 			H.adjustToxLoss(rand(1,3))
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
-
-	var/datum/reagent/self = src
 	if(..())
 		return 1
-
-	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 3) //Hardcoded
-		T.wet()
-	else
-		T.dry()
 
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
@@ -697,13 +690,6 @@
 		lowertemp.react()
 		T.assume_air(lowertemp)
 		qdel(hotspot)
-
-/datum/reagent/water/on_removal(var/amount)
-	if(!..(amount))
-		return 0
-	if(istype(holder.my_atom,/turf/simulated))
-		var/turf/simulated/T = holder.my_atom
-		T.dry()
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
 
@@ -764,24 +750,6 @@
 	density = 1.11775
 	specheatcap = 2.71388
 
-/datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
-
-	var/datum/reagent/self = src
-	if(..())
-		return 1
-
-	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 1)
-		T.wet(TURF_WET_LUBE)
-	else
-		T.dry(TURF_WET_LUBE)
-
-/datum/reagent/lube/on_removal(var/amount)
-	if(!..(amount))
-		return 0
-	if(istype(holder.my_atom,/turf/simulated))
-		var/turf/simulated/T = holder.my_atom
-		T.dry(TURF_WET_LUBE)
-
 /datum/reagent/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
@@ -800,7 +768,7 @@
 		if(!locate(/obj/effect/decal/cleanable/molten_item) in T)
 			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(T)
 			I.desc = "A bit of gel left over from sodium polyacrylate absorbing liquid."
-		T.dry(TURF_WET_LUBE) //Absorbs water or lube
+		T.reagents.remove_reagent(LUBE, T.reagents.get_reagent_amount(LUBE)) //Absorbs water or lube
 
 /datum/reagent/anti_toxin
 	name = "Dylovene"
@@ -2185,7 +2153,7 @@
 		return 1
 
 	if(T.is_wet())
-		T.dry(TURF_WET_LUBE) //Cleans water or lube
+		T.reagents.remove_reagent(LUBE, T.reagents.get_reagent_amount(LUBE)) //Cleans water or lube
 		var/obj/effect/smoke/S = new /obj/effect/smoke(T)
 		S.time_to_live = 10 //unusually short smoke
 		//We don't need to start up the system because we only want to smoke one tile.
@@ -5212,15 +5180,9 @@
 					H.adjustBruteLoss(30)
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
-
-	var/datum/reagent/self = src
 	if(..())
 		return 1
 
-	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 3)
-		T.wet()
-	else
-		T.dry()
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
@@ -5228,13 +5190,6 @@
 		lowertemp.react()
 		T.assume_air(lowertemp)
 		qdel(hotspot)
-
-/datum/reagent/cornoil/on_removal(var/amount)
-	if(!..(amount))
-		return 0
-	if(istype(holder.my_atom,/turf/simulated))
-		var/turf/simulated/T = holder.my_atom
-		T.dry()
 
 /datum/reagent/enzyme
 	name = "Universal Enzyme"
@@ -9715,7 +9670,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/incense/vapor/OnDisperse(var/turf/location)
 	for(var/turf/simulated/T in view(2,location))
 		if(T.is_wet())
-			T.dry(TURF_WET_LUBE)
+			T.reagents.remove_reagent(LUBE, T.reagents.get_reagent_amount(LUBE))
 			T.turf_animation('icons/effects/water.dmi',"dry_floor",0,0,TURF_LAYER)
 
 /datum/reagent/incense/dense

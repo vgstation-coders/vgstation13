@@ -1055,15 +1055,6 @@ var/global/list/yantar_stuff = list(
 				break
 			reagents.add_reagent(C.reagent,1)
 		qdel(C)
-	for(var/obj/effect/overlay/wetfloor/P in T)
-		if(reagents.is_full())
-			visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
-			break
-		if(P.wet == TURF_WET_LUBE)
-			reagents.add_reagent(LUBE,1)
-		else if(P.wet == TURF_WET_WATER)
-			reagents.add_reagent(WATER,1)
-		qdel(P)
 	T.clean_blood()
 	for(var/obj/item/trash/R in T)
 		if(trash.len >= max_trash)
