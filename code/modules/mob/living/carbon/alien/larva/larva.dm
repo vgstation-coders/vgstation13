@@ -52,11 +52,12 @@
 
 	var/b_loss = null
 	var/f_loss = null
+	var/dmg_phrase = ""
+	var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
 	switch (severity)
 		if(1)
 			b_loss += 500
-			if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 			gib()
 			return
 		if(2)
@@ -73,8 +74,7 @@
 			ear_deaf += 60
 			dmg_phrase = "Damage: 30"
 
-	if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
-		add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], [dmg_phrase]", admin_warn = TRUE)
+	add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 	adjustBruteLoss(b_loss)
 	adjustFireLoss(f_loss)
