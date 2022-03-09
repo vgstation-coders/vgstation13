@@ -207,7 +207,7 @@ var/auxtools_path
 		..()
 		return
 
-	if(config.map_voting)
+	if(config.map_voting && vote.winner && vote.map_paths.len)
 		//get filename
 		var/filename = "vgstation13.dmb"
 		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
@@ -216,7 +216,7 @@ var/auxtools_path
 			if(!fcopy(map_path, filename))
 				fdel(filename)
 				fcopy(map_path, filename)
-			
+
 	pre_shutdown()
 	..()
 
