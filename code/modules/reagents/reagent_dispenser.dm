@@ -505,7 +505,7 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
-	var/health = 50
+	health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
@@ -516,7 +516,7 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
 
-/obj/structure/reagent_dispensers/cauldron/barrel/proc/take_damage(var/damage, var/sound_effect = 1)
+/obj/structure/reagent_dispensers/cauldron/barrel/take_damage(var/damage, var/sound_effect = 1)
 	health = max(0, health - damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)

@@ -30,8 +30,8 @@
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them
 	var/on = 1
-	var/health = 0 //do not forget to set health for your bot!
-	var/maxhealth = 0
+	health = 0 //do not forget to set health for your bot!
+	maxHealth = 0
 	var/fire_dam_coeff = 1.0
 	var/brute_dam_coeff = 1.0
 	var/open = 0//Maint panel
@@ -599,8 +599,8 @@
 
 /obj/machinery/bot/examine(mob/user)
 	..()
-	if (src.health < maxhealth)
-		if (src.health > maxhealth/3)
+	if (src.health < maxHealth)
+		if (src.health > maxHealth/3)
 			to_chat(user, "<span class='warning'>[src]'s parts look loose.</span>")
 		else
 			to_chat(user, "<span class='danger'>[src]'s parts look very loose!</span>")
@@ -660,11 +660,11 @@
 			to_chat(user, "<span class='notice'>Maintenance panel is now [open ? "opened" : "closed"].</span>")
 			updateUsrDialog()
 	else if(iswelder(W) && user.a_intent != I_HURT)
-		if(health < maxhealth)
+		if(health < maxHealth)
 			if(open)
 				var/obj/item/tool/weldingtool/WT = W
 				if(WT.remove_fuel(0))
-					health = min(maxhealth, health+10)
+					health = min(maxHealth, health+10)
 					user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
 			else
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")

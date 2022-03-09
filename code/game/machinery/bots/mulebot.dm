@@ -26,7 +26,7 @@ var/global/mulebot_count = 0
 	anchored = 1
 	animate_movement=1
 	health = 150 //yeah, it's tougher than ed209 because it is a big metal box with wheels --rastaf0
-	maxhealth = 150
+	maxHealth = 150
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	can_take_pai = TRUE
@@ -152,8 +152,8 @@ var/global/mulebot_count = 0
 
 		updateDialog()
 	else if (I.is_wrench(user) && user.a_intent != I_HURT)
-		if (src.health < maxhealth)
-			src.health = min(maxhealth, src.health+25)
+		if (src.health < maxHealth)
+			src.health = min(maxHealth, src.health+25)
 			user.visible_message(
 				"<span class='warning'>[user] repairs [src]!</span>",
 				"<span class='notice'>You repair [src]!</span>"

@@ -18,6 +18,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/damtype = "brute"
 	var/force = 0
 
+	var/w_class
+
 	//Should we alert about reagents that should be logged?
 	var/log_reagents = 1
 

@@ -12,8 +12,8 @@
 	density = TRUE
 	icon_state = "barrier0"
 	pass_flags_self = PASSTABLE
-	var/health = 140
-	var/maxhealth = 140
+	health = 140
+	maxHealth = 140
 
 	machine_flags = EMAGGABLE
 
@@ -99,7 +99,7 @@
 	explosion(loc,-1,-1,0)
 	qdel(src)
 
-/obj/machinery/deployable/barrier/proc/take_damage(var/amount, var/kind = BRUTE)
+/obj/machinery/deployable/barrier/take_damage(var/amount, var/kind = BRUTE)
 	var/modifier = 1
 	if(kind == BRUTE)
 		modifier = 0.75

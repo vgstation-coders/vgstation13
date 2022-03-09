@@ -10,7 +10,7 @@
 	density = 1
 	var/faction = null 							//No shooting our buddies!
 	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
-	var/health = 80								// the turret's health
+	health = 80									// the turret's health
 	var/obj/machinery/turretcover/cover = null	// the cover that is covering this turret
 	var/raising = 0								// if the turret is currently opening or closing its cover
 	var/wasvalid = 0
@@ -18,7 +18,7 @@
 
 	var/reqpower = 350							// Amount of power per shot
 	var/shot_delay = 30 						//3 seconds between shots
-	var/last_shot 
+	var/last_shot
 	var/fire_twice = 0
 
 	use_power = 1								// this turret uses and requires power
@@ -61,7 +61,7 @@
 	if(stat & BROKEN)
 		icon_state = "grey_target_prism"
 	else
-		if( powered() )	
+		if( powered() )
 			if (src.enabled && !(stat & FORCEDISABLE))
 				if(istype(installed,/obj/item/weapon/gun/energy/gun))
 					var/obj/item/weapon/gun/energy/gun/EG = installed
@@ -175,7 +175,7 @@
 		return
 
 	if(!check_target(cur_target)) //if current target fails target check
-		if(fire_twice)		
+		if(fire_twice)
 			shootAt(cur_target)
 			cur_target = get_new_target()
 		else
@@ -222,7 +222,7 @@
 
 	playsound(src, installed.fire_sound, 75, 1)
 
-	last_shot = world.time 
+	last_shot = world.time
 	var/obj/item/projectile/A
 	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
 		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
@@ -361,7 +361,7 @@
 	if(!A.eyeobj)
 		A.make_eyeobj()
 	A.eyeobj.forceMove(get_turf(src))
-	A.current = src 
+	A.current = src
 	controlling_malf = A
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
@@ -572,7 +572,7 @@
 	var/list/exclude = list()
 	var/atom/cur_target
 	var/scan_range = 7
-	var/health = 40
+	health = 40
 	var/list/scan_for = list("human"=0,"cyborg"=0,"mecha"=0,"alien"=1)
 	var/on = 0
 	icon = 'icons/obj/turrets.dmi'
@@ -592,7 +592,7 @@
 		qdel (src)
 	return
 
-/obj/structure/turret/gun_turret/proc/take_damage(damage)
+/obj/structure/turret/gun_turret/take_damage(damage)
 	src.health -= damage
 	if(src.health<=0)
 		qdel (src)

@@ -138,7 +138,7 @@
 	var/undeploy_path = null
 	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
-	var/health = 30
+	health = 30
 	var/ctrl_deflate = TRUE
 
 /obj/structure/inflatable/wall
@@ -198,7 +198,7 @@
 	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
 	deflate(1)
 
-/obj/structure/inflatable/proc/take_damage(var/damage, var/sound_effect = 1)
+/obj/structure/inflatable/take_damage(var/damage, var/sound_effect = 1)
 	health = max(0, health - damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)

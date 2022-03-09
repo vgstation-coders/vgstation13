@@ -9,7 +9,7 @@
 //	weight = 1.0E7
 	req_one_access = list(access_security, access_forensics_lockers)
 	health = 100
-	maxhealth = 100
+	maxHealth = 100
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	steps_per = 2

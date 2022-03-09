@@ -28,7 +28,7 @@
 	var/step_in = 10 //make a step in step_in/10 sec.
 	var/dir_in = SOUTH//What direction will the mech face when entered/powered on? Defaults to South.
 	var/step_energy_drain = 10 //How much energy we consume in a single step
-	var/health = 300 //health is health
+	health = 300 //health is health
 	var/deflect_chance = 10 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
 	//the values in this list show how much damage will pass through, not how much will be absorbed.
 	var/list/damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=1)
@@ -534,7 +534,7 @@
 ////////  Health related procs  ////////
 ////////////////////////////////////////
 
-/obj/mecha/proc/take_damage(amount, type="brute")
+/obj/mecha/take_damage(amount, type="brute")
 	if(amount)
 		var/damage = absorbDamage(amount,type)
 		health -= damage

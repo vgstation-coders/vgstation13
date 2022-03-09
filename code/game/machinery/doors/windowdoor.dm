@@ -4,7 +4,7 @@
 	icon = 'icons/obj/doors/windoor.dmi'
 	icon_state = "left"
 	var/base_state = "left"
-	var/health = 60
+	health = 60
 	visible = 0.0
 	use_power = 0
 	flow_flags = ON_BORDER
@@ -181,7 +181,7 @@
 	operating = 0
 	return TRUE
 
-/obj/machinery/door/window/proc/take_damage(var/damage)
+/obj/machinery/door/window/take_damage(var/damage)
 	health = max(0, health - damage)
 	if(health <= 0)
 		playsound(src, "shatter", 70, 1)

@@ -25,6 +25,23 @@
 	var/start_with_lantern = /obj/item/device/flashlight/lantern/on
 	var/busy = 0
 
+	health = 60
+	breakable_flags = BREAKABLE_ALL
+	damage_armor = BREAKARMOR_MEDIUM
+	damage_resist = BREAKARMOR_WEAK
+	damaged_examine_text = "It is dented."
+	take_hit_text = "denting"
+	take_hit_text2 = "dents"
+	breaks_text = "breaks apart"
+	glanced_sound = 'sound/items/trayhit1.ogg'
+
+/obj/structure/hanging_lantern/try_break()
+	if(health <= 0)
+		Destroy()
+		return TRUE
+	else
+		return FALSE
+
 /obj/structure/hanging_lantern/New(turf/T, var/build_dir)
 
 	..()
@@ -87,6 +104,9 @@
 			lantern = W
 			update()
 			return 1
+
+	else
+		..()
 
 /obj/structure/hanging_lantern/update_icon()
 

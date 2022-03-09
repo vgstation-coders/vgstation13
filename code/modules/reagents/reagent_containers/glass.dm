@@ -90,6 +90,8 @@
 		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(valid_item_attack(W))
+		return ..()
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		if(istype(W, /obj/item/weapon/pen/fountain))
 			var/obj/item/weapon/pen/fountain/P = W
@@ -111,8 +113,20 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
+	//Breakability:
+	health = 3
+	breakable_flags = BREAKABLE_ALL
+	damage_armor = BREAKARMOR_FLIMSY
+	damage_resist = BREAKARMOR_NOARMOR
+	breakable_fragments = list(/obj/item/weapon/shard)
+	damaged_examine_text = "It is cracked."
+	take_hit_text = list("cracking", "chipping")
+	take_hit_text2 = list("cracks", "chips")
+	breaks_text = "shatters"
+	breaks_sound = 'sound/effects/Glassbr3.ogg'
+
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
+	if(!valid_item_attack(W) && src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
