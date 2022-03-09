@@ -170,7 +170,7 @@
 	throw_fly_speed = fly_speed
 
 
-/obj/throw_at(var/atom/target, var/range, var/speed, var/override , var/fly_speed) //Called when an object is thrown, and checks if it's broken or not. If it is broken the fragments are thrown instead, otherwise the object is thrown normally.
+/obj/throw_at(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Called when an object is thrown, and checks if it's broken or not. If it is broken the fragments are thrown instead, otherwise the object is thrown normally.
 	if(breakable_flags)
 		var/datum/throwparams/propelparams = new /datum/throwparams(target, range, speed, override, fly_speed)
 		if(try_break(propelparams))
