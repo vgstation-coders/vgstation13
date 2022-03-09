@@ -50,6 +50,9 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 			spread_directions.Remove(direction)
 			log_debug("Puddle reached map edge.")
 			continue
+		if(!T.reagents && !T.clears_reagents)
+			spread_directions.Remove(direction)
+			continue
 		if(!turf_on.can_leave_liquid(direction)) //Check if this liquid can leave the tile in the direction
 			spread_directions.Remove(direction)
 			continue
@@ -71,7 +74,9 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		if(!T)
 			log_debug("Puddle reached map edge.")
 			continue
-
+		if(T.clears_reagents)
+			turf_on.reagents.remove_all(average_volume)
+			return
 		turf_on.reagents.trans_to(T, average_volume)
 		T.reagents.reaction(T, none_splashed = TRUE) //Already transferred it here, don't go making it.
 		if(T.current_puddle)

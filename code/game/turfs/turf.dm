@@ -72,6 +72,8 @@
 
 	var/last_beam_damage = 0
 
+	var/clears_reagents = FALSE // If reagents get deleted when spread to here
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -80,11 +82,6 @@
 /turf/proc/process()
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
-
-/turf/New()
-	..()
-	// For an entire cubic space, 1000 reagents
-	create_reagents(1000)
 
 /turf/on_reagent_change()
 	reagents.reaction(src, none_splashed=TRUE)

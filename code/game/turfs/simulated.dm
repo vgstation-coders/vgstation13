@@ -11,7 +11,8 @@
 
 /turf/simulated/New()
 	..()
-
+	// For an entire cubic space, 1000 reagents
+	create_reagents(1000)
 	if(istype(loc, /area/chapel))
 		holy = 1
 	levelupdate()
