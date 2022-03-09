@@ -23,6 +23,7 @@
 			flick("shutterc0", src)
 			icon_state = "shutter0"
 			sleep(animation_delay)
+			plane = open_plane
 			layer = open_layer
 			setDensity(FALSE)
 			set_opacity(0)
@@ -39,6 +40,7 @@
 	icon_state = "shutter0"
 	playsound(src.loc, sound_open, 100, 1)
 	sleep(animation_delay)
+	plane = open_plane
 	layer = open_layer
 	setDensity(FALSE)
 	set_opacity(0)
@@ -55,6 +57,7 @@
 	if(operating)
 		return
 	operating = 1
+	plane = closed_plane
 	layer = closed_layer
 	flick("shutterc1", src)
 	icon_state = "shutter1"
