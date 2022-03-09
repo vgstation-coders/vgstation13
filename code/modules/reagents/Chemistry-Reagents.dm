@@ -2363,7 +2363,7 @@
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
 
-		if(T.reagents && T.has_any_reagents(CLEANABLES))
+		if(T.reagents && T.reagents.has_any_reagents(CLEANABLES))
 			T.reagents.remove_reagents(CLEANABLES)
 
 	T.color = ""
