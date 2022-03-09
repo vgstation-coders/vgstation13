@@ -247,7 +247,7 @@
 		else
 			message_admins("thisdmg (other) [thisdmg]")
 			take_damage(thisdmg, mute = FALSE, skip_break = TRUE) //Be verbose about the object taking damage.
-		try_break(hit_atom = impacted_atom)
+		try_break(null, impacted_atom)
 
 //Object being hit by a projectile
 
