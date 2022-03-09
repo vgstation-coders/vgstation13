@@ -423,9 +423,9 @@ emp_act
 		if (BLOB_ACT_STRONG)
 			b_loss += 300
 			if(!prob(gotarmor)) //Percent chance equal to their armor resist to not gib instantly.
-				gib()
-				if((src.key || src.ckey) && whodunnit)
+				if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
 					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
+				gib()
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
@@ -442,14 +442,14 @@ emp_act
 
 		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
-				gib()
-				if((src.key || src.ckey) && whodunnit)
+				if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
 					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
+				gib()
 				return
 
 			else if (stat == 2 && !client)
 				gibs(loc, virus2)
-				if((src.key || src.ckey) && whodunnit)
+				if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
 					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				qdel(src)
 				return
@@ -532,7 +532,7 @@ emp_act
 			if(LIMB_LEFT_ARM)
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
 	if(update)
-		if((src.key || src.ckey) && whodunnit)
+		if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
 			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity]", admin_warn = TRUE)
 		UpdateDamageIcon()
 

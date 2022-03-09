@@ -585,23 +585,25 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(flags & INVULNERABLE)
 		return
 	..()
+	var/dmg_phrase = ""
 	switch (severity)
 		if (1.0)
 			adjustBruteLoss(500)
-			if((src.key || src.ckey) && whodunnit)
+			if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
 				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 			gib()
 			return
 
 		if (2.0)
 			adjustBruteLoss(60)
-			if((src.key || src.ckey) && whodunnit)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 60", admin_warn = TRUE)
+			dmg_phrase = "Damage: 60"
 
 		if(3.0)
 			adjustBruteLoss(30)
-			if((src.key || src.ckey) && whodunnit)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
+			dmg_phrase = "Damage: 30"
+
+	if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], [dmg_phrase]", admin_warn = TRUE)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 

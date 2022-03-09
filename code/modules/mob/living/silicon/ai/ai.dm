@@ -439,24 +439,22 @@ var/list/ai_list = list()
 	// if(!blinded) (this is now in flash_eyes)
 	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 
-	switch(severity)
-		if(1.0)
-			if(!isDead())
+	if(!isDead())
+		switch(severity)
+			if(1.0)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-				if((src.key || src.ckey) && whodunnit)
-					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
-		if(2.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 200"
+			if(2.0)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-				if((src.key || src.ckey) && whodunnit)
-					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
-		if(3.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 120"
+			if(3.0)
 				adjustBruteLoss(30)
-				if((src.key || src.ckey) && whodunnit)
-					add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
+				dmg_phrase = "Damage: 30"
+
+		if((src.key || src.ckey || (src.mind && (src.mind.key || src.mind.ckey))) && whodunnit)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], [dmg_phrase]", admin_warn = TRUE)
 
 	updatehealth()
 
