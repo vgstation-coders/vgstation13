@@ -1,11 +1,11 @@
 /rayCastHitInfo
 	var/ray/used_ray
-	var/atom/movable/hit_atom
+	var/datum/weakref/hit_atom
 	var/vector/point
 	var/vector/point_raw
 	var/distance
 
-/rayCastHitInfo/New(var/ray/used_ray, var/atom/movable/hit_atom, var/vector/point, var/vector/point_raw, var/distance)
+/rayCastHitInfo/New(var/ray/used_ray, var/datum/weakref/hit_atom, var/vector/point, var/vector/point_raw, var/distance)
 	src.used_ray = used_ray
 	src.hit_atom = hit_atom
 	src.point = point
