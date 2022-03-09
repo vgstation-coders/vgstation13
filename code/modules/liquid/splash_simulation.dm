@@ -40,6 +40,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 				turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
 		if(turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
+		name = "[turf_on.reagents.get_master_reagent_name()] puddle"
 
 /obj/effect/overlay/puddle/proc/spread()
 	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME
@@ -93,7 +94,8 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 /obj/effect/overlay/puddle/burnFireFuel(var/used_fuel_ratio, var/used_reactants_ratio)
 	if(turf_on && turf_on.reagents)
 		for(var/id in burnable_reagents)
-			turf_on.reagents.remove_reagent(id, turf_on.reagents.get_reagent_amount(id) * used_fuel_ratio * used_reactants_ratio * 5) // liquid fuel burns 5 times as quick
+			// liquid fuel burns 5 times as quick
+			turf_on.reagents.remove_reagent(id, turf_on.reagents.get_reagent_amount(id) * used_fuel_ratio * used_reactants_ratio * 5)
 
 /obj/effect/overlay/puddle/Crossed(atom/movable/AM)
 	if(turf_on.reagents && (isobj(AM) || ismob(AM))) // Only for reaction_obj and reaction_mob, no misc types.

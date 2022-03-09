@@ -2363,6 +2363,9 @@
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
 
+		if(T.reagents && T.has_any_reagents(CLEANABLES))
+			T.reagents.remove_reagents(CLEANABLES)
+
 	T.color = ""
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
