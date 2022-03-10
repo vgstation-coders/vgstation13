@@ -83,9 +83,6 @@
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
 
-/turf/on_reagent_change()
-	reagents.reaction(src, none_splashed=TRUE)
-
 /turf/initialize()
 	..()
 	if(loc)

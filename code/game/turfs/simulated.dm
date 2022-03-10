@@ -17,6 +17,9 @@
 		holy = 1
 	levelupdate()
 
+/turf/simulated/on_reagent_change()
+	reagents.reaction(src, none_splashed=TRUE)
+
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
 	if(!tracks)
