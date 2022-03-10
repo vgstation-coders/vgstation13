@@ -99,7 +99,11 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 
 /obj/effect/overlay/puddle/Crossed(atom/movable/AM)
 	if(turf_on.reagents && (isobj(AM) || ismob(AM))) // Only for reaction_obj and reaction_mob, no misc types.
-		//turf_on.reagents.reaction(AM, volume_multiplier = 0.1) //Only targeting feet here, TODO: Uncomment when a non-gunk system for this is devised
+		//Only targeting feet here, TODO: Uncomment when a non-gunk system for this is devised.
+		/*
+		turf_on.reagents.remove_all(turf_on.reagents.total_volume/10)
+		turf_on.reagents.reaction(AM, volume_multiplier = 0.1)
+		*/
 		if(isliving(AM))
 			var/mob/living/L = AM
 			if(turf_on.reagents.has_reagent(LUBE))
