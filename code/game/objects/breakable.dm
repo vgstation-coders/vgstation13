@@ -237,15 +237,11 @@
 	if(!(breakable_flags & BREAKABLE_MOB) && istype(impacted_atom, /mob)) //Don't break when it hits a mob if it's not flagged with BREAKABLE_MOB
 		return
 	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
-		message_admins("turf loc is [loc]")
 		//Unless the object falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
 		var/thisdmg = 10 * get_total_scaled_w_class(1) / speed //impact damage scales with the weight class and speed of the object. since a smaller speed is faster, it's a divisor.
-		message_admins("thisdmg [thisdmg]")
 		if(istype(impacted_atom, /turf/simulated/floor))
-			message_admins("thisdmg (floor) [thisdmg/2]")
 			take_damage(thisdmg/2, TRUE)
 		else
-			message_admins("thisdmg (other) [thisdmg]")
 			take_damage(thisdmg, TRUE, FALSE) //Be verbose about the object taking damage.
 		try_break(null, impacted_atom)
 
