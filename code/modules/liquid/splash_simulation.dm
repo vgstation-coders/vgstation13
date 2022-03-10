@@ -79,7 +79,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 			turf_on.reagents.remove_all(average_volume)
 			return
 		turf_on.reagents.trans_to(T, average_volume)
-		T.reagents.reaction(T, none_splashed = TRUE) //Already transferred it here, don't go making it.
+		T.reagents.reaction(T, volume_multiplier = 0) //Already transferred it here, don't go making it.
 		if(T.current_puddle)
 			T.current_puddle.update_icon()
 	update_icon()
