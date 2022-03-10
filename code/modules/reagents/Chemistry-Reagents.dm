@@ -40,7 +40,7 @@
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
 	var/puddle_color = null // If it needs to look different as a puddle
-	var/puddle_alpha = 0 // See above
+	var/puddle_alpha = 128 // See above
 	var/dupeable = TRUE	//whether the reagent can be duplicated by standard reagent duplication methods such as a service borg shaker or odysseus
 	var/flags = 0
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
@@ -409,6 +409,7 @@
 	description = "A viscous blue substance of unknown origin."
 	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	color = "#64D2E6"
 	custom_metabolism = 0.01
 
@@ -428,6 +429,7 @@
 	description = "A gooey semi-liquid produced from one of the deadliest lifeforms in existence. SO REAL."
 	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	color = "#801E28" //rgb: 128, 30, 40
 	density = 0.8
 	specheatcap = 1.24
@@ -449,6 +451,7 @@
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
+	puddle_alpha = 255
 	density = 1.05
 	specheatcap = 3.49
 	glass_name = "Tomato Juice Glass"
@@ -743,7 +746,6 @@
 	viscosity = 25
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
-	puddle_alpha = 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388
@@ -879,6 +881,7 @@
 	description = "Liquid plastic, do not eat."
 	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 0.4
@@ -1284,6 +1287,7 @@
 	id = SILICATE
 	description = "A compound that can be used to repair and reinforce glass."
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	color = "#C7FFFF" //rgb: 199, 255, 255
 	overdose_am = 0
 	density = 0.69
@@ -1364,6 +1368,7 @@
 	id = MERCURY
 	description = "A chemical element."
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#484848" //rgb: 72, 72, 72
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 0.14
@@ -2303,6 +2308,7 @@
 	description = "Stomach acid mixed with partially digested chunks of food."
 	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
 	density = 1.35
 	specheatcap = 5.2
@@ -2651,6 +2657,7 @@
 	id = PLASMA
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	color = "#500064" //rgb: 80, 0, 100
 
 /datum/reagent/plasma/New()
@@ -4358,6 +4365,7 @@
 	description = "Ketchup, catsup, whatever. It's tomato paste."
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
 
@@ -4367,6 +4375,7 @@
 	description = "A spicy yellow paste."
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
 
@@ -4376,6 +4385,7 @@
 	description = "A pickled cucumber jam. Tasty!"
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#336600" //rgb: 51, 102, 0
 
@@ -4393,6 +4403,7 @@
 	description = "A substance of unspeakable suffering."
 	viscosity = 4
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#FAF0E6" //rgb: 51, 102, 0
 
@@ -4409,6 +4420,7 @@
 	id = ZAMMILD
 	description = "A tasty sauce made from mothership spices and acid."
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#B38B26" //rgb: 179, 139, 38
 
@@ -4418,6 +4430,7 @@
 	description = "A dangerously flavorful sauce made from mothership spices and powerful acid."
 	viscosity = 20
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 6 * REAGENTS_METABOLISM
 	color = "#D35A0D" //rgb: 211, 90, 13
 
@@ -5221,6 +5234,7 @@
 	id = HOT_RAMEN
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.33
@@ -5240,6 +5254,7 @@
 	id = HELL_RAMEN
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.42
@@ -5332,6 +5347,7 @@
 	description = "Totally the best. Only to be spread on foods with excellent lateral symmetry."
 	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#801E28" //rgb: 128, 30, 40
 
@@ -5348,6 +5364,7 @@
 	description = "You can almost feel your liver failing, just by looking at it."
 	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	color = "#6F884F" //rgb: 111, 136, 79
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 
@@ -5397,6 +5414,7 @@
 	description = "You can almost taste the lead sheet behind it!"
 	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 
@@ -5414,6 +5432,7 @@
 	description = "A type of sludge."
 	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
@@ -5432,6 +5451,7 @@
 	description = "Mmm.."
 	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 
@@ -5441,6 +5461,7 @@
 	description = "Mutated flavor."
 	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 
@@ -5458,6 +5479,7 @@
 	description = "What's beff? Find out!"
 	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5467,6 +5489,7 @@
 	description = "Tastes excellent in lasagna."
 	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 
@@ -5476,6 +5499,7 @@
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
 	viscosity = 25
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
@@ -5492,6 +5516,7 @@
 	description = "American Cheese."
 	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
 
@@ -5500,6 +5525,7 @@
 	id = BONEMARROW
 	description = "Looks like a skeleton got stuck in the production line."
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
 
@@ -5509,6 +5535,7 @@
 	description = "That green isn't organic."
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5529,6 +5556,7 @@
 	description = "That glow 'aint healthy."
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5546,6 +5574,7 @@
 	description = "Ramen, deep fried."
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5576,6 +5605,7 @@
 	description = "Concentrated blood platelets, capable of stemming bleeding."
 	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#a00000" //rgb: 160, 0, 0
 	custom_metabolism = 0.1
 
@@ -5585,6 +5615,7 @@
 	description = "A fast-hardening, biocompatible foam used to stem internal bleeding for a short time."
 	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
 
@@ -8675,6 +8706,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Aww, come on Double D, I don't say 'gravy' all the time."
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#E7A568"
 
@@ -9093,6 +9125,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "A slippery aqueous secretion produced by, and covering, mucous membranes.  Problematic for Asthmatics."
 	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	color = "#13BC5E"
 	custom_metabolism = 0.01
 
@@ -9442,6 +9475,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Pure, distilled spooky"
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 192
 	color = "#21d389b4"
 	density = 0.05
 
@@ -9717,6 +9751,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#571212" //like a dark red
+	puddle_alpha = 192
 	density = 1.00 //basically water
 	specheatcap = 4.184
 
@@ -9726,6 +9761,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "A noxious substance produced in the body of a grue."
 	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
+	puddle_alpha = 255
 	color = GRUE_BLOOD
 	custom_metabolism = 0.01
 	density = 1.25
