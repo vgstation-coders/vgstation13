@@ -13,6 +13,7 @@ var/list/global_singularity_pool
 	use_power = 0
 
 	var/obj/machinery/singularity/wormhole_out = null
+	var/obj/machinery/singularity/wormhole_in = null
 	var/current_size = 1
 	var/allowed_size = 1
 	var/contained = 1 //Are we going to move around?
@@ -57,13 +58,33 @@ var/list/global_singularity_pool
 	if(prob(10))
 		var/obj/machinery/singularity/other = locate(/obj/machinery/singularity) in power_machines
 		if(other)
-			other.name = "gravitational soutgularity"
-			other.repels = TRUE
-			other.color= list(-1,0,0,
-						0,-1,0,
-						0,0,-1,
-						1,1,1) //Invert it
-			wormhole_out = other
+			if(prob(50))
+				link_wormhole(other)
+			else
+				other.link_wormhole(src)
+
+/obj/machinery/singularity/link_wormhole(var/obj/machinery/singularity/other)
+	if(other)
+		other.name = "gravitational soutgularity"
+		other.repels = TRUE
+		other.color= list(-1,0,0,
+					0,-1,0,
+					0,0,-1,
+					1,1,1) //Invert it
+		wormhole_out = other
+		wormhole_in = src
+
+/obj/machinery/singularity/unlink_wormholes()
+	if(wormhole_out)
+		wormhole_out.name = initial(wormhole_out.name)
+		wormhole_out.repels = FALSE
+		wormhole_out.color= initial(wormhole_out.color)
+		wormhole_out = null
+	if(wormhole_in)
+		name = initial_name()
+		repels = FALSE
+		color = initial(color)
+		wormhole_in = null
 
 /obj/machinery/singularity/attack_hand(mob/user as mob)
 	consume(user)
@@ -659,6 +680,7 @@ var/list/global_singularity_pool
 */ //Fuck you centcomm
 
 /obj/machinery/singularity/Destroy()
+	unlink_wormholes()
 	..()
 	power_machines -= src
 	global_singularity_pool -= src
