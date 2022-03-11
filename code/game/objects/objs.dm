@@ -360,14 +360,20 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		to_chat(user, "\the [src] already has a slime extract attached.")
 		return FALSE
 
-/obj/singularity_pull(S, current_size)
+/obj/singularity_pull(S, current_size, repel = FALSE)
 	INVOKE_EVENT(src, /event/before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
-			step_towards(src, S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 	else
-		step_towards(src, S)
+		if(!repel)
+			step_towards(src, S)
+		else
+			step_away(src, S)
 	INVOKE_EVENT(src, /event/after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)

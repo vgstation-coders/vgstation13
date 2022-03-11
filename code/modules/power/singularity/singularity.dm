@@ -12,6 +12,7 @@ var/list/global_singularity_pool
 	luminosity = 6
 	use_power = 0
 
+	var/obj/machinery/singularity/wormhole_out = null
 	var/current_size = 1
 	var/allowed_size = 1
 	var/contained = 1 //Are we going to move around?
@@ -31,6 +32,7 @@ var/list/global_singularity_pool
 	appearance_flags = LONG_GLIDE|TILE_MOVER
 	var/chained = 0 //Adminbus chain-grab
 	var/modifier = "" //for memes
+	var/repels = FALSE //For pushing stuff out the other end
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
 	//CARN: admin-alert for chuckle-fuckery.
@@ -52,6 +54,16 @@ var/list/global_singularity_pool
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
+	if(prob(10))
+		var/obj/machinery/singularity/other = locate(/obj/machinery/singularity) in power_machines
+		if(other)
+			other.name = "gravitational soutgularity"
+			other.repels = TRUE
+			other.color= list(-1,0,0,
+						0,-1,0,
+						0,0,-1,
+						1,1,1) //Invert it
+			wormhole_out = other
 
 /obj/machinery/singularity/attack_hand(mob/user as mob)
 	consume(user)
@@ -351,8 +363,8 @@ var/list/global_singularity_pool
 					continue
 				try
 					var/dist = get_z_dist(X, src)
-					if(dist > consume_range)
-						X.singularity_pull(src, current_size)
+					if(dist > consume_range || repels)
+						X.singularity_pull(src, current_size, repels)
 					else if(dist <= consume_range)
 						if(consume(X))
 							ngrabbed++
@@ -390,9 +402,15 @@ var/list/global_singularity_pool
 			newsea.ChangeTurf(/turf/unsimulated/wall/supermatter)
 
 /obj/machinery/singularity/proc/consume(const/atom/A)
-	var/gain = A.singularity_act(current_size,src)
-	src.energy += gain
-	return gain
+	if(repels)
+		return
+	if(wormhole_out)
+		var/turf/T = get_turf(wormhole_out)
+		A.forceMove(T)
+	else
+		var/gain = A.singularity_act(current_size,src)
+		src.energy += gain
+		return gain
 
 /*
  * Some modifications have been done in here. The Singularity's movement is now biased instead of truly random
@@ -920,3 +938,11 @@ var/list/global_singularity_pool
 /obj/machinery/singularity/scrungulartiy
 	name = "grabibational scrungulartiy"
 	modifier = "scrung_"
+
+/obj/machinery/singularity/soutgularity
+	name = "gravitational soutgularity"
+	repels = TRUE
+	color= list(-1,0,0,
+				0,-1,0,
+				0,0,-1,
+				1,1,1) //Invert it

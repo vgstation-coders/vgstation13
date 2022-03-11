@@ -1243,9 +1243,12 @@ Thanks.
 		gib()
 		return(gain)
 
-/mob/living/singularity_pull(S)
+/mob/living/singularity_pull(S, current_size, repel = FALSE)
 	if(!(src.flags & INVULNERABLE))
-		step_towards(src, S)
+		if(!repel)
+			step_towards(src, S)
+		else
+			step_away(src, S)
 
 //shuttle_act is called when a shuttle collides with the mob
 /mob/living/shuttle_act(datum/shuttle/S)

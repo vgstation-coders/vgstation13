@@ -1235,7 +1235,7 @@ var/global/list/image/blood_overlays = list()
 	return
 
 //handling the pulling of the item for singularity
-/obj/item/singularity_pull(S, current_size)
+/obj/item/singularity_pull(S, current_size, repel = FALSE)
 	if(flags & INVULNERABLE)
 		return
 	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
@@ -1246,11 +1246,20 @@ var/global/list/image/blood_overlays = list()
 				return
 		if(current_size >= STAGE_FOUR)
 			//throw_at(S, 14, 3)
-			step_towards(src,S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 			sleep(1)
-			step_towards(src,S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 		else if(current_size > STAGE_ONE)
-			step_towards(src,S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 		else
 			..()
 
