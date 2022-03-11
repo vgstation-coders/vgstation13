@@ -1,4 +1,4 @@
-var/list/global_singularity_pool
+var/list/obj/machinery/singularity/global_singularity_pool
 
 /obj/machinery/singularity
 	name = "gravitational singularity" //Lower case
@@ -55,8 +55,8 @@ var/list/global_singularity_pool
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
-	if(prob(10))
-		var/obj/machinery/singularity/other = locate(/obj/machinery/singularity) in power_machines
+	if(prob(10) && global_singularity_pool.len > 1)
+		var/obj/machinery/singularity/other = pick(global_singularity_pool)
 		if(other)
 			if(prob(50))
 				link_wormhole(other)
@@ -67,6 +67,7 @@ var/list/global_singularity_pool
 	if(other)
 		other.name = "gravitational soutgularity"
 		other.repels = TRUE
+		other.energy = src.energy
 		other.color= list(-1,0,0,
 					0,-1,0,
 					0,0,-1,
