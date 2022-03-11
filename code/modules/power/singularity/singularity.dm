@@ -63,7 +63,7 @@ var/list/global_singularity_pool
 			else
 				other.link_wormhole(src)
 
-/obj/machinery/singularity/link_wormhole(var/obj/machinery/singularity/other)
+/obj/machinery/singularity/proc/link_wormhole(var/obj/machinery/singularity/other)
 	if(other)
 		other.name = "gravitational soutgularity"
 		other.repels = TRUE
@@ -74,14 +74,14 @@ var/list/global_singularity_pool
 		wormhole_out = other
 		wormhole_in = src
 
-/obj/machinery/singularity/unlink_wormholes()
+/obj/machinery/singularity/proc/unlink_wormholes()
 	if(wormhole_out)
 		wormhole_out.name = initial(wormhole_out.name)
 		wormhole_out.repels = FALSE
 		wormhole_out.color= initial(wormhole_out.color)
 		wormhole_out = null
 	if(wormhole_in)
-		name = initial_name()
+		name = initial(name)
 		repels = FALSE
 		color = initial(color)
 		wormhole_in = null
@@ -427,7 +427,7 @@ var/list/global_singularity_pool
 		return
 	if(wormhole_out)
 		var/turf/T = get_turf(wormhole_out)
-		A.forceMove(T)
+		do_teleport(A, T)
 	else
 		var/gain = A.singularity_act(current_size,src)
 		src.energy += gain

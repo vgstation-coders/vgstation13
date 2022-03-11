@@ -1494,7 +1494,7 @@
 	investigation_log(I_SINGULO,"has been consumed by a singularity")
 	gib()
 	return gain
-/mob/living/carbon/human/singularity_pull(S, current_size,var/radiations = 3)
+/mob/living/carbon/human/singularity_pull(S, current_size, repel = FALSE, var/radiations = 3)
 	if(src.flags & INVULNERABLE)
 		return 0
 	if(current_size >= STAGE_THREE) //Pull items from hand
