@@ -38,7 +38,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		for(var/datum/reagent/R in turf_on.reagents.reagent_list)
 			if(R.evaporation_rate)
 				turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
-		if(turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
+		if(config.puddle_spreading && turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
 		name = "[turf_on.reagents.get_master_reagent_name()] puddle"
 
