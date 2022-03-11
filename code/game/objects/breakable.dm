@@ -22,7 +22,7 @@
 	var/breaks_text		//Visible message when the object breaks. eg. "breaks apart"
 	//Sounds:
 	var/breaks_sound	//Path to audible sound when the object breaks apart. Defaults to damaged_sound if unset.
-	var/damaged_sound	//Path to audible sound when the object is damaged. Defaults to glanced_sound if unset.
+	var/damaged_sound	//Path to audible sound when the object is damaged.
 	var/glanced_sound	//Path to audible sound when the object recives a glancing attack not strong enough to damage it.
 
 /obj/New()
@@ -46,8 +46,6 @@
 		playsound(src, breaks_sound, 50, 1)
 	else if(damaged_sound)
 		playsound(src, damaged_sound, 50, 1)
-	else if(glanced_sound)
-		playsound(src, glanced_sound, 50, 1)
 
 /obj/proc/drop_fragments(var/datum/throwparams/propelparams) //Drop the object's fragments and propel them if applicable with propelparams.
 	if(breakable_fragments?.len)
@@ -184,7 +182,7 @@
 	return TRUE
 
 /obj/proc/valid_item_attack(var/obj/item/this_weapon) //Check if an object is in valid circumstances to be attacked with a wielded weapon.
-	if(usr.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && breakable_check_weapon(this_weapon) && isturf(loc))
+	if(usr.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && breakable_check_weapon(this_weapon) && isturf(loc)) //Smash objects on the ground, but not in your inventory.
 		return TRUE
 	else
 		return FALSE
@@ -195,10 +193,10 @@
 
 //Attacking the object with a wielded weapon or other item
 
-/obj/attackby(obj/item/W, mob/user)
+/obj/proc/handle_item_attack(obj/item/W, mob/user)
 	if(isobserver(user) || !Adjacent(user) || user.is_in_modules(src))
-		return
-	if(valid_item_attack(W)) //Smash objects on the ground, but not in your inventory.
+		return FALSE
+	if(valid_item_attack(W))
 		user.do_attack_animation(src, W)
 		user.delayNextAttack(1 SECONDS)
 		add_fingerprint(user)
@@ -210,8 +208,9 @@
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE)
 			W.take_damage(min(W.force, BREAKARMOR_MEDIUM), FALSE, FALSE) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
+		return TRUE
 	else
-		..()
+		return FALSE
 
 //Simple animals attacking the object
 
@@ -237,7 +236,7 @@
 		return
 	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
 		//Unless the object falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
-		var/thisdmg = 10 * get_total_scaled_w_class(1) / speed //impact damage scales with the weight class and speed of the object. since a smaller speed is faster, it's a divisor.
+		var/thisdmg = 10 * get_total_scaled_w_class(1) / (speed ? speed : 1) //impact damage scales with the weight class and speed of the object. since a smaller speed is faster, it's a divisor.
 		if(istype(impacted_atom, /turf/simulated/floor))
 			take_damage(thisdmg/2, TRUE)
 		else

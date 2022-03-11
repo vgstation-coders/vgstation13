@@ -91,7 +91,7 @@
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(valid_item_attack(W))
-		return ..()
+		..()
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		if(istype(W, /obj/item/weapon/pen/fountain))
 			var/obj/item/weapon/pen/fountain/P = W

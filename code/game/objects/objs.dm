@@ -89,6 +89,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/attackby(obj/item/weapon/W, mob/user)
 	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
+
+	if(handle_item_attack(W, user))
+		return
+
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
