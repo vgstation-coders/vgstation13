@@ -6,6 +6,7 @@
 	icon_dead = "pulsedem" // Should never be seen but just in case
 	speak_chance = 20
 	emote_hear = list("vibrates", "sizzles")
+	emote_sound = list("sound/voice/pdvoice1.ogg","sound/voice/pdvoice2.ogg","sound/voice/pdvoice3.ogg")
 	response_help = "reaches their hand into"
 	response_disarm = "pushes their hand through"
 	response_harm = "punches their fist through"
@@ -226,33 +227,38 @@
 
 // Proc for speaking as a borg
 /mob/living/simple_animal/hostile/pulse_demon/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
-    . = ..()
-    if(.)
-        return .
+	. = ..()
+	if(.)
+		return .
 
-    if(current_robot)
-        if (!speech.message)
-            return
+	if(current_robot)
+		if (!speech.message)
+			return 1
+		current_robot.say(speech.message)
+		speech.message = sanitize(speech.message)
+		var/turf/T = get_turf(src)
+		// Again, so no mistaken BWOINKs
+		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
+		log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
+		message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
+		return 1 // This ensures we don't end up speaking by ourselves too
 
-        current_robot.say(speech.message)
-        speech.message = sanitize(speech.message)
-        var/turf/T = get_turf(src)
-        // Again, so no mistaken BWOINKs
-        log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
-        log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
-        message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
+	else if(current_bot && istype(current_bot,/obj/machinery/bot/buttbot))
+		if (!speech.message)
+			return 1
+		var/obj/machinery/bot/buttbot/BB = current_bot
+		if(prob(BB.buttchance) && !findtext(speech.message,"butt"))
+			sleep(rand(1,3))
+			BB.say(buttbottify(speech.message, 3, 9)) // 3 times as intense
+			BB.fart()
+			score.buttbotfarts++
+			return 1 // This ensures we don't end up speaking by ourselves too
 
-    else if(current_bot && istype(current_bot,/obj/machinery/bot/buttbot))
-        if (!speech.message)
-            return
-        speech.message = buttbottify(speech.message, 3, 9) // 3 times as intense
-        var/obj/machinery/bot/buttbot/BB = current_bot
-        BB.fart()
-        score.buttbotfarts++
-
-    else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
-        to_chat(src, "You have nothing to speak with.")
-        return 1 //this ensures we don't end up speaking out loud
+	if(emote_sound.len) // Play sound if in an intercom or not
+		playsound(loc, "[pick(emote_sound)]", 80, 1)
+	else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
+		emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
+		return 1 // To stop speaking normally
 
 // Helper stuff for attacks
 /mob/living/simple_animal/hostile/pulse_demon/hasFullAccess()
