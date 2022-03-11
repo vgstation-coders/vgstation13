@@ -254,11 +254,11 @@
 			score.buttbotfarts++
 			return 1 // This ensures we don't end up speaking by ourselves too
 
-	if(emote_sound.len) // Play sound if in an intercom or not
-		playsound(loc, "[pick(emote_sound)]", 80, 1)
-	else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
-		emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
-		return 1 // To stop speaking normally
+	else
+		playsound(loc, "[pick(emote_sound)]", 80, 1) // Play sound if in an intercom or not
+		if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
+			emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
+			return 1 // To stop speaking normally
 
 // Helper stuff for attacks
 /mob/living/simple_animal/hostile/pulse_demon/hasFullAccess()
