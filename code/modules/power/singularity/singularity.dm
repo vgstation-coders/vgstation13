@@ -72,7 +72,7 @@ var/list/global_singularity_pool
 					0,0,-1,
 					1,1,1) //Invert it
 		wormhole_out = other
-		wormhole_in = src
+		other.wormhole_in = src
 
 /obj/machinery/singularity/proc/unlink_wormholes()
 	if(wormhole_out)
