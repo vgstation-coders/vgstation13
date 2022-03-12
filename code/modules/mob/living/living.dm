@@ -1725,7 +1725,7 @@ Thanks.
 	tool.reagents.reaction(src, INGEST)
 	return ..()
 
-/mob/living/proc/ApplySlip(var/obj/effect/overlay/puddle/P)
+/mob/living/proc/ApplySlip(var/wet)
 	return on_foot() // Check if we have legs, gravity, etc. Checked by the children.
 
 /mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_with_magbooties = 0)

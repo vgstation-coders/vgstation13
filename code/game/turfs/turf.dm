@@ -72,6 +72,8 @@
 
 	var/last_beam_damage = 0
 
+	var/clears_reagents = FALSE // If reagents get deleted when spread to here
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -469,7 +471,7 @@
 		return
 	holy = 1
 	..()
-	new /obj/effect/overlay/holywaterpuddle(src)
+	new /obj/effect/overlay/holywetfloor(src)
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs

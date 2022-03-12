@@ -130,7 +130,8 @@
 
 		if(istype(mob.loc,/turf/simulated))
 			var/turf/simulated/T = mob.loc
-			T.wet(800, TURF_WET_WATER)
+			if(T.reagents)
+				T.reagents.add_reagent(WATER,40)
 
 
 /datum/disease2/effect/elvis

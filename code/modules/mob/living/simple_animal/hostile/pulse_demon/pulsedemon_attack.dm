@@ -151,14 +151,14 @@
         visible_message("<span class='warning'>[src] makes an excited booping sound as it begins tearing apart \the [F].</span>")
 
 /obj/machinery/bot/cleanbot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
-    if(istype(A,/turf/simulated/floor) && Adjacent(A))
-        var/turf/simulated/floor/F = A
-        if(prob(50))
-            F.wet(800)
-        if(prob(50))
-            visible_message("<span class='warning'>Something flies out of \the [src]! He seems to be acting oddly.</span>")
-            if(!(locate(/obj/effect/decal/cleanable/blood/gibs) in F))
-                new /obj/effect/decal/cleanable/blood/gibs(F)
+	if(istype(A,/turf/simulated/floor) && Adjacent(A))
+		var/turf/simulated/floor/F = A
+		if(prob(50) && F.reagents)
+			F.reagents.add_reagent(WATER,40)
+		if(prob(50))
+			visible_message("<span class='warning'>Something flies out of \the [src]! He seems to be acting oddly.</span>")
+			if(!(locate(/obj/effect/decal/cleanable/blood/gibs) in F))
+				new /obj/effect/decal/cleanable/blood/gibs(F)
 
 /obj/machinery/bot/mulebot/attack_integrated_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user, var/atom/A)
     if(istype(A) && Adjacent(A))
