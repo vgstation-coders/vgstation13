@@ -40,6 +40,7 @@
 	icon_state = "time_anomaly"
 	anchored = 1
 	mouse_opacity = 1
+	flags = TIMELESS
 	var/last_effect
 
 /obj/effect/time_anomaly/New()
