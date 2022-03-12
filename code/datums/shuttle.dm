@@ -273,8 +273,9 @@
 			broadcast.announce( "Currently requesting permission to reach [D.areaname]..." )
 		else if(user)
 			to_chat(user, "Waiting for permission...")
-		var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
-		message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
+		if(user)
+			var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
+			message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
 	else
 		actually_travel_to(D, broadcast, user)
 
