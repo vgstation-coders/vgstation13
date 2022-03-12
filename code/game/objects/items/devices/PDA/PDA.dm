@@ -386,7 +386,7 @@ var/global/msg_id = 0
 /obj/item/device/pda/proc/id_check(mob/user as mob, choice as num)//To check for IDs; 1 for in-pda use, 2 for out of pda use.
 	if(choice == 1)
 		if (id)
-			remove_id()
+			remove_id(user)
 		else
 			var/obj/item/I = user.get_active_hand()
 			if (istype(I, /obj/item/weapon/card/id))
