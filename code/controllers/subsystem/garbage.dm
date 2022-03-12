@@ -264,9 +264,10 @@ List of hard deletions:"}
 	tag = null
 	for(var/timer in active_timers)
 		qdel(timer)
-	for(var/component in datum_components)
-		qdel(component)
 	active_timers = null
+	for(var/component_type in datum_components)
+		qdel(datum_components[component_type])
+	datum_components = null
 
 /datum/var/gcDestroyed
 
