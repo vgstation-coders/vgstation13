@@ -290,6 +290,7 @@
 	user << browse("[dat]", "window=shuttle_control;size=575x450")
 	onclose(user, "shuttle_control")
 
+/// Only pass `user` if the mob is directly interacting through the UI.
 /obj/machinery/computer/shuttle_control/proc/try_move(mob/user)
 	if(!shuttle)
 		if(user)
@@ -298,19 +299,6 @@
 
 	if(!selected_port && shuttle.docking_ports.len >= 2)
 		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
-
-	//Check if the selected docking port is valid (can be selected)
-	if(!allow_selecting_all && !(selected_port in shuttle.docking_ports))
-		//Check disks too
-		if(!disk || !disk.compactible(shuttle) || (disk.destination != selected_port))
-			if(user)
-				to_chat(user, "<span class='warning'>[!disk?"No disk detected":!disk.compactible(shuttle)?"Current disk not conpatable with current shuttle.":"Currently selected docking port not valid."]</span>")
-			return
-
-	if(selected_port.docked_with) //If used by another shuttle, don't try to move this shuttle
-		if(user)
-			to_chat(user, "<span class = 'warning'>Selected port is currently in use.</span>")
-		return
 
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)

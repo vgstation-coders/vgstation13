@@ -268,6 +268,23 @@
 			to_chat(user, "The shuttle can't move ([D.areaname] is used by another shuttle)")
 		return 0
 
+	if(broadcast)
+		//Check if the selected docking port is valid (can be selected)
+		if(!broadcast.allow_selecting_all && !(D in docking_ports))
+			//Check disks too
+			if(!broadcast.disk)
+				if(user)
+					to_chat(user, "<span class='warning'>No disk detected.</span>")
+				return 0
+			if(!broadcast.disk.compactible(src))
+				if(user)
+					to_chat(user, "<span class='warning'>Current disk not conpatable with current shuttle.</span>")
+				return 0
+			if(broadcast.disk.destination != D)
+				if(user)
+					to_chat(user, "<span class='warning'>Currently selected docking port not valid.</span>")
+				return 0
+
 	if(D.require_admin_permission && !isAdminGhost(user))
 		if(broadcast)
 			broadcast.announce( "Currently requesting permission to reach [D.areaname]..." )
