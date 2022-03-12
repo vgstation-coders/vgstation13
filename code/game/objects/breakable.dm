@@ -181,8 +181,8 @@
 				return FALSE
 	return TRUE
 
-/obj/proc/valid_item_attack(var/obj/item/this_weapon) //Check if an object is in valid circumstances to be attacked with a wielded weapon.
-	if(usr.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && breakable_check_weapon(this_weapon) && isturf(loc)) //Smash objects on the ground, but not in your inventory.
+/obj/proc/valid_item_attack(var/obj/item/this_weapon, var/mob/user) //Check if an object is in valid circumstances to be attacked with a wielded weapon.
+	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && breakable_check_weapon(this_weapon) && isturf(loc)) //Smash objects on the ground, but not in your inventory.
 		return TRUE
 	else
 		return FALSE
@@ -196,7 +196,7 @@
 /obj/proc/handle_item_attack(obj/item/W, mob/user)
 	if(isobserver(user) || !Adjacent(user) || user.is_in_modules(src))
 		return FALSE
-	if(valid_item_attack(W))
+	if(valid_item_attack(W, user))
 		user.do_attack_animation(src, W)
 		user.delayNextAttack(1 SECONDS)
 		add_fingerprint(user)
