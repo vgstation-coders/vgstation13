@@ -78,7 +78,7 @@
 
 	..()
 
-/obj/item/weapon/disk/shuttle_coords/proc/compactible(datum/shuttle/S)
+/obj/item/weapon/disk/shuttle_coords/proc/compatible(datum/shuttle/S)
 	if(!allowed_shuttles.len)
 		return TRUE
 
@@ -255,7 +255,7 @@
 					dat += " | [text] | "
 
 			if(disk && disk.destination)
-				if(disk.compactible(shuttle))
+				if(disk.compatible(shuttle))
 					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
 				else //Shuttle not allowed to use disk
 					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"

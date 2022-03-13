@@ -276,9 +276,9 @@
 				if(user)
 					to_chat(user, "<span class='warning'>No disk detected.</span>")
 				return 0
-			if(!broadcast.disk.compactible(src))
+			if(!broadcast.disk.compatible(src))
 				if(user)
-					to_chat(user, "<span class='warning'>Current disk not conpatable with current shuttle.</span>")
+					to_chat(user, "<span class='warning'>Current disk not compatible with current shuttle.</span>")
 				return 0
 			if(broadcast.disk.destination != D)
 				if(user)
