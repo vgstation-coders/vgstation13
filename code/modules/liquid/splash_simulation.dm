@@ -14,6 +14,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	name = "puddle"
 	plane = ABOVE_TURF_PLANE
 	layer = PUDDLE_LAYER
+	anchored = TRUE
 	var/turf/turf_on
 
 /obj/effect/overlay/puddle/New()
