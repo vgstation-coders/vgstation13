@@ -84,7 +84,7 @@
 			if(reagents && reagents.total_volume && isturf(loc))
 				var/turf/T = loc
 				if(T.reagents)
-					reagents.trans_to(T) // Spill em out
+					reagents.trans_to(T,reagents.total_volume) // Spill em out
 			qdel(src)
 			return
 		if(2.0)
@@ -92,7 +92,7 @@
 				if(reagents && reagents.total_volume && isturf(loc))
 					var/turf/T = loc
 					if(T.reagents)
-						reagents.trans_to(T) // Spill em out
+						reagents.trans_to(T,reagents.total_volume) // Spill em out
 				qdel(src)
 				return
 		if(3.0)
@@ -100,6 +100,6 @@
 				if(reagents && reagents.total_volume && isturf(loc))
 					var/turf/T = loc
 					if(T.reagents)
-						reagents.trans_to(T) // Spill em out
+						reagents.trans_to(T,reagents.total_volume) // Spill em out
 				qdel(src)
 				return
