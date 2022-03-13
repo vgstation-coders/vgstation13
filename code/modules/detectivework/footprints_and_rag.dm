@@ -94,6 +94,8 @@
 		if(target)
 			target.clean_blood()
 			if(isturf(target))
+				if(target.reagents && target.reagents.total_volume)
+					target.reagents.trans_to(src, volume - reagents.total_volume)
 				for(var/obj/effect/O in target)
 					if(iscleanaway(O))
 						qdel(O)

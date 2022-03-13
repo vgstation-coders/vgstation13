@@ -220,6 +220,8 @@
 
 #define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A, /obj/effect/overlay/hologram) && !istype(A, /obj/effect/overlay/puddle)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
+#define isadvcleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
+
 #define ismatrix(A) (istype(A, /matrix))
 
 #define ismecha(A) (istype(A, /obj/mecha))

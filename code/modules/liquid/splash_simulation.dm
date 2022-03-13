@@ -15,6 +15,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	plane = ABOVE_TURF_PLANE
 	layer = PUDDLE_LAYER
 	anchored = TRUE
+	mouse_opacity = FALSE
 	var/turf/turf_on
 
 /obj/effect/overlay/puddle/New()
@@ -31,7 +32,6 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	update_icon()
 
 /obj/effect/overlay/puddle/process()
-	turf_on = get_turf(src)
 	if(!turf_on || (turf_on.reagents && turf_on.reagents.total_volume < PUDDLE_TRANSFER_THRESHOLD))
 		qdel(src)
 		return
@@ -41,7 +41,6 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 				turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
 		if(config.puddle_spreading && turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
-		name = "[turf_on.reagents.get_master_reagent_name()] puddle"
 
 /obj/effect/overlay/puddle/proc/spread()
 	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME

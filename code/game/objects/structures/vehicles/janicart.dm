@@ -123,7 +123,7 @@
 			tile.clean_blood()
 			for(var/atom/A in tile)
 				if(istype(A, /obj/effect))
-					if(iscleanaway(A))
+					if(isadvcleanaway(A))
 						qdel(A)
 				else if(istype(A, /obj/item))
 					var/obj/item/cleaned_item = A
