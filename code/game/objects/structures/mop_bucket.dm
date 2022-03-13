@@ -37,19 +37,22 @@
 	if(istype(W, /obj/item/weapon/mop))
 		return 0
 	return ..()
+
 /obj/structure/mopbucket/mop_act(obj/item/weapon/mop/M, mob/user as mob)
 	if (istype(M))
-		if (src.reagents.total_volume >= 1)
-			if(M.reagents.total_volume >= 25)
-				return 1
-			else
-				src.reagents.trans_to(M, 25 - M.reagents.total_volume)
-				to_chat(user, "<span class='notice'>You wet [M].</span>")
-				if(lastsound + 2 SECONDS < world.time)
-					playsound(src, 'sound/effects/mopbucket.ogg', 50, 1)
-					lastsound = world.time
+		if (M.reagents.total_volume <= 1)
+			src.reagents.trans_to(M, 25 - M.reagents.total_volume)
+			to_chat(user, "<span class='notice'>You wet [M].</span>")
+			if(lastsound + 2 SECONDS < world.time)
+				playsound(src, 'sound/effects/mopbucket.ogg', 50, 1)
+				lastsound = world.time
 		else
-			to_chat(user, "<span class='notice'>Nothing left to wet [M] with!</span>")
+			var/amount_to_reduce = 100 - reagents.total_volume < M.reagents.total_volume ? 100 - reagents.total_volume : 0
+			M.reagents.trans_to(src, M.reagents.total_volume - amount_to_reduce)
+			to_chat(user, "<span class='notice'>You wring [M] into [src].</span>")
+			if(lastsound + 2 SECONDS < world.time)
+				playsound(src, 'sound/effects/mopbucket.ogg', 50, 1)
+				lastsound = world.time
 	return 1
 
 /obj/structure/mopbucket/ex_act(severity)

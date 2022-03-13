@@ -31,7 +31,6 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	update_icon()
 
 /obj/effect/overlay/puddle/process()
-	turf_on = get_turf(src)
 	if(!turf_on || (turf_on.reagents && turf_on.reagents.total_volume < PUDDLE_TRANSFER_THRESHOLD))
 		qdel(src)
 		return
@@ -41,7 +40,6 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 				turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
 		if(config.puddle_spreading && turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
-		name = "[turf_on.reagents.get_master_reagent_name()] puddle"
 
 /obj/effect/overlay/puddle/proc/spread()
 	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME
@@ -84,6 +82,9 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		if(T.current_puddle)
 			T.current_puddle.update_icon()
 	update_icon()
+
+/obj/effect/overlay/puddle/mop_act(obj/item/weapon/mop/M, mob/user)
+	turf_on.mop_act(M,user) // Cleaning stuff is done on turf below
 
 /obj/effect/overlay/puddle/getFireFuel() // Copied over from old fuel overlay system and adjusted
 	var/total_fuel = 0
