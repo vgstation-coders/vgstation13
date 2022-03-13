@@ -198,8 +198,8 @@
 	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
 	deflate(1)
 
-/obj/structure/inflatable/take_damage(var/damage, var/sound_effect = 1)
-	health = max(0, health - damage)
+/obj/structure/inflatable/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom try_damage() proc because of sound_effect behavior.
+	health = max(0, health - incoming_damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
 	return try_break()

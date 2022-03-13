@@ -99,7 +99,7 @@
 	explosion(loc,-1,-1,0)
 	qdel(src)
 
-/obj/machinery/deployable/barrier/take_damage(incoming_damage, damage_type = BRUTE)
+/obj/machinery/deployable/barrier/take_damage(incoming_damage, damage_type = BRUTE, skip_break, mute) //Custom take_damage() proc because of unimplemented general object damage resistances.
 	var/modifier = 1
 	if(damage_type == BRUTE)
 		modifier = 0.75

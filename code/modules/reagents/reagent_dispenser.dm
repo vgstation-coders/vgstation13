@@ -516,7 +516,7 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
 
-/obj/structure/reagent_dispensers/cauldron/barrel/take_damage(var/incoming_damage, var/damage_type, var/skip_break, var/mute, var/sound_effect = 1)
+/obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom try_damage() proc because of sound_effect behavior.
 	health = max(0, health - incoming_damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)

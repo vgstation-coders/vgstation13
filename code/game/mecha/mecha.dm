@@ -534,7 +534,7 @@
 ////////  Health related procs  ////////
 ////////////////////////////////////////
 
-/obj/mecha/take_damage(incoming_damage, damage_type = "brute")
+/obj/mecha/take_damage(incoming_damage, damage_type = "brute", skip_break, mute)
 	if(incoming_damage)
 		var/damage = absorbDamage(incoming_damage, damage_type)
 		health -= damage
@@ -547,7 +547,6 @@
 
 /obj/mecha/proc/dynabsorbdamage(damage,damage_type)
 	return damage*(listgetindex(damage_absorption,damage_type) || 1)
-
 
 /obj/mecha/proc/update_health()
 	if(src.health > 0)
