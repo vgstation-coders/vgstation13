@@ -29,11 +29,12 @@
 	var/datum/log_controller/I = investigations[I_CHEMS]
 	var/atom/A = holder.my_atom
 	var/turf/T = get_turf(holder.my_atom)
-	var/mob/M = get_holder_of_type(A, /mob) //if held by a mob (not necessarily true)
+	var/mob/M = T != A ? get_holder_of_type(A, /mob) : null //if held by a mob (not necessarily true, and turfs cannot be "held" by mobs)
 
-	var/obj/machinery/O = get_holder_of_type(A, /obj/machinery) //rather than showing "in a large beaker" let's show the name of the machine if it's inside one
-	if(istype(O))
-		A = O
+	if(T != A) //machinery cannot "hold" turfs
+		var/obj/machinery/O = get_holder_of_type(A, /obj/machinery) //rather than showing "in a large beaker" let's show the name of the machine if it's inside one
+		if(istype(O))
+			A = O
 
 	var/investigate_text = "<small>[time_stamp()] \ref[A] ([formatJumpTo(T)])</small> || "
 
@@ -3676,7 +3677,7 @@
 	result = BLACKCOLOR
 	required_reagents = list(COLORFUL_REAGENT = 1, CARBON = 1)
 	result_amount = 2
-	
+
 /datum/chemical_reaction/degeneratecalcium
 	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM

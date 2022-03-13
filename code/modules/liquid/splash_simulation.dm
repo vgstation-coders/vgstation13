@@ -45,7 +45,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 
 /obj/effect/overlay/puddle/proc/spread()
 	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME
-	var/list/spread_directions = cardinal
+	var/list/spread_directions = cardinal.Copy()
 	for(var/direction in spread_directions)
 		var/turf/T = get_step(src,direction)
 		if(!T)
