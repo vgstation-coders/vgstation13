@@ -15,6 +15,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	plane = ABOVE_TURF_PLANE
 	layer = PUDDLE_LAYER
 	anchored = TRUE
+	mouse_opacity = FALSE
 	var/turf/turf_on
 
 /obj/effect/overlay/puddle/New()
@@ -82,9 +83,6 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		if(T.current_puddle)
 			T.current_puddle.update_icon()
 	update_icon()
-
-/obj/effect/overlay/puddle/mop_act(obj/item/weapon/mop/M, mob/user)
-	turf_on.mop_act(M,user) // Cleaning stuff is done on turf below
 
 /obj/effect/overlay/puddle/getFireFuel() // Copied over from old fuel overlay system and adjusted
 	var/total_fuel = 0
