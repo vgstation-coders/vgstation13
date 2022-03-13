@@ -34,6 +34,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 	var/chained = 0 //Adminbus chain-grab
 	var/modifier = "" //for memes
 	var/repels = FALSE //For pushing stuff out the other end
+	var/list/speech_messages = list() //Time is occuring in random pockets. The laws of causality no longer apply.
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
 	//CARN: admin-alert for chuckle-fuckery.
@@ -153,6 +154,10 @@ var/list/obj/machinery/singularity/global_singularity_pool
 					L.forceMove(get_turf(user))
 					animate(L, alpha = 255, time = 3 SECONDS)
 
+/obj/machinery/singularity/Hear(var/datum/speech/speech, var/rendered_message="")
+	if(repels && speech.speaker.dna) // Wait a minute... I missed a discussion!
+		speech_messages[speech.speaker.dna] = speech.message // We all did
+
 /obj/machinery/singularity/process()
 	dissipate()
 	check_energy()
@@ -163,6 +168,13 @@ var/list/obj/machinery/singularity/global_singularity_pool
 		if(prob(event_chance)) //Chance for it to run a special event TODO: Come up with one or two more that fit.
 			event()
 	eat()
+	if(repels && speech_messages.len) // I've never seen one before, no one has, but I'm guessing it's a white hole.
+		for(var/mob/M in viewers) // A white hole?
+			if((M.dna in speech_messages) && prob(10))
+				if(prob(90)) // So that thing's spewing time? Back into the universe?
+					M.say(speech_messages[M.dna])
+				else
+					M.say("So what is it?") //Only joking
 
 /obj/machinery/singularity/attack_ai() //To prevent AIs from gibbing themselves when they click on one.
 	return
