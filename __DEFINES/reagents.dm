@@ -547,6 +547,10 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 
+#define SLIPPABLES list(LUBE, WATER, CORNOIL)
+#define MILDSLIPPABLES list(WATER, CORNOIL)
+#define CLEANABLES list(BLOOD, VOMIT)
+
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"
 #define INCENSE_SUNFLOWERS	"sunflowers"

@@ -33,7 +33,7 @@
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
 	var/toggle_maps = 0					// Change from votable maps = 0 to all compiled maps = 1
-	var/toggle_vote_method = 0			// Toggle voting methods: Weighted = 0, Majority = 1
+	var/toggle_vote_method = 1			// Toggle voting methods: Weighted = 1, Majority = 2, Persistent = 3, Random = 4
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives
@@ -176,6 +176,9 @@
 	var/emag_starts_charged = 1
 	var/emag_recharge_rate = 0
 	var/emag_recharge_ticks = 0
+
+	var/puddle_spreading = 0 //If puddles can spread
+	var/puddle_reactions = 0 //If puddles can react chemicals in them
 
 	var/map_voting = 0
 	var/renders_url = ""
@@ -593,6 +596,10 @@
 					multiz_render_cap = text2num(value)
 				if("multiz_bottom_cap")
 					multiz_bottom_cap = text2num(value)
+				if("enable_puddle_spread")
+					config.puddle_spreading = 1
+				if("enable_puddle_react")
+					config.puddle_reactions = 1
 
 				if("media_base_url")
 					media_base_url = value

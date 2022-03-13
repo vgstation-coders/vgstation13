@@ -11,10 +11,15 @@
 
 /turf/simulated/New()
 	..()
-
+	// For an entire cubic space, 1000 reagents
+	create_reagents(1000)
 	if(istype(loc, /area/chapel))
 		holy = 1
 	levelupdate()
+
+/turf/simulated/on_reagent_change()
+	if(config.puddle_reactions)
+		reagents.reaction(src, volume_multiplier = 0)
 
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src

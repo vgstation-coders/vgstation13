@@ -461,23 +461,17 @@
 
 
 /obj/machinery/fishtank/proc/spill_water()
+	var/amount_added = 0
 	switch(tank_type)
-		if(FISH_BOWL)										//Fishbowl: Wets it's own tile
-			var/turf/T = get_turf(src)
-			if(!istype(T, /turf/simulated))
-				return
-			var/turf/simulated/S = T
-			S.wet(10 SECONDS, TURF_WET_WATER)
-
-		if(FISH_TANK)										//Fishtank: Wets it's own tile and the 4 adjacent tiles (cardinal directions)
-			var/turf/ST = get_turf(src)
-			var/list/L = ST.CardinalTurfs()
-			for(var/turf/simulated/S in L)
-				S.wet(10 SECONDS, TURF_WET_WATER)
-
-		if (FISH_WALL)										//Wall-tank: Wets it's own tile and the surrounding 8 tiles (3x3 square)
-			for(var/turf/simulated/S in view(src, 1))
-				S.wet(10 SECONDS, TURF_WET_WATER)
+		if(FISH_BOWL)
+			amount_added = 50
+		if(FISH_TANK)
+			amount_added = 250
+		if (FISH_WALL)
+			amount_added = 450
+	var/turf/T = get_turf(src)
+	if(T && T.reagents)
+		T.reagents.add_reagent(WATER,amount_added)
 
 
 //////////////////////////////			Note from FalseIncarnate:

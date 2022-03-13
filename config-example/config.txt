@@ -378,3 +378,9 @@ MULTIZ_RENDER_CAP 8
 
 ## The maximum number of z-levels checked below in multi-z
 MULTIZ_BOTTOM_CAP 16
+
+## Comment to disable puddles spreading
+ENABLE_PUDDLE_SPREAD
+
+## Comment to disable puddles reacting
+ENABLE_PUDDLE_REACT

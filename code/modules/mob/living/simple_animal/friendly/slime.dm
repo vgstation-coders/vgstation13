@@ -131,5 +131,5 @@
 		clear_fullscreen("brute")
 	return TRUE
 
-/mob/living/simple_animal/slime/ApplySlip(var/obj/effect/overlay/puddle/P)
+/mob/living/simple_animal/slime/ApplySlip(var/wet)
 	return FALSE

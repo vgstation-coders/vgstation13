@@ -1,61 +1,63 @@
 /mob/living/simple_animal/hostile/pulse_demon
-    name = "pulse demon"
-    desc = "A strange electrical apparition that lives in wires."
-    icon_state = "pulsedem"
-    icon_living = "pulsedem"
-    icon_dead = "pulsedem" // Should never be seen but just in case
-    speak_chance = 20
-    emote_hear = list("vibrates", "sizzles")
-    response_help = "reaches their hand into"
-    response_disarm = "pushes their hand through"
-    response_harm = "punches their fist through"
-    plane = ABOVE_PLATING_PLANE
-    layer = PULSEDEMON_LAYER
+	name = "pulse demon"
+	desc = "A strange electrical apparition that lives in wires."
+	icon_state = "pulsedem"
+	icon_living = "pulsedem"
+	icon_dead = "pulsedem" // Should never be seen but just in case
+	speak_chance = 20
+	emote_hear = list("vibrates", "sizzles")
+	emote_sound = list("sound/voice/pdvoice1.ogg","sound/voice/pdvoice2.ogg","sound/voice/pdvoice3.ogg")
+	response_help = "reaches their hand into"
+	response_disarm = "pushes their hand through"
+	response_harm = "punches their fist through"
+	plane = ABOVE_PLATING_PLANE
+	layer = PULSEDEMON_LAYER
 
-    see_in_dark = 8
-    minbodytemp = 0
-    maxbodytemp = 4000
-    min_oxy = 0
-    max_co2 = 0
-    max_tox = 0
-    health = 50
-    maxHealth = 50
-    speed = 1
-    size = SIZE_TINY
+	see_in_dark = 8
+	minbodytemp = 0
+	maxbodytemp = 4000
+	min_oxy = 0
+	max_co2 = 0
+	max_tox = 0
+	health = 50
+	maxHealth = 50
+	speed = 1
+	flying = 1
+	size = SIZE_TINY
 
-    attacktext = "electrocutes"
-    attack_sound = "sparks"
-    harm_intent_damage = 0
-    melee_damage_lower = 0
-    melee_damage_upper = 0                                          //Handled in unarmed_attack_mob() anyways
-    pass_flags = PASSDOOR                                           //Stops the message spam
+	attacktext = "electrocutes"
+	attack_sound = "sparks"
+	harm_intent_damage = 0
+	melee_damage_lower = 0
+	melee_damage_upper = 0                                          //Handled in unarmed_attack_mob() anyways
+	pass_flags = PASSDOOR                                           //Stops the message spam
 
-    //VARS
-    var/charge = 1000                                               //Charge stored
-    var/maxcharge = 1000                                            //Max charge storable
-    var/health_drain_rate = 5                                       //Health drained per tick when not on power source
-    var/health_regen_rate = 5                                       //Health regenerated per tick when on power source
-    var/amount_per_regen = 100                                      //Amount of power used to regenerate health
-    var/charge_absorb_amount = 1000                                 //Amount of power sucked per tick
-    var/max_can_absorb = 10000                                      //Maximum amount that max charge can increase to
-    var/takeover_time = 30                                          //Time spent taking over electronics
-    var/show_desc = FALSE                                           //For the ability menu
-    var/can_leave_cable = FALSE                                     //For the ability that lets you
-    var/draining = TRUE                                             //For draining power or not
-    var/move_divide = 4                                             //For slowing down of above
+	//VARS
+	var/charge = 1000                                               //Charge stored
+	var/maxcharge = 1000                                            //Max charge storable
+	var/health_drain_rate = 5                                       //Health drained per tick when not on power source
+	var/health_regen_rate = 5                                       //Health regenerated per tick when on power source
+	var/amount_per_regen = 100                                      //Amount of power used to regenerate health
+	var/charge_absorb_amount = 1000                                 //Amount of power sucked per tick
+	var/max_can_absorb = 10000                                      //Maximum amount that max charge can increase to
+	var/takeover_time = 30                                          //Time spent taking over electronics
+	var/show_desc = FALSE                                           //For the ability menu
+	var/can_leave_cable = FALSE                                     //For the ability that lets you
+	var/draining = TRUE                                             //For draining power or not
+	var/move_divide = 4                                             //For slowing down of above
 
-    //TYPES
-    var/area/controlling_area                                       // Area controlled from an APC
-    var/obj/structure/cable/current_cable                           // Current cable we're on
-    var/obj/machinery/power/current_power                           // Current power machine we're in
-    var/mob/living/silicon/robot/current_robot                      // Currently controlled robot
-    var/obj/machinery/bot/current_bot                               // Currently controlled bot
-    var/obj/item/weapon/current_weapon                              // Current gun we're controlling
+	//TYPES
+	var/area/controlling_area                                       // Area controlled from an APC
+	var/obj/structure/cable/current_cable                           // Current cable we're on
+	var/obj/machinery/power/current_power                           // Current power machine we're in
+	var/mob/living/silicon/robot/current_robot                      // Currently controlled robot
+	var/obj/machinery/bot/current_bot                               // Currently controlled bot
+	var/obj/item/weapon/current_weapon                              // Current gun we're controlling
 
-    //LISTS
-    var/list/image/cables_shown = list()                            // In cable views
-    var/list/possible_spells = list()                               // To be purchasable from ability menu
-    var/list/datum/pulse_demon_upgrade/possible_upgrades = list()   // To be purchasable from ability menu
+	//LISTS
+	var/list/image/cables_shown = list()                            // In cable views
+	var/list/possible_spells = list()                               // To be purchasable from ability menu
+	var/list/datum/pulse_demon_upgrade/possible_upgrades = list()   // To be purchasable from ability menu
 
 /mob/living/simple_animal/hostile/pulse_demon/New()
     ..()
@@ -225,33 +227,38 @@
 
 // Proc for speaking as a borg
 /mob/living/simple_animal/hostile/pulse_demon/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
-    . = ..()
-    if(.)
-        return .
+	. = ..()
+	if(.)
+		return .
 
-    if(current_robot)
-        if (!speech.message)
-            return
+	if(current_robot)
+		if (!speech.message)
+			return 1
+		current_robot.say(speech.message)
+		speech.message = sanitize(speech.message)
+		var/turf/T = get_turf(src)
+		// Again, so no mistaken BWOINKs
+		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
+		log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
+		message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
+		return 1 // This ensures we don't end up speaking by ourselves too
 
-        current_robot.say(speech.message)
-        speech.message = sanitize(speech.message)
-        var/turf/T = get_turf(src)
-        // Again, so no mistaken BWOINKs
-        log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
-        log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
-        message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
-    
-    else if(current_bot && istype(current_bot,/obj/machinery/bot/buttbot))
-        if (!speech.message)
-            return
-        speech.message = buttbottify(speech.message, 3, 9) // 3 times as intense
-        var/obj/machinery/bot/buttbot/BB = current_bot
-        BB.fart()
-        score.buttbotfarts++
+	else if(current_bot && istype(current_bot,/obj/machinery/bot/buttbot))
+		if (!speech.message)
+			return 1
+		var/obj/machinery/bot/buttbot/BB = current_bot
+		if(prob(BB.buttchance) && !findtext(speech.message,"butt"))
+			sleep(rand(1,3))
+			BB.say(buttbottify(speech.message, 3, 9)) // 3 times as intense
+			BB.fart()
+			score.buttbotfarts++
+			return 1 // This ensures we don't end up speaking by ourselves too
 
-    else if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
-        to_chat(src, "You have nothing to speak with.")
-        return 1 //this ensures we don't end up speaking out loud
+	else
+		playsound(loc, "[pick(emote_sound)]", 50, 1) // Play sound if in an intercom or not
+		if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
+			emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
+			return 1 // To stop speaking normally
 
 // Helper stuff for attacks
 /mob/living/simple_animal/hostile/pulse_demon/hasFullAccess()
@@ -261,10 +268,6 @@
 	return get_all_accesses()
 
 /mob/living/simple_animal/hostile/pulse_demon/dexterity_check()
-	return TRUE
-
-// We aren't a normal living thing
-/mob/living/simple_animal/hostile/pulse_demon/Process_Spacemove(var/check_drift = 0)
 	return TRUE
 
 /mob/living/simple_animal/hostile/pulse_demon/ex_act(severity)

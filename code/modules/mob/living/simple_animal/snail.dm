@@ -155,6 +155,6 @@ var/max_snails = 40
 	health = 40
 
 /mob/living/simple_animal/snail/greasy/wander_move(turf/simulated/dest)
-	if (istype(dest) && prob(20))
-		dest.wet(800, TURF_WET_LUBE)
+	if (istype(dest) && prob(20) && dest.reagents)
+		dest.reagents.add_reagent(LUBE,40)
 	return ..()

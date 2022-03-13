@@ -93,7 +93,8 @@
 
 /obj/item/weapon/rcs/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>There are [round(cell.charge / send_cost)] charges left.</span>")
+	if(send_cost > 0)
+		to_chat(user, "<span class='info'>There are [round(cell.charge / send_cost)] charges left.</span>")
 
 /obj/item/weapon/rcs/Destroy()
 	if (cell)

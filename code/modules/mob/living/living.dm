@@ -44,6 +44,9 @@
 		qdel(immune_system)
 		immune_system = null
 
+	if(addicted_chems)
+		qdel(addicted_chems)
+		addicted_chems = null
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -1725,7 +1728,7 @@ Thanks.
 	tool.reagents.reaction(src, INGEST)
 	return ..()
 
-/mob/living/proc/ApplySlip(var/obj/effect/overlay/puddle/P)
+/mob/living/proc/ApplySlip(var/wet)
 	return on_foot() // Check if we have legs, gravity, etc. Checked by the children.
 
 /mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_with_magbooties = 0)
