@@ -55,6 +55,28 @@
 				lastsound = world.time
 	return 1
 
+/obj/structure/mopbucket/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
+		return
+	if(user.incapacitated() || user.lying)
+		return
+	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
+		return
+	var/static/list/dump_types = list(/obj/structure/sink,/obj/structure/toilet)
+	if(is_type_in_list(O,dump_types) && reagents && reagents.total_volume)
+		reagents.clear_reagents()
+		to_chat(user, "<span class='notice'>You empty [src] into [O].</span>")
+		if(lastsound + 2 SECONDS < world.time)
+			playsound(src, 'sound/effects/slosh.ogg', 50, 1)
+			lastsound = world.time
+	if(istype(O,/turf/simulated/floor) && O.reagents)
+		reagents.trans_to(O)
+		to_chat(user, "<span class='notice'>You empty [src] onto [O].</span>")
+		if(lastsound + 2 SECONDS < world.time)
+			playsound(src, 'sound/effects/slosh.ogg', 50, 1)
+			lastsound = world.time
+
+
 /obj/structure/mopbucket/ex_act(severity)
 	switch(severity)
 		if(1.0)
