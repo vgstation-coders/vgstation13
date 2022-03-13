@@ -175,7 +175,7 @@
 	var/emag_recharge_rate = 0
 	var/emag_recharge_ticks = 0
 
-	var/puddle_spreading = 0 //If puddles can spread
+	var/puddle_spreading = 1 //If puddles can spread
 	var/puddle_reactions = 1 //If puddles can react chemicals in them
 
 	var/map_voting = 0
@@ -588,8 +588,8 @@
 					multiz_render_cap = text2num(value)
 				if("multiz_bottom_cap")
 					multiz_bottom_cap = text2num(value)
-				if("enable_puddle_spread")
-					config.puddle_spreading = 1
+				if("disable_puddle_spread")
+					config.puddle_spreading = 0
 				if("disable_puddle_react")
 					config.puddle_reactions = 0
 
