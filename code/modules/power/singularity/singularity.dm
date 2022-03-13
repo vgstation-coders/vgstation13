@@ -155,8 +155,10 @@ var/list/obj/machinery/singularity/global_singularity_pool
 					animate(L, alpha = 255, time = 3 SECONDS)
 
 /obj/machinery/singularity/Hear(var/datum/speech/speech, var/rendered_message="")
-	if(repels && speech.speaker.dna) // Wait a minute... I missed a discussion!
-		speech_messages[speech.speaker.dna] = speech.message // We all did
+	if(repels && ismob(speech.speaker))
+		var/mob/M = speech.speaker
+		if(M.dna) // Wait a minute... I missed a discussion!
+			speech_messages[M.dna] = speech.message // We all did
 
 /obj/machinery/singularity/process()
 	dissipate()
@@ -169,7 +171,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 			event()
 	eat()
 	if(repels && speech_messages.len) // I've never seen one before, no one has, but I'm guessing it's a white hole.
-		for(var/mob/M in viewers) // A white hole?
+		for(var/mob/M in viewers(src)) // A white hole?
 			if((M.dna in speech_messages) && prob(10))
 				if(prob(90)) // So that thing's spewing time? Back into the universe?
 					M.say(speech_messages[M.dna])
