@@ -80,7 +80,7 @@
 			reagents.reaction(hit_atom, TOUCH)
 		reagents.reaction(get_turf(src), TOUCH) //Then spill it onto the floor.
 
-/obj/proc/take_damage(var/incoming_damage, var/skip_break = FALSE, var/mute = TRUE)
+/obj/proc/take_damage(var/incoming_damage, var/damage_type = BRUTE, var/skip_break = FALSE, var/mute = TRUE)
 	var/thisdmg = (incoming_damage > max(damage_armor, damage_resist)) * (incoming_damage - damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
 	health -= thisdmg
 	play_hit_sounds(thisdmg)
@@ -95,9 +95,9 @@
 /obj/proc/play_hit_sounds(var/thisdmg, var/hear_glanced = TRUE, var/hear_damaged = TRUE) //Plays any relevant sounds whenever the object is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
 	if(health <= 0) //Don't play a sound here if the object is ready to break, because sounds are also played by on_broken().
 		return
-	if(thisdmg && !isnull(damaged_sound) && hear_damaged)
+	if(thisdmg && damaged_sound && hear_damaged)
 		playsound(src, damaged_sound, 50, 1)
-	else if(!isnull(glanced_sound) && hear_glanced)
+	else if(glanced_sound && hear_glanced)
 		playsound(src, glanced_sound, 50, 1)
 
 /obj/proc/message_take_hit(var/mute = FALSE) //Give a visible message when the object takes damage.
@@ -146,7 +146,7 @@
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The object shatters!"
 
 /obj/proc/try_break(var/datum/throwparams/propelparams, var/hit_atom) //Breaks the object if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be propelled upon breaking.
-	if(breakable_flags && health <= 0)
+	if(health <= 0)
 		on_broken(propelparams, hit_atom)
 		qdel(src)
 		return TRUE //Return TRUE if the object was broken
@@ -200,14 +200,14 @@
 		user.do_attack_animation(src, W)
 		user.delayNextAttack(1 SECONDS)
 		add_fingerprint(user)
-		var/glanced=!take_damage(W.force, TRUE)
+		var/glanced=!take_damage(W.force, skip_break = TRUE)
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
 		user.visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You hit \the [src] with \the [W][generate_break_text(glanced)]<span>")
 		try_break()
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE)
-			W.take_damage(min(W.force, BREAKARMOR_MEDIUM), FALSE, FALSE) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
+			W.take_damage(min(W.force, BREAKARMOR_MEDIUM), skip_break = FALSE, mute = FALSE) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
 		return TRUE
 	else
 		return FALSE
@@ -218,7 +218,7 @@
 	if(M.melee_damage_upper && M.a_intent == I_HURT && breakable_flags & BREAKABLE_UNARMED)
 		M.do_attack_animation(src, M)
 		M.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper), TRUE)
+		var/glanced=!take_damage(rand(M.melee_damage_lower,M.melee_damage_upper), skip_break = TRUE)
 		if(M.attack_sound)
 			playsound(src, M.attack_sound, 50, 1)
 		M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced)]</span>")
@@ -238,9 +238,9 @@
 		//Unless the object falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
 		var/thisdmg = 10 * get_total_scaled_w_class(1) / (speed ? speed : 1) //impact damage scales with the weight class and speed of the object. since a smaller speed is faster, it's a divisor.
 		if(istype(impacted_atom, /turf/simulated/floor))
-			take_damage(thisdmg/2, TRUE)
+			take_damage(thisdmg/2, skip_break = TRUE)
 		else
-			take_damage(thisdmg, TRUE, FALSE) //Be verbose about the object taking damage.
+			take_damage(thisdmg, skip_break = TRUE, mute = FALSE) //Be verbose about the object taking damage.
 		try_break(null, impacted_atom)
 
 //Object being hit by a projectile
@@ -248,7 +248,7 @@
 /obj/bullet_act(var/obj/item/projectile/proj)
 	..()
 	if(breakable_flags & BREAKABLE_WEAPON)
-		take_damage(proj.damage, TRUE)
+		take_damage(proj.damage, skip_break = TRUE)
 	var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (get_total_scaled_w_class(3))))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the total weight class of the object.
 	if(impact_power)
 		//Throw the object in the direction the projectile was traveling
@@ -285,7 +285,7 @@
 
 		biter.do_attack_animation(src, biter)
 		biter.delayNextAttack(1 SECONDS)
-		var/glanced=!take_damage(thisdmg, TRUE)
+		var/glanced=!take_damage(thisdmg, skip_break = TRUE)
 		biter.visible_message("<span class='warning'>\The [biter] [loc == biter ? "[attacktype2] down on" : "leans over and [attacktype2]"] \the [src]!</span>",
 		"<span class='notice'>You [loc == biter ? "[attacktype] down on" : "lean over and [attacktype]"] \the [src][glanced ? "... ouch!" : "[generate_break_text()]"]</span>")
 		try_break()

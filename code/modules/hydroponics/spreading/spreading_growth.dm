@@ -116,7 +116,7 @@
 					child.update_icon()
 
 	// We shouldn't have spawned if the controller doesn't exist.
-	check_health()
+	try_break()
 	// Keep processing us until we've done all there is for us to do in life.
 	if(!neighbors.len && (health == maxHealth || health <= 0) && harvest && !is_locking(/datum/locking_category))
 		SSplant.remove_plant(src)

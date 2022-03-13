@@ -61,12 +61,12 @@
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 		user.delayNextAttack(1 SECONDS)
 		user.do_attack_animation(src, user)
-		take_damage(W.force, W.damtype)
+		take_damage(W.force, damage_type = W.damtype)
 
 /obj/machinery/deployable/barrier/bullet_act(var/obj/item/projectile/Proj)
 	. = ..()
 	if(Proj.damage)
-		take_damage(Proj.damage, Proj.damage_type)
+		take_damage(Proj.damage, damage_type = Proj.damage_type)
 
 /obj/machinery/deployable/barrier/ex_act(var/severity)
 	switch(severity)
@@ -99,10 +99,13 @@
 	explosion(loc,-1,-1,0)
 	qdel(src)
 
-/obj/machinery/deployable/barrier/take_damage(var/amount, var/kind = BRUTE)
+/obj/machinery/deployable/barrier/take_damage(incoming_damage, damage_type = BRUTE)
 	var/modifier = 1
-	if(kind == BRUTE)
+	if(damage_type == BRUTE)
 		modifier = 0.75
-	health -= amount * modifier
+	health -= incoming_damage * modifier
+	try_break()
+
+/obj/machinery/deployable/barrier/try_break()
 	if(health <= 0)
 		explode()

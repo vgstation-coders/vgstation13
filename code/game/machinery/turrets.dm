@@ -592,13 +592,6 @@
 		qdel (src)
 	return
 
-/obj/structure/turret/gun_turret/take_damage(damage)
-	src.health -= damage
-	if(src.health<=0)
-		qdel (src)
-	return
-
-
 /obj/structure/turret/gun_turret/bullet_act(var/obj/item/projectile/Proj)
 	src.take_damage(Proj.damage)
 	return ..()

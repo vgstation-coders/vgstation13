@@ -208,18 +208,11 @@
 			S.handle_item_insertion(G, 1)
 	else
 		..()
-		take_damage(W)
+		if(W.is_hot() || (W.is_sharp() && !seed.ligneous))
+			take_damage(W.force * 4)
+		else
+			take_damage(W.force)
 		user.delayNextAttack(10)
-
-/obj/effect/plantsegment/take_damage(var/obj/item/weapon/W)
-	if(!W.force)
-		return 0
-	var/dmg = W.force
-	if(W.is_hot() || (W.is_sharp() && !seed.ligneous))
-		dmg = dmg*4
-	health -= dmg
-	check_health()
-	update_icon()
 
 /obj/effect/plantsegment/ex_act(severity)
 	switch(severity)
@@ -241,7 +234,10 @@
 /obj/effect/plantsegment/fire_act(null, temp, volume)
 	die_off()
 
-/obj/effect/plantsegment/proc/check_health()
+/obj/effect/plantsegment/damaged_updates()
+	update_icon()
+
+/obj/effect/plantsegment/try_break()
 	if(health <= 0)
 		die_off()
 

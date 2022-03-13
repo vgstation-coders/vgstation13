@@ -534,12 +534,12 @@
 ////////  Health related procs  ////////
 ////////////////////////////////////////
 
-/obj/mecha/take_damage(amount, type="brute")
-	if(amount)
-		var/damage = absorbDamage(amount,type)
+/obj/mecha/take_damage(incoming_damage, damage_type = "brute")
+	if(incoming_damage)
+		var/damage = absorbDamage(incoming_damage, damage_type)
 		health -= damage
 		update_health()
-		log_append_to_last("Took [damage] points of damage. Damage type: \"[type]\".",1)
+		log_append_to_last("Took [damage] points of damage. Damage type: \"[damage_type]\".",1)
 	return
 
 /obj/mecha/proc/absorbDamage(damage,damage_type)
@@ -663,7 +663,7 @@
 		return
 	if(istype(Proj, /obj/item/projectile/beam/pulse))
 		ignore_threshold = 1
-	src.take_damage(Proj.damage,Proj.flag)
+	src.take_damage(Proj.damage, damage_type = Proj.flag)
 	src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),ignore_threshold)
 	Proj.on_hit(src)
 	return
@@ -713,13 +713,13 @@
 */
 
 /obj/mecha/blob_act()
-	take_damage(30, "brute")
+	take_damage(30, damage_type = "brute")
 	return
 
 /obj/mecha/emp_act(severity)
 	if(get_charge())
 		cell.emp_act(severity*1.25)
-		take_damage(50 / severity,"energy")
+		take_damage(50 / severity, damage_type = "energy")
 	src.log_message("EMP detected",1)
 	check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 	for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
@@ -729,7 +729,7 @@
 /obj/mecha/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature>src.max_temperature)
 		src.log_message("Exposed to dangerous temperature.",1)
-		src.take_damage(5,"fire")
+		src.take_damage(5, damage_type = "fire")
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 	return
 
@@ -748,7 +748,7 @@
 	else
 		src.occupant_message("<span class='red'><b>[user] hits [src] with [W].</b></span>")
 		user.visible_message("<span class='red'><b>[user] hits [src] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
-		src.take_damage(W.force,W.damtype)
+		src.take_damage(W.force, damage_type = W.damtype)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
 
@@ -919,7 +919,7 @@
 		else
 			src.occupant_message("<span class='red'><b>[user] hits [src] with [W].</b></span>")
 			user.visible_message("<span class='red'><b>[user] hits [src] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
-			src.take_damage(W.force,W.damtype)
+			src.take_damage(W.force, damage_type = W.damtype)
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 */
 	return
@@ -2093,7 +2093,7 @@
 
 /obj/mecha/apply_beam_damage(var/obj/effect/beam/B)
 	// Actually apply damage
-	take_damage(B.get_damage(), "emitter laser")
+	take_damage(B.get_damage(), damage_type = "emitter laser")
 
 /proc/mech_integrity_to_icon_state(var/integrity_ratio)
 	switch(integrity_ratio)
@@ -2223,7 +2223,7 @@
 		if(mecha.cabin_air && mecha.cabin_air.return_volume()>0)
 			mecha.cabin_air.temperature = min(6000+T0C, mecha.cabin_air.return_temperature()+rand(10,15))
 			if(mecha.cabin_air.return_temperature()>mecha.max_temperature/2)
-				mecha.take_damage(4/round(mecha.max_temperature/mecha.cabin_air.return_temperature(),0.1),"fire")
+				mecha.take_damage(4/round(mecha.max_temperature/mecha.cabin_air.return_temperature(),0.1), damage_type = "fire")
 	if(mecha.hasInternalDamage(MECHA_INT_TEMP_CONTROL)) //stop the mecha_preserve_temp loop datum
 		mecha.pr_int_temp_processor.stop()
 	if(mecha.hasInternalDamage(MECHA_INT_TANK_BREACH)) //remove some air from internal tank
