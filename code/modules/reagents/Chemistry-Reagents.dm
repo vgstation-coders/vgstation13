@@ -57,7 +57,7 @@
 	var/addictive = FALSE
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 	set waitfor = 0
 
 	if(!holder)
@@ -78,17 +78,24 @@
 			var/block  = 0
 
 			for(var/obj/item/clothing/C in M.get_equipped_items())
-				if(C.permeability_coefficient < chance)
-					chance = C.permeability_coefficient
+				var/covered = !zone_sels.len //Simple way for covering everything, leave it blank
+				if(!covered)
+					for(var/part in zone_sels)
+						if(C.body_parts_covered & limb_define_to_part_define(part))
+							covered = TRUE
+							break
+				if(covered)
+					if(C.permeability_coefficient < chance)
+						chance = C.permeability_coefficient
 
-				//Hardcode, but convenient until protection is fixed
-				if(istype(C, /obj/item/clothing/suit/bio_suit))
-					if(prob(75))
-						block = 1
+					//Hardcode, but convenient until protection is fixed
+					if(istype(C, /obj/item/clothing/suit/bio_suit))
+						if(prob(75))
+							block = 1
 
-				if(istype(C, /obj/item/clothing/head/bio_hood))
-					if(prob(75))
-						block = 1
+					if(istype(C, /obj/item/clothing/head/bio_hood))
+						if(prob(75))
+							block = 1
 
 			chance = chance * 100
 
@@ -492,7 +499,7 @@
 	mug_desc = "Are you sure this is [totally_not_blood]?"
 
 
-/datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	var/datum/reagent/blood/self = src
 	if(..())
@@ -629,7 +636,7 @@
 			M.adjustToxLoss(REM)
 			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
-/datum/reagent/water/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/water/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -1483,7 +1490,7 @@
 
 	M.take_organ_damage(REM, 0)
 
-/datum/reagent/chloramine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/chloramine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -1651,7 +1658,7 @@
 		M.adjustFireLoss(REM)
 		M.take_organ_damage(0, REM)
 
-/datum/reagent/sacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/sacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -1748,7 +1755,7 @@
 
 	M.adjustFireLoss(3 * REM)
 
-/datum/reagent/pacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/pacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -2019,7 +2026,7 @@
 	specheatcap = 96.86
 	custom_plant_metabolism = 2
 
-/datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -2374,7 +2381,7 @@
 
 	T.color = ""
 
-/datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -2456,7 +2463,7 @@
 			H.update_body()
 	M.adjustToxLoss(4 * REM)
 
-/datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -2604,7 +2611,7 @@
 		if(prob(1*(PC.powernet.avail/1000))) //The less there is, the hardier it gets
 			PC.die()
 
-/datum/reagent/toxin/plantbgone/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/toxin/plantbgone/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -2635,7 +2642,7 @@
 	density = 1.08
 	specheatcap = 4.18
 
-/datum/reagent/toxin/insecticide/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/toxin/insecticide/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -3092,7 +3099,7 @@
 			if(E.damage > 0)
 				E.damage = max(0, E.damage - 1)
 
-/datum/reagent/imidazoline/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/imidazoline/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -3864,7 +3871,7 @@
 	color = "#535E66" //rgb: 83, 94, 102
 	var/disease_type = DISEASE_CYBORG
 
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 	if(..())
 		return 1
 
@@ -3889,7 +3896,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
 
-/datum/reagent/xenomicrobes/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/xenomicrobes/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -4632,7 +4639,7 @@
 	density = 0.9
 	specheatcap = 8.59
 
-/datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -8309,7 +8316,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#00FF21" //rgb: 0, 255, 33
 
-/datum/reagent/hamserum/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/hamserum/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 
 	if(..())
 		return 1
@@ -9029,7 +9036,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		statue.dissolve()
 
 
-/datum/reagent/apetrine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/apetrine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 	if(..())
 		return 1
 
@@ -9085,7 +9092,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	A.light_color = initial_color
 	A.set_light(0)
 
-/datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 	if(..())
 		return 1
 
@@ -9417,7 +9424,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			if(I.robotic == 2)
 				I.take_damage(10, 0)//robo organs get damaged by ingested ironrot
 
-/datum/reagent/ironrot/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/ironrot/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = list())
 	if(..())
 		return 1
 

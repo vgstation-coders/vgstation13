@@ -137,7 +137,7 @@
 		if(src.reagents)
 			for(var/mob/O in viewers(user, null))
 				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M]!</span>"), 1)
-			src.reagents.reaction(M, TOUCH)
+			src.reagents.reaction(M, TOUCH, zone_sels = list(user.zone_sel.selecting))
 
 		//Finally, smash the bottle. This kills (del) the bottle.
 		src.smash(M, user)
@@ -1783,7 +1783,7 @@
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
 			reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
 			if(hit_atom != get_turf(src)) //prevent spilling on the floor twice though
-				reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
+				reagents.reaction(hit_atom, TOUCH, zone_sels = list(user.zone_sel.selecting))  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs

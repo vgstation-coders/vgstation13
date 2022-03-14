@@ -577,7 +577,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0, var/volume_multiplier = 1)
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0, var/volume_multiplier = 1, var/list/zone_sels = list())
 	for(var/datum/reagent/R in reagent_list)
 		var/amount_splashed = (R.volume+volume_modifier)*volume_multiplier
 		if (amount_override)
@@ -586,7 +586,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			if(isanimal(A) && R)
 				R.reaction_animal(A, method, amount_splashed)
 			else
-				R.reaction_mob(A, method, amount_splashed)
+				R.reaction_mob(A, method, amount_splashed, zone_sels)
 		if(isturf(A) && R)
 			R.reaction_turf(A, amount_splashed)
 		if(istype(A, /obj) && R)

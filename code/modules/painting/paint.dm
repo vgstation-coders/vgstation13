@@ -34,7 +34,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 		for(var/mob/O in viewers(user))
 			O.show_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>", 1)
 		spawn(5)
-			reagents.reaction(target, TOUCH)
+			reagents.reaction(target, TOUCH, zone_sels = list(user.zone_sel.selecting))
 			reagents.remove_any(5)
 	else
 		return ..()

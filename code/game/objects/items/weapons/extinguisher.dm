@@ -135,7 +135,7 @@
 			if(reagents.has_reagent(FUEL))
 				message_admins("[user.name] ([user.ckey]) poured welding fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 				log_game("[user.name] ([user.ckey]) poured welding fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			src.reagents.reaction(target, TOUCH)
+			src.reagents.reaction(target, TOUCH, zone_sels = list(user.zone_sel.selecting))
 			spawn(5) src.reagents.clear_reagents()
 			return
 	if (!safety && !is_open_container())
@@ -210,7 +210,7 @@
 					for(var/atom/atm in get_turf(W))
 						if(!W)
 							return
-						W.reagents.reaction(atm, TOUCH)                      // Touch, since we sprayed it.
+						W.reagents.reaction(atm, TOUCH, zone_sels = list(user.zone_sel.selecting))                      // Touch, since we sprayed it.
 					if(W.loc == my_target)
 						break
 					sleep(2)
@@ -290,7 +290,7 @@
 					for(var/atom/atm in get_turf(W))
 						if(!W)
 							return
-						W.reagents.reaction(atm, TOUCH)                      // Touch, since we sprayed it.
+						W.reagents.reaction(atm, TOUCH, zone_sels = list(user.zone_sel.selecting)) // Touch, since we sprayed it.
 						if(W.reagents.has_reagent(WATER))
 							if(isliving(atm)) // For extinguishing mobs on fire
 								var/mob/living/M = atm                           // Why isn't this handled by the reagent? - N3X
