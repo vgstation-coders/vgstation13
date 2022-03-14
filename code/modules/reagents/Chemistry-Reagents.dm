@@ -1699,12 +1699,15 @@
 	if(M.acidable())
 		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if(head_organ)
-				if(head_organ.take_damage(25, 0))
-					H.UpdateDamageIcon(1)
-				head_organ.disfigure("burn")
-				H.audible_scream()
+			for(var/part in zone_sels)
+				var/datum/organ/external/ext_organ = H.get_organ(part)
+				if(ext_organ)
+					if(ext_organ.take_damage(25, 0))
+						H.UpdateDamageIcon(1)
+					if(istype(ext_organ,/datum/organ/external/head))
+						var/datum/organ/external/head/head_organ = ext_organ
+						head_organ.disfigure("burn")
+					H.audible_scream()
 		else
 			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 
@@ -1779,11 +1782,15 @@
 	if(M.acidable()) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if(head_organ.take_damage(15, 0))
-				H.UpdateDamageIcon(1)
-			H.audible_scream()
-			head_organ.disfigure("burn")
+			for(var/part in zone_sels)
+				var/datum/organ/external/ext_organ = H.get_organ(part)
+				if(ext_organ)
+					if(ext_organ.take_damage(15, 0))
+						H.UpdateDamageIcon(1)
+					if(istype(ext_organ,/datum/organ/external/head))
+						var/datum/organ/external/head/head_organ = ext_organ
+						head_organ.disfigure("burn")
+					H.audible_scream()
 		else
 			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 
