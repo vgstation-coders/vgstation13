@@ -577,7 +577,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0, var/volume_multiplier = 1, var/list/zone_sels = list())
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0, var/volume_multiplier = 1, var/list/zone_sels = ALL_LIMBS)
 	for(var/datum/reagent/R in reagent_list)
 		var/amount_splashed = (R.volume+volume_modifier)*volume_multiplier
 		if (amount_override)
