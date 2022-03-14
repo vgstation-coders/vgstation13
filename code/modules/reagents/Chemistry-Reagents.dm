@@ -1676,55 +1676,37 @@
 		return 1
 
 	if(method == TOUCH)
-		if(ishuman(M))
+		if(ishuman(M) || ismonkey(M))
+			var/mob/living/carbon/H = M
+			for(var/obj/item/clothing/C in H.get_equipped_items())
+				for(var/part in zone_sels)
+					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && C == H.head)
+						continue
+					if(C.body_parts_covered & limb_define_to_part_define(part))
+						if(C.acidable())
+							var/old_flags = C.slot_flags
+							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
+							if(C == H.wear_mask) //Really really horrible appearance code workarounds
+								H.wear_mask = null
+							if(C == H.head)
+								H.head = null
+							qdel(C)
+							H.update_inv_by_slot(old_flags)
+						else
+							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
+						return
+
+	if(M.acidable())
+		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
-
-			if(H.wear_mask)
-				if(H.wear_mask.acidable())
-					qdel(H.wear_mask)
-					H.wear_mask = null
-					H.update_inv_wear_mask()
-					to_chat(H, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
-				if(prob(15) && H.head.acidable())
-					qdel(H.head)
-					H.head = null
-					H.update_inv_head()
-					to_chat(H, "<span class='warning'>Your helmet melts away but protects you from the acid</span>")
-				else
-					to_chat(H, "<span class='warning'>Your helmet protects you from the acid!</span>")
-				return
-
-		else if(ismonkey(M))
-			var/mob/living/carbon/monkey/MK = M
-			if(MK.wear_mask)
-				if(MK.wear_mask.acidable())
-					qdel(MK.wear_mask)
-					MK.wear_mask = null
-					MK.update_inv_wear_mask()
-					to_chat(MK, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-		if(M.acidable())
-			if(prob(15) && ishuman(M) && volume >= 30)
-				var/mob/living/carbon/human/H = M
-				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ)
-					if(head_organ.take_damage(25, 0))
-						H.UpdateDamageIcon(1)
-					head_organ.disfigure("burn")
-					H.audible_scream()
-			else
-				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-	else
-		if(M.acidable())
-			M.take_organ_damage(min(15, volume * 2))
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			if(head_organ)
+				if(head_organ.take_damage(25, 0))
+					H.UpdateDamageIcon(1)
+				head_organ.disfigure("burn")
+				H.audible_scream()
+		else
+			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
 
@@ -1773,60 +1755,37 @@
 		return 1
 
 	if(method == TOUCH)
+		if(ishuman(M) || ismonkey(M))
+			var/mob/living/carbon/H = M
+			for(var/obj/item/clothing/C in H.get_equipped_items())
+				for(var/part in zone_sels)
+					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && C == H.head) //Was like this in legacy system
+						continue
+					if(C.body_parts_covered & limb_define_to_part_define(part))
+						var/acidprob = C == H.head ? 15 : 100 //Was like this in legacy system
+						if(C.acidable() && prob(acidprob))
+							var/old_flags = C.slot_flags
+							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
+							if(C == H.wear_mask) //Really really horrible appearance code workarounds
+								H.wear_mask = null
+							if(C == H.head)
+								H.head = null
+							qdel(C)
+							H.update_inv_by_slot(old_flags)
+						else
+							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
+						return
+
+	if(M.acidable()) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-
-			if(H.wear_mask)
-				if(H.wear_mask.acidable())
-					qdel(H.wear_mask)
-					H.wear_mask = null
-					H.update_inv_wear_mask()
-					to_chat(H, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
-				if(prob(15) && H.head.acidable())
-					qdel(H.head)
-					H.head = null
-					H.update_inv_head()
-					to_chat(H, "<span class='warning'>Your helmet melts away but protects you from the acid</span>")
-				else
-					to_chat(H, "<span class='warning'>Your helmet protects you from the acid!</span>")
-				return
-
-			if(H.acidable())
-				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ.take_damage(15, 0))
-					H.UpdateDamageIcon(1)
-				H.audible_scream()
-
-		else if(ismonkey(M))
-			var/mob/living/carbon/monkey/MK = M
-			if(MK.wear_mask)
-				if(MK.wear_mask.acidable())
-					qdel(MK.wear_mask)
-					MK.wear_mask = null
-					MK.update_inv_wear_mask()
-					to_chat(MK, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-			if(MK.acidable())
-				MK.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
-	else
-		if(M.acidable()) //I think someone doesn't know what this does
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ.take_damage(15, 0))
-					H.UpdateDamageIcon(1)
-				H.audible_scream()
-				head_organ.disfigure("burn")
-			else
-				M.take_organ_damage(min(15, volume * 4))
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			if(head_organ.take_damage(15, 0))
+				H.UpdateDamageIcon(1)
+			H.audible_scream()
+			head_organ.disfigure("burn")
+		else
+			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 
 /datum/reagent/pacid/reaction_obj(var/obj/O, var/volume)
 

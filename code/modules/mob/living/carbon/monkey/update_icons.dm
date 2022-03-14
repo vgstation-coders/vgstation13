@@ -59,6 +59,15 @@
 		var/matrix/M = matrix()
 		src.transform = M
 
+/mob/living/carbon/monkey/update_inv_by_slot(var/slot_flags)
+	if(slot_flags & SLOT_BACK)
+		update_inv_back()
+	if(slot_flags & SLOT_MASK)
+		update_inv_wear_mask()
+	if(slot_flags & SLOT_EYES)
+		update_inv_glasses()
+	if(slot_flags & SLOT_HEAD)
+		update_inv_head()
 
 ////////
 /mob/living/carbon/monkey/proc/update_inv_uniform(var/update_icons=1)
@@ -207,7 +216,7 @@
 		update_icons()
 
 /mob/living/carbon/monkey/update_inv_back(var/update_icons=1, var/pixel_y_adjustment = 0)
-	
+
 	if(back && back.is_visible())
 		var/image/I = image("icon" = 'icons/mob/back.dmi', "icon_state" = "[back.icon_state]", pixel_y = pixel_y_adjustment)
 		if(back.dynamic_overlay)

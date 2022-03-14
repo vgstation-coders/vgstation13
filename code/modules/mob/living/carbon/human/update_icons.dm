@@ -1424,7 +1424,7 @@ var/global/list/damage_icon_parts = list()
 		return 1
 	return 0
 
-/mob/living/carbon/human/proc/update_inv_by_slot(var/slot_flags) //Yeah this is pretty shit but I couldn't find a better way
+/mob/living/carbon/human/update_inv_by_slot(var/slot_flags)
 	if(slot_flags & SLOT_BACK)
 		update_inv_back()
 	if(slot_flags & SLOT_MASK)
