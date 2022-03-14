@@ -67,6 +67,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 /obj/machinery/singularity/proc/link_wormhole(var/obj/machinery/singularity/other)
 	if(other)
 		other.name = "gravitational soutgularity"
+		desc = "Every action has an equal and opposite reaction. A black hole sucks time and matter out of the universe, a white hole returns it"
 		other.repels = TRUE
 		other.energy = src.energy
 		other.color= list(-1,0,0,
@@ -79,6 +80,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 /obj/machinery/singularity/proc/unlink_wormholes()
 	if(wormhole_out)
 		wormhole_out.name = initial(wormhole_out.name)
+		wormhole_out.desc = initial(wormhole_out.desc)
 		wormhole_out.repels = FALSE
 		wormhole_out.color= initial(wormhole_out.color)
 		wormhole_out = null
@@ -978,6 +980,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 
 /obj/machinery/singularity/soutgularity
 	name = "gravitational soutgularity"
+	desc = "Every action has an equal and opposite reaction. A black hole sucks time and space out of the universe, a white hole returns it"
 	repels = TRUE
 	color= list(-1,0,0,
 				0,-1,0,
