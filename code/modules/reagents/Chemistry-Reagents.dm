@@ -675,6 +675,7 @@
 		if(H.species && H.species.anatomy_flags & ACID4WATER) //oof ouch, water is spicy now
 			if(method == TOUCH)
 				var/splashed = FALSE
+				var/screamed = FALSE
 				for(var/part in zone_sels)
 					if(H.check_body_part_coverage(limb_define_to_part_define(part)))
 						to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of water!</span>")
@@ -686,10 +687,12 @@
 						if(ext_organ)
 							if(ext_organ.take_damage(0, 2)) // Originally was just head and 25, this divides it by 12.5 which is close enough to the 13 def_zones
 								H.UpdateDamageIcon(1)
+								screamed = TRUE
 							if(istype(ext_organ,/datum/organ/external/head))
 								var/datum/organ/external/head/head_organ = ext_organ
 								head_organ.disfigure("burn")
-								H.audible_scream()
+				if(screamed)
+					H.audible_scream()
 				if(!splashed)
 					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
@@ -1702,15 +1705,18 @@
 	if(M.acidable())
 		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
+			var/screamed = FALSE
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
 					if(ext_organ.take_damage(2, 0)) // Originally was just head and 25, this divides it by 12.5 which is close enough to the 13 def_zones
 						H.UpdateDamageIcon(1)
+						screamed = TRUE
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
 						head_organ.disfigure("burn")
-						H.audible_scream()
+			if(screamed)
+				H.audible_scream()
 		else
 			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 
@@ -1789,15 +1795,18 @@
 	if(M.acidable()) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
+			var/screamed = FALSE
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
 					if(ext_organ.take_damage(1, 0)) // Originally was just head and 15, this divides it by 15 which is close enough to the 13 def_zones
 						H.UpdateDamageIcon(1)
+						screamed = TRUE
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
 						head_organ.disfigure("burn")
-						H.audible_scream()
+			if(screamed)
+				H.audible_scream()
 		else
 			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 
