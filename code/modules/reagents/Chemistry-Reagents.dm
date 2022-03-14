@@ -689,7 +689,7 @@
 							if(istype(ext_organ,/datum/organ/external/head))
 								var/datum/organ/external/head/head_organ = ext_organ
 								head_organ.disfigure("burn")
-							H.audible_scream()
+								H.audible_scream()
 				if(!splashed)
 					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
@@ -1710,7 +1710,7 @@
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
 						head_organ.disfigure("burn")
-					H.audible_scream()
+						H.audible_scream()
 		else
 			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 
@@ -1797,7 +1797,7 @@
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
 						head_organ.disfigure("burn")
-					H.audible_scream()
+						H.audible_scream()
 		else
 			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 
