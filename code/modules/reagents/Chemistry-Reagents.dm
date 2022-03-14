@@ -160,7 +160,7 @@
 	var/datum/reagent/self = src
 	src = null
 
-	if(T.reagents && self.reagent_state == REAGENT_STATE_LIQUID && self.creates_puddle)
+	if(T.reagents && T.can_accept_liquid() && self.reagent_state == REAGENT_STATE_LIQUID && self.creates_puddle)
 		if(volume)
 			T.reagents.add_reagent(self.id, volume)
 		if(T.current_puddle)
