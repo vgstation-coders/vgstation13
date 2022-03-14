@@ -304,9 +304,6 @@
 	canremove = 0
 	wizard_garb = 1
 
-/obj/item/clothing/shoes/clown_shoes/stickymagic/acidable()
-	return 0
-
 /obj/item/clothing/shoes/clown_shoes/slippy
 	canremove = 0
 	var/lube_chance = 10
