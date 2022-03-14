@@ -67,7 +67,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 /obj/machinery/singularity/proc/link_wormhole(var/obj/machinery/singularity/other)
 	if(other)
 		other.name = "white hole"
-		desc = "Every action has an equal and opposite reaction. A black hole sucks time and matter out of the universe, a white hole returns it."
+		other.desc = "Every action has an equal and opposite reaction. A black hole sucks time and matter out of the universe, a white hole returns it."
 		other.repels = TRUE
 		other.energy = src.energy
 		other.color= list(-1,0,0,
