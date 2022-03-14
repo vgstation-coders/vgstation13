@@ -441,12 +441,14 @@ steam.start() -- spawns the effect
 
 /obj/effect/smoke/chem/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
-	for(var/atom/A in view(2, src))
+	var/list/ourview = view(2, src)
+	for(var/atom/A in ourview)
+		var/multiplier = !isturf(A) ? 1 : (1 / ourview.len)
 		if(reagents.has_reagent(RADIUM)||reagents.has_reagent(URANIUM)||reagents.has_reagent(CARBON)||reagents.has_reagent(THERMITE)||reagents.has_reagent(BLEACH))//Prevents unholy radium spam by reducing the number of 'greenglows' down to something reasonable -Sieve
 			if(prob(5))
-				reagents.reaction(A)
+				reagents.reaction(A, volume_multiplier = multiplier)
 		else
-			reagents.reaction(A)
+			reagents.reaction(A, volume_multiplier = multiplier)
 
 	return
 
