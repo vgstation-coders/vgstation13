@@ -1678,9 +1678,12 @@
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
+			var/mob/living/carbon/human/HM = null
+			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
+				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
-					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && C == H.head)
+					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head)
 						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable())
@@ -1688,8 +1691,8 @@
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
 							if(C == H.wear_mask) //Really really horrible appearance code workarounds
 								H.wear_mask = null
-							if(C == H.head)
-								H.head = null
+							if(HM && C == HM.head)
+								HM.head = null
 							qdel(C)
 							H.update_inv_by_slot(old_flags)
 						else
@@ -1760,19 +1763,23 @@
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
+			var/mob/living/carbon/human/HM
+			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
+				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
-					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && C == H.head) //Was like this in legacy system
+					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head) //Was like this in legacy system
 						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
-						var/acidprob = C == H.head ? 15 : 100 //Was like this in legacy system
+						var/acidprob = 100
+						acidprob = HM && C == HM.head ? 15 : 100 //Was like this in legacy system
 						if(C.acidable() && prob(acidprob))
 							var/old_flags = C.slot_flags
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
 							if(C == H.wear_mask) //Really really horrible appearance code workarounds
 								H.wear_mask = null
-							if(C == H.head)
-								H.head = null
+							if(HM && C == HM.head)
+								HM.head = null
 							qdel(C)
 							H.update_inv_by_slot(old_flags)
 						else
@@ -2365,28 +2372,17 @@
 		return 1
 
 	if(iscarbon(M))
-		var/mob/living/carbon/C = M
+		var/mob/living/carbon/H = M
+		if((LIMB_LEFT_HAND in zone_sels) || (LIMB_RIGHT_HAND in zone_sels))
+			for(var/obj/item/I in H.held_items)
+				I.clean_blood()
 
-		for(var/obj/item/I in C.held_items)
-			I.clean_blood()
-
-		if(C.wear_mask)
-			if(C.wear_mask.clean_blood())
-				C.update_inv_wear_mask(0)
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = C
-			if(H.head)
-				if(H.head.clean_blood())
-					H.update_inv_head(0)
-			if(H.wear_suit)
-				if(H.wear_suit.clean_blood())
-					H.update_inv_wear_suit(0)
-			else if(H.w_uniform)
-				if(H.w_uniform.clean_blood())
-					H.update_inv_w_uniform(0)
-			if(H.shoes)
-				if(H.shoes.clean_blood())
-					H.update_inv_shoes(0)
+		for(var/obj/item/clothing/C in M.get_equipped_items())
+			var/covered = FALSE
+			for(var/part in zone_sels)
+				if(C.body_parts_covered & limb_define_to_part_define(part))
+					if(C.clean_blood())
+						H.update_inv_by_slot(C.slot_flags)
 		M.clean_blood()
 		M.color = ""
 
@@ -4622,7 +4618,7 @@
 	if(..())
 		return 1
 
-	if(method == TOUCH)
+	if(method == TOUCH && ((TARGET_EYES in zone_sels) || (LIMB_HEAD in zone_sels)))
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/obj/item/mouth_covered = H.get_body_part_coverage(MOUTH)
