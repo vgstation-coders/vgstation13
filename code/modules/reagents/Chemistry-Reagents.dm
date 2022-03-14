@@ -674,18 +674,23 @@
 		var/mob/living/carbon/human/H = M
 		if(H.species && H.species.anatomy_flags & ACID4WATER) //oof ouch, water is spicy now
 			if(method == TOUCH)
-				if(H.check_body_part_coverage(EYES|MOUTH))
-					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
-					return
+				var/splashed = FALSE
+				for(var/part in zone_sels)
+					if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+						to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of water!</span>")
+						return
 
-				if(prob(15) && volume >= 30)
-					var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-					if(head_organ)
-						if(head_organ.take_damage(0, 25))
-							H.UpdateDamageIcon(1)
-						head_organ.disfigure("burn")
-						H.audible_scream()
-				else
+					if(prob(15) && volume >= 30)
+						splashed = TRUE
+						var/datum/organ/external/ext_organ = H.get_organ(part)
+						if(ext_organ)
+							if(ext_organ.take_damage(0, 25))
+								H.UpdateDamageIcon(1)
+							if(istype(ext_organ,/datum/organ/external/head))
+								var/datum/organ/external/head/head_organ = ext_organ
+								head_organ.disfigure("burn")
+							H.audible_scream()
+				if(!splashed)
 					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
 				M.take_organ_damage(0, min(15, volume * 2))
@@ -1501,7 +1506,7 @@
 
 	if(..())
 		return 1
-	if(ishuman(M))
+	if(ishuman(M) && ((LIMB_HEAD in zone_sels) || (TARGET_MOUTH in zone_sels)))
 		var/mob/living/carbon/human/H = M
 		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
