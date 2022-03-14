@@ -21,9 +21,9 @@
 	var/glances_text	//String or list of strings when the object is attacked but the attack glances off. eg. "bounces" becomes "but it bounces off!"
 	var/breaks_text		//Visible message when the object breaks. eg. "breaks apart"
 	//Sounds:
-	var/breaks_sound	//Path to audible sound when the object breaks apart. Defaults to damaged_sound if unset.
-	var/damaged_sound	//Path to audible sound when the object is damaged.
-	var/glanced_sound	//Path to audible sound when the object recives a glancing attack not strong enough to damage it.
+	var/breaks_sound	//Audible sound when the object breaks apart. Defaults to damaged_sound if unset.
+	var/damaged_sound	//Audible sound when the object is damaged by an attack, but not fully broken. Defaults to glanced_sound if unset.
+	var/glanced_sound	//Audible sound when the object recives a glancing attack not strong enough to damage it.
 
 /obj/New()
 	..()
