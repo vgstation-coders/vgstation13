@@ -79,7 +79,7 @@
 
 			for(var/obj/item/clothing/C in M.get_equipped_items())
 				var/covered = FALSE
-				for(var/part in zone_sels)
+				for(var/part in list(TARGET_MOUTH,LIMB_HEAD))
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						covered = TRUE
 						break
@@ -101,9 +101,9 @@
 			if(self.id == HOLYWATER && istype(self.holder.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, min(5,self.volume/2)) //holy water flasks only splash 5u at a time. But for deconversion purposes they will always be ingested.
-			else if(prob(chance) && !block)
+			else if(prob(chance) && !block && ((LIMB_HEAD in zone_sels) || (TARGET_MOUTH in zone_sels)))
 				if(M.reagents)
-					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
+					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume only if aiming for general mouth area
 
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
@@ -2597,7 +2597,13 @@
 			var/mob/living/carbon/human/H = M
 			if(H.dna)
 				if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage //aren't they toxin-proof anyways?
-					H.adjustToxLoss(10 * REM)
+					for(var/part in zone_sels)
+						if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+							to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of plant-b-gone!</span>")
+							return
+						H.adjustToxLoss(REM) //Originally 10, about 13 zone_sels in total so slight buff, but also nerf since human mobs are *usually* clothed in most cases
+		else if(istype(M,/mob/living/carbon/monkey/diona)) // Can't do it that way for these, so have this
+			M.adjustToxLoss(10 * REM)
 
 /datum/reagent/toxin/plantbgone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -2624,7 +2630,14 @@
 		var/mob/living/carbon/C = M
 		if(((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)) && !C.wear_mask) //If not wearing a mask
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
-		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
+		if(isinsectoid(C)) //Insecticide being poisonous to bugmen, who'd've thunk
+			var/mob/living/carbon/human/H = C
+			for(var/part in zone_sels)
+				if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+					to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of insecticide!</span>")
+					return
+				H.adjustToxLoss(REM) //Originally 10, about 13 zone_sels in total so slight buff, but also nerf since human mobs are *usually* clothed in most cases
+		else if(istype(C, /mob/living/carbon/monkey/roach)) // Can't do it that way for these, so have this
 			M.adjustToxLoss(10 * REM)
 
 /datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
