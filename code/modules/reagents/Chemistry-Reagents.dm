@@ -685,7 +685,7 @@
 						splashed = TRUE
 						var/datum/organ/external/ext_organ = H.get_organ(part)
 						if(ext_organ)
-							if(ext_organ.take_damage(0, 2)) // Originally was just head and 25, this divides it by 12.5 which is close enough to the 13 def_zones
+							if(ext_organ.take_damage(0, (25 / zone_sels.len))) // Balance for precisions vs general.
 								H.UpdateDamageIcon(1)
 								screamed = TRUE
 							if(istype(ext_organ,/datum/organ/external/head))
@@ -1709,7 +1709,7 @@
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
-					if(ext_organ.take_damage(2, 0)) // Originally was just head and 25, this divides it by 12.5 which is close enough to the 13 def_zones
+					if(ext_organ.take_damage((25 / zone_sels.len), 0)) // Balance for precisions vs general.
 						H.UpdateDamageIcon(1)
 						screamed = TRUE
 					if(istype(ext_organ,/datum/organ/external/head))
@@ -1799,7 +1799,7 @@
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
-					if(ext_organ.take_damage(1, 0)) // Originally was just head and 15, this divides it by 15 which is close enough to the 13 def_zones
+					if(ext_organ.take_damage((15 / zone_sels.len), 0)) // Balance for precisions vs general.
 						H.UpdateDamageIcon(1)
 						screamed = TRUE
 					if(istype(ext_organ,/datum/organ/external/head))
@@ -2609,7 +2609,7 @@
 						if(H.check_body_part_coverage(limb_define_to_part_define(part)))
 							to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of plant-b-gone!</span>")
 							return
-						H.adjustToxLoss(REM) //Originally 10, about 13 zone_sels in total so slight buff, but also nerf since human mobs are *usually* clothed in most cases
+						H.adjustToxLoss((10 / zone_sels.len) * REM) // Balance for precisions vs general.
 		else if(istype(M,/mob/living/carbon/monkey/diona)) // Can't do it that way for these, so have this
 			M.adjustToxLoss(10 * REM)
 
@@ -2644,7 +2644,7 @@
 				if(H.check_body_part_coverage(limb_define_to_part_define(part)))
 					to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of insecticide!</span>")
 					return
-				H.adjustToxLoss(REM) //Originally 10, about 13 zone_sels in total so slight buff, but also nerf since human mobs are *usually* clothed in most cases
+				H.adjustToxLoss((10 / zone_sels.len) * REM) // Balance for precisions vs general.
 		else if(istype(C, /mob/living/carbon/monkey/roach)) // Can't do it that way for these, so have this
 			M.adjustToxLoss(10 * REM)
 
