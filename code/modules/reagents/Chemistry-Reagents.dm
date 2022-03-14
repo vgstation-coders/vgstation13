@@ -2482,7 +2482,7 @@
 
 	M.color = ""
 
-	if(method == TOUCH)
+	if(method == TOUCH && ((TARGET_EYES in zone_sels) || (LIMB_HEAD in zone_sels)))
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
@@ -2629,7 +2629,7 @@
 		return 1
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
-		if(!C.wear_mask) //If not wearing a mask
+		if(((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)) && !C.wear_mask) //If not wearing a mask
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
@@ -2660,7 +2660,7 @@
 		return 1
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
-		if(!C.wear_mask) //If not wearing a mask
+		if(((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)) && !C.wear_mask) //If not wearing a mask
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
 		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
 			M.adjustToxLoss(10 * REM)
@@ -3117,7 +3117,7 @@
 		return 1
 
 	if(method == TOUCH)
-		if(ishuman(M))
+		if(ishuman(M) && (TARGET_EYES in zone_sels))
 			var/mob/living/carbon/human/H = M
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
 			if(eyes_covered)
@@ -3887,7 +3887,7 @@
 	if(..())
 		return 1
 
-	if((prob(10) && method == TOUCH) || method == INGEST)
+	if((prob(10) && method == TOUCH && ((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels))) || method == INGEST)
 		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
 
 /datum/reagent/nanites/reaction_dropper_mob(var/mob/living/M)
@@ -3912,7 +3912,7 @@
 
 	if(..())
 		return 1
-	if((prob(10) && method == TOUCH) || method == INGEST)
+	if((prob(10) && method == TOUCH && ((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels))) || method == INGEST)
 		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
 
 /datum/reagent/xenomicrobes/reaction_dropper_mob(var/mob/living/M)
