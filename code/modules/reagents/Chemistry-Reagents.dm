@@ -1689,7 +1689,7 @@
 					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head)
 						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
-						if(C.acidable())
+						if(C.acidable() && prob(15))
 							var/old_flags = C.slot_flags
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
 							if(C == H.wear_mask) //Really really horrible appearance code workarounds
@@ -1777,9 +1777,7 @@
 					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head) //Was like this in legacy system
 						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
-						var/acidprob = 100
-						acidprob = HM && C == HM.head ? 15 : 100 //Was like this in legacy system
-						if(C.acidable() && prob(acidprob))
+						if(C.acidable() && prob(15))
 							var/old_flags = C.slot_flags
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
 							if(C == H.wear_mask) //Really really horrible appearance code workarounds
