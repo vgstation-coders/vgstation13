@@ -684,7 +684,7 @@
 						splashed = TRUE
 						var/datum/organ/external/ext_organ = H.get_organ(part)
 						if(ext_organ)
-							if(ext_organ.take_damage(0, 25))
+							if(ext_organ.take_damage(0, 2))
 								H.UpdateDamageIcon(1)
 							if(istype(ext_organ,/datum/organ/external/head))
 								var/datum/organ/external/head/head_organ = ext_organ
@@ -1705,7 +1705,7 @@
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
-					if(ext_organ.take_damage(25, 0))
+					if(ext_organ.take_damage(2, 0))
 						H.UpdateDamageIcon(1)
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
@@ -1792,7 +1792,7 @@
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
-					if(ext_organ.take_damage(15, 0))
+					if(ext_organ.take_damage(1, 0))
 						H.UpdateDamageIcon(1)
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
