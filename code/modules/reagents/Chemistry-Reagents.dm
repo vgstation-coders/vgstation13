@@ -684,7 +684,7 @@
 						splashed = TRUE
 						var/datum/organ/external/ext_organ = H.get_organ(part)
 						if(ext_organ)
-							if(ext_organ.take_damage(0, 2))
+							if(ext_organ.take_damage(0, 2)) // Originally was just head and 25, this divides it by 12.5 which is close enough to the 13 def_zones
 								H.UpdateDamageIcon(1)
 							if(istype(ext_organ,/datum/organ/external/head))
 								var/datum/organ/external/head/head_organ = ext_organ
@@ -1705,7 +1705,7 @@
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
-					if(ext_organ.take_damage(2, 0))
+					if(ext_organ.take_damage(2, 0)) // Originally was just head and 25, this divides it by 12.5 which is close enough to the 13 def_zones
 						H.UpdateDamageIcon(1)
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
@@ -1792,7 +1792,7 @@
 			for(var/part in zone_sels)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
-					if(ext_organ.take_damage(1, 0))
+					if(ext_organ.take_damage(1, 0)) // Originally was just head and 15, this divides it by 15 which is close enough to the 13 def_zones
 						H.UpdateDamageIcon(1)
 					if(istype(ext_organ,/datum/organ/external/head))
 						var/datum/organ/external/head/head_organ = ext_organ
