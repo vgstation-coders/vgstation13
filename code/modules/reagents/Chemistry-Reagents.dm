@@ -2671,7 +2671,7 @@
 		return 1
 
 	var/mob/living/carbon/human/H = M
-	if(isplasmaman(H) || H.species.flags & PLASMA_IMMUNE)
+	if(istype(H) && H.species.flags & PLASMA_IMMUNE)
 		return 1
 	else
 		M.adjustToxLoss(3 * REM)
