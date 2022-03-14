@@ -2378,7 +2378,6 @@
 				I.clean_blood()
 
 		for(var/obj/item/clothing/C in M.get_equipped_items())
-			var/covered = FALSE
 			for(var/part in zone_sels)
 				if(C.body_parts_covered & limb_define_to_part_define(part))
 					if(C.clean_blood())
