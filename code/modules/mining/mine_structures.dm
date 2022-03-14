@@ -37,7 +37,7 @@
 
 /obj/structure/hanging_lantern/try_break()
 	if(health <= 0)
-		Destroy()
+		qdel(src)
 		return TRUE
 	else
 		return FALSE
