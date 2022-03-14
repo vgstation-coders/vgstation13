@@ -201,23 +201,25 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
-	reagents.reaction(target, TOUCH, amount_override = max(0,amount), zone_sels = list(user.zone_sel.selecting))
+	var/datum/organ/external/affecting = user.zone_sel.selecting //Find what the player is aiming at
+
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount), zone_sels = list(affecting))
 
 	if (amount > 0)
 		if(user)
-			user.investigation_log(I_CHEMS, "has splashed [amount]u of [reagents.get_reagent_ids()] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
+			user.investigation_log(I_CHEMS, "has splashed [amount]u of [reagents.get_reagent_ids()] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].")
 		reagents.remove_any(amount)
 		if(user)
 			if(user.Adjacent(target))
-				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
+				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user][ishuman(target) ? "in the [parse_zone(affecting)]" : ""]!</span>",
 			                     "<span class='notice'>You splash some of the solution onto \the [target].</span>")
 	else
 		if(user)
-			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
+			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].")
 		reagents.clear_reagents()
 		if(user)
 			if(user.Adjacent(target))
-				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
+				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user][ishuman(target) ? "in the [parse_zone(affecting)]" : ""]!</span>",
 			                     "<span class='notice'>You splash the solution onto \the [target].</span>")
 
 /**

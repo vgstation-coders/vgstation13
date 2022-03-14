@@ -50,7 +50,7 @@
 
 /mob/living/mop_act(obj/item/weapon/mop/M, mob/user as mob)
 	if(!(M.reagents.total_volume < 1)) //Slap slap slap
-		visible_message("<span class='danger'>[user] covers [src] in the mop's contents</span>")
+		visible_message("<span class='danger'>[user] [ishuman(M) ? "hits [src] in the [parse_zone(user.zone_sel.selecting)] with" : "covers [src] in"] the mop's contents</span>")
 		M.reagents.reaction(src,1,10, zone_sels = list(user.zone_sel.selecting)) //I hope you like my polyacid cleaner mix
 		M.reagents.clear_reagents()
 
