@@ -107,9 +107,9 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		if(isliving(AM))
 			var/mob/living/L = AM
 			if(turf_on.reagents.has_reagent(LUBE))
-				L.ApplySlip(TURF_WET_LUBE)
+				L.ApplySlip(TURF_WET_LUBE, turf_on.reagents.get_reagent_amount(LUBE))
 			else if(turf_on.reagents.has_any_reagents(MILDSLIPPABLES))
-				L.ApplySlip(TURF_WET_WATER)
+				L.ApplySlip(TURF_WET_WATER, turf_on.reagents.get_reagent_amounts(MILDSLIPPABLES))
 
 	else
 		return ..()
