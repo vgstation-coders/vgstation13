@@ -23,7 +23,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
-	health = 100
+	var/health = 100
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
@@ -720,7 +720,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
-	health = 20
+	var/health = 20
 
 /obj/structure/rack/proc/destroy(var/dropParts = TRUE)
 	if(parts && dropParts)

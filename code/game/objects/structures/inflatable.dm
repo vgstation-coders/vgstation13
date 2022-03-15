@@ -138,7 +138,7 @@
 	var/undeploy_path = null
 	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
-	health = 30
+	var/health = 30
 	var/ctrl_deflate = TRUE
 
 /obj/structure/inflatable/wall
@@ -168,7 +168,7 @@
 		if(2)
 			deflate(1)
 		if(3)
-			take_damage(rand(15,45), sound_effect = 0)
+			take_damage(rand(15,45), 0)
 
 /obj/structure/inflatable/attackby(obj/item/I, mob/user)
 	if(!istype(I) || istype(I, /obj/item/weapon/inflatable_dispenser))
@@ -198,19 +198,15 @@
 	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
 	deflate(1)
 
-/obj/structure/inflatable/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
-	health = max(0, health - incoming_damage)
+/obj/structure/inflatable/proc/take_damage(var/damage, var/sound_effect = 1)
+	health = max(0, health - damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
-	return try_break()
-
-/obj/structure/inflatable/try_break()
 	if(health <= 0)
 		spawn(1)
 			deflate(1)
-		return TRUE
-	return FALSE
-
+		return 1
+	return 0
 
 /obj/structure/inflatable/CtrlClick()
 	if(ctrl_deflate)

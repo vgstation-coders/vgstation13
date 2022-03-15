@@ -3,7 +3,7 @@
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "server"
 	var/datum/research/files
-	health = 100
+	var/health = 100
 	var/list/id_with_upload = list()		//List of R&D consoles with upload to server access.
 	var/list/id_with_download = list()	//List of R&D consoles with download from server access.
 	var/id_with_upload_string = ""		//String versions for easy editing in map editor.

@@ -84,18 +84,18 @@
 	// cause a plant to become healthier. Lack of sustenance will stunt the plant's growth.
 	if(prob(35))
 		if(nutrilevel > 2)
-			plant_health += healthmod
+			health += healthmod
 		else
 			affect_growth(-1)
-			plant_health -= healthmod
+			health -= healthmod
 		if(draw_warnings)
 			update_icon_after_process = 1
 	if(prob(35))
 		if(waterlevel > 10)
-			plant_health += healthmod
+			health += healthmod
 		else
 			affect_growth(-1)
-			plant_health -= healthmod
+			health -= healthmod
 		if(draw_warnings)
 			update_icon_after_process = 1
 
@@ -131,14 +131,14 @@
 		environment.update_values()
 
 		if(missing_gas > 0)
-			plant_health -= missing_gas * HYDRO_SPEED_MULTIPLIER
+			health -= missing_gas * HYDRO_SPEED_MULTIPLIER
 			if(draw_warnings)
 				update_icon_after_process = 1
 
 	// Process it.
 	var/pressure = environment.return_pressure()
 	if(pressure < seed.lowkpa_tolerance || pressure > seed.highkpa_tolerance)
-		plant_health -= healthmod
+		health -= healthmod
 		improper_kpa = 1
 		if(draw_warnings)
 			update_icon_after_process = 1
@@ -146,7 +146,7 @@
 		improper_kpa = 0
 
 	if(abs(environment.temperature - seed.ideal_heat) > seed.heat_tolerance)
-		plant_health -= healthmod
+		health -= healthmod
 		improper_heat = 1
 		if(draw_warnings)
 			update_icon_after_process = 1
@@ -175,7 +175,7 @@
 		light_available = T.get_lumcount() * 10
 
 	if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
-		plant_health -= healthmod
+		health -= healthmod
 		if(prob(35))
 			affect_growth(-1)
 		improper_light = 1
@@ -189,7 +189,7 @@
 	if(toxins > 0)
 		var/toxin_uptake = max(1,round(toxins/10))
 		if(toxins > seed.toxins_tolerance)
-			plant_health -= toxin_uptake
+			health -= toxin_uptake
 		toxins -= toxin_uptake * (1+bees)
 		if(draw_warnings)
 			update_icon_after_process = 1
@@ -198,27 +198,27 @@
 	// Some carnivorous plants happily eat pests.
 	if(pestlevel > 0)
 		if(seed.carnivorous)
-			plant_health += HYDRO_SPEED_MULTIPLIER
+			health += HYDRO_SPEED_MULTIPLIER
 			pestlevel -= HYDRO_SPEED_MULTIPLIER
 		else if (pestlevel >= seed.pest_tolerance)
-			plant_health -= HYDRO_SPEED_MULTIPLIER
+			health -= HYDRO_SPEED_MULTIPLIER
 		if(draw_warnings)
 			update_icon_after_process = 1
 
 	// Some plants thrive and live off of weeds.
 	if(weedlevel > 0)
 		if(seed.parasite)
-			plant_health += HYDRO_SPEED_MULTIPLIER
+			health += HYDRO_SPEED_MULTIPLIER
 			weedlevel -= HYDRO_SPEED_MULTIPLIER
 		else if (weedlevel >= seed.weed_tolerance)
-			plant_health -= HYDRO_SPEED_MULTIPLIER
+			health -= HYDRO_SPEED_MULTIPLIER
 		if(draw_warnings)
 			update_icon_after_process = 1
 
 	// Handle life and death.
 	// If the plant is too old, it loses health fast.
 	if(age > seed.lifespan)
-		plant_health -= (rand(3,5) * HYDRO_SPEED_MULTIPLIER)/(1+bees)
+		health -= (rand(3,5) * HYDRO_SPEED_MULTIPLIER)/(1+bees)
 		if(draw_warnings)
 			update_icon_after_process = 1
 	// If the plant's age is negative, let's revert it into a seed packet, for funsies
@@ -260,7 +260,7 @@
 		update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_health()
-	if(plant_health <= 0)
+	if(health <= 0)
 		die() //ominous
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/affect_growth(var/amount)
@@ -296,7 +296,7 @@
 
 	// Updates the plant overlay.
 	if(!isnull(seed))
-		if(draw_warnings && plant_health <= (seed.endurance / 2))
+		if(draw_warnings && health <= (seed.endurance / 2))
 			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
 
 		if(dead)
@@ -343,9 +343,9 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_level_sanity()
 	//Make sure various values are sane.
 	if(seed)
-		plant_health = clamp(plant_health, 0, seed.endurance)
+		health = clamp(health, 0, seed.endurance)
 	else
-		plant_health = 0
+		health = 0
 		dead = 0
 
 	mutation_level = clamp(mutation_level, 0, 100)

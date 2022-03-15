@@ -518,7 +518,7 @@ var/list/apiaries_list = list()
 	var/base_icon_state = "apiary-wild-inprogress"
 	var/prefix = ""
 	var/remaining_work = 10
-	health = 20
+	var/health = 20
 
 /obj/structure/wild_apiary/New(turf/loc, var/p = "")
 	prefix = p
@@ -581,7 +581,7 @@ var/list/apiaries_list = list()
 
 	cycledelay = 100
 
-	health = 100
+	var/health = 100
 
 	//Cannot normally harvest the apiary other than by breaking it
 	wild = APIARY_WILDERNESS_WILD

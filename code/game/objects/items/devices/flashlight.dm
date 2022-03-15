@@ -19,19 +19,6 @@
 	var/sound_on = 'sound/items/flashlight_on.ogg'
 	var/sound_off = 'sound/items/flashlight_off.ogg'
 
-	health = 30
-	breakable_flags = BREAKABLE_ALL
-	breakable_fragments = list(/obj/item/weapon/light/bulb/broken, /obj/item/stack/cable_coil/cut/)
-	damage_armor = 10
-	damage_resist = 10
-	damaged_examine_text = "It is dented."
-	take_hit_text = "denting"
-	take_hit_text2 = "dents"
-	breaks_text = "breaks apart"
-	glanced_sound = 'sound/items/metal_impact.ogg'
-	breaks_sound = 'sound/effects/Glassbr1.ogg'
-
-
 /obj/item/device/flashlight/initialize()
 	..()
 	if(on)
@@ -120,18 +107,12 @@
 	brightness_on = 2
 	has_sound = 0
 
-	health = 10
-
 /obj/item/device/flashlight/tactical
 	name = "tactical light"
 	desc = "A compact, tactical flashlight with automatic self-attaching screws. Fits on armor and headgear."
 	icon_state = "taclight"
 	item_state = ""
-
-	health = 40
-	damage_armor = 15
-	damage_resist = 15
-
+	
 /obj/item/device/flashlight/tactical/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return 0
@@ -150,7 +131,7 @@
 		return 1
 	else
 		to_chat(user, "<span class='notice'>\The [src] cannot be attached to that.</span>")
-	return ..()
+	return ..()	
 
 
 // the desk lamps are a bit special
@@ -206,8 +187,6 @@
 	var/H_color = ""
 
 	light_color = LIGHT_COLOR_FLARE
-
-	breakable_flags = 0 //Not breakable for now.
 
 /obj/item/device/flashlight/flare/New()
 	fuel = rand(300, 500) // Sorry for changing this so much but I keep under-estimating how long X number of ticks last in seconds.
@@ -298,14 +277,6 @@
 	has_sound = 0
 	var/brightness_max = 6
 	var/brightness_min = 2
-
-	breakable_fragments = list(/obj/item/weapon/light/bulb/broken)
-	damaged_examine_text = "It is cracked."
-	take_hit_text = list("cracking", "chipping")
-	take_hit_text2 = list("cracks", "chips")
-	breaks_text = "shatters"
-	breaks_sound = 'sound/effects/Glassbr3.ogg'
-
 
 /obj/item/device/flashlight/lamp/slime/initialize()
 	..()

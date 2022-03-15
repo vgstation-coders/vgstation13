@@ -10,7 +10,7 @@
 	pressure_resistance = 5*ONE_ATMOSPHERE
 	layer = DECAL_LAYER
 	explosion_resistance = 5
-	health = 10
+	var/health = 10
 	var/destroyed = 0
 	var/mob/living/carbon/human/supported_mob
 

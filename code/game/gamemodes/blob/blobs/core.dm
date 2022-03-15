@@ -3,7 +3,7 @@
 	icon_state = "core"
 	desc = "A part of a blob. It is large and pulsating."
 	health = 200
-	maxHealth = 200
+	maxhealth = 200
 	fire_resist = 2
 	custom_process=1
 	destroy_sound = "sound/effects/blobkill.ogg"
@@ -86,8 +86,8 @@
 		overmind.add_points(points_to_collect)
 		last_resource_collection = world.time
 
-	if(health < maxHealth)
-		health = min(maxHealth, health + 1)
+	if(health < maxhealth)
+		health = min(maxhealth, health + 1)
 		update_icon()
 
 	if(asleep)
@@ -228,7 +228,7 @@
 
 		if (looks == "AME_new")
 			icon_state = "core"
-			var/hurt_percentage = round((health * 100) / maxHealth)
+			var/hurt_percentage = round((health * 100) / maxhealth)
 			if (hurt_percentage < 25)
 				icon_state = "core_fuck"
 			else if (hurt_percentage < 50)
@@ -252,8 +252,8 @@
 
 /obj/effect/blob/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
-		if(health < maxHealth)
-			var/hurt_percentage = round((health * 100) / maxHealth)
+		if(health < maxhealth)
+			var/hurt_percentage = round((health * 100) / maxhealth)
 			var/hurt_icon
 			switch(hurt_percentage)
 				if(0 to 25)

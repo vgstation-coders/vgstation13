@@ -34,8 +34,8 @@
 	var/hair_color = "#B9C1B8"
 	var/clothing_offset_x = 0
 	var/clothing_offset_y = 3*PIXEL_MULTIPLIER
-	health = 90
-	maxHealth = 90
+	var/health = 90
+	var/maxHealth = 90
 	var/has_pedestal = TRUE
 	var/timer = 80 //in seconds
 	var/mob/living/captured
