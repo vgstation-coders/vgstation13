@@ -147,7 +147,7 @@
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The object shatters!"
 
 /obj/proc/try_break(var/datum/throwparams/propelparams, var/hit_atom) //Breaks the object if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be propelled upon breaking.
-	if(health <= 0)
+	if(!isnull(health) && (health <= 0))
 		on_broken(propelparams, hit_atom)
 		qdel(src)
 		return TRUE //Return TRUE if the object was broken
@@ -169,7 +169,7 @@
 	throw_fly_speed = fly_speed
 
 /obj/throw_at(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Called when an object is thrown, and checks if it's broken or not. If it is broken the fragments are thrown instead, otherwise the object is thrown normally.
-	if(breakable_flags)
+	if(breakable_flags && !isnull(health) && (health <= 0))
 		var/datum/throwparams/propelparams = new /datum/throwparams(target, range, speed, override, fly_speed)
 		if(try_break(propelparams))
 		 return
