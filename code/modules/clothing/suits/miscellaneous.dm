@@ -688,12 +688,6 @@ var/list/tag_suits_list = list()
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO
 
-/obj/item/clothing/suit/maidapron/stickymagic
-	canremove = 0
-
-/obj/item/clothing/suit/maidapron/stickymagic/acidable()
-	return 0
-
 /obj/item/clothing/suit/clownpiece
 	name = "small fairy wings"
 	desc = "Some small and translucid insect-like wings."

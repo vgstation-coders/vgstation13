@@ -586,6 +586,12 @@
 	_color = "maid"
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/under/maid/stickymagic
+	canremove = 0
+
+/obj/item/clothing/under/maid/stickymagic/acidable()
+	return 0
+
 /obj/item/clothing/under/darkholme
 	name = "\improper Darkholme"
 	desc = "Fuck you."
