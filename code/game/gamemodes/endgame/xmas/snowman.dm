@@ -7,7 +7,7 @@
 	density = TRUE
 	var/obj/item/clothing/head/hat = null
 	var/obj/item/carrot = null
-	var/health = 40
+	health = 40
 
 /obj/structure/snowman/Destroy()
 	qdel(hat)

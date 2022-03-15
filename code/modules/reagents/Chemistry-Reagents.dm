@@ -2586,10 +2586,10 @@
 			dmg -= K.seed.toxins_tolerance*20
 		for(var/obj/effect/plantsegment/KV in orange(O,1))
 			KV.health -= dmg*0.4
-			KV.check_health()
+			KV.try_break()
 			SSplant.add_plant(KV)
 		K.health -= dmg
-		K.check_health()
+		K.try_break()
 		SSplant.add_plant(K)
 	else if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = O

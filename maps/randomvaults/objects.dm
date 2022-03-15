@@ -482,7 +482,7 @@
 	name = "Duey"
 	desc = "Looks like a maintenance droid, repurposed for botany management. Seems the years haven't been too kind."
 	health = 150
-	maxhealth = 150
+	maxHealth = 150
 	icon_state = "duey0"
 	icon_initial = "duey"
 	Max_Fertilizers = 50
