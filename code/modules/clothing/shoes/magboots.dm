@@ -164,7 +164,7 @@
 	name = "Paramedic magboots"
 	icon_state = "para_magboots0"
 	base_state = "para_magboots"
-	
+
 //Trauma Team
 /obj/item/clothing/shoes/magboots/trauma
 	name = "Trauma Team magboots"
@@ -238,6 +238,9 @@
 	base_state = "funk"
 	var/funk_level = 0
 	canremove = 0
+
+/obj/item/clothing/shoes/magboots/funk/acidable()
+	return 0
 
 /obj/item/clothing/shoes/magboots/funk/togglemagpulse(var/mob/user = usr)
 	if(user.isUnconscious())

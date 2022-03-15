@@ -217,6 +217,8 @@
 		can_flip = 0
 	..()
 
+/obj/item/clothing/mask/gas/clown_hat/virus/acidable()
+	return canremove
 
 /obj/item/clothing/mask/gas/sexyclown
 	name = "sexy-clown wig and mask"

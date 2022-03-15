@@ -657,6 +657,9 @@
 /obj/item/clothing/head/elfhat/stickymagic
 	canremove = 0
 
+/obj/item/clothing/head/elfhat/stickymagic/acidable()
+	return 0
+
 /obj/item/clothing/head/rice_hat
 	name = "rice hat"
 	desc = "Welcome to the rice fields, motherfucker."

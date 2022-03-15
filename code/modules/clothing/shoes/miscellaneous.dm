@@ -187,6 +187,9 @@
 /obj/item/clothing/shoes/clown_shoes/elf/stickymagic
 	canremove = 0
 
+/obj/item/clothing/shoes/clown_shoes/elf/acidable()
+	return 0
+
 #define CLOWNSHOES_RANDOM_SOUND "random sound"
 
 /obj/item/clothing/shoes/clown_shoes/advanced
