@@ -1682,7 +1682,7 @@
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
 			var/mob/living/carbon/human/HM = null
-			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
+			if(ishuman(M)) //Workaround for slot variables... someone really needs to clean up appearance code
 				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
@@ -1694,8 +1694,15 @@
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
 							if(C == H.wear_mask) //Really really horrible appearance code workarounds
 								H.wear_mask = null
-							if(HM && C == HM.head)
-								HM.head = null
+							if(HM)
+								if(C == HM.head)
+									HM.head = null
+								if(C == HM.shoes)
+									HM.shoes = null
+								if(C == HM.gloves)
+									HM.gloves = null
+								if(C == HM.wear_suit)
+									HM.wear_suit = null
 							qdel(C)
 							H.update_inv_by_slot(old_flags)
 						else
