@@ -370,7 +370,7 @@
 	if(usr) //WHYYYYY
 
 		//Allow smashing of storage items on harm intent without also putting the weapon into the container.
-		if(valid_item_attack(W, usr) || health <= 0)
+		if(valid_item_attack(W, usr) || (!isnull(health) && health <= 0))
 			return 0
 
 		usr.u_equip(W,0)
