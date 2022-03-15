@@ -687,7 +687,7 @@
 			"<span class='warning'>You slip on the floor!</span>")
 
 		if(TURF_WET_ICE)
-			if(prob(30) && Slip(stun_amount = min(4, intensity / 12, weaken_amount = min(3, intensity / 16),  overlay_type = TURF_WET_ICE))
+			if(prob(30) && Slip(stun_amount = min(4, intensity / 12), weaken_amount = min(3, intensity / 16),  overlay_type = TURF_WET_ICE))
 				step(src, dir)
 				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
 				"<span class='warning'>You slip on the icy floor!</span>")
