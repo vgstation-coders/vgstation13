@@ -437,6 +437,12 @@
 	item_state = "kneesock"
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/shoes/kneesocks/stickymagic
+	canremove = 0
+
+/obj/item/clothing/shoes/kneesocks/stickymagic/acidable()
+	return 0
+
 /obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/weapon/soap))

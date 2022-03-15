@@ -267,8 +267,7 @@
 		if(multiplier)
 			if(multiplier >= 1.5)
 				//Give them schoolgirl outfits /obj/item/clothing/under/schoolgirl
-				var/obj/item/clothing/under/schoolgirl/schoolgirl = new /obj/item/clothing/under/schoolgirl
-				schoolgirl.canremove = 0
+				var/obj/item/clothing/under/schoolgirl/schoolgirl = new /obj/item/clothing/under/schoolgirl/stickymagic
 				if(affected.w_uniform && !istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
 					affected.u_equip(affected.w_uniform,1)
 					affected.equip_to_slot(schoolgirl, slot_w_uniform)
@@ -276,8 +275,7 @@
 					affected.equip_to_slot(schoolgirl, slot_w_uniform)
 			if(multiplier >= 1.8)
 				//Kneesocks /obj/item/clothing/shoes/kneesocks
-				var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
-				kneesock.canremove = 0
+				var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks/stickymagic
 				if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
 					affected.u_equip(affected.shoes,1)
 					affected.equip_to_slot(kneesock, slot_shoes)

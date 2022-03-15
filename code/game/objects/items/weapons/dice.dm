@@ -185,16 +185,10 @@
 							for(var/datum/organ/external/E in h.organs)
 								E.droplimb(1)
 						if(2)
-							var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
-							kneesock.canremove = 0
+							var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks/stickymagic
 							var/obj/item/clothing/suit/maidapron/apron = new /obj/item/clothing/suit/maidapron
-							apron.canremove = 0
-							var/obj/item/clothing/head/kitty/kitty_ears = new /obj/item/clothing/head/kitty
-							kitty_ears.canremove = 0
-							kitty_ears.anime = TRUE
-							kitty_ears.cringe = TRUE
-							var/obj/item/clothing/under/maid/maid_uniform = new /obj/item/clothing/under/maid
-							maid_uniform.canremove = 0
+							var/obj/item/clothing/head/kitty/kitty_ears = new /obj/item/clothing/head/kitty/anime/cursed
+							var/obj/item/clothing/under/maid/maid_uniform = new /obj/item/clothing/under/maid/stickymagic
 							if(h.w_uniform)
 								h.drop_from_inventory(h.w_uniform)
 							if(h.head)
