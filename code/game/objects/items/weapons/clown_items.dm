@@ -304,7 +304,6 @@
 
 /obj/item/clothing/glue_act(stick_time)
 	canremove--
-	..()
 
 /obj/structure/bed/glue_act(stick_time)
 	..()
