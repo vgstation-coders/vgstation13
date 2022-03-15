@@ -857,6 +857,9 @@
 	canremove = 0
 	siemens_coefficient = 0
 
+/obj/item/clothing/mask/gas/golem/acidable()
+	return 0
+
 /obj/item/clothing/gloves/golem
 	name = "golem's hands"
 	desc = "Strong adamantine hands."
@@ -879,6 +882,8 @@
 	armor = list(melee = 80, bullet = 20, laser = 20, energy = 10, bomb = 0, bio = 0, rad = 0)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
+/obj/item/clothing/head/space/golem/acidable()
+	return 0
 */
 /obj/effect/golem_rune
 	anchored = 1

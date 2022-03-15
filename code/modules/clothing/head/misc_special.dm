@@ -232,6 +232,9 @@
 	canremove = FALSE
 	cringe = TRUE
 
+/obj/item/clothing/head/kitty/anime/cursed/acidable()
+	return 0
+
 /obj/item/clothing/head/butt
 	name = "butt"
 	desc = "So many butts, so little time."

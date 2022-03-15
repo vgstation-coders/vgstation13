@@ -24,6 +24,9 @@
 /obj/item/clothing/mask/explosive_collar/update_icon()
 	icon_state = primed ? "bombcollaron" : "bombcollaroff"
 
+/obj/item/clothing/mask/explosive_collar/acidable()
+	return FALSE
+
 /obj/item/clothing/mask/explosive_collar/proc/explode()
 	var/mob/living/carbon/victim = loc
 	if(istype(victim) && victim.is_wearing_item(src, slot_wear_mask))

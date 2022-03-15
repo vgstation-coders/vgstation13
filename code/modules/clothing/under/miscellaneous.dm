@@ -780,6 +780,9 @@
 /obj/item/clothing/under/elf/stickymagic
 	canremove = 0
 
+/obj/item/clothing/under/elf/stickymagic/acidable()
+	return 0
+
 /obj/item/clothing/under/onesie
 	name = "green christmas onesie"
 	desc = "Festive pyjamas for the comfy crewman."

@@ -46,9 +46,6 @@
 		accessory.emp_act(severity)
 	..()
 
-/obj/item/clothing/acidable()
-	return initial(canremove)
-
 /obj/item/clothing/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/clothing/accessory))
 		var/obj/item/clothing/accessory/A = I
