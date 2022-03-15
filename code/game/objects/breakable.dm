@@ -278,7 +278,7 @@
 		var/attacktype2 = "bites"
 		var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in biter.butchering_drops
 
-		if(T ? T.amount == 0 : TRUE)
+		if(!T?.amount)
 			attacktype = "gum"
 			attacktype2 = "gums"
 			thisdmg = 1
