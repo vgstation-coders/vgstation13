@@ -71,8 +71,9 @@
 	if(contents.len)
 		for(var/obj/item/thiscontent in contents)
 			thiscontent.forceMove(src.loc)
-			if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed) //Propel the content if specified.
-				thiscontent.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
+			if(propelparams)
+				if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed) //Propel the content if specified.
+					thiscontent.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
 
 /obj/proc/spill_reagents(var/atom/hit_atom) //Spill any reagents contained within the object onto the floor, and the atom it hit when it broke, if applicable.
 	if(!isnull(reagents))
