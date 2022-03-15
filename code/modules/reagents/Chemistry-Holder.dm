@@ -553,6 +553,17 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return total_dirty
 
+/datum/reagents/proc/del_reagents(var/list/reagents, var/update_totals=1)
+	var/total_dirty=0
+	for(var/R in reagents)
+		if(has_reagent(R))
+			total_dirty = del_reagent(R, 0)
+
+	if(total_dirty && update_totals)
+		update_total()
+		my_atom.on_reagent_change()
+	return total_dirty
+
 /datum/reagents/proc/update_total()
 	total_volume = 0
 	amount_cache.len = 0

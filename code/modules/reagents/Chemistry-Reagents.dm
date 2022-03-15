@@ -770,7 +770,7 @@
 		if(!locate(/obj/effect/decal/cleanable/molten_item) in T)
 			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(T)
 			I.desc = "A bit of gel left over from sodium polyacrylate absorbing liquid."
-		T.reagents.remove_reagent(LUBE, T.reagents.get_reagent_amount(LUBE)) //Absorbs water or lube
+		T.reagents.del_reagents(SLIPPABLES) //Absorbs water or lube
 
 /datum/reagent/anti_toxin
 	name = "Dylovene"
