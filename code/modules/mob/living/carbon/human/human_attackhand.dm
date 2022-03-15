@@ -54,7 +54,7 @@
 
 	damage = run_armor_absorb(affecting, "melee", damage)
 
-	if(!T?.amount)
+	if(T.amount == 0)
 		attacktype = "gummed"
 		damage = 1
 

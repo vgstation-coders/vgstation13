@@ -9,7 +9,7 @@
 	var/obj/machinery/artifact/contained
 	var/obj/item/weapon/paper/anomaly/report
 	var/broken = FALSE
-	health = 1000
+	var/health = 1000
 
 /obj/structure/anomaly_container/Destroy()
 	if (contained)

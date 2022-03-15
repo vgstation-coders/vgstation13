@@ -17,7 +17,7 @@ Here it is: Buttbot.
 	anchored = 0
 	//weight = 1.0E7
 	health = 25
-	maxHealth = 25
+	maxhealth = 25
 	var/buttchance = 80 //Like an 80% chance of it working. It's just a butt with an arm in it.
 	var/sincelastfart = 0
 	var/det_chance

@@ -14,7 +14,7 @@
 	on = 0
 	anchored = 0
 	health = 40
-	maxHealth = 20
+	maxhealth = 20
 	req_access = list(access_medical)
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0

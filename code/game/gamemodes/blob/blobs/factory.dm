@@ -3,7 +3,7 @@
 	icon_state = "factory"
 	desc = "A part of a blob. It makes the sound of organic tissue being torn."
 	health = 100
-	maxHealth = 100
+	maxhealth = 100
 	fire_resist = 2
 	var/list/spores = list()
 	var/max_spores = 2

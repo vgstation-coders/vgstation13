@@ -34,7 +34,7 @@
 	density = 1
 	anchored = 0
 	health = 50
-	maxHealth = 50
+	maxhealth = 50
 	req_access =list(access_hydroponics)
 	bot_flags = BOT_DENSE|BOT_NOT_CHASING
 

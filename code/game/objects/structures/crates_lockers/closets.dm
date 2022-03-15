@@ -15,7 +15,7 @@
 	var/large = 1
 	var/pick_up_stuff = 1 // Pick up things that spawn at this location.
 	var/wall_mounted = 0 //never solid (You can always pass over it)
-	health = 100
+	var/health = 100
 	var/lastbang
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
 							  //then open it in a populated area to crash clients.

@@ -505,7 +505,7 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
-	health = 50
+	var/health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
@@ -516,19 +516,15 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
 
-/obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
-	health = max(0, health - incoming_damage)
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/take_damage(var/damage, var/sound_effect = 1)
+	health = max(0, health - damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)
-	return try_break()
-
-/obj/structure/reagent_dispensers/cauldron/barrel/try_break()
 	if(health <= 0)
 		spawn(1)
 			Destroy()
-		return TRUE
-	else
-		return FALSE
+		return 1
+	return 0
 
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
@@ -624,7 +620,7 @@
 		if(2)
 			Destroy()
 		if(3)
-			take_damage(rand(15,45), sound_effect = 0)
+			take_damage(rand(15,45), 0)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_animal(var/mob/living/simple_animal/M)
 	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))

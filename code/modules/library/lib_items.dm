@@ -21,7 +21,7 @@
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 10
 
-	health = 50
+	var/health = 50
 	var/tmp/busy = 0
 	var/list/valid_types = list(/obj/item/weapon/book, \
 								/obj/item/weapon/tome, \

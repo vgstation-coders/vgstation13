@@ -3,8 +3,8 @@
 	density = 1
 	anchored = 1
 	icon = 'icons/obj/cult.dmi'
-	health = 50
-	maxHealth = 50
+	var/health = 50
+	var/maxHealth = 50
 	var/sound_damaged = null
 	var/sound_destroyed = null
 	var/conceal_cooldown = 0

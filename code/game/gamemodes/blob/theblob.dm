@@ -20,8 +20,8 @@ var/list/blob_overminds = list()
 	penetration_dampening = 17
 	mouse_opacity = 1
 	pass_flags_self = PASSBLOB
-	health = 20
-	maxHealth = 20
+	var/health = 20
+	var/maxhealth = 20
 	var/health_timestamp = 0
 	var/brute_resist = 4
 	var/fire_resist = 1
@@ -207,8 +207,8 @@ var/list/blob_overminds = list()
 
 /obj/effect/blob/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
-		if(health < maxHealth)
-			var/hurt_percentage = round((health * 100) / maxHealth)
+		if(health < maxhealth)
+			var/hurt_percentage = round((health * 100) / maxhealth)
 			var/hurt_icon
 			switch(hurt_percentage)
 				if(0 to 25)
@@ -407,7 +407,7 @@ var/list/blob_looks_player = list(//Options available to players
 	qdel(src)
 
 /obj/effect/blob/proc/update_health()
-	if(asleep && (health < maxHealth))
+	if(asleep && (health < maxhealth))
 		for (var/obj/effect/blob/B in range(7,src))
 			B.asleep = FALSE
 	if(!dying && (health <= 0))

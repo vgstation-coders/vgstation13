@@ -501,7 +501,7 @@
 	anchored = TRUE
 	density = TRUE
 
-	health = 10
+	var/health = 10
 	var/gibtype = /obj/effect/gibspawner/robot
 
 /obj/structure/hive/proc/healthcheck()

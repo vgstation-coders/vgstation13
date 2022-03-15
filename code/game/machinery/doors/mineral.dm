@@ -335,8 +335,8 @@
 	explosion_block = 1
 	prefix = "cult"
 	animation_delay = 0
-	health = 100
-	maxHealth = 100
+	var/health = 100
+	var/maxHealth = 100
 
 /obj/machinery/door/mineral/cult/New()
 	..()

@@ -423,7 +423,7 @@ proc/check_panel(mob/M)
 	var/collapse
 	var/image/down
 
-	health = 100
+	var/health = 100
 
 /obj/effect/fake_attacker/attackby(var/obj/item/weapon/P as obj, mob/living/user as mob)
 	step_away(src,my_target,2)
