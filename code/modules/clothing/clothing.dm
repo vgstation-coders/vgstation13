@@ -47,7 +47,7 @@
 	..()
 
 /obj/item/clothing/acidable()
-	return canremove
+	return initial(canremove)
 
 /obj/item/clothing/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/clothing/accessory))
