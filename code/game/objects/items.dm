@@ -1288,7 +1288,7 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 		throw_at(T, kick_power, 1)
-	else
+	else if(breakable_flags & BREAKABLE_UNARMED && !isnull(health) && (health <= 0))
 		try_break() //Check for the item breaking anyway even if it didn't get propelled.
 	Crossed(H) //So you can't kick shards while naked without suffering
 
