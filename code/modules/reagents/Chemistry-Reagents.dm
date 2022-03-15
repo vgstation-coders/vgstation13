@@ -146,6 +146,8 @@
 		return 1
 	if(!istype(O))
 		return 1
+	if(istype(O,/obj/effect/overlay/puddle)) // Go interact with the turf instead, please
+		return 1
 
 	src = null
 
