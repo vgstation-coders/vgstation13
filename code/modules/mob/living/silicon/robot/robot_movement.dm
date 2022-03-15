@@ -11,7 +11,7 @@
 	if (wet != TURF_WET_WATER)
 		return FALSE
 
-	if(Slip(intensity / 10, intensity / 16))
+	if(Slip(min(5, intensity / 10), min(3, intensity / 16)))
 		//Don't step forward as a robot, we're not slipping just glitching.
 		visible_message("<span class='warning'>[src] short circuits on the water!</span>", \
 					"<span class='warning'>You short circuit on the water!</span>")
