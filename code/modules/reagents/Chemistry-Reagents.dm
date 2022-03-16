@@ -163,9 +163,7 @@
 	if(T.reagents && T.can_accept_liquid(0) && self.reagent_state == REAGENT_STATE_LIQUID && self.creates_puddle)
 		if(volume)
 			T.reagents.add_reagent(self.id, volume)
-		if(T.current_puddle)
-			T.current_puddle.update_icon()
-		else
+		if(!T.current_puddle)
 			new /obj/effect/overlay/puddle(T)
 
 /datum/reagent/proc/metabolize(var/mob/living/M)

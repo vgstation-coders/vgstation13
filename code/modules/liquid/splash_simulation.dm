@@ -44,45 +44,37 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 
 /obj/effect/overlay/puddle/proc/spread()
 	var/excess_volume = turf_on.reagents.total_volume - MAX_PUDDLE_VOLUME
-	var/list/spread_directions = cardinal.Copy()
-	for(var/direction in spread_directions)
+	var/list/turf/spread_turfs = list()
+	for(var/direction in cardinal)
 		var/turf/T = get_step(src,direction)
 		if(!T)
-			spread_directions.Remove(direction)
 			log_debug("Puddle reached map edge.")
 			continue
 		if(!T.reagents && !T.clears_reagents)
-			spread_directions.Remove(direction)
 			continue
 		if(!turf_on.can_leave_liquid(direction)) //Check if this liquid can leave the tile in the direction
-			spread_directions.Remove(direction)
 			continue
 		if(!T.can_accept_liquid(turn(direction,180))) //Check if this liquid can enter the tile
-			spread_directions.Remove(direction)
 			continue
+		spread_turfs += T
 
-	if(!spread_directions.len)
+	if(!spread_turfs.len)
 		return
 
-	var/average_volume = excess_volume / spread_directions.len //How much would be taken from our tile to fill each
+	var/average_volume = excess_volume / spread_turfs.len //How much would be taken from our tile to fill each
 	for(var/datum/reagent/R in turf_on.reagents.reagent_list)
 		average_volume = min(R.viscosity, average_volume) //Capped by viscosity
-	if(average_volume <= (spread_directions.len * PUDDLE_TRANSFER_THRESHOLD))
+	if(average_volume <= (spread_turfs.len * PUDDLE_TRANSFER_THRESHOLD))
 		return //If this is lower than the transfer threshold, break out
 
-	for(var/direction in spread_directions)
-		var/turf/T = get_step(src,direction)
+	for(var/turf/T in spread_turfs)
 		if(!T)
 			log_debug("Puddle reached map edge.")
 			continue
 		if(T.clears_reagents)
 			turf_on.reagents.remove_all(average_volume)
-			return
+			continue
 		turf_on.reagents.trans_to(T, average_volume)
-		T.reagents.reaction(T, volume_multiplier = 0) //Already transferred it here, don't go making it.
-		if(T.current_puddle)
-			T.current_puddle.update_icon()
-	update_icon()
 
 /obj/effect/overlay/puddle/getFireFuel() // Copied over from old fuel overlay system and adjusted
 	var/total_fuel = 0

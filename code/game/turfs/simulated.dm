@@ -20,6 +20,8 @@
 /turf/simulated/on_reagent_change()
 	if(config.puddle_reactions)
 		reagents.reaction(src, volume_multiplier = 0)
+	if(current_puddle)
+		current_puddle.update_icon()
 
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
