@@ -135,6 +135,8 @@ var/puddle_text = FALSE
 				return ..()
 
 /obj/effect/overlay/puddle/Destroy()
+	for(var/client/C in admins)
+		C.images -= debug_text
 	if(turf_on && turf_on.reagents)
 		turf_on.reagents.clear_reagents()
 	processing_objects.Remove(src)
@@ -143,9 +145,8 @@ var/puddle_text = FALSE
 	..()
 
 /obj/effect/overlay/puddle/update_icon()
-	if(puddle_text)
-		for(var/client/C in admins)
-			C.images -= debug_text
+	for(var/client/C in admins)
+		C.images -= debug_text
 	if(turf_on && turf_on.reagents && turf_on.reagents.reagent_list.len)
 		color = mix_color_from_reagents(turf_on.reagents.reagent_list,TRUE)
 		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list,TRUE)
@@ -153,15 +154,15 @@ var/puddle_text = FALSE
 		// Absolute scaling with volume, Scale() would give relative.
 		transform = matrix(min(1, puddle_volume / CIRCLE_PUDDLE_VOLUME), 0, 0, 0, min(1, puddle_volume / CIRCLE_PUDDLE_VOLUME), 0)
 		if(puddle_text)
+			var/round = 1
+			if(puddle_volume < 1000)
+				round = 0.1
+			if(puddle_volume < 100)
+				round = 0.01
+			if(puddle_volume < 10)
+				round = 0.001
+			debug_text.maptext = "<span class = 'center maptext black_outline'>[round(puddle_volume, round)]</span>"
 			for(var/client/C in admins)
-				var/round = 1
-				if(puddle_volume < 1000)
-					round = 0.1
-				if(puddle_volume < 100)
-					round = 0.01
-				if(puddle_volume < 10)
-					round = 0.001
-				debug_text.maptext = "<span class = 'center maptext black_outline'>[round(puddle_volume, round)]</span>"
 				C.images += debug_text
 		relativewall()
 	else // Sanity
