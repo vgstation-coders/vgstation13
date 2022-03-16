@@ -4,9 +4,19 @@
 
 var/list/obj/effect/overlay/puddle/puddles = list()
 var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
+var/puddle_text = FALSE
 
 /turf
 	var/obj/effect/overlay/puddle/current_puddle = null
+
+/client/proc/toggle_puddle_values()
+	set name = "Toggle Puddle Values"
+	set category = "Debug"
+
+	if(!check_rights(R_DEBUG))
+		return
+	puddle_text = !puddle_text
+	to_chat(usr,"<span class='notice'>Puddle volume value text [puddle_text ? "enabled" : "disabled"]</span>")
 
 /obj/effect/overlay/puddle
 	icon = 'icons/effects/puddle.dmi'
@@ -38,7 +48,10 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	if(turf_on.reagents)
 		for(var/datum/reagent/R in turf_on.reagents.reagent_list)
 			if(R.evaporation_rate)
-				turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
+				if(R.evaporation_rate < R.volume)
+					turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
+				else
+					turf_on.reagents.del_reagent(R.id,update_totals=0)
 		if(config.puddle_spreading && turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
 
@@ -125,6 +138,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 	if(turf_on && turf_on.reagents)
 		turf_on.reagents.clear_reagents()
 	processing_objects.Remove(src)
+	turf_on.maptext = ""
 	turf_on.current_puddle = null
 	..()
 
@@ -134,6 +148,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list,TRUE)
 		// Absolute scaling with volume, Scale() would give relative.
 		transform = matrix(min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0, 0, 0, min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0)
+		turf_on.maptext = puddle_text ? "[round(turf_on.reagents.total_volume, 0.1)]" : ""
 	else // Sanity
 		qdel(src)
 
