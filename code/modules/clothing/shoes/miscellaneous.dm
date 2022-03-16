@@ -187,9 +187,6 @@
 /obj/item/clothing/shoes/clown_shoes/elf/stickymagic
 	canremove = 0
 
-/obj/item/clothing/shoes/clown_shoes/elf/acidable()
-	return 0
-
 #define CLOWNSHOES_RANDOM_SOUND "random sound"
 
 /obj/item/clothing/shoes/clown_shoes/advanced
@@ -314,9 +311,6 @@
 	canremove = 0
 	var/lube_chance = 10
 
-/obj/item/clothing/shoes/clown_shoes/slippy/acidable()
-	return 0
-
 /obj/item/clothing/shoes/clown_shoes/slippy/step_action() //The honkpocalypse is here
 	..()
 	if(ishuman(loc) && prob(lube_chance))
@@ -436,12 +430,6 @@
 	icon_state = "kneesock"
 	item_state = "kneesock"
 	species_fit = list(INSECT_SHAPED)
-
-/obj/item/clothing/shoes/kneesocks/stickymagic
-	canremove = 0
-
-/obj/item/clothing/shoes/kneesocks/stickymagic/acidable()
-	return 0
 
 /obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
 	..()

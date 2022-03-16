@@ -239,9 +239,6 @@
 	var/funk_level = 0
 	canremove = 0
 
-/obj/item/clothing/shoes/magboots/funk/acidable()
-	return 0
-
 /obj/item/clothing/shoes/magboots/funk/togglemagpulse(var/mob/user = usr)
 	if(user.isUnconscious())
 		return

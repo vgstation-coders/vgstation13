@@ -276,9 +276,6 @@ var/list/science_goggles_wearers = list()
 		canremove = 0
 	..()
 
-/obj/item/clothing/glasses/sunglasses/virus/acidable()
-	return canremove
-
 /obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(src, "shatter", 50, 1)

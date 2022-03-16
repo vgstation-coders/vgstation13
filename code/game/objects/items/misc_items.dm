@@ -48,9 +48,6 @@
 	canremove = 0
 	cant_remove_msg = " is fused to your body!"
 
-/obj/item/red_ribbon_arm/acidable()
-	return 0
-
 /obj/item/red_ribbon_arm/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
 	if(istype(H) && H.get_item_by_slot(slot_belt) == src && equipped_slot != null && equipped_slot == slot_belt)

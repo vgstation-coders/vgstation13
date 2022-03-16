@@ -227,12 +227,6 @@
 	body_parts_covered = FULL_TORSO|ARMS
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
-/obj/item/clothing/under/schoolgirl/stickymagic
-	canremove = 0
-
-/obj/item/clothing/under/schoolgirl/stickymagic/acidable()
-	return 0
-
 /obj/item/clothing/under/overalls
 	name = "laborer's overalls"
 	desc = "A set of durable overalls for getting the job done."
@@ -791,9 +785,6 @@
 
 /obj/item/clothing/under/elf/stickymagic
 	canremove = 0
-
-/obj/item/clothing/under/elf/stickymagic/acidable()
-	return 0
 
 /obj/item/clothing/under/onesie
 	name = "green christmas onesie"
