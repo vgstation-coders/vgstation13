@@ -2372,7 +2372,7 @@
 				H.adjustToxLoss(rand(5, 10)/10)
 
 		if(T.reagents && T.reagents.has_any_reagents(CLEANABLES))
-			T.reagents.remove_reagents(CLEANABLES)
+			T.reagents.del_reagents(CLEANABLES)
 
 	T.color = ""
 
