@@ -27,6 +27,7 @@ var/puddle_text = FALSE
 	anchored = TRUE
 	mouse_opacity = FALSE
 	var/turf/turf_on
+	var/image/debug_text
 
 /obj/effect/overlay/puddle/New()
 	..()
@@ -38,6 +39,8 @@ var/puddle_text = FALSE
 	if(turf_on.current_puddle)
 		qdel(turf_on.current_puddle)
 	turf_on.current_puddle = src
+	debug_text = image(loc = turf_on, layer = ABOVE_LIGHTING_LAYER)
+	debug_text.plane = ABOVE_LIGHTING_PLANE
 	processing_objects.Add(src)
 	update_icon()
 
@@ -140,16 +143,29 @@ var/puddle_text = FALSE
 	..()
 
 /obj/effect/overlay/puddle/update_icon()
+	if(puddle_text)
+		for(var/client/C in admins)
+			C.images -= debug_text
 	if(turf_on && turf_on.reagents && turf_on.reagents.reagent_list.len)
 		color = mix_color_from_reagents(turf_on.reagents.reagent_list,TRUE)
 		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list,TRUE)
+		var/puddle_volume = turf_on.reagents.total_volume
 		// Absolute scaling with volume, Scale() would give relative.
-		transform = matrix(min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0, 0, 0, min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0)
-		turf_on.maptext = puddle_text ? "[round(turf_on.reagents.total_volume, 0.1)]" : ""
+		transform = matrix(min(1, puddle_volume / CIRCLE_PUDDLE_VOLUME), 0, 0, 0, min(1, puddle_volume / CIRCLE_PUDDLE_VOLUME), 0)
+		if(puddle_text)
+			for(var/client/C in admins)
+				var/round = 1
+				if(puddle_volume < 1000)
+					round = 0.1
+				if(puddle_volume < 100)
+					round = 0.01
+				if(puddle_volume < 10)
+					round = 0.001
+				debug_text.maptext = "<span class = 'center maptext black_outline'>[round(puddle_volume, round)]</span>"
+				C.images += debug_text
+		relativewall()
 	else // Sanity
 		qdel(src)
-
-	relativewall()
 
 /obj/effect/overlay/puddle/relativewall()
 	// Circle value as to have some breathing room
