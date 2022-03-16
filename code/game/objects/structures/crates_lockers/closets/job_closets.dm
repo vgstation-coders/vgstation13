@@ -51,6 +51,7 @@
 		/obj/item/clothing/head/soft/purple,
 		/obj/item/weapon/storage/box/lights/he = 2,
 		/obj/item/weapon/storage/belt/janitor,
+		/obj/item/weapon/reagent_containers/spray/antilube = 2,
 	)
 
 /*
