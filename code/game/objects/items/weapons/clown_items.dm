@@ -293,6 +293,7 @@
 /obj/item/unglue()
 	if(..())
 		cant_drop--
+		canremove++
 
 /obj/item/clothing/unglue()
 	if(..())
@@ -303,7 +304,9 @@
 	..()
 
 /obj/item/clothing/glue_act(stick_time)
+	cant_drop--
 	canremove--
+	..()
 
 /obj/structure/bed/glue_act(stick_time)
 	..()
