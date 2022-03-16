@@ -141,7 +141,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 		color = mix_color_from_reagents(turf_on.reagents.reagent_list,TRUE)
 		alpha = mix_alpha_from_reagents(turf_on.reagents.reagent_list,TRUE)
 		// Absolute scaling with volume, Scale() would give relative.
-		transform = matrix(min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0, 0, 0, min(1, turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME), 0)
+		transform = matrix(clamp(turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME, 0.1, 1), 0, 0, 0, clamp(turf_on.reagents.total_volume / CIRCLE_PUDDLE_VOLUME, 0.1, 1), 0)
 	else // Sanity
 		qdel(src)
 
