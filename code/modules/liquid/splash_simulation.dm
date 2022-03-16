@@ -97,19 +97,20 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 			// liquid fuel burns 5 times as quick
 			turf_on.reagents.remove_reagent(id, turf_on.reagents.get_reagent_amount(id) * used_fuel_ratio * used_reactants_ratio * 5)
 
-/obj/effect/overlay/puddle/Crossed(atom/movable/AM)
+/obj/effect/overlay/puddle/Crossed(atom/movable/AM) //TODO: Uncomment parts in separate PR.
 	if(turf_on.reagents && (isobj(AM) || ismob(AM))) // Only for reaction_obj and reaction_mob, no misc types.
-		//Only targeting feet here, TODO: Uncomment when a non-gunk system for this is devised.
-		/*
-		turf_on.reagents.remove_all(turf_on.reagents.total_volume/10)
-		turf_on.reagents.reaction(AM, volume_multiplier = 0.1)
-		*/
+		//turf_on.reagents.remove_all(turf_on.reagents.total_volume/10)
 		if(isliving(AM))
 			var/mob/living/L = AM
 			if(turf_on.reagents.has_reagent(LUBE))
 				L.ApplySlip(TURF_WET_LUBE)
 			else if(turf_on.reagents.has_any_reagents(MILDSLIPPABLES))
 				L.ApplySlip(TURF_WET_WATER)
+		/*	//Only targeting feet if standing,
+			var/list/zones_to_use = L.lying ? ALL_LIMBS : list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
+			turf_on.reagents.reaction(AM, volume_multiplier = 0.1, zone_sels = zones_to_use)
+		else
+			turf_on.reagents.reaction(AM, volume_multiplier = 0.1)*/
 
 	else
 		return ..()
