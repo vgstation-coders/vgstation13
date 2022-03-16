@@ -97,7 +97,7 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 			// liquid fuel burns 5 times as quick
 			turf_on.reagents.remove_reagent(id, turf_on.reagents.get_reagent_amount(id) * used_fuel_ratio * used_reactants_ratio * 5)
 
-/obj/effect/overlay/puddle/Crossed(atom/movable/AM) //TODO: Uncomment parts in separate PR.
+/obj/effect/overlay/puddle/Crossed(atom/movable/AM)
 	if(turf_on.reagents && (isobj(AM) || ismob(AM))) // Only for reaction_obj and reaction_mob, no misc types.
 		//turf_on.reagents.remove_all(turf_on.reagents.total_volume/10)
 		if(isliving(AM))
@@ -106,22 +106,15 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 				L.ApplySlip(TURF_WET_LUBE)
 			else if(turf_on.reagents.has_any_reagents(MILDSLIPPABLES))
 				L.ApplySlip(TURF_WET_WATER)
-		/*	var/list/zones_to_use = list()
+		/*	var/list/zones_to_use = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN) //TODO: Uncomment in separate PR.
 			if(L.lying)
 				// Right side of body if lying on right and vice versa, all of body except mouth on eyes if on back and all if on stomach
-				switch(L.dir)
-					if(NORTH)
-						zones_to use = ALL_LIMBS
-					if(SOUTH)
-						zones_to use = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
-											LIMB_LEFT_ARM,LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,
-											,LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
-					if(EAST)
-						zones_to use = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
-											LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT)
-					if(WEST)
-						zones_to use = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
-											LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT)
+				if(L.dir == WEST || L.dir == NORTH || L.dir == SOUTH)
+					zones_to_use += list(LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT)
+				if(L.dir == EAST || L.dir == NORTH || L.dir == SOUTH)
+					zones_to_use += list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT)
+				if(L.dir == NORTH)
+					zones_to_use += list(TARGET_MOUTH,TARGET_EYES)
 			else
 				//Only targeting feet if standing,
 				zones_to_use = list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
