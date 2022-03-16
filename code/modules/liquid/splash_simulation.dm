@@ -48,10 +48,7 @@ var/puddle_text = FALSE
 	if(turf_on.reagents)
 		for(var/datum/reagent/R in turf_on.reagents.reagent_list)
 			if(R.evaporation_rate)
-				if(R.evaporation_rate < R.volume)
-					turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
-				else
-					turf_on.reagents.del_reagent(R.id,update_totals=0)
+				turf_on.reagents.remove_reagent(R.id, R.evaporation_rate)
 		if(config.puddle_spreading && turf_on.reagents.total_volume > MAX_PUDDLE_VOLUME)
 			spread()
 
