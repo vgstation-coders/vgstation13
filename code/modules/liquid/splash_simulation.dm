@@ -106,8 +106,25 @@ var/static/list/burnable_reagents = list(FUEL) //TODO: More types later
 				L.ApplySlip(TURF_WET_LUBE)
 			else if(turf_on.reagents.has_any_reagents(MILDSLIPPABLES))
 				L.ApplySlip(TURF_WET_WATER)
-		/*	//Only targeting feet if standing,
-			var/list/zones_to_use = L.lying ? ALL_LIMBS : list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
+		/*	var/list/zones_to_use = list()
+			if(L.lying)
+				// Right side of body if lying on right and vice versa, all of body except mouth on eyes if on back and all if on stomach
+				switch(L.dir)
+					if(NORTH)
+						zones_to use = ALL_LIMBS
+					if(SOUTH)
+						zones_to use = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
+											LIMB_LEFT_ARM,LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,
+											,LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
+					if(EAST)
+						zones_to use = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
+											LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT)
+					if(WEST)
+						zones_to use = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
+											LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT)
+			else
+				//Only targeting feet if standing,
+				zones_to_use = list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
 			turf_on.reagents.reaction(AM, volume_multiplier = 0.1, zone_sels = zones_to_use)
 		else
 			turf_on.reagents.reaction(AM, volume_multiplier = 0.1)*/
