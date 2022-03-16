@@ -49,7 +49,7 @@
 
 /obj/item/weapon/cell/crap/worse
 	name = "\improper Nanotrasen brand rechargeable AAA battery"
-	maxcharge = 250
+	maxcharge = 400
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
