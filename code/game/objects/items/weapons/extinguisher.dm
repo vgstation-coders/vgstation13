@@ -202,11 +202,11 @@
 				R.my_atom = W
 				if(!W || !src)
 					return
-				for(var/b=0, b<5, b++)
+				for(var/b=0, b<REAGENT_USE, b++)
 					step_towards(W,my_target)
 					if(!W || !W.reagents)
 						return
-					W.reagents.reaction(get_turf(W), TOUCH)
+					W.reagents.reaction(get_turf(W), TOUCH, volume_multiplier = 1 / (REAGENT_USE ** 2))
 					for(var/atom/atm in get_turf(W))
 						if(!W)
 							return
@@ -281,12 +281,12 @@
 				var/turf/my_target = pick(the_targets)
 				if(!W || !src)
 					return
-				for(var/b=0, b<5, b++)
+				for(var/b=0, b<REAGENT_USE, b++)
 					var/turf/oldturf = get_turf(W)
 					step_towards(W,my_target)
 					if(!W || !W.reagents)
 						return
-					W.reagents.reaction(get_turf(W), TOUCH)
+					W.reagents.reaction(get_turf(W), TOUCH, volume_multiplier = 1 / (REAGENT_USE ** 2))
 					for(var/atom/atm in get_turf(W))
 						if(!W)
 							return
