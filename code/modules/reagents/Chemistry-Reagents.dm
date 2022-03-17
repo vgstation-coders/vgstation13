@@ -693,6 +693,8 @@
 		qdel(hotspot)
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
+
+	var/datum/reagent/self = src
 	if(..())
 		return 1
 
@@ -702,6 +704,9 @@
 		if(ismob(O.loc))
 			var/mob/M = O.loc
 			M.regenerate_icons()
+	if(isturf(O.loc))
+		var/turf/T = get_turf(O)
+		self.reaction_turf(T, volume)
 
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
@@ -2280,6 +2285,15 @@
 	specheatcap = 0.68
 	glass_icon_state = "dr_gibb_glass"
 	glass_desc = "Unless you are an industrial tool, this is probably not safe for consumption."
+
+/datum/reagent/fuel/reaction_obj(var/obj/O, var/volume)
+
+	var/datum/reagent/self = src
+	if(..())
+		return 1
+	if(isturf(O.loc))
+		var/turf/T = get_turf(O)
+		self.reaction_turf(T, volume)
 
 /datum/reagent/fuel/on_mob_life(var/mob/living/M)
 
