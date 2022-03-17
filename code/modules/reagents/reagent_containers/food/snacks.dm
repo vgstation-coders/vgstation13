@@ -5613,6 +5613,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/porktenderloin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,10) //Competitive with chicken buckets
+	reagents.add_reagent(GRAVY, 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/hoboburger
 	name = "hoboburger"
