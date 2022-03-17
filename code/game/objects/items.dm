@@ -1272,13 +1272,14 @@ var/global/list/image/blood_overlays = list()
 	var/kick_power = max((H.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
 
 	//Attempt to damage the item if it's breakable here.
-	var/glanced
+	var/glanced = TRUE
+	var/broken = FALSE
 	if(breakable_flags & BREAKABLE_UNARMED)
 		glanced=!take_damage(kick_power, skip_break = TRUE)
+		var/thispropel = new /datum/throwparams(T, kick_power, 1)
+		broken = try_break(propelparams = thispropel)
 
-	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
-
-	if(kick_power > 6) //Fly in an arc!
+	if(kick_power > 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
 			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
@@ -1288,10 +1289,9 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 		throw_at(T, kick_power, 1)
-	else
-		try_break() //Check for the item breaking anyway even if it didn't get propelled.
-	Crossed(H) //So you can't kick shards while naked without suffering
 
+	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
+	Crossed(H) //So you can't kick shards while naked without suffering
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

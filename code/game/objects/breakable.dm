@@ -71,8 +71,9 @@
 	if(contents.len)
 		for(var/obj/item/thiscontent in contents)
 			thiscontent.forceMove(src.loc)
-			if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed) //Propel the content if specified.
-				thiscontent.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
+			if(propelparams)
+				if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed) //Propel the content if specified.
+					thiscontent.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
 
 /obj/proc/spill_reagents(var/atom/hit_atom) //Spill any reagents contained within the object onto the floor, and the atom it hit when it broke, if applicable.
 	if(!isnull(reagents))
@@ -146,12 +147,13 @@
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The object shatters!"
 
 /obj/proc/try_break(var/datum/throwparams/propelparams, var/hit_atom) //Breaks the object if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be propelled upon breaking.
-	if(health <= 0)
+	if(!isnull(health) && health <= 0)
 		on_broken(propelparams, hit_atom)
 		qdel(src)
 		return TRUE //Return TRUE if the object was broken
-	else
-		return FALSE //Return FALSE if the object wasn't broken
+	else if(propelparams)
+		throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
+	return FALSE //Return FALSE if the object wasn't broken
 
 /datum/throwparams //throw_at() input parameters as a datum to make function inputs neater
 	var/throw_target
@@ -167,12 +169,22 @@
 	throw_override = override
 	throw_fly_speed = fly_speed
 
+/obj/proc/get_total_scaled_w_class(var/scalepower=3) //Returns a scaled sum of the weight class of the object itself and all of its contents, if any.
+	//scalepower raises the w_class of each object to that exponent before adding it to the total. This helps avoid things like a container full of tiny objects being heavier than it should.
+	var/total_w_class = (isnull(w_class) ? W_CLASS_MEDIUM : w_class) ** scalepower
+	if(!isnull(contents) && contents.len)
+		for(var/obj/item/thiscontent in contents)
+			total_w_class += (thiscontent.w_class ** scalepower)
+	return total_w_class
+
+/*
 /obj/throw_at(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Called when an object is thrown, and checks if it's broken or not. If it is broken the fragments are thrown instead, otherwise the object is thrown normally.
-	if(breakable_flags)
+	if(breakable_flags && !isnull(health) && (health <= 0))
 		var/datum/throwparams/propelparams = new /datum/throwparams(target, range, speed, override, fly_speed)
 		if(try_break(propelparams))
 		 return
 	..()
+*/
 
 /obj/proc/breakable_check_weapon(var/obj/item/this_weapon) //Check if a weapon isn't excluded from being used to attempt to break an object.
 	if(breakable_exclude)
@@ -246,25 +258,69 @@
 //Object being hit by a projectile
 
 /obj/bullet_act(var/obj/item/projectile/proj)
-	..()
+	. = ..()
+	var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (get_total_scaled_w_class(3))))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the total weight class of the object.
+	var/turf/T = get_edge_target_turf(loc, get_dir(proj.starting, proj.target))
+	var/thispropel = new /datum/throwparams(T, impact_power, proj.projectile_speed)
 	if(breakable_flags & BREAKABLE_WEAPON)
 		take_damage(proj.damage, skip_break = TRUE)
-	var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (get_total_scaled_w_class(3))))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the total weight class of the object.
-	if(impact_power)
-		//Throw the object in the direction the projectile was traveling
-		var/propel_dir = get_dir(proj.starting, proj.target)
-		var/turf/T = get_edge_target_turf(loc, propel_dir)
+	//Throw the object in the direction the projectile was traveling
+		if(try_break(propelparams = (impact_power ? thispropel : null)))
+			return
+	if(impact_power && !anchored)
 		throw_at(T, impact_power, proj.projectile_speed)
-	else if(breakable_flags & BREAKABLE_WEAPON)
-		try_break()
 
-/obj/proc/get_total_scaled_w_class(var/scalepower=3) //Returns a scaled sum of the weight class of the object itself and all of its contents, if any.
-	//scalepower raises the w_class of each object to that exponent before adding it to the total. This helps avoid things like a container full of tiny objects being heavier than it should.
-	var/total_w_class = (isnull(w_class) ? W_CLASS_MEDIUM : w_class) ** scalepower
-	if(!isnull(contents) && contents.len)
-		for(var/obj/item/thiscontent in contents)
-			total_w_class += (thiscontent.w_class ** scalepower)
-	return total_w_class
+//Kicking the object
+/obj/kick_act/(mob/living/carbon/human/kicker)
+	if(breakable_flags & BREAKABLE_UNARMED && kicker.can_kick(src))
+		//Pick a random usable foot to perform the kick with
+		var/datum/organ/external/foot_organ = kicker.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+		kicker.delayNextAttack(2 SECONDS) //Kicks are slow
+		if((M_CLUMSY in kicker.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
+			kicker.visible_message("<span class='notice'>\The [kicker] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
+			var/incapacitation_duration = rand(1,10)
+			kicker.Knockdown(incapacitation_duration)
+			kicker.Stun(incapacitation_duration)
+			return
+		var/attack_verb = "kick"
+		var/damage = BREAKARMOR_WEAK
+		var/recoil_damage = BREAKARMOR_FLIMSY
+		if(kicker.reagents && kicker.reagents.has_reagent(GYRO))
+			damage += 5
+			attack_verb = "roundhouse kick"
+			recoil_damage = 0
+		damage *= 1 + min(0,(kicker.size - SIZE_NORMAL)) //The bigger the kicker, the more damage
+		if(M_HULK in kicker.mutations)
+			damage *= 3
+			recoil_damage = 0
+		//Handle shoes
+		var/obj/item/clothing/shoes/S = kicker.shoes
+		if(istype(S))
+			damage += S.bonus_kick_damage
+			S.on_kick(kicker, src)
+		else if(kicker.organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus damage
+			damage += 3
+		playsound(loc, "punch", 30, 1, -1)
+		kicker.do_attack_animation(src, kicker)
+		var/glanced = !take_damage(damage, skip_break = TRUE)
+		kicker.visible_message("<span class='warning'>\The [kicker] [attack_verb]s \the [src][generate_break_text(glanced,TRUE)]</span>",
+		"<span class='notice'>You [attack_verb] \the [src][generate_break_text(glanced)]</span>")
+		var/kick_dir = get_dir(kicker, src)
+		if(kicker.loc == loc)
+			kick_dir = kicker.dir
+		var/turf/T = get_edge_target_turf(loc, kick_dir)
+		var/kick_power = max((kicker.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+		var/thispropel = new /datum/throwparams(T, kick_power, 1)
+		if(kick_power <= 6)
+			kick_power = 0
+			thispropel = null
+		if(try_break(thispropel))
+			recoil_damage = 0 //Don't take recoil damage if the item broke.
+		else if(kick_power && !anchored)
+			throw_at(T, kick_power, 1)
+		if(recoil_damage) //Recoil damage to the foot.
+			kicker.foot_impact(src, recoil_damage, ourfoot = foot_organ)
+		Crossed(kicker)
 
 //Biting the object
 
@@ -295,4 +351,10 @@
 	else
 		..()
 
+//Explosions damaging the object:
+
 /////////////////////
+
+//todo:
+//kicking
+//ex_act
