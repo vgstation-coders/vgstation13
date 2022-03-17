@@ -58,7 +58,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 	global_singularity_pool += src
 	if(prob(10) && global_singularity_pool.len > 1)
 		var/obj/machinery/singularity/other = pick(global_singularity_pool)
-		if(other)
+		if(other && other != src)
 			if(prob(50))
 				link_wormhole(other)
 			else
