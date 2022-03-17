@@ -739,7 +739,6 @@
 	id = LUBE
 	description = "Lubricant is a substance introduced between two moving surfaces to reduce the friction and wear between them. giggity."
 	viscosity = 25
-	evaporation_rate = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
 	overdose_am = REAGENTS_OVERDOSE
@@ -5144,7 +5143,6 @@
 	name = "Corn Oil"
 	id = CORNOIL
 	description = "An oil derived from various types of corn."
-	evaporation_rate = 1
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
