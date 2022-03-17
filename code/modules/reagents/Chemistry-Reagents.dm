@@ -22,9 +22,6 @@
 	var/description = ""
 	var/datum/reagents/holder = null
 	var/reagent_state = REAGENT_STATE_SOLID
-	var/creates_puddle = TRUE //For liquids that have the option not to, like paint.
-	var/evaporation_rate = 0 //For when on floors
-	var/viscosity = INFINITY //Maximum amount that can spread on puddles
 	var/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
@@ -39,8 +36,6 @@
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
-	var/puddle_color = null // If it needs to look different as a puddle
-	var/puddle_alpha = 128 // See above
 	var/dupeable = TRUE	//whether the reagent can be duplicated by standard reagent duplication methods such as a service borg shaker or odysseus
 	var/flags = 0
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
@@ -103,7 +98,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-
+	
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -119,7 +114,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-
+	
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -157,16 +152,7 @@
 	if(!istype(T))
 		return 1
 
-	var/datum/reagent/self = src
 	src = null
-
-	if(T.reagents && self.reagent_state == REAGENT_STATE_LIQUID && self.creates_puddle)
-		if(volume)
-			T.reagents.add_reagent(self.id, volume)
-		if(T.current_puddle)
-			T.current_puddle.update_icon()
-		else
-			new /obj/effect/overlay/puddle(T)
 
 /datum/reagent/proc/metabolize(var/mob/living/M)
 	tick++
@@ -208,7 +194,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
-
+	
 	if(addictive && M.addicted_chems)
 		M.addicted_chems.add_reagent(src.id, custom_metabolism)
 	if(tolerance_increase)
@@ -407,9 +393,7 @@
 	name = "Blue Goo"
 	id = BLUEGOO
 	description = "A viscous blue substance of unknown origin."
-	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	color = "#64D2E6"
 	custom_metabolism = 0.01
 
@@ -427,9 +411,7 @@
 	name = "Slime Jelly"
 	id = SLIMEJELLY
 	description = "A gooey semi-liquid produced from one of the deadliest lifeforms in existence. SO REAL."
-	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	color = "#801E28" //rgb: 128, 30, 40
 	density = 0.8
 	specheatcap = 1.24
@@ -451,7 +433,6 @@
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
-	puddle_alpha = 255
 	density = 1.05
 	specheatcap = 3.49
 	glass_name = "Tomato Juice Glass"
@@ -612,8 +593,6 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 128
-	puddle_color = "#6da7ff"
-	evaporation_rate = 1
 	specheatcap = 4.184
 	density = 1
 	glass_desc = "The father of all refreshments."
@@ -681,8 +660,12 @@
 			H.adjustToxLoss(rand(1,3))
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
+
 	if(..())
 		return 1
+
+	if(volume >= 3) //Hardcoded
+		T.wet(800)
 
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
@@ -743,12 +726,19 @@
 	name = "Space Lube"
 	id = LUBE
 	description = "Lubricant is a substance introduced between two moving surfaces to reduce the friction and wear between them. giggity."
-	viscosity = 25
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388
+
+/datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(volume >= 1)
+		T.wet(800, TURF_WET_LUBE)
 
 /datum/reagent/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
@@ -768,7 +758,7 @@
 		if(!locate(/obj/effect/decal/cleanable/molten_item) in T)
 			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(T)
 			I.desc = "A bit of gel left over from sodium polyacrylate absorbing liquid."
-		T.reagents.remove_reagent(LUBE, T.reagents.get_reagent_amount(LUBE)) //Absorbs water or lube
+		T.dry(TURF_WET_LUBE) //Absorbs water or lube
 
 /datum/reagent/anti_toxin
 	name = "Dylovene"
@@ -879,9 +869,7 @@
 	name = "Plasticide"
 	id = PLASTICIDE
 	description = "Liquid plastic, do not eat."
-	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 0.4
@@ -1193,10 +1181,10 @@
 		O.bless()
 
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
-	var/datum/reagent/self = src
+
 	if(..())
 		return 1
-	if(T.reagents && T.reagents.get_reagent_amount(self.id) >= 5)
+	if(volume >= 5)
 		T.bless()
 
 /datum/reagent/holywater/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
@@ -1287,7 +1275,6 @@
 	id = SILICATE
 	description = "A compound that can be used to repair and reinforce glass."
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	color = "#C7FFFF" //rgb: 199, 255, 255
 	overdose_am = 0
 	density = 0.69
@@ -1368,7 +1355,6 @@
 	id = MERCURY
 	description = "A chemical element."
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#484848" //rgb: 72, 72, 72
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 0.14
@@ -1579,7 +1565,6 @@
 	name = "Honey"
 	id = HONEY
 	description = "A golden yellow syrup, loaded with sugary sweetness."
-	viscosity = 1
 	color = "#FEAE00"
 	alpha = 200
 	nutriment_factor = 15 * REAGENTS_METABOLISM
@@ -2156,7 +2141,7 @@
 		return 1
 
 	if(T.is_wet())
-		T.reagents.remove_reagent(LUBE, T.reagents.get_reagent_amount(LUBE)) //Cleans water or lube
+		T.dry(TURF_WET_LUBE) //Cleans water or lube
 		var/obj/effect/smoke/S = new /obj/effect/smoke(T)
 		S.time_to_live = 10 //unusually short smoke
 		//We don't need to start up the system because we only want to smoke one tile.
@@ -2279,8 +2264,6 @@
 	description = "Required for welders. Flamable."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#660000" //rgb: 102, 0, 0
-	puddle_color = "#6D5757" //rgb: 109, 87, 87 to make it look like legacy fuel puddles, grabbed from the old sprite
-	puddle_alpha = 128
 	density = 1.1
 	specheatcap = 0.68
 	glass_icon_state = "dr_gibb_glass"
@@ -2295,6 +2278,15 @@
 		var/turf/T = get_turf(O)
 		self.reaction_turf(T, volume)
 
+
+/datum/reagent/fuel/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in T))
+		new /obj/effect/decal/cleanable/liquid_fuel(T, volume)
+
 /datum/reagent/fuel/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -2306,9 +2298,7 @@
 	name = "Vomit"
 	id = VOMIT
 	description = "Stomach acid mixed with partially digested chunks of food."
-	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
 	density = 1.35
 	specheatcap = 5.2
@@ -2332,8 +2322,6 @@
 	id = CLEANER
 	description = "A compound used to clean things. Now with 50% more sodium hypochlorite!"
 	reagent_state = REAGENT_STATE_LIQUID
-	creates_puddle = FALSE //It cleans so... no
-	evaporation_rate = 50
 	color = "#A5F0EE" //rgb: 165, 240, 238
 	density = 0.76
 	specheatcap = 60.17
@@ -2368,9 +2356,6 @@
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
-
-		if(T.reagents && T.reagents.has_any_reagents(CLEANABLES))
-			T.reagents.remove_reagents(CLEANABLES)
 
 	T.color = ""
 
@@ -2657,7 +2642,6 @@
 	id = PLASMA
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	color = "#500064" //rgb: 80, 0, 100
 
 /datum/reagent/plasma/New()
@@ -4363,9 +4347,7 @@
 	name = "Ketchup"
 	id = KETCHUP
 	description = "Ketchup, catsup, whatever. It's tomato paste."
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
 
@@ -4373,9 +4355,7 @@
 	name = "Mustard"
 	id = MUSTARD
 	description = "A spicy yellow paste."
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
 
@@ -4383,9 +4363,7 @@
 	name = "Relish"
 	id = RELISH
 	description = "A pickled cucumber jam. Tasty!"
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#336600" //rgb: 51, 102, 0
 
@@ -4401,9 +4379,7 @@
 	name = "Mayonnaise"
 	id = MAYO
 	description = "A substance of unspeakable suffering."
-	viscosity = 4
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#FAF0E6" //rgb: 51, 102, 0
 
@@ -4420,7 +4396,6 @@
 	id = ZAMMILD
 	description = "A tasty sauce made from mothership spices and acid."
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#B38B26" //rgb: 179, 139, 38
 
@@ -4428,9 +4403,7 @@
 	name = "Zam's Spicy Sauce"
 	id = ZAMSPICYTOXIN
 	description = "A dangerously flavorful sauce made from mothership spices and powerful acid."
-	viscosity = 20
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 6 * REAGENTS_METABOLISM
 	color = "#D35A0D" //rgb: 211, 90, 13
 
@@ -4513,7 +4486,6 @@
 	name = "Egg Yolk"
 	id = EGG_YOLK
 	description = "A chicken before it could become a chicken."
-	viscosity = 25
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ffcd42"
@@ -5194,9 +5166,12 @@
 					H.adjustBruteLoss(30)
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
+
 	if(..())
 		return 1
 
+	if(volume >= 3)
+		T.wet(800)
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
@@ -5234,7 +5209,6 @@
 	id = HOT_RAMEN
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.33
@@ -5254,7 +5228,6 @@
 	id = HELL_RAMEN
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.42
@@ -5305,9 +5278,7 @@
 	name = "pancake mix"
 	id = PANCAKE
 	description = "A mix of flour, milk, butter, and egg yolk. ready to be cooked into delicious pancakes."
-	viscosity = 20
 	reagent_state = REAGENT_STATE_LIQUID
-	creates_puddle = FALSE
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	color = "#E6C968" //rgb: 90, 78, 40
 
@@ -5345,9 +5316,7 @@
 	name = "Cherry Jelly"
 	id = CHERRYJELLY
 	description = "Totally the best. Only to be spread on foods with excellent lateral symmetry."
-	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#801E28" //rgb: 128, 30, 40
 
@@ -5362,9 +5331,7 @@
 	name = "Discount Dan's Special Sauce"
 	id = DISCOUNT
 	description = "You can almost feel your liver failing, just by looking at it."
-	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	color = "#6F884F" //rgb: 111, 136, 79
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 
@@ -5412,9 +5379,7 @@
 	name = "Irradiated Beans"
 	id = IRRADIATEDBEANS
 	description = "You can almost taste the lead sheet behind it!"
-	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 
@@ -5430,9 +5395,7 @@
 	name = "Toxic Waste"
 	id = TOXICWASTE
 	description = "A type of sludge."
-	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
@@ -5449,9 +5412,7 @@
 	name = "Re-Fried Beans"
 	id = REFRIEDBEANS
 	description = "Mmm.."
-	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 
@@ -5459,9 +5420,7 @@
 	name = "Mutated Beans"
 	id = MUTATEDBEANS
 	description = "Mutated flavor."
-	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 
@@ -5477,9 +5436,7 @@
 	name = "Beff"
 	id = BEFF
 	description = "What's beff? Find out!"
-	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5487,9 +5444,7 @@
 	name = "Horse Meat"
 	id = HORSEMEAT
 	description = "Tastes excellent in lasagna."
-	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 
@@ -5497,9 +5452,7 @@
 	name = "Moon Rocks"
 	id = MOONROCKS
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
-	viscosity = 25
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
@@ -5514,9 +5467,7 @@
 	name = "Off-Color Cheese"
 	id = OFFCOLORCHEESE
 	description = "American Cheese."
-	viscosity = 10
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
 
@@ -5525,7 +5476,6 @@
 	id = BONEMARROW
 	description = "Looks like a skeleton got stuck in the production line."
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
 
@@ -5533,9 +5483,7 @@
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
 	description = "That green isn't organic."
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5554,9 +5502,7 @@
 	name = "Glowing Ramen Noodles"
 	id = GLOWINGRAMEN
 	description = "That glow 'aint healthy."
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5572,9 +5518,7 @@
 	name = "Deep Fried Ramen Noodles"
 	id = DEEPFRIEDRAMEN
 	description = "Ramen, deep fried."
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 
@@ -5603,9 +5547,7 @@
 	name = "Clotting Agent"
 	id = CLOTTING_AGENT
 	description = "Concentrated blood platelets, capable of stemming bleeding."
-	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#a00000" //rgb: 160, 0, 0
 	custom_metabolism = 0.1
 
@@ -5613,9 +5555,7 @@
 	name = "Biofoam"
 	id = BIOFOAM
 	description = "A fast-hardening, biocompatible foam used to stem internal bleeding for a short time."
-	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
 
@@ -8704,9 +8644,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Gravy"
 	id = GRAVY
 	description = "Aww, come on Double D, I don't say 'gravy' all the time."
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#E7A568"
 
@@ -8722,7 +8660,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Cheesy Gloop"
 	id = CHEESYGLOOP
 	description = "This fatty, viscous substance is found only within the cheesiest of cheeses. Has the potential to cause heart stoppage."
-	viscosity = 1
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFF00" //rgb: 255, 255, 0
 	overdose_am = 5
@@ -9123,9 +9060,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Mucus"
 	id = MUCUS
 	description = "A slippery aqueous secretion produced by, and covering, mucous membranes.  Problematic for Asthmatics."
-	viscosity = 2
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	color = "#13BC5E"
 	custom_metabolism = 0.01
 
@@ -9393,7 +9328,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = IRONROT
 	description = "A mutated fungal compound that causes rapid rotting in iron infrastructures."
 	reagent_state = REAGENT_STATE_LIQUID
-	creates_puddle = FALSE
 	color = "#005200" //moldy green
 
 /datum/reagent/ironrot/reaction_turf(var/turf/simulated/T, var/volume)
@@ -9473,9 +9407,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Ectoplasm"
 	id = ECTOPLASM
 	description = "Pure, distilled spooky"
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 192
 	color = "#21d389b4"
 	density = 0.05
 
@@ -9705,7 +9637,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/incense/vapor/OnDisperse(var/turf/location)
 	for(var/turf/simulated/T in view(2,location))
 		if(T.is_wet())
-			T.reagents.remove_reagent(LUBE, T.reagents.get_reagent_amount(LUBE))
+			T.dry(TURF_WET_LUBE)
 			T.turf_animation('icons/effects/water.dmi',"dry_floor",0,0,TURF_LAYER)
 
 /datum/reagent/incense/dense
@@ -9748,10 +9680,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Delightful Mix"
 	id = DSYRUP
 	description = "This syrupy stuff is everyone's favorite tricord additive."
-	viscosity = 5
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#571212" //like a dark red
-	puddle_alpha = 192
 	density = 1.00 //basically water
 	specheatcap = 4.184
 
@@ -9759,9 +9689,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Grue Bile"
 	id = GRUE_BILE
 	description = "A noxious substance produced in the body of a grue."
-	viscosity = 1
 	reagent_state = REAGENT_STATE_LIQUID
-	puddle_alpha = 255
 	color = GRUE_BLOOD
 	custom_metabolism = 0.01
 	density = 1.25

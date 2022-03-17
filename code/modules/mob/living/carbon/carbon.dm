@@ -656,14 +656,14 @@
 				regenerate_icons()
 
 
-/mob/living/carbon/ApplySlip(var/wet)
+/mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
 	if (!..())
 		return FALSE
 
 	if (unslippable) //if unslippable, don't even bother making checks
 		return FALSE
 
-	switch(wet)
+	switch(P.wet)
 		if(TURF_WET_WATER)
 			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
 				return FALSE

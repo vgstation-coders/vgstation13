@@ -2,7 +2,7 @@
  * Returns:
  * 	#RRGGBB(AA) on success, null on failure
  */
-/proc/mix_color_from_reagents(const/list/reagent_list, var/puddle = FALSE)
+/proc/mix_color_from_reagents(const/list/reagent_list)
 	if(!istype(reagent_list))
 		return
 
@@ -15,13 +15,13 @@
 		if(reagent.id == BLOOD && reagent.data["blood_colour"])
 			reagent_color = reagent.data["blood_colour"]
 		else
-			reagent_color = (puddle && reagent.puddle_color ? reagent.puddle_color : reagent.color)
+			reagent_color = reagent.color
 
 		vol_temp = reagent.volume
 		vol_counter += vol_temp
 
 		if(isnull(color))
-			color = reagent_color
+			color = reagent.color
 		else if(length(color) >= length(reagent_color))
 			color = BlendRGB(color, reagent_color, vol_temp/vol_counter)
 		else
@@ -29,15 +29,15 @@
 
 	return color
 
-/proc/mix_alpha_from_reagents(const/list/reagent_list, var/puddle = FALSE)
+/proc/mix_alpha_from_reagents(const/list/reagent_list)
 	if(!istype(reagent_list))
 		return
 
 	var/alpha
-	var/total_alpha = 0
+	var/total_alpha
 
 	for(var/datum/reagent/reagent in reagent_list)
-		total_alpha += (puddle && reagent.puddle_alpha ? reagent.puddle_alpha : reagent.alpha)
+		total_alpha += reagent.alpha
 
 	alpha = total_alpha / reagent_list.len
 
