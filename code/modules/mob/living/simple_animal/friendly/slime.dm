@@ -131,5 +131,5 @@
 		clear_fullscreen("brute")
 	return TRUE
 
-/mob/living/simple_animal/slime/ApplySlip(var/wet)
+/mob/living/simple_animal/slime/ApplySlip(var/wet, var/intensity)
 	return FALSE
