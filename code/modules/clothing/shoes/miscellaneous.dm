@@ -317,8 +317,7 @@
 		var/mob/living/carbon/human/mob = loc
 		if(istype(mob.loc,/turf/simulated))
 			var/turf/simulated/T = mob.loc
-			if(T.reagents)
-				T.reagents.add_reagent(LUBE,40)
+			T.wet(800, TURF_WET_LUBE)
 
 /obj/item/clothing/shoes/clown_shoes/slippy/dropped(mob/user as mob)
 	canremove = 1
