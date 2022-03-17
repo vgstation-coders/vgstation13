@@ -802,6 +802,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return 0
 
+/datum/reagents/proc/get_reagent_amounts(var/list/reagents)
+	for(var/R in reagents)
+		. += get_reagent_amount(R)
+
 /datum/reagents/proc/get_reagents()
 	var/res = ""
 	for(var/datum/reagent/A in reagent_list)

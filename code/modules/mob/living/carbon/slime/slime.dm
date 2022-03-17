@@ -998,7 +998,7 @@
 /mob/living/carbon/slime/IgniteMob()
 	return 0
 
-/mob/living/carbon/slime/ApplySlip(var/wet)
+/mob/living/carbon/slime/ApplySlip(var/wet, var/intensity)
 	return FALSE
 
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
