@@ -271,6 +271,7 @@
 		throw_at(T, impact_power, proj.projectile_speed)
 
 //Kicking the object
+
 /obj/kick_act/(mob/living/carbon/human/kicker)
 	if(breakable_flags & BREAKABLE_UNARMED && kicker.can_kick(src))
 		//Pick a random usable foot to perform the kick with
