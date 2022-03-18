@@ -60,7 +60,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 /obj/machinery/singularity/proc/link_a_wormhole()
 	if(global_singularity_pool.len > 1)
 		var/obj/machinery/singularity/other = pick(global_singularity_pool)
-		if(other && other != src)
+		if(other && other != src && !other.repels)
 			if(prob(50))
 				link_wormhole(other)
 			else

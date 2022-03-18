@@ -53,7 +53,7 @@
 		else
 			S.link_a_wormhole()
 		if(istype(src,/obj/item/bluespace_crystal/flawless) && S.wormhole_out)
-			var/turf/T = get_turf(wormhole_out)
+			var/turf/T = get_turf(S.wormhole_out)
 			do_teleport(src, T)
 		else
 			qdel(src)
