@@ -1278,8 +1278,7 @@ var/global/list/image/blood_overlays = list()
 		glanced=!take_damage(kick_power, skip_break = TRUE)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
-
-	if(kick_power > 6 && !broken) //Fly in an arc!
+	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
 			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)

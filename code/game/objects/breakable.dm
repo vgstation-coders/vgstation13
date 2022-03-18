@@ -33,7 +33,7 @@
 		else if(isnull(maxHealth) && health)
 			maxHealth = health
 
-/obj/proc/on_broken(var/datum/throwparams/propelparams, var/atom/hit_atom) //Called right before an object breaks.
+/obj/proc/on_broken(datum/throwparams/propelparams, atom/hit_atom) //Called right before an object breaks.
 	//Drop and and propel any fragments:
 	drop_fragments(propelparams)
 	//Drop and propel any contents:
@@ -47,7 +47,7 @@
 	else if(damaged_sound)
 		playsound(src, damaged_sound, 50, 1)
 
-/obj/proc/drop_fragments(var/datum/throwparams/propelparams) //Drop the object's fragments and propel them if applicable with propelparams.
+/obj/proc/drop_fragments(datum/throwparams/propelparams) //Drop the object's fragments and propel them if applicable with propelparams.
 	if(breakable_fragments?.len)
 		var/oneeach=(isnull(fragment_amounts) || breakable_fragments.len != fragment_amounts.len) //default to 1 of each fragment type if fragment_amounts isn't specified or there's a length mismatch
 		var/numtodrop
@@ -67,7 +67,7 @@
 					if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed)
 						O.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
 
-/obj/proc/drop_contents(var/datum/throwparams/propelparams) //Drop the contents of the object and propel them if the object itself received a propulsive blow.
+/obj/proc/drop_contents(datum/throwparams/propelparams) //Drop the contents of the object and propel them if the object itself received a propulsive blow.
 	if(contents.len)
 		for(var/obj/item/thiscontent in contents)
 			thiscontent.forceMove(src.loc)
@@ -75,13 +75,13 @@
 				if(propelparams.throw_target && propelparams.throw_range && propelparams.throw_speed) //Propel the content if specified.
 					thiscontent.throw_at(propelparams.throw_target, propelparams.throw_range, propelparams.throw_speed, propelparams.throw_override, propelparams.throw_fly_speed)
 
-/obj/proc/spill_reagents(var/atom/hit_atom) //Spill any reagents contained within the object onto the floor, and the atom it hit when it broke, if applicable.
+/obj/proc/spill_reagents(atom/hit_atom) //Spill any reagents contained within the object onto the floor, and the atom it hit when it broke, if applicable.
 	if(!isnull(reagents))
 		if(!isnull(hit_atom) && hit_atom != get_turf(src)) //If it hit something other than the floor, spill it onto that.
 			reagents.reaction(hit_atom, TOUCH)
 		reagents.reaction(get_turf(src), TOUCH) //Then spill it onto the floor.
 
-/obj/proc/take_damage(var/incoming_damage, var/damage_type = BRUTE, var/skip_break = FALSE, var/mute = TRUE)
+/obj/proc/take_damage(incoming_damage, damage_type = BRUTE, skip_break = FALSE, mute = TRUE)
 	var/thisdmg = (incoming_damage > max(damage_armor, damage_resist)) * (incoming_damage - damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
 	health -= thisdmg
 	play_hit_sounds(thisdmg)
@@ -93,7 +93,7 @@
 			try_break()
 	return thisdmg //return the amount of damage taken
 
-/obj/proc/play_hit_sounds(var/thisdmg, var/hear_glanced = TRUE, var/hear_damaged = TRUE) //Plays any relevant sounds whenever the object is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
+/obj/proc/play_hit_sounds(thisdmg, hear_glanced = TRUE, hear_damaged = TRUE) //Plays any relevant sounds whenever the object is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
 	if(health <= 0) //Don't play a sound here if the object is ready to break, because sounds are also played by on_broken().
 		return
 	if(thisdmg && damaged_sound && hear_damaged)
@@ -101,14 +101,14 @@
 	else if(glanced_sound && hear_glanced)
 		playsound(src, glanced_sound, 50, 1)
 
-/obj/proc/message_take_hit(var/mute = FALSE) //Give a visible message when the object takes damage.
+/obj/proc/message_take_hit(mute = FALSE) //Give a visible message when the object takes damage.
 	if(!isnull(take_hit_text2) && !mute)
 		visible_message("<span class='warning'>\The [src] [pick(take_hit_text2)]!</span>")
 
 /obj/proc/damaged_updates() //Put any damage-related updates to the object here.
 	return
 
-/obj/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
+/obj/examine(mob/user, size = "", show_name = TRUE, show_icon = TRUE)
 	..()
 	if(health<maxHealth && damaged_examine_text)
 		user.simple_message("<span class='info'>[damaged_examine_text]</span>",\
@@ -133,7 +133,7 @@
 	B.blood_overlay.color = B.blood_color
 	B.overlays += B.blood_overlay
 
-/obj/proc/generate_break_text(var/glanced = FALSE, var/suppress_glance_text) //Generates text for when an object is hit.
+/obj/proc/generate_break_text(glanced = FALSE, suppress_glance_text) //Generates text for when an object is hit.
 	if(glanced)
 		if(suppress_glance_text)
 			return "!"
@@ -146,7 +146,7 @@
 	else
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The object shatters!"
 
-/obj/proc/try_break(var/datum/throwparams/propelparams, var/hit_atom) //Breaks the object if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be propelled upon breaking.
+/obj/proc/try_break(datum/throwparams/propelparams, hit_atom) //Breaks the object if its health is 0 or below. Passes throw-related parameters to on_broken() to allow for an object's fragments to be propelled upon breaking.
 	if(!isnull(health) && health <= 0)
 		on_broken(propelparams, hit_atom)
 		qdel(src)
@@ -162,14 +162,14 @@
 	var/throw_override
 	var/throw_fly_speed
 
-/datum/throwparams/New(var/target, var/range, var/speed, var/override, var/fly_speed)
+/datum/throwparams/New(target, range, speed, override, fly_speed)
 	throw_target = target
 	throw_range = range
 	throw_speed = speed
 	throw_override = override
 	throw_fly_speed = fly_speed
 
-/obj/proc/get_total_scaled_w_class(var/scalepower=3) //Returns a scaled sum of the weight class of the object itself and all of its contents, if any.
+/obj/proc/get_total_scaled_w_class(scalepower=3) //Returns a scaled sum of the weight class of the object itself and all of its contents, if any.
 	//scalepower raises the w_class of each object to that exponent before adding it to the total. This helps avoid things like a container full of tiny objects being heavier than it should.
 	var/total_w_class = (isnull(w_class) ? W_CLASS_MEDIUM : w_class) ** scalepower
 	if(!isnull(contents) && contents.len)
@@ -177,14 +177,14 @@
 			total_w_class += (thiscontent.w_class ** scalepower)
 	return total_w_class
 
-/obj/proc/breakable_check_weapon(var/obj/item/this_weapon) //Check if a weapon isn't excluded from being used to attempt to break an object.
+/obj/proc/breakable_check_weapon(obj/item/this_weapon) //Check if a weapon isn't excluded from being used to attempt to break an object.
 	if(breakable_exclude)
 		for(var/obj/item/this_excl in breakable_exclude)
 			if(istype(this_weapon, this_excl))
 				return FALSE
 	return TRUE
 
-/obj/proc/valid_item_attack(var/obj/item/this_weapon, var/mob/user) //Check if an object is in valid circumstances to be attacked with a wielded weapon.
+/obj/proc/valid_item_attack(obj/item/this_weapon, mob/user) //Check if an object is in valid circumstances to be attacked with a wielded weapon.
 	if(user.a_intent == I_HURT && breakable_flags & BREAKABLE_WEAPON && breakable_check_weapon(this_weapon) && isturf(loc)) //Smash objects on the ground, but not in your inventory.
 		return TRUE
 	else
@@ -231,7 +231,7 @@
 
 //Object ballistically colliding with something
 
-/obj/throw_impact(atom/impacted_atom, var/speed, mob/user)
+/obj/throw_impact(atom/impacted_atom, speed, mob/user)
 	..()
 	if(!(breakable_flags & BREAKABLE_AS_THROWN))
 		return
@@ -245,10 +245,30 @@
 		else
 			take_damage(thisdmg, skip_break = TRUE, mute = FALSE) //Be verbose about the object taking damage.
 		try_break(null, impacted_atom)
+/*
+//Something ballistically colliding with the object
 
+/obj/hitby(atom/movable/AM)
+	. = ..()
+	if(.)
+		return
+	if(ismob(AM))
+		var/mob/M = AM //Duh
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
+			"<span class='danger'>You slam into \the [src].</span>")
+		adjustHealthLoss(10,AM) //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
+		healthcheck(M)
+	else if(isobj(AM))
+		var/obj/item/I = AM
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+		adjustHealthLoss(I.throwforce,AM)
+		healthcheck()
+*/
 //Object being hit by a projectile
 
-/obj/bullet_act(var/obj/item/projectile/proj)
+/obj/bullet_act(obj/item/projectile/proj)
 	. = ..()
 	var/impact_power = max(0,round((proj.damage_type == BRUTE) * (proj.damage / 3 - (get_total_scaled_w_class(3))))) //The range of the impact-throw is increased by the damage of the projectile, and decreased by the total weight class of the object.
 	var/turf/T = get_edge_target_turf(loc, get_dir(proj.starting, proj.target))
@@ -303,7 +323,7 @@
 		var/turf/T = get_edge_target_turf(loc, kick_dir)
 		var/kick_power = max((kicker.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
-		if(kick_power <= 6)
+		if(kick_power < 6)
 			kick_power = 0
 			thispropel = null
 		if(try_break(thispropel))
