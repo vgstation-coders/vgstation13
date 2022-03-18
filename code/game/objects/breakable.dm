@@ -256,7 +256,7 @@
 	if(breakable_flags & BREAKABLE_WEAPON)
 		take_damage(proj.damage, skip_break = TRUE)
 	//Throw the object in the direction the projectile was traveling
-		if(try_break(propelparams = (impact_power ? thispropel : null)))
+		if(try_break(impact_power ? thispropel : null))
 			return
 	if(impact_power && !anchored)
 		throw_at(T, impact_power, proj.projectile_speed)
