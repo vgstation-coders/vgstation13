@@ -574,7 +574,8 @@ var/list/impact_master = list()
 		var/atom/step = get_step(src, dA)
 		if(!step)
 			bullet_die()
-		src.Move(step)
+		if(!src.Move(step))
+			bullet_die()
 		error -= distB
 		dir = dA
 		if(error < 0)
