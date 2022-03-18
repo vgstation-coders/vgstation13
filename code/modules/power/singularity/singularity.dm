@@ -1,4 +1,5 @@
 var/list/obj/machinery/singularity/global_singularity_pool
+var/list/obj/machinery/singularity/white_hole_candidates
 
 /obj/machinery/singularity
 	name = "gravitational singularity" //Lower case
@@ -56,17 +57,22 @@ var/list/obj/machinery/singularity/global_singularity_pool
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
-	if(prob(1))
+	if(!repels)
+		if(!white_hole_candidates)
+			white_hole_candidates = list()
+		white_hole_candidates += src
+	if(prob(1) && white_hole_candidates.len > 1)
 		link_a_wormhole()
 
 /obj/machinery/singularity/proc/link_a_wormhole()
-	if(global_singularity_pool.len > 1)
-		var/obj/machinery/singularity/other = pick(global_singularity_pool)
-		if(other && other != src && !other.repels)
-			if(prob(50))
-				link_wormhole(other)
-			else
-				other.link_wormhole(src)
+	var/obj/machinery/singularity/other = null
+	while(white_hole_candidates.len > 1 && other == src)
+		other = pick(white_hole_candidates)
+	if(other && other != src)
+		if(prob(50))
+			link_wormhole(other)
+		else
+			other.link_wormhole(src)
 
 /obj/machinery/singularity/proc/link_wormhole(var/obj/machinery/singularity/other)
 	if(other)
@@ -82,6 +88,8 @@ var/list/obj/machinery/singularity/global_singularity_pool
 					1,1,1) //Invert it
 		wormhole_out = other
 		other.wormhole_in = src
+		if(other in white_hole_candidates)
+			white_hole_candidates -= other
 
 /obj/machinery/singularity/proc/unlink_wormholes()
 	if(wormhole_out)
@@ -707,6 +715,7 @@ var/list/obj/machinery/singularity/global_singularity_pool
 	..()
 	power_machines -= src
 	global_singularity_pool -= src
+	white_hole_candidates -= src
 
 /obj/machinery/singularity/bite_act(mob/user)
 	consume(user)

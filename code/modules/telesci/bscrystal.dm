@@ -51,7 +51,7 @@
 	if(istype(src,/obj/item/bluespace_crystal/flawless) || prob(10))
 		if(S.wormhole_out || S.wormhole_in)
 			S.unlink_wormholes()
-		else
+		else if(white_hole_candidates.len > 1)
 			S.link_a_wormhole()
 		if(istype(src,/obj/item/bluespace_crystal/flawless) && S.wormhole_out)
 			var/turf/T = get_turf(S.wormhole_out)
