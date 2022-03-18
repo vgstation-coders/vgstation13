@@ -60,7 +60,8 @@ var/list/obj/machinery/singularity/white_hole_candidates
 	if(!repels)
 		if(!white_hole_candidates)
 			white_hole_candidates = list()
-		white_hole_candidates += src
+		if(!(src in white_hole_candidates))
+			white_hole_candidates += src
 	if(prob(1) && white_hole_candidates.len > 1)
 		link_a_wormhole()
 
