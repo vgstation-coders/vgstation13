@@ -376,6 +376,7 @@
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
+		
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)

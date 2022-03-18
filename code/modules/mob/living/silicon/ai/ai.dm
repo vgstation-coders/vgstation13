@@ -439,21 +439,23 @@ var/list/ai_list = list()
 	// if(!blinded) (this is now in flash_eyes)
 	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 
-	switch(severity)
-		if(1.0)
-			if(!isDead())
+	if(!isDead())
+		var/dmg_phrase = ""
+		var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
+		switch(severity)
+			if(1.0)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
-		if(2.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 200"
+			if(2.0)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
-		if(3.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 120"
+			if(3.0)
 				adjustBruteLoss(30)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
+				dmg_phrase = "Damage: 30"
+
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 	updatehealth()
 
@@ -937,5 +939,5 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/update_perception()
 	if(ai_flags & HIGHRESCAMS)
 		client?.darkness_planemaster.alpha = 150
-	else 
+	else
 		client?.darkness_planemaster.alpha = 255

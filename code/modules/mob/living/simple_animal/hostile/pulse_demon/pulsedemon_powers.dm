@@ -22,7 +22,7 @@
     if(host.charge < upgrade_cost)
         to_chat(host,"<span class='warning'>You cannot afford this upgrade.</span>")
         return FALSE
-    
+
     host.charge -= upgrade_cost
     return TRUE
 
@@ -112,44 +112,45 @@
         update_condition_and_cost()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
-    var/dat
-    dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
-            <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
-    // Shows only upgrades that meet the conditions
-    if(possible_upgrades.len)
-        dat += "<B>Upgrades:</B><BR>"
-        for(var/datum/pulse_demon_upgrade/PDU in possible_upgrades)
-            if(!PDU.condition)
-                possible_upgrades.Remove(PDU)
-            else
-                dat += "<A href='byond://?src=\ref[src];upgrade=1;thing=\ref[PDU]''>[PDU.ability_name] ([PDU.upgrade_cost]W)</A><BR>"
-                if(show_desc)
-                    dat += "<I>[PDU.ability_desc]</I><BR>"
-        dat += "<HR>"
-    if(spell_list.len > 1)
-        dat += "<B>Known abilities:</B><BR>"
-        for(var/spell/S in spell_list)
-            if(!istype(S,/spell/pulse_demon/abilities))
-                var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
-                dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
-                dat += "[S.spell_levels[Sp_SPEED] < S.level_max[Sp_SPEED] ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A>" : ""] "
-                dat += "[S.spell_levels[Sp_POWER] < S.level_max[Sp_POWER] ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A>" : ""]<BR>"
-                if(show_desc)
-                    dat += "<I>[S.desc]</I><BR>"
-        dat += "<HR>"
-    if(possible_spells.len)
-        dat += "<B>Available abilities:</B><BR>"
-        dat += "<I>The number afterwards is the charge cost.</I><BR>"
-        for(var/spell/pulse_demon/PDS in possible_spells)
-            var/icon/spellimg = icon('icons/mob/screen_spells.dmi', PDS.hud_state)
-            dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> "
-            dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
-            if(show_desc)
-                dat += "<I>[PDS.desc]</I><BR>"
-        dat += "<HR>"
-    var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu", 640, 480)
-    popup.set_content(dat)
-    popup.open()
+	var/dat
+	dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
+			<A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
+	// Shows only upgrades that meet the conditions
+	if(possible_upgrades.len)
+		dat += "<B>Upgrades:</B><BR>"
+		for(var/datum/pulse_demon_upgrade/PDU in possible_upgrades)
+			if(!PDU.condition)
+				possible_upgrades.Remove(PDU)
+			else
+				dat += "<A href='byond://?src=\ref[src];upgrade=1;thing=\ref[PDU]''>[PDU.ability_name] ([PDU.upgrade_cost]W)</A><BR>"
+				if(show_desc)
+					dat += "<I>[PDU.ability_desc]</I><BR>"
+		dat += "<HR>"
+	if(spell_list.len > 1)
+		dat += "<B>Known abilities:</B><BR>"
+		for(var/spell/pulse_demon/S in spell_list)
+			if(!istype(S,/spell/pulse_demon/abilities))
+				var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
+				dat += "[S.can_improve(Sp_SPEED) || S.can_improve(Sp_POWER) ? "(Upgrade for [S.upgrade_cost]W) " : ""]"
+				dat += "[S.can_improve(Sp_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A>" : ""] "
+				dat += "[S.can_improve(Sp_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A>" : ""]<BR>"
+				if(show_desc)
+					dat += "<I>[S.desc]</I><BR>"
+		dat += "<HR>"
+	if(possible_spells.len)
+		dat += "<B>Available abilities:</B><BR>"
+		dat += "<I>The number afterwards is the charge cost.</I><BR>"
+		for(var/spell/pulse_demon/PDS in possible_spells)
+			var/icon/spellimg = icon('icons/mob/screen_spells.dmi', PDS.hud_state)
+			dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> "
+			dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
+			if(show_desc)
+				dat += "<I>[PDS.desc]</I><BR>"
+		dat += "<HR>"
+	var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu", 640, 480)
+	popup.set_content(dat)
+	popup.open()
 
 /mob/living/simple_animal/hostile/pulse_demon/Topic(href, href_list)
     ..()
@@ -167,7 +168,7 @@
         add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
         charge -= PDS.purchase_cost
         possible_spells.Remove(PDS)
-    
+
     if(href_list["desc"])
         show_desc = !show_desc
 
@@ -238,27 +239,33 @@
         PD.charge -= charge_cost // Removing chage here
 
 /spell/pulse_demon/empower_spell() // Makes spells use less charge
-    spell_levels[Sp_POWER]++
+	if(!can_improve(Sp_POWER))
+		return 0
 
-    var/temp = ""
-    name = initial(name)
-    switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-        if(3)
-            temp = "You have improved [name] into Frugal [name]."
-            name = "Frugal [name]"
-        if(2)
-            temp = "You have improved [name] into Cheap [name]."
-            name = "Cheap [name]"
-        if(1)
-            temp = "You have improved [name] into Renewable [name]."
-            name = "Renewable [name]"
-        if(0)
-            temp = "You have improved [name] into Self-Sufficient [name]."
-            name = "Self-Sufficient [name]"
+	spell_levels[Sp_POWER]++
 
-    charge_cost /= 1.5
-    upgrade_cost *= 1.5
-    return temp
+	name = initial(name)
+	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
+		if(3)
+			. = "You have improved [name] into Frugal [name]."
+			name = "Frugal [name]"
+		if(2)
+			. = "You have improved [name] into Cheap [name]."
+			name = "Cheap [name]"
+		if(1)
+			. = "You have improved [name] into Renewable [name]."
+			name = "Renewable [name]"
+		if(0)
+			. = "You have improved [name] into Self-Sufficient [name]."
+			name = "Self-Sufficient [name]"
+
+	charge_cost /= 1.5
+	upgrade_cost *= 1.5
+
+/spell/pulse_demon/quicken_spell()
+	. = ..()
+	if(.)
+		upgrade_cost *= 1.5
 
 /spell/pulse_demon/is_valid_target(var/atom/target)
     return 1
@@ -556,4 +563,4 @@
 
         if(PD.move_divide > 1)
             PD.move_divide *= 0.75
-        return temp 
+        return temp

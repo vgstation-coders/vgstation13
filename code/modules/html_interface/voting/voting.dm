@@ -3,6 +3,10 @@ var/global/datum/controller/vote/vote = new()
 
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
+#define WEIGHTED 1
+#define MAJORITY 2
+#define PERSISTENT 3
+#define RANDOM 4
 
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
@@ -24,7 +28,6 @@ var/global/datum/controller/vote/vote = new()
 			src.hide(hclient)
 			vote.cancel_vote(usr)
 
-
 /datum/controller/vote
 	var/initiator      = null
 	var/started_time   = null
@@ -35,7 +38,7 @@ var/global/datum/controller/vote/vote = new()
 	var/datum/html_interface/nanotrasen/vote/interface
 
 	//vote data
-	var/list/voters		//assoc. list: user.ckey, choices
+	var/list/voters		//assoc. list: user.ckey, choice
 	var/list/tally		//assoc. list: choices, count
 	var/list/choices = list() //choices
 	var/list/map_paths	//assoc. list: map.name, map.path from next_map.dm
@@ -99,7 +102,7 @@ var/global/datum/controller/vote/vote = new()
 		if(time_remaining <= 0 || player_list.len < 1)
 			//if no players, select at random
 			if(player_list.len < 1)
-				config.toggle_vote_method = 3
+				config.toggle_vote_method = RANDOM
 			result()
 			for(var/ckey in voters) //hide voting interface using ckeys
 				var/client/C = directory[ckey]
@@ -111,10 +114,10 @@ var/global/datum/controller/vote/vote = new()
 		lock = FALSE
 
 /datum/controller/vote/proc/get_result()
-	//get the highest number of votes
-	currently_voting = FALSE
 	//default-vote for everyone who didn't vote
 	var/non_voters = clients.len - get_total()
+	currently_voting = FALSE
+
 	if(!config.vote_no_default && choices.len)
 		//clients with voting initialized
 		if(non_voters > 0)
@@ -128,18 +131,17 @@ var/global/datum/controller/vote/vote = new()
 				factor = max(factor,0.5)
 				tally["Initiate Crew Transfer"] = round(tally["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-	//choose the method for voting: "WEIGHTED" = 0, "MAJORITY" = 1, RANDOM = 3
 	switch(config.toggle_vote_method)
-		if(0)
+		if(WEIGHTED)
 			return weighted()
-		if(1)
+		if(MAJORITY)
 			return majority()
-		if(2)
+		if(PERSISTENT)
 			if(mode == "map")
-				return majority()
+				return persistent()
 			else
-				return majority()
-		if (3)
+				return  majority()
+		if(RANDOM)
 			return random()
 		else
 			return  majority()
@@ -200,8 +202,14 @@ var/global/datum/controller/vote/vote = new()
 			if(winner != c)
 				text += "<br>\t [c] had [tally[c] != null ? tally[c] : "0"]."
 	else
-		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+		text += "<b>Vote Result: Inconclusive - No choices!</b>"
 	return text
+
+/datum/controller/vote/proc/persistent()
+	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
+	task.insert_counts(tally)
+	task.on_shutdown()
+	return majority()
 
 /datum/controller/vote/proc/random()
 	var/text
@@ -357,7 +365,7 @@ var/global/datum/controller/vote/vote = new()
 					maps = get_all_maps()
 				else
 					maps = get_votable_maps()
-				for(var/map in maps)
+				for (var/map in maps)
 					choices.Add(map)
 				if(!choices.len)
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
@@ -376,9 +384,19 @@ var/global/datum/controller/vote/vote = new()
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		//initialize tally
-		for (var/c in choices)
-			tally += c
-			tally[c] = 0
+		if(config.toggle_vote_method == PERSISTENT && mode == "map")
+			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
+			for(var/i = 1; i <= choices.len; i++)
+				if(isnull(task.data[choices[i]]))
+					tally += choices[i]
+					tally[choices[i]] = 0
+				else
+					tally += choices[i]
+					tally[choices[i]] = task.data[choices[i]]
+		else
+			for (var/c in choices)
+				tally += c
+				tally[c] = 0
 		if(mode == "custom")
 			text += "<br>[question]"
 
@@ -430,7 +448,7 @@ var/global/datum/controller/vote/vote = new()
 		for (var/i = 1; i <= tally.len; i++)
 			var/list/L = list(i, tally[i], tally[tally[i]])
 			interface.callJavaScript("update_choices", L, hclient_or_mob)
-			
+
 /datum/controller/vote/proc/interact(client/user)
 	set waitfor = FALSE // So we don't wait for each individual client's assets to be sent.
 
@@ -485,10 +503,7 @@ var/global/datum/controller/vote/vote = new()
 		status_data += list(1)
 	else
 		status_data += list(0)
-	if(config.toggle_vote_method)
-		status_data += list(1)
-	else
-		status_data += list(0)
+	status_data += list(config.toggle_vote_method)
 
 	if(refresh && interface)
 		updateFor()
@@ -504,7 +519,8 @@ var/global/datum/controller/vote/vote = new()
 			return 0
 		if("abort")
 			if(user.client.holder)
-				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, re-use the current map.","Confirm","Yes","No") != "Yes")
+				if(alert("Are you sure you want to cancel this vote? This will not display the results, and for a map vote, may cause problems.","Confirm","Yes","No") != "Yes")
+					reset()
 					return
 				log_admin("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				message_admins("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
@@ -544,12 +560,12 @@ var/global/datum/controller/vote/vote = new()
 				update()
 		if("toggle_vote_method")
 			if(user.client.holder)
-				config.toggle_vote_method = !config.toggle_vote_method
+				config.toggle_vote_method = config.toggle_vote_method % 4 + 1
+
 				update()
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
 	user.vote()
-
 
 /mob/verb/vote()
 	var/mob/user = usr
@@ -560,7 +576,6 @@ var/global/datum/controller/vote/vote = new()
 			to_chat(user, "<span class='info'>The voting controller isn't fully initialized yet.</span>")
 		else
 			vote.interact(user.client)
-
 /datum/controller/vote/proc/rigvote()
 	var/rigged_choice = null
 	if(choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")

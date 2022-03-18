@@ -44,6 +44,9 @@
 		qdel(immune_system)
 		immune_system = null
 
+	if(addicted_chems)
+		qdel(addicted_chems)
+		addicted_chems = null
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
