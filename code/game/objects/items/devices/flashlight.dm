@@ -299,7 +299,7 @@
 	var/brightness_max = 6
 	var/brightness_min = 2
 
-	breakable_fragments = list(/obj/item/weapon/light/bulb/broken)
+	breakable_fragments = null
 	damaged_examine_text = "It is cracked."
 	take_hit_text = list("cracking", "chipping")
 	take_hit_text2 = list("cracks", "chips")

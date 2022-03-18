@@ -177,15 +177,6 @@
 			total_w_class += (thiscontent.w_class ** scalepower)
 	return total_w_class
 
-/*
-/obj/throw_at(var/atom/target, var/range, var/speed, var/override, var/fly_speed) //Called when an object is thrown, and checks if it's broken or not. If it is broken the fragments are thrown instead, otherwise the object is thrown normally.
-	if(breakable_flags && !isnull(health) && (health <= 0))
-		var/datum/throwparams/propelparams = new /datum/throwparams(target, range, speed, override, fly_speed)
-		if(try_break(propelparams))
-		 return
-	..()
-*/
-
 /obj/proc/breakable_check_weapon(var/obj/item/this_weapon) //Check if a weapon isn't excluded from being used to attempt to break an object.
 	if(breakable_exclude)
 		for(var/obj/item/this_excl in breakable_exclude)
@@ -349,13 +340,10 @@
 		if(glanced)
 			//Damage the biter's mouth.
 			biter.apply_damage(BREAKARMOR_FLIMSY, BRUTE, TARGET_MOUTH)
-	else
-		..()
 
 //Explosions damaging the object:
 
 /////////////////////
 
 //todo:
-//kicking
 //ex_act
