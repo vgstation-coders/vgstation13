@@ -370,13 +370,13 @@
 	if(usr) //WHYYYYY
 
 		//Allow smashing of storage items on harm intent without also putting the weapon into the container.
-		if(valid_item_attack(W, usr) || (health && health >= 0))
+		if(valid_item_attack(W, usr) || (!isnull(health) && health <= 0))
 			return 0
 
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
-		
+
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)

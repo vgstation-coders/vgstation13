@@ -321,16 +321,13 @@
 		var/thisdmg = BREAKARMOR_FLIMSY
 		if(biter.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 			thisdmg += 4
-
 		var/attacktype = "bite"
 		var/attacktype2 = "bites"
 		var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in biter.butchering_drops
-
 		if(!T?.amount)
 			attacktype = "gum"
 			attacktype2 = "gums"
 			thisdmg = 1
-
 		biter.do_attack_animation(src, biter)
 		biter.delayNextAttack(1 SECONDS)
 		var/glanced=!take_damage(thisdmg, skip_break = TRUE)
@@ -341,9 +338,4 @@
 			//Damage the biter's mouth.
 			biter.apply_damage(BREAKARMOR_FLIMSY, BRUTE, TARGET_MOUTH)
 
-//Explosions damaging the object:
-
 /////////////////////
-
-//todo:
-//ex_act

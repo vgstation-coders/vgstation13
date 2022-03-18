@@ -1,5 +1,5 @@
 /////////////////////
-//Breakability testing items
+//Breakability testing objects
 /obj/item/device/flashlight/test
 	name = "breakable flashlight"
 	desc = "This flashlight looks particularly flimsy."
@@ -127,4 +127,9 @@
 		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
 		/obj/item/weapon/reagent_containers/food/snacks/hotdog,
 	)
+
+/obj/item/weapon/gun/projectile/test
+	name = "high-capacity revolver"
+	desc = "A convenient revolver with a very large ammunition capacity."
+	max_shells = 999
 /////////////////////
