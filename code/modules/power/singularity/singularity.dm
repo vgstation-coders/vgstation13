@@ -444,9 +444,9 @@ var/list/obj/machinery/singularity/global_singularity_pool
 			newsea.ChangeTurf(/turf/unsimulated/wall/supermatter)
 
 /obj/machinery/singularity/proc/consume(const/atom/A)
-	if(repels)
+	if(repels && !(istype(A,/obj/item/bluespace_crystal)))
 		return
-	if(wormhole_out)
+	if(wormhole_out && !(istype(A,/obj/item/bluespace_crystal)))
 		var/turf/T = get_turf(wormhole_out)
 		do_teleport(A, T)
 	else
