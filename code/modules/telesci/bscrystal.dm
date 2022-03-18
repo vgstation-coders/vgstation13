@@ -46,8 +46,7 @@
 	qdel(src)
 
 /obj/item/bluespace_crystal/singularity_act(var/current_size,var/obj/machinery/singularity/S)
-	var/prob = istype(src,/obj/item/bluespace_crystal/artificial) ? 50 : 100
-	if(prob)
+	if(!(istype(src,/obj/item/bluespace_crystal/artificial)) || prob(50))
 		if(S.wormhole_out)
 			S.unlink_wormholes()
 		else
