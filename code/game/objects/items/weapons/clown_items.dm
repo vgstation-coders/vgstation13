@@ -301,7 +301,7 @@
 		cant_drop--
 
 /obj/item/clothing/unglue()
-	if(special_unglue())
+	if(special_unglue(1))
 		canremove++
 
 /obj/item/glue_act(stick_time)
