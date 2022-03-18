@@ -57,18 +57,18 @@ var/list/obj/machinery/singularity/white_hole_candidates
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
-	if(!repels)
-		if(!white_hole_candidates)
-			white_hole_candidates = list()
-		if(!(src in white_hole_candidates))
-			white_hole_candidates += src
+	if(!white_hole_candidates)
+		white_hole_candidates = list()
+	if(!repels && !(src in white_hole_candidates))
+		white_hole_candidates += src
 	if(prob(1) && white_hole_candidates.len > 1)
 		link_a_wormhole()
 
 /obj/machinery/singularity/proc/link_a_wormhole()
 	var/obj/machinery/singularity/other = null
-	while(white_hole_candidates.len > 1 && other == src)
+	do
 		other = pick(white_hole_candidates)
+	while(white_hole_candidates.len > 1 && other == src)
 	if(other && other != src)
 		if(prob(50))
 			link_wormhole(other)
@@ -94,15 +94,21 @@ var/list/obj/machinery/singularity/white_hole_candidates
 
 /obj/machinery/singularity/proc/unlink_wormholes()
 	if(wormhole_out)
+		visible_message("<span class='warning'>[get_area(wormhole_out) ? "[get_area(wormhole_out)]": "The strange place"] is no longer visible as [src] closes its path to it.</span>")
 		wormhole_out.name = initial(wormhole_out.name)
 		wormhole_out.desc = initial(wormhole_out.desc)
 		wormhole_out.repels = FALSE
 		wormhole_out.color= initial(wormhole_out.color)
+		if(!(wormhole_out in white_hole_candidates))
+			white_hole_candidates += wormhole_out
 		wormhole_out = null
 	if(wormhole_in)
+		visible_message("<span class='warning'>[get_area(wormhole_in) ? "[get_area(wormhole_in)]": "The strange place"] is no longer visible as [src] closes its path to it.</span>")
 		name = initial(name)
 		repels = FALSE
 		color = initial(color)
+		if(!(src in white_hole_candidates))
+			white_hole_candidates += src
 		wormhole_in = null
 
 /obj/machinery/singularity/attack_hand(mob/user as mob)

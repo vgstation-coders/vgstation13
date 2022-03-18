@@ -56,8 +56,8 @@
 		if(istype(src,/obj/item/bluespace_crystal/flawless) && S.wormhole_out)
 			var/turf/T = get_turf(S.wormhole_out)
 			do_teleport(src, T)
-		else
-			return ..()
+			return 2
+	return ..()
 
 // Artifical bluespace crystal, doesn't give you much research.
 
