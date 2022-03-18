@@ -48,7 +48,7 @@
 /obj/item/bluespace_crystal/singularity_act(var/current_size,var/obj/machinery/singularity/S)
 	if(istype(src,/obj/item/bluespace_crystal/artificial))
 		return ..()
-	if(istype(src,/obj/item/bluespace_crystal/flawless) || prob(50))
+	if(istype(src,/obj/item/bluespace_crystal/flawless) || prob(10))
 		if(S.wormhole_out || S.wormhole_in)
 			S.unlink_wormholes()
 		else

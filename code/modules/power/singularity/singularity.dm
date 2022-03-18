@@ -56,6 +56,8 @@ var/list/obj/machinery/singularity/global_singularity_pool
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
+	if(prob(1))
+		link_a_wormhole()
 
 /obj/machinery/singularity/proc/link_a_wormhole()
 	if(global_singularity_pool.len > 1)
