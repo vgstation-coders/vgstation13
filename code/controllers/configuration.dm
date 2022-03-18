@@ -79,6 +79,8 @@
 	var/multiz_render_cap = 8			//how far down open spaces will render
 	var/multiz_bottom_cap = 16			//how far down open spaces will detect for a bottom
 
+	var/server_start_now = 0			//automatically starting server on load
+
 	// BSQL things
 	var/bsql_debug = 0
 	var/async_query_timeout = 10
@@ -585,6 +587,10 @@
 					multiz_render_cap = text2num(value)
 				if("multiz_bottom_cap")
 					multiz_bottom_cap = text2num(value)
+
+
+				if("server_start_now")
+					server_start_now = 1
 
 				if("media_base_url")
 					media_base_url = value
