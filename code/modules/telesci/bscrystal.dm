@@ -45,6 +45,19 @@
 
 	qdel(src)
 
+/obj/item/bluespace_crystal/singularity_act(var/current_size,var/obj/machinery/singularity/S)
+	var/prob = istype(src,/obj/item/bluespace_crystal/artificial) ? 50 : 100
+	if(prob)
+		if(S.wormhole_out)
+			S.unlink_wormholes()
+		else
+			S.link_a_wormhole()
+		if(istype(src,/obj/item/bluespace_crystal/flawless) && S.wormhole_out)
+			var/turf/T = get_turf(wormhole_out)
+			do_teleport(src, T)
+		else
+			qdel(src)
+
 // Artifical bluespace crystal, doesn't give you much research.
 
 /obj/item/bluespace_crystal/artificial

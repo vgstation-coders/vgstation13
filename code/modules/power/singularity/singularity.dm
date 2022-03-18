@@ -56,7 +56,9 @@ var/list/obj/machinery/singularity/global_singularity_pool
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
-	if(prob(10) && global_singularity_pool.len > 1)
+
+/obj/machinery/singularity/proc/link_a_wormhole()
+	if(global_singularity_pool.len > 1)
 		var/obj/machinery/singularity/other = pick(global_singularity_pool)
 		if(other && other != src)
 			if(prob(50))
@@ -66,6 +68,8 @@ var/list/obj/machinery/singularity/global_singularity_pool
 
 /obj/machinery/singularity/proc/link_wormhole(var/obj/machinery/singularity/other)
 	if(other)
+		visible_message("<span class='notice'>[src] pulsates as a distinctive [get_area(other) ? "[get_area(other)]": "place"] becomes visible.</span>")
+		other.visible_message("<span class='notice'>[other] pulsates as a distinctive [get_area(src) ? "[get_area(src)]": "place"] becomes visible.</span>")
 		other.name = "white hole"
 		other.desc = "Every action has an equal and opposite reaction. A black hole sucks time and matter out of the universe, a white hole returns it."
 		other.repels = TRUE
