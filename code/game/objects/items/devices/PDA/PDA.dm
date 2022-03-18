@@ -127,7 +127,6 @@ var/global/msg_id = 0
 
 //NOTE: graphic resources are loaded on client login
 /obj/item/device/pda/attack_self(mob/user as mob)
-
 	user.set_machine(src)
 
 	var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
