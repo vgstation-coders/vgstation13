@@ -369,10 +369,6 @@
 
 	if(usr) //WHYYYYY
 
-		//Allow smashing of storage items on harm intent without also putting the weapon into the container.
-		if(valid_item_attack(W, usr) || (!isnull(health) && health <= 0))
-			return 0
-
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
@@ -452,6 +448,11 @@
 /obj/item/weapon/storage/attackby(obj/item/W as obj, mob/user as mob)
 	if(!Adjacent(user,MAX_ITEM_DEPTH) && !distance_interact(user))
 		return
+
+	//Allow smashing of storage items on harm intent without also putting the weapon into the container.
+	if(valid_item_attack(W, usr))
+		return ..()
+
 	..()
 
 	// /vg/ #11: Recursion.
