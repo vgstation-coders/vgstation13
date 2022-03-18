@@ -245,27 +245,25 @@
 		else
 			take_damage(thisdmg, skip_break = TRUE, mute = FALSE) //Be verbose about the object taking damage.
 		try_break(null, impacted_atom)
-/*
+
 //Something ballistically colliding with the object
 
 /obj/hitby(atom/movable/AM)
 	. = ..()
 	if(.)
 		return
-	if(ismob(AM))
-		var/mob/M = AM //Duh
-		if (AM.invisibility < 101)
-			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
-			"<span class='danger'>You slam into \the [src].</span>")
-		adjustHealthLoss(10,AM) //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
-		healthcheck(M)
-	else if(isobj(AM))
-		var/obj/item/I = AM
-		if (AM.invisibility < 101)
-			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
-		adjustHealthLoss(I.throwforce,AM)
-		healthcheck()
-*/
+	if(breakable_flags & BREAKABLE_HIT)
+		var/thisdmg = 0
+		if(ismob(AM))
+			if(!(breakable_flags & BREAKABLE_MOB))
+				return
+			var/mob/thismob = AM
+			thisdmg = thismob.size * 3 + 1
+		else if(isobj(AM))
+			var/obj/thisobj = AM
+			thisdmg = max(thisobj.throwforce, thisobj.get_total_scaled_w_class(2) + 1)
+		take_damage(thisdmg)
+
 //Object being hit by a projectile
 
 /obj/bullet_act(obj/item/projectile/proj)
