@@ -1,58 +1,61 @@
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
-    if(!spell_channeling) // Abort if we're doing spell stuff
-        if(get_area(A) == controlling_area && istype(A,/obj/machinery/power/apc)) // Put this first to get back into APCs
-            A.attack_pulsedemon(src)
-        else if(current_weapon)
-            if(istype(current_weapon,/obj/item/weapon/gun))
-                var/obj/item/weapon/gun/G = current_weapon
-                G.Fire(A,src) // Shoot at something if we're in a weapon
-        else if(current_robot) // Do APC stuff if in a borg
-            log_admin("[key_name(src)] made [key_name(current_robot)] attack [A]") // Just so admins don't bwoink them in confusion
-            message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] attack [A]</span>")
-            var/list/modifiers = params2list(params)
-            if(modifiers["middle"])
-                if(modifiers["shift"])
-                    MiddleShiftClickOn(A)
-                    return
-                else
-                    MiddleClickOn(A)
-                    return
-            if(modifiers["shift"])
-                ShiftClickOn(A)
-                return
-            if(modifiers["alt"]) // alt and alt-gr (rightalt)
-                AltClickOn(A)
-                return
-            if(modifiers["ctrl"])
-                CtrlClickOn(A)
-                return
+	if(!spell_channeling) // Abort if we're doing spell stuff
+		if(get_area(A) == controlling_area && istype(A,/obj/machinery/power/apc)) // Put this first to get back into APCs
+			A.attack_pulsedemon(src)
+		else if(current_weapon && !attack_delayer.blocked())
+			if(istype(current_weapon,/obj/item/weapon/gun))
+				var/obj/item/weapon/gun/G = current_weapon
+				G.Fire(A,src) // Shoot at something if we're in a weapon
+		else if(current_robot) // Do APC stuff if in a borg
+			log_admin("[key_name(src)] made [key_name(current_robot)] attack [A]") // Just so admins don't bwoink them in confusion
+			message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] attack [A]</span>")
+			var/list/modifiers = params2list(params)
+			if(modifiers["middle"])
+				if(modifiers["shift"])
+					MiddleShiftClickOn(A)
+					return
+				else
+					MiddleClickOn(A)
+					return
+			if(modifiers["shift"])
+				ShiftClickOn(A)
+				return
+			if(modifiers["alt"]) // alt and alt-gr (rightalt)
+				AltClickOn(A)
+				return
+			if(modifiers["ctrl"])
+				CtrlClickOn(A)
+				return
 
-            A.attack_robot(current_robot)
-        else if(current_bot) // Do bot stuff
-            current_bot.attack_integrated_pulsedemon(src,A)
-        else if(get_area(A) == controlling_area) // Only in APC areas
-            var/list/modifiers = params2list(params) // For doors and other AI stuff
-            if(modifiers["middle"])
-                if(modifiers["shift"])
-                    MiddleShiftClickOn(A)
-                    return
-                else
-                    MiddleClickOn(A)
-                    return
-            if(modifiers["shift"])
-                ShiftClickOn(A)
-                return
-            if(modifiers["alt"]) // alt and alt-gr (rightalt)
-                AltClickOn(A)
-                return
-            if(modifiers["ctrl"])
-                CtrlClickOn(A)
-                return
-            A.attack_pulsedemon(src)
-        else if(isliving(A))
-            ..()
-    else
-        spell_channeling.channeled_spell(A) // Handle spell stuff
+			if(!attack_delayer.blocked())
+				A.attack_robot(current_robot)
+				delayNextAttack(10)
+		else if(current_bot && !attack_delayer.blocked()) // Do bot stuff
+			current_bot.attack_integrated_pulsedemon(src,A)
+			delayNextAttack(10)
+		else if(get_area(A) == controlling_area) // Only in APC areas
+			var/list/modifiers = params2list(params) // For doors and other AI stuff
+			if(modifiers["middle"])
+				if(modifiers["shift"])
+					MiddleShiftClickOn(A)
+					return
+				else
+					MiddleClickOn(A)
+					return
+			if(modifiers["shift"])
+				ShiftClickOn(A)
+				return
+			if(modifiers["alt"]) // alt and alt-gr (rightalt)
+				AltClickOn(A)
+				return
+			if(modifiers["ctrl"])
+				CtrlClickOn(A)
+				return
+			A.attack_pulsedemon(src)
+		else if(isliving(A))
+			..()
+	else
+		spell_channeling.channeled_spell(A) // Handle spell stuff
 
 // Do AI stuff for this
 /mob/living/simple_animal/hostile/pulse_demon/ShiftClickOn(var/atom/A)
