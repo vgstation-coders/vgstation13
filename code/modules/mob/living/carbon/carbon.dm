@@ -659,19 +659,16 @@
 				regenerate_icons()
 
 
-/mob/living/carbon/ApplySlip(var/wet, var/intensity)
+/mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
 	if (!..())
 		return FALSE
 
 	if (unslippable) //if unslippable, don't even bother making checks
 		return FALSE
 
-	if(intensity < 10)
-		return FALSE
-
-	switch(wet)
+	switch(P.wet)
 		if(TURF_WET_WATER)
-			if (!Slip(stun_amount = min(5, intensity / 10), weaken_amount = min(3, intensity / 16), slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
 				return FALSE
 			step(src, dir)
 			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
@@ -679,9 +676,9 @@
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = min(5, intensity / 10), weaken_amount = min(3, intensity / 16), slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
 				return FALSE
-			for (var/i = 1 to max(1,intensity / 12))
+			for (var/i = 1 to 4)
 				spawn(i)
 					if(!locked_to)
 						step(src, dir)
@@ -690,7 +687,7 @@
 			"<span class='warning'>You slip on the floor!</span>")
 
 		if(TURF_WET_ICE)
-			if(prob(30) && Slip(stun_amount = min(4, intensity / 12), weaken_amount = min(3, intensity / 16),  overlay_type = TURF_WET_ICE))
+			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE))
 				step(src, dir)
 				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
 				"<span class='warning'>You slip on the icy floor!</span>")

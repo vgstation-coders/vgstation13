@@ -68,14 +68,6 @@
 		qdel(target)
 		on_successful_use(user)
 
-	else if(istype(target,/obj/effect/overlay/puddle))
-		var/obj/effect/overlay/puddle/P = target
-		if(P.turf_on && P.turf_on.reagents && !P.turf_on.reagents.has_any_reagents(SLIPPABLES)) // leave this to sodium polyacrylate
-			user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
-				"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
-			qdel(target)
-			on_successful_use(user)
-
 	else if(istype(target,/obj/effect/rune))
 		var/obj/effect/rune/R = target
 		if (!R.activated)
