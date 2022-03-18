@@ -275,16 +275,6 @@
 	icon_state = "glue_safe0"
 
 /obj/proc/glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //proc for when glue is used on something
-	call (/obj/proc/sneed_glue_act)()
-	switch(glue_state)
-		if(GLUE_STATE_TEMP)
-			current_glue_state = GLUE_STATE_TEMP
-			spawn(stick_time)
-				unglue()
-		else
-			current_glue_state = GLUE_STATE_PERMA
-
-/obj/proc/sneed_glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //special snowflake clothing interaction
 	switch(glue_state)
 		if(GLUE_STATE_TEMP)
 			current_glue_state = GLUE_STATE_TEMP
@@ -294,14 +284,6 @@
 			current_glue_state = GLUE_STATE_PERMA
 
 /obj/proc/unglue()
-	call (/obj/proc/sneed_unglue)()
-	if(current_glue_state == GLUE_STATE_TEMP)
-		current_glue_state = GLUE_STATE_NONE
-		return 1
-	else
-		return 0
-
-/obj/proc/sneed_unglue() //special snowflake clothing interaction
 	if(current_glue_state == GLUE_STATE_TEMP)
 		current_glue_state = GLUE_STATE_NONE
 		return 1
@@ -311,19 +293,20 @@
 /obj/item/unglue()
 	if(..())
 		cant_drop--
+		canremove++
 
 /obj/item/clothing/unglue()
 	if(..())
 		canremove++
-		sneed_unglue()
 
 /obj/item/glue_act(stick_time)
 	cant_drop++
 	..()
 
 /obj/item/clothing/glue_act(stick_time)
+	cant_drop--
 	canremove--
-	sneed_glue_act()
+	..()
 
 /obj/structure/bed/glue_act(stick_time)
 	..()
