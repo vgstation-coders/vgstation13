@@ -141,7 +141,7 @@
 			return ", but it [pick(glances_text)] off!"
 		else
 			return ", but it glances off!"
-	else if(health > 0 && !isnull(take_hit_text))
+	else if(health > 0 && take_hit_text)
 		return ", [pick(take_hit_text)] it!"
 	else
 		return "!" //Don't say "cracking it" if it breaks because on_broken() will subsequently say "The object shatters!"
@@ -189,6 +189,20 @@
 		return TRUE
 	else
 		return FALSE
+
+/obj/proc/get_obj_kick_damage(mob/living/carbon/human/kicker, datum/organ/external/kickingfoot)
+	if(!kickingfoot)
+		kickingfoot = kicker.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+	var/damage = kicker.get_strength() * 5
+	if(kicker.reagents && kicker.reagents.has_reagent(GYRO))
+		damage += 5
+	damage *= 1 + min(0,(kicker.size - SIZE_NORMAL)) //The bigger the kicker, the more damage
+	var/obj/item/clothing/shoes/S = kicker.shoes
+	if(istype(S))
+		damage += S.bonus_kick_damage
+	else if(kicker.organ_has_mutation(kickingfoot, M_TALONS)) //Not wearing shoes and having talons = bonus damage
+		damage += 3
+	return damage
 
 /////////////////////
 
@@ -239,7 +253,7 @@
 		return
 	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
 		//Unless the object falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
-		var/thisdmg = 10 * get_total_scaled_w_class(1) / (speed ? speed : 1) //impact damage scales with the weight class and speed of the object. since a smaller speed is faster, it's a divisor.
+		var/thisdmg = 5 * get_total_scaled_w_class(1) / (speed ? speed : 1) //impact damage scales with the weight class and speed of the object. since a smaller speed is faster, it's a divisor.
 		if(istype(impacted_atom, /turf/simulated/floor))
 			take_damage(thisdmg/2, skip_break = TRUE)
 		else
@@ -293,26 +307,19 @@
 			kicker.Stun(incapacitation_duration)
 			return
 		var/attack_verb = "kick"
-		var/damage = BREAKARMOR_WEAK
 		var/recoil_damage = BREAKARMOR_FLIMSY
 		if(kicker.reagents && kicker.reagents.has_reagent(GYRO))
-			damage += 5
 			attack_verb = "roundhouse kick"
 			recoil_damage = 0
-		damage *= 1 + min(0,(kicker.size - SIZE_NORMAL)) //The bigger the kicker, the more damage
 		if(M_HULK in kicker.mutations)
-			damage *= 3
 			recoil_damage = 0
 		//Handle shoes
 		var/obj/item/clothing/shoes/S = kicker.shoes
 		if(istype(S))
-			damage += S.bonus_kick_damage
 			S.on_kick(kicker, src)
-		else if(kicker.organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus damage
-			damage += 3
 		playsound(loc, "punch", 30, 1, -1)
 		kicker.do_attack_animation(src, kicker)
-		var/glanced = !take_damage(damage, skip_break = TRUE)
+		var/glanced = !take_damage(get_obj_kick_damage(kicker, foot_organ), skip_break = TRUE, mute = TRUE)
 		kicker.visible_message("<span class='warning'>\The [kicker] [attack_verb]s \the [src][generate_break_text(glanced,TRUE)]</span>",
 		"<span class='notice'>You [attack_verb] \the [src][generate_break_text(glanced)]</span>")
 		var/kick_dir = get_dir(kicker, src)

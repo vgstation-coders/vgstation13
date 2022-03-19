@@ -1256,10 +1256,11 @@ var/global/list/image/blood_overlays = list()
 	return get_rating()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
+	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
-			if(H.foot_impact(src,rand(1,4)))
+			if(H.foot_impact(src, rand(1,4), ourfoot = kickingfoot))
 				to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 		return
 
@@ -1275,7 +1276,7 @@ var/global/list/image/blood_overlays = list()
 	var/glanced = TRUE
 	var/broken = FALSE
 	if(breakable_flags & BREAKABLE_UNARMED)
-		glanced=!take_damage(kick_power, skip_break = TRUE)
+		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
 	if(kick_power >= 6 && !broken) //Fly in an arc!
@@ -1288,7 +1289,6 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 		throw_at(T, kick_power, 1)
-
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
 	Crossed(H) //So you can't kick shards while naked without suffering
 
