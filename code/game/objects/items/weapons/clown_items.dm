@@ -275,6 +275,9 @@
 	icon_state = "glue_safe0"
 
 /obj/proc/glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //proc for when glue is used on something
+	default_glue_act(stick_time, glue_state)
+
+/obj/proc/default_glue_act(stick_time, glue_state)
 	switch(glue_state)
 		if(GLUE_STATE_TEMP)
 			current_glue_state = GLUE_STATE_TEMP
@@ -284,27 +287,30 @@
 			current_glue_state = GLUE_STATE_PERMA
 
 /obj/proc/unglue()
+	return default_unglue()
+
+/obj/proc/default_unglue()
 	if(current_glue_state == GLUE_STATE_TEMP)
 		current_glue_state = GLUE_STATE_NONE
 		return 1
 	else
 		return 0
 
-/obj/item/unglue()
-	if(..())
-		cant_drop--
-
-/obj/item/clothing/unglue()
-	if(..())
-		canremove++
-
 /obj/item/glue_act(stick_time)
 	cant_drop++
 	..()
 
-/obj/item/clothing/glue_act(stick_time)
+/obj/item/unglue()
+	if(..())
+		cant_drop--
+
+/obj/item/clothing/glue_act(stick_time, glue_state)
 	canremove--
-	..()
+	default_glue_act(stick_time, glue_state)
+
+/obj/item/clothing/unglue()
+	if(default_unglue())
+		canremove++
 
 /obj/structure/bed/glue_act(stick_time)
 	..()
