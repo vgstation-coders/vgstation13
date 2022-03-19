@@ -1066,6 +1066,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.brute_dam = organ.brute_dam
 		src.burn_dam = organ.burn_dam
 
+		owner.butchering_drops += organ.butchering_drops
+
 		//Transfer any internal_organs from the organ item to the body
 		for(var/datum/organ/internal/transfer in organ.internal_organs)
 			if(transfer) //Don't transfer null organs
@@ -1465,6 +1467,32 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears)
 
+/datum/organ/external/head/attach(obj/item/I)
+	..()
+	var/obj/item/organ/external/head/head_item = I
+	if(!istype(head_item))
+		return
+	var/datum/human_appearance/app = head_item.owner_appearance
+	if(app)
+		owner.my_appearance.name = app.name
+		owner.real_name = app.name
+
+		owner.my_appearance.h_style = app.h_style
+		owner.my_appearance.r_hair = app.r_hair
+		owner.my_appearance.g_hair = app.g_hair
+		owner.my_appearance.b_hair = app.b_hair
+
+		owner.my_appearance.f_style = app.f_style
+		owner.my_appearance.r_facial = app.r_facial
+		owner.my_appearance.g_facial = app.g_facial
+		owner.my_appearance.b_facial = app.b_facial
+
+		owner.my_appearance.r_eyes = app.r_eyes
+		owner.my_appearance.g_eyes = app.g_eyes
+		owner.my_appearance.b_eyes = app.b_eyes
+		owner.regenerate_icons()
+		owner.update_name()
+
 /datum/organ/external/head/generate_dropped_organ(current_organ)
 	if(!current_organ)
 		current_organ = new /obj/item/organ/external/head(owner.loc, owner, src)
@@ -1615,6 +1643,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			B.amount = 0 //Transfer the found product's amount to the new datum
 
 			src.butchering_drops += new_bp
+			H.butchering_drops -= B
 
 			//The reason why B isn't just transferred from H.butchering_drops to src.butchering_drops is:
 			//on examine(), each butchering drop's "desc_modifier()" is added to the description. This adds stuff like "he HAS NO TEETH AT ALL!!!" to the resulting description.
@@ -1791,6 +1820,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
 	var/mob/living/carbon/human/origin_body = null
+	/// Copied from the human passed to New(). Used when the head is reattached.
+	var/datum/human_appearance/owner_appearance
 
 /obj/item/organ/external/head/ashtype()
 	return /obj/item/weapon/skull
@@ -1823,6 +1854,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return
 
 	if (!O || !O.disfigured)
+		owner_appearance = H.my_appearance.Copy()
+		owner_appearance.name = H.real_name
 		//Add (facial) hair.
 		if(H && H.my_appearance.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 			var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
