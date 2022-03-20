@@ -914,8 +914,8 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/monkey_recycler
-	name = "Circuit Board (Monkey Recycler)"
-	desc = "A circuit board used to run a machine that turns dead monkeys into monkey cubes."
+	name = "Circuit Board (Animal Recycler)"
+	desc = "A circuit board used to run a machine that turns dead animals into animal cubes."
 	build_path = /obj/machinery/monkey_recycler
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
