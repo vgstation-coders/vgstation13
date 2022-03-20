@@ -165,9 +165,9 @@
 			return
 
 		if(M_REMOTE_TALK in target.mutations)
-			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
+			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: </span><span class='bold'>[say]</span>")
 		else
-			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
+			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: </span><span class='bold'>[say]</span>")
 		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
 		log_admin("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
 		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
