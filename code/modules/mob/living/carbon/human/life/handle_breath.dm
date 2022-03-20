@@ -58,10 +58,10 @@
 				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
-					if(prob(15)) // 15% chance for lung damage if air intake is less of a fifth, or more than five times the threshold
+					if(prob(20))
 						L.damage += 1
-					if(!is_lung_ruptured())
-						var/chance_break = (L.damage / L.min_bruised_damage)*50 // Chance to rupture: 1/15 = 3%, 2/15 = 7%, etc...
+					if(!is_lung_ruptured() && L.damage > 2)
+						var/chance_break = (L.damage / L.min_broken_damage)*100
 						if(prob(chance_break))
 							rupture_lung()
 
