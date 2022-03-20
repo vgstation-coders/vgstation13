@@ -13,7 +13,7 @@
 		return //Can't receive items while cuffed
 	var/obj/item/I
 	if(user.get_active_hand() == null)
-		to_chat(user, "You don't have anything in your [user.get_index_limb_name(user.active_hand)] to give to [src].")
+		to_chat(user, "You don't have anything in your [user.get_index_limb_name(user.active_hand)] to give to \the [src].")
 		return
 	I = user.get_active_hand()
 	if(!I)
@@ -25,19 +25,20 @@
 		return
 	if(find_empty_hand_index())
 		give_check = TRUE
-		switch(alert(src, "[user] wants to give you \a [I]?", , "Yes", "No"))
+		to_chat(user, "<span class='notice'>You offer \the [I] to \the [src].</span>")
+		switch(alert(src, "\The [user] wants to give you \a [I]?", , "Yes", "No"))
 			if("Yes")
 				give_check = FALSE
 				if(!I)
 					return
 				if(!Adjacent(user))
 					to_chat(user, "<span class='warning'>You need to stay still while giving an object.</span>")
-					to_chat(src, "<span class='warning'>[user] moved away.</span>")//What an asshole
+					to_chat(src, "<span class='warning'>\The [user] moved away.</span>")//What an asshole
 
 					return
 				if(user.get_active_hand() != I)
 					to_chat(user, "<span class='warning'>You need to keep the item in your hand.</span>")
-					to_chat(src, "<span class='warning'>[user] has put \the [I] away!</span>")
+					to_chat(src, "<span class='warning'>\The [user] has put \the [I] away!</span>")
 					return
 				if(!find_empty_hand_index())
 					to_chat(src, "<span class='warning'>Your hands are full.</span>")
@@ -46,15 +47,15 @@
 				if(!I.on_give(user,src))
 					return
 				if(!user.drop_item(I))
-					src << "<span class='warning'>[user] can't let go of \the [I]!</span>"
+					src << "<span class='warning'>\The [user] can't let go of \the [I]!</span>"
 					user << "<span class='warning'>You can't seem to let go of \the [I].</span>"
 					return
 
 				src.put_in_hands(I)
-				src.visible_message("<span class='notice'>[user] handed \the [I] to [src].</span>")
+				src.visible_message("<span class='notice'>\The [user] handed \the [I] to \the [src].</span>")
 			if("No")
 				give_check = FALSE
-				src.visible_message("<span class='warning'>[user] tried to hand \the [I] to [src] but \he didn't want it.</span>")
+				src.visible_message("<span class='warning'>\The [user] tried to hand \the [I] to \the [src] but \he didn't want it.</span>")
 
 	else
-		to_chat(user, "<span class='warning'>[src]'s hands are full.</span>")
+		to_chat(user, "<span class='warning'>\The [src]'s hands are full.</span>")
