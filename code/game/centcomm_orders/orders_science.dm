@@ -61,6 +61,12 @@
 			return 1
 	return 0
 
+/datum/centcomm_order/department/science/technology/BuildToExtraChecks(var/obj/item/weapon/disk/tech_disk/TD)
+	if (istype(TD))
+		var/datum/tech/DT = new required_tech
+		DT.level = required_level
+		TD.stored = DT
+
 
 //Component Design Disk, with a set blueprint required
 /datum/centcomm_order/department/science/design
@@ -102,6 +108,11 @@
 	if (istype(DD.blueprint, required_comp))
 		return 1
 	return 0
+
+/datum/centcomm_order/department/science/design/BuildToExtraChecks(var/obj/item/weapon/disk/design_disk/DD)
+	if (istype(DD))
+		var/datum/design/DDS = new required_comp
+		DD.blueprint = DDS
 
 //Protolathe orders
 /datum/centcomm_order/department/science/nuclear_gun/New()
@@ -328,6 +339,26 @@
 		return 0
 	return 1
 
+/datum/centcomm_order/department/science/bomb/BuildToExtraChecks(var/obj/item/device/transfer_valve/TTV)
+	if (istype(TTV))
+		var/obj/item/weapon/tank/plasma/PT = new(TTV)
+		var/obj/item/weapon/tank/oxygen/OT = new(TTV)
+
+		TTV.tank_one = PT
+		TTV.tank_two = OT
+
+		//This is just an arbitrary mix that works fairly well.
+		PT.air_contents.temperature = T0C + 170
+		OT.air_contents.temperature = T0C - 100
+
+		for(var/obj/item/weapon/tank/T in list(PT, OT))
+			T.master = TTV
+			var/datum/gas_mixture/G = T.air_contents
+			G.update_values()
+			G.multiply(((40 / 7) * required_dev) * ONE_ATMOSPHERE / G.pressure) //Should give an epicentre in the range.
+
+		TTV.update_icon()
+
 //----------------------------------------------Xenobiology----------------------------------------------------
 
 //High-tier slime cores
@@ -458,6 +489,25 @@
 			return 1
 	return 0
 
+/datum/centcomm_order/department/science/artifact/BuildToExtraChecks(var/obj/structure/anomaly_container/AC)
+	if (istype(AC))
+		var/obj/machinery/artifact/AF = new(AC)
+		AC.contained = AF
+		if(AF.primary_effect)
+			AF.primary_effect.triggered = 1
+		AC.report = new /obj/item/weapon/paper/anomaly(AC)
+		var/obj/item/weapon/paper/anomaly/AR = AC.report
+		AR.artifact = AF
+		AR.info = "<b>[src] analysis report for [AF]</b><br>"
+		AR.info += "<br>"
+		AR.info += "[bicon(AF)] [get_scan_info(AF)]"
+		AR.stamped = list(/obj/item/weapon/stamp)
+		AR.overlays = list("paper_stamp-qm")
+		var/art_id = generate_artifact_id()
+		excavated_large_artifacts[art_id] = AF
+		AR.name = "Exotic Anomaly Report ([art_id])"
+		AC.update_icon()
+
 //Full Supermatter. yes, the round-ending one.
 /datum/centcomm_order/department/science/supermatter
 	hidden = TRUE
@@ -513,3 +563,15 @@
 	if (S.bstate)
 		return 1
 	return 0
+
+/datum/centcomm_order/department/science/skeleton/BuildToExtraChecks(var/obj/structure/skeleton/S)
+	if (istype(S))
+		for(var/i in 1 to 3)
+			S.contents.Add(new/obj/item/weapon/fossil/bone)
+		S.contents.Add(new/obj/item/weapon/fossil/skull)
+		S.bnum = S.breq
+		S.icon_state = "skel"
+		S.bstate = 1
+		S.setDensity(TRUE)
+		S.name = "alien skeleton display"
+		S.desc = "A creature made of [S.contents.len-1] assorted bones and a skull. The plaque reads \'[S.plaque_contents]\'."

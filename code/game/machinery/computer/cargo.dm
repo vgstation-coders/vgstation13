@@ -108,6 +108,7 @@ For vending packs, see vending_packs.dm*/
 
 #define SCR_MAIN 1
 #define SCR_CENTCOM 2
+#define SCR_FORWARD 3
 
 /obj/machinery/computer/supplycomp
 	name = "Supply shuttle console"
@@ -292,11 +293,27 @@ For vending packs, see vending_packs.dm*/
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "extra" = O.extra_requirements, "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = displayworth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
+	data["forwarding"] = SSsupply_shuttle.forwarding_on
+	var/forward_list[0]
+	for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
+		var/displayworth = CF.worth
+		if (isnum(CF.worth))
+			displayworth = "[CF.worth]$"
+		var/timeleft = ((CF.time_created + (CF.time_limit MINUTES)) - world.time)
+		var/mm = text2num(time2text(timeleft, "mm")) // Set the minute
+		var/ss = text2num(time2text(timeleft, "ss")) // Set the second
+		var/weighedtext = CF.weighed ? "Yes" : "No"
+		var/stampedtext = CF.associated_manifest.stamped && CF.associated_manifest.stamped.len ? "Yes" : "No"
+		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss, "weighed" = weighedtext, "stamped" = stampedtext)))
+	data["forwards"] = forward_list
+	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
+
 	var/datum/money_account/account = current_acct["account"]
 	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
 	data["money"] = account.fmtBalance()
 	data["send"] = list("send" = 1)
+	data["forward"] = list("forward" = 1)
 	data["moving"] = SSsupply_shuttle.moving
 	data["at_station"] = SSsupply_shuttle.at_station
 	data["show_permissions"] = permissions_screen
@@ -334,12 +351,16 @@ For vending packs, see vending_packs.dm*/
 		else
 			permissions_screen = FALSE
 		return 1
+	//Handle cargo crate forwarding
+	if(href_list["forward"])
+		SSsupply_shuttle.forwarding_on = !SSsupply_shuttle.forwarding_on
+		return 1
 	//Calling the shuttle
 	else if(href_list["send"])
 		if(!map.linked_to_centcomm)
 			to_chat(usr, "<span class='warning'>You aren't able to establish contact with central command, so the shuttle won't move.</span>")
 		else if(!SSsupply_shuttle.can_move())
-			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.</span>")
+			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport sapient organisms, classified nuclear weaponry or homing beacons.</span>")
 		else if(!check_restriction(usr))
 			to_chat(usr, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 
@@ -460,7 +481,7 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		var/result = text2num(href_list["screen"])
-		if(result == SCR_MAIN || result == SCR_CENTCOM)
+		if(result == SCR_MAIN || result == SCR_CENTCOM || result == SCR_FORWARD)
 			screen = result
 		return 1
 	else if (href_list["close"])

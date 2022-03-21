@@ -210,3 +210,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/disk_duplicator
+
+/datum/design/crate_weigher
+	name = "Circuit Design (Crate Weigher)"
+	desc = "Allows for the construction of circuit boards used to build a crate weigher."
+	id = "crate_weigher"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_MAGNETS = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/crate_weigher

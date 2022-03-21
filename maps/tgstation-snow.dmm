@@ -73249,6 +73249,7 @@
 /obj/machinery/light_switch{
 	pixel_x = 27
 	},
+/obj/machinery/crate_weigher,
 /turf/simulated/floor,
 /area/supply/storage)
 "hFJ" = (
