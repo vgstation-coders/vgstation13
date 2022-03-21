@@ -59,7 +59,7 @@
 				numtodrop=fragment_amounts[frag_ind]
 			thisfragment=breakable_fragments[frag_ind]
 			for(var/n in 1 to numtodrop)
-				var/obj/O = new thisfragment (loc)
+				var/obj/O = new thisfragment (get_turf(src))
 				//Transfer fingerprints, fibers, and bloodstains to the fragment.
 				transfer_fingerprints(src,O)
 				transfer_obj_blood_data(src,O)
@@ -251,7 +251,7 @@
 		return
 	if(!(breakable_flags & BREAKABLE_MOB) && istype(impacted_atom, /mob)) //Don't break when it hits a mob if it's not flagged with BREAKABLE_MOB
 		return
-	if(!ismob(loc)) //Don't take damage if it was caught by a mob mid-flight.
+	if(isturf(loc)) //Don't take damage if it was caught mid-flight.
 		//Unless the object falls to the floor unobstructed, impacts happens twice, once when it hits the target, and once when it falls to the floor.
 		var/thisdmg = 5 * get_total_scaled_w_class(1) / (speed ? speed : 1) //impact damage scales with the weight class and speed of the object. since a smaller speed is faster, it's a divisor.
 		if(istype(impacted_atom, /turf/simulated/floor))
