@@ -28,16 +28,16 @@
 	},
 /area/vault/powered/mini_station_engineering)
 "ah" = (
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
+	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
 "aj" = (
@@ -1298,14 +1298,6 @@
 	},
 /area/vault/powered/mini_station_medbay)
 "cZ" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -1313,6 +1305,14 @@
 	},
 /obj/machinery/light_switch{
 	pixel_x = -23
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_entrance)
@@ -1380,18 +1380,18 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
 "eR" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
@@ -1733,11 +1733,11 @@
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
 	dir = 8;
-	icon_state = "map"
+	tag = "icon-map (WEST)"
 	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
 	dir = 8;
-	icon_state = "map"
+	tag = "icon-map (WEST)"
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
@@ -1848,18 +1848,18 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
 "tg" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
-	dir = 1;
-	icon_state = "map"
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
-	dir = 1;
-	icon_state = "map"
-	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 1;
+	tag = "icon-map (NORTH)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 1;
+	tag = "icon-map (NORTH)"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -1964,18 +1964,18 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_entrance)
 "xz" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
@@ -2194,18 +2194,18 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
 "Ca" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
-	dir = 8;
-	icon_state = "map"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 8;
+	tag = "icon-map (WEST)"
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
@@ -2440,18 +2440,18 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_botany)
 "LF" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
-	dir = 4;
-	icon_state = "map"
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
-	dir = 4;
-	icon_state = "map"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
+	dir = 4;
+	tag = "icon-map (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
+	dir = 4;
+	tag = "icon-map (EAST)"
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
