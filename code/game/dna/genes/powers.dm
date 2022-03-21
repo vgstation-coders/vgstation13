@@ -43,7 +43,7 @@
 	invocation_type = SpI_NONE
 	range = GLOBALCAST
 	max_targets = 1
-	spell_flags = SELECTABLE | INCLUDEUSER | TALKED_BEFORE
+	spell_flags = SELECTABLE | TALKED_BEFORE
 
 	override_base = "genetic"
 	hud_state = "gen_rmind"
@@ -64,11 +64,6 @@
 		user.reset_view(0)
 		return
 
-	if(user.client.eye != user.client.mob)
-		user.remoteview_target = null
-		user.reset_view(0)
-		return
-
 	for(var/T in targets)
 		var/mob/living/target
 		if (isliving(T))
@@ -76,12 +71,8 @@
 		if (istype (T, /datum/mind))
 			target = user.can_mind_interact(T)
 		if(target)
-			if(target == user)
-				user.remoteview_target = null
-				user.reset_view(0)
-			else
-				user.remoteview_target = target
-				user.reset_view(target)
+			user.remoteview_target = target
+			user.reset_view(target)
 			break
 		else// can_mind_interact returned null
 			user.remoteview_target = null
