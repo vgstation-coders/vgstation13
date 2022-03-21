@@ -648,6 +648,8 @@
 
 	to_chat(user, "<span class='notice'>You fold \the [src] flat.</span>")
 	var/folded = new src.foldable(get_turf(src),foldable_amount)
+	user.u_equip(src)
+	user.put_in_hands(folded)
 	transfer_fingerprints_to(folded)
 	qdel(src)
 
