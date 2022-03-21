@@ -165,7 +165,7 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/vamp_H = M
 		if(vamp_H.check_body_part_coverage(MOUTH))
-			to_chat(H, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
+			to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 	return TRUE
 
 

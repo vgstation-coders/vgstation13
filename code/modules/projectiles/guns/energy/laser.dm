@@ -353,7 +353,7 @@
 /obj/item/weapon/gun/energy/laser/liberator
 	name = "liberator"
 	desc = "A laser carbine designed to protect frontier worlds from xenofauna without arming rebellions. It is particularly deadly against colony organisms."
-	charge_cost = 40
+	charge_cost = 25
 	cell_type = "/obj/item/weapon/cell/crap/worse"
 	icon_state = "lasercarbine_6"
 	projectile_type = /obj/item/projectile/beam/humanelaser

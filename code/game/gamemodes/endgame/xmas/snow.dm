@@ -193,8 +193,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 	var/turf/simulated/TS = get_turf(src)
 	if(!istype(TS))
 		return
-	if(TS.reagents)
-		TS.reagents.add_reagent(WATER,15)
+	TS.wet(300)
 	snow_tiles--
 	qdel(src)
 	return
@@ -287,8 +286,9 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 
 /obj/item/stack/sheet/snow/melt()
 	var/turf/T = get_turf(src)
-	if(T.reagents)
-		T.reagents.add_reagent(WATER,5)
+	if(istype(T,/turf/simulated))
+		var/turf/simulated/TS = T
+		TS.wet(100)
 	qdel(src)
 
 /obj/item/stack/sheet/snow/throw_at(atom/target, range, speed)
