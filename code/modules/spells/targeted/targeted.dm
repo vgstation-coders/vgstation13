@@ -63,7 +63,9 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			var/list/possible_targets = user.mind.heard_before.Copy()
 			if(spell_flags & INCLUDEUSER)
 				possible_targets[user.real_name] = user.mind
-			var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") in possible_targets
+			var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") as null|anything in possible_targets
+			if(isnull(target_name))
+				return
 			var/datum/mind/temp_target = possible_targets[target_name]
 			believed_name = target_name
 			targets += temp_target.current
