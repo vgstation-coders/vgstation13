@@ -185,11 +185,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if(isobj(MA))
 			var/obj/O = MA
 			if(O.associated_forward)
-				if(O.associated_forward.associated_crate == src)
+				if(O.associated_forward.associated_crate == O)
 					O.associated_forward.delete_crate = TRUE
-				if(O.associated_forward.associated_manifest == src)
+					continue
+				if(O.associated_forward.associated_manifest == O)
 					O.associated_forward.delete_manifest = TRUE
-				continue
+					continue
 
 		if(istype(MA,/obj/structure/closet/crate))
 			recycled_crates++
