@@ -3,8 +3,7 @@
 	name = "Lurk and Eat"
 
 /datum/objective/grue/grue_basic/IsFulfilled()
-	if (..())
-		return TRUE
+	return TRUE
 
 /datum/objective/grue/eat_sentients
 	explanation_text = "Eat sentient beings."
