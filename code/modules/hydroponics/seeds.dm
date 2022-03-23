@@ -1501,6 +1501,7 @@
 	display_name = "silicate citrus"
 	plant_dmi = 'icons/obj/hydroponics/silicatecitrus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
+	harvest_repeat = 1
 	mutants = null
 	chems = list(SILICATE = list(3,5))
 
