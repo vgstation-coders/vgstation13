@@ -576,7 +576,7 @@
 /obj/item/slime_extract/orange
 	name = "orange slime extract"
 	icon_state = "orange slime extract"
-	primarytype = /mob/living/carbon/slime/
+	primarytype = /mob/living/carbon/slime/orange
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/yellow
