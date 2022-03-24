@@ -45,8 +45,10 @@ var/scheduledEvent = null
 		message_admins("Random event call. Next event call in [next_event_delay/600] minutes.")
 
 	else if(world.timeofday > scheduledEvent)
-		spawn_dynamic_event()
-
+		if (player_list.len > 1)
+			spawn_dynamic_event()
+		else
+			message_admins("Random event call failed. No players!")
 		scheduledEvent = null
 		checkEvent()
 
