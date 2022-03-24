@@ -189,7 +189,7 @@
 
 /obj/structure/sign/shiggymemorial
 	name = "Shiggypiggy Memorial"
-	desc = "Rest in Peace"
+	desc = "Vranovian Baccarat creator. Hippocrates' strongest esculap. Rest in peace, ShiggyPiggy."
 	icon_state = "goldenplaque"
 
 /obj/structure/sign/kiddieplaque
