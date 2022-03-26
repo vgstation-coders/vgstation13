@@ -6,7 +6,7 @@ var/list/event_last_fired = list()
 		return
 
 	var/minutes_passed = world.time/600
-	var/roundstart_delay = 5
+	var/roundstart_delay = 30
 
 	if (admin_disable_events)
 		message_admins("A random event was prevented from firing by admins.")
