@@ -103,6 +103,7 @@ var/global/datum/controller/vote/vote = new()
 			//if no players, select at random
 			if(player_list.len < 1)
 				config.toggle_vote_method = RANDOM
+				config.toggle_maps = 1
 			result()
 			for(var/ckey in voters) //hide voting interface using ckeys
 				var/client/C = directory[ckey]
