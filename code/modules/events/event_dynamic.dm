@@ -13,14 +13,15 @@ var/list/event_last_fired = list()
 		log_admin("A random event was prevented from firing by admins.")
 		return
 
-	if(minutes_passed < roundstart_delay) //Self-explanatory
+	if(minutes_passed < roundstart_delay) //No events within five minutes
 		message_admins("Too early to trigger random event, aborting.")
 		return
 
 	if(universe.name != "Normal")
 		message_admins("Universe isn't normal, aborting random event spawn.")
 		return
-
+	if(player_list.len < 6) //minimum pop of 5 to trigger events
+		return
 	var/list/active_with_role = number_active_with_role()
 
 	// Maps event names to event chances
