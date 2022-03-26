@@ -72,7 +72,7 @@
 /mob/living/simple_animal/grue_egg/New()
 	..()
 	last_ping_time = world.time
-	spawn(rand(30 SECONDS,45 SECONDS))//the egg takes a while to be ready to hatch
+	spawn(rand(90 SECONDS, 150 SECONDS))//the egg takes a while to be ready to hatch
 		Grow()
 
 /mob/living/simple_animal/grue_egg/proc/Grow()
