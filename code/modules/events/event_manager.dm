@@ -45,10 +45,11 @@ var/scheduledEvent = null
 		message_admins("Random event call. Next event call in [next_event_delay/600] minutes.")
 
 	else if(world.timeofday > scheduledEvent)
-		if (player_list.len > 1)
-			spawn_dynamic_event()
-		else
-			message_admins("Random event call failed. No players!")
+		var/event_executed = FALSE
+		var/event_count = 0
+		while(!event_executed && event_count < 5 ) //try for an event 5x
+			event_executed = spawn_dynamic_event()
+			event_count++
 		scheduledEvent = null
 		checkEvent()
 
