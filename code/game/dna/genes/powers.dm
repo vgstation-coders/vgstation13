@@ -49,6 +49,14 @@
 	hud_state = "gen_rmind"
 	mind_affecting = 1
 
+
+/// Resets the view when the Cancel button is pressed or there are no suitable targets.
+/spell/targeted/remoteobserve/choose_targets(mob/living/carbon/human/user)
+	. = ..()
+	if(!length(.))
+		user.remoteview_target = null
+		user.reset_view(0)
+
 /spell/targeted/remoteobserve/cast(var/list/targets, mob/living/carbon/human/user)
 	if(!targets || !targets.len || !user || !istype(user))
 		return
