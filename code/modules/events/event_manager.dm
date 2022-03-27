@@ -45,11 +45,7 @@ var/scheduledEvent = null
 		message_admins("Random event call. Next event call in [next_event_delay/600] minutes.")
 
 	else if(world.timeofday > scheduledEvent)
-		var/event_executed = FALSE
-		var/event_count = 0
-		while(!event_executed && event_count < 5 ) //try for an event 5x
-			event_executed = spawn_dynamic_event()
-			event_count++
+		spawn_dynamic_event()
 		scheduledEvent = null
 		checkEvent()
 
