@@ -36,7 +36,7 @@ var/scheduledEvent = null
 			if(18000 to 36000) //Next thirty minutes
 				roundlength_modifier = 0.95 //Start ramping up
 			if(36000 to 54000)
-				roundlength_modifier = 0.9
+				roundlength_modifier = 0.90
 			if(54000 to INFINITY) //Round has been going for 1 hour and 30 minutes at least
 				roundlength_modifier = 0.85
 
