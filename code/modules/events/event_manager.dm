@@ -1,7 +1,7 @@
 var/list/allEvents = typesof(/datum/event) - /datum/event
 
-var/eventTimeLower = 20 //minutes
-var/eventTimeUpper = 40
+var/eventTimeLower = 10 //10 minutes
+var/eventTimeUpper = 20 //20 minutes
 var/scheduledEvent = null
 
 /proc/checkEvent()
