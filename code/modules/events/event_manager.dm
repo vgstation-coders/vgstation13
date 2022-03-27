@@ -41,7 +41,7 @@ var/scheduledEvent = null
 				roundlength_modifier = 0.85
 
 		var/next_event_delay = rand(eventTimeLower, eventTimeUpper)*playercount_modifier*roundlength_modifier
-		scheduledEvent = world.timeofday + next_event_delay  //in deciseconds
+		scheduledEvent = world.timeofday + next_event_delay
 		message_admins("Random event call. Next event call in [next_event_delay/600] minutes.")
 
 	else if(world.timeofday > scheduledEvent)
