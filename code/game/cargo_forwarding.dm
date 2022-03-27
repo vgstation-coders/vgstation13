@@ -71,7 +71,9 @@
 
 	if(!do_not_add)
 		SSsupply_shuttle.cargo_forwards.Add(src)
+		set_time_limit()
 
+/datum/cargo_forwarding/proc/set_time_limit()
 	spawn(time_limit MINUTES) //Still an order after the time limit?
 		if(src)
 			log_debug("CARGO FORWARDING: [src] denied: Time ran out")

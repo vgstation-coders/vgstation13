@@ -419,6 +419,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				var/previous_index = rand(1,previous_forwards.len)
 				var/datum/cargo_forwarding/CF = previous_forwards[previous_index]
 				cargo_forwards.Add(CF) // Blocked it in the creation of a previous forward, now do it here
+				CF.set_time_limit()
 				new_forwards.Add(CF)
 				previous_forwards.Remove(previous_forwards[previous_index]) // Must be the index to remove a specific one
 				log_debug("CARGO FORWARDING: Persistence crate [CF.type] loaded, from [CF.origin_sender_name] of [CF.origin_station_name].")
