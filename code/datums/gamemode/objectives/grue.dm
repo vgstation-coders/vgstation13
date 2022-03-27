@@ -6,7 +6,7 @@
 	if (..())
 		return TRUE
 	var/datum/role/grue/G = owner.GetRole(ROLE_GRUE)
-	return !(PD.antag.current.isDead())
+	return !(G.antag.current.isDead())
 
 /datum/objective/grue/eat_sentients
 	explanation_text = "Eat sentient beings."
