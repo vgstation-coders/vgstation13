@@ -3,7 +3,10 @@
 	name = "Lurk and Eat"
 
 /datum/objective/grue/grue_basic/IsFulfilled()
-	return TRUE
+	if (..())
+		return TRUE
+	var/datum/role/grue/G = owner.GetRole(ROLE_GRUE)
+	return (G.stat != DEAD)
 
 /datum/objective/grue/eat_sentients
 	explanation_text = "Eat sentient beings."
