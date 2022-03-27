@@ -34,11 +34,11 @@ var/scheduledEvent = null
 			if(0 to 18000) //30 first minutes
 				roundlength_modifier = 1 //Don't particularly speed up event rate
 			if(18000 to 36000) //Next thirty minutes
-				roundlength_modifier = 0.7 //Start ramping up
+				roundlength_modifier = 0.95 //Start ramping up
 			if(36000 to 54000)
-				roundlength_modifier = 0.6
+				roundlength_modifier = 0.9
 			if(54000 to INFINITY) //Round has been going for 1 hour and 30 minutes at least
-				roundlength_modifier = 0.4
+				roundlength_modifier = 0.85
 
 		var/next_event_delay = rand(eventTimeLower, eventTimeUpper)*playercount_modifier*roundlength_modifier
 		scheduledEvent = world.timeofday + next_event_delay  //in deciseconds
