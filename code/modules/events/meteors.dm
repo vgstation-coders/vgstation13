@@ -162,8 +162,7 @@ var/global/list/thing_storm_types = list(
 	meteor_wave(rand(10, 20), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/thing_storm/end()
-	spawn(450)
-		command_alert("The station has cleared the [storm_name].", "Meteor Alert")
+	command_alert("The station has cleared the [storm_name].", "Meteor Alert")
 
 /datum/event/thing_storm/meaty_gore
 
