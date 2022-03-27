@@ -180,7 +180,7 @@
 	var/map_voting = 0
 	var/renders_url = ""
 
-	var/default_ooc_color = "#002eb8"
+	var/default_ooc_color = "#325cd8"
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
