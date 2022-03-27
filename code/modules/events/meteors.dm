@@ -25,8 +25,7 @@
 	meteor_wave(rand(20, 40), max_size = 2, offset_origin = 150, offset_dest = 230) //Large waves, panic is mandatory
 
 /datum/event/meteor_wave/end()
-	spawn(450)
-		command_alert(/datum/command_alert/meteor_wave_end)
+	command_alert(/datum/command_alert/meteor_wave_end)
 
 //One to two vawes
 /datum/event/meteor_shower
@@ -50,8 +49,7 @@
 	meteor_wave(rand(10, 15), max_size = 1, offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/meteor_shower/end()
-	spawn(450)
-		command_alert(/datum/command_alert/meteor_wave_end)
+	command_alert(/datum/command_alert/meteor_wave_end)
 
 //Meteor wave that doesn't trigger an announcement. Perfect for adminbus involving extended meteor bombardments without spamming the crew with Meteor alerts.
 /datum/event/meteor_shower/meteor_quiet
@@ -144,10 +142,13 @@ var/global/list/thing_storm_types = list(
 )
 
 /datum/event/thing_storm
+	startWhen		= 10
+	endWhen 		= 30
+
 	var/storm_name = null
 
 /datum/event/thing_storm/setup()
-	endWhen	= rand(30, 60) * 10 //From 30 seconds to one minute
+	endWhen	= rand(30, 60) + 10 //From 30 seconds to one minute
 	var/list/possible_names=list()
 	for(var/storm_id in thing_storm_types)
 		possible_names += storm_id
@@ -162,8 +163,7 @@ var/global/list/thing_storm_types = list(
 	meteor_wave(rand(10, 20), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/thing_storm/end()
-	spawn(450)
-		command_alert("The station has cleared the [storm_name].", "Meteor Alert")
+	command_alert("The station has cleared the [storm_name].", "Meteor Alert")
 
 /datum/event/thing_storm/meaty_gore
 
@@ -181,8 +181,7 @@ var/global/list/thing_storm_types = list(
 	command_alert("The station is about to pass through an unknown organic debris field. No hull breaches are likely.", "Organic Debris Field")
 
 /datum/event/thing_storm/meaty_gore/end()
-	spawn(450)
-		command_alert("The station has cleared the organic debris field.", "Organic Debris Field")
+	command_alert("The station has cleared the organic debris field.", "Organic Debris Field")
 
 /datum/event/thing_storm/blob_shower
 
@@ -202,8 +201,7 @@ var/global/list/thing_storm_types = list(
 	command_alert(/datum/command_alert/blob_storm)
 
 /datum/event/thing_storm/blob_shower/end()
-	spawn(450)
-		command_alert(/datum/command_alert/blob_storm/end)
+	command_alert(/datum/command_alert/blob_storm/end)
 
 /datum/event/thing_storm/blob_storm
 	var/cores_spawned = 0
@@ -239,8 +237,7 @@ var/global/list/thing_storm_types = list(
 	command_alert(/datum/command_alert/blob_storm/overminds)
 
 /datum/event/thing_storm/blob_storm/end()
-	spawn(450)
-		command_alert(/datum/command_alert/blob_storm/overminds/end)
+	command_alert(/datum/command_alert/blob_storm/overminds/end)
 
 /datum/event/thing_storm/fireworks/setup()
 	endWhen = rand(60, 90) + 10
