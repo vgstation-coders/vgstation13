@@ -13,7 +13,7 @@ var/list/event_last_fired = list()
 		log_admin("A random event was prevented from firing by admins.")
 		return
 
-	if(minutes_passed < roundstart_delay) //Self-expalanatory
+	if(minutes_passed < roundstart_delay) //Self-explanatory
 		message_admins("Too early to trigger random event, aborting.")
 		return
 
