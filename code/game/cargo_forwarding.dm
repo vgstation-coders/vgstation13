@@ -74,7 +74,7 @@
 	time_created = world.time
 	time_limit = rand(7,17) //2 minutes is spent transiting it and it gets created at the start of that, so really 5-15
 	spawn(time_limit MINUTES) //Still an order after the time limit?
-		if(src && !delete_crate && !delete_manifest)
+		if(src && !delete_crate && !delete_manifest && SSsupply_shuttle && (src in SSsupply_shuttle.cargo_forwards))
 			log_debug("CARGO FORWARDING: [src] denied: Time ran out")
 			Pay("Time ran out")
 
@@ -94,6 +94,9 @@
 	..()
 
 /datum/cargo_forwarding/proc/Pay(var/reason) //Reason for crate denial
+	if(!SSsupply_shuttle || !(src in SSsupply_shuttle.cargo_forwards))
+		return // Only do this if in actual forwards to process
+
 	if(reason)
 		worth *= -0.5 //Deduct a penalty instead
 
