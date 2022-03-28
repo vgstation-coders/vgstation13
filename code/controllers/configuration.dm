@@ -180,9 +180,6 @@
 	var/map_voting = 0
 	var/renders_url = ""
 
-	/// If truthy, all non-admin OOC messages will be this color.
-	var/default_ooc_color
-
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
 	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
