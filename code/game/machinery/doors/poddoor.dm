@@ -77,7 +77,7 @@ var/list/poddoors = list()
 	if(istype(C, /obj/item/weapon/melee/energy/sword/ninja))
 		attempt_slicing(user)
 	else if(iscrowbar(C) || istype(C, /obj/item/weapon/fireaxe) && C.wielded)
-		if(!operating && (stat & NOPOWER|FORCEDISABLE))
+		if(!operating && (stat & (NOPOWER|FORCEDISABLE)))
 			spawn()
 				operating = TRUE
 				flick(openingicon, src)
