@@ -18,7 +18,7 @@
 	var/obj/item/weapon/paper/manifest/associated_manifest = null // Same here
 	var/origin_station_name = "" // Some fluff
 	var/origin_sender_name = ""
-	var/time_limit = 5 // In minutes
+	var/time_limit = 0 // In minutes
 	var/time_created = 0 // To check time left
 	var/weighed = FALSE // Crate weighed?
 	var/list/atom/initial_contents = list() // For easier atom checking
@@ -46,9 +46,6 @@
 	else // Sometimes they're just from centcomm directly, lorewise
 		origin_station_name = "Central Command"
 
-	time_created = world.time
-	time_limit = rand(7,17) //2 minutes is spent transiting it and it gets created at the start of that, so really 5-15
-
 	if(sender && sender != "")
 		origin_sender_name = sender
 	else
@@ -69,11 +66,15 @@
 			origin_sender_name = origin_station_name == "Central Command" ? pick(male_name,female_name) : pick(male_name,female_name,vox_name,insect_name)
 		while(origin_sender_name in player_names)
 
-	if(!do_not_add)
+	if(!do_not_add) //Remember to do these lines elsewhere if not here!
 		SSsupply_shuttle.cargo_forwards.Add(src)
+		set_time_limit()
 
+/datum/cargo_forwarding/proc/set_time_limit()
+	time_created = world.time
+	time_limit = rand(7,17) //2 minutes is spent transiting it and it gets created at the start of that, so really 5-15
 	spawn(time_limit MINUTES) //Still an order after the time limit?
-		if(src)
+		if(src && !delete_crate && !delete_manifest && SSsupply_shuttle && (src in SSsupply_shuttle.cargo_forwards))
 			log_debug("CARGO FORWARDING: [src] denied: Time ran out")
 			Pay("Time ran out")
 
@@ -93,6 +94,9 @@
 	..()
 
 /datum/cargo_forwarding/proc/Pay(var/reason) //Reason for crate denial
+	if(!SSsupply_shuttle || !(src in SSsupply_shuttle.cargo_forwards))
+		return // Only do this if in actual forwards to process
+
 	if(reason)
 		worth *= -0.5 //Deduct a penalty instead
 

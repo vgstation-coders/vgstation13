@@ -299,7 +299,7 @@ For vending packs, see vending_packs.dm*/
 		var/displayworth = CF.worth
 		if (isnum(CF.worth))
 			displayworth = "[CF.worth]$"
-		var/timeleft = ((CF.time_created + (CF.time_limit MINUTES)) - world.time)
+		var/timeleft = CF.time_created && CF.time_limit ? ((CF.time_created + (CF.time_limit MINUTES)) - world.time) : 0 // Should never see 0 but just in case
 		var/mm = text2num(time2text(timeleft, "mm")) // Set the minute
 		var/ss = text2num(time2text(timeleft, "ss")) // Set the second
 		var/weighedtext = CF.weighed ? "Yes" : "No"
