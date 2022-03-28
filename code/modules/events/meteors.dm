@@ -147,7 +147,7 @@ var/global/list/thing_storm_types = list(
 	var/storm_name = null
 
 /datum/event/thing_storm/setup()
-	endWhen	= rand(30, 60) * 10 //From 30 seconds to one minute
+	endWhen	= rand(30, 60) + 10 //From 30 seconds to one minute
 	var/list/possible_names=list()
 	for(var/storm_id in thing_storm_types)
 		possible_names += storm_id
@@ -162,7 +162,8 @@ var/global/list/thing_storm_types = list(
 	meteor_wave(rand(10, 20), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/thing_storm/end()
-	command_alert("The station has cleared the [storm_name].", "Meteor Alert")
+	spawn(450)
+		command_alert("The station has cleared the [storm_name].", "Meteor Alert")
 
 /datum/event/thing_storm/meaty_gore
 
