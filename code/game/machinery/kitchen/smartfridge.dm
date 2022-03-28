@@ -394,7 +394,7 @@
 			insert_item(G)
 			objects_loaded++
 		if(objects_loaded)
-			return TRUE			
+			return TRUE
 	return FALSE
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
@@ -428,8 +428,7 @@
 	interact(user)
 
 /obj/machinery/smartfridge/emag(mob/user)
-	new/obj/effect/sparks(get_turf(src))
-	playsound(loc,"sparks",50,1)
+	spark(src)
 	emagged = !emagged
 	if(emagged)
 		to_chat(user, "<span class='warning'>You disable the security protocols.</span>")
