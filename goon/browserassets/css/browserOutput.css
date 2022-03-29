@@ -48,7 +48,7 @@ em						{font-style: normal;	font-weight: bold;}
 .motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover
 						{color: #638500;}
 .prefix					{font-weight: bold;}
-.ooc					{font-weight: bold;}
+.ooc					{color: #002eb8;	font-weight: bold;}
 .adminobserverooc		{color: #0099cc;	font-weight: bold;}
 .adminooc				{color: #b82e00;	font-weight: bold;}
 .adminobserver			{color: #996600;	font-weight: bold;}
