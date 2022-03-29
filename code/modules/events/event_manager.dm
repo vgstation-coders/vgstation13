@@ -46,7 +46,7 @@ var/scheduledEvent = null
 
 	else if(world.timeofday > scheduledEvent)
 		spawn_dynamic_event()
-		
+
 		scheduledEvent = null
 		checkEvent()
 
