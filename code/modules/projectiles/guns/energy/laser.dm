@@ -362,7 +362,7 @@
 	slot_flags = SLOT_BACK | SLOT_BELT
 
 /obj/item/weapon/gun/energy/laser/liberator/update_icon()
-	icon_state = "lasercarbine_[round(power_supply.charge / charge_cost)]"
+	icon_state = "lasercarbine_[round(power_supply.charge / 40)]" //original liberator charge cost, done so icons don't break
 
 /obj/item/weapon/gun/energy/megabuster
 	name = "Mega-buster"
