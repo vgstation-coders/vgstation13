@@ -299,7 +299,18 @@
 	offset_y = 16
 
 /obj/abstract/mind_ui_element/bloodcult_veil_weakness/UpdateIcon()
-
+	var/datum/role/cultist/C = iscultist(GetUser())
+	if(!istype(C))
+		return
+	overlays.len = 0
+	overlays += String2Image("[veil_weakness]")
+	if(veil_weakness >= 100)
+		offset_x = 0
+	else if(veil_weakness >= 10)
+		offset_x = 3
+	else
+		offset_x = 6
+	UpdateUIScreenLoc()
 
 
 
@@ -492,51 +503,6 @@
 
 	move_whole_ui = TRUE
 
-
-////////////////////////////////////////////////////////////////////
-//																  //
-//					BLOODCULT - TEAR REALITY					  //
-//																  //
-////////////////////////////////////////////////////////////////////
-
-/datum/mind_ui/bloodcult_tear_reality
-	uniqueID = "Cultist Role"
-	element_types_to_spawn = list(
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_tear_reality
-		)
-	display_with_parent = TRUE
-	x = "LEFT"
-
-
-/datum/mind_ui/bloodcult_tear_reality/Valid()
-	var/mob/M = mind.current
-	if (!M)
-		return FALSE
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
-	if(!C || !C.arch_cultist)
-		return FALSE
-	if(!istype(universe,/datum/universal_state/eclipse))
-		return FALSE
-	return TRUE
-
-//------------------------------------------------------------
-/obj/abstract/mind_ui_element/hoverable/bloodcult_tear_reality
-	name = "Tear Reality"
-	desc = "Start tearing reality at your location."
-	icon = 'icons/ui/bloodcult/32x32.dmi'
-	icon_state = "tear"
-	layer = MIND_UI_BUTTON
-	offset_x = 6
-	offset_y = -56
-	mouse_opacity = 1
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_tear_reality/Click()
-	flick("tear-click",src)
-	var/mob/M = GetUser()
-	if (M)
-		var/datum/role/cultist/C = iscultist(M)
-		if (C)
-			C.TearReality()
 
 
 ////////////////////////////////////////////////////////////////////

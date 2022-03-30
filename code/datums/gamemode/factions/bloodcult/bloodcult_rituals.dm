@@ -54,7 +54,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 /datum/bloodcult_ritual
 	var/name = "Cult Ritual"        
-	var/desc = "Do something culty!"
+	var/desc = ""
 	var/point_limit = 0       // The ritual will stop working after this many points. 0 = infinite
 	var/points_rewarded = 0
 

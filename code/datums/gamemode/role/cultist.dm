@@ -481,33 +481,3 @@
 	if(!B || !istype(B))
 		return
 	arch_cultist = TRUE
-
-
-/datum/role/cultist/proc/TearReality()
-	var/datum/faction/bloodcult/B = faction
-	if(!B || !istype(B))
-		return
-	if(!arch_cultist)
-		return
-	if(!istype(universe,/datum/universal_state/eclipse))
-		return
-	var/mob/M = antag.current
-	var/turf/T = get_turf(M)
-	var/area/A = get_area(M)
-	for (var/turf/TU in orange(1,M))
-		if (TU.density)
-			to_chat(M, "<span class='warning'>The [TU] would hinder the ritual. Either dismantle it or find a more spacious area.</span>")
-			return
-		var/atom/AT = TU.has_dense_content()
-		if (AT && !ismob(AT)) // mobs get a free pass
-			to_chat(M, "<span class='warning'>\The [AT] would hinder the ritual. Either move it or find a more spacious area.</span>")
-			return
-	if(!B.IsValidDepartment(A))
-		to_chat(M, "<span class='warning'>You need to tear through reality in one of the five main departments!</span>")
-		return
-	if(!(B.GetDepartmentName(A) in B.departments_left))
-		to_chat(M, "<span class='warning'>There is already a tear in reality here! Move on to the next department!</span>")
-		return
-	if (do_after(M,T, 5 SECONDS))
-		new /obj/structure/cult/tear_beacon(T, arch = antag.current)
-	
