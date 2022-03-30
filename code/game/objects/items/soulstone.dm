@@ -70,6 +70,9 @@
 				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 				return
 
+
+
+
 			var/datum/soul_capture/capture_datum = new()
 			capture_datum.init_datum(user, M, src)
 			qdel(capture_datum)

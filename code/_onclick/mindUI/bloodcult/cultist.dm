@@ -153,12 +153,14 @@
 /datum/mind_ui/bloodcult_left_panel
 	uniqueID = "Cultist Left Panel"
 	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/bloodcult_veil_weakness,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help,
 		)
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_role,
 		/datum/mind_ui/bloodcult_help,
+		/datum/mind_ui/bloodcult_tear_reality,
 		)
 	display_with_parent = TRUE
 	x = "LEFT"
@@ -286,6 +288,19 @@
 	var/datum/mind_ui/bloodcult_help/tooltip = locate() in parent.subUIs
 	if(tooltip)
 		tooltip.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_veil_weakness
+	name = "Veil Weakness"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "veil_gauge"
+	offset_x = 6
+	offset_y = 16
+
+/obj/abstract/mind_ui_element/bloodcult_veil_weakness/UpdateIcon()
+
+
 
 
 ////////////////////////////////////////////////////////////////////
@@ -476,6 +491,53 @@
 	mouse_opacity = 1
 
 	move_whole_ui = TRUE
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - TEAR REALITY					  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_tear_reality
+	uniqueID = "Cultist Role"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_tear_reality
+		)
+	display_with_parent = TRUE
+	x = "LEFT"
+
+
+/datum/mind_ui/bloodcult_tear_reality/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	if(!C || !C.arch_cultist)
+		return FALSE
+	if(!istype(universe,/datum/universal_state/eclipse))
+		return FALSE
+	return TRUE
+
+//------------------------------------------------------------
+/obj/abstract/mind_ui_element/hoverable/bloodcult_tear_reality
+	name = "Tear Reality"
+	desc = "Start tearing reality at your location."
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "tear"
+	layer = MIND_UI_BUTTON
+	offset_x = 6
+	offset_y = -56
+	mouse_opacity = 1
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_tear_reality/Click()
+	flick("tear-click",src)
+	var/mob/M = GetUser()
+	if (M)
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			C.TearReality()
+
 
 ////////////////////////////////////////////////////////////////////
 //																  //

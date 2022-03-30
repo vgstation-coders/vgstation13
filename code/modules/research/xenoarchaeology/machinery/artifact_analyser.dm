@@ -211,7 +211,7 @@ var/anomaly_report_num = 0
 			rock/plastcrete composite."
 		if(/obj/structure/bed/chair/vehicle/gigadrill)
 			return "An old and dusty vehicle with a mining drill - structure composed of titanium-carbide alloy, with tip and drill lines edged in an alloy of diamond and plasma."
-		if(/obj/structure/cult_legacy/pylon)
+		if(/obj/structure/cult/pylon)
 			return "Tribal pylon - Item resembles statues/emblems built by cargo cult civilisations to honour energy systems from post-warp civilisations."
 		if(/obj/mecha/working/hoverpod)
 			return "Vacuum capable repair pod - Item is a remarkably intact single man repair craft capable of flight in a vacuum. Outer shell composed of primarily \

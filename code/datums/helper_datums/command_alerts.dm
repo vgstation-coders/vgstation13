@@ -608,11 +608,61 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 //////////////BLOOD CULT
 
-/*
-TODO (UPHEAVAL PART 2) Guess i'll add the future new announcements here
+/datum/command_alert/eclipse_start
+	name = "Blood Cult Eclipse Start"
+	alert_title = "Anomalous Solar Eclipse"
+	force_report = 1
 
-*/
+/datum/command_alert/eclipse_start/announce()
+	message = "Bluespace distortions around your area have caused the star that [station_name()] is orbiting to seemingly disappear. This anomalous eclipse is estimated to last around ten minutes, and all crewmembers should be on alert for anomalous activity."
+	..()
 
+/datum/command_alert/eclipse_end
+	name = "Blood Cult Eclipse End"
+	alert_title = "Bluespace Distortions Stabilized"
+	force_report = 1
+
+/datum/command_alert/eclipse_end/announce()
+	message = "External sensors have indicated that the nearby star has reappeared. Continue to monitor to station for any other abnormal activity."
+	..()
+
+/datum/command_alert/cult_eclipse_start
+	name = "Reality Tear Start"
+	alert_title = "Occult Assaut"
+	force_report = 1
+	theme = "endgame"
+	alertlevel = "red"
+
+/datum/command_alert/cult_eclipse_start/announce()
+	message = "The fabric of space-time around [station_name()] is weakening, and sensors are picking up a surge of occult energy. Such readings are consistent with attacks from the Cult of Nar-sie, who may be using the Eclipse as a way to tear through reality. Directive 7-10 is in effect until reality stabilizes."
+	..()
+
+
+/datum/command_alert/cult_eclipse_danger
+	name = "Reality Tear Danger"
+	alert_title = "Occult Assault Critical"
+	force_report = 1
+	theme = "endgame"
+	alertlevel = "red"
+
+
+/datum/command_alert/cult_eclipse_danger/announce()
+	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
+	if(!B || B.departments_left.len < 1) // HUHHH?
+		return 		// ABORT, ABORT
+	var/last_department = B.departments_left[1]
+	message = "Occult energies from [station_name()] are reaching a critical point. Breaches in space-time have been detected across all station departments, excluding [last_department]. Protect [last_department] at all costs."
+	..()
+
+/datum/command_alert/cult_eclipse_end
+	name = "Reality Tear End"
+	alert_title = "Reality Stabilized"
+	force_report = 1
+
+
+/datum/command_alert/cult_eclipse_end/announce()
+	message = "Sensors indicate that the fabric of space-time around [station_name()] has stabilized. Continue to monitor the station for persistent occult activity. Directive 7-10 is hereby lifted."
+	..()
 
 ////////MISC STUFF
 
