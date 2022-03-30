@@ -480,11 +480,11 @@ var/datum/controller/gameticker/ticker
 
 		spawn
 			declare_completion()
-
 			gameend_time = world.time / 10
-			vote.initiate_vote("map","The Server", popup = 1)
-			var/options = jointext(vote.choices, " ")
-			feedback_set("map vote choices", options)
+			if(!vote.map_paths)
+				vote.initiate_vote("map","The Server", popup = 1)
+				var/options = jointext(vote.choices, " ")
+				feedback_set("map vote choices", options)
 
 			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
