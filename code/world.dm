@@ -206,7 +206,7 @@ var/auxtools_path
 		..()
 		return
 
-	if(vote.winner && vote.map_paths.len)
+	if(vote.winner && vote.map_paths)
 		//get filename
 		var/filename = "vgstation13.dmb"
 		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
