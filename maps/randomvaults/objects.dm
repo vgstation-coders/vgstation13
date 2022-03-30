@@ -39,6 +39,9 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
+/area/vault/powered
+	requires_power = 1
+
 /area/vault/gingerbread_house
 
 /area/vault/podstation
@@ -956,31 +959,31 @@
 /obj/docking_port/destination/vault/minisat
 	name = "NT Microstation 1"
 
-/area/vault/mini_station
+/area/vault/powered/mini_station
 	name = "NT Microstation Hallway"
 	icon_state = "hallC"
 
-/area/vault/mini_station_entrance
+/area/vault/powered/mini_station_entrance
 	name = "NT Microstation Entrance"
 	icon_state = "entry"
 
-/area/vault/mini_station_kitchen
+/area/vault/powered/mini_station_kitchen
 	name = "NT Microstation Kitchen"
 	icon_state = "bar"
 
-/area/vault/mini_station_medbay
+/area/vault/powered/mini_station_medbay
 	name = "NT Microstation Medbay"
 	icon_state = "medbay"
 
-/area/vault/mini_station_engineering
+/area/vault/powered/mini_station_engineering
 	name = "NT Microstation Engineering"
 	icon_state = "engine"
 
-/area/vault/mini_station_botany
+/area/vault/powered/mini_station_botany
 	name = "NT Microstation Botany"
 	icon_state = "hydro"
 
-/area/vault/mini_station_construction
+/area/vault/powered/mini_station_construction
 	name = "NT Microstation Construction Room"
 	icon_state = "construction"
 

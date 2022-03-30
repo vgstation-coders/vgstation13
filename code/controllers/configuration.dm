@@ -33,7 +33,7 @@
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
 	var/toggle_maps = 0					// Change from votable maps = 0 to all compiled maps = 1
-	var/toggle_vote_method = 0			// Toggle voting methods: Weighted = 0, Majority = 1
+	var/toggle_vote_method = 1			// Toggle voting methods: Weighted = 1, Majority = 2, Persistent = 3, Random = 4
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives
@@ -74,6 +74,8 @@
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
+	var/cargo_forwarding_on_roundstart = 0
+	var/cargo_forwarding_amount_override = 0
 
 
 	var/multiz_render_cap = 8			//how far down open spaces will render
@@ -178,8 +180,6 @@
 	var/map_voting = 0
 	var/renders_url = ""
 
-	var/default_ooc_color = "#002eb8"
-
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
 	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
@@ -273,6 +273,12 @@
 
 				if ("jobs_have_minimal_access")
 					config.jobs_have_minimal_access = 1
+
+				if ("cargo_forwarding_on_roundstart")
+					cargo_forwarding_on_roundstart = 1
+
+				if ("cargo_forwarding_amount_override")
+					cargo_forwarding_amount_override = text2num(value)
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1

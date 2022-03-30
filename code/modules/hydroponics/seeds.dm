@@ -372,6 +372,11 @@
 	seed_type = "orange"
 	vending_cat = "fruits"
 
+/obj/item/seeds/silicatecitrus
+	name = "packet of silicate citrus seeds"
+	seed_type = "silicatecitrus"
+	vending_cat = "fruits"
+
 /obj/item/seeds/poisonberryseed
 	name = "packet of poison berry seeds"
 	seed_type = "poisonberries"
@@ -588,7 +593,7 @@
 	plant_dmi = 'icons/obj/hydroponics/deathberry.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
-	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5), CYTISINE = list(1))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5), CYTISINE = list(1,5))
 
 	yield = 3
 	potency = 50
@@ -1443,6 +1448,7 @@
 	plant_dmi = 'icons/obj/hydroponics/lime.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/lime)
 	harvest_repeat = 1
+	mutants = list("silicatecitrus")
 	chems = list(NUTRIMENT = list(1,20))
 
 	lifespan = 55
@@ -1460,6 +1466,7 @@
 	plant_dmi = 'icons/obj/hydroponics/lemon.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/lemon)
 	harvest_repeat = 1
+	mutants = list("silicatecitrus")
 	chems = list(NUTRIMENT = list(1,20))
 
 	lifespan = 55
@@ -1477,6 +1484,7 @@
 	plant_dmi = 'icons/obj/hydroponics/orange.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
 	harvest_repeat = 1
+	mutants = list("silicatecitrus")
 	chems = list(NUTRIMENT = list(1,20))
 
 	lifespan = 60
@@ -1486,6 +1494,21 @@
 	potency = 1
 
 	large = 0
+
+/datum/seed/silicatecitrus
+	name = "silicatecitrus"
+	seed_name = "silicate citrus"
+	display_name = "silicate citrus"
+	plant_dmi = 'icons/obj/hydroponics/silicatecitrus.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
+	harvest_repeat = 1
+	mutants = null
+	chems = list(SILICATE = list(3,5))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 5
 
 /datum/seed/grass
 	name = "grass"

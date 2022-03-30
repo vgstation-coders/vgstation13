@@ -643,32 +643,27 @@
 
 /obj/structure/closet/crate/ex_act(severity)
 	switch(severity)
-		if(1.0)
-			for(var/obj/O in src.contents)
-				qdel(O)
+		if(1)
 			qdel(src)
-			return
-		if(2.0)
-			broken = 1
+		if(2)
+			broken = TRUE
 			if(has_electronics)
 				if (prob(50))
 					dump_electronics()
 				else
 					qdel(electronics)
-			for(var/obj/O in src.contents)
+			for(var/atom/movable/thing in contents)
 				if(prob(50))
-					qdel(O)
+					qdel(thing)
+			dump_contents()
 			qdel(src)
-			return
-		if(3.0)
-			if (prob(50))
-				broken = 1
+		if(3)
+			if(prob(50))
+				broken = TRUE
 				if(has_electronics)
 					dump_electronics()
+				dump_contents()
 				qdel(src)
-			return
-		else
-	return
 
 /obj/structure/closet/crate/secure/weapon/experimental
 	name = "Experimental Weapons Crate"

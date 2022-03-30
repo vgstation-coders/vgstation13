@@ -1144,7 +1144,7 @@
 	id = BLEACH
 	result = BLEACH
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
-	result_amount = 1
+	result_amount = 2
 
 //This one isn't even close the the real life reaction but will have to do to avoid conflicts with the above reactions.
 /datum/chemical_reaction/luminol

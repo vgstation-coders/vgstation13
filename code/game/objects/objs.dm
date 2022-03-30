@@ -69,6 +69,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		integratedpai = null
 
 	material_type = null //Don't qdel, they're held globally
+	if(associated_forward)
+		associated_forward = null
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)

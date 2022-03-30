@@ -59,7 +59,7 @@ h1.alert, h2.alert		{color: #000000;}
 .bnotice				{color: #000099; 	font-weight: bold;}
 .sans					{font-family: 'Comic Sans MS', cursive, sans-serif;}
 .alien					{color: #543354;}
-.ancient				{color: #008B8B;	font-stye: italic;}
+.ancient				{color: #008B8B;	font-style: italic;}
 .newscaster				{color: #800000;}
 .mod					{color: #735638;	font-weight: bold;}
 .modooc					{color: #000000;	font-weight: bold;}
@@ -95,7 +95,7 @@ h1.alert, h2.alert		{color: #000000;}
 .good					{color: green;}
 .average				{color: #FF8000;}
 .bad					{color: #FF0000;}
-.mushroom				{color: #4B0082;}
+.mushroom				{color: #4B0082; font-weight: bold;}
 /* /vg/ Saycode Rewrite */
 .italics, .talkinto		{font-style:italic;}
 .whisper				{font-style:italic;color:#333333;}

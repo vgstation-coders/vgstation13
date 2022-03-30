@@ -183,8 +183,41 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	C.cableColor(_color)
 
 	//Set up the new cable
-	C.d1 = 0 //It's a O-X node cable
-	C.d2 = dirn
+	if(isopenspace(F))
+		C.d1 = dirn
+		C.d2 = DOWN // It's an X-32 node cable
+		var/turf/simulated/current_turf = F
+		while(use(1)) // Toss this down the open space for as much as we can
+			current_turf = GetBelow(current_turf)
+			if(!current_turf)
+				break
+			var/obj/structure/cable/C2 = new /obj/structure/cable(current_turf)
+			C2.cableColor(_color)
+			var/turf/to_check = GetBelow(current_turf)
+			if(to_check && (to_check.intact || !to_check.can_place_cables())) // Can the turf below have cables on it? Important to know if the cable should hang here.
+				to_check = null
+			var/leave_hanging = FALSE
+			if(isopenspace(current_turf) && to_check && use(1))
+				C2.d1 = UP
+				C2.d2 = DOWN
+			else
+				C2.d1 = 0
+				C2.d2 = UP
+				leave_hanging = TRUE
+			C2.add_fingerprint(user)
+			C2.update_icon()
+
+			//Create a new powernet with the cable, if needed it will be merged later
+			var/datum/powernet/PN2 = new /datum/powernet
+			PN2.add_cable(C2)
+
+			C2.mergeZConnectedNetworks()   //Merge the powernet with above powernets
+			C2.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
+			if(leave_hanging)
+				break
+	else
+		C.d1 = 0 //It's a O-X node cable
+		C.d2 = dirn
 	C.add_fingerprint(user)
 	C.update_icon()
 
@@ -192,11 +225,15 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	var/datum/powernet/PN = new /datum/powernet
 	PN.add_cable(C)
 
-	C.mergeConnectedNetworks(C.d2)   //Merge the powernet with adjacents powernets
+
+	C.mergeConnectedNetworks(C.d2 == DOWN ? C.d1 : C.d2)   //Merge the powernet with adjacents powernets
 	C.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
 
 	if(C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
 		C.mergeDiagonalsNetworks(C.d2)
+
+	if(C.d2 == UP || C.d2 == DOWN) //If the cable goes to another z-level, check the others 2 possible directions
+		C.mergeZConnectedNetworks()
 
 	use(1)
 

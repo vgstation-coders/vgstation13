@@ -68,12 +68,13 @@
 			add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
 			return TRUE
 	var/damage = run_armor_absorb(target_zone, I.damtype, power)
-	if(originator)
-		add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [max(damage - armor, 0)]")
-	else
-		add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [max(damage - armor, 0)]")
 
-	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	var/actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+
+	if(originator)
+		add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
+	else
+		add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
 	INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
 	return TRUE
 

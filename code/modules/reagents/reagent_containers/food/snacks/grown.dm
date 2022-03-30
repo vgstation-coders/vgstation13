@@ -572,6 +572,13 @@ var/list/special_fruits = list()
 	filling_color = "#FAAD28"
 	plantname = "orange"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus
+	name = "silicate citrus"
+	desc = "Best thing since the toast untoaster."
+	potency = 20
+	filling_color = "#C7FFFF"
+	plantname = "silicatecitrus"
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 	name = "white-beet"
 	desc = "You can't beat white-beet."

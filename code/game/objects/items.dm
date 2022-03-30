@@ -6,7 +6,8 @@
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	var/r_speed = 1.0
-	var/health = null
+	var/health		//Structural integrity of the item. If breakable_flags are set, at 0, the item breaks; defaults to maxHealth.
+	var/maxHealth	//Maximum structural integrity of the item. If breakable_flags are set, defaults to health.
 	var/hitsound = null
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
@@ -87,6 +88,11 @@
 	..()
 	for(var/path in actions_types)
 		new path(src)
+	if(breakable_flags)	//Initialize health and maxHealth to the same value if only one is specified.
+		if(isnull(health) && maxHealth)
+			health = maxHealth
+		else if(isnull(maxHealth) && health)
+			maxHealth = health
 
 /obj/item/Destroy()
 	infected_items -= src
@@ -1270,23 +1276,29 @@ var/global/list/image/blood_overlays = list()
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 
-	var/kick_power = max((H.get_strength() * 10 - (w_class ** 2)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+	var/kick_power = max((H.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
 
-	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
+	//Attempt to damage the item if it's breakable here.
+	var/glanced
+	if(breakable_flags & BREAKABLE_UNARMED)
+		glanced=!take_damage(kick_power, skip_break = TRUE)
+
+	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
 
 	if(kick_power > 6) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
 			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
-
 			while(loc)
 				if(!throwing)
 					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
 					break
 				sleep(5)
-
+		throw_at(T, kick_power, 1)
+	else
+		try_break() //Check for the item breaking anyway even if it didn't get propelled.
 	Crossed(H) //So you can't kick shards while naked without suffering
-	throw_at(T, kick_power, 1)
+
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

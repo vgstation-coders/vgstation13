@@ -615,6 +615,7 @@ var/datum/disease2/disease/wizarditis = null
 	starting_materials = list(MAT_PLASTIC = 1000)
 	w_type = RECYK_PLASTIC
 	melt_temperature = MELTPOINT_PLASTIC
+	volume = 100
 
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/update_icon()
 	overlays.len = 0
@@ -625,7 +626,7 @@ var/datum/disease2/disease/wizarditis = null
 
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/New()
 	..()
-	reagents.add_reagent(BLEACH, 15)
+	reagents.add_reagent(BLEACH, 100)
 
 /obj/item/weapon/reagent_containers/glass/bottle/eznutrient
 	name = "E-Z-Nutrient Bottle"

@@ -4,6 +4,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
 	var/plasmashipped		= 0 //How much plasma has been sent to centcom?
 	var/stuffshipped		= 0 //How many centcom orders have cargo fulfilled?
+	var/stuffforwarded		= 0 //How many cargo forwards have been fulfilled?
+	var/stuffnotforwarded	= 0 //How many cargo forwards have not been fulfilled?
 	var/stuffharvested		= 0 //How many harvests have hydroponics done (per crop)?
 	var/oremined			= 0 //How many chunks of ore were smelted
 	var/eventsendured		= 0 //How many random events did the station endure?
@@ -99,18 +101,18 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += silicon_score()
 	dat += misc_score()
 	dat += display()
-	
+
 	round_end_info = dat
 	round_end_info_no_img = remove_images(dat)
 	log_game(round_end_info_no_img)
 	stat_collection.crew_score = score.crewscore
-	
+
 	to_chat(world, "<b>The crew's final score is:</b>")
 	to_chat(world, "<b><font size='4'>[score.crewscore]</font></b>")
 
 	for(var/mob/E in player_list)
 		E.display_round_end_scoreboard()
-	
+
 	ticker.mode.send2servers()
 	return
 
@@ -130,6 +132,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Plasma Shipped:</B> [score.plasmashipped] ([score.plasmashipped * 0.5] Points)<BR>"
 	if(score.stuffshipped > 0)
 		dat += "<B>Centcom Orders Fulfilled:</B> [score.stuffshipped] ([score.stuffshipped * 100] Points)<BR>"
+	if(score.stuffforwarded > 0)
+		dat += "<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>"
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
@@ -153,6 +157,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>AIs Destroyed:</B> [score.deadaipenalty] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadaipenalty * 1000 : score.deadaipenalty * -1000] Points)<BR>"
 	dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
 	dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
+	if(score.stuffnotforwarded > 0)
+		dat += "<B>Cargo Crates Not Forwarded:</B> [score.stuffnotforwarded] (-[score.stuffnotforwarded * 25] Points)<BR>"
 	if (score.powerloss > 0)
 		dat += "<B>Station Power Issues:</B> [score.powerloss] (-[score.powerloss * 50] Points)<BR>"
 	if(score.turfssingulod > 0)

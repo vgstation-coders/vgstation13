@@ -364,10 +364,15 @@
 /obj/item/weapon/storage/proc/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
 	if(!istype(W))
 		return 0
+
+
+
 	if(usr) //WHYYYYY
+
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
+		
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)
@@ -643,6 +648,8 @@
 
 	to_chat(user, "<span class='notice'>You fold \the [src] flat.</span>")
 	var/folded = new src.foldable(get_turf(src),foldable_amount)
+	user.u_equip(src)
+	user.put_in_hands(folded)
 	transfer_fingerprints_to(folded)
 	qdel(src)
 

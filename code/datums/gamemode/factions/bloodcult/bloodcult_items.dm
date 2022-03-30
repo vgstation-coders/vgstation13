@@ -689,7 +689,7 @@ var/list/arcane_tomes = list()
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
 	health = 40
-	var/maxHealth = 40
+	maxHealth = 40
 	var/reflector = FALSE
 	var/mob/living/linked_cultist = null
 

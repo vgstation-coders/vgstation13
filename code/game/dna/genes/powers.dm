@@ -43,11 +43,19 @@
 	invocation_type = SpI_NONE
 	range = GLOBALCAST
 	max_targets = 1
-	spell_flags = SELECTABLE | INCLUDEUSER | TALKED_BEFORE
+	spell_flags = SELECTABLE | TALKED_BEFORE
 
 	override_base = "genetic"
 	hud_state = "gen_rmind"
 	mind_affecting = 1
+
+
+/// Resets the view when the Cancel button is pressed or there are no suitable targets.
+/spell/targeted/remoteobserve/choose_targets(mob/living/carbon/human/user)
+	. = ..()
+	if(!length(.))
+		user.remoteview_target = null
+		user.reset_view(0)
 
 /spell/targeted/remoteobserve/cast(var/list/targets, mob/living/carbon/human/user)
 	if(!targets || !targets.len || !user || !istype(user))
@@ -64,11 +72,6 @@
 		user.reset_view(0)
 		return
 
-	if(user.client.eye != user.client.mob)
-		user.remoteview_target = null
-		user.reset_view(0)
-		return
-
 	for(var/T in targets)
 		var/mob/living/target
 		if (isliving(T))
@@ -76,12 +79,8 @@
 		if (istype (T, /datum/mind))
 			target = user.can_mind_interact(T)
 		if(target)
-			if(target == user)
-				user.remoteview_target = null
-				user.reset_view(0)
-			else
-				user.remoteview_target = target
-				user.reset_view(target)
+			user.remoteview_target = target
+			user.reset_view(target)
 			break
 		else// can_mind_interact returned null
 			user.remoteview_target = null
@@ -165,9 +164,9 @@
 			return
 
 		if(M_REMOTE_TALK in target.mutations)
-			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
+			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: </span><span class='bold'>[say]</span>")
 		else
-			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
+			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: </span><span class='bold'>[say]</span>")
 		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
 		log_admin("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
 		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")

@@ -57,7 +57,8 @@
 		return TRUE
 
 	pda_device.add_fingerprint(U)
-	U.set_machine(pda_device)
+	if(!href_list["skiprefresh"])
+		U.set_machine(pda_device)
 
 /datum/pda_app/proc/refresh_pda()
 	if(!pda_device)
