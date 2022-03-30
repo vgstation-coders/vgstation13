@@ -106,7 +106,7 @@
 	for (var/ID in body.virus2)
 		var/datum/disease2/disease/disease = body.virus2[ID]
 		for (var/A in disease.antigen)
-			if(antigen_restriction.len == 0 || A in antigen_restriction)
+			if((antigen_restriction.len == 0) || (A in antigen_restriction))
 				var/tally = 0.5
 				if (isturf(body.loc) && body.lying)
 					tally += 0.5

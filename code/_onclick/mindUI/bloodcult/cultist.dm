@@ -298,7 +298,8 @@
 	offset_y = 16
 
 /obj/abstract/mind_ui_element/bloodcult_veil_weakness/UpdateIcon()
-	var/datum/role/cultist/C = iscultist(GetUser())
+	var/mob/M = GetUser()
+	var/datum/role/cultist/C = iscultist(M)
 	if(!istype(C))
 		return
 	overlays.len = 0
