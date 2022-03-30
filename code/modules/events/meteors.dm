@@ -50,7 +50,7 @@
 	meteor_wave(rand(10, 15), max_size = 1, offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/meteor_shower/end()
-	spawn(450)
+	spawn(45 SECONDS)
 		command_alert(/datum/command_alert/meteor_wave_end)
 
 //Meteor wave that doesn't trigger an announcement. Perfect for adminbus involving extended meteor bombardments without spamming the crew with Meteor alerts.
@@ -162,7 +162,7 @@ var/global/list/thing_storm_types = list(
 	meteor_wave(rand(10, 20), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/thing_storm/end()
-	spawn(450)
+	spawn(45 SECONDS)
 		command_alert("The station has cleared the [storm_name].", "Meteor Alert")
 
 /datum/event/thing_storm/meaty_gore
@@ -202,7 +202,7 @@ var/global/list/thing_storm_types = list(
 	command_alert(/datum/command_alert/blob_storm)
 
 /datum/event/thing_storm/blob_shower/end()
-	spawn(450)
+	spawn(45 SECONDS)
 		command_alert(/datum/command_alert/blob_storm/end)
 
 /datum/event/thing_storm/blob_storm
@@ -239,7 +239,7 @@ var/global/list/thing_storm_types = list(
 	command_alert(/datum/command_alert/blob_storm/overminds)
 
 /datum/event/thing_storm/blob_storm/end()
-	spawn(450)
+	spawn(45 SECONDS)
 		command_alert(/datum/command_alert/blob_storm/overminds/end)
 
 /datum/event/thing_storm/fireworks/setup()
