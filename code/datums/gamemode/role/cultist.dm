@@ -21,6 +21,8 @@
 	var/verbose = FALSE	// Used by the rune writing UI to avoid message spam
 
 	var/cultist_role = CULTIST_ROLE_NONE // Because the role might change on the fly and we don't want to set everything again each time, better not start dealing with subtypes
+	var/arch_cultist = FALSE	// same as above
+
 	var/time_role_changed_last = 0
 
 	var/datum/role/cultist/mentor = null
@@ -458,3 +460,54 @@
 		to_chat(user, "<span class='notice'>You retrace your steps, carefully undoing the lines of the [removed_word] rune.</span>")
 	else
 		to_chat(user, "<span class='warning'>There aren't any rune words left to erase.</span>")
+
+/datum/role/cultist/proc/GiveTattoo(var/type)
+	var/datum/cult_tattoo/T = new type
+	if(tattoos[T.name])
+		qdel(T)
+		return
+	tattoos[T.name] = T
+	update_cult_hud()
+	T.getTattoo(antag.current)
+	anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	sleep(1)
+	antag.current.update_mutations()
+	var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	animate(tattoo_markings, alpha = 0, time = 30)
+
+
+/datum/role/cultist/proc/MakeArchCultist()
+	var/datum/faction/bloodcult/B = faction
+	if(!B || !istype(B))
+		return
+	arch_cultist = TRUE
+
+
+/datum/role/cultist/proc/TearReality()
+	var/datum/faction/bloodcult/B = faction
+	if(!B || !istype(B))
+		return
+	if(!arch_cultist)
+		return
+	if(!istype(universe,/datum/universal_state/eclipse))
+		return
+	var/mob/M = antag.current
+	var/turf/T = get_turf(M)
+	var/area/A = get_area(M)
+	for (var/turf/TU in orange(1,M))
+		if (TU.density)
+			to_chat(M, "<span class='warning'>The [TU] would hinder the ritual. Either dismantle it or find a more spacious area.</span>")
+			return
+		var/atom/AT = TU.has_dense_content()
+		if (AT && !ismob(AT)) // mobs get a free pass
+			to_chat(M, "<span class='warning'>\The [AT] would hinder the ritual. Either move it or find a more spacious area.</span>")
+			return
+	if(!B.IsValidDepartment(A))
+		to_chat(M, "<span class='warning'>You need to tear through reality in one of the five main departments!</span>")
+		return
+	if(!(B.GetDepartmentName(A) in B.departments_left))
+		to_chat(M, "<span class='warning'>There is already a tear in reality here! Move on to the next department!</span>")
+		return
+	if (do_after(M,T, 5 SECONDS))
+		new /obj/structure/cult/tear_beacon(T, arch = antag.current)
+	

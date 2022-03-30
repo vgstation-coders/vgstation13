@@ -26,10 +26,24 @@
 
 	var/list/cultist_cap = 1	//clamped between 5 and 9 depending on crew size. once the cap goes up it cannot go down.
 
-	var/mentor_count = 0 //so we don't loop through the member list if we already know there are no mentors in there
+	var/mentor_count = 0 	//so we don't loop through the member list if we already know there are no mentors in there
+
+	var/list/arch_cultists = list()
+	var/list/departments_left = list("Security", "Medical", "Engineering", "Science", "Cargo")
 
 /datum/faction/bloodcult/check_win()
-	return cult_win
+	if(stage <= FACTION_DEFEATED)
+		return FALSE
+	if(stage < FACTION_ENDGAME)
+		if(departments_left.len < 5)
+			stage(FACTION_ENDGAME)
+			command_alert(/datum/command_alert/cult_eclipse_start)
+			return FALSE
+	if(stage == FACTION_ENDGAME)
+		if(departments_left.len == 0)
+			stage(FACTION_VICTORY)
+			cult_win = TRUE
+			return TRUE
 
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
@@ -39,6 +53,8 @@
 	..()
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
 		UpdateCap()
+	for(var/datum/bloodcult_ritual/R in unlocked_rituals)
+		R.CheckCompletion()
 
 /datum/faction/bloodcult/proc/UpdateCap()
 	var/living_players = 0
@@ -91,6 +107,7 @@
 
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_rune_words()
+	initialize_rituals()
 	AppendObjective(/datum/objective/bloodcult)
 	for (var/datum/role/R in members)
 		var/mob/M = R.antag.current
@@ -101,3 +118,23 @@
 			var/mob/M = R.antag.current
 			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station.</span>")
 	..()
+
+
+/datum/faction/bloodcult/proc/GetDepartmentName(var/area/D)
+	if(istype(D, /area/science))
+		return "Science"
+	else if(istype(D, /area/security))
+		return "Security"
+	else if(istype(D, /area/supply))
+		return "Cargo"
+	else if(istype(D, /area/medical))
+		return "Medical"
+	else if(istype(D, /area/engineering))
+		return "Engineering"
+	else
+		return D.name
+/datum/faction/bloodcult/proc/IsValidDepartment(var/area/D)
+	var/list/valid_areas = list(/area/security, /area/science, /area/supply, /area/engineering, /area/medical)
+	if(is_type_in_list(D, valid_areas))
+		return TRUE
+	return FALSE

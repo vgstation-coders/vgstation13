@@ -103,7 +103,7 @@ var/list/blood_communion = list()
 	icon_state = "manifest"
 	tier = 3
 
-/*
+
 /datum/cult_tattoo/manifest/getTattoo(var/mob/M)
 	..()
 	var/mob/living/carbon/human/H = bearer
@@ -126,7 +126,7 @@ var/list/blood_communion = list()
 	H.status_flags &= ~CANPARALYSE
 	H.regenerate_icons()
 	H.update_dna_from_appearance()
-*/
+
 
 /datum/cult_tattoo/fast
 	name = TATTOO_FAST

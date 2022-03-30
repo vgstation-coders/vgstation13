@@ -563,6 +563,7 @@ var/list/rune_appearances_cache = list()
 	rune.manage_diseases(source)
 
 	if (rune.blood3)
+		CompleteCultRitual(/datum/bloodcult_ritual/draw_rune)
 		return RUNE_WRITE_COMPLETE
 	return RUNE_WRITE_CONTINUE
 
