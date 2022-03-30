@@ -118,6 +118,7 @@
 		E.germ_level = max(germ_level,E.germ_level) //as funny as scrubbing microbes out with clean gloves is - no.
 
 /proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool, var/success_override = SURGERY_SUCCESS_NORMAL)
+	set waitfor = FALSE
 	if(!ishuman(M) && !isslime(M))
 		return 0
 	if (user.a_intent == I_HURT)	//check for Hippocratic Oath

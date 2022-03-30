@@ -800,7 +800,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		return FALSE
 	if(user.isStunned())
 		return FALSE
-	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc	
+	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
 	if(user_loc_to_check != user_original_location)
 		return FALSE
 	if(target.loc != target_original_location)
@@ -1225,6 +1225,7 @@ var/global/list/common_tools = list(
 
 //check if mob is lying down on something we can operate him on.
 /proc/can_operate(mob/living/carbon/M, mob/U, var/obj/item/tool) // tool arg only needed if you actually intend to perform surgery (and not for instance, just do an autopsy)
+	set waitfor = FALSE
 	if(U == M)
 		return 0
 	var/too_bad = FALSE
