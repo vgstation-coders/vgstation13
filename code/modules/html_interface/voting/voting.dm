@@ -259,7 +259,7 @@ var/global/datum/controller/vote/vote = new()
 		CallHook("Reboot",list())
 		sleep(50)
 		log_game("Rebooting due to restart vote")
-		world.Reboot()
+		world.Reboot(REBOOT_HOST)
 
 /datum/controller/vote/proc/submit_vote(var/mob/user, var/vote)
 	if(mode)
