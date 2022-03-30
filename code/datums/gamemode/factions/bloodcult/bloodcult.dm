@@ -37,7 +37,7 @@
 	if(stage < FACTION_ENDGAME)
 		if(departments_left.len < 5)
 			stage(FACTION_ENDGAME)
-			command_alert(/datum/command_alert/cult_eclipse_start)
+			//command_alert(/datum/command_alert/cult_eclipse_start)
 			return FALSE
 	if(stage == FACTION_ENDGAME)
 		if(departments_left.len == 0)

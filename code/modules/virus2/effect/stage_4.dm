@@ -1139,7 +1139,6 @@
 		H.set_species("Human")
 		H.regenerate_icons()
 
-<<<<<<< HEAD
 /datum/disease2/effect/lizard
 	name = "Reptile Dysfunction"
 	desc =  "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Unathi."
@@ -1151,9 +1150,6 @@
 		var/mob/living/carbon/human/H = mob
 		H.set_species("Unathi")
 		H.regenerate_icons()
-=======
-
-
 
 
 /datum/disease2/effect/faithless
@@ -1166,6 +1162,8 @@
 
 /datum/disease2/effect/faithless/activate(var/mob/living/carbon/human/H)
 	if(!istype(H) || iscultist(H))
+		return
+	if(istype(get_area(H), /area/chapel))
 		return
 
 	if(multiplier >= 2)
@@ -1196,4 +1194,3 @@
 		H.handle_regular_hud_updates()
 	
 
->>>>>>> cultrituals

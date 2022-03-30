@@ -580,6 +580,7 @@ var/list/rune_appearances_cache = list()
 		rune.word3 = null
 		rune.blood3 = null
 		rune.update_icon()
+		ChangeVeilWeakness(-1)
 		if (rune.active_spell)
 			rune.active_spell.abort(RITUALABORT_ERASED)
 			rune.active_spell = null

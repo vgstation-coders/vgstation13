@@ -752,7 +752,6 @@
 	else
 		H.vomit()
 
-<<<<<<< HEAD
 /datum/disease2/effect/antitox
 	name = "Antioxidantisation Syndrome"
 	desc = "A very real syndrome beloved by Super-Food Fans and Essential Oil Enthusiasts; encourages the production of anti-toxin within the body."
@@ -763,7 +762,7 @@
 	to_chat(mob, "<span class = 'notice'>You feel your toxins being purged!</span>")
 	if (mob.reagents.get_reagent_amount(ANTI_TOXIN) < 1)
 		mob.reagents.add_reagent(ANTI_TOXIN, 1)
-=======
+
 /datum/disease2/effect/cult_vomit
 	name = "Hemoptysis"
 	desc = "Causes the infected to cough up blood."
@@ -775,6 +774,11 @@
 /datum/disease2/effect/cult_vomit/activate(mob/living/carbon/M)
 	if(!ishuman(M) || active)
 		return
+	if(istype(get_area(M), /area/chapel))
+		return
+	if(iscultist(M))
+		return
+
 	var/mob/living/carbon/human/mob = M
 	active = 1
 	to_chat(mob, "<span class='warning'>You feel a burning sensation in your throat.</span>")
@@ -788,4 +792,3 @@
 	mob.Stun(5)
 	mob.vessel.remove_reagent(BLOOD,8)
 	active = 0
->>>>>>> cultrituals

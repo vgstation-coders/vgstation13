@@ -160,7 +160,6 @@
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_role,
 		/datum/mind_ui/bloodcult_help,
-		/datum/mind_ui/bloodcult_tear_reality,
 		)
 	display_with_parent = TRUE
 	x = "LEFT"

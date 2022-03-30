@@ -114,6 +114,8 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 			awardedpoints = 10
 		if(/mob/living/simple_animal/mouse)
 			awardedpoints = 2
+		if(/mob/living/simple_animal/cockroach)
+			awardedpoints = 1
 		else
 			awardedpoints = 5
 	return awardedpoints * multiplier
@@ -221,8 +223,10 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	
 /datum/bloodcult_ritual/animal_sacrifice/Complete(var/mob/cultist, var/list/extrainfo)
 	var/mobtype = extrainfo["mobtype"]
-	Reward(GetMobValue(mobtype, 4))
-	GrantTattoo(cultist, /datum/cult_tattoo/dagger)
+	var/points = GetMobValue(mobtype,4)
+	Reward(points)
+	if(points >= 20)
+		GrantTattoo(cultist, /datum/cult_tattoo/dagger)
 
 
 /datum/bloodcult_ritual/spirited_away

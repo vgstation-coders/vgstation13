@@ -417,6 +417,8 @@
 /datum/disease2/effect/cult_hallucination/activate(var/mob/living/mob)
 	if(iscultist(mob))
 		return
+	if(istype(get_area(mob), /area/chapel))
+		return
 	var/client/C = mob.client
 	if(!C)
 		return
@@ -425,6 +427,8 @@
 	var/list/turf_list = list()
 	for(var/turf/T in spiral_block(get_turf(mob), 40))
 		if(locate(/obj/structure/grille) in T.contents)
+			continue
+		if(istype(get_area(T), /area/chapel))
 			continue
 		if(prob(2*multiplier))
 			turf_list += T
