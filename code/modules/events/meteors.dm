@@ -25,7 +25,7 @@
 	meteor_wave(rand(20, 40), max_size = 2, offset_origin = 150, offset_dest = 230) //Large waves, panic is mandatory
 
 /datum/event/meteor_wave/end()
-	spawn(450)
+	spawn(45 SECONDS)
 		command_alert(/datum/command_alert/meteor_wave_end)
 
 //One to two vawes
@@ -181,7 +181,7 @@ var/global/list/thing_storm_types = list(
 	command_alert("The station is about to pass through an unknown organic debris field. No hull breaches are likely.", "Organic Debris Field")
 
 /datum/event/thing_storm/meaty_gore/end()
-	spawn(450)
+	spawn(45 SECONDS)
 		command_alert("The station has cleared the organic debris field.", "Organic Debris Field")
 
 /datum/event/thing_storm/blob_shower
