@@ -116,6 +116,14 @@
 		feedback_add_details("slime_core_harvested","[replacetext(S.colour," ","_")]")
 	..()
 
+/datum/food_processor_process/mob/voxchicken //out of place on purpose, do not relocate, since that will break vox chicken process-nugetting
+	input = /mob/living/carbon/monkey/vox
+	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+
+/datum/food_processor_process/mob/voxchicken/process(loc, what)
+	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
+	..()
+
 /datum/food_processor_process/mob/monkey
 	input = /mob/living/carbon/monkey
 	output = null
@@ -137,14 +145,6 @@
 	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
 
 /datum/food_processor_process/mob/chicken/process(loc, what)
-	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
-	..()
-
-/datum/food_processor_process/mob/voxchicken
-	input = /mob/living/carbon/monkey/vox
-	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
-
-/datum/food_processor_process/mob/voxchicken/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 	..()
 
