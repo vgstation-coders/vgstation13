@@ -69,6 +69,7 @@
 	var/environ = 3
 	var/operating = 1
 	var/charging = 0
+	var/charge_diff = 0 				// How much charge we've gained or lost this tick (an APC can be charging and still be losing charge depending on priorities and statisfaction)
 	var/chargemode = 1
 	var/chargecount = 0
 	var/locked = 1
@@ -111,6 +112,7 @@
 
 	power_priority = POWER_PRIORITY_APC
 	var/power_recharge_priority = POWER_PRIORITY_APC_RECHARGE // Should always be at least one level lower than power_priority
+	monitoring_enabled = TRUE
 
 	var/recharge_load = 0 // How much power we've requested for recharging purposes
 
@@ -981,6 +983,14 @@
 
 	return 1
 
+/obj/machinery/power/apc/change_priority(value, id)
+	. = ..()
+	if(.)
+		return
+
+	if (id == "\ref[src]_b")
+		power_recharge_priority = value
+
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
 	src.update()
@@ -1115,6 +1125,8 @@
 		main_status = 2 // "Good"
 
 	if(cell && !shorted)
+		var/tmpcharge = cell.charge
+
 		// Attempt to recharge the cell. Better do it now so there's something to drain later
 		recharge_cell()
 
@@ -1127,8 +1139,11 @@
 		// Turn charging on or off as needed
 		process_chargemode()
 
+		charge_diff = cell.charge - tmpcharge
+
 	else // No cell, switch everything off
 		turn_charging_off()
+		charge_diff = 0
 		equipment = autoset(equipment, 0)
 		lighting = autoset(lighting, 0)
 		environ = autoset(environ, 0)
@@ -1264,6 +1279,37 @@
 			if(val==APC_CHANNEL_STATUS_AUTO_ON)									// if auto-on, return auto-off
 				return APC_CHANNEL_STATUS_AUTO_OFF
 	return val
+
+/obj/machinery/power/apc/get_monitor_status()
+	if (stat & (BROKEN|MAINT|FORCEDISABLE) || !monitoring_enabled)
+		return null
+
+	var/list/data = list()
+
+	// Base APC data
+	var/list/base = get_monitor_status_template()
+	base["name"] = "APC"
+	base["demand"] = lastused_total
+
+	data["\ref[src]"] = base
+
+	// Charger data
+	if (cell && !shorted)
+		var/list/battery = get_monitor_status_template()
+		battery["name"] = "APC battery"
+		battery["priority"] = power_recharge_priority
+		battery["demand"] = recharge_load
+		battery["isbattery"] = TRUE
+		battery["charge"] = cell ? cell.percent() : 0
+
+		if (charge_diff > 0)
+			battery["charging"] = MONITOR_STATUS_BATTERY_CHARGING
+		else if (charge_diff < 0)
+			battery["charging"] = MONITOR_STATUS_BATTERY_DISCHARGING
+
+		data["\ref[src]_b"] = battery
+
+	return data
 
 // damage and destruction acts
 

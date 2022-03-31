@@ -22,6 +22,8 @@
 	var/obj/machinery/power/terminal/terminal = null //not strictly used on all machines - a placeholder
 	var/starting_terminal = 0
 
+	var/monitoring_enabled = FALSE //Whether to show up in the power monitor at all
+
 /obj/machinery/power/New()
 	. = ..()
 	machines -= src
@@ -142,6 +144,32 @@
 
 	powernet.remove_machine(src)
 	return 1
+
+// produces data for the power monitor
+/obj/machinery/power/proc/get_monitor_status_template()
+	return list( // Unique ID. If you're splitting a machine into multiple loads, eg: main and battery (see APCs) you could have "\ref[src]" and "\ref[src]_battery" as IDs
+		"ref" = "\ref[src]", // ref for use in Topic() calls
+		"name" = name,
+
+		"priority" = power_priority,
+		"demand" = 0,  //How much power is being requested. Override this proc and fill this in manually.
+
+		"isbattery" = FALSE, // If true, a charge meter will be displayed
+		"charging" = MONITOR_STATUS_BATTERY_STEADY,
+		"charge" = 100
+	)
+
+/obj/machinery/power/proc/change_priority(value, id)
+	if(id == "\ref[src]")
+		power_priority = value
+		return TRUE
+
+// produces data for the power monitor
+/obj/machinery/power/proc/get_monitor_status()
+	if (!monitoring_enabled)
+		return null
+
+	return list("\ref[src]" = get_monitor_status_template())
 
 ///////////////////////////////////////////
 // Powernet handling helpers

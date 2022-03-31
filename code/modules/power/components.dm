@@ -20,6 +20,14 @@
 
 	var/turf/turf = null // Updated in addToTurf()/removeFromTurf()
 
+	//for the power monitor
+	var/monitoring_enabled = FALSE // Whether to show up on the monitor at all
+	var/monitor_demand = 0 // How much power is being requested
+
+	var/monitor_isbattery = FALSE // If true, a charge meter will be displayed
+	var/monitor_charging = MONITOR_STATUS_BATTERY_STEADY
+	var/monitor_charge = 100
+
 /datum/power_connection/New(var/obj/parent)
 	src.parent = parent
 	power_machines |= src
@@ -237,6 +245,29 @@
 
 /datum/power_connection/proc/removeStaticPower(value, powerchannel)
 	addStaticPower(-value, powerchannel)
+
+/datum/power_connection/proc/get_monitor_status_template()
+	return list(
+		"ref" = "\ref[src]",
+		"name" = parent.name,
+
+		"priority" = power_priority,
+		"demand" = monitor_demand,
+
+		"isbattery" = monitor_isbattery,
+		"charging" = monitor_charging,
+		"charge" = monitor_charge
+	)
+
+/datum/power_connection/proc/get_monitor_status()
+	if (!monitoring_enabled)
+		return null
+	return list("\ref[src]" = get_monitor_status_template())
+
+/datum/power_connection/proc/change_priority(value, id)
+	if(id == "\ref[src]")
+		power_priority = value
+		return TRUE
 
 ///////////////////////////
 // POWER CONSUMERS

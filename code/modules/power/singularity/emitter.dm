@@ -11,6 +11,7 @@
 
 	use_power = MACHINE_POWER_USE_NONE
 	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
+	monitoring_enabled = TRUE
 	idle_power_usage = 10
 	active_power_usage = 300
 
@@ -32,17 +33,6 @@
 
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
-
-/obj/machinery/power/emitter/antique
-	name = "antique emitter"
-	desc = "An old fashioned heavy duty industrial laser."
-	icon_state = "emitter"
-
-/obj/machinery/power/emitter/antique/update_icon()
-	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
-		icon_state = "emitter_+a"
-	else
-		icon_state = "emitter"
 
 /obj/machinery/power/emitter/New(var/turf/loc)
 	..()
@@ -166,6 +156,15 @@
 		emitterlock.plane = ABOVE_LIGHTING_PLANE
 		emitterlock.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterlock
+
+/obj/machinery/power/emitter/get_monitor_status()
+	if (!(monitoring_enabled && active))
+		return null
+
+	var/list/template = get_monitor_status_template()
+	template["demand"] = active_power_usage
+
+	return list("\ref[src]" = template)
 
 /obj/machinery/power/emitter/attack_hand(mob/user as mob)
 	//Require consciousness

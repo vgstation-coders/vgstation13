@@ -480,7 +480,7 @@ Class Procs:
 	else if(!custom_aghost_alerts)
 		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
 
-	src.add_fingerprint(usr)
+		src.add_fingerprint(usr)
 	src.add_hiddenprint(usr)
 
 	return handle_multitool_topic(href,href_list,usr)

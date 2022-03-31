@@ -55,6 +55,7 @@ var/global/list/battery_online =	list(
 	anchored = 1
 	use_power = MACHINE_POWER_USE_NONE
 	power_priority = POWER_PRIORITY_SMES_RECHARGE
+	monitoring_enabled = TRUE
 
 	// Input
 	var/charging = FALSE //Are we currently taking charge in?
@@ -195,6 +196,21 @@ var/global/list/battery_online =	list(
 	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
 		update_icon()
 
+/obj/machinery/power/battery/get_monitor_status()
+	if (!(monitoring_enabled && charging))
+		return null
+
+	var/list/template = get_monitor_status_template()
+	template["demand"] = chargeload
+	template["isbattery"] = TRUE
+	template["charge"] = round(100 * charge/capacity)
+
+	if (chargereceived > loaddemand)
+		template["charging"] = MONITOR_STATUS_BATTERY_CHARGING
+	else if (chargereceived < loaddemand)
+		template["charging"] = MONITOR_STATUS_BATTERY_DISCHARGING
+
+	return list("\ref[src]" = template)
 /obj/machinery/power/battery/attack_hand(mob/user)
 	add_fingerprint(user)
 	ui_interact(user)

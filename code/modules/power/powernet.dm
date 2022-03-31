@@ -118,7 +118,7 @@
 // all powernets will have been rebuilt by the time this is called
 /datum/powernet/proc/reset()
 	// Apply loads, calculate satisfaction, and see how much excess we're left with (if any)
-	netexcess = avail
+	netexcess = max(avail, 0)
 	unsatisfied_priority = 0
 	if (!netexcess)
 		satisfaction = 0 // No power -> 0% satisfaction for all
