@@ -2238,7 +2238,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey
 
-/datum/recipe/vox_nuggets
+/datum/recipe/vox_nuggets //placed before regular nuggets on purpose, do not relocate, that will break the vox nuggets 
 	reagents = list(KETCHUP = 5)
 	items = list(
 		/obj/item/stack/sheet/cardboard,
@@ -2246,7 +2246,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
 
-/datum/recipe/vox_chicken_drumstick
+/datum/recipe/vox_chicken_drumstick //placed before regular drumsticks on purpose, do not relocate, that will break the vox drumsticks
 	items = list(
 		/obj/item/stack/sheet/cardboard,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
