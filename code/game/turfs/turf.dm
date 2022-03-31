@@ -594,6 +594,7 @@
 			if(O.invisibility == 101)
 				O.singularity_act()
 	ChangeTurf(get_underlying_turf())
+	get_area(src).icon_state = null
 	score.turfssingulod++
 	return(2)
 
