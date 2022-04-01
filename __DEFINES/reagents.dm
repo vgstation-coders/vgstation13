@@ -97,6 +97,7 @@
 #define TRICORDRAZINE 			"tricordrazine"
 #define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
+#define PROCIZINE 			"procizine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
 #define HYRONALIN 			"hyronalin"

@@ -98,7 +98,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -114,7 +114,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -194,7 +194,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
-	
+
 	if(addictive && M.addicted_chems)
 		M.addicted_chems.add_reagent(src.id, custom_metabolism)
 	if(tolerance_increase)
@@ -2914,6 +2914,60 @@
 	T.toxins -= 5
 	if(T.seed && !T.dead)
 		T.health += 50
+
+//Just for fun
+var/procizine_call = ""
+var/list/procizine_args = list()
+
+/client/proc/set_procizine_call()
+	set name = "Set procizine call"
+	set category = "Fun"
+    if(!user.check_rights(R_DEBUG))
+        return
+
+    procizine_call = input("Proc path to call on target reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
+    if(!procizine_call)
+        return
+
+    var/argnum = input("Number of arguments","Number:",0) as num|null
+    if(!argnum && (argnum!=0))
+        return
+
+	procizine_args.Cut()
+    procizine_args.len = argnum // Expand to right length
+
+    var/i
+    for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+        procizine_args[i] = variable_set(user.client)
+
+/datum/reagent/procizine
+	name = "Procizine"
+	id = PROCIZINE
+	description = "It is a mystery!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
+	var/procname = ""
+	var/list/procargs = list()
+
+/datum/reagent/procizine/New()
+	..()
+	procname = procizine_call
+	procargs = procizine_args.Copy()
+
+/datum/reagent/procizine/proc/call_proc(var/atom/A)
+    if(procname && hascall(A, procname))
+        call(A,procname)(arglist(procargs))
+
+/datum/reagent/procizine/on_mob_life(var/mob/living/carbon/M)
+	if(..())
+		return 1
+    call_proc(M)
+
+/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	call_proc(T)
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
