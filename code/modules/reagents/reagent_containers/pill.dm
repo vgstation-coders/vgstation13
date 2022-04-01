@@ -168,6 +168,15 @@
 	..()
 	reagents.add_reagent(ADMINORDRAZINE, 50)
 
+/obj/item/weapon/reagent_containers/pill/procizine
+	name = "Procizine pill"
+	desc = "What could possibly go wrong?"
+	icon_state = "pill6" //cyan-brown oblong
+
+/obj/item/weapon/reagent_containers/pill/procizine/New()
+	..()
+	reagents.add_reagent(PROCIZINE, 50)
+
 /obj/item/weapon/reagent_containers/pill/stox
 	name = "Sleeping pill"
 	desc = "Commonly used to treat insomnia."

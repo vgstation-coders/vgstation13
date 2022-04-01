@@ -2965,9 +2965,28 @@ var/list/procizine_args = list()
 		return 1
     call_proc(M)
 
-/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+/datum/reagent/procizine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	call_proc(T)
+
+/datum/reagent/procizine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+	call_proc(M)
+
+/datum/reagent/procizine/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	call_proc(T)
+
+/datum/reagent/procizine/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+	call_proc(O)
+
+/datum/reagent/procizine/reaction_dropper_mob(var/mob/living/M)
+	. = ..()
+	call_proc(M)
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"

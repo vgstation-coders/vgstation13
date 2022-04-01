@@ -519,6 +519,16 @@ var/datum/disease2/disease/wizarditis = null
 	..()
 	reagents.add_reagent(ADMINORDRAZINE, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/procizine
+	name = "Procizine Bottle"
+	desc = "A small bottle. Contains a liquid with effects decided on the whim of the gods."
+	icon = 'icons/obj/drinks.dmi'
+	//icon_state = "holyflask"
+
+/obj/item/weapon/reagent_containers/glass/bottle/procizine/New()
+	..()
+	reagents.add_reagent(PROCIZINE, 30)
+
 /obj/item/weapon/reagent_containers/glass/bottle/capsaicin
 	name = "Capsaicin Bottle"
 	desc = "A small bottle. Contains hot sauce."
