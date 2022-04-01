@@ -2922,7 +2922,7 @@ var/list/procizine_args = list()
 /client/proc/set_procizine_call()
 	set name = "Set procizine call"
 	set category = "Fun"
-	if(!user.check_rights(R_DEBUG))
+	if(!check_rights(R_DEBUG))
 		return
 
 	procizine_call = input("Proc path to call on target reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
@@ -2938,7 +2938,7 @@ var/list/procizine_args = list()
 
 	var/i
 	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-		procizine_args[i] = variable_set(user.client)
+		procizine_args[i] = variable_set(src)
 
 /datum/reagent/procizine
 	name = "Procizine"
