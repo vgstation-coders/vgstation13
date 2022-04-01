@@ -2957,13 +2957,13 @@ var/list/procizine_args = list()
 	procargs = procizine_args.Copy()
 
 /datum/reagent/procizine/proc/call_proc(var/atom/A)
-    if(procname && hascall(A, procname))
-        call(A,procname)(arglist(procargs))
+	if(procname && hascall(A, procname))
+		call(A,procname)(arglist(procargs))
 
 /datum/reagent/procizine/on_mob_life(var/mob/living/carbon/M)
 	if(..())
 		return 1
-    call_proc(M)
+	call_proc(M)
 
 /datum/reagent/procizine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
