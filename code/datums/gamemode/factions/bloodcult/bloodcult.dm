@@ -53,8 +53,7 @@
 	..()
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
 		UpdateCap()
-	for(var/datum/bloodcult_ritual/R in unlocked_rituals)
-		R.CheckCompletion()
+
 
 /datum/faction/bloodcult/proc/UpdateCap()
 	var/living_players = 0
@@ -107,8 +106,8 @@
 
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_rune_words()
-	initialize_rituals()
 	AppendObjective(/datum/objective/bloodcult)
+	initialize_rituals()
 	for (var/datum/role/R in members)
 		var/mob/M = R.antag.current
 		to_chat(M, "<span class='sinister'>Our communion must remain small and secretive.</span>")

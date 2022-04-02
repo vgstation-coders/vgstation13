@@ -462,10 +462,9 @@
 		to_chat(user, "<span class='warning'>There aren't any rune words left to erase.</span>")
 
 /datum/role/cultist/proc/GiveTattoo(var/type)
-	var/datum/cult_tattoo/T = new type
-	if(tattoos[T.name])
-		qdel(T)
+	if(locate(type) in tattoos)
 		return
+	var/datum/cult_tattoo/T = new type
 	tattoos[T.name] = T
 	update_cult_hud()
 	T.getTattoo(antag.current)

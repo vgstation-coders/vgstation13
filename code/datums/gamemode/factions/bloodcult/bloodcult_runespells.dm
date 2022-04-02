@@ -1510,7 +1510,6 @@ var/list/confusion_victims = list()
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
 		if(culprit && ritual_victim_count > 0)
-			to_chat(world, "sneed 2")
 			CompleteCultRitual(/datum/bloodcult_ritual/sow_confusion, culprit, list("victimcount" = ritual_victim_count))
 		while (confusion_victims.len > 0)//if the ritual atom stops existing while people are still confused, weird shit can occurs such as people remaining blinded forever.
 			sleep(10 SECONDS)
@@ -1541,9 +1540,11 @@ var/list/confusion_victims = list()
 	var/effect_range=7
 
 /datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
+	var/ritual_victim_count = 0
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
 		if (iscultist(M))
 			continue
+		ritual_victim_count += 1
 		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
 		M.update_fullscreen_alpha("deafborder", 100, 5)
 		M.Deafen(deaf_duration)
@@ -1559,7 +1560,8 @@ var/list/confusion_victims = list()
 			M.update_fullscreen_alpha("deafborder", 0, 5)
 			sleep(8)
 			M.clear_fullscreen("deafborder", animate = 0)
-
+	if(culprit && ritual_victim_count > 0)	
+		CompleteCultRitual(/datum/bloodcult_ritual/silence_lambs, culprit, list("victimcount" = ritual_victim_count))
 	qdel(spell_holder)
 
 /datum/rune_spell/deafmute/cast_talisman()
