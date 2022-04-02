@@ -122,7 +122,7 @@
 	update_colour()
 
 	if(client)
-		client.CAN_MOVE_DIAGONALLY = 0
+		client.CAN_MOVE_DIAGONALLY = TRUE
 
 	if(iscluwnebanned(src) && (timeofdeath > 0 || !iscluwne(src)))
 		log_admin("Cluwnebanned player [key_name(src)] attempted to join and was kicked.")

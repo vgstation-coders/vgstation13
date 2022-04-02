@@ -4,7 +4,7 @@
 		move_dir = 0 //keep track of the direction the player is currently trying to move in.
 		true_dir = 0
 		keypresses = 0
-		CAN_MOVE_DIAGONALLY = 0
+		CAN_MOVE_DIAGONALLY = TRUE
 
 	//rebind your interface so that your north/south/east/west keypresses are bound to:
 	//keydown: MoveKey [Direction] 1
