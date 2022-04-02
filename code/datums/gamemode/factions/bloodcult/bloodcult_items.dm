@@ -358,6 +358,7 @@ var/list/arcane_tomes = list()
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 	mech_flags = MECH_SCAN_FAIL
+	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
 	var/obj/effect/rune/attuned_rune = null
 	var/spell_type = null
@@ -466,6 +467,8 @@ var/list/arcane_tomes = list()
 	if (istype(loc,/obj/item/weapon/tome))
 		var/obj/item/weapon/tome/T = loc
 		T.talismans.Remove(src)
+	if (linked_ui)
+		linked_ui.talisman = null
 	qdel(src)
 
 /obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/R)
@@ -473,7 +476,7 @@ var/list/arcane_tomes = list()
 		return
 
 	if (blood_text)
-		to_chat(user, "<span class='warning'>Cannot imbue a talisman that has been written on.</span>")
+		to_chat(user, "<span class='warning'>You can't imbue a talisman that has been written on.</span>")
 		return
 
 	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
@@ -482,9 +485,6 @@ var/list/arcane_tomes = list()
 		src.forceMove(get_turf(R))
 		R.attack_hand(user)
 	else
-		if (attuned_rune)
-			to_chat(user, "<span class='warning'>\The [src] is already linked to a rune.</span>")
-			return
 		if (attuned_rune)
 			to_chat(user, "<span class='warning'>\The [src] is already imbued with the power of a rune.</span>")
 			return
@@ -1053,11 +1053,16 @@ var/list/arcane_tomes = list()
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	mech_flags = MECH_SCAN_FAIL//not that you should be able to drop it in the first place BUT just in case
 	var/mob/originator = null
+	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/linked_ui 
 	var/stacks = 0
 	var/absorbed = 0
 	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/weapon/melee/blood_dagger/Destroy()
+	if(linked_ui)
+		linked_ui.dagger = null
+		linked_ui.UpdateIcon()
+		linked_ui = null
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/forge_over.ogg', 100, 0, -2)
 	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)

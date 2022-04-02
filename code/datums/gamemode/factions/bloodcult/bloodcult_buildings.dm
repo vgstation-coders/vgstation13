@@ -287,7 +287,7 @@
 			if(S.stat != DEAD)
 				S.death()	
 			I.add_blood()
-			user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [S] and impales them on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [S] and impale them on \the [src]!</span>")
+			user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [S] and impales it on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [S] and impale it on \the [src]!</span>")
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
 			if (istype(blade) && !blade.shade)

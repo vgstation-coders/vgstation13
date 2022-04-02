@@ -37,12 +37,12 @@ var/list/blood_communion = list()
 	icon_state = "bloodpool"
 	tier = 1
 
-/*
+
 /datum/cult_tattoo/bloodpool/getTattoo(var/mob/M)
 	..()
 	if (iscultist(M))
 		blood_communion.Add(iscultist(M))
-*/
+
 
 /datum/cult_tattoo/silent
 	name = TATTOO_SILENT
@@ -84,6 +84,13 @@ var/list/blood_communion = list()
 	..()
 	if (iscultist(M))
 		M.add_spell(new /spell/cult/arcane_dimension, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
+
+/datum/cult_tattoo/rune_store
+	name = TATTOO_RUNESTORE
+	desc = "Allows you to trace a rune onto your skin and activate it at will."
+	icon_state = "rune"
+	tier = 2
 
 /datum/cult_tattoo/chat // functionality moved to Spires
 	name = TATTOO_CHAT

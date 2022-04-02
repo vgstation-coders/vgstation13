@@ -46,25 +46,31 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	return cult_altars
 
 /datum/faction/bloodcult/proc/initialize_rituals()
-	for(var/type in (subtypesof(/datum/bloodcult_ritual) - typesof(/datum/bloodcult_ritual/always_active))
+	for(var/type in (subtypesof(/datum/bloodcult_ritual) - typesof(/datum/bloodcult_ritual/always_active)))
 		locked_rituals += new type
 	for(var/i = 1 to 3)
 		UnlockRandomRitual()
 	for(var/type in subtypesof(/datum/bloodcult_ritual/always_active))
 		new type
 
-/datum/faction/bloodcult/proc/UnlockRandomRitual()
+/datum/faction/bloodcult/proc/UnlockRandomRitual(var/announce)
 	if(locked_rituals.len > 0)
 		var/datum/bloodcult_ritual/R = pick_n_take(locked_rituals)
-		R.Unlock()
+		R.Unlock(announce)
 		return R
 	else 
+		for(var/datum/role/cultist/C in members)
+			to_chat(C.antag.current, "<span class='sinister'>The veil of reality is close to shattering... there are no more rituals to complete.</span>")
 		return null
 
 
 /datum/faction/bloodcult/proc/update_cultist_uis()
 	for(var/datum/role/cultist/C in members)
 		C.update_cult_hud()
+
+
+///////////////////////////////////////////
+
 
 /datum/bloodcult_ritual
 	var/name = "Cult Ritual"        
@@ -85,26 +91,27 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		"<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>Remarkable... for a mortal.</span>"
 	)
 
-	var/list/completion_text_last = list(
-		"<span class='sinister'>You've weakened the veil as much as you can... there is nothing more for you to do.</span>"
-	)
-
 /datum/bloodcult_ritual/always_active/New()
 	Unlock()
 
+/datum/bloodcult_ritual/always_active/Unlock()
+	unlocked_rituals += src
 
 /datum/bloodcult_ritual/proc/Complete()
 	Reward()
 
-/datum/bloodcult_ritual/proc/Unlock()
+/datum/bloodcult_ritual/proc/Unlock(var/announce)
 	unlocked_rituals += src
 	jectie = new(src)
 	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
 	if(B)
+		if(announce)
+			for(var/datum/role/cultist/C in B.members)
+				to_chat(C.antag.current, "<b>New Objective: </b>[desc]")
 		B.AppendObjective(jectie, 1)
 
 /datum/bloodcult_ritual/proc/Reward(var/worth)
-	if(point_limit && (points_rewarded + worth <= point_limit))
+	if(!point_limit == 0 || (points_rewarded + worth <= point_limit))
 		points_rewarded += worth
 		ChangeVeilWeakness(worth)
 
@@ -112,18 +119,13 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		jectie.complete = TRUE
 		var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
 		if(B)
-			var/datum/bloodcult_ritual/R = B.UnlockRandomRitual()
 			for(var/datum/role/cultist/C in B.members)
 				var/completion_text = worth >= 50 ? pick(completion_text_major) : pick(completion_text_minor)
 				to_chat(C.antag.current, completion_text)
-				if(R)
-					to_chat(C.antag.current, "<b>New Objective:</b> [R.desc]")
-				else
-					to_chat(C.antag.current, pick(completion_text_last))
-			
+			B.UnlockRandomRitual(TRUE)
 
 /datum/bloodcult_ritual/always_active/Reward(var/worth)
-	if(point_limit && (points_rewarded + worth <= point_limit))
+	if(!point_limit == 0 || (points_rewarded + worth <= point_limit))
 		points_rewarded += worth
 		ChangeVeilWeakness(worth)
 
@@ -166,6 +168,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/always_active/draw_rune
 	name = "Draw Rune"
 	desc = "Draw a rune."
+	point_limit = 100
 
 /datum/bloodcult_ritual/always_active/draw_rune/Complete(var/mob/cultist, var/list/extrainfo)
 	var/erased = extrainfo["erased"]
@@ -204,7 +207,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/spirited_away/Complete(var/mob/cultist, var/list/extrainfo)
 	var/list/victims = extrainfo["victims"]
 	for(var/mob/V in victims)
-		if(V in previous_victims)
+		if((V in previous_victims) || !V.mind)
 			victims -= V
 	previous_victims += victims
 	if(victims.len > 0)
@@ -249,5 +252,23 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	var/people = extrainfo["victimcount"]
 	if(people > 1)
 		Reward(people * 10)
-		GrantTattoo(/datum/cult_tattoo/silent)
+		GrantTattoo(cultist, /datum/cult_tattoo/silent)
 	
+/datum/bloodcult_ritual/curse_blood
+	name = "Spread the Gift"
+	desc = "Spread our gift amongst the crew. Create cursed blood by pouring it into a goblet, then have at least 3 nonbelievers injest that blood."
+	point_limit = 100
+	var/list/infected = list()
+
+/datum/bloodcult_ritual/curse_blood/Complete(var/list/extrainfo)
+	var/mob/living/victim = extrainfo["victim"]
+	if(!victim || !victim.mind || (victim in infected))
+		return
+	infected += victim
+
+	if(infected.len == 3)
+		Reward(100)
+		var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
+		if(B)
+			for(var/datum/role/cultist/C in B.members)
+				GrantTattoo(C.antag.current, /datum/cult_tattoo/bloodpool)

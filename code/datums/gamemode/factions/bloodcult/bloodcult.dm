@@ -93,12 +93,26 @@
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	// TODO UPHEAVAL PART 2, admin debug buttons
+	
+	dat += "<br>"
+	dat += "<a href='?src=\ref[src];unlockRitual=1'>\[Unlock Ritual\]</A><br>"
+	dat += "<br>"
+
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
 	..()
-	// TODO UPHEAVAL PART 2, admin debug buttons
+
+	if(!usr.check_rights(R_ADMIN))
+		message_admins("[usr] tried to access bloodcult faction Topic() without permissions.")
+		return
+
+	if(href_list["unlockRitual"])
+		var/datum/bloodcult_ritual/R = input(usr,"Select a ritual to unlock.", "Unlock", null) as null|anything in locked_rituals
+		if(R)
+			R.Unlock(TRUE)
+			locked_rituals -= R
+			
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	..()
@@ -116,6 +130,7 @@
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
 			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station.</span>")
+	AnnounceObjectives()
 	..()
 
 

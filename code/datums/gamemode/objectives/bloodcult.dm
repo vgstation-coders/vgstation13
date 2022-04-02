@@ -28,10 +28,11 @@
 		return TRUE
 	return complete ? TRUE : FALSE
 	
-/datum/objective/bloodcult_ritual/New(var/ritual)
-	assigned_ritual = ritual
-	name = ritual.name
-	explanation_text = ritua.desc
+/datum/objective/bloodcult_ritual/New(var/datum/bloodcult_ritual/ritual)
+	if(ritual)
+		assigned_ritual = ritual
+		name = ritual.name
+		explanation_text = ritual.desc
 
 /* there might be useful bits of code here to use later so I'm leaving this commented out for convenience for now.
 /datum/objective/bloodcult_reunion

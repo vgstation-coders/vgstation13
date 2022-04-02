@@ -991,7 +991,7 @@ var/list/converted_minds = list()
 			if ("Always","Yes")
 				conversion.icon_state = "rune_convert_good"
 				to_chat(activator, "<span class='sinister'>The ritual immediately stabilizes, \the [victim] appears eager help prepare the festivities.</span>")
-				to_chat(victim, "<span class='sinister'>YOU HAVE BEEN WAITING FOR US. OUR CULT WELCOMES YOU</span>")
+				cult.send_flavour_text_accept(victim, activator)
 				success = CONVERSION_ACCEPT
 				conversion_delay = 30
 			if ("No","???","Never")
@@ -1031,7 +1031,7 @@ var/list/converted_minds = list()
 				to_chat(activator, "<span class='sinister'>This mindless creature will be sacrificed.</span>")
 				success = CONVERSION_MINDLESS
 			if ("Overcrowded")
-				to_chat(victim, "<span class='sinister'>EXCEPT...THERE ARE NO VACANT SEATS LEFT.</span>")
+				to_chat(victim, "<span class='sinister'>EXCEPT...THERE ARE NO VACANT SEATS LEFT!</span>")
 				success = CONVERSION_OVERCROWDED
 				conversion_delay = 30
 
@@ -1560,8 +1560,8 @@ var/list/confusion_victims = list()
 			M.update_fullscreen_alpha("deafborder", 0, 5)
 			sleep(8)
 			M.clear_fullscreen("deafborder", animate = 0)
-	if(culprit && ritual_victim_count > 0)	
-		CompleteCultRitual(/datum/bloodcult_ritual/silence_lambs, culprit, list("victimcount" = ritual_victim_count))
+	if(activator && ritual_victim_count > 0)	
+		CompleteCultRitual(/datum/bloodcult_ritual/silence_lambs, activator, list("victimcount" = ritual_victim_count))
 	qdel(spell_holder)
 
 /datum/rune_spell/deafmute/cast_talisman()
@@ -1866,7 +1866,7 @@ var/list/confusion_victims = list()
 
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
-	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
+	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration, animate_movement = TRUE)
 	new /obj/effect/cult_ritual/seer(activator,activator,null,TRUE, talisman_duration)
 	qdel(src)
 
