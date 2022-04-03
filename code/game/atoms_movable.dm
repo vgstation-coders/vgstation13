@@ -1024,6 +1024,10 @@
 /atom/movable/proc/do_attack_animation(atom/target, atom/tool)
 	set waitfor = 0
 
+	if(tool.flags&NO_ATTACK_ANIM)
+		return
+
+
 	ASSERT(tool) //If no tool, shut down the proc and call the coder police
 
 	if(target == src)

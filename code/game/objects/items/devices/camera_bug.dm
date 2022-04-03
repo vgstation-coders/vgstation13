@@ -7,7 +7,7 @@
 	item_state = ""
 	throw_speed = 4
 	throw_range = 20
-	flags = FPRINT | NO_ATTACK_MSG
+	flags = FPRINT | NO_ATTACK_MSG | NO_ATTACK_ANIM
 	var/c_tag = ""
 	var/active = FALSE
 	var/network = ""
