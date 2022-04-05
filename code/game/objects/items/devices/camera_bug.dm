@@ -8,7 +8,6 @@
 	throw_speed = 4
 	throw_range = 20
 	flags = FPRINT | NO_ATTACK_MSG
-	hitsound = null
 	var/c_tag = ""
 	var/active = FALSE
 	var/network = ""
@@ -20,9 +19,6 @@
 		/mob/living/carbon,
 		/obj/item/weapon/storage
 	)
-
-/obj/item/device/camera_bug/do_attack_animation(atom/target, mob/user)
-   return
 
 /obj/item/device/camera_bug/attack_self(var/mob/user)
 	var/newtag = sanitize(input(user, "Choose a unique ID tag:", name, c_tag) as null|text)
