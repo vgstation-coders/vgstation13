@@ -1026,9 +1026,6 @@
 
 	ASSERT(tool) //If no tool, shut down the proc and call the coder police
 
-	if(tool.flags&NO_ATTACK_ANIM)
-		return
-
 	if(target == src)
 		return
 	var/horizontal = 0

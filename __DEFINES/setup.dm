@@ -209,8 +209,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SILENTCONTAINER	65536 //reactions inside make no noise
 #define ATOM_INITIALIZED 131072 // initialize() was called
 
-#define NO_ATTACK_ANIM 262144 // use when you completely want to get rid of an attack animation for an item
-
 #define ALL ~0
 #define NONE 0
 
