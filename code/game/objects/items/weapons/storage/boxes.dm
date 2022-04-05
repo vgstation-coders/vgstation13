@@ -395,34 +395,34 @@
 /obj/item/weapon/storage/box/monkeycubes/farwacubes
 	name = "farwa cube box"
 	desc = "Drymate brand farwa cubes, shipped from Ahdomai. Just add water!"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/farwacube = 5)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/farwacube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/stokcubes
 	name = "stok cube box"
 	desc = "Drymate brand stok cubes, shipped from Moghes. Just add water!"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/stokcube = 5)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/stokcube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/neaeracubes
 	name = "neaera cube box"
 	desc = "Drymate brand neaera cubes, shipped from Jargon 4. Just add water!"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube = 5)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/roachcubes
 	name = "roach cube box"
 	desc = "Drymate brand roach cubes, shipped from Secto 4. Just add water!"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube = 5)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/mousecubes
 	name = "lab mouse cube box"
 	desc = "Drymate brand laboratory mouse cubes, shipped from Yensid. Just add water!"
 	icon_state = "mousecubebox"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube = 5)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/spacecarpcube
 	name = "space carp baby cube box"
 	desc = "Drymate brand space carp baby cubes, shipped from F1SH-1NG. Just add water!"
 	icon_state = "spacecarpcubebox"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube = 5)
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube = 6)
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"
