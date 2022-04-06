@@ -51,6 +51,7 @@
 	var/mug_desc = null
 	var/addictive = FALSE
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
+	var/overdose_am_multiplier = null //use this to control if something has an OD threshold
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -98,7 +99,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -114,7 +115,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -187,21 +188,28 @@
 
 	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
 		return 1
-	if(is_overdosing())
+	if(is_overdosing(M))
 		on_overdose(M)
 
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
-	
+
 	if(addictive && M.addicted_chems)
 		M.addicted_chems.add_reagent(src.id, custom_metabolism)
 	if(tolerance_increase)
 		M.tolerated_chems[src.id] += tolerance_increase
 
-/datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
-	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
+/datum/reagent/proc/is_overdosing(var/mob/living/M) //Too much chems, or been in your system too long
+	var/tolerance_level = null
+	if(M.tolerated_chems[src.id])
+		tolerance_level = M.tolerated_chems[src.id]
+	else
+		tolerance_level = 0
+	var/tolerance_OD_am = max(round(overdose_am - (1/(overdose_am/3))*tolerance_level*(tolerance_level - overdose_am),0.01),overdose_am) //OD limit increases as tolerance incrases up to a certain point before matching tolerance level indefinitely.
+	var/tolerance_OD_tick = max(round(tolerance_OD_am/overdose_am * overdose_tick,1), overdose_tick)
+	return (overdose_am && volume >= tolerance_OD_am) || (overdose_tick && tick >= tolerance_OD_tick)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
