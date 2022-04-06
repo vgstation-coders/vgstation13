@@ -315,7 +315,7 @@ var/list/map_dimension_cache = list()
 
 	var/turf/T_current = locate(xcrd,ycrd,zcrd)
 	var/area/A = instance
-	if(T_current.loc != A) //If preloader didn't set the area, do it here
+	if(!istype(T_current.loc, A.type) //If preloader didn't set the area, do it here
 		T_current.set_area(A)
 
 	//The areas list doesn't contain areas without objects by default
