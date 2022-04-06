@@ -135,20 +135,41 @@
 
 
 /datum/faction/bloodcult/proc/GetDepartmentName(var/area/D)
-	if(istype(D, /area/science))
-		return "Science"
-	else if(istype(D, /area/security))
-		return "Security"
-	else if(istype(D, /area/supply))
-		return "Cargo"
-	else if(istype(D, /area/medical))
-		return "Medical"
-	else if(istype(D, /area/engineering))
-		return "Engineering"
-	else
-		return D.name
+	switch(D.type)
+		if(/area/science))
+			return "Science"
+		if(/area/security))
+			return "Security"
+		if(/area/supply))
+			return "Cargo"
+		if(/area/medical))
+			return "Medical"
+		if(/area/engineering))
+			return "Engineering"
+		else
+			return D.name
+			
 /datum/faction/bloodcult/proc/IsValidDepartment(var/area/D)
 	var/list/valid_areas = list(/area/security, /area/science, /area/supply, /area/engineering, /area/medical)
 	if(is_type_in_list(D, valid_areas))
 		return TRUE
 	return FALSE
+
+
+/datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
+	if (!istype(T))
+		return
+	if(T && (T.z == map.zMainStation))//F I V E   T I L E S
+		if(!(locate("\ref[T]") in bloody_floors))
+			bloody_floors[T] = T
+			for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
+				B.update_icon()
+			TriggerCultRitual(/datum/bloodcult_ritual/spill_blood)
+
+
+/datum/faction/bloodcult/proc/remove_bloody_floor(var/turf/T)
+	if (!istype(T))
+		return
+	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
+		B.update_icon()
+	bloody_floors -= T

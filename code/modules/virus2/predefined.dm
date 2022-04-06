@@ -165,5 +165,5 @@ var/list/global_diseases = list()
 /datum/disease2/disease/predefined/cult/CanInfect(var/mob/living/mob)
 	if(iscultist(mob))
 		return FALSE
-	CompleteCultRitual(/datum/bloodcult_ritual/curse_blood, list("victim" = mob))
+	TriggerCultRitual(/datum/bloodcult_ritual/curse_blood, list("victim" = mob))
 	return TRUE

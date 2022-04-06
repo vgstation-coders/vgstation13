@@ -20,7 +20,7 @@
 /datum/objective/bloodcult_ritual
 	name = "Blood Cult: Ritual"
 	explanation_text = ""
-	var/assigned_ritual
+	var/datum/bloodcult_ritual/assigned_ritual
 	var/complete = FALSE
 
 /datum/objective/bloodcult_ritual/IsFulfilled()
@@ -33,6 +33,10 @@
 		assigned_ritual = ritual
 		name = ritual.name
 		explanation_text = ritual.desc
+
+/datum/objective/bloodcult_ritual/extraInfo()
+	explanation_text += assigned_ritual.extraInfo()
+	
 
 /* there might be useful bits of code here to use later so I'm leaving this commented out for convenience for now.
 /datum/objective/bloodcult_reunion

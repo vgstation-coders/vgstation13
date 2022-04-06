@@ -1,7 +1,18 @@
 ///////////////////////////////////
 //            CULT RITUALS
 // 
-// 
+// 	Flow Overview: 
+//      TriggerCultRitual Global Proc =>
+//			Trigger() Ritual Proc => Check For Completion
+//				Reward() Ritual Proc =>
+//					Finish() => Ritual Proc
+//
+//
+//
+//		Procs to override:
+//		Trigger()  -  Called every time a ritual should be checked for completion
+//		extraInfo() - Returns text to be added to objective description on roundend screen
+//
 // 
 ///////////////////////////////////
 
@@ -30,10 +41,10 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		for(var/obj/structure/cult/spire/S in cult_spires)
 			S.upgrade(2)
 
-/proc/CompleteCultRitual(var/ritualtype, var/mob/cultist, var/list/extrainfo )
+/proc/TriggerCultRitual(var/ritualtype, var/mob/cultist, var/list/extrainfo )
 	var/datum/bloodcult_ritual/R = locate(ritualtype) in unlocked_rituals
 	if(R)
-		R.Complete(cultist, extrainfo)
+		R.Trigger(cultist, extrainfo)
 
 
 /datum/faction/bloodcult/proc/GetVeilWeakness()
@@ -76,8 +87,10 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	var/name = "Cult Ritual"        
 	var/desc = ""
 	var/point_limit = 0       // The ritual will stop working after this many points. 0 = infinite
-	var/points_rewarded = 0
+	var/only_once = 0		  // Can only be completed once.
+	var/total_points_rewarded = 0
 	var/datum/objective/bloodcult_ritual/jectie = null
+	var/datum/faction/bloodcult/cult = null 	// Quick reference
 
 	// Flavor
 	var/list/completion_text_minor = list(
@@ -91,42 +104,55 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		"<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>Remarkable... for a mortal.</span>"
 	)
 
+/datum/bloodcult_ritual/New()
+	..()
+	cult = locate(/datum/faction/bloodcult) in ticker.mode.factions
+	if(!cult)
+		message_admins("An initialized cult ritual failed to find the bloodcult faction. This shouldn't appear; expect problems.")
+
 /datum/bloodcult_ritual/always_active/New()
+	..()
 	Unlock()
 
 /datum/bloodcult_ritual/always_active/Unlock()
 	unlocked_rituals += src
 
-/datum/bloodcult_ritual/proc/Complete()
+/datum/bloodcult_ritual/Finish()
+	if(!jectie.complete)
+		jectie.complete = TRUE
+		for(var/datum/role/cultist/C in cult.members)
+			var/completion_text = worth >= 50 ? pick(completion_text_major) : pick(completion_text_minor)
+			to_chat(C.antag.current, completion_text)
+		cult.UnlockRandomRitual(TRUE)
+
+	if(only_once)
+		unlocked_rituals -= src
+		completed_rituals += src
+
+/datum/bloodcult_ritual/proc/Trigger()
 	Reward()
 
 /datum/bloodcult_ritual/proc/Unlock(var/announce)
 	unlocked_rituals += src
 	jectie = new(src)
-	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
-	if(B)
-		if(announce)
-			for(var/datum/role/cultist/C in B.members)
-				to_chat(C.antag.current, "<b>New Objective: </b>[desc]")
-		B.AppendObjective(jectie, 1)
+	if(announce)
+		for(var/datum/role/cultist/C in cult.members)
+			to_chat(C.antag.current, "<b>New Objective: </b>[desc]")
+	cult.AppendObjective(jectie, 1)
+
+/datum/bloodcult_ritual/proc/extraInfo()
+	return ""
 
 /datum/bloodcult_ritual/proc/Reward(var/worth)
-	if(!point_limit == 0 || (points_rewarded + worth <= point_limit))
-		points_rewarded += worth
+	if(!point_limit == 0 || (total_points_rewarded + worth <= point_limit))
+		total_points_rewarded += worth
 		ChangeVeilWeakness(worth)
 
-	if(!jectie.complete)
-		jectie.complete = TRUE
-		var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
-		if(B)
-			for(var/datum/role/cultist/C in B.members)
-				var/completion_text = worth >= 50 ? pick(completion_text_major) : pick(completion_text_minor)
-				to_chat(C.antag.current, completion_text)
-			B.UnlockRandomRitual(TRUE)
+	Finish()
 
 /datum/bloodcult_ritual/always_active/Reward(var/worth)
-	if(!point_limit == 0 || (points_rewarded + worth <= point_limit))
-		points_rewarded += worth
+	if(!point_limit == 0 || (total_points_rewarded + worth <= point_limit))
+		total_points_rewarded += worth
 		ChangeVeilWeakness(worth)
 
 /datum/bloodcult_ritual/proc/GrantTattoo(var/mob/cultist, var/type)
@@ -170,7 +196,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	desc = "Draw a rune."
 	point_limit = 100
 
-/datum/bloodcult_ritual/always_active/draw_rune/Complete(var/mob/cultist, var/list/extrainfo)
+/datum/bloodcult_ritual/always_active/draw_rune/Trigger(var/mob/cultist, var/list/extrainfo)
 	var/erased = extrainfo["erased"]
 	erased ? Reward(-1) : Reward(1)
 
@@ -178,7 +204,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	name = "Sow Confusion"
 	desc = "Corrupt the minds of the unenlightened. Curse at least two people with a single confusion rune."
 
-/datum/bloodcult_ritual/sow_confusion/Complete(var/mob/cultist, var/list/extrainfo)
+/datum/bloodcult_ritual/sow_confusion/Trigger(var/mob/cultist, var/list/extrainfo)
 	var/people = extrainfo["victimcount"]
 	if(people > 1)
 		Reward(people * 10)
@@ -188,7 +214,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	name = "Sacrifice Animal"
 	desc = "The Geometer demands blood. Sacrifice an animal at an altar."
 	
-/datum/bloodcult_ritual/animal_sacrifice/Complete(var/mob/cultist, var/list/extrainfo)
+/datum/bloodcult_ritual/animal_sacrifice/Trigger(var/mob/cultist, var/list/extrainfo)
 	var/mobtype = extrainfo["mobtype"]
 	var/points = GetMobValue(mobtype,4)
 	Reward(points)
@@ -204,7 +230,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	desc = "Show a nonbeliever life beyond this world. Send them on a trip through a path rune."
 	var/list/previous_victims = list()
 
-/datum/bloodcult_ritual/spirited_away/Complete(var/mob/cultist, var/list/extrainfo)
+/datum/bloodcult_ritual/spirited_away/Trigger(var/mob/cultist, var/list/extrainfo)
 	var/list/victims = extrainfo["victims"]
 	for(var/mob/V in victims)
 		if((V in previous_victims) || !V.mind)
@@ -218,7 +244,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	name = "Sacrifice Human"
 	desc = "The Geometer demands a meal. Sacrifice a human at an altar with the help of another cultist."
 
-/datum/bloodcult_ritual/human_sacrifice/Complete(var/mob/cultist, var/list/extrainfo)
+/datum/bloodcult_ritual/human_sacrifice/Trigger(var/mob/cultist, var/list/extrainfo)
 	Reward(500)
 	var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
 	if(!C)
@@ -234,7 +260,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	name = "Reveal the Truth"
 	desc = "Reveal the truth to the nonbelievers. Reveal hidden runes to nonbelievers and ensnare them in occult energy."
 
-/datum/bloodcult_ritual/reveal_truth/Complete(var/mob/cultist, var/list/extrainfo)
+/datum/bloodcult_ritual/reveal_truth/Trigger(var/mob/cultist, var/list/extrainfo)
 	var/points = 0
 	var/list/shocked = extrainfo["shocked"]
 	if(!shocked || shocked.len == 0)
@@ -248,7 +274,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	name = "Silence the Lambs"
 	desc = "Silence heretics aboard the station. Use a deaf/mute rune on at least two nonbelievers."
 
-/datum/bloodcult_ritual/silence_lambs/Complete(var/mob/cultist, var/list/extrainfo)
+/datum/bloodcult_ritual/silence_lambs/Trigger(var/mob/cultist, var/list/extrainfo)
 	var/people = extrainfo["victimcount"]
 	if(people > 1)
 		Reward(people * 10)
@@ -260,7 +286,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	point_limit = 100
 	var/list/infected = list()
 
-/datum/bloodcult_ritual/curse_blood/Complete(var/list/extrainfo)
+/datum/bloodcult_ritual/curse_blood/Trigger(var/list/extrainfo)
 	var/mob/living/victim = extrainfo["victim"]
 	if(!victim || !victim.mind || (victim in infected))
 		return
@@ -268,7 +294,61 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 	if(infected.len == 3)
 		Reward(100)
-		var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
-		if(B)
-			for(var/datum/role/cultist/C in B.members)
-				GrantTattoo(C.antag.current, /datum/cult_tattoo/bloodpool)
+		for(var/datum/role/cultist/C in cult.members)
+			GrantTattoo(C.antag.current, /datum/cult_tattoo/bloodpool)
+
+/datum/bloodcult_ritual/conversion
+	name = "Blood Missionary"
+	desc = "Spread our message amongst the crew. Convert a crewmember and have them join our cause."
+	var/list/converted = list()
+
+// Only succeeds if the conversion was successful! 
+// Be careful about reaching the cult capacity before unlocking this ritual.
+// Only works on people who haven't been converted before.
+// (Might make it so the ritual is completed if conversion fails ONLY due to cult capacity)
+/datum/bloodcult_ritual/conversion/Trigger(var/mob/living/cultist, var/list/extrainfo)
+	var/mob/living/victim = extrainfo["victim"]
+	if(victim && !(victim in converted))
+		converted += victim
+		Reward(200)
+		GrantTattoo(cultist, /datum/cult_tattoo/rune_store)
+
+
+/datum/bloodcult_ritual/build_construct
+	name = "Forge Construct"
+	desc = "Create the perfect servant. Use a captive soul to create a construct."
+
+/datum/bloodcult_ritual/build_construct/Trigger(var/list/extrainfo)
+	var/perfect = extrainfo["perfect"]
+	perfect ? Reward(150) : Reward(75)
+
+
+/datum/bloodcult_ritual/spill_blood
+	name = "Spill Blood"
+	desc = "Prepare this station for the Geometer's arrival. Spill blood across the station's floors."
+	var/only_once = TRUE
+	var/percent_bloodspill = 4//percent of all the station's simulated floors, you should keep it under 5.
+	var/target_bloodspill = 0//actual amount of bloodied floors to reach
+	var/max_bloodspill = 0//max amount of bloodied floors simultanously reached
+
+/datum/bloodcult_ritual/spill_blood/New()
+	..()
+	var/floor_count = 0
+	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			var/turf/tile = locate(i, r, map.zMainStation)
+			if(tile && istype(tile, /turf/simulated/floor) && !isspace(tile.loc) && !istype(tile.loc, /area/asteroid) && !istype(tile.loc, /area/mine) && !istype(tile.loc, /area/vault) && !istype(tile.loc, /area/prison) && !istype(tile.loc, /area/vox_trading_post))
+				floor_count++
+	target_bloodspill = round(floor_count * percent_bloodspill / 100)
+	target_bloodspill += rand(-20,20)
+	desc = "Prepare this station for the Geometer's arrival. Spill blood across [target_bloodspill] of the station's floors."
+
+/datum/bloodcult_ritual/spill_blood/extraInfo()
+	return " (Highest bloody floor count reached: [max_bloodspill])"
+
+/datum/bloodcult_ritual/spill_blood/Trigger()
+	var/count = cult.bloody_floors.len 
+	if(count > max_bloodspill)
+		max_bloodspill = count
+	if(max_bloodspill >= target_bloodspill)
+		Reward(500)

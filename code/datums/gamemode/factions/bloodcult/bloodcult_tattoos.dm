@@ -31,12 +31,11 @@
 ///////////////////////////
 var/list/blood_communion = list()
 
-/datum/cult_tattoo/bloodpool // doesn't actually do anything right now beside give you a cool tattoo
+/datum/cult_tattoo/bloodpool 
 	name = TATTOO_POOL
 	desc = "All blood costs reduced by 20%. Tributes are split with other bearers of this mark."
 	icon_state = "bloodpool"
 	tier = 1
-
 
 /datum/cult_tattoo/bloodpool/getTattoo(var/mob/M)
 	..()
@@ -92,11 +91,14 @@ var/list/blood_communion = list()
 	icon_state = "rune"
 	tier = 2
 
+// Obsolete - Spire grants :x communication when built.
+/*
 /datum/cult_tattoo/chat // functionality moved to Spires
 	name = TATTOO_CHAT
 	desc = "Chat with the cult using :x."
 	icon_state = "chat"
 	tier = 2
+*/
 
 ///////////////////////////
 //                       //
@@ -134,12 +136,14 @@ var/list/blood_communion = list()
 	H.regenerate_icons()
 	H.update_dna_from_appearance()
 
-
+// Obsolete - Runes are traced instantly now.
+/*
 /datum/cult_tattoo/fast
 	name = TATTOO_FAST
 	desc = "Trace runes 66% faster."
 	icon_state = "fast"
 	tier = 3
+*/
 
 /datum/cult_tattoo/shortcut
 	name = TATTOO_SHORTCUT

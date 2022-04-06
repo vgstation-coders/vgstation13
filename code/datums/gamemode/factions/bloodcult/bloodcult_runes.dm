@@ -563,7 +563,7 @@ var/list/rune_appearances_cache = list()
 	rune.manage_diseases(source)
 
 	if (rune.blood3)
-		CompleteCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = FALSE))
+		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = FALSE))
 		return RUNE_WRITE_COMPLETE
 	return RUNE_WRITE_CONTINUE
 
@@ -580,7 +580,7 @@ var/list/rune_appearances_cache = list()
 		rune.word3 = null
 		rune.blood3 = null
 		rune.update_icon()
-		CompleteCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = TRUE))
+		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = TRUE))
 		if (rune.active_spell)
 			rune.active_spell.abort(RITUALABORT_ERASED)
 			rune.active_spell = null

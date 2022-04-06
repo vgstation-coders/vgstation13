@@ -801,7 +801,7 @@
 			update_icon()
 			var/mob/M = get_locked(lock_type)[1]
 			if(M.mind)
-				CompleteCultRitual(/datum/bloodcult_ritual/human_sacrifice, sacrificer)
+				TriggerCultRitual(/datum/bloodcult_ritual/human_sacrifice, sacrificer)
 			if (istype(blade) && !blade.shade && (cult && cult.CanConvert()))//If an empty soul blade was the tool used for the ritual, let's make them its shade.
 				var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, 1 )
 				blade.forceMove(loc)
@@ -856,7 +856,7 @@
 						else 
 							M.take_blood(R, min(remaining, 60))
 						R.on_reagent_change()
-				CompleteCultRitual(/datum/bloodcult_ritual/animal_sacrifice, sacrificer, list("mobtype" = M.type))
+				TriggerCultRitual(/datum/bloodcult_ritual/animal_sacrifice, sacrificer, list("mobtype" = M.type))
 				qdel(M)
 				bloodmess_splatter(TU)
 				playsound(src, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
@@ -1338,6 +1338,52 @@ var/list/cult_spires = list()
 	I.blend_mode = BLEND_ADD
 	overlays += I
 
+
+/*
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                       //
+//      VEIL DRILL       //	// better name pending
+//                       //
+///////////////////////////
+/obj/structure/cult/drill
+	name = "veil drilld"
+	desc = "A veil drill."
+	icon = 'icons/obj/cult_64x64.dmi'
+	icon_state = "spire1"
+	health = 100
+	maxHealth = 100
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -4 * PIXEL_MULTIPLIER
+	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	light_color = "#FF0000"
+	custom_process = 1
+
+	var/range
+
+/obj/structure/cult/drill/New()
+	..()
+	processing_objects.Add(src)
+	set_light(1)
+	var/datum/holomap_marker/holomarker = new()
+	holomarker.id = HOLOMAP_MARKER_CULT_SPIRE
+	holomarker.filter = HOLOMAP_FILTER_CULT
+	holomarker.x = src.x
+	holomarker.y = src.y
+	holomarker.z = src.z
+	holomap_markers[HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"] = holomarker
+
+
+/obj/structure/cult/drill/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/structure/cult/drill/process()
+	..()
+
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                       //Spawns next to blood stones
