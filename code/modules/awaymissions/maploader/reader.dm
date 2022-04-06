@@ -313,22 +313,23 @@ var/list/map_dimension_cache = list()
 	if(use_preloader && instance)
 		_preloader.load(instance)
 
+	var/turf/T_current = locate(xcrd,ycrd,zcrd)
+	var/area/A = instance
+	if(T_current.loc != instance)
+		T_current.set_area(instance)
+
 	//The areas list doesn't contain areas without objects by default
 	//We have to add it manually
-	if(!areas.Find(instance))
-		var/area/A = instance
-
-		if(istype(A))
-			areas.Add(instance)
-			A.addSorted()
+	if(istype(A) && !areas.Find(A))
+		areas.Add(A)
+		A.addSorted()
 
 
 	members.Remove(members[index])
 
 	if(overwrite) //make this come first so lighting overlays don't die
-		var/turf/T_old = locate(xcrd,ycrd,zcrd)
 		var/static/list/blacklisted_types = list(/mob/dead/observer, /mob/dview, /atom/movable/lighting_overlay, /atom/movable/border_dummy)
-		for(var/atom/thing as anything in T_old.contents)
+		for(var/atom/thing as anything in T_current.contents)
 			if(!is_type_in_list(thing.type,blacklisted_types))
 				qdel(thing)
 
