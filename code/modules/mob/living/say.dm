@@ -299,6 +299,8 @@ var/list/headset_modes = list(
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
+	else if (istype(speech.speaker, /obj/item/device/assembly/speaker) || istype(speech.speaker, /obj/item/device/assembly_frame)) //Speakers will still work if no_goonchat_for_obj is set to TRUE
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
