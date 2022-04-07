@@ -3973,7 +3973,7 @@
 	if(!location)
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		if(prob(95)) //greater odds than getting a queen via mutating roaches (0.5%), still small odds
+		if(prob(80)) //greater odds than getting a queen via mutating roaches (0.5%)
 			new /mob/living/simple_animal/hostile/bigroach(location)
 		else
 			new /mob/living/simple_animal/hostile/bigroach/queen(location)
