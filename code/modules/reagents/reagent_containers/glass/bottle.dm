@@ -523,7 +523,6 @@ var/datum/disease2/disease/wizarditis = null
 	name = "Procizine Bottle"
 	desc = "A small bottle. Contains a liquid with effects decided on the whim of the gods."
 	icon = 'icons/obj/drinks.dmi'
-	//icon_state = "holyflask"
 
 /obj/item/weapon/reagent_containers/glass/bottle/procizine/New()
 	..()

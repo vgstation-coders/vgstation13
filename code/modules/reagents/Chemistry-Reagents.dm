@@ -2916,29 +2916,63 @@
 		T.health += 50
 
 //Just for fun
-var/procizine_call = ""
-var/list/procizine_args = list()
+var/list/procizine_calls = list(
+	"life" = "",
+	"plant" = "",
+	"mob" = "",
+	"obj" = "",
+	"turf" = "",
+	"dropper" = "",
+	)
+var/list/procizine_args = list(
+	"life" = list(),
+	"plant" = list(),
+	"mob" = list(),
+	"obj" = list(),
+	"turf" = list(),
+	"dropper" = list(),
+	)
 
 /client/proc/set_procizine_call()
-	set name = "Set procizine call"
+	set name = "Set Procizine Call"
 	set category = "Fun"
 	if(!check_rights(R_DEBUG))
 		return
 
-	procizine_call = input("Proc path to call on target reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
-	if(!procizine_call)
+	var/ourproc = input("Proc path to call on target reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
+	if(!ourproc)
 		return
+
+	procizine_calls["life"] = ourproc
 
 	var/argnum = input("Number of arguments","Number:",0) as num|null
-	if(!argnum && (argnum!=0))
-		return
 
-	procizine_args.Cut()
-	procizine_args.len = argnum // Expand to right length
+	var/list/ourargs = list()
+	ourargs.len = !argnum && (argnum!=0) ? 0 : argnum // Expand to right length
 
 	var/i
 	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-		procizine_args[i] = variable_set(src)
+		ourargs[i] = variable_set(src)
+
+	procizine_args["life"] = ourargs.Copy()
+
+	var/static/list/other_call_types = list("plant","mob","obj","turf","dropper")
+	var/goahead = input("Do you wish to customise this further? (The previous input will only be used for mob life)", "Advanced procizine calls", "Yes", "No") == "Yes"
+	if(goahead)
+		for(var/calltype in other_call_types)
+			ourproc = input("Proc path to call on [calltype] reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
+			procizine_calls[calltype] = ourproc
+
+			argnum = input("Number of arguments","Number:",0) as num|null
+			ourargs.len = !argnum && (argnum!=0) ? 0 : argnum // Expand to right length
+
+			for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+				ourargs[i] = variable_set(src)
+			procizine_args[calltype] = ourargs.Copy()
+	else
+		for(var/calltype in other_call_types)
+			procizine_calls[calltype] = ourproc
+			procizine_args[calltype] = ourargs.Copy()
 
 /datum/reagent/procizine
 	name = "Procizine"
@@ -2948,45 +2982,45 @@ var/list/procizine_args = list()
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = ARBITRARILY_LARGE_NUMBER
 	specheatcap = ARBITRARILY_LARGE_NUMBER
-	var/procname = ""
-	var/list/procargs = list()
+	var/list/procnames
+	var/list/procargs
 
 /datum/reagent/procizine/New()
 	..()
-	procname = procizine_call
+	procnames = procizine_calls.Copy()
 	procargs = procizine_args.Copy()
 
-/datum/reagent/procizine/proc/call_proc(var/atom/A)
-	if(procname && hascall(A, procname))
-		call(A,procname)(arglist(procargs))
+/datum/reagent/procizine/proc/call_proc(var/atom/A, var/call_type)
+	if(procnames[call_type] && hascall(A, procnames[call_type]))
+		call(A,procnames[call_type])(arglist(procargs[call_type]))
 
 /datum/reagent/procizine/on_mob_life(var/mob/living/carbon/M)
 	if(..())
 		return 1
-	call_proc(M)
+	call_proc(M,"life")
 
 /datum/reagent/procizine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	call_proc(T)
+	call_proc(T,"plant")
 
 /datum/reagent/procizine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
 		return 1
-	call_proc(M)
+	call_proc(M,"mob")
 
 /datum/reagent/procizine/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
-	call_proc(T)
+	call_proc(T,"turf")
 
 /datum/reagent/procizine/reaction_obj(var/obj/O, var/volume)
 	if(..())
 		return 1
-	call_proc(O)
+	call_proc(O,"obj")
 
 /datum/reagent/procizine/reaction_dropper_mob(var/mob/living/M)
 	. = ..()
-	call_proc(M)
+	call_proc(M,"dropper")
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
