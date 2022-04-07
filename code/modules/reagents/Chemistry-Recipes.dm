@@ -3676,7 +3676,7 @@
 	result = BLACKCOLOR
 	required_reagents = list(COLORFUL_REAGENT = 1, CARBON = 1)
 	result_amount = 2
-	
+
 /datum/chemical_reaction/degeneratecalcium
 	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
@@ -3922,6 +3922,13 @@
 	id = LOCUTOGEN
 	result = LOCUTOGEN
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/naloxone
+	name = "Naloxone"
+	id = NALOXONE
+	result = NALOXONE
+	required_reagents = list(ETHYLREDOXRAZINE = 1, PLASMA = 1, STOXIN = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/random

@@ -203,12 +203,21 @@
 
 /datum/reagent/proc/is_overdosing(var/mob/living/M) //Too much chems, or been in your system too long
 	var/tolerance_level = null
+	var/tolerance_OD_am = null
+	var/tolerance_OD_tick = null
 	if(M.tolerated_chems[src.id])
 		tolerance_level = M.tolerated_chems[src.id]
 	else
 		tolerance_level = 0
-	var/tolerance_OD_am = max(round(overdose_am - (1/(overdose_am/3))*tolerance_level*(tolerance_level - overdose_am),0.01),overdose_am) //OD limit increases as tolerance incrases up to a certain point before matching tolerance level indefinitely.
-	var/tolerance_OD_tick = max(round(tolerance_OD_am/overdose_am * overdose_tick,1), overdose_tick)
+	if(overdose_am)
+		tolerance_OD_am = max(round(overdose_am - (1/(overdose_am/3))*tolerance_level*(tolerance_level - overdose_am),0.01),overdose_am) //OD limit increases as tolerance incrases up to a certain point before matching tolerance level indefinitely.
+	if(overdose_tick)
+		if(overdose_am)
+			tolerance_OD_tick = max(round(tolerance_OD_am/overdose_am * overdose_tick,1), overdose_tick)
+		else
+			tolerance_OD_tick = overdose_tick
+	else
+		tolerance_OD_tick = 0
 	return (overdose_am && volume >= tolerance_OD_am) || (overdose_tick && tick >= tolerance_OD_tick)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
@@ -2073,7 +2082,6 @@
 	density = 1.26
 	specheatcap = 24.59
 
-
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -3248,7 +3256,6 @@
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 1.79
 	specheatcap = 0.70
-
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
@@ -9715,3 +9722,33 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
 		if(E && !istype(E, /datum/organ/internal/eyes/umbra) && !E.robotic) //doesn't harm umbra or robotic eyes
 			E.damage += 0.5
+
+/datum/reagent/naloxone
+	name = "Naloxone"
+	id = NALOXONE
+	description = "Sedative drug used to treat drug tolerance and addiction."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#75ffa8" //RGB: 117, 255, 168
+	density = 109.81 //same as rezadone
+	specheatcap = 13.59 //same as rezadone
+
+/datum/reagent/naloxone/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+
+	switch(tick)
+		if(1 to 3)
+			M.eye_blurry = max(M.eye_blurry, 10)
+		if(3 to 5)
+			M.drowsyness  = max(M.drowsyness, 20)
+		if(5 to INFINITY)
+			M.Paralyse(20)
+			M.drowsyness  = max(M.drowsyness, 30)
+			M.adjustToxLoss(0.2)
+			for(var/reagent_id in M.tolerated_chems)
+				var/datum/reagent/R = chemical_reagents_list[reagent_id]
+					if(M.tolerated_chems[reagent_id] > 0)
+						M.tolerated_chems[reagent_id] += R.tolerance_increase * -10
+					else
+						M.tolerated_chems[reagent_id] = 0

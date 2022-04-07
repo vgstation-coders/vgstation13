@@ -467,6 +467,7 @@
 #define TRINITRINE		"trinitrine"
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
+#define NALOXONE		"naloxone"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
