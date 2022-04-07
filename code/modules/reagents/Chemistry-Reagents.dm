@@ -51,7 +51,6 @@
 	var/mug_desc = null
 	var/addictive = FALSE
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
-	var/overdose_am_multiplier = null //use this to control if something has an OD threshold
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -9747,8 +9746,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			M.drowsyness  = max(M.drowsyness, 30)
 			M.adjustToxLoss(0.2)
 			for(var/reagent_id in M.tolerated_chems)
-				var/datum/reagent/R = chemical_reagents_list[reagent_id]
-					if(M.tolerated_chems[reagent_id] > 0)
-						M.tolerated_chems[reagent_id] += R.tolerance_increase * -10
-					else
-						M.tolerated_chems[reagent_id] = 0
+				if(M.tolerated_chems[reagent_id] <= 0)
+					M.tolerated_chems[reagent_id] = 0
+				else
+					var/datum/reagent/R = chemical_reagents_list[reagent_id]
+					M.tolerated_chems[reagent_id] += R.tolerance_increase * -10
