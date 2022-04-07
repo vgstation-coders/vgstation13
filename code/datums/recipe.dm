@@ -38,7 +38,7 @@
 	var/list/items //List of items needed, items = list(/obj/item/tool/crowbar, /obj/item/weapon/welder)
 	var/result //Result of a complete recipe. result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	var/time = 10 SECONDS //Length of time it takes to complete the recipe. In 10ths of a second
-
+	var/priority = 0 //To check which recipe takes priority if they share ingredients
 /*
 	check_reagents function
 	Looks for reagents in the reagent container passed to it, and if this matches what we require.
