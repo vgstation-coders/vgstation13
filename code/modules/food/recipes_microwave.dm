@@ -2261,6 +2261,7 @@
 
 /datum/recipe/vox_nuggets
 	reagents = list(KETCHUP = 5)
+	priority = 1
 	items = list(
 		/obj/item/stack/sheet/cardboard,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
@@ -2268,6 +2269,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
 
 /datum/recipe/vox_chicken_drumstick
+	priority = 1
 	items = list(
 		/obj/item/stack/sheet/cardboard,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
