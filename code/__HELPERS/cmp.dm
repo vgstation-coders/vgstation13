@@ -77,6 +77,3 @@ var/atom/cmp_dist_origin=null
 
 /proc/cmp_microwave_recipe_dsc(datum/recipe/a, datum/recipe/b)
 	return b.priority - a.priority
-
-/proc/cmp_food_processor_dsc(datum/food_processor_process/a, datum/food_processor_process/b)
-	return b.priority - a.priority
