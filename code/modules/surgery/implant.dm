@@ -231,7 +231,7 @@
 		clowndigobj = new clowndigobj(user.loc)
 		if (istype(clowndigobj, /obj/item/toy/singlecard))
 			var/obj/item/toy/singlecard/O = clowndigobj
-			O.cardname = "Joker"
+			O.cardname = pick("Red Joker","Black Joker")
 			clowndigobj = O
 		else if (istype(clowndigobj, /obj/item/toy/waterflower))
 			clowndigobj.reagents.remove_reagent(WATER, 10)
