@@ -16,7 +16,6 @@
 		/turf/simulated/floor,
 		/turf/space,
 		/turf/simulated/wall/shuttle,
-		/mob/living/carbon,
 		/obj/item/weapon/storage
 	)
 
@@ -43,6 +42,37 @@
 	if(is_type_in_list(A, excludes))
 		to_chat(user, "<span class='warning'>\The [src] won't stick!</span>")
 		return 0
+	if(istype(A, /mob/living/carbon/human))
+		var/mob/living/carbon/human/N = A
+		var/location = user.zone_sel.selecting
+		var/list/obscured = N.check_obscured_slots()
+		var/obj/item/attach = ""
+		var/protection_check = limb_define_to_part_define(location)
+		var/protection = N.get_body_part_coverage(protection_check)
+		if(protection == null)
+			to_chat(user, "<span class= 'warning'> \the [N] isn't wearing anything where you're selecting!</span>")
+			return 1
+		switch(location)
+			if(LIMB_CHEST, LIMB_GROIN, LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_RIGHT_LEG, LIMB_LEFT_LEG)
+				if(slot_w_uniform in obscured)
+					attach = N.get_item_by_slot(slot_wear_suit)
+				else
+					attach = N.get_item_by_slot(slot_w_uniform)
+			if(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
+				attach = N.get_item_by_slot(slot_gloves)
+			if(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(slot_shoes in obscured)
+					attach = N.get_item_by_slot(slot_wear_suit)
+				else
+					attach = N.get_item_by_slot(slot_shoes)
+			if(TARGET_MOUTH)
+				attach = N.get_item_by_slot(slot_wear_mask)
+			if(TARGET_EYES)
+				attach = N.get_item_by_slot(slot_glasses)
+			if(LIMB_HEAD)
+				attach = N.get_item_by_slot(slot_head)
+		A = attach
+
 	if(istype(A, /obj/item))
 		var/obj/item/I = A
 		if(I.w_class < W_CLASS_MEDIUM)
