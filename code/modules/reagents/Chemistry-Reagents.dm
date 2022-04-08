@@ -2925,6 +2925,7 @@ var/list/procizine_calls = list(
 	"mob dropper" = "",
 	"object dropper" = "",
 	"removal" = "",
+	"overdose" = "",
 	)
 var/list/procizine_args = list(
 	"life" = list(),
@@ -2935,7 +2936,12 @@ var/list/procizine_args = list(
 	"mob dropper" = list(),
 	"object dropper" = list(),
 	"removal" = list(),
+	"overdose" = list(),
 	)
+var/procizine_name = ""
+var/procizine_overdose = 0
+var/procizine_metabolism = 0
+var/procizine_color = "#C8A5DC"
 
 /client/proc/set_procizine_call()
 	set name = "Set Procizine Call"
@@ -2960,7 +2966,7 @@ var/list/procizine_args = list(
 
 	procizine_args["life"] = ourargs.Copy()
 
-	var/static/list/other_call_types = list("plant","mob","object","turf","mob dropper","object dropper","removal")
+	var/static/list/other_call_types = list("plant","mob","object","turf","mob dropper","object dropper","removal","overdose")
 	var/goahead = alert("Do you wish to customise this further? (The previous input will only be used for mob life)", "Advanced procizine calls", "Yes", "No") == "Yes"
 	if(goahead)
 		for(var/calltype in other_call_types)
@@ -2978,6 +2984,17 @@ var/list/procizine_args = list(
 			procizine_calls[calltype] = ourproc
 			procizine_args[calltype] = ourargs.Copy()
 
+/client/proc/set_procizine_properties()
+	set name = "Set Procizine Properties"
+	set category = "Fun"
+	if(!check_rights(R_DEBUG))
+		return
+
+	procizine_name = input(src, "Reagent name","Procizine attributes", procizine_name) as text|null
+	procizine_overdose = input(src, "Overdose threshold","Procizine attributes", procizine_overdose) as num|null
+	procizine_metabolism = input(src, "Custom metabolism","Procizine attributes", procizine_metabolism) as num|null
+	procizine_color = input(usr, "Reagent color", "Procizine attributes") as color|null
+
 /datum/reagent/procizine
 	name = "Procizine"
 	id = PROCIZINE
@@ -2993,6 +3010,10 @@ var/list/procizine_args = list(
 	..()
 	procnames = procizine_calls.Copy()
 	procargs = procizine_args.Copy()
+	name = procizine_name && procizine_name != "" ? procizine_name : initial(name)
+	overdose_am = procizine_overdose
+	custom_metabolism = procizine_metabolism || REAGENTS_METABOLISM
+	color = procizine_color || initial(color)
 
 /datum/reagent/procizine/proc/call_proc(var/atom/A, var/call_type)
 	if(procnames[call_type] && hascall(A, procnames[call_type]))
@@ -3032,6 +3053,9 @@ var/list/procizine_args = list(
 
 /datum/reagent/procizine/reagent_deleted()
 	call_proc(holder.my_atom,"removal")
+
+/datum/reagent/procizine/on_overdose(mob/living/M)
+	call_proc(holder.my_atom,"overdose")
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
