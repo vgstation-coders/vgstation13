@@ -3028,12 +3028,10 @@ var/list/procizine_args = list(
 
 /datum/reagent/procizine/reaction_dropper_obj(var/obj/O)
 	. = ..()
-	call_proc(M,"object dropper")
+	call_proc(O,"object dropper")
 
-/datum/reagent/procizine/on_removal(var/amount)
-	if(!..(amount))
-		return
-	call_proc(M,"removal")
+/datum/reagent/procizine/reagent_deleted()
+	call_proc(holder.my_atom,"removal")
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
