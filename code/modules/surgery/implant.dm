@@ -224,7 +224,7 @@
 		affected.hidden.update_icon()
 		affected.hidden = null
 
-	else if (((M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM)) && prob(20)) //I HATE DATUMS! I HATE DATUMS!
+	else if (tool.clumsy_check(user) && prob(20))
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		var/obj/clowndigobj = pick(/obj/item/weapon/bikehorn/rubberducky, /obj/item/weapon/reagent_containers/food/snacks/pie, /obj/item/toy/singlecard, /obj/item/toy/waterflower)
