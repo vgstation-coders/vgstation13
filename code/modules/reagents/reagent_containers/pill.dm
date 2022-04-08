@@ -176,6 +176,10 @@
 /obj/item/weapon/reagent_containers/pill/procizine/New()
 	..()
 	reagents.add_reagent(PROCIZINE, 50)
+	for(var/procname in procizine_calls)
+		if(procizine_calls[procname] in bad_procs)
+			desc = "You have a bad feeling about taking this."
+			return
 
 /obj/item/weapon/reagent_containers/pill/stox
 	name = "sleeping pill"

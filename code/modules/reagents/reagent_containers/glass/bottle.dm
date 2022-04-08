@@ -506,6 +506,10 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/procizine/New()
 	..()
 	reagents.add_reagent(PROCIZINE, 30)
+	for(var/procname in procizine_calls)
+		if(procizine_calls[procname] in bad_procs)
+			desc = "A small bottle. Contains a liquid with effects decided with the spite of the gods, this can't end well."
+			return
 
 /obj/item/weapon/reagent_containers/glass/bottle/capsaicin
 	name = "capsaicin bottle"
