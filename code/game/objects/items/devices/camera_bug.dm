@@ -50,7 +50,7 @@
 		var/protection_check = limb_define_to_part_define(location)
 		var/protection = N.get_body_part_coverage(protection_check)
 		if(protection == null)
-			to_chat(user, "<span class= 'warning'> \the [N] isn't wearing anything where you're selecting!</span>")
+			to_chat(user, "<span class= 'warning'>[N] isn't wearing anything where you're selecting!</span>")
 			return 1
 		switch(location)
 			if(LIMB_CHEST, LIMB_GROIN, LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_RIGHT_LEG, LIMB_LEFT_LEG)
