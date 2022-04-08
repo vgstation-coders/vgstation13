@@ -2916,32 +2916,14 @@
 		T.health += 50
 
 //Just for fun
-var/list/procizine_calls = list(
-	"life" = "",
-	"plant" = "",
-	"mob" = "",
-	"object" = "",
-	"turf" = "",
-	"mob dropper" = "",
-	"object dropper" = "",
-	"removal" = "",
-	"overdose" = "",
-	)
-var/list/procizine_args = list(
-	"life" = list(),
-	"plant" = list(),
-	"mob" = list(),
-	"object" = list(),
-	"turf" = list(),
-	"mob dropper" = list(),
-	"object dropper" = list(),
-	"removal" = list(),
-	"overdose" = list(),
-	)
+var/list/procizine_calls = list()
+var/list/procizine_args = list()
 var/procizine_name = ""
 var/procizine_overdose = 0
 var/procizine_metabolism = 0
 var/procizine_color = "#C8A5DC"
+var/procizine_addictive = FALSE
+var/procizine_tolerance = 0
 
 /client/proc/set_procizine_call()
 	set name = "Set Procizine Call"
@@ -2966,23 +2948,20 @@ var/procizine_color = "#C8A5DC"
 
 	procizine_args["life"] = ourargs.Copy()
 
-	var/static/list/other_call_types = list("plant","mob","object","turf","mob dropper","object dropper","removal","overdose")
+	var/static/list/other_call_types = list("plant","mob","object","turf","mob dropper","object dropper","removal","overdose","withdrawal")
 	var/goahead = alert("Do you wish to customise this further? (The previous input will only be used for mob life)", "Advanced procizine calls", "Yes", "No") == "Yes"
-	if(goahead)
-		for(var/calltype in other_call_types)
+	for(var/calltype in other_call_types)
+		if(goahead)
 			ourproc = input("Proc path to call on [calltype] reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
-			procizine_calls[calltype] = ourproc
 
 			argnum = input("Number of arguments","Number:",0) as num|null
 			ourargs.len = !argnum && (argnum!=0) ? 0 : argnum // Expand to right length
 
 			for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
 				ourargs[i] = variable_set(src)
-			procizine_args[calltype] = ourargs.Copy()
-	else
-		for(var/calltype in other_call_types)
-			procizine_calls[calltype] = ourproc
-			procizine_args[calltype] = ourargs.Copy()
+
+		procizine_calls[calltype] = ourproc
+		procizine_args[calltype] = ourargs.Copy()
 
 /client/proc/set_procizine_properties()
 	set name = "Set Procizine Properties"
@@ -2993,7 +2972,9 @@ var/procizine_color = "#C8A5DC"
 	procizine_name = input(src, "Reagent name","Procizine attributes", procizine_name) as text|null
 	procizine_overdose = input(src, "Overdose threshold","Procizine attributes", procizine_overdose) as num|null
 	procizine_metabolism = input(src, "Custom metabolism","Procizine attributes", procizine_metabolism) as num|null
-	procizine_color = input(usr, "Reagent color", "Procizine attributes") as color|null
+	procizine_addictive = alert(src, "Is addictive?","Procizine attributes", "Yes", "No") == "Yes"
+	procizine_tolerance = input(src, "Tolerance increase per metabolisation","Procizine attributes", procizine_metabolism) as num|null
+	procizine_color = input(src, "Reagent color", "Procizine attributes") as color|null
 
 /datum/reagent/procizine
 	name = "Procizine"
@@ -3014,6 +2995,8 @@ var/procizine_color = "#C8A5DC"
 	overdose_am = procizine_overdose
 	custom_metabolism = procizine_metabolism || REAGENTS_METABOLISM
 	color = procizine_color || initial(color)
+	addictive = procizine_addictive
+	tolerance_increase = procizine_tolerance
 
 /datum/reagent/procizine/proc/call_proc(var/atom/A, var/call_type)
 	if(procnames[call_type] && hascall(A, procnames[call_type]))
@@ -3056,6 +3039,11 @@ var/procizine_color = "#C8A5DC"
 
 /datum/reagent/procizine/on_overdose(mob/living/M)
 	call_proc(holder.my_atom,"overdose")
+
+/datum/reagent/procizine/on_withdrawal(mob/living/M)
+	if(..())
+		return 1
+	call_proc(holder.my_atom,"withdrawal")
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
