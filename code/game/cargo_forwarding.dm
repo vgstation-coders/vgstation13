@@ -293,10 +293,9 @@
 			name = initialised_order.name_override[i]
 			containername = initialised_order.name_override[i]
 		else
-			var/atom/thing = new i
-			name = thing.name
-			containername = thing.name
-			qdel(thing)
+			var/atom/thing = i
+			name = initial(thing.name)
+			containername = initial(thing.name)
 		if(isnum(amount))
 			var/our_amount = amount
 			if(istype(i,/obj/item/stack))
