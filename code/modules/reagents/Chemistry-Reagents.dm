@@ -2920,17 +2920,21 @@ var/list/procizine_calls = list(
 	"life" = "",
 	"plant" = "",
 	"mob" = "",
-	"obj" = "",
+	"object" = "",
 	"turf" = "",
-	"dropper" = "",
+	"mob dropper" = "",
+	"object dropper" = "",
+	"removal" = "",
 	)
 var/list/procizine_args = list(
 	"life" = list(),
 	"plant" = list(),
 	"mob" = list(),
-	"obj" = list(),
+	"object" = list(),
 	"turf" = list(),
-	"dropper" = list(),
+	"mob dropper" = list(),
+	"object dropper" = list(),
+	"removal" = list(),
 	)
 
 /client/proc/set_procizine_call()
@@ -2956,8 +2960,8 @@ var/list/procizine_args = list(
 
 	procizine_args["life"] = ourargs.Copy()
 
-	var/static/list/other_call_types = list("plant","mob","obj","turf","dropper")
-	var/goahead = input("Do you wish to customise this further? (The previous input will only be used for mob life)", "Advanced procizine calls", "Yes", "No") == "Yes"
+	var/static/list/other_call_types = list("plant","mob","object","turf","mob dropper","object dropper","removal")
+	var/goahead = alert("Do you wish to customise this further? (The previous input will only be used for mob life)", "Advanced procizine calls", "Yes", "No") == "Yes"
 	if(goahead)
 		for(var/calltype in other_call_types)
 			ourproc = input("Proc path to call on [calltype] reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
@@ -3016,11 +3020,20 @@ var/list/procizine_args = list(
 /datum/reagent/procizine/reaction_obj(var/obj/O, var/volume)
 	if(..())
 		return 1
-	call_proc(O,"obj")
+	call_proc(O,"object")
 
 /datum/reagent/procizine/reaction_dropper_mob(var/mob/living/M)
 	. = ..()
-	call_proc(M,"dropper")
+	call_proc(M,"mob dropper")
+
+/datum/reagent/procizine/reaction_dropper_obj(var/obj/O)
+	. = ..()
+	call_proc(M,"object dropper")
+
+/datum/reagent/procizine/on_removal(var/amount)
+	if(!..(amount))
+		return
+	call_proc(M,"removal")
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"

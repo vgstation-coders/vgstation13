@@ -124,7 +124,7 @@
 	reagents.add_reagent(CREATINE, 30) //ONLY FIST
 
 /obj/item/weapon/reagent_containers/pill/antitox
-	name = "Anti-toxins pill"
+	name = "anti-toxins pill"
 	desc = "Neutralizes many common toxins."
 	icon_state = "pill14" //green round plain
 
@@ -133,7 +133,7 @@
 	reagents.add_reagent(ANTI_TOXIN, 25)
 
 /obj/item/weapon/reagent_containers/pill/tox
-	name = "Toxins pill"
+	name = "toxins pill"
 	desc = "Highly toxic."
 	icon_state = "pill5" //bright red oblong with stripe
 
@@ -142,7 +142,7 @@
 	reagents.add_reagent(TOXIN, 50)
 
 /obj/item/weapon/reagent_containers/pill/cyanide
-	name = "Cyanide pill"
+	name = "cyanide pill"
 	desc = "Don't swallow this."
 	icon_state = "pill5" //bright red oblong with stripe
 
@@ -160,7 +160,7 @@
 	return(SUICIDE_ACT_TOXLOSS | SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/reagent_containers/pill/adminordrazine
-	name = "Adminordrazine pill"
+	name = "adminordrazine pill"
 	desc = "It's magic. We don't have to explain it."
 	icon_state = "pill6" //cyan-brown oblong
 
@@ -169,7 +169,7 @@
 	reagents.add_reagent(ADMINORDRAZINE, 50)
 
 /obj/item/weapon/reagent_containers/pill/procizine
-	name = "Procizine pill"
+	name = "procizine pill"
 	desc = "What could possibly go wrong?"
 	icon_state = "pill6" //cyan-brown oblong
 
@@ -178,7 +178,7 @@
 	reagents.add_reagent(PROCIZINE, 50)
 
 /obj/item/weapon/reagent_containers/pill/stox
-	name = "Sleeping pill"
+	name = "sleeping pill"
 	desc = "Commonly used to treat insomnia."
 	icon_state = "pill11" //light blue round
 
@@ -187,7 +187,7 @@
 	reagents.add_reagent(STOXIN, 30)
 
 /obj/item/weapon/reagent_containers/pill/kelotane
-	name = "Kelotane pill"
+	name = "kelotane pill"
 	desc = "Used to treat burns."
 	icon_state = "pill12" //yellow round
 
@@ -196,7 +196,7 @@
 	reagents.add_reagent(KELOTANE, 30)
 
 /obj/item/weapon/reagent_containers/pill/tramadol
-	name = "Tramadol pill"
+	name = "tramadol pill"
 	desc = "A simple painkiller."
 	icon_state = "pill11" //light blue round
 
@@ -205,7 +205,7 @@
 	reagents.add_reagent(TRAMADOL, 15)
 
 /obj/item/weapon/reagent_containers/pill/citalopram
-	name = "Citalopram pill"
+	name = "citalopram pill"
 	desc = "Mild anti-depressant."
 	icon_state = "pill11" //light blue round
 
@@ -214,7 +214,7 @@
 	reagents.add_reagent(CITALOPRAM, 15)
 
 /obj/item/weapon/reagent_containers/pill/inaprovaline
-	name = "Inaprovaline pill"
+	name = "inaprovaline pill"
 	desc = "Used to stabilize patients."
 	icon_state = "pill9" //magenta/yellow oblong
 
@@ -223,7 +223,7 @@
 	reagents.add_reagent(INAPROVALINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/dexalin
-	name = "Dexalin pill"
+	name = "dexalin pill"
 	desc = "Used to treat oxygen deprivation."
 	icon_state = "pill19" //dark blue/blue round
 
@@ -232,7 +232,7 @@
 	reagents.add_reagent(DEXALIN, 30)
 
 /obj/item/weapon/reagent_containers/pill/bicaridine
-	name = "Bicaridine pill"
+	name = "bicaridine pill"
 	desc = "Used to treat physical injuries."
 	icon_state = "pill15" //red round
 
@@ -241,7 +241,7 @@
 	reagents.add_reagent(BICARIDINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/happy
-	name = "Happy pill"
+	name = "happy pill"
 	desc = "Happy happy joy joy!"
 	icon_state = "pill7" //grey oblong
 
@@ -251,7 +251,7 @@
 	reagents.add_reagent(SUGAR, 15)
 
 /obj/item/weapon/reagent_containers/pill/zoom
-	name = "Zoom pill"
+	name = "zoom pill"
 	desc = "Zoooom!"
 	icon_state = "pill7" //grey oblong
 
@@ -262,7 +262,7 @@
 	reagents.add_reagent(HYPERZINE, 10)
 
 /obj/item/weapon/reagent_containers/pill/hyperzine
-	name = "Hyperzine pill"
+	name = "hyperzine pill"
 	desc = "Gotta go fast!"
 
 	icon_state = "pill7" //grey oblong
@@ -271,7 +271,7 @@
 	reagents.add_reagent(HYPERZINE, 10)
 
 /obj/item/weapon/reagent_containers/pill/creatine_safe
-	name = "Creatine Pill (26 units)"
+	name = "creatine pill (26 units)"
 	desc = "Become the boss of this Gym."
 	icon_state = "pill5" //bright red oblong with stripe
 
@@ -280,7 +280,7 @@
 	reagents.add_reagent(CREATINE, 26)
 
 /obj/item/weapon/reagent_containers/pill/creatine_supplement
-	name = "Creatine Supplement (5 units)"
+	name = "creatine supplement (5 units)"
 	desc = "Maintain those massive gains!"
 	icon_state = "pill6" //cyan/brown oblong
 
@@ -289,7 +289,7 @@
 	reagents.add_reagent(CREATINE, 5)
 
 /obj/item/weapon/reagent_containers/pill/ryetalyn
-	name = "Ryetalyn pill"
+	name = "ryetalyn pill"
 	desc = "Eliminates genetic defects."
 	icon_state = "pill7" //grey oblong
 
