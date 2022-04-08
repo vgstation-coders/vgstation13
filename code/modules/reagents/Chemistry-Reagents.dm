@@ -94,12 +94,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-<<<<<<< HEAD
-	
-	if(self.tolerance_increase)
-		M.tolerated_chems[self.id] += self.tolerance_increase
-=======
->>>>>>> parent of 41b85b444d (Reagent addiction/tolerance system, take two (#31994))
+
 
 /datum/reagent/proc/reaction_dropper_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
@@ -111,12 +106,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-<<<<<<< HEAD
-	
-	if(self.tolerance_increase)
-		M.tolerated_chems[self.id] += self.tolerance_increase
-=======
->>>>>>> parent of 41b85b444d (Reagent addiction/tolerance system, take two (#31994))
+
 
 /datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
 	reaction_obj(O, volume)
