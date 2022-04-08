@@ -783,7 +783,7 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/gooncode/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
+	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's trying to re-add poo!</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
