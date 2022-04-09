@@ -127,7 +127,8 @@
 				"Cargo Technician" = /obj/item/clothing/shoes/black,
 			),
 			slot_head_str = list(
-				"Mailman" = /obj/item/clothing/head/mailman
+				"Mailman" = /obj/item/clothing/head/mailman,
+			),
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = list(
