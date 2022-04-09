@@ -131,12 +131,9 @@
 				var/tKnock = max(0, rngDefense - rngForce)
 				if(isrobot(L))
 					var/mob/living/silicon/robot/R = L
-					if(prob(33))
-						R.tip(get_dir(src, R))
-						visible_message("<span class='warning'>[src] collides with [R], tipping it over!</span>")
-						R.self_righting()
-					else
-						visible_message("<span class='warning'>[src] bounces off the [R]!</span>")
+					R.tip(get_dir(src, R))
+					visible_message("<span class='warning'>[src] collides with [R], tipping it over!</span>")
+					R.self_righting()
 					tackleGetHurt(0, 3)
 					AdjustStunned(3)	//Mostly a mercy to borgs but something something metal casing + skull
 				else
