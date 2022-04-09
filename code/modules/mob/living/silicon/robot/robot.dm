@@ -894,7 +894,7 @@
 	AdjustKnockdown(5)
 	animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
 	spark(src, 5, FALSE)
-	if(prob(25))
+	if(prob(5))
 		locked = FALSE
 		opened = TRUE
 		updateicon()
@@ -903,7 +903,7 @@
 
 /mob/living/silicon/robot/proc/self_righting(var/knockdown = 0)
 	to_chat(src, "<span class='info' style=\"font-family:Courier\"'>Starting self-righting mechanism.</span>")
-	spawn(knockdown + 30 SECONDS)
+	spawn(knockdown SECONDS)
 		if(isDead() || !is_component_functioning("actuator") || !is_component_functioning("power cell"))
 			to_chat(src, "<span class='danger'>ERROR. Self-righting mechanism damaged or unpowered.</span>")
 			return
@@ -936,6 +936,7 @@
 		tip(rotate)
 		visible_message("<span class='danger'>\The [disarmer] has tipped over \the [src]!</span>")
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		self_righting()
 
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
