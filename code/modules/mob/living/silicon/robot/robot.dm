@@ -894,7 +894,7 @@
 	AdjustKnockdown(5)
 	animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
 	spark(src, 5, FALSE)
-	if(prob(5))
+	if(prob(2))
 		locked = FALSE
 		opened = TRUE
 		updateicon()
@@ -936,7 +936,7 @@
 		tip(rotate)
 		visible_message("<span class='danger'>\The [disarmer] has tipped over \the [src]!</span>")
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		self_righting()
+		self_righting(knockdown)
 
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
