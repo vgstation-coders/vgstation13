@@ -49,9 +49,7 @@
 			var/obj/structure/ore_box/B = locate() in in_T
 			if(B)
 				for(var/O in B.stored_ores)
-					var/amount = B.stored_ores[O]
-					SmeltOreType(O, amount)
-					score.oremined += amount
+					SmeltOreType(O, B.stored_ores[O])
 		else
 			for(var/i = 0; i < 10; i++)
 				var/obj/item/stack/ore/O = locate() in in_T
@@ -59,7 +57,6 @@
 					continue //Skip slag for now.
 				if(O)
 					SmeltMineral(O)
-					score.oremined += O.amount
 				else
 					break
 
@@ -67,6 +64,7 @@
 	if(O.materials)
 		credits += O.materials.getValue()
 		materials.addFrom(O.materials, TRUE)
+		score.oremined += O.materials.getValue()
 		qdel(O)
 
 /obj/machinery/mineral/ore_redemption/proc/SmeltOreType(var/type, var/amount)
