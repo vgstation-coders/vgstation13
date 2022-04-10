@@ -94,7 +94,7 @@
 	score.crewscore += score.plasmashipped * 0.5 //Plasma Sheets shipped
 	score.crewscore += score.stuffforwarded * 50 //Cargo Crates forwarded
 	score.crewscore -= score.stuffnotforwarded * 25 //Cargo Crates not forwarded
-	score.crewscore += score.oremined //Not actually counted at mining, but at processing. One ore smelted is one point
+	score.crewscore += score.oremined //Not actually counted at mining, but at processing. One credit of smelted ore value is one point
 
 /datum/controller/gameticker/scoreboard/proc/science_score()
 	//var/researchpoints = score.scores["researchdone"] * 20 //One discovered design is 20 points. You'll usually find hundreds
