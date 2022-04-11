@@ -38,25 +38,25 @@ Used In File(s): \code\modules\research\rdconsole.dm
 {{else}}
 	<div style="float: left; margin-top: 3px;">
 		<div class="line">
-			{{:helper.link('Current Research Levels', 'key', {'screen':11}, (data.screen==11)?'linkOn':'')}}
+			{{:helper.link('Current Research Levels', 'key', {'menu':11}, (data.screen==11)?'linkOn':'')}}
 			{{if data.tdisk}}
-				{{:helper.link('Disk Operations', 'circle-triangle-e', {'screen':12}, (data.screen==12)?'linkOn':'')}}
+				{{:helper.link('Disk Operations', 'circle-triangle-e', {'menu':12}, (data.screen==12)?'linkOn':'')}}
 			{{else data.ddisk}}
-				{{:helper.link('Disk Operations', 'circle-triangle-e', {'screen':14}, (data.screen==14)?'linkOn':'')}}
+				{{:helper.link('Disk Operations', 'circle-triangle-e', {'menu':14}, (data.screen==14)?'linkOn':'')}}
 			{{/if}}
 			{{if data.destroy}}
-				{{:helper.link('Destructive Analyzer Menu', 'key', {'screen':22}, (data.screen==22)?'linkOn':'')}}
+				{{:helper.link('Destructive Analyzer Menu', 'key', {'menu':22}, (data.screen==22)?'linkOn':'')}}
 			{{/if}}
 			{{if data.lathe}}
-				{{:helper.link('Protolathe Construction Menu', 'key', {'screen':31}, (data.screen==31)?'linkOn':'')}}
+				{{:helper.link('Protolathe Construction Menu', 'key', {'menu':31}, (data.screen==31)?'linkOn':'')}}
 			{{/if}}
 			{{if data.imprinter}}
-				{{:helper.link('Circuit Construction Menu', 'key', {'screen':41}, (data.screen==41)?'linkOn':'')}}
+				{{:helper.link('Circuit Construction Menu', 'key', {'menu':41}, (data.screen==41)?'linkOn':'')}}
 			{{/if}}
 			{{if data.isadmin}}
 				{{:helper.link('MAXIMUM SCIENCE', 'key', {'hax':null}, null)}}
 			{{/if}}
-			{{:helper.link('Settings', 'key', {'screen':16}, (data.screen==16)?'linkOn':'')}}
+			{{:helper.link('Settings', 'key', {'menu':16}, (data.screen==16)?'linkOn':'')}}
 		</div>
 	</div>
 
