@@ -653,8 +653,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		var/lathe_queue[0]
 		for(var/i in 1 to linked_lathe.queue.len)
 			var/datum/design/part = linked_lathe.queue[i]
-			queue_list.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
-
+			lathe_queue.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
 		data["lathequeue"] = lathe_queue
 
 		var/lathe_categories[0]
@@ -669,13 +668,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 					continue
-				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D))))
+				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D), "commands" = list("build" = D.id))))
 		data["lathedesigns"] = lathe_designs
 
 		var/lathe_mats[0]
 		for(var/matID in linked_lathe.materials.storage)
 			var/datum/material/M=linked_lathe.materials.getMaterial(matID)
-			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID])))
+			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID], "commands" = list("lathe_ejectsheet" = matID, "lathe_ejectsheet_amt" = 50))))
 		data["lathemats"] = lathe_mats
 
 		data["lathecategory"] = lathe_category
@@ -684,8 +683,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		var/imprinter_queue[0]
 		for(var/i in 1 to linked_imprinter.queue.len)
 			var/datum/design/part = linked_imprinter.queue[i]
-			queue_list.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
-
+			imprinter_queue.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
 		data["imprinterqueue"] = imprinter_queue
 
 		var/imprinter_categories[0]
@@ -700,13 +698,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & IMPRINTER) || D.category != name_set)
 					continue
-				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D))))
+				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D), "commands" = list("imprint" = D.id))))
 		data["imprinterdesigns"] = imprinter_designs
 
 		var/imprinter_mats[0]
 		for(var/matID in linked_imprinter.materials.storage)
 			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
-			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID])))
+			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "imprinter_ejectsheet_amt" = 50))))
 		data["imprintermats"] = imprinter_mats
 
 		data["imprintercategory"] = imprinter_category
@@ -715,8 +713,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["lathe"] = linked_lathe != null
 	data["imprinter"] = linked_imprinter != null
 	data["isadmin"] = user.client.holder != null
-	data["tdisk"] = tdisk != null
-	data["ddisk"] = ddisk != null
+	data["tdisk"] = t_disk != null
+	data["ddisk"] = d_disk != null
 
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(20 to 29)
