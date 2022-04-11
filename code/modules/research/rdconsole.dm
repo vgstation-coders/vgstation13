@@ -709,6 +709,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "imprinter_ejectsheet_amt" = 50))))
 
+	var/tech_info[0]
+	for(var/ID in files.known_tech)
+		var/datum/tech/T = files.known_tech[ID]
+		lathe_categories.Add(list(list("name" = T.name, "level" = T.level, "summary" = T.desc)))
+	data["techinfo"] = tech_info
+
 	data["lathequeue"] = lathe_queue
 	data["lathecategories"] = lathe_categories
 	data["lathedesigns"] = lathe_designs
@@ -756,15 +762,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	switch(screen)
 
 		//////////////////////R&D CONSOLE SCREENS//////////////////
-
-		if(1.1) //Research viewer
-			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><BR>"
-			dat += "Current Research Levels:<BR><BR>"
-			for(var/ID in files.known_tech)
-				var/datum/tech/T = files.known_tech[ID]
-				dat += {"[T.name]<BR>
-					* Level: [T.level]<BR>
-					* Summary: [T.desc]<HR>"}
 
 		if(1.2) //Technology Disk Menu
 

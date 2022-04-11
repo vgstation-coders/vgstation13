@@ -60,7 +60,19 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		</div>
 	</div>
 
-	{{if data.screen == 16}}
+	{{if data.screen == 11}}
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+				{{for data.techinfo}}
+					<b>{{:data.name}}</b><br>Level: {{:data.level}}<br><i>{{:data.desc}}</i><br><br>
+				{{empty}}
+					No tech levels found.
+				{{/for}}
+				</div>
+			</div>
+		</div>
+	{{else data.screen == 16}}
 		<div class="itemLabel">
 			R&D Console Settings
 		</div>
