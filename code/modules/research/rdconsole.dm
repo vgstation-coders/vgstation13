@@ -641,9 +641,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		updateUsrDialog()
 	return
 
-/*/obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+/obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
+
+	files.RefreshResearch()
 
 	var/lathe_categories[0]
 	for(var/name_set in linked_lathe.part_sets)
@@ -686,13 +688,30 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["tdisk"] = tdisk != null
 	data["ddisk"] = ddisk != null
 
+	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
+		if(2 to 2.9)
+			if(linked_destroy == null)
+				screen = 2.0
+			else if(linked_destroy.loaded_item == null)
+				screen = 2.1
+			else
+				screen = 2.2
+		if(3 to 3.9)
+			if(linked_lathe == null)
+				screen = 3.0
+		if(4 to 4.9)
+			if(linked_imprinter == null)
+				screen = 4.0
+
+	data["screen"] = screen
+
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "rndconsole.tmpl", name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
 		ui.set_initial_data(data)
-		ui.open()*/
+		ui.open()
 
-/obj/machinery/computer/rdconsole/proc/protolathe_header()
+/*/obj/machinery/computer/rdconsole/proc/protolathe_header()
 	var/list/options=list()
 	if(screen!=3.1)
 		options += "<A href='?src=\ref[src];menu=3.1'>Design Selection</A>"
@@ -1137,7 +1156,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	dat = jointext(dat,"")
 	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
-	onclose(user, "rdconsole")
+	onclose(user, "rdconsole")*/
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
 	return screen == 0.2
