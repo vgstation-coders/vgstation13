@@ -55,7 +55,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		/obj/machinery/r_n_d/reverse_engine,
 		/obj/machinery/r_n_d/blueprinter
 		)
-	var/screen = 1.0	//Which screen is currently showing.
+	var/screen = 10	//Which screen is currently showing.
 	var/id = 0			//ID of the computer (for server restrictions).
 	var/sync = 1		//If sync = 0, it doesn't show up on Server Control Console
 
@@ -237,7 +237,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(isLocked() || (linked_destroy.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		return
 	linked_destroy.busy = 1
-	screen = 0.1
+	screen = 1
 	updateUsrDialog()
 	flick("d_analyzer_process", linked_destroy)
 
@@ -246,7 +246,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if(!linked_destroy.hacked)
 				if(!linked_destroy.loaded_item)
 					to_chat(user, "<span class='warning'>The destructive analyzer appears to be empty.</span>")
-					screen = 1.0
+					screen = 1
 					linked_destroy.busy = 0
 					return
 				if(linked_destroy.loaded_item.reliability >= 90)
@@ -274,7 +274,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 				linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
-			screen = 1.0
+			screen = 10
 			updateUsrDialog()
 			linked_destroy.busy = 0
 
@@ -294,15 +294,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
 		var/temp_screen = text2num(href_list["menu"])
-		if(temp_screen <= 1.1 || (2 <= temp_screen && 4.9 >= temp_screen) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
+		if(temp_screen <= 11 || (2 <= temp_screen && 49 >= temp_screen) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
 			screen = temp_screen
 		else
 			to_chat(usr, "Unauthorized Access.")
 
 	else if(href_list["updt_tech"]) //Update the research holder with information from the technology disk.
-		screen = 0.0
+		screen = 0
 		spawn(50)
-			screen = 1.2
+			screen = 12
 			files.AddTech2Known(t_disk.stored)
 			if(t_disk.stored.new_category && !(t_disk.stored.new_category in part_sets))
 				part_sets += t_disk.stored.new_category
@@ -317,10 +317,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			return
 		if (alert("Are you sure you want to do this? This will maximize every research level!", "Admin R&D console Hax.", "Yes", "No") != "Yes")
 			return TRUE
-		screen = 0.0
+		screen = 0
 		spawn(50)
 			Maximize()
-			screen = 1.0
+			screen = 10
 			updateUsrDialog()
 			griefProtection() //Update centcomm too
 
@@ -330,7 +330,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(href_list["eject_tech"]) //Eject the technology disk.
 		t_disk:forceMove(src.loc)
 		t_disk = null
-		screen = 1.0
+		screen = 10
 
 	else if(href_list["copy_tech"]) //Copys some technology data from the research holder to the disk.
 		for(var/ID in files.known_tech)
@@ -338,12 +338,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if(href_list["copy_tech_ID"] == T.id)
 				t_disk.stored = T
 				break
-		screen = 1.2
+		screen = 12
 
 	else if(href_list["updt_design"]) //Updates the research holder with design data from the design disk.
-		screen = 0.0
+		screen = 0
 		spawn(50)
-			screen = 1.4
+			screen = 14
 			files.AddDesign2Known(d_disk.blueprint)
 			updateUsrDialog()
 			griefProtection() //Update centcomm too
@@ -354,14 +354,14 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(href_list["eject_design"]) //Eject the design disk.
 		d_disk:forceMove(src.loc)
 		d_disk = null
-		screen = 1.0
+		screen = 10
 
 	else if(href_list["copy_design"]) //Copy design data from the research holder to the design disk.
 		for(var/datum/design/D in files.known_designs)
 			if(href_list["copy_design_ID"] == D.id)
 				d_disk.blueprint = D
 				break
-		screen = 1.4
+		screen = 14
 
 	else if(href_list["eject_item"]) //Eject the item inside the destructive analyzer.
 		if(linked_destroy)
@@ -372,7 +372,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				linked_destroy.loaded_item.forceMove(linked_destroy.loc)
 				linked_destroy.loaded_item = null
 				linked_destroy.icon_state = "d_analyzer"
-				screen = 2.1
+				screen = 21
 
 	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
 		if(linked_destroy)
@@ -392,7 +392,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			to_chat(usr, "Unauthorized Access.")
 
 	else if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
-		screen = 0.0
+		screen = 0
 		if(!sync)
 			to_chat(usr, "<span class='warning'>You must connect to the network first!</span>")
 		else
@@ -421,7 +421,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							server_processed = 1
 						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
 							S.produce_heat(100)
-					screen = 1.6
+					screen = 16
 					updateUsrDialog()
 
 	else if(href_list["togglesync"]) //Prevents the console from being synced by other consoles. Can still send data.
@@ -441,7 +441,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/M in being_built.materials)
 					power += round(being_built.materials[M] / 5)
 				power = max(2000, power)
-				//screen = 0.3
+				//screen = 3
 				var/n
 				if (href_list["customamt"])
 					n = round(input("Queue how many? (Maximum [RESEARCH_MAX_Q_LEN - linked_lathe.queue.len])", "Protolathe Queue") as num|null)
@@ -580,10 +580,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				sheet = null
 
 	else if(href_list["find_device"]) //The R&D console looks for devices nearby to link up with.
-		screen = 0.0
+		screen = 0
 		spawn(20)
 			SyncRDevices()
-			screen = 1.7
+			screen = 17
 			updateUsrDialog()
 
 	else if(href_list["disconnect"]) //The R&D console disconnects with a specific device.
@@ -605,11 +605,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		griefProtection()
 		var/choice = alert("R&D Console Database Reset", "Are you sure you want to reset the R&D console's database? Data lost cannot be recovered.", "Continue", "Cancel")
 		if(choice == "Continue")
-			screen = 0.0
+			screen = 0
 			qdel(files)
 			files = new /datum/research(src)
 			spawn(20)
-				screen = 1.6
+				screen = 16
 				updateUsrDialog()
 
 	else if(href_list["toggleCategory"]) //Filter or unfilter a category
@@ -719,19 +719,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["ddisk"] = ddisk != null
 
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
-		if(2 to 2.9)
+		if(20 to 29)
 			if(linked_destroy == null)
-				screen = 2.0
+				screen = 20
 			else if(linked_destroy.loaded_item == null)
-				screen = 2.1
+				screen = 21
 			else
-				screen = 2.2
-		if(3 to 3.9)
+				screen = 22
+		if(30 to 39)
 			if(linked_lathe == null)
-				screen = 3.0
-		if(4 to 4.9)
+				screen = 30
+		if(40 to 49)
 			if(linked_imprinter == null)
-				screen = 4.0
+				screen = 40
 
 	data["screen"] = screen
 
