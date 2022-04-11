@@ -53,6 +53,8 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						{{empty}}
 							<i>No parts in memory</i>
 						{{/for}}
+					{{else}}
+						<i>No parts in memory</i>
 					{{/if}}
 				</div>
 				<br>
@@ -84,7 +86,54 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			{{empty}}
 				<i>No categories found</i>
 			{{/for}}
+		{{else}}
+			<i>No categories found</i>
 		{{/if}}
+	</div>
+
+	<div class="item">
+		{{if data.lathe && data.screen = 31}}
+			<div class="itemLabel">
+				{{data.lathecategory}}
+			</div>
+		{{else data.imprinter && data.screen = 41}}
+			<div class="itemLabel">
+				{{data.imprintercategory}}
+			</div>
+		{{/if}}
+		<div class="itemContentWide" style="width:100%;">
+			<div class="statusDisplay">
+				<div class="line">
+					{{if data.lathe && data.screen = 31}}
+						{{for data.lathedesigns}}
+							<div class="line">
+								<div class="statusValue">
+									{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+									{{:helper.link(value.cost, null, null, null, null, 'costsmall')}}
+									{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+								</div>
+							</div>
+						{{empty}}
+							<i>No parts in memory</i>
+						{{/for}}
+					{{else data.imprinter && data.screen = 41}}
+						{{for data.imprinterdesigns}}
+							<div class="line">
+								<div class="statusValue">
+									{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+									{{:helper.link(value.cost, null, null, null, null, 'costsmall')}}
+									{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+								</div>
+							</div>
+						{{empty}}
+							<i>No parts in memory</i>
+						{{/for}}
+					{{else}}
+						<i>No parts in memory</i>
+					{{/if}}
+				</div>
+			</div>
+		</div>
 	</div>
 {{else data.screen == 16}}
 	<div class="itemLabel">

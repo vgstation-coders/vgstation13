@@ -63,6 +63,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		"protolathe" = list(),
 		"imprinter" = list()
 	)
+	var/lathe_category = "" //Current category on a protolathe
+	var/imprinter_category = "" //Current category on an imprinter
 	var/autorefresh = 1 //Prevents the window from being updated while queueing items
 
 	req_access = list(access_rnd)	//Data and setting manipulation requires scientist access.
@@ -648,10 +650,34 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		lathe_categories.Add(list(list("name" = name_set)))
 	data["lathecategories"] = lathe_categories
 
+	var/lathe_designs[0]
+	for(var/name_set in linked_lathe.part_sets)
+		if(name_set != lathe_category)
+			continue
+		for(var/datum/design/D in files.known_designs)
+			if(!(D.build_type & PROTOLATHE) || D.category != name_set)
+				continue
+			lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D))))
+	data["lathedesigns"] = lathe_designs
+
+	data["lathecategory"] = lathe_category
+
 	var/imprinter_categories[0]
 	for(var/name_set in linked_imprinter.part_sets)
 		imprinter_categories.Add(list(list("name" = name_set)))
 	data["imprintercategories"] = imprinter_categories
+
+	var/imprinter_designs[0]
+	for(var/name_set in linked_imprinter.part_sets)
+		if(name_set != imprinter_category)
+			continue
+		for(var/datum/design/D in files.known_designs)
+			if(!(D.build_type & IMPRINTER) || D.category != name_set)
+				continue
+			imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D))))
+	data["imprinterdesigns"] = imprinter_designs
+
+	data["imprintercategory"] = imprinter_category
 
 	data["destroy"] = linked_destroy != null
 	data["lathe"] = linked_lathe != null
