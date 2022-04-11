@@ -28,7 +28,42 @@ Used In File(s): \code\modules\research\rdconsole.dm
 </div>
 
 {{if data.screen == 31 || data.screen = 41}}
-	<div style="float: right; width: 75%;">
+	<div style="float: right; width: 25%;">
+		<div class="itemLabel">
+			Material Storage
+		</div>
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+					{{if data.lathe && data.screen == 31}}
+						{{for data.lathemats}}
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+								{{:helper.link(value.cost, 'gear', null, null, null, 'misc')}}
+								{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+							</div>
+						{{empty}}
+							<i>Material storage is empty</i>
+						{{/for}}
+					{{else data.imprinter && data.screen == 41}}
+						{{for data.imprintermats}}
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+								{{:helper.link(value.cost, 'gear', null, null, null, 'misc')}}
+								{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+							</div>
+						{{empty}}
+							<i>Material storage is empty</i>
+						{{/for}}
+					{{else}}
+						<i>Material storage not found</i>
+					{{/if}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div style="float: centre; width: 50%;">
 		<div class="itemLabel">
 			Queue
 		</div>

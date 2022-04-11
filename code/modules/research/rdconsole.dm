@@ -647,39 +647,53 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	files.RefreshResearch()
 
-	var/lathe_categories[0]
-	for(var/name_set in linked_lathe.part_sets)
-		lathe_categories.Add(list(list("name" = name_set)))
-	data["lathecategories"] = lathe_categories
+	if(linked_lathe)
+		var/lathe_categories[0]
+		for(var/name_set in linked_lathe.part_sets)
+			lathe_categories.Add(list(list("name" = name_set)))
+		data["lathecategories"] = lathe_categories
 
-	var/lathe_designs[0]
-	for(var/name_set in linked_lathe.part_sets)
-		if(name_set != lathe_category)
-			continue
-		for(var/datum/design/D in files.known_designs)
-			if(!(D.build_type & PROTOLATHE) || D.category != name_set)
+		var/lathe_designs[0]
+		for(var/name_set in linked_lathe.part_sets)
+			if(name_set != lathe_category)
 				continue
-			lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D))))
-	data["lathedesigns"] = lathe_designs
+			for(var/datum/design/D in files.known_designs)
+				if(!(D.build_type & PROTOLATHE) || D.category != name_set)
+					continue
+				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D))))
+		data["lathedesigns"] = lathe_designs
 
-	data["lathecategory"] = lathe_category
+		var/lathe_mats[0]
+		for(var/matID in linked_lathe.materials.storage)
+			var/datum/material/M=linked_lathe.materials.getMaterial(matID)
+			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID])))
+		data["lathemats"] = lathe_mats
 
-	var/imprinter_categories[0]
-	for(var/name_set in linked_imprinter.part_sets)
-		imprinter_categories.Add(list(list("name" = name_set)))
-	data["imprintercategories"] = imprinter_categories
+		data["lathecategory"] = lathe_category
 
-	var/imprinter_designs[0]
-	for(var/name_set in linked_imprinter.part_sets)
-		if(name_set != imprinter_category)
-			continue
-		for(var/datum/design/D in files.known_designs)
-			if(!(D.build_type & IMPRINTER) || D.category != name_set)
+	if(linked_imprinter)
+		var/imprinter_categories[0]
+		for(var/name_set in linked_imprinter.part_sets)
+			imprinter_categories.Add(list(list("name" = name_set)))
+		data["imprintercategories"] = imprinter_categories
+
+		var/imprinter_designs[0]
+		for(var/name_set in linked_imprinter.part_sets)
+			if(name_set != imprinter_category)
 				continue
-			imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D))))
-	data["imprinterdesigns"] = imprinter_designs
+			for(var/datum/design/D in files.known_designs)
+				if(!(D.build_type & IMPRINTER) || D.category != name_set)
+					continue
+				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D))))
+		data["imprinterdesigns"] = imprinter_designs
 
-	data["imprintercategory"] = imprinter_category
+		var/imprinter_mats[0]
+		for(var/matID in linked_imprinter.materials.storage)
+			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
+			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID])))
+		data["imprintermats"] = imprinter_mats
+
+		data["imprintercategory"] = imprinter_category
 
 	data["destroy"] = linked_destroy != null
 	data["lathe"] = linked_lathe != null
