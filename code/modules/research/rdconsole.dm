@@ -659,19 +659,24 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 
+	var/lathe_queue[0]
+	var/lathe_categories[0]
+	var/lathe_designs[0]
+	var/lathe_mats[0]
+
+	var/imprinter_queue[0]
+	var/imprinter_categories[0]
+	var/imprinter_designs[0]
+	var/imprinter_mats[0]
+
 	if(linked_lathe)
-		var/lathe_queue[0]
 		for(var/i in 1 to linked_lathe.queue.len)
 			var/datum/design/part = linked_lathe.queue[i]
 			lathe_queue.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
-		data["lathequeue"] = lathe_queue
 
-		var/lathe_categories[0]
 		for(var/name_set in linked_lathe.part_sets)
 			lathe_categories.Add(list(list("name" = name_set)))
-		data["lathecategories"] = lathe_categories
 
-		var/lathe_designs[0]
 		for(var/name_set in linked_lathe.part_sets)
 			if(name_set != lathe_category)
 				continue
@@ -679,29 +684,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 					continue
 				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D), "command1" = list("build" = D.id, "n" = 1), "command2" = list("build" = D.id, "n" = 1, "now" = 1))))
-		data["lathedesigns"] = lathe_designs
 
-		var/lathe_mats[0]
 		for(var/matID in linked_lathe.materials.storage)
 			var/datum/material/M=linked_lathe.materials.getMaterial(matID)
 			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID], "commands" = list("lathe_ejectsheet" = matID, "lathe_ejectsheet_amt" = 50))))
-		data["lathemats"] = lathe_mats
-
-		data["lathecategory"] = lathe_category
 
 	if(linked_imprinter)
-		var/imprinter_queue[0]
 		for(var/i in 1 to linked_imprinter.queue.len)
 			var/datum/design/part = linked_imprinter.queue[i]
 			imprinter_queue.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
-		data["imprinterqueue"] = imprinter_queue
 
-		var/imprinter_categories[0]
 		for(var/name_set in linked_imprinter.part_sets)
 			imprinter_categories.Add(list(list("name" = name_set)))
-		data["imprintercategories"] = imprinter_categories
 
-		var/imprinter_designs[0]
 		for(var/name_set in linked_imprinter.part_sets)
 			if(name_set != imprinter_category)
 				continue
@@ -709,15 +704,22 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(!(D.build_type & IMPRINTER) || D.category != name_set)
 					continue
 				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D), "command1" = list("imprint" = D.id, "n" = 1), "command2" = list("imprint" = D.id, "n" = 1, "now" = 1))))
-		data["imprinterdesigns"] = imprinter_designs
 
-		var/imprinter_mats[0]
 		for(var/matID in linked_imprinter.materials.storage)
 			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "imprinter_ejectsheet_amt" = 50))))
-		data["imprintermats"] = imprinter_mats
 
-		data["imprintercategory"] = imprinter_category
+	data["lathequeue"] = lathe_queue
+	data["lathecategories"] = lathe_categories
+	data["lathedesigns"] = lathe_designs
+	data["lathemats"] = lathe_mats
+	data["lathecategory"] = lathe_category
+
+	data["imprinterqueue"] = imprinter_queue
+	data["imprintercategories"] = imprinter_categories
+	data["imprinterdesigns"] = imprinter_designs
+	data["imprintermats"] = imprinter_mats
+	data["imprintercategory"] = imprinter_category
 
 	data["destroy"] = linked_destroy != null
 	data["lathe"] = linked_lathe != null
@@ -725,6 +727,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["isadmin"] = user.client.holder != null
 	data["tdisk"] = t_disk != null
 	data["ddisk"] = d_disk != null
+	data["synced"] = sync
 
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(20 to 29)
