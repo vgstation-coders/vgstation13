@@ -1,0 +1,108 @@
+<!--
+Title: Protolathe UI
+Used In File(s): \code\modules\research\rdconsole.dm
+-->
+
+<div style="float: left; margin-top: 3px;">
+	<div class="line">
+		{{:helper.link('Current Research Levels', 'key', {'screen':11}, (data.screen==11)?'linkOn':'')}}
+		{{if data.tdisk}}
+			{{:helper.link('Disk Operations', 'circle-triangle-e', {'screen':12}, (data.screen==12)?'linkOn':'')}}
+		{{else data.ddisk}}
+			{{:helper.link('Disk Operations', 'circle-triangle-e', {'screen':14}, (data.screen==14)?'linkOn':'')}}
+		{{/if}}
+		{{if data.destroy}}
+			{{:helper.link('Destructive Analyzer Menu', 'key', {'screen':22}, (data.screen==22)?'linkOn':'')}}
+		{{/if}}
+		{{if data.lathe}}
+			{{:helper.link('Protolathe Construction Menu', 'key', {'screen':31}, (data.screen==31)?'linkOn':'')}}
+		{{/if}}
+		{{if data.imprinter}}
+			{{:helper.link('Circuit Construction Menu', 'key', {'screen':41}, (data.screen==41)?'linkOn':'')}}
+		{{/if}}
+		{{if data.isadmin}}
+			{{:helper.link('MAXIMUM SCIENCE', 'key', {'hax':null}, null)}}
+		{{/if}}
+		{{:helper.link('Settings', 'key', {'screen':16}, (data.screen==16)?'linkOn':'')}}
+	</div>
+</div>
+
+{{if data.screen == 31 || data.screen = 41}}
+	<div style="float: right; width: 75%;">
+		<div class="itemLabel">
+			Queue
+		</div>
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+					{{if data.lathe && data.screen == 31}}
+						{{for data.lathequeue}}
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+								{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+							</div>
+						{{empty}}
+							<i>No parts in memory</i>
+						{{/for}}
+					{{else data.imprinter && data.screen == 41}}
+						{{for data.imprinterqueue}}
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+								{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+							</div>
+						{{empty}}
+							<i>No parts in memory</i>
+						{{/for}}
+					{{/if}}
+				</div>
+				<br>
+				<div class="line">
+					{{:helper.link('Process Queue', 'circle-arrow-s', {'process_queue':null}, null, null, 'misc')}}
+					{{:helper.link('Clear Queue', 'circle-arrow-s', {'clear_queue':null}, null, 'fixedLeft')}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Categories
+		</div>
+		{{if data.lathe && data.screen == 31}}
+			{{for data.lathecategories}}
+				<div class="line">
+					{{:helper.link(value.name, 'gear',{'category':value.name},(data.lathecategory = value.name)?'linkOn':'', 'fixedLeftWide')}}
+				</div>
+			{{empty}}
+				<i>No categories found</i>
+			{{/for}}
+		{{else data.imprinter && data.screen == 41}}
+			{{for data.imprintercategories}}
+				<div class="line">
+					{{:helper.link(value.name, 'gear',{'category':value.name},(data.imprintercategory = value.name)?'linkOn':'', 'fixedLeftWide')}}
+				</div>
+			{{empty}}
+				<i>No categories found</i>
+			{{/for}}
+		{{/if}}
+	</div>
+{{else data.screen == 16}}
+	<div class="itemLabel">
+		R&D Console Settings
+	</div>
+	{{if data.synced}}
+		<div class="line">
+			{{:helper.link('Sync Database with Network', 'circle-arrow-s', {'sync':null}, null)}
+		</div>
+		<div class="line">
+			{{:helper.link('Disconnect from Research Network', 'circle-arrow-s', {'togglesync':null}, null)}
+		</div>
+	{{else}}
+		<div class="line">
+			{{:helper.link('Connect to Research Network', 'circle-arrow-s', {'togglesync':null}, null)}
+		</div>
+	{{/if}}
+	<div class="line">
+		{{:helper.link('Reset R&D Database', 'circle-arrow-s', {'reset':null}, null)}
+	</div>
+{{/if}}
