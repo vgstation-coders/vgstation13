@@ -639,6 +639,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		updateUsrDialog()
 	return
 
+/*/obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if (!ui)
+		ui = new(user, src, ui_key, "rndconsole.tmpl", name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
+		ui.set_initial_data(data)
+		ui.open()*/
+
 /obj/machinery/computer/rdconsole/proc/protolathe_header()
 	var/list/options=list()
 	if(screen!=3.1)
