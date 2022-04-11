@@ -756,21 +756,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	switch(screen)
 
 		//////////////////////R&D CONSOLE SCREENS//////////////////
-		if(0.0)
-			dat += "Updating Database...."
-
-		if(0.1)
-			dat += "Processing and Updating Database..."
-
-		if(0.2)
-
-			dat += {"SYSTEM LOCKED<BR><BR>
-				<A href='?src=\ref[src];lock=1.6'>Unlock</A>"}
-		if(0.3)
-			dat += "Constructing Prototypes. Please Wait..."
-
-		if(0.4)
-			dat += "Imprinting Circuit. Please Wait..."
 
 		if(1.1) //Research viewer
 			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><BR>"
