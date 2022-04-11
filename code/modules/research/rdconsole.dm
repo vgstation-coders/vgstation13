@@ -647,12 +647,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		updateUsrDialog()
 	return
 
-/obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+/obj/machinery/computer/rdconsole/attack_hand(var/mob/user as mob)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
+	user.set_machine(src)
 	files.RefreshResearch()
+	ui_interact(user)
+	onclose(user, "computer")
 
+/obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 
 	if(linked_lathe)
@@ -674,7 +678,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 					continue
-				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D), "commands" = list("build" = D.id))))
+				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D), "command1" = list("build" = D.id, "n" = 1), "command2" = list("build" = D.id, "n" = 1, "now" = 1))))
 		data["lathedesigns"] = lathe_designs
 
 		var/lathe_mats[0]
@@ -704,7 +708,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & IMPRINTER) || D.category != name_set)
 					continue
-				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D), "commands" = list("imprint" = D.id))))
+				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D), "command1" = list("imprint" = D.id, "n" = 1), "command2" = list("imprint" = D.id, "n" = 1, "now" = 1))))
 		data["imprinterdesigns"] = imprinter_designs
 
 		var/imprinter_mats[0]
