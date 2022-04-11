@@ -108,7 +108,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		{{if data.lathe && data.screen == 31}}
 			{{for data.lathecategories}}
 				<div class="line">
-					{{:helper.link(value.name, 'gear',{'toggleCategory':value.name},(data.lathecategory = value.name)?'linkOn':'', 'fixedLeftWide')}}
+					{{:helper.link(value.name, 'gear',{'setLatheCategory':value.name},(data.lathecategory = value.name)?'linkOn':'', 'fixedLeftWide')}}
 				</div>
 			{{empty}}
 				<i>No categories found</i>
@@ -116,7 +116,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		{{else data.imprinter && data.screen == 41}}
 			{{for data.imprintercategories}}
 				<div class="line">
-					{{:helper.link(value.name, 'gear',{'toggleCategory':value.name},(data.imprintercategory = value.name)?'linkOn':'', 'fixedLeftWide')}}
+					{{:helper.link(value.name, 'gear',{'setImprinterCategory':value.name},(data.imprintercategory = value.name)?'linkOn':'', 'fixedLeftWide')}}
 				</div>
 			{{empty}}
 				<i>No categories found</i>

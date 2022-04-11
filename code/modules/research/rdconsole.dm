@@ -612,6 +612,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				screen = 16
 				updateUsrDialog()
 
+	else if(href_list["setLatheCategory"])
+		lathe_category = href_list["setLatheCategory"]
+
+	else if(href_list["setImprinterCategory"])
+		imprinter_category = href_list["setImprinterCategory"]
+
 	else if(href_list["toggleCategory"]) //Filter or unfilter a category
 		var/cat = href_list["toggleCategory"]
 		var/machine = href_list["machine"]
