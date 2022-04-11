@@ -60,7 +60,44 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		</div>
 	</div>
 
-	{{if data.screen == 31 || data.screen == 41}}
+	{{else data.screen == 16}}
+		<div class="itemLabel">
+			R&D Console Settings
+		</div>
+		{{if data.synced}}
+			<div class="line">
+				{{:helper.link('Sync Database with Network', 'circle-arrow-s', {'sync':null}, null)}}
+			</div>
+			<div class="line">
+				{{:helper.link('Disconnect from Research Network', 'circle-arrow-s', {'togglesync':null}, null)}}
+			</div>
+		{{else}}
+			<div class="line">
+				{{:helper.link('Connect to Research Network', 'circle-arrow-s', {'togglesync':null}, null)}}
+			</div>
+		{{/if}}
+		<div class="line">
+			{{:helper.link('Device Linkage Menu', 'circle-arrow-s', {'menu':17}, null)}}
+		</div>
+		<div class="line">
+			{{:helper.link('Lock Console', 'circle-arrow-s', {'lock':2}, null)}}
+		</div>
+		<div class="line">
+			{{:helper.link('Reset R&D Database', 'circle-arrow-s', {'reset':null}, null)}}
+		</div>
+	{{else data.screen == 20}}
+		<div class="itemLabel">
+			NO DESTRUCTIVE ANALYZER LINKED TO CONSOLE
+		</div>
+	{{else data.screen == 30}}
+		<div class="itemLabel">
+			NO PROTOLATHE LINKED TO CONSOLE
+		</div>
+	{{else data.screen == 40}}
+		<div class="itemLabel">
+			NO CIRCUIT IMPRINTER LINKED TO CONSOLE
+		</div>
+	{{else data.screen == 31 || data.screen == 41}}
 		<div style="float: right; width: 25%;">
 			<div class="itemLabel">
 				Material Storage
@@ -202,31 +239,6 @@ Used In File(s): \code\modules\research\rdconsole.dm
 					</div>
 				</div>
 			</div>
-		</div>
-	{{else data.screen == 16}}
-		<div class="itemLabel">
-			R&D Console Settings
-		</div>
-		{{if data.synced}}
-			<div class="line">
-				{{:helper.link('Sync Database with Network', 'circle-arrow-s', {'sync':null}, null)}}
-			</div>
-			<div class="line">
-				{{:helper.link('Disconnect from Research Network', 'circle-arrow-s', {'togglesync':null}, null)}}
-			</div>
-		{{else}}
-			<div class="line">
-				{{:helper.link('Connect to Research Network', 'circle-arrow-s', {'togglesync':null}, null)}}
-			</div>
-		{{/if}}
-		<div class="line">
-			{{:helper.link('Device Linkage Menu', 'circle-arrow-s', {'menu':17}, null)}}
-		</div>
-		<div class="line">
-			{{:helper.link('Lock Console', 'circle-arrow-s', {'lock':2}, null)}}
-		</div>
-		<div class="line">
-			{{:helper.link('Reset R&D Database', 'circle-arrow-s', {'reset':null}, null)}}
 		</div>
 	{{/if}}
 {{/if}}

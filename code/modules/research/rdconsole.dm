@@ -862,10 +862,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					dat += "* [R.name] <BR>"
 
 		////////////////////DESTRUCTIVE ANALYZER SCREENS////////////////////////////
-		if(2.0)
-
-			dat += {"NO DESTRUCTIVE ANALYZER LINKED TO CONSOLE<BR><BR>
-				<A href='?src=\ref[src];menu=1.0'>Main Menu</A>"}
 		if(2.1)
 
 			dat += {"No Item Loaded. Standing-by...<BR><HR>
@@ -890,17 +886,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "</UL><BR>"
 			dat += {"<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> ||
 				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "}
-		/////////////////////PROTOLATHE SCREENS/////////////////////////
-		if(3.0)
-
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				NO PROTOLATHE LINKED TO CONSOLE<BR><BR>"}
 
 		///////////////////CIRCUIT IMPRINTER SCREENS////////////////////
-		if(4.0)
-
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				NO CIRCUIT IMPRINTER LINKED TO CONSOLE<BR><BR>"}
 
 		if(4.2)
 
