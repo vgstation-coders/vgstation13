@@ -643,6 +643,23 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
+	var/lathe_categories[0]
+	for(var/name_set in linked_lathe.part_sets)
+		lathe_categories.Add(list(list("name" = name_set)))
+	data["lathecategories"] = lathe_categories
+
+	var/imprinter_categories[0]
+	for(var/name_set in linked_imprinter.part_sets)
+		imprinter_categories.Add(list(list("name" = name_set)))
+	data["imprintercategories"] = imprinter_categories
+
+	data["destroy"] = linked_destroy != null
+	data["lathe"] = linked_lathe != null
+	data["imprinter"] = linked_imprinter != null
+	data["isadmin"] = user.client.holder != null
+	data["tdisk"] = tdisk != null
+	data["ddisk"] = ddisk != null
+
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "rndconsole.tmpl", name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
