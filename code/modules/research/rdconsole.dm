@@ -834,20 +834,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 				dat += {"[D.name]
 					<A href='?src=\ref[src];copy_design=1;copy_design_ID=[D.id]'>(Copy to Disk)</A><BR>"}
-		if(1.6) //R&D console settings
-
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				R&D Console Setting:<BR><BR>"}
-			if(sync)
-
-				dat += {"<A href='?src=\ref[src];sync=1'>Sync Database with Network</A><BR>
-					<A href='?src=\ref[src];togglesync=1'>Disconnect from Research Network</A><BR>"}
-			else
-				dat += "<A href='?src=\ref[src];togglesync=1'>Connect to Research Network</A><BR>"
-
-			dat += {"<A href='?src=\ref[src];menu=1.7'>Device Linkage Menu</A><BR>
-				<A href='?src=\ref[src];lock=0.2'>Lock Console</A><BR>
-				<A href='?src=\ref[src];reset=1'>Reset R&D Database.</A><BR>"}
 		if(1.7) //R&D device linkage
 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||

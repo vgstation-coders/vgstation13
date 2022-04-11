@@ -162,11 +162,11 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		<div class="item">
 			{{if data.lathe && data.screen == 31}}
 				<div class="itemLabel">
-					{{data.lathecategory}}
+					{{:data.lathecategory}}
 				</div>
 			{{else data.imprinter && data.screen == 41}}
 				<div class="itemLabel">
-					{{data.imprintercategory}}
+					{{:data.imprintercategory}}
 				</div>
 			{{/if}}
 			<div class="itemContentWide" style="width:100%;">
@@ -219,6 +219,12 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				{{:helper.link('Connect to Research Network', 'circle-arrow-s', {'togglesync':null}, null)}}
 			</div>
 		{{/if}}
+		<div class="line">
+			{{:helper.link('Device Linkage Menu', 'circle-arrow-s', {'menu':17}, null)}}
+		</div>
+		<div class="line">
+			{{:helper.link('Lock Console', 'circle-arrow-s', {'lock':2}, null)}}
+		</div>
 		<div class="line">
 			{{:helper.link('Reset R&D Database', 'circle-arrow-s', {'reset':null}, null)}}
 		</div>
