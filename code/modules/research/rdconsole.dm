@@ -752,52 +752,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		ui.set_initial_data(data)
 		ui.open()
 
-/*/obj/machinery/computer/rdconsole/proc/protolathe_header()
-	var/list/options=list()
-	if(screen!=3.1)
-		options += "<A href='?src=\ref[src];menu=3.1'>Design Selection</A>"
-	if(screen!=3.2)
-		options += "<A href='?src=\ref[src];menu=3.2'>Material Storage</A>"
-	if(screen!=3.4)
-		options += "<A href='?src=\ref[src];menu=3.4'>Production Queue</A> ([linked_lathe.queue.len])"
-	return {"\[<A href='?src=\ref[src];menu=1.0'>Main Menu</A>\]
-	<div class="header">[jointext(options," || ")]</div><hr />"}
-
-/obj/machinery/computer/rdconsole/proc/CircuitImprinterHeader()
-	var/list/options=list()
-	if(screen!=4.1)
-		options += "<A href='?src=\ref[src];menu=4.1'>Design Selection</A>"
-	if(screen!=4.3)
-		options += "<A href='?src=\ref[src];menu=4.3'>Material Storage</A>"
-	if(screen!=4.2)
-		options += "<A href='?src=\ref[src];menu=4.2'>Chemical Storage</A>"
-	if(screen!=4.4)
-		options += "<A href='?src=\ref[src];menu=4.4'>Production Queue</A> ([linked_imprinter.queue.len])"
-	return {"\[<A href='?src=\ref[src];menu=1.0'>Main Menu</A>\]
-	<div class=\"header\">[jointext(options," || ")]</div><hr />"}
-
-/obj/machinery/computer/rdconsole/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-		return
-
-	user.set_machine(src)
-	var/dat = list("<style>a:link {color: #0066CC} a:visited {color: #0066CC}</style>")
-	files.RefreshResearch()
-	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
-		if(2 to 2.9)
-			if(linked_destroy == null)
-				screen = 2.0
-			else if(linked_destroy.loaded_item == null)
-				screen = 2.1
-			else
-				screen = 2.2
-		if(3 to 3.9)
-			if(linked_lathe == null)
-				screen = 3.0
-		if(4 to 4.9)
-			if(linked_imprinter == null)
-				screen = 4.0
-
+/*
 	switch(screen)
 
 		//////////////////////R&D CONSOLE SCREENS//////////////////
@@ -816,26 +771,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(0.4)
 			dat += "Imprinting Circuit. Please Wait..."
-
-		if(1.0) //Main Menu
-
-			dat += {"Main Menu:<BR><BR>
-				<A href='?src=\ref[src];menu=1.1'>Current Research Levels</A><BR>"}
-			if(t_disk)
-				dat += "<A href='?src=\ref[src];menu=1.2'>Disk Operations</A><BR>"
-			else if(d_disk)
-				dat += "<A href='?src=\ref[src];menu=1.4'>Disk Operations</A><BR>"
-			else
-				dat += "(Please Insert Disk)<BR>"
-			if(linked_destroy != null)
-				dat += "<A href='?src=\ref[src];menu=2.2'>Destructive Analyzer Menu</A><BR>"
-			if(linked_lathe != null)
-				dat += "<A href='?src=\ref[src];menu=3.1'>Protolathe Construction Menu</A><BR>"
-			if(linked_imprinter != null)
-				dat += "<A href='?src=\ref[src];menu=4.1'>Circuit Construction Menu</A><BR>"
-			if(user.client.holder)
-				dat += "<A href='?src=\ref[src];hax=1'>MAXIMUM SCIENCE</A><BR>"
-			dat += "<A href='?src=\ref[src];menu=1.6'>Settings</A>"
 
 		if(1.1) //Research viewer
 			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><BR>"
@@ -989,137 +924,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
 				NO PROTOLATHE LINKED TO CONSOLE<BR><BR>"}
-		if(3.1)
-
-			dat += protolathe_header()+{"Protolathe Construction Menu \[<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A>\]<HR>"}
-			dat += "Filter: "
-			for(var/name_set in linked_lathe.part_sets)
-				if (name_set in filtered["protolathe"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #A66300'>[name_set]</a> / "
-				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #0066CC'>Filter All</a><HR>"
-
-			for(var/name_set in linked_lathe.part_sets)
-				if(name_set in filtered["protolathe"])
-					continue
-				dat += "<h2>[name_set]</h2><ul>"
-				for(var/datum/design/D in files.known_designs)
-					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
-						continue
-					var/temp_dat = "[D.name] [linked_lathe.output_part_cost(D)]"
-					var/upTo=10
-					for(var/M in D.materials)
-						var/num_units_avail=linked_lathe.check_mat(D,M)
-						if(num_units_avail)
-							upTo = min(upTo, num_units_avail)
-						else
-							break
-					if (upTo)
-						dat += {"<li>
-							<A href='?src=\ref[src];build=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
-						if(upTo>=5)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>(&times;5)</A>"
-						if(upTo>=10)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>(&times;10)</A>"
-						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>(Custom)</A>"
-						dat += "</li>"
-					else
-						dat += "<li>[temp_dat]</li>"
-				dat += "</ul>"
-
-		if(3.2) //Protolathe Material Storage Sub-menu
-
-			dat += protolathe_header()+{"Material Storage<ul>"}
-
-
-			for(var/matID in linked_lathe.materials.storage)
-				var/datum/material/M=linked_lathe.materials.getMaterial(matID)
-				dat += "<li>[linked_lathe.materials.storage[matID]] cm<sup>3</sup> of [M.processed_name]"
-				if(linked_lathe.materials.storage[matID] >= M.cc_per_sheet)
-					dat += " - <A href='?src=\ref[src];lathe_ejectsheet=[matID];lathe_ejectsheet_amt=1'>(1 Sheet)</A> "
-					if(linked_lathe.materials.storage[matID] >= (M.cc_per_sheet*5))
-						dat += "<A href='?src=\ref[src];lathe_ejectsheet=[matID];lathe_ejectsheet_amt=5'>(5 Sheets)</A> "
-					dat += "<A href='?src=\ref[src];lathe_ejectsheet=[matID];lathe_ejectsheet_amt=50'>(Max Sheets)</A>"
-				else
-					dat += " - <em>(Empty)</em>"
-				dat += "</li>"
-			dat += "</ul>"
-
-		if(3.4) //Protolathe Queue Management
-			dat += protolathe_header()+"Production Queue<BR><HR><ul>"
-			var/list/required_materials = list()
-			for(var/i=1;i<=linked_lathe.queue.len;i++)
-				var/datum/design/I=linked_lathe.queue[i]
-				dat += "<li>Name: [I.name]"
-				for(var/material in I.materials)
-					required_materials[material] += I.materials[material]*linked_lathe.resource_coeff
-				if(linked_lathe.stopped)
-					dat += "<A href='?src=\ref[src];removeQItem=[i];device=protolathe'>(Remove)</A></li>"
-			dat += "</ul>"
-			if(required_materials.len) //Do we have the materials required? Green if so, blue if it requires bluespace, red otherwise.
-				dat += "<BR>Required Materials: "
-				for(var/I in required_materials)
-					var/datum/material/M=linked_lathe.materials.getMaterial(I)
-					var/success = "red"
-					var/success_amount = linked_lathe.check_mats(I)
-					if(linked_lathe.check_mats(I) >= required_materials[I])
-						success = "green"
-					else if(linked_lathe.check_mats_bluespace(I) >= required_materials[I])
-						success_amount = linked_lathe.check_mats_bluespace(I)
-						success = "blue"
-					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
-			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
-			if(linked_lathe.stopped)
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:green'>Start Production</A>"
-			else
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=1' style='color:red'>Stop Production</A>"
 
 		///////////////////CIRCUIT IMPRINTER SCREENS////////////////////
 		if(4.0)
 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
 				NO CIRCUIT IMPRINTER LINKED TO CONSOLE<BR><BR>"}
-		if(4.1)
-
-			dat += {"[CircuitImprinterHeader()]
-				Circuit Imprinter Menu \[<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A>\]<BR>
-				<b>Material Amount:</b> [linked_imprinter.TotalMaterials()] cm<sup>3</sup><BR>
-				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<HR>"}
-			dat += "Filter: "
-			for(var/name_set in linked_imprinter.part_sets)
-				if (name_set in filtered["imprinter"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #A66300'>[name_set]</a> / "
-				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #0066CC'>Filter All</a><HR>"
-
-			for(var/name_set in linked_imprinter.part_sets)
-				if(name_set in filtered["imprinter"])
-					continue
-				dat += "<h2>[name_set]</h2><ul>"
-				for(var/datum/design/D in files.known_designs)
-					if(!(D.build_type & IMPRINTER) || D.category != name_set)
-						continue
-					var/temp_dat = "[D.name] [linked_imprinter.output_part_cost(D)]"
-					var/upTo=10
-					for(var/M in D.materials)
-						var/num_units_avail=linked_imprinter.check_mat(D,M)
-						if(num_units_avail)
-							upTo = min(upTo, num_units_avail)
-						else
-							break
-					if (upTo)
-						dat += {"<li><A href='?src=\ref[src];imprint=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
-						if(upTo>=5)
-							dat += "<A href='?src=\ref[src];imprint=[D.id];n=5'>(&times;5)</A>"
-						if(upTo>=10)
-							dat += "<A href='?src=\ref[src];imprint=[D.id];n=10'>(&times;10)</A>"
-						dat += "<A href='?src=\ref[src];imprint=[D.id];customamt=1'>(Custom)</A>"
-						dat += "</li>"
-					else
-						dat += "<li>[temp_dat]</li>"
-				dat += "</ul>"
 
 		if(4.2)
 
@@ -1138,66 +948,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					dat += "<em>(Empty)</em><BR>"
 				dat += "<BR>"
 			dat += "<A href='?src=\ref[src];disposeallI=1'><U>Disposal All Chemicals in Storage</U></A><BR>"
-
-		if(4.3)
-
-			dat += {"[CircuitImprinterHeader()]
-				Material Storage<HR><ul>"}
-
-
-			for(var/matID in linked_imprinter.materials.storage)
-				var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
-				if(!(matID in linked_imprinter.allowed_materials))
-					continue
-				dat += "<li>[linked_imprinter.materials.storage[matID]] cm<sup>3</sup> of [M.processed_name]"
-				if(linked_imprinter.materials.storage[matID] >= M.cc_per_sheet)
-					dat += " - <A href='?src=\ref[src];imprinter_ejectsheet=[matID];imprinter_ejectsheet_amt=1'>(1 Sheet)</A> "
-					if(linked_imprinter.materials.storage[matID] >= (M.cc_per_sheet*5))
-						dat += "<A href='?src=\ref[src];imprinter_ejectsheet=[matID];imprinter_ejectsheet_amt=5'>(5 Sheets)</A> "
-					dat += "<A href='?src=\ref[src];imprinter_ejectsheet=[matID];imprinter_ejectsheet_amt=50'>(Max Sheets)</A>"
-				else
-					dat += " - <em>(Empty)</em>"
-				dat += "</li>"
-			dat += "</ul>"
-
-		if(4.4) //Imprinter Queue Management
-			dat += CircuitImprinterHeader()+"Production Queue<BR><HR><ul>"
-			var/list/required_materials = list()
-			for(var/i=1;i<=linked_imprinter.queue.len;i++)
-				var/datum/design/I=linked_imprinter.queue[i]
-				dat += "<li>Name: [I.name]"
-				for(var/material in I.materials)
-					required_materials[material] += I.materials[material]*linked_imprinter.resource_coeff
-				if(linked_imprinter.stopped)
-					dat += "<A href='?src=\ref[src];removeQItem=[i];device=imprinter'>(Remove)</A></li>"
-			dat += "</ul>"
-			if(required_materials.len) //Do we have the materials required? Green if so, blue if it requires bluespace, red otherwise.
-				dat += "<BR>Required Materials: "
-				for(var/I in required_materials)
-					if(copytext(I,1,2) == "$")
-						var/datum/material/M=linked_imprinter.materials.getMaterial(I)
-						if(M)
-							var/success = "red"
-							var/success_amount = linked_imprinter.check_mats(I)
-							if(linked_imprinter.check_mats(I) >= required_materials[I])
-								success = "green"
-							else if(linked_imprinter.check_mats_bluespace(I) >= required_materials[I])
-								success_amount = linked_imprinter.check_mats_bluespace(I)
-								success = "blue"
-							dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
-					else
-						var/success = linked_imprinter.check_mats(I)
-						dat += "<span style='color:[success?"green":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
-
-			dat += "<br><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
-			if(linked_imprinter.stopped)
-				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:green'>Start Production</A>"
-			else
-				dat += "<A href='?src=\ref[src];setImprinterStopped=1' style='color:red'>Stop Production</A>"
-
-	dat = jointext(dat,"")
-	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
-	onclose(user, "rdconsole")*/
+*/
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
 	return screen == 2
