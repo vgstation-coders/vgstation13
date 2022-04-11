@@ -1189,7 +1189,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	onclose(user, "rdconsole")*/
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
-	return screen == 0.2
+	return screen == 2
 
 /obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
 	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that
