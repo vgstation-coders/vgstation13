@@ -647,7 +647,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	files.RefreshResearch()
 
+	var/data[0]
+
 	if(linked_lathe)
+		var/lathe_queue[0]
+		for(var/i in 1 to linked_lathe.queue.len)
+			var/datum/design/part = linked_lathe.queue[i]
+			queue_list.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
+
+		data["lathequeue"] = lathe_queue
+
 		var/lathe_categories[0]
 		for(var/name_set in linked_lathe.part_sets)
 			lathe_categories.Add(list(list("name" = name_set)))
@@ -672,6 +681,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		data["lathecategory"] = lathe_category
 
 	if(linked_imprinter)
+		var/imprinter_queue[0]
+		for(var/i in 1 to linked_imprinter.queue.len)
+			var/datum/design/part = linked_imprinter.queue[i]
+			queue_list.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
+
+		data["imprinterqueue"] = imprinter_queue
+
 		var/imprinter_categories[0]
 		for(var/name_set in linked_imprinter.part_sets)
 			imprinter_categories.Add(list(list("name" = name_set)))
