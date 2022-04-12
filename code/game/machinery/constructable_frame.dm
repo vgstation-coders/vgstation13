@@ -1295,6 +1295,11 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to run a machine that sorts input into two outputs from pre-programmed settings. This one is programmed for mail."
 	build_path = /obj/machinery/sorting_machine/destination
 
+/obj/item/weapon/circuitboard/sorting_machine/item
+	name = "Circuit Design (Item Sorting Machine)"
+	desc = "Allows for the construction of circuit boards used to build an item sorting machine."
+	build_path = /obj/item/weapon/circuitboard/sorting_machine/item
+
 /obj/item/weapon/circuitboard/processing_unit
 	name = "Circuit Board (Ore Processor)"
 	desc = "A circuit board used to run a machine that smelts mineral ores into sheets."

@@ -525,6 +525,16 @@
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
 
+/obj/structure/closet/crate/secure/proc/autotogglelock(var/obj/machinery/M)
+	if(istype(M,/obj/machinery/logistics_machine/crate_opener))
+		var/obj/machinery/logistics_machine/crate_opener/N = M
+		if(can_access(N.access,req_access,req_access))
+			src.locked = !src.locked
+			update_icon()
+			return 1
+		else
+			return 0
+
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
 		overlays.len = 0
