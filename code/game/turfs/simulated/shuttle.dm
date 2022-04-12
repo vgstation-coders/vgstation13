@@ -198,6 +198,11 @@
 	var/datum/shuttle/escape/pod/linked_pod
 	machine_flags = SCREWTOGGLE
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
 	..()
