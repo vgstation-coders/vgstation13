@@ -203,21 +203,26 @@
 		/datum/malfhack_ability/oneuse/overload_quiet
 	)
 
+
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
 	..()
 	
+/obj/machinery/podcomputer/process()
+	..()
+	update_icon()
 
 /obj/machinery/podcomputer/emag_act(mob/user)
 	if(emagged)
 		return
 	if(emergency_shuttle.online)
-		to_chat(user, "<span class='warning'>The emergency shuttle is already on its way. The [src]'s systems are locked.")
+		to_chat(user, "<span class='warning'>The emergency shuttle is already on its way. \The [src]'s systems are locked.")
 		return
 	to_chat(user, "<span class='warning'>You insert the cryptographic sequencer into the [src] short out the desination controller!</span>")
 	emagged = TRUE
 	linked_pod?.crashing_this_pod = "with no survivors"
 	spark(src)
+	update_icon()
 
 /obj/machinery/podcomputer/examine(mob/user)
 	..()
@@ -235,13 +240,17 @@
 
 /obj/machinery/podcomputer/proc/fix_circuitry(mob/user)
 	emagged = FALSE
-	to_chat(user, "<span class='notice'>You repair the melted wire in the desination controller.</span>")
+	to_chat(user, "<span class='notice'>You repair the melted wire in the destination controller.</span>")
 	linked_pod?.crashing_this_pod = FALSE
 
 /obj/machinery/podcomputer/update_icon()
 	if(panel_open)
 		icon_state = "podcomputer_maint"
+	else if(emergency_shuttle.online)
+		icon_state = "podcomputer_shuttle"
 	else if(emagged)
 		icon_state = "podcomputer_error"
 	else 
 		icon_state = "podcomputer"
+
+
