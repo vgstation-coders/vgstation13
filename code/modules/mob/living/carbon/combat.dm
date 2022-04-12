@@ -133,6 +133,7 @@
 					var/mob/living/silicon/robot/R = L
 					R.tip(get_dir(src, R))
 					visible_message("<span class='warning'>[src] collides with [R], tipping it over!</span>")
+					R.self_righting(R.knockdown)
 					tackleGetHurt(0, 3)
 					AdjustStunned(3)	//Mostly a mercy to borgs but something something metal casing + skull
 				else
