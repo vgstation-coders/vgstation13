@@ -8,6 +8,8 @@
 	flags = INVULNERABLE
 	walltype = "swall"
 
+	var/stop_fucking_smoothing = 0
+
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall/shuttle,
@@ -19,6 +21,8 @@
 
 /turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
 	if (get_area(A) != get_area(src))
+		return 0
+	if(stop_fucking_smoothing)
 		return 0
 
 	return ..()
@@ -184,3 +188,30 @@
 /turf/simulated/floor/shuttle/brig // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
 	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
 	icon_state = "floor4"
+
+
+/obj/machinery/podcomputer 
+	name = "pod computer"
+	desc = "A computer for piloting escape pods. The software hasn't been updated since the autopilot system was installed and is mostly non-functional."
+	use_power = 0
+	icon = 'icons/obj/computer.dmi'
+	icon_state = "podcomputer"
+
+	var/datum/shuttle/escape/pod/linked_pod
+
+/obj/machinery/podcomputer/Destroy()
+	linked_pod?.podcomputer = null
+	..()
+	
+
+/obj/machinery/podcomputer/emag_act(mob/user)
+	if(emagged)
+		return
+	to_chat(user, "<span class='warning'>You short out the desination controller!</span>")
+	emagged = TRUE
+	linked_pod?.crashing_this_pod = "with no survivors"
+
+/obj/machinery/podcomputer/proc/fix_circuitry(mob/user)
+	emagged = FALSE
+	to_chat(user, "<span class='notice'>You repair the melted wire in the desination controller.</span>")
+	linked_pod?.crashing_this_pod = FALSE
