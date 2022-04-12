@@ -84,6 +84,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 
 	if(podcomputer)
 		podcomputer.say("Warning! Destination controller is offline. Rerouting to nearest suitable location...")
+		spark(get_turf(podcomputer))
 
 	var/random_delay = pick(5 SECONDS, 15 SECONDS)
 
