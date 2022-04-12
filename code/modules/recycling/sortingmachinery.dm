@@ -791,7 +791,6 @@
 	for(var/dest in map.default_tagger_locations)
 		if(dest)
 			destinations += dest
-	destinations += "None"
 
 	mover = new
 
@@ -847,8 +846,7 @@
 			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
 			target.forceMove(P)
 			packagewrap += -1
-			if(!(currTag == "None"))
-				tag_item(P)
+			tag_item(P)
 		else
 			if(world.time > next_sound)
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
@@ -868,9 +866,7 @@
 			var/obj/item/P = new bigpath(get_turf(target.loc),target)
 			target.forceMove(P)
 			packagewrap += -3
-			if(!(currTag == "None"))
-				tag_item(P)
-			return
+			tag_item(P)
 		else
 			if(world.time > next_sound)
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
@@ -895,8 +891,8 @@
 			var/tag = uppertext(src.destinations[src.currTag])
 			D.sortTag = tag
 			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
-			overlays = 0
-			overlays += image(icon = icon, icon_state = "deliverytag")
+			D.overlays = 0
+			D.overlays += image(icon = icon, icon_state = "deliverytag")
 			D.desc = "A small wrapped package. It has a label reading [tag]"
 
 /obj/machinery/wrapping_machine/multitool_menu(var/mob/user, var/obj/item/device/multitool/P) //copied from sorting machine and modified
