@@ -193,9 +193,10 @@
 	use_power = 0
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "podcomputer"
+	icon_state_open = "podcomputer_maint"
 
 	var/datum/shuttle/escape/pod/linked_pod
-	var/panel_open = 0
+	machine_flags = SCREWTOGGLE
 
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
@@ -216,10 +217,7 @@
 	
 /obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
 	..()
-	if(O.is_screwdriver(user))
-		panel_open = !panel_open
-		to_chat(user, "<span class='notice'>You [panel_open ? "open" : "close"] the maintenance panel.</span>")
-	else if(issolder(O) && emagged && panel_open)
+	if(issolder(O) && emagged && panel_open)
 		var/obj/item/tool/solder/S = O
 		if(S.remove_fuel(2,user))
 			fix_circuitry(user)
@@ -233,4 +231,4 @@
 	if(panel_open)
 		icon_state = "podcomputer_maint"
 	else 
-		icon = "podcomputer"
+		icon_state = "podcomputer"
