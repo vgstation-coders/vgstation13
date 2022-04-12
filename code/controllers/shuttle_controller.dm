@@ -345,11 +345,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				var/collision_imminent = FALSE
 				for(var/datum/shuttle/escape/pod/pod in escape_pods)
 					if(pod.crashing_this_pod)
-						if(locate(/mob/living) in pod.linked_area)
-							pod.crash_into_shuttle()
-							collision_imminent = TRUE
-						else 
-							pod.crashing_this_pod = 0
+						pod.crash_into_shuttle()
+						collision_imminent = TRUE
+
 				if(collision_imminent)
 					playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
 				

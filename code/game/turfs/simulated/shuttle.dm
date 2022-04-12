@@ -211,14 +211,17 @@
 /obj/machinery/podcomputer/emag_act(mob/user)
 	if(emagged)
 		return
-	to_chat(user, "<span class='warning'>You short out the desination controller!</span>")
+	if(emergency_shuttle.online)
+		to_chat(user, "<span class='warning'>The emergency shuttle is already on its way. The [src]'s systems are locked.")
+		return
+	to_chat(user, "<span class='warning'>You insert the cryptographic sequencer into the [src] short out the desination controller!</span>")
 	emagged = TRUE
 	linked_pod?.crashing_this_pod = "with no survivors"
 
 /obj/machinery/podcomputer/examine(mob/user)
 	..()
-	if(panel_open && emagged)
-		to_chat(user, "<span class='danger'>Some of the wires have been shorted out!</span>")
+	if(emagged)
+		to_chat(user, "<span class='danger'>It seems to be malfunctioning!</span>")
 	
 /obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
 	..()
@@ -235,5 +238,7 @@
 /obj/machinery/podcomputer/update_icon()
 	if(panel_open)
 		icon_state = "podcomputer_maint"
+	else if(emagged)
+		icon_state = "podcomputer_error"
 	else 
 		icon_state = "podcomputer"
