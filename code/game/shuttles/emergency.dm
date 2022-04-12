@@ -64,8 +64,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 		podcomputer.linked_pod = src
 	
 	// I fucking hate shuttle wall smoothing it is such an annoying feature that only causes problems
-	for(var/turf/simulated/wall/shuttle/W in linked_area)
-		W.stop_fucking_smoothing = 1
+
 
 /datum/shuttle/escape/pod/Destroy()
 	podcomputer.linked_pod = null
@@ -75,38 +74,46 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 /datum/shuttle/escape/pod/proc/crash_into_shuttle()
 	if(!crashing_this_pod)
 		return
+		
 	crashing_this_pod = 0
 
-	playsound(linked_port, 'sound/misc/weather_warning_short.ogg', 80, 0, 7, 0, 0)
+	if(!dock_shuttle)
+		return
+
+	playsound(linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
 
 	if(podcomputer)
 		podcomputer.say("Warning! Destination controller is offline. Rerouting to nearest suitable location...")
 
-	spawn(15 SECONDS)
+	var/random_delay = pick(5 SECONDS, 15 SECONDS)
 
-	playsound(linked_port, 'sound/machines/hyperspace_begin.ogg', 70, 0, 0, 0, 0)
-	playsound(dock_shuttle, 'sound/machines/hyperspace_begin.ogg', 60, 0, 0, 0, 0)
+	spawn(15 SECONDS + random_delay)
 
-	spawn(5 SECONDS)
+		playsound(linked_port, 'sound/machines/hyperspace_begin.ogg', 70, 0, 0, 0, 0)
+		playsound(dock_shuttle, 'sound/machines/hyperspace_begin.ogg', 60, 0, 0, 0, 0)
+
+		spawn(5 SECONDS)
 	
-	if(!move_to_dock(dock_shuttle, 0, 180))
-		message_admins("Warning: [src] failed to crash into shuttle.")
-	else
-		explosion(get_turf(dock_shuttle), 2, 3, 4, 5)
+		if(!move_to_dock(dock_shuttle, 0, 180))
+			message_admins("Warning: [src] failed to crash into shuttle.")
+		else
+			explosion(get_turf(dock_shuttle), 2, 4, 5, 6)
+
+			for(var/mob/living/M in emergency_shuttle.shuttle.linked_area)
+				shake_camera(M, 10, 1) 
+				if(iscarbon(M) || !M.anchored)
+					M.Knockdown(3)
 
 
-
-		// The pod crashed into the shuttle. Make it part of the shuttle
-		for(var/turf/T in linked_area)
-			T.set_area(emergency_shuttle.shuttle.linked_area)
-		qdel(linked_area)
-
-		for(var/mob/living/M in emergency_shuttle.shuttle.linked_area)
-			shake_camera(M, 10, 1) 
-			if(iscarbon(M) || !M.anchored)
-				M.Knockdown(3)
-
-		qdel(src)
+			// The pod crashed into the shuttle. Make it part of the shuttle
+			// Automatic wall smoothing is gay and causes the pod to 'merge' with the shuttle visually
+			// instead of wasting time solving an issue caused by a worthless feature im going to cheat
+			
+			spawn(2 SECONDS)
+				for(var/turf/T in linked_area)
+					T.set_area(emergency_shuttle.shuttle.linked_area)
+				qdel(linked_area)
+				qdel(src)
 
 
 var/global/datum/shuttle/escape/pod/one/EP1 = new(starting_area=/area/shuttle/escape_pod1)

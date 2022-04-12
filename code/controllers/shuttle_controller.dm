@@ -137,13 +137,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			if(!S.move_to_dock(S.dock_station, 0))
 				message_admins("Warning: [S] failed to move to station.")
 		if("centcom")
-
-			// Did we crash into the shuttle? Well we better stay 'attached'tt
 			if(S.current_port != S.dock_shuttle)
 				if(!S.move_to_dock(S.dock_centcom, 0))
 					message_admins("Warning: [S] failed to move to centcom.")
-
-
 		if("transit")
 			if(!S.move_to_dock(S.transit_port, 0))
 				message_admins("Warning: [S] failed to move to transit.")
@@ -352,7 +348,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 						pod.crash_into_shuttle()
 						collision_imminent = TRUE
 				if(collision_imminent)
-					playsound(shuttle.linked_port, 'sound/misc/weather_warning_short.ogg', 80, 0, 7, 0, 0)
+					playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
 				
 				if(timeleft>0)
 					return 0

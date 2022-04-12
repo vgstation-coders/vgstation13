@@ -739,6 +739,7 @@
 			modern.floor_tile = ancient.floor_tile
 			ancient.floor_tile = null
 		if(rotate)
+			to_chat(world, "rotate called on new_turf: area = [get_area(new_turf).name]")
 			new_turf.map_element_rotate(rotate)
 
 		//*****Move air*****

@@ -8,7 +8,6 @@
 	flags = INVULNERABLE
 	walltype = "swall"
 
-	var/stop_fucking_smoothing = 0
 
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(
@@ -21,8 +20,6 @@
 
 /turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
 	if (get_area(A) != get_area(src))
-		return 0
-	if(stop_fucking_smoothing)
 		return 0
 
 	return ..()
@@ -198,6 +195,7 @@
 	icon_state = "podcomputer"
 
 	var/datum/shuttle/escape/pod/linked_pod
+	var/panel_open = 0
 
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
@@ -211,7 +209,28 @@
 	emagged = TRUE
 	linked_pod?.crashing_this_pod = "with no survivors"
 
+/obj/machinery/podcomputer/examine(mob/user)
+	..()
+	if(panel_open && emagged)
+		to_chat(user, "<span class='danger'>Some of the wires have been shorted out!</span>")
+	
+/obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
+	..()
+	if(O.is_screwdriver(user))
+		panel_open = !panel_open
+		to_chat(user, "<span class='notice'>You [panel_open ? "open" : "close"] the maintenance panel.</span>")
+	else if(issolder(O) && emagged && panel_open)
+		var/obj/item/tool/solder/S = O
+		if(S.remove_fuel(2,user))
+			fix_circuitry(user)
+
 /obj/machinery/podcomputer/proc/fix_circuitry(mob/user)
 	emagged = FALSE
 	to_chat(user, "<span class='notice'>You repair the melted wire in the desination controller.</span>")
 	linked_pod?.crashing_this_pod = FALSE
+
+/obj/machinery/podcomputer/update_icon()
+	if(panel_open)
+		icon_state = "podcomputer_maint"
+	else 
+		icon = "podcomputer"
