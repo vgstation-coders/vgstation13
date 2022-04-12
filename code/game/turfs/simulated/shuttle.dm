@@ -217,6 +217,7 @@
 	to_chat(user, "<span class='warning'>You insert the cryptographic sequencer into the [src] short out the desination controller!</span>")
 	emagged = TRUE
 	linked_pod?.crashing_this_pod = "with no survivors"
+	spark(src)
 
 /obj/machinery/podcomputer/examine(mob/user)
 	..()
