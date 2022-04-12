@@ -220,7 +220,9 @@
 
 /obj/machinery/podcomputer/examine(mob/user)
 	..()
-	if(emagged)
+	if(panel_open && emagged)
+		to_chat(user, "<span class='danger'>Some of the wires have been shorted out!</span>")
+	else if(emagged)
 		to_chat(user, "<span class='danger'>It seems to be malfunctioning!</span>")
 	
 /obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
