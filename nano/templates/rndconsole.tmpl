@@ -100,18 +100,30 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				{{:helper.link('Eject Disk', 'circle-arrow-s', {'eject_tech':null}, null)}}
 			</div>
 		{{/if}}
-	{{else data.screen == 13}}
+	{{else data.screen == 13 || data.screen == 15}}
 		<div class="itemLabel">
-			Load Technology to Disk:
+			{{if data.screen == 13}}
+				Load Technology to Disk:
+			{{else data.screen == 15}}
+				Load Design to Disk:
+			{{/if}}
 		</div>
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-					{{for data.techinfo}}
-						<b>{{:value.name}}</b><br>{{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}<br><br>
-					{{empty}}
-						No tech levels found.
-					{{/for}}
+					{{if data.screen == 13}}
+						{{for data.techinfo}}
+							<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}<br><br>
+						{{empty}}
+							No tech levels found.
+						{{/for}}
+					{{else data.screen == 15}}
+						{{for data.alldesigns}}
+							<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}<br><br>
+						{{empty}}
+							No designs found.
+						{{/for}}
+					{{/if}}
 				</div>
 			</div>
 		</div>

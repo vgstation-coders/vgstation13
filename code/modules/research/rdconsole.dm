@@ -727,6 +727,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["imprintermats"] = imprinter_mats
 	data["imprintercategory"] = imprinter_category
 
+	var/all_desgins[0]
+	for(var/datum/design/D in files.known_designs)
+		all_designs.Add(list(list("name" = D.name, "commands" = list("copy_design" = 1, "copy_design_ID" = D.id))))
+	data["alldesigns"] = all_designs
 	data["destroy"] = linked_destroy != null
 	data["lathe"] = linked_lathe != null
 	data["imprinter"] = linked_imprinter != null
@@ -797,15 +801,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					<A href='?src=\ref[src];clear_design=1'>Clear Disk</A> || "}
 			dat += "<A href='?src=\ref[src];eject_design=1'>Eject Disk</A>"
 
-		if(1.5) //Technology disk submenu
-
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
-				<A href='?src=\ref[src];menu=1.4'>Return to Disk Operations</A><HR>
-				Load Design to Disk:<BR><BR>"}
-			for(var/datum/design/D in files.known_designs)
-
-				dat += {"[D.name]
-					<A href='?src=\ref[src];copy_design=1;copy_design_ID=[D.id]'>(Copy to Disk)</A><BR>"}
 		if(1.7) //R&D device linkage
 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
