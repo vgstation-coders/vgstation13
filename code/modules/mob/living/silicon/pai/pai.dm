@@ -89,8 +89,9 @@
 		"Tramadol" = TRAMADOL,
 		"Alkysine" = ALKYSINE,
 		"Arithrazine" = ARITHRAZINE,
+		"Ethylredoxrazine" = ETHYLREDOXRAZINE,
 		"Spaceacilin" = SPACEACILLIN,
-		"Sleep Toxin = STOXIN,
+		"Sleep Toxin" = STOXIN,
 	)
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
