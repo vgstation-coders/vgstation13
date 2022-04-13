@@ -373,9 +373,7 @@
 			return close()
 		else
 			return open()
-		return 1	
-	return 0
-	
+
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)
 
