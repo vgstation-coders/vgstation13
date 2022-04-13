@@ -768,6 +768,7 @@
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 	var/packagewrap = 0
+	var/syndiewrap = 0
 
 	var/next_sound = 0
 	var/sound_delay = 20
@@ -784,7 +785,7 @@
 
 	var/smallpath = /obj/item/delivery //We use this for items
 	var/bigpath = /obj/item/delivery/large //We use this for structures (crates, closets, recharge packs, etc.)
-	var/manpath = null //We use this for people.
+	var/manpath = /obj/item/delivery/large //We use this for people.
 	var/list/cannot_wrap = list(
 		/obj/structure/table,
 		/obj/structure/rack,
@@ -894,6 +895,24 @@
 				for(var/mob/M in hearers(src))
 					M.show_message("<b>[src]</b> announces, \"Please insert additional sheets of package wrap into \the [src].\"")
 				return 0
+	else if(istype(target,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = target
+		if(syndiewrap >= 2)
+			syndiewrap += -2
+			packagewrap += -2
+			var/obj/present = new manpath(get_turf(src),H)
+			if (H.client)
+				H.client.perspective = EYE_PERSPECTIVE
+				H.client.eye = present
+			H.visible_message("<span class='warning'>[src] wraps [H]!</span>")
+			H.forceMove(present)
+		else
+			if(world.time > next_sound)
+				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+				next_sound = world.time + sound_delay
+			for(var/mob/M in hearers(src))
+				M.show_message("<b>[src]</b> announces, \"Standard package wrap is not strong enough to wrap living creatures.\"")
+			return 0
 	else
 		if(world.time > next_sound)
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
@@ -958,8 +977,10 @@
 	. = ..()
 	if(istype(O,/obj/item/stack/package_wrap))
 		var/obj/item/stack/package_wrap/P = O
+		if(istype(P,/obj/item/stack/package_wrap/syndie))
+			syndiewrap += P.amount
 		packagewrap += P.amount
-		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to /the [src].</span>")
+		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to \the [src].</span>")
 		P.use(P.amount)
 
 /obj/machinery/wrapping_machine/attack_hand(mob/user)
