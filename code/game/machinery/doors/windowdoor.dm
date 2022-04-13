@@ -17,7 +17,7 @@
 	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
 	ghost_read = 0
-	machine_flags = EMAGGABLE
+	machine_flags = EMAGGABLE|WIREJACK
 	soundeffect = 'sound/machines/windowdoor.ogg'
 	var/shard_type = /obj/item/weapon/shard
 	penetration_dampening = 2
