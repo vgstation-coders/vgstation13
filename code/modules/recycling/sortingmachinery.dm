@@ -621,7 +621,8 @@
 
 //Machines for working with crates prior to shipping
 /obj/machinery/logistics_machine
-	layer = OPEN_DOOR_LAYER // Below the crates
+	layer = ABOVE_TILE_LAYER
+	plane = ABOVE_TURF_PLANE
 	anchored = 1
 	density = 0
 	use_power = 1
@@ -739,7 +740,7 @@
 	name = "wrapping machine"
 	desc = "Wraps and tags items."
 	icon = 'icons/obj/recycling.dmi'
-	icon_state = "grinder-b1"
+	icon_state = "separator-AO0"
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
@@ -883,6 +884,7 @@
 /obj/machinery/wrapping_machine/proc/tag_item(var/atom/movable/target)
 	if(istype(target,/obj/item/delivery))
 		var/obj/item/delivery/D = target
+		var/image/tag_overlay = image('icons/obj/storage/storage.dmi', D, "deliverytag")
 		if(D.sortTag != src.currTag)
 			if(!src.currTag)
 				return
@@ -890,7 +892,7 @@
 			D.sortTag = tag
 			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			D.overlays = 0
-			D.overlays += image(icon = icon, icon_state = "deliverytag")
+			D.overlays += tag_overlay
 			D.desc = "A small wrapped package. It has a label reading [tag]"
 
 /obj/machinery/wrapping_machine/multitool_menu(var/mob/user, var/obj/item/device/multitool/P) //copied from sorting machine and modified
