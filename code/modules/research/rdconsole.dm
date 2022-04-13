@@ -744,7 +744,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["tstoreddesc"] = t_disk && t_disk.stored ? t_disk.stored.desc : ""
 
 	data["ddisk"] = d_disk != null
+	data["dstored"] = d_disk && d_disk.blueprint
+	data["dstoredname"] = d_disk && d_disk.blueprint ? d_disk.blueprint.name : ""
+	data["dstoredlevel"] = d_disk && d_disk.blueprint ? clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100) : 0
+	data["dstoredtype"] = !d_disk || !d_disk.blueprint ? "" : d_disk.blueprint.build_type == IMPRINTER ? "Circuit Imprinter" : d_disk.blueprint.build_type == PROTOLATHE ? "Protolathe" : d_disk.blueprint.build_type == AUTOLATHE ? "Autolathe" : "Unknown"
 
+	var/dstored_mats[0]
+	if(d_disk && d_disk.blueprint)
+		for(var/M in d_disk.blueprint.materials)
+			if(copytext(M, 1, 2) == "$")
+				dstored_mats.Add(list(list("* [copytext(M, 2)] x [d_disk.blueprint.materials[M]]")))
+			else
+				dstored_mats.Add(list(list("* [M] x [d_disk.blueprint.materials[M]]")))
+	data["dstoredmats"] = dstored_mats
 
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(20 to 29)
@@ -771,36 +783,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 /*
 		//////////////////////R&D CONSOLE SCREENS//////////////////
-		if(1.4) //Design Disk menu.
-			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>"
-			if(d_disk.blueprint == null)
-
-				dat += {"The disk has no data stored on it.<HR>
-					Operations:
-					<A href='?src=\ref[src];menu=1.5'>Load Design to Disk</A> || "}
-			else
-
-				dat += {"Name: [d_disk.blueprint.name]<BR>
-					Level: [clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
-				switch(d_disk.blueprint.build_type)
-					if(IMPRINTER)
-						dat += "Lathe Type: Circuit Imprinter<BR>"
-					if(PROTOLATHE)
-						dat += "Lathe Type: Proto-lathe<BR>"
-					if(AUTOLATHE)
-						dat += "Lathe Type: Auto-lathe<BR>"
-				dat += "Required Materials:<BR>"
-				for(var/M in d_disk.blueprint.materials)
-					if(copytext(M, 1, 2) == "$")
-						dat += "* [copytext(M, 2)] x [d_disk.blueprint.materials[M]]<BR>"
-					else
-						dat += "* [M] x [d_disk.blueprint.materials[M]]<BR>"
-
-				dat += {"<HR>Operations:
-					<A href='?src=\ref[src];updt_design=1'>Upload to Database</A> ||
-					<A href='?src=\ref[src];clear_design=1'>Clear Disk</A> || "}
-			dat += "<A href='?src=\ref[src];eject_design=1'>Eject Disk</A>"
-
 		if(1.7) //R&D device linkage
 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||

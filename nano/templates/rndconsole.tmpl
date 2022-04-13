@@ -72,33 +72,65 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				</div>
 			</div>
 		</div>
-	{{else data.screen == 12}}
+	{{else data.screen == 12 || data.screen == 14}}
 		<div class="itemLabel">
-			Disk Contents: (Technology Data Disk)
+			{{if data.screen == 12}}
+				Disk Contents: (Technology Data Disk)
+			{{else data.screen == 14}}
+				Disk Contents: (Design Data Disk)
+			{{if}}
 		</div>
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-					{{if !data.tdisk}}
-						No disk inserted.
-					{{else !data.tstored}}
-						This disk has no data stored on it.
-					{{else}}
-						<b>{{:data.tstoredname}}</b><br>Level: {{:data.tstoredlevel}}<br><i>{{:data.tstoreddesc}}</i>
+					{{if data.screen == 12}}
+						{{if !data.tdisk}}
+							No disk inserted.
+						{{else !data.tstored}}
+							This disk has no data stored on it.
+						{{else}}
+							<b>{{:data.tstoredname}}</b><br><b>Level:</b> {{:data.tstoredlevel}}<br><i>{{:data.tstoreddesc}}</i>
+						{{/if}}
+					{{else data.screen == 14}}
+						{{if !data.ddisk}}
+							No disk inserted.
+						{{else !data.dstored}}
+							This disk has no data stored on it.
+						{{else}}
+							<b>{{:data.dstoredname}}</b>><br><b>Level:</b> {{:data.dstoredlevel}}<br><b>Lathe Type:</b> {{:data.dstoredtype}}<br>
+						{{for data.dstoredmats}}
+							<b>Required materials:</b> {{:value.amount}}<br>
+						{{empty}}
+							No materials required.<br>
+						{{/if}}
 					{{/if}}
 				</div>
 			</div>
 		</div>
-		{{if data.tdisk}}
-			<div class="line">
-				{{if !data.tstored}}
-					{{:helper.link('Load Tech to Disk', 'circle-arrow-s', {'menu':13}, null)}}
-				{{else}}
-					{{:helper.link('Upload to Database', 'circle-arrow-s', {'updt_tech':null}, null)}}
-					{{:helper.link('Clear Disk', 'circle-arrow-s', {'clear_tech':null}, null)}}
-				{{/if}}
-				{{:helper.link('Eject Disk', 'circle-arrow-s', {'eject_tech':null}, null)}}
-			</div>
+		{{if data.screen == 12}}
+			{{if data.tdisk}}
+				<div class="line">
+					{{if !data.tstored}}
+						{{:helper.link('Load Tech to Disk', 'circle-arrow-s', {'menu':13}, null)}}
+					{{else}}
+						{{:helper.link('Upload to Database', 'circle-arrow-s', {'updt_tech':null}, null)}}
+						{{:helper.link('Clear Disk', 'circle-arrow-s', {'clear_tech':null}, null)}}
+					{{/if}}
+					{{:helper.link('Eject Disk', 'circle-arrow-s', {'eject_tech':null}, null)}}
+				</div>
+			{{/if}}
+		{{if data.screen == 14}}
+			{{if data.ddisk}}
+				<div class="line">
+					{{if !data.dstored}}
+						{{:helper.link('Load Tech to Disk', 'circle-arrow-s', {'menu':15}, null)}}
+					{{else}}
+						{{:helper.link('Upload to Database', 'circle-arrow-s', {'updt_design':null}, null)}}
+						{{:helper.link('Clear Disk', 'circle-arrow-s', {'clear_design':null}, null)}}
+					{{/if}}
+					{{:helper.link('Eject Disk', 'circle-arrow-s', {'eject_design':null}, null)}}
+				</div>
+			{{/if}}
 		{{/if}}
 	{{else data.screen == 13 || data.screen == 15}}
 		<div class="itemLabel">
