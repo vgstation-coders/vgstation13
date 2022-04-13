@@ -3,7 +3,7 @@
 	icon_state = "resource"
 	desc = "A part of a blob. It makes a slow, deep breathing sound."
 	health = 30
-	maxhealth = 30
+	maxHealth = 30
 	fire_resist = 2
 	var/resource_delay = 0
 	spawning = 0

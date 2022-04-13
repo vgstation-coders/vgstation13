@@ -40,13 +40,17 @@ var/list/camera_names=list()
 	var/hear_voice = 0
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
-	var/health = CAMERA_MAX_HEALTH
+	health = CAMERA_MAX_HEALTH
 
 	hack_abilities = list(
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/camera_reactivate,
 		/datum/malfhack_ability/oneuse/camera_upgrade
 	)
+
+	breakable_flags = BREAKABLE_UNARMED //Custom behavior already exists for armed cases.
+	damage_armor = CAMERA_MIN_WEAPON_DAMAGE
+	damage_resist = 0
 
 /obj/machinery/camera/flawless
 	failure_chance = 0
@@ -318,19 +322,23 @@ var/list/camera_messages = list()
 			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
 			visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>")
 			return
+		if(W.hitsound)
+			playsound(src, W.hitsound, 50, 1)
 		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 		take_damage(W.force)
 
-/obj/machinery/camera/proc/take_damage(var/amount)
-	if(amount <= 0)
-		return
+/obj/machinery/camera/damaged_updates()
 	triggerCameraAlarm()
-	health -= amount
 	if(health <= CAMERA_DEACTIVATE_HEALTH && status)
 		deactivate()
+
+/obj/machinery/camera/try_break()
 	if(health <= 0)
 		spark(src)
 		dismantle()
+		return TRUE
+	else
+		return FALSE
 
 /obj/machinery/camera/Topic(href, href_list)
 	if(..())

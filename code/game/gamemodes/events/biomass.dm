@@ -13,7 +13,7 @@
 	mouse_opacity = 1
 	var/energy = 0
 	var/obj/effect/biomass_controller/master = null
-	var/health = 15
+	health = 15
 
 /obj/effect/biomass/Destroy()
 	unreferenceMaster()
