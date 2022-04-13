@@ -657,7 +657,8 @@
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
 		playsound(src, get_sfx("card_swipe"), 60, 1, -5)
-		to_chat(user, "<span class='notice'>Successfully copied access from \the [I].</span>")
+		for(var/mob/M in hearers(src))
+			M.show_message("<b>[src]</b> announces, \"Successfully copied access from \the [I].\"")
 		access |= I.access
 	else
 		return ..()
@@ -671,8 +672,6 @@
 				if (world.time > next_sound)
 					playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 					next_sound = world.time + sound_delay
-					for(var/mob/M in viewers())
-						to_chat(M, "<span class='notice'>Insufficent access stored to unlock the [A].</span>")
 			else
 				S.open()
 		else
@@ -850,8 +849,9 @@
 			if(world.time > next_sound)
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 				next_sound = world.time + sound_delay
-				for(var/mob/M in viewers(src))
-					to_chat(M, "<span class='notice'>Please insert additional package wrap packagewrap into the [src].</span>")
+				for(var/mob/M in hearers(src))
+					M.show_message("<b>[src]</b> announces, \"Please insert additional sheets of package wrap into \the [src].\"")
+				return 0
 	else if(is_type_in_list(target,wrappable_big_stuff) && bigpath)
 		if(istype(target,/obj/structure/closet))
 			var/obj/structure/closet/C = target
@@ -870,16 +870,13 @@
 			if(world.time > next_sound)
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 				next_sound = world.time + sound_delay
-				for(var/mob/M in viewers(src))
-					to_chat(M, "<span class='notice'>Please insert additional package wrap packagewrap into the [src].</span>")
+				for(var/mob/M in hearers(src))
+					M.show_message("<b>[src]</b> announces, \"Please insert additional sheets of package wrap into \the [src].\"")
 				return 0
 	else
 		if(world.time > next_sound)
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 			next_sound = world.time + sound_delay
-			for(var/mob/M in viewers(src))
-				to_chat(M, "<span class='notice'>[target] cannot be wrapped.</span>")
-			return 0
 
 /obj/machinery/wrapping_machine/proc/tag_item(var/atom/movable/target)
 	if(istype(target,/obj/item/delivery))
@@ -941,6 +938,7 @@
 	if(istype(O,/obj/item/stack/package_wrap))
 		var/obj/item/stack/package_wrap/P = O
 		packagewrap += P.amount
+		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to the [src].</span>")
 		P.use(P.amount)
 
 /obj/machinery/wrapping_machine/attack_hand(mob/user)

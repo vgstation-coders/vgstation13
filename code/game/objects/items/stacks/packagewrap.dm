@@ -53,6 +53,8 @@
 	var/atom/movable/target = attacked
 	if(!istype(target))
 		return
+	if(istype(target,/obj/machinery/wrapping_machine))
+		return
 	if(is_type_in_list(target, cannot_wrap))
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
 		return
