@@ -89,7 +89,6 @@
 		"Tramadol" = TRAMADOL,
 		"Alkysine" = ALKYSINE,
 		"Arithrazine" = ARITHRAZINE,
-		"Ethylredoxrazine" = ETHYLREDOXRAZINE,
 		"Spaceacilin" = SPACEACILLIN,
 		"Sleep Toxin = STOXIN,
 	)
