@@ -668,11 +668,23 @@
 		icon_state = "active"
 		if(istype(A,/obj/structure/closet/crate/secure))
 			var/obj/structure/closet/crate/secure/S = A
-			if(!S.togglelock(src))
-				if (world.time > next_sound)
-					playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
-					next_sound = world.time + sound_delay
+			if(!src.emagged)
+				if(!S.togglelock(src))
+					if (world.time > next_sound)
+						playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+						next_sound = world.time + sound_delay
+				else
+					S.open()
 			else
+//				var/sparks = "securecratesparks"
+//				var/emag = "securecrateemag"
+				S.overlays.len = 0
+				S.overlays += S.emag
+				S.overlays += S.sparks
+				spawn(6) S.overlays -= S.sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
+				playsound(S, "sparks", 60, 1)
+				S.locked = 0
+				S.broken = 1
 				S.open()
 		else
 			var/obj/structure/closet/crate/C = A
@@ -682,6 +694,15 @@
 /obj/machinery/logistics_machine/crate_opener/Uncrossed(atom/movable/A)
 	if(istype(A,/obj/structure/closet/crate))
 		icon_state = "inactive"
+
+/obj/machinery/logistics_machine/crate_opener/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
+	if(!src.emagged)
+		spark(src, 1)
+		src.emagged = 1
+		if(user)
+			to_chat(user, "<span class = 'warning'>You overload the ID scanner on [src].</span>")
+		return 1
+	return 0
 
 /obj/item/weapon/circuitboard/crate_opener
 	name = "Circuit Board (Crate Opener)"
@@ -938,7 +959,7 @@
 	if(istype(O,/obj/item/stack/package_wrap))
 		var/obj/item/stack/package_wrap/P = O
 		packagewrap += P.amount
-		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to the [src].</span>")
+		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to /the [src].</span>")
 		P.use(P.amount)
 
 /obj/machinery/wrapping_machine/attack_hand(mob/user)
