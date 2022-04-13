@@ -3707,14 +3707,19 @@
 	result_amount = 1
 	required_container = /obj/item/weapon/reagent_containers/food/snacks/cracker
 
-/datum/chemical_reaction/synthmouse
-	name = "Synthmouse"
-	id = "synthmouse"
-	result = null
-	required_reagents = list(NUTRIMENT = 3, AMINOMICIN = 1)
-	result_amount = 1
+/datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /mob/living/simple_animal/parrot(location)
+	qdel(holder.my_atom)
 
-/datum/chemical_reaction/synthmouse/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/synthmob //to cut down in duplicate code
+	name = null
+	id = null
+	result = null
+	result_amount = 1
+	var/mob2spawn = null
+
+/datum/chemical_reaction/synthmob/on_reaction(var/datum/reagents/holder, var/created_volume)
 	set waitfor = FALSE //makes sleep() work like spawn()
 	if(ishuman(holder.my_atom))
 		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
@@ -3732,59 +3737,18 @@
 		sleep(rand(5 SECONDS, 10 SECONDS))
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/mouse/common(location)
+	for(var/i=1 to created_volume)	
+		new mob2spawn(location)
 
-/datum/chemical_reaction/aminomician
-	name = "Aminomician"
-	id = AMINOMICIAN
-	result = AMINOMICIAN
-	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3)
-	result_amount = 1
-
-/datum/chemical_reaction/synthcorgi
-	name = "Synthcorgi"
-	id = "synthcorgi"
+/datum/chemical_reaction/synthmobhostile //to cut down in duplicate code
+	name = null
+	id = null
 	result = null
-	required_reagents = list(NUTRIMENT = 3, AMINOMICIAN = 1)
 	result_amount = 1
+	var/mob2spawnA = null
+	var/mob2spawnB = null
 
-/datum/chemical_reaction/synthcorgi/on_reaction(var/datum/reagents/holder, var/created_volume)
-	set waitfor = FALSE //makes sleep() work like spawn()
-	if(ishuman(holder.my_atom))
-		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
-		var/mob/living/carbon/human/H = holder.my_atom
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		to_chat(H, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
-		H.emote("me",1,"winces slightly.")
-		sleep(rand(10 SECONDS, 20 SECONDS))
-		to_chat(H, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
-		H.emote("me",1,"winces painfully.")
-		H.adjustToxLoss(1)
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
-		H.apply_damage(2*created_volume, BRUTE, LIMB_CHEST)
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		H.vomit(instant = TRUE) //mouse spawning continues below
-	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/corgi/puppy(location)
-
-/datum/chemical_reaction/aminocyprinidol
-	name = "Aminocyprinidol"
-	id = AMINOCYPRINIDOL
-	result = AMINOCYPRINIDOL
-	required_reagents = list(AMINOMICIN = 1, CARPPHEROMONES = 5)
-	result_amount = 1
-
-/datum/chemical_reaction/synthcarp
-	name = "Synthcarp"
-	id = "synthcarp"
-	result = null
-	required_reagents = list(NUTRIMENT = 10, AMINOCYPRINIDOL = 1)
-	result_amount = 1
-
-/datum/chemical_reaction/synthcarp/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/synthmobhostile/on_reaction(var/datum/reagents/holder, var/created_volume)
 	set waitfor = FALSE //makes sleep() work like spawn()
 	var/location
 	if(ishuman(holder.my_atom))
@@ -3808,8 +3772,8 @@
 				E.fracture()
 				E.createwound(CUT, 60)
 				playsound(H, get_sfx("gib"),50,1)
-			if(5 to INFINITY)
-				to_chat(H, "<span class='warning'>Something smells fishy...</span>")
+			if(6 to INFINITY)
+				to_chat(H, "<span class='warning'>Something smells nasty...</span>")
 				sleep(rand(5 SECONDS, 10 SECONDS))
 				location = get_turf(holder.my_atom)
 				H.gib()
@@ -3820,12 +3784,73 @@
 	if(!location)
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/hostile/carp/baby(location)
+		if(prob(80))
+			new mob2spawnA(location)
+		else
+			new mob2spawnB(location)
+			
+/datum/chemical_reaction/synthmob/synthmouse
+	name = "Synthmouse"
+	id = "synthmouse"
+	result = null
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIN = 1)
+	result_amount = 1
+	mob2spawn = /mob/living/simple_animal/mouse/common
 
-/datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
-	var/location = get_turf(holder.my_atom)
-	new /mob/living/simple_animal/parrot(location)
-	qdel(holder.my_atom)
+/datum/chemical_reaction/aminomician
+	name = "Aminomician"
+	id = AMINOMICIAN
+	result = AMINOMICIAN
+	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmob/synthcorgi
+	name = "Synthcorgi"
+	id = "synthcorgi"
+	result = null
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIAN = 1)
+	result_amount = 1
+	mob2spawn = /mob/living/simple_animal/corgi/puppy
+
+/datum/chemical_reaction/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
+	result = AMINOCYPRINIDOL
+	required_reagents = list(AMINOMICIN = 1, CARPPHEROMONES = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmobhostile/synthcarp
+	name = "Synthcarp"
+	id = "synthcarp"
+	result = null
+	required_reagents = list(NUTRIMENT = 10, AMINOCYPRINIDOL = 1)
+	result_amount = 1
+	mob2spawnA = /mob/living/simple_animal/hostile/carp/baby
+	mob2spawnB = /mob/living/simple_animal/hostile/carp/baby 
+
+/datum/chemical_reaction/aminoblatella
+	name = "Aminoblatella"
+	id = AMINOBLATELLA
+	result = AMINOBLATELLA
+	required_reagents = list(AMINOMICIN = 1, ROACHSHELL = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmob/synthroach
+	name = "Synthroach"
+	id = "synthroach"
+	result = null
+	required_reagents = list(NUTRIMENT = 1, AMINOBLATELLA = 1)
+	result_amount = 3
+	mob2spawn = /mob/living/simple_animal/cockroach
+
+/datum/chemical_reaction/synthmobhostile/synthmutroach
+	name = "Synthmutroach"
+	id = "synthmutroach"
+	result = null
+	required_reagents = list(MUTAGEN = 10, AMINOBLATELLA = 1)
+	result_amount = 1
+	mob2spawnA = /mob/living/simple_animal/hostile/bigroach
+	mob2spawnB = /mob/living/simple_animal/hostile/bigroach/queen ////greater odds than getting a queen via mutating roaches (0.5%)
 
 /datum/chemical_reaction/ectoplasm
 	name = "Ectoplasm"
@@ -3892,91 +3917,6 @@
 	var/L = get_turf(holder.my_atom)
 	new /mob/living/simple_animal/hostile/ginger/gingerboneman(L)
 	qdel(holder.my_atom)
-
-/datum/chemical_reaction/aminoblatella
-	name = "Aminoblatella"
-	id = AMINOBLATELLA
-	result = AMINOBLATELLA
-	required_reagents = list(AMINOMICIN = 1, ROACHSHELL = 5)
-	result_amount = 1
-
-/datum/chemical_reaction/synthroach
-	name = "Synthroach"
-	id = "synthroach"
-	result = null
-	required_reagents = list(NUTRIMENT = 1, AMINOBLATELLA = 1)
-	result_amount = 1
-	
-/datum/chemical_reaction/synthroach/on_reaction(var/datum/reagents/holder, var/created_volume)
-	set waitfor = FALSE //makes sleep() work like spawn()
-	if(ishuman(holder.my_atom))
-		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
-		var/mob/living/carbon/human/H = holder.my_atom
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		to_chat(H, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
-		H.emote("me",1,"winces slightly.")
-		sleep(rand(10 SECONDS, 20 SECONDS))
-		to_chat(H, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
-		H.emote("me",1,"winces painfully.")
-		H.adjustToxLoss(1)
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
-		H.apply_damage(2*created_volume, BRUTE, LIMB_CHEST)
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		H.vomit(instant = TRUE) //roach spawning continues below
-	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/cockroach(location) //3 roaches per reaction
-		new /mob/living/simple_animal/cockroach(location)
-		new /mob/living/simple_animal/cockroach(location)
-		
-/datum/chemical_reaction/synthmutroach
-	name = "Synthmutroach"
-	id = "synthmutroach"
-	result = null
-	required_reagents = list(MUTAGEN = 10, AMINOBLATELLA = 1)
-	result_amount = 1
-
-/datum/chemical_reaction/synthmutroach/on_reaction(var/datum/reagents/holder, var/created_volume) //Same as synthcarp but slightly less brutal
-	set waitfor = FALSE //makes sleep() work like spawn()
-	var/location
-	if(ishuman(holder.my_atom))
-		var/mob/living/carbon/human/H = holder.my_atom
-		switch(created_volume)
-			if(1)
-				to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
-				H.apply_damage(7, BRUTE, LIMB_CHEST)
-				sleep(rand(5 SECONDS, 10 SECONDS))
-				H.vomit(instant = TRUE)
-			if(2 to 3)
-				to_chat(H, "<span class='danger'>You feel something violently tear its way out of your stomach!</span>")
-				var/datum/organ/external/E = H.get_organ(LIMB_CHEST)
-				E.createwound(CUT, 20)
-				playsound(H, get_sfx("gib"),50,1)
-			if(4 to 5)
-				to_chat(H, "<span class='danger'>You feel something violently expanding inside your chest!</span>")
-				var/datum/organ/external/E = H.get_organ(LIMB_CHEST)
-				for(var/datum/organ/internal/I in E.internal_organs)
-					I.take_damage(rand(I.min_bruised_damage, I.min_broken_damage+1))
-				E.fracture()
-				E.createwound(CUT, 30)
-				playsound(H, get_sfx("gib"),50,1)
-			if(5 to INFINITY)
-				to_chat(H, "<span class='warning'>Something smells rotten...</span>")
-				sleep(rand(5 SECONDS, 10 SECONDS))
-				location = get_turf(holder.my_atom)
-				H.gib()
-	else if(ismonkey(holder.my_atom))
-		var/mob/living/carbon/monkey/M = holder.my_atom
-		location = get_turf(holder.my_atom)
-		M.gib()
-	if(!location)
-		location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)
-		if(prob(80)) //greater odds than getting a queen via mutating roaches (0.5%)
-			new /mob/living/simple_animal/hostile/bigroach(location)
-		else
-			new /mob/living/simple_animal/hostile/bigroach/queen(location)
 
 /datum/chemical_reaction/midazoline
 	name = "Midazoline"
