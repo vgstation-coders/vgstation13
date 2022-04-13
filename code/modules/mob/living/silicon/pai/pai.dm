@@ -86,11 +86,11 @@
 		"Kelotane" = KELOTANE,
 		"Dexalin Plus" = DEXALINP,
 		"Iron" = IRON,
-		"Spaceacilin" = SPACEACILLIN,
 		"Tramadol" = TRAMADOL,
+		"Alkysine" = ALKYSINE,
 		"Arithrazine" = ARITHRAZINE,
 		"Ethylredoxrazine" = ETHYLREDOXRAZINE,
-		"Alkysine" = ALKYSINE,
+		"Spaceacilin" = SPACEACILLIN,
 		"Sleep Toxin = STOXIN,
 	)
 
