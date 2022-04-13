@@ -367,6 +367,12 @@
 		electronics.forceMove(loc)
 		electronics = null
 
+/obj/machinery/door/window/wirejack(var/mob/living/silicon/pai/P)
+	if(..())
+		attack_ai(P)
+		return 1
+	return 0
+
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)
 
