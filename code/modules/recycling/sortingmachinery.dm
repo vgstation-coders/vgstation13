@@ -640,7 +640,6 @@
 	icon = 'icons/obj/machines/logistics.dmi'
 	icon_state = "inactive"
 	var/list/access = list()
-	..()
 
 /obj/machinery/logistics_machine/crate_opener/New()
 	. = ..()
@@ -667,7 +666,7 @@
 		icon_state = "active"
 		if(istype(A,/obj/structure/closet/crate/secure))
 			var/obj/structure/closet/crate/secure/S = A
-			if(!S.autotogglelock(src))
+			if(!S.togglelock(src))
 				if (world.time > next_sound)
 					playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 					next_sound = world.time + sound_delay
@@ -701,7 +700,6 @@
 	icon = 'icons/obj/machines/logistics.dmi'
 	icon_state = "inactive"
 	var/list/access = list()
-	..()
 
 /obj/machinery/logistics_machine/crate_closer/New()
 	. = ..()

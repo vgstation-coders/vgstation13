@@ -513,21 +513,21 @@
 	else
 		..()
 
-/obj/structure/closet/crate/secure/proc/togglelock(mob/user)
-	if(src.allowed(user))
-		src.locked = !src.locked
-		if (src.locked)
-			to_chat(user, "<span class='notice'>You lock \the [src].</span>")
-			update_icon()
+/obj/structure/closet/crate/secure/proc/togglelock(atom/A)
+	if(istype(A,/mob))
+		var/mob/user = A
+		if(src.allowed(user))
+			src.locked = !src.locked
+			if (src.locked)
+				to_chat(user, "<span class='notice'>You lock \the [src].</span>")
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You unlock [src].</span>")
+				update_icon()
 		else
-			to_chat(user, "<span class='notice'>You unlock [src].</span>")
-			update_icon()
-	else
-		to_chat(user, "<span class='notice'>Access Denied.</span>")
-
-/obj/structure/closet/crate/secure/proc/autotogglelock(var/obj/machinery/M)
-	if(istype(M,/obj/machinery/logistics_machine/crate_opener))
-		var/obj/machinery/logistics_machine/crate_opener/N = M
+			to_chat(user, "<span class='notice'>Access Denied.</span>")
+	else if(istype(A,/obj/machinery/logistics_machine/crate_opener))
+		var/obj/machinery/logistics_machine/crate_opener/N = A
 		if(can_access(N.access,req_access,req_access))
 			src.locked = !src.locked
 			update_icon()
