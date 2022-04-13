@@ -85,7 +85,7 @@
 		"Bicaridine" = BICARIDINE,
 		"Kelotane" = KELOTANE,
 		"Dexalin" = DEXALIN,
-		"Dylovene" = DYLOVENE,
+		"Iron" = IRON,
 		"Spaceacilin" = SPACEACILLIN,
 		"Tramadol" = TRAMADOL,
 	)
