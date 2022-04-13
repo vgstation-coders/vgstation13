@@ -82,8 +82,12 @@
 	)
 
 	var/list/synthable_medical_chems = list(
+		"Bicaridine" = BICARIDINE,
+		"Kelotane" = KELOTANE,
+		"Dexalin" = DEXALIN,
+		"Dylovene" = DYLOVENE,
 		"Spaceacilin" = SPACEACILLIN,
-		"Albuterol" = ALBUTEROL,
+		"Tramadol" = TRAMADOL,
 	)
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
