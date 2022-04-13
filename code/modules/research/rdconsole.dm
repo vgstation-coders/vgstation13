@@ -712,7 +712,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	var/tech_info[0]
 	for(var/ID in files.known_tech)
 		var/datum/tech/T = files.known_tech[ID]
-		lathe_categories.Add(list(list("name" = T.name, "level" = T.level, "summary" = T.desc)))
+		tech_info.Add(list(list("name" = T.name, "level" = T.level, "summary" = T.desc, "commands" = list("copy_tech" = 1, "copy_tech_ID" = T.id))))
 	data["techinfo"] = tech_info
 
 	data["lathequeue"] = lathe_queue
@@ -731,9 +731,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["lathe"] = linked_lathe != null
 	data["imprinter"] = linked_imprinter != null
 	data["isadmin"] = user.client.holder != null
-	data["tdisk"] = t_disk != null
-	data["ddisk"] = d_disk != null
 	data["synced"] = sync
+
+	data["tdisk"] = t_disk != null
+	data["tstored"] = t_disk && t_disk.stored
+	data["tstoredname"] = t_disk && t_disk.stored ? t_disk.stored.name : ""
+	data["tstoredlevel"] = t_disk && t_disk.stored ? t_disk.stored.level : 0
+	data["tstoreddesc"] = t_disk && t_disk.stored ? t_disk.stored.desc : ""
+
+	data["ddisk"] = d_disk != null
+
 
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(20 to 29)
@@ -759,39 +766,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		ui.open()
 
 /*
-	switch(screen)
-
 		//////////////////////R&D CONSOLE SCREENS//////////////////
-
-		if(1.2) //Technology Disk Menu
-
-
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				Disk Contents: (Technology Data Disk)<BR><BR>"}
-			if(t_disk.stored == null)
-
-				dat += {"The disk has no data stored on it.<HR>
-					Operations:
-					<A href='?src=\ref[src];menu=1.3'>Load Tech to Disk</A> || "}
-			else
-
-				dat += {"Name: [t_disk.stored.name]<BR>
-					Level: [t_disk.stored.level]<BR>
-					Description: [t_disk.stored.desc]<HR>
-					Operations:
-					<A href='?src=\ref[src];updt_tech=1'>Upload to Database</A> ||
-					<A href='?src=\ref[src];clear_tech=1'>Clear Disk</A> || "}
-			dat += "<A href='?src=\ref[src];eject_tech=1'>Eject Disk</A>"
-
-		if(1.3) //Technology Disk submenu
-
-			dat += {"<BR><A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
-				<A href='?src=\ref[src];menu=1.2'>Return to Disk Operations</A><HR>
-				Load Technology to Disk:<BR><BR>"}
-			for(var/ID in files.known_tech)
-				var/datum/tech/T = files.known_tech[ID]
-				dat += {"[T.name]
-					<A href='?src=\ref[src];copy_tech=1;copy_tech_ID=[T.id]'>(Copy to Disk)</A><BR>"}
 		if(1.4) //Design Disk menu.
 			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>"
 			if(d_disk.blueprint == null)

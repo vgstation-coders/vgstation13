@@ -65,10 +65,53 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
 				{{for data.techinfo}}
-					<b>{{:data.name}}</b><br>Level: {{:data.level}}<br><i>{{:data.desc}}</i><br><br>
+					<b>{{:value.name}}</b><br>Level: {{:value.level}}<br><i>{{:value.desc}}</i><br><br>
 				{{empty}}
 					No tech levels found.
 				{{/for}}
+				</div>
+			</div>
+		</div>
+	{{else data.screen == 12}}
+		<div class="itemLabel">
+			Disk Contents: (Technology Data Disk)
+		</div>
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+					{{if !data.tdisk}}
+						No disk inserted.
+					{{else !data.tstored}}
+						This disk has no data stored on it.
+					{{else}}
+						<b>{{:data.tstoredname}}</b><br>Level: {{:data.tstoredlevel}}<br><i>{{:data.tstoreddesc}}</i>
+					{{/if}}
+				</div>
+			</div>
+		</div>
+		{{if data.tdisk}}
+			<div class="line">
+				{{if !data.tstored}}
+					{{:helper.link('Load Tech to Disk', 'circle-arrow-s', {'menu':13}, null)}}
+				{{else}}
+					{{:helper.link('Upload to Database', 'circle-arrow-s', {'updt_tech':null}, null)}}
+					{{:helper.link('Clear Disk', 'circle-arrow-s', {'clear_tech':null}, null)}}
+				{{/if}}
+				{{:helper.link('Eject Disk', 'circle-arrow-s', {'eject_tech':null}, null)}}
+			</div>
+		{{/if}}
+	{{else data.screen == 13}}
+		<div class="itemLabel">
+			Load Technology to Disk:
+		</div>
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+					{{for data.techinfo}}
+						<b>{{:value.name}}</b><br>{{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}<br><br>
+					{{empty}}
+						No tech levels found.
+					{{/for}}
 				</div>
 			</div>
 		</div>
