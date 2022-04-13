@@ -3784,7 +3784,7 @@
 	if(!location)
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		if(prob(80))
+		if(prob(80)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
 			new mob2spawnA(location)
 		else
 			new mob2spawnB(location)
@@ -3826,7 +3826,7 @@
 	required_reagents = list(NUTRIMENT = 10, AMINOCYPRINIDOL = 1)
 	result_amount = 1
 	mob2spawnA = /mob/living/simple_animal/hostile/carp/baby
-	mob2spawnB = /mob/living/simple_animal/hostile/carp/baby 
+	mob2spawnB = /mob/living/simple_animal/hostile/carp/baby
 
 /datum/chemical_reaction/aminoblatella
 	name = "Aminoblatella"
@@ -3840,7 +3840,7 @@
 	id = "synthroach"
 	result = null
 	required_reagents = list(NUTRIMENT = 1, AMINOBLATELLA = 1)
-	result_amount = 3
+	result_amount = 3 //so you get 3 roaches per reaction
 	mob2spawn = /mob/living/simple_animal/cockroach
 
 /datum/chemical_reaction/synthmobhostile/synthmutroach
@@ -3850,7 +3850,7 @@
 	required_reagents = list(MUTAGEN = 10, AMINOBLATELLA = 1)
 	result_amount = 1
 	mob2spawnA = /mob/living/simple_animal/hostile/bigroach
-	mob2spawnB = /mob/living/simple_animal/hostile/bigroach/queen ////greater odds than getting a queen via mutating roaches (0.5%)
+	mob2spawnB = /mob/living/simple_animal/hostile/bigroach/queen //greater odds than getting a queen via mutating roaches (0.5%)
 
 /datum/chemical_reaction/ectoplasm
 	name = "Ectoplasm"
