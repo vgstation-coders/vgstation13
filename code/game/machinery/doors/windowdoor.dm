@@ -282,7 +282,7 @@
 		return
 
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
-	if(density && istype(I, /obj/item) && !istype(I, /obj/item/weapon/card))
+	if(density && istype(I, /obj/item) && !istype(I, /obj/item/weapon/card) && !istype(I, /obj/item/device/paicard))
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
@@ -369,10 +369,13 @@
 
 /obj/machinery/door/window/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
-		attack_ai(P)
-		return 1
+		if (!density)
+			return close()
+		else
+			return open()
+		return 1	
 	return 0
-
+	
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)
 
