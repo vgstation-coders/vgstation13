@@ -999,6 +999,10 @@ Use this proc preferably at the end of an equipment loadout
 		if(point)
 			qdel(point)
 
+	for (var/obj/item/I in held_items)
+		if (I.is_pointer(src))
+			I.point_to(A, src)
+
 	return 1
 
 /mob/proc/has_hand_check()
