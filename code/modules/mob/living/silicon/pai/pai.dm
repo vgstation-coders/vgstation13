@@ -88,6 +88,10 @@
 		"Iron" = IRON,
 		"Spaceacilin" = SPACEACILLIN,
 		"Tramadol" = TRAMADOL,
+		"Arithrazine" = ARITHRAZINE,
+		"Ethylredoxrazine" = ETHYLREDOXRAZINE,
+		"Alkysine" = ALKYSINE,
+		"Sleep Toxin = STOXIN,
 	)
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
