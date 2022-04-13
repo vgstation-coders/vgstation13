@@ -84,7 +84,7 @@
 	var/list/synthable_medical_chems = list(
 		"Bicaridine" = BICARIDINE,
 		"Kelotane" = KELOTANE,
-		"Dexalin" = DEXALIN,
+		"Dexalin Plus" = DEXALINP,
 		"Iron" = IRON,
 		"Spaceacilin" = SPACEACILLIN,
 		"Tramadol" = TRAMADOL,
