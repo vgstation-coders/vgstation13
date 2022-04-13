@@ -27,8 +27,6 @@
 	. = ..()
 	. += "The grue ate [eatencount] sentient being[eatencount==1 ? "" : "s"]"
 	if(config.grue_egglaying)
-		. += " and spawned [spawncount] offspring."
-	else
-		. += "."
-	. += "<BR>"
+		. += " and spawned [spawncount] offspring"
+	. += ".<BR>"
 
