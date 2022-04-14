@@ -49,6 +49,12 @@
 	return cult_win
 
 
+/datum/faction/bloodcult/GetScoreboard()
+	. = ..()
+	. += "<BR>Total Veil Weakness:[veil_weakness]<BR>"
+	return .
+
+
 /datum/faction/bloodcult/process()
 	..()
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()

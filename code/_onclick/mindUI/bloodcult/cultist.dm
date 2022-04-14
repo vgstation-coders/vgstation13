@@ -387,7 +387,7 @@
 /datum/mind_ui/bloodcult_left_panel
 	uniqueID = "Cultist Left Panel"
 	element_types_to_spawn = list(
-		/obj/abstract/mind_ui_element/bloodcult_veil_weakness,
+	//	/obj/abstract/mind_ui_element/bloodcult_veil_weakness,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help,
 		)
