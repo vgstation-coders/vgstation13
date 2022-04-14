@@ -208,6 +208,15 @@
 			if(moulttimer<=0)
 				complete_moult()
 
+/*
+	//stop draining light if the grue runs out of nutrienergy
+	if(channeling_flags & GRUE_DRAINLIGHT)
+		nutrienergy = max(0,nutrienergy) //Just in case it went below 0.
+		if(!nutrienergy)
+			for(var/spell/aoe_turf/grue_drainlight/S in spell_list)
+				S.stop_casting(null, src)
+*/
+
 	regular_hud_updates()
 	standard_damage_overlay_updates()
 
@@ -563,6 +572,9 @@
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 		digest+=10 //add 10 life ticks (20 seconds) of increased healing + nutrition gain
+		
+		//Transfer any reagents inside the creature to the grue
+		E.reagents.trans_to(src, E.reagents.total_volume)
 
 		//Upgrade the grue's stats as it feeds
 		if(E.mind) //eaten creature must have a mind to power up the grue
@@ -573,13 +585,13 @@
 				if(G)
 					G.eatencount++
 			eatencharge++ //can be spent on egg laying
-			grue_stat_updates(1)
+			grue_stat_updates(TRUE)
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.gib()
 	busy=FALSE
 
-/mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = 0) //update stats, called by lifestage_updates() as well as handle_feed()
+/mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
 	//health regen in darkness
 	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
@@ -595,7 +607,6 @@
 	//update light drain power in case the grue fed while channeling it
 	if(channeling_flags & GRUE_DRAINLIGHT)
 		drainlight_set()
-
 
 	if(lifestage==GRUE_ADULT)
 		if(eatencount>=GRUE_WALLBREAK)
@@ -634,6 +645,7 @@
 	else
 		channeling_flags &= !GRUE_DRAINLIGHT
 		set_light(0)
+//		playsound(src, aawwww, 50, 1)
 		if(nutrienergy)
 			if(!mute)
 				to_chat(src, "<span class='notice'>You stop draining light.</span>")
@@ -644,9 +656,6 @@
 
 /mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
 	set_light(7 + eatencount, -3 * eatencount, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
-
-
-
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()
