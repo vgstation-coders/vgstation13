@@ -814,6 +814,13 @@
 
 	mover = new
 
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/wrapping_machine,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/matter_bin,
+	)
+
 /obj/machinery/wrapping_machine/Destroy()
 	. = ..()
 

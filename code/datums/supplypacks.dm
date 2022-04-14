@@ -1857,6 +1857,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_engine_equip)
 	group = "Engineering"
 
+/datum/supply_packs/automation
+	name = "Automation supplies"
+	contains = list(/obj/item/weapon/circuitboard/wrapping_machine,
+					/obj/item/weapon/circuitboard/sorting_machine/item,
+					/obj/item/weapon/circuitboard/crate_opener,
+					/obj/item/weapon/circuitboard/crate_closer)
+	cost = 25
+	containertype = /obj/structure/closet/crate/engi
+	containername = "Automation Supplies Crate"
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
