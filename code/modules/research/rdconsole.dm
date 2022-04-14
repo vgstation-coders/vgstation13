@@ -727,7 +727,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["imprintermats"] = imprinter_mats
 	data["imprintercategory"] = imprinter_category
 
-	var/all_desgins[0]
+	var/all_designs[0]
 	for(var/datum/design/D in files.known_designs)
 		all_designs.Add(list(list("name" = D.name, "commands" = list("copy_design" = 1, "copy_design_ID" = D.id))))
 	data["alldesigns"] = all_designs
