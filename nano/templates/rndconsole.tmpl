@@ -97,11 +97,12 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						{{else !data.dstored}}
 							This disk has no data stored on it.
 						{{else}}
-							<b>{{:data.dstoredname}}</b>><br><b>Level:</b> {{:data.dstoredlevel}}<br><b>Lathe Type:</b> {{:data.dstoredtype}}<br>
+							<b>{{:data.dstoredname}}</b><br><b>Level:</b> {{:data.dstoredlevel}}<br><b>Lathe Type:</b> {{:data.dstoredtype}}<br>
 							{{for data.dstoredmats}}
 								<b>Required materials:</b> {{:value.amount}}<br>
 							{{empty}}
 								No materials required.<br>
+							{{/for}}
 						{{/if}}
 					{{/if}}
 				</div>
