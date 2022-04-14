@@ -1275,10 +1275,16 @@ var/global/list/image/blood_overlays = list()
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
 	var/broken = FALSE
+	
 	if(breakable_flags & BREAKABLE_UNARMED)
 		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
+		
+	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced, TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced, TRUE)]</span>")
+	
+	if(breakable_flags & BREAKABLE_UNARMED)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
+		
 	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
@@ -1289,7 +1295,6 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 		throw_at(T, kick_power, 1)
-	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
 	Crossed(H) //So you can't kick shards while naked without suffering
 
 /obj/item/animationBolt(var/mob/firer)
