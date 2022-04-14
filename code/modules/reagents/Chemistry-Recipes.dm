@@ -95,8 +95,8 @@
 
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
 	set waitfor = FALSE //makes sleep() work like spawn()
-	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 1)
-	sleep(1 SECONDS) //wait for the song to finish
+	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 0)
+	sleep(2 SECONDS) //wait for the song to finish
 	..() //boom
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
