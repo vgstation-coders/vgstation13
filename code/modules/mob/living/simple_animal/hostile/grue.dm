@@ -190,43 +190,25 @@
 					to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
 				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
 
-
 		//update accum_light_expos_mult for light damage
 		lightparams.alem_adjust()
-
 
 		//handle light-based nutrienergy gain or drain
 		lightparams.nutri_adjust(src)
 
-
 		//update speed modifier based on light condition
 		lightparams.speed_adjust(src)
-
 
 		if(ismoulting)
 			moulttimer--
 			if(moulttimer<=0)
 				complete_moult()
 
-/*
-	//stop draining light if the grue runs out of nutrienergy
-	if(channeling_flags & GRUE_DRAINLIGHT)
-		nutrienergy = max(0,nutrienergy) //Just in case it went below 0.
-		if(!nutrienergy)
-			for(var/spell/aoe_turf/grue_drainlight/S in spell_list)
-				S.stop_casting(null, src)
-*/
-
 	regular_hud_updates()
 	standard_damage_overlay_updates()
 
-
 	if((stat==CONSCIOUS) && !busy && !ismoulting && !client && !mind && !ckey) //Checks for AI
 		grue_ai()
-
-
-
-
 
 //AI stuff:
 /mob/living/simple_animal/hostile/grue/proc/grue_ai()
@@ -645,7 +627,6 @@
 	else
 		channeling_flags &= !GRUE_DRAINLIGHT
 		set_light(0)
-//		playsound(src, aawwww, 50, 1)
 		if(nutrienergy)
 			if(!mute)
 				to_chat(src, "<span class='notice'>You stop draining light.</span>")
