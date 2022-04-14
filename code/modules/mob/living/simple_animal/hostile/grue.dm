@@ -294,6 +294,7 @@
 		attack_sound = 'sound/weapons/bite.ogg'
 		size = SIZE_SMALL
 		pass_flags = PASSTABLE
+		reagents.maximum_volume = 500
 		//Larval grue spells: moult, ventcrawl, and hide
 		add_spell(new /spell/aoe_turf/grue_hide, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -317,6 +318,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
+		reagents.maximum_volume = 1000
 		//Juvenile grue spells: eat and moult
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -340,6 +342,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
+		reagents.maximum_volume = 1500
 		//Adult grue spells: eat, lay eggs, and drain light
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
