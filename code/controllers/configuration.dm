@@ -177,7 +177,6 @@
 	var/emag_recharge_rate = 0
 	var/emag_recharge_ticks = 0
 
-	var/map_voting = 0
 	var/renders_url = ""
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
@@ -602,8 +601,6 @@
 					vgws_ip = value
 				if("poll_results_url")
 					poll_results_url = value
-				if("map_voting")
-					map_voting = 1
 				if("renders_url")
 					renders_url = value
 				if("mommi_static")
