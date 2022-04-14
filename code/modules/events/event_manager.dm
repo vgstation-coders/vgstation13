@@ -40,7 +40,7 @@ var/scheduledEvent = null
 			if(54000 to INFINITY) //Round has been going for 1 hour and 30 minutes at least
 				roundlength_modifier = 0.4
 
-		var/next_event_delay = round(rand(eventTimeLower, eventTimeUpper)*playercount_modifier*roundlength_modifier,10) MINUTES
+		var/next_event_delay = round(rand(eventTimeLower, eventTimeUpper)*playercount_modifier*roundlength_modifier,1) MINUTES
 		scheduledEvent = world.timeofday + next_event_delay  //in deciseconds
 		message_admins("Random event call. Next event call in [next_event_delay/600] minutes.")
 
