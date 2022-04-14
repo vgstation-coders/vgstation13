@@ -667,6 +667,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	var/imprinter_queue[0]
 	var/imprinter_categories[0]
 	var/imprinter_designs[0]
+	var/imprinter_chems[0]
 	var/imprinter_mats[0]
 
 	if(linked_lathe)
@@ -705,6 +706,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					continue
 				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D), "command1" = list("imprint" = D.id, "n" = 1), "command2" = list("imprint" = D.id, "n" = 1, "now" = 1))))
 
+		var/beaker_index = 0
+		for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
+			beaker_index++
+			var/reagent_info[0]
+			if(RC.reagents.reagent_list && RC.reagents.reagent_list.len)
+				for(var/datum/reagent/R in RC.reagents.reagent_list)
+					reagent_info.Add(list(list("name" = R.name, "volume" = R.volume, "commands" = list("disposeI" = R.id; "beakerI" = "\ref[RC]"))))
+			imprinter_chems.Add(list(list("index" = beaker_index, "name" = RC.name, "reagents" = reagent_info)))
+
 		for(var/matID in linked_imprinter.materials.storage)
 			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "imprinter_ejectsheet_amt" = 50))))
@@ -725,6 +735,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["imprintercategories"] = imprinter_categories
 	data["imprinterdesigns"] = imprinter_designs
 	data["imprintermats"] = imprinter_mats
+	data["imprinterchems"] = imprinter_chems
 	data["imprintercategory"] = imprinter_category
 
 	var/all_designs[0]
@@ -818,26 +829,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "</UL><BR>"
 			dat += {"<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> ||
 				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "}
-
-		///////////////////CIRCUIT IMPRINTER SCREENS////////////////////
-
-		if(4.2)
-
-			dat += {"[CircuitImprinterHeader()]
-				Chemical Storage<HR>"}
-
-			var/beaker_index = 0
-			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
-				beaker_index++
-				dat += "<b>Reservoir [beaker_index] &mdash; [RC.name]:</b><BR>"
-				if(RC.reagents.reagent_list && RC.reagents.reagent_list.len)
-					for(var/datum/reagent/R in RC.reagents.reagent_list)
-						dat += {"[R.name] | Units: [R.volume]
-							<A href='?src=\ref[src];disposeI=[R.id];beakerI=\ref[RC]'>(Purge)</A><BR>"}
-				else
-					dat += "<em>(Empty)</em><BR>"
-				dat += "<BR>"
-			dat += "<A href='?src=\ref[src];disposeallI=1'><U>Disposal All Chemicals in Storage</U></A><BR>"
 */
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!

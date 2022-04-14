@@ -246,6 +246,25 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								<i>Material storage is empty</i>
 							{{/for}}
 						{{else data.imprinter && data.screen == 41}}
+							{{for data.imprinterchems}}
+								<div class="statusValue">
+									<b>Reservoir {{:value.index}} &mdash; {{:value.name}}:</b>
+								</div>
+								{{for value.reagents}}
+									<div class="statusValue">
+										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+										{{:helper.link(value.volume, 'gear', null, null, null, 'misc')}}
+										{{:helper.link("(Purge)", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+									</div>
+								{{empty}}
+									<div class="statusValue">
+										(Empty)
+									</div>
+								{{/for}}
+							{{/for}}
+							<div class="statusValue">
+								{{:helper.link('Disposal All Chemicals in Storage', 'circle-arrow-s', {'disposeallI':1}, null)}}
+							</div>
 							{{for data.imprintermats}}
 								<div class="statusValue">
 									{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
