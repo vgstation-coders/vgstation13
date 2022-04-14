@@ -238,8 +238,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 						visible_message("<span class='danger'>[user] attempted to disarm [src]!</span>")
 					return
 			if(I_HELP)
-				help_shake_act(user)
-				return
+				if(lying)
+					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					visible_message("<span class='notice'>\The [user.name] attempts to pull up \the [name]!</span>")
+					AdjustKnockdown(-3)
+					if(knockdown <= 0)
+						untip()
+				else
+					help_shake_act(user)
 
 /mob/living/silicon/robot/mommi/choose_icon()
 	if(..())

@@ -4,7 +4,7 @@
 	icon = 'icons/obj/doors/windoor.dmi'
 	icon_state = "left"
 	var/base_state = "left"
-	var/health = 60
+	health = 60
 	visible = 0.0
 	use_power = 0
 	flow_flags = ON_BORDER
@@ -181,14 +181,16 @@
 	operating = 0
 	return TRUE
 
-/obj/machinery/door/window/proc/take_damage(var/damage)
-	health = max(0, health - damage)
+/obj/machinery/door/window/try_break()
 	if(health <= 0)
 		playsound(src, "shatter", 70, 1)
 		new shard_type(loc)
 		new /obj/item/stack/cable_coil(loc, 2)
 		eject_electronics()
 		qdel(src)
+		return TRUE
+	else
+		return FALSE
 
 /obj/machinery/door/window/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damage)

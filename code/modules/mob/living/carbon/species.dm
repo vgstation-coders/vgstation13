@@ -1350,7 +1350,7 @@ var/list/has_died_as_golem = list()
 		if(telepathic_target == M) //Talking to ourselves
 			to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
 			return
-		to_chat(telepathic_target,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>.")
+		to_chat(telepathic_target,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
 		to_chat(M,"<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
 
 

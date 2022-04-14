@@ -180,8 +180,6 @@
 	var/map_voting = 0
 	var/renders_url = ""
 
-	var/default_ooc_color = "#002eb8"
-
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
 	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
@@ -278,7 +276,7 @@
 
 				if ("cargo_forwarding_on_roundstart")
 					cargo_forwarding_on_roundstart = 1
-				
+
 				if ("cargo_forwarding_amount_override")
 					cargo_forwarding_amount_override = text2num(value)
 

@@ -18,7 +18,7 @@ var/list/one_way_windows
 	layer = SIDE_WINDOW_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1
-	var/health = 10 //This window is so bad blowing on it would break it, sucks for it
+	health = 10 //This window is so bad blowing on it would break it, sucks for it
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
 	var/reinforcetype = /obj/item/stack/rods

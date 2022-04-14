@@ -9,6 +9,7 @@ em						{font-style: normal;	font-weight: bold;}
 						{color: #638500;}
 .prefix					{					font-weight: bold;}
 .ooc					{					font-weight: bold;}
+.looc					{					font-weight: bold;}
 .adminobserverooc		{color: #0099cc;	font-weight: bold;}
 .adminooc				{color: #b82e00;	font-weight: bold;}
 .adminobserver			{color: #996600;	font-weight: bold;}
@@ -95,7 +96,7 @@ h1.alert, h2.alert		{color: #000000;}
 .good					{color: green;}
 .average				{color: #FF8000;}
 .bad					{color: #FF0000;}
-.mushroom				{color: #4B0082;}
+.mushroom				{color: #4B0082; font-weight: bold;}
 /* /vg/ Saycode Rewrite */
 .italics, .talkinto		{font-style:italic;}
 .whisper				{font-style:italic;color:#333333;}

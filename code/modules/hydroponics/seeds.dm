@@ -76,8 +76,9 @@
 	vending_cat = "vegetables"
 
 /obj/item/seeds/plastiseed
-	name = "packet of plastellium seeds"
+	name = "packet of plastellium spores"
 	seed_type = "plastic"
+	vending_cat = "mushrooms"
 
 /obj/item/seeds/grapeseed
 	name = "packet of grape seeds"
@@ -1501,6 +1502,7 @@
 	display_name = "silicate citrus"
 	plant_dmi = 'icons/obj/hydroponics/silicatecitrus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
+	harvest_repeat = 1
 	mutants = null
 	chems = list(SILICATE = list(3,5))
 

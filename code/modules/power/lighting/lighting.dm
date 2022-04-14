@@ -407,7 +407,7 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/proc/has_power()
 	var/area/this_area = get_area(src)
-	return this_area.lightswitch && this_area.power_light
+	return this_area && this_area.lightswitch && this_area.power_light
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)
@@ -571,8 +571,7 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/power_change()
 	spawn(10)
-		var/area/this_area = get_area(src)
-		seton(this_area.lightswitch && this_area.power_light)
+		seton(has_power())
 
 // called when on fire
 

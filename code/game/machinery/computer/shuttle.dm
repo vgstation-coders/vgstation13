@@ -65,8 +65,7 @@
 
 /obj/machinery/computer/shuttle/emag(mob/user as mob)
 	if(!emagged)
-		new/obj/effect/sparks(get_turf(src))
-		playsound(loc,"sparks",50,1)
+		spark(src)
 		var/choice = "Cancel"
 		if(user)
 			choice = alert(user, "Would you like to launch the shuttle?","Shuttle control", "Launch", "Cancel")
