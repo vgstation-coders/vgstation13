@@ -802,21 +802,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dstored_mats.Add(list(list("* [M] x [d_disk.blueprint.materials[M]]")))
 	data["dstoredmats"] = dstored_mats
 
-	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
-		if(20 to 29)
-			if(linked_destroy == null)
-				screen = 20
-			else if(linked_destroy.loaded_item == null)
-				screen = 21
-			else
-				screen = 22
-		if(30 to 39)
-			if(linked_lathe == null)
-				screen = 30
-		if(40 to 49)
-			if(linked_imprinter == null)
-				screen = 40
-
 	data["screen"] = screen
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

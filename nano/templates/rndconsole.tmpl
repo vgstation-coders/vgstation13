@@ -211,217 +211,225 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				* {{:value.name}}<br>
 			{{/for}}
 		</div>
-	{{else data.screen == 20 || data.screen == 21 || data.screen == 30 || data.screen == 40 }}
-		<div class="itemLabel">
-			{{if data.screen == 20}}
-				NO DESTRUCTIVE ANALYZER LINKED TO CONSOLE
-			{{else data.screen == 21}}
-				No item loaded. Standing by...
-			{{else data.screen == 30}}
-				NO PROTOLATHE LINKED TO CONSOLE
-			{{else data.screen == 40}}
-				NO CIRCUIT IMPRINTER LINKED TO CONSOLE
-			{{/if}}
-		</div>
 	{{else data.screen == 22}}
-		<div class="itemLabel">
-			Name: {{:data.destroyname}}
-		</div>
-		<div class="itemContentWide" style="width: 95%;">
-			<div class="statusDisplay">
-				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-					<div class="statusValue">
-						<b>Origin Tech:</b>
-					</div>
-					{{for data.destroytech}}
-						<div class="statusValue">
-							{{:value.name}} {{value.tech}} [Current research level: {{:value.level}}]
-						</div>
-					{{empty}}
-						<div class="statusValue">
-							This item does not have a tech origin.
-						</div>
-					{{/for}}
-					<div class="statusValue">
-						<b>Material Composition:</b>
-					</div>
-					{{for data.destroymats}}
-						<div class="statusValue">
-							{{:value.name}}: {{:value.amount}}
-						</div>
-					{{empty}}
-						<div class="statusValue">
-							No materials found.
-						</div>
-					{{/for}}
-					<div class="line">
-						{{:helper.link('Deconstruct Item', 'circle-arrow-s', {'deconstruct':1}, null)}}
-						{{:helper.link('Eject Item', 'circle-arrow-s', {'eject_item':1}, null)}}
-					</div>
-				</div>
-			</div>
-		</div>
-	{{else data.screen == 31 || data.screen == 41}}
-		<div style="float: right; width: 25%;">
+		{{if !data.destroy || !data.destroyitem}}
 			<div class="itemLabel">
-				Material Storage
+				{{if !data.destroy}}
+					NO DESTRUCTIVE ANALYZER LINKED TO CONSOLE
+				{{else !data.destroyitem}}
+					No item loaded. Standing by...
+				{{/if}}
+			</div>
+		{{else}}
+			<div class="itemLabel">
+				Name: {{:data.destroyname}}
 			</div>
 			<div class="itemContentWide" style="width: 95%;">
 				<div class="statusDisplay">
 					<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-						{{if data.lathe && data.screen == 31}}
-							{{for data.lathemats}}
-								<div class="statusValue">
-									{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
-									{{:helper.link(value.cost, 'gear', null, null, null, 'misc')}}
-									{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
-								</div>
-							{{empty}}
-								<i>Material storage is empty</i>
-							{{/for}}
-						{{else data.imprinter && data.screen == 41}}
-							{{for data.imprinterchems}}
-								<div class="statusValue">
-									<b>Reservoir {{:value.index}} &mdash; {{:value.name}}:</b>
-								</div>
-								{{for value.reagents}}
+						<div class="statusValue">
+							<b>Origin Tech:</b>
+						</div>
+						{{for data.destroytech}}
+							<div class="statusValue">
+								{{:value.name}} {{value.tech}} [Current research level: {{:value.level}}]
+							</div>
+						{{empty}}
+							<div class="statusValue">
+								This item does not have a tech origin.
+							</div>
+						{{/for}}
+						<div class="statusValue">
+							<b>Material Composition:</b>
+						</div>
+						{{for data.destroymats}}
+							<div class="statusValue">
+								{{:value.name}}: {{:value.amount}}
+							</div>
+						{{empty}}
+							<div class="statusValue">
+								No materials found.
+							</div>
+						{{/for}}
+						<div class="line">
+							{{:helper.link('Deconstruct Item', 'circle-arrow-s', {'deconstruct':1}, null)}}
+							{{:helper.link('Eject Item', 'circle-arrow-s', {'eject_item':1}, null)}}
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+	{{else data.screen == 31 || data.screen == 41}}
+		{{if data.screen == 31 && !data.lathe}}
+			<div class="itemLabel">
+				NO PROTOLATHE LINKED TO CONSOLE
+			</div>
+		{{else data.screen == 41 && !data.imprinter}}
+			<div class="itemLabel">
+				NO CIRCUIT IMPRINTER LINKED TO CONSOLE
+			</div>
+		{{else}}
+			<div style="float: right; width: 25%;">
+				<div class="itemLabel">
+					Material Storage
+				</div>
+				<div class="itemContentWide" style="width: 95%;">
+					<div class="statusDisplay">
+						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+							{{if data.lathe && data.screen == 31}}
+								{{for data.lathemats}}
 									<div class="statusValue">
 										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
-										{{:helper.link(value.volume, 'gear', null, null, null, 'misc')}}
-										{{:helper.link("(Purge)", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+										{{:helper.link(value.cost, 'gear', null, null, null, 'misc')}}
+										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
 									</div>
 								{{empty}}
-									<div class="statusValue">
-										(Empty)
-									</div>
+									<i>Material storage is empty</i>
 								{{/for}}
-							{{/for}}
-							<div class="statusValue">
-								{{:helper.link('Disposal All Chemicals in Storage', 'circle-arrow-s', {'disposeallI':1}, null)}}
-							</div>
-							{{for data.imprintermats}}
-								<div class="statusValue">
-									{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
-									{{:helper.link(value.cost, 'gear', null, null, null, 'misc')}}
-									{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
-								</div>
-							{{empty}}
-								<i>Material storage is empty</i>
-							{{/for}}
-						{{else}}
-							<i>Material storage not found</i>
-						{{/if}}
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div style="float: right; width: 50%;">
-			<div class="itemLabel">
-				Queue
-			</div>
-			<div class="itemContentWide" style="width: 95%;">
-				<div class="statusDisplay">
-					<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-						{{if data.lathe && data.screen == 31}}
-							{{for data.lathequeue}}
-								<div class="statusValue">
-									{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
-									{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
-								</div>
-							{{empty}}
-								<i>No parts in memory</i>
-							{{/for}}
-						{{else data.imprinter && data.screen == 41}}
-							{{for data.imprinterqueue}}
-								<div class="statusValue">
-									{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
-									{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
-								</div>
-							{{empty}}
-								<i>No parts in memory</i>
-							{{/for}}
-						{{else}}
-							<i>No parts in memory</i>
-						{{/if}}
-					</div>
-					<br>
-					<div class="line">
-						{{:helper.link('Process Queue', 'circle-arrow-s', {'process_queue':null}, null, null, 'misc')}}
-						{{:helper.link('Clear Queue', 'circle-arrow-s', {'clear_queue':null}, null, 'fixedLeft')}}
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div style="float: left; width: 25%;">
-			<div class="itemLabel">
-				Categories
-			</div>
-			{{if data.lathe && data.screen == 31}}
-				{{for data.lathecategories}}
-					<div class="line">
-						{{:helper.link(value.name, 'gear',{'setLatheCategory':value.name},(data.lathecategory == value.name)?'linkOn':'', 'fixedLeftWide')}}
-					</div>
-				{{empty}}
-					<i>No categories found</i>
-				{{/for}}
-			{{else data.imprinter && data.screen == 41}}
-				{{for data.imprintercategories}}
-					<div class="line">
-						{{:helper.link(value.name, 'gear',{'setImprinterCategory':value.name},(data.imprintercategory == value.name)?'linkOn':'', 'fixedLeftWide')}}
-					</div>
-				{{empty}}
-					<i>No categories found</i>
-				{{/for}}
-			{{else}}
-				<i>No categories found</i>
-			{{/if}}
-		</div>
-
-		<div class="item">
-			{{if data.lathe && data.screen == 31}}
-				<div class="itemLabel">
-					{{:data.lathecategory}}
-				</div>
-			{{else data.imprinter && data.screen == 41}}
-				<div class="itemLabel">
-					{{:data.imprintercategory}}
-				</div>
-			{{/if}}
-			<div class="itemContentWide" style="width:100%;">
-				<div class="statusDisplay">
-					<div class="line">
-						{{if data.lathe && data.screen == 31}}
-							{{for data.lathedesigns}}
-								<div class="line">
+							{{else data.imprinter && data.screen == 41}}
+								{{for data.imprinterchems}}
 									<div class="statusValue">
-										{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
-										{{:helper.link(value.cost, null, null, null, null, 'costsmall')}}
-										{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+										<b>Reservoir {{:value.index}} &mdash; {{:value.name}}:</b>
 									</div>
+									{{for value.reagents}}
+										<div class="statusValue">
+											{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+											{{:helper.link(value.volume, 'gear', null, null, null, 'misc')}}
+											{{:helper.link("(Purge)", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+										</div>
+									{{empty}}
+										<div class="statusValue">
+											(Empty)
+										</div>
+									{{/for}}
+								{{/for}}
+								<div class="statusValue">
+									{{:helper.link('Disposal All Chemicals in Storage', 'circle-arrow-s', {'disposeallI':1}, null)}}
 								</div>
-							{{empty}}
-								<i>No parts in memory</i>
-							{{/for}}
-						{{else data.imprinter && data.screen == 41}}
-							{{for data.imprinterdesigns}}
-								<div class="line">
+								{{for data.imprintermats}}
 									<div class="statusValue">
-										{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
-										{{:helper.link(value.cost, null, null, null, null, 'costsmall')}}
-										{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+										{{:helper.link(value.cost, 'gear', null, null, null, 'misc')}}
+										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
 									</div>
-								</div>
-							{{empty}}
-								<i>No parts in memory</i>
-							{{/for}}
-						{{else}}
-							<i>No parts in memory</i>
-						{{/if}}
+								{{empty}}
+									<i>Material storage is empty</i>
+								{{/for}}
+							{{else}}
+								<i>Material storage not found</i>
+							{{/if}}
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+
+			<div style="float: right; width: 50%;">
+				<div class="itemLabel">
+					Queue
+				</div>
+				<div class="itemContentWide" style="width: 95%;">
+					<div class="statusDisplay">
+						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+							{{if data.lathe && data.screen == 31}}
+								{{for data.lathequeue}}
+									<div class="statusValue">
+										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+									</div>
+								{{empty}}
+									<i>No parts in memory</i>
+								{{/for}}
+							{{else data.imprinter && data.screen == 41}}
+								{{for data.imprinterqueue}}
+									<div class="statusValue">
+										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+									</div>
+								{{empty}}
+									<i>No parts in memory</i>
+								{{/for}}
+							{{else}}
+								<i>No parts in memory</i>
+							{{/if}}
+						</div>
+						<br>
+						<div class="line">
+							{{:helper.link('Process Queue', 'circle-arrow-s', {'process_queue':null}, null, null, 'misc')}}
+							{{:helper.link('Clear Queue', 'circle-arrow-s', {'clear_queue':null}, null, 'fixedLeft')}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div style="float: left; width: 25%;">
+				<div class="itemLabel">
+					Categories
+				</div>
+				{{if data.lathe && data.screen == 31}}
+					{{for data.lathecategories}}
+						<div class="line">
+							{{:helper.link(value.name, 'gear',{'setLatheCategory':value.name},(data.lathecategory == value.name)?'linkOn':'', 'fixedLeftWide')}}
+						</div>
+					{{empty}}
+						<i>No categories found</i>
+					{{/for}}
+				{{else data.imprinter && data.screen == 41}}
+					{{for data.imprintercategories}}
+						<div class="line">
+							{{:helper.link(value.name, 'gear',{'setImprinterCategory':value.name},(data.imprintercategory == value.name)?'linkOn':'', 'fixedLeftWide')}}
+						</div>
+					{{empty}}
+						<i>No categories found</i>
+					{{/for}}
+				{{else}}
+					<i>No categories found</i>
+				{{/if}}
+			</div>
+
+			<div class="item">
+				{{if data.lathe && data.screen == 31}}
+					<div class="itemLabel">
+						{{:data.lathecategory}}
+					</div>
+				{{else data.imprinter && data.screen == 41}}
+					<div class="itemLabel">
+						{{:data.imprintercategory}}
+					</div>
+				{{/if}}
+				<div class="itemContentWide" style="width:100%;">
+					<div class="statusDisplay">
+						<div class="line">
+							{{if data.lathe && data.screen == 31}}
+								{{for data.lathedesigns}}
+									<div class="line">
+										<div class="statusValue">
+											{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+											{{:helper.link(value.cost, null, null, null, null, 'costsmall')}}
+											{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+										</div>
+									</div>
+								{{empty}}
+									<i>No parts in memory</i>
+								{{/for}}
+							{{else data.imprinter && data.screen == 41}}
+								{{for data.imprinterdesigns}}
+									<div class="line">
+										<div class="statusValue">
+											{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+											{{:helper.link(value.cost, null, null, null, null, 'costsmall')}}
+											{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+										</div>
+									</div>
+								{{empty}}
+									<i>No parts in memory</i>
+								{{/for}}
+							{{else}}
+								<i>No parts in memory</i>
+							{{/if}}
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/if}}
 	{{/if}}
 {{/if}}
