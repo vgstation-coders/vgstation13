@@ -91,6 +91,8 @@ var/list/poddoors = list()
 	return 0
 
 /obj/machinery/door/poddoor/open()
+	if(!density) //it's already open bro
+		return FALSE
 	if (operating == 1) //doors can still open when emag-disabled
 		return
 	if (!ticker)

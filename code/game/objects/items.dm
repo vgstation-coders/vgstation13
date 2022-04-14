@@ -6,13 +6,11 @@
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	var/r_speed = 1.0
-	var/health		//Structural integrity of the item. If breakable_flags are set, at 0, the item breaks; defaults to maxHealth.
-	var/maxHealth	//Maximum structural integrity of the item. If breakable_flags are set, defaults to health.
 	var/hitsound = null
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
-	var/w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
 
 	flags = FPRINT
@@ -88,11 +86,6 @@
 	..()
 	for(var/path in actions_types)
 		new path(src)
-	if(breakable_flags)	//Initialize health and maxHealth to the same value if only one is specified.
-		if(isnull(health) && maxHealth)
-			health = maxHealth
-		else if(isnull(maxHealth) && health)
-			maxHealth = health
 
 /obj/item/Destroy()
 	infected_items -= src
@@ -1263,10 +1256,11 @@ var/global/list/image/blood_overlays = list()
 	return get_rating()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
+	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
-			if(H.foot_impact(src,rand(1,4)))
+			if(H.foot_impact(src, rand(1,4), ourfoot = kickingfoot))
 				to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 		return
 
@@ -1279,13 +1273,19 @@ var/global/list/image/blood_overlays = list()
 	var/kick_power = max((H.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
 
 	//Attempt to damage the item if it's breakable here.
-	var/glanced
+	var/glanced = TRUE
+	var/broken = FALSE
+	
 	if(breakable_flags & BREAKABLE_UNARMED)
-		glanced=!take_damage(kick_power, skip_break = TRUE)
-
-	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced,TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced,TRUE)]</span>")
-
-	if(kick_power > 6) //Fly in an arc!
+		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
+		
+	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced, TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced, TRUE)]</span>")
+	
+	if(breakable_flags & BREAKABLE_UNARMED)
+		var/thispropel = new /datum/throwparams(T, kick_power, 1)
+		broken = try_break(propelparams = thispropel)
+		
+	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
 			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
@@ -1295,10 +1295,7 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 		throw_at(T, kick_power, 1)
-	else
-		try_break() //Check for the item breaking anyway even if it didn't get propelled.
 	Crossed(H) //So you can't kick shards while naked without suffering
-
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

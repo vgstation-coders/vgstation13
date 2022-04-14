@@ -601,13 +601,23 @@ var/list/shuttle_log = list()
 	return 1
 
 /proc/init_shift_change(var/mob/user, var/force = 0)
-	if ((!( ticker ) || emergency_shuttle.location))
+	if (!ticker)
 		return
-
+	if (emergency_shuttle.direction == -1 && vote.winner ==  "Initiate Crew Transfer")
+		emergency_shuttle.setdirection(1)
+		emergency_shuttle.settimeleft(10)
+		var/reason = pick("is arriving ahead of schedule", "hit the turbo", "has engaged nitro afterburners")
+		captain_announce("The emergency shuttle reversed and [reason]. It will arrive in [emergency_shuttle.timeleft()] seconds.")
+		return
 	if(emergency_shuttle.direction == -1)
 		to_chat(user, "The shuttle may not be called while returning to CentCom.")
 		return
-
+	if (emergency_shuttle.online && vote.winner ==  "Initiate Crew Transfer")
+		if(10 < emergency_shuttle.timeleft())
+			var/reason = pick("is arriving ahead of schedule", "hit the turbo", "has engaged nitro afterburners")
+			emergency_shuttle.settimeleft(10)
+			captain_announce("The emergency shuttle [reason]. It will arrive in [emergency_shuttle.timeleft()] seconds.")
+		return
 	if(emergency_shuttle.online)
 		to_chat(user, "The shuttle is already on its way.")
 		return

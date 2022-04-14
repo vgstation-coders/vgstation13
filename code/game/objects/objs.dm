@@ -18,6 +18,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/damtype = "brute"
 	var/force = 0
 
+	var/w_class
+
 	//Should we alert about reagents that should be logged?
 	var/log_reagents = 1
 
@@ -89,6 +91,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/attackby(obj/item/weapon/W, mob/user)
 	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
+
+	if(handle_item_attack(W, user))
+		return
+
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -655,7 +661,7 @@ a {
 				user.visible_message("<span class='danger'>[user] puts \his foot to \the [A] and kicks \himself away!</span>", \
 					"<span class='warning'>You put your foot to \the [A] and kick as hard as you can! [pick("RAAAAAAAARGH!", "HNNNNNNNNNGGGGGGH!", "GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", "AAAAAAARRRGH!")]</span>")
 				var/turf/T = get_edge_target_turf(src, movementdirection)
-				src.throw_at(T,8,20,fly_speed = 2)
+				src.throw_at(T, 8, 20, TRUE, 2)
 			else
 				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
 				for(var/i in list(2,2,3,3))
