@@ -39,7 +39,7 @@ Thus, the two variables affect pump operation are set in New():
 		icon_state = "intact_off"
 	else if(stat & FORCEDISABLE)
 		icon_state = "intact_malflocked"
-	else if (pump_stalled)
+	else if (pump_stalled && on)
 		icon_state="intact_stalled"
 	else if(node1 && node2)
 		icon_state = "intact_[on?("on"):("off")]"
