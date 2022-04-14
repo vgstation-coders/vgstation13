@@ -136,8 +136,8 @@
 	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
-			var/datum/objective_holder/OH = faction.objective_holder
 			/* 
+			var/datum/objective_holder/OH = faction.objective_holder
 			if (OH.objectives.len > 0)
 				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
 				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
