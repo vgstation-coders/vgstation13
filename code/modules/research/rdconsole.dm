@@ -739,7 +739,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			var/reagent_info[0]
 			if(RC.reagents.reagent_list && RC.reagents.reagent_list.len)
 				for(var/datum/reagent/R in RC.reagents.reagent_list)
-					reagent_info.Add(list(list("name" = R.name, "volume" = R.volume, "commands" = list("disposeI" = R.id; "beakerI" = "\ref[RC]"))))
+					reagent_info.Add(list(list("name" = R.name, "volume" = R.volume, "commands" = list("disposeI" = R.id, "beakerI" = "\ref[RC]"))))
 			imprinter_chems.Add(list(list("index" = beaker_index, "name" = RC.name, "reagents" = reagent_info)))
 
 		for(var/matID in linked_imprinter.materials.storage)
