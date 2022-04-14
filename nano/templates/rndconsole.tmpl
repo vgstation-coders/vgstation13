@@ -223,6 +223,44 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				NO CIRCUIT IMPRINTER LINKED TO CONSOLE
 			{{/if}}
 		</div>
+	{{else data.screen == 22}}
+		<div class="itemLabel">
+			Name: {{:data.destroyname}}
+		</div>
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
+					<div class="statusValue">
+						<b>Origin Tech:</b>
+					</div>
+					{{for data.destroytech}}
+						<div class="statusValue">
+							{{:value.name}} {{value.tech}} [Current research level: {{:value.level}}]
+						</div>
+					{{empty}}
+						<div class="statusValue">
+							This item does not have a tech origin.
+						</div>
+					{{/for}}
+					<div class="statusValue">
+						<b>Material Composition:</b>
+					</div>
+					{{for data.destroymats}}
+						<div class="statusValue">
+							{{:value.name}}: {{:value.amount}}
+						</div>
+					{{empty}}
+						<div class="statusValue">
+							No materials found.
+						</div>
+					{{/for}}
+					<div class="line">
+						{{:helper.link('Deconstruct Item', 'circle-arrow-s', {'deconstruct':1}, null)}}
+						{{:helper.link('Eject Item', 'circle-arrow-s', {'eject_item':1}, null)}}
+					</div>
+				</div>
+			</div>
+		</div>
 	{{else data.screen == 31 || data.screen == 41}}
 		<div style="float: right; width: 25%;">
 			<div class="itemLabel">

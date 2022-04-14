@@ -673,6 +673,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					var/datum/material/M = linked_destroy.loaded_item.materials.getMaterial(matID)
 					destroy_mats.Add(list(list("name" = M.processed_name, "amount" = linked_destroy.loaded_item.materials.storage[matID])))
 
+	data["destroy"] = linked_destroy != null
+	data["destroyitem"] = linked.destroy && linked_destroy.loaded_item
 	data["destroyname"] = linked_destory && linked_destroy.loaded_item ? linked_destroy.loaded_item.name : ""
 	data["destroytech"] = destroy_tech
 	data["destroymats"] = destroy_mats
@@ -702,6 +704,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			var/datum/material/M=linked_lathe.materials.getMaterial(matID)
 			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID], "commands" = list("lathe_ejectsheet" = matID, "lathe_ejectsheet_amt" = 50))))
 
+	data["lathe"] = linked_lathe != null
 	data["lathequeue"] = lathe_queue
 	data["lathecategories"] = lathe_categories
 	data["lathedesigns"] = lathe_designs
@@ -743,6 +746,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "imprinter_ejectsheet_amt" = 50))))
 
+	data["imprinter"] = linked_imprinter != null
 	data["imprinterqueue"] = imprinter_queue
 	data["imprintercategories"] = imprinter_categories
 	data["imprinterdesigns"] = imprinter_designs
@@ -760,10 +764,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	for(var/datum/design/D in files.known_designs)
 		all_designs.Add(list(list("name" = D.name, "commands" = list("copy_design" = 1, "copy_design_ID" = D.id))))
 	data["alldesigns"] = all_designs
-
-	data["destroy"] = linked_destroy != null
-	data["lathe"] = linked_lathe != null
-	data["imprinter"] = linked_imprinter != null
 
 	var/other_link[0]
 	var/remain_link = linked_machines
@@ -824,30 +824,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		ui = new(user, src, ui_key, "rndconsole.tmpl", name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
 		ui.set_initial_data(data)
 		ui.open()
-
-/*
-		////////////////////DESTRUCTIVE ANALYZER SCREENS////////////////////////////
-		if(2.2)
-
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				Deconstruction Menu<HR>
-				Name: [linked_destroy.loaded_item.name]<BR>
-				Origin Tech:<UL>"}
-			var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
-			for(var/T in temp_tech)
-				var/datum/tech/TT = files.GetKTechByID(T)
-				dat += "<LI>[CallTechName(T)] [temp_tech[T]] \[Current research level: [TT.level]\]</LI>"
-			dat += "</UL>"
-			if(linked_destroy.loaded_item.materials)
-				dat += "Material Composition:<UL>"
-				for(var/matID in linked_destroy.loaded_item.materials.storage)
-					if(linked_destroy.loaded_item.materials.storage[matID])
-						var/datum/material/M = linked_destroy.loaded_item.materials.getMaterial(matID)
-						dat += "<LI>[M.processed_name]: [linked_destroy.loaded_item.materials.storage[matID]]</LI>"
-				dat += "</UL><BR>"
-			dat += {"<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> ||
-				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "}
-*/
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
 	return screen == 2
