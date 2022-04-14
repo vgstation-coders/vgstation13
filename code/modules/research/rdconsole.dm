@@ -731,9 +731,24 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	for(var/datum/design/D in files.known_designs)
 		all_designs.Add(list(list("name" = D.name, "commands" = list("copy_design" = 1, "copy_design_ID" = D.id))))
 	data["alldesigns"] = all_designs
+
 	data["destroy"] = linked_destroy != null
 	data["lathe"] = linked_lathe != null
 	data["imprinter"] = linked_imprinter != null
+
+	var/other_link[0]
+	var/remain_link = linked_machines
+	if(linked_destroy)
+		remain_link -= linked_destroy
+	if(linked_lathe)
+		remain_link -= linked_lathe
+	if(linked_imprinter)
+		remain_link -= linked_imprinter
+	if(remain_link)
+		for(var/obj/machinery/r_n_d/R in remain_link)
+			other_link.Add(list(list("name" = R.name)))
+	data["othermachines"] = other_link
+
 	data["isadmin"] = user.client.holder != null
 	data["synced"] = sync
 
@@ -782,39 +797,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		ui.open()
 
 /*
-		//////////////////////R&D CONSOLE SCREENS//////////////////
-		if(1.7) //R&D device linkage
-
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
-				<A href='?src=\ref[src];menu=1.6'>Settings Menu</A><HR>
-				R&D Console Device Linkage Menu:<BR><BR>
-				<A href='?src=\ref[src];find_device=1'>Re-sync with Nearby Devices</A><BR>
-				Linked Devices:<BR>"}
-			var/remain_link = linked_machines
-			if(linked_destroy)
-				dat += "* Destructive Analyzer <A href='?src=\ref[src];disconnect=destroy'>(Disconnect)</A><BR>"
-				remain_link -= linked_destroy
-			else
-				dat += "* (No Destructive Analyzer Linked)<BR>"
-			if(linked_lathe)
-				dat += "* Protolathe <A href='?src=\ref[src];disconnect=lathe'>(Disconnect)</A><BR>"
-				remain_link -= linked_lathe
-			else
-				dat += "* (No Protolathe Linked)<BR>"
-			if(linked_imprinter)
-				dat += "* Circuit Imprinter <A href='?src=\ref[src];disconnect=imprinter'>(Disconnect)</A><BR>"
-				remain_link -= linked_imprinter
-			else
-				dat += "* (No Circuit Imprinter Linked)<BR>"
-			if(remain_link)
-				for(var/obj/machinery/r_n_d/R in remain_link)
-					dat += "* [R.name] <BR>"
-
 		////////////////////DESTRUCTIVE ANALYZER SCREENS////////////////////////////
-		if(2.1)
-
-			dat += {"No Item Loaded. Standing-by...<BR><HR>
-				<A href='?src=\ref[src];menu=1.0'>Main Menu</A>"}
 		if(2.2)
 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>

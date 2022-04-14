@@ -65,7 +65,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
 					{{for data.techinfo}}
-						<b>{{:value.name}}</b><br>Level: {{:value.level}}<br><i>{{:value.desc}}</i><br><br>
+						<b>{{:value.name}}</b><br>Level: {{:value.level}}<br><i>{{:value.summary}}</i><br><br>
 					{{empty}}
 						No tech levels found.
 					{{/for}}
@@ -177,17 +177,47 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			</div>
 		{{/if}}
 		<div class="line">
-			{{:helper.link('Device Linkage Menu', 'circle-arrow-s', {'menu':17}, null)}}
-		</div>
-		<div class="line">
 			{{:helper.link('Lock Console', 'circle-arrow-s', {'lock':2}, null)}}
 		</div>
 		<div class="line">
 			{{:helper.link('Reset R&D Database', 'circle-arrow-s', {'reset':null}, null)}}
 		</div>
+		<div class="line">
+			{{:helper.link('Re-sync with Nearby Devices', 'circle-arrow-s', {'find_device':1}, null)}}
+		</div>
+		<div class="itemLabel">
+			Linked Devices:
+		</div>
+		<div class="line">
+			{{if data.destroy}}
+				* Destructive Analyzer {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'destroy'}, null)}}
+			{{else}}
+				* (No Destructive Analyzer Linked)
+			{{/if}}
+			<br>
+			{{if data.lathe}}
+				* Protolathe {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'lathe'}, null)}}
+			{{else}}
+				* (No Protolathe Linked)
+			{{/if}}
+			<br>
+			{{if data.imprinter}}
+				* Circuit Imprinter {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'imprinter'}, null)}}
+			{{else}}
+				* (No Circuit Imprinter Linked)
+			{{/if}}
+			<br>
+			{{for data.othermachines}}
+				* {{:value.name}}<br>
+			{{/for}}
+		</div>
 	{{else data.screen == 20}}
 		<div class="itemLabel">
 			NO DESTRUCTIVE ANALYZER LINKED TO CONSOLE
+		</div>
+	{{else data.screen == 21}}
+		<div class="itemLabel">
+			No item loaded. Standing by...
 		</div>
 	{{else data.screen == 30}}
 		<div class="itemLabel">
