@@ -86,10 +86,15 @@
 	if ((cultist_role == CULTIST_ROLE_ACOLYTE) && !mentor)
 		FindMentor()
 
+
+// 2022 - Commenting out some part of the greeting message and spacing it out a bit. 
+//  Getting converted floods the chat with a lot of unncessary information
+
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 
+	to_chat(antag.current, "<br>")
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
 		if (GREET_ROUNDSTART)
@@ -127,18 +132,20 @@
 				to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You are a lone cultist. You've spent years studying the language of Nar-Sie, but haven't associated with his followers.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
-
+	//to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
+	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
 			var/datum/objective_holder/OH = faction.objective_holder
+			/* 
 			if (OH.objectives.len > 0)
 				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
 				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
 				to_chat(antag.current,"<b>First of all though, choose a role that fits you best using the button on the left.</b>")
-				if (greeting != GREET_ROUNDSTART)
-					var/datum/faction/bloodcult/cult = faction
-					to_chat(antag.current, "<span class='sinister'>The station population is currently large enough for <span class='userdanger'>[cult.cultist_cap]</span> cultists.</span>")
+			*/
+			if (greeting != GREET_ROUNDSTART)
+				var/datum/faction/bloodcult/cult = faction
+				to_chat(antag.current, "<span class='sinister'>The station population is currently large enough for <span class='userdanger'>[cult.cultist_cap]</span> cultists.</span>")
 
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()

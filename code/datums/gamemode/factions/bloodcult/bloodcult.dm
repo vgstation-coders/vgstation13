@@ -31,6 +31,12 @@
 	var/list/arch_cultists = list()
 	var/list/departments_left = list("Security", "Medical", "Engineering", "Science", "Cargo")
 
+	var/mob/living/sacrifice_target = null
+	var/datum/mind/sacrifice_mind = null
+	var/target_sacrificed = FALSE
+
+
+
 /datum/faction/bloodcult/check_win()
 	if(stage <= FACTION_DEFEATED)
 		return FALSE
@@ -154,7 +160,7 @@
 			return "Engineering"
 		else
 			return D.name
-			
+
 /datum/faction/bloodcult/proc/IsValidDepartment(var/area/D)
 	var/list/valid_areas = list(/area/security, /area/science, /area/supply, /area/engineering, /area/medical)
 	if(is_type_in_list(D, valid_areas))
@@ -179,3 +185,31 @@
 	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		B.update_icon()
 	bloody_floors -= T
+
+
+/datum/faction/bloodcult/proc/FindSacrificeTarget()
+	var/list/possible_targets = list()
+	var/list/backup_targets = list()
+	for(var/mob/living/carbon/human/player in player_list)
+		if(iscultist(player))
+			continue
+		//They may be dead, but we only need their flesh
+		var/turf/player_turf = get_turf(player)
+		if(player_turf.z != map.zMainStation)//We only look for people currently aboard the station
+			continue
+		var/is_implanted = player.is_loyalty_implanted()
+		if(is_implanted || isReligiousLeader(player))
+			possible_targets += player
+		else
+			backup_targets += player
+
+	if(possible_targets.len <= 0) // If there are only non-implanted players left on the station, we'll have to sacrifice one of them
+		if (backup_targets.len <= 0)
+			message_admins("Blood Cult: Could not find a suitable sacrifice target.")
+			log_admin("Blood Cult: Could not find a suitable sacrifice target.")
+			return null
+		else
+			sacrifice_target = pick(backup_targets)
+	else
+		sacrifice_target = pick(possible_targets)
+	return sacrifice_target

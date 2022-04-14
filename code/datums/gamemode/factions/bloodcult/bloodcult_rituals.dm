@@ -117,7 +117,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/always_active/Unlock()
 	unlocked_rituals += src
 
-/datum/bloodcult_ritual/Finish(var/worth)
+/datum/bloodcult_ritual/proc/Finish(var/worth)
 	if(!jectie.complete)
 		jectie.complete = TRUE
 		for(var/datum/role/cultist/C in cult.members)
@@ -130,7 +130,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		completed_rituals += src
 
 /datum/bloodcult_ritual/proc/Trigger()
-	Reward()
+	return
 
 /datum/bloodcult_ritual/proc/Unlock(var/announce)
 	unlocked_rituals += src
@@ -144,14 +144,14 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	return ""
 
 /datum/bloodcult_ritual/proc/Reward(var/worth)
-	if(!point_limit == 0 || (total_points_rewarded + worth <= point_limit))
+	if(point_limit == 0 || (total_points_rewarded + worth <= point_limit))
 		total_points_rewarded += worth
 		ChangeVeilWeakness(worth)
 
 	Finish(worth)
 
 /datum/bloodcult_ritual/always_active/Reward(var/worth)
-	if(!point_limit == 0 || (total_points_rewarded + worth <= point_limit))
+	if(point_limit == 0 || (total_points_rewarded + worth <= point_limit))
 		total_points_rewarded += worth
 		ChangeVeilWeakness(worth)
 
@@ -200,6 +200,9 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	var/erased = extrainfo["erased"]
 	erased ? Reward(-1) : Reward(1)
 
+
+//////////////////////
+
 /datum/bloodcult_ritual/sow_confusion
 	name = "Sow Confusion"
 	desc = "Corrupt the minds of the unenlightened. Curse at least two people with a single confusion rune."
@@ -243,18 +246,30 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/human_sacrifice
 	name = "Sacrifice Human"
 	desc = "The Geometer demands a meal. Sacrifice a human at an altar with the help of another cultist."
+	only_once = TRUE
+	var/accept_anyone = FALSE
+
+/datum/bloodcult_ritual/human_sacrifice/New()
+	..()
+	if(cult.FindSacrificeTarget())
+		desc = "The Geometer demands a meal. Sacrifice the flesh of [cult.sacrifice_target][cult.sacrifice_target?.mind?.assigned_role ? ", the [cult.sacrifice_target.mind.assigned_role]," : ""] at an altar with the help of another cultist."
+	else
+		accept_anyone = TRUE
 
 /datum/bloodcult_ritual/human_sacrifice/Trigger(var/mob/cultist, var/list/extrainfo)
-	Reward(500)
-	var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
-	if(!C)
-		return  // huh?
-	if(!cultist.mind)
-		return  // HUH?
-	GrantTattoo(cultist, /datum/cult_tattoo/manifest)
-	playsound(cultist, 'sound/effects/fervor.ogg', 50, 0, -2)
-	anim(target = cultist, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = cultist.dir)
-	C.MakeArchCultist()
+	var/mob/living/carbon/human/victim = extrainfo["victim"]
+	if(accept_anyone || (cult.sacrifice_target == victim))	// No target? Oh well, just accept anybody.
+		Reward(500)
+
+		var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
+		if(!C)
+			return  // huh?
+		if(!cultist.mind)
+			return  // HUH?
+		GrantTattoo(cultist, /datum/cult_tattoo/manifest)
+		playsound(cultist, 'sound/effects/fervor.ogg', 50, 0, -2)
+		anim(target = cultist, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = cultist.dir)
+		C.MakeArchCultist()
 
 /datum/bloodcult_ritual/reveal_truth 
 	name = "Reveal the Truth"
@@ -326,7 +341,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/spill_blood
 	name = "Spill Blood"
 	desc = "Prepare this station for the Geometer's arrival. Spill blood across the station's floors."
-	var/only_once = TRUE
+	only_once = TRUE
 	var/percent_bloodspill = 4//percent of all the station's simulated floors, you should keep it under 5.
 	var/target_bloodspill = 0//actual amount of bloodied floors to reach
 	var/max_bloodspill = 0//max amount of bloodied floors simultanously reached
