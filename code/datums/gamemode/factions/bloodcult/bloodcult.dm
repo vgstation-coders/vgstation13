@@ -142,15 +142,15 @@
 
 /datum/faction/bloodcult/proc/GetDepartmentName(var/area/D)
 	switch(D.type)
-		if(/area/science))
+		if(/area/science)
 			return "Science"
-		if(/area/security))
+		if(/area/security)
 			return "Security"
-		if(/area/supply))
+		if(/area/supply)
 			return "Cargo"
-		if(/area/medical))
+		if(/area/medical)
 			return "Medical"
-		if(/area/engineering))
+		if(/area/engineering)
 			return "Engineering"
 		else
 			return D.name
