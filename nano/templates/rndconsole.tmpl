@@ -64,11 +64,11 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-				{{for data.techinfo}}
-					<b>{{:value.name}}</b><br>Level: {{:value.level}}<br><i>{{:value.desc}}</i><br><br>
-				{{empty}}
-					No tech levels found.
-				{{/for}}
+					{{for data.techinfo}}
+						<b>{{:value.name}}</b><br>Level: {{:value.level}}<br><i>{{:value.desc}}</i><br><br>
+					{{empty}}
+						No tech levels found.
+					{{/for}}
 				</div>
 			</div>
 		</div>
@@ -78,7 +78,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				Disk Contents: (Technology Data Disk)
 			{{else data.screen == 14}}
 				Disk Contents: (Design Data Disk)
-			{{if}}
+			{{/if}}
 		</div>
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
@@ -98,10 +98,10 @@ Used In File(s): \code\modules\research\rdconsole.dm
 							This disk has no data stored on it.
 						{{else}}
 							<b>{{:data.dstoredname}}</b>><br><b>Level:</b> {{:data.dstoredlevel}}<br><b>Lathe Type:</b> {{:data.dstoredtype}}<br>
-						{{for data.dstoredmats}}
-							<b>Required materials:</b> {{:value.amount}}<br>
-						{{empty}}
-							No materials required.<br>
+							{{for data.dstoredmats}}
+								<b>Required materials:</b> {{:value.amount}}<br>
+							{{empty}}
+								No materials required.<br>
 						{{/if}}
 					{{/if}}
 				</div>
@@ -119,7 +119,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 					{{:helper.link('Eject Disk', 'circle-arrow-s', {'eject_tech':null}, null)}}
 				</div>
 			{{/if}}
-		{{if data.screen == 14}}
+		{{else data.screen == 14}}
 			{{if data.ddisk}}
 				<div class="line">
 					{{if !data.dstored}}
