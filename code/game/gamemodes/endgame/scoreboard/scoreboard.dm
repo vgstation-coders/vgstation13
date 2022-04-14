@@ -135,7 +135,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.stuffforwarded > 0)
 		dat += "<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>"
 	if(score.oremined > 0)
-		dat += "<B>Value of Ore Smelted:</B> $[score.oremined] ([score.oremined] Points)<BR>"
+		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
