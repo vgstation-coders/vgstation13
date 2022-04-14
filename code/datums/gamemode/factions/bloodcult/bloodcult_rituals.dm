@@ -117,7 +117,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /datum/bloodcult_ritual/always_active/Unlock()
 	unlocked_rituals += src
 
-/datum/bloodcult_ritual/Finish()
+/datum/bloodcult_ritual/Finish(var/worth)
 	if(!jectie.complete)
 		jectie.complete = TRUE
 		for(var/datum/role/cultist/C in cult.members)
@@ -148,7 +148,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		total_points_rewarded += worth
 		ChangeVeilWeakness(worth)
 
-	Finish()
+	Finish(worth)
 
 /datum/bloodcult_ritual/always_active/Reward(var/worth)
 	if(!point_limit == 0 || (total_points_rewarded + worth <= point_limit))

@@ -1454,6 +1454,8 @@ var/list/cult_spires = list()
 //                       //
 ///////////////////////////
 
+var/list/bloodstone_list = list()
+
 /obj/structure/cult/bloodstone
 	name = "blood stone"
 	icon_state = "bloodstone-enter1"
@@ -1470,6 +1472,7 @@ var/list/cult_spires = list()
 /obj/structure/cult/bloodstone/New()
 	..()
 	set_light(3)
+	bloodstone_list.Add(src)
 
 /obj/structure/cult/bloodstone/proc/flashy_entrance()
 	for (var/obj/O in loc)
@@ -1521,6 +1524,7 @@ var/list/cult_spires = list()
 /obj/structure/cult/bloodstone/Destroy()
 	new /obj/effect/decal/cleanable/ash(loc)
 	new /obj/item/weapon/ectoplasm(loc)
+	bloodstone_list.Remove(src)
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)
@@ -1597,7 +1601,6 @@ var/list/cult_spires = list()
 	update_icon()
 
 /*
-var/list/bloodstone_list = list()
 
 /obj/structure/cult/bloodstone
 	name = "blood stone"
