@@ -659,16 +659,28 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 
+	var/destroy_tech[0]
+	var/destroy_mats[0]
+
+	if(linked_destroy && linked_destroy.loaded_item)
+		var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
+		for(var/T in temp_tech)
+			var/datum/tech/TT = files.GetKTechByID(T)
+			destroy_tech.Add(list(list("name" = CallTechName(T), "tech" = temp_tech[T], "level" = TT.level)))
+		if(linked_destroy.loaded_item.materials)
+			for(var/matID in linked_destroy.loaded_item.materials.storage)
+				if(linked_destroy.loaded_item.materials.storage[matID])
+					var/datum/material/M = linked_destroy.loaded_item.materials.getMaterial(matID)
+					destroy_mats.Add(list(list("name" = M.processed_name, "amount" = linked_destroy.loaded_item.materials.storage[matID])))
+
+	data["destroyname"] = linked_destory && linked_destroy.loaded_item ? linked_destroy.loaded_item.name : ""
+	data["destroytech"] = destroy_tech
+	data["destroymats"] = destroy_mats
+
 	var/lathe_queue[0]
 	var/lathe_categories[0]
 	var/lathe_designs[0]
 	var/lathe_mats[0]
-
-	var/imprinter_queue[0]
-	var/imprinter_categories[0]
-	var/imprinter_designs[0]
-	var/imprinter_chems[0]
-	var/imprinter_mats[0]
 
 	if(linked_lathe)
 		for(var/i in 1 to linked_lathe.queue.len)
@@ -689,6 +701,18 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		for(var/matID in linked_lathe.materials.storage)
 			var/datum/material/M=linked_lathe.materials.getMaterial(matID)
 			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID], "commands" = list("lathe_ejectsheet" = matID, "lathe_ejectsheet_amt" = 50))))
+
+	data["lathequeue"] = lathe_queue
+	data["lathecategories"] = lathe_categories
+	data["lathedesigns"] = lathe_designs
+	data["lathemats"] = lathe_mats
+	data["lathecategory"] = lathe_category
+
+	var/imprinter_queue[0]
+	var/imprinter_categories[0]
+	var/imprinter_designs[0]
+	var/imprinter_chems[0]
+	var/imprinter_mats[0]
 
 	if(linked_imprinter)
 		for(var/i in 1 to linked_imprinter.queue.len)
@@ -719,24 +743,18 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "imprinter_ejectsheet_amt" = 50))))
 
-	var/tech_info[0]
-	for(var/ID in files.known_tech)
-		var/datum/tech/T = files.known_tech[ID]
-		tech_info.Add(list(list("name" = T.name, "level" = T.level, "summary" = T.desc, "commands" = list("copy_tech" = 1, "copy_tech_ID" = T.id))))
-	data["techinfo"] = tech_info
-
-	data["lathequeue"] = lathe_queue
-	data["lathecategories"] = lathe_categories
-	data["lathedesigns"] = lathe_designs
-	data["lathemats"] = lathe_mats
-	data["lathecategory"] = lathe_category
-
 	data["imprinterqueue"] = imprinter_queue
 	data["imprintercategories"] = imprinter_categories
 	data["imprinterdesigns"] = imprinter_designs
 	data["imprintermats"] = imprinter_mats
 	data["imprinterchems"] = imprinter_chems
 	data["imprintercategory"] = imprinter_category
+
+	var/tech_info[0]
+	for(var/ID in files.known_tech)
+		var/datum/tech/T = files.known_tech[ID]
+		tech_info.Add(list(list("name" = T.name, "level" = T.level, "summary" = T.desc, "commands" = list("copy_tech" = 1, "copy_tech_ID" = T.id))))
+	data["techinfo"] = tech_info
 
 	var/all_designs[0]
 	for(var/datum/design/D in files.known_designs)
