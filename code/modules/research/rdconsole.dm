@@ -674,8 +674,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					destroy_mats.Add(list(list("name" = M.processed_name, "amount" = linked_destroy.loaded_item.materials.storage[matID])))
 
 	data["destroy"] = linked_destroy != null
-	data["destroyitem"] = linked.destroy && linked_destroy.loaded_item
-	data["destroyname"] = linked_destory && linked_destroy.loaded_item ? linked_destroy.loaded_item.name : ""
+	data["destroyitem"] = linked_destroy && linked_destroy.loaded_item
+	data["destroyname"] = linked_destroy && linked_destroy.loaded_item ? linked_destroy.loaded_item.name : ""
 	data["destroytech"] = destroy_tech
 	data["destroymats"] = destroy_mats
 
