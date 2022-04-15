@@ -9301,6 +9301,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin
 
+/datum/reagent/aminoblatella
+	name = "Aminoblatella"
+	id = AMINOBLATELLA
+	description = "Developed in the darkest halls of maintenance by the Elder Greytide council, it is said to be able to create untold gunk. Potential reaction detected if mixed with equal parts nutriment or ten parts mutagen."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#634848" //rgb: 99, 72, 72
+	density = 15.49 //our ingredients are pretty dense
+	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin
+
 /datum/reagent/luminol
 	name = "Luminol"
 	id = LUMINOL
