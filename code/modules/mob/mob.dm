@@ -1165,19 +1165,18 @@ Use this proc preferably at the end of an equipment loadout
 		var/mob/living/L = src
 		if(!isobserver(L) && !L.eyecheck() && !L.invisibility && L.alpha >= 1)
 			if(A.loc != L || A == L.get_active_hand() || A == L.get_inactive_hand())
-				var/look_target = "at \the [A]"
-				if(isobj(A.loc))
-					look_target = "inside \the [A.loc]"
-				if(A == L)
-					look_target = "at [A]"
 				for(var/mob/M in viewers(4, L))
 					if(M == L)
 						continue
 					if(M.client && M.client.prefs.examine_messages)
 						if(M.is_blind())
 							continue
-						to_chat(M, "<span class='info'><b>\The [L]</b> looks [look_target].</span>")
-
+						if(isobj(A.loc))
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks inside \the [A.loc].</span>")
+						else if(A == L)
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at \the [A.loc].</span>")
+						else
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at [A.loc].</span>")
 
 /mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
