@@ -230,6 +230,7 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	var/tgui_fancy = TRUE
 	var/fps = 0
+	var/examine_messages = TRUE
 
 	var/client/client
 	var/saveloaded = 0
@@ -437,6 +438,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
 	<b>Fancy tgui:</b>
 	<a href='?_src_=prefs;preference=tgui_fancy'>[tgui_fancy ? "Enabled" : "Disabled"]</a><br>
+	<b>Examine messages:</b>
+	<a href='?_src_=prefs;preference=examine_messages'>[examine_messages ? "Enabled" : "Disabled"]</a><br>
 	<b>
 	<center>Runechat prefererences</center>
 	<b>Chat on map for mobs:</b>
@@ -1380,6 +1383,9 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 
 				if("tgui_fancy")
 					tgui_fancy = !tgui_fancy
+
+				if("examine_messages")
+					examine_messages = !examine_messages
 
 				if ("mob_chat_on_map")
 					mob_chat_on_map = !mob_chat_on_map

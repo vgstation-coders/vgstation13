@@ -1161,6 +1161,23 @@ Use this proc preferably at the end of an equipment loadout
 	face_atom(A)
 	A.examine(src)
 
+	if(istype(src,/mob/living))
+		var/mob/living/L = src
+		if(!isobserver(L) && !L.eyecheck() && !L.invisibility && L.alpha >= 1)
+			if(A.loc != L || A == L.get_active_hand() || A == L.get_inactive_hand())
+				var/look_target = "at \the [A]"
+				if(isobj(A.loc))
+					look_target = "inside \the [A.loc]"
+				if(A == L)
+					look_target = "at [A]"
+				for(var/mob/M in viewers(4, L))
+					if(M == L)
+						continue
+					if(M.client && M.client.prefs.examine_messages)
+						if(M.is_blind())
+							continue
+						to_chat(M, "<span class='info'><b>\The [L]</b> looks [look_target].</span>")
+
 
 /mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"

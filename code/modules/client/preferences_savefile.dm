@@ -72,6 +72,7 @@
 	obj_chat_on_map 	 =  text2num(preference_list_client["obj_chat_on_map"])
 	no_goonchat_for_obj  =  text2num(preference_list_client["no_goonchat_for_obj"])
 	tgui_fancy           =  text2num(preference_list_client["tgui_fancy"])
+	examine_messages	 =  text2num(preference_list_client["examine_messages"])
 	show_warning_next_time = text2num(preference_list_client["show_warning_next_time"])
 	last_warned_message = preference_list_client["last_warned_message"]
 	warning_admin = preference_list_client["warning_admin"]
@@ -111,6 +112,7 @@
 	obj_chat_on_map 	 =  sanitize_integer(obj_chat_on_map, 0, 1, initial(obj_chat_on_map))
 	no_goonchat_for_obj  =  sanitize_integer(no_goonchat_for_obj, 0, 1, initial(no_goonchat_for_obj))
 	tgui_fancy           =  sanitize_integer(tgui_fancy, 0, 1, initial(tgui_fancy))
+	examine_messages     =  sanitize_integer(examine_messages, 0, 1, initial(examine_messages))
 	show_warning_next_time = sanitize_integer(show_warning_next_time, 0, 1, initial(show_warning_next_time))
 	fps = sanitize_integer(fps, -1, 1000, initial(fps))
 	initialize_preferences()
