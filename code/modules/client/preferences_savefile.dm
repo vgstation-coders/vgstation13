@@ -61,6 +61,7 @@
 	hear_voicesound = 	text2num(preference_list_client["hear_voicesound"])
 	hear_instruments =	text2num(preference_list_client["hear_instruments"])
 	ambience_volume	=	text2num(preference_list_client["ambience_volume"])
+	headset_sound	= 	sanitize_integer(headset_sound, 0, 2, initial(headset_sound))
 	credits_volume	=	text2num(preference_list_client["credits_volume"])
 	credits 		=	preference_list_client["credits"]
 	jingle	 		=	preference_list_client["jingle"]
