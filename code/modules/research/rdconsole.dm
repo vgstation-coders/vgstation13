@@ -237,7 +237,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(isLocked() || (linked_destroy.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		return
 	linked_destroy.busy = 1
-	screen = 1
 	updateUsrDialog()
 	flick("d_analyzer_process", linked_destroy)
 
@@ -246,7 +245,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if(!linked_destroy.hacked)
 				if(!linked_destroy.loaded_item)
 					to_chat(user, "<span class='warning'>The destructive analyzer appears to be empty.</span>")
-					screen = 1
 					linked_destroy.busy = 0
 					return
 				if(linked_destroy.loaded_item.reliability >= 90)
@@ -274,7 +272,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 				linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
-			screen = 10
 			updateUsrDialog()
 			linked_destroy.busy = 0
 
@@ -674,6 +671,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					destroy_mats.Add(list(list("name" = M.processed_name, "amount" = linked_destroy.loaded_item.materials.storage[matID])))
 
 	data["destroy"] = linked_destroy != null
+	data["destroybusy"] = linked_destroy && linked_destroy.busy
 	data["destroyitem"] = linked_destroy && linked_destroy.loaded_item
 	data["destroyname"] = linked_destroy && linked_destroy.loaded_item ? linked_destroy.loaded_item.name : ""
 	data["destroytech"] = destroy_tech

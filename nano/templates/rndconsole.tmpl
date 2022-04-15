@@ -21,14 +21,8 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		<div class="itemLabel">
 			{{if data.screen == 0}}
 				Updating Database...
-			{{else data.screen == 1}}
-				Processing and Updating Database...
 			{{else data.screen == 2}}
 				SYSTEM LOCKED
-			{{else data.screen == 3}}
-				Constructing Prototypes. Please Wait...
-			{{else data.screen == 4}}
-				Imprinting Circuit. Please Wait...
 			{{/if}}
 		</div>
 		{{if data.screen == 2}}
@@ -212,12 +206,14 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			{{/for}}
 		</div>
 	{{else data.screen == 22}}
-		{{if !data.destroy || !data.destroyitem}}
+		{{if !data.destroy || !data.destroyitem || data.destroybusy}}
 			<div class="itemLabel">
 				{{if !data.destroy}}
 					NO DESTRUCTIVE ANALYZER LINKED TO CONSOLE
 				{{else !data.destroyitem}}
 					No item loaded. Standing by...
+				{{else data.destroybusy}}
+					Processing and Updating Database...
 				{{/if}}
 			</div>
 		{{else}}
