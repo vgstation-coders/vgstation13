@@ -178,7 +178,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if (voting_cache)
 		return
 	voting_cache = 1
-	if(config.map_voting && vote)
+	if(vote)
 		for(var/client/C in clients)
 			spawn
 				vote.interface.sendAssets(C)

@@ -98,7 +98,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -114,7 +114,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
-	
+
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
 
@@ -194,7 +194,7 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
-	
+
 	if(addictive && M.addicted_chems)
 		M.addicted_chems.add_reagent(src.id, custom_metabolism)
 	if(tolerance_increase)
@@ -2571,10 +2571,10 @@
 			dmg -= K.seed.toxins_tolerance*20
 		for(var/obj/effect/plantsegment/KV in orange(O,1))
 			KV.health -= dmg*0.4
-			KV.check_health()
+			KV.try_break()
 			SSplant.add_plant(KV)
 		K.health -= dmg
-		K.check_health()
+		K.try_break()
 		SSplant.add_plant(K)
 	else if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = O
@@ -9299,6 +9299,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#cb42f4" //rgb: 203, 66, 244
 	density = 111.75 //our ingredients are extremely dense, especially carppheromones
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
+	custom_metabolism = 0.01 //oh shit what are you doin
+
+/datum/reagent/aminoblatella
+	name = "Aminoblatella"
+	id = AMINOBLATELLA
+	description = "Developed in the darkest halls of maintenance by the Elder Greytide council, it is said to be able to create untold gunk. Potential reaction detected if mixed with equal parts nutriment or ten parts mutagen."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#634848" //rgb: 99, 72, 72
+	density = 15.49 //our ingredients are pretty dense
+	specheatcap = 208.4
 	custom_metabolism = 0.01 //oh shit what are you doin
 
 /datum/reagent/luminol

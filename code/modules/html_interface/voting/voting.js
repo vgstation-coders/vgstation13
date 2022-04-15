@@ -35,7 +35,7 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, v
 	allow_mode = parseInt(vmode) || 0;
 	allow_restart = parseInt(vrestart) || 0;
 	toggle_map = parseInt(vmap) || 0;
-	toggle_vote_method = parseInt(vmethod) || 0;
+	toggle_vote_method = parseInt(vmethod) || 1;
 	time_left = parseInt(newTimeleft) || 0;
 	$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemLabel'></div>").html("Time Left")).append($("<div class='itemContent'></div>").html(displayBar(time_left, 0, 60, (time_left >= 50) ? 'good' : (time_left >= 25) ? 'average' : 'bad', '<center>' + time_left + '</center>'))));
 	$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemLabel'></div>").html("<br />Question")).append($("<div class='itemContentMedium'></div>").append($("<div class='statusDisplay'></div>").text(question))));

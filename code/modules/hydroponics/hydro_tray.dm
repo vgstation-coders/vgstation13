@@ -35,7 +35,7 @@
 	var/is_somatoraying = 0    // Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
 
 	// Mechanical concerns.
-	var/health = 0             // Plant health.
+	var/plant_health = 0       // Plant health.
 	var/lastproduce = 0        // Last time tray was harvested.
 	var/lastcycle = 0          // Cycle timing/tracking var.
 	var/cycledelay = 150       // Delay per cycle.
@@ -193,7 +193,7 @@
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
-	health = seed.endurance
+	plant_health = seed.endurance
 	lastcycle = world.time
 	weedlevel = 0
 	update_icon()
@@ -239,7 +239,7 @@
 				nutrilevel = 1
 
 			//Snowflakey, maybe move this to the seed datum
-			health = seed.endurance
+			plant_health = seed.endurance
 
 			lastcycle = world.time
 
@@ -254,7 +254,7 @@
 	else if(O.force && seed && user.a_intent == I_HURT)
 		visible_message("<span class='danger'>\The [seed.display_name] has been attacked by [user] with \the [O]!</span>")
 		if(!dead)
-			health -= O.force
+			plant_health -= O.force
 			check_health()
 		user.delayNextAttack(5)
 
@@ -327,7 +327,7 @@
 		// Create a sample.
 		seed.spawn_seed_packet(get_turf(user))
 		to_chat(user, "You take a sample from the [seed.display_name].")
-		health -= (rand(3,5)*10)
+		plant_health -= (rand(3,5)*10)
 
 		if(prob(30))
 			sampled = 1
@@ -404,7 +404,7 @@
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
-		
+
 	else
 		return ..()
 
@@ -451,7 +451,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/view_contents(mob/user)
 	if(src.seed && !src.dead)
 		to_chat(user, "<span class='info'>[src.seed.display_name]</span> is growing here.")
-		if(src.health <= (src.seed.endurance / 2))
+		if(src.plant_health <= (src.seed.endurance / 2))
 			to_chat(user, "The plant looks <span class='alert'>[age > seed.lifespan ? "old and wilting" : "unhealthy"].</span>")
 	else if(src.seed && src.dead)
 		to_chat(user, "[src] is full of dead plant matter.")
