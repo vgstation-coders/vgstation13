@@ -87,7 +87,4 @@
 	..()
 	if(imp_in)
 		remove()
-	if(reagents)
-		qdel(reagents)
-		reagents = null
 
