@@ -2915,6 +2915,136 @@
 	if(T.seed && !T.dead)
 		T.health += 50
 
+//Just for fun
+var/list/procizine_calls = list()
+var/list/procizine_args = list()
+var/procizine_name = ""
+var/procizine_overdose = 0
+var/procizine_metabolism = 0
+var/procizine_color = "#C8A5DC"
+var/procizine_addictive = FALSE
+var/procizine_tolerance = 0
+
+/client/proc/set_procizine_call()
+	set name = "Set Procizine Call"
+	set category = "Fun"
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/ourproc = input("Proc path to call on target reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
+	if(!ourproc)
+		return
+
+	procizine_calls["life"] = ourproc
+
+	var/argnum = input("Number of arguments","Number:",0) as num|null
+
+	var/list/ourargs = list()
+	ourargs.len = !argnum && (argnum!=0) ? 0 : argnum // Expand to right length
+
+	var/i
+	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+		ourargs[i] = variable_set(src)
+
+	procizine_args["life"] = ourargs.Copy()
+
+	var/static/list/other_call_types = list("plant","mob","object","turf","mob dropper","object dropper","removal","overdose","withdrawal")
+	var/goahead = alert("Do you wish to customise this further? (The previous input will only be used for mob life)", "Advanced procizine calls", "Yes", "No") == "Yes"
+	for(var/calltype in other_call_types)
+		if(goahead)
+			ourproc = input("Proc path to call on [calltype] reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
+
+			argnum = input("Number of arguments","Number:",0) as num|null
+			ourargs.len = !argnum && (argnum!=0) ? 0 : argnum // Expand to right length
+
+			for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+				ourargs[i] = variable_set(src)
+
+		procizine_calls[calltype] = ourproc
+		procizine_args[calltype] = ourargs.Copy()
+
+/client/proc/set_procizine_properties()
+	set name = "Set Procizine Properties"
+	set category = "Fun"
+	if(!check_rights(R_DEBUG))
+		return
+
+	procizine_name = input(src, "Reagent name","Procizine attributes", procizine_name) as text|null
+	procizine_overdose = input(src, "Overdose threshold","Procizine attributes", procizine_overdose) as num|null
+	procizine_metabolism = input(src, "Custom metabolism","Procizine attributes", procizine_metabolism) as num|null
+	procizine_addictive = alert(src, "Is addictive?","Procizine attributes", "Yes", "No") == "Yes"
+	procizine_tolerance = input(src, "Tolerance increase per metabolisation","Procizine attributes", procizine_metabolism) as num|null
+	procizine_color = input(src, "Reagent color", "Procizine attributes") as color|null
+
+/datum/reagent/procizine
+	name = "Procizine"
+	id = PROCIZINE
+	description = "It is a mystery!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
+	var/list/procnames
+	var/list/procargs
+
+/datum/reagent/procizine/New()
+	..()
+	procnames = procizine_calls.Copy()
+	procargs = procizine_args.Copy()
+	name = procizine_name && procizine_name != "" ? procizine_name : initial(name)
+	overdose_am = procizine_overdose
+	custom_metabolism = procizine_metabolism || REAGENTS_METABOLISM
+	color = procizine_color || initial(color)
+	addictive = procizine_addictive
+	tolerance_increase = procizine_tolerance
+
+/datum/reagent/procizine/proc/call_proc(var/atom/A, var/call_type)
+	if(procnames[call_type] && hascall(A, procnames[call_type]))
+		call(A,procnames[call_type])(arglist(procargs[call_type]))
+
+/datum/reagent/procizine/on_mob_life(var/mob/living/carbon/M)
+	if(..())
+		return 1
+	call_proc(M,"life")
+
+/datum/reagent/procizine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	call_proc(T,"plant")
+
+/datum/reagent/procizine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+	call_proc(M,"mob")
+
+/datum/reagent/procizine/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	call_proc(T,"turf")
+
+/datum/reagent/procizine/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+	call_proc(O,"object")
+
+/datum/reagent/procizine/reaction_dropper_mob(var/mob/living/M)
+	. = ..()
+	call_proc(M,"mob dropper")
+
+/datum/reagent/procizine/reaction_dropper_obj(var/obj/O)
+	. = ..()
+	call_proc(O,"object dropper")
+
+/datum/reagent/procizine/reagent_deleted()
+	call_proc(holder.my_atom,"removal")
+
+/datum/reagent/procizine/on_overdose(mob/living/M)
+	call_proc(holder.my_atom,"overdose")
+
+/datum/reagent/procizine/on_withdrawal(mob/living/M)
+	if(..())
+		return 1
+	call_proc(holder.my_atom,"withdrawal")
+
 /datum/reagent/synaptizine
 	name = "Synaptizine"
 	id = SYNAPTIZINE
