@@ -82,7 +82,8 @@
 		malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
 /obj/item/weapon/implant/Destroy()
-	remove()
+	if(imp_in)
+		remove()
 	if(reagents)
 		qdel(reagents)
 		reagents = null
