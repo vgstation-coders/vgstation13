@@ -17,7 +17,7 @@
 	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
 	ghost_read = 0
-	machine_flags = EMAGGABLE
+	machine_flags = EMAGGABLE|WIREJACK
 	soundeffect = 'sound/machines/windowdoor.ogg'
 	var/shard_type = /obj/item/weapon/shard
 	penetration_dampening = 2
@@ -284,7 +284,7 @@
 		return
 
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
-	if(density && istype(I, /obj/item) && !istype(I, /obj/item/weapon/card))
+	if(density && istype(I, /obj/item) && !istype(I, /obj/item/weapon/card) && !istype(I, /obj/item/device/paicard))
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
@@ -368,6 +368,13 @@
 		electronics.installed = FALSE
 		electronics.forceMove(loc)
 		electronics = null
+
+/obj/machinery/door/window/wirejack(var/mob/living/silicon/pai/P)
+	if(..())
+		if (!density)
+			return close()
+		else
+			return open()
 
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)
