@@ -225,6 +225,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
+	if(species && species.anatomy_flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
+		return 0
+
 	amt = max(0, amt * calcbloodloss()) //determines how much blood to lose based on human's situation
 	
 	if(!amt)
