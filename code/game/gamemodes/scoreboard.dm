@@ -57,7 +57,7 @@
 			continue
 		var/icon/flat = getFlatIcon(robo)
 		if (!robo.connected_ai)
-			if (robo.stat != 2)
+			if (robo.stat != DEAD)
 				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
 			else
 				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
