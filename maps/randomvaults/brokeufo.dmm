@@ -25,7 +25,7 @@
 "aO" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
 "aP" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/door/airlock/vault{id_tag = "ufocell"; locked = 1; name = "Containment Cell"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
 "aR" = (/obj/structure/rack,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/device/flashlight/flare/ever_bright,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aT" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/ranged{name = "Zorb"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
+"aT" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/ranged{name = "Gort"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
 "aU" = (/obj/machinery/door/unpowered/shuttle{name = "Research Bay"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
 "aW" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibleg"},/obj/item/device/flashlight/flare/ever_bright,/obj/item/organ/external/l_arm,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
 "aX" = (/obj/machinery/door/unpowered/shuttle{name = "Engine Room"},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
