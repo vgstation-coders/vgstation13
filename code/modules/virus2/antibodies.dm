@@ -13,6 +13,7 @@ var/list/all_antigens = list(
 	ANTIGEN_X,
 	ANTIGEN_Y,
 	ANTIGEN_Z,
+	ANTIGEN_CULT,
 )
 var/list/blood_antigens = list(
 	ANTIGEN_O,
@@ -35,6 +36,9 @@ var/list/alien_antigens = list(
 	ANTIGEN_Y,
 	ANTIGEN_Z,
 )
+var/list/special_antigens = list(
+	ANTIGEN_CULT,
+)
 
 /proc/antigen_family(var/id)
 	switch(id)
@@ -46,3 +50,5 @@ var/list/alien_antigens = list(
 			return rare_antigens
 		if (ANTIGEN_ALIEN)
 			return alien_antigens
+		if(ANTIGEN_SPECIAL)
+			return special_antigens

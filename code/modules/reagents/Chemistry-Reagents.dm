@@ -1172,6 +1172,12 @@
 	specheatcap = 4.183
 	alpha = 128
 
+/datum/reagent/holywater/on_mob_life(mob/living/M)
+	if(..())
+		return 1
+	M.immune_system.ApplyAntipathogenics(100, list(ANTIGEN_CULT), 2)
+	
+
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 
 	if(..())

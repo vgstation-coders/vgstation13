@@ -35,6 +35,7 @@
 
 	var/heat_protection = 0.5
 	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
+	var/list/xeno_cult_items = list(/obj/item/weapon/melee/blood_dagger)
 
 /mob/living/carbon/alien/New()
 	add_language(LANGUAGE_XENO)

@@ -165,6 +165,7 @@
 #define TATTOO_CHAT		"Dark Communication"
 #define TATTOO_MANIFEST	"Pale Body"
 #define TATTOO_MEMORIZE	"Arcane Dimension"
+#define TATTOO_RUNESTORE "Runic Skin"
 #define TATTOO_SHORTCUT	"Shortcut Tracer"
 
 #define	TOME_CLOSED	1

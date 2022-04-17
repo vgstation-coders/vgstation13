@@ -70,6 +70,9 @@
 				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 				return
 
+
+
+
 			var/datum/soul_capture/capture_datum = new()
 			capture_datum.init_datum(user, M, src)
 			qdel(capture_datum)
@@ -644,6 +647,9 @@
 
 	new_construct.real_name = soul.real_name
 	new_construct.name = "[new_construct.real_name] the [construct_class]"
+
+	if(iscultist(user))
+		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/build_construct, extrainfo = list("perfect" = perfect))
 
 	for(var/atom/A in stone)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 		qdel(A)

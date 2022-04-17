@@ -167,7 +167,7 @@
 	on = 1
 
 /obj/item/device/flashlight/lamp/cultify()
-	new /obj/structure/cult_legacy/pylon(loc)
+	new /obj/structure/cult/pylon(loc)
 	qdel(src)
 
 // green-shaded desk lamp
