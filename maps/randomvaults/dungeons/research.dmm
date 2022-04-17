@@ -48,6 +48,7 @@
 "dB" = (/obj/structure/table,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/research)
 "dC" = (/obj/machinery/bot/bloodbot{emagged = 1; name = "Doctor Ayycula"; on = 1},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
 "dE" = (/obj/machinery/turret/mothership_lab/mkII{dir = 8},/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/samplestorage)
+"dH" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/turret_protected/vault/mothership_lab/research)
 "dI" = (/obj/structure/weightlifter,/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/machinery/light/he{dir = 1},/turf/simulated/floor{icon_state = "darkredfull"; tag = "icon-darkredfull"},/area/turret_protected/vault/mothership_lab/research)
 "dJ" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/turret_protected/vault/mothership_lab/research)
 "dL" = (/obj/machinery/camera{id_tag = "labcameras"; name = "Researcher Dormitory West"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor{dir = 1; icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/research)
@@ -282,7 +283,7 @@
 "wK" = (/obj/structure/table/reinforced,/obj/machinery/light/he{dir = 4},/obj/item/weapon/storage/toolbox/electrical,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/device/robotanalyzer,/obj/item/weapon/cell/hyper,/obj/item/weapon/cell/hyper,/obj/item/weapon/cell/hyper,/obj/item/clothing/glasses/welding,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
 "wN" = (/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/research)
 "wP" = (/turf/simulated/floor{icon_state = "white"},/area/turret_protected/vault/mothership_lab/samplestorage)
-"wW" = (/obj/structure/closet/secure_closet{anchored = 1; name = "Researcher's Locker"; req_access_txt = "163"; req_one_access_txt = "163"},/obj/item/clothing/under/grey/grey_researcher,/turf/simulated/floor{icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/research)
+"wW" = (/obj/structure/closet/secure_closet{anchored = 1; name = "Researcher's Locker"; req_access_txt = "163"; req_one_access_txt = "163"},/obj/item/clothing/under/grey/grey_researcher,/obj/machinery/light/he,/turf/simulated/floor{icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/research)
 "xh" = (/obj/machinery/door/poddoor{density = 0; icon_state = "pdoor0"; id_tag = "labcheckpoint3"; name = "Checkpoint Blast Doors"; opacity = 0},/obj/machinery/door/airlock/silver{name = "Lab Entrance"; req_access_txt = "160"; req_one_access_txt = "160"},/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/research)
 "xv" = (/obj/structure/bed/chair/shuttle/gamer{dir = 4},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
 "xG" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/maintenance)
@@ -519,6 +520,7 @@
 "UF" = (/obj/machinery/light/he/broken{dir = 4},/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/research)
 "UI" = (/obj/machinery/light/he/broken,/obj/structure/door_assembly/door_assembly_vault,/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/research)
 "UJ" = (/mob/living/simple_animal/hostile/humanoid/grey/surgeon,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
+"Vb" = (/obj/structure/closet/secure_closet{anchored = 1; name = "Researcher's Locker"; req_access_txt = "163"; req_one_access_txt = "163"},/obj/machinery/light/he{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/research)
 "Vj" = (/obj/structure/rack,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 4},/obj/item/weapon/tank/oxygen/red,/obj/item/clothing/shoes/magboots,/obj/item/clothing/suit/space/rig/grey/soldier,/obj/item/clothing/mask/gas,/obj/machinery/door/window/plasma/secure{dir = 2; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/engine,/area/turret_protected/vault/mothership_lab/armory)
 "Vr" = (/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/samplestorage)
 "VG" = (/obj/structure/table/reinforced,/obj/item/weapon/soap,/obj/item/weapon/reagent_containers/spray/cleaner,/obj/machinery/light/small/broken{dir = 8},/turf/simulated/floor{icon_state = "showroomfloor"},/area/turret_protected/vault/mothership_lab/research)
@@ -596,7 +598,7 @@ eWrVrVYQkVpxiSDnPXJSkVhWhWhWWuPgIikVhyuxTnRhysZYMCyryryryrveyryryryrDHtyopyropDK
 eWrVYQRhkVkVkVkVkVkVkVkVkVkVkVkVkVkVicuxsuRhEUuxMCyryryrwNAtPttytytyDKRhhYSdhYRhRhHoRoyQRoDwBuCvRorfuxetRhYQrVrVrVrVrVrVrVrVrV
 rVrVYQRholFzfUOOZzVQRhSpOEmpkFdkpgWVuxuxEBRhweZYMCyrDHrTLRRhxvLbIELbJTRhuxcbuxRhRhRhRhRhRhRhRhRhRhRhpMRhRhYQrVrVrVrVrVrVrVrVrV
 rVrVYQRhicuxuxuxuxuxreictdnzAXhqfzRhdluxyBRhBJpGUiyrzrLkpARhRhRhRhRhRhRhRhRhRhRhsrGaaTRhYQYQYQYQRhRaGazyRhRhYQrVrVrVrVrVrVrVrV
-rVrVYQRhWBxTOAIzuxemRhRhPffIPfRhRhRhRhYHRhRhRhpkhHyrlcuxduRhSGEYGWEYHrEYTLTpRhRaGaGaRhRhYQrVrVYQRhaiGaGadnRhYQrVrVrVrVrVrVrVrV
+rVrVYQRhWBxTOAIzuxemRhRhPffIPfRhRhRhRhYHRhRhRhpkhHyrlcuxduRhSGEYGWEYHrEYTLTpRhRaGadHRhRhYQrVrVYQRhaiGaGadnRhYQrVrVrVrVrVrVrVrV
 rVrVYQRhRhRhRhicuxuORhJzCZcvcvVZRhcvcvoHcvRyRhhUyryrlcOiWxRhhUyryryryryryryrHdGaGaWWRhYQrVrVrVYQRhRhRhRhRhRhYQrVrVrVrVrVrVrVrV
 rVYQRhRhKILzRhuxuxTYRhoHhkhkoHoHxhoHoHoHcvRhRhyryryrlcuxwKRharuqjouqRhRhqsRhRhRhRhRhRhYQrVrVrVrVYQYQYQYQYQYQrVrVrVrVrVrVrVrVrV
 rVYQRhebGaGapMuxQasSRhQDSsCydVRrRhcvoHcvcvRyRhyrLpggzemlgoRhRhRhRhRhRhONyrTfvVVPkRfCRhYQrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrV
@@ -606,7 +608,7 @@ rVrVYQGAmgDeezwPVrnCGAGAyiZVqbcvRhcvoHoHoHoHRxAsoHbjyryryryryryryryryryryrIsvVfp
 rVrVYQGATEDeezwPVrnCdEGAcvCyQfCyRhcvcvcvcvCyhVcvcvRhYrzutytyQyIrbpbKyryryrwNvVWMfpaRRhYQrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVeW
 rVrVYQGAGAGAoVDgoVGAGAGARhrYiFrYRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhbFmYRSyrhhvVEAfpBaRhYQYQYQYQYQYQYQrVrVrVrVrVrVrVrVrVrVrVrVeW
 rVrVrVYQYQGAYAwPvKGAzcpBRhXmhJkwrYJzcvVZRhZaoMRhMOOOOIOOqcOOatVQRhRhRhRhqsRhRhRhRhxGxGxGxGxGxGxGdtxGYQrVrVrVrVrVrVrVrVrVrVeWeW
-rVrVrVYQYQGAwzjtLCGAEyjzRhkwppkwiFoHMfcvTmPhBIRhicsauxuxuxuxuxuxpMnQgERhyrKPEYGWTpxGvtxGvtxGLcnyLMxGYQYQYQrVrVrVrVrVrVrVrVeWeW
+rVrVrVYQYQGAwzjtLCGAEyjzRhkwppkwiFoHMfcvTmPhBIRhicsauxuxuxuxuxuxpMnQgERhyrKPEYVbTpxGvtxGvtxGLcnyLMxGYQYQYQrVrVrVrVrVrVrVrVeWeW
 rVrVYQRhRhGAoViXoVGAzTPQRhkwkwaNrYyioHJODSuKCLRhvUuxuxuxuxaEMhSTRhWsGaRhyryryryrwNxGrExGrExGKyxIeCxGxGxGxGYQrVrVrVrVrVrVrVeWeW
 rVrVYQRhvyzAuYyrNhElhHBzPORhRhRhRhBOQfcvTmPzaCRhAkuxuxFcuxuxhXRhRhVGGaRhyryryryrwNxGRexIxIxGxGvjxGxGHsqdxGYQrVrVrVrVrVrVrVeWeW
 rVrVYQRhnuMThUyXyryrMyyrsFyXyrmZRhQDoHRrRhQajhRhOCuxCvSZWIyDZPRhXBGaGaRhyrwWuqLBQtxGmqNvNvxIxIxIPUxGxIqdxGYQrVrVrVrVrVrVrVeWeW
