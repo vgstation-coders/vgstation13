@@ -333,6 +333,8 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
 	/mob/living/simple_animal/hostile/ginger/gingerbroodmother,		// Gingerbominations...
 	/mob/living/simple_animal/hostile/old_vendotron,				// Why is a normal, harmless, vending machine on this list?
+	/mob/living/simple_animal/hostile/humanoid/greynurse,           // Turn your head and cough
+	/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader  // Very mean chikun man
 	)
 
 // Set by traitor item, affects cargo supplies
