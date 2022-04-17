@@ -123,7 +123,6 @@
 		var/datum/bloodcult_ritual/R = input(usr,"Select a ritual to unlock.", "Unlock", null) as null|anything in locked_rituals
 		if(R)
 			R.Unlock(TRUE)
-			locked_rituals -= R
 			
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)

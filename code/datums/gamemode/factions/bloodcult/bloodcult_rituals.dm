@@ -66,7 +66,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 /datum/faction/bloodcult/proc/UnlockRandomRitual(var/announce)
 	if(locked_rituals.len > 0)
-		var/datum/bloodcult_ritual/R = pick_n_take(locked_rituals)
+		var/datum/bloodcult_ritual/R = pick(locked_rituals)
 		R.Unlock(announce)
 		return R
 	else 
@@ -116,6 +116,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 /datum/bloodcult_ritual/always_active/Unlock()
 	unlocked_rituals += src
+	locked_rituals -= src
 
 /datum/bloodcult_ritual/proc/Finish(var/worth)
 	if(!jectie.complete)
@@ -134,6 +135,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 /datum/bloodcult_ritual/proc/Unlock(var/announce)
 	unlocked_rituals += src
+	locked_rituals -= src
 	jectie = new(src)
 	if(announce)
 		for(var/datum/role/cultist/C in cult.members)
