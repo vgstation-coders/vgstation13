@@ -145,28 +145,6 @@
 	..()
 
 
-/datum/faction/bloodcult/proc/GetDepartmentName(var/area/D)
-	switch(D.type)
-		if(/area/science)
-			return "Science"
-		if(/area/security)
-			return "Security"
-		if(/area/supply)
-			return "Cargo"
-		if(/area/medical)
-			return "Medical"
-		if(/area/engineering)
-			return "Engineering"
-		else
-			return D.name
-
-/datum/faction/bloodcult/proc/IsValidDepartment(var/area/D)
-	var/list/valid_areas = list(/area/security, /area/science, /area/supply, /area/engineering, /area/medical)
-	if(is_type_in_list(D, valid_areas))
-		return TRUE
-	return FALSE
-
-
 /datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
 	if (!istype(T))
 		return
