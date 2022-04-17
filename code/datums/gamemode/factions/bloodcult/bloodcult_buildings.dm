@@ -405,7 +405,7 @@
 		L.unlock_from()
 
 		if (ishuman(L) && L != user)
-			L.resting = 1
+			L.resting = TRUE
 			L.update_canmove()
 
 		add_fingerprint(L)
