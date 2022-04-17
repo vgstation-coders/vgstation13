@@ -127,6 +127,13 @@ var/auxtools_path
 
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
+	// Baid-aid fix for people who can't connect
+	spawn()
+		while (TRUE)
+			sleep(5 MINUTES)
+			OpenPort("none")
+			OpenPort(7777)
+
 	return ..()
 
 /world/Topic(T, addr, master, key)
