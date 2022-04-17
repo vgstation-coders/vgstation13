@@ -130,10 +130,10 @@ var/auxtools_path
 	// Baid-aid fix for people who can't connect
 	spawn()
 		while (TRUE)
-			sleep(5 MINUTES)
+			sleep(300)
 			OpenPort("none")
 			OpenPort(7777)
-
+			
 	return ..()
 
 /world/Topic(T, addr, master, key)
