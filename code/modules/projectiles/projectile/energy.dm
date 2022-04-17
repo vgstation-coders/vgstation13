@@ -274,3 +274,11 @@
 			P.OnFired(T)
 			P.process()
 	..()
+
+/obj/item/projectile/energy/scorchbolt
+	name = "scorch bolt"
+	icon_state = "scorchbolt"
+	nodamage = 0
+	damage = 15
+	damage_type = BURN
+	fire_sound = 'sound/weapons/alien_laser1.ogg'

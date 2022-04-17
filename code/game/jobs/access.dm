@@ -86,6 +86,13 @@
 	//The Syndicate
 /var/const/access_syndicate = 150//General Syndicate Access
 
+	//The Mothership (ayy lmao)
+/var/const/access_mothership_general = 160//General Mothership Access
+/var/const/access_mothership_maintenance = 161//Laborer Access
+/var/const/access_mothership_military = 162//Military Access
+/var/const/access_mothership_research = 163//Research Access
+/var/const/access_mothership_leader = 164//Administrator Access
+
 	//Vox are Pox
 /var/const/access_trade = 140//Vox Trader Access
 

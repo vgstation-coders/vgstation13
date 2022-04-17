@@ -142,10 +142,6 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/hivebot_crash.dmm"
 	can_rotate = TRUE
 
-/datum/map_element/vault/brokeufo
-	file_path = "maps/randomvaults/brokeufo.dmm"
-	can_rotate = TRUE
-
 /datum/map_element/vault/prison
 	file_path = "maps/randomvaults/prison_ship.dmm"
 
@@ -237,3 +233,9 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/mini_station
 	file_path = "maps/randomvaults/mini_station.dmm"
+
+/datum/map_element/dungeon/habitation
+	file_path = "maps/randomvaults/dungeons/habitation.dmm"
+
+/datum/map_element/dungeon/research
+	file_path = "maps/randomvaults/dungeons/research.dmm"

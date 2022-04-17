@@ -580,6 +580,74 @@
 	can_evolve = 0
 	unique_name = 1
 
+///////////////// Grey Soldier Zombie ////////////////////
+/mob/living/simple_animal/hostile/necro/zombie/greysoldier
+	name = "decaying soldier"
+	desc = "A zombified grey soldier, wearing a tattered armor vest. It carries itself rather steadily for a zombie."
+	icon_state = "decaying_soldier"
+	icon_living = "decaying_soldier"
+	icon_dead = "decaying_soldier"
+	move_to_delay = 3 // Quite a bit faster than a normal zombie, though still easy to outrun
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey // Slighty rotten AND acidic. Nice.
+
+/mob/living/simple_animal/hostile/necro/zombie/greylaborer
+	name = "mauled laborer"
+	desc = "A zombified grey laborer, wearing the torn remains of its overalls. It shambles quite rapidly."
+	icon_state = "mauled_laborer"
+	icon_living = "mauled_laborer"
+	icon_dead = "mauled_laborer"
+	move_to_delay = 4 // A bit faster than a regular zombie
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey // Slighty rotten AND acidic. Nice.
+
+	maxHealth = 80 // Slightly less health
+	health = 80
+
+///////////////// Vox Raider Zombies ////////////////////
+
+/mob/living/simple_animal/hostile/necro/zombie/raider1
+	name = "tainted raider"
+	desc = "A zombified vox raider, still clad in the remains of armored hardsuit plates. Its remaining eye gleams with a new kind of hunger."
+	icon_state = "rotting_raider1"
+	icon_living = "rotting_raider1"
+	icon_dead = "rotting_raider1"
+	move_to_delay = 4 // A bit faster due to recently turning
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox // Would you eat zombie chicken?
+
+	health = 125 // A little tankier due to wearing remains of armor
+	maxHealth = 125
+
+	melee_damage_lower = 15
+	melee_damage_upper = 25
+
+	attacktext = "claws"
+	attack_sound = 'sound/weapons/slice.ogg'
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+
+/mob/living/simple_animal/hostile/necro/zombie/raider2
+	name = "rotting raider"
+	desc = "A zombified vox raider, still clad in the remains of armored hardsuit plates. Its remaining eye gleams with a new kind of hunger."
+	icon_state = "rotting_raider2"
+	icon_living = "rotting_raider2"
+	icon_dead = "rotting_raider2"
+	move_to_delay = 4
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
+
+	health = 125
+	maxHealth = 125
+
+	melee_damage_lower = 15
+	melee_damage_upper = 25
+
+	attacktext = "claws"
+	attack_sound = 'sound/weapons/slice.ogg'
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+
+///////////////// GHOULS ////////////////////
+
 /mob/living/simple_animal/hostile/necro/zombie/ghoul
 	name = "ghoul"
 	icon_state = "ghoul"

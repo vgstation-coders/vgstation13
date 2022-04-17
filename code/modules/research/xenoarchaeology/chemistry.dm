@@ -163,3 +163,11 @@
 	..()
 	reagents.add_reagent(FUEL,50)
 	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/beaker/acid
+	name = "beaker 'sulphuric acid'"
+
+/obj/item/weapon/reagent_containers/glass/beaker/acid/New()
+	..()
+	reagents.add_reagent(SACID,50)
+	update_icon()

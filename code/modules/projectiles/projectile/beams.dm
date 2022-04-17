@@ -499,6 +499,7 @@ var/list/beam_master = list()
 					return 0
 				if(isgrey(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -514,6 +515,7 @@ var/list/beam_master = list()
 
 				if(isvox(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -529,6 +531,7 @@ var/list/beam_master = list()
 
 				if(isinsectoid(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -544,6 +547,7 @@ var/list/beam_master = list()
 
 				if(ishuman(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -576,6 +580,7 @@ var/list/beam_master = list()
 					return 0
 				if(isgrey(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -591,6 +596,7 @@ var/list/beam_master = list()
 
 				if(isvox(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -606,6 +612,7 @@ var/list/beam_master = list()
 
 				if(isinsectoid(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -621,6 +628,7 @@ var/list/beam_master = list()
 
 				if(ishuman(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -635,6 +643,9 @@ var/list/beam_master = list()
 					qdel(H)
 		else
 			return 1
+
+/obj/item/projectile/beam/immolationray/upgraded // Exclusively used by the hoverdisc drone
+	damage = 60
 
 /obj/item/projectile/beam/lightlaser
 	name = "light laser"

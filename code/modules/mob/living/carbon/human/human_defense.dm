@@ -24,6 +24,19 @@ emp_act
 
 				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
+	if(wear_suit && istype(wear_suit, /obj/item/clothing/suit/space/rig/grey/leader))
+		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+			var/reflectchance = 50 - round(P.damage/3)
+			if(prob(reflectchance))
+				visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s [wear_suit.name]!</span>")
+
+				if(!istype(P, /obj/item/projectile/beam)) //beam has its own rebound-call-logic
+					P.reflected = 1
+					P.rebound(src)
+
+				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
+
+
 	if(check_shields(P.damage, P))
 		P.on_hit(src, 100)
 		return PROJECTILE_COLLISION_BLOCKED
