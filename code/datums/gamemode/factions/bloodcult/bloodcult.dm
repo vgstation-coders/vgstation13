@@ -58,7 +58,6 @@
 /datum/faction/bloodcult/GetScoreboard()
 	. = ..()
 	. += "<BR>Total Veil Weakness:[veil_weakness]<BR>"
-	return .
 
 
 /datum/faction/bloodcult/process()
