@@ -412,7 +412,7 @@
 
 	O.forceMove(loc)
 	if(O == user)
-		to_chat(user, "<span class='warning'>You climb on top of \the [src]</span>")
+		to_chat(user, "<span class='warning'>You climb on top of \the [src].</span>")
 		user.resting = 1
 	else
 		to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
