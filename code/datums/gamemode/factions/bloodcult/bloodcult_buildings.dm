@@ -529,7 +529,7 @@
 				unlock_atom(get_locked(lock_type)[1])
 				blade.forceMove(loc)
 				blade.attack_hand(user)
-				to_chat(user, "You remove \the [blade] from \the [src]</span>")
+				to_chat(user, "<span class='notice'>You remove \the [blade] from \the [src]</span>")
 				blade = null
 				playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 				update_icon()
