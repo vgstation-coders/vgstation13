@@ -1,22 +1,11 @@
 /mob/living/New()
-	. = ..()
-	generate_static_overlay()
-	if(istype(static_overlays,/list) && static_overlays.len)
-		for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
-			if(MoMMI.can_see_static())
-				if(MoMMI.static_choice in static_overlays)
-					MoMMI.static_overlays.Add(static_overlays[MoMMI.static_choice])
-					MoMMI.client.images.Add(static_overlays[MoMMI.static_choice])
-				else
-					MoMMI.static_overlays.Add(static_overlays["static"])
-					MoMMI.client.images.Add(static_overlays["static"])
-
+	..()
 	if(!species_type)
 		species_type = src.type
 	if(can_butcher && !meat_amount)
 		meat_amount = size
 
-	immune_system = new (src)
+	immune_system = new(src)
 
 /mob/living/create_reagents(const/max_vol)
 	..(max_vol)
