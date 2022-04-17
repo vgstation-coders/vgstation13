@@ -47,7 +47,7 @@
 	if(invis)
 		animation.invisibility = invis
 	animation.icon = a_icon
-	animation.animate_movement = TRUE
+	animation.animate_movement = animate_movement
 	animation.mouse_opacity = 0
 	if(!lay)
 		animation.layer = target:layer+1
