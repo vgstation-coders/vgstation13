@@ -88,7 +88,7 @@
 /obj/machinery/sleeper/interact(var/mob/user)
 	var/dat = list()
 	if(on)
-		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
+		dat += "<B>Performing anaesthesic emergence...</B><BR>" //Best I could come up with
 		dat += "<B>Purging sleep-inducing chemicals...</B>" //Same
 		dat += "<HR><A href='?src=\ref[src];toggle_autoeject=1'>Auto-eject occupant: [auto_eject_after ? "Yes" : "No"]</A><BR>"
 	else
@@ -407,10 +407,8 @@
 		if(!src || !on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
 			return
 		if(occupant)
-			occupant.reagents.del_reagent(CHLORALHYDRATE)
-			occupant.reagents.del_reagent(STOXIN)
-			occupant.reagents.del_reagent(STOXIN2)
-			occupant.reagents.del_reagent(VALERENIC_ACID)
+			if(occupant.reagents.has_any_reagents(list(STOXIN, STOXIN2, VALERENIC_ACID, CHLORALHYDRATE)))
+				occupant.reagents.remove_reagents(list(STOXIN, STOXIN2, VALERENIC_ACID, CHLORALHYDRATE),1000)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
 			occupant.resting = 0
