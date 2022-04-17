@@ -8,7 +8,7 @@
 	icon_state = "sleeper_0"
 	density = TRUE
 	anchored = TRUE
-	sleeptime = 6 SECONDS
+	var/sleeptime = 6 SECONDS
 	var/base_icon = "sleeper"
 	var/mob/living/occupant = null
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
