@@ -363,6 +363,9 @@ var/list/rune_appearances_cache = list()
 		if (C.occult_muted())
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
+		if(C.lying)
+			to_chat(user, "<span class='warning'>You need to stand upright for the ritual to proceed properly.</span>")
+			return
 
 	if(!user.checkTattoo(TATTOO_SILENT))
 		if(user.is_wearing_item(/obj/item/clothing/mask/muzzle, slot_wear_mask))
