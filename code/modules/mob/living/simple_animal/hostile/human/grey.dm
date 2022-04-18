@@ -721,7 +721,7 @@
 		if(!victims.len)
 			return
 		switch(rand(0,4))
-			if(1) //Brain damage, confusion, dizziness, and drowsiness
+			if(1) //Brain damage, confusion, and dizziness
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
 						continue
