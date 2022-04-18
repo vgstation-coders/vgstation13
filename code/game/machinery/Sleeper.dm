@@ -407,8 +407,7 @@
 		if(!src || !on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
 			return
 		if(occupant)
-			if(occupant.reagents.has_any_reagents(list(STOXIN, STOXIN2, VALERENIC_ACID, CHLORALHYDRATE)))
-				occupant.reagents.remove_reagents(list(STOXIN, STOXIN2, VALERENIC_ACID, CHLORALHYDRATE),1000)
+			occupant.reagents.remove_reagents(list(STOXIN, STOXIN2, VALERENIC_ACID, CHLORALHYDRATE),1000)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
 			occupant.resting = 0
