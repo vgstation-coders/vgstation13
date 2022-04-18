@@ -96,7 +96,7 @@
 
 	charge_cost = 50 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/beam/atomizationray"
-	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
 
 	var/charge_tick = 0

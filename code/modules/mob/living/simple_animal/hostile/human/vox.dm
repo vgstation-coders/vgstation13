@@ -137,6 +137,38 @@
 	else
 		..()
 
+///////////////////////////////////////////////////////////////////BREACHER RAIDER///////////
+//A bit slower, but a bit tankier. Has a shotgun to greatly discourage CQC
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher
+	name = "Vox Breacher"
+	desc = "A vox raider in a pressure suit. This one seems to be more heavily armored, and is equipped with a shotgun."
+	icon_state = "voxraider_breacher"
+
+	health = 180
+	maxHealth = 180
+
+	move_to_delay = 3 // Sacrifices speed for more health/armor
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Breach and clear
+
+	corpse = /obj/effect/landmark/corpse/vox/spaceraider
+
+	items_to_drop = list(/obj/item/weapon/gun/projectile/shotgun/pump/combat)
+
+	speak = list("Greys and humans are so squishy, keheh.","So much loot. I can retire soon.","Need to clean gun again.")
+	speak_chance = 1
+
+	projectiletype = /obj/item/projectile/bullet/buckshot
+	projectilesound = 'sound/weapons/shotgun.ogg'
+	retreat_distance = 3
+	minimum_distance = 3
+	ranged = 1
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher/Aggro()
+	..()
+	say(pick("Some rats going to die... here I come!","We see how brave you are after some buckshot.","Attack! Kill them!"), all_languages[LANGUAGE_VOX])
+
 ///////////////////////////////////////////////////////////////////DEADEYE RAIDER///////////
 //Aptly named. One shot is enough to send any spessman running home to medbay, or worse
 
