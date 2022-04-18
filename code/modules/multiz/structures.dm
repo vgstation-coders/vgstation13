@@ -167,7 +167,7 @@
 			if(L.pulling)
 				L.pulling.Move(target)
 
-/obj/structure/stairs/Cross(atom/movable/mover, turf/source, height = 1.5, air_group = 0)
+/obj/structure/stairs/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	return !istype(mover) || (bounds_dist(border_dummy, mover) >= 0)
 
 /obj/structure/stairs/attackby(obj/item/W, mob/user)
