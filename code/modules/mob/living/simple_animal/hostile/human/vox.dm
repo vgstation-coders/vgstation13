@@ -240,7 +240,7 @@
 		minimum_distance = 4
 
 	if((last_bigheal + bigheal_cooldown < world.time) && health < 75) // After he heals he has to wait quite a while before doing it again. Don't give him time to do it again
-		health+=200
+		health+=150
 		visible_message("<span class='warning'>[src] draws a giant syringe and injects himself with the contents. He shrieks, but his wounds rapidly begin to heal!</span>")
 		playsound(src, 'sound/misc/shriek1.ogg', 50, 1)
 		new /obj/item/weapon/reagent_containers/syringe/giant(src.loc)

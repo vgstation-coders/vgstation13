@@ -10,9 +10,9 @@
 	maxHealth = 150
 	health = 150
 
-	vision_range = 10
-	aggro_vision_range = 10
-	idle_vision_range = 10 // Can see a bit further due to being a "special" mob
+	vision_range = 12
+	aggro_vision_range = 12
+	idle_vision_range = 12 // Can see a bit further due to being a "special" mob
 
 	melee_damage_lower = 15
 	melee_damage_upper = 25
@@ -105,9 +105,9 @@
 	maxHealth = 300
 	health = 300
 
-	vision_range = 10
-	aggro_vision_range = 10
-	idle_vision_range = 10 // Can see a bit further due to being a "boss" mob
+	vision_range = 12
+	aggro_vision_range = 12
+	idle_vision_range = 12 // Can see a bit further due to being a "boss" mob
 
 	melee_damage_lower = 30
 	melee_damage_upper = 50 // No longer ranged, but very deadly in melee combat
