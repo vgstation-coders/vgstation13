@@ -42,20 +42,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/prefix = "Mobile MMI"
 	var/damage_control_network = "Damage Control"
 
-	var/static_choice = "static"
-	var/list/static_choices = list("static", "letter", "blank")
-
 	var/obj/abstract/screen/inv_tool = null
 	var/obj/item/tool_state = null
 	var/obj/item/head_state = null
 
 /mob/living/silicon/robot/mommi/getModules()
 	return mommi_modules //Default non-subtype mommis aren't supposed to spawn outside of bus anyways
-
-//REMOVE STATIC
-/mob/living/silicon/robot/mommi/Destroy()
-	remove_static_overlays()
-	..()
 
 /mob/living/silicon/robot/mommi/track_globally()
 	return //don't track
@@ -86,7 +78,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		return TRUE
 	if(..())
 		return TRUE
-	remove_static_overlays()
 	updateicon()
 
 	//If KEEPER is enabled, disable it.

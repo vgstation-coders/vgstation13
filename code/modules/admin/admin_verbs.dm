@@ -126,7 +126,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/gib_money, // /vg/
 	/client/proc/smissmas,
 	/client/proc/achievement,
-	/client/proc/mommi_static,
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
 	/client/proc/set_teleport_pref,
@@ -1042,23 +1041,6 @@ var/list/admin_verbs_mod = list(
 
 	var/datum/achievement = new /datum/achievement(award, winner.key, winner.name, name, desc)
 	ticker.achievements.Add(achievement)
-
-/client/proc/mommi_static()
-	set name = "Toggle MoMMI Static"
-	set desc = "Toggle whether MoMMIs can see mobs or if the mobs are cloaked in static"
-	set category = "Fun"
-
-	if(!holder || !config)
-		return
-
-	config.mommi_static = !config.mommi_static
-	log_admin("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
-	message_admins("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
-	for(var/mob/living/silicon/robot/mommi/M in player_list)
-		if(M.can_see_static())
-			M.add_static_overlays()
-		else
-			M.remove_static_overlays()
 
 /client/proc/shuttle_magic()
 	set name = "Shuttle Magic"

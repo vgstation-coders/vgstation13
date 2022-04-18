@@ -521,6 +521,3 @@
 		return BlendRGB("#000000", tone, gray/(tone_gray || 1))
 	else
 		return BlendRGB(tone, "#ffffff", (gray-tone_gray)/((255-tone_gray) || 1))
-
-/icon/Blend(...)
-	return ..()

@@ -14,11 +14,6 @@
 /mob/living/silicon/robot/identification_string()
 	return name
 
-/mob/living/silicon/robot/mommi/soviet/can_see_static() //Fuck the config i told you we were hardcore.
-	if(emagged || syndicate)
-		return FALSE
-	return TRUE
-
 /mob/living/silicon/robot/mommi/soviet/New()
 	pick_module(SOVIET_MOMMI)
 	..()
