@@ -291,22 +291,18 @@
 					capture_soul(user,new_target.client,target)
 		else if(humanTarget)
 			//aw shit, our target is a brain/headless human, let's try and locate the head.
-			if(!humanTarget.decapitated || (humanTarget.decapitated.loc == null))
+			var/obj/item/organ/external/head/target_head = humanTarget.decapitated?.get()
+			if(!target_head)
 				if (!blade)
 					to_chat(user, "<span class='warning'>\The [receptacle] isn't reacting, looks like their brain has been removed or head has been destroyed.</span>")
 				return
-			else if(istype(humanTarget.decapitated.loc,/mob/living/carbon/human))
-				if (!blade)
-					to_chat(user, "<span class='warning'>\The [receptacle] isn't reacting, looks like their head has been grafted on another body.</span>")
-				return
 			else
-				var/obj/item/organ/external/head/humanHead = humanTarget.decapitated
-				if((humanHead.z != humanTarget.z) || (get_dist(humanTarget,humanHead) > 5))//F I V E   T I L E S
+				if(target_head.z != humanTarget.z || get_dist(humanTarget, target_head) > 5)//F I V E   T I L E S
 					if (!blade)
 						to_chat(user, "<span class='warning'>\The [receptacle] isn't reacting, the head needs to be closer from the body.</span>")
 					return
 				else
-					init_head(receptacle, humanHead, user)
+					init_head(receptacle, target_head, user)
 					return
 
 	else
@@ -348,11 +344,11 @@
 			else
 				to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into \the [receptacle].</span>")
 				to_chat(user, "<span class='rose'>\The [receptacle] reacts to the corpse and starts glowing.</span>")
-				capture_soul(user,new_target.client,humanHead,humanHead.origin_body)
+				capture_soul(user,new_target.client,humanHead,humanHead.origin_body?.get())
 	else
 		to_chat(humanBrainMob, "<span class='danger'>You feel your soul getting sucked into \the [receptacle].</span>")
 		to_chat(user, "<span class='rose'>\The [receptacle] reacts to the corpse and starts glowing.</span>")
-		capture_soul(user,humanBrainMob.client,humanHead,humanHead.origin_body)
+		capture_soul(user, humanBrainMob.client, humanHead, humanHead.origin_body?.get())
 
 /datum/soul_capture/proc/capture_soul(var/mob/living/carbon/user, var/client/targetClient, var/atom/movable/target, var/atom/movable/add_target = null)
 	//user is the guy using the soulstone
@@ -407,7 +403,7 @@
 			else
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
-		if(!gem && body.decapitated && (body.decapitated == target))//just making sure we're dealing with the right head
+		if(!gem && body.decapitated?.get() == target)//just making sure we're dealing with the right head
 			new /obj/item/weapon/skull(get_turf(target))
 
 	target.invisibility = 101 //It's not possible to interact with the body normally now, but we don't want to delete it just yet

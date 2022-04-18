@@ -845,7 +845,7 @@
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
-		var/obj/item/organ/external/head/B = decapitated
+		var/obj/item/organ/external/head/B = decapitated?.get()
 		if(B)
 			var/datum/organ/internal/brain/copied
 			if(B.organ_data)
