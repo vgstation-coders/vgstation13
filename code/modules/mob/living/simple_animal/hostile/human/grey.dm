@@ -633,7 +633,7 @@
 	attacktext = "telekinetically repels" // Not really the fisticuffs type, will just try to fling targets away
 	attack_sound = 'sound/weapons/punchmiss.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | SMASH_WALLS // Can smash many things open thanks to stronk brain muscles
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can smash many things open thanks to stronk brain muscles
 	status_flags = UNPACIFIABLE // Not pacifiable due to being a "boss" mob
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
@@ -731,7 +731,7 @@
 						continue
 					to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
 					H.adjustBrainLoss(20)
-					H.eyeblurry += 10
+					H.eye_blurry = max(H.eye_blurry, 10)
 					H.confused += 10
 					H.dizziness += 10
 					last_psychicattack = world.time
