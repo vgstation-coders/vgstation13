@@ -334,6 +334,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/ginger/gingerbroodmother,		// Gingerbominations...
 	/mob/living/simple_animal/hostile/old_vendotron,				// Why is a normal, harmless, vending machine on this list?
 	/mob/living/simple_animal/hostile/humanoid/greynurse,           // Turn your head and cough
+	/mob/living/simple_animal/hostile/humanoid/nurseunit,           // Nurse...?
 	/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader,  // Very mean chikun man
 	/mob/living/simple_animal/hostile/humanoid/grey/leader,          // Evil, pompous, and alien
 	)
