@@ -1070,13 +1070,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Transfer any internal_organs from the organ item to the body
 		for(var/datum/organ/internal/transfer in organ.internal_organs)
-			if(transfer) //Don't transfer null organs
-				owner.internal_organs += transfer
-		//Transfer any internal_organs (by name) from the organ item to the body
-		for(var/datum/organ/internal/transfer_by_name in organ.internal_organs)
-			if(transfer_by_name)
-				owner.internal_organs_by_name[transfer_by_name.organ_type] = transfer_by_name
-				owner.internal_organs_by_name[transfer_by_name.organ_type].owner = owner
+			owner.internal_organs += transfer
+			owner.internal_organs_by_name[transfer.organ_type] = transfer
+			owner.internal_organs_by_name[transfer.organ_type].owner = owner
 
 
 		//Process attached parts (i.e. if attaching an arm with a hand, this will process the hand)
@@ -1496,13 +1492,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/head/generate_dropped_organ(current_organ)
 	if(!current_organ)
 		current_organ = new /obj/item/organ/external/head(owner.loc, owner, src)
-		owner.decapitated = current_organ
+		owner.decapitated = makeweakref(current_organ)
 	var/datum/organ/internal/brain/B = eject_brain()
 	eject_eyes()
 	var/obj/item/organ/external/head/H = current_organ
 	if(B)
 		H.organ_data = B
-		B.organ_holder = current_organ
 		B.owner_dna = H.owner_dna
 
 	return current_organ
@@ -1819,7 +1814,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	w_class = W_CLASS_SMALL
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
-	var/mob/living/carbon/human/origin_body = null
+	/// (/mob/living/carbon/human)
+	var/datum/weakref/origin_body
 	/// Copied from the human passed to New(). Used when the head is reattached.
 	var/datum/human_appearance/owner_appearance
 
@@ -1841,7 +1837,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	name = "robotic head"
 
 /obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
-	origin_body = H
+	origin_body = makeweakref(H)
 
 	if(istype(H))
 		src.icon_state = H.gender == MALE? "head_m" : "head_f"
@@ -2028,9 +2024,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/head/Destroy()
 	if(brainmob)
 		brainmob.ghostize()
-	if(origin_body)
-		origin_body.decapitated = null
-		origin_body = null
+		qdel(brainmob)
+		brainmob = null
 	..()
 
 /mob/living/carbon/human/find_organ_by_grasp_index(index)
