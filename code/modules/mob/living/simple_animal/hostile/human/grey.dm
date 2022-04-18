@@ -492,6 +492,8 @@
 //////////////////////////////
 // GREY RESEARCHERS
 //////////////////////////////
+
+///////////////////////////////////////////////////////////////////GREY SURGEON///////////
 //Grey melee researcher. Less hit points than a soldier, but is one of the only enemies in the vault that can use psychic attacks
 /mob/living/simple_animal/hostile/humanoid/grey/surgeon
 	name = "Mothership Surgeon"
@@ -522,8 +524,8 @@
 	ranged = 1
 	ranged_message = "stares intently"
 
-	ranged_cooldown = 10
-	ranged_cooldown_cap = 10
+	ranged_cooldown = 20
+	ranged_cooldown_cap = 20
 
 /mob/living/simple_animal/hostile/humanoid/grey/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
@@ -543,20 +545,22 @@
 				H.eye_blurry = max(H.eye_blurry, 3)
 				H.confused = max(H.confused, 3)
 				H.Dizzy(3)
-				H.drowsyness += 3
 			if(2) //A brief knockdown
 				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
 				H.emote("me", 1, "collapses!")
 				H.Knockdown(2)
 			if(3) //The worst one, the target gets put to sleep for a short time
 				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
-				H.sleeping += 3
+				H.drowsyness += 2
+				spawn(2 SECONDS)
+					H.sleeping += 3
 		return 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/surgeon/Aggro()
 	..()
 	say(pick("I could use more tissue samples.","Hold still, this will only sting for a moment.","You don't belong here! Good, I needed a new specimen to dissect."), all_languages[LANGUAGE_GREY])
 
+///////////////////////////////////////////////////////////////////GREY SCIENTIST///////////
 //Grey ranged researcher. Less hit points than a soldier, will occasionally throw unstable goo at targets
 /mob/living/simple_animal/hostile/humanoid/grey/researcher
 	name = "Mothership Researcher"
@@ -601,3 +605,194 @@
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/Aggro()
 	..()
 	say(pick("Brain beats brawn!","It seems you've volunteered to be my next test subject.","You don't belong here! Get out of my laboratory!"), all_languages[LANGUAGE_GREY])
+
+//////////////////////////////
+// GREY LEADER
+//////////////////////////////
+
+///////////////////////////////////////////////////////////////////GREY LEADER///////////
+//The final bawss. Equipped with a decently damaging ranged weapon, and strong psychic attack capabilities. Can buff allies in the vicinity with a small health boost or drain their health to replenish its own
+/mob/living/simple_animal/hostile/humanoid/grey/leader
+	name = "Mothership Administrator"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and brandishing an advanced disintegrator."
+
+	icon_state = "grey_leader"
+	icon_living = "grey_leader"
+
+	maxHealth = 300
+	health = 300
+
+	see_in_dark = 10 // superior ayy darkvision
+	vision_range = 12 // Capable of seeing farther than your average mob
+	aggro_vision_range = 12
+	idle_vision_range = 12
+
+	melee_damage_lower = 20
+	melee_damage_upper = 40 // Moderate melee damage
+
+	attacktext = "telekinetically repels" // Not really the fisticuffs type, will just try to fling targets away
+	attack_sound = 'sound/weapons/punchmiss.ogg'
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | SMASH_WALLS // Can smash many things open thanks to stronk brain muscles
+	status_flags = UNPACIFIABLE // Not pacifiable due to being a "boss" mob
+	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
+
+	universal_speak = 1
+	universal_understand = 1
+	waterproof = 1
+
+	var/psychic_range = 10 // Range limit on psychic attacks
+
+	var/last_psychicdrain = 0
+	var/const/psychicdrain_cooldown = 10 SECONDS // Cooldown on the ability to leech health from an ally
+
+	var/last_psychicrejuvenate = 0
+	var/const/psychicrejuvenate_cooldown = 30 SECONDS // Cooldown on the ability to heal an ally
+
+	var/last_psychicattack = 0
+	var/const/psychicattack_cooldown = 20 SECONDS // Cooldown on general psychic attacks used against players
+
+	var/telekinesis_throw_chance = 80 // Values for flinging a target away with a melee attack
+	var/telekinesis_throw_speed = 3
+	var/telekinesis_throw_range = 10
+
+	corpse = /obj/effect/landmark/corpse/grey/leader
+
+	items_to_drop = list(/obj/item/weapon/gun/energy/advdisintegrator, /obj/item/weapon/card/id/mothership_leader)
+
+	speak = list("These imbeciles... it's all so tiresome.","The latest clone batch has been less than impressive.","I will not tolerate further failure.","The mothership and the Chairman are counting on us, cowardice and incompetence are unacceptable.","Do I have to tell you cretins how to do everything?","To think the Chairman assigned me to this backwater sector... what a waste of my talents.")
+	speak_chance = 5
+
+	faction = "mothership"
+
+	projectiletype = /obj/item/projectile/beam/atomizationray
+	projectilesound = 'sound/weapons/ray1.ogg'
+	retreat_distance = 7
+	minimum_distance = 7
+	ranged = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Life() // Can heal allies or drain health from them to heal himself. A good tactic could be to focus shooting at him so he eventually drains all the soldiers around him of all their health
+	..()
+	if(last_psychicrejuvenate + psychicrejuvenate_cooldown < world.time)
+		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
+			if(S.health < (S.maxHealth/2))
+				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on the wounded [S], and they suddenly appear to be slightly revitalized!</span>")
+				if(prob(25))
+					say(pick("You don't deserve this, you useless lobotomite.","The pain in your nervous system is an illusion.","Your death in the line of duty is unacceptable for the time being.","The mothership requires your continued service.","I have seen mothership soldiers survive far worse, compose yourself."))
+				S.health+=30
+				last_psychicrejuvenate = world.time
+
+			if(target && S.target != target)
+				S.GiveTarget(target)
+
+	if(last_psychicdrain + psychicdrain_cooldown < world.time)
+		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
+			if(health < (maxHealth/2))
+				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on [S], and they shudder in agony. \The [src] appears to have been rejuvenated by the exchange, however.</span>")
+				if(prob(25))
+					say(pick("The mothership will remember your sacrifice.","Your psychic energy will serve me better.","Your strength becomes my strength.","You have failed to defend your administrator, this is the price."))
+				health+=150
+				S.health-=75
+				last_psychicdrain = world.time
+
+			if(target && S.target != target)
+				S.GiveTarget(target)
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/AttackingTarget() // Fling the people trying to beat them up awaaaaaay
+	..()
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(telekinesis_throw_range && prob(telekinesis_throw_chance))
+			visible_message("<span class='danger'>\The [M] is flung away from [src]!</span>")
+			var/turf/T = get_turf(src)
+			var/turf/target_turf
+			if(istype(T, /turf/space)) // if ended in space, then range is unlimited
+				target_turf = get_edge_target_turf(T, dir)
+			else
+				target_turf = get_ranged_target_turf(T, dir, telekinesis_throw_range)
+			M.throw_at(target_turf,100,telekinesis_throw_speed)
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Shoot()
+	if(last_psychicattack + psychicattack_cooldown < world.time)
+		var/list/victims = list()
+		for(var/mob/living/carbon/human/H in view(src, psychic_range))
+			victims.Add(H)
+
+		if(!victims.len)
+			return
+		switch(rand(0,4))
+			if(1) //Brain damage, confusion, dizziness, and drowsiness
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
+						continue
+					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
+						continue
+					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
+					H.adjustBrainLoss(20)
+					H.eyeblurry += 10
+					H.confused += 10
+					H.dizziness += 10
+					last_psychicattack = world.time
+					if(prob(25))
+						H.audible_scream()
+			if(2) //The equivalent of a mass disarm push, with some dizziness
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
+						continue
+					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
+						continue
+					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+					H.emote("me", 1, "collapses!")
+					H.Knockdown(2)
+					H.dizziness += 4
+					last_psychicattack = world.time
+			if(3) //Naptime
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
+						continue
+					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
+						continue
+					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
+					H.drowsyness += 2
+					last_psychicattack = world.time
+					spawn(2 SECONDS)
+						H.sleeping += 6
+			if(4) //Hallucinations and jittering
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
+						continue
+					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
+						continue
+					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
+					H.hallucination += 40
+					H.Jitter(20)
+					last_psychicattack = world.time
+
+	if(!last_psychicattack + psychicattack_cooldown < world.time) // If not done cooling down from the previous psychic attack, just shoot a laser beem
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/bullet_act(var/obj/item/projectile/P) // Lasers have a 50% chance to reflect off the armor, which matches up if the player takes it and puts it on
+	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+		var/reflectchance = 50 - round(P.damage/3)
+		if(prob(reflectchance))
+			visible_message("<span class='danger'>The [P.name] gets reflected by \the [src]'s rigsuit!</span>")
+
+			if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
+				P.reflected = 1
+				P.rebound(src)
+
+			return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
+
+	return (..(P))
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Aggro()
+	..()
+	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will be keeping your head to study your unnatural behavior."), all_languages[LANGUAGE_GREY])

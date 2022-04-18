@@ -124,6 +124,10 @@
 	msg = "You feel a scratching presence in your mind, like someone is trying to whisper in your ear. You can only make out a few words, but it seems to be warning you to turn back."
 	play_sound = 'sound/hallucinations/turn_around1.ogg'
 
+/obj/effect/narration/mothership_lab/leaderdeck2 // Like anyone will stop if they've come this far. Gotta grab everything you can!
+	msg = "The presence scratches at your mind again, stronger this time. Whoever or whatever it is, it's telling you to turn back the way you came immediately."
+	play_sound = 'sound/hallucinations/i_see_you1.ogg'
+
 /obj/effect/narration/mothership_lab/nurseboss // Hello, Nurse?
 	msg = "A sharp chill runs down your spine as you enter the doorway of the greyling dormitory."
 	play_sound = 'sound/hallucinations/scary.ogg'
@@ -381,6 +385,9 @@
 	icon_state = "ayy_leader"
 	access = list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 	base_access = list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
+
+/obj/item/weapon/card/id/mothership_leader/acidable() // ID nanobots or something. This is mostly to prevent it being melted by a stray grenade in the vault crossfire
+	return 0
 
 //////////////////////////////
 // GREY GOO (Pill and pill bottle items for an experimental grey brain medication. More info on Chemistry-Reagents.dm)

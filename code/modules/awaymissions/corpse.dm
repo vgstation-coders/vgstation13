@@ -1129,6 +1129,13 @@
 	corpseuniform = /obj/item/clothing/under/grey/grey_researcher
 	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
 
+/obj/effect/landmark/corpse/grey/leader
+	name = "Grey Leader"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/rig/grey/leader
+	corpseuniform = /obj/item/clothing/under/grey/grey_leader
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior
+
 //////////////////Vox Corpses///////////////////////////
 
 /obj/effect/landmark/corpse/vox
