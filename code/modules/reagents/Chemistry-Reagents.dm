@@ -1094,25 +1094,36 @@
 	if(..())
 		return 1
 
+	//Always happens, regardless if patient is in the sleeper
+	//Slows down massive suffocation
 	if(M.losebreath >= 10)
 		M.losebreath = max(10, M.losebreath - 10)
+	//Immediate eye blurriness/drowsiness indicate that you may have been drugged
 	switch(tick)
-		if(1 to 15)
-			M.eye_blurry = max(M.eye_blurry, 10)
-		if(15 to 25)
-			M.drowsyness  = max(M.drowsyness, 20)
-		if(25 to INFINITY)
-			M.sleeping += 1
+		if(1 to 5)
+			M.eye_blurry = max(M.eye_blurry, 10) //Eyes get blurry immediately
+		if(5 to INFINITY)
+			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
+				
+	//This handles sleeper/cryo vs out of sleeper/cryo behaviors
+	if (istype(M.loc,/obj/machinery/sleeper) || M.bodytemperature < 170)
+		//If the patient is in a sleeper/cryo and it's been at least 20 seconds...
+		if(tick >= 10)
+			M.sleeping = max(M.sleeping, 15) //Put to sleep, lasts 30 seconds from exiting the sleeper/running out
 			M.adjustOxyLoss(-M.getOxyLoss())
+			M.heal_organ_damage(REM, REM) //Tricord-level healing
+			M.adjustToxLoss(-REM)
 			M.SetKnockdown(0)
 			M.SetStunned(0)
 			M.SetParalysis(0)
 			M.dizziness = 0
-			M.drowsyness = 0
+			M.drowsyness = 0 //Wake-up function/Natural wearing off inside sleeper prevents drowsiness on waking up
 			M.stuttering = 0
 			M.confused = 0
 			M.remove_jitter()
 			M.hallucination = 0
+	else
+		tick = min(tick, 5) //Getting kicked out of the sleeper requires additional time to restart healing when returned
 
 /datum/reagent/inaprovaline
 	name = "Inaprovaline"
