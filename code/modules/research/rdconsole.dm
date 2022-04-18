@@ -804,7 +804,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "rndconsole.tmpl", name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
+		ui = new(user, src, ui_key, "rnd_console.tmpl", name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
 		ui.set_initial_data(data)
 		ui.open()
 
