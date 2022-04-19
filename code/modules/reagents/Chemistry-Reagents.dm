@@ -653,18 +653,26 @@
 		var/mob/living/carbon/human/H = M
 		if(H.species && H.species.anatomy_flags & ACID4WATER) //oof ouch, water is spicy now
 			if(method == TOUCH)
-				if(H.check_body_part_coverage(EYES|MOUTH))
-					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
-					return
+				var/splashed = FALSE
+				var/screamed = FALSE
+				for(var/part in zone_sels)
+					if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+						to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of water!</span>")
+						return
 
-				if(prob(15) && volume >= 30)
-					var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-					if(head_organ)
-						if(head_organ.take_damage(0, 25))
-							H.UpdateDamageIcon(1)
-						head_organ.disfigure("burn")
-						H.audible_scream()
-				else
+					if(prob(15) && volume >= 30)
+						splashed = TRUE
+						var/datum/organ/external/ext_organ = H.get_organ(part)
+						if(ext_organ)
+							if(ext_organ.take_damage(0, (25 / zone_sels.len))) // Balance for precisions vs general.
+								H.UpdateDamageIcon(1)
+								screamed = TRUE
+							if(istype(ext_organ,/datum/organ/external/head))
+								var/datum/organ/external/head/head_organ = ext_organ
+								head_organ.disfigure("burn")
+				if(screamed)
+					H.audible_scream()
+				if(!splashed)
 					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
 				M.take_organ_damage(0, min(15, volume * 2))
@@ -1662,55 +1670,53 @@
 		return 1
 
 	if(method == TOUCH)
-		if(ishuman(M))
+		if(ishuman(M) || ismonkey(M))
+			var/mob/living/carbon/H = M
+			var/mob/living/carbon/human/HM = null
+			if(ishuman(M)) //Workaround for slot variables... someone really needs to clean up appearance code
+				HM = H
+			for(var/obj/item/clothing/C in H.get_equipped_items())
+				for(var/part in zone_sels)
+					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head)
+						continue
+					if(C.body_parts_covered & limb_define_to_part_define(part))
+						if(C.acidable() && prob(15))
+							var/old_flags = C.slot_flags
+							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
+							if(C == H.wear_mask) //Really really horrible appearance code workarounds
+								H.wear_mask = null
+							if(HM)
+								if(C == HM.head)
+									HM.head = null
+								if(C == HM.shoes)
+									HM.shoes = null
+								if(C == HM.gloves)
+									HM.gloves = null
+								if(C == HM.wear_suit)
+									HM.wear_suit = null
+							qdel(C)
+							H.update_inv_by_slot(old_flags)
+						else
+							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
+						return
+
+	if(M.acidable())
+		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
-
-			if(H.wear_mask)
-				if(H.wear_mask.acidable())
-					qdel(H.wear_mask)
-					H.wear_mask = null
-					H.update_inv_wear_mask()
-					to_chat(H, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
-				if(prob(15) && H.head.acidable())
-					qdel(H.head)
-					H.head = null
-					H.update_inv_head()
-					to_chat(H, "<span class='warning'>Your helmet melts away but protects you from the acid</span>")
-				else
-					to_chat(H, "<span class='warning'>Your helmet protects you from the acid!</span>")
-				return
-
-		else if(ismonkey(M))
-			var/mob/living/carbon/monkey/MK = M
-			if(MK.wear_mask)
-				if(MK.wear_mask.acidable())
-					qdel(MK.wear_mask)
-					MK.wear_mask = null
-					MK.update_inv_wear_mask()
-					to_chat(MK, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-		if(M.acidable())
-			if(prob(15) && ishuman(M) && volume >= 30)
-				var/mob/living/carbon/human/H = M
-				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ)
-					if(head_organ.take_damage(25, 0))
+			var/screamed = FALSE
+			for(var/part in zone_sels)
+				var/datum/organ/external/ext_organ = H.get_organ(part)
+				if(ext_organ)
+					if(ext_organ.take_damage((25 / zone_sels.len), 0)) // Balance for precisions vs general.
 						H.UpdateDamageIcon(1)
-					head_organ.disfigure("burn")
-					H.audible_scream()
-			else
-				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-	else
-		if(M.acidable())
-			M.take_organ_damage(min(15, volume * 2))
+						screamed = TRUE
+					if(istype(ext_organ,/datum/organ/external/head))
+						var/datum/organ/external/head/head_organ = ext_organ
+						head_organ.disfigure("burn")
+			if(screamed)
+				H.audible_scream()
+		else
+			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
 
@@ -1759,60 +1765,53 @@
 		return 1
 
 	if(method == TOUCH)
+		if(ishuman(M) || ismonkey(M))
+			var/mob/living/carbon/H = M
+			var/mob/living/carbon/human/HM
+			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
+				HM = H
+			for(var/obj/item/clothing/C in H.get_equipped_items())
+				for(var/part in zone_sels)
+					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head) //Was like this in legacy system
+						continue
+					if(C.body_parts_covered & limb_define_to_part_define(part))
+						if(C.acidable() && prob(15))
+							var/old_flags = C.slot_flags
+							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
+							if(C == H.wear_mask) //Really really horrible appearance code workarounds
+								H.wear_mask = null
+							if(HM)
+								if(C == HM.head)
+									HM.head = null
+								if(C == HM.shoes)
+									HM.shoes = null
+								if(C == HM.gloves)
+									HM.gloves = null
+								if(C == HM.wear_suit)
+									HM.wear_suit = null
+							qdel(C)
+							H.update_inv_by_slot(old_flags)
+						else
+							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
+						return
+
+	if(M.acidable()) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-
-			if(H.wear_mask)
-				if(H.wear_mask.acidable())
-					qdel(H.wear_mask)
-					H.wear_mask = null
-					H.update_inv_wear_mask()
-					to_chat(H, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
-				if(prob(15) && H.head.acidable())
-					qdel(H.head)
-					H.head = null
-					H.update_inv_head()
-					to_chat(H, "<span class='warning'>Your helmet melts away but protects you from the acid</span>")
-				else
-					to_chat(H, "<span class='warning'>Your helmet protects you from the acid!</span>")
-				return
-
-			if(H.acidable())
-				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ.take_damage(15, 0))
-					H.UpdateDamageIcon(1)
+			var/screamed = FALSE
+			for(var/part in zone_sels)
+				var/datum/organ/external/ext_organ = H.get_organ(part)
+				if(ext_organ)
+					if(ext_organ.take_damage((15 / zone_sels.len), 0)) // Balance for precisions vs general.
+						H.UpdateDamageIcon(1)
+						screamed = TRUE
+					if(istype(ext_organ,/datum/organ/external/head))
+						var/datum/organ/external/head/head_organ = ext_organ
+						head_organ.disfigure("burn")
+			if(screamed)
 				H.audible_scream()
-
-		else if(ismonkey(M))
-			var/mob/living/carbon/monkey/MK = M
-			if(MK.wear_mask)
-				if(MK.wear_mask.acidable())
-					qdel(MK.wear_mask)
-					MK.wear_mask = null
-					MK.update_inv_wear_mask()
-					to_chat(MK, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
-				else
-					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
-				return
-
-			if(MK.acidable())
-				MK.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
-	else
-		if(M.acidable()) //I think someone doesn't know what this does
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ.take_damage(15, 0))
-					H.UpdateDamageIcon(1)
-				H.audible_scream()
-				head_organ.disfigure("burn")
-			else
-				M.take_organ_damage(min(15, volume * 4))
+		else
+			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 
 /datum/reagent/pacid/reaction_obj(var/obj/O, var/volume)
 
@@ -2603,13 +2602,20 @@
 		return 1
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
-		if(!C.wear_mask) //If not wearing a mask
+		if(((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)) && !C.wear_mask) //If not wearing a mask
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if(H.dna)
 				if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage //aren't they toxin-proof anyways?
-					H.adjustToxLoss(10 * REM)
+					for(var/part in zone_sels)
+						if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+							to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of plant-b-gone!</span>")
+							return
+						H.adjustToxLoss((10 / zone_sels.len) * REM) // Balance for precisions vs general.
+		else if(istype(M,/mob/living/carbon/monkey/diona)) // Can't do it that way for these, so have this
+			M.adjustToxLoss(10 * REM)
+
 
 /datum/reagent/toxin/plantbgone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -2634,9 +2640,16 @@
 		return 1
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
-		if(!C.wear_mask) //If not wearing a mask
+		if(((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)) && !C.wear_mask) //If not wearing a mask
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
-		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
+		if(isinsectoid(C)) //Insecticide being poisonous to bugmen, who'd've thunk
+			var/mob/living/carbon/human/H = C
+			for(var/part in zone_sels)
+				if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+					to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of insecticide!</span>")
+					return
+				H.adjustToxLoss((10 / zone_sels.len) * REM) // Balance for precisions vs general.
+		else if(istype(C, /mob/living/carbon/monkey/roach)) // Can't do it that way for these, so have this
 			M.adjustToxLoss(10 * REM)
 
 /datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
