@@ -69,7 +69,7 @@
 	category = "Misc"
 
 /datum/design/dses_module_rangeboost
-	name = "DSES Ping Ñong-Range Listener"
+	name = "DSES Ping Long-Range Listener"
 	desc = "A high-gain amplifier circuit for a DSES receiver, effectively doubling the range."
 	id = "dses_module_rangeboost"
 	req_tech = list(Tc_BLUESPACE = 4)
