@@ -394,8 +394,8 @@
 	icon_state = "greyheavy"
 	icon_living = "greyheavy"
 
-	maxHealth = 250 // Pretty hefty amount of hp
-	health = 250
+	maxHealth = 200 // Pretty hefty amount of hp
+	health = 200
 
 	melee_damage_type = BURN
 	melee_damage_lower = 50 // The nastiest "melee" damage of all the grey enemies. Give him his space
