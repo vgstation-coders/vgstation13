@@ -1672,6 +1672,9 @@
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
+			var/mob/living/carbon/human/HM
+			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
+				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
 					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head)
@@ -1752,6 +1755,9 @@
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
+			var/mob/living/carbon/human/HM
+			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
+				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
 					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head) //Was like this in legacy system
