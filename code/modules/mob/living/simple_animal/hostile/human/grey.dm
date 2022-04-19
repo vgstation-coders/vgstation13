@@ -613,7 +613,7 @@
 ///////////////////////////////////////////////////////////////////GREY LEADER///////////
 //The final bawss. Equipped with a decently damaging ranged weapon, and strong psychic attack capabilities. Can buff allies in the vicinity with a small health boost or drain their health to replenish its own
 /mob/living/simple_animal/hostile/humanoid/grey/leader
-	name = "Mothership Administrator"
+	name = "Administrator Zorb"
 	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and brandishing an advanced disintegrator."
 
 	icon_state = "grey_leader"
@@ -688,7 +688,7 @@
 	if(last_psychicdrain + psychicdrain_cooldown < world.time)
 		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
 			if(health < (maxHealth/2))
-				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on [S], and they shudder in agony. \The [src] appears to have been rejuvenated by the exchange, however.</span>")
+				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on [S], and they writhe in agony. \The [src] appears to have been rejuvenated by the exchange, however.</span>")
 				if(prob(25))
 					say(pick("The mothership will remember your sacrifice.","Your psychic energy will serve me better.","Your strength becomes my strength.","You have failed to defend your administrator, this is the price."))
 				health+=150
@@ -698,7 +698,7 @@
 			if(target && S.target != target)
 				S.GiveTarget(target)
 
-/mob/living/simple_animal/hostile/humanoid/grey/leader/AttackingTarget() // Fling the people trying to beat them up awaaaaaay
+/mob/living/simple_animal/hostile/humanoid/grey/leader/AttackingTarget() // Fling the people trying to beat him up awaaaaaay
 	..()
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
@@ -720,8 +720,8 @@
 
 		if(!victims.len)
 			return
-		switch(rand(0,4))
-			if(1) //Brain damage, confusion, and dizziness
+		switch(rand(0,3))
+			if(0) //Brain damage, confusion, and dizziness
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
 						continue
@@ -737,7 +737,7 @@
 					last_psychicattack = world.time
 					if(prob(25))
 						H.audible_scream()
-			if(2) //The equivalent of a mass disarm push, with some dizziness
+			if(1) //The equivalent of a mass disarm push, with some dizziness
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
 						continue
@@ -750,7 +750,7 @@
 					H.Knockdown(2)
 					H.dizziness += 4
 					last_psychicattack = world.time
-			if(3) //Naptime
+			if(2) //Naptime
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
 						continue
@@ -763,7 +763,7 @@
 					last_psychicattack = world.time
 					spawn(2 SECONDS)
 						H.sleeping += 6
-			if(4) //Hallucinations and jittering
+			if(3) //Hallucinations and jittering
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
 						continue
@@ -795,4 +795,4 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Aggro()
 	..()
-	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will be keeping your head to study your unnatural behavior."), all_languages[LANGUAGE_GREY])
+	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will be keeping your brain to study your unnatural behavior."), all_languages[LANGUAGE_GREY])
