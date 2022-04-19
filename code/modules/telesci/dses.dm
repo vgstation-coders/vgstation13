@@ -37,7 +37,7 @@
 	var/last_distance
 	var/list/positive_locations = list()
 	var/auto_pulse = 0
-	origin_tech = list(Tc_BLUESPACE = 2, Tc_MATERIALS = 4)
+	origin_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 4)
 
 /datum/dses_find
 	var/name
