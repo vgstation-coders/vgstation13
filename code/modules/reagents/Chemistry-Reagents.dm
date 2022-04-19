@@ -1681,21 +1681,12 @@
 						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
-							var/old_flags = C.slot_flags
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
 							if(C == H.wear_mask) //Really really horrible appearance code workarounds
 								H.wear_mask = null
 							if(HM)
-								if(C == HM.head)
-									HM.head = null
-								if(C == HM.shoes)
-									HM.shoes = null
-								if(C == HM.gloves)
-									HM.gloves = null
-								if(C == HM.wear_suit)
-									HM.wear_suit = null
+								HM.u_equip(C)
 							qdel(C)
-							H.update_inv_by_slot(old_flags)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
 						return
@@ -1776,21 +1767,12 @@
 						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
-							var/old_flags = C.slot_flags
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
 							if(C == H.wear_mask) //Really really horrible appearance code workarounds
 								H.wear_mask = null
 							if(HM)
-								if(C == HM.head)
-									HM.head = null
-								if(C == HM.shoes)
-									HM.shoes = null
-								if(C == HM.gloves)
-									HM.gloves = null
-								if(C == HM.wear_suit)
-									HM.wear_suit = null
+								HM.u_equip(C)
 							qdel(C)
-							H.update_inv_by_slot(old_flags)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
 						return
