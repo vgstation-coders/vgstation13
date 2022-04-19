@@ -1679,7 +1679,7 @@
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
-							H.u_equip(C)
+							H.u_equip(C,0)
 							qdel(C)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
@@ -1759,7 +1759,7 @@
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
-							H.u_equip(C)
+							H.u_equip(C,0)
 							qdel(C)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
