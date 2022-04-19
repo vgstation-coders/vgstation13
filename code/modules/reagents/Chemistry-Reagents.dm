@@ -1672,9 +1672,6 @@
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
-			var/mob/living/carbon/human/HM = null
-			if(ishuman(M)) //Workaround for slot variables... someone really needs to clean up appearance code
-				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
 					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head)
@@ -1682,10 +1679,7 @@
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
-							if(C == H.wear_mask) //Really really horrible appearance code workarounds
-								H.wear_mask = null
-							if(HM)
-								HM.u_equip(C)
+							H.u_equip(C)
 							qdel(C)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
@@ -1758,9 +1752,6 @@
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
-			var/mob/living/carbon/human/HM
-			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
-				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
 					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head) //Was like this in legacy system
@@ -1768,10 +1759,7 @@
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
-							if(C == H.wear_mask) //Really really horrible appearance code workarounds
-								H.wear_mask = null
-							if(HM)
-								HM.u_equip(C)
+							H.u_equip(C)
 							qdel(C)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
