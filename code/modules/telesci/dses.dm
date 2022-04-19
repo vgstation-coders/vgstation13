@@ -26,7 +26,7 @@
 	icon_state = "dses"
 	icon = 'icons/obj/telescience.dmi'
 	var/obj/item/weapon/cell/C = null
-	var/module_limit = 1
+	var/module_limit = 2 //So you can get a diverse-ish DSES instead of only ever using the directional module
 	var/list/module_list = list()
 	var/list/locations = list()
 	var/pulse_range = 25
