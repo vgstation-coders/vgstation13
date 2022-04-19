@@ -316,10 +316,10 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier/proc/shockAttack(mob/living/carbon/human/target) // It's not a great idea to fight these guys in CQC if you don't have some kind of stun resistance
 	var/damage = rand(5, 10)
-	target.electrocute_act(damage, src, incapacitation_duration = 8 SECONDS, def_zone = LIMB_CHEST) // 8 code seconds is more like 4 real seconds
+	target.electrocute_act(damage, src, incapacitation_duration = 6 SECONDS, def_zone = LIMB_CHEST) // 6 seconds is pretty rough, twice as long as a carp stun
 	if(iscarbon(target))
 		var/mob/living/L = target
-		L.apply_effect(10, STUTTER)
+		L.apply_effect(6, STUTTER)
 	return
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier/AttackingTarget() // Won't keep stunning a downed player, so they should have a chance to run when they get up
