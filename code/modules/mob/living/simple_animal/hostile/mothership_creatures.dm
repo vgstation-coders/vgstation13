@@ -77,10 +77,10 @@
 	return (..(P))
 
 /mob/living/simple_animal/hostile/mothership_saucerdrone/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'>The [src] loses altitude and crash lands!</span>")
-	explosion(get_turf(src), -1, -1, 0, whodunnit = src)
+	playsound(src, "sound/effects/explosion_small1.ogg", 50, 1)
 	qdel(src)
-	return
 
 ///////////////////////////////////////////////////////////////////HOVERDISC DRONE///////////
 // A robotic enemy meant to support grey soldiers in combat. It will usually stay back, using its detection range to its advantage while firing high-damage laser blasts from afar
@@ -170,11 +170,11 @@
 	return (..(P))
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'>The [src] shudders and violently explodes!</span>")
 	new /obj/effect/gibspawner/robot(src.loc)
 	explosion(get_turf(src), -1, 2, 4, whodunnit = src)
 	qdel(src)
-	return
 
 ///////////////////////////////////////////////////////////////////POLYP///////////
 // A jellyfish-like creature from an alien world, adapted for space travel. It can give a nasty burning sting, but synthesizes an edible gelatin substance

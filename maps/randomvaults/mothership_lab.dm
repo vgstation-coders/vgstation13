@@ -200,8 +200,8 @@
 	item_state = "ayy_helm_heavy"
 	desc = "A helmet perfectly fitted for an enormous cranium. This one has a reinforced visor that offers some additional protection."
 	body_parts_covered = FULL_HEAD
-	species_restricted = list(GREY_SHAPED)
-	species_fit = list(GREY_SHAPED) // This one only fits ayys
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 65, bullet = 30, laser = 65, energy = 15, bomb = 40, bio = 0, rad = 0)
 
 //Ayy lmao armor vest
