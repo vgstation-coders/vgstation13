@@ -90,10 +90,20 @@
 	id = "gps"
 	req_tech = list(Tc_BLUESPACE = 2, Tc_MAGNETS = 2)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 800, MAT_GLASS = 200)
+	materials = list(MAT_IRON = 800, MAT_GLASS = 200)
 	category = "Bluespace"
 	build_path = /obj/item/device/gps/science
 
+/datum/design/dses
+	name = "Deep Space Exploration System"
+	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."
+	id = "dses"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 4)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_IRON = 1600, MAT_GLASS = 400)
+	category = "Bluespace"
+	build_path = /obj/item/device/dses
+	
 /datum/design/rcs_device
 	name = "Rapid Crate Sender"
 	desc = "Use this to send crates and closets to cargo telepads."
