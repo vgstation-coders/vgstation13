@@ -67,7 +67,17 @@
 	req_tech = list(Tc_MATERIALS = 2, Tc_BIOTECH = 2, Tc_PROGRAMMING = 2)
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000)
 	category = "Misc"
-
+	
+/datum/design/dses
+	name = "Deep Space Exploration System"
+	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."
+	id = "dses"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 4)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_IRON = 1600, MAT_GLASS = 400)
+	category = "Bluespace"
+	build_path = /obj/item/device/dses
+	
 /datum/design/dses_module_rangeboost
 	name = "DSES Ping Long-Range Listener"
 	desc = "A high-gain amplifier circuit for a DSES receiver, effectively doubling the range."
