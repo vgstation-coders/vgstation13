@@ -21,10 +21,6 @@ var/datum/subsystem/thanksbyond/SSthanksbyond
 
 /datum/subsystem/thanksbyond/fire(resumed = FALSE)
 	if(!port)
-		log_debug("[name]: skipping because port is not set")
 		return
-	var/old_port = world.port
-	var/result = world.OpenPort("none")
-	log_debug("[name]: closing port [old_port]: [result]")
-	result = world.OpenPort(port)
-	log_debug("[name]: opening port [port]: [result]")
+	world.OpenPort("none")
+	world.OpenPort(port)
