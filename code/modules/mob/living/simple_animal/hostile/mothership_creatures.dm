@@ -44,6 +44,15 @@
 
 	faction = "mothership"
 
+/mob/living/simple_animal/hostile/mothership_saucerdrone/Life()
+	..()
+	if(health <= (maxHealth/2)) // Health is getting low, adopt cautious attack mode
+		retreat_distance = 3
+		minimum_distance = 3
+	if(health > (maxHealth/2)) // Health has somehow been restored, aggressive attack time!
+		retreat_distance = 1
+		minimum_distance = 1
+
 /mob/living/simple_animal/hostile/mothership_saucerdrone/Process_Spacemove(var/check_drift = 0) // It can follow enemies into space, and won't just drift off
 	return 1
 
@@ -53,7 +62,7 @@
 
 	switch (severity)
 		if (1)
-			adjustBruteLoss(20)
+			adjustBruteLoss(30)
 
 		if (2)
 			adjustBruteLoss(10)
@@ -108,8 +117,8 @@
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 8 // It will attempt to linger at a distance just outside a player's typical field of view, taking potshots
 	minimum_distance = 8
-	ranged_cooldown = 3 // Some cooldown to balance the serious punch it packs
-	ranged_cooldown_cap = 3
+	ranged_cooldown = 5 // Some cooldown to balance the serious punch it packs
+	ranged_cooldown_cap = 5
 
 	melee_damage_lower = 5
 	melee_damage_upper = 10 // Deals almost no melee damage. It's primarily a ranged support unit

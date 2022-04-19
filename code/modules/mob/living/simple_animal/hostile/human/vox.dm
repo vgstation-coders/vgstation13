@@ -255,7 +255,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/Life()
 	..()
-	if(health < (maxHealth/2) && berserk == 0) // Will go berserk if he loses half his health
+	if(health <= (maxHealth/2) && berserk == 0) // Will go berserk if he loses half his health
 		visible_message("<span class='warning'>[src] lowers his shotgun and charges with his machete raised!</span>")
 		berserk = 1
 		move_to_delay = 1.8 // Chaaaaaaaaaaarge
@@ -263,7 +263,7 @@
 		retreat_distance = 1
 		minimum_distance = 1
 
-	if(health > 150 && berserk == 1) // Will calm down again if he heals himself above half health
+	if(health > (maxHealth/2) && berserk == 1) // Will calm down again if he heals himself above half health
 		visible_message("<span class='warning'>[src] lowers his machete to a defensive position and raises his shotgun!</span>")
 		berserk = 0
 		move_to_delay = 2 // Back to normal speed
