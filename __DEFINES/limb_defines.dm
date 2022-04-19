@@ -11,6 +11,7 @@
 #define LIMB_RIGHT_FOOT		"r_foot"
 #define TARGET_MOUTH		"mouth"
 #define TARGET_EYES		    "eyes"
+#define ALL_LIMBS			list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot","mouth","eyes")
 
 #define UNCUFF_LEGS			-1
 #define UNCUFF_BOTH			0

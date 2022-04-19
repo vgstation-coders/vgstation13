@@ -52,7 +52,7 @@
 	var/addictive = FALSE
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	set waitfor = 0
 
 	if(!holder)
@@ -73,26 +73,32 @@
 			var/block  = 0
 
 			for(var/obj/item/clothing/C in M.get_equipped_items())
-				if(C.permeability_coefficient < chance)
-					chance = C.permeability_coefficient
+				var/covered = FALSE
+				for(var/part in list(TARGET_MOUTH,LIMB_HEAD))
+					if(C.body_parts_covered & limb_define_to_part_define(part))
+						covered = TRUE
+						break
+				if(covered)
+					if(C.permeability_coefficient < chance)
+						chance = C.permeability_coefficient
 
-				//Hardcode, but convenient until protection is fixed
-				if(istype(C, /obj/item/clothing/suit/bio_suit))
-					if(prob(75))
-						block = 1
+					//Hardcode, but convenient until protection is fixed
+					if(istype(C, /obj/item/clothing/suit/bio_suit))
+						if(prob(75))
+							block = 1
 
-				if(istype(C, /obj/item/clothing/head/bio_hood))
-					if(prob(75))
-						block = 1
+					if(istype(C, /obj/item/clothing/head/bio_hood))
+						if(prob(75))
+							block = 1
 
 			chance = chance * 100
 
 			if(self.id == HOLYWATER && istype(self.holder.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, min(5,self.volume/2)) //holy water flasks only splash 5u at a time. But for deconversion purposes they will always be ingested.
-			else if(prob(chance) && !block)
+			else if(prob(chance) && !block && ((LIMB_HEAD in zone_sels) || (TARGET_MOUTH in zone_sels)))
 				if(M.reagents)
-					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
+					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume only if aiming at general mouth area
 
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
@@ -1176,7 +1182,7 @@
 	if(..())
 		return 1
 	M.immune_system.ApplyAntipathogenics(100, list(ANTIGEN_CULT), 2)
-	
+
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 
