@@ -312,7 +312,7 @@
 	speak_chance = 1
 
 	var/last_shockattack = 0
-	var/const/shockattack_cooldown = 25 SECONDS // Some cooldown variables to remove the chance of getting stunlocked by a single one of these guys
+	var/const/shockattack_cooldown = 20 SECONDS // Some cooldown variables to remove the chance of getting stunlocked by a single one of these guys
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier/proc/shockAttack(mob/living/carbon/human/target) // It's not a great idea to fight these guys in CQC if you don't have some kind of stun resistance
 	var/damage = rand(5, 10)
@@ -424,7 +424,7 @@
 	minimum_distance = 3
 	ranged = 1
 
-/mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy/Shoot()
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy/Shoot(var/atom/target, var/atom/start, var/mob/user)
 	if(shield_up == 1) // If the shield is up shoot a bit less often, we're focusing on defense
 		ranged_cooldown = 2
 		..()

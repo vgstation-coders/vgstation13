@@ -97,7 +97,7 @@
 		last_healed = world.time
 
 ///////////////////////////////////////////////////////////////////ASSASSIN RAIDER///////////
-//More dangerous than the medic. Throws knives and has a retro laser gun
+//More dangerous than the medic. Throws knives and has a retro laser gun, also remembers the basics...
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin
 	name = "Vox Assassin"
@@ -125,9 +125,23 @@
 	minimum_distance = 2
 	ranged = 1
 
+	var/last_takedown = 0 // He remembers the basics
+	var/const/takedown_cooldown = 20 SECONDS
+
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin/Aggro()
 	..()
 	say(pick("Challenge, khm?","We fight, then.","You will die quickly."), all_languages[LANGUAGE_VOX])
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin/AttackingTarget() // Vox judo chooooooooooooooop
+	var/mob/living/carbon/human/H = target
+	if((last_takedown + takedown_cooldown < world.time) && !H.lying && ishuman(H) && (H.get_strength() < 2)) // Will only bully weak spessmen with this. You shoulda trained HARDER
+		H.visible_message("<span class='danger'>[src] sweeps [H]'s legs out from under them and slams them to the ground!</span>")
+		playsound(src, 'sound/weapons/punch1.ogg', 50, 1)
+		last_takedown = world.time
+		H.adjustBruteLoss(10)
+		H.Knockdown(3)
+	else // Otherwise just give 'em a stab
+		..()
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin/Shoot(var/atom/target, var/atom/start, var/mob/user)
 	if(prob(10))
@@ -137,16 +151,26 @@
 	else
 		..()
 
+//This one has a submachine gun instead of a retro laser. Does not fire in bursts
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin/smg
+	desc = "A vox raider in a pressure suit. This one is wielding a submachine gun and is equipped with an array of knives for throwing."
+	icon_state = "voxraider_assassin2"
+
+	items_to_drop = list(/obj/item/weapon/gun/projectile/automatic, /obj/item/weapon/kitchen/utensil/knife/tactical)
+
+	projectiletype = /obj/item/projectile/bullet/midbullet
+	projectilesound = 'sound/weapons/Gunshot_c20.ogg'
+
 ///////////////////////////////////////////////////////////////////BREACHER RAIDER///////////
-//A bit slower, but a bit tankier. Has a shotgun to greatly discourage CQC
+//A bit slower, but a bit tankier. Has a shotgun to greatly discourage CQC, will occasionally throw bangers
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher
 	name = "Vox Breacher"
 	desc = "A vox raider in a pressure suit. This one seems to be more heavily armored, and is equipped with a shotgun."
 	icon_state = "voxraider_breacher"
 
-	health = 180
-	maxHealth = 180
+	health = 200
+	maxHealth = 200
 
 	move_to_delay = 3 // Sacrifices speed for more health/armor
 
@@ -154,9 +178,9 @@
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider
 
-	items_to_drop = list(/obj/item/weapon/gun/projectile/shotgun/pump/combat)
+	items_to_drop = list(/obj/item/weapon/gun/projectile/shotgun/pump/combat, /obj/item/weapon/grenade/flashbang)
 
-	speak = list("Greys and humans are so squishy, keheh.","So much loot. I can retire soon.","Need to clean gun again.")
+	speak = list("Greys and humans are so squishy, keheh.","So much loot, I can retire soon.","Need to clean gun again.")
 	speak_chance = 1
 
 	projectiletype = /obj/item/projectile/bullet/buckshot
@@ -164,6 +188,17 @@
 	retreat_distance = 3
 	minimum_distance = 3
 	ranged = 1
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher/Shoot(var/atom/target, var/atom/start, var/mob/user)
+	if(prob(10)) // Throw a banger
+		visible_message("<span class = 'warning'>\The [src] primes a flashbang and hurls it towards \the [target]!</span>")
+		say("[pick("No credit needed for this.", "Gift for friend!", "Throwing bang!")]")
+		var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/flashbang(get_turf(src))
+		var/obj/item/weapon/grenade/F = grenade_to_throw
+		grenade_to_throw.throw_at(target,10,2)
+		F.activate()
+	else // Otherwise just fire the shotgun
+		..()
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher/Aggro()
 	..()
