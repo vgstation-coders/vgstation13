@@ -135,7 +135,7 @@
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin/AttackingTarget() // Vox judo chooooooooooooooop
 	var/mob/living/carbon/human/H = target
 	if((last_takedown + takedown_cooldown < world.time) && !H.lying && ishuman(H) && (H.get_strength() < 2)) // Will only bully weak spessmen with this. You shoulda trained HARDER
-		H.visible_message("<span class='danger'>[src] sweeps [H]'s legs out from under them and slams them to the ground!</span>")
+		H.visible_message("<span class='danger'>[src] sweeps [H]'s legs and slams them to the ground!</span>")
 		playsound(src, 'sound/weapons/punch1.ogg', 50, 1)
 		last_takedown = world.time
 		H.adjustBruteLoss(10)
