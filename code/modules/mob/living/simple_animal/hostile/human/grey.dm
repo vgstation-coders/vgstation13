@@ -540,7 +540,7 @@
 			if(0) //Ranged disarm
 				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
 				H.drop_item()
-			if(1) //Dizziness, blurry eyes, and slowed movement
+			if(1) //Dizziness, blurry eyes, and confused movement
 				to_chat(H, "<span class='userdanger'>You suddenly feel confused and disoriented!</span>")
 				H.eye_blurry = max(H.eye_blurry, 3)
 				H.confused = max(H.confused, 3)
@@ -720,7 +720,7 @@
 
 		if(!victims.len)
 			return
-		switch(rand(0,3))
+		switch(rand(0,4))
 			if(0) //Brain damage, confusion, and dizziness
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
@@ -737,7 +737,7 @@
 					last_psychicattack = world.time
 					if(prob(25))
 						H.audible_scream()
-			if(1) //The equivalent of a mass disarm push, with some dizziness
+			if(1) //A knockdown, with some dizziness
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
 						continue
@@ -747,8 +747,8 @@
 						continue
 					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
 					H.emote("me", 1, "collapses!")
-					H.Knockdown(2)
-					H.dizziness += 4
+					H.Knockdown(4)
+					H.dizziness += 6
 					last_psychicattack = world.time
 			if(2) //Naptime
 				for(var/mob/living/carbon/human/H in victims)
@@ -762,7 +762,7 @@
 					H.drowsyness += 2
 					last_psychicattack = world.time
 					spawn(2 SECONDS)
-						H.sleeping += 6
+						H.sleeping += 5
 			if(3) //Hallucinations and jittering
 				for(var/mob/living/carbon/human/H in victims)
 					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
@@ -772,8 +772,20 @@
 					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
-					H.hallucination += 40
-					H.Jitter(20)
+					H.hallucination += 50
+					H.Jitter(30)
+					H.stuttering += 30
+					last_psychicattack = world.time
+			if(4) //Brief period of pacification
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
+						continue
+					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
+						continue
+					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
+					H.reagents.add_reagent(CHILLWAX, 1)
 					last_psychicattack = world.time
 
 	if(!last_psychicattack + psychicattack_cooldown < world.time) // If not done cooling down from the previous psychic attack, just shoot a laser beem
@@ -783,7 +795,7 @@
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		var/reflectchance = 50 - round(P.damage/3)
 		if(prob(reflectchance))
-			visible_message("<span class='danger'>The [P.name] gets reflected by \the [src]'s rigsuit!</span>")
+			visible_message("<span class='danger'>The [P.name] gets reflected by \the [src]'s Administrator Pressure Suit!</span>")
 
 			if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
 				P.reflected = 1
@@ -795,4 +807,4 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Aggro()
 	..()
-	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will be keeping your brain to study your unnatural behavior."), all_languages[LANGUAGE_GREY])
+	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will keep your brain to study your unnatural behavior."), all_languages[LANGUAGE_GREY])
