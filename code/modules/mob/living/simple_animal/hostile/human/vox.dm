@@ -190,7 +190,7 @@
 	ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(prob(10)) // Throw a banger
+	if(prob(5)) // Throw a banger
 		visible_message("<span class = 'warning'>\The [src] primes a flashbang and hurls it towards \the [target]!</span>")
 		say("[pick("No credit needed for this.", "Gift for friend!", "Throwing bang!")]")
 		var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/flashbang(get_turf(src))
