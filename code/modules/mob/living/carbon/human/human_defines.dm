@@ -68,7 +68,9 @@
 	var/lastAnemia = 0 //Anemia rest cooldown
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
-	var/obj/item/organ/external/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
+	/// To keep track of a decapitated head, for debug and soulstone purposes.
+	/// (obj/item/organ/external/head)
+	var/datum/weakref/decapitated
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
