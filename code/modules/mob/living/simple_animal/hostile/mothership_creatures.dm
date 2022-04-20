@@ -1,5 +1,12 @@
+/obj/item/projectile/scorchbolt // Can't make it an energy projectile or it has a tendency to runtime??? Somehow just making it a child of a generic projectile fixed it
+	name = "scorch bolt"
+	icon_state = "scorchbolt"
+	damage = 15
+	damage_type = BURN
+	fire_sound = 'sound/weapons/alien_laser1.ogg'
+
 ///////////////////////////////////////////////////////////////////SAUCER DRONE///////////
-// A tiny robotic ranged enemy that fills the same niche for the MDF that the viscerator does for the Syndicate. Very weak and fragile, but can overwhelm even an equipped enemy with sheer volume of tiny laser blasts
+// A tiny robotic ranged enemy that fills the same niche for the MDF that the viscerator does for the Syndicate. Very weak and fragile, but can overwhelm even an equipped enemy with sheer volume of tiny bolts
 /mob/living/simple_animal/hostile/mothership_saucerdrone
 	name = "Saucer Drone"
 	desc = "A tiny ufo-shaped scout drone. Where's a tiny interceptor when you need one?"
@@ -41,7 +48,7 @@
 	see_in_dark = 8 // Drone sensors or some such
 
 	ranged = 1
-	projectiletype = /obj/item/projectile/energy/scorchbolt // Shoots a projectile that does 15 damage, not very threatening unless there's multiple
+	projectiletype = /obj/item/projectile/scorchbolt // Shoots a projectile that does 15 damage, not very threatening unless there's multiple
 	projectilesound = 'sound/weapons/alien_laser1.ogg'
 	retreat_distance = 2
 	minimum_distance = 2
