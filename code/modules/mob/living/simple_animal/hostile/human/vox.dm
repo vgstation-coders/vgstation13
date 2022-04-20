@@ -158,8 +158,8 @@
 
 	items_to_drop = list(/obj/item/weapon/gun/projectile/automatic, /obj/item/weapon/kitchen/utensil/knife/tactical)
 
-	projectiletype = /obj/item/projectile/bullet/midbullet
-	projectilesound = 'sound/weapons/Gunshot_c20.ogg'
+	projectiletype = /obj/item/projectile/bullet/midbullet2
+	projectilesound = 'sound/weapons/Gunshot.ogg'
 
 ///////////////////////////////////////////////////////////////////BREACHER RAIDER///////////
 //A bit slower, but a bit tankier. Has a shotgun to greatly discourage CQC, will occasionally throw bangers
