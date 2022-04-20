@@ -7,133 +7,17 @@
 	icon_state = "minidrone"
 	icon_living = "minidrone"
 	pass_flags = PASSTABLE
-	see_in_dark = 8 // Drone sensors or some such
-	size = SIZE_SMALL
-
-	maxHealth = 20 // Very fragile
-	health = 20
-
-	ranged = 1
-	projectiletype = /obj/item/projectile/energy/scorchbolt // Shoots a projectile that does 15 damage, not very threatening unless there's multiple
-	projectilesound = 'sound/weapons/alien_laser1.ogg'
-
+	maxHealth = 25 // Quite fragile
+	health = 25
 	melee_damage_type = BURN
 	melee_damage_lower = 15
 	melee_damage_upper = 15
 	attacktext = "fires point-blank at"
 	attack_sound = 'sound/weapons/alien_laser1.ogg'
-
-	flying = 1
-	acidimmune = 1
-	mob_property_flags = MOB_ROBOTIC
-	blooded = FALSE
-
-	status_flags = UNPACIFIABLE // Not pacifiable due to being a robit
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES // Can't smash many things
-
-	min_oxy = 0
-	max_oxy = 0
-	min_tox = 0
-	max_tox = 0
-	min_co2 = 0
-	max_co2 = 0
-	min_n2 = 0
-	max_n2 = 0
-	minbodytemp = 0
-	maxbodytemp = 500
-
 	faction = "mothership"
-
-/mob/living/simple_animal/hostile/mothership_saucerdrone/Life()
-	..()
-	if(health <= (maxHealth/2)) // Health is getting low, adopt cautious attack mode
-		retreat_distance = 3
-		minimum_distance = 3
-	if(health > (maxHealth/2)) // Health has somehow been restored, aggressive attack time!
-		retreat_distance = 1
-		minimum_distance = 1
-
-/mob/living/simple_animal/hostile/mothership_saucerdrone/Process_Spacemove(var/check_drift = 0) // It can follow enemies into space, and won't just drift off
-	return 1
-
-/mob/living/simple_animal/hostile/mothership_saucerdrone/emp_act(severity) // Vulnerable to EMP damage, not that you NEED to use EMPs
-	if(flags & INVULNERABLE)
-		return
-
-	switch (severity)
-		if (1)
-			adjustBruteLoss(30)
-
-		if (2)
-			adjustBruteLoss(10)
-
-/mob/living/simple_animal/hostile/mothership_saucerdrone/bullet_act(var/obj/item/projectile/P) // Has a small chance to "evade" projectiles, but all you have to do is hit it once
-	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
-		if(prob(80))
-			src.health -= P.damage
-			return PROJECTILE_COLLISION_DEFAULT
-		else
-			visible_message("<span class='danger'>The [src] narrowly evades the [P.name]!</span>")
-			return PROJECTILE_COLLISION_MISS
-
-	if(istype(P, /obj/item/projectile/bullet))
-		if(prob(80))
-			src.health -= P.damage
-			return PROJECTILE_COLLISION_DEFAULT
-		else
-			visible_message("<span class='danger'>The [src] narrowly evades the bullet!</span>")
-			return PROJECTILE_COLLISION_MISS
-	return (..(P))
-
-/mob/living/simple_animal/hostile/mothership_saucerdrone/death(var/gibbed = FALSE)
-	..(TRUE)
-	visible_message("<span class='warning'>The [src] loses altitude and crash lands!</span>")
-	playsound(src, "sound/effects/explosion_small1.ogg", 50, 1)
-	qdel(src)
-
-///////////////////////////////////////////////////////////////////HOVERDISC DRONE///////////
-// A robotic enemy meant to support grey soldiers in combat. It will usually stay back, using its detection range to its advantage while firing high-damage laser blasts from afar
-/mob/living/simple_animal/hostile/mothership_hoverdisc
-	name = "Hoverdisc Drone"
-	desc = "A heavily armored mothership combat drone. It's equipped with an anti-gravity propulsion system and an integrated heavy disintegrator."
-	icon = 'icons/mob/animal.dmi'
-	icon_state = "hoverdisc_drone"
-	icon_living = "hoverdisc_drone"
-	pass_flags = PASSTABLE
-	turns_per_move = 5 // Not particularly fast
-	move_to_delay = 5
-	speed = 3
-	see_in_dark = 12 // Drone sensors or some such
-
-	maxHealth = 250
-	health = 250
-
-	vision_range = 12 // It can detect enemies from a further distance away than most simplemobs
-	aggro_vision_range = 12
-	idle_vision_range = 12
-
-	ranged = 1
-	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray
-	projectilesound = 'sound/weapons/ray1.ogg'
-	retreat_distance = 8 // It will attempt to linger at a distance just outside a player's typical field of view, taking potshots
-	minimum_distance = 8
-	ranged_cooldown = 5 // Some cooldown to balance the serious punch it packs
-	ranged_cooldown_cap = 5
-
-	melee_damage_lower = 5
-	melee_damage_upper = 10 // Deals almost no melee damage. It's primarily a ranged support unit
-
-	attacktext = "clumsily bumps"
-	attack_sound = 'sound/weapons/smash.ogg'
-
+	can_butcher = 0
 	flying = 1
 	acidimmune = 1
-	mob_property_flags = MOB_ROBOTIC
-	blooded = FALSE
-
-	status_flags = UNPACIFIABLE // Not pacifiable due to being a robit
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can open doors. Coincidentally this also seems to allow the mob to shoot through them (if they're glass airlocks)? It's weird
-	stat_attack = UNCONSCIOUS // DISINTEGRATION PROTOCOLS ACTIVE
 
 	min_oxy = 0
 	max_oxy = 0
@@ -146,10 +30,106 @@
 	minbodytemp = 0
 	maxbodytemp = 1000
 
-	faction = "mothership"
+	size = SIZE_SMALL
+	meat_type = null
+	held_items = list()
+	mob_property_flags = MOB_ROBOTIC
+	status_flags = UNPACIFIABLE // Not pacifiable due to being a robit
 
-/mob/living/simple_animal/hostile/mothership_hoverdisc/Process_Spacemove(var/check_drift = 0) // It can follow enemies into space, and won't just drift off
-	return 1
+	blooded = FALSE
+
+	see_in_dark = 8 // Drone sensors or some such
+
+	ranged = 1
+	projectiletype = /obj/item/projectile/energy/scorchbolt // Shoots a projectile that does 15 damage, not very threatening unless there's multiple
+	projectilesound = 'sound/weapons/alien_laser1.ogg'
+	retreat_distance = 2
+	minimum_distance = 2
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES // Can't smash much besides tables, so you can hide in a locker to escape
+
+/mob/living/simple_animal/hostile/mothership_saucerdrone/death(var/gibbed = FALSE)
+	..(TRUE)
+	playsound(src, "sound/effects/explosion_small1.ogg", 50, 1)
+	visible_message("<span class='warning'>The [src] loses altitude and crash lands!</span>")
+	qdel(src)
+
+/mob/living/simple_animal/hostile/mothership_saucerdrone/emp_act(severity) // Vulnerable to EMP damage, not that you NEED to use EMPs
+	if(flags & INVULNERABLE)
+		return
+
+	switch (severity)
+		if (1)
+			adjustBruteLoss(30)
+
+		if (2)
+			adjustBruteLoss(10)
+
+///////////////////////////////////////////////////////////////////HOVERDISC DRONE///////////
+// A robotic enemy meant to support grey soldiers in combat. It will usually stay back, using its detection range to its advantage while firing high-damage laser blasts from afar
+/mob/living/simple_animal/hostile/mothership_hoverdisc
+	name = "Hoverdisc Drone"
+	desc = "A heavily armored mothership combat drone. It's equipped with an anti-gravity propulsion system and an integrated heavy disintegrator."
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "hoverdisc_drone"
+	icon_living = "hoverdisc_drone"
+	pass_flags = PASSTABLE
+	maxHealth = 250 // Pretty tanky
+	health = 250
+	melee_damage_lower = 5
+	melee_damage_upper = 10
+	attacktext = "clumsily bumps"
+	attack_sound = 'sound/weapons/smash.ogg'
+	faction = "mothership"
+	can_butcher = 0
+	flying = 1
+	acidimmune = 1
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+	maxbodytemp = 1000
+
+	size = SIZE_BIG
+	meat_type = null
+	held_items = list()
+	mob_property_flags = MOB_ROBOTIC
+	status_flags = UNPACIFIABLE // Not pacifiable due to being a robit
+
+	blooded = FALSE
+
+	vision_range = 12 // It can detect enemies from a further distance away than most simplemobs
+	aggro_vision_range = 12
+	idle_vision_range = 12
+	see_in_dark = 12 // Drone sensors or some such
+
+	turns_per_move = 5 // Not particularly fast
+	move_to_delay = 5
+	speed = 3
+
+	ranged = 1
+	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray
+	projectilesound = 'sound/weapons/ray1.ogg'
+	retreat_distance = 8 // It will attempt to linger at a distance just outside a player's typical field of view, taking potshots
+	minimum_distance = 8
+	ranged_cooldown = 5 // Some cooldown to balance the serious punch it packs
+	ranged_cooldown_cap = 5
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can open doors. Coincidentally this also seems to allow the mob to shoot through them (if they're glass airlocks)? It's weird
+	stat_attack = UNCONSCIOUS // DISINTEGRATION PROTOCOLS ACTIVE
+
+/mob/living/simple_animal/hostile/mothership_hoverdisc/death(var/gibbed = FALSE)
+	..(TRUE)
+	visible_message("<span class='warning'>The [src] shudders and violently explodes!</span>")
+	new /obj/effect/gibspawner/robot(src.loc)
+	explosion(get_turf(src), -1, 2, 4, whodunnit = src)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/emp_act(severity) // Vulnerable to EMP damage
 	if(flags & INVULNERABLE)
@@ -177,13 +157,6 @@
 			src.health -= P.damage/3
 		return PROJECTILE_COLLISION_DEFAULT
 	return (..(P))
-
-/mob/living/simple_animal/hostile/mothership_hoverdisc/death(var/gibbed = FALSE)
-	..(TRUE)
-	visible_message("<span class='warning'>The [src] shudders and violently explodes!</span>")
-	new /obj/effect/gibspawner/robot(src.loc)
-	explosion(get_turf(src), -1, 2, 4, whodunnit = src)
-	qdel(src)
 
 ///////////////////////////////////////////////////////////////////POLYP///////////
 // A jellyfish-like creature from an alien world, adapted for space travel. It can give a nasty burning sting, but synthesizes an edible gelatin substance
@@ -285,13 +258,12 @@
 	else
 		..()
 
-/mob/living/simple_animal/hostile/retaliate/polyp/Process_Spacemove(var/check_drift = 0) // It can follow enemies into space, and won't just drift off
-	return 1
-
-/mob/living/simple_animal/hostile/retaliate/polyp/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
+// Mothership faction version, so it doesn't get attacked by the vault dwellers
+/mob/living/simple_animal/hostile/retaliate/polyp/mothership
 	faction = "mothership"
 
-/mob/living/simple_animal/hostile/retaliate/polyp/phyl // Unique polyp that has been trained to trade coins when fed NotRaisins, there's no way to know this in-game as of yet. Jellyfish traders when?
+// Unique polyp that has been trained to trade coins when fed NotRaisins, there's no way to know this in-game as of yet. Jellyfish traders when?
+/mob/living/simple_animal/hostile/retaliate/polyp/phyl
 	name = "Phyl"
 	desc = "This polyp has several coins stuck to its inner tendrils. How odd."
 
