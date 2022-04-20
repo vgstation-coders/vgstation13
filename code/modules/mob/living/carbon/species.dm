@@ -1197,7 +1197,6 @@ var/list/has_died_as_golem = list()
 					O.organ_data.transplant_data["blood_type"] = slime_person.dna.b_type
 					O.organ_data.transplant_data["blood_DNA"] =  slime_person.dna.unique_enzymes
 
-					O.organ_data.organ_holder = null
 					O.organ_data.owner = slime_person
 					slime_person.internal_organs |= O.organ_data
 					head.internal_organs |= O.organ_data
