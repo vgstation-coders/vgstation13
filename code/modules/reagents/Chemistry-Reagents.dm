@@ -1669,21 +1669,24 @@
 	if(..())
 		return 1
 
-	var/list/targeted_zones = list()
+	var/list/targeted_zones = zone_sels.Copy()
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
 			for(var/obj/item/clothing/C in H.get_equipped_items())
+				var/covered = FALSE
 				for(var/part in zone_sels)
 					if(C.body_parts_covered & limb_define_to_part_define(part))
-						if(C.acidable() && prob(15))
-							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
-							H.u_equip(C,0)
-							qdel(C)
-						else
-							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
-						continue
-					targeted_zones.Add(part)
+						covered = TRUE
+						targeted_zones.Remove(part)
+						break
+				if(covered)
+					if(C.acidable() && prob(15))
+						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
+						H.u_equip(C,0)
+						qdel(C)
+					else
+						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
 	if(M.acidable() && targeted_zones.len)
 		if(prob(15) && ishuman(M) && volume >= 30)
@@ -1749,21 +1752,24 @@
 	if(..())
 		return 1
 
-	var/list/targeted_zones = list()
+	var/list/targeted_zones = zone_sels.Copy()
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
 			for(var/obj/item/clothing/C in H.get_equipped_items())
+				var/covered = FALSE
 				for(var/part in zone_sels)
 					if(C.body_parts_covered & limb_define_to_part_define(part))
-						if(C.acidable() && prob(15))
-							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
-							H.u_equip(C,0)
-							qdel(C)
-						else
-							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
-						continue
-					targeted_zones.Add(part)
+						covered = TRUE
+						targeted_zones.Remove(part)
+						break
+				if(covered)
+					if(C.acidable() && prob(15))
+						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
+						H.u_equip(C,0)
+						qdel(C)
+					else
+						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
 	if(M.acidable() && targeted_zones.len) //I think someone doesn't know what this does
 		if(ishuman(M))
