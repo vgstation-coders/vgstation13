@@ -137,6 +137,7 @@
 "rE" = (/obj/structure/rack,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/storage/bag/ore,/obj/item/weapon/storage/bag/ore,/turf/unsimulated/floor/airless{dir = 6; icon_state = "asteroidwarning"},/area/vault/mothership_lab/asteroid)
 "rG" = (/obj/machinery/light/he,/turf/simulated/floor{icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "rZ" = (/obj/structure/rack,/turf/unsimulated/floor/airless{dir = 9; icon_state = "asteroidwarning"},/area/vault/mothership_lab/asteroid)
+"sc" = (/obj/effect/narration/mothership_lab/ayyboss,/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/control_room)
 "sn" = (/obj/structure/cage/autoclose/cover,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "sr" = (/obj/structure/bed/chair,/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/turret_protected/vault/mothership_lab/entrance)
 "ss" = (/turf/simulated/floor{dir = 4; icon_state = "darkredcorners"; tag = "icon-darkredcorners (EAST)"},/area/turret_protected/vault/mothership_lab/entrance)
@@ -197,7 +198,7 @@
 "zu" = (/obj/structure/cage/autoclose/cover,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "zw" = (/obj/machinery/computer/crew,/obj/machinery/light/he/broken{dir = 4},/turf/simulated/floor{dir = 4; icon_state = "darkred"; tag = "icon-darkred (EAST)"},/area/turret_protected/vault/mothership_lab/control_room)
 "zy" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 8},/obj/item/weapon/cell/ultra,/obj/item/weapon/cell/ultra,/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/control_room)
-"zz" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Control Room Access"; req_access_txt = "164"; req_one_access_txt = "164"},/obj/effect/narration/mothership_lab/ayyboss,/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/control_room)
+"zz" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Control Room Access"; req_access_txt = "164"; req_one_access_txt = "164"},/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/control_room)
 "zK" = (/obj/machinery/door/airlock/hatch{name = "Lab Hangar Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "zX" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/asteroid)
 "Ak" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Control Room Access"; req_access_txt = "164"; req_one_access_txt = "164"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/control_room)
@@ -417,7 +418,7 @@ MDMDYFoogFPHPHXHvwooUQkGUQooGecHPHPHlEooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQI
 MDMDYFoozyBJYUSXGdooooyqoooomJSXjnTAPdooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIgVMaQTZTyEzKyEZTIXZTbIuKolZTCzLKHQCPyGqaZTYFYFYFMDMDYFGLGLeQGLYFMD
 MDmvYFooooooooooooooVwPJVwooooooooooooooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIcfDETYgngnDEnvZTIXZTUXuKJTZTEGLKDNbHDNjEZTZTZTZTYFMDYFGLeQvDGLYFMD
 MDmvYFtrqxvPooWwQRiHoozzooKDQRWwoovPIctrIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIRDTYQTZTfxKUgnZTIXZTJTEySDZTPfLKLKLKLKLKgjlxPCZTYFMDAulyeQGLGLYFMD
-MDmvYFoojWjWooQRQRQRWwQRWwQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwZTSSAnChZTIXZTppuKnjZTWOyDAsyDWRKWZTiGFfZTYFMDNfFteQlyrZYFMD
+MDmvYFoojWjWooQRQRQRWwscWwQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwZTSSAnChZTIXZTppuKnjZTWOyDAsyDWRKWZTiGFfZTYFMDNfFteQlyrZYFMD
 MDMDYFoofzjWooQRQRQRQRQRQRQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwyjvUvUZTZTcKZTbIdubIZTZTZTZTZTZTZTZTRRFfZTYFMDAulyeQGLsXYFMD
 MDMDYFoojWjWoomTQRQRQRQRQRQRQRmToojWfzooIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwyjZTcKfcLXVTWPQmXQbLWIZTYFZTuiFfFfZTYFMDYFGLvDGLYFMDMD
 MDMDYFoojWjWooooooSbiuiuiuSboooooojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwFRZTcKZTFKuKdutbDEVTDEZTYFZTZTZTZTZTYFMDYFGLeQGLYFMDMD

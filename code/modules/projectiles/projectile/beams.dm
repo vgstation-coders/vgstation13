@@ -645,7 +645,7 @@ var/list/beam_master = list()
 			return 1
 
 /obj/item/projectile/beam/immolationray/upgraded // Exclusively used by the hoverdisc drone
-	damage = 60
+	damage = 55
 
 /obj/item/projectile/beam/atomizationray
 	name = "atomization ray"

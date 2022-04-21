@@ -1,8 +1,7 @@
-/obj/item/projectile/scorchbolt // Can't make it an energy projectile or it has a tendency to runtime??? Somehow just making it a child of a generic projectile fixed it
+/obj/item/projectile/energy/scorchbolt // Has a tendency to runtime and I can't figure out why, aaaaaaaaaaaaaaaa
 	name = "scorch bolt"
 	icon_state = "scorchbolt"
 	damage = 15
-	damage_type = BURN
 	fire_sound = 'sound/weapons/alien_laser1.ogg'
 
 ///////////////////////////////////////////////////////////////////SAUCER DRONE///////////
@@ -14,8 +13,8 @@
 	icon_state = "minidrone"
 	icon_living = "minidrone"
 	pass_flags = PASSTABLE
-	maxHealth = 25 // Quite fragile
-	health = 25
+	maxHealth = 30 // Quite fragile
+	health = 30
 	melee_damage_type = BURN
 	melee_damage_lower = 15
 	melee_damage_upper = 15
@@ -35,7 +34,7 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	maxbodytemp = 1000
+	maxbodytemp = 500
 
 	size = SIZE_SMALL
 	meat_type = null
@@ -48,7 +47,7 @@
 	see_in_dark = 8 // Drone sensors or some such
 
 	ranged = 1
-	projectiletype = /obj/item/projectile/scorchbolt // Shoots a projectile that does 15 damage, not very threatening unless there's multiple
+	projectiletype = /obj/item/projectile/energy/scorchbolt // Shoots a projectile that does 15 damage, not very threatening unless there's multiple
 	projectilesound = 'sound/weapons/alien_laser1.ogg'
 	retreat_distance = 2
 	minimum_distance = 2
@@ -73,7 +72,7 @@
 			adjustBruteLoss(10)
 
 ///////////////////////////////////////////////////////////////////HOVERDISC DRONE///////////
-// A robotic enemy meant to support grey soldiers in combat. It will usually stay back, using its detection range to its advantage while firing high-damage laser blasts from afar
+// An armored robotic enemy meant to support grey soldiers in combat. It will usually stay back, using its detection range to its advantage while firing high-damage laser blasts from afar
 /mob/living/simple_animal/hostile/mothership_hoverdisc
 	name = "Hoverdisc Drone"
 	desc = "A heavily armored mothership combat drone. It's equipped with an anti-gravity propulsion system and an integrated heavy disintegrator."
@@ -81,12 +80,13 @@
 	icon_state = "hoverdisc_drone"
 	icon_living = "hoverdisc_drone"
 	pass_flags = PASSTABLE
-	maxHealth = 250 // Pretty tanky
-	health = 250
-	melee_damage_lower = 5
-	melee_damage_upper = 10
-	attacktext = "clumsily bumps"
-	attack_sound = 'sound/weapons/smash.ogg'
+	maxHealth = 175 // Pretty decent HP, but the armor is the real problem
+	health = 175
+	melee_damage_type = BURN
+	melee_damage_lower = 55 // Fighting it in melee is ballsy, to say the least
+	melee_damage_upper = 55
+	attacktext = "fires point-blank at"
+	attack_sound = 'sound/weapons/ray1.ogg'
 	faction = "mothership"
 	can_butcher = 0
 	flying = 1
@@ -123,10 +123,10 @@
 	ranged = 1
 	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray
 	projectilesound = 'sound/weapons/ray1.ogg'
-	retreat_distance = 8 // It will attempt to linger at a distance just outside a player's typical field of view, taking potshots
+	retreat_distance = 8 // It will attempt to linger at a distance just outside of a player's typical field of view, firing shots while deflecting return fire off its armor
 	minimum_distance = 8
-	ranged_cooldown = 5 // Some cooldown to balance the serious punch it packs
-	ranged_cooldown_cap = 5
+	ranged_cooldown = 4 // Some cooldown to balance the serious punch it packs
+	ranged_cooldown_cap = 4
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can open doors. Coincidentally this also seems to allow the mob to shoot through them (if they're glass airlocks)? It's weird
 	stat_attack = UNCONSCIOUS // DISINTEGRATION PROTOCOLS ACTIVE
@@ -138,30 +138,42 @@
 	explosion(get_turf(src), -1, 2, 4, whodunnit = src)
 	qdel(src)
 
-/mob/living/simple_animal/hostile/mothership_hoverdisc/emp_act(severity) // Vulnerable to EMP damage
+/mob/living/simple_animal/hostile/mothership_hoverdisc/emp_act(severity) // Extremely vulnerable to EMP damage, three direct hits with an ion rifle will destroy it, or three to four ion grenades in close proximity
 	if(flags & INVULNERABLE)
 		return
 
 	switch (severity)
 		if (1)
-			adjustBruteLoss(50)
+			adjustBruteLoss(70)
 
 		if (2)
-			adjustBruteLoss(30)
+			adjustBruteLoss(50)
 
-/mob/living/simple_animal/hostile/mothership_hoverdisc/bullet_act(var/obj/item/projectile/P) // Tough nut. Energy weapons are almost completely ineffective. Ballistics are better, but ions are best
+/mob/living/simple_animal/hostile/mothership_hoverdisc/attackby(var/obj/item/W as obj, var/mob/user as mob) // Melee weapon force has to be quite high to be effective
+	if(W.force >= 20)
+		var/damage = W.force
+		if (W.damtype == HALLOSS)
+			damage = 0
+		health -= damage
+		visible_message("<span class='danger'>[user] damages \the [src] with \the [W]! </span>")
+		playsound(src, 'sound/effects/sparks1.ogg', 25)
+	else
+		visible_message("<span class='danger'>\The [W] glances harmlessly off of \the [src]'s armor plating! </span>")
+		playsound(src, 'sound/items/metal_impact.ogg', 25)
+
+/mob/living/simple_animal/hostile/mothership_hoverdisc/bullet_act(var/obj/item/projectile/P) // Tough nut. Energy weapons are almost completely ineffective, and ballistics do reduced damage. Ions are your best friend here
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		if(prob(35))
 			src.health -= P.damage
 		else
-			visible_message("<span class='danger'>The [P.name] dissipates harmlessly on the [src]'s armor plating!</span>") // Energy weapons have a high chance to "dissipate" and do no damage
+			visible_message("<span class='danger'>The [P.name] dissipates harmlessly on the [src]'s armor plating!</span>") // Lasers that fail to get through "dissipate" and do no damage
 		return PROJECTILE_COLLISION_DEFAULT
 	if(istype(P, /obj/item/projectile/bullet))
-		if(prob(65))
+		if(prob(35))
 			src.health -= P.damage
 		else
-			visible_message("<span class='danger'>The bullet glances off the [src]'s armor plating, failing to penetrate!</span>") // Bullets have a lesser chance to "deflect", and do reduced damage
-			src.health -= P.damage/3
+			visible_message("<span class='danger'>The bullet glances off the [src]'s armor plating, failing to penetrate!</span>") // Bullets that fail to get through "deflect" and do reduced damage
+			src.health -= P.damage/4
 		return PROJECTILE_COLLISION_DEFAULT
 	return (..(P))
 
