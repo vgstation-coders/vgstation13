@@ -172,7 +172,7 @@
 		if(prob(35))
 			src.health -= P.damage
 		else
-			visible_message("<span class='danger'>The bullet glances off the [src]'s armor plating, failing to penetrate!</span>") // Bullets that fail to get through "deflect" and do reduced damage
+			visible_message("<span class='danger'>The [P.name] glances off the [src]'s armor plating, failing to penetrate!</span>") // Bullets that fail to get through "deflect" and do reduced damage
 			src.health -= P.damage/5
 		return PROJECTILE_COLLISION_DEFAULT
 	return (..(P))
