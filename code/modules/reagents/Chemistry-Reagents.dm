@@ -1669,16 +1669,12 @@
 	if(..())
 		return 1
 
+	var/list/targeted_zones = list()
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
-			var/mob/living/carbon/human/HM
-			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
-				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
-					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head)
-						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
@@ -1686,13 +1682,14 @@
 							qdel(C)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
-						return
+						continue
+					targeted_zones.Add(part)
 
-	if(M.acidable())
+	if(M.acidable() && targeted_zones.len)
 		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
-			for(var/part in zone_sels)
+			for(var/part in targeted_zones)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
 					if(ext_organ.take_damage((25 / zone_sels.len), 0)) // Balance for precisions vs general.
@@ -1752,16 +1749,12 @@
 	if(..())
 		return 1
 
+	var/list/targeted_zones = list()
 	if(method == TOUCH)
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/H = M
-			var/mob/living/carbon/human/HM
-			if(ishuman(M)) //Workaround for .head variable... someone really needs to clean up appearance code
-				HM = H
 			for(var/obj/item/clothing/C in H.get_equipped_items())
 				for(var/part in zone_sels)
-					if(istype(C, /obj/item/weapon/reagent_containers/glass/bucket) && HM && C == HM.head) //Was like this in legacy system
-						continue
 					if(C.body_parts_covered & limb_define_to_part_define(part))
 						if(C.acidable() && prob(15))
 							to_chat(H, "<span class='warning'>Your [C] melts away but protects you from the acid!</span>")
@@ -1769,13 +1762,14 @@
 							qdel(C)
 						else
 							to_chat(H, "<span class='warning'>Your [C] protects you from the acid!</span>")
-						return
+						continue
+					targeted_zones.Add(part)
 
-	if(M.acidable()) //I think someone doesn't know what this does
+	if(M.acidable() && targeted_zones.len) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
-			for(var/part in zone_sels)
+			for(var/part in targeted_zones)
 				var/datum/organ/external/ext_organ = H.get_organ(part)
 				if(ext_organ)
 					if(ext_organ.take_damage((15 / zone_sels.len), 0)) // Balance for precisions vs general.
