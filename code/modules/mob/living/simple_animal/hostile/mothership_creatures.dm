@@ -138,7 +138,7 @@
 	explosion(get_turf(src), -1, 2, 4, whodunnit = src)
 	qdel(src)
 
-/mob/living/simple_animal/hostile/mothership_hoverdisc/emp_act(severity) // Extremely vulnerable to EMP damage, three direct hits with an ion rifle will destroy it, or three to four ion grenades in close proximity
+/mob/living/simple_animal/hostile/mothership_hoverdisc/emp_act(severity) // Extremely vulnerable to EMP damage, three direct hits with an ion rifle will destroy it, or three to four emp grenades in close proximity
 	if(flags & INVULNERABLE)
 		return
 
@@ -155,10 +155,10 @@
 		if (W.damtype == HALLOSS)
 			damage = 0
 		health -= damage
-		visible_message("<span class='danger'>[user] damages \the [src] with \the [W]! </span>")
+		visible_message("<span class='danger'>[user] damages the [src] with \the [W]! </span>")
 		playsound(src, 'sound/effects/sparks1.ogg', 25)
 	else
-		visible_message("<span class='danger'>\The [W] glances harmlessly off of \the [src]'s armor plating! </span>")
+		visible_message("<span class='danger'>\The [W] glances harmlessly off of the [src]'s armor plating! </span>")
 		playsound(src, 'sound/items/metal_impact.ogg', 25)
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/bullet_act(var/obj/item/projectile/P) // Tough nut. Energy weapons are almost completely ineffective, and ballistics do reduced damage. Ions are your best friend here
@@ -167,13 +167,14 @@
 			src.health -= P.damage
 		else
 			visible_message("<span class='danger'>The [P.name] dissipates harmlessly on the [src]'s armor plating!</span>") // Lasers that fail to get through "dissipate" and do no damage
+			playsound(src, 'sound/items/metal_impact.ogg', 25)
 		return PROJECTILE_COLLISION_DEFAULT
 	if(istype(P, /obj/item/projectile/bullet))
 		if(prob(35))
 			src.health -= P.damage
 		else
 			visible_message("<span class='danger'>The bullet glances off the [src]'s armor plating, failing to penetrate!</span>") // Bullets that fail to get through "deflect" and do reduced damage
-			src.health -= P.damage/4
+			src.health -= P.damage/5
 		return PROJECTILE_COLLISION_DEFAULT
 	return (..(P))
 
