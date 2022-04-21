@@ -8,6 +8,7 @@
 	flags = INVULNERABLE
 	walltype = "swall"
 
+
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall/shuttle,
@@ -184,3 +185,70 @@
 /turf/simulated/floor/shuttle/brig // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
 	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
 	icon_state = "floor4"
+
+
+/obj/machinery/podcomputer 
+	name = "pod computer"
+	desc = "A computer for piloting escape pods. The software hasn't been updated since the autopilot system was installed and is mostly non-functional."
+	use_power = 0
+	icon = 'icons/obj/computer.dmi'
+	icon_state = "podcomputer"
+	icon_state_open = "podcomputer_maint"
+
+	var/datum/shuttle/escape/pod/linked_pod
+	machine_flags = SCREWTOGGLE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
+
+/obj/machinery/podcomputer/Destroy()
+	linked_pod?.podcomputer = null
+	..()
+	
+/obj/machinery/podcomputer/process()
+	..()
+	update_icon()
+
+/obj/machinery/podcomputer/emag_act(mob/user)
+	if(emagged)
+		return
+	if(emergency_shuttle.online)
+		to_chat(user, "<span class='warning'>The emergency shuttle is already on its way. \The [src]'s systems are locked.")
+		return
+	to_chat(user, "<span class='warning'>You insert the cryptographic sequencer into the [src] short out the desination controller!</span>")
+	emagged = TRUE
+	linked_pod?.crashing_this_pod = "with no survivors"
+	spark(src)
+	update_icon()
+
+/obj/machinery/podcomputer/examine(mob/user)
+	..()
+	if(panel_open && emagged)
+		to_chat(user, "<span class='danger'>Some of the wires have been shorted out!</span>")
+	
+/obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
+	..()
+	if(issolder(O) && emagged && panel_open)
+		var/obj/item/tool/solder/S = O
+		if(S.remove_fuel(2,user))
+			fix_circuitry(user)
+
+/obj/machinery/podcomputer/proc/fix_circuitry(mob/user)
+	emagged = FALSE
+	to_chat(user, "<span class='notice'>You repair the melted wire in the destination controller.</span>")
+	linked_pod?.crashing_this_pod = FALSE
+
+/obj/machinery/podcomputer/update_icon()
+	if(panel_open)
+		icon_state = "podcomputer_maint"
+	else if(emergency_shuttle.online)
+		icon_state = "podcomputer_shuttle"
+	else if(emagged)
+		icon_state = "podcomputer_error"
+	else 
+		icon_state = "podcomputer"
+
+

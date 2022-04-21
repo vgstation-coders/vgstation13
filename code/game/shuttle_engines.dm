@@ -41,6 +41,19 @@
 	icon_state = "propulsion"
 	opacity = 1
 	var/exhaust_type = /obj/item/projectile/fire_breath/shuttle_exhaust
+	var/destroyed = 0 
+
+/obj/structure/shuttle/engine/propulsion/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			die()
+		if(2.0)
+			if(prob(50))
+				die()
+
+/obj/structure/shuttle/engine/propulsion/proc/die()
+	icon_state = "propulsion_dead"
+	destroyed = 1
 
 /obj/structure/shuttle/engine/heater/DIY
 	name = "shuttle engine pre-igniter"
@@ -54,7 +67,7 @@
 	disconnect()
 
 	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in range(1,src))
-		if(D.anchored && !D.heater && D.dir == dir && D.loc == get_step(src,dir))
+		if(D.anchored && !D.destroyed && !D.heater && D.dir == dir && D.loc == get_step(src,dir))
 			D.heater = src
 			connected_engine = D
 			desc += " It is connected to an engine." // have to do both, because only one of the parts' try_connect()s runs
@@ -187,7 +200,7 @@
 	return ..()
 
 /obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust(forward=9, backward=9, var/turf/source_turf)
-	if(!anchored)
+	if(!anchored || destroyed)
 		return
 	var/turf/target = get_edge_target_turf(src,dir)
 	var/turf/T = source_turf

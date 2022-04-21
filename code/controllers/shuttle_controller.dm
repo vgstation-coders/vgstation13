@@ -131,20 +131,21 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if (!pod || !destination || !(istype(pod, /datum/shuttle/escape)) || !escape_pods.Find(pod))
 		return
 
-	var/datum/shuttle/escape/S = pod
+	var/datum/shuttle/escape/pod/S = pod
 	switch(destination)
 		if("station")
 			if(!S.move_to_dock(S.dock_station, 0))
 				message_admins("Warning: [S] failed to move to station.")
 		if("centcom")
-			if(!S.move_to_dock(S.dock_centcom, 0))
-				message_admins("Warning: [S] failed to move to centcom.")
+			if(S.current_port != S.dock_shuttle)
+				if(!S.move_to_dock(S.dock_centcom, 0))
+					message_admins("Warning: [S] failed to move to centcom.")
 		if("transit")
 			if(!S.move_to_dock(S.transit_port, 0))
 				message_admins("Warning: [S] failed to move to transit.")
 	spawn()
 		for(var/obj/machinery/door/D in S.linked_area)
-			if(destination == "transit")
+			if(destination == "transit" || destination == "shuttle")
 				D.close()
 			else
 				D.open()
@@ -340,6 +341,16 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
 					spawn()
 						P.shoot_exhaust(backward = 3)
+
+				var/collision_imminent = FALSE
+				for(var/datum/shuttle/escape/pod/pod in escape_pods)
+					if(pod.crashing_this_pod)
+						pod.crash_into_shuttle()
+						collision_imminent = TRUE
+
+				if(collision_imminent)
+					playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
+				
 				if(timeleft>0)
 					return 0
 
