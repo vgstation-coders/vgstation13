@@ -162,6 +162,17 @@
 		if(!throwing)
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
+			if(istype(Obstacle,/obj/machinery/door/airlock) && istype(src,/mob/living/carbon/human)) //Tackling doors while wearing an emag hacks them open
+				var/obj/machinery/door/airlock/A = Obstacle
+				var/mob/living/carbon/human/H = src
+				if(H.wear_id && istype(H.wear_id, /obj/item/weapon/card/emag))
+					if (!A.operating)
+						A.operating = -1
+						if(A.density)
+							A.door_animate("spark")
+							sleep(6)
+							A.open(1)
+						A.operating = -1
 			tackleGetHurt()
 
 /mob/living/carbon/proc/tackleGetHurt(var/hurtAmount = 0, var/knockAmount = 0, var/hurtSound = "trayhit")
