@@ -167,7 +167,6 @@
 			src.health -= P.damage
 		else
 			visible_message("<span class='danger'>The [P.name] dissipates harmlessly on the [src]'s armor plating!</span>") // Lasers that fail to get through "dissipate" and do no damage
-			playsound(src, 'sound/items/metal_impact.ogg', 25)
 		return PROJECTILE_COLLISION_DEFAULT
 	if(istype(P, /obj/item/projectile/bullet))
 		if(prob(35))
