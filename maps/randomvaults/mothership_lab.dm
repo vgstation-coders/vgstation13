@@ -269,7 +269,7 @@
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 
 /obj/item/clothing/under/grey/grey_worker
-	desc = "A set of coveralls issued to mothership engineers and technicians. It has minor radiation shielding."
+	desc = "A set of high visibility coveralls issued to mothership engineers and technicians. It has minor radiation shielding."
 	name = "worker's coveralls"
 	icon_state = "greyuniform_worker"
 	item_state = "greyuniform_worker"
@@ -278,20 +278,20 @@
 
 /obj/item/clothing/under/grey/grey_scout
 	name = "explorer's uniform"
-	desc = "A uniform issued to the mothership's exploration league. Map the stars and probe new species with pride, explorer."
+	desc = "A uniform issued to the mothership's exploration league. The strong material offers some protection from the teeth and claws of hostile xenofauna."
 	icon_state = "greyuniform_scout"
 	item_state = "greyuniform_scout"
 	_color = "greyuniform_scout"
-	armor = list(melee = 5, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 5)
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/under/grey/grey_soldier
 	name = "soldier's uniform"
-	desc = "A uniform issued to the mothership's defense forces. It's made of tough, thermal-resistant fibers."
+	desc = "A uniform issued to the mothership's defense forces. It's made from thermal-resistant fibers that provide some protection from laser fire."
 	icon_state = "greyuniform_soldier"
 	item_state = "greyuniform_soldier"
 	_color = "greyuniform_soldier"
-	armor = list(melee = 5, bullet = 0, laser = 10,energy = 0, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 0, bullet = 0, laser = 10,energy = 5, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/under/grey/grey_researcher
