@@ -17,7 +17,7 @@ CREATE TABLE players (
     gen_record          TEXT,
     player_alt_titles   TEXT,
     be_special          TEXT,
-    disabilities        INTEGER,
+    disabilities        INTEGER,-0
     nanotrasen_relation TEXT,
     bank_security 		INTEGER,
     UNIQUE ( player_ckey, player_slot )
@@ -121,6 +121,7 @@ CREATE TABLE client (
     hear_instruments INTEGER,
     ambience_volume INTEGER,
     credits_volume INTEGER,
+	heatset_sounds INTEGER,
     antag_objectives INTEGER,
 	typing_indicator INTEGER,
 	mob_chat_on_map INTEGER,
