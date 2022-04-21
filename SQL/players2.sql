@@ -121,7 +121,7 @@ CREATE TABLE client (
     hear_instruments INTEGER,
     ambience_volume INTEGER,
     credits_volume INTEGER,
-	heatset_sounds INTEGER,
+	headset_sounds INTEGER,
     antag_objectives INTEGER,
 	typing_indicator INTEGER,
 	mob_chat_on_map INTEGER,
