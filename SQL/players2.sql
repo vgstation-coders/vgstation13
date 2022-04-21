@@ -17,7 +17,7 @@ CREATE TABLE players (
     gen_record          TEXT,
     player_alt_titles   TEXT,
     be_special          TEXT,
-    disabilities        INTEGER,-0
+    disabilities        INTEGER,
     nanotrasen_relation TEXT,
     bank_security 		INTEGER,
     UNIQUE ( player_ckey, player_slot )
