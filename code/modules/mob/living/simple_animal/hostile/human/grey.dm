@@ -587,7 +587,6 @@
 	ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/chemist/Shoot(var/atom/target, var/atom/start, var/mob/user) // Angry nerd will throw unstable goo, or a flask filled with nasty chems
-	var/mob/living/L = target
 	switch(rand(0,3))
 		if(0)
 			visible_message("<span class = 'warning'>\The [src] pulls a glob of unstable goo from one of their labcoat pockets and hurls it towards \the [target]!</span>")
