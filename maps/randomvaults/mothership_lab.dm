@@ -20,7 +20,7 @@
 	name = "\improper Mothership Lab Asteroid"
 	icon_state = "mothershiplab_asteroid"
 	requires_power = 0
-	jammed = 1
+	jammed = 2
 	flags = NO_PACIFICATION
 
 /area/vault/mothership_lab/hobo
