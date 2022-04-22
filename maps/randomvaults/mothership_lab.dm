@@ -105,7 +105,7 @@
 //////////////////////////////
 
 /obj/effect/narration/mothership_lab // A fairly explicit warning to turn back if faint of heart or ill-equipped
-	msg = "An intense sense of foreboding worms into your mind as you pass the entrance to the lab. Somehow, you know that this place contains great danger."
+	msg = "An intense sense of foreboding worms into your mind as you approach the entrance to the lab. Somehow, you know that this place contains great danger."
 	play_sound = 'sound/ambience/spookyspace1.ogg'
 
 /obj/effect/narration/mothership_lab/raidertunnel // This tunnel be for pirates, matey
@@ -125,7 +125,7 @@
 	play_sound = 'sound/hallucinations/turn_around1.ogg'
 
 /obj/effect/narration/mothership_lab/leaderdeck2 // Like anyone will stop if they've come this far. Gotta grab everything you can!
-	msg = "The presence scratches at your mind again, stronger this time. Whoever or whatever it is, it's telling you to turn back the way you came immediately."
+	msg = "The presence is in your mind again, stronger this time. Whoever or whatever it is, it's telling you to turn back the way you came immediately."
 	play_sound = 'sound/hallucinations/i_see_you1.ogg'
 
 /obj/effect/narration/mothership_lab/nurseboss // Hello, Nurse?
@@ -137,7 +137,7 @@
 	play_sound = 'sound/misc/shriek1.ogg'
 
 /obj/effect/narration/mothership_lab/ayyboss // The final battle, oh yeah!
-	msg = "It looks like this is the facility's control room. The presence scratching at your mind is much stronger here, and seems extraordinarily displeased with you for coming this far. Whatever the source of it is, it's inside this room."
+	msg = "It looks like this is the facility's control room. The presence that has been communicating with your mind is much stronger here, and seems extraordinarily displeased with you for coming this far. Whatever the source of it is, it's inside this room."
 	play_sound = 'sound/music/elite_syndie_squad.ogg'
 
 //////////////////////////////

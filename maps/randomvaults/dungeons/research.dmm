@@ -215,7 +215,7 @@
 "po" = (/mob/living/simple_animal/hostile/mothership_hoverdisc,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
 "pp" = (/obj/structure/ladder{id = "labladder_2"; name = "Habitation Deck Access"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/research)
 "pr" = (/obj/structure/bed/chair/shuttle/red{dir = 4},/mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy{dir = 4},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/armory)
-"px" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "armor cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/clothing/suit/armor/mothership_heavy,/obj/item/clothing/suit/armor/mothership_heavy,/obj/item/clothing/head/helmet/mothership_visor_heavy,/obj/item/clothing/head/helmet/mothership_visor_heavy,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/armory)
+"px" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "armor cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/clothing/suit/armor/mothership_heavy,/obj/item/clothing/suit/armor/mothership_heavy,/obj/item/clothing/head/helmet/mothership_visor_heavy,/obj/item/clothing/head/helmet/mothership_visor_heavy,/obj/item/weapon/shield/energy/red,/obj/item/weapon/shield/energy/red,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/armory)
 "pA" = (/obj/machinery/computer/operating{name = "Robotics Operating Computer"},/obj/structure/window/reinforced{dir = 1},/obj/structure/closet/walllocker/defiblocker{pixel_x = 32},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
 "pB" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/spray/cleaner{desc = "Someone has crossed out the Space from Space Cleaner and written in Surgery. 'Do not remove under punishment of death!!!' is scrawled on the back."; name = "Surgery Cleaner"},/obj/item/clothing/gloves/latex,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
 "pD" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor{dir = 9; icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/research)
@@ -430,7 +430,7 @@
 "IC" = (/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/structure/bed/chair/folding{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/research)
 "ID" = (/turf/simulated/floor{dir = 4; icon_state = "darkredcorners"; tag = "icon-darkredcorners (EAST)"},/area/turret_protected/vault/mothership_lab/research)
 "IE" = (/obj/structure/bed/chair/shuttle/gamer{dir = 4},/obj/machinery/camera{dir = 1; id_tag = "labcameras"; name = "Genetics Research South"; network = list("MOTHERSHIPLAB")},/mob/living/simple_animal/hostile/humanoid/grey/researcher{dir = 4},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/research)
-"IO" = (/obj/effect/narration/mothership_lab/leaderdeck,/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/research)
+"IO" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/effect/narration/mothership_lab/leaderdeck,/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/research)
 "IS" = (/obj/machinery/door/airlock/vault{locked = 1; name = "MDF Armory"; req_access_txt = "164"; req_one_access_txt = "164"},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/armory)
 "Jk" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/armory)
 "Jz" = (/obj/structure/shuttle/diag_wall/black{dir = 4},/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/research)
@@ -669,8 +669,8 @@ rVrVYQRholFzfUOOZzVQRhSpOEmpkFdkpgWVuxuxEBRhweZYMCyrDHrTLRRhxvLbIELbJTRhuxcbuxRh
 rVrVYQRhicuxuxuxuxuxreictdnzAXhqfzRhdluxyBRhBJpGUiyrzrLkpARhRhRhRhRhRhRhRhRhRhRhsrGaaTxGdpxIejjIxGRaGazyRhRhYQrVrVrVrVrVrVrVrV
 rVrVYQRhWBxTOAIzuxemRhRhPffIPfRhRhRhRhYHRhRhRhpkhHyrlcuxduRhSGEYGWEYHrEYTLTpRhRaGaNCxGxGlMxIYJmmxGaiGaGadnRhYQYQYQYQYQrVrVrVrV
 rVrVYQRhRhRhRhicuxuORhJzCZcvcvVZRhcvcvoHcvRyRhhUyryrlcOiWxRhhUyryryryryryryrHdGaGaWWxGqdxIxIxIxIxGxGxGxGxGxGxGxGxGxGxGYQrVrVrV
-rVYQRhRhKILzRhuxuxTYRhoHhkhkoHIOxhoHoHoHcvRhRhyryryrlcuxwKRharuqjouqRhRhqsRhRhRhRhRhxGvdxIIbxIxIxIwlAfFoHDKzxGNEPUNExGYQrVrVrV
-rVYQRhebGaGapMuxQasSRhQDSsCydVRrRhcvoHcvcvRyRhyrLpggzemlgoRhRhRhRhRhRhONyrTfvVVPkRfCxGXfuGvMorcDxIqdxIxIxIZNxGNExINExGYQrVrVrV
+rVYQRhRhKILzRhuxuxTYRhoHhkhkoHoHxhoHoHoHcvRhRhyryryrlcuxwKRharuqjouqRhRhqsRhRhRhRhRhxGvdxIIbxIxIxIwlAfFoHDKzxGNEPUNExGYQrVrVrV
+rVYQRhebGaGapMuxQasSRhQDSsIOdVRrRhcvoHcvcvRyRhyrLpggzemlgoRhRhRhRhRhRhONyrTfvVVPkRfCxGXfuGvMorcDxIqdxIxIxIZNxGNExINExGYQrVrVrV
 rVYQRhGAGAGAGAGAGAGAGAGARhFkRhRhRhRhIhRhRhRhRhsKRhRhRhRhRhRhQdRmZJeEjAviyrwNvVfpjHaRxGxIxIxIxIxIxIxGxGVBHSxGxGxGQOxGxGYQrVrVrV
 rVrVYQGAhwoswPryVrnCdEGAcvoHJOcvRhPGoHcvcvcvCyoHcvRhfLbUdLhHviyryryryryryryrFlqOkOqkxGGRMtUAYmZsxIxGYnxIYJxIxItTqdHhxGYQrVrVrV
 rVrVYQGAmgDeezwPVrnCGAGAyiZVqbcvRhyioHoHoHoHRxAsoHbjyryryryryryryryryryryrIsvVfpfpfpxGJVHOZEVJTxxISCxIxIxIiixIIbxIMLxGYQrVrVeW
