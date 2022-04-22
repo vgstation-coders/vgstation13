@@ -492,17 +492,133 @@
 //////////////////////////////
 // GREY RESEARCHERS
 //////////////////////////////
+//Baseline researcher, here for the sake of some inheritance sanity
+/mob/living/simple_animal/hostile/humanoid/grey/researcher
+	name = "Mothership Researcher"
+	desc = "A thin alien humanoid. This one is wearing a labcoat and appears to be unfriendly."
+
+	icon_state = "greyresearcher_base"
+	icon_living = "greyresearcher_base"
+
+	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
+
+	melee_damage_lower = 4
+	melee_damage_upper = 6 // Very weak melee attacks, angry nerd flailing
+
+	attacktext = "kicks"
+	attack_sound = 'sound/weapons/punch1.ogg'
+
+	faction = "mothership"
+
+	corpse = /obj/effect/landmark/corpse/grey/researcher
+
+///////////////////////////////////////////////////////////////////GREY SCIENTIST///////////
+//Grey ranged researcher. Less hit points than a soldier, will shoot their disintegrator at targets and occasionally change firing modes
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/laser
+	name = "Mothership Researcher"
+	desc = "A thin alien humanoid. This one is armed with a disintegrator."
+
+	icon_state = "greyresearcher_laser"
+	icon_living = "greyresearcher_laser"
+
+	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows them to shoot through glass airlocks
+
+	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/toy/snappop/virus)
+
+	speak = list("I can't believe these reports.","This will be my most impressive breakthrough yet.","Can't those MDF buffoons do anything right?","The Administration will make me a senior researcher when they see these results.")
+	speak_chance = 1
+
+	faction = "mothership"
+
+	var/microwave = 0
+
+	projectiletype = /obj/item/projectile/beam/scorchray
+	projectilesound = 'sound/weapons/ray1.ogg'
+	retreat_distance = 4
+	minimum_distance = 4
+	ranged = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/laser/Life()
+	..()
+	if(microwave == 0)
+		projectiletype = /obj/item/projectile/beam/scorchray
+		projectilesound = 'sound/weapons/ray1.ogg'
+		icon_state = "greysentry"
+		icon_living = "greysentry"
+	if(microwave == 1)
+		projectiletype = /obj/item/projectile/energy/microwaveray
+		projectilesound = 'sound/weapons/ray2.ogg'
+		icon_state = "greysentry1"
+		icon_living = "greysentry1"
+
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/laser/Shoot()
+	if(prob(5)) //Handles switching firing modes in combat
+		if(microwave == 0)
+			visible_message("<span class='warning'>[src] switches their disintegrator to microwave mode!</span>")
+			microwave = 1
+		else
+			visible_message("<span class='warning'>[src] switches their disintegrator to scorch mode!</span>")
+			microwave = 0
+	else // Otherwise fire the projectile for whatever mode is active
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/laser/Aggro()
+	..()
+	say(pick("Brain beats brawn!","It seems you've volunteered to be my next weapon testing subject.","You don't belong here! Get out of my laboratory!"), all_languages[LANGUAGE_GREY])
+
+///////////////////////////////////////////////////////////////////GREY CHEMIST///////////
+//Grey chemist. Less hit points than a soldier and not technically "armed". However, they will throw unstable goo and flasks of nasty chemicals at targets. Best not to underestimate them
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/chemist
+	name = "Mothership Chemist"
+	desc = "A thin alien humanoid. This one doesn't seemed armed, but has several flasks of unknown chemicals sticking out of their labcoat pockets."
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can smash things open, nerd rage
+
+	items_to_drop = list(/obj/item/toy/snappop/virus, /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer)
+
+	speak = list("I can't believe these reports.","This will be my most impressive breakthrough yet.","Can't those MDF buffoons do anything right?","The Administration will make me a senior researcher when they see these results.")
+	speak_chance = 1
+
+	ranged_message = "rants angrily"
+	ranged_cooldown = 5
+	ranged_cooldown_cap = 5
+	retreat_distance = 3
+	minimum_distance = 3
+	ranged = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/chemist/Shoot(var/atom/target, var/atom/start, var/mob/user) // Angry nerd will throw unstable goo, or a flask filled with nasty chems
+	var/mob/living/L = target
+	switch(rand(0,3))
+		if(0)
+			visible_message("<span class = 'warning'>\The [src] pulls a glob of unstable goo from one of their labcoat pockets and hurls it towards \the [target]!</span>")
+			var/atom/movable/goo_to_throw = new /obj/item/toy/snappop/virus(get_turf(src))
+			goo_to_throw.throw_at(target,10,3) // Deals a decent amount of brute damage
+		if(1)
+			visible_message("<span class = 'warning'>\The [src] pulls a huge flask from one of their labcoat pockets and hurls it towards \the [target]!</span>")
+			var/atom/movable/acidflask_to_throw = new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/pacid(get_turf(src))
+			acidflask_to_throw.throw_at(target,10,3) // Tasty acid beaker
+		if(2)
+			visible_message("<span class = 'warning'>\The [src] pulls a huge flask from one of their labcoat pockets and hurls it towards \the [target]!</span>")
+			var/atom/movable/mutaflask_to_throw = new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/mutagen(get_turf(src))
+			mutaflask_to_throw.throw_at(target,10,3) // Mutagen beaker, oh boy
+		if(3)
+			visible_message("<span class = 'warning'>\The [src] pulls a huge flask from one of their labcoat pockets and hurls it towards \the [target]!</span>")
+			var/atom/movable/beetusflask_to_throw = new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/diabeetus(get_turf(src))
+			beetusflask_to_throw.throw_at(target,10,3) // Because diabeetusol doesn't show up enough, and it's a hilarious chem
+	return 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/chemist/Aggro()
+	..()
+	say(pick("Stay out of chemistry!","You are interrupting the flow of chemistry!","You don't belong here! Get out of chemistry!"), all_languages[LANGUAGE_GREY])
 
 ///////////////////////////////////////////////////////////////////GREY SURGEON///////////
 //Grey melee researcher. Less hit points than a soldier, but is one of the only enemies in the vault that can use psychic attacks
-/mob/living/simple_animal/hostile/humanoid/grey/surgeon
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon
 	name = "Mothership Surgeon"
 	desc = "A thin alien humanoid. This one is armed with a laser scalpel."
 
 	icon_state = "greyresearcher_scalpel"
 	icon_living = "greyresearcher_scalpel"
-
-	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	melee_damage_lower = 15
 	melee_damage_upper = 25 // One of the more dangerous greys in melee combat
@@ -519,15 +635,12 @@
 	speak = list("Another day, another dissection.","Measure twice, cut once.","Can't those MDF buffoons do anything right?","The Administration will make me a senior researcher when they see these results.")
 	speak_chance = 1
 
-	faction = "mothership"
-
-	ranged = 1
 	ranged_message = "stares intently"
-
 	ranged_cooldown = 20
 	ranged_cooldown_cap = 20
+	ranged = 1
 
-/mob/living/simple_animal/hostile/humanoid/grey/surgeon/Shoot()
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
 	if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
 		return
@@ -536,75 +649,33 @@
 	if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
 		return
 	else
-		switch(rand(0,3))
-			if(0) //Ranged disarm
-				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
-				H.drop_item()
-			if(1) //Dizziness, blurry eyes, and confused movement
-				to_chat(H, "<span class='userdanger'>You suddenly feel confused and disoriented!</span>")
-				H.eye_blurry = max(H.eye_blurry, 3)
-				H.confused = max(H.confused, 3)
-				H.Dizzy(3)
-			if(2) //A brief knockdown
+		switch(rand(0,4))
+			if(0) //Minor brain damage
+				to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
+				H.adjustBrainLoss(10)
+				H.eye_blurry = max(H.eye_blurry, 5)
+			if(1) //Brief knockdown
 				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
 				H.emote("me", 1, "collapses!")
 				H.Knockdown(2)
-			if(3) //The worst one, the target gets put to sleep for a short time
+			if(2) //Target gets put to sleep for a few seconds
 				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
 				H.drowsyness += 2
 				spawn(2 SECONDS)
 					H.sleeping += 3
+			if(3) //Minor hallucinations
+				to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
+				H.hallucination += 20
+				H.Jitter(10)
+				H.stuttering += 10
+			if(4) //Ranged disarm
+				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
+				H.drop_item()
 		return 1
 
-/mob/living/simple_animal/hostile/humanoid/grey/surgeon/Aggro()
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Aggro()
 	..()
 	say(pick("I could use more tissue samples.","Hold still, this will only sting for a moment.","You don't belong here! Good, I needed a new specimen to dissect."), all_languages[LANGUAGE_GREY])
-
-///////////////////////////////////////////////////////////////////GREY SCIENTIST///////////
-//Grey ranged researcher. Less hit points than a soldier, will occasionally throw unstable goo at targets
-/mob/living/simple_animal/hostile/humanoid/grey/researcher
-	name = "Mothership Researcher"
-	desc = "A thin alien humanoid. This one is armed with a disintegrator and handfuls of strange-looking clumps of goo."
-
-	icon_state = "greyresearcher_laser"
-	icon_living = "greyresearcher_laser"
-
-	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
-
-	melee_damage_lower = 4
-	melee_damage_upper = 6 // Very weak melee attacks, angry nerd flailing
-
-	attacktext = "kicks"
-	attack_sound = 'sound/weapons/punch1.ogg'
-
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows them to shoot through glass airlocks
-
-	corpse = /obj/effect/landmark/corpse/grey/researcher
-
-	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/toy/snappop/virus)
-
-	speak = list("I can't believe these reports.","This will be my most impressive breakthrough yet.","Can't those MDF buffoons do anything right?","The Administration will make me a senior researcher when they see these results.")
-	speak_chance = 1
-
-	faction = "mothership"
-
-	projectiletype = /obj/item/projectile/beam/scorchray
-	projectilesound = 'sound/weapons/ray1.ogg'
-	retreat_distance = 3
-	minimum_distance = 3
-	ranged = 1
-
-/mob/living/simple_animal/hostile/humanoid/grey/researcher/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(prob(15))
-		visible_message("<span class = 'warning'>\The [src] tosses a glob of unstable goo towards \the [target]!</span>")
-		var/atom/movable/goo_to_throw = new /obj/item/toy/snappop/virus(get_turf(src))
-		goo_to_throw.throw_at(target,10,5) // Deals around 30 brute damage
-	else
-		..()
-
-/mob/living/simple_animal/hostile/humanoid/grey/researcher/Aggro()
-	..()
-	say(pick("Brain beats brawn!","It seems you've volunteered to be my next test subject.","You don't belong here! Get out of my laboratory!"), all_languages[LANGUAGE_GREY])
 
 //////////////////////////////
 // GREY LEADER

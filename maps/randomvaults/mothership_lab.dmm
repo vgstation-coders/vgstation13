@@ -230,7 +230,7 @@
 "CP" = (/obj/structure/table,/obj/item/toy/cards,/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/entrance)
 "Di" = (/obj/structure/closet/emcloset/vox,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "Dl" = (/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{dir = 1},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
-"Do" = (/obj/machinery/door/airlock/highsecurity{name = "Lab Access"; req_access_txt = "160"; req_one_access_txt = "160"},/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/entrance)
+"Do" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Lab Access"; req_access_txt = "160"; req_one_access_txt = "160"},/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/entrance)
 "DE" = (/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "DG" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/damaged,/area/turret_protected/vault/mothership_lab/entrance)
 "DL" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/storage/box/inflatables,/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/syringe/broken,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
