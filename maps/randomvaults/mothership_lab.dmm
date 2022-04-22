@@ -44,13 +44,15 @@
 "gj" = (/obj/machinery/door/airlock{name = "Barracks Lavatory"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "showroomfloor"},/area/turret_protected/vault/mothership_lab/entrance)
 "gn" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "gw" = (/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/asteroid)
+"gy" = (/obj/structure/catwalk/invulnerable,/obj/structure/closet{anchored = 1; name = "Explorer's Locker"},/obj/item/clothing/under/grey/grey_scout,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/item/weapon/storage/belt/mothership,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "gD" = (/obj/structure/shuttle/diag_wall/black{dir = 8},/turf/unsimulated/floor/asteroid,/area/turret_protected/vault/mothership_lab/control_room)
 "gF" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/table/reinforced,/obj/item/weapon/paper_bin/red,/obj/item/weapon/pen,/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/turret_protected/vault/mothership_lab/control_room)
 "gK" = (/obj/machinery/computer/security{id_tag = "labcameras"; network = list("MOTHERSHIPLAB"); req_access_txt = "162"},/obj/machinery/light/he/broken{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/turret_protected/vault/mothership_lab/control_room)
 "gU" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "gV" = (/obj/structure/shuttle/diag_wall/black{dir = 8},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
+"hi" = (/obj/structure/catwalk/invulnerable,/obj/machinery/door/airlock/hatch{name = "Explorer Equipment Stores"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "hj" = (/obj/machinery/vending/wallmed1{pixel_y = 30},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/entrance)
-"hr" = (/obj/machinery/light/small{dir = 4},/obj/structure/catwalk/invulnerable,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
+"hr" = (/obj/structure/catwalk/invulnerable,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "hU" = (/obj/structure/ore_box,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/control_room)
 "id" = (/obj/structure/bed/chair/folding,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "is" = (/obj/structure/closet/crate,/obj/item/weapon/storage/firstaid/adv,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
@@ -62,7 +64,7 @@
 "jn" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/device/flash,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "jo" = (/obj/machinery/recharger{pixel_y = -30},/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "disintegrator cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
 "jq" = (/obj/item/weapon/book/manual/medical_cloning,/obj/item/weapon/book/manual/research_and_development,/obj/item/weapon/book/manual/virology_guide,/obj/item/weapon/book/manual/chemistry_manual,/obj/structure/table,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/entrance)
-"js" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'EXTERNAL AIRLOCK'"; icon_state = "space"; name = "EXTERNAL AIRLOCK"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/asteroid)
+"js" = (/obj/effect/narration/mothership_lab,/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/entrance)
 "jA" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning-asteroid"; tag = "icon-warning (NORTH)"},/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/asteroid)
 "jD" = (/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "jE" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor{dir = 4; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/entrance)
@@ -79,7 +81,7 @@
 "kG" = (/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/control_room)
 "kH" = (/obj/machinery/recharger{pixel_y = -30},/turf/simulated/floor{dir = 6; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "ld" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
-"ll" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet{anchored = 1; name = "Explorer Uniform Locker"},/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/item/clothing/under/grey/grey_scout,/obj/item/clothing/under/grey/grey_scout,/obj/item/clothing/under/grey/grey_scout,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
+"ll" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/emcloset,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "ln" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/obj/machinery/recharger,/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/turret_protected/vault/mothership_lab/control_room)
 "lo" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/machinery/computer/station_alert,/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "lp" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/entrance)
@@ -148,10 +150,12 @@
 "sX" = (/obj/structure/rack,/obj/item/device/assembly/igniter,/obj/item/device/assembly/igniter,/obj/item/device/assembly/igniter,/turf/unsimulated/floor/airless{dir = 10; icon_state = "asteroidwarning"},/area/vault/mothership_lab/asteroid)
 "tb" = (/obj/machinery/door/airlock/silver{name = "Habitation Deck Access"; req_access_txt = "160"; req_one_access_txt = "160"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "th" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4},/obj/machinery/recharger,/turf/simulated/floor{dir = 5; icon_state = "darkred"; tag = "icon-darkred (NORTHEAST)"},/area/turret_protected/vault/mothership_lab/control_room)
-"tm" = (/obj/effect/narration/mothership_lab,/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/entrance)
+"tm" = (/obj/structure/catwalk/invulnerable,/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "disintegrator cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "tr" = (/obj/effect/decal/warning_stripes{icon_state = "1"},/turf/simulated/wall/invulnerable/r_wall,/area/turret_protected/vault/mothership_lab/control_room)
+"tF" = (/obj/structure/catwalk/invulnerable,/obj/machinery/recharger{pixel_x = 30},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "tI" = (/turf/unsimulated/mineral,/area)
 "ui" = (/obj/machinery/door/window{name = "Shower"},/obj/machinery/acidshower{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/turret_protected/vault/mothership_lab/entrance)
+"uo" = (/obj/structure/catwalk/invulnerable,/obj/structure/rack,/obj/machinery/light/small{dir = 1},/obj/item/weapon/storage/fancy/flares,/obj/item/weapon/storage/fancy/flares,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "uz" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "armor cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/clothing/suit/armor/mothership,/obj/item/clothing/suit/armor/mothership,/obj/item/clothing/suit/armor/mothership,/obj/item/clothing/head/helmet/mothership,/obj/item/clothing/head/helmet/mothership,/obj/item/clothing/head/helmet/mothership,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
 "uG" = (/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/structure/table/flipped,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "uK" = (/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/entrance)
@@ -200,7 +204,7 @@
 "zy" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 8},/obj/item/weapon/cell/ultra,/obj/item/weapon/cell/ultra,/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "zz" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Control Room Access"; req_access_txt = "164"; req_one_access_txt = "164"},/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/control_room)
 "zK" = (/obj/machinery/door/airlock/hatch{name = "Lab Hangar Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
-"zX" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/asteroid)
+"zX" = (/obj/structure/catwalk/invulnerable,/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "armor cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "Ak" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Control Room Access"; req_access_txt = "164"; req_one_access_txt = "164"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/control_room)
 "Al" = (/obj/effect/decal/cleanable/dirt,/obj/item/stack/sheet/cardboard,/obj/machinery/light/small{dir = 8},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "An" = (/obj/structure/table,/obj/effect/decal/cleanable/dirt,/obj/item/device/crank_charger,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
@@ -216,7 +220,7 @@
 "Bv" = (/obj/machinery/light/small/broken,/turf/simulated/floor/greengrid,/area/turret_protected/vault/mothership_lab/entrance)
 "BJ" = (/obj/structure/window/reinforced/plasma,/obj/structure/table/reinforced,/obj/item/weapon/storage/toolbox/emergency,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "BL" = (/obj/structure/closet/crate,/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/item/clothing/under/grey/grey_soldier,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/entrance)
-"BX" = (/obj/machinery/door/airlock/sandstone{name = "Lab Hangar Access"; req_access_txt = "161"; req_one_access_txt = "161"},/obj/structure/catwalk/invulnerable,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
+"BX" = (/obj/structure/catwalk/invulnerable,/obj/machinery/door/airlock/hatch{name = "Lab Hangar Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "Ch" = (/obj/structure/table,/obj/item/tool/weldingtool/hugetank,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "Cp" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma{dir = 1},/obj/item/weapon/storage/fancy/flares,/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "Cx" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/box/lights/he,/obj/item/device/gps/secure,/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (EAST)"},/area/turret_protected/vault/mothership_lab/control_room)
@@ -250,6 +254,7 @@
 "Ge" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "ion weapons cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/weapon/gun/energy/ionrifle,/obj/item/weapon/gun/energy/ionrifle,/obj/item/weapon/gun/energy/ionrifle/ioncarbine,/obj/item/weapon/gun/energy/ionrifle/ioncarbine,/obj/item/weapon/gun/energy/ionrifle/ioncarbine,/obj/item/weapon/grenade/empgrenade,/obj/item/weapon/grenade/empgrenade,/obj/item/weapon/grenade/empgrenade,/obj/item/weapon/grenade/empgrenade,/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/turret_protected/vault/mothership_lab/control_room)
 "Gf" = (/obj/machinery/recharger{pixel_y = -30},/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/control_room)
 "Gm" = (/turf/simulated/wall/r_rock/porous,/area/vault/mothership_lab/raidtunnel)
+"Gz" = (/obj/structure/catwalk/invulnerable,/obj/item/clothing/under/grey/grey_scout,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/structure/closet{anchored = 1; name = "Explorer's Locker"},/obj/machinery/light/small,/obj/item/weapon/storage/belt/mothership,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "GE" = (/turf/unsimulated/mineral/plasma,/area/vault/mothership_lab/asteroid)
 "GG" = (/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/item/clothing/under/grey/grey_soldier,/obj/item/clothing/head/helmet/mothership,/obj/item/weapon/storage/belt/mothership,/obj/structure/closet/secure_closet{anchored = 1; name = "MDF Locker"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
 "GJ" = (/obj/machinery/camera{dir = 4; id_tag = "labcameras"; name = "Entry Deck Main Hall 1"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/entrance)
@@ -295,6 +300,7 @@
 "Nj" = (/obj/machinery/vending/medical{emagged = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
 "Nq" = (/obj/structure/shuttle/diag_wall/black{dir = 4},/turf/unsimulated/floor/asteroid,/area/turret_protected/vault/mothership_lab/entrance)
 "NM" = (/obj/machinery/door/airlock/external{name = "Lab External Airlock"; req_access_txt = "160"; req_one_access_txt = "160"},/obj/structure/catwalk/invulnerable,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
+"Oc" = (/obj/structure/catwalk/invulnerable,/obj/structure/rack,/obj/machinery/recharger{pixel_x = 30},/obj/item/binoculars,/obj/item/binoculars,/obj/item/binoculars,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "Od" = (/obj/machinery/door_control{id_tag = "labcheckpoint2"; name = "Checkpoint Flow Control"; pixel_x = -25; pixel_y = -25; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
 "Oh" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/asteroid,/area/vault/mothership_lab/asteroid)
 "Ok" = (/obj/structure/closet{anchored = 1; name = "MDF Uniform Locker"},/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/item/clothing/under/grey/grey_soldier,/obj/item/clothing/accessory/holster/handgun,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
@@ -350,6 +356,7 @@
 "UH" = (/obj/machinery/light/he,/obj/structure/bed/chair{dir = 4},/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/turret_protected/vault/mothership_lab/entrance)
 "UM" = (/obj/machinery/atmospherics/unary/tank/air{dir = 8},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/control_room)
 "UQ" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/control_room)
+"UU" = (/obj/structure/catwalk/invulnerable,/obj/structure/rack,/obj/item/device/analyzer,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "UV" = (/obj/structure/reagent_dispensers/silicate,/obj/item/device/silicate_sprayer/advanced,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "UX" = (/mob/living/simple_animal/hostile/humanoid/grey/soldier/sentry,/turf/simulated/floor,/area/turret_protected/vault/mothership_lab/entrance)
 "UY" = (/obj/structure/table/reinforced,/obj/machinery/door/poddoor{density = 0; icon_state = "pdoor0"; id_tag = "checkpointshutters2"; name = "Checkpoint Blast Doors"; opacity = 0},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
@@ -360,6 +367,7 @@
 "Wd" = (/obj/structure/shuttle/diag_wall/black,/turf/simulated/floor{dir = 5; icon_state = "darkred"; tag = "icon-darkred (NORTHEAST)"},/area/turret_protected/vault/mothership_lab/control_room)
 "Wf" = (/obj/structure/fence,/turf/unsimulated/floor/asteroid,/area/vault/mothership_lab/asteroid)
 "Wl" = (/obj/structure/bed/roller,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
+"Wq" = (/obj/structure/catwalk/invulnerable,/obj/item/clothing/under/grey/grey_scout,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/obj/structure/closet{anchored = 1; name = "Explorer's Locker"},/obj/item/weapon/storage/belt/mothership,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "Ww" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/machinery/turret/mothership_lab/mkII,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/control_room)
 "WE" = (/obj/machinery/computer/secure_data{req_access_txt = "162"; req_one_access = null},/turf/simulated/floor{dir = 4; icon_state = "darkred"},/area/turret_protected/vault/mothership_lab/entrance)
 "WI" = (/obj/structure/ladder{height = 1; id = "labladder_1"; name = "Habitation Deck Access"},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
@@ -383,7 +391,7 @@
 "YF" = (/turf/simulated/wall/r_rock/porous,/area/vault/mothership_lab/asteroid)
 "YS" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/reagent_containers/glass/bucket/water_filled,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "YU" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma,/obj/item/weapon/melee/stunprobe,/obj/item/weapon/storage/box/PDAs,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/turret_protected/vault/mothership_lab/control_room)
-"Zi" = (/obj/structure/closet{anchored = 1; name = "MDF Uniform Locker"},/obj/item/weapon/storage/belt/mothership,/obj/item/binoculars,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/vault/mothership_lab/entrance)
+"Zi" = (/obj/structure/catwalk/invulnerable,/obj/machinery/light/small{dir = 8},/obj/machinery/vending/wallmed1{pixel_y = 30},/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/entrance)
 "Zj" = (/obj/structure/bed/chair/shuttle/blue{dir = 4},/mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/control_room)
 "Zt" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/vault/mothership_lab/hobo)
 "Zy" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
@@ -404,11 +412,11 @@ zrzrzrzrMDMDMDmvmvMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlRlYFZTnLFfgjLKLK
 zrzrzrMDMDMDYFYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlYFZTZTFfxYZTPfLKLKLKpkLKLKLKeRuKuKuKuKuKaKuKuKuKpTuKuKuKuKuKJYuKoSOsWJeQeQeQGLGLYFMDzrzr
 zrzrzrMDMDYFgDoooooooooooooooooojQYFAqYFYFYFYFYFYFYFYFYFYFYFYFYFYFZTykFfEUZTLgUHksTtZTjqqfIvZTqeRgbIrpwGZTBouKbIZTqebIbIbIwGZTZTyEZTNqGLGLeQeQGLYFMDzrzr
 zrzrMDMDYFgDoooolnlooMqurwsNthoooojQYFZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTvzZTZTZTbIuKolZTZTIoxTIoZTZTYFYFYFYFYFGLGLeQGLYFMDMDzr
-zrtIMDYFgDooxOCpCxPHDYIIDYPHOKSaWdoojQZTIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXyQDEyQRzZTbItmuKLWLKjepMPOxWZTYFAqAqMDYFAufseIfsAuMDMDzr
+zrtIMDYFgDooxOCpCxPHDYIIDYPHOKSaWdoojQZTIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXyQDEyQRzZTbIjsuKLWLKjepMPOxWZTYFAqAqMDYFAufseIfsAuMDMDzr
 zrMDYFooooxOcHPHPHvpPHEMPHvpPHPHXHWdooooIXZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTzKZTIXZTqeuKwGZTGGqsCLqCjLZTYFMDMDMDMDNfZWeQXdNfMDMDzr
 zrMDYFooxOcHEMvpPHEaEauGEaEaPHvpEMXHWdooIXZTZTZTVmgwaMaMaMaMaMaMaMaMnUaMaMaMaMaMaMaMaMgwyjZTIFDEjYgnZTIXZTQmDoQmZTZTZTZTZTZTZTYFMDMDMDMDAuGLeQGLAuMDMDzr
 zrMDYFooLfYCEMYCYvPJPJPJPJPJYvYCEMYCetooIXZTZTVmgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwZTdDdZgnXZZTIXZTBouKbIZTxXLKkDLKOkZTYFMDMDMDMDYFGLeQlyGLYFMDMD
-zrMDYFoogKbvPHqPHbkGkGkGkGkGbRrfPHZjzwooIXZTVmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBFRZTAllpOxXZZTIXZTbIuKbIZTuzLKZiLKAtZTYFMDMDMDMDYFlyeQeQlyGLYFMD
+zrMDYFoogKbvPHqPHbkGkGkGkGkGbRrfPHZjzwooIXZTVmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBFRZTAllpOxXZZTIXZTbIuKbIZTuzLKODLKAtZTYFMDMDMDMDYFlyeQeQlyGLYFMD
 zrMDYFoogFPHPHqPHbkGkGPBkGkGbRrfPHPHpeooIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUUVgngnXZZTIXZTGJRBuKiwLKLKODLKpnZTYFMDMDMDMDYFGLGLvDeQGLYFMD
 zrMDYFooJrPHPHqPHbKSkGkGkGKSbRrfPHPHAwooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUIqDEDEGZZTIXZTbIuKfrZTisLKLKLKvfZTYFMDMDMDMDMDYFGLGLeQlyYFMD
 MDMDYFooadbvPHqPHbmjlXkGlXmjbRrfPHZjNdooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUDGqhVTldZTIXZTfNJXaYZTNjLKLvaljoZTYFMDMDMDMDMDYFYiGLeQGLYFMD
@@ -417,17 +425,17 @@ MDMDYFoozyBJYUSXGdooooyqoooomJSXjnTAPdooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQI
 MDmvYFooooooooooooooVwPJVwooooooooooooooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIcfDETYgngnDEnvZTIXZTUXINJTZTEGLKDNbHDNjEZTZTZTZTYFMDYFGLeQvDGLYFMD
 MDmvYFtrqxvPooWwQRiHoozzooKDQRWwoovPIctrIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIRDTYQTZTfxKUgnZTIXZTJTEySDZTPfLKLKLKLKLKgjlxPCZTYFMDAulyeQGLGLYFMD
 MDmvYFoojWjWooQRQRQRWwscWwQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwZTSSAnChZTIXZTppuKnjZTWOyDAsyDWRKWZTiGFfZTYFMDNfFteQlyrZYFMD
-MDMDYFoofzjWooQRQRQRQRQRQRQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwyjvUvUZTZTcKZTbIdubIZTZTZTZTZTZTZTZTRRFfZTYFMDAulyeQGLsXYFMD
-MDMDYFoojWjWoomTQRQRQRQRQRQRQRmToojWfzooIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwyjZTcKfcLXVTWPQmXQbLWIZTYFZTuiFfFfZTYFMDYFGLvDGLYFMDMD
-MDMDYFoojWjWooooooSbiuiuiuSboooooojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwFRZTcKZTFKuKdutbDEVTDEZTYFZTZTZTZTZTYFMDYFGLeQGLYFMDMD
-MDMDYFoohUjWqTqNoocGPzPzPzdqoosRcnjWjWooIXZTTXgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwynZTcKfcbIBvVTQmPcggytZTYFYFYFYFYFYFMDMDYFlyeQlyYFMDmv
+MDMDYFoofzjWooQRQRQRQRQRQRQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwyjvUvUZTZTZTZTbIdubIZTZTZTZTZTZTZTZTRRFfZTYFMDAulyeQGLsXYFMD
+MDMDYFoojWjWoomTQRQRQRQRQRQRQRmToojWfzooIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwyjZTZTfcLXVTWPQmXQbLWIZTYFZTuiFfFfZTYFMDYFGLvDGLYFMDMD
+MDMDYFoojWjWooooooSbiuiuiuSboooooojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwFRZTZTZTFKuKdutbDEVTDEZTYFZTZTZTZTZTYFMDYFGLeQGLYFMDMD
+MDMDYFoohUjWqTqNoocGPzPzPzdqoosRcnjWjWooIXZTTXgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwynZTZTfcbIBvVTQmPcggytZTYFYFYFYFYFYFMDMDYFlyeQlyYFMDmv
 MDMDYFooPxjWeNjWAkPHPHPHPHPHAkqTeNjWUMooIXZTZTTXgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwynZTZTcKZTYxZTYxZTZTZTZTZTYFMDMDMDRlMDMDMDYFGLeQlyYFMDMD
-MDMDYFooooooooooooGfGbrGGbkHoooooooooooocKZTZTZTTXgwgigigigigigigigikqgigigigigigigigigwgwgwgwynZTZTZTIXZTZTZTZTZTYFYFYFYFMDMDMDRlMDMDMDYFGLlyeQGLYFmvMD
-MDkcMDYFYFYFYFYFooooooooooooooYFYFYFYFZTwjVPQmZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTBXZTZTZTZTZTZTIXZTYFYFYFYFMDMDMDMDMDMDMDMDMDAuNfAuGLeQvDGLYFMDMD
-MDmvkcMDMDMDMDMDYFYFYFYFYFYFYFMDMDMDMDwYBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdNMUqNMIXIXhrcKIXIXIXIXIXZTYFMDMDMDMDMDMDMDMDMDGLGLGLGLkbWfGLeQGLGLYFMDMD
-MDMDmvMDQiQiQiQiQiQiQiQiMDMDMDMDMDMDYFZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTwgZTZTZTZTZTZTZTZTZTZTZTYFMDMDMDMDMDMDMDMDMDGLGLeQeQeQsKeQvDGLYFMDMDMD
-zrMDmvmvQijDKLZymRHCHCQiMDMDmvMDMDMDMDYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFzXjszXYFYFYFYFYFYFYFYFYFYFkcAuAuAuMDMDGLGLGLGLGLGLGLGLOhWfGLGLlyYFMDMDzr
-zrMDMDMDQiATmQyUQiQianQiMDMDmvmvmvMDMDMDMDMDMDAuAuAuMDMDMDMDMDMDMDMDMDmvmvMDMDMDYFYFYFMDMDMDMDMDMDMDMDMDMDMDGLyAGLmBmBGLGLGLGLGLMDMDAuNfAuYFYFYFMDMDMDzr
+MDMDYFooooooooooooGfGbrGGbkHooooooooooooZTZTZTZTTXgwgigigigigigigigikqgigigigigigigigigwgwgwgwynZTZTtmzXZTZTZTZTZTYFYFYFYFMDMDMDRlMDMDMDYFGLlyeQGLYFmvMD
+MDkcMDYFYFYFYFYFooooooooooooooYFYFYFYFZTwjVPQmZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTBXZTZTZTZTZiIXIXUUuoOcZTYFMDMDMDMDMDMDMDMDMDAuNfAuGLeQvDGLYFMDMD
+MDmvkcMDMDMDMDMDYFYFYFYFYFYFYFMDMDMDMDwYBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdNMUqNMIXIXhrIXIXhiIXIXIXIXIXtFZTYFMDMDMDMDMDMDGLGLGLGLkbWfGLeQGLGLYFMDMD
+MDMDmvMDQiQiQiQiQiQiQiQiMDMDMDMDMDMDYFZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTwgZTZTZTZTZTZTZTgyGzWqZTZTZTZTYFMDMDMDMDMDMDGLGLeQeQeQsKeQvDGLYFMDMDMD
+zrMDmvmvQijDKLZymRHCHCQiMDMDmvMDMDMDMDYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFZTQTZTYFYFYFYFYFZTZTZTZTZTYFAuAuAuMDMDGLGLGLGLGLGLGLGLOhWfGLGLlyYFMDMDzr
+zrMDMDMDQiATmQyUQiQianQiMDMDmvmvmvMDMDMDMDMDMDAuAuAuMDMDMDMDMDMDMDMDMDmvmvMDMDMDYFYFYFMDMDMDMDMDYFYFYFYFYFkcGLyAGLmBmBGLGLGLGLGLMDMDAuNfAuYFYFYFMDMDMDzr
 zrMDMDMDQiQiQiQiZRsEdCQiYFYFMDmvmvmvMDMDMDGLGLGLyAGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLmBMDMDMDMDMDMDRlMDMDMDMDMDMDMDMDMDzr
 zrMDMDMDMDMDMDMDQiQiZtQinqrEYFMDMDMDMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLOhGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDRlRlMDMDMDMDMDMDMDMDMDzrzr
 zrMDMDMDFOMDMDXoXoyAGLyAGLGLGLMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLAuAuSlMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvMDMDMDzrzr

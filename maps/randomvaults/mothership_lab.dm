@@ -318,7 +318,7 @@
 
 //Ayy lmao labcoat (Same as a normal labcoat in stats, but slightly altered spritewise to look better when paired with the uniform)
 /obj/item/clothing/suit/storage/labcoat/mothership
-	name = "Mothership Labcoat"
+	name = "mothership labcoat"
 	desc = "A labcoat with an incredibly slim fit. Praise your superior waistline ratio."
 	base_icon_state = "labcoat_ayy"
 	item_state = "labcoat_ayy"
@@ -327,7 +327,7 @@
 
 //Ayy lmao boots
 /obj/item/clothing/shoes/jackboots/steeltoe/mothership
-	name = "Mothership Boots"
+	name = "mothership boots"
 	desc = "Issued, recalled post-mortem, and reissued countless times to many mothership denizens. Despite that, the boots still shine impeccably."
 	sterility = 75
 
