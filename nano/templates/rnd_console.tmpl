@@ -19,6 +19,16 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		width:30%;
 		float:left;
 	}
+	#chemname
+	{
+		width:40%;
+		float:left;
+	}
+	#chemcost
+	{
+		width:20%;
+		float:left;
+	}
 </style>
 
 {{if data.screen < 10}}
@@ -293,7 +303,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				<div class="itemLabelWide">
 					Material Storage
 				</div>
-				<div class="itemContentWide" style="width: 100%;">
+				<div class="itemContentWide" style="width: 95%;">
 					<div class="statusDisplay">
 						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
 							{{if data.lathe && data.screen == 31}}
@@ -315,9 +325,9 @@ Used In File(s): \code\modules\research\rdconsole.dm
 									</div>
 									{{for value.reagents}}
 										<div class="line">
-											{{:helper.link(value.name, 'gear', null, null, null, 'materials')}}
-											{{:helper.link(value.volume, null, null, null, null, 'materials')}}
-											{{:helper.link("(Purge)", 'circle-arrow-s', value.commands, null, null, 'materials')}}
+											{{:helper.link(value.name, 'gear', null, null, null, 'chemname')}}
+											{{:helper.link(value.volume, null, null, null, null, 'chemcost')}}
+											{{:helper.link("Purge", 'circle-arrow-s', value.commands, null, null, 'materials')}}
 										</div>
 									{{empty}}
 										<div class="line">
