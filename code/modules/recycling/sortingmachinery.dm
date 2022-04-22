@@ -676,8 +676,6 @@
 				else
 					S.open()
 			else
-//				var/sparks = "securecratesparks"
-//				var/emag = "securecrateemag"
 				S.overlays.len = 0
 				S.overlays += S.emag
 				S.overlays += S.sparks
@@ -760,10 +758,10 @@
 	name = "wrapping machine"
 	desc = "Wraps and tags items."
 	icon = 'icons/obj/recycling.dmi'
-	icon_state = "separator-AO0"
+	icon_state = "wrapper-4"
 	density = 1
 	anchored = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
@@ -773,8 +771,8 @@
 	var/next_sound = 0
 	var/sound_delay = 20
 
-	output_dir = WEST
-	var/input_dir = EAST
+	output_dir = 8 //WEST
+	var/input_dir = 4 //EAST
 
 	var/mode  = 0 //If the tagger is "hacked" so you can add extra tags.
 
@@ -939,47 +937,6 @@
 			D.overlays += tag_overlay
 			D.desc = "A small wrapped package. It has a label reading [tag]"
 
-/obj/machinery/wrapping_machine/multitool_menu(var/mob/user, var/obj/item/device/multitool/P) //copied from sorting machine and modified
-	return {"
-		<ul>
-			<li><b>Input/output directions:</b></li>
-			<li><b>Input: </b><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(input_dir))]</a></li>
-			<li><b>Output: </b><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(output_dir))]</a></li>
-		</ul>
-	"}
-
-//Handles changing of the IO dirs, 'ID's: 1 is input and 2 is output in this proc.
-
-/obj/machinery/wrapping_machine/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P) //copied from sorting machine and modified
-	. = ..()
-	if(.)
-		return .
-
-	if("changedir" in href_list)
-		var/changingdir = text2num(href_list["changedir"])
-		changingdir = clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
-
-		var/newdir = input("Select the new direction", "SupplyX WrapMaster 5000", "North") as null|anything in list("North", "South", "East", "West")
-		if(!newdir)
-			return 1
-		newdir = text2dir(newdir)
-
-		var/list/dirlist = list(input_dir, output_dir)//Behold the idea I got on how to do this.
-		var/olddir = dirlist[changingdir]//Store this for future reference before wiping it next line
-		dirlist[changingdir] = -1//Make the dir that's being changed -1 so it doesn't see itself.
-
-		var/conflictingdir = dirlist.Find(newdir)//Check if the dir is conflicting with another one
-		if(conflictingdir)//Welp, it is.
-			dirlist[conflictingdir] = olddir//Set it to the olddir of the dir we're changing
-
-		dirlist[changingdir] = newdir//Set the changindir to the selected dir
-
-		input_dir = dirlist[1]
-		output_dir = dirlist[2]
-
-		return MT_UPDATE
-		//Honestly I didn't expect that to fit in, what, 10 lines of code?
-
 /obj/machinery/wrapping_machine/attackby(var/obj/item/O, mob/user)
 	. = ..()
 	if(istype(O,/obj/item/stack/package_wrap))
@@ -989,6 +946,25 @@
 		packagewrap += P.amount
 		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to \the [src].</span>")
 		P.use(P.amount)
+	else if(O.is_multitool(user))
+		setOutput(user)
+
+/obj/machinery/wrapping_machine/proc/setOutput(user)
+	var/result = input("Set your location as output?") in list("Yes","No")
+	switch(result)
+		if("Yes")
+			if(!Adjacent(user))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+				return 1
+			output_dir = get_dir(src, user)
+			input_dir = opposite_dirs[output_dir]
+			if(!cardinal.Find(output_dir))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; cardinal directions only!</span>")
+				return 1
+			icon_state = "wrapper-[input_dir]"
+			update_icon()
+			to_chat(user, "<span class='notice'>Output set.</span>")
+			return 1
 
 /obj/machinery/wrapping_machine/attack_hand(mob/user)
 	interact(user)
