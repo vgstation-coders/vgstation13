@@ -795,9 +795,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(d_disk && d_disk.blueprint)
 		for(var/M in d_disk.blueprint.materials)
 			if(copytext(M, 1, 2) == "$")
-				dstored_mats.Add(list(list("* [copytext(M, 2)] x [d_disk.blueprint.materials[M]]")))
+				dstored_mats.Add(list(list("amount" = "* [copytext(M, 2)] x [d_disk.blueprint.materials[M]]")))
 			else
-				dstored_mats.Add(list(list("* [M] x [d_disk.blueprint.materials[M]]")))
+				dstored_mats.Add(list(list("amount" = "* [M] x [d_disk.blueprint.materials[M]]")))
 	data["dstoredmats"] = dstored_mats
 
 	data["screen"] = screen

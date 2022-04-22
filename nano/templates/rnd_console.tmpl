@@ -14,21 +14,16 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		width:350px;
 		float:left;
 	}
-	#matname
+	#materials
 	{
-		width:100px;
-		float:left;
-	}
-	#matcost
-	{
-		width:50px;
+		width:30%;
 		float:left;
 	}
 </style>
 
 {{if data.screen < 10}}
 	<div style="float: left; margin-top: 3px;">
-		<div class="itemLabel">
+		<div class="itemLabelWide">
 			{{if data.screen == 0}}
 				Updating Database...
 			{{else data.screen == 2}}
@@ -36,6 +31,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			{{/if}}
 		</div>
 		{{if data.screen == 2}}
+			<div class="line">
 			{{:helper.link('Unlock', 'key', {'lock':16}, null)}}
 		{{/if}}
 	</div>
@@ -101,9 +97,9 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						{{else !data.dstored}}
 							This disk has no data stored on it.
 						{{else}}
-							<b>{{:data.dstoredname}}</b><br><b>Level:</b> {{:data.dstoredlevel}}<br><b>Lathe Type:</b> {{:data.dstoredtype}}<br>
+							<b>{{:data.dstoredname}}</b><br><b>Level:</b> {{:data.dstoredlevel}}<br><b>Lathe Type:</b> {{:data.dstoredtype}}<br><b>Required materials:</b><br>
 							{{for data.dstoredmats}}
-								<b>Required materials:</b> {{:value.amount}}<br>
+								{{:value.amount}}<br>
 							{{empty}}
 								No materials required.<br>
 							{{/for}}
@@ -150,13 +146,17 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff">
 					{{if data.screen == 13}}
 						{{for data.techinfo}}
-							<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}<br><br>
+							<div class="line">
+								<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}
+							</div>
 						{{empty}}
 							No tech levels found.
 						{{/for}}
 					{{else data.screen == 15}}
 						{{for data.alldesigns}}
-							<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}<br><br>
+							<div class="line">
+								<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}
+							</div>
 						{{empty}}
 							No designs found.
 						{{/for}}
@@ -189,31 +189,45 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		<div class="line">
 			{{:helper.link('Re-sync with Nearby Devices', 'circle-arrow-s', {'find_device':1}, null)}}
 		</div>
-		<div class="itemLabel">
-			Linked Devices:
-		</div>
+		<br>
 		<div class="line">
-			{{if data.destroy}}
-				* Destructive Analyzer {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'destroy'}, null)}}
-			{{else}}
-				* (No Destructive Analyzer Linked)
-			{{/if}}
-			<br>
-			{{if data.lathe}}
-				* Protolathe {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'lathe'}, null)}}
-			{{else}}
-				* (No Protolathe Linked)
-			{{/if}}
-			<br>
-			{{if data.imprinter}}
-				* Circuit Imprinter {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'imprinter'}, null)}}
-			{{else}}
-				* (No Circuit Imprinter Linked)
-			{{/if}}
-			<br>
-			{{for data.othermachines}}
-				* {{:value.name}}<br>
-			{{/for}}
+			<div class="itemLabel">
+				Linked Devices:
+			</div>
+		</div>
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff">
+					<div class="line">
+						{{if data.destroy}}
+							* Destructive Analyzer {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'destroy'}, null)}}
+						{{else}}
+							* (No Destructive Analyzer Linked)
+						{{/if}}
+					</div>
+					<div class="line">
+						{{if data.lathe}}
+							* Protolathe {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'lathe'}, null)}}
+						{{else}}
+							* (No Protolathe Linked)
+						{{/if}}
+					</div>
+					<div class="line">
+						{{if data.imprinter}}
+							* Circuit Imprinter {{:helper.link('(Disconnect)', 'circle-arrow-s', {'disconnect':'imprinter'}, null)}}
+						{{else}}
+							* (No Circuit Imprinter Linked)
+						{{/if}}
+					</div>
+					<div class="line">
+						{{for data.othermachines}}
+							<div class="line">
+								* {{:value.name}}
+							</div>
+						{{/for}}
+					</div>
+				</div>
+			</div>
 		</div>
 	{{else data.screen == 22}}
 		{{if !data.destroy || !data.destroyitem || data.destroybusy}}
@@ -233,27 +247,27 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			<div class="itemContentWide" style="width: 95%;">
 				<div class="statusDisplay">
 					<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff">
-						<div class="statusValue">
+						<div class="line">
 							<b>Origin Tech:</b>
 						</div>
 						{{for data.destroytech}}
-							<div class="statusValue">
-								{{:value.name}} {{value.tech}} [Current research level: {{:value.level}}]
+							<div class="line">
+								{{:value.name}} {{:value.tech}} [Current research level: {{:value.level}}]
 							</div>
 						{{empty}}
-							<div class="statusValue">
+							<div class="line">
 								This item does not have a tech origin.
 							</div>
 						{{/for}}
-						<div class="statusValue">
+						<div class="line">
 							<b>Material Composition:</b>
 						</div>
 						{{for data.destroymats}}
-							<div class="statusValue">
+							<div class="line">
 								{{:value.name}}: {{:value.amount}}
 							</div>
 						{{empty}}
-							<div class="statusValue">
+							<div class="line">
 								No materials found.
 							</div>
 						{{/for}}
@@ -275,20 +289,20 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				NO CIRCUIT IMPRINTER LINKED TO CONSOLE
 			</div>
 		{{else}}
-			<div style="float: right; width: 25%;">
-				<div class="itemLabel">
+			<div style="float: right; width: 30%;">
+				<div class="itemLabelWide">
 					Material Storage
 				</div>
-				<div class="itemContentWide" style="width: 95%;">
+				<div class="itemContentWide" style="width: 100%;">
 					<div class="statusDisplay">
 						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
 							{{if data.lathe && data.screen == 31}}
 								{{for data.lathemats}}
 									{{if value.amount > 0}}
-										<div class="statusValue">
-											{{:helper.link(value.name, 'gear', null, null, null, 'matname')}}
-											{{:helper.link(value.amount, 'gear', null, null, null, 'matcost')}}
-											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+										<div class="line">
+											{{:helper.link(value.name, 'gear', null, null, null, 'materials')}}
+											{{:helper.link(value.amount, null, null, null, null, 'materials')}}
+											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, null, 'materials')}}
 										</div>
 									{{/if}}
 								{{empty}}
@@ -300,13 +314,13 @@ Used In File(s): \code\modules\research\rdconsole.dm
 										<b>Reservoir {{:value.index}} &mdash; {{:value.name}}:</b>
 									</div>
 									{{for value.reagents}}
-										<div class="statusValue">
-											{{:helper.link(value.name, 'gear', null, null, null, 'matname')}}
-											{{:helper.link(value.volume, 'gear', null, null, null, 'matcost')}}
-											{{:helper.link("(Purge)", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+										<div class="line">
+											{{:helper.link(value.name, 'gear', null, null, null, 'materials')}}
+											{{:helper.link(value.volume, null, null, null, null, 'materials')}}
+											{{:helper.link("(Purge)", 'circle-arrow-s', value.commands, null, null, 'materials')}}
 										</div>
 									{{empty}}
-										<div class="statusValue">
+										<div class="line">
 											(Empty)
 										</div>
 									{{/for}}
@@ -314,12 +328,15 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								<div class="statusValue">
 									{{:helper.link('Disposal All Chemicals in Storage', 'circle-arrow-s', {'disposeallI':1}, null)}}
 								</div>
+								<div class="line">
+									<b>Other materials:</b>
+								</div>
 								{{for data.imprintermats}}
 									{{if value.amount > 0}}
-										<div class="statusValue">
-											{{:helper.link(value.name, 'gear', null, null, null, 'matname')}}
-											{{:helper.link(value.amount, 'gear', null, null, null, 'matcost')}}
-											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftWide')}}
+										<div class="line">
+											{{:helper.link(value.name, 'gear', null, null, null, 'materials')}}
+											{{:helper.link(value.amount, null, null, null, null, 'materials')}}
+											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, null, 'materials')}}
 										</div>
 									{{/if}}
 								{{empty}}
@@ -364,14 +381,14 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						</div>
 						<br>
 						<div class="line">
-							{{:helper.link('Process Queue', 'circle-arrow-s', {'process_queue':null}, null, null, 'misc')}}
+							{{:helper.link('Process Queue', 'circle-arrow-s', {'process_queue':null}, null, null, 'costsmall')}}
 							{{:helper.link('Clear Queue', 'circle-arrow-s', {'clear_queue':null}, null, 'fixedLeft')}}
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div style="float: left; width: 25%;">
+			<div style="float: left; width: 20%;">
 				<div class="itemLabel">
 					Categories
 				</div>
