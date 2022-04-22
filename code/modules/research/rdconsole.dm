@@ -515,7 +515,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					linked_imprinter.queue.Cut(i,i+1)
 
 	else if(href_list["clearQ"]) //Clears queue
-		switch(href_list["device"])
+		switch(href_list["clearQ"])
 			if("protolathe")
 				if(linked_lathe)
 					linked_lathe.queue.len = 0
@@ -685,7 +685,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(linked_lathe)
 		for(var/i in 1 to linked_lathe.queue.len)
 			var/datum/design/part = linked_lathe.queue[i]
-			lathe_queue.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
+			lathe_queue.Add(list(list("name" = part.name, "commands" = list("removeQItem" = i, "device" = "protolathe"))))
 
 		for(var/name_set in linked_lathe.part_sets)
 			lathe_categories.Add(list(list("name" = name_set)))
@@ -718,7 +718,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(linked_imprinter)
 		for(var/i in 1 to linked_imprinter.queue.len)
 			var/datum/design/part = linked_imprinter.queue[i]
-			imprinter_queue.Add(list(list("name" = part.name, "commands" = list("remove_from_queue" = i))))
+			imprinter_queue.Add(list(list("name" = part.name, "commands" = list("removeQItem" = i, "device" = "imprinter"))))
 
 		for(var/name_set in linked_imprinter.part_sets)
 			imprinter_categories.Add(list(list("name" = name_set)))
