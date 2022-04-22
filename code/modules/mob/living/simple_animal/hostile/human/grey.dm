@@ -523,7 +523,7 @@
 
 	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows them to shoot through glass airlocks
 
-	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/toy/snappop/virus)
+	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
 	speak = list("I can't believe these reports.","This will be my most impressive breakthrough yet.","Can't those MDF buffoons do anything right?","The Administration will make me a senior researcher when they see these results.")
 	speak_chance = 1

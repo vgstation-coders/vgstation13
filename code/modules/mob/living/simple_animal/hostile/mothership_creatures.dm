@@ -80,8 +80,8 @@
 	icon_state = "hoverdisc_drone"
 	icon_living = "hoverdisc_drone"
 	pass_flags = PASSTABLE
-	maxHealth = 175 // Pretty decent HP, but the armor is the real problem
-	health = 175
+	maxHealth = 200 // Pretty decent HP, but the armor is the real problem
+	health = 200
 	melee_damage_type = BURN
 	melee_damage_lower = 55 // Fighting it in melee is ballsy, to say the least
 	melee_damage_upper = 55
