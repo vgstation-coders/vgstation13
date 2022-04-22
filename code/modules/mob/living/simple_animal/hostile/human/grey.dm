@@ -543,13 +543,13 @@
 	if(microwave == 0)
 		projectiletype = /obj/item/projectile/beam/scorchray
 		projectilesound = 'sound/weapons/ray1.ogg'
-		icon_state = "greysentry"
-		icon_living = "greysentry"
+		icon_state = "greyresearcher_laser"
+		icon_living = "greyresearcher_laser"
 	if(microwave == 1)
 		projectiletype = /obj/item/projectile/energy/microwaveray
 		projectilesound = 'sound/weapons/ray2.ogg'
-		icon_state = "greysentry1"
-		icon_living = "greysentry1"
+		icon_state = "greyresearcher_laser1"
+		icon_living = "greyresearcher_laser1"
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/laser/Shoot()
 	if(prob(5)) //Handles switching firing modes in combat
