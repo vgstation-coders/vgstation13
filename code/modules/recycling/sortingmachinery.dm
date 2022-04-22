@@ -761,7 +761,7 @@
 	icon_state = "wrapper-4"
 	density = 1
 	anchored = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
