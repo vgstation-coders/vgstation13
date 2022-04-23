@@ -641,11 +641,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
-	if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
-		return
-	if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
-		return
-	if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+	if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 		return
 	else
 		switch(rand(0,4))
@@ -659,14 +655,14 @@
 				H.Knockdown(2)
 			if(2) //Target gets put to sleep for a few seconds
 				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
-				H.drowsyness += 2
+				H.drowsyness += 5
 				spawn(2 SECONDS)
 					H.sleeping += 3
-			if(3) //Minor hallucinations
+			if(3) //Minor hallucinations and jittering
 				to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
-				H.hallucination += 20
-				H.Jitter(10)
-				H.stuttering += 10
+				H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
+				H.Jitter(20)
+				H.stuttering += 20
 			if(4) //Ranged disarm
 				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
 				H.drop_item()
@@ -684,7 +680,7 @@
 //The final bawss. Equipped with a decently damaging ranged weapon, and strong psychic attack capabilities. Can buff allies in the vicinity with a small health boost or drain their health to replenish its own
 /mob/living/simple_animal/hostile/humanoid/grey/leader
 	name = "Administrator Zorb"
-	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and brandishing an advanced disintegrator."
+	desc = "A thin alien humanoid. This one is wearing an armored pressure suit and brandishing an advanced disintegrator."
 
 	icon_state = "grey_leader"
 	icon_living = "grey_leader"
@@ -793,11 +789,7 @@
 		switch(rand(0,4))
 			if(0) //Brain damage, confusion, and dizziness
 				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
-						continue
-					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
-						continue
-					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
 					H.adjustBrainLoss(20)
@@ -809,11 +801,7 @@
 						H.audible_scream()
 			if(1) //A knockdown, with some dizziness
 				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
-						continue
-					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
-						continue
-					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
 					H.emote("me", 1, "collapses!")
@@ -822,37 +810,25 @@
 					last_psychicattack = world.time
 			if(2) //Naptime
 				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
-						continue
-					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
-						continue
-					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
-					H.drowsyness += 2
+					H.drowsyness += 8
 					last_psychicattack = world.time
 					spawn(2 SECONDS)
 						H.sleeping += 5
-			if(3) //Hallucinations and jittering
+			if(3) //Serious hallucinations and jittering
 				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
-						continue
-					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
-						continue
-					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
-					H.hallucination += 50
+					H.hallucination += 75
 					H.Jitter(30)
 					H.stuttering += 30
 					last_psychicattack = world.time
 			if(4) //Brief period of pacification
 				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious()) // Won't use psy-attacks on unconscious targets
-						continue
-					if(H.is_wearing_item(/obj/item/clothing/head/tinfoil)) // Psy-attacks don't work if the target is wearing a tinfoil hat
-						continue
-					if((M_PSY_RESIST in H.mutations))// Psy-attacks don't work if the target has genetic resistance
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
 					H.reagents.add_reagent(CHILLWAX, 1)
@@ -865,7 +841,7 @@
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		var/reflectchance = 50 - round(P.damage/3)
 		if(prob(reflectchance))
-			visible_message("<span class='danger'>The [P.name] gets reflected by \the [src]'s Administrator Pressure Suit!</span>")
+			visible_message("<span class='danger'>The [P.name] gets reflected by \the [src]'s pressure suit!</span>")
 
 			if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
 				P.reflected = 1
