@@ -471,10 +471,12 @@
 
 		printpicture(user, I, "You can't see a thing.", flag)
 		return
-
+	var/obj/item/device/camera_bug/wahee
+	var/bug_check = 0
 	var/mobs = ""
 	var/list/seen
-	if(!isAI(user)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
+	var/atom/bug_pass
+	if(!isAI(user) && !istype(target, /obj/item/device/camera_bug)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
 		if(user.client)		//To make shooting through security cameras possible
 			seen = get_hear(world.view, user.client.eye) //To make shooting through security cameras possible
 			// To make shooting through the tgui cameras possible
@@ -486,10 +488,19 @@
 		else
 			seen = get_hear(world.view, user)
 	else
-		seen = get_hear(world.view, target)
+		if(istype(target, /obj/item/device/camera_bug))
+			wahee = target
+			seen = get_hear(world.view, wahee.placed_turf)
+			bug_check = 1
+		else
+			seen = get_hear(world.view, target)
 
 	var/list/turfs = list()
-	for(var/turf/T in range(round(photo_size * 0.5), target))
+	if(bug_check)
+		bug_pass = wahee.placed_turf
+	else
+		bug_pass = target
+	for(var/turf/T in range(round(photo_size * 0.5), bug_pass))
 		if(T in seen)
 			if(isAI(user) && !cameranet.checkTurfVis(T))
 				continue
@@ -501,7 +512,7 @@
 	var/icon/temp = get_base_photo_icon()
 
 	temp.Blend("#000", ICON_OVERLAY)
-	temp.Blend(camera_get_icon_deluxe(turfs, target), ICON_OVERLAY)
+	temp.Blend(camera_get_icon_deluxe(turfs, bug_pass), ICON_OVERLAY)
 
 	if(!issilicon(user))
 		printpicture(user, temp, mobs, flag)
@@ -683,10 +694,9 @@
 
 /obj/item/device/camera/afterattack(atom/target, mob/user, flag)
 	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc)))
-		return
-
+		if(!istype(target, /obj/item/device/camera_bug))
+			return
 	captureimage(target, user, flag)
-
 	playsound(loc, "polaroid", 75, 1, -3)
 
 	pictures_left--
