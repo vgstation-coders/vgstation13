@@ -806,6 +806,7 @@
 					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
 					H.emote("me", 1, "collapses!")
 					H.Knockdown(4)
+					H.confused += 6
 					H.dizziness += 6
 					last_psychicattack = world.time
 			if(2) //Naptime
