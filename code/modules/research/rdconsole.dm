@@ -289,6 +289,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	usr.set_machine(src)
 
+	if(href_list["close"])
+		if(usr.machine == src)
+			usr.unset_machine()
+
 	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
 		var/temp_screen = text2num(href_list["menu"])
 		if(temp_screen <= 11 || (2 <= temp_screen && 49 >= temp_screen) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
@@ -651,7 +655,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	user.set_machine(src)
 	files.RefreshResearch()
 	ui_interact(user)
-	onclose(user, "computer")
 
 /obj/machinery/computer/rdconsole/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
