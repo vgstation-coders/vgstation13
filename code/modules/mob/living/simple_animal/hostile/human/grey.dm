@@ -655,7 +655,7 @@
 				H.Knockdown(2)
 			if(2) //Target gets put to sleep for a few seconds
 				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
-				H.drowsyness += 5
+				H.drowsyness += 4
 				spawn(2 SECONDS)
 					H.sleeping += 3
 			if(3) //Minor hallucinations and jittering
@@ -814,7 +814,7 @@
 					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
-					H.drowsyness += 8
+					H.drowsyness += 6
 					last_psychicattack = world.time
 					spawn(2 SECONDS)
 						H.sleeping += 5
