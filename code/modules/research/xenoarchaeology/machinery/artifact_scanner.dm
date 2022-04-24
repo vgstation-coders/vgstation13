@@ -15,7 +15,9 @@
 	update_icon()
 
 /obj/machinery/artifact_scanpad/Destroy()
+	analyser_console.owned_scanner = null
 	analyser_console = null
+	harvester_console.owned_scanner = null
 	harvester_console = null
 	..()
 
