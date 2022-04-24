@@ -309,6 +309,7 @@
 	icon_state = "s_a_k"
 	item_state = "s_a_k"
 	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 
 	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
 						"/obj/item/tool/wrench:wrench" = null,
