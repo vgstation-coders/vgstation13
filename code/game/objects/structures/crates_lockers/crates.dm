@@ -513,17 +513,27 @@
 	else
 		..()
 
-/obj/structure/closet/crate/secure/proc/togglelock(mob/user)
-	if(src.allowed(user))
-		src.locked = !src.locked
-		if (src.locked)
-			to_chat(user, "<span class='notice'>You lock \the [src].</span>")
-			update_icon()
+/obj/structure/closet/crate/secure/proc/togglelock(atom/A)
+	if(istype(A,/mob))
+		var/mob/user = A
+		if(src.allowed(user))
+			src.locked = !src.locked
+			if (src.locked)
+				to_chat(user, "<span class='notice'>You lock \the [src].</span>")
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You unlock [src].</span>")
+				update_icon()
 		else
-			to_chat(user, "<span class='notice'>You unlock [src].</span>")
+			to_chat(user, "<span class='notice'>Access Denied.</span>")
+	else if(istype(A,/obj/machinery/logistics_machine/crate_opener))
+		var/obj/machinery/logistics_machine/crate_opener/N = A
+		if(can_access(N.access,req_access,req_access))
+			src.locked = !src.locked
 			update_icon()
-	else
-		to_chat(user, "<span class='notice'>Access Denied.</span>")
+			return 1
+		else
+			return 0
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
