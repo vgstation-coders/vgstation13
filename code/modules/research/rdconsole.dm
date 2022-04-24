@@ -58,11 +58,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	var/screen = 10	//Which screen is currently showing.
 	var/id = 0			//ID of the computer (for server restrictions).
 	var/sync = 1		//If sync = 0, it doesn't show up on Server Control Console
-
-	var/list/filtered = list( //Filters categories in the protolathe menu
-		"protolathe" = list(),
-		"imprinter" = list()
-	)
 	var/lathe_category = "" //Current category on a protolathe
 	var/imprinter_category = "" //Current category on an imprinter
 	var/autorefresh = 1 //Prevents the window from being updated while queueing items
@@ -618,28 +613,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	else if(href_list["setImprinterCategory"])
 		imprinter_category = href_list["setImprinterCategory"]
-
-	else if(href_list["toggleCategory"]) //Filter or unfilter a category
-		var/cat = href_list["toggleCategory"]
-		var/machine = href_list["machine"]
-		if (cat in filtered[machine])
-			filtered[machine] -= cat
-		else
-			filtered[machine] += cat
-
-	else if(href_list["toggleAllCategories"]) //Filter all categories, if all are filtered, clear filter.
-		var/machine = href_list["machine"]
-		var/list/tempfilter = filtered[machine] //t-thanks BYOND
-		if(tempfilter.len == (machine == "protolathe" ? linked_lathe.part_sets.len : linked_imprinter.part_sets.len))
-			filtered[machine] = list()
-		else
-			filtered[machine] = list()
-			if (machine == "protolathe")
-				for(var/name_set in linked_lathe.part_sets)
-					filtered[machine] += name_set
-			else
-				for(var/name_set in linked_imprinter.part_sets)
-					filtered[machine] += name_set
 
 	else if(href_list["toggleAutoRefresh"]) //STOP
 		autorefresh = !autorefresh
