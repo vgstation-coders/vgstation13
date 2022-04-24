@@ -672,7 +672,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 					continue
-				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D), "command1" = list("build" = D.id, "n" = 1), "command2" = list("build" = D.id, "n" = 1, "now" = 1))))
+				lathe_designs.Add(list(list("name" = D.name, "cost" = linked_lathe.output_part_cost(D), "command1" = list("build" = D.id, "n" = 1), "command5" = list("build" = D.id, "n" = 5), "command10" = list("build" = D.id, "n" = 10),  "command2" = list("build" = D.id, "customamt" = 1), "command3" = list("build" = D.id, "n" = 1, "now" = 1))))
 
 		for(var/matID in linked_lathe.materials.storage)
 			var/datum/material/M=linked_lathe.materials.getMaterial(matID)
@@ -705,7 +705,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & IMPRINTER) || D.category != name_set)
 					continue
-				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D), "command1" = list("imprint" = D.id, "n" = 1), "command2" = list("imprint" = D.id, "n" = 1, "now" = 1))))
+				imprinter_designs.Add(list(list("name" = D.name, "cost" = linked_imprinter.output_part_cost(D), "command1" = list("build" = D.id, "n" = 1), "command5" = list("build" = D.id, "n" = 5), "command10" = list("build" = D.id, "n" = 10), "command2" = list("build" = D.id, "customamt" = 1), "command3" = list("build" = D.id, "n" = 1, "now" = 1))))
 
 		var/beaker_index = 0
 		for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)

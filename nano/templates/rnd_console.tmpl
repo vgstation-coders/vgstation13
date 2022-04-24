@@ -73,7 +73,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 	{{if data.screen == 11}}
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
-				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 660px">
 					{{for data.techinfo}}
 						<b>{{:value.name}}</b><br>Level: {{:value.level}}<br><i>{{:value.summary}}</i><br><br>
 					{{empty}}
@@ -440,14 +440,17 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				{{/if}}
 				<div class="itemContentWide" style="width:100%;">
 					<div class="statusDisplay">
-						<div class="line">
+						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 330px">
 							{{if data.lathe && data.screen == 31}}
 								{{for data.lathedesigns}}
 									<div class="line">
 										<div class="statusValue">
-											{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+											{{:helper.link(value.name, 'gear', value.command3, null, null, 'misc')}}
 											{{:helper.link(value.cost, null, null, null, null, 'cost')}}
-											{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+											{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeftNarrow')}}
+											{{:helper.link('5', null, value.command5, null, 'fixedLeftNarrow')}}
+											{{:helper.link('10', null, value.command10, null, 'fixedLeftNarrow')}}
+											{{:helper.link('Custom', null, value.command2, null, 'fixedLeftNarrow')}}
 										</div>
 									</div>
 								{{empty}}
@@ -457,9 +460,12 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								{{for data.imprinterdesigns}}
 									<div class="line">
 										<div class="statusValue">
-											{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+											{{:helper.link(value.name, 'gear', value.command3, null, null, 'misc')}}
 											{{:helper.link(value.cost, null, null, null, null, 'cost')}}
-											{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+											{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeftNarrow')}}
+											{{:helper.link('5', null, value.command5, null, 'fixedLeftNarrow')}}
+											{{:helper.link('10', null, value.command10, null, 'fixedLeftNarrow')}}
+											{{:helper.link('Custom', null, value.command2, null, 'fixedLeftNarrow')}}
 										</div>
 									</div>
 								{{empty}}
