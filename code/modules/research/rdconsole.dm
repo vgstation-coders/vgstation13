@@ -292,7 +292,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
 		var/temp_screen = text2num(href_list["menu"])
-		if(temp_screen == 1 || temp_screen == 8 || temp_screen == 9 || src.allowed(usr) || emagged) //Unless you are making something, you need access.
+		if(temp_screen == 1 || temp_screen == 6 || temp_screen == 7 || src.allowed(usr) || emagged) //Unless you are making something, you need access.
 			screen = temp_screen
 		else
 			to_chat(usr, "Unauthorized Access.")
@@ -328,7 +328,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(href_list["eject_tech"]) //Eject the technology disk.
 		t_disk:forceMove(src.loc)
 		t_disk = null
-		screen = 10
+		screen = 0
 
 	else if(href_list["copy_tech"]) //Copys some technology data from the research holder to the disk.
 		for(var/ID in files.known_tech)
@@ -336,7 +336,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if(href_list["copy_tech_ID"] == T.id)
 				t_disk.stored = T
 				break
-		screen = 12
 
 	else if(href_list["updt_design"]) //Updates the research holder with design data from the design disk.
 		updating = 1
@@ -352,14 +351,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(href_list["eject_design"]) //Eject the design disk.
 		d_disk:forceMove(src.loc)
 		d_disk = null
-		screen = 10
+		screen = 0
 
 	else if(href_list["copy_design"]) //Copy design data from the research holder to the design disk.
 		for(var/datum/design/D in files.known_designs)
 			if(href_list["copy_design_ID"] == D.id)
 				d_disk.blueprint = D
 				break
-		screen = 14
 
 	else if(href_list["eject_item"]) //Eject the item inside the destructive analyzer.
 		if(linked_destroy)
@@ -370,7 +368,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				linked_destroy.loaded_item.forceMove(linked_destroy.loc)
 				linked_destroy.loaded_item = null
 				linked_destroy.icon_state = "d_analyzer"
-				screen = 21
 
 	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
 		if(linked_destroy)
@@ -439,7 +436,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/M in being_built.materials)
 					power += round(being_built.materials[M] / 5)
 				power = max(2000, power)
-				//screen = 8
 				var/n
 				if (href_list["customamt"])
 					n = round(input("Queue how many? (Maximum [RESEARCH_MAX_Q_LEN - linked_lathe.queue.len])", "Protolathe Queue") as num|null)
