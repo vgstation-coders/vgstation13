@@ -56,6 +56,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		/obj/machinery/r_n_d/blueprinter
 		)
 	var/screen = 10	//Which screen is currently showing.
+	var/updating = 0 //Updating database?
+	var/locked = 0 //Screen locked?
 	var/id = 0			//ID of the computer (for server restrictions).
 	var/sync = 1		//If sync = 0, it doesn't show up on Server Control Console
 	var/lathe_category = "" //Current category on a protolathe
@@ -229,7 +231,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/proc/deconstruct_item(mob/user)
 	if(!linked_destroy || linked_destroy.busy || !linked_destroy.loaded_item)
 		return
-	if(isLocked() || (linked_destroy.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
+	if(locked || (linked_destroy.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		return
 	linked_destroy.busy = 1
 	updateUsrDialog()
@@ -278,7 +280,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	add_fingerprint(usr)
 
-	if(isLocked() && !allowed(usr))
+	if(locked && !allowed(usr))
 		to_chat(usr, "Unauthorized Access.")
 		return
 
@@ -296,9 +298,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			to_chat(usr, "Unauthorized Access.")
 
 	else if(href_list["updt_tech"]) //Update the research holder with information from the technology disk.
-		screen = 0
+		updating = 1
 		spawn(50)
-			screen = 12
+			updating = 0
 			files.AddTech2Known(t_disk.stored)
 			if(t_disk.stored.new_category && !(t_disk.stored.new_category in part_sets))
 				part_sets += t_disk.stored.new_category
@@ -313,10 +315,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			return
 		if (alert("Are you sure you want to do this? This will maximize every research level!", "Admin R&D console Hax.", "Yes", "No") != "Yes")
 			return TRUE
-		screen = 0
+		updating = 1
 		spawn(50)
 			Maximize()
-			screen = 10
+			updating = 0
 			updateUsrDialog()
 			griefProtection() //Update centcomm too
 
@@ -337,9 +339,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		screen = 12
 
 	else if(href_list["updt_design"]) //Updates the research holder with design data from the design disk.
-		screen = 0
+		updating = 1
 		spawn(50)
-			screen = 14
+			updating = 0
 			files.AddDesign2Known(d_disk.blueprint)
 			updateUsrDialog()
 			griefProtection() //Update centcomm too
@@ -383,15 +385,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	else if(href_list["lock"]) //Lock the console from use by anyone without tox access.
 		if(src.allowed(usr))
-			screen = text2num(href_list["lock"])
+			locked = !locked
 		else
 			to_chat(usr, "Unauthorized Access.")
 
 	else if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
-		screen = 0
 		if(!sync)
 			to_chat(usr, "<span class='warning'>You must connect to the network first!</span>")
 		else
+			updating = 1
 			griefProtection() //Putting this here because I dont trust the sync process
 			spawn(30)
 				if(src)
@@ -417,7 +419,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							server_processed = 1
 						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
 							S.produce_heat(100)
-					screen = 16
+					updating = 0
 					updateUsrDialog()
 
 	else if(href_list["togglesync"]) //Prevents the console from being synced by other consoles. Can still send data.
@@ -587,10 +589,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			linked_imprinter.materials.removeAmount(matID, sheet.amount * sheet.perunit)
 
 	else if(href_list["find_device"]) //The R&D console looks for devices nearby to link up with.
-		screen = 0
+		updating = 1
 		spawn(20)
 			SyncRDevices()
-			screen = 17
+			updating = 0
 			updateUsrDialog()
 
 	else if(href_list["disconnect"]) //The R&D console disconnects with a specific device.
@@ -612,11 +614,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		griefProtection()
 		var/choice = alert("R&D Console Database Reset", "Are you sure you want to reset the R&D console's database? Data lost cannot be recovered.", "Continue", "Cancel")
 		if(choice == "Continue")
-			screen = 0
+			updating = 1
 			qdel(files)
 			files = new /datum/research(src)
 			spawn(20)
-				screen = 16
+				updating = 0
 				updateUsrDialog()
 
 	else if(href_list["setLatheCategory"])
@@ -765,6 +767,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	data["isadmin"] = user.client.holder != null
 	data["synced"] = sync
+	data["locked"] = locked
+	data["updatingdb"] = updating
 
 	data["tdisk"] = t_disk != null
 	data["tstored"] = t_disk && t_disk.stored
@@ -794,9 +798,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		ui = new(user, src, ui_key, "rnd_console.tmpl", name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
 		ui.set_initial_data(data)
 		ui.open()
-
-/obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
-	return screen == 2
 
 /obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
 	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that

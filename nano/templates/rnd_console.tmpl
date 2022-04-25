@@ -36,18 +36,18 @@ Used In File(s): \code\modules\research\rdconsole.dm
 	}
 </style>
 
-{{if data.screen < 10}}
+{{if data.updating || data.locked}}
 	<div style="float: left; margin-top: 3px;">
 		<div class="itemLabelWide">
-			{{if data.screen == 0}}
+			{{if data.updating}}
 				Updating Database...
-			{{else data.screen == 2}}
+			{{else data.locked}}
 				SYSTEM LOCKED
 			{{/if}}
 		</div>
-		{{if data.screen == 2}}
+		{{if data.locked}}
 			<div class="line">
-			{{:helper.link('Unlock', 'key', {'lock':16}, null)}}
+			{{:helper.link('Unlock', 'key', {'lock':1}, null)}}
 		{{/if}}
 	</div>
 {{else}}
@@ -196,7 +196,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			</div>
 		{{/if}}
 		<div class="line">
-			{{:helper.link('Lock Console', 'circle-arrow-s', {'lock':2}, null)}}
+			{{:helper.link('Lock Console', 'circle-arrow-s', {'lock':1}, null)}}
 		</div>
 		<div class="line">
 			{{:helper.link('Reset R&D Database', 'circle-arrow-s', {'reset':null}, null)}}
