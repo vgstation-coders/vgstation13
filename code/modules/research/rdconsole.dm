@@ -768,7 +768,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	data["isadmin"] = user.client.holder != null
 	data["synced"] = sync
 	data["locked"] = locked
-	data["updatingdb"] = updating
+	data["updating"] = updating
 
 	data["tdisk"] = t_disk != null
 	data["tstored"] = t_disk && t_disk.stored
