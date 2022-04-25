@@ -487,7 +487,7 @@
 	desc = "A belt used to hold most janitorial supplies."
 	icon_state = "janibelt"
 	item_state = "janibelt"
-	storage_slots = 12
+	storage_slots = 14
 	fits_max_w_class = 5
 	max_combined_w_class = 35
 	can_only_hold = list(
