@@ -292,7 +292,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
 		var/temp_screen = text2num(href_list["menu"])
-		if(temp_screen = 1 || temp_screen == 8 || temp_screen == 9 || src.allowed(usr) || emagged) //Unless you are making something, you need access.
+		if(temp_screen == 1 || temp_screen == 8 || temp_screen == 9 || src.allowed(usr) || emagged) //Unless you are making something, you need access.
 			screen = temp_screen
 		else
 			to_chat(usr, "Unauthorized Access.")
