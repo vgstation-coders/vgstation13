@@ -174,13 +174,13 @@ var/list/shuttle_log = list()
 			if(authenticated==AUTH_CAPT && !(issilicon(usr) && !is_malf_owner(usr)))
 				if(message_cooldown)
 					return
-				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
+				var/input = stripped_message(usr, "Please choose a message to announce to the station crew.", "Priority Announcement")
 				if(message_cooldown || !input || (!usr.Adjacent(src) && !issilicon(usr)))
 					return
 				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
 				var/turf/T = get_turf(usr)
-				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made a captain announcement: [input]")
-				message_admins("[key_name_admin(usr)] has made a captain announcement.", 1)
+				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made a Comms Console announcement: [input]")
+				message_admins("[key_name_admin(usr)] has made a Comms Console announcement.", 1)
 				message_cooldown = 1
 				spawn(600)//One minute cooldown
 					message_cooldown = 0
