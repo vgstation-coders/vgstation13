@@ -55,7 +55,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		/obj/machinery/r_n_d/reverse_engine,
 		/obj/machinery/r_n_d/blueprinter
 		)
-	var/screen = 10	//Which screen is currently showing.
+	var/screen = 0	//Which screen is currently showing.
 	var/updating = 0 //Updating database?
 	var/locked = 0 //Screen locked?
 	var/id = 0			//ID of the computer (for server restrictions).
@@ -292,7 +292,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
 		var/temp_screen = text2num(href_list["menu"])
-		if(temp_screen <= 11 || (2 <= temp_screen && 49 >= temp_screen) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
+		if(temp_screen = 1 || temp_screen == 8 || temp_screen == 9 || src.allowed(usr) || emagged) //Unless you are making something, you need access.
 			screen = temp_screen
 		else
 			to_chat(usr, "Unauthorized Access.")
@@ -439,7 +439,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/M in being_built.materials)
 					power += round(being_built.materials[M] / 5)
 				power = max(2000, power)
-				//screen = 3
+				//screen = 8
 				var/n
 				if (href_list["customamt"])
 					n = round(input("Queue how many? (Maximum [RESEARCH_MAX_Q_LEN - linked_lathe.queue.len])", "Protolathe Queue") as num|null)

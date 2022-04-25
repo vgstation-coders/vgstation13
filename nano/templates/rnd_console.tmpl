@@ -53,29 +53,29 @@ Used In File(s): \code\modules\research\rdconsole.dm
 {{else}}
 	<div style="float: left; margin-top: 3px;">
 		<div class="line">
-			{{:helper.link('Current Research Levels', 'key', {'menu':11}, (data.screen==11)?'linkOn':'')}}
+			{{:helper.link('Current Research Levels', 'key', {'menu':11}, (data.screen==1)?'linkOn':'')}}
 			{{if data.tdisk}}
-				{{:helper.link('Disk Operations', 'circle-triangle-e', {'menu':12}, (data.screen==12)?'linkOn':'')}}
+				{{:helper.link('Disk Operations', 'circle-triangle-e', {'menu':12}, (data.screen==2)?'linkOn':'')}}
 			{{else data.ddisk}}
-				{{:helper.link('Disk Operations', 'circle-triangle-e', {'menu':14}, (data.screen==14)?'linkOn':'')}}
+				{{:helper.link('Disk Operations', 'circle-triangle-e', {'menu':14}, (data.screen==4)?'linkOn':'')}}
 			{{/if}}
 			{{if data.destroy}}
-				{{:helper.link('Destructive Analyzer Menu', 'key', {'menu':22}, (data.screen==22)?'linkOn':'')}}
+				{{:helper.link('Destructive Analyzer Menu', 'key', {'menu':22}, (data.screen==7)?'linkOn':'')}}
 			{{/if}}
 			{{if data.lathe}}
-				{{:helper.link('Protolathe Construction Menu', 'key', {'menu':31}, (data.screen==31)?'linkOn':'')}}
+				{{:helper.link('Protolathe Construction Menu', 'key', {'menu':31}, (data.screen==8)?'linkOn':'')}}
 			{{/if}}
 			{{if data.imprinter}}
-				{{:helper.link('Circuit Construction Menu', 'key', {'menu':41}, (data.screen==41)?'linkOn':'')}}
+				{{:helper.link('Circuit Construction Menu', 'key', {'menu':41}, (data.screen==9)?'linkOn':'')}}
 			{{/if}}
 			{{if data.isadmin}}
 				{{:helper.link('MAXIMUM SCIENCE', 'key', {'hax':null}, null)}}
 			{{/if}}
-			{{:helper.link('Settings', 'key', {'menu':16}, (data.screen==16)?'linkOn':'')}}
+			{{:helper.link('Settings', 'key', {'menu':16}, (data.screen==6)?'linkOn':'')}}
 		</div>
 	</div>
 
-	{{if data.screen == 11}}
+	{{if data.screen == 1}}
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 660px">
@@ -87,18 +87,18 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				</div>
 			</div>
 		</div>
-	{{else data.screen == 12 || data.screen == 14}}
+	{{else data.screen == 2 || data.screen == 4}}
 		<div class="itemLabel">
-			{{if data.screen == 12}}
+			{{if data.screen == 2}}
 				Disk Contents: (Technology Data Disk)
-			{{else data.screen == 14}}
+			{{else data.screen == 4}}
 				Disk Contents: (Design Data Disk)
 			{{/if}}
 		</div>
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff">
-					{{if data.screen == 12}}
+					{{if data.screen == 2}}
 						{{if !data.tdisk}}
 							No disk inserted.
 						{{else !data.tstored}}
@@ -106,7 +106,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						{{else}}
 							<b>{{:data.tstoredname}}</b><br><b>Level:</b> {{:data.tstoredlevel}}<br><i>{{:data.tstoreddesc}}</i>
 						{{/if}}
-					{{else data.screen == 14}}
+					{{else data.screen == 4}}
 						{{if !data.ddisk}}
 							No disk inserted.
 						{{else !data.dstored}}
@@ -123,7 +123,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				</div>
 			</div>
 		</div>
-		{{if data.screen == 12}}
+		{{if data.screen == 2}}
 			{{if data.tdisk}}
 				<div class="line">
 					{{if !data.tstored}}
@@ -135,7 +135,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 					{{:helper.link('Eject Disk', 'circle-arrow-s', {'eject_tech':null}, null)}}
 				</div>
 			{{/if}}
-		{{else data.screen == 14}}
+		{{else data.screen == 4}}
 			{{if data.ddisk}}
 				<div class="line">
 					{{if !data.dstored}}
@@ -148,11 +148,11 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				</div>
 			{{/if}}
 		{{/if}}
-	{{else data.screen == 13 || data.screen == 15}}
+	{{else data.screen == 3 || data.screen == 5}}
 		<div class="itemLabel">
-			{{if data.screen == 13}}
+			{{if data.screen == 3}}
 				Load Technology to Disk:
-			{{else data.screen == 15}}
+			{{else data.screen == 5}}
 				Load Design to Disk:
 			{{/if}}
 		</div>
@@ -179,7 +179,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				</div>
 			</div>
 		</div>
-	{{else data.screen == 16}}
+	{{else data.screen == 6}}
 		<div class="itemLabel">
 			R&D Console Settings
 		</div>
@@ -244,7 +244,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				</div>
 			</div>
 		</div>
-	{{else data.screen == 22}}
+	{{else data.screen == 7}}
 		{{if !data.destroy || !data.destroyitem || data.destroybusy}}
 			<div class="itemLabel">
 				{{if !data.destroy}}
@@ -294,12 +294,12 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				</div>
 			</div>
 		{{/if}}
-	{{else data.screen == 31 || data.screen == 41}}
-		{{if data.screen == 31 && !data.lathe}}
+	{{else data.screen == 8 || data.screen == 9}}
+		{{if data.screen == 8 && !data.lathe}}
 			<div class="itemLabel">
 				NO PROTOLATHE LINKED TO CONSOLE
 			</div>
-		{{else data.screen == 41 && !data.imprinter}}
+		{{else data.screen == 9 && !data.imprinter}}
 			<div class="itemLabel">
 				NO CIRCUIT IMPRINTER LINKED TO CONSOLE
 			</div>
@@ -311,7 +311,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				<div class="itemContentWide" style="width: 95%;">
 					<div class="statusDisplay">
 						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-							{{if data.lathe && data.screen == 31}}
+							{{if data.lathe && data.screen == 8}}
 								{{for data.lathemats}}
 									{{if value.amount > 0}}
 										<div class="line">
@@ -323,7 +323,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								{{empty}}
 									<i>Material storage is empty</i>
 								{{/for}}
-							{{else data.imprinter && data.screen == 41}}
+							{{else data.imprinter && data.screen == 9}}
 								{{for data.imprinterchems}}
 									<div class="statusValue">
 										<b>Reservoir {{:value.index}} &mdash; {{:value.name}}:</b>
@@ -372,7 +372,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				<div class="itemContentWide" style="width: 95%;">
 					<div class="statusDisplay">
 						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 165px">
-							{{if data.lathe && data.screen == 31}}
+							{{if data.lathe && data.screen == 8}}
 								{{for data.lathequeue}}
 									<div class="statusValue">
 										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
@@ -381,7 +381,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								{{empty}}
 									<i>No parts in memory</i>
 								{{/for}}
-							{{else data.imprinter && data.screen == 41}}
+							{{else data.imprinter && data.screen == 9}}
 								{{for data.imprinterqueue}}
 									<div class="statusValue">
 										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
@@ -396,10 +396,10 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						</div>
 						<br>
 						<div class="line">
-							{{if data.lathe && data.screen == 31}}
+							{{if data.lathe && data.screen == 8}}
 								{{:helper.link('Process Queue', 'circle-arrow-s', {'setProtolatheStopped':0,}, null, null, 'misc')}}
 								{{:helper.link('Clear Queue', 'circle-arrow-s', {'clearQ':'protolathe'}, null, 'fixedLeft')}}
-							{{else data.imprinter && data.screen == 41}}
+							{{else data.imprinter && data.screen == 9}}
 								{{:helper.link('Process Queue', 'circle-arrow-s', {'setImprinterStopped':0}, null, null, 'misc')}}
 								{{:helper.link('Clear Queue', 'circle-arrow-s', {'clearQ':'imprinter'}, null, 'fixedLeft')}}
 							{{/if}}
@@ -412,7 +412,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				<div class="itemLabel">
 					Categories
 				</div>
-				{{if data.lathe && data.screen == 31}}
+				{{if data.lathe && data.screen == 8}}
 					{{for data.lathecategories}}
 						<div class="line">
 							{{:helper.link(value.name, 'gear',{'setLatheCategory':value.name},(data.lathecategory == value.name)?'linkOn':'', 'fixedLeftWide')}}
@@ -420,7 +420,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 					{{empty}}
 						<i>No categories found</i>
 					{{/for}}
-				{{else data.imprinter && data.screen == 41}}
+				{{else data.imprinter && data.screen == 9}}
 					{{for data.imprintercategories}}
 						<div class="line">
 							{{:helper.link(value.name, 'gear',{'setImprinterCategory':value.name},(data.imprintercategory == value.name)?'linkOn':'', 'fixedLeftWide')}}
@@ -434,11 +434,11 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			</div>
 
 			<div class="item">
-				{{if data.lathe && data.screen == 31}}
+				{{if data.lathe && data.screen == 8}}
 					<div class="itemLabel">
 						{{:data.lathecategory}}
 					</div>
-				{{else data.imprinter && data.screen == 41}}
+				{{else data.imprinter && data.screen == 9}}
 					<div class="itemLabel">
 						{{:data.imprintercategory}}
 					</div>
@@ -446,7 +446,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				<div class="itemContentWide" style="width:100%;">
 					<div class="statusDisplay">
 						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 330px">
-							{{if data.lathe && data.screen == 31}}
+							{{if data.lathe && data.screen == 8}}
 								{{for data.lathedesigns}}
 									<div class="line">
 										<div class="statusValue">
@@ -461,7 +461,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								{{empty}}
 									<i>No parts in memory</i>
 								{{/for}}
-							{{else data.imprinter && data.screen == 41}}
+							{{else data.imprinter && data.screen == 9}}
 								{{for data.imprinterdesigns}}
 									<div class="line">
 										<div class="statusValue">
