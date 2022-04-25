@@ -159,7 +159,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		<div class="itemContentWide" style="width: 95%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff">
-					{{if data.screen == 13}}
+					{{if data.screen == 3}}
 						{{for data.techinfo}}
 							<div class="line">
 								<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}
@@ -167,7 +167,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						{{empty}}
 							No tech levels found.
 						{{/for}}
-					{{else data.screen == 15}}
+					{{else data.screen == 5}}
 						{{for data.alldesigns}}
 							<div class="line">
 								<b>{{:value.name}}</b> {{:helper.link('(Copy to Disk)', 'circle-arrow-s', value.commands, null)}}
