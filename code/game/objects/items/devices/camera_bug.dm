@@ -11,7 +11,7 @@
 	var/c_tag = ""
 	var/active = FALSE
 	var/network = ""
-	var/atom/placed_turf
+	var/atom/placed_atom
 	var/list/excludes = list(
 		/obj/effect,
 		/turf/simulated/floor,
@@ -88,7 +88,7 @@
 		return 1
 	to_chat(user, "<span class='notice'>You stealthily place \the [src] onto \the [A].</span>")
 	active = TRUE
-	placed_turf = A
+	placed_atom = A
 	camera_bugs += src
 	return 1
 

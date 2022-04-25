@@ -471,7 +471,7 @@
 
 		printpicture(user, I, "You can't see a thing.", flag)
 		return
-	var/obj/item/device/camera_bug/wahee
+	var/obj/item/device/camera_bug/camera_bug_pass
 	var/bug_check = 0
 	var/mobs = ""
 	var/list/seen
@@ -489,15 +489,15 @@
 			seen = get_hear(world.view, user)
 	else
 		if(istype(target, /obj/item/device/camera_bug))
-			wahee = target
-			seen = get_hear(world.view, wahee.placed_turf)
+			camera_bug_pass = target
+			seen = get_hear(world.view, camera_bug_pass.placed_atom)
 			bug_check = 1
 		else
 			seen = get_hear(world.view, target)
 
 	var/list/turfs = list()
 	if(bug_check)
-		bug_pass = wahee.placed_turf
+		bug_pass = camera_bug_pass.placed_atom
 	else
 		bug_pass = target
 	for(var/turf/T in range(round(photo_size * 0.5), bug_pass))
