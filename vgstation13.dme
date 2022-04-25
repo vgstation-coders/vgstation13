@@ -2829,7 +2829,6 @@
 #include "maps\_map.dm"
 #include "maps\_map_override.dm"
 #include "maps\roidstation.dm"
-#include "maps\RoidStation.dmm"
 #include "maps\defficiency\areas.dm"
 #include "maps\lampreystation\lamprey.dm"
 #include "maps\packedstation\telecomms.dm"
