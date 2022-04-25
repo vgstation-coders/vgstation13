@@ -709,8 +709,7 @@
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2"
 	req_components = list(
-							/obj/item/weapon/stock_parts/manipulator = 1,
-							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
 						)
 
 /obj/machinery/logistics_machine/crate_closer
@@ -744,14 +743,13 @@
 		icon_state = "inactive"
 
 /obj/item/weapon/circuitboard/crate_closer
-	name = "Circuit Board (Crate Opener)"
+	name = "Circuit Board (Crate Closer)"
 	desc = "A circuit board used to run a crate closing machine."
 	build_path = /obj/machinery/logistics_machine/crate_closer
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2"
 	req_components = list(
-							/obj/item/weapon/stock_parts/manipulator = 1,
-							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
 						)
 
 /obj/machinery/wrapping_machine
@@ -811,13 +809,6 @@
 			destinations += dest
 
 	mover = new
-
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/wrapping_machine,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-	)
 
 /obj/machinery/wrapping_machine/Destroy()
 	. = ..()
