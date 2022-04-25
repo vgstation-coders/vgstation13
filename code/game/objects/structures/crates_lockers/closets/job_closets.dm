@@ -49,6 +49,7 @@
 		/obj/item/device/lightreplacer/loaded/mixed,
 		/obj/item/clothing/gloves/black,
 		/obj/item/clothing/head/soft/purple,
+		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/weapon/storage/box/lights/he = 2,
 		/obj/item/weapon/storage/belt/janitor,
 	)
