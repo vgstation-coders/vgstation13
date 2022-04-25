@@ -217,7 +217,7 @@
 		/obj/item/weapon/tank/emergency_oxygen,
 		/obj/item/weapon/tank/emergency_nitrogen,
 		/obj/item/device/device_analyser,
-		/obj/item/device/rcd,	
+		/obj/item/device/rcd,
 		/obj/item/weapon/rcs,
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/storage/bag/trash,
