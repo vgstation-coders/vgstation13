@@ -66,7 +66,6 @@
 "oL" = (/obj/structure/table/reinforced,/obj/item/tool/bonesetter,/obj/item/tool/bonegel,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
 "qo" = (/obj/machinery/door/airlock/vault{id_tag = "ufostorage"; locked = 1; name = "Storage Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
 "rH" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/shuttle/brokeufo/start)
-"se" = (/obj/machinery/door/airlock/external{locked = 1; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
 "tx" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor6"},/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/toolbox{name = "Klaatu"},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
 "tS" = (/obj/structure/table/reinforced,/obj/item/stack/sheet/mineral/plastic{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/effect/decal/cleanable/dirt,/obj/item/weapon/storage/box/inflatables,/obj/machinery/power/apc{cell_type = 0; dir = 4; icon_state = "apc1"; opened = 1; pixel_x = 28},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
 "uN" = (/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/ranged{name = "Barada"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
@@ -107,7 +106,7 @@ aaapaZaIamanaZawtxaqaZaOasbiaZaraa
 aaaZaRacafauaZaZaXaZaZaYbfbgbhaZaa
 aaaZbaaJaTbdaJaPXFbegwbfasbybjaZaa
 apaeaZaZaZaZaZcFaCfdaZaZaZaZaZaZar
-seiHiWXFaCgSXFgZXFXFXFhlaCaCiWjPse
+iWiHiWXFaCgSXFgZXFXFXFhlaCaCiWjPiW
 hDaZaZaZaZaZaZjZaCmoaZaZaZaZaZaeSG
 aaaZoLFCGmGtZAaUXFqoROTpTLbHAfaZaa
 aaaZveaWnGaGaZaZxPaZaZzXcarHXUaZaa
