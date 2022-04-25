@@ -97,6 +97,7 @@
 #define TRICORDRAZINE 			"tricordrazine"
 #define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
+#define PROCIZINE 			"procizine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
 #define HYRONALIN 			"hyronalin"
@@ -457,6 +458,7 @@
 #define TENDIES			"tendies"
 #define DSYRUP			"dsyrup"
 #define GRUE_BILE		"grue_bile"
+#define PINKLADY		"pinklady"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -495,6 +497,7 @@
 #define AMINOMICIN		"aminomicin"
 #define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
+#define AMINOBLATELLA	"aminoblatella"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"

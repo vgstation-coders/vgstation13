@@ -59,8 +59,8 @@
 	build_path = /obj/item/weapon/circuitboard/mechfab
 
 /datum/design/monkey_recycler
-	name = "Circuit Design (Monkey Recycler)"
-	desc = "Allows for the construction of circuit boards used to build a Monkey Recycler."
+	name = "Circuit Design (Animal Recycler)"
+	desc = "Allows for the construction of circuit boards used to build a Animal Recycler."
 	id = "monkey"
 	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 3, Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER

@@ -520,7 +520,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		else
 			product = new product_type(T)
 
-		score["stuffharvested"] += 1 //One point per product unit
+		score.stuffharvested += 1 //One point per product unit
 
 		if(mysterious)
 			product.name += "?"

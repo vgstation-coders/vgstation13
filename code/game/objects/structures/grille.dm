@@ -11,7 +11,7 @@
 	layer = BELOW_OBJ_LAYER
 	explosion_resistance = 5
 	pass_flags_self = PASSGRILLE
-	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
+	health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
 	var/grille_material = /obj/item/stack/rods
 
@@ -301,6 +301,7 @@
 	..()
 	health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
+
 
 /obj/structure/grille/broken/healthcheck(var/hitsound = 0) //needed because initial icon_state for broken is grille-b for mapping
 	..()

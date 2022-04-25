@@ -14,7 +14,7 @@
 	on = 0
 	anchored = 0
 	health = 40
-	maxhealth = 20
+	maxHealth = 20
 	req_access = list(access_medical)
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0
@@ -173,6 +173,7 @@
 	else
 		locked = 0
 		visible_message("<span class='danger'>[src]'s panel clicks open.</span>", 1)
+
 
 /obj/machinery/bot/bloodbot/can_path()
 	return !currently_drawing_blood

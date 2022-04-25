@@ -114,9 +114,6 @@
 //                                          //
 //////////////////////////////////////////////
 
-
-//note: this can only fire on snowmap
-
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = /datum/role/changeling
@@ -128,22 +125,14 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 18
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
-	var/changeling_threshold = 2
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
-	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
-	for (var/i = 1 to num_changelings)
-		var/mob/M = pick(candidates)
-		assigned += M
-		candidates -= M
-		if (i > changeling_threshold)
-			if ((mode.threat > cost))
-				mode.spend_threat(cost)
-			else
-				break
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
@@ -155,7 +144,7 @@
 		if(!hivemind)
 			hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 			hivemind.OnPostSetup()
-		hivemind?.HandleRecruitedRole(newChangeling)
+		hivemind.HandleRecruitedRole(newChangeling)
 
 		newChangeling.ForgeObjectives()
 		newChangeling.Greet(GREET_ROUNDSTART)
@@ -238,6 +227,8 @@
 	if (M)
 		var/datum/role/wizard/newWizard = new
 		M.forceMove(pick(wizardstart))
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
@@ -310,6 +301,8 @@
 		else
 			PFW.HandleRecruitedRole(newWizard)
 		M.forceMove(pick(wizardstart))
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		newWizard.AssignToRole(M.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
@@ -470,6 +463,8 @@ Assign your candidates in choose_candidates() instead.
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
 		M.forceMove(synd_spawn[spawnpos])
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new

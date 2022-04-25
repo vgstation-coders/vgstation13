@@ -3,7 +3,7 @@
 	icon_state = "node"
 	desc = "A part of a blob."
 	health = 100
-	maxhealth = 100
+	maxHealth = 100
 	fire_resist = 2
 	custom_process=1
 	layer = BLOB_NODE_LAYER
@@ -51,8 +51,8 @@
 	for(var/i = 1; i < 8; i += i)
 		Pulse(5, i, overmind)
 
-	if(health < maxhealth)
-		health = min(maxhealth, health + 1)
+	if(health < maxHealth)
+		health = min(maxHealth, health + 1)
 		update_icon()
 
 /obj/effect/blob/node/run_action()

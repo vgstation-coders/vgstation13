@@ -41,12 +41,12 @@ var/list/beam_master = list()
 	hit_cache = .
 
 /ray/beam_ray/raycast_hit_check(var/rayCastHitInfo/info)
-	var/atom/movable/A = info.hit_atom
-	var/turf/T = vector2turf(info.point, z)
+	var/atom/movable/A = info.hit_atom.get()
 
 	if(isnull(A))
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
+	var/turf/T = vector2turf(info.point, z)
 	T.last_beam_damage = fired_beam.damage
 
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
@@ -236,7 +236,8 @@ var/list/beam_master = list()
 			log_attack("<font color='red'>[key_name(firer_mob)] shot himself with a [type].</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
-			msg_admin_attack("[key_name(firer_mob)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
+			if(firer_mob.key || firer_mob.ckey)
+				msg_admin_attack("[key_name(firer_mob)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
 			if(!iscarbon(firer_mob))
 				M.LAssailant = null
 			else
@@ -246,7 +247,7 @@ var/list/beam_master = list()
 			log_attack("<font color='red'>[key_name(firer_mob)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
-			if(firer_mob.client || M.client)
+			if((firer_mob.key || firer_mob.ckey) && (M.key || M.ckey))
 				msg_admin_attack("[key_name(firer_mob)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
 			if(!iscarbon(firer_mob))
 				M.LAssailant = null

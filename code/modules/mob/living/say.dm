@@ -189,15 +189,15 @@ var/list/headset_modes = list(
 		return
 
 	//parse the language code and consume it
-	
+
 	//but first, scoreboard for syndiphrases stuff
 	if(src.mind && (src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER)))
 		for(var/syn in syndicate_code_phrase)
 			if(findtext(speech.message, syn))
-				score["syndiphrases"] += 1
+				score.syndiphrases += 1
 		for(var/syn in syndicate_code_response)
 			if(findtext(speech.message, syn))
-				score["syndisponses"] += 1
+				score.syndisponses += 1
 
 	var/message_range = 7
 	treat_speech(speech)
@@ -276,10 +276,10 @@ var/list/headset_modes = list(
 	//checking for syndie codephrases if person is a tator
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
 		for(var/T in syndicate_code_phrase)
-			rendered_message = replacetext(html_decode(rendered_message), T, "<b style='color: red;'>[html_encode(T)]</b>")
+			rendered_message = replacetext(rendered_message, html_encode(T), "<b style='color: red;'>[html_encode(T)]</b>")
 
 		for(var/T in syndicate_code_response)
-			rendered_message = replacetext(html_decode(rendered_message), T, "<i style='color: red;'>[html_encode(T)]</i>")
+			rendered_message = replacetext(rendered_message, html_encode(T), "<i style='color: red;'>[html_encode(T)]</i>")
 
 	//AI mentions
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
@@ -298,6 +298,8 @@ var/list/headset_modes = list(
 	if (ismob(speech.speaker))
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+	else if (istype(speech.speaker, /obj/item/device/assembly/speaker) || istype(speech.speaker, /obj/item/device/assembly_frame)) //Speakers will still work if no_goonchat_for_obj is set to TRUE
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
 
@@ -342,7 +344,7 @@ var/list/headset_modes = list(
 	talkcount++
 	. = ..()
 
-/mob/living/proc/say_test(var/text)
+/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))
 	if (ending == "?")
 		return "1"
@@ -607,7 +609,7 @@ var/list/headset_modes = list(
 		return "gibbers"
 	return ..()
 
-/mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)
+/atom/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)
 	//speech bubble
 	var/list/tracking_speech_bubble_recipients = list()
 	var/list/static_speech_bubble_recipients = list()

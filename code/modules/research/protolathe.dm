@@ -39,7 +39,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 
 /obj/machinery/r_n_d/fabricator/protolathe/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(2)
 	else
 		set_light(0)

@@ -193,6 +193,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/base_name = "cigarette"
 	var/base_icon = "cig"
 	var/burn_on_end = FALSE
+	surgerysound = 'sound/items/cautery.ogg'
 
 /obj/item/clothing/mask/cigarette/New()
 	..()
@@ -359,7 +360,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	lit = 1 //All checks that could have stopped the cigarette are done, let us begin
-	score["tobacco"]++
+	score.tobacco++
 
 	flags &= ~NOREACT //Allow reagents to react after being lit
 	clothing_flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
@@ -716,7 +717,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
 		lit = 1
-		score["tobacco"]++
+		score.tobacco++
 		damtype = BURN
 		update_brightness()
 		var/turf/T = get_turf(src)
@@ -807,6 +808,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
 	var/base_icon = "lighter"
+	surgerysound = 'sound/items/cautery.ogg'
 
 /obj/item/weapon/lighter/New()
 	..()

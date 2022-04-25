@@ -6,12 +6,11 @@
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	var/r_speed = 1.0
-	var/health = null
 	var/hitsound = null
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
-	var/w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
 
 	flags = FPRINT
@@ -72,6 +71,7 @@
 	var/image/pathogen
 
 	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
+	var/surgerysound = null
 	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much.
 
 	var/crit_chance = CRIT_CHANCE_RANGED
@@ -1228,7 +1228,7 @@ var/global/list/image/blood_overlays = list()
 	return
 
 //handling the pulling of the item for singularity
-/obj/item/singularity_pull(S, current_size)
+/obj/item/singularity_pull(S, current_size, repel = FALSE)
 	if(flags & INVULNERABLE)
 		return
 	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
@@ -1239,11 +1239,20 @@ var/global/list/image/blood_overlays = list()
 				return
 		if(current_size >= STAGE_FOUR)
 			//throw_at(S, 14, 3)
-			step_towards(src,S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 			sleep(1)
-			step_towards(src,S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 		else if(current_size > STAGE_ONE)
-			step_towards(src,S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 		else
 			..()
 
@@ -1256,10 +1265,11 @@ var/global/list/image/blood_overlays = list()
 	return get_rating()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
+	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
-			if(H.foot_impact(src,rand(1,4)))
+			if(H.foot_impact(src, rand(1,4), ourfoot = kickingfoot))
 				to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 		return
 
@@ -1269,23 +1279,32 @@ var/global/list/image/blood_overlays = list()
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 
-	var/kick_power = max((H.get_strength() * 10 - (w_class ** 2)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+	var/kick_power = max((H.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
 
-	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
-
-	if(kick_power > 6) //Fly in an arc!
+	//Attempt to damage the item if it's breakable here.
+	var/glanced = TRUE
+	var/broken = FALSE
+	
+	if(breakable_flags & BREAKABLE_UNARMED)
+		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
+		
+	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced, TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced, TRUE)]</span>")
+	
+	if(breakable_flags & BREAKABLE_UNARMED)
+		var/thispropel = new /datum/throwparams(T, kick_power, 1)
+		broken = try_break(propelparams = thispropel)
+		
+	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
 			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
-
 			while(loc)
 				if(!throwing)
 					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
 					break
 				sleep(5)
-
+		throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
-	throw_at(T, kick_power, 1)
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
@@ -1352,7 +1371,6 @@ var/global/list/image/blood_overlays = list()
 	else
 		M.LAssailant = user
 		M.assaulted_by(user)
-
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
 
@@ -1567,6 +1585,10 @@ var/global/list/image/blood_overlays = list()
 	if(A && toolsounds)
 		var/tool_sound = pick(toolsounds)
 		playsound(A, tool_sound, volume, TRUE, vary)
+
+/obj/item/proc/playsurgerysound(atom/A, var/volume = 75)
+	if(A && surgerysound)
+		playsound(A, surgerysound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE

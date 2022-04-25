@@ -34,7 +34,7 @@
 	density = 1
 	anchored = 0
 	health = 50
-	maxhealth = 50
+	maxHealth = 50
 	req_access =list(access_hydroponics)
 	bot_flags = BOT_DENSE|BOT_NOT_CHASING
 
@@ -189,6 +189,7 @@
 	mode = FARMBOT_MODE_WAITING //Give the emagger a chance to get away! 15 seconds should be good.
 	spawn(150)
 		mode = 0
+
 
 /obj/machinery/bot/farmbot/explode()
 	src.on = 0

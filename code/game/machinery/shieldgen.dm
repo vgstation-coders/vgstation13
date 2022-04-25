@@ -8,8 +8,8 @@
 	anchored = 1
 	ghost_read = 0
 	ghost_write = 0
-	var/const/max_health = 200
-	var/health = max_health //The shield can only take so much beating (prevents perma-prisons)
+	maxHealth = 200
+	health = 200 //The shield can only take so much beating (prevents perma-prisons)
 
 /obj/machinery/shield/acidable()
 	return 0
@@ -125,25 +125,31 @@
 	spawn(20) if(src) opacity = 0
 
 /obj/machinery/shieldgen
-		name = "Emergency shield projector"
-		desc = "Used to seal minor hull breaches."
-		icon = 'icons/obj/objects.dmi'
-		icon_state = "shieldoff"
-		density = 1
-		opacity = 0
-		anchored = 0
-		pressure_resistance = 2*ONE_ATMOSPHERE
-		req_access = list(access_engine)
-		var/const/max_health = 100
-		var/health = max_health
-		var/active = 0
-		var/malfunction = 0 //Malfunction causes parts of the shield to slowly dissapate
-		var/list/deployed_shields = list()
-		var/locked = 0
-		ghost_read = 0
-		ghost_write = 0
+	name = "Emergency shield projector"
+	desc = "Used to seal minor hull breaches."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "shieldoff"
+	density = 1
+	opacity = 0
+	anchored = 0
+	pressure_resistance = 2*ONE_ATMOSPHERE
+	req_access = list(access_engine)
+	maxHealth = 100
+	health = 100
+	var/active = 0
+	var/malfunction = 0 //Malfunction causes parts of the shield to slowly dissapate
+	var/list/deployed_shields = list()
+	var/locked = 0
+	ghost_read = 0
+	ghost_write = 0
 
-		machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | SCREWTOGGLE
+	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | SCREWTOGGLE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
 
 /obj/machinery/shieldgen/Destroy()
 	for(var/obj/machinery/shield/shield_tile in deployed_shields)
@@ -269,7 +275,7 @@
 			if(!src || !coil)
 				return
 			coil.use(1)
-			health = max_health
+			health = maxHealth
 			malfunction = 0
 			to_chat(user, "<span class='notice'>You repair the [src]!</span>")
 			update_icon()

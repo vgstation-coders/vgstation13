@@ -29,21 +29,18 @@
 
 	RefreshParts()
 
-/obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user as mob)
+/obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user)
 	add_fingerprint(user)
 
 	if(charging)
+		user.put_in_hands(charging)
 		charging.update_icon()
-		charging.forceMove(loc)
 		charging = null
 		use_power = 1
 		update_icon()
 
-/obj/machinery/recharger/defibcharger/wallcharger/attack_paw(mob/user as mob)
-	return attack_hand(user)
-
 /obj/machinery/recharger/defibcharger/wallcharger/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		..(severity)
 		return
 
@@ -61,7 +58,7 @@
 
 
 /obj/machinery/recharger/defibcharger/wallcharger/process()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
 
 	if(charging)

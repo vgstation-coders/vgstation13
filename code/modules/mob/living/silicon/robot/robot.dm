@@ -388,14 +388,15 @@
 /mob/living/silicon/robot/show_malf_ai()
 	..()
 	if(connected_ai && connected_ai.mind)
-		var/datum/faction/malf/malf = find_active_faction_by_member(connected_ai.mind.GetRole(MALF))
+		var/datum/role/malfAI/malfrole = connected_ai.mind.GetRole(MALF)
+		var/datum/faction/malf/malf = find_active_faction_by_member(malfrole)
 		if(!malf)
 			malf = find_active_faction_by_type(/datum/faction/malf) //Let's see if there is anything to print at least
 			var/malf_stat = malf.get_statpanel_addition()
 			if(malf_stat && malf_stat != null)
 				stat(null, malf_stat)
-		if(malf.apcs >= 3)
-			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+		if(malfrole.apcs.len >= 3)
+			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malfrole.apcs.len/3), 0)] seconds")
 	return FALSE
 
 // this function displays jetpack pressure in the stat panel
@@ -464,23 +465,25 @@
 
 	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 
-	switch(severity)
-		if(1.0)
-			if(!isDead())
+	if(!isDead())
+		var/dmg_phrase = ""
+		var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
+		switch(severity)
+			if(1.0)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				gib()
 				return
-		if(2.0)
-			if(!isDead())
+			if(2.0)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
-		if(3.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 120"
+			if(3.0)
 				adjustBruteLoss(30)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
+				dmg_phrase = "Damage: 30"
+
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 	updatehealth()
 

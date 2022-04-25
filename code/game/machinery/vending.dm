@@ -21,8 +21,8 @@ var/global/num_vending_terminals = 1
 	density = 1
 	layer = OPEN_DOOR_LAYER //This is below BELOW_OBJ_LAYER because vendors can contain crates/closets
 	pass_flags_self = PASSMACHINE
-	var/health = 100
-	var/maxhealth = 100 //Kicking feature
+	health = 100
+	maxHealth = 100 	//Kicking feature
 	var/active = 1		//No sales pitches if off!
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
@@ -84,6 +84,13 @@ var/global/num_vending_terminals = 1
 	var/edit_mode = FALSE // Used for editing machine stock and information
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 	var/credits_held = 0 // How many credits in the machine
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 
 /atom/movable/proc/product_name()
 	return name
@@ -180,7 +187,12 @@ var/global/num_vending_terminals = 1
 	if(wires)
 		qdel(wires)
 		wires = null
+	if(coinbox)
+		qdel(coinbox)
+		coinbox = null
+	..()
 
+/obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
 		if(is_custom_machine)
 			var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
@@ -200,7 +212,6 @@ var/global/num_vending_terminals = 1
 
 	if(coinbox)
 		coinbox.forceMove(get_turf(src))
-	..()
 
 /obj/machinery/vending/examine(var/mob/user)
 	..()
@@ -218,7 +229,7 @@ var/global/num_vending_terminals = 1
 	return ..()
 
 /obj/machinery/vending/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if(user.incapacitated() || user.lying)
@@ -315,10 +326,12 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/ex_act(severity)
 	switch(severity)
 		if(1.0)
+			dump_vendpack_and_coinbox()
 			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
+				dump_vendpack_and_coinbox()
 				qdel(src)
 				return
 		if(3.0)
@@ -330,10 +343,11 @@ var/global/num_vending_terminals = 1
 	if(prob(75))
 		malfunction()
 	else
+		dump_vendpack_and_coinbox()
 		qdel(src)
 
 /obj/machinery/vending/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	switch(severity)
 		if(1.0)
@@ -651,10 +665,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/vending/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
 	var/micon = !isnull(P.mini_icon) ? "<td class='fridgeIcon cropped'>[P.mini_icon]</td>" : ""
 	var/dat = {"[micon]<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
@@ -707,7 +717,7 @@ var/global/num_vending_terminals = 1
 			return null
 
 /obj/machinery/vending/proc/TurnOff(var/ticks) //Turn off for a while. 10 ticks = 1 second
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	stat |= NOPOWER
@@ -721,7 +731,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/update_vicon()
 	if(stat & (BROKEN))
 		src.icon_state = "[initial(icon_state)]-broken"
-	else if (stat & (NOPOWER))
+	else if (stat & (NOPOWER|FORCEDISABLE))
 		src.icon_state = "[initial(icon_state)]-off"
 	else
 		src.icon_state = "[initial(icon_state)]"
@@ -761,7 +771,7 @@ var/global/num_vending_terminals = 1
 		to_chat(user, "<span class='notice'>The glass in \the [src] is broken, it refuses to work.</span>")
 		return
 
-	if(stat & (NOPOWER))
+	if(stat & (NOPOWER|FORCEDISABLE))
 		to_chat(user, "<span class='notice'>\The [src] is dark and unresponsive.</span>")
 		return
 
@@ -1099,7 +1109,7 @@ var/global/num_vending_terminals = 1
 		src.updateUsrDialog()
 
 /obj/machinery/vending/process()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if(!src.active)
@@ -1134,7 +1144,7 @@ var/global/num_vending_terminals = 1
 	return pick(product_slogans)
 
 /obj/machinery/vending/proc/speak(var/message, var/mob/living/M)
-	if(stat & NOPOWER)
+	if(stat & (NOPOWER|FORCEDISABLE))
 		return
 
 	if(!message)
@@ -3703,3 +3713,81 @@ var/global/num_vending_terminals = 1
 		return pick(grey_slogans)
 	else
 		return pick(product_slogans)
+
+/obj/machinery/vending/lotto
+	name = "\improper Lotto Tickets"
+	desc = "Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here."
+	product_slogans = list(
+		"Feeling lucky?",
+		"Money won is twice as sweet as money earned.",
+		"The greatest risk is not taking one."
+	)
+	product_ads = list(
+		"Quit while you’re ahead. All the best gamblers do.",
+		"If there weren’t luck involved, I would win every time.",
+		"Better an ounce of luck than a pound of gold.",
+		"Behind bad luck comes good luck."
+	)
+	vend_reply = "Good luck!"
+	icon_state = "Lotto"
+	icon_vend = "Lotto-vend"
+	products = list(
+		/obj/item/toy/lotto_ticket/gold_rush = 20,
+		/obj/item/toy/lotto_ticket/diamond_hands = 20,
+		/obj/item/toy/lotto_ticket/phazon_fortune = 20
+		)
+	contraband = list(
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 5
+		)
+	prices = list(
+		/obj/item/toy/lotto_ticket/gold_rush = 5,
+		/obj/item/toy/lotto_ticket/diamond_hands = 10,
+		/obj/item/toy/lotto_ticket/phazon_fortune = 20,
+		/obj/item/toy/lotto_ticket/supermatter_surprise = 50
+		)
+
+	pack = /obj/structure/vendomatpack/lotto
+
+
+/obj/machinery/vending/lotto/proc/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend, var/mob/living/carbon/human/character, var/winnings)
+		var/rank = character.mind.role_alt_title
+		var/datum/speech/speech = announcement_intercom.create_speech("[character.real_name],[rank ? " [rank]," : " visitor," ] has won [winnings] credits in the lottery!", transmitter=announcement_intercom)
+		speech.speaker = lottovend
+		speech.name = "Lottery Tickets Vendor"
+		speech.job = "Automated Announcement"
+		speech.as_name = "Lottery Tickets Vendor"
+		speech.frequency = COMMON_FREQ
+
+		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
+		qdel(speech)
+
+/obj/machinery/vending/lotto/attackby(obj/item/I, var/mob/living/user)
+	add_fingerprint(user)
+	if(istype(I, /obj/item/toy/lotto_ticket))
+		var/obj/item/toy/lotto_ticket/T = I
+		if(!T.revealed)
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket cannot be read until the film is scratched off.\"")
+			return
+		if(!T.iswinner)
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
+		else
+			visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund!\"")
+			dispense_cash(T.winnings, get_turf(src))
+			playsound(src, "polaroid", 50, 1)
+			if(T.winnings >= 10000)
+				AnnounceWinner(src,user,T.winnings)
+				log_admin("([user.ckey]/[user]) won a large lottery prize of [T.winnings] credits.")
+			qdel(T)
+	else
+		..()
+
+/obj/machinery/vending/lotto/throw_item()
+	var/mob/living/target = locate() in view(7, src)
+
+	if (!target)
+		return 0
+	for(var/i = 0 to rand(3,12))
+		var/obj/I = new /obj/item/weapon/paper(get_turf(src))
+		I.throw_at(target, 16, 3)

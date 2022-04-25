@@ -45,6 +45,20 @@
 
 	qdel(src)
 
+/obj/item/bluespace_crystal/singularity_act(var/current_size,var/obj/machinery/singularity/S)
+	if(istype(src,/obj/item/bluespace_crystal/artificial))
+		return ..()
+	if(istype(src,/obj/item/bluespace_crystal/flawless) || prob(10))
+		if(S.wormhole_out || S.wormhole_in)
+			S.unlink_wormholes()
+		else if(white_hole_candidates.len > 1)
+			S.link_a_wormhole()
+		if(istype(src,/obj/item/bluespace_crystal/flawless) && S.wormhole_out)
+			var/turf/T = get_turf(S.wormhole_out)
+			do_teleport(src, T)
+			return 2
+	return ..()
+
 // Artifical bluespace crystal, doesn't give you much research.
 
 /obj/item/bluespace_crystal/artificial

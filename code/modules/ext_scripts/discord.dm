@@ -14,6 +14,7 @@
 // Meta argument here is the MoMMI meta argument to send to the gamenudge route.
 // AKA the MoMMI config file chooses where to send it based on this key.
 /proc/send2discord(var/msg, var/meta, var/ping = FALSE)
+	set waitfor = FALSE
 	if (!global.config.discord_url || !global.config.discord_password)
 		return
 

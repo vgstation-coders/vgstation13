@@ -1,25 +1,311 @@
-"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
-"b" = (/turf/unsimulated/wall/bomberman{color = "#FFDDFF"},/area/vault/sokoban/level)
-"c" = (/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
-"d" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
-"e" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
-"f" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
-"g" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/wall/other,
+/area/vault/sokoban/level)
+"b" = (
+/turf/unsimulated/wall/bomberman{
+	color = "#FFDDFF"
+	},
+/area/vault/sokoban/level)
+"c" = (
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/sokoban/level)
+"d" = (
+/obj/structure/closet/crate/sokoban,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/sokoban/level)
+"e" = (
+/obj/structure/ladder/sokoban/entrance,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/sokoban/level)
+"f" = (
+/obj/structure/sokoban_teleporter,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/sokoban/level)
+"g" = (
+/obj/structure/ladder/sokoban/exit,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/sokoban/level)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaa
-abbbbbbbbbbbbbba
-abccccbbbbcccbba
-abcdccbbbbcdcbba
-abcdccccccdccbba
-abccbbbebbbdcbba
-abbbbbbbbbbcbbba
-abccfffgbcccccba
-abccbbbbbdccccba
-abbfbbbbbcdcccba
-abbfbbbbbcdcccba
-abbccffffdcdccba
-abbccbbbbbbbbbba
-abbbbbbbbbbbbbba
-aaaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(3,1,1) = {"
+a
+b
+c
+c
+c
+c
+b
+c
+c
+b
+b
+b
+b
+b
+a
+"}
+(4,1,1) = {"
+a
+b
+c
+d
+d
+c
+b
+c
+c
+f
+f
+c
+c
+b
+a
+"}
+(5,1,1) = {"
+a
+b
+c
+c
+c
+b
+b
+f
+b
+b
+b
+c
+c
+b
+a
+"}
+(6,1,1) = {"
+a
+b
+c
+c
+c
+b
+b
+f
+b
+b
+b
+f
+b
+b
+a
+"}
+(7,1,1) = {"
+a
+b
+b
+b
+c
+b
+b
+f
+b
+b
+b
+f
+b
+b
+a
+"}
+(8,1,1) = {"
+a
+b
+b
+b
+c
+e
+b
+g
+b
+b
+b
+f
+b
+b
+a
+"}
+(9,1,1) = {"
+a
+b
+b
+b
+c
+b
+b
+b
+b
+b
+b
+f
+b
+b
+a
+"}
+(10,1,1) = {"
+a
+b
+b
+b
+c
+b
+b
+c
+d
+c
+c
+d
+b
+b
+a
+"}
+(11,1,1) = {"
+a
+b
+c
+c
+d
+b
+b
+c
+c
+d
+d
+c
+b
+b
+a
+"}
+(12,1,1) = {"
+a
+b
+c
+d
+c
+d
+c
+c
+c
+c
+c
+d
+b
+b
+a
+"}
+(13,1,1) = {"
+a
+b
+c
+c
+c
+c
+b
+c
+c
+c
+c
+c
+b
+b
+a
+"}
+(14,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+c
+c
+c
+c
+c
+b
+b
+a
+"}
+(15,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(16,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}

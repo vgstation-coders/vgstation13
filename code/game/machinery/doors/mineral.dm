@@ -35,7 +35,6 @@
 		TryToSwitchState(user)
 	return
 
-
 /obj/machinery/door/mineral/attack_ai(mob/user as mob) //those aren't really machinery, they're just big fucking slabs of a mineral
 	if(isAI(user)) //so the AI can't open it
 		return
@@ -336,8 +335,8 @@
 	explosion_block = 1
 	prefix = "cult"
 	animation_delay = 0
-	var/health = 100
-	var/maxHealth = 100
+	health = 100
+	maxHealth = 100
 
 /obj/machinery/door/mineral/cult/New()
 	..()

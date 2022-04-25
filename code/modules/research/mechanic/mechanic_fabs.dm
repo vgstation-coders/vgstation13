@@ -108,7 +108,7 @@
 		return 1
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user))
 		return
