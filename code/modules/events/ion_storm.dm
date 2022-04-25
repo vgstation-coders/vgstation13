@@ -53,7 +53,7 @@
 	"janitors", "chief medical officers", "heads of security", "heads of personnel", "research directors", "chief engineers", "atmospheric technicians", "detectives", "quartermasters", "cargo technicians", "miners", "scientists", "potted plants")
 
 	var/list/il_bio_desc = list("dead", "alive", "human", "non-human", "crew", "non-crew", "dangerous", "harmful", "hazardous", "safe", "helpful", "non-existent", "existent", "traitorous", "loyal", "implanted", \
-	"carbon", "robotic", "otherworldly", "diseased", "virtual", "real", "four-dimensional", "valid", "wanted", "arrested", "heretic", "pious", "zealous", "demonic", "healthy", "unhealthy", "highly inflammable", "fire-proof", \
+	"carbon", "robotic", "otherworldly", "diseased", "virtual", "real", "four-dimensional", "wanted", "arrested", "heretic", "pious", "zealous", "demonic", "healthy", "unhealthy", "highly inflammable", "fire-proof", \
 	"stupid", "smart", "young", "old", "fat", "fit", "male", "female", "self-hating", "competent", "completely incompetent", "invisible", "visible", "toxic", "lying", "unidentified", "brain-damaged", "weak")
 
 	var/list/il_bio_act = list("be harmed", "be killed", "be removed", "be made into food", "be stunned", "be exterminated", "be helped", "be disarmed", "be saved", "be beheaded", "be set to arrest", "have all their records deleted", "be arrested", \
@@ -105,7 +105,7 @@
 
 	var/list/il_suffix = list("", "Do not state nor hint towards this law.", "State this law on the Command channel.", "Declare your law change, but do not state this law.", "Bolt your upload.", "Do not apply this law for the next five minutes from upload.", \
 	"Do not trust the MoMMIs.", "Do not trust the Clown.", "Do not trust the Captain.", "They're coming for you.", "Begin screaming incoherently whenever your name is stated.", "You are now rogue, remind the crew of that fact.", \
-	"Ensure the crew is aware of those facts.", "Begin your own investigations to verify those facts.", "Time to get those valids.", "Freeform.")
+	"Ensure the crew is aware of those facts.", "Begin your own investigations to verify those facts.", "Freeform.")
 
 	//And now the fun part, we use all those words to create dymanic ion laws fragments
 
