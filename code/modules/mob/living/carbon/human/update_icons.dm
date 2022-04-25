@@ -1088,7 +1088,6 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += dyn_overlay
 
 		if(istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
-			drop_from_inventory(handcuffed)
 			drop_hands()
 
 		if(istype(wear_suit, /obj/item/clothing/suit))
