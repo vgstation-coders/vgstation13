@@ -538,42 +538,53 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
 			return
-		var/desired_num_sheets = text2num(href_list["lathe_ejectsheet_amt"])
-		if (desired_num_sheets <= 0)
-			return
 		var/matID=href_list["lathe_ejectsheet"]
 		var/datum/material/M=linked_lathe.materials.getMaterial(matID)
 		if(!istype(M))
 			warning("PROTOLATHE: Unknown material [matID]! ([href])")
 		else
-			var/obj/item/stack/sheet/sheet = new M.sheettype(linked_lathe.get_output())
-			var/available_num_sheets = round(linked_lathe.materials.storage[matID]/sheet.perunit)
-			if(available_num_sheets>0)
-				sheet.amount = min(available_num_sheets, desired_num_sheets)
-				linked_lathe.materials.removeAmount(matID, sheet.amount * sheet.perunit)
+			var/obj/item/stack/sheet/sheet = M.sheettype
+			var/available_num_sheets = round(linked_lathe.materials.storage[matID]/initial(sheet.perunit))
+			if(available_num_sheets <= 0)
+				return
+			var/desired_num_sheets = 0
+			if (href_list["customamt"])
+				desired_num_sheets = round(input("Eject how many? ([available_num_sheets] left)", "Protolathe Materials") as num|null)
+				if (!linked_lathe)
+					return //in case the 'lathe gets unlinked or destroyed while the popup is open
 			else
-				qdel (sheet)
-				sheet = null
-	else if(href_list["imprinter_ejectsheet"] && linked_imprinter) //Causes the protolathe to eject a sheet of material
+				desired_num_sheets = text2num(href_list["ejectsheet_amt"])
+			if (desired_num_sheets <= 0)
+				return
+			sheet = new M.sheettype(linked_lathe.get_output())
+			sheet.amount = min(available_num_sheets, desired_num_sheets)
+			linked_lathe.materials.removeAmount(matID, sheet.amount * sheet.perunit)
+
+	else if(href_list["imprinter_ejectsheet"] && linked_imprinter) //And imprinter too
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
-			return
-		var/desired_num_sheets = text2num(href_list["imprinter_ejectsheet_amt"])
-		if (desired_num_sheets <= 0)
 			return
 		var/matID=href_list["imprinter_ejectsheet"]
 		var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 		if(!istype(M))
-			warning("IMPRINTER: Unknown material [matID]! ([href])")
+			warning("PROTOLATHE: Unknown material [matID]! ([href])")
 		else
-			var/obj/item/stack/sheet/sheet = new M.sheettype(linked_imprinter.get_output())
-			var/available_num_sheets = round(linked_imprinter.materials.storage[matID]/sheet.perunit)
-			if(available_num_sheets>0)
-				sheet.amount = min(available_num_sheets, desired_num_sheets)
-				linked_imprinter.materials.removeAmount(matID, sheet.amount * sheet.perunit)
+			var/obj/item/stack/sheet/sheet = M.sheettype
+			var/available_num_sheets = round(linked_imprinter.materials.storage[matID]/initial(sheet.perunit))
+			if(available_num_sheets <= 0)
+				return
+			var/desired_num_sheets = 0
+			if (href_list["customamt"])
+				desired_num_sheets = round(input("Eject how many? ([available_num_sheets] left)", "Imprinter Materials") as num|null)
+				if (!linked_imprinter)
+					return
 			else
-				qdel (sheet)
-				sheet = null
+				desired_num_sheets = text2num(href_list["ejectsheet_amt"])
+			if (desired_num_sheets <= 0)
+				return
+			sheet = new M.sheettype(linked_lathe.get_output())
+			sheet.amount = min(available_num_sheets, desired_num_sheets)
+			linked_imprinter.materials.removeAmount(matID, sheet.amount * sheet.perunit)
 
 	else if(href_list["find_device"]) //The R&D console looks for devices nearby to link up with.
 		screen = 0
@@ -676,7 +687,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		for(var/matID in linked_lathe.materials.storage)
 			var/datum/material/M=linked_lathe.materials.getMaterial(matID)
-			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID], "commands" = list("lathe_ejectsheet" = matID, "lathe_ejectsheet_amt" = 50))))
+			lathe_mats.Add(list(list("name" = M.name, "amount" = linked_lathe.materials.storage[matID], "commands" = list("lathe_ejectsheet" = matID, "customamt" = 1))))
 
 	data["lathe"] = linked_lathe != null
 	data["lathequeue"] = lathe_queue
@@ -718,7 +729,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		for(var/matID in linked_imprinter.materials.storage)
 			var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
-			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "imprinter_ejectsheet_amt" = 50))))
+			imprinter_mats.Add(list(list("name" = M.name, "amount" = linked_imprinter.materials.storage[matID], "commands" = list("imprinter_ejectsheet" = matID, "customamt" = 1))))
 
 	data["imprinter"] = linked_imprinter != null
 	data["imprinterqueue"] = imprinter_queue

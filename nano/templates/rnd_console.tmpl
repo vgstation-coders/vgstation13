@@ -19,12 +19,17 @@ Used In File(s): \code\modules\research\rdconsole.dm
 		width:30%;
 		float:left;
 	}
-	#chemname
+	#matlarge
 	{
 		width:40%;
 		float:left;
 	}
-	#chemcost
+	#matsmall
+	{
+		width:25%;
+		float:left;
+	}
+	#matvsmall
 	{
 		width:20%;
 		float:left;
@@ -312,7 +317,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 										<div class="line">
 											{{:helper.link(value.name, 'gear', null, null, null, 'materials')}}
 											{{:helper.link(value.amount, null, null, null, null, 'materials')}}
-											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, null, 'materials')}}
+											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, null, 'matsmall')}}
 										</div>
 									{{/if}}
 								{{empty}}
@@ -325,9 +330,9 @@ Used In File(s): \code\modules\research\rdconsole.dm
 									</div>
 									{{for value.reagents}}
 										<div class="line">
-											{{:helper.link(value.name, 'gear', null, null, null, 'chemname')}}
-											{{:helper.link(value.volume, null, null, null, null, 'chemcost')}}
-											{{:helper.link("Purge", 'circle-arrow-s', value.commands, null, null, 'materials')}}
+											{{:helper.link(value.name, 'gear', null, null, null, 'matlarge')}}
+											{{:helper.link(value.volume, null, null, null, null, 'matvsmall')}}
+											{{:helper.link("Purge", 'circle-arrow-s', value.commands, null, null, 'matsmall')}}
 										</div>
 									{{empty}}
 										<div class="line">
@@ -346,7 +351,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 										<div class="line">
 											{{:helper.link(value.name, 'gear', null, null, null, 'materials')}}
 											{{:helper.link(value.amount, null, null, null, null, 'materials')}}
-											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, null, 'materials')}}
+											{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, null, 'matsmall')}}
 										</div>
 									{{/if}}
 								{{empty}}
