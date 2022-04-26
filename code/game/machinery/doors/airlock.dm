@@ -1514,3 +1514,8 @@ About the new airlock wires panel:
 		aiControlDisabled = 2
 	else
 		aiControlDisabled = 0
+
+/obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
+	if(user.wear_id && istype(user.wear_id, /obj/item/weapon/card/emag))
+		return 1
+	..()

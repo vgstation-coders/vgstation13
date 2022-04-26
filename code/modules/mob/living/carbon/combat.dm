@@ -163,7 +163,7 @@
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
 			tackleGetHurt()
-			if(airlockEmagTackled(src,Obstacle))
+			if(Obstacle.tackled(src))
 				Obstacle.emag_act()
 
 /mob/living/carbon/proc/tackleGetHurt(var/hurtAmount = 0, var/knockAmount = 0, var/hurtSound = "trayhit")
@@ -243,11 +243,5 @@
 /mob/living/carbon/proc/bonusTackleRange(var/tR = 3)
 	return tR
 
-/atom/proc/airlockEmagTackled(var/mob/living/carbon/C,var/atom/A)
-	if(!istype(A,/obj/machinery/door/airlock))
-		return 0
-	if(!istype(C,/mob/living/carbon/human))
-		return 0
-	var/mob/living/carbon/human/H = C
-	if(H.wear_id && istype(H.wear_id, /obj/item/weapon/card/emag))
-		return 1
+/atom/proc/tackled(mob/living/user)
+	return 0
