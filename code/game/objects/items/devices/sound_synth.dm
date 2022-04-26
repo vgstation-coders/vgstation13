@@ -81,7 +81,7 @@
 /obj/item/device/soundsynth/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
-		sound_list = sound_list_emagged
+		sound_list = sound_list_emagged + sound_list
 		selected_sound = "sound/effects/adminhelp.ogg"
 		spark(src,5,FALSE)
 	else
