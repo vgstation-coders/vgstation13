@@ -446,7 +446,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/device_tools/camerabugs
 	name = "Camera Bugs"
 	desc = "A cigarette pack containing five camera bugs hidden within. Requires a mobile TV receiver to use, intended to recharge the above bundle for extra surveillance coverage."
-	item = /obj/item/weapon/storage/box/surveillance
+	item = /obj/item/device/radio/phone/surveillance
 	cost = 4
 
 /datum/uplink_item/device_tools/binary

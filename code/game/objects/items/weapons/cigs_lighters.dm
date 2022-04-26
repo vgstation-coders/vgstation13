@@ -530,7 +530,15 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/spaceportbutt
 
+/obj/item/clothing/mask/cigarette/bugged //transmits voice to the detective's cigarette pack when turned into a butt
+	..()
+	type_butt = /obj/item/trash/cigbutt/bugged
 
+/obj/item/clothing/mask/cigarette/bugged/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and has wires in the filter.</span>")
+		return
 
 ////////////
 // CIGARS //
@@ -628,6 +636,21 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/trash/cigbutt/bugged
+	var/obj/item/device/radio/cigbug
+	..()
+
+/obj/item/trash/cigbutt/bugged/New()
+	..()
+	cigbug = new /obj/item/device/radio/bug(src)
+	cigbug.frequency = BUG_FREQ
+
+/obj/item/trash/cigbutt/bugged/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and has wires in the filter.</span>")
+		return
 
 /*
 //I'll light my cigar with an energy sword if I want to, thanks

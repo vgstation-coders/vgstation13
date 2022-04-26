@@ -264,7 +264,7 @@
 	name = "box (S)"
 	items_to_spawn = list(
 		/obj/item/device/handtv,
-		/obj/item/weapon/storage/box/surveillance,
+		/obj/item/device/radio/phone/surveillance,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/conversion
