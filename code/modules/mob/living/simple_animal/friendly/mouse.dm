@@ -32,7 +32,7 @@
 	response_harm   = "stamps on the"
 	density = 0
 	var/_color = "gray" //brown, gray and white, leave blank for random
-	min_oxy = 16 //Require atleast 16kPA oxygen
+	min_oxy = 8 //Require atleast 8kPA oxygen
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 	universal_speak = 0
@@ -264,11 +264,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
-	if(isUnconscious())
+	if(isUnconscious() || !can_be_infected() || issilicon(target))
 		return
-
-	if(!can_be_infected())
-		return
+	
 	var/block = 0
 	var/bleeding = 0
 
@@ -483,8 +481,10 @@
 	desc = "It's a small, disease-ridden rodent."
 	icon_state = "mouse_plague"
 	infectable = TRUE
+	min_oxy = 0
+	maxHealth = 15
+	health = 15
 
-//TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/Tom
 	name = "Tom"
 	namenumbers = FALSE

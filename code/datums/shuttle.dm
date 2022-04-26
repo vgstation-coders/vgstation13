@@ -268,13 +268,31 @@
 			to_chat(user, "The shuttle can't move ([D.areaname] is used by another shuttle)")
 		return 0
 
+	if(broadcast)
+		//Check if the selected docking port is valid (can be selected)
+		if(!broadcast.allow_selecting_all && !(D in docking_ports))
+			//Check disks too
+			if(!broadcast.disk)
+				if(user)
+					to_chat(user, "<span class='warning'>No disk detected.</span>")
+				return 0
+			if(!broadcast.disk.compatible(src))
+				if(user)
+					to_chat(user, "<span class='warning'>Current disk not compatible with current shuttle.</span>")
+				return 0
+			if(broadcast.disk.destination != D)
+				if(user)
+					to_chat(user, "<span class='warning'>Currently selected docking port not valid.</span>")
+				return 0
+
 	if(D.require_admin_permission && !isAdminGhost(user))
 		if(broadcast)
 			broadcast.announce( "Currently requesting permission to reach [D.areaname]..." )
 		else if(user)
 			to_chat(user, "Waiting for permission...")
-		var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
-		message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
+		if(user)
+			var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
+			message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
 	else
 		actually_travel_to(D, broadcast, user)
 
@@ -370,7 +388,7 @@
 	moving = 0
 
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
-/datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0) //A direct proc with no bullshit
+/datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0, var/rotate_after = 0) //A direct proc with no bullshit
 	if(!D)
 		return
 	if(!linked_port)
@@ -404,6 +422,8 @@
 		if(linked_port.dir != turn(D.dir,180))
 
 			rotate = dir2angle(turn(D.dir,180)) - dir2angle(linked_port.dir)
+
+			rotate += rotate_after
 
 			if(rotate < 0)
 				rotate += 360
@@ -542,7 +562,7 @@
 	return occupants
 
 /proc/get_refill_area(var/obj/docking_port/destination/D)
-	if(ispath(D.refill_area))
+	if(ispath(D?.refill_area))
 		return locate(D.refill_area)
 	else
 		return get_space_area()
@@ -669,7 +689,8 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		new_turf.ChangeTurf(old_turf.type, allow = 1)
+		if(!istype(old_turf, /turf/space))
+			new_turf.ChangeTurf(old_turf.type, allow = 1)
 		new_turfs[C] = new_turf
 
 		//***Remove old turf from shuttle's area****
@@ -699,11 +720,13 @@
 		else
 			new_turf.underlays += undlay*/
 
-		new_turf.dir = old_turf.dir
-		new_turf.icon_state = old_turf.icon_state
-		new_turf.icon = old_turf.icon
-		new_turf.plane = old_turf.plane
-		new_turf.layer = old_turf.layer
+		if(!istype(old_turf, /turf/space))
+			new_turf.dir = old_turf.dir
+			new_turf.icon_state = old_turf.icon_state
+			new_turf.icon = old_turf.icon
+			new_turf.plane = old_turf.plane
+			new_turf.layer = old_turf.layer
+			new_turf.color = old_turf.color
 
 		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
 		// Floor turfs create their `floor_tile` in New() if it's null.
@@ -716,7 +739,7 @@
 			modern.floor_tile = ancient.floor_tile
 			ancient.floor_tile = null
 		if(rotate)
-			new_turf.shuttle_rotate(rotate)
+			new_turf.map_element_rotate(rotate)
 
 		//*****Move air*****
 
@@ -787,7 +810,7 @@
 		AM.forceMove(new_turf)
 
 	if(rotate)
-		AM.shuttle_rotate(rotate)
+		AM.map_element_rotate(rotate)
 
 /proc/setup_shuttles()
 	world.log << "Setting up all shuttles..."

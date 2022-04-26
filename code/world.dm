@@ -91,6 +91,7 @@ var/auxtools_path
 		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
+	paxban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
@@ -123,9 +124,6 @@ var/auxtools_path
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
-
-	for(var/client/C in clients)
-		C.clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
@@ -192,7 +190,6 @@ var/auxtools_path
 
 
 /world/Reboot(reason)
-	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -209,30 +206,17 @@ var/auxtools_path
 		..()
 		return
 
-	if(config.map_voting)
-		//testing("we have done a map vote")
-		if(fexists(vote.chosen_map))
-			//testing("[vote.chosen_map] exists")
-			var/start = 1
-			var/pos = findtext(vote.chosen_map, "/", start)
-			var/lastpos = pos
-			//testing("First slash [lastpos]")
-			while(pos > 0)
-				lastpos = pos
-				pos = findtext(vote.chosen_map, "/", start)
-				start = pos + 1
-				//testing("Next slash [pos]")
-			var/filename = copytext(vote.chosen_map, lastpos + 1, 0)
-			//testing("Found [filename]")
-
-			if(!fcopy(vote.chosen_map, filename))
-				//testing("Fcopy failed, deleting and copying")
+	if(vote.winner && vote.map_paths)
+		//get filename
+		var/filename = "vgstation13.dmb"
+		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
+		if(fexists(map_path))
+			//copy file to main folder
+			if(!fcopy(map_path, filename))
 				fdel(filename)
-				fcopy(vote.chosen_map, filename)
-			sleep(60)
+				fcopy(map_path, filename)
 
 	pre_shutdown()
-
 	..()
 
 /world/proc/pre_shutdown()

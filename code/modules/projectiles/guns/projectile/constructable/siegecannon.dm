@@ -542,6 +542,7 @@
 /obj/item/cannonball/bananium/proc/stopBouncing()
 	throwing = 0
 	kinetic_acceleration = 0
+	isBouncing = FALSE
 	if(cannonFired)
 		cannonAdjust()
 

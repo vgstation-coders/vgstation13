@@ -13,7 +13,7 @@
 
 /obj/machinery/computer/aiupload/attackby(I as obj, user as mob)
 	if(istype(I, /obj/item/device/aicard))
-		if(stat & (NOPOWER|BROKEN))
+		if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			to_chat(user, "This terminal isn't functioning right now, get it working!")
 			return
 		var/obj/item/card = I
@@ -42,6 +42,9 @@
 		return 0
 	if(stat & BROKEN)
 		to_chat(usr, "The upload computer is broken!")
+		return 0
+	if(stat & FORCEDISABLE)
+		to_chat(usr, "The upload computer isn't responding!")
 		return 0
 	if(!current)
 		to_chat(usr, "You haven't selected an AI to transmit laws to!")
@@ -102,6 +105,9 @@
 		if(stat & BROKEN)
 			to_chat(usr, "The upload computer is broken!")
 			return
+		if(stat & FORCEDISABLE)
+			to_chat(usr, "The upload computer isn't responding!")
+			return 0
 		if(!current)
 			to_chat(usr, "You haven't selected an AI to transmit laws to!")
 			return
@@ -140,6 +146,9 @@
 	if(stat & NOPOWER)
 		to_chat(usr, "The upload computer has no power!")
 		return
+	if(stat & FORCEDISABLE)
+		to_chat(usr, "The upload computer isn't responding!")
+		return 0
 	if(stat & BROKEN)
 		to_chat(usr, "The upload computer is broken!")
 		return
@@ -184,6 +193,9 @@
 		return 0
 	if(stat & BROKEN)
 		to_chat(usr, "The upload computer is broken!")
+		return 0
+	if(stat & FORCEDISABLE)
+		to_chat(usr, "The upload computer isn't responding!")
 		return 0
 	if(!current)
 		to_chat(usr, "You haven't selected a robot to transmit laws to!")
@@ -239,6 +251,9 @@
 		if(stat & BROKEN)
 			to_chat(user, "The upload computer is broken!")
 			return
+		if(stat & FORCEDISABLE)
+			to_chat(usr, "The upload computer isn't responding!")
+			return 0
 		if(!current)
 			to_chat(user, "You haven't selected a robot to transmit laws to!")
 			return
@@ -282,7 +297,9 @@
 	if(stat & BROKEN)
 		to_chat(usr, "The upload computer is broken!")
 		return
-
+	if(stat & FORCEDISABLE)
+		to_chat(usr, "The upload computer isn't responding!")
+		return 0
 	current = freeborg()
 
 	if(!current)
@@ -303,7 +320,7 @@
 	..()
 	overlays = 0
 	
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 	
 	if (occupant)

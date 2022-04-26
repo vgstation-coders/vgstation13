@@ -68,6 +68,12 @@
 	desc = "Any humanoid injected with this implant will become somewhat loyal to Nanotrasen and the local Heads of Staff."
 	imp_type = /obj/item/weapon/implant/loyalty
 
+/obj/item/weapon/implanter/freedom
+	imp_type = /obj/item/weapon/implant/freedom
+
+/obj/item/weapon/implanter/uplink
+	imp_type = /obj/item/weapon/implant/uplink
+
 /obj/item/weapon/implanter/explosive
 	name = "implanter (E)"
 	desc = "A small device used to apply implants to people. This one has a microphone and some circuitry attached for some reason."

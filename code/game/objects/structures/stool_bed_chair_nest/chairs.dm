@@ -581,7 +581,7 @@
 	..()
 
 /obj/item/folding_chair/on_attack(atom/attacked, mob/user)
-	hitsound = pick('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
+	hitsound = "trayhit"
 	..()
 
 /obj/item/folding_chair/attack_self(mob/user)

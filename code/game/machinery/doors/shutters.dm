@@ -17,18 +17,21 @@
 	add_fingerprint(user)
 	if(!(iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
-	if(density && (stat & NOPOWER) && !operating)
+	if(density && (stat & (FORCEDISABLE|NOPOWER)) && !operating)
 		operating = 1
 		spawn(-1)
 			flick("shutterc0", src)
 			icon_state = "shutter0"
 			sleep(animation_delay)
+			plane = open_plane
 			layer = open_layer
 			setDensity(FALSE)
 			set_opacity(0)
 			operating = 0
 
 /obj/machinery/door/poddoor/shutters/open()
+	if(!density) //it's already open bro
+		return FALSE
 	if(operating == 1) //doors can still open when emag-disabled
 		return
 	if(!ticker)
@@ -39,6 +42,7 @@
 	icon_state = "shutter0"
 	playsound(src.loc, sound_open, 100, 1)
 	sleep(animation_delay)
+	plane = open_plane
 	layer = open_layer
 	setDensity(FALSE)
 	set_opacity(0)
@@ -55,6 +59,7 @@
 	if(operating)
 		return
 	operating = 1
+	plane = closed_plane
 	layer = closed_layer
 	flick("shutterc1", src)
 	icon_state = "shutter1"

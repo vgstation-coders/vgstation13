@@ -194,6 +194,7 @@
 		if(!t_state)
 			t_state = I.icon_state
 		var/image/IM = image("icon" = t_inhand_states, "icon_state" = t_state)
+		IM.color = I.color
 		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"])
 			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"]
 			IM.overlays.Add(dyn_overlay)

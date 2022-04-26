@@ -257,7 +257,7 @@
 			return 0
 
 		visible_message( \
-			"<span class='warning'>[src] was shocked by the [source]!</span>", \
+			"<span class='warning'>[src] was shocked by \the [source]!</span>", \
 			"<span class='danger'>Energy pulse detected, system damaged!</span>", \
 			"<span class='warning'>You hear a heavy electrical crack.</span>" \
 		)

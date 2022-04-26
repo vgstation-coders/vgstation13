@@ -397,6 +397,18 @@ proc/move_mining_shuttle()
 	toolspeed = 0.4
 	diggables = DIG_SOIL //soil only
 
+/obj/item/weapon/pickaxe/shovel/attack(var/mob/living/M, var/mob/user)
+	var/obj/item/I
+	if(user.zone_sel.selecting == "l_hand")
+		I = M.get_held_item_by_index(GRASP_LEFT_HAND)
+	else if(user.zone_sel.selecting == "r_hand")
+		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
+	if(I && istype(I,src.type) && user.a_intent == I_HELP)
+		playsound(get_turf(user), "trayhit", 50, 1)
+		visible_message("<span class='notice'>[user] high shovels [M].</span>", "<span class='notice'>You high shovel [M].</span>")
+	else
+		..()
+
 /obj/item/weapon/pickaxe/shovel/spade
 	name = "spade"
 	desc = "A small tool for digging and moving dirt."

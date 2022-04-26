@@ -28,4 +28,5 @@
 		/obj/item/weapon/minihoe,
 		/obj/item/weapon/hatchet,
 		/obj/item/weapon/bee_net,
+		/obj/item/weapon/storage/belt/botanist,
 	)

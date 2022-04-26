@@ -15,7 +15,9 @@ var/list/all_doors = list()
 	density = 1
 	layer = OPEN_DOOR_LAYER
 	penetration_dampening = 10
+	var/open_plane = OBJ_PLANE
 	var/open_layer = OPEN_DOOR_LAYER
+	var/closed_plane = OBJ_PLANE
 	var/closed_layer = CLOSED_DOOR_LAYER
 	var/secondsElectrified = 0
 	var/visible = 1
@@ -231,12 +233,12 @@ var/list/all_doors = list()
 	playsound(H.loc, 'sound/effects/horrorforce2.ogg', 80)
 	visible_message("<span class='danger'>\The [src]'s motors whine as several great tendrils begin trying to force it open!</span>")
 	if(do_after(H, src, 32))
-		open(1)
+		open()
 		visible_message("<span class='danger'>[H.name] forces \the [src] open!</span>")
 
 		// Open firedoors, too.
 		for(var/obj/machinery/door/firedoor/FD in loc)
-			FD.open(1)
+			FD.open()
 	else
 		to_chat(H, "<span class='warning'>You fail to open \the [src].</span>")
 
@@ -282,6 +284,7 @@ var/list/all_doors = list()
 		sleep(animation_delay_predensity_opening)
 	else
 		sleep(animation_delay)
+	plane = open_plane
 	layer = open_layer
 	setDensity(FALSE)
 	update_nearby_tiles()
@@ -313,6 +316,7 @@ var/list/all_doors = list()
 
 	operating = 1
 
+	plane = closed_plane
 	layer = closed_layer
 
 	if (makes_noise)
@@ -355,10 +359,11 @@ var/list/all_doors = list()
 
 	if(density)
 		// above most items if closed
+		plane = closed_plane
 		layer = closed_layer
-
 		explosion_resistance = initial(explosion_resistance)
 	else
+		plane = open_plane
 		layer = open_layer
 
 		explosion_resistance = 0

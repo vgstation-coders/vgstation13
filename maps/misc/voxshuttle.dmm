@@ -1,166 +1,2518 @@
-"aa" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area)
-"ab" = (/turf/space,/area)
-"ac" = (/obj/machinery/newscaster,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area)
-"ad" = (/obj/machinery/door/airlock/highsecurity,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area)
-"ae" = (/turf/simulated/floor/airless,/area)
-"af" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/airless,/area)
-"ag" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/airless,/area)
-"ah" = (/obj/structure/bed/chair/comfy/beige,/turf/simulated/floor/airless,/area)
-"ai" = (/obj/machinery/light{dir = 4},/turf/simulated/floor/airless,/area)
-"aj" = (/turf/simulated/floor/airless{icon_state = "warning"},/area)
-"ak" = (/obj/structure/table/reinforced,/turf/simulated/floor/airless{icon_state = "warning"},/area)
-"al" = (/obj/machinery/door/poddoor,/obj/machinery/door/airlock/highsecurity,/turf/space,/area)
-"am" = (/turf/unsimulated/wall/fakeglass{dir = 8},/area)
-"an" = (/turf/unsimulated/wall/fakeglass{icon_state = "fakewindows2"; dir = 8},/area)
-"ao" = (/turf/unsimulated/wall/fakeglass{dir = 4},/area)
-"ap" = (/obj/machinery/door/poddoor,/obj/machinery/door/airlock/highsecurity,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area)
-"aq" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "diagonalWall3"},/area)
-"ar" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/airless,/area)
-"as" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 4; icon_state = "diagonalWall3"},/area)
-"at" = (/obj/structure/lattice,/turf/space,/area)
-"au" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/airless,/area)
-"av" = (/obj/structure/window/reinforced{dir = 4},/turf/space,/area)
-"aw" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/effect/light_emitter,/turf/simulated/floor/airless,/area)
-"ax" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/lattice,/turf/space,/area)
-"ay" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 8; icon_state = "diagonalWall3"},/area/shuttle/vox/station)
-"az" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 1; icon_state = "diagonalWall3"},/area/shuttle/vox/station)
-"aA" = (/obj/structure/lattice,/obj/structure/window/reinforced{dir = 4},/turf/space,/area)
-"aB" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/effect/light_emitter,/turf/simulated/floor/airless,/area)
-"aC" = (/obj/structure/window/reinforced{dir = 8},/turf/space,/area)
-"aD" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "wall3"; dir = 1},/area/shuttle/vox/station)
-"aE" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aF" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aG" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aH" = (/obj/machinery/computer/security,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aI" = (/obj/machinery/computer/shuttle_control/vox,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aJ" = (/obj/machinery/computer/crew{holomap_filter = 16},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aK" = (/obj/machinery/door/poddoor,/turf/simulated/floor/airless,/area)
-"aL" = (/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aM" = (/obj/structure/bed/chair/shuttle/red{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aN" = (/obj/machinery/recharger{pixel_y = 26},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aO" = (/obj/machinery/door/airlock/hatch{aiControlDisabled = 1; req_access_txt = "150"},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aP" = (/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aQ" = (/obj/effect/landmark{name = "voxstart"},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aR" = (/obj/structure/closet/emcloset/vox,/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aS" = (/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aT" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aU" = (/obj/structure/bed/chair/shuttle/gamer{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aV" = (/obj/item/device/radio/off,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"aW" = (/obj/structure/closet/emcloset/vox,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aX" = (/obj/machinery/light,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aY" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"aZ" = (/obj/machinery/telecomms/allinone{raider_allinone = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"ba" = (/obj/machinery/light,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bb" = (/obj/structure/closet/emcloset/vox,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bc" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bd" = (/obj/item/weapon/paper/crumpled,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"be" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bf" = (/obj/machinery/sleeper,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bg" = (/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bh" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/item/weapon/storage/firstaid/regular,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bi" = (/obj/effect/landmark/vox_locker,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bj" = (/obj/machinery/light/small,/obj/effect/landmark/vox_locker,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bk" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/syringe/inaprovaline,/obj/item/weapon/reagent_containers/syringe/inaprovaline,/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline,/obj/item/stack/medical/splint,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bl" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/glass/bottle/stoxin,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/glass/bottle/rezadone{pixel_x = 6; pixel_y = 4},/obj/item/weapon/reagent_containers/glass/bottle/alkysinesmall{pixel_x = -6; pixel_y = 8},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bm" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/item/weapon/storage/firstaid/regular,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bn" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bo" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bp" = (/obj/machinery/door/window/brigdoor{base_state = "left"; dir = 4; req_access = null},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bq" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/fire,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"br" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bs" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bt" = (/obj/machinery/sleeper,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bu" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bv" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack,/obj/item/clothing/glasses/thermal/monocle,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bw" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bx" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"by" = (/obj/machinery/dna_scannernew,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bz" = (/obj/machinery/computer/cloning,/obj/machinery/light,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bA" = (/obj/machinery/cloning/clonepod/full,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bB" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/toxin,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bC" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bD" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bE" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack,/obj/item/weapon/storage/belt/slim,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bF" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "diagonalWall3"},/area/shuttle/vox/station)
-"bG" = (/obj/structure/shuttle/engine/propulsion/left,/turf/space,/area/shuttle/vox/station)
-"bH" = (/obj/structure/shuttle/engine/propulsion/right,/turf/space,/area/shuttle/vox/station)
-"bI" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack,/obj/item/clothing/head/helmet/space/vox/stealth,/obj/item/clothing/suit/space/vox/stealth,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bJ" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/clothing/head/helmet/space/vox/medic,/obj/item/clothing/suit/space/vox/medic,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bK" = (/obj/machinery/light{dir = 1},/obj/item/weapon/spacecash,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bL" = (/obj/structure/closet{name = "loot closet"},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bM" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 4; icon_state = "diagonalWall3"},/area/shuttle/vox/station)
-"bN" = (/obj/item/trash/popcorn,/obj/machinery/door_control{id_tag = "RAIDER_BRIG"; name = "Brig Door-Control"; normaldoorcontrol = 1; pixel_x = -25; specialfunctions = 4},/obj/item/clothing/suit/unathi/robe,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bO" = (/obj/machinery/flasher_button{id_tag = "vox_flasher"; pixel_x = 25; pixel_y = -5},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bP" = (/obj/item/weapon/storage/toolbox/mechanical,/obj/item/weapon/storage/toolbox/electrical{pixel_y = -6},/obj/item/clothing/glasses/welding,/obj/item/clothing/glasses/welding,/obj/structure/closet/toolcloset,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bQ" = (/obj/machinery/door/airlock/hatch{aiControlDisabled = 1; req_access_txt = "150"},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bR" = (/obj/structure/rack,/obj/item/weapon/gun/energy/taser{pixel_x = 6; pixel_y = -6},/obj/item/weapon/gun/energy/taser,/obj/item/weapon/gun/energy/taser{pixel_x = -6; pixel_y = 6},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bS" = (/obj/machinery/door/airlock/glass{id_tag = "RAIDER_BRIG"; name = "Brig"},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bT" = (/obj/structure/rack,/obj/item/weapon/gun/dartgun/vox/raider,/obj/item/weapon/gun/dartgun/vox/raider{pixel_x = 6; pixel_y = -6},/obj/item/weapon/gun/dartgun/vox/raider{pixel_x = -6; pixel_y = 6},/obj/item/weapon/dart_cartridge,/obj/item/weapon/dart_cartridge,/obj/item/weapon/dart_cartridge{pixel_x = -5; pixel_y = -5},/obj/item/weapon/dart_cartridge,/obj/item/weapon/dart_cartridge{pixel_x = 7; pixel_y = 2},/obj/item/weapon/dart_cartridge,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bU" = (/obj/item/weapon/tank/oxygen{pixel_x = 12; pixel_y = -9},/obj/item/weapon/tank/oxygen{pixel_y = -6},/obj/item/clothing/mask/breath{pixel_y = 2},/obj/machinery/flasher{id_tag = "vox_flasher"; pixel_x = -25; pixel_y = 5},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bV" = (/obj/machinery/flasher{id_tag = "vox_flasher"; pixel_x = 23; pixel_y = 5},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"bW" = (/obj/structure/table/reinforced,/obj/machinery/light{dir = 8},/obj/abstract/map/spawner/voxfood,/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bX" = (/obj/structure/table/reinforced,/obj/machinery/recharger,/obj/item/weapon/storage/box/handcuffs{pixel_x = 6; pixel_y = 12},/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bY" = (/obj/structure/table/reinforced,/obj/item/device/multitool,/obj/item/clothing/gloves/yellow/vox,/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"bZ" = (/obj/structure/table/reinforced,/obj/item/weapon/c4{pixel_x = 3},/obj/item/weapon/c4,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"ca" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/backpack/industrial,/obj/item/weapon/storage/backpack/industrial,/obj/item/weapon/storage/backpack/industrial,/obj/item/weapon/hatchet,/obj/machinery/light{dir = 4},/obj/item/weapon/tank/nitrogen{pixel_y = -12},/obj/item/weapon/tank/nitrogen,/obj/item/weapon/spacecash/c10,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"cb" = (/obj/structure/rack,/obj/item/weapon/gun/energy/ionrifle{pixel_x = -4; pixel_y = 6},/obj/item/weapon/gun/energy/ionrifle{pixel_x = 4; pixel_y = -6},/obj/item/weapon/gun/energy/ionrifle,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
-"cc" = (/obj/effect/decal/cleanable/vomit,/obj/item/trash/candy,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cd" = (/obj/machinery/light/small{dir = 4; on = 1},/obj/item/clothing/mask/breath,/obj/item/stack/medical/bruise_pack/bandaid,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"ce" = (/obj/item/trash/danitos,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cf" = (/obj/item/weapon/tank/oxygen,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cg" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"ch" = (/obj/item/trash/soda_cans,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"ci" = (/obj/machinery/computer/arcade,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cj" = (/obj/structure/table/woodentable,/obj/item/weapon/dice/d20{pixel_x = -3; pixel_y = 2},/obj/item/weapon/dice{pixel_x = 4; pixel_y = -2},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/item/weapon/storage/pill_bottle/dice,/obj/item/stack/package_wrap,/obj/item/weapon/paper_bin{pixel_x = 1; pixel_y = 9},/turf/simulated/floor/wood,/area/shuttle/vox/station)
-"ck" = (/obj/item/trash/sosjerky,/obj/machinery/computer/security,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cl" = (/obj/item/trash/semki,/obj/item/weapon/tank/oxygen,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cm" = (/obj/item/trash/plate,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cn" = (/obj/item/trash/oldempirebar,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"co" = (/obj/item/trash/syndi_cakes,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cp" = (/obj/structure/table,/obj/item/weapon/paper,/obj/item/weapon/pen,/turf/simulated/floor/plating,/area/shuttle/vox/station)
-"cq" = (/obj/structure/table,/obj/item/toy/cards/une,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cr" = (/obj/item/trash/pistachios,/obj/structure/table,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"cs" = (/obj/structure/table,/turf/simulated/floor/shuttle/plating/vox,/area/shuttle/vox/station)
-"ct" = (/obj/structure/shuttle/engine/propulsion,/obj/docking_port/shuttle{dir = 2},/turf/space,/area/shuttle/vox/station)
-"cu" = (/obj/docking_port/destination/vox/station,/turf/space,/area)
-"cv" = (/obj/machinery/vending/raider,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/shuttle/vox/station)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area)
+"ab" = (
+/turf/space,
+/area)
+"ac" = (
+/obj/machinery/newscaster,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area)
+"ad" = (
+/obj/machinery/door/airlock/highsecurity,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area)
+"ae" = (
+/turf/simulated/floor/airless,
+/area)
+"af" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/airless,
+/area)
+"ag" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/airless,
+/area)
+"ah" = (
+/obj/structure/bed/chair/comfy/beige,
+/turf/simulated/floor/airless,
+/area)
+"ai" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/airless,
+/area)
+"aj" = (
+/turf/simulated/floor/airless{
+	icon_state = "warning"
+	},
+/area)
+"ak" = (
+/obj/structure/table/reinforced,
+/turf/simulated/floor/airless{
+	icon_state = "warning"
+	},
+/area)
+"al" = (
+/obj/machinery/door/poddoor,
+/obj/machinery/door/airlock/highsecurity,
+/turf/space,
+/area)
+"am" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 8
+	},
+/area)
+"an" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 8;
+	icon_state = "fakewindows2"
+	},
+/area)
+"ao" = (
+/turf/unsimulated/wall/fakeglass{
+	dir = 4
+	},
+/area)
+"ap" = (
+/obj/machinery/door/poddoor,
+/obj/machinery/door/airlock/highsecurity,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area)
+"aq" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	icon_state = "diagonalWall3"
+	},
+/area)
+"ar" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless,
+/area)
+"as" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 4;
+	icon_state = "diagonalWall3"
+	},
+/area)
+"at" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"au" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/airless,
+/area)
+"av" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/space,
+/area)
+"aw" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/effect/light_emitter,
+/turf/simulated/floor/airless,
+/area)
+"ax" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/lattice,
+/turf/space,
+/area)
+"ay" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 8;
+	icon_state = "diagonalWall3"
+	},
+/area/shuttle/vox/station)
+"az" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "diagonalWall3"
+	},
+/area/shuttle/vox/station)
+"aA" = (
+/obj/structure/lattice,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/space,
+/area)
+"aB" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/effect/light_emitter,
+/turf/simulated/floor/airless,
+/area)
+"aC" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/space,
+/area)
+"aD" = (
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 1;
+	icon_state = "wall3"
+	},
+/area/shuttle/vox/station)
+"aE" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aF" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aG" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aH" = (
+/obj/machinery/computer/security,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aI" = (
+/obj/machinery/computer/shuttle_control/vox,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aJ" = (
+/obj/machinery/computer/crew{
+	holomap_filter = 16
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aK" = (
+/obj/machinery/door/poddoor,
+/turf/simulated/floor/airless,
+/area)
+"aL" = (
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aM" = (
+/obj/structure/bed/chair/shuttle/red{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aN" = (
+/obj/machinery/recharger{
+	pixel_y = 26
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aO" = (
+/obj/machinery/door/airlock/hatch{
+	aiControlDisabled = 1;
+	req_access_txt = "150"
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aP" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aQ" = (
+/obj/effect/landmark{
+	name = "voxstart"
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aR" = (
+/obj/structure/closet/emcloset/vox,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aS" = (
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aT" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aU" = (
+/obj/structure/bed/chair/shuttle/gamer{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aV" = (
+/obj/item/device/radio/off,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"aW" = (
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aX" = (
+/obj/machinery/light,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aY" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"aZ" = (
+/obj/machinery/telecomms/allinone{
+	raider_allinone = 1
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"ba" = (
+/obj/machinery/light,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bb" = (
+/obj/structure/closet/emcloset/vox,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bc" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bd" = (
+/obj/item/weapon/paper/crumpled,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"be" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bf" = (
+/obj/machinery/sleeper,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bg" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bh" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/item/weapon/storage/firstaid/regular,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bi" = (
+/obj/effect/landmark/vox_locker,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bj" = (
+/obj/machinery/light/small,
+/obj/effect/landmark/vox_locker,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bk" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/syringe/inaprovaline,
+/obj/item/weapon/reagent_containers/syringe/inaprovaline,
+/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline,
+/obj/item/stack/medical/splint,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bl" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/glass/bottle/stoxin,
+/obj/item/weapon/reagent_containers/syringe,
+/obj/item/weapon/reagent_containers/glass/bottle/rezadone{
+	pixel_x = 6;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/alkysinesmall{
+	pixel_x = -6;
+	pixel_y = 8
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bm" = (
+/obj/structure/table/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/item/weapon/storage/firstaid/regular,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bn" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bo" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bp" = (
+/obj/machinery/door/window/brigdoor{
+	base_state = "left";
+	dir = 4;
+	req_access = null
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bq" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/firstaid/fire,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"br" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bs" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bt" = (
+/obj/machinery/sleeper,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bu" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bv" = (
+/obj/structure/closet/vox_raiders,
+/obj/item/weapon/storage/backpack,
+/obj/item/clothing/glasses/thermal/monocle,
+/obj/item/device/radio/headset/raider/pretuned,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bw" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bx" = (
+/obj/structure/closet/vox_raiders,
+/obj/item/weapon/storage/backpack/satchel_norm,
+/obj/item/device/radio/headset/raider/pretuned,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"by" = (
+/obj/machinery/dna_scannernew,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bz" = (
+/obj/machinery/computer/cloning,
+/obj/machinery/light,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bA" = (
+/obj/machinery/cloning/clonepod/full,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bB" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/firstaid/toxin,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bC" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bD" = (
+/obj/structure/shuttle/engine/heater,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bE" = (
+/obj/structure/closet/vox_raiders,
+/obj/item/weapon/storage/backpack,
+/obj/item/weapon/storage/belt/slim,
+/obj/item/device/radio/headset/raider/pretuned,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bF" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	icon_state = "diagonalWall3"
+	},
+/area/shuttle/vox/station)
+"bG" = (
+/obj/structure/shuttle/engine/propulsion/left,
+/turf/space,
+/area/shuttle/vox/station)
+"bH" = (
+/obj/structure/shuttle/engine/propulsion/right,
+/turf/space,
+/area/shuttle/vox/station)
+"bI" = (
+/obj/structure/closet/vox_raiders,
+/obj/item/weapon/storage/backpack,
+/obj/item/clothing/head/helmet/space/vox/stealth,
+/obj/item/clothing/suit/space/vox/stealth,
+/obj/item/device/radio/headset/raider/pretuned,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bJ" = (
+/obj/structure/closet/vox_raiders,
+/obj/item/weapon/storage/backpack/satchel_norm,
+/obj/item/clothing/head/helmet/space/vox/medic,
+/obj/item/clothing/suit/space/vox/medic,
+/obj/item/device/radio/headset/raider/pretuned,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bK" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/item/weapon/spacecash,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bL" = (
+/obj/structure/closet{
+	name = "loot closet"
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bM" = (
+/turf/space,
+/turf/simulated/wall/shuttle/unsmoothed{
+	dir = 4;
+	icon_state = "diagonalWall3"
+	},
+/area/shuttle/vox/station)
+"bN" = (
+/obj/item/trash/popcorn,
+/obj/machinery/door_control{
+	id_tag = "RAIDER_BRIG";
+	name = "Brig Door-Control";
+	normaldoorcontrol = 1;
+	pixel_x = -25;
+	specialfunctions = 4
+	},
+/obj/item/clothing/suit/unathi/robe,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bO" = (
+/obj/machinery/flasher_button{
+	id_tag = "vox_flasher";
+	pixel_x = 25;
+	pixel_y = -5
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bP" = (
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/weapon/storage/toolbox/electrical{
+	pixel_y = -6
+	},
+/obj/item/clothing/glasses/welding,
+/obj/item/clothing/glasses/welding,
+/obj/structure/closet/toolcloset,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bQ" = (
+/obj/machinery/door/airlock/hatch{
+	aiControlDisabled = 1;
+	req_access_txt = "150"
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bR" = (
+/obj/structure/rack,
+/obj/item/weapon/gun/energy/taser{
+	pixel_x = 6;
+	pixel_y = -6
+	},
+/obj/item/weapon/gun/energy/taser,
+/obj/item/weapon/gun/energy/taser{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bS" = (
+/obj/machinery/door/airlock/glass{
+	id_tag = "RAIDER_BRIG";
+	name = "Brig"
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bT" = (
+/obj/structure/rack,
+/obj/item/weapon/gun/dartgun/vox/raider,
+/obj/item/weapon/gun/dartgun/vox/raider{
+	pixel_x = 6;
+	pixel_y = -6
+	},
+/obj/item/weapon/gun/dartgun/vox/raider{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/dart_cartridge,
+/obj/item/weapon/dart_cartridge,
+/obj/item/weapon/dart_cartridge{
+	pixel_x = -5;
+	pixel_y = -5
+	},
+/obj/item/weapon/dart_cartridge,
+/obj/item/weapon/dart_cartridge{
+	pixel_x = 7;
+	pixel_y = 2
+	},
+/obj/item/weapon/dart_cartridge,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bU" = (
+/obj/item/weapon/tank/oxygen{
+	pixel_x = 12;
+	pixel_y = -9
+	},
+/obj/item/weapon/tank/oxygen{
+	pixel_y = -6
+	},
+/obj/item/clothing/mask/breath{
+	pixel_y = 2
+	},
+/obj/machinery/flasher{
+	id_tag = "vox_flasher";
+	pixel_x = -25;
+	pixel_y = 5
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bV" = (
+/obj/machinery/flasher{
+	id_tag = "vox_flasher";
+	pixel_x = 23;
+	pixel_y = 5
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"bW" = (
+/obj/structure/table/reinforced,
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/abstract/map/spawner/voxfood,
+/obj/item/weapon/storage/bag/plasticbag,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bX" = (
+/obj/structure/table/reinforced,
+/obj/machinery/recharger,
+/obj/item/weapon/storage/box/handcuffs{
+	pixel_x = 6;
+	pixel_y = 12
+	},
+/obj/item/weapon/storage/bag/plasticbag,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bY" = (
+/obj/structure/table/reinforced,
+/obj/item/device/multitool,
+/obj/item/clothing/gloves/yellow/vox,
+/obj/item/weapon/storage/bag/plasticbag,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"bZ" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/c4{
+	pixel_x = 3
+	},
+/obj/item/weapon/c4,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"ca" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/backpack/industrial,
+/obj/item/weapon/storage/backpack/industrial,
+/obj/item/weapon/storage/backpack/industrial,
+/obj/item/weapon/hatchet,
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/item/weapon/tank/nitrogen{
+	pixel_y = -12
+	},
+/obj/item/weapon/tank/nitrogen,
+/obj/item/weapon/spacecash/c10,
+/obj/item/clothing/mask/breath/vox,
+/obj/item/clothing/mask/breath/vox,
+/obj/item/weapon/storage/bag/plasticbag,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"cb" = (
+/obj/structure/rack,
+/obj/item/weapon/gun/energy/ionrifle{
+	pixel_x = -4;
+	pixel_y = 6
+	},
+/obj/item/weapon/gun/energy/ionrifle{
+	pixel_x = 4;
+	pixel_y = -6
+	},
+/obj/item/weapon/gun/energy/ionrifle,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
+"cc" = (
+/obj/effect/decal/cleanable/vomit,
+/obj/item/trash/candy,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cd" = (
+/obj/machinery/light/small{
+	dir = 4;
+	on = 1
+	},
+/obj/item/clothing/mask/breath,
+/obj/item/stack/medical/bruise_pack/bandaid,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"ce" = (
+/obj/item/trash/danitos,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cf" = (
+/obj/item/weapon/tank/oxygen,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cg" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"ch" = (
+/obj/item/trash/soda_cans,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"ci" = (
+/obj/machinery/computer/arcade,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cj" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/dice/d20{
+	pixel_x = -3;
+	pixel_y = 2
+	},
+/obj/item/weapon/dice{
+	pixel_x = 4;
+	pixel_y = -2
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/item/weapon/storage/pill_bottle/dice,
+/obj/item/stack/package_wrap,
+/obj/item/weapon/paper_bin{
+	pixel_x = 1;
+	pixel_y = 9
+	},
+/turf/simulated/floor/wood,
+/area/shuttle/vox/station)
+"ck" = (
+/obj/item/trash/sosjerky,
+/obj/machinery/computer/security,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cl" = (
+/obj/item/trash/semki,
+/obj/item/weapon/tank/oxygen,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cm" = (
+/obj/item/trash/plate,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cn" = (
+/obj/item/trash/oldempirebar,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"co" = (
+/obj/item/trash/syndi_cakes,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cp" = (
+/obj/structure/table,
+/obj/item/weapon/paper,
+/obj/item/weapon/pen,
+/turf/simulated/floor/plating,
+/area/shuttle/vox/station)
+"cq" = (
+/obj/structure/table,
+/obj/item/toy/cards/une,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cr" = (
+/obj/item/trash/pistachios,
+/obj/structure/table,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"cs" = (
+/obj/structure/table,
+/turf/simulated/floor/shuttle/plating/vox,
+/area/shuttle/vox/station)
+"ct" = (
+/obj/structure/shuttle/engine/propulsion,
+/obj/docking_port/shuttle{
+	dir = 2
+	},
+/turf/space,
+/area/shuttle/vox/station)
+"cu" = (
+/obj/docking_port/destination/vox/station,
+/turf/space,
+/area)
+"cv" = (
+/obj/machinery/vending/raider,
+/turf/simulated/floor/shuttle/vox{
+	icon_state = "floor4"
+	},
+/area/shuttle/vox/station)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaababaaaaaaaaacadaaaaaaaaaaababaaaaaaaaaaaaaaaaaaaaaaaa
-aaababababababababababaaababaaaeafaeaeaeaeaeafaeaaababaaababababababababababaa
-aaababababababababababaaaaaaaaaeaeaeaeaeaeaeaeaeaaaaaaaaababababababababababaa
-aaababababababababababaaagaeaeaeaeaeahahahaeaeaeaeaeaiaaababababababababababaa
-aaababababababababababaaaeaaaaajajakakakakakajajaaaaaeaaababababababababababaa
-aaababababababababababaaalaaaaamanananananananaoaaaaapaaababababababababababaa
-aaababababababababababaqarasaqatatatatatatatatatasaqauasababababababababababaa
-aaababababababababababavawaxatatabayabababazabatataAaBaCababababababababababaa
-aaababababababababababavaraCabatabaDaEaFaGaDabatabavauaCababababababababababaa
-aaababababababababababavaraCabatayaDaHaIaJaDazatabavauaCababababababababababaa
-aaababababababababababayaKazabayaDaLaMaMaMaNaDazabayaKazababababababababababaa
-aaabababababababababayaDaOaDabaDaPaMaQaLaQaMaPaDabaDaOaDazabababababababababaa
-aaabababababababababaDaRaSaDabaTaLaLaQaUaQaLaVaTabaDaSaWaDabababababababababaa
-aaabababababababababaDaXaSaDabaYaZbaaQaLaQbabbaYabaDaSaXaDabababababababababaa
-aaabababababababababaDaDaOaDaDaDaDaDaDaOaDaDaDaDaDaDaOaDaDabababababababababaa
-aaabababababababababaDaSaSaSbcaSaOaSaSaSaSaSaOaSbcaSaSbdaDabababababababababaa
-aaabababababababababbebfbgbhaSaSaDbibjaSbjbiaDaLaLbkblbmbnabababababababababaa
-aaabababababababababboaLaLbpaSaSaDaDaDaOaDaDaDaLaLaLaLbqbrabababababababababaa
-aaabababababababababbsbtaLbuaXaSaDbvbwaLbwbxaDbybzbAaLbBbCabababababababababaa
-aaabababababababababaDbDbDaDaDaOaDbEaLaLaLbxaDaDaDaDbDbDaDabababababababababaa
-aaabababababababababbFbGbHaDbcaSaDbIaLcvaLbJaDbKbLaDbGbHbMabababababababababaa
-aaababababababababababababaDbNbOaDbPaLaLaLaLbQaLbRaDababababababababababababaa
-aaababababababababababababaDaDbSaDaPaLaLaLaLaDaLbTaDababababababababababababaa
-aaababababababababababababaDbUbVaDbWbXbYbZcaaDaLcbaDababababababababababababaa
-aaababababababababababababaDcccdaDaDaDaDaDaDaDaDaDaDababababababababababababaa
-aaababababababababababababaDcecfaScgaSaSaSchcicjckaDababababababababababababaa
-aaababababababababababababaDclcmaSaSaSaSaSaSaScncoaDababababababababababababaa
-aaababababababababababababbFaDaDaDcpcqcrcsciaDaDaDbMababababababababababababaa
-aaabababababababababababababababbFaDbDbDbDaDbMabababababababababababababababaa
-aaababababababababababababababababbFbGctbHbMababababababababababababababababaa
-aaababababababababababababababababababcuababababababababababababababababababaa
-aaabababababababababababababababababababababababababababababababababababababaa
-aaabababababababababababababababababababababababababababababababababababababaa
-aaabababababababababababababababababababababababababababababababababababababaa
-aaabababababababababababababababababababababababababababababababababababababaa
-aaabababababababababababababababababababababababababababababababababababababaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(3,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(4,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(5,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(6,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(7,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(8,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(9,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(10,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(11,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ay
+aD
+aD
+aD
+aD
+be
+bo
+bs
+aD
+bF
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(12,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aq
+av
+av
+av
+ay
+aD
+aR
+aX
+aD
+aS
+bf
+aL
+bt
+bD
+bG
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(13,1,1) = {"
+ab
+ab
+aa
+ag
+ae
+al
+ar
+aw
+ar
+ar
+aK
+aO
+aS
+aS
+aO
+aS
+bg
+aL
+aL
+bD
+bH
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(14,1,1) = {"
+ab
+ab
+aa
+ae
+aa
+aa
+as
+ax
+aC
+aC
+az
+aD
+aD
+aD
+aD
+aS
+bh
+bp
+bu
+aD
+aD
+aD
+aD
+aD
+aD
+aD
+aD
+bF
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(15,1,1) = {"
+aa
+aa
+aa
+ae
+aa
+aa
+aq
+at
+ab
+ab
+ab
+ab
+ab
+ab
+aD
+bc
+aS
+aS
+aX
+aD
+bc
+bN
+aD
+bU
+cc
+ce
+cl
+aD
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(16,1,1) = {"
+aa
+ae
+ae
+ae
+aj
+am
+at
+at
+at
+at
+ay
+aD
+aT
+aY
+aD
+aS
+aS
+aS
+aS
+aO
+aS
+bO
+bS
+bV
+cd
+cf
+cm
+aD
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(17,1,1) = {"
+aa
+af
+ae
+ae
+aj
+an
+at
+ab
+ab
+ay
+aD
+aP
+aL
+aZ
+aD
+aO
+aD
+aD
+aD
+aD
+aD
+aD
+aD
+aD
+aD
+aS
+aS
+aD
+bF
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(18,1,1) = {"
+aa
+ae
+ae
+ae
+ak
+an
+at
+ay
+aD
+aD
+aL
+aM
+aL
+ba
+aD
+aS
+bi
+aD
+bv
+bE
+bI
+bP
+aP
+bW
+aD
+cg
+aS
+cp
+aD
+bF
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(19,1,1) = {"
+ac
+ae
+ae
+ah
+ak
+an
+at
+ab
+aE
+aH
+aM
+aQ
+aQ
+aQ
+aD
+aS
+bj
+aD
+bw
+aL
+aL
+aL
+aL
+bX
+aD
+aS
+aS
+cq
+bD
+bG
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(20,1,1) = {"
+ad
+ae
+ae
+ah
+ak
+an
+at
+ab
+aF
+aI
+aM
+aL
+aU
+aL
+aO
+aS
+aS
+aO
+aL
+aL
+cv
+aL
+aL
+bY
+aD
+aS
+aS
+cr
+bD
+ct
+cu
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(21,1,1) = {"
+aa
+ae
+ae
+ah
+ak
+an
+at
+ab
+aG
+aJ
+aM
+aQ
+aQ
+aQ
+aD
+aS
+bj
+aD
+bw
+aL
+aL
+aL
+aL
+bZ
+aD
+aS
+aS
+cs
+bD
+bH
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(22,1,1) = {"
+aa
+ae
+ae
+ae
+ak
+an
+at
+az
+aD
+aD
+aN
+aM
+aL
+ba
+aD
+aS
+bi
+aD
+bx
+bx
+bJ
+aL
+aL
+ca
+aD
+ch
+aS
+ci
+aD
+bM
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(23,1,1) = {"
+aa
+af
+ae
+ae
+aj
+an
+at
+ab
+ab
+az
+aD
+aP
+aV
+bb
+aD
+aO
+aD
+aD
+aD
+aD
+aD
+bQ
+aD
+aD
+aD
+ci
+aS
+aD
+bM
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(24,1,1) = {"
+aa
+ae
+ae
+ae
+aj
+ao
+at
+at
+at
+at
+az
+aD
+aT
+aY
+aD
+aS
+aL
+aL
+by
+aD
+bK
+aL
+aL
+aL
+aD
+cj
+cn
+aD
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(25,1,1) = {"
+aa
+aa
+aa
+ae
+aa
+aa
+as
+at
+ab
+ab
+ab
+ab
+ab
+ab
+aD
+bc
+aL
+aL
+bz
+aD
+bL
+bR
+bT
+cb
+aD
+ck
+co
+aD
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(26,1,1) = {"
+ab
+ab
+aa
+ae
+aa
+aa
+aq
+aA
+av
+av
+ay
+aD
+aD
+aD
+aD
+aS
+bk
+aL
+bA
+aD
+aD
+aD
+aD
+aD
+aD
+aD
+aD
+bM
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(27,1,1) = {"
+ab
+ab
+aa
+ai
+ae
+ap
+au
+aB
+au
+au
+aK
+aO
+aS
+aS
+aO
+aS
+bl
+aL
+aL
+bD
+bG
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(28,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+as
+aC
+aC
+aC
+az
+aD
+aW
+aX
+aD
+bd
+bm
+bq
+bB
+bD
+bH
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(29,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+az
+aD
+aD
+aD
+aD
+bn
+br
+bC
+aD
+bM
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(30,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(31,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(32,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(33,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(34,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(35,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(36,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(37,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(38,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(39,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}

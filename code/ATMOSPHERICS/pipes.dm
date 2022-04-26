@@ -132,10 +132,13 @@
 
 /obj/machinery/atmospherics/pipe/simple/New()
 	..()
+	update_dir()
+
+/obj/machinery/atmospherics/pipe/simple/update_dir()
 	switch(dir)
-		if(SOUTH || NORTH)
+		if(SOUTH, NORTH)
 			initialize_directions = SOUTH|NORTH
-		if(EAST || WEST)
+		if(EAST, WEST)
 			initialize_directions = EAST|WEST
 		if(NORTHEAST)
 			initialize_directions = NORTH|EAST
@@ -145,6 +148,7 @@
 			initialize_directions = SOUTH|EAST
 		if(SOUTHWEST)
 			initialize_directions = SOUTH|WEST
+	..()
 
 /obj/machinery/atmospherics/pipe/simple/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
@@ -477,6 +481,13 @@
 
 /obj/machinery/atmospherics/pipe/manifold/New()
 	icon_state = "manifold"
+	update_dir()
+	centre_overlay = manifold_centre
+	centre_overlay.color = color
+	overlays += centre_overlay
+	..()
+
+/obj/machinery/atmospherics/pipe/manifold/update_dir()
 	switch(dir)
 		if(NORTH)
 			initialize_directions = EAST|SOUTH|WEST
@@ -486,11 +497,7 @@
 			initialize_directions = SOUTH|WEST|NORTH
 		if(WEST)
 			initialize_directions = NORTH|EAST|SOUTH
-	centre_overlay = manifold_centre
-	centre_overlay.color = color
-	overlays += centre_overlay
 	..()
-
 
 /obj/machinery/atmospherics/pipe/manifold/get_node(node_id)
 	switch(node_id)
@@ -982,17 +989,20 @@
 /obj/machinery/atmospherics/pipe/layer_manifold/New()
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
 		layer_nodes.Add(null)
-	switch(dir)
-		if(NORTH,SOUTH)
-			initialize_directions = NORTH|SOUTH
-		if(EAST,WEST)
-			initialize_directions = EAST|WEST
-
+	update_dir()
 	centre_overlay = centre_image
 	centre_overlay.color = color
 	overlays += centre_overlay
 	icon_state = ""
 	..()
+
+/obj/machinery/atmospherics/pipe/layer_manifold/update_dir()
+	..()
+	switch(dir)
+		if(NORTH,SOUTH)
+			initialize_directions = NORTH|SOUTH
+		if(EAST,WEST)
+			initialize_directions = EAST|WEST
 
 /obj/machinery/atmospherics/pipe/layer_manifold/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = PIPING_LAYER_DEFAULT
@@ -1194,11 +1204,15 @@
 
 /obj/machinery/atmospherics/pipe/layer_adapter/New()
 	..()
+	update_dir()
+
+/obj/machinery/atmospherics/pipe/layer_adapter/update_dir()
 	switch(dir)
 		if(NORTH,SOUTH)
 			initialize_directions = NORTH|SOUTH
 		if(EAST,WEST)
 			initialize_directions = EAST|WEST
+	..()
 
 /obj/machinery/atmospherics/pipe/layer_adapter/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = new_layer

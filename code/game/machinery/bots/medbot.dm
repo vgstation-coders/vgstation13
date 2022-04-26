@@ -34,7 +34,7 @@ var/list/firstaid_exceptions = list(
 	density = 0
 	anchored = 0
 	health = 20
-	maxhealth = 20
+	maxHealth = 20
 	req_access =list(access_medical)
 	bot_flags = BOT_NOT_CHASING|BOT_CONTROL
 	can_take_pai = TRUE
@@ -633,18 +633,6 @@ var/list/firstaid_exceptions = list(
 /obj/machinery/bot/medbot/eject_integratedpai_if_present()
 	if(..())
 		overlays -= image('icons/obj/aibots.dmi', "medibot_pai_overlay")
-
-/obj/machinery/bot/medbot/getpAIMovementDelay()
-	return 1
-
-/obj/machinery/bot/medbot/pAImove(mob/living/silicon/pai/user, dir)
-	if(!on)
-		return
-	if(!..())
-		return
-	if(!isturf(loc))
-		return
-	step(src, dir)
 
 /obj/machinery/bot/medbot/on_integrated_pai_click(mob/living/silicon/pai/user, mob/living/carbon/A)
 	if(!Adjacent(A))

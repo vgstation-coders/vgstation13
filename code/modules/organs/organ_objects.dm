@@ -3,6 +3,7 @@
 	desc = "It looks like it probably just plopped out."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "appendix"
+	w_class = W_CLASS_SMALL
 
 	health = 100                              // Process() ticks before death.
 
@@ -255,6 +256,7 @@
 	prosthetic_icon = "eyes-prosthetic"
 	organ_tag = "eyes"
 	organ_type = /datum/organ/internal/eyes
+	w_class = W_CLASS_TINY
 	var/eye_colour
 	var/emitter = FALSE
 
@@ -290,11 +292,11 @@
 	prosthetic_name = "vox visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/vox
 
-/obj/item/organ/internal/eyes/grue
-	name = "grue eyeballs"
+/obj/item/organ/internal/eyes/umbra
+	name = "umbra eyeballs"
 //	icon_state = "eyes"
-	prosthetic_name = "grue visual prosthesis"
-	organ_type = /datum/organ/internal/eyes/grue
+	prosthetic_name = "umbra visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/umbra
 
 /obj/item/organ/internal/eyes/mushroom
 	name = "mushroom eyeballs"
@@ -327,6 +329,7 @@
 	name = "appendix"
 	icon_state = "appendix"
 	organ_tag = "appendix"
+	w_class = W_CLASS_TINY
 
 //These are here so they can be printed out via the fabricator.
 /obj/item/organ/internal/heart/prosthetic

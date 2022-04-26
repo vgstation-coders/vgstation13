@@ -45191,18 +45191,9 @@
 /area/science/robotics)
 "bIg" = (
 /obj/structure/table,
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
-/obj/item/weapon/storage/firstaid/regular{
-	empty = 1;
-	name = "First-Aid (empty)"
-	},
+/obj/item/weapon/storage/firstaid/regular/empty,
+/obj/item/weapon/storage/firstaid/regular/empty,
+/obj/item/weapon/storage/firstaid/regular/empty,
 /obj/item/device/healthanalyzer,
 /obj/item/device/healthanalyzer,
 /obj/item/device/healthanalyzer,
@@ -45515,6 +45506,7 @@
 /obj/machinery/light_switch{
 	pixel_x = 27
 	},
+/obj/machinery/crate_weigher,
 /turf/simulated/floor,
 /area/supply/storage)
 "bIM" = (

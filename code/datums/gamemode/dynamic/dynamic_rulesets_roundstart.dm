@@ -114,9 +114,6 @@
 //                                          //
 //////////////////////////////////////////////
 
-
-//note: this can only fire on snowmap
-
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = /datum/role/changeling
@@ -128,22 +125,14 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 18
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
-	var/changeling_threshold = 2
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
-	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
-	for (var/i = 1 to num_changelings)
-		var/mob/M = pick(candidates)
-		assigned += M
-		candidates -= M
-		if (i > changeling_threshold)
-			if ((mode.threat > cost))
-				mode.spend_threat(cost)
-			else
-				break
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
@@ -155,7 +144,7 @@
 		if(!hivemind)
 			hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
 			hivemind.OnPostSetup()
-		hivemind?.HandleRecruitedRole(newChangeling)
+		hivemind.HandleRecruitedRole(newChangeling)
 
 		newChangeling.ForgeObjectives()
 		newChangeling.Greet(GREET_ROUNDSTART)
@@ -238,6 +227,8 @@
 	if (M)
 		var/datum/role/wizard/newWizard = new
 		M.forceMove(pick(wizardstart))
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
@@ -310,6 +301,8 @@
 		else
 			PFW.HandleRecruitedRole(newWizard)
 		M.forceMove(pick(wizardstart))
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		newWizard.AssignToRole(M.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
@@ -470,6 +463,8 @@ Assign your candidates in choose_candidates() instead.
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
 		M.forceMove(synd_spawn[spawnpos])
+		if(!isjusthuman(M))
+			M = M.Humanize("Human")
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
@@ -512,11 +507,10 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
 	if(M.mind.assigned_role != "AI")
-		for(var/mob/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
-			if(player.mind.assigned_role == "AI")
-				//We have located an AI to replace
+		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
+			if(player != M)	// This should always be true but in case something goes terribly terribly wrong we definitely do not want to end up displacing the malf AI
 				displace_AI(player)
-				message_admins("Displacing AI played by: [key_name(player)].")
+				break		// There will only be one roundstart AI normally. In case of a triple-AI round we only need to displace one AI anyway.
 
 	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
 	M.mind.assigned_role = "AI"
@@ -536,7 +530,11 @@ Assign your candidates in choose_candidates() instead.
 	MAI.Greet()
 	return 1
 
-/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
+/datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/displaced)
+	var/mob/new_player/old_AI = new 
+	old_AI.ckey = displaced.ckey
+	old_AI.name = displaced.ckey
+	qdel(displaced)
 	old_AI.mind.assigned_role = null
 	var/list/shuffledoccupations = shuffle(job_master.occupations)
 	for(var/level = 3 to 1 step -1)
@@ -545,16 +543,28 @@ Assign your candidates in choose_candidates() instead.
 		for(var/datum/job/job in shuffledoccupations)
 			if(job_master.TryAssignJob(old_AI,level,job))
 				break
-	if(old_AI.mind.assigned_role)
-		return
-	if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
-		job_master.GiveRandomJob(old_AI)
-		return
-	else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
-		job_master.AssignRole(old_AI, "Assistant")
-	else
+	if(!old_AI.mind.assigned_role) // still no job
+		if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
+			job_master.GiveRandomJob(old_AI)
+		else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
+			job_master.AssignRole(old_AI, "Assistant")
+	if(!old_AI.mind.assigned_role)
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
+		log_admin("([old_AI.ckey]) was displaced by a malf AI and sent back to lobby.")
+		message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 		old_AI.ready = 0
+		return 
+
+	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
+		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
+	else
+		var/mob/living/carbon/human/new_character = old_AI.create_character(0)
+		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+		job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+		EquipCustomItems(new_character)
+	log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
+	message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
+	qdel(old_AI)
 
 //////////////////////////////////////////////
 //                                          //
@@ -656,7 +666,7 @@ Assign your candidates in choose_candidates() instead.
 	if (!..())
 		return FALSE
 	var/head_check = 0
-	for (var/mob/new_player/player in player_list)
+	for (var/mob/player in player_list)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
 	return (head_check >= required_heads)

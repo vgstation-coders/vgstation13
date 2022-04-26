@@ -70,7 +70,7 @@
 
 // Overwrite standard behavior else it'll never work
 /obj/machinery/smartglass_electronics/Topic(href, href_list)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		to_chat(usr, "<span class='warning'>WARNING: Device is not powered.</span>")
 		return 1
 	if(href_list["close"])

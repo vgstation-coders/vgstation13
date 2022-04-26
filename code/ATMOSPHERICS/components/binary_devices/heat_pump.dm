@@ -43,7 +43,7 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 
 /obj/machinery/atmospherics/binary/heat_pump/process()
 	. = ..()
-	if(!on || stat & (NOPOWER | BROKEN))
+	if(!on || stat & (NOPOWER | BROKEN | FORCEDISABLE))
 		return
 
 	if(!air1.total_moles || !air2.total_moles)
@@ -79,11 +79,6 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 /obj/machinery/atmospherics/binary/heat_pump/attack_hand(mob/user)
 	toggle_status(user)
 
-
-/obj/machinery/atmospherics/binary/heat_pump/attack_ai(mob/user)
-	toggle_status(user)
-
-
 /obj/machinery/atmospherics/binary/heat_pump/toggle_status(mob/user)
 	if(issilicon(user))
 		add_hiddenprint(user)
@@ -98,7 +93,7 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 
 
 /obj/machinery/atmospherics/binary/heat_pump/update_icon()
-	if(!on || stat & (NOPOWER | BROKEN))
+	if(!on || stat & (NOPOWER | BROKEN | FORCEDISABLE))
 		icon_state = "intact_off"
 	else
 		icon_state = "intact_on"

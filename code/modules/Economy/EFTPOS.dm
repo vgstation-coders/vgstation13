@@ -52,7 +52,7 @@
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		//Checks for a database on its Z-level, else it checks for a database at the main Station.
 		if((DB.z == src.z) || (DB.z == map.zMainStation))
-			if(!(DB.stat & NOPOWER) && DB.activated )//If the database if damaged or not powered, people won't be able to use the EFTPOS anymore
+			if(!(DB.stat & (NOPOWER|FORCEDISABLE)) && DB.activated )//If the database if damaged or not powered, people won't be able to use the EFTPOS anymore
 				linked_db = DB
 				break
 

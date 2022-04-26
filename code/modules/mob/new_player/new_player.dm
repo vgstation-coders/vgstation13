@@ -204,7 +204,7 @@
 			return
 		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
 		for(var/obj/item/device/pda/pingme in PDAs)
-			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
+			if(pingme.cartridge && pingme.cartridge.fax_pings && (locate(/datum/pda_app/cart/status_display) in pingme.applications))
 				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
 				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
 				var/mob/living/L = get_holder_of_type(pingme,/mob/living)
@@ -333,6 +333,7 @@
 	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
 	mind.transfer_to(observer)
+	log_admin("([observer.ckey]/[observer]) started the game as a ghost.")
 	qdel(src)
 
 /mob/new_player/proc/create_cluwne()

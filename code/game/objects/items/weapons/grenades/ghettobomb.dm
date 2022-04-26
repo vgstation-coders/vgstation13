@@ -13,7 +13,7 @@
 		qdel(I)
 		I = null
 		qdel(src)
-	if(I.is_wirecutter(user))
+	else if(I.is_wirecutter(user))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
 		I.playtoolsound(user, 50)
 		if(src.loc == user)
@@ -24,6 +24,8 @@
 		else
 			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
 			qdel(src)
+	else
+		return ..()
 
 
 /obj/item/weapon/grenade/iedcasing

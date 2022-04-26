@@ -602,7 +602,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/key/security/spare/New()
 	..()
 	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station",
-		 "Snow Station", "NRV Horizon", "Synergy Station", "Lamprey Station")
+		 "Snow Station", "Synergy Station", "Lamprey Station")
 	map_names -= map.nameLong
 	home_map = pick(map_names)
 
@@ -1742,6 +1742,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	mech_flags = MECH_SCAN_FAIL	//Nip that in the bud
 	var/static/list/illegalChems = list(	//Just a bad idea
 		ADMINORDRAZINE,
+		PROCIZINE,
 		BLOCKIZINE,
 		AUTISTNANITES,
 		XENOMICROBES,

@@ -142,6 +142,12 @@
 	id = "destsortingmachine"
 	build_path = /obj/item/weapon/circuitboard/sorting_machine/destination
 
+/datum/design/sorting_machine/item
+	name = "Circuit Design (Item Sorting Machine)"
+	desc = "Allows for the construction of circuit boards used to build an item sorting machine."
+	id = "itemsortingmachine"
+	build_path = /obj/item/weapon/circuitboard/sorting_machine/item
+
 /datum/design/washing_machine
 	name = "Circuit Design (Washing Machine)"
 	desc = "Allows for the construction of circuit boards used to build a washing machine."
@@ -210,3 +216,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/disk_duplicator
+
+/datum/design/crate_weigher
+	name = "Circuit Design (Crate Weigher)"
+	desc = "Allows for the construction of circuit boards used to build a crate weigher."
+	id = "crate_weigher"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_MAGNETS = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/crate_weigher

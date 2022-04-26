@@ -1,37 +1,260 @@
-"a" = (/turf/space,/area)
-"b" = (/turf/unsimulated/mineral,/area/vault/prison_ship)
-"c" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/unsimulated/mineral,/area/vault/prison_ship)
-"f" = (/obj/item/stack/rods,/turf/simulated/floor/shuttle/plating,/area/vault/prison_ship)
-"g" = (/obj/item/stack/rods,/turf/unsimulated/mineral,/area/vault/prison_ship)
-"h" = (/obj/item/stack/rods,/obj/effect/landmark/corpse/mutilated,/turf/simulated/floor/shuttle/plating,/area/vault/prison_ship)
-"i" = (/obj/structure/shuttle/engine/heater{dir = 8; pixel_x = 8},/obj/structure/shuttle/engine/propulsion/burst{dir = 8; pixel_x = -24},/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"k" = (/obj/item/weapon/reagent_containers/glass/bucket,/obj/effect/landmark/corpse/civilian,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"l" = (/obj/item/stack/sheet/cardboard,/obj/effect/landmark/corpse/civilian,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"m" = (/obj/structure/fence,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"n" = (/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"o" = (/obj/item/stack/rods,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"p" = (/obj/structure/displaycase/broken,/obj/item/toy/gasha/skub,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"q" = (/obj/structure/fence{dir = 4},/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"r" = (/obj/structure/fence/door/secure/from_south,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"s" = (/obj/structure/fence/corner,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"t" = (/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"u" = (/obj/effect/landmark/corpse/mutilated,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"v" = (/obj/structure/computerframe,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"w" = (/obj/structure/computerframe,/obj/item/weapon/disk/shuttle_coords/vault/prison,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"y" = (/obj/item/toy/gasha/nurse,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"z" = (/obj/structure/displaycase/broken,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"A" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/prison_ship)
-"B" = (/turf/simulated/wall/shuttle,/area/vault/prison_ship)
-"C" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"D" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/prison_ship)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/space,
+/area)
+"b" = (
+/turf/unsimulated/mineral,
+/area/vault/prison_ship)
+"c" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/unsimulated/mineral,
+/area/vault/prison_ship)
+"f" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/shuttle/plating,
+/area/vault/prison_ship)
+"g" = (
+/obj/item/stack/rods,
+/turf/unsimulated/mineral,
+/area/vault/prison_ship)
+"h" = (
+/obj/item/stack/rods,
+/obj/effect/landmark/corpse/mutilated,
+/turf/simulated/floor/shuttle/plating,
+/area/vault/prison_ship)
+"i" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 8;
+	pixel_x = 8
+	},
+/obj/structure/shuttle/engine/propulsion/burst{
+	dir = 8;
+	pixel_x = -24
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"k" = (
+/obj/item/weapon/reagent_containers/glass/bucket,
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"l" = (
+/obj/item/stack/sheet/cardboard,
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"m" = (
+/obj/structure/fence,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"n" = (
+/obj/item/device/flashlight/flare/ever_bright,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"o" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"p" = (
+/obj/structure/displaycase/broken,
+/obj/item/toy/gasha/skub,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"q" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"r" = (
+/obj/structure/fence/door/secure/from_south,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"s" = (
+/obj/structure/fence/corner,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"t" = (
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"u" = (
+/obj/effect/landmark/corpse/mutilated,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"v" = (
+/obj/structure/computerframe,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"w" = (
+/obj/structure/computerframe,
+/obj/item/weapon/disk/shuttle_coords/vault/prison,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"y" = (
+/obj/item/toy/gasha/nurse,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"z" = (
+/obj/structure/displaycase/broken,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"A" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/vault/prison_ship)
+"B" = (
+/turf/simulated/wall/shuttle,
+/area/vault/prison_ship)
+"C" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/prison_ship)
+"D" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/space,
+/area/vault/prison_ship)
 
 (1,1,1) = {"
-aaaaaaaabbbbaa
-aaabaaabbbbbba
-abcBBBBBfghbba
-aaiBklmnopgbba
-aaiBqrstuvfbaa
-aaiBtttotwBbaa
-aaiBtotytzBaaa
-aaABBCCBBBDaaa
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+b
+a
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+c
+i
+i
+i
+i
+A
+"}
+(4,1,1) = {"
+a
+b
+B
+B
+B
+B
+B
+B
+"}
+(5,1,1) = {"
+a
+a
+B
+k
+q
+t
+t
+B
+"}
+(6,1,1) = {"
+a
+a
+B
+l
+r
+t
+o
+C
+"}
+(7,1,1) = {"
+a
+a
+B
+m
+s
+t
+t
+C
+"}
+(8,1,1) = {"
+a
+b
+B
+n
+t
+o
+y
+B
+"}
+(9,1,1) = {"
+b
+b
+f
+o
+u
+t
+t
+B
+"}
+(10,1,1) = {"
+b
+b
+g
+p
+v
+w
+z
+B
+"}
+(11,1,1) = {"
+b
+b
+h
+g
+f
+B
+B
+D
+"}
+(12,1,1) = {"
+b
+b
+b
+b
+b
+b
+a
+a
+"}
+(13,1,1) = {"
+a
+b
+b
+b
+a
+a
+a
+a
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
 "}

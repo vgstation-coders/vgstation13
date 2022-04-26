@@ -174,6 +174,7 @@ Class Procs:
 /obj/machinery/New()
 	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
+	initialize_malfhack_abilities()
 	//if(ticker) initialize()
 	return ..()
 
@@ -203,6 +204,10 @@ Class Procs:
 			component_parts -= AM
 */
 	component_parts = null
+	for(var/datum/malfhack_ability/MH in hack_abilities)
+		MH.machine = null
+		qdel(MH)
+	qdel(hack_overlay)
 
 	..()
 
@@ -214,6 +219,7 @@ Class Procs:
 	return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
+	malf_disrupt(MALF_DISRUPT_TIME)
 	if(use_power && stat == 0)
 		use_power(7500/severity)
 
@@ -226,6 +232,8 @@ Class Procs:
 
 		spawn(10)
 			qdel(pulse2)
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Finally take these out inside APCs and etc.
 	..()
 
 /obj/machinery/suicide_act(var/mob/living/user)
@@ -386,7 +394,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return 1
 	if(href_list["close"])
 		return
@@ -419,9 +427,11 @@ Class Procs:
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
 		if(user.client && user.client.eye == user)
-			return src.attack_hand(user)
+			return attack_hand(user)
 	else
-		return src.attack_hand(user)
+		if(stat & NOAICONTROL)
+			return
+		return attack_hand(user)
 
 /obj/machinery/attack_ghost(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -435,7 +445,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
-	if(stat & (NOPOWER|BROKEN|MAINT))
+	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return 1
 
 	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
@@ -447,6 +457,7 @@ Class Procs:
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
+
 /*
 	//distance checks are made by atom/proc/DblClick
 	if ((get_dist(src, user) > 1 || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
@@ -572,8 +583,7 @@ Class Procs:
 /obj/machinery/proc/emag(mob/user as mob)
 	// Disable emaggability. Note that some machines such as the Communications Computer might be emaggable multiple times.
 	machine_flags &= ~EMAGGABLE
-	new/obj/effect/sparks(get_turf(src))
-	playsound(loc,"sparks",50,1)
+	spark(src)
 
 
 /**
@@ -594,7 +604,7 @@ Class Procs:
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
 			emag(user)
-			return
+			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
@@ -778,7 +788,7 @@ Class Procs:
 			scan = null
 
 /obj/machinery/proc/is_operational()
-	return !(stat & (NOPOWER|BROKEN|MAINT))
+	return !(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 
 
 /obj/machinery/proc/setOutputLocation(user)
