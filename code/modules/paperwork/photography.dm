@@ -471,10 +471,9 @@
 
 		printpicture(user, I, "You can't see a thing.", flag)
 		return
-
 	var/mobs = ""
 	var/list/seen
-	if(!isAI(user)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
+	if(!isAI(user) && !istype(user.client.eye, /obj/item/device/camera_bug)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
 		if(user.client)		//To make shooting through security cameras possible
 			seen = get_hear(world.view, user.client.eye) //To make shooting through security cameras possible
 			// To make shooting through the tgui cameras possible
@@ -486,7 +485,10 @@
 		else
 			seen = get_hear(world.view, user)
 	else
-		seen = get_hear(world.view, target)
+		if(istype(user.client.eye, /obj/item/device/camera_bug))
+			seen = get_hear(world.view, get_turf(user.client.eye))
+		else
+			seen = get_hear(world.view, target)
 
 	var/list/turfs = list()
 	for(var/turf/T in range(round(photo_size * 0.5), target))
@@ -699,7 +701,7 @@
 			on = TRUE
 
 /obj/item/device/camera/remote_attack(atom/target, mob/user, atom/movable/eye)
-	if(istype(eye, /obj/machinery/camera))
+	if(istype(eye, /obj/machinery/camera) || istype(user.client.eye, /obj/item/device/camera_bug))
 		return afterattack(target, user) //Allow taking photos when looking through cameras
 
 /obj/item/device/camera/silicon/proc/toggle_camera_mode(var/mob/living/silicon/S = null)
