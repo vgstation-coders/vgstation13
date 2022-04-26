@@ -255,7 +255,7 @@
 			var/obj/item/beacon/I = locate() in outturf
 			if(I && I.emagged) // If safety checks are off on beacons.
 				for(var/mob/living/L in outturf)
-					if(L != ourself) // Don't get ourselves
+					if(L != ourself && ourself.lying == L.lying) // Don't get ourselves or mobs lying down while we aren't, or vice versa
 						if(L.size <= ourself.size) // If the same size as us or smaller
 							add_attacklogs(L,ourself,"has been telefragged by", admin_warn = 1)
 							ourself.visible_message("<span class='danger'>[ourself] collides with [L] during teleportation and mangles them to bits!</span>","<span class='danger'>You collide with [L] during teleportation and mangle them to bits!</span>","<span class='danger'>You hear squelching noises below you.</span>")
