@@ -40,13 +40,8 @@ var/global/list/camera_bugs = list()
 		user.unset_machine()
 		return
 
-/obj/item/device/handtv/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/device/camera/) && current)
-		I.afterattack(current, user)
-
-
 /obj/item/device/handtv/check_eye(var/mob/user as mob)
-	if ( loc != user || user.get_active_hand() != src || user.incapacitated() || user.blinded || !current || !current.active )
+	if ( loc != user || !(user.get_active_hand() == src || user.get_inactive_hand() == src) || user.incapacitated() || user.blinded || !current || !current.active )
 		return null
 	user.reset_view(current)
 	return 1

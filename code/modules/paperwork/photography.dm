@@ -471,12 +471,9 @@
 
 		printpicture(user, I, "You can't see a thing.", flag)
 		return
-	var/obj/item/device/camera_bug/camera_bug_pass
-	var/bug_check = 0
 	var/mobs = ""
 	var/list/seen
-	var/atom/bug_pass
-	if(!isAI(user) && !istype(target, /obj/item/device/camera_bug)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
+	if(!isAI(user) && !istype(user.client.eye, /obj/item/device/camera_bug)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
 		if(user.client)		//To make shooting through security cameras possible
 			seen = get_hear(world.view, user.client.eye) //To make shooting through security cameras possible
 			// To make shooting through the tgui cameras possible
@@ -488,19 +485,13 @@
 		else
 			seen = get_hear(world.view, user)
 	else
-		if(istype(target, /obj/item/device/camera_bug))
-			camera_bug_pass = target
-			seen = get_hear(world.view, camera_bug_pass.placed_atom)
-			bug_check = 1
+		if(istype(user.client.eye, /obj/item/device/camera_bug))
+			seen = get_hear(world.view, get_turf(user.client.eye))
 		else
 			seen = get_hear(world.view, target)
 
 	var/list/turfs = list()
-	if(bug_check)
-		bug_pass = camera_bug_pass.placed_atom
-	else
-		bug_pass = target
-	for(var/turf/T in range(round(photo_size * 0.5), bug_pass))
+	for(var/turf/T in range(round(photo_size * 0.5), target))
 		if(T in seen)
 			if(isAI(user) && !cameranet.checkTurfVis(T))
 				continue
@@ -512,7 +503,7 @@
 	var/icon/temp = get_base_photo_icon()
 
 	temp.Blend("#000", ICON_OVERLAY)
-	temp.Blend(camera_get_icon_deluxe(turfs, bug_pass), ICON_OVERLAY)
+	temp.Blend(camera_get_icon_deluxe(turfs, target), ICON_OVERLAY)
 
 	if(!issilicon(user))
 		printpicture(user, temp, mobs, flag)
@@ -694,9 +685,10 @@
 
 /obj/item/device/camera/afterattack(atom/target, mob/user, flag)
 	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc)))
-		if(!istype(target, /obj/item/device/camera_bug))
-			return
+		return
+
 	captureimage(target, user, flag)
+
 	playsound(loc, "polaroid", 75, 1, -3)
 
 	pictures_left--
@@ -709,7 +701,7 @@
 			on = TRUE
 
 /obj/item/device/camera/remote_attack(atom/target, mob/user, atom/movable/eye)
-	if(istype(eye, /obj/machinery/camera))
+	if(istype(eye, /obj/machinery/camera) || istype(user.client.eye, /obj/item/device/camera_bug))
 		return afterattack(target, user) //Allow taking photos when looking through cameras
 
 /obj/item/device/camera/silicon/proc/toggle_camera_mode(var/mob/living/silicon/S = null)
