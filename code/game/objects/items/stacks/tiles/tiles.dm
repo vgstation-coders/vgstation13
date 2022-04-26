@@ -14,9 +14,8 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
-	var/active
-	var/sheet_type = /obj/item/stack/sheet/metal
 	material = "metal"
+	var/active
 
 /obj/item/stack/tile/metal/New(var/loc, var/amount=null)
 	. = ..()
@@ -179,5 +178,4 @@
 	melt_temperature = MELTPOINT_PLASMA
 	throwforce = 15
 	sheet_type = /obj/item/stack/sheet/plasteel
-
 	material = "plasteel"
