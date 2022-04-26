@@ -11,7 +11,17 @@
 	var/selected_sound = "sound/items/bikehorn.ogg"
 	var/shiftpitch = 1
 	var/volume = 50
+	var/emagged = 0
 
+	var/list/sound_list_emagged = list(
+	"BWOINK" = "selected_sound=sound/effects/adminhelp.ogg&shiftpitch=0&volume=100",
+	"Discord" = "selected_sound=sound/effects/Discord Notification.mp3&shiftpitch=0&volume=50",
+	"Blob Pulse" = "selected_sound=sound/effects/blob_pulse.ogg&shiftpitch=1&volume=100",
+	"Conversion" = "selected_sound=sound/effects/convert_start.ogg&shiftpitch=1&volume=50",
+	"Absorb" = "selected_sound=sound/effects/lingabsorbs.ogg&shiftpitch=1&volume=100",
+	"Energy Sword" = "selected_sound=sound/weapons/blade1.ogg&shiftpitch=1&volume=100"
+	)
+	
 	var/list/sound_list = list( //How I would like to add tabbing to make this not as messy, but BYOND doesn't like that.
 	"Honk" = "selected_sound=sound/items/bikehorn.ogg&shiftpitch=1&volume=50",
 	"Applause" = "selected_sound=sound/effects/applause.ogg&shiftpitch=1&volume=65",
@@ -67,6 +77,20 @@
 		M.playsound_local(get_turf(src), selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 		//to_chat(M, selected_sound) //this doesn't actually go to their chat very much at all.
+
+/obj/item/device/soundsynth/emag_act(mob/user)
+	if(!emagged)
+		emagged = 1
+		sound_list = sound_list_emagged
+		selected_sound = "sound/effects/adminhelp.ogg"
+		spark(src,5,FALSE)
+	else
+		playsound(src, "sound/machines/WXP_error.ogg",25)
+
+/obj/item/device/soundsynth/examine(mob/user)
+	..()
+	if(emagged)
+		to_chat(user, "<span class='warning'>ERR%_m(mo4y čorr˘pt+d</span>")
 
 /obj/item/device/soundsynth/AltClick()
 	if(!usr.incapacitated() && Adjacent(usr))
