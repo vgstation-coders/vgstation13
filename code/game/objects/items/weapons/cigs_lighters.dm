@@ -638,7 +638,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/trash/cigbutt/bugged
 	var/obj/item/device/radio/cigbug
-	..()
 
 /obj/item/trash/cigbutt/bugged/New()
 	..()
