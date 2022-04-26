@@ -531,7 +531,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/spaceportbutt
 
 /obj/item/clothing/mask/cigarette/bugged //transmits voice to the detective's cigarette pack when turned into a butt
-	..()
 	type_butt = /obj/item/trash/cigbutt/bugged
 
 /obj/item/clothing/mask/cigarette/bugged/examine(mob/user)
