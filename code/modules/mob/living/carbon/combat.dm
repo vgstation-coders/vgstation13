@@ -163,8 +163,7 @@
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
 			tackleGetHurt()
-			if(Obstacle.tackled(src))
-				Obstacle.emag_act()
+			Obstacle.tackled(src)
 
 /mob/living/carbon/proc/tackleGetHurt(var/hurtAmount = 0, var/knockAmount = 0, var/hurtSound = "trayhit")
 	if(!hurtAmount)
