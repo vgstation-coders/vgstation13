@@ -109,7 +109,7 @@
 "hx" = (/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/turret_protected/vault/mothership_lab/research)
 "hy" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/turret_protected/vault/mothership_lab/research)
 "hC" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
-"hF" = (/obj/machinery/light/small/broken{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
+"hF" = (/obj/machinery/light/small/broken{dir = 4},/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin/smg{dir = 8},/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
 "hG" = (/obj/structure/bed/roller,/obj/effect/landmark/corpse/vox/spaceraider,/obj/effect/decal/cleanable/blood{basecolor = "#2299FC"; blood_color = "#2299FC"; icon_state = "floor6"},/obj/item/weapon/gun/projectile/shotgun/pump/combat,/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
 "hH" = (/turf/simulated/floor{dir = 1; icon_state = "whitegreen"},/area/turret_protected/vault/mothership_lab/research)
 "hJ" = (/mob/living/simple_animal/hostile/necro/zombie/putrid,/turf/simulated/floor/plating,/area/turret_protected/vault/mothership_lab/research)
