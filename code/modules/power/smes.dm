@@ -15,6 +15,11 @@ var/list/smes_list = list()
 
 	starting_terminal = 1
 
+	hack_abilities = list(
+		/datum/malfhack_ability/destroy_lights,
+		/datum/malfhack_ability/oneuse/overload_loud,
+	)
+
 /obj/machinery/power/battery/smes/pristine
 	charge = 0
 

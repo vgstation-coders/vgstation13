@@ -182,7 +182,7 @@
 
 	var/force_jaunt = FALSE
 
-/obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup)
+/obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup, var/mob/activator)
 	..()
 	if (!user && !packup && !force_jaunt)
 		qdel(src)
@@ -206,6 +206,7 @@
 				M.apply_vision_overrides()
 				M.flags |= INVULNERABLE
 	if (packup)
+		var/list/noncult_victims = list()
 		for (var/atom/movable/AM in packup)
 			if (AM.anchored)
 				if (ismob(AM))
@@ -218,6 +219,8 @@
 				if (C.occult_muted())
 					muted = TRUE
 					to_chat(C, "<span class='warning'>The holy energies upon your body repel the blood jaunt.</span>")
+				if(!iscultist(C))
+					noncult_victims += C
 			if (!AM.anchored && !muted)
 				AM.forceMove(src)
 				packed.Add(AM)
@@ -227,6 +230,8 @@
 					M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
 					M.apply_vision_overrides()
 					M.flags |= INVULNERABLE
+		if(noncult_victims.len > 0 && activator)
+			TriggerCultRitual(/datum/bloodcult_ritual/spirited_away, activator, list("victims" = noncult_victims))
 	starting = loc
 	target = destination
 	initial_pixel_x = pixel_x
@@ -624,6 +629,12 @@ var/bloodstone_backup = 0
 /obj/effect/stun_indicator/singularity_act()
 	return
 
+///////////////////////////////////OFFERINGS EFFECT////////////////////////////
+/obj/effect/cult_offerings
+	anchored = 1
+	mouse_opacity = 0
+	icon_state = "offerings"
+
 ///////////////////////////////////THROWN DAGGER TRAP////////////////////////////
 
 /obj/effect/rooting_trap/bloodnail
@@ -652,6 +663,7 @@ var/bloodstone_backup = 0
 	var/list/dancers = list()
 
 /obj/effect/cult_ritual/dance/New(var/turf/loc, var/mob/first_dancer)
+	..()
 	if (!first_dancer)
 		qdel(src)
 		return
@@ -684,6 +696,8 @@ var/bloodstone_backup = 0
 		sleep(6)
 
 /obj/effect/cult_ritual/dance/proc/add_dancer(var/mob/dancer)
+	if(dancer in dancers)
+		return
 	dancers += dancer
 
 /obj/effect/cult_ritual/dance/proc/dance_step()

@@ -32,6 +32,13 @@
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/dropper)
 
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag,
+	)
+
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/microwave,\
 		/obj/item/weapon/stock_parts/micro_laser,\
@@ -67,7 +74,7 @@
 				acceptable_items |= item
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
-
+		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)   
 /*******************
 *   Part Upgrades
 ********************/
@@ -227,6 +234,8 @@
 	if(isAdminGhost(user))
 		user.set_machine(src)
 		interact(user)
+		return
+	..()
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -358,7 +367,7 @@
 ************************************/
 
 /obj/machinery/microwave/proc/cook()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(operating)
 		return
@@ -462,7 +471,7 @@
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
-		if (stat & (NOPOWER|BROKEN))
+		if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		use_power(500)
 		sleep(10/speed_multiplier)
@@ -577,7 +586,7 @@
 	return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return ..()
 	if(!anchored)
 		return ..()

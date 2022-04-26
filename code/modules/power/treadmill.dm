@@ -29,6 +29,11 @@
 		/obj/item/weapon/stock_parts/console_screen
 	)
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+	
 /obj/machinery/power/treadmill/New()
 	..()
 	setup_border_dummy()
@@ -80,6 +85,8 @@
 						to_chat(runner,"<span class='warning'>Your legs really hurt!</span>")
 						runner.apply_damage(5, BRUTE, LIMB_LEFT_LEG)
 						runner.apply_damage(5, BRUTE, LIMB_RIGHT_LEG)
+					else
+						//do nothing
 				runner.bodytemperature = max(T0C + 100,cached_temp)
 	else
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")

@@ -513,17 +513,27 @@
 	else
 		..()
 
-/obj/structure/closet/crate/secure/proc/togglelock(mob/user)
-	if(src.allowed(user))
-		src.locked = !src.locked
-		if (src.locked)
-			to_chat(user, "<span class='notice'>You lock \the [src].</span>")
-			update_icon()
+/obj/structure/closet/crate/secure/proc/togglelock(atom/A)
+	if(istype(A,/mob))
+		var/mob/user = A
+		if(src.allowed(user))
+			src.locked = !src.locked
+			if (src.locked)
+				to_chat(user, "<span class='notice'>You lock \the [src].</span>")
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You unlock [src].</span>")
+				update_icon()
 		else
-			to_chat(user, "<span class='notice'>You unlock [src].</span>")
+			to_chat(user, "<span class='notice'>Access Denied.</span>")
+	else if(istype(A,/obj/machinery/logistics_machine/crate_opener))
+		var/obj/machinery/logistics_machine/crate_opener/N = A
+		if(can_access(N.access,req_access,req_access))
+			src.locked = !src.locked
 			update_icon()
-	else
-		to_chat(user, "<span class='notice'>Access Denied.</span>")
+			return 1
+		else
+			return 0
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
@@ -643,32 +653,27 @@
 
 /obj/structure/closet/crate/ex_act(severity)
 	switch(severity)
-		if(1.0)
-			for(var/obj/O in src.contents)
-				qdel(O)
+		if(1)
 			qdel(src)
-			return
-		if(2.0)
-			broken = 1
+		if(2)
+			broken = TRUE
 			if(has_electronics)
 				if (prob(50))
 					dump_electronics()
 				else
 					qdel(electronics)
-			for(var/obj/O in src.contents)
+			for(var/atom/movable/thing in contents)
 				if(prob(50))
-					qdel(O)
+					qdel(thing)
+			dump_contents()
 			qdel(src)
-			return
-		if(3.0)
-			if (prob(50))
-				broken = 1
+		if(3)
+			if(prob(50))
+				broken = TRUE
 				if(has_electronics)
 					dump_electronics()
+				dump_contents()
 				qdel(src)
-			return
-		else
-	return
 
 /obj/structure/closet/crate/secure/weapon/experimental
 	name = "Experimental Weapons Crate"

@@ -48,20 +48,6 @@
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
 	M.unarmed_attack_mob(src)
 
-/* Old Station Map Stuff
-/mob/living/carbon/proc/update_minimap()
-	var/obj/item/device/pda/pda_device = machine
-	if(machine && istype(pda_device))
-		var/turf/user_loc = get_turf(src)
-		var/turf/pda_loc = get_turf(pda_device)
-		if(get_dist(user_loc,pda_loc) <= 1)
-			if(pda_device.mode == PDA_APP_STATIONMAP)
-				pda_device.attack_self(src)
-		else
-			unset_machine()
-			src << browse(null, "window=pda")
-*/
-
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)
 		if(prob(40))
@@ -136,7 +122,7 @@
 		Knockdown(incapacitation_duration)
 
 	visible_message( \
-		"<span class='warning'>[src] was shocked by the [source]!</span>", \
+		"<span class='warning'>[src] was shocked by \the [source]!</span>", \
 		"<span class='danger'>You feel a powerful shock course through your body!</span>", \
 		"<span class='warning'>You hear a heavy electrical crack.</span>", \
 		"<span class='notice'>[src] starts raving!</span>", \

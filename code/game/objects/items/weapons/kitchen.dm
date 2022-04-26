@@ -189,6 +189,7 @@
 	sharpness_flags = SHARP_TIP
 	sharpness = 0.6
 	melt_temperature = MELTPOINT_STEEL
+	surgerysound = 'sound/items/retractor.ogg'
 
 /obj/item/weapon/kitchen/utensil/fork/New()
 	..()
@@ -343,6 +344,7 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	shrapnel_amount = 0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -391,6 +393,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("cleaves", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	surgerysound = 'sound/items/hatchetsurgery.ogg'
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	name = "meat cleaver"

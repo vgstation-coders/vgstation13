@@ -181,7 +181,7 @@
 		for(var/datum/organ/external/affecting in H.organs)
 			if(affecting.heal_damage(5, 5)) //5 brute and burn healed per bash. Not wonderful, but it can help if someone has Alkyzine handy
 				H.UpdateDamageIcon()
-	return //Nothing else to add
+	H.immune_system.ApplyAntipathogenics(100, list(ANTIGEN_CULT), 5)  // work towards curing curses too
 
 //We're done working on mobs, let's check if we're blessing something else
 /obj/item/weapon/storage/bible/afterattack(var/atom/A, var/mob/user, var/proximity_flag)

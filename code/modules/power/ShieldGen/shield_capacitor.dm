@@ -136,7 +136,7 @@
 
 /obj/machinery/shield_capacitor/kick_act()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		active = FALSE
 		return
 	if(prob(50))

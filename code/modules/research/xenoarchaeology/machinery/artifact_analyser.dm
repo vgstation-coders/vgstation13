@@ -62,7 +62,7 @@ var/anomaly_report_num = 0
 /obj/machinery/artifact_analyser/interact(mob/user)
 	if(..())
 		return
-	if(stat & (NOPOWER|BROKEN) || get_dist(src, user) > 1)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || get_dist(src, user) > 1)
 		user.unset_machine(src)
 		return
 
@@ -144,7 +144,7 @@ var/anomaly_report_num = 0
 			if (!A.analyzed)
 				A.analyzed = TRUE
 				if (istype(A.primary_effect) && A.primary_effect.triggered)
-					score["artifacts"]++
+					score.artifacts++
 
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)
@@ -196,7 +196,7 @@ var/anomaly_report_num = 0
 	updateDialog()
 
 //hardcoded responses, oh well
-/obj/machinery/artifact_analyser/proc/get_scan_info(var/atom/movable/AM)
+/proc/get_scan_info(var/atom/movable/AM)
 	switch(AM.type)
 		if(/obj/machinery/auto_cloner)
 			return "Automated cloning pod - appears to rely on organic nanomachines with a self perpetuating \
@@ -211,7 +211,7 @@ var/anomaly_report_num = 0
 			rock/plastcrete composite."
 		if(/obj/structure/bed/chair/vehicle/gigadrill)
 			return "An old and dusty vehicle with a mining drill - structure composed of titanium-carbide alloy, with tip and drill lines edged in an alloy of diamond and plasma."
-		if(/obj/structure/cult_legacy/pylon)
+		if(/obj/structure/cult/pylon)
 			return "Tribal pylon - Item resembles statues/emblems built by cargo cult civilisations to honour energy systems from post-warp civilisations."
 		if(/obj/mecha/working/hoverpod)
 			return "Vacuum capable repair pod - Item is a remarkably intact single man repair craft capable of flight in a vacuum. Outer shell composed of primarily \

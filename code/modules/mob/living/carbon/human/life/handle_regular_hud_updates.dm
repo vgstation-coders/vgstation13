@@ -64,6 +64,8 @@
 					see_in_dark = 3
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 				if("shadow")
+					if(client)
+						client.darkness_planemaster.alpha = 100
 					see_in_dark = 8
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 		if(M_THERMALS in mutations)

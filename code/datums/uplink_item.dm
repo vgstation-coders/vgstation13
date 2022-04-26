@@ -300,6 +300,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
 
+/datum/uplink_item/stealthy_weapons/framecart
+	name = "F.R.A.M.E PDA Cartridge"
+	desc = "When inserted into a PDA, gives you four charges allowing you to create a fake uplink on PDAs of crewmembers who have messaging enabled. The fake uplinks will use the same unlock code as your uplink if applicable, or else generate a new one. TC can also be inserted into the cartridge to send to the PDA"
+	item = /obj/item/weapon/cartridge/syndifake
+	cost = 6
+
 /datum/uplink_item/stealthy_weapons/knuckles
 	name = "Spiked Knuckles"
 	desc = "A pair of spiked metal knuckles that can be worn directly on your hands in place of gloves, dramatically increasing damage done by your punches without giving any obvious signs to observers unless they inspect you more closely."
@@ -523,7 +529,7 @@ var/list/uplink_items = list()
 	cost = 1
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
-	
+
 /datum/uplink_item/device_tools/radio_jammer
 	name = "Radio Jammer"
 	desc = "A device that disrupts all radio communication in nearby area. Guaranteed radio silence at point blank range, but effectiveness decreases with range. Requires a power cell for operation. Batteries and screwdriver not included."

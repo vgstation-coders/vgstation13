@@ -32,6 +32,8 @@
 	var/allow_admin_ooccolor = 0		// Allows admins with relevant permissions to have their own ooc colour
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
+	var/toggle_maps = 0					// Change from votable maps = 0 to all compiled maps = 1
+	var/toggle_vote_method = 1			// Toggle voting methods: Weighted = 1, Majority = 2, Persistent = 3, Random = 4
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives
@@ -72,6 +74,8 @@
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
+	var/cargo_forwarding_on_roundstart = 0
+	var/cargo_forwarding_amount_override = 0
 
 
 	var/multiz_render_cap = 8			//how far down open spaces will render
@@ -173,10 +177,7 @@
 	var/emag_recharge_rate = 0
 	var/emag_recharge_ticks = 0
 
-	var/map_voting = 0
 	var/renders_url = ""
-
-	var/default_ooc_color = "#002eb8"
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
@@ -202,9 +203,6 @@
 	var/discord_url
 	var/discord_password
 	var/kill_phrase = "All your bases are belong to us."
-
-	// Weighted Votes
-	var/weighted_votes = 0
 
 	// Dynamic Mode
 	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
@@ -274,6 +272,12 @@
 
 				if ("jobs_have_minimal_access")
 					config.jobs_have_minimal_access = 1
+
+				if ("cargo_forwarding_on_roundstart")
+					cargo_forwarding_on_roundstart = 1
+
+				if ("cargo_forwarding_amount_override")
+					cargo_forwarding_amount_override = text2num(value)
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1
@@ -352,7 +356,6 @@
 
 				if ("allow_vote_mode")
 					config.allow_vote_mode = 1
-
 				if ("allow_admin_jump")
 					config.allow_admin_jump = 1
 
@@ -598,8 +601,6 @@
 					vgws_ip = value
 				if("poll_results_url")
 					poll_results_url = value
-				if("map_voting")
-					map_voting = 1
 				if("renders_url")
 					renders_url = value
 				if("mommi_static")
@@ -634,8 +635,6 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
-				if("weighted_votes")
-					weighted_votes = TRUE
 
 				if ("kill_phrase")
 					kill_phrase = value

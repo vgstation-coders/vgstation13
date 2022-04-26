@@ -594,7 +594,7 @@
 			if(O.invisibility == 101)
 				O.singularity_act()
 	ChangeTurf(get_underlying_turf())
-	score["turfssingulod"]++
+	score.turfssingulod++
 	return(2)
 
 //Return a lattice to allow catwalk building

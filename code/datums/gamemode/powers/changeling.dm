@@ -1,5 +1,3 @@
-
-
 /datum/power/changeling
 	var/allowduringlesserform = 0
 	var/allowduringhorrorform = 1
@@ -65,7 +63,7 @@
 /datum/power/changeling/horror_form
 	name = "Horror Form"
 	desc = "This costly evolution allows us to transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
-	cost = 10
+	cost = 9
 	spellpath = /spell/changeling/horrorform
 	allowduringhorrorform = 0
 
@@ -104,7 +102,7 @@
 /datum/power/changeling/blind_sting
 	name = "Blind Sting"
 	desc = "We silently sting a human, completely blinding them for a short time."
-	cost = 2
+	cost = 1
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/sting/blind
 
@@ -120,7 +118,7 @@
 	name = "Mimic Voice"
 	desc = "We shape our vocal glands to sound like a desired voice."
 	helptext = "Will turn your voice into the name that you enter."
-	cost = 3
+	cost = 2
 	spellpath = /spell/changeling/voicechange
 	allowduringhorrorform = 0
 
@@ -128,7 +126,7 @@
 	name = "Extract DNA"
 	desc = "We stealthily sting a target and extract the DNA from them."
 	helptext = "Will give you the DNA of your target, allowing you to transform into them. Does not count towards absorb objectives."
-	cost = 3
+	cost = 2
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/sting/dnaextract
 
@@ -136,20 +134,20 @@
 	name = "Transformation Sting"
 	desc = "We silently sting a human, injecting a retrovirus that forces them to transform into another."
 	helptext = "Does not provide a warning to others. The victim will transform much like a changeling would."
-	cost = 3
+	cost = 2
 	spellpath = /spell/changeling/sting/transformation
 
 /datum/power/changeling/paralysis_sting
 	name = "Paralysis Sting"
 	desc = "We silently sting a human, paralyzing them for a short time."
-	cost = 4
+	cost = 3
 	spellpath = /spell/changeling/sting/paralyse
 
 /datum/power/changeling/LSDSting
 	name = "Hallucination Sting"
 	desc = "We evolve the ability to sting a target with a powerful hallucinogen."
 	helptext = "The target does not notice they have been stung.  The effect occurs after 30 to 60 seconds."
-	cost = 3
+	cost = 2
 	spellpath = /spell/changeling/sting/hallucinate
 
 /datum/power/changeling/unfat_sting
@@ -168,7 +166,7 @@
 
 /datum/power/changeling/boost_range
 	name = "Boost Range"
-	desc = "We evolve the ability to shoot our stingers at humans, with some preperation."
+	desc = "We evolve the ability to shoot our stingers at humans, with some preparation."
 	helptext = "Our throat adjusts to launch the stinger."
 	cost = 2
 
@@ -184,14 +182,14 @@
 	name = "Epinephrine sacs"
 	desc = "We evolve additional sacs of adrenaline throughout our body."
 	helptext = "Gives the ability to instantly recover from stuns.  High chemical cost."
-	cost = 4
+	cost = 3
 	spellpath = /spell/changeling/unstun
 
 /datum/power/changeling/ChemicalSynth
 	name = "Rapid Chemical-Synthesis"
 	desc = "We evolve new pathways for producing our necessary chemicals, permitting us to naturally create them faster."
 	helptext = "Doubles the rate at which we naturally recharge chemicals."
-	cost = 4
+	cost = 2
 
 /datum/power/changeling/ChemicalSynth/add_power(var/datum/role/R)
 	. = ..()
@@ -205,7 +203,7 @@
 	name = "Advanced Chemical-Synthesis"
 	desc = "We evolve new pathways for producing our necessary chemicals, permitting us to naturally create them faster."
 	helptext = "Doubles the rate at which we naturally recharge chemicals."
-	cost = 8
+	cost = 2
 
 /datum/power/changeling/AdvChemicalSynth/add_power(var/datum/role/R)
 	. = ..()
@@ -219,7 +217,7 @@
 	name = "Engorged Chemical Glands"
 	desc = "Our chemical glands swell, permitting us to store more chemicals inside of them."
 	helptext = "Allows us to store an extra 25 units of chemicals."
-	cost = 4
+	cost = 1
 
 /datum/power/changeling/EngorgedGlands/add_power(var/datum/role/R)
 	. = ..()
@@ -232,7 +230,7 @@
 /datum/power/changeling/DigitalCamoflague
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
-	cost = 3
+	cost = 2
 	allowduringlesserform = 1
 	allowduringhorrorform = 0
 
@@ -244,31 +242,29 @@
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
 	C.digitalcamo = 1
 
-
-
 /datum/power/changeling/rapidregeneration
 	name = "Rapid Regeneration"
 	desc = "We evolve the ability to rapidly regenerate, negating the need for stasis."
 	helptext = "Heals a moderate amount of damage every tick."
-	cost = 8
+	cost = 5
 	spellpath = /spell/changeling/rapidregen
 
 /datum/power/changeling/armblade
 	name = "Arm Blade"
 	desc = "We transform one of our arms into an organic blade that can cut through flesh and bone."
 	helptext = "The blade can be retracted by using the same spell used to manifest it. It has a chance to deflect projectiles."
-	cost = 5
+	cost = 3
 	spellpath = /spell/changeling/armblade
-
-// /datum/power/changeling/chemsting
-// 	name = "Chemical Sting"
-// 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to inject into another lifeform or ourselves if needs be."
-// 	helptext = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
-// 	cost = 1
-// 	spellpath = /obj/item/verbs/changeling/proc/changeling_chemsting
-
-// /datum/power/changeling/chemspit
-// 	name = "Chemical Spit"
+/*
+/datum/power/changeling/chemsting
+	name = "Chemical Sting"
+	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to inject into another lifeform or ourselves if needs be."
+	helptext = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
+	cost = 1
+	spellpath = /spell/changeling/changeling_chemsting
+*/
+///datum/power/changeling/chemspit
+//	name = "Chemical Spit"
 // 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to fire like projectile venom in our facing direction."
 // 	helptext = "Handy for firing acid at enemies, providing we have learned such chemicals."
 // 	cost = 1

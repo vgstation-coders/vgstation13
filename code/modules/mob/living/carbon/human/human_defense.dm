@@ -312,15 +312,15 @@ emp_act
 			drugged_message = "<span class='info'>The tooth fairy takes some of \the [src]'s teeth out!</span>",\
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
 
-/mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage) //When our foot is hurt, for example by kicking something stationary
+/mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage, var/datum/organ/external/ourfoot) //When our foot is hurt, for example by kicking something stationary
 	//note: as per can_kick() in human.dm, kicking requires both feet intact
 	if(shoes && istype(shoes, /obj/item/clothing/shoes))
 		var/obj/item/clothing/shoes/S = shoes
 		damage = S.impact_dampen(source, damage)
 	if(!damage)
 		return FALSE
-	var/chosen_foot = pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
-	var/datum/organ/external/ourfoot = get_organ(chosen_foot)
+	if(!ourfoot)
+		ourfoot = get_organ(pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT))
 	apply_damage(damage, BRUTE, ourfoot)
 	return TRUE
 
@@ -419,12 +419,13 @@ emp_act
 	var/b_loss = null
 	var/f_loss = null
 	var/gotarmor = clamp(getarmor(null, "bomb"),0,100)
+	var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
 	switch (severity)
 		if (BLOB_ACT_STRONG)
 			b_loss += 300
 			if(!prob(gotarmor)) //Percent chance equal to their armor resist to not gib instantly.
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				gib()
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
@@ -441,13 +442,13 @@ emp_act
 
 		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				gib()
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 
 			else if (stat == 2 && !client)
 				gibs(loc, virus2)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				qdel(src)
 				return
 
@@ -529,7 +530,7 @@ emp_act
 			if(LIMB_LEFT_ARM)
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
 	if(update)
-		add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity]", admin_warn = TRUE)
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity]", admin_warn = msg_admin)
 		UpdateDamageIcon()
 
 

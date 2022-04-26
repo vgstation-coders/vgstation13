@@ -1742,6 +1742,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	mech_flags = MECH_SCAN_FAIL	//Nip that in the bud
 	var/static/list/illegalChems = list(	//Just a bad idea
 		ADMINORDRAZINE,
+		PROCIZINE,
 		BLOCKIZINE,
 		AUTISTNANITES,
 		XENOMICROBES,

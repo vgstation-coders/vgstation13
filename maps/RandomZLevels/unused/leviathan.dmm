@@ -24,7 +24,7 @@
 "ax" = (/turf/unsimulated/mineral/phazon,/area/mine/explored)
 "ay" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/mine/unexplored)
 "az" = (/turf/simulated/wall/r_wall,/area/mine/explored)
-"aA" = (/obj/item/weapon/gun/energy/laser/captain,/obj/structure/cult_legacy/pylon,/obj/effect/rune,/turf/simulated/floor/engine/cult,/area/mine/explored)
+"aA" = (/obj/item/weapon/gun/energy/laser/captain,/obj/structure/cult/pylon,/obj/effect/rune,/turf/simulated/floor/engine/cult,/area/mine/explored)
 "aB" = (/obj/effect/decal/remains/xeno,/obj/item/candle{desc = "This strange candle is made of some mystery wax. It never seems to burn out."; icon_state = "candle1_lit"; lit = 1; name = "Blood Candle"; pixel_x = 2; wax = 50000},/turf/simulated/floor/engine/cult,/area/mine/explored)
 "aC" = (/obj/effect/decal/cleanable/blood{icon_state = "floor6"},/turf/simulated/floor/engine/cult,/area/mine/explored)
 "aD" = (/turf/unsimulated/mineral/random,/area/mine/explored)

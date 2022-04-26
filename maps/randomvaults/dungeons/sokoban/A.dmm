@@ -1,24 +1,286 @@
-"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
-"b" = (/turf/unsimulated/wall/bomberman,/area/vault/sokoban/level)
-"c" = (/obj/structure/lattice,/turf/unsimulated/wall/other,/area/vault/sokoban/level)
-"d" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor,/area/vault/sokoban/level)
-"e" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor,/area/vault/sokoban/level)
-"f" = (/turf/simulated/floor,/area/vault/sokoban/level)
-"g" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor,/area/vault/sokoban/level)
-"h" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor,/area/vault/sokoban/level)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/wall/other,
+/area/vault/sokoban/level)
+"b" = (
+/turf/unsimulated/wall/bomberman,
+/area/vault/sokoban/level)
+"c" = (
+/obj/structure/lattice,
+/turf/unsimulated/wall/other,
+/area/vault/sokoban/level)
+"d" = (
+/obj/structure/ladder/sokoban/exit,
+/turf/simulated/floor,
+/area/vault/sokoban/level)
+"e" = (
+/obj/structure/ladder/sokoban/entrance,
+/turf/simulated/floor,
+/area/vault/sokoban/level)
+"f" = (
+/turf/simulated/floor,
+/area/vault/sokoban/level)
+"g" = (
+/obj/structure/sokoban_teleporter,
+/turf/simulated/floor,
+/area/vault/sokoban/level)
+"h" = (
+/obj/structure/closet/crate/sokoban,
+/turf/simulated/floor,
+/area/vault/sokoban/level)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaa
-abbbbbbbbbbbbbbbc
-abdbefffbbbffffba
-abgbbfhhffffhffba
-abgbbffhhbfhfhfba
-abgbbffffbfffffba
-abgbbbbbbbhbbbbba
-abgbbbbbbffffffba
-abgbbbbbbffffffba
-abffgggghhhhfffba
-abffbbbbbffffffba
-abbbbbbbbbbbbbbba
-aaaaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(3,1,1) = {"
+a
+b
+d
+g
+g
+g
+g
+g
+g
+f
+f
+b
+a
+"}
+(4,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+f
+f
+b
+a
+"}
+(5,1,1) = {"
+a
+b
+e
+b
+b
+b
+b
+b
+b
+g
+b
+b
+a
+"}
+(6,1,1) = {"
+a
+b
+f
+f
+f
+f
+b
+b
+b
+g
+b
+b
+a
+"}
+(7,1,1) = {"
+a
+b
+f
+h
+f
+f
+b
+b
+b
+g
+b
+b
+a
+"}
+(8,1,1) = {"
+a
+b
+f
+h
+h
+f
+b
+b
+b
+g
+b
+b
+a
+"}
+(9,1,1) = {"
+a
+b
+b
+f
+h
+f
+b
+b
+b
+h
+b
+b
+a
+"}
+(10,1,1) = {"
+a
+b
+b
+f
+b
+b
+b
+f
+f
+h
+f
+b
+a
+"}
+(11,1,1) = {"
+a
+b
+b
+f
+f
+f
+h
+f
+f
+h
+f
+b
+a
+"}
+(12,1,1) = {"
+a
+b
+f
+f
+h
+f
+b
+f
+f
+h
+f
+b
+a
+"}
+(13,1,1) = {"
+a
+b
+f
+h
+f
+f
+b
+f
+f
+f
+f
+b
+a
+"}
+(14,1,1) = {"
+a
+b
+f
+f
+h
+f
+b
+f
+f
+f
+f
+b
+a
+"}
+(15,1,1) = {"
+a
+b
+f
+f
+f
+f
+b
+f
+f
+f
+f
+b
+a
+"}
+(16,1,1) = {"
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+"}
+(17,1,1) = {"
+a
+c
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}

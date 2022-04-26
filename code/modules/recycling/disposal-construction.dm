@@ -285,7 +285,7 @@
 					switch(ptype)
 						if(9, 10)
 							var/obj/structure/disposalpipe/sortjunction/SortP = P
-							SortP.updatedir()
+							SortP.update_dir()
 						if(11, 12)
 							var/obj/structure/disposalpipe/wrapsortjunction/sort_P = P
 							sort_P.update_dir()

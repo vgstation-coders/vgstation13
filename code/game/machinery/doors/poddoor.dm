@@ -51,10 +51,6 @@ var/list/poddoors = list()
 
 /obj/machinery/door/poddoor/New()
 	. = ..()
-	if(density)
-		layer = closed_layer
-	else
-		layer = open_layer
 	poddoors += src
 
 /obj/machinery/door/poddoor/Destroy()
@@ -81,7 +77,7 @@ var/list/poddoors = list()
 	if(istype(C, /obj/item/weapon/melee/energy/sword/ninja))
 		attempt_slicing(user)
 	else if(iscrowbar(C) || istype(C, /obj/item/weapon/fireaxe) && C.wielded)
-		if(!operating && stat & NOPOWER)
+		if(!operating && (stat & (NOPOWER|FORCEDISABLE)))
 			spawn()
 				operating = TRUE
 				flick(openingicon, src)
@@ -95,6 +91,8 @@ var/list/poddoors = list()
 	return 0
 
 /obj/machinery/door/poddoor/open()
+	if(!density) //it's already open bro
+		return FALSE
 	if (operating == 1) //doors can still open when emag-disabled
 		return
 	if (!ticker)
@@ -123,6 +121,7 @@ var/list/poddoors = list()
 		return
 	playsound(loc, 'sound/machines/poddoor.ogg', 60, 1)
 	operating = 1
+	plane = closed_plane
 	layer = closed_layer
 	flick(closingicon, src)
 	icon_state = closedicon

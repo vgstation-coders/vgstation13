@@ -1,48 +1,427 @@
-"a" = (/turf/unsimulated/floor/snow,/area)
-"b" = (/obj/structure/reagent_dispensers/beerkeg{icon_state = "bloodkeg"},/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding1"},/turf/simulated/floor/wood,/area/vault/hotspring)
-"d" = (/obj/structure/closet/athletic_mixed,/turf/simulated/floor/beach/sand,/area/vault/hotspring)
-"e" = (/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding4"},/turf/simulated/floor/wood,/area/vault/hotspring)
-"g" = (/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding1"},/turf/simulated/floor/wood,/area/vault/hotspring)
-"j" = (/obj/item/weapon/reagent_containers/food/snacks/grown/orange{icon = 'icons/obj/hydroponics/orange.dmi'},/turf/unsimulated/beach/sandbar,/area/vault/hotspring)
-"k" = (/turf/unsimulated/floor/snow/cave,/area/vault/hotspring)
-"o" = (/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding3"},/turf/simulated/floor/wood,/area/vault/hotspring)
-"p" = (/obj/structure/reagent_dispensers/cauldron/barrel/wood,/turf/simulated/floor/beach/sand,/area/vault/hotspring)
-"q" = (/mob/living/simple_animal/capybara{dir = 4},/turf/unsimulated/beach/sandbar,/area/vault/hotspring)
-"r" = (/turf/simulated/floor/wood,/area/vault/hotspring)
-"s" = (/obj/structure/hanging_lantern{dir = 4},/turf/simulated/floor/beach/sand,/area/vault/hotspring)
-"u" = (/mob/living/simple_animal/capybara{icon_state = "capybara-rest"; lying = 1},/turf/unsimulated/beach/shallows,/area/vault/hotspring)
-"x" = (/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding5"},/mob/living/simple_animal/capybara{dir = 8},/turf/simulated/floor/wood,/area/vault/hotspring)
-"B" = (/mob/living/simple_animal/capybara,/turf/unsimulated/beach/shallows,/area/vault/hotspring)
-"C" = (/obj/structure/geyser/vent{icon_state = "geyser-sandy"; smoke_probability = 3},/turf/simulated/floor/beach/sand,/area/vault/hotspring)
-"F" = (/obj/item/weapon/reagent_containers/food/snacks/grown/orange{icon = 'icons/obj/hydroponics/orange.dmi'},/turf/unsimulated/beach/shallows,/area/vault/hotspring)
-"H" = (/mob/living/simple_animal/capybara{dir = 8},/turf/simulated/floor/beach/sand,/area/vault/hotspring)
-"I" = (/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding10"},/turf/simulated/floor/wood,/area/vault/hotspring)
-"J" = (/obj/structure/hanging_lantern,/turf/simulated/floor/wood,/area/vault/hotspring)
-"L" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/bahamamama{icon_state = "bahama_mama"; pixel_y = 8},/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding3"},/turf/simulated/floor/wood,/area/vault/hotspring)
-"M" = (/obj/structure/flora/ausbushes/reedbush,/turf/unsimulated/beach/sandbar,/area/vault/hotspring)
-"N" = (/turf/simulated/floor/beach/sand,/area/vault/hotspring)
-"O" = (/obj/machinery/door/mineral/wood/log,/turf/simulated/floor/wood,/area/vault/hotspring)
-"P" = (/turf/unsimulated/beach/sandbar,/area/vault/hotspring)
-"Q" = (/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding2"},/turf/simulated/floor/wood,/area/vault/hotspring)
-"T" = (/turf/unsimulated/beach/shallows,/area/vault/hotspring)
-"U" = (/obj/structure/reagent_dispensers/cauldron/barrel/wood,/obj/structure/hanging_lantern{dir = 1},/turf/simulated/floor/beach/sand,/area/vault/hotspring)
-"Y" = (/turf/unsimulated/wall/rock/ice,/area/vault/hotspring)
-"Z" = (/obj/effect/decal/warning_stripes{icon = 'icons/turf/floors.dmi'; icon_state = "wood_siding6"},/turf/simulated/floor/wood,/area/vault/hotspring)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/snow,
+/area)
+"b" = (
+/obj/structure/reagent_dispensers/beerkeg{
+	icon_state = "bloodkeg"
+	},
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding1"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"d" = (
+/obj/structure/closet/athletic_mixed,
+/turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"e" = (
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding4"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"g" = (
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding1"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"j" = (
+/obj/item/weapon/reagent_containers/food/snacks/grown/orange{
+	icon = 'icons/obj/hydroponics/orange.dmi'
+	},
+/turf/unsimulated/beach/sandbar,
+/area/vault/hotspring)
+"k" = (
+/turf/unsimulated/floor/snow/cave,
+/area/vault/hotspring)
+"o" = (
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding3"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"p" = (
+/obj/structure/reagent_dispensers/cauldron/barrel/wood,
+/turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"q" = (
+/mob/living/simple_animal/capybara{
+	dir = 4
+	},
+/turf/unsimulated/beach/sandbar,
+/area/vault/hotspring)
+"r" = (
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"s" = (
+/obj/structure/hanging_lantern{
+	dir = 4
+	},
+/turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"u" = (
+/mob/living/simple_animal/capybara{
+	icon_state = "capybara-rest";
+	lying = 1
+	},
+/turf/unsimulated/beach/shallows,
+/area/vault/hotspring)
+"x" = (
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding5"
+	},
+/mob/living/simple_animal/capybara{
+	dir = 8
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"B" = (
+/mob/living/simple_animal/capybara,
+/turf/unsimulated/beach/shallows,
+/area/vault/hotspring)
+"C" = (
+/obj/structure/geyser/vent{
+	icon_state = "geyser-sandy";
+	smoke_probability = 3
+	},
+/turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"F" = (
+/obj/item/weapon/reagent_containers/food/snacks/grown/orange{
+	icon = 'icons/obj/hydroponics/orange.dmi'
+	},
+/turf/unsimulated/beach/shallows,
+/area/vault/hotspring)
+"H" = (
+/mob/living/simple_animal/capybara{
+	dir = 8
+	},
+/turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"I" = (
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding10"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"J" = (
+/obj/structure/hanging_lantern,
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"L" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/bahamamama{
+	icon_state = "bahama_mama";
+	pixel_y = 8
+	},
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding3"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"M" = (
+/obj/structure/flora/ausbushes/reedbush,
+/turf/unsimulated/beach/sandbar,
+/area/vault/hotspring)
+"N" = (
+/turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"O" = (
+/obj/machinery/door/mineral/wood/log,
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"P" = (
+/turf/unsimulated/beach/sandbar,
+/area/vault/hotspring)
+"Q" = (
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding2"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
+"T" = (
+/turf/unsimulated/beach/shallows,
+/area/vault/hotspring)
+"U" = (
+/obj/structure/reagent_dispensers/cauldron/barrel/wood,
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/simulated/floor/beach/sand,
+/area/vault/hotspring)
+"Y" = (
+/turf/unsimulated/wall/rock/ice,
+/area/vault/hotspring)
+"Z" = (
+/obj/effect/decal/warning_stripes{
+	icon = 'icons/turf/floors.dmi';
+	icon_state = "wood_siding6"
+	},
+/turf/simulated/floor/wood,
+/area/vault/hotspring)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaa
-aaaYYaaaaaaaaaa
-aaYYYYYYYYaaaaa
-aYYYpUPMYYYaaaa
-YYYNCTFTCNYYYaa
-aYYNqTCTBjNYYaa
-aYYMTuTTFMsYYaa
-aYYCjTuFjHNYaaa
-YYYbxMjPCNpYaaa
-aYYYJgggooLYYaa
-akkYYrreNNdYYYa
-akkkYYOYYYYYYYY
-aYkkkIQZkkkkkYa
-aYYkkkkkkkkkkka
-aaYYYYYYYYYYkaa
+a
+a
+a
+a
+Y
+a
+a
+a
+Y
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+k
+k
+Y
+Y
+a
+"}
+(3,1,1) = {"
+a
+a
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+k
+k
+k
+Y
+Y
+"}
+(4,1,1) = {"
+a
+Y
+Y
+Y
+N
+N
+M
+C
+b
+Y
+Y
+k
+k
+k
+Y
+"}
+(5,1,1) = {"
+a
+Y
+Y
+p
+C
+q
+T
+j
+x
+J
+Y
+Y
+k
+k
+Y
+"}
+(6,1,1) = {"
+a
+a
+Y
+U
+T
+T
+u
+T
+M
+g
+r
+Y
+I
+k
+Y
+"}
+(7,1,1) = {"
+a
+a
+Y
+P
+F
+C
+T
+u
+j
+g
+r
+O
+Q
+k
+Y
+"}
+(8,1,1) = {"
+a
+a
+Y
+M
+T
+T
+T
+F
+P
+g
+e
+Y
+Z
+k
+Y
+"}
+(9,1,1) = {"
+a
+a
+Y
+Y
+C
+B
+F
+j
+C
+o
+N
+Y
+k
+k
+Y
+"}
+(10,1,1) = {"
+a
+a
+Y
+Y
+N
+j
+M
+H
+N
+o
+N
+Y
+k
+k
+Y
+"}
+(11,1,1) = {"
+a
+a
+a
+Y
+Y
+N
+s
+N
+p
+L
+d
+Y
+k
+k
+Y
+"}
+(12,1,1) = {"
+a
+a
+a
+a
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+k
+k
+Y
+"}
+(13,1,1) = {"
+a
+a
+a
+a
+Y
+Y
+Y
+a
+a
+Y
+Y
+Y
+k
+k
+k
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+Y
+Y
+Y
+k
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+Y
+a
+a
+a
 "}

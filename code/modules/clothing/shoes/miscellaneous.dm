@@ -228,6 +228,7 @@
 		"Dramatic" = 'sound/effects/dramatic_short.ogg',
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
+	var/emagged = 0
 
 /obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/living/user)
 	if(user.mind && !clumsy_check(user))
@@ -279,6 +280,25 @@
 		if(random_sound)
 			step_sound = sound_list[pick(sound_list)]
 	..()
+
+/obj/item/clothing/shoes/clown_shoes/advanced/emag_act(var/mob/user) //Causes the shoes to play a sound every step instead of 2
+	..()
+	if(!emagged)
+		if(modulo_steps == 1)
+			to_chat(user, "<span class='warning'>Aww shucks! Looks like someone beat you to the punch, for these shoes already play a sound every step! Perhaps it was the result of a very special day, or maybe it was tampered with by a very bored god. Either way, you are a fool!</span>")
+			to_chat(user, "<span class='good'>However, here is a consolation banana.</span>")
+			var/dat = {"<html><div><span style="color:#ff0000;">H</span><span style="color:#99ff00;">O</span><span style="color:#0000ff;">N</span><span style="color:#00ff80;">K</span><span style="color:#0066ff;">!</span></html></div>"}
+			to_chat(user, dat)
+			playsound(user, 'sound/items/bikehorn.ogg', 100, 0)
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/banana/B = new()
+			B.name = "consolation banana"
+			B.desc = "This one seems to be enchanted..."
+			B.potency = 1337 //Honk
+			user.put_in_hands(B)
+		else
+			to_chat(user, "<span class='warning'>You overload the audio cogitators of \the [src], causing them to play a sound on every step!</span>")
+			modulo_steps = 1
+		emagged = 1
 
 /obj/item/clothing/shoes/clown_shoes/stickymagic
 	canremove = 0
@@ -409,6 +429,37 @@
 	icon_state = "kneesock"
 	item_state = "kneesock"
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/soap))
+		if(do_after(user, src, 1 SECONDS))
+			user.drop_item(src)
+			if(!user.drop_item(W))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+				return
+			var/obj/item/weapon/soap_sock/I = new (get_turf(user))
+			W.transfer_fingerprints_to(I)
+			I.base_soap = W
+			I.base_sock = src
+			W.forceMove(I)
+			src.forceMove(I)
+			user.put_in_hands(I)
+			to_chat(user, "<span class='notice'>You place \the [W] into \the [src].</span>")
+	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
+		var/obj/item/stack/sheet/mineral/brick/S = W
+		if(do_after(user, src, 1 SECONDS))
+			user.drop_item(src)
+			if(!user.drop_item(S))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+				return
+			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
+			if(!S.use(1))
+				return
+			I.base_sock = src
+			src.forceMove(I)
+			user.put_in_hands(I)
+			to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
 
 /obj/item/clothing/shoes/jestershoes
 	name = "Jester Shoes"

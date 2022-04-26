@@ -264,11 +264,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
-	if(isUnconscious())
+	if(isUnconscious() || !can_be_infected() || issilicon(target))
 		return
-
-	if(!can_be_infected())
-		return
+	
 	var/block = 0
 	var/bleeding = 0
 

@@ -1,23 +1,3 @@
-//move eat, ventcrawl, hide, moult, egglay, dark aura to spells
-
-///spell/grue
-//    name = "Grue Ability"
-//    desc = "A template grue ability."
-//    abbreviation = "GA"
-//    still_recharging_msg = "<span class='warning'>Your body is still <span>"
-
-//    user_type = USER_TYPE_GRUE
-//    school = "grue"
-//    spell_flags = 0
-//    level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
-
-//    override_base = "grue"
-//    hud_state = "grue_icon_base"
-//    charge_max = 20 SECONDS
-//    cooldown_min = 1 SECONDS
-//    var/sp_cost = 0 //shadow power cost to use the spell
-//    var/re_cost = 0 //reproductive power cost to use the spell
-
 /spell/targeted/grue_eat
 	name = "Eat"
 	desc = "Eat someone."
@@ -58,7 +38,6 @@
 
 /spell/aoe_turf/grue_ventcrawl/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.ventcrawl()
-
 
 /spell/aoe_turf/grue_hide
 	name = "Hide"
@@ -101,3 +80,29 @@
 
 /spell/aoe_turf/grue_moult/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.moult()
+
+/spell/aoe_turf/grue_drainlight
+	name = "Drain Light"
+	desc = "Drain the light from the surrounding area."
+	hud_state = "grue_drainlight"
+	user_type = USER_TYPE_GRUE
+	panel = "Grue"
+	override_base = "grue"
+	range = 0
+	charge_type = Sp_GRADUAL | Sp_HOLDVAR
+	holder_var_type = "nutrienergy"
+	holder_var_amount = 0.1 //Around 1 nutrienergy per second.
+	holder_var_name = "nutritive energy"
+	still_recharging_msg = "<span class='notice'>You need to feed more first.</span>"
+
+
+/spell/aoe_turf/grue_drainlight/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
+	playsound(user, 'sound/effects/grue_drainlight.ogg', 50, 1)
+	user.drainlight(TRUE)
+	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_UMBRA)
+
+/spell/aoe_turf/grue_drainlight/stop_casting(list/targets, mob/living/simple_animal/hostile/grue/user, var/mute=FALSE)
+	user.drainlight(FALSE, mute)
+	playsound(user, null, 50, channel = CHANNEL_UMBRA)
+	..()
+

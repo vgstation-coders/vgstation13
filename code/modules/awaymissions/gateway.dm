@@ -21,7 +21,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 		return
 	icon_state = "off"
 
-/obj/machinery/gateway/shuttle_rotate()
+/obj/machinery/gateway/map_element_rotate()
 	return
 
 
@@ -58,7 +58,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 
 
 /obj/machinery/gateway/centerstation/process()
-	if(stat & (NOPOWER))
+	if(stat & (NOPOWER|FORCEDISABLE))
 		if(active)
 			toggleoff()
 		return

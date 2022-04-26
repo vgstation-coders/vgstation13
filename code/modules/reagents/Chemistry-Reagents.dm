@@ -49,6 +49,8 @@
 	var/mug_icon_state = null
 	var/mug_name = null
 	var/mug_desc = null
+	var/addictive = FALSE
+	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -56,6 +58,8 @@
 	if(!holder)
 		return 1
 	if(!istype(M))
+		return 1
+	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
 		return 1
 
 	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
@@ -95,7 +99,12 @@
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
 
+	if(self.tolerance_increase)
+		M.tolerated_chems[self.id] += self.tolerance_increase
+
 /datum/reagent/proc/reaction_dropper_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
+		return 1
 	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
 	src = null
 	if(M.reagents)
@@ -105,6 +114,9 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
+
+	if(self.tolerance_increase)
+		M.tolerated_chems[self.id] += self.tolerance_increase
 
 /datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
 	reaction_obj(O, volume)
@@ -173,6 +185,8 @@
 				C.absorbed_chems.Add(id)
 				to_chat(M, "<span class = 'notice'>We have learned [src].</span>")
 
+	if((src.id in M.tolerated_chems) && M.tolerated_chems[src.id] && M.tolerated_chems[src.id] >= volume)
+		return 1
 	if(is_overdosing())
 		on_overdose(M)
 
@@ -180,6 +194,11 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_reagent(id)
+
+	if(addictive && M.addicted_chems)
+		M.addicted_chems.add_reagent(src.id, custom_metabolism)
+	if(tolerance_increase)
+		M.tolerated_chems[src.id] += tolerance_increase
 
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
@@ -198,8 +217,26 @@
 /datum/reagent/proc/on_introduced(var/data)
 	return
 
-/datum/reagent/proc/on_removal(var/data)
+/datum/reagent/proc/on_removal(var/amount)
 	return 1
+
+//Called every tick when listed as an addicted chemical
+/datum/reagent/proc/on_withdrawal(var/mob/living/M)
+	if(!holder)
+		return 1
+	if(!M)
+		M = holder.my_atom //Try to find the mob through the holder
+	if(!istype(M)) //Still can't find it, abort
+		return 1
+	if(M.addicted_chems)
+		M.addicted_chems.remove_reagent(src.id, custom_metabolism)
+	tick++
+	real_tick++
+
+//Has to be a reagents datum for on_withdrawal()
+/mob/living/var/datum/reagents/addicted_chems
+//Associative lists for tolerance formatted like (REAGENT_ID = amount)
+/mob/living/var/list/tolerated_chems
 
 //Completely unimplemented as of 2021, commenting out
 ///datum/reagent/proc/on_move(var/mob/M)
@@ -1110,6 +1147,7 @@
 	density = 5.23
 	specheatcap = 0.62
 
+
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -1133,6 +1171,12 @@
 	custom_metabolism = 2
 	specheatcap = 4.183
 	alpha = 128
+
+/datum/reagent/holywater/on_mob_life(mob/living/M)
+	if(..())
+		return 1
+	M.immune_system.ApplyAntipathogenics(100, list(ANTIGEN_CULT), 2)
+	
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 
@@ -2027,6 +2071,7 @@
 	density = 1.26
 	specheatcap = 24.59
 
+
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -2532,10 +2577,10 @@
 			dmg -= K.seed.toxins_tolerance*20
 		for(var/obj/effect/plantsegment/KV in orange(O,1))
 			KV.health -= dmg*0.4
-			KV.check_health()
+			KV.try_break()
 			SSplant.add_plant(KV)
 		K.health -= dmg
-		K.check_health()
+		K.try_break()
 		SSplant.add_plant(K)
 	else if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = O
@@ -2616,7 +2661,7 @@
 		return 1
 
 	var/mob/living/carbon/human/H = M
-	if(isplasmaman(H) || H.species.flags & PLASMA_IMMUNE)
+	if(istype(H) && H.species.flags & PLASMA_IMMUNE)
 		return 1
 	else
 		M.adjustToxLoss(3 * REM)
@@ -2875,6 +2920,136 @@
 	T.toxins -= 5
 	if(T.seed && !T.dead)
 		T.health += 50
+
+//Just for fun
+var/list/procizine_calls = list()
+var/list/procizine_args = list()
+var/procizine_name = ""
+var/procizine_overdose = 0
+var/procizine_metabolism = 0
+var/procizine_color = "#C8A5DC"
+var/procizine_addictive = FALSE
+var/procizine_tolerance = 0
+
+/client/proc/set_procizine_call()
+	set name = "Set Procizine Call"
+	set category = "Fun"
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/ourproc = input("Proc path to call on target reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
+	if(!ourproc)
+		return
+
+	procizine_calls["life"] = ourproc
+
+	var/argnum = input("Number of arguments","Number:",0) as num|null
+
+	var/list/ourargs = list()
+	ourargs.len = !argnum && (argnum!=0) ? 0 : argnum // Expand to right length
+
+	var/i
+	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+		ourargs[i] = variable_set(src)
+
+	procizine_args["life"] = ourargs.Copy()
+
+	var/static/list/other_call_types = list("plant","mob","object","turf","mob dropper","object dropper","removal","overdose","withdrawal")
+	var/goahead = alert("Do you wish to customise this further? (The previous input will only be used for mob life)", "Advanced procizine calls", "Yes", "No") == "Yes"
+	for(var/calltype in other_call_types)
+		if(goahead)
+			ourproc = input("Proc path to call on [calltype] reaction, eg: /proc/fake_blood (To make effective, add the reagent procizine to the atom)","Path:", null) as text|null
+
+			argnum = input("Number of arguments","Number:",0) as num|null
+			ourargs.len = !argnum && (argnum!=0) ? 0 : argnum // Expand to right length
+
+			for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+				ourargs[i] = variable_set(src)
+
+		procizine_calls[calltype] = ourproc
+		procizine_args[calltype] = ourargs.Copy()
+
+/client/proc/set_procizine_properties()
+	set name = "Set Procizine Properties"
+	set category = "Fun"
+	if(!check_rights(R_DEBUG))
+		return
+
+	procizine_name = input(src, "Reagent name","Procizine attributes", procizine_name) as text|null
+	procizine_overdose = input(src, "Overdose threshold","Procizine attributes", procizine_overdose) as num|null
+	procizine_metabolism = input(src, "Custom metabolism","Procizine attributes", procizine_metabolism) as num|null
+	procizine_addictive = alert(src, "Is addictive?","Procizine attributes", "Yes", "No") == "Yes"
+	procizine_tolerance = input(src, "Tolerance increase per metabolisation","Procizine attributes", procizine_metabolism) as num|null
+	procizine_color = input(src, "Reagent color", "Procizine attributes") as color|null
+
+/datum/reagent/procizine
+	name = "Procizine"
+	id = PROCIZINE
+	description = "It is a mystery!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
+	var/list/procnames
+	var/list/procargs
+
+/datum/reagent/procizine/New()
+	..()
+	procnames = procizine_calls.Copy()
+	procargs = procizine_args.Copy()
+	name = procizine_name && procizine_name != "" ? procizine_name : initial(name)
+	overdose_am = procizine_overdose
+	custom_metabolism = procizine_metabolism || REAGENTS_METABOLISM
+	color = procizine_color || initial(color)
+	addictive = procizine_addictive
+	tolerance_increase = procizine_tolerance
+
+/datum/reagent/procizine/proc/call_proc(var/atom/A, var/call_type)
+	if(procnames[call_type] && hascall(A, procnames[call_type]))
+		call(A,procnames[call_type])(arglist(procargs[call_type]))
+
+/datum/reagent/procizine/on_mob_life(var/mob/living/carbon/M)
+	if(..())
+		return 1
+	call_proc(M,"life")
+
+/datum/reagent/procizine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	call_proc(T,"plant")
+
+/datum/reagent/procizine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+	call_proc(M,"mob")
+
+/datum/reagent/procizine/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	call_proc(T,"turf")
+
+/datum/reagent/procizine/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+	call_proc(O,"object")
+
+/datum/reagent/procizine/reaction_dropper_mob(var/mob/living/M)
+	. = ..()
+	call_proc(M,"mob dropper")
+
+/datum/reagent/procizine/reaction_dropper_obj(var/obj/O)
+	. = ..()
+	call_proc(O,"object dropper")
+
+/datum/reagent/procizine/reagent_deleted()
+	call_proc(holder.my_atom,"removal")
+
+/datum/reagent/procizine/on_overdose(mob/living/M)
+	call_proc(holder.my_atom,"overdose")
+
+/datum/reagent/procizine/on_withdrawal(mob/living/M)
+	if(..())
+		return 1
+	call_proc(holder.my_atom,"withdrawal")
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
@@ -3202,13 +3377,14 @@
 	density = 1.79
 	specheatcap = 0.70
 
+
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
 	if(prob(5) && M.stat == CONSCIOUS)
-		M.emote(pick("twitch","blink_r","shiver"))
+		M.emote(pick("twitch","blink_r","shiver")) //See movement_tally_multiplier for the rest
 
 /datum/reagent/hyperzine/on_overdose(var/mob/living/M)
 	if(ishuman(M) && M.get_heart()) // Got a heart?
@@ -7084,6 +7260,14 @@
 	M.drowsyness = max(0, M.drowsyness - 7)
 	M.Jitter(1)
 
+/datum/reagent/ethanol/drink/pinklady
+	name = "Pink Lady"
+	id = PINKLADY
+	description = "A pink alcoholic beverage made primarily from gin."
+	color = "#ff6a8f"
+	glass_icon_state = "pinklady"
+	glass_desc = "A delightful blush-pink cocktail, garnished with a cherry and the rind of a lemon."
+
 /////////////////////////////////////////////////////////////////Cocktail Entities//////////////////////////////////////////////
 
 /datum/reagent/ethanol/drink/bilk
@@ -9253,6 +9437,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin
 
+/datum/reagent/aminoblatella
+	name = "Aminoblatella"
+	id = AMINOBLATELLA
+	description = "Developed in the darkest halls of maintenance by the Elder Greytide council, it is said to be able to create untold gunk. Potential reaction detected if mixed with equal parts nutriment or ten parts mutagen."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#634848" //rgb: 99, 72, 72
+	density = 15.49 //our ingredients are pretty dense
+	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin
+
 /datum/reagent/luminol
 	name = "Luminol"
 	id = LUMINOL
@@ -9657,5 +9851,5 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
-		if(E && !istype(E, /datum/organ/internal/eyes/umbra)) //doesn't harm umbra eyes
+		if(E && !istype(E, /datum/organ/internal/eyes/umbra) && !E.robotic) //doesn't harm umbra or robotic eyes
 			E.damage += 0.5

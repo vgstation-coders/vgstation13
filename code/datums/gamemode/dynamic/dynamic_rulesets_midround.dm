@@ -859,35 +859,39 @@
 	name = "Grue Infestation"
 	role_category = /datum/role/grue
 	enemy_jobs = list()
-	required_enemies = list()
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 20
-	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	requirements = list(70,60,50,40,30,20,10,10,10,10)
 	high_population_requirement = 10
 	logo = "grue-logo"
-	var/grue_spawn_spots=list()
-	var/turf/thisturf
+	repeatable = TRUE
+	var/list/grue_spawn_spots=list()
 
 /datum/dynamic_ruleset/midround/from_ghosts/grue/ready(var/forced = 0)
 	grue_spawn_spots=list()
 	var/list/found_vents = list()
+	var/turf/thisturf
+	var/vent_visible=0 //used to check if vent is visible by a living player
 	for(var/obj/machinery/atmospherics/unary/vent_pump/thisvent in atmos_machines)
 		thisturf=get_turf(thisvent)
-		if(!thisvent.welded && thisvent.z == map.zMainStation && thisvent.canSpawnMice==1&&thisturf.get_lumcount()<=0.1&&istype(get_area(thisvent),/area/maintenance)) // Same as spiders but with additional check for being in the dark and in maintenance.
-			found_vents.Add(thisvent)
+		if(!thisvent.welded && thisvent.z == map.zMainStation && thisvent.canSpawnMice==1&&thisturf.get_lumcount()<=0.1 && thisvent.network) // Check that the vent isn't welded, is on the main z-level, can spawn mice, is in the dark, and is connected to a pipe network.
+			if(thisvent.network.normal_members.len > 50) //only accept vents with suitably large networks
+				found_vents.Add(thisvent)
 	if(found_vents.len)
 		while(found_vents.len > 0)
 			var/obj/machinery/atmospherics/unary/vent_pump/thisvent = pick(found_vents)
 			found_vents -= thisvent
+			vent_visible=0
 			for (var/mob/M in player_list)
-				if (isliving(M) && (get_dist(M,thisvent) > 7))//trying to find just one vent that is far out of view of any player
-					grue_spawn_spots+=get_turf(thisvent)
-	if(!grue_spawn_spots)
+				if (isliving(M) && (get_dist(M,thisvent) <= 7)) //make sure vent is not in default view range of any living player
+					vent_visible=1
+			if(!vent_visible)
+				grue_spawn_spots+=get_turf(thisvent)
+	if(!grue_spawn_spots.len)
 		log_admin("Cannot accept Grue ruleset, no suitable spawn locations found.")
 		message_admins("Cannot accept Grue ruleset, no spawn locations found.")
 		return 0
-
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/grue/generate_ruleset_body(var/mob/applicant)

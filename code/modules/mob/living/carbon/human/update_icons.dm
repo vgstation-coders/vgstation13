@@ -348,11 +348,17 @@ var/global/list/damage_icon_parts = list()
 	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(),HIDEHEADHAIR))) //If the hair is hidden, don't draw it
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
-			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
-			if(hair_style.do_colouration)
-				hair_s.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
-			if(hair_style.additional_accessories)
-				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
+			var/icon/hair_s
+			if(isvox(src))
+				if(my_appearance.r_hair > 7)
+					my_appearance.r_hair = rand(1,7)
+				hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[my_appearance.r_hair]_[hair_suffix]")
+			else
+				hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
+				if(hair_style.do_colouration)
+					hair_s.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
+				if(hair_style.additional_accessories)
+					hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 			face_standing.Blend(hair_s, ICON_OVERLAY)
 //		else
 			//warning("Invalid my_appearance.h_style for [species.name]: [my_appearance.h_style]")
@@ -1082,7 +1088,6 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += dyn_overlay
 
 		if(istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
-			drop_from_inventory(handcuffed)
 			drop_hands()
 
 		if(istype(wear_suit, /obj/item/clothing/suit))

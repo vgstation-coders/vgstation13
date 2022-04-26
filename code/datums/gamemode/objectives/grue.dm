@@ -5,6 +5,8 @@
 /datum/objective/grue/grue_basic/IsFulfilled()
 	if (..())
 		return TRUE
+	var/datum/role/grue/G = owner.GetRole(ROLE_GRUE)
+	return !(G.antag.current?.isDead())
 
 /datum/objective/grue/eat_sentients
 	explanation_text = "Eat sentient beings."
@@ -14,7 +16,7 @@
 /datum/objective/grue/eat_sentients/PostAppend()
 	. = ..()
 	eat_objective = rand(2,3)
-	explanation_text = "Eat [eat_objective] sentient being[(eat_objective>1) ? "" : "s"]."
+	explanation_text = "Eat [eat_objective] sentient being[(eat_objective>1) ? "s" : ""]."
 
 /datum/objective/grue/eat_sentients/IsFulfilled()
 	if (..())
@@ -30,7 +32,7 @@
 /datum/objective/grue/spawn_offspring/PostAppend()
 	. = ..()
 	spawn_objective = rand(1,2)
-	explanation_text = "Lay [(spawn_objective>1) ? "an egg" : "eggs"] and spawn [spawn_objective] offspring."
+	explanation_text = "Lay [(spawn_objective>1) ? "eggs" : "an egg"] and spawn [spawn_objective] offspring."
 
 /datum/objective/grue/spawn_offspring/IsFulfilled()
 	if (..())

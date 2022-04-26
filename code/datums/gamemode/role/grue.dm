@@ -12,7 +12,7 @@
 
 /datum/role/grue/Greet()
 	to_chat(antag.current, "<span class='warning'>You are a grue.</span>")
-	to_chat(antag.current, "<span class='warning'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are fully mature.</span>")
+	to_chat(antag.current, "<span class='warning'>Darkness is your ally; bright light is harmful to your kind. You hunger... specifically for sentient beings, but you are still young and cannot eat until you are more mature.</span>")
 	to_chat(antag.current, "<span class='warning'>Bask in shadows to prepare to moult. The more sentient beings you eat, the more powerful you will become.</span>")
 
 /datum/role/grue/ForgeObjectives(var/hatched) //Check if they hatched from an egg or spawned in
@@ -25,10 +25,8 @@
 
 /datum/role/grue/GetScoreboard()
 	. = ..()
-	if(istype(antag.current,/mob/living/simple_animal/hostile/grue))
-		. += "<BR>The grue ate [eatencount] sentient beings"
-		if(config.grue_egglaying)
-			.+= " and spawned [spawncount] offspring."
-		else
-			.+= "."
+	. += "The grue ate [eatencount] sentient being[eatencount==1 ? "" : "s"]"
+	if(config.grue_egglaying)
+		. += " and spawned [spawncount] offspring"
+	. += ".<BR>"
 
