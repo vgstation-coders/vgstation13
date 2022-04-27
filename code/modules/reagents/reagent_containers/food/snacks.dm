@@ -2298,7 +2298,7 @@
 	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
 	valid_utensils = UTENSILE_SPOON
 	
-/obj/item/weapon/reagent_containers/food_snacks/roboticiststears/new()
+/obj/item/weapon/reagent_containers/food/snacks/roboticiststears/new()
 	..()
 	reagents.add_reagent(NUTRIMENT, 30) //You're using phazon here, that's the good shit.
 	reagents.add_reagent(PHAZON, 1)
