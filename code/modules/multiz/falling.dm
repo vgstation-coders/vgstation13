@@ -92,11 +92,6 @@
 				L.pulling.Move(below)
 		return 0
 
-	var/gravity = get_gravity()
-	// No gravity in space, apparently.
-	if(!gravity) //Polaris uses a proc, has_gravity(), for this
-		return 0
-
 	return below
 
 //For children to override
