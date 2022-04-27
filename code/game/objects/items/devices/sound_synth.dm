@@ -19,7 +19,12 @@
 	"Blob Pulse" = "selected_sound=sound/effects/blob_pulse.ogg&shiftpitch=1&volume=100",
 	"Conversion" = "selected_sound=sound/effects/convert_start.ogg&shiftpitch=1&volume=50",
 	"Absorb" = "selected_sound=sound/effects/lingabsorbs.ogg&shiftpitch=1&volume=100",
-	"Energy Sword" = "selected_sound=sound/weapons/blade1.ogg&shiftpitch=1&volume=100"
+	"Energy Sword" = "selected_sound=sound/weapons/blade1.ogg&shiftpitch=1&volume=100",
+	"Super Fart" = "selected_sound=sound/effects/superfart.ogg&shiftpitch=1&volume=75",
+	"Delamination Imminent" = "selected_sound=sound/AI/supermatter_delam.ogg&shiftpitch=0&volume=100",
+	"'elite' Syndie Squad" = "selected_sound=sound/music/elite_syndie_squad.ogg&shiftpitch=0&volume=25",
+	"'elite' NT Squad" = "selected_sound=sound/music/deathsquad.ogg&shiftpitch=0&volume=5",
+	"Command Report" = "selected_sound=sound/AI/commandreport.ogg&shiftpitch=1&volume=100"
 	)
 	
 	var/list/sound_list = list( //How I would like to add tabbing to make this not as messy, but BYOND doesn't like that.
