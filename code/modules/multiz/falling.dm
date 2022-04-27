@@ -32,7 +32,7 @@
 	var/gravity = get_gravity()
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
-		return 0
+		return
 
 	fall_lock = TRUE
 	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
@@ -44,7 +44,7 @@
 			return
 
 		if(!get_gravity())
-			return 0
+			return
 
 		/*if(throwing)  This was causing odd behavior where things wouldn't stop.
 			return*/
