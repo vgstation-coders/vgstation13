@@ -319,7 +319,7 @@
 	},
 /area/awaymission/tomb/outside/expedition_camp)
 "bm" = (
-/obj/machinery/gateway/centeraway,
+/obj/machinery/gateway/center/away,
 /turf/simulated/floor/plating,
 /area/awaymission/tomb/outside/expedition_camp)
 "bn" = (

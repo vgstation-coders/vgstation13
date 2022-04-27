@@ -85818,7 +85818,7 @@
 	},
 /area/gateway)
 "lYd" = (
-/obj/machinery/gateway/centerstation,
+/obj/machinery/gateway/center,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},

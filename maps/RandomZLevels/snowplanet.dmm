@@ -101,7 +101,7 @@
 /turf/simulated/floor/bluegrid,
 /area/awaymission/snowplanet)
 "aw" = (
-/obj/machinery/gateway/centeraway,
+/obj/machinery/gateway/center/away,
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "unloading"

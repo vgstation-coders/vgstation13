@@ -438,7 +438,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "bC" = (
-/obj/machinery/gateway/centeraway{
+/obj/machinery/gateway/center/away{
 	calibrated = 0
 	},
 /obj/structure/cable{

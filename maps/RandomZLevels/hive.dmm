@@ -94,7 +94,7 @@
 	},
 /area/awaymission/hive)
 "au" = (
-/obj/machinery/gateway/centeraway,
+/obj/machinery/gateway/center/away,
 /turf/simulated/floor/plating,
 /area/awaymission/hive)
 "av" = (
