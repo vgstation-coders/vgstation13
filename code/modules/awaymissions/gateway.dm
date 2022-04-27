@@ -8,9 +8,9 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	icon_state = "off"
 	density = 1
 	anchored = 1
-	pixel_y = WORLD_ICON_SIZE
+	pixel_x = -WORLD_ICON_SIZE
 	bound_x = -WORLD_ICON_SIZE
-	bound_y = 2 * WORLD_ICON_SIZE
+	bound_y = WORLD_ICON_SIZE
 	bound_width = 3 * WORLD_ICON_SIZE
 	bound_height = 2 * WORLD_ICON_SIZE
 	var/active = 0
@@ -41,6 +41,11 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	icon = 'icons/obj/machines/gatewaycenter.dmi'
 	icon_state = "off"
 	use_power = 1
+	pixel_x = 0
+	bound_x = WORLD_ICON_SIZE
+	bound_y = WORLD_ICON_SIZE
+	bound_width = WORLD_ICON_SIZE
+	bound_height = WORLD_ICON_SIZE
 
 	//warping vars
 	var/obj/machinery/gateway/linked = null
