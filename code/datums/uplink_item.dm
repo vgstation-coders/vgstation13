@@ -1149,6 +1149,14 @@ var/list/uplink_items = list()
 	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
 	jobs_with_discount = list("Trader","Cargo Technician","Quartermaster")
 
+/datum/uplink_item/jobspecific/cannedmatter
+	category = "Skrell Specials"
+	name = "Canned Compressed Matter"
+	desc = "For once, the syndicate has it."
+	item = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter
+	cost = 6
+	jobs_exclusive = list("Skrell")
+
 // SYNDICATE COOP
 // Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
 

@@ -871,6 +871,25 @@
 		var/obj/B = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread(get_turf(src))
 		user.put_in_hands(B)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter
+	name = "\improper canned bread"
+	desc = "Wow, they have it!"
+	icon_state = "cannedbread"
+	var/obj/item/storeditem = null
+	//no actual chemicals in the can
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter/attackby(var/obj/item/I, mob/user as mob)
+	if(!(flags & OPENCONTAINER)) // Won't work if already opened
+		user.drop_item(I,src)
+		storeditem = I
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter/pop_open(var/mob/user)
+	. = ..()
+	spawn(0.5 SECONDS)
+		playsound(src, pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 50)
+		storeditem.forceMove(get_turf(src))
+		storeditem = null
+
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "\improper vial of food coloring"
 	icon = 'icons/obj/chemical.dmi'
