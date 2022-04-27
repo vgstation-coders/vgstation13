@@ -1396,7 +1396,7 @@
 		/obj/item/robot_parts/head,
 		/obj/item/stack/sheet/mineral/phazon,
 		)
-	result = /obj/item/weapon/regent_containers/food/snacks/roboticiststears
+	result = /obj/item/weapon/reagent_containers/food/snacks/roboticiststears
 
 /datum/recipe/mushroomsoup
 	reagents = list(WATER = 5, MILK = 5)
