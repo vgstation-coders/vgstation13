@@ -27,7 +27,6 @@
 	plane = OPENSPACE_PLANE_START
 	//pathweight = 100000 //For lack of pathweights, mobdropping meta inc
 	dynamic_lighting = 0 // Someday lets do proper lighting z-transfer.  Until then we are leaving this off so it looks nicer.
-
 	var/turf/below
 
 /turf/simulated/open/post_change()
@@ -83,7 +82,11 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 /turf/simulated/open/examine(mob/user, distance, infix, suffix)
 	if(..(user, 2))
 		var/depth = 1
-		for(var/T = GetBelow(src); isopenspace(T); T = GetBelow(T))
+		var/list/checked_belows = list()
+		for(var/turf/T = GetBelow(src); isopenspace(T); T = GetBelow(T))
+			if(T.z in checked_belows) // To stop getting caught on this in infinite loops
+				to_chat(user, "It looks bottomless.")
+				return
 			depth += 1
 		to_chat(user, "It is about [depth] levels deep.")
 
@@ -104,8 +107,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 		alpha_to_subtract /= 2
 		if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
-			alpha_to_subtract = 0
-			break
+			return // Don't even render anything
 		checked_belows.Add(bottom.z)
 
 	if(!bottom || bottom == src)
@@ -210,8 +212,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 			alpha_to_subtract /= 2
 			if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
-				alpha_to_subtract = 0
-				break
+				return // Again, pointless to render anything
 			checked_belows.Add(bottom.z)
 
 		if(!bottom || bottom == src)
