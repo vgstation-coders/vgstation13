@@ -2299,7 +2299,7 @@
 	valid_utensils = UTENSILE_SPOON
 	
 /obj/item/weapon/reagent_containers/food_snacks/roboticiststears/new()
-	--()
+	..()
 	reagents.add_reagent(NUTRIMENT, 30) //You're using phazon here, that's the good shit.
 	reagents.add_reagent(PHAZON, 1)
 	reagents.add_reagent(WATER, 5) //water turned into nutriment via phazon magic fuckery
