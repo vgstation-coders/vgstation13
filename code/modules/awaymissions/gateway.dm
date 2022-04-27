@@ -1,4 +1,5 @@
 var/list/gateways = list() //List containing all gateway parts
+var/list/gateway_centers_station = list() //List containing the gateways on the station
 var/list/gateway_centers_away = list() //List containing the gateways on away missions
 
 /obj/machinery/gateway
@@ -55,15 +56,23 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	icon_state = "off"
 	use_power = 1
 	pixel_x = 0
-	bound_x = WORLD_ICON_SIZE
-	bound_y = WORLD_ICON_SIZE
+	bound_x = 0
+	bound_y = 0
 	bound_width = WORLD_ICON_SIZE
 	bound_height = WORLD_ICON_SIZE
+	flow_flags = ON_BORDER // So collision even works
 
 	//warping vars
 	var/obj/machinery/gateway/linked = null
-	var/ready = 0				//have we got a gateway?
 	var/wait = 0				//this just grabs world.time at world start
+
+/obj/machinery/gateway/center/New()
+	..()
+	gateway_centers_station.Add(src)
+
+/obj/machinery/gateway/center/Destroy()
+	gateway_centers_station.Remove(src)
+	..()
 
 /obj/machinery/gateway/center/proc/admin_active(mob/user)
 	detect()
@@ -90,16 +99,12 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	var/obj/machinery/gateway/G = locate(/obj/machinery/gateway) in T
 	if(G)
 		linked = G
-		ready = 1
 		linked.detect()
 	else
 		//this is only done if we fail to find a part
-		ready = 0
 		toggleoff()
 
 /obj/machinery/gateway/center/proc/toggleon(mob/user as mob)
-	if(!ready)
-		return
 	if(!linked)
 		return
 	if(!powered())
@@ -124,7 +129,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	update_icon()
 
 /obj/machinery/gateway/center/attack_hand(mob/user as mob)
-	if(!ready)
+	if(!linked)
 		detect()
 		return
 	if(!active)
@@ -134,7 +139,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 //okay, here's the good teleporting stuff
 /obj/machinery/gateway/center/Bumped(atom/movable/M as mob|obj)
-	if(!ready)
+	if(!linked)
 		return
 	if(!active)
 		return
@@ -145,7 +150,6 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	if(dest.calibrated) //If it's calibrated, move to it
 		M.forceMove(get_step(dest.loc, SOUTH))
 		M.dir = SOUTH
-		return
 	else //Otherwise teleport to a landmark on the same z-level
 		var/list/good_landmarks = list()
 
@@ -171,26 +175,20 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 /obj/machinery/gateway/center/away
 	use_power = 0
 	var/calibrated = 1
-	var/obj/machinery/gateway/center/stationgate = null
 
 /obj/machinery/gateway/center/away/New()
 	..()
+	gateway_centers_station.Remove(src)
 	gateway_centers_away.Add(src)
 
 /obj/machinery/gateway/center/away/Destroy()
 	gateway_centers_away.Remove(src)
 	..()
 
-/obj/machinery/gateway/center/away/initialize()
-	update_icon()
-	stationgate = locate(/obj/machinery/gateway/center)
-
 /obj/machinery/gateway/center/away/toggleon(mob/user as mob)
-	if(!ready)
-		return
 	if(!linked)
 		return
-	if(!stationgate)
+	if(!gateway_centers_station.len)
 		to_chat(user, "<span class='notice'>Error: No destination found.</span>")
 		return
 
@@ -200,7 +198,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	update_icon()
 
 /obj/machinery/gateway/center/away/Bumped(atom/movable/M as mob|obj)
-	if(!ready)
+	if(!linked)
 		return
 	if(!active)
 		return
@@ -209,9 +207,11 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 			if(E.imp_in == M)//Checking that it's actually implanted vs just in their pocket
 				to_chat(M, "<span class='warning'>The station gate has detected your exile implant and is blocking your entry.</span>")
 				return
-	M.forceMove(get_step(stationgate.loc, SOUTH))
-	M.dir = SOUTH
-
+	if(gateway_centers_station.len)
+		var/obj/machinery/gateway/center/dest = pick(gateway_centers_station) //Pick a random gateway from the station
+		if(dest)
+			M.forceMove(get_step(dest.loc, SOUTH))
+			M.dir = SOUTH
 
 /obj/machinery/gateway/center/away/attackby(obj/item/device/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/multitool))
@@ -219,15 +219,12 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 			to_chat(user, "<span class='warning'>The gate is already calibrated, there is no work for you to do here.</span>")
 			return
 		else
-			to_chat(user, "<span class='notice'>Recalibration successful: This gate's systems have been fine tuned.  Travel to this gate will now be on target.</span>")
+			to_chat(user, "<span class='notice'>Recalibration successful: This gate's systems have been fine tuned. Travel to this gate will now be on target.</span>")
 			calibrated = 1
 			return
 
 /obj/machinery/gateway/center/attack_ghost(mob/user)
-	if (isAdminGhost(user) && existing_away_missions.len)
+	if (isAdminGhost(user) && existing_away_missions.len && !active)
 		admin_active(user)
 		return
-	return src.Bumped(user)
-
-/obj/machinery/gateway/center/away/attack_ghost(mob/user as mob)
 	return src.Bumped(user)
