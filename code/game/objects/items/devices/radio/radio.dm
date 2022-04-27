@@ -303,6 +303,13 @@
 	else
 		speech.job = "Unknown"
 
+	// --- Radio Bugs ---
+
+	if(istype(speech.radio,/obj/item/device/radio/bug))
+		var/obj/item/device/radio/bug/R = speech.radio
+		if(R.radio_tag)
+			speech.message = "\[[R.radio_tag]\] [speech.message]" //hacky solution but it's less invasive than modifying telecomms code
+
 /*
 	// --- Modifications to the mob's identity ---
 
@@ -680,3 +687,4 @@
 	broadcasting = 1
 	listening = 0
 	always_talk = 1
+	var/radio_tag
