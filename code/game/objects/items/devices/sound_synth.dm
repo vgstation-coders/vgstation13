@@ -24,7 +24,9 @@
 	"Delamination Imminent" = "selected_sound=sound/AI/supermatter_delam.ogg&shiftpitch=0&volume=100",
 	"'elite' Syndie Squad" = "selected_sound=sound/music/elite_syndie_squad.ogg&shiftpitch=0&volume=25",
 	"'elite' NT Squad" = "selected_sound=sound/music/deathsquad.ogg&shiftpitch=0&volume=5",
-	"Command Report" = "selected_sound=sound/AI/commandreport.ogg&shiftpitch=1&volume=100"
+	"Command Report" = "selected_sound=sound/AI/commandreport.ogg&shiftpitch=1&volume=100",
+	"Wilhelm" = "selected_sound=sound/vox_sfx/_scream.ogg&shiftpitch=1&volume=100",
+	"DOORSTUCK" = "selected_sound=sound/vox_sfx/_doorstuck.ogg&shiftpitch=1&volume=100"
 	)
 	
 	var/list/sound_list = list( //How I would like to add tabbing to make this not as messy, but BYOND doesn't like that.
