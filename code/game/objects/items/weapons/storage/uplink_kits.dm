@@ -448,21 +448,24 @@
 /obj/item/weapon/storage/box/syndie_kit/hunter //Get dat fukken disk!
 	name = "Hunter"
 	items_to_spawn = list(
-	/obj/item/weapon/implanter/explosive,
+		/obj/item/weapon/implanter/explosive,
 		/obj/item/weapon/gun/projectile/beretta,
 		/obj/item/ammo_storage/magazine/beretta = 2,
 		/obj/item/weapon/pinpointer,
 		/obj/item/weapon/vinyl/syndie_assault,
+		/obj/item/device/encryptionkey/syndicate/hacked,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/hacker //Threaten the station! Announce Nuke inspection day! Who knows?!
 	name = "Hacker"
 	items_to_spawn = list(
-		/obj/item/weapon/implanter/explosive,
 		/obj/item/device/codebreaker,
-		/obj/item/weapon/card/emag,
 		/obj/item/device/megaphone/madscientist,
 		/obj/item/device/reportintercom,
+		/obj/item/device/handtv,
+		/obj/item/device/camera_bug,
+		/obj/item/weapon/circuitboard/security,
+		/obj/item/device/encryptionkey/syndicate/hacked,
 	)
 
 
