@@ -1128,7 +1128,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/gun/dartgun/vox/raider
 	cost = 20
 	discounted_cost = 16
-	jobs_exclusive = list("Trader","Vox")
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
 	jobs_with_discount = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/dart_cartridge
@@ -1137,7 +1137,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/dart_cartridge
 	cost = 6
 	discounted_cost = 2
-	jobs_exclusive = list("Trader","Vox")
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
 	jobs_with_discount = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/cratesender
@@ -1146,7 +1146,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
 	cost = 10
 	discounted_cost = 6
-	jobs_exclusive = list("Trader","Vox")
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
 	jobs_with_discount = list("Trader","Cargo Technician","Quartermaster")
 
 // SYNDICATE COOP
