@@ -100,13 +100,13 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
-	var/list/turf/checked_belows = list()
+	var/list/checked_belows = list()
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 		alpha_to_subtract /= 2
-		if(bottom in checked_belows) // To stop getting caught on this in infinite loops
+		if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
 			alpha_to_subtract = 0
 			break
-		checked_belows.Add(bottom)
+		checked_belows.Add(bottom.z)
 
 	if(!bottom || bottom == src)
 		return
@@ -206,13 +206,13 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 		vis_contents.Cut()
 		overlays.Cut()
 		var/turf/bottom
-		var/list/turf/checked_belows = list()
+		var/list/checked_belows = list()
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 			alpha_to_subtract /= 2
-			if(bottom in checked_belows) // To stop getting caught on this in infinite loops
+			if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
 				alpha_to_subtract = 0
 				break
-			checked_belows.Add(bottom)
+			checked_belows.Add(bottom.z)
 
 		if(!bottom || bottom == src)
 			return

@@ -67,11 +67,11 @@
 		return 0
 
 	var/turf/bottom = null
-	var/list/turf/checked_belows = list()
+	var/list/checked_belows = list()
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-		if(bottom in checked_belows) // To stop getting caught on this in infinite loops
+		if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
 			break
-		checked_belows.Add(bottom)
+		checked_belows.Add(bottom.z)
 
 	if(istype(bottom,/turf/space))
 		return 0
