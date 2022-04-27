@@ -37,7 +37,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 //this is da important part wot makes things go
 /obj/machinery/gateway/center
-	density =
+	density = 1
 	icon = 'icons/obj/machines/gatewaycenter.dmi'
 	icon_state = "off"
 	use_power = 1
@@ -150,15 +150,10 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /////////////////////////////////////Away////////////////////////
 
-
 /obj/machinery/gateway/center/away
 	density = 1
-	icon = 'icons/obj/machines/gatewaycenter.dmi'
-	icon_state = "off"
 	use_power = 0
 	var/calibrated = 1
-	var/list/linked = list()	//a list of the connected gateway chunks
-	var/ready = 0
 	var/obj/machinery/gateway/center/away/stationgate = null
 
 /obj/machinery/gateway/center/away/New()
