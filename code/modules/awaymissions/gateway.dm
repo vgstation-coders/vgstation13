@@ -14,13 +14,21 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	bound_width = 3 * WORLD_ICON_SIZE
 	bound_height = 2 * WORLD_ICON_SIZE
 	var/active = 0
+	var/centertype = /obj/machinery/gateway/center
+	var/obj/machinery/gateway/center/thecenter = null
 
 /obj/machinery/gateway/New()
 	..()
+	var/turf/T= get_step(loc, NORTH)
+	thecenter = locate(/obj/machinery/gateway/center) in T
+	if(!thecenter)
+		thecenter = new centertype(T)
 	gateways.Add(src)
 
 /obj/machinery/gateway/Destroy()
 	gateways.Remove(src)
+	if(thecenter)
+		qdel(thecenter)
 	..()
 
 /obj/machinery/gateway/initialize()
@@ -34,6 +42,9 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/map_element_rotate()
 	return
+
+/obj/machinery/gateway/away
+	centertype = /obj/machinery/gateway/center/away
 
 //this is da important part wot makes things go
 /obj/machinery/gateway/center
@@ -159,7 +170,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	density = 1
 	use_power = 0
 	var/calibrated = 1
-	var/obj/machinery/gateway/center/away/stationgate = null
+	var/obj/machinery/gateway/center/stationgate = null
 
 /obj/machinery/gateway/center/away/New()
 	..()
