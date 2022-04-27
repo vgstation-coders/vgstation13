@@ -445,33 +445,11 @@
 		/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel = 4,
 	)
 
-/obj/item/weapon/storage/box/syndie_kit/hunter //Get dat fukken disk!
-	name = "Hunter"
-	items_to_spawn = list(
-		/obj/item/weapon/implanter/explosive,
-		/obj/item/weapon/gun/projectile/beretta,
-		/obj/item/ammo_storage/magazine/beretta = 2,
-		/obj/item/weapon/pinpointer,
-		/obj/item/weapon/vinyl/syndie_assault,
-		/obj/item/device/encryptionkey/syndicate/hacked,
-	)
-
-/obj/item/weapon/storage/box/syndie_kit/hacker //Threaten the station! Announce Nuke inspection day! Who knows?!
-	name = "Hacker"
-	items_to_spawn = list(
-		/obj/item/device/codebreaker,
-		/obj/item/device/megaphone/madscientist,
-		/obj/item/device/reportintercom,
-		/obj/item/device/handtv,
-		/obj/item/device/camera_bug,
-		/obj/item/weapon/circuitboard/security,
-		/obj/item/device/encryptionkey/syndicate/hacked,
-	)
 
 
 /obj/item/weapon/storage/box/syndicate_team/New()
 	..()
-	var/team_kit = pick("sniperspotter", "scammers", "workplaceshooter", "newcops")
+	var/team_kit = pick("sniperspotter", "scammers", "workplaceshooter")
 	switch(team_kit)
 		if("sniperspotter")
 			new /obj/item/weapon/storage/box/syndie_kit/sniper(src)
@@ -485,6 +463,4 @@
 			new /obj/item/weapon/storage/box/syndie_kit/shootershotty(src)
 			new /obj/item/weapon/storage/box/syndie_kit/shooteruzis(src)
 
-		if("newcops")
-			new /obj/item/weapon/storage/box/syndie_kit/hacker(src)
-			new /obj/item/weapon/storage/box/syndie_kit/hunter(src)
+
