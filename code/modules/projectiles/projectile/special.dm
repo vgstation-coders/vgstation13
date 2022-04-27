@@ -475,9 +475,13 @@
 		var/mob/living/M = target
 		if(ishuman(target))
 			var/mob/living/carbon/human/H = M
-			to_chat(M, "<span class='warning'>You are heated by the microwave ray's energy!</span>")
-			H.eye_blurry = max(M.eye_blurry, 5)
-			M.bodytemperature += 120
+			if(!blocked)
+				to_chat(H, "<span class='warning'>You are heated by the microwave ray's energy!</span>")
+				H.eye_blurry = max(H.eye_blurry, 5)
+				H.bodytemperature += 120
+			else
+				return
+	return 1
 
 /obj/item/projectile/energy/scramblerray
 	name = "scrambler ray"
@@ -491,8 +495,12 @@
 		var/mob/living/M = target
 		if(ishuman(target))
 			var/mob/living/carbon/human/H = M
-			to_chat(M, "<span class='warning'>The scrambler ray's energy makes you feel lightheaded and sick!</span>")
-			H.eye_blurry = max(M.eye_blurry, 5)
-			M.adjustBrainLoss(2)
-			H.drop_item()
-			H.vomit(0,1)
+			if(!blocked)
+				to_chat(H, "<span class='warning'>The scrambler ray's energy makes you feel lightheaded and sick!</span>")
+				H.eye_blurry = max(H.eye_blurry, 5)
+				H.adjustBrainLoss(2)
+				H.drop_item()
+				H.vomit(0,1)
+			else
+				return
+	return 1
