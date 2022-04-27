@@ -880,8 +880,8 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter/attackby(var/obj/item/I, mob/user as mob)
 	if(!(flags & OPENCONTAINER)) // Won't work if already opened
-		user.drop_item(I,src)
-		storeditem = I
+		if(user.drop_item(I,src))
+			storeditem = I
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter/pop_open(var/mob/user)
 	. = ..()
