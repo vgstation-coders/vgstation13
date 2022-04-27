@@ -94,7 +94,7 @@
 	},
 /area/awaymission/hive)
 "ay" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
 /area/awaymission/hive)
 "az" = (

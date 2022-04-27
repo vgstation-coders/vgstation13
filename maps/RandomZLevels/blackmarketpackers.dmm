@@ -459,7 +459,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "bM" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "bO" = (

@@ -22,7 +22,7 @@
 /turf/unsimulated/beach/sand,
 /area/awaymission/beach)
 "l" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/unsimulated/beach/sand,
 /area/awaymission/beach)
 "n" = (

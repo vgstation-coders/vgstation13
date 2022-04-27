@@ -279,7 +279,7 @@
 	},
 /area/mine/explored)
 "aX" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/airless{
 	icon_state = "gcircuit";
 	tag = "icon-gcircuit"

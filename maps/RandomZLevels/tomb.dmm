@@ -366,7 +366,7 @@
 	},
 /area/awaymission/tomb/outside/expedition_camp)
 "by" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
 /area/awaymission/tomb/outside/expedition_camp)
 "bz" = (

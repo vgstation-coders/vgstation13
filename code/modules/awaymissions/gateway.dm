@@ -20,12 +20,14 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/New()
 	..()
-	detect()
 	gateways.Add(src)
 
 /obj/machinery/gateway/Destroy()
 	gateways.Remove(src)
+	if(!thecenter)
+		detect()
 	if(thecenter)
+		thecenter.linked = null
 		qdel(thecenter)
 	..()
 
@@ -72,6 +74,8 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/center/Destroy()
 	gateway_centers_station.Remove(src)
+	if(linked)
+		linked.detect()
 	..()
 
 /obj/machinery/gateway/center/proc/admin_active(mob/user)

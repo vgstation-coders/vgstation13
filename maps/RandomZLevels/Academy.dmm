@@ -4277,7 +4277,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/academy/academygate)
 "kL" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
 /area/awaymission/academy/academygate)
 "kN" = (

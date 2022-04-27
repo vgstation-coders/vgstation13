@@ -102,7 +102,7 @@
 /turf/simulated/floor/bluegrid,
 /area/awaymission/snowplanet)
 "az" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /obj/effect/decal/warning_stripes{
 	dir = 2;
 	icon_state = "loading_area";

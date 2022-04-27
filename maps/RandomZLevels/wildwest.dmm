@@ -98,7 +98,7 @@
 	},
 /area/awaymission/wwvault)
 "ay" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/shuttle/plating{
 	icon_state = "gcircuitoff";
 	tag = "icon-gcircuitoff"

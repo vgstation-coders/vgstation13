@@ -204,7 +204,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/articwasteland/gateway)
 "aR" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /obj/effect/landmark{
 	name = "awaystart"
 	},
