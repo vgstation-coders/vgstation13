@@ -19,10 +19,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/New()
 	..()
-	var/turf/T= get_step(loc, NORTH)
-	thecenter = locate(/obj/machinery/gateway/center) in T
-	if(!thecenter)
-		thecenter = new centertype(T)
+	detect()
 	gateways.Add(src)
 
 /obj/machinery/gateway/Destroy()
@@ -43,6 +40,12 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 /obj/machinery/gateway/map_element_rotate()
 	return
 
+/obj/machinery/gateway/proc/detect()
+	var/turf/T= get_step(loc, NORTH)
+	thecenter = locate(centertype) in T
+	if(!thecenter)
+		thecenter = new centertype(T)
+
 /obj/machinery/gateway/away
 	centertype = /obj/machinery/gateway/center/away
 
@@ -61,18 +64,16 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	var/obj/machinery/gateway/linked = null
 	var/ready = 0				//have we got a gateway?
 	var/wait = 0				//this just grabs world.time at world start
-	var/obj/machinery/gateway/center/away/awaygate = null
 
-/obj/machinery/gateway/center/proc/admin_active()
+/obj/machinery/gateway/center/proc/admin_active(mob/user)
 	detect()
-	initialize()
+	update_icon()
 	wait = 0
-	toggleon()
+	toggleon(user)
 
 /obj/machinery/gateway/center/initialize()
-	update_icon()
+	..()
 	wait = world.time + config.gateway_delay	//+ thirty minutes default
-	awaygate = locate(/obj/machinery/gateway/center/away)
 
 /obj/machinery/gateway/center/process()
 	if(stat & (NOPOWER|FORCEDISABLE))
@@ -83,13 +84,14 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	if(active)
 		use_power(5000)
 
-/obj/machinery/gateway/center/proc/detect()
+/obj/machinery/gateway/center/detect()
 	linked = null	//clear this
 	var/turf/T= get_step(loc, SOUTH)
 	var/obj/machinery/gateway/G = locate(/obj/machinery/gateway) in T
 	if(G)
 		linked = G
 		ready = 1
+		linked.detect()
 	else
 		//this is only done if we fail to find a part
 		ready = 0
@@ -115,8 +117,9 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	update_icon()
 
 /obj/machinery/gateway/center/proc/toggleoff()
-	linked.active = 0
-	linked.update_icon()
+	if(linked)
+		linked.active = 0
+		linked.update_icon()
 	active = 0
 	update_icon()
 
@@ -222,7 +225,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/center/attack_ghost(mob/user)
 	if (isAdminGhost(user) && existing_away_missions.len)
-		admin_active()
+		admin_active(user)
 		return
 	return src.Bumped(user)
 
