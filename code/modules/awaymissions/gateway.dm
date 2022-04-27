@@ -48,7 +48,6 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 //this is da important part wot makes things go
 /obj/machinery/gateway/center
-	density = 1
 	icon = 'icons/obj/machines/gatewaycenter.dmi'
 	icon_state = "off"
 	use_power = 1
@@ -104,10 +103,10 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	if(!powered())
 		return
 	if(!gateway_centers_away.len)
-		to_chat(user, "<span class='notice'>Error: No destination found.</span>")
+		to_chat(user, "<span class='warning'>Error: No destination found.</span>")
 		return
 	if(world.time < wait)
-		to_chat(user, "<span class='notice'>Error: Warpspace triangulation in progress. Estimated time to completion: [round(((wait - world.time) / 10) / 60)] minutes.</span>")
+		to_chat(user, "<span class='warning'>Error: Warpspace triangulation in progress. Estimated time to completion: [round(((wait - world.time) / 10) / 60)] minutes.</span>")
 		return
 
 	linked.active = 1
@@ -161,13 +160,12 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/center/attackby(obj/item/device/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/multitool))
-		to_chat(user, "\black The gate is already calibrated, there is no work for you to do here.")
+		to_chat(user, "<span class='warning'>The gate is already calibrated, there is no work for you to do here.</span>")
 		return
 
 /////////////////////////////////////Away////////////////////////
 
 /obj/machinery/gateway/center/away
-	density = 1
 	use_power = 0
 	var/calibrated = 1
 	var/obj/machinery/gateway/center/stationgate = null
@@ -206,7 +204,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 	if(istype(M, /mob/living/carbon))
 		for(var/obj/item/weapon/implant/exile/E in M)//Checking that there is an exile implant in the contents
 			if(E.imp_in == M)//Checking that it's actually implanted vs just in their pocket
-				to_chat(M, "\black The station gate has detected your exile implant and is blocking your entry.")
+				to_chat(M, "<span class='warning'>The station gate has detected your exile implant and is blocking your entry.</span>")
 				return
 	M.forceMove(get_step(stationgate.loc, SOUTH))
 	M.dir = SOUTH
@@ -215,10 +213,10 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 /obj/machinery/gateway/center/away/attackby(obj/item/device/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/multitool))
 		if(calibrated)
-			to_chat(user, "\black The gate is already calibrated, there is no work for you to do here.")
+			to_chat(user, "<span class='warning'>The gate is already calibrated, there is no work for you to do here.</span>")
 			return
 		else
-			to_chat(user, "<span class='notice'><b>Recalibration successful!</b>: </span>This gate's systems have been fine tuned.  Travel to this gate will now be on target.")
+			to_chat(user, "<span class='notice'>Recalibration successful: This gate's systems have been fine tuned.  Travel to this gate will now be on target.</span>")
 			calibrated = 1
 			return
 
