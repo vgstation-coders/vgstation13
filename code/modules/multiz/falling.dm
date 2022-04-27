@@ -43,9 +43,7 @@
 		if(!below)
 			return
 
-		gravity = get_gravity()
-		// No gravity in space, apparently.
-		if(!gravity) //Polaris uses a proc, has_gravity(), for this
+		if(!get_gravity())
 			return 0
 
 		/*if(throwing)  This was causing odd behavior where things wouldn't stop.
