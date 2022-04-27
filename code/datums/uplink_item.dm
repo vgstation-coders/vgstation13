@@ -1179,3 +1179,15 @@ var/list/uplink_items = list()
 	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."
 	item = /obj/item/device/codebreaker
 	cost = 100
+
+// EXTRATERRESTRIAL BLACK MARKET
+// Weapons and gadgets from a spacefaring alien power that the Syndicate has acquired through unknown means (Only one item for now, more to come soon)
+
+/datum/uplink_item/ayylmao
+	category = "Extraterrestrial Black Market"
+
+/datum/uplink_item/ayylmao/hdisintegrator
+	name = "Heavy Disintegrator"
+	desc = "A powerful military issue alien laser weapon. It has a primary firing mode capable of incapacitating most unarmored targets in three shots, and a secondary mode capable of instantaneously inducing nausea and vomiting."
+	item = /obj/item/weapon/gun/energy/heavydisintegrator
+	cost = 16
