@@ -73,7 +73,7 @@ var/list/uplink_items = list()
 	return new new_item(location)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, datum/component/uplink/U, mob/user)
-	if(!available_for_job(U.job) || !available_for_job(U.species))
+	if(!available_for_job(U.job) && !available_for_job(U.species))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to them! (Job: [U.job]) (Species: [U.species]) ([formatJumpTo(get_turf(U))])")
 		return
 	if(U.nuke_ops_inventory && !available_for_nuke_ops)
@@ -623,7 +623,7 @@ var/list/uplink_items = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
-			if(!I.available_for_job(U.job) || !I.available_for_job(U.species))
+			if(!I.available_for_job(U.job) && !I.available_for_job(U.species))
 				continue
 			if(!I.available_for_nuke_ops && U.nuke_ops_inventory)
 				continue
@@ -1152,7 +1152,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/cannedmatter
 	category = "Skrell Specials"
 	name = "Canned Compressed Matter"
-	desc = "For once, the syndicate has it."
+	desc = "For once, the syndicate has it. When an item is pressed onto the closed can, it can be stored inside regardless of its size, to be released again on the can opening. Does not allow items to be stored anymore once opened."
 	item = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter
 	cost = 6
 	jobs_exclusive = list("Skrell")
