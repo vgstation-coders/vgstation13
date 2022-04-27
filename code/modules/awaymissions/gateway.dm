@@ -24,8 +24,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/Destroy()
 	gateways.Remove(src)
-	if(!thecenter)
-		detect()
+	detect()
 	if(thecenter)
 		thecenter.linked = null
 		qdel(thecenter)
