@@ -2292,7 +2292,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/roboticiststears
 	name = "Roboticist's Tears"
 	desc = "Absolutely hilarious."
-	icon_state "roboticiststears"
+	icon_state = "roboticiststears"
 	food_flags = FOOD_LIQUID
 	crumb_icon = "dribbles"
 	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
