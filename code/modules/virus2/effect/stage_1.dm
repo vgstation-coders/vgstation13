@@ -444,7 +444,7 @@
 			
 				C.images += rune_holder
 
-				anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-write", col = DEFAULT_BLOOD, sleeptime = 36)
+				anim(target = rune_holder, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-write", col = DEFAULT_BLOOD, sleeptime = 36)
 				
 				spawn(30)
 
