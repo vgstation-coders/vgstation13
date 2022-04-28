@@ -30,7 +30,7 @@
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/turret_protected/vault/mothership_lab/entrance
+/area/vault/mothership_lab/entrance
 	name = "\improper Mothership Lab Entry Level"
 	icon_state = "mothershiplab_entrydeck"
 	requires_power = 0
@@ -58,21 +58,21 @@
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/turret_protected/vault/mothership_lab/research
+/area/vault/mothership_lab/research
 	name = "\improper Mothership Lab Research Level"
 	icon_state = "mothershiplab_researchdeck"
 	requires_power = 0
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/turret_protected/vault/mothership_lab/samplestorage
+/area/vault/mothership_lab/samplestorage
 	name = "\improper Mothership Lab Sample Storage"
 	icon_state = "mothershiplab_researchsamples"
 	requires_power = 0
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/turret_protected/vault/mothership_lab/armory
+/area/vault/mothership_lab/armory
 	name = "\improper Mothership Lab Armory"
 	icon_state = "mothershiplab_armory"
 	requires_power = 0
@@ -93,7 +93,7 @@
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/turret_protected/vault/mothership_lab/control_room
+/area/vault/mothership_lab/control_room
 	name = "\improper Mothership Lab Control Room"
 	icon_state = "mothershiplab_controlroom"
 	requires_power = 0
