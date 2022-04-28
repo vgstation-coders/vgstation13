@@ -99,6 +99,9 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	plane = OPEN_OVERLAY_PLANE
 
 /turf/simulated/open/update_icon()
+	make_openspace_view()
+
+/turf/simulated/proc/make_openspace_view()
 	var/alpha_to_subtract = 127
 	overlays.Cut()
 	vis_contents.Cut()
@@ -118,6 +121,8 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	vis_contents += bottom
 	if(!istype(bottom,/turf/space)) // Space below us
 		vis_contents.Add(overimage)
+		return 1
+	return 0
 
 /turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	overlays.Cut()
@@ -204,25 +209,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 /turf/simulated/floor/glass/update_icon()
 	..()
 	if(get_base_turf(src.z) == /turf/simulated/open)
-		var/alpha_to_subtract = 127
-		vis_contents.Cut()
-		overlays.Cut()
-		var/turf/bottom
-		var/list/checked_belows = list()
-		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-			alpha_to_subtract /= 2
-			if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
-				return // Again, pointless to render anything
-			checked_belows.Add(bottom.z)
-
-		if(!bottom || bottom == src)
-			return
-		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
-		overimage.alpha = 255 - alpha_to_subtract
-		overimage.color = rgb(0,0,0,overimage.alpha)
-		vis_contents += bottom
-		if(!istype(bottom,/turf/space)) // Space below us
-			vis_contents.Add(overimage)
+		if(make_openspace_view()) // Space below us
 			icon_state = "" // Remove any previous space stuff, if any
 		else
 			// We space background now, forget the vis contentsing of it
