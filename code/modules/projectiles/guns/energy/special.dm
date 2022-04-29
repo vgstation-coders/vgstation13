@@ -175,6 +175,44 @@
 	projectile_type = "/obj/item/projectile/animate"
 	charge_cost = 100
 
+#define MAJOR "major"
+#define MINOR "minor"
+#define DEFECTIVE "defect"
+
+/obj/item/weapon/gun/energy/staff/polymorph
+	name = "staff of polymorph"
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "staffofpolymorph"
+	item_state = "staffofpolymorph"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/wiz_left.dmi', "right_hand" = 'icons/mob/in-hand/right/wiz_right.dmi')
+	desc = "An artefact that turns the person afflicted into an animal."
+	charge_cost = 250
+	projectile_type = "/obj/item/projectile/polymorph"
+	var/setting = MINOR
+	var/next_changetype = 0
+
+/obj/item/weapon/gun/energy/staff/polymorph/attack_self(var/mob/living/user)
+	if(world.time < next_changetype)
+		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
+		return
+
+	var/selected = input("You squint at the dial conspicuously mounted on the side of your [name].","[name]") as null|anything in list(MINOR, MAJOR)
+	if(!selected)
+		return
+
+	to_chat(user, "<span class='info'>You set \the [src] to [selected].</span>")
+	add_gamelogs(user, "set \the [src] to \ [selected]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "warning")
+	setting=selected
+	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
+
+/obj/item/weapon/gun/energy/staff/polymorph/process_chambered()
+	if(!..())
+		return 0
+	var/obj/item/projectile/polymorph/P=in_chamber
+	if(P && istype(P))
+		P.status=setting
+	return 1
+
 #define RAISE_TYPE_ZOMBIE 0
 #define RAISE_TYPE_SKELETON 1
 #define RAISE_HUMAN 1

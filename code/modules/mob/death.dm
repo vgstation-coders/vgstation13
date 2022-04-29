@@ -57,7 +57,7 @@
 	var/mob/living/L = C.contained_mob
 	transmogrify()
 	L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
-	if(istype(L))
+	if(C.kill_on_death && istype(L))
 		L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
 		L.updatehealth()
 
