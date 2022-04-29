@@ -1040,6 +1040,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define	ANTIGEN_COMMON	"common"
 #define	ANTIGEN_RARE	"rare"
 #define	ANTIGEN_ALIEN	"alien"
+#define ANTIGEN_SPECIAL "special"
 
 //blood antigens
 #define	ANTIGEN_O	"O"
@@ -1058,6 +1059,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define	ANTIGEN_X	"X"
 #define	ANTIGEN_Y	"Y"
 #define	ANTIGEN_Z	"Z"
+//cult antigen
+#define ANTIGEN_CULT	"C"
+
 
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.

@@ -41,13 +41,15 @@
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
 
-/obj/structure/closet/body_bag/attackby(obj/item/W, mob/user as mob)
+/obj/structure/closet/body_bag/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
-		if(S.amount<5)
+		if(!S.use(5))
 			return
-		S.use(5)
-		new /obj/structure/morgue(src.loc)
+		var/obj/structure/morgue/new_morgue = new(loc)
+		for(var/atom/movable/thing in src)
+			thing.forceMove(new_morgue)
+		new_morgue.update_icon()
 		qdel(src)
 	else if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user, maxlength=32)

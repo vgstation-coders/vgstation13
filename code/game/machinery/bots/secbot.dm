@@ -9,7 +9,7 @@
 	density = 0
 	anchored = 0
 	health = 25
-	maxhealth = 25
+	maxHealth = 25
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
@@ -572,7 +572,7 @@ Auto Patrol: []"},
 	icon_state = "cheapsky0"
 	icon_initial = "cheapsky"
 	health = 15
-	maxhealth = 15
+	maxHealth = 15
 //Cheapsky Construction
 
 /obj/item/weapon/secbot_assembly/cheapsky

@@ -845,7 +845,7 @@
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
-		var/obj/item/organ/external/head/B = decapitated
+		var/obj/item/organ/external/head/B = decapitated?.get()
 		if(B)
 			var/datum/organ/internal/brain/copied
 			if(B.organ_data)
@@ -1494,14 +1494,17 @@
 	investigation_log(I_SINGULO,"has been consumed by a singularity")
 	gib()
 	return gain
-/mob/living/carbon/human/singularity_pull(S, current_size,var/radiations = 3)
+/mob/living/carbon/human/singularity_pull(S, current_size, repel = FALSE, var/radiations = 3)
 	if(src.flags & INVULNERABLE)
 		return 0
 	if(current_size >= STAGE_THREE) //Pull items from hand
 		for(var/obj/item/I in held_items)
 			if(prob(current_size*5) && I.w_class >= ((11-current_size)/2) && u_equip(I,1))
-				step_towards(I, src)
-				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
+				if(!repel)
+					step_towards(I, S)
+				else
+					step_away(I, S)
+				to_chat(src, "<span class = 'warning'>\The [S] [repel ? "pushes" : "pulls"] \the [I] from your grip!</span>")
 	if(radiations)
 		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)

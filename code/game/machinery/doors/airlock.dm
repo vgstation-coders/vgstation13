@@ -1279,13 +1279,7 @@ About the new airlock wires panel:
 					spawn(0)	close(1)
 		src.busy = 0
 	else if (istype(I, /obj/item/weapon/card/emag))
-		if (!operating)
-			operating = -1
-			if(density)
-				door_animate("spark")
-				sleep(6)
-				open(1)
-			operating = -1
+		emag_act(src)
 	else
 		..(I, user)
 	add_fingerprint(user)
@@ -1299,7 +1293,7 @@ About the new airlock wires panel:
 			sleep(6)
 			open(1)
 		operating = -1
-	
+
 
 /obj/machinery/door/airlock/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -1357,6 +1351,16 @@ About the new airlock wires panel:
 	var/heat = C.is_hot()
 	if(heat > 300)
 		ignite(heat)
+	..()
+
+/obj/machinery/door/airlock/emag_act()
+	if (!src.operating)
+		src.operating = -1
+		if(src.density)
+			src.door_animate("spark")
+			sleep(6)
+			src.open(1)
+		src.operating = -1
 	..()
 
 /obj/machinery/door/airlock/open(var/forced=0)
@@ -1508,6 +1512,9 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/enable_AI_control(var/bypass = FALSE)
 	if(bypass)
 		aiControlDisabled = 2
-	else 
+	else
 		aiControlDisabled = 0
-	
+
+/obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
+	if(ishuman(user) && istype(user.wear_id, /obj/item/weapon/card/emag))
+		emag_act()

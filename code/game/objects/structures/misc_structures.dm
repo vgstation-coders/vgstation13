@@ -14,8 +14,9 @@
 	if(istype(H))
 		head = H
 		name = "[H.name]"
-		if(H.origin_body)
-			desc = "The severed head of [H.origin_body.real_name], crudely shoved onto the tip of a spear."
+		var/mob/living/carbon/human/body = H.origin_body?.get()
+		if(body)
+			desc = "The severed head of [body.real_name], crudely shoved onto the tip of a spear."
 		else
 			desc = "A severed head, crudely shoved onto the tip of a spear."
 		display_head = new (src)

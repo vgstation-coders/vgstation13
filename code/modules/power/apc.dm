@@ -1240,20 +1240,16 @@
 // on 0=off, 1=on, 2=autooff
 
 /obj/machinery/power/apc/proc/autoset(var/val, var/on)
-	if(on==0)
-		if(val==2)			// if on, return off
-			return 0
-		else if(val==3)		// if auto-on, return auto-off
-			return 1
-
-	else if(on==1)
-		if(val==1)			// if auto-off, return auto-on
-			return 3
-
-	else if(on==2)
-		if(val==3)			// if auto-on, return auto-off
-			return 1
-
+	switch (on)
+		if (0)
+			if(val>=2)		// if on or auto-on, return auto-off
+				return 1
+		if (1)
+			if(val==1)			// if auto-off, return auto-on
+				return 3
+		if (2)
+			if(val==3)			// if auto-on, return auto-off
+				return 1
 	return val
 
 // damage and destruction acts

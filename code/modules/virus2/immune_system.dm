@@ -19,6 +19,7 @@
 		ANTIGEN_X	= 0,
 		ANTIGEN_Y	= 0,
 		ANTIGEN_Z	= 0,
+		ANTIGEN_CULT = 0,
 		)
 
 /datum/immune_system/New(var/mob/living/L)
@@ -91,40 +92,42 @@
 /datum/immune_system/proc/CanInfect(var/datum/disease2/disease/disease)
 	if (overloaded)
 		return TRUE
+	if(!disease.CanInfect(body))
+		return FALSE
 
 	for (var/antigen in disease.antigen)
 		if ((strength * antibodies[antigen]) >= disease.strength)
 			return FALSE
 	return TRUE
 
-/datum/immune_system/proc/ApplyAntipathogenics(var/threshold)
+/datum/immune_system/proc/ApplyAntipathogenics(var/threshold, var/list/antigen_restriction = list(), var/multiplier = 1)
 	if (overloaded)
 		return
-
 	for (var/ID in body.virus2)
 		var/datum/disease2/disease/disease = body.virus2[ID]
 		for (var/A in disease.antigen)
-			var/tally = 0.5
-			if (isturf(body.loc) && body.lying)
-				tally += 0.5
-				var/obj/structure/bed/B = locate() in body.loc
-				if (B && B.mob_lock_type == /datum/locking_category/buckle/bed)//fucking chairs n stuff
-					tally += 1
-				if (body.sleeping)
-					if (tally < 2)
+			if((antigen_restriction.len == 0) || (A in antigen_restriction))
+				var/tally = 0.5
+				if (isturf(body.loc) && body.lying)
+					tally += 0.5
+					var/obj/structure/bed/B = locate() in body.loc
+					if (B && B.mob_lock_type == /datum/locking_category/buckle/bed)//fucking chairs n stuff
 						tally += 1
-					else
-						tally += 2//if we're sleeping in a bed, we get up to 4
-			else if(istype(body.loc, /obj/machinery/atmospherics/unary/cryo_cell))
-				tally += 1.5
-			else if(body.locked_to && istype(body.locked_to, /obj/item/critter_cage))
-				tally += 2
+					if (body.sleeping)
+						if (tally < 2)
+							tally += 1
+						else
+							tally += 2//if we're sleeping in a bed, we get up to 4
+				else if(istype(body.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+					tally += 1.5
+				else if(body.locked_to && istype(body.locked_to, /obj/item/critter_cage))
+					tally += 2
 
-			if (antibodies[A] < threshold)
-				antibodies[A] = min(antibodies[A] + tally, threshold)//no overshooting here
-			else
-				if (prob(threshold) && prob(tally * 10) && prob((100 - antibodies[A])*100/(100-threshold)))//smaller and smaller chance for further increase
-					antibodies[A] = min(antibodies[A] + 1, 100)
+				if (antibodies[A] < threshold)
+					antibodies[A] = min(antibodies[A] + (tally*multiplier), threshold)//no overshooting here
+				else
+					if (prob(threshold) && prob(tally * 10) && prob((100 - antibodies[A])*100/(100-threshold)))//smaller and smaller chance for further increase
+						antibodies[A] = min(antibodies[A] + 1, 100)
 
 
 /datum/immune_system/proc/ApplyVaccine(var/list/antigen)

@@ -76,8 +76,9 @@
 	vending_cat = "vegetables"
 
 /obj/item/seeds/plastiseed
-	name = "packet of plastellium seeds"
+	name = "packet of plastellium spores"
 	seed_type = "plastic"
+	vending_cat = "mushrooms"
 
 /obj/item/seeds/grapeseed
 	name = "packet of grape seeds"

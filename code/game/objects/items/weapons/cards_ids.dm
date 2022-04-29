@@ -58,6 +58,7 @@
 	name = "cryptographic sequencer"
 	icon_state = "emag"
 	item_state = "card-id"
+	slot_flags = SLOT_ID
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
 
 	/**
@@ -217,7 +218,7 @@ var/list/global/id_cards = list()
 		SetOwnerDNAInfo(loc)
 
 /obj/item/weapon/card/id/Destroy()
-	id_cards -= src 
+	id_cards -= src
 	..()
 
 /obj/item/weapon/card/id/examine(mob/user)

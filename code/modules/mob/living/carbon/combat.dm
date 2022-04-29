@@ -133,6 +133,7 @@
 					var/mob/living/silicon/robot/R = L
 					R.tip(get_dir(src, R))
 					visible_message("<span class='warning'>[src] collides with [R], tipping it over!</span>")
+					R.self_righting(R.knockdown)
 					tackleGetHurt(0, 3)
 					AdjustStunned(3)	//Mostly a mercy to borgs but something something metal casing + skull
 				else
@@ -162,6 +163,7 @@
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
 			tackleGetHurt()
+			Obstacle.tackled(src)
 
 /mob/living/carbon/proc/tackleGetHurt(var/hurtAmount = 0, var/knockAmount = 0, var/hurtSound = "trayhit")
 	if(!hurtAmount)
@@ -239,3 +241,6 @@
 
 /mob/living/carbon/proc/bonusTackleRange(var/tR = 3)
 	return tR
+
+/atom/proc/tackled(mob/living/user)
+	return 0

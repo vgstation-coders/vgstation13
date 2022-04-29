@@ -226,6 +226,7 @@ var/list/isolated_antibodies = list(
 	ANTIGEN_X	= 0,
 	ANTIGEN_Y	= 0,
 	ANTIGEN_Z	= 0,
+	ANTIGEN_CULT = 0,
 	)
 var/list/extracted_gna = list()
 

@@ -327,7 +327,7 @@ var/list/map_dimension_cache = list()
 
 	if(overwrite) //make this come first so lighting overlays don't die
 		var/turf/T_old = locate(xcrd,ycrd,zcrd)
-		var/static/list/blacklisted_types = list(/mob/dead/observer,/mob/dview,/atom/movable/lighting_overlay)
+		var/static/list/blacklisted_types = list(/mob/dead/observer, /mob/dview, /atom/movable/lighting_overlay, /atom/movable/border_dummy)
 		for(var/atom/thing as anything in T_old.contents)
 			if(!is_type_in_list(thing.type,blacklisted_types))
 				qdel(thing)

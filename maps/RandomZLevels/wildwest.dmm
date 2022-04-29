@@ -9,7 +9,7 @@
 /turf/simulated/floor/engine/cult,
 /area/awaymission/wwvault)
 "ad" = (
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor/engine/cult,
 /area/awaymission/wwvault)
 "ae" = (
@@ -82,7 +82,7 @@
 	},
 /area/awaymission/wwvault)
 "aq" = (
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor/shuttle/plating{
 	icon_state = "gcircuitoff";
 	tag = "icon-gcircuitoff"
@@ -175,7 +175,7 @@
 	},
 /area/awaymission/wwvault)
 "aB" = (
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor/shuttle/plating{
 	icon_state = "bcircuitoff";
 	tag = "icon-bcircuitoff"

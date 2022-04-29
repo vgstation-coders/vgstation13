@@ -266,7 +266,6 @@ var/global/datum/controller/vote/vote = new()
 		if(config.vote_no_dead && user.stat == DEAD && !user.client.holder)
 			return 0
 		if (isnum(vote) && (1>vote) || (vote > choices.len))
-			to_chat(user, "<span class='warning'>Illegal vote.</span>")
 			return 0
 		if(mode == "map")
 			if(!user.client.holder)

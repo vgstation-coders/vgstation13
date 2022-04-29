@@ -911,7 +911,7 @@
 /obj/structure/window/barricade{
 	dir = 8
 	},
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor,
 /area/awaymission/tomb/tower_of_madness)
 "dc" = (
@@ -925,7 +925,7 @@
 /obj/structure/window/barricade{
 	dir = 4
 	},
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor,
 /area/awaymission/tomb/tower_of_madness)
 "de" = (
@@ -1126,7 +1126,7 @@
 /obj/structure/window/barricade{
 	dir = 8
 	},
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor,
 /area/awaymission/tomb/tower_of_madness)
 "dK" = (
@@ -1134,7 +1134,7 @@
 	dir = 4
 	},
 /obj/structure/window/barricade,
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor,
 /area/awaymission/tomb/tower_of_madness)
 "dL" = (
@@ -2992,7 +2992,7 @@
 	},
 /area/awaymission/tomb/sewers)
 "iW" = (
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor,
 /area/awaymission/tomb/tower_of_madness)
 "iX" = (

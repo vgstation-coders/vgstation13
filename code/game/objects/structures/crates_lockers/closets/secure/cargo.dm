@@ -43,4 +43,5 @@
 		/obj/item/mounted/poster/cargo,
 		/obj/item/mounted/poster/cargo,
 		/obj/item/weapon/card/debit/preferred/department/cargo,
+		/obj/item/mulebot_laser,
 	)

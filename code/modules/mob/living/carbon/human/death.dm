@@ -77,10 +77,6 @@
 		qdel(species)
 		species = null
 
-	if(decapitated)
-		decapitated.origin_body = null
-		decapitated = null
-
 	if(vessel)
 		qdel(vessel)
 		vessel = null

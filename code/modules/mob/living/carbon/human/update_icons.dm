@@ -350,7 +350,8 @@ var/global/list/damage_icon_parts = list()
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
 			var/icon/hair_s
 			if(isvox(src))
-
+				if(my_appearance.r_hair > 7)
+					my_appearance.r_hair = rand(1,7)
 				hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[my_appearance.r_hair]_[hair_suffix]")
 			else
 				hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
@@ -1087,7 +1088,6 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += dyn_overlay
 
 		if(istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
-			drop_from_inventory(handcuffed)
 			drop_hands()
 
 		if(istype(wear_suit, /obj/item/clothing/suit))

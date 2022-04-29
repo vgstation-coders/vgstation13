@@ -441,7 +441,6 @@
 			O.organ_data.transplant_data["blood_type"] = transplant_blood.data["blood_type"]
 			O.organ_data.transplant_data["blood_DNA"] =  transplant_blood.data["blood_DNA"]
 
-		O.organ_data.organ_holder = null
 		O.organ_data.owner = target
 		target.internal_organs |= O.organ_data
 		affected.internal_organs |= O.organ_data

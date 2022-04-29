@@ -288,7 +288,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/watertank
 	name = "Water tank"
 	contains = list(/obj/structure/reagent_dispensers/watertank)
-	cost = 15
+	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "water tank crate"
 	group = "Supplies"
@@ -296,7 +296,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/fueltank
 	name = "Fuel tank"
 	contains = list(/obj/structure/reagent_dispensers/fueltank)
-	cost = 30
+	cost = 15
 	containertype = /obj/structure/largecrate
 	containername = "fuel tank crate"
 	group = "Supplies"
@@ -304,7 +304,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/silicatetank
 	name = "Silicate tank"
 	contains = list(/obj/structure/reagent_dispensers/silicate)
-	cost = 15
+	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "silicate tank crate"
 	group = "Supplies"
@@ -312,7 +312,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/sacidtank
 	name = "Sulphuric acid tank"
 	contains = list(/obj/structure/reagent_dispensers/sacid)
-	cost = 30
+	cost = 15
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "sulphuric acid tank crate"
 	group = "Supplies"
@@ -1857,6 +1857,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_engine_equip)
 	group = "Engineering"
 
+/datum/supply_packs/automation
+	name = "Automation supplies"
+	contains = list(/obj/item/weapon/circuitboard/wrapping_machine,
+					/obj/item/weapon/circuitboard/sorting_machine/item,
+					/obj/item/weapon/circuitboard/crate_opener,
+					/obj/item/weapon/circuitboard/crate_closer)
+	cost = 25
+	containertype = /obj/structure/closet/crate/engi
+	containername = "Automation Supplies Crate"
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
@@ -2198,6 +2209,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "stok crate"
+	group = "Hydroponics"
+
+/datum/supply_packs/roach
+	name = "Roach cubes"
+	contains = list (/obj/item/weapon/storage/box/monkeycubes/roachcubes)
+	cost = 30
+	containertype = /obj/structure/closet/crate/freezer
+	containername = "roach crate"
 	group = "Hydroponics"
 
 /datum/supply_packs/vox
