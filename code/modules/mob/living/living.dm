@@ -1430,8 +1430,7 @@ Thanks.
 	return 0
 
 /mob/living/nuke_act() //Called when caught in a nuclear blast
-	health = 0
-	stat = DEAD
+	return
 
 /mob/living/proc/turn_into_statue(forever = 0, force)
 	if(!force)
