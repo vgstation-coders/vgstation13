@@ -372,7 +372,7 @@ var/list/nuclear_bombs = list()
 
 /obj/item/weapon/disk/nuclear/process()
 	var/turf/T = get_turf(src)
-	if(!T)
+	if(!T && !ticker.station_was_nuked)
 		var/atom/A
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 		message_admins("\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]")
