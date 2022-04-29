@@ -74,10 +74,9 @@
 			toggle_door(user)
 
 /obj/structure/cage/ex_act(var/severity)
-	if(severity < 3)
-		var/list/affected_mobs = remove_mobs()
-		for(var/atom/movable/M in affected_mobs)
-			M.ex_act(severity)
+	var/list/affected_mobs = severity < 3 ? remove_mobs() : get_mobs()
+	for(var/atom/movable/M in affected_mobs)
+		M.ex_act(severity)
 	..()
 
 /obj/structure/cage/shuttle_act(var/datum/shuttle/S)
@@ -271,6 +270,13 @@
 		return TRUE
 
 	return checked in get_locked(/datum/locking_category/cage)
+
+/obj/structure/cage/proc/get_mobs()
+	switch(cover_state)
+		if(C_OPENED)
+			. = get_locked(/datum/locking_category/cage)
+		if(C_CLOSED)
+			. = contents
 
 /obj/structure/cage/proc/remove_mobs()
 	. = list()
