@@ -7,11 +7,11 @@
 <b>Implant Specifications:</b><BR>
 <b>Name:</b> Holy Dogmatic Interference Implant<BR>
 <b>Life:</b> Anywhere from ten days to ten years depending on the strain placed upon the implant by the subject.<BR>
-<b>Important Notes:</b> This device was commissioned by Nanotrasen after it proved able to distract occult practitioners, making them unable to practice their dark arts.<BR>
+<b>Important Notes:</b> This device was commissioned by Nanotrasen after it proved able to distract occult practitioners and vampiric influences, making them unable to practice their dark arts.<BR>
 <HR>
 <b>Implant Details:</b><BR>
 <b>Function:</b> Submits its subject to the chants of a thousand chaplains.<BR>
-<b>Special Features:</b> Prevents cultists from using their runes and talismans, or from being the target of some of their peers' rituals.<BR>
+<b>Special Features:</b> Prevents cultists from using their runes and talismans, or from being the target of some of their peers' rituals. Exhausts vampires from using their blood-based abilities over time, severely weakening their power but is not instant.<BR>
 <b>Integrity:</b> Implant anchors itself against the subject's bones to prevent blood pressure induced ejections."}
 
 /obj/item/weapon/implant/holy/implanted(mob/implanter)
@@ -19,8 +19,8 @@
 	imp_in << sound('sound/ambience/ambicha2.ogg')
 	imp_in << sound('sound/ambience/ambicha3.ogg')
 	imp_in << sound('sound/ambience/ambicha4.ogg')
-	if(iscultist(imp_in))
-		to_chat(imp_in, "<span class='danger'>You feel uneasy as you suddenly start hearing a cacophony of religious chants. You find yourself unable to perform any ritual.</span>")
+	if(iscultist(imp_in), isvampire(imp_in))
+		to_chat(imp_in, "<span class='danger'>You feel uneasy as you suddenly start hearing a cacophony of religious chants. You find yourself growing distant from your ritualistic abilities...</span>")
 	else
 		to_chat(imp_in, "<span class='notice'>You hear the soothing millennia-old Gregorian chants of the clergy.</span>")
 
