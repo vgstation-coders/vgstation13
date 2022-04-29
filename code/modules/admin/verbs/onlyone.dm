@@ -96,7 +96,7 @@
 	return H
 
 
-/*MAGIC MISSILE
+//MAGIC MISSILE
 /datum/only_one/wizardwars
 	name = "Wizard Wars"
 
@@ -163,4 +163,3 @@
 		if(M.mind)
 			M.mind.nospells = 0
 		to_chat(M, "<span class='warning'>Invincibility period over. Let the battle begin!</span>")
-*/
