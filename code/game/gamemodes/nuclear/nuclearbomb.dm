@@ -129,6 +129,15 @@ var/list/nuclear_bombs = list()
 		return attack_hand(user) //continue as normal
 	return 0 //otherwise nothing
 
+/obj/machinery/nuclearbomb/kick_act(mob/living/carbon/human/H)
+	..()
+	if(H.is_wearing_item(/obj/item/clothing/shoes/brown/rd, slot_shoes))
+		return
+	if(prob(1) && prob(1) && prob(1))
+		src.safety = 0
+		explode()
+
+
 /obj/machinery/nuclearbomb/attack_hand(mob/user as mob)
 	if (src.extended)
 		user.set_machine(src)
