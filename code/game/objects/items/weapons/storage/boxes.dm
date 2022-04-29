@@ -605,6 +605,16 @@
 		/obj/item/clothing/head/spaceninjafake,
 	)
 
+/obj/item/weapon/storage/box/syndicatefake/ops
+	name = "Operative Suit Replica"
+	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
+	items_to_spawn = list(
+		/obj/item/clothing/suit/opsfake,
+		/obj/item/clothing/head/opsfake,
+
+	)
+
 /obj/item/weapon/storage/box/autoinjectors
 	name = "box of injectors"
 	desc = "Contains autoinjectors."

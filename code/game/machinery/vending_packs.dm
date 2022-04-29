@@ -312,3 +312,7 @@
 	targetvendomat = /obj/machinery/vending/lotto
 	icon_state = "sale"
 
+/obj/structure/vendomatpack/syndicatesuits
+	name = "Syndicate Suits recharge pack"
+	targetvendomat = /obj/machinery/vending/coffee
+	icon_state = "syndicatesuits"
