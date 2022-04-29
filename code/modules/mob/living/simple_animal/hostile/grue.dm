@@ -136,6 +136,7 @@
 	..()
 	if(client && hud_used)
 		hud_used.grue_hud()
+		update_pull_icon()
 
 //health indicator
 		if (health >= maxHealth)
