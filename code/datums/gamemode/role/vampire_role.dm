@@ -22,6 +22,7 @@
 
 	var/nullified = 0
 	var/smitecounter = 0
+	var/holyimplanted = 0
 
 	var/list/saved_appearances = list()
 	var/datum/human_appearance/initial_appearance
@@ -421,6 +422,13 @@
 				to_chat(H, "<span class='danger'>The holy flames continue to burn your flesh!</span>")
 			H.fire_stacks += 5
 			H.IgniteMob()
+			
+/datum/role/vampire/proc/holyimplanted
+	if (is_implanted(/obj/item/weapon/implant/holy))
+		return 1
+	return 0
+	if (var/holyimplanted = 1)
+		remove_blood(1)
 
 /datum/role/vampire/proc/remove_blood(var/amount)
 	blood_usable = max(0, blood_usable - amount)
