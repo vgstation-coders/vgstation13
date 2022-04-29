@@ -612,7 +612,6 @@
 	items_to_spawn = list(
 		/obj/item/clothing/suit/opsfake,
 		/obj/item/clothing/head/opsfake,
-
 	)
 
 /obj/item/weapon/storage/box/autoinjectors
