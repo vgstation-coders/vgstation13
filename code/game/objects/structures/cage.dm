@@ -74,9 +74,10 @@
 			toggle_door(user)
 
 /obj/structure/cage/ex_act(var/severity)
-	var/list/affected_mobs = remove_mobs()
-	for(var/atom/movable/M in affected_mobs)
-		M.ex_act(severity)
+	if(severity < 3)
+		var/list/affected_mobs = remove_mobs()
+		for(var/atom/movable/M in affected_mobs)
+			M.ex_act(severity)
 	..()
 
 /obj/structure/cage/shuttle_act(var/datum/shuttle/S)
