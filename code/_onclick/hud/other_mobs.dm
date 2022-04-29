@@ -316,17 +316,17 @@
 	mymob.healths2.name= "darkness"
 	mymob.healths2.screen_loc=ui_under_health
 
-+	mymob.pullin = new /obj/abstract/screen
-+	mymob.pullin.icon = 'icons/mob/screen1_construct.dmi'
-+	mymob.pullin.icon_state = "pull0"
-+	mymob.pullin.name = "pull"
-+	mymob.pullin.screen_loc = ui_construct_pull
-+
-+	mymob.zone_sel = new /obj/abstract/screen/zone_sel
-+	mymob.zone_sel.icon = 'icons/mob/screen1_construct.dmi'
-+	mymob.zone_sel.overlays.len = 0
-+	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
-+
-+	mymob.client.reset_screen()
-+
-+	mymob.client.screen += list(mymob.healths, mymob.healths2, mymob.pullin, mymob.zone_sel)
+	mymob.pullin = new /obj/abstract/screen
+	mymob.pullin.icon = 'icons/mob/screen1_construct.dmi'
+	mymob.pullin.icon_state = "pull0"
+	mymob.pullin.name = "pull"
+	mymob.pullin.screen_loc = ui_construct_pull
+
+	mymob.zone_sel = new /obj/abstract/screen/zone_sel
+	mymob.zone_sel.icon = 'icons/mob/screen1_construct.dmi'
+	mymob.zone_sel.overlays.len = 0
+	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+
+	mymob.client.reset_screen()
+
+	mymob.client.screen += list(mymob.healths, mymob.healths2, mymob.pullin, mymob.zone_sel)
