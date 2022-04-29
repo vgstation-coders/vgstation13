@@ -3807,7 +3807,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/syndicate/executive = 2,
 		/obj/item/clothing/suit/storage/syndicateexec = 2,
 		/obj/item/weapon/storage/box/syndicatefake/space = 2,
-		/obj/item/clothing/mask/gas/syndicate =2,
+		/obj/item/clothing/mask/gas/syndicate = 2,
+		/obj/item/clothing/shoes/laceup = 2,
 		)
 	contraband = list(
 		/obj/item/clothing/head/beret/centcom/officer = 2,
