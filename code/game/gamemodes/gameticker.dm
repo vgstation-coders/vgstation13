@@ -313,6 +313,7 @@ var/datum/controller/gameticker/ticker
 		if(M.client)
 			M.client.screen += cinematic	//show every client the cinematic
 
+
 	//Now animate the cinematic
 	switch(station_missed)
 		if(1)	//nuke was nearby but (mostly) missed
@@ -330,8 +331,6 @@ var/datum/controller/gameticker/ticker
 					sleep(35)
 					world << sound('sound/effects/explosionfar.ogg')
 					//flick("end",cinematic)
-
-
 		if(2)	//nuke was nowhere nearby	//TODO: a really distant explosion animation
 			sleep(50)
 			world << sound('sound/effects/explosionfar.ogg')
@@ -359,7 +358,6 @@ var/datum/controller/gameticker/ticker
 					flick("station_explode_fade_red", cinematic)
 					world << sound('sound/effects/explosionfar.ogg')
 					cinematic.icon_state = "summary_selfdes"
-
 	if(cinematic)
 		qdel(cinematic)		//end the cinematic
 	if(temp_buckle)
@@ -467,11 +465,6 @@ var/datum/controller/gameticker/ticker
 				vote.initiate_vote("map","The Server", popup = 1)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
-
-			if (station_was_nuked)
-				feedback_set_details("end_proper","nuke")
-				if(!delay_end && !watchdog.waiting)
-					to_chat(world, "<span class='notice'><B>Rebooting due to destruction of station in [restart_timeout/10] seconds</B></span>")
 			else
 				feedback_set_details("end_proper","\proper completion")
 				if(!delay_end && !watchdog.waiting)

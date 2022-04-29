@@ -121,9 +121,6 @@
 
 /mob/living/simple_animal/hostile/bigroach/ex_act()
 	return //Survive bombs
-
-/mob/living/simple_animal/hostile/bigroach/nuke_act()
-	return //Survive nuclear blasts
 	
 /mob/living/simple_animal/hostile/bigroach/reagent_act(id, method, volume)
 	if(isDead())

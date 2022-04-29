@@ -1429,10 +1429,6 @@ Thanks.
 
 	return 0
 
-/mob/living/nuke_act() //Called when caught in a nuclear blast
-	health = 0
-	stat = DEAD
-
 /mob/living/proc/turn_into_statue(forever = 0, force)
 	if(!force)
 		if(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL))

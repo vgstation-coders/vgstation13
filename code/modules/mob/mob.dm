@@ -1854,9 +1854,6 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/teleport_to(var/atom/A)
 	forceMove(get_turf(A))
 
-/mob/proc/nuke_act() //Called when caught in a nuclear blast
-	return
-
 /mob/supermatter_act(atom/source, severity)
 	var/contents = get_contents_in_object(src)
 
