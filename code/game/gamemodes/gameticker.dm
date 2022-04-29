@@ -308,24 +308,10 @@ var/datum/controller/gameticker/ticker
 	cinematic.screen_loc = "1,0"
 
 	var/obj/structure/bed/temp_buckle = new(src)
-	//Incredibly hackish. It creates a bed within the gameticker (lol) to stop mobs running around
-	if(station_missed)
-		for(var/mob/living/M in living_mob_list)
-			M.locked_to = temp_buckle				//buckles the mob so it can't do anything
-			if(M.client)
-				M.client.screen += cinematic	//show every client the cinematic
-	else	//nuke kills everyone on the station to prevent "hurr-durr I survived"
-		for(var/mob/living/M in living_mob_list)
-			M.locked_to = temp_buckle
-			if(M.client)
-				M.client.screen += cinematic
-
-			if(!(M.z))	//inside a crate or something
-				var/turf/T = get_turf(M)
-				if(T && T.z==map.zMainStation)	//we don't use M.death(0) because it calls a for(/mob) loop and
-					M.nuke_act()
-			else if(M.z == map.zMainStation) //on the station.
-				M.nuke_act()
+	for(var/mob/living/M in living_mob_list)
+		M.locked_to = temp_buckle				//buckles the mob so it can't do anything
+		if(M.client)
+			M.client.screen += cinematic	//show every client the cinematic
 
 	//Now animate the cinematic
 	switch(station_missed)
@@ -373,10 +359,6 @@ var/datum/controller/gameticker/ticker
 					flick("station_explode_fade_red", cinematic)
 					world << sound('sound/effects/explosionfar.ogg')
 					cinematic.icon_state = "summary_selfdes"
-
-	//If its actually the end of the round, wait for it to end.
-	//Otherwise if its a verb it will continue on afterwards.
-	sleep(300)
 
 	if(cinematic)
 		qdel(cinematic)		//end the cinematic
