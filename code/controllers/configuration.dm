@@ -179,8 +179,6 @@
 
 	var/renders_url = ""
 
-	var/mommi_static = 0 //Scrambling mobs for mommis or not
-
 	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
 
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
@@ -603,8 +601,6 @@
 					poll_results_url = value
 				if("renders_url")
 					renders_url = value
-				if("mommi_static")
-					mommi_static = 1
 				if("skip_minimap_generation")
 					skip_minimap_generation = 1
 				if("skip_holominimap_generation")

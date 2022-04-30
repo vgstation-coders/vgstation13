@@ -1483,9 +1483,11 @@ var/list/confusion_victims = list()
 			if (C.client)
 				var/list/my_hallucinated_stuff = hallucinated_turfs.Copy()
 				for(var/mob/living/L in range(T,25))//All mobs in a large radius will look like monsters to the victims.
-					if (L == C || !("cult" in L.static_overlays))
+					if (L == C)
 						continue//the victims still see themselves as humans (or whatever they are)
-					my_hallucinated_stuff.Add(L.static_overlays["cult"])
+					var/image/override_overlay = image(icon = 'icons/mob/animal.dmi', loc = L, icon_state = pick("faithless","forgotten","otherthing"))
+					override_overlay.override = TRUE
+					my_hallucinated_stuff.Add(override_overlay)
 				if (!new_victim)
 					my_hallucinated_stuff.Add(confusion_victims[C])
 					C.client.images.Remove(confusion_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
@@ -2052,7 +2054,7 @@ var/list/seer_rituals = list()
 	activator.put_in_hands(BT)
 	if(iscultist(target))
 		to_chat(target, "<span class='notice'>Robes and gear of the followers of Nar-Sie manifests around your body. You feel empowered.</span>")
-	else 
+	else
 		to_chat(target, "<span class='warning'>Robes and gear of the followers of Nar-Sie manifests around your body. You feel sickened.</span>")
 	to_chat(activator, "<span class='notice'>A [BT] materializes in your hand, you may use it to instantly swap back into your stored clothing.</span>")
 	qdel(src)

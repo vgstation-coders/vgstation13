@@ -152,18 +152,8 @@ var/global/list/damage_icon_parts = list()
 //DAMAGE OVERLAYS
 //constructs damage icon for each organ from mask * damage field and saves it in our overlays_ lists
 /mob/living/carbon/human/UpdateDamageIcon(var/update_icons=1)
-	// first check whether something actually changed about damage appearance
-	/*for(var/datum/organ/external/O in organs)
-		if(O.status & ORGAN_DESTROYED)
-			damage_appearance += "d"
-		else
-			damage_appearance += O.damage_state
-	if(damage_appearance == previous_damage_appearance)
-		// nothing to do here
+	if(monkeyizing)
 		return
-	previous_damage_appearance = damage_appearance
-	*/
-
 	var/image/standing_image = image('icons/mob/dam_human.dmi', "blank")
 
 	// blend the individual damage states with our icons
@@ -191,7 +181,8 @@ var/global/list/damage_icon_parts = list()
 
 //BASE MOB SPRITE
 /mob/living/carbon/human/proc/update_body(var/update_icons=1)
-
+	if(monkeyizing)
+		return
 
 	var/husk_color_mod = rgb(96,88,80)
 	var/hulk_color_mod = rgb(48,224,40)
@@ -319,7 +310,8 @@ var/global/list/damage_icon_parts = list()
 
 //HAIR OVERLAY
 /mob/living/carbon/human/update_hair(var/update_icons=1)
-	//Reset our hair
+	if(monkeyizing)
+		return
 
 	overlays -= obj_overlays[HAIR_LAYER]
 
@@ -378,7 +370,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_mutations(var/update_icons=1)
-
+	if(monkeyizing)
+		return
 	var/fat
 	if(M_FAT in mutations)
 		fat = "fat"
@@ -434,8 +427,8 @@ var/global/list/damage_icon_parts = list()
 
 
 /mob/living/carbon/human/proc/update_mutantrace(var/update_icons=1)
-
-
+	if(monkeyizing)
+		return
 	var/fat
 	if( M_FAT in mutations )
 		fat = "fat"
@@ -537,7 +530,8 @@ var/global/list/damage_icon_parts = list()
 //vvvvvv UPDATE_INV PROCS vvvvvv
 
 /mob/living/carbon/human/update_inv_w_uniform(var/update_icons=1)
-
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[UNIFORM_LAYER]
 	if(!w_uniform)
 		var/list/drop_items = list(r_store, l_store, wear_id)
@@ -615,6 +609,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_wear_id(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[ID_LAYER]
 	if(wear_id)
 		wear_id.screen_loc = ui_id	//TODO
@@ -651,6 +647,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_gloves(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[GLOVES_LAYER]
 	var/obj/abstract/Overlays/O = obj_overlays[GLOVES_LAYER]
 	O.overlays.len = 0
@@ -718,6 +716,8 @@ var/global/list/damage_icon_parts = list()
 
 
 /mob/living/carbon/human/update_inv_glasses(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[GLASSES_LAYER]
 	overlays -= obj_overlays[GLASSES_OVER_HAIR_LAYER]
 	if(glasses && !check_hidden_head_flags(HIDEEYES) && glasses.is_visible())
@@ -780,7 +780,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_ears(var/update_icons=1)
-
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[EARS_LAYER]
 	if(ears && !check_hidden_head_flags(HIDEEARS) && ears.is_visible())
 		var/image/standing
@@ -827,6 +828,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_shoes(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[SHOES_LAYER]
 	if(shoes && !check_hidden_body_flags(HIDESHOES) && shoes.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[SHOES_LAYER]
@@ -877,6 +880,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_s_store(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[SUIT_STORE_LAYER]
 	if(s_store)
 		var/t_state = s_store.item_state
@@ -904,6 +909,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_head(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[HEAD_LAYER]
 	if(head && head.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[HEAD_LAYER]
@@ -1002,6 +1009,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_belt(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[BELT_LAYER]
 	if(belt && belt.is_visible())
 		belt.screen_loc = ui_belt	//TODO
@@ -1048,6 +1057,8 @@ var/global/list/damage_icon_parts = list()
 
 
 /mob/living/carbon/human/update_inv_wear_suit(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[SUIT_LAYER]
 	if( wear_suit && wear_suit.is_visible())	//TODO check this
 		wear_suit.screen_loc = ui_oclothing	//TODO
@@ -1117,7 +1128,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_pockets(var/update_icons=1)
-
+	if(monkeyizing)
+		return
 	if(l_store)
 		l_store.screen_loc = ui_storage1	//TODO
 	if(r_store)
@@ -1127,6 +1139,8 @@ var/global/list/damage_icon_parts = list()
 
 
 /mob/living/carbon/human/update_inv_wear_mask(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[FACEMASK_LAYER]
 	if( wear_mask && !check_hidden_head_flags(MOUTH) && wear_mask.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[FACEMASK_LAYER]
@@ -1179,6 +1193,8 @@ var/global/list/damage_icon_parts = list()
 
 
 /mob/living/carbon/human/update_inv_back(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[BACK_LAYER]
 	if(back && back.is_visible())
 		back.screen_loc = ui_back	//TODO
@@ -1231,6 +1247,8 @@ var/global/list/damage_icon_parts = list()
 
 
 /mob/living/carbon/human/update_inv_handcuffed(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[HANDCUFF_LAYER]
 	if(handcuffed && handcuffed.is_visible())
 		drop_hands()
@@ -1246,6 +1264,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_mutual_handcuffed(var/update_icons = TRUE)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[HANDCUFF_LAYER]
 	if (mutual_handcuffs && mutual_handcuffs.is_visible())
 		stop_pulling()	//TODO: should be handled elsewhere
@@ -1260,6 +1280,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_legcuffed(var/update_icons=1)
+	if(monkeyizing)
+		return
 	overlays -= obj_overlays[LEGCUFF_LAYER]
 	if(legcuffed && legcuffed.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[LEGCUFF_LAYER]
@@ -1280,6 +1302,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_hand(index, var/update_icons = 1)
+	if(monkeyizing)
+		return
 	if(!obj_overlays)	//this shouldn't happen, but it does
 		return
 	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
@@ -1390,7 +1414,7 @@ var/global/list/damage_icon_parts = list()
 
 //lower cost way of updating the necessary human icons on equip and unequip
 /mob/living/carbon/human/proc/update_hidden_item_icons(var/obj/item/W)
-	if(!W || gcDestroyed)
+	if(!W || gcDestroyed || monkeyizing)
 		return
 
 	if(is_slot_hidden(W.body_parts_covered, (HIDEHEADHAIR), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (MASKHEADHAIR), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (HIDEBEARDHAIR), 0, W.body_parts_visible_override))
