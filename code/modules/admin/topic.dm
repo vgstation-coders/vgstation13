@@ -4080,13 +4080,13 @@
 			if("fakebooms") //Michael Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
-				var/amount = input("How much high-budget explosions do you want ?", "Michael Bay SFX Systems", 1) as num
+				var/amount = input("How many fake explosions do you want ?", "Fake Explosions", 1) as num
 				if(amount < 1) //No negative or null explosion amounts here math genius
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
-				var/realeffect = alert(usr,"Use visible explosions?", "Michael Bay SFX Systems", "Yes", "No") == "Yes"
-				message_admins("[key_name_admin(usr)] improvised himself as Michael Bay and triggered [round(amount)] fake explosions.")
-				log_admin("[key_name_admin(usr)] improvised himself as Michael Bay and triggered [round(amount)] fake explosions.")
+				var/realeffect = alert(usr,"Use visible explosions?", "Fake Explosions", "Yes", "No") == "Yes"
+				message_admins("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
+				log_admin("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
 				for(var/i = 1 to amount)
 					if(realeffect)
 						var/turf/epicenter = locate(rand(1,world.maxx),rand(1,world.maxy),map.zMainStation)
