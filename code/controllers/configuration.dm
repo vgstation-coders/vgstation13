@@ -77,10 +77,6 @@
 	var/cargo_forwarding_on_roundstart = 0
 	var/cargo_forwarding_amount_override = 0
 
-
-	var/multiz_render_cap = 8			//how far down open spaces will render
-	var/multiz_bottom_cap = 16			//how far down open spaces will detect for a bottom
-
 	// BSQL things
 	var/bsql_debug = 0
 	var/async_query_timeout = 10
@@ -583,11 +579,6 @@
 				if("bsql_thread_limit")
 					bsql_thread_limit = text2num(value)
 
-
-				if("multiz_render_cap")
-					multiz_render_cap = text2num(value)
-				if("multiz_bottom_cap")
-					multiz_bottom_cap = text2num(value)
 
 				if("media_base_url")
 					media_base_url = value

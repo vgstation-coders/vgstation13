@@ -27,7 +27,6 @@
 	plane = OPENSPACE_PLANE_START
 	//pathweight = 100000 //For lack of pathweights, mobdropping meta inc
 	dynamic_lighting = 0 // Someday lets do proper lighting z-transfer.  Until then we are leaving this off so it looks nicer.
-
 	var/turf/below
 
 /turf/simulated/open/post_change()
@@ -83,7 +82,11 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 /turf/simulated/open/examine(mob/user, distance, infix, suffix)
 	if(..(user, 2))
 		var/depth = 1
-		for(var/T = GetBelow(src); isopenspace(T); T = GetBelow(T))
+		var/list/checked_belows = list()
+		for(var/turf/T = GetBelow(src); isopenspace(T); T = GetBelow(T))
+			if(T.z in checked_belows) // To stop getting caught on this in infinite loops
+				to_chat(user, "It looks bottomless.")
+				return
 			depth += 1
 		to_chat(user, "It is about [depth] levels deep.")
 
@@ -96,16 +99,19 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	plane = OPEN_OVERLAY_PLANE
 
 /turf/simulated/open/update_icon()
+	make_openspace_view()
+
+/turf/simulated/proc/make_openspace_view()
 	var/alpha_to_subtract = 127
 	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
-	var/depth = 0
+	var/list/checked_belows = list()
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 		alpha_to_subtract /= 2
-		depth++
-		if(depth > config.multiz_render_cap) // To stop getting caught on this in infinite loops
-			break
+		if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
+			return // Don't even render anything
+		checked_belows.Add(bottom.z)
 
 	if(!bottom || bottom == src)
 		return
@@ -115,6 +121,8 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	vis_contents += bottom
 	if(!istype(bottom,/turf/space)) // Space below us
 		vis_contents.Add(overimage)
+		return 1
+	return 0
 
 /turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	overlays.Cut()
@@ -201,25 +209,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 /turf/simulated/floor/glass/update_icon()
 	..()
 	if(get_base_turf(src.z) == /turf/simulated/open)
-		var/alpha_to_subtract = 127
-		vis_contents.Cut()
-		overlays.Cut()
-		var/turf/bottom
-		var/depth = 0
-		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-			alpha_to_subtract /= 2
-			depth++
-			if(depth > config.multiz_render_cap) // To stop getting caught on this in infinite loops
-				break
-
-		if(!bottom || bottom == src)
-			return
-		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
-		overimage.alpha = 255 - alpha_to_subtract
-		overimage.color = rgb(0,0,0,overimage.alpha)
-		vis_contents += bottom
-		if(!istype(bottom,/turf/space)) // Space below us
-			vis_contents.Add(overimage)
+		if(make_openspace_view()) // Space below us
 			icon_state = "" // Remove any previous space stuff, if any
 		else
 			// We space background now, forget the vis contentsing of it
