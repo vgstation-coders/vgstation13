@@ -173,7 +173,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/pacid
-	name = "huge pacid flask"
+	name = "huge polytrinic acid flask"
 
 /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/pacid/New()
 	..()
@@ -189,7 +189,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/diabeetus
-	name = "huge diabeetus flask"
+	name = "huge diabeetusol flask"
 
 /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/diabeetus/New()
 	..()
