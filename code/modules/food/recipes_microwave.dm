@@ -1386,9 +1386,17 @@
 	reagents = list(WATER = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/stack/ore/clown,
+		/obj/item/stack/sheet/mineral/clown,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/clownstears
+
+/datum/recipe/roboticiststears
+	reagents = list(WATER = 10)
+	items = list(
+		/obj/item/robot_parts/head,
+		/obj/item/stack/sheet/mineral/phazon,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/roboticiststears
 
 /datum/recipe/mushroomsoup
 	reagents = list(WATER = 5, MILK = 5)
