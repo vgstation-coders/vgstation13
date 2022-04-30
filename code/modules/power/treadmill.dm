@@ -33,7 +33,7 @@
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
-	
+
 /obj/machinery/power/treadmill/New()
 	..()
 	setup_border_dummy()
@@ -117,7 +117,7 @@
 	else
 		disconnect_from_network()
 
-/obj/machinery/power/treadmill/emag()
+/obj/machinery/power/treadmill/emag_act()
 	..()
 	emagged = 1
 	name = "\improper DREADMILL"

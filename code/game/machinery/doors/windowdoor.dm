@@ -301,7 +301,7 @@
 
 	return ..()
 
-/obj/machinery/door/window/emag(mob/user)
+/obj/machinery/door/window/emag_act(mob/user)
 	..()
 	hackOpen(user)
 

@@ -1142,7 +1142,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //used to define machine behaviour in attackbys and other code situations
-#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag()
+#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag_act()
 #define SCREWTOGGLE		2 //does it toggle panel_open when hit by a screwdriver?
 #define CROWDESTROY		4 //does hitting a panel_open machine with a crowbar disassemble it?
 #define WRENCHMOVE		8 //does hitting it with a wrench toggle its anchored state?

@@ -558,7 +558,7 @@
 
 	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_LIFT_VIROTAPE
 
-	modules += new /obj/item/weapon/card/emag(src)
+	modules += new /obj/item/weapon/card/emag_act(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
 	modules += new /obj/item/device/chameleon(src)

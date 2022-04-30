@@ -261,7 +261,7 @@
 
 		//A.dumbfire()
 
-/obj/machinery/power/emitter/emag(mob/user)
+/obj/machinery/power/emitter/emag_act(mob/user)
 	if(!emagged)
 		locked = 0
 		emagged = 1

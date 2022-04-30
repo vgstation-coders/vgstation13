@@ -613,7 +613,7 @@
 	if (src.health <= 0)
 		src.explode()
 
-/obj/machinery/bot/proc/Emag(mob/user)
+/obj/machinery/bot/emag_act(mob/user)
 	if(locked)
 		locked = 0
 		emagged = 1
@@ -627,7 +627,6 @@
 /obj/machinery/bot/emag_ai(mob/living/silicon/ai/A)
 	locked = 0
 	open = 1
-	emag(A)
 	emag_act(A)
 
 /obj/machinery/bot/npc_tamper_act(mob/living/L)
@@ -710,7 +709,7 @@
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
 	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
-		Emag(user)
+		emag_act(user)
 	else
 		if(isobj(W))
 			W.on_attack(src, user)

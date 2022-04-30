@@ -245,7 +245,7 @@
 		else
 			to_chat(user, "The [src] must first be secured to the floor.")
 
-/obj/machinery/shieldgen/emag(mob/user)
+/obj/machinery/shieldgen/emag_act(mob/user)
 	if(!emagged)
 		malfunction = 1
 		update_icon()

@@ -95,7 +95,7 @@ var/list/mass_drivers = list()
 	drive()
 	..(severity)
 
-/obj/machinery/mass_driver/emag(mob/user)
+/obj/machinery/mass_driver/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
 		if(user)

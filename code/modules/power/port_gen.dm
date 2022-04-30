@@ -161,7 +161,7 @@
 /obj/machinery/power/port_gen/pacman/proc/overheat()
 	explosion(src.loc, 2, 5, 2, -1)
 
-/obj/machinery/power/port_gen/pacman/emag(mob/user)
+/obj/machinery/power/port_gen/pacman/emag_act(mob/user)
 	emagged = 1
 	emp_act(1)
 	return 1

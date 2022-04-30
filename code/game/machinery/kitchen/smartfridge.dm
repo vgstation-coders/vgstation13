@@ -427,7 +427,7 @@
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/smartfridge/emag(mob/user)
+/obj/machinery/smartfridge/emag_act(mob/user)
 	spark(src)
 	emagged = !emagged
 	if(emagged)

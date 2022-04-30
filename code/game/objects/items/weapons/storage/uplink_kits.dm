@@ -32,13 +32,13 @@
 		if("guns")//13+4+6+4=27
 			new /obj/item/weapon/gun/projectile/revolver(src)
 			new /obj/item/ammo_storage/box/a357(src)
-			new /obj/item/weapon/card/emag(src)
+			new /obj/item/weapon/card/emag_act(src)
 			new /obj/item/weapon/c4(src)
 
 		if("murder")//8+6+6+2+4=26
 			new /obj/item/weapon/melee/energy/sword(src)
 			new /obj/item/clothing/glasses/thermal/syndi(src)
-			new /obj/item/weapon/card/emag(src)
+			new /obj/item/weapon/card/emag_act(src)
 			new /obj/item/clothing/shoes/syndigaloshes(src)
 			new /obj/item/weapon/storage/belt/skull(src)
 
@@ -54,7 +54,7 @@
 
 		if("hacker")//14+6+5+3=28
 			new /obj/item/weapon/aiModule/freeform/syndicate(src)
-			new /obj/item/weapon/card/emag(src)
+			new /obj/item/weapon/card/emag_act(src)
 			new /obj/item/device/encryptionkey/binary(src)
 			new /obj/item/device/multitool/ai_detect(src)
 
@@ -62,7 +62,7 @@
 			new /obj/item/beacon/syndicate(src)
 			new /obj/item/clothing/suit/space/syndicate(src)
 			new /obj/item/clothing/head/helmet/space/syndicate(src)
-			new /obj/item/weapon/card/emag(src)
+			new /obj/item/weapon/card/emag_act(src)
 
 		if("smoothoperator")//6?+2+2?+1+1?+1?+4+4=21
 			new /obj/item/weapon/gun/projectile/pistol(src)
@@ -84,7 +84,7 @@
 			new /obj/item/weapon/soap/syndie(src)
 			new /obj/item/clothing/mask/gas/voice(src)
 			new /obj/item/weapon/card/id/syndicate(src)
-			new /obj/item/weapon/card/emag(src)
+			new /obj/item/weapon/card/emag_act(src)
 			new /obj/item/weapon/newspaper(src)
 			new /obj/item/weapon/fireaxe(src)
 			new /obj/item/clothing/shoes/syndigaloshes(src)
@@ -145,7 +145,7 @@
 			new /obj/item/clothing/mask/bandana/red(src)
 			new /obj/item/clothing/mask/bandana/red(src)
 			new /obj/item/clothing/mask/bandana/red(src)
-			new /obj/item/weapon/card/emag(src)
+			new /obj/item/weapon/card/emag_act(src)
 			new /obj/item/weapon/storage/box/syndie_kit/molotovs(src)
 
 		if("emagsandglue")//(4+6+4+6+4+6+4)*5=memes

@@ -70,7 +70,7 @@
 	else
 		return ..()
 
-/obj/machinery/sweet/emag(mob/user)
+/obj/machinery/sweet/emag_act(mob/user)
 	if(!emagged && user)
 		to_chat(user, "<span class='warning'>You inexplicably short out the [src.name].</span>")
 	emagged = !emagged

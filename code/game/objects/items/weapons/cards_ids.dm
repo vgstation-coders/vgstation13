@@ -179,6 +179,12 @@
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
 		return
+	if(istype(target,/obj/machinery))
+		var/obj/machinery/M = target
+		if(!(M.machine_flags & EMAGGABLE))
+			return
+		if(!canUse(user,M))
+			return
 	target.emag_act(user)
 
 

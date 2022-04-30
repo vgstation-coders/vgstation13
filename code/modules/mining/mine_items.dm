@@ -151,7 +151,7 @@ proc/move_mining_shuttle()
 		else
 			to_chat(usr, "<span class='notice'>Shuttle is already moving.</span>")
 
-/obj/machinery/computer/mining_shuttle/emag(mob/user as mob)
+/obj/machinery/computer/mining_shuttle/emag_act(mob/user as mob)
 	..()
 	src.req_access = list()
 	to_chat(usr, "You disable the console's access requirement.")

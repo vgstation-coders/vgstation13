@@ -580,7 +580,7 @@ Class Procs:
  * Handle emags.
  * @param user /mob The mob that used the emag.
  */
-/obj/machinery/proc/emag(mob/user as mob)
+/obj/machinery/emag_act(mob/user as mob)
 	// Disable emaggability. Note that some machines such as the Communications Computer might be emaggable multiple times.
 	machine_flags &= ~EMAGGABLE
 	spark(src)
@@ -599,12 +599,6 @@ Class Procs:
 	..()
 
 	add_fingerprint(user)
-
-	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
-		var/obj/item/weapon/card/emag/E = O
-		if(E.canUse(user,src))
-			emag(user)
-			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
