@@ -3869,24 +3869,6 @@
 	icon_state = "warning"
 	},
 /area/awaymission/gateroom)
-"jQ" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/simulated/floor,
-/area/awaymission/gateroom)
-"jR" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor,
-/area/awaymission/gateroom)
-"jS" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor,
-/area/awaymission/gateroom)
 "jT" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -4015,26 +3997,14 @@
 	},
 /turf/simulated/floor,
 /area/awaymission/southblock)
-"km" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/simulated/floor,
-/area/awaymission/gateroom)
 "kn" = (
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/obj/machinery/gateway/centeraway{
+/obj/machinery/gateway/center/away{
 	calibrated = 0
-	},
-/turf/simulated/floor,
-/area/awaymission/gateroom)
-"ko" = (
-/obj/machinery/gateway{
-	dir = 4
 	},
 /turf/simulated/floor,
 /area/awaymission/gateroom)
@@ -4095,25 +4065,13 @@
 	icon_state = "warning"
 	},
 /area/awaymission/gateroom)
-"kw" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
-/turf/simulated/floor,
-/area/awaymission/gateroom)
 "kx" = (
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/gateway,
-/turf/simulated/floor,
-/area/awaymission/gateroom)
-"ky" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
+/obj/machinery/gateway/away,
 /turf/simulated/floor,
 /area/awaymission/gateroom)
 "kz" = (
@@ -7422,9 +7380,9 @@ fW
 iW
 jr
 jy
-jQ
-km
-kw
+lL
+lL
+lL
 kS
 le
 le
@@ -7488,7 +7446,7 @@ fW
 iW
 iW
 jy
-jR
+lL
 kn
 kx
 kT
@@ -7554,9 +7512,9 @@ fW
 iW
 iW
 jy
-jS
-ko
-ky
+lL
+lL
+lL
 kS
 le
 le

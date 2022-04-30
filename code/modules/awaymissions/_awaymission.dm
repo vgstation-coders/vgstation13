@@ -49,7 +49,7 @@ Example of the second method:
 	if(accessable_z_levels.len >= z)
 		zLevel = accessable_z_levels[z]
 
-	for(var/obj/effect/landmark/L in objects) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
+	for(var/obj/effect/landmark/L in landmarks_list) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
 		if(L.name != "awaystart")
 			continue
 
@@ -58,7 +58,7 @@ Example of the second method:
 		if(!location)
 			location = get_turf(L)
 
-	for(var/obj/machinery/gateway/G in objects)
+	for(var/obj/machinery/gateway/G in gateways)
 		G.initialize()
 
 /datum/map_element/away_mission/empty_space

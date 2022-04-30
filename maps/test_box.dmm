@@ -19843,28 +19843,7 @@
 	},
 /area/gateway)
 "aKi" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
 /turf/simulated/floor{
-	icon_state = "dark-markings"
-	},
-/area/gateway)
-"aKj" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
-"aKk" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor{
-	dir = 1;
 	icon_state = "dark-markings"
 	},
 /area/gateway)
@@ -20494,27 +20473,15 @@
 	},
 /area/gateway)
 "aLt" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
 	},
 /area/gateway)
 "aLu" = (
-/obj/machinery/gateway/centerstation,
+/obj/machinery/gateway/center,
 /turf/simulated/floor{
 	icon_state = "dark"
-	},
-/area/gateway)
-"aLv" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark-markings"
 	},
 /area/gateway)
 "aLw" = (
@@ -20905,9 +20872,6 @@
 /turf/simulated/floor/engine,
 /area/science/podbay)
 "aMn" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark-markings"
@@ -20922,14 +20886,6 @@
 	},
 /turf/simulated/floor{
 	dir = 8;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
-"aMp" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
-/turf/simulated/floor{
 	icon_state = "dark-markings"
 	},
 /area/gateway)
@@ -105292,7 +105248,7 @@ axj
 aGl
 aHp
 aIJ
-aKj
+aLt
 aLu
 aMo
 aNS
@@ -105549,9 +105505,9 @@ axj
 aGl
 aHp
 aIJ
-aKk
-aLv
-aMp
+aMn
+aLt
+aKi
 aNT
 aPv
 aQH

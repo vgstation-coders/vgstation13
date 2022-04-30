@@ -485,7 +485,7 @@
 "jr" = (/obj/machinery/light{dir = 8},/turf/simulated/floor{icon_state = "white"},/area/awaymission/leviathan/research/gateway)
 "js" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/awaymission/leviathan/research/gateway)
 "jt" = (/obj/machinery/gateway{dir = 8},/turf/simulated/floor/engine{icon_state = "enginebot"},/area/awaymission/leviathan/research/gateway)
-"ju" = (/obj/machinery/gateway/centeraway,/turf/simulated/floor/engine{icon_state = "enginedelivery"},/area/awaymission/leviathan/research/gateway)
+"ju" = (/obj/machinery/gateway/center/away,/turf/simulated/floor/engine{icon_state = "enginedelivery"},/area/awaymission/leviathan/research/gateway)
 "jv" = (/obj/machinery/gateway{dir = 4},/turf/simulated/floor/engine{icon_state = "enginebot"},/area/awaymission/leviathan/research/gateway)
 "jw" = (/obj/machinery/alarm{dir = 1; pixel_y = -22},/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/leviathan/research/mining)
 "jx" = (/obj/machinery/telecomms/relay/preset/mining,/obj/machinery/light/small,/turf/simulated/floor{dir = 8; icon_state = "dark-markings"},/area/awaymission/leviathan/research/mining)

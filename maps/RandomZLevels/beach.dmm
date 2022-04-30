@@ -8,42 +8,12 @@
 "b" = (
 /turf/unsimulated/beach/sand,
 /area/awaymission/beach)
-"c" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/unsimulated/beach/sand,
-/area/awaymission/beach)
-"d" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/unsimulated/beach/sand,
-/area/awaymission/beach)
-"e" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/unsimulated/beach/sand,
-/area/awaymission/beach)
 "f" = (
 /obj/effect/overlay/palmtree_r,
 /turf/unsimulated/beach/sand,
 /area/awaymission/beach)
-"g" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/unsimulated/beach/sand,
-/area/awaymission/beach)
 "h" = (
-/obj/machinery/gateway/centeraway,
-/turf/unsimulated/beach/sand,
-/area/awaymission/beach)
-"i" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
+/obj/machinery/gateway/center/away,
 /turf/unsimulated/beach/sand,
 /area/awaymission/beach)
 "j" = (
@@ -51,20 +21,8 @@
 /obj/effect/overlay/coconut,
 /turf/unsimulated/beach/sand,
 /area/awaymission/beach)
-"k" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
-/turf/unsimulated/beach/sand,
-/area/awaymission/beach)
 "l" = (
-/obj/machinery/gateway,
-/turf/unsimulated/beach/sand,
-/area/awaymission/beach)
-"m" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
+/obj/machinery/gateway/away,
 /turf/unsimulated/beach/sand,
 /area/awaymission/beach)
 "n" = (
@@ -310,9 +268,9 @@ T
 "}
 (2,1,1) = {"
 a
-c
-g
-k
+b
+b
+b
 b
 b
 b
@@ -337,7 +295,7 @@ T
 "}
 (3,1,1) = {"
 a
-d
+b
 h
 l
 b
@@ -364,9 +322,9 @@ T
 "}
 (4,1,1) = {"
 a
-e
-i
-m
+b
+b
+b
 b
 b
 b
