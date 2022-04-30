@@ -181,9 +181,7 @@
 		return
 	if(istype(target,/obj/machinery))
 		var/obj/machinery/M = target
-		if(!(M.machine_flags & EMAGGABLE))
-			return
-		if(!canUse(user,M))
+		if(!(M.machine_flags & EMAGGABLE) || !canUse(user,M) || (istype(M,/obj/machinery/bot) && M.emagged < 2))
 			return
 	target.emag_act(user)
 
