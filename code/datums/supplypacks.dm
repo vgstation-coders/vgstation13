@@ -1679,7 +1679,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "\improper R-UST Mk. 7 console circuitry crate"
 	group = "Engineering"
-	access = list(access_engine)
+	access = list(access_engine_major)
 
 /datum/supply_packs/rust_gyrotron
 	contains = list(/obj/machinery/rust/gyrotron)
