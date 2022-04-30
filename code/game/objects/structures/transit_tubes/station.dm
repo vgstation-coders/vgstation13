@@ -64,6 +64,8 @@
 					src.Bumped(GM)
 					qdel(G)
 				break
+		return
+	..()
 
 /obj/structure/transit_tube/station/attack_robot(mob/user)
 	if(Adjacent(user))
