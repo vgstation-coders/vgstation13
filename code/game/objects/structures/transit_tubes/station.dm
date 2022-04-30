@@ -24,7 +24,7 @@
 /obj/structure/transit_tube/station/Destroy()
 	processing_objects -= src
 	..()
-	
+
 //Attacks
 
 /obj/structure/transit_tube/station/attack_hand(mob/user)
@@ -99,7 +99,7 @@
 					update_icon()
 				return
 		else
-			to_chat(user, "<span class='warning'>Access denied.</span>")			
+			to_chat(user, "<span class='warning'>Access denied.</span>")
 
 //This doesn't work
 /obj/structure/transit_tube/station/Bumped(atom/movable/mover)
@@ -147,7 +147,7 @@
 				pod_moving = 0
 			return 1
 	return 0
-	
+
 /obj/structure/transit_tube/station/process()
 	if(!pod_moving)
 		launch_pod()
