@@ -310,6 +310,9 @@ var/datum/controller/gameticker/ticker
 	for(var/mob/M in player_list)
 		if(M.client)
 			M.client.screen += cinematic	//show every client the cinematic
+		if (istype(M,/mob/living/carbon/human))
+			var/mob/living/carbon/human/C = M
+			C.apply_radiation(rand(50, 250),RAD_EXTERNAL)
 
 	//Now animate the cinematic
 	switch(station_missed)
