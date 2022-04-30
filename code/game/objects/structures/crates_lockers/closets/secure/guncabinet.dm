@@ -80,7 +80,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/engineering
 	name = "engineering gun cabinet"
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 	icon_state = "eng"
 	icon_off = "eng"
 	icon_broken ="eng"

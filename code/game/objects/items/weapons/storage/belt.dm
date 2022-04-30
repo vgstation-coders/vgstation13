@@ -264,7 +264,7 @@
 		"/obj/item/weapon/storage/evidencebag",
 		"/obj/item/device/detective_scanner",
 		"/obj/item/binoculars",
-		"/obj/item/weapon/storage/box/surveillance",
+		"/obj/item/device/radio/phone/surveillance",
 		"/obj/item/device/handtv",
 		"/obj/item/device/camera_film",
 		"/obj/item/weapon/photo",

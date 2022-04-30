@@ -530,7 +530,29 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/spaceportbutt
 
+/obj/item/clothing/mask/cigarette/bugged //transmits voice to the detective's cigarette pack when turned into a butt
+	var/cig_tag = ""
 
+/obj/item/clothing/mask/cigarette/bugged/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and has wires in the filter.</span>")
+		return
+
+/obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
+	if(lit)
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the lit [name], putting it out.</span>")
+		var/turf/T = get_turf(src)
+		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
+		new_butt.cigbug.radio_tag = cig_tag
+		transfer_fingerprints_to(new_butt)
+		lit = 0 //Needed for proper update
+		update_brightness()
+		qdel(src)
+	else
+		var/newtag = sanitize(input(user, "Choose a unique ID tag:", name, cig_tag) as null|text)
+		if(newtag)
+			cig_tag = newtag
 
 ////////////
 // CIGARS //
@@ -628,6 +650,19 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/trash/cigbutt/bugged
+	var/obj/item/device/radio/bug/cigbug
+
+/obj/item/trash/cigbutt/bugged/New()
+	cigbug = new /obj/item/device/radio/bug(src)
+	cigbug.frequency = BUG_FREQ
+
+/obj/item/trash/cigbutt/bugged/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and has wires in the filter.</span>")
+		return
 
 /*
 //I'll light my cigar with an energy sword if I want to, thanks

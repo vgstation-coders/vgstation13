@@ -2401,7 +2401,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/engivend
 	name = "\improper Engi-Vend"
 	desc = "Spare tool vending. What? Did you expect some witty description?"
-	req_access = list(access_engine_equip)//Engineering Equipment access
+	req_access = list(access_engine_minor)//Engineering Equipment access
 	icon_state = "engivend"
 	icon_deny = "engivend-deny"
 	icon_vend = "engivend-vend"
@@ -2477,7 +2477,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/engineering
 	name = "\improper Robco Tool Maker"
 	desc = "A vending machine containing many engineering supplies. A label reads: \"Everything you need for do-it-yourself station repair.\""
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 	icon_state = "engi"
 	icon_deny = "engi-deny"
 	products = list(
@@ -3791,3 +3791,38 @@ var/global/num_vending_terminals = 1
 	for(var/i = 0 to rand(3,12))
 		var/obj/I = new /obj/item/weapon/paper(get_turf(src))
 		I.throw_at(target, 16, 3)
+
+/obj/machinery/vending/syndicatesuits
+	name = "\improper Syndicate Suits"
+	desc = "A vending machine containing everyone's favorite organization's clothing."
+	product_ads = list(
+		"I hope this was worth the cost.",
+		"Rep the winning team's colors here",
+		"Fair wages here.",
+		"NT drools, Syndicate Rules.",
+	)
+	icon_state = "syndicatesuits"
+	products = list(
+		/obj/item/clothing/under/syndicate/combat = 2,
+		/obj/item/clothing/under/syndicate/executive = 2,
+		/obj/item/clothing/suit/storage/syndicateexec = 2,
+		/obj/item/weapon/storage/box/syndicatefake/space = 2,
+		/obj/item/clothing/mask/gas/syndicate = 2,
+		/obj/item/clothing/shoes/laceup = 2,
+		)
+	contraband = list(
+		/obj/item/clothing/head/beret/centcom/officer = 2,
+		/obj/item/clothing/head/beret/centcom/captain = 2,
+		/obj/item/clothing/under/rank/centcom_officer  = 2,
+		/obj/item/clothing/under/rank/centcom_commander = 2,
+		/obj/item/clothing/under/rank/centcom/captain = 2,
+		/obj/item/clothing/under/rank/centcom/representative = 2,
+		/obj/item/clothing/shoes/centcom = 2,
+		)
+	premium = list(
+		/obj/item/clothing/gloves/combat = 1,
+		/obj/item/clothing/shoes/combat = 1,
+		/obj/item/weapon/storage/box/syndicatefake/ops = 2,
+		)
+
+	pack = /obj/structure/vendomatpack/syndicatesuits
