@@ -110,6 +110,22 @@
 	else
 		return ..()
 
+/obj/item/device/flashlight/torch
+	name = "torch"
+	desc = "Well I didn't vote for you!"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flashlights_n_lamps.dmi', "right_hand" = 'icons/mob/in-hand/right/flashlights_n_lamps.dmi')
+	icon_state = "torch"
+	item_state = "torch"
+	force = 8
+	damtype = "fire"
+	hitsound = 'sound/items/cautery.ogg'
+	flags = FPRINT
+	brightness_on = 5
+	has_sound = 1
+	light_color = LIGHT_COLOR_FIRE
+	sound_on = 'sound/items/flare_on.ogg'
+	sound_off = 'sound/items/cautery.ogg'
+
 /obj/item/device/flashlight/pen
 	name = "penlight"
 	desc = "A pen-sized light, used by medical staff."
