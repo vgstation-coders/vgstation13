@@ -133,7 +133,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/c20r
 	name = "\improper C-20r SMG"
-	desc = "A lightweight, fast firing gun for when you REALLY want someone dead. Uses 12mm rounds. Has a \"Scarborough Arms - Per falcis, per pravitas\" buttstamp."
+	desc = "A lightweight, fast firing gun for when you REALLY want someone dead. Uses 12mm SPECIAL rounds. Has a \"Scarborough Arms - Per falcis, per pravitas\" buttstamp."
 	icon_state = "c20r"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	item_state = "c20r"

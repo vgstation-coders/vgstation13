@@ -269,24 +269,6 @@
 "bd" = (
 /turf/unsimulated/beach/sand,
 /area/awaymission/tomb/outside/expedition_camp)
-"be" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/tomb/outside/expedition_camp)
-"bf" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/tomb/outside/expedition_camp)
-"bg" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/tomb/outside/expedition_camp)
 "bh" = (
 /turf/unsimulated/beach/sand{
 	color = "#EEEEEE"
@@ -309,9 +291,6 @@
 /turf/unsimulated/beach/water,
 /area/awaymission/tomb/sewers)
 "bl" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
 /turf/simulated/floor/plating{
 	dir = 8;
 	icon_state = "warnplate";
@@ -319,13 +298,7 @@
 	},
 /area/awaymission/tomb/outside/expedition_camp)
 "bm" = (
-/obj/machinery/gateway/centeraway,
-/turf/simulated/floor/plating,
-/area/awaymission/tomb/outside/expedition_camp)
-"bn" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
+/obj/machinery/gateway/center/away,
 /turf/simulated/floor/plating,
 /area/awaymission/tomb/outside/expedition_camp)
 "bo" = (
@@ -386,9 +359,6 @@
 /turf/unsimulated/beach/sand,
 /area/awaymission/tomb/outside/expedition_camp)
 "bx" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
 /turf/simulated/floor/plating{
 	dir = 10;
 	icon_state = "warnplate";
@@ -396,13 +366,10 @@
 	},
 /area/awaymission/tomb/outside/expedition_camp)
 "by" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
 /area/awaymission/tomb/outside/expedition_camp)
 "bz" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
 /turf/simulated/floor/plating{
 	dir = 4;
 	icon_state = "warnplate";
@@ -5788,7 +5755,7 @@ aa
 aB
 aI
 aT
-be
+aS
 bl
 bx
 bd
@@ -5890,7 +5857,7 @@ aa
 aB
 aI
 aT
-bf
+aS
 bm
 by
 bB
@@ -5992,8 +5959,8 @@ aa
 aB
 aI
 aT
-bg
-bn
+aS
+aS
 bz
 aS
 bd

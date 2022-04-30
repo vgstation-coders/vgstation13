@@ -507,11 +507,24 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "pitchspoon"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	flags = TWOHANDABLE
 	force = 8
-	sharpness = 2
+	sharpness = 1.4
 	sharpness = SHARP_TIP
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	w_type = RECYK_METAL
+	var/base_force = 8
+
+/obj/item/weapon/pitchfork/update_wield(mob/user)
+	item_state = "pitchspoon[wielded ? 1 : 0]"
+
+	force = base_force
+	if(wielded)
+		force += 6
+
+	if(user)
+		user.update_inv_hands()
+	return
 
 /obj/item/weapon/baseball_bat
 	name = "baseball bat"

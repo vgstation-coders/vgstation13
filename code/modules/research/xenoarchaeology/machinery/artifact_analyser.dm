@@ -57,35 +57,51 @@ var/anomaly_report_num = 0
 	if(..())
 		return
 	src.add_fingerprint(user)
-	interact(user)
 
-/obj/machinery/artifact_analyser/interact(mob/user)
-	if(..())
-		return
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || get_dist(src, user) > 1)
-		user.unset_machine(src)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
-	var/dat = "<B>Anomalous material analyzer</B><BR>"
-	dat += "<HR>"
 	if(!owned_scanner)
-		owned_scanner = locate() in orange(1, src)
-
+		reconnect_scanner()
 	if(!owned_scanner)
-		dat += "<b><font color=red>Unable to locate analysis pad.</font></b><br>"
+		visible_message("<span class='warning'>[src] buzzes: No scan possible, unable to locate analysis pad.</span>")
 	else if(scan_in_progress)
-		dat += "Please wait. Analysis in progress.<br>"
-		dat += "<a href='?src=\ref[src];halt_scan=1'>Halt scanning.</a><br>"
-	else
-		dat += "Scanner is ready.<br>"
-		dat += "<a href='?src=\ref[src];begin_scan=1'>Begin scanning.</a><br>"
+		var/confirm = alert(user,"Do you wish to halt scanning? It is currently in progress","Confirm scan halt","Yes","No") == "Yes"
+		if(confirm)
+			scan_in_progress = FALSE
+			update_icon()
+			visible_message("<span class='warning'>[src] buzzes: Scanning halted.</span>")
+			if(scanned_atom && istype(scanned_atom, /obj/machinery/artifact))
+				var/obj/machinery/artifact/A = scanned_atom
+				A.anchored = FALSE
+				A.being_used = FALSE
+	else if(owned_scanner)
+		var/artifact_in_use = FALSE
+		for(var/atom/movable/AM in owned_scanner.loc)
+			if(AM == owned_scanner)
+				continue
+			if(AM.invisibility)
+				continue
+			if(istype(AM, /obj/machinery/artifact))
+				var/obj/machinery/artifact/A = AM
+				if(A.being_used)
+					artifact_in_use = TRUE
+				else
+					A.anchored = TRUE
+					A.being_used = TRUE
 
-	dat += "<br>"
-	dat += "<hr>"
-	dat += "<a href='?src=\ref[src]'>Refresh</a> <a href='?src=\ref[src];close=1'>Close</a>"
-	user << browse(dat, "window=artanalyser;size=450x500")
-	user.set_machine(src)
-	onclose(user, "artanalyser")
+			if(artifact_in_use)
+				visible_message("<span class='warning'>[src] buzzes: Cannot harvest. Too much interference.</span>")
+			else
+				scanned_atom = AM
+				scan_in_progress = TRUE
+				update_icon()
+				scan_completion_time = world.time + scan_duration
+				visible_message("<span class='notice'>[src] states: Scanning begun.</span>")
+				flick("xenoarch_console-flick",src)
+			break
+		if(!scanned_atom)
+			visible_message("<span class='warning'>[src] buzzes: Unable to isolate scan target.</span>")
 
 /obj/machinery/artifact_analyser/process()
 	if(scan_in_progress && world.time > scan_completion_time)
@@ -109,7 +125,7 @@ var/anomaly_report_num = 0
 		else
 			results = get_scan_info(scanned_atom)
 
-		src.visible_message("<b>[name]</b> states, \"Scanning complete.\"")
+		visible_message("<span class='notice'>[src] states: Scanning complete.</span>")
 		var/obj/item/weapon/paper/anomaly/P = new(src.loc)
 		P.artifact = scanned_atom
 		P.info = "<b>[src] analysis report for [scanned_atom]</b><br>"
@@ -145,55 +161,6 @@ var/anomaly_report_num = 0
 				A.analyzed = TRUE
 				if (istype(A.primary_effect) && A.primary_effect.triggered)
 					score.artifacts++
-
-
-/obj/machinery/artifact_analyser/Topic(href, href_list)
-	if(..())
-		return
-	if(href_list["begin_scan"])
-		if(!owned_scanner)
-			reconnect_scanner()
-		if(owned_scanner)
-			var/artifact_in_use = FALSE
-			for(var/atom/movable/AM in owned_scanner.loc)
-				if(AM == owned_scanner)
-					continue
-				if(AM.invisibility)
-					continue
-				if(istype(AM, /obj/machinery/artifact))
-					var/obj/machinery/artifact/A = AM
-					if(A.being_used)
-						artifact_in_use = TRUE
-					else
-						A.anchored = TRUE
-						A.being_used = TRUE
-
-				if(artifact_in_use)
-					visible_message("<b>[name]</b> states, \"Cannot harvest. Too much interference.\"")
-				else
-					scanned_atom = AM
-					scan_in_progress = TRUE
-					update_icon()
-					scan_completion_time = world.time + scan_duration
-					visible_message("<b>[name]</b> states, \"Scanning begun.\"")
-					flick("xenoarch_console-flick",src)
-				break
-			if(!scanned_atom)
-				src.visible_message("<b>[name]</b> states, \"Unable to isolate scan target.\"")
-	if(href_list["halt_scan"])
-		scan_in_progress = FALSE
-		update_icon()
-		src.visible_message("<b>[name]</b> states, \"Scanning halted.\"")
-		if(scanned_atom && istype(scanned_atom, /obj/machinery/artifact))
-			var/obj/machinery/artifact/A = scanned_atom
-			A.anchored = FALSE
-			A.being_used = FALSE
-
-	if(href_list["close"])
-		usr.unset_machine(src)
-		usr << browse(null, "window=artanalyser")
-
-	updateDialog()
 
 //hardcoded responses, oh well
 /proc/get_scan_info(var/atom/movable/AM)

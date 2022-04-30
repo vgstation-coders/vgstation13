@@ -1655,15 +1655,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 200	//10x the fuel, 10x the cost + 50 for convenience
 	containername = "Large antimatter containment jar crate"
 
-/datum/supply_packs/rust_gyrotron
-	contains = list(/obj/machinery/rust/gyrotron)
-	name = "R-UST Mk. 7 gyrotron"
-	cost = 25
-	containertype = /obj/structure/closet/crate/secure/large
-	containername = "\improper R-UST Mk. 7 gyrotron crate"
-	group = "Engineering"
-	access = list(access_engine_major)
-
 /datum/supply_packs/rust
 	contains = list(/obj/item/weapon/module/rust_fuel_compressor,
 					/obj/item/weapon/module/rust_fuel_port,
@@ -1674,6 +1665,28 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "\improper R-UST Mk. 7 fuel compressor circuitry crate"
+	group = "Engineering"
+	access = list(access_engine_major)
+
+/datum/supply_packs/rust_consoles
+	contains = list(/obj/item/weapon/circuitboard/rust_gyrotron_control,
+					/obj/item/weapon/circuitboard/rust_fuel_control,
+					/obj/item/weapon/circuitboard/rust_core_monitor,
+					/obj/item/weapon/circuitboard/rust_core_control
+					)
+	name = "R-UST Mk. 7 console circuitry kit"
+	cost = 30
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "\improper R-UST Mk. 7 console circuitry crate"
+	group = "Engineering"
+	access = list(access_engine)
+
+/datum/supply_packs/rust_gyrotron
+	contains = list(/obj/machinery/rust/gyrotron)
+	name = "R-UST Mk. 7 gyrotron"
+	cost = 25
+	containertype = /obj/structure/closet/crate/secure/large
+	containername = "\improper R-UST Mk. 7 gyrotron crate"
 	group = "Engineering"
 	access = list(access_engine_major)
 

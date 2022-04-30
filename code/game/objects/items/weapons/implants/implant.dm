@@ -38,7 +38,8 @@
 	if(part)
 		part.implants -= src
 		part = null
-	forceMove(get_turf(imp_in))
+	if(!gcDestroyed)
+		forceMove(get_turf(imp_in))
 	imp_in = null
 	return TRUE
 
@@ -82,9 +83,8 @@
 		malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
 /obj/item/weapon/implant/Destroy()
-	remove()
-	if(reagents)
-		qdel(reagents)
-		reagents = null
+	// Super-call before remove(), so that remove() can avoid moving the implant.
 	..()
+	if(imp_in)
+		remove()
 

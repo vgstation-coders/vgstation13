@@ -51,8 +51,8 @@ var/list/uplink_items = list()
 	var/refund_path = null // Alternative path for refunds, in case the item purchased isn't what is actually refunded (Bombs and such).
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
-/datum/uplink_item/proc/get_cost(var/user_job, var/cost_modifier = 1)
-	if(gives_discount(user_job))
+/datum/uplink_item/proc/get_cost(var/user_job, var/user_species, var/cost_modifier = 1)
+	if(gives_discount(user_job) || gives_discount(user_species))
 		. = discounted_cost
 	else
 		. = cost
@@ -73,13 +73,13 @@ var/list/uplink_items = list()
 	return new new_item(location)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, datum/component/uplink/U, mob/user)
-	if(!available_for_job(U.job))
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
+	if(!available_for_job(U.job) && !available_for_job(U.species))
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to them! (Job: [U.job]) (Species: [U.species]) ([formatJumpTo(get_turf(U))])")
 		return
 	if(U.nuke_ops_inventory && !available_for_nuke_ops)
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a nuclear operative")
 		return
-	U.telecrystals -= max(get_cost(U.job), 0)
+	U.telecrystals -= max(get_cost(U.job, U.species), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
 	return new_uplink_item(item, loc, user)
 
@@ -101,7 +101,7 @@ var/list/uplink_items = list()
 	var/obj/item/holder = U.parent
 	if ((holder in user.contents || (in_range(holder, user) && istype(holder.loc, /turf))))
 		user.set_machine(U)
-		if(get_cost(U.job) > U.telecrystals)
+		if(get_cost(U.job, U.species) > U.telecrystals)
 			return 0
 
 		var/O = spawn_item(get_turf(user), U, user)
@@ -132,24 +132,24 @@ var/list/uplink_items = list()
 			if(istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
-			U.purchase_log += {"[user] ([user.ckey]) bought <img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)]."}
+			U.purchase_log += {"[user] ([user.ckey]) bought <img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name] for [UI ? UI.get_cost(U.job, U.species, 0.5) : get_cost(U.job, U.species)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
 
 			if(user.mind)
-				user.mind.spent_TC += get_cost(U.job)
+				user.mind.spent_TC += get_cost(U.job, U.species)
 				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
 				var/datum/role/R = user.mind.GetRole(NUKE_OP)
 				if(R)
-					R.faction.faction_scoreboard_data += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
+					R.faction.faction_scoreboard_data += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, U.species, 0.5) : get_cost(U.job, U.species)] TC<BR>"}
 				else
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
-						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
+						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, U.species, 0.5) : get_cost(U.job, U.species)] TC<BR>"}
 					else
 						R = user.mind.GetRole(CHALLENGER)
 						if(R)
-							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
+							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, U.species, 0.5) : get_cost(U.job, U.species)] TC<BR>"}
 		return 1
 	return 0
 
@@ -536,6 +536,18 @@ var/list/uplink_items = list()
 	item = /obj/item/device/radio_jammer
 	cost = 8
 
+// EXTRATERRESTRIAL BLACK MARKET
+// Weapons and gadgets from a spacefaring alien power that the Syndicate has acquired through unknown means (Only one item for now, more to come soon)
+
+/datum/uplink_item/ayylmao
+	category = "Extraterrestrial Black Market"
+
+/datum/uplink_item/ayylmao/hdisintegrator
+	name = "Heavy Disintegrator"
+	desc = "A powerful military issue alien laser weapon. It has a primary firing mode capable of incapacitating most unarmored targets in three shots, and a secondary mode capable of instantaneously inducing nausea and vomiting."
+	item = /obj/item/weapon/gun/energy/heavydisintegrator
+	cost = 16
+
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
 
@@ -623,17 +635,17 @@ var/list/uplink_items = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
-			if(!I.available_for_job(U.job))
+			if(!I.available_for_job(U.job) && !I.available_for_job(U.species))
 				continue
 			if(!I.available_for_nuke_ops && U.nuke_ops_inventory)
 				continue
-			if(I.get_cost(U.job, 0.5) > U.telecrystals)
+			if(I.get_cost(U.job, U.species, 0.5) > U.telecrystals)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.telecrystals -= max(0, I.get_cost(U.job, 0.5))
+		U.telecrystals -= max(0, I.get_cost(U.job, U.species, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return I
 
@@ -705,7 +717,7 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/command_security/briefcase_smg/on_item_spawned(var/obj/I, var/mob/user)
-	if(gives_discount(user.job))
+	if(gives_discount(user.job) || gives_discount(user.dna.species))
 		I.icon_state = "briefcase-centcomm"
 	return
 
@@ -1126,22 +1138,36 @@ var/list/uplink_items = list()
 	name = "Chemical Dart Gun"
 	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
 	item = /obj/item/weapon/gun/dartgun/vox/raider
-	cost = 16
-	jobs_exclusive = list("Trader")
+	cost = 20
+	discounted_cost = 16
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
+	jobs_with_discount = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/dart_cartridge
 	name = "Dart Cartridge"
 	desc = "A spare cartridge to refill your dart gun."
 	item = /obj/item/weapon/dart_cartridge
-	cost = 2
-	jobs_exclusive = list("Trader")
+	cost = 6
+	discounted_cost = 2
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
+	jobs_with_discount = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/cratesender
 	name = "Modified Crate Sender"
 	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
+	cost = 10
+	discounted_cost = 6
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
+	jobs_with_discount = list("Trader","Cargo Technician","Quartermaster")
+
+/datum/uplink_item/jobspecific/cannedmatter
+	category = "Skrell Specials"
+	name = "Canned Compressed Matter"
+	desc = "For once, the syndicate has it. When an item is pressed onto the closed can, it can be stored inside regardless of its size, to be released again on the can opening. Does not allow items to be stored anymore once opened."
+	item = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter
 	cost = 6
-	jobs_exclusive = list("Trader")
+	jobs_exclusive = list("Skrell")
 
 // SYNDICATE COOP
 // Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.

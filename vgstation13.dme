@@ -1979,7 +1979,6 @@
 #include "code\modules\mob\living\silicon\mommi\laws.dm"
 #include "code\modules\mob\living\silicon\mommi\login.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi.dm"
-#include "code\modules\mob\living\silicon\mommi\mommi_hud.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_inventory.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_modules.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_verbs.dm"

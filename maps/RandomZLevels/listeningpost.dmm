@@ -271,92 +271,15 @@
 	tag = "icon-gcircuit"
 	},
 /area/mine/explored)
-"aQ" = (
-/obj/machinery/gateway{
-	dir = 9;
-	icon_state = "off";
-	tag = "icon-off (NORTHWEST)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "gcircuit";
-	tag = "icon-gcircuit"
-	},
-/area/mine/explored)
-"aR" = (
-/obj/machinery/gateway{
-	dir = 1;
-	icon_state = "off";
-	tag = "icon-off (NORTH)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "gcircuit";
-	tag = "icon-gcircuit"
-	},
-/area/mine/explored)
-"aS" = (
-/obj/machinery/gateway{
-	dir = 5;
-	icon_state = "off";
-	tag = "icon-off (NORTHEAST)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "gcircuit";
-	tag = "icon-gcircuit"
-	},
-/area/mine/explored)
-"aT" = (
-/obj/machinery/gateway{
-	dir = 8;
-	icon_state = "off";
-	tag = "icon-off (WEST)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "gcircuit";
-	tag = "icon-gcircuit"
-	},
-/area/mine/explored)
 "aU" = (
-/obj/machinery/gateway/centeraway,
-/turf/simulated/floor/airless{
-	icon_state = "gcircuit";
-	tag = "icon-gcircuit"
-	},
-/area/mine/explored)
-"aV" = (
-/obj/machinery/gateway{
-	dir = 4;
-	icon_state = "off";
-	tag = "icon-off (EAST)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "gcircuit";
-	tag = "icon-gcircuit"
-	},
-/area/mine/explored)
-"aW" = (
-/obj/machinery/gateway{
-	dir = 10;
-	icon_state = "off";
-	tag = "icon-off (SOUTHWEST)"
-	},
+/obj/machinery/gateway/center/away,
 /turf/simulated/floor/airless{
 	icon_state = "gcircuit";
 	tag = "icon-gcircuit"
 	},
 /area/mine/explored)
 "aX" = (
-/obj/machinery/gateway,
-/turf/simulated/floor/airless{
-	icon_state = "gcircuit";
-	tag = "icon-gcircuit"
-	},
-/area/mine/explored)
-"aY" = (
-/obj/machinery/gateway{
-	dir = 6;
-	icon_state = "off";
-	tag = "icon-off (SOUTHEAST)"
-	},
+/obj/machinery/gateway/away,
 /turf/simulated/floor/airless{
 	icon_state = "gcircuit";
 	tag = "icon-gcircuit"
@@ -5823,9 +5746,9 @@ ab
 ab
 aO
 aP
-aQ
-aT
-aW
+aP
+aP
+aP
 aP
 aO
 ab
@@ -5925,7 +5848,7 @@ ab
 ab
 aO
 aP
-aR
+aP
 aU
 aX
 aP
@@ -6027,9 +5950,9 @@ ab
 ab
 aO
 aP
-aS
-aV
-aY
+aP
+aP
+aP
 aP
 aO
 ab
