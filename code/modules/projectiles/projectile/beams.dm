@@ -1104,10 +1104,10 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
 				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
 									"<span class='warning'>\The [src] [splash_verb] you!</span>")
-				splash_sub(reagents, get_turf(A), reagents.total_volume/2)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
+				splash_sub(reagents, get_turf(A), reagents.total_volume/2, firer)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
 		else
-			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
-		splash_sub(reagents, A, reagents.total_volume)//and 10 more on the atom itself
+			splash_sub(reagents, get_turf(src), reagents.total_volume/2, firer)
+		splash_sub(reagents, A, reagents.total_volume, firer)//and 10 more on the atom itself
 		has_splashed = TRUE
 		return 1
 
