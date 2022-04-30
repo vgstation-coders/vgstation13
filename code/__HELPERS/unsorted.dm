@@ -800,7 +800,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		return FALSE
 	if(user.isStunned())
 		return FALSE
-	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc	
+	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
 	if(user_loc_to_check != user_original_location)
 		return FALSE
 	if(target.loc != target_original_location)
@@ -1897,11 +1897,13 @@ Game Mode config tags:
 		"[DSQUAD_FREQ]" = "dsquadradio",
 		"[RESPONSE_FREQ]" = "resteamradio",
 		"[RAID_FREQ]" = "raiderradio",
+		"[BUG_FREQ]" = "bugradio"
 	)
 
 	radiochannelsreverse = list(
 		"[DJ_FREQ]" = "DJ",
 		"[SYND_FREQ]" = "Syndicate",
+		"[BUG_FREQ]" = "Radio Bug",
 		"[RAID_FREQ]" = "Raider",
 		"[RESPONSE_FREQ]" = "Response Team",
 		"[SUP_FREQ]" = "Supply",
@@ -1930,7 +1932,8 @@ Game Mode config tags:
 		"Response Team" = RESPONSE_FREQ,
 		"Raider" = RAID_FREQ,
 		"Syndicate" = SYND_FREQ,
-		"DJ" = DJ_FREQ
+		"DJ" = DJ_FREQ,
+		"Radio Bug" = BUG_FREQ
 	)
 
 	stationchannels = list(
