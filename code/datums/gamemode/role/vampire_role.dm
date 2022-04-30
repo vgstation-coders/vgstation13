@@ -423,11 +423,11 @@
 			H.fire_stacks += 5
 			H.IgniteMob()
 
-/datum/role/vampire/proc/holyimplanted() //holy implant interaction
-	if (is_implanted(/obj/item/weapon/implant/holy))
+/datum/role/vampire/proc/holyimplanted() //holy implant interaction - you lose 2 usable blood for having a holy implant
+	if (/mob/proc/is_implanted(/obj/item/weapon/implant/holy))
 		return 1
 	return 0
-	if (var/holyimplanted = 1)
+	if (holyimplanted = 1)
 		remove_blood(2)
 
 /datum/role/vampire/proc/remove_blood(var/amount)
