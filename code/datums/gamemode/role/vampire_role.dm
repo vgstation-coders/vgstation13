@@ -424,7 +424,7 @@
 
 /datum/role/vampire/proc/holyimplanted
 	if (is_implanted(/obj/item/weapon/implant/holy))
-		remove_blood(1)
+		remove_blood(2)
 
 /datum/role/vampire/proc/remove_blood(var/amount)
 	blood_usable = max(0, blood_usable - amount)
