@@ -2401,7 +2401,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/engivend
 	name = "\improper Engi-Vend"
 	desc = "Spare tool vending. What? Did you expect some witty description?"
-	req_access = list(access_engine_equip)//Engineering Equipment access
+	req_access = list(access_engine_minor)//Engineering Equipment access
 	icon_state = "engivend"
 	icon_deny = "engivend-deny"
 	icon_vend = "engivend-vend"
@@ -2477,7 +2477,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/engineering
 	name = "\improper Robco Tool Maker"
 	desc = "A vending machine containing many engineering supplies. A label reads: \"Everything you need for do-it-yourself station repair.\""
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 	icon_state = "engi"
 	icon_deny = "engi-deny"
 	products = list(

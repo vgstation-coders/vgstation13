@@ -296,7 +296,7 @@ var/list/dispenser_presets = list()
 				suit_list["Paramedic"] = suits["Paramedic"]
 			if(access_atmospherics)
 				suit_list["Atmospherics Technician"] = suits["Atmospherics Technician"]
-			if(access_engine)
+			if(access_engine_minor)
 				suit_list["Engineering"] = suits["Engineering"]
 	return suit_list
 
