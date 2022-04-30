@@ -345,7 +345,7 @@ var/list/potential_bonus_items = list(
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
 	new /obj/item/weapon/storage/belt/utility/full(src)
 	new /obj/item/clothing/glasses/thermal/monocle(src)
-	new /obj/item/weapon/card/emag_act(src)
+	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/gun/dartgun/vox/raider(src)
 	new /obj/item/device/multitool(src)
 
