@@ -754,7 +754,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/organ_remover/traitor
 	cost = 8
 	discounted_cost = 6
-	jobs_with_discount = list("Medical Doctor", "Chief Medical Officer")
+	jobs_with_discount = list("Medical Doctor", "Chief Medical Officer", "Trader", "Vox")
 
 /datum/uplink_item/jobspecific/medical/chemsprayer
 	name = "Chemical Sprayer"
