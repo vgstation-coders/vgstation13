@@ -67,3 +67,73 @@
 	req_tech = list(Tc_MATERIALS = 2, Tc_BIOTECH = 2, Tc_PROGRAMMING = 2)
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000)
 	category = "Misc"
+	
+/datum/design/dses
+	name = "Deep Space Exploration System"
+	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."
+	id = "dses"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 4)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_IRON = 1600, MAT_GLASS = 400)
+	category = "Bluespace"
+	build_path = /obj/item/device/dses
+	
+/datum/design/dses_module_rangeboost
+	name = "DSES Ping Long-Range Listener"
+	desc = "A high-gain amplifier circuit for a DSES receiver, effectively doubling the range."
+	id = "dses_module_rangeboost"
+	req_tech = list(Tc_BLUESPACE = 4)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_GLASS=3000, MAT_IRON=2500)
+	category = "Misc"
+	build_path = /obj/item/dses_module/range_boost
+	
+/datum/design/dses_module_costreduc
+	name = "DSES Ping Resource Optimizer"
+	desc = "Optimizes the cost of DSES pings, reducing the amount of energy needed per ping."
+	id = "dses_module_costreduc"
+	req_tech = list(Tc_POWERSTORAGE = 4)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_GLASS=4000)
+	category = "Misc"
+	build_path = /obj/item/dses_module/cost_reduc
+	
+/datum/design/dses_module_pulsedirection
+	name = "DSES Ping Resonation Locator"
+	desc = "A much more sensitive listening system which can give a direction to a bounce-back ping."
+	id = "dses_module_pulsedirection"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 4)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_GLASS=2000, MAT_IRON=3000)
+	category = "Misc"
+	build_path = /obj/item/dses_module/pulse_direction
+	
+/datum/design/dses_module_gpslogger
+	name = "DSES Ping Resonance Logger"
+	desc = "Basic memory unit for co-ordinating and logging the locations of succesful pings."
+	id = "dses_module_gpslogger"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_MAGNETS = 4)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_GLASS=2000, MAT_IRON=2000)
+	category = "Misc"
+	build_path = /obj/item/dses_module/gps_logger
+	
+/datum/design/dses_module_pingtimer
+	name = "DSES Automated Ping System"
+	desc = "Basic clock timer for automating the pinging system, turning it into a toggle."
+	id = "dses_module_pingtimer"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 3)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_GLASS=2000)
+	category = "Misc"
+	build_path = /obj/item/dses_module/ping_timer
+	
+/datum/design/dses_module_distanceget
+	name = "DSES Ping Distance Approximation System"
+	desc = "A small mathematic system that calculates signal decay between transmission and sending, to approximate distance."
+	id = "dses_module_distanceget"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 3)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_GLASS=2000, MAT_IRON=1000)
+	category = "Misc"
+	build_path = /obj/item/dses_module/distance_get
