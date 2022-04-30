@@ -512,7 +512,7 @@
 	machine.emag_ai(A)
 
 // Emag behavior varies from machine to machine
-// Simply calling emag and/or emag_act
+// Simply calling emag_act
 // isn't enough for a lot of things, so this can be overridden
 /obj/machinery/proc/emag_ai(mob/living/silicon/ai/A)
 	emag_act(A)
