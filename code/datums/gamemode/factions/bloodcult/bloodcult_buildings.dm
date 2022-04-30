@@ -893,8 +893,8 @@
 #undef ALTARTASK_SACRIFICE_ANIMAL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                       //Spawned from the Raise Structure rune. Available from Act II, upgrades at each subsequent Act
-//      CULT SPIRE       //Can be used by cultists to acquire arcane tattoos. One of each tier.
+//                       //Spawned from the Raise Structure rune.
+//      CULT SPIRE       //Enables rune-less cult comms for cultists on their current Z-Level
 //                       //
 ///////////////////////////
 var/list/cult_spires = list()
@@ -1076,7 +1076,7 @@ var/list/cult_spires = list()
 	*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                       //Spawned from the Raise Structure rune. Available from Act II
+//                       //Spawned from the Raise Structure rune
 //      CULT FORGE       //Also a source of heat
 //                       //
 ///////////////////////////
@@ -1179,7 +1179,7 @@ var/list/cult_spires = list()
 				M.bodytemperature += (6-round(M.get_cult_power()/30))/((get_dist(src,M)+1))//cult gear reduces the heat buildup
 		if (forging)
 			if (forger)
-				if (!Adjacent(forger))
+				if (!Adjacent(forger) || forger.incapacitated())
 					if (forger.client)
 						forger.client.images -= progbar
 					forger = null
