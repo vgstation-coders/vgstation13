@@ -91,7 +91,7 @@
 
 /obj/item/weapon/implanter/holy
 	name = "implanter-holy"
-	desc = "This microscripture implanter helps those affected by the Occult from manifesting unwanted abilities."
+	desc = "This microscripture implanter helps vampires and those affected by the Occult from manifesting unwanted abilities."
 	imp_type = /obj/item/weapon/implant/holy
 
 /obj/item/weapon/implanter/compressed

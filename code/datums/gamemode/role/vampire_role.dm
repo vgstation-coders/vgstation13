@@ -22,6 +22,7 @@
 
 	var/nullified = 0
 	var/smitecounter = 0
+	var/holyimplanted = 0
 
 	var/list/saved_appearances = list()
 	var/datum/human_appearance/initial_appearance
@@ -422,8 +423,11 @@
 			H.fire_stacks += 5
 			H.IgniteMob()
 
-/datum/role/vampire/proc/holyimplanted()
+/datum/role/vampire/proc/holyimplanted() //holy implant interaction
 	if (is_implanted(/obj/item/weapon/implant/holy))
+		return 1
+	return 0
+	if (var/holyimplanted = 1)
 		remove_blood(2)
 
 /datum/role/vampire/proc/remove_blood(var/amount)
