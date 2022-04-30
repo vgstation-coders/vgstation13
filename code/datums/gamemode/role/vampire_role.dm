@@ -422,7 +422,7 @@
 			H.fire_stacks += 5
 			H.IgniteMob()
 
-/datum/role/vampire/proc/holyimplanted
+/datum/role/vampire/holyimplant
 	if (is_implanted(/obj/item/weapon/implant/holy))
 		remove_blood(2)
 
