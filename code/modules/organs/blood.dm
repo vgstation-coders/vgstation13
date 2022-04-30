@@ -212,7 +212,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
 		blood_factor += 0.3
 
-	if(reagents.has_reagent(INAPROVALINE) || reagents.has_reagent(BICARIDINE)) //Inaprov and Bicard slow bleeding, but do not stack
+	if(reagents.has_reagent(INAPROVALINE)) //Inaprov and Bicard slow bleeding, and stack
+		blood_factor -= 0.3
+		
+	if(reagents.has_reagent(BICARIDINE))
 		blood_factor -= 0.3
 		
 	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
