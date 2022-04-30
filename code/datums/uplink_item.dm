@@ -536,6 +536,18 @@ var/list/uplink_items = list()
 	item = /obj/item/device/radio_jammer
 	cost = 8
 
+// EXTRATERRESTRIAL BLACK MARKET
+// Weapons and gadgets from a spacefaring alien power that the Syndicate has acquired through unknown means (Only one item for now, more to come soon)
+
+/datum/uplink_item/ayylmao
+	category = "Extraterrestrial Black Market"
+
+/datum/uplink_item/ayylmao/hdisintegrator
+	name = "Heavy Disintegrator"
+	desc = "A powerful military issue alien laser weapon. It has a primary firing mode capable of incapacitating most unarmored targets in three shots, and a secondary mode capable of instantaneously inducing nausea and vomiting."
+	item = /obj/item/weapon/gun/energy/heavydisintegrator
+	cost = 16
+
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
 
