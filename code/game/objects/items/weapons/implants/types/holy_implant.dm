@@ -19,8 +19,10 @@
 	imp_in << sound('sound/ambience/ambicha2.ogg')
 	imp_in << sound('sound/ambience/ambicha3.ogg')
 	imp_in << sound('sound/ambience/ambicha4.ogg')
-	if(iscultist(imp_in), isvampire(imp_in))
-		to_chat(imp_in, "<span class='danger'>You feel uneasy as you suddenly start hearing a cacophony of religious chants. You find yourself growing distant from your ritualistic abilities...</span>")
+	if(iscultist(imp_in))
+		to_chat(imp_in, "<span class='danger'>You feel uneasy as you suddenly start hearing a cacophony of religious chants. You find yourself unable to perform any ritual.</span>")
+	if(isvampire(imp_in))
+		to_chat(imp_in, "<span class ='danger>You feel uneasy as you suddenly start hearing a cacophony of religious chants. You feel growing distant from your vampiric powers...</span>")
 	else
 		to_chat(imp_in, "<span class='notice'>You hear the soothing millennia-old Gregorian chants of the clergy.</span>")
 
