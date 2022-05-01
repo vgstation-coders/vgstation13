@@ -1745,7 +1745,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "supermatter shard crate"
 	group = "Engineering"
-	access = list(access_engine_minor)
+	access = list(access_engine_major)
 	var/static/list/shard_counts_by_user = list()
 
 
