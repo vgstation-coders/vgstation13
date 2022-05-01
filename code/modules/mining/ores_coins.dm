@@ -369,7 +369,7 @@
 			while(R.checkIngredients(materials)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
 					materials.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
-					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+					score.oremined += 1 //Count this ore piece as processed for the scoreboard
 					if(istype(loc,/obj/structure/forge))
 						drop_stack(R.yieldtype,loc.loc)
 					else
@@ -388,6 +388,7 @@
 	force = 1
 	throwforce = 1
 	w_class = W_CLASS_TINY
+	w_type = RECYK_METAL
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
@@ -412,32 +413,28 @@
 /obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
 	var/matrix/flipit = matrix()
 	flipit.Scale(0.2,1)
-	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
-	sleep(1.2) //sleeps because otherwise the scale/invert transforms get skipped
+	animate(src, transform = flipit, time = 1.5, easing = QUAD_EASING)
 	flipit.Scale(5,1)
 	flipit.Invert()
 	flipit.Turn(rand(1,359))
-	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
-	sleep(1.2)
+	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
 	flipit.Scale(0.2,1)
-	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
-	sleep(1.2)
+	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
 	if (pick(0,1))
 		sideup = "heads-up."
 		flipit.Scale(5,1)
 		flipit.Turn(rand(1,359))
-		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
 	else
 		sideup = "tails-up."
 		flipit.Scale(5,1)
 		flipit.Invert()
 		flipit.Turn(rand(1,359))
-		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
 	if (prob(0.1) || rigged)
 		flipit.Scale(0.2,1)
-		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
 		sideup = "on the side!"
-	sleep(1.2)
 	if(!thrown)
 		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
 							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \

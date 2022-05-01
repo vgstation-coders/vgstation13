@@ -406,6 +406,13 @@ var/list/special_fruits = list()
 	plantname = "cabbage"
 	fragrance = INCENSE_LEAFY
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage
+	name = "plasma cabbage"
+	desc = "Not to be confused with red cabbage."
+	potency = 25
+	filling_color = "#99335C"
+	plantname = "plasmacabbage"
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
 	desc = "Nutritious!"
@@ -565,6 +572,13 @@ var/list/special_fruits = list()
 	filling_color = "#FAAD28"
 	plantname = "orange"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus
+	name = "silicate citrus"
+	desc = "Best thing since the toast untoaster."
+	potency = 20
+	filling_color = "#C7FFFF"
+	plantname = "silicatecitrus"
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 	name = "white-beet"
 	desc = "You can't beat white-beet."
@@ -582,6 +596,12 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
 	return TRUE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/banana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	var/obj/item/weapon/bananapeel/peel = new
+	peel.potency = potency
+	trash = peel
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
 	name = "bluespace banana"

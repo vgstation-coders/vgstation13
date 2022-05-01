@@ -110,6 +110,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/pacify_aura = FALSE
 
 	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff
+	var/force_airlock_time=0 //to allow for airlock forcing to take some time
 
 /mob/living/simple_animal/isBloodedAnimal()
 	return blooded
@@ -584,20 +585,24 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(flags & INVULNERABLE)
 		return
 	..()
+	var/dmg_phrase = ""
+	var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
 	switch (severity)
 		if (1.0)
 			adjustBruteLoss(500)
-			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 			gib()
 			return
 
 		if (2.0)
 			adjustBruteLoss(60)
-			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 60", admin_warn = TRUE)
+			dmg_phrase = "Damage: 60"
 
 		if(3.0)
 			adjustBruteLoss(30)
-			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
+			dmg_phrase = "Damage: 30"
+
+	add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 

@@ -42,7 +42,7 @@
 
 #define ishorrorform(A) (ishuman(A) && istype(A:species, /datum/species/horror))
 
-#define isgrue(A) (ishuman(A) && istype(A:species, /datum/species/grue))
+#define isumbra(A) (ishuman(A) && istype(A:species, /datum/species/umbra))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
@@ -75,6 +75,8 @@
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
 
 #define ispulsedemon(A) (istype(A, /mob/living/simple_animal/hostile/pulse_demon))
+
+#define isgrue(A) (istype(A, /mob/living/simple_animal/hostile/grue))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -113,6 +115,8 @@
 #define issilicon(A) istype(A, /mob/living/silicon)
 
 #define isMoMMI(A) istype(A, /mob/living/silicon/robot/mommi)
+
+#define isSaMMI(A) istype(A, /mob/living/silicon/robot/mommi/sammi)
 
 #define isbot(A) istype(A, /obj/machinery/bot)
 
@@ -243,8 +247,6 @@
 #define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
-
-#define isNonTimeDataReagent(R) (is_type_in_list(R, list( /datum/reagent/citalopram, /datum/reagent/paroxetine)))
 
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
@@ -399,8 +401,6 @@
 
 
 #define subtypesof(A) (typesof(A) - A)
-
-#define LIBVG(function, arguments...) call("./libvg.[world.system_type == UNIX ? "so" : "dll"]", function)(arguments)
 
 // For areas that are on the map, `x` is the coordinate of the turf with the lowest z, y, and x coordinate (in that order) that is contained by the area.
 #define is_area_in_map(A) (A.x)

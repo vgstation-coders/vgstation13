@@ -66,5 +66,13 @@
 		#undef MAP_OVERRIDE
 		#include "island.dm"
 		#define MAP_OVERRIDE 13
+	#elif MAP_OVERRIDE == 14
+		#undef MAP_OVERRIDE
+		#include "line.dm"
+		#define MAP_OVERRIDE 14
+	#elif MAP_OVERRIDE == 15
+		#undef MAP_OVERRIDE
+		#include "test_very_tiny.dm"
+		#define MAP_OVERRIDE 15
 	#endif
 #endif

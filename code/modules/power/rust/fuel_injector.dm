@@ -8,11 +8,11 @@
 	density = 1
 	anchored = 0
 	var/locked = FALSE
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 
 	var/obj/item/weapon/fuel_assembly/cur_assembly
 	var/fuel_usage = 0.0001			//percentage of available fuel to use per cycle
-	 
+
 	var/injecting = FALSE
 
 	use_power = 1
@@ -54,7 +54,7 @@
 		out += "has been shorted.<br>"
 	else
 		out += "is [locked ? "locked" : "unlocked"].<br>"
-	if(stat & NOPOWER || state != 2)
+	if(stat & (FORCEDISABLE|NOPOWER) || state != 2)
 		out += "It seems to be powered down.<br>"
 	else if(injecting)
 		out += "It's actively injecting fuel.<br>"
@@ -66,7 +66,7 @@
 
 /obj/machinery/power/rust_fuel_injector/process()
 	if(injecting)
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			stop_injecting()
 		else
 			inject()
@@ -134,7 +134,7 @@
 	. = ..()
 	if(.)
 		return
-	if(stat & NOPOWER || state != 2)
+	if(stat & (FORCEDISABLE|NOPOWER) || state != 2)
 		to_chat(user, "<span class='warning'>It's completely unresponsive.</span>")
 		return
 	ui_interact(user)
@@ -166,7 +166,7 @@
 	if(..())
 		return 1
 
-	if (stat & NOPOWER || locked || state != 2)
+	if (stat & (FORCEDISABLE|NOPOWER) || locked || state != 2)
 		return 1
 
 	if(href_list["modify_tag"])
@@ -266,7 +266,7 @@
 		stop_injecting()
 
 /obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap()
-	var/rev_dir = reverse_direction(dir)
+	var/rev_dir = opposite_dirs[dir]
 	var/turf/mid = get_step(src, rev_dir)
 	var/success = 0
 	for(var/obj/machinery/rust_fuel_assembly_port/check_port in get_step(mid, rev_dir))

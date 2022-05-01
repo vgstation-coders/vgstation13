@@ -8,7 +8,7 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
 	log_reagents = 0 //transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd].
@@ -31,6 +31,13 @@
 												/obj/item/weapon/reagent_containers/food/drinks,
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/dropper)
+
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag,
+	)
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/microwave,\
@@ -67,7 +74,7 @@
 				acceptable_items |= item
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
-
+		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)   
 /*******************
 *   Part Upgrades
 ********************/
@@ -227,10 +234,17 @@
 	if(isAdminGhost(user))
 		user.set_machine(src)
 		interact(user)
+		return
+	..()
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
+
+/obj/machinery/microwave/emag(mob/user)
+	..()
+	emagged = 1
+	to_chat(user, "<span class='warning'>You mess up \the [src]'s circuitry.</span>")
 
 /*******************
 *   Microwave Menu
@@ -353,7 +367,7 @@
 ************************************/
 
 /obj/machinery/microwave/proc/cook()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(operating)
 		return
@@ -446,7 +460,10 @@
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
-		cooked = recipe.make_food(src)
+		if(!emagged)
+			cooked = recipe.make_food(src)
+		else
+			cooked = fail()
 		stop()
 		if(cooked)
 			cooked.forceMove(src.loc)
@@ -454,7 +471,7 @@
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
-		if (stat & (NOPOWER|BROKEN))
+		if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		use_power(500)
 		sleep(10/speed_multiplier)
@@ -550,6 +567,8 @@
 	src.reagents.clear_reagents()
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
+	if(emagged || Holiday == APRIL_FOOLS_DAY)
+		playsound(src, "goon/sound/effects/dramatic.ogg", 100, 0)
 	return ffuu
 
 /obj/machinery/microwave/proc/empty()
@@ -567,7 +586,7 @@
 	return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return ..()
 	if(!anchored)
 		return ..()

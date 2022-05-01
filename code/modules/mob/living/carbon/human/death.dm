@@ -6,7 +6,6 @@
 		return
 
 	death(1)
-	monkeyizing = 1
 	canmove = 0
 	icon = null
 	invisibility = 101
@@ -14,6 +13,7 @@
 
 //This will get called often at first until custom gibbing events get made up for each species.
 /mob/living/carbon/human/proc/default_gib()
+	monkeyizing = TRUE
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
@@ -77,10 +77,6 @@
 		qdel(species)
 		species = null
 
-	if(decapitated)
-		decapitated.origin_body = null
-		decapitated = null
-
 	if(vessel)
 		qdel(vessel)
 		vessel = null
@@ -130,7 +126,7 @@
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
 		if(!(mind && mind.suiciding)) //Cowards don't count
-			score["deadcrew"]++ //Someone died at this point, and that's terrible
+			score.deadcrew++ //Someone died at this point, and that's terrible
 	if (dorfpod)
 		dorfpod.scan_body(src)
 	if(ticker && ticker.mode)
@@ -175,9 +171,4 @@
 	update_body(0)
 	update_mutantrace()
 	vessel.remove_reagent(BLOOD,vessel.get_reagent_amount(BLOOD))
-	return
-
-/mob/living/carbon/human/proc/Drain()
-	ChangeToHusk()
-	mutations |= M_NOCLONE
 	return

@@ -23,7 +23,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
-	var/health = 100
+	health = 100
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
@@ -356,17 +356,14 @@
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
 		M.Stun(1)
-		if (prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
+		playsound(M, "trayhit", 50, 1)
 		M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
 		return
 	return ..()
 
 /obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	for (var/atom/A in loc)
-		if (A == src)
+		if (A == src || A == victim || A == user)
 			continue
 		if (!A.Cross(victim,get_turf(victim)))
 			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
@@ -723,7 +720,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
-	var/health = 20
+	health = 20
 
 /obj/structure/rack/proc/destroy(var/dropParts = TRUE)
 	if(parts && dropParts)

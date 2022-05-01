@@ -85,8 +85,11 @@
 		else
 			to_chat(user, "You can't pry anything out of \the [src]!")
 			return 1
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN ))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
+		return 1
+	if(stat & FORCEDISABLE)
+		to_chat(user, "<span class='notice'>[src] seems unresponsive.</span>")
 		return 1
 	if(panel_open)
 		to_chat(user, "You can't insert anything into \the [src] while the maintenance panel is open.</span>")
@@ -176,7 +179,7 @@
 		icon_state = "recharger4"
 		return
 
-	if(!self_powered && (stat & (NOPOWER|BROKEN)))
+	if(!self_powered && (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		if(charging)//Spit out anything being charged if it loses power or breaks
 			charging.appearance = appearance_backup
 			charging.update_icon()
@@ -271,7 +274,7 @@
 	use_power(amount)
 
 /obj/machinery/recharger/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		..(severity)
 		return
 
@@ -324,7 +327,7 @@
 
 
 /obj/machinery/recharger/wallcharger/process()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
 
 	if(charging)

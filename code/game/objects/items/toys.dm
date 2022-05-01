@@ -537,7 +537,7 @@
 	icon_state = "crayonred"
 	w_class = W_CLASS_TINY
 	attack_verb = list("attacks", "colours", "colors")//teehee
-	var/colour = DEFAULT_BLOOD //RGB
+	var/mainColour = DEFAULT_BLOOD //RGB
 	var/shadeColour = "#220000" //RGB
 	var/uses = 30 //0 for unlimited uses
 	var/instant = 0
@@ -783,7 +783,7 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/gooncode/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
+	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's trying to re-add poo!</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 

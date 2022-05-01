@@ -43,8 +43,8 @@
 			src.name = N
 	else if(istype(I, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = I
-		src.color = C.colour //doesn't work with paper hats but I haven't found a way to fix it, who will even notice anyways
-		src.unfolded.color = C.colour
+		src.color = C.mainColour //doesn't work with paper hats but I haven't found a way to fix it, who will even notice anyways
+		src.unfolded.color = C.mainColour
 	else if(I.is_hot())
 		src.ashify_item(user)
 		return

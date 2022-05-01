@@ -124,6 +124,10 @@
 	name = "neaera cube"
 	contained_mob = /mob/living/carbon/monkey/skrell
 
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube
+	name = "roach cube"
+	contained_mob = /mob/living/carbon/monkey/roach
+
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube
 	name = "humanoid cube"
 	desc = "Freshly compressed. Add water to release the creature within."

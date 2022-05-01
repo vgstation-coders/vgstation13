@@ -999,6 +999,10 @@ Use this proc preferably at the end of an equipment loadout
 		if(point)
 			qdel(point)
 
+	for (var/obj/item/I in held_items)
+		if (I.is_pointer(src))
+			I.point_to(A, src)
+
 	return 1
 
 /mob/proc/has_hand_check()
@@ -1794,7 +1798,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/shuttle_act()
 	return
 
-/mob/shuttle_rotate(angle)
+/mob/map_element_rotate(angle)
 	src.dir = turn(src.dir, -angle) //rotating pixel_x and pixel_y is bad
 
 /mob/can_shuttle_move()
@@ -2103,6 +2107,10 @@ Use this proc preferably at the end of an equipment loadout
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(paxban_isbanned(ckey))
+		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
+		return TRUE
+
 	if (runescape_pvp)
 		var/area/A = get_area(src)
 		if (!istype(A, /area/maintenance) && !is_type_in_list(A,non_standard_maint_areas))

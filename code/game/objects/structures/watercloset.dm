@@ -124,7 +124,7 @@
 						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
 						add_fingerprint(user)
 						add_fingerprint(GM)
-						watersource.reagents.reaction(GM, TOUCH)
+						watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH))
 
 						if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5

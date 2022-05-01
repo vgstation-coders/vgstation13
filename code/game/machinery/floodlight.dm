@@ -40,10 +40,6 @@
 			visible_message("<span class='warning'>\The [src] shuts down!</span>")
 			return
 
-/obj/machinery/floodlight/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/floodlight/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 

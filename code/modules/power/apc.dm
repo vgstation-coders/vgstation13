@@ -12,6 +12,7 @@
 #define UPSTATE_BLUESCREEN 32
 #define UPSTATE_WIREEXP 64
 #define UPSTATE_ALLGOOD 128
+#define UPSTATE_SHUNT 256
 
 //update_overlay
 #define APC_UPOVERLAY_CHARGEING0 1
@@ -48,7 +49,7 @@
 	icon_state = "apc0"
 	anchored = 1
 	use_power = 0
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 	var/spooky=0
 	var/pulsecompromising=0
 	var/obj/item/weapon/cell/cell
@@ -77,8 +78,8 @@
 	var/wiresexposed = 0
 	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
-	var/mob/living/silicon/ai/hacking_ai = null     //The AI that is currently attempting to hack this APC
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
+	var/mob/living/silicon/ai/currently_hacking_ai = null
 	var/malflocked = 0 //used for malfs locking down APCs
 //	luminosity = 1
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
@@ -99,6 +100,7 @@
 	var/is_critical = 0 // Endgame scenarios will not destroy this APC.
 
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
+	var/atom/movable/fake_camera_image/malfimage
 
 	machine_flags = WIREJACK
 
@@ -176,7 +178,8 @@
 /obj/machinery/power/apc/initialize()
 	..()
 	var/area/this_area = get_area(src)
-	name = "[this_area.name] APC"
+	if(this_area)
+		name = "[this_area.name] APC"
 
 	update_icon()
 	add_self_to_holomap()
@@ -262,6 +265,8 @@
 				icon_state = "[basestate]-nocover"
 		else if(update_state & UPSTATE_BROKE)
 			icon_state = "apc-b"
+		else if(update_state & UPSTATE_SHUNT)
+			icon_state = "apcshunt"
 		else if(update_state & UPSTATE_BLUESCREEN)
 			icon_state = "apcemag"
 		else if(update_state & UPSTATE_WIREEXP)
@@ -301,7 +306,6 @@
 		update_state |= UPSTATE_BROKE
 	if(stat & MAINT)
 		update_state |= UPSTATE_MAINT
-
 	if(opened)
 		if(opened==1)
 			update_state |= UPSTATE_OPENED1
@@ -580,6 +584,9 @@
 					"<span class='warning'>[src] has been cut from the wall by [user.name] with the weldingtool.</span>",\
 					"You cut the APC frame from the wall.",\
 					"<span class='warning'>You hear welding.</span>")
+			if(cell)
+				cell.forceMove(loc)
+				cell = null
 			qdel(src)
 			return
 	else if (istype(W, /obj/item/mounted/frame/apc_frame) && opened && emagged)
@@ -604,8 +611,11 @@
 			qdel(W)
 			W = null
 			stat &= ~BROKEN
-			malfai = null
-			malfhack = 0
+			if(malfai)
+				var/datum/role/malfAI/M = malfai.mind.GetRole(MALF)
+				M.apcs -= src
+				malfai = null
+				malfhack = 0
 			if (opened==2)
 				opened = 1
 			update_icon()
@@ -723,9 +733,14 @@
 	ui_interact(user)
 
 /obj/machinery/power/apc/proc/get_malf_status(var/mob/living/silicon/ai/user)
-	if (istype(user) && find_active_faction_by_member(user.mind.GetRole(MALF)))
-		if (src.malfai == (user.parent ? user.parent : user))
-			if (src.occupant == user)
+	var/datum/role/malfAI/M = user.mind.GetRole(MALF)
+	if(!istype(M))
+		return 0 // 0 = User is not a Malf AI
+	if(src in M.currently_hacking_apcs)
+		return 5 		//5 - currently being hacked
+	if (istype(user) && M)
+		if (malfai == (user.parent ? user.parent : user))
+			if (occupant == user)
 				return 3 // 3 = User is shunted in this APC
 			else if (istype(user.loc, /obj/machinery/power/apc))
 				return 4 // 4 = User is shunted in another APC
@@ -896,7 +911,7 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if((!aidisabled) && malflocked && usr != malfai) //exclusive control enabled
+	if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
 		to_chat(usr, "Access refused.")
 		return 0
 	if(!can_use(usr, 1))
@@ -935,47 +950,16 @@
 		update_icon()
 		update()
 
+	else if(href_list["occupyapc"])
+		var/datum/malfhack_ability/shunt/S = locate(/datum/malfhack_ability/shunt) in hack_abilities
+		var/mob/living/silicon/ai/A = usr
+		if(istype(S) && istype(A))
+			if(S.check_available(A))
+				S.activate(A)
+
 	else if (href_list["overload"])
 		if(istype(usr, /mob/living/silicon) || isAdminGhost(usr))
 			src.overload_lighting()
-
-	else if (href_list["malfhack"])
-		var/mob/living/silicon/ai/malfai = usr
-		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(get_malf_status(malfai)==1)
-			if (malfai.malfhacking)
-				to_chat(malfai, "You are already hacking an APC.")
-				return 1
-			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
-			to_chat(malfai, "Beginning override of APC systems. This will take [time_required/10] seconds, and you cannot hack other APC's during the process.")
-			malfai.malfhack = src
-			malfai.malfhacking = 1
-			hacking_ai = malfai
-			malfai.handle_regular_hud_updates()
-			sleep(time_required)
-			if(src && malfai)
-				if (!src.aidisabled)
-					malfai.malfhack = null
-					malfai.malfhacking = 0
-					hacking_ai = null
-					locked = 1
-					if(M && map.zMainStation == z)
-						M.apcs++
-					if(usr:parent)
-						src.malfai = usr:parent
-					else
-						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [map.zMainStation == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
-					malfai.handle_regular_hud_updates()
-					update_icon()
-
-	else if (href_list["occupyapc"])
-		if(get_malf_status(usr))
-			malfoccupy(usr)
-
-	else if (href_list["deoccupyapc"])
-		if(get_malf_status(usr))
-			malfvacate()
 
 	else if (href_list["toggleaccess"])
 		if(istype(usr, /mob/living/silicon))
@@ -985,25 +969,14 @@
 				locked = !locked
 				update_icon()
 
-	else if (href_list["malflock"])
-		if(get_malf_status(usr))
-			malflocked = !malflocked
-
 	return 1
 
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
-	if(malfai)
-		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && map.zMainStation == z)
-			operating ? M.apcs++ : M.apcs--
-
 	src.update()
 	update_icon()
 
-/obj/machinery/power/apc/proc/malfoccupy(var/mob/living/silicon/ai/malf)
-	if(!istype(malf))
-		return
+/*
 	if(istype(malf.loc, /obj/machinery/power/apc)) // Already in an APC
 		to_chat(malf, "<span class='warning'>You must evacuate your current apc first.</span>")
 		return
@@ -1037,13 +1010,12 @@
 		if(istype(mf.stat_datum, /datum/stat/faction/malf))
 			var/datum/stat/faction/malf/MS = mf.stat_datum
 			MS.shunted = TRUE
-
+*/
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)
 	if(!src.occupant)
 		return
 	if(src.occupant.parent && src.occupant.parent.stat != 2)
-		src.occupant.mind.transfer_to(src.occupant.parent)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
@@ -1051,16 +1023,17 @@
 				var/mob/living/silicon/ai/A = occupant.parent // the current mob the mind owns
 				if(A.stat != DEAD)
 					point.target = A //The pinpointer tracks the AI back into its core.
-		qdel(src.occupant)
+		new /obj/effect/malf_jaunt(loc, occupant, occupant.parent, TRUE)
 		src.occupant = null
 	else
-		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
 			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
 			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
+		else 
+			to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 
 /obj/machinery/power/apc/can_overload()
 	return 1
@@ -1267,20 +1240,16 @@
 // on 0=off, 1=on, 2=autooff
 
 /obj/machinery/power/apc/proc/autoset(var/val, var/on)
-	if(on==0)
-		if(val==2)			// if on, return off
-			return 0
-		else if(val==3)		// if auto-on, return auto-off
-			return 1
-
-	else if(on==1)
-		if(val==1)			// if auto-off, return auto-on
-			return 3
-
-	else if(on==2)
-		if(val==3)			// if auto-on, return auto-off
-			return 1
-
+	switch (on)
+		if (0)
+			if(val>=2)		// if on or auto-on, return auto-off
+				return 1
+		if (1)
+			if(val==1)			// if auto-off, return auto-on
+				return 3
+		if (2)
+			if(val==3)			// if auto-on, return auto-off
+				return 1
 	return val
 
 // damage and destruction acts
@@ -1305,9 +1274,6 @@
 /obj/machinery/power/apc/ex_act(severity)
 	switch(severity)
 		if(1)
-			if(cell)
-				qdel(cell)
-				cell = null
 			qdel(src)
 		if(2)
 			if(prob(50))
@@ -1332,9 +1298,9 @@
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && map.zMainStation == z)
-			M.apcs--
+		var/datum/role/malfAI/M = malfai.mind?.GetRole(MALF)
+		if(M && (src in M.apcs))
+			M.apcs -= src
 	stat |= BROKEN
 	operating = 0
 	wiresexposed = 0
@@ -1362,14 +1328,7 @@
 	var/area/this_area = get_area(src)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
-		if(hacking_ai)	//APC got destroyed mid-hack
-			hacking_ai.malfhack = null
-			hacking_ai.malfhacking = 0
-			to_chat(hacking_ai, "<span class='warning'>The APC you were currently hacking was destroyed.</span>")
-		if(malfai && operating)
-			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-			if (M && map.zMainStation == z)
-				M.apcs--
+		clear_malf()
 		this_area.power_light = 0
 		this_area.power_equip = 0
 		this_area.power_environ = 0
@@ -1379,12 +1338,15 @@
 		malfvacate(1)
 
 	if(cell)
-		cell.forceMove(loc)
+		qdel(cell)
 		cell = null
 
 	if(wires)
 		qdel(wires)
 		wires = null
+
+	if(malfimage)
+		qdel(malfimage)
 
 	..()
 

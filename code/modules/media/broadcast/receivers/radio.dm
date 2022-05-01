@@ -13,7 +13,7 @@
 	update_icon()
 
 /obj/machinery/media/receiver/boombox/attack_hand(var/mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		to_chat(usr, "<span class='warning'>You don't see anything to mess with.</span>")
 		return
 	user.set_machine(src)

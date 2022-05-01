@@ -394,6 +394,14 @@ var/list/asset_datums = list()
 /datum/asset/simple/power_chart
 	assets = list("powerChart.js" = 'code/modules/power/powerChart.js')
 
+/datum/asset/simple/paint_tool
+	assets = list(
+		"paintTool.js" = 'code/modules/html_interface/paintTool/paintTool.js',
+		"canvas.js" =  'code/modules/html_interface/paintTool/canvas.js',
+		"canvas.css" =  'code/modules/html_interface/paintTool/canvas.css',
+		"checkerboard.png" =  'code/modules/html_interface/paintTool/checkerboard.png'
+	)
+
 /datum/asset/simple/util
 	assets = list(
 		"href_multipart_handler.js" =  'code/modules/html_interface/href_multipart_handler.js'
@@ -442,9 +450,9 @@ var/list/asset_datums = list()
 
 /datum/asset/simple/tgfont
 	assets = list(
-		"tgfont.eot" = file("tgui/packages/tgfont/dist/tgfont.eot"),
-		"tgfont.woff2" = file("tgui/packages/tgfont/dist/tgfont.woff2"),
-		"tgfont.css" = file("tgui/packages/tgfont/dist/tgfont.css"),
+		"tgfont.eot" = file("tgui/packages/tgfont/static/tgfont.eot"),
+		"tgfont.woff2" = file("tgui/packages/tgfont/static/tgfont.woff2"),
+		"tgfont.css" = file("tgui/packages/tgfont/static/tgfont.css"),
 	)
 
 /datum/asset/simple/other_fonts

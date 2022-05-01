@@ -137,6 +137,7 @@
 	return TRUE
 
 /obj/item/weapon/gun/energy/laser/captain
+	name ="captain's laser gun"
 	icon_state = "caplaser"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -348,6 +349,20 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 75
+
+/obj/item/weapon/gun/energy/laser/liberator
+	name = "liberator"
+	desc = "A laser carbine designed to protect frontier worlds from xenofauna without arming rebellions. It is particularly deadly against colony organisms."
+	charge_cost = 25
+	cell_type = "/obj/item/weapon/cell/crap/worse"
+	icon_state = "lasercarbine_6"
+	projectile_type = /obj/item/projectile/beam/humanelaser
+	origin_tech = Tc_COMBAT + "=3;" + Tc_ENGINEERING + "=2"
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BACK | SLOT_BELT
+
+/obj/item/weapon/gun/energy/laser/liberator/update_icon()
+	icon_state = "lasercarbine_[round(power_supply.charge / 40)]" //original liberator charge cost, done so icons don't break
 
 /obj/item/weapon/gun/energy/megabuster
 	name = "Mega-buster"

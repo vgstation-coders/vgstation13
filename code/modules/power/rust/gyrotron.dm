@@ -13,7 +13,7 @@
 	var/rate = 10
 	var/mega_energy = 0.001
 
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 
 	use_power = 1
 	idle_power_usage = 10
@@ -38,7 +38,7 @@
 	update_icon()
 
 /obj/machinery/rust/gyrotron/proc/start_emitting()
-	if(stat & (NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
 		return
 
 	emitting = 1
@@ -83,13 +83,13 @@
 
 /obj/machinery/rust/gyrotron/power_change()
 	. =..()
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		stop_emitting()
 
 	update_icon()
 
 /obj/machinery/rust/gyrotron/update_icon()
-	if(!(stat & (NOPOWER | BROKEN)) && emitting)
+	if(!(stat & (FORCEDISABLE | NOPOWER | BROKEN)) && emitting)
 		icon_state = "emitter-on"
 	else
 		icon_state = "emitter-off"

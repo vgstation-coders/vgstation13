@@ -9,8 +9,8 @@
 /var/const/access_rnd = 7			// Research and Development
 /var/const/access_tox_storage = 8	// Toxins mixing and storage
 /var/const/access_genetics = 9
-/var/const/access_engine = 10		// Power Engines
-/var/const/access_engine_equip = 11	// Engineering Foyer
+/var/const/access_engine_major = 10		// Power Engines
+/var/const/access_engine_minor = 11	// Engineering Foyer
 /var/const/access_maint_tunnels = 12
 /var/const/access_external_airlocks = 13
 /var/const/access_emergency_storage = 14
@@ -113,10 +113,24 @@
 		return 1
 	var/list/ACL = M.GetAccess()
 	if(req_access_dir)
-		var/turf/T = get_turf(src)
-		if(!((flow_flags & ON_BORDER) && dir == opposite_dirs[req_access_dir])) // For non-windoors
-			T = get_step(T,req_access_dir)
-		if(M in T.contents)
+		// A special check that combines dirs specified in this number by chaining the conditions below, for example NORTHEAST would add the north and east conditions together.
+		var/condition = FALSE
+		if((flow_flags & ON_BORDER) && opposite_dirs[req_access_dir] & dir) // For windoors and etc.
+			condition |= M.y == src.y && M.x == src.x
+		if(req_access_dir & NORTH)
+			condition |= M.y > src.y
+		if(req_access_dir & SOUTH)
+			condition |= M.y < src.y
+		if(req_access_dir & EAST)
+			condition |= M.x > src.x
+		if(req_access_dir & WEST)
+			condition |= M.x < src.x
+		if(map.multiz)
+			if(req_access_dir & UP)
+				condition |= M.z > src.z
+			if(req_access_dir & DOWN)
+				condition |= M.z < src.z
+		if(condition)
 			return can_access(ACL,req_access,req_one_access)
 		else
 			return access_not_dir
@@ -239,7 +253,7 @@
 /proc/get_all_accesses()
 	return list(access_shop, access_security, access_sec_doors, access_brig, access_armory, access_forensics_lockers, access_court,
 	            access_medical, access_genetics, access_morgue, access_rd,
-	            access_rnd, access_tox_storage, access_chemistry, access_engine, access_engine_equip, access_maint_tunnels,
+	            access_rnd, access_tox_storage, access_chemistry, access_engine_major, access_engine_minor, access_maint_tunnels,
 	            access_external_airlocks, access_change_ids, access_ai_upload,
 	            access_teleporter, access_eva, access_heads, access_captain, access_all_personal_lockers,
 	            access_tech_storage, access_chapel_office, access_atmospherics, access_kitchen,
@@ -262,7 +276,7 @@
 	return list(
 		access_security, access_sec_doors, access_brig, access_armory,		//sec
 		access_medical, access_genetics, access_surgery, access_paramedic,	//med
-		access_atmospherics, access_engine,	access_tech_storage,			//engi
+		access_atmospherics, access_engine_major,	access_tech_storage,			//engi
 		access_robotics, access_science,									//sci
 		access_external_airlocks, access_teleporter, access_eva,			//entering/leaving the station
 		access_maint_tunnels,
@@ -280,7 +294,7 @@
 		if(3) //research
 			return list(access_science, access_rnd, access_tox_storage, access_robotics, access_mechanic, access_xenobiology, access_rd)
 		if(4) //engineering and maintenance
-			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_mechanic, access_atmospherics, access_ce)
+			return list(access_construction, access_maint_tunnels, access_engine_major, access_engine_minor, access_external_airlocks, access_tech_storage, access_mechanic, access_atmospherics, access_ce)
 		if(5) //command
 			return list(access_heads, access_RC_announce, access_keycard_auth, access_change_ids, access_ai_upload, access_teleporter, access_eva, access_tcomsat, access_gateway, access_all_personal_lockers, access_heads_vault, access_hop, access_captain)
 		if(6) //station general
@@ -342,10 +356,10 @@
 			return "Bar"
 		if(access_janitor)
 			return "Custodial Closet"
-		if(access_engine)
-			return "Engineering"
-		if(access_engine_equip)
-			return "Power Equipment"
+		if(access_engine_major)
+			return "Advanced Engineering"
+		if(access_engine_minor)
+			return "Basic Engineering"
 		if(access_maint_tunnels)
 			return "Maintenance"
 		if(access_external_airlocks)

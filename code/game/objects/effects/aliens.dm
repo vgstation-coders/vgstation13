@@ -28,7 +28,7 @@
 	density = 1
 	opacity = 1
 	anchored = 1
-	var/health = 200
+	health = 200
 	var/turf/linked_turf
 
 /obj/effect/alien/resin/wall
@@ -183,7 +183,7 @@
 	density = 0
 	plane = ABOVE_TURF_PLANE
 	layer = WEED_LAYER
-	var/health = 14
+	health = 14
 	var/obj/effect/alien/weeds/node/linked_node = null
 	var/obj/machinery/door/jammin = null
 
@@ -455,7 +455,7 @@
 	density = 0
 	anchored = 1
 
-	var/health = 50
+	health = 50
 	var/status = GROWING //can be GROWING, GROWN or BURST; all mutually exclusive
 
 	flags = PROXMOVE

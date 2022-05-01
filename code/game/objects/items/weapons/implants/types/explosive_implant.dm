@@ -49,10 +49,11 @@
 	phrase = input("Choose activation phrase:") as text
 	var/static/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	phrase = sanitize_simple(phrase, replacechars)
-	usr.mind.store_memory("Explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
-	to_chat(usr, "The implanted explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
+	usr.mind.store_memory("Explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
+	to_chat(usr, "The implanted explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
 	addHear()
 	source.register_event(/event/emote, src, .proc/trigger)
+	score.implant_phrases += "[usr.real_name] ([get_key(usr)]) rigged [imp_in.real_name] to explode on the phrase <font color='red'>\"[phrase]\"</font>!"
 	return 1
 
 /obj/item/weapon/implant/explosive/emp_act(severity)
@@ -110,6 +111,14 @@
 	desc = "Injects \"chemicals\"."
 	icon_state = "implant"
 
+/obj/item/weapon/implant/explosive/remote/New()
+	..()
+	remote_implants.Add(src)
+
+/obj/item/weapon/implant/explosive/remote/Destroy()
+	remote_implants.Remove(src)
+	..()
+
 /obj/item/weapon/implant/explosive/remote/get_data()
 	return {"
 <b>Implant Specifications:</b><BR>
@@ -126,21 +135,21 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/explosive/remote/Hear()
 	return
 
-/obj/item/weapon/implant/explosive/remote/activate()
+/obj/item/weapon/implant/explosive/remote/activate(mob/user)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return
 	if(iscarbon(imp_in))
 		var/mob/M = imp_in
 
-		message_admins("Remote explosive implant triggered in [M] ([M.key]). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>) ")
-		log_game("Remote explosive implant triggered in [M] ([M.key]).")
+		message_admins("Remote explosive implant triggered in [M] ([M.key])[user ? "by [user] ([user.key])": ""]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>) ")
+		log_game("Remote explosive implant triggered in [M] ([M.key])[user ? "by [user] ([user.key])": ""].")
 
 		to_chat(M, "You hear a faint *beep*.")
 
 		var/turf/T = get_turf(M)
 
 		M.gib()
-		explosion(T, 1, 1, 3, 4, whodunnit = M)
+		explosion(T, 1, 1, 3, 4, whodunnit = user)
 		T.hotspot_expose(3500, 125, surfaces = 1)
 
 		qdel(src)

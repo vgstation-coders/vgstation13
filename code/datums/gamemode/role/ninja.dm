@@ -14,7 +14,7 @@
 	admin_voice_style = "bold"
 
 	stat_datum_type = /datum/stat/role/ninja
-
+	var/list/datum/weakref/thrown_shuriken = list()
 	var/last_star_throw = 0
 
 /datum/role/ninja/OnPostSetup(var/laterole = FALSE)
@@ -108,7 +108,7 @@ var/list/valid_ninja_suits = list(
 	)
 
 /obj/item/stack/shuriken
-	name = "3D printed shuriken"
+	name = "EM shuriken"
 	desc = "A specially designed shuriken that can only be used to its full potential by one trained in Spider Clan techniques. Highly effective against unarmored targets."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "shuriken"
@@ -129,21 +129,22 @@ var/list/valid_ninja_suits = list(
 		var/mob/living/carbon/human/H = usr
 		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
 		if(N)
-			var/suited = is_type_in_list(H.wear_suit,valid_ninja_suits) ? TRUE : FALSE
-			if(N.last_star_throw > world.time + (10-8*suited)) //10 deciseconds if unsuited, 2 otherwise
+			if(N.last_star_throw > world.time + 0.8 SECONDS)
+				N.last_star_throw = world.time
 				to_chat(H, "<span class='danger'>You can't throw \the [src] until you finish throwing the last one.</span>")
 				return
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
-				S.throw_at(A,throw_range,throw_speed*(1+suited)) //double speed if suited
+				S.throw_at(A, throw_range, throw_speed)
 				H.put_in_hands(src)
 				//statistics collection: ninja shuriken thrown
 				if(istype(N.stat_datum, /datum/stat/role/ninja))
 					var/datum/stat/role/ninja/ND = N.stat_datum
 					ND.shuriken_thrown++
 			else
-				..(A,throw_range,throw_speed*(1+suited)) //double speed if suited
+				N.thrown_shuriken += makeweakref(src)
+				..()
 		else
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 			//It drops to the ground in throwcode already
@@ -151,6 +152,13 @@ var/list/valid_ninja_suits = list(
 		if(ismob(usr))
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 		//Sometimes things are thrown by objects like vending machines or pneumatic cannons
+
+/obj/item/stack/shuriken/pickup(mob/user)
+	var/datum/role/ninja/weeb = isninja(user)
+	if(!weeb)
+		return
+	// Prevents "pulse shuriken" from blowing up shuriken that were thrown then picked back up
+	weeb.thrown_shuriken -= src.weakref
 
 /obj/item/stack/shuriken/Crossed(atom/movable/A)
 	if(!ishuman(A))
@@ -261,7 +269,11 @@ var/list/valid_ninja_suits = list(
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
 	var/shuriken_icon = "radial_print"
-	actions_types = list(/datum/action/item_action/make_shuriken, /datum/action/item_action/charge_sword)
+	actions_types = list(
+		/datum/action/item_action/make_shuriken,
+		/datum/action/item_action/pulse_shuriken,
+		/datum/action/item_action/charge_sword)
+	var/list/thrown_shuriken = list()
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
@@ -335,6 +347,19 @@ var/list/valid_ninja_suits = list(
 	var/obj/item/clothing/gloves/ninja/I = target
 	I.make_shuriken(owner)
 
+/datum/action/item_action/pulse_shuriken
+	name = "Pulse Shuriken"
+	desc = "Release an electromagnetic pulse from all thrown shuriken."
+	icon_icon = 'icons/mob/screen_spells.dmi'
+	button_icon_state = "wiz_tech"
+
+/datum/action/item_action/pulse_shuriken/Trigger()
+	if (!owner.mind.GetRole(NINJA))
+		to_chat(owner, "<span class='warning'>Only a true ninja can do that!</span>")
+		return FALSE
+	var/obj/item/clothing/gloves/ninja/I = target
+	I.pulse_shuriken(owner)
+
 /datum/action/item_action/charge_sword
 	name = "Charge Sword"
 	desc = "Reset the cooldown on your blade's teleport."
@@ -387,6 +412,19 @@ var/list/valid_ninja_suits = list(
 			user.put_in_hands(new /obj/item/stack/shuriken(user))
 	else
 		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] charge to make a shuriken!</span>")
+
+/obj/item/clothing/gloves/ninja/proc/pulse_shuriken(mob/user)
+	var/datum/role/ninja/weeb = isninja(user)
+	if(!weeb)
+		return
+	for(var/datum/weakref/maybe_star in weeb.thrown_shuriken)
+		var/obj/item/stack/shuriken/star = maybe_star.get()
+		if(!istype(star))
+			continue
+		empulse(star, -1, 1)
+		new /obj/effect/decal/cleanable/ash(get_turf(star))
+		qdel(star)
+	weeb.thrown_shuriken.Cut()
 
 /obj/item/clothing/gloves/ninja/proc/charge_sword(mob/user)
 	var/obj/item/weapon/oursword = GetNinjaWeapon(user)
@@ -554,7 +592,7 @@ Helpers For Both Variants
 
 /obj/item/weapon/melee/energy/sword/ninja/New()
 	..()
-	daemon = new /datum/daemon/teleport(src,"Weakness",null)
+	daemon = new /datum/daemon/teleport(src, pick("Weakness", "Nothing personnel kid"),null)
 
 /obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
 	if(togglestate) //override

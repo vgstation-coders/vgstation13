@@ -559,7 +559,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/structure/largecrate/secure/magmaw
 	name = "engineering livestock crate"
 	desc = "An access-locked crate containing a magmaw. Handlers are advised to stand back when administering plasma to the animal."
-	req_access = list(access_engine)
+	req_access = list(access_engine_minor)
 	mob_path = /mob/living/simple_animal/hostile/asteroid/magmaw
 	bonus_path = null //originally was /obj/item/stack/sheet/mineral/plasma resulting in immediate FIRE
 
@@ -602,7 +602,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/key/security/spare/New()
 	..()
 	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station",
-		 "Snow Station", "NRV Horizon", "Synergy Station", "Lamprey Station")
+		 "Snow Station", "Synergy Station", "Lamprey Station")
 	map_names -= map.nameLong
 	home_map = pick(map_names)
 
@@ -1538,7 +1538,7 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 	var/mode = OMNIMODE_TOOL
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
@@ -1742,6 +1742,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	mech_flags = MECH_SCAN_FAIL	//Nip that in the bud
 	var/static/list/illegalChems = list(	//Just a bad idea
 		ADMINORDRAZINE,
+		PROCIZINE,
 		BLOCKIZINE,
 		AUTISTNANITES,
 		XENOMICROBES,
@@ -1779,6 +1780,22 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 /obj/item/weapon/paper/permissionslip/New()
 	..()
 	info = "The purchaser or purchasers of this or any other Circuitry Circus Education Toy Booster Pack <i>TM</i> recognizes, accepts, and is bound to the terms and conditions found within any Circuitry Circus Education Toy Starter Pack <i>TM</i>. This includes but is not limited to: <BR>the relinquishment of any state, country, nation, or planetary given rights protecting those of select ages from legal action based on misuse of the product.<BR>All: injuries, dismemberments, trauma (mental or physical), diseases, invasive species, deaths, memory loss, time loss, genetic recombination, or quantum displacement is the sole responsibility of the owner of the Circuitry Circus Education Toy Booster Pack <i>TM</i> <BR><BR>Please ask for your parent or guardian's permission before playing. Have fun."
+
+
+//Mystery upgrades////////////
+
+/obj/item/weapon/storage/box/mystery_upgrade
+	name = "random cyborg upgrade pack"
+	desc = "Magnetic gripper not included. Ever."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "circuit"
+
+/obj/item/weapon/storage/box/mystery_upgrade/New()
+	..()
+	var/list/legalCircuits = existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper //Moved from old trade vendor
+	for(var/i = 1 to 3)
+		var/boosterPack = pick(legalCircuits)
+		new boosterPack(src)
 
 
 //Mystery material//////////////////////

@@ -11,7 +11,7 @@
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "yellow"
 	density = 1
-	var/health = 100.0
+	health = 100.0
 	flags = FPRINT
 	siemens_coefficient = 1
 
@@ -290,11 +290,6 @@
 
 	nanomanager.update_uis(src) // Update all NanoUIs attached to src
 
-
-
-/obj/machinery/portable_atmospherics/canister/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/portable_atmospherics/canister/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)

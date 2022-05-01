@@ -83,7 +83,7 @@ Refactored AI modules by N3X15
 	lawchanges.Add("[time] : [log_entry]")
 	message_admins(log_entry)
 	log_game(log_entry)
-	score["lawchanges"]++
+	score.lawchanges++
 	return 1
 
 // Constructs the law and desc from variables.

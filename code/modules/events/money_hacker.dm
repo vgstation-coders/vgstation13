@@ -15,7 +15,7 @@
 /datum/event/money_hacker/setup()
 	if(all_money_accounts.len)
 		for(var/obj/machinery/account_database/DB in account_DBs)
-			if( DB.z == map.zMainStation && !(DB.stat&NOPOWER) && DB.activated )
+			if( DB.z == map.zMainStation && !(DB.stat&(FORCEDISABLE|NOPOWER)) && DB.activated )
 				affected_db = DB
 				break
 	if(affected_db)
@@ -66,7 +66,7 @@
 /datum/event/money_hacker/tick()
 	if(world.time > time_start + time_duration)
 		var/message
-		if(affected_account && affected_db && affected_db.activated && !(affected_db.stat & (NOPOWER|BROKEN)) )
+		if(affected_account && affected_db && affected_db.activated && !(affected_db.stat & (FORCEDISABLE|NOPOWER|BROKEN)) )
 			//hacker wins
 			message = "The hack attempt has succeeded."
 
@@ -75,19 +75,18 @@
 			affected_account.money -= lost
 
 			//create a taunting log entry
-			var/datum/transaction/T = new()
-			T.target_name = pick("","yo brotha from anotha motha","el Presidente","chieF smackDowN")
-			T.purpose = pick("Ne$ ---ount fu%ds init*&lisat@*n","PAY BACK YOUR MUM","Funds withdrawal","pWnAgE","l33t hax","liberationez")
-			T.amount = pick("","([rand(0,99999)])","alla money","9001$","HOLLA HOLLA GET DOLLA","([lost])")
+			var/ourtarget = pick("","yo brotha from anotha motha","el Presidente","chieF smackDowN")
+			var/ourpurpose = pick("Ne$ ---ount fu%ds init*&lisat@*n","PAY BACK YOUR MUM","Funds withdrawal","pWnAgE","l33t hax","liberationez")
+			var/ouramount = pick("","([rand(0,99999)])","alla money","9001$","HOLLA HOLLA GET DOLLA","([lost])")
 			var/date1 = "31 December, 1999"
 			var/date2 = "[num2text(rand(1,31))] [pick("January","February","March","April","May","June","July","August","September","October","November","December")], [rand(1000,3000)]"
-			T.date = pick("", current_date_string, date1, date2)
+			var/ourdate = pick("", current_date_string, date1, date2)
 			var/time1 = rand(0, 99999999)
 			var/time2 = "[round(time1 / 36000)+12]:[(time1 / 600 % 60) < 10 ? add_zero(time1 / 600 % 60, 1) : time1 / 600 % 60]"
-			T.time = pick("", worldtime2text(), time2)
-			T.source_terminal = pick("","[pick("Biesel","New Gibson")] GalaxyNet Terminal #[rand(111,999)]","your mums place","nantrasen high CommanD")
+			var/ourtime = pick("", worldtime2text(), time2)
+			var/ourterminal = pick("","[pick("Biesel","New Gibson")] GalaxyNet Terminal #[rand(111,999)]","your mums place","nantrasen high CommanD")
 
-			affected_account.transaction_log.Add(T)
+			new /datum/transaction(affected_account, ourpurpose, ouramount, ourterminal, ourtarget, ourdate, ourtime)
 
 		else
 			//crew wins

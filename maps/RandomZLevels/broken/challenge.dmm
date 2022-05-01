@@ -153,7 +153,7 @@
 "cW" = (/obj/machinery/light{dir = 4},/obj/machinery/door/poddoor{icon_state = "pdoor1"; id_tag = "challenge"; name = "Gateway Shutters"; panel_open = 0},/turf/simulated/floor/bluegrid,/area/awaymission/challenge/end)
 "cX" = (/obj/machinery/door/poddoor{icon_state = "pdoor1"; id_tag = "challenge"; name = "Gateway Shutters"; panel_open = 0},/turf/simulated/floor/bluegrid,/area/awaymission/challenge/end)
 "cY" = (/obj/machinery/gateway{dir = 8},/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/awaymission/challenge/end)
-"cZ" = (/obj/machinery/gateway/centeraway{calibrated = 0},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/challenge/end)
+"cZ" = (/obj/machinery/gateway/center/away{calibrated = 0},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/challenge/end)
 "da" = (/obj/machinery/gateway{dir = 4},/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/awaymission/challenge/end)
 "db" = (/obj/machinery/gateway{dir = 10},/turf/simulated/floor{tag = "icon-vault (EAST)"; icon_state = "vault"; dir = 4},/area/awaymission/challenge/end)
 "dc" = (/obj/machinery/gateway,/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/awaymission/challenge/end)

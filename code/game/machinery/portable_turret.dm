@@ -32,6 +32,13 @@
 
 	machine_flags = EMAGGABLE | SHUTTLEWRENCH
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_loud,
+		/datum/malfhack_ability/manual_control
+	)
+
+
 /obj/machinery/turret/portable/New()
 	..()
 	icon_state = "[lasercolor]grey_target_prism"
@@ -69,11 +76,6 @@
 /obj/machinery/turret/portable/Destroy()
 	qdel(installed)
 	..()
-
-
-/obj/machinery/turret/portable/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/turret/portable/attack_hand(mob/user as mob)
 	. = ..()
@@ -409,6 +411,12 @@ Status: []<BR>"},
 				if(check_target(L))
 					targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
+	if(check_anomalies || emagged)
+		for(var/obj/effect/blob/B in view(7+emagged*5, src))
+			targets += B
+		for(var/mob/living/simple_animal/hostile/blobspore/BS in view(7+emagged*5, src))
+			targets += BS
+
 	if (targets.len) // if there are targets to shoot
 		new_target = pick(targets)
 
@@ -420,11 +428,13 @@ Status: []<BR>"},
 /obj/machinery/turret/portable/target()
 	if (istype(cur_target, /mob/living))
 		var/mob/living/L = cur_target
-		if (L.stat!=2)
-			spawn() popUp()
-			dir=get_dir(src, cur_target)
-			shootAt(cur_target)
-	return
+		if (L.stat == DEAD)
+			return
+	spawn()
+		popUp()
+	dir=get_dir(src, cur_target)
+	shootAt(cur_target)
+
 
 /obj/machinery/turret/portable/popUp() // pops the turret up
 	if(!enabled)
@@ -736,7 +746,6 @@ Status: []<BR>"},
 	machine_flags = SHUTTLEWRENCH
 
 /obj/machinery/turretcover/portable/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
 	return host.attack_ai(user)
 
 /obj/machinery/turretcover/portable/attackby(obj/item/W as obj, mob/user as mob)

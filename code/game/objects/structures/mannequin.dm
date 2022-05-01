@@ -34,8 +34,8 @@
 	var/hair_color = "#B9C1B8"
 	var/clothing_offset_x = 0
 	var/clothing_offset_y = 3*PIXEL_MULTIPLIER
-	var/health = 90
-	var/maxHealth = 90
+	health = 90
+	maxHealth = 90
 	var/has_pedestal = TRUE
 	var/timer = 80 //in seconds
 	var/mob/living/captured
@@ -455,6 +455,7 @@
 /obj/structure/mannequin/proc/freeCaptive()
 	if (!captured)
 		return
+	captured.sdisabilities &= ~MUTE
 	captured.timestopped = 0
 	captured.forceMove(loc)
 	for(var/cloth in clothing)
@@ -501,7 +502,6 @@
 			continue
 		captured.put_in_hands(tool)
 	held_items.len = 0
-
 	captured.dir = dir
 	captured.apply_damage(additional_damage)
 

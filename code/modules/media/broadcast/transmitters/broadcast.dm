@@ -107,10 +107,6 @@
 			integrity = 100
 			to_chat(user, "<span class='notice'>You repair the blown fuses on [src].</span>")
 
-/obj/machinery/media/transmitter/broadcast/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	attack_hand(user)
-
 /obj/machinery/media/transmitter/broadcast/attack_hand(var/mob/user as mob)
 	if(panel_open)
 		wires.Interact(user)
@@ -125,7 +121,7 @@
 		if(!istype(user.get_active_hand(), /obj/item/device/multitool))
 			return
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		return
 
 	var/screen = {"
@@ -147,7 +143,7 @@
 
 
 /obj/machinery/media/transmitter/broadcast/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		..(severity)
 		return
 	cable_power_change()
@@ -197,7 +193,7 @@
 			icon_state = "broadcaster damaged1"
 		if (75 to 100)
 			icon_state = "broadcaster"
-	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on)
 		overlays += image(icon = icon, icon_state = "broadcaster on")
@@ -253,7 +249,7 @@
 	return !wires.IsIndexCut(TRANS_RAD_ONE) + !wires.IsIndexCut(TRANS_RAD_TWO)
 
 /obj/machinery/media/transmitter/broadcast/process()
-	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on && anchored)
 		if(integrity<=0 || count_rad_wires()==0) //Shut down if too damaged OR if no rad wires

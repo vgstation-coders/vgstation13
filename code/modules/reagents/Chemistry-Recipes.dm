@@ -94,8 +94,10 @@
 	result_amount = 2.4
 
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
-	..()
-	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 1)
+	set waitfor = FALSE //makes sleep() work like spawn()
+	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 0)
+	sleep(2 SECONDS) //wait for the song to finish
+	..() //boom
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
@@ -129,7 +131,7 @@
 	name = "Peptobismol"
 	id = PEPTOBISMOL
 	result = PEPTOBISMOL
-	required_reagents = list(ANTI_TOXIN = 1, DISCOUNT = 1)
+	required_reagents = list(ANTI_TOXINS = 1, DISCOUNT = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/emp_pulse
@@ -309,7 +311,7 @@
 	name = "Polytrinic acid"
 	id = PACID
 	result = PACID
-	required_reagents = list(SACID = 1, CHLORINE = 1, POTASSIUM = 1)
+	required_reagents = list(SACIDS = 1, CHLORINE = 1, POTASSIUM = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/synaptizine
@@ -425,14 +427,14 @@
 	name = "Dermaline"
 	id = DERMALINE
 	result = DERMALINE
-	required_reagents = list(OXYGEN = 1, PHOSPHORUS = 1, KELOTANE = 1)
+	required_reagents = list(OXYGEN = 1, PHOSPHORUS = 1, KELOTANES = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/dexalinp
 	name = "Dexalin Plus"
 	id = DEXALINP
 	result = DEXALINP
-	required_reagents = list(DEXALIN = 1, CARBON = 1, IRON = 1)
+	required_reagents = list(DEXALINS = 1, CARBON = 1, IRON = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/bicaridine
@@ -562,7 +564,7 @@
 	name = "Trinitrine"
 	id = TRINITRINE
 	result = TRINITRINE
-	required_reagents = list(GLYCEROL = 1, SACID = 1, WATER = 3)
+	required_reagents = list(GLYCEROL = 1, SACIDS = 1, WATER = 3)
 	required_catalysts = list(NITROGEN = 5)
 	result_amount = 5
 
@@ -727,7 +729,7 @@
 	name = "Suxameth"
 	id = SUX
 	result = SUX
-	required_reagents = list(TOXIN = 1, CHLORINE = 1)
+	required_reagents = list(TOXINS = 1, CHLORINE = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/zombiepowder
@@ -987,7 +989,7 @@
 	name = "Nanobots"
 	id = NANOBOTS
 	result = NANOBOTS
-	required_reagents = list(NANITES = 1, URANIUM = 10, GOLD = 10, NUTRIMENT = 10, SILICON = 10)
+	required_reagents = list(ALLNANITES = 1, URANIUM = 10, GOLD = 10, NUTRIMENT = 10, SILICON = 10)
 	result_amount = 2
 
 /datum/chemical_reaction/nanobots2
@@ -1017,7 +1019,7 @@
 	name = "FixOVein"
 	id = "fixovein"
 	result = null
-	required_reagents = list(BICARIDINE = 10, CLONEXADONE = 10)
+	required_reagents = list(BICARIDINES = 10, CLONEXADONE = 10)
 	result_amount = 1
 	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
 
@@ -1078,7 +1080,7 @@
 	name = "Metal Foam"
 	id = "metalfoam"
 	result = null
-	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/metalfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1096,7 +1098,7 @@
 	name = "Iron Foam"
 	id = "ironlfoam"
 	result = null
-	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACID = 1)
+	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/ironfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1144,7 +1146,7 @@
 	id = BLEACH
 	result = BLEACH
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
-	result_amount = 1
+	result_amount = 2
 
 //This one isn't even close the the real life reaction but will have to do to avoid conflicts with the above reactions.
 /datum/chemical_reaction/luminol
@@ -1193,7 +1195,7 @@
 	name = "Insecticide"
 	id = INSECTICIDE
 	result = INSECTICIDE
-	required_reagents = list(TOXIN = 1, SALTWATER = 4)
+	required_reagents = list(TOXINS = 1, SALTWATER = 4)
 	result_amount = 5
 
 // Special Reactions for Plasma Beaker
@@ -2285,14 +2287,14 @@
 	name = "Zam's Mild Sauce"
 	id = ZAMMILD
 	result = ZAMMILD
-	required_reagents = list(ZAMSPICES = 3, SACID = 2)
+	required_reagents = list(ZAMSPICES = 3, SACIDS = 2)
 	result_amount = 5
 
 /datum/chemical_reaction/zamspicytoxin
 	name = "Zam's Spicy Sauce"
 	id = ZAMSPICYTOXIN
 	result = ZAMSPICYTOXIN
-	required_reagents = list(ZAMMILD = 3, PACID = 2)
+	required_reagents = list(ZAMMILD = 3, PACIDS = 2)
 	required_catalysts = list(MUTAGEN = 5)
 	result_amount = 3
 
@@ -2889,6 +2891,13 @@
 	required_reagents = list(PLASMA = 1, SNOWWHITE = 4, BERRYJUICE = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/pinklady
+	name = "Pink Lady"
+	id = PINKLADY
+	result = PINKLADY
+	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
+	result_amount = 4
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten
@@ -2967,6 +2976,13 @@
 	id = CHANGELINGSTING
 	result = CHANGELINGSTING
 	required_reagents = list(SCREWDRIVERCOCKTAIL = 1, LIMEJUICE = 1, LEMONJUICE = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/changelingstab
+	name = "Changeling Stab"
+	id = CHANGELINGSTAB
+	result = CHANGELINGSTAB
+	required_reagents = list(CHANGELINGSTING = 1, NOTHING = 1, KARMOTRINE = 3)
 	result_amount = 5
 
 /datum/chemical_reaction/aloe
@@ -3437,7 +3453,7 @@
 	name = "Apetrine"
 	id = APETRINE
 	result = APETRINE
-	required_reagents = list(PETRITRICIN = 2, PACID = 3)
+	required_reagents = list(PETRITRICIN = 2, PACIDS = 3)
 	result_amount = 1
 
 /datum/chemical_reaction/potassiumcarbonate
@@ -3656,6 +3672,13 @@
 	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/black_food_coloring
+	name = "Black Food Coloring"
+	id = BLACKCOLOR
+	result = BLACKCOLOR
+	required_reagents = list(COLORFUL_REAGENT = 1, CARBON = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/degeneratecalcium
 	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
@@ -3678,14 +3701,27 @@
 	required_reagents = list(CLONEXADONE = 1, MUTAGEN = 1, ENZYME = 1)
 	result_amount = 1
 
-/datum/chemical_reaction/synthmouse
-	name = "Synthmouse"
-	id = "synthmouse"
+/datum/chemical_reaction/synthparrot
+	name = "Synthparrot"
+	id = "synthparrot"
 	result = null
-	required_reagents = list(NUTRIMENT = 3, AMINOMICIN = 1)
+	required_reagents = list(NUTRIMENT = 1, AMINOMICIN = 1)
 	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/food/snacks/cracker
 
-/datum/chemical_reaction/synthmouse/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /mob/living/simple_animal/parrot(location)
+	qdel(holder.my_atom)
+
+/datum/chemical_reaction/synthmob //to cut down in duplicate code
+	name = null
+	id = null
+	result = null
+	result_amount = 1
+	var/mob2spawn = null
+
+/datum/chemical_reaction/synthmob/on_reaction(var/datum/reagents/holder, var/created_volume)
 	set waitfor = FALSE //makes sleep() work like spawn()
 	if(ishuman(holder.my_atom))
 		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
@@ -3703,59 +3739,18 @@
 		sleep(rand(5 SECONDS, 10 SECONDS))
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/mouse/common(location)
+	for(var/i=1 to created_volume)	
+		new mob2spawn(location)
 
-/datum/chemical_reaction/aminomician
-	name = "Aminomician"
-	id = AMINOMICIAN
-	result = AMINOMICIAN
-	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3)
-	result_amount = 1
-
-/datum/chemical_reaction/synthcorgi
-	name = "Synthcorgi"
-	id = "synthcorgi"
+/datum/chemical_reaction/synthmobhostile //to cut down in duplicate code
+	name = null
+	id = null
 	result = null
-	required_reagents = list(NUTRIMENT = 3, AMINOMICIAN = 1)
 	result_amount = 1
+	var/mob2spawnA = null
+	var/mob2spawnB = null
 
-/datum/chemical_reaction/synthcorgi/on_reaction(var/datum/reagents/holder, var/created_volume)
-	set waitfor = FALSE //makes sleep() work like spawn()
-	if(ishuman(holder.my_atom))
-		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
-		var/mob/living/carbon/human/H = holder.my_atom
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		to_chat(H, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
-		H.emote("me",1,"winces slightly.")
-		sleep(rand(10 SECONDS, 20 SECONDS))
-		to_chat(H, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
-		H.emote("me",1,"winces painfully.")
-		H.adjustToxLoss(1)
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
-		H.apply_damage(2*created_volume, BRUTE, LIMB_CHEST)
-		sleep(rand(5 SECONDS, 10 SECONDS))
-		H.vomit(instant = TRUE) //mouse spawning continues below
-	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/corgi/puppy(location)
-
-/datum/chemical_reaction/aminocyprinidol
-	name = "Aminocyprinidol"
-	id = AMINOCYPRINIDOL
-	result = AMINOCYPRINIDOL
-	required_reagents = list(AMINOMICIN = 1, CARPPHEROMONES = 5)
-	result_amount = 1
-
-/datum/chemical_reaction/synthcarp
-	name = "Synthcarp"
-	id = "synthcarp"
-	result = null
-	required_reagents = list(NUTRIMENT = 10, AMINOCYPRINIDOL = 1)
-	result_amount = 1
-
-/datum/chemical_reaction/synthcarp/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/synthmobhostile/on_reaction(var/datum/reagents/holder, var/created_volume)
 	set waitfor = FALSE //makes sleep() work like spawn()
 	var/location
 	if(ishuman(holder.my_atom))
@@ -3779,8 +3774,8 @@
 				E.fracture()
 				E.createwound(CUT, 60)
 				playsound(H, get_sfx("gib"),50,1)
-			if(5 to INFINITY)
-				to_chat(H, "<span class='warning'>Something smells fishy...</span>")
+			if(6 to INFINITY)
+				to_chat(H, "<span class='warning'>Something smells nasty...</span>")
 				sleep(rand(5 SECONDS, 10 SECONDS))
 				location = get_turf(holder.my_atom)
 				H.gib()
@@ -3791,20 +3786,73 @@
 	if(!location)
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /mob/living/simple_animal/hostile/carp/baby(location)
-
-/datum/chemical_reaction/synthparrot
-	name = "Synthparrot"
-	id = "synthparrot"
+		if(prob(80)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
+			new mob2spawnA(location)
+		else
+			new mob2spawnB(location)
+			
+/datum/chemical_reaction/synthmob/synthmouse
+	name = "Synthmouse"
+	id = "synthmouse"
 	result = null
-	required_reagents = list(NUTRIMENT = 1, AMINOMICIN = 1)
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIN = 1)
 	result_amount = 1
-	required_container = /obj/item/weapon/reagent_containers/food/snacks/cracker
+	mob2spawn = /mob/living/simple_animal/mouse/common
 
-/datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
-	var/location = get_turf(holder.my_atom)
-	new /mob/living/simple_animal/parrot(location)
-	qdel(holder.my_atom)
+/datum/chemical_reaction/aminomician
+	name = "Aminomician"
+	id = AMINOMICIAN
+	result = AMINOMICIAN
+	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmob/synthcorgi
+	name = "Synthcorgi"
+	id = "synthcorgi"
+	result = null
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIAN = 1)
+	result_amount = 1
+	mob2spawn = /mob/living/simple_animal/corgi/puppy
+
+/datum/chemical_reaction/aminocyprinidol
+	name = "Aminocyprinidol"
+	id = AMINOCYPRINIDOL
+	result = AMINOCYPRINIDOL
+	required_reagents = list(AMINOMICIN = 1, CARPPHEROMONES = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmobhostile/synthcarp
+	name = "Synthcarp"
+	id = "synthcarp"
+	result = null
+	required_reagents = list(NUTRIMENT = 10, AMINOCYPRINIDOL = 1)
+	result_amount = 1
+	mob2spawnA = /mob/living/simple_animal/hostile/carp/baby
+	mob2spawnB = /mob/living/simple_animal/hostile/carp/baby
+
+/datum/chemical_reaction/aminoblatella
+	name = "Aminoblatella"
+	id = AMINOBLATELLA
+	result = AMINOBLATELLA
+	required_reagents = list(AMINOMICIN = 1, ROACHSHELL = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmob/synthroach
+	name = "Synthroach"
+	id = "synthroach"
+	result = null
+	required_reagents = list(NUTRIMENT = 1, AMINOBLATELLA = 1)
+	result_amount = 3 //so you get 3 roaches per reaction
+	mob2spawn = /mob/living/simple_animal/cockroach
+
+/datum/chemical_reaction/synthmobhostile/synthmutroach
+	name = "Synthmutroach"
+	id = "synthmutroach"
+	result = null
+	required_reagents = list(MUTAGEN = 10, AMINOBLATELLA = 1)
+	result_amount = 1
+	mob2spawnA = /mob/living/simple_animal/hostile/bigroach
+	mob2spawnB = /mob/living/simple_animal/hostile/bigroach/queen //greater odds than getting a queen via mutating roaches (0.5%)
 
 /datum/chemical_reaction/ectoplasm
 	name = "Ectoplasm"
@@ -3902,6 +3950,25 @@
 	result = LOCUTOGEN
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/random
+	name = "Random chemical"
+	id = "random"
+	result = null
+	required_reagents = list(NOTHING = 10, PHAZON = 10)
+	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
+	result_amount = 1
+
+/datum/chemical_reaction/random/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	if(prob(50)) // Half chance to start another chemical reaction
+		var/our_id = pick(chemical_reactions_list)
+		var/datum/chemical_reaction/new_reaction = pick(chemical_reactions_list[our_id])
+		holder.handle_reaction(new_reaction,TRUE,created_volume)
+	else // Or else just spawn a new chem
+		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
+		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
+		holder.add_reagent(pick(allowed_reagents),created_volume)
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

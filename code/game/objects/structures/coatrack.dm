@@ -22,7 +22,23 @@
 		/obj/item/clothing/suit/raincoat,
 		/obj/item/clothing/suit/storage/capjacket,
 		/obj/item/clothing/suit/pirate,
-		/obj/item/clothing/suit/storage/trader
+		/obj/item/clothing/suit/hgpirate,
+		/obj/item/clothing/suit/storage/trader,
+		/obj/item/clothing/suit/storage/lawyer,
+		/obj/item/clothing/suit/secdressjacket,
+		/obj/item/clothing/suit/storage/internalaffairs,
+		/obj/item/clothing/suit/storage/lawyer/bridgeofficer,
+		/obj/item/clothing/suit/storage/fr_jacket,
+		/obj/item/clothing/suit/storage/Hop_Coat,
+		/obj/item/clothing/suit/storage/syndicateexec,
+		/obj/item/clothing/suit/storage/armorjacketcapt,
+		/obj/item/clothing/suit/storage/capjacket,
+		/obj/item/clothing/suit/greatcoat,
+		/obj/item/clothing/suit/johnny_coat,
+		/obj/item/clothing/suit/leathercoat,
+		/obj/item/clothing/suit/browncoat,
+		/obj/item/clothing/suit/neocoat,
+		/obj/item/clothing/suit/inquisitor
 		)
 	var/list/allowed_hats = list(
 		/obj/item/clothing/head/det_hat,

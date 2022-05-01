@@ -22,13 +22,6 @@
 /atom/Click(location,control,params)
 	usr.ClickOn(src, params)
 
-/mob/living/Click()
-	if(isAI(usr))
-		var/mob/living/silicon/ai/A = usr
-		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
-			return
-	..()
-
 /atom/DblClick(location,control,params)
 	usr.DblClickOn(src,params)
 
@@ -91,6 +84,9 @@
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
 		return
+	if(modifiers["right"])
+		RightClickOn(A)
+		return
 
 	if(attempt_crawling(A))
 		return
@@ -114,7 +110,7 @@
 		return
 
 	if(in_throw_mode)
-		if(!get_active_hand() && (a_intent == I_GRAB || a_intent == I_DISARM))
+		if(!get_active_hand() && (a_intent == I_DISARM))
 			doTackle(A)
 		else
 			throw_item(A)
@@ -295,6 +291,16 @@
 /atom/movable/CtrlClick(var/mob/user)
 	if(Adjacent(user))
 		user.start_pulling(src)
+
+/*
+	Right Click
+*/
+
+/mob/proc/RightClickOn(var/atom/A)
+	A.RightClick()
+
+/atom/proc/RightClick(var/mob/user)
+	return
 
 
 /*

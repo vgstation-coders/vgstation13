@@ -1024,8 +1024,8 @@ var/list/has_died_as_golem = list()
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
 
-/datum/species/grue
-	name = "Grue"
+/datum/species/umbra
+	name = "Umbra"
 	icobase = 'icons/mob/human_races/r_grue.dmi'		// Normal icon set.
 	deform = 'icons/mob/human_races/r_def_grue.dmi'	// Mutated icon set.
 	eyes = "grue_eyes_s"
@@ -1050,13 +1050,13 @@ var/list/has_died_as_golem = list()
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/grue
+		"eyes" =     /datum/organ/internal/eyes/umbra
 	)
 
-/datum/species/grue/makeName()
-	return "grue"
+/datum/species/umbra/makeName()
+	return "umbra"
 
-/datum/species/grue/gib(mob/living/carbon/human/H)
+/datum/species/umbra/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -1130,6 +1130,9 @@ var/list/has_died_as_golem = list()
 		S.desc = "The slimy remains of what used to be [S.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
 	S.slime_person = H
 	H.forceMove(S)
+	//Transfer the DNA and mind into the slime puddle.
+	S.dna=H.dna
+	S.mind=H.mind
 
 /datum/species/slime/gib(mob/living/carbon/human/H)
 	..()
@@ -1194,7 +1197,6 @@ var/list/has_died_as_golem = list()
 					O.organ_data.transplant_data["blood_type"] = slime_person.dna.b_type
 					O.organ_data.transplant_data["blood_DNA"] =  slime_person.dna.unique_enzymes
 
-					O.organ_data.organ_holder = null
 					O.organ_data.owner = slime_person
 					slime_person.internal_organs |= O.organ_data
 					head.internal_organs |= O.organ_data
@@ -1347,7 +1349,7 @@ var/list/has_died_as_golem = list()
 		if(telepathic_target == M) //Talking to ourselves
 			to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
 			return
-		to_chat(telepathic_target,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>.")
+		to_chat(telepathic_target,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
 		to_chat(M,"<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
 
 

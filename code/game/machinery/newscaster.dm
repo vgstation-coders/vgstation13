@@ -43,6 +43,7 @@
 
 /datum/feed_channel
 	var/channel_name=""
+	var/backup_name = ""
 	var/list/datum/feed_message/messages = list()
 	var/locked = FALSE
 	var/author = ""
@@ -83,6 +84,7 @@
 
 /datum/feed_channel/proc/clear()
 	channel_name = ""
+	backup_name = ""
 	messages = list()
 	locked = 0
 	author = ""
@@ -183,7 +185,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		icon_state = "newscaster_0"
 		return
 
-	if((stat & NOPOWER) || (stat & BROKEN))
+	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 		icon_state = "newscaster_off"
 		if(stat & BROKEN) //If the thing is smashed, add crack overlay on top of the unpowered sprite.
 			overlays.Cut()
@@ -246,10 +248,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 			update_icon()
 	return ..()
-
-/obj/machinery/newscaster/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/newscaster/attack_hand(mob/user as mob)            //########### THE MAIN BEEF IS HERE! And in the proc below this...############
 
@@ -445,7 +443,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(NEWSCASTER_CENSORSHIP_CHANNEL)
 
 				dat += {"<B>[viewing_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[viewing_channel.author]</FONT> \]</FONT><BR>
-					<FONT SIZE=2><A href='?src=\ref[src];censor_channel_author=\ref[viewing_channel]'>[(viewing_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>"}
+					<FONT SIZE=2><A href='?src=\ref[src];censor_channel_name=\ref[viewing_channel]'>[(viewing_channel.channel_name=="\[REDACTED\]") ? ("Undo Title censorship") : ("Censor channel Title")]</A>
+					<A href='?src=\ref[src];censor_channel_author=\ref[viewing_channel]'>[(viewing_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>"}
 				if( isemptylist(viewing_channel.messages) )
 					dat+="<I>No feed messages found in channel...</I><BR>"
 				else
@@ -874,6 +873,22 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		else if(href_list["view_wanted"])
 			screen=NEWSCASTER_WANTED_SHOW
 			updateUsrDialog()
+
+		else if(href_list["censor_channel_name"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to censor a channel title"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			var/datum/feed_channel/FC = locate(href_list["censor_channel_name"])
+			if(FC.is_admin_channel)
+				alert("This channel was created by a Nanotrasen Officer. You cannot censor it.","Ok")
+				return
+			if(FC.channel_name != "<B>\[REDACTED\]</B>")
+				FC.backup_name = FC.channel_name
+				FC.channel_name = "<B>\[REDACTED\]</B>"
+			else
+				FC.channel_name = FC.backup_name
+			updateUsrDialog()
+
 		else if(href_list["censor_channel_author"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to censor an author"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")

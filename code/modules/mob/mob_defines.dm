@@ -72,7 +72,9 @@
 	var/sdisabilities = 0	//Carbon
 	var/disabilities = 0	//Carbon
 	var/atom/movable/pulling = null
-	var/monkeyizing = null	//Carbon
+	/// Set to TRUE when the mob is being transformed into something else or gibbed.
+	/// Can be checked to avoid running expensive code for mobs that are about to not exist.
+	var/monkeyizing = null
 	var/other = 0.0
 	var/eye_blind = null	//Carbon
 	var/eye_blurry = null	//Carbon

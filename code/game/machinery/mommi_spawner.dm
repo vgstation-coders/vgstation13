@@ -50,10 +50,10 @@
 	update_icon()
 
 /obj/machinery/mommi_spawner/proc/canSpawn()
-	return !(stat & NOPOWER) && !building && metal >= metalPerMoMMI
+	return !(stat & (FORCEDISABLE|NOPOWER)) && !building && metal >= metalPerMoMMI
 
 /obj/machinery/mommi_spawner/process()
-	if(stat & NOPOWER || building || metal >= metalPerMoMMI)
+	if(stat & (FORCEDISABLE|NOPOWER) || building || metal >= metalPerMoMMI)
 		return
 	metal += metalPerTick
 	if(metal >= metalPerMoMMI)
@@ -133,6 +133,7 @@
 			return
 
 		// Make the MoMMI!
+		log_admin("([user.ckey]/[user]) became a MoMMI as a ghost.")
 		var/mob/living/silicon/robot/mommi/M = new mommi_type(loc)
 		M.key = user.key
 
@@ -167,7 +168,7 @@
 		M.Namepick()
 
 /obj/machinery/mommi_spawner/update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state="mommispawner-nopower"
 	else if(metal < metalPerMoMMI)
 		icon_state="mommispawner-recharging"

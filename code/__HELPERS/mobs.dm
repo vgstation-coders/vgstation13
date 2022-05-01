@@ -1,3 +1,8 @@
+var/static/list/ALL_LIMBS = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
+								LIMB_LEFT_ARM,LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,
+								LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,
+								TARGET_MOUTH,TARGET_EYES)
+
 /proc/random_hair_style(gender, species = "Human")
 	var/h_style = "Bald"
 
@@ -128,6 +133,25 @@
 				return "brown"
 	else
 		return "unknown"
+
+/proc/haircolordesc(v_hair)
+	switch(v_hair)
+		if("Green")
+			return "1"
+		if("Azure")
+			return "2"
+		if("Brown")
+			return "3"
+		if("Emerald")
+			return "4"
+		if("Gray")
+			return "5"
+		if("Light Green")
+			return "6"
+		if("Green-Brown")
+			return "7"
+		else
+			return "7"
 
 /proc/age2agedescription(age)
 	switch(age)

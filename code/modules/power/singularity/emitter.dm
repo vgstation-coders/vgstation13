@@ -7,7 +7,7 @@
 	icon_state = "emitter0"
 	anchored = 0
 	density = 1
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 
 	use_power = 0
 	idle_power_usage = 10
@@ -189,7 +189,7 @@
 		to_chat(user, "<span class='warning'>\The [src] needs to be firmly secured to the floor first.</span>")
 		return 1
 
-/obj/machinery/power/emitter/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+/obj/machinery/power/emitter/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	if(active) // You just removed it from the power cable it was on, what did you think would happen?
 		visible_message("<span class='warning'>The [src] gets yanked off of its power source and turns off!</span>")
 		turn_off()
