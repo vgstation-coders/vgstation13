@@ -3688,6 +3688,19 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice/rocket
+	name = "Margherita slice"
+	desc = "A slice of the most cheesy pizza in galaxy. Seems covered in gunpowder."
+	icon_state = "pizzamargheritaslice"
+	bitesize = 2
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice/rocket/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 7)
+	reagents.add_reagent(TOMATOJUICE, 1)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza
 	name = "Meatpizza"
 	desc = "A filling pizza laden with meat, perfect for the manliest of carnivores."
