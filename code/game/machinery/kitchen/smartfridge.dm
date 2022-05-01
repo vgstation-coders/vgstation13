@@ -300,6 +300,8 @@
 		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/ABPlus(src))
+		insert_item(new /obj/item/weapon/reagent_containers/blood/ABMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
