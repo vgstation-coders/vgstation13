@@ -10,6 +10,7 @@
 	var/job
 	var/species
 	var/nuke_ops_inventory = FALSE
+	var/is_challenger = FALSE
 
 /datum/component/uplink/initialize()
 	if(!isitem(parent))
@@ -61,7 +62,7 @@
 			"items" = list()
 		)
 		for(var/datum/uplink_item/I in uplink_items[category])
-			if((!I.available_for_job(job) && !I.available_for_job(species)) || (!I.available_for_nuke_ops && nuke_ops_inventory))
+			if((!I.available_for_job(job) && !I.available_for_job(species)) || (!I.available_for_nuke_ops && nuke_ops_inventory) || (!I.available_for_challengers && is_challenger))
 				continue
 			cat["items"] += list(list(
 				"name" = I.name,

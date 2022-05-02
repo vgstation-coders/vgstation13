@@ -162,6 +162,8 @@
 		uplink = new_uplink
 		new_uplink.job = traitor_mob.mind.assigned_role
 		new_uplink.species = traitor_mob.dna.species
+		if(ischallenger(traitor_mob))
+			new_uplink.is_challenger = TRUE
 	else
 		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you an uplink.")
 

@@ -24,6 +24,7 @@
 	var/votable = TRUE
 	var/list/orphaned_roles = list()
 	var/dat = ""
+	var/intercept_sent = FALSE
 
 /datum/gamemode/proc/can_start()
 	if(minimum_player_count && minimum_player_count < get_player_count())
@@ -188,7 +189,8 @@
 		display_roundstart_logout_report()
 
 	spawn (rand(INTERCEPT_TIME_LOW , INTERCEPT_TIME_HIGH))
-		send_intercept()
+		if(!intercept_sent) // Sanity
+			send_intercept()
 
 	feedback_set_details("round_start","[time2text(world.realtime)]")
 	if(ticker && ticker.mode)

@@ -371,6 +371,12 @@
 	alert_title = "Enemy communications intercept"
 	message = "Summary downloaded and printed out at all communications consoles."
 
+/datum/command_alert/syndie_comms_interception
+	name = "Syndicate Communications Intercepted"
+	alert_title = "Enemy communications intercept"
+	message = "Confirmed syndicate presence detected on station. Security level raised."
+	alert = 'sound/AI/intercept_.ogg'
+
 //////////SUPERMATTER CASCADE
 
 /datum/command_alert/supermatter_cascade
@@ -433,7 +439,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "malfdelta"
 	alertlevel = "delta"
 
-/datum/command_alert/malf_win 
+/datum/command_alert/malf_win
 	name = "AI Malfunctioning Win"
 	alert = 'sound/effects/static/static4.ogg'
 

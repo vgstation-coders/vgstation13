@@ -42,6 +42,7 @@ var/list/uplink_items = list()
 	var/list/jobs_excluded = list() //Jobs in this list cannot buy this item at all.
 	var/list/roles_exclusive = list() //If empty, does nothing. If not empty, ONLY roles in this list can buy this item.
 	var/available_for_traitors = TRUE
+	var/available_for_challengers = TRUE
 	var/available_for_nuke_ops = TRUE
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
@@ -79,7 +80,10 @@ var/list/uplink_items = list()
 	if(U.nuke_ops_inventory && !available_for_nuke_ops)
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a nuclear operative")
 		return
-	U.telecrystals -= max(get_cost(U.job, U.species), 0)
+	if(U.nuke_ops_inventory && !available_for_challengers)
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a challenger")
+		return
+	U.telecrystals -= get_cost(U.job, U.species) // Was originally clamped at 0, but the "go loud" item is -6
 	feedback_add_details("traitor_uplink_items_bought", name)
 	return new_uplink_item(item, loc, user)
 
@@ -231,6 +235,27 @@ var/list/uplink_items = list()
 	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives due to its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
 	item = /obj/effect/spawner/mecha/mauler
 	cost = 80
+
+// GO LOUD
+// For the traitor that wants risk and reward
+
+/datum/uplink_item/goloud
+	category = "Extreme Visibility Option"
+	name = "Syndicate Assault Package"
+	desc = "Provides seven extra telecrystals to the buyer. WARNING: This purchase will almost certainly expose syndicate communications to Nanotrasen-affiliated airwaves, making any form of stealthy cover amongst the crew impossible."
+	cost = -7 // One short of being able to get an elite bundle
+	item = /obj/item/device/megaphone // Just here for it to work as an item
+	num_in_stock = 1
+	available_for_nuke_ops = FALSE
+	available_for_challengers = FALSE
+
+var/list/global/exposed_traitors = list()
+
+/datum/uplink_item/goloud/on_item_spawned(obj/I, mob/user)
+	qdel(I)
+	exposed_traitors += user
+	if(ticker.mode.intercept_sent)
+		ticker.mode.expose_loud_traitors()
 
 // DANGEROUS WEAPONS
 // Any Syndicate item with applying lethal force to people while being very much detected (Ex: Revolver, E-Sword, Machete)

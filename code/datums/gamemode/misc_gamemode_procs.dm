@@ -100,7 +100,12 @@
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(intercepttext)
 
-	command_alert(/datum/command_alert/enemy_comms_interception)
+	if(exposed_traitors.len)
+		expose_loud_traitors()
+	else
+		command_alert(/datum/command_alert/enemy_comms_interception)
+
+	intercept_sent = TRUE
 
 /datum/gamemode/dynamic/send_intercept()
 	var/intercepttext = {"<html><style>
@@ -149,7 +154,41 @@
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(intercepttext)
 
-	command_alert(/datum/command_alert/enemy_comms_interception)
+	if(exposed_traitors.len)
+		expose_loud_traitors()
+	else
+		command_alert(/datum/command_alert/enemy_comms_interception)
+
+	intercept_sent = TRUE
+
+/datum/gamemode/proc/expose_loud_traitors()
+	if(!exposed_traitors.len)
+		return
+	command_alert(/datum/command_alert/syndie_comms_interception)
+	set_security_level("red")
+	var/intercepttext = {"<html><style>
+					body {color: #000000; background: #EDD6B6;}
+					h1 {color: #000000; font-size:30px;}
+					</style><FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR></br>
+					<body>
+					<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"><BR>
+					<B>Attached is a list of personnel indicated to be affiliated with the Syndicate from reliable sources and communications interception:</B><br>"}
+
+	for(var/mob/M in exposed_traitors)
+		intercepttext += "<b>[M.name]</b>, the <b>[M.mind.assigned_role]</b> <br>"
+
+	intercepttext += "</center></body></html>"
+
+	for (var/obj/machinery/computer/communications/comm in machines)
+		if (!(comm.stat & (BROKEN | NOPOWER | FORCEDISABLE)) && comm.prints_intercept)
+			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			intercept.name = "paper- '[command_name()] Status Summary'"
+			intercept.info = intercepttext
+
+			comm.messagetitle.Add("[command_name()] Status Summary")
+			comm.messagetext.Add(intercepttext)
+
+	exposed_traitors.Cut()
 
 /proc/disable_suit_sensors(mob/living/carbon/human/H)
 	var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
