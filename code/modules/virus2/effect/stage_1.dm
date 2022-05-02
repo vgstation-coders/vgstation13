@@ -444,7 +444,7 @@
 			
 				C.images += rune_holder
 
-				anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-write", col = DEFAULT_BLOOD, sleeptime = 36)
+		//		anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-write", col = DEFAULT_BLOOD, sleeptime = 36)
 				
 				spawn(30)
 
@@ -456,7 +456,7 @@
 				spawn(duration)
 					if(C)
 						rune_holder.overlays -= rune_render
-						anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-erase", col = DEFAULT_BLOOD)
+		//				anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-erase", col = DEFAULT_BLOOD)
 						spawn(12)
 							C.images -= rune_holder
 
