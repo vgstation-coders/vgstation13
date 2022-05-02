@@ -96,8 +96,8 @@
 "gD" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor6"},/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
 "gE" = (/obj/structure/acidtoilet{dir = 8},/obj/machinery/light/small/broken{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/research)
 "gG" = (/obj/structure/bed/chair/comfy/red{dir = 4},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/carpet,/area/vault/mothership_lab/research)
-"gN" = (/obj/effect/decal/warning_stripes/siding{dir = 9},/obj/item/clothing/gloves/boxing,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
-"hd" = (/mob/living/simple_animal/mouse/gym_rat/mothership,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
+"gN" = (/obj/effect/decal/warning_stripes/siding{dir = 9},/obj/item/clothing/gloves/boxing,/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership{dir = 4},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
+"hd" = (/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "hh" = (/obj/structure/flora/pottedplant/random{icon_state = "plant-13"; tag = "icon-plant-13"},/turf/simulated/floor{dir = 6; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
 "hi" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor{dir = 1; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
 "hk" = (/obj/structure/window/barricade/full,/obj/effect/mine/stun,/turf/simulated/floor/greengrid,/area/vault/mothership_lab/research)
@@ -362,7 +362,7 @@
 "Cw" = (/obj/structure/acidtoilet,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
 "Cy" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor,/area/vault/mothership_lab/research)
 "CC" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "heavy disintegrator cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/weapon/gun/energy/heavydisintegrator,/obj/item/weapon/gun/energy/heavydisintegrator,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/armory)
-"CI" = (/obj/effect/decal/warning_stripes/siding{dir = 6},/obj/item/clothing/gloves/boxing/blue,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
+"CI" = (/obj/effect/decal/warning_stripes/siding{dir = 6},/obj/item/clothing/gloves/boxing/blue,/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership{dir = 8},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
 "CL" = (/obj/machinery/light/he/broken{dir = 4},/obj/machinery/recharger{pixel_x = 29},/turf/simulated/floor{dir = 4; icon_state = "darkred"; tag = "icon-darkred (EAST)"},/area/vault/mothership_lab/research)
 "CZ" = (/obj/item/weapon/barricade_kit,/turf/simulated/floor,/area/vault/mothership_lab/research)
 "Db" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "loading_area"; tag = "icon-loading_area (EAST)"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
@@ -375,6 +375,7 @@
 "Dw" = (/obj/structure/closet/crate,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/research)
 "DE" = (/obj/structure/rack,/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/structure/window/reinforced/plasma,/obj/item/device/flashlight/tactical,/obj/item/device/flashlight/tactical,/obj/item/device/flashlight/tactical,/turf/simulated/floor/engine,/area/vault/mothership_lab/armory)
 "DH" = (/turf/simulated/floor{icon_state = "whitegreencorner"},/area/vault/mothership_lab/research)
+"DJ" = (/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership{dir = 4},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "DK" = (/turf/simulated/floor{dir = 6; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
 "DM" = (/obj/machinery/light/he,/turf/simulated/floor,/area/vault/mothership_lab/research)
 "DS" = (/obj/structure/table/reinforced,/obj/machinery/door/poddoor{density = 0; icon_state = "pdoor0"; id_tag = "checkpointshutters4"; name = "Checkpoint Blast Doors"; opacity = 0},/obj/item/weapon/paper_bin/red,/obj/item/weapon/pen,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
@@ -654,7 +655,7 @@ eWeWeWeWrVYQRhRhRhgGnLlJuxclRhYQrVrVrVrVrVrVrVrVrVrVYQRhRhRhRhRhRhRhRhRhRhRhRhRh
 eWeWeWeWrVYQRhJFKauxuxuxuxikRhYQYQYQYQYQYQYQYQYQYQYQYQRhaiGaGaaTRhCadIdkmvdkmvdkdIdkvqfhgNRFkrRhPJGaGacnRhYQrVrVrVrVrVrVeWeWeW
 eWeWeWeWrVYQRhoSRhRhwDRhiNRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRaGaUkRhRhicuxhduxuxuxuxuxuxuxigbahxFORhPJGaGacnRhYQYQYQYQYQYQrVrVeWeW
 eWeWeWrVrVYQRhHRRhrIMPfTuxIDZCbrOfUwCadkpgRhfgzjlEsVRjRhRhpMRhRhXyWNdAuxdAuxdAuxdAuxuxigvnlgCIRhPJGaGacnRhRhRhRhRhRhRhYQrVeWeW
-eWeWeWrVrVYQRhHYRhcTkDYKVIuxuxuxuxrmuxpouxesuxuxuxuxIDdkdkuxSLRhcSuxuxuxuxuxuxuxuxhduxIDjMICQFRhjRGaGarLRhKIRhKIRhKIRhYQrVrVeW
+eWeWeWrVrVYQRhHYRhcTkDYKVIuxuxuxuxrmuxpouxesuxuxuxuxIDdkdkuxSLRhcSDJuxuxuxuxuxuxuxhduxIDjMICQFRhjRGaGarLRhKIRhKIRhKIRhYQrVrVeW
 eWeWrVrVYQYQrYfnrYZOfMntuxMhrPWlrPUwicuxEBRhicuxuxuxuxuxuxuxuxzHuxuxMhiEIzuxMhiEIzuxuxuxuxuxEBRhNtRhRhRhRhzLRhzLRhzLRhYQrVrVeW
 eWeWrVYQkVkVkVkVkVkVkVkVkVkVkVkVkVkVhypesuRhkcxHRoDwRoCvRohrOjRhZdgCuVWvvlQauVlsvliEiEiEIzuxuxwFGanQnQnQGaGaGaGaGarLRhYQrVrVeW
 eWeWrVYQkVauiSbDVjuCkVmuWPkVWeQzTbkVhyuxdjRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhPFPFPFGpuxuVRhRvmKmKmKNqGaGaGaGaGaRhYQrVrVeW

@@ -190,7 +190,8 @@
 	speak_emote = list("burbles", "hums")
 	emote_hear = list("gurgles")
 	speak_chance = 1
-
+	turns_per_move = 5
+	see_in_dark = 6
 	stop_automated_movement_when_pulled = TRUE
 	pass_flags = PASSTABLE // Can fly over tables
 
@@ -330,22 +331,121 @@
 		..()
 
 ///////////////////////////////////////////////////////////////////GYM RAT///////////
-// Just a silly joke for now, may expand more on it in the future (maybe)
-/mob/living/simple_animal/mouse/gym_rat
+// Can run on a treadmill much like the trader's colossal hamster, but not quite as efficiently. Maybe in the future I can code a unique reaction to creatine or something
+#define GYMRAT_MOVEDELAY 1
+/mob/living/simple_animal/hostile/retaliate/gym_rat
 	name = "gym rat"
 	desc = "It's pretty swole."
-	_color = "balbc"
-	icon_state = "mouse_balbc"
-	namenumbers = FALSE
+	icon_state = "gymrat"
+	icon_living = "gymrat"
+	icon_dead = "gymrat-dead"
+	response_help  = "pets the"
+	response_disarm = "gently pushes aside the"
+	response_harm   = "stamps on the"
+	treadmill_speed = 6
+	health = 30
+	maxHealth = 30
+	speak_chance = 2
+	turns_per_move = 5
+	see_in_dark = 6
+	speak = list("More protein!","No pain, no gain!","I'm the cream of the crop!")
+	speak_emote = list("squeaks loudly")
+	emote_hear = list("squeaks loudly")
 	emote_see = list("flexes", "sweats", "does a rep")
-	maxHealth = 25
-	health = 25
-	universal_speak = 1
-	universal_understand = 1
-	can_chew_wires = 1
 
-/mob/living/simple_animal/mouse/gym_rat/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
+	size = SIZE_SMALL // If they're not at least small it doesn't seem like the treadmill works or makes sound
+	can_ventcrawl = TRUE
+	stop_automated_movement_when_pulled = TRUE
+
+	density = 0
+	min_oxy = 8 //Require atleast 8kPA oxygen
+	minbodytemp = 223		//Below -50 Degrees Celcius
+	maxbodytemp = 323	//Above 50 Degrees Celcius
+
+	melee_damage_lower = 1
+	melee_damage_upper = 3
+	attacktext = "bites"
+	attack_sound = 'sound/weapons/bite.ogg'
+
+	var/health_cap = 45 // Feeding it protein can pack on a whopping 50% increase in max health. GAINZ
+	var/icon_eat = "gymrat-eat"
+	var/obj/my_wheel
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
+	if(timestopped)
+		return 0
+	. = ..()
+	if(.)
+		if(enemies.len && prob(10))
+			Calm()
+	if(!my_wheel && isturf(loc))
+		var/obj/machinery/power/treadmill/T = locate(/obj/machinery/power/treadmill) in loc
+		if(T)
+			wander = FALSE
+			my_wheel = T
+		else
+			wander = TRUE
+	if(my_wheel)
+		gymratwheel(20)
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/proc/gymratwheel(var/repeat)
+	if(repeat < 1 || stat)
+		return
+	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
+		wander = TRUE
+		my_wheel = null
+		return
+	step(src,my_wheel.dir)
+	delayNextMove(GYMRAT_MOVEDELAY)
+	sleep(GYMRAT_MOVEDELAY)
+	gymratwheel(repeat-1)
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/proc/Calm()
+	enemies.Cut()
+	LoseTarget()
+	src.visible_message("<span class='notice'>[src] squeaks softly and calms down.</span>")
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/Retaliate()
+	if(!stat)
+		..()
+		src.say(pick("You want to go? Let's go!","You can't beat me, nerd!","I'll break you in half!"))
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/attackby(var/obj/item/O as obj, var/mob/user as mob) // Feed the gym rat some food
+	if(stat == CONSCIOUS)
+		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheese heals it a bit
+			Calm()
+			health+=5
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(O)
+		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on a bit of extra maximum hp
+			Calm()
+			health+=1
+			maxHealth+=1
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(O)
+		else
+			..()
+	else
+		..()
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/New() // speaks mouse
+	..()
+	languages += all_languages[LANGUAGE_MOUSE]
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
 	faction = "mothership"
+
+#undef GYMRAT_MOVEDELAY
 
 ///////////////////////////////////////////////////////////////////CATTLE SPECIMEN///////////
 // A talking cow!
@@ -371,6 +471,7 @@
 	health = 50
 
 	size = SIZE_BIG
+	stop_automated_movement_when_pulled = TRUE
 	holder_type = /obj/item/weapon/holder/animal/cow
 
 	melee_damage_lower = 1
