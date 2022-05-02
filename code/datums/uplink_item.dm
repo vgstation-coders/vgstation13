@@ -80,7 +80,7 @@ var/list/uplink_items = list()
 	if(U.nuke_ops_inventory && !available_for_nuke_ops)
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a nuclear operative")
 		return
-	if(U.nuke_ops_inventory && !available_for_challengers)
+	if(U.is_challenger && !available_for_challengers)
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a challenger")
 		return
 	U.telecrystals -= get_cost(U.job, U.species) // Was originally clamped at 0, but the "go loud" item is -6
