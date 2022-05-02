@@ -355,6 +355,7 @@
 
 	size = SIZE_SMALL // If they're not at least small it doesn't seem like the treadmill works or makes sound
 	can_ventcrawl = TRUE
+	pass_flags = PASSTABLE
 	stop_automated_movement_when_pulled = TRUE
 
 	density = 0
@@ -529,6 +530,7 @@
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
 		M.visible_message("<span class='warning'>[M] tips over [src].</span>","<span class='notice'>You tip over [src].</span>")
 		Knockdown(30)
+		Calm() // What you've done is so impolite the cow forgets that it's mad at you
 		icon_state = icon_dead
 		spawn(rand(20,50))
 			if(!stat && M)
