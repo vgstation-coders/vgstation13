@@ -8,11 +8,11 @@
 	density = 1
 	anchored = 0
 	var/locked = FALSE
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 
 	var/obj/item/weapon/fuel_assembly/cur_assembly
 	var/fuel_usage = 0.0001			//percentage of available fuel to use per cycle
-	 
+
 	var/injecting = FALSE
 
 	use_power = 1

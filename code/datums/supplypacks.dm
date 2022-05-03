@@ -288,7 +288,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/watertank
 	name = "Water tank"
 	contains = list(/obj/structure/reagent_dispensers/watertank)
-	cost = 15
+	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "water tank crate"
 	group = "Supplies"
@@ -296,7 +296,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/fueltank
 	name = "Fuel tank"
 	contains = list(/obj/structure/reagent_dispensers/fueltank)
-	cost = 30
+	cost = 15
 	containertype = /obj/structure/largecrate
 	containername = "fuel tank crate"
 	group = "Supplies"
@@ -304,7 +304,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/silicatetank
 	name = "Silicate tank"
 	contains = list(/obj/structure/reagent_dispensers/silicate)
-	cost = 15
+	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "silicate tank crate"
 	group = "Supplies"
@@ -312,11 +312,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/sacidtank
 	name = "Sulphuric acid tank"
 	contains = list(/obj/structure/reagent_dispensers/sacid)
-	cost = 30
+	cost = 15
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "sulphuric acid tank crate"
 	group = "Supplies"
-	one_access = list(access_engine, access_science)
+	one_access = list(access_engine_minor, access_science)
 
 /datum/supply_packs/mining
 	name = "Mining equipment"
@@ -1547,7 +1547,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "emitter crate"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 	group = "Engineering"
 
 /datum/supply_packs/engine/field_gen
@@ -1556,7 +1556,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/field_generator)
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "field generator crate"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 	group = "Engineering"
 
 /datum/supply_packs/engine/sing_gen
@@ -1594,7 +1594,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/structure/particle_accelerator/end_cap)
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "particle accelerator crate"
-	access = list(access_engine)
+	access = list(access_engine_major)
 	group = "Engineering"
 
 /datum/supply_packs/shieldgens
@@ -1606,7 +1606,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "shield generators crate"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 	group = "Engineering"
 
 /datum/supply_packs/engine/amrcontrol
@@ -1615,7 +1615,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "antimatter control unit crate"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 	group = "Engineering"
 
 /datum/supply_packs/engine/amrparts
@@ -1635,7 +1635,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "packaged antimatter reactor crate"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 	group = "Engineering"
 
 /datum/supply_packs/engine/amrcontainment
@@ -1646,7 +1646,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "antimatter containment jar crate"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 	group = "Engineering"
 
 /datum/supply_packs/engine/amrcontainment/big
@@ -1654,15 +1654,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/weapon/am_containment/big)
 	cost = 200	//10x the fuel, 10x the cost + 50 for convenience
 	containername = "Large antimatter containment jar crate"
-
-/datum/supply_packs/rust_gyrotron
-	contains = list(/obj/machinery/rust/gyrotron)
-	name = "R-UST Mk. 7 gyrotron"
-	cost = 25
-	containertype = /obj/structure/closet/crate/secure/large
-	containername = "\improper R-UST Mk. 7 gyrotron crate"
-	group = "Engineering"
-	access = list(access_engine)
 
 /datum/supply_packs/rust
 	contains = list(/obj/item/weapon/module/rust_fuel_compressor,
@@ -1675,7 +1666,29 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "\improper R-UST Mk. 7 fuel compressor circuitry crate"
 	group = "Engineering"
-	access = list(access_engine)
+	access = list(access_engine_major)
+
+/datum/supply_packs/rust_consoles
+	contains = list(/obj/item/weapon/circuitboard/rust_gyrotron_control,
+					/obj/item/weapon/circuitboard/rust_fuel_control,
+					/obj/item/weapon/circuitboard/rust_core_monitor,
+					/obj/item/weapon/circuitboard/rust_core_control
+					)
+	name = "R-UST Mk. 7 console circuitry kit"
+	cost = 30
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "\improper R-UST Mk. 7 console circuitry crate"
+	group = "Engineering"
+	access = list(access_engine_major)
+
+/datum/supply_packs/rust_gyrotron
+	contains = list(/obj/machinery/rust/gyrotron)
+	name = "R-UST Mk. 7 gyrotron"
+	cost = 25
+	containertype = /obj/structure/closet/crate/secure/large
+	containername = "\improper R-UST Mk. 7 gyrotron crate"
+	group = "Engineering"
+	access = list(access_engine_major)
 
 /datum/supply_packs/shield_gen
 	contains = list(/obj/structure/closet/crate/flatpack/starscreen_generator,
@@ -1685,7 +1698,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/large/reinforced
 	containername = "Starscreen shield generator crate"
 	group = "Engineering"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 
 /datum/supply_packs/shield_gen/post_creation(var/atom/movable/container)
 	var/obj/structure/closet/crate/flatpack/flatpack1 = locate(/obj/structure/closet/crate/flatpack/starscreen_generator/) in container
@@ -1700,7 +1713,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/large/reinforced
 	containername = "Starscreen-EX shield generator crate"
 	group = "Engineering"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 
 /datum/supply_packs/shield_gen_ex/post_creation(var/atom/movable/container)
 	var/obj/structure/closet/crate/flatpack/flatpack1 = locate(/obj/structure/closet/crate/flatpack/starscreen_ex_generator/) in container
@@ -1714,7 +1727,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/large
 	containername = "mk1 TEG crate"
 	group = "Engineering"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 
 /datum/supply_packs/circulator
 	contains = list(/obj/machinery/atmospherics/binary/circulator)
@@ -1723,7 +1736,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/large
 	containername = "atmospheric circulator crate"
 	group = "Engineering"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 
 /datum/supply_packs/supermatter_shard
 	contains = list(/obj/machinery/power/supermatter/shard)
@@ -1732,7 +1745,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "supermatter shard crate"
 	group = "Engineering"
-	access = list(access_engine_equip)
+	access = list(access_engine_major)
 	var/static/list/shard_counts_by_user = list()
 
 
@@ -1762,7 +1775,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "portable SMES crate"
 	group = "Engineering"
-	access = list(access_engine)
+	access = list(access_engine_minor)
 
 /datum/supply_packs/rcs_device
 	name = "Rapid-Crate-Sender"
@@ -1854,7 +1867,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 75
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "Gourmonger Crate"
-	access = list(access_engine_equip)
+	access = list(access_engine_minor)
+	group = "Engineering"
+
+/datum/supply_packs/automation
+	name = "Automation supplies"
+	contains = list(/obj/item/weapon/circuitboard/wrapping_machine,
+					/obj/item/weapon/circuitboard/sorting_machine/item,
+					/obj/item/weapon/circuitboard/crate_opener,
+					/obj/item/weapon/circuitboard/crate_closer)
+	cost = 25
+	containertype = /obj/structure/closet/crate/engi
+	containername = "Automation Supplies Crate"
 	group = "Engineering"
 
 //////MEDICAL//////

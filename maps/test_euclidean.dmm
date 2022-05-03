@@ -90,6 +90,13 @@
 /obj/structure/closet/emcloset,
 /turf/simulated/floor,
 /area/gateway)
+"fA" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/stairs/west,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
 "fL" = (
 /turf/portal{
 	teleport_x = -1;
@@ -177,9 +184,6 @@
 	},
 /area/crew_quarters/bar)
 "ip" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -439,15 +443,6 @@
 /obj/machinery/suit_storage_unit/excavation,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
-"rD" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "sk" = (
 /obj/structure/stairs/south,
 /obj/structure/window/reinforced{
@@ -598,19 +593,7 @@
 	},
 /area/gateway)
 "xF" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
 /turf/simulated/floor{
-	icon_state = "dark-markings"
-	},
-/area/gateway)
-"xK" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor{
-	dir = 1;
 	icon_state = "dark-markings"
 	},
 /area/gateway)
@@ -636,17 +619,8 @@
 	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
-"zx" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "zA" = (
-/obj/machinery/gateway/centerstation,
+/obj/machinery/gateway/center,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -658,19 +632,8 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "Ai" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
 /turf/simulated/floor{
 	dir = 1;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
-"Ak" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
-/turf/simulated/floor{
 	icon_state = "dark-markings"
 	},
 /area/gateway)
@@ -6460,7 +6423,7 @@ bi
 bi
 gM
 xF
-zx
+ip
 Ai
 BJ
 nf
@@ -6525,7 +6488,7 @@ bi
 bi
 bi
 gM
-rD
+ip
 zA
 jX
 Be
@@ -6591,9 +6554,9 @@ bi
 bi
 bi
 gM
-xK
+Ai
 ip
-Ak
+xF
 BJ
 nr
 Co
@@ -9039,10 +9002,10 @@ aa
 aa
 aa
 ag
-bi
-bi
-bi
-bi
+uv
+uv
+uv
+uv
 ag
 aa
 aa
@@ -9105,10 +9068,10 @@ aa
 aa
 aa
 ag
-bi
-bi
-bi
-bi
+uv
+uv
+uv
+uv
 ag
 aa
 aa
@@ -9171,10 +9134,10 @@ aa
 aa
 aa
 ag
-bi
-bi
-bi
-bi
+uv
+uv
+uv
+uv
 ag
 aa
 aa
@@ -21717,7 +21680,7 @@ ag
 uv
 uv
 uv
-HZ
+fA
 ag
 aa
 aa

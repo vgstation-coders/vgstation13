@@ -142,6 +142,12 @@
 	id = "destsortingmachine"
 	build_path = /obj/item/weapon/circuitboard/sorting_machine/destination
 
+/datum/design/sorting_machine/item
+	name = "Circuit Design (Item Sorting Machine)"
+	desc = "Allows for the construction of circuit boards used to build an item sorting machine."
+	id = "itemsortingmachine"
+	build_path = /obj/item/weapon/circuitboard/sorting_machine/item
+
 /datum/design/washing_machine
 	name = "Circuit Design (Washing Machine)"
 	desc = "Allows for the construction of circuit boards used to build a washing machine."

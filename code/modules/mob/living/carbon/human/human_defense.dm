@@ -312,15 +312,15 @@ emp_act
 			drugged_message = "<span class='info'>The tooth fairy takes some of \the [src]'s teeth out!</span>",\
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
 
-/mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage) //When our foot is hurt, for example by kicking something stationary
+/mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage, var/datum/organ/external/ourfoot) //When our foot is hurt, for example by kicking something stationary
 	//note: as per can_kick() in human.dm, kicking requires both feet intact
 	if(shoes && istype(shoes, /obj/item/clothing/shoes))
 		var/obj/item/clothing/shoes/S = shoes
 		damage = S.impact_dampen(source, damage)
 	if(!damage)
 		return FALSE
-	var/chosen_foot = pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
-	var/datum/organ/external/ourfoot = get_organ(chosen_foot)
+	if(!ourfoot)
+		ourfoot = get_organ(pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT))
 	apply_damage(damage, BRUTE, ourfoot)
 	return TRUE
 

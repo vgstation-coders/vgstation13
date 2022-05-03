@@ -27,12 +27,6 @@
 
 	if (tube_dirs == null)
 		init_dirs()
-	
-/obj/structure/transit_tube/New(loc)
-	..(loc)
-
-	if(tube_dirs == null)
-		init_dirs()
 
 /obj/structure/transit_tube/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	return TRUE //Otherwise, whatever.
@@ -82,10 +76,10 @@
 
 /obj/structure/transit_tube/proc/enter_delay(pod, to_dir)
 	return enter_delay
-	
+
 // Called when a pod stops in this tube section.
 /obj/structure/transit_tube/proc/pod_stopped(pod, from_dir)
-	return	
+	return
 
 /obj/structure/transit_tube/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
@@ -131,7 +125,7 @@
 	for(var/obj/structure/transit_tube_pod/pod in loc)
 		pod.show_occupants(user)
 
-	
+
 // Parse the icon_state into a list of directions.
 // This means that mappers can use Dream Maker's built in
 //  "Generate Instances from Icon-states" option to get all

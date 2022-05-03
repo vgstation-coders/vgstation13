@@ -156,7 +156,7 @@
 "cZ" = (/obj/structure/rack,/obj/item/weapon/storage/pill_bottle/antitox,/turf/unsimulated/floor,/area/jungle)
 "da" = (/obj/structure/rack,/turf/unsimulated/floor,/area/jungle)
 "db" = (/obj/machinery/gateway{tag = "icon-off (WEST)"; icon_state = "off"; dir = 8},/turf/unsimulated/floor,/area/jungle)
-"dc" = (/obj/machinery/gateway/centeraway,/turf/unsimulated/floor,/area/jungle)
+"dc" = (/obj/machinery/gateway/center/away,/turf/unsimulated/floor,/area/jungle)
 "dd" = (/obj/machinery/gateway{tag = "icon-off (EAST)"; icon_state = "off"; dir = 4},/turf/unsimulated/floor,/area/jungle)
 "de" = (/obj/structure/reagent_dispensers,/turf/unsimulated/jungle/clear,/area/jungle)
 "df" = (/obj/structure/rack,/obj/item/weapon/pen,/turf/unsimulated/floor,/area/jungle)

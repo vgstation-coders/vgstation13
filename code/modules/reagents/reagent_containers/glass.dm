@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////////////
 /// (Mixing) Glass.
 ////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +89,8 @@
 		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(valid_item_attack(W, user))
+		return ..()
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		if(istype(W, /obj/item/weapon/pen/fountain))
 			var/obj/item/weapon/pen/fountain/P = W
@@ -111,8 +112,20 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
+	//Breakability:
+	health = 3
+	breakable_flags = BREAKABLE_ALL
+	damage_armor = BREAKARMOR_FLIMSY
+	damage_resist = BREAKARMOR_NOARMOR
+	breakable_fragments = list(/obj/item/weapon/shard)
+	damaged_examine_text = "It is cracked."
+	take_hit_text = list("cracking", "chipping")
+	take_hit_text2 = list("cracks", "chips")
+	breaks_text = "shatters"
+	breaks_sound = 'sound/effects/Glassbr3.ogg'
+
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
+	if(user.a_intent != I_HURT && src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
@@ -379,6 +392,12 @@
 			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
 			reagents.clear_reagents()
 
+/obj/item/weapon/reagent_containers/glass/bucket/acidable()
+	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(H && src == H.head)
+		return 0
+	return ..()
+
 /obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
 		if (src.reagents.total_volume >= 1)
@@ -474,7 +493,6 @@
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "blender_jug_e"
 	volume = 100
-
 	on_reagent_change()
 		switch(src.reagents.total_volume)
 			if(0)
@@ -483,7 +501,6 @@
 				icon_state = "blender_jug_h"
 			if(76 to 100)
 				icon_state = "blender_jug_f"
-
 /obj/item/weapon/reagent_containers/glass/canister		//not used apparantly
 	desc = "It's a canister. Mainly used for transporting fuel."
 	name = "canister"
@@ -493,12 +510,10 @@
 	m_amt = 300
 	g_amt = 0
 	w_class = W_CLASS_LARGE
-
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,30,60)
 	volume = 120
 	flags = FPRINT
-
 /obj/item/weapon/reagent_containers/glass/dispenser
 	name = "reagent glass"
 	desc = "A reagent glass."
@@ -506,15 +521,12 @@
 	icon_state = "beaker0"
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER
-
 /obj/item/weapon/reagent_containers/glass/dispenser/surfactant
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
-
 /obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
 	..()
 	reagents.add_reagent(FLUOROSURFACTANT, 20)
-
 */
 
 //No idea if this actually works anymore. Please handle carefully

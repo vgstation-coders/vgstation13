@@ -6,7 +6,7 @@
 	desc = "Charges Starscreen shield generators."
 	icon = 'icons/effects/shielding.dmi'
 	icon_state = "capacitor"
-	req_one_access = list(access_security, access_engine) // For locking/unlocking controls
+	req_one_access = list(access_security, access_engine_minor) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
 	use_power = 1			//0 use nothing

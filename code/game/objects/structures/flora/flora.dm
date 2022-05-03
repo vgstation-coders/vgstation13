@@ -73,8 +73,8 @@
 
 	pixel_x = -WORLD_ICON_SIZE/2
 
-	var/health = 100
-	var/maxHealth = 100
+	health = 100
+	maxHealth = 100
 
 	var/height = 6 //How many logs are spawned
 

@@ -174,13 +174,13 @@ var/list/shuttle_log = list()
 			if(authenticated==AUTH_CAPT && !(issilicon(usr) && !is_malf_owner(usr)))
 				if(message_cooldown)
 					return
-				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
+				var/input = stripped_message(usr, "Please choose a message to announce to the station crew.", "Priority Announcement")
 				if(message_cooldown || !input || (!usr.Adjacent(src) && !issilicon(usr)))
 					return
 				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
 				var/turf/T = get_turf(usr)
-				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made a captain announcement: [input]")
-				message_admins("[key_name_admin(usr)] has made a captain announcement.", 1)
+				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made a Comms Console announcement: [input]")
+				message_admins("[key_name_admin(usr)] has made a Comms Console announcement.", 1)
 				message_cooldown = 1
 				spawn(600)//One minute cooldown
 					message_cooldown = 0
@@ -601,13 +601,23 @@ var/list/shuttle_log = list()
 	return 1
 
 /proc/init_shift_change(var/mob/user, var/force = 0)
-	if ((!( ticker ) || emergency_shuttle.location))
+	if (!ticker)
 		return
-
+	if (emergency_shuttle.direction == -1 && vote.winner ==  "Initiate Crew Transfer")
+		emergency_shuttle.setdirection(1)
+		emergency_shuttle.settimeleft(10)
+		var/reason = pick("is arriving ahead of schedule", "hit the turbo", "has engaged nitro afterburners")
+		captain_announce("The emergency shuttle reversed and [reason]. It will arrive in [emergency_shuttle.timeleft()] seconds.")
+		return
 	if(emergency_shuttle.direction == -1)
 		to_chat(user, "The shuttle may not be called while returning to CentCom.")
 		return
-
+	if (emergency_shuttle.online && vote.winner ==  "Initiate Crew Transfer")
+		if(10 < emergency_shuttle.timeleft())
+			var/reason = pick("is arriving ahead of schedule", "hit the turbo", "has engaged nitro afterburners")
+			emergency_shuttle.settimeleft(10)
+			captain_announce("The emergency shuttle [reason]. It will arrive in [emergency_shuttle.timeleft()] seconds.")
+		return
 	if(emergency_shuttle.online)
 		to_chat(user, "The shuttle is already on its way.")
 		return

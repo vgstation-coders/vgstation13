@@ -316,7 +316,7 @@ var/global/msg_id = 0
 			U << browse(null, "window=pda")
 
 /// Returns TRUE on success.
-/obj/item/device/pda/verb/remove_id(mob/user)
+/obj/item/device/pda/proc/remove_id(mob/user)
 	if(issilicon(user))
 		return FALSE
 
@@ -337,7 +337,7 @@ var/global/msg_id = 0
 
 /obj/item/device/pda/verb/verb_remove_id()
 	set category = "Object"
-	set name = "Remove id"
+	set name = "Remove ID"
 	set src in usr
 
 	remove_id(usr)

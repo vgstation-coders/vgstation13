@@ -190,7 +190,6 @@ var/auxtools_path
 
 
 /world/Reboot(reason)
-	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -207,7 +206,7 @@ var/auxtools_path
 		..()
 		return
 
-	if(config.map_voting && vote.winner && vote.map_paths.len)
+	if(vote.winner && vote.map_paths)
 		//get filename
 		var/filename = "vgstation13.dmb"
 		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename

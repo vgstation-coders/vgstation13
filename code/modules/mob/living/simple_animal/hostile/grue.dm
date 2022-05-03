@@ -190,18 +190,14 @@
 					to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
 				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
 
-
 		//update accum_light_expos_mult for light damage
 		lightparams.alem_adjust()
-
 
 		//handle light-based nutrienergy gain or drain
 		lightparams.nutri_adjust(src)
 
-
 		//update speed modifier based on light condition
 		lightparams.speed_adjust(src)
-
 
 		if(ismoulting)
 			moulttimer--
@@ -211,13 +207,8 @@
 	regular_hud_updates()
 	standard_damage_overlay_updates()
 
-
 	if((stat==CONSCIOUS) && !busy && !ismoulting && !client && !mind && !ckey) //Checks for AI
 		grue_ai()
-
-
-
-
 
 //AI stuff:
 /mob/living/simple_animal/hostile/grue/proc/grue_ai()
@@ -303,6 +294,7 @@
 		attack_sound = 'sound/weapons/bite.ogg'
 		size = SIZE_SMALL
 		pass_flags = PASSTABLE
+		reagents.maximum_volume = 500
 		//Larval grue spells: moult, ventcrawl, and hide
 		add_spell(new /spell/aoe_turf/grue_hide, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -326,6 +318,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
+		reagents.maximum_volume = 1000
 		//Juvenile grue spells: eat and moult
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -349,6 +342,7 @@
 		attack_sound = 'sound/weapons/cbar_hitbod1.ogg'
 		size = SIZE_BIG
 		pass_flags = 0
+		reagents.maximum_volume = 1500
 		//Adult grue spells: eat, lay eggs, and drain light
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -563,6 +557,9 @@
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 		digest+=10 //add 10 life ticks (20 seconds) of increased healing + nutrition gain
+		
+		//Transfer any reagents inside the creature to the grue
+		E.reagents.trans_to(src, E.reagents.total_volume)
 
 		//Upgrade the grue's stats as it feeds
 		if(E.mind) //eaten creature must have a mind to power up the grue
@@ -573,13 +570,13 @@
 				if(G)
 					G.eatencount++
 			eatencharge++ //can be spent on egg laying
-			grue_stat_updates(1)
+			grue_stat_updates(TRUE)
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.gib()
 	busy=FALSE
 
-/mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = 0) //update stats, called by lifestage_updates() as well as handle_feed()
+/mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
 	//health regen in darkness
 	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
@@ -595,7 +592,6 @@
 	//update light drain power in case the grue fed while channeling it
 	if(channeling_flags & GRUE_DRAINLIGHT)
 		drainlight_set()
-
 
 	if(lifestage==GRUE_ADULT)
 		if(eatencount>=GRUE_WALLBREAK)
@@ -644,9 +640,6 @@
 
 /mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
 	set_light(7 + eatencount, -3 * eatencount, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
-
-
-
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()

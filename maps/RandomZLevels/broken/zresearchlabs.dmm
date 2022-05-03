@@ -274,7 +274,7 @@
 "fn" = (/obj/effect/decal/cleanable/oil,/obj/effect/decal/remains/robot,/turf/simulated/floor/airless{icon_state = "damaged2"},/area/awaymission/labs/gateway)
 "fo" = (/turf/simulated/floor/airless{icon_state = "floorscorched1"},/area/awaymission/labs/gateway)
 "fp" = (/obj/machinery/gateway{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "warning"},/area/awaymission/labs/gateway)
-"fq" = (/obj/machinery/gateway/centeraway,/turf/simulated/floor,/area/awaymission/labs/gateway)
+"fq" = (/obj/machinery/gateway/center/away,/turf/simulated/floor,/area/awaymission/labs/gateway)
 "fr" = (/obj/machinery/gateway{dir = 4},/turf/simulated/floor{dir = 4; icon_state = "warning"},/area/awaymission/labs/gateway)
 "fs" = (/obj/effect/decal/cleanable/blood,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/landmark/corpse/officer,/turf/simulated/floor,/area/awaymission/labs/gateway)
 "ft" = (/obj/machinery/power/apc{dir = 4; name = "Worn-out APC"; pixel_x = 24; pixel_y = 0},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor,/area/awaymission/labs/gateway)

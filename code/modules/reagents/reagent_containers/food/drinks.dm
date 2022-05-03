@@ -136,8 +136,8 @@
 		//The reagents in the bottle splash all over the target, thanks for the idea Nodrak
 		if(src.reagents)
 			for(var/mob/O in viewers(user, null))
-				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M]!</span>"), 1)
-			src.reagents.reaction(M, TOUCH)
+				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M][ishuman(M) ? "'s [parse_zone(affecting)]" : ""]!</span>"), 1)
+			src.reagents.reaction(M, TOUCH, zone_sels = list(user.zone_sel.selecting))
 
 		//Finally, smash the bottle. This kills (del) the bottle.
 		src.smash(M, user)
@@ -870,6 +870,25 @@
 		playsound(src, pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 50)
 		var/obj/B = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread(get_turf(src))
 		user.put_in_hands(B)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter
+	name = "\improper canned bread"
+	desc = "Wow, they have it!"
+	icon_state = "cannedbread"
+	var/obj/item/storeditem = null
+	//no actual chemicals in the can
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter/attackby(var/obj/item/I, mob/user as mob)
+	if(!(flags & OPENCONTAINER)) // Won't work if already opened
+		if(user.drop_item(I,src))
+			storeditem = I
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter/pop_open(var/mob/user)
+	. = ..()
+	spawn(0.5 SECONDS)
+		playsound(src, pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 50)
+		storeditem.forceMove(get_turf(src))
+		storeditem = null
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "\improper vial of food coloring"
@@ -1783,7 +1802,7 @@
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
 			reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
 			if(hit_atom != get_turf(src)) //prevent spilling on the floor twice though
-				reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
+				reagents.reaction(hit_atom, TOUCH, zone_sels = list(user.zone_sel.selecting))  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs

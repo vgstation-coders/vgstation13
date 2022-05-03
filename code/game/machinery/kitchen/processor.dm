@@ -116,6 +116,10 @@
 		feedback_add_details("slime_core_harvested","[replacetext(S.colour," ","_")]")
 	..()
 
+/datum/food_processor_process/mob/voxchicken //Do not relocate please I will cry; I tried sorting all fancylike with some help, but it seems the file is scuffed beyond my mortal means
+	input = /mob/living/carbon/monkey/vox
+	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+
 /datum/food_processor_process/mob/monkey
 	input = /mob/living/carbon/monkey
 	output = null
@@ -139,10 +143,6 @@
 /datum/food_processor_process/mob/chicken/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 	..()
-
-/datum/food_processor_process/mob/voxchicken
-	input = /mob/living/carbon/monkey/vox
-	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
 
 /datum/food_processor_process/mob/voxchicken/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)

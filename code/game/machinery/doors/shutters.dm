@@ -30,6 +30,8 @@
 			operating = 0
 
 /obj/machinery/door/poddoor/shutters/open()
+	if(!density) //it's already open bro
+		return FALSE
 	if(operating == 1) //doors can still open when emag-disabled
 		return
 	if(!ticker)

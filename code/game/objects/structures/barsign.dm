@@ -193,7 +193,7 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/Topic(href, href_list)
 	if(..())
 		return
-	if(in_range(src, usr) && isliving(usr) && allowed(usr) || isAdminGhost(usr) || isAI(usr))
+	if(in_range(src, usr) && isliving(usr) && allowed(usr) || isAdminGhost(usr) || isAI(usr) || isrobot(usr))
 		var/mob/user = usr
 
 		if(href_list["direct_select"])

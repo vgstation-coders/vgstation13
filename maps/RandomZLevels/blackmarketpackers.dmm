@@ -276,24 +276,6 @@
 /obj/item/weapon/storage/box,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
-"bf" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
-"bg" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
-"bh" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
 "bi" = (
 /obj/item/weapon/hand_labeler,
 /turf/simulated/floor/plating,
@@ -431,31 +413,13 @@
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
-"bB" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
 "bC" = (
-/obj/machinery/gateway/centeraway{
+/obj/machinery/gateway/center/away{
 	calibrated = 0
 	},
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
-"bD" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
-	},
-/obj/machinery/gateway{
-	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
@@ -494,20 +458,8 @@
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
-"bL" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
 "bM" = (
-/obj/machinery/gateway,
-/turf/simulated/floor/plating,
-/area/awaymission/BMPship1)
-"bN" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
+/obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
 /area/awaymission/BMPship1)
 "bO" = (
@@ -14550,9 +14502,9 @@ an
 aq
 ha
 aV
-bf
-bB
-bL
+bd
+bd
+bd
 cb
 cs
 ha
@@ -14680,7 +14632,7 @@ ah
 ip
 ha
 aU
-bg
+bd
 bC
 bM
 cb
@@ -14810,9 +14762,9 @@ aa
 ah
 ha
 aU
-bh
-bD
-bN
+bd
+cb
+bd
 cb
 cu
 ha

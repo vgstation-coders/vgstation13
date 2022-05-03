@@ -122,7 +122,7 @@
 		Knockdown(incapacitation_duration)
 
 	visible_message( \
-		"<span class='warning'>[src] was shocked by the [source]!</span>", \
+		"<span class='warning'>[src] was shocked by \the [source]!</span>", \
 		"<span class='danger'>You feel a powerful shock course through your body!</span>", \
 		"<span class='warning'>You hear a heavy electrical crack.</span>", \
 		"<span class='notice'>[src] starts raving!</span>", \
@@ -145,6 +145,9 @@
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 	update_hands_icons()
+
+/mob/living/carbon/proc/update_inv_by_slot(var/slot_flags)
+	return
 
 /mob/living/carbon/proc/update_hands_icons()
 	if(!hud_used)

@@ -1,15 +1,5 @@
 /mob/living/New()
-	. = ..()
-	generate_static_overlay()
-	if(istype(static_overlays,/list) && static_overlays.len)
-		for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
-			if(MoMMI.can_see_static())
-				if(MoMMI.static_choice in static_overlays)
-					MoMMI.static_overlays.Add(static_overlays[MoMMI.static_choice])
-					MoMMI.client.images.Add(static_overlays[MoMMI.static_choice])
-				else
-					MoMMI.static_overlays.Add(static_overlays["static"])
-					MoMMI.client.images.Add(static_overlays["static"])
+	..()
 
 	if(!species_type)
 		species_type = src.type
@@ -25,15 +15,6 @@
 	tolerated_chems = list()
 
 /mob/living/Destroy()
-	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
-		for(var/image/I in static_overlays)
-			MoMMI.static_overlays.Remove(I) //no checks, since it's either there or its not
-			MoMMI.client.images.Remove(I)
-			qdel(I)
-			I = null
-	if(static_overlays)
-		static_overlays = null
-
 	if(butchering_drops)
 		for(var/datum/butchering_product/B in butchering_drops)
 			butchering_drops -= B
@@ -1246,9 +1227,12 @@ Thanks.
 		gib()
 		return(gain)
 
-/mob/living/singularity_pull(S)
+/mob/living/singularity_pull(S, current_size, repel = FALSE)
 	if(!(src.flags & INVULNERABLE))
-		step_towards(src, S)
+		if(!repel)
+			step_towards(src, S)
+		else
+			step_away(src, S)
 
 //shuttle_act is called when a shuttle collides with the mob
 /mob/living/shuttle_act(datum/shuttle/S)
@@ -1278,26 +1262,6 @@ Thanks.
 
 /mob/living/proc/pointToMessage(var/pointer, var/pointed_at)
 	return "<b>\The [pointer]</b> points at <b>\the [pointed_at]</b>."
-
-/mob/living/proc/generate_static_overlay()
-	if(!istype(static_overlays,/list))
-		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter", "cult"))
-	var/image/static_overlay = image(getStaticIcon(new/icon(src.icon, src.icon_state)), loc = src)
-	static_overlay.override = 1
-	static_overlays["static"] = static_overlay
-
-	static_overlay = image(getBlankIcon(new/icon(src.icon, src.icon_state)), loc = src)
-	static_overlay.override = 1
-	static_overlays["blank"] = static_overlay
-
-	static_overlay = getLetterImage(src)
-	static_overlay.override = 1
-	static_overlays["letter"] = static_overlay
-
-	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
-	static_overlay.override = 1
-	static_overlays["cult"] = static_overlay
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)

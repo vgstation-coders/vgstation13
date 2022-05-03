@@ -74,7 +74,7 @@
 				acceptable_items |= item
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
-
+		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)   
 /*******************
 *   Part Upgrades
 ********************/

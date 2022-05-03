@@ -293,10 +293,9 @@
 			name = initialised_order.name_override[i]
 			containername = initialised_order.name_override[i]
 		else
-			var/atom/thing = new i
-			name = thing.name
-			containername = thing.name
-			qdel(thing)
+			var/atom/thing = i
+			name = initial(thing.name)
+			containername = initial(thing.name)
 		if(isnum(amount))
 			var/our_amount = amount
 			if(istype(i,/obj/item/stack))
@@ -311,7 +310,7 @@
 	//Sadly cannot use switch here
 	if(istype(initialised_order,/datum/centcomm_order/department/engineering))
 		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
-		access = list(access_engine)
+		access = list(access_engine_minor)
 	else if(istype(initialised_order,/datum/centcomm_order/department/medical))
 		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/medsec : /obj/structure/largecrate
 		access = list(access_medical)

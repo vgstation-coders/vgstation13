@@ -63,9 +63,6 @@
 	},
 /area/awaymission/snowplanet)
 "ar" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 9;
 	icon_state = "warning";
@@ -74,15 +71,9 @@
 /turf/simulated/floor/bluegrid,
 /area/awaymission/snowplanet)
 "as" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
 /turf/simulated/floor/bluegrid,
 /area/awaymission/snowplanet)
 "at" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 5;
 	icon_state = "warning";
@@ -94,30 +85,15 @@
 /obj/structure/flora/tree_stump,
 /turf/simulated/floor/plating/snow,
 /area/awaymission/snowplanet)
-"av" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/simulated/floor/bluegrid,
-/area/awaymission/snowplanet)
 "aw" = (
-/obj/machinery/gateway/centeraway,
+/obj/machinery/gateway/center/away,
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "unloading"
 	},
 /turf/simulated/floor/light,
 /area/awaymission/snowplanet)
-"ax" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
-/turf/simulated/floor/bluegrid,
-/area/awaymission/snowplanet)
 "ay" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 10;
 	icon_state = "warning";
@@ -126,7 +102,7 @@
 /turf/simulated/floor/bluegrid,
 /area/awaymission/snowplanet)
 "az" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /obj/effect/decal/warning_stripes{
 	dir = 2;
 	icon_state = "loading_area";
@@ -135,9 +111,6 @@
 /turf/simulated/floor/bluegrid,
 /area/awaymission/snowplanet)
 "aA" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 6;
 	icon_state = "warning";
@@ -2181,7 +2154,7 @@ ad
 aT
 ao
 ar
-av
+as
 ay
 aq
 aq
@@ -2309,7 +2282,7 @@ ad
 aT
 ao
 at
-ax
+as
 aA
 aq
 aq

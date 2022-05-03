@@ -529,11 +529,11 @@
 		gauge_state = "healthcrit"
 	var/image/gauge = image('icons/ui/blob/18x200.dmi', src, gauge_state)
 	var/matrix/gauge_matrix = matrix()
-	gauge_matrix.Scale(1,M.blob_core.health/M.blob_core.maxhealth)
+	gauge_matrix.Scale(1,M.blob_core.health/M.blob_core.maxHealth)
 	gauge.transform = gauge_matrix
 	gauge.layer = MIND_UI_BUTTON
 	gauge.pixel_x = 3
-	gauge.pixel_y = round(-79 + 100 * (M.blob_core.health/M.blob_core.maxhealth))
+	gauge.pixel_y = round(-79 + 100 * (M.blob_core.health/M.blob_core.maxHealth))
 	overlays += gauge
 
 	var/image/cover = image(icon, src, "coverRIGHT")

@@ -106,7 +106,7 @@
 /area/vault/asteroid)
 "ax" = (
 /obj/effect/decal/cleanable/cockroach_remains,
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /obj/effect/decal/cleanable/cobweb,
 /turf/simulated/floor/plating,
 /area/vault/asteroid)
@@ -220,14 +220,14 @@
 /turf/simulated/floor/wood,
 /area/vault/asteroid)
 "aS" = (
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor/wood{
 	broken = 1;
 	icon_state = "wood-broken"
 	},
 /area/vault/asteroid)
 "aT" = (
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /turf/simulated/floor/wood,
 /area/vault/asteroid)
 "aU" = (
@@ -371,7 +371,7 @@
 /turf/simulated/wall/r_wall,
 /area/vault/asteroid)
 "bo" = (
-/obj/structure/cult_legacy/pylon,
+/obj/structure/cult/pylon,
 /obj/structure/window/reinforced/plasma,
 /turf/simulated/floor/plating,
 /area/vault/asteroid)

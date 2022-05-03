@@ -133,18 +133,17 @@ var/global/list/facial_hair_styles_female_list	= list()
 // USE THIS WHEN COPYING STUFF OR YOU'LL GET CORRUPTION!
 /datum/dna/proc/Clone()
 	var/datum/dna/new_dna = new()
-	new_dna.unique_enzymes=unique_enzymes
-	new_dna.b_type=b_type
-	new_dna.mutantrace=mutantrace
-	new_dna.real_name=real_name
-	new_dna.flavor_text=flavor_text
-	new_dna.species=species
+	new_dna.unique_enzymes = unique_enzymes
+	new_dna.struc_enzymes = struc_enzymes
+	new_dna.b_type = b_type
+	new_dna.mutantrace = mutantrace
+	new_dna.real_name = real_name
+	new_dna.flavor_text = flavor_text
+	new_dna.species = species
 	for(var/b=1;b<=DNA_SE_LENGTH;b++)
 		new_dna.SE[b]=SE[b]
 		if(b<=DNA_UI_LENGTH)
 			new_dna.UI[b]=UI[b]
-	new_dna.UpdateUI()
-	new_dna.UpdateSE()
 	return new_dna
 
 /datum/dna/proc/GiveRandomSE(var/notflags = 0, var/flags = 0, var/genetype = -1, var/dormant = FALSE)

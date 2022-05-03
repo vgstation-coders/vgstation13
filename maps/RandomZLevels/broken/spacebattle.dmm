@@ -222,7 +222,7 @@
 "en" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/engine,/area/awaymission/spacebattle/cruiser)
 "eo" = (/turf/simulated/floor/engine,/area/awaymission/spacebattle/cruiser)
 "ep" = (/obj/machinery/gateway{dir = 8},/turf/simulated/floor/plating,/area/awaymission/spacebattle/cruiser)
-"eq" = (/obj/machinery/gateway/centeraway{calibrated = 0},/turf/simulated/floor/plating,/area/awaymission/spacebattle/cruiser)
+"eq" = (/obj/machinery/gateway/center/away{calibrated = 0},/turf/simulated/floor/plating,/area/awaymission/spacebattle/cruiser)
 "er" = (/obj/machinery/gateway{dir = 4},/turf/simulated/floor/plating,/area/awaymission/spacebattle/cruiser)
 "es" = (/obj/structure/stool/bed/chair{dir = 1},/turf/simulated/floor{icon_state = "bar"},/area/awaymission/spacebattle/cruiser)
 "et" = (/turf/space,/turf/simulated/wall/shuttle/unsmoothed{dir = 8; icon_state = "diagonalWall3"},/area/awaymission/spacebattle/syndicate4)

@@ -129,19 +129,21 @@
 	allowed_directions = UP|DOWN
 	icon_state = "ladder11"
 
+//TODO: Preferably make these work without border_dummy. This was the simplest way to convert their old behavior.
 /obj/structure/stairs
 	name = "\improper stairs"
 	desc = "Stairs leading to another deck."
 	icon = 'icons/obj/stairs.dmi'
 	icon_state = "stairs"
-	density = 0
+	density = 1
 	opacity = 0
 	anchored = 1
 
 /obj/structure/stairs/New()
+	..()
 	if(world.has_round_started())
 		initialize()
-	..()
+	setup_border_dummy()
 
 /obj/structure/stairs/initialize()
 	for(var/turf/turf in locs)
@@ -151,15 +153,6 @@
 			return qdel(src)
 		if(!istype(above))
 			above.ChangeTurf(/turf/simulated/open)
-
-// Handles if we can go up these stairs for Move()
-/obj/structure/stairs/Uncross(atom/movable/mover, turf/target)
-	// Needs to have a target elsewhere in move to return true, for some reason runtimes without the ?
-	if(target?.z != z)
-		return 1
-	if(mover.dir == dir)
-		return 0
-	return 1
 
 // And now the actual going, fail uncross to move up, hence bumped()
 /obj/structure/stairs/Bumped(atom/movable/A)
@@ -174,8 +167,8 @@
 			if(L.pulling)
 				L.pulling.Move(target)
 
-/obj/structure/stairs/Cross(obj/mover, turf/source, height, airflow)
-	return airflow || !density
+/obj/structure/stairs/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	return !density || !istype(mover) || (bounds_dist(border_dummy, mover) >= 0)
 
 /obj/structure/stairs/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
@@ -241,14 +234,14 @@
 		"<span class='notice'>You dissasemble \the [src].</span>")
 		new /obj/item/stack/sheet/metal(get_turf(src), 4)
 		qdel(src)
-	
-	if(W.is_wrench(user))	
+
+	if(W.is_wrench(user))
 		user.visible_message("<span class='warning'>[user] [anchored ? "unanchors" : "anchors"] \the [src].</span>", \
 		"<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
 		add_hiddenprint(user)
 		add_fingerprint(user)
 		anchored = !anchored
-	
+
 	else if(istype(W, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
 		if(!anchored)

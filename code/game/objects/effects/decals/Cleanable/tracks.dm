@@ -182,7 +182,7 @@
 		var/state=coming_state
 		truedir=track.direction
 		if(truedir>15) // Check if we're in the GOING block
-			state=going_state
+			state = state || going_state
 			truedir=truedir>>4
 		var/icon/add = icon('icons/effects/fluidtracks.dmi', state, truedir)
 		add.SwapColor("#FFFFFF",track.basecolor)
