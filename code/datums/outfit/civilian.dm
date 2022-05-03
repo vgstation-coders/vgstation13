@@ -305,7 +305,7 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = list(
 				"Clown" = /obj/item/clothing/under/rank/clown,
 				"Jester" = /obj/item/clothing/under/jester,
@@ -320,7 +320,7 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/clown_hat,
 		),
 		/datum/species/plasmaman/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = list(
 				"Clown" = /obj/item/clothing/under/rank/clown,
 				"Jester" = /obj/item/clothing/under/jester,
@@ -334,7 +334,7 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/gas/clown_hat,
 		),
 		/datum/species/vox/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = list(
 				"Clown" = /obj/item/clothing/under/rank/clown,
 				"Jester" = /obj/item/clothing/under/jester,
@@ -393,7 +393,7 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/mime,
 			slot_shoes_str = /obj/item/clothing/shoes/mime,
 			slot_gloves_str = /obj/item/clothing/gloves/white,
@@ -403,7 +403,7 @@
 			slot_l_store_str = /obj/item/toy/crayon/mime,
 		),
 		/datum/species/plasmaman/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/mime,
 			slot_shoes_str = /obj/item/clothing/shoes/mime,
 			slot_gloves_str = /obj/item/clothing/gloves/white,
@@ -413,7 +413,7 @@
 			slot_l_store_str = /obj/item/toy/crayon/mime,
 		),
 		/datum/species/vox/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/mime,
 			slot_shoes_str = /obj/item/clothing/shoes/mime,
 			slot_gloves_str = /obj/item/clothing/gloves/white,
@@ -486,12 +486,12 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/janitor,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 		),
 		/datum/species/plasmaman/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/janitor,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/janitor,
@@ -499,7 +499,7 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/janitor,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/janitor,
@@ -538,7 +538,7 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
@@ -547,7 +547,7 @@
 			),
 		),
 		/datum/species/plasmaman/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/librarian,
@@ -555,7 +555,7 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/librarian,
@@ -579,7 +579,7 @@
 			/obj/item/weapon/palette = null,
 		)
 	)
-	
+
 
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt
@@ -738,13 +738,13 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/chaplain,
 			slot_shoes_str = /obj/item/clothing/shoes/laceup,
 			slot_l_store_str = /obj/item/weapon/nullrod,
 		),
 		/datum/species/plasmaman/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/chaplain,
 			slot_shoes_str = /obj/item/clothing/shoes/laceup,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/chaplain,
@@ -753,7 +753,7 @@
 			slot_l_store_str = /obj/item/weapon/nullrod,
 		),
 		/datum/species/vox/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/chaplain,
 			slot_shoes_str = /obj/item/clothing/shoes/laceup,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/chaplain,
