@@ -22,7 +22,7 @@
 	response_disarm = "gently pushes aside"
 	response_harm   = "stomps"
 	stop_automated_movement_when_pulled = 0
-	maxHealth = 200 // Was 75
+	maxHealth = 200
 	health = 200
 	melee_damage_lower = 15
 	melee_damage_upper = 20
@@ -43,6 +43,7 @@
 	wander = 1
 	ranged = 0
 	//minimum_distance = 1
+	status_flags = CANPUSH
 	size = SIZE_SMALL //dog-sized spiders are still big!
 
 	var/icon_aggro = null // for swapping to when we get aggressive
@@ -101,6 +102,8 @@
 
 // Checks pressure here vs. around us. Intended to make sure the spider doesn't breach to space while comfortable, or breach into a high pressure area
 /mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/curturf)
+	if(usr.client)
+		return
 	if(!istype(curturf))
 		return 0
 	var/datum/gas_mixture/myenv=curturf.return_air()
