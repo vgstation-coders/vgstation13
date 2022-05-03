@@ -704,6 +704,9 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(istype(O,/turf))
 			var/turf/T=O
 			T.ChangeTurf(T.get_underlying_turf())
+		if(istype(O,/mob/living/carbon/human))
+			qdel(O)
+			playsound(target, 'sound/effect/deletescream.ogg', 75, 1)
 		else
 			qdel(O)
 
