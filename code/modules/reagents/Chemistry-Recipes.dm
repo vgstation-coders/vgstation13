@@ -94,8 +94,10 @@
 	result_amount = 2.4
 
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
-	..()
-	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 1)
+	set waitfor = FALSE //makes sleep() work like spawn()
+	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 0)
+	sleep(2 SECONDS) //wait for the song to finish
+	..() //boom
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
@@ -3676,7 +3678,7 @@
 	result = BLACKCOLOR
 	required_reagents = list(COLORFUL_REAGENT = 1, CARBON = 1)
 	result_amount = 2
-	
+
 /datum/chemical_reaction/degeneratecalcium
 	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
@@ -3964,7 +3966,7 @@
 		var/datum/chemical_reaction/new_reaction = pick(chemical_reactions_list[our_id])
 		holder.handle_reaction(new_reaction,TRUE,created_volume)
 	else // Or else just spawn a new chem
-		var/list/blocked_chems = list(ADMINORDRAZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
+		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
 		holder.add_reagent(pick(allowed_reagents),created_volume)
 

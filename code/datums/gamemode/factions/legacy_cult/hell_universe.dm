@@ -27,7 +27,7 @@ In short:
 	if(!T.holy)
 		T.cultify()
 		for(var/obj/machinery/light/L in T.contents)
-			new /obj/structure/cult_legacy/pylon(L.loc)
+			new /obj/structure/cult/pylon(L.loc)
 			qdel(L)
 	return
 

@@ -26,7 +26,7 @@
 	icon_state = "dses"
 	icon = 'icons/obj/telescience.dmi'
 	var/obj/item/weapon/cell/C = null
-	var/module_limit = 1
+	var/module_limit = 2 //So you can get a diverse-ish DSES instead of only ever using the directional module
 	var/list/module_list = list()
 	var/list/locations = list()
 	var/pulse_range = 25
@@ -37,7 +37,7 @@
 	var/last_distance
 	var/list/positive_locations = list()
 	var/auto_pulse = 0
-	origin_tech = list(Tc_BLUESPACE = 2, Tc_MATERIALS = 4)
+	origin_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 4)
 
 /datum/dses_find
 	var/name

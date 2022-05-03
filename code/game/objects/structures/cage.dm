@@ -41,9 +41,13 @@
 		toggle_cover()
 
 /obj/structure/cage/Destroy()
-	for(var/atom/movable/M in contents)
-		M.forceMove(src.loc)
-
+	switch(cover_state)
+		if(C_OPENED)
+			for(var/mob/living/L in get_locked(/datum/locking_category/cage))
+				qdel(L)
+		if(C_CLOSED)
+			for(var/atom/movable/M in contents)
+				qdel(M)
 	..()
 
 /obj/structure/cage/update_icon()
@@ -69,6 +73,17 @@
 		else
 			toggle_door(user)
 
+/obj/structure/cage/ex_act(var/severity)
+	var/list/affected_mobs = severity < 3 ? remove_mobs() : get_mobs()
+	for(var/atom/movable/M in affected_mobs)
+		M.ex_act(severity)
+	..()
+
+/obj/structure/cage/shuttle_act(var/datum/shuttle/S)
+	var/list/affected_mobs = remove_mobs()
+	for(var/atom/movable/M in affected_mobs)
+		M.shuttle_act(S)
+	..()
 
 /obj/structure/cage/bullet_act(var/obj/item/projectile/Proj)
 	if (!locked_atoms?.len)
@@ -256,11 +271,32 @@
 
 	return checked in get_locked(/datum/locking_category/cage)
 
+/obj/structure/cage/proc/get_mobs()
+	switch(cover_state)
+		if(C_OPENED)
+			. = get_locked(/datum/locking_category/cage)
+		if(C_CLOSED)
+			. = contents
+
+/obj/structure/cage/proc/remove_mobs()
+	. = list()
+	switch(cover_state)
+		if(C_OPENED) //Cover is opened - mob is atom unlocked from the cage
+			for(var/mob/living/L in get_locked(/datum/locking_category/cage))
+				unlock_atom(L)
+				. |= L
+		if(C_CLOSED) //Cover is closed - mob is removed from the cage
+			for(var/atom/movable/M in contents)
+				M.forceMove(src.loc)
+				. |= M
+
 /obj/structure/cage/random_mob/New()
 	..()
-	var/mobtype = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)))
-	var/mob/living/simple_animal/ourmob = new mobtype
-	add_mob(ourmob)
+	spawn()
+		toggle_cover() // Spawn closed for cargo forwards
+		var/mobtype = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)))
+		var/mob/living/simple_animal/ourmob = new mobtype
+		add_mob(ourmob)
 
 #undef C_OPENED
 #undef C_CLOSED

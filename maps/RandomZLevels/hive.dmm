@@ -49,23 +49,8 @@
 "al" = (
 /turf/simulated/floor/shuttle/plating/airless,
 /area/awaymission/hive)
-"am" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/hive)
 "an" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/hive)
-"ao" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor/plating,
+/turf/space,
 /area/awaymission/hive)
 "ap" = (
 /turf/simulated/wall/shuttle/unsmoothed{
@@ -84,9 +69,6 @@
 /turf/simulated/floor/shuttle/plating/airless,
 /area/awaymission/hive)
 "at" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
 /turf/simulated/floor/plating{
 	dir = 8;
 	icon_state = "warnplate";
@@ -94,13 +76,10 @@
 	},
 /area/awaymission/hive)
 "au" = (
-/obj/machinery/gateway/centeraway,
+/obj/machinery/gateway/center/away,
 /turf/simulated/floor/plating,
 /area/awaymission/hive)
 "av" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
 /turf/simulated/floor/plating,
 /area/awaymission/hive)
 "aw" = (
@@ -108,9 +87,6 @@
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive)
 "ax" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
 /turf/simulated/floor/plating{
 	dir = 10;
 	icon_state = "warnplate";
@@ -118,13 +94,10 @@
 	},
 /area/awaymission/hive)
 "ay" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /turf/simulated/floor/plating,
 /area/awaymission/hive)
 "az" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
 /turf/simulated/floor/plating{
 	dir = 4;
 	icon_state = "warnplate";
@@ -9557,7 +9530,7 @@ ab
 (72,1,1) = {"
 ae
 eT
-am
+av
 at
 ax
 al
@@ -9659,7 +9632,7 @@ ab
 (73,1,1) = {"
 ae
 eT
-an
+av
 au
 ay
 al
@@ -9760,8 +9733,8 @@ aa
 "}
 (74,1,1) = {"
 ae
-eT
-ao
+an
+av
 av
 az
 al

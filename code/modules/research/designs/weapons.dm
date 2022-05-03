@@ -667,8 +667,8 @@
 //Hidden
 
 /datum/design/magazine_12mm/ops
-	name = "C-20r magazine (12mm)"
-	desc = "A magazine for the Syndicate C-20r assault rifle. Holds 12mm ammunition."
+	name = "C-20r magazine (12mm SPECIAL)"
+	desc = "A magazine for the Syndicate C-20r assault rifle. Holds 12mm SPECIAL ammunition."
 	id = "magazine_12mm"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 400)

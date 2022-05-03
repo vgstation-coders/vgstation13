@@ -124,26 +124,6 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/generate_static_overlay()
-	if(!istype(static_overlays,/list))
-		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter", "cult"))
-	var/image/static_overlay = image(icon('icons/effects/effects.dmi', "static"), loc = src)
-	static_overlay.override = 1
-	static_overlays["static"] = static_overlay
-
-	static_overlay = image(icon('icons/effects/effects.dmi', "blank_human"), loc = src)
-	static_overlay.override = 1
-	static_overlays["blank"] = static_overlay
-
-	static_overlay = getLetterImage(src, "H", 1)
-	static_overlay.override = 1
-	static_overlays["letter"] = static_overlay
-
-	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
-	static_overlay.override = 1
-	static_overlays["cult"] = static_overlay
-
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	my_appearance = new // Initialise how they look.
 	if(new_species_name)
@@ -845,7 +825,7 @@
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
-		var/obj/item/organ/external/head/B = decapitated
+		var/obj/item/organ/external/head/B = decapitated?.get()
 		if(B)
 			var/datum/organ/internal/brain/copied
 			if(B.organ_data)
@@ -1494,14 +1474,17 @@
 	investigation_log(I_SINGULO,"has been consumed by a singularity")
 	gib()
 	return gain
-/mob/living/carbon/human/singularity_pull(S, current_size,var/radiations = 3)
+/mob/living/carbon/human/singularity_pull(S, current_size, repel = FALSE, var/radiations = 3)
 	if(src.flags & INVULNERABLE)
 		return 0
 	if(current_size >= STAGE_THREE) //Pull items from hand
 		for(var/obj/item/I in held_items)
 			if(prob(current_size*5) && I.w_class >= ((11-current_size)/2) && u_equip(I,1))
-				step_towards(I, src)
-				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
+				if(!repel)
+					step_towards(I, S)
+				else
+					step_away(I, S)
+				to_chat(src, "<span class = 'warning'>\The [S] [repel ? "pushes" : "pulls"] \the [I] from your grip!</span>")
 	if(radiations)
 		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)

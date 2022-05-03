@@ -82,7 +82,9 @@
 		if(!t_state)
 			t_state = I.icon_state
 		I.screen_loc = ui_rhand
-		overlays_standing[X_R_HAND_LAYER]	= image("icon" = t_inhand_state, "icon_state" = t_state)
+		var/image/IM = image("icon" = t_inhand_state, "icon_state" = t_state)
+		IM.color = I.color
+		overlays_standing[X_R_HAND_LAYER] = IM
 		if(handcuffed)
 			drop_item(I)
 	else
@@ -100,7 +102,9 @@
 		if(!t_state)
 			t_state = I.icon_state
 		I.screen_loc = ui_lhand
-		overlays_standing[X_L_HAND_LAYER]	= image("icon" = t_inhand_state, "icon_state" = t_state)
+		var/image/IM = image("icon" = t_inhand_state, "icon_state" = t_state)
+		IM.color = I.color
+		overlays_standing[X_L_HAND_LAYER] = IM
 		if(handcuffed)
 			drop_item(I)
 	else

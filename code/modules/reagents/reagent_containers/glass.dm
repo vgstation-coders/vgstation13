@@ -392,6 +392,12 @@
 			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
 			reagents.clear_reagents()
 
+/obj/item/weapon/reagent_containers/glass/bucket/acidable()
+	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(H && src == H.head)
+		return 0
+	return ..()
+
 /obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
 		if (src.reagents.total_volume >= 1)

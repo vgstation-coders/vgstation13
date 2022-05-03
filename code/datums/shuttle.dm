@@ -388,7 +388,7 @@
 	moving = 0
 
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
-/datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0) //A direct proc with no bullshit
+/datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0, var/rotate_after = 0) //A direct proc with no bullshit
 	if(!D)
 		return
 	if(!linked_port)
@@ -422,6 +422,8 @@
 		if(linked_port.dir != turn(D.dir,180))
 
 			rotate = dir2angle(turn(D.dir,180)) - dir2angle(linked_port.dir)
+
+			rotate += rotate_after
 
 			if(rotate < 0)
 				rotate += 360
@@ -687,7 +689,8 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		new_turf.ChangeTurf(old_turf.type, allow = 1)
+		if(!istype(old_turf, /turf/space))
+			new_turf.ChangeTurf(old_turf.type, allow = 1)
 		new_turfs[C] = new_turf
 
 		//***Remove old turf from shuttle's area****
@@ -717,12 +720,13 @@
 		else
 			new_turf.underlays += undlay*/
 
-		new_turf.dir = old_turf.dir
-		new_turf.icon_state = old_turf.icon_state
-		new_turf.icon = old_turf.icon
-		new_turf.plane = old_turf.plane
-		new_turf.layer = old_turf.layer
-		new_turf.color = old_turf.color
+		if(!istype(old_turf, /turf/space))
+			new_turf.dir = old_turf.dir
+			new_turf.icon_state = old_turf.icon_state
+			new_turf.icon = old_turf.icon
+			new_turf.plane = old_turf.plane
+			new_turf.layer = old_turf.layer
+			new_turf.color = old_turf.color
 
 		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
 		// Floor turfs create their `floor_tile` in New() if it's null.

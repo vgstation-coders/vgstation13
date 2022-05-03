@@ -163,6 +163,7 @@
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
 			tackleGetHurt()
+			Obstacle.tackled(src)
 
 /mob/living/carbon/proc/tackleGetHurt(var/hurtAmount = 0, var/knockAmount = 0, var/hurtSound = "trayhit")
 	if(!hurtAmount)
@@ -240,3 +241,6 @@
 
 /mob/living/carbon/proc/bonusTackleRange(var/tR = 3)
 	return tR
+
+/atom/proc/tackled(mob/living/user)
+	return 0

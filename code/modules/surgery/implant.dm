@@ -224,6 +224,24 @@
 		affected.hidden.update_icon()
 		affected.hidden = null
 
+	else if (tool.clumsy_check(user) && prob(20))
+		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
+		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
+		var/obj/clowndigobj = pick(/obj/item/weapon/bikehorn/rubberducky, /obj/item/weapon/reagent_containers/food/snacks/pie, /obj/item/toy/singlecard, /obj/item/toy/waterflower)
+		clowndigobj = new clowndigobj(user.loc)
+		if (istype(clowndigobj, /obj/item/toy/singlecard))
+			var/obj/item/toy/singlecard/O = clowndigobj
+			O.cardname = pick("Red Joker","Black Joker")
+			clowndigobj = O
+		else if (istype(clowndigobj, /obj/item/toy/waterflower))
+			clowndigobj.reagents.remove_reagent(WATER, 10)
+			clowndigobj.reagents.add_reagent(BLOOD, 10)
+		user.put_in_hands(clowndigobj)
+		if(!clowndigobj.blood_DNA)
+			clowndigobj.blood_DNA = list()
+		clowndigobj.blood_DNA[target.dna.unique_enzymes] = target.dna.b_type
+		clowndigobj.update_icon()
+
 	else
 		user.visible_message("<span class='notice'>[user] could not find anything inside [target]'s [affected.display_name], and pulls \the [tool] out.</span>", \
 		"<span class='notice'>You could not find anything inside [target]'s [affected.display_name].</span>" )

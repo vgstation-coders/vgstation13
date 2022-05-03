@@ -348,6 +348,17 @@ var/list/tag_suits_list = list()
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
 
+/obj/item/clothing/suit/opsfake
+	icon_state = "rig-syndi"
+	name = "blood-red hardsuit"
+	desc = "A plastic replica of a nuclear operative's suit, you'll look just like a real murderous syndicate operative in this! This is a toy, it is not made for use in space!"
+	item_state = "syndie_hardsuit"
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
 	desc = "It's treason then."

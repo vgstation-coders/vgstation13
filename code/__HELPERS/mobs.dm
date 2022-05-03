@@ -1,3 +1,8 @@
+var/static/list/ALL_LIMBS = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
+								LIMB_LEFT_ARM,LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,
+								LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,
+								TARGET_MOUTH,TARGET_EYES)
+
 /proc/random_hair_style(gender, species = "Human")
 	var/h_style = "Bald"
 

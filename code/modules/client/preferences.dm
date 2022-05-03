@@ -93,6 +93,12 @@ var/list/special_popup_text2num = list(
 	"Use both chat and special" = SPECIAL_POPUP_USE_BOTH,
 )
 
+var/list/headset_sound_text2num = list(
+	"Disabled" = HEADSET_SOUND_DISABLED,
+	"Transmit Only" = HEADSET_SOUND_TRANSMIT,
+	"All" = HEADSET_SOUND_ALL,
+)
+
 var/const/MAX_SAVE_SLOTS = 16
 
 #define POLLED_LIMIT	100
@@ -203,6 +209,9 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	// Whether or not to use randomized character slots
 	var/randomslot = 0
+
+	// Radio headset static sound
+	var/headset_sound = HEADSET_SOUND_TRANSMIT
 
 	// jukebox volume
 	var/volume = 100
@@ -383,6 +392,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=ambience'><b>[(toggles & SOUND_AMBIENCE) ? "Yes" : "No"]</b></a><br>
 	[(toggles & SOUND_AMBIENCE)? \
 	"<b>Ambience Volume:</b><a href='?_src_=prefs;preference=ambience_volume'><b>[ambience_volume]</b></a><br>":""]
+	<b>Radio Headset Sounds:</b>
+	<a href='?_src_=prefs;preference=headset_sound'><b>[headset_sound_text2num[headset_sound+1]]</b></a><br>
 	<b>Hear streamed media:</b>
 	<a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
 	<b>Streaming Program:</b>
@@ -1254,6 +1265,12 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)
 				if("ambience_volume")
 					ambience_volume = min(max(input(user, "Enter the new volume you wish to use. (0-100)","Ambience Volume Preferences", ambience_volume), 0), 100)
+
+				if("headset_sound")
+					var/choice = input(user, "Set your radio headset sound preferences:", "Settings") as null|anything in headset_sound_text2num
+					if(!isnull(choice))
+						headset_sound = headset_sound_text2num[choice]
+
 				if("jukebox")
 					toggles ^= SOUND_STREAMING
 

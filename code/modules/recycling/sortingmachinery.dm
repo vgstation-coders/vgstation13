@@ -587,3 +587,421 @@
 
 /obj/machinery/sorting_machine/destination/unwrapped
 	unwrapped = 1
+
+
+//Same as above but filtering by item.
+/obj/machinery/sorting_machine/item
+	name = "Item Sorting Machine"
+	desc = "Sort specific items off a conveyor belt."
+	var/obj/item/sort_item = null
+
+/obj/machinery/sorting_machine/item/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/sorting_machine/item,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+	RefreshParts()
+
+/obj/machinery/sorting_machine/item/attackby(var/obj/item/O, mob/user)
+	. = ..()
+	if(.)
+		return .
+	else
+		sort_item = O
+		to_chat(user, "<span class='notice'>Filtering item set to [O].</span>")
+
+/obj/machinery/sorting_machine/item/sort(atom/movable/A)
+	if(istype(A,sort_item))
+		return(1)
+
+//Machines for working with crates prior to shipping
+/obj/machinery/logistics_machine
+	layer = ABOVE_TILE_LAYER
+	plane = ABOVE_TURF_PLANE
+	anchored = 1
+	density = 0
+	use_power = 1
+	idle_power_usage = 0
+	active_power_usage = 50
+	power_channel = EQUIP
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
+	ghost_read = 0 // Deactivate ghost touching.
+	ghost_write = 0
+	var/next_sound = 0
+	var/sound_delay = 20
+
+/obj/machinery/logistics_machine/crate_opener
+	name = "crate opener"
+	desc = "Magnetically opens crates provided the proper access has been swiped on the machine."
+	icon = 'icons/obj/machines/logistics.dmi'
+	icon_state = "inactive"
+	var/list/access = list()
+
+/obj/machinery/logistics_machine/crate_opener/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/crate_opener,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+	)
+
+	RefreshParts()
+
+/obj/machinery/logistics_machine/crate_opener/attackby(var/obj/item/O, mob/user)
+	if(istype(O, /obj/item/weapon/card/id))
+		var/obj/item/weapon/card/id/I = O
+		playsound(src, get_sfx("card_swipe"), 60, 1, -5)
+		for(var/mob/M in hearers(src))
+			M.show_message("<b>[src]</b> announces, \"Successfully copied access from \the [I].\"")
+		access |= I.access
+	else
+		return ..()
+
+/obj/machinery/logistics_machine/crate_opener/Crossed(atom/movable/A)
+	if(istype(A,/obj/structure/closet/crate))
+		icon_state = "active"
+		if(istype(A,/obj/structure/closet/crate/secure))
+			var/obj/structure/closet/crate/secure/S = A
+			if(!src.emagged)
+				if(!S.togglelock(src))
+					if (world.time > next_sound)
+						playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+						next_sound = world.time + sound_delay
+				else
+					S.open()
+			else
+				S.overlays.len = 0
+				S.overlays += S.emag
+				S.overlays += S.sparks
+				spawn(6) S.overlays -= S.sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
+				playsound(S, "sparks", 60, 1)
+				S.locked = 0
+				S.broken = 1
+				S.open()
+		else
+			var/obj/structure/closet/crate/C = A
+			if(!C.opened)
+				C.open()
+
+/obj/machinery/logistics_machine/crate_opener/Uncrossed(atom/movable/A)
+	if(istype(A,/obj/structure/closet/crate))
+		icon_state = "inactive"
+
+/obj/machinery/logistics_machine/crate_opener/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
+	if(!src.emagged)
+		spark(src, 1)
+		src.emagged = 1
+		if(user)
+			to_chat(user, "<span class = 'warning'>You overload the ID scanner on [src].</span>")
+		return 1
+	return 0
+
+/obj/item/weapon/circuitboard/crate_opener
+	name = "Circuit Board (Crate Opener)"
+	desc = "A circuit board used to run a crate opening machine."
+	build_path = /obj/machinery/logistics_machine/crate_opener
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/manipulator = 2,
+						)
+
+/obj/machinery/logistics_machine/crate_closer
+	name = "crate closer"
+	desc = "Magnetically closes crates."
+	icon = 'icons/obj/machines/logistics.dmi'
+	icon_state = "inactive"
+	var/list/access = list()
+
+/obj/machinery/logistics_machine/crate_closer/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/crate_closer,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+	)
+
+	RefreshParts()
+
+/obj/machinery/logistics_machine/crate_closer/Crossed(atom/movable/A)
+	if(istype(A,/obj/structure/closet/crate))
+		icon_state = "active"
+		var/obj/structure/closet/crate/C = A
+		if(C.opened)
+			sleep(2) //allows stuff in crates to move to the same tile
+			C.close()
+
+/obj/machinery/logistics_machine/crate_closer/Uncrossed(atom/movable/A)
+	if(istype(A,/obj/structure/closet/crate))
+		icon_state = "inactive"
+
+/obj/item/weapon/circuitboard/crate_closer
+	name = "Circuit Board (Crate Closer)"
+	desc = "A circuit board used to run a crate closing machine."
+	build_path = /obj/machinery/logistics_machine/crate_closer
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/manipulator = 2,
+						)
+
+/obj/machinery/wrapping_machine
+	name = "wrapping machine"
+	desc = "Wraps and tags items."
+	icon = 'icons/obj/recycling.dmi'
+	icon_state = "wrapper-4"
+	density = 1
+	anchored = 1
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
+
+	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
+	var/packagewrap = 0
+	var/syndiewrap = 0
+
+	var/next_sound = 0
+	var/sound_delay = 20
+
+	output_dir = 8 //WEST
+	var/input_dir = 4 //EAST
+
+	var/mode  = 0 //If the tagger is "hacked" so you can add extra tags.
+
+	var/max_items_moved = 100
+
+	var/currTag = 0
+	var/list/destinations  = list()
+
+	var/smallpath = /obj/item/delivery //We use this for items
+	var/bigpath = /obj/item/delivery/large //We use this for structures (crates, closets, recharge packs, etc.)
+	var/manpath = /obj/item/delivery/large //We use this for people.
+	var/list/cannot_wrap = list(
+		/obj/structure/table,
+		/obj/structure/rack,
+		/obj/item/delivery,
+		/obj/item/weapon/gift,
+		/obj/item/weapon/winter_gift,
+		/obj/item/weapon/storage/evidencebag,
+		/obj/item/weapon/storage/backpack/holding,
+		/obj/item/weapon/legcuffs/bolas,
+		/mob/living/simple_animal/hostile/mimic/crate/item
+		)
+
+	var/list/wrappable_big_stuff = list(
+		/mob/living/simple_animal/hostile/mimic/crate,
+		/obj/structure/closet,
+		/obj/structure/vendomatpack,
+		/obj/structure/stackopacks
+		)
+
+/obj/machinery/wrapping_machine/New()
+	. = ..()
+
+	for(var/dest in map.default_tagger_locations)
+		if(dest)
+			destinations += dest
+
+	mover = new
+
+/obj/machinery/wrapping_machine/Destroy()
+	. = ..()
+
+	qdel(mover)
+	mover = null
+
+/obj/machinery/wrapping_machine/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
+		T += bin.rating//intentionally not doing '- 1' here, for the math below
+	max_items_moved = initial(max_items_moved) * (T / 3) //Usefull upgrade/10, that's an increase from 10 (base matter bins) to 30 (super matter bins)
+
+	T = 0//reusing T here because muh RAM
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating - 1
+	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
+
+/obj/machinery/wrapping_machine/process()
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
+		return
+
+	var/turf/in_T = get_step(src, input_dir)
+	var/turf/out_T = get_step(src, output_dir)
+
+	if(!out_T.Enter(mover, mover.loc, TRUE))
+		return
+
+	var/affecting = in_T.contents
+	var/items_moved = 0
+
+	for(var/atom/movable/A in affecting)
+
+		if(items_moved >= max_items_moved)
+			break
+
+		if(A.anchored)
+			continue
+
+		A.forceMove(out_T)
+
+		if(!is_type_in_list(A, cannot_wrap))
+			wrap(A)
+
+		items_moved++
+
+/obj/machinery/wrapping_machine/proc/wrap(var/atom/movable/target)
+	if(istype(target, /obj/item) && smallpath)
+		if (packagewrap >= 1)
+			var/obj/item/I = target
+			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
+			target.forceMove(P)
+			packagewrap += -1
+			tag_item(P)
+		else
+			if(world.time > next_sound)
+				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+				next_sound = world.time + sound_delay
+				for(var/mob/M in hearers(src))
+					M.show_message("<b>[src]</b> announces, \"Please insert additional sheets of package wrap into \the [src].\"")
+				return 0
+	else if(is_type_in_list(target,wrappable_big_stuff) && bigpath)
+		if(istype(target,/obj/structure/closet))
+			var/obj/structure/closet/C = target
+			if(C.opened)
+				return
+		if(istype(target, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/MC = target
+			if(MC.angry)
+				return
+		if(packagewrap >= 3)
+			var/obj/item/P = new bigpath(get_turf(target.loc),target)
+			target.forceMove(P)
+			packagewrap += -3
+			tag_item(P)
+		else
+			if(world.time > next_sound)
+				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+				next_sound = world.time + sound_delay
+				for(var/mob/M in hearers(src))
+					M.show_message("<b>[src]</b> announces, \"Please insert additional sheets of package wrap into \the [src].\"")
+				return 0
+	else if(istype(target,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = target
+		if(syndiewrap >= 2)
+			syndiewrap += -2
+			packagewrap += -2
+			var/obj/present = new manpath(get_turf(src),H)
+			if (H.client)
+				H.client.perspective = EYE_PERSPECTIVE
+				H.client.eye = present
+			H.visible_message("<span class='warning'>[src] wraps [H]!</span>")
+			H.forceMove(present)
+		else
+			if(world.time > next_sound)
+				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+				next_sound = world.time + sound_delay
+			for(var/mob/M in hearers(src))
+				M.show_message("<b>[src]</b> announces, \"Standard package wrap is not strong enough to wrap living creatures.\"")
+			return 0
+	else
+		if(world.time > next_sound)
+			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+			next_sound = world.time + sound_delay
+
+/obj/machinery/wrapping_machine/proc/tag_item(var/atom/movable/target)
+	if(istype(target,/obj/item/delivery))
+		var/obj/item/delivery/D = target
+		var/image/tag_overlay = image('icons/obj/storage/storage.dmi', D, "deliverytag")
+		if(D.sortTag != src.currTag)
+			if(!src.currTag)
+				return
+			var/tag = uppertext(src.destinations[src.currTag])
+			D.sortTag = tag
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
+			D.overlays = 0
+			D.overlays += tag_overlay
+			D.desc = "A small wrapped package. It has a label reading [tag]"
+
+/obj/machinery/wrapping_machine/attackby(var/obj/item/O, mob/user)
+	. = ..()
+	if(istype(O,/obj/item/stack/package_wrap))
+		var/obj/item/stack/package_wrap/P = O
+		if(istype(P,/obj/item/stack/package_wrap/syndie))
+			syndiewrap += P.amount
+		packagewrap += P.amount
+		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to \the [src].</span>")
+		P.use(P.amount)
+	else if(O.is_multitool(user))
+		setOutput(user)
+
+/obj/machinery/wrapping_machine/proc/setOutput(user)
+	var/result = input("Set your location as output?") in list("Yes","No")
+	switch(result)
+		if("Yes")
+			if(!Adjacent(user))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+				return 1
+			output_dir = get_dir(src, user)
+			input_dir = opposite_dirs[output_dir]
+			if(!cardinal.Find(output_dir))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; cardinal directions only!</span>")
+				return 1
+			icon_state = "wrapper-[input_dir]"
+			update_icon()
+			to_chat(user, "<span class='notice'>Output set.</span>")
+			return 1
+
+/obj/machinery/wrapping_machine/attack_hand(mob/user)
+	interact(user)
+
+/obj/machinery/wrapping_machine/interact(mob/user as mob)
+
+	var/dat = "<table style='width:100%; padding:4px;'><tr>"
+
+	for (var/i = 1, i <= destinations.len, i++)
+		dat += "<td><a href='?src=\ref[src];nextTag=[i]'>[destinations[i]]</a>[mode ? "<a href='?src=\ref[src];remove_dest=[i]' class='linkDanger'>\[X\]</a>" : ""]</td>"
+
+		if (i % 4 == 0)
+			dat += "</tr><tr>"
+
+	dat += "</tr></table><br>Current Selection: [currTag ? destinations[currTag] : "None"].<hr><br>"
+
+	if(mode)
+		dat += "<a href='?src=\ref[src];new_dest=1'>Add destination</a>"
+
+	var/datum/browser/popup = new(user, "destTagger", name, 380, 350, src)
+	popup.add_stylesheet("shared", 'nano/css/shared.css')
+	popup.set_content(dat)
+	popup.open()
+
+/obj/machinery/wrapping_machine/Topic(href, href_list)
+	. = ..()
+	if(.)
+		return
+
+	add_fingerprint(usr)
+
+	if(href_list["nextTag"])
+		currTag = clamp(text2num(href_list["nextTag"]), 0, destinations.len)
+		interact(usr)
+		return 1
+
+	if(href_list["remove_dest"] && mode)
+		var/idx = clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
+		if(currTag == destinations[idx])
+			currTag = 0 // In case the index was at the end of the list
+		destinations -= destinations[idx]
+		interact(usr)
+		return 1
+
+	if(href_list["new_dest"] && mode)
+		var/newtag = uppertext(copytext(sanitize(input(usr, "Destination ID?","Add Destination") as text), 1, MAX_NAME_LEN))
+		destinations |= newtag
+		interact(usr)
+		return 1
