@@ -1,41 +1,3 @@
-//Cargo
-/datum/job/qm
-	title = "Quartermaster"
-	faction = "Station"
-	total_positions = 1
-	spawn_positions = 1
-	supervisors = "the head of personnel"
-	wage_payout = 65
-	selection_color = "#CC9D5F"
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
-	outfit_datum = /datum/outfit/qm
-
-/datum/job/cargo_tech
-	title = "Cargo Technician"
-	faction = "Station"
-	total_positions = 2
-	spawn_positions = 2
-	supervisors = "the quartermaster and the head of personnel"
-	wage_payout = 20
-	selection_color = "#CEA773"
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
-	alt_titles = list("Mailman")
-	outfit_datum = /datum/outfit/cargo_tech
-
-/datum/job/mining
-	title = "Shaft Miner"
-	faction = "Station"
-	total_positions = 3
-	spawn_positions = 3
-	supervisors = "the quartermaster and the head of personnel"
-	wage_payout = 30
-	selection_color = "#CEA773"
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
-	outfit_datum = /datum/outfit/mining
-
 //Food
 /datum/job/bartender
 	title = "Bartender"
@@ -74,6 +36,44 @@
 	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	alt_titles = list("Hydroponicist", "Beekeeper", "Gardener")
 	outfit_datum = /datum/outfit/hydro
+
+//Cargo
+/datum/job/qm
+	title = "Quartermaster"
+	faction = "Station"
+	total_positions = 1
+	spawn_positions = 1
+	supervisors = "the head of personnel"
+	wage_payout = 65
+	selection_color = "#E9D9BC"
+	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
+	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
+	outfit_datum = /datum/outfit/qm
+
+/datum/job/cargo_tech
+	title = "Cargo Technician"
+	faction = "Station"
+	total_positions = 2
+	spawn_positions = 2
+	supervisors = "the quartermaster and the head of personnel"
+	wage_payout = 20
+	selection_color = "#F9EAD5"
+	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
+	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
+	alt_titles = list("Mailman")
+	outfit_datum = /datum/outfit/cargo_tech
+
+/datum/job/mining
+	title = "Shaft Miner"
+	faction = "Station"
+	total_positions = 3
+	spawn_positions = 3
+	supervisors = "the quartermaster and the head of personnel"
+	wage_payout = 30
+	selection_color = "#F9EAD5"
+	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
+	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
+	outfit_datum = /datum/outfit/mining
 
 /datum/job/clown
 	title = "Clown"
