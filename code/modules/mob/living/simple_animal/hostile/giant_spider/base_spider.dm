@@ -43,7 +43,6 @@
 	wander = 1
 	ranged = 0
 	//minimum_distance = 1
-	status_flags = CANPUSH
 	size = SIZE_SMALL //dog-sized spiders are still big!
 
 	var/icon_aggro = null // for swapping to when we get aggressive
