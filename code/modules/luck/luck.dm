@@ -127,18 +127,9 @@
 	//The coordinates of P are (50 - ourluck, 50 + ourluck):
 	var/P_i = 50 - ourluck
 	var/P_o = 50 + ourluck
-	message_admins("P_i: [P_i]")
-	message_admins("P_o: [P_o]")
 	if(P_o == 100 || P_o == 0)
 		return P_o
 	//The polynomial running though (0, 0), P, and (100, 100) is:
-	message_admins("term 1: [(-1 * P_o * (baseprob ** 2) / (100 * (100 - P_i)))]")
-	message_admins("term 2: [(P_o * (baseprob ** 2) / (100 * P_i))]")
-	message_admins("term 3: [(P_i * P_o * baseprob / (100 * (100 - P_i)))]")
-	message_admins("term 4: [(P_o * baseprob / P_i)]")
-	message_admins("term 5: [((baseprob ** 2) / (100 - P_i))]")
-	message_admins("term 6: [(P_i * baseprob / (100 - P_i))]")
-	message_admins("term 7: [(P_o * baseprob / 100)]")
 	var/newprob = (-1 * P_o * (baseprob ** 2) / (100 * (100 - P_i))) - (P_o * (baseprob ** 2) / (100 * P_i)) + (P_i * P_o * baseprob / (100 * (100 - P_i))) + (P_o * baseprob / P_i) + ((baseprob ** 2) / (100 - P_i)) - (P_i * baseprob / (100 - P_i)) + (P_o * baseprob / 100)
 	//Clamp it to the range [0, 100] to avoid precision-based excursions:
 	newprob = clamp(newprob, 0, 100)

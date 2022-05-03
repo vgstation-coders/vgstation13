@@ -180,3 +180,8 @@
 /datum/blesscurse/saltspiller
 	blesscurse_name = "salt-spiller curse"
 	blesscurse_strength = -50
+
+//Curse when a mime breaks their vow of silence.
+/datum/blesscurse/mimevowbreak
+	blesscurse_name = "vow-of-silence-breaker curse"
+	blesscurse_strength = -250
