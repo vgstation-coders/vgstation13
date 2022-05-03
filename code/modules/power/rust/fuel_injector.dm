@@ -89,7 +89,7 @@
 		return 1
 	return -1
 
-/obj/machinery/power/rust_fuel_injector/emag(var/mob/user)
+/obj/machinery/power/rust_fuel_injector/emag_act(var/mob/user)
 	if(!emagged)
 		locked = FALSE
 		emagged = TRUE

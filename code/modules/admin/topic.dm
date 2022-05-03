@@ -4241,7 +4241,7 @@
 				Turret.update_gun()
 				var/emag = input("Emag the turret?") in list("No", "Yes")
 				if(emag=="Yes")
-					Turret.emag(usr)
+					Turret.emag_act(usr)
 			if("virusdish")
 				virus2_make_custom(usr.client,null)
 				feedback_inc("admin_secrets_fun_used",1)

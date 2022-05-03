@@ -309,7 +309,7 @@ var/list/inserted_datadisk_cache = list()
 		attack_hand(user)
 
 
-/obj/machinery/disk_duplicator/emag(var/mob/user)
+/obj/machinery/disk_duplicator/emag_act(var/mob/user)
 	if(!emagged)
 		emagged = TRUE
 		playsound(src, pick(spark_sound), 75, 1)

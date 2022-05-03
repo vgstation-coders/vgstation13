@@ -43,7 +43,7 @@
 /obj/machinery/door_control/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/door_control/emag(mob/user)
+/obj/machinery/door_control/emag_act(mob/user)
 	req_access = list()
 	req_one_access = list()
 	playsound(src, "sparks", 100, 1)

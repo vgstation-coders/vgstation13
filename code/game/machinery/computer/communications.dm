@@ -502,7 +502,7 @@ var/list/shuttle_log = list()
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
 
-/obj/machinery/computer/communications/emag(mob/user as mob)
+/obj/machinery/computer/communications/emag_act(mob/user as mob)
 	if(!emagged)
 		emagged = 1
 		if(user)

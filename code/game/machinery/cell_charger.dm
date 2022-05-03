@@ -97,7 +97,7 @@
 				chargelevel = -1
 		updateicon()
 
-/obj/machinery/cell_charger/emag(mob/user)
+/obj/machinery/cell_charger/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1 //Congratulations, you've done it
 		user.visible_message("<span class='warning'>[user] swipes a card into \the [src]'s charging port.</span>", \

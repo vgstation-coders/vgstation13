@@ -130,7 +130,7 @@ var/global/list/floorbot_targets=list()
 	else
 		. = ..()
 
-/obj/machinery/bot/floorbot/Emag(mob/user as mob)
+/obj/machinery/bot/floorbot/emag_act(mob/user as mob)
 	..()
 	if(open && !locked)
 		if(user)

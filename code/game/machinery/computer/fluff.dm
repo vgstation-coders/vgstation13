@@ -72,7 +72,7 @@
 
 	src.updateUsrDialog()
 
-/obj/machinery/computer/fluff/emag(mob/user)
+/obj/machinery/computer/fluff/emag_act(mob/user)
 	if(user)
 		to_chat(user, "<span class='notice'>You hold the cryptographic sequencer up to the ID scanner. Nothing happens.</span>")
 

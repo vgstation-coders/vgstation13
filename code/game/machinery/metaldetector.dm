@@ -243,7 +243,7 @@
 		flash()
 	..(severity)
 
-/obj/machinery/detector/emag(mob/user)
+/obj/machinery/detector/emag_act(mob/user)
 	..()
 	emagged = TRUE
 

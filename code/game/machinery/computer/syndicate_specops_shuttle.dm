@@ -184,7 +184,7 @@ var/syndicate_elite_shuttle_timeleft = 0
 /obj/machinery/computer/syndicate_elite_shuttle/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/computer/syndicate_elite_shuttle/emag(mob/user as mob)
+/obj/machinery/computer/syndicate_elite_shuttle/emag_act(mob/user as mob)
 	if(user)
 		to_chat(user, "<span class='notice'>The electronic systems in this console are far too advanced for your primitive hacking peripherals.</span>")
 

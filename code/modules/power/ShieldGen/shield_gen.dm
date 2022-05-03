@@ -83,7 +83,7 @@
 		to_chat(user, "\The [src]'s controls are now [locked ? "locked" : "unlocked"].")
 	nanomanager.update_uis(src)
 
-/obj/machinery/shield_gen/emag(var/mob/user)
+/obj/machinery/shield_gen/emag_act(var/mob/user)
 	if(prob(75))
 		toggle_lock(user)
 		spark(src, 5)
