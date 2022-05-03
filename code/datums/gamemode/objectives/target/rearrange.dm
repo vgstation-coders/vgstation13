@@ -21,8 +21,9 @@
 		if(!istype(get_area(A), destination))
 			objects_in_area.Remove(A)
 	for(var/atom/A in objects)
-		if(is_type_in_list(A.type, objects_to_locate))
-			if(istype(get_area(A), destination) && !(locate(A) in objects_in_area)) // Second, to add anything new
+		// (Have to do it this way to prevent list cache being made and including redundant subtypes, and also to check supertypes)
+		for(var/type in objects_to_locate)
+			if(istype(A,type) && istype(get_area(A), destination) && !(locate(A) in objects_in_area)) // Second, to add anything new
 				objects_in_area.Add(A)
 		if(!(locate(A) in objects_in_area)) // Third, once this is all done, check all objects we need in the area, if one isn't there, break out, we aren't done.
 			return

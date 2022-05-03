@@ -40,11 +40,13 @@ var/list/potential_locate_objects = list(/obj/item/weapon/bikehorn/rubberducky,
 
 /datum/objective/target/locate/proc/check(var/list/objects)
 	for(var/atom/A in objects)
-		if(is_type_in_list(A.type, objects_to_locate))
-			to_chat(owner.current, "<span class='notice'>[capitalize(initial(A.name))] located.</span>")
-			objects_to_locate.Remove(A.type)
-			if(objects_to_locate.len)
-				to_chat(owner.current, "<span class='notice'>Remaining items to locate: [capitalize(counted_english_list(objects_to_locate))].</span>")
-			else
-				to_chat(owner.current, "<span class='notice'>All items located!</span>")
+		// Have to do it this way to prevent list cache being made and including redundant subtypes, and also to check supertypes
+		for(var/type in objects_to_locate)
+			if(istype(A,type))
+				to_chat(owner.current, "<span class='notice'>[capitalize(initial(A.name))] located.</span>")
+				objects_to_locate.Remove(A.type)
+				if(objects_to_locate.len)
+					to_chat(owner.current, "<span class='notice'>Remaining items to locate: [capitalize(counted_english_list(objects_to_locate))].</span>")
+				else
+					to_chat(owner.current, "<span class='notice'>All items located!</span>")
 	IsFulfilled()
