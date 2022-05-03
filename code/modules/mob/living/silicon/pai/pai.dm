@@ -82,8 +82,16 @@
 	)
 
 	var/list/synthable_medical_chems = list(
+		"Bicaridine" = BICARIDINE,
+		"Kelotane" = KELOTANE,
+		"Dexalin" = DEXALIN,
+		"Iron" = IRON,
+		"Tramadol" = TRAMADOL,
+		"Alkysine" = ALKYSINE,
+		"Arithrazine" = ARITHRAZINE,
+		"Ethylredoxrazine" = ETHYLREDOXRAZINE,
 		"Spaceacilin" = SPACEACILLIN,
-		"Albuterol" = ALBUTEROL,
+		"Sleep Toxin" = STOXIN,
 	)
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)

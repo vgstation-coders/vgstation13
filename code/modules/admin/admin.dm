@@ -883,7 +883,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
+			<A href='?src=\ref[src];secretsfun=fakebooms'>Create fake explosions around the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
