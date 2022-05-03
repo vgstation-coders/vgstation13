@@ -586,7 +586,7 @@
 	desc = "Despite the name honey is not included nor recommended for use with this."
 	icon_state = "comb"
 
-/obj/item/weapon/pocket_mirror/comb/shatter()
+/obj/item/weapon/pocket_mirror/comb/shatter(mob/shatterer)
 	return
 
 /obj/item/weapon/pocket_mirror/comb/attack(mob/M, mob/user)
@@ -602,7 +602,7 @@
 	sharpness = 1
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 
-/obj/item/weapon/pocket_mirror/scissors/shatter()
+/obj/item/weapon/pocket_mirror/scissors/shatter(mob/shatterer)
 	return
 
 /obj/item/weapon/pocket_mirror/scissors/attack(atom/target, mob/user)
