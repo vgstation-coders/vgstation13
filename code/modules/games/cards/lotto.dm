@@ -23,7 +23,7 @@
 		var/thisprob = problist[prize]
 		//Take luck into account.
 		if(user)
-			thisprob = user.lucky_probability(thisprob, luckfactor = 1/500)")
+			thisprob = user.lucky_probability(thisprob, luckfactor = 1/500)
 		if(prob(thisprob))
 			profit = prizelist[prize]*input_prize_multiplier*tuning_value
 			return profit
