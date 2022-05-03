@@ -35,7 +35,7 @@
 	if(!broadcasting)
 		return
 	if(usr.client && usr.client.prefs.headset_sound)
-		playsound(usr, 'sound/effects/radio_chatter.ogg', 100, 1, vary = 0)
+		playsound(usr, 'sound/effects/radio_beep.ogg', 40, 1, vary = 0)
 	return ..()
 
 /obj/item/device/radio/headset/receive_range(freq, level)
