@@ -144,7 +144,7 @@
 		if(!head || head.status & ORGAN_DESTROYED)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe cranial damage detected.</span>")
 			return
-		if((M_HUSK in target.mutations) && (M_NOCLONE in target.mutations))
+		if(M_HUSK in target.mutations)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
 			return
 		if(!target.has_brain())
@@ -177,24 +177,19 @@
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")
-		if(target.health > config.health_threshold_dead)
-			target.timeofdeath = 0
-			target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
-
-			target.resurrect()
-
-			target.tod = null
-			target.stat = UNCONSCIOUS
-			target.regenerate_icons()
-			target.update_canmove()
-			target.flash_eyes(visual = 1)
-			target.apply_effect(10, EYE_BLUR) //I'll still put this back in to avoid dumb "pounce back up" behavior
-			target.apply_effect(10, PARALYZE)
-			target.update_canmove()
-			has_been_shade.Remove(target.mind)
-			to_chat(target, "<span class='notice'>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane.</span>")
-		else
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
+		target.timeofdeath = 0
+		target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
+		target.resurrect()
+		target.tod = null
+		target.stat = UNCONSCIOUS
+		target.regenerate_icons()
+		target.update_canmove()
+		target.flash_eyes(visual = 1)
+		target.apply_effect(10, EYE_BLUR) //I'll still put this back in to avoid dumb "pounce back up" behavior
+		target.apply_effect(10, PARALYZE)
+		target.update_canmove()
+		has_been_shade.Remove(target.mind)
+		to_chat(target, "<span class='notice'>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane.</span>")
 		return
 
 /obj/item/weapon/melee/defibrillator/restock()
