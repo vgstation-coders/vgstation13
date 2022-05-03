@@ -1,6 +1,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
 	name = "clover"
 	desc = "A cheerful little herb with three leaves."
+	icon_state = "clover"
 	potency = 50
 	filling_color = "#247E0A"
 	plantname = "clover"
@@ -10,42 +11,49 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
 	name = "zero-leaf clover"
 	desc = "Bad luck and extreme misfortune will infest your pathetic soul for all eternity."
+	icon_state = "clover0"
 	luckiness = -10000
 	leaves = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
 	name = "one-leaf clover"
 	desc = "This cursed clover is said to bring nothing but misery to the one who bears it."
+	icon_state = "clove1"
 	luckiness = -500
 	leaves = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
 	name = "two-leaf clover"
 	desc = "This clover only has two leaves. How unfortunate!"
+	icon_state = "clover2"
 	luckiness = -25
 	leaves = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
 	name = "four-leaf clover"
 	desc = "This clover has four leaves. Lucky you!"
+	icon_state = "clover4"
 	luckiness = 25
 	leaves = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf
 	name = "five-leaf clover"
 	desc = "A marvel of probabilistics, this exquisitely rare clover is said to bring fantastic luck."
+	icon_state = "clover5"
 	luckiness = 100
 	leaves = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf
 	name = "six-leaf clover"
 	desc = "A closely-guarded secret of the leperchauns."
+	icon_state = "clover6"
 	luckiness = 500
 	leaves = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
 	name = "seven-leaf clover"
 	desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
+	icon_state = "clover7"
 	luckiness = 10000
 	leaves = 7
 
@@ -163,11 +171,12 @@
 	name = "packet of seven-leaf clover seeds"
 	seed_type = "clover7"
 
+//Curse when someone breaks a mirror.
 /datum/blesscurse/brokenmirror
 	blesscurse_name = "mirror-breaker curse"
 	blesscurse_strength = -50
 
-//For when someone spills salt. Requires accidental reagent spilling to be re-implmented.
+//Curse when someone spills salt. Requires accidental reagent spilling to be re-implmented.
 /datum/blesscurse/saltspiller
 	blesscurse_name = "salt-spiller curse"
 	blesscurse_strength = -50

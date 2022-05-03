@@ -112,26 +112,53 @@
 	var/blesscurse_name //string; name of the blessing or curse
 	var/blesscurse_strength //number; how much luck (+) or unluck (-) the blessing or curse confers.
 
-
-
+//Modify a probability in the range [0,100] based on luck.
+/mob/proc/lucky_probability(var/baseprob = 50, var/luckfactor = 1)
+	//Get our luck and scale it by the luckfactor:
+	var/ourluck = luck() * luckfactor
+	if(ourluck == 0 || baseprob == 0 || baseprob == 100)
+		return baseprob
+	//Asymptotically clamp it to between -50 and 50 using hyperbolic tangent:
+	ourluck = 50 * clamp(((E ** ourluck) - (E ** (-1* ourluck))) / ((E ** ourluck) + (E ** (-1* ourluck))), -1, 1)
+	//Skew the probabiliity by "pulling" the unbiased (50 input probability, 50 output probability) point towards either (0, 100) - maximally lucky, or (100, 0) - maximally unlucky.
+	//This is done by shifting a point P from (50, 50) a distance of (sqrt(2) * ourluck) along the line running through (0, 100) and (100, 0), and then fitting a polynomial to (0, 0), P, and (100,100).
+	//The coordinates of P are (50 - ourluck, 50 + ourluck):
+	var/P_i = 50 - ourluck
+	var/P_o = 50 + ourluck
+	message_admins("P_i: [P_i]")
+	message_admins("P_o: [P_o]")
+	if(P_o == 100 || P_o == 0)
+		return P_o
+	//The polynomial running though (0, 0), P, and (100, 100) is:
+	message_admins("term 1: [(-1 * P_o * (baseprob ** 2) / (100 * (100 - P_i)))]")
+	message_admins("term 2: [(P_o * (baseprob ** 2) / (100 * P_i))]")
+	message_admins("term 3: [(P_i * P_o * baseprob / (100 * (100 - P_i)))]")
+	message_admins("term 4: [(P_o * baseprob / P_i)]")
+	message_admins("term 5: [((baseprob ** 2) / (100 - P_i))]")
+	message_admins("term 6: [(P_i * baseprob / (100 - P_i))]")
+	message_admins("term 7: [(P_o * baseprob / 100)]")
+	var/newprob = (-1 * P_o * (baseprob ** 2) / (100 * (100 - P_i))) - (P_o * (baseprob ** 2) / (100 * P_i)) + (P_i * P_o * baseprob / (100 * (100 - P_i))) + (P_o * baseprob / P_i) + ((baseprob ** 2) / (100 - P_i)) - (P_i * baseprob / (100 - P_i)) + (P_o * baseprob / 100)
+	//Clamp it to the range [0, 100] to avoid precision-based excursions:
+	newprob = clamp(newprob, 0, 100)
+	return newprob
 
 //todo:
-	//slowly reduce temporary (un)luck on life tick
+
+	//[TEST] slowly reduce temporary (un)luck on life tick
 	//clovers, hold or eat
-	//luck potion?
-	//broke a mirror
-	//lucky items surgically implanted or inside the body?
-	//test recursion and in general
-	//pocket mirrors?
+	//[DONE] broke a mirror
+	//[DONE] lucky items surgically implanted or inside the body?
+	//[DONE] test recursion and in general
+	//[DONE] pocket mirrors?
 
-	//todo: clover seeds, sprites, test
+	//clover seeds, sprites, test
 	//only one of each blesscurse type active at once?
-
-	//proof of concept:
+	//edge cases breaking mirrors with explosives or otherwise
+	//finish clover mechanics and sprites
 
 
 	//Curses:
-	//breaking a mirror
+	//[DONE] breaking a mirror
 	//spilling salt from a container
 
 	//Lucky items:
@@ -141,26 +168,16 @@
 
 	//Luck affects:
 	//surgery sucess/failures
-	//gambling (slots and scratch cards)
+	//[DONE] scratch cards
+	//slots
 	//tripping rate with long hair
 	//shuttle kicking
 	//breaking bones when hit
 	//randomly getting a disease chance
-	//russian roulette
+	//[DONE] russian roulette
 	//very bad luck increases midround threat?
 	//very good luck decreases midround threat?
 	//calling coin flips and die rolls.
 	//singularity attraction/repulsion?
 	//plant breeding/clover breeding?
-	//mojo substance
-
-	//fix scratchcard
-
-
-/*
-
-/datum/blesscurse/saltspiller
-	blesscurse_name = "salt-spiller curse"
-	blesscurse_strength = -50
-
-*/
+	//luck-conferring mojo reagent
