@@ -86,7 +86,7 @@ For vending packs, see vending_packs.dm*/
 #undef MENTION_DB_OFFLINE
 #undef USE_ACCOUNT_ON_ID
 
-/obj/item/weapon/paper/request_form/New(var/loc, var/list/account_information, var/datum/supply_packs/pack, var/number_of_crates, var/reason = "No destination provided.")
+/obj/item/weapon/paper/request_form/New(var/loc, var/list/account_information, var/datum/supply_packs/pack, var/number_of_crates, var/destination = "No destination provided.")
 	. = ..(loc)
 	name = "[pack.name] Requisition Form - [account_information["idname"]], [account_information["idrank"]]"
 	info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
@@ -96,7 +96,7 @@ For vending packs, see vending_packs.dm*/
 		info += "USING DEBIT AS: [account_information["authorized_name"]]<br>"
 
 	info+= {"RANK: [account_information["idrank"]]<br>
-		DESTINATION: [reason]<br>
+		DESTINATION: [destination]<br>
 		SUPPLY CRATE TYPE: [pack.name]<br>
 		NUMBER OF CRATES: [number_of_crates]<br>
 		ACCESS RESTRICTION: [get_access_desc(pack.access)]<br>
@@ -412,13 +412,13 @@ For vending packs, see vending_packs.dm*/
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
-		var/reason = stripped_input(usr,"Where would you like this item sent/who would you like cargo to call when it arrives?","Destination:","",REASON_LEN)
+		var/destination = stripped_input(usr,"Where would you like this item sent/who would you like cargo to call when it arrives?","Destination:","",DESTINATION_LEN)
 		if(world.time > timeout)
 			return
-		if(!reason)
+		if(!destination)
 			return
 
-		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, reason)
+		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, destination)
 		reqtime = (world.time + 5) % 1e5
 		//make our supply_order datum
 		for(var/i = 1; i <= crates; i++)
@@ -429,7 +429,7 @@ For vending packs, see vending_packs.dm*/
 			O.orderedby = idname
 			O.authorized_name = current_acct["authorized_name"]
 			O.account = account
-			O.comment = reason
+			O.comment = destination
 
 			SSsupply_shuttle.requestlist += O
 
@@ -650,13 +650,13 @@ For vending packs, see vending_packs.dm*/
 			var/max_crates = round((account.money - total_money_req) / P.cost)
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
-		var/reason = stripped_input(usr,"Where would you like this item sent/who would you like cargo to call when it arrives?","Destination:","",REASON_LEN)
+		var/destination = stripped_input(usr,"Where would you like this item sent/who would you like cargo to call when it arrives?","Destination:","",DESTINATION_LEN)
 		if(world.time > timeout)
 			return
-		if(!reason)
+		if(!destination)
 			return
 
-		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, reason)
+		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, destination)
 		reqtime = (world.time + 5) % 1e5
 
 		//make our supply_order datum
@@ -668,7 +668,7 @@ For vending packs, see vending_packs.dm*/
 			O.orderedby = idname
 			O.authorized_name = current_acct["authorized_name"]
 			O.account = account
-			O.comment = reason
+			O.comment = destination
 			SSsupply_shuttle.requestlist += O
 			stat_collection.crates_ordered++
 

@@ -5,7 +5,7 @@
 #define SUPPLY_DOCKZ 2          //Z-level of the Dock.
 #define SUPPLY_STATIONZ 1       //Z-level of the Station.
 
-#define REASON_LEN 140 // max length for reason message, nanoui appears to not like long strings.
+#define DESTINATION_LEN 140 // max length for destination message, nanoui appears to not like long strings.
 
 #define CENTCOMM_ORDER_DELAY_MIN (20 MINUTES)
 #define CENTCOMM_ORDER_DELAY_MAX (40 MINUTES)
