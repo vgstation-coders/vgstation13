@@ -46,8 +46,9 @@
 				var/list/thisitemscontents = thisitem.contents
 				var/j = 1
 				while(j <= thisitemscontents.len)
-					if(thisitemscontents[j].contents.len)
-						thisitemscontents += thisitemscontents[j].contents
+					var/obj/item/thiscontent = thisitemscontents[j]
+					if(thiscontent.contents.len)
+						thisitemscontents += thiscontent.contents
 					j += 1
 				for(var/k in 1 to thisitemscontents.len)
 					var/obj/item/thisitemscontent = thisitemscontents[k]
@@ -64,8 +65,9 @@
 				var/list/thisitemscontents = thisitem.contents
 				var/j = 1
 				while(j <= thisitemscontents.len)
-					if(thisitemscontents[j].contents.len)
-						thisitemscontents += thisitemscontents[j].contents
+					var/obj/item/thiscontent = thisitemscontents[j]
+					if(thiscontent.contents.len)
+						thisitemscontents += thiscontent.contents
 					j += 1
 				for(var/k in 1 to thisitemscontents.len)
 					var/obj/item/thisitemscontent = thisitemscontents[k]
