@@ -79,6 +79,9 @@
 
 	var/datum/speech_filter/speech_filter
 
+	var/luckiness //How much luck or unluck the item confers while held
+	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc. See luck_defines.dm
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -1284,16 +1287,16 @@ var/global/list/image/blood_overlays = list()
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
 	var/broken = FALSE
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
-		
+
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced, TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced, TRUE)]</span>")
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
-		
+
 	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y

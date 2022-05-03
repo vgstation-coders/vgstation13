@@ -421,6 +421,17 @@
 		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
 			crit_rampup -= time
 
+	if(base_luck)
+		if(base_luck.temporary_luckiness < 0)
+			base_luck.temporary_luckiness += LUCKINESS_DRAINRATE
+			if(base_luck.temporary_luckiness > 0)
+				base_luck.temporary_luckiness = 0
+		else if(base_luck.temporary_luckiness > 0)
+			base_luck.temporary_luckiness -= LUCKINESS_DRAINRATE
+			if(base_luck.temporary_luckiness < 0)
+				base_luck.temporary_luckiness = 0
+
+
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
 	if(N.chained)
 		if(narsimage)
