@@ -102,7 +102,7 @@
 
 // Checks pressure here vs. around us. Intended to make sure the spider doesn't breach to space while comfortable, or breach into a high pressure area
 /mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/curturf)
-	if(usr.client)
+	if(client)
 		return
 	if(!istype(curturf))
 		return 0
