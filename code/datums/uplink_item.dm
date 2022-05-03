@@ -547,6 +547,8 @@ var/list/uplink_items = list()
 	desc = "A powerful military issue alien laser weapon. It has a primary firing mode capable of incapacitating most unarmored targets in three shots, and a secondary mode capable of instantaneously inducing nausea and vomiting."
 	item = /obj/item/weapon/gun/energy/heavydisintegrator
 	cost = 16
+	discounted_cost = 12
+	jobs_with_discount = list("Grey")
 
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
