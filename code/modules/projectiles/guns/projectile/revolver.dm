@@ -134,7 +134,7 @@
 /obj/item/weapon/gun/projectile/russian/proc/Spin(mob/spinner)
 	loaded = shuffle(loaded)
 
-	if(spinner) //Take luck into account
+	if(spinner) //Take luck into account.
 		var/spinnerluck = spinner.luck()
 		var/rollpower = rand(25,75)
 		var/rerolls = min(round(abs(spinnerluck),rollpower)/rollpower,100)

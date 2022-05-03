@@ -8,7 +8,6 @@
 #define LUCKINESS_WHEN_GENERAL (LUCKINESS_WHEN_HELD | LUCKINESS_WHEN_WORN) //The item confers (un)luck when directly held in the hand or worn in an inventory slot.
 #define LUCKINESS_WHEN_GENERAL_RECURSIVE (LUCKINESS_WHEN_HELD_RECURSIVE | LUCKINESS_WHEN_WORN_RECURSIVE) //The item confers (un)luck when held in the hand or worn directly, or inside something else being held in the hand or worn.
 
-
 //Luckiness and unluckiness
 
 /mob/proc/luck()
@@ -86,23 +85,6 @@
 			var/datum/blesscurse/this_blesscurse = blesscurse[i]
 			base_luck += this_blesscurse.blesscurse_strength
 	return base_luck
-/*
-
-/datum/luckiness/proc/add_blesscurse(var/blesscurse/ourblesscurse)
-	blesscurse += ourblesscurse
-
-/datum/luckiness/proc/remove_blesscurse(var/blesscurse/ourblesscurse)
-	blesscurse -= ourblesscurse
-
-/datum/luckiness/proc/has_blesscurse(var/blesscurse/ourblesscurse)
-	if(blesscurse.len)
-		for(var/i in 1 to blesscurse.len)
-			if(istype(blesscurse[i], ourblesscurse))
-				return TRUE
-	else
-		return FALSE
-
-*/
 
 /mob/proc/add_blesscurse(var/datum/blesscurse/ourblesscurse)
 	if(!base_luck)
@@ -171,6 +153,9 @@
 	//singularity attraction/repulsion?
 	//plant breeding/clover breeding?
 	//mojo substance
+
+	//fix scratchcard
+
 
 /*
 
