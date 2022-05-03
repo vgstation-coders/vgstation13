@@ -50,6 +50,7 @@
 	var/poison_per_bite = 5
 	var/poison_type = TOXIN
 	var/delimbable_icon = TRUE
+	var/health_regen_rate = 2
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 
 	//Spider aren't affected by atmos.
@@ -157,6 +158,8 @@
 /mob/living/simple_animal/hostile/giant_spider/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
+	if(health > 0)
+		health = min(maxHealth, health_regen_rate + health)
 	. = ..()
 
 	regular_hud_updates()
