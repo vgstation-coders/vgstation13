@@ -1694,6 +1694,7 @@
 #include "code\modules\lighting\~lighting_undefs.dm"
 #include "code\modules\liquid\splash_simulation.dm"
 #include "code\modules\luck\luck.dm"
+#include "code\modules\luck\luck_blesscurse.dm"
 #include "code\modules\luck\luck_test.dm"
 #include "code\modules\maps\map_objects.dm"
 #include "code\modules\maps\movers.dm"

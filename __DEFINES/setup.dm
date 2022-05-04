@@ -1807,8 +1807,9 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define SPORTINESS_SUGAR 1.2
 #define SPORTINESS_SPORTS_DRINK 5
 
-//Luckiness-related defines
+//Luck-related defines
 
+//Flags for item luckiness:
 #define LUCKINESS_WHEN_HELD (1<<0) //The item confers (un)luck when held in the hand. Also includes surgically implanted items.
 #define LUCKINESS_WHEN_WORN (1<<1)	//The item confers (un)luck when worn in an inventory slot other than the hands.
 #define LUCKINESS_WHEN_HELD_RECURSIVE (1<<2) //The item confers (un)luck when held in the hand directly or inside something else being held in the hand.

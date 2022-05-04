@@ -1,78 +1,160 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
-	name = "clover"
-	desc = "A cheerful little herb with three leaves."
-	icon_state = "clover"
 	potency = 50
 	filling_color = "#247E0A"
-	plantname = "clover"
 	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
 	var/leaves = 3
+	plantname = "clover3"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
-	name = "zero-leaf clover"
-	desc = "Bad luck and extreme misfortune will infest your pathetic soul for all eternity."
-	icon_state = "clover0"
-	luckiness = -10000
 	leaves = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
-	name = "one-leaf clover"
-	desc = "This cursed clover is said to bring nothing but misery to the one who bears it."
-	icon_state = "clover1"
-	luckiness = -500
 	leaves = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
-	name = "two-leaf clover"
-	desc = "This clover only has two leaves. How unfortunate!"
-	icon_state = "clover2"
-	luckiness = -25
 	leaves = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
-	name = "four-leaf clover"
-	desc = "This clover has four leaves. Lucky you!"
-	icon_state = "clover4"
-	luckiness = 25
 	leaves = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf
-	name = "five-leaf clover"
-	desc = "A marvel of probabilistics, this exquisitely rare clover is said to bring fantastic luck."
-	icon_state = "clover5"
-	luckiness = 100
 	leaves = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf
-	name = "six-leaf clover"
-	desc = "A closely-guarded secret of the leperchauns."
-	icon_state = "clover6"
-	luckiness = 500
 	leaves = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
-	name = "seven-leaf clover"
-	desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
-	icon_state = "clover7"
-	luckiness = 10000
 	leaves = 7
 
-/datum/seed/clover
-	name = "clover"
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/New(atom/loc, custom_plantname)
+	. = ..()
+//	if(!isnull(leaves))
+//		seed.leaves = leaves
+	update_leaves()
+/*
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/initialize()
+	. = ..()
+	leaves = seed.leaves
+*/
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/update_leaves()
+	switch(leaves)
+		if(3)
+			name = "clover"
+			desc = "A cheerful little herb with three leaves."
+		if(0)
+			name = "zero-leaf clover"
+			desc = "Bad luck and extreme misfortune will infest your pathetic soul for all eternity."
+			luckiness = -10000
+		if(1)
+			name = "one-leaf clover"
+			desc = "This cursed clover is said to bring nothing but misery to the one who bears it."
+			luckiness = -500
+		if(2)
+			name = "two-leaf clover"
+			desc = "This clover only has two leaves. How unfortunate!"
+			luckiness = -25
+		if(4)
+			name = "four-leaf clover"
+			desc = "This clover has four leaves. Lucky you!"
+			luckiness = 25
+		if(5)
+			name = "five-leaf clover"
+			desc = "A marvel of probabilistics, this exquisitely rare clover is said to bring fantastic luck."
+			luckiness = 100
+		if(6)
+			name = "six-leaf clover"
+			desc = "A closely-guarded secret of the leperchauns."
+			luckiness = 1000
+		if(7)
+			name = "seven-leaf clover"
+			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
+			luckiness = 10000
+//	icon = 'icons/obj/hydroponics/clover.dmi'
+	plantname = "clover[leaves]"
+	icon_state = "clover[leaves]"
+
+/datum/seed/clover/
+	name = "clover3"
 	seed_name = "clover"
 	display_name = "clover"
 	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
+	plant_icon_state = "clover3"
+
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
 
-	plant_icon_state = "clover"
-
-
-	mutants = list("clover2","clover4")
+//	mutants = list("clover2","clover4")
 	harvest_repeat = 1
-//	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
+
 	yield = 6
 
+	leaves = 3
+
+/datum/seed/clover/New()
+	. = ..()
+	leaves = get_next_leaves()
+
+/datum/seed/clover/proc/get_next_leaves()
+	if(isnull(leaves))
+		leaves = 3
+	if(prob(50+rand(-5,5)))
+		return 3
+	if(prob(99+rand(-1,1)))
+		return leaves
+	var/ls = 1
+	while(ls <= 7)
+		if(!prob(95+rand(-5,5)))
+			ls += 1
+	return pick((leaves - ls < 0) ? leaves : leaves - ls, (leaves + ls > 7) ? leaves : leaves + ls)
+
+
+/datum/seed/clover/zeroleaf
+	name = "clover0"
+	leaves = 0
+
+/datum/seed/clover/oneleaf
+	name = "clover1"
+	leaves = 1
+
+/datum/seed/clover/twoleaf
+	name = "clover2"
+	leaves = 2
+
 /*
+/datum/seed/clover/threeleaf
+	name = "clover3"
+	leaves = 3
+*/
+
+/datum/seed/clover/fourleaf
+	name = "clover4"
+	leaves = 4
+
+/datum/seed/clover/fiveleaf
+	name = "clover5"
+	leaves = 5
+
+/datum/seed/clover/sixleaf
+	name = "clover6"
+	leaves = 6
+
+/datum/seed/clover/sevenleaf
+	name = "clover7"
+	leaves = 7
+
+/obj/item/seeds/cloverseed
+	name = "packet of clover seeds"
+	seed_type = "clover3"
+	vending_cat = "weeds"
+
+/obj/item/seeds/cloverseed/New()
+	. = ..()
+	var/datum/seed/clover/S = seed
+	seed_type = "clover[S.get_next_leaves()]"
+
+
+/*
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
 	lifespan = 60
 	maturation = 6
 	production = 6
@@ -82,6 +164,52 @@
 	large = 0
 */
 
+/*
+/datum/seed/clover/zeroleaf
+	leaves = 0
+
+/datum/seed/clover/oneleaf
+	leaves = 1
+
+/datum/seed/clover/twoleaf
+	leaves = 2
+
+/datum/seed/clover/fourleaf
+	leaves = 4
+
+/datum/seed/clover/fiveleaf
+	leaves = 5
+
+/datum/seed/clover/sixleaf
+	leaves = 6
+
+/datum/seed/clover/sevenleaf
+	leaves = 7
+*/
+
+/*
+
+/obj/item/seeds/cloverseed/zeroleaf
+
+/obj/item/seeds/cloverseed/oneleaf
+
+/obj/item/seeds/cloverseed/twoleaf
+
+/obj/item/seeds/cloverseed/fourleaf
+
+/obj/item/seeds/cloverseed/fiveleaf
+
+/obj/item/seeds/cloverseed/sixleaf
+
+/obj/item/seeds/cloverseed/sevenleaf
+
+/obj/item/seeds/cloverseed/New()
+	. = ..()
+	seed.leaves = seedleaves
+
+*/
+
+/*
 /datum/seed/clover/zeroleaf
 	name = "clover0"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf)
@@ -137,11 +265,9 @@
 	plant_icon_state = "clover7"
 	seed_name = "seven-leaf clover"
 	display_name = "seven-leaf clover"
+*/
 
-/obj/item/seeds/cloverseed
-	name = "packet of clover seeds"
-	seed_type = "clover"
-	vending_cat = "weeds"
+/*
 
 /obj/item/seeds/cloverseed/zeroleaf
 	name = "packet of zero-leaf clover seeds"
@@ -170,18 +296,5 @@
 /obj/item/seeds/cloverseed/sevenleaf
 	name = "packet of seven-leaf clover seeds"
 	seed_type = "clover7"
+*/
 
-//Curse when someone breaks a mirror.
-/datum/blesscurse/brokenmirror
-	blesscurse_name = "mirror-breaker curse"
-	blesscurse_strength = -50
-
-//Curse when someone spills salt. Requires accidental reagent-spilling to be re-implmented.
-/datum/blesscurse/saltspiller
-	blesscurse_name = "salt-spiller curse"
-	blesscurse_strength = -50
-
-//Curse when a mime breaks their vow of silence.
-/datum/blesscurse/mimevowbreak
-	blesscurse_name = "vow-of-silence-breaker curse"
-	blesscurse_strength = -250

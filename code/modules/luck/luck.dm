@@ -105,13 +105,16 @@
 	var/blesscurse_strength //number; how much luck (+) or unluck (-) the blessing or curse confers.
 
 //Modify a probability in the range [0,100] based on luck.
-/mob/proc/lucky_probability(var/baseprob = 50, var/luckfactor = 1)
+	//baseprob: The base probability to be modified
+	//luckfactor: Related to the percentage the outcome probability shifts for every 1 luck. With a luckfactor of 1, 1 luck corresponds to a shift from 50% to around 51%.
+	//maxskew: The maximum influence luck can have on the outcome probability. At maxskew 0, there is no effect. At maxskew 50, the effect is maximal.
+/mob/proc/lucky_probability(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50)
 	//Get our luck and scale it by the luckfactor:
 	var/ourluck = luck() * luckfactor
 	if(ourluck == 0 || baseprob == 0 || baseprob == 100)
 		return baseprob
-	//Asymptotically clamp it to between -50 and 50 using hyperbolic tangent:
-	ourluck = 50 * clamp(((E ** ourluck) - (E ** (-1* ourluck))) / ((E ** ourluck) + (E ** (-1* ourluck))), -1, 1)
+	//Asymptotically clamp it to between -maxskew and maxskew using hyperbolic tangent:
+	ourluck = clamp(maxskew, 0, 50) * clamp(((E ** ourluck) - (E ** (-1* ourluck))) / ((E ** ourluck) + (E ** (-1* ourluck))), -1, 1)
 	//Skew the probability by "pulling" the unbiased (50 input probability, 50 output probability) point towards either (0, 100) - maximally lucky, or (100, 0) - maximally unlucky.
 	//This is done by shifting a point P from (50, 50) a distance of (sqrt(2) * ourluck) along the line running through (0, 100) and (100, 0), and then fitting a polynomial to (0, 0), P, and (100,100).
 	//The coordinates of P are (50 - ourluck, 50 + ourluck):
@@ -129,16 +132,13 @@
 
 	//[TEST] slowly reduce temporary (un)luck on life tick
 	//clovers, hold or eat
-	//[DONE] broke a mirror
-	//[DONE] lucky items surgically implanted or inside the body?
-	//[DONE] test recursion and in general
-	//[DONE] pocket mirrors?
 
 	//clover seeds, sprites, test
 	//only one of each blesscurse type active at once?
 	//edge cases breaking mirrors with explosives or otherwise
+	//standard #define luckfactors eg. with 1000 luck 50% odds goes to 55%, 75%, 90%, 99%, etc.
 	//finish clover mechanics and sprites
-
+	//cloverleaves: var/mutfactor = 0
 
 	//Curses:
 	//[DONE] breaking a mirror
@@ -164,3 +164,11 @@
 	//singularity attraction/repulsion?
 	//plant breeding/clover breeding?
 	//luck-conferring mojo reagent
+
+	//clover to seed leaves transfer
+	//seed to clover leaves transfer
+
+	//add clover seeds to maps
+	//remove debug
+
+	//no overshooting the 0 and 7 leaves?
