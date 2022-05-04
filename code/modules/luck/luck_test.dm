@@ -18,7 +18,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
 	name = "one-leaf clover"
 	desc = "This cursed clover is said to bring nothing but misery to the one who bears it."
-	icon_state = "clove1"
+	icon_state = "clover1"
 	luckiness = -500
 	leaves = 1
 
@@ -176,7 +176,7 @@
 	blesscurse_name = "mirror-breaker curse"
 	blesscurse_strength = -50
 
-//Curse when someone spills salt. Requires accidental reagent spilling to be re-implmented.
+//Curse when someone spills salt. Requires accidental reagent-spilling to be re-implmented.
 /datum/blesscurse/saltspiller
 	blesscurse_name = "salt-spiller curse"
 	blesscurse_strength = -50
