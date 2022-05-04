@@ -1115,7 +1115,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/command/lawgivermk2
 	name = "Lawgiver Demolition Kit"
 	desc = "A container that comes with a Lawgiver modification kit, converting it into a Demolition variant Lawgiver. Also comes with two spare demolition magazines."
-	item = /obj/item/weapon/storage/box/survival/demolition
+	item = /obj/item/weapon/storage/box/demolition
 	cost = 12
 	jobs_exclusive = list("Head of Security")
 
