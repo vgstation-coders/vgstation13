@@ -14,6 +14,7 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
+
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
 
@@ -1078,3 +1079,78 @@ var/list/special_fruits = list()
 	filling_color = "#DFE88B"
 	plantname = "mustardplant"
 	fragrance = INCENSE_MUSTARDPLANT
+
+//Clovers
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover
+	filling_color = "#247E0A"
+	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
+	var/leaves = 3
+	plantname = "clover3"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
+	leaves = 0
+	plantname = "clover0"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
+	leaves = 1
+	plantname = "clover1"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
+	leaves = 2
+	plantname = "clover2"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
+	leaves = 4
+	plantname = "clover4"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf
+	leaves = 5
+	plantname = "clover5"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf
+	leaves = 6
+	plantname = "clover6"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
+	leaves = 7
+	plantname = "clover7"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/New(atom/loc, custom_plantname)
+	. = ..()
+	update_leaves()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/update_leaves()
+	switch(leaves)
+		if(3)
+			name = "clover"
+			desc = "A cheerful little herb with three leaves."
+		if(0)
+			name = "zero-leaf clover"
+			desc = "Bad luck and extreme misfortune will infest your pathetic soul for all eternity."
+			luckiness = -10000
+		if(1)
+			name = "one-leaf clover"
+			desc = "This cursed clover is said to bring nothing but misery to the one who bears it."
+			luckiness = -500
+		if(2)
+			name = "two-leaf clover"
+			desc = "This clover only has two leaves. How unfortunate!"
+			luckiness = -25
+		if(4)
+			name = "four-leaf clover"
+			desc = "This clover has four leaves. Lucky you!"
+			luckiness = 25
+		if(5)
+			name = "five-leaf clover"
+			desc = "A marvel of probabilistics, this exquisitely rare clover is said to bring fantastic luck."
+			luckiness = 100
+		if(6)
+			name = "six-leaf clover"
+			desc = "A closely-guarded secret of the leperchauns."
+			luckiness = 1000
+		if(7)
+			name = "seven-leaf clover"
+			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
+			luckiness = 10000
+	plantname = "clover[leaves]"
+	icon_state = "clover[leaves]"

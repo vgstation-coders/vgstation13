@@ -130,34 +130,30 @@
 
 //todo:
 
+	//clover growing sprites and inhand sprites
+	//clover tune params/mutagen factor etc
+	//remove redundant code
+	//using clovers as an accessory?
+
 	//[TEST] slowly reduce temporary (un)luck on life tick
 	//clovers, hold or eat
 
-	//clover seeds, sprites, test
-	//only one of each blesscurse type active at once?
 	//edge cases breaking mirrors with explosives or otherwise
 	//standard #define luckfactors eg. with 1000 luck 50% odds goes to 55%, 75%, 90%, 99%, etc.
-	//finish clover mechanics and sprites
-	//cloverleaves: var/mutfactor = 0
 
 	//Curses:
-	//[DONE] breaking a mirror
 	//spilling salt from a container
 
 	//Lucky items:
-	//lucky 4 leaf clovers when held
 	//eat clover for a temporary luck boost
-	//unlucky 2 leaf clovers
 
 	//Luck affects:
 	//surgery sucess/failures
-	//[DONE] scratch cards
 	//slots
 	//tripping rate with long hair
 	//shuttle kicking
 	//breaking bones when hit
 	//randomly getting a disease chance
-	//[DONE] russian roulette
 	//very bad luck increases midround threat?
 	//very good luck decreases midround threat?
 	//calling coin flips and die rolls.
@@ -165,10 +161,4 @@
 	//plant breeding/clover breeding?
 	//luck-conferring mojo reagent
 
-	//clover to seed leaves transfer
-	//seed to clover leaves transfer
-
 	//add clover seeds to maps
-	//remove debug
-
-	//no overshooting the 0 and 7 leaves?

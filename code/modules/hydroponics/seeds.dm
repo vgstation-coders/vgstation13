@@ -102,7 +102,7 @@
 	name = "packet of cabbage seeds"
 	seed_type = "cabbage"
 	vending_cat = "vegetables"
-	
+
 /obj/item/seeds/plasmacabbageseed
 	name = "packet of plasma cabbage seeds"
 	seed_type = "plasmacabbage"
@@ -1842,3 +1842,96 @@
 	yield = 1
 	potency = 30
 	growth_stages = 3
+
+//Clovers
+/datum/seed/clover/
+	name = "clover3"
+	seed_name = "clover"
+	display_name = "clover"
+	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
+	plant_icon_state = "clover3"
+
+	products = list(
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf)
+
+	harvest_repeat = 1
+	yield = 3
+	var/leaves = 3
+
+
+//	yield = 50
+/*
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
+	lifespan = 60
+	maturation = 6
+	production = 6
+	yield = 6
+	potency = 5
+	ideal_light = 8
+	large = 0
+*/
+
+/datum/seed/clover/proc/get_next_leaves()
+	if(isnull(leaves))
+		leaves = 3
+	if(prob(50 + rand(-5,5)))
+		return 3
+	if(prob(99 + rand(-1,1)))
+		return leaves
+	var/ls = 1
+	for(var/i in 1 to 7)
+		if(!prob(98 + rand(-2,2)))
+			ls += 1
+	if((leaves > 3 && rand(2)) || (leaves < 3 && !rand(2)))
+		ls *= -1
+	else
+		ls *= pick(-1,1)
+	return (leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3
+
+/datum/seed/clover/product_logic()
+	return products[get_next_leaves()+1]
+
+/datum/seed/clover/zeroleaf
+	name = "clover0"
+	leaves = 0
+
+/datum/seed/clover/oneleaf
+	name = "clover1"
+	leaves = 1
+
+/datum/seed/clover/twoleaf
+	name = "clover2"
+	leaves = 2
+
+/datum/seed/clover/fourleaf
+	name = "clover4"
+	leaves = 4
+
+/datum/seed/clover/fiveleaf
+	name = "clover5"
+	leaves = 5
+
+/datum/seed/clover/sixleaf
+	name = "clover6"
+	leaves = 6
+
+/datum/seed/clover/sevenleaf
+	name = "clover7"
+	leaves = 7
+
+/obj/item/seeds/cloverseed
+	name = "packet of clover seeds"
+	seed_type = "clover3"
+	vending_cat = "weeds"
+
+/obj/item/seeds/cloverseed/New()
+	. = ..()
+	var/datum/seed/clover/S = seed
+	seed_type = "clover[S.get_next_leaves()]"
