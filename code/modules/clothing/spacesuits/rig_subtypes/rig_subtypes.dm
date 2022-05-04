@@ -39,19 +39,18 @@
 	desc = "An advanced suit that protects against hazardous, low pressure environments. Shines with a high polish making it plasma proof."
 	icon_state = "rig-white"
 	item_state = "ce_hardsuit"
+	allowed = list(/obj/item/weapon/tank/jetpack)
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
 	cell_type = /obj/item/weapon/cell/super
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite
-	allowed = list(/obj/item/weapon/tank/jetpack)
 
 /obj/item/clothing/head/helmet/space/rig/engineer/elite/test
 	name = "prototype advanced hardsuit helmet"
 	desc = "A bleeding-edge helmet designed to protect its wearer against extreme environments. The armored padding in this helmet was totally removed to give place for its experimental plasmovsky alloy."
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 100, bomb = 100, bio = 100, rad = 100)
-
 
 //Self-charging, auto-refiller high-test suit.
 /obj/item/clothing/suit/space/rig/engineer/elite/test
@@ -506,7 +505,7 @@
 	desc = "A heavily armored suit that protects against a lot of things. Used in special operations."
 	icon_state = "rig-deathsquad"
 	item_state = "rig-deathsquad"
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/jetpack,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pinpointer,/obj/item/weapon/shield/energy,/obj/item/weapon/c4,/obj/item/weapon/disk/nuclear)
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,obj/item/weapon/tank/jetpack,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pinpointer,/obj/item/weapon/shield/energy,/obj/item/weapon/c4,/obj/item/weapon/disk/nuclear)
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 60, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.5
