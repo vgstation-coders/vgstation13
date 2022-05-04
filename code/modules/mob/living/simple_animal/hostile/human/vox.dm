@@ -53,6 +53,40 @@
 
 	faction = "raider" //Assigning them a shared faction means they will attack most mobs but not each other
 
+	var/noloot_retreat = null
+	var/noloot_minimum = 1
+
+	search_objects = 1
+	wanted_objects = list(/obj/item/weapon/spacecash) //Gotta grab everything I can
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/Found(atom/A)
+	if(istype(A,/obj/item/weapon/spacecash))
+		say(pick("Mine!","I smell the credits.","That is my loot.","Money! Happiness!","Ah... \a [target]. Very good, yes."), all_languages[LANGUAGE_VOX]) //Money looting speech dialogue
+		return TRUE
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/ranged_mode() //So they don't shoot money instead of running to it and picking it up
+	if(is_type_in_list(target, wanted_objects))
+		retreat_distance = null
+		minimum_distance = 1
+		return FALSE
+	if(isliving(target))
+		retreat_distance = noloot_retreat
+		minimum_distance = noloot_minimum
+	return ..()
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/AttackingTarget() //Grab dat loot
+	if(istype(target,/obj/item/weapon/spacecash))
+		var/atom/movable/cash = target
+		cash.forceMove(src)
+		LoseAggro()
+	else
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/death(gibbed = FALSE) //Drop the loot on death
+	for(var/obj/item/weapon/spacecash/S in src)
+		S.forceMove(loc)
+	..()
+
 //The two lines below mean this mob and any that inherit from it can follow someone retreating into space, and won't just float off once they hit vacuum
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/Process_Spacemove(var/check_drift = 0)
 	return 1
@@ -79,8 +113,8 @@
 
 	projectiletype = /obj/item/projectile/bullet/auto380
 	projectilesound = 'sound/weapons/semiauto.ogg'
-	retreat_distance = 4
-	minimum_distance = 4
+	noloot_retreat = 4
+	noloot_minimum = 4
 	ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic/Aggro()
@@ -121,8 +155,8 @@
 
 	projectiletype = /obj/item/projectile/beam/retro
 	projectilesound = 'sound/weapons/Laser.ogg'
-	retreat_distance = 2
-	minimum_distance = 2
+	noloot_retreat = 2
+	noloot_minimum = 2
 	ranged = 1
 
 	var/last_takedown = 0 // He remembers the basics
@@ -185,8 +219,8 @@
 
 	projectiletype = /obj/item/projectile/bullet/buckshot
 	projectilesound = 'sound/weapons/shotgun.ogg'
-	retreat_distance = 3
-	minimum_distance = 3
+	noloot_retreat = 3
+	noloot_minimum = 3
 	ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher/Shoot(var/atom/target, var/atom/start, var/mob/user)
@@ -227,8 +261,8 @@
 	ranged = 1
 	projectiletype = /obj/item/projectile/bullet/a762x55
 	projectilesound = 'sound/weapons/mosin.ogg'
-	retreat_distance = 7
-	minimum_distance = 7
+	noloot_retreat = 7
+	noloot_minimum = 7
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/deadeye/Aggro()
 	..()
@@ -281,8 +315,8 @@
 	ranged = 1
 	projectiletype = /obj/item/projectile/bullet/buckshot
 	projectilesound = 'sound/weapons/shotgun.ogg'
-	retreat_distance = 3
-	minimum_distance = 3
+	noloot_retreat = 3
+	noloot_minimum = 3
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/Aggro()
 	..()
@@ -295,16 +329,16 @@
 		berserk = 1
 		move_to_delay = 1.8 // Chaaaaaaaaaaarge
 		ranged = 0
-		retreat_distance = 1
-		minimum_distance = 1
+		noloot_retreat = 1
+		noloot_minimum = 1
 
 	if(health > (maxHealth/2) && berserk == 1) // Will calm down again if he heals himself above half health
 		visible_message("<span class='warning'>[src] lowers his machete to a defensive position and raises his shotgun!</span>")
 		berserk = 0
 		move_to_delay = 2 // Back to normal speed
 		ranged = 1
-		retreat_distance = 4
-		minimum_distance = 4
+		noloot_retreat = 3
+		noloot_minimum = 3
 
 	if((last_bigheal + bigheal_cooldown < world.time) && health < 75) // After he heals he has to wait quite a while before doing it again. Don't give him time to do it again
 		health+=150

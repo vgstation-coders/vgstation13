@@ -234,6 +234,9 @@
 		stance = HOSTILE_STANCE_ATTACK
 	return
 
+/mob/living/simple_animal/hostile/proc/ranged_mode() //Allows different ranged modes to be used, and potentially for a mob to ignore normal ranged behavior in pursuit of a target
+	return ranged
+
 /mob/living/simple_animal/hostile/proc/MoveToTarget()//Step 5, handle movement between us and our target
 	stop_automated_movement = 1
 	if(!target || !CanAttack(target))
@@ -253,7 +256,7 @@
 	if(isturf(loc))
 		if(target in ListTargets())
 			var/target_distance = get_dist(src,target)
-			if(ranged)//We ranged? Shoot at em
+			if(ranged_mode())//We ranged? Shoot at em if our ranged mode allows for it
 				if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
 					OpenFire(target)
 			if(target.Adjacent(src))	//If they're next to us, attack
