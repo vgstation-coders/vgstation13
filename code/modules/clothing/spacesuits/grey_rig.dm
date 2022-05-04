@@ -63,19 +63,24 @@
 //Leader//
 
 /obj/item/clothing/suit/space/rig/grey/leader
-	name = "administrator pressure suit"	//Not an admin item. Just a thematic name.
+	name = "Administrator Pressure Suit"	//Not an admin item. Just a thematic name. It's capitalized unlike the others because it's important! And also because it looks better on the reflect message.
 	desc = "A pressure suit for high ranking officials in the Grey Democratic Republic. It provides much better protection than a standard soldier suit."
 	icon_state = "rig_grey_leader"
 	item_state = "rig_grey_leader"
-	armor = list(melee = 50, bullet = 25, laser = 60, energy = 25, bomb = 40, bio = 100, rad = 50)
-	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/handcuffs, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator)
+	armor = list(melee = 50, bullet = 25, laser = 70, energy = 25, bomb = 40, bio = 100, rad = 50)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator, /obj/item/weapon/gun/energy/advdisintegrator)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/leader
 
+/obj/item/clothing/suit/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
+	return 0
 
 /obj/item/clothing/head/helmet/space/rig/grey/leader
-	name = "administrator pressure helmet"
+	name = "Administrator Pressure Helmet"
 	desc = "A grey Administrator's pressure helmet. Glory to the mothership, and all hail the Chairman!"
 	icon_state = "rig0_grey_leader_dome"
 	item_state = "rig0_grey_leader_dome"
 	_color = "grey_leader_dome"
-	armor = list(melee = 50, bullet = 25, laser = 60, energy = 25, bomb = 40, bio = 100, rad = 50)
+	armor = list(melee = 50, bullet = 25, laser = 70, energy = 25, bomb = 40, bio = 100, rad = 50)
+
+/obj/item/clothing/head/helmet/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
+	return 0

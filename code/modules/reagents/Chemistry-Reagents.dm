@@ -413,6 +413,42 @@
 		else
 			M.say(pick("Praise the mothership!", "Be productive this quarter, fellow denizens.", "Grey minds are naturally superior.", "I work for the happiness of all greykind.", "Alert the local battalion about any socially unstable behavior."))
 
+/datum/reagent/greygoo // A very powerful mothership neurostimulant and anti hallucinogenic. Toxic for other species and less effective, but still usable
+	name = "Grey Goo"
+	id = GREYGOO
+	description = "A viscous grey substance of unknown origin."
+	reagent_state = REAGENT_STATE_LIQUID
+	dupeable = FALSE
+	color = "#B5B5B5" //rgb: 181, 181, 181
+	custom_metabolism = 0.1
+	pain_resistance = 50
+
+/datum/reagent/greygoo/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+
+	if(holder.has_any_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS)))
+		holder.remove_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS), 5 * REM)
+	if(holder.has_any_reagents(list(MINDBREAKER, SPIRITBREAKER)))
+		holder.remove_reagents(list(MINDBREAKER, SPIRITBREAKER), 3 * REM) // The only chemical that removes spiritbreaker besides adminordrazine
+
+	if(alien && alien == IS_GREY) // A nice brain scrub for greys, cleaning out any damage, hallucinations, confusion, and dizziness
+		if(ishuman(M))
+			M.adjustBrainLoss(-10)
+			M.hallucination = 0
+			M.dizziness = 0
+			M.confused = 0
+			if(prob(5))
+				to_chat(M, "<span class='notice'>[pick("You feel a pleasant equilibrium settle across your mind.","You feel much more focused.","Your mind is clear and lucid.")]</span>")
+	else // Still a pretty effective brain scrub for other species, but cures brain damage half as effectively and causes some toxin damage
+		if(ishuman(M))
+			M.adjustBrainLoss(-5)
+			M.hallucination = 0
+			M.dizziness = 0
+			M.confused = 0
+			M.adjustToxLoss(1)
+
 /datum/reagent/slimejelly
 	name = "Slime Jelly"
 	id = SLIMEJELLY
@@ -4618,6 +4654,26 @@ var/procizine_tolerance = 0
 					if(prob(10))
 						H.custom_pain("Your chest feels like its on fire!",1)
 						M.audible_scream()
+
+/datum/reagent/polypgelatin
+	name = "Polyp Gelatin"
+	id = POLYPGELATIN
+	description = "An edible gelatinous liquid harvested from a space polyp. It's very mild in flavor, and surprisingly filling."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 10 * REAGENTS_METABOLISM
+	color = "#00FFFF" //rgb: 211, 90, 13
+
+/datum/reagent/polypgelatin/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getFireLoss() && prob(20))
+		M.heal_organ_damage(0, 1)
+
+/datum/reagent/polypgelatin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.5)
 
 /datum/reagent/egg_yolk
 	name = "Egg Yolk"

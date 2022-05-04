@@ -220,7 +220,7 @@
 			if(M.occupant)//Just so we don't attack empty mechs
 				if(CanAttack(M.occupant))
 					return 1
-		if((environment_smash_flags & OPEN_DOOR_STRONG) && istype(the_target, /obj/machinery/door/airlock))
+		if(!(environment_smash_flags & OPEN_DOOR_SMART) && (environment_smash_flags & (OPEN_DOOR_STRONG | OPEN_DOOR_WEAK)) && istype(the_target, /obj/machinery/door/airlock))
 			var/obj/machinery/door/airlock/A = the_target
 			if(!A.density || A.operating || A.locked || A.welded)
 				return 0
@@ -234,6 +234,9 @@
 		stance = HOSTILE_STANCE_ATTACK
 	return
 
+/mob/living/simple_animal/hostile/proc/ranged_mode() //Allows different ranged modes to be used, and potentially for a mob to ignore normal ranged behavior in pursuit of a target
+	return ranged
+
 /mob/living/simple_animal/hostile/proc/MoveToTarget()//Step 5, handle movement between us and our target
 	stop_automated_movement = 1
 	if(!target || !CanAttack(target))
@@ -241,10 +244,16 @@
 		return
 
 	if(loc == lastloc && !target.Adjacent(src))
-		hostile_interest--
-		if(hostile_interest <= 0)
-			LoseTarget()
-			return
+		if(environment_smash_flags & OPEN_DOOR_SMART)
+			var/turf/T = get_step(src,target)
+			for(var/obj/machinery/door/airlock/AL in T)
+				attack_animal(src)
+				delayNextAttack(1 SECONDS)
+		else
+			hostile_interest--
+			if(hostile_interest <= 0)
+				LoseTarget()
+				return
 	else
 		hostile_interest = initial(hostile_interest)
 
@@ -253,7 +262,7 @@
 	if(isturf(loc))
 		if(target in ListTargets())
 			var/target_distance = get_dist(src,target)
-			if(ranged)//We ranged? Shoot at em
+			if(ranged_mode())//We ranged? Shoot at em if our ranged mode allows for it
 				if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
 					OpenFire(target)
 			if(target.Adjacent(src))	//If they're next to us, attack

@@ -103,7 +103,7 @@
 	if(!anchored)
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
 		return 1
-	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs) || istype(G, /obj/item/clothing/head/helmet/stun))
+	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/weapon/melee/stunprobe) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs) || istype(G, /obj/item/clothing/head/helmet/stun))
 		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
 			to_chat(user, "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>")
 			return 1
@@ -240,7 +240,20 @@
 					has_beeped = TRUE
 			else
 				icon_state = "recharger0"
-		
+		else if(istype(charging, /obj/item/weapon/melee/stunprobe)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
+			var/obj/item/weapon/melee/stunprobe/B = charging
+			if(B.bcell)
+				if(B.bcell.give(175*charging_speed_modifier))
+					icon_state = "recharger1"
+					if(!self_powered)
+						use_power(200*charging_speed_modifier)
+				else
+					icon_state = "recharger2"
+					if(!has_beeped)
+						playsound(src, 'sound/machines/charge_finish.ogg', 50)
+					has_beeped = TRUE
+			else
+				icon_state = "recharger0"
 		else if(istype(charging, /obj/item/clothing/head/helmet/stun))
 			var/obj/item/clothing/head/helmet/stun/B = charging
 			if(B.bcell)
@@ -282,6 +295,11 @@
 		var/obj/item/weapon/gun/energy/E = charging
 		if(E.power_supply)
 			E.power_supply.emp_act(severity)
+
+	if(istype(charging, /obj/item/weapon/melee/stunprobe))
+		var/obj/item/weapon/melee/stunprobe/B = charging
+		if(B.bcell)
+			B.bcell.charge = 0
 
 	else if(istype(charging, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = charging
@@ -343,6 +361,17 @@
 			return
 		if(istype(charging, /obj/item/weapon/melee/baton))
 			var/obj/item/weapon/melee/baton/B = charging
+			if(B.bcell)
+				if(B.bcell.give(175))
+					icon_state = "wrecharger1"
+					if(!self_powered)
+						use_power(200)
+				else
+					icon_state = "wrecharger2"
+			else
+				icon_state = "wrecharger3"
+		if(istype(charging, /obj/item/weapon/melee/stunprobe))
+			var/obj/item/weapon/melee/stunprobe/B = charging
 			if(B.bcell)
 				if(B.bcell.give(175))
 					icon_state = "wrecharger1"
