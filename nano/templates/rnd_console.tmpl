@@ -452,7 +452,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						for ( var i = 0; i < lis.length; ++i )
 						{
 							try{
-								var li = lis\[i\];
+								var li = lis[i];
 								if ( li.innerText.toLowerCase().indexOf(filter) == -1 )
 								{
 									vars_ol.removeChild(li);
@@ -464,7 +464,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				}
 			</script>
 
-			<div class="item">
+			<div class="item" onkeyup='updateSearch()'>
 				{{if (data.lathe && data.lathecategory && data.screen == 6) || (data.imprinter && data.imprintercategory && data.screen == 7)}}
 					<script type='text/javascript'>
 						var vars_ol = document.getElementById("items");
