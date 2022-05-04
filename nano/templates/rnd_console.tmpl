@@ -373,7 +373,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								{{for data.lathequeue}}
 									<div class="statusValue">
 										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
-										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeft')}}
+										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftNarrow')}}
 									</div>
 								{{empty}}
 									<i>No parts in memory</i>
@@ -382,7 +382,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								{{for data.imprinterqueue}}
 									<div class="statusValue">
 										{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
-										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeft')}}
+										{{:helper.link("Remove", 'circle-arrow-s', value.commands, null, 'fixedLeftNarrow')}}
 									</div>
 								{{empty}}
 									<i>No parts in memory</i>
@@ -430,7 +430,45 @@ Used In File(s): \code\modules\research\rdconsole.dm
 				{{/if}}
 			</div>
 
+			<script type="text/javascript">
+				function updateSearch(){
+					var filter_text = document.getElementById('filter');
+					var filter = filter_text.value.toLowerCase();
+
+					//This part here resets everything to how it was at the start so the filter is applied to the complete list.
+					if(complete_list != null && complete_list != "")
+						{
+						var vars_ol1 = document.getElementById("items");
+						vars_ol1.innerHTML = complete_list
+					}
+
+					if(filter.value == "")
+						{
+						return;
+					}else{
+						var vars_ol = document.getElementById('items');
+						var lis = vars_ol.getElementsById("item");
+
+						for ( var i = 0; i < lis.length; ++i )
+						{
+							try{
+								var li = lis\[i\];
+								if ( li.innerText.toLowerCase().indexOf(filter) == -1 )
+								{
+									vars_ol.removeChild(li);
+									i--;
+								}
+							}catch(err) {   }
+						}
+					}
+				}
+			</script>
+
 			<div class="item">
+				<script type='text/javascript'>
+					var vars_ol = document.getElementById("items");
+					var complete_list = vars_ol.innerHTML;
+				</script>
 				{{if data.lathe && data.screen == 6}}
 					<div class="itemLabel">
 						{{:data.lathecategory}}
@@ -440,12 +478,15 @@ Used In File(s): \code\modules\research\rdconsole.dm
 						{{:data.imprintercategory}}
 					</div>
 				{{/if}}
+				<div class="itemLabelWide" style="float: right;">
+					Search: <input type='text' id='filter' name='filter_text' value='' style='width:80%;' onchange='updateSearch()'>
+				</div>
 				<div class="itemContentWide" style="width:100%;">
 					<div class="statusDisplay">
-						<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 330px">
+						<div class="line" id="items" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 330px">
 							{{if data.lathe && data.screen == 6}}
 								{{for data.lathedesigns}}
-									<div class="line">
+									<div class="line" id="item">
 										<div class="statusValue">
 											{{:helper.link(value.name, 'gear', value.command3, null, null, 'misc')}}
 											{{:helper.link(value.cost, null, null, null, null, 'cost')}}
@@ -460,7 +501,7 @@ Used In File(s): \code\modules\research\rdconsole.dm
 								{{/for}}
 							{{else data.imprinter && data.screen == 7}}
 								{{for data.imprinterdesigns}}
-									<div class="line">
+									<div class="line" id="item">
 										<div class="statusValue">
 											{{:helper.link(value.name, 'gear', value.command3, null, null, 'misc')}}
 											{{:helper.link(value.cost, null, null, null, null, 'cost')}}
