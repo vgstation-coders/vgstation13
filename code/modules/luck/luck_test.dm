@@ -2,12 +2,13 @@
 	//[DONE] make and test spawning a clover having all the right params
 		//[DONE] need the seed to be the same as the leaves
 	//[DONE] make and test seed extracting a clover passing all seed data onto its seeds
-	//make and test growing clover seeds turning into the proper type of clover
-		// need the randomness to work properly too per each spawned
-	//make sure both grown clovers and spawned clovers have the right params
+	//[DONE] make and test growing clover seeds turning into the proper type of clover
+		// [DONE] need the randomness to work properly too per each spawned
+	//[DONE] make sure both grown clovers and spawned clovers have the right params
 	//sprites and inhand sprites
 	//tune params etc
 	//remove redundant code
+	//using clovers as an accessory?
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
