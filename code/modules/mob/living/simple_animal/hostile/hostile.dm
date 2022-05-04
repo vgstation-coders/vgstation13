@@ -220,7 +220,7 @@
 			if(M.occupant)//Just so we don't attack empty mechs
 				if(CanAttack(M.occupant))
 					return 1
-		if((environment_smash_flags & OPEN_DOOR_STRONG) && istype(the_target, /obj/machinery/door/airlock))
+		if(!(environment_smash_flags & OPEN_DOOR_SMART) && (environment_smash_flags & (OPEN_DOOR_STRONG | OPEN_DOOR_WEAK)) && istype(the_target, /obj/machinery/door/airlock))
 			var/obj/machinery/door/airlock/A = the_target
 			if(!A.density || A.operating || A.locked || A.welded)
 				return 0
@@ -244,10 +244,16 @@
 		return
 
 	if(loc == lastloc && !target.Adjacent(src))
-		hostile_interest--
-		if(hostile_interest <= 0)
-			LoseTarget()
-			return
+		if(environment_smash_flags & OPEN_DOOR_SMART)
+			var/turf/T = get_step(src,target)
+			for(var/obj/machinery/door/airlock/AL in T)
+				attack_animal(src)
+				delayNextAttack(1 SECONDS)
+		else
+			hostile_interest--
+			if(hostile_interest <= 0)
+				LoseTarget()
+				return
 	else
 		hostile_interest = initial(hostile_interest)
 

@@ -150,7 +150,7 @@
 /mob/living/simple_animal/hostile/humanoid/nurseunit/AttackingTarget()
 	var/mob/living/carbon/human/H = target
 
-	if(!H.lying && !H.locked_to && prob(knockdown_chance)) // Knockdown attack
+	if(!H.lying && !H.locked_to && ishuman(H) && prob(knockdown_chance)) // Knockdown attack
 		H.visible_message("<span class='danger'>[src] slams into [H], knocking them down!</span>")
 		playsound(src, 'sound/weapons/smash.ogg', 50, 1)
 		H.adjustBruteLoss(10)
