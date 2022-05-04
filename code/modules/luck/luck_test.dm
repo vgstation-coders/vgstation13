@@ -1,3 +1,15 @@
+//todo:
+	//[DONE] make and test spawning a clover having all the right params
+		//[DONE] need the seed to be the same as the leaves
+	//[DONE] make and test seed extracting a clover passing all seed data onto its seeds
+	//make and test growing clover seeds turning into the proper type of clover
+		// need the randomness to work properly too per each spawned
+	//make sure both grown clovers and spawned clovers have the right params
+	//sprites and inhand sprites
+	//tune params etc
+	//remove redundant code
+
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
 	potency = 50
 	filling_color = "#247E0A"
@@ -7,24 +19,31 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
 	leaves = 0
+	plantname = "clover0"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
 	leaves = 1
+	plantname = "clover1"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
 	leaves = 2
+	plantname = "clover2"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
 	leaves = 4
+	plantname = "clover4"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf
 	leaves = 5
+	plantname = "clover5"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf
 	leaves = 6
+	plantname = "clover6"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
 	leaves = 7
+	plantname = "clover7"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/New(atom/loc, custom_plantname)
 	. = ..()
@@ -71,6 +90,9 @@
 			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
 			luckiness = 10000
 //	icon = 'icons/obj/hydroponics/clover.dmi'
+//	var/datum/seed/clover/S = new
+//	if(seed)
+//		leaves =
 	plantname = "clover[leaves]"
 	icon_state = "clover[leaves]"
 
@@ -81,32 +103,50 @@
 	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
 	plant_icon_state = "clover3"
 
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
+	products = list(
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf)
 
 //	mutants = list("clover2","clover4")
 	harvest_repeat = 1
+	yield = 3
+//	yield = 50
 
-	yield = 6
+//	leaves = 3
 
-	leaves = 3
+/*
 
 /datum/seed/clover/New()
 	. = ..()
 	leaves = get_next_leaves()
+*/
+
 
 /datum/seed/clover/proc/get_next_leaves()
 	if(isnull(leaves))
 		leaves = 3
-	if(prob(50+rand(-5,5)))
+	if(prob(50 + rand(-5,5)))
 		return 3
-	if(prob(99+rand(-1,1)))
+	if(prob(99 + rand(-1,1)))
 		return leaves
 	var/ls = 1
-	while(ls <= 7)
-		if(!prob(95+rand(-5,5)))
+	for(var/i in 1 to 7)
+		if(!prob(98 + rand(-2,2)))
 			ls += 1
-	return pick((leaves - ls < 0) ? leaves : leaves - ls, (leaves + ls > 7) ? leaves : leaves + ls)
+	if((leaves > 3 && rand(2)) || (leaves < 3 && !rand(2)))
+		ls *= -1
+	else
+		ls *= pick(-1,1)
+	return (leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3
 
+/datum/seed/clover/product_logic()
+	return products[get_next_leaves()+1]
 
 /datum/seed/clover/zeroleaf
 	name = "clover0"

@@ -510,7 +510,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	currently_querying = list()
 	for(var/i = 0;i<total_yield;i++)
-		var/product_type = pick(products)
+		var/product_type = product_logic()
 
 		var/obj/item/product
 
@@ -538,6 +538,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
 			handle_living_product(product)
+
+/datum/seed/proc/product_logic()
+	return pick(products)
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
