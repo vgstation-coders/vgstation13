@@ -180,9 +180,7 @@
 		target_living.emag_act(user, organ, src)
 		return
 	if(istype(target,/obj/machinery))
-		var/obj/machinery/M = target
-		if(!(M.machine_flags & EMAGGABLE) || !canUse(user,M) || (istype(M,/obj/machinery/bot) && M.emagged < 2))
-			return
+		return // Handled in machine attackby()
 	target.emag_act(user)
 
 

@@ -600,6 +600,12 @@ Class Procs:
 
 	add_fingerprint(user)
 
+	if(isEmag(O) && machine_flags & EMAGGABLE)
+		var/obj/item/weapon/card/emag/E = O
+		if(E.canUse(user,src))
+			emag_act(user)
+			return 1
+
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
 			if(state == 2 && src.machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
