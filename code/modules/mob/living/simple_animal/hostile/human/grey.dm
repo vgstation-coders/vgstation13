@@ -192,6 +192,7 @@
 	icon_living = "greysentry"
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
+
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
 	speak = list("The MDF is prepared for anything.","Five of theirs shall be disintegrated for every one of ours.","I need to refill my canteen...")
