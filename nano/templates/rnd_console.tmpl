@@ -465,10 +465,12 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			</script>
 
 			<div class="item">
-				<script type='text/javascript'>
-					var vars_ol = document.getElementById("items");
-					var complete_list = vars_ol.innerHTML;
-				</script>
+				{{if (data.lathe && data.lathecategory && data.screen == 6) || (data.imprinter && data.imprintercategory && data.screen == 7)}}
+					<script type='text/javascript'>
+						var vars_ol = document.getElementById("items");
+						var complete_list = vars_ol.innerHTML;
+					</script>
+				{{/if}}
 				{{if data.lathe && data.screen == 6}}
 					<div class="itemLabel">
 						{{:data.lathecategory}}
