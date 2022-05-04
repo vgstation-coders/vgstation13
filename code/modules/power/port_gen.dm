@@ -53,6 +53,7 @@
 
 /obj/machinery/power/port_gen/pacman
 	name = "P.A.C.M.A.N.-type Portable Generator"
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""

@@ -640,6 +640,7 @@
 	desc = "Magnetically opens crates provided the proper access has been swiped on the machine."
 	icon = 'icons/obj/machines/logistics.dmi'
 	icon_state = "inactive"
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EMAGGABLE
 	var/list/access = list()
 
 /obj/machinery/logistics_machine/crate_opener/New()
