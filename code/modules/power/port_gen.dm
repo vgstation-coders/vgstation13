@@ -8,7 +8,7 @@
 	anchored = 0
 	use_power = 0
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
 	var/active = 0
 	var/power_gen = 5000
@@ -53,7 +53,6 @@
 
 /obj/machinery/power/port_gen/pacman
 	name = "P.A.C.M.A.N.-type Portable Generator"
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""
