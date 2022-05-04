@@ -652,7 +652,7 @@ var/list/uplink_items = list()
 		return I
 
 /datum/uplink_item/jobspecific/command_security
-	category = "Command and Security Specials"
+	category = "Security Specials"
 
 /datum/uplink_item/jobspecific/command_security/syndicuffs
 	name = "Syndicate Cuffs"
@@ -709,27 +709,6 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 10
 	jobs_with_discount = list("Detective")
-
-/datum/uplink_item/jobspecific/command_security/briefcase_smg
-	name = "Briefcase SMG"
-	desc = "A modified briefcase capable of storing and firing a gun under a false bottom, while still allowing regular storage functions. Starts with a 9mm SMG loaded with 18 rounds that can be fired by holding the briefcase. Use a screwdriver to pry away the false bottom and either retrieve the gun or insert a new one. Distinguishable upon close examination due to the added weight."
-	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
-	cost = 14
-	discounted_cost = 10
-	jobs_with_discount = list("Internal Affairs Agent")
-
-/datum/uplink_item/jobspecific/command_security/briefcase_smg/on_item_spawned(var/obj/I, var/mob/user)
-	if(gives_discount(user.job) || gives_discount(user.dna.species))
-		I.icon_state = "briefcase-centcomm"
-	return
-
-/datum/uplink_item/jobspecific/command_security/knifeboot
-	name = "Concealed knife shoes"
-	desc = "Lace-up shoes with a knife concealed in the toecap. Tap your heels together to reveal the small knife. Remember to kick the target to stab them. Knife will be visible when pulled out, but kicking with the knife will not be directly obvious to observers."
-	item = /obj/item/clothing/shoes/knifeboot
-	cost = 4
-	discounted_cost = 2
-	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/medical
 	category = "Medical Specials"
@@ -1132,6 +1111,34 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 8
 	jobs_with_discount = list("Captain", "Head of Personnel")
+
+/datum/uplink_item/jobspecific/command/lawgivermk2
+	name = "Lawgiver Demolition Kit"
+	desc = "A container that comes with a Lawgiver modification kit, converting it into a Demolition variant Lawgiver. Also comes with two spare demolition magazines."
+	item = /obj/item/weapon/storage/box/survival/demolition
+	cost = 12
+	jobs_exclusive = list("Head of Security")
+
+/datum/uplink_item/jobspecific/command/briefcase_smg
+	name = "Briefcase SMG"
+	desc = "A modified briefcase capable of storing and firing a gun under a false bottom, while still allowing regular storage functions. Starts with a 9mm SMG loaded with 18 rounds that can be fired by holding the briefcase. Use a screwdriver to pry away the false bottom and either retrieve the gun or insert a new one. Distinguishable upon close examination due to the added weight."
+	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Internal Affairs Agent")
+
+/datum/uplink_item/jobspecific/command/briefcase_smg/on_item_spawned(var/obj/I, var/mob/user)
+	if(gives_discount(user.job) || gives_discount(user.dna.species))
+		I.icon_state = "briefcase-centcomm"
+	return
+
+/datum/uplink_item/jobspecific/command/knifeboot
+	name = "Concealed knife shoes"
+	desc = "Lace-up shoes with a knife concealed in the toecap. Tap your heels together to reveal the small knife. Remember to kick the target to stab them. Knife will be visible when pulled out, but kicking with the knife will not be directly obvious to observers."
+	item = /obj/item/clothing/shoes/knifeboot
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"
