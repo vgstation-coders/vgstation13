@@ -24,7 +24,7 @@
 	blooded = FALSE
 
 	status_flags = UNPACIFIABLE // Not pacifiable due to being a "special" mob
-	environment_smash_flags = OPEN_DOOR_SMART // Won't smash stuff. Smashing would scare the greylings
+	environment_smash_flags = 0 // Won't smash stuff. Smashing would scare the greylings
 	stat_attack = UNCONSCIOUS // Help nurse, I've fallen and can't get up
 
 	min_oxy = 0
