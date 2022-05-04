@@ -249,7 +249,7 @@
 	aggro_vision_range = 10
 	idle_vision_range = 10 // He's got good eyes
 
-	environment_smash_flags = OPEN_DOOR_STRONG // This flag allows him to shoot through glass airlocks
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_deadeye
 

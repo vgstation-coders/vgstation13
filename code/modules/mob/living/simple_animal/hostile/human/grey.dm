@@ -191,8 +191,7 @@
 	icon_state = "greysentry"
 	icon_living = "greysentry"
 
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
-
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
 	speak = list("The MDF is prepared for anything.","Five of theirs shall be disintegrated for every one of ours.","I need to refill my canteen...")
@@ -241,7 +240,7 @@
 	icon_state = "greysoldier"
 	icon_living = "greysoldier"
 
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_regular
 
@@ -345,7 +344,7 @@
 	icon_state = "greygrenadier"
 	icon_living = "greygrenadier"
 
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_grenadier
 
@@ -521,7 +520,7 @@
 	icon_state = "greyresearcher_laser"
 	icon_living = "greyresearcher_laser"
 
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
