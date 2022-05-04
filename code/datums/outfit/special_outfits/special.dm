@@ -50,7 +50,6 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/engineer,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
 	)
 
@@ -60,7 +59,6 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/engineer/elite,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
 	)
 
@@ -90,7 +88,6 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/medical,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
 	)
 
@@ -100,7 +97,6 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/atmos,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
 	)
 
@@ -131,7 +127,6 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
 	//Maybe replace with civilian rig whenever that becomes a truely unique rig.
 	)
