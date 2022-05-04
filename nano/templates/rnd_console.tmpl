@@ -431,34 +431,39 @@ Used In File(s): \code\modules\research\rdconsole.dm
 			</div>
 
 			<script type="text/javascript">
-				function updateSearch(){
+				function updateSearch()
+				{
 					var filter_text = document.getElementById('filter');
 					var filter = filter_text.value.toLowerCase();
 
 					//This part here resets everything to how it was at the start so the filter is applied to the complete list.
 					if(complete_list != null && complete_list != "")
-						{
+					{
 						var vars_ol1 = document.getElementById("items");
-						vars_ol1.innerHTML = complete_list
+						vars_ol1.innerHTML = complete_list;
 					}
 
 					if(filter.value == "")
-						{
+					{
 						return;
-					}else{
+					}
+					else
+					{
 						var vars_ol = document.getElementById('items');
 						var lis = vars_ol.getElementsById("item");
 
 						for ( var i = 0; i < lis.length; ++i )
 						{
-							try{
+							try
+							{
 								var li = lis[i];
 								if ( li.innerText.toLowerCase().indexOf(filter) == -1 )
 								{
 									vars_ol.removeChild(li);
 									i--;
 								}
-							}catch(err) {   }
+							}
+							catch(err) {}
 						}
 					}
 				}
