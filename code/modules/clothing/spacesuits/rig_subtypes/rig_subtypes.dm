@@ -16,7 +16,7 @@
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 50)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/storage/bag/ore, /obj/item/device/t_scanner, /obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank/oxygen, /obj/item/weapon/tank/plasma, /obj/item/weapon/tank/nitrogen, /obj/item/weapon/storage/bag/ore, /obj/item/device/t_scanner, /obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer
@@ -45,11 +45,13 @@
 	clothing_flags = PLASMAGUARD
 	cell_type = /obj/item/weapon/cell/super
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite
+	allowed = list(/obj/item/weapon/tank/jetpack)
 
 /obj/item/clothing/head/helmet/space/rig/engineer/elite/test
 	name = "prototype advanced hardsuit helmet"
 	desc = "A bleeding-edge helmet designed to protect its wearer against extreme environments. The armored padding in this helmet was totally removed to give place for its experimental plasmovsky alloy."
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 100, bomb = 100, bio = 100, rad = 100)
+
 
 //Self-charging, auto-refiller high-test suit.
 /obj/item/clothing/suit/space/rig/engineer/elite/test
@@ -89,7 +91,9 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
 	allowed = list(
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
+		/obj/item/weapon/tank/oxygen,
+		/obj/item/weapon/tank/plasma,
+		/obj/item/weapon/tank/nitrogen,
 		/obj/item/weapon/storage/bag/ore,
 		/obj/item/device/mining_scanner,
 		/obj/item/weapon/pickaxe,
@@ -263,7 +267,7 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 30)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical, /obj/item/roller)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/plasma,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical, /obj/item/roller)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/medical
 
@@ -292,7 +296,9 @@
 	allowed = list(
 		/obj/item/weapon/gun,
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
+		/obj/item/weapon/tank/oxygen,
+		/obj/item/weapon/tank/plasma,
+		/obj/item/weapon/tank/nitrogen,
 		/obj/item/weapon/melee/baton,
 		/obj/item/weapon/reagent_containers/spray/pepper,
 		/obj/item/ammo_storage,
@@ -389,7 +395,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED,INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/plasma,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket)
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos/gold
 
 //ADMINBUS RIGS. SOVIET + NAZI
@@ -413,7 +419,7 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
-	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
+	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/plasma,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/nazi
 
@@ -437,7 +443,7 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//HET
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
-	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
+	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/plasma,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/soviet
 
@@ -500,7 +506,7 @@
 	desc = "A heavily armored suit that protects against a lot of things. Used in special operations."
 	icon_state = "rig-deathsquad"
 	item_state = "rig-deathsquad"
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pinpointer,/obj/item/weapon/shield/energy,/obj/item/weapon/c4,/obj/item/weapon/disk/nuclear)
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/jetpack,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pinpointer,/obj/item/weapon/shield/energy,/obj/item/weapon/c4,/obj/item/weapon/disk/nuclear)
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 60, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.5
@@ -530,7 +536,7 @@
 	desc = "A well polished set of armour belonging to a Space-Knight. Maidens Rescued in Space: 100, Maidens who have slept with me in Space: 0."
 	icon_state = "rig-knight"
 	item_state = "rig-knight"
-	allowed = list(/obj/item/weapon/gun,/obj/item/weapon/melee/baton,/obj/item/weapon/tank,/obj/item/weapon/shield/energy,/obj/item/weapon/claymore)
+	allowed = list(/obj/item/weapon/gun,/obj/item/weapon/melee/baton,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/plasma,/obj/item/weapon/tank/nitrogen,/obj/item/weapon/shield/energy,/obj/item/weapon/claymore)
 	armor = list(melee = 60, bullet = 40, laser = 40,energy = 30, bomb = 50, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.5
