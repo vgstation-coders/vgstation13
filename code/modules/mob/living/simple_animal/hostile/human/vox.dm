@@ -61,7 +61,6 @@
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/Found(atom/A)
 	if(istype(A,/obj/item/weapon/spacecash))
-		say(pick("Mine!","I smell the credits.","That is my loot.","Money! Happiness!","Ah... \a [A]. Very good, yes."), all_languages[LANGUAGE_VOX]) //Money looting speech dialogue
 		return TRUE
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/ranged_mode() //So they don't shoot money instead of running to it and picking it up
@@ -77,6 +76,7 @@
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/AttackingTarget() //Grab dat loot
 	if(istype(target,/obj/item/weapon/spacecash))
 		var/atom/movable/cash = target
+		say(pick("What's this? Mine!","Love smell of fresh credits in morning.","This is my loot.","Money! Happiness!","Ah... \a [target]. Very good, yes."), all_languages[LANGUAGE_VOX]) //Money looting speech dialogue
 		cash.forceMove(src)
 		LoseAggro()
 	else
@@ -99,7 +99,7 @@
 	desc = "A vox raider in a pressure suit. This one is clutching a syringe and brandishing a glock pistol."
 	icon_state = "voxraider_medic"
 
-	environment_smash_flags = 0 // Medics are too skittish to smash stuff, and bootleg medical equipment is expensive
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Will smash through obstacles and force open doors to track down targets
 
 	var/last_healed = 0
 	var/const/heal_cooldown = 30 SECONDS // Can heal himself when he starts losing health
@@ -144,7 +144,7 @@
 	attacktext = "stabs"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART // Will smash through obstacles and force open doors to track down targets
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Will smash through obstacles and force open doors to track down targets
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_assassin
 
@@ -208,7 +208,7 @@
 
 	move_to_delay = 3 // Sacrifices speed for more health/armor
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART // Breach and clear
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Breach and clear
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider
 
@@ -249,7 +249,7 @@
 	aggro_vision_range = 10
 	idle_vision_range = 10 // He's got good eyes
 
-	environment_smash_flags = OPEN_DOOR_SMART // This flag allows him to shoot through glass airlocks and open doors
+	environment_smash_flags = OPEN_DOOR_STRONG // This flag allows him to shoot through glass airlocks
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_deadeye
 
@@ -299,7 +299,7 @@
 	attack_sound = 'sound/weapons/machete_hit01.ogg'
 
 	status_flags = UNPACIFIABLE // Too angry to be pacified. Also meant to be a "boss" mob, so that would be a bit silly
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART // He can smash stuff open and force open airlocks to attack his target
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // He can smash stuff open and force open airlocks to attack his target
 
 	var/berserk = 0
 	var/last_bigheal = 0

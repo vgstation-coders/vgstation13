@@ -191,7 +191,7 @@
 	icon_state = "greysentry"
 	icon_living = "greysentry"
 
-	environment_smash_flags = 0 // They leave the smashing to the lancers
+	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
@@ -241,7 +241,7 @@
 	icon_state = "greysoldier"
 	icon_living = "greysoldier"
 
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows them to shoot through glass airlocks
+	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_regular
 
@@ -304,7 +304,7 @@
 	attacktext = "beats"
 	attack_sound = 'sound/weapons/genhit1.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // He is well-versed in the art of forced entry
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // He is well-versed in the art of forced entry
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_pacifier
 
@@ -345,7 +345,7 @@
 	icon_state = "greygrenadier"
 	icon_living = "greygrenadier"
 
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows them to shoot through glass airlocks
+	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_grenadier
 
@@ -406,7 +406,7 @@
 
 	move_to_delay = 3 // Being densely armored means slow going
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can smash things open
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_heavy
 
@@ -521,7 +521,7 @@
 	icon_state = "greyresearcher_laser"
 	icon_living = "greyresearcher_laser"
 
-	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows them to shoot through glass airlocks
+	environment_smash_flags = OPEN_DOOR_STRONG // Won't smash stuff, but this flag allows shooting through glass airlocks
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
@@ -572,7 +572,7 @@
 	name = "Mothership Chemist"
 	desc = "A thin alien humanoid. This one doesn't seemed armed, but has several flasks of unknown chemicals sticking out of their labcoat pockets."
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can smash things open, nerd rage
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open, nerd rage
 
 	items_to_drop = list(/obj/item/toy/snappop/virus, /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer)
 
@@ -625,7 +625,7 @@
 	attacktext = "slices"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can smash things open
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open
 
 	corpse = /obj/effect/landmark/corpse/grey/surgeon
 
@@ -699,7 +699,7 @@
 	attacktext = "telekinetically repels" // Not really the fisticuffs type, will just try to fling targets away
 	attack_sound = 'sound/weapons/punchmiss.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can smash many things open thanks to stronk brain muscles
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash many things open thanks to stronk brain muscles
 	status_flags = UNPACIFIABLE // Not pacifiable due to being a "boss" mob
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 

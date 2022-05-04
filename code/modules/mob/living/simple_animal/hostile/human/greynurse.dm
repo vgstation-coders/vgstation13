@@ -24,7 +24,7 @@
 	blooded = FALSE
 
 	status_flags = UNPACIFIABLE // Not pacifiable due to being a "special" mob
-	environment_smash_flags = OPEN_DOOR_STRONG // Can open doors, but won't smash stuff. Smashing would scare the greylings
+	environment_smash_flags = OPEN_DOOR_SMART // Won't smash stuff. Smashing would scare the greylings
 	stat_attack = UNCONSCIOUS // Help nurse, I've fallen and can't get up
 
 	min_oxy = 0
@@ -119,7 +119,7 @@
 	blooded = FALSE
 
 	status_flags = UNPACIFIABLE // Not pacifiable due to being a "boss" mob
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Now angered, so will smash things in addition to forcing doors open
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Now angered, so will smash things in addition to forcing doors open
 	stat_attack = UNCONSCIOUS // Help nurse, I've fallen and can't get up
 
 	min_oxy = 0
