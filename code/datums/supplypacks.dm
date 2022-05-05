@@ -108,23 +108,31 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/janitor
 	name = "Janitorial supplies"
 	contains = list(/obj/item/weapon/reagent_containers/glass/bucket,
-					/obj/item/weapon/reagent_containers/glass/bucket,
-					/obj/item/weapon/reagent_containers/glass/bucket,
-					/obj/item/weapon/mop,
-					/obj/item/weapon/caution,
-					/obj/item/weapon/caution,
-					/obj/item/weapon/caution,
+					/obj/item/weapon/reagent_containers/glass/bottle/bleach,
+					/obj/item/weapon/soap,
+					/obj/item/device/lightreplacer,
 					/obj/item/weapon/storage/bag/trash,
 					/obj/item/weapon/reagent_containers/spray/cleaner,
 					/obj/item/weapon/reagent_containers/glass/rag,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
-					/obj/item/weapon/storage/box/mousetraps,
-					/obj/structure/mopbucket)
+					/obj/item/weapon/storage/box/mousetraps)
 	cost = 10
 	containertype = /obj/structure/closet/crate/basic
 	containername = "janitorial supplies crate"
+	group = "Supplies"
+
+/datum/supply_packs/mopbucket
+	name = "Mop and Bucket"
+	contains = list(/obj/item/weapon/mop,
+					/obj/item/weapon/caution,
+					/obj/item/weapon/caution,
+					/obj/item/weapon/caution,
+					/obj/structure/mopbucket)
+	cost = 20
+	containertype = /obj/structure/largecrate
+	containername = "mop and bucket crate"
 	group = "Supplies"
 
 /datum/supply_packs/trashcompactor
