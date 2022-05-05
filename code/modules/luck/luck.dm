@@ -146,16 +146,14 @@
 	//clover growing sprites and inhand sprites
 	//clover plant stats
 	//remove redundant code
-	//change name to lucky_prob or add/use lucky_prob=prob(lucky_probability())
-	//[DONE] fix bug with returning -1 (tanh() blowing up)
+	//additional chems in clovers?
+	//names upon clover splicing and whatnot?
+	//splicing in general
 
 	//defines for curses
 
 	//edge cases breaking mirrors with explosives or otherwise
 	//standard #define luckfactors eg. with 1000 luck 50% odds goes to 55%, 75%, 90%, 99%, etc.
-
-	//Lucky items:
-	//eat clover for a temporary luck boost
 
 	//Luck affects:
 	//slots

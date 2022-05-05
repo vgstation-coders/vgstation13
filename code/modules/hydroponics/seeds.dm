@@ -1850,7 +1850,7 @@
 	display_name = "clover"
 	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
 	plant_icon_state = "clover3"
-
+	chems = list(NUTRIMENT = list(0.5,10))
 	products = list(
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf,
@@ -1862,7 +1862,7 @@
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf)
 
 	harvest_repeat = 1
-	yield = 3
+	yield = 50
 	var/leaves = 3
 
 
@@ -1881,9 +1881,9 @@
 /datum/seed/clover/proc/get_next_leaves()
 	if(isnull(leaves))
 		leaves = 3
-	if(prob(50 + rand(-5,5)))
+	if(prob(66 + rand(-5,5)))
 		return 3
-	if(prob(99 + rand(-1,1)))
+	if(prob(98 + rand(-2,2)))
 		return leaves
 	var/ls = 1
 	for(var/i in 1 to 7)

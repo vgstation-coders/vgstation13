@@ -61,6 +61,9 @@
 		"<span class='notice'>You finish eating \the [src].</span>")
 		score.foodeaten++ //For post-round score
 
+		if(luckiness)
+			user.luck_adjust(luckiness, temporary = TRUE)
+
 		//Drop our item before we delete it, to clear any references of ourselves in people's hands or whatever.
 		var/old_loc = loc
 		if(loc == user)
@@ -2297,7 +2300,7 @@
 	crumb_icon = "dribbles"
 	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
 	valid_utensils = UTENSILE_SPOON
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/roboticiststears/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 60) //You're using phazon here, that's the good shit.
