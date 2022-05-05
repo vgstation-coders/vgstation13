@@ -425,9 +425,6 @@
 	ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(shield_up == 1) // If the shield is up shoot a bit less often, we're focusing on defense
-		ranged_cooldown = 2
-		..()
 	if(shield_up == 0 && prob(5)) // If the shield isn't up, maybe we throw a grenade
 		visible_message("<span class = 'warning'>\The [src] primes a grenade and hurls it towards \the [target]!</span>")
 		say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
