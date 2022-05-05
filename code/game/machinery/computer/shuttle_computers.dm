@@ -569,7 +569,7 @@
 
 /obj/machinery/computer/shuttle_control/kick_act(mob/user)
 	..()
-	if(is_operational() && prob(5))
+	if(is_operational() && (user ? user.lucky_prob(5, luckfactor = 1/5) : prob(5)))
 		try_move()
 
 /obj/machinery/computer/shuttle_control/emp_act(severity)

@@ -114,7 +114,14 @@
 	if(ourluck == 0 || baseprob == 0 || baseprob == 100)
 		return baseprob
 	//Asymptotically clamp it to between -maxskew and maxskew using hyperbolic tangent:
-	ourluck = clamp(maxskew, 0, 50) * clamp(((E ** ourluck) - (E ** (-1* ourluck))) / ((E ** ourluck) + (E ** (-1* ourluck))), -1, 1)
+	if(abs(ourluck) < 16)
+		ourluck = clamp(((E ** ourluck) - (E ** (-1 * ourluck))) / ((E ** ourluck) + (E ** (-1 * ourluck))), -1, 1)
+	//Avoid overflow:
+	else if(ourluck > 0)
+		ourluck = 1
+	else
+		ourluck = -1
+	ourluck = clamp(maxskew, 0, 50) * ourluck
 	//Skew the probability by "pulling" the unbiased (50 input probability, 50 output probability) point towards either (0, 100) - maximally lucky, or (100, 0) - maximally unlucky.
 	//This is done by shifting a point P from (50, 50) a distance of (sqrt(2) * ourluck) along the line running through (0, 100) and (100, 0), and then fitting a polynomial to (0, 0), P, and (100,100).
 	//The coordinates of P are (50 - ourluck, 50 + ourluck):
@@ -122,43 +129,49 @@
 	var/P_o = 50 + ourluck
 	if(P_o == 100 || P_o == 0)
 		return P_o
+	else if(P_i == 100 || P_i == 0)
+		return P_i
 	//The polynomial running though (0, 0), P, and (100, 100) is:
 	var/newprob = (-1 * P_o * (baseprob ** 2) / (100 * (100 - P_i))) - (P_o * (baseprob ** 2) / (100 * P_i)) + (P_i * P_o * baseprob / (100 * (100 - P_i))) + (P_o * baseprob / P_i) + ((baseprob ** 2) / (100 - P_i)) - (P_i * baseprob / (100 - P_i)) + (P_o * baseprob / 100)
 	//Clamp it to the range [0, 100] to avoid precision-based excursions:
 	newprob = clamp(newprob, 0, 100)
 	return newprob
 
+//Calls prob() on lucky_probability(), for convenience.
+/mob/proc/lucky_prob(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50)
+	return prob(lucky_probability(baseprob, luckfactor, maxskew))
+
 //todo:
 
 	//clover growing sprites and inhand sprites
-	//clover tune params/mutagen factor etc
+	//clover plant stats
 	//remove redundant code
-	//using clovers as an accessory?
+	//change name to lucky_prob or add/use lucky_prob=prob(lucky_probability())
+	//[DONE] fix bug with returning -1 (tanh() blowing up)
 
-	//[TEST] slowly reduce temporary (un)luck on life tick
-	//clovers, hold or eat
+	//defines for curses
 
 	//edge cases breaking mirrors with explosives or otherwise
 	//standard #define luckfactors eg. with 1000 luck 50% odds goes to 55%, 75%, 90%, 99%, etc.
-
-	//Curses:
-	//spilling salt from a container
 
 	//Lucky items:
 	//eat clover for a temporary luck boost
 
 	//Luck affects:
-	//surgery sucess/failures
 	//slots
 	//tripping rate with long hair
 	//shuttle kicking
 	//breaking bones when hit
 	//randomly getting a disease chance
-	//very bad luck increases midround threat?
-	//very good luck decreases midround threat?
-	//calling coin flips and die rolls.
-	//singularity attraction/repulsion?
-	//plant breeding/clover breeding?
-	//luck-conferring mojo reagent
 
-	//add clover seeds to maps
+	//[NEXT VERSION] clover tune params/mutagen factor etc
+	//[NEXT VERSION] surgery sucess/failures
+	//[NEXT VERSION] spilling salt from a container
+	//[NEXT VERSION] using clovers as an accessory?
+	//[NEXT VERSION] very bad luck increases midround threat?
+	//[NEXT VERSION] very good luck decreases midround threat?
+	//[NEXT VERSION] calling coin flips and die rolls.
+	//[NEXT VERSION] singularity attraction/repulsion?
+	//[NEXT VERSION] plant breeding/clover breeding?
+	//[NEXT VERSION] luck-conferring mojo reagent
+
