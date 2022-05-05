@@ -1817,4 +1817,4 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define LUCKINESS_WHEN_GENERAL (LUCKINESS_WHEN_HELD | LUCKINESS_WHEN_WORN) //The item confers (un)luck when directly held in the hand or worn in an inventory slot.
 #define LUCKINESS_WHEN_GENERAL_RECURSIVE (LUCKINESS_WHEN_HELD_RECURSIVE | LUCKINESS_WHEN_WORN_RECURSIVE) //The item confers (un)luck when held in the hand or worn directly, or inside something else being held in the hand or worn.
 
-#define LUCKINESS_DRAINFACTOR 0.999 //Multiplied by a mob's temporary luckiness every Life() tick. The greater the magnitude of luckiness, the faster it drains.
+#define LUCKINESS_DRAINFACTOR 0.998 //Multiplied by a mob's temporary luckiness every Life() tick. The greater the magnitude of temporary luckiness, the faster it drains.

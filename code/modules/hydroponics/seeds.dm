@@ -1878,6 +1878,33 @@
 	large = 0
 */
 
+/datum/seed/clover/get_mutant_variant(var/mut)
+	var/datum/seed/clover/C = new products[get_next_leaves(mut)+1]
+	return C.name
+
+/datum/seed/clover/proc/get_next_leaves(var/mut = 0)
+	message_admins("get_next_leaves() called with mut = [mut]")
+	mut = clamp(mut, 0, 21)
+	if(isnull(leaves))
+		leaves = 3
+	if(prob(66 - (leaves == 3) * mut))
+		message_admins("[leaves] to default three-leaf")
+		return 3
+	if(prob(99 - rand(0, round(mut / 7))))
+		message_admins("[leaves] to selfsame [leaves]")
+		return leaves
+	var/ls = 1
+	for(var/i in 1 to 7)
+		if(prob(2))
+			ls += 1
+	if((leaves > 3 && rand(2)) || (leaves < 3 && !rand(2)))
+		ls *= -1
+	else
+		ls *= pick(-1,1)
+	message_admins("shift.. returning [(leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3]")
+	return (leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3
+
+/*
 /datum/seed/clover/proc/get_next_leaves()
 	if(isnull(leaves))
 		leaves = 3
@@ -1894,6 +1921,7 @@
 	else
 		ls *= pick(-1,1)
 	return (leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3
+*/
 
 /datum/seed/clover/product_logic()
 	return products[get_next_leaves()+1]

@@ -149,6 +149,10 @@
 	//additional chems in clovers?
 	//names upon clover splicing and whatnot?
 	//splicing in general
+	//fix mutate not calling get_next_leaves() and picking randomly from products
+	//related to randomize?
+	//make clover3 is own subtype?
+	//bees_apiary products[i]
 
 	//defines for curses
 

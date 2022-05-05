@@ -539,6 +539,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			handle_living_product(product)
 
 /datum/seed/proc/product_logic()
+	message_admins("debug: running default pick_products")
 	return pick(products)
 
 //Harvest without concern for the user
