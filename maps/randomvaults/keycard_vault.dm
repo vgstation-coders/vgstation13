@@ -12,14 +12,14 @@
 	can_rotate = FALSE // It has dungeons, which don't rotate well for now
 	var/difficulty = KEYCARD_DIFFICULTY_NORMAL
 	var/datum/map_element/dungeon/keycard_vault/thevault
-	var/list/vault_turfs = list()
 
 /datum/map_element/vault/keycards/pre_load()
 	difficulty = pick(KEYCARD_DIFFICULTY_EASY,KEYCARD_DIFFICULTY_NORMAL,KEYCARD_DIFFICULTY_HARD)
 	thevault = new /datum/map_element/dungeon/keycard_vault
 	thevault.file_path = "maps/randomvaults/dungeons/keycard_vault_[difficulty].dmm"
 	thevault.parent = src
-	vault_turfs = load_dungeon(thevault,rotation)
+	var/result1 = load_dungeon(thevault,rotation)
+	ASSERT(result1)
 	var/static/list/keycard_find_types = list(
 		KEYCARD_DIFFICULTY_EASY = /datum/map_element/keycard_find_easy,
 		KEYCARD_DIFFICULTY_NORMAL = /datum/map_element/keycard_find_normal,
@@ -28,8 +28,8 @@
 	var/vault_type = keycard_find_types[difficulty]
 	var/list/list_of_vaults = get_map_element_objects(vault_type)
 	var/area/A = locate(/area/random_vault)
-	var/result = populate_area_with_vaults(A, list_of_vaults, 3, population_density = 2, filter_function=/proc/stay_in_vault_area)
-	ASSERT(result)
+	var/result2 = populate_area_with_vaults(A, list_of_vaults, 3, population_density = 2, filter_function=/proc/stay_in_vault_area)
+	ASSERT(result2)
 	var/list/keycard_landmarks = list()
 	for(var/obj/effect/landmark/keycard/KC in landmarks_list)
 		if(KC.name == "keycard-[difficulty]")
@@ -45,20 +45,24 @@
 	var/list/turfs = ..()
 	ASSERT(thevault)
 	ASSERT(turfs.len)
-	ASSERT(vault_turfs.len)
 	for(var/turf/portal/PT in turfs)
 		PT.teleport_x = (PT.x - location.x) + (thevault.location.x - location.x)
 		PT.teleport_y = (PT.y - location.y) + (thevault.location.y - location.y)
 		PT.teleport_z = thevault.location.z - location.z
-	for(var/turf/portal/PT in vault_turfs)
-		PT.teleport_x = (PT.x - thevault.location.x) + (location.x - thevault.location.x)
-		PT.teleport_y = (PT.y - thevault.location.y) + (location.y - thevault.location.y)
-		PT.teleport_z = location.z - thevault.location.z
 
 /datum/map_element/dungeon/keycard_vault
 	name = "Keycard-gate vault proper"
 	file_path = "maps/randomvaults/dungeons/keycard_vault_normal.dmm"
 	var/datum/map_element/vault/keycards/parent
+
+/datum/map_element/dungeon/keycard_vault/load()
+	var/list/turfs = ..()
+	ASSERT(parent)
+	ASSERT(turfs.len)
+	for(var/turf/portal/PT in turfs)
+		PT.teleport_x = (PT.x - location.x) + (parent.location.x - location.x)
+		PT.teleport_y = (PT.y - location.y) + (parent.location.y - location.y)
+		PT.teleport_z = parent.location.z - location.z
 
 /datum/map_element/keycard_find_easy
 	name = "Easy difficulty keycard find"
