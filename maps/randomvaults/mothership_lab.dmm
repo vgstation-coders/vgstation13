@@ -230,7 +230,7 @@
 "CL" = (/obj/machinery/light/he,/obj/machinery/recharger{pixel_y = -30},/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/entrance)
 "CP" = (/obj/structure/table,/obj/item/toy/cards,/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/entrance)
 "Di" = (/obj/structure/closet/emcloset/vox,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
-"Dl" = (/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{dir = 1},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
+"Dl" = (/obj/effect/decal/cleanable/blood/drip{basecolor = "#2299FC"; blood_color = "#2299FC"},/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{dir = 1},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "Do" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Lab Access"; req_access_txt = "160"; req_one_access_txt = "160"},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/entrance)
 "DE" = (/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "DG" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/damaged,/area/vault/mothership_lab/entrance)
@@ -441,7 +441,7 @@ zrMDMDMDMDMDMDMDAuAuZtAunqrEYFMDMDMDMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLOh
 zrMDMDMDFOMDMDXoXoyAGLyAGLGLGLMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLAuAuSlMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvMDMDMDzrzr
 zrzrMDMDFOGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDmvmvmvMDMDMDMDMDMDMDMDMDMDMDGmmeGmMDGmGmGmGmGmGmGmGmGmGmMDMDMDMDMDGEGEGEMDMDMDmvMDMDMDmvmvmvMDMDzrzrzr
 zrzrMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDFOMDMDMDGmGmGmGmGmGmGmGmGmGmgUGmGmYdaJSYnWxGmZepnGWlDiGmGmGmMDMDMDGEGEGEMDmvmvMDMDmvmvmvMDMDMDzrzrzr
-zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDMDMDMDQzJBgbzuYSpmidbqPIMQGmmeQzPIMQDlHLMQMQMQHLMQQsMQPIgUgUGmMDMDMDMDMDmvmvmvMDMDmvMDMDMDzrzrzrzrzr
+zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDMDMDMDQzJBgbzuYSpmidbqPIMQGmmeQzPIMQMQDlMQMQMQHLQsMQMQPIgUgUGmMDMDMDMDMDmvmvmvMDMDmvMDMDMDzrzrzrzrzr
 zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDGEGEMDMDMDMDMDMDMDGmndgUMQMQbqMQgULkgUMQMQgUYhMQMQgUMQMQxSmhMQMQHLkrgUHLYjGmMDMDMDMDMDmvMDMDMDMDzrzrzrzrzrzrzrzr
 zrzrzrzrMDmvGLGLGLGLGLGLGLGLXomvmvMDMDGEMDMDMDMDMDMDMDMDMDGmyNzusnzuMQgUMQPIGmGmGmGmPIxGgURvDLnGSYTlTpgUYdPIMQzaGmMDMDmvmvMDMDMDMDMDMDzrzrzrzrzrzrzrzrzr
 zrzrzrzrzrMDMDGLGLGLGLGLMDMDMDMDmvmvMDMDMDMDMDMDzrzrzrMDMDGEGmGmGmGmGmGmGmGmMDMDMDMDGmGmGmGmGmGmGmGmGmGmGmGmGmGmMDMDmvMDMDzrzrzrzrzrzrzrzrzrzrzrxBzrzrzr
