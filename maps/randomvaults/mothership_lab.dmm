@@ -154,7 +154,6 @@
 "tm" = (/obj/structure/catwalk/invulnerable,/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "disintegrator cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "tr" = (/obj/effect/decal/warning_stripes{icon_state = "1"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/control_room)
 "tF" = (/obj/structure/catwalk/invulnerable,/obj/machinery/recharger{pixel_x = 30},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
-"tI" = (/turf/unsimulated/mineral,/area)
 "ui" = (/obj/machinery/door/window{name = "Shower"},/obj/machinery/acidshower{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/entrance)
 "uo" = (/obj/structure/catwalk/invulnerable,/obj/structure/rack,/obj/machinery/light/small{dir = 1},/obj/item/weapon/storage/fancy/flares,/obj/item/weapon/storage/fancy/flares,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "uz" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "armor cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/clothing/suit/armor/mothership,/obj/item/clothing/suit/armor/mothership,/obj/item/clothing/suit/armor/mothership,/obj/item/clothing/head/helmet/mothership,/obj/item/clothing/head/helmet/mothership,/obj/item/clothing/head/helmet/mothership,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/entrance)
@@ -412,7 +411,7 @@ zrzrzrzrMDMDMDmvmvMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlRlYFZTnLFfgjLKLK
 zrzrzrMDMDMDYFYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlYFZTZTFfxYZTPfLKLKLKpkLKLKLKeRuKuKuKuKuKaKuKuKuKpTuKuKuKuKuKJYuKoSOsWJeQeQeQGLGLYFMDzrzr
 zrzrzrMDMDYFgDoooooooooooooooooojQYFAqYFYFYFYFYFYFYFYFYFYFYFYFYFYFZTykFfEUZTLgUHksTtZTjqqfIvZTqeRgbIrpwGZTBouKbIZTqebIbIbIwGZTZTyEZTNqGLGLeQeQGLYFMDzrzr
 zrzrMDMDYFgDoooolnlooMqurwsNthoooojQYFZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTvzZTZTZTbIuKolZTZTIoxTIoZTZTYFYFYFYFYFGLGLeQGLYFMDMDzr
-zrtIMDYFgDooxOCpCxPHDYIIDYPHOKSaWdoojQZTIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXyQDEyQRzZTbIjsuKLWLKjepMPOxWZTYFAqAqMDYFAufseIfsAuMDMDzr
+zrMDMDYFgDooxOCpCxPHDYIIDYPHOKSaWdoojQZTIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXyQDEyQRzZTbIjsuKLWLKjepMPOxWZTYFAqAqMDYFAufseIfsAuMDMDzr
 zrMDYFooooxOcHPHPHvpPHEMPHvpPHPHXHWdooooIXZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTzKZTIXZTqeuKwGZTGGqsCLqCjLZTYFMDMDMDMDNfZWeQXdNfMDMDzr
 zrMDYFooxOcHEMvpPHEaEauGEaEaPHvpEMXHWdooIXZTZTZTVmgwaMaMaMaMaMaMaMaMnUaMaMaMaMaMaMaMaMgwyjZTIFDEjYgnZTIXZTQmDoQmZTZTZTZTZTZTZTYFMDMDMDMDAuGLeQGLAuMDMDzr
 zrMDYFooLfYCEMYCYvPJPJPJPJPJYvYCEMYCetooIXZTZTVmgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwZTdDdZgnXZZTIXZTBouKbIZTxXLKkDLKOkZTYFMDMDMDMDYFGLeQlyGLYFMDMD

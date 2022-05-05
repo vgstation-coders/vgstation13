@@ -503,7 +503,6 @@
 "Im" = (/obj/structure/table,/obj/item/device/flashlight,/obj/item/device/flashlight,/obj/item/device/flashlight,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "Iy" = (/obj/structure/table/woodentable,/obj/item/ammo_storage/magazine/smg9mm,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel)
 "Iz" = (/obj/machinery/light/he/burned,/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "raider ammunition cabinet"; req_access = null},/obj/item/ammo_storage/box/b762x55,/obj/item/ammo_storage/box/b762x55,/obj/item/ammo_storage/box/b380auto,/obj/item/ammo_storage/box/b380auto,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
-"IA" = (/turf/unsimulated/mineral,/area)
 "IB" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/vault/mothership_lab/hobo)
 "II" = (/obj/structure/closet{anchored = 1; name = "Laborer's Locker"},/obj/item/clothing/shoes/jackboots/steeltoe/mothership,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "IK" = (/obj/structure/table,/obj/machinery/computer/library/checkout,/obj/machinery/camera{id_tag = "labcameras"; name = "Greyling Dormitory 1"; network = list("MOTHERSHIPLAB")},/obj/machinery/recharger{pixel_y = 30},/turf/simulated/floor{icon_state = "dark floor stripe"; tag = "icon-dark floor stripe"},/area/vault/mothership_lab/habitation)
@@ -779,6 +778,6 @@ ibgNjezQMdSxhzCljrSxYDTpzQjRcSCGqPzPCGHCjRazQlmUuEBbjRkQSqSqSqwbFwjRjRjRPGSFWTOd
 ibgNjemDneaWcrJBzQtdFMtdzQjRUFUFUFEpsRJHjRjRjRmUhgBbjRnLDKSqSqfYjRAfsIjRMNRunqPkLAgCvfWTPkqdgCgiJxzomxVXjRekynqIqIHOsNqIqIekekekekekekeyeyibibibBJBJBJBJ
 ibgNjezQzQzQmDzQzQzQmDzQzQjRjRjRjRjRjRjRjRazQlHUjPBbjRSLDZPPSqSqFYUMXBjRjRjRjRjRjRjRjRjRjRjRjRxXSIIWXkNzjReksNmzQJqINVqIekeyeyeyeyeyeyibibibibBJBJBJBJBJ
 ibgNjejejejejejejejejejejejegNgNgNgNgNgNjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRgNgNgNgNgNgNgNgNgNgNjRjRjRjRjRjRjRekekekekekekekeyibibibibibibibBJBJBJBJBJBJBJBJ
-BJibgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNibibIAIAIAIAibibibibgNgNgNgNgNgNgNeyeyeyeyeyeyeyibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
-BJBJBJibibibibibibibibIAIAIABJBJibibibibibibibibibibibibibibibibibibibibibIABJBJBJBJBJBJBJibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
+BJibgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibibibibibgNgNgNgNgNgNgNeyeyeyeyeyeyeyibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
+BJBJBJibibibibibibibibibibibBJBJibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
 "}
