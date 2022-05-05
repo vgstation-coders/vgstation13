@@ -2172,6 +2172,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/lemonseed = 3,
 		/obj/item/seeds/orangeseed = 3,
 		/obj/item/seeds/grassseed = 3,
+		/obj/item/seeds/cloverseed = 3,
 		/obj/item/seeds/cocoapodseed = 3,
 		/obj/item/seeds/cabbageseed = 3,
 		/obj/item/seeds/grapeseed = 3,
