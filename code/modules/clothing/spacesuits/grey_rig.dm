@@ -70,6 +70,7 @@
 	armor = list(melee = 50, bullet = 25, laser = 70, energy = 25, bomb = 40, bio = 100, rad = 50)
 	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator, /obj/item/weapon/gun/energy/advdisintegrator)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/leader
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
 	return 0
@@ -81,6 +82,7 @@
 	item_state = "rig0_grey_leader_dome"
 	_color = "grey_leader_dome"
 	armor = list(melee = 50, bullet = 25, laser = 70, energy = 25, bomb = 40, bio = 100, rad = 50)
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
 	return 0
