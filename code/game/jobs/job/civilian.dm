@@ -45,7 +45,7 @@
 	spawn_positions = 1
 	supervisors = "the head of personnel"
 	wage_payout = 65
-	selection_color = "#dddddd"
+	selection_color = "#E9D9BC"
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 	outfit_datum = /datum/outfit/qm
@@ -57,7 +57,7 @@
 	spawn_positions = 2
 	supervisors = "the quartermaster and the head of personnel"
 	wage_payout = 20
-	selection_color = "#dddddd"
+	selection_color = "#F9EAD5"
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
 	alt_titles = list("Mailman")
@@ -70,7 +70,7 @@
 	spawn_positions = 3
 	supervisors = "the quartermaster and the head of personnel"
 	wage_payout = 30
-	selection_color = "#dddddd"
+	selection_color = "#F9EAD5"
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
 	outfit_datum = /datum/outfit/mining
