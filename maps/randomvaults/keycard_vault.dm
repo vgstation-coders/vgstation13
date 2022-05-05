@@ -18,8 +18,7 @@
 	thevault = new /datum/map_element/dungeon/keycard_vault
 	thevault.file_path = "maps/randomvaults/dungeons/keycard_vault_[difficulty].dmm"
 	thevault.parent = src
-	var/result1 = load_dungeon(thevault,rotation)
-	ASSERT(result1)
+	load_dungeon(thevault,rotation)
 	var/static/list/keycard_find_types = list(
 		KEYCARD_DIFFICULTY_EASY = /datum/map_element/keycard_find_easy,
 		KEYCARD_DIFFICULTY_NORMAL = /datum/map_element/keycard_find_normal,
@@ -45,9 +44,15 @@
 	var/list/turfs = ..()
 	ASSERT(thevault)
 	ASSERT(turfs.len)
+	var/offset = 0
+	switch(difficulty)
+		if(KEYCARD_DIFFICULTY_NORMAL)
+			offset = 1
+		if(KEYCARD_DIFFICULTY_HARD)
+			offset = 2
 	for(var/turf/portal/PT in turfs)
-		PT.teleport_x = (PT.x - location.x) + (thevault.location.x - location.x)
-		PT.teleport_y = (PT.y - location.y) + (thevault.location.y - location.y)
+		PT.teleport_x = thevault.location.x - location.x
+		PT.teleport_y = (thevault.location.y - location.y) + offset
 		PT.teleport_z = thevault.location.z - location.z
 
 /datum/map_element/dungeon/keycard_vault
@@ -59,9 +64,15 @@
 	var/list/turfs = ..()
 	ASSERT(parent)
 	ASSERT(turfs.len)
+	var/offset = 0
+	switch(parent.difficulty)
+		if(KEYCARD_DIFFICULTY_NORMAL)
+			offset = 1
+		if(KEYCARD_DIFFICULTY_HARD)
+			offset = 2
 	for(var/turf/portal/PT in turfs)
-		PT.teleport_x = (PT.x - location.x) + (parent.location.x - location.x)
-		PT.teleport_y = (PT.y - location.y) + (parent.location.y - location.y)
+		PT.teleport_x = parent.location.x - location.x
+		PT.teleport_y = (parent.location.y - location.y) - offset
 		PT.teleport_z = parent.location.z - location.z
 
 /datum/map_element/keycard_find_easy
@@ -109,7 +120,19 @@
 	icon = 'icons/obj/doors/keycarddoor.dmi'
 	var/keycard_status = 0
 
-/obj/machinery/door/airlock/highsecurity/keycard/bump_open(mob/living/user)
+/obj/machinery/door/airlock/highsecurity/keycard/hitby(atom/movable/AM)
+	if(keycard_status == RED_KEYCARD_IN | BLUE_KEYCARD_IN | YELLOW_KEYCARD_IN)
+		..()
+	else
+		denied()
+
+/obj/machinery/door/airlock/highsecurity/keycard/attack_hand(mob/user)
+	if(keycard_status == RED_KEYCARD_IN | BLUE_KEYCARD_IN | YELLOW_KEYCARD_IN)
+		..()
+	else
+		denied()
+
+/obj/machinery/door/airlock/highsecurity/keycard/Bumped(atom/AM)
 	if(keycard_status == RED_KEYCARD_IN | BLUE_KEYCARD_IN | YELLOW_KEYCARD_IN)
 		..()
 	else
