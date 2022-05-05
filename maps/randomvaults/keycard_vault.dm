@@ -5,6 +5,7 @@
 #define RED_KEYCARD_IN 1
 #define BLUE_KEYCARD_IN 2
 #define YELLOW_KEYCARD_IN 4
+#define ALL_CARDS_IN 7
 
 /datum/map_element/vault/keycards
 	name = "Keycard-gate vault entrance"
@@ -121,19 +122,19 @@
 	var/keycard_status = 0
 
 /obj/machinery/door/airlock/highsecurity/keycard/hitby(atom/movable/AM)
-	if(keycard_status == RED_KEYCARD_IN | BLUE_KEYCARD_IN | YELLOW_KEYCARD_IN)
+	if(keycard_status == ALL_CARDS_IN)
 		..()
 	else
 		denied()
 
 /obj/machinery/door/airlock/highsecurity/keycard/attack_hand(mob/user)
-	if(keycard_status == RED_KEYCARD_IN | BLUE_KEYCARD_IN | YELLOW_KEYCARD_IN)
+	if(keycard_status == ALL_CARDS_IN)
 		..()
 	else
 		denied()
 
 /obj/machinery/door/airlock/highsecurity/keycard/Bumped(atom/AM)
-	if(keycard_status == RED_KEYCARD_IN | BLUE_KEYCARD_IN | YELLOW_KEYCARD_IN)
+	if(keycard_status == ALL_CARDS_IN)
 		..()
 	else
 		denied()
@@ -226,3 +227,4 @@
 #undef RED_KEYCARD_IN
 #undef BLUE_KEYCARD_IN
 #undef YELLOW_KEYCARD_IN
+#undef ALL_CARDS_IN
