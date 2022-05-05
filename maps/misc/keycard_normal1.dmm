@@ -1,10 +1,90 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
-/obj/effect/landmark/keycard/hard,
+/obj/structure/grille,
+/turf/space,
+/area)
+"e" = (
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"k" = (
 /obj/structure/lattice,
+/obj/structure/grille,
+/turf/space,
+/area)
+"o" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"v" = (
+/obj/structure/catwalk,
+/obj/effect/landmark/keycard,
+/turf/space,
+/area)
+"A" = (
 /turf/space,
 /area)
 
 (1,1,1) = {"
+o
+A
+o
+o
 a
+A
+a
+"}
+(2,1,1) = {"
+a
+A
+A
+e
+A
+o
+o
+"}
+(3,1,1) = {"
+a
+A
+e
+o
+e
+A
+a
+"}
+(4,1,1) = {"
+A
+o
+e
+v
+o
+A
+k
+"}
+(5,1,1) = {"
+a
+A
+o
+o
+e
+e
+A
+"}
+(6,1,1) = {"
+o
+A
+o
+A
+o
+A
+a
+"}
+(7,1,1) = {"
+o
+a
+a
+A
+A
+o
+o
 "}
