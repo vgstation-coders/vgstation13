@@ -27,7 +27,8 @@
 	var/vault_type = keycard_find_types[difficulty]
 	var/list/list_of_vaults = get_map_element_objects(vault_type)
 	var/area/A = locate(/area/random_vault)
-	populate_area_with_vaults(A, list_of_vaults, 3, population_density = POPULATION_SCARCE, filter_function=/proc/stay_in_vault_area)
+	var/result = populate_area_with_vaults(A, list_of_vaults, 3, population_density = 2, filter_function=/proc/stay_in_vault_area)
+	ASSERT(result)
 	var/list/keycard_landmarks = list()
 	for(var/obj/effect/landmark/keycard/KC in landmarks_list)
 		if(KC.name == "keycard-[difficulty]")
@@ -48,37 +49,37 @@
 	name = "Easy difficulty keycard find"
 
 /datum/map_element/keycard_find_easy/type1
-	file_path = "maps/misc/keycard_find_easy1.dmm"
+	file_path = "maps/misc/keycards/easy1.dmm"
 
 /datum/map_element/keycard_find_easy/type2
-	file_path = "maps/misc/keycard_find_easy2.dmm"
+	file_path = "maps/misc/keycards/easy2.dmm"
 
 /datum/map_element/keycard_find_easy/type3
-	file_path = "maps/misc/keycard_find_easy3.dmm"
+	file_path = "maps/misc/keycards/easy3.dmm"
 
 /datum/map_element/keycard_find_normal
 	name = "Normal difficulty keycard find"
 
 /datum/map_element/keycard_find_normal/type1
-	file_path = "maps/misc/keycard_find_normal1.dmm"
+	file_path = "maps/misc/keycards/normal1.dmm"
 
 /datum/map_element/keycard_find_normal/type2
-	file_path = "maps/misc/keycard_find_normal2.dmm"
+	file_path = "maps/misc/keycards/normal2.dmm"
 
 /datum/map_element/keycard_find_normal/type3
-	file_path = "maps/misc/keycard_find_normal3.dmm"
+	file_path = "maps/misc/keycards/normal3.dmm"
 
 /datum/map_element/keycard_find_hard
 	name = "Hard difficulty keycard find"
 
 /datum/map_element/keycard_find_hard/type1
-	file_path = "maps/misc/keycard_find_hard1.dmm"
+	file_path = "maps/misc/keycards/hard1.dmm"
 
 /datum/map_element/keycard_find_hard/type2
-	file_path = "maps/misc/keycard_find_hard2.dmm"
+	file_path = "maps/misc/keycards/hard2.dmm"
 
 /datum/map_element/keycard_find_hard/type3
-	file_path = "maps/misc/keycard_find_hard3.dmm"
+	file_path = "maps/misc/keycards/hard3.dmm"
 
 /area/vault/keycard
 	dynamic_lighting = FALSE // Area portals don't look good in this for now

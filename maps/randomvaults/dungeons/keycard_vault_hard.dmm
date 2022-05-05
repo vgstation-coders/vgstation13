@@ -6,8 +6,16 @@
 /obj/machinery/door/airlock/highsecurity,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"F" = (
+/obj/structure/table,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
+/area/vault/keycard)
+"I" = (
+/obj/structure/rack,
+/turf/simulated/floor/plating,
 /area/vault/keycard)
 "P" = (
 /turf/portal,
@@ -48,79 +56,79 @@ H
 "}
 (4,1,1) = {"
 H
+F
+F
+I
 a
-a
-a
-a
-a
-a
-a
+I
+F
+F
 H
 "}
 (5,1,1) = {"
 H
+F
 a
 a
 a
 a
 a
-a
-a
+F
 H
 "}
 (6,1,1) = {"
 H
+I
 a
+F
 a
+F
 a
-a
-a
-a
-a
+I
 H
 "}
 (7,1,1) = {"
 H
+I
 a
+F
+I
+F
 a
-a
-a
-a
-a
-a
+I
 H
 "}
 (8,1,1) = {"
 H
+I
 a
+F
+F
+F
 a
-a
-a
-a
-a
-a
+I
 H
 "}
 (9,1,1) = {"
 H
+F
 a
 a
 a
 a
 a
-a
-a
+F
 H
 "}
 (10,1,1) = {"
 H
-a
-a
-a
-a
-a
-a
-a
+F
+F
+I
+I
+I
+F
+F
 H
 "}
 (11,1,1) = {"

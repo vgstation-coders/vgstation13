@@ -2,6 +2,14 @@
 "a" = (
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"d" = (
+/obj/structure/table,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"u" = (
+/obj/structure/rack,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "B" = (
 /obj/machinery/door/airlock/highsecurity,
 /turf/simulated/floor/plating,
@@ -36,23 +44,23 @@ H
 "}
 (4,1,1) = {"
 H
+u
 a
-a
-a
+u
 H
 "}
 (5,1,1) = {"
 H
+u
 a
-a
-a
+u
 H
 "}
 (6,1,1) = {"
 H
-a
-a
-a
+d
+d
+d
 H
 "}
 (7,1,1) = {"
