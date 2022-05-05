@@ -966,7 +966,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	CAMERANET_THUNDER,
 	CAMERANET_ERT,
 	CAMERANET_NUKE,
-	CAMERANET_CREED
+	CAMERANET_CREED,
+	CAMERANET_MOTHERSHIPLAB
 	)
 
 //Generic species flags.
