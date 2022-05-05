@@ -610,6 +610,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/janny_gear
 	contains = list(/obj/item/clothing/suit/apron/overalls,
 					/obj/item/clothing/gloves/black,
+					/obj/item/weapon/storage/belt/janitor,
 					/obj/item/clothing/shoes/galoshes)
 	name = "Custodial gear"
 	cost = 100
