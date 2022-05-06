@@ -13,6 +13,11 @@
 /obj/machinery/door/airlock/highsecurity/keycard,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"w" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
 "K" = (
 /obj/structure/catwalk/invulnerable,
 /turf/space,
@@ -48,7 +53,7 @@ c
 (4,1,1) = {"
 c
 a
-h
+w
 a
 a
 c

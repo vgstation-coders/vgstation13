@@ -27,6 +27,11 @@
 /obj/abstract/map/spawner/safe/medal,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"k" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
 "m" = (
 /obj/structure/table,
 /obj/item/weapon/gun/projectile/flamethrower/full,
@@ -189,7 +194,7 @@ H
 H
 H
 H
-P
+k
 H
 H
 H

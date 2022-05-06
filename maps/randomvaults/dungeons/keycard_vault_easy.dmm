@@ -7,6 +7,11 @@
 /obj/item/weapon/gun/energy/laser/captain/alien,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"m" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
 "o" = (
 /obj/structure/table,
 /obj/item/soulstone,
@@ -59,7 +64,7 @@ H
 H
 H
 H
-P
+m
 H
 "}
 (3,1,1) = {"

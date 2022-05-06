@@ -73,6 +73,11 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"O" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
 "P" = (
 /turf/portal,
 /area/vault/keycard)
@@ -111,7 +116,7 @@ H
 H
 H
 H
-P
+O
 H
 H
 "}
