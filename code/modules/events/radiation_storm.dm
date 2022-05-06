@@ -81,7 +81,7 @@
 				var/applied_rads = (H.apply_radiation(irradiationThisBurst,RAD_EXTERNAL) > (irradiationThisBurst/4))
 				if(randomMutation && applied_rads)
 					//luck plays a role in the mutations acquired
-					badMutation = H.lucky_prob(50, -1/10)
+					badMutation = H?.lucky_prob(50, -1/10)
 					if(badMutation)
 						//H.apply_effect((rand(25,50)),IRRADIATE,0)
 						randmutb(H) // Applies bad mutation
