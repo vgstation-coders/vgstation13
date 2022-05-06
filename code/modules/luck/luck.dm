@@ -146,6 +146,7 @@
 	//clover growing sprites and inhand sprites
 	//clover plant stats
 	//remove redundant code 		plantname = "clover[leaves]" icon_state = "clover[leaves]" etc.?
+	//tune leaf prob params
 	//additional chems in clovers?
 	//names upon clover splicing and whatnot?
 	//remove_debug_code/message_admins/admin_log
@@ -154,6 +155,12 @@
 	//customplantname?
 	//luck penalty for having something put away/nested
 	//return values in shift_leaves() to avoid always calling update_icon()
+	//tweak clover lucks for balance?
+	//ls not going beyond 7,
+	//modulo wraparound?
+	//also clover prob tweak:
+		//potency affects more the odds to get a shift
+		//luck more affects the odds to get a shift of more than 1
 
 	//defines for curses
 

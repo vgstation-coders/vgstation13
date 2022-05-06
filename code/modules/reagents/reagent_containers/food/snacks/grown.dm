@@ -1157,7 +1157,7 @@ var/list/special_fruits = list()
 	var/prob1 = (1 + mut / 7)
 	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25) : prob(prob1))
 		var/ls = 1
-		var/prob2 = mut ? (1 + mut / 21) : 1
+		var/prob2 = max(mut / 21, 0.1)
 		prob2 = shifter ? shifter.lucky_probability(prob2, 1/1000 , 33) : prob2
 		for(var/i in 1 to 7)
 			if(prob(prob2))
