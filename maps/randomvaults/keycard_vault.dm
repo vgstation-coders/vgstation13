@@ -118,6 +118,7 @@
 
 /obj/machinery/door/airlock/highsecurity/keycard
 	name = "\improper Keycard-Gated Airlock"
+	desc = "Requires three colored keycards to open, found elsewhere in space."
 	icon = 'icons/obj/doors/keycarddoor.dmi'
 	var/keycard_status = 0
 
