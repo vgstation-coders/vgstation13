@@ -274,7 +274,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			priority = -1
 
 	if(href_list["writeAnnouncement"])
-		var/new_message = copytext(reject_bad_text(stripped_message(usr, "Write your message:", "Departmental Announcement", "")),1,MAX_MESSAGE_LEN)
+		var/new_message = copytext(stripped_message(usr, "Write your message:", "Departmental Announcement", ""))
 		if(new_message)
 			message = new_message
 			switch(href_list["priority"])
