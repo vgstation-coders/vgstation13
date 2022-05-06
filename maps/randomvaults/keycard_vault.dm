@@ -45,14 +45,14 @@
 	var/list/turfs = ..()
 	ASSERT(thevault)
 	ASSERT(turfs.len)
-	var/offset = 0
+	var/offset = -1
 	switch(difficulty)
 		if(KEYCARD_DIFFICULTY_NORMAL)
-			offset = 1
+			offset = 0
 		if(KEYCARD_DIFFICULTY_HARD)
-			offset = 2
+			offset = 1
 	for(var/turf/portal/PT in turfs)
-		PT.teleport_x = thevault.location.x - location.x
+		PT.teleport_x = (thevault.location.x - location.x)
 		PT.teleport_y = (thevault.location.y - location.y) + offset
 		PT.teleport_z = thevault.location.z - location.z
 
@@ -65,14 +65,14 @@
 	var/list/turfs = ..()
 	ASSERT(parent)
 	ASSERT(turfs.len)
-	var/offset = 0
+	var/offset = -1
 	switch(parent.difficulty)
 		if(KEYCARD_DIFFICULTY_NORMAL)
-			offset = 1
+			offset = 0
 		if(KEYCARD_DIFFICULTY_HARD)
-			offset = 2
+			offset = 1
 	for(var/turf/portal/PT in turfs)
-		PT.teleport_x = parent.location.x - location.x
+		PT.teleport_x = (parent.location.x - location.x)
 		PT.teleport_y = (parent.location.y - location.y) - offset
 		PT.teleport_z = parent.location.z - location.z
 

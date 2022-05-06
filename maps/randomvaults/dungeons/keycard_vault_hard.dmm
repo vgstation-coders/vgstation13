@@ -72,11 +72,7 @@
 /area/vault/keycard)
 "v" = (
 /obj/structure/rack,
-/obj/item/weapon/dnainjector/nofail/randompower,
-/obj/item/weapon/dnainjector/nofail/randompower,
-/obj/item/weapon/dnainjector/nofail/randompower,
-/obj/item/weapon/dnainjector/nofail/randompower,
-/obj/item/weapon/dnainjector/nofail/randompower,
+/obj/item/weapon/storage/box/mystery_dna,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "x" = (
@@ -192,13 +188,24 @@ H
 H
 H
 H
-a
+H
 P
-P
+H
 H
 H
 "}
 (3,1,1) = {"
+H
+H
+H
+H
+a
+P
+H
+H
+H
+"}
+(4,1,1) = {"
 H
 H
 H
@@ -209,7 +216,7 @@ H
 H
 H
 "}
-(4,1,1) = {"
+(5,1,1) = {"
 H
 q
 K
@@ -220,7 +227,7 @@ L
 Q
 H
 "}
-(5,1,1) = {"
+(6,1,1) = {"
 H
 m
 a
@@ -231,7 +238,7 @@ a
 M
 H
 "}
-(6,1,1) = {"
+(7,1,1) = {"
 H
 j
 a
@@ -242,7 +249,7 @@ a
 o
 H
 "}
-(7,1,1) = {"
+(8,1,1) = {"
 H
 D
 a
@@ -253,7 +260,7 @@ a
 I
 H
 "}
-(8,1,1) = {"
+(9,1,1) = {"
 H
 J
 a
@@ -264,7 +271,7 @@ a
 g
 H
 "}
-(9,1,1) = {"
+(10,1,1) = {"
 H
 x
 a
@@ -275,7 +282,7 @@ a
 y
 H
 "}
-(10,1,1) = {"
+(11,1,1) = {"
 H
 r
 f
@@ -286,7 +293,7 @@ Y
 R
 H
 "}
-(11,1,1) = {"
+(12,1,1) = {"
 H
 H
 H
