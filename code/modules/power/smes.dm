@@ -9,7 +9,7 @@ var/list/smes_list = list()
 	icon_state = "smes"
 	density = 1
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 

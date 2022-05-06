@@ -70,7 +70,7 @@ var/global/ingredientLimit = 10
 	var/recursive_ingredients = 0 //allow /food/snacks/customizable as a valid ingredient
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 
@@ -307,7 +307,7 @@ var/global/ingredientLimit = 10
 	cookSound = 'sound/machines/juicer.ogg'
 	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
 
-/obj/machinery/cooking/candy/RefreshParts()						
+/obj/machinery/cooking/candy/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
@@ -376,7 +376,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/cerealmaker/makeFood()
 	makeCereal()
 
-/obj/machinery/cooking/proc/makeCereal()	
+/obj/machinery/cooking/proc/makeCereal()
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
 	for(var/obj/item/embedded in src.ingredient.contents)
 		embedded.forceMove(src.loc)
@@ -666,7 +666,7 @@ var/global/ingredientLimit = 10
 	density = 0
 	icon_state = "spit"
 	icon_state_on = "spit"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	cooks_in_reagents = 0
 	machine_flags = null
 
@@ -718,7 +718,7 @@ var/global/ingredientLimit = 10
 	source_temperature = T0C+180
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/obj/item/weapon/reagent_containers/within
 
@@ -789,11 +789,11 @@ var/global/ingredientLimit = 10
 /obj/machinery/oven/proc/toggle(mob/user)
 	if(use_power == 1)
 		icon_state = icon_state_on
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		processing_objects.Add(src)
 	else if(use_power == 2)
 		icon_state = initial(icon_state)
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		processing_objects.Remove(src)
 	if(user)
 		to_chat(user, use_power ? "<span class = 'notice'>You turn \the [src] [use_power == 2 ? "on" : "off"].</span>" : "<span class = 'warning'>\The [src] doesn't seem to be plugged in!</span>")

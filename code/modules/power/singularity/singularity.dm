@@ -11,7 +11,7 @@ var/list/obj/machinery/singularity/white_hole_candidates
 	layer = SINGULARITY_LAYER
 	plane = EFFECTS_PLANE
 	luminosity = 6
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 	var/obj/machinery/singularity/wormhole_out = null
 	var/obj/machinery/singularity/wormhole_in = null

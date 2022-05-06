@@ -25,7 +25,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 	name = "status display"
 	anchored = 1
 	density = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	var/mode = 1	// 0 = Blank
 					// 1 = Shuttle timer

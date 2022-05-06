@@ -21,7 +21,7 @@
 	var/last_shot
 	var/fire_twice = 0
 
-	use_power = 1								// this turret uses and requires power
+	use_power = MACHINE_POWER_USE_IDLE			// this turret uses and requires power
 	idle_power_usage = 50						// when inactive, this turret takes up constant 50 Equipment power
 	active_power_usage = 300					// when active, this turret takes up constant 300 Equipment power
 //	var/list/targets
@@ -184,7 +184,7 @@
 		if(!raising)
 			if(!raised)
 				popUp()
-				use_power = 2
+				use_power = MACHINE_POWER_USE_ACTIVE
 			else
 				spawn()
 					if(!targeting_active)
@@ -199,7 +199,7 @@
 				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 	else if(!raising || raised)//else, pop down
 		popDown()
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 	return
 
 /obj/machinery/turret/proc/target()

@@ -15,7 +15,7 @@
 
 	req_access = list(access_engine_major)
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 100000 //Yes that is a shitton. No you're not running this engine on an SE/AME you SE/AME scrubs.
 
@@ -34,7 +34,7 @@
 
 /obj/machinery/rust/gyrotron/proc/stop_emitting()
 	emitting = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	update_icon()
 
 /obj/machinery/rust/gyrotron/proc/start_emitting()
@@ -42,7 +42,7 @@
 		return
 
 	emitting = 1
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 
 	update_icon()
 

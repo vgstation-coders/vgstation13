@@ -5,7 +5,7 @@
 	icon_state = "m_pad"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 5000
 	var/building = 0

@@ -12,7 +12,7 @@
 	icon_state = "access_control_standby"
 	anchored = 0
 	density = FALSE
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 1
 	active_power_usage = 50
 	power_channel = ENVIRON
@@ -50,9 +50,9 @@
 	smart_transparency = !smart_transparency
 	Ourwindow.smart_toggle()
 	if (use_power == 1)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 	return smart_transparency
 
 

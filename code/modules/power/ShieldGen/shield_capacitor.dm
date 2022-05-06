@@ -9,9 +9,9 @@
 	req_one_access = list(access_security, access_engine_minor) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = 1			//0 use nothing
-							//1 use idle power
-							//2 use active power
+	use_power = MACHINE_POWER_USE_IDLE	//0 use nothing
+										//1 use idle power
+										//2 use active power
 	idle_power_usage = 10
 	active_power_usage = 100
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -111,14 +111,14 @@
 
 /obj/machinery/shield_capacitor/process()
 	if(active)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		if(stored_charge + charge_rate > max_charge)
 			active_power_usage = max_charge - stored_charge
 		else
 			active_power_usage = charge_rate
 		stored_charge += active_power_usage
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	time_since_fail++
 	if(stored_charge < active_power_usage * 1.5)

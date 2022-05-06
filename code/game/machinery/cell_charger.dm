@@ -5,7 +5,7 @@
 	icon_state = "ccharger0"
 	icon_state_open = "ccharger_open"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 10 //Power is already drained to charge batteries
 	power_channel = EQUIP

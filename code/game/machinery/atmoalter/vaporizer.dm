@@ -6,7 +6,7 @@
 	icon_state = "vaporizer_closed_unlocked"
 
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	density = 1
 	machine_flags = EMAGGABLE
 	flags = OPENCONTAINER | NOREACT

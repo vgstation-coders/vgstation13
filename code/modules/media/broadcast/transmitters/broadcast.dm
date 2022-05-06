@@ -5,7 +5,7 @@
 	icon = 'icons/obj/machines/broadcast.dmi'
 	icon_state = "broadcaster"
 	light_color = LIGHT_COLOR_BLUE
-	use_power = 0 // We use power_connection for this.
+	use_power = MACHINE_POWER_USE_NONE // We use power_connection for this.
 	density = 1
 	anchored = 1 // May need map updates idfk
 	idle_power_usage = 50
@@ -198,10 +198,10 @@
 	if(on)
 		overlays += image(icon = icon, icon_state = "broadcaster on")
 		set_light(3) // OH FUUUUCK
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
 		set_light(1) // Only the tile we're on.
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 	if(sources.len)
 		overlays += image(icon = icon, icon_state = "broadcaster linked")
 

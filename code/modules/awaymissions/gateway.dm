@@ -55,7 +55,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 /obj/machinery/gateway/center
 	icon = 'icons/obj/machines/gatewaycenter.dmi'
 	icon_state = "off"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	pixel_x = 0
 	bound_x = 0
 	bound_y = 0
@@ -176,7 +176,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 /////////////////////////////////////Away////////////////////////
 
 /obj/machinery/gateway/center/away
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/calibrated = 1
 
 /obj/machinery/gateway/center/away/New()

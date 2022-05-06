@@ -2,7 +2,7 @@
 	icon = 'icons/obj/atmospherics/cold_sink.dmi'
 	icon_state = "on_cool"
 	density = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	name = "Cold Sink"
 	desc = "Cools gases when connected to a pipe network."

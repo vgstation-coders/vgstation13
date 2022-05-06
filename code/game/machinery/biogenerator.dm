@@ -340,7 +340,7 @@
 	icon_state = "biogen-stand"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 40
 	var/speed_coefficient = 15
 	var/biomass_coefficient = 9

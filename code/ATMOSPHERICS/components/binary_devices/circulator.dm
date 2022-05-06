@@ -8,7 +8,7 @@
 	icon_state = "circ-off"
 	anchored = 0
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 	var/obj/machinery/power/generator/linked_generator
 

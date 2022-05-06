@@ -10,7 +10,7 @@
 	light_power_on = 1
 	light_color = LIGHT_COLOR_YELLOW
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 300
 	active_power_usage = 300
 

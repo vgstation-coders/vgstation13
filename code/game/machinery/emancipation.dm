@@ -5,7 +5,7 @@
 	icon_state = "emancipation_grill"
 	density = FALSE
 	anchored = TRUE
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 75
 	active_power_usage = 750
 	flow_flags = IMPASSABLE
