@@ -13,6 +13,8 @@
 	var/connected = 0
 	var/datum/powernet/powernet = null
 
+	var/power_priority = POWER_PRIORITY_NORMAL
+
 	var/machine_flags = 0 // Emulate machinery flags.
 	var/inMachineList = 0
 
@@ -81,13 +83,13 @@
 	if(get_powernet())
 		powernet.newavail += amount
 
-/datum/power_connection/proc/add_load(var/amount)
+/datum/power_connection/proc/add_load(var/amount, var/priority = power_priority)
 	if(get_powernet())
-		powernet.load += amount
+		powernet.add_load(amount, priority)
 
 /datum/power_connection/proc/get_surplus()
 	if(get_powernet())
-		return powernet.avail-powernet.load
+		return powernet.avail-powernet.get_load()
 	else
 		return 0
 

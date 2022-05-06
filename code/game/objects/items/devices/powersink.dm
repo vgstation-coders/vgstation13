@@ -26,6 +26,7 @@
 /obj/item/device/powersink/New()
 	. = ..()
 	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_BYPASS
 
 /obj/item/device/powersink/Destroy()
 	set_light(0)

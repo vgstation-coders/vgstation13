@@ -54,6 +54,7 @@ var/global/list/battery_online =	list(
 	density = 1
 	anchored = 1
 	use_power = MACHINE_POWER_USE_GRID
+	power_priority = POWER_PRIORITY_SMES_RECHARGE
 
 	var/output = 50000
 	var/lastout = 0

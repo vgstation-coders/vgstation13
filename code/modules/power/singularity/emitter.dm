@@ -10,6 +10,7 @@
 	req_access = list(access_engine_minor)
 
 	use_power = MACHINE_POWER_USE_GRID
+	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	idle_power_usage = 10
 	active_power_usage = 300
 

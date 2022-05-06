@@ -14,6 +14,7 @@
 	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
+	var/power_priority = POWER_PRIORITY_NORMAL
 
 	//For powernet rebuilding
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
@@ -70,13 +71,13 @@
 	if(get_powernet())
 		powernet.newavail += amount
 
-/obj/machinery/power/proc/add_load(var/amount)
+/obj/machinery/power/proc/add_load(var/amount, var/priority = power_priority)
 	if(get_powernet())
-		powernet.load += amount
+		powernet.add_load(amount, priority)
 
 /obj/machinery/power/proc/surplus()
 	if(get_powernet())
-		return powernet.avail-powernet.load
+		return powernet.avail-powernet.get_load()
 	else
 		return 0
 
@@ -88,7 +89,7 @@
 
 /obj/machinery/power/proc/load()
 	if(get_powernet())
-		return powernet.load
+		return powernet.get_load()
 	else
 		return 0
 

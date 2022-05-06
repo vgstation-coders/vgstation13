@@ -325,6 +325,7 @@
 
 /obj/machinery/shieldwallgen/New()
 	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	. = ..()
 
 /obj/machinery/shieldwallgen/Destroy()
@@ -353,7 +354,7 @@
 		power = 0
 		return 0
 
-	var/surplus = max(PN.avail - PN.load, 0)
+	var/surplus = max(PN.avail - PN.get_load(), 0)
 	var/shieldload = min(rand(50,200), surplus)
 	if(shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
 		power = 0

@@ -104,6 +104,8 @@
 
 	machine_flags = WIREJACK
 
+	power_priority = POWER_PRIORITY_APC
+
 /obj/machinery/power/apc/get_cell()
 	return cell
 
@@ -1032,7 +1034,7 @@
 			src.occupant.gib()
 			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
-		else 
+		else
 			to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 
 /obj/machinery/power/apc/can_overload()
@@ -1066,9 +1068,9 @@
 	else
 		return 0
 
-/obj/machinery/power/apc/add_load(var/amount)
+/obj/machinery/power/apc/add_load(var/amount, var/priority = power_priority)
 	if(terminal && terminal.get_powernet())
-		terminal.powernet.load += amount
+		terminal.powernet.add_load(amount, priority)
 
 /obj/machinery/power/apc/avail()
 	if(terminal)
@@ -1242,14 +1244,14 @@
 /obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	switch (on)
 		if (0)
-			if(val>=2)		// if on or auto-on, return auto-off
-				return 1
+			if(val==APC_CHANNEL_STATUS_ON || val==APC_CHANNEL_STATUS_AUTO_ON)	// if on or auto-on, return auto-off
+				return APC_CHANNEL_STATUS_AUTO_OFF
 		if (1)
-			if(val==1)			// if auto-off, return auto-on
-				return 3
+			if(val==APC_CHANNEL_STATUS_AUTO_OFF)								// if auto-off, return auto-on
+				return APC_CHANNEL_STATUS_AUTO_ON
 		if (2)
-			if(val==3)			// if auto-on, return auto-off
-				return 1
+			if(val==APC_CHANNEL_STATUS_AUTO_ON)									// if auto-on, return auto-off
+				return APC_CHANNEL_STATUS_AUTO_OFF
 	return val
 
 // damage and destruction acts

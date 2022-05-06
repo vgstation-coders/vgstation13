@@ -26,6 +26,7 @@
 /obj/machinery/singularity_beacon/New()
 	. = ..()
 	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_BYPASS
 	cell = new /obj/item/weapon/cell/hyper(src) //Singularity beacons are wasteful as fuck, that state-of-the-art cell will last a single minute
 
 /obj/machinery/singularity_beacon/Destroy()

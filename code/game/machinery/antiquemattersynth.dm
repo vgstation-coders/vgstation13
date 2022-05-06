@@ -39,6 +39,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	icon_state = "scanner_0old"
 
 	use_power = MACHINE_POWER_USE_GRID
+	power_priority = POWER_PRIORITY_EXCESS
 	density = 1
 	anchored = 0
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE

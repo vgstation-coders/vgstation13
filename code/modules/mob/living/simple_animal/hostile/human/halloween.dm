@@ -471,6 +471,7 @@
 	. = ..()
 	cell = new /obj/item/weapon/cell/super/empty(src)
 	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_BYPASS
 
 /mob/living/simple_animal/hostile/syphoner/Destroy()
 	if(power_connection)
