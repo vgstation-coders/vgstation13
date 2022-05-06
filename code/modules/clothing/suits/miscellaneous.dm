@@ -359,6 +359,17 @@ var/list/tag_suits_list = list()
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
 
+/obj/item/clothing/suit/timefake
+	name = "time suit"
+	desc = "A replica of a time agent's suit. El Psy Congroo."
+	icon_state = "time_suit"
+	item_state = "time_suit"
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
 	desc = "It's treason then."
