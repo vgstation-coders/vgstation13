@@ -495,7 +495,10 @@
 	seed_type = "silverpear"
 	vending_cat = "fruits"
 
-
+/obj/item/seeds/cloverseed
+	name = "packet of clover seeds"
+	seed_type = "clover"
+	vending_cat = "weeds"
 
 // Chili plants/variants.
 /datum/seed/chili
@@ -1843,46 +1846,20 @@
 	potency = 30
 	growth_stages = 3
 
-
-
-
-
-
-
-
-
-
-
-//Clovers
 /datum/seed/clover/
 	name = "clover"
 	seed_name = "clover"
 	display_name = "clover"
 	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
 	plant_icon_state = "clover"
-	chems = list(NUTRIMENT = list(0.5,10))
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
+	chems = list(NUTRIMENT = list(0.5,10))
 	harvest_repeat = 1
-	yield = 50
-//	luckyleaves = 3
-
-
-//	yield = 50
-/*
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
 	lifespan = 60
-	maturation = 6
-	production = 6
-	yield = 6
-	potency = 5
-	ideal_light = 8
-	large = 0
-*/
-
-/obj/item/seeds/cloverseed
-	name = "packet of clover seeds"
-	seed_type = "clover"
-	vending_cat = "weeds"
-
-
+	maturation = 2
+	production = 5
+	yield = 5
+	growth_stages = 2
+	water_consumption = 0.5
+	nutrient_consumption = 0.15
 

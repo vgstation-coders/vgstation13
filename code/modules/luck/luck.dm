@@ -147,14 +147,12 @@
 	//clover plant stats
 	//remove redundant code 		plantname = "clover[leaves]" icon_state = "clover[leaves]" etc.?
 	//tune leaf prob params
-	//additional chems in clovers?
+
 	//names upon clover splicing and whatnot?
-	//remove_debug_code/message_admins/admin_log
 	//unlimit potency?
-	//spliced plants not overriding them with update_leaves()
+	//check mutant/splicing icons work properly not overriding them with update_leaves()
 	//customplantname?
 	//luck penalty for having something put away/nested
-	//return values in shift_leaves() to avoid always calling update_icon()
 	//tweak clover lucks for balance?
 	//ls not going beyond 7,
 	//modulo wraparound?
@@ -173,6 +171,7 @@
 	//breaking bones when hit
 	//randomly getting a disease chance
 
+	//[NEXT VERSION] additional chems in clovers?
 	//[NEXT VERSION] surgery sucess/failures
 	//[NEXT VERSION] spilling salt from a container
 	//[NEXT VERSION] using clovers as an accessory?
