@@ -23,4 +23,5 @@ var/datum/subsystem/thanksbyond/SSthanksbyond
 	if(!port)
 		return
 	world.OpenPort("none")
+	sleep(50)
 	world.OpenPort(port)
