@@ -86,7 +86,7 @@ For vending packs, see vending_packs.dm*/
 #undef MENTION_DB_OFFLINE
 #undef USE_ACCOUNT_ON_ID
 
-/obj/item/weapon/paper/request_form/New(var/loc, var/list/account_information, var/datum/supply_packs/pack, var/number_of_crates, var/reason = "No destination provided.")
+/obj/item/weapon/paper/request_form/New(var/loc, var/list/account_information, var/datum/supply_packs/pack, var/number_of_crates, var/reason = "No reason provided.")
 	. = ..(loc)
 	name = "[pack.name] Requisition Form - [account_information["idname"]], [account_information["idrank"]]"
 	info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
@@ -96,7 +96,7 @@ For vending packs, see vending_packs.dm*/
 		info += "USING DEBIT AS: [account_information["authorized_name"]]<br>"
 
 	info+= {"RANK: [account_information["idrank"]]<br>
-		DESTINATION: [reason]<br>
+		REASON: [reason]<br>
 		SUPPLY CRATE TYPE: [pack.name]<br>
 		NUMBER OF CRATES: [number_of_crates]<br>
 		ACCESS RESTRICTION: [get_access_desc(pack.access)]<br>
@@ -274,7 +274,7 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_order/SO = set_name
 		if(SO)
 			if(!SO.comment)
-				SO.comment = "No destination provided."
+				SO.comment = "No reason provided."
 			requests_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "authorized_name" = SO.authorized_name, "comment" = SO.comment, "command1" = list("confirmorder" = SO.ordernum), "command2" = list("rreq" = SO.ordernum))))
 	data["requests"] = requests_list
 
