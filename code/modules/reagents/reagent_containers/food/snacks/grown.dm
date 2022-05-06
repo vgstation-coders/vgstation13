@@ -1084,8 +1084,8 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
 	filling_color = "#247E0A"
 	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
-	var/leaves = 3
-	plantname = "clover3"
+	var/leaves
+	plantname = "clover"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
 	leaves = 0
@@ -1098,6 +1098,10 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
 	leaves = 2
 	plantname = "clover2"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/threeleaf
+	leaves = 3
+	plantname = "clover3"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
 	leaves = 4
@@ -1119,7 +1123,10 @@ var/list/special_fruits = list()
 	. = ..()
 	update_leaves()
 
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/update_leaves()
+	if(isnull(leaves))
+		leaves = seed.luckyleaves
 	switch(leaves)
 		if(3)
 			name = "clover"
@@ -1153,4 +1160,5 @@ var/list/special_fruits = list()
 			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
 			luckiness = 10000
 	plantname = "clover[leaves]"
-	icon_state = "clover[leaves]"
+	if(icon == 'icons/obj/hydroponics/clover.dmi')
+		icon_state = "clover[leaves]"

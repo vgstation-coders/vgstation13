@@ -1845,17 +1845,19 @@
 
 //Clovers
 /datum/seed/clover/
-	name = "clover3"
+	name = "clover"
 	seed_name = "clover"
 	display_name = "clover"
 	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
-	plant_icon_state = "clover3"
+	plant_icon_state = "clover"
 	chems = list(NUTRIMENT = list(0.5,10))
+//	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
+
 	products = list(
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/threeleaf,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf,
@@ -1863,7 +1865,7 @@
 
 	harvest_repeat = 1
 	yield = 50
-	var/leaves = 3
+	luckyleaves = 3
 
 
 //	yield = 50
@@ -1877,89 +1879,68 @@
 	ideal_light = 8
 	large = 0
 */
+/*
 
 /datum/seed/clover/get_mutant_variant(var/mut)
-	var/datum/seed/clover/C = new products[get_next_leaves(mut)+1]
+	//var/datum/seed/clover/C = products[get_next_leaves(mut)+1]
+	var/datum/seed/clover/C = products[get_next_leaves(mut)+1].New()
+	message_admins("debug: C.name = [C.name]")
 	return C.name
+*/
 
-/datum/seed/clover/proc/get_next_leaves(var/mut = 0)
-	message_admins("get_next_leaves() called with mut = [mut]")
-	mut = clamp(mut, 0, 21)
-	if(isnull(leaves))
-		leaves = 3
-	if(prob(66 - (leaves == 3) * mut))
-		message_admins("[leaves] to default three-leaf")
-		return 3
-	if(prob(99 - rand(0, round(mut / 7))))
-		message_admins("[leaves] to selfsame [leaves]")
-		return leaves
-	var/ls = 1
-	for(var/i in 1 to 7)
-		if(prob(2))
-			ls += 1
-	if((leaves > 3 && rand(2)) || (leaves < 3 && !rand(2)))
-		ls *= -1
-	else
-		ls *= pick(-1,1)
-	message_admins("shift.. returning [(leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3]")
-	return (leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3
 
 /*
 /datum/seed/clover/proc/get_next_leaves()
-	if(isnull(leaves))
-		leaves = 3
+	if(isnull(luckyleaves))
+		luckyleaves = 3
 	if(prob(66 + rand(-5,5)))
 		return 3
 	if(prob(98 + rand(-2,2)))
-		return leaves
+		return luckyleaves
 	var/ls = 1
 	for(var/i in 1 to 7)
 		if(!prob(98 + rand(-2,2)))
 			ls += 1
-	if((leaves > 3 && rand(2)) || (leaves < 3 && !rand(2)))
+	if((luckyleaves > 3 && rand(2)) || (luckyleaves < 3 && !rand(2)))
 		ls *= -1
 	else
 		ls *= pick(-1,1)
-	return (leaves + ls <= 7 && leaves + ls >= 0) ? leaves + ls : 3
+	return (luckyleaves + ls <= 7 && luckyleaves + ls >= 0) ? luckyleaves + ls : 3
 */
-
-/datum/seed/clover/product_logic()
-	return products[get_next_leaves()+1]
 
 /datum/seed/clover/zeroleaf
 	name = "clover0"
-	leaves = 0
+	luckyleaves = 0
 
 /datum/seed/clover/oneleaf
 	name = "clover1"
-	leaves = 1
+	luckyleaves = 1
 
 /datum/seed/clover/twoleaf
 	name = "clover2"
-	leaves = 2
+	luckyleaves = 2
+
+/datum/seed/clover/threeleaf
+	name = "clover3"
+	luckyleaves = 3
 
 /datum/seed/clover/fourleaf
 	name = "clover4"
-	leaves = 4
+	luckyleaves = 4
 
 /datum/seed/clover/fiveleaf
 	name = "clover5"
-	leaves = 5
+	luckyleaves = 5
 
 /datum/seed/clover/sixleaf
 	name = "clover6"
-	leaves = 6
+	luckyleaves = 6
 
 /datum/seed/clover/sevenleaf
 	name = "clover7"
-	leaves = 7
+	luckyleaves = 7
 
 /obj/item/seeds/cloverseed
 	name = "packet of clover seeds"
 	seed_type = "clover3"
 	vending_cat = "weeds"
-
-/obj/item/seeds/cloverseed/New()
-	. = ..()
-	var/datum/seed/clover/S = seed
-	seed_type = "clover[S.get_next_leaves()]"

@@ -56,6 +56,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/ligneous = 0				// If 1, requires sharp instrument to harvest. Kudzu with this trait resists sharp items better.
 	var/teleporting = 0				// If 1, causes teleportation when thrown.
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
+	var/luckyleaves					// Used for clovers; number of clover leaves, null = not a clover.
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
@@ -509,6 +510,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	currently_querying = list()
 	for(var/i = 0;i<total_yield;i++)
+
 		var/product_type = product_logic()
 
 		var/obj/item/product
@@ -531,6 +533,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				product.light_color = biolum_colour
 			//product.set_light(1+round(potency/50))
 			product.set_light(2)
+/*
+		if(istype(product, /obj/item/weapon/reagent_containers/food/snacks/grown/clover))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/clover/C = product
+			C.leaves = C.seed.luckyleaves
+			C.update_leaves()
+*/
 
 		//Handle spawning in living, mobile products (like dionaea).
 		if(istype(product,/mob/living))
@@ -539,8 +547,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			handle_living_product(product)
 
 /datum/seed/proc/product_logic()
-	message_admins("debug: running default pick_products")
-	return pick(products)
+	if(ispath(products[1], /obj/item/weapon/reagent_containers/food/snacks/grown/clover))
+		return products[get_next_luckyleaves(potency)+1]
+	else
+		return pick(products)
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
@@ -662,6 +672,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.ligneous =             ligneous
 	new_seed.teleporting =          teleporting
 	new_seed.juicy =        	    juicy
+	new_seed.luckyleaves =			luckyleaves
 	new_seed.plant_icon_state =     plant_icon_state
 	new_seed.splat_type =           splat_type
 	new_seed.packet_icon =          packet_icon
@@ -682,3 +693,26 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		R = chemical_reagents_list[rid]
 		reagent_names += R.name
 	return reagent_names
+
+//For clovers:
+/datum/seed/proc/get_next_luckyleaves(var/mut = 0)
+	message_admins("get_next_leaves() called with mut = [mut]")
+	mut = clamp(mut, 0, 21)
+	if(isnull(luckyleaves))
+		luckyleaves = 3
+	if(prob(66 - (luckyleaves == 3) * mut))
+		message_admins("[luckyleaves] to default three-leaf")
+		return 3
+	if(prob(99 - rand(0, round(mut / 7))))
+		message_admins("[luckyleaves] to selfsame [luckyleaves]")
+		return luckyleaves
+	var/ls = 1
+	for(var/i in 1 to 7)
+		if(prob(2))
+			ls += 1
+	if((luckyleaves > 3 && rand(2)) || (luckyleaves < 3 && !rand(2)))
+		ls *= -1
+	else
+		ls *= pick(-1,1)
+	message_admins("shift.. returning [(luckyleaves + ls <= 7 && luckyleaves + ls >= 0) ? luckyleaves + ls : 3]")
+	return (luckyleaves + ls <= 7 && luckyleaves + ls >= 0) ? luckyleaves + ls : 3
