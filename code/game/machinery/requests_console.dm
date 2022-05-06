@@ -266,7 +266,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				else
 					priority = -1
 		else
-			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
+			to_chat(usr, "<span class='warning'>Invalid characters or no text detected.</span>")
 			dpt = "";
 			msgVerified = ""
 			msgStamped = ""
@@ -283,7 +283,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				else
 					priority = -1
 		else
-			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
+			to_chat(usr, "<span class='warning'>Invalid characters or no text detected.</span>")
 			message = ""
 			announceAuth = 0
 			screen = 0
