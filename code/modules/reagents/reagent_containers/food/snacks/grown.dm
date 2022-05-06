@@ -1084,49 +1084,39 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
 	filling_color = "#247E0A"
 	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
-	var/leaves
+	var/leaves = 3
 	plantname = "clover"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
 	leaves = 0
-	plantname = "clover0"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
 	leaves = 1
-	plantname = "clover1"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
 	leaves = 2
-	plantname = "clover2"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/threeleaf
 	leaves = 3
-	plantname = "clover3"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
 	leaves = 4
-	plantname = "clover4"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf
 	leaves = 5
-	plantname = "clover5"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf
 	leaves = 6
-	plantname = "clover6"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
 	leaves = 7
-	plantname = "clover7"
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/New(atom/loc, custom_plantname)
 	. = ..()
 	update_leaves()
 
-
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/update_leaves()
-	if(isnull(leaves))
-		leaves = seed.luckyleaves
 	switch(leaves)
 		if(3)
 			name = "clover"
@@ -1159,6 +1149,22 @@ var/list/special_fruits = list()
 			name = "seven-leaf clover"
 			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
 			luckiness = 10000
-	plantname = "clover[leaves]"
-	if(icon == 'icons/obj/hydroponics/clover.dmi')
-		icon_state = "clover[leaves]"
+	icon_state = "clover[leaves]"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
+	mut = clamp(mut, 0, 21)
+	leaves = 3
+	var/prob1 = (1 + mut / 7)
+	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25) : prob(prob1))
+		var/ls = 1
+		var/prob2 = mut ? (1 + mut / 21) : 1
+		prob2 = shifter ? shifter.lucky_probability(prob2, 1/1000 , 33) : prob2
+		for(var/i in 1 to 7)
+			if(prob(prob2))
+				ls += 1
+		leaves += ls * pick(-1,1)
+		if(shifter ? shifter.lucky_prob(3, 1/1000, 50) : prob(3))
+			leaves = clamp(leaves, 0, 7)
+		else if(leaves < 0 || leaves > 7)
+			leaves = 3
+		return leaves != 3

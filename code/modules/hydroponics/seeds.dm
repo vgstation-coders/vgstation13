@@ -1843,6 +1843,16 @@
 	potency = 30
 	growth_stages = 3
 
+
+
+
+
+
+
+
+
+
+
 //Clovers
 /datum/seed/clover/
 	name = "clover"
@@ -1851,21 +1861,10 @@
 	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
 	plant_icon_state = "clover"
 	chems = list(NUTRIMENT = list(0.5,10))
-//	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
-
-	products = list(
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/threeleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf)
-
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
 	harvest_repeat = 1
 	yield = 50
-	luckyleaves = 3
+//	luckyleaves = 3
 
 
 //	yield = 50
@@ -1879,68 +1878,11 @@
 	ideal_light = 8
 	large = 0
 */
-/*
-
-/datum/seed/clover/get_mutant_variant(var/mut)
-	//var/datum/seed/clover/C = products[get_next_leaves(mut)+1]
-	var/datum/seed/clover/C = products[get_next_leaves(mut)+1].New()
-	message_admins("debug: C.name = [C.name]")
-	return C.name
-*/
-
-
-/*
-/datum/seed/clover/proc/get_next_leaves()
-	if(isnull(luckyleaves))
-		luckyleaves = 3
-	if(prob(66 + rand(-5,5)))
-		return 3
-	if(prob(98 + rand(-2,2)))
-		return luckyleaves
-	var/ls = 1
-	for(var/i in 1 to 7)
-		if(!prob(98 + rand(-2,2)))
-			ls += 1
-	if((luckyleaves > 3 && rand(2)) || (luckyleaves < 3 && !rand(2)))
-		ls *= -1
-	else
-		ls *= pick(-1,1)
-	return (luckyleaves + ls <= 7 && luckyleaves + ls >= 0) ? luckyleaves + ls : 3
-*/
-
-/datum/seed/clover/zeroleaf
-	name = "clover0"
-	luckyleaves = 0
-
-/datum/seed/clover/oneleaf
-	name = "clover1"
-	luckyleaves = 1
-
-/datum/seed/clover/twoleaf
-	name = "clover2"
-	luckyleaves = 2
-
-/datum/seed/clover/threeleaf
-	name = "clover3"
-	luckyleaves = 3
-
-/datum/seed/clover/fourleaf
-	name = "clover4"
-	luckyleaves = 4
-
-/datum/seed/clover/fiveleaf
-	name = "clover5"
-	luckyleaves = 5
-
-/datum/seed/clover/sixleaf
-	name = "clover6"
-	luckyleaves = 6
-
-/datum/seed/clover/sevenleaf
-	name = "clover7"
-	luckyleaves = 7
 
 /obj/item/seeds/cloverseed
 	name = "packet of clover seeds"
-	seed_type = "clover3"
+	seed_type = "clover"
 	vending_cat = "weeds"
+
+
+

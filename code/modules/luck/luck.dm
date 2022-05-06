@@ -143,25 +143,17 @@
 
 //todo:
 
-	//clovers randomizing properly upon harvest
-	//mutation stuff
 	//clover growing sprites and inhand sprites
 	//clover plant stats
 	//remove redundant code 		plantname = "clover[leaves]" icon_state = "clover[leaves]" etc.?
 	//additional chems in clovers?
 	//names upon clover splicing and whatnot?
-	//splicing in general
-	//fix mutate not calling get_next_leaves() and picking randomly from products
-	//related to randomize?
-	//make clover3 is own subtype?
-	//when to call get_next_luckyleaves and use mut etc?
-	//bees_apiary products[i]
 	//remove_debug_code/message_admins/admin_log
-	//add luckyleaves to the mutation logic everywhere
-	//unlimit potency
+	//unlimit potency?
 	//spliced plants not overriding them with update_leaves()
 	//customplantname?
-	//better solution in "TODO" "C = product"
+	//luck penalty for having something put away/nested
+	//return values in shift_leaves() to avoid always calling update_icon()
 
 	//defines for curses
 
@@ -171,11 +163,9 @@
 	//Luck affects:
 	//slots
 	//tripping rate with long hair
-	//shuttle kicking
 	//breaking bones when hit
 	//randomly getting a disease chance
 
-	//[NEXT VERSION] clover tune params/mutagen factor etc
 	//[NEXT VERSION] surgery sucess/failures
 	//[NEXT VERSION] spilling salt from a container
 	//[NEXT VERSION] using clovers as an accessory?
@@ -185,6 +175,3 @@
 	//[NEXT VERSION] singularity attraction/repulsion?
 	//[NEXT VERSION] plant breeding/clover breeding?
 	//[NEXT VERSION] luck-conferring mojo reagent
-
-	//[DONE] spawned base clover, spawned 3 leaf, spawned 4 leaf, harvested 2 leaf have proper amount of leaves
-	//harvested 2 leaf still has 3 seed.luckyleaves, spawned 4 leaf still has 3 seed.luckyleaves. spawned 3 leaf is OK, base clover is OK.
