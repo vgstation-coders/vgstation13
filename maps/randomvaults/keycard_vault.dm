@@ -11,11 +11,12 @@
 	name = "Keycard-gate vault entrance"
 	file_path = "maps/randomvaults/keycard_entrance.dmm"
 	can_rotate = FALSE // It has dungeons, which don't rotate well for now
-	var/difficulty = KEYCARD_DIFFICULTY_NORMAL
+	var/difficulty = 0 // 0 to generate randomly, see preset variants below
 	var/datum/map_element/dungeon/keycard_vault/thevault
 
 /datum/map_element/vault/keycards/pre_load()
-	difficulty = pick(KEYCARD_DIFFICULTY_EASY,KEYCARD_DIFFICULTY_NORMAL,KEYCARD_DIFFICULTY_HARD)
+	if(!difficulty)
+		difficulty = pick(KEYCARD_DIFFICULTY_EASY,KEYCARD_DIFFICULTY_NORMAL,KEYCARD_DIFFICULTY_HARD)
 	thevault = new /datum/map_element/dungeon/keycard_vault
 	thevault.file_path = "maps/randomvaults/dungeons/keycard_vault_[difficulty].dmm"
 	thevault.parent = src
@@ -55,6 +56,19 @@
 		PT.teleport_x = (thevault.location.x - location.x)
 		PT.teleport_y = (thevault.location.y - location.y) + offset
 		PT.teleport_z = thevault.location.z - location.z
+
+// Preset kinds for testing and debugging,
+// note that distribution to select these is split 4 ways with the normal and presets anyways,
+// plus the fourth "random" one decides an even 3 way split between these anyways,
+// added up makes the same difference as picking from one of these three probability wise.
+/datum/map_element/vault/keycards/easy
+	difficulty = KEYCARD_DIFFICULTY_EASY
+
+/datum/map_element/vault/keycards/normal
+	difficulty = KEYCARD_DIFFICULTY_NORMAL
+
+/datum/map_element/vault/keycards/hard
+	difficulty = KEYCARD_DIFFICULTY_HARD
 
 /datum/map_element/dungeon/keycard_vault
 	name = "Keycard-gate vault proper"
