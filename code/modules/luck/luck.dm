@@ -95,7 +95,7 @@
 		return FALSE
 	if(base_luck.blesscurse.len)
 		for(var/i in 1 to base_luck.blesscurse.len)
-			if(istype(base_luck.blesscurse[i], ourblesscurse))
+			if(ispath(base_luck.blesscurse[i], ourblesscurse))
 				return TRUE
 	else
 		return FALSE
@@ -140,44 +140,3 @@
 //Calls prob() on lucky_probability(), for convenience.
 /mob/proc/lucky_prob(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50)
 	return prob(lucky_probability(baseprob, luckfactor, maxskew))
-
-//todo:
-
-	//clover growing sprites and inhand sprites
-	//clover plant stats
-	//remove redundant code 		plantname = "clover[leaves]" icon_state = "clover[leaves]" etc.?
-	//tune leaf prob params
-
-	//names upon clover splicing and whatnot?
-	//unlimit potency?
-	//check mutant/splicing icons work properly not overriding them with update_leaves()
-	//customplantname?
-	//luck penalty for having something put away/nested
-	//tweak clover lucks for balance?
-	//ls not going beyond 7,
-	//modulo wraparound?
-	//also clover prob tweak:
-		//potency affects more the odds to get a shift
-		//luck more affects the odds to get a shift of more than 1
-
-	//defines for curses
-
-	//edge cases breaking mirrors with explosives or otherwise
-	//standard #define luckfactors eg. with 1000 luck 50% odds goes to 55%, 75%, 90%, 99%, etc.
-
-	//Luck affects:
-	//slots
-	//tripping rate with long hair
-	//breaking bones when hit
-	//randomly getting a disease chance
-
-	//[NEXT VERSION] additional chems in clovers?
-	//[NEXT VERSION] surgery sucess/failures
-	//[NEXT VERSION] spilling salt from a container
-	//[NEXT VERSION] using clovers as an accessory?
-	//[NEXT VERSION] very bad luck increases midround threat?
-	//[NEXT VERSION] very good luck decreases midround threat?
-	//[NEXT VERSION] calling coin flips and die rolls.
-	//[NEXT VERSION] singularity attraction/repulsion?
-	//[NEXT VERSION] plant breeding/clover breeding?
-	//[NEXT VERSION] luck-conferring mojo reagent

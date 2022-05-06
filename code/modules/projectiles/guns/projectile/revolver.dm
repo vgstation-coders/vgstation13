@@ -137,7 +137,7 @@
 	if(spinner) //Take luck into account.
 		var/spinnerluck = spinner.luck()
 		var/rollpower = rand(25,75)
-		var/rerolls = min(round(abs(spinnerluck),rollpower)/rollpower,100)
+		var/rerolls = min(round(abs(spinnerluck), rollpower) / rollpower, 100)
 		while(rerolls)
 			if(loaded[1] && spinnerluck > 0)		//Lucky people get rerolls if they were going to get a bullet.
 				loaded = shuffle(loaded)

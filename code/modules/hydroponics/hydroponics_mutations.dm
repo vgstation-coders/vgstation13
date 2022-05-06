@@ -19,7 +19,7 @@
 
 	//Is the plant still a sapling? If so, try to mutate species, otherwise do something bad.
 	if(age < 3)
-		if((seed.mutants && seed.mutants.len) || istype(seed, /datum/seed/clover))
+		if((seed.mutants && seed.mutants.len))
 			if(prob(30))
 				mutate_species()
 				return
@@ -525,14 +525,14 @@
 						source_turf.visible_message("<span class='notice'>\The [display_name]'s flowers wither and fall off.</span>")*/
 
 //Returns a key corresponding to an entry in the global seed list.
-/datum/seed/proc/get_mutant_variant(var/mut)
+/datum/seed/proc/get_mutant_variant()
 	if(!mutants || !mutants.len || immutable > 0)
 		return 0
 	return pick(mutants)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate_species()
 	var/previous_plant = seed.display_name
-	var/newseed = seed.get_mutant_variant(mutation_level)
+	var/newseed = seed.get_mutant_variant()
 
 	seed = SSplant.seeds[newseed]
 	if(!seed)
