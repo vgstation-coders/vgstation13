@@ -80,7 +80,7 @@ interactions:
 	. = ..()
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.base_color)
-		stored_colours["[++tagindex]"] = p.base_color//FIXME !J
+		stored_colours["[++tagindex]"] = p.base_color
 		to_chat(user, "<span class='notice'>You add a new color to \the [src].</span>")
 
 /obj/item/weapon/palette/ui_interact(mob/user, ui_key, datum/nanoui/ui, force_open)
@@ -143,7 +143,7 @@ interactions:
 					PB.paint_color = blend_rgb
 				PB.update_icon()
 			if ("duplicate")
-				stored_colours["[++tagindex]"] += colour //FIXME !J
+				stored_colours["[++tagindex]"] += colour
 				return
 			if ("delete")
 				stored_colours -= colour_tag
