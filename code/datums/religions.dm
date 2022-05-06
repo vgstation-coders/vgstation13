@@ -1548,3 +1548,16 @@ var/list/all_bible_styles = list(
 /datum/religion/anprim/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/suit/unathi/mantle(H), slot_wear_suit)
+
+/datum/religion/loop
+	name = "The Loop"
+	deity_name = "The Loop"
+	bible_name = list("The Ouroboros Cycle")
+	male_adept = "Looper"
+	female_adept = "Looper"
+	keys = list("loop", "ouroboros")
+	bookstyle = "Ithaqua"
+	
+/datum/religion/loop/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/timefake(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/head/timefake(H), slot_head)
