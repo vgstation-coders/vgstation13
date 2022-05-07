@@ -2297,7 +2297,7 @@
 	crumb_icon = "dribbles"
 	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
 	valid_utensils = UTENSILE_SPOON
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/roboticiststears/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 60) //You're using phazon here, that's the good shit.
@@ -5306,18 +5306,7 @@
 	food_flags = FOOD_SWEET
 	icon_state = "chococoin_unwrapped"
 	bitesize = 4
-
-/obj/item/trash/lollipopstick
-	name = "lollipop stick"
-	desc = "A small plastic stick."
-	icon = 'icons/obj/candymachine.dmi'
-	icon_state = "lollipop_stick"
-	w_class = W_CLASS_TINY
-	slot_flags = SLOT_MASK
-	throwforce = 1
-	autoignition_temperature = 0
-	w_type = RECYK_PLASTIC
-	starting_materials = list(MAT_PLASTIC = 100)
+	var/sideup = "heads-up." //heads, tails or on its side?
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
 	desc = "Still covered in golden foil wrapper."
@@ -5332,12 +5321,61 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(SUGAR, 2)
 	reagents.add_reagent(COCO, 3)
+	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
+	sideup = pick("heads-up.","tails-up.")
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+	var/matrix/flipit = matrix()
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 1.5, easing = QUAD_EASING)
+	flipit.Scale(5,1)
+	flipit.Invert()
+	flipit.Turn(rand(1,359))
+	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	flipit.Scale(0.2,1)
+	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	if (pick(0,1))
+		sideup = "heads-up."
+		flipit.Scale(5,1)
+		flipit.Turn(rand(1,359))
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	else
+		sideup = "tails-up."
+		flipit.Scale(5,1)
+		flipit.Invert()
+		flipit.Turn(rand(1,359))
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	if (prob(0.1) || rigged)
+		flipit.Scale(0.2,1)
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+		sideup = "on the side!"
+	if(!thrown)
+		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You hear [src] landing.</span>")
+	else
+		if(!throwing) //coin was thrown and is coming to rest
+			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/attack_self(mob/user)
 	if(wrapped)
 		Unwrap(user)
 	else
 		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/equipped(var/mob/user)
+	..()
+	sideup = "heads-up."
+	transform = null
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/throw_impact(atom/hit_atom, speed, user)
+	..()
+	coinflip(user, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/proc/Unwrap(mob/user)
 	icon_state = "chococoin_unwrapped"
@@ -5347,6 +5385,18 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/is_screwdriver(var/mob/user)
 	return user.a_intent == I_HURT
+
+/obj/item/trash/lollipopstick
+	name = "lollipop stick"
+	desc = "A small plastic stick."
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollipop_stick"
+	w_class = W_CLASS_TINY
+	slot_flags = SLOT_MASK
+	throwforce = 1
+	autoignition_temperature = 0
+	w_type = RECYK_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/eucharist
 	name = "\improper Eucharist Wafer"
