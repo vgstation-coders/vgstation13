@@ -158,7 +158,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	if (health == maxHealth)
-		return
+		return ..()
 	if (health > 0)
 		health = min(maxHealth, health_regen_rate + health)
 	. = ..()
