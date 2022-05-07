@@ -287,11 +287,16 @@
 	return K
 
 //Return a list with no duplicate names
-/proc/uniquenamelist(var/list/atom/L)
+/proc/uniquenamelist(var/list/L)
 	var/list/K = list()
-	for(var/atom/item in L)
-		if(!(item.name in K))
-			K += item.name
+	var/current_name = ""
+	var/atom/current_atom = null
+	for(var/item in L)
+		if(isatom(item) || ispath(item))
+			current_atom = item
+		current_name = ispath(item) ? initial(current_atom.name) : isatom(item) ? current_atom.name : item
+		if(!(current_name in K))
+			K += current_name
 	return K
 
 //for sorting clients or mobs by ckey
@@ -367,10 +372,15 @@
 			i++
 	return i
 
-/proc/count_by_name(var/list/atom/L, name)
+/proc/count_by_name(var/list/L, name)
 	var/i = 0
-	for(var/atom/T in L)
-		if(T.name == name)
+	var/atom/current_atom = null
+	var/current_name = ""
+	for(var/T in L)
+		if(isatom(T) || ispath(T))
+			current_atom = T
+		current_name = ispath(T) ? initial(current_atom.name) : isatom(T) ? current_atom.name : T
+		if(current_name == name)
 			i++
 	return i
 
