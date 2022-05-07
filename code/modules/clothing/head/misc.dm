@@ -139,7 +139,7 @@
 
 /obj/item/clothing/head/timefake
 	name = "time helmet"
-	desc = "A replica time helmet. It is not spaceproof and can't seal a timesuit."
+	desc = "A replica of the time helmet worn by the original Looper, the one who saved us from the collapsing timeline. We remember."
 	icon_state = "time_helmet"
 	item_state = "time_helmet"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
