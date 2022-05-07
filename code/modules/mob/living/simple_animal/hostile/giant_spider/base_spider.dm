@@ -157,7 +157,9 @@
 /mob/living/simple_animal/hostile/giant_spider/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
-	if(health > 0)
+	if (health == maxHealth)
+		return
+	if (health > 0)
 		health = min(maxHealth, health_regen_rate + health)
 	. = ..()
 
