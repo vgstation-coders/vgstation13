@@ -384,6 +384,7 @@ var/list/all_bible_styles = list(
 	"Slab" = list("icon" = "slab", "desc" = "A bizarre, ticking device... That looks broken."),
 	"The Dokument" = "gunbible",
 	"Holy Grimoire" = list("icon" = "holygrimoire", "desc" = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly.")
+	"The Loop" = list("icon" = "loop", "desc" = "The combined efforts of a thousand timelines fill this book, explaining the nature of the loop and how to survive it.")
 )
 
 /proc/chooseBible(var/datum/religion/R, var/mob/user, var/noinput = FALSE) //Noinput if they just wanted the defaults
@@ -1556,7 +1557,7 @@ var/list/all_bible_styles = list(
 	male_adept = "Looper"
 	female_adept = "Looper"
 	keys = list("loop", "ouroboros")
-	bookstyle = "Ithaqua"
+	bookstyle = "The Loop"
 	
 /datum/religion/loop/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/timefake(H), slot_wear_suit)
