@@ -383,7 +383,7 @@ var/list/all_bible_styles = list(
 	"The Guide" = "guide",
 	"Slab" = list("icon" = "slab", "desc" = "A bizarre, ticking device... That looks broken."),
 	"The Dokument" = "gunbible",
-	"Holy Grimoire" = list("icon" = "holygrimoire", "desc" = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly.")
+	"Holy Grimoire" = list("icon" = "holygrimoire", "desc" = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."),
 	"The Loop" = list("icon" = "loop", "desc" = "The combined efforts of a thousand timelines fill this book, explaining the nature of the loop and how to survive it.")
 )
 
