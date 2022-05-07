@@ -450,7 +450,8 @@
 
 /obj/item/weapon/coin/equipped(var/mob/user)
 	..()
-	sideup = "heads-up."
+	if(sideup == "on the side!")
+		sideup = pick("heads-up.", "tails-up.")
 	transform = null
 
 /obj/item/weapon/coin/attack_self(var/mob/user)

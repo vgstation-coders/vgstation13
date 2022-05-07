@@ -5370,7 +5370,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/equipped(var/mob/user)
 	..()
-	sideup = "heads-up."
+	if(sideup == "on the side!")
+		sideup = pick("heads-up.", "tails-up.")
 	transform = null
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/throw_impact(atom/hit_atom, speed, user)
