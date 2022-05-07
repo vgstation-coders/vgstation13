@@ -122,8 +122,8 @@
 	else
 		ourluck = -1
 	ourluck = clamp(maxskew, 0, 50) * ourluck
-	//Skew the probability by "pulling" the unbiased (50 input probability, 50 output probability) point towards either (0, 100) - maximally lucky, or (100, 0) - maximally unlucky.
-	//This is done by shifting a point P from (50, 50) a distance of (sqrt(2) * ourluck) along the line running through (0, 100) and (100, 0), and then fitting a polynomial to (0, 0), P, and (100,100).
+	//Skew the probability by pulling the unbiased (50 input probability, 50 output probability) point towards either (0, 100) - maximally lucky, or (100, 0) - maximally unlucky.
+	//This is done by shifting a point P from (50, 50) a distance of (sqrt(2) * ourluck) along the line running through (0, 100) and (100, 0), and then linearly interpolating between (0, 0), P, and (100,100).
 	//The coordinates of P are (50 - ourluck, 50 + ourluck):
 	var/P_i = 50 - ourluck
 	var/P_o = 50 + ourluck
@@ -131,9 +131,12 @@
 		return P_o
 	else if(P_i == 100 || P_i == 0)
 		return P_i
-	//The polynomial running though (0, 0), P, and (100, 100) is:
-	var/newprob = (-1 * P_o * (baseprob ** 2) / (100 * (100 - P_i))) - (P_o * (baseprob ** 2) / (100 * P_i)) + (P_i * P_o * baseprob / (100 * (100 - P_i))) + (P_o * baseprob / P_i) + ((baseprob ** 2) / (100 - P_i)) - (P_i * baseprob / (100 - P_i)) + (P_o * baseprob / 100)
-	//Clamp it to the range [0, 100] to avoid precision-based excursions:
+	//The piecewise function passing through (0, 0), P, and (100, 100) is:
+	var/newprob
+	if(baseprob <= P_i)
+		newprob = (P_o / P_i) * baseprob
+	else
+		newprob = 100 - (P_i / P_o) * (100 - baseprob)
 	newprob = clamp(newprob, 0, 100)
 	return newprob
 
