@@ -18,11 +18,11 @@
 /obj/item/toy/lotto_ticket/proc/scratch(var/input_prize_multiplier, var/mob/user)
 	var/tuning_value = 1/5 //Used to adjust expected values.
 	var/profit = 0
+	var/luck = user?.luck()
 	for(var/prize = 1 to problist.len)
-
 		var/thisprob = problist[prize]
 		//Take luck into account.
-		if(user ? user.lucky_prob(thisprob, luckfactor = 1/500) : prob(thisprob))
+		if(user ? user.lucky_prob(thisprob, luckfactor = 1/500, ourluck = luck) : prob(thisprob))
 			profit = prizelist[prize]*input_prize_multiplier*tuning_value
 			return profit
 

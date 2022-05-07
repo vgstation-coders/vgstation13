@@ -108,9 +108,13 @@
 	//baseprob: The base probability to be modified
 	//luckfactor: Related to the percentage the outcome probability shifts for every 1 luck. With a luckfactor of 1, 1 luck corresponds to a shift from 50% to around 51%.
 	//maxskew: The maximum influence luck can have on the outcome probability. At maxskew 0, there is no effect. At maxskew 50, the effect is maximal.
-/mob/proc/lucky_probability(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50)
+	//ourluck: Can set this to the mob's luck to avoid having to call luck() multiple times.
+/mob/proc/lucky_probability(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50, var/ourluck)
 	//Get our luck and scale it by the luckfactor:
-	var/ourluck = luck() * luckfactor
+	if(isnull(ourluck))
+		ourluck = luck() * luckfactor
+	else
+		ourluck = ourluck * luckfactor
 	if(ourluck == 0 || baseprob == 0 || baseprob == 100)
 		return baseprob
 	//Asymptotically clamp it to between -maxskew and maxskew using hyperbolic tangent:
@@ -141,5 +145,5 @@
 	return newprob
 
 //Calls prob() on lucky_probability(), for convenience.
-/mob/proc/lucky_prob(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50)
-	return prob(lucky_probability(baseprob, luckfactor, maxskew))
+/mob/proc/lucky_prob(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50, var/ourluck)
+	return prob(lucky_probability(baseprob, luckfactor, maxskew, ourluck))
