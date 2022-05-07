@@ -659,7 +659,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin
 	name = "flavored chocolate coin"
 	icon_state = "coincustom"
-	var/sideup
+	var/sideup = "heads-up." //heads, tails or on its side?
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/New()
 	..()
