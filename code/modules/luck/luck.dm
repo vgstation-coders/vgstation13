@@ -127,7 +127,7 @@
 		ourluck = -1
 	ourluck = clamp(maxskew, 0, 50) * ourluck
 	//Skew the probability by pulling the unbiased (50 input probability, 50 output probability) point towards either (0, 100) - maximally lucky, or (100, 0) - maximally unlucky.
-	//This is done by shifting a point P from (50, 50) a distance of (sqrt(2) * ourluck) along the line running through (0, 100) and (100, 0), and then linearly interpolating between (0, 0), P, and (100,100).
+	//This is done by shifting a point P from (50, 50) a distance of (sqrt(2) * ourluck) along the line running through (0, 100) and (100, 0), and then linearly interpolating between (0, 0), P, and (100, 100).
 	//The coordinates of P are (50 - ourluck, 50 + ourluck):
 	var/P_i = 50 - ourluck
 	var/P_o = 50 + ourluck
