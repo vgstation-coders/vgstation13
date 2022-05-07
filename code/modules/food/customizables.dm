@@ -659,6 +659,60 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin
 	name = "flavored chocolate coin"
 	icon_state = "coincustom"
+	var/sideup
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/New()
+	..()
+	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
+	sideup = pick("heads-up.","tails-up.")
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+	var/matrix/flipit = matrix()
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 1.5, easing = QUAD_EASING)
+	flipit.Scale(5,1)
+	flipit.Invert()
+	flipit.Turn(rand(1,359))
+	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	flipit.Scale(0.2,1)
+	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	if (pick(0,1))
+		sideup = "heads-up."
+		flipit.Scale(5,1)
+		flipit.Turn(rand(1,359))
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	else
+		sideup = "tails-up."
+		flipit.Scale(5,1)
+		flipit.Invert()
+		flipit.Turn(rand(1,359))
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+	if (prob(0.1) || rigged)
+		flipit.Scale(0.2,1)
+		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
+		sideup = "on the side!"
+	if(!thrown)
+		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You hear [src] landing.</span>")
+	else
+		if(!throwing) //coin was thrown and is coming to rest
+			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/equipped(var/mob/user)
+	..()
+	if(sideup == "on the side!")
+		sideup = pick("heads-up.", "tails-up.")
+	transform = null
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/throw_impact(atom/hit_atom, speed, user)
+	..()
+	coinflip(user, 1)
 
 // Customizable Drinks /////////////////////////////////////////
 
