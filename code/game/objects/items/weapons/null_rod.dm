@@ -322,7 +322,7 @@
 
 /obj/item/weapon/nullrod/loop //loop religion
 	name = "rewind rifle"
-	desc = "The incarnation of looping in gun-rod form. The shooting mechanism has been replaced with clockwork looping machinery."
+	desc = "The incarnation of looping in gun form. The shooting mechanism has been replaced with looping machinery and will only fire when the Loop happens."
 	icon = 'icons/obj/gun.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')	
 	icon_state = "xcomlasergun"
