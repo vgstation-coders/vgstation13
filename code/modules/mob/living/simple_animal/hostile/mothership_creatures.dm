@@ -128,7 +128,7 @@
 	ranged_cooldown = 4 // Some cooldown to balance the serious punch it packs
 	ranged_cooldown_cap = 4
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG // Can open doors. Coincidentally this also seems to allow the mob to shoot through them (if they're glass airlocks)? It's weird
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can open doors. Coincidentally this also seems to allow the mob to shoot through them (if they're glass airlocks)? It's weird
 	stat_attack = UNCONSCIOUS // DISINTEGRATION PROTOCOLS ACTIVE
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/death(var/gibbed = FALSE)
