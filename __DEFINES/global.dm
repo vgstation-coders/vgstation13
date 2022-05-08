@@ -338,6 +338,31 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader,  // Very mean chikun man
 	/mob/living/simple_animal/hostile/humanoid/grey/leader,          // Evil, pompous, and alien
 	)
+//Mobs that are unlikely to cause trouble
+var/list/minor_mobs = list(/mob/living/simple_animal/parrot,
+	/mob/living/simple_animal/cockroach,
+	/mob/living/simple_animal/hostile/lizard,
+	/mob/living/simple_animal/mouse,
+	/mob/living/simple_animal/hostile/asteroid/pillow
+	)+ typesof(/mob/living/simple_animal/cat) + typesof(/mob/living/simple_animal/corgi)
+
+//Mobs that may cause a mess of the crew
+var/list/major_mobs = list(
+	/mob/living/simple_animal/hostile/carp,
+	/mob/living/simple_animal/hostile/giant_spider,
+	/mob/living/simple_animal/hostile/giant_spider/hunter,
+	/mob/living/simple_animal/hostile/giant_spider/nurse,
+	/mob/living/simple_animal/hostile/monster/skrite
+	) + typesof(/mob/living/simple_animal/hostile/bear)\
+	+ typesof(/mob/living/simple_animal/hostile/frog)\
+	+ subtypesof(/mob/living/simple_animal/hostile/asteroid)\
+	+ typesof(/mob/living/simple_animal/hostile/bigroach)
+
+//Supernatural mobs, preferably organic or unsettling
+var/list/corrupt_mobs = list(
+	/mob/living/simple_animal/hostile/creature,
+	/mob/living/simple_animal/hostile/mannequin/cult,
+	/mob/living/simple_animal/hostile/humanoid/supermatter)
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
