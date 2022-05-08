@@ -2098,8 +2098,10 @@
 			R.AssignToRole(user.mind,1)
 		var/obj/item/weapon/reagent_containers/food/snacks/jectie/J = ..()
 		if(J && J.icon_state == "jectie_green")
+			R.logo_state = "jectie_green"
 			R.AppendObjective(/datum/objective/cook_jectie/success)
 		else
+			R.logo_state = "jectie_red"
 			R.AppendObjective(/datum/objective/cook_jectie)
 		return J
 	return ..()
