@@ -1,6 +1,7 @@
 /datum/role/jectie_cooker
 	id = JECTIE_COOKER
 	name = JECTIE_COOKER
+	logo_icon = 'icons/obj/food.dmi'
 	logo_state = "jectie_green"
 	greets = list(GREET_DEFAULT, GREET_CUSTOM)
 	default_admin_voice = "Head Chef"
@@ -10,13 +11,13 @@
 	if(!greeting)
 		return
 
-	var/icon/logo = icon('icons/obj/food.dmi', "jectie_green")
+	var/icon/logo = icon(logo_icon, logo_state)
 	switch(greeting)
 		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
 
 /datum/role/jectie_cooker/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
-	var/icon/logo = icon('icons/obj/food.dmi', "jectie_green")
+	var/icon/logo = icon(logo_icon, logo_state)
 	var/mob/M = antag.current
 	var/text
 	if (!M) // Body destroyed
