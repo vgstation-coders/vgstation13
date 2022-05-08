@@ -1151,13 +1151,12 @@ var/list/special_fruits = list()
 	icon_state = "clover[leaves]"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
-	mut = clamp(mut, 0, 21)
 	leaves = 3
-	var/prob1 = (1 + mut / 7)
+	var/prob1 = clamp(1 + mut / 3, 0, 66)
 	var/luck = shifter?.luck()
 	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
 		var/ls = 1
-		var/prob2 = max(mut / 21, 0.1)
+		var/prob2 = max(clamp(mut, 0, 21) / 21, 0.1)
 		prob2 = shifter ? shifter.lucky_probability(prob2, 1/1000 , 33, ourluck = luck) : prob2
 		for(var/i in 1 to 7)
 			if(prob(prob2))
