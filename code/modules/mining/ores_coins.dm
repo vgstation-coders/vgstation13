@@ -392,13 +392,13 @@
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
-	var/sideup = "heads-up." //heads, tails or on its side?
+	var/sideup = COIN_HEADS //heads, tails or on its side?
 
 /obj/item/weapon/coin/New()
 	. = ..()
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
-	sideup = pick("heads-up.","tails-up.")
+	sideup = pick(COIN_HEADS, COIN_TAILS)
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)
@@ -422,12 +422,12 @@
 	flipit.Scale(0.2,1)
 	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
 	if (pick(0,1))
-		sideup = "heads-up."
+		sideup = COIN_HEADS
 		flipit.Scale(5,1)
 		flipit.Turn(rand(1,359))
 		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
 	else
-		sideup = "tails-up."
+		sideup = COIN_TAILS
 		flipit.Scale(5,1)
 		flipit.Invert()
 		flipit.Turn(rand(1,359))
@@ -435,7 +435,7 @@
 	if (prob(0.1) || rigged)
 		flipit.Scale(0.2,1)
 		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-		sideup = "on the side!"
+		sideup = COIN_SIDE
 	if(!thrown)
 		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
 							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
@@ -450,8 +450,8 @@
 
 /obj/item/weapon/coin/equipped(var/mob/user)
 	..()
-	if(sideup == "on the side!")
-		sideup = pick("heads-up.", "tails-up.")
+	if(sideup == COIN_SIDE)
+		sideup = pick(COIN_HEADS, COIN_TAILS)
 	transform = null
 
 /obj/item/weapon/coin/attack_self(var/mob/user)
