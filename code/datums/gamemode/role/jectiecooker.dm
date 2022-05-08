@@ -1,6 +1,7 @@
 /datum/role/jectie_cooker
 	id = JECTIE_COOKER
 	name = JECTIE_COOKER
+	logo_state = "jectie_green"
 	greets = list(GREET_DEFAULT, GREET_CUSTOM)
 	default_admin_voice = "Head Chef"
 	admin_voice_style = "djradio"
