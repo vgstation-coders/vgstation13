@@ -442,6 +442,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
 	if(air_contents.total_moles() < 10)
 		return
+	if(istype(occupant, /mob/living/simple_animal/))
+		go_out()
+		return
 	if(occupant)
 		if(occupant.stat == DEAD)
 			return
@@ -545,8 +548,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	update_icon()
 	nanomanager.update_uis(src)
 
-
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/M as mob, mob/living/user)
+	if (occupant)
+		if(user)
+			to_chat(user, "<span class='danger'>The cryo cell is already occupied!</span>")
+		return FALSE
 	if(!istype(M))
 		if(user)
 			to_chat(user, "<span class='danger'>The cryo cell cannot handle such a lifeform!</span>")
@@ -573,17 +579,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 				to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 				return FALSE
-
 	for(var/mob/living/carbon/slime/S in range(1,M))
 		if(S.Victim == M)
 			if(user)
 				to_chat(user, "<span class='warning'>[M.name] will not fit into the cryo cell because they have a slime latched onto their head.</span>")
 			return FALSE
-
-	if (occupant)
-		if(user)
-			to_chat(user, "<span class='danger'>The cryo cell is already occupied!</span>")
-		return FALSE
 	if(panel_open)
 		if(user)
 			to_chat(user, "<span class='bnotice'>Close the maintenance panel first.</span>")
@@ -630,7 +630,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	set name = "Move inside"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.incapacitated() || usr.lying || usr.locked_to) //are you cuffed, dying, lying, stunned or other
+	if(usr.incapacitated() || usr.locked_to)
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)

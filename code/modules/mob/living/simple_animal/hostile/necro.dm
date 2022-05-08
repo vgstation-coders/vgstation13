@@ -426,7 +426,7 @@
 			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
-			if(user.mind && (user.mind.assigned_role == "Chaplain"))
+			if(user.mind && isReligiousLeader(user))
 				chaplain = TRUE //Indeed we are
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
