@@ -77,10 +77,6 @@
 	var/cargo_forwarding_on_roundstart = 0
 	var/cargo_forwarding_amount_override = 0
 
-
-	var/multiz_render_cap = 8			//how far down open spaces will render
-	var/multiz_bottom_cap = 16			//how far down open spaces will detect for a bottom
-
 	// BSQL things
 	var/bsql_debug = 0
 	var/async_query_timeout = 10
@@ -178,8 +174,6 @@
 	var/emag_recharge_ticks = 0
 
 	var/renders_url = ""
-
-	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
 	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
 
@@ -586,11 +580,6 @@
 					bsql_thread_limit = text2num(value)
 
 
-				if("multiz_render_cap")
-					multiz_render_cap = text2num(value)
-				if("multiz_bottom_cap")
-					multiz_bottom_cap = text2num(value)
-
 				if("media_base_url")
 					media_base_url = value
 				if("media_secret_key")
@@ -603,8 +592,6 @@
 					poll_results_url = value
 				if("renders_url")
 					renders_url = value
-				if("mommi_static")
-					mommi_static = 1
 				if("skip_minimap_generation")
 					skip_minimap_generation = 1
 				if("skip_holominimap_generation")

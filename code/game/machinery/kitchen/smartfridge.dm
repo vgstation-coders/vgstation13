@@ -295,13 +295,14 @@
 /obj/machinery/smartfridge/bloodbank/filled/New()
 	. = ..()
 
-	for(var/i = 0 to 4)
+	for(var/i = 0 to 2)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
+	for(var/i = 0 to 5)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
 /obj/machinery/smartfridge/bloodbank/power_change()
@@ -427,7 +428,7 @@
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/smartfridge/emag(mob/user)
+/obj/machinery/smartfridge/emag_act(mob/user)
 	spark(src)
 	emagged = !emagged
 	if(emagged)

@@ -198,7 +198,7 @@
 	update_icon()
 	set_light(0)
 
-/obj/machinery/bodyscanner/emag(mob/user)
+/obj/machinery/bodyscanner/emag_act(mob/user)
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
 		to_chat(user, "<span class='notice'>\The [src] emits an ominous hum.</span>")

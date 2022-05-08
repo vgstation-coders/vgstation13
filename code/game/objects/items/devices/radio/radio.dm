@@ -249,10 +249,10 @@
 	say_testing(loc, "talk_into(): frequency set to [speech.frequency]")
 
 	var/turf/position = get_turf(src)
-	
+
 	//### Radio jammerer function code ###//
 	var/jamming_severity = radio_jamming_severity(position)
-	
+
 	// Completely silences the message if jamming effect is too severe.
 	// Otherwise distorts it.
 	if (is_completely_jammed(jamming_severity))
@@ -302,6 +302,13 @@
 	// --- Unidentifiable mob ---
 	else
 		speech.job = "Unknown"
+
+	// --- Radio Bugs ---
+
+	if(istype(speech.radio,/obj/item/device/radio/bug))
+		var/obj/item/device/radio/bug/R = speech.radio
+		if(R.radio_tag)
+			speech.message = "\[[R.radio_tag]\] [speech.message]" //hacky solution but it's less invasive than modifying telecomms code
 
 /*
 	// --- Modifications to the mob's identity ---
@@ -622,3 +629,62 @@
 		playsound(loc, rustle_sound, 50, 1, -5)
 		return TRUE
 	return FALSE
+
+/obj/item/device/radio/phone/surveillance
+	name = "\improper DromedaryCo packet"
+	desc = "A packet of six imported DromedaryCo cigarettes. A label on the packaging reads: \"Wouldn't a slow death make a change?\""
+	icon = 'icons/obj/cigarettes.dmi'
+	icon_state = "Dpacket"
+	item_state = "Dpacket"
+	anchored = FALSE
+	w_class = W_CLASS_TINY
+	channels = list("Radio Bug" = 1)
+	var/obj/item/weapon/storage/box/surveillance/cigbox
+
+/obj/item/device/radio/phone/surveillance/New()
+	..()
+	frequency = BUG_FREQ
+	cigbox = new /obj/item/weapon/storage/box/surveillance(src)
+
+/obj/item/device/radio/phone/surveillance/attack_hand(mob/user)
+	if(user.get_inactive_hand() == src)
+		cigbox.show_to(user)
+	else
+		..()
+
+/obj/item/device/radio/phone/surveillance/interact(mob/user as mob)
+	if(!on)
+		return
+
+	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+
+	dat += "Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>"
+	dat+={"</TT></body></html>"}
+	user << browse(dat, "window=radio")
+	onclose(user, "radio")
+
+/obj/item/device/radio/phone/surveillance/Topic(href, href_list)
+	if(..())
+		return 1
+
+/obj/item/device/radio/phone/surveillance/examine(mob/user)
+	cigbox.examine(user)
+
+/obj/item/device/radio/phone/surveillance/AltClick(mob/user)
+	cigbox.AltClick(user)
+
+/obj/item/device/radio/phone/surveillance/attackby(obj/item/I, mob/user)
+	cigbox.attackby(I,user)
+
+/obj/item/device/radio/bug
+	name = "cigarette butt"
+	desc = "A manky old cigarette butt."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "cigbutt"
+	w_class = W_CLASS_TINY
+	throwforce = 1
+	autoignition_temperature = 0 //The filter doesn't burn
+	broadcasting = 1
+	listening = 0
+	always_talk = 1
+	var/radio_tag

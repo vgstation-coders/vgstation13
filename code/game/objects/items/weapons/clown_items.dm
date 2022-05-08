@@ -160,6 +160,17 @@
 	item_state = "honkbaton"
 	can_honk_baton = 0
 
+/obj/item/weapon/bikehorn/skullhorn
+	name = "skull horn"
+	desc = "To be or not to be bad to the bone..."
+	icon = 'icons/effects/blood.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/remains.dmi', "right_hand" = 'icons/mob/in-hand/right/remains.dmi')
+	icon_state = "remains_skull"
+	item_state = "skull"
+	attack_verb = list("hits")
+	hitsound = 'sound/items/badtothebone.ogg'
+	can_honk_baton = 0
+
 #define TELE_COOLDOWN 5 SECONDS
 
 /obj/item/weapon/bikehorn/rubberducky/quantum

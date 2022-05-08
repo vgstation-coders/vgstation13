@@ -2,7 +2,7 @@
 	..()
 	var/tagname
 	if(!forced_bundle)
-		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 25, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 25, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100, "clown" = 50, "druid" = 50, "actor" = 100, "jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50))
+		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 25, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 25, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100, "clown" = 50, "druid" = 50, "actor" = 100, "jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50, "Killtheking" = 50))
 	else
 		tagname = forced_bundle
 
@@ -227,6 +227,17 @@
 			new /obj/item/weapon/storage/box/mystery_vial(src)
 			new /obj/item/weapon/storage/box/mystery_vial(src)
 
+		if("Killtheking")//weight 50, same as anarchist. We found a witch!
+			new /obj/item/weapon/implanter/traitor(src)
+			new /obj/item/weapon/implanter/traitor(src)
+			new /obj/item/weapon/implanter/traitor(src)
+			new /obj/item/device/flashlight/torch(src)
+			new /obj/item/device/flashlight/torch(src)
+			new /obj/item/device/flashlight/torch(src)
+			new /obj/item/weapon/pitchfork(src)
+			new /obj/item/weapon/pitchfork(src)
+			new /obj/item/weapon/pitchfork(src)
+			new /obj/item/weapon/crossbow(src)
 	tag = tagname
 
 
@@ -264,7 +275,7 @@
 	name = "box (S)"
 	items_to_spawn = list(
 		/obj/item/device/handtv,
-		/obj/item/weapon/storage/box/surveillance,
+		/obj/item/device/radio/phone/surveillance,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/conversion
@@ -434,6 +445,8 @@
 		/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel = 4,
 	)
 
+
+
 /obj/item/weapon/storage/box/syndicate_team/New()
 	..()
 	var/team_kit = pick("sniperspotter", "scammers", "workplaceshooter")
@@ -449,3 +462,5 @@
 		if("workplaceshooter")
 			new /obj/item/weapon/storage/box/syndie_kit/shootershotty(src)
 			new /obj/item/weapon/storage/box/syndie_kit/shooteruzis(src)
+
+

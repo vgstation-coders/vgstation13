@@ -53,7 +53,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	machine_flags = 0 //No screwtoggle because this computer can't be built
 	allow_silicons = 0 //no NT robots allowed
 
-/obj/machinery/computer/shuttle_control/syndicate/emag()
+/obj/machinery/computer/shuttle_control/syndicate/emag_act()
 	return
 
 /obj/machinery/computer/shuttle_control/syndicate/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm

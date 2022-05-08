@@ -20,7 +20,7 @@ var/list/event_last_fired = list()
 	if(universe.name != "Normal")
 		message_admins("Universe isn't normal, aborting random event spawn.")
 		return
-	if(player_list.len < 6) //minimum pop of 5 to trigger events
+	if(player_list.len < 1) //minimum pop of 1 to trigger events
 		message_admins("Too few players to trigger random event, aborting.")
 		return
 	var/list/active_with_role = number_active_with_role()

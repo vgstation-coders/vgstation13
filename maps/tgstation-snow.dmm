@@ -84070,19 +84070,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/solar_control)
 "ltZ" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
 /turf/simulated/floor{
-	icon_state = "dark-markings"
-	},
-/area/gateway)
-"luf" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 8;
 	icon_state = "dark-markings"
 	},
 /area/gateway)
@@ -84116,15 +84104,6 @@
 	icon_state = "wood"
 	},
 /area/wizard_station)
-"luF" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "luR" = (
 /turf/simulated/wall,
 /area/science/lab)
@@ -85809,16 +85788,13 @@
 	},
 /area/hallway/secondary/exit)
 "lYc" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
 	},
 /area/gateway)
 "lYd" = (
-/obj/machinery/gateway/centerstation,
+/obj/machinery/gateway/center,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -85834,15 +85810,6 @@
 	icon_state = "white"
 	},
 /area/medical/medbay)
-"lYn" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "lYv" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/storage/toolbox/mechanical,
@@ -86479,9 +86446,6 @@
 /turf/simulated/floor/engine/concrete,
 /area/station/garage)
 "mmE" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark-markings"
@@ -86544,14 +86508,6 @@
 	icon_state = "whiteblue"
 	},
 /area/medical/medbay)
-"mnW" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
-/turf/simulated/floor{
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "mnZ" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -241481,7 +241437,7 @@ gnF
 jWg
 koS
 kOC
-luf
+lYc
 lYd
 mng
 mVl
@@ -241783,9 +241739,9 @@ gnF
 jWg
 koS
 kOC
-luF
-lYn
-mnW
+mmE
+lYc
+ltZ
 mVF
 nKp
 ojY

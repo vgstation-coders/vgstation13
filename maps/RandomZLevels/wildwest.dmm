@@ -88,44 +88,8 @@
 	tag = "icon-gcircuitoff"
 	},
 /area/awaymission/wwvault)
-"ar" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/simulated/floor/shuttle/plating{
-	icon_state = "gcircuitoff";
-	tag = "icon-gcircuitoff"
-	},
-/area/awaymission/wwvault)
-"as" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor/shuttle/plating{
-	icon_state = "gcircuitoff";
-	tag = "icon-gcircuitoff"
-	},
-/area/awaymission/wwvault)
-"at" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor/shuttle/plating{
-	icon_state = "gcircuitoff";
-	tag = "icon-gcircuitoff"
-	},
-/area/awaymission/wwvault)
-"au" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/simulated/floor/shuttle/plating{
-	icon_state = "gcircuitoff";
-	tag = "icon-gcircuitoff"
-	},
-/area/awaymission/wwvault)
 "av" = (
-/obj/machinery/gateway/centeraway{
+/obj/machinery/gateway/center/away{
 	calibrated = 0
 	},
 /turf/simulated/floor/shuttle/plating{
@@ -133,35 +97,8 @@
 	tag = "icon-gcircuitoff"
 	},
 /area/awaymission/wwvault)
-"aw" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
-/turf/simulated/floor/shuttle/plating{
-	icon_state = "gcircuitoff";
-	tag = "icon-gcircuitoff"
-	},
-/area/awaymission/wwvault)
-"ax" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
-/turf/simulated/floor/shuttle/plating{
-	icon_state = "gcircuitoff";
-	tag = "icon-gcircuitoff"
-	},
-/area/awaymission/wwvault)
 "ay" = (
-/obj/machinery/gateway,
-/turf/simulated/floor/shuttle/plating{
-	icon_state = "gcircuitoff";
-	tag = "icon-gcircuitoff"
-	},
-/area/awaymission/wwvault)
-"az" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
+/obj/machinery/gateway/away,
 /turf/simulated/floor/shuttle/plating{
 	icon_state = "gcircuitoff";
 	tag = "icon-gcircuitoff"
@@ -36156,9 +36093,9 @@ aa
 ab
 an
 an
-ar
-au
-ax
+ao
+ao
+ao
 ao
 ao
 ao
@@ -36413,7 +36350,7 @@ aa
 ab
 ab
 an
-as
+ao
 av
 ay
 ao
@@ -36670,9 +36607,9 @@ aa
 aa
 ab
 an
-at
-aw
-az
+ao
+ao
+ao
 ao
 ao
 ao

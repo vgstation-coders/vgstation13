@@ -56,7 +56,24 @@
 	item_state = "Dpacket"
 	w_class = W_CLASS_TINY
 	foldable = null
-	items_to_spawn = list(/obj/item/device/camera_bug = 5)
+	items_to_spawn = list(
+		/obj/item/device/camera_bug = 5,
+		/obj/item/clothing/mask/cigarette/bugged = 3,
+	)
+
+/obj/item/weapon/storage/box/surveillance/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the box is apparently modified with complex electronics.</span>")
+		return
+	if(isturf(loc) && user.Adjacent(src))
+		to_chat(user, "Something's a little off...")
+
+/obj/item/weapon/storage/box/surveillance/distance_interact(mob/user)
+	if(istype(loc,/obj/item/weapon/storage/box/surveillance) && in_range(user,loc))
+		playsound(loc, rustle_sound, 50, 1, -5)
+		return TRUE
+	return FALSE
 
 /obj/item/weapon/storage/box/survival
 	name = "survival equipment box"
@@ -501,7 +518,7 @@
 		/obj/item/weapon/storage/box/evidence,
 		/obj/item/device/detective_scanner,
 		/obj/item/binoculars,
-		/obj/item/weapon/storage/box/surveillance,
+		/obj/item/device/radio/phone/surveillance,
 		/obj/item/device/handtv,
 		/obj/item/weapon/reagent_containers/spray/luminol,
 		/obj/item/taperoll/police,
@@ -603,6 +620,15 @@
 	items_to_spawn = list(
 		/obj/item/clothing/suit/spaceninjafake,
 		/obj/item/clothing/head/spaceninjafake,
+	)
+
+/obj/item/weapon/storage/box/syndicatefake/ops
+	name = "Operative Suit Replica"
+	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
+	items_to_spawn = list(
+		/obj/item/clothing/suit/opsfake,
+		/obj/item/clothing/head/opsfake,
 	)
 
 /obj/item/weapon/storage/box/autoinjectors
@@ -1291,3 +1317,10 @@
 	new /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit(src)
 	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+
+/obj/item/weapon/storage/box/demolition
+	icon_state = "box_of_doom"
+	items_to_spawn = list(
+		/obj/item/device/modkit/demolition,
+		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
+	)

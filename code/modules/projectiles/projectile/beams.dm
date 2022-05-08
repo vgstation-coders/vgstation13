@@ -499,6 +499,7 @@ var/list/beam_master = list()
 					return 0
 				if(isgrey(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -514,6 +515,7 @@ var/list/beam_master = list()
 
 				if(isvox(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -529,6 +531,7 @@ var/list/beam_master = list()
 
 				if(isinsectoid(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -544,6 +547,7 @@ var/list/beam_master = list()
 
 				if(ishuman(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -576,6 +580,7 @@ var/list/beam_master = list()
 					return 0
 				if(isgrey(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -591,6 +596,7 @@ var/list/beam_master = list()
 
 				if(isvox(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -606,6 +612,7 @@ var/list/beam_master = list()
 
 				if(isinsectoid(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -621,6 +628,91 @@ var/list/beam_master = list()
 
 				if(ishuman(H))
 					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+		else
+			return 1
+
+/obj/item/projectile/beam/immolationray/upgraded // Exclusively used by the hoverdisc drone
+	damage = 55
+
+/obj/item/projectile/beam/atomizationray
+	name = "atomization ray"
+	icon_state = "atomray"
+	damage = 40
+	fire_sound = 'sound/weapons/ray1.ogg'
+
+/obj/item/projectile/beam/atomizationray/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			if (H.isDead())
+				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
+					return 0
+				if(isgrey(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+
+				if(isvox(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+
+				if(isinsectoid(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+
+					if(H.lying)
+						H.drop_all() // So their gear doesn't all get deleted
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
+					else
+						H.drop_all()
+						head_organ.droplimb(1,1)
+						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
+
+					new /obj/effect/decal/cleanable/ash(get_turf(target))
+					qdel(H)
+
+				if(ishuman(H))
+					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
 
 					if(H.lying)
 						H.drop_all() // So their gear doesn't all get deleted
@@ -1104,10 +1196,10 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
 				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
 									"<span class='warning'>\The [src] [splash_verb] you!</span>")
-				splash_sub(reagents, get_turf(A), reagents.total_volume/2)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
+				splash_sub(reagents, get_turf(A), reagents.total_volume/2, firer)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
 		else
-			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
-		splash_sub(reagents, A, reagents.total_volume)//and 10 more on the atom itself
+			splash_sub(reagents, get_turf(src), reagents.total_volume/2, firer)
+		splash_sub(reagents, A, reagents.total_volume, firer)//and 10 more on the atom itself
 		has_splashed = TRUE
 		return 1
 

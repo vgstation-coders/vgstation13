@@ -101,6 +101,17 @@
 	..()
 	reagents.add_reagent(SACID, 3)
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/polyp
+	name = "polyp meat"
+	desc = "A lump of meat from the top of a polyp's bell. Somewhat salty in taste, but quite nutritious."
+	icon_state = "raw_jellyfish"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/polyp/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(POLYPGELATIN, 5)
+	bitesize = 1
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	name = "insectoid meat"
 	desc = "A slab of gooey, white meat. It's still got traces of hardened chitin."

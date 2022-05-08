@@ -332,7 +332,7 @@
 
 	return
 
-/obj/machinery/cloning/clonepod/emag(mob/user as mob)
+/obj/machinery/cloning/clonepod/emag_act(mob/user as mob)
 	if(isnull(occupant))
 		return
 	if(user)

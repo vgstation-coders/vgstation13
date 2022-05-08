@@ -100,7 +100,7 @@
 	var/list/speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //speed modifiers based on light condition
 	var/list/base_speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //base speed modifiers based on light condition
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
-	var/base_regenbonus=1
+	var/base_regenbonus=1.5
 	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
 
 /datum/grue_calc/grue/proc/nutri_adjust(var/mob/living/simple_animal/hostile/grue/G)

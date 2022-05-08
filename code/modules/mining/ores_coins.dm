@@ -392,12 +392,13 @@
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
-	var/sideup = "heads." //heads, tails or on its side?
+	var/sideup = "heads-up." //heads, tails or on its side?
 
 /obj/item/weapon/coin/New()
 	. = ..()
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
+	sideup = pick("heads-up.","tails-up.")
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)

@@ -29,7 +29,7 @@
 	var/image/openimage
 	var/image/closeimage
 
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -68,7 +68,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/engineer
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 
 /obj/machinery/suit_storage_unit/engie/empty
 	isopen = 1

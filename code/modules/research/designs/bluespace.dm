@@ -90,7 +90,7 @@
 	id = "gps"
 	req_tech = list(Tc_BLUESPACE = 2, Tc_MAGNETS = 2)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 800, MAT_GLASS = 200)
+	materials = list(MAT_IRON = 800, MAT_GLASS = 200)
 	category = "Bluespace"
 	build_path = /obj/item/device/gps/science
 

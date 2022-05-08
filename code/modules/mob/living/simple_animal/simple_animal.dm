@@ -110,6 +110,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/pacify_aura = FALSE
 
 	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff
+	var/acidimmune = 0 //A check for whether the mob doesn't take damage from acid reagents. Set to 0 by default
 	var/force_airlock_time=0 //to allow for airlock forcing to take some time
 
 /mob/living/simple_animal/isBloodedAnimal()
@@ -778,9 +779,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	switch(id)
 		if(SACID)
+			if(acidimmune)
+				return
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
 		if(PACID)
+			if(acidimmune)
+				return
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
 

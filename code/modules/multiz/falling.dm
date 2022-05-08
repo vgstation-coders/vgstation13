@@ -26,71 +26,24 @@
 	if(!isturf(loc))
 		return
 
-	var/turf/below = GetBelow(src)
-	if(!below)
-		return
-
-	var/turf/bottom = null
-	var/depth = 0
-	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-		depth++
-		if(depth > config.multiz_bottom_cap) // To stop getting caught on this in infinite loops
-			break
-
-	if(istype(bottom,/turf/space))
-		return
-
-	var/turf/T = loc
-	if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
-		return
-
-	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
-	// Detect stairs below and traverse down them.
-	if(down_stairs && down_stairs.dir == GetOppositeDir(dir))
-		Move(below)
-		if(isliving(src))
-			var/mob/living/L = src
-			if(L.pulling)
-				L.pulling.Move(below)
+	if(!check_below())
 		return
 
 	var/gravity = get_gravity()
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
 		return
+
 	fall_lock = TRUE
 	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
 		fall_lock = FALSE
 
+		var/turf/below = check_below()
 		// We're in a new loc most likely, so check all this again
-		below = GetBelow(src)
 		if(!below)
 			return
 
-		bottom = null
-		depth = 0
-		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-			depth++
-			if(depth > config.multiz_bottom_cap) // To stop getting caught on this in infinite loops
-				break
-
-		if(istype(bottom,/turf/space))
-			return
-		T = loc
-		if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
-			return
-
-		down_stairs = locate(/obj/structure/stairs) in below
-		if(down_stairs && down_stairs.dir == GetOppositeDir(dir))
-			Move(below)
-			if(isliving(src))
-				var/mob/living/L = src
-				if(L.pulling)
-					L.pulling.Move(below)
-			return
-
-		gravity = get_gravity()
-		if(!gravity)
+		if(!get_gravity())
 			return
 
 		/*if(throwing)  This was causing odd behavior where things wouldn't stop.
@@ -107,6 +60,37 @@
 				handle_fall(below)
 				if(is_client_moving) M.client.moving = 0
 			// TODO - handle fall on damage!
+
+/atom/movable/proc/check_below()
+	var/turf/below = GetBelow(src)
+	if(!below)
+		return 0
+
+	var/turf/bottom = null
+	var/list/checked_belows = list()
+	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+		if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
+			break
+		checked_belows.Add(bottom.z)
+
+	if(istype(bottom,/turf/space))
+		return 0
+
+	var/turf/T = loc
+	if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
+		return 0
+
+	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
+	// Detect stairs below and traverse down them.
+	if(down_stairs && down_stairs.dir == GetOppositeDir(dir))
+		Move(below)
+		if(isliving(src))
+			var/mob/living/L = src
+			if(L.pulling)
+				L.pulling.Move(below)
+		return 0
+
+	return below
 
 //For children to override
 /atom/movable/proc/can_fall()

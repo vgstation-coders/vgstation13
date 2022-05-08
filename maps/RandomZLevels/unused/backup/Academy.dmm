@@ -552,7 +552,7 @@
 "kF" = (/obj/machinery/gateway{dir = 1},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating,/area/awaymission/academy/academygate)
 "kG" = (/obj/machinery/gateway{dir = 5},/turf/simulated/floor/plating,/area/awaymission/academy/academygate)
 "kH" = (/obj/machinery/gateway{dir = 8},/turf/simulated/floor/plating,/area/awaymission/academy/academygate)
-"kI" = (/obj/structure/cable,/obj/machinery/gateway/centeraway{calibrated = 0},/turf/simulated/floor/plating,/area/awaymission/academy/academygate)
+"kI" = (/obj/structure/cable,/obj/machinery/gateway/center/away{calibrated = 0},/turf/simulated/floor/plating,/area/awaymission/academy/academygate)
 "kJ" = (/obj/machinery/gateway{dir = 4},/turf/simulated/floor/plating,/area/awaymission/academy/academygate)
 "kK" = (/obj/machinery/gateway{dir = 10},/turf/simulated/floor/plating,/area/awaymission/academy/academygate)
 "kL" = (/obj/machinery/gateway,/turf/simulated/floor/plating,/area/awaymission/academy/academygate)

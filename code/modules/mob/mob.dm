@@ -1988,7 +1988,7 @@ Use this proc preferably at the end of an equipment loadout
 	spawn(duration + 1)
 		regenerate_icons()
 
-/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
+/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE, var/kill_on_death = TRUE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
 			var/obj/transmog_body_container/tC = transmogged_from
@@ -2016,8 +2016,10 @@ Use this proc preferably at the end of an equipment loadout
 		return
 	var/mob/M = new target_type(loc)
 	var/obj/transmog_body_container/C = new (M)
+	C.kill_on_death = kill_on_death
 	M.transmogged_from = C
 	transmogged_to = M
+	C.set_contained_mob(src)
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
@@ -2027,7 +2029,6 @@ Use this proc preferably at the end of an equipment loadout
 		else
 			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
-	C.set_contained_mob(src)
 	timestopped = 1
 	return M
 
@@ -2073,6 +2074,7 @@ Use this proc preferably at the end of an equipment loadout
 	desc = "You should not be seeing this."
 	flags = TIMELESS
 	var/mob/contained_mob
+	var/kill_on_death = TRUE
 
 /obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
 	ASSERT(M)

@@ -4077,17 +4077,22 @@
 						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						return
 					//TODO (UPHEAVAL PART 2) think of fake alerts too
-			if("fakebooms") //Micheal Bay is in the house !
+			if("fakebooms") //Michael Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
-				var/choice = input("How much high-budget explosions do you want ?", "Micheal Bay SFX Systems", 1) as num
-				if(choice < 1) //No negative or null explosion amounts here math genius
+				var/amount = input("How many fake explosions do you want ?", "Fake Explosions", 1) as num
+				if(amount < 1) //No negative or null explosion amounts here math genius
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
-				message_admins("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
-				log_admin("[key_name_admin(usr)] improvised himself as Micheal Bay and triggered [round(choice)] fake explosions.")
-				for(var/i = 1 to choice)
-					world << sound('sound/effects/explosionfar.ogg')
+				var/realeffect = alert(usr,"Use visible explosions?", "Fake Explosions", "Yes", "No") == "Yes"
+				message_admins("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
+				log_admin("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
+				for(var/i = 1 to amount)
+					if(realeffect)
+						var/turf/epicenter = locate(rand(1,world.maxx),rand(1,world.maxy),map.zMainStation)
+						explosion_effect(epicenter,7,14,28)
+					else
+						world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
 			if("togglerunescapepvp")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -4236,7 +4241,7 @@
 				Turret.update_gun()
 				var/emag = input("Emag the turret?") in list("No", "Yes")
 				if(emag=="Yes")
-					Turret.emag(usr)
+					Turret.emag_act(usr)
 			if("virusdish")
 				virus2_make_custom(usr.client,null)
 				feedback_inc("admin_secrets_fun_used",1)
@@ -4379,7 +4384,7 @@
 				for(var/obj/machinery/door/airlock/maintenance/M in all_doors)
 					if (access_maint_tunnels in M.req_access)
 						M.req_access = list()
-						M.req_one_access = list(access_brig,access_engine)
+						M.req_one_access = list(access_brig,access_engine_major)
 				message_admins("[key_name_admin(usr)] made all maint doors engineering and brig access-only.")
 			if("infinite_sec")
 				var/datum/job/J = job_master.GetJob("Security Officer")

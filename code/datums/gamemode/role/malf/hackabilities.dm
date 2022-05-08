@@ -2,10 +2,10 @@
 	var/name = "HACK"						//ability name (must be unique)
 	var/desc = "This does something."	//ability description
 	var/icon = "radial_off"				//icon to display in the radial
-	
+
 	var/cost = 0
 
-	var/obj/machinery/machine 
+	var/obj/machinery/machine
 
 /datum/malfhack_ability/New(var/obj/machinery/M)
 	machine = M
@@ -45,7 +45,7 @@
 
 
 /datum/malfhack_ability/toggle
-	var/toggled = FALSE	
+	var/toggled = FALSE
 	var/icon_toggled = "radial_on"
 	var/freedisable = FALSE
 
@@ -67,7 +67,7 @@
 	else
 		cost = original_cost
 	return ..()
-	
+
 /datum/malfhack_ability/core/activate(var/mob/living/silicon/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!M)
@@ -142,7 +142,7 @@
 	S.cancel_camera()
 
 	new /obj/effect/malf_jaunt(S.loc, S, P)
-	
+
 /datum/malfhack_ability/shunt/check_available(var/mob/living/silicon/ai/A)
 	if(!..())
 		return FALSE
@@ -234,7 +234,7 @@
 	if(!..())
 		return
 	machine.visible_message("<span class='warning'>You hear a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>") //highlight this, motherfucker
-	if(istype(machine, /obj/machinery/turret)) 
+	if(istype(machine, /obj/machinery/turret))
 		var/obj/machinery/turret/T = machine
 		if(T.cover)
 			T.cover.shake_animation(4, 4, 0.2 SECONDS, 20)
@@ -274,7 +274,7 @@
 /datum/malfhack_ability/toggle/radio_blackout/activate(var/mob/living/silicon/ai/A)
 	if(!..())
 		return
-	var/obj/machinery/telecomms/receiver/R = machine 
+	var/obj/machinery/telecomms/receiver/R = machine
 	if(!istype(R))
 		return
 	malf_radio_blackout = !malf_radio_blackout
@@ -300,12 +300,12 @@
 	var/fakename = copytext(input(A, "Please enter a name for the message.", "Name?", "") as text|null, 1, MAX_NAME_LEN)
 	if(!fakename)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
-		return 
+		return
 	var/fakeid = copytext(input(A, "Please enter an ID for the message .", "Occupation?", "Assistant") as text|null, 1, MAX_NAME_LEN)
 	if(!fakeid)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
-		return 
-	var/freq = input(usr, "Set a new frequency (MHz, 90.0, 200.0).", "Frequency?", COMMON_FREQ ) as null|num	
+		return
+	var/freq = input(usr, "Set a new frequency (MHz, 90.0, 200.0).", "Frequency?", COMMON_FREQ ) as null|num
 	if(freq)
 		if(findtext(num2text(freq), "."))
 			freq *= 10 // shift the decimal one place
@@ -314,17 +314,17 @@
 			return
 	else
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
-		return 
-	var/message = copytext(input(usr, "Please enter a message.", "Message?", "") as text|null,1, MAX_BROADCAST_LEN)	
+		return
+	var/message = copytext(input(usr, "Please enter a message.", "Message?", "") as text|null,1, MAX_BROADCAST_LEN)
 	if(!message)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
-		return 
+		return
 
 	var/turf/T = get_turf(machine)
 	var/datum/speech/speech = new /datum/speech
 	speech.message = message
-	speech.frequency = freq 
-	speech.job = fakeid 
+	speech.frequency = freq
+	speech.job = fakeid
 	speech.name = fakename
 	speech.speaker = machine.hack_overlay	// This is dumb, but a speaker object is needed. Passing the machine itself would cause it to "beep" instead of "say".
 	Broadcast_Message(speech, 0, 0, 0 , list(T.z))
@@ -350,7 +350,7 @@
 		var/customname = input(A, "Pick a title for the report.", "Title") as text|null
 		if(!input)
 			to_chat(A, "<span class='warning'>Announcement cancelled.</span>")
-			return 
+			return
 		if(M.processing_power < cost)
 			return
 		else
@@ -386,7 +386,7 @@
 		var/chosen_announcement = input(A, "Select a fake announcement to send out.", "Interhack") as null|anything in choices
 		if(!chosen_announcement)
 			to_chat(A, "<span class='warning'>Selection cancelled.</span>")
-			return 
+			return
 		if(M.processing_power < cost)
 			return
 		else
@@ -438,7 +438,7 @@
 		return
 	A.explosive_cyborgs = TRUE
 	to_chat(A, "<span class='warning'>You rig your cyborgs to explode violently on death.</span>")
-	
+
 //--------------------------------------------------------
 
 /*
@@ -466,25 +466,25 @@
 /datum/malfhack_ability/core/takeover/activate(var/mob/living/silicon/ai/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	var/datum/faction/malf/MF = find_active_faction_by_member(M)
-	
+
 	if(!M || !MF)
 		to_chat(A, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
-		return 
+		return
 	if (MF.stage > FACTION_ENDGAME)
 		to_chat(A, "<span class='warning'>You've already begun your takeover.</span>")
-		return 
+		return
 	if (M.apcs.len < 3)
 		to_chat(A, "<span class='notice'>You don't have enough hacked APCs to take over the station yet. You need to hack at least 3, however hacking more will make the takeover faster. You have hacked [M.apcs.len] APCs so far.</span>")
-		return 
+		return
 	if (alert(A, "Are you sure you wish to initiate the takeover? The station hostile runtime detection software is bound to alert everyone. You have hacked [M.apcs.len] APCs.", "Takeover:", "Yes", "No") != "Yes")
-		return 
+		return
 
 	MF.stage(FACTION_ENDGAME)
 	M.core_upgrades -= src
 
 //--------------------------------------------------------
 
-/datum/malfhack_ability/core/highres 
+/datum/malfhack_ability/core/highres
 	name = "High Resolution Cameras"
 	desc = "Upgrade your camera resolution and download the latest lip reading software."
 	cost = 10
@@ -511,11 +511,10 @@
 		return
 	machine.emag_ai(A)
 
-// Emag behavior varies from machine to machine 
-// Simply calling emag and/or emag_act 
+// Emag behavior varies from machine to machine
+// Simply calling emag_act
 // isn't enough for a lot of things, so this can be overridden
 /obj/machinery/proc/emag_ai(mob/living/silicon/ai/A)
-	emag(A)
 	emag_act(A)
 
 
@@ -534,7 +533,7 @@
 	C.deactivate(A) // why this proc is called deactivate is beyond me
 
 /datum/malfhack_ability/camera_reactivate/check_available(var/mob/living/silicon/A)
-	var/obj/machinery/camera/C = machine 
+	var/obj/machinery/camera/C = machine
 	if(!istype(C))
 		return FALSE
 	if(C.status)
@@ -591,8 +590,8 @@
 	if(M.has_autoborger)
 		return FALSE
 	return TRUE
-	
-	
+
+
 //--------------------------------------------------------
 
 /datum/malfhack_ability/manual_control
@@ -606,11 +605,11 @@
 		return
 	var/obj/machinery/turret/T = machine
 	if(!istype(T))
-		return 
+		return
 	T.malf_take_control(A)
 
 
-	
+
 //--------------------------------------------------------
 
 /datum/malfhack_ability/destroy_lights
@@ -680,13 +679,13 @@
 	var/chosen_sps = input(A, "Select a secure positioning system to trigger.", "SPS Alert") as null|anything in choices
 	if(!chosen_sps)
 		to_chat(A, "<span class='warning'>Selection cancelled.</span>")
-		return 
-	
+		return
+
 	var/list/codes = list("Red", "Yellow")
 	var/chosen_code = input(A, "Select an alert code.", "SPS Alert") as null|anything in codes
 	if(!chosen_code)
 		to_chat(A, "<span class='warning'>Selection cancelled.</span>")
-		return 
+		return
 
 	if(M.processing_power < cost)
 		return
@@ -696,7 +695,7 @@
 	var/obj/item/device/gps/secure/S  = choices[chosen_sps]
 	var/code = chosen_code
 	S.send_signal(SPS = S, code = "SPS [S.gpstag]: Code [code]", stfu = TRUE)
-	
+
 
 
 //--------------------------------------------------------
@@ -715,7 +714,7 @@
 	if(!istype(N))
 		return
 	if(N.extended) // was already bolted
-		return 
+		return
 	if(N.removal_stage < 5)
 		N.anchored = 1
 		N.visible_message("<span class='notice'>With a steely snap, bolts slide out of [N] and anchor it to the flooring!</span>")
@@ -743,16 +742,16 @@
 		return
 	if(!M || !MF)
 		to_chat(A, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
-		return 
+		return
 	if(MF.stage < MALF_CHOOSING_NUKE)
 		to_chat(A, "<span class='warning'>You are unable to access the self-destruct system as you don't control the station yet.</span>")
-		return 
+		return
 	if(ticker.explosion_in_progress || ticker.station_was_nuked)
 		to_chat(A, "<span class='notice'>The self-destruct countdown was already triggered!</span>")
-		return 
+		return
 	if(MF.stage >= FACTION_VICTORY) //Takeover IS completed, but 60s timer passed.
 		to_chat(A, "<span class='warning'>Cannot interface, it seems a neutralization signal was sent!</span>")
-		return 
+		return
 
 
 	to_chat(A, "<span class='danger'>Detonation signal sent!</span>")
@@ -780,7 +779,7 @@
 	var/datum/faction/malf/MF = find_active_faction_by_member(M)
 	if(!M || !MF || !istype(N))
 		return FALSE
-	if(!M.takeover) 
+	if(!M.takeover)
 		return FALSE
 	return TRUE
 
@@ -795,9 +794,9 @@
 /datum/malfhack_ability/kill_plant/activate(mob/living/silicon/A)
 	if(!..())
 		return
-	var/obj/machinery/portable_atmospherics/hydroponics/H = machine 
+	var/obj/machinery/portable_atmospherics/hydroponics/H = machine
 	if(!istype(H))
-		return 
+		return
 	H.die()
 
 //--------------------------------------------------------
@@ -819,24 +818,24 @@
 
 
 	var/list/ids = list()
-	for(var/obj/item/weapon/card/id/I in id_cards) 
+	for(var/obj/item/weapon/card/id/I in id_cards)
 		if(!get_card_account(I))
 			continue
 		ids[I.registered_name] = I
 
 	if(ids.len == 0)
 		to_chat(A, "<span class='warning'>No IDs found.</span>")
-		return 
+		return
 
 	var/choice = input(A, "Select an ID to use.", "ID?") as null|anything in ids
 	if(!choice)
 		to_chat(A, "<span class='warning'>Selection cancelled.</span>")
-		return 
+		return
 	var/obj/item/weapon/card/id/ID = ids[choice]
 	var/datum/money_account/acct = get_card_account(ID)
 	if(!acct)
 		to_chat(A, "<span class='warning'>No account found for that ID.</span>")
-		return 
+		return
 
 
 	acc_info["authorized_name"] = ""
@@ -846,7 +845,7 @@
 	acc_info["account"] = acct
 
 	if(S)
-		S.current_acct_override = acc_info 
+		S.current_acct_override = acc_info
 		S.attack_ai(A)
 	else if(O)
 		O.current_acct_override = acc_info

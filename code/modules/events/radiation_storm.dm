@@ -18,6 +18,7 @@
 		/area/medical/patient_room1,
 		/area/medical/patient_room2,
 		/area/derelictparts,
+		/area/vox_trading_post,
 	)
 
 /datum/event/radiation_storm/can_start()

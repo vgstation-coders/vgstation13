@@ -2289,6 +2289,22 @@
 	reagents.add_reagent(WATER, 10)
 	bitesize = 5
 
+/obj/item/weapon/reagent_containers/food/snacks/roboticiststears
+	name = "Roboticist's Tears"
+	desc = "Absolutely hilarious."
+	icon_state = "roboticiststears"
+	food_flags = FOOD_LIQUID
+	crumb_icon = "dribbles"
+	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
+	valid_utensils = UTENSILE_SPOON
+	
+/obj/item/weapon/reagent_containers/food/snacks/roboticiststears/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 60) //You're using phazon here, that's the good shit.
+	reagents.add_reagent(PHAZON, 1)
+	reagents.add_reagent(WATER, 5) //water turned into nutriment via phazon magic fuckery
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/vegetablesoup
 	name = "Vegetable soup"
 	desc = "A true vegan meal." //TODO
@@ -3687,6 +3703,19 @@
 	icon_state = "pizzamargheritaslice"
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice/rocket
+	name = "Margherita slice"
+	desc = "A slice of the most cheesy pizza in galaxy. Seems covered in gunpowder."
+	icon_state = "pizzamargheritaslice"
+	bitesize = 2
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice/rocket/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 7)
+	reagents.add_reagent(TOMATOJUICE, 1)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza
 	name = "Meatpizza"

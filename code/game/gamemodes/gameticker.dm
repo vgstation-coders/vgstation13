@@ -307,25 +307,12 @@ var/datum/controller/gameticker/ticker
 	cinematic.mouse_opacity = 0
 	cinematic.screen_loc = "1,0"
 
-	var/obj/structure/bed/temp_buckle = new(src)
-	//Incredibly hackish. It creates a bed within the gameticker (lol) to stop mobs running around
-	if(station_missed)
-		for(var/mob/living/M in living_mob_list)
-			M.locked_to = temp_buckle				//buckles the mob so it can't do anything
-			if(M.client)
-				M.client.screen += cinematic	//show every client the cinematic
-	else	//nuke kills everyone on the station to prevent "hurr-durr I survived"
-		for(var/mob/living/M in living_mob_list)
-			M.locked_to = temp_buckle
-			if(M.client)
-				M.client.screen += cinematic
-
-			if(!(M.z))	//inside a crate or something
-				var/turf/T = get_turf(M)
-				if(T && T.z==map.zMainStation)	//we don't use M.death(0) because it calls a for(/mob) loop and
-					M.nuke_act()
-			else if(M.z == map.zMainStation) //on the station.
-				M.nuke_act()
+	for(var/mob/M in player_list)
+		if(M.client)
+			M.client.screen += cinematic	//show every client the cinematic
+		if (istype(M,/mob/living/carbon/human))
+			var/mob/living/carbon/human/C = M
+			C.apply_radiation(rand(50, 250),RAD_EXTERNAL)
 
 	//Now animate the cinematic
 	switch(station_missed)
@@ -347,10 +334,7 @@ var/datum/controller/gameticker/ticker
 
 
 		if(2)	//nuke was nowhere nearby	//TODO: a really distant explosion animation
-			sleep(50)
 			world << sound('sound/effects/explosionfar.ogg')
-
-
 		else	//station was destroyed
 			if( mode && !override )
 				override = mode.name
@@ -374,15 +358,8 @@ var/datum/controller/gameticker/ticker
 					world << sound('sound/effects/explosionfar.ogg')
 					cinematic.icon_state = "summary_selfdes"
 
-	//If its actually the end of the round, wait for it to end.
-	//Otherwise if its a verb it will continue on afterwards.
-	sleep(300)
-
 	if(cinematic)
 		qdel(cinematic)		//end the cinematic
-	if(temp_buckle)
-		qdel(temp_buckle)	//release everybody
-	return
 
 /datum/controller/gameticker/proc/station_nolife_cinematic(var/override = null)
 	if( cinematic )

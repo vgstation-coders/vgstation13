@@ -411,7 +411,7 @@
 	ASSERT(isarea(control_area))
 	updateTurrets() //Updates the turrets and the icon if an instance is made that is not set to stun by default
 
-/obj/machinery/turretid/emag(mob/user)
+/obj/machinery/turretid/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
 		locked = 0

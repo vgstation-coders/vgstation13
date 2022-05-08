@@ -20,26 +20,6 @@
 /obj/structure/flora/tree/pine,
 /turf/simulated/floor/plating/snow,
 /area/awaymission/articwasteland)
-"ag" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
-/turf/simulated/floor/plating{
-	dir = 4;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (EAST)"
-	},
-/area/awaymission/articwasteland/gateway)
-"ah" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
-/turf/simulated/floor/plating{
-	dir = 8;
-	icon_state = "warnplate";
-	tag = "icon-warnplate (WEST)"
-	},
-/area/awaymission/articwasteland/gateway)
 "ai" = (
 /turf/simulated/floor/plating,
 /area/awaymission/articwasteland/gateway)
@@ -139,24 +119,6 @@
 	tag = "icon-warnplate (EAST)"
 	},
 /area/awaymission/articwasteland/gateway)
-"ay" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/articwasteland/gateway)
-"az" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/articwasteland/gateway)
-"aA" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/articwasteland/gateway)
 "aB" = (
 /obj/machinery/vending/assist,
 /turf/simulated/floor/plating{
@@ -173,21 +135,9 @@
 	tag = "icon-warnplate (EAST)"
 	},
 /area/awaymission/articwasteland/gateway)
-"aD" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/articwasteland/gateway)
 "aE" = (
-/obj/machinery/gateway/centeraway{
+/obj/machinery/gateway/center/away{
 	calibrated = 0
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/articwasteland/gateway)
-"aF" = (
-/obj/machinery/gateway{
-	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/articwasteland/gateway)
@@ -254,7 +204,7 @@
 /turf/simulated/floor/plating,
 /area/awaymission/articwasteland/gateway)
 "aR" = (
-/obj/machinery/gateway,
+/obj/machinery/gateway/away,
 /obj/effect/landmark{
 	name = "awaystart"
 	},
@@ -37522,9 +37472,9 @@ aa
 ac
 ac
 ac
-ay
-aD
-ag
+ai
+ai
+av
 ap
 ai
 ai
@@ -37724,7 +37674,7 @@ aa
 ac
 ac
 ac
-az
+ai
 aE
 aR
 ai
@@ -37926,9 +37876,9 @@ aa
 ac
 ac
 ac
-aA
-aF
-ah
+ai
+ai
+at
 ap
 ai
 ai
