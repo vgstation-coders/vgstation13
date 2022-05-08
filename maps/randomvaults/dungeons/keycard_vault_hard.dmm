@@ -77,7 +77,10 @@
 /area/vault/keycard)
 "v" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/box/mystery_dna,
+/obj/item/weapon/storage/box{
+	name = "mystery DNA powers box";
+	items_to_spawn = list(/obj/item/weapon/dnainjector/nofail/randompower = 5)
+	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "x" = (

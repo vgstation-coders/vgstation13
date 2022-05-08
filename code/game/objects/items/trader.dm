@@ -1853,11 +1853,3 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	for(var/i = 1 to 2)
 		var/bootlegDrink = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/drinks))
 		new bootlegDrink(src)
-
-//Mystery DNA//////////////////////
-
-/obj/item/weapon/storage/box/mystery_dna
-	name = "random DNA powers pack"
-	items_to_spawn = list(
-		/obj/item/weapon/dnainjector/nofail/randompower = 5,
-	)
