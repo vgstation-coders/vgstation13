@@ -1152,7 +1152,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
 	leaves = 3
-	var/prob1 = clamp(1 + mut / 3, 0, 66)
+	var/prob1 = clamp(mut / 3, 0, 66)
 	var/luck = shifter?.luck()
 	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
 		var/ls = 1
