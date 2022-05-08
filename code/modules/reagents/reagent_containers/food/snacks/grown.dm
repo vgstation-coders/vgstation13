@@ -1111,7 +1111,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
 	leaves = 7
 
-
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/New(atom/loc, custom_plantname)
 	. = ..()
 	update_leaves()
