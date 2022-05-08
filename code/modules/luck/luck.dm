@@ -1,16 +1,65 @@
-//Luckiness and unluckiness
+///////Luck///////
 
+//Every mob has a certain amount of luck, defaulting to a neutral value of 0.
+//Luck can be affected by blessings or curses, or by bearing lucky or unlucky items.
+//Luck can also be permanently or temporarily given to a mob itself through various means.
+//A mob's luck can affect the outcomes of various probabilistic events involving that mob.
+
+//Returns a mob's luckiness.
 /mob/proc/luck()
 	var/luck = 0
 	if(base_luck)
 		luck += base_luck.base_luck()
-	//Adjust based on borne items
+	//adjust based on borne items
 	luck += borne_item_luckiness()
 	return luck
 
 /mob
 	var/datum/luckiness/base_luck
 
+//Stores the factors that contribute to a mob's base luckiness.
+	//permanent_luckiness: Remains constant unless modified via luck_adjust().
+	//temporary_luckiness: Slowly decreases in magnitude according to LUCKINESS_DRAINFACTOR.
+	//blesscurse: List of blessings and curses: see luck_blesscurse.dm.
+/datum/luckiness
+	var/permanent_luckiness = 0
+	var/temporary_luckiness = 0
+	var/list/blesscurse = list()
+
+//Returns a mob's base luckiness.
+/datum/luckiness/proc/base_luck()
+	var/base_luck = permanent_luckiness + temporary_luckiness
+	if(blesscurse.len)
+		for(var/datum/blesscurse/this_blesscurse in blesscurse)
+			base_luck += this_blesscurse.blesscurse_strength
+	return base_luck
+
+//Add a blessing or curse to a mob.
+/mob/proc/add_blesscurse(var/datum/blesscurse/ourblesscurse)
+	if(!base_luck)
+		base_luck = new /datum/luckiness
+	if(has_blesscurse(ourblesscurse)) //can only have one instance of each type of blessing or curse
+		return
+	base_luck.blesscurse += ourblesscurse
+
+//Remove a blessing or curse from a mob.
+/mob/proc/remove_blesscurse(var/datum/blesscurse/ourblesscurse)
+	if(!base_luck)
+		return
+	base_luck.blesscurse -= ourblesscurse
+
+//Check if a mob has a given type of blessing or curse.
+/mob/proc/has_blesscurse(var/datum/blesscurse/ourblesscurse)
+	if(!base_luck)
+		return FALSE
+	if(base_luck.blesscurse.len)
+		for(var/i in 1 to base_luck.blesscurse.len)
+			if(ispath(base_luck.blesscurse[i], ourblesscurse))
+				return TRUE
+	else
+		return FALSE
+
+//Alters a mob's base luckiness.
 /mob/proc/luck_adjust(var/luckchange, var/temporary = FALSE)
 	if(!base_luck)
 		base_luck = new /datum/luckiness
@@ -19,6 +68,7 @@
 	else
 		base_luck.permanent_luckiness += luckchange
 
+//Returns the total luckiness of all items held or worn by the mob. Items confer luckiness in different inventory locations according to their luckiness_validity flags: see setup.dm.
 /mob/proc/borne_item_luckiness() //Check all inventory items for (un)luckiness.
 	var/total_item_luckiness = 0
 	var/list/equipped_items = get_equipped_items()
@@ -27,8 +77,7 @@
 	var/list/held_or_implanted_items = contents - equipped_items
 	//check hand slot items and implanted items
 	if(held_or_implanted_items.len)
-		for(var/i in 1 to held_or_implanted_items.len)
-			var/obj/item/thisitem = held_or_implanted_items[i]
+		for(var/obj/item/thisitem in held_or_implanted_items)
 			if(thisitem.luckiness_validity & (LUCKINESS_WHEN_HELD | LUCKINESS_WHEN_HELD_RECURSIVE) && thisitem.luckiness)
 				total_item_luckiness += thisitem.luckiness
 			//check hand slot and implanted item contents recursively
@@ -40,17 +89,15 @@
 					if(thiscontent.contents.len)
 						thisitemscontents += thiscontent.contents
 					j += 1
-				for(var/k in 1 to thisitemscontents.len)
-					var/obj/item/thisitemscontent = thisitemscontents[k]
+				for(var/obj/item/thisitemscontent in thisitemscontents)
 					if(thisitemscontent.luckiness_validity & LUCKINESS_WHEN_HELD_RECURSIVE && thisitemscontent.luckiness)
 						total_item_luckiness += thisitemscontent.luckiness
 	//check worn items directly
 	if(equipped_items.len)
-		for(var/i in 1 to equipped_items.len)
-			var/obj/item/thisitem = equipped_items[i]
+		for(var/obj/item/thisitem in  equipped_items.len)
 			if(thisitem.luckiness_validity & (LUCKINESS_WHEN_WORN | LUCKINESS_WHEN_WORN_RECURSIVE) && thisitem.luckiness)
 				total_item_luckiness += thisitem.luckiness
-				//check worn item contents recursively
+			//check worn item contents recursively
 			if(thisitem.contents.len)
 				var/list/thisitemscontents = thisitem.contents
 				var/j = 1
@@ -59,53 +106,13 @@
 					if(thiscontent.contents.len)
 						thisitemscontents += thiscontent.contents
 					j += 1
-				for(var/k in 1 to thisitemscontents.len)
-					var/obj/item/thisitemscontent = thisitemscontents[k]
+				for(var/obj/item/thisitemscontent in thisitemscontents)
 					if(thisitemscontent.luckiness_validity & LUCKINESS_WHEN_WORN_RECURSIVE && thisitemscontent.luckiness)
 						total_item_luckiness += thisitemscontent.luckiness
 	return total_item_luckiness
 
-/datum/luckiness
-	var/permanent_luckiness = 0
-	var/temporary_luckiness = 0
-	var/list/blesscurse = list() //List of blessings and curses.
-
-/datum/luckiness/proc/base_luck()
-	var/base_luck = permanent_luckiness + temporary_luckiness
-	if(blesscurse.len)
-		for(var/i in 1 to blesscurse.len)
-			var/datum/blesscurse/this_blesscurse = blesscurse[i]
-			base_luck += this_blesscurse.blesscurse_strength
-	return base_luck
-
-/mob/proc/add_blesscurse(var/datum/blesscurse/ourblesscurse)
-	if(!base_luck)
-		base_luck = new /datum/luckiness
-	if(has_blesscurse(ourblesscurse)) //can only have one instance of each type of blessing or curse.
-		return
-	base_luck.blesscurse += ourblesscurse
-
-/mob/proc/remove_blesscurse(var/datum/blesscurse/ourblesscurse)
-	if(!base_luck)
-		return
-	base_luck.blesscurse -= ourblesscurse
-
-/mob/proc/has_blesscurse(var/datum/blesscurse/ourblesscurse)
-	if(!base_luck)
-		return FALSE
-	if(base_luck.blesscurse.len)
-		for(var/i in 1 to base_luck.blesscurse.len)
-			if(ispath(base_luck.blesscurse[i], ourblesscurse))
-				return TRUE
-	else
-		return FALSE
-
-/datum/blesscurse
-	var/blesscurse_name //string; name of the blessing or curse
-	var/blesscurse_strength //number; how much luck (+) or unluck (-) the blessing or curse confers.
-
 //Modify a probability in the range [0,100] based on luck.
-	//baseprob: The base probability to be modified
+	//baseprob: The base probability to be modified.
 	//luckfactor: Related to the percentage the outcome probability shifts for every 1 luck. With a luckfactor of 1, 1 luck corresponds to a shift from 50% to around 51%.
 	//maxskew: The maximum influence luck can have on the outcome probability. At maxskew 0, there is no effect. At maxskew 50, the effect is maximal.
 	//ourluck: Can set this to the mob's luck to avoid having to call luck() multiple times.

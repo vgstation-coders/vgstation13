@@ -1,3 +1,8 @@
+//Blessings and curses that confer (un)luck to a mob.
+/datum/blesscurse
+	var/blesscurse_name		//string: Name of the blessing or curse.
+	var/blesscurse_strength	//number: How much luck (+) or unluck (-) the blessing or curse confers.
+
 //Curse when someone breaks a mirror.
 /datum/blesscurse/brokenmirror
 	blesscurse_name = "mirror-breaker curse"
