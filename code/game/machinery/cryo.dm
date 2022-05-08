@@ -443,7 +443,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(air_contents.total_moles() < 10)
 		return
 	if(istype(occupant, /mob/living/simple_animal/))
-		go_out(ejector = L)
+		go_out()
 		return
 	if(occupant)
 		if(occupant.stat == DEAD)
