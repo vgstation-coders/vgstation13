@@ -82,7 +82,7 @@
 				total_item_luckiness += thisitem.luckiness
 			//check hand slot and implanted item contents recursively
 			if(thisitem.contents.len)
-				var/list/thisitemscontents = thisitem.contents
+				var/list/thisitemscontents = thisitem.contents.Copy()
 				var/j = 1
 				while(j <= thisitemscontents.len)
 					var/obj/item/thiscontent = thisitemscontents[j]
@@ -94,12 +94,12 @@
 						total_item_luckiness += thisitemscontent.luckiness
 	//check worn items directly
 	if(equipped_items.len)
-		for(var/obj/item/thisitem in  equipped_items.len)
+		for(var/obj/item/thisitem in  equipped_items)
 			if(thisitem.luckiness_validity & (LUCKINESS_WHEN_WORN | LUCKINESS_WHEN_WORN_RECURSIVE) && thisitem.luckiness)
 				total_item_luckiness += thisitem.luckiness
 			//check worn item contents recursively
 			if(thisitem.contents.len)
-				var/list/thisitemscontents = thisitem.contents
+				var/list/thisitemscontents = thisitem.contents.Copy()
 				var/j = 1
 				while(j <= thisitemscontents.len)
 					var/obj/item/thiscontent = thisitemscontents[j]
