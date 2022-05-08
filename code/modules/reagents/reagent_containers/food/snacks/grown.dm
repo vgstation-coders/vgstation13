@@ -1157,12 +1157,12 @@ var/list/special_fruits = list()
 	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
 		var/ls = 1
 		var/prob2 = max(clamp(mut, 0, 21) / 21, 0.1)
-		prob2 = shifter ? shifter.lucky_probability(prob2, 1/1000 , 33, ourluck = luck) : prob2
+		prob2 = shifter ? shifter.lucky_probability(prob2, 1/100 , 33, ourluck = luck) : prob2
 		for(var/i in 1 to 7)
 			if(prob(prob2))
 				ls += 1
 		leaves += ls * pick(-1,1)
-		if(shifter ? shifter.lucky_prob(3, 1/1000, 50, ourluck = luck) : prob(3))
+		if(shifter ? shifter.lucky_prob(3, 1/100, 50, ourluck = luck) : prob(3))
 			leaves = clamp(leaves, 0, 7)
 		else if(leaves < 0 || leaves > 7)
 			leaves = 3
