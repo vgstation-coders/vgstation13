@@ -742,7 +742,7 @@
 	icon_state = "nr_uniform"
 	item_state = "nr_uniform"
 	_color = "nr_uniform"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 /*
 /obj/item/clothing/under/skelevoxsuit
 	name = "skelevox suit"
