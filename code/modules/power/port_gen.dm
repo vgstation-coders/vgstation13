@@ -8,7 +8,7 @@
 	anchored = 0
 	use_power = 0
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
 	var/active = 0
 	var/power_gen = 5000
