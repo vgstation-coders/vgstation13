@@ -105,6 +105,13 @@
 //		if(!check_drift && J.allow_thrust(0.01, src))
 //			return 1
 
+//Also allows jetpacks to work from suit storage slots
+	else if(istype(s_store, /obj/item/weapon/tank/jetpack))
+		var/obj/item/weapon/tank/jetpack/J = s_store
+		if(((!check_drift) || (check_drift && J.stabilization_on)) && (!lying) && (J.allow_thrust(0.01, src)))
+			inertia_dir = 0
+			return 1
+
 	//If no working jetpack then use the other checks
 	return ..()
 
