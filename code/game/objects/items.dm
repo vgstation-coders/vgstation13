@@ -80,7 +80,7 @@
 	var/datum/speech_filter/speech_filter
 
 	var/luckiness //How much luck or unluck the item confers while held
-	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc. See luck.dm
+	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)

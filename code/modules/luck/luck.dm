@@ -19,7 +19,7 @@
 
 //Stores the factors that contribute to a mob's base luckiness.
 	//permanent_luckiness: Remains constant unless modified via luck_adjust().
-	//temporary_luckiness: Slowly decreases in magnitude according to LUCKINESS_DRAINFACTOR.
+	//temporary_luckiness: Gradually decreases in magnitude according to LUCKINESS_DRAINFACTOR.
 	//blesscurse: List of blessings and curses: see luck_blesscurse.dm.
 /datum/luckiness
 	var/permanent_luckiness = 0
