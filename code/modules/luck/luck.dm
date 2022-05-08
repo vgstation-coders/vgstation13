@@ -113,7 +113,7 @@
 
 //Modify a probability in the range [0,100] based on luck.
 	//baseprob: The base probability to be modified.
-	//luckfactor: Related to the how much the probability shifts towards 100% for every +1 luck. A negative luckfactor causes the shift to be towards 0% instead.
+	//luckfactor: Related to how much the probability shifts towards 100% for every +1 luck. A negative luckfactor causes the shift to be towards 0% instead.
 	//maxskew: The maximum influence luck can have on the outcome probability. At maxskew 0, there is no effect. At maxskew 50, the effect is maximal.
 	//ourluck: Can set this to the mob's luck to avoid having to call luck() multiple times.
 /mob/proc/lucky_probability(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50, var/ourluck)
