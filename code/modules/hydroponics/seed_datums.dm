@@ -508,6 +508,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		total_yield = round(max(1,total_yield))
 
 	currently_querying = list()
+
 	for(var/i = 0;i<total_yield;i++)
 
 		var/product_type = pick(products)
@@ -517,7 +518,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(ispath(product_type, /obj/item/stack))
 			product = drop_stack(product_type, T, 1, null)
 		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown) || ispath(product_type, /obj/item/weapon/grown))
-			product = new product_type(T, custom_plantname = name)
+			product = new product_type(T, custom_plantname = name, harvester)
 		else
 			product = new product_type(T)
 
@@ -532,12 +533,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				product.light_color = biolum_colour
 			//product.set_light(1+round(potency/50))
 			product.set_light(2)
-
-		//Clovers:
-		if(istype(product, /obj/item/weapon/reagent_containers/food/snacks/grown/clover))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/clover/C = product
-			if(C.shift_leaves(potency, harvester))
-				C.update_leaves()
 
 		//Handle spawning in living, mobile products (like dionaea).
 		if(istype(product,/mob/living))

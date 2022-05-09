@@ -571,7 +571,7 @@
 	shatterer.add_blesscurse(mirrorcurse)
 
 /obj/item/weapon/pocket_mirror/kick_act(mob/living/carbon/human/H)
-	shatter(shatterer = H)
+	shatter(H)
 	..()
 
 /obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom, var/speed, mob/user)
@@ -579,7 +579,7 @@
 	if(!isturf(hit_atom))
 		return
 	if (prob(25))
-		shatter(shatterer = user)
+		shatter(user)
 
 /obj/item/weapon/pocket_mirror/comb
 	name = "hair comb"

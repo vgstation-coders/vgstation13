@@ -26,14 +26,14 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname)
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname, mob/harvester)
 	..()
 	if(custom_plantname)
 		plantname = custom_plantname
 	if(ticker)
-		initialize()
+		initialize(harvester)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
+/obj/item/weapon/reagent_containers/food/snacks/grown/initialize(mob/harvester)
 
 	//Handle some post-spawn var stuff.
 	//Fill the object up with the appropriate reagents.
@@ -370,7 +370,7 @@ var/list/special_fruits = list()
 	plantname = "rocknut"
 	force = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname)
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname, mob/harvester)
 	..()
 	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
 	eatverb = pick("crunch","gnaw","bite")
@@ -935,7 +935,7 @@ var/list/special_fruits = list()
 	var/current_path = null
 	var/counter = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname)
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname, mob/harvester)
 	..()
 	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
 	available_fruits = shuffle(available_fruits)
@@ -1084,7 +1084,7 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
 	filling_color = "#247E0A"
 	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
-	var/leaves = 3
+	var/leaves
 	plantname = "clover"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
@@ -1110,10 +1110,6 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
 	leaves = 7
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/New(atom/loc, custom_plantname)
-	. = ..()
-	update_leaves()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/update_leaves()
 	switch(leaves)
@@ -1167,3 +1163,9 @@ var/list/special_fruits = list()
 		else if(leaves < 0 || leaves > 7)
 			leaves = 3
 		return leaves != 3
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/initialize(mob/harvester)
+	. = ..()
+	if(isnull(leaves))
+		shift_leaves(seed?.potency, harvester)
+	update_leaves()
