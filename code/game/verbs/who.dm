@@ -63,9 +63,9 @@
 			var/counts_as_antag = FALSE
 			for(var/role in C.mob.mind.antag_roles)
 				var/datum/role/R = C.mob.mind.antag_roles[role]
-				if(!R.non_antag)
+				if(R.is_antag)
 					counts_as_antag = TRUE
-				var/spanclass = R.non_antag ? "good" : "bad"
+				var/spanclass = R.is_antag ? "bad" : "good"
 				entry += " - <b><span class='[spanclass]'>[uppertext(R.name)]</span></b>"
 			if(counts_as_antag)
 				if(!(C.mob.isDead()))

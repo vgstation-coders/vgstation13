@@ -527,7 +527,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		var/counts_as_antag = FALSE
 		for(var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			if(!R.non_antag)
+			if(R.is_antag)
 				counts_as_antag = TRUE
 				break
 		if(counts_as_antag)

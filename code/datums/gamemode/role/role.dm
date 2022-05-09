@@ -75,7 +75,7 @@
 
 	var/list/minds = list()
 
-	var/non_antag = FALSE // Role isn't really an antag
+	var/is_antag = TRUE // Is role antag or not?
 
 	//////////////////////////////
 	// Local
@@ -607,7 +607,7 @@
 	id = RESPONDER
 	special_role = RESPONDER
 	logo_state = "ERT_empty-logo"
-	non_antag = TRUE
+	is_antag = FALSE
 
 //________________________________________________
 
