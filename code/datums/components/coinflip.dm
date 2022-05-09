@@ -2,7 +2,7 @@
 	var/sideup
 
 /datum/component/coinflip/initialize()
-	if(!iscoin(parent))
+	if(!isitem(parent))
 		return FALSE
 
 	parent.register_event(/event/item_attack_self, src, .proc/on_attack_self)
