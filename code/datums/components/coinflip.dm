@@ -31,7 +31,7 @@
 /datum/component/coinflip/proc/equipped()
 	if(sideup == COIN_SIDE)
 		sideup = pick(COIN_HEADS, COIN_TAILS)
-	var/obj/O = parent as obj
+	var/obj/O = parent
 	O.transform = null
 
 /datum/component/coinflip/proc/examined(mob/examiner)
@@ -67,7 +67,7 @@
 							 "<span class='notice'>You flip [parent]. It lands [sideup]</span>", \
 							 "<span class='notice'>You hear [parent] landing.</span>")
 	else
-		var/obj/O = parent as obj
+		var/obj/O = parent
 		if(!O.throwing) //coin was thrown and is coming to rest
 			O.visible_message("<span class='notice'>[parent] stops spinning, landing [sideup]</span>")
 
