@@ -5306,7 +5306,6 @@
 	food_flags = FOOD_SWEET
 	icon_state = "chococoin_unwrapped"
 	bitesize = 4
-	var/sideup = COIN_HEADS //heads, tails or on its side?
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
 	desc = "Still covered in golden foil wrapper."
@@ -5321,62 +5320,13 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(SUGAR, 2)
 	reagents.add_reagent(COCO, 3)
-	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
-	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
-	sideup = pick(COIN_HEADS, COIN_TAILS)
-
-/obj/item/weapon/reagent_containers/food/snacks/chococoin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
-	var/matrix/flipit = matrix()
-	flipit.Scale(0.2,1)
-	animate(src, transform = flipit, time = 1.5, easing = QUAD_EASING)
-	flipit.Scale(5,1)
-	flipit.Invert()
-	flipit.Turn(rand(1,359))
-	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	flipit.Scale(0.2,1)
-	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	if (pick(0,1))
-		sideup = COIN_HEADS
-		flipit.Scale(5,1)
-		flipit.Turn(rand(1,359))
-		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	else
-		sideup = COIN_TAILS
-		flipit.Scale(5,1)
-		flipit.Invert()
-		flipit.Turn(rand(1,359))
-		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	if (prob(0.1) || rigged)
-		flipit.Scale(0.2,1)
-		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-		sideup = COIN_SIDE
-	if(!thrown)
-		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
-							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
-							 "<span class='notice'>You hear [src] landing.</span>")
-	else
-		if(!throwing) //coin was thrown and is coming to rest
-			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
+	add_component(/datum/component/coinflip)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/attack_self(mob/user)
 	if(wrapped)
 		Unwrap(user)
 	else
 		..()
-
-/obj/item/weapon/reagent_containers/food/snacks/chococoin/examine(var/mob/user)
-	..()
-	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
-
-/obj/item/weapon/reagent_containers/food/snacks/chococoin/equipped(var/mob/user)
-	..()
-	if(sideup == COIN_SIDE)
-		sideup = pick(COIN_HEADS, COIN_TAILS)
-	transform = null
-
-/obj/item/weapon/reagent_containers/food/snacks/chococoin/throw_impact(atom/hit_atom, speed, user)
-	..()
-	coinflip(user, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/proc/Unwrap(mob/user)
 	icon_state = "chococoin_unwrapped"

@@ -303,6 +303,7 @@
 #include "code\datums\supplypacks.dm"
 #include "code\datums\tether.dm"
 #include "code\datums\uplink_item.dm"
+#include "code\datums\components\coinflip.dm"
 #include "code\datums\components\component.dm"
 #include "code\datums\components\uplink.dm"
 #include "code\datums\diseases\appendicitis.dm"
