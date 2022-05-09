@@ -361,7 +361,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/timefake
 	name = "time suit"
-	desc = "A replica of a real time suit, it helps you remember the previous timeline, may the loop protect their souls."
+	desc = "A replica of a real time suit; it reminds you of the previous timelines. May the loop protect the ones left behind."
 	icon_state = "time_suit"
 	item_state = "time_suit"
 	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
