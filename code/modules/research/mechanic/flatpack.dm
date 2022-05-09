@@ -329,8 +329,3 @@
 	..()
 	name = "ancient flatpack (electrolytic chemmaster)"
 	machine = new /obj/machinery/chem_master/electrolytic(src)
-
-/obj/structure/closet/crate/flatpack/holyjuke/New()
-	..()
-	name = "prepacked flatpack (holy jukebox)"
-	machine = new /obj/machinery/media/jukebox/holyjuke(src)
