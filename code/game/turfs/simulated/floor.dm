@@ -218,7 +218,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
-	
+
 /turf/simulated/floor/attack_animal(mob/user as mob)
 	return src.attack_hand(user)
 
@@ -400,6 +400,12 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	material = "metal"
 	plane = PLATING_PLANE
 
+	for(var/obj/item/I in contents)
+		// Sorry about magic number but this is what the value actually gets set to in make_metal_floor, rather than what the define becomes.
+		if(I.layer == FLOORBOARD_ITEM_LAYER && I.plane == 32765 && I.invisibility == 101 && !istype(I,/obj/item/projectile))
+			I.plane = initial(I.plane)
+			I.layer = initial(I.layer)
+			I.invisibility = initial(I.invisibility)
 	update_icon()
 	levelupdate()
 
@@ -434,6 +440,11 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			if(istype(get_step(src,direction),/turf/simulated/floor))
 				var/turf/simulated/floor/FF = get_step(src,direction)
 				FF.update_icon() //so siding gets updated properly
+	for(var/obj/item/I in contents)
+		if(I.w_class == W_CLASS_TINY && !istype(I,/obj/item/projectile))
+			I.plane = ABOVE_PLATING_PLANE
+			I.layer = FLOORBOARD_ITEM_LAYER
+			I.invisibility = 101
 	update_icon()
 	levelupdate()
 	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
