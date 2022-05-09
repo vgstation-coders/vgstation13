@@ -25,19 +25,19 @@
 	if(!isfood(parent))
 		coinflip(user, TRUE)
 
-/datum/component/coinflip/proc/on_throw_impact(atom/hit_atom, var/speed, mob/user)
+/datum/component/coinflip/proc/on_throw_impact(atom/hit_atom, speed, mob/user)
 	coinflip(thrown = TRUE)
 
-/datum/component/coinflip/proc/equipped()
+/datum/component/coinflip/proc/equipped(mob/user, slot, hand_index = 0)
 	if(sideup == COIN_SIDE)
 		sideup = pick(COIN_HEADS, COIN_TAILS)
 	var/obj/O = parent
 	O.transform = null
 
-/datum/component/coinflip/proc/examined(mob/examiner)
-	to_chat(examiner, "<span class='notice'>[parent] is [sideup]</span>")
+/datum/component/coinflip/proc/examined(mob/user)
+	to_chat(user, "<span class='notice'>[parent] is [sideup]</span>")
 
-/datum/component/coinflip/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+/datum/component/coinflip/proc/coinflip(mob/user, thrown, rigged = FALSE)
 	var/matrix/flipit = matrix()
 	flipit.Scale(0.2,1)
 	animate(parent, transform = flipit, time = 1.5, easing = QUAD_EASING)

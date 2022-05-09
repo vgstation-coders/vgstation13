@@ -214,7 +214,7 @@
 
 //Called by examine
 //Arguments:
-//mob/examiner: the mob doing the examining
+//mob/user: the mob doing the examining
 /event/examined
 
 /event/ui_act
