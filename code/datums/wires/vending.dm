@@ -1,13 +1,14 @@
 /datum/wires/vending
 	holder_type = /obj/machinery/vending
-	wire_count = 4
+	wire_count = 5
 
 /datum/wires/vending/New()
 	wire_names=list(
 		"[VENDING_WIRE_THROW]" 		= "Firing",
 		"[VENDING_WIRE_CONTRABAND]" = "Contraband",
 		"[VENDING_WIRE_ELECTRIFY]" 	= "Shock",
-		"[VENDING_WIRE_IDSCAN]" 	= "ID Scan"
+		"[VENDING_WIRE_IDSCAN]" 	= "ID Scan",
+		"[VENDING_WIRE_SHUTUP]" 	= "Speaker"
 	)
 	..()
 
@@ -15,6 +16,7 @@ var/const/VENDING_WIRE_THROW = 1
 var/const/VENDING_WIRE_CONTRABAND = 2
 var/const/VENDING_WIRE_ELECTRIFY = 4
 var/const/VENDING_WIRE_IDSCAN = 8
+var/const/VENDING_WIRE_SHUTUP = 16
 
 /datum/wires/vending/CanUse(var/mob/living/L)
 	if(!..())
@@ -29,11 +31,6 @@ var/const/VENDING_WIRE_IDSCAN = 8
 		return 1
 	return 0
 
-/datum/wires/vending/Interact(var/mob/living/user)
-	if(CanUse(user))
-		var/obj/machinery/vending/V = holder
-		V.attack_hand(user)
-
 /datum/wires/vending/GetInteractWindow()
 	var/obj/machinery/vending/V = holder
 	. += ..()
@@ -41,6 +38,7 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	. += "The red light is [V.shoot_inventory ? "off" : "blinking"].<BR>"
 	. += "The green light is [V.extended_inventory ? "on" : "off"].<BR>"
 	. += "A [V.scan_id ? "purple" : "yellow"] light is on.<BR>"
+	. += "The speaker indicator is [V.shut_up ? "off" : "on"].<BR>"
 	. += "The return box printer is <B>[V.cardboard ? "loaded</B>. Ready for disassembly." : "unloaded</B>. Insert cardboard."]<BR>"
 
 /datum/wires/vending/UpdateCut(var/index, var/mended)
@@ -60,6 +58,9 @@ var/const/VENDING_WIRE_IDSCAN = 8
 				V.seconds_electrified = -1
 		if(VENDING_WIRE_IDSCAN)
 			V.scan_id = 1
+		if(VENDING_WIRE_SHUTUP)
+			V.shut_up = 1
+	SStgui.update_uis(holder)
 
 
 /datum/wires/vending/UpdatePulsed(var/index)
@@ -76,3 +77,6 @@ var/const/VENDING_WIRE_IDSCAN = 8
 			V.seconds_electrified = 30
 		if(VENDING_WIRE_IDSCAN)
 			V.scan_id = !V.scan_id
+		if(VENDING_WIRE_SHUTUP)
+			V.shut_up = !V.shut_up
+	SStgui.update_uis(holder)

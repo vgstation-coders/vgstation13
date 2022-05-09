@@ -369,12 +369,14 @@ var/global/num_vending_terminals = 1
 		if (isnull(amount))
 			amount = 1
 
+		var/obj/item/I = typepath
 		var/datum/data/vending_product/R = new()
 		R.product_path = typepath
 		R.amount = amount
 		R.original_amount = amount
 		R.price = price
 		R.assignedholiday = special
+		R.mini_icon = icon2base64(icon(initial(I.icon), initial(I.icon_state), SOUTH, 1))
 		if (!R.display_color)
 			R.display_color = pick("red", "blue", "green")
 		if (hidden)
@@ -405,11 +407,11 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/get_all_records()
 	var/list/datum_products = list()
+	datum_products |= product_records
+	datum_products |= holiday_records
 	datum_products |= hidden_records
 	datum_products |= coin_records
 	datum_products |= voucher_records
-	datum_products |= holiday_records
-	datum_products |= product_records
 	return datum_products
 
 /obj/machinery/vending/proc/get_item_by_type(var/this_type)
@@ -491,10 +493,9 @@ var/global/num_vending_terminals = 1
 			C.use(4)
 			to_chat(user, "<span class='notice'>You slot some cardboard into \the [src].</span>")
 			cardboard = 1
-			src.updateUsrDialog()
 	if(iswiretool(W))
 		if(panel_open)
-			attack_hand(user)
+			wires.Interact(user)
 		return
 	else if(premium.len > 0 && is_type_in_list(W, accepted_coins))
 		if(is_locking(/datum/locking_category/gum_stuck))
@@ -504,7 +505,7 @@ var/global/num_vending_terminals = 1
 			if(user.drop_item(W, src))
 				coin = W
 				to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
-				src.updateUsrDialog()
+				SStgui.update_uis(src)
 		else
 			to_chat(user, "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>")
 		return
@@ -517,7 +518,7 @@ var/global/num_vending_terminals = 1
 		if(can_accept_voucher(W, user))
 			if(user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You insert [W] into [src].</span>")
-				src.updateUsrDialog()
+				SStgui.update_uis(src)
 				return voucher_act(W, user)
 		else
 			to_chat(user, "<span class='notice'>\The [src] refuses to take [W].</span>")
@@ -540,8 +541,8 @@ var/global/num_vending_terminals = 1
 			reconnect_database()
 
 		if(currently_vending) //We're trying to pay, not set the account
-			connect_account(user, W)
-			src.updateUsrDialog()
+			scan_card(W)
+			SStgui.update_uis(src)
 			return
 
 		if(account_first_linked && linked_account) // Account check
@@ -556,7 +557,7 @@ var/global/num_vending_terminals = 1
 				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Security Violation.</span>")
 				return 0
 			edit_mode = !edit_mode
-			src.updateUsrDialog()
+			SStgui.update_uis(src)
 			return
 		if(!user.Adjacent(src))
 			return 0
@@ -569,7 +570,7 @@ var/global/num_vending_terminals = 1
 			return
 		if(user.drop_item(W, src))
 			loadCustomItem(W)
-			src.updateUsrDialog()
+			SStgui.update_uis(src)
 
 /obj/machinery/vending/proc/loadCustomItem(var/obj/item/item)
 	for(var/datum/data/vending_product/VP in product_records)
@@ -584,7 +585,7 @@ var/global/num_vending_terminals = 1
 	var/datum/data/vending_product/R = new()
 	R.custom = TRUE
 	R.product_name = item.product_name()
-	R.mini_icon = costly_bicon(item)
+	R.mini_icon = icon2base64(icon(item.icon, item.icon_state, SOUTH, 1))
 	R.display_color = pick("red", "blue", "green")
 	R.amount = 1
 	if(item.price) // price tagger - only works on new items
@@ -594,6 +595,7 @@ var/global/num_vending_terminals = 1
 	product_records += R
 	custom_stock += item
 	update_vicon()
+	SStgui.update_uis(src)
 
 /obj/machinery/vending/proc/connect_to_user_account(mob/user)
 	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
@@ -607,10 +609,11 @@ var/global/num_vending_terminals = 1
 			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
 			to_chat(user, "[bicon(src)]<span class='notice'>New connection established: [D.owner_name].</span>")
 			edit_mode = !edit_mode
-			src.updateUsrDialog()
+			SStgui.update_uis(src)
 			return TRUE
 	to_chat(user, "[bicon(src)]<span class='warning'>The specified account doesn't exist.</span>")
 	return FALSE
+
 /obj/machinery/vending/proc/dispense_change(var/amount = 0)
 	if(!amount)
 		amount = credits_held
@@ -634,7 +637,7 @@ var/global/num_vending_terminals = 1
 		dispense_change()
 		vend(src.currently_vending, usr)
 		currently_vending = null
-		updateUsrDialog()
+		SStgui.update_uis(src)
 		return 1
 	else
 		return 0
@@ -654,67 +657,16 @@ var/global/num_vending_terminals = 1
 				// Vend the item
 				src.vend(src.currently_vending, usr)
 				currently_vending = null
-				src.updateUsrDialog()
+				SStgui.update_uis(src)
 			if(CARD_CAPTURE_FAILURE_USER_CANCELED)
 				currently_vending = null
-				src.updateUsrDialog()
+				SStgui.update_uis(src)
 			else
 				playsound(src, 'sound/machines/alert.ogg', 50, 1)
 				visible_message("[bicon(src)] \The [src] buzzes.")
 
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
-
-/obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
-	var/micon = !isnull(P.mini_icon) ? "<td class='fridgeIcon cropped'>[P.mini_icon]</td>" : ""
-	var/dat = {"[micon]<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
-		<b>[P.amount]</b> </font>"}
-	if(P.price)
-		dat += " <b>($[P.price])</b>"
-	if (P.amount > 0)
-		var/idx=GetProductIndex(P)
-		dat += " <a href='byond://?src=\ref[src];vend=[idx];cat=[P.category]'>(Vend)</A>"
-		if (edit_mode)
-			dat += " <a href='byond://?src=\ref[src];set_price=[idx];cat=[P.category]'>(Set Price)</A>"
-	else
-		if(dont_render_OOS)
-			return //return nothing for this line
-		dat += " <span class='warning'>SOLD OUT</span>"
-		if(edit_mode)
-			var/idx=GetProductIndex(P)
-			dat += " <a href='byond://?src=\ref[src];delete_entry=[idx];cat=[P.category]'>(Delete Entry)</A>"
-	dat += "<br>"
-
-	return dat
-
-/obj/machinery/vending/proc/GetProductIndex(var/datum/data/vending_product/P)
-	var/list/plist
-	switch(P.category)
-		if(CAT_HOLIDAY)
-			plist=holiday_records
-		if(CAT_NORMAL)
-			plist=product_records
-		if(CAT_HIDDEN)
-			plist=hidden_records
-		if(CAT_COIN)
-			plist=coin_records
-		else
-			warning("UNKNOWN CATEGORY [P.category] IN TYPE [P.product_path] INSIDE [type]!")
-	return plist.Find(P)
-
-/obj/machinery/vending/proc/GetProductByID(var/pid, var/category)
-	switch(category)
-		if(CAT_HOLIDAY)
-			return holiday_records[pid]
-		if(CAT_NORMAL)
-			return product_records[pid]
-		if(CAT_HIDDEN)
-			return hidden_records[pid]
-		if(CAT_COIN)
-			return coin_records[pid]
-		else
-			warning("UNKNOWN PRODUCT: PID: [pid], CAT: [category] INSIDE [type]!")
-			return null
 
 /obj/machinery/vending/proc/TurnOff(var/ticks) //Turn off for a while. 10 ticks = 1 second
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -766,6 +718,99 @@ var/global/num_vending_terminals = 1
 		return 1
 	return 0
 
+/obj/machinery/vending/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "Vending", name)
+		ui.set_autoupdate(FALSE)
+		ui.open()
+
+/obj/machinery/vending/ui_static_data(mob/user)
+	var/list/data = list()
+	data["ad"] += pick(product_ads)
+	data["has_premium"] = coin_records.len > 0
+	data["bypass"] = isAdminGhost(user)
+	data["silicon"] = istype(user, /mob/living/silicon)
+	if (data["silicon"] && istype(user, /mob/living/silicon/robot))
+		var/mob/living/silicon/robot/R = user
+		if (HAS_MODULE_QUIRK(R, MODULE_CAN_BUY))
+			data["bypass"] = TRUE // act like normal if the module allows it
+	return data
+
+/obj/machinery/vending/ui_data(mob/user)
+	var/list/data = list()
+	if (currently_vending != null)
+		data["currently_vending"] = list(
+			name = currently_vending.product_name,
+			price = currently_vending.price,
+			ref = ref(currently_vending)
+		)
+	else
+		data["currently_vending"] = null
+		data["edit_mode"] = edit_mode
+		data["machine_name"] = name
+		data["vend_ready"] = vend_ready
+		data["contraband"] = extended_inventory
+		data["coin"] = coin != null
+		data["categories"] = list()
+		for (var/datum/data/vending_product/P in get_all_records())
+			var/list/product = list(
+				name = P.product_name,
+				amount = P.amount,
+				price = P.price,
+				category = P.category,
+				icon = P.mini_icon,
+				ref = ref(P)
+			)
+			if (data["categories"][P.subcategory] == null)
+				data["categories"][P.subcategory] = list(name = P.subcategory, items = list())
+			data["categories"][P.subcategory]["items"] += list(product)
+	return data
+
+/obj/machinery/vending/ui_act(action, params)
+	. = ..()
+	if (.)
+		return
+
+	. = TRUE
+	switch (action)
+		if ("dispense")
+			var/datum/data/vending_product/item = locate(params["item"])
+			vend(item, usr)
+		if ("try_vend")
+			currently_vending = locate(params["item"])
+		if ("confirm")
+			var/obj/item/weapon/card/card = usr.get_card()
+			if(card)
+				scan_card(card)
+			else
+				to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
+		if ("cancel")
+			dispense_change()
+			currently_vending = null
+		if ("eject_coin")
+			if(!coin)
+				to_chat(usr, "There is no coin in this machine.")
+				return
+			if(is_locking(/datum/locking_category/gum_stuck))
+				to_chat(usr, "<span class='warning'>[bicon(src)] Something's blocking the coin slot!</span>")
+				return
+
+			coin.forceMove(get_turf(src))
+			if(!usr.get_active_hand())
+				usr.put_in_hands(coin)
+			to_chat(usr, "<span class='notice'>You remove \the [coin] from \the [src]</span>")
+			coin = null
+		if ("set_price")
+			var/datum/data/vending_product/P = locate(params["item"])
+			var/newprice = params["price"]
+			P.price = newprice
+		if ("set_name")
+			// doesn't reload the TGUI window name unless re-opened, no workaround from what I can tell
+			name = params["name"]
+		if ("delete_product")
+			deleteEntry(locate(params["item"]))
+
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
 	if(stat & (BROKEN))
 		to_chat(user, "<span class='notice'>The glass in \the [src] is broken, it refuses to work.</span>")
@@ -791,252 +836,7 @@ var/global/num_vending_terminals = 1
 		seconds_electrified = 0
 
 	user.set_machine(src)
-
-	var/vendorname = (src.name)  //import the machine's name
-
-	var/vertical = 400
-
-	if(src.currently_vending)
-		var/dat = "<TT><center><b>[vendorname]</b></center><hr /><br>" //display the name, and added a horizontal rule
-
-		dat += {"<b>You have selected [currently_vending.product_name].<br>Please ensure your ID is in your ID holder or hand.</b><br>
-			<a href='byond://?src=\ref[src];buy=1'>Pay</a> |
-			<a href='byond://?src=\ref[src];cancel_buying=1'>Cancel</a>"}
-		user << browse(dat, "window=vending")
-		onclose(user, "")
-		return
-
-	var/dat = "<TT><center><b>[vendorname]</b></center><hr/>" //display the name, and added a horizontal rule
-	if(product_ads.len)
-		dat += "<marquee>[pick(product_ads)]</marquee><hr/>"
-	dat += "<br><b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
-
-	if (premium.len > 0)
-		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
-
-	if (src.product_records.len == 0 && coin_records.len == 0)
-		dat += "<font color = 'red'>No products loaded!</font><br><br></TT>"
-	else
-		var/list/display_records = src.product_records.Copy()
-
-		if(holiday_records.len)
-			display_records += src.holiday_records
-		if(src.extended_inventory)
-			display_records += src.hidden_records
-		if(src.coin)
-			display_records += src.coin_records
-
-		if(display_records.len > 12)
-			vertical = min(400 + (16 * (display_records.len - 12)),840)
-
-		categories["default"] = list()
-		var/list/category_names = list()
-		for (var/datum/data/vending_product/R in product_records)
-			if(R.subcategory)
-				if(!(R.subcategory in category_names))
-					category_names += R.subcategory
-					categories[R.subcategory] = list()
-				categories[R.subcategory] += R
-			else
-				categories["default"] += R
-
-		if(holiday_records.len)
-			var/col = pick("orange", "purple", "navy")
-			var/hol = Holiday ? Holiday : time2text(world.realtime,"Month")
-			dat += {"<FONT color = [col]><B>&nbsp;&nbsp;[hol] specials</B></font>:<br>"}
-			for (var/datum/data/vending_product/R in holiday_records)
-				dat += GetProductLine(R)
-			dat += "<br>"
-
-		if(is_custom_machine)
-			for(var/datum/data/vending_product/VP in product_records)
-				if(!istype(VP))
-					continue
-				dat += GetProductLine(VP)
-		else
-			for (var/datum/data/vending_product/R in categories["default"])
-				dat += GetProductLine(R)
-		dat += "<br>"
-
-		for(var/cat_name in category_names)
-			dat += {"<B>&nbsp;&nbsp;[cat_name]</B>:<br>"}
-			for (var/datum/data/vending_product/R in categories[cat_name])
-				dat += GetProductLine(R)
-			dat += "<br>"
-
-		if(src.extended_inventory)
-			dat += {"<B>&nbsp;&nbsp;contraband</B>:<br>"}
-			for (var/datum/data/vending_product/R in hidden_records)
-				dat += GetProductLine(R)
-			dat += "<br>"
-
-		if(src.coin)
-			dat += {"<B>&nbsp;&nbsp;premium</B>:<br>"}
-			for (var/datum/data/vending_product/R in coin_records)
-				dat += GetProductLine(R)
-			dat += "<br>"
-
-		dat += "</TT>"
-
-	if(panel_open)
-		dat += wires()
-
-		if(product_slogans != "")
-			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>(Toggle)</a><br>"
-
-	if(is_custom_machine)
-		if(edit_mode)
-			dat += "Machine name: [src.name] <a href='?src=\ref[src];rename=1'>(Rename)</a><br>"
-			dat += "Current slogans: " + (product_slogans.len >= CUSTOM_VENDING_MAX_SLOGANS ? "" : "<a href='?src=\ref[src];add_slogan=1'>(Add a Slogan)</a>") + "<br>"
-			for(var/i = 1, i <= product_slogans.len, i++) // list slogans
-				dat += "[product_slogans[i]] <a href='?src=\ref[src];delete_slogan_line=[i]'>(Delete)</a><br>"
-			dat += "Edit mode is on."
-		if(!account_first_linked)
-			dat += "<br><br><i>Note: Remember to slide your ID on this machine to link your account. Once this is done, sliding your ID will enable editing and loading.</i>"
-
-	user << browse(dat, "window=vending;size=400x[vertical]")
-	onclose(user, "vending")
-
-// returns the wire panel text
-/obj/machinery/vending/proc/wires()
-	return wires.GetInteractWindow()
-
-/obj/machinery/vending/Topic(href, href_list)
-	if(..())
-		usr << browse(null, "window=vending")
-		return 1
-
-	//testing("..(): [href]")
-	var/free_vend = 0
-	if(isAdminGhost(usr))
-		free_vend = 1
-	if(istype(usr,/mob/living/silicon))
-		var/can_vend = 1
-		if (href_list["vend"] && src.vend_ready && !currently_vending)
-			var/idx=text2num(href_list["vend"])
-			var/cat=text2num(href_list["cat"])
-			var/datum/data/vending_product/R = GetProductByID(idx,cat)
-			if(R.price)
-				can_vend = FALSE //all borgs can buy free items from vending machines
-		if(istype(usr,/mob/living/silicon/robot))
-			var/mob/living/silicon/robot/R = usr
-			if(HAS_MODULE_QUIRK(R, MODULE_CAN_BUY))
-				can_vend = TRUE //But if their module allows it..
-		if(!can_vend || is_custom_machine) //currently made it so that silicon cannot buy from custom machine. Could make it so that selling to silicon is a toggleable option that bills the station.
-			to_chat(usr, "<span class='warning'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>")
-			return
-		else
-			free_vend = 1//so that don't have to swipe their non-existant IDs
-
-	if(href_list["remove_coin"])
-		if(!coin)
-			to_chat(usr, "There is no coin in this machine.")
-			return
-		if(is_locking(/datum/locking_category/gum_stuck))
-			to_chat(usr, "<span class='warning'>[bicon(src)] Something's blocking the coin slot!</span>")
-			return
-
-		coin.forceMove(get_turf(src))
-		if(!usr.get_active_hand())
-			usr.put_in_hands(coin)
-		to_chat(usr, "<span class='notice'>You remove \the [coin] from \the [src]</span>")
-		coin = null
-	usr.set_machine(src)
-
-
-	if (href_list["vend"] && src.vend_ready && !currently_vending)
-		//testing("vend: [href]")
-
-		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
-
-			flick(src.icon_deny,src)
-			return
-
-		var/idx=text2num(href_list["vend"])
-		var/cat=text2num(href_list["cat"])
-
-		var/datum/data/vending_product/R = GetProductByID(idx,cat)
-		if (!R || !istype(R) || R.amount <= 0)
-			return
-
-		if(R.price == null || !R.price)
-			src.vend(R, usr)
-		else if(free_vend)//for MoMMI and Service Borgs
-			src.vend(R, usr)
-		else
-			src.currently_vending = R
-			src.updateUsrDialog()
-
-		return
-
-	else if (href_list["set_price"] && src.vend_ready && !currently_vending && edit_mode)
-		//testing("vend: [href]")
-
-		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
-
-			flick(src.icon_deny,src)
-			return
-
-		var/idx=text2num(href_list["set_price"])
-		var/cat=text2num(href_list["cat"])
-
-		var/datum/data/vending_product/R = GetProductByID(idx,cat)
-		if (!R || !istype(R) || R.amount <= 0)
-			return
-
-		var/new_price = input("Enter a price", "Change price", R.price) as null|num
-		if(new_price == null || new_price < 0)
-			new_price = R.price
-		new_price = min(new_price, MAX_ITEM_PRICE)
-
-		R.price = new_price
-
-	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
-		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
-
-			flick(src.icon_deny,src)
-			return
-
-		var/idx=text2num(href_list["delete_entry"])
-		var/cat=text2num(href_list["cat"])
-
-		var/datum/data/vending_product/R = GetProductByID(idx,cat)
-		if(!R || !istype(R) || R.amount > 0)
-			return
-		deleteEntry(R)
-
-	else if (href_list["cancel_buying"])
-		dispense_change()
-		src.currently_vending = null
-
-	else if (href_list["buy"])
-		var/obj/item/weapon/card/card = usr.get_card()
-		if(card)
-			connect_account(usr, card)
-		else
-			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
-
-	else if ((href_list["togglevoice"]) && (src.panel_open))
-		src.shut_up = !src.shut_up
-
-	else if (href_list["rename"] && edit_mode)
-		var/newname = input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text
-		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
-			src.name = html_encode(newname)
-
-	else if (href_list["add_slogan"] && edit_mode)
-		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
-		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
-			product_slogans += html_encode(newslogan)
-
-	else if (href_list["delete_slogan_line"] && edit_mode && product_slogans.len > 0)
-		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
-
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	tgui_interact(usr)
 
 /obj/machinery/vending/proc/deleteEntry(datum/data/vending_product/R)
 	if(R.custom)
@@ -1093,7 +893,7 @@ var/global/num_vending_terminals = 1
 	if (src.icon_vend) //Show the vending animation if needed
 		flick(src.icon_vend,src)
 	R.amount--
-	src.updateUsrDialog()
+	SStgui.update_uis(src)
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
@@ -1106,7 +906,7 @@ var/global/num_vending_terminals = 1
 					break
 		src.vend_ready = 1
 		update_vicon()
-		src.updateUsrDialog()
+		SStgui.update_uis(src)
 
 /obj/machinery/vending/process()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -1228,7 +1028,7 @@ var/global/num_vending_terminals = 1
 			throw_item.throw_at(target, 16, 3)
 
 		src.visible_message("<span class='danger'>[src] launches [throw_item.name] at [target.name]!</span>")
-		src.updateUsrDialog()
+		tgui_interact(usr)
 		return 1
 
 	return 0
