@@ -614,6 +614,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contraband = 1
 	group = "Clothing"
 
+/datum/supply_packs/janny_gear
+	contains = list(/obj/item/clothing/suit/apron/overalls,
+					/obj/item/clothing/gloves/black,
+					/obj/item/weapon/storage/belt/janitor,
+					/obj/item/clothing/shoes/galoshes)
+	name = "Custodial gear"
+	cost = 100
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "custodial gear crate"
+	access = list(access_janitor)
+	group = "Clothing"
+
 /datum/supply_packs/waifu
 	name = "Feminine formalwear"
 	contains = list(/obj/item/clothing/under/dress/dress_fire,
