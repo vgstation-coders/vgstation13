@@ -440,12 +440,15 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			if(istype(get_step(src,direction),/turf/simulated/floor))
 				var/turf/simulated/floor/FF = get_step(src,direction)
 				FF.update_icon() //so siding gets updated properly
-	for(var/obj/item/I in contents)
-		if(I.w_class == W_CLASS_TINY && !istype(I,/obj/item/projectile))
-			I.plane = ABOVE_PLATING_PLANE
-			I.layer = FLOORBOARD_ITEM_LAYER
-			I.level = LEVEL_BELOW_FLOOR
-			I.invisibility = 101
+	// Placement sanity
+	if(!(locate(/obj/structure/table) in contents) && !(locate(/obj/structure/rack) in contents) && !(locate(/obj/structure/closet) in contents))
+		for(var/obj/item/I in contents)
+			// Hiding things under the tiles!
+			if(I.w_class == W_CLASS_TINY && !istype(I,/obj/item/projectile))
+				I.plane = ABOVE_PLATING_PLANE
+				I.layer = FLOORBOARD_ITEM_LAYER
+				I.level = LEVEL_BELOW_FLOOR
+				I.invisibility = 101
 	update_icon()
 	levelupdate()
 	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
