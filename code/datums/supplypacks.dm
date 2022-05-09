@@ -890,12 +890,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/specialops
 	name = "Special Ops supplies"
 	contains = list(/obj/item/weapon/storage/box/emps,
-					/obj/item/weapon/grenade/smokebomb,
-					/obj/item/weapon/grenade/smokebomb,
-					/obj/item/weapon/grenade/smokebomb,
+					/obj/item/weapon/storage/box/smokebombs,
 					/obj/item/weapon/gun/projectile/silenced,
 					/obj/item/ammo_storage/magazine/c45)
-	cost = 20
+	cost = 50
 	containertype = /obj/structure/closet/crate/basic
 	containername = "special ops crate"
 	group = "Security"
@@ -933,23 +931,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/beanbagammo
 	name = "Beanbag shells"
-	contains = list(/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag,
-					/obj/item/ammo_casing/shotgun/beanbag)
+	contains = list(/obj/item/weapon/storage/box/beanbagshells)
 	cost = 10
 	containertype = /obj/structure/closet/crate/basic
 	containername = "beanbag shells crate"
 	group = "Security"
 
 /datum/supply_packs/weapons
-	name = "Weapons"
+	name = "Security weapons"
 	contains = list(/obj/item/weapon/melee/baton/loaded,
 					/obj/item/weapon/melee/baton/loaded,
 					/obj/item/weapon/gun/energy/laser,
@@ -957,11 +946,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/gun/energy/taser,
 					/obj/item/weapon/storage/box/flashbangs,
-					/obj/item/weapon/storage/box/flashbangs,
+					/obj/item/weapon/storage/box/teargas,
 					/obj/item/weapon/storage/box/bolas)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/weapon
-	containername = "weapons crate"
+	containername = "security weapons crate"
 	access = list(access_security)
 	group = "Security"
 
@@ -996,9 +985,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Armor"
 	contains = list(/obj/item/clothing/head/helmet/tactical/sec,
 					/obj/item/clothing/head/helmet/tactical/sec,
+					/obj/item/clothing/suit/armor/bulletproof,
+					/obj/item/clothing/suit/armor/bulletproof,
 					/obj/item/clothing/suit/armor/vest,
 					/obj/item/clothing/suit/armor/vest)
-	cost = 15
+	cost = 20
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "armor crate"
 	access = list(access_security)
@@ -1012,18 +1003,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/shield/riot,
 					/obj/item/weapon/shield/riot,
 					/obj/item/weapon/shield/riot,
-					/obj/item/weapon/storage/box/flashbangs,
-					/obj/item/weapon/storage/box/flashbangs,
-					/obj/item/weapon/storage/box/flashbangs,
-					/obj/item/weapon/handcuffs,
-					/obj/item/weapon/handcuffs,
-					/obj/item/weapon/handcuffs,
 					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot,
 					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot,
 					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot,
+					/obj/item/weapon/storage/box/teargas,
+					/obj/item/weapon/storage/box/teargas,
+					/obj/item/weapon/storage/box/teargas,
+					/obj/item/weapon/storage/box/bolas,
 					/obj/item/weapon/storage/box/bolas,
 					/obj/item/weapon/storage/box/bolas)
 	cost = 60
@@ -1101,14 +1090,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/ballistic
-	name = "Ballistic gear"
-	contains = list(/obj/item/clothing/suit/armor/bulletproof,
-					/obj/item/clothing/suit/armor/bulletproof,
-					/obj/item/weapon/gun/projectile/shotgun/pump/combat,
+	name = "Combat shotguns"
+	contains = list(/obj/item/weapon/gun/projectile/shotgun/pump/combat,
 					/obj/item/weapon/gun/projectile/shotgun/pump/combat)
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/basic
-	containername = "ballistic gear crate"
+	containername = "combat shotgun crate"
 	access = list(access_armory)
 	group = "Security"
 
@@ -1116,7 +1103,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Shotgun shells"
 	contains = list(/obj/item/weapon/storage/box/lethalshells,
 					/obj/item/weapon/storage/box/buckshotshells,
-					/obj/item/weapon/storage/box/beanbagshells,
 					/obj/item/weapon/storage/box/stunshells,
 					/obj/item/weapon/storage/box/dartshells)
 	cost = 20
