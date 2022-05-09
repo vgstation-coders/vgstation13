@@ -2,7 +2,7 @@
 Pull requests must be atomic. Change one set of related things at a time.
 Test your changes. PRs that were not tested will not be accepted.
 
-You can now self-label your PR. See https://ss13.moe/wiki/index.php/Guide_to_Writing_a_Pull_Request
+You can self-label your PR. See https://ss13.moe/wiki/index.php/Guide_to_Writing_a_Pull_Request -->
 
 ## What this does
 <!-- Describe here all changes included in the PR. -->
@@ -19,6 +19,6 @@ You can now self-label your PR. See https://ss13.moe/wiki/index.php/Guide_to_Wri
  * bugfix: Fixed a bug that caused something bad to happen.
  * tweak: Changed a 5 to a 6.
  * imageadd: Added new sprites.
- * imagedel: Removed new sprites.
+ * imagedel: Removed old sprites.
  * experiment: Added an experimental/work-in-progress something.
 
