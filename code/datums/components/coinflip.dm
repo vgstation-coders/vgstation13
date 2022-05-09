@@ -70,5 +70,3 @@
 		var/obj/O = parent
 		if(!O.throwing) //coin was thrown and is coming to rest
 			O.visible_message("<span class='notice'>[parent] stops spinning, landing [sideup]</span>")
-
-//todo: Check parent.transform versus transform.
