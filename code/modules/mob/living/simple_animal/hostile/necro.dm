@@ -95,7 +95,6 @@
 	melee_damage_upper = 10
 	attacktext = "bites"
 	speak_emote = list("groans", "moans")
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/animal_ghoul/proc/ghoulifyAnimal(S)
 	var/mob/living/aGhoul = S
@@ -157,7 +156,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 	meat_type = null
 /*
 #define EVOLVING 1
@@ -206,8 +205,6 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
 
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse
@@ -399,7 +396,7 @@
 	maxHealth = 50
 	health = 50
 	can_evolve = TRUE
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/being_unzombified = FALSE
 
@@ -480,7 +477,7 @@
 	maxHealth = 100
 	health = 100
 	can_evolve = 1
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting/check_evolve()
 	..()
@@ -498,7 +495,7 @@
 	health = 150
 	can_evolve = 0
 	var/zombify_chance = 25 //Down with hardcoding
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
 	if(busy)
@@ -625,7 +622,7 @@
 
 	attacktext = "claws"
 	attack_sound = 'sound/weapons/slice.ogg'
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 /mob/living/simple_animal/hostile/necro/zombie/raider2
 	name = "rotting raider"
@@ -645,7 +642,7 @@
 
 	attacktext = "claws"
 	attack_sound = 'sound/weapons/slice.ogg'
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 ///////////////// GHOULS ////////////////////
 
@@ -665,7 +662,7 @@
 	melee_damage_upper = 20
 	attacktext = "punches"
 	attack_sound = "sound/weapons/punch1.ogg"
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/Life()
 	..()
@@ -692,7 +689,7 @@
 
 	melee_damage_lower = 15
 	melee_damage_upper = 25
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_SMART
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
 	var/last_rad_blast = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/Life()
@@ -750,7 +747,7 @@
 	canRegenerate = 0
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/obj/item/clothing/mask/facehugger/headcrab/crab //The crab controlling it.
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
