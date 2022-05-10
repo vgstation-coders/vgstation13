@@ -11,6 +11,8 @@
 
 var/global/num_vending_terminals = 1
 
+var/list/vending_item_icon_cache = list()
+
 /obj/machinery/vending
 	name = "empty vending machine"
 	desc = "Just add capitalism!"
@@ -104,7 +106,6 @@ var/global/num_vending_terminals = 1
 	var/original_amount = 0 //NON-CUSTOM ONLY - How many items of this product the recharge pack starts with
 	var/amount = 0
 	var/price = 0
-	var/display_color = null //string, "red", "green", "blue", etc
 	var/category = CAT_NORMAL //available on holidays, by default, contraband, or premium (requires a coin)
 	var/subcategory = null
 	var/mini_icon = null
@@ -376,9 +377,9 @@ var/global/num_vending_terminals = 1
 		R.original_amount = amount
 		R.price = price
 		R.assignedholiday = special
-		R.mini_icon = icon2base64(icon(initial(I.icon), initial(I.icon_state), SOUTH, 1))
-		if (!R.display_color)
-			R.display_color = pick("red", "blue", "green")
+		if (vending_item_icon_cache[typepath] == null)
+			vending_item_icon_cache[typepath] = icon2base64(icon(initial(I.icon), initial(I.icon_state), SOUTH, 1))
+		R.mini_icon = vending_item_icon_cache[typepath]
 		if (hidden)
 			R.category=CAT_HIDDEN
 			hidden_records  += R
@@ -391,7 +392,6 @@ var/global/num_vending_terminals = 1
 		else if (R.assignedholiday)
 			var/curmonth = time2text(world.realtime,"MM")
 			R.category=CAT_HOLIDAY
-			R.display_color = pick("orange", "purple", "navy")
 			if(Holiday && R.assignedholiday == Holiday )
 				holiday_records += R //only add it to the lists if today's our day
 			if(R.assignedholiday == curmonth)
@@ -586,7 +586,6 @@ var/global/num_vending_terminals = 1
 	R.custom = TRUE
 	R.product_name = item.product_name()
 	R.mini_icon = icon2base64(icon(item.icon, item.icon_state, SOUTH, 1))
-	R.display_color = pick("red", "blue", "green")
 	R.amount = 1
 	if(item.price) // price tagger - only works on new items
 		R.price = item.price
