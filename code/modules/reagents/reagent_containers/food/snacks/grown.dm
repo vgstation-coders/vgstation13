@@ -127,11 +127,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(var/mob/living/carbon/M)
 	..()
-	if(!seed)
-		return
-	if(!istype(M))
-		return
-	if(!M.on_foot())
+	if(!seed || level != LEVEL_ABOVE_FLOOR || !istype(M) || !M.on_foot())
 		return
 	if(seed.thorny || seed.stinging)
 		if(istype(M, /mob/living/carbon/human))

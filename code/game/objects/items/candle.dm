@@ -96,7 +96,7 @@
 	return 0
 
 /obj/item/candle/Crossed(var/obj/Proj)
-	if(isbeam(Proj))
+	if(isbeam(Proj) && level == LEVEL_ABOVE_FLOOR)
 		var/obj/item/projectile/beam/P = Proj//could be a laser beam or an emitter beam, both feature the get_damage() proc, for now...
 		if(P.get_damage() != 0)
 			light("", 1)

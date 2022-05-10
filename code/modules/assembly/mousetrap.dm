@@ -82,7 +82,7 @@
 
 
 /obj/item/device/assembly/mousetrap/Crossed(AM as mob|obj)
-	if(armed)
+	if(armed && level == LEVEL_ABOVE_FLOOR)
 		if(ishuman(AM))
 			var/mob/living/carbon/H = AM
 			if(H.m_intent == "run")

@@ -128,7 +128,7 @@ Frequency:
 	item_state = "bluespacebanana_peel"
 
 /obj/item/weapon/bananapeel/bluespace/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
+	if (istype(AM, /mob/living/carbon) && level == LEVEL_ABOVE_FLOOR)
 		var/mob/living/carbon/M = AM
 		if (M.Slip(2, 2, 1))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",

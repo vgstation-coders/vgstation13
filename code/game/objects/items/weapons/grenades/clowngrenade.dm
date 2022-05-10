@@ -67,8 +67,8 @@
 	var/slip_power = 4
 
 /obj/item/weapon/bananapeel/traitorpeel/Crossed(AM as mob|obj)
-	var/burned = rand(2,5)
-	if(istype(AM, /mob/living))
+	if(isliving(AM) && level == LEVEL_ABOVE_FLOOR)
+		var/burned = rand(2,5)
 		var/mob/living/M = AM
 		if(M.lying)
 			M.take_overall_damage(0, max(0, (burned - 2)))
