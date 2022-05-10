@@ -402,10 +402,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 	for(var/obj/item/I in contents)
 		if(I.level == LEVEL_BELOW_FLOOR && !istype(I,/obj/item/projectile))
-			I.plane = initial(I.plane)
-			I.layer = initial(I.layer)
-			I.invisibility = initial(I.invisibility)
-			I.level = initial(I.level)
+			I.hide(intact)
 	update_icon()
 	levelupdate()
 
@@ -445,10 +442,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		for(var/obj/item/I in contents)
 			// Hiding things under the tiles!
 			if(I.w_class == W_CLASS_TINY && !istype(I,/obj/item/projectile))
-				I.plane = ABOVE_PLATING_PLANE
-				I.layer = FLOORBOARD_ITEM_LAYER
-				I.level = LEVEL_BELOW_FLOOR
-				I.invisibility = 101
+				I.hide(intact)
 	update_icon()
 	levelupdate()
 	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
