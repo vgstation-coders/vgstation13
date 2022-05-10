@@ -1915,14 +1915,3 @@ Thanks.
 	if(B.host_brain.ckey)
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
-		
-//Rescales a mob's health and oxy damage scaling to a new maximum health.
-/mob/living/proc/rescaleHealth(var/newMaxHealth = maxHealth)
-	if(maxHealth)
-		var/oldMaxHealth = maxHealth
-		maxHealth = newMaxHealth
-		health *= (newMaxHealth / oldMaxHealth)
-		oxy_damage_modifier *= (newMaxHealth / oldMaxHealth)
-		return TRUE
-	else
-		return FALSE
