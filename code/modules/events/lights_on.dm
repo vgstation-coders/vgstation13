@@ -4,7 +4,7 @@
 
 /datum/event/lights_on/can_start(var/list/active_with_role)
 	if(player_list.len <= 6 && world.time > 15 MINUTES && active_with_role["Engineering"] <= 0)
-		for(/obj/machinery/power/battery/smes/S in smes_list)
+		for(var/obj/machinery/power/battery/smes/S in smes_list)
 			if(S.avail())
 				return 0
 		return 25
@@ -17,7 +17,7 @@
 		make_doors_all_access(list(accesss_engine_minor))
 
 /datum/event/lights_on/tick()
-	for(/obj/machinery/power/battery/smes/S in smes_list)
+	for(var/obj/machinery/power/battery/smes/S in smes_list)
 		if(S.avail() && S.z == map.zMainStation)
 			S.charge = S.capacity
 			S.output = 200000
