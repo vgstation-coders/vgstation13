@@ -570,7 +570,6 @@ var/list/vending_item_icon_cache = list()
 			return
 		if(user.drop_item(W, src))
 			loadCustomItem(W)
-			SStgui.update_uis(src)
 
 /obj/machinery/vending/proc/loadCustomItem(var/obj/item/item)
 	for(var/datum/data/vending_product/VP in product_records)
@@ -594,7 +593,7 @@ var/list/vending_item_icon_cache = list()
 	product_records += R
 	custom_stock += item
 	update_vicon()
-	SStgui.update_uis(src)
+	SStgui.update_static_data(usr) // new static product record must be loaded
 
 /obj/machinery/vending/proc/connect_to_user_account(mob/user)
 	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num

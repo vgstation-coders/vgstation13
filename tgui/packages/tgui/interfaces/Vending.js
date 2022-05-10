@@ -72,7 +72,7 @@ const Confirmation = (props, context) => {
   );
 }
 
-const ProductView = (props, context) => {
+const ProductView = (props, _context) => {
   const { records, products } = props;
 
   return (
@@ -92,7 +92,6 @@ const ProductView = (props, context) => {
 };
 
 const ItemRow = (props, context) => {
-  const CAT_NORMAL = 1;
   const CAT_HIDDEN = 2;
   const CAT_COIN   = 3;
   const CAT_VOUCH  = 4;
@@ -111,6 +110,7 @@ const ItemRow = (props, context) => {
   const {
     amount, price
   } = props.product;
+  if (amount == null) return; // deleted product, ignore until next full update (when it's completely gone)
 
   let hidden = ((category == CAT_COIN  ) && !coin)
             || ((category == CAT_HIDDEN) && !contraband)
@@ -149,7 +149,7 @@ const ItemRow = (props, context) => {
           </Table.Cell>
         </Box>
       ) : (
-        <Table.Cell pb={0.4} collapsing textAlign={ category != CAT_NORMAL ? "center" : "right" }>
+        <Table.Cell pb={0.4} collapsing textAlign={ !price ? "center" : "right" }>
           <Button onClick={() => {
             if (!price || bypass)
               act('dispense', {'item' : ref});
