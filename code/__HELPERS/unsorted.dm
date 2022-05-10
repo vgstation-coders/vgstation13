@@ -524,7 +524,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			. += "/([M.name])"
 
 	if(showantag && M && isanyantag(M))
-		. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
+		var/counts_as_antag = FALSE
+		for(var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			if(R.is_antag)
+				counts_as_antag = TRUE
+				break
+		if(counts_as_antag)
+			. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
 
 	if(more_info && M)
 		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"

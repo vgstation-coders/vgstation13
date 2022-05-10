@@ -392,13 +392,12 @@
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
-	var/sideup = "heads-up." //heads, tails or on its side?
 
 /obj/item/weapon/coin/New()
 	. = ..()
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
-	sideup = pick("heads-up.","tails-up.")
+	add_component(/datum/component/coinflip)
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)
@@ -410,55 +409,6 @@
 	if(user.a_intent == I_HURT)
 		to_chat(user, "<span class='warning'>You forcefully press with \the [src]!</span>")
 	return user.a_intent == I_HURT
-
-/obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
-	var/matrix/flipit = matrix()
-	flipit.Scale(0.2,1)
-	animate(src, transform = flipit, time = 1.5, easing = QUAD_EASING)
-	flipit.Scale(5,1)
-	flipit.Invert()
-	flipit.Turn(rand(1,359))
-	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	flipit.Scale(0.2,1)
-	animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	if (pick(0,1))
-		sideup = "heads-up."
-		flipit.Scale(5,1)
-		flipit.Turn(rand(1,359))
-		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	else
-		sideup = "tails-up."
-		flipit.Scale(5,1)
-		flipit.Invert()
-		flipit.Turn(rand(1,359))
-		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-	if (prob(0.1) || rigged)
-		flipit.Scale(0.2,1)
-		animate(transform = flipit, time = 1.5, easing = QUAD_EASING)
-		sideup = "on the side!"
-	if(!thrown)
-		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
-							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
-							 "<span class='notice'>You hear [src] landing.</span>")
-	else
-		if(!throwing) //coin was thrown and is coming to rest
-			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
-
-/obj/item/weapon/coin/examine(var/mob/user)
-	..()
-	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
-
-/obj/item/weapon/coin/equipped(var/mob/user)
-	..()
-	sideup = "heads-up."
-	transform = null
-
-/obj/item/weapon/coin/attack_self(var/mob/user)
-	coinflip(user, 0)
-
-/obj/item/weapon/coin/throw_impact(atom/hit_atom, speed, user)
-	..()
-	coinflip(user, 1)
 
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD

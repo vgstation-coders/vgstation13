@@ -218,6 +218,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
+	
+/turf/simulated/floor/attack_animal(mob/user as mob)
+	return src.attack_hand(user)
 
 /turf/simulated/floor/attack_hand(mob/user as mob)
 	if (is_light_floor())

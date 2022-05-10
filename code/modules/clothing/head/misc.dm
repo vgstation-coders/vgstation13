@@ -137,6 +137,16 @@
 	body_parts_covered = FULL_HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
+/obj/item/clothing/head/timefake
+	name = "time helmet"
+	desc = "A replica of the time helmet worn by the original Looper, the one who saved us from the collapsing timeline. We remember."
+	icon_state = "time_helmet"
+	item_state = "time_helmet"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|HIDEHEADHAIR
+	siemens_coefficient = 1.0
+
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"

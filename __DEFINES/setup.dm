@@ -1807,3 +1807,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define SPORTINESS_NONE 1
 #define SPORTINESS_SUGAR 1.2
 #define SPORTINESS_SPORTS_DRINK 5
+
+//Coin-related defines.
+#define COIN_HEADS "heads-up."
+#define COIN_TAILS "tails-up."
+#define COIN_SIDE "on the side!"

@@ -167,6 +167,7 @@ var/global/list/ghdel_profiling = list()
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
+	INVOKE_EVENT(src, /event/throw_impact, "user" = user)
 
 /atom/Destroy()
 	if(reagents)
@@ -476,6 +477,7 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
+	INVOKE_EVENT(src, /event/examined, "user" = user)
 
 /atom/Topic(href, href_list)
 	. = ..()

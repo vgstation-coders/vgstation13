@@ -158,7 +158,9 @@
 
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
-#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
+#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
+
+#define isfood(A) istype(A, /obj/item/weapon/reagent_containers/food)
 
 #define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
 
