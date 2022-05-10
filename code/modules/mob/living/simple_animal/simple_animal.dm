@@ -581,7 +581,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	..(gibbed)
 
-
 /mob/living/simple_animal/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
@@ -635,7 +634,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
-		
+
 /mob/living/simple_animal/adjustOxyLoss(damage)
 	damage *= oxy_damage_modifier
 	if(status_flags & GODMODE)
@@ -686,8 +685,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	overlays = null
 	if (targeted_by && target_locked)
 		overlays += target_locked
-
-
 
 /mob/living/simple_animal/update_fire()
 	return
@@ -877,7 +874,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /datum/locking_category/simple_animal
 
-//Rescales a mob's health and oxy damage scaling to a new maximum health.
+//Sets a new maxHealth for a mob and rescales that mob's health and oxy damage scaling accordingly.
 /mob/living/simple_animal/proc/rescaleHealth(var/newMaxHealth = maxHealth)
 	if(maxHealth)
 		var/oldMaxHealth = maxHealth
