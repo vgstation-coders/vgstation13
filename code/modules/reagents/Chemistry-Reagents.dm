@@ -4885,7 +4885,7 @@ var/procizine_tolerance = 0
 /datum/reagent/frostoil
 	name = "Frost Oil"
 	id = FROSTOIL
-	description = "A special oil that noticably chills the body. Extraced from Icepeppers."
+	description = "A special oil that noticeably chills the body. Extraced from Icepeppers."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8BA6E9" //rgb: 139, 166, 233
 	custom_metabolism = FOOD_METABOLISM
