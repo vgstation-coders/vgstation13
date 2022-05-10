@@ -259,14 +259,17 @@ var/global/datum/credits/end_credits = new
 /datum/credits/proc/draft_caststring()
 	cast_string = "<h1>CAST:</h1><br><h2>(in order of appearance)</h2><br>"
 	cast_string += "<table class='crewtable'>"
+	var/list/archive_keys_check = list()
 	for(var/mob/living/carbon/human/H in mob_list)
 		if(!H.key || H.iscorpse)
 			continue
+		archive_keys_check += H.key
 		cast_string += "[gender_credits(H)]"
 
 	for(var/mob/living/silicon/S in mob_list)
 		if(!S.key)
 			continue
+		archive_keys_check += H.key
 		cast_string += "[silicon_credits(S)]"
 
 	cast_string += "</table><br>"
@@ -276,7 +279,13 @@ var/global/datum/credits/end_credits = new
 		if(!H.key || H.iscorpse)
 			continue
 		else if(H.real_name)
+			archive_keys_check += H.key
 			corpses += H.real_name
+	for(var/datum/body_archive/B in body_archives)
+		if(B.key && B.key in archive_keys_check)
+			continue
+		else if(B.name)
+			corpses += B.name
 	if(corpses.len)
 		var/true_story_bro = "<br>[pick("BASED ON","INSPIRED BY","A RE-ENACTMENT OF")] [pick("A TRUE STORY","REAL EVENTS","THE EVENTS ABOARD [uppertext(station_name())]")]"
 		cast_string += "<h3>[true_story_bro]</h3><br>In memory of those that did not make it.<br>[english_list(corpses)].<br>"
