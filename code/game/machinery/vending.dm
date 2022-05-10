@@ -735,6 +735,18 @@ var/global/num_vending_terminals = 1
 		var/mob/living/silicon/robot/R = user
 		if (HAS_MODULE_QUIRK(R, MODULE_CAN_BUY))
 			data["bypass"] = TRUE // act like normal if the module allows it
+
+	data["records"] = list()
+	for (var/datum/data/vending_product/P in get_all_records())
+		var/list/product = list(
+			name = P.product_name,
+			category = P.category,
+			icon = P.mini_icon,
+			ref = ref(P)
+		)
+		if (data["records"][P.subcategory] == null)
+			data["records"][P.subcategory] = list(name = P.subcategory, items = list())
+		data["records"][P.subcategory]["items"] += list(product)
 	return data
 
 /obj/machinery/vending/ui_data(mob/user)
@@ -752,19 +764,13 @@ var/global/num_vending_terminals = 1
 		data["vend_ready"] = vend_ready
 		data["contraband"] = extended_inventory
 		data["coin"] = coin != null
-		data["categories"] = list()
+		data["products"] = list()
 		for (var/datum/data/vending_product/P in get_all_records())
 			var/list/product = list(
-				name = P.product_name,
 				amount = P.amount,
-				price = P.price,
-				category = P.category,
-				icon = P.mini_icon,
-				ref = ref(P)
+				price = P.price
 			)
-			if (data["categories"][P.subcategory] == null)
-				data["categories"][P.subcategory] = list(name = P.subcategory, items = list())
-			data["categories"][P.subcategory]["items"] += list(product)
+			data["products"][ref(P)] = product
 	return data
 
 /obj/machinery/vending/ui_act(action, params)
@@ -836,7 +842,7 @@ var/global/num_vending_terminals = 1
 		seconds_electrified = 0
 
 	user.set_machine(src)
-	tgui_interact(usr)
+	tgui_interact(user)
 
 /obj/machinery/vending/proc/deleteEntry(datum/data/vending_product/R)
 	if(R.custom)
@@ -1028,7 +1034,7 @@ var/global/num_vending_terminals = 1
 			throw_item.throw_at(target, 16, 3)
 
 		src.visible_message("<span class='danger'>[src] launches [throw_item.name] at [target.name]!</span>")
-		tgui_interact(usr)
+		SStgui.update_uis(src)
 		return 1
 
 	return 0

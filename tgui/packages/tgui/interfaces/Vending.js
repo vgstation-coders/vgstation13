@@ -8,15 +8,15 @@ export const Vending = (_props, context) => {
     currently_vending,
     machine_name,
     has_premium,
-    categories,
     edit_mode,
+    products,
+    records,
     ad
   } = data;
 
-  let tabIndex = 1;
   let cat_array = [];
-  for (let cat in categories) {
-    cat_array.push(categories[cat])
+  for (let cat in records) {
+    cat_array.push(records[cat])
   }
 
   return (
@@ -45,7 +45,7 @@ export const Vending = (_props, context) => {
             <Stack.Item grow>
               { currently_vending != null ?
                 (<Confirmation name={currently_vending.name} price={currently_vending.price} />) :
-                (<ProductView categories={cat_array} />)}
+                (<ProductView records={cat_array} products={products} />)}
             </Stack.Item>
           </Stack>
         </Window.Content>
@@ -73,18 +73,18 @@ const Confirmation = (props, context) => {
 }
 
 const ProductView = (props, context) => {
-  const { categories } = props;
+  const { records, products } = props;
 
   return (
     <Section
       fill scrollable
       title="Products">
-        {!categories.length ?
+        {!records.length ?
           (<Box>No products loaded!</Box>) :
           (<Table>
-            {categories.map(category =>
+            {records.map(category =>
               <Section title={(category.name || '').replace(/^\w/, c => c.toUpperCase()) || null}>
-                {category.items.map(item => <ItemRow item={item} />)}
+                {category.items.map(item => <ItemRow record={item} product={products[item.ref]} />)}
               </Section>)}
           </Table>)}
     </Section>
@@ -105,8 +105,12 @@ const ItemRow = (props, context) => {
   } = data;
 
   const {
-    name, amount, price, category, icon, ref
-  } = props.item;
+    name, category, icon, ref
+  } = props.record;
+
+  const {
+    amount, price
+  } = props.product;
 
   let hidden = ((category == CAT_COIN  ) && !coin)
             || ((category == CAT_HIDDEN) && !contraband)
