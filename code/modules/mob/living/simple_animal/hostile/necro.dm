@@ -652,7 +652,7 @@
 	icon_state = "ghoul"
 	icon_dead = "ghoul"
 	icon_living = "ghoul"
-	desc = "Suffering from onset decay from radiation exposure, this one has lost their mind, their soul, but not their hunger."
+	desc = "Suffering from onset decay from radiation exposure. They have lost their mind and soul, but not their hunger."
 	can_evolve = 0
 	canRegenerate = 0
 
