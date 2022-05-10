@@ -18,6 +18,7 @@
 	var/has_sound = 1 //The CLICK sound when turning on/off
 	var/sound_on = 'sound/items/flashlight_on.ogg'
 	var/sound_off = 'sound/items/flashlight_off.ogg'
+	var/flickering = FALSE
 
 	health = 30
 	breakable_flags = BREAKABLE_ALL
@@ -63,6 +64,12 @@
 	update_brightness(user)
 	return 1
 
+/obj/item/device/flashlight/proc/toggle_onoff(var/onoff = null)
+	if(isnull(onoff))
+		on = !on
+	else
+		on = onoff
+	update_brightness()
 
 /obj/item/device/flashlight/attack(mob/living/M as mob, mob/living/user as mob)
 	add_fingerprint(user)
@@ -109,6 +116,23 @@
 				to_chat(user, "<span class='notice'>[src] highlights [M.times_cloned] dot[M.times_cloned != 1 ? "s" : ""] on [M]'s sclerae!</span>")
 	else
 		return ..()
+
+/obj/item/device/flashlight/proc/flicker()
+	if(flickering)
+		return
+	if(on)
+		flickering = 1
+		spawn(0)
+			on = FALSE
+			update_brightness()
+			sleep(rand(5, 15))
+			flickering = 0
+			on = TRUE
+			update_brightness()
+
+/obj/item/device/flashlight/attack_ghost(var/mob/dead/observer/ghost)
+	flicker()
+	. = ..()
 
 /obj/item/device/flashlight/torch
 	name = "torch"
@@ -168,7 +192,6 @@
 		to_chat(user, "<span class='notice'>\The [src] cannot be attached to that.</span>")
 	return ..()
 
-
 // the desk lamps are a bit special
 /obj/item/device/flashlight/lamp
 	name = "desk lamp"
@@ -180,7 +203,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null
-	on = 1
+	on = 0	//Lamps start out off unless someone spawns in the same room as them at roundstart.
 
 /obj/item/device/flashlight/lamp/cultify()
 	new /obj/structure/cult/pylon(loc)
@@ -258,6 +281,9 @@
 		update_brightness(U)
 	else
 		update_brightness()
+
+/obj/item/device/flashlight/flare/flicker()
+	return
 
 /obj/item/device/flashlight/flare/attack_self(mob/user)
 
