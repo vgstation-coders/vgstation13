@@ -14,7 +14,7 @@
 	spawn()
 		command_alert(/datum/command_alert/lights_on)
 
-		make_doors_all_access(list(accesss_engine_minor))
+		make_doors_all_access(list(access_engine_minor))
 
 /datum/event/lights_on/tick()
 	for(var/obj/machinery/power/battery/smes/S in smes_list)
@@ -29,4 +29,4 @@
 	// Don't do anything, we want to pack the announcement with the actual event
 
 /datum/event/lights_on/end()
-	revoke_doors_all_access(list(accesss_engine_minor))
+	revoke_doors_all_access(list(access_engine_minor))
