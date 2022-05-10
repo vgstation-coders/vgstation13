@@ -2251,9 +2251,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "stok crate"
 	group = "Hydroponics"
 
-/datum/supply_packs/roach
+/datum/supply_packs/isopod
 	name = "Isopod cubes"
-	contains = list (/obj/item/weapon/storage/box/monkeycubes/roachcubes)
+	contains = list (/obj/item/weapon/storage/box/monkeycubes/isopodcubes)
 	cost = 30
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "isopod crate"
