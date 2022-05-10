@@ -285,8 +285,8 @@
 
 				if(isloosecatbeast(H))
 					episode_names += new /datum/episode_name/rare("CAT'S PAW", "The only survivor was a loose catbeast.", 1500)
-					//if(station was freezing!!!!)
-						//episode_names += new /datum/episode_name/rare("ONE COOL CAT", "The only survivor was a loose catbeast. Also the station was freezing.", 2500)
+					if(get_station_avg_temp() <= T0C)
+						episode_names += new /datum/episode_name/rare("ONE COOL CAT", "The only survivor was a loose catbeast. Also the station was freezing.", 2500)
 
 				if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chef")
 					var/chance = 250
@@ -407,7 +407,7 @@
 					livingmobcount += 1
 				if(wolfcount == 1 && livingmobcount == 1)
 					episode_names += new /datum/episode_name/rare("LONE WOLF", "...", 1500)
-			else 
+			else
 				//more than 0 human escapees
 				var/braindamage_total = 0
 				var/all_retarded = TRUE
