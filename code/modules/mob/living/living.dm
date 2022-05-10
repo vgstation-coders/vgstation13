@@ -7,7 +7,7 @@
 		meat_amount = size
 
 	immune_system = new (src)
-	oxy_damage_modifier *= maxHealth / 100 //Scale oxy_damage_modifier based on the max health of the mob.
+	oxy_damage_modifier *= (maxHealth / 100) //Scale oxy damage based on the max health of the mob.
 
 /mob/living/create_reagents(const/max_vol)
 	..(max_vol)
@@ -1915,3 +1915,14 @@ Thanks.
 	if(B.host_brain.ckey)
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
+		
+//Rescales a mob's health and oxy damage scaling to a new maximum health.
+/mob/living/proc/rescaleHealth(var/newMaxHealth = maxHealth)
+	if(maxHealth)
+		var/oldMaxHealth = maxHealth
+		maxHealth = newMaxHealth
+		health *= (newMaxHealth / oldMaxHealth)
+		oxy_damage_modifier *= (newMaxHealth / oldMaxHealth)
+		return TRUE
+	else
+		return FALSE
