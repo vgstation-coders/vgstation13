@@ -739,7 +739,7 @@
 ///////////////// HEADCRAB ZOMBIES ////////////////////
 ///////////////////////////////////////////////////////
 
-/mob/living/simple_animal/hostile/necro/zombie/headcrab //Not very useful
+/mob/living/simple_animal/hostile/necro/zombie/headcrab
 	icon_state = "zombie_headcrab"
 	icon_living = "zombie_headcrab"
 	icon_dead = "zombie_headcrab"
@@ -750,6 +750,7 @@
 	canRegenerate = 0
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/obj/item/clothing/mask/facehugger/headcrab/crab //The crab controlling it.
+	environment_smash_flags = OPEN_DOOR_WEAK
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
