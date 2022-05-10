@@ -391,7 +391,7 @@
 		clothing.Remove(I)
 	..()
 
-/mob/living/simple_animal/hostile/necro/zombie/turned //Not very useful
+/mob/living/simple_animal/hostile/necro/zombie/turned
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
 	icon_living = "zombie_turned"
 	icon_dead = "zombie_turned"
@@ -399,6 +399,7 @@
 	maxHealth = 50
 	health = 50
 	can_evolve = TRUE
+	environment_smash_flags = OPEN_DOOR_WEAK
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/being_unzombified = FALSE
 
