@@ -425,8 +425,8 @@
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/roachcubes
-	name = "roach cube box"
-	desc = "Drymate brand roach cubes, shipped from Secto 4. Just add water!"
+	name = "isopod cube box"
+	desc = "Drymate brand isopod cubes, shipped from Secto 4. Just add water!"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/mousecubes

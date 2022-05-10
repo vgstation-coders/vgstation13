@@ -2252,11 +2252,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/roach
-	name = "Roach cubes"
+	name = "Isopod cubes"
 	contains = list (/obj/item/weapon/storage/box/monkeycubes/roachcubes)
 	cost = 30
 	containertype = /obj/structure/closet/crate/freezer
-	containername = "roach crate"
+	containername = "isopod crate"
 	group = "Hydroponics"
 
 /datum/supply_packs/vox
