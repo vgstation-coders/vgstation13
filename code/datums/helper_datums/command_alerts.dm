@@ -415,6 +415,17 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	..()
 
+////////////////LIGHTS ON
+
+/datum/command_alert/lights_on
+	name = "Keep the Lights On"
+	alert_title = "Power Reactivation Incentive"
+
+/datum/command_alert/lights_on/announce()
+	message = "It seems your station is starting to run low on its power reserves. Central Command can send you relief power if you can get a current running in the cables. Consider running the PACMAN-type generator or Antimatter Engine. Access to Engineering will be waived for the next five minutes."
+
+	..()
+
 ////////////////WORMHOLES
 
 /datum/command_alert/wormholes
@@ -433,7 +444,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "malfdelta"
 	alertlevel = "delta"
 
-/datum/command_alert/malf_win 
+/datum/command_alert/malf_win
 	name = "AI Malfunctioning Win"
 	alert = 'sound/effects/static/static4.ogg'
 
