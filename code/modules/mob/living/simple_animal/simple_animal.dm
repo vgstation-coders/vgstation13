@@ -876,3 +876,14 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		qdel(src)
 
 /datum/locking_category/simple_animal
+
+//Rescales a mob's health and oxy damage scaling to a new maximum health.
+/mob/living/simple_animal/proc/rescaleHealth(var/newMaxHealth = maxHealth)
+	if(maxHealth)
+		var/oldMaxHealth = maxHealth
+		maxHealth = newMaxHealth
+		health *= (newMaxHealth / oldMaxHealth)
+		oxy_damage_modifier *= (newMaxHealth / oldMaxHealth)
+		return TRUE
+	else
+		return FALSE
