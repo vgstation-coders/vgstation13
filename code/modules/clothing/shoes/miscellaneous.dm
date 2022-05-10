@@ -187,6 +187,9 @@
 /obj/item/clothing/shoes/clown_shoes/elf/stickymagic
 	canremove = 0
 
+/obj/item/clothing/shoes/clown_shoes/elf/stickymagic/acidable()
+	return 0
+
 #define CLOWNSHOES_RANDOM_SOUND "random sound"
 
 /obj/item/clothing/shoes/clown_shoes/advanced
@@ -310,6 +313,9 @@
 /obj/item/clothing/shoes/clown_shoes/slippy
 	canremove = 0
 	var/lube_chance = 10
+
+/obj/item/clothing/shoes/clown_shoes/slippy/acidable()
+	return 0
 
 /obj/item/clothing/shoes/clown_shoes/slippy/step_action() //The honkpocalypse is here
 	..()
