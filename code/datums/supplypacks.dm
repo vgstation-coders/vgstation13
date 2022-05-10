@@ -171,6 +171,33 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "newscaster crate"
 	group = "Supplies"
 
+/datum/supply_packs/office_supplies
+	name = "Office supplies"
+	contains = list(/obj/item/weapon/paper_pack,
+					/obj/item/weapon/folder/black,
+					/obj/item/weapon/folder/white,
+					/obj/item/weapon/folder/blue,
+					/obj/item/weapon/folder/red,
+					/obj/item/weapon/folder/orange,
+					/obj/item/weapon/pen,
+					/obj/item/weapon/pen/blue,
+					/obj/item/weapon/pen/red,
+					/obj/item/weapon/pen/fountain,
+					/obj/item/weapon/storage/bag/clipboard)
+	cost = 10
+	containertype = /obj/structure/closet/crate/basic
+	containername = "office supply crate"
+	group = "Supplies"
+
+/datum/supply_packs/heaterscoolers
+	name = "Heater and AC"
+	contains = list(/obj/machinery/space_heater,
+					/obj/machinery/space_heater/air_conditioner)
+	cost = 20
+	containertype = /obj/structure/largecrate
+	containername = "temperature control crate"
+	group = "Supplies"
+
 /datum/supply_packs/porcelain
 	name = "Porcelain furniture"
 	contains = list()
@@ -1484,6 +1511,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "mechanical maintenance crate"
 	group = "Engineering"
 
+/datum/supply_packs/scrubberpump
+	name = "Portable Scrubber and Pump"
+	contains = list(/obj/machinery/portable_atmospherics/pump,
+					/obj/machinery/portable_atmospherics/scrubber)
+	cost = 20
+	containertype = /obj/structure/largecrate
+	containername = "portable atmospherics crate"
+	group = "Engineering"
+
 /datum/supply_packs/solar
 	name = "Solar panels kit"
 	contains  = list(/obj/machinery/power/solar_assembly,
@@ -1885,6 +1921,30 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 25
 	containertype = /obj/structure/closet/crate/engi
 	containername = "automation supplies crate"
+	group = "Cargo"
+
+/datum/supply_packs/package_wrap
+	name = "Package wrap"
+	contains = list(/obj/item/stack/package_wrap,
+                    /obj/item/stack/package_wrap,
+                    /obj/item/stack/package_wrap,
+                    /obj/item/stack/package_wrap,)
+	cost = 10
+	containertype = /obj/structure/closet/crate/basic
+	containername = "package wrap crate"
+	group = "Cargo"
+
+/datum/supply_packs/cargonia_propaganda
+	name = "Cargo posters"
+	contains = list(/obj/item/mounted/poster/cargo,
+                    /obj/item/mounted/poster/cargo,
+                    /obj/item/mounted/poster/cargo,
+                    /obj/item/mounted/poster/cargo,
+                    /obj/item/mounted/poster/cargo,
+                    /obj/item/mounted/poster/cargo,)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "cargonia poster crate"
 	group = "Cargo"
 
 
@@ -2621,15 +2681,23 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/sovietmachines
 	name = "Old and Forgotten stack of packs"
-	contains = list(/obj/structure/vendomatpack/sovietsoda,
-					/obj/structure/vendomatpack/sovietsoda,
-					/obj/structure/vendomatpack/nazivend,
+	contains = list(/obj/structure/vendomatpack/nazivend,
 					/obj/structure/vendomatpack/sovietvend)
 	cost = 20
 	containertype = /obj/structure/stackopacks
 	containername = "Old and Forgotten stack of packs"
 	group = "Vending Machine packs"
 	hidden = 1
+
+/datum/supply_packs/sovietsodamachines
+	name = "Russian Beverage stack of packs"
+	contains = list(/obj/structure/vendomatpack/sovietsoda,
+					/obj/structure/vendomatpack/sovietsoda)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Russian Beverage stack of packs"
+	group = "Vending Machine packs"
+	contraband = 1
 
 /datum/supply_packs/magimachines
 	name = "Strange and Bright stack of packs"
