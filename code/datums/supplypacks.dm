@@ -1928,7 +1928,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/stack/package_wrap,
                     /obj/item/stack/package_wrap,
                     /obj/item/stack/package_wrap,
-                    /obj/item/stack/package_wrap,)
+                    /obj/item/stack/package_wrap)
 	cost = 10
 	containertype = /obj/structure/closet/crate/basic
 	containername = "package wrap crate"
@@ -1941,7 +1941,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
                     /obj/item/mounted/poster/cargo,
                     /obj/item/mounted/poster/cargo,
                     /obj/item/mounted/poster/cargo,
-                    /obj/item/mounted/poster/cargo,)
+                    /obj/item/mounted/poster/cargo)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
 	containername = "cargonia poster crate"
