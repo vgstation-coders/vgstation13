@@ -269,7 +269,7 @@ var/global/datum/credits/end_credits = new
 	for(var/mob/living/silicon/S in mob_list)
 		if(!S.key)
 			continue
-		archive_keys_check += H.key
+		archive_keys_check += S.key
 		cast_string += "[silicon_credits(S)]"
 
 	cast_string += "</table><br>"
@@ -282,7 +282,7 @@ var/global/datum/credits/end_credits = new
 			archive_keys_check += H.key
 			corpses += H.real_name
 	for(var/datum/body_archive/B in body_archives)
-		if(B.key && (B.key in archive_keys_check))
+		if(B.key && !ishuman(mob_type) && !issilicon(mob_type) && (B.key in archive_keys_check))
 			continue
 		else if(B.name)
 			corpses += B.name
