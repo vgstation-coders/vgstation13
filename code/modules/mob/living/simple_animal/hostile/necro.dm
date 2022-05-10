@@ -95,6 +95,7 @@
 	melee_damage_upper = 10
 	attacktext = "bites"
 	speak_emote = list("groans", "moans")
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
 /mob/living/simple_animal/hostile/necro/animal_ghoul/proc/ghoulifyAnimal(S)
 	var/mob/living/aGhoul = S
