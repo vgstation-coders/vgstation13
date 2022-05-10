@@ -60,13 +60,18 @@
 			else
 				living++
 		if (C.mob.mind && C.mob.mind.antag_roles.len > 0)
+			var/counts_as_antag = FALSE
 			for(var/role in C.mob.mind.antag_roles)
 				var/datum/role/R = C.mob.mind.antag_roles[role]
-				entry += " - <b><span class='red'>[uppertext(R.name)]</span></b>"
-			if(!(C.mob.isDead()))
-				living_antags++
-			else
-				dead_antags++
+				if(R.is_antag)
+					counts_as_antag = TRUE
+				var/spanclass = R.is_antag ? "bad" : "good"
+				entry += " - <b><span class='[spanclass]'>[uppertext(R.name)]</span></b>"
+			if(counts_as_antag)
+				if(!(C.mob.isDead()))
+					living_antags++
+				else
+					dead_antags++
 		entry += " (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.mob]'>?</A>)"
 		Lines += entry
 

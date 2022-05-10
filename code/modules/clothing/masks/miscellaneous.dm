@@ -7,7 +7,7 @@
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
 
@@ -178,7 +178,7 @@
 /obj/item/clothing/mask/bandana/red
 	name = "red bandana"
 	icon_state = "bandred"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/joy
 	name = "joy mask"

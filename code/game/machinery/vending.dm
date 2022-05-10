@@ -421,7 +421,7 @@ var/global/num_vending_terminals = 1
 
 //		to_chat(world, "Added: [R.product_name]] - [R.amount] - [R.product_path]")
 
-/obj/machinery/vending/emag(mob/user)
+/obj/machinery/vending/emag_act(mob/user)
 	if(!emagged || !extended_inventory || scan_id)
 		emagged = 1
 		extended_inventory = 1
@@ -530,7 +530,7 @@ var/global/num_vending_terminals = 1
 	else if(istype(W, /obj/item/weapon/card/emag))
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
 		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
-		if (emag())
+		if (emag_act())
 			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
 		else
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
@@ -2874,7 +2874,7 @@ var/global/num_vending_terminals = 1
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
 
-/obj/machinery/vending/nazivend/emag(mob/user)
+/obj/machinery/vending/nazivend/emag_act(mob/user)
 	if(!emagged)
 		if(user)
 			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
@@ -2957,7 +2957,7 @@ var/global/num_vending_terminals = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
 
 
-/obj/machinery/vending/sovietvend/emag(mob/user)
+/obj/machinery/vending/sovietvend/emag_act(mob/user)
 	if(!emagged)
 		if(user)
 			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")

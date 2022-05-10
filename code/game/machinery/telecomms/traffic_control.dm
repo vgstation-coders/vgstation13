@@ -279,7 +279,7 @@
 /obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	return ..()
 
-/obj/machinery/computer/telecomms/emag(mob/user)
+/obj/machinery/computer/telecomms/emag_act(mob/user)
 	if(!emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1

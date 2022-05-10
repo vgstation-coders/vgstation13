@@ -591,7 +591,7 @@
 	req_access = shuttle.req_access
 	updateUsrDialog()
 
-/obj/machinery/computer/shuttle_control/emag(mob/user as mob)
+/obj/machinery/computer/shuttle_control/emag_act(mob/user as mob)
 	..()
 	req_access = list()
 	if(user)

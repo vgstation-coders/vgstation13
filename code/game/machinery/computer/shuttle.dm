@@ -63,7 +63,7 @@
 				src.authorized.len = 0
 				src.authorized = list(  )
 
-/obj/machinery/computer/shuttle/emag(mob/user as mob)
+/obj/machinery/computer/shuttle/emag_act(mob/user as mob)
 	if(!emagged)
 		spark(src)
 		var/choice = "Cancel"

@@ -202,7 +202,7 @@
 	B.set_content(dat)
 	B.open()
 
-/obj/machinery/computer/library/checkout/emag(mob/user)
+/obj/machinery/computer/library/checkout/emag_act(mob/user)
 	if(!emagged)
 		src.emagged = 1
 		if(user)

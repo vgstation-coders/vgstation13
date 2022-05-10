@@ -127,9 +127,6 @@
 /obj/docking_port/destination/vault/biodome
 	areaname = "biodome"
 
-/area/vault/brokeufo
-	requires_power = 1
-
 /area/vault/AIsat
 	requires_power = 1
 

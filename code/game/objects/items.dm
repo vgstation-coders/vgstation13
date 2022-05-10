@@ -378,6 +378,7 @@
 		var/datum/action/A = X
 		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
 			A.Grant(user)
+	INVOKE_EVENT(src, /event/equipped, "user" = user)
 	return
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)

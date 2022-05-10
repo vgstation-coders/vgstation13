@@ -173,7 +173,7 @@
 				bots -= bot
 				continue
 			if(prob(botEmagChance))
-				bot.Emag()
+				bot.emag_act()
 
 /datum/event/ionstorm/end()
 	active = 0
@@ -291,7 +291,7 @@
 	if(botEmagChance)
 		for(var/obj/machinery/bot/bot in world)
 			if(prob(botEmagChance))
-				bot.Emag()
+				bot.emag_act()
 */
 
 	/*

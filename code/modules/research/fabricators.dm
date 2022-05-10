@@ -76,7 +76,7 @@
 		T += Ml.rating - 1
 	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
-/obj/machinery/r_n_d/fabricator/emag()
+/obj/machinery/r_n_d/fabricator/emag_act()
 	sleep()
 	if(!(research_flags & ACCESS_EMAG))
 		return

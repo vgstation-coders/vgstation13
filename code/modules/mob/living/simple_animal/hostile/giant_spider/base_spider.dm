@@ -22,7 +22,7 @@
 	response_disarm = "gently pushes aside"
 	response_harm   = "stomps"
 	stop_automated_movement_when_pulled = 0
-	maxHealth = 200 // Was 75
+	maxHealth = 200
 	health = 200
 	melee_damage_lower = 15
 	melee_damage_upper = 20
@@ -49,6 +49,7 @@
 	var/poison_per_bite = 5
 	var/poison_type = TOXIN
 	var/delimbable_icon = TRUE
+	var/health_regen_rate = 2
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 
 	//Spider aren't affected by atmos.
@@ -101,6 +102,8 @@
 
 // Checks pressure here vs. around us. Intended to make sure the spider doesn't breach to space while comfortable, or breach into a high pressure area
 /mob/living/simple_animal/hostile/giant_spider/proc/performPressureCheck(var/turf/curturf)
+	if(client)
+		return
 	if(!istype(curturf))
 		return 0
 	var/datum/gas_mixture/myenv=curturf.return_air()
@@ -154,6 +157,10 @@
 /mob/living/simple_animal/hostile/giant_spider/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
+	if (health == maxHealth)
+		return ..()
+	if (health > 0)
+		health = min(maxHealth, health_regen_rate + health)
 	. = ..()
 
 	regular_hud_updates()

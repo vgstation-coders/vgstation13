@@ -29,7 +29,7 @@
 /obj/machinery/deployable/barrier/update_icon()
 	icon_state = "barrier[anchored]"
 
-/obj/machinery/deployable/barrier/emag(var/mob/user)
+/obj/machinery/deployable/barrier/emag_act(var/mob/user)
 	if (!emagged)
 		emagged = TRUE
 		req_access = 0

@@ -78,7 +78,7 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 			sleeptime = 2 SECONDS
 
-/obj/machinery/sleeper/emag(mob/user)
+/obj/machinery/sleeper/emag_act(mob/user)
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You short out the overdose prevention system on \the [src].</span>")
 		emagged = 1
@@ -593,7 +593,7 @@
 	else
 		set_light(0)
 
-/obj/machinery/sleeper/mancrowave/emag(mob/user)
+/obj/machinery/sleeper/mancrowave/emag_act(mob/user)
 	if(!emagged)
 		emagged = TRUE
 		if(user)

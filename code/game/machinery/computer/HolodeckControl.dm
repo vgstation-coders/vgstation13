@@ -231,7 +231,7 @@
 /obj/machinery/computer/HolodeckControl/attackby(obj/item/weapon/W, mob/user)
 	..() //This still allows items to unrez even if the computer is deconstructed
 
-/obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
+/obj/machinery/computer/HolodeckControl/emag_act(mob/user as mob)
 	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	if(emagged)
 		return //No spamming

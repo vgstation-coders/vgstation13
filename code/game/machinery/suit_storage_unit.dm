@@ -29,7 +29,7 @@
 	var/image/openimage
 	var/image/closeimage
 
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,

@@ -27,6 +27,13 @@
 	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
+/datum/spellbook_artifact/staff_of_polymorph
+	name = "Staff of Polymorph"
+	desc = "An artefact that shoots highly chaotic bolts of energy which transform the target into a random creature for a short while. Using the staff on oneself will permanently corrupt the user's form, transforming into an unstable, writhing pollywog!"
+	abbreviation = "PM"
+	price = 20
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/polymorph)
+
 /datum/spellbook_artifact/staff_of_swapping
 	name = "Staff of Swapping"
 	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects.."

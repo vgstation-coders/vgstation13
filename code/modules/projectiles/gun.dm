@@ -372,6 +372,7 @@
 					playsound(user, fire_sound, fire_volume, 1)
 				else if (in_chamber.fire_sound)
 					playsound(user, in_chamber.fire_sound, fire_volume, 1)
+			in_chamber.firer = M
 			in_chamber.on_hit(M)
 			if (!in_chamber.nodamage)
 				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")

@@ -74,7 +74,7 @@
 				acceptable_items |= item
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
-		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)   
+		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)
 /*******************
 *   Part Upgrades
 ********************/
@@ -241,7 +241,7 @@
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/microwave/emag(mob/user)
+/obj/machinery/microwave/emag_act(mob/user)
 	..()
 	emagged = 1
 	to_chat(user, "<span class='warning'>You mess up \the [src]'s circuitry.</span>")

@@ -65,7 +65,7 @@
     user << browse(dat, "window=arcade")
     onclose(user, "arcade")
 
-/obj/machinery/computer/arcade/emag(mob/user)
+/obj/machinery/computer/arcade/emag_act(mob/user)
 	game.emag_act(user)
 
 /obj/machinery/computer/arcade/emp_act(severity)

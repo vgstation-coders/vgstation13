@@ -215,7 +215,7 @@
 		return 1
 	updateUsrDialog()
 
-/obj/machinery/computer/telecomms/monitor/emag(mob/user)
+/obj/machinery/computer/telecomms/monitor/emag_act(mob/user)
 	if(!emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1

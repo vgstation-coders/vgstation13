@@ -174,7 +174,7 @@
 	else
 		..()
 
-/obj/machinery/bot/farmbot/Emag(mob/user as mob)
+/obj/machinery/bot/farmbot/emag_act(mob/user as mob)
 	..()
 	if(user)
 		to_chat(user, "<span class='warning'>You short out [src]'s plant identifier circuits.</span>")

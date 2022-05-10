@@ -286,7 +286,7 @@ var/list/firstaid_exceptions = list(
 		if (. && isturf(loc))
 			step_away(src,user)
 
-/obj/machinery/bot/medbot/Emag(mob/user)
+/obj/machinery/bot/medbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		declare_crit = 0

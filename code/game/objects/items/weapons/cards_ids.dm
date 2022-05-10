@@ -179,6 +179,8 @@
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
 		return
+	if(istype(target,/obj/machinery))
+		return // Handled in machine attackby()
 	target.emag_act(user)
 
 

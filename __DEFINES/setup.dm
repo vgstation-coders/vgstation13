@@ -966,7 +966,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	CAMERANET_THUNDER,
 	CAMERANET_ERT,
 	CAMERANET_NUKE,
-	CAMERANET_CREED
+	CAMERANET_CREED,
+	CAMERANET_MOTHERSHIPLAB
 	)
 
 //Generic species flags.
@@ -1142,7 +1143,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //used to define machine behaviour in attackbys and other code situations
-#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag()
+#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag_act()
 #define SCREWTOGGLE		2 //does it toggle panel_open when hit by a screwdriver?
 #define CROWDESTROY		4 //does hitting a panel_open machine with a crowbar disassemble it?
 #define WRENCHMOVE		8 //does hitting it with a wrench toggle its anchored state?
@@ -1818,3 +1819,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define LUCKINESS_WHEN_GENERAL_RECURSIVE (LUCKINESS_WHEN_HELD_RECURSIVE | LUCKINESS_WHEN_WORN_RECURSIVE) //The item confers (un)luck when held in the hand or worn directly, or inside something else being held in the hand or worn.
 
 #define LUCKINESS_DRAINFACTOR 0.998 //Multiplied by a mob's temporary luckiness every Life() tick. The greater the magnitude of temporary luckiness, the faster it drains.
+
+//Coin-related defines
+#define COIN_HEADS "heads-up."
+#define COIN_TAILS "tails-up."
+#define COIN_SIDE "on the side!"

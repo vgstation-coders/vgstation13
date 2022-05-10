@@ -1046,20 +1046,170 @@
 	name = "Grey"
 	mutantrace = "Grey"
 	corpsegender = G_BOTH
-
-/obj/effect/landmark/corpse/grey/space
-	name = "Grey"
-	mutantrace = "Grey"
 	generate_random_appearance = 1
-	corpsegender = G_BOTH
+
+/obj/effect/landmark/corpse/grey/worker
+	name = "Grey Laborer"
+	corpseuniform = /obj/item/clothing/under/grey/grey_worker
+	corpsebelt = /obj/item/weapon/storage/belt/utility/full
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+
+/obj/effect/landmark/corpse/grey/soldier_unarmed
+	name = "Grey Soldier"
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+
+/obj/effect/landmark/corpse/grey/soldier_sentry
+	name = "Grey Soldier"
+	corpsesuit = /obj/item/clothing/suit/armor/mothership
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+
+/obj/effect/landmark/corpse/grey/soldier_regular
+	name = "Grey Soldier"
+	corpsesuit = /obj/item/clothing/suit/armor/mothership
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpsehelmet = /obj/item/clothing/head/helmet/mothership
+
+/obj/effect/landmark/corpse/grey/soldier_pacifier
+	name = "Grey Soldier"
+	corpsesuit = /obj/item/clothing/suit/armor/mothership
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor
+
+/obj/effect/landmark/corpse/grey/soldier_grenadier
+	name = "Grey Soldier"
+	corpsesuit = /obj/item/clothing/suit/armor/mothership
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor_heavy
+
+/obj/effect/landmark/corpse/grey/soldier_heavy
+	name = "Grey Soldier"
+	corpsesuit = /obj/item/clothing/suit/armor/mothership_heavy
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor_heavy
+
+/obj/effect/landmark/corpse/grey/explorer
+	name = "Grey Explorer"
+	corpseuniform = /obj/item/clothing/under/grey/grey_scout
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+
+/obj/effect/landmark/corpse/grey/explorer_space
+	name = "Grey Explorer"
 	corpsemask = /obj/item/clothing/mask/breath
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpsesuit = /obj/item/clothing/suit/space/grey
-	corpseuniform = /obj/item/clothing/under/color/grey
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe
+	corpseuniform = /obj/item/clothing/under/grey/grey_scout
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
 	corpseback = /obj/item/weapon/tank/oxygen/red
 	corpsehelmet = /obj/item/clothing/head/helmet/space/grey
-	corpseid = 0
+
+/obj/effect/landmark/corpse/grey/researcher
+	name = "Grey Researcher"
+	corpseglasses = /obj/item/clothing/glasses/science
+	corpsegloves = /obj/item/clothing/gloves/latex
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/mothership
+	corpseuniform = /obj/item/clothing/under/grey/grey_researcher
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+
+/obj/effect/landmark/corpse/grey/surgeon
+	name = "Grey Surgeon"
+	corpseglasses = /obj/item/clothing/glasses/hud/health
+	corpsegloves = /obj/item/clothing/gloves/latex
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/mothership
+	corpseuniform = /obj/item/clothing/under/grey/grey_researcher
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+
+/obj/effect/landmark/corpse/grey/leader
+	name = "Grey Administrator"
+	corpsegender = G_MALE
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/rig/grey/leader
+	corpseuniform = /obj/item/clothing/under/grey/grey_leader
+	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior
+
+//////////////////Vox Corpses///////////////////////////
+
+/obj/effect/landmark/corpse/vox
+	name = "Vox"
+	mutantrace = "Vox"
+	corpsegender = G_BOTH
+	generate_random_appearance = 1
+
+/obj/effect/landmark/corpse/vox/spaceraider
+	name = "Vox Raider"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/vox/pressure
+	corpseuniform = /obj/item/clothing/under/vox/vox_casual
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseback = /obj/item/weapon/tank/nitrogen
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/pressure
+
+/obj/effect/landmark/corpse/vox/spaceraider_medic
+	name = "Vox Raider"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/vox/medic
+	corpseuniform = /obj/item/clothing/under/vox/vox_casual
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseback = /obj/item/weapon/tank/nitrogen
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/medic
+
+/obj/effect/landmark/corpse/vox/spaceraider_assassin
+	name = "Vox Raider"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/vox/stealth
+	corpseuniform = /obj/item/clothing/under/vox/vox_casual
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseback = /obj/item/weapon/tank/nitrogen
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/stealth
+
+/obj/effect/landmark/corpse/vox/spaceraider_deadeye
+	name = "Vox Raider"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/vox/carapace
+	corpseuniform = /obj/item/clothing/under/vox/vox_casual
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseback = /obj/item/weapon/tank/nitrogen
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/carapace
+
+/obj/effect/landmark/corpse/vox/spaceraider_leader
+	name = "Vox Raid Leader"
+	corpsegender = G_MALE
+	corpsemask = /obj/item/clothing/mask/gas/syndicate
+	corpsesuit = /obj/item/clothing/suit/space/rig/syndi
+	corpseuniform = /obj/item/clothing/under/vox/vox_casual
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseback = /obj/item/weapon/tank/nitrogen
+
+/obj/effect/landmark/corpse/vox/crossbow
+	name = "vox sharpshooter"
+	corpseuniform = /obj/item/clothing/under/vox/vox_casual
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+
+/obj/effect/landmark/corpse/vox/crossbow/space
+	corpsesuit = /obj/item/clothing/suit/space/vox/pressure
+	corpsemask = /obj/item/clothing/mask/breath/vox
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/pressure
+
+/obj/effect/landmark/corpse/vox/ion
+	name = "vox cyber operator"
+	corpseuniform = /obj/item/clothing/under/rank/roboticist
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseglasses = /obj/item/clothing/glasses/scanner/meson
+
+/obj/effect/landmark/corpse/vox/ion/space
+	corpsesuit = /obj/item/clothing/suit/space/vox/pressure
+	corpsemask = /obj/item/clothing/mask/breath/vox
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/pressure
 
 //////////////////Misc Corpses///////////////////////////
 
@@ -1124,14 +1274,6 @@
 	possible_names = list("Konfetka", "Florida", "Matilda", "Ogonjok", "Almaz", "Kisulja")
 
 	corpsehelmet = list(/obj/item/clothing/head/ushanka, /obj/item/clothing/head/squatter_hat) //heh
-
-/obj/effect/landmark/corpse/vox
-	name = "Dead vox"
-	mutantrace = "Vox"
-	generate_random_mob_name = 1
-	generate_random_appearance = 1
-	corpsegender = G_BOTH
-	burn_dmg = 100
 
 /obj/effect/landmark/corpse/civilian/New()
 	corpseuniform += existing_typesof(/obj/item/clothing/under/color)

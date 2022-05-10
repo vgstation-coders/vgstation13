@@ -602,6 +602,9 @@
 	desc = "Made with love."
 	icon_state = "wafflecustom"
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/
+	trash = null
+
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cookie
 	name = "cookie"
 	icon_state = "cookiecustom"
@@ -659,6 +662,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin
 	name = "flavored chocolate coin"
 	icon_state = "coincustom"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/New()
+	..()
+	add_component(/datum/component/coinflip)
 
 // Customizable Drinks /////////////////////////////////////////
 

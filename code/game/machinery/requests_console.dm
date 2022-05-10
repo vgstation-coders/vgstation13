@@ -266,7 +266,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				else
 					priority = -1
 		else
-			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
+			to_chat(usr, "<span class='warning'>Invalid characters or no text detected.</span>")
 			dpt = "";
 			msgVerified = ""
 			msgStamped = ""
@@ -274,7 +274,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			priority = -1
 
 	if(href_list["writeAnnouncement"])
-		var/new_message = copytext(reject_bad_text(input(usr, "Write your message:", "Awaiting Input", "")),1,MAX_MESSAGE_LEN)
+		var/new_message = stripped_message(usr, "Write your message:", "Departmental Announcement", "")
 		if(new_message)
 			message = new_message
 			switch(href_list["priority"])
@@ -283,7 +283,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				else
 					priority = -1
 		else
-			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
+			to_chat(usr, "<span class='warning'>Invalid characters or no text detected.</span>")
 			message = ""
 			announceAuth = 0
 			screen = 0

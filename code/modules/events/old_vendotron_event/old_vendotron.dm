@@ -239,7 +239,7 @@
 //Begin spoilers/////
 
 
-/obj/machinery/vending/old_vendotron/emag(mob/user)
+/obj/machinery/vending/old_vendotron/emag_act(mob/user)
 	if(!emagged)
 		emagged = TRUE
 		if(prob(50))
