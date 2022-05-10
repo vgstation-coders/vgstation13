@@ -6,6 +6,7 @@
 	greets = list(GREET_DEFAULT, GREET_CUSTOM)
 	default_admin_voice = "Head Chef"
 	admin_voice_style = "djradio"
+	is_antag = FALSE
 
 /datum/role/jectie_cooker/Greet(greeting, custom)
 	if(!greeting)
