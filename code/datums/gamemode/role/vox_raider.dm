@@ -38,6 +38,10 @@
 	icon_state = "contract0"
 	var/uses = 1
 
+/obj/item/vox_charter/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/item/vox_charter/examine(mob/user, size, show_name)
 	..()
 	var/speaksvox = FALSE
