@@ -122,11 +122,13 @@
 			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
 			user.register_event(/event/moved, src, .proc/mob_moved)
 			user.alpha = 1	//to cloak immediately instead of on the next Life() tick
+			user.invisibility = INVISIBILITY_MAXIMUM
 			user.alphas[CLOAKINGCLOAK] = 1
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
 			user.unregister_event(/event/moved, src, .proc/mob_moved)
 			user.alpha = initial(user.alpha)
+			user.invisibility = 0
 			user.alphas.Remove(CLOAKINGCLOAK)
 
 

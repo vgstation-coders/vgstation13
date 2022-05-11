@@ -651,11 +651,13 @@
 	if(include_clothing)
 		return ..()
 	body_alphas[source_define] = 1
+	invisibility = INVISIBILITY_MAXIMUM
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
 			if(src)
 				body_alphas.Remove(source_define)
+				invisibility = 0
 				regenerate_icons()
 
 
