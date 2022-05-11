@@ -243,6 +243,9 @@ Auto Patrol: []"},
 		if (istype(C, /mob/living/carbon/human))
 			threatlevel = assess_perp(C)
 
+		if (C.alpha == 1 || C.invisibility > SEE_INVISIBLE_LEVEL_TWO)
+			continue
+
 		if (!threatlevel)
 			continue
 
