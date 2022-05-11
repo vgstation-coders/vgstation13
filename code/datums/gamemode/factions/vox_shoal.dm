@@ -252,7 +252,7 @@ var/list/potential_bonus_items = list(
 			results = "The vox raiders didn't beat the previous record of [score_to_beat]."
 
 		for (var/datum/role/R in members)
-			to_chat(R.antag.current, "<span class='notice'>The raid is over. The shoal contract has seized. Enjoy your spoils!</span>")
+			to_chat(R.antag.current, "<span class='notice'>The raid is over. The shoal contract has seized and all collected items and personnel have been converted to shoal funds at the trade window. Enjoy your spoils!</span>")
 		trader_account.money += total_points
 
 	else if (vox_shuttle.returned_home)
