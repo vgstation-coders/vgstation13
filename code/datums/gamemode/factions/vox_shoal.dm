@@ -253,6 +253,7 @@ var/list/potential_bonus_items = list(
 
 		for (var/datum/role/R in members)
 			to_chat(R.antag.current, "<span class='notice'>The raid is over. The shoal contract has seized. Enjoy your spoils!</span>")
+		trader_account.money += total_points
 
 	else if (vox_shuttle.returned_home)
 		completed =  TRUE
