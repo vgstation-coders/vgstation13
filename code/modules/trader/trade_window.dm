@@ -65,6 +65,7 @@
 /obj/structure/trade_window/attackby(obj/item/W, mob/living/carbon/human/user)
 	if(!istype(user))
 		return
+	user.delayNextAttack(8)
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
@@ -130,6 +131,7 @@
 /obj/structure/trade_window/attack_hand(mob/user)
 	if(!isobserver(user) && (!Adjacent(user) || user.incapacitated()))
 		return
+	user.delayNextAttack(8)
 	ui_interact(user)
 
 /obj/structure/trade_window/ui_interact(mob/living/carbon/human/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -323,8 +325,7 @@
 /obj/structure/trade_window/say(var/message)
 	if(!trader_language)
 		trader_language = all_languages[LANGUAGE_VOX]
-	if(world.time>time_last_speech+2 SECONDS)
-		..(message, trader_language)
+	..(message, trader_language)
 	if(world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
 		playsound(loc, pick(voice_vox_sound), 120, 0)
