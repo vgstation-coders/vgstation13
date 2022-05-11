@@ -152,6 +152,8 @@
 
 	var/data[0]
 	if(!aghost)
+		if(closed)
+			say(pick("I'm not opening back up until you fix the air out there!", "Fix the air out there, then we'll talk!"))
 		if(user.get_face_name() == "Unknown")
 			var/datum/organ/external/head/head_organ = user.get_organ(LIMB_HEAD)
 			if(head_organ.disfigured)
@@ -165,7 +167,7 @@
 				return
 
 		else if(!(user.get_face_name() in SStrade.loyal_customers))
-			say("I don't know you. You want to join up? You need someone to vouch for you. Bring a fresh ID and an inkpad to my table when you do.")
+			say(pick("I don't know you. You want to join up? You need someone to vouch for you. Bring a fresh ID and an inkpad to my table when you do.", "You don't look like a member. Bring a fresh ID and an inkpad to my table if you want to do business."))
 			return
 		else
 			greet(user)
@@ -321,7 +323,8 @@
 /obj/structure/trade_window/say(var/message)
 	if(!trader_language)
 		trader_language = all_languages[LANGUAGE_VOX]
-	..(message, trader_language)
+	if(world.time>time_last_speech+2 SECONDS)
+		..(message, trader_language)
 	if(world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
 		playsound(loc, pick(voice_vox_sound), 120, 0)
