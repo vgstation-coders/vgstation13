@@ -203,8 +203,34 @@ var/list/potential_bonus_items = list(
 			total_points -= RULE_OF_THREE(-60, 100, time_left)
 			completed = TRUE
 			return
-		/*
-		// -- Secondly, add points if everyone is alive and well, and send back our prisonners to the mainstation in a shelter.
+
+		// -- Secondly, are all our raiders in the end area?
+		for (var/datum/role/R in members)
+			if(!(get_area(R.antag.current) == end_area))
+				return
+
+		// -- Thirdly, add points if everyone is alive and well, but reset and break out if goal is not met.
+		for (var/mob/living/H in end_area)
+			if (!isvoxraider(H))
+				count_score(H)
+
+		var/datum/objective/abduct/A = locate(/datum/objective/abduct) in objective_holder.GetObjectives()
+		if(!A || got_personnel < A.num)
+			got_personnel = 0
+			score = 0
+			return
+
+		for (var/obj/O in end_area)
+			count_score(O)
+
+		var/datum/objective/steal_priority/SP = locate(/datum/objective/steal_priority) in objective_holder.GetObjectives()
+		if(!SP || got_items < SP.num)
+			got_items = 0
+			score = 0
+			return
+
+		completed = TRUE
+
 		for (var/mob/living/H in end_area)
 			if (isvoxraider(H))
 				if (H.stat)
@@ -213,13 +239,8 @@ var/list/potential_bonus_items = list(
 				else
 					to_chat(H, "<span class='notice'>The raid has been concluded, and you returned safe. This will greatly helps us.</span>")
 					total_points += 500
-			else
-				count_score(H)
 
-		for (var/obj/O in end_area)
-			count_score(O)
-
-		// -- Thirdly, let's compare the score.
+		// -- Fourthly, let's compare the score.
 		var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
 		var/score_to_beat = text2num(vox_raider_data["best_score"])
 
@@ -232,7 +253,6 @@ var/list/potential_bonus_items = list(
 
 		for (var/datum/role/R in members)
 			to_chat(R.antag.current, "<span class='notice'>The raid is over. The shoal contract has seized. Enjoy your spoils!</span>")
-			*/
 
 	else if (vox_shuttle.returned_home)
 		completed =  TRUE
