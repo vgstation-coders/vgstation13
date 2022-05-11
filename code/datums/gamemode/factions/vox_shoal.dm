@@ -136,17 +136,17 @@ var/list/potential_bonus_items = list(
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
 
-	for(var/obj/effect/landmark/A in landmarks_list)
-		if (A.name == "vox_locker")
-			var/obj/structure/closet/loot/L = new(get_turf(A))
-			our_bounty_lockers += L
-			qdel(A)
-			A = null
-			continue
-
-	var/spawn_count = 1
-
 	if(!tradepost_shoal)
+		for(var/obj/effect/landmark/A in landmarks_list)
+			if (A.name == "vox_locker")
+				var/obj/structure/closet/loot/L = new(get_turf(A))
+				our_bounty_lockers += L
+				qdel(A)
+				A = null
+				continue
+
+		var/spawn_count = 1
+
 		for(var/datum/role/vox_raider/V in members)
 			var/datum/mind/synd_mind = V.antag
 			equip_raider(synd_mind.current, spawn_count)
@@ -195,7 +195,7 @@ var/list/potential_bonus_items = list(
 	. = ..()
 	time_left -= 2
 	if (tradepost_shoal)
-		var/area/end_area = locate(/area/trade_floor)
+		var/area/end_area = locate(/area/vox_trading_post/docking)
 		// -- First, are we late ? -100 points for every minute over the clock.
 		if (time_left < 0)
 			for (var/datum/role/R in members)

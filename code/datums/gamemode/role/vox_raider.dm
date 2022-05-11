@@ -69,12 +69,14 @@
 		if (!shoal)
 			shoal = ticker.mode.CreateFaction(/datum/faction/vox_shoal, null, 1)
 			shoal.OnPostSetup()
+			shoal.forgeObjectives()
 		shoal.tradepost_shoal = TRUE
 		var/datum/role/vox_raider/newRaider = new /datum/role/vox_raider()
 		newRaider.tradepost_shoal = TRUE
 		newRaider.AssignToRole(user.mind,1)
 		shoal.HandleRecruitedRole(newRaider)
 		newRaider.OnPostSetup()
+		newRaider.AnnounceObjectives()
 		newRaider.Greet(GREET_DEFAULT)
 		uses--
 	else
