@@ -44,7 +44,7 @@
 	spell_levels[Sp_POWER]++
 	empowered = 1
 
-/proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, var/empowered)
+/proc/ethereal_jaunt(var/mob/living/carbon/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, var/empowered)
 	var/mobloc = get_turf(target)
 	var/previncorp = target.incorporeal_move //This shouldn't ever matter under usual circumstances
 	if(target.incorporeal_move) //they're already jaunting, we have another fix for this but this is sane
@@ -63,13 +63,11 @@
 		target.incorporeal_move = INCORPOREAL_ETHEREAL_IMPROVED
 	else
 		target.incorporeal_move = INCORPOREAL_ETHEREAL
-	target.invisibility = INVISIBILITY_MAXIMUM
+	target.make_invisible(ETHEREAL, 0, TRUE, 125, INVISIBILITY_MAXIMUM)
 	target.flags |= INVULNERABLE
 	var/old_density = target.density
 	target.setDensity(FALSE)
 	target.candrop = 0
-	target.alphas["etheral_jaunt"] = 125 //Spoopy mode to know you are jaunting
-	target.handle_alpha()
 	for(var/obj/abstract/screen/movable/spell_master/SM in target.spell_masters)
 		SM.silence_spells(duration+25)
 	target.delayNextAttack(duration+25)
@@ -97,15 +95,13 @@
 		return
 	//Forcemove him onto the tile and make him visible and vulnerable
 	target.forceMove(mobloc)
-	target.invisibility = 0
+	target.make_visible(ETHEREAL, TRUE)
 	for(var/obj/abstract/screen/movable/spell_master/SM in target.spell_masters)
 		SM.silence_spells(0)
 	target.flags &= ~INVULNERABLE
 	target.setDensity(old_density)
 	target.candrop = 1
 	target.incorporeal_move = previncorp
-	target.alphas -= "etheral_jaunt"
-	target.handle_alpha()
 
 /proc/mass_jaunt(targets, duration, enteranim, exitanim, mist)
 	var/list/jaunts = list()

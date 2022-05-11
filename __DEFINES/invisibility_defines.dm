@@ -1,4 +1,6 @@
 #define INVISIBLESPRAY "invisiblespray"
+#define ETHEREAL "ethereal"
+#define CLOAKINGCLOAK "cloakingcloak"
 #define INVISIBLEPOTION "invisiblepotion"
 #define TRANSPARENCYPOTION "transparencypotion"
 #define HORROR "horror"

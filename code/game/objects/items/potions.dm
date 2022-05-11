@@ -271,16 +271,12 @@
 	icon_state = "blue_minibottle"
 
 /obj/item/potion/transparency/imbibe_effect(mob/user)
-	user.alphas[TRANSPARENCYPOTION] = 125
-	spawn(10 MINUTES)
-		user.alphas -= TRANSPARENCYPOTION
+	user.make_invisible(TRANSPARENCYPOTION,10 MINUTES)
 
-/obj/item/potion/transparency/impact_atom(atom/target)
+/obj/item/potion/transparency/impact_atom(obj/target)
 	if(!ismovable(target))
 		return
-	target.alpha = 125
-	spawn(10 MINUTES)
-		target.alpha = initial(target.alpha)
+	target.make_invisible(TRANSPARENCYPOTION,10 MINUTES)
 
 /obj/item/potion/paralysis
 	name = "potion of minor paralysis"

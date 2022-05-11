@@ -645,19 +645,26 @@
 		if(health_deficiency >= (maxHealth * 0.4))
 			. += (health_deficiency / (maxHealth * 0.25))
 
-/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
+/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
 	if(invisibility || alpha <= 1 || !source_define)
 		return
 	if(include_clothing)
 		return ..()
-	body_alphas[source_define] = 1
+	invisibility = invisibility_value
+	body_alphas[source_define] = alpha_value
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			if(src)
-				body_alphas.Remove(source_define)
-				regenerate_icons()
+			make_visible(source_define, include_clothing)
 
+/mob/living/carbon/make_visible(var/source_define, var/include_clothing)
+	if(!invisibility || !source_define)
+		return
+	if(include_clothing)
+		return ..()
+	if(src)
+		body_alphas.Remove(source_define)
+		regenerate_icons()
 
 /mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
 	if (!..())
