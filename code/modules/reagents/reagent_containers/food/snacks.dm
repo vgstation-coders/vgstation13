@@ -1914,6 +1914,7 @@
 	reagents.add_reagent(MOONROCKS, 4)
 	reagents.add_reagent(TOXICWASTE, 8)
 	reagents.add_reagent(URANIUM, 8)
+	reagents.add_reagent(CORNSYRUP, 2)
 	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
 	bitesize = 2
 
