@@ -2498,6 +2498,14 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/cornsyrup
+	name = "Corn Syrup"
+	id = CORNSYRUP
+	result = CORNSYRUP
+	required_reagents = list(MOONSHINE = 10, SUGAR = 2)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 12
+
 /datum/chemical_reaction/wine
 	name = "Wine"
 	id = WINE
@@ -3739,7 +3747,7 @@
 		sleep(rand(5 SECONDS, 10 SECONDS))
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)	
+	for(var/i=1 to created_volume)
 		new mob2spawn(location)
 
 /datum/chemical_reaction/synthmobhostile //to cut down in duplicate code
@@ -3790,7 +3798,7 @@
 			new mob2spawnA(location)
 		else
 			new mob2spawnB(location)
-			
+
 /datum/chemical_reaction/synthmob/synthmouse
 	name = "Synthmouse"
 	id = "synthmouse"
