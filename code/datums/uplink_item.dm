@@ -1209,6 +1209,20 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/bloodcult_pamphlet/oneuse
 	cost = 60
 
+/datum/uplink_item/syndie_coop/voxraid_charter
+	name = "Vox Raid Charter"
+	desc = "A charter for cousins decreeing the beginning of a raiding on Nanotrasen-held spaces, forming a shoal creed for bringing back wares for many goods! For fluent vox eyes only."
+	item = /obj/item/vox_charter
+	cost = 60
+	discounted_cost = 40
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
+	jobs_with_discount = list("Trader")
+
+/datum/uplink_item/syndie_coop/voxraid_charter/on_item_spawned(var/obj/I, var/mob/user)
+	if(istype(I,/obj/item/vox_charter))
+		var/obj/item/vox_charter/VC = I
+		VC.uses = gives_discount(user.job) || gives_discount(user.dna.species) ? 2 : 3 // Cap it at 20 per head
+
 /datum/uplink_item/syndie_coop/codebreaker
 	name = "Codebreaker"
 	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."

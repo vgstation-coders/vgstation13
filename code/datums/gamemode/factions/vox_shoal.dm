@@ -73,10 +73,13 @@ var/list/potential_bonus_items = list(
 	var/total_points = 0
 	var/list/our_bounty_lockers = list()
 
+	var/tradepost_shoal = FALSE
+
 /datum/faction/vox_shoal/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
-	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
+	if(!tradepost_shoal)
+		load_dungeon(/datum/map_element/dungeon/vox_shuttle)
+		vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
 /datum/faction/vox_shoal/forgeObjectives()
 	var/list/dept_of_choice = pick(
@@ -143,9 +146,10 @@ var/list/potential_bonus_items = list(
 
 	var/spawn_count = 1
 
-	for(var/datum/role/vox_raider/V in members)
-		var/datum/mind/synd_mind = V.antag
-		equip_raider(synd_mind.current, spawn_count)
+	if(!tradepost_shoal)
+		for(var/datum/role/vox_raider/V in members)
+			var/datum/mind/synd_mind = V.antag
+			equip_raider(synd_mind.current, spawn_count)
 
 /datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
 	vox.age = rand(12,20)
@@ -190,7 +194,47 @@ var/list/potential_bonus_items = list(
 		return
 	. = ..()
 	time_left -= 2
-	if (vox_shuttle.returned_home)
+	if (tradepost_shoal)
+		var/area/end_area = locate(/area/trade_floor)
+		// -- First, are we late ? -100 points for every minute over the clock.
+		if (time_left < 0)
+			for (var/datum/role/R in members)
+				to_chat(R.antag.current, "<span class='warning'>The raid took too long. This will draw Nanotrasen attention on us.</span>")
+			total_points -= RULE_OF_THREE(-60, 100, time_left)
+			completed = TRUE
+			return
+		/*
+		// -- Secondly, add points if everyone is alive and well, and send back our prisonners to the mainstation in a shelter.
+		for (var/mob/living/H in end_area)
+			if (isvoxraider(H))
+				if (H.stat)
+					to_chat(H, "<span class='notice'>The raid has been concluded, but you were critically injured. The shoal will remember you.</span>")
+					total_points += 250
+				else
+					to_chat(H, "<span class='notice'>The raid has been concluded, and you returned safe. This will greatly helps us.</span>")
+					total_points += 500
+			else
+				count_score(H)
+
+		for (var/obj/O in end_area)
+			count_score(O)
+
+		// -- Thirdly, let's compare the score.
+		var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
+		var/score_to_beat = text2num(vox_raider_data["best_score"])
+
+		if (total_points > score_to_beat)
+			for (var/datum/role/R in members)
+				to_chat(R.antag.current, "<span class='notice'><b>You have beaten the /vg/station heist record.</b> Congratulations!</span>")
+				results = "The vox raiders were <b>better</b> than the previous record of [score_to_beat], which was on [vox_raider_data["MM"]]/[vox_raider_data["DD"]]/[vox_raider_data["YY"]]."
+		else
+			results = "The vox raiders didn't beat the previous record of [score_to_beat]."
+
+		for (var/datum/role/R in members)
+			to_chat(R.antag.current, "<span class='notice'>The raid is over. The shoal contract has seized. Enjoy your spoils!</span>")
+			*/
+
+	else if (vox_shuttle.returned_home)
 		completed =  TRUE
 		var/area/end_area = locate(/area/shuttle/vox/station)
 		// -- First, are we late ? -100 points for every minute over the clock.
