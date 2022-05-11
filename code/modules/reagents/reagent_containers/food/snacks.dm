@@ -1610,7 +1610,7 @@
 	reagents.add_reagent(NUTRIMENT,2)
 	reagents.add_reagent(DISCOUNT,2)
 	reagents.add_reagent(TOXIN,2)
-	reagents.add_reagent(SUGAR,4)
+	reagents.add_reagent(CORNSYRUP,4)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/meatpie
 	name = "Meat-pie"

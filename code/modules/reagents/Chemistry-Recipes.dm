@@ -123,9 +123,9 @@
 	name = "Discount Dan's Special Sauce"
 	id = DISCOUNT
 	result = DISCOUNT
-	required_reagents = list(IRRADIATEDBEANS = 1, TOXICWASTE = 1, REFRIEDBEANS = 1, MUTATEDBEANS = 1, BEFF = 1, HORSEMEAT = 1, \
+	required_reagents = list(IRRADIATEDBEANS = 1, TOXICWASTE = 1, REFRIEDBEANS = 1, MUTATEDBEANS = 1, BEFF = 1, HORSEMEAT = 1, CORNSYRUP = 1, \
 							 MOONROCKS = 1, OFFCOLORCHEESE = 1, BONEMARROW = 1, GREENRAMEN = 1, GLOWINGRAMEN = 1, DEEPFRIEDRAMEN = 1)
-	result_amount = 12
+	result_amount = 13
 
 /datum/chemical_reaction/peptobismol
 	name = "Peptobismol"

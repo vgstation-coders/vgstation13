@@ -475,7 +475,7 @@
 			name = "Groans Soda: Energy Shot"
 			desc = "Warning: The Groans Energy Blend(tm), may be toxic to those without constant exposure to chemical waste. Drink responsibly."
 			icon_state += "_energy"
-			reagents.add_reagent(SUGAR, 10)
+			reagents.add_reagent(CORNSRYUP, 10)
 			reagents.add_reagent(CHEMICAL_WASTE, 10)
 		if(5)
 			name = "Groans Soda: Double Dan"
@@ -504,7 +504,7 @@
 			reagents.add_reagent(RUM, 30)
 		if(4)
 			name = "Filk: Sugar Blast Editon"
-			reagents.add_reagent(SUGAR, 30)
+			reagents.add_reagent(CORNSYRUP, 30)
 			reagents.add_reagent(RADIUM, 10) // le epik fallout may mays
 			reagents.add_reagent(TOXICWASTE, 10)
 		if(5)
@@ -529,7 +529,7 @@
 			reagents.add_reagent(FROSTOIL, 30)
 		if(3)
 			name = "Grifeo: Crystallic"
-			reagents.add_reagent(SUGAR, 20)
+			reagents.add_reagent(CORNSRYUP, 20)
 			reagents.add_reagent(ICE, 20, reagtemp = T0C)
 			reagents.add_reagent(SPACE_DRUGS, 20)
 		if(4)
