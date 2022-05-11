@@ -189,13 +189,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "office supply crate"
 	group = "Supplies"
 
-/datum/supply_packs/heaterscoolers
-	name = "Heater and AC"
+/datum/supply_packs/space_heaters
+	name = "Space Heaters"
 	contains = list(/obj/machinery/space_heater,
+					/obj/machinery/space_heater)
+	cost = 20
+	containertype = /obj/structure/largecrate
+	containername = "space heater crate"
+	group = "Supplies"
+
+/datum/supply_packs/air_conditioners
+	name = "Air Conditioners"
+	contains = list(/obj/machinery/space_heater/air_conditioner,
 					/obj/machinery/space_heater/air_conditioner)
 	cost = 20
 	containertype = /obj/structure/largecrate
-	containername = "temperature control crate"
+	containername = "air conditioner crate"
 	group = "Supplies"
 
 /datum/supply_packs/porcelain
@@ -1515,7 +1524,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Portable Scrubber and Pump"
 	contains = list(/obj/machinery/portable_atmospherics/pump,
 					/obj/machinery/portable_atmospherics/scrubber)
-	cost = 20
+	cost = 25
 	containertype = /obj/structure/largecrate
 	containername = "portable atmospherics crate"
 	group = "Engineering"
