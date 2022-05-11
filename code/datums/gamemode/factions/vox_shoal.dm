@@ -254,8 +254,11 @@ var/list/potential_bonus_items = list(
 		for (var/datum/role/R in members)
 			to_chat(R.antag.current, "<span class='notice'>The raid is over. The shoal contract has seized and all collected items and personnel have been converted to shoal funds at the trade window. Enjoy your spoils!</span>")
 		trader_account.money += total_points
-		var/datum/trade_product/voxraid/VR = new
-		SStrade.all_trade_merch.Add(VR)
+		for(var/path in subtypesof(/datum/trade_product))
+			var/datum/trade_product/TP = path
+			if(!(initial(TP.raid_required)))
+				continue
+			all_trade_merch += new path
 
 	else if (vox_shuttle.returned_home)
 		completed =  TRUE
