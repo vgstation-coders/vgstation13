@@ -65,7 +65,6 @@
 /obj/structure/trade_window/attackby(obj/item/W, mob/living/carbon/human/user)
 	if(!istype(user))
 		return
-	user.delayNextAttack(8)
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
