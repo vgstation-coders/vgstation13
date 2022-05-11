@@ -76,8 +76,8 @@
 		newRaider.AssignToRole(user.mind,1)
 		shoal.HandleRecruitedRole(newRaider)
 		newRaider.OnPostSetup()
-		newRaider.AnnounceObjectives()
 		newRaider.Greet(GREET_DEFAULT)
+		newRaider.AnnounceObjectives()
 		uses--
 	else
 		to_chat(user, "<span class='vox'>You seem to already have pact active with raiding. Maybe ask again some other time?</span>")
