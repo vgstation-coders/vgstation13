@@ -254,6 +254,8 @@ var/list/potential_bonus_items = list(
 		for (var/datum/role/R in members)
 			to_chat(R.antag.current, "<span class='notice'>The raid is over. The shoal contract has seized and all collected items and personnel have been converted to shoal funds at the trade window. Enjoy your spoils!</span>")
 		trader_account.money += total_points
+		var/datum/trade_product/voxraid/VR = new
+		SStrade.all_trade_merch.Add(VR)
 
 	else if (vox_shuttle.returned_home)
 		completed =  TRUE
@@ -422,6 +424,17 @@ var/list/potential_bonus_items = list(
 	new /obj/item/clothing/glasses/hud/health(src)
 	new /obj/item/tool/circular_saw(src)
 	new /obj/item/weapon/gun/dartgun/vox/medical(src)
+
+/obj/item/weapon/storage/box/large/vox_equipment/random/New()
+	..()
+	var/boxtype = pick(
+		/obj/item/weapon/storage/box/large/vox_equipment/raider,
+		/obj/item/weapon/storage/box/large/vox_equipment/engineer,
+		/obj/item/weapon/storage/box/large/vox_equipment/saboteur,
+		/obj/item/weapon/storage/box/large/vox_equipment/medic,
+	)
+	new boxtype(loc)
+	qdel(src)
 
 /obj/machinery/vending/raider
 	name = "\improper Raider Surplus"

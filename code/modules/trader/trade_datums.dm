@@ -12,6 +12,7 @@
 	var/totalsold = 0
 	var/flux_rate = 1
 	var/sales_category = TRADE_SINGLE
+	var/raid_required = FALSE
 
 /datum/trade_product/proc/current_price(mob/user)
 	var/loyalty_multiplier = 1
@@ -160,3 +161,11 @@
 	restocks_left = 3
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/voxraid
+	name = "vox raiding kit"
+	path = /obj/item/weapon/storage/box/large/vox_equipment/random
+	baseprice = 100
+	maxunits = 3
+	restocks_left = 3
+	sales_category = TRADE_VARIETY
+	raid_required = TRUE

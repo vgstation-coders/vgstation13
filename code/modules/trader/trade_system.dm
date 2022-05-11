@@ -20,6 +20,9 @@ var/datum/subsystem/trade_system/SStrade
 
 /datum/subsystem/trade_system/Initialize(timeofday)
 	for(var/path in subtypesof(/datum/trade_product))
+		var/datum/trade_product/TP = path
+		if(initial(TP.raid_required))
+			continue
 		all_trade_merch += new path
 	market_flux(FALSE)
 	..()
