@@ -195,13 +195,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			src.delayedRegen()
 		return 0
 
-	if(health < 1 && stat != DEAD)
+	if(health <= 0 && stat != DEAD)
 		death()
 		return 0
 
 	life_tick++
 
-	health = min(health, maxHealth)
+	update_health()
 
 	if(stunned)
 		AdjustStunned(-1)
@@ -342,6 +342,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(!atmos_suitable)
 		adjustOxyLoss(unsuitable_atmos_damage)
+	else
+		adjustOxyLoss(-unsuitable_atmos_damage)
 
 	if(bodytemperature < minbodytemp)
 		temperature_alert = TEMP_ALARM_COLD_STRONG
@@ -614,7 +616,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	bruteloss += damage
+	bruteloss = max(0, bruteloss + damage)
 	update_health()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
@@ -629,7 +631,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	fireloss += damage
+	fireloss = max(0, fireloss + damage)
 	update_health()
 
 /mob/living/simple_animal/adjustOxyLoss(damage)
@@ -638,7 +640,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(INVOKE_EVENT(src, /event/damaged, "kind" = OXY, "amount" = damage))
 		return 0
-	oxyloss += damage
+	oxyloss = max(0, oxyloss + damage)
 	update_health()
 
 /mob/living/simple_animal/proc/update_health()
