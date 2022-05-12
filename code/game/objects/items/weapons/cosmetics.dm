@@ -358,7 +358,7 @@
 	var/static/list/prohibited_objects = list( //For fun removal
 		)
 
-/obj/item/weapon/invisible_spray/preattack(obj/target, mob/user, proximity_flag, click_parameters)
+/obj/item/weapon/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
 	if(!istype(target))
@@ -374,12 +374,17 @@
 		return 1
 	if(permanent)
 		invisible_time = 0
-	if(target == user)
+	var/mob/M = target
+	if(M == user)
 		to_chat(user, "You spray yourself with \the [src].")
 		user.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_MAXIMUM)
-	else
-		to_chat(user, "You spray \the [target] with \the [src].")
-		target.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_MAXIMUM)
+	else if (ismob(M))
+		to_chat(user, "You spray [M] with \the [src].")
+		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_MAXIMUM)
+	var/obj/O = target
+	if(isobj(O))
+		to_chat(user, "You spray \the [O] with \the [src].")
+		O.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_MAXIMUM)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
