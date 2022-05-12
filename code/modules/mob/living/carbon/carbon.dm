@@ -658,7 +658,7 @@
 			make_visible(source_define, include_clothing)
 
 /mob/living/carbon/make_visible(var/source_define, var/include_clothing)
-	if(!invisibility || !source_define)
+	if(!invisibility && alpha == 255 || !source_define)
 		return
 	if(include_clothing)
 		return ..()
