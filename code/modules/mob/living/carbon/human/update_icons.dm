@@ -155,7 +155,8 @@ var/global/list/damage_icon_parts = list()
 	if(monkeyizing)
 		return
 	var/image/standing_image = image('icons/mob/dam_human.dmi', "blank")
-
+	if(body_alphas <= 1)
+		return
 	// blend the individual damage states with our icons
 	for(var/datum/organ/external/O in organs)
 		if(!(O.status & ORGAN_DESTROYED))
@@ -183,12 +184,12 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/proc/update_body(var/update_icons=1)
 	if(monkeyizing)
 		return
-
+		
 	var/husk_color_mod = rgb(96,88,80)
 	var/hulk_color_mod = rgb(48,224,40)
 	var/necrosis_color_mod = rgb(10,50,0)
 
-	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
+	var/husk = (M_HUSK in src.mutations)
 	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isumbra(src) && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (M_SKELETON in src.mutations)
