@@ -875,10 +875,14 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 //Sets a new maxHealth for a mob and rescales that mob's health and oxy damage scaling accordingly.
 /mob/living/simple_animal/proc/rescaleHealth(var/newMaxHealth = maxHealth)
 	if(maxHealth)
-		var/oldMaxHealth = maxHealth
+		var/scaleFactor = (newMaxHealth / maxHealth)
 		maxHealth = newMaxHealth
-		health *= (newMaxHealth / oldMaxHealth)
-		oxy_damage_modifier *= (newMaxHealth / oldMaxHealth)
+		bruteloss *= scaleFactor
+		fireloss *= scaleFactor
+		toxloss *= scaleFactor
+		oxyloss *= scaleFactor
+		oxy_damage_modifier *= scaleFactor
+		update_health()
 		return TRUE
 	else
 		return FALSE
