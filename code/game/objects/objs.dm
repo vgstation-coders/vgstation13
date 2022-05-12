@@ -686,6 +686,7 @@ a {
 		return
 	invisibility = invisibility_value
 	alphas[source_define] = alpha_value
+	handle_alpha()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.regenerate_icons()
@@ -709,7 +710,7 @@ a {
 		alpha = 255
 	else
 		sortTim(alphas, /proc/cmp_numeric_asc,1)
-		alpha = alphas[1]
+		alpha = alphas[alphas[1]]
 
 /obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
 	var/material_mod = mat ? mat.quality_mod : material_type ? material_type.quality_mod : 1
