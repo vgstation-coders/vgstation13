@@ -674,7 +674,7 @@
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/C = M
-			C.make_visible(INVISIBLESPRAY,TRUE)
+			C.make_visible(INVISIBLESPRAY,FALSE)
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
