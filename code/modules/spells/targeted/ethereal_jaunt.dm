@@ -191,14 +191,13 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
-	if (user.locked_to)
-		to_chat(user, "<span class='warning'>We are restrained!</span>")
-		return FALSE
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
+		return FALSE
+	if (!isvampire(user))
 		return FALSE
 
 /spell/targeted/ethereal_jaunt/vamp/cast(list/targets, var/mob/user)
-	var/datum/role/vampire/V = isvampire(user)
+	var/datum/role/vampire/V = user.mind.GetRole(VAMPIRE)
 	var/mob/living/simple_animal/hostile/scarybat/SB = new(get_turf(user))
 	SB.vamp_fac = V.faction
 	V.faction.members += SB

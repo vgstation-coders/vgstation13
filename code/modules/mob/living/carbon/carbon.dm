@@ -646,6 +646,7 @@
 			. += (health_deficiency / (maxHealth * 0.25))
 
 /mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
+	//INVISIBILITY_LEVEL_ONE to INVISIBILITY_MAXIMUM for invisibility
 	if(invisibility || alpha <= 1 || !source_define)
 		return
 	if(include_clothing)
