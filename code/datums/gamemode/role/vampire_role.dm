@@ -301,7 +301,7 @@
 	if(H.stat != DEAD)
 		iscloaking = FALSE
 	if(!iscloaking)
-		H.alphas["vampire_cloak"] = 255
+		H.alphas[VAMPIRECLOAK] = 255
 		H.color = "#FFFFFF"
 		return FALSE
 
@@ -312,9 +312,9 @@
 		return TRUE
 	else
 		if(locate(/datum/power/vampire/shadow) in current_powers)
-			H.alphas["vampire_cloak"] = round((255 * 0.15))
+			H.alphas[VAMPIRECLOAK] = round((255 * 0.15))
 		else
-			H.alphas["vampire_cloak"] = round((255 * 0.80))
+			H.alphas[VAMPIRECLOAK] = round((255 * 0.80))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
 	if(H.stat == DEAD)

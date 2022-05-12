@@ -3,4 +3,5 @@
 #define CLOAKINGCLOAK "cloakingcloak"
 #define INVISIBLEPOTION "invisiblepotion"
 #define TRANSPARENCYPOTION "transparencypotion"
+#define VAMPIRECLOAK "vampire_cloak"
 #define HORROR "horror"
