@@ -614,10 +614,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-
-	health = clamp(health - damage, 0, maxHealth)
-	if(health < 1 && stat != DEAD)
-		death()
+	bruteloss += damage
+	update_health()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
 	damage *= burn_damage_modifier
@@ -631,9 +629,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	health = clamp(health - damage, 0, maxHealth)
-	if(health < 1 && stat != DEAD)
-		death()
+	fireloss += damage
+	update_health()
 
 /mob/living/simple_animal/adjustOxyLoss(damage)
 	damage *= oxy_damage_modifier
@@ -641,10 +638,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(INVOKE_EVENT(src, /event/damaged, "kind" = OXY, "amount" = damage))
 		return 0
-	health = clamp(health - damage, 0, maxHealth)
-	if(health < 1 && stat != DEAD)
-		death()
+	oxyloss += damage
+	update_health()
 
+/mob/living/simple_animal/proc/update_health()
+	health = clamp(maxHealth - bruteloss - fireloss - toxloss - oxyloss, 0, maxHealth) 
+	if(health <= 0 && stat != DEAD)
+		death()
 
 /mob/living/simple_animal/proc/skinned()
 	if(butchering_drops)
