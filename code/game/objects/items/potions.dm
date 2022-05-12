@@ -267,7 +267,7 @@
 	name = "potion of reduced visibility"
 	desc = "Become slightly transparent for ten minutes."
 	icon_state = "blue_minibottle"
-	time = 10 MINUTES
+	var/time = 10 MINUTES
 
 /obj/item/potion/transparency/imbibe_effect(mob/user)
 	user.make_invisible(TRANSPARENCYPOTION, time, TRUE, 125)
