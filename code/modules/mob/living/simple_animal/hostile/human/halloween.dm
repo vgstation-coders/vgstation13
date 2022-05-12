@@ -183,7 +183,7 @@
 			to_chat(user, "<span class='warning'>You struggle furiously against the [src]'s grip!</span>")
 			if(do_after(user, src, 10)) // 1 second resist time, 50% chance of success
 				if(prob(50))
-					to_chat(user, "<span class='warning'>The [src] manages to keep its hold on you! Its teeth are still firmly lodged in your neck!</span>")
+					to_chat(user, "<span class='warning'>The [src] manages to keep their hold on you! Their teeth are still firmly lodged in your neck!</span>")
 				else
 					to_chat(user, "<span class='warning'>You yank the [src]'s teeth out of your neck with a mighty effort and shove them away, freeing yourself!</span>")
 					unlock_atom(H)
@@ -192,7 +192,7 @@
 			to_chat(user, "<span class='warning'>You struggle to get free of the [src]'s bloodsucking latch!</span>")
 			if(do_after(user, src, 10)) // 1 second resist time, 25% chance of success with no other modifiers
 				if(prob(75))
-					to_chat(user, "<span class='warning'>You fail to get free of the [src]'s grip, and it only seems to bite down on your neck harder!</span>")
+					to_chat(user, "<span class='warning'>You fail to get free of the [src]'s grip, and they only bite down on your neck harder!</span>")
 				else
 					to_chat(user, "<span class='warning'>You manage to pry the [src]'s teeth off your neck, freeing yourself!</span>")
 					unlock_atom(H)
