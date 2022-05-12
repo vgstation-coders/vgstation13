@@ -615,7 +615,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		damage = damage * 2
 
-	health = clamp(health - brute_damage_modifier * damage, 0, maxHealth)
+	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 
