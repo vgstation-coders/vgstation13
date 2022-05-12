@@ -273,7 +273,7 @@
 	user.make_invisible(TRANSPARENCYPOTION, time, TRUE, 125)
 
 /obj/item/potion/transparency/impact_atom(obj/target)
-	target.make_invisible(INVISIBLEPOTION, time, 125)
+	target.make_invisible(TRANSPARENCYPOTION, time, 125)
 
 /obj/item/potion/paralysis
 	name = "potion of minor paralysis"
