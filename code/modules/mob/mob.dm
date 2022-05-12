@@ -2115,7 +2115,6 @@ Use this proc preferably at the end of an equipment loadout
 		sortTim(alphas, /proc/cmp_numeric_asc,1)
 		alpha = alphas[alphas[1]]
 
-
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(paxban_isbanned(ckey))
 		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")

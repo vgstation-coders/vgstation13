@@ -273,10 +273,12 @@
 /obj/item/potion/transparency/imbibe_effect(mob/user)
 	user.make_invisible(TRANSPARENCYPOTION,10 MINUTES, TRUE, 125)
 
-/obj/item/potion/transparency/impact_atom(obj/target)
+/obj/item/potion/transparency/impact_atom(atom/target)
 	if(!ismovable(target))
 		return
-	target.make_invisible(TRANSPARENCYPOTION,10 MINUTES, 125)
+	target.alpha = 125
+	spawn(10 MINUTES)
+		target.alpha = initial(target.alpha)
 
 /obj/item/potion/paralysis
 	name = "potion of minor paralysis"
