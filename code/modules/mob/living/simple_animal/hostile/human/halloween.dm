@@ -273,7 +273,6 @@
 	visible_message("<span class='warning'>\The [src] lets out one last ear piercing shriek, before collapsing into dust!</span>")
 	playsound(src.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
 	for(var/mob/living/carbon/human/H in view(7, src))
-		message_admins("Trying to shriek [H]. Affected: [H.vampire_affected()]; Earprot: [H.earprot()]")
 		if((H.vampire_affected() <= 0) || H.earprot())
 			continue
 		to_chat(H, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
