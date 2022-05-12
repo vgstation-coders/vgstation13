@@ -2093,8 +2093,7 @@ Use this proc preferably at the end of an equipment loadout
 		return
 	invisibility = invisibility_value
 	alphas[source_define] = alpha_value
-	if (alpha_value <= 1)
-		handle_alpha()
+	handle_alpha()
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
@@ -2114,7 +2113,8 @@ Use this proc preferably at the end of an equipment loadout
 		alpha = 255
 	else
 		sortTim(alphas, /proc/cmp_numeric_asc,1)
-		alpha = alphas[1]
+		alpha = alphas[alphas[1]]
+
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(paxban_isbanned(ckey))
