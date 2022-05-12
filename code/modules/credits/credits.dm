@@ -282,7 +282,7 @@ var/global/datum/credits/end_credits = new
 			archive_keys_check += H.key
 			corpses += H.real_name
 	for(var/datum/body_archive/B in body_archives)
-		if(B.mob_type && (!ishuman(B.mob_type) && !issilicon(B.mob_type)) || (B.key && (B.key in archive_keys_check)))
+		if((B.mob_type && !ishuman(B.mob_type) && !issilicon(B.mob_type)) || (B.key && (B.key in archive_keys_check)))
 			continue
 		else if(B.name)
 			corpses += B.name
