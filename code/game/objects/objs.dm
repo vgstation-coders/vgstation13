@@ -679,10 +679,10 @@ a {
 					sleep(i)
 		return 1
 
-/obj/make_invisible(var/source_define, var/time = 0, var/alpha_value = 1, var/invisibility_value = 0)
+/obj/proc/make_invisible(var/source_define, var/time = 0, var/alpha_value = 1, var/invisibility_value = 0)
 	//INVISIBILITY_MAXIMUM is a value of 100 for invisibility_value
 	//alpha_value = 1 hides the sprite
-	if(..() || !source_define)
+	if(invisibility || alpha <= 1 || !source_define)
 		return
 	invisibility = invisibility_value
 	alphas[source_define] = alpha_value
@@ -693,8 +693,8 @@ a {
 		spawn(time)
 			make_visible(source_define)
 
-/obj/make_visible(var/source_define)
-	if(!source_define)
+/obj/proc/make_visible(var/source_define)
+	if(!invisibility && alpha == 255 || !source_define)
 		return
 	if(src)
 		invisibility = 0

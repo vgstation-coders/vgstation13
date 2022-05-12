@@ -1101,13 +1101,6 @@
 			for(var/client/C in clients)
 				C.images -= hitmarker
 
-//Makes things practically invisible, not actually invisible. Alpha is set to 1.
-/atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
-	return invisibility || alpha <= 1	//already invisible
-
-/atom/movable/proc/make_visible(var/source_define)	//Makes things visible
-	return !invisibility || alpha == 255	//already visible
-
 /atom/movable/proc/break_all_tethers()	//Breaks all tethers
 	if(current_tethers)
 		for(var/datum/tether/T in current_tethers)

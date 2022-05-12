@@ -2088,8 +2088,8 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
-/mob/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
-	if(..() || !source_define)
+/mob/proc/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
+	if(invisibility || alpha <= 1 || !source_define)
 		return
 	invisibility = invisibility_value
 	alphas[source_define] = alpha_value
@@ -2099,8 +2099,8 @@ Use this proc preferably at the end of an equipment loadout
 		spawn(time)
 			make_visible(source_define)
 
-/mob/make_visible(var/source_define)
-	if(!source_define)
+/mob/proc/make_visible(var/source_define)
+	if(!invisibility && alpha == 255 || !source_define)
 		return
 	if(src)
 		invisibility = 0
