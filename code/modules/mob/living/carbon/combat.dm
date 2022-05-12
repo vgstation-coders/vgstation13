@@ -27,9 +27,10 @@
 		return FALSE
 	target_zone = null
 	var/power = I.force
+	if(isgrey(user))
+		power *= 0.8
 	if (crit)
 		power *= CRIT_MULTIPLIER
-
 	if(def_zone)
 		target_zone = get_zone_with_miss_chance(def_zone, src)
 	else if(originator)
