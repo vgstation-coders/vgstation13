@@ -155,8 +155,7 @@ var/global/list/damage_icon_parts = list()
 	if(monkeyizing)
 		return
 	var/image/standing_image = image('icons/mob/dam_human.dmi', "blank")
-	if(body_alphas <= 1)
-		return
+
 	// blend the individual damage states with our icons
 	for(var/datum/organ/external/O in organs)
 		if(!(O.status & ORGAN_DESTROYED))
@@ -174,8 +173,6 @@ var/global/list/damage_icon_parts = list()
 	O.overlays.len = 0
 	O.overlays += standing_image
 	obj_to_plane_overlay(O,DAMAGE_LAYER)
-
-
 
 	if(update_icons)
 		update_icons()
