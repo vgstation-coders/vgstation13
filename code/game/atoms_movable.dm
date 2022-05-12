@@ -1106,7 +1106,7 @@
 	return invisibility || alpha <= 1	//already invisible
 
 /atom/movable/proc/make_visible(var/source_define)	//Makes things visible
-	return !invisibility || alpha > 1	//already visible
+	return !invisibility || alpha == 255	//already visible
 
 /atom/movable/proc/break_all_tethers()	//Breaks all tethers
 	if(current_tethers)

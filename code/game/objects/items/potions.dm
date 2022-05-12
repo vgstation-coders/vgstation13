@@ -130,7 +130,7 @@
 /obj/item/potion/invisibility/impact_atom(atom/target)
 	if(ismovable(target))
 		var/atom/movable/AM = target
-		AM.make_invisible(INVISIBLEPOTION, time)
+		AM.make_invisible(INVISIBLEPOTION, time, include_clothes, 1, INVISIBILITY_MAXIMUM)
 
 /obj/item/potion/invisibility/major
 	name = "potion of major invisibility"
@@ -271,12 +271,12 @@
 	icon_state = "blue_minibottle"
 
 /obj/item/potion/transparency/imbibe_effect(mob/user)
-	user.make_invisible(TRANSPARENCYPOTION,10 MINUTES)
+	user.make_invisible(TRANSPARENCYPOTION,10 MINUTES, TRUE, 125)
 
 /obj/item/potion/transparency/impact_atom(obj/target)
 	if(!ismovable(target))
 		return
-	target.make_invisible(TRANSPARENCYPOTION,10 MINUTES)
+	target.make_invisible(TRANSPARENCYPOTION,10 MINUTES, 125)
 
 /obj/item/potion/paralysis
 	name = "potion of minor paralysis"

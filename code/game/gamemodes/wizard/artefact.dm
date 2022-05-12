@@ -118,7 +118,7 @@
 		if(wielded)
 			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
 			user.register_event(/event/moved, src, .proc/mob_moved)
-			user.make_invisible(CLOAKINGCLOAK, 0, TRUE)
+			user.make_invisible(CLOAKINGCLOAK, 0, TRUE, 1, INVISIBILITY_MAXIMUM)
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
 			user.unregister_event(/event/moved, src, .proc/mob_moved)

@@ -379,7 +379,7 @@
 	else
 		to_chat(user, "You spray \the [target] with \the [src].")
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
-	target.make_invisible(INVISIBLESPRAY, invisible_time)
+	target.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_MAXIMUM)
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))
 		return 0

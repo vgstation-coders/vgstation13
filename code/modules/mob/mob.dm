@@ -2100,7 +2100,7 @@ Use this proc preferably at the end of an equipment loadout
 			make_visible(source_define)
 
 /mob/make_visible(var/source_define)
-	if(..() || !source_define)
+	if(!source_define)
 		return
 	if(src)
 		invisibility = 0
