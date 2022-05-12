@@ -39,4 +39,4 @@
 
 /datum/species/horror/handle_post_spawn(var/mob/living/carbon/human/H)
 	//hide hair and beard
-	H.make_invisible(HORROR, 2 MINUTES, TRUE, 1, INVISIBILITY_MAXIMUM)
+	H.make_invisible(HORROR, 2 MINUTES)
