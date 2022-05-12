@@ -2093,7 +2093,8 @@ Use this proc preferably at the end of an equipment loadout
 		return
 	invisibility = invisibility_value
 	alphas[source_define] = alpha_value
-	handle_alpha()
+	if (alpha_value <= 1)
+		handle_alpha()
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
