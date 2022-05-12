@@ -13,9 +13,17 @@
 //Attempt to perform suicide with an item nearby or in-hand
 //Return 0 if the suicide failed, return 1 if successful. Returning 1 does not perform the default suicide afterwards
 /mob/living/proc/attempt_object_suicide(var/obj/suicide_object)
-	if(suicide_object) //We need the item to be there to begin, otherwise abort
+	if(suicide_object && suicide_object.mouse_opacity && !suicide_object.invisibility) //We need the item to be there and tangible to begin, otherwise abort
 		var/damagetype = suicide_object.suicide_act(src)
 		if(damagetype)
+			if(!Adjacent(suicide_object)) // Get near it if we aren't
+				var/old_canmove = canmove
+				canmove = FALSE // No breaking the mob out of this stupor
+				while(!Adjacent(suicide_object) && mind && mind.suiciding) // Getting dosed with paroxetine or something should break this
+					sleep(2)
+					if(!(step_towards(src,suicide_object))) // Extra bit of sanity
+						return
+				canmove = old_canmove
 			var/damage_mod = count_set_bitflags(damagetype) // How many damage types are to be applied
 
 			if(damagetype & SUICIDE_ACT_CUSTOM)
@@ -38,7 +46,10 @@
 			return 1
 
 /mob/living/proc/handle_suicide_bomb_cause()
+	var/old_canmove = canmove
+	canmove = FALSE // Prevent moving away and ruining this
 	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
+	canmove = old_canmove
 
 	if(custom_message)
 		return "FOR [uppertext(custom_message)]!"
@@ -120,39 +131,70 @@
 	if(!held_item)
 		held_item = get_inactive_hand()
 
-	if(!attempt_object_suicide(held_item)) //Failed that, attempt alternate methods
-		var/list/obj/nearbystuff = list() //Check stuff in front of us
-		for(var/obj/O in get_step(loc,dir))
-			nearbystuff += O
-		log_debug("Nearby stuff in front of [src]: [counted_english_list(nearbystuff)]")
-		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item))
-				if(istype(chosen_item,/obj/item))
-					var/obj/item/I = chosen_item
-					put_in_hands(I)
-				return
-		nearbystuff = list()
-		for(var/obj/O in adjacent_atoms(src)) //Failed that, check anything around us
-			nearbystuff += O
-		log_debug("Nearby stuff around [src]: [counted_english_list(nearbystuff)]")
-		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item))
-				if(istype(chosen_item,/obj/item))
-					var/obj/item/I = chosen_item
-					put_in_hands(I)
-				return
-		log_debug("Held item by [src]: [held_item]")
-		if(Holiday == APRIL_FOOLS_DAY)
-			visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
-		else
-			visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
-								"<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
-								"<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
-								"<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
-		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
-		updatehealth()
+	if(attempt_object_suicide(held_item)) //Failing this, attempt alternate methods below
+		return
+	var/turf/T = get_turf(src)
+	var/turf/T2 = get_step(T,dir)
+	if(attempt_ranged_suicide(T.contents)) //Check stuff below us
+		return
+	if(attempt_ranged_suicide(T2.contents)) //Failed that, check stuff in front of us
+		return
+	var/below_and_in_front = T.contents + T2.contents
+	if(attempt_ranged_suicide(view(1), below_and_in_front)) //Failed that, check anything around us
+		return
+	for(var/i in 2 to 7) //Failed that, check anything nearby, starting in the 2 view range increasing to 7 outwards
+		if(attempt_ranged_suicide(view(i), view(i-1)))
+			return
+	if(Holiday == APRIL_FOOLS_DAY) // Failed that, do a miscellaneous one
+		visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
+	else
+		visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
+	adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+	updatehealth()
+
+// Proc to check the viability of an item suicide with a thing nearby
+/mob/living/proc/attempt_ranged_suicide(set_range = null, already_checked_range = null)
+	if(!set_range) // Essential for this function, second one not so
+		return
+	var/list/obj/nearbystuff = list()
+	for(var/obj/O in set_range)
+		if(already_checked_range && (O in already_checked_range))
+			continue // Exclude items in this range if it exists
+		nearbystuff += O
+	if(nearbystuff.len) // No log spam if we don't need it
+		log_debug("Nearby stuff in range of [src]: [counted_english_list(nearbystuff)]")
+	var/list/obj/rejectedstuff = list() // Just for logging
+	while(nearbystuff.len)
+		var/obj/chosen_item = pick_n_take(nearbystuff)
+		if(!Adjacent(chosen_item)) // Special density checks for items blocking the way to the item, if any
+			var/not_reachable = FALSE
+			for(var/turf/T = get_step_towards(get_turf(src),get_turf(chosen_item)), T != get_turf(chosen_item), T = get_step_towards(T,get_turf(chosen_item)))
+				if(T.density)
+					not_reachable = TRUE
+					break
+				for(var/atom/movable/MV in T)
+					if(MV.density)
+						not_reachable = TRUE
+						break
+				if(not_reachable)
+					break
+			if(not_reachable)
+				rejectedstuff += chosen_item
+				continue
+		if(attempt_object_suicide(chosen_item))
+			if(istype(chosen_item,/obj/item))
+				var/obj/item/I = chosen_item
+				put_in_hands(I)
+				log_debug("Held item by [src]: [I]")
+			if(rejectedstuff.len)
+				log_debug("Objects rejected for being unreachable by [src]: [counted_english_list(rejectedstuff)]")
+			return 1
+	if(rejectedstuff.len)
+		log_debug("Objects rejected for being unreachable by [src]: [counted_english_list(rejectedstuff)]")
+	return 0
 
 /mob/living/carbon/brain/attempt_suicide(forced = 0, suicide_set = 1)
 
