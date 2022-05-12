@@ -199,25 +199,25 @@
 	visible_message("<span class='danger'>\The [src]'s eyes emit a blinding flash!</span>")
 	var/list/close_mobs = list()
 	var/list/dist_mobs = list()
-	for(var/mob/living/carbon/C in oview(1, src))
+	for(var/mob/living/carbon/human/C in view(1, src))
 		if(C.vampire_affected() <= 0)
 			continue
 		if(istype(C))
 			close_mobs |= C
-	for(var/mob/living/carbon/C in oview(3, src))
+	for(var/mob/living/carbon/human/C in view(3, src))
 		if(C.vampire_affected() <= 0)
 			continue
 		if(istype(C))
 			dist_mobs |= C
 	dist_mobs -= close_mobs
-	for(var/mob/living/carbon/C in close_mobs)
+	for(var/mob/living/carbon/human/C in close_mobs)
 		C.Stun(8)
 		C.Knockdown(8)
 		C.stuttering += 20
 		if(!C.blinded)
 			C.blinded = 1
 		C.blinded += 5
-	for(var/mob/living/carbon/C in dist_mobs)
+	for(var/mob/living/carbon/human/C in dist_mobs)
 		var/distance_value = max(0, abs((get_dist(C, src)-3)) + 1)
 		C.Stun(distance_value)
 		if(distance_value > 1)
@@ -227,7 +227,7 @@
 		if(!C.blinded)
 			C.blinded = 1
 		C.blinded += max(1, distance_value)
-	to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by \the [src]'s glare</span>")
+	to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by \the [src]'s glare!</span>")
 
 
 /mob/living/simple_animal/hostile/humanoid/vampire/proc/jaunt_away()
@@ -240,21 +240,17 @@
 		retreating = 0
 
 /mob/living/simple_animal/hostile/humanoid/vampire/death(var/gibbed = FALSE)
-	..(TRUE)
 	visible_message("<span class='warning'>\The [src] lets out one last ear piercing shriek, before collapsing into dust!</span>")
-	for(var/mob/living/carbon/C in hearers(4, src))
-		if(ishuman(C))
-			var/mob/living/carbon/human/H = C
-			if(H.earprot())
-				continue
-		if(C.vampire_affected() <= 0)
+	for(var/mob/living/carbon/human/H in view(7, src))
+		if((H.vampire_affected() <= 0) || H.earprot())
 			continue
-		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
-		C.Knockdown(8)
-		C.ear_deaf = 20
-		C.stuttering = 20
-		C.Stun(8)
-		C.Jitter(150)
+		else
+			to_chat(H, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
+			H.Knockdown(8)
+			H.ear_deaf = 20
+			H.stuttering = 20
+			H.Stun(8)
+			H.Jitter(150)
 	for(var/obj/structure/window/W in view(4, src))
 		W.shatter()
 	playsound(src.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
