@@ -104,7 +104,7 @@
 /datum/dna/gene/basic/increaserun/New()
 	block = INCREASERUNBLOCK
 
-/datum/dna/gene/basic/grant_spell/remotetalk
+/datum/dna/gene/basic/grant_spell/telepathy
 	name = "Telepathy"
 	activation_messages = list("You feel your voice can penetrate other minds.")
 	deactivation_messages = list("Your mind can no longer project your voice onto others.")
@@ -114,33 +114,29 @@
 
 	mutation = M_REMOTE_TALK
 
-	spelltype = /spell/targeted/remotesay
+	spelltype = /spell/targeted/telepathy
 
-/datum/dna/gene/basic/grant_spell/remotetalk/New()
+/datum/dna/gene/basic/grant_spell/telepathy/New()
 	..()
-	block = REMOTETALKBLOCK
+	block = TELEPATHYBLOCK
 
-/spell/targeted/remotesay
+/spell/targeted/telepathy
 	name = "Project Mind"
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
-
 	charge_type = Sp_RECHARGE
 	charge_max = 50
-
 	invocation_type = SpI_NONE
 	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE|TALKED_BEFORE
-
+	spell_flags = SELECTABLE|TALKED_BEFORE|INCLUDEUSER
 	override_base = "genetic"
 	hud_state = "gen_project"
-
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
 
-/spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
+/spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
 	if(!user || !istype(user))
 		return
 
