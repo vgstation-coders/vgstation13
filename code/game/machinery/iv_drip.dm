@@ -190,10 +190,6 @@
 		to_chat(usr, "<span class='warning'>You can't do that.</span>")
 		return
 
-	if(locked_to) //attached to rollerbed? probably?
-		to_chat(usr, "<span class='warning'>You can't do that while \the [src] is fastened to something.</span>")
-		return
-
 	mode = !mode
 	to_chat(usr, "<span class='info'>The [src] is now [mode ? "injecting" : "taking blood"].</span>")
 	update_icon()
