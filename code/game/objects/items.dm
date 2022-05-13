@@ -120,6 +120,7 @@
 		invisibility = i ? 101 : 0
 		plane = i ? ABOVE_PLATING_PLANE : initial(plane)
 		layer = i ? FLOORBOARD_ITEM_LAYER : initial(layer)
+		anchored = i
 
 /obj/item/t_scanner_expose()
 	if (level != LEVEL_BELOW_FLOOR)
