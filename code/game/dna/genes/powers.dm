@@ -161,7 +161,7 @@
 		if (istype (T, /datum/mind))
 			target = user.can_mind_interact(T)
 		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
-			user.show_message("<span class='notice'>You are unable to use telepathy with [believed_name].</span>")
+			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
 			continue //return
 		else if(istype(M))
 			M.telepathic_target += target
@@ -170,9 +170,9 @@
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: </span><span class='bold'>[say]</span>")
 		else
 			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: </span><span class='bold'>[say]</span>")
-		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
-		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
+		user.show_message("<span class='notice'>You project your mind towards [target]: [say]</span>")
+		log_admin("[key_name(user)] projects his mind towards (believed:[target]/actual:[key_name(target)]: [say]</span>")
+		message_admins("[key_name(user)] projects his mind towards (believed:[target]/actual:[key_name(target)]: [say]</span>")
 		for(var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
 

@@ -1340,16 +1340,16 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
-	for(T in telepathic_target)
+	for(var/mob/living/T in telepathic_target)
 		if(istype(T) && M.can_mind_interact(T))
 			for(var/mob/dead/observer/G in dead_mob_list)
-				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
-			log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
+				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[T]</b>: [message]</i>")
+			log_admin("[key_name(M)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]</span>")
 			if(T == M) //Talking to ourselves
 				to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
 				return
-			to_chat(telepathic_target,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
-			to_chat(M,"<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
+			to_chat(T,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
+			to_chat(M,"<span class='mushroom'>Projected to <b>[T]</b>: [message]</span>")
 
 
 /datum/species/lich
