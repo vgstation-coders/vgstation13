@@ -121,7 +121,7 @@
 	block = TELEPATHYBLOCK
 
 /spell/targeted/telepathy
-	name = "Project Mind"
+	name = "Telepathy"
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
 	charge_type = Sp_RECHARGE
