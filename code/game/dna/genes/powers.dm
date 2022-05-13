@@ -173,9 +173,9 @@
 			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
 			return
 		if(M_TELEPATHY in target.mutations)
-			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: </span>[message]</span>")
+			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: [message]</span>")
 		else
-			to_chat(T,"<span class='notice'>You hear a voice inside your head: </span>[message]")
+			to_chat(T,"<span class='notice'>You hear a voice inside your head: [message] </span>")
 		to_chat(user,"<span class='notice'>Projected to <b>[T]</b>: [message]</span>")
 
 /datum/dna/gene/basic/morph
