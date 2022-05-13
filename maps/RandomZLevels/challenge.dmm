@@ -1179,13 +1179,6 @@
 	dir = 1
 	},
 /area/awaymission/challenge/end)
-"cU" = (
-/obj/machinery/turret{
-	dir = 8;
-	faction = "syndicate"
-	},
-/turf/simulated/floor/bluegrid,
-/area/awaymission/challenge/end)
 "cV" = (
 /turf/simulated/floor{
 	tag = "icon-vault (EAST)";
@@ -1214,12 +1207,6 @@
 	},
 /turf/simulated/floor/bluegrid,
 /area/awaymission/challenge/end)
-"cY" = (
-/obj/machinery/turret{
-	faction = "syndicate"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/challenge/main)
 "cZ" = (
 /obj/machinery/gateway/center/away{
 	calibrated = 0
@@ -1227,20 +1214,6 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/awaymission/challenge/end)
-"da" = (
-/obj/machinery/turret{
-	dir = 4;
-	faction = "syndicate"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/challenge/main)
-"db" = (
-/obj/machinery/turret{
-	dir = 4;
-	faction = "syndicate"
-	},
-/turf/simulated/floor/bluegrid,
 /area/awaymission/challenge/end)
 "dc" = (
 /obj/machinery/gateway,
@@ -1255,13 +1228,6 @@
 	dir = 8
 	},
 /area/awaymission/challenge/end)
-"dd" = (
-/obj/machinery/turret{
-	dir = 8;
-	faction = "syndicate"
-	},
-/turf/simulated/floor/airless,
-/area/awaymission/challenge/main)
 "de" = (
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor{
@@ -1680,7 +1646,6 @@ co
 cc
 cc
 cn
-db
 cn
 cn
 cn
@@ -1689,7 +1654,8 @@ cn
 cn
 cn
 cn
-db
+cn
+cn
 bM
 "}
 (5,1,1) = {"
@@ -1721,7 +1687,7 @@ aH
 aH
 aH
 aJ
-da
+aH
 aH
 aH
 bv
@@ -1729,7 +1695,7 @@ aX
 aZ
 aH
 aH
-da
+aH
 aJ
 aH
 aH
@@ -2180,7 +2146,7 @@ aC
 aA
 aC
 bs
-cY
+aH
 aH
 aH
 aH
@@ -2570,7 +2536,7 @@ aH
 aM
 aH
 aH
-dd
+aH
 aH
 bg
 aM
@@ -2579,7 +2545,7 @@ aH
 aH
 aH
 aM
-dd
+aH
 aH
 aH
 bw
@@ -2736,7 +2702,6 @@ cn
 cn
 cn
 cn
-cU
 cn
 cn
 cn
@@ -2745,7 +2710,8 @@ cn
 cn
 cn
 cn
-cU
+cn
+cn
 bM
 "}
 (21,1,1) = {"
