@@ -81,10 +81,15 @@ Example of the second method:
 	desc = "A tiny unbreachable room full of angry turrets and loot."
 	generate_randomly = 0
 
-///datum/map_element/away_mission/challenge
-//	name = "emitter hell"
-//	file_path = "maps/RandomZLevels/broken/challenge.dmm"
-//	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
+/datum/map_element/away_mission/challenge
+	name = "emitter hell"
+	file_path = "maps/RandomZLevels/challenge.dmm"
+	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
+
+/datum/map_element/away_mission/spacebattle
+	name = "space battle"
+	file_path = "maps/RandomZLevels/spacebattle.dmm"
+	desc = "A large ship being attacked by smaller syndicate ones in an asteroid field, featuring a bluespace artillery gun on the main ship."
 
 /datum/map_element/away_mission/spaceship
 	name = "stranded spaceship"
@@ -126,7 +131,7 @@ Example of the second method:
 	file_path = "maps/RandomZLevels/snowplanet.dmm"
 	desc = "A small little planetoid with a cold atmosphere and a wooden cabin with a gateway. Be sure to pack some sweaters!"
 
-var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission) - /datum/map_element/away_mission
+var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_mission)
 
 #if UNIT_TESTS_ENABLED
 /datum/unit_test/away_missions/start()
