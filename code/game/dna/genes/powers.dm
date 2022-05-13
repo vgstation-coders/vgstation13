@@ -146,10 +146,10 @@
 		return
 /spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
 	var/datum/species/mushroom/M = user.species
-	var/say
+	var/message
 	if(!istype(M))
-		say = stripped_input(user, "What do you wish to say?", "Telepathy")
-		if(!say)
+		message = stripped_input(user, "What do you wish to say?", "Telepathy")
+		if(!message)
 			return 1
 	else
 		M.telepathic_target.len = 0
@@ -166,15 +166,17 @@
 		else if(istype(M))
 			M.telepathic_target += target
 			continue
-		else if(M_TELEPATHY in target.mutations)
-			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: </span><span class='bold'>[say]</span>")
-		else
-			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: </span><span class='bold'>[say]</span>")
-		user.show_message("<span class='notice'>You project your mind towards [target]: [say]</span>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[target]/actual:[key_name(target)]: [say]</span>")
-		message_admins("[key_name(user)] projects his mind towards (believed:[target]/actual:[key_name(target)]: [say]</span>")
 		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
+			G.show_message("<i>Telepathy, <b>[user]</b> to <b>[T]</b>: [message]</i>")
+		log_admin("[key_name(user)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]</span>")
+		if(T == user) //Talking to ourselves
+			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
+			return
+		if(M_TELEPATHY in target.mutations)
+			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: </span>[message]</span>")
+		else
+			to_chat(T,"<span class='notice'>You hear a voice inside your head: </span>[message]")
+		to_chat(user,"<span class='notice'>Projected to <b>[T]</b>: [message]</span>")
 
 /datum/dna/gene/basic/morph
 	name = "Morph"
