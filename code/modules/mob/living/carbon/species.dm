@@ -1349,7 +1349,7 @@ var/list/has_died_as_golem = list()
 		if(istype(T) && M.can_mind_interact(T))
 			for(var/mob/dead/observer/G in dead_mob_list)
 				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[T]</b>: [message]</i>")
-			log_admin("[key_name(M)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]</span>")
+			log_admin("[key_name(M)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
 			if(T == M) //Talking to ourselves
 				to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
 				return

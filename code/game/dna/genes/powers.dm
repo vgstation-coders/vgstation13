@@ -168,7 +168,7 @@
 			continue
 		for(var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathy, <b>[user]</b> to <b>[T]</b>: [message]</i>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]</span>")
+		log_admin("[key_name(user)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
 		if(T == user) //Talking to ourselves
 			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
 			return
