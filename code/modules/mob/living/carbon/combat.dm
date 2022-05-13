@@ -27,8 +27,9 @@
 		return FALSE
 	target_zone = null
 	var/power = I.force
-	if(isgrey(user))
-		power *= 0.8
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		power = power * H.species?.power_multiplier
 	if (crit)
 		power *= CRIT_MULTIPLIER
 	if(def_zone)
