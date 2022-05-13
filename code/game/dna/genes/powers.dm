@@ -135,19 +135,24 @@
 	hud_state = "gen_project"
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
-
-/spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
+/spell/targeted/telepathy/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.)
+		return FALSE
 	if(!user || !istype(user))
 		return
-
 	if(user.mind.miming)
 		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
 		return
-
-	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
-
-	if(!say)
-		return 1
+/spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
+	var/datum/species/mushroom/M = user.species
+	var/say
+	if(!istype(M))
+		say = stripped_input(user, "What do you wish to say?", "Telepathy")
+		if(!say)
+			return 1
+	else
+		M.telepathic_target = list()
 
 	for(var/T in targets)
 		var/mob/living/target
@@ -156,10 +161,12 @@
 		if (istype (T, /datum/mind))
 			target = user.can_mind_interact(T)
 		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
-			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
+			user.show_message("<span class='notice'>You are unable to use telepathy with [believed_name].</span>")
+			continue //return
+		else if(istype(M))
+			M.telepathic_target += target
 			return
-
-		if(M_TELEPATHY in target.mutations)
+		else if(M_TELEPATHY in target.mutations)
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: </span><span class='bold'>[say]</span>")
 		else
 			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: </span><span class='bold'>[say]</span>")
@@ -168,10 +175,6 @@
 		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
 		for(var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
-		var/datum/species/mushroom/M = user.species
-		if(!istype(M))
-			return
-		M.telepathic_target = target
 
 /datum/dna/gene/basic/morph
 	name = "Morph"
