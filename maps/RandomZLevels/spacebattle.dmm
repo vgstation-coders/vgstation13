@@ -1392,24 +1392,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/spacebattle/cruiser)
-"ef" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/spacebattle/cruiser)
-"eg" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/spacebattle/cruiser)
-"eh" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/spacebattle/cruiser)
 "ei" = (
 /obj/structure/closet/crate{
 	name = "Gold Crate"
@@ -1458,21 +1440,9 @@
 "eo" = (
 /turf/simulated/floor/engine,
 /area/awaymission/spacebattle/cruiser)
-"ep" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/spacebattle/cruiser)
 "eq" = (
 /obj/machinery/gateway/center/away{
 	calibrated = 0
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/spacebattle/cruiser)
-"er" = (
-/obj/machinery/gateway{
-	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/spacebattle/cruiser)
@@ -1503,20 +1473,8 @@
 	icon_state = "diagonalWall3"
 	},
 /area/awaymission/spacebattle/syndicate4)
-"ew" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
-/turf/simulated/floor/plating,
-/area/awaymission/spacebattle/cruiser)
 "ex" = (
 /obj/machinery/gateway,
-/turf/simulated/floor/plating,
-/area/awaymission/spacebattle/cruiser)
-"ey" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
 /turf/simulated/floor/plating,
 /area/awaymission/spacebattle/cruiser)
 "ez" = (
@@ -21802,7 +21760,7 @@ ab
 ab
 ab
 ab
-bU
+fo
 bZ
 ch
 ch
@@ -21831,7 +21789,7 @@ ab
 ab
 ab
 ab
-bU
+fo
 bZ
 ch
 ch
@@ -27211,9 +27169,9 @@ ce
 ce
 dr
 cM
-ef
-ep
-ew
+cM
+cM
+cM
 cM
 cM
 cM
@@ -27468,7 +27426,7 @@ cC
 ce
 dr
 cM
-eg
+cM
 eq
 ex
 cM
@@ -27725,9 +27683,9 @@ ce
 ce
 dr
 cM
-eh
-er
-ey
+cM
+cM
+cM
 cM
 eX
 ff
@@ -34138,46 +34096,46 @@ ab
 ab
 ab
 ab
+bU
+dr
+dr
+dr
+cL
+cL
+dr
+ce
+ce
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+cf
+cf
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+ce
+ce
+dr
+cL
+cL
+dr
+dr
+dr
 ie
-dr
-dr
-dr
-cL
-cL
-dr
-ce
-ce
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-cf
-cf
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-dr
-ce
-ce
-dr
-cL
-cL
-dr
-dr
-dr
-fo
 ab
 ab
 ab
@@ -35940,7 +35898,7 @@ ab
 ab
 ab
 ab
-ie
+bU
 cL
 cL
 dr
@@ -35973,7 +35931,7 @@ ce
 dr
 cL
 cL
-fo
+ie
 ab
 ab
 ab
@@ -43396,7 +43354,7 @@ ab
 ab
 ab
 ab
-ie
+bU
 dr
 dr
 dr
@@ -43656,7 +43614,7 @@ ab
 ab
 ab
 ab
-ie
+bU
 dr
 dr
 dr
@@ -50338,7 +50296,7 @@ ab
 ab
 ab
 ab
-bU
+fo
 dr
 dr
 dr
@@ -50592,7 +50550,7 @@ ab
 ab
 ab
 ab
-bU
+fo
 dr
 dr
 dr
@@ -54447,34 +54405,34 @@ ab
 ab
 ab
 ab
+bU
+db
+dg
+db
+dg
+db
+dg
+db
+dg
+db
+dg
+db
 ie
-db
-dg
-db
-dg
-db
-dg
-db
-dg
-db
-dg
-db
-fo
 ab
 ab
+bU
+db
+dg
+db
+dg
+db
+dg
+db
+dg
+db
+dg
+db
 ie
-db
-dg
-db
-dg
-db
-dg
-db
-dg
-db
-dg
-db
-fo
 ab
 ab
 ab
