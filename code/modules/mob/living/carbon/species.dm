@@ -613,7 +613,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
-	spells = list(/spell/targeted/genetic/telepathy)
+	spells = list(/spell/targeted/telepathy)
 
 	//PLEASE IF YOU MAKE A NEW RACE, KEEP IN MIND PEOPLE WILL PROBABLY MAKE UNIFORM SPRITES.
 	uniform_icons = 'icons/mob/species/grey/uniform.dmi'
@@ -1289,7 +1289,7 @@ var/list/has_died_as_golem = list()
 
 	primitive = /mob/living/carbon/monkey/mushroom
 
-	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/genetic/telepathy)
+	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/telepathy)
 
 
 	default_mutations=list() //exoskeleton someday...
