@@ -66,11 +66,15 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") as null|anything in possible_targets
 			if(isnull(target_name))
 				return
+			var/datum/mind/temp_target
 			if(target_name == "All")
-				for(var/datum/mind/temp_target in possible_targets)
-					targets += temp_target
+				for(var/T in possible_targets)
+					if(T == "All")
+						continue
+					temp_target = possible_targets[T]
+					targets += temp_target.current
 			else
-				var/datum/mind/temp_target = possible_targets[target_name]
+				temp_target = possible_targets[target_name]
 				targets += temp_target.current
 		else if((range == 0 || range == SELFCAST) && (spell_flags & INCLUDEUSER))
 			targets += user

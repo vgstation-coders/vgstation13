@@ -125,7 +125,7 @@
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
 	charge_type = Sp_RECHARGE
-	charge_max = 50
+	charge_max = 10
 	invocation_type = SpI_NONE
 	range = GLOBALCAST //the world
 	max_targets = 1
@@ -152,7 +152,7 @@
 		if(!say)
 			return 1
 	else
-		M.telepathic_target = list()
+		M.telepathic_target.len = 0
 
 	for(var/T in targets)
 		var/mob/living/target
@@ -162,10 +162,10 @@
 			target = user.can_mind_interact(T)
 		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
 			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
-			continue //return
+			continue
 		else if(istype(M))
 			M.telepathic_target += target
-			return
+			continue
 		else if(M_TELEPATHY in target.mutations)
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: </span><span class='bold'>[say]</span>")
 		else

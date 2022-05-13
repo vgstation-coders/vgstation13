@@ -1330,7 +1330,7 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
 					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
-	var/mob/living/telepathic_target = list()
+	var/mob/living/telepathic_target[] = list()
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1340,6 +1340,11 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
+	if(!telepathic_target.len)
+		for(var/mob/dead/observer/G in dead_mob_list)
+			G.show_message("<i>[key_name(M)] projects its mind towards itself: [message]</i>")
+		log_admin("[key_name(M)] projects its mind towards itself: [message]</span>")
+		to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
 	for(var/mob/living/T in telepathic_target)
 		if(istype(T) && M.can_mind_interact(T))
 			for(var/mob/dead/observer/G in dead_mob_list)
@@ -1350,7 +1355,6 @@ var/list/has_died_as_golem = list()
 				return
 			to_chat(T,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
 			to_chat(M,"<span class='mushroom'>Projected to <b>[T]</b>: [message]</span>")
-
 
 /datum/species/lich
 	name = "Undead"
