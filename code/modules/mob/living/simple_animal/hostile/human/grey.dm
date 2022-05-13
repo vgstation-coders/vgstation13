@@ -71,8 +71,8 @@
 	icon_state = "grey_testsubject_melee"
 	icon_living = "grey_testsubject_melee"
 
-	melee_damage_lower = 16
-	melee_damage_upper = 20 // Speermin
+	melee_damage_lower = 14
+	melee_damage_upper = 18 // Speermin
 
 	attacktext = "jabs"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
@@ -92,11 +92,11 @@
 			playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1)
 			var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
 			if(C)
-				C.take_damage(20) // If human, damage targets the chest
+				C.take_damage(18) // If human, damage targets the chest
 		else
 			visible_message("<b><span class='warning'>[src] gores [H] with a carefully aimed spear thrust!</span>")
 			playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1)
-			H.adjustBruteLoss(20) // Otherwise just adjust bruteloss on the mob
+			H.adjustBruteLoss(18) // Otherwise just adjust bruteloss on the mob
 	else // A regular spear stabbin'
 		..()
 
