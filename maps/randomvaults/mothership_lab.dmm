@@ -12,7 +12,6 @@
 "bI" = (/turf/simulated/floor,/area/vault/mothership_lab/entrance)
 "bL" = (/obj/machinery/light/small/broken{dir = 1},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "bR" = (/turf/simulated/floor{dir = 8; icon_state = "stage_stairs"; tag = "icon-stage_stairs"},/area/vault/mothership_lab/control_room)
-"cf" = (/obj/machinery/door/airlock/external{name = "Hangar External Airlock"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating/airless,/area/vault/mothership_lab/entrance)
 "ck" = (/turf/simulated/floor{icon_state = "darkredcorners"; tag = "icon-darkredcorners"},/area/vault/mothership_lab/entrance)
 "cn" = (/obj/structure/bed/chair/folding,/turf/simulated/floor/plating,/area/vault/mothership_lab/control_room)
 "cG" = (/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/vault/mothership_lab/control_room)
@@ -421,7 +420,7 @@ zrMDYFooJrPHPHqPHbKSkGkGkGKSbRrfPHPHAwooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQI
 MDMDYFooadbvPHqPHbmjlXkGlXmjbRrfPHZjNdooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUDGqhVTldZTIXZTfNJXaYZTNjLKLvaljoZTYFMDMDMDMDMDYFYiGLeQGLYFMD
 MDMDYFoogFPHPHXHvwooUQkGUQooGecHPHPHlEooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwZTFURGlpllZTIXZTmnuKbIZTZTxJZTZTZTZTZTYFMDMDMDMDYFEblyeQlyYFMD
 MDMDYFoozyBJYUSXGdooooyqoooomJSXjnTAPdooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIgVMaQTZTyEzKyEZTIXZTbIuKUXZTCzLKHQCPyGqaZTYFYFYFMDMDYFGLGLeQGLYFMD
-MDmvYFooooooooooooooVwPJVwooooooooooooooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIcfDETYgngnDEnvZTIXZTUXINJTZTEGLKDNbHDNjEZTZTZTZTYFMDYFGLeQvDGLYFMD
+MDmvYFooooooooooooooVwPJVwooooooooooooooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIMaDETYgngnDEnvZTIXZTUXINJTZTEGLKDNbHDNjEZTZTZTZTYFMDYFGLeQvDGLYFMD
 MDmvYFtrqxvPooWwQRiHoozzooKDQRWwoovPIctrIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIRDTYQTZTfxKUgnZTIXZTJTEySDZTPfLKLKLKLKLKgjlxPCZTYFMDAulyeQGLGLYFMD
 MDmvYFoojWjWooQRQRQRWwscWwQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwZTSSAnChZTIXZTppuKnjZTWOyDAsyDWRKWZTiGFfZTYFMDNfFteQlyrZYFMD
 MDMDYFoofzjWooQRQRQRQRQRQRQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwyjvUvUZTZTZTZTbIdubIZTZTZTZTZTZTZTZTRRFfZTYFMDAulyeQGLsXYFMD
