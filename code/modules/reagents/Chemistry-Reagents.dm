@@ -1860,8 +1860,11 @@
 	..()
 	T.toxins += 20
 	T.weedlevel -= 4
-	if(T.seed && !T.dead)
-		T.health -= 8
+	if(toxins.affinity > 5)
+		T.health = min(T.health + 8, T.maxHealth)
+	else
+		if(T.seed && !T.dead)
+			T.health = max(T.health - 8, 0)
 
 /datum/reagent/glycerol
 	name = "Glycerol"
@@ -2598,7 +2601,7 @@
 		var/obj/effect/plantsegment/K = O
 		var/dmg = 200
 		if(K.seed)
-			dmg -= K.seed.toxins_tolerance*20
+			dmg -= K.seed.toxins_affinity*20
 		for(var/obj/effect/plantsegment/KV in orange(O,1))
 			KV.health -= dmg*0.4
 			KV.try_break()

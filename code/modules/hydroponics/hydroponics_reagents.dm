@@ -1,10 +1,3 @@
-/*
- * Oh god
- * What the fuck am I doing
- * I am not good with compueter
- */
-
-
 /obj/machinery/portable_atmospherics/hydroponics/proc/adjust_nutrient(var/amount, var/bloody = 0)
 	if(seed)
 		if(seed.hematophage != bloody)
@@ -17,8 +10,12 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/adjust_water(var/amount)
 	waterlevel += amount
 	// Water dilutes toxin level.
-	if(amount > 0)
-		toxins -= amount*4
+	toxins = max(toxins-amount*4,0)
+
+obj/machinery/portable_atmospherics/hydroponics/proc/adjust_toxins(var/amount)
+	toxins += amount
+	// Toxins dilutes water level.
+	waterlevel = max(waterlevel-amount*4,0)
 
 //Process reagents being input into the tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents()

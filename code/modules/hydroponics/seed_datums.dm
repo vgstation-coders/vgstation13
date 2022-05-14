@@ -25,12 +25,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	//Tolerances.
 	var/nutrient_consumption = 0.25 // Plant eats this much per tick.
-	var/water_consumption = 3       // Plant drinks this much per tick.
+	var/media_consumption = 3       // Plant drinks this much water or toxin per tick.
 	var/ideal_heat = 293            // Preferred temperature in Kelvin.
 	var/heat_tolerance = 20         // Departure from ideal that is survivable.
 	var/ideal_light = 7             // Preferred light level in luminosity.
 	var/light_tolerance = 5         // Departure from ideal that is survivable.
-	var/toxins_tolerance = 4        // Resistance to poison.
+	var/toxin_affinity = 4          // Resistance to poison, either water or toxins
 	var/lowkpa_tolerance = 25       // Low pressure capacity.
 	var/highkpa_tolerance = 200     // High pressure capacity.
 	var/pest_tolerance = 5          // Threshold for pests to impact health.
@@ -116,15 +116,15 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		nutrient_consumption = 0
 
 	if(prob(90))
-		water_consumption = rand(10)
+		media_consumption = rand(10)
 	else
-		water_consumption = 0
+		media_consumption = 0
 
 	ideal_heat =       rand(273,313)
 	heat_tolerance =   rand(10,30)
 	ideal_light =      rand(2,10)
 	light_tolerance =  rand(2,7)
-	toxins_tolerance = rand(2,7)
+	toxins_affinity =  rand(1,10)
 	pest_tolerance =   rand(2,7)
 	weed_tolerance =   rand(2,7)
 	lowkpa_tolerance = rand(10,50)
@@ -446,7 +446,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			)
 		if(GENE_ECOPHYSIOLOGY)
 			P.values = list(
-				(toxins_tolerance     	? toxins_tolerance    	: 0),
+				(toxins_affinity     	? toxins_affinity    	: 0),
 				(pest_tolerance       	? pest_tolerance      	: 0),
 				(weed_tolerance       	? weed_tolerance      	: 0),
 				(lifespan      			? lifespan				: 0),
@@ -455,7 +455,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_METABOLISM)
 			P.values = list(
 				(nutrient_consumption 	? nutrient_consumption	: 0),
-				(water_consumption    	? water_consumption   	: 0),
+				(media_consumption    	? media_consumption   	: 0),
 				(alter_temp    			? alter_temp    		: 0),
 				(exude_gasses    		? exude_gasses    		: 0)
 			)
@@ -631,12 +631,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		new_seed.display_name = "[display_name]"
 
 	new_seed.nutrient_consumption = nutrient_consumption
-	new_seed.water_consumption =    water_consumption
+	new_seed.media_consumption =    media_consumption
 	new_seed.ideal_heat =           ideal_heat
 	new_seed.heat_tolerance =       heat_tolerance
 	new_seed.ideal_light =          ideal_light
 	new_seed.light_tolerance =      light_tolerance
-	new_seed.toxins_tolerance =     toxins_tolerance
+	new_seed.toxins_affinity =      toxins_affinity
 	new_seed.lowkpa_tolerance =     lowkpa_tolerance
 	new_seed.highkpa_tolerance =    highkpa_tolerance
 	new_seed.pest_tolerance =       pest_tolerance

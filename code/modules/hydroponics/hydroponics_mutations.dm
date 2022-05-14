@@ -62,7 +62,7 @@
 			// chance to toggle again, since then it would stop glowing, which is less fun and frustrating if you're trying to stack mutations.
 			10;						"plusstat_potency", \
 			S.yield == -1 ? 0 : 6;	"plusstat_yield",\
-			3;						"plusstat_weed&toxins_tolerance",\
+			3;						"plusstat_weed&toxins_affinity",\
 			5;						"plusstat_lifespan&endurance",\
 			5;						"plusstat_production&maturation",\
 			3;						"plusstat_heat&pressure_tolerance",\
