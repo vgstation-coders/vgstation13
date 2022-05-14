@@ -353,8 +353,8 @@ Doesn't work on other aliens/AI.*/
 	user_type = USER_TYPE_XENOMORPH
 	insufficient_holder_msg = "<span class='alien'>You are not fully grown yet.</span>"
 
-	holder_var_type = "death"
-	holder_var_amount = 3
+	holder_var_type = "growth"
+	holder_var_amount = LARVA_GROW_TIME
 
 	var/spawning
 
