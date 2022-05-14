@@ -73,7 +73,7 @@
 		nutrilevel -= max(0,seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER)
 		if(draw_warnings)
 			update_icon_after_process = 1
-	if(seed.water_consumption > 0 && waterlevel > 0  && prob(25))
+	if(seed.media_consumption > 0 && waterlevel > 0  && prob(25))
 		waterlevel -= max(0,seed.water_consumption * HYDRO_SPEED_MULTIPLIER)
 		if(draw_warnings)
 			update_icon_after_process = 1
@@ -188,7 +188,7 @@
 	// toxins are sucked up each tick and slowly reduce over time.
 	if(toxins > 0)
 		var/toxin_uptake = max(1,round(toxins/10))
-		if(toxins > seed.toxins_tolerance)
+		if(toxins > seed.toxins_affinity)
 			plant_health -= toxin_uptake
 		toxins -= toxin_uptake * (1+bees)
 		if(draw_warnings)
