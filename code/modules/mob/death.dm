@@ -66,7 +66,5 @@
 /mob/proc/resurrect()
 	living_mob_list |= src
 	dead_mob_list -= src
-	if(src.client)
-		clear_fullscreens()
 
 	verbs -= /mob/living/proc/butcher
