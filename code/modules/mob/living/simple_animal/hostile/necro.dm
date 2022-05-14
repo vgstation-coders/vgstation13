@@ -333,6 +333,7 @@
 		get_clothes(src, evolution)
 		if(mind)
 			mind.transfer_to(evolution) //Just in the offchance we have a player in control
+			evolution.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		qdel(src)
 	else
 		//Now, how did you get here when this is supposed to be the zombie evolution tree?
