@@ -252,10 +252,17 @@
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
 			if(M.zone_sel.selecting == "head" && !(!S || S.status & ORGAN_DESTROYED))
-				M.visible_message( \
-					"<span class='notice'>[M] pats [src]'s head.</span>", \
-					"<span class='notice'>You pat [src]'s head.</span>", \
-					)
+				if(isgrey(M)) // Ayys give a unique little flavor headpoke emote that also synthesizes a little more paracetamol
+					M.visible_message( \
+						"<span class='notice'>[M] reaches out and pokes [src] on the forehead.</span>", \
+						"<span class='notice'>You reach out and poke [src]'s forehead.</span>", \
+						)
+					reagents.add_reagent(PARACETAMOL, 1)
+				else
+					M.visible_message( \
+						"<span class='notice'>[M] pats [src]'s head.</span>", \
+						"<span class='notice'>You pat [src]'s head.</span>", \
+						)
 			else if((M.zone_sel.selecting == "l_hand" && !(!S || S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(!S || S.status & ORGAN_DESTROYED)))
 				var/shock_damage = 5
 				var/shock_time = 0
