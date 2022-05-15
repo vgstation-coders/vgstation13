@@ -2650,7 +2650,6 @@
 #include "code\modules\spells\changeling\absorb_dna.dm"
 #include "code\modules\spells\changeling\armblade.dm"
 #include "code\modules\spells\changeling\changeling_spell.dm"
-#include "code\modules\spells\changeling\changespecies.dm"
 #include "code\modules\spells\changeling\evolutionmenu.dm"
 #include "code\modules\spells\changeling\hivedownload.dm"
 #include "code\modules\spells\changeling\hiveupload.dm"
