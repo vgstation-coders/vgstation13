@@ -125,7 +125,7 @@
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
 	charge_type = Sp_RECHARGE
-	charge_max = 10
+	charge_max = 0
 	invocation_type = SpI_NONE
 	range = GLOBALCAST //the world
 	max_targets = 1
