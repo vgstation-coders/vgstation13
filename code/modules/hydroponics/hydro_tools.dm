@@ -236,7 +236,6 @@
 		last_data = ""
 		usr << browse(null, "window=plant_analyzer")
 
-
 /obj/item/device/analyzer/plant_analyzer/proc/print_report(var/mob/living/user) //full credits to Zuhayr
 	if(!last_data)
 		to_chat(user, "<span class='warning'>[bicon(src)] There is no plant scan data to print.</span>")
@@ -266,57 +265,30 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 10
-	var/toxicity = 4
-	var/pest_kill_str = 0
-	var/weed_kill_str = 0
+	var/toxicity = 40
+	var/uses = 0
 
-/obj/item/weapon/plantspray/weeds // -- Skie
+/obj/item/weapon/plantspray/proc/use(amount = 1)
+	uses = max(uses - amount,0)
+	if(!uses)
+		name = "empty [src]"
+		return FALSE
+	else
+		return TRUE
 
+/obj/item/weapon/plantspray/weeds
 	name = "weed-spray"
 	desc = "It's a toxic mixture, in spray form, to kill small weeds."
 	icon_state = "weedspray"
-	weed_kill_str = 6
+	uses = 60
 
 /obj/item/weapon/plantspray/pests
 	name = "pest-spray"
 	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
 	icon_state = "pestspray"
-	pest_kill_str = 6
+	uses = 60
 
-/obj/item/weapon/plantspray/pests/proc/use(amount = 1)
-	if(pest_kill_str >= amount)
-		pest_kill_str -= amount
-
-		if(pest_kill_str == 0)
-			name = "empty [src]"
-
-		return TRUE
-	return FALSE
-
-/obj/item/weapon/plantspray/pests/old
-	name = "bottle of pestkiller"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-
-/obj/item/weapon/plantspray/pests/old/carbaryl
-	name = "bottle of carbaryl"
-	icon_state = "bottle16"
-	toxicity = 4
-	pest_kill_str = 2
-
-/obj/item/weapon/plantspray/pests/old/lindane
-	name = "bottle of lindane"
-	icon_state = "bottle18"
-	toxicity = 6
-	pest_kill_str = 4
-
-/obj/item/weapon/plantspray/pests/old/phosmet
-	name = "bottle of phosmet"
-	icon_state = "bottle15"
-	toxicity = 8
-	pest_kill_str = 7
-
-/obj/item/weapon/minihoe // -- Numbers
+/obj/item/weapon/minihoe
 	name = "mini hoe"
 	desc = "It's used for removing weeds or scratching your back."
 	icon = 'icons/obj/weapons.dmi'
@@ -331,7 +303,6 @@
 	w_type = RECYK_METAL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
-
 // *************************************
 // Weedkiller defines for hydroponics
 // *************************************
@@ -342,7 +313,15 @@
 	icon_state = "bottle16"
 	flags = FPRINT
 	var/toxicity = 0
-	var/weed_kill_str = 0
+	var/uses = 0
+
+/obj/item/weapon/weedkiller/proc/use(amount = 1)
+	uses = max(uses - amount,0)
+	if(!uses)
+		name = "empty [src]"
+		return FALSE
+	else
+		return TRUE
 
 /obj/item/weedkiller/triclopyr
 	name = "bottle of glyphosate"
@@ -393,7 +372,6 @@
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
 
-//If it's a hatchet it goes here. I guess
 /obj/item/weapon/hatchet/unathiknife
 	name = "dueling knife"
 	desc = "A length of leather-bound wood studded with razor-sharp teeth. How crude."
@@ -428,20 +406,6 @@
 		for(var/obj/structure/cable/powercreeper/C in range(user,1))
 			C.die()
 		user.delayNextAttack(10)
-		/*var/olddir = user.dir
-		spawn for(var/i=-2, i<=2, i++) //hheeeehehe i'm so dumb
-			user.dir = turn(olddir, 45*i)
-			sleep(2)*/
-	/*if(istype(A, /obj/effect/plantsegment))
-		for(var/obj/effect/plantsegment/B in orange(A,1))
-			if(prob(B.seed.ligneous ? 10 : 80))
-				B.die_off()
-		var/obj/effect/plantsegment/K = A
-		K.die_off()
-	if(istype(A, /turf/simulated/floor))
-		for(var/obj/effect/plantsegment/B in orange(A,1))
-			if(prob(B.seed.ligneous ? 10 : 80))
-				B.die_off()*/
 
 /obj/item/claypot
 	name = "clay pot"
@@ -465,7 +429,6 @@
 		to_chat(user, "<span class='warning'>There is no plant to remove in \the [src].</span>")
 	else
 		to_chat(user, "<span class='warning'>You cannot plant \the [O] in \the [src].</span>")
-
 
 /obj/item/claypot/throw_impact(atom/hit_atom)
 	..()

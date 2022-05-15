@@ -633,8 +633,8 @@
 
 /datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.5, bloody=1)
-	T.adjust_water(0.7)
+	T.add_nutrient(0.5, bloody=1)
+	T.add_water(0.7)
 
 /datum/reagent/water
 	name = "Water"
@@ -778,7 +778,7 @@
 
 /datum/reagent/water/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(1)
+	T.add_water(1)
 
 /datum/reagent/lube
 	name = "Space Lube"
@@ -881,9 +881,7 @@
 
 /datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins -= 10
-	if(T.seed && !T.dead)
-		T.health += 1
+	T.add_toxins(-10)
 
 /datum/reagent/phalanximine
 	name = "Phalanximine"
@@ -921,7 +919,7 @@
 
 /datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 10
+	T.add_toxins(10)
 
 /datum/reagent/plasticide
 	name = "Plasticide"
@@ -1315,14 +1313,9 @@
 
 /datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-3)
-	T.adjust_nutrient(-0.3)
-	T.toxins += 8
-	T.weedlevel -= 2
-	T.pestlevel -= 1
-	if(T.seed && !T.dead)
-		T.health -= 2
-
+	T.add_water(-3)
+	T.add_nutrient(-0.3)
+	T.add_toxins(8)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -1494,11 +1487,7 @@
 
 /datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-0.5)
-	T.toxins += 15
-	T.weedlevel -= 3
-	if(T.seed && !T.dead)
-		T.health -= 1
+	T.adjust_toxins(8)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -1521,11 +1510,7 @@
 
 /datum/reagent/fluorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-0.5)
-	T.toxins += 25
-	T.weedlevel -= 4
-	if(T.seed && !T.dead)
-		T.health -= 2
+	T.adjust_toxins(25)
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -1576,8 +1561,6 @@
 /datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.adjust_nutrient(0.1)
-	T.adjust_water(-0.5)
-	T.weedlevel -= 2
 
 /datum/reagent/lithium
 	name = "Lithium"
@@ -1617,8 +1600,6 @@
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.adjust_nutrient(0.1)
-	T.weedlevel += 2
-	T.pestlevel += 2
 
 /datum/reagent/caramel
 	name = "Caramel"
@@ -1772,10 +1753,7 @@
 
 /datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 10
-	T.weedlevel -= 2
-	if(T.seed && !T.dead)
-		T.health -= 4
+	T.add_toxins(10)
 
 /datum/reagent/pacid
 	name = "Polytrinic acid"
@@ -1858,13 +1836,7 @@
 
 /datum/reagent/pacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 20
-	T.weedlevel -= 4
-	if(toxins.affinity > 5)
-		T.health = min(T.health + 8, T.maxHealth)
-	else
-		if(T.seed && !T.dead)
-			T.health = max(T.health - 8, 0)
+	T.add_toxins(20)
 
 /datum/reagent/glycerol
 	name = "Glycerol"
@@ -1925,7 +1897,6 @@
 				return
 
 /datum/reagent/radium/reaction_turf(var/turf/simulated/T, var/volume)
-
 	if(..())
 		return 1
 
@@ -1936,7 +1907,7 @@
 /datum/reagent/radium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.mutation_level += 0.6*T.mutation_mod*custom_plant_metabolism
-	T.toxins += 4
+	T.add_toxins(4)
 	if(T.seed && !T.dead)
 		T.health -= 1.5
 		if(prob(20))
@@ -2645,7 +2616,7 @@
 
 /datum/reagent/toxin/plantbgone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 6
+	T.add_toxins(6)
 	T.weedlevel -= 8
 	if(T.seed && !T.dead)
 		T.health -= 20
@@ -2954,8 +2925,8 @@
 
 /datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	T.adjust_water(1)
+	T.add_nutrient(1)
+	T.add_water(1)
 	T.weedlevel -= 5
 	T.pestlevel -= 5
 	T.toxins -= 5
@@ -4966,9 +4937,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/sodiumchloride/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-3)
 	T.adjust_nutrient(-0.3)
-	T.toxins += 8
+	T.adjust_toxins(8)
 	T.weedlevel -= 2
 	T.pestlevel -= 1
 	if(T.seed && !T.dead)
@@ -6047,8 +6017,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/milk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.1)
-	T.adjust_water(0.9)
+	T.add_nutrient(0.1)
+	T.add_water(0.9)
 
 
 /datum/reagent/drink/milk/mommimilk
@@ -6249,8 +6219,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.1)
-	T.adjust_water(1)
+	T.add_nutrient(0.1)
+	T.add_water(1)
 	if(T.seed && !T.dead)
 		T.health += 0.1
 
@@ -6576,8 +6546,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.25)
-	T.adjust_water(0.7)
+	T.add_nutrient(0.25)
+	T.add_water(0.7)
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"

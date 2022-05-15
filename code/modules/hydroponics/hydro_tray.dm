@@ -12,15 +12,15 @@
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
 
 	// Plant maintenance vars.
-	var/waterlevel = 100       // Water (max 100)
-	var/nutrilevel = 100       // Nutrient (max 100)
-	var/pestlevel = 0          // Pests (max 10)
-	var/weedlevel = 0          // Weeds (max 10)
-	var/toxins = 0             // Toxicity in the tray (max 100)
-	var/improper_light = 0	   // Becomes 1 when the plant has improper lighting, only used for update_icon purposes.
-	var/improper_kpa = 0       // Becomes 1 when the environment pressure is too high/too low, only used for update_icon purposes.
-	var/improper_heat = 0	   // Becomes 1 when the environment temperature is too low/too high, only used for update_icon purposes.
-	var/missing_gas = 0		   // Adds +1 for every type of gas missing, used in process().
+	var/waterlevel = 100				// Water (max 100)
+	var/nutrientlevel = 100			// Nutrient (max 100)
+	var/pestlevel = 0				// Pests (max 100)
+	var/weedlevel = 0			// Weeds (max 100)
+	var/toxinslevel = 0				// Toxicity in the tray (max 100)
+	var/improper_light = 0		// Becomes 1 when the plant has improper lighting, only used for update_icon purposes.
+	var/improper_kpa = 0		// Becomes 1 when the environment pressure is too high/too low, only used for update_icon purposes.
+	var/improper_heat = 0		// Becomes 1 when the environment temperature is too low/too high, only used for update_icon purposes.
+	var/missing_gas = 0			// Adds +1 for every type of gas missing, used in process().
 
 	// Tray state vars.
 	var/dead = 0               // Is it dead?
@@ -109,7 +109,7 @@
 	improper_kpa = 0
 	improper_heat = 0
 	// When the plant dies, weeds thrive and pests die off.
-	weedlevel += 1 * HYDRO_SPEED_MULTIPLIER
+	weedlevel += 10 * HYDRO_SPEED_MULTIPLIER
 	pestlevel = 0
 	update_icon()
 
@@ -184,8 +184,6 @@
 
  // If a weed growth is sufficient, this proc is called.
 /obj/machinery/portable_atmospherics/hydroponics/proc/weed_invasion()
-
-
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
@@ -202,7 +200,6 @@
 	return
 
 /obj/machinery/portable_atmospherics/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
-
 	if(O.is_open_container())
 		return 0
 
@@ -363,9 +360,9 @@
 
 		var/obj/item/weapon/plantspray/spray = O
 		user.drop_item(spray, force_drop = 1)
-		toxins += spray.toxicity
-		pestlevel -= spray.pest_kill_str
-		weedlevel -= spray.weed_kill_str
+		add_toxins(spray.toxicity)
+		pestlevel = 0
+		weedlevel = 0
 		to_chat(user, "You spray [src] with [O].")
 		playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
 		qdel(O)

@@ -325,10 +325,10 @@
 	if ( setting_ignoreEmpty && !tray.seed )
 		return 0
 
-	if ( setting_water && tray.waterlevel <= 10 && tank && tank.reagents.total_volume >= 1 )
+	if ( setting_water && tray.getwaterlevel() <= 10 && tank && tank.reagents.total_volume >= 1 )
 		return FARMBOT_MODE_WATER
 
-	if ( setting_weed && tray.weedlevel >= 5 )
+	if ( setting_weed && tray.weed >= 50 )
 		return FARMBOT_MODE_WEED
 	if ( setting_fertilize && tray.nutrilevel <= 2 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
 		return FARMBOT_MODE_FERTILIZE
@@ -354,7 +354,7 @@
 
 	else // feed them plants~
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		tray.nutrilevel = 10
+		tray.add_nutrient(10)
 		fert.reagents.trans_to(tray, fert.reagents.total_volume)
 		qdel (fert)
 		fert = null
@@ -433,7 +433,7 @@
 			if(b_amount + tray.waterlevel > 100)
 				b_amount = 100 - tray.waterlevel
 			tank.reagents.remove_reagent(WATER, b_amount)
-			tray.adjust_water(b_amount)
+			tray.add_water(b_amount)
 			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 		//tray.updateicon()

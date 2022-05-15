@@ -43,7 +43,7 @@
 	// On each tick, there's a chance the pest population will increase.
 	// This process is under the !seed check because it only happens when a live plant is in the tray.
 	if(prob(1/(1+bees)))
-		pestlevel += 0.5 * HYDRO_SPEED_MULTIPLIER
+		pestlevel += 5 * HYDRO_SPEED_MULTIPLIER
 		if(draw_warnings)
 			update_icon_after_process = 1
 
@@ -320,7 +320,7 @@
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		if(nutrilevel <= 2)
 			overlays += image(icon = icon, icon_state = "over_lownutri3")
-		if(weedlevel >= 5 || pestlevel >= 5 || toxins >= 40 || improper_heat || improper_light || improper_kpa || missing_gas)
+		if(weedlevel >= 50 || pestlevel >= 50 || toxins >= 40 || improper_heat || improper_light || improper_kpa || missing_gas)
 			overlays += image(icon = icon, icon_state = "over_alert3")
 		if(harvest)
 			overlays += image(icon = icon, icon_state = "over_harvest3")
@@ -351,8 +351,8 @@
 	mutation_level = clamp(mutation_level, 0, 100)
 	nutrilevel =     clamp(nutrilevel, 0, 10)
 	waterlevel =     clamp(waterlevel, 0, 100)
-	pestlevel =      clamp(pestlevel, 0, 10)
-	weedlevel =      clamp(weedlevel, 0, 10)
+	pestlevel =      clamp(pestlevel, 0, 100)
+	weedlevel =      clamp(weedlevel, 0, 100)
 	toxins =         clamp(toxins, 0, 100)
 	yield_mod = 	 clamp(yield_mod, 0, 2)
 	mutation_mod = 	 clamp(mutation_mod, 0, 3)

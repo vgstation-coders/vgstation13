@@ -24,7 +24,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 
 	//Tolerances.
-	var/nutrient_consumption = 0.25 // Plant eats this much per tick.
+	var/nutrient_consumption = 1 // Plant eats this much per tick.
 	var/media_consumption = 3       // Plant drinks this much water or toxin per tick.
 	var/ideal_heat = 293            // Preferred temperature in Kelvin.
 	var/heat_tolerance = 20         // Departure from ideal that is survivable.
@@ -33,8 +33,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/toxin_affinity = 4          // Resistance to poison, either water or toxins
 	var/lowkpa_tolerance = 25       // Low pressure capacity.
 	var/highkpa_tolerance = 200     // High pressure capacity.
-	var/pest_tolerance = 5          // Threshold for pests to impact health.
-	var/weed_tolerance = 5          // Threshold for weeds to impact health.
+	var/pest_tolerance = 50          // Threshold for pests to impact health.
+	var/weed_tolerance = 50          // Threshold for weeds to impact health.
 
 	//General traits.
 	var/endurance = 100             // Maximum plant HP when growing.
@@ -125,8 +125,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	ideal_light =      rand(2,10)
 	light_tolerance =  rand(2,7)
 	toxins_affinity =  rand(1,10)
-	pest_tolerance =   rand(2,7)
-	weed_tolerance =   rand(2,7)
+	pest_tolerance =   rand(20,70)
+	weed_tolerance =   rand(20,70)
 	lowkpa_tolerance = rand(10,50)
 	highkpa_tolerance = rand(100,300)
 
@@ -339,14 +339,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_ECOPHYSIOLOGY)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
-					toxins_tolerance 	= gene.values[1]
-					pest_tolerance 		= gene.values[2]
-					weed_tolerance 		= gene.values[3]
-					lifespan 			= gene.values[4]
+					toxins_affinity		= gene.values[1]
+					pest_tolerance		= gene.values[2]
+					weed_tolerance		= gene.values[3]
+					lifespan			= gene.values[4]
 					endurance			= gene.values[5]
 				if(GENEGUN_MODE_SPLICE)
-					toxins_tolerance 	= round(mix(gene.values[1], toxins_tolerance,	rand(40, 60)/100), 0.1)
-					pest_tolerance 		= round(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100), 0.1)
+					toxins_affinity 	= round(mix(gene.values[1], toxins_affinity,	rand(40, 60)/100), 0.1)
+					pest_tolerance		= round(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100), 0.1)
 					weed_tolerance 		= round(mix(gene.values[3], weed_tolerance, 	rand(40, 60)/100), 0.1)
 					lifespan 			= round(mix(gene.values[4], lifespan, 			rand(40, 60)/100), 0.1)
 					endurance			= round(mix(gene.values[5], endurance, 			rand(40, 60)/100), 0.1)
