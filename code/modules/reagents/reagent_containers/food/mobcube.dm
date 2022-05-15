@@ -124,8 +124,8 @@
 	name = "neaera cube"
 	contained_mob = /mob/living/carbon/monkey/skrell
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube
-	name = "roach cube"
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube
+	name = "isopod cube"
 	contained_mob = /mob/living/carbon/monkey/roach
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube
