@@ -112,11 +112,11 @@
 	else
 		dat += "It requires a moderate supply of nutrient fluid.<br>"
 
-	if(grown_seed.fluids_consumption == 0)
+	if(grown_seed.fluid_consumption == 0)
 		dat += "It does not require fluids to subsist.<br>"
-	else if(grown_seed.fluids_consumption < 1)
+	else if(grown_seed.fluid_consumption < 1)
 		dat += "It requires very little fluids.<br>"
-	else if(grown_seed.fluids_consumption > 5)
+	else if(grown_seed.fluid_consumption > 5)
 		dat += "It requires a large amount of fluids.<br>"
 	else
 		dat += "It requires a stable supply of fluids.<br>"
