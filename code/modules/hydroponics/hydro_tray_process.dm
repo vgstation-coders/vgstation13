@@ -22,7 +22,7 @@
 	// Weeds like water and nutrients, there's a chance the weed population will increase.
 	// Bonus chance if the tray is unoccupied.
 	// This process is up here because it still happens even when the tray is empty.
-	if(waterlevel > 10 && nutrilevel > 2 && prob(isnull(seed) ? 5 : (1/(1+bees)))) //I hate whoever wrote this check
+	if(waterlevel > 10 && nutrilevel > 20 && prob(isnull(seed) ? 5 : (1/(1+bees)))) //I hate whoever wrote this check
 		weedlevel += 1 * HYDRO_SPEED_MULTIPLIER * weed_coefficient
 		if(draw_warnings)
 			update_icon_after_process = 1
