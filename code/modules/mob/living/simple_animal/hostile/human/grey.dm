@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////FERAL GREY///////////
-
+//Previously found in Blacksite Prism
 /mob/living/simple_animal/hostile/humanoid/grey
 	name = "Grey"
 	desc = "A thin alien humanoid. This one seems to be feral."
@@ -34,15 +34,110 @@
 	languages += all_languages[LANGUAGE_GREY]
 
 //////////////////////////////
+// GREY PRISONERS
+//////////////////////////////
+//Found in Blacksite Prism
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner // Boring default prisoner, for inheritance
+	name = "Grey Prisoner"
+	desc = "A thin alien humanoid. This is wearing a prisoner's uniform and seems to be hostile."
+
+	icon_state = "grey_testsubject"
+	icon_living = "grey_testsubject"
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
+	stat_attack = UNCONSCIOUS // No mercy in the big house
+
+	melee_damage_lower = 4
+	melee_damage_upper = 6 // Very weak melee attacks
+
+	attacktext = "kicks"
+	attack_sound = 'sound/weapons/punch1.ogg'
+
+	speak = list("I don't remember who I am... why? I must be someone.","Praise the... praise the... what? What was so important?","I don't remember how I arrived here, just red suits and pain. So much pain...","I will escape. I will.","So thirsty. There must be a drop of acid somewhere.","I cannot feel other minds anymore. I am alone.")
+	speak_chance = 1
+
+	corpse = /obj/effect/landmark/corpse/grey/prisoner
+	faction = "prisoner" // We're all brothers and sisters in binds now
+
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/Aggro()
+	..()
+	say(pick("No, no more experiments!","I'll eviscerate you!","Greeeeeeeeeee!","You won't take me again!","Ngaaaaah! Die!"), all_languages[LANGUAGE_GREY])
+
+///////////////////////////////////////////////////////////////////Melee Prisoner///////////
+//Prisoner with a makeshift spear. Can occasionally do a piercing attack that bypasses armor damage resistance
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/melee
+	desc = "A thin alien humanoid. This one is armed with a makeshift spear and seems to be hostile."
+
+	icon_state = "grey_testsubject_melee"
+	icon_living = "grey_testsubject_melee"
+
+	melee_damage_lower = 14
+	melee_damage_upper = 18 // Speermin
+
+	attacktext = "jabs"
+	attack_sound = 'sound/weapons/bladeslice.ogg'
+
+	items_to_drop = list(/obj/item/weapon/spear)
+
+	retreat_distance = 2 // Will attempt to kite/avoid incoming melee attacks
+	minimum_distance = 1
+
+	var/pierceattack_chance = 10
+
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/melee/AttackingTarget()
+	if(prob(pierceattack_chance)) // Attack that does the mob's max damage and ignores damage resistance
+		var/mob/living/carbon/human/H = target
+		if(ishuman(H))
+			visible_message("<b><span class='warning'>[src] gores [H] with a carefully aimed spear thrust!</span>")
+			playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1)
+			var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
+			if(C)
+				C.take_damage(18) // If human, damage targets the chest
+		else
+			visible_message("<b><span class='warning'>[src] gores [H] with a carefully aimed spear thrust!</span>")
+			playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1)
+			H.adjustBruteLoss(18) // Otherwise just adjust bruteloss on the mob
+	else // A regular spear stabbin'
+		..()
+
+///////////////////////////////////////////////////////////////////Ranged Prisoner///////////
+//Prisoner with a makeshift laser musket. Decent ranged damage, but has to crank between shots
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/ranged
+	desc = "A thin alien humanoid. This one is armed with a makeshift laser musket and seems to be hostile."
+
+	icon_state = "grey_testsubject_musket"
+	icon_living = "grey_testsubject_musket"
+
+	items_to_drop = list(/obj/item/weapon/gun/energy/lasmusket)
+
+	projectiletype = /obj/item/projectile/beam/lightlaser
+	projectilesound = 'sound/weapons/Laser.ogg'
+	retreat_distance = 4
+	minimum_distance = 4
+	ranged = 1
+
+	var/last_musketshot = 0
+	var/const/musketshot_cooldown = 6 SECONDS // Gotta crank it after firing!
+
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/ranged/Shoot() // This doesn't work as well as I'd hoped. Ideally it would only go on cooldown after they fire at a target, but what can you do. It works well enough, I suppose
+	if(last_musketshot + musketshot_cooldown > world.time)
+		visible_message("<b><span class='warning'>[src] cranks their laser musket!</span>")
+		playsound(src, 'sound/items/crank.ogg', 50, 1)
+	else
+		last_musketshot = world.time
+		..()
+
+//////////////////////////////
 // GREY EXPLORERS
 //////////////////////////////
 /mob/living/simple_animal/hostile/humanoid/grey/explorer
 	name = "Grey Explorer"
-	desc = "A thin alien humanoid. This one seems to be hostile."
+	desc = "A thin alien humanoid. This is wearing a mothership explorer uniform and seems to be hostile."
 
 	icon_state = "greyexplorer"
 	icon_living = "greyexplorer"
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	melee_damage_lower = 5
@@ -168,6 +263,7 @@
 	icon_state = "greysoldier_base"
 	icon_living = "greysoldier_base"
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	health = 125
@@ -190,8 +286,6 @@
 
 	icon_state = "greysentry"
 	icon_living = "greysentry"
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
@@ -240,8 +334,6 @@
 
 	icon_state = "greysoldier"
 	icon_living = "greysoldier"
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_regular
 
@@ -304,8 +396,6 @@
 	attacktext = "beats"
 	attack_sound = 'sound/weapons/genhit1.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // He is well-versed in the art of forced entry
-
 	corpse = /obj/effect/landmark/corpse/grey/soldier_pacifier
 
 	speak = list("Pacification unit reporting.","Stun probe ready.","Fortune favors the bold.","Praise the mothership.","I am ready for anything.")
@@ -344,8 +434,6 @@
 
 	icon_state = "greygrenadier"
 	icon_living = "greygrenadier"
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_grenadier
 
@@ -405,8 +493,6 @@
 	attack_sound = 'sound/weapons/ray1.ogg'
 
 	move_to_delay = 3 // Being densely armored means slow going
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_heavy
 
@@ -497,6 +583,7 @@
 	icon_state = "greyresearcher_base"
 	icon_living = "greyresearcher_base"
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open, nerd rage
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	melee_damage_lower = 4
@@ -517,8 +604,6 @@
 
 	icon_state = "greyresearcher_laser"
 	icon_living = "greyresearcher_laser"
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
@@ -568,8 +653,6 @@
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/chemist
 	name = "Mothership Chemist"
 	desc = "A thin alien humanoid. This one doesn't seemed armed, but has several flasks of unknown chemicals sticking out of their labcoat pockets."
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open, nerd rage
 
 	items_to_drop = list(/obj/item/toy/snappop/virus, /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer)
 
@@ -621,8 +704,6 @@
 
 	attacktext = "slices"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open
 
 	corpse = /obj/effect/landmark/corpse/grey/surgeon
 
