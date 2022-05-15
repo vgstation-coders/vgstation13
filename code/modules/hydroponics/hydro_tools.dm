@@ -112,14 +112,14 @@
 	else
 		dat += "It requires a moderate supply of nutrient fluid.<br>"
 
-	if(grown_seed.water_consumption == 0)
-		dat += "It does not require water to subsist.<br>"
-	else if(grown_seed.water_consumption < 1)
-		dat += "It requires very little water.<br>"
-	else if(grown_seed.water_consumption > 5)
-		dat += "It requires a large amount of water.<br>"
+	if(grown_seed.fluids_consumption == 0)
+		dat += "It does not require fluids to subsist.<br>"
+	else if(grown_seed.fluids_consumption < 1)
+		dat += "It requires very little fluids.<br>"
+	else if(grown_seed.fluids_consumption > 5)
+		dat += "It requires a large amount of fluids.<br>"
 	else
-		dat += "It requires a stable supply of water.<br>"
+		dat += "It requires a stable supply of fluids.<br>"
 
 	dat += "It thrives in a temperature of [grown_seed.ideal_heat] Kelvin."
 

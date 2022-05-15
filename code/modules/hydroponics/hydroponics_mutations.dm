@@ -67,7 +67,7 @@
 			5;						"plusstat_production&maturation",\
 			3;						"plusstat_heat&pressure_tolerance",\
 			3;						"plusstat_light_tolerance", \
-			3;						"plusstat_nutrient&water_consumption", \
+			3;						"plusstat_nutrient&fluid_consumption", \
 			S.yield != -1 && !S.harvest_repeat ? 0.4 : 0;	"toggle_repeatharvest"
 			)
 		if(MUTCAT_WEIRD)
@@ -257,7 +257,7 @@
 			seed.light_tolerance = clamp(seed.light_tolerance + deviation, 0, 10)
 			generic_mutation_message("quivers!")
 
-		if("plusstat_nutrient&water_consumption")
+		if("plusstat_nutrient&fluid_consumption")
 			var/list/softcap_values = list(0.30, 0.25, 0.15, 0.05, 0, 0)
 			var/list/hardcap_values = list(0.15, 0.10, 0.05, 0,    0, 0)
 			var/deviation = severity * (rand(3, 7)/1000) * get_ratio(severity, softcap_values, hardcap_values, seed.nutrient_consumption)
@@ -266,37 +266,33 @@
 
 			softcap_values = list(4, 3,   1.5, 0.5, 0, 0)
 			hardcap_values = list(2, 1.5, 0.5, 0,   0, 0)
-			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.water_consumption)
+			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.fluid_consumption)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.water_consumption = clamp(seed.water_consumption - deviation, 0, 10)
+			seed.fluid_consumption = clamp(seed.fluid_consumption - deviation, 0, 10)
 			generic_mutation_message("quivers!")
 
 		if("tox_increase")
-			toxins += rand(50,80)
+			add_toxins(rand(5,20))
 			generic_mutation_message("shudders!")
 		if("weed_increase")
-			weedlevel = max(4, weedlevel * 2)
+			add_weedlevel(max(get_weedlevel * 2, 40))
 			generic_mutation_message("shudders!")
 		if("pest_increase")
-			pestlevel = max(4, pestlevel * 2)
+			add_pestlevel(max(get_pestlevel * 2, 40))
 			generic_mutation_message("shudders!")
 		if("stunt_growth")
 			affect_growth(-rand(2,4))
 			generic_mutation_message("droops idly...")
-
 		if("randomize_light")
 			seed.ideal_light = rand(2,10)
 			generic_mutation_message("shakes!")
-
 		if("randomize_temperature") //Variance so small that it can be fixed by just touching the thermostat, but I guarantee people will just apply a new enviro gene anyways
 			seed.ideal_heat = rand(253,343)
 			generic_mutation_message("shakes!")
-
 		if("breathe_aliengas") //This is honestly awful and pretty unfun. It just guarantees that the user will have to apply a new enviro gene. But for now I'm leaving it in
 			var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.consume_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
-
 		if("exude_dangerousgas")
 			var/gas = pick(GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.exude_gasses[gas] = rand(3,9)
@@ -466,7 +462,7 @@
 				source_turf.visible_message("<span class='warning'>\The [display_name] withers rapidly!</span>")
 			if(1)
 				nutrient_consumption =      max(0,  min(5,   nutrient_consumption + rand(-(degree*0.1),(degree*0.1))))
-				water_consumption =         max(0,  min(50,  water_consumption    + rand(-degree,degree)))
+				fluid_consumption =         max(0,  min(50,  fluid_consumption    + rand(-degree,degree)))
 			if(2)
 				ideal_heat =                max(70, min(800, ideal_heat           + (rand(-5,5)   * degree)))
 				heat_tolerance =            max(70, min(800, heat_tolerance       + (rand(-5,5)   * degree)))

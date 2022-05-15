@@ -355,11 +355,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					nutrient_consumption	= gene.values[1]
-					water_consumption 		= gene.values[2]
+					fluid_consumption 		= gene.values[2]
 					alter_temp 				= gene.values[3]
 				if(GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
-					water_consumption 		= mix(gene.values[2], water_consumption,	rand(40, 60)/100)
+					fluid_consumption 		= mix(gene.values[2], fluid_consumption,	rand(40, 60)/100)
 					alter_temp 				= max(gene.values[3], alter_temp)
 			var/list/new_gasses = gene.values[4]
 			if(islist(new_gasses))

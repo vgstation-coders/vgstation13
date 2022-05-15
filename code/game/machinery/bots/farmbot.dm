@@ -330,7 +330,7 @@
 
 	if ( setting_weed && tray.weed >= 50 )
 		return FARMBOT_MODE_WEED
-	if ( setting_fertilize && tray.nutrilevel <= 2 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
+	if ( setting_fertilize && tray.get_nutrientlevel() <= 20 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
 		return FARMBOT_MODE_FERTILIZE
 	return 0
 

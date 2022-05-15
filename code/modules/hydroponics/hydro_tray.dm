@@ -31,7 +31,7 @@
 	// Harvest/mutation mods.
 	var/yield_mod = 1          // Multiplier to yield for the next harvest.
 	var/mutation_mod = 1       // Modifier to mutation_level increase.
-	var/mutation_level = 0     // Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
+	var/mutationlevel = 0     // Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
 	var/is_somatoraying = 0    // Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
 
 	// Mechanical concerns.
