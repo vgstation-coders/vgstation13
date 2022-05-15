@@ -1,6 +1,6 @@
 /datum/episode_name
 	var/thename = ""
-	var/reason = "Default episode name." //Explanation on why this episode name fits this round. For the admin panel.
+	var/reason = "Nothing particularly of note happened this round to influence the episode name." //Explanation on why this episode name fits this round. For the admin panel.
 	var/weight = 100 //50 will have 50% the chance of being picked. 200 will have 200% the chance of being picked, etc. Relative to other names, not total (just the default names already total 700%)
 	var/rare = FALSE //If set to true and this episode name is picked, the current round is considered "not a rerun" for client preferences.
 
