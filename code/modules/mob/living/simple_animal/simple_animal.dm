@@ -201,7 +201,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	life_tick++
 
-	update_health()
+	health = min(health, maxHealth)
 
 	if(stunned)
 		AdjustStunned(-1)
@@ -218,10 +218,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
 		blinded = 1
 	else if(eye_blind)			//blindness, heals slowly over time
-		eye_blind = max(eye_blind-1,0)
+		eye_blind = max(eye_blind - 1, 0)
 		blinded = 1
-	else if(eye_blurry)	//blurry eyes heal slowly
-		eye_blurry = max(eye_blurry-1, 0)
+	else
+		if(eye_blurry)	//blurry eyes heal slowly
+			eye_blurry = max(eye_blurry - 1, 0)
+		blinded = null
 
 	//Ears
 	if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
@@ -342,8 +344,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(!atmos_suitable)
 		adjustOxyLoss(unsuitable_atmos_damage)
-	else
-		adjustOxyLoss(-unsuitable_atmos_damage)
 
 	if(bodytemperature < minbodytemp)
 		temperature_alert = TEMP_ALARM_COLD_STRONG
@@ -583,6 +583,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	..(gibbed)
 
+
 /mob/living/simple_animal/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
@@ -616,8 +617,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	bruteloss = max(0, bruteloss + damage)
-	update_health()
+	health = clamp(health - damage, 0, maxHealth)
+	if(health <= 0 && stat != DEAD)
+		death()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
 	damage *= burn_damage_modifier
@@ -631,8 +633,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	fireloss = max(0, fireloss + damage)
-	update_health()
+	health = clamp(health - damage, 0, maxHealth)
+	if(health <= 0 && stat != DEAD)
+		death()
 
 /mob/living/simple_animal/adjustOxyLoss(damage)
 	damage *= oxy_damage_modifier
@@ -641,10 +644,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(INVOKE_EVENT(src, /event/damaged, "kind" = OXY, "amount" = damage))
 		return 0
 	oxyloss = max(0, oxyloss + damage)
-	update_health()
-
-/mob/living/simple_animal/proc/update_health()
-	health = clamp(maxHealth - bruteloss - fireloss - toxloss - oxyloss, 0, maxHealth) 
+	health = clamp(health - damage, 0, maxHealth)
 	if(health <= 0 && stat != DEAD)
 		death()
 
@@ -683,6 +683,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	overlays = null
 	if (targeted_by && target_locked)
 		overlays += target_locked
+
+
 
 /mob/living/simple_animal/update_fire()
 	return
@@ -875,14 +877,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 //Sets a new maxHealth for a mob and rescales that mob's health and oxy damage scaling accordingly.
 /mob/living/simple_animal/proc/rescaleHealth(var/newMaxHealth = maxHealth)
 	if(maxHealth)
-		var/scaleFactor = (newMaxHealth / maxHealth)
-		maxHealth = newMaxHealth
-		bruteloss *= scaleFactor
-		fireloss *= scaleFactor
-		toxloss *= scaleFactor
-		oxyloss *= scaleFactor
-		oxy_damage_modifier *= scaleFactor
-		update_health()
+		var/oldMaxHealth = maxHealth
+		maxHealth = newMaxhealth
+		health *= (newMaxHealth / oldMaxHealth)
+		oxy_damage_modifier *= (newMaxHealth / oldMaxHealth)
 		return TRUE
 	else
 		return FALSE
