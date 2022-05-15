@@ -88,7 +88,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint the species leaves if they are not wearing shoes. If we ever get any other than human and vox, maybe this should be explicitly defined for each species.
 
 	// For grays
-	var/max_hurt_damage = 5 // Max melee damage dealt
+	var/max_hurt_damage = 5 // Max unarmed damage
+	var/power_multiplier = 1 //A melee damage modifier
 	var/list/default_mutations = list()
 	var/list/default_blocks = list() // Don't touch.
 	var/list/default_block_names = list() // Use this instead, using the names from setupgame.dm
@@ -603,6 +604,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	max_hurt_damage = 3 // From 5 (for humans)
 	tacklePower = 25
+	power_multiplier = 0.8
 
 	blood_color = "#CFAAAA"
 	flesh_color = "#B5B5B5"
@@ -644,7 +646,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	species_intro = "You are a Grey.<br>\
 					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
-					You're not as good in a fist fight as a regular baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
+					You're not as good at swinging a toolbox or throwing a punch as a baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
 
 /datum/species/grey/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
