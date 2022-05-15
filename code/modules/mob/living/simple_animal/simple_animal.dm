@@ -643,7 +643,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(INVOKE_EVENT(src, /event/damaged, "kind" = OXY, "amount" = damage))
 		return 0
-	oxyloss = max(0, oxyloss + damage)
 	health = clamp(health - damage, 0, maxHealth)
 	if(health <= 0 && stat != DEAD)
 		death()
