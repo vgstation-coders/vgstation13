@@ -1,5 +1,4 @@
 /obj/machinery/portable_atmospherics/hydroponics/process()
-
 	//Do this even if we're not ready for a plant cycle.
 	process_reagents()
 
@@ -22,14 +21,14 @@
 	// Weeds like water and nutrients, there's a chance the weed population will increase.
 	// Bonus chance if the tray is unoccupied.
 	// This process is up here because it still happens even when the tray is empty.
-	if(waterlevel > 10 && nutrilevel > 20 && prob(isnull(seed) ? 5 : (1/(1+bees)))) //I hate whoever wrote this check
-		weedlevel += 1 * HYDRO_SPEED_MULTIPLIER * weed_coefficient
+	if(get_waterlevel() > 10 && get_nutrientlevel() > 20 && prob(isnull(seed) ? 5 : (1/(1+bees)))) //I hate whoever wrote this check
+		add_weedlevel(1 * HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		if(draw_warnings)
 			update_icon_after_process = 1
 
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 8) are unaffected.
-	if (weedlevel >= 10 && prob(10))
+	if (get_weedlevel() >= 10 && prob(10))
 		if(!seed || weedlevel >= seed.weed_tolerance+2)
 			weed_invasion()
 
@@ -68,22 +67,26 @@
 		if(prob(5))
 			mutate(rand(5,15))
 
-	// Maintain tray nutrient and water levels.
-	if(seed.nutrient_consumption > 0 && nutrilevel > 0 && prob(25))
-		nutrilevel -= max(0,seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER)
-		if(draw_warnings)
-			update_icon_after_process = 1
-	if(seed.media_consumption > 0 && waterlevel > 0  && prob(25))
-		waterlevel -= max(0,seed.water_consumption * HYDRO_SPEED_MULTIPLIER)
-		if(draw_warnings)
-			update_icon_after_process = 1
+	// Maintain tray nutrient and water levels, 25% of the time
+	if(prob(25))
+		if(seed.nutrient_consumption > 0 && nutrientlevel > 0)
+			add_nutrient(-seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER)
+			if(draw_warnings)
+				update_icon_after_process = 1
+	if(prob(25))
+		if(seed.fluid_consumption > 0)
+			if(toxin_affinity < 5)
+				add_waterlevel(-seed.fluid_consumption * HYDRO_SPEED_MULTIPLIER)
+			if(get_waterlevel < )
+				if(draw_warnings)
+					update_icon_after_process = 1
 
 	var/healthmod = rand(1,3) * HYDRO_SPEED_MULTIPLIER
 
 	// Make sure the plant is not starving or thirsty. Adequate water and nutrients will
 	// cause a plant to become healthier. Lack of sustenance will stunt the plant's growth.
 	if(prob(35))
-		if(nutrilevel > 2)
+		if(get_nutrientlevel > 20)
 			plant_health += healthmod
 		else
 			affect_growth(-1)
@@ -320,7 +323,7 @@
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		if(nutrilevel <= 2)
 			overlays += image(icon = icon, icon_state = "over_lownutri3")
-		if(weedlevel >= 50 || pestlevel >= 50 || toxins >= 40 || improper_heat || improper_light || improper_kpa || missing_gas)
+		if(weedlevel >= 5 || pestlevel >= 5 || toxins >= 40 || improper_heat || improper_light || improper_kpa || missing_gas)
 			overlays += image(icon = icon, icon_state = "over_alert3")
 		if(harvest)
 			overlays += image(icon = icon, icon_state = "over_harvest3")
@@ -351,8 +354,8 @@
 	mutation_level = clamp(mutation_level, 0, 100)
 	nutrilevel =     clamp(nutrilevel, 0, 10)
 	waterlevel =     clamp(waterlevel, 0, 100)
-	pestlevel =      clamp(pestlevel, 0, 100)
-	weedlevel =      clamp(weedlevel, 0, 100)
+	pestlevel =      clamp(pestlevel, 0, 10)
+	weedlevel =      clamp(weedlevel, 0, 10)
 	toxins =         clamp(toxins, 0, 100)
 	yield_mod = 	 clamp(yield_mod, 0, 2)
 	mutation_mod = 	 clamp(mutation_mod, 0, 3)
