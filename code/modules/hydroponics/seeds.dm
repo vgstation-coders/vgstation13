@@ -556,7 +556,7 @@
 	production = 5
 	yield = 2
 	potency = 10
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0.15
 
 /datum/seed/berry/glow
@@ -573,7 +573,7 @@
 	production = 5
 	yield = 2
 	potency = 10
-	water_consumption = 3
+	fluid_consumption = 3
 	nutrient_consumption = 0.25
 	biolum = 1
 	biolum_colour = "#00ff00"
@@ -644,7 +644,7 @@
 	production = 6
 	yield = 2
 	potency = 10
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0.25
 	ideal_light = 8
 	ideal_heat = 298
@@ -823,7 +823,7 @@
 	yield = 5
 	potency = 1
 	growth_stages = 3
-	water_consumption = 6
+	fluid_consumption = 6
 	light_tolerance = 6
 	ideal_heat = 288
 
@@ -1001,7 +1001,7 @@
 	yield = 6
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 0.5
+	fluid_consumption = 0.5
 	nutrient_consumption = 0.15
 
 	large = 0
@@ -1018,7 +1018,7 @@
 	maturation = 6
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0.15
 	large = 0
 
@@ -1070,7 +1070,7 @@
 	maturation = 6
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0 //these are a bunch of flowers, not an actual food
 	large = 0
 
@@ -1154,7 +1154,7 @@
 	potency = 10
 	growth_stages = 1
 	ideal_light = 8
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0.15
 
 /datum/seed/plasmacabbage
@@ -1173,7 +1173,7 @@
 	potency = 10
 	growth_stages = 1
 	ideal_light = 8
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0.15
 
 /datum/seed/shand
@@ -1221,7 +1221,7 @@
 	production = 6
 	yield = 3
 	ideal_light = 9
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 
 /datum/seed/banana/bluespace
@@ -1248,7 +1248,7 @@
 	potency = 20
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 	large = 0
 
@@ -1266,7 +1266,7 @@
 	yield = 4
 	potency = 10
 	growth_stages = 4
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/soybean
 	name = "soybean"
@@ -1329,7 +1329,7 @@
 	yield = 4
 	potency = 5
 	growth_stages = 4
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0.15
 
 /datum/seed/carrots
@@ -1347,7 +1347,7 @@
 	yield = 5
 	potency = 10
 	growth_stages = 3
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/carrots/diamond
 	name = "diamondcarrot"
@@ -1388,7 +1388,7 @@
 	production = 6
 	yield = 6
 	potency = 10
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/sugarcane
 	name = "sugarcane"
@@ -1421,7 +1421,7 @@
 	production = 6
 	yield = 3
 	potency = 10
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 	ideal_light = 8
 
@@ -1440,7 +1440,7 @@
 	yield = 3
 	potency = 10
 	growth_stages = 3
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/lime
 	name = "lime"
@@ -1524,7 +1524,7 @@
 	production = 5
 	yield = 5
 	growth_stages = 2
-	water_consumption = 0.5
+	fluid_consumption = 0.5
 	nutrient_consumption = 0.15
 
 /datum/seed/cocoa
@@ -1542,7 +1542,7 @@
 	yield = 2
 	potency = 10
 	growth_stages = 5
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 	large = 0
 
@@ -1598,7 +1598,7 @@
 	potency = 20
 	growth_stages = 4
 	spread = 2
-	water_consumption = 0.5
+	fluid_consumption = 0.5
 
 /datum/seed/diona
 	name = "diona"
@@ -1669,7 +1669,7 @@
 	production = 5
 	yield = 1
 	potency = 10
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 1
 	growth_stages = 4
 
@@ -1770,7 +1770,7 @@
 	production = 6
 	yield = 3
 	ideal_light = 9
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 
 /datum/seed/garlic
@@ -1787,7 +1787,7 @@
 	growth_stages = 3
 	production = 6
 	yield = 4
-	water_consumption = 2
+	fluid_consumption = 2
 	ideal_heat = 298
 
 /datum/seed/pitcher
@@ -1804,7 +1804,7 @@
 	growth_stages = 3
 	maturation = 12
 	production = 1
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 310
 	pest_tolerance = 10
 	endurance = 25 //Fragile...
