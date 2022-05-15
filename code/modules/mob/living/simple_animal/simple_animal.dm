@@ -878,7 +878,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/rescaleHealth(var/newMaxHealth = maxHealth)
 	if(maxHealth)
 		var/oldMaxHealth = maxHealth
-		maxHealth = newMaxhealth
+		maxHealth = newMaxHealth
 		health *= (newMaxHealth / oldMaxHealth)
 		oxy_damage_modifier *= (newMaxHealth / oldMaxHealth)
 		return TRUE
