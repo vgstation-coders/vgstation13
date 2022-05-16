@@ -197,7 +197,7 @@ var/global/list/battery_online =	list(
 		update_icon()
 
 /obj/machinery/power/battery/get_monitor_status()
-	if (!(monitoring_enabled && charging))
+	if (!monitoring_enabled)
 		return null
 
 	var/list/template = get_monitor_status_template()
@@ -240,7 +240,7 @@ var/global/list/battery_online =	list(
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
 		ui = new(user, src, ui_key, "smes.tmpl", "The SMES Unit", 540, 380)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
