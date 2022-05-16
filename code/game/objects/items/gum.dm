@@ -198,7 +198,9 @@
 	update_icon()
 
 /obj/item/gum/Crossed(mob/living/carbon/human/AM)
-	if(chewed && !locked_to && level == LEVEL_ABOVE_FLOOR)
+	if(..())
+		return 1
+	if(chewed && !locked_to)
 		if(istype(AM) && AM.on_foot())
 			gum_shoes(AM)
 

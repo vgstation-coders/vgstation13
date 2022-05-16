@@ -82,7 +82,9 @@
 
 
 /obj/item/device/assembly/mousetrap/Crossed(AM as mob|obj)
-	if(armed && level == LEVEL_ABOVE_FLOOR)
+	if(..())
+		return 1
+	if(armed)
 		if(ishuman(AM))
 			var/mob/living/carbon/H = AM
 			if(H.m_intent == "run")
@@ -91,7 +93,6 @@
 								  "<span class='warning'>You accidentally step on [src]</span>")
 		if(ismouse(AM))
 			triggered(AM)
-	..()
 
 
 /obj/item/device/assembly/mousetrap/on_found(mob/wearer, mob/finder as mob)

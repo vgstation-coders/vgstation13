@@ -122,6 +122,11 @@
 		layer = i ? FLOORBOARD_ITEM_LAYER : initial(layer)
 		anchored = i
 
+/obj/item/Crossed(atom/movable/AM)
+	if(level < LEVEL_ABOVE_FLOOR)
+		return 1
+	return 0
+
 /obj/item/t_scanner_expose()
 	if (level != LEVEL_BELOW_FLOOR)
 		return

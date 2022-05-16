@@ -8,22 +8,23 @@
  * Banana Peels
  */
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
-	if(level == LEVEL_ABOVE_FLOOR) // Slipping if these are below a floor tile is nonsensical
-		if (istype(AM, /mob/living/carbon))
-			var/mob/living/carbon/M = AM
-			if(slip_n_slide(M))
-				M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
-					"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
-		if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
-			var/obj/structure/bed/chair/vehicle/gokart/kart = AM
-			var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
-			var/tiles_to_slip = rand(round(potency/20, 1), round(potency/10, 1))
-			kart.speen()
-			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-			spawn()
-				for(var/i in 1 to tiles_to_slip)
-					step(kart, left_or_right)
-					sleep(1)
+	if(..())  // Slipping if these are below a floor tile is nonsensical
+		return 1
+	if (iscarbon(AM))
+		var/mob/living/carbon/M = AM
+		if(slip_n_slide(M))
+			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
+				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+	if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+		var/obj/structure/bed/chair/vehicle/gokart/kart = AM
+		var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
+		var/tiles_to_slip = rand(round(potency/20, 1), round(potency/10, 1))
+		kart.speen()
+		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+		spawn()
+			for(var/i in 1 to tiles_to_slip)
+				step(kart, left_or_right)
+				sleep(1)
 
 /datum/locking_category/banana_peel
 

@@ -99,6 +99,6 @@
 	return ..()
 
 /obj/item/weapon/shard/Crossed(var/mob/living/AM)
-	if(level == LEVEL_ABOVE_FLOOR)
-		FeetStab(AM)
-	..()
+	if(..())
+		return 1
+	FeetStab(AM)
