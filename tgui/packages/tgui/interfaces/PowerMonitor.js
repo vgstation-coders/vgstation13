@@ -3,7 +3,7 @@ import { flow } from 'common/fp';
 import { toFixed } from 'common/math';
 import { pureComponentHooks } from 'common/react';
 import { useBackend, useLocalState } from '../backend';
-import { Box, Button, Chart, ColorBox, Flex, Icon, LabeledList, ProgressBar, Section, Table, Dropdown } from '../components';
+import { Box, Button, Chart, ColorBox, Flex, Icon, LabeledList, ProgressBar, Section, Table } from '../components';
 import { Window } from '../layouts';
 
 export const PowerMonitor = () => {
@@ -122,7 +122,7 @@ export const PowerMonitorContent = (props, context) => {
             <Table.Cell>
               Area
             </Table.Cell>
-            <Table.Cell collapsing textAlign="right">
+            <Table.Cell collapsing textAlign="center">
               Priority
             </Table.Cell>
             <Table.Cell collapsing>
@@ -148,33 +148,32 @@ export const PowerMonitorContent = (props, context) => {
                 className="Table__row candystripe">
                 <td>
                   {/* Area name + machine list dropdown */}
-                  { areaDetailExpanded.has(area.id) === true && (
-                    <Button
-                      icon="caret-down"
-                      selected
-                      title="Hide Details"
-                      onClick={() => {
+                  <Button
+                    icon={(areaDetailExpanded.has(area.id) === true ? "minus" : "plus") + "-square-o"}
+                    color="transparent"
+                    textColor="#ffffff"
+                    title={(areaDetailExpanded.has(area.id) === true ? "Hide" : "Show") + " details"}
+                    onClick={() => {
+                      if (areaDetailExpanded.has(area.id) === true) {
                         areaDetailExpanded.delete(area.id);
-                        setAreaDetailExpanded(areaDetailExpanded); }}
-                    />
-                  ) || (
-                    <Button
-                      icon="caret-right"
-                      title="Show Details"
-                      onClick={() => {
+                        setAreaDetailExpanded(areaDetailExpanded);
+                      } else {
                         setAreaDetailExpanded(
                           areaDetailExpanded.add(area.id));
-                      }}
-                    />
-                  )}&nbsp;
-                  {area.name}
+                      }
+                    }}
+                  >
+                    {area.name}
+                  </Button>
                 </td>
+
                 <td>{
                   /* Purposely left blank
                      areas have no priority, only machines do
                   */
                 }
                 </td>
+
                 <td className="Table__cell text-right text-nowrap">
                   {/* Area battery info */}
                   { area.charge !== undefined && (
@@ -184,25 +183,30 @@ export const PowerMonitorContent = (props, context) => {
                     />
                   )}
                 </td>
+
                 <td className="Table__cell text-right text-nowrap">
                   {/* Area power demand info */}
                   {area.f_demand}
                 </td>
+
                 <td className="Table__cell text-center text-nowrap">
                   { area.eqp !== undefined && (
                     <ApcStatusIndicator status={area.eqp} tooltipName="Equipment" />
                   )}
                 </td>
+
                 <td className="Table__cell text-center text-nowrap">
                   { area.lgt !== undefined && (
                     <ApcStatusIndicator status={area.lgt} tooltipName="Lights" />
                   )}
                 </td>
+
                 <td className="Table__cell text-center text-nowrap">
                   { area.env !== undefined && (
                     <ApcStatusIndicator status={area.env} tooltipName="Enviroment" />
                   )}
                 </td>
+
               </tr>
               { areaDetailExpanded.has(area.id) === true
                 && map((machine, key) =>
@@ -210,34 +214,46 @@ export const PowerMonitorContent = (props, context) => {
                     <tr className="Table__row candystripe">
                       <td>
                         {/* Machine name */}
-                        {key === Object.keys(area.machines).pop() ? '└' : '├'} {machine.name}
+                        &nbsp; {key === Object.keys(area.machines).pop() ? '└' : '├'} {machine.name}
                       </td>
-
                       <td className="Table__cell text-center text-nowrap">
                         {/* Machine priority display/dropdown */}
                         { data.engineer_access === 1 && (
-                          <Dropdown
-                            selected={
-                              (machine.priority >= 2
-                                && machine.priority < (2 + priorityText.length)
-                              )
-                                ? priorityText[machine.priority -2]
-                                : "$^%!#%¿&"
-                            }
-                            options={priorityText}
-                            onSelected={(selected) => act('priority', {
-                              'value': (priorityText.indexOf(selected) + 2),
+                          <Button
+                            icon="minus"
+                            compact
+                            mx="2px"
+                            disabled={machine.priority >= 10}
+                            onClick={() => act('priority', {
+                              'value': (machine.priority + 1),
                               'ref': machine.ref,
                               'id': key,
                             })}
                           />
-                        ) || (
-                          (machine.priority >= 2
+                        )}
+                        <Box
+                          inline
+                          width="6rem"
+                        >
+                          {(machine.priority >= 2
                               && machine.priority < (2 + priorityText.length)
                           )
                             ? priorityText[machine.priority -2]
-                            : "$^%!#%¿&"
-                        )}&nbsp;
+                            : "$^%!#%¿&"}
+                        </Box>
+                        { data.engineer_access === 1 && (
+                          <Button
+                            icon="plus"
+                            compact
+                            mx="2px"
+                            disabled={machine.priority <= 2}
+                            onClick={() => act('priority', {
+                              'value': (machine.priority - 1),
+                              'ref': machine.ref,
+                              'id': key,
+                            })}
+                          />
+                        )}
                       </td>
 
                       <td className="Table__cell text-right text-nowrap">
