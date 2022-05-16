@@ -192,6 +192,7 @@
 	desc = "A computer for piloting escape pods. The software hasn't been updated since the autopilot system was installed and is mostly non-functional."
 	use_power = 0
 	icon = 'icons/obj/computer.dmi'
+	anchored = TRUE
 	icon_state = "podcomputer"
 	icon_state_open = "podcomputer_maint"
 
