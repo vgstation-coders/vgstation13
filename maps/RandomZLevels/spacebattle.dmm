@@ -398,10 +398,9 @@
 	},
 /area/awaymission/spacebattle/syndicate1)
 "bf" = (
-/obj/machinery/turret/portable{
+/obj/machinery/turret/portable/cannon{
 	dir = 8;
-	emagged = 1;
-	installation = /obj/item/weapon/gun/energy/lasercannon
+	emagged = 1
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/spacebattle/syndicate2)
@@ -555,10 +554,9 @@
 	},
 /area/awaymission/spacebattle/syndicate1)
 "bB" = (
-/obj/machinery/turret/portable{
+/obj/machinery/turret/portable/cannon{
 	dir = 8;
-	emagged = 1;
-	installation = /obj/item/weapon/gun/energy/lasercannon
+	emagged = 1
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/spacebattle/syndicate3)
@@ -607,10 +605,9 @@
 	},
 /area/awaymission/spacebattle/syndicate1)
 "bI" = (
-/obj/machinery/turret/portable{
+/obj/machinery/turret/portable/cannon{
 	dir = 8;
-	emagged = 1;
-	installation = /obj/item/weapon/gun/energy/lasercannon
+	emagged = 1
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/spacebattle/syndicate1)
@@ -1365,10 +1362,9 @@
 /turf/simulated/floor/engine,
 /area/awaymission/spacebattle/cruiser)
 "ec" = (
-/obj/machinery/turret/portable{
+/obj/machinery/turret/portable/cannon{
 	dir = 8;
-	emagged = 1;
-	installation = /obj/item/weapon/gun/energy/lasercannon
+	emagged = 1
 	},
 /turf/simulated/floor/engine,
 /area/awaymission/spacebattle/cruiser)
@@ -2299,10 +2295,9 @@
 /turf/simulated/floor/plating/airless,
 /area/awaymission/spacebattle/cruiser)
 "gU" = (
-/obj/machinery/turret/portable{
+/obj/machinery/turret/portable/cannon{
 	dir = 8;
-	emagged = 1;
-	installation = /obj/item/weapon/gun/energy/lasercannon
+	emagged = 1
 	},
 /turf/simulated/floor/plating/airless,
 /area/awaymission/spacebattle/syndicate7)
