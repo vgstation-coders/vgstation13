@@ -201,6 +201,7 @@ var/global/list/battery_online =	list(
 		return null
 
 	var/list/template = get_monitor_status_template()
+	template["name"] = "SMES Unit" + (name_tag ? " ([name_tag])" : "")
 	template["demand"] = chargeload
 	template["isbattery"] = TRUE
 	template["charge"] = round(100 * charge/capacity)
@@ -240,8 +241,8 @@ var/global/list/battery_online =	list(
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "smes.tmpl", "The SMES Unit", 540, 380)
+        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		ui = new(user, src, ui_key, "smes.tmpl", "The SMES Unit" + (name_tag ? " ([name_tag])" : ""), 540, 380)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -301,6 +302,10 @@ var/global/list/battery_online =	list(
 			if("set")
 				outputlevel = input(usr, "Enter new output level (0-[max_output])", "SMES Output Power Control", outputlevel) as num
 		outputlevel = max(0, min(max_output, outputlevel))	// clamp to range
+
+	else if ( href_list["rename"] )
+		var/name = input(usr, "Choose a nametag for this SMES Unit", "SMES nametag", null)
+		name_tag = strip_html_simple(name)
 
 	investigation_log(I_SINGULO,"input/output; [chargelevel>outputlevel?"<font color='green'>":"<font color='red'>"][chargelevel]/[outputlevel]</font> | Output-mode: [online?"<font color='green'>on</font>":"<font color='red'>off</font>"] | Input-mode: [chargemode?"<font color='green'>auto</font>":"<font color='red'>off</font>"] by [usr.key]")
 
