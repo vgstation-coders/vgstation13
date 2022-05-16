@@ -12,11 +12,11 @@
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
 
 	// Plant maintenance vars.
-	var/waterlevel = 100				// Water (max 100)
-	var/nutrientlevel = 100			// Nutrient (max 100)
-	var/pestlevel = 0				// Pests (max 100)
+	var/waterlevel = 100		// Water (max 100)
+	var/nutrientlevel = 100		// Nutrient (max 100)
+	var/pestlevel = 0			// Pests (max 100)
 	var/weedlevel = 0			// Weeds (max 100)
-	var/toxinlevel = 0				// Toxicity in the tray (max 100)
+	var/toxinlevel = 0			// Toxicity in the tray (max 100)
 	var/improper_light = 0		// Becomes 1 when the plant has improper lighting, only used for update_icon purposes.
 	var/improper_kpa = 0		// Becomes 1 when the environment pressure is too high/too low, only used for update_icon purposes.
 	var/improper_heat = 0		// Becomes 1 when the environment temperature is too low/too high, only used for update_icon purposes.
@@ -29,10 +29,10 @@
 	var/sampled = 0            // Have we taken a sample?
 
 	// Harvest/mutation mods.
-	var/yield_mod = 1          // Multiplier to yield for the next harvest.
-	var/mutation_mod = 1       // Modifier to mutationlevel increase.
-	var/mutationlevel = 0     // Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
-	var/is_somatoraying = 0    // Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
+	var/yield_mod = 1			// Multiplier to yield for the next harvest.
+	var/mutation_mod = 1		// Modifier to mutationlevel increase.
+	var/mutationlevel = 0		// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
+	var/is_somatoraying = 0		// Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
 
 	// Mechanical concerns.
 	var/plant_health = 0       // Plant health.
@@ -102,7 +102,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
 	dead = 1
 	harvest = 0
-	mutation_level = 0
+	mutationlevel = 0
 	yield_mod = 1
 	mutation_mod = 1
 	improper_light = 0
@@ -476,7 +476,7 @@
 	else
 		to_chat(user, "[src] has nothing planted.")
 	if (Adjacent(user) || isobserver(user) || issilicon(user))
-		to_chat(user, "Water: [round(src.get_waterlevel())]/100")
+		to_chat(user, "Water: [src.get_waterlevel()]/100")
 		if(seed && seed.hematophage)
 			to_chat(user, "<span class='danger'>Blood:</span> [src.get_nutrientlevel()]/100")
 		else
@@ -608,8 +608,7 @@
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(seed && !dead)
 			add_yieldmod(rand(3,5)/10)
-			if(get_yieldmod() >= 2)
-				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
+			visible_message("<span class='notice'>\The [seed.display_name] looks lush.</span>")
 			return
 
 	..()

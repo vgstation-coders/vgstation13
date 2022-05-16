@@ -5,19 +5,12 @@
 
 //Mutates the plant overall (randomly).
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/severity)
-
 	if(!severity)
 		return
-
-	// No seed? Try to mutate the weeds or pests in the tray, if any.
 	if(!seed)
-		//TODO
 		return
-
 	if(seed.immutable)
 		return
-
-	//Is the plant still a sapling? If so, try to mutate species, otherwise do something bad.
 	if(age < 3)
 		if(seed.mutants && seed.mutants.len)
 			if(prob(30))
@@ -25,10 +18,9 @@
 				return
 		var/mutation_type = pick_mut(severity, MUTCAT_BAD)
 		apply_mut(mutation_type, severity)
-		return
-
-	var/mutation_type = pick_mut(severity)
-	apply_mut(mutation_type, severity)
+	else
+		var/mutation_type = pick_mut(severity)
+		apply_mut(mutation_type, severity)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/pick_mut(var/severity, var/mutation_category = "")
 

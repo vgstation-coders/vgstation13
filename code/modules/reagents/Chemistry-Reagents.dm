@@ -2047,7 +2047,7 @@
 
 /datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_mutationlevel(1*T.mutation_mod*custom_plant_metabolism)
+	T.add_mutationlevel(1*T.get_mutation_mod()*custom_plant_metabolism)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -2490,7 +2490,7 @@
 
 /datum/reagent/fertilizer/eznutrient/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
+	T.add_nutrientlevel(10)
 
 /datum/reagent/fertilizer/left4zed
 	name = "Left-4-Zed"
@@ -2502,11 +2502,9 @@
 
 /datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	if(T.seed && !T.dead)
-		T.health -= 0.5
-		if(prob(30))
-			T.mutation_mod += 0.2
+	T.add_nutrientlevel(10)
+	if(prob(30))
+		T.add_mutationmod(0.2)
 
 /datum/reagent/fertilizer/robustharvest
 	name = "Robust Harvest"
@@ -4258,9 +4256,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/ammonia/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	if(T.seed && !T.dead)
-		T.health += 0.5
+	T.add_nutrient(10)
+	T.add_planthealth(1)
 
 /datum/reagent/ultraglue
 	name = "Ultra Glue"
@@ -4281,7 +4278,7 @@ var/procizine_tolerance = 0
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
-	T.add_planthealth(0.1)
+	T.add_planthealth(1)
 	if(prob(100*custom_plant_metabolism))
 		T.add_pestlevel(-1)
 	if(T.seed && !T.dead)
@@ -4399,9 +4396,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/nutriment/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	if(T.seed && !T.dead)
-		T.health += 0.5
+	T.add_nutrientlevel(10)
+	T.add_planthealth(1)
 
 //The anti-nutriment
 /datum/reagent/lipozine
@@ -4633,7 +4629,7 @@ var/procizine_tolerance = 0
 
 /datum/reagent/polypgelatin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.5)
+	T.add_nutrientlevel(5)
 
 /datum/reagent/egg_yolk
 	name = "Egg Yolk"
