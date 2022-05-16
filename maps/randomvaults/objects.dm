@@ -507,7 +507,7 @@
 	name = "\improper AI Satellite APC"
 
 /obj/machinery/turret/portable/cannon/New()
-	installed = new/obj/item/weapon/gun/energy/lasercannon(src)
+	installed = new/obj/item/weapon/gun/energy/laser/cannon(src)
 	..()
 
 /obj/machinery/turret/portable/AIvault
