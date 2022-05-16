@@ -7,6 +7,7 @@
 /datum/artifact_trigger/electricity/New()
 	. = ..()
 	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_BYPASS
 
 /datum/artifact_trigger/electricity/Destroy()
 	if(power_connection)
