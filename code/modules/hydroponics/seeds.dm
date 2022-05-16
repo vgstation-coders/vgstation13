@@ -1806,7 +1806,7 @@
 	production = 1
 	fluid_consumption = 6
 	ideal_heat = 310
-	pest_tolerance = 10
+	pest_tolerance = 100
 	endurance = 25 //Fragile...
 	carnivorous = 1 //Eats pests!
 	juicy = 2 //And here's where the slipperiness comes in

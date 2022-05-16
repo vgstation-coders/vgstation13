@@ -62,7 +62,7 @@
 			// chance to toggle again, since then it would stop glowing, which is less fun and frustrating if you're trying to stack mutations.
 			10;						"plusstat_potency", \
 			S.yield == -1 ? 0 : 6;	"plusstat_yield",\
-			3;						"plusstat_weed&toxins_affinity",\
+			3;						"plusstat_weed&toxin_affinity",\
 			5;						"plusstat_lifespan&endurance",\
 			5;						"plusstat_production&maturation",\
 			3;						"plusstat_heat&pressure_tolerance",\
@@ -187,7 +187,7 @@
 			seed.yield = clamp(seed.yield + deviation, 0, 16)
 			generic_mutation_message("quivers!")
 
-		if("plusstat_weed&toxins_tolerance")
+		if("plusstat_weed&toxin_affinity")
 			var/list/softcap_values = list(2, 3, 6,  9,  11, 11)
 			var/list/hardcap_values = list(4, 5, 10, 12, 12, 12)
 			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.weed_tolerance)
@@ -196,9 +196,9 @@
 
 			softcap_values = list(2, 3, 6,  9,  11, 11)
 			hardcap_values = list(4, 5, 10, 12, 12, 12)
-			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.toxins_tolerance)
+			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.toxin_affinity)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.toxins_tolerance = clamp(seed.toxins_tolerance + deviation, 0, 11)
+			seed.toxin_affinity = clamp(seed.toxin_affinity + deviation, 0, 11)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_lifespan&endurance")
@@ -272,7 +272,7 @@
 			generic_mutation_message("quivers!")
 
 		if("tox_increase")
-			add_toxins(rand(5,20))
+			add_toxinlevel(rand(5,20))
 			generic_mutation_message("shudders!")
 		if("weed_increase")
 			add_weedlevel(max(get_weedlevel * 2, 40))
@@ -367,7 +367,7 @@
 			seed.hematophage = !seed.hematophage
 			if(seed.hematophage)
 				visible_message("<span class='notice'>\The [seed.display_name] shudders thirstily, turning red at the roots!</span>")
-				nutrientlevel = 1
+				add_nutrientlevel(-50)
 			else
 				visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
 
@@ -472,7 +472,7 @@
 				ideal_light =               max(0,  min(30,  ideal_light          + (rand(-1,1)   * degree)))
 				light_tolerance =           max(0,  min(10,  light_tolerance      + (rand(-2,2)   * degree)))
 			if(4)
-				toxins_tolerance =          max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))//nice copypaste
+				toxin_affinity =          max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))//nice copypaste
 			if(5)
 				weed_tolerance  =           max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))
 				if(prob(degree*5))
@@ -538,7 +538,6 @@
 	health = seed.endurance
 	lastcycle = world.time
 	harvest = 0
-	weedlevel = 0 //Why is this here?
 	sampled = 0
 
 	update_icon()

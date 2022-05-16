@@ -124,7 +124,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	heat_tolerance =   rand(10,30)
 	ideal_light =      rand(2,10)
 	light_tolerance =  rand(2,7)
-	toxins_affinity =  rand(1,10)
+	toxin_affinity =  rand(1,10)
 	pest_tolerance =   rand(20,70)
 	weed_tolerance =   rand(20,70)
 	lowkpa_tolerance = rand(10,50)
@@ -339,13 +339,13 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_ECOPHYSIOLOGY)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
-					toxins_affinity		= gene.values[1]
+					toxin_affinity		= gene.values[1]
 					pest_tolerance		= gene.values[2]
 					weed_tolerance		= gene.values[3]
 					lifespan			= gene.values[4]
 					endurance			= gene.values[5]
 				if(GENEGUN_MODE_SPLICE)
-					toxins_affinity 	= round(mix(gene.values[1], toxins_affinity,	rand(40, 60)/100), 0.1)
+					toxin_affinity 	= round(mix(gene.values[1], toxin_affinity,			rand(40, 60)/100), 0.1)
 					pest_tolerance		= round(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100), 0.1)
 					weed_tolerance 		= round(mix(gene.values[3], weed_tolerance, 	rand(40, 60)/100), 0.1)
 					lifespan 			= round(mix(gene.values[4], lifespan, 			rand(40, 60)/100), 0.1)
@@ -446,7 +446,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			)
 		if(GENE_ECOPHYSIOLOGY)
 			P.values = list(
-				(toxins_affinity     	? toxins_affinity    	: 0),
+				(toxin_affinity     	? toxin_affinity    	: 0),
 				(pest_tolerance       	? pest_tolerance      	: 0),
 				(weed_tolerance       	? weed_tolerance      	: 0),
 				(lifespan      			? lifespan				: 0),
@@ -484,28 +484,20 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		SSplant.seeds[name] = src
 
 //Place the plant products at the feet of the user.
-/datum/seed/proc/harvest(var/mob/user,var/yield_mod = 1)
+/datum/seed/proc/harvest(var/mob/user)
 	if(!user)
 		return
-
 	if(isnull(products) || !products.len || yield <= 0)
 		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
 		to_chat(user, "You harvest from the [display_name].")
+		generate_product(get_turf(user))
 
-		generate_product(get_turf(user), yield_mod)
-
-/datum/seed/proc/generate_product(var/turf/T, yield_mod)
+/datum/seed/proc/generate_product(var/turf/T, var/yield_mod = 1)
 	add_newline_to_controller()
 
 	var/total_yield = 0
-	if(yield > -1)
-		if(isnull(yield_mod) || yield_mod < 0)
-			yield_mod = 1
-			total_yield = yield
-		else
-			total_yield = yield * yield_mod
-		total_yield = round(max(1,total_yield))
+	total_yield = round(yield*yield_mod)
 
 	currently_querying = list()
 	for(var/i = 0;i<total_yield;i++)
@@ -539,9 +531,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			handle_living_product(product)
 
 //Harvest without concern for the user
-/datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
+/datum/seed/proc/autoharvest(var/turf/T)
 	if(T && (!isnull(products)) && products.len && (yield > 0))
-		generate_product(T, yield_mod)
+		generate_product(T)
 
 /datum/seed/proc/check_harvest(var/mob/user, var/obj/machinery/portable_atmospherics/hydroponics/tray)
 	var/success = 1
@@ -636,7 +628,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.heat_tolerance =       heat_tolerance
 	new_seed.ideal_light =          ideal_light
 	new_seed.light_tolerance =      light_tolerance
-	new_seed.toxins_affinity =      toxins_affinity
+	new_seed.toxin_affinity =      toxin_affinity
 	new_seed.lowkpa_tolerance =     lowkpa_tolerance
 	new_seed.highkpa_tolerance =    highkpa_tolerance
 	new_seed.pest_tolerance =       pest_tolerance

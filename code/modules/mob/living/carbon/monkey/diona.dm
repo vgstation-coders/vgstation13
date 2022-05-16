@@ -62,12 +62,12 @@
 
 	var/list/trays = list()
 	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
-		if(tray.get_weedlevel > 0)
+		if(tray.get_weedlevel() > 0)
 			trays += tray
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = pick(trays)
-	src.reagents.add_reagent(NUTRIMENT, target.weedlevel)
-	target.weedlevel = 0
+	src.reagents.add_reagent(NUTRIMENT, 50)
+	target.add_weedlevel(-50)
 	src.visible_message("<span class='warning'>[src] begins rooting through [target], ripping out weeds and eating them noisily.</span>","<span class='warning'>You begin rooting through [target], ripping out weeds and eating them noisily.</span>")
 
 /mob/living/carbon/monkey/diona/verb/evolve()

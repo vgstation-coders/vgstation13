@@ -147,9 +147,9 @@
 	else if(grown_seed.light_tolerance < 3)
 		dat += "<br>It is very sensitive to light level shifts."
 
-	if(grown_seed.toxins_affinity < 3)
+	if(grown_seed.toxin_affinity < 5)
 		dat += "<br>It is highly sensitive to toxins."
-	else if(grown_seed.toxins_affinity > 7)
+	else if(grown_seed.toxin_affinity > 7)
 		dat += "<br>It has a remarkable affinity for toxins."
 
 	if(grown_seed.pest_tolerance < 3)
