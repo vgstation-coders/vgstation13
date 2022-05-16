@@ -30,6 +30,7 @@
 	power_connection = new(src)
 	power_connection.idle_usage=idle_power_usage
 	power_connection.active_usage=active_power_usage
+	power_connection.monitoring_enabled = TRUE
 
 /obj/machinery/media/transmitter/broadcast/Destroy()
 	if(wires)

@@ -327,6 +327,7 @@
 
 /obj/machinery/shieldwallgen/New()
 	power_connection = new(src)
+	power_connection.monitoring_enabled = TRUE
 	. = ..()
 
 /obj/machinery/shieldwallgen/Destroy()
