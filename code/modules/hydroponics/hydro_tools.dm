@@ -280,13 +280,13 @@
 	name = "weed-spray"
 	desc = "It's a toxic mixture, in spray form, to kill small weeds."
 	icon_state = "weedspray"
-	uses = 60
+	uses = 6
 
 /obj/item/weapon/plantspray/pests
 	name = "pest-spray"
 	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
 	icon_state = "pestspray"
-	uses = 60
+	uses = 6
 
 /obj/item/weapon/minihoe
 	name = "mini hoe"
@@ -329,7 +329,6 @@
 	icon_state = "bottle16"
 	flags = FPRINT
 	toxicity = 4
-	weed_kill_str = 2
 
 /obj/item/weedkiller/lindane
 	name = "bottle of triclopyr"
@@ -337,7 +336,6 @@
 	icon_state = "bottle18"
 	flags = FPRINT
 	toxicity = 6
-	weed_kill_str = 4
 
 /obj/item/weedkiller/D24
 	name = "bottle of 2,4-D"
@@ -345,7 +343,6 @@
 	icon_state = "bottle15"
 	flags = FPRINT
 	toxicity = 8
-	weed_kill_str = 7
 
 //Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
