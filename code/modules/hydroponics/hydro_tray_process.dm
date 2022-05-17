@@ -67,7 +67,6 @@
 	if(prob(25))
 		if(seed.nutrient_consumption > 0 && nutrientlevel > 0)
 			add_nutrientlevel(-seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER * 10)
-	if(prob(25))
 		if(seed.fluid_consumption > 0)
 			if(seed.toxin_affinity < 5)
 				add_waterlevel(-seed.fluid_consumption * HYDRO_SPEED_MULTIPLIER)
@@ -177,11 +176,13 @@
 
 	//Updated the various alert icons.
 	if(draw_warnings)
-		if(seed.toxin_affinity < 5 && get_waterlevel() <= WATERLEVEL_MAX/5)
-			overlays += image(icon = icon, icon_state = "over_lowwater3")
-		else if(seed.toxin_affinity <= 7 && (get_waterlevel() < WATERLEVEL_MAX/5 || get_toxinlevel() < TOXINLEVEL_MAX/5))
-			overlays += image(icon = icon, icon_state = "over_lowwater3")
-		else if(seed.toxin_affinity > 7 && get_toxinlevel() < TOXINLEVEL_MAX/5)
+		if(seed.toxin_affinity < 5)
+			if(get_waterlevel() <= WATERLEVEL_MAX/5)
+				overlays += image(icon = icon, icon_state = "over_lowwater3")
+		else if(seed.toxin_affinity <= 7)
+			if(get_waterlevel() < WATERLEVEL_MAX/5 || get_toxinlevel() < TOXINLEVEL_MAX/5)
+				overlays += image(icon = icon, icon_state = "over_lowwater3")
+		else if(get_toxinlevel() < TOXINLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		if(get_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
 			overlays += image(icon = icon, icon_state = "over_lownutri3")
@@ -257,12 +258,14 @@
 	if(prob(35))
 		if(get_nutrientlevel() > NUTRIENTLEVEL_MAX / 5)
 			sum_health += healthmod
-		if(get_waterlevel() > WATERLEVEL_MAX / 5 && seed.toxin_affinity < 5)
-			sum_health += healthmod
+ 		if(seed.toxin_affinity < 5)
+			if(get_waterlevel() > WATERLEVEL_MAX / 5)
+				sum_health += healthmod
 		//lower minimum thresholds for moderate toxin affinity because it uptakes both toxin and water
-		else if(seed.toxin_affinity <= 7 && (get_waterlevel() > WATERLEVEL_MAX/10 && get_toxinlevel() > TOXINLEVEL_MAX/10))
-			sum_health += healthmod
-		else if(seed.toxin_affinity > 7 && get_toxinlevel() > TOXINLEVEL_MAX/5)
+		else if(seed.toxin_affinity <= 7)
+			if(get_waterlevel() > WATERLEVEL_MAX/10 && get_toxinlevel() > TOXINLEVEL_MAX/10)
+				sum_health += healthmod
+		else if(get_toxinlevel() > TOXINLEVEL_MAX/5)
 			sum_health += healthmod
 
 	if(missing_gas)

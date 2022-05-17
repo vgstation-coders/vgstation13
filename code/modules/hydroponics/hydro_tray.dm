@@ -424,10 +424,8 @@
 		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
-
 	if(harvest)
 		harvest(user)
-
 	else if(dead)
 		remove_dead(user)
 
@@ -467,6 +465,8 @@
 		to_chat(user, "[src] has nothing planted.")
 	if (Adjacent(user) || isobserver(user) || issilicon(user))
 		to_chat(user, "Water: [src.get_waterlevel()]/100")
+		if(seed && seed.toxin_affinity >= 5)
+			to_chat(user, "Toxin: [src.get_toxinlevel()]/100")
 		if(seed && seed.hematophage)
 			to_chat(user, "<span class='danger'>Blood:</span> [src.get_nutrientlevel()]/100")
 		else
