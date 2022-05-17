@@ -204,13 +204,13 @@
 	if(istype(teleatom, /obj/effect/sparks)) // Don't teleport sparks or the server dies
 		return FALSE
 
-	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
+	if(istype(teleatom, /obj/item/weapon/disk/nuclear) && teleatom.z != destination.z) // Don't let nuke disks get teleported --NeoFite // Same z-level is fine though --kanef
 		teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE
 	if(teleatom.locked_to)
 		return FALSE
 
-	if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/disk/nuclear)))
+	if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/disk/nuclear)) && teleatom.z != destination.z)
 		if(istype(teleatom, /mob/living))
 			var/mob/living/MM = teleatom
 			MM.visible_message("<span class='danger'>\The [MM] bounces off of the portal!</span>","<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>")
