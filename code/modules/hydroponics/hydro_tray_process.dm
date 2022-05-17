@@ -25,9 +25,9 @@
 		add_weedlevel(1 * HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 
 	// There's a chance for a weed explosion to happen if the weeds take over.
-	// Plants that are themselves weeds (weed_tolerance > 8) are unaffected.
+	// Plants that are themselves weeds (weed_tolerance > 80) are unaffected.
 	if (get_weedlevel() > WEEDLEVEL_MAX/5 && prob(10))
-		if(!seed || get_weedlevel() >= seed.weed_tolerance+2)
+		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20)
 			weed_invasion()
 
 	// If there is no seed data (and hence nothing planted),
@@ -66,7 +66,7 @@
 	//Consume, 25% of the time
 	if(prob(25))
 		if(seed.nutrient_consumption > 0 && nutrientlevel > 0)
-			add_nutrientlevel(-seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER * 10)
+			add_nutrientlevel(-seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER)
 		if(seed.fluid_consumption > 0)
 			if(seed.toxin_affinity < 5)
 				add_waterlevel(-seed.fluid_consumption * HYDRO_SPEED_MULTIPLIER)
@@ -258,7 +258,7 @@
 	if(prob(35))
 		if(get_nutrientlevel() > NUTRIENTLEVEL_MAX / 5)
 			sum_health += healthmod
- 		if(seed.toxin_affinity < 5 && get_waterlevel() > WATERLEVEL_MAX / 5)
+		if(seed.toxin_affinity < 5 && get_waterlevel() > WATERLEVEL_MAX / 5)
 			sum_health += healthmod
 		//lower minimum thresholds for moderate toxin affinity because it uptakes both toxin and water
 		else if(seed.toxin_affinity >= 5 \

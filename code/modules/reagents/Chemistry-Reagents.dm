@@ -1600,6 +1600,7 @@
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
+	T.add_pestlevel(1)
 
 /datum/reagent/caramel
 	name = "Caramel"

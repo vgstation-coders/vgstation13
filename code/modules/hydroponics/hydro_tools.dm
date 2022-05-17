@@ -152,14 +152,14 @@
 	else if(grown_seed.toxin_affinity > 7)
 		dat += "<br>It has a remarkable affinity for toxins."
 
-	if(grown_seed.pest_tolerance < 3)
+	if(grown_seed.pest_tolerance < 30)
 		dat += "<br>It is highly sensitive to pests."
-	else if(grown_seed.pest_tolerance > 7)
+	else if(grown_seed.pest_tolerance > 70)
 		dat += "<br>It is remarkably resistant to pests."
 
-	if(grown_seed.weed_tolerance < 3)
+	if(grown_seed.weed_tolerance < 30)
 		dat += "<br>It is highly sensitive to weeds."
-	else if(grown_seed.weed_tolerance > 7)
+	else if(grown_seed.weed_tolerance > 70)
 		dat += "<br>It is remarkably resistant to weeds."
 
 	switch(grown_seed.spread)
