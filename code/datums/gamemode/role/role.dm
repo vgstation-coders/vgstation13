@@ -88,8 +88,8 @@
 
 	// Objectives
 	var/datum/objective_holder/objectives=new
-
-	var/icon/logo_state = "synd-logo"
+	var/logo_icon = 'icons/logos.dmi'
+	var/logo_state = "synd-logo"
 
 	var/default_admin_voice = "Supreme Leader"
 	var/admin_voice_style = "radio" // check stylesheet.dm for a list of all possible styles
@@ -267,7 +267,7 @@
 	return dat
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
-	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	var/icon/logo = icon(logo_icon, logo_state)
 	if(!antag || !antag.current)
 		return
 	if (!ismob(usr))
@@ -294,7 +294,7 @@
 	if(!greeting)
 		return
 
-	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	var/icon/logo = icon(logo_icon, logo_state)
 	switch(greeting)
 		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>[custom]</B>")
@@ -330,7 +330,7 @@
 		else
 			text += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]' style='position:relative; top:10px;'>"
 
-	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	var/icon/logo = icon(logo_icon, logo_state)
 	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag ? "[antag.key]" : "(somebody)"]</b> was <b>[antag ? "[antag.name]" : "(someone)"]</b> ("
 	if(M)
 		if(!antag.GetRole(id))
@@ -383,7 +383,7 @@
 	return dat
 
 /datum/role/proc/GetMemory(var/datum/mind/M, var/admin_edit = FALSE)
-	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	var/icon/logo = icon(logo_icon, logo_state)
 	var/text = "<b><img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [name]</b>"
 	if (admin_edit)
 		text += " - <a href='?src=\ref[M];role_edit=\ref[src];remove_role=1'>(remove)</a> - <a href='?src=\ref[M];greet_role=\ref[src]'>(greet)</a>[extraPanelButtons()]"
@@ -669,7 +669,7 @@
 	if (!(former_minions.len))
 		return ..()
 	// else...
-	var/icon/logo_slave = icon('icons/logos.dmi', "greytide-logo")
+	var/icon/logo_slave = icon(logo_icon, "greytide-logo")
 	var/list/dat = list()
 	dat += ..()
 	dat += "<br/>The greytide leader's former slaves were: <br/>"
@@ -681,7 +681,7 @@
 	if (!(former_minions.len))
 		return ..()
 	// else...
-	var/icon/logo_slave = icon('icons/logos.dmi', "greytide-logo")
+	var/icon/logo_slave = icon(logo_icon, "greytide-logo")
 	var/list/dat = list()
 	dat += ..()
 	dat += "<br/>The greytide leader's former slaves were: <br/>"
