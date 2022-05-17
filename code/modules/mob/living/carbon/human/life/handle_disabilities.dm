@@ -14,9 +14,13 @@
 				if(prob(5))
 					Jitter(5)
 				if(prob(5))
-					M.eye_blurry += 5
-		//for(var/obj/item/device/D in search_contents_for(/obj/item/device))
-			//apply_effects(agony = 1, eyeblur = prob(10))
+					eye_blurry += 5
+		/*for(var/obj/item/device/D in search_contents_for(/obj/item/device))
+			adjustHalLoss(1)
+			if(prob(5))
+				Jitter(5)
+			if(prob(5))
+				eye_blurry += 5*/
 
 	if(disabilities & ASTHMA)
 		if(prob(0.2))
