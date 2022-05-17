@@ -263,12 +263,10 @@
 
 	return..()
 
-
-
 /mob/living/simple_animal/hostile/necro/zombie/Life()
 	if(!isUnconscious())
 		if(stance == HOSTILE_STANCE_IDLE && !client) //Not doing anything at the time
-			if(can_evolve)//Can we evolve, and have we fed
+			if(can_evolve) //Can we evolve, and have we fed
 				check_evolve()
 	..()
 
@@ -314,11 +312,6 @@
 	else if (istype(src, /mob/living/simple_animal/hostile/necro/zombie/rotting))
 		*/
 
-/mob/living/simple_animal/hostile/necro/zombie/verb/check_can_evolve()
-	set name = "Check Evolve"
-	set category = "IC"
-	check_evolve()
-
 /mob/living/simple_animal/hostile/necro/zombie/proc/stats()
 	stat(null, "Times revived - [times_revived]")
 	stat(null, "Times eaten - [times_eaten]")
@@ -327,7 +320,6 @@
 	..()
 	if(statpanel("Status"))
 		stats()
-
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
 	if(ispath(evolve_to, /mob/living/simple_animal/hostile/necro))
@@ -339,6 +331,7 @@
 		get_clothes(src, evolution)
 		if(mind)
 			mind.transfer_to(evolution) //Just in the offchance we have a player in control
+			evolution.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		qdel(src)
 	else
 		//Now, how did you get here when this is supposed to be the zombie evolution tree?
@@ -477,7 +470,8 @@
 	desc = "A reanimated corpse that looks like it has seen better days. Whoever this was is long gone."
 	maxHealth = 100
 	health = 100
-	can_evolve = 1
+
+	can_evolve = TRUE
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting/check_evolve()

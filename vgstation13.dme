@@ -2094,6 +2094,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\mothership_creatures.dm"
 #include "code\modules\mob\living\simple_animal\hostile\mushroom.dm"
 #include "code\modules\mob\living\simple_animal\hostile\necro.dm"
+#include "code\modules\mob\living\simple_animal\hostile\necro_powers.dm"
 #include "code\modules\mob\living\simple_animal\hostile\necromorph.dm"
 #include "code\modules\mob\living\simple_animal\hostile\pitbull.dm"
 #include "code\modules\mob\living\simple_animal\hostile\rattlemebones.dm"
