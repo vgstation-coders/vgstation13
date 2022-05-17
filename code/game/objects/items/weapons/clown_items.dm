@@ -8,7 +8,14 @@
  * Banana Peels
  */
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
+	if(..())  // Slipping if these are below a floor tile is nonsensical
+		return 1
+	handle_slip(AM)
+
+/datum/locking_category/banana_peel
+
+/obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM)
+	if (iscarbon(AM))
 		var/mob/living/carbon/M = AM
 		if(slip_n_slide(M))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
@@ -23,8 +30,6 @@
 			for(var/i in 1 to tiles_to_slip)
 				step(kart, left_or_right)
 				sleep(1)
-
-/datum/locking_category/banana_peel
 
 /obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
 	if(!M.Slip(2,2,1))
@@ -71,7 +76,7 @@
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
-	if (isliving(AM) && world.time > next_honk)
+	if (isliving(AM) && world.time > next_honk) // Honking these while under floortiles is fine though
 		honk(AM)
 		next_honk = world.time + honk_delay
 

@@ -192,8 +192,9 @@
 	Attach(M)
 
 /obj/item/clothing/mask/facehugger/Crossed(atom/target) // Instead of HasEntered. Probably the right proc, probably.
+	if(..())
+		return 1
 	HasProximity(target)
-	return
 
 /obj/item/clothing/mask/facehugger/on_found(wearer, mob/finder as mob)
 	if(stat == CONSCIOUS)
