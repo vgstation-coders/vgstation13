@@ -554,10 +554,10 @@
 	for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(3*multiplier,mob))
 		switch(rand(1,3))
 			if(1)
-				add_waterlevel(-rand(1,10))
-				add_nutrientlevel(-rand(1,5))
+				H.add_waterlevel(-rand(1,10))
+				H.add_nutrientlevel(-rand(1,5))
 			if(2)
-				add_toxinlevel(rand(1,50))
+				H.add_toxinlevel(rand(1,50))
 			if(3)
 				H.weed_coefficient++
 				H.add_weedlevel(10)

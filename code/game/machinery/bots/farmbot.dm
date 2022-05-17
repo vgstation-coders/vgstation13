@@ -354,7 +354,7 @@
 
 	else // feed them plants~
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		tray.add_nutrient(10)
+		tray.add_nutrientlevel(10)
 		fert.reagents.trans_to(tray, fert.reagents.total_volume)
 		qdel (fert)
 		fert = null
@@ -427,8 +427,8 @@
 		spawn(FARMBOT_EMAG_DELAY)
 			mode = 0
 	else
-		var /obj/machinery/portable_atmospherics/hydroponics/tray = target
-		var/b_amount = tank.reagents.remove_reagent(WATER, WATERLEVEL_MAX - get_waterlevel())
+		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+		var/b_amount = tank.reagents.remove_reagent(WATER, WATERLEVEL_MAX - tray.get_waterlevel())
 		tray.add_waterlevel(b_amount)
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 

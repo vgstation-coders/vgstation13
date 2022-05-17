@@ -20,14 +20,17 @@
 		mutationlevel = round(min(mutationlevel + amount, MUTATIONLEVEL_MAX))
 		add_planthealth(-2)
 	else
-		mutationlevel = round(min(0, mutatiolevel + amount))
+		mutationlevel = round(min(0, mutationlevel + amount))
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_mutationlevel()
 	return mutationlevel
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/add_nutrientlevel(var/amount, var/bloody = FALSE)
-	if(hematophage && !bloody)
-		return
+	if(seed)
+		if(seed.hematophage != bloody)
+			return
+		else if(bloody)
+			return
 	if (amount > 0)
 		nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
 		weedlevel = round(min(weedlevel + amount, WEEDLEVEL_MAX))
@@ -53,8 +56,10 @@
 	return waterlevel
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/add_pestlevel(var/amount, var/bloody = FALSE)
-	if(hematophage && !bloody)
-		return
+	if(amount > 0)
+		pestlevel = round(min(pestlevel + amount,PESTLEVEL_MAX))
+	else
+		pestlevel = round(max(0, pestlevel + amount))
 	
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_pestlevel()
 	return pestlevel
@@ -75,9 +80,10 @@
 	else
 		//Remove or uptake toxins
 		toxinlevel = round(max(toxinlevel + amount,0))
-		if(toxinlevel == 0 && !(toxin_affinity < 5))
-			add_planthealth(rand(1,3) * HYDRO_SPEED_MULTIPLIER)
-			affect_growth(-1)
+		if(seed && !dead)
+			if(toxinlevel == 0 && !(seed.toxin_affinity < 5))
+				add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
+				affect_growth(-1)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_toxinlevel()
 	return toxinlevel

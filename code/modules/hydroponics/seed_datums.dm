@@ -25,7 +25,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	//Tolerances.
 	var/nutrient_consumption = 1 // Plant eats this much per tick.
-	var/media_consumption = 3       // Plant drinks this much water or toxin per tick.
+	var/fluid_consumption = 3       // Plant drinks this much water or toxin per tick.
 	var/ideal_heat = 293            // Preferred temperature in Kelvin.
 	var/heat_tolerance = 20         // Departure from ideal that is survivable.
 	var/ideal_light = 7             // Preferred light level in luminosity.
@@ -110,15 +110,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(!add_random_chemical())
 			break
 
-	if(prob(90))
-		nutrient_consumption = rand(30)/100
-	else
-		nutrient_consumption = 0
-
-	if(prob(90))
-		media_consumption = rand(10)
-	else
-		media_consumption = 0
+	nutrient_consumption = rand(28)/10
+	fluid_consumption = rand(9)
 
 	ideal_heat =       rand(273,313)
 	heat_tolerance =   rand(10,30)
@@ -455,7 +448,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_METABOLISM)
 			P.values = list(
 				(nutrient_consumption 	? nutrient_consumption	: 0),
-				(media_consumption    	? media_consumption   	: 0),
+				(fluid_consumption    	? fluid_consumption   	: 0),
 				(alter_temp    			? alter_temp    		: 0),
 				(exude_gasses    		? exude_gasses    		: 0)
 			)
@@ -623,12 +616,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		new_seed.display_name = "[display_name]"
 
 	new_seed.nutrient_consumption = nutrient_consumption
-	new_seed.media_consumption =    media_consumption
+	new_seed.fluid_consumption =    fluid_consumption
 	new_seed.ideal_heat =           ideal_heat
 	new_seed.heat_tolerance =       heat_tolerance
 	new_seed.ideal_light =          ideal_light
 	new_seed.light_tolerance =      light_tolerance
-	new_seed.toxin_affinity =      toxin_affinity
+	new_seed.toxin_affinity =		toxin_affinity
 	new_seed.lowkpa_tolerance =     lowkpa_tolerance
 	new_seed.highkpa_tolerance =    highkpa_tolerance
 	new_seed.pest_tolerance =       pest_tolerance

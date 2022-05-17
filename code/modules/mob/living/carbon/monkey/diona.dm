@@ -46,7 +46,7 @@
 
 	var/list/trays = list()
 	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
-		if(tray.get_nutrientlevel < 100)
+		if(tray.get_nutrientlevel() < 100)
 			trays += tray
 	var/obj/machinery/portable_atmospherics/hydroponics/target = pick(trays)
 

@@ -27,7 +27,7 @@
 						H.add_waterlevel(10)
 						H.add_nutrientlevel(10)
 					if(2)
-						H.add_age(-1)
+						H.age--
 					if(3)
 						H.add_weedlevel(-10)
 						H.add_pestlevel(-10)

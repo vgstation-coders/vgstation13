@@ -162,7 +162,6 @@
 	if(!seed.harvest_repeat)
 		remove_plant()
 
-	check_level_sanity()
 	update_icon()
 	return
 
@@ -170,15 +169,13 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/remove_dead(var/mob/user)
 	if(!user || !dead)
 		return
-
 	if(closed_system)
 		to_chat(user, "You can't remove the dead plant while the lid is shut.")
 		return
 
 	remove_plant()
-
 	to_chat(user, "You remove the dead plant from the [src].")
-	check_level_sanity()
+
 	update_icon()
 	return
 
@@ -212,9 +209,9 @@
 	if(seed.hematophage || seed.carnivorous)
 		return TRUE
 	//Doesn't spread if well-fed
-	if(get_nutrientlevel < NUTRIENTLEVEL_MAX * 0.8)
+	if(get_nutrientlevel() < NUTRIENTLEVEL_MAX * 0.8)
 		return TRUE
-	if(toxin_affinity < 5 && get_waterlevel() < WATERLEVEL_MAX * 0.8)
+	if(seed.toxin_affinity < 5 && get_waterlevel() < WATERLEVEL_MAX * 0.8)
 		return TRUE
 	else if(seed.toxin_affinity <= 7 && (get_waterlevel() < WATERLEVEL_MAX * 0.8 || get_toxinlevel() < TOXINLEVEL_MAX * 0.8))
 		return TRUE
@@ -265,10 +262,7 @@
 			lastcycle = world.time
 
 			qdel(O)
-
-			check_level_sanity()
 			update_icon()
-
 		else
 			to_chat(user, "<span class='alert'>\The [src] already has seeds in it!</span>")
 
@@ -322,8 +316,6 @@
 					S.light_color = seed.biolum_colour
 
 			remove_plant()
-
-			check_level_sanity()
 			update_icon()
 		else
 			C.being_potted = FALSE
@@ -351,8 +343,6 @@
 		if(prob(30))
 			sampled = 1
 
-		// Bookkeeping.
-		check_level_sanity()
 		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
@@ -546,7 +536,7 @@
 	if(!usr || usr.isUnconscious() || usr.restrained())
 		return
 	light_on = !light_on
-	calculate_light()
+	check_light()
 	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
@@ -584,7 +574,6 @@
 						unlock_atom(M)
 						M.gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 						add_nutrientlevel(6)
-						check_level_sanity()
 						update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)

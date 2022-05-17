@@ -633,8 +633,8 @@
 
 /datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrientlevel(0.5, TRUE)
-	T.add_waterlevel(0.5)
+	T.add_nutrientlevel(5, TRUE)
+	T.add_waterlevel(1)
 
 /datum/reagent/water
 	name = "Water"
@@ -1599,7 +1599,7 @@
 
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrient(1)
+	T.add_nutrientlevel(1)
 
 /datum/reagent/caramel
 	name = "Caramel"
@@ -2047,7 +2047,7 @@
 
 /datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_mutationlevel(1*T.get_mutation_mod()*custom_plant_metabolism)
+	T.add_mutationlevel(1*T.get_mutationmod()*custom_plant_metabolism)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -3547,9 +3547,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins -= 3
-	if(T.seed && !T.dead)
-		T.health += 3
+	T.add_toxinlevel(-3)
+	T.add_planthealth(3)
 
 /datum/reagent/clonexadone
 	name = "Clonexadone"
@@ -3573,9 +3572,9 @@ var/procizine_tolerance = 0
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins -= 5
+	T.add_toxinlevel(-5)
+	T.add_planthealth(5)
 	if(T.seed && !T.dead)
-		T.health += 5
 		var/datum/seed/S = T.seed
 		var/deviation
 		if(T.age > S.maturation)
@@ -4256,7 +4255,7 @@ var/procizine_tolerance = 0
 
 /datum/reagent/ammonia/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrient(10)
+	T.add_nutrientlevel(10)
 	T.add_planthealth(1)
 
 /datum/reagent/ultraglue
@@ -5995,8 +5994,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/milk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrient(0.1)
-	T.add_water(0.9)
+	T.add_nutrientlevel(1)
+	T.add_waterlevel(1)
 
 
 /datum/reagent/drink/milk/mommimilk
@@ -6014,9 +6013,8 @@ var/procizine_tolerance = 0
 	M.adjustToxLoss(1)
 /datum/reagent/drink/milk/mommimilk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 10
-	if(T.seed && !T.dead)
-		T.health -= 20
+	T.add_toxinlevel(10)
+	T.add_planthealth(-20)
 
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
@@ -6197,10 +6195,9 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrient(0.1)
-	T.add_water(1)
-	if(T.seed && !T.dead)
-		T.health += 0.1
+	T.add_nutrientlevel(1)
+	T.add_waterlevel(1)
+	T.add_planthealth(1)
 
 /datum/reagent/drink/cold/ice
 	name = "Ice"
@@ -6524,8 +6521,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrient(0.25)
-	T.add_water(0.7)
+	T.add_nutrientlevel(1)
+	T.add_waterlevel(1)
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"

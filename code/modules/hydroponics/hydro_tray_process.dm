@@ -69,7 +69,7 @@
 			add_nutrientlevel(-seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER * 10)
 	if(prob(25))
 		if(seed.fluid_consumption > 0)
-			if(toxin_affinity < 5)
+			if(seed.toxin_affinity < 5)
 				add_waterlevel(-seed.fluid_consumption * HYDRO_SPEED_MULTIPLIER)
 			else if(seed.toxin_affinity <= 7)
 				add_waterlevel(-seed.fluid_consumption * HYDRO_SPEED_MULTIPLIER/2)
@@ -98,6 +98,22 @@
 				harvest = 0
 				lastproduce = age
 
+	var/turf/T = loc
+	var/datum/gas_mixture/environment
+	// If we're closed, take from our internal sources.
+	if(closed_system && (connected_port || holding))
+		environment = air_contents
+	else if(!environment && istype(T))
+		environment = T.return_air()
+	else
+		environment = space_gas
+
+	process_health()
+	check_light(T)
+	check_gasses(environment)
+	check_kpa(environment)
+	check_temperature(environment)
+
 	// If we're a spreading vine, let's go ahead and try to spread our love.
 	if(try_spread())
 		if(!(locate(/obj/effect/plantsegment) in T))
@@ -108,11 +124,6 @@
 				if(2)
 					msg_admin_attack("space vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>, last touched by [key_name_last_user]. Seed id: [seed.uid]. ([bad_stuff()])")
 	
-	process_health()
-	check_light()
-	check_gasses()
-	check_kpa()
-	check_temperature()
 
 	if(update_icon_after_process)
 		update_icon()
@@ -170,16 +181,16 @@
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		else if(seed.toxin_affinity <= 7 && (get_waterlevel() < WATERLEVEL_MAX/5 || get_toxinlevel() < TOXINLEVEL_MAX/5))
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
-		else if(seed.toxin_affinity > 7 && get_toxinlevel() < TOXINLEVEL_MAX/5))
+		else if(seed.toxin_affinity > 7 && get_toxinlevel() < TOXINLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
-		if(get_nutrientlevel <= NUTRIENTLEVEL_MAX / 5)
+		if(get_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
 			overlays += image(icon = icon, icon_state = "over_lownutri3")
 		if(get_weedlevel() >= WEEDLEVEL_MAX/2 || get_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
 			overlays += image(icon = icon, icon_state = "over_alert3")
 		if(harvest)
 			overlays += image(icon = icon, icon_state = "over_harvest3")
 
-/obj/machinery/portable_atmospherics/hydroponics/proc/check_light()
+/obj/machinery/portable_atmospherics/hydroponics/proc/check_light(var/turf/T)
 	var/light_out = 0
 	if(light_on)
 		light_out += internal_light
@@ -200,19 +211,7 @@
 	else
 		improper_light = 0
 
-/obj/machinery/portable_atmospherics/hydroponics/proc/check_gasses()
-	// First, handle an open system or an unconnected closed system.
-	var/turf/T = loc
-	var/datum/gas_mixture/environment
-
-	// If we're closed, take from our internal sources.
-	if(closed_system && (connected_port || holding))
-		environment = air_contents
-	else if(!environment && istype(T))
-		environment = T.return_air()
-	else
-		environment = space_gas
-
+/obj/machinery/portable_atmospherics/hydroponics/proc/check_gasses(var/datum/gas_mixture/environment)
 	// Handle gas consumption.
 	if(seed.consume_gasses && seed.consume_gasses.len && environment)
 		missing_gas = 0
@@ -231,14 +230,14 @@
 		for(var/gas in seed.exude_gasses)
 			environment.adjust_gas(gas, max(1,round((seed.exude_gasses[gas]*round(seed.potency))/seed.exude_gasses.len)))
 
-/obj/machinery/portable_atmospherics/hydroponics/proc/check_kpa()
+/obj/machinery/portable_atmospherics/hydroponics/proc/check_kpa(var/datum/gas_mixture/environment)
 	var/pressure = environment.return_pressure()
 	if(pressure < seed.lowkpa_tolerance || pressure > seed.highkpa_tolerance)
 		improper_kpa = 1
 	else
 		improper_kpa = 0
 
-/obj/machinery/portable_atmospherics/hydroponics/proc/check_temperature()
+/obj/machinery/portable_atmospherics/hydroponics/proc/check_temperature(var/datum/gas_mixture/environment)
 	if(abs(environment.temperature - seed.ideal_heat) > seed.heat_tolerance)
 		improper_heat = 1
 		if(seed.alter_temp)
@@ -258,7 +257,7 @@
 	if(prob(35))
 		if(get_nutrientlevel() > NUTRIENTLEVEL_MAX / 5)
 			sum_health += healthmod
-		if(get_waterlevel() > WATERLEVEL_MAX / 5 && toxin_affinity < 5)
+		if(get_waterlevel() > WATERLEVEL_MAX / 5 && seed.toxin_affinity < 5)
 			sum_health += healthmod
 		//lower minimum thresholds for moderate toxin affinity because it uptakes both toxin and water
 		else if(seed.toxin_affinity <= 7 && (get_waterlevel() > WATERLEVEL_MAX/10 && get_toxinlevel() > TOXINLEVEL_MAX/10))
