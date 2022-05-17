@@ -298,23 +298,25 @@
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
-	if(H.stat != DEAD)
+	if(H.stat == DEAD)
 		iscloaking = FALSE
 	if(!iscloaking)
-		H.alphas["vampire_cloak"] = 255
+		H.make_visible(VAMPIRECLOAK,TRUE)
 		H.color = "#FFFFFF"
 		return FALSE
 
 	if((T.get_lumcount() * 10) <= 2)
-		H.alphas["vampire_cloak"] = round((255 * 0.15))
 		if(locate(/datum/power/vampire/shadow) in current_powers)
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15), INVISIBILITY_LEVEL_TWO)
 			H.color = "#000000"
+		else
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		return TRUE
 	else
 		if(locate(/datum/power/vampire/shadow) in current_powers)
-			H.alphas["vampire_cloak"] = round((255 * 0.15))
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		else
-			H.alphas["vampire_cloak"] = round((255 * 0.80))
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.8))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
 	if(H.stat == DEAD)

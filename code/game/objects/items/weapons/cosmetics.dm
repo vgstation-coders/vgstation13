@@ -374,47 +374,18 @@
 		return 1
 	if(permanent)
 		invisible_time = 0
-	target.make_invisible(INVISIBLESPRAY, invisible_time)
-	/*
-	if(istype(target, /mob))
-		if(istype(target, /mob/living/carbon/human) || istype(target, /mob/living/carbon/monkey))
-			var/mob/living/carbon/C = target
-			C.body_alphas[INVISIBLESPRAY] = 1
-			C.regenerate_icons()
-			if(!permanent)
-				spawn(invisible_time)
-					if(C)
-						C.body_alphas.Remove(INVISIBLESPRAY)
-						C.regenerate_icons()
-		else
-			var/mob/M = target
-			M.alpha = 1	//to cloak immediately instead of on the next Life() tick
-			M.alphas[INVISIBLESPRAY] = 1
-			if(!permanent)
-				spawn(invisible_time)
-					if(M)
-						M.alpha = initial(M.alpha)
-						M.alphas.Remove(INVISIBLESPRAY)
-	else
-		if(istype(target, /obj))
-			var/obj/O = target
-			O.alpha = 1
-			O.has_been_invisible_sprayed = TRUE
-			if(O.loc == user)
-				user.regenerate_icons()
-			if(!permanent)
-				spawn(invisible_time)
-					if(O)
-						O.alpha = initial(O.alpha)
-						O.has_been_invisible_sprayed = FALSE
-						if(ismob(O.loc))
-							var/mob/M = O.loc
-							M.regenerate_icons()
-	*/
-	if(target == user)
+	var/mob/M = target
+	if(M == user)
 		to_chat(user, "You spray yourself with \the [src].")
-	else
-		to_chat(user, "You spray \the [target] with \the [src].")
+		user.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_MAXIMUM)
+	else if (ismob(M))
+		to_chat(user, "You spray [M] with \the [src].")
+		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_MAXIMUM)
+	var/obj/O = target
+	if(isobj(O))
+		to_chat(user, "You spray \the [O] with \the [src].")
+		O.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_MAXIMUM)
+
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))

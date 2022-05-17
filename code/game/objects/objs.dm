@@ -43,7 +43,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	// Can we wrench/weld this to a turf with a dense /obj on it?
 	var/can_affix_to_dense_turf=0
 
-	var/has_been_invisible_sprayed = FALSE
+	var/list/alphas = list()
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
@@ -679,22 +679,38 @@ a {
 					sleep(i)
 		return 1
 
-/obj/make_invisible(var/source_define, var/time, var/include_clothing)
-	if(..() || !source_define)
+/obj/proc/make_invisible(var/source_define, var/time = 0, var/alpha_value = 1, var/invisibility_value = 0)
+	//INVISIBILITY_MAXIMUM is a value of 100 for invisibility_value
+	//alpha_value = 1 hides the sprite
+	if(invisibility || alpha <= 1 || !source_define)
 		return
-	alpha = 1
-	if(source_define == INVISIBLESPRAY)
-		has_been_invisible_sprayed = TRUE
+	invisibility = invisibility_value
+	alphas[source_define] = alpha_value
+	handle_alpha()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			alpha = initial(alpha)
-			has_been_invisible_sprayed = FALSE
-			if(ismob(loc))
-				var/mob/M = loc
-				M.regenerate_icons()
+			make_visible(source_define)
+
+/obj/proc/make_visible(var/source_define)
+	if(!invisibility && alpha == 255 || !source_define)
+		return
+	if(src)
+		invisibility = 0
+		alphas.Remove(source_define)
+		handle_alpha()
+		if(ismob(loc))
+			var/mob/M = loc
+			M.regenerate_icons()
+
+/obj/proc/handle_alpha()	//uses the lowest alpha on the mob
+	if(alphas.len < 1)
+		alpha = 255
+	else
+		sortTim(alphas, /proc/cmp_numeric_asc,1)
+		alpha = alphas[alphas[1]]
 
 /obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
 	var/material_mod = mat ? mat.quality_mod : material_type ? material_type.quality_mod : 1

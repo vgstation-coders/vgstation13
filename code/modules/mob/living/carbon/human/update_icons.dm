@@ -174,8 +174,6 @@ var/global/list/damage_icon_parts = list()
 	O.overlays += standing_image
 	obj_to_plane_overlay(O,DAMAGE_LAYER)
 
-
-
 	if(update_icons)
 		update_icons()
 
@@ -183,12 +181,12 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/proc/update_body(var/update_icons=1)
 	if(monkeyizing)
 		return
-
+		
 	var/husk_color_mod = rgb(96,88,80)
 	var/hulk_color_mod = rgb(48,224,40)
 	var/necrosis_color_mod = rgb(10,50,0)
 
-	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
+	var/husk = (M_HUSK in src.mutations)
 	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isumbra(src) && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (M_SKELETON in src.mutations)

@@ -24,13 +24,13 @@
 		return FALSE
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
-
+	if (!isvampire(user))
+		return FALSE
 /spell/cloak/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
 
 /spell/cloak/cast(var/list/targets, var/mob/user)
-	var/datum/role/vampire/V = isvampire(user) // Shouldn't ever be null, as cast_check checks if we're a vamp.
-	if (!V)
-		return FALSE
+	var/datum/role/vampire/V = user.mind.GetRole(VAMPIRE)
 	V.iscloaking = !V.iscloaking
 	to_chat(user, "<span class='notice'>You will now be [V.iscloaking ? "hidden" : "seen"] in darkness.</span>")
+	V.handle_cloak(user)
