@@ -250,11 +250,11 @@
 			generic_mutation_message("quivers!")
 
 		if("plusstat_nutrient&fluid_consumption")
-			var/list/softcap_values = list(0.30, 0.25, 0.15, 0.05, 0, 0)
-			var/list/hardcap_values = list(0.15, 0.10, 0.05, 0,    0, 0)
+			var/list/softcap_values = list(4, 3, 2, 1, 0, 0)
+			var/list/hardcap_values = list(2, 1, 1, 0,    0, 0)
 			var/deviation = severity * (rand(3, 7)/1000) * get_ratio(severity, softcap_values, hardcap_values, seed.nutrient_consumption)
 			//Deviation per 10u Mutagen before cap: 0.03-0.07
-			seed.nutrient_consumption = clamp(seed.nutrient_consumption - deviation, 0, 1)
+			seed.nutrient_consumption = clamp(seed.nutrient_consumption - deviation, 0, 10)
 
 			softcap_values = list(4, 3,   1.5, 0.5, 0, 0)
 			hardcap_values = list(2, 1.5, 0.5, 0,   0, 0)

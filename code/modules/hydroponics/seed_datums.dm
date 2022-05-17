@@ -24,7 +24,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 
 	//Tolerances.
-	var/nutrient_consumption = 1 // Plant eats this much per tick.
+	var/nutrient_consumption = 10	// Plant eats this much per tick.
 	var/fluid_consumption = 3       // Plant drinks this much water or toxin per tick.
 	var/ideal_heat = 293            // Preferred temperature in Kelvin.
 	var/heat_tolerance = 20         // Departure from ideal that is survivable.

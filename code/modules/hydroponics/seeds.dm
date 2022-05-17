@@ -557,7 +557,7 @@
 	yield = 2
 	potency = 10
 	fluid_consumption = 6
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/berry/glow
 	name = "glowberries"
@@ -574,7 +574,7 @@
 	yield = 2
 	potency = 10
 	fluid_consumption = 3
-	nutrient_consumption = 0.25
+	nutrient_consumption = 3
 	biolum = 1
 	biolum_colour = "#00ff00"
 
@@ -645,7 +645,7 @@
 	yield = 2
 	potency = 10
 	fluid_consumption = 6
-	nutrient_consumption = 0.25
+	nutrient_consumption = 3
 	ideal_light = 8
 	ideal_heat = 298
 	juicy = 1
@@ -984,7 +984,7 @@
 	production = 1
 	yield = 2
 	growth_stages = 4
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/flower/poppy
 	name = "poppies"
@@ -1002,7 +1002,7 @@
 	growth_stages = 3
 	ideal_light = 8
 	fluid_consumption = 0.5
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 	large = 0
 
@@ -1019,7 +1019,7 @@
 	growth_stages = 3
 	ideal_light = 8
 	fluid_consumption = 6
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 	large = 0
 
 /datum/seed/flower/sunflower/moonflower
@@ -1092,7 +1092,7 @@
 	yield = 4
 	potency = 10
 	ideal_light = 8
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 	large = 0
 
 /datum/seed/grapes/green
@@ -1155,7 +1155,7 @@
 	growth_stages = 1
 	ideal_light = 8
 	fluid_consumption = 6
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/plasmacabbage
 	name = "plasmacabbage"
@@ -1174,7 +1174,7 @@
 	growth_stages = 1
 	ideal_light = 8
 	fluid_consumption = 6
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/shand
 	name = "shand"
@@ -1313,7 +1313,7 @@
 	yield = 4
 	potency = 5
 	ideal_light = 8
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/rice
 	name = "rice"
@@ -1330,7 +1330,7 @@
 	potency = 5
 	growth_stages = 4
 	fluid_consumption = 6
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/carrots
 	name = "carrot"
@@ -1525,7 +1525,7 @@
 	yield = 5
 	growth_stages = 2
 	fluid_consumption = 0.5
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/cocoa
 	name = "cocoa"
@@ -1670,7 +1670,7 @@
 	yield = 1
 	potency = 10
 	fluid_consumption = 6
-	nutrient_consumption = 1
+	nutrient_consumption = 10
 	growth_stages = 4
 
 /datum/seed/avocado

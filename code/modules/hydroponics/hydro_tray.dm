@@ -476,7 +476,7 @@
 		if(src.get_pestlevel() >= WEEDLEVEL_MAX/2)
 			to_chat(user, "[src] is <span class='alert'>filled with tiny worms!</span>")
 		if(draw_warnings)
-			if(src.get_toxinlevel() >= TOXINLEVEL_MAX/2)
+			if(src.seed.toxin_affinity < 5 && src.get_toxinlevel() >= TOXINLEVEL_MAX/2)
 				to_chat(user, "The tray's <span class='alert'>toxicity level alert</span> is flashing red.")
 			if(improper_light)
 				to_chat(user, "The tray's <span class='alert'>improper light level alert</span> is blinking.")
