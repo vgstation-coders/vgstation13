@@ -1,6 +1,23 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_disabilities()
+	if(disabilities & ELECTROSENSE)
+		var/affected = FALSE
+		var/affect_chance = 100
+		if(head && istype(head,/obj/item/clothing/head/tinfoil))
+			affect_chance /= 2
+		if(wear_suit && istype(wear_suit,/obj/item/clothing/suit/spaceblanket))
+			affect_chance /= 2
+		for(var/obj/machinery/M in range(3,src))
+			if(!(M.stat & NOPOWER) && prob(affect_chance))
+				adjustHalLoss(1)
+				if(prob(5))
+					Jitter(5)
+				if(prob(5))
+					M.eye_blurry += 5
+		//for(var/obj/item/device/D in search_contents_for(/obj/item/device))
+			//apply_effects(agony = 1, eyeblur = prob(10))
+
 	if(disabilities & ASTHMA)
 		if(prob(0.2))
 			asthma_attack()

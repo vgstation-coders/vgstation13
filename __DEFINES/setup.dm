@@ -510,6 +510,7 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define ASTHMA		32
 #define LACTOSE		64
 #define ANEMIA		128
+#define ELECTROSENSE	256
 
 //sdisabilities
 #define BLIND			1
@@ -1708,7 +1709,7 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
-#define DNA_SE_LENGTH 59
+#define DNA_SE_LENGTH 60
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"
