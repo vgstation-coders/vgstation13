@@ -345,7 +345,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	a_intent = I_HURT
 	anchored = 1
 
-	unsuitable_atoms_damage = 0
+	unsuitable_atmos_damage = 0
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
@@ -658,7 +658,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	projectilesound = 'sound/weapons/Gunshot.ogg'
 	casingtype = /obj/item/ammo_casing/a357
 
-	unsuitable_atoms_damage = 0
+	unsuitable_atmos_damage = 0
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0

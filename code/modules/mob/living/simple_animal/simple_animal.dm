@@ -62,7 +62,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/max_co2 = 5
 	var/min_n2 = 0
 	var/max_n2 = 0
-	var/unsuitable_atoms_damage = 2	//This damage is taken when atmos doesn't fit all the requirements above
+	var/unsuitable_atmos_damage = 2	//This damage is taken when atmos doesn't fit all the requirements above
 
 
 	mob_bump_flag = SIMPLE_ANIMAL
@@ -195,7 +195,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			src.delayedRegen()
 		return 0
 
-	if(health < 1 && stat != DEAD)
+	if(health <= 0 && stat != DEAD)
 		death()
 		return 0
 
@@ -343,7 +343,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				toxins_alert = 1
 
 	if(!atmos_suitable)
-		adjustBruteLoss(unsuitable_atoms_damage)
+		adjustOxyLoss(unsuitable_atmos_damage)
 
 	if(bodytemperature < minbodytemp)
 		temperature_alert = TEMP_ALARM_COLD_STRONG
@@ -608,7 +608,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
-
+	damage *= brute_damage_modifier
 	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = damage))
 		return 0
 	if (damage > 0)
@@ -617,12 +617,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-
 	health = clamp(health - damage, 0, maxHealth)
-	if(health < 1 && stat != DEAD)
+	if(health <= 0 && stat != DEAD)
 		death()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
+	damage *= burn_damage_modifier
 	if(status_flags & GODMODE)
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
@@ -634,7 +634,17 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		damage = damage * 2
 	health = clamp(health - damage, 0, maxHealth)
-	if(health < 1 && stat != DEAD)
+	if(health <= 0 && stat != DEAD)
+		death()
+
+/mob/living/simple_animal/adjustOxyLoss(damage)
+	damage *= oxy_damage_modifier
+	if(status_flags & GODMODE)
+		return 0
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = OXY, "amount" = damage))
+		return 0
+	health = clamp(health - damage, 0, maxHealth)
+	if(health <= 0 && stat != DEAD)
 		death()
 
 /mob/living/simple_animal/proc/skinned()
@@ -862,3 +872,14 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		qdel(src)
 
 /datum/locking_category/simple_animal
+
+//Sets a new maxHealth for a mob and rescales that mob's health and oxy damage scaling accordingly.
+/mob/living/simple_animal/proc/rescaleHealth(var/newMaxHealth = maxHealth)
+	if(maxHealth)
+		var/oldMaxHealth = maxHealth
+		maxHealth = newMaxHealth
+		health *= (newMaxHealth / oldMaxHealth)
+		oxy_damage_modifier *= (newMaxHealth / oldMaxHealth)
+		return TRUE
+	else
+		return FALSE

@@ -22,7 +22,7 @@
 	max_co2 = 0
 	min_n2 = 0
 	max_n2 = 0
-	unsuitable_atoms_damage = 0
+	unsuitable_atmos_damage = 0
 
 	faction = "diona"
 
