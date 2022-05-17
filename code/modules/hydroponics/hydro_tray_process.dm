@@ -268,12 +268,12 @@
 			sum_health += healthmod
 		else if(seed.toxin_affinity > 7 && get_toxinlevel() > TOXINLEVEL_MAX/5)
 			sum_health += healthmod
-		else
-			//some function to scale damage with inverse toxin_affinity
-			sum_health -= healthmod*(5-(seed.toxin_affinity < 5) ? seed.toxin_affinity : 5)
+
+	if(seed.toxin_affinity < 5 && get_toxinlevel() > TOXINLEVEL_MAX/5)	
+		sum_health -= healthmod*(5-(seed.toxin_affinity < 5) ? seed.toxin_affinity : 5)
 
 	if(missing_gas)
-		sum_health -= missing_gas * HYDRO_SPEED_MULTIPLIER
+		sum_health -= missing_gas * healthmod
 		update_icon_after_process = 1
 	if(improper_heat)
 		sum_health -= healthmod
