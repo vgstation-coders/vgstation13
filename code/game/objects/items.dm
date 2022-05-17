@@ -114,6 +114,37 @@
 		I.desc = "Looks like this was \a [src] some time ago."
 		qdel(src)
 
+/obj/item/hide(i)
+	if(isturf(loc))
+		level = i ? LEVEL_BELOW_FLOOR : LEVEL_ABOVE_FLOOR
+		invisibility = i ? 101 : 0
+		plane = i ? ABOVE_PLATING_PLANE : initial(plane)
+		layer = i ? FLOORBOARD_ITEM_LAYER : initial(layer)
+		anchored = i
+
+/obj/item/Crossed(atom/movable/AM)
+	if(level < LEVEL_ABOVE_FLOOR)
+		return 1
+	return 0
+
+/obj/item/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	var/oldalpha = alpha
+	invisibility = 0
+	alpha = 127
+	plane = initial(plane)
+	layer = initial(layer)
+
+	spawn(1 SECONDS)
+		var/turf/U = loc
+		if(istype(U) && U.intact)
+			invisibility = 101
+			plane = ABOVE_PLATING_PLANE
+			layer = FLOORBOARD_ITEM_LAYER
+		alpha = oldalpha
+
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 
@@ -375,6 +406,7 @@
 		var/datum/action/A = X
 		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
 			A.Grant(user)
+	INVOKE_EVENT(src, /event/equipped, "user" = user)
 	return
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
@@ -1284,16 +1316,16 @@ var/global/list/image/blood_overlays = list()
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
 	var/broken = FALSE
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
-		
+
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced, TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced, TRUE)]</span>")
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
-		
+
 	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y

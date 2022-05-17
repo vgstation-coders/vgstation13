@@ -16,6 +16,7 @@ var/global/datum/credits/end_credits = new
 	var/list/datum/episode_name/episode_names = list()
 
 	var/episode_name = ""
+	var/episode_reason = ""
 	var/producers_string = ""
 	var/episode_string = ""
 	var/cast_string = ""
@@ -192,11 +193,14 @@ var/global/datum/credits/end_credits = new
 		episode_name = customized_name
 		return
 	var/list/drafted_names = list()
+	var/list/name_reasons = list()
 	var/list/is_rare_assoc_list = list()
 	for(var/datum/episode_name/N in episode_names)
 		drafted_names["[N.thename]"] = N.weight
+		name_reasons["[N.thename]"] = N.reason
 		is_rare_assoc_list["[N.thename]"] = N.rare
 	episode_name = pickweight(drafted_names)
+	episode_reason = name_reasons[episode_name]
 	if(is_rare_assoc_list[episode_name] == TRUE)
 		rare_episode_name = TRUE
 
@@ -204,7 +208,7 @@ var/global/datum/credits/end_credits = new
 	var/season = time2text(world.realtime,"YY")
 	var/episode_count_data = SSpersistence_misc.read_data(/datum/persistence_task/round_count)
 	var/episodenum = episode_count_data[season]
-	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
+	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename' title='[episode_reason]'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
 	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name] ... [customized_ss]")
 
 /datum/credits/proc/finalize_disclaimerstring()

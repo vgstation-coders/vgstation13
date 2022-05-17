@@ -353,12 +353,23 @@ var/list/tag_suits_list = list()
 	name = "blood-red hardsuit"
 	desc = "A plastic replica of a nuclear operative's suit, you'll look just like a real murderous syndicate operative in this! This is a toy, it is not made for use in space!"
 	item_state = "syndie_hardsuit"
-	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
 
+/obj/item/clothing/suit/timefake
+	name = "time suit"
+	desc = "A replica of a real time suit; it reminds you of the previous timelines. May the loop protect the ones left behind."
+	icon_state = "time_suit"
+	item_state = "time_suit"
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
 	desc = "It's treason then."
@@ -645,7 +656,7 @@ var/list/tag_suits_list = list()
 	icon_state = "russofurcoat"
 	allowed = list(/obj/item/weapon/gun)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/doshjacket
 	name = "Plasterer's Jacket"

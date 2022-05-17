@@ -63,13 +63,14 @@ interactions:
 
 	// Materials stuff
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_WOOD = 245) //25cm wide circle, 0.5cm thick. Roughly the size of a DIN A4 piece of paper
+	starting_materials = list(MAT_WOOD = 245) //25cm wide disc, 0.5cm thick. Roughly the size of a DIN A4 piece of paper
 	autoignition_temperature = AUTOIGNITION_WOOD
 	w_type = RECYK_WOOD
 	siemens_coefficient = 0
 
 	// Paint stuff
-	var/list/datum/painting_utensil/stored_colours = list()
+	var/tagindex = 0
+	var/list/stored_colours = list()
 
 /obj/item/weapon/palette/attack_self(mob/user)
 	. = ..()
@@ -78,9 +79,8 @@ interactions:
 /obj/item/weapon/palette/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
 	var/datum/painting_utensil/p = new(user, W)
-	if (p.palette.len)
-		p.tag = "\ref[p]"
-		stored_colours += p
+	if (p.base_color)
+		stored_colours["[++tagindex]"] = p.base_color
 		to_chat(user, "<span class='notice'>You add a new color to \the [src].</span>")
 
 /obj/item/weapon/palette/ui_interact(mob/user, ui_key, datum/nanoui/ui, force_open)
@@ -89,12 +89,12 @@ interactions:
 	var/list/paint_colours
 	if (stored_colours.len)
 		paint_colours = list()
-	for (var/datum/painting_utensil/PU in stored_colours)
-		var/PU_data[0]
-		PU_data["tag"] = PU.tag
-		var/colour = rgb2num(PU.base_color) // Shaving off the alpha channel
-		PU_data["base_color"] = rgb(colour[1], colour[2], colour[3])
-		paint_colours += list(PU_data)
+	for (var/C_tag in stored_colours)
+		var/C_data[0]
+		C_data["tag"] = C_tag
+		var/colour = rgb2num(stored_colours[C_tag]) // Shaving off the alpha channel
+		C_data["base_color"] = rgb(colour[1], colour[2], colour[3])
+		paint_colours += list(C_data)
 	data["paint_colours"] = paint_colours
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 
@@ -111,8 +111,9 @@ interactions:
 	if (..())
 		return
 	if (href_list["colour"])
-		var/datum/painting_utensil/colour = locate(href_list["colour"])
-		if (!istype(colour))
+		var/colour_tag = href_list["colour"]
+		var/colour = stored_colours[href_list["colour"]]
+		if (!colour)
 			return
 		var/mob/living/L = usr
 		if (!istype(L))
@@ -128,27 +129,24 @@ interactions:
 		switch (href_list["act"])
 			if ("apply")
 				if (!PB.paint_color)
-					PB.paint_color = colour.base_color
+					PB.paint_color = colour
 					to_chat(usr, "<span class='notice'>You apply the color to \the [PB].</span>")
 				else
 					to_chat(usr, "<span class='notice'>You start mixing colours...</span>")
 					var/strengh = input("How much do you want to mix the colours? 0.5 is for an even mixing. Values toward 0 get a stronger shade of the colour in the palette, value toward 1 get a stronger shade of the colour in the pencil.", "Strenght of mixing", 0.5) as null|num
 					strengh = clamp(strengh, 0, 1)
 					var/colour_pencil = rgb2num(PB.paint_color)
-					var/colour_palette = rgb2num(colour.base_color)
+					var/colour_palette = rgb2num(colour)
 					var/blend = colorRybBlend(colour_pencil, colour_palette, strengh)
 					var/blend_rgb = rgb(blend[1], blend[2], blend[3], blend[4], "COLORSPACE_RGB")
-					colour.palette = list(blend_rgb)
-					colour.base_color = blend_rgb
+					stored_colours[colour_tag] = blend_rgb
 					PB.paint_color = blend_rgb
 				PB.update_icon()
 			if ("duplicate")
-				var/datum/painting_utensil/PU_new = colour.duplicate()
-				stored_colours += PU_new
+				stored_colours["[++tagindex]"] += colour
 				return
 			if ("delete")
-				stored_colours -= colour
-				qdel(colour)
+				stored_colours -= colour_tag
 				return
 
 	else if (href_list["wash_pencil"])

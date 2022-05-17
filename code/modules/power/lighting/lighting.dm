@@ -249,7 +249,6 @@ var/global/list/obj/machinery/light/alllights = list()
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
 
-
 	update_icon()
 	if(on)
 		if(light_range != current_bulb.brightness_range || light_power != current_bulb.brightness_power || light_color != current_bulb.brightness_color)

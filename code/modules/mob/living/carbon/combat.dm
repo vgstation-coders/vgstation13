@@ -27,9 +27,11 @@
 		return FALSE
 	target_zone = null
 	var/power = I.force
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		power = power * H.species?.power_multiplier
 	if (crit)
 		power *= CRIT_MULTIPLIER
-
 	if(def_zone)
 		target_zone = get_zone_with_miss_chance(def_zone, src)
 	else if(originator)

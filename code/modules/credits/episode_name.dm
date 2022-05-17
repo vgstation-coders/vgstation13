@@ -1,6 +1,6 @@
 /datum/episode_name
 	var/thename = ""
-	var/reason = "Default episode name." //Explanation on why this episode name fits this round. For the admin panel.
+	var/reason = "Nothing particularly of note happened this round to influence the episode name." //Explanation on why this episode name fits this round. For the admin panel.
 	var/weight = 100 //50 will have 50% the chance of being picked. 200 will have 200% the chance of being picked, etc. Relative to other names, not total (just the default names already total 700%)
 	var/rare = FALSE //If set to true and this episode name is picked, the current round is considered "not a rerun" for client preferences.
 
@@ -285,8 +285,8 @@
 
 				if(isloosecatbeast(H))
 					episode_names += new /datum/episode_name/rare("CAT'S PAW", "The only survivor was a loose catbeast.", 1500)
-					//if(station was freezing!!!!)
-						//episode_names += new /datum/episode_name/rare("ONE COOL CAT", "The only survivor was a loose catbeast. Also the station was freezing.", 2500)
+					if(get_station_avg_temp() <= T0C)
+						episode_names += new /datum/episode_name/rare("ONE COOL CAT", "The only survivor was a loose catbeast. Also the station was freezing.", 2500)
 
 				if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chef")
 					var/chance = 250
@@ -407,7 +407,7 @@
 					livingmobcount += 1
 				if(wolfcount == 1 && livingmobcount == 1)
 					episode_names += new /datum/episode_name/rare("LONE WOLF", "...", 1500)
-			else 
+			else
 				//more than 0 human escapees
 				var/braindamage_total = 0
 				var/all_retarded = TRUE

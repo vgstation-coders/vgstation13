@@ -524,7 +524,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			. += "/([M.name])"
 
 	if(showantag && M && isanyantag(M))
-		. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
+		var/counts_as_antag = FALSE
+		for(var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			if(R.is_antag)
+				counts_as_antag = TRUE
+				break
+		if(counts_as_antag)
+			. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
 
 	if(more_info && M)
 		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
@@ -1256,7 +1263,7 @@ Checks if that loc and dir has a item on the wall
 var/list/WALLITEMS = list(
 	"/obj/machinery/power/apc", "/obj/machinery/alarm", "/obj/item/device/radio/intercom",
 	"/obj/structure/extinguisher_cabinet", "/obj/structure/reagent_dispensers/peppertank",
-	"/obj/machinery/status_display", "/obj/machinery/requests_console", "/obj/machinery/light_switch", "/obj/effect/sign",
+	"/obj/machinery/status_display", "/obj/machinery/requests_console", "/obj/machinery/light_switch", "/obj/structure/sign",
 	"/obj/machinery/newscaster", "/obj/machinery/firealarm", "/obj/structure/noticeboard", "/obj/machinery/door_control",
 	"/obj/machinery/computer/security/telescreen", "/obj/machinery/embedded_controller/radio/simple_vent_controller",
 	"/obj/item/weapon/storage/secure/safe", "/obj/machinery/door_timer", "/obj/machinery/flasher", "/obj/machinery/keycard_auth",

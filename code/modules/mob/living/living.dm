@@ -7,6 +7,7 @@
 		meat_amount = size
 
 	immune_system = new (src)
+	oxy_damage_modifier *= (maxHealth / 100) //Scale oxy damage based on the max health of the mob.
 
 /mob/living/create_reagents(const/max_vol)
 	..(max_vol)

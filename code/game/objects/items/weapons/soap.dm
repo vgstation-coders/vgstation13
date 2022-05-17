@@ -47,7 +47,9 @@
 
 
 /obj/item/weapon/soap/Crossed(var/atom/movable/AM)
-	if (istype(AM, /mob/living/carbon))
+	if(..())
+		return 1
+	if (iscarbon(AM))
 		var/mob/living/carbon/M = AM
 		if (M.Slip(3, 2, 1))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",

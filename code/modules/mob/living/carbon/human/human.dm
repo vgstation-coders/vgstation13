@@ -1940,6 +1940,7 @@
 		T.get_clothes(src, T)
 		T.name = real_name
 		T.host = src
+		T.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		forceMove(null)
 		return T
 

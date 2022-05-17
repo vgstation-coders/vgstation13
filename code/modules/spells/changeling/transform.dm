@@ -36,13 +36,12 @@
 	user.visible_message("<span class='danger'>[user] transforms!</span>")
 	playsound(user, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	changeling.geneticdamage = 30
-	var/oldspecies = user.dna.species
 	user.dna = chosen_dna.Clone()
 	user.real_name = chosen_dna.real_name
 	user.flavor_text = chosen_dna.flavor_text
+	user.set_species(user.dna.species, 1)
 	user.UpdateAppearance()
-	if(oldspecies != user.dna.species)
-		user.set_species(user.dna.species, 0)
+
 	domutcheck(user, null)
 	feedback_add_details("changeling_powers","TR")
 

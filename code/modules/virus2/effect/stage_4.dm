@@ -83,8 +83,12 @@
 
 /datum/disease2/effect/zombie/activate(var/mob/living/mob)
 	if(ishuman(mob))
-		var/mob/living/carbon/human/h = mob
-		h.become_zombie_after_death = 2
+		var/mob/living/carbon/human/H = mob
+		H.become_zombie_after_death = 2
+		if(H.isDeadorDying())
+			if(isjusthuman(H))
+				H.make_zombie()
+	to_chat(mob, "<span class = 'notice'>You hunger...</span>")
 
 /datum/disease2/effect/suicide
 	name = "Suicidal Syndrome"

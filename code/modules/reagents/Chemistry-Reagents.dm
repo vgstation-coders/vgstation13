@@ -674,12 +674,7 @@
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
 		if(ishuman(M) || ismonkey(M))
 			var/mob/living/carbon/C = M
-			if(C.body_alphas[INVISIBLESPRAY])
-				C.body_alphas.Remove(INVISIBLESPRAY)
-				C.regenerate_icons()
-		else if(M.alphas[INVISIBLESPRAY])
-			M.alpha = initial(M.alpha)
-			M.alphas.Remove(INVISIBLESPRAY)
+			C.make_visible(INVISIBLESPRAY,FALSE)
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -734,20 +729,11 @@
 		qdel(hotspot)
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
-
-	var/datum/reagent/self = src
 	if(..())
 		return 1
 
-	if(O.has_been_invisible_sprayed)
-		O.alpha = initial(O.alpha)
-		O.has_been_invisible_sprayed = FALSE
-		if(ismob(O.loc))
-			var/mob/M = O.loc
-			M.regenerate_icons()
-	if(isturf(O.loc))
-		var/turf/T = get_turf(O)
-		self.reaction_turf(T, volume)
+	if(O.invisibility)
+		O.make_visible(INVISIBLESPRAY)
 
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
@@ -4885,7 +4871,7 @@ var/procizine_tolerance = 0
 /datum/reagent/frostoil
 	name = "Frost Oil"
 	id = FROSTOIL
-	description = "A special oil that noticably chills the body. Extraced from Icepeppers."
+	description = "A special oil that noticeably chills the body. Extraced from Icepeppers."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8BA6E9" //rgb: 139, 166, 233
 	custom_metabolism = FOOD_METABOLISM

@@ -366,7 +366,7 @@
 *   Microwave Menu Handling/Cooking
 ************************************/
 
-/obj/machinery/microwave/proc/cook()
+/obj/machinery/microwave/proc/cook(mob/user)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(operating)
@@ -461,7 +461,7 @@
 			cooked.forceMove(src.loc)
 			return
 		if(!emagged)
-			cooked = recipe.make_food(src)
+			cooked = recipe.make_food(src,user)
 		else
 			cooked = fail()
 		stop()
@@ -581,7 +581,7 @@
 	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
-		cook() //Cook checks for power, brokenness, and contents internally
+		cook(user) //Cook checks for power, brokenness, and contents internally
 		return
 	return ..()
 
@@ -606,7 +606,7 @@
 
 		switch(task)
 			if("Cook")
-				cook()
+				cook(user)
 			if("Eject Ingredients")
 				dispose()
 			if("Toggle Reagent Disposal")
@@ -635,7 +635,7 @@
 
 	switch(href_list["action"])
 		if ("cook")
-			cook()
+			cook(usr)
 
 		if ("dispose")
 			dispose()

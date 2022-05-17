@@ -747,3 +747,6 @@
 
 /obj/machinery/turretcover/malf_disrupt(var/duration, var/bypassafter = FALSE)
 	return
+
+/obj/machinery/turret/centcomm/syndie
+	faction = "syndicate"

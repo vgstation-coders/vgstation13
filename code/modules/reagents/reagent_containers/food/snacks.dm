@@ -2058,7 +2058,9 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O)
-	if (istype(O, /mob/living/carbon/human))
+	if(..())
+		return 1
+	if (ishuman(O))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() != TRUE)
 			return
@@ -2297,7 +2299,7 @@
 	crumb_icon = "dribbles"
 	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
 	valid_utensils = UTENSILE_SPOON
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/roboticiststears/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 60) //You're using phazon here, that's the good shit.
@@ -4957,7 +4959,9 @@
 	icon_state = "slider_slippery"
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery/Crossed(atom/movable/O) //exactly the same as soap
-	if (istype(O, /mob/living/carbon/human))
+	if(..())
+		return 1
+	if (ishuman(O))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() != TRUE)
 			return
@@ -5307,18 +5311,6 @@
 	icon_state = "chococoin_unwrapped"
 	bitesize = 4
 
-/obj/item/trash/lollipopstick
-	name = "lollipop stick"
-	desc = "A small plastic stick."
-	icon = 'icons/obj/candymachine.dmi'
-	icon_state = "lollipop_stick"
-	w_class = W_CLASS_TINY
-	slot_flags = SLOT_MASK
-	throwforce = 1
-	autoignition_temperature = 0
-	w_type = RECYK_PLASTIC
-	starting_materials = list(MAT_PLASTIC = 100)
-
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
 	desc = "Still covered in golden foil wrapper."
 	icon_state = "chococoin_wrapped"
@@ -5332,6 +5324,7 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(SUGAR, 2)
 	reagents.add_reagent(COCO, 3)
+	add_component(/datum/component/coinflip)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/attack_self(mob/user)
 	if(wrapped)
@@ -5347,6 +5340,18 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/is_screwdriver(var/mob/user)
 	return user.a_intent == I_HURT
+
+/obj/item/trash/lollipopstick
+	name = "lollipop stick"
+	desc = "A small plastic stick."
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollipop_stick"
+	w_class = W_CLASS_TINY
+	slot_flags = SLOT_MASK
+	throwforce = 1
+	autoignition_temperature = 0
+	w_type = RECYK_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/eucharist
 	name = "\improper Eucharist Wafer"
@@ -6654,7 +6659,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O)
-	if (istype(O, /mob/living/carbon/human))
+	if(..())
+		return 1
+	if (ishuman(O))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() != TRUE)
 			return

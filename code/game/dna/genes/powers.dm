@@ -104,7 +104,7 @@
 /datum/dna/gene/basic/increaserun/New()
 	block = INCREASERUNBLOCK
 
-/datum/dna/gene/basic/grant_spell/remotetalk
+/datum/dna/gene/basic/grant_spell/telepathy
 	name = "Telepathy"
 	activation_messages = list("You feel your voice can penetrate other minds.")
 	deactivation_messages = list("Your mind can no longer project your voice onto others.")
@@ -112,46 +112,47 @@
 	drug_activation_messages = list("You feel your voice can reach the astral plane now.")
 	drug_deactivation_messages = list("Your voice can no longer reach the astral plane.")
 
-	mutation = M_REMOTE_TALK
+	mutation = M_TELEPATHY
 
-	spelltype = /spell/targeted/remotesay
+	spelltype = /spell/targeted/telepathy
 
-/datum/dna/gene/basic/grant_spell/remotetalk/New()
+/datum/dna/gene/basic/grant_spell/telepathy/New()
 	..()
-	block = REMOTETALKBLOCK
+	block = TELEPATHYBLOCK
 
-/spell/targeted/remotesay
-	name = "Project Mind"
+/spell/targeted/telepathy
+	name = "Telepathy"
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
-
 	charge_type = Sp_RECHARGE
-	charge_max = 50
-
+	charge_max = 0
 	invocation_type = SpI_NONE
 	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE|TALKED_BEFORE
-
+	spell_flags = SELECTABLE|TALKED_BEFORE|INCLUDEUSER
 	override_base = "genetic"
 	hud_state = "gen_project"
-
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
-
-/spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
+/spell/targeted/telepathy/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.)
+		return FALSE
 	if(!user || !istype(user))
 		return
-
 	if(user.mind.miming)
 		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
 		return
-
-	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
-
-	if(!say)
-		return 1
+/spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
+	var/datum/species/mushroom/M = user.species
+	var/message
+	if(!istype(M))
+		message = stripped_input(user, "What do you wish to say?", "Telepathy")
+		if(!message)
+			return 1
+	else
+		M.telepathic_target.len = 0
 
 	for(var/T in targets)
 		var/mob/living/target
@@ -160,18 +161,22 @@
 		if (istype (T, /datum/mind))
 			target = user.can_mind_interact(T)
 		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
-			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
-			return
-
-		if(M_REMOTE_TALK in target.mutations)
-			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: </span><span class='bold'>[say]</span>")
-		else
-			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: </span><span class='bold'>[say]</span>")
-		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
-		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
+			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
+			continue
+		else if(istype(M))
+			M.telepathic_target += target
+			continue
 		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
+			G.show_message("<i>Telepathy, <b>[user]</b> to <b>[T]</b>: [message]</i>")
+		log_admin("[key_name(user)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
+		if(T == user) //Talking to ourselves
+			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
+			return
+		if(M_TELEPATHY in target.mutations)
+			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: [message]</span>")
+		else
+			to_chat(T,"<span class='notice'>You hear a voice inside your head: [message] </span>")
+		to_chat(user,"<span class='notice'>Projected to <b>[T]</b>: [message]</span>")
 
 /datum/dna/gene/basic/morph
 	name = "Morph"

@@ -94,9 +94,6 @@
 
 //necromancy moved to code\modules\projectiles\guns\energy\special.dm --Sonix
 
-
-#define CLOAKINGCLOAK "cloakingcloak"
-
 /obj/item/weapon/cloakingcloak
 	name = "cloak of cloaking"
 	desc = "A silk cloak that will hide you from anything with eyes."
@@ -121,14 +118,11 @@
 		if(wielded)
 			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
 			user.register_event(/event/moved, src, .proc/mob_moved)
-			user.alpha = 1	//to cloak immediately instead of on the next Life() tick
-			user.alphas[CLOAKINGCLOAK] = 1
+			user.make_invisible(CLOAKINGCLOAK, 0, TRUE, 1, INVISIBILITY_MAXIMUM)
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
 			user.unregister_event(/event/moved, src, .proc/mob_moved)
-			user.alpha = initial(user.alpha)
-			user.alphas.Remove(CLOAKINGCLOAK)
-
+			user.make_visible(CLOAKINGCLOAK, TRUE)
 
 /obj/item/weapon/glow_orb
 	name = "inert stone"

@@ -1,3 +1,5 @@
+///////////////////////////////////////////////////////////////////FERAL VOX///////////
+//Previously found in Blacksite Prism
 /mob/living/simple_animal/hostile/humanoid/vox
 	name = "vox"
 	desc = "A bird-like creature. This one is feral."
@@ -25,8 +27,101 @@
 	..()
 	languages += all_languages[LANGUAGE_VOX]
 
-///////////////////////////////////////////////////////////////////NU VOX RAIDERS///////////
-//Armed with various ranged weapons, with a bias towards cheaper ballistics
+//////////////////////////////
+// VOX PRISONERS
+//////////////////////////////
+//Found in Blacksite Prism
+/mob/living/simple_animal/hostile/humanoid/vox/prisoner // Boring default prisoner, for inheritance
+	name = "Vox Prisoner"
+	desc = "A bird-like creature. This one is wearing a prisoner's uniform and seems to be hostile."
+	icon_state = "vox_testsubject"
+
+	melee_damage_lower = 5
+	melee_damage_upper = 10
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
+	stat_attack = UNCONSCIOUS // No mercy in the big house
+
+	attacktext = "kicks"
+	attack_sound = 'sound/weapons/punch1.ogg'
+
+	max_oxy = 0
+	max_tox = 0
+	max_co2 = 0
+	min_n2 = 0 // Won't die immediately when they spawn in Blacksite Prism anymore
+
+	speak = list("Head itches inside, but can't scratch. Annoying.","When escape, will tear them all apart piece by piece.","Last remember, was making good trade for shoal on human station. Deal go bad, maybe.","Kreh, so hungry. Will eat anything, don't care.","Kill, kill, kill...")
+	speak_chance = 1
+
+	corpse = /obj/effect/landmark/corpse/vox/prisoner
+	faction = "prisoner" // We're all brothers and sisters in binds now
+
+/mob/living/simple_animal/hostile/humanoid/vox/prisoner/Aggro()
+	..()
+	say(pick("I rip you apart!","Kill or eat, why not both?","Don't care who you are. Die now!","Will slaughter you, then use your skin as rug!","KREEEEEEEEEEE!"), all_languages[LANGUAGE_VOX])
+
+///////////////////////////////////////////////////////////////////Melee Prisoner///////////
+//Prisoner with a makeshift hatchet. Will throw bolas at distant targets, then close in to tear them up
+/mob/living/simple_animal/hostile/humanoid/vox/prisoner/melee
+	desc = "A bird-like creature. This one is grasping a makeshift hatchet and some bolas in its claws."
+	icon_state = "vox_testsubject_melee"
+
+	melee_damage_lower = 12
+	melee_damage_upper = 16
+
+	attacktext = "chops"
+	attack_sound = 'sound/weapons/bladeslice.ogg'
+
+	items_to_drop = list(/obj/item/weapon/hatchet/tomahawk/metal, /obj/item/weapon/legcuffs/bolas)
+
+	ranged_message = "shrieks angrily"
+	retreat_distance = 2 // Will attempt to kite/avoid incoming melee attacks
+	minimum_distance = 1
+	ranged = 1
+
+	var/last_bolathrow = 0
+	var/const/bolathrow_cooldown = 45 SECONDS // Needs to wait a while between bola throws
+
+/mob/living/simple_animal/hostile/humanoid/vox/prisoner/melee/Shoot(var/atom/target, var/atom/start, var/mob/user)
+	var/mob/living/carbon/human/H = target
+	if(last_bolathrow + bolathrow_cooldown < world.time) // If we're not on cooldown, chuck some bolas at a distant target
+		var/atom/movable/bola_to_throw = new /obj/item/weapon/legcuffs/bolas(get_turf(src))
+		visible_message("<b><span class='warning'>[src] tosses some bolas at [H]!</span>")
+		bola_to_throw.throw_at(target,10,3)
+		last_bolathrow = world.time
+	else // Otherwise shriek angrily at the target for a massive debuff to their morale
+		..()
+
+///////////////////////////////////////////////////////////////////Ranged Prisoner///////////
+//Prisoner with a powered crossbow. Just as dangerous as the old vox raiders
+/mob/living/simple_animal/hostile/humanoid/vox/prisoner/ranged
+	desc = "A bird-like creature. This one is grasping a jury-rigged powered crossbow in its claws."
+	icon_state = "vox_testsubject_crossbow"
+
+	items_to_drop = list(/obj/item/weapon/crossbow, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill)
+
+	ranged = 1
+	retreat_distance = 4
+	minimum_distance = 4
+	ranged_cooldown_cap = 6
+
+/mob/living/simple_animal/hostile/humanoid/vox/prisoner/ranged/Shoot(var/target, var/start, var/user, var/bullet = 0)
+	if(target == start)
+		return
+	if(!istype(target, /turf))
+		return
+
+	var/obj/item/weapon/arrow/A = new /obj/item/weapon/arrow/quill(get_turf(src))
+	visible_message("<b><span class='warning'>[src] launches a quill from their crossbow!</span>")
+	A.throw_at(target,10,25)
+
+	ranged_cooldown = 6
+	return
+
+//////////////////////////////
+// NU VOX RAIDERS
+//////////////////////////////
+//Vox raiders armed with various ranged weapons, with a bias towards cheaper ballistics
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider //Baseline chikun raider, here so that the others that follow inherit all its useful properties
 	name = "Vox Raider"
@@ -37,6 +132,7 @@
 	melee_damage_lower = 6
 	melee_damage_upper = 12
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Will smash through obstacles and force open doors to track down targets
 	stat_attack = UNCONSCIOUS //These raiders are extra mean
 
 	attacktext = "kicks"
@@ -99,8 +195,6 @@
 	desc = "A vox raider in a pressure suit. This one is clutching a syringe and brandishing a glock pistol."
 	icon_state = "voxraider_medic"
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Will smash through obstacles and force open doors to track down targets
-
 	var/last_healed = 0
 	var/const/heal_cooldown = 30 SECONDS // Can heal himself when he starts losing health
 
@@ -143,8 +237,6 @@
 
 	attacktext = "stabs"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Will smash through obstacles and force open doors to track down targets
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_assassin
 
@@ -208,8 +300,6 @@
 
 	move_to_delay = 3 // Sacrifices speed for more health/armor
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Breach and clear
-
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider
 
 	items_to_drop = list(/obj/item/weapon/gun/projectile/shotgun/pump/combat, /obj/item/weapon/grenade/flashbang)
@@ -248,8 +338,6 @@
 	vision_range = 10
 	aggro_vision_range = 10
 	idle_vision_range = 10 // He's got good eyes
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_deadeye
 
@@ -299,7 +387,6 @@
 	attack_sound = 'sound/weapons/machete_hit01.ogg'
 
 	status_flags = UNPACIFIABLE // Too angry to be pacified. Also meant to be a "boss" mob, so that would be a bit silly
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // He can smash stuff open and force open airlocks to attack his target
 
 	var/berserk = 0
 	var/last_bigheal = 0
@@ -359,7 +446,7 @@
 	retreat_distance = 5
 	minimum_distance = 5
 
-	ranged_cooldown_cap = 9
+	ranged_cooldown_cap = 6
 
 	corpse = /obj/effect/landmark/corpse/vox/crossbow
 	items_to_drop = list(/obj/item/weapon/crossbow, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill)
@@ -371,9 +458,10 @@
 		return
 
 	var/obj/item/weapon/arrow/A = new /obj/item/weapon/arrow/quill(get_turf(src))
-
+	visible_message("<b><span class='warning'>[src] launches a quill from their crossbow!</span>")
 	A.throw_at(target,10,25)
 
+	ranged_cooldown = 6 // Why this wasn't here before is beyond me. This should make it so these guys don't fire crossbows like machine guns
 	return
 
 /mob/living/simple_animal/hostile/humanoid/vox/crossbow/spacesuit

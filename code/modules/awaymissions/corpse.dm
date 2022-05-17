@@ -1048,6 +1048,11 @@
 	corpsegender = G_BOTH
 	generate_random_appearance = 1
 
+/obj/effect/landmark/corpse/grey/prisoner
+	name = "Grey Prisoner"
+	corpseuniform = /obj/item/clothing/under/color/prisoner
+	corpseshoes = /obj/item/clothing/shoes/orange
+
 /obj/effect/landmark/corpse/grey/worker
 	name = "Grey Laborer"
 	corpseuniform = /obj/item/clothing/under/grey/grey_worker
@@ -1144,6 +1149,13 @@
 	mutantrace = "Vox"
 	corpsegender = G_BOTH
 	generate_random_appearance = 1
+
+/obj/effect/landmark/corpse/vox/prisoner
+	name = "Vox Prisoner"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpseuniform = /obj/item/clothing/under/color/prisoner
+	corpseshoes = /obj/item/clothing/shoes/orange
+	corpseback = /obj/item/weapon/tank/nitrogen
 
 /obj/effect/landmark/corpse/vox/spaceraider
 	name = "Vox Raider"
