@@ -260,7 +260,7 @@
 			add_weedlevel(max(get_weedlevel() * 2, 40))
 			generic_mutation_message("shudders!")
 		if("pest_increase")
-			add_pestlevel(max(get_pestlevel * 2, 40))
+			add_pestlevel(max(get_pestlevel() * 2, 40))
 			generic_mutation_message("shudders!")
 		if("stunt_growth")
 			affect_growth(-rand(2,4))
