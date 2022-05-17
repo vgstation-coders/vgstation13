@@ -30,7 +30,7 @@
 /datum/disease2/effect/telepathic/activate(var/mob/living/mob)
 	if (mob.dna)
 		mob.dna.check_integrity()
-		mob.dna.SetSEState(REMOTETALKBLOCK,1)
+		mob.dna.SetSEState(TELEPATHYBLOCK,1)
 		domutcheck(mob, null)
 
 /datum/disease2/effect/mind

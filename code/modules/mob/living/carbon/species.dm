@@ -615,9 +615,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
-	// Both must be set or it's only a 45% chance of manifesting.
-	default_mutations=list(M_REMOTE_TALK)
-	default_block_names=list("REMOTETALK")
+	spells = list(/spell/targeted/telepathy)
 
 	//PLEASE IF YOU MAKE A NEW RACE, KEEP IN MIND PEOPLE WILL PROBABLY MAKE UNIFORM SPRITES.
 	uniform_icons = 'icons/mob/species/grey/uniform.dmi'
@@ -1293,7 +1291,7 @@ var/list/has_died_as_golem = list()
 
 	primitive = /mob/living/carbon/monkey/mushroom
 
-	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/genetic/fungaltelepathy)
+	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/telepathy)
 
 
 	default_mutations=list() //exoskeleton someday...
@@ -1334,7 +1332,7 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
 					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
-	var/mob/living/telepathic_target
+	var/mob/living/telepathic_target[] = list()
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1344,16 +1342,21 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
-	if(istype(telepathic_target) && M.can_mind_interact(telepathic_target))
+	if(!telepathic_target.len)
 		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Fungal Telepathy, <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
-		log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
-		if(telepathic_target == M) //Talking to ourselves
-			to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
-			return
-		to_chat(telepathic_target,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
-		to_chat(M,"<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
-
+			G.show_message("<i>[key_name(M)] projects its mind towards itself: [message]</i>")
+		log_admin("[key_name(M)] projects its mind towards itself: [message]</span>")
+		to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
+	for(var/mob/living/T in telepathic_target)
+		if(istype(T) && M.can_mind_interact(T))
+			for(var/mob/dead/observer/G in dead_mob_list)
+				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[T]</b>: [message]</i>")
+			log_admin("[key_name(M)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
+			if(T == M) //Talking to ourselves
+				to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
+				return
+			to_chat(T,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
+			to_chat(M,"<span class='mushroom'>Projected to <b>[T]</b>: [message]</span>")
 
 /datum/species/lich
 	name = "Undead"
