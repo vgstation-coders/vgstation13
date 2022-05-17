@@ -35,9 +35,9 @@
 		nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
 		weedlevel = round(min(weedlevel + amount, WEEDLEVEL_MAX))
 	else
-		nutrientlevel = round(min(0, nutrientlevel + amount))
+		nutrientlevel = round(max(0, nutrientlevel + amount))
 		weedlevel = round(min(0, weedlevel + amount))
-		if(nutrientlevel == 0)
+		if(nutrientlevel < 1)
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
 
@@ -51,7 +51,7 @@
 	else
 		//Remove or uptake water
 		waterlevel = round(max(0, waterlevel + amount))
-		if(waterlevel == 0)
+		if(waterlevel < 1)
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
 
