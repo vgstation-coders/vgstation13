@@ -307,15 +307,15 @@
 // Weedkiller defines for hydroponics
 // *************************************
 
-/obj/item/weapon/weedkiller
+/obj/item/weedkiller
 	name = "bottle of weedkiller"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
 	flags = FPRINT
-	var/toxicity = 0
-	var/uses = 0
+	var/toxicity = 40
+	var/uses = 6
 
-/obj/item/weapon/weedkiller/proc/use(amount = 1)
+/obj/item/weedkiller/proc/use(amount = 1)
 	uses = max(uses - amount,0)
 	if(!uses)
 		name = "empty [src]"
@@ -323,21 +323,21 @@
 	else
 		return TRUE
 
-/obj/item/weapon/weedkiller/triclopyr
+/obj/item/weedkiller/triclopyr
 	name = "bottle of glyphosate"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
 	flags = FPRINT
 	toxicity = 4
 
-/obj/item/weapon/weedkiller/lindane
+/obj/item/weedkiller/lindane
 	name = "bottle of triclopyr"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle18"
 	flags = FPRINT
 	toxicity = 6
 
-/obj/item/weapon/weedkiller/D24
+/obj/item/weedkiller/D24
 	name = "bottle of 2,4-D"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle15"

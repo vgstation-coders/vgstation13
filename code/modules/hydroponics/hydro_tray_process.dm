@@ -21,7 +21,7 @@
 	// Weeds like water and nutrients, there's a chance the weed population will increase.
 	// Bonus chance if the tray is unoccupied.
 	// This process is up here because it still happens even when the tray is empty.
-	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5 && prob(3))
+	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5 && prob(1))
 		add_weedlevel(1 * HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 
 	// There's a chance for a weed explosion to happen if the weeds take over.
@@ -65,7 +65,7 @@
 
 	//Consume, 25% of the time
 	if(prob(25))
-		if(seed.nutrient_consumption > 0 && nutrientlevel > 0)
+		if(seed.nutrient_consumption > 0)
 			add_nutrientlevel(-seed.nutrient_consumption * HYDRO_SPEED_MULTIPLIER)
 		if(seed.fluid_consumption > 0)
 			if(seed.toxin_affinity < 5)

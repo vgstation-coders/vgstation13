@@ -37,6 +37,9 @@
 	else
 		nutrientlevel = round(min(0, nutrientlevel + amount))
 		weedlevel = round(min(0, weedlevel + amount))
+		if(nutrientlevel == 0)
+			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
+			affect_growth(-1)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_nutrientlevel()
 	return nutrientlevel
@@ -49,7 +52,7 @@
 		//Remove or uptake water
 		waterlevel = round(max(0, waterlevel + amount))
 		if(waterlevel == 0)
-			add_planthealth(rand(1,3) * HYDRO_SPEED_MULTIPLIER)
+			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_waterlevel()
