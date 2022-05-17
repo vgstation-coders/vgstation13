@@ -258,12 +258,10 @@
 	if(prob(35))
 		if(get_nutrientlevel() > NUTRIENTLEVEL_MAX / 5)
 			sum_health += healthmod
- 		if(seed.toxin_affinity < 5)
-			if(get_waterlevel() > WATERLEVEL_MAX / 5)
-				sum_health += healthmod
+ 		if(seed.toxin_affinity < 5 && get_waterlevel() > WATERLEVEL_MAX / 5)
+			sum_health += healthmod
 		//lower minimum thresholds for moderate toxin affinity because it uptakes both toxin and water
-		else if(seed.toxin_affinity <= 7)
-			if(get_waterlevel() > WATERLEVEL_MAX/10 && get_toxinlevel() > TOXINLEVEL_MAX/10)
+		else if(seed.toxin_affinity >= 5 && seed.toxin_affinity <= 7 && get_waterlevel() > WATERLEVEL_MAX/10 && get_toxinlevel() > TOXINLEVEL_MAX/10)
 				sum_health += healthmod
 		else if(get_toxinlevel() > TOXINLEVEL_MAX/5)
 			sum_health += healthmod
