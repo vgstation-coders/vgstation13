@@ -2,7 +2,6 @@
 
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(disabilities & ELECTROSENSE)
-		var/affected = FALSE
 		var/affect_chance = 100
 		if(head && istype(head,/obj/item/clothing/head/tinfoil))
 			affect_chance /= 2
