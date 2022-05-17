@@ -460,7 +460,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_REMOTE_VIEW	101 	// remote viewing
 #define M_REGEN			102 	// health regen
 #define M_RUN			103 	// no slowdown
-#define M_REMOTE_TALK	104 	// remote talking
+#define M_TELEPATHY		104 	// remote talking
 #define M_MORPH			105 	// changing appearance
 #define M_RESIST_HEAT	106 	// heat resistance
 #define M_HALLUCINATE	107 	// hallucinations
@@ -652,7 +652,7 @@ var/list/liftable_structures = list(\
 	/obj/machinery/space_heater, \
 	/obj/machinery/recharge_station, \
 	/obj/machinery/flasher, \
-	/obj/structure/stool, \
+	/obj/item/weapon/stool, \
 	/obj/structure/closet, \
 	/obj/machinery/photocopier, \
 	/obj/structure/filingcabinet, \

@@ -53,8 +53,10 @@
 			if(ghostmob)
 				to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
 				return
-			to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
-			return
+		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
+		if(!brainmob.mind)  
+			to_chat(user, "<span class='deadsay'>It shows no signs of sentience.</span>") //monkeyman or NPC
+		return
 
 /obj/item/organ/internal/brain/removed(var/mob/living/target,var/mob/living/user)
 

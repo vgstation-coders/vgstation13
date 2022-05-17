@@ -38,7 +38,7 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter)
 	result = /obj/item/weapon/reagent_containers/food/snacks/bagel
 
-/datum/recipe/bagel/make_food(obj/container)
+/datum/recipe/bagel/make_food(obj/container, mob/user)
 	score.bagelscooked++
 	return ..()
 
@@ -337,7 +337,7 @@
 
 /datum/recipe/human //Parent datum only
 
-/datum/recipe/human/make_food(var/obj/container)
+/datum/recipe/human/make_food(var/obj/container, var/mob/user)
 	var/human_name
 	for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
 		if(HM.subjectname)
@@ -490,7 +490,7 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/faggot)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donkpocket //SPECIAL
 
-/datum/recipe/donkpocket/make_food(var/obj/container)
+/datum/recipe/donkpocket/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked = ..(container)
 	being_cooked.warm_up()
 	return being_cooked
@@ -500,7 +500,7 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/donkpocket)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donkpocket
 
-/datum/recipe/donkpocket/warm/make_food(var/obj/container)
+/datum/recipe/donkpocket/warm/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked = locate() in container
 	if(istype(being_cooked))
 		if(being_cooked.warm <= 0)
@@ -716,7 +716,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fortunecookie
 
-/datum/recipe/fortunecookie/make_food(var/obj/container)
+/datum/recipe/fortunecookie/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/paper/paper = locate() in container
 	paper.forceMove(null) //prevent deletion
 	var/obj/item/weapon/reagent_containers/food/snacks/fortunecookie/being_cooked = ..(container)
@@ -724,7 +724,7 @@
 	being_cooked.trash = paper
 	return being_cooked
 
-/datum/recipe/fortunecookie/check_items(var/obj/container)
+/datum/recipe/fortunecookie/check_items(var/obj/container, var/mob/user)
 	. = ..()
 	if(.)
 		var/obj/item/weapon/paper/paper = locate() in container
@@ -1270,7 +1270,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/amanitajelly
 
-/datum/recipe/amanitajelly/make_food(var/obj/container)
+/datum/recipe/amanitajelly/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/amanitajelly/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(AMATOXIN)
 	return being_cooked
@@ -1684,7 +1684,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/herbsalad
 
-/datum/recipe/herbsalad/make_food(var/obj/container)
+/datum/recipe/herbsalad/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/herbsalad/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(TOXIN)
 	return being_cooked
@@ -1709,7 +1709,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/validsalad
 
-/datum/recipe/validsalad/make_food(var/obj/container)
+/datum/recipe/validsalad/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/validsalad/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(TOXIN)
 	return being_cooked
@@ -2090,6 +2090,22 @@
 	reagents = list(CHERRYJELLY = 5, SUGAR = 10)
 	result = /obj/item/weapon/reagent_containers/food/snacks/jectie
 
+/datum/recipe/jectie/make_food(obj/container, mob/user)
+	if(user && user.mind)
+		var/datum/role/jectie_cooker/R = user.mind.GetRole(JECTIE_COOKER)
+		if(!R)
+			R = new
+			R.AssignToRole(user.mind,1)
+		var/obj/item/weapon/reagent_containers/food/snacks/jectie/J = ..()
+		if(J && J.icon_state == "jectie_green")
+			R.logo_state = "jectie_green"
+			R.AppendObjective(/datum/objective/cook_jectie/success)
+		else
+			R.logo_state = "jectie_red"
+			R.AppendObjective(/datum/objective/cook_jectie)
+		return J
+	return ..()
+
 /datum/recipe/ramen
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/stack/sheet/cardboard)
@@ -2229,7 +2245,7 @@
 		)
 	result = /obj/item/weapon/storage/fancy/food_box/slider_box/carp
 
-/datum/recipe/sliders/carp/make_food(var/obj/container)
+/datum/recipe/sliders/carp/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/C = locate() in container
 	if(C.poisonsacs)
 		result = /obj/item/weapon/storage/fancy/food_box/slider_box/toxiccarp
@@ -2693,7 +2709,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan
 
-/datum/recipe/zhulongcaofan/make_food(var/obj/container as obj)
+/datum/recipe/zhulongcaofan/make_food(var/obj/container, var/mob/user)
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
 		P.reagents.del_reagent(FORMIC_ACID) //This cleanses the plant.
 	return ..()
@@ -2724,7 +2740,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/hoboburger
 
-/datum/recipe/hoboburger/make_food(var/obj/container as obj)
+/datum/recipe/hoboburger/make_food(var/obj/container, var/mob/user)
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
 		P.reagents.del_reagent(FORMIC_ACID) //This cleanses the plant.
 	return ..()
@@ -2737,7 +2753,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/hoboburger
 
-/datum/recipe/moonhoboburger/make_food(var/obj/container as obj)
+/datum/recipe/moonhoboburger/make_food(var/obj/container, var/mob/user)
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
 		P.reagents.del_reagent(FORMIC_ACID) //This cleanses the plant.
 	return ..()

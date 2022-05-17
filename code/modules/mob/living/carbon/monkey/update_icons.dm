@@ -128,6 +128,9 @@
 /mob/living/carbon/monkey/diona/update_inv_hat()
 	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
 
+/mob/living/carbon/monkey/roach/update_inv_hat()
+	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
+
 /mob/living/carbon/monkey/vox/update_inv_hat()
 	..(pixel_y_adjustment = -12 * PIXEL_MULTIPLIER)
 
@@ -165,6 +168,9 @@
 
 /mob/living/carbon/monkey/diona/update_inv_wear_mask()
 	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
+
+/mob/living/carbon/monkey/roach/update_inv_wear_mask()
+	..(pixel_y_adjustment = -9 * PIXEL_MULTIPLIER)
 
 /mob/living/carbon/monkey/vox/update_inv_wear_mask()
 	..(pixel_y_adjustment = -12 * PIXEL_MULTIPLIER)
@@ -234,6 +240,9 @@
 
 /mob/living/carbon/monkey/diona/update_inv_back()//needed for pixel_y adjustment
 	..(pixel_y_adjustment = -5 * PIXEL_MULTIPLIER)
+
+/mob/living/carbon/monkey/roach/update_inv_back()
+	..(pixel_y_adjustment = -2 * PIXEL_MULTIPLIER)
 
 /mob/living/carbon/monkey/vox/update_inv_back()//Sorry for the copypaste
 	..(pixel_y_adjustment = -5 * PIXEL_MULTIPLIER)

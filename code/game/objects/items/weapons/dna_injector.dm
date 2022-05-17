@@ -1335,24 +1335,24 @@
 	block = FARSIGHTBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/remotesay
-	name = "DNA-Injector (Remote Say)"
+/obj/item/weapon/dnainjector/nofail/telepathy
+	name = "DNA-Injector (Telepathy)"
 	desc = "Share it with the world."
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 
-/obj/item/weapon/dnainjector/nofail/remotesay/initialize()
-	block = REMOTETALKBLOCK
+/obj/item/weapon/dnainjector/nofail/telepathy/initialize()
+	block = TELEPATHYBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/antiremotesay
-	name = "DNA-Injector (Remote Say)"
+/obj/item/weapon/dnainjector/nofail/antitelepathy
+	name = "DNA-Injector (Telepathy)"
 	desc = "Keep it to yourself."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 
-/obj/item/weapon/dnainjector/nofail/antiremotesay/initialize()
-	block = REMOTETALKBLOCK
+/obj/item/weapon/dnainjector/nofail/telepathy/initialize()
+	block = TELEPATHYBLOCK
 	..()
 
 /obj/item/weapon/dnainjector/nofail/randompower/New(newloc)
@@ -1383,6 +1383,6 @@
         /obj/item/weapon/dnainjector/nofail/immolate,
         /obj/item/weapon/dnainjector/nofail/melt,
         /obj/item/weapon/dnainjector/nofail/farsightmut,
-        /obj/item/weapon/dnainjector/nofail/remotesay)
+        /obj/item/weapon/dnainjector/nofail/telepathy)
     new type(loc)
     qdel(src)
