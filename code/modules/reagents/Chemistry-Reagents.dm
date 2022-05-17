@@ -1270,6 +1270,10 @@
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
 
+/datum/reagent/holywater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.add_waterlevel(1)
+
 /datum/reagent/holysalts
 	name = "Holy Salts"
 	id = HOLYSALTS
