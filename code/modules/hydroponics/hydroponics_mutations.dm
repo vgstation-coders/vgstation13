@@ -1,9 +1,3 @@
-//The astrogator has a way with plants of every type.
-//She nurtures alien veg'tables and cooks them when they're ripe!
-//She had a Veged orchid once that ate the captain's cat.
-//Then terrorized the ship's exec, until she squashed it flat!
-
-//Mutates the plant overall (randomly).
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/severity)
 	if(!severity)
 		return
@@ -29,10 +23,8 @@
 		return
 
 	//First we'll pick a CATEGORY of mutations to look from, for simplicity and to keep an even ratio of good things to bad things if more mutations are added.
-	//This looks like shit, but it's a lot easier to read/change this way. Maybe. Promise. Hahaha. Shit.
 	if(!mutation_category) //If we already have a category, use that instead.
 		mutation_category = pick(\
-			// What's going on with these numbers?
 			// Effectively, the weight of each category is a linear function that increases with the potency of the mutation.
 			// Most categories have an integer deducted from severity, this means that the chance for that mutation
 			// is 0 below said severity (e.g. you won't get dangerous shit if you use less than 14u mutagen).
@@ -48,7 +40,6 @@
 	switch(mutation_category)
 		if(MUTCAT_GOOD)
 			mutation_type = pick(\
-			// What's going on with these numbers?
 			// We want a different weight for the mutation depending on whether the plant already has it. For example, a non-glowey plant
 			// will have a fair chance to toggle bio-luminiscence. However, if it already has bioluminiscence, then it will have a smaller
 			// chance to toggle again, since then it would stop glowing, which is less fun and frustrating if you're trying to stack mutations.
@@ -135,7 +126,6 @@
 	//testing("Mutation Category: [mutation_category] - Mutation Type: [mutation_type]. Severity: [severity]. All category weights at this sev: GOOD=15/BAD=[clamp(0.4*severity,0, 7)]/WEIRD=[clamp(0.7*(severity-5),0,8)]/BIZZARE=[clamp(severity-12,0,7)]/AWFUL=[clamp(severity-12,0,14)]/DANGEROUS=[clamp(severity-14,0,20)]")
 	switch(mutation_type)
 		if("code_explanation")
-			// DEARIE ME, WHAT IS GOING ON HERE?
 			// Each stat mutation will have a "soft cap" and a "hard cap" depending on how much mutagen is used. If the stat to mutate is bigger than the "soft cap",
 			// the strength of the mutation will decrease. As that stat approaches the "hard cap", the strength of subsequent mutations will linearly decrease to 0.
 			// Example: If the potency "soft cap" is 50, the "hard cap" is 75, and your plant has 60 potency, then the mutation will only be 60% of what is listed.
@@ -151,7 +141,7 @@
 			// Finally, we use the linear interpolation function, and we'll have our final soft cap and hard cap.
 			var/softcap = mix(softcap_values[i], softcap_values[i+1], lerp_factor)
 			var/hardcap = mix(hardcap_values[i], hardcap_values[i+1], lerp_factor)
-			// Excellent! Now we can check if the mutation's strength should be affected by these caps.
+			// Now we can check if the mutation's strength should be affected by these caps.
 			// To do this, we use the unmix function, which returns a decimal number from 0 to 1.
 			var/cap_ratio = unmix(seed.potency, softcap, hardcap)
 			// Now that we have all the final modifiers, we can calculate the mutation's final strength.
@@ -250,11 +240,11 @@
 			generic_mutation_message("quivers!")
 
 		if("plusstat_nutrient&fluid_consumption")
-			var/list/softcap_values = list(4, 3, 2, 1, 0, 0)
-			var/list/hardcap_values = list(2, 1, 1, 0,    0, 0)
+			var/list/softcap_values = list(0.30, 0.25, 0.15, 0.05, 0, 0)
+			var/list/hardcap_values = list(0.15, 0.10, 0.05, 0,    0, 0)
 			var/deviation = severity * (rand(3, 7)/1000) * get_ratio(severity, softcap_values, hardcap_values, seed.nutrient_consumption)
 			//Deviation per 10u Mutagen before cap: 0.03-0.07
-			seed.nutrient_consumption = clamp(seed.nutrient_consumption - deviation, 0, 10)
+			seed.nutrient_consumption = clamp(seed.nutrient_consumption - deviation, 0, 1)
 
 			softcap_values = list(4, 3,   1.5, 0.5, 0, 0)
 			hardcap_values = list(2, 1.5, 0.5, 0,   0, 0)
@@ -270,7 +260,7 @@
 			add_weedlevel(max(get_weedlevel() * 2, 40))
 			generic_mutation_message("shudders!")
 		if("pest_increase")
-			add_pestlevel(max(get_pestlevel() * 2, 40))
+			add_pestlevel(max(get_pestlevel * 2, 40))
 			generic_mutation_message("shudders!")
 		if("stunt_growth")
 			affect_growth(-rand(2,4))
