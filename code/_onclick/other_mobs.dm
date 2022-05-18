@@ -17,10 +17,7 @@
 					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
 						after_special_attack(A, attack_type, special_attack_result)
 						return
-
 					delayNextAttack(-10) //This is only called when the kick fails
-				else
-					set_attack_type() //Reset attack type
 
 			if(ATTACK_BITE)
 				if(can_bite(A))
@@ -30,10 +27,7 @@
 					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
 						after_special_attack(A, attack_type, special_attack_result)
 						return
-
 					delayNextAttack(-10) //This is only called when the bite fails
-				else
-					set_attack_type() //Reset attack type
 
 	// Special glove functions:
 	// If the gloves do anything, have them return 1 to stop
@@ -53,6 +47,8 @@
 			else
 				to_chat(src, "You try to move your arm but nothing happens. Need a hand?")
 		return
+	set_attack_type() //Reset attack type
+	
 	if(src.can_use_hand())
 		A.attack_hand(src, params, proximity)
 	else
