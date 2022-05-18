@@ -33,6 +33,7 @@
 	// If the gloves do anything, have them return 1 to stop
 	// normal attack_hand() here.
 	if(proximity && istype(G) && G.Touch(A, src, 1))
+		set_attack_type() //Reset attack type
 		return
 
 	if(ismob(A))
