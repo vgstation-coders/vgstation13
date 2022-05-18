@@ -6,6 +6,7 @@
 */
 /mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
+
 	if(a_intent == "hurt" && !is_pacified() && A.loc != src)
 		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 		switch(attack_type) //Special attacks - kicks, bites
@@ -13,6 +14,7 @@
 				if(can_kick(A))
 
 					delayNextAttack(10)
+
 					special_attack_result = A.kick_act(src)
 					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
 						after_special_attack(A, attack_type, special_attack_result)
@@ -26,6 +28,7 @@
 				if(can_bite(A))
 
 					delayNextAttack(10)
+
 					special_attack_result = A.bite_act(src)
 					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
 						after_special_attack(A, attack_type, special_attack_result)
@@ -45,13 +48,7 @@
 		delayNextAttack(10)
 
 	if(!can_use_hand_or_stump())
-		switch(attack_type)
-			if(ATTACK_KICK)
-				to_chat(src, "You can't seem to kick in your current state. Need a leg up?")
-			if(ATTACK_BITE)
-				to_chat(src, "You can't seem to bite in your current state. Bitten off more than you can chew?")
-			else
-				to_chat(src, "You try to move your arm but nothing happens. Need a hand?")
+		to_chat(src, "You try to move your arm but nothing happens. Need a hand?")
 		return
 	if(src.can_use_hand())
 		A.attack_hand(src, params, proximity)
