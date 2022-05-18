@@ -104,7 +104,7 @@
 			return
 
 		if(!pickpocket)
-			visible_message("<span class='danger'>\The [user] is trying to put \a [held] on \the [src]!</span>")
+			visible_message("<span class='danger'>\The [user] is trying to put \a [held] [held.goes_in_mouth ? "in" : "on"] \the [src][held.goes_in_mouth ? "'s mouth" : ""]!</span>")
 
 		if(reversestrip_into_slot(user, slot, pickpocket))
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
