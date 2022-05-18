@@ -220,11 +220,7 @@
 /turf/simulated/floor/engine/n20
 	oxygen = 0
 	nitrogen = 0
-
-/turf/simulated/floor/engine/n20/New()
-	..()
-	misc_gases = new()
-	misc_gases[GAS_SLEEPING] = 36000
+	misc_gases = list(GAS_SLEEPING = 36000)
 
 /turf/simulated/floor/engine/nitrogen
 	name = "nitrogen floor"
