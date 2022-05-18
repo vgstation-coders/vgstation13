@@ -184,6 +184,8 @@
 				overlays += image(icon = icon, icon_state = "over_lowwater3")
 		else if(get_toxinlevel() < TOXINLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
+		else if(!seed && get_waterlevel() <= WATERLEVEL_MAX/5)
+			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		if(get_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
 			overlays += image(icon = icon, icon_state = "over_lownutri3")
 		if(get_weedlevel() >= WEEDLEVEL_MAX/2 || get_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
