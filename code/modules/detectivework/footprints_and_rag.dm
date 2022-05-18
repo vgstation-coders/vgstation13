@@ -20,6 +20,7 @@
 	volume = 10
 	can_be_placed_into = null
 	slot_flags = SLOT_MASK
+	body_parts_covered = MOUTH
 	var/mob/current_target = null
 
 /obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)
