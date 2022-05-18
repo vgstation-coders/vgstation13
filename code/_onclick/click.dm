@@ -106,10 +106,8 @@
 		return M.click_action(A,src)
 
 	if(restrained())
-		var/mob/living/carbon/human/H = src
-		if(!(H.attack_type)) //Allow kicking and biting while restrained.
-			RestrainedClickOn(A)
-			return
+		RestrainedClickOn(A)
+		return
 
 	if(in_throw_mode)
 		if(!get_active_hand() && (a_intent == I_DISARM))
