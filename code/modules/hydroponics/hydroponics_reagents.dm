@@ -20,7 +20,7 @@
 		mutationlevel = round(min(mutationlevel + amount, MUTATIONLEVEL_MAX))
 		add_planthealth(-2)
 	else
-		mutationlevel = round(min(0, mutationlevel + amount))
+		mutationlevel = round(max(0, mutationlevel + amount))
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_mutationlevel()
 	return mutationlevel
@@ -36,7 +36,7 @@
 		weedlevel = round(min(weedlevel + amount, WEEDLEVEL_MAX))
 	else
 		nutrientlevel = round(max(0, nutrientlevel + amount))
-		weedlevel = round(min(0, weedlevel + amount))
+		weedlevel = round(max(0, weedlevel + amount))
 		if(nutrientlevel < 1)
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
@@ -82,9 +82,9 @@
 		waterlevel = round(max(waterlevel - amount/2, 0))
 	else
 		//Remove or uptake toxins
-		toxinlevel = round(max(toxinlevel + amount,0))
+		toxinlevel = round(max(0, toxinlevel + amount))
 		if(seed && !dead)
-			if(toxinlevel == 0 && !(seed.toxin_affinity < 5))
+			if(toxinlevel < 1 && !(seed.toxin_affinity < 5))
 				add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 				affect_growth(-1)
 
@@ -99,8 +99,7 @@
 	if(amount > 0)
 		yield_mod = min(yield_mod + amount,YIELDMOD_MAX)
 	else
-		//Remove or uptake toxins
-		yield_mod = max(yield_mod + amount,0)
+		yield_mod = max(0, yield_mod + amount)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_yieldmod()
 	return yield_mod
@@ -113,8 +112,7 @@
 	if(amount > 0)
 		yield_mod = min(yield_mod + amount, MUTATIONMOD_MAX)
 	else
-		//Remove or uptake toxins
-		yield_mod = max(yield_mod + amount,0)
+		yield_mod = max(0, yield_mod + amount)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_mutationmod()
 	return yield_mod
@@ -128,7 +126,7 @@
 	if(amount > 0)
 		plant_health = round(min(plant_health + amount, seed.endurance))
 	else
-		plant_health = round(max(plant_health + amount, 0))
+		plant_health = round(max(0, plant_health + amount))
 		if(get_planthealth() < 1)
 			die()
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_planthealth()
