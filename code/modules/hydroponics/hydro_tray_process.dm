@@ -154,6 +154,8 @@
 	update_name() //fuck it i'll make it not happen constantly later
 
 	// Updates the plant overlay.
+	if(get_toxinlevel() > TOXINLEVEL_MAX/2)
+		overlays += image(icon = icon, icon_state = "hydrotray_toxin")
 	if(!isnull(seed))
 		if(draw_warnings && get_planthealth() <= (seed.endurance / 2))
 			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")

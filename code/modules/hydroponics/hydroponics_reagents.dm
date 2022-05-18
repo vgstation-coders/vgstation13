@@ -87,6 +87,8 @@
 			if(toxinlevel < 1 && !(seed.toxin_affinity < 5))
 				add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 				affect_growth(-1)
+	//to update tray color
+	update_icon_after_process = 1
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_toxinlevel()
 	return toxinlevel
