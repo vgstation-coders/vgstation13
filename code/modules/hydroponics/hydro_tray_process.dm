@@ -17,12 +17,10 @@
 		pollination--
 		bees = 1
 
-
 	// Weeds like water and nutrients, there's a chance the weed population will increase.
-	// Bonus chance if the tray is unoccupied.
 	// This process is up here because it still happens even when the tray is empty.
 	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5 && prob(2))
-		add_weedlevel(1 * HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+		add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 80) are unaffected.
