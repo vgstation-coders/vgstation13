@@ -96,10 +96,10 @@
 			var/turf/portal/port = unsim // Area portal handling.
 			if(port.target_turf)
 				unsim = port.target_turf
-		
+
 		if(!unsim) // Above check should be fine, but sanity
 			continue
-		
+
 		var/block = unsim.c_airblock(src)
 		if(block & AIR_BLOCKED)
 
@@ -212,6 +212,9 @@
 	GM[GAS_CARBON] = carbon_dioxide
 	GM[GAS_NITROGEN] = nitrogen
 	GM[GAS_PLASMA] = toxins
+	if(misc_gases?.len)
+		for(var/G in misc_gases)
+			GM[G] = misc_gases[G]
 
 	GM.temperature = temperature
 	GM.update_values()
@@ -221,17 +224,27 @@
 /turf/remove_air(amount as num)
 	var/datum/gas_mixture/GM = new
 
-	var/sum = oxygen + carbon_dioxide + nitrogen + toxins
+	var/sum = oxygen + carbon_dioxide + nitrogen + toxins + misc_gases_sum()
 	if(sum>0)
 		GM[GAS_OXYGEN] = (oxygen/sum)*amount
 		GM[GAS_CARBON] = (carbon_dioxide/sum)*amount
 		GM[GAS_NITROGEN] = (nitrogen/sum)*amount
 		GM[GAS_PLASMA] = (toxins/sum)*amount
+		if(misc_gases?.len)
+			for(var/G in misc_gases)
+				GM[G] = (misc_gases[G]/sum)*amount
 
 	GM.temperature = temperature
 	GM.update_values()
 
 	return GM
+
+/turf/proc/misc_gases_sum()
+	var/sum = 0
+	if(misc_gases?.len)
+		for(var/G in misc_gases)
+			sum += misc_gases[G]
+	return sum
 
 /turf/simulated/assume_air(datum/gas_mixture/giver)
 	var/datum/gas_mixture/my_air = return_air()
@@ -263,6 +276,9 @@
 		GAS_CARBON, carbon_dioxide,
 		GAS_NITROGEN, nitrogen,
 		GAS_PLASMA, toxins)
+	if(misc_gases?.len)
+		for(var/G in misc_gases)
+			air.adjust_gas(G, misc_gases[G])
 
 /turf/simulated/proc/c_copy_air()
 	if(!air)
