@@ -84,7 +84,7 @@ emp_act
 	var/siemens_coefficient = 1.0
 	var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes) // What all are we checking?
 
-	for(var/obj/item/clothing/C in clothing_items)
+	for(var/obj/item/C in clothing_items)
 		if(istype(C) && (C.body_parts_covered & def_zone.body_part)) // Is that body part being targeted covered?
 			siemens_coefficient *= C.siemens_coefficient
 
@@ -130,7 +130,7 @@ emp_act
 	if(!body_part_flags)
 		return 0
 	var/parts_to_check = body_part_flags
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		if(ignored && C == ignored)
@@ -145,7 +145,7 @@ emp_act
 /mob/living/carbon/human/proc/get_body_part_coverage(var/body_part_flags=0)
 	if(!body_part_flags)
 		return null
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		 //Check if this piece of clothing contains ALL of the flags we want to check.
@@ -157,7 +157,7 @@ emp_act
 	//Because get_body_part_coverage(FULL_BODY) would only return true if the human has one piece of clothing that covers their whole body by itself.
 	var/body_coverage = FULL_BODY | FULL_HEAD
 
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		body_coverage &= ~(C.body_parts_covered)
