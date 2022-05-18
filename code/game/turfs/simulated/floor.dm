@@ -218,7 +218,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
-	
+
 /turf/simulated/floor/attack_animal(mob/user as mob)
 	return src.attack_hand(user)
 
@@ -400,6 +400,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	material = "metal"
 	plane = PLATING_PLANE
 
+	for(var/obj/item/I in contents)
+		if(I.level == LEVEL_BELOW_FLOOR && !istype(I,/obj/item/projectile))
+			I.hide(intact)
 	update_icon()
 	levelupdate()
 
@@ -434,6 +437,12 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			if(istype(get_step(src,direction),/turf/simulated/floor))
 				var/turf/simulated/floor/FF = get_step(src,direction)
 				FF.update_icon() //so siding gets updated properly
+	// Placement sanity
+	if(!(locate(/obj/structure/table) in contents) && !(locate(/obj/structure/rack) in contents) && !(locate(/obj/structure/closet) in contents))
+		for(var/obj/item/I in contents)
+			// Hiding things under the tiles!
+			if(I.w_class == W_CLASS_TINY && !istype(I,/obj/item/projectile))
+				I.hide(intact)
 	update_icon()
 	levelupdate()
 	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)

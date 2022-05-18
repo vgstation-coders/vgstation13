@@ -127,13 +127,13 @@ Frequency:
 	icon_state = "peel"
 	item_state = "bluespacebanana_peel"
 
-/obj/item/weapon/bananapeel/bluespace/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
+/obj/item/weapon/bananapeel/bluespace/handle_slip(atom/movable/AM)
+	if (iscarbon(AM))
 		var/mob/living/carbon/M = AM
 		if (M.Slip(2, 2, 1))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
-			if(istype(AM,/mob/living/carbon/human))
+			if(ishuman(AM))
 				var/mob/living/carbon/human/H = AM
 				var/obj/teleported_shoes = H.get_item_by_slot(slot_shoes)
 				var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)

@@ -103,6 +103,8 @@
 	show_roll(user, thrown, result)
 
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
 		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))

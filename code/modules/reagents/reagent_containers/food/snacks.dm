@@ -2058,7 +2058,9 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O)
-	if (istype(O, /mob/living/carbon/human))
+	if(..())
+		return 1
+	if (ishuman(O))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() != TRUE)
 			return
@@ -4957,7 +4959,9 @@
 	icon_state = "slider_slippery"
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery/Crossed(atom/movable/O) //exactly the same as soap
-	if (istype(O, /mob/living/carbon/human))
+	if(..())
+		return 1
+	if (ishuman(O))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() != TRUE)
 			return
@@ -6655,7 +6659,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O)
-	if (istype(O, /mob/living/carbon/human))
+	if(..())
+		return 1
+	if (ishuman(O))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() != TRUE)
 			return

@@ -114,6 +114,37 @@
 		I.desc = "Looks like this was \a [src] some time ago."
 		qdel(src)
 
+/obj/item/hide(i)
+	if(isturf(loc))
+		level = i ? LEVEL_BELOW_FLOOR : LEVEL_ABOVE_FLOOR
+		invisibility = i ? 101 : 0
+		plane = i ? ABOVE_PLATING_PLANE : initial(plane)
+		layer = i ? FLOORBOARD_ITEM_LAYER : initial(layer)
+		anchored = i
+
+/obj/item/Crossed(atom/movable/AM)
+	if(level < LEVEL_ABOVE_FLOOR)
+		return 1
+	return 0
+
+/obj/item/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	var/oldalpha = alpha
+	invisibility = 0
+	alpha = 127
+	plane = initial(plane)
+	layer = initial(layer)
+
+	spawn(1 SECONDS)
+		var/turf/U = loc
+		if(istype(U) && U.intact)
+			invisibility = 101
+			plane = ABOVE_PLATING_PLANE
+			layer = FLOORBOARD_ITEM_LAYER
+		alpha = oldalpha
+
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 
