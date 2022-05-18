@@ -270,7 +270,7 @@
 			sum_health += healthmod
 
 	if(seed.toxin_affinity < 5 && get_toxinlevel() > TOXINLEVEL_MAX/5)	
-		sum_health -= healthmod*(5-(seed.toxin_affinity < 5) ? seed.toxin_affinity : 5)
+		sum_health -= healthmod*(5-seed.toxin_affinity)
 
 	if(missing_gas)
 		sum_health -= missing_gas * healthmod
