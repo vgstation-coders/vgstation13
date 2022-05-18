@@ -462,8 +462,7 @@
 	return borers_in_mob
 
 /mob/living/carbon/is_muzzled()
-	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
-
+	return ismuzzle(get_item_by_slot(slot_wear_mask))
 
 /mob/living/carbon/proc/isInCrit()
 	// Health is in deep shit and we're not already dead

@@ -162,6 +162,8 @@
 
 #define isfood(A) istype(A, /obj/item/weapon/reagent_containers/food)
 
+#define ismuzzle(A) is_type_in_list(A, list(/obj/item/clothing/mask/muzzle, /obj/item/weapon/reagent_containers/glass/rag))
+
 #define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
