@@ -19,7 +19,7 @@
 		delayNextAttack(10)
 
 	if(!can_use_hand_or_stump())
-		to_chat(src, "<span class = 'info'>You try to move your arm but nothing happens. Need a hand?</span>")
+		to_chat(src, "<span class = 'notice'>You try to move your arm but nothing happens. Need a hand?</span>")
 		return
 
 	if(src.can_use_hand())
@@ -160,11 +160,11 @@
 		if(pulledby || grabbed_by.len)
 			switch(attack_type)
 				if(ATTACK_KICK)
-					to_chat(src, "<span class = 'info'>Your restraints keep you from kicking properly. Need a leg up?</span>")
+					to_chat(src, "<span class = 'notice'>You're being restrained! Need a leg up?</span>")
 				if(ATTACK_BITE)
-					to_chat(src, "<span class = 'info'>Your restraints keep you from biting properly. Bitten off more than you can chew?</span>")
+					to_chat(src, "<span class = 'notice'>You're being restrained! Bitten off more than you can chew?</span>")
 				else
-					to_chat(src, "<span class = 'info'>Your restraints keep you from doing that properly.</span>")
+					to_chat(src, "<span class = 'notice'>You're being restrained!</span>")
 			return
 	handleSpecialAttack(A)
 
