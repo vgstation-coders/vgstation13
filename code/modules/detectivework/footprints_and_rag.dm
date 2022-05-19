@@ -113,7 +113,7 @@
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				reagents.reaction(M, INGEST)
-				reagents.trans_to(M, 1)
+				reagents.trans_to(M, 0.5)
 		else
 			processing_objects.Remove(src)
 
