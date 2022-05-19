@@ -769,16 +769,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/grey_uniform/New()
 	selection_from = list(laborer, scientist, explorer)
 
-/datum/supply_packs/grey_boots
-	name = "Mothership boots"
-	contains = list(/obj/item/clothing/shoes/jackboots/steeltoe/mothership,
-					/obj/item/clothing/shoes/jackboots/steeltoe/mothership)
-	cost = 150
-	containertype = /obj/structure/closet/crate/basic
-	containername = "Mothership boots crate"
-	group = "Clothing"
-	contraband = 1
-
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
 	contains = list(/obj/item/clothing/suit/armor/vest/neorussian,
@@ -996,21 +986,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 	hidden = 1
 
-/datum/supply_packs/randomised/greynades
-	name = "MDF Surplus grenades"
-	num_contained = 4 //number of items picked to be contained in a randomised
-	contains = list(/obj/item/weapon/grenade/spawnergrenade/mothershipdrone,
-					/obj/item/weapon/grenade/chem_grenade/mothershipacid,
-					/obj/item/weapon/grenade/chem_grenade/mothershipacid,
-					/obj/item/weapon/grenade/chem_grenade/mothershipacid,
-					/obj/item/weapon/grenade/chem_grenade/mothershipacid)
-	cost = 300
-	containertype = /obj/structure/closet/crate/secure/weapon
-	containername = "MDF grenade crate"
-	access = list(access_armory)
-	group = "Security"
-	hidden = 1
-
 /datum/supply_packs/secway
 	name = "Secway"
 	contains = list(/obj/structure/bed/chair/vehicle/secway)
@@ -1056,7 +1031,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "MDF standard weapons crate"
 	access = list(access_armory)
 	group = "Security"
-	contraband = 1
+	hidden = 1
 
 /datum/supply_packs/smartlaser
 	name = "Smart laser guns"
@@ -1139,21 +1114,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "riot gear crate"
 	access = list(access_armory)
 	group = "Security"
-
-/datum/supply_packs/greyarmor_heavy
-	name = "MDF Surplus heavy armor"
-	contains = list(/obj/item/clothing/suit/armor/mothership_heavy,
-					/obj/item/clothing/suit/armor/mothership_heavy,
-					/obj/item/clothing/head/helmet/mothership_visor_heavy,
-					/obj/item/clothing/head/helmet/mothership_visor_heavy,
-					/obj/item/weapon/storage/belt/mothership,
-					/obj/item/weapon/storage/belt/mothership)
-	cost = 120
-	containertype = /obj/structure/closet/crate/secure/gear
-	containername = "MDF heavy armor crate"
-	access = list(access_security)
-	group = "Security"
-	hidden = 1
 
 /datum/supply_packs/tactical
 	name = "Tactical Assault gear"
