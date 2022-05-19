@@ -384,7 +384,7 @@
 		for(var/atom/A in T)
 			if (A == src)
 				continue
-			var/list/hit_zone = user ? list(user.zone_sel.selecting) : ALL_LIMBS
+			var/list/hit_zone = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS
 			reagents.reaction(A, zone_sels = hit_zone)
 		return 1
 	return 0
