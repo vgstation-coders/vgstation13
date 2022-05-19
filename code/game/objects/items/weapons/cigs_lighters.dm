@@ -181,6 +181,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
+	goes_in_mouth = TRUE
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/trash/cigbutt

@@ -15,12 +15,14 @@
 	w_class = W_CLASS_TINY
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "rag"
+	item_state = new/icon("icon" = 'icons/mob/mask.dmi', "icon_state" = "rag")
 	amount_per_transfer_from_this = 5
 	possible_transfer_amounts = list(5)
-	volume = 10
+	volume = 5
 	can_be_placed_into = null
 	slot_flags = SLOT_MASK
 	body_parts_covered = MOUTH
+	goes_in_mouth = TRUE
 	var/mob/current_target = null
 
 /obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)
