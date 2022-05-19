@@ -113,6 +113,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/acidimmune = 0 //A check for whether the mob doesn't take damage from acid reagents. Set to 0 by default
 	var/force_airlock_time=0 //to allow for airlock forcing to take some time
 
+	var/list/items_to_drop = list()
+
 /mob/living/simple_animal/isBloodedAnimal()
 	return blooded
 
@@ -580,6 +582,16 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		for(var/butchering_type in animal_butchering_products)
 			butchering_drops += new butchering_type
+
+	if(items_to_drop.len)
+
+		for(var/object in items_to_drop)
+
+			if(ispath(object))
+				new object (get_turf(src))
+			else if(istype(object, /atom/movable))
+				var/atom/movable/A = object
+				A.forceMove(get_turf(src))
 
 	..(gibbed)
 

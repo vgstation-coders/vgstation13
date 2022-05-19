@@ -8,8 +8,8 @@ Afternoon - 16 Minutes
 Sunset    - 2 Minutes
 Nighttime - 36 Minutes
 */
-					
-#define TOD_MORNING 	"#4d6f86" 
+
+#define TOD_MORNING 	"#4d6f86"
 #define TOD_SUNRISE 	"#fdc5a0"
 #define TOD_DAYTIME 	"#FFFFFF"
 #define TOD_AFTERNOON 	"#ffeedf"
@@ -35,13 +35,16 @@ Basically, you are going to overwrite the flags.
 	flags 		  = SS_NO_FIRE | SS_NO_INIT
 	var/daynight_z_lvl = FALSE
 
-	var/current_timeOfDay = TOD_DAYTIME //This is more or less the color and duration since its in a switch.
-	var/next_light_power = 10 // As much as you would want to change these for cool factor.
-	var/next_light_range = 1 //	They basically are at the maximum values to not have overlapping light. 
+	var/datum/timeofday/current_timeOfDay //timeofday datum, our current one; if unspecified defaults to first in...
+	var/list/all_times_in_cycle = list() //if empty, defaults to normal snaxi settings; assemble before initializing
+
+
+	var/next_light_range = 1 //	They basically are at the maximum values to not have overlapping light.
 							// Along with mesh evenly that is, the dir scan handles missed diagonals stylishly.
 
 	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
 	var/next_firetime = 0 //In essence this is world.time + the time you want. Ex: world.time + 3 MINUTES
+	var/force_time_forward = FALSE //for adminbus, set to TRUE to immediately advance the time
 	var/list/currentrun
 
 /datum/subsystem/daynightcycle/New()
@@ -50,35 +53,25 @@ Basically, you are going to overwrite the flags.
 /datum/subsystem/daynightcycle/Initialize()
 	if(!daynight_z_lvl)
 		daynight_z_lvl = map.zMainStation
-	get_turflist()
-	..()
+	if(!all_times_in_cycle.len)
+		all_times_in_cycle = list(new /datum/timeofday/daytime, new /datum/timeofday/afternoon, new /datum/timeofday/sunset,
+		new /datum/timeofday/nighttime, new /datum/timeofday/morning, new /datum/timeofday/sunrise)
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
-	if(world.time >= next_firetime)
-		switch(current_timeOfDay) //Then set the next segment up.
-			if(TOD_MORNING)
-				current_timeOfDay = TOD_SUNRISE
-				next_firetime = world.time + 3 MINUTES
-				play_globalsound()
-			if(TOD_SUNRISE)
-				current_timeOfDay = TOD_DAYTIME
-				next_firetime = world.time + 14 MINUTES
-			if(TOD_DAYTIME)
-				current_timeOfDay = TOD_AFTERNOON
-				next_firetime = world.time + 15 MINUTES
-			if(TOD_AFTERNOON)
-				current_timeOfDay = TOD_SUNSET
-				next_firetime = world.time + 3 MINUTES
-			if(TOD_SUNSET)
-				current_timeOfDay = TOD_NIGHTTIME
-				next_light_power = 3
-				next_firetime = world.time + 36 MINUTES
-				play_globalsound()
-			if(TOD_NIGHTTIME)
-				current_timeOfDay = TOD_MORNING
-				next_light_power = 10
-				next_firetime = world.time + 5 MINUTES
-			
+	if(!current_timeOfDay && all_times_in_cycle.len) //Don't have a time of day but we do have a cycle list
+		current_timeOfDay = all_times_in_cycle[1]
+	if(world.time >= next_firetime || force_time_forward)
+		force_time_forward = FALSE
+		var/index_time = all_times_in_cycle.Find(current_timeOfDay)
+		if(index_time == all_times_in_cycle.len || !index_time)
+			current_timeOfDay = all_times_in_cycle[1]
+		else
+			current_timeOfDay = all_times_in_cycle[index_time+1]
+		next_firetime = current_timeOfDay.duration
+
+		if(current_timeOfDay.triggersound)
+			play_globalsound()
+
 		if(!resumed)
 			currentrun = daynight_turfs.Copy()
 
@@ -89,7 +82,7 @@ Basically, you are going to overwrite the flags.
 		if(!T || T.gcDestroyed)
 			continue
 
-		T.set_light(next_light_range,next_light_power,current_timeOfDay)
+		T.set_light(next_light_range,current_timeOfDay.lightpower,current_timeOfDay)
 
 		if(MC_TICK_CHECK)
 			return
@@ -112,9 +105,48 @@ Basically, you are going to overwrite the flags.
 	for(var/mob/M in player_list)
 		if(!M.client)
 			continue
-		else
-			switch(current_timeOfDay)
-				if(TOD_SUNRISE)
-					M << 'sound/misc/6amRooster.wav'
-				if(TOD_NIGHTTIME)
-					M << 'sound/misc/6pmWolf.wav'
+		if(M.z != daynight_z_lvl)
+			continue
+		M << current_timeOfDay.triggersound
+
+/datum/timeofday
+	var/name
+	var/duration
+	var/lightpower = 10
+	var/triggersound
+
+/datum/timeofday/morning
+	name = TOD_MORNING
+	duration = 5 MINUTES
+
+/datum/timeofday/sunrise
+	name = TOD_SUNRISE
+	duration = 3 MINUTES
+	triggersound = 'sound/misc/6amRooster.wav'
+
+/datum/timeofday/daytime
+	name = TOD_DAYTIME
+	duration = 14 MINUTES
+
+/datum/timeofday/daytime/short
+	duration = 5 MINUTES
+
+/datum/timeofday/afternoon
+	name = TOD_AFTERNOON
+	duration = 15 MINUTES
+
+/datum/timeofday/afternoon/short
+	duration = 5 MINUTES
+
+/datum/timeofday/sunset
+	name = TOD_SUNSET
+	duration = 3 MINUTES
+
+/datum/timeofday/nighttime
+	name = TOD_NIGHTTIME
+	duration = 36 MINUTES
+	lightpower = 3
+	triggersound = 'sound/misc/6pmWolf.wav'
+
+/datum/timeofday/nighttime/short
+	duration = 5 MINUTES

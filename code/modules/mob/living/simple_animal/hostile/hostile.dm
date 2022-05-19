@@ -20,6 +20,7 @@
 	var/ranged_message = "fires" //Fluff text for ranged mobs
 	var/ranged_cooldown = 0 //What the starting cooldown is on ranged attacks
 	var/ranged_cooldown_cap = 3 //What ranged attacks, after being used are set to, to go back on cooldown, defaults to 3 life() ticks
+	var/minimum_shot_distance = 2 //For ranged mobs, what is the minimum range at which we can use our ranged attack?
 	var/retreat_distance = null //If our mob runs from players when they're too close, set in tile distance. By default, mobs do not retreat.
 	var/minimum_distance = 1 //Minimum approach distance, so ranged mobs chase targets down, but still keep their distance set in tiles to the target, set higher to make mobs keep distance
 	var/search_objects = 0 //If we want to consider objects when searching around, set this to 1. If you want to search for objects while also ignoring mobs until hurt, set it to 2. To completely ignore mobs, even when attacked, set it to 3
@@ -117,6 +118,7 @@
 					EscapeConfinement()
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
+				AfterIdle()
 
 			if(HOSTILE_STANCE_ATTACK)
 				if(!(flags & INVULNERABLE))
@@ -263,7 +265,7 @@
 		if(target in ListTargets())
 			var/target_distance = get_dist(src,target)
 			if(ranged_mode())//We ranged? Shoot at em if our ranged mode allows for it
-				if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
+				if(target_distance >= minimum_shot_distance && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
 					OpenFire(target)
 			if(target.Adjacent(src))	//If they're next to us, attack
 				AttackingTarget()
@@ -301,6 +303,7 @@
 			Aggro()
 			var/new_target = FindTarget()
 			GiveTarget(new_target)
+			AfterIdle()
 		if(stance == HOSTILE_STANCE_ATTACK)//No more pulling a mob forever and having a second player attack it, it can switch targets now if it finds a more suitable one
 			if(target != null && prob(25))
 				var/new_target = FindTarget()
@@ -503,6 +506,11 @@
 		return 1
 	else
 		return 0
+
+//What to do immediately after switching from stance = IDLE to stance = ATTACK
+/mob/living/simple_animal/hostile/proc/AfterIdle()
+	return
+
 
 //Let players use mobs' ranged attacks
 /mob/living/simple_animal/hostile/Stat()

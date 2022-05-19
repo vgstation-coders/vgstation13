@@ -99,6 +99,9 @@
 	//MONEY
 /var/const/access_crate_cash = 200
 
+//Away missions
+/var/const/access_deputy = 300 //Wild West
+
 // /VG/ SPECIFIC SHIT
 /var/const/access_paramedic = 500
 /var/const/access_mechanic = 501

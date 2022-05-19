@@ -245,7 +245,7 @@
 	spawn(1)	// slight delay to prevent infinite propagation due to map order	//TODO: please no spawn() in process(). It's a very bad idea
 		var/items_checked = 0
 		for(var/atom/movable/A in affecting)
-			if(!A.anchored)
+			if(!A.anchored && A.convey(src))
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
 					items_checked++
 					for(var/atom/dest in get_step(src, movedir)) //Should/can this be optimized to not check ALL atoms?

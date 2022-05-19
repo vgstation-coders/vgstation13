@@ -158,7 +158,7 @@
 	minbodytemp = 0
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
-	meat_type = null
+	meat_type = /obj/item/stack/sheet/bone
 /*
 #define EVOLVING 1
 #define MOVING_TO_TARGET 2

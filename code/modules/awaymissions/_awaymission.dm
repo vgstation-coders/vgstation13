@@ -121,11 +121,6 @@ Example of the second method:
 	file_path = "maps/RandomZLevels/stationCollision.dmm"
 	desc = "A shuttlecraft crashed into a small space station, bringing aboard aliens and cultists. Features the Lord Nar-Sie himself."
 
-/datum/map_element/away_mission/wildwest
-	name = "wild west"
-	file_path = "maps/RandomZLevels/wildwest.dmm"
-	desc = "An exciting adventure for the toughest adventures your station can offer. Those who defeat all of the final area's guardians will find a wish granter."
-
 /datum/map_element/away_mission/tomb
 	name = "tomb of Rafid"
 	file_path = "maps/RandomZLevels/tomb.dmm"
@@ -187,3 +182,15 @@ var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_missi
 		return
 
 	to_chat(messages, "<span class='danger'>Failed to load away mission [AM.file_path] (file doesn't exist).</span>")
+
+//Helper procs
+
+//Finds an active away mission with a matching name, or returns null
+proc/get_away_mission(var/id)
+	for(var/datum/map_element/away_mission/AD in existing_away_missions)
+		if(id == AD.name)
+			return AD
+
+
+//Away defines
+#define WESTERN "Wild West"

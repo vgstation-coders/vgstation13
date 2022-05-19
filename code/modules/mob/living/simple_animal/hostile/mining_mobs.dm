@@ -488,7 +488,7 @@
 	if(!istype(tturf, /turf/space) && istype(ttarget))
 		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
 		playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
-		new /obj/effect/goliath_tentacle/original(tturf)
+		new /obj/effect/goliath_tentacle/original(tturf, src)
 		ranged_cooldown = ranged_cooldown_cap
 	return
 
@@ -499,10 +499,12 @@
 	ranged_cooldown--
 	..()
 
-/obj/effect/goliath_tentacle/
+/obj/effect/goliath_tentacle
 	name = "Goliath tentacle"
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "Goliath_tentacle"
+	var/trip_delay = 2 SECONDS
+	var/spread_dirs = 3
 
 /obj/effect/goliath_tentacle/New()
 	..()
@@ -511,20 +513,26 @@
 		var/turf/unsimulated/mineral/M = turftype
 		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
 			M.GetDrilled()
-	spawn(20)
+	spawn(trip_delay)
 		Trip()
 
 /obj/effect/goliath_tentacle/original
 
-/obj/effect/goliath_tentacle/original/New()
+/obj/effect/goliath_tentacle/original/New(loc, mob/source)
+	..()
+	handle_spread()
+
+/obj/effect/goliath_tentacle/original/proc/handle_spread()
 	var/list/directions = cardinal.Copy()
 	var/counter
-	for(counter = 1, counter <= 3, counter++)
+	for(counter = 1, counter <= spread_dirs, counter++)
 		var/spawndir = pick(directions)
 		directions -= spawndir
 		var/turf/T = get_step(src,spawndir)
 		if(!istype(T, /turf/space))
-			new /obj/effect/goliath_tentacle(T)
+			var/obj/effect/goliath_tentacle/GT = new(T)
+			GT.icon = icon
+			GT.icon_state = icon_state
 	..()
 
 /obj/effect/goliath_tentacle/proc/Trip()

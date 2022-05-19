@@ -28,7 +28,6 @@
 	status_flags = CANPUSH
 
 	var/obj/effect/landmark/corpse/corpse = /obj/effect/landmark/corpse
-	var/list/items_to_drop = list()
 
 	//A list with icons associated with icon states
 	//The icons are shown on top of the mob, in the order of the list
@@ -57,16 +56,6 @@
 	..(gibbed)
 	if(corpse)
 		new corpse(loc)
-
-	if(items_to_drop.len)
-
-		for(var/object in items_to_drop)
-
-			if(ispath(object))
-				new object (get_turf(src))
-			else if(istype(object, /atom/movable))
-				var/atom/movable/A = object
-				A.forceMove(get_turf(src))
 
 	qdel(src)
 

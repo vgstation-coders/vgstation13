@@ -36,4 +36,5 @@
 
 /turf/simulated/wall/syndicate
 	icon = 'icons/turf/shuttle.dmi'
+	icon_state = "satwall0"
 	walltype = "satwall"

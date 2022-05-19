@@ -1329,3 +1329,6 @@
 			change_dir(new_dir)
 			sleep(1)
 	change_dir(prev_dir)
+
+/atom/movable/proc/convey(obj/machinery/conveyor/C)
+	return TRUE

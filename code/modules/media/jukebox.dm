@@ -1029,6 +1029,17 @@ var/global/list/loopModeNames=list(
 		"holy" = "Pastor's Paradise"
 	)
 
+/obj/machinery/media/jukebox/folk
+	name = "Old Timey Jukebox"
+
+	change_cost = 0
+
+	playlist_id="folk"
+	// Must be defined on your server.
+	playlists=list(
+		"folk" = "House Specials"
+	)
+
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
 	// EMAG DOES NOTHING
 	if(istype(W, /obj/item/weapon/card/emag))

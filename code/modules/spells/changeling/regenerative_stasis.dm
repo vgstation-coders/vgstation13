@@ -27,7 +27,7 @@
 	var/mob/living/carbon/C = user
 	var/delay = 0 SECONDS
 	inuse = TRUE
-	
+
 	if(C.stat != DEAD)
 		C.status_flags |= FAKEDEATH		//play dead
 		C.update_canmove()
@@ -44,7 +44,7 @@
 		to_chat(C, "<span class = 'notice'>Click the action button to revive.</span>")
 		var/datum/action/lingrevive/revive_action = new()
 		revive_action.Grant(C)
-		
+
 	feedback_add_details("changeling_powers","FD")
 
 	..()
@@ -63,7 +63,7 @@
 	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
 	if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
 		to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
-		if(C.dna in changeling.absorbed_dna)
+		if(C.dna in changeling?.absorbed_dna)
 			changeling.absorbed_dna.Remove(C.dna)
 	feedback_add_details("changeling_powers","RJ")
 	Remove(owner)
