@@ -151,7 +151,7 @@
 
 //Humans being able to bite and kick while restrained, either generally or only when not being pulled or grabbed, according to config.human_captive_kickbite.
 /mob/living/carbon/human/RestrainedClickOn(var/atom/A)
-	if(a_intent != I_HURT || !attack_type || A.loc == src)
+	if(a_intent != I_HURT || !attack_type || A.loc == src || !Adjacent(A))
 		return
 	if(is_pacified())
 		to_chat(src, "<span class = 'notice'>Violence is not the answer, you remind yourself.</span>")
