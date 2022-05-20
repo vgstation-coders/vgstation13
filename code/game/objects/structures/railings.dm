@@ -72,11 +72,11 @@
 	if(!wired && !istype(shockee))
 		return
 	var/obj/structure/cable/C = locate() in get_turf(src)
-	if(C && (C.d1 == dir || C.d2 == dir) && C.avail())
+	if(C && (C.d1 == dir || C.d2 == dir))
 		electrocute_mob(shockee, C.get_powernet(), C)
 	else
 		C = locate() in get_step(src,dir)
-		if(C && (C.d1 == opposite_dirs[dir] || C.d2 == opposite_dirs[dir]) && C.avail())
+		if(C && (C.d1 == opposite_dirs[dir] || C.d2 == opposite_dirs[dir]))
 			electrocute_mob(shockee, C.get_powernet(), C)
 
 /turf/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
