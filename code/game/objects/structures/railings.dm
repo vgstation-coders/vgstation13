@@ -50,11 +50,12 @@
 /obj/structure/railing/proc/hurdle(atom/movable/jumper)
 	var/turf/T = get_turf(src)
 	if(get_turf(jumper) == T)
-		T = get_step(T,dir)
+		T = get_step(src,dir)
 	if(locate(/obj/effect/unwall_field) in T)
 		jumper.forceMove(T)
-	for(var/atom/movable/AM in T)
-		if(AM == src || istype(AM,/obj/structure/railing))
+	for(var/atom/movable/AM in T.contents)
+		// Border dummies weren't playing nice on the nearby turf
+		if(AM == src || istype(AM,/obj/structure/railing) || istype(AM,/atom/movable/border_dummy))
 			continue
 		if(!AM.Cross(jumper))
 			return
