@@ -862,7 +862,7 @@
 #include "code\game\mecha\working\clarke.dm"
 #include "code\game\mecha\working\ripley.dm"
 #include "code\game\mecha\working\working.dm"
-#include "code\game\objects\breakable.dm
+#include "code\game\objects\breakable.dm"
 #include "code\game\objects\empulse.dm"
 #include "code\game\objects\explosion.dm"
 #include "code\game\objects\explosion_recursive.dm"
