@@ -763,5 +763,4 @@ var/list/headset_modes = list(
 
 //todo: fix radio bug with removing first letter
 //check/fix languages/non "vocal" languages
-//fix last letter capitalization
-//mouth check for putting rags in creatures without mouths
+//should muffled speech apply before or after language?

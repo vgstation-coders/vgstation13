@@ -492,6 +492,11 @@
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
+
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				return CAN_EQUIP
 			if(slot_back)
 				if( !(slot_flags & SLOT_BACK) )
