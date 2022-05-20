@@ -761,8 +761,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/explorer = list(/obj/item/clothing/under/grey/grey_scout,
 					/obj/item/clothing/under/grey/grey_scout)
 	cost = 50
-	containertype = /obj/structure/closet/crate/basic
-	containername = "mothership uniform crate"
+	containertype = /obj/structure/closet/crate/ayybin
+	containername = "mothership uniform bin"
 	group = "Clothing"
 	contraband = 1
 
@@ -1027,9 +1027,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/smalldisintegrator,
 					/obj/item/weapon/gun/energy/smalldisintegrator)
 	cost = 60
-	containertype = /obj/structure/closet/crate/secure/weapon
+	containertype = /obj/structure/closet/crate/secure/ayyweapon
 	containername = "MDF standard weapons crate"
-	access = list(access_armory)
+	one_access = list(access_mothership_military)
 	group = "Security"
 	hidden = 1
 
@@ -1083,9 +1083,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/under/grey/grey_soldier,
 					/obj/item/clothing/under/grey/grey_soldier)
 	cost = 40
-	containertype = /obj/structure/closet/crate/secure/gear
-	containername = "MDF standard armor crate"
-	access = list(access_security)
+	containertype = /obj/structure/closet/crate/secure/ayybin
+	containername = "MDF standard armor bin"
+	one_access = list(access_mothership_military)
 	group = "Security"
 	contraband = 1
 
