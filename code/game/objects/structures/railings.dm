@@ -54,7 +54,11 @@
 
 /obj/structure/railing/MouseDropTo(atom/movable/O, mob/user)
 	var/turf/T = get_turf(src)
-	T.MouseDropTo(O,user)
+	if(get_turf(user) == T)
+		var/turf/T2 = get_step(T,dir)
+		T2.MouseDropTo(O,user)
+	else
+		T.MouseDropTo(O,user)
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the railing. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/railing/proc/check_cover(obj/item/projectile/P, turf/from)
