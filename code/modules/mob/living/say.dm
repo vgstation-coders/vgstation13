@@ -147,7 +147,7 @@ var/list/headset_modes = list(
 		say_testing(src, "we aren't able to talk")
 		return
 
-	//Handle muffled speech by muzzles.
+	//Handle speech muffling by muzzles.
 	var/mob/living/carbon/C = src
 	if(C.is_muzzled())
 		message = muffle(message)
@@ -748,7 +748,7 @@ var/list/headset_modes = list(
 			i += 1
 		else
 			var/length_to_add = 1
-			var/allcaps = TRUE
+			var/allcaps = uppertext(message[i]) == message[i]
 			while((i + length_to_add <= length(message)) && (length_to_add < 3))
 				if(message[i + length_to_add] in unmuffled)
 					break
