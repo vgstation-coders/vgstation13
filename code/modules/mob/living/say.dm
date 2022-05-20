@@ -147,11 +147,6 @@ var/list/headset_modes = list(
 		say_testing(src, "we aren't able to talk")
 		return
 
-	//Handle speech muffling by muzzles.
-	var/mob/living/carbon/C = src
-	if(C.is_muzzled())
-		message = muffle(message)
-
 	if(message_mode == MODE_HEADSET || message_mode == MODE_ROBOT)
 		say_testing(src, "Message mode was [message_mode == MODE_HEADSET ? "headset" : "robot"]")
 		message = copytext(message, 2)
@@ -159,6 +154,11 @@ var/list/headset_modes = list(
 		say_testing(src, "Message mode is [message_mode]")
 		if(message_mode != MODE_HOLOPAD)
 			message = copytext(message, 3)
+
+	//Handle speech muffling by muzzles.
+	var/mob/living/carbon/C = src
+	if(C.is_muzzled())
+		message = muffle(message)
 
 	// SAYCODE 90.0!
 	// We construct our speech object here.
@@ -743,7 +743,6 @@ var/list/headset_modes = list(
 	while(i <= length(message))
 		current_char = message[i]
 		if(current_char in unmuffled)
-			message_admins("debug 01 [current_char]")
 			output += current_char
 			i += 1
 		else
