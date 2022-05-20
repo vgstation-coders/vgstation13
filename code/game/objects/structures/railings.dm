@@ -55,6 +55,11 @@
 				return
 		user.forceMove(T)
 
+/turf/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
+	var/obj/structure/railing/R = locate() in src
+	if(R)
+		R.MouseDropTo(O,user,src_location,over_location,src_control,over_control,params)
+
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the railing. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/railing/proc/check_cover(obj/item/projectile/P, turf/from)
 	var/shooting_at_directly = P.original == src
