@@ -122,6 +122,6 @@
 	if(istype(H) && H.get_item_by_slot(slot_wear_mask) == src && equipped_slot != null && equipped_slot == slot_wear_mask)
 		processing_objects.Add(src)
 
-/obj/item/red_ribbon_arm/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+/obj/item/weapon/reagent_containers/glass/rag/unequipped(mob/living/carbon/human/user, from_slot = null)
 	..()
 	processing_objects.Remove(src)
