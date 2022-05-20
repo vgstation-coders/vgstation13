@@ -155,11 +155,6 @@ var/list/headset_modes = list(
 		if(message_mode != MODE_HOLOPAD)
 			message = copytext(message, 3)
 
-	//Handle speech muffling by muzzles.
-	var/mob/living/carbon/C = src
-	if(C.is_muzzled())
-		message = muffle(message)
-
 	// SAYCODE 90.0!
 	// We construct our speech object here.
 	var/datum/speech/speech = create_speech(message)
@@ -168,6 +163,7 @@ var/list/headset_modes = list(
 		speech.language = parse_language(speech.message)
 		say_testing(src, "Getting speaking language, got [istype(speech.language) ? speech.language.name : "null"]")
 	if(istype(speech.language))
+
 #ifdef SAY_DEBUG
 		var/oldmsg = message
 #endif
@@ -185,6 +181,17 @@ var/list/headset_modes = list(
 		speech.language = get_default_language()
 		say_testing(src, "Didnt have a language, get_default_language() gave us [speech.language ? speech.language.name : "null"]")
 	speech.message = trim_left(speech.message)
+
+	//Handle speech muffling by muzzles.
+	if(!(speech?.language?.flags & NONORAL))
+		var/mob/living/carbon/C = src
+		switch(C.is_muzzled())
+			if(MUZZLE_SOFT)
+				speech.message = muffle(speech.message)
+			if(MUZZLE_HARD)
+				qdel(speech)
+				return
+
 	if(handle_inherent_channels(speech, message_mode))
 		say_testing(src, "Handled by inherent channel")
 		qdel(speech)
@@ -380,9 +387,6 @@ var/list/headset_modes = list(
 		return
 
 	if(is_mute())
-		return
-
-	if(is_muzzled() == MUZZLE_HARD)
 		return
 
 	if(!IsVocal())
@@ -759,7 +763,3 @@ var/list/headset_modes = list(
 			else
 				output += pick(muffle_syllables)
 	return output
-
-//todo: fix radio bug with removing first letter
-//check/fix languages/non "vocal" languages
-//should muffled speech apply before or after language?

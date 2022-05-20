@@ -222,6 +222,7 @@
 	colour = "sinister"
 	native=1
 	space_chance = 95
+	flags = NONORAL
 	syllables = list("CLICK", "CLACK")
 
 /datum/language/golem
