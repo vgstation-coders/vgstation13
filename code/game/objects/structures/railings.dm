@@ -41,24 +41,19 @@
 		return TRUE
 	return bounds_dist(border_dummy, mover) >= 0
 
-/turf/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
+/obj/structure/railing/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
 	if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 		return
-	if(O == user && !density && ((locate(/obj/structure/railing) in src) || (locate(/obj/structure/railing) in get_turf(user))))
-		if(locate(/obj/effect/unwall_field) in loc)
-			user.forceMove(src)
-		for(var/atom/movable/AM in src)
+	if(O == user)
+		var/turf/T = get_turf(src)
+		if(get_turf(user) == T)
+			T = get_step(T,dir)
+		if(locate(/obj/effect/unwall_field) in T)
+			user.forceMove(T)
+		for(var/atom/movable/AM in T)
 			if(!istype(AM,/obj/structure/railing) && !AM.Cross(user))
 				return
-		user.forceMove(src)
-
-/obj/structure/railing/MouseDropTo(atom/movable/O, mob/user)
-	var/turf/T = get_turf(src)
-	if(get_turf(user) == T)
-		var/turf/T2 = get_step(T,dir)
-		T2.MouseDropTo(O,user)
-	else
-		T.MouseDropTo(O,user)
+		user.forceMove(T)
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the railing. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/railing/proc/check_cover(obj/item/projectile/P, turf/from)
