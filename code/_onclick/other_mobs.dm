@@ -157,14 +157,15 @@
 		to_chat(src, "<span class = 'notice'>Violence is not the answer, you remind yourself.</span>")
 		return
 	if(!config.human_captive_kickbite)
-		if(pulledby || grabbed_by.len)
+		if(pulledby || grabbed_by.len || locked_to)
+			var/restrained_message = "<span class = 'notice'>You're [locked_to ? "buckled to [locked_to]" : "being restrained"]!"
 			switch(attack_type)
 				if(ATTACK_KICK)
-					to_chat(src, "<span class = 'notice'>You're being restrained! Need a leg up?</span>")
+					restrained_message += " Need a leg up?"
 				if(ATTACK_BITE)
-					to_chat(src, "<span class = 'notice'>You're being restrained! Bitten off more than you can chew?</span>")
-				else
-					to_chat(src, "<span class = 'notice'>You're being restrained!</span>")
+					restrained_message += " Bitten off more than you can chew?"
+			restrained_message += "</span>"
+			to_chat(src, restrained_message)
 			return
 	handleSpecialAttack(A)
 
