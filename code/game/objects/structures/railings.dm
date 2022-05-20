@@ -69,7 +69,7 @@
 	shock_check(Obstacle)
 
 /obj/structure/railing/proc/shock_check(mob/living/shockee)
-	if(!wired && !istype(shockee))
+	if(!wired || !istype(shockee))
 		return
 	var/obj/structure/cable/C = locate() in get_turf(src)
 	if(C && (C.d1 == dir || C.d2 == dir))
