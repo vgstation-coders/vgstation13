@@ -1812,3 +1812,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define COIN_HEADS "heads-up."
 #define COIN_TAILS "tails-up."
 #define COIN_SIDE "on the side!"
+
+//Muzzles
+#define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
+#define MUZZLE_HARD	2	//Muzzle prevents speech.

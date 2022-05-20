@@ -147,6 +147,11 @@ var/list/headset_modes = list(
 		say_testing(src, "we aren't able to talk")
 		return
 
+	//Handle muffled speech by muzzles.
+	var/mob/living/carbon/C = src
+	if(C.is_muzzled())
+		message = muffle(message)
+
 	if(message_mode == MODE_HEADSET || message_mode == MODE_ROBOT)
 		say_testing(src, "Message mode was [message_mode == MODE_HEADSET ? "headset" : "robot"]")
 		message = copytext(message, 2)
@@ -377,7 +382,7 @@ var/list/headset_modes = list(
 	if(is_mute())
 		return
 
-	if(is_muzzled())
+	if(is_muzzled() == MUZZLE_HARD)
 		return
 
 	if(!IsVocal())
@@ -727,3 +732,36 @@ var/list/headset_modes = list(
 
 /obj/effect/speech_bubble
 	var/mob/parent
+
+//Muffles a message for when muzzled.
+/proc/muffle(var/message)
+	var/muffle_syllables = list("mh","mph","mm","mgh","mg")
+	var/unmuffled = list(" ", "-", ",", ".", "!", "?")
+	var/output = ""
+	var/i = 1
+	var/current_char
+	while(i <= length(message))
+		current_char = message[i]
+		if(current_char in unmuffled)
+			message_admins("debug 01 [current_char]")
+			output += current_char
+			i += 1
+		else
+			var/length_to_add = 1
+			var/allcaps = TRUE
+			while((i + length_to_add <= length(message)) && (length_to_add < 3))
+				if(message[i + length_to_add] in unmuffled)
+					break
+				allcaps &= uppertext(message[i + length_to_add]) == message[i + length_to_add]
+				length_to_add += 1
+			i += length_to_add
+			if(allcaps)
+				output += uppertext(pick(muffle_syllables))
+			else
+				output += pick(muffle_syllables)
+	return output
+
+//todo: fix radio bug with removing first letter
+//check/fix languages/non "vocal" languages
+//fix last letter capitalization
+//mouth check for putting rags in creatures without mouths

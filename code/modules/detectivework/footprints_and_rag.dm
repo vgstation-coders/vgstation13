@@ -23,6 +23,7 @@
 	slot_flags = SLOT_MASK
 	body_parts_covered = MOUTH
 	goes_in_mouth = TRUE
+	is_muzzle = MUZZLE_SOFT
 	var/mob/current_target = null
 
 /obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)

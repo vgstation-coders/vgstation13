@@ -64,6 +64,7 @@
 	var/restraint_apply_time = 3 SECONDS
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/goes_in_mouth //Whether or not the item is described as "on his/her face" or "in his/her mouth" when worn on the face slot.
+	var/is_muzzle	//Whether or not the item is a muzzle, and how strong the muzzling effect is. See setup.dm.
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
