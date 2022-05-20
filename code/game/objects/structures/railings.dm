@@ -66,7 +66,7 @@
 
 /obj/structure/railing/to_bump(atom/Obstacle)
 	..()
-	shock_check(obstacle)
+	shock_check(Obstacle)
 
 /obj/structure/railing/proc/shock_check(mob/living/shockee)
 	if(!wired && !istype(shockee))
