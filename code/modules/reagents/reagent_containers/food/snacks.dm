@@ -5240,6 +5240,7 @@
 	icon = 'icons/obj/candymachine.dmi'
 	bitesize = 5
 	slot_flags = SLOT_MASK //No, really, suck on this.
+	goes_in_mouth = TRUE
 	attack_verb = list("taps", "pokes")
 	eatverb = "crunch"
 	valid_utensils = 0
