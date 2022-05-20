@@ -1029,7 +1029,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure/ayyweapon
 	containername = "MDF standard weapons crate"
-	one_access = list(access_mothership_military)
+	one_access = list(access_armory, access_mothership_military)
 	group = "Security"
 	hidden = 1
 
@@ -1085,7 +1085,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 40
 	containertype = /obj/structure/closet/crate/secure/ayybin
 	containername = "MDF standard armor bin"
-	one_access = list(access_mothership_military)
+	one_access = list(access_security, access_mothership_military)
 	group = "Security"
 	contraband = 1
 
