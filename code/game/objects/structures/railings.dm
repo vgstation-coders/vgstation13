@@ -45,15 +45,20 @@
 	if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 		return
 	if(O == user)
-		var/turf/T = get_turf(src)
-		if(get_turf(user) == T)
-			T = get_step(T,dir)
-		if(locate(/obj/effect/unwall_field) in T)
-			user.forceMove(T)
-		for(var/atom/movable/AM in T)
-			if(!istype(AM,/obj/structure/railing) && !AM.Cross(user))
-				return
-		user.forceMove(T)
+		hurdle(user)
+
+/obj/structure/railing/proc/hurdle(atom/movable/jumper)
+	var/turf/T = get_turf(src)
+	if(get_turf(jumper) == T)
+		T = get_step(T,dir)
+	if(locate(/obj/effect/unwall_field) in T)
+		jumper.forceMove(T)
+	for(var/atom/movable/AM in T)
+		if(AM == src || istype(AM,/obj/structure/railing))
+			continue
+		if(!AM.Cross(jumper))
+			return
+	jumper.forceMove(T)
 
 /turf/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
 	var/obj/structure/railing/R = locate() in src

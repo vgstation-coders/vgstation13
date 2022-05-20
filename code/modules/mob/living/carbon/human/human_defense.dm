@@ -36,6 +36,11 @@ emp_act
 
 				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
+	var/obj/structure/railing/R = locate(/obj/structure/railing) in get_turf(src)
+	if(R)
+		var/turf/T = get_step(R,R.dir)
+		if(isopenspace(T) && P.get_damage())
+			R.hurdle(src) // Railing kill!
 
 	if(check_shields(P.damage, P))
 		P.on_hit(src, 100)
