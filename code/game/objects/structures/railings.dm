@@ -15,6 +15,8 @@
 	var/weldtime = 25
 	var/sheettype = /obj/item/stack/sheet/metal
 	var/hit_behind_chance = 90
+	var/wired = FALSE
+	var/wire_color = "#FFFFFF"
 	health = 100
 
 /obj/structure/railing/New(loc)
@@ -60,6 +62,22 @@
 		if(!AM.Cross(jumper))
 			return
 	jumper.forceMove(T)
+	shock_check(jumper)
+
+/obj/structure/railing/to_bump(atom/Obstacle)
+	..()
+	shock_check(obstacle)
+
+/obj/structure/railing/proc/shock_check(mob/living/shockee)
+	if(!wired && !istype(shockee))
+		return
+	var/obj/structure/cable/C = locate() in get_turf(src)
+	if(C && (C.d1 == dir || C.d2 == dir) && C.avail())
+		electrocute_mob(shockee, C.get_powernet(), C)
+	else
+		C = locate() in get_step(src,dir)
+		if(C && (C.d1 == opposite_dirs[dir] || C.d2 == opposite_dirs[dir]) && C.avail())
+			electrocute_mob(shockee, C.get_powernet(), C)
 
 /turf/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
 	var/obj/structure/railing/R = (locate() in src) || (locate() in get_turf(user))
@@ -109,6 +127,13 @@
 			junction &= ~WEST
 	icon_state = anchored ? "[railingtype]railing[junction]" : "[railingtype]railing0"
 
+/obj/structure/railing/update_icon()
+	overlays.Cut()
+	if(wired)
+		var/image/I = image(icon = icon, icon_state = "[railingtype]electric")
+		I.color = wire_color
+		overlays += I
+
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
 		return 1
@@ -123,23 +148,41 @@
 			relativewall()
 			relativewall_neighbours()
 			return
-	if(iswelder(C) && !anchored && railingtype != "wooden")
-		var/obj/item/tool/weldingtool/WT = C
-		user.visible_message("<span class='notice'>[user] starts to deconstruct [src] with \a [C].</span>",\
-		"<span class='notice'>You begin to deconstruct [src] with \the [C].</span>")
-		if(WT.do_weld(user, src, weldtime, 0))
-			user.visible_message("<span class='notice'>[user] deconstructed [src] with \a [C].</span>",\
-			"<span class='notice'>You deconstruct [src] with \the [C].</span>")
-			make_into_sheets()
-			return
-	if(iscrowbar(C) && !anchored && railingtype == "wooden")
-		user.visible_message("<span class='notice'>[user] starts to deconstruct [src] with \a [C].</span>",\
-		"<span class='notice'>You begin to deconstruct [src] with \the [C].</span>")
-		if(do_after(user, src, weldtime))
-			user.visible_message("<span class='notice'>[user] deconstructed [src] with \a [C].</span>",\
-			"<span class='notice'>You deconstruct [src] with \the [C].</span>")
-			make_into_sheets()
-			return
+	if(!anchored)
+		if(iswelder(C) && railingtype != "wooden")
+			var/obj/item/tool/weldingtool/WT = C
+			user.visible_message("<span class='notice'>[user] starts to deconstruct [src] with \a [C].</span>",\
+			"<span class='notice'>You begin to deconstruct [src] with \the [C].</span>")
+			if(WT.do_weld(user, src, weldtime, 0))
+				user.visible_message("<span class='notice'>[user] deconstructed [src] with \a [C].</span>",\
+				"<span class='notice'>You deconstruct [src] with \the [C].</span>")
+				make_into_sheets()
+				return
+		if(iscrowbar(C) && railingtype == "wooden")
+			user.visible_message("<span class='notice'>[user] starts to deconstruct [src] with \a [C].</span>",\
+			"<span class='notice'>You begin to deconstruct [src] with \the [C].</span>")
+			C.playtoolsound(src, 50)
+			if(do_after(user, src, weldtime))
+				user.visible_message("<span class='notice'>[user] deconstructed [src] with \a [C].</span>",\
+				"<span class='notice'>You deconstruct [src] with \the [C].</span>")
+				make_into_sheets()
+				return
+	if(anchored)
+		if(iscablecoil(C) && !wired)
+			var/obj/item/stack/cable_coil/CC = C
+			if(CC.use(2))
+				user.visible_message("<span class='notice'>[user] adds wiring to [src].</span>",\
+				"<span class='notice'>You add wiring to [src].</span>")
+				wired = TRUE
+				wire_color = CC._color
+				update_icon()
+		if(C.is_wirecutter(user) && wired)
+			user.visible_message("<span class='notice'>[user] removes wiring from [src].</span>",\
+			"<span class='notice'>You removed wiring from [src].</span>")
+			C.playtoolsound(src, 50)
+			wired = FALSE
+			new /obj/item/stack/cable_coil(get_turf(user),2)
+			update_icon()
 	return 1
 
 /obj/structure/railing/proc/make_into_sheets()
