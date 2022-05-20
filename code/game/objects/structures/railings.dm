@@ -61,7 +61,9 @@
 	jumper.forceMove(T)
 
 /turf/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
-	var/obj/structure/railing/R = locate() in adjacent_atoms(src)
+	var/obj/structure/railing/R = locate() in src
+	if(!R)
+		R = locate() in get_turf(user)
 	if(R)
 		R.MouseDropTo(O,user,src_location,over_location,src_control,over_control,params)
 
