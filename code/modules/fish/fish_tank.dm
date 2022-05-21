@@ -49,8 +49,8 @@
 	var/list/egg_list = list()	// Strings containing egg.fish_type
 
 	var/has_lid = FALSE			// FALSE if the tank doesn't have a lid/light, TRUE if it does
-	var/max_health = 0			// Can handle a couple hits
-	var/cur_health = 0			// Current health, starts at max_health
+	var/maxHealth = 0			// Can handle a couple hits
+	var/health = 0			// Current health, starts at maxHealth
 	var/leaking = NO_LEAK
 	var/shard_count = 0			// Number of glass shards to salvage when broken (1 less than the number of sheets to build the tank)
 	var/automated = 0			// Cleans the aquarium on its own
@@ -70,8 +70,8 @@
 	max_fish = 1				// What a lonely fish
 
 	has_lid = FALSE
-	max_health = 15				// Not very sturdy
-	cur_health = 15
+	maxHealth = 15				// Not very sturdy
+	health = 15
 	shard_count = 0				// No salvageable shards
 
 /obj/machinery/fishtank/bowl/full
@@ -97,8 +97,8 @@
 	max_fish = 4				// Room for a few fish
 
 	has_lid = TRUE
-	max_health = 50				// Average strength, will take a couple hits from a toolbox.
-	cur_health = 50
+	maxHealth = 50				// Average strength, will take a couple hits from a toolbox.
+	health = 50
 	shard_count = 4
 
 /obj/machinery/fishtank/tank/full
@@ -119,8 +119,8 @@
 	max_fish = 10				// Plenty of room for a lot of fish
 
 	has_lid = TRUE
-	max_health = 100			// This thing is a freaking wall, it can handle abuse.
-	cur_health = 100
+	maxHealth = 100			// This thing is a freaking wall, it can handle abuse.
+	health = 100
 	shard_count = 9
 
 /obj/machinery/fishtank/wall/full
@@ -364,20 +364,25 @@
 	food_level = min(MAX_FOOD, food_level + amount)
 	update_icon()
 
-/obj/machinery/fishtank/proc/check_health()
-	//Max value check
-	if(cur_health > max_health)						//Cur_health cannot exceed max_health, set it to max_health if it does
-		cur_health = max_health
+/obj/machinery/fishtank/proc/add_health(var/amount)
+	if(amount > 0)
+		health = min(health + amount, maxHealth)
+	else
+		health = max(0, health + amount)
 	//Leaking status check
-	if(cur_health <= (max_health * 0.25))			//Major leak at or below 25% health (-10 water/cycle)
+	if(health <= (maxHealth * 0.25))			//Major leak at or below 25% health (-10 water/cycle)
 		leaking = MAJOR_LEAK
-	else if(cur_health <= (max_health * 0.5))		//Minor leak at or below 50% health (-1 water/cycle)
+	else if(health <= (maxHealth * 0.5))		//Minor leak at or below 50% health (-1 water/cycle)
 		leaking = MINOR_LEAK
 	else											//Not leaking above 50% health
 		leaking = NO_LEAK
-	//Destruction check
-	if(cur_health <= 0)								//The tank is broken, destroy it
+
+	if(health < 1)
+		user.visible_message("<span class='danger'>\The [src] was destroyed!</span>")
 		destroy()
+	else
+		user.visible_message("<span class='danger'>\The [src] was smashed!</span>")
+		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 
 /obj/machinery/fishtank/proc/kill_fish(var/type = null)
 	//Check if we were passed a fish to kill, otherwise kill a random one
@@ -416,11 +421,9 @@
 /obj/machinery/fishtank/proc/harvest_eggs(var/mob/user)
 	if(!egg_list.len)									//Can't harvest non-existant eggs
 		return
-
 	for(var/i = 1 to egg_list.len)						//Loop until you've harvested all the eggs
 		var/obj/item/fish_eggs/egg = egg_list[i]	//Go through the eggs
 		new egg(get_turf(user))						//Spawn the egg at the user's feet
-
 	egg_list = list()								//Destroy any excess eggs, clearing the egg_list
 
 /obj/machinery/fishtank/proc/harvest_fish(var/mob/user)
@@ -614,26 +617,16 @@
 		user.visible_message("\The [user] taps on \the [src].", \
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
-
 	user.delayNextAttack(0.8 SECONDS)
-
 
 /obj/machinery/fishtank/proc/hit(var/obj/O, var/mob/user)
 	user.delayNextAttack(0.8 SECONDS)
 	user.do_attack_animation(src, O)
 	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
-	cur_health = max(0, cur_health - O.force)
-	check_health()
+	add_health(-O.force)
 
 /obj/machinery/fishtank/proc/attack_generic(var/mob/living/user, var/damage = 0)	//used by attack_alien, attack_animal, and attack_slime
-	cur_health = max(0, cur_health - damage)
-	if(cur_health <= 0)
-		user.visible_message("<span class='danger'>\The [user] smashes through \the [src]!</span>")
-		destroy()
-	else	//for nicer text
-		user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>")
-		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
-		check_health()
+	add_health(-damage)
 
 /obj/machinery/fishtank/attackby(var/obj/item/O, var/mob/user as mob)
 	//Silicate sprayers repair damaged tanks on help intent
@@ -641,15 +634,8 @@
 		var/obj/item/device/silicate_sprayer/S = O
 		if(user.a_intent == I_HELP)
 			if (S.get_amount() >= 2)
-				if(cur_health < max_health)
-					to_chat(user, "<span class='notice'>You repair some of the cracks on \the [src].</span>")
-					cur_health += 20
-					S.remove_silicate(2)
-					check_health()
-				else
-					to_chat(user, "<span class='warning'>There is no damage to fix!</span>")
-			else if (cur_health < max_health)
-				to_chat(user, "<span class='notice'>You require more silicate to fix the damage on \the [src].</span>")
+				add_health(20)
+				S.remove_silicate(2)
 		return TRUE
 	//Open reagent containers add and remove water
 	if(O.is_open_container())
