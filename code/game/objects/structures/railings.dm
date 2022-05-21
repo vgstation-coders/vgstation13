@@ -1,3 +1,7 @@
+#define NO_GLASS 1
+#define NORMAL_GLASS 2
+#define PLASMA_GLASS 3
+
 /obj/structure/railing
 	name = "railing"
 	desc = "For protecting people from going too far over ledges."
@@ -17,12 +21,15 @@
 	var/hit_behind_chance = 90
 	var/wired = FALSE
 	var/wire_color = "#FFFFFF"
+	var/glasstype = NO_GLASS
+	var/glasshealth = 0
 	health = 100
 
 /obj/structure/railing/New(loc)
 	..(loc)
 	setup_border_dummy()
 	desc = "A [railingtype] railing, for protecting people from going too far over ledges."
+	update_icon()
 
 /obj/structure/railing/initialize()
 	relativewall()
@@ -133,6 +140,8 @@
 		var/image/I = image(icon = icon, icon_state = "[railingtype]electric")
 		I.color = wire_color
 		overlays += I
+	if(glasstype)
+		overlays += image(icon = icon, icon_state = "[railingtype][glasstype = PLASMA_GLASS ? "p" : ""]glass")
 
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
@@ -183,6 +192,45 @@
 			wired = FALSE
 			new /obj/item/stack/cable_coil(get_turf(user),2)
 			update_icon()
+		if(((istype(C,/obj/item/stack/sheet/glass) && railingtype != "plasteel") ||\
+			(istype(C,/obj/item/stack/sheet/glass/rglass) && railingtype == "plasteel")) \
+			&& !glasstype)
+			var/obj/item/stack/sheet/glass/GS = C
+			var/isplasmaglass = (istype(GS,/obj/item/stack/sheet/glass/plasmaglass) && railingtype != "plasteel") || (istype(GS,/obj/item/stack/sheet/glass/plasmarglass) && railingtype == "plasteel")
+			if(GS.use(railingtype == "wooden" ? 1 : 2))
+				user.visible_message("<span class='notice'>[user] adds glass sheets to [src].</span>",\
+				"<span class='notice'>You add glass sheets to [src].</span>")
+				glasstype = isplasmaglass ? PLASMA_GLASS : NORMAL_GLASS
+				switch(railingtype)
+					if("wooden")
+						glasshealth = 10 * glasstype
+					if("metal")
+						glasshealth = 25 * glasstype
+					if("plasteel")
+						glasshealth = 50 * glasstype
+				update_icon()
+		if(iscrowbar(C) && glasstype)
+			user.visible_message("<span class='notice'>[user] starts to remove glass from [src] with \a [C].</span>",\
+			"<span class='notice'>You begin to remove glass from [src] with \the [C].</span>")
+			C.playtoolsound(src, 50)
+			if(do_after(user, src, wrenchtime))
+				user.visible_message("<span class='notice'>[user] removed glass from [src] with \a [C].</span>",\
+				"<span class='notice'>You removed glass from [src] with \the [C].</span>")
+				switch(glasstype)
+					if(NORMAL_GLASS)
+						if(railingtype == "plasteel")
+							new /obj/item/stack/sheet/glass/rglass(get_turf(user),railingtype == "wooden" ? 1 : 2)
+						else
+							new /obj/item/stack/sheet/glass(get_turf(user),railingtype == "wooden" ? 1 : 2)
+					if(PLASMA_GLASS)
+						if(railingtype == "plasteel")
+							new /obj/item/stack/sheet/glass/plasmarglass(get_turf(user),railingtype == "wooden" ? 1 : 2)
+						else
+							new /obj/item/stack/sheet/glass/plasmaglass(get_turf(user),railingtype == "wooden" ? 1 : 2)
+				glasstype = NO_GLASS
+				glasshealth = 0
+				update_icon()
+				return
 	return 1
 
 /obj/structure/railing/proc/make_into_sheets()
@@ -231,6 +279,15 @@
 /obj/structure/railing/loose
 	anchored = 0
 
+/obj/structure/railing/wired
+	wired = TRUE
+
+/obj/structure/railing/glass
+	glasstype = NORMAL_GLASS
+
+/obj/structure/railing/pglass
+	glasstype = PLASMA_GLASS
+
 /obj/structure/railing/plasteel
 	name = "reinforced railing"
 	railingtype = "plasteel"
@@ -248,6 +305,15 @@
 /obj/structure/railing/plasteel/loose
 	anchored = 0
 
+/obj/structure/railing/plasteel/wired
+	wired = TRUE
+
+/obj/structure/railing/plasteel/glass
+	glasstype = NORMAL_GLASS
+
+/obj/structure/railing/plasteel/pglass
+	glasstype = PLASMA_GLASS
+
 /obj/structure/railing/wood
 	railingtype = "wooden"
 	sheettype = /obj/item/stack/sheet/wood
@@ -261,3 +327,12 @@
 
 /obj/structure/railing/wood/loose
 	anchored = 0
+
+/obj/structure/railing/wood/wired
+	wired = TRUE
+
+/obj/structure/railing/wood/glass
+	glasstype = NORMAL_GLASS
+
+/obj/structure/railing/wood/pglass
+	glasstype = PLASMA_GLASS
