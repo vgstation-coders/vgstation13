@@ -336,10 +336,6 @@
 		to_chat(user, "<span class='notice'>\The [src] is still wrapped.</span>")
 		return
 
-	if(eater.is_muzzled())
-		to_chat(user, "<span class='notice'>[(user==eater) ? "Your" : "\The [eater]'s"] mouth is obstructed by [eater.wear_mask].</span>")
-		return
-
 	var/fullness = eater.nutrition + (eater.reagents.get_reagent_amount(NUTRIMENT) * 25) //This reminds me how unlogical mob nutrition is
 
 	if(fullness > (550 * (1 + eater.overeatduration / 2000)))	// The more you eat - the more you can eat
