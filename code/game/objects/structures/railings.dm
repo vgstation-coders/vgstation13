@@ -218,15 +218,11 @@
 				"<span class='notice'>You removed glass from [src] with \the [C].</span>")
 				switch(glasstype)
 					if(NORMAL_GLASS)
-						if(railingtype == "plasteel")
-							new /obj/item/stack/sheet/glass/rglass(get_turf(user),railingtype == "wooden" ? 1 : 2)
-						else
-							new /obj/item/stack/sheet/glass(get_turf(user),railingtype == "wooden" ? 1 : 2)
+						var/glasstospawn = railingtype == "plasteel" ? /obj/item/stack/sheet/glass/rglass : /obj/item/stack/sheet/glass
+						new glasstospawn(get_turf(user),railingtype == "wooden" ? 1 : 2)
 					if(PLASMA_GLASS)
-						if(railingtype == "plasteel")
-							new /obj/item/stack/sheet/glass/plasmarglass(get_turf(user),railingtype == "wooden" ? 1 : 2)
-						else
-							new /obj/item/stack/sheet/glass/plasmaglass(get_turf(user),railingtype == "wooden" ? 1 : 2)
+						var/glasstospawn = railingtype == "plasteel" ? /obj/item/stack/sheet/glass/plasmarglass : /obj/item/stack/sheet/plasmaglass
+						new glasstospawn(get_turf(user),railingtype == "wooden" ? 1 : 2)
 				glasstype = NO_GLASS
 				glasshealth = 0
 				update_icon()
