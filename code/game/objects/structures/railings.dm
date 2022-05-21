@@ -141,7 +141,7 @@
 		I.color = wire_color
 		overlays += I
 	if(glasstype)
-		overlays += image(icon = icon, icon_state = "[railingtype][glasstype = PLASMA_GLASS ? "p" : ""]glass")
+		overlays += image(icon = icon, icon_state = "[railingtype][glasstype == PLASMA_GLASS ? "p" : ""]glass")
 
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
