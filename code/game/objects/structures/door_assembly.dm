@@ -266,7 +266,7 @@
 		user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
 		user.drop_item(W, src, force_drop = 1)
 
-		if(do_after(user, src, 40))
+		if(do_after(user, src, 20))
 			if(!src)
 				return
 			var/obj/item/weapon/circuitboard/airlock/electronic = W
