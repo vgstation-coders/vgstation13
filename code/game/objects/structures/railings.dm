@@ -1,6 +1,6 @@
-#define NO_GLASS 1
-#define NORMAL_GLASS 2
-#define PLASMA_GLASS 3
+#define NO_GLASS 0
+#define NORMAL_GLASS 1
+#define PLASMA_GLASS 2
 
 /obj/structure/railing
 	name = "railing"
