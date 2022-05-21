@@ -52,6 +52,7 @@
 	var/leaking = NO_LEAK
 	var/shard_count = 0			// Number of glass shards to salvage when broken (1 less than the number of sheets to build the tank)
 	var/automated = 0			// Cleans the aquarium on its own
+	var/acidic = FALSE
 
 /obj/machinery/fishtank/bowl
 	name = "fish bowl"
@@ -234,12 +235,15 @@
 			water_type = "clean"
 		if (FILTH_THRESHOLD to MAX_FILTH)
 			water_type = "dirty"
-
-	switch (water_level/water_capacity)
-		if (0.01 to 0.85) // Lest there can be fish in waterless environements
-			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_half_[water_type]", WATER_LAYER)
-		if (0.85 to 1)
-			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]", WATER_LAYER)
+ 	// Lest there can be fish in waterless environments
+	if(!acidic && water_level/water_capacity < 0.85))
+		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_half_[water_type]", WATER_LAYER)
+	else if (!acidic)
+		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]", WATER_LAYER)
+	else if (water_level/water_capacity < 0.85)
+		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]_acidic", WATER_LAYER)
+	else
+		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]_acidic", WATER_LAYER)
 
 //////////////////////////////
 //		PROCESS PROC		//
@@ -670,10 +674,20 @@
 			//Containers with any reagents will get dumped in
 			if(C.reagents.total_volume)
 				var/water_value = 0
-				water_value += C.reagents.get_reagent_amount(WATER)					//Water is full value
-				water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1		//Holywater is (somehow) better. Who said religion had to make sense?
+				if(C.reagents.get_reagent_amount(WATERS) > 0 && acidic)
+					acidic = FALSE
+					water_value += C.reagents.get_reagent_amount(WATER)					//Water is full value
+					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1		//Holywater is (somehow) better. Who said religion had to make sense?
+					water_value += C.reagents.get_reagent_amount(ICE) * 0.80			//Ice is 80% value
+				else if(C.reagents.get_reagent_amount(PACIDS) > 0 || C.reagents.get_reagent_amount(SACIDS) > 0 && !acidic)
+					acidic = TRUE
+					water_value += C.reagents.get_reagent_amount(PACIDS) * 2
+					water_value += C.reagents.get_reagent_amount(SACIDS)
+				else
+					water_value += C.reagents.get_reagent_amount(WATER)
+					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
+					water_value += C.reagents.get_reagent_amount(ICE) * 0.80
 
-				water_value += C.reagents.get_reagent_amount(ICE) * 0.80			//Ice is 80% value
 				var/message = ""
 				if(!water_value)													//The container has no water value, clear everything in it
 					message = "<span class='warning'>The filtration process removes everything, leaving the water level unchanged.</span>"
