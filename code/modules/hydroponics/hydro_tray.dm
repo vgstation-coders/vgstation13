@@ -573,14 +573,12 @@
 	//Override for somatoray projectiles.
 	if(!is_somatoraying && istype(Proj ,/obj/item/projectile/energy/floramut))
 		var/obj/item/projectile/energy/floramut/P = Proj
-		var/sev = P.mutstrength
 		is_somatoraying = 1
-		spawn(4*sev)
+		spawn(4)
 			is_somatoraying = 0
-			if(src && seed && !seed.immutable && !dead) //spawn() is tricky with sanity
-				mutate(sev)
-				if(prob(30) && seed.yield != -1)
-					apply_mut("plusstat_yield", sev)
+			mutate(sev)
+			if(prob(30) && seed.yield != -1)
+				apply_mut("plusstat_yield", sev)
 				return
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(seed && !dead)
@@ -595,7 +593,6 @@
 		return
 	close_lid()
 
-// See no evil, hear no evil. Returns all the potentially bad things on a hydroponic tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
 	var/list/things = list()
 	if(seed)

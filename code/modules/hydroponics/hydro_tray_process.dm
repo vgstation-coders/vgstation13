@@ -59,7 +59,7 @@
 	//Highly mutable plants have a chance of mutating every tick.
 	if(seed.immutable == -1)
 		if(prob(5))
-			mutate(rand(5,15))
+			mutate()
 
 	//Consume, 25% of the time
 	if(prob(25))
