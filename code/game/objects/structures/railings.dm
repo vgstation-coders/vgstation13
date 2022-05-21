@@ -108,24 +108,43 @@
 			if(M.lying)
 				chance -= 20 //Lying down lets you catch less bullets
 	if(shooting_at_directly || !(prob(chance)))
-		if(glasstype && glasshealth > 0)
-			glasshealth -= P.damage/2
-			visible_message("<span class='warning'>[P] hits \the [src] glass!</span>")
+		return handle_damage(P.damage, P, P.firer)
+	return 1
+
+/obj/structure/railing/proc/handle_damage(var/damage, obj/item/I, mob/user)
+	if(glasstype && glasshealth > 0)
+		glasshealth -= damage/2
+		if(user)
+			user.visible_message("<span class='warning'>[user] hits \the [src] glass with \a [I].</span>",\
+								"<span class='warning'>You hit \the [src] glass with \a [I].</span>")
+		else
+			visible_message("<span class='warning'>[I] hits \the [src] glass!</span>")
+		return 0
+	else
+		if(glasstype)
+			if(user)
+				user.visible_message("<span class='warning'>[user] breaks \the [src] glass!</span>",\
+									"<span class='warning'>You break \the [src] glass!</span>")
+			else
+				visible_message("<span class='warning'>[I] breaks \the [src] glass!</span>")
+			break_glass(TRUE)
+			return 0
+		health -= damage/2
+		if (health > 0)
+			if(user)
+				user.visible_message("<span class='warning'>[user] hits \the [src] with \a [I].</span>",\
+									"<span class='warning'>You hit \the [src] with \a [I].</span>")
+			else
+				visible_message("<span class='warning'>[I] hits \the [src]!</span>")
 			return 0
 		else
-			if(glasstype)
-				visible_message("<span class='warning'>[P] breaks \the [src] glass!</span>")
-				break_glass(TRUE)
-				return 0
-			health -= P.damage/2
-			if (health > 0)
-				visible_message("<span class='warning'>[P] hits \the [src]!</span>")
-				return 0
+			if(user)
+				user.visible_message("<span class='warning'>[user] breaks \the [src] down!</span>",\
+									"<span class='warning'>You break \the [src] down!</span>")
 			else
 				visible_message("<span class='warning'>[src] breaks down!</span>")
-				make_into_sheets()
-				return 1
-	return 1
+			make_into_sheets()
+			return 1
 
 /obj/structure/railing/canSmoothWith()
 	return list(/obj/structure/railing)
@@ -235,6 +254,9 @@
 				"<span class='notice'>You removed [glasstype == PLASMA_GLASS ? "plasma " : ""]glass from [src] with \the [C].</span>")
 				break_glass()
 				return
+	if(C.force)
+		handle_damage(C.force, C, user)
+		return
 	return 1
 
 /obj/structure/railing/proc/make_into_sheets(var/damage = FALSE)
