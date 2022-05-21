@@ -326,7 +326,7 @@
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 
 //Ayy lmao boots
-/obj/item/clothing/shoes/jackboots/steeltoe/mothership
+/obj/item/clothing/shoes/jackboots/mothership
 	name = "mothership boots"
 	desc = "Issued, recalled post-mortem, and reissued countless times to many mothership denizens. Despite that, the boots still shine impeccably."
 	sterility = 75
