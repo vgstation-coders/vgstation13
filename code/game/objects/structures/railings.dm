@@ -96,6 +96,8 @@
 /obj/structure/railing/proc/check_cover(obj/item/projectile/P, turf/from)
 	var/shooting_at_directly = P.original == src
 	var/chance = hit_behind_chance
+	if(glasstype)
+		chance = min(40,chance)
 	if(!shooting_at_directly)
 		if(get_dir(loc, from) != dir) // The direction needs to be right
 			return 1
