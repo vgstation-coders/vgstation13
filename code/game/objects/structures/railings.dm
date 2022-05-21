@@ -23,6 +23,7 @@
 	var/wire_color = "#FFFFFF"
 	var/glasstype = NO_GLASS
 	var/glasshealth = 0
+	var/min_damage_force = 10
 	health = 100
 
 /obj/structure/railing/New(loc)
@@ -108,12 +109,14 @@
 			if(M.lying)
 				chance -= 20 //Lying down lets you catch less bullets
 	if(shooting_at_directly || !(prob(chance)))
-		return handle_damage(P.damage, P, P.firer)
+		return handle_damage(P.damage, P, sound = FALSE)
 	return 1
 
-/obj/structure/railing/proc/handle_damage(var/damage, obj/item/I, mob/user)
+/obj/structure/railing/proc/handle_damage(var/damage, obj/item/I, mob/user, var/sound = TRUE)
 	if(glasstype && glasshealth > 0)
 		glasshealth -= damage/2
+		if(sound)
+			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 		if(user)
 			user.visible_message("<span class='warning'>[user] hits \the [src] glass with \a [I].</span>",\
 								"<span class='warning'>You hit \the [src] glass with \a [I].</span>")
@@ -130,6 +133,8 @@
 			break_glass(TRUE)
 			return 0
 		health -= damage/2
+		if(sound)
+			playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
 		if (health > 0)
 			if(user)
 				user.visible_message("<span class='warning'>[user] hits \the [src] with \a [I].</span>",\
@@ -233,6 +238,7 @@
 			if(GS.use(railingtype == "wooden" ? 1 : 2))
 				user.visible_message("<span class='notice'>[user] begins to add [isplasmaglass ? "plasma " : ""]glass sheets to [src].</span>",\
 				"<span class='notice'>You begins to add [isplasmaglass ? "plasma " : ""]glass sheets to [src].</span>")
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, src, wrenchtime))
 					user.visible_message("<span class='notice'>[user] adds [isplasmaglass ? "plasma " : ""]glass sheets to [src].</span>",\
 					"<span class='notice'>You add [isplasmaglass ? "plasma " : ""]glass sheets to [src].</span>")
@@ -254,7 +260,7 @@
 				"<span class='notice'>You removed [glasstype == PLASMA_GLASS ? "plasma " : ""]glass from [src] with \the [C].</span>")
 				break_glass()
 				return
-	if(C.force)
+	if(C.force > min_damage_force)
 		handle_damage(C.force, C, user)
 		return
 	return 1
@@ -356,6 +362,7 @@
 	health = 100
 	icon_state = "plasteelrailing0"
 	hit_behind_chance = 70
+	min_damage_force = 15
 
 /obj/structure/railing/plasteel/ex_act(severity)
 	var/nu_severity = severity + 1
@@ -381,6 +388,7 @@
 	health = 30
 	icon_state = "woodenrailing0"
 	hit_behind_chance = 50
+	min_damage_force = 5
 
 /obj/structure/railing/wood/ex_act(severity)
 	var/nu_severity = max(1,severity - 1)
