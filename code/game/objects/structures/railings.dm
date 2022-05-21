@@ -117,10 +117,10 @@
 		glasshealth -= damage/2
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
-		if(user)
+		if(user && I)
 			user.visible_message("<span class='warning'>[user] hits \the [src] glass with \a [I].</span>",\
 								"<span class='warning'>You hit \the [src] glass with \a [I].</span>")
-		else
+		else if(I)
 			visible_message("<span class='warning'>[I] hits \the [src] glass!</span>")
 		return 0
 	else
@@ -128,18 +128,20 @@
 			if(user)
 				user.visible_message("<span class='warning'>[user] breaks \the [src] glass!</span>",\
 									"<span class='warning'>You break \the [src] glass!</span>")
-			else
+			else if(I)
 				visible_message("<span class='warning'>[I] breaks \the [src] glass!</span>")
+			else
+				visible_message("<span class='warning'>[src] breaks down!</span>")
 			break_glass(TRUE)
 			return 0
 		health -= damage/2
 		if(sound)
 			playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
 		if (health > 0)
-			if(user)
+			if(user && I)
 				user.visible_message("<span class='warning'>[user] hits \the [src] with \a [I].</span>",\
 									"<span class='warning'>You hit \the [src] with \a [I].</span>")
-			else
+			else if(I)
 				visible_message("<span class='warning'>[I] hits \the [src]!</span>")
 			return 0
 		else
@@ -306,25 +308,34 @@
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		make_into_sheets(TRUE)
+		if(glasstype)
+			break_glass(TRUE)
+		else
+			make_into_sheets(TRUE)
 
 /obj/structure/railing/attack_paw(mob/living/user)
 	if(M_HULK in user.mutations)
 		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		make_into_sheets(TRUE)
+		if(glasstype)
+			break_glass(TRUE)
+		else
+			make_into_sheets(TRUE)
 
 /obj/structure/railing/attack_alien(mob/living/user)
 	user.do_attack_animation(src, user)
-	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
-	make_into_sheets(TRUE)
+	visible_message("<span class='danger'>[user] slices at [src]!</span>")
+	handle_damage(50,null,user)
 
 /obj/structure/railing/attack_animal(mob/living/simple_animal/user)
 	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		make_into_sheets(TRUE)
+		visible_message("<span class='danger'>[user] smashes [src]!</span>")
+		if(glasstype)
+			break_glass(TRUE)
+		else
+			make_into_sheets(TRUE)
 
 /obj/structure/railing/ex_act(severity)
 	switch(severity)
