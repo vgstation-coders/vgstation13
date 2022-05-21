@@ -49,8 +49,6 @@
 	var/list/egg_list = list()	// Strings containing egg.fish_type
 
 	var/has_lid = FALSE			// FALSE if the tank doesn't have a lid/light, TRUE if it does
-	var/maxHealth = 0			// Can handle a couple hits
-	var/health = 0			// Current health, starts at maxHealth
 	var/leaking = NO_LEAK
 	var/shard_count = 0			// Number of glass shards to salvage when broken (1 less than the number of sheets to build the tank)
 	var/automated = 0			// Cleans the aquarium on its own
@@ -185,8 +183,8 @@
 /obj/machinery/fishtank/update_icon()
 	overlays.Cut()
 	//Update Alert Lights
-	if(has_lid)											//Skip the alert lights for aquariums that don't have lids (fishbowls)
-		if(egg_list.len)								//There is at least 1 egg to harvest
+	if(has_lid)
+		if(egg_list.len)
 			overlays += "over_egg"
 		if(lid_switch == TRUE)							//Lid is closed, lid status light is red
 			overlays += "over_lid_1"
@@ -238,7 +236,7 @@
 		if (FILTH_THRESHOLD to MAX_FILTH)
 			water_type = "dirty"
  	// Lest there can be fish in waterless environments
-	if(!acidic && water_level/water_capacity < 0.85))
+	if(!acidic && water_level/water_capacity < 0.85)
 		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_half_[water_type]", WATER_LAYER)
 	else if (!acidic)
 		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]", WATER_LAYER)
@@ -247,50 +245,46 @@
 	else
 		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]_acidic", WATER_LAYER)
 
-//////////////////////////////
-//		PROCESS PROC		//
-//////////////////////////////
-
-
 /obj/machinery/fishtank/process()
 	//Check if the water level can support the current number of fish
 	if((fish_list.len * 50) > water_level)
-		if(prob(50))								//Not enough water for all the fish, chance to kill one
-			kill_fish()								//Chance passed, kill a random fish
-			add_filth(2)							//Dead fish raise the filth level quite a bit, reflect this
+		if(prob(50))
+			kill_fish()
+			add_filth(2)
 
 	//Check filth_level
-	if(filth_level == MAX_FILTH && fish_list.len > 0)//This tank is nasty and possibly unsuitable for fish if any are in it
-		if(prob(30))								//Chance for a fish to die each cycle while the tank is this nasty
-			kill_fish()								//Kill a random fish, don't raise filth level since we're at cap already
+	if(filth_level == MAX_FILTH && fish_list.len > 0)
+		if(prob(30))
+			kill_fish()
 
 	//Check breeding conditions
-	if(fish_list.len >=2 && egg_list.len < max_fish)//Need at least 2 fish to breed, but won't breed if there are as many eggs as max_fish
-		if(food_level > 2 && filth_level <=5)		//Breeding is going to use extra food, and the filth_level shouldn't be too high
-			if(prob(((fish_list.len - 2) * 5)+8))	//Chances increase with each additional fish, 8% base + 4% per additional fish
-				egg_list.Add(pick(fish_list))		//Add string in fish_list from egg.fish_type
-				remove_food(2)						//Remove extra food for the breeding process
+	if(fish_list.len >=2 && egg_list.len < max_fish)
+		if(food_level > 2 && filth_level <=5)
+			if(prob(((fish_list.len - 2) * 5)+8))
+				egg_list.Add(pick(fish_list))
+				remove_food(2)
 
 	//Handle standard food and filth adjustments
 	var/ate_food = FALSE
-	if(food_level > 0 && prob(50))					//Chance for the fish to eat some food
-		if(food_level >= (fish_list.len * 0.01))		//If there is at least enough food to go around, feed all the fish
+	if(food_level > 0 && prob(50))
+		if(food_level >= (fish_list.len * 0.01))
 			remove_food(fish_list.len * 0.01)
-		else										//Use up the last of the food
+		else
 			food_level = 0
 		ate_food = TRUE
 
-	if(water_level > 0)								//Don't dirty the tank if it has no water
-		if(fish_list.len == 0)							//If the tank has no fish, algae growth can occur
-			if(filth_level < ALGAE_THRESHOLD && prob(15))		//Algae growth is a low chance and cannot exceed filth_level of 7.5
-				add_filth(0.05)					//Algae growth is slower than fish filth build-up
-		else if(filth_level < MAX_FILTH && prob(10))		//Chance for the tank to get dirtier if the filth_level isn't 10
-			if(ate_food && prob(25))				//If they ate this cycle, there is an additional chance they make a bigger mess
+	if(water_level > 0)
+		if(fish_list.len == 0)	
+			//If the tank has no fish, algae growth can occur						
+			if(filth_level < ALGAE_THRESHOLD && prob(15))
+				add_filth(0.05)
+		//Chance for the tank to get dirtier if the filth_level isn't max
+		else if(filth_level < MAX_FILTH && prob(10))		
+			if(ate_food && prob(25))
 				add_filth(fish_list.len * 0.1)
-			else									//If they didn't make the big mess, make a little one
+			else
 				add_filth(0.1)
 
-	//Handle special interactions
 	handle_special_interactions()
 
 	//Handle water leakage from damage
@@ -314,15 +308,17 @@
 	var/glo_light = 0
 	for(var/fish in fish_list)
 		switch(fish)
-			if("catfish")							//Catfish have a small chance of cleaning some filth since they are a bottom-feeder
+			//Catfish have a small chance of cleaning some filth since they are a bottom-feeder
+			if("catfish")
 				if(filth_level > 0 && prob(30))
 					remove_filth(0.1)
-			if("feederfish")						//Feeder fish have a small chance of sacrificing themselves to produce some food
-				if(fish_list.len < 2)					//Don't sacrifice the last fish, there's nothing to eat it
+			if("feederfish")
+				//only feederfish left
+				if(fish_list.len < 2)
 					continue
 				if(food_level <= FOOD_OK && prob(25))
-					kill_fish("feederfish")			//Kill the fish to reflect it's sacrifice, but don't increase the filth_level
-					add_food(1)					//The corpse became food for the other fish, ecology at it's finest
+					kill_fish("feederfish")
+					add_food(1)
 			if("glofish")
 				glo_light++
 			if("clownfish")
@@ -338,7 +334,6 @@
 
 	if(!light_switch && (glo_light > 0))
 		set_light(2,glo_light,"#99FF66")
-
 
 /obj/machinery/fishtank/proc/remove_water(var/amount)
 	water_level = max(0, water_level - amount)
@@ -369,27 +364,23 @@
 		health = min(health + amount, maxHealth)
 	else
 		health = max(0, health + amount)
-	//Leaking status check
-	if(health <= (maxHealth * 0.25))			//Major leak at or below 25% health (-10 water/cycle)
+	if(health <= (maxHealth * 0.25))
 		leaking = MAJOR_LEAK
-	else if(health <= (maxHealth * 0.5))		//Minor leak at or below 50% health (-1 water/cycle)
+	else if(health <= (maxHealth * 0.5))
 		leaking = MINOR_LEAK
-	else											//Not leaking above 50% health
+	else
 		leaking = NO_LEAK
 
 	if(health < 1)
-		user.visible_message("<span class='danger'>\The [src] was destroyed!</span>")
 		destroy()
 	else
-		user.visible_message("<span class='danger'>\The [src] was smashed!</span>")
 		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 
 /obj/machinery/fishtank/proc/kill_fish(var/type = null)
-	//Check if we were passed a fish to kill, otherwise kill a random one
 	if(type)
-		fish_list.Remove(type)						//Kill a fish of the specified type
+		fish_list.Remove(type)
 	else
-		fish_list.Remove(pick(fish_list))			//Kill a random fish
+		fish_list.Remove(pick(fish_list))
 	update_icon()
 
 /obj/machinery/fishtank/proc/seadevil_eat()
@@ -419,45 +410,43 @@
 			visible_message("The [egg.fish_type] has been placed in \the [src]!")
 
 /obj/machinery/fishtank/proc/harvest_eggs(var/mob/user)
-	if(!egg_list.len)									//Can't harvest non-existant eggs
+	if(!egg_list.len)
 		return
-	for(var/i = 1 to egg_list.len)						//Loop until you've harvested all the eggs
-		var/obj/item/fish_eggs/egg = egg_list[i]	//Go through the eggs
-		new egg(get_turf(user))						//Spawn the egg at the user's feet
-	egg_list = list()								//Destroy any excess eggs, clearing the egg_list
+	for(var/egg in egg_list)
+		new egg(get_turf(user))
+	egg_list = list()
 
 /obj/machinery/fishtank/proc/harvest_fish(var/mob/user)
-	if(!fish_list.len)									//Can't catch non-existant fish!
+	if(!fish_list.len)
 		to_chat(user, "There are no fish in \the [src] to catch!")
 		return
 
-	var/caught_fish = input("Select a fish to catch.", "Fishing") as null|anything in fish_list		//Select a fish from the tank
+	var/caught_fish = pick(fish_list)
 	if(caught_fish)
-		var/dead_fish = fish_items_list[caught_fish] //Locate the appropriate fish_item for the caught fish
-		if(!dead_fish)								 //No fish_item found, possibly due to typo or not being listed. Do nothing.
+		var/dead_fish = fish_items_list[caught_fish]
+		if(!dead_fish)
 			return
-		kill_fish(caught_fish)						//Kill the caught fish from the tank
+		kill_fish(caught_fish)
 		user.visible_message("[user.name] harvests \a [caught_fish] from \the [src].", "You scoop \a [caught_fish] out of \the [src].")
-		new dead_fish(get_turf(user))				//Spawn the appropriate fish_item at the user's feet.
+		new dead_fish(get_turf(user))
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
-	if(!deconstruct)															//Check if we are deconstructing or breaking the tank
-		for(var/i = 0 to shard_count)											//Produce the appropriate number of glass shards
+	if(!deconstruct)
+		for(var/i = 0 to shard_count)
 			new /obj/item/weapon/shard(get_turf(src))
-		if(water_level)															//Spill any water that was left in the tank when it broke
+		if(water_level)
 			spill_water()
-	else																//We are deconstructing, make glass sheets instead of shards
-		var/sheets = shard_count + 1									//Deconstructing it salvages all the glass used to build the tank
+	else
+		var/sheets = shard_count + 1
 		var/cur_turf = get_turf(src)
-		new /obj/item/stack/sheet/glass/glass(cur_turf, sheets)			//Produce the appropriate number of glass sheets, in a single stack (/glass/glass)
+		new /obj/item/stack/sheet/glass/glass(cur_turf, sheets)
 		if(circuitboard)
-			new circuitboard(cur_turf)									//Eject the circuitboard
-	qdel(src)															//qdel the tank and it's contents
-
+			new circuitboard(cur_turf)
+	qdel(src)
 
 /obj/machinery/fishtank/proc/spill_water()
 	switch(tank_type)
-		if(FISH_BOWL)										//Fishbowl: Wets it's own tile
+		if(FISH_BOWL)
 			var/turf/T = get_turf(src)
 			if(!istype(T, /turf/simulated))
 				return
@@ -473,11 +462,6 @@
 		if (FISH_WALL)										//Wall-tank: Wets it's own tile and the surrounding 8 tiles (3x3 square)
 			for(var/turf/simulated/S in view(src, 1))
 				S.wet(10 SECONDS, TURF_WET_WATER)
-
-
-//////////////////////////////			Note from FalseIncarnate:
-//		EXAMINE PROC		//			This proc is massive, messy, and probably could be handled better.
-//////////////////////////////			Feel free to try cleaning it up if you think of a better way to do it.
 
 /obj/machinery/fishtank/examine(var/mob/user)
 	..()
