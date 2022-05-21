@@ -43,8 +43,10 @@
 	var/lid_switch = FALSE		// FALSE = open, TRUE = closed (open by default)
 	var/max_fish = 0			// How many fish the tank can support (varies with tank type, 1 fish per 50 units sounds reasonable)
 	var/food_level = 0			// Amount of fishfood floating in the tank (max 10)
-	var/list/fish_list = list()	// Tracks the current types of fish in the tank
-	var/list/egg_list = list()	// Tracks the current types of harvestable eggs in the tank
+	var/list/fish_list_water = list()	// Tracks the current types of fish in the tank
+	var/list/fish_list_acidic = list()
+	var/list/fish_list = list()
+	var/list/egg_list = list()	// Strings containing egg.fish_type
 
 	var/has_lid = FALSE			// FALSE if the tank doesn't have a lid/light, TRUE if it does
 	var/max_health = 0			// Can handle a couple hits
@@ -251,7 +253,6 @@
 
 
 /obj/machinery/fishtank/process()
-
 	//Check if the water level can support the current number of fish
 	if((fish_list.len * 50) > water_level)
 		if(prob(50))								//Not enough water for all the fish, chance to kill one
@@ -259,15 +260,15 @@
 			add_filth(2)							//Dead fish raise the filth level quite a bit, reflect this
 
 	//Check filth_level
-	if(filth_level == MAX_FILTH && fish_list.len > 0)			//This tank is nasty and possibly unsuitable for fish if any are in it
+	if(filth_level == MAX_FILTH && fish_list.len > 0)//This tank is nasty and possibly unsuitable for fish if any are in it
 		if(prob(30))								//Chance for a fish to die each cycle while the tank is this nasty
 			kill_fish()								//Kill a random fish, don't raise filth level since we're at cap already
 
 	//Check breeding conditions
-	if(fish_list.len >=2 && egg_list.len < max_fish)		//Need at least 2 fish to breed, but won't breed if there are as many eggs as max_fish
+	if(fish_list.len >=2 && egg_list.len < max_fish)//Need at least 2 fish to breed, but won't breed if there are as many eggs as max_fish
 		if(food_level > 2 && filth_level <=5)		//Breeding is going to use extra food, and the filth_level shouldn't be too high
-			if(prob(((fish_list.len - 2) * 5)+10))		//Chances increase with each additional fish, 10% base + 5% per additional fish
-				egg_list.Add(select_egg_type())		//Add the new egg to the egg_list for storage
+			if(prob(((fish_list.len - 2) * 5)+8))	//Chances increase with each additional fish, 8% base + 4% per additional fish
+				egg_list.Add(pick(fish_list))		//Add string in fish_list from egg.fish_type
 				remove_food(2)						//Remove extra food for the breeding process
 
 	//Handle standard food and filth adjustments
@@ -331,9 +332,8 @@
 				if(fish_list.len > 1 && prob(5))
 					//Small chance to eat a random fish that isn't itself.
 					seadevil_eat()
-
 				if(fish_list.len < max_fish && egg_list.len)
-					add_fish(get_key_by_element(fish_eggs_list,egg_list[1])) //add_fish takes a string. egg_list gives a path. fish_eggs_list is an associative list keyed with strings. get_key_by_index returns that string key by matching the path
+					add_fish(egg_list[1]) 
 					egg_list -= egg_list[1]
 
 	if(!light_switch && (glo_light > 0))
@@ -394,36 +394,24 @@
 	visible_message("<span class='notice'>The sea devil devours \an [eat_target].</span>")
 	kill_fish(eat_target)
 
-/obj/machinery/fishtank/proc/add_fish(var/type)
-	if(!type || type == "dud")
+/obj/machinery/fishtank/proc/add_fish(var/fish_type)
+	if(!fish_type || fish_type == "dud")
 		return
-	//Check if we were passed a fish type
-	fish_list.Add("[type]")						//Add a fish of the specified type
-	//Announce the new fish
-	update_icon()
-	if(nonhatching_types.Find(type))
-		visible_message("The [type] has been placed in \the [src]!")
-	else
-		visible_message("A new [type] has hatched in \the [src]!")
-
-/obj/machinery/fishtank/proc/select_egg_type()
-	var/fish = null
-	if(prob(10)) //Small chance for infertility
-		fish = "dud"
-	else
-		fish = recursive_valid_egg(fish_list)
-	var/obj/item/fish_eggs/egg_path	= fish_eggs_list[fish]					//Locate the corresponding path from fish_eggs_list that matches the fish
-	return egg_path
-
-/obj/machinery/fishtank/proc/recursive_valid_egg(var/list/pick_egg_from)
-	var/fish = pick(pick_egg_from)
-	if(!fish || nonhatching_types.Find(fish))
-		var/list/new_list = pick_egg_from.Copy()
-		return recursive_valid_egg(new_list.Remove(fish))
-		//If it's a nonvalid type, let's try again without it.
-	else
-		return fish
-		//If it's valid, return this.
+	for (var/egg_path in subtypesof(/obj/item/fish_eggs/))
+		var/obj/item/fish_eggs/egg = new egg_path
+		if(egg.fish_type != fish_type)
+			continue
+		if(egg.acidic)
+			fish_list_acidic.Add(egg.fish_type)
+		else
+			fish_list_water.Add(egg.fish_type)
+		fish_list.Add(egg.fish_type)
+		//Announce the new fish
+		update_icon()
+		if(egg.hatching)
+			visible_message("A new [egg.fish_type] has hatched in \the [src]!")
+		else
+			visible_message("The [egg.fish_type] has been placed in \the [src]!")
 
 /obj/machinery/fishtank/proc/harvest_eggs(var/mob/user)
 	if(!egg_list.len)									//Can't harvest non-existant eggs
@@ -611,7 +599,6 @@
 	if(islarva(user))
 		return
 	attack_generic(user, 15)
-
 
 /obj/machinery/fishtank/attack_hand(var/mob/user)
 
