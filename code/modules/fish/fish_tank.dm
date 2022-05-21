@@ -626,25 +626,20 @@
 			//Containers with any reagents will get dumped in
 			if(C.reagents.total_volume)
 				var/water_value = 0
-				if(	C.reagents.get_reagent_amount(WATERS) > 0 || \
-					C.reagents.get_reagent_amount(HOLYWATER) > 0 || \
-					C.reagents.get_reagent_amount(ICE) > 0 && \
-					acidic)
+				if(!C.has_any_reagents(PETRITRICINCURES) && C.has_any_reagents(WATERS))
 					acidic = FALSE
 					water_value += C.reagents.get_reagent_amount(WATER)
 					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
 					water_value += C.reagents.get_reagent_amount(ICE) * 0.80
-				else if(	C.reagents.get_reagent_amount(PACID) > 0 || \
-							C.reagents.get_reagent_amount(SACID) > 0 && \
-							!acidic)
+				if(C.has_any_reagents(PETRITRICINCURES) &&  !C.has_any_reagents(WATERS))
 					acidic = TRUE
 					water_value += C.reagents.get_reagent_amount(PACID) * 2
 					water_value += C.reagents.get_reagent_amount(SACID)
+					water_value += C.reagents.get_reagent_amount(FORMIC_ACID)
 				else
 					water_value += C.reagents.get_reagent_amount(WATER)
 					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
 					water_value += C.reagents.get_reagent_amount(ICE) * 0.80
-
 				var/message = ""
 				if(!water_value)
 					message = "<span class='warning'>The filtration process removes everything, leaving the fluid level unchanged.</span>"
@@ -654,12 +649,9 @@
 						to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
 						return TRUE
 					else
-						message = "The filtration process purifies the fluid, raising the fluid level."
 						add_water(water_value)
 						if(water_level == water_capacity)
 							message += "You filled \the [src] to the brim!"
-						if(water_level > water_capacity)
-							message += "You overfilled \the [src] and some water runs down the side, wasted."
 						C.reagents.clear_reagents()
 				user.visible_message("\The [user] pours the contents of \the [C] into \the [src].", "<span class = 'notice'>[message]</span>")
 				return TRUE
