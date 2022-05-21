@@ -249,13 +249,13 @@
 	//Check if the water level can support the current number of fish
 	if((fish_list.len * 50) > water_level)
 		if(prob(50))
-			kill_fish()
+			remove_fish()
 			add_filth(2)
 
 	//Check filth_level
 	if(filth_level == MAX_FILTH && fish_list.len > 0)
 		if(prob(30))
-			kill_fish()
+			remove_fish()
 
 	//Check breeding conditions
 	if(fish_list.len >=2 && egg_list.len < max_fish)
@@ -299,11 +299,6 @@
 		if(filth_level > 0)
 			remove_filth(0.05)
 
-
-//////////////////////////////
-//		SUPPORT PROCS		//
-//////////////////////////////
-
 /obj/machinery/fishtank/proc/handle_special_interactions()
 	var/glo_light = 0
 	for(var/fish in fish_list)
@@ -317,7 +312,7 @@
 				if(fish_list.len < 2)
 					continue
 				if(food_level <= FOOD_OK && prob(25))
-					kill_fish("feederfish")
+					remove_fish("feederfish")
 					add_food(1)
 			if("glofish")
 				glo_light++
@@ -376,7 +371,7 @@
 	else
 		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 
-/obj/machinery/fishtank/proc/kill_fish(var/type = null)
+/obj/machinery/fishtank/proc/remove_fish(var/type = null)
 	if(type)
 		fish_list.Remove(type)
 	else
@@ -388,7 +383,7 @@
 	fish_to_eat.Remove("sea devil")
 	var/eat_target = pick(fish_to_eat)
 	visible_message("<span class='notice'>The sea devil devours \an [eat_target].</span>")
-	kill_fish(eat_target)
+	remove_fish(eat_target)
 
 /obj/machinery/fishtank/proc/add_fish(var/fish_type)
 	if(!fish_type || fish_type == "dud")
@@ -423,12 +418,12 @@
 
 	var/caught_fish = pick(fish_list)
 	if(caught_fish)
-		var/dead_fish = fish_items_list[caught_fish]
-		if(!dead_fish)
-			return
-		kill_fish(caught_fish)
+		remove_fish(caught_fish)
 		user.visible_message("[user.name] harvests \a [caught_fish] from \the [src].", "You scoop \a [caught_fish] out of \the [src].")
-		new dead_fish(get_turf(user))
+	for(var/fish_path in subtypesof(/obj/item/weapon/fish/))
+		var/obj/item/weapon/fish = new fish_path
+		if(fish.name == caught_fish)
+			new fish(get_turf(user))
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
 	if(!deconstruct)
@@ -631,30 +626,35 @@
 			//Containers with any reagents will get dumped in
 			if(C.reagents.total_volume)
 				var/water_value = 0
-				if(C.reagents.get_reagent_amount(WATERS) > 0 && acidic)
+				if(	C.reagents.get_reagent_amount(WATERS) > 0 || \
+					C.reagents.get_reagent_amount(HOLYWATER) > 0 || \
+					C.reagents.get_reagent_amount(ICE) > 0 && \
+					acidic)
 					acidic = FALSE
-					water_value += C.reagents.get_reagent_amount(WATER)					//Water is full value
-					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1		//Holywater is (somehow) better. Who said religion had to make sense?
-					water_value += C.reagents.get_reagent_amount(ICE) * 0.80			//Ice is 80% value
-				else if(C.reagents.get_reagent_amount(PACIDS) > 0 || C.reagents.get_reagent_amount(SACIDS) > 0 && !acidic)
+					water_value += C.reagents.get_reagent_amount(WATER)
+					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
+					water_value += C.reagents.get_reagent_amount(ICE) * 0.80
+				else if(	C.reagents.get_reagent_amount(PACID) > 0 || \
+							C.reagents.get_reagent_amount(SACID) > 0 && \
+							!acidic)
 					acidic = TRUE
-					water_value += C.reagents.get_reagent_amount(PACIDS) * 2
-					water_value += C.reagents.get_reagent_amount(SACIDS)
+					water_value += C.reagents.get_reagent_amount(PACID) * 2
+					water_value += C.reagents.get_reagent_amount(SACID)
 				else
 					water_value += C.reagents.get_reagent_amount(WATER)
 					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
 					water_value += C.reagents.get_reagent_amount(ICE) * 0.80
 
 				var/message = ""
-				if(!water_value)													//The container has no water value, clear everything in it
-					message = "<span class='warning'>The filtration process removes everything, leaving the water level unchanged.</span>"
+				if(!water_value)
+					message = "<span class='warning'>The filtration process removes everything, leaving the fluid level unchanged.</span>"
 					C.reagents.clear_reagents()
 				else
 					if(water_level == water_capacity)
 						to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
 						return TRUE
 					else
-						message = "The filtration process purifies the water, raising the water level."
+						message = "The filtration process purifies the fluid, raising the fluid level."
 						add_water(water_value)
 						if(water_level == water_capacity)
 							message += "You filled \the [src] to the brim!"
