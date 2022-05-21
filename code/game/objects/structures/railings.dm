@@ -221,7 +221,7 @@
 						var/glasstospawn = railingtype == "plasteel" ? /obj/item/stack/sheet/glass/rglass : /obj/item/stack/sheet/glass
 						new glasstospawn(get_turf(user),railingtype == "wooden" ? 1 : 2)
 					if(PLASMA_GLASS)
-						var/glasstospawn = railingtype == "plasteel" ? /obj/item/stack/sheet/glass/plasmarglass : /obj/item/stack/sheet/plasmaglass
+						var/glasstospawn = railingtype == "plasteel" ? /obj/item/stack/sheet/glass/plasmarglass : /obj/item/stack/sheet/glass/plasmaglass
 						new glasstospawn(get_turf(user),railingtype == "wooden" ? 1 : 2)
 				glasstype = NO_GLASS
 				glasshealth = 0
