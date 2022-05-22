@@ -513,6 +513,8 @@ var/global/mulebot_count = 0
 	lock_atom(C, /datum/locking_category/mulebot)
 
 /obj/machinery/bot/mulebot/proc/can_load(var/atom/movable/C)
+	if (C.anchored)
+		return FALSE
 	if (!istype(C,/obj/item) && !istype(C,/obj/machinery) && !istype(C,/obj/structure) && !ismob(C))
 		return FALSE
 	if (!emagged)
