@@ -274,12 +274,17 @@
 		ate_food = TRUE
 
 	if(water_level > 0)
-		if(fish_list.len == 0)	
+		if(!fish_list.len)	
 			//If the tank has no fish, algae growth can occur						
 			if(filth_level < ALGAE_THRESHOLD && prob(15))
 				add_filth(0.05)
 		//Chance for the tank to get dirtier if the filth_level isn't max
-		else if(filth_level < MAX_FILTH && prob(10))		
+		else 
+			if(acidic && fish_list_water.len)
+				remove_fish(pick(fish_list_water))
+			else if(!acidic && fish_list_acidic.len)
+				remove_fish(pick(fish_list_acidic))
+		if(filth_level < MAX_FILTH && prob(10))		
 			if(ate_food && prob(25))
 				add_filth(fish_list.len * 0.1)
 			else
@@ -374,8 +379,13 @@
 /obj/machinery/fishtank/proc/remove_fish(var/type = null)
 	if(type)
 		fish_list.Remove(type)
+		fish_list_water.Remove(type)
+		fish_list_acidic.Remove(type)
 	else
-		fish_list.Remove(pick(fish_list))
+		var/fish = pick(fish_list)
+		fish_list.Remove(fish)
+		fish_list_water.Remove(fish)
+		fish_list_acidic.Remove(fish)
 	update_icon()
 
 /obj/machinery/fishtank/proc/seadevil_eat()
@@ -570,7 +580,6 @@
 			if(MAJOR_LEAK)
 				examine_message += "<span class = 'warning'>\The [src] is nearly shattered!</span>"
 
-	//Finally, report the full examine_message constructed from the above reports
 	to_chat(user, jointext(examine_message, ""))
 
 //////////////////////////////
@@ -604,135 +613,35 @@
 	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
 	add_health(-O.force)
 
-/obj/machinery/fishtank/proc/attack_generic(var/mob/living/user, var/damage = 0)	//used by attack_alien, attack_animal, and attack_slime
+//used by attack_alien, attack_animal, and attack_slime
+/obj/machinery/fishtank/proc/attack_generic(var/mob/living/user, var/damage = 0)
 	add_health(-damage)
 
 /obj/machinery/fishtank/attackby(var/obj/item/O, var/mob/user as mob)
 	//Silicate sprayers repair damaged tanks on help intent
 	if(issilicatesprayer(O))
-		var/obj/item/device/silicate_sprayer/S = O
-		if(user.a_intent == I_HELP)
-			if (S.get_amount() >= 2)
-				add_health(20)
-				S.remove_silicate(2)
-		return TRUE
+		return handle_silicate_sprayer(O, user)
 	//Open reagent containers add and remove water
 	if(O.is_open_container())
-		if(istype(O, /obj/item/weapon/reagent_containers/glass))
-			if(lid_switch)
-				to_chat(user, "<span class='notice'>Open the lid on \the [src] first!</span>")
-				return TRUE
-			var/obj/item/weapon/reagent_containers/glass/C = O
-			//Containers with any reagents will get dumped in
-			if(C.reagents.total_volume)
-				var/water_value = 0
-				if(!C.has_any_reagents(PETRITRICINCURES) && C.has_any_reagents(WATERS))
-					acidic = FALSE
-					water_value += C.reagents.get_reagent_amount(WATER)
-					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
-					water_value += C.reagents.get_reagent_amount(ICE) * 0.80
-				if(C.has_any_reagents(PETRITRICINCURES) &&  !C.has_any_reagents(WATERS))
-					acidic = TRUE
-					water_value += C.reagents.get_reagent_amount(PACID) * 2
-					water_value += C.reagents.get_reagent_amount(SACID)
-					water_value += C.reagents.get_reagent_amount(FORMIC_ACID)
-				else
-					water_value += C.reagents.get_reagent_amount(WATER)
-					water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
-					water_value += C.reagents.get_reagent_amount(ICE) * 0.80
-				var/message = ""
-				if(!water_value)
-					message = "<span class='warning'>The filtration process removes everything, leaving the fluid level unchanged.</span>"
-					C.reagents.clear_reagents()
-				else
-					if(water_level == water_capacity)
-						to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
-						return TRUE
-					else
-						add_water(water_value)
-						if(water_level == water_capacity)
-							message += "You filled \the [src] to the brim!"
-						C.reagents.clear_reagents()
-				user.visible_message("\The [user] pours the contents of \the [C] into \the [src].", "<span class = 'notice'>[message]</span>")
-				return TRUE
-			//Empty containers will scoop out water, filling the container as much as possible from the water_level
-			else
-				if(water_level == 0)
-					to_chat(user, "<span class='notice'>\The [src] is empty!</span>")
-				else
-					C.reagents.add_reagent(WATER, water_level)
-					remove_water(C.volume)
-					if(water_level >= C.volume)										//Enough to fill the container completely
-						user.visible_message("\The [user] scoops out some water from \the [src].", "<span class = 'notice'>You completely fill [C.name] from \the [src].</span>")
-					else															//Fill the container as much as possible with the water_level
-						user.visible_message("\The [user] scoops out some water from \the [src].", "<span class = 'notice'>You fill [C.name] with the last of the water in \the [src].</span>")
-
-			return TRUE
-	//Wrenches can deconstruct empty tanks, but not tanks with any water. Kills any fish left inside and destroys any unharvested eggs in the process
+		return handle_containers(O, user)
+	//Wrenches can deconstruct empty tanks, but not tanks with any water
 	if(O.is_wrench(user))
-		if (water_level == 0)
-			to_chat(user, "<span class='notice'>Now disassembling \the [src].</span>")
-			O.playtoolsound(loc, 50)
-			if(do_after(user,50, target = src))
-				destroy(1)
-		else
-			to_chat(user, "<span class='warning'>\The [src] must be empty before you disassemble it!</span>")
-		return TRUE
+		return handle_wrench(O, user)
 	//Fish eggs
-	else if(istype(O, /obj/item/fish_eggs))
-		var/obj/item/fish_eggs/egg = O
-		//Don't add eggs if there is no water (they kinda need that to live)
-		if(water_level == 0)
-			to_chat(user, "<span class='warning'>\The [src] has no water; [egg.name] won't hatch without water!</span>")
-			return FALSE
-		//Don't add eggs if the tank already has the max number of fish
-		if(fish_list.len >= max_fish)
-			to_chat(user, "<span class='warning'>\The [src] can't hold any more fish.</span>")
-			return FALSE
-		if (egg.fish_type == "dud") // Fugging duds
-			to_chat(user, "<span class='warning'>The eggs didn't hatch. They were duds!</span>")
-			qdel(egg)
-			return FALSE
-		add_fish(egg.fish_type)
-		qdel(egg)
-		return TRUE
+	if(istype(O, /obj/item/fish_eggs))
+		return handle_eggs(O, user)
 	//Fish food
-	else if(istype(O, /obj/item/weapon/fishtools/fish_food))
-		//Only add food if there is water and it isn't already full of food
-		if(!water_level)
-			to_chat(user, "<span class='warning'>\The [src] doesn't have any water in it. You should fill it with water first.</span>")
-			return FALSE
-		if(food_level >= MAX_FOOD)
-			to_chat(user, "<span class='notice'>\The [src] already has plenty of food in it. You decide to not add more.<span>")
-			return FALSE
-
-		if(fish_list.len == 0)
-			user.visible_message("\The [user] shakes some fish food into the empty [src]... How sad.", "<span class='notice'>You shake some fish food into the empty [src]... If only it had fish.</span>")
-		else
-			user.visible_message("\The [user] feeds the fish in \the [src]. The fish look excited!", "<span class='notice'>You feed the fish in \the [src]. They look excited!</span>")
-		add_food(MAX_FOOD)
-
-		return TRUE
+	if(istype(O, /obj/item/weapon/fishtools/fish_food))
+		return handle_food(O, user)
 	//Fish egg scoop
-	else if(istype(O, /obj/item/weapon/fishtools/fish_egg_scoop))
-		if(egg_list.len)
-			user.visible_message("\The [user] harvests some fish eggs from \the [src].", "<span class='notice'>You scoop the fish eggs out of \the [src].</span>")
-			harvest_eggs(user)
-		else
-			user.visible_message("\The [user] fails to harvest any fish eggs from \the [src].", "<span class='notice'>There are no fish eggs in \the [src] to scoop out.</span>")
-		return TRUE
+	if(istype(O, /obj/item/weapon/fishtools/fish_egg_scoop))
+		return handle_fish_scoop(O, user)
 	//Fish net
 	if(istype(O, /obj/item/weapon/fishtools/fish_net))
-		harvest_fish(user)
-		return TRUE
+		return harvest_fish(user)
 	//Tank brush
 	if(istype(O, /obj/item/weapon/fishtools/fish_tank_brush))
-		if(filth_level == 0)
-			to_chat(user, "\The [src] is already spotless!")
-			return TRUE
-		filth_level = 0
-		user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")
-		return TRUE
+		return handle_brush(O, user)
 	//Installing the automation module
 	if(istype(O, /obj/item/weapon/fishtools/fishtank_helper))
 		if(automated)
@@ -746,6 +655,112 @@
 	else if(O && O.force)
 		user.visible_message("<span class='danger'>\The [src] has been attacked by \the [user] with \the [O]!</span>")
 		hit(O, user)
+	return TRUE
+
+/obj/machinery/fishtank/proc/handle_silicate_sprayer(var/obj/item/O, var/mob/user as mob)
+	var/obj/item/device/silicate_sprayer/S = O
+	if(user.a_intent == I_HELP)
+		if (S.get_amount() >= 2)
+			add_health(20)
+			S.remove_silicate(2)
+	return TRUE
+
+/obj/machinery/fishtank/proc/handle_containers(var/obj/item/O, var/mob/user as mob)
+	if(!istype(O, /obj/item/weapon/reagent_containers/glass))
+		return FALSE
+	if(lid_switch)
+		to_chat(user, "<span class='notice'>Open the lid on \the [src] first!</span>")
+		return FALSE
+	var/obj/item/weapon/reagent_containers/glass/C = O
+	if(water_level && !C.reagents.total_volume)
+		//Empty containers will scoop out water, filling the container as much as possible from the water_level
+		if(acidic)
+			C.reagents.add_reagent(SACID, water_level)
+			remove_water(C.volume)
+		else
+			C.reagents.add_reagent(WATER, water_level)
+			remove_water(C.volume)
+		return FALSE
+	else if(water_level == water_capacity)
+		to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
+		return FALSE
+
+	var/water_value = 0
+	if(!C.reagents.has_any_reagents(PETRITRICINCURES) && C.reagents.has_any_reagents(WATERS))
+		acidic = FALSE
+		water_value += C.reagents.get_reagent_amount(WATER)
+		water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
+		water_value += C.reagents.get_reagent_amount(ICE) * 0.80
+	else if(C.reagents.has_any_reagents(PETRITRICINCURES) &&  !C.reagents.has_any_reagents(WATERS))
+		acidic = TRUE
+		water_value += C.reagents.get_reagent_amount(PACID) * 2
+		water_value += C.reagents.get_reagent_amount(SACID)
+		water_value += C.reagents.get_reagent_amount(PHENOL)
+		water_value += C.reagents.get_reagent_amount(FORMIC_ACID)
+	else
+		water_value += C.reagents.get_reagent_amount(WATER)
+		water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
+		water_value += C.reagents.get_reagent_amount(ICE) * 0.80
+	var/message = ""
+	if(water_value)
+		add_water(water_value)
+		C.reagents.clear_reagents()
+		if(water_level == water_capacity)
+			message += "You filled \the [src] to the brim!"
+	return TRUE
+
+/obj/machinery/fishtank/proc/handle_wrench(var/obj/item/O, var/mob/user as mob)
+	if (water_level == 0)
+		O.playtoolsound(loc, 50)
+		if(do_after(user,50, target = src))
+			destroy(1)
+	else
+		to_chat(user, "<span class='warning'>\The [src] must be empty before you disassemble it!</span>")
+	return TRUE
+
+/obj/machinery/fishtank/proc/handle_eggs(var/obj/item/O, var/mob/user as mob)
+	var/obj/item/fish_eggs/egg = O
+	if(water_level == 0)
+		to_chat(user, "<span class='warning'>\The [src] has no water; [egg.name] won't hatch without water!</span>")
+		return FALSE
+	//Don't add eggs if the tank already has the max number of fish
+	if(fish_list.len >= max_fish)
+		to_chat(user, "<span class='warning'>\The [src] can't hold any more fish.</span>")
+		return FALSE
+	if (egg.fish_type == "dud")
+		to_chat(user, "<span class='warning'>The eggs didn't hatch.</span>")
+		qdel(egg)
+		return FALSE
+	add_fish(egg.fish_type)
+	qdel(egg)
+	return TRUE
+
+/obj/machinery/fishtank/proc/handle_food(var/obj/item/O, var/mob/user as mob)
+	//Only add food if there is water and it isn't already full of food
+	if(!water_level)
+		to_chat(user, "<span class='warning'>\The [src] doesn't have any water in it. You should fill it with water first.</span>")
+		return FALSE
+	if(food_level >= MAX_FOOD)
+		to_chat(user, "<span class='notice'>\The [src] already has plenty of food in it. You decide to not add more.<span>")
+		return FALSE
+	add_food(MAX_FOOD)
+
+	return TRUE
+
+/obj/machinery/fishtank/proc/handle_fish_scoop(var/obj/item/O, var/mob/user as mob)
+	if(egg_list.len)
+		user.visible_message("\The [user] harvests some fish eggs from \the [src].", "<span class='notice'>You scoop the fish eggs out of \the [src].</span>")
+		harvest_eggs(user)
+	else
+		user.visible_message("\The [user] fails to harvest any fish eggs from \the [src].", "<span class='notice'>There are no fish eggs in \the [src] to scoop out.</span>")
+	return TRUE
+
+/obj/machinery/fishtank/proc/handle_brush(var/obj/item/O, var/mob/user as mob)
+	if(filth_level == 0)
+		to_chat(user, "\The [src] is already spotless!")
+		return TRUE
+	filth_level = 0
+	user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")
 	return TRUE
 
 //Conduction plate for electric eels
@@ -788,15 +803,10 @@
 		add_avail(power)
 
 /obj/machinery/power/conduction_plate/proc/check_tank()
-	//Are we anchored?
 	if(!anchored)
 		return 0
-
-	//Is our old tank is still valid?
 	if(attached_tank && attached_tank.loc == loc)
 		return 1
-
-	//No? Let's look for a new one.
 	attached_tank = locate(/obj/machinery/fishtank/) in loc
 	if(attached_tank)
 		return 1
