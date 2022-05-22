@@ -51,15 +51,20 @@
 			// We want a different weight for the mutation depending on whether the plant already has it. For example, a non-glowey plant
 			// will have a fair chance to toggle bio-luminiscence. However, if it already has bioluminiscence, then it will have a smaller
 			// chance to toggle again, since then it would stop glowing, which is less fun and frustrating if you're trying to stack mutations.
-			10;						"plusstat_potency", \
-			S.yield == -1 ? 0 : 6;	"plusstat_yield",\
-			3;						"plusstat_weed&toxins_tolerance",\
-			5;						"plusstat_lifespan&endurance",\
-			5;						"plusstat_production&maturation",\
-			3;						"plusstat_heat&pressure_tolerance",\
-			3;						"plusstat_light_tolerance", \
-			3;						"plusstat_nutrient&water_consumption", \
-			S.yield != -1 && !S.harvest_repeat ? 0.4 : 0;	"toggle_repeatharvest"
+			9;						PLANT_STAT_POTENCY, \
+			S.yield == -1 ? 0 : 6;	PLANT_STAT_YIELD, \
+			1;						PLANT_STAT_WEEDTOLERANCE, \
+			1;                      PLANT_STAT_TOXINAFFINITY, \
+			2;						PLANT_STAT_LIFESPAN, \
+			2;                      PLANT_STAT_ENDURANCE, \
+			2;						PLANT_STAT_PRODUCTION, \
+			2;                      PLANT_STAT_MATURATION, \
+			1;                      PLANT_STAT_HEAT, \
+			1;						PLANT_STAT_PRESSURE,\
+			2;						PLANT_STAT_LIGHT, \
+			1;						PLANT_STAT_NUTRIENT, \
+			1;                      PLANT_STAT_FLUID, \
+			S.yield != -1 && !S.harvest_repeat ? 0.4 : 0;	PLANT_STAT_HARVEST, \
 			)
 		if(MUTCAT_WEIRD)
 			mutation_type = pick(\
