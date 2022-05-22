@@ -10,7 +10,7 @@
 	icon = 'icons/obj/structures/railing.dmi'
 	icon_state = "metalrailing0"
 	plane = ABOVE_HUMAN_PLANE
-	layer = RAILING_LAYER
+	layer = RAILING_BACK_LAYER
 	flow_flags = ON_BORDER
 	pass_flags_self = PASSTABLE|PASSGLASS
 	var/railingtype = "metal"
@@ -173,6 +173,7 @@
 	update_icon()
 
 /obj/structure/railing/update_icon()
+	update_dir()
 	icon_state = "[railingtype]railing[anchored ? junction : "0"]"
 	overlays.Cut()
 	if(wired)
@@ -181,6 +182,16 @@
 		overlays += I
 	if(glasstype)
 		overlays += image(icon = icon, icon_state = "[railingtype][glasstype == PLASMA_GLASS ? "p" : ""]glass[anchored ? junction : "0"]")
+
+/obj/structure/railing/update_dir()
+	..()
+	switch(dir)
+		if(1)
+			layer = RAILING_BACK_LAYER
+		if(2)
+			layer = RAILING_FRONT_LAYER
+		if(4, 8)
+			layer = RAILING_MID_LAYER
 
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
