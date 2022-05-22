@@ -44,7 +44,14 @@
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/vault/mothership_lab/raidtunnel
+/area/vault/mothership_lab/raidtunnel_upper
+	name = "\improper Mothership Lab Raider Tunnel"
+	icon_state = "mothershiplab_raidertunnel"
+	requires_power = 0
+	jammed = 2
+	flags = NO_PACIFICATION
+
+/area/vault/mothership_lab/raidtunnel_lower
 	name = "\improper Mothership Lab Raider Tunnel"
 	icon_state = "mothershiplab_raidertunnel"
 	requires_power = 0
