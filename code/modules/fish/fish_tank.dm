@@ -236,14 +236,16 @@
 		if (FILTH_THRESHOLD to MAX_FILTH)
 			water_type = "dirty"
  	// Lest there can be fish in waterless environments
-	if(!acidic && water_level/water_capacity < 0.85)
-		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_half_[water_type]", WATER_LAYER)
-	else if (!acidic)
-		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]", WATER_LAYER)
-	else if (water_level/water_capacity < 0.85)
-		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]_acidic", WATER_LAYER)
+	if(!acidic)
+		if(water_level/water_capacity < 0.85 && water_level/water_capacity > 0.01)
+			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_half_[water_type]", WATER_LAYER)
+		else if(water_level/water_capacity > 0.85)
+			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]", WATER_LAYER)
 	else
-		overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]_acidic", WATER_LAYER)
+		if(water_level/water_capacity < 0.85 && water_level/water_capacity > 0.01)
+			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_half_[water_type]_acidic", WATER_LAYER)
+		else if(water_level/water_capacity > 0.85)
+			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]_acidic", WATER_LAYER)
 
 /obj/machinery/fishtank/process()
 	//Check if the water level can support the current number of fish
@@ -364,6 +366,7 @@
 		health = min(health + amount, maxHealth)
 	else
 		health = max(0, health + amount)
+		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 	if(health <= (maxHealth * 0.25))
 		leaking = MAJOR_LEAK
 	else if(health <= (maxHealth * 0.5))
@@ -372,9 +375,8 @@
 		leaking = NO_LEAK
 
 	if(health < 1)
+		playsound(loc, 'sound/effects/Glassbr2.ogg', 100, 1)
 		destroy()
-	else
-		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 
 /obj/machinery/fishtank/proc/remove_fish(var/type = null)
 	if(type)
@@ -417,9 +419,12 @@
 /obj/machinery/fishtank/proc/harvest_eggs(var/mob/user)
 	if(!egg_list.len)
 		return
-	for(var/egg in egg_list)
-		new egg(get_turf(user))
-	egg_list = list()
+	for(var/fish_type in egg_list)
+		for (var/egg_path in subtypesof(/obj/item/fish_eggs/))
+			var/obj/item/fish_eggs/egg = new egg_path
+			if(egg.fish_type == fish_type)
+				egg = new egg_path(get_turf(user))
+	egg_list.len = 0
 
 /obj/machinery/fishtank/proc/harvest_fish(var/mob/user)
 	if(!fish_list.len)
@@ -671,6 +676,7 @@
 	if(lid_switch)
 		to_chat(user, "<span class='notice'>Open the lid on \the [src] first!</span>")
 		return FALSE
+
 	var/obj/item/weapon/reagent_containers/glass/C = O
 	if(water_level && !C.reagents.total_volume)
 		//Empty containers will scoop out water, filling the container as much as possible from the water_level
@@ -680,10 +686,11 @@
 		else
 			C.reagents.add_reagent(WATER, water_level)
 			remove_water(C.volume)
-		return FALSE
+		update_icon()
+		return TRUE
 	else if(water_level == water_capacity)
 		to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
-		return FALSE
+		return TRUE
 
 	var/water_value = 0
 	if(!C.reagents.has_any_reagents(PETRITRICINCURES) && C.reagents.has_any_reagents(WATERS))
@@ -707,6 +714,7 @@
 		C.reagents.clear_reagents()
 		if(water_level == water_capacity)
 			message += "You filled \the [src] to the brim!"
+		update_icon()
 	return TRUE
 
 /obj/machinery/fishtank/proc/handle_wrench(var/obj/item/O, var/mob/user as mob)
@@ -748,12 +756,7 @@
 	return TRUE
 
 /obj/machinery/fishtank/proc/handle_fish_scoop(var/obj/item/O, var/mob/user as mob)
-	if(egg_list.len)
-		user.visible_message("\The [user] harvests some fish eggs from \the [src].", "<span class='notice'>You scoop the fish eggs out of \the [src].</span>")
-		harvest_eggs(user)
-	else
-		user.visible_message("\The [user] fails to harvest any fish eggs from \the [src].", "<span class='notice'>There are no fish eggs in \the [src] to scoop out.</span>")
-	return TRUE
+	harvest_eggs(user)
 
 /obj/machinery/fishtank/proc/handle_brush(var/obj/item/O, var/mob/user as mob)
 	if(filth_level == 0)
