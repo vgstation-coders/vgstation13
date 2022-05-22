@@ -58,6 +58,8 @@
 		hurdle(user)
 
 /obj/structure/railing/proc/hurdle(atom/movable/jumper)
+	if(!Adjacent(jumper))
+		return
 	var/turf/T = get_turf(src)
 	if(get_turf(jumper) == T)
 		T = get_step(src,dir)
@@ -170,16 +172,17 @@
 		if(EAST, WEST)
 			junction &= ~EAST
 			junction &= ~WEST
-	icon_state = anchored ? "[railingtype]railing[junction]" : "[railingtype]railing0"
+	update_icon()
 
 /obj/structure/railing/update_icon()
+	icon_state = "[railingtype]railing[anchored ? junction : "0"]"
 	overlays.Cut()
 	if(wired)
 		var/image/I = image(icon = icon, icon_state = "[railingtype]electric")
 		I.color = wire_color
 		overlays += I
 	if(glasstype)
-		overlays += image(icon = icon, icon_state = "[railingtype][glasstype == PLASMA_GLASS ? "p" : ""]glass")
+		overlays += image(icon = icon, icon_state = "[railingtype][glasstype == PLASMA_GLASS ? "p" : ""]glass[anchored ? junction : "0"]")
 
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
