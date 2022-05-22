@@ -44,7 +44,14 @@
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/vault/mothership_lab/raidtunnel
+/area/vault/mothership_lab/raidtunnel_upper
+	name = "\improper Mothership Lab Raider Tunnel"
+	icon_state = "mothershiplab_raidertunnel"
+	requires_power = 0
+	jammed = 2
+	flags = NO_PACIFICATION
+
+/area/vault/mothership_lab/raidtunnel_lower
 	name = "\improper Mothership Lab Raider Tunnel"
 	icon_state = "mothershiplab_raidertunnel"
 	requires_power = 0
@@ -326,7 +333,7 @@
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 
 //Ayy lmao boots
-/obj/item/clothing/shoes/jackboots/steeltoe/mothership
+/obj/item/clothing/shoes/jackboots/mothership
 	name = "mothership boots"
 	desc = "Issued, recalled post-mortem, and reissued countless times to many mothership denizens. Despite that, the boots still shine impeccably."
 	sterility = 75
