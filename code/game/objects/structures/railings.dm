@@ -115,45 +115,43 @@
 	return 1
 
 /obj/structure/railing/proc/handle_damage(var/damage, obj/item/I, mob/user, var/sound = TRUE)
-	if(glasstype && glasshealth > 0)
-		glasshealth -= damage/2
-		if(sound)
-			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
-		if(user && I)
-			user.visible_message("<span class='warning'>[user] hits \the [src] glass with \a [I].</span>",\
-								"<span class='warning'>You hit \the [src] glass with \a [I].</span>")
-		else if(I)
-			visible_message("<span class='warning'>[I] hits \the [src] glass!</span>")
-		return 0
-	else
-		if(glasstype)
-			if(user)
-				user.visible_message("<span class='warning'>[user] breaks \the [src] glass!</span>",\
-									"<span class='warning'>You break \the [src] glass!</span>")
-			else if(I)
-				visible_message("<span class='warning'>[I] breaks \the [src] glass!</span>")
-			else
-				visible_message("<span class='warning'>[src] breaks down!</span>")
-			break_glass(TRUE)
-			return 0
-		health -= damage/2
-		if(sound)
-			playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
-		if (health > 0)
+	if(glasstype)
+		if(glasshealth > 0)
+			glasshealth -= damage/2
+			if(sound)
+				playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 			if(user && I)
-				user.visible_message("<span class='warning'>[user] hits \the [src] with \a [I].</span>",\
-									"<span class='warning'>You hit \the [src] with \a [I].</span>")
+				user.visible_message("<span class='warning'>[user] hits \the [src] glass with \a [I].</span>",\
+									"<span class='warning'>You hit \the [src] glass with \a [I].</span>")
 			else if(I)
-				visible_message("<span class='warning'>[I] hits \the [src]!</span>")
+				visible_message("<span class='warning'>[I] hits \the [src] glass!</span>")
 			return 0
+		if(user)
+			user.visible_message("<span class='warning'>[user] breaks \the [src] glass!</span>",\
+								"<span class='warning'>You break \the [src] glass!</span>")
+		else if(I)
+			visible_message("<span class='warning'>[I] breaks \the [src] glass!</span>")
 		else
-			if(user)
-				user.visible_message("<span class='warning'>[user] breaks \the [src] down!</span>",\
-									"<span class='warning'>You break \the [src] down!</span>")
-			else
-				visible_message("<span class='warning'>[src] breaks down!</span>")
-			make_into_sheets()
-			return 1
+			visible_message("<span class='warning'>[src] glass breaks down!</span>")
+		break_glass(TRUE)
+		return 0
+	health -= damage/2
+	if(sound)
+		playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
+	if (health > 0)
+		if(user && I)
+			user.visible_message("<span class='warning'>[user] hits \the [src] with \a [I].</span>",\
+								"<span class='warning'>You hit \the [src] with \a [I].</span>")
+		else if(I)
+			visible_message("<span class='warning'>[I] hits \the [src]!</span>")
+		return 0
+	if(user)
+		user.visible_message("<span class='warning'>[user] breaks \the [src] down!</span>",\
+							"<span class='warning'>You break \the [src] down!</span>")
+	else
+		visible_message("<span class='warning'>[src] breaks down!</span>")
+	make_into_sheets()
+	return 1
 
 /obj/structure/railing/canSmoothWith()
 	return list(/obj/structure/railing)
