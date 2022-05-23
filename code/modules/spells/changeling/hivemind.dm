@@ -1,12 +1,12 @@
 /spell/changeling/hivemind
-	name = "Hivemind (25)"
+	name = "Hivemind (20)"
 	desc = "We can transmit and receive DNA. We can use this DNA to transform as if we acquired the DNA ourselves."
 	abbreviation = "HC"
 	hud_state = "hivemind"
 
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
-	chemcost = 25
+	chemcost = 20
 
 /spell/changeling/hivemind/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
