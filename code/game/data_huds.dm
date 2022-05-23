@@ -90,7 +90,7 @@ the HUD updates properly! */
 	for(var/mob/living/carbon/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if (ishuman(patient))
 			var/mob/living/carbon/human/H = patient
-			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+			if(H.digitalcamo) //Tinfoil hat? Move along.
 				continue
 		if(!check_HUD_visibility(patient, M))
 			continue
@@ -181,7 +181,7 @@ the HUD updates properly! */
 		if(!holder)
 			continue
 		holder.icon_state = "hudno_id"
-		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+		if(perp.digitalcamo) //Tinfoil hat? Move along.
 			C.images += holder
 			continue
 		var/obj/item/weapon/card/id/card = perp.get_id_card()

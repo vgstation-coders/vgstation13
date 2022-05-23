@@ -626,7 +626,7 @@
 	switch(spell)
 		if(1) //Mass Hallucination
 			for(var/mob/living/carbon/human/H in victims)
-				if(H.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+				if(H.digitalcamo)
 					continue
 				if(M_PSY_RESIST in H.mutations)
 					continue

@@ -294,6 +294,14 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/clothing/head/helmet/stun/get_cell()
 	return bcell
 
+/obj/item/clothing/head/helmet/stun/equipped(mob/living/carbon/human/user, head)
+	if(istype(user) && H.get_item_by_slot(head) == src)
+		user.digitalcamo = 1
+
+/obj/item/clothing/head/helmet/stun/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	if(from_slot == slot_head && istype(user))
+		user.digitalcamo = 0
+
 /obj/item/clothing/head/helmet/stun/examine(mob/user)
 	..()
 	if(bcell)

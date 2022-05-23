@@ -160,7 +160,7 @@
 			target = T
 		if (istype (T, /datum/mind))
 			target = user.can_mind_interact(T)
-		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
+		if(!T || !istype(target) || target.digitalcamo || !user.can_mind_interact(target))
 			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
 			continue
 		else if(istype(M))

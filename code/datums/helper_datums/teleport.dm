@@ -235,8 +235,8 @@
 	for (var/mob/M in recursive_type_check(teleatom, /mob))
 		if(istype(M,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
 			var/mob/living/carbon/human/H = M
-			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
-				to_chat(H, "<span class'info'>Your headgear has 'foiled' a teleport!</span>")
+			if(H.digitalcamo)
+				to_chat(H, "<span class'info'>Your digital camouflage has 'foiled' a teleport!</span>")
 				return FALSE
 
 		if(istype(M, /mob/living))

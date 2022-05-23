@@ -2203,7 +2203,7 @@ Use this proc preferably at the end of an equipment loadout
 	if(M_PSY_RESIST in target.mutations)
 		to_chat(src, "The target mind is resisting!")
 		return null
-	if(target.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian,/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+	if(target.digitalcamo)
 		to_chat(src, "Interference is disrupting the connection with the target mind.")
 		return null
 	return target
