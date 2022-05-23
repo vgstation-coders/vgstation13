@@ -547,6 +547,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/count = 0
 	for(var/obj/O in T)
 		count++
+	//prevent the server or players from crashing
 	if(count > 50)
 		return
 	if(yield > 0)
