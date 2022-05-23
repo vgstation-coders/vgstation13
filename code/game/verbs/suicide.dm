@@ -13,7 +13,7 @@
 //Attempt to perform suicide with an item nearby or in-hand
 //Return 0 if the suicide failed, return 1 if successful. Returning 1 does not perform the default suicide afterwards
 /mob/living/proc/attempt_object_suicide(var/obj/suicide_object)
-	if(suicide_object) //We need the item to be there to begin, otherwise abort
+	if(suicide_object && suicide_object.mouse_opacity && !suicide_object.invisibility) //We need the item to be there and tangible to begin, otherwise abort
 		var/damagetype = suicide_object.suicide_act(src)
 		if(damagetype)
 			var/damage_mod = count_set_bitflags(damagetype) // How many damage types are to be applied
@@ -38,7 +38,10 @@
 			return 1
 
 /mob/living/proc/handle_suicide_bomb_cause()
+	var/old_canmove = canmove
+	canmove = FALSE // Prevent moving away and ruining this
 	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
+	canmove = old_canmove
 
 	if(custom_message)
 		return "FOR [uppertext(custom_message)]!"
