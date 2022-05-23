@@ -504,7 +504,7 @@
 			reagents.add_reagent(RUM, 30)
 		if(4)
 			name = "Filk: Sugar Blast Editon"
-			reagents.add_reagent(CORNSYRUP, 30)
+			reagents.add_reagent(SUGAR, 30)
 			reagents.add_reagent(RADIUM, 10) // le epik fallout may mays
 			reagents.add_reagent(TOXICWASTE, 10)
 		if(5)
