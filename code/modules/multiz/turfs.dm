@@ -185,6 +185,15 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	var/turf/below = GetBelow(src)
 	return !below || below.is_space()
 
+/turf/simulated/open/suicide_act(var/mob/living/user)
+	if(user.can_fall() && Cross(user) && CanZPass(user) && get_gravity() > 0.5)
+		for(var/atom/movable/AM in src)
+			if(!AM.CanFallThru())
+				return
+		user.forceMove(src)
+		to_chat(viewers(user), "<span class='danger'>[user] is plunging to his death! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_CUSTOM
+
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
 	if(get_base_turf(src.z) == /turf/simulated/open)
