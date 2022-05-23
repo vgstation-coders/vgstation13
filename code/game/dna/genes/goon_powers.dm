@@ -614,7 +614,7 @@
 		to_chat(user, "<span class='warning'>This can only be used on carbon beings.</span>")
 		return 1
 
-	if (M_PSY_RESIST in M.mutations)
+	if (!user.can_mind_interact(M.mind))
 		to_chat(user, "<span class='warning'>You can't see into [M.name]'s mind at all!</span>")
 		return 1
 

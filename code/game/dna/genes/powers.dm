@@ -77,7 +77,7 @@
 		if (isliving(T))
 			target = T
 		if (istype (T, /datum/mind))
-			target = user.can_mind_interact(T)
+			target = user.can_mind_interact(T.mind)
 		if(target)
 			user.remoteview_target = target
 			user.reset_view(target)
@@ -159,7 +159,7 @@
 		if (isliving(T))
 			target = T
 		if (istype (T, /datum/mind))
-			target = user.can_mind_interact(T)
+			target = user.can_mind_interact(T.mind)
 		if(!T || !istype(target) || !user.can_mind_interact(target))
 			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
 			continue
