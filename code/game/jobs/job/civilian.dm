@@ -151,6 +151,9 @@
 		for(var/spell/targeted/oathbreak/spell in M.spell_list)
 			M.remove_spell(spell)
 		message_admins("[M.name] ([M.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M]'>JMP</a>)")
+		//Curse the mime with bad luck.
+		var/datum/blesscurse/mimevowbreak/mimecurse = new /datum/blesscurse/mimevowbreak
+		M.add_blesscurse(mimecurse)
 		to_chat(M, "<span class = 'notice'>An unsettling feeling surrounds you...</span>")
 		return
 

@@ -454,6 +454,10 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
 
+	if(!original && !target)
+		qdel(src) //If for some reason the target stops existing as the weapon is fired, just delete the projectile
+		return
+
 	// 2 % chance to crit
 	if (firer && is_ranged_crit(src, firer))
 		become_crit()

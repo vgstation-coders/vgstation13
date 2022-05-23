@@ -506,6 +506,10 @@
 	. = ..()
 	name = "\improper AI Satellite APC"
 
+/obj/machinery/turret/portable/cannon/New()
+	installed = new/obj/item/weapon/gun/energy/laser/cannon(src)
+	..()
+
 /obj/machinery/turret/portable/AIvault
 	req_access = list(access_ai_upload)
 	check_records = 1

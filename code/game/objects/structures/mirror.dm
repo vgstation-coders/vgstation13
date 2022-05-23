@@ -115,7 +115,7 @@
 /obj/structure/mirror/MouseDropTo(mob/living/carbon/human/victim, mob/user)
 	choose(user, victim)
 
-/obj/structure/mirror/proc/shatter()
+/obj/structure/mirror/proc/shatter(mob/shatterer)
 	if(shattered)
 		return
 	shattered = 1
@@ -123,11 +123,15 @@
 	playsound(src, "shatter", 70, 1)
 	desc = "Oh no, seven years of bad luck!"
 
+	//Curse the shatterer with bad luck
+	var/datum/blesscurse/brokenmirror/mirrorcurse = new /datum/blesscurse/brokenmirror
+	shatterer.add_blesscurse(mirrorcurse)
+
 
 /obj/structure/mirror/bullet_act(var/obj/item/projectile/Proj)
 	if(prob(Proj.damage * 2))
 		if(!shattered)
-			shatter()
+			shatter(Proj.firer)
 		else
 			playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	return ..()
@@ -164,7 +168,7 @@
 			return
 		else if(prob(I.force * 2))
 			visible_message("<span class='warning'>[user] smashes [src] with [I]!</span>")
-			shatter()
+			shatter(user)
 		else
 			visible_message("<span class='warning'>[user] hits [src] with [I]!</span>")
 			playsound(src, 'sound/effects/Glasshit.ogg', 70, 1)
@@ -178,7 +182,7 @@
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
-	shatter()
+	shatter(user)
 
 
 /obj/structure/mirror/attack_animal(mob/living/user as mob)
@@ -192,7 +196,7 @@
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
-	shatter()
+	shatter(user)
 
 
 /obj/structure/mirror/attack_slime(mob/living/user as mob)
@@ -203,11 +207,11 @@
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
-	shatter()
+	shatter(user)
 
-/obj/structure/mirror/kick_act()
+/obj/structure/mirror/kick_act(mob/living/user as mob)
 	..()
-	shatter()
+	shatter(user)
 
 /obj/structure/mirror/magic
 	name = "magic mirror"

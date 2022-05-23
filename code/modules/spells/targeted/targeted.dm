@@ -31,7 +31,6 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	var/mind_affecting = 0 //Determines if it can be blocked by PSY_RESIST or tinfoil hat
 
 	var/list/compatible_mobs = list()
-	var/believed_name
 
 /spell/targeted/is_valid_target(var/target, mob/user, list/options)
 	if(!(spell_flags & INCLUDEUSER) && target == user)
@@ -61,14 +60,22 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			if(!user || !user.mind || !user.mind.heard_before.len)
 				return
 			var/list/possible_targets = user.mind.heard_before.Copy()
+			possible_targets += "All"
 			if(spell_flags & INCLUDEUSER)
 				possible_targets[user.real_name] = user.mind
 			var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") as null|anything in possible_targets
 			if(isnull(target_name))
 				return
-			var/datum/mind/temp_target = possible_targets[target_name]
-			believed_name = target_name
-			targets += temp_target.current
+			var/datum/mind/temp_target
+			if(target_name == "All")
+				for(var/T in possible_targets)
+					if(T == "All")
+						continue
+					temp_target = possible_targets[T]
+					targets += temp_target.current
+			else
+				temp_target = possible_targets[target_name]
+				targets += temp_target.current
 		else if((range == 0 || range == SELFCAST) && (spell_flags & INCLUDEUSER))
 			targets += user
 		else

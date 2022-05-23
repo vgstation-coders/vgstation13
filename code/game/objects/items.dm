@@ -63,6 +63,8 @@
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
+	var/goes_in_mouth //Whether or not the item is described as "on his/her face" or "in his/her mouth" when worn on the face slot.
+	var/is_muzzle	//Whether or not the item is a muzzle, and how strong the muzzling effect is. See setup.dm.
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
@@ -78,6 +80,9 @@
 	var/crit_chance_melee = CRIT_CHANCE_MELEE
 
 	var/datum/speech_filter/speech_filter
+
+	var/luckiness //How much luck or unluck the item confers while held
+	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
@@ -113,6 +118,37 @@
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
 		I.desc = "Looks like this was \a [src] some time ago."
 		qdel(src)
+
+/obj/item/hide(i)
+	if(isturf(loc))
+		level = i ? LEVEL_BELOW_FLOOR : LEVEL_ABOVE_FLOOR
+		invisibility = i ? 101 : 0
+		plane = i ? ABOVE_PLATING_PLANE : initial(plane)
+		layer = i ? FLOORBOARD_ITEM_LAYER : initial(layer)
+		anchored = i
+
+/obj/item/Crossed(atom/movable/AM)
+	if(level < LEVEL_ABOVE_FLOOR)
+		return 1
+	return 0
+
+/obj/item/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	var/oldalpha = alpha
+	invisibility = 0
+	alpha = 127
+	plane = initial(plane)
+	layer = initial(layer)
+
+	spawn(1 SECONDS)
+		var/turf/U = loc
+		if(istype(U) && U.intact)
+			invisibility = 101
+			plane = ABOVE_PLATING_PLANE
+			layer = FLOORBOARD_ITEM_LAYER
+		alpha = oldalpha
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -459,6 +495,11 @@
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
+
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				return CAN_EQUIP
 			if(slot_back)
 				if( !(slot_flags & SLOT_BACK) )

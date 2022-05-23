@@ -135,7 +135,10 @@
 	melee_damage_upper = 15
 	attacktext = "slaps"
 	attack_sound = 'sound/weapons/punchmiss.ogg'
-	stat_attack = 1
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Vampeers can smash many things and open doors
+	stat_attack = UNCONSCIOUS // Even if it's unconscious, it still has blood! Blah blah blah!
+
 	var/last_glare
 	var/last_jaunt
 	var/retreating = 0
@@ -151,8 +154,10 @@
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		if(H.lying && !H.locked_to)
-			visible_message("<span class='danger'>\The [src] bites down into [H]'s neck!</span>")
-			lock_atom(H, /datum/locking_category/vampire_latch)
+			spawn(2 SECONDS) // Wait a second, otherwise the transition is too abrupt
+				if(H.lying && !H.locked_to)
+					visible_message("<span class='danger'>\The [src] bites down into [H]'s neck!</span>")
+					lock_atom(H, /datum/locking_category/vampire_latch)
 		if(H.locked_to == src)
 			if(H.vessel.get_reagent_amount(BLOOD) < 50)
 				unlock_atom(H)
@@ -161,6 +166,36 @@
 				health = max(maxHealth*2, health+=rand(5,10)) //Can overheal
 			return
 	..()
+
+/mob/living/simple_animal/hostile/humanoid/vampire/relaymove(mob/user)// Allows a player to resist out of the vampire's grip. Takes strength from mutations and other sources into account (Copied from grey nurse code)
+	var/mob/living/carbon/human/H = user
+	if(istype(H))
+		if(user.incapacitated()) // Can't resist when stunned or unconscious
+			return
+
+		if(H.get_strength() > 2) // Are we TOO SWOLE TO CONTROL?! Breaking free is guaranteed!
+			to_chat(user, "<span class='warning'>You start to loosen the [src]'s weak grip!</span>")
+			if(do_after(user, src, 10)) // 1 second resist time, 100% chance of success
+				to_chat(user, "<span class='warning'>You force the [src]'s teeth off your neck with minimal effort, freeing yourself!</span>")
+				unlock_atom(H)
+
+		if(H.get_strength() == 2) // Are we stronger than average due to a mutation or other bonus? Boost resistance chance!
+			to_chat(user, "<span class='warning'>You struggle furiously against the [src]'s grip!</span>")
+			if(do_after(user, src, 10)) // 1 second resist time, 60% chance of success
+				if(prob(40))
+					to_chat(user, "<span class='warning'>The [src] manages to keep their hold on you! Their teeth are still firmly lodged in your neck!</span>")
+				else
+					to_chat(user, "<span class='warning'>You yank the [src]'s teeth out of your neck with a mighty effort and shove them away, freeing yourself!</span>")
+					unlock_atom(H)
+
+		if(H.get_strength() < 2) // Are we just average strength? We get the lowest chance of successfully escaping
+			to_chat(user, "<span class='warning'>You struggle to get free of the [src]'s bloodsucking latch!</span>")
+			if(do_after(user, src, 10)) // 1 second resist time, 35% chance of success with no other modifiers
+				if(prob(65))
+					to_chat(user, "<span class='warning'>You fail to get free of the [src]'s grip, and they only bite down on your neck harder!</span>")
+				else
+					to_chat(user, "<span class='warning'>You manage to pry the [src]'s teeth off your neck, freeing yourself!</span>")
+					unlock_atom(H)
 
 /mob/living/simple_animal/hostile/humanoid/vampire/Life()
 	..()
@@ -199,36 +234,31 @@
 	visible_message("<span class='danger'>\The [src]'s eyes emit a blinding flash!</span>")
 	var/list/close_mobs = list()
 	var/list/dist_mobs = list()
-	for(var/mob/living/carbon/C in oview(1, src))
-		if(C.vampire_affected() <= 0)
+	for(var/mob/living/carbon/human/H in view(1, src))
+		if((H.vampire_affected() <= 0) || H.is_blind())
 			continue
-		if(istype(C))
-			close_mobs |= C
-	for(var/mob/living/carbon/C in oview(3, src))
-		if(C.vampire_affected() <= 0)
+		if(istype(H))
+			close_mobs |= H
+	for(var/mob/living/carbon/human/H in view(3, src))
+		if((H.vampire_affected() <= 0) || H.is_blind())
 			continue
-		if(istype(C))
-			dist_mobs |= C
+		if(istype(H))
+			dist_mobs |= H
 	dist_mobs -= close_mobs
-	for(var/mob/living/carbon/C in close_mobs)
-		C.Stun(8)
-		C.Knockdown(8)
-		C.stuttering += 20
-		if(!C.blinded)
-			C.blinded = 1
-		C.blinded += 5
-	for(var/mob/living/carbon/C in dist_mobs)
-		var/distance_value = max(0, abs((get_dist(C, src)-3)) + 1)
-		C.Stun(distance_value)
+	for(var/mob/living/carbon/human/H in close_mobs)
+		H.Stun(8)
+		H.Knockdown(8)
+		H.stuttering += 20
+		H.flash_eyes()
+	for(var/mob/living/carbon/human/H in dist_mobs)
+		var/distance_value = max(0, abs((get_dist(H, src)-3)) + 1)
+		H.Stun(distance_value)
 		if(distance_value > 1)
-			C.Knockdown(distance_value)
-			C.Stun(distance_value)
-		C.stuttering += 5+distance_value *2
-		if(!C.blinded)
-			C.blinded = 1
-		C.blinded += max(1, distance_value)
-	to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by \the [src]'s glare</span>")
-
+			H.Knockdown(distance_value)
+			H.Stun(distance_value)
+		H.stuttering += 5+distance_value *2
+		H.flash_eyes()
+	to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by \the [src]'s glare!</span>")
 
 /mob/living/simple_animal/hostile/humanoid/vampire/proc/jaunt_away()
 	update_latch()
@@ -240,24 +270,19 @@
 		retreating = 0
 
 /mob/living/simple_animal/hostile/humanoid/vampire/death(var/gibbed = FALSE)
-	..(TRUE)
 	visible_message("<span class='warning'>\The [src] lets out one last ear piercing shriek, before collapsing into dust!</span>")
-	for(var/mob/living/carbon/C in hearers(4, src))
-		if(ishuman(C))
-			var/mob/living/carbon/human/H = C
-			if(H.earprot())
-				continue
-		if(C.vampire_affected() <= 0)
+	playsound(src.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
+	for(var/mob/living/carbon/human/H in view(7, src))
+		if((H.vampire_affected() <= 0) || H.earprot())
 			continue
-		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
-		C.Knockdown(8)
-		C.ear_deaf = 20
-		C.stuttering = 20
-		C.Stun(8)
-		C.Jitter(150)
+		to_chat(H, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
+		H.Knockdown(8)
+		H.ear_deaf = 20
+		H.stuttering = 20
+		H.Stun(8)
+		H.Jitter(150)
 	for(var/obj/structure/window/W in view(4, src))
 		W.shatter()
-	playsound(src.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
 

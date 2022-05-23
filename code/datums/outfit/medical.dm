@@ -484,11 +484,11 @@
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
-	var/obj/item/weapon/dnainjector/nofail/randominjector = pick(/obj/item/weapon/dnainjector/nofail/remotesay, /obj/item/weapon/dnainjector/nofail/runfast, /obj/item/weapon/dnainjector/nofail/strong)
+	var/obj/item/weapon/dnainjector/nofail/randominjector = pick(/obj/item/weapon/dnainjector/nofail/telepathy, /obj/item/weapon/dnainjector/nofail/runfast, /obj/item/weapon/dnainjector/nofail/strong)
 	items_to_collect[randomcan] = GRASP_RIGHT_HAND
 	items_to_collect[randominjector] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/weapon/dnainjector/nofail/remotesay] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/dnainjector/nofail/telepathy] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 

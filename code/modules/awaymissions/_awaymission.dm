@@ -81,10 +81,15 @@ Example of the second method:
 	desc = "A tiny unbreachable room full of angry turrets and loot."
 	generate_randomly = 0
 
-///datum/map_element/away_mission/challenge
-//	name = "emitter hell"
-//	file_path = "maps/RandomZLevels/broken/challenge.dmm"
-//	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
+/datum/map_element/away_mission/challenge
+	name = "emitter hell"
+	file_path = "maps/RandomZLevels/challenge.dmm"
+	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
+
+/datum/map_element/away_mission/spacebattle
+	name = "space battle"
+	file_path = "maps/RandomZLevels/spacebattle.dmm"
+	desc = "A large ship being attacked by smaller syndicate ones in an asteroid field, featuring a bluespace artillery gun on the main ship."
 
 /datum/map_element/away_mission/spaceship
 	name = "stranded spaceship"
@@ -106,6 +111,11 @@ Example of the second method:
 	file_path = "maps/RandomZLevels/listeningpost.dmm"
 	desc = "A large asteroid with a hidden syndicate listening post. Don't forget to bring pickaxes!"
 
+/datum/map_element/away_mission/leviathan
+	name = "leviathan"
+	file_path = "maps/RandomZLevels/leviathan.dmm"
+	desc = "A large asteroid in the shape of a mythical creature with an abandoned mining outpost, functional research outpost and hidden rare minerals in the center."
+
 /datum/map_element/away_mission/stationcollision
 	name = "station collision"
 	file_path = "maps/RandomZLevels/stationCollision.dmm"
@@ -126,7 +136,7 @@ Example of the second method:
 	file_path = "maps/RandomZLevels/snowplanet.dmm"
 	desc = "A small little planetoid with a cold atmosphere and a wooden cabin with a gateway. Be sure to pack some sweaters!"
 
-var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission) - /datum/map_element/away_mission
+var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_mission)
 
 #if UNIT_TESTS_ENABLED
 /datum/unit_test/away_missions/start()
@@ -143,43 +153,6 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 	for(var/T in potentialRandomZlevels) //Fill the list with away mission datums (because currently it only contains paths)
 		potentialRandomZlevels.Add(new T)
 		potentialRandomZlevels.Remove(T)
-
-	var/list/Lines = file2list("maps/RandomZLevels/fileList.txt")
-	if(!Lines.len)
-		return
-	for (var/t in Lines)
-		if (!t)
-			continue
-
-		t = trim(t)
-		if (length(t) == 0)
-			continue
-		else if (copytext(t, 1, 2) == "#")
-			continue
-
-		var/pos = findtext(t, " ")
-		var/name = null
-	//	var/value = null
-
-		if (pos)
-            // No, don't do lowertext here, that breaks paths on linux
-			name = copytext(t, 1, pos)
-		//	value = copytext(t, pos + 1)
-		else
-            // No, don't do lowertext here, that breaks paths on linux
-			name = t
-
-		if (!name)
-			continue
-
-		if(!isfile(name))
-			warning("fileList.txt contains a map that does not exist: [name]")
-			continue
-
-		var/datum/map_element/away_mission/AM = new /datum/map_element/away_mission
-		AM.file_path = name
-
-		potentialRandomZlevels.Add(AM)
 
 	if(!include_unrandom)
 		for(var/datum/map_element/away_mission/AM in potentialRandomZlevels)

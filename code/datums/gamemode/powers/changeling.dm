@@ -37,13 +37,6 @@
 	spellpath = /spell/changeling/transform
 	allowduringhorrorform = 0
 
-/datum/power/changeling/change_species
-	name = "Change Species"
-	desc = "We take on the appearance of a species that we have absorbed."
-	cost = 0
-	spellpath = /spell/changeling/changespecies
-	allowduringhorrorform = 0
-
 /datum/power/changeling/fakedeath
 	name = "Regenerative Stasis"
 	desc = "We become weakened to a death-like state, where we will rise again from death."
@@ -68,7 +61,6 @@
 	allowduringhorrorform = 0
 
 // Hivemind
-
 /datum/power/changeling/hive_upload
 	name = "Hive Channel"
 	desc = "We can channel a DNA into the airwaves, allowing our fellow changelings to absorb it and transform into it as if they acquired the DNA themselves."

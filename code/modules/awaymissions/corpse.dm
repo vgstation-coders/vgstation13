@@ -1048,30 +1048,35 @@
 	corpsegender = G_BOTH
 	generate_random_appearance = 1
 
+/obj/effect/landmark/corpse/grey/prisoner
+	name = "Grey Prisoner"
+	corpseuniform = /obj/item/clothing/under/color/prisoner
+	corpseshoes = /obj/item/clothing/shoes/orange
+
 /obj/effect/landmark/corpse/grey/worker
 	name = "Grey Laborer"
 	corpseuniform = /obj/item/clothing/under/grey/grey_worker
 	corpsebelt = /obj/item/weapon/storage/belt/utility/full
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 
 /obj/effect/landmark/corpse/grey/soldier_unarmed
 	name = "Grey Soldier"
 	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 
 /obj/effect/landmark/corpse/grey/soldier_sentry
 	name = "Grey Soldier"
 	corpsesuit = /obj/item/clothing/suit/armor/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
 	corpsebelt = /obj/item/weapon/storage/belt/mothership
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 
 /obj/effect/landmark/corpse/grey/soldier_regular
 	name = "Grey Soldier"
 	corpsesuit = /obj/item/clothing/suit/armor/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
 	corpsebelt = /obj/item/weapon/storage/belt/mothership
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 	corpsehelmet = /obj/item/clothing/head/helmet/mothership
 
 /obj/effect/landmark/corpse/grey/soldier_pacifier
@@ -1079,7 +1084,7 @@
 	corpsesuit = /obj/item/clothing/suit/armor/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
 	corpsebelt = /obj/item/weapon/storage/belt/mothership
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor
 
 /obj/effect/landmark/corpse/grey/soldier_grenadier
@@ -1087,7 +1092,7 @@
 	corpsesuit = /obj/item/clothing/suit/armor/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
 	corpsebelt = /obj/item/weapon/storage/belt/mothership
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor_heavy
 
 /obj/effect/landmark/corpse/grey/soldier_heavy
@@ -1095,13 +1100,13 @@
 	corpsesuit = /obj/item/clothing/suit/armor/mothership_heavy
 	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
 	corpsebelt = /obj/item/weapon/storage/belt/mothership
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor_heavy
 
 /obj/effect/landmark/corpse/grey/explorer
 	name = "Grey Explorer"
 	corpseuniform = /obj/item/clothing/under/grey/grey_scout
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 
 /obj/effect/landmark/corpse/grey/explorer_space
 	name = "Grey Explorer"
@@ -1109,7 +1114,7 @@
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpsesuit = /obj/item/clothing/suit/space/grey
 	corpseuniform = /obj/item/clothing/under/grey/grey_scout
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 	corpseback = /obj/item/weapon/tank/oxygen/red
 	corpsehelmet = /obj/item/clothing/head/helmet/space/grey
 
@@ -1119,7 +1124,7 @@
 	corpsegloves = /obj/item/clothing/gloves/latex
 	corpsesuit = /obj/item/clothing/suit/storage/labcoat/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_researcher
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 
 /obj/effect/landmark/corpse/grey/surgeon
 	name = "Grey Surgeon"
@@ -1127,7 +1132,7 @@
 	corpsegloves = /obj/item/clothing/gloves/latex
 	corpsesuit = /obj/item/clothing/suit/storage/labcoat/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_researcher
-	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 
 /obj/effect/landmark/corpse/grey/leader
 	name = "Grey Administrator"
@@ -1144,6 +1149,13 @@
 	mutantrace = "Vox"
 	corpsegender = G_BOTH
 	generate_random_appearance = 1
+
+/obj/effect/landmark/corpse/vox/prisoner
+	name = "Vox Prisoner"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpseuniform = /obj/item/clothing/under/color/prisoner
+	corpseshoes = /obj/item/clothing/shoes/orange
+	corpseback = /obj/item/weapon/tank/nitrogen
 
 /obj/effect/landmark/corpse/vox/spaceraider
 	name = "Vox Raider"

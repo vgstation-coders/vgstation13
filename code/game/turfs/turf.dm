@@ -13,6 +13,7 @@
 	var/carbon_dioxide = 0
 	var/nitrogen = 0
 	var/toxins = 0
+	var/list/misc_gases //associative list of gas names and amounts. eg. to add N2O to a turf: misc_gases = list(GAS_SLEEPING = 36000)
 
 	//properties for airtight tiles (/wall)
 	var/thermal_conductivity = 0.05

@@ -421,6 +421,11 @@
 		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
 			crit_rampup -= time
 
+	if(base_luck ? base_luck.temporary_luckiness : FALSE)
+		base_luck.temporary_luckiness *= LUCKINESS_DRAINFACTOR
+		if(abs(base_luck.temporary_luckiness) < 1)
+			base_luck.temporary_luckiness = 0
+
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
 	if(N.chained)
 		if(narsimage)
@@ -1842,15 +1847,6 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_pai(mob/user as mob)
 	ShiftClick(user)
 
-/mob/proc/handle_alpha()
-	if(alphas.len < 1)
-		alpha = 255
-	else
-		var/lowest_alpha = 255
-		for(var/alpha_modification in alphas)
-			lowest_alpha = min(lowest_alpha,alphas[alpha_modification])
-		alpha = lowest_alpha
-
 /mob/proc/teleport_to(var/atom/A)
 	forceMove(get_turf(A))
 
@@ -2097,16 +2093,32 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
-/mob/make_invisible(var/source_define, var/time, var/include_clothing)
-	if(..() || !source_define)
+/mob/proc/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
+	if(invisibility || alpha <= 1 || !source_define)
 		return
-	alpha = 1	//to cloak immediately instead of on the next Life() tick
-	alphas[source_define] = 1
+	invisibility = invisibility_value
+	alphas[source_define] = alpha_value
+	handle_alpha()
+	regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			if(src)
-				alpha = initial(alpha)
-				alphas.Remove(source_define)
+			make_visible(source_define)
+
+/mob/proc/make_visible(var/source_define)
+	if(!invisibility && alpha == 255 || !source_define)
+		return
+	if(src)
+		invisibility = 0
+		alphas.Remove(source_define)
+		handle_alpha()
+		regenerate_icons()
+
+/mob/proc/handle_alpha()	//uses the lowest alpha on the mob
+	if(alphas.len < 1)
+		alpha = 255
+	else
+		sortTim(alphas, /proc/cmp_numeric_asc,1)
+		alpha = alphas[alphas[1]]
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(paxban_isbanned(ckey))

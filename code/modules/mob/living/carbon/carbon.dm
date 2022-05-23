@@ -252,10 +252,17 @@
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
 			if(M.zone_sel.selecting == "head" && !(!S || S.status & ORGAN_DESTROYED))
-				M.visible_message( \
-					"<span class='notice'>[M] pats [src]'s head.</span>", \
-					"<span class='notice'>You pat [src]'s head.</span>", \
-					)
+				if(isgrey(M)) // Ayys give a unique little flavor headpoke emote that also synthesizes a little more paracetamol
+					M.visible_message( \
+						"<span class='notice'>[M] reaches out and pokes [src] on the forehead.</span>", \
+						"<span class='notice'>You reach out and poke [src]'s forehead.</span>", \
+						)
+					reagents.add_reagent(PARACETAMOL, 1)
+				else
+					M.visible_message( \
+						"<span class='notice'>[M] pats [src]'s head.</span>", \
+						"<span class='notice'>You pat [src]'s head.</span>", \
+						)
 			else if((M.zone_sel.selecting == "l_hand" && !(!S || S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(!S || S.status & ORGAN_DESTROYED)))
 				var/shock_damage = 5
 				var/shock_time = 0
@@ -455,8 +462,8 @@
 	return borers_in_mob
 
 /mob/living/carbon/is_muzzled()
-	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
-
+	var/obj/item/M = get_item_by_slot(slot_wear_mask)
+	return M?.is_muzzle
 
 /mob/living/carbon/proc/isInCrit()
 	// Health is in deep shit and we're not already dead
@@ -645,19 +652,26 @@
 		if(health_deficiency >= (maxHealth * 0.4))
 			. += (health_deficiency / (maxHealth * 0.25))
 
-/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
-	if(invisibility || alpha <= 1 || !source_define)
-		return
+/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
+	//INVISIBILITY_LEVEL_ONE to INVISIBILITY_MAXIMUM for invisibility
 	if(include_clothing)
 		return ..()
-	body_alphas[source_define] = 1
+	if(invisibility || alpha <= 1 || !source_define)
+		return
+	body_alphas[source_define] = alpha_value
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			if(src)
-				body_alphas.Remove(source_define)
-				regenerate_icons()
+			make_visible(source_define, include_clothing)
 
+/mob/living/carbon/make_visible(var/source_define, var/include_clothing)
+	if(include_clothing)
+		..()
+	if(!body_alphas || !source_define)
+		return
+	if(src)
+		body_alphas.Remove(source_define)
+		regenerate_icons()
 
 /mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
 	if (!..())

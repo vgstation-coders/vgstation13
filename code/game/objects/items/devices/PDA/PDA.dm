@@ -551,7 +551,9 @@ var/global/msg_id = 0
 		map_app.holomap.stopWatching()
 
 /obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
-	if (istype(AM, /mob/living/carbon))
+	if(..())
+		return 1
+	if (iscarbon(AM))
 		var/mob/living/carbon/M = AM
 		if (M.Slip(8, 5, 1))
 			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
