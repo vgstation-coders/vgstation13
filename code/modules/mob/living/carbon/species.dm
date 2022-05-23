@@ -1348,7 +1348,7 @@ var/list/has_died_as_golem = list()
 		log_admin("[key_name(M)] projects its mind towards itself: [message]</span>")
 		to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
 
-	var/all_switch = (telepathic_target > 1) ? TRUE : FALSE
+	var/all_switch = (telepathic_target.len > 1) ? TRUE : FALSE
 	for(var/mob/living/T in telepathic_target)
 		if(istype(T) && M.can_mind_interact(T))
 			if(T == M) //Talking to ourselves
@@ -1358,10 +1358,12 @@ var/list/has_died_as_golem = list()
 			to_chat(M,"<span class='mushroom'>Projected to <b>[T]</b>: [message]</span>")
 		if(all_switch && telepathic_target.len > 1)
 			all_switch = FALSE
+			to_chat(M,"<span class='mushroom'>Projected to <b>[english_list(telepathic_target)]</b>: [message]</span>")
 			for(var/mob/dead/observer/G in dead_mob_list)
 				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[english_list(telepathic_target)]</b>: [message]</i>")
 			log_admin("[key_name(M)] projects his mind towards [english_list(telepathic_target)]: [message]")
 		else if(!all_switch && telepathic_target.len < 2)
+			to_chat(M,"<span class='mushroom'>Projected to <b>[T]</b>: [message]</span>")
 			for(var/mob/dead/observer/G in dead_mob_list)
 				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[T]</b>: [message]</i>")
 			log_admin("[key_name(M)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
