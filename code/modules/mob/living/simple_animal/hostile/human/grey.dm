@@ -863,10 +863,10 @@
 		victims.Add(H)
 	if(!victims.len)
 		return
-	if(!src.can_mind_interact(H.mind))
-		return
 	var/shot_choice = rand(0,4)
 	for(var/mob/living/carbon/human/H in victims)
+		if(!src.can_mind_interact(H.mind))
+			continue
 		switch(shot_choice)
 			if(0) //Brain damage, confusion, and dizziness
 				to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
@@ -878,29 +878,29 @@
 				if(prob(25))
 					H.audible_scream()
 			if(1) //A knockdown, with some dizziness
-					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-					H.emote("me", 1, "collapses!")
-					H.Knockdown(4)
-					H.confused += 6
-					H.dizziness += 6
-					last_psychicattack = world.time
+				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+				H.emote("me", 1, "collapses!")
+				H.Knockdown(4)
+				H.confused += 6
+				H.dizziness += 6
+				last_psychicattack = world.time
 			if(2) //Naptime
-					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
-					H.drowsyness += 6
-					last_psychicattack = world.time
-					spawn(2 SECONDS)
-						H.sleeping += 5
+				to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
+				H.drowsyness += 6
+				last_psychicattack = world.time
+				spawn(2 SECONDS)
+					H.sleeping += 5
 			if(3) //Serious hallucinations and jittering
-					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
-					H.hallucination += 75
-					H.Jitter(30)
-					H.stuttering += 30
-					last_psychicattack = world.time
+				to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
+				H.hallucination += 75
+				H.Jitter(30)
+				H.stuttering += 30
+				last_psychicattack = world.time
 			if(4) //Brief period of pacification
-					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
-					H.reagents.add_reagent(CHILLWAX, 1)
-					last_psychicattack = world.time
-	else
+				to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
+				H.reagents.add_reagent(CHILLWAX, 1)
+				last_psychicattack = world.time
+		return
 		// If not done cooling down from the previous psychic attack, just shoot a laser beem
 		..()
 
