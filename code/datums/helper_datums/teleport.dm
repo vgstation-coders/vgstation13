@@ -232,7 +232,7 @@
 	if (L.teleJammed && !ignore_jamming)
 		return FALSE
 
-	for (var/mob/M in recursive_type_check(teleatom, /mob))
+	for (var/mob/living/carbon/human/M in recursive_type_check(teleatom, /mob))
 		if(istype(M,/mob/living/carbon/human))
 			if(M.locked_to_z != FALSE && destination.z != M.locked_to_z)
 				M.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
