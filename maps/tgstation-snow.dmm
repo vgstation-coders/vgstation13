@@ -2277,13 +2277,13 @@
 /area/research_outpost/maint)
 "aeL" = (
 /obj/structure/stairs/west,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
 /area/hydroponics)
 "aeM" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -110320,7 +110320,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -118416,7 +118416,7 @@
 	dir = 4
 	},
 /obj/item/clothing/mask/gas,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor/plating,
