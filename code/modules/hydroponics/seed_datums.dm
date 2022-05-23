@@ -544,11 +544,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		return
 	if(!products.len)
 		return
-	var/count = 0
+	var/tile_objects = 0
 	for(var/obj/O in T)
-		count++
+		tile_objects++
 	//prevent the server or players from crashing
-	if(count > 50)
+	if(tile_objects > 50)
 		return
 	if(yield > 0)
 		generate_product(T, yield_mod)
