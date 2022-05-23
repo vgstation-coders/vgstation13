@@ -191,7 +191,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 			if(!AM.CanFallThru())
 				return
 		user.forceMove(src)
-		to_chat(viewers(user), "<span class='danger'>[user] is plunging to his death! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is plunging to \his death! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_CUSTOM
 
 /turf/simulated/floor/glass/New(loc)
