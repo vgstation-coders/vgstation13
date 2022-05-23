@@ -55,6 +55,9 @@
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
 			total_brute_loss = getBruteLoss() - old_brute_loss
+			if(mind && mind.suiciding)
+				adjustBruteLoss(175 - total_brute_loss) // Makes the act look real
+				total_brute_loss = getBruteLoss() - old_brute_loss
 			log_debug("[src] has taken [total_brute_loss] damage after falling [zs_fallen] z levels with a gravity of [gravity] Gs!")
 		AdjustKnockdown((3 * min(zs_fallen,10)) * gravity)
 	else
@@ -62,8 +65,6 @@
 			"You fall off and land on the \the [landing].", \
 			"You hear something drop onto \the [landing].")
 	zs_fallen = 0
-	if(mind && mind.suiciding)
-		adjustBruteLoss(175 - total_brute_loss) // Makes the act look real deadly
 
 /obj/mecha/handle_fall(var/turf/landing)
 	// First things first, break any lattice
