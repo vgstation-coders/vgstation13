@@ -186,7 +186,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	return !below || below.is_space()
 
 /turf/simulated/open/suicide_act(var/mob/living/user)
-	if(user.can_fall() && Cross(user) && CanZPass(user) && get_gravity() > 0.5)
+	if(user.can_fall() && Cross(user) && CanZPass(user) && get_gravity() > 0.667)
 		for(var/obj/O in src)
 			if(!O.CanFallThru())
 				return
