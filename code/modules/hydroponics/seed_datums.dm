@@ -547,8 +547,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/count = 0
 	for(var/obj/O in T)
 		count++
-		if(count > 50)
-			return
+	if(count > 50)
+		return
 	if(yield > 0)
 		generate_product(T, yield_mod)
 
