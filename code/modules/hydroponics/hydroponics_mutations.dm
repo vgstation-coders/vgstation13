@@ -130,17 +130,9 @@
 	check_for_divergence()
 
 	switch(mutation_type)
-		if("code_explanation")
-
-
-			seed = hardcap/2*ROUND(log(10,rand(5,15)),1)
-			// Excellent! Now we can check if the mutation's strength should be affected by these caps.
-			// To do this, we use the unmix function, which returns a decimal number from 0 to 1.
-			var/cap_ratio = unmix(seed.potency, softcap, hardcap)
-			// Now that we have all the final modifiers, we can calculate the mutation's final strength.
-			var/deviation = severity * (rand(50, 125)/100) * cap_ratio
+			deviation = min(hardcap/2*ROUND(log(10,seed.potency/max*100),3),0.15*MAX)
 			//Deviation per 10u Mutagen before cap: 5-12.5
-			seed.potency = clamp(seed.potency + deviation, 0, 200)
+			seed.potency += deviation
 			generic_mutation_message("quivers!")
 
 		if("plusstat_potency")

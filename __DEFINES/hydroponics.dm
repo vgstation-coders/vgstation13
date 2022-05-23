@@ -34,9 +34,7 @@
 #define HYDRO_PREHISTORIC 1
 #define HYDRO_VOX 2
 
-
-//Xenobotany
-
+//Xenobotany mutations
 //Good
 #define PLANT_STAT_POTENCY (1<<0)
 #define PLANT_STAT_YIELD (1<<1)
@@ -64,21 +62,12 @@
 #define PLANT_CARNIVOROUS2 (1<<7)
 #define PLANT_LIGNEOUS (1<<8)
 
+#define PLANT_CHEMICAL (1<<9)
+#define PLANT_FRUIT (1<<10)
+#define PLANT_APPEARANCE (1<<11)
+#define PLANT_SPREAD (1<<12)
 //BAD
-9;						PLANT_STAT_POTENCY, \
-S.yield == -1 ? 0 : 6;	PLANT_STAT_YIELD, \
-1;						PLANT_STAT_WEEDTOLERANCE, \
-1;                      PLANT_STAT_TOXINAFFINITY, \
-2;						PLANT_STAT_LIFESPAN, \
-2;                      PLANT_STAT_ENDURANCE, \
-2;						PLANT_STAT_PRODUCTION, \
-2;                      PLANT_STAT_MATURATION, \
-1;                      PLANT_STAT_HEAT, \
-1;						PLANT_STAT_PRESSURE,\
-2;						PLANT_STAT_LIGHT, \
-1;						"plusstat_nutrient&water_consumption", \
-S.yield != -1 && !S.harvest_repeat ? 0.4 : 0;	"toggle_repeatharvest"
-)
+
 if(MUTCAT_WEIRD)
 mutation_type = pick(\
 S.biolum ? 10 : 0;			"biolum_changecolor",\
