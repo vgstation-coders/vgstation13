@@ -248,7 +248,7 @@
 
 //hidden in plain sight
 /obj/item/clothing/head/tinfoil/equipped(mob/living/carbon/human/user, head)
-	if(istype(user) && H.get_item_by_slot(head) == src)
+	if(istype(user) && user.get_item_by_slot(head) == src)
 		user.digitalcamo = 1
 
 /obj/item/clothing/head/tinfoil/unequipped(mob/living/carbon/human/user, var/from_slot = null)

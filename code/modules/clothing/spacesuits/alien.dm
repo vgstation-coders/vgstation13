@@ -717,8 +717,8 @@
 				return
 	..()
 
-/obj/item/clothing/head/helmet/space/martian/equipped(mob/living/carbon/human/user, head)
-	if(istype(user) && H.get_item_by_slot(head) == src)
+/obj/item/clothing/head/helmet/space/martian/equipped(mob/user, head)
+	if(istype(user) && user.get_item_by_slot(head) == src)
 		user.digitalcamo = 1
 
 /obj/item/clothing/head/helmet/space/martian/unequipped(mob/living/carbon/human/user, var/from_slot = null)
