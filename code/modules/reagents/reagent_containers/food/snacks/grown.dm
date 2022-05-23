@@ -81,7 +81,7 @@ var/list/special_fruits = list()
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
+/obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
 	if(!seed || !src)
 		return
@@ -91,12 +91,12 @@ var/list/special_fruits = list()
 	// We ONLY want to apply special effects if we're hitting a turf! That's because throw_impact will always be
 	// called on a turf AFTER it's called on the things ON the turf, and will runtime if the item doesn't exist anymore.
 	if(isturf(hit_atom))
-		do_splat_effects(hit_atom)
+		do_splat_effects(hit_atom,user)
 	return
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_splat_effects(atom/hit_atom)
+/obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_splat_effects(atom/hit_atom, mob/user)
 	if(seed.teleporting)
-		splat_reagent_reaction(get_turf(hit_atom))
+		splat_reagent_reaction(get_turf(hit_atom),user)
 		if(do_fruit_teleport(hit_atom, usr, potency))
 			visible_message("<span class='danger'>The [src] splatters, causing a distortion in space-time!</span>")
 		else if(splat_decal(get_turf(hit_atom)))
@@ -106,7 +106,7 @@ var/list/special_fruits = list()
 
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
-		splat_reagent_reaction(get_turf(hit_atom))
+		splat_reagent_reaction(get_turf(hit_atom),user)
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
@@ -122,7 +122,7 @@ var/list/special_fruits = list()
 					add_attacklogs(user, M, "stung", object = src, addition = "Reagents: [english_list(seed.get_reagent_names())]", admin_warn = 1)
 			to_chat(user, "<span class='alert'>Some of \the [src]'s stingers break off in the hit!</span>")
 			potency -= rand(1,(potency/3)+1)
-		do_splat_effects(M)
+		do_splat_effects(M,user)
 		return
 	return ..()
 

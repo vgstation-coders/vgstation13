@@ -381,13 +381,14 @@
 
 	return 1
 
-/obj/item/weapon/reagent_containers/food/snacks/proc/splat_reagent_reaction(turf/T)
+/obj/item/weapon/reagent_containers/food/snacks/proc/splat_reagent_reaction(turf/T, mob/user)
 	if(reagents.total_volume > 0)
 		reagents.reaction(T)
 		for(var/atom/A in T)
 			if (A == src)
 				continue
-			reagents.reaction(A)
+			var/list/hit_zone = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS
+			reagents.reaction(A, zone_sels = hit_zone)
 		return 1
 	return 0
 
