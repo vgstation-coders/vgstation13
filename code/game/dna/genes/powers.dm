@@ -178,8 +178,8 @@
 		if(all_switch && targets.len > 1)
 			all_switch = FALSE
 			for(var/mob/dead/observer/G in dead_mob_list)
-				G.show_message("<i>Telepathy, <b>[user]</b> to everyone nearby</b>: [message]</i>")
-			log_admin("[key_name(user)] projects his mind towards to everyone nearby: [message]")
+				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>: [message]</i>")
+			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
 		else if(!all_switch && targets.len < 2)
 			for(var/mob/dead/observer/G in dead_mob_list)
 				G.show_message("<i>Telepathy, <b>[user]</b> to <b>[T]</b>: [message]</i>")
