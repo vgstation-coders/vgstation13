@@ -368,7 +368,7 @@
 /obj/structure/railing/suicide_act(mob/living/user)
 	var/turf/T = hurdle(user)
 	if(T && isopenspace(T))
-		return T.suicide_act(user)
+		return T.suicide_act(user) || ..()
 	else
 		return ..()
 
