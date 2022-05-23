@@ -1,12 +1,12 @@
 /spell/changeling/hivemind
-	name = "Hivemind (20)"
+	name = "Hivemind (25)"
 	desc = "We can transmit and receive DNA. We can use this DNA to transform as if we acquired the DNA ourselves."
 	abbreviation = "HC"
 	hud_state = "hivemind"
 
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
-	chemcost = 20
+	chemcost = 25
 
 /spell/changeling/hivemind/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
@@ -20,30 +20,28 @@
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		if(!(DNA in hivemind.hivemind_bank))
 			names += DNA.real_name
-
 	if(names.len <= 0)
 		to_chat(user, "<span class='notice'>We have transmitted all of our DNA.</span>")
 	else
-		var/S = input("Select a DNA to channel: ", "Channel DNA", null) as null|anything in names
-		if(S)
+		for(var/S in names)
 			var/datum/dna/chosen_dna = changeling.GetDNA(S)
 			if(chosen_dna)
 				hivemind.hivemind_bank += chosen_dna
 				to_chat(user, "<span class='notice'>We transmit the DNA of [S].</span>")
-				feedback_add_details("changeling_powers","HU")
+	feedback_add_details("changeling_powers","HU")
+
 	//Receive DNA
 	names = list()
 	for(var/datum/dna/DNA in hivemind.hivemind_bank)
 		if(!(DNA in changeling.absorbed_dna))
 			names[DNA.real_name] = DNA
 	if(names.len <= 0)
-		to_chat(user, "<span class='notice'>There's no new DNA to absorb from the air.</span>")
+		to_chat(user, "<span class='notice'>There's no new DNA transmitted.</span>")
 	else
-		var/S = input("Select a DNA absorb from the air: ", "Absorb DNA", null) as null|anything in names
-		if(S)
+		for(var/S in names)
 			var/datum/dna/chosen_dna = names[S]
 			if(chosen_dna)
 				changeling.absorbed_dna += chosen_dna
-				to_chat(user, "<span class='notice'>We absorb the DNA of [S] from the air.</span>")
-				feedback_add_details("changeling_powers","HD")
+				to_chat(user, "<span class='notice'>We receive the DNA of [S].</span>")
+	feedback_add_details("changeling_powers","HD")
 	..()
