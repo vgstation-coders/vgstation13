@@ -469,8 +469,9 @@
 	desc = "The hind left foot from a rabbit. It makes you feel lucky."
 	icon_state = "rabbit_foot"
 	_color = "rabbit_foot"
-	var/thisvarmakesyoulucky = TRUE //Note: Luck is a mental construct and doesn't actually exist.
 	var/wired = FALSE
+	luckiness = 50
+	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
 
 /obj/item/clothing/accessory/rabbit_foot/attackby(obj/item/I, mob/user)
 	..()

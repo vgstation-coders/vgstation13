@@ -43,7 +43,7 @@
 	var/force_update           // Set this to bypass the cycle time check.
 	var/skip_aging = 0		   // Don't advance age for the next N cycles.
 	var/pollination = 0
-	var/bees = 0				//Are the trays currently affected by the bees' pollination?
+	var/bees = 0			   //Are the trays currently affected by the bees' pollination?
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
 	var/weed_coefficient = 1    //Coefficient to the chance of weeds appearing
@@ -142,7 +142,7 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user,yield_mod)
+	seed.harvest(user, yield_mod)
 	after_harvest()
 	return
 
@@ -222,6 +222,7 @@
 				return
 
 			to_chat(user, "You plant the [S.seed.seed_name] [S.seed.seed_noun].")
+
 			switch(S.seed.spread)
 				if(1)
 					var/turf/T = get_turf(src)

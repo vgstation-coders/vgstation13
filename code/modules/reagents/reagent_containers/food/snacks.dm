@@ -61,6 +61,9 @@
 		"<span class='notice'>You finish eating \the [src].</span>")
 		score.foodeaten++ //For post-round score
 
+		if(luckiness)
+			user.luck_adjust(luckiness, temporary = TRUE)
+
 		//Drop our item before we delete it, to clear any references of ourselves in people's hands or whatever.
 		var/old_loc = loc
 		if(loc == user)

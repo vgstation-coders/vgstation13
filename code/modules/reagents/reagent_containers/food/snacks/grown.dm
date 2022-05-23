@@ -14,6 +14,7 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
+
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
 
@@ -25,14 +26,14 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname)
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname, mob/harvester)
 	..()
 	if(custom_plantname)
 		plantname = custom_plantname
 	if(ticker)
-		initialize()
+		initialize(harvester)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
+/obj/item/weapon/reagent_containers/food/snacks/grown/initialize(mob/harvester)
 
 	//Handle some post-spawn var stuff.
 	//Fill the object up with the appropriate reagents.
@@ -364,7 +365,7 @@ var/list/special_fruits = list()
 	plantname = "rocknut"
 	force = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname)
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname, mob/harvester)
 	..()
 	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
 	eatverb = pick("crunch","gnaw","bite")
@@ -929,7 +930,7 @@ var/list/special_fruits = list()
 	var/current_path = null
 	var/counter = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname)
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname, mob/harvester)
 	..()
 	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
 	available_fruits = shuffle(available_fruits)
@@ -1073,3 +1074,93 @@ var/list/special_fruits = list()
 	filling_color = "#DFE88B"
 	plantname = "mustardplant"
 	fragrance = INCENSE_MUSTARDPLANT
+
+//Clovers
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover
+	filling_color = "#247E0A"
+	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
+	var/leaves
+	plantname = "clover"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
+	leaves = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
+	leaves = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
+	leaves = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/threeleaf
+	leaves = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
+	leaves = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf
+	leaves = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf
+	leaves = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
+	leaves = 7
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/update_leaves()
+	switch(leaves)
+		if(3)
+			name = "clover"
+			desc = "A cheerful little herb with three leaves."
+		if(0)
+			name = "zero-leaf clover"
+			desc = "Bad luck and extreme misfortune will infest your pathetic soul for all eternity."
+			luckiness = -10000
+		if(1)
+			name = "one-leaf clover"
+			desc = "This cursed clover is said to bring nothing but misery to the one who bears it."
+			luckiness = -500
+		if(2)
+			name = "two-leaf clover"
+			desc = "This clover only has two leaves. How unfortunate!"
+			luckiness = -25
+		if(4)
+			name = "four-leaf clover"
+			desc = "This clover has four leaves. Lucky you!"
+			luckiness = 25
+		if(5)
+			name = "five-leaf clover"
+			desc = "A marvel of probabilistics, this exquisitely rare clover is said to bring fantastic luck."
+			luckiness = 100
+		if(6)
+			name = "six-leaf clover"
+			desc = "A closely-guarded secret of the leperchauns."
+			luckiness = 1000
+		if(7)
+			name = "seven-leaf clover"
+			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
+			luckiness = 10000
+	icon_state = "clover[leaves]"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
+	leaves = 3
+	var/prob1 = clamp(mut / 3, 0, 66)
+	var/luck = shifter?.luck()
+	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
+		var/ls = 1
+		var/prob2 = max(clamp(mut, 0, 21) / 21, 0.1)
+		prob2 = shifter ? shifter.lucky_probability(prob2, 1/100 , 33, ourluck = luck) : prob2
+		for(var/i in 1 to 7)
+			if(prob(prob2))
+				ls += 1
+		leaves += ls * pick(-1,1)
+		if(shifter ? shifter.lucky_prob(3, 1/100, 50, ourluck = luck) : prob(3))
+			leaves = clamp(leaves, 0, 7)
+		else if(leaves < 0 || leaves > 7)
+			leaves = 3
+		return leaves != 3
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/clover/initialize(mob/harvester)
+	. = ..()
+	if(isnull(leaves))
+		shift_leaves(seed?.potency, harvester)
+	update_leaves()
