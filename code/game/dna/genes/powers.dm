@@ -72,13 +72,8 @@
 		user.reset_view(0)
 		return
 
-	for(var/T in targets)
-		var/mob/living/target
-		if (isliving(T))
-			target = T
-		if (istype (T, /datum/mind))
-			target = user.can_mind_interact(target.mind)
-		if(target)
+	for(var/mob/living/target in targets)
+		if (user.can_mind_interact(target.mind))
 			user.remoteview_target = target
 			user.reset_view(target)
 			break
