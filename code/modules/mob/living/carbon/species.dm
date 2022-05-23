@@ -1343,8 +1343,8 @@ var/list/has_died_as_golem = list()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
 	if(!telepathic_target.len)
-		var/mob/living/T = M
-		telepathic_target += M
+		var/mob/living/L = M
+		telepathic_target += L
 
 	var/all_switch = TRUE
 	for(var/mob/living/T in telepathic_target)
