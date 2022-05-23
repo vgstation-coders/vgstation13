@@ -68,7 +68,7 @@
 			return
 	usr.add_blood(T)
 	var/datum/organ/external/chest/chest_organ = T.get_organ(UPPER_TORSO)
-	chest_organ.add_autopsy_data("sharp", 1)
+	chest_organ.add_autopsy_data("unknown", 1)
 
 	to_chat(user, "<span class='notice'>We have absorbed [T]!</span>")
 	user.visible_message("<span class='danger'>[user] sucks the fluids from [T]!</span>")
