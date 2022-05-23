@@ -63,6 +63,8 @@
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
+	var/goes_in_mouth //Whether or not the item is described as "on his/her face" or "in his/her mouth" when worn on the face slot.
+	var/is_muzzle	//Whether or not the item is a muzzle, and how strong the muzzling effect is. See setup.dm.
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
@@ -493,6 +495,11 @@
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
+
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				return CAN_EQUIP
 			if(slot_back)
 				if( !(slot_flags & SLOT_BACK) )

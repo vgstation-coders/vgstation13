@@ -1065,9 +1065,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //Language flags.
-#define WHITELISTED 1  // Language is available if the speaker is whitelisted.
-#define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
-#define CAN_BE_SECONDARY_LANGUAGE 4 // Language is available on character setup as secondary language.
+#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted.
+#define RESTRICTED (1<<1)   // Language can only be accquired by spawning or an admin.
+#define CAN_BE_SECONDARY_LANGUAGE (1<<2)	// Language is available on character setup as secondary language.
+#define NONORAL (1<<3)		//Language is spoken without using the mouth, so can be spoken while muzzled.
 
 // Hairstyle flags
 #define HAIRSTYLE_CANTRIP 1 // 5% chance of tripping your stupid ass if you're running.
@@ -1824,3 +1825,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define COIN_HEADS "heads-up."
 #define COIN_TAILS "tails-up."
 #define COIN_SIDE "on the side!"
+
+//Muzzles
+#define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
+#define MUZZLE_HARD	2	//Muzzle prevents speech.
