@@ -233,18 +233,10 @@
 		return FALSE
 
 	for (var/mob/M in recursive_type_check(teleatom, /mob))
-		if(istype(M,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
-			var/mob/living/carbon/human/H = M
-			if(H.digitalcamo)
-				to_chat(H, "<span class'info'>Your digital camouflage has 'foiled' a teleport!</span>")
+		if(istype(M,/mob/living/carbon/human))
+			if(M.locked_to_z != FALSE && destination.z != M.locked_to_z)
+				M.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return FALSE
-
-		if(istype(M, /mob/living))
-			var/mob/living/MM = M
-			if(MM.locked_to_z != FALSE && destination.z != MM.locked_to_z)
-				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
-				return FALSE
-
 	return TRUE
 
 /datum/teleport/instant/science/doTeleport()
