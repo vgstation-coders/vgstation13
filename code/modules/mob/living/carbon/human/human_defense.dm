@@ -104,11 +104,12 @@ emp_act
 	for(var/bp in body_parts)
 		if(!bp)
 			continue
-		if(bp && istype(bp ,/obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
+			var/obj/item/clothing/CC = C
+			for(var/obj/item/clothing/accessory/A in CC.accessories)
 				if(A.body_parts_covered & def_zone.body_part)
 					protection += A.get_armor(type)
 	if(istype(loc, /obj/mecha))
@@ -122,11 +123,12 @@ emp_act
 	var/protection = 0
 	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
 	for(var/bp in body_parts)
-		if(istype(bp, /obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor_absorb(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
+			var/obj/item/clothing/CC = C
+			for(var/obj/item/clothing/accessory/A in CC.accessories)
 				if(A.body_parts_covered & def_zone.body_part)
 					protection += A.get_armor_absorb(type)
 	return protection

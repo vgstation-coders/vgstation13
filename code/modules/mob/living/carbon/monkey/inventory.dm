@@ -47,6 +47,7 @@
 	W.forceMove(src)
 	if(client)
 		client.screen |= W
+	INVOKE_EVENT(src, /event/equipped, W, slot)
 
 // Return the item currently in the slot ID
 /mob/living/carbon/monkey/get_item_by_slot(slot_id)

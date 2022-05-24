@@ -27,11 +27,11 @@ LINEN BINS
 	if(I.is_sharp())
 		cut_time = 60 / I.sharpness
 	if(cut_time)
-		to_chat(user, "<span  class='notice'>You begin cutting up [src].</span>")
+		to_chat(user, "<span  class='notice'>You begin cutting up \the [src].</span>")
 		if(do_after(user, src, cut_time))
 			if(!src)
 				return
-			to_chat(user, "<span  class='notice'>You finish cutting [src] into rags.</span>")
+			to_chat(user, "<span  class='notice'>You finish cutting \the [src] into rags.</span>")
 			var/turf/location = get_turf(src)
 			for(var/x=0; x<=8; x++)
 				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)

@@ -1853,7 +1853,7 @@
 	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
 	plant_icon_state = "clover"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
-	chems = list(NUTRIMENT = list(0.5,25))
+	chems = list(NUTRIMENT = list(1,25))
 	harvest_repeat = 1
 	lifespan = 60
 	maturation = 2

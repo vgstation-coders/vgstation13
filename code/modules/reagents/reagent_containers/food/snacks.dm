@@ -5353,6 +5353,7 @@
 	icon_state = "lollipop_stick"
 	w_class = W_CLASS_TINY
 	slot_flags = SLOT_MASK
+	goes_in_mouth = TRUE
 	throwforce = 1
 	autoignition_temperature = 0
 	w_type = RECYK_PLASTIC
