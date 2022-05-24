@@ -415,6 +415,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_LACTOSE		256
 #define DISABILITY_FLAG_LISP		512
 #define DISABILITY_FLAG_ANEMIA		1024
+#define DISABILITY_FLAG_EHS			2048
 
 ///////////////////////////////////////
 // MUTATIONS
