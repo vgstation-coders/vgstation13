@@ -2203,10 +2203,12 @@ Use this proc preferably at the end of an equipment loadout
 		return null
 	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
 		return null
-	if(target.wear_id && istype(target.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-		return null
+	var/mob/living/carbon/human/H = target
+	if(istype(H))
+		if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+			return null
 	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
-	if(C)
+	if(istype(C))
 		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)
 			return null
 
