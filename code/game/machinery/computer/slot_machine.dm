@@ -142,14 +142,11 @@
 	else if((value_1 == value_2 && value_2 == value_3) && !towin)	//Unlucky people get jostles if they were going to win.
 		switch(rand(1,3))
 			if(1)
-				if(value_1 == value_2 || value_1 == value_3)
-					value_1 = rand(1,10)
+				value_1 = rand(1,10)
 			if(2)
-				if(value_1 == value_2 || value_2 == value_3)
-					value_2 = rand(1,10)
+				value_2 = rand(1,10)
 			if(3)
-				if(value_1 == value_3 || value_2 == value_3)
-					value_3 = rand(1,10)
+				value_3 = rand(1,10)
 	else
 		return TRUE
 
