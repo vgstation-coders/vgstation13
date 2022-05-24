@@ -14,7 +14,7 @@
 /*
  * Welding mask
  */
- /obj/item/clothing/head/welding
+/obj/item/clothing/head/welding
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
 	icon_state = "weldingup"
