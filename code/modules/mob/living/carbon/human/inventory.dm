@@ -485,7 +485,6 @@
 	W.equipped(src, slot)
 	if(client)
 		client.screen |= W
-	INVOKE_EVENT(src, /event/equipped, W, slot)
 
 /mob/living/carbon/human/get_multitool(var/active_only=0)
 	if(istype(get_active_hand(),/obj/item/device/multitool))
