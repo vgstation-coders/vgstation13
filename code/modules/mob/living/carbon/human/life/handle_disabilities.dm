@@ -11,7 +11,7 @@
 		for(var/obj/machinery/M in range(3,src))
 			if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0 && prob(affect_chance))
 				affect_amount++
-		for(var/atom/movable/A in in range(rand(1,2),src))
+		for(var/atom/movable/A in range(rand(1,2),src))
 			var/obj/item/cell/C = A.get_cell()
 			if(C && C.charge && prob(affect_chance))
 				affect_amount++
