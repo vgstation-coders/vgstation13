@@ -39,8 +39,8 @@
 
 /mob/living/proc/handle_suicide_bomb_cause(var/atom/suicide_object)
 	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
-	if(!Adjacent(suicide_object) || ((!get_active_hand() || get_active_hand() != suicide_object) && (!get_inactive_hand() || get_inactive_hand() != suicide_object)))
-		return // User moved or lost item, abort.
+	if(!Adjacent(suicide_object)) // User moved or lost item, abort.
+		return
 
 	if(custom_message)
 		return "FOR [uppertext(custom_message)]!"
