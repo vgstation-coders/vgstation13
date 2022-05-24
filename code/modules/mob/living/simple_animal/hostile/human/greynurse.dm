@@ -88,6 +88,9 @@
 	new /mob/living/simple_animal/hostile/humanoid/nurseunit(get_turf(src))
 	..(gibbed)
 
+/mob/living/simple_animal/hostile/humanoid/greynurse/GetAccess()
+	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
+
 /mob/living/simple_animal/hostile/humanoid/greynurse/New() // she can also speak quack
 	..()
 	languages += all_languages[LANGUAGE_GREY]
@@ -119,7 +122,7 @@
 	blooded = FALSE
 
 	status_flags = UNPACIFIABLE // Not pacifiable due to being a "boss" mob
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Now angered, so will smash things in addition to forcing doors open
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Now angered, so will smash things in addition to forcing doors open
 	stat_attack = UNCONSCIOUS // Help nurse, I've fallen and can't get up
 
 	min_oxy = 0
@@ -254,6 +257,9 @@
 	new /obj/effect/gibspawner/genericmothership(src.loc)
 	new /obj/effect/gibspawner/robot(src.loc)
 	..(gibbed)
+
+/mob/living/simple_animal/hostile/humanoid/nurseunit/GetAccess()
+	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 
 /mob/living/simple_animal/hostile/humanoid/nurseunit/New()
 	..()

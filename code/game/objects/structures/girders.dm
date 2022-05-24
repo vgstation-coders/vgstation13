@@ -6,6 +6,15 @@
 	var/material = /obj/item/stack/sheet/metal
 	var/construction_length = 40
 	pass_flags_self = PASSGIRDER
+
+/obj/structure/girder/attack_animal(var/mob/living/simple_animal/M)
+	M.delayNextAttack(8)
+	if(M.environment_smash_flags & SMASH_WALLS)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
+		"<span class='attack'>You smash through \the [src].</span>")
+		qdel(src)
+
 /obj/structure/girder/wood
 	icon_state = "girder_wood"
 	name = "wooden girder"
