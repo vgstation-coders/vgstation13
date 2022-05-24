@@ -684,6 +684,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LACTOSE,     "Lactose Intolerant")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LISP,       "Lisp")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ANEMIA,       "Anemia")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_EHS,       "Electromagnetic Hypersensitivity")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -1517,6 +1518,8 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 		character.disabilities|=NEARSIGHTED
 	if(disabilities & DISABILITY_FLAG_EPILEPTIC)
 		character.disabilities|=EPILEPSY
+	if(disabilities & DISABILITY_FLAG_EHS)
+		character.disabilities|=ELECTROSENSE
 	if(disabilities & DISABILITY_FLAG_DEAF)
 		character.sdisabilities|=DEAF
 	if(disabilities & DISABILITY_FLAG_BLIND)
