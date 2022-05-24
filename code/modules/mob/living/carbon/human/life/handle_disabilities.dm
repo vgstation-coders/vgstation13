@@ -12,14 +12,15 @@
 			if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0 && prob(affect_chance))
 				affect_amount++
 		for(var/atom/movable/A in range(rand(1,2),src))
-			var/obj/item/cell/C = A.get_cell()
+			var/obj/item/weapon/cell/C = A.get_cell()
 			if(C && C.charge && prob(affect_chance))
 				affect_amount++
-		adjustHalLoss(affect_amount)
-		if(prob(min(affect_amount,100)))
-			Jitter(min(affect_amount,100))
-		if(prob(min(affect_amount,100)))
-			eye_blurry += min(affect_amount,100)
+		if(!stat)
+			adjustHalLoss(affect_amount)
+			if(prob(min(affect_amount,100)))
+				Jitter(min(affect_amount,100))
+			if(prob(min(affect_amount,100)))
+				eye_blurry += min(affect_amount,100)
 
 	if(disabilities & ASTHMA)
 		if(prob(0.2))
