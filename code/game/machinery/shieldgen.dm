@@ -328,17 +328,13 @@
 /obj/machinery/shieldwallgen/New()
 	power_connection = new(src)
 	power_connection.monitoring_enabled = TRUE
-	. = ..()
+	..()
 
 /obj/machinery/shieldwallgen/Destroy()
-	src.cleanup(1)
-	src.cleanup(2)
-	src.cleanup(4)
-	src.cleanup(8)
 	if(power_connection)
 		qdel(power_connection)
 		power_connection = null
-	. = ..()
+	..()
 
 /obj/machinery/shieldwallgen/free_access
 	req_access = null

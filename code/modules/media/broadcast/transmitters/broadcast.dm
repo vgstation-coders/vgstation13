@@ -25,7 +25,7 @@
 	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/media/transmitter/broadcast/New()
-	. = ..()
+	..()
 	wires = new(src)
 	power_connection = new(src)
 	power_connection.idle_usage=idle_power_usage
