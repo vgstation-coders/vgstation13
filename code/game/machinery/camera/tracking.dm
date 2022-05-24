@@ -156,13 +156,9 @@
 		return FALSE
 
 	if(ismob(target))
-		var/mob/target_mob = target
-
-		if(ishuman(target))
-			var/mob/living/carbon/human/target_human = target
-			if(!can_mind_interact(target.mind))
-				return FALSE
-
+		var/mob/M = target
+		if(!can_mind_interact(M.mind))
+			return FALSE
 		if(istype(target.loc, /obj/effect/dummy))
 			return FALSE
 

@@ -2203,17 +2203,12 @@ Use this proc preferably at the end of an equipment loadout
 		return null
 	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
 		return null
-	var/datum/role/changeling/C = target.GetRole(CHANGELING)
+	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
 	if(C)
 		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)
 			return null
 
-	return target
-
-	to_chat(src, "You cannot sense your target anymore, that's not good...")
-	to_chat(src, "Your target is too faint, but still close. They may be unconscious.")
-	to_chat(src, "Interference is disrupting the connection with the target.")
-	to_chat(src, "Interference is disrupting the connection with the target.")
+	return TRUE
 
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE
