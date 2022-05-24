@@ -246,15 +246,6 @@
 	siemens_coefficient = 2
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
-//hidden in plain sight
-/obj/item/clothing/head/tinfoil/equipped(mob/living/carbon/human/user, head)
-	if(istype(user) && user.get_item_by_slot(head) == src)
-		user.digitalcamo = 1
-
-/obj/item/clothing/head/tinfoil/unequipped(mob/living/carbon/human/user, var/from_slot = null)
-	if(from_slot == slot_head && istype(user))
-		user.digitalcamo = 0
-
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"
 	desc = "According to legend, Celtic kings would use crowns like this one to shield their subjects from harsh winters back on Earth."

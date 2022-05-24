@@ -717,14 +717,6 @@
 				return
 	..()
 
-/obj/item/clothing/head/helmet/space/martian/equipped(mob/user, head)
-	if(istype(user) && user.get_item_by_slot(head) == src)
-		user.digitalcamo = 1
-
-/obj/item/clothing/head/helmet/space/martian/unequipped(mob/living/carbon/human/user, var/from_slot = null)
-	if(from_slot == slot_head && istype(user))
-		user.digitalcamo = 0
-
 /obj/item/clothing/head/helmet/space/martian/attack_self(mob/user)
 	if(tank)
 		to_chat(user, "<span class = 'notice'>You start detaching \the [tank] from \the [src].</span>")

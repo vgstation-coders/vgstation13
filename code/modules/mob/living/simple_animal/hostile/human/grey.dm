@@ -719,7 +719,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
-	if(H.can_mind_interact(H.mind)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+	if(can_mind_interact(H.mind)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 		return
 	switch(rand(0,4))
 		if(0) //Minor brain damage
@@ -856,7 +856,9 @@
 			M.throw_at(target_turf,100,telekinesis_throw_speed)
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Shoot()
+	// If not done cooling down from the previous psychic attack, just shoot a laser beem
 	if(last_psychicattack + psychicattack_cooldown > world.time)
+		..()
 		return
 	var/list/victims = list()
 	for(var/mob/living/carbon/human/H in view(src, psychic_range))
@@ -865,7 +867,7 @@
 		return
 	var/shot_choice = rand(0,4)
 	for(var/mob/living/carbon/human/H in victims)
-		if(!src.can_mind_interact(H.mind))
+		if(!can_mind_interact(H.mind))
 			continue
 		switch(shot_choice)
 			if(0) //Brain damage, confusion, and dizziness
@@ -874,7 +876,6 @@
 				H.eye_blurry = max(H.eye_blurry, 10)
 				H.confused += 10
 				H.dizziness += 10
-				last_psychicattack = world.time
 				if(prob(25))
 					H.audible_scream()
 			if(1) //A knockdown, with some dizziness
@@ -883,11 +884,9 @@
 				H.Knockdown(4)
 				H.confused += 6
 				H.dizziness += 6
-				last_psychicattack = world.time
 			if(2) //Naptime
 				to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
 				H.drowsyness += 6
-				last_psychicattack = world.time
 				spawn(2 SECONDS)
 					H.sleeping += 5
 			if(3) //Serious hallucinations and jittering
@@ -895,14 +894,10 @@
 				H.hallucination += 75
 				H.Jitter(30)
 				H.stuttering += 30
-				last_psychicattack = world.time
 			if(4) //Brief period of pacification
 				to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
 				H.reagents.add_reagent(CHILLWAX, 1)
-				last_psychicattack = world.time
-		return
-		// If not done cooling down from the previous psychic attack, just shoot a laser beem
-		..()
+	last_psychicattack = world.time
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/bullet_act(var/obj/item/projectile/P) // Lasers have a 50% chance to reflect off the armor, which matches up if the player takes it and puts it on
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))

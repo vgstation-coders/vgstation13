@@ -39,13 +39,13 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 		return 0
 	if(ismob(target) && mind_affecting)
 		var/mob/M = target
-		if (!user.can_mind_interact(M.mind))
+		if (!can_mind_interact(M.mind))
 			return 0
 	return !compatible_mobs.len || is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/choose_targets(mob/user = usr)
-	if(mind_affecting && user.digitalcamo)
-		to_chat(user, "<span class='warning'>Something is interfering with your ability to target minds.</span>")
+	if(mind_affecting && !can_mind_interact(user.mind))
+		to_chat(user, "<span class='warning'>Interference is disrupting the connection with the target.</span>")
 		return
 	var/list/targets = list()
 	if(max_targets == 0) //unlimited
@@ -96,7 +96,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 					continue
 				if(mind_affecting)
 					if(iscarbon(user))
-						if(!M.mind || !user.can_mind_interact(M.mind))
+						if(!M.mind || !can_mind_interact(M.mind))
 							continue
 				possible_targets += M
 

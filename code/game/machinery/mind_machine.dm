@@ -354,7 +354,7 @@
 	if(is_type_in_list(S, illegalSwap) || is_type_in_list(S, illegalSwap))
 		MT = MINDMACHINE_SHIELDED
 	if((ishigherbeing(S)) || (ismonkey(S)))
-		if(S.digitalcamo)
+		if(!can_mind_interact(S.mind))
 			MT = MINDMACHINE_SHIELDED
 	if(S == occupantOne)
 		mindTypeOne = MT

@@ -2177,7 +2177,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/attempt_crawling(var/turf/target)
 	return FALSE
 
-/mob/proc/can_mind_interact(var/datum/mind/target_mind)
+/proc/can_mind_interact(var/datum/mind/target_mind)
 	var/mob/living/target
 	if(isliving(target_mind))
 		target = target_mind
@@ -2187,26 +2187,33 @@ Use this proc preferably at the end of an equipment loadout
 		target = target_mind.current
 	if (!istype(target))
 		return null
-	var/turf/target_turf = get_turf(target)
-	var/turf/our_turf = get_turf(src)
-	if(!target_turf)
-		return null
-	if (target.isDead())
-		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
-		return null
-	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
-		to_chat(src, "The target mind is too faint, they must be quite far from you...")
-		return null
-	if(target.stat != CONSCIOUS)
-		to_chat(src, "The target mind is too faint, but still close, they must be unconscious...")
-		return null
 	if(M_PSY_RESIST in target.mutations)
-		to_chat(src, "The target mind is resisting!")
 		return null
-	if(target.digitalcamo)
-		to_chat(src, "Interference is disrupting the connection with the target mind.")
+	if(isalien(target))
 		return null
+	if(target.is_wearing_item(/obj/item/clothing/mask/gas/voice))
+		return null
+	if(target.is_wearing_item(/obj/item/clothing/head/helmet/stun/))
+		return null
+	if(target.is_wearing_item(/obj/item/clothing/gloves/ninja))
+		return null
+	if(target.is_wearing_item(/obj/item/clothing/head/tinfoil))
+		return null
+	if(target.is_wearing_item(/obj/item/clothing/head/helmet/space/martian))
+		return null
+	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
+		return null
+	var/datum/role/changeling/C = target.GetRole(CHANGELING)
+	if(C)
+		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)
+			return null
+
 	return target
+
+	to_chat(src, "You cannot sense your target anymore, that's not good...")
+	to_chat(src, "Your target is too faint, but still close. They may be unconscious.")
+	to_chat(src, "Interference is disrupting the connection with the target.")
+	to_chat(src, "Interference is disrupting the connection with the target.")
 
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE

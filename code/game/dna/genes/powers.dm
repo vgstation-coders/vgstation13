@@ -73,7 +73,7 @@
 		return
 
 	for(var/mob/living/target in targets)
-		if (user.can_mind_interact(target.mind))
+		if (can_mind_interact(target.mind))
 			user.remoteview_target = target
 			user.reset_view(target)
 			break
@@ -150,7 +150,7 @@
 		M.telepathic_target.len = 0
 
 	for(var/mob/living/T in targets)
-		if(!user.can_mind_interact(T))
+		if(!can_mind_interact(T))
 			user.show_message("<span class='notice'>You are unable to use telepathy with [T].</span>")
 			continue
 		else if(istype(M))
