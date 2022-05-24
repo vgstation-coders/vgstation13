@@ -104,15 +104,17 @@ var/global/list/mineralSpawnChance[]
 	dismantle_type = /turf/unsimulated/mineral
 	girder_type = null
 	walltype = "rock_rf"
+	//overlay_state = "rock_overlay"
 
-/turf/simulated/wall/r_rock/New()
+/*/turf/simulated/wall/r_rock/New()
 	..()
-	add_rock_overlay()
+	add_rock_overlay()*/
 
 /turf/simulated/wall/r_rock/porous
 	name = "reinforced porous rock"
 	desc = "This rock is filled with pockets of breathable air. It has metal struts to protect it from mining."
 	dismantle_type = /turf/unsimulated/mineral/internal/air
+	//overlay_state = ""
 
 /turf/unsimulated/mineral/internal/air
 	name = "porous rock"
