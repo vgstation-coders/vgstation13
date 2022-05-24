@@ -10,6 +10,8 @@
 #define POWER_PRIORITY_MINIMAL		10
 #define POWER_PRIORITY_EXCESS		11 // Meant for the antique matter synth and other beneficial power sinks that could wreak havoc if misused
 
+#define TOTAL_PRIORITY_SLOTS 		POWER_PRIORITY_EXCESS // Make sure to update this as needed if you add extra priority levels
+
 #define POWER_PRIORITY_POWER_EQUIPMENT	POWER_PRIORITY_HIGH		// Emitters and other important machinery
 #define POWER_PRIORITY_APC				POWER_PRIORITY_NORMAL
 #define POWER_PRIORITY_MISC_EQUIPMENT	POWER_PRIORITY_NORMAL

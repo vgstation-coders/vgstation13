@@ -331,6 +331,10 @@
 	..()
 
 /obj/machinery/shieldwallgen/Destroy()
+	cleanup(NORTH)
+	cleanup(SOUTH)
+	cleanup(EAST)
+	cleanup(WEST)
 	if(power_connection)
 		qdel(power_connection)
 		power_connection = null

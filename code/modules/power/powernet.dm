@@ -1,14 +1,14 @@
 //Powernets
 /datum/powernet
-	var/list/obj/structure/cable/cables = list()	// all cables & junctions
-	var/list/obj/machinery/power/nodes = list()		// all connected machines
-	var/list/datum/power_connection/components = list()		// all connected components
-	var/list/load = new(POWER_PRIORITY_EXCESS)		// the current load on the powernet, increased by each machine at processing
-	var/newavail = 0			// what available power was gathered last tick, then becomes...
-	var/avail = 0				// ...the current available power in the powernet
-	var/viewload = 0			// the load as it appears on the power console (gradually updated)
+	var/list/obj/structure/cable/cables = list()		// all cables & junctions
+	var/list/obj/machinery/power/nodes = list()			// all connected machines
+	var/list/datum/power_connection/components = list()	// all connected components
+	var/list/load[TOTAL_PRIORITY_SLOTS]	// the current load on the powernet, increased by each machine at processing
+	var/newavail = 0					// what available power was gathered last tick, then becomes...
+	var/avail = 0						// ...the current available power in the powernet
+	var/viewload = 0					// the load as it appears on the power console (gradually updated)
 	var/number = 0
-	var/netexcess = 0			// excess power on the powernet (typically avail-load)
+	var/netexcess = 0					// excess power on the powernet (typically avail-load)
 
 	var/satisfaction = 0			// Satisfaction percent of the unsatisfied_priority
 	var/unsatisfied_priority = 1	// First load priority that did not reach full satisfaction last tick. Loads before it are 100% satisfied, loads after are 0% satisfied.
