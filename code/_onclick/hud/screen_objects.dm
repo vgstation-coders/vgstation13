@@ -333,7 +333,7 @@
 			if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 				return 1
 			if(iscarbon(usr))
-				var/mob/living/carbon/human/H = usr
+				var/mob/living/carbon/H = usr
 				H.quick_equip()
 
 		if("resist")
