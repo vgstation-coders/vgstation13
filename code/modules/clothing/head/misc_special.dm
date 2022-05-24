@@ -1,4 +1,20 @@
-/obj/item/clothing/head/welding
+/*
+ * Contents:
+ *		Welding mask
+ *		Cakehat
+ *		Ushanka
+ *		Pumpkin head
+ *		Kitty ears
+ *		Butt
+ *		Tinfoil Hat
+ *		Celtic Crown
+ *		Energy Dome
+ */
+
+/*
+ * Welding mask
+ */
+ /obj/item/clothing/head/welding
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
 	icon_state = "weldingup"
