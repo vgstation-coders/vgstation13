@@ -128,7 +128,7 @@
 				return
 
 /obj/machinery/computer/slot_machine/proc/jostle(towin = TRUE)
-	if(!(value_1 == value_2 && value_2 == value_3) && towin)		//Lucky people get jostles if they were going to lose.
+	if((value_1 != value_2 || value_2 != value_3 || value_1 != value_3) && towin)		//Lucky people get jostles on unaligned wheels.
 		switch(rand(1,3))
 			if(1)
 				if(value_1 != value_2 && value_1 != value_3)
@@ -139,14 +139,17 @@
 			if(3)
 				if(value_1 != value_3 && value_2 != value_3)
 					value_3 = rand(1,10)
-	else if((value_1 == value_2 && value_2 == value_3) && !towin)	//Unlucky people get jostles if they were going to win.
+	else if((value_1 == value_2 || value_2 == value_3 || value_1 == value_3) && !towin)	//Unlucky people get jostles on aligned wheels.
 		switch(rand(1,3))
 			if(1)
-				value_1 = rand(1,10)
+				if(value_1 == value_2 || value_1 == value_3)
+					value_1 = rand(1,10)
 			if(2)
-				value_2 = rand(1,10)
+				if(value_1 == value_2 || value_2 == value_3)
+					value_2 = rand(1,10)
 			if(3)
-				value_3 = rand(1,10)
+				if(value_1 == value_3 || value_2 == value_3)
+					value_3 = rand(1,10)
 	else
 		return TRUE
 
