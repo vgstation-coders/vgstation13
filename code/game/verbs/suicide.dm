@@ -38,10 +38,7 @@
 			return 1
 
 /mob/living/proc/handle_suicide_bomb_cause()
-	var/old_canmove = canmove
-	canmove = FALSE // Prevent moving away and ruining this
 	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
-	canmove = old_canmove
 
 	if(custom_message)
 		return "FOR [uppertext(custom_message)]!"
