@@ -149,16 +149,14 @@
 	else
 		M.telepathic_target.len = 0
 
+	var/all_switch = TRUE
 	for(var/mob/living/T in targets)
 		if(!can_mind_interact(T))
 			user.show_message("<span class='notice'>You are unable to use telepathy with [T].</span>")
 			continue
-		else if(istype(M))
+		if(istype(M))
 			M.telepathic_target += T
 			continue
-		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Telepathy, <b>[user]</b> to <b>[T]</b>: [message]</i>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
 		if(T == user) //Talking to ourselves
 			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
 			return
@@ -166,7 +164,12 @@
 			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: [message]</span>")
 		else
 			to_chat(T,"<span class='notice'>You hear a voice inside your head: [message] </span>")
-		to_chat(user,"<span class='notice'>Projected to <b>[T]</b>: [message]</span>")
+		if(all_switch)
+			all_switch = FALSE
+			to_chat(user,"<span class='notice'>Projected to <b>[english_list(targets)]</b>: [message]</span>")
+			for(var/mob/dead/observer/G in dead_mob_list)
+				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>: [message]</i>")
+			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
 
 /datum/dna/gene/basic/morph
 	name = "Morph"
