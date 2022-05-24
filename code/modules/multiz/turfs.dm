@@ -198,7 +198,6 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 				return
 		user.forceMove(src)
 		to_chat(viewers(user), "<span class='danger'>[user] is plunging to \his death! It looks like \he's trying to commit suicide.</span>")
-		user.audible_scream()
 		if(prob(1)) // Do a flip!
 			user.emote("flip")
 		return SUICIDE_ACT_CUSTOM

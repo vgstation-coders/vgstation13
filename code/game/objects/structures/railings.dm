@@ -369,8 +369,7 @@
 	var/turf/T = hurdle(user)
 	if(T && isopenspace(T))
 		return T.suicide_act(user) || ..()
-	else
-		return ..()
+	return ..()
 
 /obj/structure/railing/loose
 	anchored = 0
