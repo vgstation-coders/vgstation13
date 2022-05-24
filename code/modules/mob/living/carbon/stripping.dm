@@ -76,7 +76,7 @@
 
 	if(istype(target_item) && !target_item.abstract) //We want the player to be able to strip someone while holding an item in their hands, for convenience and because otherwise people will bitch about it.
 
-		internal = target_item?.goes_in_mouth
+		internal = target_item.goes_in_mouth
 
 		if(!target_item.canremove || src.is_in_modules(target_item))
 			to_chat(user, "<span class='warning'>You can't seem to be able to take that off!</span>")
