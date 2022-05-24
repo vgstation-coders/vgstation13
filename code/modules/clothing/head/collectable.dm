@@ -61,7 +61,7 @@
 	desc = "A Collectable Welding Helmet. Now with 80% less lead! Not for actual welding. Any welding done while wearing this Helmet is done so at the owner's own risk!"
 	icon_state = "welding"
 	item_state = "welding"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/head/collectable/slime
 	name = "collectable slime hat"
