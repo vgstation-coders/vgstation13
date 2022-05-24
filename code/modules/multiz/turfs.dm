@@ -188,13 +188,13 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 /turf/simulated/open/suicide_act(var/mob/living/user)
 	if(user.can_fall() && Cross(user) && CanZPass(user) && get_gravity() > 0.667)
 		var/turf/below = getBelow(src)
-		if(!below)
+		if(!below || below.can_prevent_fall(user,src))
 			return
 		for(var/obj/O in src)
 			if(!O.CanFallThru())
 				return
-		for(var/obj/O in below)
-			if(O.can_prevent_fall(user,src))
+		for(var/atom/A in below)
+			if(A.can_prevent_fall(user,src))
 				return
 		user.forceMove(src)
 		to_chat(viewers(user), "<span class='danger'>[user] is plunging to \his death! It looks like \he's trying to commit suicide.</span>")
