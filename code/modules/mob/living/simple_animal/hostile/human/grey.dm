@@ -150,6 +150,9 @@
 
 	corpse = /obj/effect/landmark/corpse/grey/explorer
 
+/mob/living/simple_animal/hostile/humanoid/grey/explorer/GetAccess()
+	return list(access_mothership_general, access_mothership_military)
+
 ///////////////////////////////////////////////////////////////////SPACEWORTHY EXPLORERS///////////
 /mob/living/simple_animal/hostile/humanoid/grey/explorer/space
 	name = "Grey Explorer"
@@ -277,6 +280,9 @@
 	faction = "mothership"
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_sentry
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/GetAccess()
+	return list(access_mothership_general, access_mothership_military)
 
 ///////////////////////////////////////////////////////////////////GREY GUARD///////////
 //Baseline soldier. Has an additional 25 HP and a disintegrator ranged weapon. They can also change firing modes in combat!
@@ -595,6 +601,9 @@
 	faction = "mothership"
 
 	corpse = /obj/effect/landmark/corpse/grey/researcher
+
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/GetAccess()
+	return list(access_mothership_general, access_mothership_research)
 
 ///////////////////////////////////////////////////////////////////GREY SCIENTIST///////////
 //Grey ranged researcher. Less hit points than a soldier, will shoot their disintegrator at targets and occasionally change firing modes
@@ -933,3 +942,6 @@
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Aggro()
 	..()
 	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will keep your brain to study your unnatural behavior."), all_languages[LANGUAGE_GREY])
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/GetAccess()
+	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
