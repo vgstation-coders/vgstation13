@@ -109,7 +109,7 @@
 				//Take luck into account.
 				if(spinner)
 					var/spinnerluck = spinner.luck()
-					var/jostlepower = rand(25,500)
+					var/jostlepower = rand(25,1000)
 					var/jostles = min(round(abs(spinnerluck), jostlepower) / jostlepower, 1000)
 					while(jostles)
 						if(jostle(spinnerluck > 0))
