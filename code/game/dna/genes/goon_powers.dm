@@ -12,16 +12,16 @@
 	block = SOBERBLOCK
 
 //WAS: /datum/bioEffect/psychic_resist
-/datum/dna/gene/basic/psychic_resist
+/datum/dna/gene/basic/interference
 	name = "Psy-Resist"
-	desc = "Boosts efficiency in sectors of the brain commonly associated with meta-mental energies."
-	activation_messages = list("Your mind feels closed.")
+	desc = "Creates an invisible shield around your body, protecting you from harmful electromagnetic radiation."
+	activation_messages = list("Your body and mind feel shielded.")
 	deactivation_messages = list("You feel oddly exposed.")
 
-	mutation = M_PSY_RESIST
+	mutation = M_INTERFERENCE
 
-/datum/dna/gene/basic/psychic_resist/New()
-	block = PSYRESISTBLOCK
+/datum/dna/gene/basic/interference/New()
+	block = INTERFERENCEBLOCK
 
 /////////////////////////
 // Stealth Enhancers

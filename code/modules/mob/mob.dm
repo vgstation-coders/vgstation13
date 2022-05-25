@@ -2187,7 +2187,7 @@ Use this proc preferably at the end of an equipment loadout
 		target = target_mind.current
 	if (!istype(target))
 		return null
-	if(M_PSY_RESIST in target.mutations)
+	if(M_INTERFERENCE in target.mutations)
 		return null
 	if(isalien(target))
 		return null
