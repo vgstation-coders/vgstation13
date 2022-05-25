@@ -244,6 +244,7 @@
 			if(MM.locked_to_z != FALSE && destination.z != MM.locked_to_z)
 				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return FALSE
+				
 	return TRUE
 
 /datum/teleport/instant/science/doTeleport()
