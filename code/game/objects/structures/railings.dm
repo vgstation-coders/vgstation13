@@ -64,7 +64,7 @@
 	if(get_turf(jumper) == T)
 		T = get_step(src,dir)
 	if(!(locate(/obj/effect/unwall_field) in T))
-		if(T.density)
+		if(!T.Cross(jumper))
 			return
 		for(var/atom/movable/AM in T.contents)
 			// Border dummies weren't playing nice on the nearby turf
