@@ -13,7 +13,7 @@
 
 //WAS: /datum/bioEffect/psychic_resist
 /datum/dna/gene/basic/interference
-	name = "Psy-Resist"
+	name = "Interference"
 	desc = "Creates an invisible shield around your body, protecting you from harmful electromagnetic radiation."
 	activation_messages = list("Your body and mind feel shielded.")
 	deactivation_messages = list("You feel oddly exposed.")
