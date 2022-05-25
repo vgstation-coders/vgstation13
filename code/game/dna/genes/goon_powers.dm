@@ -12,16 +12,16 @@
 	block = SOBERBLOCK
 
 //WAS: /datum/bioEffect/psychic_resist
-/datum/dna/gene/basic/interference
-	name = "Psy-Resist"
+/datum/dna/gene/basic/jamsignals
+	name = "Signal Jam"
 	desc = "Creates an invisible shield around your body, protecting you from harmful electromagnetic radiation."
 	activation_messages = list("Your body and mind feel shielded.")
 	deactivation_messages = list("You feel oddly exposed.")
 
-	mutation = M_INTERFERENCE
+	mutation = M_JAMSIGNALS
 
-/datum/dna/gene/basic/interference/New()
-	block = INTERFERENCEBLOCK
+/datum/dna/gene/basic/jamsignals/New()
+	block = JAMSIGNALSBLOCK
 
 /////////////////////////
 // Stealth Enhancers
