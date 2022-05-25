@@ -232,15 +232,18 @@
 	if (L.teleJammed && !ignore_jamming)
 		return FALSE
 
-	for (var/mob/living/carbon/H in recursive_type_check(teleatom, /mob))
-		if(!istype(H)) //Tinfoil hats resist teleportation, but only when worn
-			continue
-		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
-			to_chat(H, "<span class'info'>Your headgear has 'foiled' a teleport!</span>")
-			return FALSE
-		if(H.locked_to_z != FALSE && destination.z != H.locked_to_z)
-			H.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
-			return FALSE
+	for (var/mob/M in recursive_type_check(teleatom, /mob))
+		if(istype(M,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
+			var/mob/living/carbon/human/H = M
+			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+				to_chat(H, "<span class'info'>Your headgear has 'foiled' a teleport!</span>")
+				return FALSE
+
+		if(istype(M, /mob/living))
+			var/mob/living/MM = M
+			if(MM.locked_to_z != FALSE && destination.z != MM.locked_to_z)
+				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
+				return FALSE
 	return TRUE
 
 /datum/teleport/instant/science/doTeleport()
