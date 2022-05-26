@@ -22,7 +22,7 @@
 	for(var/prize = 1 to problist.len)
 		var/thisprob = problist[prize]
 		//Take luck into account.
-		if(user ? user.lucky_prob(thisprob, luckfactor = 1/500, ourluck = luck) : prob(thisprob))
+		if(user ? user.lucky_prob(thisprob, luckfactor = 1/5000, maxskew = 25, ourluck = luck) : prob(thisprob))
 			profit = prizelist[prize]*input_prize_multiplier*tuning_value
 			return profit
 
