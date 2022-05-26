@@ -1342,11 +1342,31 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
+	if(M.stat == DEAD)
+		var/mob/dead/observer/O = M
+		if(istype(M))
+			O.say(message)
+		return
+	if (M.stat == UNCONSCIOUS)
+		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
+		return
+	//Need to remove targets, otherwise mushroom can communicate at any distance to everyone
+	var/all_switch = FALSE
+	var/list/too_far = list()
+	for(var/mob/living/T in telepathic_target)
+		if(T in view(10,M))
+			continue
+		all_switch = TRUE
+		telepathic_target -= T
+		too_far += T.name
+	if(all_switch)
+		to_chat(M, "<span class='notice'>[english_list(too_far)] is too far away.</span>")
+
 	if(!telepathic_target.len)
 		var/mob/living/L = M
 		telepathic_target += L
 
-	var/all_switch = TRUE
+	all_switch = TRUE
 	for(var/mob/living/T in telepathic_target)
 		if(istype(T) && M.can_mind_interact(T))
 			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
