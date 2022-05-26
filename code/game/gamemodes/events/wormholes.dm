@@ -3,12 +3,9 @@
 		var/list/pick_turfs = list()
 		for(var/turf/simulated/floor/T in world)
 			if(T.z == map.zMainStation)
-				//Check for and avoid grilles and closed doors.
+				//Check for and avoid grilles.
 				if(var/obj/structure/grille/G in T.contents)
 					continue
-				else if(var/obj/machinery/door/D in T.contents)
-					if(D.density)
-						continue
 				pick_turfs += T
 
 		if(pick_turfs.len)
