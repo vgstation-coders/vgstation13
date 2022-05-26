@@ -84,9 +84,6 @@
 	var/luckiness //How much luck or unluck the item confers while held
 	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
 
-/obj/item/proc/return_thermal_protection()
-	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
-
 /obj/item/New()
 	..()
 	for(var/path in actions_types)
@@ -112,6 +109,16 @@
 	Works similarly to worn sprite_sheets, except the alternate sprites are used when the clothing/refit_for_species() proc is called.
 	*/
 	//var/list/sprite_sheets_obj = null
+
+
+/obj/item/proc/get_armor(var/type)
+	return armor[type]
+
+/obj/item/proc/get_armor_absorb(var/type)
+	return armor_absorb[type]
+
+/obj/item/proc/return_thermal_protection()
+	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
 /obj/item/acid_melt()
 	if (acidable())
