@@ -24,6 +24,7 @@
 	var/glasstype = NO_GLASS
 	var/glasshealth = 0
 	var/min_damage_force = 10
+	var/atom/movable/hurdler = null
 	health = 100
 
 /obj/structure/railing/New(loc)
@@ -39,6 +40,8 @@
 /obj/structure/railing/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return TRUE
+	if(mover == hurdler)
+		return TRUE
 	if(air_group || (height==0))
 		return TRUE
 	if(istype(mover,/obj/item/projectile))
@@ -50,6 +53,9 @@
 	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	return bounds_dist(border_dummy, mover) >= 0
+
+/obj/structure/railing/border_dummy_Cross(atom/movable/mover)
+	return mover == hurdler || ..()
 
 /obj/structure/railing/MouseDropTo(atom/movable/O, mob/user, src_location, over_location, src_control, over_control, params)
 	if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
@@ -63,15 +69,9 @@
 	var/turf/T = get_turf(src)
 	if(get_turf(jumper) == T)
 		T = get_step(src,dir)
-	if(locate(/obj/effect/unwall_field) in T)
-		jumper.forceMove(T)
-	for(var/atom/movable/AM in T.contents)
-		// Border dummies weren't playing nice on the nearby turf
-		if(AM == src || istype(AM,/obj/structure/railing) || istype(AM,/atom/movable/border_dummy))
-			continue
-		if(!AM.Cross(jumper))
-			return
-	jumper.forceMove(T)
+	hurdler = jumper
+	jumper.Move(T)
+	hurdler = null
 	shock_check(jumper)
 
 /obj/structure/railing/to_bump(atom/Obstacle)
