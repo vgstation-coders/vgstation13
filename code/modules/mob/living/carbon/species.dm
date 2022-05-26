@@ -1342,6 +1342,15 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
+	if(!message)
+		return
+	if(M.stat == DEAD)
+		to_chat(M, "<span class='warning'>You must be alive to do this!</span>")
+		return
+	if (M.stat == UNCONSCIOUS)
+		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
+		return
+
 	if(!telepathic_target.len)
 		var/mob/living/L = M
 		telepathic_target += L
