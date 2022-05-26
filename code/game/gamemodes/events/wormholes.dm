@@ -4,7 +4,7 @@
 		for(var/turf/simulated/floor/T in world)
 			if(T.z == map.zMainStation)
 				//Check for and avoid grilles.
-				if(var/obj/structure/grille/G in T.contents)
+				if(/obj/structure/grille in T.contents)
 					continue
 				pick_turfs += T
 
