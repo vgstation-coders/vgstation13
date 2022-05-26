@@ -223,6 +223,37 @@
 	return
 
 /obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if(sharpness_flags & (SHARP_BLADE | SERRATED_BLADE | SHARP_TIP | HOT_EDGE)) //Running with sharp objects is dangerous!
+			var/severity = 0
+			var/saving_prob = C.lucky_probability(60, luckfactor = 1/100)
+			for(var/i in 1 to 3) //Three saving throws. One failed means a near miss. Two failed means a normal attack. Three failed means a critical attack.
+				if(prob(saving_prob))
+					break
+				severity += 1
+			if(severity >= 2)
+				var/list/attackable_zones = list("head")
+				if(C.has_eyes())
+					attackable_zones += "eyes"
+				if(C.hasmouth())
+					attackable_zones += "mouth"
+				C.attacked_by(src, C, def_zone = pick(attackable_zones), crit = severity >= 3, flavor = "accidentally")
+			else if(severity >= 1)
+				var/list/possibles = list("head", "face", "neck")
+				if(C.has_eyes())
+					possibles += "eye"
+				if(C.hasmouth())
+					possibles += "throat"
+				to_chat(C, "<span class = 'warning'>\The [src] just misses your [pick(possibles)]... close one!</span>")
+
+
+		//todo: delaynextattack stuff
+		//todo: monkeys as well
+		//todo: what if it doesnt' actually get dropped ie. ninja sword or superglue
+		//todo: maxskew
+		//todo: clumsy gene, graceful gene
+
 	return
 
 /obj/item/projectile_check()

@@ -322,7 +322,7 @@
 
 
 
-/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!..())
 		return
 

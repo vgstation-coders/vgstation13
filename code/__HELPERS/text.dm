@@ -110,7 +110,7 @@
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|text
 	return strip_html_simple(name, max_length)
-	
+
 //As above, but for full-size paragraph textboxes
 /proc/stripped_message(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|message
@@ -716,3 +716,12 @@ var/quote = ascii2text(34)
 			count++
 	while(last_index)
 	return count
+
+/proc/get_reflexive_pronoun(var/gender) //For when \himself won't work.
+	switch(gender)
+		if(MALE)
+			return "himself"
+		if(FEMALE)
+			return "herself"
+		else //Neuter and plural, though plural doesn't work in this case. eg: "The bees sting(s) themselves."
+			return "itself"
