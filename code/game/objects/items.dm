@@ -251,7 +251,9 @@
 		//todo: delaynextattack stuff
 		//todo: monkeys as well
 		//todo: what if it doesnt' actually get dropped ie. ninja sword or superglue
+		//todo: check syringe
 		//todo: maxskew
+		//todo: consider message order
 		//todo: clumsy gene, graceful gene
 
 	return

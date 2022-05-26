@@ -22,7 +22,7 @@
 
 
 //Checks armor, special attackby of object instances, and miss chance
-/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!I || !user)
 		return FALSE
 	target_zone = null
