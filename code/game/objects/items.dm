@@ -227,7 +227,11 @@
 		var/mob/living/carbon/C = user
 		if(sharpness_flags & (SHARP_BLADE | SERRATED_BLADE | SHARP_TIP | HOT_EDGE)) //Running with sharp objects is dangerous!
 			var/severity = 0
-			var/saving_prob = C.lucky_probability(60, luckfactor = 1/100)
+			var/saving_prob = C.lucky_probability(60, luckfactor = 1/50)
+
+			if(M_CLUMSY in C.mutations)
+				severity += 1
+
 			for(var/i in 1 to 3) //Three saving throws. One failed means a near miss. Two failed means a normal attack. Three failed means a critical attack.
 				if(prob(saving_prob))
 					break
@@ -251,7 +255,7 @@
 				C.a_intent = previntent
 
 			else if(severity >= 1)
-				var/list/possibles = list("head", "face", "neck")
+				var/list/possibles = list("face", "neck")
 				if(C.has_eyes())
 					possibles += "eye"
 				if(C.hasmouth())
@@ -267,16 +271,10 @@
 
 
 		//todo: delaynextattack stuff
-		//todo: harm vs. help intent (force harm?)
-		//todo: fix not working screwdrivers, syringes, etc.
 		//todo: monkeys as well
-		//todo: what if it doesnt' actually get dropped ie. ninja sword or superglue
-		//todo: check syringe
-		//todo: make zone stuff truly random instead of being what your zone select is
 		//todo: check text works properly esp. with possible_edgepoints
 		//todo: consider message order
 		//todo: clumsy gene, graceful gene
-		//todo: check if slip increments
 
 	return
 
