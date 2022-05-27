@@ -725,3 +725,26 @@ var/quote = ascii2text(34)
 			return "herself"
 		else //Neuter and plural, though plural doesn't work in this case. eg: "The bees sting(s) themselves."
 			return "itself"
+
+/proc/shift_verb_tense(var/input) //Turns "slashes" into "slash" and "hits" into "hit".
+	//Special cases where chopping off "es", and if not, "s" won't work. More can be added as they are encountered.
+	switch(input)
+		if("bites")
+			return "bite"
+		if("dices")
+			return "dice"
+		if("slices")
+			return "slice"
+		if("pokes")
+			return "poke"
+	//Check if input ends in "es" or "s" and chop those off if so.
+	var/inputlength = length(input)
+	if(inputlength > 2)
+		if(copytext(input, inputlength - 1, inputlength + 1) == "es")
+			return copytext(input, 1, inputlength - 1)
+		else if(copytext(input, inputlength, inputlength + 1) == "s")
+			return copytext(input, 1, inputlength)
+		else
+			return input
+	else
+		return input

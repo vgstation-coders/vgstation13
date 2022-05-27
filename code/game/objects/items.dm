@@ -245,16 +245,24 @@
 					possibles += "eye"
 				if(C.hasmouth())
 					possibles += "throat"
-				to_chat(C, "<span class = 'warning'>\The [src] just misses your [pick(possibles)]... close one!</span>")
+				var/list/possible_edgepoints = list()
+				if(sharpness_flags & SHARP_BLADE)
+					possible_edgepoints += "sharp edge"
+				if(sharpness_flags & SERRATED_BLADE)
+					possible_edgepoints += "serrated edge"
+				if(sharpness_flags & SHARP_TIP)
+					possible_edgepoints += "sharp point"
+				to_chat(C, "<span class = 'warning'>\The [possible_edgepoints.len ? "[pick(possible_edgepoints)] of the " : ""][src] just misses your [pick(possibles)]... close one!</span>")
 
 
 		//todo: delaynextattack stuff
 		//todo: monkeys as well
 		//todo: what if it doesnt' actually get dropped ie. ninja sword or superglue
 		//todo: check syringe
-		//todo: maxskew
+		//todo: make zone stuff truly random instead of being what your zone select is
 		//todo: consider message order
 		//todo: clumsy gene, graceful gene
+		//todo: check if slip increments
 
 	return
 
