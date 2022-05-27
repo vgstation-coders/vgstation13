@@ -297,7 +297,7 @@
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
-	if(!can_evolve) //How did you get here if not?
+	if(!can_evolve)
 		return
 
 	/*
@@ -308,9 +308,6 @@
 			Putrid													Crimson
 	Eaten too much, died too little								Eaten too little, died too much
 	*/
-/*	if(istype(src, /mob/living/simple_animal/hostile/necro/zombie/turned))
-	else if (istype(src, /mob/living/simple_animal/hostile/necro/zombie/rotting))
-		*/
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/stats()
 	stat(null, "Times revived - [times_revived]")
@@ -393,6 +390,16 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/being_unzombified = FALSE
+
+/mob/living/simple_animal/hostile/necro/zombie/turned/grey
+	icon_state = "mauled_laborer"
+	icon_living = "mauled_laborer"
+	icon_dead = "mauled_laborer"
+
+/mob/living/simple_animal/hostile/necro/zombie/turned/vox
+	icon_state = "rotting_raider1"
+	icon_living = "rotting_raider1"
+	icon_dead = "rotting_raider1"
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/check_evolve()
 	..()
@@ -572,7 +579,6 @@
 	health = 80
 
 ///////////////// Vox Raider Zombies ////////////////////
-
 /mob/living/simple_animal/hostile/necro/zombie/raider1
 	name = "tainted raider"
 	desc = "A zombified vox raider, still clad in the remains of armored hardsuit plates. Its remaining eye gleams with a new kind of hunger."
@@ -700,11 +706,7 @@
 
 #undef RAD_COST
 
-
-///////////////////////////////////////////////////////
 ///////////////// HEADCRAB ZOMBIES ////////////////////
-///////////////////////////////////////////////////////
-
 /mob/living/simple_animal/hostile/necro/zombie/headcrab
 	icon_state = "zombie_headcrab"
 	icon_living = "zombie_headcrab"
