@@ -744,7 +744,7 @@ var/quote = ascii2text(34)
 				return copytext(input, 1, inputlength - 2) + "y" //"parries" becomes "parry"
 			else
 				return copytext(input, 1, inputlength - 1) //Otherwise remove the "es".
-		else if(copytext(input, inputlength, inputlength + 1) == "s") //If the second-to-last letter isn't "e", and the last latter is "s", remove the "s".
+		else if(copytext(input, inputlength, inputlength + 1) == "s") //If the second-to-last letter isn't "e", and the last letter is "s", remove the "s".
 			return copytext(input, 1, inputlength)	//"gets" becomes "get"
 		else
 			return input
