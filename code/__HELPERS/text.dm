@@ -723,7 +723,9 @@ var/quote = ascii2text(34)
 			return "himself"
 		if(FEMALE)
 			return "herself"
-		else //Neuter and plural, though plural doesn't work in this case. eg: "The bees sting(s) themselves."
+		if(PLURAL) //Can be used in conjunction with shift_verb_tense(). eg. "The bees stings themselves." -> "The bees sting themselves."
+			return "themselves"
+		else
 			return "itself"
 
 /proc/shift_verb_tense(var/input) //Turns "slashes" into "slash" and "hits" into "hit".

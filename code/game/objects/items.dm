@@ -260,6 +260,7 @@
 		//todo: what if it doesnt' actually get dropped ie. ninja sword or superglue
 		//todo: check syringe
 		//todo: make zone stuff truly random instead of being what your zone select is
+		//todo: check text works properly esp. with possible_edgepoints
 		//todo: consider message order
 		//todo: clumsy gene, graceful gene
 		//todo: check if slip increments
