@@ -45,11 +45,12 @@
 			size = "huge"
 
 	var/pronoun = "it is"
-	if(src.gender == FEMALE)
+	switch(gender)
+	if(FEMALE)
 		pronoun = "she is"
-	else if(src.gender == MALE)
+	if(MALE)
 		pronoun = "he is"
-	else if(src.gender == PLURAL)
+	if(PLURAL)
 		pronoun = "they are"
 
 	..(user, " [capitalize(pronoun)] [size].", show_name, FALSE)
