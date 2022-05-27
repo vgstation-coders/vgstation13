@@ -93,7 +93,7 @@
 	if(M_HULK in user.mutations)
 		power *= 2
 
-	if(!istype(M, /mob/living/carbon/human))
+	if(!(ishuman(M) || ismonkey(M)))
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
 			if(prob(25))
@@ -181,7 +181,7 @@
 						showname = "[user]'s left arm"
 
 		//make not the same mistake as me, these messages are only for slimes
-		if(istype(I.attack_verb,/list) && I.attack_verb.len)
+		if(istype(I.attack_verb,/list) && I.attack_verb.len && !iscarbon(M))
 			M.visible_message("<span class='danger'>[showname] [pick(I.attack_verb)] [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] [pick(I.attack_verb)] you with [I].</span>")
 		else if(I.force == 0)

@@ -269,13 +269,6 @@
 					possible_edgepoints += "sharp point"
 				to_chat(C, "<span class = 'warning'>[possible_edgepoints.len ? "The [pick(possible_edgepoints)] of \the [src]" : "\The [src]"] just misses your [pick(possibles)]... close one!</span>")
 
-
-		//todo: delaynextattack stuff
-		//todo: recheck syringe and such
-		//todo: monkeys as well
-		//todo: check text works properly esp. with possible_edgepoints
-		//todo: consider message order
-
 	return
 
 /obj/item/projectile_check()
