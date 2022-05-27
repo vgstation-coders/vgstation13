@@ -276,7 +276,7 @@
 	if((health < maxHealth) || (maxHealth < health_cap))
 		if(!(target.isDead()))
 			return 0 //It ain't dead
-		if(isjusthuman(target)) //Humans are always edible
+		if(ishuman(target)) //Humans are always edible
 			return 1
 		if(target.health > -(target.maxHealth*MAX_EAT_MULTIPLIER)) //So they're not caught eating the same dumb bird all day
 			return 1
@@ -405,7 +405,6 @@
 		host = null
 	..()
 
-
 /mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
@@ -495,31 +494,17 @@
 /mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
 	if(busy)
 		return 0
-	if(isjusthuman(target))
+	if(ishuman(target))
 		return 1
 	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()
-	if(target.health < -150  && isjusthuman(target)) //Gotta be a bit chewed on
+	if(target.health < -150  && ishuman(target)) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
 			var/master = creator ? creator : src
 			target.make_zombie(master)
-
-/*
-
-/mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
-	//Make the target drop their stuff, move them into the contents of the zombie so the ghost can at least see how its zombie self is doing
-	//target.drop_all()
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/new_zombie = new /mob/living/simple_animal/hostile/necro/zombie/turned(target.loc)
-	get_clothes(target, new_zombie)
-	new_zombie.name = target.real_name
-	new_zombie.host = target
-	target.ghostize()
-	target.loc = null
-
-*/
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
 	/*Check what mob type the target is, if it's carbon, run through their wear_ slots see human_defines.dm L#34
