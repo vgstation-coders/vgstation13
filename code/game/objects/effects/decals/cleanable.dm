@@ -95,7 +95,7 @@ var/list/infected_cleanables = list()
 		blood_DNA = list()
 	blood_DNA[fake_DNA] = "N/A"
 
-/obj/effect/decal/cleanable/throw_impact(atom/hit_atom)
+/obj/effect/decal/cleanable/throw_impact(atom/hit_atom, mob/user)
 	if (isliving(hit_atom) && blood_DNA?.len)
 		var/mob/living/L = hit_atom
 		var/blood_data = list(

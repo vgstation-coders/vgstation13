@@ -407,44 +407,33 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
-	if(stat == DEAD) //Can only attempt to unzombify if they're dead
-		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
-			if(being_unzombified)
-				to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
-				return
-			being_unzombified = TRUE
-			var/obj/item/weapon/storage/bible/bible = W
-			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
+	if(!istype(W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
+		return
+	if(being_unzombified)
+		to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
+		return
+	being_unzombified = TRUE
+	var/obj/item/weapon/storage/bible/bible = W
+	user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
-			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
-			if(user.mind && isReligiousLeader(user))
-				chaplain = TRUE //Indeed we are
-			if(do_after(user, src, 25)) //So there's a nice delay
-				if(!chaplain)
-					if(prob(5)) //Let's be generous, they'll only get one regen for this
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!</span>")
-						unzombify()
-					else
-						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
-
-				else if(chaplain)
-					var/holy_modifier = 1 //How much the potential for reconversion works
-					if(user.reagents.reagent_list.len)
-						if(user.reagents.has_reagent(WHISKEY) || user.reagents.has_reagent(HOLYWATER)) //Take a swig, then get to work
-							holy_modifier += 1
-					var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
-					if(turf_on.holy) //We're in the chapel
-						holy_modifier += 2
-					else
-						if(turf_on.blessed) //The chaplain's spilt some of his holy water
-							holy_modifier += 1
-
-					if(prob(15*holy_modifier)) //Gotta have faith
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
-						unzombify()
-					else
-						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
-			being_unzombified = FALSE
+	var/holy_bonus = 0 //How much the potential for reconversion works
+	if(do_after(user, src, 25)) //So there's a nice delay
+		if(user.reagents.reagent_list.len)
+			if(user.reagents.has_reagent(WHISKEY) || user.reagents.has_reagent(HOLYWATER)) //Take a swig, then get to work
+				holy_bonus += 10
+		var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
+		if(turf_on.holy) //We're in the chapel
+			holy_bonus += 10
+		if(turf_on.blessed) //Blessed ground by holy water
+			holy_bonus += 10
+		if(user.mind && isReligiousLeader(user)) //chaplain
+			holy_bonus += 65
+		if(prob(5+holy_bonus)) //Gotta have faith
+			to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
+			unzombify()
+		else
+			to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
+	being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
 	if(host && mind)
