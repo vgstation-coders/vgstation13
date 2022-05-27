@@ -25,6 +25,7 @@
 "bD" = (/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/vault/mothership_lab/habitation)
 "bE" = (/obj/machinery/vending/boozeomat,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
 "bM" = (/obj/effect/decal/cleanable/blood/gibs{basecolor = "#2299FC"; blood_color = "#2299FC"; fleshcolor = "#808D11"; icon_state = "gibdown1"},/obj/effect/landmark/corpse/vox/spaceraider,/obj/machinery/camera{dir = 1; id_tag = "labcameras"; name = "Greyling Dormitory 2"; network = list("MOTHERSHIPLAB")},/obj/item/weapon/gun/projectile/shotgun/pump/combat,/turf/simulated/floor{dir = 1; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (NORTH)"},/area/vault/mothership_lab/habitation)
+"bO" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/cave)
 "bP" = (/obj/effect/decal/remains/human/noskull,/obj/structure/boulder,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "bZ" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/obj/machinery/space_heater,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "cc" = (/obj/machinery/light/he/broken{dir = 8},/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
@@ -137,7 +138,7 @@
 "iR" = (/obj/structure/window/barricade/full,/turf/simulated/floor/greengrid,/area/vault/mothership_lab/habitation)
 "iU" = (/obj/structure/rack,/obj/structure/window/reinforced{dir = 4},/obj/machinery/door/window/brigdoor{dir = 2},/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/structure/window/reinforced{dir = 8},/obj/item/clothing/shoes/magboots,/obj/item/weapon/tank/oxygen/red,/obj/item/clothing/suit/space/rig/grey/researcher,/obj/item/clothing/mask/breath,/turf/simulated/floor/engine,/area/vault/mothership_lab/habitation)
 "ja" = (/obj/machinery/computer/arcade,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
-"je" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/hobo)
+"je" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/hobo)
 "jh" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "jn" = (/obj/structure/falserwall,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "jr" = (/obj/machinery/door/mineral/iron,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/vault/mothership_lab/hobo)
@@ -177,7 +178,7 @@
 "lH" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small/broken{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "lL" = (/obj/structure/grille/broken,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "lT" = (/obj/effect/spider/stickyweb,/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/cave)
-"lV" = (/obj/machinery/door/mineral/sandstone,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
+"lV" = (/obj/machinery/door/mineral/sandstone,/obj/structure/window/barricade/full/block,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "lY" = (/obj/structure/curtain/open/shower,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "ma" = (/obj/machinery/door/airlock{name = "Toilet"},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/administration)
 "md" = (/obj/structure/table/flipped{dir = 4},/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
@@ -237,6 +238,7 @@
 "pl" = (/obj/structure/bed,/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor{dir = 4; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (EAST)"},/area/vault/mothership_lab/administration)
 "pm" = (/obj/item/weapon/stool/bar,/obj/machinery/light/he/broken{dir = 4},/turf/simulated/floor{dir = 5; icon_state = "darkpurple"; tag = "icon-darkpurple (WEST)"},/area/vault/mothership_lab/habitation)
 "pn" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/administration)
+"pq" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/administration)
 "pr" = (/obj/structure/acidsink{dir = 8; pixel_x = 10},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
 "ps" = (/obj/effect/decal/cleanable/blood/gibs{basecolor = "#2299FC"; blood_color = "#2299FC"; dir = 4; fleshcolor = "#808D11"; icon_state = "gib4"},/obj/item/weapon/gun/projectile/mosin,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "px" = (/obj/machinery/light/small{dir = 4},/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
@@ -264,7 +266,7 @@
 "qQ" = (/obj/structure/forge,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "qS" = (/obj/item/weapon/table_parts,/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = ""},/area/vault/mothership_lab/habitation)
 "qV" = (/obj/machinery/space_heater/campfire/stove/fireplace,/turf/simulated/floor{icon_state = "dark floor stripe"; tag = "icon-dark floor stripe"},/area/vault/mothership_lab/administration)
-"qX" = (/obj/structure/sign/pox,/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/habitation)
+"qX" = (/obj/structure/sign/pox,/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/habitation)
 "qY" = (/obj/machinery/door/airlock/highsecurity{name = "Administrator's Bedroom"; req_access_txt = "164"; req_one_access_txt = "164"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/mothership_lab/administration)
 "rg" = (/obj/effect/spider/stickyweb,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "rj" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp_spicy,/obj/item/weapon/kitchen/utensil/spoon,/turf/simulated/floor{dir = 1; icon_state = "barber"; tag = "icon-barber (NORTH)"},/area/vault/mothership_lab/habitation)
@@ -274,7 +276,7 @@
 "rA" = (/obj/item/weapon/spacecash/c10,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
 "rF" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "rI" = (/obj/structure/table/woodentable,/obj/item/weapon/kitchen/utensil/spoon,/obj/item/weapon/kitchen/utensil/spoon,/obj/item/weapon/kitchen/utensil/spoon,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
-"rQ" = (/obj/machinery/door/window/brigdoor{dir = 1; req_access = null; req_access_txt = "160"; req_one_access_txt = "160"},/obj/structure/curtain/closed,/turf/simulated/floor{icon_state = "dark floor stripe"; tag = "icon-dark floor stripe"},/area/vault/mothership_lab/habitation)
+"rQ" = (/obj/machinery/door/window/brigdoor{dir = 1; req_access = null; req_access_txt = "160"; req_one_access_txt = "160"},/obj/structure/curtain/closed,/obj/structure/table/flipped{dir = 1},/turf/simulated/floor{icon_state = "dark floor stripe"; tag = "icon-dark floor stripe"},/area/vault/mothership_lab/habitation)
 "sf" = (/obj/machinery/light/he/broken,/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "sg" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/woodentable,/obj/item/weapon/batteringram,/obj/item/weapon/storage/box/flashbangs,/obj/item/weapon/storage/box/flashbangs,/obj/item/weapon/c4,/obj/item/weapon/c4,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "sh" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/habitation)
@@ -303,6 +305,7 @@
 "tM" = (/obj/structure/bed/chair/wood/normal{dir = 4},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "tO" = (/turf/simulated/floor{icon_state = "stage_stairs"},/area/vault/mothership_lab/administration)
 "tX" = (/obj/item/stack/sheet/wood,/obj/machinery/camera{dir = 1; id_tag = "labcameras"; name = "Habitation Deck Hall 2"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
+"ub" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/raidtunnel_lower)
 "ue" = (/obj/item/weapon/table_parts,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "uh" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/cave)
 "ul" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/administration)
@@ -313,7 +316,7 @@
 "uE" = (/obj/item/weapon/melee/stunprobe,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/habitation)
 "uF" = (/obj/machinery/light/small,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
 "uG" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/mothership_lab/cave)
-"uI" = (/obj/machinery/door/window/brigdoor{dir = 2; req_access = null; req_access_txt = "160"; req_one_access_txt = "160"},/obj/structure/curtain/closed,/turf/simulated/floor{dir = 1; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (NORTH)"},/area/vault/mothership_lab/habitation)
+"uI" = (/obj/machinery/door/window/brigdoor{dir = 2; req_access = null; req_access_txt = "160"; req_one_access_txt = "160"},/obj/structure/curtain/closed,/obj/structure/table/flipped,/turf/simulated/floor{dir = 1; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (NORTH)"},/area/vault/mothership_lab/habitation)
 "uP" = (/turf/simulated/floor{icon_state = "stage_stairs"; tag = "icon-stage_stairs"},/area/vault/mothership_lab/habitation)
 "uS" = (/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; icon_state = "floor2"},/obj/effect/landmark/corpse/grey/worker,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
 "uW" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/curry/xeno,/obj/item/weapon/reagent_containers/food/snacks/curry/xeno,/obj/item/weapon/reagent_containers/food/snacks/curry/xeno,/obj/item/weapon/kitchen/utensil/fork/teflon,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
@@ -391,6 +394,7 @@
 "Ac" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "Af" = (/obj/structure/vendomatpack/zamsnax,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "Ah" = (/turf/simulated/floor/carpet,/area/vault/mothership_lab/administration)
+"Aw" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/habitation)
 "Az" = (/obj/structure/table/flipped{dir = 8},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "AC" = (/obj/structure/window/barricade/full/block,/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "AH" = (/obj/effect/decal/warning_stripes{icon_state = "2"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/habitation)
@@ -564,7 +568,7 @@
 "NF" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/iv_drip,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "NH" = (/obj/structure/window/reinforced,/obj/structure/curtain/closed,/turf/simulated/floor{dir = 1; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (NORTH)"},/area/vault/mothership_lab/habitation)
 "NJ" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
-"NQ" = (/obj/effect/decal/warning_stripes{icon_state = "2"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/administration)
+"NQ" = (/obj/effect/decal/warning_stripes{icon_state = "2"},/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/administration)
 "NR" = (/turf/simulated/floor{icon_state = "dark"},/area/vault/mothership_lab/habitation)
 "NS" = (/obj/effect/spider/stickyweb,/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small/broken{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "NV" = (/obj/item/weapon/storage/fancy/flares,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
@@ -737,47 +741,47 @@
 (1,1,1) = {"
 BJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJibibibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
 BJBJBJBJBJBJBJBJBJBJBJBJBJBJBJibibibibibgNgNgNgNgNibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
-BJBJBJBJBJBJBJBJBJBJBJibibibibibibibibgNulululululgNibibibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
-BJBJBJBJBJBJBJBJibibibibibibibibibibibgNulsUpnkCulgNibibibibibibibibibibuhuhuhuhibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
-BJBJBJBJBJBJBJibibibibibibibgNgNgNgNgNgNulsUkCkCulgNgNgNgNibibibibibibuhgVgVgVgVuhibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJ
-BJBJBJBJBJBJibibibibibibibgNulululululululululOZulululululgNibibibibuhgVKlKlhZjvgVuhibibibibibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJ
-BJBJBJBJBJibibibibibibibibgNulRAWaZHwVOBulDUkCkCulwBulwBulgNibibibuhgVhZKllTKlKlKlgVuhibibibibibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJ
-BJBJBJBJBJibibibibibibibibgNulHPgygygyUEulDUkCxuulmaulmaulgNibibuhgVKljvKlKlwWBNKlhZgVuhibibibibibibibibibibeyeyeyeyeyeyeyibibibibibibibibibibibibBJBJBJ
-BJBJBJBJBJibibibibgNgNgNgNgNulplgygygygyhbkCkCkCkCkCkCkCulgNibibuhgVhZKlCtKlKlKlKljvKlgVuhibibibibibibibibeyekekekekekekekeyeyeyeyibibibibibibibibibBJBJ
-BJBJBJBJibibibibgNulNQulNQululGhgygywQHpulRBkCkCkCkCkCfrulgNgNuhgVKlKlKlhZKlKlKlhZKlgVgVgVuhgNgNgNgNgNgNeyekbCgzzkmzzkqjbCekekekekeyeyibibibibibibibBJBJ
-BJBJBJBJibibibibgNulbnnVbnululplgygyRWululululululululululuhuhuhuhuhuhuhKlKlKlKlKluhuhuhuhuhuhuhuhuhuhuheyekVCmzqIIyGsqjbCnXgGSXLYekekeyibibibibibibibBJ
-BJBJBJibibibibgNgNulyFyFyFululCvgygyJJulbZHFWwuhvIPnXbXbVyXbXbZQVyXbPnXbVyIeKlVyZQXbPnZQIPwJVyZQXeuhVyzweyekRbqIqIYxktawbCmzGyqIqIDYTwekeyibibibibibibBJ
-BJBJibibibibgNulululUUxxUUulululgygyUEulZQwJZQZAZQIPPnNJNJZQNJXbVyZQXbZQSaMSXbZQVyNJXbZQWwZQVyXbSafWXbVyeyekXdmzmzqIqIqIlVqIuDqIqIqIqIdXekeyibibibibibBJ
-BJibibgNgNgNgNulojBOddyFfABOaoulgygyMKulFxZQZQuhiaZQZQZQXbXbZQXbZQXbVyVyZQXbVyXbPnPnXbZQXbZQPnNJXeuhvJYNeyekYPqIqIqIqIqIbCqImzGyVaqIqIlCyNekeyibibibibBJ
-BJibgNulululululHPgyultOulgybuJugygySAuluhaiuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhYNVveyekbCDeEQFXWDsgbCMCmzqImzqImzqImzekeyibibibibib
-BJibgNulvdpnXqulvkbugygygybugyulChntpCulrgYNwtuhWLVyHnXbWLuhVzXbuhtIuhxWuhDHzwyEuhoFfiXbXbXbXbXbZQuhrgZQeyekekekekekekekekWPCEqIqIgqrImzqIekeyibibibibib
-BJibgNululOZululHPgygygyqsNcPculululululnENJnRuhuhXbXbXbuhuhRkXbuhtxuhtxuhFqXbbhuhgLVyXbXbXbvJXbXbuhZQlHeyeyeyeyeyeyeyeyekbCbCqImzbCbCqIqIbCekeyibibibib
-ibibgNulDUkCkCnYbugybugyqsNcAhQLulgNuhHyXbVyPyuhWLVyXbVyXbZAXbVyXbXbXbXbuhuhlYuhuhBGXbXbUARcXbXbVyuhXbVyBhsngpGUenzcGIuhekpfmzqIqIeHDVqImzQOekeyibibibib
-ibibgNulaMkCcYulKIgygygyqsNcAhhAulgNuhNEVyVyXbuhuhVyVwXbuhuhkukFXbXbLiXbXbVyXbXbuhuhfhuhuhuhXbVybbuhXbNJBhVyBPVyXbXbmluhekWkhDqIqImzqImzgzLRekeyibibibib
-ibibgNulululululsjgygygyqsNcAhwdululululVyXbVyuhWLXbXbXbWLuhuhuhZAuhuhSolLSouhuhuhfMXbUxotuhXbVybbuhVyXbBhQcXbVyXbLTTluhekQOgzqIniAcqIqIeqqIyYekeyibibib
-ibibgNulsSqVGjulCRgyoMgyqsNcRIululJzmFulXbXbXbuhuhuhfhuhuhuhgdgdXbXbXbXbXbXbXRcuHvXbXbXbXbKDXbVylsuhXbVyuhcIuhuhZAuhuhuheyekhMqIqIVVVVNFqImzyYekeyibibib
-ibibgNulOjgygyqYbugygygyoMgyOrulJoUIUIulvJVyfCuhImmTXbXbKpuhdKXbXbVyXbXbVyXbVyXbXbXbVyXbXbRLXbXbfCuhrgNSuhuhuhXbXbXbmfHyeyekbCGBbCekekekbCGBbCekeyibibib
-ibibgNulIiJiwIulYLbuulhNulgygyxbUInjjDulPnXbVyZAXbXbVyXbXbZAXbXbXbXbXbXbXbXbXbXbXbeFVyXbXbRXXbXbXbZAVyZQfEayNJVyVyXbXbuGmzmzqIvYqIfjfdfdULsNmzekeyibibib
-ibibgNulululululqltfddyFfAtfoXulululululZQZQhnuhEhaLCivCnnuhototXbXbVyXbXbVyXbZmXbVyXbXbotuhNEHyftuhXbfCuhCHXbXbXbXbMJXbeyeksCqImzjWsNqIqIqImzmzekeyibib
-ibibibgNgNNQfoMQululUUXZUUululMQGiNQgNuhgxuhjRjRjRjRjRjnjRjRjRjRHQHQmMHQjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRFwjRjRxmjRjRekekekekekekekqIqIpeqIPrekeyib
-ibibibibgNulgjsvfAbnyFyFyFbnddYlgjulgNuhoJSmjRjhAZEcEcDLjhjRPREUWboxScTcpVcZjRWFQPcFQddhjRgnSOrpUKLwYmbEjRSqSqtsAHoZPArsjRjRjRjRjRjRjRjRekqIqIqImzekeyib
-ibgNgNgNgNulEmsvfAyFyFyFyFyFddYlEmulgNuhZcLnjRjRxKBkximQjRjRRlCIvrSqFbvryvdmjRZVvvGfgahhjRQwpjqGfnuSfpmdDMEjPOcXnpFIFIBVjRqKSHpbLoSHJPjRekmzmzqImzekeyib
-gNjejejejeulululululululululululululgNuhinVkjRjhEchOMlEcjhjROFVBLKSqSqvrVBvrpUEZnxnxWsdpjRRvsXjRtFwLwLCZaKvjtvjQAHBrzeEvjRfnfnLfoEfnfnjReksNauqIsNekeyib
-gNjezQzQzQzQzQzQzQzQzQzQjejRjRjRjRjRgNuhininjRjREcUQYIEcjRjRCIVByvSqSqvrVBCIpUTDodfnrAxkjRcQKkVltDPmPmpmjRuecXpOjRjRjRjRjRuINHxkjRNHuIjRTdekfdqImzekeyib
-gNjezQQqMbnkkcpGzQGOcBzQzQjRhidWRmjRgNuhElhojRjhFFPzIIEcjhjRaIVBvrSqSqLKVBOFpUrAfnaAfnxnFPSKWZqOqOqOqOkYnUqHokSqjRQDIKWzpYpYpYdapYpYpYqtjRTdekfjqIekeyib
-gNjezQUgkRkOHocUzQCVjziCzQjREcEcoTjRgNuhmiBzwEjRxKEcQRmQjRjRRlvrliSqSqVgvrhEjRdEfnfnfnywFPurqOqOxFqOqOZSjRSqcXhlqXtyxSxSzAgZzATYzATYSdZKidjRekmzqIekeyib
-gNjezQvUzQzQzQzQzQvUzQzQzQjRoigAZljRgNuhXcuuanjhEczvEcEcjhjRNjdfjRsmsmjREfYkjRjaCkmrUBjRjRHZMxjJBomGMxYTaKSqcXcXMLlxlhxSiDxSyJxSeSxSFoFuGujRekqIvYekeyib
-gNjezQUgmwaDaSdgzQUgiymyzQjRAHPeAHjRQGjRjRjRjRjRjRVqVqjRxkjRFGFGNXQXxnNXFGFGjRjRjRjRjRjRjRaKINjRkqjRcfcfjRcctvOkqXSpxSxSzAcozATYzATYxSYMZajRekqImzekeyib
-gNjezQATIBSxSxVQSSkiSxnyzQjRSqcXSqjQSqxcSqCzSqSqHkHzSqBlxPCzMnKtzlcXCfVICzjQTBbDjQCzzlFbqHwvSqFzcXCzwaSqswHzTJOfjRRGkSRGRGRGkSAabMRGRGEXjRltekqIsNekeyib
-gNjezQQpfafyLupxzQFVkRxrzQjRFcxzXzcXbDcXcXmZcXcXcXSgbDcXcXCfcXcXcXjZZncXcXXzgmiRKMehcXwYcXgBcXcXcXehcXcXcXcXcXbDjRrQGxjRjRrQGxjRjRGxrQjRltekfdqIfdekeyib
-gNjezQqQUgkRaOaazQzFLuxrzQjRswSqCzCzcXLBueSqjMluVqtXPQbppssfzZcXSqSqSqPJSqHzqpSqjQaFAzVqrvSqIzcXokCzCzHzpDcnSqOojRfnfnNnMOfnfnRFcLfnfnjRekfdmzqIekeyibib
-gNjezQTVUgtMGcuXzQBRaaEWzQjRFmjRjRjRLdjRjRjRjRVqjRjRjRlololojRwkjRoVFSjRaKaKjRKGdBjRcfcHcfcfjREyNRjRACACjRjRjRjRjRLhqishOaQduFfzvLqizyjRekqIqIekeyibibBJ
-gNjezQzQwDzQzQzQzQzQzQzQzQjRVFmIiUmIYsZkjRazQlmUmUdLjRDDyzZeFbdnSqzBKzjRWTqwCTIVIVYfqSgCWTiFgCuPuPEzmxjOjRekekekjRjRjRjRjRjRjRjRjRjRjRjRqImzekeyibibibBJ
-gNjejemDTuHAiAXomDlrsZPWzQjRcjkJCGmpqPQCjRjRjRmUewjRjRnLzYSqSqSqWYvhdrjRfxxXxXxXxXJxCyxXuzxXxXJpiEuWmxQvjRekbPrFekekevmzsNqIqImzmzqIqIqImzekeyibibibBJBJ
-ibgNjezQMdSxhzCljrSxYDTpzQjRcSCGqPzPCGHCjRazQlmUuEBbjRkQSqSqSqwbFwjRjRjRPGSFWTOdPkgCxXWTPkrjgCxXiEecmxprjRekmzqIqImzmzekmzmzqIvYqIqImzekekeyibibibBJBJBJ
-ibgNjemDneaWcrJBzQtdFMtdzQjRUFUFUFEpsRJHjRjRjRmUhgBbjRnLDKSqSqfYjRAfsIjRMNRunqPkLAgCvfWTPkqdgCgiJxzomxVXjRekynqIqIHOsNqIqIekekekekekekeyeyibibibBJBJBJBJ
-ibgNjezQzQzQmDzQzQzQmDzQzQjRjRjRjRjRjRjRjRazQlHUjPBbjRSLDZPPSqSqFYUMXBjRjRjRjRjRjRjRjRjRjRjRjRxXSIIWXkNzjReksNmzQJqINVqIekeyeyeyeyeyeyibibibibBJBJBJBJBJ
-ibgNjejejejejejejejejejejejegNgNgNgNgNgNjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRgNgNgNgNgNgNgNgNgNgNjRjRjRjRjRjRjRekekekekekekekeyibibibibibibibBJBJBJBJBJBJBJBJ
-BJibgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibibibibibgNgNgNgNgNgNgNeyeyeyeyeyeyeyibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
+BJBJBJBJBJBJBJBJBJBJBJibibibibibibibibgNpqpqpqpqpqgNibibibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
+BJBJBJBJBJBJBJBJibibibibibibibibibibibgNpqsUpnkCpqgNibibibibibibibibibibbObObObOibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
+BJBJBJBJBJBJBJibibibibibibibgNgNgNgNgNgNpqsUkCkCpqgNgNgNgNibibibibibibbOgVgVgVgVbOibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJ
+BJBJBJBJBJBJibibibibibibibgNpqpqpqpqpqpqpqululOZpqpqpqpqpqgNibibibibbOgVKlKlhZjvgVbOibibibibibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJ
+BJBJBJBJBJibibibibibibibibgNpqRAWaZHwVOBulDUkCkCulwBulwBpqgNibibibbOgVhZKllTKlKlKlgVbOibibibibibibibibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJ
+BJBJBJBJBJibibibibibibibibgNpqHPgygygyUEulDUkCxuulmaulmapqgNibibbOgVKljvKlKlwWBNKlhZgVbOibibibibibibibibibibubububububububibibibibibibibibibibibibBJBJBJ
+BJBJBJBJBJibibibibgNgNgNgNgNpqplgygygygyhbkCkCkCkCkCkCkCpqgNibibbOgVhZKlCtKlKlKlKljvKlgVbOibibibibibibibibubekekekekekekekububububibibibibibibibibibBJBJ
+BJBJBJBJibibibibgNpqNQpqNQpqpqGhgygywQHpulRBkCkCkCkCkCfrpqgNgNbOgVKlKlKlhZKlKlKlhZKlgVgVgVbOgNgNgNgNgNgNubekbCgzzkmzzkqjbCekekekekububibibibibibibibBJBJ
+BJBJBJBJibibibibgNpqbnnVbnululplgygyRWpqpqpqpqpqpqpqpqpqpqbObObOuhuhuhuhKlKlKlKlKluhuhuhuhbObObObObObObOubekVCmzqIIyGsqjbCnXgGSXLYekekubibibibibibibibBJ
+BJBJBJibibibibgNgNpqyFyFyFululCvgygyJJpqbZHFWwuhvIPnXbXbVyXbXbZQVyXbPnXbVyIeKlVyZQXbPnZQIPwJVyZQXeuhVyzweyekRbqIqIYxktawbCmzGyqIqIDYTwekubibibibibibibBJ
+BJBJibibibibgNpqpqpqUUxxUUulululgygyUEpqZQwJZQZAZQIPPnNJNJZQNJXbVyZQXbZQSaMSXbZQVyNJXbZQWwZQVyXbSafWXbVyeyekXdmzmzqIqIqIlVqIuDqIqIqIqIdXekubibibibibibBJ
+BJibibgNgNgNgNpqojBOddyFfABOaoulgygyMKpqFxZQZQuhiaZQZQZQXbXbZQXbZQXbVyVyZQXbVyXbPnPnXbZQXbZQPnNJXeuhvJYNeyekYPqIqIqIqIqIbCqImzGyVaqIqIlCyNekubibibibibBJ
+BJibgNpqpqpqpqpqHPgyultOulgybuJugygySApquhaiuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhuhYNVveyekbCDeEQFXWDsgbCMCmzqImzqImzqImzekubibibibibib
+BJibgNpqvdpnXqulvkbugygygybugyulChntpCpqrgYNwtuhWLVyHnXbWLuhVzXbuhtIuhxWuhDHzwyEuhoFfiXbXbXbXbXbZQuhrgZQeyekekekekekekekekWPCEqIqIgqrImzqIekubibibibibib
+BJibgNpqulOZululHPgygygyqsNcPculululpqpqnENJnRuhuhXbXbXbuhuhRkXbuhtxuhtxuhFqXbbhuhgLVyXbXbXbvJXbXbuhZQlHeyeyeyeyeyeyeyeyekbCbCqImzbCbCqIqIbCekubibibibib
+ibibgNpqDUkCkCnYbugybugyqsNcAhQLulgNbOHyXbVyPyuhWLVyXbVyXbZAXbVyXbXbXbXbuhuhlYuhuhBGXbXbUARcXbXbVyuhXbVyBhsngpGUenzcGIuhekpfmzqIqIeHDVqImzQOekubibibibib
+ibibgNpqaMkCcYulKIgygygyqsNcAhhAulgNbONEVyVyXbuhuhVyVwXbuhuhkukFXbXbLiXbXbVyXbXbuhuhfhuhuhuhXbVybbuhXbNJBhVyBPVyXbXbmluhekWkhDqIqImzqImzgzLRekubibibibib
+ibibgNpqululululsjgygygyqsNcAhwdululpqpqVyXbVyuhWLXbXbXbWLuhuhuhZAuhuhSolLSouhuhuhfMXbUxotuhXbVybbuhVyXbBhQcXbVyXbLTTluhekQOgzqIniAcqIqIeqqIyYekubibibib
+ibibgNpqsSqVGjulCRgyoMgyqsNcRIululJzmFpqXbXbXbuhuhuhfhuhuhuhgdgdXbXbXbXbXbXbXRcuHvXbXbXbXbKDXbVylsuhXbVyuhcIuhuhZAuhuhuheyekhMqIqIVVVVNFqImzyYekubibibib
+ibibgNpqOjgygyqYbugygygyoMgyOrulJoUIUIpqvJVyfCuhImmTXbXbKpuhdKXbXbVyXbXbVyXbVyXbXbXbVyXbXbRLXbXbfCuhrgNSuhuhuhXbXbXbmfHyeyekbCGBbCekekekbCGBbCekubibibib
+ibibgNpqIiJiwIulYLbuulhNulgygyxbUInjjDpqPnXbVyZAXbXbVyXbXbZAXbXbXbXbXbXbXbXbXbXbXbeFVyXbXbRXXbXbXbZAVyZQfEayNJVyVyXbXbuGmzmzqIvYqIfjfdfdULsNmzekubibibib
+ibibgNpqpqpqululqltfddyFfAtfoXululpqpqpqZQZQhnuhEhaLCivCnnuhototXbXbVyXbXbVyXbZmXbVyXbXbotuhNEHyftuhXbfCuhCHXbXbXbXbMJXbeyeksCqImzjWsNqIqIqImzmzekubibib
+ibibibgNgNNQfoMQululUUXZUUululMQGiNQgNuhgxuhjRjRjRjRjRjnjRjRjRjRHQHQmMHQjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRjRFwjRjRxmjRjRekekekekekekekqIqIpeqIPrekubib
+ibibibibgNpqgjsvfAbnyFyFyFbnddYlgjpqgNuhoJSmjRjhAZEcEcDLjhjRPREUWboxScTcpVcZjRWFQPcFQddhjRgnSOrpUKLwYmbEjRSqSqtsAHoZPArsAwAwAwAwAwAwAwAwekqIqIqImzekubib
+ibgNgNgNgNpqEmsvfAyFyFyFyFyFddYlEmpqgNuhZcLnjRjRxKBkximQjRjRRlCIvrSqFbvryvdmjRZVvvGfgahhjRQwpjqGfnuSfpmdDMEjPOcXnpFIFIBVAwqKSHpbLoSHJPAwekmzmzqImzekubib
+gNjejejejepqpqpqpqpqpqpqpqpqpqpqpqpqgNuhinVkjRjhEchOMlEcjhjROFVBLKSqSqvrVBvrpUEZnxnxWsdpjRRvsXjRtFwLwLCZaKvjtvjQAHBrzeEvAwfnfnLfoEfnfnAweksNauqIsNekubib
+gNjezQzQzQzQzQzQzQzQzQzQjeAwjRjRjRjRgNuhininjRjREcUQYIEcjRjRCIVByvSqSqvrVBCIpUTDodfnrAxkjRcQKkVltDPmPmpmjRuecXpOAwAwAwAwAwuINHxkjRNHuIAwTdekfdqImzekubib
+gNjezQQqMbnkkcpGzQGOcBzQzQAwhidWRmjRgNuhElhojRjhFFPzIIEcjhjRaIVBvrSqSqLKVBOFpUrAfnaAfnxnFPSKWZqOqOqOqOkYnUqHokSqAwQDIKWzpYpYpYdapYpYpYqtAwTdekfjqIekubib
+gNjezQUgkRkOHocUzQCVjziCzQAwEcEcoTjRgNuhmiBzwEjRxKEcQRmQjRjRRlvrliSqSqVgvrhEjRdEfnfnfnywFPurqOqOxFqOqOZSjRSqcXhlqXtyxSxSzAgZzATYzATYSdZKidAwekmzqIekubib
+gNjezQvUzQzQzQzQzQvUzQzQzQAwoigAZljRgNuhXcuuanjhEczvEcEcjhjRNjdfjRsmsmjREfYkjRjaCkmrUBjRjRHZMxjJBomGMxYTaKSqcXcXMLlxlhxSiDxSyJxSeSxSFoFuGuAwekqIvYekubib
+gNjezQUgmwaDaSdgzQUgiymyzQAwAHPeAHjRQGjRjRjRjRjRjRVqVqjRxkjRFGFGNXQXxnNXFGFGjRjRjRjRjRjRjRaKINjRkqjRcfcfjRcctvOkqXSpxSxSzAcozATYzATYxSYMZaAwekqImzekubib
+gNjezQATIBSxSxVQSSkiSxnyzQAwSqcXSqjQSqxcSqCzSqSqHkHzSqBlxPCzMnKtzlcXCfVICzjQTBbDjQCzzlFbqHwvSqFzcXCzwaSqswHzTJOfAwRGkSRGRGRGkSAabMRGRGEXAwltekqIsNekubib
+gNjezQQpfafyLupxzQFVkRxrzQAwFcxzXzcXbDcXcXmZcXcXcXSgbDcXcXCfcXcXcXjZZncXcXXzgmiRKMehcXwYcXgBcXcXcXehcXcXcXcXcXbDAwrQGxjRjRrQGxjRjRGxrQAwltekfdqIfdekubib
+gNjezQqQUgkRaOaazQzFLuxrzQAwswSqCzCzcXLBueSqjMluVqtXPQbppssfzZcXSqSqSqPJSqHzqpSqjQaFAzVqrvSqIzcXokCzCzHzpDcnSqOoAwfnfnNnMOfnfnRFcLfnfnAwekfdmzqIekubibib
+gNjezQTVUgtMGcuXzQBRaaEWzQAwFmjRjRjRLdjRjRjRjRVqjRjRjRlololojRwkjRoVFSjRaKaKjRKGdBjRcfcHcfcfjREyNRjRACACjRjRjRjRAwLhqishOaQduFfzvLqizyAwekqIqIekubibibBJ
+gNjezQzQwDzQzQzQzQzQzQzQzQAwVFmIiUmIYsZkjRazQlmUmUdLjRDDyzZeFbdnSqzBKzjRWTqwCTIVIVYfqSgCWTiFgCuPuPEzmxjOjRekekekAwAwAwAwAwAwAwAwAwAwAwAwqImzekubibibibBJ
+gNjejemDTuHAiAXomDlrsZPWzQAwcjkJCGmpqPQCjRjRjRmUewjRjRnLzYSqSqSqWYvhdrjRfxxXxXxXxXJxCyxXuzxXxXJpiEuWmxQvjRekbPrFekekevmzsNqIqImzmzqIqIqImzekubibibibBJBJ
+ibgNjezQMdSxhzCljrSxYDTpzQAwcSCGqPzPCGHCjRazQlmUuEBbjRkQSqSqSqwbFwjRjRjRPGSFWTOdPkgCxXWTPkrjgCxXiEecmxprjRekmzqIqImzmzekmzmzqIvYqIqImzekekubibibibBJBJBJ
+ibgNjemDneaWcrJBzQtdFMtdzQAwUFUFUFEpsRJHjRjRjRmUhgBbjRnLDKSqSqfYjRAfsIjRMNRunqPkLAgCvfWTPkqdgCgiJxzomxVXjRekynqIqIHOsNqIqIekekekekekekububibibibBJBJBJBJ
+ibgNjezQzQzQmDzQzQzQmDzQzQAwAwAwAwAwAwAwAwazQlHUjPBbjRSLDZPPSqSqFYUMXBAwAwAwAwAwAwAwAwAwAwAwAwxXSIIWXkNzjReksNmzQJqINVqIekububububububibibibibBJBJBJBJBJ
+ibgNjejejejejejejejejejejejegNgNgNgNgNgNAwAwAwAwAwAwAwAwAwAwAwAwAwAwAwAwgNgNgNgNgNgNgNgNgNgNAwAwAwAwAwAwAwekekekekekekekubibibibibibibibBJBJBJBJBJBJBJBJ
+BJibgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibibibibibgNgNgNgNgNgNgNubububububububibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
 BJBJBJibibibibibibibibibibibBJBJibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
 "}
