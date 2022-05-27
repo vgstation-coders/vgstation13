@@ -46,12 +46,12 @@
 
 	var/pronoun = "it is"
 	switch(gender)
-	if(FEMALE)
-		pronoun = "she is"
-	if(MALE)
-		pronoun = "he is"
-	if(PLURAL)
-		pronoun = "they are"
+		if(FEMALE)
+			pronoun = "she is"
+		if(MALE)
+			pronoun = "he is"
+		if(PLURAL)
+			pronoun = "they are"
 
 	..(user, " [capitalize(pronoun)] [size].", show_name, FALSE)
 	if(meat_taken > 0)
