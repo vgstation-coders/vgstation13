@@ -723,7 +723,7 @@ var/quote = ascii2text(34)
 			return "himself"
 		if(FEMALE)
 			return "herself"
-		if(PLURAL) //Can be used in conjunction with shift_verb_tense(). eg. "The bees stings themselves." -> "The bees sting themselves."
+		if(PLURAL) //Can be used in conjunction with shift_verb_tense(). eg. "The bees cleans themselves." -> "The bees clean themselves."
 			return "themselves"
 		else
 			return "itself"

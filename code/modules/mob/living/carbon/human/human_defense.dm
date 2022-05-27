@@ -210,6 +210,9 @@ emp_act
 	if (crit)
 		power *= CRIT_MULTIPLIER
 
+	if(def_zone)
+		target_zone = def_zone
+
 	var/datum/organ/external/affecting = get_organ(target_zone)
 
 	if (!affecting)

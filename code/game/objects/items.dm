@@ -238,7 +238,18 @@
 					attackable_zones += "eyes"
 				if(C.hasmouth())
 					attackable_zones += "mouth"
+
+				//Temporarily switch C to harm intent
+				var/previntent = C.a_intent
+				C.a_intent = I_HURT
+
+				//Do the attack.
 				C.attacked_by(src, C, def_zone = pick(attackable_zones), crit = severity >= 3, flavor = "accidentally")
+				afterattack(C, C, proximity_flag = TRUE)
+
+				//Switch them back to their previous intent.
+				C.a_intent = previntent
+
 			else if(severity >= 1)
 				var/list/possibles = list("head", "face", "neck")
 				if(C.has_eyes())
@@ -252,10 +263,12 @@
 					possible_edgepoints += "serrated edge"
 				if(sharpness_flags & SHARP_TIP)
 					possible_edgepoints += "sharp point"
-				to_chat(C, "<span class = 'warning'>\The [possible_edgepoints.len ? "[pick(possible_edgepoints)] of the " : ""][src] just misses your [pick(possibles)]... close one!</span>")
+				to_chat(C, "<span class = 'warning'>[possible_edgepoints.len ? "The [pick(possible_edgepoints)] of \the [src]" : "\The [src]"] just misses your [pick(possibles)]... close one!</span>")
 
 
 		//todo: delaynextattack stuff
+		//todo: harm vs. help intent (force harm?)
+		//todo: fix not working screwdrivers, syringes, etc.
 		//todo: monkeys as well
 		//todo: what if it doesnt' actually get dropped ie. ninja sword or superglue
 		//todo: check syringe
