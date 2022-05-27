@@ -249,7 +249,7 @@
 
 				//Do the attack.
 				C.attacked_by(src, C, def_zone = pick(attackable_zones), crit = severity >= 3, flavor = "accidentally")
-				afterattack(C, C, proximity_flag = TRUE)
+				afterattack(C, C)
 
 				//Switch them back to their previous intent.
 				C.a_intent = previntent
@@ -271,10 +271,10 @@
 
 
 		//todo: delaynextattack stuff
+		//todo: recheck syringe and such
 		//todo: monkeys as well
 		//todo: check text works properly esp. with possible_edgepoints
 		//todo: consider message order
-		//todo: clumsy gene, graceful gene
 
 	return
 
