@@ -151,8 +151,8 @@
 
 	var/all_switch = TRUE
 	for(var/mob/living/T in targets)
-		if(!istype(T) || !T.mind)
-			user.show_message("<span class='notice'>You are unable to use telepathy with [T].</span>")
+		if(!istype(T) && !can_mind_interact(T.mind))
+			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
 			continue
 		if(istype(M))
 			M.telepathic_target += T
