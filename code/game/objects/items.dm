@@ -243,7 +243,7 @@
 				if(C.hasmouth())
 					attackable_zones += "mouth"
 
-				//Temporarily switch C to harm intent
+				//Temporarily switch C to harm intent.
 				var/previntent = C.a_intent
 				C.a_intent = I_HURT
 
