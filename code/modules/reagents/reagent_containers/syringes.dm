@@ -15,6 +15,7 @@
 	volume = 15
 	starting_materials = list(MAT_GLASS = 1000)
 	w_type = RECYK_GLASS
+	attack_verb = list("stabs", "sticks", "pokes")
 
 	var/mode = SYRINGE_DRAW
 	var/can_draw_blood = TRUE

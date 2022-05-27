@@ -738,7 +738,7 @@ var/quote = ascii2text(34)
 	if(inputlength > 2)
 		if(copytext(input, inputlength - 1, inputlength + 1) == "es") //If it ends in "es"
 			var/third_to_last = copytext(input, inputlength - 2, inputlength - 1)
-			if(findtext("cdefghklmnprstuvxz", third_to_last)) //If the third-to-last letter is any of the given letters.
+			if(findtext("cdefgklmnprstuvxz", third_to_last)) //If the third-to-last letter is any of the given letters.
 				return copytext(input, 1, inputlength) //"smiles" becomes "smile"
 			else if(third_to_last == "i")
 				return copytext(input, 1, inputlength - 2) + "y" //"parries" becomes "parry"

@@ -242,17 +242,24 @@
 					attackable_zones += "eyes"
 				if(C.hasmouth())
 					attackable_zones += "mouth"
+				var/attackable_zone = pick(attackable_zones)
 
-				//Temporarily switch C to harm intent.
+				//Temporarily switch C to harm intent and make them target their head.
 				var/previntent = C.a_intent
+				var/prevzone
+				if(C.zone_sel)
+					prevzone = C.zone_sel.selecting
+					C.zone_sel.selecting = attackable_zone
 				C.a_intent = I_HURT
 
 				//Do the attack.
-				C.attacked_by(src, C, def_zone = pick(attackable_zones), crit = severity >= 3, flavor = "accidentally")
+				C.attacked_by(src, C, def_zone = attackable_zone, crit = severity >= 3, flavor = "accidentally")
 				afterattack(C, C)
 
-				//Switch them back to their previous intent.
+				//Switch them back to their previous intent and targeting.
 				C.a_intent = previntent
+				if(C.zone_sel)
+					C.zone_sel.selecting = prevzone
 
 			else if(severity >= 1)
 				var/list/possibles = list("face", "neck")

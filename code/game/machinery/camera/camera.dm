@@ -324,7 +324,7 @@ var/list/camera_messages = list()
 			return
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
-		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
+		visible_message("<span class='danger'>[user] [pick(W.attack_verb)] [src] with [W].</span>", "<span class='warning'>You [shift_verb_tense(pick(W.attack_verb))] [src] with [W].</span>")
 		take_damage(W.force)
 
 /obj/machinery/camera/damaged_updates()
