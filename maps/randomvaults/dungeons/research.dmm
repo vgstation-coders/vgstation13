@@ -71,7 +71,7 @@
 "ez" = (/turf/simulated/floor{dir = 8; icon_state = "whitegreen"},/area/vault/mothership_lab/samplestorage)
 "eC" = (/obj/machinery/acidshower{dir = 8},/obj/item/weapon/card/id/mothership_laborer,/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"},/obj/effect/landmark/corpse/grey/worker,/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
 "eE" = (/obj/structure/bed/chair/comfy/couch/left/teal,/turf/simulated/floor{dir = 1; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
-"eU" = (/obj/effect/decal/cleanable/blood{basecolor = "#2299FC"; blood_color = "#2299FC"; icon_state = "floor6"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/research)
+"eU" = (/obj/effect/decal/cleanable/blood{basecolor = "#2299FC"; blood_color = "#2299FC"; icon_state = "floor6"},/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/research)
 "eW" = (/turf/space,/area)
 "fc" = (/obj/structure/bed,/obj/effect/decal/remains/human/noskull,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
 "fg" = (/obj/machinery/computer/arcade,/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/vault/mothership_lab/research)
@@ -97,6 +97,7 @@
 "gE" = (/obj/structure/acidtoilet{dir = 8},/obj/machinery/light/small/broken{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/research)
 "gG" = (/obj/structure/bed/chair/comfy/red{dir = 4},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/carpet,/area/vault/mothership_lab/research)
 "gN" = (/obj/effect/decal/warning_stripes/siding{dir = 9},/obj/item/clothing/gloves/boxing,/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership{dir = 4},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
+"hb" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/samplestorage)
 "hd" = (/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "hh" = (/obj/structure/flora/pottedplant/random{icon_state = "plant-13"; tag = "icon-plant-13"},/turf/simulated/floor{dir = 6; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
 "hi" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor{dir = 1; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
@@ -357,6 +358,7 @@
 "BW" = (/obj/structure/door_assembly,/obj/machinery/camera{dir = 8; id_tag = "labcameras"; name = "Necrotic Specimens East"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor,/area/vault/mothership_lab/research)
 "BY" = (/mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/armory)
 "Ca" = (/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/vault/mothership_lab/research)
+"Ci" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/maintenance)
 "Cu" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/armory)
 "Cv" = (/obj/structure/closet/crate,/obj/structure/window/reinforced{dir = 8},/obj/item/clothing/shoes/jackboots/mothership,/obj/item/clothing/under/grey/grey_soldier,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/research)
 "Cw" = (/obj/structure/acidtoilet,/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
@@ -374,6 +376,7 @@
 "Do" = (/obj/machinery/chem_master,/obj/item/weapon/reagent_containers/pill/tramadol,/obj/item/weapon/reagent_containers/pill/tramadol,/obj/item/weapon/reagent_containers/pill/tramadol,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "Dw" = (/obj/structure/closet/crate,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/research)
 "DE" = (/obj/structure/rack,/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/structure/window/reinforced/plasma,/obj/item/device/flashlight/tactical,/obj/item/device/flashlight/tactical,/obj/item/device/flashlight/tactical,/turf/simulated/floor/engine,/area/vault/mothership_lab/armory)
+"DG" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/armory)
 "DH" = (/turf/simulated/floor{icon_state = "whitegreencorner"},/area/vault/mothership_lab/research)
 "DJ" = (/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership{dir = 4},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "DK" = (/turf/simulated/floor{dir = 6; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
@@ -422,7 +425,7 @@
 "HS" = (/obj/structure/window/barricade/full/block,/obj/structure/grille/broken,/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = ""},/area/vault/mothership_lab/maintenance)
 "HY" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/research)
 "Ib" = (/obj/effect/decal/cleanable/blood/oil,/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
-"Ih" = (/obj/machinery/door/airlock/highsecurity{name = "Research Division"; req_access_txt = "163"; req_one_access_txt = "163"},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/research)
+"Ih" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "Research Division"; req_access_txt = "163"; req_one_access_txt = "163"},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/research)
 "Ii" = (/obj/machinery/vending/medical{emagged = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{dir = 6; icon_state = "darkred"; tag = "icon-darkred (SOUTHEAST)"},/area/vault/mothership_lab/armory)
 "Ir" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,/obj/machinery/light/he,/turf/simulated/floor{icon_state = "whitegreen"},/area/vault/mothership_lab/research)
 "Is" = (/mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier{dir = 8},/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/vault/mothership_lab/research)
@@ -574,6 +577,7 @@
 "Uk" = (/obj/structure/table/reinforced,/obj/item/weapon/soap,/obj/item/weapon/reagent_containers/spray/cleaner,/obj/machinery/light/small{dir = 4; on = 1},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/research)
 "Ul" = (/obj/effect/decal/cleanable/blood{basecolor = "#2299FC"; blood_color = "#2299FC"; icon_state = "floor5"},/obj/item/weapon/gun/energy/laser/retro,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "Un" = (/obj/machinery/light/he/broken{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
+"Ur" = (/obj/effect/decal/warning_stripes{icon_state = "3"},/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/research)
 "Uw" = (/obj/structure/girder/reinforced,/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "Ux" = (/obj/structure/closet/crate,/obj/structure/window/reinforced{dir = 8},/obj/machinery/light/he{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/research)
 "UA" = (/obj/structure/rack,/obj/item/tool/wrench,/obj/item/tool/wrench,/obj/item/tool/wrench,/obj/item/tool/wrench/socket,/obj/item/tool/wrench/socket,/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
@@ -627,7 +631,7 @@
 "Yw" = (/obj/structure/rack,/obj/item/clothing/under/grey/grey_worker,/obj/item/clothing/under/grey/grey_worker,/obj/item/clothing/under/grey/grey_worker,/obj/item/clothing/under/grey/grey_worker,/obj/item/clothing/under/grey/grey_worker,/obj/item/clothing/under/grey/grey_worker,/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
 "YA" = (/obj/machinery/acidshower{dir = 4},/obj/structure/curtain/open/shower/right,/obj/item/weapon/card/id/mothership_researcher,/obj/effect/landmark/corpse/grey/surgeon,/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; icon_state = "floor2"},/turf/simulated/floor{dir = 8; icon_state = "whitegreen"},/area/vault/mothership_lab/samplestorage)
 "YG" = (/obj/structure/closet{anchored = 1; name = "Laborer's Locker"},/obj/item/device/lightreplacer/advanced,/obj/item/clothing/glasses/welding,/obj/machinery/light/he/broken{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
-"YH" = (/obj/machinery/door/airlock/highsecurity{name = "MDF Secure Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
+"YH" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "MDF Secure Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "YJ" = (/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = ""},/area/vault/mothership_lab/maintenance)
 "YK" = (/obj/structure/table/reinforced,/obj/machinery/door/window/plasma/secure{req_access_txt = "164"; req_one_access_txt = "164"},/obj/item/weapon/paper_bin/black,/obj/item/weapon/pen/fountain,/turf/simulated/floor/carpet,/area/vault/mothership_lab/research)
 "YL" = (/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
@@ -635,6 +639,7 @@
 "Za" = (/obj/structure/closet/secure_closet{anchored = 1; name = "MDF Locker"; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/clothing/shoes/jackboots/mothership,/obj/item/clothing/under/grey/grey_soldier,/obj/item/weapon/storage/belt/mothership,/obj/item/clothing/head/helmet/mothership,/turf/simulated/floor{dir = 1; icon_state = "darkred"; tag = "icon-darkred (NORTH)"},/area/vault/mothership_lab/research)
 "Zd" = (/obj/structure/closet{anchored = 1; name = "Athletic Closet"},/obj/item/clothing/under/shorts/red,/obj/item/clothing/under/shorts/red,/obj/item/clothing/under/shorts/red,/obj/item/clothing/under/shorts/red,/turf/simulated/floor{dir = 10; icon_state = "darkred"; tag = "icon-darkred (SOUTHWEST)"},/area/vault/mothership_lab/research)
 "Zg" = (/obj/structure/table/reinforced,/obj/item/weapon/paper_bin/white,/obj/item/weapon/pen/multi,/turf/simulated/floor{icon_state = "white"},/area/vault/mothership_lab/research)
+"Zn" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/research)
 "Zo" = (/obj/effect/decal/cleanable/blood/gibs{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; dir = 4; fleshcolor = "#B5B5B5"; icon_state = "gib4"},/obj/machinery/light/he/broken,/obj/item/weapon/melee/stunprobe,/turf/simulated/floor,/area/vault/mothership_lab/research)
 "Zs" = (/obj/structure/rack,/obj/item/tool/crowbar,/obj/item/tool/crowbar,/turf/simulated/floor/plating,/area/vault/mothership_lab/maintenance)
 "Zz" = (/obj/structure/closet/crate,/obj/item/clothing/shoes/jackboots/mothership,/obj/structure/window/reinforced{dir = 8},/obj/item/clothing/accessory/holster/handgun,/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/research)
@@ -650,47 +655,47 @@
 (1,1,1) = {"
 eWeWeWeWeWeWrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVeWeWeWeWeWeWeWeWrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVeWeWeWeWeWeWeWeWeWeWeWeW
 eWeWeWeWeWrVrVrVYQYQYQYQYQYQYQrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVeWeWeWeWeWeWeWeW
-eWeWeWeWrVrVYQYQRhRhRhRhRhRhRhYQrVrVrVrVrVrVrVrVrVrVrVYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQrVrVrVrVrVeWeWeWeWeW
-eWeWeWeWrVYQRhRhRhgGnLlJuxclRhYQrVrVrVrVrVrVrVrVrVrVYQRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhYQrVrVrVrVrVeWeWeWeW
-eWeWeWeWrVYQRhJFKauxuxuxuxikRhYQYQYQYQYQYQYQYQYQYQYQYQRhaiGaGaaTRhCadIdkmvdkmvdkdIdkvqfhgNRFkrRhPJGaGacnRhYQrVrVrVrVrVrVeWeWeW
-eWeWeWeWrVYQRhoSRhRhwDRhiNRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRaGaUkRhRhicuxhduxuxuxuxuxuxuxigbahxFORhPJGaGacnRhYQYQYQYQYQYQrVrVeWeW
-eWeWeWrVrVYQRhHRRhrIMPfTuxIDZCbrOfUwCadkpgRhfgzjlEsVRjRhRhpMRhRhXyWNdAuxdAuxdAuxdAuxuxigvnlgCIRhPJGaGacnRhRhRhRhRhRhRhYQrVeWeW
-eWeWeWrVrVYQRhHYRhcTkDYKVIuxuxuxuxrmuxpouxesuxuxuxuxIDdkdkuxSLRhcSDJuxuxuxuxuxuxuxhduxIDjMICQFRhjRGaGarLRhKIRhKIRhKIRhYQrVrVeW
-eWeWrVrVYQYQrYfnrYZOfMntuxMhrPWlrPUwicuxEBRhicuxuxuxuxuxuxuxuxzHuxuxMhiEIzuxMhiEIzuxuxuxuxuxEBRhNtRhRhRhRhzLRhzLRhzLRhYQrVrVeW
-eWeWrVYQkVkVkVkVkVkVkVkVkVkVkVkVkVkVhypesuRhkcxHRoDwRoCvRohrOjRhZdgCuVWvvlQauVlsvliEiEiEIzuxuxwFGanQnQnQGaGaGaGaGarLRhYQrVrVeW
-eWeWrVYQkVauiSbDVjuCkVmuWPkVWeQzTbkVhyuxdjRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhPFPFPFGpuxuVRhRvmKmKmKNqGaGaGaGaGaRhYQrVrVeW
-eWeWrVYQkVJKiSiSiSnkkVCuiScZRzBYiKkVHzuxknRhXPDbpDbUsOMsqpRheotfMADoeoRhrGzbOekeRhRhRhRhRhzHRhRhRhRhRhRhRhRhRhRhRhRhRhYQrVrVeW
-eWrVrVYQkVqIiSDEEpiSISiSproxRzhWQikVafkHthRhXPDblhyrukxvMURhNluxuxuxNlRdpauxUJdsRhhvlEbWtCuxqcOOUxOOSSVQRhYQYQYQYQYQYQrVrVrVeW
-eWrVrVYQkVJKiSLjQqJkkVlFiSXcRzhWKvkVvQuxGzRhhihiviyrukdCglRhoTExfSKwoTRhAefSaWgcRhicuxuxuxuxuxuxuxuxuxknRhYQrVrVrVrVrVrVrVrVeW
-eWrVrVYQkVCCiSiSiSnkkVOUkVkVhWhWhWDjuxuxknRhXssAmTyraKhiPZAtpkhHyrhHhHhHhHyrhHBzRhicuxuxuxuxuxuxuxuxuxknRhYQrVrVrVrVrVrVrVrVrV
-eWrVrVYQkVpxiSDnPXJSkVhWhWhWWuPgIikVhyuxTnRhysZYMCyryryryrveyryryryrDHtytyyrtyDKRhicuxuxuxuxuxuxuxuxuxkjRhYQrVrVrVrVrVrVrVrVrV
-eWrVYQRhkVkVkVkVkVkVkVkVkVkVkVkVkVkVicuxsuRhEUuxMCyryryrwNAtPttytytyDKRhhYSdhYRhRhHoRoyQRoDwBuCvRorfuxetRhYQrVrVrVrVrVrVrVrVrV
-rVrVYQRholFzfUOOZzVQRhSpOEmpkFdkpgWVuxuxEBRhweZYMCyrDHrTLRRhxvLbIELbJTRhuxcbuxRhRhRhRhxGxGxGxGxGxGRhpMRhRhYQrVrVrVrVrVrVrVrVrV
-rVrVYQRhicuxuxuxuxuxreictdnzAXhqfzRhdluxyBRhBJpGUiyrzrLkpARhRhRhRhRhRhRhRhRhRhRhsrGaaTxGdpxIejjIxGRaGazyRhRhYQrVrVrVrVrVrVrVrV
-rVrVYQRhWBxTOAIzuxemRhRhPffIPfRhRhRhRhYHRhRhRhpkhHyrlcuxduRhSGEYGWEYHrEYTLTpRhRaGaNCxGxGlMxIYJmmxGaiGaGadnRhYQYQYQYQYQrVrVrVrV
-rVrVYQRhRhRhRhicuxuORhJzCZcvcvVZRhcvcvoHcvRyRhhUyryrlcOiWxRhhUyryryryryryryrHdGaGaWWxGqdxIxIxIxIxGxGxGxGxGxGxGxGxGxGxGYQrVrVrV
-rVYQRhRhKILzRhuxuxTYRhoHhkhkoHoHxhoHoHoHcvRhRhyryryrlcuxwKRharuqjouqRhRhqsRhRhRhRhRhxGvdxIIbxIxIxIwlAfFoHDKzxGNEPUNExGYQrVrVrV
-rVYQRhebGaGapMuxQasSRhQDSsIOdVRrRhcvoHcvcvRyRhyrLpggzemlgoRhRhRhRhRhRhONyrTfvVVPkRfCxGXfuGvMorcDxIqdxIxIxIZNxGNExINExGYQrVrVrV
-rVYQRhGAGAGAGAGAGAGAGAGARhFkRhRhRhRhIhRhRhRhRhsKRhRhRhRhRhRhQdRmZJeEjAviyrwNvVfpjHaRxGxIxIxIxIxIxIxGxGVBHSxGxGxGQOxGxGYQrVrVrV
-rVrVYQGAhwoswPryVrnCdEGAcvoHJOcvRhPGoHcvcvcvCyoHcvRhfLbUdLhHviyryryryryryryrFlqOkOqkxGGRMtUAYmZsxIxGYnxIYJxIxItTqdHhxGYQrVrVrV
-rVrVYQGAmgDeezwPVrnCGAGAyiZVqbcvRhyioHoHoHoHRxAsoHbjyryryryryryryryryryryrIsvVfpfpfpxGJVHOZEVJTxxISCxIxIxIiixIIbxIMLxGYQrVrVeW
-rVrVYQGATEDeezwPVrnCdEGAcvCyQfCyRhcvcvcvMICyhVDMcvRhYrzutytyQyIrbpbKyryryrwNvVWMfpaRxGvdxIxIxIgDUnxGxuxItStSxIdiRBaLxGYQrVrVeW
-rVrVYQGAGAGAoVDgoVGAGAGARhrYiFrYRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhbFmYRSyrhhvVEAfpBaxGrxxzYwvWPexIxGxGxGzkzkxGxGxGxGxGYQrVrVeW
-rVrVrVYQYQGAYAwPvKGAzcpBRhXmhJkwrYJzcvVZRhZaoMRhMOOOOIOOqcOOatVQRhRhRhRhqsRhRhRhRhxGxGxGxGxGBrxGdtxGaQxIxIxIYJGuxGYQYQrVrVeWeW
-rVrVrVYQYQGAwzjtLCGAEyjzRhkwppkwiFoHMfcvTmPhBIRhicsauxuxuxuxuxuxpMnQgERhyrKPEYjdTpxGvtxGvtxGLcnyLMxGMeOXqdxIxIYGxGYQrVrVrVeWeW
-rVrVYQRhRhGAoViXoVGAzTPQRhkwkwaNrYyioHJODSuKCLRhvUuxuxuxuxaEMhSTRhWsGaRhyryryryrwNxGrExGrExGKyxIeCxGdSxIxIxIxIidxGYQrVrVrVeWeW
-rVrVYQRhvyzAuYyrNhElhHNGPORhRhRhRhBOQfcvTmPzaCRhAkuxuxFcuxuxhXRhRhVGGaRhyryryryrwNxGReSAxIxGTlvjxGxGHsIbHhqQxIEKxGYQrVrVrVeWeW
-rVrVYQRhnuMThUyXyryrMyyrsFyXyrmZRhQDoHRrRhQajhRhOCuxCvSZWIyDZPRhXBGaGaRhyrwWuqLBQtxGmqNvNvxIYjxIxIpNxIxIfWtSxIyVxGYQrVrVrVeWeW
-eWrVYQRhnXAAhUVOZgDktyBRRhXksFXkcdRhmwRhRhiFRhRhRhsFRhRhRhRhRhRhRhRhRhRhHdRhRhRhRhxGxGxGxGxGxGxGQkxGxGxGxGYJxGxGxGYQrVrVrVeWeW
-eWrVYQRhvybnhUaIhmwNskzsRhNNoHcvcvsFoHcvRhdksyvmRAuxdkpgRhETETETETRhRaNWGaRhKIRhKIxGlClCFvStGqxIxIJBqdjsuzxIxIhCxGYQrVrVrVeWeW
-eWrVYQRhnuMTPtEutyyWMTzQRhRhoHwGbvoHoHcviFAhuxAhPSOYUldMRhjRGaGaGaRhRaGaGaRhzLRhzLxGrieuqlYJJBRIYjxIxIxGYjxIUnxGxGYQrVrVrVeWeW
-eWrVYQRhnXdwoXaZWbytTZnXRhjnboZovCcvoHUIRhQaQadJdJREQadhRhWWGaGaGaGaGaGaGaGaGaGarLxGhGxInTYLxItTxIgDxInaxIxIxIhCxGYQrVrVeWeWeW
-eWrVYQRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhkURhrYRhRhRhRhRhRhRhRhRhRhRhRhxGxGxGxGxGxGxGxGxGmSWjxIxIxIxIqdxIWjxGxIxIxIxGxGYQrVrVeWeWeW
-eWrVrVYQYQYQRhnbqPXkcvXkCwfcudGidBXkUFXkoNGiGiGiGiGiRhTcRhTcRhYQYQxGnHtTxGKQxIqdEgxGMZxIxIIbxIUnxGjsjsxGxItTxIhCxGYQrVeWeWeWeW
-eWeWrVrVrVYQRhGihxfFcvjCdZhxhxqPbLiFcvfFhxhxWUqPhxjURhhxRhhxRhYQYQxGVVgDcNxIxIxIxIKlNzomNzxIxIxIpNxIxIxIxIWhMLxGxGYQrVeWeWeWeW
-eWeWrVrVrVYQRhuFhKsFcvXkfFEtmsfFfFXkcvjCFMhxhxhxhxhxhxhxqPhxRhYQYQxGSDqixGJJxIeuhFxGqdrrXRWwwEdoxGRpxIIbxIfWxIhCxGYQrVeWeWeWeW
-eWeWeWrVrVYQRhGihxfFcvcvVNcvcvcvcvcvboGnqPhxRhRhRhRhRhRhRhRhRhYQYQxGxGxGxGxGxGxGxGxGxGxGxGxGxGxGxGxGhCxGhCxGhCxGxGYQrVeWeWeWeW
-eWeWeWrVrVYQRhdBhxXkkKcvbocvcvaSnicvBWXkXWGiRhYQYQYQYQYQYQYQYQrVrVYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQxGxGxGxGxGxGxGYQrVeWeWeWeWeW
-eWeWeWeWrVYQRhRhRhRhRhRhRhRheURhRhRhRhRhRhRhRhYQrVrVeWeWeWrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVYQYQYQYQYQYQYQrVeWeWeWeWeWeW
+eWeWeWeWrVrVYQYQZnZnZnZnZnZnZnYQrVrVrVrVrVrVrVrVrVrVrVYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQrVrVrVrVrVeWeWeWeWeW
+eWeWeWeWrVYQZnZnZngGnLlJuxclZnYQrVrVrVrVrVrVrVrVrVrVYQZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnYQrVrVrVrVrVeWeWeWeW
+eWeWeWeWrVYQZnJFKauxuxuxuxikZnYQYQYQYQYQYQYQYQYQYQYQYQZnaiGaGaaTRhCadIdkmvdkmvdkdIdkvqfhgNRFkrRhPJGaGacnZnYQrVrVrVrVrVrVeWeWeW
+eWeWeWeWrVYQZnoSRhRhwDRhiNRhZnZnZnZnZnZnZnZnZnZnZnZnZnZnRaGaUkRhRhicuxhduxuxuxuxuxuxuxigbahxFORhPJGaGacnZnYQYQYQYQYQYQrVrVeWeW
+eWeWeWrVrVYQZnHRRhrIMPfTuxIDZCbrOfUwCadkpgRhfgzjlEsVRjRhRhpMRhRhXyWNdAuxdAuxdAuxdAuxuxigvnlgCIRhPJGaGacnZnZnZnZnZnZnZnYQrVeWeW
+eWeWeWrVrVYQZnHYRhcTkDYKVIuxuxuxuxrmuxpouxesuxuxuxuxIDdkdkuxSLRhcSDJuxuxuxuxuxuxuxhduxIDjMICQFRhjRGaGarLRhKIRhKIRhKIZnYQrVrVeW
+eWeWrVrVYQYQUrfnrYZOfMntuxMhrPWlrPUwicuxEBRhicuxuxuxuxuxuxuxuxzHuxuxMhiEIzuxMhiEIzuxuxuxuxuxEBRhNtRhRhRhRhzLRhzLRhzLZnYQrVrVeW
+eWeWrVYQDGDGDGkVkVkVkVkVkVkVkVkVkVkVhypesuRhkcxHRoDwRoCvRohrOjRhZdgCuVWvvlQauVlsvliEiEiEIzuxuxwFGanQnQnQGaGaGaGaGarLZnYQrVrVeW
+eWeWrVYQDGauiSbDVjuCkVmuWPkVWeQzTbkVhyuxdjRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhPFPFPFGpuxuVRhRvmKmKmKNqGaGaGaGaGaZnYQrVrVeW
+eWeWrVYQDGJKiSiSiSnkkVCuiScZRzBYiKkVHzuxknRhXPDbpDbUsOMsqpRheotfMADoeoRhrGzbOekeRhRhRhRhRhzHRhRhRhRhRhRhZnZnZnZnZnZnZnYQrVrVeW
+eWrVrVYQDGqIiSDEEpiSISiSproxRzhWQikVafkHthRhXPDblhyrukxvMURhNluxuxuxNlRdpauxUJdsRhhvlEbWtCuxqcOOUxOOSSVQZnYQYQYQYQYQYQrVrVrVeW
+eWrVrVYQDGJKiSLjQqJkkVlFiSXcRzhWKvkVvQuxGzRhhihiviyrukdCglRhoTExfSKwoTRhAefSaWgcRhicuxuxuxuxuxuxuxuxuxknZnYQrVrVrVrVrVrVrVrVeW
+eWrVrVYQDGCCiSiSiSnkkVOUkVkVhWhWhWDjuxuxknRhXssAmTyraKhiPZAtpkhHyrhHhHhHhHyrhHBzRhicuxuxuxuxuxuxuxuxuxknZnYQrVrVrVrVrVrVrVrVrV
+eWrVrVYQDGpxiSDnPXJSkVhWhWhWWuPgIikVhyuxTnRhysZYMCyryryryrveyryryryrDHtytyyrtyDKRhicuxuxuxuxuxuxuxuxuxkjZnYQrVrVrVrVrVrVrVrVrV
+eWrVYQZnDGkVkVkVkVkVkVkVkVkVkVkVkVkVicuxsuRhEUuxMCyryryrwNAtPttytytyDKRhhYSdhYRhRhHoRoyQRoDwBuCvRorfuxetZnYQrVrVrVrVrVrVrVrVrV
+rVrVYQZnolFzfUOOZzVQRhSpOEmpkFdkpgWVuxuxEBRhweZYMCyrDHrTLRRhxvLbIELbJTRhuxcbuxRhRhRhRhCiCiCiCiCiCiRhpMRhZnYQrVrVrVrVrVrVrVrVrV
+rVrVYQZnicuxuxuxuxuxreictdnzAXhqfzRhdluxyBRhBJpGUiyrzrLkpARhRhRhRhRhRhRhRhRhRhRhsrGaaTCidpxIejjICiRaGazyZnZnYQrVrVrVrVrVrVrVrV
+rVrVYQZnWBxTOAIzuxemRhRhPffIPfRhRhRhRhYHRhRhRhpkhHyrlcuxduRhSGEYGWEYHrEYTLTpRhRaGaNCCiCilMxIYJmmCiaiGaGadnZnYQYQYQYQYQrVrVrVrV
+rVrVYQZnRhRhRhicuxuORhJzCZcvcvVZRhcvcvoHcvRyRhhUyryrlcOiWxRhhUyryryryryryryrHdGaGaWWCiqdxIxIxIxICiCiCiCiCiCiCiCiCiCiCiYQrVrVrV
+rVYQZnZnKILzRhuxuxTYRhoHhkhkoHoHxhoHoHoHcvRhRhyryryrlcuxwKRharuqjouqRhRhqsRhRhRhRhRhCivdxIIbxIxIxIwlAfFoHDKzxGNEPUNECiYQrVrVrV
+rVYQZnebGaGapMuxQasSRhQDSsIOdVRrRhcvoHcvcvRyRhyrLpggzemlgoRhRhRhRhRhRhONyrTfvVVPkRfCCiXfuGvMorcDxIqdxIxIxIZNxGNExINECiYQrVrVrV
+rVYQZnhbGAGAGAGAGAGAGAGARhFkRhRhRhRhIhRhRhRhRhsKRhRhRhRhRhRhQdRmZJeEjAviyrwNvVfpjHaRCixIxIxIxIxIxIxGxGVBHSxGxGxGQOxGCiYQrVrVrV
+rVrVYQhbhwoswPryVrnCdEGAcvoHJOcvRhPGoHcvcvcvCyoHcvRhfLbUdLhHviyryryryryryryrFlqOkOqkCiGRMtUAYmZsxIxGYnxIYJxIxItTqdHhCiYQrVrVrV
+rVrVYQhbmgDeezwPVrnCGAGAyiZVqbcvRhyioHoHoHoHRxAsoHbjyryryryryryryryryryryrIsvVfpfpfpCiJVHOZEVJTxxISCxIxIxIiixIIbxIMLCiYQrVrVeW
+rVrVYQhbTEDeezwPVrnCdEGAcvCyQfCyRhcvcvcvMICyhVDMcvRhYrzutytyQyIrbpbKyryryrwNvVWMfpaRCivdxIxIxIgDUnxGxuxItStSxIdiRBaLCiYQrVrVeW
+rVrVYQhbhbhboVDgoVGAGAGARhrYiFrYRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhRhbFmYRSyrhhvVEAfpBaCirxxzYwvWPexIxGxGxGzkzkxGxGCiCiCiYQrVrVeW
+rVrVrVYQYQhbYAwPvKGAzcpBRhXmhJkwrYJzcvVZRhZaoMRhMOOOOIOOqcOOatVQRhRhRhRhqsRhRhRhRhCiCixGxGxGBrxGdtxGaQxIxIxIYJGuCiYQYQrVrVeWeW
+rVrVrVYQYQhbwzjtLCGAEyjzRhkwppkwiFoHMfcvTmPhBIRhicsauxuxuxuxuxuxpMnQgERhyrKPEYjdTpCivtxGvtxGLcnyLMxGMeOXqdxIxIYGCiYQrVrVrVeWeW
+rVrVYQZnZnhboViXoVGAzTPQRhkwkwaNrYyioHJODSuKCLRhvUuxuxuxuxaEMhSTRhWsGaRhyryryryrwNCirExGrExGKyxIeCxGdSxIxIxIxIidCiYQrVrVrVeWeW
+rVrVYQZnvyzAuYyrNhElhHNGPORhRhRhRhBOQfcvTmPzaCRhAkuxuxFcuxuxhXRhRhVGGaRhyryryryrwNCiReSAxIxGTlvjxGxGHsIbHhqQxIEKCiYQrVrVrVeWeW
+rVrVYQZnnuMThUyXyryrMyyrsFyXyrmZRhQDoHRrRhQajhRhOCuxCvSZWIyDZPRhXBGaGaRhyrwWuqLBQtCimqNvNvxIYjxIxIpNxIxIfWtSxIyVCiYQrVrVrVeWeW
+eWrVYQZnnXAAhUVOZgDktyBRRhXksFXkcdRhmwRhRhiFRhRhRhsFRhRhRhRhRhRhRhRhRhRhHdRhRhRhRhCixGxGxGxGxGxGQkxGxGxGxGYJxGxGCiYQrVrVrVeWeW
+eWrVYQZnvybnhUaIhmwNskzsRhNNoHcvcvsFoHcvRhdksyvmRAuxdkpgRhETETETETRhRaNWGaRhKIRhKICilClCFvStGqxIxIJBqdjsuzxIxIhCCiYQrVrVrVeWeW
+eWrVYQZnnuMTPtEutyyWMTzQRhRhoHwGbvoHoHcviFAhuxAhPSOYUldMRhjRGaGaGaRhRaGaGaRhzLRhzLCirieuqlYJJBRIYjxIxIxGYjxIUnxGCiYQrVrVrVeWeW
+eWrVYQZnnXdwoXaZWbytTZnXRhjnboZovCcvoHUIRhQaQadJdJREQadhRhWWGaGaGaGaGaGaGaGaGaGarLCihGxInTYLxItTxIgDxInaxIxIxIhCCiYQrVrVeWeWeW
+eWrVYQZnZnZnZnRhRhRhRhRhRhRhRhRhRhRhkURhrYRhRhRhRhRhRhRhRhRhZnZnZnCiCiCiCiCiCiCiCiCimSWjxIxIxIxIqdxIWjxGxIxIxIxGCiYQrVrVeWeWeW
+eWrVrVYQYQYQZnnbqPXkcvXkCwfcudGidBXkUFXkoNGiGiGiGiGiRhTcRhTcZnYQYQCinHtTxGKQxIqdEgxGMZxIxIIbxIUnxGjsjsxGxItTxIhCCiYQrVeWeWeWeW
+eWeWrVrVrVYQZnGihxfFcvjCdZhxhxqPbLiFcvfFhxhxWUqPhxjURhhxRhhxZnYQYQCiVVgDcNxIxIxIxIKlNzomNzxIxIxIpNxIxIxIxIWhMLxGCiYQrVeWeWeWeW
+eWeWrVrVrVYQZnuFhKsFcvXkfFEtmsfFfFXkcvjCFMhxhxhxhxhxhxhxqPhxZnYQYQCiSDqixGJJxIeuhFxGqdrrXRWwwEdoxGRpxIIbxIfWxIhCCiYQrVeWeWeWeW
+eWeWeWrVrVYQZnGihxfFcvcvVNcvcvcvcvcvboGnqPhxZnZnZnZnZnZnZnZnZnYQYQCiCiCiCiCiCiCiCiCiCiCiCiCiCiCiCiCihCxGhCxGhCCiCiYQrVeWeWeWeW
+eWeWeWrVrVYQZndBhxXkkKcvbocvcvaSnicvBWXkXWGiZnYQYQYQYQYQYQYQYQrVrVYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQCiCiCiCiCiCiCiYQrVeWeWeWeWeW
+eWeWeWeWrVYQZnZnZnZnZnZnZnZneUZnZnZnZnZnZnZnZnYQrVrVeWeWeWrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVrVYQYQYQYQYQYQYQrVeWeWeWeWeWeW
 eWeWeWeWeWrVYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQrVrVeWeWeWeWeWeWrVrVrVrVrVrVrVrVeWeWeWeWeWeWrVrVrVrVrVrVrVrVrVrVrVeWeWeWeWeWeWeW
 "}
