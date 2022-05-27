@@ -265,6 +265,7 @@
 "HC" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/vault/mothership_lab/asteroid)
 "HI" = (/turf/unsimulated/wall{desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."; icon_state = "r_wall"; name = "riveted reinforced wall"},/area/vault/mothership_lab/entrance)
 "HL" = (/obj/effect/decal/cleanable/blood/drip{basecolor = "#2299FC"; blood_color = "#2299FC"},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_upper)
+"HM" = (/turf/unsimulated/wall/rock{desc =  "This rock is very dense, and has thick metal struts to protect it from mining."; icon_state = "rock_rf0"},/area/vault/mothership_lab/raidtunnel_upper)
 "HQ" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/entrance)
 "Ic" = (/obj/structure/ladder{height = 1; id = "labladder_5"; name = "Administration Deck Access"},/turf/simulated/floor/plating,/area/vault/mothership_lab/control_room)
 "Io" = (/obj/structure/table/reinforced,/obj/machinery/door/poddoor{density = 0; icon_state = "pdoor0"; id_tag = "checkpointshutters1"; name = "Checkpoint Blast Doors"; opacity = 0},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/entrance)
@@ -444,10 +445,10 @@ zrMDMDMDAuAuAuAuZRsEdCAuYFYFMDmvmvmvMDMDMDGLGLGLyAGLGLGLGLGLGLGLGLGLGLGLGLGLGLGL
 zrMDMDMDMDMDMDMDAuAuZtAunqrEYFMDMDMDMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLOhGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDRlRlMDMDMDMDMDMDMDMDMDzrzr
 zrMDMDMDFOMDMDXoXoyAGLyAGLGLGLMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLAuAuSlMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvMDMDMDzrzr
 zrzrMDMDFOGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDmvmvmvMDMDMDMDMDMDMDMDMDMDMDQzctQzMDQzQzQzQzQzQzQzQzQzQzMDMDMDMDMDGEGEGEMDMDMDmvMDMDMDmvmvmvMDMDzrzrzr
-zrzrMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDFOMDMDQzQzQzQzQzQzQzQzQzQzQzmuQzQzYdaJSYnWxGmZepnGWlDiQzQzQzMDMDMDGEGEGEMDmvmvMDMDmvmvmvMDMDMDzrzrzr
-zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDMDMDMDQzJBgbzuYSpmidbqPIMQQzmeVzPIMQMQDlMQMQMQHLQsMQMQPIgUgUQzQzMDMDMDMDmvmvmvMDMDmvMDMDMDzrzrzrzrzr
-zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDGEGEMDMDMDMDMDMDMDQzndgUMQMQbqMQgULkgUMQMQgUYhMQMQgUMQMQxSmhMQMQHLkrgUHLYjQzMDMDMDMDMDmvMDMDMDMDzrzrzrzrzrzrzrzr
-zrzrzrzrMDmvGLGLGLGLGLGLGLGLXomvmvMDMDGEMDMDMDMDMDMDMDMDGEQzyNzusnzuMQgUMQPIQzQzQzQzPIxGgURvDLnGSYTlTpgUYdPIMQzaQzQzMDmvmvMDMDMDMDMDMDzrzrzrzrzrzrzrzrzr
-zrzrzrzrzrMDMDGLGLGLGLGLMDMDMDMDmvmvMDMDMDMDMDMDzrzrzrMDMDQzQzQzQzQzQzQzQzQzMDMDMDMDQzQzQzQzQzQzQzQzQzQzQzQzQzQzMDMDmvMDMDzrzrzrzrzrzrzrzrzrzrzrxBzrzrzr
+zrzrMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDFOMDMDQzQzQzQzQzQzQzQzQzQzQzmuQzQzYdaJSYnWxGmZepnGWlDiHMHMHMMDMDMDGEGEGEMDmvmvMDMDmvmvmvMDMDMDzrzrzr
+zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDMDMDMDQzJBgbzuYSpmidbqPIMQQzmeVzPIMQMQDlMQMQMQHLQsMQMQPIgUgUHMHMMDMDMDMDmvmvmvMDMDmvMDMDMDzrzrzrzrzr
+zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDGEGEMDMDMDMDMDMDMDQzndgUMQMQbqMQgULkgUMQMQgUYhMQMQgUMQMQxSmhMQMQHLkrgUHLYjHMMDMDMDMDMDmvMDMDMDMDzrzrzrzrzrzrzrzr
+zrzrzrzrMDmvGLGLGLGLGLGLGLGLXomvmvMDMDGEMDMDMDMDMDMDMDMDGEQzyNzusnzuMQgUMQPIQzQzQzQzPIxGgURvDLnGSYTlTpgUYdPIMQzaHMHMMDmvmvMDMDMDMDMDMDzrzrzrzrzrzrzrzrzr
+zrzrzrzrzrMDMDGLGLGLGLGLMDMDMDMDmvmvMDMDMDMDMDMDzrzrzrMDMDQzQzQzQzQzQzQzQzQzMDMDMDMDQzQzQzQzQzQzQzQzQzQzQzHMHMHMMDMDmvMDMDzrzrzrzrzrzrzrzrzrzrzrxBzrzrzr
 zrzrzrzrzrzrzrzrGLGLGLGLGLMDMDMDMDMDMDMDMDMDzrzrzrzrzrzrMDMDMDMDMDMDMDMDMDMDMDzrzrMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzr
 "}
