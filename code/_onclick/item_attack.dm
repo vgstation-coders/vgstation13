@@ -181,7 +181,7 @@
 						showname = "[user]'s left arm"
 
 		//make not the same mistake as me, these messages are only for slimes
-		if(istype(I.attack_verb,/list) && I.attack_verb.len && !iscarbon(M))
+		if(istype(I.attack_verb,/list) && I.attack_verb.len)
 			M.visible_message("<span class='danger'>[showname] [pick(I.attack_verb)] [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] [pick(I.attack_verb)] you with [I].</span>")
 		else if(I.force == 0)
