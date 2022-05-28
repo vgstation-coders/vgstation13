@@ -164,8 +164,14 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/vamp_H = M
+
+		if(vamp_H.is_muzzled())
+			to_chat(M, "<span class='warning'> The [vamp_H.wear_mask] prevents you from biting!</span>")
+			return FALSE
+
 		if(vamp_H.check_body_part_coverage(MOUTH))
 			to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
+
 	return TRUE
 
 

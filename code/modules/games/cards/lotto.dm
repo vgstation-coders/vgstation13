@@ -15,11 +15,14 @@
 	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 
-/obj/item/toy/lotto_ticket/proc/scratch(var/input_prize_multiplier)
+/obj/item/toy/lotto_ticket/proc/scratch(var/input_prize_multiplier, var/mob/user)
 	var/tuning_value = 1/5 //Used to adjust expected values.
 	var/profit = 0
+	var/luck = user?.luck()
 	for(var/prize = 1 to problist.len)
-		if(prob(problist[prize]))
+		var/thisprob = problist[prize]
+		//Take luck into account.
+		if(user ? user.lucky_prob(thisprob, luckfactor = 1/5000, maxskew = 25, ourluck = luck) : prob(thisprob))
 			profit = prizelist[prize]*input_prize_multiplier*tuning_value
 			return profit
 
@@ -43,7 +46,6 @@
 			to_chat(M, "<span class='warning'>Your eyes start to burn badly!</span>")
 	M.update_icons()
 
-
 /obj/item/toy/lotto_ticket/attackby(obj/item/weapon/S, mob/user)
 	if(!revealed)
 		if(!user.is_holding_item(src) && istype(src,/obj/item/toy/lotto_ticket/supermatter_surprise))
@@ -54,7 +56,7 @@
 				src.revealed = TRUE
 				src.update_icon()
 				to_chat(user, "<span class='notice'>You scratch off the film covering the prizes.</span>")
-				winnings = scratch(prize_multiplier)
+				winnings = scratch(prize_multiplier, user)
 				if(winnings)
 					src.iswinner = TRUE
 		else

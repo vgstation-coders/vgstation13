@@ -1342,21 +1342,30 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
+	if(!message)
+		return
+	if(M.stat == DEAD)
+		to_chat(M, "<span class='warning'>You must be alive to do this!</span>")
+		return
+	if (M.stat == UNCONSCIOUS)
+		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
+		return
+
 	if(!telepathic_target.len)
-		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>[key_name(M)] projects its mind towards itself: [message]</i>")
-		log_admin("[key_name(M)] projects its mind towards itself: [message]</span>")
-		to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
+		var/mob/living/L = M
+		telepathic_target += L
+
+	var/all_switch = TRUE
 	for(var/mob/living/T in telepathic_target)
 		if(istype(T) && M.can_mind_interact(T))
+			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
+		if(all_switch)
+			all_switch = FALSE
+			if(T != M)
+				to_chat(M,"<span class='mushroom'>Projected to <b>[english_list(telepathic_target)]</b>: [message]</span>")
 			for(var/mob/dead/observer/G in dead_mob_list)
-				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[T]</b>: [message]</i>")
-			log_admin("[key_name(M)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
-			if(T == M) //Talking to ourselves
-				to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
-				return
-			to_chat(T,"<span class='notice'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
-			to_chat(M,"<span class='mushroom'>Projected to <b>[T]</b>: [message]</span>")
+				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[english_list(telepathic_target)]</b>: [message]</i>")
+			log_admin("[key_name(M)] projects his mind towards [english_list(telepathic_target)]: [message]")
 
 /datum/species/lich
 	name = "Undead"

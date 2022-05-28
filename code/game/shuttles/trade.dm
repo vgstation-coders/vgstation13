@@ -29,7 +29,7 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 	icon_state = "syndishuttle"
 
 	light_color = LIGHT_COLOR_RED
-	machine_flags = EMAGGABLE //No screwtoggle because this computer can't be built
+	machine_flags = EMAGGABLE | SCREWTOGGLE
 
 /obj/machinery/computer/shuttle_control/trade/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	link_to(trade_shuttle)

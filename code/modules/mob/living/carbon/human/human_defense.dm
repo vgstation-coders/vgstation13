@@ -36,10 +36,16 @@ emp_act
 
 				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
-
 	if(check_shields(P.damage, P))
 		P.on_hit(src, 100)
 		return PROJECTILE_COLLISION_BLOCKED
+
+	var/obj/structure/railing/R = locate(/obj/structure/railing) in get_turf(src)
+	if(R)
+		var/turf/T = get_step(R,R.dir)
+		if(isopenspace(T) && P.get_damage())
+			R.hurdle(src) // Railing kill!
+
 	return (..(P , def_zone))
 
 
@@ -84,7 +90,7 @@ emp_act
 	var/siemens_coefficient = 1.0
 	var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes) // What all are we checking?
 
-	for(var/obj/item/clothing/C in clothing_items)
+	for(var/obj/item/C in clothing_items)
 		if(istype(C) && (C.body_parts_covered & def_zone.body_part)) // Is that body part being targeted covered?
 			siemens_coefficient *= C.siemens_coefficient
 
@@ -98,11 +104,12 @@ emp_act
 	for(var/bp in body_parts)
 		if(!bp)
 			continue
-		if(bp && istype(bp ,/obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
+			var/obj/item/clothing/CC = C
+			for(var/obj/item/clothing/accessory/A in CC.accessories)
 				if(A.body_parts_covered & def_zone.body_part)
 					protection += A.get_armor(type)
 	if(istype(loc, /obj/mecha))
@@ -116,11 +123,12 @@ emp_act
 	var/protection = 0
 	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
 	for(var/bp in body_parts)
-		if(istype(bp, /obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor_absorb(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
+			var/obj/item/clothing/CC = C
+			for(var/obj/item/clothing/accessory/A in CC.accessories)
 				if(A.body_parts_covered & def_zone.body_part)
 					protection += A.get_armor_absorb(type)
 	return protection
@@ -130,7 +138,7 @@ emp_act
 	if(!body_part_flags)
 		return 0
 	var/parts_to_check = body_part_flags
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		if(ignored && C == ignored)
@@ -145,7 +153,7 @@ emp_act
 /mob/living/carbon/human/proc/get_body_part_coverage(var/body_part_flags=0)
 	if(!body_part_flags)
 		return null
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		 //Check if this piece of clothing contains ALL of the flags we want to check.
@@ -157,7 +165,7 @@ emp_act
 	//Because get_body_part_coverage(FULL_BODY) would only return true if the human has one piece of clothing that covers their whole body by itself.
 	var/body_coverage = FULL_BODY | FULL_HEAD
 
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		body_coverage &= ~(C.body_parts_covered)

@@ -484,7 +484,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		SSplant.seeds[name] = src
 
 //Place the plant products at the feet of the user.
-/datum/seed/proc/harvest(var/mob/user,var/yield_mod = 1)
+/datum/seed/proc/harvest(var/mob/user, var/yield_mod = 1)
 	if(!user)
 		return
 
@@ -493,9 +493,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	else
 		to_chat(user, "You harvest from the [display_name].")
 
-		generate_product(get_turf(user), yield_mod)
+		generate_product(get_turf(user), yield_mod, user)
 
-/datum/seed/proc/generate_product(var/turf/T, yield_mod)
+/datum/seed/proc/generate_product(var/turf/T, yield_mod, mob/harvester)
 	add_newline_to_controller()
 
 	var/total_yield = 0
@@ -508,7 +508,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		total_yield = round(max(1,total_yield))
 
 	currently_querying = list()
+
 	for(var/i = 0;i<total_yield;i++)
+
 		var/product_type = pick(products)
 
 		var/obj/item/product
@@ -516,7 +518,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(ispath(product_type, /obj/item/stack))
 			product = drop_stack(product_type, T, 1, null)
 		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown) || ispath(product_type, /obj/item/weapon/grown))
-			product = new product_type(T, custom_plantname = name)
+			product = new product_type(T, custom_plantname = name, harvester = harvester)
 		else
 			product = new product_type(T)
 

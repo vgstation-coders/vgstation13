@@ -327,7 +327,7 @@ var/global/list/floorbot_targets=list()
 			visible_message("<span class='warning'>[src] begins to improve the floor.</span>")
 			repairing = 1
 			spawn(50)
-				F.make_metal_floor(new /obj/item/stack/tile/metal)
+				F.make_tiled_floor(new /obj/item/stack/tile/metal)
 				repairing = 0
 				amount -= 1
 				update_icon()

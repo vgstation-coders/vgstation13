@@ -752,6 +752,23 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/grey_supply/New()
 	selection_from = list(basic, worker, researcher, soldier)
 
+/datum/supply_packs/grey_uniform
+	name = "Mothership uniforms"
+	var/laborer = list(/obj/item/clothing/under/grey/grey_worker,
+					/obj/item/clothing/under/grey/grey_worker)
+	var/scientist = list(/obj/item/clothing/under/grey/grey_researcher,
+					/obj/item/clothing/suit/storage/labcoat/mothership)
+	var/explorer = list(/obj/item/clothing/under/grey/grey_scout,
+					/obj/item/clothing/under/grey/grey_scout)
+	cost = 50
+	containertype = /obj/structure/closet/crate/ayybin
+	containername = "mothership uniform bin"
+	group = "Clothing"
+	contraband = 1
+
+/datum/supply_packs/grey_uniform/New()
+	selection_from = list(laborer, scientist, explorer)
+
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
 	contains = list(/obj/item/clothing/suit/armor/vest/neorussian,
@@ -1003,6 +1020,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_security)
 	group = "Security"
 
+/datum/supply_packs/greyweapons
+	name = "MDF Surplus weapons"
+	contains = list(/obj/item/weapon/melee/stunprobe,
+					/obj/item/weapon/melee/stunprobe,
+					/obj/item/weapon/gun/energy/smalldisintegrator,
+					/obj/item/weapon/gun/energy/smalldisintegrator)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/ayyweapon
+	containername = "MDF standard weapons crate"
+	one_access = list(access_armory, access_mothership_military)
+	group = "Security"
+	hidden = 1
+
 /datum/supply_packs/smartlaser
 	name = "Smart laser guns"
 	contains = list(/obj/item/weapon/gun/energy/laser/smart,
@@ -1043,6 +1073,21 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "armor crate"
 	access = list(access_security)
 	group = "Security"
+
+/datum/supply_packs/greyarmor
+	name = "MDF Surplus standard armor"
+	contains = list(/obj/item/clothing/suit/armor/mothership,
+					/obj/item/clothing/suit/armor/mothership,
+					/obj/item/clothing/head/helmet/mothership,
+					/obj/item/clothing/head/helmet/mothership,
+					/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/under/grey/grey_soldier)
+	cost = 40
+	containertype = /obj/structure/closet/crate/secure/ayybin
+	containername = "MDF standard armor bin"
+	one_access = list(access_security, access_mothership_military)
+	group = "Security"
+	contraband = 1
 
 /datum/supply_packs/riot
 	name = "Riot gear"

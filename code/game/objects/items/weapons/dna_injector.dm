@@ -1355,6 +1355,16 @@
 	block = TELEPATHYBLOCK
 	..()
 
+/obj/item/weapon/dnainjector/nofail/ehs
+	name = "DNA-Injector (Electromagnetic Hypersensitivity)"
+	desc = "And he gets to be an IAA? What a sick joke!"
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+
+/obj/item/weapon/dnainjector/nofail/ehs/initialize()
+	block = EHSBLOCK
+	..()
+
 /obj/item/weapon/dnainjector/nofail/randompower/New(newloc)
     var/type = pick(/obj/item/weapon/dnainjector/nofail/hulkmut,
         /obj/item/weapon/dnainjector/nofail/xraymut,

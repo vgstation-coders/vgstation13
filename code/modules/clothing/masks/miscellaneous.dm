@@ -10,6 +10,7 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
+	is_muzzle = MUZZLE_HARD
 
 //Monkeys can not take the muzzle off of themself! Call PETA!
 /obj/item/clothing/mask/muzzle/attack_paw(mob/user as mob)

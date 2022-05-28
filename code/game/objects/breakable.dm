@@ -241,7 +241,7 @@
 		M.visible_message("<span class='warning'>\The [M] [M.attacktext] \the [src][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You hit \the [src][generate_break_text(glanced)]</span>")
 		try_break()
 	else
-		..()
+		. = ..()
 
 //Object ballistically colliding with something
 
@@ -338,6 +338,8 @@
 		if(recoil_damage) //Recoil damage to the foot.
 			kicker.foot_impact(src, recoil_damage, ourfoot = foot_organ)
 		Crossed(kicker)
+	else
+		. = ..()
 
 //Biting the object
 
@@ -363,5 +365,7 @@
 		if(glanced)
 			//Damage the biter's mouth.
 			biter.apply_damage(BREAKARMOR_FLIMSY, BRUTE, TARGET_MOUTH)
+	else
+		. = ..()
 
 /////////////////////

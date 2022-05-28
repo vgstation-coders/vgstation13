@@ -254,55 +254,31 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	break_tile()
 
 /turf/simulated/floor/is_metal_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/metal))
-		return 1
-	else
-		return 0
+	return istype(floor_tile,/obj/item/stack/tile/metal)
 
 /turf/simulated/floor/is_light_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/light))
-		return 1
-	else
-		return 0
+	return istype(floor_tile,/obj/item/stack/tile/light)
 
 /turf/simulated/floor/is_grass_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/grass))
-		return 1
-	else
-		return 0
+	return istype(floor_tile,/obj/item/stack/tile/grass)
 
 /turf/simulated/floor/is_wood_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/wood))
-		return 1
-	else
-		return 0
+	return istype(floor_tile,/obj/item/stack/tile/wood)
 
 /turf/simulated/floor/is_carpet_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/carpet))
-		return 1
-	else
-		return 0
+	return istype(floor_tile,/obj/item/stack/tile/carpet)
 
 /turf/simulated/floor/is_arcade_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/arcade))
-		return 1
-	return 0
+	return istype(floor_tile,/obj/item/stack/tile/arcade)
 
 /turf/simulated/floor/is_slime_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/slime))
-		return 1
-	else
-		return 0
+	return istype(floor_tile,/obj/item/stack/tile/slime)
 
 /turf/simulated/floor/is_plating()
-	if(!floor_tile)
-		return 1
-	return 0
+	return !floor_tile
 
 /turf/simulated/floor/is_mineral_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/mineral))
-		return 1
-	return 0
+	return istype(floor_tile,/obj/item/stack/tile/mineral)
 
 /turf/simulated/floor/proc/break_tile()
 	if(istype(src,/turf/simulated/floor/engine))
@@ -406,10 +382,10 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	update_icon()
 	levelupdate()
 
-//This proc will make the turf a plasteel floor tile. The expected argument is the tile to make the turf with
+//This proc will make the turf from a floor tile. The expected argument is the tile to make the turf with
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
-/turf/simulated/floor/proc/make_metal_floor(var/obj/item/stack/tile/metal/T = null)
+/turf/simulated/floor/proc/make_tiled_floor(var/obj/item/stack/tile/metal/T = null)
 	if(floor_tile)
 		qdel(floor_tile)
 	floor_tile = null
@@ -446,92 +422,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	update_icon()
 	levelupdate()
 	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-//This proc will make the turf a light floor tile. The expected argument is the tile to make the turf with
-//If none is given it will make a new object. dropping or unequipping must be handled before or after calling
-//this proc.
-/turf/simulated/floor/proc/make_light_floor(var/obj/item/stack/tile/light/T = null)
-	broken = 0
-	burnt = 0
-	intact = 1
-	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/light))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/light(null)
-
-	update_icon()
-	levelupdate()
-
-//This proc will make a turf into a grass patch. Fun eh? Insert the grass tile to be used as the argument
-//If no argument is given a new one will be made.
-/turf/simulated/floor/proc/make_grass_floor(var/obj/item/stack/tile/grass/T = null)
-	broken = 0
-	burnt = 0
-	intact = 1
-	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/grass))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/wood(null)
-	update_icon()
-	levelupdate()
-
-//This proc will make a turf into a wood floor. Fun eh? Insert the wood tile to be used as the argument
-//If no argument is given a new one will be made.
-/turf/simulated/floor/proc/make_wood_floor(var/obj/item/stack/tile/wood/T = null)
-	broken = 0
-	burnt = 0
-	intact = 1
-	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/wood))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/wood(null)
-	update_icon()
-	levelupdate()
-
-//This proc will make a turf into a carpet floor. Fun eh? Insert the carpet tile to be used as the argument
-//If no argument is given a new one will be made.
-/turf/simulated/floor/proc/make_carpet_floor(var/obj/item/stack/tile/carpet/T = null)
-	broken = 0
-	burnt = 0
-	intact = 1
-	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/carpet))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/carpet(null)
-
-	update_icon()
-	levelupdate()
 
 
 /turf/simulated/floor/singularity_pull(S, current_size)
@@ -616,7 +506,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					make_metal_floor(T)
+					make_tiled_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
 	else if(isshovel(C))

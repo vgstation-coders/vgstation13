@@ -492,7 +492,7 @@ var/global/mulebot_count = 0
 
 	//I'm sure someone will come along and ask why this is here... well people were dragging screen items onto the mule, and that was not cool.
 	//So this is a simple fix that only allows a selection of item types to be considered. Further narrowing-down is below.
-	if(!istype(C,/obj/item) && !istype(C,/obj/machinery) && !istype(C,/obj/structure) && !ismob(C))
+	if(!can_load(C))
 		return
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return
@@ -511,6 +511,18 @@ var/global/mulebot_count = 0
 		crate.close()
 
 	lock_atom(C, /datum/locking_category/mulebot)
+
+/obj/machinery/bot/mulebot/proc/can_load(var/atom/movable/C)
+	if (C.anchored)
+		return FALSE
+	if (!istype(C,/obj/item) && !istype(C,/obj/machinery) && !istype(C,/obj/structure) && !ismob(C))
+		return FALSE
+	if (!emagged)
+		if (istype(C,/obj/machinery/door))
+			return check_access(botcard)
+		if (istype(C, /obj/structure/grille) || istype(C, /obj/structure/window))
+			return FALSE
+	return TRUE
 
 // called to unload the bot
 // argument is optional direction to unload

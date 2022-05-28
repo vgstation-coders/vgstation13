@@ -102,7 +102,7 @@
 	name = "packet of cabbage seeds"
 	seed_type = "cabbage"
 	vending_cat = "vegetables"
-	
+
 /obj/item/seeds/plasmacabbageseed
 	name = "packet of plasma cabbage seeds"
 	seed_type = "plasmacabbage"
@@ -495,7 +495,10 @@
 	seed_type = "silverpear"
 	vending_cat = "fruits"
 
-
+/obj/item/seeds/cloverseed
+	name = "packet of clover seeds"
+	seed_type = "clover"
+	vending_cat = "weeds"
 
 // Chili plants/variants.
 /datum/seed/chili
@@ -1842,3 +1845,21 @@
 	yield = 1
 	potency = 30
 	growth_stages = 3
+
+/datum/seed/clover/
+	name = "clover"
+	seed_name = "clover"
+	display_name = "clover"
+	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
+	plant_icon_state = "clover"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
+	chems = list(NUTRIMENT = list(1,25))
+	harvest_repeat = 1
+	lifespan = 60
+	maturation = 2
+	production = 5
+	yield = 5
+	growth_stages = 2
+	water_consumption = 0.5
+	nutrient_consumption = 0.15
+

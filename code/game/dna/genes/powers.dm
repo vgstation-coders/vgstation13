@@ -130,7 +130,7 @@
 	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE|TALKED_BEFORE|INCLUDEUSER
+	spell_flags = SELECTABLE|TALKED_BEFORE
 	override_base = "genetic"
 	hud_state = "gen_project"
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
@@ -154,6 +154,7 @@
 	else
 		M.telepathic_target.len = 0
 
+	var/all_switch = TRUE
 	for(var/T in targets)
 		var/mob/living/target
 		if (isliving(T))
@@ -166,17 +167,16 @@
 		else if(istype(M))
 			M.telepathic_target += target
 			continue
-		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Telepathy, <b>[user]</b> to <b>[T]</b>: [message]</i>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
-		if(T == user) //Talking to ourselves
-			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
-			return
 		if(M_TELEPATHY in target.mutations)
 			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: [message]</span>")
 		else
 			to_chat(T,"<span class='notice'>You hear a voice inside your head: [message] </span>")
-		to_chat(user,"<span class='notice'>Projected to <b>[T]</b>: [message]</span>")
+		if(all_switch)
+			all_switch = FALSE
+			to_chat(user,"<span class='notice'>Projected to <b>[english_list(targets)]</b>: [message]</span>")
+			for(var/mob/dead/observer/G in dead_mob_list)
+				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>: [message]</i>")
+			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
 
 /datum/dna/gene/basic/morph
 	name = "Morph"

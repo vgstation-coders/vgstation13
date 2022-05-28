@@ -67,8 +67,9 @@
 				if(T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 				D.receive_pulse(irradiationThisBurst * 50)
-			var/randomMutation = prob(50)
-			var/badMutation = prob(50)
+
+			var/randomMutation
+			var/badMutation
 			for(var/mob/living/carbon/human/H in living_mob_list)
 				if(istype(H.loc, /obj/spacepod))
 					continue
@@ -77,10 +78,12 @@
 					continue
 				if(T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
-
+				randomMutation = prob(50)
 				var/applied_rads = (H.apply_radiation(irradiationThisBurst,RAD_EXTERNAL) > (irradiationThisBurst/4))
 				if(randomMutation && applied_rads)
-					if (badMutation)
+					//luck plays a role in the mutations acquired
+					badMutation = H?.lucky_prob(50, -1/10)
+					if(badMutation)
 						//H.apply_effect((rand(25,50)),IRRADIATE,0)
 						randmutb(H) // Applies bad mutation
 						domutcheck(H,null,MUTCHK_FORCED)

@@ -61,6 +61,9 @@
 		"<span class='notice'>You finish eating \the [src].</span>")
 		score.foodeaten++ //For post-round score
 
+		if(luckiness)
+			user.luck_adjust(luckiness, temporary = TRUE)
+
 		//Drop our item before we delete it, to clear any references of ourselves in people's hands or whatever.
 		var/old_loc = loc
 		if(loc == user)
@@ -378,13 +381,14 @@
 
 	return 1
 
-/obj/item/weapon/reagent_containers/food/snacks/proc/splat_reagent_reaction(turf/T)
+/obj/item/weapon/reagent_containers/food/snacks/proc/splat_reagent_reaction(turf/T, mob/user)
 	if(reagents.total_volume > 0)
 		reagents.reaction(T)
 		for(var/atom/A in T)
 			if (A == src)
 				continue
-			reagents.reaction(A)
+			var/list/hit_zone = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS
+			reagents.reaction(A, zone_sels = hit_zone)
 		return 1
 	return 0
 
@@ -5240,6 +5244,7 @@
 	icon = 'icons/obj/candymachine.dmi'
 	bitesize = 5
 	slot_flags = SLOT_MASK //No, really, suck on this.
+	goes_in_mouth = TRUE
 	attack_verb = list("taps", "pokes")
 	eatverb = "crunch"
 	valid_utensils = 0
@@ -5348,6 +5353,7 @@
 	icon_state = "lollipop_stick"
 	w_class = W_CLASS_TINY
 	slot_flags = SLOT_MASK
+	goes_in_mouth = TRUE
 	throwforce = 1
 	autoignition_temperature = 0
 	w_type = RECYK_PLASTIC

@@ -63,6 +63,8 @@
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
+	var/goes_in_mouth //Whether or not the item is described as "on his/her face" or "in his/her mouth" when worn on the face slot.
+	var/is_muzzle	//Whether or not the item is a muzzle, and how strong the muzzling effect is. See setup.dm.
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
@@ -79,8 +81,8 @@
 
 	var/datum/speech_filter/speech_filter
 
-/obj/item/proc/return_thermal_protection()
-	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
+	var/luckiness //How much luck or unluck the item confers while held
+	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
 
 /obj/item/New()
 	..()
@@ -107,6 +109,16 @@
 	Works similarly to worn sprite_sheets, except the alternate sprites are used when the clothing/refit_for_species() proc is called.
 	*/
 	//var/list/sprite_sheets_obj = null
+
+
+/obj/item/proc/get_armor(var/type)
+	return armor[type]
+
+/obj/item/proc/get_armor_absorb(var/type)
+	return armor_absorb[type]
+
+/obj/item/proc/return_thermal_protection()
+	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
 /obj/item/acid_melt()
 	if (acidable())
@@ -490,6 +502,11 @@
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
+
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				return CAN_EQUIP
 			if(slot_back)
 				if( !(slot_flags & SLOT_BACK) )

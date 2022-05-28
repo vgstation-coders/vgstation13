@@ -152,7 +152,7 @@
 
 
 /mob/living/carbon/monkey/update_inv_wear_mask(var/update_icons=1, var/pixel_y_adjustment = 0)
-	if( wear_mask && istype(wear_mask, /obj/item/clothing/mask) && wear_mask.is_visible())
+	if(isitem(wear_mask) && wear_mask.is_visible())
 
 		var/image/I	= image("icon" = ((wear_mask.icon_override) ? wear_mask.icon_override : 'icons/mob/monkey.dmi'), "icon_state" = "[wear_mask.icon_state]", pixel_y = pixel_y_adjustment)
 		if(wear_mask.dynamic_overlay)
