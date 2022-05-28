@@ -43,7 +43,7 @@
 
 	if(user == src) // Attacking yourself can't miss
 		if(isnull(user.zone_sel)) //If the mob attacks itself without a client controlling it and therefore has no zone select active. This could happen if a catatonic person wielding a sword slips.
-			target_zone = pick("head", "chest", "eyes", "mouth")
+			target_zone = pick("head", "eyes", "mouth")
 		else
 			target_zone = user.zone_sel.selecting
 

@@ -2066,8 +2066,7 @@
 		return 1
 	if(iscarbon(O))
 		var/mob/living/carbon/C = O
-		if(C.Slip(4,3))
-			to_chat(C, "<SPAN CLASS='notice'>You slipped on \the [name]!</SPAN>")
+		if(C.Slip(4, 3, slipped_on = src))
 			new/obj/effect/decal/cleanable/smashed_butter(src.loc)
 			qdel(src)
 
@@ -4961,8 +4960,7 @@
 		return 1
 	if(iscarbon(O))
 		var/mob/living/carbon/C = O
-		if(C.Slip(3,2))
-			to_chat(C, "<SPAN CLASS='notice'>You slipped on \the [name]!</SPAN>")
+		C.Slip(3, 2, slipped_on = src)
 
 ////////////////SLIDERS END////////////////
 
@@ -6656,8 +6654,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		return 1
 	if(iscarbon(O))
 		var/mob/living/carbon/C = O
-		if(C.Slip(4,3))
-			to_chat(C, "<SPAN CLASS='notice'>You slipped on \the [name]!</SPAN>")
+		if(C.Slip(4, 3, slipped_on = src))
 			new/obj/effect/decal/cleanable/smashed_butter(src.loc)
 			qdel(src)
 
@@ -6697,6 +6694,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/Crossed(atom/movable/O)
+	if(..())
+		return 1
+	if(iscarbon(O))
+		var/mob/living/carbon/C = O
+		C.Slip(4, 3, slipped_on = src)
+
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	name = "butter fingers"
 	desc = "It's a microwaved hand slathered in butter!"
@@ -6708,6 +6712,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/Crossed(atom/movable/O)
+	if(..())
+		return 1
+	if(iscarbon(O))
+		var/mob/living/carbon/C = O
+		C.Slip(4, 3, slipped_on = src)
 
 /obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	name = "buttered toast"

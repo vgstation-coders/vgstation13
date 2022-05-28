@@ -15,11 +15,9 @@
 /datum/locking_category/banana_peel
 
 /obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM)
-	if (iscarbon(AM))
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if(slip_n_slide(M))
-			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+		slip_n_slide(M)
 	if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
 		var/obj/structure/bed/chair/vehicle/gokart/kart = AM
 		var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
@@ -32,7 +30,7 @@
 				sleep(1)
 
 /obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
-	if(!M.Slip(2,2,1))
+	if(!M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>"))
 		return 0
 	var/tiles_to_slip = rand(round(potency/20, 1),round(potency/10, 1))
 	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
