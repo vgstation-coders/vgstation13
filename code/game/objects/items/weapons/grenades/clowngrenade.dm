@@ -84,9 +84,15 @@
 			else
 				return
 
+
 		if(!istype(M, /mob/living/carbon/slime) && !isrobot(M))
-			M.stop_pulling()
-			M.Slip(10, 10, slipped_on = src, drugged_message = "<span class='userdanger'>Please, just end the pain!</span>", spanclass = "notice")
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				C.Slip(10, 10, slipped_on = src, drugged_message = "<span class='userdanger'>Please, just end the pain!</span>", spanclass = "notice")
+			else //Includes simple animals
+				M.Slip(10, 10)
+				M.simple_message("<span class='notice'>You slipped on \the [name]!</span>",\
+				"<span class='userdanger'>Please, just end the pain!</span>")
 			step(M, M.dir)
 			spawn(1)
 				for(var/i = 1 to slip_power)
