@@ -493,7 +493,7 @@
 	src.unslippable = last_slip_value
 
 /mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
-	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
+	if((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
 	for(var/obj/item/I in held_items)
@@ -501,6 +501,7 @@
 
 	if(..())
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+
 		return 1
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)

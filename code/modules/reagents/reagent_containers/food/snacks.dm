@@ -2064,18 +2064,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O)
 	if(..())
 		return 1
-	if (ishuman(O))
-		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() != TRUE)
-			return
-
-		H.stop_pulling()
-		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
-		playsound((src), 'sound/misc/slip.ogg', 50, 1, -3)
-		H.Stun(4)
-		H.Knockdown(3)
-		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
-		qdel(src)
+	if(iscarbon(O))
+		var/mob/living/carbon/C = O
+		if(C.Slip(4,3))
+			to_chat(C, "<SPAN CLASS='notice'>You slipped on \the [name]!</SPAN>")
+			new/obj/effect/decal/cleanable/smashed_butter(src.loc)
+			qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pancake
 	name = "pancake"
@@ -4962,19 +4956,13 @@
 	desc = "It's so slippery!"
 	icon_state = "slider_slippery"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/slippery/Crossed(atom/movable/O) //exactly the same as soap
+/obj/item/weapon/reagent_containers/food/snacks/slider/slippery/Crossed(atom/movable/O) //similar to soap
 	if(..())
 		return 1
-	if (ishuman(O))
-		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() != TRUE)
-			return
-
-		H.stop_pulling()
-		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
-		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-		H.Stun(3)
-		H.Knockdown(2)
+	if(iscarbon(O))
+		var/mob/living/carbon/C = O
+		if(C.Slip(3,2))
+			to_chat(C, "<SPAN CLASS='notice'>You slipped on \the [name]!</SPAN>")
 
 ////////////////SLIDERS END////////////////
 
@@ -6666,18 +6654,12 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O)
 	if(..())
 		return 1
-	if (ishuman(O))
-		var/mob/living/carbon/human/H = O
-		if (H.CheckSlip() != TRUE)
-			return
-
-		H.stop_pulling()
-		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
-		playsound((src), 'sound/misc/slip.ogg', 50, 1, -3)
-		H.Stun(4)
-		H.Knockdown(3)
-		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
-		qdel(src)
+	if(iscarbon(O))
+		var/mob/living/carbon/C = O
+		if(C.Slip(4,3))
+			to_chat(C, "<SPAN CLASS='notice'>You slipped on \the [name]!</SPAN>")
+			new/obj/effect/decal/cleanable/smashed_butter(src.loc)
+			qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/butterstick/New()
 	..()

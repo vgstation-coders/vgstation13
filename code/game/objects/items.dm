@@ -249,7 +249,7 @@
 				var/prevzone
 				if(C.zone_sel)
 					prevzone = C.zone_sel.selecting
-					C.zone_sel.selecting = attackable_zone
+					C.zone_sel.selecting = attackable_zone //For proper afterattack() behavior, otherwise we chould just pass attackable_zone into attacked_by().
 				C.a_intent = I_HURT
 
 				//Do the attack.
