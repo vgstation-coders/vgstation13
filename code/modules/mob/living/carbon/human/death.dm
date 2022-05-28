@@ -115,28 +115,31 @@
 //		to_chat(world, "Vox kills: [vox_kills]")
 		//vox_kills++ //Bad vox. Shouldn't be killing humans.
 	if(ishuman(LAssailant))
-		var/mob/living/carbon/human/H=LAssailant
-		if(H.mind)
-			H.mind.kills += "[name] ([ckey])"
+		var/mob/living/carbon/human/A=LAssailant
+		if(A.mind)
+			A.mind.kills += "[name] ([ckey])"
 
 	if(!gibbed)
 		update_canmove()
 	stat = DEAD
-	tod = worldtime2text() //Weasellos time of death patch
+	tod = worldtime2text()
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
 		if(!(mind && mind.suiciding)) //Cowards don't count
-			score.deadcrew++ //Someone died at this point, and that's terrible
+			score.deadcrew++
 	if (dorfpod)
 		dorfpod.scan_body(src)
 	if(ticker && ticker.mode)
 		sql_report_death(src)
 	species.handle_death(src)
-
-	if(become_zombie_after_death && ishuman(src))
-		spawn(30 SECONDS)
+	var/mob/living/carbon/C = src
+	if(become_zombie && ishuman(src))
+		spawn(20 SECONDS)
 			if(!gcDestroyed)
-				make_zombie(retain_mind = become_zombie_after_death-1)
+				make_zombie()
+	else if(become_zombie)
+		new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(C), C, C)
+		gib()
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
