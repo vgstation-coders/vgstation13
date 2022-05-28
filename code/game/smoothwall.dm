@@ -115,6 +115,8 @@
 
 var/list/smoothable_unsims = list(
 	"riveted",
+	"r_wall",
+	"rock_rf0",
 	)
 
 /turf/unsimulated/wall/New()
