@@ -108,7 +108,7 @@
 	flags = NO_PACIFICATION
 
 //////////////////////////////
-// WALLS (icon swapped riveted walls, applied to appropriate areas to prevent escaping the vault to the Centcomm Z-level, or tunneling into boss rooms)
+// WALLS (An invulnerable wall subtype, and two icon-swapped riveted walls, applied to appropriate areas to prevent escaping the vault to the Centcomm Z-level, or tunneling into boss rooms)
 //////////////////////////////
 
 /turf/simulated/wall/invulnerable/r_wall/mothership
