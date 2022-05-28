@@ -84,7 +84,6 @@
 			else
 				return
 
-
 		if(!istype(M, /mob/living/carbon/slime) && !isrobot(M))
 			if(iscarbon(M))
 				var/mob/living/carbon/C = M
