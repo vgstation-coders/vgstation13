@@ -67,7 +67,6 @@
 /datum/disease2/effect/giggle/activate(var/mob/living/mob)
 	mob.emote("giggle")
 
-
 /datum/disease2/effect/chickenpox
 	name = "Chicken Pox"
 	desc = "Causes the infected to begin coughing up eggs of the poultry variety."
@@ -76,8 +75,7 @@
 	var/eggspawn = /obj/item/weapon/reagent_containers/food/snacks/egg
 
 /datum/disease2/effect/chickenpox/activate(var/mob/living/mob)
-	var/mob/living/carbon/human/H = mob
-	if(H.species.name == "Vox")
+	if(isvox(mob))
 		eggspawn = /obj/item/weapon/reagent_containers/food/snacks/egg/vox
 	if (prob(30))
 		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
@@ -85,7 +83,6 @@
 		mob.emote("me",1,"vomits up a chicken egg!")
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 		new eggspawn(get_turf(mob))
-
 
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"
