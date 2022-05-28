@@ -391,16 +391,6 @@
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/being_unzombified = FALSE
 
-/mob/living/simple_animal/hostile/necro/zombie/turned/grey
-	icon_state = "mauled_laborer"
-	icon_living = "mauled_laborer"
-	icon_dead = "mauled_laborer"
-
-/mob/living/simple_animal/hostile/necro/zombie/turned/vox
-	icon_state = "rotting_raider1"
-	icon_living = "rotting_raider1"
-	icon_dead = "rotting_raider1"
-
 /mob/living/simple_animal/hostile/necro/zombie/turned/check_evolve()
 	..()
 	if(times_revived > 0 || times_eaten > 0)
