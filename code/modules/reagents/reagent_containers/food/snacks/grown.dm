@@ -1133,7 +1133,7 @@ var/list/special_fruits = list()
 			luckiness = 100
 		if(6)
 			name = "six-leaf clover"
-			desc = "A closely-guarded secret of the leperchauns."
+			desc = "A closely-guarded secret of the leprechauns."
 			luckiness = 1000
 		if(7)
 			name = "seven-leaf clover"
