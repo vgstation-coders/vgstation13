@@ -492,6 +492,7 @@
 	adjSpeed = 1
 	adjForce = 0
 	var/isBouncing = FALSE	//Prevents it bouncing infinitely due to some dark curse of throw_at()
+	var/lastBounceCount = 0
 
 /obj/item/cannonball/bananium/throw_at(atom/target, range, speed, override = 1)
 	if(!cannonFired)
@@ -508,29 +509,37 @@
 /obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
 	if(!cannonFired)
+		lastBounceCount = 0
 		return
+	lastBounceCount++
 	if(isliving(hit_atom))
 		honkMob(hit_atom)
+		honkBounce(hit_atom)
 	else if(isitem(hit_atom) && hit_atom.density)
-		spawn(3)	//Give throwing time to stop bullying me
+		spawn(10)	//Give throwing time to stop bullying me
 			if(!throwing && cannonFired)
-				honkBounce(hit_atom)
+
+				honkBounce(hit_atom,lastBounceCount)
 
 
 /obj/item/cannonball/bananium/proc/honkMob(var/mob/living/L)
 	L.Knockdown(rand(2,10))
 	playsound(src, 'sound/items/bikehorn.ogg', 75, 1)
-	honkBounce(L)
 
-/obj/item/cannonball/bananium/proc/honkBounce(var/atom/cTarg)
+/obj/item/cannonball/bananium/proc/honkBounce(var/atom/cTarg, var/tot_bounces = 0)
+	if(tot_bounces > 10)
+		stopBouncing()
+		return 0
 	var/list/honkStep = alldirs.Copy()
 	var/honkDir = get_dir(src, cTarg)
 	honkStep -= list(honkDir, turn(honkDir, 45), turn(honkDir, -45))	//Every direction possible except directly, or diagonally, toward what we hit
 	honkDir = pick(honkStep)
-	spawn(3)	//Prevents multiple instances of throw_at() from being active
+	spawn(10)	//Prevents multiple instances of throw_at() from being active
 		bounceStep(honkDir)
 
 /obj/item/cannonball/bananium/proc/bounceStep(var/honkDir)
+	if(lastBounceCount > 25)
+		stopBouncing()
 	if(cannonFired)
 		if(prob(10) && istype(get_turf(src), /turf/simulated))
 			var/turf/simulated/T = get_turf(src)
@@ -543,6 +552,7 @@
 	throwing = 0
 	kinetic_acceleration = 0
 	isBouncing = FALSE
+	lastBounceCount = 0
 	if(cannonFired)
 		cannonAdjust()
 

@@ -237,8 +237,9 @@ Class Procs:
 	..()
 
 /obj/machinery/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_FIRELOSS)
+	if(!(stat & NOPOWER|BROKEN|FORCEDISABLE) && use_power > 0)
+		to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
+		return(SUICIDE_ACT_FIRELOSS)
 
 /obj/machinery/ex_act(severity)
 	switch(severity)
