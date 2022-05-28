@@ -133,7 +133,7 @@
 		sql_report_death(src)
 	species.handle_death(src)
 
-	if(become_zombie_after_death && isjusthuman(src))
+	if(become_zombie_after_death && ishuman(src))
 		spawn(30 SECONDS)
 			if(!gcDestroyed)
 				make_zombie(retain_mind = become_zombie_after_death-1)
