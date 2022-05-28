@@ -368,7 +368,7 @@ var/list/rune_appearances_cache = list()
 			return
 
 	if(!user.checkTattoo(TATTOO_SILENT))
-		if(ismuzzle(user.wear_mask))
+		if(user.wear_mask?.is_muzzle)
 			to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")
 			return
 

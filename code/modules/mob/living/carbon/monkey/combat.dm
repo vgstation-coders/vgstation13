@@ -11,7 +11,7 @@
 	return 2
 
 /mob/living/carbon/monkey/unarmed_attack_mob(mob/living/)
-	if(ismuzzle(wear_mask))
+	if(wear_mask?.is_muzzle)
 		to_chat(src, "<span class='notice'>You can't do this with \the [wear_mask] on!</span>")
 		return
 
