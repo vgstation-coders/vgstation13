@@ -3739,7 +3739,7 @@
 		sleep(rand(5 SECONDS, 10 SECONDS))
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)	
+	for(var/i=1 to created_volume)
 		new mob2spawn(location)
 
 /datum/chemical_reaction/synthmobhostile //to cut down in duplicate code
@@ -3790,7 +3790,7 @@
 			new mob2spawnA(location)
 		else
 			new mob2spawnB(location)
-			
+
 /datum/chemical_reaction/synthmob/synthmouse
 	name = "Synthmouse"
 	id = "synthmouse"
@@ -3950,6 +3950,25 @@
 	result = LOCUTOGEN
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/bumcivilian
+	name = "Bumcivilian"
+	id = BUMCIVILIAN
+	result = BUMCIVILIAN
+	required_reagents = list(IRON = 1, SACIDS = 1) //..5.05 Mg
+	result_amount = 1
+
+/datum/chemical_reaction/bumcivilian/required_condition_check(datum/reagents/holder)
+	for(var/obj/item/device/deskbell/B in view(3,get_turf(holder.my_atom)))
+		if(world.time - B.last_ring_time <= 30)
+			return 1
+
+/datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
+	B.mute_time = world.time
+	for(var/mob/M in range(5,get_turf(holder.my_atom)))
+		M.Mute(B.mute_duration/30) //ticks to seconds i THINK
 
 /datum/chemical_reaction/random
 	name = "Random chemical"

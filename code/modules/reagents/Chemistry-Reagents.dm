@@ -1148,7 +1148,7 @@
 			M.eye_blurry = max(M.eye_blurry, 10) //Eyes get blurry immediately
 		if(5 to INFINITY)
 			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
-				
+
 	//This handles sleeper/cryo vs out of sleeper/cryo behaviors
 	if (istype(M.loc,/obj/machinery/sleeper) || M.bodytemperature < 170)
 		//If the patient is in a sleeper/cryo and it's been at least 20 seconds...
@@ -9895,3 +9895,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
 		if(E && !istype(E, /datum/organ/internal/eyes/umbra) && !E.robotic) //doesn't harm umbra or robotic eyes
 			E.damage += 0.5
+
+/datum/reagent/bumcivilian
+	name = "Bumcivilian"
+	id = BUMCIVILIAN
+	description = "The most basic form of iron, also known as 'brown iron'. It has the unusual property of absorbing sound particles when it is produced by reactions with sulfuric acid."
+	color = "#786228" //120, 98, 40
+	specheatcap = 0.45
+	density = 7.874
+	var/mute_time = 0
+	var/mute_duration = 300 //ticks

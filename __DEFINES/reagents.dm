@@ -470,6 +470,7 @@
 #define TRINITRINE		"trinitrine"
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
+#define BUMCIVILIAN		"bumcivilian"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"

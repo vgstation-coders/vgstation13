@@ -83,6 +83,20 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 
 	var/Dist = world.view + extrarange
 
+	for(var/obj/item/weapon/reagent_containers/R in range(Dist,get_turf(source)))
+		var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in R.reagents.reagent_list
+		if(!B)
+			continue
+		if(world.time - B.mute_time < B.mute_duration)
+			return
+	for(var/obj/machinery/chem_dispenser/C in range(Dist,get_turf(source)))
+		for(var/obj/item/weapon/reagent_containers/R in C)
+			var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in R.reagents.reagent_list
+			if(!B)
+				continue
+			if(world.time - B.mute_time < B.mute_duration)
+				return
+
 	// Looping through the player list has the added bonus of working for mobs inside containers
 	for (var/mob/player in player_list)
 		if(!player || !player.client)
