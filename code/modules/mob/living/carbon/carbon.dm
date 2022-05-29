@@ -527,7 +527,6 @@
 			onwhatmsg = "on something!"
 		simple_message("<span class='[spanclass]'>You slip[onwhatmsg]</span>",\
 						drugged_message)
-	message_admins("Debug 007")
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
