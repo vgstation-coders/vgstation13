@@ -441,6 +441,7 @@
 			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
+		host.become_zombie = FALSE
 		visible_message("<span class='notice'>\The [src]'s eyes regain focus, and the smell of decay vanishes. [host] has come back to their senses!</span>")
 		host = null
 		qdel(src)
