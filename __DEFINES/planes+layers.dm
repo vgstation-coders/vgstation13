@@ -74,6 +74,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	------
 	FLOAT_PLANE = -32767
 */
+#define BELOW_PLATING_PLANE 			(-6 + FLOAT_PLANE)
 
 #define PLATING_PLANE 			(-5 + FLOAT_PLANE)
 
