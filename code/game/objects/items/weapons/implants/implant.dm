@@ -22,7 +22,7 @@
 	if(ishuman(target))
 		var/datum/organ/external/organ = target.get_organ(target_limb)
 		if(!organ || organ.gcDestroyed || !organ.is_existing())
-			to_chat(implanter, "You can't implant that organ.")
+			to_chat(implanter, "<span class='warning'>You can't implant that organ.</span>")
 			return FALSE
 		organ.implants += src
 		part = organ
