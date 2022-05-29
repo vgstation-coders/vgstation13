@@ -19,9 +19,6 @@
 	. = ..()
 	if (!.)
 		return
-	if(!target.get_organ(target_limb))
-		implanter.show_message("<span class='warning'>They don't have that limb!</span>")
-		return
 	if(!iscarbon(target))
 		to_chat(implanter, "<span class='danger'>The implant doesn't seem to be compatible with [target]!</span>")
 		return FALSE
