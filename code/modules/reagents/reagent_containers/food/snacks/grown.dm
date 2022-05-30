@@ -1139,21 +1139,24 @@ var/list/special_fruits = list()
 			name = "seven-leaf clover"
 			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
 			luckiness = 10000
+	icon = 'icons/obj/hydroponics/clover.dmi'
 	icon_state = "clover[leaves]"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
 	leaves = 3
 	var/prob1 = clamp(mut / 3, 0, 66)
-	var/luck = shifter?.luck()
-	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
+	var/luck = 0
+	if(ismob(shifter))
+		luck = shifter.luck()
+	if(luck ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
 		var/ls = 1
 		var/prob2 = max(clamp(mut, 0, 21) / 21, 0.1)
-		prob2 = shifter ? shifter.lucky_probability(prob2, 1/333 , 33, ourluck = luck) : prob2
+		prob2 = luck ? shifter.lucky_probability(prob2, 1/333 , 33, ourluck = luck) : prob2
 		for(var/i in 1 to 7)
 			if(prob(prob2))
 				ls += 1
 		leaves += ls * pick(-1,1)
-		if(shifter ? shifter.lucky_prob(3, 1/333, 50, ourluck = luck) : prob(3))
+		if(luck ? shifter.lucky_prob(3, 1/333, 50, ourluck = luck) : prob(3))
 			leaves = clamp(leaves, 0, 7)
 		else if(leaves < 0 || leaves > 7)
 			leaves = 3
