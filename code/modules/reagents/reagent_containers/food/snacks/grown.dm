@@ -1141,8 +1141,7 @@ var/list/special_fruits = list()
 			luckiness = 10000
 	icon = 'icons/obj/hydroponics/clover.dmi'
 	icon_state = "clover[leaves]"
-	if(seed?.mysterious)
-		seed.mysterious_append(src)
+	seed?.mysterious_append(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
 	leaves = 3
