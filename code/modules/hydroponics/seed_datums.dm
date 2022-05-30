@@ -83,7 +83,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	mysterious = 1
 
 	seed_noun = pick("spores","nodes","cuttings","seeds")
-	products = list(pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown)))
+	products = list(pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/) - strange_seed_product_blacklist)) //The product can be any subtype of /food/snacks/grown, except those in strange_seed_product_blacklist.
 	potency = rand(5,30)
 
 	randomize_icon()
