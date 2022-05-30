@@ -46,7 +46,7 @@
 				user.add_ventcrawl(target_move)
 			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5))
 				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
-			user.forceMove(target_move, glide_size_override = DELAY2GLIDESIZE(1))
+			user.forceMove(target_move)
 			user.client.eye = target_move //if we don't do this, Byond only updates the eye every tick - required for smooth movement
 			user.last_movement=world.time
 			if(world.time - user.last_played_vent > VENT_SOUND_DELAY)
