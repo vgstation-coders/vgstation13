@@ -1614,7 +1614,7 @@
 	reagents.add_reagent(NUTRIMENT,2)
 	reagents.add_reagent(DISCOUNT,2)
 	reagents.add_reagent(TOXIN,2)
-	reagents.add_reagent(SUGAR,4)
+	reagents.add_reagent(CORNSYRUP,4)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/meatpie
 	name = "Meat-pie"
@@ -1918,6 +1918,7 @@
 	reagents.add_reagent(MOONROCKS, 4)
 	reagents.add_reagent(TOXICWASTE, 8)
 	reagents.add_reagent(URANIUM, 8)
+	reagents.add_reagent(CORNSYRUP, 2)
 	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
 	bitesize = 2
 

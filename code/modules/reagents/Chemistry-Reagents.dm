@@ -1148,7 +1148,7 @@
 			M.eye_blurry = max(M.eye_blurry, 10) //Eyes get blurry immediately
 		if(5 to INFINITY)
 			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
-				
+
 	//This handles sleeper/cryo vs out of sleeper/cryo behaviors
 	if (istype(M.loc,/obj/machinery/sleeper) || M.bodytemperature < 170)
 		//If the patient is in a sleeper/cryo and it's been at least 20 seconds...
@@ -1605,6 +1605,11 @@
 	T.adjust_nutrient(0.1)
 	T.weedlevel += 2
 	T.pestlevel += 2
+
+/datum/reagent/sugar/cornsyrup
+	name = "High-fructose corn syrup"
+	id = CORNSYRUP
+	description = "For when sugar needs to be produced on a budget, can become so prevalent that everyone will be made to drink it."
 
 /datum/reagent/caramel
 	name = "Caramel"
