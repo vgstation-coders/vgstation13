@@ -524,9 +524,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 		score.stuffharvested += 1 //One point per product unit
 
-		if(mysterious)
-			product.name += "?"
-			product.desc += " On second thought, something about this one looks strange."
+		mysterious_append(product)
 
 		if(biolum)
 			if(biolum_colour)
@@ -539,6 +537,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
 			handle_living_product(product)
+
+/datum/seed/proc/mysterious_append(product)
+	if(mysterious)
+		product.name += "?"
+		product.desc += " On second thought, something about this one looks strange."
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
