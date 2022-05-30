@@ -3966,9 +3966,8 @@
 /datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
 	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
-	B.mute_time = world.time
-	for(var/mob/M in range(5,get_turf(holder.my_atom)))
-		M.Mute(B.mute_duration/30) //ticks to seconds i THINK
+	for(var/turf/T in view(get_turf(holder.my_atom)))
+		T.mute_time = world.time + B.mute_duration
 
 /datum/chemical_reaction/random
 	name = "Random chemical"

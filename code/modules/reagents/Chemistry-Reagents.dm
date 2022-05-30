@@ -9903,5 +9903,4 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#786228" //120, 98, 40
 	specheatcap = 0.45
 	density = 7.874
-	var/mute_time = 0
-	var/mute_duration = 300 //ticks
+	var/mute_duration = 300 //30 seconds
