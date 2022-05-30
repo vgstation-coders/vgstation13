@@ -538,7 +538,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
 			handle_living_product(product)
 
-/datum/seed/proc/mysterious_append(product)
+/datum/seed/proc/mysterious_append(atom/product)
 	if(mysterious)
 		product.name += "?"
 		product.desc += " On second thought, something about this one looks strange."
