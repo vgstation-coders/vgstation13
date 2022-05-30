@@ -1140,7 +1140,7 @@ var/list/special_fruits = list()
 			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
 			luckiness = 10000
 	icon = 'icons/obj/hydroponics/clover.dmi'
-	icon_state = "clover[leaves]
+	icon_state = "clover[leaves]"
 	if(seed?.mysterious)
 		seed.mysterious_append(src)
 
