@@ -261,6 +261,8 @@ var/list/special_fruits = list()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
+//Types blacklisted from appearing as products of strange seeds.
+var/list/strange_seed_product_blacklist = list(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/)) //Otherwise the selection would be biased by the multiple neaf-number subtypes - the base type is still valid.
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn
 	name = "ear of corn"
