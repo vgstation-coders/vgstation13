@@ -1143,7 +1143,6 @@ var/list/strange_seed_product_blacklist = list(subtypesof(/obj/item/weapon/reage
 			luckiness = 10000
 	icon = 'icons/obj/hydroponics/clover.dmi'
 	icon_state = "clover[leaves]"
-	seed?.mysterious_append(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
 	leaves = 3
@@ -1167,6 +1166,6 @@ var/list/strange_seed_product_blacklist = list(subtypesof(/obj/item/weapon/reage
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/initialize(mob/harvester)
 	. = ..()
-	if(isnull(leaves) || seed?.mysterious)
+	if(isnull(leaves))
 		shift_leaves(seed?.potency, harvester)
 	update_leaves()
