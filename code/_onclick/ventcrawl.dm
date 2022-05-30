@@ -21,6 +21,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		/obj/transmog_body_container,
 		/obj/item/verbs,
 		/obj/item/weapon/gun/hookshot/flesh,
+		/obj/item/device/camera_bug,
 	)
 	return allowed_items
 
