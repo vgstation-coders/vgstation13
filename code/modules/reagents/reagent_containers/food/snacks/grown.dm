@@ -1133,16 +1133,16 @@ var/list/special_fruits = list()
 			luckiness = 100
 		if(6)
 			name = "six-leaf clover"
-			desc = "A closely-guarded secret of the leprechauns."
+			desc = "A closely-guarded secret of the leperchauns."
 			luckiness = 1000
 		if(7)
 			name = "seven-leaf clover"
 			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
 			luckiness = 10000
 	icon = 'icons/obj/hydroponics/clover.dmi'
-	icon_state = "clover[leaves]"
+	icon_state = "clover[leaves]
 	if(seed?.mysterious)
-		name += "?"
+		seed.mysterious_append(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
 	leaves = 3
