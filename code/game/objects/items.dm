@@ -225,7 +225,7 @@
 /obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
-		if(sharpness_flags & (SHARP_BLADE | SERRATED_BLADE | SHARP_TIP | HOT_EDGE)) //Running with sharp objects is dangerous!
+		if(C.m_intent == M_INTENT_RUN && sharpness_flags & (SHARP_BLADE | SERRATED_BLADE | SHARP_TIP | HOT_EDGE)) //Running with sharp objects is dangerous!
 			var/severity = 0
 			var/saving_prob = C.lucky_probability(60, luckfactor = 1/50)
 
