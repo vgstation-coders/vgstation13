@@ -1,43 +1,26 @@
-//The astrogator has a way with plants of every type.
-//She nurtures alien veg'tables and cooks them when they're ripe!
-//She had a Veged orchid once that ate the captain's cat.
-//Then terrorized the ship's exec, until she squashed it flat!
-
-//Mutates the plant overall (randomly).
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate()
 	if(!seed)
 		return
 	if(seed.immutable)
 		return
-	//Is the plant still a sapling? If so, try to mutate species, otherwise do something bad.
 	if(age < 3)
 		if(seed.mutants && seed.mutants.len)
 			if(prob(30))
 				mutate_species()
 				return
-		var/mutation_type = pick_mut(MUTCAT_BAD)
-		apply_mut(mutation_type)
+		apply_mut()
 		return
 
 	var/mutation_type = pick_mut(severity)
 	apply_mut(mutation_type, severity)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/pick_mut(var/severity, var/mutation_category = "")
-
 	var/datum/seed/S = seed
 	if (!S)
 		return
-
-	//First we'll pick a CATEGORY of mutations to look from, for simplicity and to keep an even ratio of good things to bad things if more mutations are added.
-	//This looks like shit, but it's a lot easier to read/change this way. Maybe. Promise. Hahaha. Shit.
 	if(!mutation_category) //If we already have a category, use that instead.
 		mutation_category = pick(\
-			// What's going on with these numbers?
-			// Effectively, the weight of each category is a linear function that increases with the potency of the mutation.
-			// Most categories have an integer deducted from severity, this means that the chance for that mutation
-			// is 0 below said severity (e.g. you won't get dangerous shit if you use less than 14u mutagen).
 			15;								MUTCAT_GOOD, \
-			clamp(0.4*severity, 	0, 7);	MUTCAT_BAD, \
 			clamp(0.7*(severity-5), 0, 8); 	MUTCAT_WEIRD, \
 			clamp(severity-12, 		0, 7); 	MUTCAT_WEIRD2, \
 			clamp(severity-12, 		0, 14); MUTCAT_BAD2, \
@@ -53,44 +36,34 @@
 			// chance to toggle again, since then it would stop glowing, which is less fun and frustrating if you're trying to stack mutations.
 			9;						PLANT_STAT_POTENCY, \
 			S.yield == -1 ? 0 : 6;	PLANT_STAT_YIELD, \
-			1;						PLANT_STAT_WEEDTOLERANCE, \
+			1;						PLANT_STAT_WEED_TOLERANCE, \
 			1;                      PLANT_STAT_TOXINAFFINITY, \
 			2;						PLANT_STAT_LIFESPAN, \
 			2;                      PLANT_STAT_ENDURANCE, \
 			2;						PLANT_STAT_PRODUCTION, \
 			2;                      PLANT_STAT_MATURATION, \
-			1;                      PLANT_STAT_HEAT, \
-			1;						PLANT_STAT_PRESSURE,\
-			2;						PLANT_STAT_LIGHT, \
-			1;						PLANT_STAT_NUTRIENT, \
-			1;                      PLANT_STAT_FLUID, \
+			1;                      PLANT_STAT_HEAT_TOLERANCE, \
+			1;						PLANT_STAT_PRESSURE_TOLERANCE,\
+			2;						PLANT_STAT_LIGHT_TOLERANCE, \
+			1;						PLANT_STAT_NUTRIENT_CONSUMPTION, \
+			1;                      PLANT_STAT_FLUID_CONSUMPTION, \
 			S.yield != -1 && !S.harvest_repeat ? 0.4 : 0;	PLANT_STAT_HARVEST, \
 			)
 		if(MUTCAT_WEIRD)
 			mutation_type = pick(\
-			S.biolum ? 10 : 0;			"biolum_changecolor",\
-			S.biolum ? 1 : 10;			"trait_biolum",\
-			S.juicy ? 0.5 : 5;			"trait_juicy", \
-			S.juicy == 1 ? 10 : 2 ;		"trait_slippery", \
-			S.thorny ? 0.2 : 5;			"trait_thorns",\
-			S.parasite ? 0.2 : 5;		"trait_parasitic",\
-			S.carnivorous ? 0.1 : 5;	"trait_carnivorous",\
-			S.carnivorous == 1 ? 8 : 2;	"trait_carnivorous2",\
-			S.ligneous ? 0.2 : 5;		"trait_ligneous"
-			)
-		if(MUTCAT_WEIRD2)
-			mutation_type = pick(\
-			4;					"chemical_exotic", \
-			6;					"fruit_exotic", \
-			2;					"change_appearance", \
-			S.spread ? 0.1 : 1;	"trait_creepspread"
-			)
-		if(MUTCAT_BAD)
-			mutation_type = pick(\
-			3;	"tox_increase", \
-			2;	"weed_increase", \
-			2;	"pest_increase", \
-			5;	"stunt_growth"
+			S.biolum ? 10 : 0;			PLANT_BIOLUM_COLOR,\
+			S.biolum ? 1 : 10;			PLANT_BIOLUM,\
+			S.juicy ? 0.5 : 5;			PLANT_JUICY, \
+			S.juicy == 1 ? 10 : 2 ;		PLANT_SLIPPERY, \
+			S.thorny ? 0.2 : 5;			PLANT_THORNY,\
+			S.parasite ? 0.2 : 5;		PLANT_PARASITIC,\
+			S.carnivorous ? 0.1 : 5;	PLANT_CARNIVOROUS,\
+			S.carnivorous == 1 ? 8 : 2;	PLANT_CARNIVOROUS2,\
+			S.ligneous ? 0.2 : 5;		PLANT_LIGNEOUS
+			4;					PLANT_CHEMICAL, \
+			6;					PLANT_FRUIT, \
+			2;					PLANT_APPEARANCE, \
+			S.spread ? 0.1 : 1;	PLANT_SPREAD
 			)
 		if(MUTCAT_BAD2)
 			mutation_type = pick(\
@@ -136,8 +109,6 @@
 			generic_mutation_message("quivers!")
 
 		if("plusstat_potency")
-			var/list/softcap_values = list(5,  20, 50,  100, 150, 180)
-			var/list/hardcap_values = list(35, 45, 100, 180, 250, 300)
 			var/deviation = severity * (rand(50, 125)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.potency)
 			//Deviation per 10u Mutagen before cap: 5-12.5
 			seed.potency = clamp(seed.potency + deviation, 0, 200)
@@ -238,30 +209,12 @@
 			seed.water_consumption = clamp(seed.water_consumption - deviation, 0, 10)
 			generic_mutation_message("quivers!")
 
-		if("tox_increase")
-			toxins += rand(50,80)
-			generic_mutation_message("shudders!")
-		if("weed_increase")
-			weedlevel = max(4, weedlevel * 2)
-			generic_mutation_message("shudders!")
-		if("pest_increase")
-			pestlevel = max(4, pestlevel * 2)
-			generic_mutation_message("shudders!")
-		if("stunt_growth")
-			affect_growth(-rand(2,4))
-			generic_mutation_message("droops idly...")
-
 		if("randomize_light")
 			seed.ideal_light = rand(2,10)
 			generic_mutation_message("shakes!")
 
 		if("randomize_temperature") //Variance so small that it can be fixed by just touching the thermostat, but I guarantee people will just apply a new enviro gene anyways
 			seed.ideal_heat = rand(253,343)
-			generic_mutation_message("shakes!")
-
-		if("breathe_aliengas") //This is honestly awful and pretty unfun. It just guarantees that the user will have to apply a new enviro gene. But for now I'm leaving it in
-			var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
-			seed.consume_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
 
 		if("exude_dangerousgas")
@@ -327,7 +280,7 @@
 			visible_message("<span class='notice'>\The [seed.display_name] suddenly looks a little different.</span>")
 
 		if("fruit_exotic")
-			seed.products += pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-/obj/item/weapon/reagent_containers/food/snacks/grown)
+			seed.products += pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
 			visible_message("<span class='notice'>\The [seed.display_name] seems to be growing something weird.</span>")
 
 		if("chemical_exotic")
