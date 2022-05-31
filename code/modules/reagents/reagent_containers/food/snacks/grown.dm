@@ -934,7 +934,7 @@ var/list/strange_seed_product_blacklist = list(subtypesof(/obj/item/weapon/reage
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname, mob/harvester)
 	..()
-	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
+	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits() - strange_seed_product_blacklist
 	available_fruits = shuffle(available_fruits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()
