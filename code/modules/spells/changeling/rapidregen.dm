@@ -16,7 +16,7 @@
 	if (!.)
 		return FALSE
 	if(user.mind && user.mind.suiciding)			//no reviving from suicides
-		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?")
+		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
 		return FALSE
 	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
