@@ -573,7 +573,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
 
 /client/proc/update_special_views()
-	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.
+	if(prefs?.space_parallax)	//Updating parallax for clients that have parallax turned on.
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
