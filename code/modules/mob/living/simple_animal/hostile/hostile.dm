@@ -468,6 +468,7 @@
 					 /obj/structure/closet,
 					 /obj/structure/table,
 					 /obj/structure/grille,
+					 /obj/structure/girder,
 					 /obj/structure/rack,
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
