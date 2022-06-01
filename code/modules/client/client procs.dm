@@ -573,7 +573,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
 
 /client/proc/update_special_views()
-	if(prefs?.space_parallax)	//Updating parallax for clients that have parallax turned on.
+	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
@@ -624,7 +624,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	ViewFilter = newimages
 
 /client/proc/handle_hear_voice(var/mob/origin)
-	if(prefs?.hear_voicesound)
+	if(prefs.hear_voicesound)
 		if(issilicon(origin))
 			mob.playsound_local(get_turf(origin), get_sfx("voice-silicon"),50,1)
 		if(isvox(origin))
