@@ -569,9 +569,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
 /proc/get_edge_target_turf(var/atom/A, var/direction)
-	var/turf/target = locate(A.x, A.y, A.z)
 	if(!A || !target)
 		return 0
+	var/turf/target = locate(A.x, A.y, A.z)
 		//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
 		//and isn't really any more complicated
 
