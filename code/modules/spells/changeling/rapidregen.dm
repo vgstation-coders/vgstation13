@@ -6,8 +6,8 @@
 
 	spell_flags = NEEDSHUMAN | STATALLOWED
 
-	charge_max = 1 MINUTES
-	cooldown_min = 1 MINUTES
+	charge_max = 3 MINUTES
+	cooldown_min = 3 MINUTES
 
 	chemcost = 40
 
