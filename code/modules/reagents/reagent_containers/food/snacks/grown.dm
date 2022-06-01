@@ -261,7 +261,7 @@ var/list/special_fruits = list()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
-//Types blacklisted from appearing as products of strange seeds.
+//Types blacklisted from appearing as products of strange seeds and no-fruit.
 var/list/strange_seed_product_blacklist = list(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/)) //Otherwise the selection would be biased by the relatively large number of multiple leaf-number-specific subtypes - the base type with randomized leaves is still valid.
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn
