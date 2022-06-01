@@ -580,7 +580,6 @@
 		)
 	)
 
-
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
