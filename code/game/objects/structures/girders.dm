@@ -14,7 +14,7 @@
 			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 			M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 			"<span class='attack'>You smash through \the [src].</span>")
-			new material(get_turf(src), 2)
+			drop_stack(material, get_turf(src), 2)
 			qdel(src)
 		else
 			M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
