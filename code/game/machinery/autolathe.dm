@@ -42,13 +42,13 @@
 		new /obj/item/tool/screwdriver(), \
 		new /obj/item/tool/wirecutters(), \
 		new /obj/item/tool/wrench(), \
+		new /obj/item/tool/wrench/socket(), \
 		new /obj/item/tool/solder(),\
 		new /obj/item/tool/wirecutters/clippers(),\
 		new /obj/item/weapon/minihoe(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
-		new /obj/item/tool/wrench/socket(), \
 		),
 		"Containers"=list(
 		new /obj/item/weapon/reagent_containers/glass/beaker(), \
