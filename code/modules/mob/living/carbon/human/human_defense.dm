@@ -108,7 +108,7 @@ emp_act
 			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor(type)
-			if(istype(C), /obj/item/clothing)
+			if(istype(C, /obj/item/clothing))
 				var/obj/item/clothing/CC = C
 				for(var/obj/item/clothing/accessory/A in CC.accessories)
 					if(A.body_parts_covered & def_zone.body_part)
@@ -128,7 +128,7 @@ emp_act
 			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor_absorb(type)
-			if(istype(C), /obj/item/clothing)
+			if(istype(C, /obj/item/clothing))
 				var/obj/item/clothing/CC = C
 				for(var/obj/item/clothing/accessory/A in CC.accessories)
 					if(A.body_parts_covered & def_zone.body_part)
