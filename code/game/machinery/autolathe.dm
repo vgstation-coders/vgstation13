@@ -42,7 +42,6 @@
 		new /obj/item/tool/screwdriver(), \
 		new /obj/item/tool/wirecutters(), \
 		new /obj/item/tool/wrench(), \
-		new /obj/item/tool/wrench/socket(), \
 		new /obj/item/tool/solder(),\
 		new /obj/item/tool/wirecutters/clippers(),\
 		new /obj/item/weapon/minihoe(),\
@@ -148,6 +147,7 @@
 		new /obj/item/weapon/beartrap(),\
 		new /obj/item/gun_part/scope(),\
 		new /obj/item/weapon/grenade/chem_grenade/timer(), \
+		new /obj/item/tool/wrench/socket(), \
 		)
 	)
 
