@@ -27,7 +27,6 @@
 		return
 
 /spell/changeling/rapidregen/cast(var/list/targets, var/mob/living/carbon/C)
-	C.rejuvenate(0)
 	for(var/i = 0, i<10,i++)
 		if(C)
 			C.adjustBruteLoss(-10)
@@ -35,6 +34,7 @@
 			C.adjustOxyLoss(-10)
 			C.adjustFireLoss(-10)
 			sleep(10)
+	C.rejuvenate(0)
 	feedback_add_details("changeling_powers","RR")
 	..()
 
