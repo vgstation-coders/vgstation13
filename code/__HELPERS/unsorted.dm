@@ -573,7 +573,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		return 0
 	var/turf/target = locate(A.x, A.y, A.z)
 	if(!target)
-	 	return 0
+		return 0
 		//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
 		//and isn't really any more complicated
 
