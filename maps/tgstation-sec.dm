@@ -31,6 +31,7 @@
 		/datum/job/warden,
 		/datum/job/detective,
 		/datum/job/officer,
+		/datum/job/judge,
 		/datum/job/ai,
 		/datum/job/cyborg,
 		/datum/job/mommi)

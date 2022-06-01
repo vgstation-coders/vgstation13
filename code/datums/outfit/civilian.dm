@@ -579,7 +579,7 @@
 			/obj/item/weapon/palette = null,
 		)
 	)
-	
+
 
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt
@@ -722,6 +722,66 @@
 		if(H.mind.role_alt_title == "Lawyer" || H.mind.role_alt_title == "Bridge Officer") //Lawyers and bridge officers are exempt
 			return
 		H.set_light(1, 4, "#006400") //Dark green, RGB(0,100,0)
+
+// -- Judge
+
+/datum/outfit/judge
+
+	outfit_name = "Judge"
+	associated_job = /datum/job/judge
+
+	backpack_types = list(
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+	)
+
+	items_to_spawn = list(
+		"Default" = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_com,
+			slot_w_uniform_str = /obj/item/clothing/under/lawyer/oldman,
+			slot_shoes_str = /obj/item/clothing/shoes/laceup,
+			slot_wear_suit_str = /obj/item/clothing/suit/judgerobe,
+		),
+		/datum/species/plasmaman/ = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_com,
+			slot_w_uniform_str = /obj/item/clothing/under/lawyer/oldman,
+			slot_shoes_str = /obj/item/clothing/shoes/laceup,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/lawyer,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/lawyer,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+		),
+		/datum/species/vox/ = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_com,
+			slot_w_uniform_str = /obj/item/clothing/under/lawyer/oldman,
+			slot_shoes_str = /obj/item/clothing/shoes/laceup,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
+		),
+	)
+
+	implant_types = list(
+		/obj/item/weapon/implant/loyalty,
+	)
+
+	items_to_collect = list(
+		/obj/item/clothing/head/powdered_wig = null,
+		/obj/item/weapon/gavelblock = null,
+		/obj/item/weapon/book/manual/security_space_law = null,
+	)
+
+	pda_type = /obj/item/device/pda/lawyer
+	pda_slot = slot_belt
+	id_type = /obj/item/weapon/card/id/centcom
+
+/datum/outfit/judge/post_equip(var/mob/living/carbon/human/H)
+	..()
+	H.put_in_hands(new /obj/item/weapon/gavelhammer(H))
+
+/datum/outfit/judge/post_equip_priority(var/mob/living/carbon/human/H)
+	return ..()
 
 // -- Chaplain
 

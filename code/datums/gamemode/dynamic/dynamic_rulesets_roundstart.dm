@@ -318,7 +318,7 @@
 	role_category = /datum/role/cultist
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective",
 							"Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent",
-							"Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
+							"Judge", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	enemy_jobs = list("Security Officer","Warden", "Detective","Head of Security", "Captain")
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
@@ -531,7 +531,7 @@ Assign your candidates in choose_candidates() instead.
 	return 1
 
 /datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/displaced)
-	var/mob/new_player/old_AI = new 
+	var/mob/new_player/old_AI = new
 	old_AI.ckey = displaced.ckey
 	old_AI.name = displaced.ckey
 	qdel(displaced)
@@ -553,7 +553,7 @@ Assign your candidates in choose_candidates() instead.
 		log_admin("([old_AI.ckey]) was displaced by a malf AI and sent back to lobby.")
 		message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 		old_AI.ready = 0
-		return 
+		return
 
 	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
 		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
@@ -647,7 +647,7 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/delayed/revs
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
-	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent", "Brig Medic")
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent", "Brig Medic", "Judge")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3

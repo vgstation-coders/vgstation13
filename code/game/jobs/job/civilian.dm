@@ -201,6 +201,18 @@
 	alt_titles = list("Lawyer", "Bridge Officer")
 	outfit_datum = /datum/outfit/iaa
 
+/datum/job/judge
+	title = "Judge"
+	faction = "Station"
+	total_positions = 1
+	spawn_positions = 1
+	supervisors = "Nanotrasen Space Law, and the station's captain."
+	wage_payout = 70
+	selection_color = "#dddddd"
+	access = list(access_court, access_sec_doors, access_heads)
+	minimal_access = list(access_court, access_sec_doors, access_heads)
+	outfit_datum = /datum/outfit/judge
+
 /datum/job/chaplain
 	title = "Chaplain"
 	faction = "Station"

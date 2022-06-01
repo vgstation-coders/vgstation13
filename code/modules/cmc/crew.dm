@@ -75,6 +75,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		"Mime" = 67,
 		"Janitor" = 68,
 		"Internal Affairs Agent" = 69,
+		"Judge" = 70,
 		"Admiral" = 200,
 		"Centcom Commander" = 210,
 		"Emergency Response Team Commander" = 220,
