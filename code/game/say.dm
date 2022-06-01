@@ -358,7 +358,7 @@ var/global/resethearers = 0
 					var/mob/M = VH.attached
 					if(M.client)						//The mob has a client.
 						var/client/C = M.client
-						if(C.ObscuredTurfs?.len)			//The client is in range of something that is artificially obscuring its view.
+						if(C.ObscuredTurfs.len)			//The client is in range of something that is artificially obscuring its view.
 							if(T in C.ObscuredTurfs)	//The source's turf is one that is being artificially obscured.
 								can_hear = 0
 				if(can_hear)
