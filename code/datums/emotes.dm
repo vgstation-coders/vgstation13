@@ -62,29 +62,27 @@
 
 	var/obs_pass = TRUE
 	// Don't hear simple mobs without a client.
-	if (istype(user, /mob/living/simple_animal) && !user.client)
+	if(istype(user, /mob/living/simple_animal) && !user.client)
 		obs_pass = FALSE
 
-	if (obs_pass)
+	if(obs_pass)
 		for(var/mob/M in dead_mob_list)
-			if(!M.client || isnewplayer(M))
+			if(!(M.client?.prefs?.toggles & CHAT_GHOSTSIGHT) || !isobserver(M) || isnewplayer(M) || (M in viewers(get_turf(user)))
 				continue
-			var/T = get_turf(user)
-			if(isobserver(M) && M.client && (M.client.prefs?.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
-				M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
-				if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < M?.client.view)
-					M.create_chat_message(user, null, msg_runechat, "", list("italics"))
+			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
+			if(user.client && M.client.prefs.mob_chat_on_map && get_dist(M, user) < M.client.view)
+				M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
-	if (emote_type == EMOTE_VISIBLE)
+	if(emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
 		for(var/z0 in GetOpenConnectedZlevels(user))
-			for (var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
+			for(var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
 				if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
 					O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
-			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !O.is_deaf())
+			if(user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !O.is_deaf())
 				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	var/turf/T = get_turf(user)
