@@ -67,7 +67,7 @@
 
 	if(obs_pass)
 		for(var/mob/M in dead_mob_list)
-			if(!(M.client?.prefs?.toggles & CHAT_GHOSTSIGHT) || !isobserver(M) || isnewplayer(M) || (M in viewers(get_turf(user)))
+			if(!(M.client?.prefs?.toggles & CHAT_GHOSTSIGHT) || !isobserver(M) || isnewplayer(M) || (M in viewers(get_turf(user))))
 				continue
 			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
 			if(user.client && M.client.prefs.mob_chat_on_map && get_dist(M, user) < M.client.view)
