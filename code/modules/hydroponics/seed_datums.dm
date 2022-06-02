@@ -19,7 +19,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	// Output.
 	var/list/products              // Possible fruit/other product paths.
 	var/list/mutants               // Possible predefined mutant varieties, if any.
-	var/list/chems                 // Chemicals that plant produces in products/injects into victim. Total units of chemical in products: First value + (Potency/Second value)
+	var/list/chems                 // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
 	var/list/consume_gasses=list() // The plant will absorb these gasses during its life.
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 
@@ -76,8 +76,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Creates a random seed. MAKE SURE THE LINE HAS DIVERGED BEFORE THIS IS CALLED.
 /datum/seed/proc/randomize()
-
-
 	roundstart = 0
 	seed_name = "strange plant"     // TODO: name generator.
 	display_name = "strange plants" // TODO: name generator.
@@ -177,7 +175,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	lifespan = rand(4,15)*5
 
 //Gives the plant a new, random icon from a list, with matching growth stages number.
-/datum/seed/proc/add_random_chemical(var/severity = 15)
+/datum/seed/proc/add_random_chemical()
 	var/list/possible_chems = list(
 		// Important Medicines
 		REZADONE = 200,
@@ -235,8 +233,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	if(!possible_chems.len)
 		return 0
 	var/new_chem = pickweight(possible_chems)
-	chems[new_chem] = list(rand(1,severity/3),rand(10-Ceiling(severity/3),15))
+	chems[new_chem] = list(rand(1,5),rand(10,15))
 	return 1
+
+/datum/seed/proc/remove_random_chemical()
+	if(length(chems))
+		chems -= pick(chems)
+		return TRUE
+	return FALSE
 
 /datum/seed/proc/randomize_icon()
 	var/random = rand(1, SSplant.roundstart_seeds)
@@ -253,8 +257,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Mutates a specific trait/set of traits. Used by the Bioballistic Delivery System.
 /datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode, var/mob/user)
-
-	if(!gene || !gene.values || immutable > 0)
+	if(!gene)
+		return
+	if(!gene.values)
+		return
+	if(immutable > 0)
 		return
 
 	switch(gene.genetype)
@@ -355,27 +362,22 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					nutrient_consumption	= gene.values[1]
 					fluid_consumption 		= gene.values[2]
 					alter_temp 				= gene.values[3]
+					carnivorous 		= gene.values[4]
+					parasite 			= gene.values[5]
+					hematophage 		= gene.values[6]
 				if(GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
 					fluid_consumption 		= mix(gene.values[2], fluid_consumption,	rand(40, 60)/100)
 					alter_temp 				= max(gene.values[3], alter_temp)
-			var/list/new_gasses = gene.values[4]
+					carnivorous 		= max(gene.values[4], carnivorous)
+					parasite 			= max(gene.values[5], parasite)
+					hematophage 		= max(gene.values[6], hematophage)
+			var/list/new_gasses = gene.values[7]
 			if(islist(new_gasses))
 				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
 					exude_gasses = list()
 				exude_gasses |= new_gasses
-
-		if(GENE_NUTRITION)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
-					carnivorous 		= gene.values[1]
-					parasite 			= gene.values[2]
-					hematophage 		= gene.values[3]
-				if(GENEGUN_MODE_SPLICE)
-					carnivorous 		= max(gene.values[1], carnivorous)
-					parasite 			= max(gene.values[2], parasite)
-					hematophage 		= max(gene.values[3], hematophage)
-			var/list/new_gasses = gene.values[4]
+			new_gasses = gene.values[8]
 			if(islist(new_gasses))
 				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
 					consume_gasses = list()
@@ -456,10 +458,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(nutrient_consumption 	? nutrient_consumption	: 0),
 				(fluid_consumption    	? fluid_consumption   	: 0),
 				(alter_temp    			? alter_temp    		: 0),
-				(exude_gasses    		? exude_gasses    		: 0)
-			)
-		if(GENE_NUTRITION)
-			P.values = list(
+				(exude_gasses    		? exude_gasses    		: 0),
 				(carnivorous 			? carnivorous			: 0),
 				(parasite    			? parasite   			: 0),
 				(hematophage    		? hematophage    		: 0),

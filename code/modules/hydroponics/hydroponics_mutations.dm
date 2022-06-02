@@ -1,89 +1,3 @@
-/obj/machinery/portable_atmospherics/hydroponics/proc/mutate()
-	if(!seed)
-		return
-	if(seed.immutable)
-		return
-	if(age < 3)
-		if(seed.mutants && seed.mutants.len)
-			if(prob(30))
-				mutate_species()
-				return
-		apply_mut()
-		return
-
-	var/mutation_type = pick_mut(severity)
-	apply_mut(mutation_type, severity)
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/pick_mut(var/severity, var/mutation_category = "")
-	var/datum/seed/S = seed
-	if (!S)
-		return
-	if(!mutation_category) //If we already have a category, use that instead.
-		mutation_category = pick(\
-			15;								MUTCAT_GOOD, \
-			clamp(0.7*(severity-5), 0, 8); 	MUTCAT_WEIRD, \
-			clamp(severity-12, 		0, 7); 	MUTCAT_WEIRD2, \
-			clamp(severity-12, 		0, 14); MUTCAT_BAD2, \
-			clamp(severity-14,		0, 20); MUTCAT_DANGEROUS \
-			)
-	var/mutation_type
-	//Now we'll pick a certain type of mutation from that category, special considerations in mind.
-	switch(mutation_category)
-		if(MUTCAT_GOOD)
-			mutation_type = pick(\
-			// We want a different weight for the mutation depending on whether the plant already has it. For example, a non-glowey plant
-			// will have a fair chance to toggle bio-luminiscence. However, if it already has bioluminiscence, then it will have a smaller
-			// chance to toggle again, since then it would stop glowing, which is less fun and frustrating if you're trying to stack mutations.
-			9;						PLANT_STAT_POTENCY, \
-			S.yield == -1 ? 0 : 6;	PLANT_STAT_YIELD, \
-			1;						PLANT_STAT_WEED_TOLERANCE, \
-			1;                      PLANT_STAT_TOXINAFFINITY, \
-			2;						PLANT_STAT_LIFESPAN, \
-			2;                      PLANT_STAT_ENDURANCE, \
-			2;						PLANT_STAT_PRODUCTION, \
-			2;                      PLANT_STAT_MATURATION, \
-			1;                      PLANT_STAT_HEAT_TOLERANCE, \
-			1;						PLANT_STAT_PRESSURE_TOLERANCE,\
-			2;						PLANT_STAT_LIGHT_TOLERANCE, \
-			1;						PLANT_STAT_NUTRIENT_CONSUMPTION, \
-			1;                      PLANT_STAT_FLUID_CONSUMPTION, \
-			S.yield != -1 && !S.harvest_repeat ? 0.4 : 0;	PLANT_STAT_HARVEST, \
-			)
-		if(MUTCAT_WEIRD)
-			mutation_type = pick(\
-			S.biolum ? 10 : 0;			PLANT_BIOLUM_COLOR,\
-			S.biolum ? 1 : 10;			PLANT_BIOLUM,\
-			S.juicy ? 0.5 : 5;			PLANT_JUICY, \
-			S.juicy == 1 ? 10 : 2 ;		PLANT_SLIPPERY, \
-			S.thorny ? 0.2 : 5;			PLANT_THORNY,\
-			S.parasite ? 0.2 : 5;		PLANT_PARASITIC,\
-			S.carnivorous ? 0.1 : 5;	PLANT_CARNIVOROUS,\
-			S.carnivorous == 1 ? 8 : 2;	PLANT_CARNIVOROUS2,\
-			S.ligneous ? 0.2 : 5;		PLANT_LIGNEOUS
-			4;					PLANT_CHEMICAL, \
-			6;					PLANT_FRUIT, \
-			2;					PLANT_APPEARANCE, \
-			S.spread ? 0.1 : 1;	PLANT_SPREAD
-			)
-		if(MUTCAT_BAD2)
-			mutation_type = pick(\
-			S.hematophage ? 0.2 : 5;	"trait_hematophage", \
-			5;							"randomize_light", \
-			5;							"randomize_temperature", \
-			2;							"breathe_aliengas", \
-			S.yield != -1 && S.harvest_repeat ? 2 : 0;	"toggle_repeatharvest",\
-			)
-		if(MUTCAT_DANGEROUS)
-			mutation_type = pick(\
-			4;						"spontaneous_creeper", \
-			1;						"spontaneous_kudzu", \
-			S.spread == 1 ? 5 : 1;	"trait_vinespread",
-			S.stinging ? 0.2 : 4;	"trait_stinging", \
-			1;						"exude_dangerousgas", \
-			S.alter_temp ? 0.2 : 2;	"change_roomtemp"
-			)
-	return mutation_type
-
 /obj/machinery/portable_atmospherics/hydroponics/proc/generic_mutation_message(var/text = "quivers!")
 	visible_message("<span class='notice'>\The [seed.display_name] [text]</span>")
 
@@ -94,355 +8,234 @@
 	if(!isnull(SSplant.seeds[seed.name]))
 		seed = seed.diverge(modified)
 
-/obj/machinery/portable_atmospherics/hydroponics/proc/apply_mut(var/mutation_type, var/severity)
-
-	// Check if we should even bother working on the current seed datum.
-	if(seed.immutable > 0)
+/obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/gene)
+	if(!seed)
+		return
+	if(seed.immutable)
+		return
+	if(age < 3 && length(seed.mutants) && prob(30))
+		mutate_species()
 		return
 
 	check_for_divergence()
 
-	switch(mutation_type)
-			deviation = min(hardcap/2*ROUND(log(10,seed.potency/max*100),3),0.15*MAX)
-			//Deviation per 10u Mutagen before cap: 5-12.5
-			seed.potency += deviation
+	switch(gene)
+		if(GENE_PHYTOCHEMISTRY)
+			var/mutation_type = pick(70; PLANT_POTENCY, 15; PLANT_CHEMICAL, 15; PLANT_TELEPORT)
+			switch(mutation_type)
+				if(PLANT_POTENCY)
+					var/hardcap = 200
+					if(seed.potency <= 0)
+						return
+					//This function modifies stats with diminishing returns, approaching the hardcap value
+					//15% is currently set for the maximum change
+					//Log function so can't be equal to or less than 0.
+					//Careful when minimizing on the sign
+					seed.potency += round(min(hardcap - hardcap/2*round(log(10,seed.potency/hardcap*100),0.01),0.15*hardcap),0.1)
+					generic_mutation_message("quivers!")
+				if(PLANT_CHEMICAL)
+					var/check_success = FALSE
+					if(prob(50))
+						check_success = seed.remove_random_chemical()
+						if(check_success)
+							visible_message("<span class='notice'>\A gland on the [seed.display_name] withers and dies.</span>")
+					if(prob(50))
+						check_success = seed.add_random_chemical()
+						if(check_success)
+							visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
+				if(PLANT_TELEPORT)
+					//Toggle true or false
+					seed.teleporting = !seed.teleporting
+					if(seed.teleporting)
+						visible_message("<span class='notice'>\The [seed.display_name] wobbles unstably, glowing blue for a moment!</span>")
+					else
+						visible_message("<span class='notice'>\The [seed.display_name] slowly becomes spatial-temporally stable again.</span>")
+
+		if(GENE_MORPHOLOGY)
+			var/mutation_type = pick(PLANT_PRODUCTS, PLANT_THORNY, PLANT_JUICY, PLANT_LIGNEOUS, PLANT_STINGING, PLANT_APPEARANCE)
+			switch(mutation_type)
+				if(PLANT_PRODUCTS)
+					seed.products += pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-/obj/item/weapon/reagent_containers/food/snacks/grown)
+					visible_message("<span class='notice'>\The [seed.display_name] seems to be growing something weird.</span>")
+				if(PLANT_THORNY)
+					seed.thorny = !seed.thorny
+					if(seed.thorny)
+						visible_message("<span class='notice'>\The [seed.display_name] spontaneously develops mean-looking thorns!</span>")
+					else
+						visible_message("<span class='notice'>\The [seed.display_name] sheds its thorns away...</span>")
+				if(PLANT_JUICY)
+					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
+					seed.juicy = seed.juicy % 2 + 1
+					generic_mutation_message("wobbles!")
+				if(PLANT_LIGNEOUS)
+					seed.ligneous = !seed.ligneous
+					if(seed.ligneous)
+						visible_message("<span class='notice'>\The [seed.display_name] seems to grow a cover of robust bark.</span>")
+					else
+						visible_message("<span class='notice'>\The [seed.display_name]'s bark slowly sheds away...</span>")
+				if(PLANT_STINGING)
+					seed.stinging = !seed.stinging
+					if(seed.stinging)
+						visible_message("<span class='notice'>\The [seed.display_name] sprouts a coat of chemical stingers!</span>")
+					else
+						visible_message("<span class='notice'>\The [seed.display_name]'s stingers dry off and break...</span>")
+				if(PLANT_APPEARANCE)
+					seed.randomize_icon()
+					update_icon()
+					visible_message("<span class='notice'>\The [seed.display_name] suddenly looks a little different.</span>")
+
+		if(GENE_BIOLUMINESCENCE)
+			var/mutation_type = pick(seed.biolum ? 10 : 0;	PLANT_BIOLUM_COLOR, seed.biolum ? 1 : 10; PLANT_BIOLUM)
+			switch(mutation_type)
+				if(PLANT_BIOLUM)
+					seed.biolum = !seed.biolum
+					if(seed.biolum)
+						visible_message("<span class='notice'>\The [seed.display_name] begins to glow!</span>")
+						if(!seed.biolum_colour)
+							seed.biolum_colour = "#[get_random_colour(1)]"
+					else
+						visible_message("<span class='notice'>\The [seed.display_name]'s glow dims...</span>")
+				if(PLANT_BIOLUM_COLOR)
+					seed.biolum_colour = "#[get_random_colour(0,75,190)]"
+					visible_message("<span class='notice'>\The [seed.display_name]'s glow <font color='[seed.biolum_colour]'>changes colour</font>!</span>")
+			update_icon()
+
+		if(GENE_ECOLOGY)
+			var/mutation_type = pick(PLANT_TEMPERATURE_IDEAL, PLANT_HEAT_TOLERANCE, PLANT_PRESSURE_TOLERANCE,PLANT_LIGHT_TOLERANCE, PLANT_LIGHT_IDEAL)
+			switch(mutation_type)
+				if(PLANT_TEMPERATURE_IDEAL)
+					//Variance so small that it can be fixed by just touching the thermostat, but I guarantee people will just apply a new enviro gene anyways
+					seed.ideal_heat = rand(253,343)
+				if(PLANT_HEAT_TOLERANCE)
+					var/hardcap = 800
+					seed.heat_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.heat_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+				if(PLANT_PRESSURE_TOLERANCE)
+					if(seed.lowkpa_tolerance < 1)
+						seed.lowkpa_tolerance = 0
+					else
+						//lower better
+						var/hardcap = 0.1
+						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,seed.lowkpa_tolerance/hardcap*100),0.01),0.15*hardcap),0.1) 
+					//higher better
+					var/hardcap = 500
+					seed.highkpa_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.highkpa_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+				if(PLANT_LIGHT_IDEAL)
+					seed.ideal_light = rand(2,10)
+				if(PLANT_LIGHT_TOLERANCE)
+					var/hardcap = 10
+					seed.light_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.light_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+			generic_mutation_message("shakes!")
+
+		if(GENE_ECOPHYSIOLOGY)
+			var/mutation_type = pick(PLANT_TOXIN_AFFINITY, PLANT_WEED_TOLERANCE, PLANT_PEST_TOLERANCE, PLANT_LIFESPAN, PLANT_ENDURANCE)
+			switch(mutation_type)
+				if(PLANT_TOXIN_AFFINITY)
+					var/hardcap = 11
+					seed.toxinaffinity += round(min(hardcap - hardcap/2*round(log(10,seed.toxinaffinity/hardcap*100),0.01),0.15*hardcap),0.1)
+				if(PLANT_WEED_TOLERANCE)
+					var/hardcap = 11
+					seed.weed_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.weed_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+				if(PLANT_PEST_TOLERANCE)
+					var/hardcap = 11
+					seed.pest_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.pest_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+				if(PLANT_LIFESPAN)
+					var/hardcap = 125
+					seed.lifespan += round(min(hardcap - hardcap/2*round(log(10,seed.lifespan/hardcap*100),0.01),0.15*hardcap),0.1)
+				if(PLANT_ENDURANCE)
+					var/hardcap = 125
+					seed.endurance += round(min(hardcap - hardcap/2*round(log(10,seed.endurance/hardcap*100),0.01),0.15*hardcap),0.1)
 			generic_mutation_message("quivers!")
 
-		if("plusstat_potency")
-			var/deviation = severity * (rand(50, 125)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.potency)
-			//Deviation per 10u Mutagen before cap: 5-12.5
-			seed.potency = clamp(seed.potency + deviation, 0, 200)
-			generic_mutation_message("quivers!")
-
-		if("plusstat_yield")
+		if(GENE_METABOLISM)
+			var/mutation_type = pick(PLANT_NUTRIENT_CONSUMPTION, PLANT_FLUID_CONSUMPTION, PLANT_ROOMTEMP, PLANT_PARASITIC, PLANT_CARNIVOROUS, PLANT_GAS, PLANT_HEMATOPHAGE)
+			switch(mutation_type)
+				if(PLANT_NUTRIENT_CONSUMPTION)
+					if(seed.nutrient_consumption < 0.1)
+						seed.nutrient_consumption = 0
+					else
+						//Lower better
+						var/hardcap = 0.01
+						seed.nutrient_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.nutrient_consumption/hardcap*100),0.01),0.15*hardcap),0.1)
+					generic_mutation_message("rustles!")
+				if(PLANT_FLUID_CONSUMPTION)
+					if(seed.fluid_consumption < 0.1)
+						seed.fluid_consumption = 0
+					else
+						//Lower better
+						var/hardcap = 0.01
+						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.fluid_consumption/hardcap*100),0.01),0.15*hardcap),0.1)
+					generic_mutation_message("rustles!")
+				if(PLANT_ROOMTEMP)
+					seed.alter_temp = !seed.alter_temp
+					generic_mutation_message("rustles!")
+				if(PLANT_CARNIVOROUS)
+					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
+					seed.carnivorous = seed.carnivorous % 2 + 1
+					if(seed.carnivorous)
+						generic_mutation_message("shudders hungrily.")
+					else
+						generic_mutation_message("mellows down.")
+				if(PLANT_GAS)
+					var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
+					seed.exude_gasses[gas] = rand(3,9)
+					generic_mutation_message("rustles!")
+				if(PLANT_HEMATOPHAGE)
+					seed.hematophage = !seed.hematophage
+					if(seed.hematophage)
+						visible_message("<span class='notice'>\The [seed.display_name] shudders thirstily, turning red at the roots!</span>")
+						nutrilevel = 1
+					else
+						visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
+		if(GENE_DEVELOPMENT)
+			var/mutation_type
 			if(seed.yield == -1)
-				visible_message("<span class='notice'>\The [seed.display_name] twitches for a second, but nothing seems to happen...</span>")
-				return
-			var/list/softcap_values = list(2, 3, 6,  9,  12, 12)
-			var/list/hardcap_values = list(4, 5, 10, 15, 17, 20)
-			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.yield)
-			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.yield = clamp(seed.yield + deviation, 0, 16)
-			generic_mutation_message("quivers!")
-
-		if("plusstat_weed&toxins_tolerance")
-			var/list/softcap_values = list(2, 3, 6,  9,  11, 11)
-			var/list/hardcap_values = list(4, 5, 10, 12, 12, 12)
-			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.weed_tolerance)
-			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.weed_tolerance = clamp(seed.weed_tolerance + deviation, 0, 11)
-
-			softcap_values = list(2, 3, 6,  9,  11, 11)
-			hardcap_values = list(4, 5, 10, 12, 12, 12)
-			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.toxins_tolerance)
-			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.toxins_tolerance = clamp(seed.toxins_tolerance + deviation, 0, 11)
-			generic_mutation_message("quivers!")
-
-		if("plusstat_lifespan&endurance")
-			var/list/softcap_values = list(2, 65, 80,  95,  110, 125)
-			var/list/hardcap_values = list(4, 75, 100, 125, 150, 150)
-			var/deviation = severity * (rand(50, 80)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.lifespan)
-			//Deviation per 10u Mutagen before cap: 5-8
-			seed.lifespan = clamp(seed.lifespan + deviation, 10, 125)
-
-			softcap_values = list(2, 65, 80,  95,  110, 125)
-			hardcap_values = list(4, 75, 100, 125, 150, 150)
-			deviation = severity * (rand(30, 50)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.endurance)
-			//Deviation per 10u Mutagen before cap: 3-5
-			seed.endurance = clamp(seed.endurance + deviation, 10, 125)
-			generic_mutation_message("quivers!")
-
-		if("plusstat_production&maturation")
-			var/list/softcap_values = list(10, 7.5, 5,  2.5,  2,    1)
-			var/list/hardcap_values = list(5,  3.5, 2,  1,    0.75, 0)
-			var/deviation = severity * (rand(4, 8)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.production)
-			//Deviation per 10u Mutagen before cap: 0.4-0.8
-			seed.production = clamp(seed.production - deviation, 1, 10)
-
-			softcap_values = list(10, 7.5, 5,  2.5, 2,    1)
-			hardcap_values = list(5,  3.5, 2,  1,   0.75, 0)
-			deviation = severity * (rand(8, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.maturation)
-			//Deviation per 10u Mutagen before cap: 0.8-1.2
-			seed.maturation = clamp(seed.maturation - deviation, 1.1, 30)
-			generic_mutation_message("quivers!")
-
-		if("plusstat_heat&pressure_tolerance")
-			var/list/softcap_values = list(100, 150, 300, 450,  600,    900)
-			var/list/hardcap_values = list(200, 300, 600, 900,    1200, 1200)
-			var/deviation = severity * (rand(100, 250)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.heat_tolerance)
-			//Deviation per 10u Mutagen before cap: 10-25
-			seed.heat_tolerance = clamp(seed.heat_tolerance + deviation, 1, 800)
-
-			softcap_values = list(20, 12.5, 5, 0, 0, 0)
-			hardcap_values = list(15, 5,    0, 0, 0, 0)
-			deviation = severity * (rand(20, 50)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.lowkpa_tolerance)
-			//Deviation per 10u Mutagen before cap: 2-5
-			seed.lowkpa_tolerance = clamp(seed.lowkpa_tolerance - deviation, 0, 80)
-
-			softcap_values = list(20, 275, 350, 450, 500, 500)
-			hardcap_values = list(15, 325, 450, 575, 575, 575)
-			deviation = severity * (rand(200, 300)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.highkpa_tolerance)
-			//Deviation per 10u Mutagen before cap: 20-30
-			seed.highkpa_tolerance = clamp(seed.highkpa_tolerance + deviation, 110, 500)
-			generic_mutation_message("quivers!")
-
-		if("plusstat_light_tolerance")
-			var/list/softcap_values = list(2, 5, 8,  9,  11, 11)
-			var/list/hardcap_values = list(4, 7, 10, 12, 12, 12)
-			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.light_tolerance)
-			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.light_tolerance = clamp(seed.light_tolerance + deviation, 0, 10)
-			generic_mutation_message("quivers!")
-
-		if("plusstat_nutrient&water_consumption")
-			var/list/softcap_values = list(0.30, 0.25, 0.15, 0.05, 0, 0)
-			var/list/hardcap_values = list(0.15, 0.10, 0.05, 0,    0, 0)
-			var/deviation = severity * (rand(3, 7)/1000) * get_ratio(severity, softcap_values, hardcap_values, seed.nutrient_consumption)
-			//Deviation per 10u Mutagen before cap: 0.03-0.07
-			seed.nutrient_consumption = clamp(seed.nutrient_consumption - deviation, 0, 1)
-
-			softcap_values = list(4, 3,   1.5, 0.5, 0, 0)
-			hardcap_values = list(2, 1.5, 0.5, 0,   0, 0)
-			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.water_consumption)
-			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.water_consumption = clamp(seed.water_consumption - deviation, 0, 10)
-			generic_mutation_message("quivers!")
-
-		if("randomize_light")
-			seed.ideal_light = rand(2,10)
-			generic_mutation_message("shakes!")
-
-		if("randomize_temperature") //Variance so small that it can be fixed by just touching the thermostat, but I guarantee people will just apply a new enviro gene anyways
-			seed.ideal_heat = rand(253,343)
-			generic_mutation_message("shakes!")
-
-		if("exude_dangerousgas")
-			var/gas = pick(GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
-			seed.exude_gasses[gas] = rand(3,9)
-			generic_mutation_message("shakes!")
-
-		if("change_roomtemp") //we'll see how this one works out
-			if(!seed.alter_temp)
-				seed.alter_temp = 1
-				var/deviation = rand(severity*0.5,severity)*(prob(50) ? 3 : -3)
-				seed.heat_tolerance = clamp(seed.heat_tolerance + (deviation*0.8), 1, 800)
-				seed.ideal_heat += deviation
+				//These have a yield that is not allowed to be modified
+				mutation_type = pick(PLANT_PRODUCTION, PLANT_MATURATION, PLANT_SPREAD)
 			else
-				seed.alter_temp = 0
-			generic_mutation_message("shakes!")
-
-		if("toggle_repeatharvest")
-			seed.harvest_repeat = !seed.harvest_repeat
-			if(seed.harvest_repeat)
-				visible_message("<span class='notice'>\The [seed.display_name] roots deep and sprouts a bevy of new stalks!</span>")
-			else
-				visible_message("<span class='notice'>\The [seed.display_name] wilts away some of its roots...</span>")
-
-		if("trait_biolum")
-			seed.biolum = !seed.biolum
-			if(seed.biolum)
-				visible_message("<span class='notice'>\The [seed.display_name] begins to glow!</span>")
-				if(!seed.biolum_colour)
-					seed.biolum_colour = "#[get_random_colour(1)]"
-			else
-				visible_message("<span class='notice'>\The [seed.display_name]'s glow dims...</span>")
-			update_icon()
-
-		if("biolum_changecolor")
-			seed.biolum_colour = "#[get_random_colour(0,75,190)]"
-			visible_message("<span class='notice'>\The [seed.display_name]'s glow <font color='[seed.biolum_colour]'>changes colour</font>!</span>")
-			update_icon()
-
-		if("spontaneous_creeper")
-			visible_message("<span class='notice'>\The [seed.display_name] spasms visibly, shifting in the tray!</span>")
-			spawn(20)
-				if(src && seed)
-					var/datum/seed/newseed = seed.diverge()
-					newseed.spread = 1
-					var/turf/T = get_turf(src)
-					new /obj/effect/plantsegment(T, newseed)
-					msg_admin_attack("a random chance hydroponics mutation has spawned limited growth creeper vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
-
-		if("spontaneous_kudzu")
-			visible_message("<span class='notice'>\The [seed.display_name] thrashes about, growing out of control!</span>")
-			spawn(20)
-				if(src && seed)
-					var/datum/seed/newseed = seed.diverge()
-					newseed.spread = 2
-					var/turf/T = get_turf(src)
-					new /obj/effect/plantsegment(T, newseed)
-					msg_admin_attack("a random chance hydroponics mutation has spawned space vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
-
-		if("change_appearance")
-			seed.randomize_icon()
-			update_icon()
-			visible_message("<span class='notice'>\The [seed.display_name] suddenly looks a little different.</span>")
-
-		if("fruit_exotic")
-			seed.products += pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
-			visible_message("<span class='notice'>\The [seed.display_name] seems to be growing something weird.</span>")
-
-		if("chemical_exotic")
-			seed.add_random_chemical(severity)
-			visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland...</span>")
-
-		if("trait_hematophage")
-			seed.hematophage = !seed.hematophage
-			if(seed.hematophage)
-				visible_message("<span class='notice'>\The [seed.display_name] shudders thirstily, turning red at the roots!</span>")
-				nutrilevel = 1
-			else
-				visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
-
-		if("trait_creepspread")
-			seed.spread = seed.spread ? 0 : 1
-			generic_mutation_message("spasms visibly, shifting in the tray!")
-
-		if("trait_vinespread")
-			switch(seed.spread)
-				if(0 to 1)
-					seed.spread = 2
-				if(2)
-					seed.spread = 0
-			generic_mutation_message("spasms visibly, shifting in the tray!")
-
-		if("trait_teleporting")
-			seed.teleporting = !seed.teleporting
-			if(seed.teleporting)
-				visible_message("<span class='notice'>\The [seed.display_name] wobbles unstably, glowing blue for a moment!</span>")
-			else
-				visible_message("<span class='notice'>\The [seed.display_name] slowly becomes spatial-temporally stable again.</span>")
-
-		if("trait_ligneous")
-			seed.ligneous = !seed.ligneous
-			if(seed.ligneous)
-				visible_message("<span class='notice'>\The [seed.display_name] seems to grow a cover of robust bark.</span>")
-			else
-				visible_message("<span class='notice'>\The [seed.display_name]'s bark slowly sheds away...</span>")
-
-		if("trait_parasitic")
-			seed.parasite = !seed.parasite
-			if(seed.parasite)
-				generic_mutation_message("shudders hungrily.")
-			else
-				generic_mutation_message("seems to mellow down...")
-
-		if("trait_juicy")
-			seed.juicy = seed.juicy ? 0 : 1
-			generic_mutation_message("wobbles!")
-
-		if("trait_slippery")
-			switch(seed.juicy)
-				if(0 to 1)
-					seed.juicy = 2
-				if(2)
-					seed.juicy = 0
-			generic_mutation_message("wobbles!")
-
-		if("trait_thorns")
-			seed.thorny = !seed.thorny
-			if(seed.thorny)
-				visible_message("<span class='notice'>\The [seed.display_name] spontaneously develops mean-looking thorns!</span>")
-			else
-				visible_message("<span class='notice'>\The [seed.display_name] sheds its thorns away...</span>")
-
-		if("trait_stinging")
-			seed.stinging = !seed.stinging
-			if(seed.stinging)
-				visible_message("<span class='notice'>\The [seed.display_name] sprouts a coat of chemical stingers!</span>")
-			else
-				visible_message("<span class='notice'>\The [seed.display_name]'s stingers dry off and break...</span>")
-
-		if("trait_carnivorous")
-			seed.carnivorous = seed.carnivorous ? 0 : 1
-			if(seed.carnivorous)
-				generic_mutation_message("shudders hungrily.")
-			else
-				generic_mutation_message("seems to mellow down...")
-
-		if("trait_carnivorous2")
-			switch(seed.carnivorous)
-				if(0 to 1)
-					seed.carnivorous = 2
-					generic_mutation_message("shudders hungrily.")
-				if(2)
-					seed.carnivorous = 0
-					generic_mutation_message("seems to mellow down...")
-
-		else
-			error("Tried to apply a Hydroponics mutation, \"[mutation_type]\", which doesn't exist.")
-
-	return
-	//visible_message("<span class='notice'>\The [seed.display_name] quivers!</span>")
-
-	/*//This looks like shit, but it's a lot easier to read/change this way.
-	var/total_mutations = rand(1,1+degree)
-	for(var/i = 0 to total_mutations)
-		switch(rand(0,11))
-			if(0) //Plant cancer!
-				lifespan = max(0,lifespan-rand(1,5))
-				endurance = max(0,endurance-rand(10,20))
-				source_turf.visible_message("<span class='warning'>\The [display_name] withers rapidly!</span>")
-			if(1)
-				nutrient_consumption =      max(0,  min(5,   nutrient_consumption + rand(-(degree*0.1),(degree*0.1))))
-				water_consumption =         max(0,  min(50,  water_consumption    + rand(-degree,degree)))
-			if(2)
-				ideal_heat =                max(70, min(800, ideal_heat           + (rand(-5,5)   * degree)))
-				heat_tolerance =            max(70, min(800, heat_tolerance       + (rand(-5,5)   * degree)))
-				lowkpa_tolerance =          max(0,  min(80,  lowkpa_tolerance     + (rand(-5,5)   * degree)))
-				highkpa_tolerance =         max(110, min(500,highkpa_tolerance    + (rand(-5,5)   * degree)))
-			if(3)
-				ideal_light =               max(0,  min(30,  ideal_light          + (rand(-1,1)   * degree)))
-				light_tolerance =           max(0,  min(10,  light_tolerance      + (rand(-2,2)   * degree)))
-			if(4)
-				toxins_tolerance =          max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))//nice copypaste
-			if(5)
-				weed_tolerance  =           max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))
-				if(prob(degree*5))
-					carnivorous =           max(0,  min(2,   carnivorous          + rand(-degree,degree)))
-					if(carnivorous)
-						source_turf.visible_message("<span class='notice'>\The [display_name] shudders hungrily.</span>")
-			if(6)
-				weed_tolerance  =           max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))
-				if(prob(degree*5))
-					parasite = !parasite
-
-			if(7)
-				lifespan =                  max(10, min(30,  lifespan             + (rand(-2,2)   * degree)))
-				if(yield != -1)
-					yield =     max(0,  min(10,  yield                + (rand(-2,2)   * degree)))
-			if(8)
-				endurance =                 max(10, min(100, endurance            + (rand(-5,5)   * degree)))
-				production =                max(1,  min(10,  production           + (rand(-1,1)   * degree)))
-				potency =                   max(0,  min(200, potency              + (rand(-20,20) * degree)))
-				if(prob(degree*5))
-					spread =                max(0,  min(2,   spread               + rand(-1,1)))
-					source_turf.visible_message("<span class='notice'>\The [display_name] spasms visibly, shifting in the tray.</span>")
-			if(9)
-				maturation =                max(0,  min(30,  maturation      + (rand(-1,1)   * degree)))
-				if(prob(degree*5))
-					harvest_repeat = !harvest_repeat
-			if(10)
-				if(prob(degree*4))
-					biolum = !biolum
-					if(biolum)
-						source_turf.visible_message("<span class='notice'>\The [display_name] begins to glow!</span>")
-						if(prob(degree*4))
-							biolum_colour = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
-							source_turf.visible_message("<span class='notice'>\The [display_name]'s glow <font color='[biolum_colour]'>changes colour</font>!</span>")
+				mutation_type = pick(PLANT_PRODUCTION, PLANT_MATURATION, PLANT_SPREAD, PLANT_HARVEST, PLANT_YIELD)
+			switch(mutation_type)
+				if(PLANT_PRODUCTION)
+					//lower better
+					var/hardcap = 1
+					seed.production -= round(min(hardcap - hardcap/2*round(log(10,seed.production/hardcap*100),0.01),0.15*hardcap),0.1)
+					generic_mutation_message("wriggles!")
+				if(PLANT_MATURATION)
+					//lower better
+					var/hardcap = 1.1
+					seed.maturation -= round(min(hardcap - hardcap/2*round(log(10,seed.maturation/hardcap*100),0.01),0.15*hardcap),0.1)
+					generic_mutation_message("wriggles!")
+				if(PLANT_SPREAD)
+					seed.spread = seed.spread % 2 + 1
+					if(src && seed && seed.spread == 1)
+						visible_message("<span class='notice'>\The [seed.display_name] shifts in the tray!</span>")
+						spawn(20)
+							var/datum/seed/newseed = seed.diverge()
+							newseed.spread = 1
+							var/turf/T = get_turf(src)
+							new /obj/effect/plantsegment(T, newseed)
+							msg_admin_attack("a random chance hydroponics mutation has spawned limited growth creeper vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+					else if(src && seed && seed.spread == 2)
+						visible_message("<span class='notice'>\The [seed.display_name] spasms visibly, violently thrashing in the tray!</span>")
+						var/datum/seed/newseed = seed.diverge()
+						newseed.spread = 2
+						var/turf/T = get_turf(src)
+						new /obj/effect/plantsegment(T, newseed)
+						msg_admin_attack("a random chance hydroponics mutation has spawned space vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 					else
-						source_turf.visible_message("<span class='notice'>\The [display_name]'s glow dims...</span>")
-			if(11)
-				if(prob(degree*2))
-					flowers = !flowers
-					if(flowers)
-						source_turf.visible_message("<span class='notice'>\The [display_name] sprouts a bevy of flowers!</span>")
-						if(prob(degree*2))
-							flower_colour = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
-						source_turf.visible_message("<span class='notice'>\The [display_name]'s flowers <font='[flower_colour]'>changes colour</font>!</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] recedes into the tray.</span>")
+				if(PLANT_HARVEST)
+					var/new_harvest
+					new_harvest = seed.harvest_repeat % 2 + 1
+					if(seed.harvest_repeat < new_harvest)
+						visible_message("<span class='notice'>\The [seed.display_name] roots deep and sprouts new stalks!</span>")
 					else
-						source_turf.visible_message("<span class='notice'>\The [display_name]'s flowers wither and fall off.</span>")*/
+						visible_message("<span class='notice'>\The [seed.display_name] wilts away some of its roots.</span>")
+					seed.harvest_repeat = new_harvest
+				if(PLANT_YIELD)
+					if(seed.yield <= 0)
+						return
+					var/hardcap = 16
+					seed.yield += round(min(hardcap - hardcap/2*round(log(10,seed.yield/hardcap*100),0.01),0.15*hardcap),0.1)
 
 //Returns a key corresponding to an entry in the global seed list.
 /datum/seed/proc/get_mutant_variant()
@@ -462,15 +255,7 @@
 	health = seed.endurance
 	lastcycle = world.time
 	harvest = 0
-	weedlevel = 0 //Why is this here?
 	sampled = 0
 
 	update_icon()
 	visible_message("<span class='alert'>The</span> <span class='italics,alert'>[previous_plant]</span> <span class='alert'>has suddenly mutated into</span> <span class='italics,alert'>[seed.display_name]!</span>")
-
-#undef MUTCAT_GOOD
-#undef MUTCAT_BAD
-#undef MUTCAT_BAD2
-#undef MUTCAT_DANGEROUS
-#undef MUTCAT_WEIRD
-#undef MUTCAT_WEIRD2
