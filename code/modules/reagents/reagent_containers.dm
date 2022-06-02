@@ -244,12 +244,10 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 					to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
 				return tx_amount
 		if(reagents && reagents.is_empty() && istype(target, /obj/machinery/cooking))
-			var/obj/machinery/cooking/C = target
-			if(C.can_transfer)
-				var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)
-				if (tx_amount > 0)
-					to_chat(user, "<span class='notice'>You fill \the [src] to the brim with [tx_amount] units of the contents of \the [target].</span>")
-				return tx_amount
+			var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)
+			if (tx_amount > 0)
+				to_chat(user, "<span class='notice'>You fill \the [src] to the brim with [tx_amount] units of the contents of \the [target].</span>")
+			return tx_amount
 	// Transfer to container
 	if (can_send /*&& target.reagents**/)
 		var/obj/container = target

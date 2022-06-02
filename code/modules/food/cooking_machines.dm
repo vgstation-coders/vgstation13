@@ -84,7 +84,6 @@ var/global/ingredientLimit = 10
 
 	var/cooks_in_reagents = 0 //are we able to add stuff to the machine so that reagents are added to food?
 	var/cks_max_volume = 50
-	var/can_transfer = FALSE
 
 /obj/machinery/cooking/cultify()
 	new /obj/structure/cult_legacy/talisman(loc)
@@ -417,7 +416,6 @@ var/global/ingredientLimit = 10
 	recursive_ingredients = 1
 	cks_max_volume = 400
 	cooks_in_reagents = 1
-	can_transfer = TRUE
 	var/fry_reagent = CORNOIL
 
 /obj/machinery/cooking/deepfryer/initialize()
