@@ -84,6 +84,7 @@ var/global/ingredientLimit = 10
 
 	var/cooks_in_reagents = 0 //are we able to add stuff to the machine so that reagents are added to food?
 	var/cks_max_volume = 50
+	var/can_transfer = FALSE
 
 /obj/machinery/cooking/cultify()
 	new /obj/structure/cult_legacy/talisman(loc)
@@ -307,7 +308,7 @@ var/global/ingredientLimit = 10
 	cookSound = 'sound/machines/juicer.ogg'
 	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
 
-/obj/machinery/cooking/candy/RefreshParts()						
+/obj/machinery/cooking/candy/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
@@ -359,7 +360,7 @@ var/global/ingredientLimit = 10
 	icon_state_on = "cereal_on"
 	foodChoices = null
 	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
-	
+
 /obj/machinery/cooking/cerealmaker/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
@@ -376,7 +377,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/cerealmaker/makeFood()
 	makeCereal()
 
-/obj/machinery/cooking/proc/makeCereal()	
+/obj/machinery/cooking/proc/makeCereal()
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
 	for(var/obj/item/embedded in src.ingredient.contents)
 		embedded.forceMove(src.loc)
@@ -416,10 +417,12 @@ var/global/ingredientLimit = 10
 	recursive_ingredients = 1
 	cks_max_volume = 400
 	cooks_in_reagents = 1
+	can_transfer = TRUE
+	var/fry_reagent = CORNOIL
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
-	reagents.add_reagent(CORNOIL, 300)
+	reagents.add_reagent(fry_reagent, 300)
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
@@ -524,6 +527,7 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 	machine_flags = WRENCHMOVE | CROWDESTROY | SCREWTOGGLE | FIXED2WORK | SHUTTLEWRENCH
+	fry_reagent = SUGAR
 
 /obj/machinery/cooking/deepfryer/confectionator/New()
 	. = ..()
@@ -545,12 +549,6 @@ var/global/ingredientLimit = 10
 	if((. == "valid") && (!foodNesting))
 		if(findtext(I.name,"sugar"))
 			. = "It's already a sugar copy."
-
-/obj/machinery/cooking/deepfryer/confectionator/initialize()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(SUGAR, 300)
-
 
 /obj/machinery/cooking/deepfryer/confectionator/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
