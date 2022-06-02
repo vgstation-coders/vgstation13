@@ -66,7 +66,7 @@ var/list/obj/machinery/prism/prism_list = list()
 /obj/machinery/prism/AltClick(mob/user)
 	if(user.incapacitated() || !Adjacent(user))
 		return
-	rotate_ccw()
+	rotate_cw()
 
 /obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
