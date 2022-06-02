@@ -161,3 +161,8 @@
 	set src in oview(1)
 
 	rotate(usr, 90)
+
+/obj/machinery/shield_capacitor/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate(usr,-90)
