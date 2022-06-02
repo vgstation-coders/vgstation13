@@ -311,3 +311,9 @@
 		return
 
 	src.dir = turn(src.dir, 90)
+
+
+/obj/machinery/prism/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_clock()
