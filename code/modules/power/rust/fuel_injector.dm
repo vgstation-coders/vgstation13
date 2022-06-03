@@ -313,7 +313,7 @@
 	src.dir = turn(src.dir, 90)
 
 
-/obj/machinery/prism/AltClick(mob/user)
+/obj/machinery/power/rust_fuel_injector/AltClick(mob/user)
 	if(user.incapacitated() || !Adjacent(user))
 		return
 	rotate_clock()
