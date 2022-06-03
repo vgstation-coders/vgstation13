@@ -138,7 +138,7 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user,yield_mod)
+	seed.harvest(user)
 	after_harvest()
 	return
 
@@ -566,27 +566,22 @@
 						update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)
-
 	//Don't act on seeds like dionaea that shouldn't change.
 	if(seed && seed.immutable > 0)
 		return
 
 	//Override for somatoray projectiles.
-	if(!is_somatoraying && istype(Proj ,/obj/item/projectile/energy/floramut))
+	if(!is_somatoraying && istype(Proj, /obj/item/projectile/energy/floramut))
 		is_somatoraying = 1
-		spawn(4)
+		spawn(10)
 			is_somatoraying = 0
 			mutate(GENE_PHYTOCHEMISTRY)
-			if(prob(30))
-				mutate(GENE_DEVELOPMENT)
-				return
-	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
-		if(seed && !dead)
-			yield_mod = clamp(yield_mod + (rand(3,5)/10), 1, 2)
-			if(yield_mod >= 2)
-				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
 			return
-
+	else if(istype(Proj, /obj/item/projectile/energy/florayield))
+		is_somatoraying = 1
+		spawn(10)
+			mutate(GENE_DEVELOPMENT)
+			return
 	..()
 
 /obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)

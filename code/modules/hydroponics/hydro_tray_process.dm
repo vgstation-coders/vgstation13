@@ -353,4 +353,3 @@
 	pestlevel =      clamp(pestlevel, 0, 10)
 	weedlevel =      clamp(weedlevel, 0, 10)
 	toxins =         clamp(toxins, 0, 100)
-	yield_mod = 	 clamp(yield_mod, 0, 2)
