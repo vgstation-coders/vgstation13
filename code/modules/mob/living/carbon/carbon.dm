@@ -707,14 +707,14 @@
 
 	switch(P.wet)
 		if(TURF_WET_WATER)
-			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slipped_on = P, onwhat = "the wet floor", otherscansee = TRUE, spanclass = "warning"))
+			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, onwhat = "the wet floor", otherscansee = TRUE, spanclass = "warning"))
 				step(src, dir)
 			else
 				return FALSE
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE, slipped_on = P, onwhat = "the floor", otherscansee = TRUE, spanclass = "warning"))
+			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE, onwhat = "the floor", otherscansee = TRUE, spanclass = "warning"))
 				for(var/i = 1 to 4)
 					spawn(i)
 						if(!locked_to)
@@ -725,7 +725,7 @@
 
 
 		if(TURF_WET_ICE)
-			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE, slipped_on = P, onwhat = "the icy floor", otherscansee = TRUE, spanclass = "warning"))
+			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE, onwhat = "the icy floor", otherscansee = TRUE, spanclass = "warning"))
 				step(src, dir)
 			else
 				return FALSE
