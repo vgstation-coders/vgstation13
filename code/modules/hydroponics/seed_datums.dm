@@ -48,8 +48,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/spread = 0                  // 0 limits plant to tray, 1 = creepers, 2 = vines.
 	var/immutable = 0               // If set, plant will never mutate. If -1, plant is  highly mutable.
 	var/alter_temp = 0              // If set, the plant will periodically alter local temp by this amount.
-	var/carnivorous = 0             // 0 = none, 1 = eat pests in tray, 2 = eat living things.
-	var/parasite = 0                // 0 = no, 1 = gain health from weed level. //Todo: Some more interactions with this.
+	var/voracious = 0             	// 0 = none, 1 = eat weeds and eat pests in tray, 2 = eat living things.
 	var/hematophage = 0				// 0 = no, 1 = plant only gains nutriment from blood.
 	var/thorny = 0					// If 1, does brute damage when touched without protection. Can't be held or harvested without gloves. Short for the Thorned Reaper.
 	var/stinging = 0				// If 1, injects reagents when touched without protection.
@@ -130,45 +129,28 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	if(prob(5))
 		alter_temp = 1
-
-	/*if(prob(1))
-		immutable = -1*/ //todo this
-
-	var/carnivore_prob = rand(100)
-	if(carnivore_prob < 5)
-		carnivorous = 2
-	else if(carnivore_prob < 10)
-		carnivorous = 1
-
 	if(prob(5))
-		parasite = 1
-
-	var/vine_prob = rand(100)
-	if(vine_prob < 5)
+		voracious = 2
+	else if(prob(5))
+		voracious = 1
+	if(prob(5))
 		spread = 2
-	else if(vine_prob < 10)
+	else if(prob(5))
 		spread = 1
-
 	if(prob(10))
 		biolum = 1
 		biolum_colour = "#[get_random_colour(1)]"
-
 	if(prob(5))
 		hematophage = 1
-
 	if(prob(5))
 		thorny = 1
-
 	if(prob(5))
 		stinging = 1
-
 	if(prob(5))
 		ligneous = 1
-
-	var/juicy_prob = rand(100)
-	if(juicy_prob < 5)
+	if(prob(5))
 		juicy = 2
-	else if(juicy_prob < 10)
+	else if(prob(5))
 		juicy = 1
 
 	endurance = rand(60,100)
@@ -364,22 +346,20 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					nutrient_consumption	= gene.values[1]
 					water_consumption 		= gene.values[2]
 					alter_temp 				= gene.values[3]
-					carnivorous 		= gene.values[4]
-					parasite 			= gene.values[5]
-					hematophage 		= gene.values[6]
+					voracious				= gene.values[4]
+					hematophage 			= gene.values[5]
 				if(GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
 					water_consumption 		= mix(gene.values[2], water_consumption,	rand(40, 60)/100)
 					alter_temp 				= max(gene.values[3], alter_temp)
-					carnivorous 		= max(gene.values[4], carnivorous)
-					parasite 			= max(gene.values[5], parasite)
-					hematophage 		= max(gene.values[6], hematophage)
-			var/list/new_gasses = gene.values[7]
+					voracious 				= max(gene.values[4], voracious)
+					hematophage 			= max(gene.values[5], hematophage)
+			var/list/new_gasses = gene.values[6]
 			if(islist(new_gasses))
 				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
 					exude_gasses = list()
 				exude_gasses |= new_gasses
-			new_gasses = gene.values[8]
+			new_gasses = gene.values[7]
 			if(islist(new_gasses))
 				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
 					consume_gasses = list()
@@ -401,7 +381,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					yield				= round(mix(gene.values[5], yield,		rand(40, 60)/100), 0.1)
 
 	var/text = "([timestamp()]) Plant engineered by [key_name(usr)], mode: [mode] (cf __DEFINES/hydroponics.dm). |"
-	text += " Plant is now [carnivorous ? "carnivorous" : "NO LONGER carnivorous."] |"
+	text += " Plant is now [voracious ? "voracious" : "NO LONGER carnivorous."] |"
 	text += " Plant is now [thorny ? "thorny" : "NO LONGER thorny."] |"
 	text += " Plant chems: "
 	for (var/chemical in chems)
@@ -459,8 +439,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(nutrient_consumption 	? nutrient_consumption	: 0),
 				(water_consumption    	? water_consumption   	: 0),
 				(alter_temp    			? alter_temp    		: 0),
-				(carnivorous 			? carnivorous			: 0),
-				(parasite    			? parasite   			: 0),
+				(voracious				? voracious 			: 0),
 				(hematophage    		? hematophage    		: 0),
 				(exude_gasses    		? exude_gasses    		: 0),
 				(consume_gasses    		? consume_gasses    	: 0)
@@ -548,11 +527,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					if(affecting && affecting.is_existing() && affecting.is_usable() && affecting.is_organic())
 						stung = 1
 						if(thorny)
-							if(affecting.take_damage(5+carnivorous*5, 0))
+							if(affecting.take_damage(5+voracious*5, 0))
 								H.UpdateDamageIcon()
 								H.updatehealth()
 							else
-								H.adjustBruteLoss(5+carnivorous*5)
+								H.adjustBruteLoss(5+voracious*5)
 							to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [seed_name]!</span>")
 							if(H.feels_pain())
 								success = 0
@@ -622,39 +601,38 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		new_seed.display_name = "[display_name]"
 
 	new_seed.nutrient_consumption = nutrient_consumption
-	new_seed.water_consumption =    water_consumption
-	new_seed.ideal_heat =           ideal_heat
-	new_seed.heat_tolerance =       heat_tolerance
-	new_seed.ideal_light =          ideal_light
-	new_seed.light_tolerance =      light_tolerance
-	new_seed.toxins_tolerance =     toxins_tolerance
-	new_seed.lowkpa_tolerance =     lowkpa_tolerance
-	new_seed.highkpa_tolerance =    highkpa_tolerance
-	new_seed.pest_tolerance =       pest_tolerance
-	new_seed.weed_tolerance =       weed_tolerance
-	new_seed.endurance =            endurance
-	new_seed.yield =                yield
-	new_seed.lifespan =             lifespan
-	new_seed.maturation =           maturation
-	new_seed.production =           production
-	new_seed.growth_stages =        growth_stages
-	new_seed.harvest_repeat =       harvest_repeat
-	new_seed.potency =              potency
-	new_seed.spread =               spread
-	new_seed.carnivorous =          carnivorous
-	new_seed.parasite =             parasite
-	new_seed.hematophage =          hematophage
-	new_seed.thorny =               thorny
-	new_seed.stinging =             stinging
-	new_seed.ligneous =             ligneous
-	new_seed.teleporting =          teleporting
-	new_seed.juicy =        	    juicy
-	new_seed.plant_icon_state =     plant_icon_state
-	new_seed.splat_type =           splat_type
-	new_seed.packet_icon =          packet_icon
-	new_seed.biolum =               biolum
-	new_seed.biolum_colour =        biolum_colour
-	new_seed.alter_temp = 			alter_temp
+	new_seed.water_consumption =	water_consumption
+	new_seed.ideal_heat =			ideal_heat
+	new_seed.heat_tolerance =		heat_tolerance
+	new_seed.ideal_light =			ideal_light
+	new_seed.light_tolerance =		light_tolerance
+	new_seed.toxins_tolerance =		toxins_tolerance
+	new_seed.lowkpa_tolerance =		lowkpa_tolerance
+	new_seed.highkpa_tolerance =	highkpa_tolerance
+	new_seed.pest_tolerance =		pest_tolerance
+	new_seed.weed_tolerance =		weed_tolerance
+	new_seed.endurance =			endurance
+	new_seed.yield =				yield
+	new_seed.lifespan =				lifespan
+	new_seed.maturation =			maturation
+	new_seed.production =			production
+	new_seed.growth_stages =		growth_stages
+	new_seed.harvest_repeat =		harvest_repeat
+	new_seed.potency =				potency
+	new_seed.spread =				spread
+	new_seed.voracious =			voracious
+	new_seed.hematophage =			hematophage
+	new_seed.thorny =				thorny
+	new_seed.stinging =				stinging
+	new_seed.ligneous =				ligneous
+	new_seed.teleporting =			teleporting
+	new_seed.juicy =				juicy
+	new_seed.plant_icon_state =		plant_icon_state
+	new_seed.splat_type =			splat_type
+	new_seed.packet_icon =			packet_icon
+	new_seed.biolum =				biolum
+	new_seed.biolum_colour =		biolum_colour
+	new_seed.alter_temp =			alter_temp
 	new_seed.plant_dmi =			plant_dmi
 	new_seed.mutation_log =			mutation_log
 	new_seed.mutation_log += "([timestamp()]) Diverged from seed with uid: [uid]."

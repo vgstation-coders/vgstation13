@@ -548,7 +548,7 @@
 	update_name()
 
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
-	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
+	if(seed && !dead && seed.voracious == 2 && age > seed.maturation)
 		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
 			spawn(10)
 				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
@@ -594,7 +594,7 @@
 	if(seed)
 		if (seed.thorny)
 			things += "thorny"
-		if (seed.carnivorous)
+		if (seed.voracious == 2)
 			things += "carnivorous"
 		for (var/chemical_id in seed.chems)
 			if (chemical_id in reagents_to_log)

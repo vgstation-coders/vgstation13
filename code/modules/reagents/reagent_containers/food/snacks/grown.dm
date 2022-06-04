@@ -14,7 +14,6 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
-
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
 
@@ -26,14 +25,14 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname, mob/harvester)
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname)
 	..()
 	if(custom_plantname)
 		plantname = custom_plantname
 	if(ticker)
-		initialize(harvester)
+		initialize()
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/initialize(mob/harvester)
+/obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
 
 	//Handle some post-spawn var stuff.
 	//Fill the object up with the appropriate reagents.
@@ -44,10 +43,8 @@ var/list/special_fruits = list()
 		icon = seed.plant_dmi
 		icon_state = seed.plant_icon_state
 		potency = round(seed.potency)
-		force = seed.thorny ? 5+seed.carnivorous*3 : 0
-		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
-		if(seed.noreact)
-			flags |= NOREACT
+		force = seed.thorny ? 5+seed.voracious*3 : 0
+		throwforce = seed.thorny ? 5+seed.voracious*3 : 0
 
 		if(seed.teleporting)
 			name = "blue-space [name]"
@@ -83,7 +80,7 @@ var/list/special_fruits = list()
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom, var/speed, mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
 	if(!seed || !src)
 		return
@@ -93,12 +90,12 @@ var/list/special_fruits = list()
 	// We ONLY want to apply special effects if we're hitting a turf! That's because throw_impact will always be
 	// called on a turf AFTER it's called on the things ON the turf, and will runtime if the item doesn't exist anymore.
 	if(isturf(hit_atom))
-		do_splat_effects(hit_atom,user)
+		do_splat_effects(hit_atom)
 	return
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_splat_effects(atom/hit_atom, mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_splat_effects(atom/hit_atom)
 	if(seed.teleporting)
-		splat_reagent_reaction(get_turf(hit_atom),user)
+		splat_reagent_reaction(get_turf(hit_atom))
 		if(do_fruit_teleport(hit_atom, usr, potency))
 			visible_message("<span class='danger'>The [src] splatters, causing a distortion in space-time!</span>")
 		else if(splat_decal(get_turf(hit_atom)))
@@ -108,7 +105,7 @@ var/list/special_fruits = list()
 
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
-		splat_reagent_reaction(get_turf(hit_atom),user)
+		splat_reagent_reaction(get_turf(hit_atom))
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
@@ -124,7 +121,7 @@ var/list/special_fruits = list()
 					add_attacklogs(user, M, "stung", object = src, addition = "Reagents: [english_list(seed.get_reagent_names())]", admin_warn = 1)
 			to_chat(user, "<span class='alert'>Some of \the [src]'s stingers break off in the hit!</span>")
 			potency -= rand(1,(potency/3)+1)
-		do_splat_effects(M,user)
+		do_splat_effects(M)
 		return
 	return ..()
 
@@ -146,7 +143,8 @@ var/list/special_fruits = list()
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
 	if(seed.juicy == 2)
-		if(M.Slip(3, 2, slipped_on = src))
+		if(M.Slip(3, 2))
+			to_chat(M, "<span class='notice'>You slipped on the [name]!</span>")
 			do_splat_effects(M)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pickup(mob/user)
@@ -211,8 +209,7 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/thorns_apply_damage(mob/living/carbon/human/H, datum/organ/external/affecting)
 	if(!seed.thorny || !affecting)
 		return 0
-	//if(affecting.take_damage(5+seed.carnivorous*3, 0, 0, "plant thorns")) //For some fucked up reason, it's not returning 1
-	affecting.take_damage(5+seed.carnivorous*3, 0, 0, "plant thorns")
+	affecting.take_damage(5+seed.voracious*3, 0, 0, "plant thorns")
 	H.UpdateDamageIcon()
 	return 1
 
@@ -262,8 +259,6 @@ var/list/special_fruits = list()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
-//Types blacklisted from appearing as products of strange seeds and no-fruit.
-var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/) //Otherwise the selection would be biased by the relatively large number of multiple leaf-number-specific subtypes - the base type with randomized leaves is still valid.
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn
 	name = "ear of corn"
@@ -368,7 +363,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	plantname = "rocknut"
 	force = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname, mob/harvester)
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname)
 	..()
 	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
 	eatverb = pick("crunch","gnaw","bite")
@@ -933,9 +928,9 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	var/current_path = null
 	var/counter = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname, mob/harvester)
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname)
 	..()
-	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits() - strange_seed_product_blacklist
+	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
 	available_fruits = shuffle(available_fruits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()
@@ -1077,96 +1072,3 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#DFE88B"
 	plantname = "mustardplant"
 	fragrance = INCENSE_MUSTARDPLANT
-
-//Clovers
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover
-	filling_color = "#247E0A"
-	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
-	var/leaves
-	plantname = "clover"
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
-	leaves = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/oneleaf
-	leaves = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/twoleaf
-	leaves = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/threeleaf
-	leaves = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fourleaf
-	leaves = 4
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/fiveleaf
-	leaves = 5
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sixleaf
-	leaves = 6
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/sevenleaf
-	leaves = 7
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/update_leaves()
-	switch(leaves)
-		if(3)
-			name = "clover"
-			desc = "A cheerful little herb with three leaves."
-		if(0)
-			name = "zero-leaf clover"
-			desc = "Bad luck and extreme misfortune will infest your pathetic soul for all eternity."
-			luckiness = -10000
-		if(1)
-			name = "one-leaf clover"
-			desc = "This cursed clover is said to bring nothing but misery to the one who bears it."
-			luckiness = -500
-		if(2)
-			name = "two-leaf clover"
-			desc = "This clover only has two leaves. How unfortunate!"
-			luckiness = -25
-		if(4)
-			name = "four-leaf clover"
-			desc = "This clover has four leaves. Lucky you!"
-			luckiness = 25
-		if(5)
-			name = "five-leaf clover"
-			desc = "A marvel of probabilistics, this exquisitely rare clover is said to bring fantastic luck."
-			luckiness = 100
-		if(6)
-			name = "six-leaf clover"
-			desc = "A closely-guarded secret of the leprechauns."
-			luckiness = 1000
-		if(7)
-			name = "seven-leaf clover"
-			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
-			luckiness = 10000
-	icon = 'icons/obj/hydroponics/clover.dmi'
-	icon_state = "clover[leaves]"
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
-	leaves = 3
-	var/prob1 = clamp(mut / 3, 0, 66)
-	var/luck = 0
-	if(ismob(shifter))
-		luck = shifter.luck()
-	if(luck ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
-		var/ls = 1
-		var/prob2 = max(clamp(mut, 0, 21) / 21, 0.1)
-		prob2 = luck ? shifter.lucky_probability(prob2, 1/333 , 33, ourluck = luck) : prob2
-		for(var/i in 1 to 7)
-			if(prob(prob2))
-				ls += 1
-		leaves += ls * pick(-1,1)
-		if(luck ? shifter.lucky_prob(3, 1/333, 50, ourluck = luck) : prob(3))
-			leaves = clamp(leaves, 0, 7)
-		else if(leaves < 0 || leaves > 7)
-			leaves = 3
-		return leaves != 3
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/clover/initialize(mob/harvester)
-	. = ..()
-	if(isnull(leaves))
-		shift_leaves(seed?.potency, harvester)
-	update_leaves()

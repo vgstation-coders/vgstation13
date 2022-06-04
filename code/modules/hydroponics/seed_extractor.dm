@@ -213,9 +213,9 @@
 					dat += "<span title=\"This plant is capable of growing beyond the confines of a tray.\">CREEP </span>"
 				if(2)
 					dat += "<span title=\"This plant is a robust and vigorous vine that will spread rapidly.\">VINE </span>"
-			switch(P.seed.carnivorous)
+			switch(P.seed.voracious)
 				if(1)
-					dat += "<span title=\"This plant is carnivorous and will eat tray pests for sustenance.\">CARN </span>"
+					dat += "<span title=\"This plant is voracious and will eat tray pests and weeds for sustenance.\">CARN </span>"
 				if(2)
 					dat += "<span title=\"This plant is carnivorous and poses a significant threat to living things around it.\">HCARN </span>"
 			switch(P.seed.juicy)
@@ -225,8 +225,6 @@
 					dat += "<span title=\"This plant's fruit is excessively soft and juicy.\">SLIP </span>"
 			if(P.seed.immutable > 0)
 				dat += "<span title=\"This plant does not possess genetics that are alterable.\">NOMUT </span>"
-			if(P.seed.parasite)
-				dat += "<span title=\"This plant is capable of parasitizing and gaining sustenance from tray weeds.\">PARA </span>"
 			if(P.seed.hematophage)
 				dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
 			if(P.seed.alter_temp)
@@ -294,7 +292,6 @@
 				break
 
 		for (var/obj/item/seeds/O in contents) //Now we find the seed we need to vend
-			//if (O.seed.display_name == href_list["name"] && O.seed.lifespan == href_list["li"] && O.seed.endurance == href_list["en"] && O.seed.maturation == href_list["ma"] && O.seed.production == href_list["pr"] && O.seed.yield == href_list["yi"] && O.seed.potency == href_list["pot"] && href_list["biolum_colour"] == O.seed.biolum_colour && href_list["gasexude"] == O.seed.exude_gasses.len && O.seed.spread == href_list["spread"] && O.seed.alter_temp == href_list["alter_temp"] && O.seed.carnivorous == href_list["carnivorous"] && O.seed.parasite == href_list["parasite"] && O.seed.hematophage == href_list["hematophage"] && O.seed.thorny == href_list["thorny"] && O.seed.stinging == href_list["stinging"] && O.seed.ligneous == href_list["ligneous"] && O.seed.teleporting == href_list["teleporting"] && O.seed.juicy == href_list["juicy"]) //If the spaghetti above wasn't proof enough, the length of of this line alone should tell you that something is probably very very wrong here and this whole fucking file probably shouldn't work the way it does. What it SHOULD do is just store the seed datum itself and check the stored seed's seed datum, which would be infinitely simpler. However, since no other machines use or are dependent on this shitcode, and due to the fact that seed datums will likely not be re-structured much if at all in the future, to that I say fuck it, it just werks. Sincerely, please don't git blame me I only intended well, oh god don't take my pomfcoins way no i didn't even come up with this system originally i just ported it and lazily expanded it please okay there I made it not shit chickenman no
 			if(O.seed == S)
 				O.forceMove(src.loc)
 				amt--

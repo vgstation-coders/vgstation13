@@ -77,7 +77,7 @@
 					do_chem_inject(V)
 					do_carnivorous_bite(V, seed.potency)
 		else
-			if(seed.carnivorous == 2)
+			if(seed.voracious == 2)
 				var/mob/living/victim = locate() in range(src,1)
 				if(victim)
 					grab_mob(victim)

@@ -147,7 +147,7 @@
 			generic_mutation_message("quivers!")
 
 		if(GENE_METABOLISM)
-			var/mutation_type = pick(PLANT_NUTRIENT_CONSUMPTION, PLANT_FLUID_CONSUMPTION, PLANT_ROOMTEMP, PLANT_PARASITIC, PLANT_CARNIVOROUS, PLANT_GAS, PLANT_HEMATOPHAGE)
+			var/mutation_type = pick(PLANT_NUTRIENT_CONSUMPTION, PLANT_FLUID_CONSUMPTION, PLANT_ROOMTEMP, PLANT_VORACIOUS, PLANT_GAS, PLANT_HEMATOPHAGE)
 			switch(mutation_type)
 				if(PLANT_NUTRIENT_CONSUMPTION)
 					if(seed.nutrient_consumption < 0.1)
@@ -168,16 +168,22 @@
 				if(PLANT_ROOMTEMP)
 					seed.alter_temp = !seed.alter_temp
 					generic_mutation_message("rustles!")
-				if(PLANT_CARNIVOROUS)
+				if(PLANT_VORACIOUS)
 					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
-					seed.carnivorous = seed.carnivorous % 2 + 1
-					if(seed.carnivorous)
-						generic_mutation_message("shudders hungrily.")
-					else
-						generic_mutation_message("mellows down.")
+					seed.voracious = seed.voracious % 2 + 1
+					generic_mutation_message("shudders hungrily.")
 				if(PLANT_GAS)
-					var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
-					seed.exude_gasses[gas] = rand(3,9)
+					if(length(seed.consume_gasses) && prob(50))
+						seed.consume_gasses -= pick(seed.consume_gasses)
+					if(prob(50))
+						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
+						seed.consume_gasses[gas] = rand(3,9)
+					if(length(seed.exude_gasses) && prob(50))
+						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
+						seed.exude_gasses -= pick(seed.exude_gasses)
+					if(prob(50))
+						seed.exude_gasses[gas] = rand(3,9)
+
 					generic_mutation_message("rustles!")
 				if(PLANT_HEMATOPHAGE)
 					seed.hematophage = !seed.hematophage
@@ -225,6 +231,7 @@
 						visible_message("<span class='notice'>\The [seed.display_name] recedes into the tray.</span>")
 				if(PLANT_HARVEST)
 					var/new_harvest
+					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
 					new_harvest = seed.harvest_repeat % 2 + 1
 					if(seed.harvest_repeat < new_harvest)
 						visible_message("<span class='notice'>\The [seed.display_name] roots deep and sprouts new stalks!</span>")

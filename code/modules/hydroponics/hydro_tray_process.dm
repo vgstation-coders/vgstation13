@@ -196,21 +196,19 @@
 
 	// Check for pests and weeds.
 	// Some carnivorous plants happily eat pests.
-	if(pestlevel > 0)
-		if(seed.carnivorous)
+	if(pestlevel > 0 || weedlevel > 0)
+		if(seed.voracious)
 			plant_health += HYDRO_SPEED_MULTIPLIER
 			pestlevel -= HYDRO_SPEED_MULTIPLIER
-		else if (pestlevel >= seed.pest_tolerance)
+			weedlevel -= HYDRO_SPEED_MULTIPLIER
+		else if (pestlevel >= seed.pest_tolerance || weedlevel >= seed.weed_tolerance)
 			plant_health -= HYDRO_SPEED_MULTIPLIER
 		if(draw_warnings)
 			update_icon_after_process = 1
 
 	// Some plants thrive and live off of weeds.
 	if(weedlevel > 0)
-		if(seed.parasite)
-			plant_health += HYDRO_SPEED_MULTIPLIER
-			weedlevel -= HYDRO_SPEED_MULTIPLIER
-		else if (weedlevel >= seed.weed_tolerance)
+		if (weedlevel >= seed.weed_tolerance)
 			plant_health -= HYDRO_SPEED_MULTIPLIER
 		if(draw_warnings)
 			update_icon_after_process = 1
@@ -246,7 +244,7 @@
 
 	// If we're a spreading vine, let's go ahead and try to spread our love.
 	if(seed.spread && !closed_system && age >= seed.maturation && prob(2 * max(10,seed.potency)))
-		if((nutrilevel < 8 && waterlevel < 80) || seed.hematophage || seed.carnivorous) // Unless we're particularly vicious, let's not try to spread while our needs are met.
+		if((nutrilevel < 8 && waterlevel < 80) || seed.hematophage || seed.voracious) // Unless we're particularly vicious, let's not try to spread while our needs are met.
 			if(!(locate(/obj/effect/plantsegment) in T))
 				new /obj/effect/plantsegment(T, seed)
 				switch(seed.spread)
