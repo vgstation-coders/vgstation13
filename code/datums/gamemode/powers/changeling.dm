@@ -211,20 +211,19 @@
 	if(changeling)
 		changeling.chem_storage += 25
 
-/datum/power/changeling/DigitalCamoflague
+/datum/power/changeling/DigitalCamouflage
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
 	cost = 2
 	allowduringlesserform = 1
 	allowduringhorrorform = 0
 
-/datum/power/changeling/DigitalCamoflague/add_power(var/datum/role/R)
+/datum/power/changeling/DigitalCamouflage/add_power(var/datum/role/R)
 	. = ..()
 	if (!.) 
 		return 
 	var/mob/living/carbon/human/C = R.antag.current
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
-	C.digitalcamo = 1
 
 /datum/power/changeling/rapidregeneration
 	name = "Rapid Regeneration"
