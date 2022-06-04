@@ -841,7 +841,7 @@ steam.start() -- spawns the effect
 
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		M.Slip(5, 2, 1, slipped_on = src, onwhat = "the foam")
+		M.Slip(5, 2, 1, onwhat = "the foam")
 
 /datum/effect/system/foam_spread
 	var/amount = 5				// the size of the foam spread.
