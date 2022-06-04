@@ -334,11 +334,11 @@ var/stacking_limit = 90
 
 	var/indice_pop = min(10,round(roundstart_pop_ready/5)+1)
 	var/extra_rulesets_amount = 0
+	var/rst_pop = 0
 
 	if (classic_secret) // Classic secret experience : one & only one roundstart ruleset
 		extra_rulesets_amount = 0
 	else
-		var/rst_pop = 0
 		for(var/mob/living/player in player_list)
 			if(player.mind)
 				rst_pop++
