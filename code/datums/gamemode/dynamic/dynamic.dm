@@ -394,7 +394,7 @@ var/stacking_limit = 90
 
 		// 4. If Ruleset is exclusive and population is under high_pop_limit, ensure ruleset is only one drafted.
 		if(chosen_one.exclusive && high_pop_limit > rst_pop)
-			drafted_rules = chosen_one	
+			drafted_rules = list(chosen_one)	
 			break
 
 		// 4. Adding to the LIST.
