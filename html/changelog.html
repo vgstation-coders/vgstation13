@@ -85,6 +85,16 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">Merge Changeling hive upload and download into one spell. You also send/receive all available DNA at once rather than one at a time.</li>
 				<li class="tweak">Changed some abilities and items to be more consistent related to tracking, viewing, and telepathy. For example, Changeling&#39;s Digital Camouflage is now like a tinfoil hat. Certain syndicate items now jam various technology and mind powers like a tinfoil hat.</li>
 			</ul>
+			<h3 class="author">jellyveggie2 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The power grid now works off a priority system. Consumers in higher priority tiers receive power before those on lower tiers. All consumers in the same tier receive the same amount of power proportional to how much each requested and how much power is left available for said tier.</li>
+				<li class="tweak">Current priority round-start is: Emitters &gt; APCs and machinery &gt; Recharging an APC &gt; recharging an SMES. So, the SMES won&#39;t recharge until there&#39;s enough power for all APCs to recharge, and APCs won&#39;t recharge until there&#39;s enough power to run</li>
+				<li class="tweak">Emitters can run at low power so long as you can meet at least 30% of their demand, albeit with reduced intensity. Intensity scales linearly with met demand, so 50% met demand means 50% intensity.</li>
+				<li class="tweak">&#34;Draw&#34; in power monitors is now more representative of how much power the station requires in that moment, rather than how much it is consuming</li>
+				<li class="rscadd">Power monitors will now display machines wired to the grid within an area, such as emitters and SMES units. Illegal or antiquated tech may not show at all.</li>
+				<li class="rscadd">Power monitors may be used to modify the priority of said machines, assuming you have engineering access. Feel free to redirect power from security to cargo or whatever.</li>
+				<li class="rscadd">SMES units can be given a name tag through their UI, to better identify them within the power monitor.</li>
+			</ul>
 			<h2 class="date">2022.06.01</h2>
 			<h3 class="author">Optimism333 updated:</h3>
 			<ul class="changes bgimages16">
