@@ -17,7 +17,7 @@
 		world.log << "ERROR: Could not initate grey-tide. Unable find prison or brig area."
 	else if(!foundSomeone)
 		world.log << "ERROR: Could not initate grey-tide. Unable find person in prison or brig areas."
-	return 25 * foundSomeone
+	return 50 * foundSomeone
 
 /datum/event/prison_break/setup()
 	announceWhen = rand(50, 60)
