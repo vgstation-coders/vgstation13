@@ -75,27 +75,29 @@
 			M.simple_message("<span class='danger'>Something burns your back!</span>",\
 				"<span class='userdanger'>They're eating your back!</span>")
 			return
+
 		if(ishuman(M))
-			if(M.CheckSlip() != TRUE)
-				return
-			else
+			if(M.CheckSlip())
 				M.simple_message("<span class='warning'>Your feet feel like they're on fire!</span>",\
 					"<span class='userdanger'>Egads! They bite your feet!</span>")
 				M.take_overall_damage(0, max(0, (burned - 2)))
+			else
+				return
 
 		if(!istype(M, /mob/living/carbon/slime) && !isrobot(M))
-			M.stop_pulling()
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				C.Slip(10, 10, slipped_on = src, drugged_message = "<span class='userdanger'>Please, just end the pain!</span>", spanclass = "notice")
+			else //Includes simple animals
+				M.Slip(10, 10)
+				M.simple_message("<span class='notice'>You slipped on \the [name]!</span>",\
+				"<span class='userdanger'>Please, just end the pain!</span>")
 			step(M, M.dir)
 			spawn(1)
 				for(var/i = 1 to slip_power)
 					step(M, M.dir)
 					sleep(1)
 			M.take_organ_damage(2) // Was 5 -- TLE
-			M.simple_message("<span class='notice'>You slipped on \the [name]!</span>",\
-				"<span class='userdanger'>Please, just end the pain!</span>")
-			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-			M.Knockdown(10)
-			M.Stun(10)
 			M.take_overall_damage(0, burned)
 
 /obj/item/weapon/bananapeel/traitorpeel/throw_impact(atom/hit_atom)

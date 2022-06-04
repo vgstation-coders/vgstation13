@@ -15,6 +15,7 @@
 	volume = 15
 	starting_materials = list(MAT_GLASS = 1000)
 	w_type = RECYK_GLASS
+	attack_verb = list("stabs", "sticks", "pokes")
 
 	var/mode = SYRINGE_DRAW
 	var/can_draw_blood = TRUE
@@ -272,15 +273,15 @@
 		add_attacklogs(user, target, (deflected ? "attempted to inject" : "injected"), object = src, addition = "Deflected: [deflected ? "YES" : "NO"]; Reagents: [english_list(get_reagent_names())]", admin_warn = !deflected)
 
 		if (deflected)
-			user.visible_message("<span class='danger'>[user] tries to stab [target] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>", "<span class='danger'>You try to stab [target] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>")
+			user.visible_message("<span class='danger'>[user] tries to stab [user == target ? get_reflexive_pronoun(user.gender) : target] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>", "<span class='danger'>You try to stab [user == target ? "yourself" : "\the [target]"] in \the [hit_area] with \the [src], but the attack is deflected by armor!</span>")
 			user.u_equip(src, 1)
 			qdel(src)
 			return // Avoid the transfer since we're using qdel
 		else
-			user.visible_message("<span class='danger'>[user] stabs [target] in \the [hit_area] with \the [src]!</span>", "<span class='danger'>You stab [target] in \the [hit_area] with \the [src]!</span>")
+			user.visible_message("<span class='danger'>[user] stabs [user == target ? get_reflexive_pronoun(user.gender) : target] in \the [hit_area] with \the [src]!</span>", "<span class='danger'>You stab [user == target ? "yourself" : "\the [target]"] in \the [hit_area] with \the [src]!</span>")
 			affecting.take_damage(3)
 	else
-		user.visible_message("<span class='danger'>[user] stabs [target] with \the [src]!</span>", "<span class='danger'>You stab [target] with \the [src]!</span>")
+		user.visible_message("<span class='danger'>[user] stabs [user == target ? get_reflexive_pronoun(user.gender) : target] with \the [src]!</span>", "<span class='danger'>You stab [user == target ? "yourself" : "\the [target]"]  with \the [src]!</span>")
 		target.take_organ_damage(3)// 7 is the same as crowbar punch
 
 	// Break the syringe and transfer some of the reagents to the target

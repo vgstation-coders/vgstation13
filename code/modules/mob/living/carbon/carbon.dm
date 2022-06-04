@@ -492,16 +492,41 @@
 	forceMove(get_turf(A))
 	src.unslippable = last_slip_value
 
-/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
-	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
+/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0, obj/slipped_on, onwhat, otherscansee, message, self_message, drugged_message, self_drugged_message, blind_drugged_message, spanclass = "info")
+	if((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
+
+	slip_message(slipped_on, onwhat, otherscansee, message, self_message, drugged_message, self_drugged_message, blind_drugged_message, spanclass)
 
 	for(var/obj/item/I in held_items)
 		I.SlipDropped(src,dir,overlay_type) // can be set to trigger specific behaviours when items are dropped by slipping
 
 	if(..())
+
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+
 		return 1
+
+/mob/living/carbon/proc/slip_message(obj/slipped_on, onwhat, otherscansee = FALSE, message, self_message, drugged_message, self_drugged_message, blind_drugged_message, spanclass = "info")
+	var/onwhatmsg
+	if(onwhat)
+		onwhatmsg = " on [onwhat]!"
+	else if(slipped_on)
+		onwhatmsg = " on \the [slipped_on]!"
+	else
+		onwhatmsg = "!"
+	if(otherscansee)
+		visible_message("<span class='[spanclass]'>\The [src] slips[onwhatmsg]</span>",\
+						"<span class='[spanclass]'>You slip[onwhatmsg]</span>",\
+						"<span class='[spanclass]'>You slip on something!</span>",\
+						drugged_message,\
+						self_drugged_message,\
+						blind_drugged_message)
+	else
+		if(blinded)
+			onwhatmsg = "on something!"
+		simple_message("<span class='[spanclass]'>You slip[onwhatmsg]</span>",\
+						drugged_message)
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
@@ -674,35 +699,35 @@
 		regenerate_icons()
 
 /mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
-	if (!..())
+	if(!..())
 		return FALSE
 
-	if (unslippable) //if unslippable, don't even bother making checks
+	if(unslippable) //if unslippable, don't even bother making checks
 		return FALSE
 
 	switch(P.wet)
 		if(TURF_WET_WATER)
-			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, onwhat = "the wet floor", otherscansee = TRUE, spanclass = "warning"))
+				step(src, dir)
+			else
 				return FALSE
-			step(src, dir)
-			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
-			"<span class='warning'>You slip on the wet floor!</span>")
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE, onwhat = "the floor", otherscansee = TRUE, spanclass = "warning"))
+				for(var/i = 1 to 4)
+					spawn(i)
+						if(!locked_to)
+							step(src, dir)
+				take_organ_damage(2) // Was 5 -- TLE
+			else
 				return FALSE
-			for (var/i = 1 to 4)
-				spawn(i)
-					if(!locked_to)
-						step(src, dir)
-			take_organ_damage(2) // Was 5 -- TLE
-			visible_message("<span class='warning'>[src] slips on the floor!</span>", \
-			"<span class='warning'>You slip on the floor!</span>")
+
 
 		if(TURF_WET_ICE)
-			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE))
+			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE, onwhat = "the icy floor", otherscansee = TRUE, spanclass = "warning"))
 				step(src, dir)
-				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
-				"<span class='warning'>You slip on the icy floor!</span>")
+			else
+				return FALSE
+
 	return TRUE
