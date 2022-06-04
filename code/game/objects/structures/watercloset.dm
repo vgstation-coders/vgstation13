@@ -227,7 +227,7 @@
 	icon_state_open = "shower_t"
 	density = 0
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/on = 0
 	var/obj/effect/mist/mymist = null
 	var/ismist = 0 //Needs a var so we can make it linger~

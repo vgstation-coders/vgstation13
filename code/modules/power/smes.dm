@@ -9,8 +9,8 @@ var/list/smes_list = list()
 	icon_state = "smes"
 	density = 1
 	anchored = 1
-	use_power = 0
-
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_SMES_RECHARGE
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 
 	starting_terminal = 1
@@ -120,9 +120,15 @@ var/list/smes_list = list()
 		return terminal.surplus()
 	return 0
 
-/obj/machinery/power/battery/smes/add_load(var/amount)
+/obj/machinery/power/battery/smes/add_load(var/amount, var/priority = power_priority)
 	if(terminal)
-		terminal.add_load(amount)
+		terminal.add_load(amount, priority)
+
+/obj/machinery/power/battery/smes/get_satisfaction(var/priority = power_priority)
+	if(terminal && terminal.get_powernet())
+		return terminal.get_satisfaction(priority)
+	else
+		return 0
 
 /obj/machinery/power/battery/smes/infinite
 	name = "magical power storage unit"

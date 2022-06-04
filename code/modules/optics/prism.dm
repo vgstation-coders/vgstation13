@@ -6,7 +6,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	icon='icons/obj/machines/optical/prism.dmi'
 	icon_state="prism_off"
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	anchored = 0
 	density = 1
 

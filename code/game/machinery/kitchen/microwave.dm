@@ -5,7 +5,7 @@
 	icon_state = "mw"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 100
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE

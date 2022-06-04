@@ -384,12 +384,13 @@
  */
 var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 
-/proc/format_units(var/number)
+/proc/format_units(var/number, var/decimals=2)
 	if (number<0)
 		return "-[format_units(abs(number))]"
 	if (number==0)
 		return "0 "
 
+	// Figure out suffix
 	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
@@ -397,6 +398,10 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 		i++
 		if (i == max_unit_suffix)
 			break
+
+	// Remove excess decimals
+	decimals = 10 ** decimals
+	number = round(number * decimals)/decimals
 
 	return "[format_num(number)] [unit_suffixes[i]]"
 

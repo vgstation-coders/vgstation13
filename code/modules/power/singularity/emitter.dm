@@ -9,7 +9,9 @@
 	density = 1
 	req_access = list(access_engine_minor)
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
+	monitoring_enabled = TRUE
 	idle_power_usage = 10
 	active_power_usage = 300
 
@@ -20,6 +22,9 @@
 	var/shot_number = 0
 	var/locked = 0
 	var/previous_state = 0//for update_icon() purposes
+	var/beam_power = 1
+	var/min_satisfaction = 0.3 //Emitter will shutdown below this level of power satisfaction
+	var/last_satisfaction = 0
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
@@ -28,17 +33,6 @@
 
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
-
-/obj/machinery/power/emitter/antique
-	name = "antique emitter"
-	desc = "An old fashioned heavy duty industrial laser."
-	icon_state = "emitter"
-
-/obj/machinery/power/emitter/antique/update_icon()
-	if(powered && get_powernet() && avail(active_power_usage) && active)
-		icon_state = "emitter_+a"
-	else
-		icon_state = "emitter"
 
 /obj/machinery/power/emitter/New(var/turf/loc)
 	..()
@@ -97,6 +91,8 @@
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
+		if (last_satisfaction != get_satisfaction()) // Beam power scales down is satisfaction is down too
+			beam.set_power(beam_power * get_satisfaction())
 	else
 		if(beam)
 			beam._re_emit = 0
@@ -124,13 +120,16 @@
 				on = !active
 
 		if(!isnull(on) && anchored && state == 2 && on != active)
-			active = on
+			if (active != on)
+				if (on)
+					turn_on()
+				else
+					turn_off()
+
 			var/statestr = on ? "on":"off"
 			// Spammy message_admins("Emitter turned [statestr] by radio signal ([signal.data["command"]] @ [frequency]) in [formatJumpTo(src)]",0,1)
 			log_game("Emitter turned [statestr] by radio signal ([signal.data["command"]] @ [frequency]) in ([x],[y],[z])")
 			investigation_log(I_SINGULO,"turned <font color='orange'>[statestr]</font> by radio signal ([signal.data["command"]] @ [frequency])")
-			update_icon()
-			update_beam()
 
 /obj/machinery/power/emitter/Destroy()
 	qdel(beam)
@@ -146,7 +145,7 @@
 		flick("emitterflick-[previous_state][state]",src)
 		previous_state = state
 
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
 		var/image/emitterbeam = image(icon,"emitter-beam")
 		emitterbeam.plane = ABOVE_LIGHTING_PLANE
 		emitterbeam.layer = ABOVE_LIGHTING_LAYER
@@ -157,6 +156,15 @@
 		emitterlock.plane = ABOVE_LIGHTING_PLANE
 		emitterlock.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterlock
+
+/obj/machinery/power/emitter/get_monitor_status()
+	if (!(monitoring_enabled && active))
+		return null
+
+	var/list/template = get_monitor_status_template()
+	template["demand"] = active_power_usage
+
+	return list("\ref[src]" = template)
 
 /obj/machinery/power/emitter/attack_hand(mob/user as mob)
 	//Require consciousness
@@ -201,7 +209,7 @@
 	shot_number = 0
 	fire_delay = 100
 	update_icon()
-	update_beam()
+	//update_beam()
 
 /obj/machinery/power/emitter/proc/turn_off()
 	active = 0
@@ -227,14 +235,18 @@
 		update_beam()
 		return
 
+	if (active)
+		add_load(active_power_usage) //Request power for next tick
+
 	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
-		if(!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
-			add_load(active_power_usage) //Drain it then bitch
+		if(!active_power_usage || get_satisfaction() > min_satisfaction) //Doesn't require power or powernet has enough supply
 			if(!powered) //Yay its powered
 				powered = 1
 				update_icon()
 				update_beam()
 				investigation_log(I_SINGULO,"regained power and turned <font color='green'>on</font>")
+			else if (last_satisfaction != get_satisfaction())
+				update_beam()
 		else
 			if(powered) //Fuck its not anymore
 				powered = 0 //Whelp time to kill it then
@@ -373,7 +385,7 @@
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"

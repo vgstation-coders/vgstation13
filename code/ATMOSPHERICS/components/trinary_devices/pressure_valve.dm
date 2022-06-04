@@ -164,7 +164,7 @@
 	name = "pressure valve"
 	desc = "A pressure activated valve."
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 /obj/machinery/atmospherics/trinary/pressure_valve/manual/attack_ai(mob/user)
 	if(isMoMMI(user) && (user in (viewers(1, src) + loc))) // MoMMIs must be next to the valve to view and manipulate it
