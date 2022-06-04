@@ -585,6 +585,7 @@ Assign your candidates in choose_candidates() instead.
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
 	flags = HIGHLANDER_RULESET
+	exclusive = 1
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)

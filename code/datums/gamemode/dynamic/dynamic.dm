@@ -392,6 +392,11 @@ var/stacking_limit = 90
 		// 3. Picking up the CHOSEN ONE.
 		var/datum/dynamic_ruleset/chosen_one = picking_roundstart_rule(drafted_rules, candidate_rules)
 
+		// 4. If Ruleset is exclusive and population is under high_pop_limit, ensure ruleset is only one drafted.
+		if(chosen_one.exclusive && high_pop_limit > rst_pop)
+			drafted_rules = chosen_one	
+			break
+
 		// 4. Adding to the LIST.
 		if (chosen_one)
 			message_admins("DYNAMIC MODE: Picking a [istype(chosen_one, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[chosen_one.name]</font>!")

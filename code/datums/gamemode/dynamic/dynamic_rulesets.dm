@@ -17,6 +17,7 @@
 	var/list/weekday_rule_boost = list()
 	var/list/timeslot_rule_boost = list()
 	var/cost = 0//threat cost for this rule.
+	var/exclusive //Rulesets that are exclusive will be drafted at the exclusion of all rulesets unless the population exceeds dynamic_high_pop_limit
 	var/logo = ""//any state from /icons/logos.dmi
 	var/calledBy //who dunnit, for round end scoreboard
 
