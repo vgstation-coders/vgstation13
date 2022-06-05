@@ -253,7 +253,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_PHYTOCHEMISTRY)
 			if(!chems || mode == GENEGUN_MODE_PURGE)
 				chems = list()
+			var/list/chems_to_splice = gene.values[1]
+			for(var/chem in chems_to_splice)
+				chems[chem] = chems_to_splice[chem]
 
+
+/*
 			var/list/gene_value = gene.values[1]
 			for(var/rid in gene_value)
 				var/list/gene_chem = gene_value[rid]
@@ -273,14 +278,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 						chems[rid][i] = max(1,round((gene_chem[i] + chems[rid][i])/2))
 					else
 						chems[rid][i] = gene_chem[i]
-
+*/
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					potency 			= gene.values[2]
-					teleporting 		= gene.values[3]
 				if(GENEGUN_MODE_SPLICE)
 					potency 			= round(mix(gene.values[2], potency, rand(40, 60)/100), 0.1)
-					teleporting 		= max(gene.values[3], teleporting)
 
 		if(GENE_MORPHOLOGY)
 			if(gene.values[1])
@@ -345,26 +348,13 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				if(GENEGUN_MODE_PURGE)
 					nutrient_consumption	= gene.values[1]
 					water_consumption 		= gene.values[2]
-					alter_temp 				= gene.values[3]
 					voracious				= gene.values[4]
 					hematophage 			= gene.values[5]
 				if(GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
 					water_consumption 		= mix(gene.values[2], water_consumption,	rand(40, 60)/100)
-					alter_temp 				= max(gene.values[3], alter_temp)
 					voracious 				= max(gene.values[4], voracious)
 					hematophage 			= max(gene.values[5], hematophage)
-			var/list/new_gasses = gene.values[6]
-			if(islist(new_gasses))
-				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
-					exude_gasses = list()
-				exude_gasses |= new_gasses
-			new_gasses = gene.values[7]
-			if(islist(new_gasses))
-				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
-					consume_gasses = list()
-				consume_gasses |= new_gasses
-
 		if(GENE_DEVELOPMENT)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
@@ -379,6 +369,24 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					spread 				= max(gene.values[3], spread)
 					harvest_repeat 		= max(gene.values[4], harvest_repeat)
 					yield				= round(mix(gene.values[5], yield,		rand(40, 60)/100), 0.1)
+		if(XENOBOTANY)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					teleporting 		= gene.values[3]
+					alter_temp 				= gene.values[3]
+				if(GENEGUN_MODE_SPLICE)
+					teleporting 		= max(gene.values[3], teleporting)
+					alter_temp 				= max(gene.values[3], alter_temp)
+			var/list/new_gasses = gene.values[6]
+			if(islist(new_gasses))
+				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
+					exude_gasses = list()
+				exude_gasses |= new_gasses
+			new_gasses = gene.values[7]
+			if(islist(new_gasses))
+				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
+					consume_gasses = list()
+				consume_gasses |= new_gasses
 
 	var/text = "([timestamp()]) Plant engineered by [key_name(usr)], mode: [mode] (cf __DEFINES/hydroponics.dm). |"
 	text += " Plant is now [voracious ? "voracious" : "NO LONGER carnivorous."] |"
