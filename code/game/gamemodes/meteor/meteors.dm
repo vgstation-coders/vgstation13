@@ -305,44 +305,39 @@
 /obj/item/projectile/meteor/Destroy()
 	..()
 
-var/static/list/type2species = list(
-	/mob/living/carbon/human = /datum/species/human,
-	/mob/living/carbon/human/vox = /datum/species/vox,
-	/mob/living/carbon/human/insectoid = /datum/species/insectoid,
-	/mob/living/carbon/human/diona = /datum/species/diona,
-	/mob/living/carbon/human/grey = /datum/species/grey,
-	/mob/living/carbon/human/unathi = /datum/species/unathi,
-	/mob/living/carbon/human/tajaran = /datum/species/tajaran,
-	/mob/living/carbon/human/skellington = /datum/species/skellington,
-)
-
 /obj/item/projectile/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
 	name = "organic debris"
 	icon_state = "human"
 	var/mob/living/mob_to_gib = /mob/living/carbon/human
+	var/mobpath = /mob/living/carbon/human
 	var/datum/species/species = /datum/species/human
 
 /obj/item/projectile/meteor/gib/New(atom/start, atom/end)
 	if(prob(50))
 		var/list/blocked = boss_mobs + blacklisted_mobs
-		var/mobtype = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blocked))
-		mob_to_gib = mobtype
+		mobpath = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blocked))
+		mob_to_gib = mobpath
 	else
 		var/list/human_blocked = list(
 			/mob/living/carbon/human/krampus,
 			/mob/living/carbon/human/dummy,
 			/mob/living/carbon/human/manifested,
 			/mob/living/carbon/human/muton,
+			/mob/living/carbon/human/golem,
 			/mob/living/carbon/human/umbra,
+			/mob/living/carbon/human/frankenstein,
+			/mob/living/carbon/human/lich,
 			/mob/living/carbon/human/NPC,
 		)
-		mob_to_gib =  pick(existing_typesof(/mob/living/carbon/human) - existing_typesof_list(human_blocked))
+		mobpath = pick(existing_typesof(/mob/living/carbon/human) - existing_typesof_list(human_blocked))
+		mob_to_gib = mobpath
 	name = initial(mob_to_gib.name)
-	if(ishuman(mob_to_gib))
-		for(var/spec in type2species)
-			if(istype(mob_to_gib,spec))
-				species = type2species[spec]
-				break
+	if(ishuman(mobpath))
+		var/pathtext = "[mobpath]"
+		pathtext = replacetext(pathtext,"/mob/living/carbon/human","/datum/species")
+		pathtext = replacetext(pathtext,"/plasma","/plasmaman")
+		pathtext = replacetext(pathtext,"/skelevox","/skellington/skelevox")
+		species = text2path(pathtext)
 		icon = initial(species.override_icon)
 		icon_state = "[lowertext(initial(species.name))]_[pick(MALE,FEMALE)]"
 	else
@@ -355,7 +350,7 @@ var/static/list/type2species = list(
 
 	if(loc == null)
 		return
-	if(ishuman(mob_to_gib))
+	if(ishuman(mobpath))
 		for(var/organ_name in list("eyes","heart","kidneys","liver"))
 			if(organ_name in initial(species.has_organ))
 				var/organtypes = initial(species.has_organ)
