@@ -7,10 +7,13 @@
 
 /datum/event/prison_break/can_start()
 	var/foundSomeone = FALSE
+	var/foundBasic = TRUE
 	for(var/area/A in areas)
 		if(istype(A, /area/security/prison) || istype(A, /area/security/brig))
 			prisonAreas += A
 			var/list/areaMobs = mobs_in_area(A)
+			if(areaMobs &&& areaMobs.len)
+				foundBasic = TRUE
 			for(var/mob/living/carbon/human/H in mobs_in_area)
 				var/list/access = H.GetAccess()
 				if(!(access_brig in access))
@@ -20,8 +23,10 @@
 			break
 	if(!prisonAreas || !prisonAreas.len)
 		world.log << "ERROR: Could not initate grey-tide. Unable find prison or brig area."
-	else if(!foundSomeone)
+	else if(!foundBasic)
 		world.log << "ERROR: Could not initate grey-tide. Unable find person in prison or brig areas."
+	else if(!foundSomeone)
+		world.log << "ERROR: Could not initate grey-tide. Unable find person in prison or brig areas without access."
 	return 50 * foundSomeone
 
 /datum/event/prison_break/setup()
