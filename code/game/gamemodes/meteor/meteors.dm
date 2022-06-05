@@ -305,51 +305,83 @@
 /obj/item/projectile/meteor/Destroy()
 	..()
 
+var/static/list/type2species = list(
+	/mob/living/carbon/human = /datum/species/human,
+	/mob/living/carbon/human/vox = /datum/species/vox,
+	/mob/living/carbon/human/insectoid = /datum/species/insectoid,
+	/mob/living/carbon/human/diona = /datum/species/diona,
+	/mob/living/carbon/human/grey = /datum/species/grey,
+	/mob/living/carbon/human/unathi = /datum/species/unathi,
+	/mob/living/carbon/human/tajaran = /datum/species/tajaran,
+	/mob/living/carbon/human/skellington = /datum/species/skellington,
+)
+
 /obj/item/projectile/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
 	name = "organic debris"
 	icon_state = "human"
-	var/mob/living/mob_to_gib = null
+	var/mob/living/mob_to_gib = /mob/living/carbon/human
+	var/datum/species/species = /datum/species/human
 
 /obj/item/projectile/meteor/gib/New(atom/start, atom/end)
 	if(prob(50))
 		var/list/blocked = boss_mobs + blacklisted_mobs
 		var/mobtype = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blocked))
-		mob_to_gib = new mobtype(src)
+		mob_to_gib = mobtype
 	else
-		mob_to_gib = new /mob/living/carbon/human(src)
-		var/mob/living/carbon/human/H = mob_to_gib
-		H.set_species(pick(100;"Human",100;"Vox",100;"Insectoid",100;"Diona",100;"Grey",10;"Tajaran",10;"Unathi",10;"Skrell"))
-		mob_to_gib.regenerate_icons()
-	if(mob_to_gib)
-		icon_state = ""
-		mouse_opacity = 0
-		vis_contents.Add(mob_to_gib)
+		var/list/human_blocked = list(
+			/mob/living/carbon/human/krampus,
+			/mob/living/carbon/human/dummy,
+			/mob/living/carbon/human/manifested,
+			/mob/living/carbon/human/muton,
+			/mob/living/carbon/human/umbra,
+			/mob/living/carbon/human/NPC,
+		)
+		mob_to_gib =  pick(existing_typesof(/mob/living/carbon/human) - existing_typesof_list(human_blocked))
+	name = initial(mob_to_gib.name)
+	if(ishuman(mob_to_gib))
+		for(var/spec in type2species)
+			if(istype(mob_to_gib,spec))
+				species = type2species[spec]
+				break
+		icon = initial(species.override_icon)
+		icon_state = "[lowertext(initial(species.name))]_[pick(MALE,FEMALE)]"
+	else
+
+		icon = initial(mob_to_gib.icon)
+		icon_state = initial(mob_to_gib.icon_state)
 	..(start,end)
 
 /obj/item/projectile/meteor/gib/to_bump(atom/A)
 
 	if(loc == null)
 		return
-
-	if(mob_to_gib)
-		mob_to_gib.forceMove(loc)
-		if(ishuman(mob_to_gib))
-			var/mob/living/carbon/human/H = mob_to_gib
-			for(var/organ_name in list("eyes","heart","kidneys","liver"))
-				var/datum/organ/internal/I = H.internal_organs_by_name[organ_name]
-				if(I && istype(I))
-					if(isatom(I.removed_type))
-						var/obj/item/organ/internal/removed_organ = I.removed_type
-						removed_organ.forceMove(loc)
-						I.removed_type = null
-					else
-						new I.removed_type(loc)
-		while(mob_to_gib.meat_type && mob_to_gib.meat_taken < mob_to_gib.meat_amount)
-			mob_to_gib.drop_meat(loc)
-		if(mob_to_gib)
-			mob_to_gib.gib()
-	else
-		new /obj/effect/gibspawner/human(loc)
+	if(ishuman(mob_to_gib))
+		for(var/organ_name in list("eyes","heart","kidneys","liver"))
+			if(organ_name in initial(species.has_organ))
+				var/organtypes = initial(species.has_organ)
+				var/datum/organ/internal/O = organtypes[organ_name]
+				var/true_organ = initial(O.removed_type)
+				new true_organ(loc)
+		var/static/list/ext_organs = list(
+			/obj/item/organ/external/l_arm,
+			/obj/item/organ/external/r_arm,
+			/obj/item/organ/external/l_leg,
+			/obj/item/organ/external/r_leg,
+			/obj/item/organ/external/l_foot,
+			/obj/item/organ/external/r_foot,
+			/obj/item/organ/external/l_hand,
+			/obj/item/organ/external/r_hand,
+		)
+		for(var/ext_type in ext_organs)
+			/*var/obj/item/organ/external/E = */new ext_type(loc)
+			//E.species = new species
+			//E.update_icon()
+	else if(initial(mob_to_gib.meat_type) && (initial(mob_to_gib.meat_amount) || initial(mob_to_gib.size)))
+		var/meattype = ishuman(mob_to_gib) ? initial(species.meat_type) : initial(mob_to_gib.meat_type)
+		var/meatamount = initial(mob_to_gib.meat_amount) ? initial(mob_to_gib.meat_amount) : initial(mob_to_gib.size)
+		for(var/i in 1 to meatamount)
+			new meattype(loc)
+	new /obj/effect/gibspawner/human(loc)
 	qdel(src)
 
 
