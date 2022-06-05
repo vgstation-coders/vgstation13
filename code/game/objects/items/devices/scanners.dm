@@ -66,11 +66,12 @@ BREATHALYZER
 						M.alpha = oldalpha
 
 		var/mob/living/M = locate() in T
-		if(M && M.invisibility == 2)
+		if(M && M.invisibility > SEE_INVISIBLE_LIVING)
+			var/save_invisibility = M.invisibility
 			M.invisibility = 0
 			spawn(10)
 				if(M)
-					M.invisibility = INVISIBILITY_LEVEL_TWO
+					M.invisibility = save_invisibility
 
 /obj/item/device/t_scanner/advanced
 	name = "\improper P-ray scanner"
