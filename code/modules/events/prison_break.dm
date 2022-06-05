@@ -14,7 +14,7 @@
 			var/list/areaMobs = mobs_in_area(A)
 			if(areaMobs &&& areaMobs.len)
 				foundBasic = TRUE
-			for(var/mob/living/carbon/human/H in mobs_in_area)
+			for(var/mob/living/carbon/human/H in areaMobs)
 				var/list/access = H.GetAccess()
 				if(!(access_brig in access))
 					foundSomeone = TRUE
