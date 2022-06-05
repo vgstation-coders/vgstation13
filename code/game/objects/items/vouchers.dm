@@ -108,13 +108,21 @@
 	freebies = list(/obj/item/weapon/medbot_cube)
 	vend_amount = 1
 	single_items = 1
-	
+
 
 /obj/item/voucher/free_item/armorstrap
 	name = "reinforced strap voucher"
 	desc = "Redeem at a SECtech vending machine to get a set of reinforced armor straps for an armored vest."
 	icon_state = "secvoucher"
 	freebies = list(/obj/item/clothing/accessory/armoredvestshoulderstrap)
+	vend_amount = 1
+	single_items = 1
+	shred_on_use = 1
+
+/obj/item/voucher/free_item/meat
+	name = "free meat voucher"
+	desc = "Discount Dan gives you his blessings. Redeemable at a Meat Fridge vendor, brought to you by Discount Dan."
+	freebies = list(/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan)
 	vend_amount = 1
 	single_items = 1
 	shred_on_use = 1
