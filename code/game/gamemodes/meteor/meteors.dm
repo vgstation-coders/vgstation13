@@ -306,15 +306,50 @@
 	..()
 
 /obj/item/projectile/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
-	name = "human corpse"
+	name = "organic debris"
 	icon_state = "human"
+	var/mob/living/mob_to_gib = null
+
+/obj/item/projectile/meteor/gib/New(atom/start, atom/end)
+	if(prob(50))
+		var/list/blocked = boss_mobs + blacklisted_mobs
+		var/mobtype = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blocked))
+		mob_to_gib = new mobtype(src)
+	else
+		mob_to_gib = new /mob/living/carbon/human(src)
+		var/mob/living/carbon/human/H = mob_to_gib
+		H.set_species(pick(100;"Human",100;"Vox",100;"Insectoid",100;"Diona",100;"Grey",10;"Tajaran",10;"Unathi",10;"Skrell"))
+		mob_to_gib.regenerate_icons()
+	if(mob_to_gib)
+		icon_state = ""
+		mouse_opacity = 0
+		vis_contents.Add(mob_to_gib)
+	..(start,end)
 
 /obj/item/projectile/meteor/gib/to_bump(atom/A)
 
 	if(loc == null)
 		return
 
-	new /obj/effect/gibspawner/human(src.loc)
+	if(mob_to_gib)
+		mob_to_gib.forceMove(loc)
+		if(ishuman(mob_to_gib))
+			var/mob/living/carbon/human/H = mob_to_gib
+			for(var/organ_name in list("eyes","heart","kidneys","liver"))
+				var/datum/organ/internal/I = H.internal_organs_by_name[organ_name]
+				if(I && istype(I))
+					if(isatom(I.removed_type))
+						var/obj/item/organ/internal/removed_organ = I.removed_type
+						removed_organ.forceMove(loc)
+						I.removed_type = null
+					else
+						new I.removed_type(loc)
+		while(mob_to_gib.meat_type && mob_to_gib.meat_taken < mob_to_gib.meat_amount)
+			mob_to_gib.drop_meat(loc)
+		if(mob_to_gib)
+			mob_to_gib.gib()
+	else
+		new /obj/effect/gibspawner/human(loc)
 	qdel(src)
 
 
