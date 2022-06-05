@@ -7,14 +7,16 @@
 
 /datum/event/prison_break/can_start()
 	var/foundSomeone = FALSE
-	var/foundBasic = TRUE
+	var/foundBasic = FALSE
 	for(var/area/A in areas)
 		if(istype(A, /area/security/prison) || istype(A, /area/security/brig))
 			prisonAreas += A
-			var/list/areaMobs = mobs_in_area(A)
+			var/list/areaMobs = mobs_in_area(A,1)
 			if(areaMobs && areaMobs.len)
 				foundBasic = TRUE
 			for(var/mob/living/carbon/human/H in areaMobs)
+				if(H.stat)
+					continue
 				var/list/access = H.GetAccess()
 				if(!(access_brig in access))
 					foundSomeone = TRUE
