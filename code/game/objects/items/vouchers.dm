@@ -91,7 +91,7 @@
 
 /obj/item/voucher/free_item/glowing //This one gives you special voucher-only items!
 	name = "glowing voucher"
-	desc = "Don't bother appealing to a Vendomat without this! It's the one with the machine parts."
+	desc = "Don't bother appealing to a Vendomat without this!"
 	icon_state = "glowingvoucher"
 	freebies = list(
 		/obj/item/weapon/glowstick,
