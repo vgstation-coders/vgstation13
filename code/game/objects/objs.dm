@@ -609,14 +609,18 @@ a {
 
 /obj/proc/t_scanner_expose()
 	//don't reveal docking ports or spawns
-	if(invisibility > 0 && invisibility < INVISIBILITY_OBSERVER)
+	if(invisibility > 0 && invisibility < INVISIBILITY_OBSERVER || alpha < 255)
 		var/old_invisibility = invisibility
+		var/old_alpha = alpha
+		var/old_plane = plane
 		invisibility = 0
+		alpha = 255
 
 		spawn(1 SECONDS)
 			var/turf/U = loc
 			if(istype(U) && U.intact)
 				invisibility = old_invisibility
+				alpha = old_alpha
 
 /obj/proc/become_defective()
 	if(!defective)
