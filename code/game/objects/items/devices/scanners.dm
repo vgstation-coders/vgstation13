@@ -76,7 +76,7 @@ BREATHALYZER
 							C.invisibility = old_invisibility
 			else if(istype(A,/mob/living/))
 				var/mob/living/L = A
-				if(L.alpha < OPAQUE || (L.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER))
+				if(L.alpha < OPAQUE || (L.invisibility > 0 && L.invisibility < INVISIBILITY_OBSERVER))
 					var/old_alpha = L.alpha
 					var/old_invisibility = L.invisibility
 					L.alpha = OPAQUE
