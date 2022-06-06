@@ -612,7 +612,6 @@ a {
 	if(invisibility > 0 && invisibility < INVISIBILITY_OBSERVER || alpha < 255)
 		var/old_invisibility = invisibility
 		var/old_alpha = alpha
-		var/old_plane = plane
 		invisibility = 0
 		alpha = 255
 
