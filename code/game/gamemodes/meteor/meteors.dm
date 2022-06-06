@@ -346,7 +346,7 @@
 
 	if(loc == null)
 		return
-	if(ispath(mob_to_gib,/mob/living/carbon/human))
+	if(ispath(mob_to_gib,/mob/living/carbon/human) && species)
 		for(var/organ_name in species.has_organ)
 			var/datum/organ/internal/O = species.has_organ[organ_name]
 			var/true_organ = initial(O.removed_type)
