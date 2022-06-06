@@ -266,57 +266,46 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 10
-	var/toxicity = 4
+	var/toxicity = 20
 	var/pest_kill_str = 0
 	var/weed_kill_str = 0
 
-/obj/item/weapon/plantspray/weeds // -- Skie
-
-	name = "weed-spray"
-	desc = "It's a toxic mixture, in spray form, to kill small weeds."
-	icon_state = "weedspray"
-	weed_kill_str = 6
-
-/obj/item/weapon/plantspray/pests
+/obj/item/weapon/plantspray/pestspray
 	name = "pest-spray"
 	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
 	icon_state = "pestspray"
-	pest_kill_str = 6
+	pest_kill_str = 60
 
-/obj/item/weapon/plantspray/pests/proc/use(amount = 1)
+/obj/item/weapon/plantspray/weedspray
+	name = "weed-spray"
+	desc = "It's a toxic mixture, in spray form, to kill small weeds."
+	icon_state = "weedspray"
+	weed_kill_str = 60
+
+/obj/item/weapon/plantspray/pestspray/proc/use(user, target, amount = 10)
 	if(pest_kill_str >= amount)
 		pest_kill_str -= amount
-
-		if(pest_kill_str == 0)
+		if(pest_kill_str < 1)
 			name = "empty [src]"
+	else
+		return FALSE
+	to_chat(user, "You spray [target] with pest spray.")
+	playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
+	return TRUE
 
-		return TRUE
-	return FALSE
+/obj/item/weapon/plantspray/weedspray/proc/use(user, target, amount = 10)
+	if(weed_kill_str >= amount)
+		weed_kill_str -= amount
+		if(pest_kill_str < 1)
+			name = "empty [src]"
+	else
+		return FALSE
+	to_chat(user, "You spray [target] with weed spray.")
+	playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
+	return TRUE
 
-/obj/item/weapon/plantspray/pests/old
-	name = "bottle of pestkiller"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-
-/obj/item/weapon/plantspray/pests/old/carbaryl
-	name = "bottle of carbaryl"
-	icon_state = "bottle16"
-	toxicity = 4
-	pest_kill_str = 2
-
-/obj/item/weapon/plantspray/pests/old/lindane
-	name = "bottle of lindane"
-	icon_state = "bottle18"
-	toxicity = 6
-	pest_kill_str = 4
-
-/obj/item/weapon/plantspray/pests/old/phosmet
-	name = "bottle of phosmet"
-	icon_state = "bottle15"
-	toxicity = 8
-	pest_kill_str = 7
-
-/obj/item/weapon/minihoe // -- Numbers
+//Hatchets and things
+/obj/item/weapon/minihoe
 	name = "mini hoe"
 	desc = "It's used for removing weeds or scratching your back."
 	icon = 'icons/obj/weapons.dmi'
@@ -331,44 +320,6 @@
 	w_type = RECYK_METAL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
-
-// *************************************
-// Weedkiller defines for hydroponics
-// *************************************
-
-/obj/item/weedkiller
-	name = "bottle of weedkiller"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	var/toxicity = 0
-	var/weed_kill_str = 0
-
-/obj/item/weedkiller/triclopyr
-	name = "bottle of glyphosate"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	toxicity = 4
-	weed_kill_str = 2
-
-/obj/item/weedkiller/lindane
-	name = "bottle of triclopyr"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle18"
-	flags = FPRINT
-	toxicity = 6
-	weed_kill_str = 4
-
-/obj/item/weedkiller/D24
-	name = "bottle of 2,4-D"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle15"
-	flags = FPRINT
-	toxicity = 8
-	weed_kill_str = 7
-
-//Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
 	name = "hatchet"
 	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."

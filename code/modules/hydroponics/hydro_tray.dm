@@ -360,19 +360,17 @@
 				return
 			S.handle_item_insertion(G, 1)
 
-	else if ( istype(O, /obj/item/weapon/plantspray) )
+	else if (istype(O, /obj/item/weapon/plantspray/weedspray))
+		var/obj/item/weapon/plantspray/weedspray/spray = O
+		spray.use(user, src, 10)
+		toxins += spray.toxicity
+		weedlevel -= spray.weed_kill_str
 
-		var/obj/item/weapon/plantspray/spray = O
-		user.drop_item(spray, force_drop = 1)
+	else if(istype(O, /obj/item/weapon/plantspray/pestspray))
+		var/obj/item/weapon/plantspray/pestspray/spray = O
+		spray.use(user, src, 10)
 		toxins += spray.toxicity
 		pestlevel -= spray.pest_kill_str
-		weedlevel -= spray.weed_kill_str
-		to_chat(user, "You spray [src] with [O].")
-		playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
-		qdel(O)
-
-		check_level_sanity()
-		update_icon()
 
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.

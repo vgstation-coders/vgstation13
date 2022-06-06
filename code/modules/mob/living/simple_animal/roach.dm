@@ -271,11 +271,9 @@
 		W.desc = "[initial(W.desc)] <span class='notice'>There is a splattered [src] on the back.</span>"
 
 		adjustBruteLoss(5)
-	else if(istype(W, /obj/item/weapon/plantspray/pests))
-		var/obj/item/weapon/plantspray/pests/P = W
-		if(P.use(1))
-			to_chat(user, "You spray \the [src] with \the [P].")
-			playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
+	else if(istype(W, /obj/item/weapon/plantspray/pestspray))
+		var/obj/item/weapon/plantspray/pestspray/P = W
+		if(P.use(user, src, 10))
 			death(gore = 0)
 	else
 		return ..()
