@@ -285,8 +285,6 @@
 /obj/item/weapon/plantspray/pestspray/proc/use(user, target, amount = 10)
 	if(pest_kill_str >= amount)
 		pest_kill_str -= amount
-		if(pest_kill_str < 1)
-			name = "empty [src]"
 	else
 		return FALSE
 	to_chat(user, "You spray [target] with pest spray.")
@@ -296,8 +294,6 @@
 /obj/item/weapon/plantspray/weedspray/proc/use(user, target, amount = 10)
 	if(weed_kill_str >= amount)
 		weed_kill_str -= amount
-		if(pest_kill_str < 1)
-			name = "empty [src]"
 	else
 		return FALSE
 	to_chat(user, "You spray [target] with weed spray.")
