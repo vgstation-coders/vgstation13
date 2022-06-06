@@ -57,7 +57,7 @@
 
 /obj/item/voucher/free_item/hot_drink
 	name = "free hot drink voucher"
-	desc = "Perk Up Your Day, with this handy free hot drink! Redeemable at any Hot Drinks machine.."
+	desc = "Perk Up Your Day, with this handy free hot drink! Redeemable at any Hot Drinks machine."
 	freebies = list(
 		/obj/item/weapon/reagent_containers/food/drinks/coffee,
 		/obj/item/weapon/reagent_containers/food/drinks/tea,
@@ -91,7 +91,7 @@
 
 /obj/item/voucher/free_item/glowing //This one gives you special voucher-only items!
 	name = "glowing voucher"
-	desc = "Don't bother appealing to a Vendomat machine without this!"
+	desc = "Don't bother appealing to a Vendomat without this! It's the one with the machine parts."
 	icon_state = "glowingvoucher"
 	freebies = list(
 		/obj/item/weapon/glowstick,
