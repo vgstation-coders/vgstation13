@@ -128,7 +128,7 @@
 	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
 
 /obj/item/potion/invisibility/impact_atom(obj/target)
-	target.make_invisible(INVISIBLEPOTION, time, 1, INVISIBILITY_LEVEL_ONE)
+	target.make_invisible(INVISIBLEPOTION, time, 1, INVISIBILITY_LEVEL_TWO)
 
 /obj/item/potion/invisibility/major
 	name = "potion of major invisibility"
