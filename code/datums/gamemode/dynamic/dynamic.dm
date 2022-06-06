@@ -664,7 +664,7 @@ var/stacking_limit = 90
 		last_time_of_population = world.time
 	else if(last_time_of_population && world.time - last_time_of_population > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without it
 		ticker.station_nolife_cinematic()
-	if(world.time > (7 HOURS + 40 MINUTES) && world.time - last_time_of_late_shuttle_call > 1 HOUR && emergency_shuttle.direction == 0) // 8 hour work shift, with time for shuttle to arrive and leave. If recalled, do every hour
+	if(world.time > (7 HOURS + 40 MINUTES) && world.time - last_time_of_late_shuttle_call > 1 HOURS && emergency_shuttle.direction == 0) // 8 hour work shift, with time for shuttle to arrive and leave. If recalled, do every hour
 		shuttle_autocall("Shift due to end")
 		last_time_of_late_shuttle_call = world.time
 
