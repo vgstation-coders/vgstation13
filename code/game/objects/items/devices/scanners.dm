@@ -59,7 +59,7 @@ BREATHALYZER
 				O.t_scanner_expose()
 			if(istype(A,/mob/living/carbon))
 				var/mob/living/carbon/C = A
-				if(C.alpha < OPAQUE || C.invisibility > 0 || length(C.body_alphas))
+				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
 					var/old_alpha = C.alpha
 					var/old_invisibility = C.invisibility
 					var/list/old_body_alphas = C.body_alphas.Copy()
@@ -76,7 +76,7 @@ BREATHALYZER
 							C.invisibility = old_invisibility
 			else if(istype(A,/mob/living/))
 				var/mob/living/L = A
-				if(L.alpha < OPAQUE || L.invisibility > 0)
+				if(L.alpha < OPAQUE || (L.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER))
 					var/old_alpha = L.alpha
 					var/old_invisibility = L.invisibility
 					L.alpha = OPAQUE
