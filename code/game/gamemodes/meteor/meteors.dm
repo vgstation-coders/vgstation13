@@ -370,7 +370,7 @@
 		var/meatamount = initial(mob_to_gib.meat_amount) ? initial(mob_to_gib.meat_amount) : initial(mob_to_gib.size)
 		for(var/i in 1 to meatamount)
 			new meattype(loc)
-	new /obj/effect/gibspawner/human(loc,fleshcolor = species.flesh_color, bloodcolor = species.blood_color)
+	new /obj/effect/gibspawner/human(loc, fleshcolor = species ? species.flesh_color : DEFAULT_FLESH, bloodcolor = species ? species.blood_color : DEFAULT_BLOOD)
 	qdel(src)
 
 
