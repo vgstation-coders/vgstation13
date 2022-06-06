@@ -309,7 +309,7 @@
 	name = "organic debris"
 	icon_state = "human"
 	var/mob/living/mob_to_gib = /mob/living/carbon/human
-	var/datum/species/species = /datum/species/human
+	var/datum/species/species
 
 /obj/item/projectile/meteor/gib/New(atom/start, atom/end)
 	if(prob(50))
@@ -332,11 +332,12 @@
 	if(ispath(mob_to_gib,/mob/living/carbon/human))
 		var/pathtext = "[mob_to_gib]"
 		pathtext = replacetext(pathtext,"/mob/living/carbon/human","/datum/species")
-		pathtext = replacetext(pathtext,"/plasma","/plasmaman")
 		pathtext = replacetext(pathtext,"/skelevox","/skellington/skelevox")
-		species = text2path(pathtext)
+		if(pathtext == "/datum/species")
+			pathtext = "/datum/species/human"
+		var/specpath = text2path(pathtext)
+		species = new specpath
 	else
-
 		icon = initial(mob_to_gib.icon)
 		icon_state = initial(mob_to_gib.icon_state)
 	..(start,end)
@@ -346,9 +347,8 @@
 	if(loc == null)
 		return
 	if(ispath(mob_to_gib,/mob/living/carbon/human))
-		var/organtypes = initial(species.has_organ)
-		for(var/organ_name in organtypes)
-			var/datum/organ/internal/O = organtypes[organ_name]
+		for(var/organ_name in species.has_organ)
+			var/datum/organ/internal/O = species.has_organ[organ_name]
 			var/true_organ = initial(O.removed_type)
 			new true_organ(loc)
 		var/static/list/ext_organs = list(
@@ -363,10 +363,10 @@
 		)
 		for(var/ext_type in ext_organs)
 			var/obj/item/organ/external/E = new ext_type(loc)
-			E.species = new species
+			E.species = species
 			E.update_icon()
 	if(initial(mob_to_gib.meat_type) && (initial(mob_to_gib.meat_amount) || initial(mob_to_gib.size)))
-		var/meattype = ispath(mob_to_gib,/mob/living/carbon/human) ? initial(species.meat_type) : initial(mob_to_gib.meat_type)
+		var/meattype = ispath(mob_to_gib,/mob/living/carbon/human) && species ? species.meat_type : initial(mob_to_gib.meat_type)
 		var/meatamount = initial(mob_to_gib.meat_amount) ? initial(mob_to_gib.meat_amount) : initial(mob_to_gib.size)
 		for(var/i in 1 to meatamount)
 			new meattype(loc)
