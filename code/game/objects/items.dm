@@ -143,7 +143,8 @@
 	if (level != LEVEL_BELOW_FLOOR)
 		return
 
-	var/oldalpha = alpha
+	var/old_alpha = alpha
+	var/old_invisibility = invisibility
 	invisibility = 0
 	alpha = 127
 	plane = initial(plane)
@@ -152,10 +153,10 @@
 	spawn(1 SECONDS)
 		var/turf/U = loc
 		if(istype(U) && U.intact)
-			invisibility = 101
+			invisibility = old_invisibility
 			plane = ABOVE_PLATING_PLANE
 			layer = FLOORBOARD_ITEM_LAYER
-		alpha = oldalpha
+		alpha = old_alpha
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'

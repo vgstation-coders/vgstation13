@@ -679,6 +679,8 @@
 
 /mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
 	//INVISIBILITY_LEVEL_ONE to INVISIBILITY_MAXIMUM for invisibility
+	//use INVISIBILITY_LEVEL_ONE for items that cause invisibility
+	//use INVISIBILITY_LEVEL_TWO for spells that cause invisibility
 	if(include_clothing)
 		return ..()
 	if(invisibility || alpha <= 1 || !source_define)

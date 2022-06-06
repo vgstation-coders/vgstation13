@@ -608,16 +608,15 @@ a {
 	return !(flags & INVULNERABLE)
 
 /obj/proc/t_scanner_expose()
-	if (level != LEVEL_BELOW_FLOOR)
-		return
-
-	if (invisibility == 101)
+	//don't reveal docking ports or spawns
+	if(invisibility > 0 && invisibility < INVISIBILITY_OBSERVER)
+		var/old_invisibility = invisibility
 		invisibility = 0
 
 		spawn(1 SECONDS)
 			var/turf/U = loc
 			if(istype(U) && U.intact)
-				invisibility = 101
+				invisibility = old_invisibility
 
 /obj/proc/become_defective()
 	if(!defective)

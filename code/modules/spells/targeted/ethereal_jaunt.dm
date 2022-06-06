@@ -63,7 +63,7 @@
 		target.incorporeal_move = INCORPOREAL_ETHEREAL_IMPROVED
 	else
 		target.incorporeal_move = INCORPOREAL_ETHEREAL
-	target.make_invisible(ETHEREAL, 0, TRUE, 125, INVISIBILITY_MAXIMUM)
+	target.make_invisible(ETHEREAL, 0, TRUE, 125, INVISIBILITY_LEVEL_TWO)
 	target.flags |= INVULNERABLE
 	var/old_density = target.density
 	target.setDensity(FALSE)
