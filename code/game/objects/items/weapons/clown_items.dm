@@ -10,11 +10,11 @@
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
 	if(..())  // Slipping if these are below a floor tile is nonsensical
 		return 1
-	handle_slip(AM,0)
+	handle_slip(AM)
 
 /datum/locking_category/banana_peel
 
-/obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM,var/slip_override)
+/obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM)
 	if(iscarbon(AM) || istype(AM, /obj/structure/bed/chair/vehicle/gokart))
 		return slip_n_slide(AM,2,2,"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
