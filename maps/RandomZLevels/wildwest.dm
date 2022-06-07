@@ -1,5 +1,6 @@
 //Wild West Away Mission
-#define WILDWEST_MAYORDEAD 1
+#define WILDWEST_MAYORRESCUED 1
+#define WILDWEST_COWDELIVERED 2
 
 /datum/map_element/away_mission/wildwest
 	name = WESTERN
@@ -14,14 +15,49 @@
 	SSDayNight.flags = SS_KEEP_TIMING
 	SSDayNight.all_times_in_cycle = list(new /datum/timeofday/daytime/short, new /datum/timeofday/afternoon/short, new /datum/timeofday/sunset,
 		new /datum/timeofday/nighttime/short, new /datum/timeofday/morning, new /datum/timeofday/sunrise)
+	message_admins("Trying to start the daynight cycle.")
+	daily_events += new /datum/timely_event/desertspawns()
 	SSDayNight.Initialize()
-	message_admins("Started the daynight cycle.")
 
 /datum/map_element/away_mission/wildwest/can_load()
 	if(!(SSDayNight.flags & SS_NO_FIRE))
 		message_admins("Wild West load failed. Cannot load if daynight is already active.")
 		return FALSE
 	return ..()
+
+//Timely events
+/datum/timely_event/desertspawns/time_changed(datum/timeofday/ctod, cycles)
+	switch(ctod.name)
+		if(TOD_SUNRISE)
+			for(var/obj/effect/landmark/respawner/desert/L in landmarks_list)
+				if(prob(33))
+					new /mob/living/simple_animal/hostile/lizard(L.loc)
+
+			if(cycles == 1) //One day has already passed
+				message_admins("Wild West event: Picador appears (Sunrise 2)")
+				createnew("picador spawn", /mob/living/simple_animal/hostile/necro/skeleton/western/picador)
+
+		if(TOD_SUNSET)
+			//if(cycles == 2)
+			//Raid code here
+
+		if(TOD_AFTERNOON)
+			//if(cycles == 1)
+			//bttf code here
+
+		if(TOD_NIGHTTIME)
+			if(cycles == 1)
+				message_admins("Wild West event: UFO appears (Night 2)")
+				createnew("tractor beam spawn", /obj/effect/tractorbeam)
+			if(cycles == 2)
+				message_admins("Wild West event: La Chupacabra appears (Night 3)")
+				createnew("sw spawn",/mob/living/simple_animal/hostile/somethingwrong)
+
+/datum/timely_event/desertspawns/proc/createnew(lmname, type)
+	for(var/obj/effect/landmark/respawner/L in landmarks_list)
+		if(L.name == lmname)
+			new type(L.loc)
+			break
 
 ///Areas
 /area/surface/western
@@ -97,16 +133,111 @@
 	name = "\improper Old Zounds Escape Ship"
 	icon_state = "away1"
 
+/area/awaymission/western/ufo
+	name = "\improper Unidentified Flying Object"
+	icon_state = "away3"
+
+//Turf
+/turf/unsimulated/wall/meat
+	name = "?"
+	desc = null
+	icon = 'icons/turf/meat.dmi'
+	icon_state = "meat255"
+
+/turf/unsimulated/wall/meat/canSmoothWith()
+	return null
+
+/turf/unsimulated/wall/guts
+	name = "guts"
+	desc = "Some kind of twisting intestinal layers."
+	icon = 'icons/turf/meat.dmi'
+	icon_state = "guts0"
+	walltype = "guts"
+
+/turf/unsimulated/wall/guts/canSmoothWith()
+	var/static/list/smoothables = list(/turf/unsimulated/wall/guts)
+	return smoothables
+
+/turf/simulated/floor/plating/flesh
+	name = "?"
+	desc = null
+	icon = 'icons/turf/meat.dmi'
+	icon_state = "flesh"
+
+/turf/simulated/floor/plating/flesh/New()
+	..()
+	var/image/img = image('icons/turf/rock_overlay.dmi', "flesh_overlay",layer = SIDE_LAYER)
+	img.pixel_x = -4*PIXEL_MULTIPLIER
+	img.pixel_y = -4*PIXEL_MULTIPLIER
+	img.plane = BELOW_TURF_PLANE
+	overlays += img
+
 //Objects
+/obj/item/voucher/free_item/scrip
+	name = "scrip"
+	desc = "Redeem at a Deepvein Trust vendor."
+	freebies = list()
+	vend_amount = 1
+	single_items = 1
+	shred_on_use = 1
+
+/obj/item/voucher/free_item/scrip/liberator
+	name = "liberator scrip"
+	freebies = list(/obj/item/weapon/gun/energy/laser/liberator)
+
+/obj/item/voucher/free_item/scrip/drill
+	name = "drill scrip"
+	freebies = list(/obj/item/weapon/pickaxe/drill)
+
+/obj/item/voucher/free_item/scrip/lazarus
+	name = "lazarus scrip"
+	freebies = list(/obj/item/weapon/lazarus_injector)
+
+/obj/item/voucher/free_item/scrip/rifle
+	name = "rifle scrip"
+	freebies = list(/obj/item/weapon/gun/projectile/hecate/hunting)
+
+/obj/item/voucher/free_item/scrip/sausage
+	name = "sausage scrip"
+	freebies = list(/obj/item/weapon/reagent_containers/food/snacks/sausage)
+
+/obj/item/voucher/free_item/scrip/threefiftyseven
+	name = ".357 scrip"
+	freebies = list(/obj/item/ammo_storage/box/a357)
+
+/obj/machinery/vending/deepvein
+	name = "\improper Deepvein Trust Company Store"
+	desc = "Use your 'wages' here!"
+	product_slogans = list(
+		"Please have your scrip ready for vending."
+	)
+	product_ads = list(
+		"Time is money, so get back to digging!"
+	)
+	vend_reply = "What a glorious time to mine!"
+	icon_state = "mining"
+	vouched = list(
+		/obj/item/weapon/pickaxe/drill = 10,
+		/obj/item/weapon/lazarus_injector = 10,
+		/obj/item/weapon/gun/energy/laser/liberator = 10,
+		/obj/item/weapon/gun/projectile/hecate/hunting = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/sausage = 10,
+		/obj/item/ammo_storage/box/a357 = 20
+		)
+
+
 /obj/item/weapon/card/id/deputy
 	name = "deputy badge"
 	desc = "A metal star that signifies one as a friend of Old Zounds. You're my favorite deputy."
 	assignment = "Deputy"
 	icon_state = "deputystar"
 	access = list(access_deputy)
+	show_biometrics = FALSE
 
 /obj/item/weapon/card/id/deputy/prepickup(mob/user)
 	var/datum/map_element/away_mission/wildwest/W = get_away_mission(WESTERN)
+	if(!W)
+		return 0 //No special away mission
 	if(user in W.wanted)
 		to_chat(user, "<span class='danger'>You spit on \the [src]. A villain would never wear that.</span>")
 		return 1 //Cancel the pickup
@@ -123,11 +254,6 @@
 	registered_name = user.real_name
 
 	return 0
-
-
-/obj/item/weapon/card/id/deputy/equipped(\mob/user, slot, hand_index = 0)
-	to_chat(user, "<span class = 'warning'>\The [src] disappears from your grasp!</span>")
-	user.drop_item(src)
 
 /obj/structure/uraninitecrystal
 	name = "glowing crystal"
@@ -178,10 +304,78 @@
 /obj/structure/rustycart
 	name = "rusty cart"
 	desc = "This isn't going anywhere fast."
-	icon = 'icons/obj/vehicles.dmi'
-	icon_state = "mining_cart"
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "mining_cart"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "miningcar"
 	anchored = TRUE
 	density = TRUE
+
+/obj/structure/flora/desert
+	icon = 'icons/obj/flora/ausflora.dmi'
+	shovelaway = TRUE
+
+/obj/structure/flora/desert/barrelcactus
+	name = "barrel cactus"
+	desc = "That's a barrel. Wait, no."
+	anchored = TRUE
+	icon_state = "barrelcactus_1"
+
+/obj/structure/flora/desert/barrelcactus/New()
+	..()
+	icon_state = "barrelcactus_[rand(1,2)]"
+
+/obj/structure/flora/desert/barrelcactus/Crossed(atom/movable/AM)
+	..()
+	if(iscarbon(AM))
+		var/mob/living/carbon/L = AM
+		L.reagents.add_reagent(FEVERFEW,3) //This will take 15 ticks to clear, doing about 22 brute (but brute regens easily)
+		to_chat(L, "<span class='danger'>You prick yourself on \the [src].</span>")
+
+/obj/structure/flora/desert/saguaro
+	name = "saguaro cactus"
+	desc = "The space saguaro gets its name from the Earth saguaro, which comes from an indigenous Opata word that refers to saguaros."
+	density = TRUE
+	pass_flags_self = PASSTABLE | PASSGLASS
+	anchored = TRUE
+	icon_state = "saguaro_1"
+
+/obj/structure/flora/desert/saguaro/Bumped(atom/movable/AM)
+	..()
+	if(iscarbon(AM))
+		var/mob/living/carbon/L = AM
+		L.reagents.add_reagent(FEVERFEW,3)
+		to_chat(L, "<span class='danger'>You prick yourself on \the [src].</span>")
+
+/obj/structure/flora/desert/saguaro/New()
+	..()
+	icon_state = "saguaro_[rand(1,2)]"
+
+/obj/structure/flora/desert/tumbleweed
+	name = "tumbleweed"
+	desc = "Please, just tumble away. You might need my help some day. Tumble away."
+	icon_state = "tumbleweed"
+
+/obj/structure/flora/desert/tumbleweed/New()
+	..()
+	processing_objects += src
+
+/obj/structure/flora/desert/tumbleweed/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/structure/flora/desert/tumbleweed/process()
+	if(prob(98))
+		return
+	throw_at(get_turf(pick(orange(7,src))), 10,2)
+
+/obj/structure/sarcophagous
+	name = "sarcophagous"
+	desc = "Although often associated with Egyptians, sarchopagous is a Greek word meaning 'eater of flesh'. It refers to any stone burial recepticle."
+	density = TRUE
+	anchored = TRUE
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "morguestone"
 
 // Umbra Vault
 
@@ -254,7 +448,7 @@
 	user.update_mutantrace()
 
 
-///////////////Meatgrinder//////////////
+///////////////Effects//////////////
 
 
 /obj/effect/meatgrinder
@@ -275,6 +469,69 @@
 		explosion(M, 1, 0, 0, 0)
 		qdel(src)
 
+/obj/effect/floating_candle
+	name = "floating candle"
+	desc = "The ghost of a candle? This is extremely cursed."
+	icon = 'icons/obj/candle.dmi'
+	icon_state = "floatcandle"
+	anchored = TRUE
+
+/obj/effect/floating_candle/New()
+	..()
+	set_light(8, 4, LIGHT_COLOR_CYAN)
+
+/obj/effect/tractorbeam
+	name = "tractor beam"
+	desc = "???"
+	icon = null
+	icon_state = null
+	anchored = TRUE
+	density = TRUE
+	var/turf/endpoint
+
+/obj/effect/tractorbeam/New()
+	..()
+	set_light(4, 8, LIGHT_COLOR_HALOGEN)
+	for(var/obj/effect/landmark/L in landmarks_list)
+		if(L.name == "tractor beam")
+			endpoint = get_turf(L)
+			break
+
+/obj/effect/tractorbeam/Bumped(atom/movable/AM)
+	AM.forceMove(endpoint)
+	to_chat(AM, "<span class='warning'>Gravity seems to lapse as you float into the sky!</span>")
+
+/obj/effect/trigger
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "x3"
+
+/obj/effect/trigger/New()
+	..()
+	invisibility = 101
+
+/obj/effect/trigger/clownball/Crossed(atom/movable/AM)
+	for(var/obj/item/cannonball/bananium/B in range(3, src))
+		var/target = isturf(B.loc) ? AM : pick(alldirs)
+		B.cannonFired = TRUE
+		B.throw_at(target)
+
+/obj/effect/trigger/cowrustlin/Crossed(atom/movable/AM)
+	if(istype(AM, /mob/living/simple_animal/cow))
+		var/datum/map_element/away_mission/wildwest/W = get_away_mission(WESTERN)
+		if(W)
+			W.flags &= WILDWEST_COWDELIVERED
+			qdel(src)
+
+/obj/effect/trigger/mayorrescue/Crossed(atom/movable/AM)
+	if(istype(AM, /mob/living/simple_animal/hostile/humanoid/civilwest/flee/banker) && AM.name == "Mayor Strawman")
+		var/datum/map_element/away_mission/wildwest/W = get_away_mission(WESTERN)
+		if(W)
+			W.flags &= WILDWEST_MAYORRESCUED
+			qdel(src)
+
+//Landmarks
+/obj/effect/landmark/respawner/desert
+	name = "Wild West respawner"
 
 /////For the Wishgranter///////////
 
@@ -363,18 +620,21 @@
 	if(!..())
 		return 0
 	if(faction != "oldzounds")
-		return 0 //All bets are off, not so civil anymore.
+		return 1 //All bets are off, not so civil anymore.
 	if(ismob(A))
-		if(ishuman(A)) //If the target is human, don't attack if they're wearing a badge or if the mayor is dead
+		if(ishuman(A)) //If the target is human, don't attack if they're wearing a badge or if the mayor is rescued
 			var/mob/living/carbon/human/H = A
 			if(H.is_wearing_item(/obj/item/weapon/card/id/deputy))
 				return 0
 			var/datum/map_element/away_mission/wildwest/W = get_away_mission(WESTERN)
-			if(W.flags & WILDWEST_MAYORDEAD)
+			if(W?.flags & WILDWEST_MAYORRESCUED)
 				return 0
-		var/mob/living/L = A //If the target is neutral, ignore it unless it has attacked us.
-		if(L.faction == "neutral" && !(L in reporting_murderers))
-			return 0
+		else
+			var/mob/living/L = A //If the target is neutral, ignore it unless it has attacked us.
+			if(L.faction == "neutral" && !(L in reporting_murderers))
+				return 0
+			if(L.faction == "clown")
+				return 0 //peace treaty
 	return 1
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/assaulted_by(mob/M, weak_assault=FALSE)
@@ -425,7 +685,7 @@
 
 	corpse = /obj/effect/landmark/corpse/prospector
 
-	speak = list("Thar's gold in them hills!.",
+	speak = list("Thar's gold in them hills!",
 	"Ye caught me off guard! Not s'pposed to see me 'til further down the road.",
 	"Care fer a game o' chance? Pick a Boulder 'n I'll break it. If it's gold... it's yers.",
 	"Dag nab it... no gold.",
@@ -506,7 +766,11 @@
 	name = "deputy sheriff"
 	desc = "An honest deputy, likely part of a posse. Courage is being scared to death and saddling up anyway!"
 	projectiletype = /obj/item/projectile/bullet/fourtyfive //35 damage + 2 agony + 2 drowsy + 3 penetration; nasty
+	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
 	icon_state = "cowboy_deputy"
+
+/mob/living/simple_animal/hostile/humanoid/civilwest/sheriff/GetAccess()
+	return list(access_deputy)
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/sheriff/deputy/New()
 	..()
@@ -516,11 +780,16 @@
 	name = "sheriff"
 	desc = "An elected official who keeps the peace. The giver of the people's law. Where the leather is scarred, there is a great story to tell."
 	projectiletype = /obj/item/projectile/bullet //The ammotype of the Colt. 60 damage. Enough to kill anything that moves.
+	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
 	icon_state = "cowboy_sheriff"
 	retreat_distance = 0
 	ranged = 1
 	minimum_distance = 2
 	var/ammo = 6
+
+/mob/living/simple_animal/hostile/humanoid/civilwest/sheriff/New()
+	..()
+	add_spell(new /spell/mountup, "gen_leap")
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/sheriff/Shoot(atom/target, atom/start, mob/user)
 	if(!ammo)
@@ -540,28 +809,225 @@
 	ammo = 6
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/butcher
+	name = "chuckwagon cook"
+	desc = "There's no room at the chuck wagon for a quitter's blankets."
 	icon_state = "chuckwagon_cook"
+	retreat_distance = 2 //cook tries to strike and back off repeatedly
+	melee_damage_lower = 12
+	melee_damage_upper = 15
+
+/mob/living/simple_animal/hostile/humanoid/civilwest/butcher/UnarmedAttack(atom/target, prox)
+	if(isliving(target))
+		var/mob/living/L = target
+		L.reagents.add_reagent(FEVERFEW, 1) //Add bleed poison before the hit
+	..()
+
+/mob/living/simple_animal/hostile/humanoid/civilwest/flee
+	retreat_distance = 8
+	minimum_distance = 8
+
+/mob/living/simple_animal/hostile/humanoid/civilwest/flee/before_retreat()
+	if(rand(1))
+		say(pick("Help!", "Oh no!", "Look out!", "Incomin'!"))
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/flee/bartender
+	name = "saloon tender"
+	desc = "The saloon keeper loves a drunk, but not as a son-in-law."
 	icon_state = "saloon_tender"
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/flee/banker
+	name = "banker"
+	desc = "It's harder to make a banker out of a hoss thief than a hoss thief out of a banker."
 	icon_state = "bank_teller"
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/flee/dancer
+	name = "dancer"
+	desc = "At the height of the Earth's California Gold Rush, men outnumbered women 20 to 1 in the city of San Francisco. Seeing how that went, future rough frontier rushes planned to have more women around."
 	icon_state = "saloon_woman"
 
-/mob/living/simple_animal/hostile/humanoid/civilwest/clownboy
-	icon_state = "clownboy_baton"
-
-/mob/living/simple_animal/hostile/humanoid/civilwest/clownboy/ranged
-	icon_state = "clownboy_banana"
-
 /mob/living/simple_animal/hostile/humanoid/civilwest/cowboy
+	name = "cowboy"
+	desc = "Some cowboys got too much tumbleweed in their blood to settle down."
 	icon_state = "cowboy_whip"
+	health = 220 //Tough as nails! To offset low damage
+	maxHealth = 220
+	minimum_shot_distance = 1
+	minimum_distance = 5
+	ranged_cooldown_cap = 1
+	ranged = TRUE
+	ranged_message = "swings"
+	projectiletype = /obj/item/projectile/beam/armawhip
+	projectilesound = 'sound/weapons/whip_crack.ogg'
+
+//Clowns... they are their own faction
+
+/mob/living/simple_animal/hostile/humanoid/clownboy
+	name = "rodeo clown whiteface"
+	desc = "A simple rodeo clown. He puts on his spurs one foot at a time, just like you. The whiteface is the straightman in any clowning act."
+	icon_state = "clownboy_baton"
+	icon = 'icons/mob/western_mobs.dmi'
+	health = 100
+	maxHealth = 100
+	melee_damage_lower = 12
+	melee_damage_upper = 15
+	attacktext = "honks at"
+	attack_sound = 'sound/items/bikehorn.ogg'
+	faction = "clown"
+	var/barrel_shield = 250
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/death(gibbed)
+	enemies.Cut()
+	..()
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/assaulted_by(mob/M, weak_assault=FALSE)
+	..()
+	enemies += M //We retaliate against those who attack us
+	for(var/mob/living/simple_animal/hostile/L in view(9, src))
+		if(L.faction == faction)
+			L.enemies |= enemies //And so do our friends
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/CanAttack(atom/A)
+	if(!..())
+		return 0
+	if(ismob(A))
+		if(ishuman(A)) //If the target is human, don't attack if quest complete
+			var/datum/map_element/away_mission/wildwest/W = get_away_mission(WESTERN)
+			if(W?.flags & WILDWEST_COWDELIVERED)
+				return 0
+		var/mob/living/L = A //If the target is neutral, ignore it unless it has attacked us.
+		if(L.faction == "neutral" && !(L in enemies))
+			return 0
+		if(L.faction == "oldzounds")
+			return 0 //peace treaty
+	return 1
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/bullet_act(var/obj/item/projectile/Proj)
+	if(barrel_shield > 0)
+		damage_shields(Proj)
+	else
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/proc/damage_shields(var/obj/item/projectile/Proj)
+	flick("clownbarrel",src)
+	barrel_shield -= Proj.damage
+	visible_message("<span class='rose'>\The [src] blocks \the [Proj] with his protective barrel!</span>")
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/ranged
+	name = "rodeo clown auguste"
+	desc = "The auguste assists the whiteface, and can take on a broad number of bungling roles."
+	icon_state = "clownboy_banana"
+	health = 50
+	maxHealth = 50
+	melee_damage_lower = 5
+	melee_damage_upper = 7
+	ranged = TRUE
+	minimum_distance = 5
+	ranged_cooldown_cap = 2
+	projectiletype = /obj/item/projectile/bullet/weakbullet/booze/nostun
+	projectilesound = 'sound/items/bikehorn.ogg'
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/ranged/before_retreat()
+	new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(loc)
+
+/obj/item/projectile/bullet/weakbullet/booze/nostun
+	stun = 0
+	weaken = 0
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/tramp
+	name = "wooden barrel"
+	icon_state = "woodenbarrel"
+	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
+	health = 65
+	maxHealth = 65
+	melee_damage_lower = 8
+	melee_damage_upper = 11
+	idle_vision_range = 3
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/tramp/Life()
+	..()
+	if(prob(2))
+		flick("clownbarrel",src) // Peek on occasion
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/tramp/Aggro()
+	..()
+	name = "rodeo clown tramp"
+	desc = "The tramp is even more comical than the auguste, and generally the hapless companion of the whiteface."
+	flick("clownbarrel",src)
+	spawn(6) //This is how long clownbarrel lasts
+		icon_state = "clownboy_baton"
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/tramp/LoseAggro()
+	..()
+	name = "wooden barrel"
+	icon_state = "woodenbarrel"
+	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
+
+/mob/living/simple_animal/hostile/humanoid/clownboy/clownbomination
+	name = "funhouse clownbomination"
+	desc = "A sickening creature twisted by funhouse mirror experiments. Mirrors, how do they work?"
+	health = 450
+	maxHealth = 450
+	melee_damage_lower = 6
+	melee_damage_upper = 8
+	attacktext = "honk-crushes"
+	attack_sound = 'sound/weapons/heavysmash.ogg'
+	faction = "clown"
+	icon = 'icons/mob/clown_mobs.dmi'
+	icon_state = "clown"
+
+/mob/living/simple_animal/hostile/clownbomination/UnarmedAttack(atom/target, prox)
+	..()
+	if(isliving(target))
+		var/mob/living/L = target
+		L.apply_effect(2, WEAKEN) //Knockdown power
+
+/mob/living/simple_animal/hostile/clownbomination/New()
+	..()
+	icon_state = pick("honkhulk","banana tree", "long face", "pie spewer", "lube", "honkmunculus",
+	"giggles", "chlown", "scaryclown", "fleshclown", "destroyer", "clowns", "mutant", "blob", "honkling")
+
+//Neutral
+/mob/living/simple_animal/cow/skiddish
+	var/feartarget
+
+/mob/living/simple_animal/cow/skiddish/Life()
+	..()
+	if(!feartarget)
+		FindFear()
+	if(feartarget && !pulledby)
+		if(get_dist(feartarget,src)<=4)
+			walk_away(src,feartarget,3,1)
+		else
+			feartarget = null
+
+/mob/living/simple_animal/cow/skiddish/proc/FindFear()
+	for(var/mob/living/L in shuffle(oview(4, src)))
+		if(L.client)
+			feartarget = L
+			return
+
 
 //UNCIVIL WESTERNERS
 //Enemies of Old Zounds. They won't report on murders, but they won't have mercy for badged players.
+
+/mob/living/simple_animal/hostile/carp/clarp
+	name = "clarp"
+	desc = "Clownfish carp. No laughing matter."
+	icon_state = "clarp"
+	icon_living = "clarp"
+	icon_dead = "clarp_dead"
+	can_breed = FALSE
+	pheromones_act = 2 //PHEROMONES_FOLLOW
+	health = 80
+	maxHealth = 80
+	attacktext = "honks at"
+	attack_sound = 'sound/items/bikehorn.ogg'
+	faction = "clown"
+	environment_smash_flags = IGNORE_WINDOWS
+
+/mob/living/simple_animal/hostile/carp/Aggro()
+	..()
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
 /mob/living/simple_animal/hostile/bull
 	name = "bull"
@@ -571,6 +1037,7 @@
 	icon_dead = "bull_dead"
 
 /mob/living/simple_animal/hostile/bull/arena
+	faction = "clown"
 
 /mob/living/simple_animal/hostile/bull/muerte
 	faction = "muerte"
@@ -636,6 +1103,46 @@
 	..()
 	if(prob(5))
 		say("Bang...")
+
+/mob/living/simple_animal/hostile/humanoid/lostminer
+	name = "Lost Orphan miner"
+	desc = "An insectoid hired to help claim the valuable but deadly uranium of Lost Orphan Lode. It looks like it has gone feral, though..."
+
+	icon = 'icons/mob/western_mobs.dmi'
+	icon_state = "uranium_miner"
+	icon_living = "uranium_miner"
+	faction = "roach"
+
+	maxHealth = 140 // High health to accomodate lack of range
+	health = 140
+	melee_damage_lower = 10
+	melee_damage_upper = 15
+	move_to_delay = 1.2
+
+	items_to_drop = list(/obj/item/weapon/pickaxe)
+
+	attacktext = "picks"
+	attack_sound = 'sound/weapons/genhit1.ogg'
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
+
+	speak = list("This is hard work, but I don't mind.",
+	"Down here, I can k-keep working without even sleeping.",
+	"Ohhh, bury my mother, pale and slight.",
+	"There's p-p-plenty for everyone, just grab a pick and join in! Ha ha! ",
+	"Are you still running about? Why not join me d-down here? ",
+	"I'll wait here forever...till light blooms again..",
+	"...Bury... body... cover... shell")
+
+/mob/living/simple_animal/hostile/humanoid/lostminer/death(gibbed)
+	..()
+	if(!gibbed && prob(50))
+		sleep(rand(2 SECONDS, 8 SECONDS))
+		shake(2, 3)
+		for(var/i = 1 to rand(2,3))
+			new /mob/living/simple_animal/hostile/bigroach(loc)
+		gib()
+
 
 //Crypts
 
@@ -738,11 +1245,52 @@
 	name = "juergista de la muerte"
 	desc = "Hay quienes no temen a la muerte, pero le dan la bienvenida. Ellos festejan incluso ahora."
 	icon_state = "juergista"
+	health = 50
+	maxHealth = 50
+	ranged = TRUE
+	ranged_cooldown_cap = 5
+	//retreat_distance = 6
+	minimum_distance = 6
+	projectiletype = /obj/item/projectile/simple_fireball
+
+/mob/living/simple_animal/hostile/necro/skeleton/western/juergista/Shoot(var/atom/target_turf, var/atom/start, var/mob/user, var/bullet = 0)
+	..()
+	//After firing, teleport away
+	var/center = target ? target : src
+	var/list/low_prio_turfs = list()
+	var/turf/new_loc
+	for(var/turf/T in oview(9,center))
+		if(T.density)
+			continue
+		var/closeness = get_dist(T,center)
+		if(closeness<=3)
+			continue //Don't bother at all
+		if(closeness<=6)
+			low_prio_turfs += T
+		else
+			new_loc = T
+			break
+	if(!new_loc)
+		new_loc = pick(low_prio_turfs)
+
+	if(!new_loc)
+		return
+
+	var/obj/effect/smoke/S = new /obj/effect/smoke(get_turf(src))
+	S.time_to_live = 2 SECONDS
+	forceMove(new_loc)
+
+/mob/living/simple_animal/hostile/necro/skeleton/western/juergista/ex_act()
+	return //immune to explosions
 
 /mob/living/simple_animal/hostile/necro/skeleton/western/bandito
 	name = "bandito muerte"
 	desc = "Se desconoce el propósito de su robo, porque dejan objetos de valor en el polvo."
 	icon_state = "bandito_muerto"
+	health = 50
+	maxHealth = 50
+	projectiletype = /obj/item/projectile/bullet/midbullet/assault
+	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
 
 /mob/living/simple_animal/hostile/necro/skeleton/western/matador
 	name = "El Matador de Toros"
@@ -755,13 +1303,13 @@
 	icon_state = "matador_cape"
 
 /mob/living/simple_animal/hostile/necro/skeleton/western/picador
-	name = "El Picador Pedido"
+	name = "El Picador Perdido"
 	desc = "En el desierto, hay un picador que una vez usó su lanza para un trío de toreros. Sin embargo, las arenas secas han dejado al descubierto sus recuerdos."
 	icon_state = "matador_capeless"
 
 //Refinery
 /mob/living/simple_animal/hostile/hivebot/refinery
-	name = "refinery robot"
+	name = "refinery robot class 1"
 	desc = "A robot specialized for traction on conveyor belts. This one seems to be malfunctioning."
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "engibot"
@@ -771,6 +1319,7 @@
 	melee_damage_lower = 2
 	melee_damage_upper = 3
 	faction = "oldzounds"
+	var/optimizations = 1
 
 /mob/living/simple_animal/hostile/hivebot/refinery/New()
 	..()
@@ -784,7 +1333,66 @@
 /mob/living/simple_animal/hostile/hivebot/refinery/get_unarmed_damage()
 	var/damage = rand(melee_damage_lower, melee_damage_upper)
 	visible_message("<span class='rose'>[src] optimizes!</span>")
+	level++
+	name = "refinery robot class [optimizations]"
 
 	melee_damage_upper += melee_damage_lower //increase our cap by the last lowest possibility
 	melee_damage_lower = damage //We'll never deal less again
 	return damage
+
+/mob/living/simple_animal/hostile/somethingwrong
+	name = "wolf"
+	desc = "Something's wrong..."
+	icon = 'icons/mob/western_mobs.dmi'
+	icon_state = "bigregulardog"
+	icon_dead = "somethingwrong_dead"
+	health = 600
+	maxHealth = 600
+	melee_damage_upper = 30
+	melee_damage_lower = 15
+	speed = 2
+	idle_vision_range = 2 //Let them get close
+	stat_attack = 1
+	var/revealed = FALSE
+
+/mob/living/simple_animal/hostile/somethingwrong/Aggro()
+	..()
+	if(!revealed && target) //Not yet revealed, but has a target
+		if(ismob(target))
+			var/mob/M = target
+			if(M.mind) //Needs to be something that will understand what it is seeing
+				reveal()
+
+/mob/living/simple_animal/hostile/somethingwrong/Life()
+	..()
+	if(revealed && stance == HOSTILE_STANCE_IDLE)
+		revealed = max(0, revealed-1)
+		if(!revealed)
+			name = "wolf"
+			desc = "Something's wrong..."
+			icon_state = "bigregulardog"
+
+/mob/living/simple_animal/hostile/somethingwrong/adjustBruteLoss(damage)
+	if(timestopped)
+		return
+	..()
+
+/mob/living/simple_animal/hostile/somethingwrong/proc/reveal()
+	var/list/unfreeze = list()
+	for(var/mob/living/L in view(9,src))
+		if(L.timestopped)
+			continue
+		unfreeze += L
+		L << 'sound/effects/greaterling.ogg'
+		L.timestopped = TRUE
+	sleep(4 SECONDS)
+	shake_animation(pixelshiftx = 4, pixelshifty = 2, speed = 0.2 SECONDS, loops = 20)
+	flick("sw_transform", src)
+	sleep(2 SECONDS)
+	name = "La Chupacabra"
+	desc = "A blood-drinking creature of ill-renown."
+	icon_state = "somethingwrong"
+	timestopped = FALSE
+	sleep(2 SECONDS)
+	for(var/atom/A in unfreeze)
+		A.timestopped = FALSE

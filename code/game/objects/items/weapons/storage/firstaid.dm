@@ -245,6 +245,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/pill/hyronalin = 3,
 		/obj/item/weapon/reagent_containers/pill/arithrazine = 3,
+		/obj/item/weapon/reagent_containers/pill/lithotorcrazine = 3
 	)
 
 /obj/item/weapon/storage/pill_bottle/sweets

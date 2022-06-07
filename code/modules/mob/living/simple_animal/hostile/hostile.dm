@@ -13,6 +13,7 @@
 	var/casingtype
 	var/move_to_delay = 2 //delay for the movement when chasing a target. higher = slower movement.
 	var/list/friends = list()
+	var/list/enemies = list() //Now that this is is at a hostile level, soon retaliate can just become a flag instead of a type
 	var/vision_range = 9 //How big of an area to search for targets in, a vision of 9 attempts to find targets as soon as they walk into screen view
 
 	var/aggro_vision_range = 9 //If a mob is aggro, we search in this radius. Defaults to 9 to keep in line with original simple mob aggro radius
@@ -32,6 +33,10 @@
 	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
 	var/hostile_interest = 2 //How long will we wait in the same spot trying to chase something before giving up?
 	var/atom/lastloc //Where we were last time we were moving toward a target.
+
+	var/strafe_width = -1 //How wide should we swing while strafing? 0 = run over, 1 = melee, >1 = ranged shots, -1 = do not
+	var/strafe_depth = 2 //In order to attempt a strafe, there need to be at least 2 spaces behind the target.
+	//Strafe depth is how far we would like to continue our charge past the target given unlimited space
 
 	var/list/target_rules = list()
 
@@ -118,7 +123,8 @@
 					EscapeConfinement()
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
-				AfterIdle()
+				if(new_target)
+					AfterIdle()
 
 			if(HOSTILE_STANCE_ATTACK)
 				if(!(flags & INVULNERABLE))
@@ -222,6 +228,8 @@
 			if(M.occupant)//Just so we don't attack empty mechs
 				if(CanAttack(M.occupant))
 					return 1
+		if(istype(the_target,/obj/structure/window) && environment_smash_flags & IGNORE_WINDOWS)
+			return 0
 		if(!(environment_smash_flags & OPEN_DOOR_SMART) && (environment_smash_flags & (OPEN_DOOR_STRONG | OPEN_DOOR_WEAK)) && istype(the_target, /obj/machinery/door/airlock))
 			var/obj/machinery/door/airlock/A = the_target
 			if(!A.density || A.operating || A.locked || A.welded)
@@ -251,11 +259,12 @@
 			for(var/obj/machinery/door/airlock/AL in T)
 				attack_animal(src)
 				delayNextAttack(1 SECONDS)
-		else
-			hostile_interest--
-			if(hostile_interest <= 0)
-				LoseTarget()
-				return
+				hostile_interest++ //Offset interest loss because we are working on a door
+				break //attack only one airlock at once
+		hostile_interest--
+		if(hostile_interest <= 0)
+			LoseTarget()
+			return
 	else
 		hostile_interest = initial(hostile_interest)
 
@@ -271,6 +280,7 @@
 				AttackingTarget()
 			if(canmove && space_check())
 				if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
+					before_retreat()
 					walk_away(src,target,retreat_distance,move_to_delay)
 				else
 					Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
@@ -432,6 +442,8 @@
 	if(!A)
 		return 0
 
+	hostile_interest = initial(hostile_interest) // don't lose interest while actively firing on an enemy!
+
 	if(projectilesound)
 		playsound(user, projectilesound, 100, 1)
 
@@ -506,6 +518,9 @@
 		return 1
 	else
 		return 0
+
+//What to do immediately after deciding to retreat but before the walk action starts
+/mob/living/simple_animal/hostile/proc/before_retreat()
 
 //What to do immediately after switching from stance = IDLE to stance = ATTACK
 /mob/living/simple_animal/hostile/proc/AfterIdle()

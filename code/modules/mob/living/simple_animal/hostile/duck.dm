@@ -27,7 +27,6 @@
 	stat_attack = DEAD
 	vision_range = 12
 	var/angered
-	var/list/enemies = list()
 	var/dying
 
 /mob/living/simple_animal/hostile/roboduck/examine(mob/user)

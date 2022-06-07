@@ -198,6 +198,7 @@ var/list/global/id_cards = list()
 	var/registered_name = "Unknown" // The name registered_name on the card
 	slot_flags = SLOT_ID
 
+	var/show_biometrics = TRUE //Necessary to display the below stats
 	var/blood_type = "\[UNSET\]"
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
@@ -226,7 +227,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
 
-	if(Adjacent(user))
+	if(show_biometrics && Adjacent(user))
 		user.show_message(text("The current assignment on the card is [src.assignment]."),1)
 		user.show_message("The blood type on the card is [blood_type].",1)
 		user.show_message("The DNA hash on the card is [dna_hash].",1)

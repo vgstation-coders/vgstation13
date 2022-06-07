@@ -1,5 +1,4 @@
 /mob/living/simple_animal/hostile/retaliate
-	var/list/enemies = list()
 	var/hostile = 0 //Reverts back into a hostile mob when toggle to 1
 
 /mob/living/simple_animal/hostile/retaliate/Found(var/atom/A)

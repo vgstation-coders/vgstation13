@@ -4,7 +4,7 @@
 #define REAGENT_STATE_GAS 3
 #define FOOD_METABOLISM 0.4
 #define REAGENTS_OVERDOSE 30
-#define REM REAGENTS_EFFECT_MULTIPLIER
+#define REM REAGENTS_EFFECT_MULTIPLIER //0.5
 
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
@@ -505,6 +505,7 @@
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
+#define FEVERFEW		"feverfew"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -520,6 +521,7 @@
 
 // By defining the effect multiplier this way, it'll exactly adjust
 // all effects according to how they originally were with the 0.4 metabolism
+// Since REAGENTS_METABOLISM is 0.2, this is a roundabout way of getting the number 0.5
 #define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4
 
 //Pulse related bullshit

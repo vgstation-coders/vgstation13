@@ -1,5 +1,6 @@
 var/datum/subsystem/daynightcycle/SSDayNight
 var/list/daynight_turfs = list()
+var/daily_events = list() //List that you can add /datum/timely_event entries to for some action specific to a time of day
 /* Original Plan
 Morning	  - 2 Mins
 Sunrise   - 2 Mins
@@ -46,6 +47,7 @@ Basically, you are going to overwrite the flags.
 	var/next_firetime = 0 //In essence this is world.time + the time you want. Ex: world.time + 3 MINUTES
 	var/force_time_forward = FALSE //for adminbus, set to TRUE to immediately advance the time
 	var/list/currentrun
+	var/completed_cycles = 0
 
 /datum/subsystem/daynightcycle/New()
 	NEW_SS_GLOBAL(SSDayNight)
@@ -65,9 +67,13 @@ Basically, you are going to overwrite the flags.
 		var/index_time = all_times_in_cycle.Find(current_timeOfDay)
 		if(index_time == all_times_in_cycle.len || !index_time)
 			current_timeOfDay = all_times_in_cycle[1]
+			completed_cycles++
 		else
 			current_timeOfDay = all_times_in_cycle[index_time+1]
 		next_firetime = current_timeOfDay.duration
+
+		for(var/datum/timely_event/TE in daily_events)
+			TE.time_changed(current_timeOfDay, completed_cycles)
 
 		if(current_timeOfDay.triggersound)
 			play_globalsound()
@@ -82,7 +88,7 @@ Basically, you are going to overwrite the flags.
 		if(!T || T.gcDestroyed)
 			continue
 
-		T.set_light(next_light_range,current_timeOfDay.lightpower,current_timeOfDay)
+		T.set_light(next_light_range,current_timeOfDay.lightpower,current_timeOfDay.name)
 
 		if(MC_TICK_CHECK)
 			return
@@ -110,7 +116,7 @@ Basically, you are going to overwrite the flags.
 		M << current_timeOfDay.triggersound
 
 /datum/timeofday
-	var/name
+	var/name //name doubles as color!
 	var/duration
 	var/lightpower = 10
 	var/triggersound
@@ -150,3 +156,5 @@ Basically, you are going to overwrite the flags.
 
 /datum/timeofday/nighttime/short
 	duration = 5 MINUTES
+
+/datum/timely_event/proc/time_changed(datum/timeofday/ctod, cycles)

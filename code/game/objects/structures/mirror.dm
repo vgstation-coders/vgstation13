@@ -237,3 +237,32 @@
 				targ.pick_appearance(M)
 
 		to_chat(targ, "<span class='notice'>You gaze into the [src].</span>")
+
+/obj/structure/mirror/funhouse
+	name = "funhouse mirror"
+	desc = "A hilarious mirror that distorts all of your features."
+	icon_state = "funhousemirror1"
+
+/obj/structure/mirror/funhouse/New()
+	..()
+	icon_state = "funhousemirror[pick(1,2,3)]"
+
+/obj/structure/mirror/funhouse/shatter()
+	playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
+	visible_message("<span class='clown'>\The [src] resists shattering!</span>")
+
+/obj/structure/mirror/funhouse/choose(mob/living/user, mob/living/carbon/human/target)
+	if(!can_use(user, target))
+		return
+	var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, target.gender, target.species.name)
+	if(species_facial_hair.len)
+		target.my_appearance.f_style = pick(species_facial_hair)
+		target.update_hair()
+	var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, target.species.name) //gender intentionally left null so speshul snowflakes can cross-hairdress
+	if(species_hair.len)
+		target.my_appearance.h_style = pick(species_hair)
+		target.update_hair()
+	var/list/underwear_options = target.gender == MALE ? underwear_m : underwear_f
+	target.underwear = pick(underwear_options)
+	target.regenerate_icons()
+	to_chat(user, "<span class='danger'>Trying to use this mirror for grooming is a disaster!</span>")

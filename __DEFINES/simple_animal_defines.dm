@@ -7,3 +7,4 @@
 #define OPEN_DOOR_WEAK 32 //If the mob can attack and open unpowered doors
 #define OPEN_DOOR_STRONG 64 //If the mob can attack and open powered doors
 #define OPEN_DOOR_SMART 128 //If the mob can open doors more intelligently than the average bear (MUST BE COMBINED WITH OPEN_DOOR_WEAK or OPEN_DOOR_STRONG to function!!!)
+#define IGNORE_WINDOWS 256 //Will not attack windows
