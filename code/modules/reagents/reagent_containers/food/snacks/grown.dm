@@ -46,6 +46,8 @@ var/list/special_fruits = list()
 		potency = round(seed.potency)
 		force = seed.thorny ? 5+seed.carnivorous*3 : 0
 		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
+		if(seed.noreact)
+			flags |= NOREACT
 
 		if(seed.teleporting)
 			name = "blue-space [name]"
