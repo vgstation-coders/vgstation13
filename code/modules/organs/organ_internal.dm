@@ -152,7 +152,7 @@
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
 	if(!owner)
 		return
-	if(owner && owner.status_flags & GODMODE)
+	if(owner?.status_flags & GODMODE)
 		return 0	//godmode
 	if(src.robotic == 2)
 		src.damage += (amount * 0.8)
