@@ -1,12 +1,13 @@
 /spell/changeling/unstun
-	name = "Epinephrine Sacs (45)"
+	name = "Epinephrine Sacs"
 	desc = "We extract extra adrenaline from epinephrine sacs within our body, instantly recovering us from stuns."
 	abbreviation = "ES"
 	hud_state = "unstun"
 
 	spell_flags = NEEDSHUMAN
 
-	chemcost = 45
+	charge_max = 1 MINUTES
+	cooldown_min = 1 MINUTES
 
 //Recover from stuns.
 /spell/changeling/unstun/cast(var/list/targets, var/mob/living/carbon/human/user)
