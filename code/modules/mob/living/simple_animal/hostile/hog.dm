@@ -26,8 +26,8 @@
 	size = SIZE_BIG
 
 	harm_intent_damage = 10
-	melee_damage_lower = 15
-	melee_damage_upper = 15
+	melee_damage_lower = 4
+	melee_damage_upper = 8
 	attacktext = "gores"
 	attack_sound = 'sound/weapons/bite.ogg'
 
@@ -51,7 +51,7 @@
 	speed = 2.5
 	maxHealth = 450
 	health = 450
-
+	size = SIZE_HUGE
 	nutrition = HOG_MAX
 
 /mob/living/simple_animal/hostile/spacehog/Life()
@@ -66,15 +66,19 @@
 	desc = "Oh no, it's greased."
 	speed = 0.8 //faster due to grease
 	pass_flags = PASSMOB|PASSDOOR //greased hogs can move through doors
+	melee_damage_lower = 8
+	melee_damage_upper = 12
 
 /mob/living/simple_animal/hostile/spacehog/greased/over
 	name = "overgreased feral space hog"
 	desc = "It leaves a sickly trail of grease, like a particularly slimy slug."
 	speed = 0.7
+	melee_damage_lower = 12
+	melee_damage_upper = 15
 
 /mob/living/simple_animal/hostile/spacehog/greased/over/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	//Before departing
-	var/turf/T = loc
+	var/turf/simulated/T = loc
 	if(istype(loc) && !T.is_wet())
 		new /obj/effect/overlay/puddle(loc, TURF_WET_LUBE, 5 SECONDS) //leave 5 seconds of lube behind
 	..() //move on
@@ -104,10 +108,10 @@
 	switch(nutrition)
 		if(HOG_FED to INFINITY)
 			retreat_distance = 8
-			minimum_distrance = 8 //skiddish, move away completely
+			minimum_distance = 8 //skittish, move away completely
 		if(HOG_HUNGRY to HOG_FED-1)
 			retreat_distance = 2
-			minimum_distance = 1 //skiddish, hit and run tactics
+			minimum_distance = 1 //skittish, hit and run tactics
 		if(0 to HOG_HUNGRY-1)
 			retreat_distance = null
 			minimum_distance = 1 //hungry!
