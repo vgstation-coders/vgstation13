@@ -145,9 +145,9 @@
 								return
 						else
 							return
-				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
+				user.eyeobj.forceMove(NewLoc = step)
 			else
-				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
+				user.eyeobj.forceMove(NewLoc = step)
 	user.last_movement=world.time
 
 	user.cooldown = world.timeofday + 5
