@@ -260,14 +260,17 @@
 	id = "insecticide"
 	name = "Insecticide"
 	cost=35
-	result=/obj/item/weapon/reagent_containers/glass/bottle/insecticide
+	reagent=INSECTICIDE
+	amount_per_unit=10
+	other_amounts=list(5)
 
 /datum/biogen_recipe/misc/plantbgone
 	id="plantbgone"
 	name="Plant-B-Gone"
 	reagent=PLANTBGONE
 	cost=35
-	result=/obj/item/weapon/reagent_containers/glass/bottle/plantbgone
+	amount_per_unit=10
+	other_amounts=list(5)
 
 /datum/biogen_recipe/misc/candle
 	cost=50
