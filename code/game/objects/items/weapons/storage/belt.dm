@@ -519,7 +519,7 @@
 		"/obj/item/device/analyzer/plant_analyzer",
 		"/obj/item/tool/wirecutters/clippers",
 		"/obj/item/weapon/reagent_containers/spray/plantbgone",
-		"/obj/item/weapon/reagent_containers/spray/insecticide",
+		"/obj/item/weapon/reagent_containers/spray/bugzapper",
 		"/obj/item/weapon/scythe",
 		"/obj/item/weapon/pickaxe/shovel/spade",
 		"/obj/item/weapon/minihoe",
