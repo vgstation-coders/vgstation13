@@ -3920,14 +3920,14 @@ var/global/num_vending_terminals = 1
 		visible_message("\The [src.name] makes a squeaking sound as a mouse pops out of the slot!", "You hear a squeak.")
 		playsound(loc, 'sound/effects/mousesqueek.ogg', 50, 1)
 		spawn(vend_delay)
-			new /mob/living/simple_animal/mouse/common(get_turf(src))
+			new /mob/living/simple_animal/mouse/common/dan(get_turf(src))
 
 /obj/machinery/vending/meat/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	..()
 	if(hasmouse)
 		visible_message("\The [src.name] makes a squeaking sound as a mouse pops out of the machine!", "You hear a squeak.")
 		playsound(loc, 'sound/effects/mousesqueek.ogg', 50, 1)
-		new /mob/living/simple_animal/mouse/common(get_turf(src))
+		new /mob/living/simple_animal/mouse/common/dan(get_turf(src))
 
 /obj/machinery/vending/meat/attackby(obj/item/W, mob/user)
 	..()

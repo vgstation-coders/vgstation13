@@ -462,7 +462,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "meat"
 	desc = "A slab of \"meat\". Something's a little strange about this one."
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/New(atom/A, var/mob/M)
 	..()
 	//A new blend of meat in every slab! Can be better than or worse than normal meat.
 	reagents.clear_reagents()
