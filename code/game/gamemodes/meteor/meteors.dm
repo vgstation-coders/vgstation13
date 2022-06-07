@@ -314,7 +314,9 @@
 /obj/item/projectile/meteor/gib/New(atom/start, atom/end)
 	if(prob(50))
 		var/list/blocked = boss_mobs + blacklisted_mobs
-		mob_to_gib = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blocked))
+		do
+			mob_to_gib = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blocked))
+		while(!initial(mob_to_gib.meat_type))
 	else
 		var/list/human_blocked = list(
 			/mob/living/carbon/human/krampus,
