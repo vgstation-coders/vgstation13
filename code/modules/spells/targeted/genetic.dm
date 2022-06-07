@@ -105,15 +105,12 @@ code\game\\dna\genes\goon_powers.dm
 	var/mob/living/carbon/human/H = user
 	var/list/trays = list()
 	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
-		if(tray.weedlevel > 0)
+		if(tray.get_weedlevel() > 0)
 			trays += tray
 
-	var/obj/machinery/portable_atmospherics/hydroponics/target = input(H,"Select a tray:") as null|anything in trays
+	var/obj/machinery/portable_atmospherics/hydroponics/target = pick(trays)
 
-	if(!isnull(gcDestroyed) || !target || target.weedlevel == 0)
-		return
-
-	H.reagents.add_reagent(NUTRIMENT, target.weedlevel)
-	target.weedlevel = 0
+	H.reagents.add_reagent(NUTRIMENT, 50)
+	target.add_weedlevel(-50)
 
 	user.visible_message("<span class='warning'>[user] begins rooting through [target], ripping out weeds and eating them noisily.</span>","<span class='warning'>You begin rooting through [target], ripping out weeds and eating them noisily.</span>")

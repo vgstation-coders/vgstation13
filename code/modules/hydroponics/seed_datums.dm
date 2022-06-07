@@ -24,17 +24,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 
 	//Tolerances.
-	var/nutrient_consumption = 0.25 // Plant eats this much per tick.
-	var/water_consumption = 3       // Plant drinks this much per tick.
+	var/nutrient_consumption = 10	// Plant eats this much per tick.
+	var/fluid_consumption = 3       // Plant drinks this much water or toxin per tick.
 	var/ideal_heat = 293            // Preferred temperature in Kelvin.
 	var/heat_tolerance = 20         // Departure from ideal that is survivable.
 	var/ideal_light = 7             // Preferred light level in luminosity.
 	var/light_tolerance = 5         // Departure from ideal that is survivable.
-	var/toxins_tolerance = 4        // Resistance to poison.
+	var/toxin_affinity = 4          // Resistance to poison, either water or toxins
 	var/lowkpa_tolerance = 25       // Low pressure capacity.
 	var/highkpa_tolerance = 200     // High pressure capacity.
-	var/pest_tolerance = 5          // Threshold for pests to impact health.
-	var/weed_tolerance = 5          // Threshold for weeds to impact health.
+	var/pest_tolerance = 50          // Threshold for pests to impact health.
+	var/weed_tolerance = 50          // Threshold for weeds to impact health.
 
 	//General traits.
 	var/endurance = 100             // Maximum plant HP when growing.
@@ -111,23 +111,16 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(!add_random_chemical())
 			break
 
-	if(prob(90))
-		nutrient_consumption = rand(30)/100
-	else
-		nutrient_consumption = 0
-
-	if(prob(90))
-		water_consumption = rand(10)
-	else
-		water_consumption = 0
+	nutrient_consumption = rand(28)/10
+	fluid_consumption = rand(9)
 
 	ideal_heat =       rand(273,313)
 	heat_tolerance =   rand(10,30)
 	ideal_light =      rand(2,10)
 	light_tolerance =  rand(2,7)
-	toxins_tolerance = rand(2,7)
-	pest_tolerance =   rand(2,7)
-	weed_tolerance =   rand(2,7)
+	toxin_affinity =  rand(1,10)
+	pest_tolerance =   rand(20,70)
+	weed_tolerance =   rand(20,70)
 	lowkpa_tolerance = rand(10,50)
 	highkpa_tolerance = rand(100,300)
 
@@ -344,14 +337,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_ECOPHYSIOLOGY)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
-					toxins_tolerance 	= gene.values[1]
-					pest_tolerance 		= gene.values[2]
-					weed_tolerance 		= gene.values[3]
-					lifespan 			= gene.values[4]
+					toxin_affinity		= gene.values[1]
+					pest_tolerance		= gene.values[2]
+					weed_tolerance		= gene.values[3]
+					lifespan			= gene.values[4]
 					endurance			= gene.values[5]
 				if(GENEGUN_MODE_SPLICE)
-					toxins_tolerance 	= round(mix(gene.values[1], toxins_tolerance,	rand(40, 60)/100), 0.1)
-					pest_tolerance 		= round(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100), 0.1)
+					toxin_affinity 	= round(mix(gene.values[1], toxin_affinity,			rand(40, 60)/100), 0.1)
+					pest_tolerance		= round(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100), 0.1)
 					weed_tolerance 		= round(mix(gene.values[3], weed_tolerance, 	rand(40, 60)/100), 0.1)
 					lifespan 			= round(mix(gene.values[4], lifespan, 			rand(40, 60)/100), 0.1)
 					endurance			= round(mix(gene.values[5], endurance, 			rand(40, 60)/100), 0.1)
@@ -360,11 +353,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					nutrient_consumption	= gene.values[1]
-					water_consumption 		= gene.values[2]
+					fluid_consumption 		= gene.values[2]
 					alter_temp 				= gene.values[3]
 				if(GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
-					water_consumption 		= mix(gene.values[2], water_consumption,	rand(40, 60)/100)
+					fluid_consumption 		= mix(gene.values[2], fluid_consumption,	rand(40, 60)/100)
 					alter_temp 				= max(gene.values[3], alter_temp)
 			var/list/new_gasses = gene.values[4]
 			if(islist(new_gasses))
@@ -452,7 +445,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			)
 		if(GENE_ECOPHYSIOLOGY)
 			P.values = list(
-				(toxins_tolerance     	? toxins_tolerance    	: 0),
+				(toxin_affinity     	? toxin_affinity    	: 0),
 				(pest_tolerance       	? pest_tolerance      	: 0),
 				(weed_tolerance       	? weed_tolerance      	: 0),
 				(lifespan      			? lifespan				: 0),
@@ -461,7 +454,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_METABOLISM)
 			P.values = list(
 				(nutrient_consumption 	? nutrient_consumption	: 0),
-				(water_consumption    	? water_consumption   	: 0),
+				(fluid_consumption    	? fluid_consumption   	: 0),
 				(alter_temp    			? alter_temp    		: 0),
 				(exude_gasses    		? exude_gasses    		: 0)
 			)
@@ -493,25 +486,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 /datum/seed/proc/harvest(var/mob/user, var/yield_mod = 1)
 	if(!user)
 		return
-
 	if(isnull(products) || !products.len || yield <= 0)
 		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
 		to_chat(user, "You harvest from the [display_name].")
-
 		generate_product(get_turf(user), yield_mod, user)
 
 /datum/seed/proc/generate_product(var/turf/T, yield_mod, mob/harvester)
 	add_newline_to_controller()
 
 	var/total_yield = 0
-	if(yield > -1)
-		if(isnull(yield_mod) || yield_mod < 0)
-			yield_mod = 1
-			total_yield = yield
-		else
-			total_yield = yield * yield_mod
-		total_yield = round(max(1,total_yield))
+	total_yield = round(yield*yield_mod)
 
 	currently_querying = list()
 
@@ -651,12 +636,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		new_seed.display_name = "[display_name]"
 
 	new_seed.nutrient_consumption = nutrient_consumption
-	new_seed.water_consumption =    water_consumption
+	new_seed.fluid_consumption =    fluid_consumption
 	new_seed.ideal_heat =           ideal_heat
 	new_seed.heat_tolerance =       heat_tolerance
 	new_seed.ideal_light =          ideal_light
 	new_seed.light_tolerance =      light_tolerance
-	new_seed.toxins_tolerance =     toxins_tolerance
+	new_seed.toxin_affinity =		toxin_affinity
 	new_seed.lowkpa_tolerance =     lowkpa_tolerance
 	new_seed.highkpa_tolerance =    highkpa_tolerance
 	new_seed.pest_tolerance =       pest_tolerance
