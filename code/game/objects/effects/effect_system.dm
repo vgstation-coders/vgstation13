@@ -839,11 +839,9 @@ steam.start() -- spawns the effect
 			reagents.reaction(M)
 		return
 
-	if (istype(AM, /mob/living/carbon))
+	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(5, 2, 1))
-			to_chat(M, "<span class='notice'>You slipped on the foam!</span>")
-
+		M.Slip(5, 2, 1, onwhat = "the foam")
 
 /datum/effect/system/foam_spread
 	var/amount = 5				// the size of the foam spread.

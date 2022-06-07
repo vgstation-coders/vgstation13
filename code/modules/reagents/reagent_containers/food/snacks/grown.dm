@@ -46,6 +46,8 @@ var/list/special_fruits = list()
 		potency = round(seed.potency)
 		force = seed.thorny ? 5+seed.carnivorous*3 : 0
 		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
+		if(seed.noreact)
+			flags |= NOREACT
 
 		if(seed.teleporting)
 			name = "blue-space [name]"
@@ -144,8 +146,7 @@ var/list/special_fruits = list()
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
 	if(seed.juicy == 2)
-		if(M.Slip(3, 2))
-			to_chat(M, "<span class='notice'>You slipped on the [name]!</span>")
+		if(M.Slip(3, 2, slipped_on = src))
 			do_splat_effects(M)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pickup(mob/user)
@@ -261,6 +262,8 @@ var/list/special_fruits = list()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
+//Types blacklisted from appearing as products of strange seeds and no-fruit.
+var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/) //Otherwise the selection would be biased by the relatively large number of multiple leaf-number-specific subtypes - the base type with randomized leaves is still valid.
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn
 	name = "ear of corn"
@@ -932,7 +935,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname, mob/harvester)
 	..()
-	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
+	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits() - strange_seed_product_blacklist
 	available_fruits = shuffle(available_fruits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()
@@ -1139,21 +1142,24 @@ var/list/special_fruits = list()
 			name = "seven-leaf clover"
 			desc = "The fates themselves are said to shower their adoration on the one who bears this legendary lucky charm."
 			luckiness = 10000
+	icon = 'icons/obj/hydroponics/clover.dmi'
 	icon_state = "clover[leaves]"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/proc/shift_leaves(var/mut = 0, var/mob/shifter)
 	leaves = 3
 	var/prob1 = clamp(mut / 3, 0, 66)
-	var/luck = shifter?.luck()
-	if(shifter ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
+	var/luck = 0
+	if(ismob(shifter))
+		luck = shifter.luck()
+	if(luck ? shifter.lucky_prob(prob1, 1/100, 25, ourluck = luck) : prob(prob1))
 		var/ls = 1
 		var/prob2 = max(clamp(mut, 0, 21) / 21, 0.1)
-		prob2 = shifter ? shifter.lucky_probability(prob2, 1/333 , 33, ourluck = luck) : prob2
+		prob2 = luck ? shifter.lucky_probability(prob2, 1/333 , 33, ourluck = luck) : prob2
 		for(var/i in 1 to 7)
 			if(prob(prob2))
 				ls += 1
 		leaves += ls * pick(-1,1)
-		if(shifter ? shifter.lucky_prob(3, 1/333, 50, ourluck = luck) : prob(3))
+		if(luck ? shifter.lucky_prob(3, 1/333, 50, ourluck = luck) : prob(3))
 			leaves = clamp(leaves, 0, 7)
 		else if(leaves < 0 || leaves > 7)
 			leaves = 3

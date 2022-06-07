@@ -205,15 +205,18 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!..())
 		return
-
 	var/power = I.force
 	if (crit)
 		power *= CRIT_MULTIPLIER
 
+	if(def_zone)
+		target_zone = def_zone
+
 	var/datum/organ/external/affecting = get_organ(target_zone)
+
 	if (!affecting)
 		return FALSE
 	if(affecting.status & ORGAN_DESTROYED)
@@ -225,11 +228,11 @@ emp_act
 	var/hit_area = affecting.display_name
 
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>\The [user] [pick(I.attack_verb)] \the [src] in \the [hit_area] with \the [I]!</span>", \
-			"<span class='userdanger'>\The [user] [pick(I.attack_verb)] you in \the [hit_area] with \the [I]!</span>")
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""][pick(I.attack_verb)] [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] in \the [hit_area] with \the [I]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""][user == src ? "[shift_verb_tense(pick(I.attack_verb))] yourself": "[pick(I.attack_verb)] you"] in \the [hit_area] with \the [I]!</span>")
 	else if(!(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>\The [user] attacks \the [src] in \the [hit_area] with \the [I.name]!</span>", \
-			"<span class='userdanger'>\The [user] attacks you in \the [hit_area] with \the [I.name]!</span>")
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""]attacks [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] in \the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""]attack[user == src ? " yourself" : "s you"] in \the [hit_area] with \the [I.name]!</span>")
 
 	//Contact diseases on the weapon?
 	I.disease_contact(src,get_part_from_limb(target_zone))

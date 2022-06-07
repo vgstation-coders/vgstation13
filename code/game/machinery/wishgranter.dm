@@ -4,7 +4,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "wishgranter"
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	anchored = 1
 	density = 1
 

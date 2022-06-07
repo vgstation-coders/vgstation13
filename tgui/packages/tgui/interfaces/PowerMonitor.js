@@ -6,11 +6,6 @@ import { useBackend, useLocalState } from '../backend';
 import { Box, Button, Chart, ColorBox, Flex, Icon, LabeledList, ProgressBar, Section, Table } from '../components';
 import { Window } from '../layouts';
 
-export const powerRank = str => {
-  const unit = String(str.split(' ')[1]).toLowerCase();
-  return ['w', 'kw', 'mw', 'gw'].indexOf(unit);
-};
-
 export const PowerMonitor = () => {
   return (
     <Window
@@ -25,6 +20,7 @@ export const PowerMonitor = () => {
 
 export const PowerMonitorContent = (props, context) => {
   const { data } = useBackend(context);
+  const { act } = useBackend(context);
   const { history } = data;
   const [
     sortByField,
@@ -40,17 +36,17 @@ export const PowerMonitorContent = (props, context) => {
     ...history.demand);
     // Process area data
   const areas = flow([
-    map((area, i) => ({
+    map((area, key) => ({
       ...area,
-      // Generate a unique id
-      id: area.name + i,
+      id: key,
+      details: false,
     })),
     sortByField === 'name' && sortBy(area => area.name),
     sortByField === 'charge' && sortBy(area => -area.charge),
-    sortByField === 'draw' && sortBy(
-      area => -powerRank(area.load),
-      area => -parseFloat(area.load)),
+    sortByField === 'draw' && sortBy(area => -area.demand),
   ])(data.areas);
+  const priorityText = ["Critical", "Highest", "Very High", "High", "Normal", "Low", "Very Low", "Lowest", "Minimal"];
+  const [areaDetailExpanded, setAreaDetailExpanded] = useLocalState(context, 'areaDetailExpanded', new Set());
   return (
     <>
       <Flex mx={-0.5} mb={1}>
@@ -126,6 +122,9 @@ export const PowerMonitorContent = (props, context) => {
             <Table.Cell>
               Area
             </Table.Cell>
+            <Table.Cell collapsing textAlign="center">
+              Priority
+            </Table.Cell>
             <Table.Cell collapsing>
               Charge
             </Table.Cell>
@@ -143,30 +142,140 @@ export const PowerMonitorContent = (props, context) => {
             </Table.Cell>
           </Table.Row>
           {areas.map((area, i) => (
-            <tr
-              key={area.id}
-              className="Table__row candystripe">
-              <td>
-                {area.name}
-              </td>
-              <td className="Table__cell text-right text-nowrap">
-                <AreaCharge
-                  charging={area.charging}
-                  charge={area.charge} />
-              </td>
-              <td className="Table__cell text-right text-nowrap">
-                {area.load}
-              </td>
-              <td className="Table__cell text-center text-nowrap">
-                <AreaStatusColorBox status={area.eqp} />
-              </td>
-              <td className="Table__cell text-center text-nowrap">
-                <AreaStatusColorBox status={area.lgt} />
-              </td>
-              <td className="Table__cell text-center text-nowrap">
-                <AreaStatusColorBox status={area.env} />
-              </td>
-            </tr>
+            <>
+              <tr
+                key={area.id}
+                className="Table__row candystripe">
+                <td>
+                  {/* Area name + machine list dropdown */}
+                  <Button
+                    icon={(areaDetailExpanded.has(area.id) === true ? "minus" : "plus") + "-square-o"}
+                    color="transparent"
+                    textColor="#ffffff"
+                    title={(areaDetailExpanded.has(area.id) === true ? "Hide" : "Show") + " details"}
+                    onClick={() => {
+                      if (areaDetailExpanded.has(area.id) === true) {
+                        areaDetailExpanded.delete(area.id);
+                        setAreaDetailExpanded(areaDetailExpanded);
+                      } else {
+                        setAreaDetailExpanded(
+                          areaDetailExpanded.add(area.id));
+                      }
+                    }}
+                  >
+                    {area.name}
+                  </Button>
+                </td>
+
+                <td>{
+                  /* Purposely left blank
+                     areas have no priority, only machines do
+                  */
+                }
+                </td>
+
+                <td className="Table__cell text-right text-nowrap">
+                  {/* Area battery info */}
+                  { area.charge !== undefined && (
+                    <BatteryStatusIndicator
+                      charging={area.charging}
+                      charge={area.charge}
+                    />
+                  )}
+                </td>
+
+                <td className="Table__cell text-right text-nowrap">
+                  {/* Area power demand info */}
+                  {area.f_demand}
+                </td>
+
+                <td className="Table__cell text-center text-nowrap">
+                  { area.eqp !== undefined && (
+                    <ApcStatusIndicator status={area.eqp} tooltipName="Equipment" />
+                  )}
+                </td>
+
+                <td className="Table__cell text-center text-nowrap">
+                  { area.lgt !== undefined && (
+                    <ApcStatusIndicator status={area.lgt} tooltipName="Lights" />
+                  )}
+                </td>
+
+                <td className="Table__cell text-center text-nowrap">
+                  { area.env !== undefined && (
+                    <ApcStatusIndicator status={area.env} tooltipName="Enviroment" />
+                  )}
+                </td>
+
+              </tr>
+              { areaDetailExpanded.has(area.id) === true
+                && map((machine, key) =>
+                  (
+                    <tr className="Table__row candystripe">
+                      <td>
+                        {/* Machine name */}
+                        &nbsp; {key === Object.keys(area.machines).pop() ? '└' : '├'} {machine.name}
+                      </td>
+                      <td className="Table__cell text-center text-nowrap">
+                        {/* Machine priority display/dropdown */}
+                        { data.engineer_access === 1 && (
+                          <Button
+                            icon="minus"
+                            compact
+                            mx="2px"
+                            disabled={machine.priority >= 10}
+                            onClick={() => act('priority', {
+                              'value': (machine.priority + 1),
+                              'ref': machine.ref,
+                              'id': key,
+                            })}
+                          />
+                        )}
+                        <Box
+                          inline
+                          width="6rem"
+                        >
+                          {(machine.priority >= 2
+                              && machine.priority < (2 + priorityText.length)
+                          )
+                            ? priorityText[machine.priority -2]
+                            : "$^%!#%¿&"}
+                        </Box>
+                        { data.engineer_access === 1 && (
+                          <Button
+                            icon="plus"
+                            compact
+                            mx="2px"
+                            disabled={machine.priority <= 2}
+                            onClick={() => act('priority', {
+                              'value': (machine.priority - 1),
+                              'ref': machine.ref,
+                              'id': key,
+                            })}
+                          />
+                        )}
+                      </td>
+
+                      <td className="Table__cell text-right text-nowrap">
+                        {/* Machine battery info */}
+                        {!!machine.isbattery && (
+                          <BatteryStatusIndicator
+                            charging={machine.charging}
+                            charge={machine.charge}
+                          />
+                        )}
+                      </td>
+
+                      <td className="Table__cell text-right text-nowrap">
+                        {/* Machine power demand info */}
+                        {machine.f_demand}
+                      </td>
+
+                      <td /><td /><td />
+
+                    </tr>
+                  ))(area.machines)}
+            </>
           ))}
         </Table>
       </Section>
@@ -174,55 +283,53 @@ export const PowerMonitorContent = (props, context) => {
   );
 };
 
-export const AreaCharge = props => {
+export const BatteryStatusIndicator = props => {
   const { charging, charge } = props;
+  // TODO figure out icons for no change vs discharge vs charging
   return (
     <>
       <Icon
-        width="18px"
-        textAlign="center"
         name={(
-          charging === 0 && (
-            charge > 50
-              ? 'battery-half'
-              : 'battery-quarter'
-          )
-          || charging === 1 && 'bolt'
-          || charging === 2 && 'battery-full'
+          charging === 1 && 'bolt'
+          || charge >= 100 && 'battery-full'
+          || charge > 50 && 'battery-half'
+          || charge > 0 && 'battery-quarter'
+          || 'battery-empty'
         )}
         color={(
-          charging === 0 && (
-            charge > 50
-              ? 'yellow'
-              : 'red'
-          )
-          || charging === 1 && 'yellow'
-          || charging === 2 && 'green'
-        )} />
+          charging === 1 && 'yellow'
+          || charge >= 100 && 'green'
+          || charge > 50 && 'yellow'
+          || 'red'
+        )}
+      />
       <Box
         inline
         width="36px"
-        textAlign="right">
+        textAlign="right"
+      >
         {toFixed(charge) + '%'}
       </Box>
     </>
   );
 };
 
-AreaCharge.defaultHooks = pureComponentHooks;
+BatteryStatusIndicator.defaultHooks = pureComponentHooks;
 
-const AreaStatusColorBox = props => {
+const ApcStatusIndicator = props => {
+  const { tooltipName } = props;
   const { status } = props;
   const power = Boolean(status & 2);
   const mode = Boolean(status & 1);
-  const tooltipText = (power ? 'On' : 'Off')
+  const tooltipText = tooltipName + ' ' + (power ? 'On' : 'Off')
     + ` [${mode ? 'auto' : 'manual'}]`;
   return (
     <ColorBox
       color={power ? 'good' : 'bad'}
       content={mode ? undefined : 'M'}
-      title={tooltipText} />
+      title={tooltipText}
+    />
   );
 };
 
-AreaStatusColorBox.defaultHooks = pureComponentHooks;
+ApcStatusIndicator.defaultHooks = pureComponentHooks;

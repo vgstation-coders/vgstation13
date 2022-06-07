@@ -7,7 +7,7 @@
 	var/old_icon_mod = "on"
 	anchored = 0
 	density = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 100
 	active_power_usage = 1000
 
@@ -275,11 +275,11 @@
 	active = !active
 	if(active)
 		playsound(src, 'sound/effects/fall.ogg', 50, 1)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		visible_message("[bicon(src)] The [src.name] starts up.")
 	else
 		playsound(src, 'sound/effects/fall2.ogg', 50, 1)
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		visible_message("[bicon(src)] The [src.name] shuts down.")
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
 		AMS.update_icon()

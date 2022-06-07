@@ -464,14 +464,24 @@
 
 	search_objects = 1
 	var/obj/item/weapon/cell/cell = null
+	var/datum/power_connection/consumer/cable/power_connection = null
 	var/latched = 0
+	var/draining = 0 //How much we're attempting to drain from the powernet
+
+/mob/living/simple_animal/hostile/syphoner/New()
+	. = ..()
+	cell = new /obj/item/weapon/cell/super/empty(src)
+	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_BYPASS
+
+/mob/living/simple_animal/hostile/syphoner/Destroy()
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	. = ..()
 
 /mob/living/simple_animal/hostile/syphoner/get_cell()
 	return cell
-
-/mob/living/simple_animal/hostile/syphoner/New()
-	..()
-	cell = new /obj/item/weapon/cell/super/empty(src)
 
 /mob/living/simple_animal/hostile/syphoner/update_icon()
 	if(latched)
@@ -519,11 +529,11 @@
 	if(istype(target, /obj/structure/cable))
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
-			var/datum/powernet/PN = C.get_powernet()
+			var/datum/powernet/PN = power_connection.get_powernet()
 			if(cell && PN && PN.avail > 0 && cell.percent() < 100)
-				var/drained = min (rand(500,1500), PN.avail )
-				PN.load += drained
-				cell.give(drained/10)
+				cell.give(draining * power_connection.get_satisfaction()/10)
+				draining = rand(500,1500)
+				power_connection.add_load(draining)
 			else
 				visible_message("<span class = 'notice'>\The [src] detaches from \the [C]</span>")
 				unlatch()
@@ -533,6 +543,7 @@
 		else if (latched)
 			//How did we get here? Let's just quietly unlock and forget all about this
 			unlatch()
+
 	if(istype(target, /obj/item/weapon/cell))
 		var/obj/item/weapon/cell/C = target
 		if(C.percent() < 100)
@@ -542,6 +553,7 @@
 
 /mob/living/simple_animal/hostile/syphoner/proc/unlatch()
 	latched = 0
+	power_connection.disconnect()
 	unlock_from()
 	update_icon()
 
@@ -550,6 +562,8 @@
 		return
 	latched = 1
 	A.lock_atom(src, /datum/locking_category/cable_lock)
+	if (istype(A, /obj/structure/cable))
+		power_connection.connect(A)
 	update_icon()
 
 /mob/living/simple_animal/hostile/syphoner/death(var/gibbed = FALSE)
@@ -626,9 +640,7 @@
 	switch(spell)
 		if(1) //Mass Hallucination
 			for(var/mob/living/carbon/human/H in victims)
-				if(H.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
-					continue
-				if(M_PSY_RESIST in H.mutations)
+				if(!can_mind_interact(H.mind))
 					continue
 				to_chat(H, "<span class = 'warning'>You feel [diceroll>15 ? "incredibly" : ""] disorientated.</span>")
 				H.hallucination += rand(10,20)*diceroll

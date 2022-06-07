@@ -230,6 +230,59 @@
 	return
 
 /obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if(sharpness_flags & (SHARP_BLADE | SERRATED_BLADE | SHARP_TIP | HOT_EDGE)) //Running with sharp objects is dangerous!
+			var/severity = 0
+			var/saving_prob = C.lucky_probability(60, luckfactor = 1/50)
+
+			if(M_CLUMSY in C.mutations)
+				severity += 1
+
+			for(var/i in 1 to 3) //Three saving throws. One failed means a near miss. Two failed means a normal attack. Three failed means a critical attack.
+				if(prob(saving_prob))
+					break
+				severity += 1
+			if(severity >= 2)
+				var/list/attackable_zones = list("head")
+				if(C.has_eyes())
+					attackable_zones += "eyes"
+				if(C.hasmouth())
+					attackable_zones += "mouth"
+				var/attackable_zone = pick(attackable_zones)
+
+				//Temporarily switch C to harm intent and make them target their head.
+				var/previntent = C.a_intent
+				var/prevzone
+				if(C.zone_sel)
+					prevzone = C.zone_sel.selecting
+					C.zone_sel.selecting = attackable_zone //For proper afterattack() behavior, otherwise we chould just pass attackable_zone into attacked_by().
+				C.a_intent = I_HURT
+
+				//Do the attack.
+				C.attacked_by(src, C, def_zone = attackable_zone, crit = severity >= 3, flavor = "accidentally")
+				afterattack(C, C)
+
+				//Switch them back to their previous intent and targeting.
+				C.a_intent = previntent
+				if(C.zone_sel)
+					C.zone_sel.selecting = prevzone
+
+			else if(severity >= 1)
+				var/list/possibles = list("face", "neck")
+				if(C.has_eyes())
+					possibles += "eye"
+				if(C.hasmouth())
+					possibles += "throat"
+				var/list/possible_edgepoints = list()
+				if(sharpness_flags & SHARP_BLADE)
+					possible_edgepoints += "sharp edge"
+				if(sharpness_flags & SERRATED_BLADE)
+					possible_edgepoints += "serrated edge"
+				if(sharpness_flags & SHARP_TIP)
+					possible_edgepoints += "sharp point"
+				to_chat(C, "<span class = 'warning'>[possible_edgepoints.len ? "The [pick(possible_edgepoints)] of \the [src]" : "\The [src]"] just misses your [pick(possibles)]... close one!</span>")
+
 	return
 
 /obj/item/projectile_check()

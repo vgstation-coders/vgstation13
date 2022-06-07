@@ -22,7 +22,7 @@
 
 
 //Checks armor, special attackby of object instances, and miss chance
-/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!I || !user)
 		return FALSE
 	target_zone = null
@@ -42,7 +42,11 @@
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
 
 	if(user == src) // Attacking yourself can't miss
-		target_zone = user.zone_sel.selecting
+		if(isnull(user.zone_sel)) //If the mob attacks itself without a client controlling it and therefore has no zone select active. This could happen if a catatonic person wielding a sword slips.
+			target_zone = pick("head", "eyes", "mouth")
+		else
+			target_zone = user.zone_sel.selecting
+
 	if(!target_zone && !src.stat)
 		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
 		add_logs(user, src, "missed", admin=1, object=I, addition="intended damage: [power]")

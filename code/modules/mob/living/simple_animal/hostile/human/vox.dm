@@ -387,6 +387,7 @@
 	attack_sound = 'sound/weapons/machete_hit01.ogg'
 
 	status_flags = UNPACIFIABLE // Too angry to be pacified. Also meant to be a "boss" mob, so that would be a bit silly
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Here's Johnny
 
 	var/berserk = 0
 	var/last_bigheal = 0

@@ -418,7 +418,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/pancake
 
 /datum/recipe/sugarcookie
-	reagents = list(FLOUR = 5, SUGAR = 5)
+	reagents = list(FLOUR = 5, SUGARS = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sugarcookie
 
@@ -428,11 +428,11 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/caramelcookie
 
 /datum/recipe/holidaycookie
-	reagents = list(FLOUR = 5, SUGAR = 5, SPRINKLES = 5)
+	reagents = list(FLOUR = 5, SUGARS = 5, SPRINKLES = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
 
 /datum/recipe/candyheart
-	reagents = list(SUGAR = 5, CORNOIL = 5)
+	reagents = list(SUGARS = 5, CORNOIL = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
 
 /datum/recipe/chocostrawberry
@@ -440,7 +440,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/chocostrawberry
 
 /datum/recipe/gingerbread_man
-	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
+	reagents = list(FLOUR = 5, SUGARS = 5, WATER = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
 
@@ -452,7 +452,7 @@
 	result = /mob/living/simple_animal/hostile/gingerbread
 
 /datum/recipe/candy_cane
-	reagents = list(SUGAR = 5, WATER = 5)
+	reagents = list(SUGARS = 5, WATER = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/candy_cane
 
@@ -858,7 +858,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/meatbun
 
 /datum/recipe/candiedapple
-	reagents = list(WATER = 5, SUGAR = 5)
+	reagents = list(WATER = 5, SUGARS = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
 	result = /obj/item/weapon/reagent_containers/food/snacks/candiedapple
 
@@ -1037,7 +1037,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
 
 /datum/recipe/christmascake
-	reagents = list(SUGAR = 10)
+	reagents = list(SUGARS = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
@@ -1093,7 +1093,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/asspie
 
 /datum/recipe/appletart
-	reagents = list(SUGAR = 5, MILK = 5, FLOUR = 15)
+	reagents = list(SUGARS = 5, MILK = 5, FLOUR = 15)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
@@ -1101,7 +1101,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/appletart
 
 /datum/recipe/pumpkinpie
-	reagents = list(MILK = 5, SUGAR = 5, FLOUR = 5)
+	reagents = list(MILK = 5, SUGARS = 5, FLOUR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
@@ -1787,7 +1787,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/chickensalad
 
 /datum/recipe/grapesalad
-	reagents = list (SUGAR = 10)
+	reagents = list (SUGARS = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
@@ -1795,7 +1795,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
 
 /datum/recipe/moongrapesalad //Alternate recipe using moon cheese
-	reagents = list (SUGAR = 10)
+	reagents = list (SUGARS = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
@@ -1989,7 +1989,7 @@
 // Misc ////////////////////////////////////////////////////////
 
 /datum/recipe/caramel
-	reagents = list(SUGAR = 50)
+	reagents = list(SUGARS = 50)
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/condiment/caramel
 
@@ -2087,7 +2087,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/gelatin
 
 /datum/recipe/jectie
-	reagents = list(CHERRYJELLY = 5, SUGAR = 10)
+	reagents = list(CHERRYJELLY = 5, SUGARS = 10)
 	result = /obj/item/weapon/reagent_containers/food/snacks/jectie
 
 /datum/recipe/jectie/make_food(obj/container, mob/user)
@@ -2302,7 +2302,7 @@
 	result = /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket
 
 /datum/recipe/crab_sticks
-	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)
+	reagents = list(SODIUMCHLORIDE = 1, SUGARS = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
 
@@ -2327,7 +2327,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/gigapuddi
 
 /datum/recipe/gigapuddi/happy
-	reagents = list(MILK = 15, SUGAR = 5)
+	reagents = list(MILK = 15, SUGARS = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/gigapuddi/happy
 
 /datum/recipe/gigapuddi/anger
@@ -2383,7 +2383,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/omurice
 
 /datum/recipe/omurice/heart
-	reagents = list(RICE = 5, KETCHUP = 5, SUGAR = 5)
+	reagents = list(RICE = 5, KETCHUP = 5, SUGARS = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/omurice/heart
 
 /datum/recipe/omurice/face
@@ -2415,7 +2415,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/yellowcupcake
 
 /datum/recipe/cookiebowl
-	reagents = list(FLOUR = 5, SUGAR = 2)
+	reagents = list(FLOUR = 5, SUGARS = 2)
 	items = list (
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar
@@ -2543,14 +2543,14 @@
 	result = /obj/item/claypot
 
 /datum/recipe/cinnamonroll
-	reagents = list(MILK = 5, SUGAR = 10, FLOUR = 5, CINNAMON = 5)
+	reagents = list(MILK = 5, SUGARS = 10, FLOUR = 5, CINNAMON = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll
 
 /datum/recipe/cinnamonpie
-	reagents = list(MILK = 5, SUGAR = 10, FLOUR = 10, CINNAMON = 5)
+	reagents = list(MILK = 5, SUGARS = 10, FLOUR = 10, CINNAMON = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
@@ -2586,7 +2586,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/threebeanburrito
 
 /datum/recipe/hauntedjam
-	reagents = list(SUGAR = 5, VINEGAR = 5)
+	reagents = list(SUGARS = 5, VINEGAR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper,
@@ -2642,14 +2642,14 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit
 
 /datum/recipe/woodapplejam
-	reagents = list(SUGAR = 20)
+	reagents = list(SUGARS = 20)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/woodapple
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/woodapplejam
 
 /datum/recipe/candiedwoodapple
-	reagents = list(SUGAR = 5, WATER = 5)
+	reagents = list(SUGARS = 5, WATER = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/woodapple
 		)
@@ -2726,7 +2726,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/porktenderloin
 
 /datum/recipe/sweetandsourpork
-	reagents = list(SOYSAUCE = 10, SUGAR = 10) //Will require trading with humans to get soy, but they can make their own acid.
+	reagents = list(SOYSAUCE = 10, SUGARS = 10) //Will require trading with humans to get soy, but they can make their own acid.
 	items = (
 		/obj/item/weapon/reagent_containers/food/snacks/meat/box
 		)
@@ -2776,7 +2776,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/poachedaloe
 
 /datum/recipe/toxicmint
-	reagents = list(SUGAR = 1)
+	reagents = list(SUGARS = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mint
 
@@ -2823,7 +2823,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
 
 /datum/recipe/mapleleaf
-	reagents = list (SUGAR = 10, HONEY = 15)
+	reagents = list (SUGARS = 10, HONEY = 15)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/aloe,
 		/obj/item/stack/sheet/snow
@@ -3117,7 +3117,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/butterstick
 
 /datum/recipe/ambrosia_brownies
-	reagents = list(COCO = 10, SUGAR = 10, FLOUR = 15)
+	reagents = list(COCO = 10, SUGARS = 10, FLOUR = 15)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter,
 	/obj/item/weapon/reagent_containers/food/snacks/egg,
 	/obj/item/weapon/reagent_containers/food/snacks/egg,
@@ -3179,7 +3179,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
 
 /datum/recipe/bulgogi
-	reagents = list(SOYSAUCE = 10, SUGAR =5)
+	reagents = list(SOYSAUCE = 10, SUGARS =5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
@@ -3196,7 +3196,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/candiedpear
 
 /datum/recipe/bakedpears
-	reagents = list(CINNAMON = 5, SUGAR = 5, CREAM = 5)
+	reagents = list(CINNAMON = 5, SUGARS = 5, CREAM = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
@@ -3234,7 +3234,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/saltednuts
 
 /datum/recipe/grapejelly
-	reagents = list (SUGAR = 5)
+	reagents = list (SUGARS = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes)
 	result = /obj/item/weapon/reagent_containers/food/snacks/grapejelly
 
@@ -3325,7 +3325,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
 
 /datum/recipe/sweetroll
-	reagents = list(FLOUR = 5, SUGAR = 5)
+	reagents = list(FLOUR = 5, SUGARS = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/butter,

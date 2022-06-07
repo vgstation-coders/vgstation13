@@ -728,32 +728,31 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
-	if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+	if(can_mind_interact(H.mind)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 		return
-	else
-		switch(rand(0,4))
-			if(0) //Minor brain damage
-				to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
-				H.adjustBrainLoss(10)
-				H.eye_blurry = max(H.eye_blurry, 5)
-			if(1) //Brief knockdown
-				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-				H.emote("me", 1, "collapses!")
-				H.Knockdown(2)
-			if(2) //Target gets put to sleep for a few seconds
-				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
-				H.drowsyness += 4
-				spawn(2 SECONDS)
-					H.sleeping += 3
-			if(3) //Minor hallucinations and jittering
-				to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
-				H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
-				H.Jitter(20)
-				H.stuttering += 20
-			if(4) //Ranged disarm
-				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
-				H.drop_item()
-		return 1
+	switch(rand(0,4))
+		if(0) //Minor brain damage
+			to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
+			H.adjustBrainLoss(10)
+			H.eye_blurry = max(H.eye_blurry, 5)
+		if(1) //Brief knockdown
+			to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+			H.emote("me", 1, "collapses!")
+			H.Knockdown(2)
+		if(2) //Target gets put to sleep for a few seconds
+			to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
+			H.drowsyness += 4
+			spawn(2 SECONDS)
+				H.sleeping += 3
+		if(3) //Minor hallucinations and jittering
+			to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
+			H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
+			H.Jitter(20)
+			H.stuttering += 20
+		if(4) //Ranged disarm
+			to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
+			H.drop_item()
+	return 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Aggro()
 	..()
@@ -866,64 +865,48 @@
 			M.throw_at(target_turf,100,telekinesis_throw_speed)
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Shoot()
-	if(last_psychicattack + psychicattack_cooldown < world.time)
-		var/list/victims = list()
-		for(var/mob/living/carbon/human/H in view(src, psychic_range))
-			victims.Add(H)
-
-		if(!victims.len)
-			return
-		switch(rand(0,4))
-			if(0) //Brain damage, confusion, and dizziness
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
-					H.adjustBrainLoss(20)
-					H.eye_blurry = max(H.eye_blurry, 10)
-					H.confused += 10
-					H.dizziness += 10
-					last_psychicattack = world.time
-					if(prob(25))
-						H.audible_scream()
-			if(1) //A knockdown, with some dizziness
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-					H.emote("me", 1, "collapses!")
-					H.Knockdown(4)
-					H.confused += 6
-					H.dizziness += 6
-					last_psychicattack = world.time
-			if(2) //Naptime
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
-					H.drowsyness += 6
-					last_psychicattack = world.time
-					spawn(2 SECONDS)
-						H.sleeping += 5
-			if(3) //Serious hallucinations and jittering
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
-					H.hallucination += 75
-					H.Jitter(30)
-					H.stuttering += 30
-					last_psychicattack = world.time
-			if(4) //Brief period of pacification
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
-					H.reagents.add_reagent(CHILLWAX, 1)
-					last_psychicattack = world.time
-
-	if(!last_psychicattack + psychicattack_cooldown < world.time) // If not done cooling down from the previous psychic attack, just shoot a laser beem
+	// If not done cooling down from the previous psychic attack, just shoot a laser beem
+	if(last_psychicattack + psychicattack_cooldown > world.time)
 		..()
+		return
+	var/list/victims = list()
+	for(var/mob/living/carbon/human/H in view(src, psychic_range))
+		victims.Add(H)
+	if(!victims.len)
+		return
+	var/shot_choice = rand(0,4)
+	for(var/mob/living/carbon/human/H in victims)
+		if(!can_mind_interact(H.mind))
+			continue
+		switch(shot_choice)
+			if(0) //Brain damage, confusion, and dizziness
+				to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
+				H.adjustBrainLoss(20)
+				H.eye_blurry = max(H.eye_blurry, 10)
+				H.confused += 10
+				H.dizziness += 10
+				if(prob(25))
+					H.audible_scream()
+			if(1) //A knockdown, with some dizziness
+				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+				H.emote("me", 1, "collapses!")
+				H.Knockdown(4)
+				H.confused += 6
+				H.dizziness += 6
+			if(2) //Naptime
+				to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
+				H.drowsyness += 6
+				spawn(2 SECONDS)
+					H.sleeping += 5
+			if(3) //Serious hallucinations and jittering
+				to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
+				H.hallucination += 75
+				H.Jitter(30)
+				H.stuttering += 30
+			if(4) //Brief period of pacification
+				to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
+				H.reagents.add_reagent(CHILLWAX, 1)
+	last_psychicattack = world.time
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/bullet_act(var/obj/item/projectile/P) // Lasers have a 50% chance to reflect off the armor, which matches up if the player takes it and puts it on
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
