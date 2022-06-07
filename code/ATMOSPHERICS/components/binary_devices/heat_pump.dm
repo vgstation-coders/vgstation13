@@ -89,7 +89,7 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 
 
 /obj/machinery/atmospherics/binary/heat_pump/proc/update_status() //Really not sure why this isn't defined on the parent
-	use_power = on + 1
+	use_power = on ? MACHINE_POWER_USE_ACTIVE : MACHINE_POWER_USE_IDLE
 
 
 /obj/machinery/atmospherics/binary/heat_pump/update_icon()

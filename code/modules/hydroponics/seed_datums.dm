@@ -56,6 +56,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/ligneous = 0				// If 1, requires sharp instrument to harvest. Kudzu with this trait resists sharp items better.
 	var/teleporting = 0				// If 1, causes teleportation when thrown.
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
+	var/noreact = 0					// If 1, chems do not react inside the plant.
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
@@ -83,7 +84,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	mysterious = 1
 
 	seed_noun = pick("spores","nodes","cuttings","seeds")
-	products = list(pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown)))
+	products = list(pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/) - strange_seed_product_blacklist)) //The product can be any subtype of /food/snacks/grown, except those in strange_seed_product_blacklist.
 	potency = rand(5,30)
 
 	randomize_icon()
@@ -172,6 +173,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		juicy = 2
 	else if(juicy_prob < 10)
 		juicy = 1
+
+	if(prob(5))
+		noreact = 1
 
 	endurance = rand(60,100)
 	yield = rand(2,15)
@@ -309,6 +313,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					stinging 			= max(gene.values[3], stinging)
 					ligneous 			= max(gene.values[4], ligneous)
 					juicy 				= max(gene.values[5], juicy)
+					noreact 			= max(gene.values[6], noreact)
 
 		if(GENE_BIOLUMINESCENCE)
 			switch(mode)
@@ -428,7 +433,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(thorny           	 	? thorny           		: 0),
 				(stinging            	? stinging            	: 0),
 				(ligneous             	? ligneous            	: 0),
-				(juicy             		? juicy             	: 0)
+				(juicy             		? juicy             	: 0),
+				(noreact             	? noreact             	: 0)
 			)
 		if(GENE_BIOLUMINESCENCE)
 			P.values = list(
@@ -517,8 +523,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 		if(ispath(product_type, /obj/item/stack))
 			product = drop_stack(product_type, T, 1, null)
-		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown) || ispath(product_type, /obj/item/weapon/grown))
+		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown))
 			product = new product_type(T, custom_plantname = name, harvester = harvester)
+		else if(ispath(product_type, /obj/item/weapon/grown))
+			product = new product_type(T, custom_plantname = name)
 		else
 			product = new product_type(T)
 
@@ -542,7 +550,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
-	if(T && (!isnull(products)) && products.len && (yield > 0))
+	if(!T)
+		return
+	if(!length(products))
+		return
+	var/tile_objects = 0
+	for(var/obj/O in T)
+		tile_objects++
+	//prevent the server or players from crashing
+	if(tile_objects > 50)
+		return
+	if(yield > 0)
 		generate_product(T, yield_mod)
 
 /datum/seed/proc/check_harvest(var/mob/user, var/obj/machinery/portable_atmospherics/hydroponics/tray)
@@ -660,6 +678,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.ligneous =             ligneous
 	new_seed.teleporting =          teleporting
 	new_seed.juicy =        	    juicy
+	new_seed.noreact =        	    noreact
 	new_seed.plant_icon_state =     plant_icon_state
 	new_seed.splat_type =           splat_type
 	new_seed.packet_icon =          packet_icon

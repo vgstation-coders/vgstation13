@@ -73,6 +73,65 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2022.06.07</h2>
+			<h3 class="author">DorainGrey updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Can now rotate Emitters, Shield Capacitors, Prisms, PA Machinery, gyrotrons and fuel injectors with ALT+Click</li>
+			</ul>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Lowered influence of luck on slot machines.</li>
+				<li class="tweak">Tweaked influence of luck on scratchcards to hopefully give more satisfying results.</li>
+				<li class="bugfix">Luck influences Supermatter Surprise scratchcards properly.</li>
+				<li class="bugfix">Fixed non-edible plants not being generated properly.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a new sound to tell rev heads that they&#39;ve been converted.</li>
+			</ul>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Changeling&#39;s Rapid Regen should work like it&#39;s description says</li>
+			</ul>
+			<h3 class="author">jellyveggie2 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes an oversight causing power monitors to crash if an APC is shorted or has no battery in it.</li>
+				<li class="bugfix">Fixes power monitors often becoming unresponsive if someone cuts/adds wires to the grid, which used to require that you unscrew and re-screw the monitor&#39;s screen to fix it.</li>
+				<li class="bugfix">Fixes power monitors not showing up on the PDA power monitoring app.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Changed some free item voucher descriptions.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The no-reaction hard shells of amauri fruits can now be spliced into other plants via xenobotany.</li>
+				<li class="tweak">Amauri fruits now register fingerprints on them.</li>
+				<li class="tweak">Players no longer need to undeclare ready in pre-round to change and edit character slots.</li>
+				<li class="tweak">Prison breaks will no longer happen if there are no signs of life within cells without access to open them, but are now twice as common when there is.</li>
+			</ul>
+			<h2 class="date">2022.06.04</h2>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Didn&#39;t you ever hear not to run with scissors? Slipping while holding a sharp object can result in injury.</li>
+				<li class="rscadd">Butter fingers can be slipped on.</li>
+			</ul>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Autoharvest stops working after a large number of harvests on the tile to prevent players and the server from crashing.</li>
+				<li class="tweak">Merge Changeling hive upload and download into one spell. You also send/receive all available DNA at once rather than one at a time.</li>
+				<li class="tweak">Changed some abilities and items to be more consistent related to tracking, viewing, and telepathy. For example, Changeling&#39;s Digital Camouflage is now like a tinfoil hat. Certain syndicate items now jam various technology and mind powers like a tinfoil hat.</li>
+			</ul>
+			<h3 class="author">jellyveggie2 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The power grid now works off a priority system. Consumers in higher priority tiers receive power before those on lower tiers. All consumers in the same tier receive the same amount of power proportional to how much each requested and how much power is left available for said tier.</li>
+				<li class="tweak">Current priority round-start is: Emitters &gt; APCs and machinery &gt; Recharging an APC &gt; recharging an SMES. So, the SMES won&#39;t recharge until there&#39;s enough power for all APCs to recharge, and APCs won&#39;t recharge until there&#39;s enough power to run</li>
+				<li class="tweak">Emitters can run at low power so long as you can meet at least 30% of their demand, albeit with reduced intensity. Intensity scales linearly with met demand, so 50% met demand means 50% intensity.</li>
+				<li class="tweak">&#34;Draw&#34; in power monitors is now more representative of how much power the station requires in that moment, rather than how much it is consuming</li>
+				<li class="rscadd">Power monitors will now display machines wired to the grid within an area, such as emitters and SMES units. Illegal or antiquated tech may not show at all.</li>
+				<li class="rscadd">Power monitors may be used to modify the priority of said machines, assuming you have engineering access. Feel free to redirect power from security to cargo or whatever.</li>
+				<li class="rscadd">SMES units can be given a name tag through their UI, to better identify them within the power monitor.</li>
+			</ul>
 			<h2 class="date">2022.06.01</h2>
 			<h3 class="author">Optimism333 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1493,43 +1552,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">jellyveggie2 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixes color palettes sometimes not responding to color mixing.</li>
-			</ul>
-			<h2 class="date">2021.12.15</h2>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes issues with custom paintings not saving any changes if trying to paint after putting them on a wall</li>
-			</ul>
-			<h3 class="author">joaomarcosh updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a new plant to hydroponics: Plasbages!</li>
-				<li class="imageadd">Adds the sprite for the Plasbage.</li>
-			</ul>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Naked, mindless space hobos no longer swarm their shacks.</li>
-			</ul>
-			<h2 class="date">2021.12.14</h2>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Palettes are now craftable.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Made distro for Frankenline Station little more robust and prevented future disaster if borer pen was breached.</li>
-			</ul>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Painting changes and fixes: Having a palette in hand while painting with a brush now adds the palette&#39;s colors to the painting UI, so you don&#39;t have to juggle two UIs at once or save your changes whenever you want to apply a different color with your brush.</li>
-				<li class="tweak">You can now tell apart canvas of different sizes by examining them , rather than having to hang them on a wall to learn their size.</li>
-				<li class="bugfix">Canvas found in the arts and crafts supply pack now come as items instead of hanging mid-air.</li>
-				<li class="bugfix">You can no longer paint remotely, and will need to stand next to the canvas in order to paint.</li>
-				<li class="bugfix">Maxing out opacity no longer causes painting templates to break when filling in a color.</li>
-				<li class="spellcheck">Fixed some inconsistencies in blank canvas&#39; descriptions. Canvas hanging on a wall or held in hand as an item should have the same description, untitled paintings that have been scrubbed with soap and left blank should be described as blank canvas rather than treated as works of art, and so on.</li>
-			</ul>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Direction access requirements can now check more than one direction.</li>
-				<li class="bugfix">Directional access doors can no longer be opened diagonally if not in the direction.</li>
 			</ul>
 		</div>
 		<!--

@@ -5,7 +5,7 @@
 	icon = 'icons/obj/machines/broadcast.dmi'
 	icon_state = "broadcaster"
 	light_color = LIGHT_COLOR_BLUE
-	use_power = 0 // We use power_connection for this.
+	use_power = MACHINE_POWER_USE_NONE // We use power_connection for this.
 	density = 1
 	anchored = 1 // May need map updates idfk
 	idle_power_usage = 50
@@ -27,9 +27,10 @@
 /obj/machinery/media/transmitter/broadcast/New()
 	..()
 	wires = new(src)
-	power_connection=new(src,LIGHT)
+	power_connection = new(src)
 	power_connection.idle_usage=idle_power_usage
 	power_connection.active_usage=active_power_usage
+	power_connection.monitoring_enabled = TRUE
 
 /obj/machinery/media/transmitter/broadcast/Destroy()
 	if(wires)
@@ -38,7 +39,7 @@
 	if(power_connection)
 		qdel(power_connection)
 		power_connection = null
-	..()
+	. = ..()
 
 /obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)
 	if(power_connection.powered())
@@ -198,10 +199,10 @@
 	if(on)
 		overlays += image(icon = icon, icon_state = "broadcaster on")
 		set_light(3) // OH FUUUUCK
-		use_power = 2
+		power_connection.use_power = MACHINE_POWER_USE_ACTIVE
 	else
 		set_light(1) // Only the tile we're on.
-		use_power = 1
+		power_connection.use_power = MACHINE_POWER_USE_IDLE
 	if(sources.len)
 		overlays += image(icon = icon, icon_state = "broadcaster linked")
 
@@ -252,7 +253,7 @@
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on && anchored)
-		if(integrity<=0 || count_rad_wires()==0) //Shut down if too damaged OR if no rad wires
+		if(integrity<=0 || count_rad_wires()==0 || power_connection.get_satisfaction() < 1.0) //Shut down if too damaged, no rad wires or not properly powered
 			on=0
 			update_on()
 
