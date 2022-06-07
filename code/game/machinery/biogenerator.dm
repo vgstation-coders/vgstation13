@@ -256,24 +256,18 @@
 /datum/biogen_recipe/misc
 	category="Misc."
 
-/datum/biogen_recipe/misc/pest
-	id="pestspray"
-	name="Pest Spray"
+/datum/biogen_recipe/misc/insecticide
+	id = "insecticide"
+	name = "Insecticide"
 	cost=35
-	result=/obj/item/weapon/plantspray/pestspray/
-
-/datum/biogen_recipe/misc/weedspray
-	id = "weedspray"
-	name = "Weed Spray"
-	cost=35
-	result=/obj/item/weapon/plantspray/weedspray/
+	result=/obj/item/weapon/reagent_containers/glass/bottle/insecticide
 
 /datum/biogen_recipe/misc/plantbgone
 	id="plantbgone"
 	name="Plant-B-Gone"
 	reagent=PLANTBGONE
 	cost=35
-	result=/obj/item/weapon/reagent_containers/spray/plantbgone
+	result=/obj/item/weapon/reagent_containers/glass/bottle/plantbgone
 
 /datum/biogen_recipe/misc/candle
 	cost=50

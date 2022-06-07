@@ -360,18 +360,6 @@
 				return
 			S.handle_item_insertion(G, 1)
 
-	else if (istype(O, /obj/item/weapon/plantspray/weedspray))
-		var/obj/item/weapon/plantspray/weedspray/spray = O
-		spray.use(user, src, 10)
-		toxins += spray.toxicity
-		weedlevel -= spray.weed_kill_str
-
-	else if(istype(O, /obj/item/weapon/plantspray/pestspray))
-		var/obj/item/weapon/plantspray/pestspray/spray = O
-		spray.use(user, src, 10)
-		toxins += spray.toxicity
-		pestlevel -= spray.pest_kill_str
-
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 

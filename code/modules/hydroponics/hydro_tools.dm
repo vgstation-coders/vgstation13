@@ -253,53 +253,6 @@
 	user.visible_message("<span class='notice'>\The [src] spits out a piece of paper.</span>")
 	return
 
-// *************************************
-// Hydroponics Tools
-// *************************************
-
-/obj/item/weapon/plantspray
-	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	item_state = "spray"
-	flags = FPRINT | NO_ATTACK_MSG
-	slot_flags = SLOT_BELT
-	throwforce = 4
-	w_class = W_CLASS_SMALL
-	throw_speed = 2
-	throw_range = 10
-	var/toxicity = 20
-	var/pest_kill_str = 0
-	var/weed_kill_str = 0
-
-/obj/item/weapon/plantspray/pestspray
-	name = "pest-spray"
-	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
-	icon_state = "pestspray"
-	pest_kill_str = 60
-
-/obj/item/weapon/plantspray/weedspray
-	name = "weed-spray"
-	desc = "It's a toxic mixture, in spray form, to kill small weeds."
-	icon_state = "weedspray"
-	weed_kill_str = 60
-
-/obj/item/weapon/plantspray/pestspray/proc/use(user, target, amount = 10)
-	if(pest_kill_str >= amount)
-		pest_kill_str -= amount
-	else
-		return FALSE
-	to_chat(user, "You spray [target] with pest spray.")
-	playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
-	return TRUE
-
-/obj/item/weapon/plantspray/weedspray/proc/use(user, target, amount = 10)
-	if(weed_kill_str >= amount)
-		weed_kill_str -= amount
-	else
-		return FALSE
-	to_chat(user, "You spray [target] with weed spray.")
-	playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
-	return TRUE
-
 //Hatchets and things
 /obj/item/weapon/minihoe
 	name = "mini hoe"

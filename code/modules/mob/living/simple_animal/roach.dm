@@ -269,12 +269,7 @@
 	if(istype(W, /obj/item/weapon/newspaper))
 		user.visible_message("<span class='danger'>[user] swats \the [src] with \the [W]!</span>", "<span class='danger'>You swat \the [src] with \the [W].</span>")
 		W.desc = "[initial(W.desc)] <span class='notice'>There is a splattered [src] on the back.</span>"
-
 		adjustBruteLoss(5)
-	else if(istype(W, /obj/item/weapon/plantspray/pestspray))
-		var/obj/item/weapon/plantspray/pestspray/P = W
-		if(P.use(user, src, 10))
-			death(gore = 0)
 	else
 		return ..()
 

@@ -95,10 +95,6 @@
 /mob/living/simple_animal/hostile/bigroach/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/newspaper))
 		to_chat(user, "<span class='notice'>You're gonna need a bigger newspaper.</span>")
-	else if(istype(W, /obj/item/weapon/plantspray/pestspray))
-		var/obj/item/weapon/plantspray/pestspray/P = W
-		if(P.use(user, src, 10))
-			to_chat(user, "<span class='notice'>\The [P] doesn't seem to be very effective.</span>")
 	else
 		return ..()
 
