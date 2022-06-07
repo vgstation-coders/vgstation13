@@ -106,7 +106,7 @@ var/list/dispenser_presets = list()
 		to_chat(user,"<span class='notice'>[S.name] specialisation processed. Have a good day.</span>")
 
 
-/obj/machinery/suit_dispenser/emag(var/mob/user)
+/obj/machinery/suit_dispenser/emag_act(var/mob/user)
 	if(!emagged)
 		emagged = TRUE
 		if(user)
@@ -296,7 +296,7 @@ var/list/dispenser_presets = list()
 				suit_list["Paramedic"] = suits["Paramedic"]
 			if(access_atmospherics)
 				suit_list["Atmospherics Technician"] = suits["Atmospherics Technician"]
-			if(access_engine)
+			if(access_engine_minor)
 				suit_list["Engineering"] = suits["Engineering"]
 	return suit_list
 

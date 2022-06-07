@@ -13,9 +13,9 @@
 	var/rate = 10
 	var/mega_energy = 0.001
 
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 100000 //Yes that is a shitton. No you're not running this engine on an SE/AME you SE/AME scrubs.
 
@@ -34,15 +34,15 @@
 
 /obj/machinery/rust/gyrotron/proc/stop_emitting()
 	emitting = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	update_icon()
 
 /obj/machinery/rust/gyrotron/proc/start_emitting()
-	if(stat & (NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
 		return
 
 	emitting = 1
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 
 	update_icon()
 
@@ -83,13 +83,13 @@
 
 /obj/machinery/rust/gyrotron/power_change()
 	. =..()
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		stop_emitting()
 
 	update_icon()
 
 /obj/machinery/rust/gyrotron/update_icon()
-	if(!(stat & (NOPOWER | BROKEN)) && emitting)
+	if(!(stat & (FORCEDISABLE | NOPOWER | BROKEN)) && emitting)
 		icon_state = "emitter-on"
 	else
 		icon_state = "emitter-off"
@@ -127,3 +127,8 @@
 		return
 
 	dir = turn(dir, 90)
+
+/obj/machinery/rust/gyrotron/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_cw()

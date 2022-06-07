@@ -4,7 +4,7 @@
 	icon = 'icons/obj/datadisks.dmi'
 	icon_state = "duplicator0"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 4
 	active_power_usage = 10
 
@@ -20,6 +20,12 @@
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
 
 	pass_flags = PASSTABLE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
 
 /obj/machinery/disk_duplicator/New()
 	. = ..()
@@ -303,7 +309,7 @@ var/list/inserted_datadisk_cache = list()
 		attack_hand(user)
 
 
-/obj/machinery/disk_duplicator/emag(var/mob/user)
+/obj/machinery/disk_duplicator/emag_act(var/mob/user)
 	if(!emagged)
 		emagged = TRUE
 		playsound(src, pick(spark_sound), 75, 1)

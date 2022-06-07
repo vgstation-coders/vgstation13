@@ -17,10 +17,16 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	desc = "A dish-shaped machine used to broadcast processed subspace signals."
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 25
 	machinetype = 5
 	delay = 7
+
+	hack_abilities = list(
+		/datum/malfhack_ability/fake_message,
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
 
 /obj/machinery/telecomms/broadcaster/New()
 	..()
@@ -136,7 +142,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	desc = "A compact machine used for portable subspace telecommuniations processing."
 	density = 1
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	machinetype = 6
 	heating_power = 0

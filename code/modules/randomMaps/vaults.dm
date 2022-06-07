@@ -79,7 +79,7 @@
 	message_admins("<span class='info'>Spawning [vault_number] vaults in space!</span>")
 
 	var/area/A = locate(/area/random_vault)
-	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE, filter_function=/proc/stay_on_map)
+	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE, filter_function=/proc/stay_in_vault_area)
 
 	for(var/turf/TURF in A) //Replace all of the temporary areas with space
 		TURF.set_area(space)
@@ -91,23 +91,31 @@
 
 	var/surprise_number = rand(1, min(list_of_surprises.len, max_secret_rooms))
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded [result] out of [surprise_number] mining surprises.</span>")
 
 /proc/generate_hoboshack()
 	var/list/list_of_shacks = get_map_element_objects(/datum/map_element/hoboshack)
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
 
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
-	var/list/dimensions = E.get_dimensions()
-	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])
+	if(!E.width || !E.height) //If the map element doesn't have its width/height calculated yet, do it now
+		E.assign_dimensions()
+	var/result = check_complex_placement(start_turf, E.width, E.height)
 	return result
 
-/proc/stay_on_map(var/datum/map_element/E, var/turf/start_turf)
+/proc/stay_in_vault_area(var/datum/map_element/E, var/turf/start_turf)
+	if(!E.width || !E.height) //If the map element doesn't have its width/height calculated yet, do it now
+		E.assign_dimensions()
+
+	for(var/area/A in block(locate(start_turf.x, start_turf.y, start_turf.z), locate(start_turf.x+E.width, start_turf.y+E.height, start_turf.z)))
+		if(!istype(A, /area/random_vault))
+			return 0
+
 	return start_turf && (start_turf.z <= map.zDeepSpace)
 
 //Proc that populates a single area with many vaults, randomly
@@ -118,7 +126,7 @@
 //POPULATION_SCARCE is cheaper but may not do the job as well
 //NOTE: Vaults may be placed partially outside of the area. Only the lower left corner is guaranteed to be in the area
 
-/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE, filter_function)
+/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE, filter_function, var/overwrites = FALSE)
 	var/list/area_turfs
 
 	if(ispath(A, /area))
@@ -209,7 +217,7 @@
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
 			valid_spawn_points.Remove(block(t1, t2))
 
-		if(ME.load(vault_x, vault_y, vault_z, vault_rotate))
+		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
 			spawned.Add(ME)
 			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
 			if(!ME.can_rotate)

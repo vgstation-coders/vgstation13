@@ -1,19 +1,94 @@
-"a" = (/turf/unsimulated/floor/snow,/area)
-"d" = (/obj/structure/flora/rock,/turf/unsimulated/floor/snow,/area)
-"g" = (/obj/item/weapon/lobster,/turf/unsimulated/beach/shallows,/area)
-"n" = (/mob/living/simple_animal/crab/snowy{name = "snow crab"},/turf/unsimulated/floor/snow,/area)
-"q" = (/turf/unsimulated/beach/shallows,/area)
-"H" = (/obj/item/weapon/fish/salmon,/turf/unsimulated/beach/shallows,/area)
-"I" = (/obj/structure/geyser,/turf/unsimulated/floor/snow,/area)
-"U" = (/obj/glacier,/turf/unsimulated/beach/shallows,/area)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/snow,
+/area)
+"d" = (
+/obj/structure/flora/rock,
+/turf/unsimulated/floor/snow,
+/area)
+"g" = (
+/obj/item/weapon/lobster,
+/turf/unsimulated/beach/shallows,
+/area)
+"n" = (
+/mob/living/simple_animal/crab/snowy{
+	name = "snow crab"
+	},
+/turf/unsimulated/floor/snow,
+/area)
+"q" = (
+/turf/unsimulated/beach/shallows,
+/area)
+"H" = (
+/obj/item/weapon/fish/salmon,
+/turf/unsimulated/beach/shallows,
+/area)
+"I" = (
+/obj/structure/geyser,
+/turf/unsimulated/floor/snow,
+/area)
+"U" = (
+/obj/glacier,
+/turf/unsimulated/beach/shallows,
+/area)
 
 (1,1,1) = {"
-Uaaaaa
-UUaIda
-UqHqna
-qgqHqU
-qHIqqa
-UqaqUU
-dUaUUU
-aaadUa
+U
+U
+U
+q
+q
+U
+d
+a
+"}
+(2,1,1) = {"
+a
+U
+q
+g
+H
+q
+U
+a
+"}
+(3,1,1) = {"
+a
+a
+H
+q
+I
+a
+a
+a
+"}
+(4,1,1) = {"
+a
+I
+q
+H
+q
+q
+U
+d
+"}
+(5,1,1) = {"
+a
+d
+n
+q
+q
+U
+U
+U
+"}
+(6,1,1) = {"
+a
+a
+a
+U
+a
+U
+U
+a
 "}

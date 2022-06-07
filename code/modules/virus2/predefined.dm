@@ -123,3 +123,47 @@ var/list/global_diseases = list()
 	pattern_color = "#680b0b"
 
 	origin = "Wendigo Meat"
+
+
+/datum/disease2/disease/predefined/cult
+	form = "Curse"
+	category = DISEASE_CULT
+	stage_variance = -4
+	can_kill = list()
+
+	effects = list(
+		new /datum/disease2/effect/cult_hallucination,
+		new /datum/disease2/effect/cult_vomit,
+		new /datum/disease2/effect/cult_teleport,
+		new /datum/disease2/effect/faithless
+	)
+
+	spread = SPREAD_BLOOD
+	robustness = 100
+	mutation_modifier = 0
+
+	color = "#9e0909"
+	pattern = 2
+	pattern_color = "#2b0202"
+
+	origin = "Cursed Blood"
+
+/datum/disease2/disease/predefined/cult/New()
+	antigen = list(ANTIGEN_CULT)
+	uniqueID = rand(0,9999)
+	subID = rand(0,9999)
+	strength = rand(80,100)
+
+	..()
+
+/datum/disease2/disease/predefined/cult/activate(var/mob/living/mob)
+	if(iscultist(mob))
+		cure(mob)
+		return
+	..()
+
+/datum/disease2/disease/predefined/cult/CanInfect(var/mob/living/mob)
+	if(iscultist(mob))
+		return FALSE
+	TriggerCultRitual(/datum/bloodcult_ritual/curse_blood, list("victim" = mob))
+	return TRUE

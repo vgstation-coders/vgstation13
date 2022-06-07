@@ -5,6 +5,7 @@
 	greets = list(GREET_DEFAULT, GREET_CUSTOM)
 	default_admin_voice = "PewDiePie"
 	admin_voice_style = "djradio"
+	is_antag = FALSE
 
 	var/list/followers = list()
 	var/list/subscribers = list()

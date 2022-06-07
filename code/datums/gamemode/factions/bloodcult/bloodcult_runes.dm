@@ -363,9 +363,12 @@ var/list/rune_appearances_cache = list()
 		if (C.occult_muted())
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
+		if(C.lying)
+			to_chat(user, "<span class='warning'>You need to stand upright for the ritual to proceed properly.</span>")
+			return
 
 	if(!user.checkTattoo(TATTOO_SILENT))
-		if(user.is_wearing_item(/obj/item/clothing/mask/muzzle, slot_wear_mask))
+		if(user.wear_mask?.is_muzzle)
 			to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")
 			return
 
@@ -563,6 +566,7 @@ var/list/rune_appearances_cache = list()
 	rune.manage_diseases(source)
 
 	if (rune.blood3)
+		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = FALSE))
 		return RUNE_WRITE_COMPLETE
 	return RUNE_WRITE_CONTINUE
 
@@ -579,6 +583,7 @@ var/list/rune_appearances_cache = list()
 		rune.word3 = null
 		rune.blood3 = null
 		rune.update_icon()
+		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = TRUE))
 		if (rune.active_spell)
 			rune.active_spell.abort(RITUALABORT_ERASED)
 			rune.active_spell = null

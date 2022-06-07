@@ -180,6 +180,24 @@
 	name="Security Belt"
 	result=/obj/item/weapon/storage/belt/security
 
+/datum/biogen_recipe/leather/minebelt
+	cost=350
+	id="minebelt"
+	name="Mining Gear Belt"
+	result=/obj/item/weapon/storage/belt/mining
+
+/datum/biogen_recipe/leather/janibelt
+	cost=350
+	id="janibelt"
+	name="Janibelt"
+	result=/obj/item/weapon/storage/belt/janitor
+
+/datum/biogen_recipe/leather/hydrobelt
+	cost=350
+	id="hydrobelt"
+	name="Botany Gear Belt"
+	result=/obj/item/weapon/storage/belt/botanist
+
 /datum/biogen_recipe/leather/briefcase
 	cost=400
 	id="briefcase"
@@ -322,7 +340,7 @@
 	icon_state = "biogen-stand"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 40
 	var/speed_coefficient = 15
 	var/biomass_coefficient = 9

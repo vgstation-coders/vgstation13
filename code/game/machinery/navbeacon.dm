@@ -20,7 +20,7 @@ var/list/navbeacons = list()
 	var/list/codes		// assoc. list of transponder codes
 	var/codes_txt = ""	// codes as set on map: "tag1;tag2" or "tag1=value;tag2=value"
 
-	req_access = list(access_engine)
+	req_access = list(access_engine_minor)
 
 	machine_flags = SCREWTOGGLE
 
@@ -133,7 +133,7 @@ var/list/navbeacons = list()
 			to_chat(user, "You must open the cover first!")
 
 /obj/machinery/navbeacon/attack_ai(var/mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	interact(user, 1)
 
 /obj/machinery/navbeacon/attack_paw()

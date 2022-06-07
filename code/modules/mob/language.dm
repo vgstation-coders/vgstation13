@@ -138,6 +138,7 @@
 	exclaim_verb = "rustles"
 	colour = "soghun"
 	key = "q"
+	flags = NONORAL
 	syllables = list("hs","zt","kr","st","sh")
 
 /datum/language/common
@@ -221,6 +222,7 @@
 	colour = "sinister"
 	native=1
 	space_chance = 95
+	flags = NONORAL
 	syllables = list("CLICK", "CLACK")
 
 /datum/language/golem
@@ -233,6 +235,7 @@
 	colour = "golem"
 	native = 1
 	key = "8"
+	flags = NONORAL
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
 /datum/language/slime
@@ -245,6 +248,7 @@
 	colour = "slime"
 	native = 1
 	key = "f"
+	flags = NONORAL
 	syllables = list("ba","ab","be","eb","bi","ib","bo","ob","bu","ub")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
@@ -295,6 +299,19 @@
 	key = "9"
 	space_chance = 80
 	syllables = list("squeak")
+
+/datum/language/grue
+	name = LANGUAGE_GRUE
+	desc = "The sounds grues use to communicate with one another."
+	speech_verb = "roars"
+	ask_verb = "roars"
+	exclaim_verb = "roars"
+	whisper_verb = "hisses"
+	key = "g"
+	flags = RESTRICTED
+	native = 1
+	syllables = list("BWAAGH","BWOOGH","GRAAH","WAAGH","ROOHR","SWOOH","KROOH","KRAAH")
+	space_chance = 100
 
 /datum/language/martian
 	name = LANGUAGE_MARTIAN

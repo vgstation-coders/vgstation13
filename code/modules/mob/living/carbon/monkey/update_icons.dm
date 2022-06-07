@@ -61,6 +61,16 @@
 
 
 ////////
+/mob/living/carbon/monkey/update_inv_by_slot(var/slot_flags)
+	if(slot_flags & SLOT_BACK)
+		update_inv_back()
+	if(slot_flags & SLOT_MASK)
+		update_inv_wear_mask()
+	if(slot_flags & SLOT_EYES)
+		update_inv_glasses()
+	if(slot_flags & SLOT_HEAD)
+		update_inv_head()
+
 /mob/living/carbon/monkey/proc/update_inv_uniform(var/update_icons=1)
 	if(uniform && uniform.is_visible())
 		var/t_state = uniform.item_state
@@ -118,6 +128,9 @@
 /mob/living/carbon/monkey/diona/update_inv_hat()
 	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
 
+/mob/living/carbon/monkey/roach/update_inv_hat()
+	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
+
 /mob/living/carbon/monkey/vox/update_inv_hat()
 	..(pixel_y_adjustment = -12 * PIXEL_MULTIPLIER)
 
@@ -139,7 +152,7 @@
 
 
 /mob/living/carbon/monkey/update_inv_wear_mask(var/update_icons=1, var/pixel_y_adjustment = 0)
-	if( wear_mask && istype(wear_mask, /obj/item/clothing/mask) && wear_mask.is_visible())
+	if(isitem(wear_mask) && wear_mask.is_visible())
 
 		var/image/I	= image("icon" = ((wear_mask.icon_override) ? wear_mask.icon_override : 'icons/mob/monkey.dmi'), "icon_state" = "[wear_mask.icon_state]", pixel_y = pixel_y_adjustment)
 		if(wear_mask.dynamic_overlay)
@@ -155,6 +168,9 @@
 
 /mob/living/carbon/monkey/diona/update_inv_wear_mask()
 	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
+
+/mob/living/carbon/monkey/roach/update_inv_wear_mask()
+	..(pixel_y_adjustment = -9 * PIXEL_MULTIPLIER)
 
 /mob/living/carbon/monkey/vox/update_inv_wear_mask()
 	..(pixel_y_adjustment = -12 * PIXEL_MULTIPLIER)
@@ -194,6 +210,7 @@
 		if(!t_state)
 			t_state = I.icon_state
 		var/image/IM = image("icon" = t_inhand_states, "icon_state" = t_state)
+		IM.color = I.color
 		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"])
 			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"]
 			IM.overlays.Add(dyn_overlay)
@@ -207,7 +224,7 @@
 		update_icons()
 
 /mob/living/carbon/monkey/update_inv_back(var/update_icons=1, var/pixel_y_adjustment = 0)
-	
+
 	if(back && back.is_visible())
 		var/image/I = image("icon" = 'icons/mob/back.dmi', "icon_state" = "[back.icon_state]", pixel_y = pixel_y_adjustment)
 		if(back.dynamic_overlay)
@@ -223,6 +240,9 @@
 
 /mob/living/carbon/monkey/diona/update_inv_back()//needed for pixel_y adjustment
 	..(pixel_y_adjustment = -5 * PIXEL_MULTIPLIER)
+
+/mob/living/carbon/monkey/roach/update_inv_back()
+	..(pixel_y_adjustment = -2 * PIXEL_MULTIPLIER)
 
 /mob/living/carbon/monkey/vox/update_inv_back()//Sorry for the copypaste
 	..(pixel_y_adjustment = -5 * PIXEL_MULTIPLIER)

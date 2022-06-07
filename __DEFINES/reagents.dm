@@ -19,6 +19,7 @@
 #define BUSTANUT 			"bustanut"
 #define ROGAN 			"rogan"
 #define BLUEGOO			"bluegoo"
+#define GREYGOO			"greygoo"
 #define SLIMEJELLY 			"slimejelly"
 #define BLOOD 			"blood"
 #define VACCINE 			"vaccine"
@@ -97,6 +98,7 @@
 #define TRICORDRAZINE 			"tricordrazine"
 #define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
+#define PROCIZINE 			"procizine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
 #define HYRONALIN 			"hyronalin"
@@ -161,6 +163,7 @@
 #define ZAMSPICES			"zamspices"
 #define ZAMMILD				"zammild"
 #define ZAMSPICYTOXIN			"zamspicytoxin"
+#define POLYPGELATIN				"polypgelatin"
 #define COCO 			"coco"
 #define AMATOXIN 			"amatoxin"
 #define AMANATIN 			"amanatin"
@@ -271,6 +274,7 @@
 #define BEEPSKYSMASH 			"beepskysmash"
 #define DOCTORSDELIGHT 			"doctorsdelight"
 #define CHANGELINGSTING 			"changelingsting"
+#define CHANGELINGSTAB 			"changelingstab"
 #define IRISHCREAM 			"irishcream"
 #define MANLYDORF 			"manlydorf"
 #define LONGISLANDICEDTEA 			"longislandicedtea"
@@ -279,6 +283,7 @@
 #define SACRIFICIAL_MARY			"sacrificial_mary"
 #define CREAMY_HOT_COCO			"creamy_hot_coco"
 #define MOONSHINE 			"moonshine"
+#define CORNSYRUP 			"cornsyrup"
 #define MIDNIGHTKISS	"midnightkiss"
 #define COSMOPOLITAN	"cosmopolitan"
 #define CORPSEREVIVER	"corpsereviver"
@@ -455,6 +460,8 @@
 #define FESTIVE_EGGNOG	"festive_eggnog"
 #define TENDIES			"tendies"
 #define DSYRUP			"dsyrup"
+#define GRUE_BILE		"grue_bile"
+#define PINKLADY		"pinklady"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -493,6 +500,7 @@
 #define AMINOMICIN		"aminomicin"
 #define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
+#define AMINOBLATELLA	"aminoblatella"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
@@ -543,6 +551,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define WATERS list(WATER, HOLYWATER)
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)
+#define SUGARS list(SUGAR, CORNSYRUP)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"

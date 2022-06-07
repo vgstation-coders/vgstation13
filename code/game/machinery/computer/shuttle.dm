@@ -8,7 +8,7 @@
 	light_color = LIGHT_COLOR_CYAN
 
 /obj/machinery/computer/shuttle/attackby(var/obj/item/weapon/card/W as obj, var/mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	..()
 	if ((!( istype(W, /obj/item/weapon/card) ) || !( ticker ) || emergency_shuttle.location != 1 || !( user )))
@@ -63,10 +63,9 @@
 				src.authorized.len = 0
 				src.authorized = list(  )
 
-/obj/machinery/computer/shuttle/emag(mob/user as mob)
+/obj/machinery/computer/shuttle/emag_act(mob/user as mob)
 	if(!emagged)
-		new/obj/effect/sparks(get_turf(src))
-		playsound(loc,"sparks",50,1)
+		spark(src)
 		var/choice = "Cancel"
 		if(user)
 			choice = alert(user, "Would you like to launch the shuttle?","Shuttle control", "Launch", "Cancel")

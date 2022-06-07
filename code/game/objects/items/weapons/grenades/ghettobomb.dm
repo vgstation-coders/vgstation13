@@ -13,7 +13,7 @@
 		qdel(I)
 		I = null
 		qdel(src)
-	if(I.is_wirecutter(user))
+	else if(I.is_wirecutter(user))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
 		I.playtoolsound(user, 50)
 		if(src.loc == user)
@@ -24,6 +24,8 @@
 		else
 			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
 			qdel(src)
+	else
+		return ..()
 
 
 /obj/item/weapon/grenade/iedcasing
@@ -119,8 +121,10 @@
 /obj/item/weapon/grenade/iedcasing/suicide_act(var/mob/living/user)
 	if (!active) //no explosion with no active ied, dummy
 		return
-	
-	var/message_say = user.handle_suicide_bomb_cause()
+
+	var/message_say = user.handle_suicide_bomb_cause(src)
+	if(!message_say)
+		return
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
 	attack_self(user)

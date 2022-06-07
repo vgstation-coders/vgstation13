@@ -8,7 +8,7 @@ var/list/camera_names=list()
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "camera"
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 5
 	active_power_usage = 10
 	plane = ABOVE_HUMAN_PLANE
@@ -40,7 +40,17 @@ var/list/camera_names=list()
 	var/hear_voice = 0
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
-	var/health = CAMERA_MAX_HEALTH
+	health = CAMERA_MAX_HEALTH
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/camera_reactivate,
+		/datum/malfhack_ability/oneuse/camera_upgrade
+	)
+
+	breakable_flags = BREAKABLE_UNARMED //Custom behavior already exists for armed cases.
+	damage_armor = CAMERA_MIN_WEAPON_DAMAGE
+	damage_resist = 0
 
 /obj/machinery/camera/flawless
 	failure_chance = 0
@@ -281,7 +291,9 @@ var/list/camera_messages = list()
 			info = X.info
 		else
 			var/obj/item/device/pda/P = W
-			info = P.notehtml
+			var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in P.applications
+			if(app)
+				info = app.notehtml
 
 		var/key = "\ref[W]"
 		if(camera_messages.len > MAX_CAMERA_MESSAGES)
@@ -303,26 +315,30 @@ var/list/camera_messages = list()
 		add_fingerprint(user)
 		user.delayNextAttack(8)
 		if(user.a_intent == I_HELP)
-			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
+			user.visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>", "<span class='notice'>You gently tap [src] with [W].</span>")
 			return
 		W.on_attack(src, user)
 		if(W.force < CAMERA_MIN_WEAPON_DAMAGE)
 			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
-			visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>")
+			user.visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>", "<span class='warning'>You hit [src] with [W]. It's not very effective.</span>")
 			return
-		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
+		if(W.hitsound)
+			playsound(src, W.hitsound, 50, 1)
+		user.visible_message("<span class='danger'>[user] [pick(W.attack_verb)] [src] with [W].</span>", "<span class='warning'>You [shift_verb_tense(pick(W.attack_verb))] [src] with [W].</span>")
 		take_damage(W.force)
 
-/obj/machinery/camera/proc/take_damage(var/amount)
-	if(amount <= 0)
-		return
+/obj/machinery/camera/damaged_updates()
 	triggerCameraAlarm()
-	health -= amount
 	if(health <= CAMERA_DEACTIVATE_HEALTH && status)
 		deactivate()
+
+/obj/machinery/camera/try_break()
 	if(health <= 0)
 		spark(src)
 		dismantle()
+		return TRUE
+	else
+		return FALSE
 
 /obj/machinery/camera/Topic(href, href_list)
 	if(..())
@@ -468,7 +484,7 @@ var/list/camera_messages = list()
 	name = "arena camera"
 	desc = "A camera anchored to the floor, designed to survive hits and explosions of any size. What's it made of anyway?"
 	icon_state = "camerarena"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
 	layer = DECAL_LAYER

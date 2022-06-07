@@ -23,7 +23,7 @@
 
 
 /obj/machinery/computer/telecomms/server/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	user.set_machine(src)
 	var/dat = "<TITLE>Telecommunication Server Monitor</TITLE><center><b>Telecommunications Server Monitor</b></center>"
@@ -234,7 +234,7 @@
 		return 1
 	src.updateUsrDialog()
 
-/obj/machinery/computer/telecomms/server/emag(mob/user)
+/obj/machinery/computer/telecomms/server/emag_act(mob/user)
 	if(!emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1

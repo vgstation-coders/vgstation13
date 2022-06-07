@@ -141,6 +141,9 @@
 		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 		to_chat(src, "<span class='warning'>You may only spawn again as a mouse more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
 		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
+		return
 
 	var/response = alert(src, "Are you -sure- you want to become a mouse?","Are you sure you want to squeek?","Squeek!","Nope!")
 	if(response != "Squeek!")
@@ -163,6 +166,7 @@
 		if(config.uneducated_mice)
 			host.universal_understand = 0
 		host.ckey = src.ckey
+		log_admin("([host.ckey]/[host]) became a mouse as a ghost.")
 		to_chat(host, "<span class='info'>You are now a mouse. Try to avoid interaction with players, and do not give hints away that you are more than a simple rodent.</span>")
 
 /mob/dead/observer/verb/hide_sprite()
@@ -499,6 +503,9 @@
 		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 		to_chat(src, "<span class='warning'>You may only spawn again as a mouse or MoMMI more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
 		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
+		return
 
 	//find a viable mouse candidate
 	var/list/found_spawners = list()
@@ -552,6 +559,7 @@
 	hobo.generate_name()
 	var/datum/outfit/special/with_id/hobo/hobo_outfit = new
 	hobo_outfit.equip(hobo)
+	log_admin("([hobo.ckey]/[hobo]) became a space hobo as a ghost.")
 	to_chat(hobo, "<B>You are a Space Hobo.</B>")
 	// somewhat taken from CEV eris
 	to_chat(hobo, "<b>The ID you wear is likely not even your own. At least as far as you can remember. But this chunk of plastic still can be a rare oddity that can change your character. Find a way to stay out of trouble, and survive. Though this does not mean you have no home, as the asteroid is your home. Whatever planet you may have come from is now a distant memory.</b>")

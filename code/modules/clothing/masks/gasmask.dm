@@ -68,7 +68,7 @@
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -77,7 +77,7 @@
 	desc = "A face-covering mask that can be connected to an air supply."
 	icon_state = "ert"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_SMALL
 	can_flip = 0
 	canstage = 0
@@ -87,7 +87,7 @@
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
 

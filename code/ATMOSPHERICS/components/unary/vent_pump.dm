@@ -4,7 +4,7 @@
 
 	name = "Air Vent"
 	desc = "Has a valve and pump attached to it."
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	level = 1
 	var/area_uid
@@ -70,7 +70,7 @@
 	overlays = null
 	icon_state = welded ? "weld" : "base"
 
-	if (on && ~stat & (NOPOWER|BROKEN))
+	if (on && ~stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		overlays += pump_direction ? "out" : "in"
 
 	..()
@@ -94,7 +94,7 @@
 	CHECK_DISABLED(vents)
 	if (!node1)
 		return // Turning off the vent is a PITA. - N3X
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 		//on = 0
 
@@ -222,7 +222,7 @@
 		set_frequency(frequency)
 
 /obj/machinery/atmospherics/unary/vent_pump/receive_signal(datum/signal/signal)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	//log_admin("DEBUG \[[world.timeofday]\]: /obj/machinery/atmospherics/unary/vent_pump/receive_signal([signal.debug_print()])")
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command") || (signal.data["type"] && signal.data["type"] != "vent"))

@@ -25,7 +25,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 	name = "status display"
 	anchored = 1
 	density = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	var/mode = 1	// 0 = Blank
 					// 1 = Shuttle timer
@@ -73,7 +73,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 // timed process
 /obj/machinery/status_display/process()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		remove_display()
 		return
 	if(spookymode)
@@ -93,7 +93,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 		if(user.stat)
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #408)</span>")
 			return
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
 
@@ -122,7 +122,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 				mode = MODE_CARGO_TIMER
 
 /obj/machinery/status_display/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	set_picture("ai_bsod")
@@ -374,15 +374,14 @@ var/global/list/status_display_images = list(
 
 	if(isAI(user)) //This allows AIs to load any image into the status displays
 		var/mob/living/silicon/ai/A = user
-
 		//Some fluff
 		if(user.stat)
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #408)</span>")
 			return
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
-
+			
 		var/new_icon = input(A, "Load an image to be desplayed on [src].", "AI status display") in status_display_images
 
 		if(new_icon)
@@ -391,7 +390,7 @@ var/global/list/status_display_images = list(
 			src.set_picture(status_display_images[new_icon])
 
 /obj/machinery/ai_status_display/process()
-	if(stat & NOPOWER)
+	if(stat & (NOPOWER|FORCEDISABLE))
 		overlays.len = 0
 		return
 	if(spookymode)
@@ -402,7 +401,7 @@ var/global/list/status_display_images = list(
 	update()
 
 /obj/machinery/ai_status_display/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	set_picture("ai_bsod")

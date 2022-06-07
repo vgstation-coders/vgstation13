@@ -178,8 +178,11 @@
 	name = "neurotoxin bolt"
 	icon_state = "neurotoxin"
 	damage = 5
+	eyeblur = 4
 	damage_type = TOX
 	weaken = 5
+	stun = 5
+	bumped = 1
 
 /obj/item/projectile/energy/rad
 	name = "radiation bolt"

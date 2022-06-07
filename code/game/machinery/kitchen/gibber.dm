@@ -11,7 +11,7 @@
 	var/gibtime = 40 // Time from starting until meat appears
 	var/mob/living/occupant // Mob who has been put inside
 	var/opened = 0.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -72,7 +72,7 @@
 	overlays.len = 0
 	if (dirty)
 		src.overlays += image('icons/obj/kitchen.dmi', "grbloody")
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if (!occupant)
 		src.overlays += image('icons/obj/kitchen.dmi', "grjam")
@@ -89,7 +89,7 @@
 	return
 
 /obj/machinery/gibber/attack_hand(mob/user as mob)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
@@ -302,7 +302,7 @@
 	Bumped(user)
 
 /obj/machinery/gibber/autogibber/Bumped(var/atom/A)
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 	use_power(100)
 	if(isliving(A))

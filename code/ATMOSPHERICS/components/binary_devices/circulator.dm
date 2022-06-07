@@ -8,7 +8,7 @@
 	icon_state = "circ-off"
 	anchored = 0
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 	var/obj/machinery/power/generator/linked_generator
 
@@ -97,7 +97,7 @@
 		update_icon()
 
 /obj/machinery/atmospherics/binary/circulator/update_icon()
-	if(!linked_generator || linked_generator.stat & (NOPOWER | BROKEN))	//These get power from the TeG itself.
+	if(!linked_generator || linked_generator.stat & (NOPOWER | BROKEN | FORCEDISABLE))	//These get power from the TeG itself.
 		icon_state = "circ-p"
 
 	else if(last_pressure_delta > 0 && recent_moles_transferred > 0)

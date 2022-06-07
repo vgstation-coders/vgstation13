@@ -12,6 +12,9 @@
 	var/holes = 0
 	var/mode = BLOODPACK_NORMAL
 
+	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
+	w_type = RECYK_PLASTIC
+
 /obj/item/weapon/reagent_containers/blood/New()
 	..()
 	if(blood_type != null)
@@ -106,6 +109,12 @@
 
 /obj/item/weapon/reagent_containers/blood/BMinus
 	blood_type = "B-"
+
+/obj/item/weapon/reagent_containers/blood/ABPlus
+	blood_type = "AB+"
+
+/obj/item/weapon/reagent_containers/blood/ABMinus
+	blood_type = "AB-"
 
 /obj/item/weapon/reagent_containers/blood/OPlus
 	blood_type = "O+"

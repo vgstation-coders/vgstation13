@@ -22,7 +22,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	name = "Crew monitoring computer"
 	desc = "Used to monitor active health sensors built into most of the crew's uniforms."
 	icon_state = "crew"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 250
 	active_power_usage = 500
 	circuit = "/obj/item/weapon/circuitboard/crew"
@@ -100,14 +100,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	deactivateAll()
 	..()
 
-/obj/machinery/computer/crew/attack_ai(mob/user)
-	attack_hand(user)
-
 /obj/machinery/computer/crew/attack_hand(mob/user)
 	. = ..()
 	if(.)
 		return
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	initializeUser(user)
 
@@ -115,7 +112,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
 	else
-		if(stat & NOPOWER)
+		if(stat & (FORCEDISABLE|NOPOWER))
 			src.icon_state = "c_unpowered"
 			stat |= NOPOWER
 		else
@@ -140,7 +137,7 @@ GENERAL PROCS
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
-	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
+	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER|FORCEDISABLE))) //sanity
 		deactivateAll()
 		return
 

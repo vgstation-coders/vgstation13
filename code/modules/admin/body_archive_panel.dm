@@ -25,7 +25,9 @@
 		<tr>
 		<th style="width:1%">Key</th>
 		<th style="width:1%">Name</th>
+		<th style="width:1%">Rank</th>
 		<th style="width:0.5%">Spawn Copy</th>
+		<th style="width:1%">Spawn and Transfer</th>
 		<th style="width:1%">Mob Type</th>
 		</tr>
 		"}
@@ -34,7 +36,9 @@
 		dat += {"<tr>
 			<td>[archive.key]</td>
 			<td>[archive.name]</td>
+			<td>[archive.rank]</td>
 			<td><a href='?src=\ref[src];bodyarchivepanel_spawncopy=\ref[archive]'>\[SPAWN\]</a></td>
+			<td><a href='?src=\ref[src];bodyarchivepanel_spawntransfer=\ref[archive]'>\[SPAWN+TRANSFER\]</a></td>
 			<td><i>[archive.mob_type]</i></td>
 			</tr>
 			"}
@@ -44,4 +48,4 @@
 		</html>
 		"}
 
-	usr << browse(dat, "window=bodyarchivepanel;size=860x500")
+	usr << browse(dat, "window=bodyarchivepanel;size=860x640")

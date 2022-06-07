@@ -414,6 +414,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_ASTHMA 128
 #define DISABILITY_FLAG_LACTOSE		256
 #define DISABILITY_FLAG_LISP		512
+#define DISABILITY_FLAG_ANEMIA		1024
+#define DISABILITY_FLAG_EHS			2048
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -459,7 +461,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_REMOTE_VIEW	101 	// remote viewing
 #define M_REGEN			102 	// health regen
 #define M_RUN			103 	// no slowdown
-#define M_REMOTE_TALK	104 	// remote talking
+#define M_TELEPATHY		104 	// remote talking
 #define M_MORPH			105 	// changing appearance
 #define M_RESIST_HEAT	106 	// heat resistance
 #define M_HALLUCINATE	107 	// hallucinations
@@ -472,7 +474,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_TOXIC_FARTS   201		// Duh
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
-#define M_PSY_RESIST    204		// Block remoteview
+#define M_JAMSIGNALS	204		// Block EMFs
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
@@ -508,6 +510,8 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define NERVOUS			16
 #define ASTHMA		32
 #define LACTOSE		64
+#define ANEMIA		128
+#define ELECTROSENSE	256
 
 //sdisabilities
 #define BLIND			1
@@ -531,10 +535,12 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 // bitflags for machine stat variable
 #define BROKEN		1
 #define NOPOWER		2
-#define POWEROFF	4		// tbd
-#define MAINT		8			// under maintaince
+#define POWEROFF	4		// unused
+#define MAINT		8		// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
-#define FORCEDISABLE 32 //forced to be off, such as by a random event
+#define FORCEDISABLE 32 	//disabled either via wire pulse, grid check, or malf ai
+#define NOAICONTROL 	64		//ai control disable
+
 
 //bitflags for door switches.
 #define OPEN	1
@@ -648,7 +654,7 @@ var/list/liftable_structures = list(\
 	/obj/machinery/space_heater, \
 	/obj/machinery/recharge_station, \
 	/obj/machinery/flasher, \
-	/obj/structure/stool, \
+	/obj/item/weapon/stool, \
 	/obj/structure/closet, \
 	/obj/machinery/photocopier, \
 	/obj/structure/filingcabinet, \
@@ -678,6 +684,8 @@ var/list/liftable_structures = list(\
 #define BANTYPE_APPEARANCE	6
 #define BANTYPE_OOC_PERMA	7
 #define BANTYPE_OOC_TEMP	8
+#define BANTYPE_PAX_PERMA	9
+#define BANTYPE_PAX_TEMP	10
 
 #define SEE_INVISIBLE_MINIMUM 5
 
@@ -900,6 +908,7 @@ SEE_PIXELS	256
 #define ROLE_ALIEN			"xenomorph"
 #define ROLE_STRIKE			"striketeam"
 #define ROLE_PRISONER		"prisoner"
+#define ROLE_GRUE			"grue"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -959,7 +968,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	CAMERANET_THUNDER,
 	CAMERANET_ERT,
 	CAMERANET_NUKE,
-	CAMERANET_CREED
+	CAMERANET_CREED,
+	CAMERANET_MOTHERSHIPLAB
 	)
 
 //Generic species flags.
@@ -1033,6 +1043,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define	ANTIGEN_COMMON	"common"
 #define	ANTIGEN_RARE	"rare"
 #define	ANTIGEN_ALIEN	"alien"
+#define ANTIGEN_SPECIAL "special"
 
 //blood antigens
 #define	ANTIGEN_O	"O"
@@ -1051,11 +1062,15 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define	ANTIGEN_X	"X"
 #define	ANTIGEN_Y	"Y"
 #define	ANTIGEN_Z	"Z"
+//cult antigen
+#define ANTIGEN_CULT	"C"
+
 
 //Language flags.
-#define WHITELISTED 1  // Language is available if the speaker is whitelisted.
-#define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
-#define CAN_BE_SECONDARY_LANGUAGE 4 // Language is available on character setup as secondary language.
+#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted.
+#define RESTRICTED (1<<1)   // Language can only be accquired by spawning or an admin.
+#define CAN_BE_SECONDARY_LANGUAGE (1<<2)	// Language is available on character setup as secondary language.
+#define NONORAL (1<<3)		//Language is spoken without using the mouth, so can be spoken while muzzled.
 
 // Hairstyle flags
 #define HAIRSTYLE_CANTRIP 1 // 5% chance of tripping your stupid ass if you're running.
@@ -1095,7 +1110,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define RECYK_BIOLOGICAL 3
 #define RECYK_METAL      4
 #define RECYK_ELECTRONIC 5
-#define RECYK_WOOD		 6
+#define RECYK_WOOD       6
+#define RECYK_PLASTIC    7
 
 ////////////////
 // job.info_flags
@@ -1130,7 +1146,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //used to define machine behaviour in attackbys and other code situations
-#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag()
+#define EMAGGABLE		1 //can we emag it? If this is flagged, the machine calls emag_act()
 #define SCREWTOGGLE		2 //does it toggle panel_open when hit by a screwdriver?
 #define CROWDESTROY		4 //does hitting a panel_open machine with a crowbar disassemble it?
 #define WRENCHMOVE		8 //does hitting it with a wrench toggle its anchored state?
@@ -1246,26 +1262,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define TOTAL_LAYERS			23
 //////////////////////////////////
 
-
-////////////////////////
-////PDA APPS DEFINES////
-////////////////////////
-#define PDA_APP_ALARM			100
-#define PDA_APP_RINGER			101
-#define PDA_APP_SPAMFILTER		102
-#define PDA_APP_BALANCECHECK	103
-#define PDA_APP_STATIONMAP		104
-#define PDA_APP_SNAKEII			105
-#define PDA_APP_MINESWEEPER		106
-#define PDA_APP_SPESSPETS		107
-#define PDA_APP_NEWSREADER		108
-
+//Snake stuff so leaderboard can see it too
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
-
-#define NEWSREADER_CHANNEL_LIST	0
-#define NEWSREADER_VIEW_CHANNEL	1
-#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
@@ -1308,6 +1307,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_INSECT "Insectoid"
 #define LANGUAGE_DEATHSQUAD "Deathsquad"
 #define LANGUAGE_CLOWN "Clown"
+#define LANGUAGE_GRUE "Grue"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1359,7 +1359,7 @@ var/proccalls = 1
 #define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
-#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
+#define CHANNEL_UMBRA				1021	//only ever used to allow the ambient umbra sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
@@ -1404,6 +1404,17 @@ var/proccalls = 1
 
 #define UTENSILE_FORK	1
 #define UTENSILE_SPOON	2
+
+//Grue defines
+#define GRUE_LARVA 1
+#define GRUE_JUVENILE 2
+#define GRUE_ADULT 3
+#define GRUE_WALLBREAK 3//Beings to eat before able to break walls
+#define GRUE_RWALLBREAK 5 //Beings to eat before able to break reinforced walls
+#define GRUE_DARK 0 //dark enough for healing
+#define GRUE_DIM 1	//light level neither heals nor burns
+#define GRUE_LIGHT 2//bright enough to burn
+#define GRUE_DRAINLIGHT 1 //Channeling the drain light ability
 /*
  *
  *
@@ -1449,6 +1460,8 @@ var/proccalls = 1
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
+
+#define paxban_isbanned(key) paxban_keylist.Find("[ckey(key)]")
 
 //message modes. you're not supposed to mess with these.
 #define MODE_HEADSET "headset"
@@ -1629,6 +1642,7 @@ var/proccalls = 1
 #define INSECT_BLOOD	"#EBECE6"
 #define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
 #define GHOUL_BLOOD		"#7FFF00"
+#define GRUE_BLOOD		"#272728"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1697,7 +1711,7 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
-#define DNA_SE_LENGTH 58
+#define DNA_SE_LENGTH 60
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"
@@ -1796,3 +1810,24 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define SPORTINESS_NONE 1
 #define SPORTINESS_SUGAR 1.2
 #define SPORTINESS_SPORTS_DRINK 5
+
+//Luck-related defines
+
+//Flags for item luckiness:
+#define LUCKINESS_WHEN_HELD (1<<0) //The item confers (un)luck when held in the hand. Also includes surgically implanted items.
+#define LUCKINESS_WHEN_WORN (1<<1)	//The item confers (un)luck when worn in an inventory slot other than the hands.
+#define LUCKINESS_WHEN_HELD_RECURSIVE (1<<2) //The item confers (un)luck when held in the hand directly or inside something else being held in the hand.
+#define LUCKINESS_WHEN_WORN_RECURSIVE (1<<3) //The item confers (un)luck when worn or inside something else being worn, but not held in the hand.
+#define LUCKINESS_WHEN_GENERAL (LUCKINESS_WHEN_HELD | LUCKINESS_WHEN_WORN) //The item confers (un)luck when directly held in the hand or worn in an inventory slot.
+#define LUCKINESS_WHEN_GENERAL_RECURSIVE (LUCKINESS_WHEN_HELD_RECURSIVE | LUCKINESS_WHEN_WORN_RECURSIVE) //The item confers (un)luck when held in the hand or worn directly, or inside something else being held in the hand or worn.
+
+#define LUCKINESS_DRAINFACTOR 0.998 //Multiplied by a mob's temporary luckiness every Life() tick. The greater the magnitude of temporary luckiness, the faster it drains.
+
+//Coin-related defines
+#define COIN_HEADS "heads-up."
+#define COIN_TAILS "tails-up."
+#define COIN_SIDE "on the side!"
+
+//Muzzles
+#define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
+#define MUZZLE_HARD	2	//Muzzle prevents speech.

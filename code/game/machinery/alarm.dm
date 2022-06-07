@@ -192,11 +192,11 @@ var/global/list/airalarm_presets = list(
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "alarm0"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 100
 	active_power_usage = 200
 	power_channel = ENVIRON
-	req_one_access = list(access_atmospherics, access_engine_equip)
+	req_one_access = list(access_atmospherics, access_engine_minor)
 	var/frequency = 1439
 	//var/skipprocess = 0 //Experimenting
 	var/alarm_frequency = 1437
@@ -206,7 +206,6 @@ var/global/list/airalarm_presets = list(
 	var/locked = 1
 	var/datum/wires/alarm/wires = null
 	var/wiresexposed = 0 // If it's been screwdrivered open.
-	var/aidisabled = 0
 	var/AAlarmwires = 31
 	var/shorted = 0
 
@@ -233,16 +232,16 @@ var/global/list/airalarm_presets = list(
 	return TRUE
 
 /obj/machinery/alarm/xenobio
-	req_one_access = list(access_rd, access_atmospherics, access_engine_equip, access_xenobiology)
+	req_one_access = list(access_rd, access_atmospherics, access_engine_minor, access_xenobiology)
 	req_access = list()
 
 /obj/machinery/alarm/execution
-	req_one_access = list(access_atmospherics, access_engine_equip, access_brig)
+	req_one_access = list(access_atmospherics, access_engine_minor, access_brig)
 	req_access = list()
 
 /obj/machinery/alarm/server
 	preset = "Coldroom"
-	req_one_access = list(access_rd, access_atmospherics, access_engine_equip)
+	req_one_access = list(access_rd, access_atmospherics, access_engine_minor)
 	req_access = list()
 
 /obj/machinery/alarm/vox
@@ -272,7 +271,7 @@ var/global/list/airalarm_presets = list(
 	if(propagate)
 		var/area/this_area = get_area(src)
 		for (var/obj/machinery/alarm/AA in this_area)
-			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.preset=preset
 				AA.apply_preset(1, 0) // Only this air alarm should send a cycle.
 		apply_mode() //reapply this to update scrubbers and other things
@@ -338,8 +337,8 @@ var/global/list/airalarm_presets = list(
 
 
 /obj/machinery/alarm/process()
-	if((stat & (NOPOWER|BROKEN)) || shorted || buildstage != 2)
-		use_power = 0
+	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted || buildstage != 2)
+		use_power = MACHINE_POWER_USE_NONE
 		return
 
 	var/turf/simulated/location = loc
@@ -389,7 +388,7 @@ var/global/list/airalarm_presets = list(
 
 	if (new_danger < old_level)
 		danger_averted_confidence++
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	// Only change danger level if:
 	// we're going up a level
@@ -398,7 +397,7 @@ var/global/list/airalarm_presets = list(
 		setDangerLevel(new_danger)
 		update_icon()
 		danger_averted_confidence = 0 // Reset counter.
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 
 	if (mode==AALARM_MODE_CYCLE && environment.return_pressure()<ONE_ATMOSPHERE*0.05)
 		mode=AALARM_MODE_FILL
@@ -458,13 +457,13 @@ var/global/list/airalarm_presets = list(
 
 /obj/machinery/alarm/proc/master_is_operating()
 	var/area/this_area = get_area(src)
-	return this_area.master_air_alarm && !(this_area.master_air_alarm.stat & (NOPOWER|BROKEN))
+	return this_area.master_air_alarm && !(this_area.master_air_alarm.stat & (FORCEDISABLE|NOPOWER|BROKEN))
 
 
 /obj/machinery/alarm/proc/elect_master()
 	var/area/this_area = get_area(src)
 	for (var/obj/machinery/alarm/AA in this_area)
-		if (!(AA.stat & (NOPOWER|BROKEN)))
+		if (!(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 			this_area.master_air_alarm = AA
 			return 1
 	return 0
@@ -483,7 +482,7 @@ var/global/list/airalarm_presets = list(
 	if(wiresexposed)
 		icon_state = "alarmx"
 		return
-	if((stat & (NOPOWER|BROKEN)) || shorted)
+	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted)
 		icon_state = "alarmp"
 		return
 	var/area/this_area = get_area(src)
@@ -497,7 +496,7 @@ var/global/list/airalarm_presets = list(
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
 	var/area/this_area = get_area(src)
-	if(stat & (NOPOWER|BROKEN) || !this_area)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !this_area)
 		return
 	if (this_area.master_air_alarm != src)
 		if (master_is_operating())
@@ -579,7 +578,7 @@ var/global/list/airalarm_presets = list(
 	if(propagate)
 		var/area/this_area = get_area(src)
 		for (var/obj/machinery/alarm/AA in this_area)
-			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if (!(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.target_temperature = temp
 
 /obj/machinery/alarm/proc/set_threshold(var/env, var/index, var/value, var/propagate=1)
@@ -630,7 +629,7 @@ var/global/list/airalarm_presets = list(
 		apply_mode()
 		var/area/this_area = get_area(src)
 		for (var/obj/machinery/alarm/AA in this_area)
-			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if (!(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.set_threshold(env, index, value, 0)
 
 /obj/machinery/alarm/proc/set_alarm(var/alarm, var/propagate=1)
@@ -639,7 +638,7 @@ var/global/list/airalarm_presets = list(
 	if(propagate)
 		var/area/this_area = get_area(src)
 		for (var/obj/machinery/alarm/AA in this_area)
-			if (!(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if (!(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.set_alarm(alarm, 0)
 		this_area.updateDangerLevel()
 
@@ -740,7 +739,7 @@ var/global/list/airalarm_presets = list(
 	interact(user)
 
 /obj/machinery/alarm/attack_ai(mob/user)
-	if(aidisabled)
+	if(stat & NOAICONTROL)
 		to_chat(user, "<span class='warning'>AI control of this device has been disabled.</span>")
 		return
 	..()
@@ -964,7 +963,7 @@ var/global/list/airalarm_presets = list(
 		//propagate to other AAs in the area
 		var/area/this_area = get_area(src)
 		for (var/obj/machinery/alarm/AA in this_area)
-			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.rcon_setting = rcon_setting
 		return 1
 
@@ -1072,7 +1071,7 @@ var/global/list/airalarm_presets = list(
 				new /obj/item/stack/cable_coil(get_turf(user), 5)
 				return
 			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
-				if(stat & (NOPOWER|BROKEN))
+				if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 					to_chat(user, "It does nothing")
 					return
 				else
@@ -1167,7 +1166,7 @@ FIRE ALARM
 	var/timing = 0.0
 	var/lockdownbyai = 0
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 6
 	power_channel = ENVIRON
@@ -1195,7 +1194,7 @@ FIRE ALARM
 
 	if(stat & BROKEN)
 		icon_state = "firex"
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "firep"
 	else
 		icon_state = "fire[detecting ? "0" : "1"][shelter ? "s" : "e"]"
@@ -1208,10 +1207,6 @@ FIRE ALARM
 	if(src.detecting)
 		if(exposed_temperature > T0C+200)
 			src.alarm()			// added check of detector status here
-
-/obj/machinery/firealarm/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/firealarm/bullet_act(BLAH)
 	src.alarm()
@@ -1320,7 +1315,7 @@ FIRE ALARM
 	src.alarm()
 
 /obj/machinery/firealarm/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	var/turf/simulated/location = loc
@@ -1358,7 +1353,7 @@ FIRE ALARM
 			update_icon()
 
 /obj/machinery/firealarm/attack_hand(mob/user as mob)
-	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
+	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	if (!(user.dexterity_check())) // No squeaks or moos allowed.
@@ -1495,7 +1490,7 @@ var/global/list/firealarms = list() //shrug
 	var/timing = 0.0
 	var/lockdownbyai = 0
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 6
 
@@ -1508,7 +1503,7 @@ var/global/list/firealarms = list() //shrug
 	return attack_hand(user)
 
 /obj/machinery/partyalarm/attack_hand(mob/user as mob)
-	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
+	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	user.machine = src
@@ -1562,7 +1557,7 @@ var/global/list/firealarms = list() //shrug
 /obj/machinery/partyalarm/Topic(href, href_list)
 	if(..())
 		return 1
-	if (usr.stat || stat & (BROKEN|NOPOWER))
+	if (usr.stat || stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	usr.machine = src

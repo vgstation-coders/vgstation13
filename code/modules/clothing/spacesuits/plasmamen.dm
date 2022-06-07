@@ -42,7 +42,7 @@
 	species_restricted = list(PLASMAMAN_SHAPED)
 	species_fit = list(PLASMAMAN_SHAPED)
 	eyeprot = 0
-
+	hides_identity = HIDES_IDENTITY_NEVER
 	icon_state = "plasmaman_helmet0"
 	item_state = "plasmaman_helmet0"
 	var/base_state = "plasmaman_helmet"

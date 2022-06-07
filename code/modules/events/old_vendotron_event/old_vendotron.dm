@@ -148,6 +148,9 @@
 		/obj/item/weapon/storage/box/mysterycubes = 250,
 		/obj/item/weapon/glow_orb = 200,
 		/obj/item/stack/sheet/mineral/phazon = 300,
+		/obj/item/weapon/reagent_containers/spray/noreact = 750,	//This isn't nearly as broken as it sounds
+		/obj/item/weapon/circuitboard/mind_machine_hub = 400,
+		/obj/item/weapon/circuitboard/mind_machine_pod = 250,
 	)
 
 	var/list/rareStock = list(
@@ -236,7 +239,7 @@
 //Begin spoilers/////
 
 
-/obj/machinery/vending/old_vendotron/emag(mob/user)
+/obj/machinery/vending/old_vendotron/emag_act(mob/user)
 	if(!emagged)
 		emagged = TRUE
 		if(prob(50))

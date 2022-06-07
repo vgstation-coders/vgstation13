@@ -1,8 +1,15 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
-// Mulebot - carries crates around for Quartermaster
-// Navigates via floor navbeacons
-// Remote Controlled from QM's PDA
+/* Mulebot - carries crates around for Quartermaster
+ * Navigates via floor navbeacons
+ * Remote Controlled from QM's PDA
+ *
+ * Hello, the path algorithm now uses
+ *
+ *
+ *
+ *
+*/
 
 #define MODE_IDLE 0
 #define MODE_LOADING 1
@@ -26,7 +33,7 @@ var/global/mulebot_count = 0
 	anchored = 1
 	animate_movement=1
 	health = 150 //yeah, it's tougher than ed209 because it is a big metal box with wheels --rastaf0
-	maxhealth = 150
+	maxHealth = 150
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	can_take_pai = TRUE
@@ -72,6 +79,8 @@ var/global/mulebot_count = 0
 	var/coolingdown = FALSE
 
 	commanding_radio = /obj/item/radio/integrated/signal/bot/mule
+
+	var/datum/bot/order/mule/current_order // where we're going and what we have to do once we arrive to destination
 
 /obj/machinery/bot/mulebot/get_cell()
 	return cell
@@ -152,8 +161,8 @@ var/global/mulebot_count = 0
 
 		updateDialog()
 	else if (I.is_wrench(user) && user.a_intent != I_HURT)
-		if (src.health < maxhealth)
-			src.health = min(maxhealth, src.health+25)
+		if (src.health < maxHealth)
+			src.health = min(maxHealth, src.health+25)
 			user.visible_message(
 				"<span class='warning'>[user] repairs [src]!</span>",
 				"<span class='notice'>You repair [src]!</span>"
@@ -193,7 +202,7 @@ var/global/mulebot_count = 0
 
 
 /obj/machinery/bot/mulebot/attack_ai(var/mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	user.set_machine(src)
 	interact(user, 1)
 
@@ -475,6 +484,7 @@ var/global/mulebot_count = 0
 
 // called to load a crate
 /obj/machinery/bot/mulebot/proc/load(var/atom/movable/C)
+	initialize()
 	if(wires.LoadCheck() && !is_type_in_list(C,can_load))
 		src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
@@ -482,7 +492,7 @@ var/global/mulebot_count = 0
 
 	//I'm sure someone will come along and ask why this is here... well people were dragging screen items onto the mule, and that was not cool.
 	//So this is a simple fix that only allows a selection of item types to be considered. Further narrowing-down is below.
-	if(!istype(C,/obj/item) && !istype(C,/obj/machinery) && !istype(C,/obj/structure) && !ismob(C))
+	if(!can_load(C))
 		return
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return
@@ -502,6 +512,18 @@ var/global/mulebot_count = 0
 
 	lock_atom(C, /datum/locking_category/mulebot)
 
+/obj/machinery/bot/mulebot/proc/can_load(var/atom/movable/C)
+	if (C.anchored)
+		return FALSE
+	if (!istype(C,/obj/item) && !istype(C,/obj/machinery) && !istype(C,/obj/structure) && !ismob(C))
+		return FALSE
+	if (!emagged)
+		if (istype(C,/obj/machinery/door))
+			return check_access(botcard)
+		if (istype(C, /obj/structure/grille) || istype(C, /obj/structure/window))
+			return FALSE
+	return TRUE
+
 // called to unload the bot
 // argument is optional direction to unload
 // if zero, unload at bot's location
@@ -509,11 +531,20 @@ var/global/mulebot_count = 0
 	if(!is_locking(/datum/locking_category/mulebot))
 		return
 
+	var/atom/movable/load = get_locked(/datum/locking_category/mulebot)[1]
+
+	if(current_order?.unload_here)
+		unlock_atom(load)
+		load.forceMove(current_order.destination)
+		if(istype(current_order.thing_to_load, /obj/machinery/cart/cargo))
+			var/obj/machinery/cart/cargo/cart = current_order.thing_to_load
+			cart.load(load)
+		return
+
 	mode = MODE_LOADING
 	overlays.len = 0
 	if(integratedpai)
 		overlays += image('icons/obj/aibots.dmi', "mulebot1_pai")
-	var/atom/movable/load = get_locked(/datum/locking_category/mulebot)[1]
 	unlock_atom(load)
 
 	if(dirn)
@@ -539,7 +570,7 @@ var/global/mulebot_count = 0
 	if(!has_power())
 		on = 0
 		return
-	steps_per = 2 + (wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) // The more motor wires active, the faster we go
+	steps_per = 2 + (wires.Motor1() ? 0 : 1) + (wires.Motor2() ? 0 : 2) // The more motor wires active, the faster we go
 
 /obj/machinery/bot/mulebot/on_path_step(var/turf/simulated/next)
 	if (istype(next))
@@ -590,10 +621,14 @@ var/global/mulebot_count = 0
 		awaiting_beacon = 0
 		return 1
 	// -- Command signals --
-	var/target_bot = signal.data["target"]
-	if (target_bot != "\ref[src]")
-		return
+	if (signal.data["assigned_mulebot"])
+		var/obj/machinery/bot/mulebot/chosen_mulebot = locate(signal.data["assigned_mulebot"])
+		if (chosen_mulebot != src)
+			return
 	var/command = signal.data["command"]
+	if (!auto_pickup)
+		auto_pickup = signal.data["auto_pickup"]
+
 	execute_signal_command(signal, command)
 
 // starts bot moving to home
@@ -682,7 +717,8 @@ var/global/mulebot_count = 0
 
 // player INSIDE mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
-	unload()
+	if(!(..()))
+		unload()
 
 // receive a radio signal
 // used for control and beacon reception
@@ -698,19 +734,17 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/getpAIMovementDelay()
 	return ((wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) - 1) * 2
 
-/obj/machinery/bot/mulebot/pAImove(mob/living/silicon/pai/user, dir)
+/obj/machinery/bot/mulebot/pAImove(mob/living/user, dir)
 	if(getpAIMovementDelay() < 0)
 		to_chat(user, "There seems to be something wrong with the motor. Have a technician check the wires.")
-		return
-	if(!..())
-		return
+		return FALSE
 	if(!on)
 		to_chat(user, "You can't move \the [src] while it's turned off.")
-		return
+		return FALSE
 	var/turf/T = loc
 	if(!T.has_gravity())
-		return
-	step(src, dir)
+		return FALSE
+	..()
 
 /obj/machinery/bot/mulebot/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/movable/A)
 	if(!istype(A) || !Adjacent(A) || A.anchored)
@@ -791,3 +825,191 @@ var/global/mulebot_count = 0
 	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	unload(0)
 	qdel(src)
+
+/obj/machinery/bot/mulebot/process_pathing()
+	if(path.len)
+		set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
+		if(!process_astar_path()) // either end of path or couldn't move
+			if(frustration > 15) // obstacle found
+				//if(path.len == 1) // delivery site has an obstacle!
+					//TODO
+				var/turf/obstacle = path[1]
+				var/stop_a_tile_before = current_order.thing_to_load != null
+				path = get_path_to(src, current_order.destination, 30, stop_a_tile_before, botcard, TRUE, obstacle)
+				if(path.len)
+					bots_list.Remove(src)
+				frustration = 0
+			else // end of path
+				if(!(src in bots_list))
+					bots_list.Add(src)
+				return
+		spawn(SS_WAIT_BOTS/steps_per)
+			process_pathing()
+	else if(destinations_queue.len)
+		current_order = shift(destinations_queue)
+		var/stop_a_tile_before = current_order.thing_to_load != null
+		path = get_path_to(src, current_order.destination, 30, stop_a_tile_before, botcard)
+		if(path.len)
+			bots_list.Remove(src)
+			process_pathing()
+
+/obj/machinery/bot/mulebot/process_astar_path()
+	if(gcDestroyed)
+		return FALSE
+
+	Move(path[1])
+	if(get_turf(src) != path[1])
+		if(on_path_step_fail(path[1]))
+			return TRUE // keep trying
+		// gives up
+		playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
+		return FALSE
+	path.Remove(path[1])
+	if(!path.len)
+		handle_destination_arrival()
+		return FALSE
+	return TRUE
+
+/obj/machinery/bot/mulebot/proc/handle_destination_arrival()
+	if(current_order.unload_here)
+		unload()
+	else if(current_order.thing_to_load)
+		load(current_order.thing_to_load)
+		current_order.thing_to_load = null
+	playsound(loc, 'sound/machines/ping.ogg', 50, 0)
+	frustration = 0
+	current_order = null
+
+// returns true if it's still below the frustration threshold
+/obj/machinery/bot/mulebot/on_path_step_fail(var/turf/next)
+	for(var/obj/machinery/door/D in next)
+		if (istype(D, /obj/machinery/door/firedoor))
+			continue
+		if (istype(D, /obj/machinery/door/poddoor))
+			continue
+		if (D.check_access(botcard) && !D.operating && D.SpecialAccess(src))
+			D.open()
+			frustration = 0
+			return TRUE
+	switch(frustration)
+		if(1)
+			playsound(loc, 'sound/machines/horn1.ogg', 50, 0)
+		if(5)
+			playsound(loc, 'sound/machines/horn2.ogg', 50, 0)
+		if(10)
+			playsound(loc, 'sound/machines/horn3.ogg', 50, 0)
+	return frustration++ < 15
+
+// The fourth parameter is whether to move, load, or unload
+// So the list is (x, y, z, cmd)
+/obj/machinery/bot/mulebot/handle_goto_command(var/datum/signal/signal)
+	var/turf/location = locate(text2num(signal.data["x"]), text2num(signal.data["y"]), text2num(signal.data["z"]))
+	if(!location)
+		return FALSE
+	var/datum/bot/order/mule/order = new /datum/bot/order/mule(location, signal.data["thing_to_load"], signal.data["unload_here"])
+	return queue_destination(order)
+
+/obj/machinery/bot/mulebot/queue_destination(order)
+	if(destinations_queue.len > MAX_QUEUE_LENGTH)
+		return FALSE
+	destinations_queue += order
+	return TRUE
+
+/obj/item/proc/is_pointer(var/mob/user)
+	return FALSE
+
+/obj/item/proc/point_to(atom)
+	return
+
+#define LOAD_OR_MOVE_HERE 0
+#define UNLOAD_HERE 1
+
+/obj/item/mulebot_laser
+	name = "mulebot laser pointing device"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "airprojector"
+	var/mode = LOAD_OR_MOVE_HERE
+	var/datum/radio_frequency/radio_connection
+	var/frequency = 1447
+	var/obj/machinery/bot/mulebot/my_mulebot
+	var/obj/item/radio/integrated/signal/bot/mule/radio
+
+/obj/item/mulebot_laser/New()
+	. = ..()
+	laser_pointers_list += src
+	radio = new()
+	radio_connection = radio_controller.add_object(src, frequency)
+
+/obj/item/mulebot_laser/Destroy()
+	. = ..()
+	laser_pointers_list -= src
+	qdel(radio)
+	radio = null
+	my_mulebot = null
+
+/obj/item/mulebot_laser/attack_self(mob/user)
+	var/mode_txt
+	switch (mode)
+		if (LOAD_OR_MOVE_HERE)
+			mode_txt = "loading"
+		if (UNLOAD_HERE)
+			mode_txt = "unloading"
+	to_chat(user, "<span class='notice'>You change the mode to [mode_txt].</span>")
+	mode = !mode
+
+/obj/item/mulebot_laser/verb/clear_assigned_mulebot()
+	if (usr.incapacitated())
+		return
+	my_mulebot = null
+	to_chat(usr, "<span='notice'>Cleared assigned mulebot.</span>")
+
+/obj/item/mulebot_laser/is_pointer(var/mob/user)
+	return !user.incapacitated()
+
+/obj/item/mulebot_laser/point_to(var/atom/atom, var/mob/user)
+	var/turf/tile = get_turf(atom)
+	if(!tile)
+		return
+
+	var/obj/machinery/bot/mulebot/MB = locate() in tile
+	if (MB && !my_mulebot)
+		my_mulebot = MB
+		to_chat(user, "<span class='notice'>\The [MB] will now be your assigned mulebot. Use the verb to select another.</span>")
+		return
+
+	var/datum/signal/signal = new /datum/signal
+	signal.transmission_method = SIGNAL_RADIO
+	signal.source = radio
+	signal.data["command"] = "go_to"
+	signal.data["x"] = tile.x
+	signal.data["y"] = tile.y
+	signal.data["z"] = tile.z
+
+	if(mode == UNLOAD_HERE)
+		signal.data["unload_here"] = TRUE
+		signal.data["thing_to_load"] = isturf(atom) ? null : atom
+		point_effect(/obj/effect/decal/point/cargo_unload, tile, atom)
+	else if(!isturf(atom))
+		signal.data["auto_pickup"] = TRUE
+		signal.data["thing_to_load"] = atom
+		point_effect(/obj/effect/decal/point/cargo_load, tile, atom)
+	else
+		point_effect(/obj/effect/decal/point/go_here, tile, atom)
+
+	if (my_mulebot)
+		signal.data["assigned_mulebot"] = "[\ref(my_mulebot)]"
+
+	radio_connection.post_signal(src, signal, filter = RADIO_MULEBOT)
+
+/proc/point_effect(var/obj/effect/decal/point/type, var/turf/tile, var/atom/atom)
+	var/obj/effect/decal/point/point = new type(tile)
+	point.target = atom
+	point.pixel_x = atom.pixel_x
+	point.pixel_y = atom.pixel_y
+	point.alpha = 192
+	spawn(20)
+		if(point)
+			qdel(point)
+
+#undef LOAD_OR_MOVE_HERE
+#undef UNLOAD_HERE

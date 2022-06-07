@@ -7,16 +7,12 @@ var/global/list/igniters = list()
 	var/on = 1.0
 	var/obj/item/device/assembly_holder/assembly=null
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4
 
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
-
-/obj/machinery/igniter/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/igniter/attack_paw(mob/user as mob)
 	if ((ticker && ticker.mode.name == "monkey"))
@@ -34,7 +30,7 @@ var/global/list/igniters = list()
 	return
 
 /obj/machinery/igniter/process()	//ugh why is this even in process()?
-	if (src.on && !(stat & NOPOWER) )
+	if (src.on && !(stat & (NOPOWER|FORCEDISABLE)) )
 		var/turf/location = src.loc
 		if (isturf(location))
 			location.hotspot_expose(1000,500,1,surfaces=0)
@@ -56,7 +52,7 @@ var/global/list/igniters = list()
 	..()
 
 /obj/machinery/igniter/power_change()
-	if(!( stat & NOPOWER) )
+	if(!( stat & (FORCEDISABLE|NOPOWER)) )
 		icon_state = "igniter[src.on]"
 	else
 		icon_state = "igniter0"
@@ -127,7 +123,7 @@ var/global/list/igniters = list()
 			else
 				icon_state = "[base_state]-p"
 
-/obj/machinery/sparker/attack_ai()
+/obj/machinery/sparker/attack_ai(var/mob/user)
 	if (src.anchored)
 		return do_spark()
 	else
@@ -151,15 +147,11 @@ var/global/list/igniters = list()
 	return 1
 
 /obj/machinery/sparker/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	do_spark()
 	..(severity)
-
-/obj/machinery/ignition_switch/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/ignition_switch/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -169,7 +161,7 @@ var/global/list/igniters = list()
 
 /obj/machinery/ignition_switch/attack_hand(mob/user as mob)
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(active)
 		return

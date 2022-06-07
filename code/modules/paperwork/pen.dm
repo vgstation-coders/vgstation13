@@ -111,7 +111,7 @@
 		text_color = P.colour
 	else if(istype(P, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = P
-		text_color = C.colour
+		text_color = C.mainColour
 
 	return "<span style=\"[style];color:[text_color]\">[t]</span>"
 

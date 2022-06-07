@@ -425,8 +425,8 @@
 				butchSpeed += 0.25
 				if(!toolName)
 					toolName = "claws"
-		if(isgrue(H))
-			toolName = "grue"
+		if(isumbra(H))
+			toolName = "umbra"
 			butchSpeed += 0.5
 	else
 		butchSpeed = 0.5

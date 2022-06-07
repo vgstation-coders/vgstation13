@@ -1,3 +1,17 @@
+/mob/living/carbon/verb/quick_equip()
+	set name = "quick-equip"
+	set hidden = 1
+
+	var/mob/living/carbon/C = src
+	var/obj/item/I = C.get_active_hand()
+	if(!I)
+		to_chat(C, "<span class='notice'>You are not holding anything to equip.</span>")
+		return
+	if(C.equip_to_appropriate_slot(I))
+		update_inv_hand(active_hand)
+	else
+		to_chat(C, "<span class='warning'>You are unable to equip that.</span>")
+
 /mob/living/carbon/get_item_by_slot(slot_id)
 	switch(slot_id)
 		if(slot_back)
@@ -68,7 +82,7 @@
 	set desc = "Get what is currently on your backslot"
 
 	attack_ui(slot_back)
-	
+
 /mob/living/carbon/verb/get_belt()
 	set name = "Get belt"
 	set category = "IC"
@@ -109,3 +123,4 @@
 /mob/living/carbon/verb/StorageHotkey(var/index as num)
 	set hidden = 1
 	hotkey_box_slot(index)
+

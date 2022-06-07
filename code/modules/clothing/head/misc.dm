@@ -127,6 +127,26 @@
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
+/obj/item/clothing/head/opsfake
+	name = "blood-red hardsuit helmet"
+	desc = "A plastic replica of a nuclear operative's helmet, you'll look just like a real murderous syndicate operative in this! This is a toy, it is not made for use in space!"
+	icon_state = "rig0-syndi"
+	item_state = "syndie_helm"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|HIDEHEADHAIR
+	siemens_coefficient = 2.0
+
+/obj/item/clothing/head/timefake
+	name = "time helmet"
+	desc = "A replica of the time helmet worn by the original Looper, the one who saved us from the collapsing timeline. We remember."
+	icon_state = "time_helmet"
+	item_state = "time_helmet"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|HIDEHEADHAIR
+	siemens_coefficient = 1.0
+
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"

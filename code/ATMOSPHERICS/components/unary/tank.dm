@@ -22,7 +22,6 @@
 	..()
 	air_contents.temperature = T20C
 	atmos_machines.Remove(src)
-	initialize_directions = dir
 	if(anchored)
 		verbs -= rotate_verbs
 
@@ -177,7 +176,7 @@
 	if (istype(W, /obj/item/device/analyzer) && get_dist(user, src) <= 1)
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(air_contents, src, 0), 1)
-	
+
 	//deconstruction
 	if(iswelder(W) && !anchored)
 		var/obj/item/tool/weldingtool/WT = W

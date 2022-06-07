@@ -163,3 +163,35 @@
 	..()
 	reagents.add_reagent(FUEL,50)
 	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/beaker/acid
+	name = "beaker 'sulphuric acid'"
+
+/obj/item/weapon/reagent_containers/glass/beaker/acid/New()
+	..()
+	reagents.add_reagent(SACID,50)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/pacid
+	name = "huge polytrinic acid flask"
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/pacid/New()
+	..()
+	reagents.add_reagent(PACID,100)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/mutagen
+	name = "huge mutagen flask"
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/mutagen/New()
+	..()
+	reagents.add_reagent(MUTAGEN,100)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/diabeetus
+	name = "huge diabeetusol flask"
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/diabeetus/New()
+	..()
+	reagents.add_reagent(DIABEETUSOL,100)
+	update_icon()

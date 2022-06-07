@@ -26,6 +26,16 @@
 			if(M.dry)
 				M.dry=0
 		M.virus2 |= virus_copylist(mob.virus2)
+		if(istype(mob.wear_mask, /obj/item/clothing/mask/cigarette) && !mob.is_wearing_item(/obj/item/clothing/head/helmet/space))
+			var/obj/item/clothing/mask/cigarette/I = mob.get_item_by_slot(slot_wear_mask)
+			if(prob(20))
+				var/turf/Q = get_turf(mob)
+				var/turf/endLocation
+				var/spitForce = pick(0,1,2,3)
+				endLocation = get_ranged_target_turf(Q, mob.dir, spitForce)
+				to_chat(mob, "<span class ='warning'>You sneezed \the [mob.wear_mask] out of your mouth!</span>")
+				mob.drop_item(I)
+				I.throw_at(endLocation,spitForce,1)
 
 
 /datum/disease2/effect/gunck
@@ -262,13 +272,13 @@
 	badness = EFFECT_DANGER_FLAVOR
 	restricted = 2
 	var/list/say_messages = list(
-		"Boop.", 
-		"Beep.", 
+		"Boop.",
+		"Beep.",
 		"Beep Beep Beep!",
 		"Beep... Boop?",
-		"Ping!", 
+		"Ping!",
 		"Buzz.",
-		"Buzz...", 
+		"Buzz...",
 		"Kkkiiiill mmee...",
 		"HUMAN HARM!",
 		"DESTROY ALL CARBONS!"
@@ -288,11 +298,11 @@
 	)
 
 /datum/disease2/effect/cyborg_warning/activate(var/mob/living/mob)
-	if(prob(50)) 
+	if(prob(50))
 		mob.say(pick(say_messages))
 	else
 		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
-		
+
 
 /datum/disease2/effect/mommi_warning
 	name = "Major Neural Rewiring"
@@ -301,13 +311,13 @@
 	badness = EFFECT_DANGER_FLAVOR
 	restricted = 2
 	var/list/say_messages = list(
-		"PING!", 
-		"PING! PING! PING!", 
+		"PING!",
+		"PING! PING! PING!",
 		"A-FLAP!",
 		"*me flaps their arms ANGRILY!",
-		"*spin", 
+		"*spin",
 		"BUILDING BARS IMPROVES THE STATION!",
-		"OUT OF THE WAY ENGINEERS!", 
+		"OUT OF THE WAY ENGINEERS!",
 		"Does anybody have cryptographic sequencer?",
 		"Is that a cryptographic sequencer?"
 	)
@@ -326,7 +336,7 @@
 	)
 
 /datum/disease2/effect/mommi_warning/activate(var/mob/living/mob)
-	if(prob(50)) 
+	if(prob(50))
 		mob.say(pick(say_messages))
 	else
 		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
@@ -362,9 +372,9 @@
 	var/list/say_messages = list(
 		"Hhhhssssshhhh!",
 		"Hisssssss!",
-		"SsssSSssssss!", 
+		"SsssSSssssss!",
 		"*me hisses.",
-		"Kill...", 
+		"Kill...",
 		"You look delicious."
 	)
 	var/list/host_messages = list(
@@ -380,11 +390,11 @@
 	)
 
 /datum/disease2/effect/xenomorph_warning/activate(var/mob/living/mob)
-	if(prob(50)) 
+	if(prob(50))
 		mob.say(pick(say_messages))
 	else
 		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
-	
+
 	//Punch people around the infected.
 	var/list/targets = list()
 	for(var/mob/living/L in range(1, get_turf(mob)))
@@ -395,3 +405,76 @@
 		if(target)
 			if(!mob.is_pacified(VIOLENCE_DEFAULT,target))
 				mob.unarmed_attack_mob(target)
+
+/datum/disease2/effect/cult_hallucination
+	name = "Visions of the End-Times"	
+	desc = "UNKNOWN"
+	stage = 1
+	badness = EFFECT_DANGER_ANNOYING
+	restricted = 2
+	max_multiplier = 2.5
+
+/datum/disease2/effect/cult_hallucination/activate(var/mob/living/mob)
+	if(iscultist(mob))
+		return
+	if(istype(get_area(mob), /area/chapel))
+		return
+	var/client/C = mob.client
+	if(!C)
+		return
+	mob.whisper("...[pick(rune_words_rune)]...")	
+
+	var/list/turf_list = list()
+	for(var/turf/T in spiral_block(get_turf(mob), 40))
+		if(locate(/obj/structure/grille) in T.contents)
+			continue
+		if(istype(get_area(T), /area/chapel))
+			continue
+		if(prob(2*multiplier))
+			turf_list += T
+	if(turf_list.len)
+		for(var/turf/simulated/floor/T in turf_list)
+			var/delay = rand(0, 50) // so the runes don't all appear at once
+			spawn(delay)
+
+				var/runenum = rand(1,2)
+				var/image/rune_holder = image('icons/effects/deityrunes.dmi',T,"")
+				var/image/rune_render = image('icons/effects/deityrunes.dmi',T,"fullrune-[runenum]")
+				rune_render.color = DEFAULT_BLOOD
+			
+				C.images += rune_holder
+
+		//		anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-write", col = DEFAULT_BLOOD, sleeptime = 36)
+				
+				spawn(30)
+
+					rune_render.icon_state = "fullrune-[runenum]"
+					rune_holder.overlays += rune_render
+					AnimateFakeRune(rune_holder)
+
+				var/duration = rand(20 SECONDS, 40 SECONDS)
+				spawn(duration)
+					if(C)
+						rune_holder.overlays -= rune_render
+		//				anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "fullrune-[runenum]-erase", col = DEFAULT_BLOOD)
+						spawn(12)
+							C.images -= rune_holder
+
+
+/datum/disease2/effect/cult_hallucination/proc/AnimateFakeRune(var/image/rune)
+	animate(rune, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)//4
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)//5
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)//9
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)//5
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2

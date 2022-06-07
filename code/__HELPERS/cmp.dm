@@ -74,3 +74,6 @@ var/atom/cmp_dist_origin=null
 	if(a_when == b_when)
 		return b.id - a.id
 	return b_when - a_when
+
+/proc/cmp_microwave_recipe_dsc(datum/recipe/a, datum/recipe/b)
+	return b.priority - a.priority

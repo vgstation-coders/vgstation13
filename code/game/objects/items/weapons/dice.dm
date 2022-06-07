@@ -103,6 +103,8 @@
 	show_roll(user, thrown, result)
 
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
 		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
@@ -170,29 +172,29 @@
 				if(1)
 					to_chat(user, "<span class=sinister><B>A natural failure, your poor roll has cursed you. Better luck next time! </span></B>")
 					h.flash_eyes(visual = 1)
-					h.Cluwneize()
+					if(h.species.name != "Tajaran")
+						if(h.set_species("Tajaran"))
+							h.regenerate_icons()
+						to_chat(user, "<span class=danger><B>You have been turned into a disgusting catbeast! </span></B>")
+					else
+						for(var/datum/organ/external/E in h.organs) //Being a catbeast doesn't exempt you from getting a curse just because you cannot turn into a catbeast again.
+							E.droplimb(1)
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
 					h.flash_eyes(visual = 1)
-					switch(pick(1,2,3,4))
+					switch(pick(1,2,3))
 						if(1)
-							if(h.species.name != "Tajaran")
-								if(h.set_species("Tajaran"))
-									h.regenerate_icons()
-								to_chat(user, "<span class=danger><B>You have been turned into a disgusting catbeast! </span></B>")
-							else
-								for(var/datum/organ/external/E in h.organs) //Being a catbeast doesn't exempt you from getting a curse just because you cannot turn into a catbeast again.
-									E.droplimb(1)
-						if(2)
 							for(var/datum/organ/external/E in h.organs)
 								E.droplimb(1)
-						if(3)
+						if(2)
 							var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
 							kneesock.canremove = 0
 							var/obj/item/clothing/suit/maidapron/apron = new /obj/item/clothing/suit/maidapron
 							apron.canremove = 0
 							var/obj/item/clothing/head/kitty/kitty_ears = new /obj/item/clothing/head/kitty
 							kitty_ears.canremove = 0
+							kitty_ears.anime = TRUE
+							kitty_ears.cringe = TRUE
 							var/obj/item/clothing/under/maid/maid_uniform = new /obj/item/clothing/under/maid
 							maid_uniform.canremove = 0
 							if(h.w_uniform)
@@ -208,7 +210,7 @@
 							h.equip_to_slot(apron,slot_wear_suit)
 							h.equip_to_slot(kitty_ears,slot_head)
 							to_chat(user, "<span class=danger><B>You have been turned into a disgusting faggot! </span></B>")
-						if(4)
+						if(3)
 							if(h.species.name != "Tajaran") // Catbeasts don't get to roll the dice and turn into monsters.
 								var/list/valid_species = (all_species - list("Krampus", "Horror"))
 								for(var/datum/organ/external/E in h.organs)
@@ -278,7 +280,7 @@
 
 				if(14 to 19)
 					to_chat(user, "<span class=sinister><B>You've rolled well and shall be rewarded! </span></B>")
-					switch(pick(1,2,3,4,5,6))
+					switch(pick(1,2,3,4,5,6,7))
 						if(1)
 							user.dna.SetSEState(INCREASERUNBLOCK,1)
 							user.dna.SetSEState(SMALLSIZEBLOCK,1)
@@ -324,6 +326,10 @@
 								if(3)
 									new /obj/item/clothing/head/helmet/richard(user.loc, user)
 									new /obj/item/clothing/under/jacketsuit(user.loc, user)
+						if(7)
+							to_chat(user, "<span class=danger><B>You have been reward with a selection of random potions! </span></B>")
+							new /obj/item/weapon/storage/bag/potion/dice_potion_bundle(user.loc, user)
+
 
 				if(20)
 					to_chat(user, "<span class=sinister><B>A perfect roll! enjoy your reward! </span></B>")

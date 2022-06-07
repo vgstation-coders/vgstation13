@@ -139,7 +139,7 @@
 /datum/dna/gene/disability/nearsighted
 	name = "Nearsightedness"
 	activation_message = "Your eyes feel weird..."
-	deactivation_message = "Your eyes no longer feel weird..."
+	deactivation_message = "Your eyes no longer feel weird."
 	disability = NEARSIGHTED
 
 /datum/dna/gene/disability/nearsighted/New()
@@ -147,7 +147,7 @@
 
 /datum/dna/gene/disability/lisp
 	name = "Lisp"
-	desc = "I wonder wath thith doeth."
+	desc = "I wonder what thith doeth."
 	activation_message = "Thomething doethn't feel right."
 	deactivation_message = "You now feel able to pronounce consonants."
 
@@ -158,3 +158,23 @@
 /datum/dna/gene/disability/lisp/OnSay(var/mob/M, var/datum/speech/speech)
 	speech.message = replacetext(speech.message,"ss","thh")
 	speech.message = replacetext(speech.message,"s","th")
+
+/datum/dna/gene/disability/anemia
+	name = "Anemia"
+	activation_message = "You feel out of breath."
+	deactivation_message = "The fatigue begins to ease up."
+	disability = ANEMIA
+
+/datum/dna/gene/disability/anemia/New()
+	..()
+	block = ANEMIABLOCK
+
+/datum/dna/gene/disability/ehs
+	name = "Electromagnetic Hypersensitivity"
+	activation_message = "You feel like electricity burns you."
+	deactivation_message = "Electricity no longer hurts to be around."
+	disability = ELECTROSENSE
+
+/datum/dna/gene/disability/ehs/New()
+	..()
+	block = EHSBLOCK

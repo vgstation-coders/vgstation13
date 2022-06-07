@@ -11,7 +11,7 @@
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "yellow"
 	density = 1
-	var/health = 100.0
+	health = 100.0
 	flags = FPRINT
 	siemens_coefficient = 1
 
@@ -25,7 +25,7 @@
 	pressure_resistance = 7*ONE_ATMOSPHERE
 	var/temperature_resistance = 1000 + T0C
 	volume = 1000
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/release_log = ""
 	var/busy = 0
 	starting_materials = list(MAT_IRON = 10*CC_PER_SHEET_METAL)
@@ -290,11 +290,6 @@
 
 	nanomanager.update_uis(src) // Update all NanoUIs attached to src
 
-
-
-/obj/machinery/portable_atmospherics/canister/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/portable_atmospherics/canister/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)

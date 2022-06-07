@@ -174,10 +174,10 @@ Doesn't work on other aliens/AI.*/
 		visible_message_target = target
 
 	if(visible_message_target)
-		user.visible_message("<span class='alien'>\The [user] spits neurotoxin at [visible_message_target] !</span>", "<span class='alien'>You spit neurotoxin at [visible_message_target] !</span>")
+		user.visible_message("<span class='alien'>\The [user] spits neurotoxin at [visible_message_target]!</span>", "<span class='alien'>You spit neurotoxin at [visible_message_target]!</span>")
 	else
-		user.visible_message("<span class='alien'>\The [user] spits a salvo of neurotoxin !</span>", "<span class='alien'>You spit out neurotoxin !</span>")
-
+		user.visible_message("<span class='alien'>\The [user] spits a salvo of neurotoxin!</span>", "<span class='alien'>You spit out neurotoxin!</span>")
+	user.apply_inertia(get_dir(target, user))
 	. = ..()
 
 /spell/aoe_turf/conjure/choice/alienresin
@@ -330,7 +330,7 @@ Doesn't work on other aliens/AI.*/
 	return ..()
 
 /spell/aoe_turf/evolve/drone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	user.visible_message("<span class='danger'>[user] begins to violently twist and contort!</span>", "<span class='bold alien'>You begin to evolve, stand still for a few moments.</span>")
+	user.visible_message("<span class='danger'>[user] begins to violently twist and contort!</span>", "<span class='bold alien'>You begin to evolve. Stand still for a few moments.</span>")
 	return ..()
 
 /spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/alien/humanoid/user)

@@ -14,7 +14,7 @@
 	on = 0
 	anchored = 0
 	health = 40
-	maxhealth = 20
+	maxHealth = 20
 	req_access = list(access_medical)
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0
@@ -163,7 +163,7 @@
 	if(. && !emagged && isturf(loc)) //Retreat if we're not hostile and we're under attack
 		step_away(src,user)
 
-/obj/machinery/bot/bloodbot/Emag(mob/user as mob)
+/obj/machinery/bot/bloodbot/emag_act(mob/user as mob)
 	if(!locked)
 		visible_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		emagged = 1
@@ -173,6 +173,7 @@
 	else
 		locked = 0
 		visible_message("<span class='danger'>[src]'s panel clicks open.</span>", 1)
+
 
 /obj/machinery/bot/bloodbot/can_path()
 	return !currently_drawing_blood

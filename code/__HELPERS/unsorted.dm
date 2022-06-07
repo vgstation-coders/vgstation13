@@ -524,7 +524,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			. += "/([M.name])"
 
 	if(showantag && M && isanyantag(M))
-		. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
+		var/counts_as_antag = FALSE
+		for(var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			if(R.is_antag)
+				counts_as_antag = TRUE
+				break
+		if(counts_as_antag)
+			. += " <span title='[english_list(M.mind.antag_roles)]'>(A)</span>"
 
 	if(more_info && M)
 		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
@@ -1256,7 +1263,7 @@ Checks if that loc and dir has a item on the wall
 var/list/WALLITEMS = list(
 	"/obj/machinery/power/apc", "/obj/machinery/alarm", "/obj/item/device/radio/intercom",
 	"/obj/structure/extinguisher_cabinet", "/obj/structure/reagent_dispensers/peppertank",
-	"/obj/machinery/status_display", "/obj/machinery/requests_console", "/obj/machinery/light_switch", "/obj/effect/sign",
+	"/obj/machinery/status_display", "/obj/machinery/requests_console", "/obj/machinery/light_switch", "/obj/structure/sign",
 	"/obj/machinery/newscaster", "/obj/machinery/firealarm", "/obj/structure/noticeboard", "/obj/machinery/door_control",
 	"/obj/machinery/computer/security/telescreen", "/obj/machinery/embedded_controller/radio/simple_vent_controller",
 	"/obj/item/weapon/storage/secure/safe", "/obj/machinery/door_timer", "/obj/machinery/flasher", "/obj/machinery/keycard_auth",
@@ -1880,7 +1887,7 @@ Game Mode config tags:
 				continue
 			taken_freqs.Add(chosen_freq)
 			freqs[i] = chosen_freq
-			world.log << "freq [i] is now [chosen_freq]"
+			world.log << "Radio frequency [i] is now [chosen_freq]"
 			freq_found = TRUE
 
 	freqtospan = list(
@@ -1897,11 +1904,13 @@ Game Mode config tags:
 		"[DSQUAD_FREQ]" = "dsquadradio",
 		"[RESPONSE_FREQ]" = "resteamradio",
 		"[RAID_FREQ]" = "raiderradio",
+		"[BUG_FREQ]" = "bugradio"
 	)
 
 	radiochannelsreverse = list(
 		"[DJ_FREQ]" = "DJ",
 		"[SYND_FREQ]" = "Syndicate",
+		"[BUG_FREQ]" = "Radio Bug",
 		"[RAID_FREQ]" = "Raider",
 		"[RESPONSE_FREQ]" = "Response Team",
 		"[SUP_FREQ]" = "Supply",
@@ -1930,7 +1939,8 @@ Game Mode config tags:
 		"Response Team" = RESPONSE_FREQ,
 		"Raider" = RAID_FREQ,
 		"Syndicate" = SYND_FREQ,
-		"DJ" = DJ_FREQ
+		"DJ" = DJ_FREQ,
+		"Radio Bug" = BUG_FREQ
 	)
 
 	stationchannels = list(
@@ -1943,6 +1953,22 @@ Game Mode config tags:
 	"Service" = SER_FREQ,
 	"Supply" = SUP_FREQ
 	)
+
+/proc/update_radio_frequency(var/name, var/freq, var/color, var/mob/user, var/update_station = TRUE)
+	var/newspan = null
+	if(name in freqs)
+		newspan = freqtospan["[freqs[name]]"]
+	freqs[name] = freq
+	radiochannels[name] = freqs[name]
+	radiochannelsreverse["[freqs[name]]"] = name
+	if(color)
+		freqtocolor["[freqs[name]]"] = color
+	if(newspan)
+		freqtospan["[freqs[name]]"] = newspan
+	if(update_station)
+		stationchannels[name] = freqs[name]
+	log_admin("[update_station ? "World" : "Non-station"] radio frequency [name] is now [freqs[name]][user ? " set by [key_name(user)]": ""]")
+	message_admins("[update_station ? "World" : "Non-station"] radio frequency [color ? "<font color=[freqtocolor["[freqs[name]]"]]>" : ""][name][color ? "</font color>" : ""] is now [freqs[name]][user ? " set by [key_name(user)] ([formatJumpTo(user, "JMP")])" : ""]")
 
 /proc/getviewsize(view)
 	if(isnum(view))

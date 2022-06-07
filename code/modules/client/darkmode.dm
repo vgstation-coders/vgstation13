@@ -59,6 +59,3 @@
 	winset(src, "mebutton", 			"background-color = [COLOR_DARKMODE_BACKGROUND];text-color = [COLOR_DARKMODE_TEXT]")
 	winset(src, "saybutton", 			"background-color = [COLOR_DARKMODE_BACKGROUND];text-color = [COLOR_DARKMODE_TEXT]")
 	winset(src, "hotkey_toggle", 	"background-color = [COLOR_DARKMODE_BACKGROUND];text-color = [COLOR_DARKMODE_TEXT]")
-
-	to_chat(src, "<span class='bnotice'>Thank you for helping to test the darkmode color preset. There will probably be bugs. \
-		Do not hesitate to GITHUB REPORT any black/purple colored messages that are unreadable in the darkmode background, or to give feedback on the half-assed color pallete. Nothing here is final.</span>")

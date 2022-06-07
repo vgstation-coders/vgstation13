@@ -136,10 +136,6 @@
 	if(state_changed)
 		investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by a signal")
 
-/obj/machinery/atmospherics/binary/passive_gate/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/atmospherics/binary/passive_gate/attack_hand(mob/user as mob)
 	toggle_status(user)
 

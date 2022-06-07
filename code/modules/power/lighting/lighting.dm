@@ -112,7 +112,7 @@ var/list/light_source_images = list()
 	anchored = 1
 	plane = OBJ_PLANE
 	layer = ABOVE_DOOR_LAYER
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 2
 	active_power_usage = 10
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
@@ -166,7 +166,7 @@ var/list/light_source_images = list()
 // the smaller bulb light fixture
 
 /obj/machinery/light/cultify()
-	new /obj/structure/cult_legacy/pylon(loc)
+	new /obj/structure/cult/pylon(loc)
 	qdel(src)
 
 /obj/machinery/light/bullet_act(var/obj/item/projectile/Proj)
@@ -416,7 +416,7 @@ var/list/light_source_images = list()
  */
 /obj/machinery/light/proc/has_power()
 	var/area/this_area = get_area(src)
-	return this_area.lightswitch && this_area.power_light
+	return this_area && this_area.lightswitch && this_area.power_light
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)
@@ -579,8 +579,7 @@ var/list/light_source_images = list()
  */
 /obj/machinery/light/power_change()
 	spawn(10)
-		var/area/this_area = get_area(src)
-		seton(this_area.lightswitch && this_area.power_light)
+		seton(has_power())
 
 // called when on fire
 

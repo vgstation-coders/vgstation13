@@ -118,6 +118,7 @@
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
 	body_parts_visible_override = 0
+	hides_identity = HIDES_IDENTITY_NEVER
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
@@ -684,6 +685,7 @@
 	item_state = "grey-pressure-suit"
 	desc = "An outdated pressure suit that was once standard issue for spacefaring grey explorers. It's compact enough to be stored in a bag."
 	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/smalldisintegrator)
 	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)

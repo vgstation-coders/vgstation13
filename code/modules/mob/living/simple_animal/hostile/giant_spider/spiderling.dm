@@ -31,7 +31,7 @@
 	a_intent = I_HELP
 	size = SIZE_TINY
 	//throw_message = "sinks in slowly, before being pushed out of "
-	//status_flags = CANPUSH
+	
 	search_objects = 0
 	wanted_objects = list(/obj/machinery/atmospherics/unary/vent_pump)
 	can_ventcrawl = TRUE

@@ -19,10 +19,10 @@
 	desc = "Generates a box-shaped wall of energy when active."
 	icon = 'icons/effects/shielding.dmi'
 	icon_state = "generator_regular_off"
-	req_one_access = list(access_security, access_engine) // For locking/unlocking controls
+	req_one_access = list(access_security, access_engine_major) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = 1			//0 use nothing
+	use_power = MACHINE_POWER_USE_IDLE			//0 use nothing
 							//1 use idle power
 							//2 use active power
 	idle_power_usage = 20
@@ -83,7 +83,7 @@
 		to_chat(user, "\The [src]'s controls are now [locked ? "locked" : "unlocked"].")
 	nanomanager.update_uis(src)
 
-/obj/machinery/shield_gen/emag(var/mob/user)
+/obj/machinery/shield_gen/emag_act(var/mob/user)
 	if(prob(75))
 		toggle_lock(user)
 		spark(src, 5)
@@ -260,7 +260,7 @@
 
 /obj/machinery/shield_gen/kick_act()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		active = FALSE
 		return
 	if(prob(50))

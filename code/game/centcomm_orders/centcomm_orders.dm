@@ -95,6 +95,10 @@ var/global/current_centcomm_order_id=124901
 /datum/centcomm_order/proc/ExtraChecks(var/atom/movable/AM)
 	return 1
 
+// For cargo crate forwarding
+/datum/centcomm_order/proc/BuildToExtraChecks(var/atom/movable/AM)
+	return
+
 /datum/centcomm_order/proc/CheckShuttleObject(var/obj/O, var/in_crate, var/preserve = FALSE)
 	if(must_be_in_crate && !in_crate)
 		return 0
@@ -122,7 +126,7 @@ var/global/current_centcomm_order_id=124901
 	for(var/typepath in requested)
 		if(!(typepath in fulfilled) || fulfilled[typepath] < requested[typepath])
 			return FALSE
-	score["stuffshipped"]++
+	score.stuffshipped++
 	return TRUE
 
 /datum/centcomm_order/proc/Pay(var/complete = TRUE)
@@ -195,7 +199,7 @@ var/global/current_centcomm_order_id=124901
 	if(toPay)
 		if(complete)
 			acct.charge(-toPay,null,"Complete payment for per-unit order #[id]",dest_name = name)
-			score["stuffshipped"]++
+			score.stuffshipped++
 		else
 			acct.charge(-toPay,null,"Partial payment for per-unit order #[id]",dest_name = name)
 
@@ -262,7 +266,7 @@ var/global/current_centcomm_order_id=124901
 
 ///////////////////////////////////////
 
-/proc/create_weighted_order()
+/proc/get_weighted_order()
 	var/list/active_with_role = get_dept_pop()
 
 	var/list/department_weights = list(
@@ -323,8 +327,7 @@ var/global/current_centcomm_order_id=124901
 	if (!orders.len)
 		return
 
-	var/chosen_order = pick(orders)
-	SSsupply_shuttle.add_centcomm_order(new chosen_order)
+	return pick(orders)
 
 
 /proc/get_dept_pop()

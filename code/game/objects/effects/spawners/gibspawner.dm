@@ -8,6 +8,16 @@
 	gibdirections = list(list(WEST, NORTHWEST, SOUTHWEST, NORTH),list(EAST, NORTHEAST, SOUTHEAST, SOUTH), list())
 	..()
 
+/obj/effect/gibspawner/genericmothership
+	gibtypes = list(/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs/core)
+	gibamounts = list(2,2,1)
+	fleshcolor = "#B5B5B5"
+	bloodcolor = "#CFAAAA"
+
+/obj/effect/gibspawner/genericmothership/New()
+	gibdirections = list(list(WEST, NORTHWEST, SOUTHWEST, NORTH),list(EAST, NORTHEAST, SOUTHEAST, SOUTH), list())
+	..()
+
 /obj/effect/gibspawner/human
 	gibtypes = list(/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs/down,/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs/core)
 	gibamounts = list(1,1,1,1,1,1,1)

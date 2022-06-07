@@ -16,7 +16,7 @@
 	starting_materials = list(MAT_IRON = 15000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 	var/hmodule = null
 
 	//the colon separates the typepath from the name
@@ -309,6 +309,7 @@
 	icon_state = "s_a_k"
 	item_state = "s_a_k"
 	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 
 	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
 						"/obj/item/tool/wrench:wrench" = null,

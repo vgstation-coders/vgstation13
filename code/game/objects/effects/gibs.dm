@@ -1,5 +1,8 @@
-/proc/gibs(atom/location, var/list/virus2, var/datum/dna/MobDNA)		//CARN MARKER
-	new /obj/effect/gibspawner/generic(get_turf(location),virus2,MobDNA)
+/proc/gibs(atom/location, var/list/virus2, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)		//CARN MARKER
+	new /obj/effect/gibspawner/generic(get_turf(location),virus2,MobDNA,fleshcolor,bloodcolor)
+
+/proc/mgibs(atom/location, var/list/virus2, var/datum/dna/MobDNA)
+	new /obj/effect/gibspawner/genericmothership(get_turf(location),virus2,MobDNA)
 
 /proc/hgibs(atom/location, var/list/virus2, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
 	new /obj/effect/gibspawner/human(get_turf(location),virus2,MobDNA,fleshcolor,bloodcolor, spread_radius)

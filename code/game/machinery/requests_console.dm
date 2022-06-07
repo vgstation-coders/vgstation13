@@ -61,7 +61,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	update_icon()
 
 /obj/machinery/requests_console/update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		if(icon_state != "req_comp_off")
 			icon_state = "req_comp_off"
 	else
@@ -215,12 +215,12 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 			if(10)	//send announcement
 				dat += text("<B>Station wide announcement</B><BR><BR>")
-				if(announceAuth)
+				if(announceAuth || is_malf_owner(user))
 					dat += text("<b>Authentication accepted</b><BR><BR>")
 				else
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 				dat += text("<b>Message: </b>[message] <A href='?src=\ref[src];writeAnnouncement=1'>Write</A><BR><BR>")
-				if (announceAuth && message)
+				if ((announceAuth || is_malf_owner(user)) && message)
 					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
@@ -266,7 +266,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				else
 					priority = -1
 		else
-			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
+			to_chat(usr, "<span class='warning'>Invalid characters or no text detected.</span>")
 			dpt = "";
 			msgVerified = ""
 			msgStamped = ""
@@ -274,7 +274,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			priority = -1
 
 	if(href_list["writeAnnouncement"])
-		var/new_message = copytext(reject_bad_text(input(usr, "Write your message:", "Awaiting Input", "")),1,MAX_MESSAGE_LEN)
+		var/new_message = stripped_message(usr, "Write your message:", "Departmental Announcement", "")
 		if(new_message)
 			message = new_message
 			switch(href_list["priority"])
@@ -283,7 +283,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				else
 					priority = -1
 		else
-			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
+			to_chat(usr, "<span class='warning'>Invalid characters or no text detected.</span>")
 			message = ""
 			announceAuth = 0
 			screen = 0
@@ -468,7 +468,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
 		if(screen == 5)
 			var/obj/item/weapon/card/id/ID = O.GetID()
-			if (hackState || ID.access.Find(access_engine_equip))
+			if (hackState || ID.access.Find(access_engine_minor))
 				announceAuth = 1
 			else
 				announceAuth = 0

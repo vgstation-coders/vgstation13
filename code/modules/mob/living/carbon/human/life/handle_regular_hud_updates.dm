@@ -64,6 +64,8 @@
 					see_in_dark = 3
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 				if("shadow")
+					if(client)
+						client.darkness_planemaster.alpha = 100
 					see_in_dark = 8
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 		if(M_THERMALS in mutations)
@@ -277,7 +279,7 @@
 					isRemoteObserve = 0
 
 				//Does he have psy resist?
-				if(M_PSY_RESIST in remoteview_target.mutations)
+				if(!can_mind_interact(remoteview_target.mind))
 					to_chat(src, "<span class='warning'>Your mind is shut out!</span>")
 					isRemoteObserve = 0
 

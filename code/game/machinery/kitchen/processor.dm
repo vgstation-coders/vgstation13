@@ -11,7 +11,7 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 	var/time_coeff = 1
@@ -110,11 +110,15 @@
 		S.forceMove(loc)
 		S.visible_message("<span class='notice'>[S] crawls free of the processor!</span>")
 		return
-	score["slimes"]++
+	score.slimes++
 	for(var/i = 1, i <= C, i++)
 		new S.coretype(loc)
 		feedback_add_details("slime_core_harvested","[replacetext(S.colour," ","_")]")
 	..()
+
+/datum/food_processor_process/mob/voxchicken //Do not relocate please I will cry; I tried sorting all fancylike with some help, but it seems the file is scuffed beyond my mortal means
+	input = /mob/living/carbon/monkey/vox
+	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
 
 /datum/food_processor_process/mob/monkey
 	input = /mob/living/carbon/monkey
@@ -136,15 +140,17 @@
 	input = /mob/living/simple_animal/chicken
 	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
 
-
 /datum/food_processor_process/mob/chicken/process(loc, what)
+	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
+	..()
+
+/datum/food_processor_process/mob/voxchicken/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 	..()
 
 /datum/food_processor_process/mob/chick
 	input = /mob/living/simple_animal/chick
 	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
-
 
 /datum/food_processor_process/mob/chick/process(loc, what)
 	playsound(loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
@@ -153,7 +159,6 @@
 /datum/food_processor_process/mob/human
 	input = /mob/living/carbon/human
 	output = null
-
 
 /datum/food_processor_process/mob/human/process(loc, what)
 	var/mob/living/carbon/human/target = what

@@ -51,7 +51,7 @@ var/global/datum/shuttle/transport/transport_shuttle = new(starting_area = /area
 	link_to(transport_shuttle)
 	.=..()
 
-/obj/machinery/computer/shuttle_control/transport/emag() //Can't be emagged to hijack the centcom ferry
+/obj/machinery/computer/shuttle_control/transport/emag_act() //Can't be emagged to hijack the centcom ferry
 	return
 
 //code/game/objects/structures/docking_port.dm
@@ -93,7 +93,7 @@ var/global/datum/shuttle/ert/ert_shuttle = new(starting_area = /area/shuttle/ert
 	link_to(ert_shuttle)
 	.=..()
 
-/obj/machinery/computer/shuttle_control/ert/emag() //Can't be emagged to hijack the ert shuttle
+/obj/machinery/computer/shuttle_control/ert/emag_act() //Can't be emagged to hijack the ert shuttle
 	return
 
 //code/game/objects/structures/docking_port.dm
@@ -136,7 +136,7 @@ var/global/datum/shuttle/deathsquad/deathsquad_shuttle = new(starting_area = /ar
 	link_to(deathsquad_shuttle)
 	.=..()
 
-/obj/machinery/computer/shuttle_control/deathsquad/emag() //Can't be emagged to hijack the deathsquad shuttle
+/obj/machinery/computer/shuttle_control/deathsquad/emag_act() //Can't be emagged to hijack the deathsquad shuttle
 	return
 
 //code/game/objects/structures/docking_port.dm
@@ -184,7 +184,7 @@ var/global/datum/shuttle/elite_syndie/elite_syndie_shuttle = new(starting_area =
 	link_to(elite_syndie_shuttle)
 	.=..()
 
-/obj/machinery/computer/shuttle_control/elite_syndie/emag() //Can't be emagged to hijack the elite syndie shuttle
+/obj/machinery/computer/shuttle_control/elite_syndie/emag_act() //Can't be emagged to hijack the elite syndie shuttle
 	return
 
 //code/game/objects/structures/docking_port.dm
@@ -232,7 +232,7 @@ var/global/datum/shuttle/striketeam/strike_team_shuttle = new(starting_area = /a
 	link_to(strike_team_shuttle)
 	.=..()
 
-/obj/machinery/computer/shuttle_control/striketeam/emag() //Can't be emagged to hijack the strike team shuttle
+/obj/machinery/computer/shuttle_control/striketeam/emag_act() //Can't be emagged to hijack the strike team shuttle
 	return
 
 //code/game/objects/structures/docking_port.dm
@@ -280,5 +280,5 @@ var/global/datum/shuttle/admin/admin_shuttle = new(starting_area = /area/shuttle
 	link_to(admin_shuttle)
 	.=..()
 
-/obj/machinery/computer/shuttle_control/admin_shuttle/emag() //Can't be emagged to hijack the centcom ferry
+/obj/machinery/computer/shuttle_control/admin_shuttle/emag_act() //Can't be emagged to hijack the centcom ferry
 	return

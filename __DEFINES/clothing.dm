@@ -1,6 +1,6 @@
 #define HIDES_IDENTITY_DEFAULT 0
 #define HIDES_IDENTITY_ALWAYS 1
-
+#define HIDES_IDENTITY_NEVER -1
 
 //clothing flags
 #define MASKINTERNALS		1 // mask allows internals

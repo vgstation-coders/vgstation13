@@ -7,7 +7,7 @@ var/list/pda_multicasters = list()
 	icon_state = "pda_server-on"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 750
 	var/obj/item/device/pda/camo/CAMO
 	var/on = TRUE
@@ -36,7 +36,7 @@ var/list/pda_multicasters = list()
 	..()
 
 /obj/machinery/pda_multicaster/update_icon()
-	if(stat & (BROKEN|NOPOWER|EMPED))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED))
 		icon_state = "pda_server-nopower"
 	else
 		icon_state = "pda_server-[on ? "on" : "off"]"
@@ -52,11 +52,13 @@ var/list/pda_multicasters = list()
 	update_icon()
 
 /obj/machinery/pda_multicaster/proc/check_status()
-	return !(stat&(BROKEN|NOPOWER|EMPED))&&on
+	return !(stat&(FORCEDISABLE|BROKEN|NOPOWER|EMPED))&&on
 
 /obj/machinery/pda_multicaster/proc/update_PDAs(var/turn_off)
 	for(var/obj/item/device/pda/pda in contents)
-		pda.toff = turn_off
+		var/datum/pda_app/messenger/camo/app = locate(/datum/pda_app/messenger/camo) in pda.applications
+		if(app)
+			app.toff = turn_off
 
 /obj/machinery/pda_multicaster/proc/multicast(var/target,var/obj/item/device/pda/sender,var/mob/living/U,var/message)
 	var/list/redirection_list = list(
@@ -73,15 +75,24 @@ var/list/pda_multicasters = list()
 		var/obj/item/device/pda/P = available_pdas[element]
 		if(is_type_in_list(P,redirection_list[target]))
 			CAMO.ownjob = "[sender.owner]"
-			CAMO.create_message(U, P, message, sender)
+			var/datum/pda_app/messenger/camo/app = locate(/datum/pda_app/messenger/camo) in CAMO.applications
+			if(app)
+				app.create_message(U, P, message, sender)
 
 /obj/item/device/pda/camo
 	name = "Centralized Autonomous Messaging Operator"
 	owner = "CAMO"
 	ownjob = "CAMO"
-	detonate = 0
+	accepted_viruses = list(
+		/datum/pda_app/cart/virus/honk,
+		/datum/pda_app/cart/virus/silent,
+	)
 	hidden = 1
+	starting_apps = list(/datum/pda_app/messenger/camo)
 
-/obj/item/device/pda/camo/create_message(var/mob/living/U,var/obj/item/device/pda/P,var/multicast_message = null)
+/datum/pda_app/messenger/camo
+	can_purchase = FALSE
+
+/datum/pda_app/messenger/camo/create_message(var/mob/living/U,var/obj/item/device/pda/P,var/multicast_message = null)
 	..()
 	last_text = 0 //CAMO can text as much as it pleases

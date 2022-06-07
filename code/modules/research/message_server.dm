@@ -53,7 +53,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	name = "Messaging Server"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 100
 	ghost_read=0
@@ -86,7 +86,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	return newKey
 
 /obj/machinery/message_server/proc/is_functioning()
-	return !disabled && !(stat & (BROKEN|NOPOWER))
+	return !disabled && !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 
 /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "", var/icon/img_sent = null)
 	pda_msgs += new/datum/data_pda_msg(recipient,sender,message,img_sent)
@@ -109,7 +109,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	update_icon()
 
 /obj/machinery/message_server/update_icon()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		icon_state = "pda_server-nopower"
 	else if (disabled)
 		icon_state = "pda_server-off"
@@ -124,7 +124,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	name = "Blackbox Recorder"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 100
 

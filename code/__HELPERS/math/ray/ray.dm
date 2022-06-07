@@ -72,7 +72,8 @@
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
 	//calc where we hit the atom
 	var/vector/hit_point = hit.point_raw
-	var/vector/hit_atom_loc = atom2vector(hit.hit_atom) + new /vector(0.5, 0.5)
+	var/atom/movable/resolved_hit_atom = hit.hit_atom?.get()
+	var/vector/hit_atom_loc = atom2vector(resolved_hit_atom) + new /vector(0.5, 0.5)
 
 	var/vector/hit_vector = hit_point - hit_atom_loc
 
@@ -136,7 +137,7 @@
 		var/turf/T = vector2turf(new_position, z)
 
 		//trying hit at turf
-		var/rayCastHitInfo/info = new /rayCastHitInfo(src, T, new_position, new_position_unfloored, distance)
+		var/rayCastHitInfo/info = new /rayCastHitInfo(src, makeweakref(T), new_position, new_position_unfloored, distance)
 		var/rayCastHit/hit = raycast_hit_check(info)
 		switch(hit.hit_code())
 			if(RAY_CAST_NO_HIT_EXIT)
@@ -154,7 +155,7 @@
 
 		//trying hit on every atom inside the turf
 		for(var/atom/movable/A in T)
-			info = new /rayCastHitInfo(src, A, new_position, new_position_unfloored, distance)
+			info = new /rayCastHitInfo(src, makeweakref(A), new_position, new_position_unfloored, distance)
 			hit = raycast_hit_check(info)
 			switch(hit.hit_code())
 				if(RAY_CAST_NO_HIT_EXIT)

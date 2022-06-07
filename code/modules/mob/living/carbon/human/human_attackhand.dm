@@ -54,7 +54,7 @@
 
 	damage = run_armor_absorb(affecting, "melee", damage)
 
-	if(T.amount == 0)
+	if(!T?.amount)
 		attacktype = "gummed"
 		damage = 1
 
@@ -82,6 +82,7 @@
 		LAssailant = M
 		assaulted_by(M)
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
+
 	return
 
 //KICKS

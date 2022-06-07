@@ -4,9 +4,9 @@
 	icon = 'icons/obj/doors/windoor.dmi'
 	icon_state = "left"
 	var/base_state = "left"
-	var/health = 60
+	health = 60
 	visible = 0.0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	flow_flags = ON_BORDER
 	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
 	layer = WINDOOR_LAYER //Below curtains
@@ -17,7 +17,7 @@
 	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
 	ghost_read = 0
-	machine_flags = EMAGGABLE
+	machine_flags = EMAGGABLE|WIREJACK
 	soundeffect = 'sound/machines/windowdoor.ogg'
 	var/shard_type = /obj/item/weapon/shard
 	penetration_dampening = 2
@@ -25,6 +25,12 @@
 	var/obj/machinery/smartglass_electronics/smartwindow
 	var/window_is_opaque = FALSE //The var that helps darken the glass when the door opens/closes
 	var/assembly_type = /obj/structure/windoor_assembly
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
 
 
 /obj/machinery/door/window/New()
@@ -175,14 +181,16 @@
 	operating = 0
 	return TRUE
 
-/obj/machinery/door/window/proc/take_damage(var/damage)
-	health = max(0, health - damage)
+/obj/machinery/door/window/try_break()
 	if(health <= 0)
 		playsound(src, "shatter", 70, 1)
 		new shard_type(loc)
 		new /obj/item/stack/cable_coil(loc, 2)
 		eject_electronics()
 		qdel(src)
+		return TRUE
+	else
+		return FALSE
 
 /obj/machinery/door/window/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damage)
@@ -203,9 +211,6 @@
 	playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 	take_damage(tforce)
 
-/obj/machinery/door/window/attack_ai(mob/user)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/door/window/attack_ghost(mob/user)
 	if(isAdminGhost(user))
@@ -279,7 +284,7 @@
 		return
 
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
-	if(density && istype(I, /obj/item) && !istype(I, /obj/item/weapon/card))
+	if(density && istype(I, /obj/item) && !istype(I, /obj/item/weapon/card) && !istype(I, /obj/item/device/paicard))
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
@@ -296,7 +301,7 @@
 
 	return ..()
 
-/obj/machinery/door/window/emag(mob/user)
+/obj/machinery/door/window/emag_act(mob/user)
 	..()
 	hackOpen(user)
 
@@ -363,6 +368,13 @@
 		electronics.installed = FALSE
 		electronics.forceMove(loc)
 		electronics = null
+
+/obj/machinery/door/window/wirejack(var/mob/living/silicon/pai/P)
+	if(..())
+		if (!density)
+			return close()
+		else
+			return open()
 
 /obj/machinery/door/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork, BRASS_WINDOOR_GLOW)

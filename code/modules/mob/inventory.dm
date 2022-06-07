@@ -345,6 +345,12 @@
 	to_drop.dropped(src)
 
 	if(to_drop && to_drop.loc)
+		if(mind)
+			var/datum/role/R = mind.GetRole(TIMEAGENT)
+			if(R)
+				var/datum/objective/target/locate/rearrange/L = locate() in R.objectives.GetObjectives()
+				if(L)
+					L.check(list(to_drop))
 		return 1
 	return 0
 
@@ -564,12 +570,15 @@
 	else
 		return get_id_card()
 
-/mob/proc/slotID2slotname(slot_id)
+/mob/proc/slotID2slotname(slot_id, internal)
 	switch (slot_id)
 		if (slot_back)
 			return "back"
 		if (slot_wear_mask)
-			return "face"
+			if(internal)
+				return "mouth"
+			else
+				return "face"
 		if (slot_handcuffed)
 			return "hands"
 		if (slot_belt)

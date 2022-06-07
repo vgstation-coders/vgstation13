@@ -3,7 +3,7 @@
 	desc = "A device which uses weather control techniques such as cloud seeding to manipulate atmospheric conditions. It runs on bluespace crystals."
 	icon = 'icons/obj/stationobjs_32x64.dmi'
 	icon_state = "wcd0"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -96,7 +96,7 @@
 	if(!allowed(usr) && !emagged)
 		to_chat(usr,"<span class='warning'>Access denied.</span>")
 		return
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	var/datum/climate/C = map.climate
 	var/datum/weather/CW = C.current_weather
@@ -104,7 +104,7 @@
 	var/feedback = NOFIRE
 	var/usedcost = 0
 
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		feedback = POWER_ERROR
 	else
 		if(href_list["disrupt"])

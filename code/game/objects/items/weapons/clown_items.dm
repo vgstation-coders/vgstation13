@@ -8,11 +8,16 @@
  * Banana Peels
  */
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
+	if(..())  // Slipping if these are below a floor tile is nonsensical
+		return 1
+	handle_slip(AM)
+
+/datum/locking_category/banana_peel
+
+/obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM)
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if(slip_n_slide(M))
-			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+		slip_n_slide(M)
 	if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
 		var/obj/structure/bed/chair/vehicle/gokart/kart = AM
 		var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
@@ -24,10 +29,8 @@
 				step(kart, left_or_right)
 				sleep(1)
 
-/datum/locking_category/banana_peel
-
 /obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
-	if(!M.Slip(2,2,1))
+	if(!M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>"))
 		return 0
 	var/tiles_to_slip = rand(round(potency/20, 1),round(potency/10, 1))
 	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
@@ -71,7 +74,7 @@
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
-	if (isliving(AM) && world.time > next_honk)
+	if (isliving(AM) && world.time > next_honk) // Honking these while under floortiles is fine though
 		honk(AM)
 		next_honk = world.time + honk_delay
 
@@ -158,6 +161,17 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "honkbaton"
 	item_state = "honkbaton"
+	can_honk_baton = 0
+
+/obj/item/weapon/bikehorn/skullhorn
+	name = "skull horn"
+	desc = "To be or not to be bad to the bone..."
+	icon = 'icons/effects/blood.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/remains.dmi', "right_hand" = 'icons/mob/in-hand/right/remains.dmi')
+	icon_state = "remains_skull"
+	item_state = "skull"
+	attack_verb = list("hits")
+	hitsound = 'sound/items/badtothebone.ogg'
 	can_honk_baton = 0
 
 #define TELE_COOLDOWN 5 SECONDS
@@ -275,6 +289,9 @@
 	icon_state = "glue_safe0"
 
 /obj/proc/glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //proc for when glue is used on something
+	default_glue_act(stick_time, glue_state)
+
+/obj/proc/default_glue_act(stick_time, glue_state)
 	switch(glue_state)
 		if(GLUE_STATE_TEMP)
 			current_glue_state = GLUE_STATE_TEMP
@@ -284,27 +301,30 @@
 			current_glue_state = GLUE_STATE_PERMA
 
 /obj/proc/unglue()
+	return default_unglue()
+
+/obj/proc/default_unglue()
 	if(current_glue_state == GLUE_STATE_TEMP)
 		current_glue_state = GLUE_STATE_NONE
 		return 1
 	else
 		return 0
 
-/obj/item/unglue()
-	if(..())
-		cant_drop--
-
-/obj/item/clothing/unglue()
-	if(..())
-		canremove++
-
 /obj/item/glue_act(stick_time)
 	cant_drop++
 	..()
 
-/obj/item/clothing/glue_act(stick_time)
+/obj/item/unglue()
+	if(..())
+		cant_drop--
+
+/obj/item/clothing/glue_act(stick_time, glue_state)
 	canremove--
-	..()
+	default_glue_act(stick_time, glue_state)
+
+/obj/item/clothing/unglue()
+	if(default_unglue())
+		canremove++
 
 /obj/structure/bed/glue_act(stick_time)
 	..()

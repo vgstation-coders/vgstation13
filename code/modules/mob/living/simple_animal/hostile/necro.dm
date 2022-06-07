@@ -157,7 +157,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 	meat_type = null
 /*
 #define EVOLVING 1
@@ -206,8 +206,6 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse
@@ -265,12 +263,10 @@
 
 	return..()
 
-
-
 /mob/living/simple_animal/hostile/necro/zombie/Life()
 	if(!isUnconscious())
 		if(stance == HOSTILE_STANCE_IDLE && !client) //Not doing anything at the time
-			if(can_evolve)//Can we evolve, and have we fed
+			if(can_evolve) //Can we evolve, and have we fed
 				check_evolve()
 	..()
 
@@ -316,11 +312,6 @@
 	else if (istype(src, /mob/living/simple_animal/hostile/necro/zombie/rotting))
 		*/
 
-/mob/living/simple_animal/hostile/necro/zombie/verb/check_can_evolve()
-	set name = "Check Evolve"
-	set category = "IC"
-	check_evolve()
-
 /mob/living/simple_animal/hostile/necro/zombie/proc/stats()
 	stat(null, "Times revived - [times_revived]")
 	stat(null, "Times eaten - [times_eaten]")
@@ -329,7 +320,6 @@
 	..()
 	if(statpanel("Status"))
 		stats()
-
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
 	if(ispath(evolve_to, /mob/living/simple_animal/hostile/necro))
@@ -341,6 +331,7 @@
 		get_clothes(src, evolution)
 		if(mind)
 			mind.transfer_to(evolution) //Just in the offchance we have a player in control
+			evolution.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		qdel(src)
 	else
 		//Now, how did you get here when this is supposed to be the zombie evolution tree?
@@ -391,7 +382,7 @@
 		clothing.Remove(I)
 	..()
 
-/mob/living/simple_animal/hostile/necro/zombie/turned //Not very useful
+/mob/living/simple_animal/hostile/necro/zombie/turned
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
 	icon_living = "zombie_turned"
 	icon_dead = "zombie_turned"
@@ -399,6 +390,7 @@
 	maxHealth = 50
 	health = 50
 	can_evolve = TRUE
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/being_unzombified = FALSE
 
@@ -426,7 +418,7 @@
 			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
-			if(user.mind && (user.mind.assigned_role == "Chaplain"))
+			if(user.mind && isReligiousLeader(user))
 				chaplain = TRUE //Indeed we are
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
@@ -478,8 +470,9 @@
 	desc = "A reanimated corpse that looks like it has seen better days. Whoever this was is long gone."
 	maxHealth = 100
 	health = 100
-	can_evolve = 1
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+
+	can_evolve = TRUE
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting/check_evolve()
 	..()
@@ -580,12 +573,80 @@
 	can_evolve = 0
 	unique_name = 1
 
+///////////////// Grey Soldier Zombie ////////////////////
+/mob/living/simple_animal/hostile/necro/zombie/greysoldier
+	name = "decaying soldier"
+	desc = "A zombified grey soldier, wearing a tattered armor vest. It carries itself rather steadily for a zombie."
+	icon_state = "decaying_soldier"
+	icon_living = "decaying_soldier"
+	icon_dead = "decaying_soldier"
+	move_to_delay = 3 // Quite a bit faster than a normal zombie, though still easy to outrun
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey // Slighty rotten AND acidic. Nice.
+
+/mob/living/simple_animal/hostile/necro/zombie/greylaborer
+	name = "mauled laborer"
+	desc = "A zombified grey laborer, wearing the torn remains of its overalls. It shambles quite rapidly."
+	icon_state = "mauled_laborer"
+	icon_living = "mauled_laborer"
+	icon_dead = "mauled_laborer"
+	move_to_delay = 4 // A bit faster than a regular zombie
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey // Slighty rotten AND acidic. Nice.
+
+	maxHealth = 80 // Slightly less health
+	health = 80
+
+///////////////// Vox Raider Zombies ////////////////////
+
+/mob/living/simple_animal/hostile/necro/zombie/raider1
+	name = "tainted raider"
+	desc = "A zombified vox raider, still clad in the remains of armored hardsuit plates. Its remaining eye gleams with a new kind of hunger."
+	icon_state = "rotting_raider1"
+	icon_living = "rotting_raider1"
+	icon_dead = "rotting_raider1"
+	move_to_delay = 4 // A bit faster due to recently turning
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox // Would you eat zombie chicken?
+
+	health = 125 // A little tankier due to wearing remains of armor
+	maxHealth = 125
+
+	melee_damage_lower = 15
+	melee_damage_upper = 25
+
+	attacktext = "claws"
+	attack_sound = 'sound/weapons/slice.ogg'
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+
+/mob/living/simple_animal/hostile/necro/zombie/raider2
+	name = "rotting raider"
+	desc = "A zombified vox raider, still clad in the remains of armored hardsuit plates. Its remaining eye gleams with a new kind of hunger."
+	icon_state = "rotting_raider2"
+	icon_living = "rotting_raider2"
+	icon_dead = "rotting_raider2"
+	move_to_delay = 4
+	can_evolve = 0
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
+
+	health = 125
+	maxHealth = 125
+
+	melee_damage_lower = 15
+	melee_damage_upper = 25
+
+	attacktext = "claws"
+	attack_sound = 'sound/weapons/slice.ogg'
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+
+///////////////// GHOULS ////////////////////
+
 /mob/living/simple_animal/hostile/necro/zombie/ghoul
 	name = "ghoul"
 	icon_state = "ghoul"
 	icon_dead = "ghoul"
 	icon_living = "ghoul"
-	desc = "Suffering from onset decay from radiation exposure, this one has lost their mind, their soul, but not their hunger."
+	desc = "Suffering from onset decay from radiation exposure. They have lost their mind and soul, but not their hunger."
 	can_evolve = 0
 	canRegenerate = 0
 
@@ -596,7 +657,7 @@
 	melee_damage_upper = 20
 	attacktext = "punches"
 	attack_sound = "sound/weapons/punch1.ogg"
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/Life()
 	..()
@@ -623,7 +684,7 @@
 
 	melee_damage_lower = 15
 	melee_damage_upper = 25
-
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
 	var/last_rad_blast = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/Life()
@@ -670,7 +731,7 @@
 ///////////////// HEADCRAB ZOMBIES ////////////////////
 ///////////////////////////////////////////////////////
 
-/mob/living/simple_animal/hostile/necro/zombie/headcrab //Not very useful
+/mob/living/simple_animal/hostile/necro/zombie/headcrab
 	icon_state = "zombie_headcrab"
 	icon_living = "zombie_headcrab"
 	icon_dead = "zombie_headcrab"
@@ -681,6 +742,7 @@
 	canRegenerate = 0
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/obj/item/clothing/mask/facehugger/headcrab/crab //The crab controlling it.
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()

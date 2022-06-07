@@ -180,7 +180,8 @@ var/list/impact_master = list()
 			log_attack("<font color='red'>[key_name(firer)] shot himself with a [type].</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot himself with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot himself with a <b>[type]</b>"
-			msg_admin_attack("[key_name(firer)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
+			if(firer.key || firer.ckey)
+				msg_admin_attack("[key_name(firer)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
 			if(!iscarbon(firer))
 				M.LAssailant = null
 			else
@@ -190,7 +191,7 @@ var/list/impact_master = list()
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
-			if(firer.client || M.client)
+			if((firer.key || firer.ckey) && (M.key || M.ckey))
 				msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
 			if(!iscarbon(firer))
 				M.LAssailant = null
@@ -452,6 +453,10 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
+
+	if(!original && !target)
+		qdel(src) //If for some reason the target stops existing as the weapon is fired, just delete the projectile
+		return
 
 	// 2 % chance to crit
 	if (firer && is_ranged_crit(src, firer))

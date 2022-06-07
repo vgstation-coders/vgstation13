@@ -5,7 +5,7 @@
 	icon = 'icons/obj/machines/broadcast.dmi'
 	icon_state = "broadcaster"
 	light_color = LIGHT_COLOR_BLUE
-	use_power = 0 // We use power_connection for this.
+	use_power = MACHINE_POWER_USE_NONE // We use power_connection for this.
 	density = 1
 	anchored = 1 // May need map updates idfk
 	idle_power_usage = 50
@@ -27,9 +27,10 @@
 /obj/machinery/media/transmitter/broadcast/New()
 	..()
 	wires = new(src)
-	power_connection=new(src,LIGHT)
+	power_connection = new(src)
 	power_connection.idle_usage=idle_power_usage
 	power_connection.active_usage=active_power_usage
+	power_connection.monitoring_enabled = TRUE
 
 /obj/machinery/media/transmitter/broadcast/Destroy()
 	if(wires)
@@ -38,7 +39,7 @@
 	if(power_connection)
 		qdel(power_connection)
 		power_connection = null
-	..()
+	. = ..()
 
 /obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)
 	if(power_connection.powered())
@@ -107,10 +108,6 @@
 			integrity = 100
 			to_chat(user, "<span class='notice'>You repair the blown fuses on [src].</span>")
 
-/obj/machinery/media/transmitter/broadcast/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	attack_hand(user)
-
 /obj/machinery/media/transmitter/broadcast/attack_hand(var/mob/user as mob)
 	if(panel_open)
 		wires.Interact(user)
@@ -125,7 +122,7 @@
 		if(!istype(user.get_active_hand(), /obj/item/device/multitool))
 			return
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		return
 
 	var/screen = {"
@@ -147,7 +144,7 @@
 
 
 /obj/machinery/media/transmitter/broadcast/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		..(severity)
 		return
 	cable_power_change()
@@ -197,15 +194,15 @@
 			icon_state = "broadcaster damaged1"
 		if (75 to 100)
 			icon_state = "broadcaster"
-	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on)
 		overlays += image(icon = icon, icon_state = "broadcaster on")
 		set_light(3) // OH FUUUUCK
-		use_power = 2
+		power_connection.use_power = MACHINE_POWER_USE_ACTIVE
 	else
 		set_light(1) // Only the tile we're on.
-		use_power = 1
+		power_connection.use_power = MACHINE_POWER_USE_IDLE
 	if(sources.len)
 		overlays += image(icon = icon, icon_state = "broadcaster linked")
 
@@ -253,10 +250,10 @@
 	return !wires.IsIndexCut(TRANS_RAD_ONE) + !wires.IsIndexCut(TRANS_RAD_TWO)
 
 /obj/machinery/media/transmitter/broadcast/process()
-	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on && anchored)
-		if(integrity<=0 || count_rad_wires()==0) //Shut down if too damaged OR if no rad wires
+		if(integrity<=0 || count_rad_wires()==0 || power_connection.get_satisfaction() < 1.0) //Shut down if too damaged, no rad wires or not properly powered
 			on=0
 			update_on()
 

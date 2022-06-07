@@ -29,7 +29,7 @@
 	hide = 1
 	toggled = 1
 	//anchored = 1
-	//use_power = 0
+	//use_power = MACHINE_POWER_USE_NONE
 	//idle_power_usage = 0
 	heating_power = 0
 	autolinkers = list("c_relay")
@@ -163,6 +163,7 @@
 /obj/machinery/telecomms/server/presets/science/initialize()
 	..()
 	freq_listening = list(SCI_FREQ)
+	freq_names = list(SCIENCE = "#993399")
 
 /obj/machinery/telecomms/server/presets/medical
 	id = "Medical Server"
@@ -171,6 +172,7 @@
 /obj/machinery/telecomms/server/presets/medical/initialize()
 	..()
 	freq_listening = list(MED_FREQ)
+	freq_names = list(MEDICAL = "#3399CC")
 
 /obj/machinery/telecomms/server/presets/supply
 	id = "Supply Server"
@@ -179,6 +181,7 @@
 /obj/machinery/telecomms/server/presets/supply/initialize()
 	..()
 	freq_listening = list(SUP_FREQ)
+	freq_names = list(CARGO = "#54F519")
 
 //Using old mining channel frequency for a service channel for the bartender, botanist and chef.
 //Also cleaned up all the references to the mining channel I could find, it most likely will never be used again anyway. - Duny
@@ -189,6 +192,7 @@
 /obj/machinery/telecomms/server/presets/service/initialize()
 	..()
 	freq_listening = list(SER_FREQ)
+	freq_names = list(SERVICE = "#A17A4E")
 
 /obj/machinery/telecomms/server/presets/common
 	id = "Common Server"
@@ -197,6 +201,8 @@
 /obj/machinery/telecomms/server/presets/common/initialize()
 	..()
 	freq_listening = list(COMMON_FREQ, AIPRIV_FREQ)	//just stick AI private frequency in there until somebody gives it its own server
+	freq_names = list(COMMON = "#008000", AIPRIVATE = "#ff00ff") //ditto
+
 	//Common and other radio frequencies for people to freely use
 	// 1441 to 1489
 /obj/machinery/telecomms/server/presets/common/New()
@@ -214,25 +220,31 @@
 	id = "Command Server"
 	autolinkers = list("command")
 
+
 /obj/machinery/telecomms/server/presets/command/initialize()
 	..()
 	freq_listening = list(COMM_FREQ)
+	freq_names = list(COMMAND = "#193A7A")
 
 /obj/machinery/telecomms/server/presets/engineering
 	id = "Engineering Server"
 	autolinkers = list("engineering")
 
+
 /obj/machinery/telecomms/server/presets/engineering/initialize()
 	..()
 	freq_listening = list(ENG_FREQ)
+	freq_names = list(ENGINEERING = "#A66300")
 
 /obj/machinery/telecomms/server/presets/security
 	id = "Security Server"
 	autolinkers = list("security")
 
+
 /obj/machinery/telecomms/server/presets/security/initialize()
 	..()
 	freq_listening = list(SEC_FREQ)
+	freq_names = list(SECURITY_COMM = "#A30000")
 
 //Broadcasters
 

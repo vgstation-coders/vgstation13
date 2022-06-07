@@ -14,7 +14,6 @@
 	var/removed_type //When removed, forms this object.
 	var/list/transplant_data // Blood DNA and colour of donor
 	var/rejecting            // Is this organ already being rejected?
-	var/obj/item/organ/internal/organ_holder
 	var/datum/dna/owner_dna
 
 
@@ -25,9 +24,6 @@
 		var/datum/organ/external/E = owner.organs_by_name[parent_organ] //Fuck this setup
 		E.internal_organs -= src
 		owner = null
-	if(organ_holder)
-		organ_holder.organ_data = null
-		organ_holder = null
 	..()
 
 /datum/organ/internal/Copy()
@@ -41,7 +37,6 @@
 	I.removed_type = removed_type
 	I.transplant_data = transplant_data
 	I.rejecting = rejecting
-	I.organ_holder = null
 	I.owner_dna = owner_dna
 	return I
 
@@ -157,6 +152,8 @@
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
 	if(!owner)
 		return
+	if(owner?.status_flags & GODMODE)
+		return 0	//godmode
 	if(src.robotic == 2)
 		src.damage += (amount * 0.8)
 	else
@@ -248,7 +245,6 @@
 		if(owner)
 			removed_organ.had_mind = !isnull(owner.mind)
 		removed_organ.update()
-		organ_holder = removed_organ
 		removed_organ.stabilized = FALSE
 	return removed_organ
 

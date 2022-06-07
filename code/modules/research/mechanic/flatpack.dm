@@ -151,23 +151,32 @@
 /obj/structure/closet/crate/flatpack/MouseDropTo(atom/dropping, mob/user)
 	if(istype(dropping, /obj/structure/closet/crate/flatpack) && dropping != src)
 		var/obj/structure/closet/crate/flatpack/stacking = dropping
-		if(assembling == ASSEMBLING || stacking.assembling == ASSEMBLING)
-			to_chat(user, "You can't stack opened flatpacks.")
-			return
-		if((stacked.len + stacking.stacked.len + 2) >= MAX_FLATPACK_STACKS) //how many flatpacks we can in a stack (including the bases)
-			to_chat(user, "You can't stack flatpacks that high.")
-			return
 		if(user.incapacitated() || user.lying) //make sure they can interact with it
 			return
 		if(!ishigherbeing(user) && !isrobot(user)) //check mob type
 			return
 		if(!user.Adjacent(src) || !user.Adjacent(dropping))
 			return
+		if(!try_add_stack(stacking, user))
+			return
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")
-		add_stack(stacking)
-		return 1
-	return
+
+
+/// Returns TRUE on success.
+/obj/structure/closet/crate/flatpack/proc/try_add_stack(obj/structure/closet/crate/flatpack/other, mob/user)
+	if(other == src)
+		return FALSE
+	if(assembling == ASSEMBLING || other.assembling == ASSEMBLING)
+		if(user)
+			to_chat(user, "<span class='warning'>You can't stack opened flatpacks.</span>")
+		return FALSE
+	if((stacked.len + other.stacked.len + 2) >= MAX_FLATPACK_STACKS) //how many flatpacks we can in a stack (including the bases)
+		if(user)
+			to_chat(user, "<span class='warning'>You can't stack flatpacks that high.</span>")
+		return FALSE
+	add_stack(other)
+	return TRUE
 
 /obj/structure/closet/crate/flatpack/proc/add_stack(obj/structure/closet/crate/flatpack/flatpack)
 	if(!flatpack)

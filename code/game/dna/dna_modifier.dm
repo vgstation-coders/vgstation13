@@ -59,7 +59,7 @@
 	icon_state = "scanner_0"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	active_power_usage = 300
 	var/locked = 0
@@ -175,7 +175,7 @@
 	if(!istype(L))
 		return
 
-	put_in(L)
+	put_in(L,user)
 
 /obj/machinery/dna_scannernew/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
@@ -239,9 +239,9 @@
 	else if(M.anchored)
 		return FALSE
 
-	if(ismanifested(M) || !iscarbon(M))
+	if(ismanifested(M) || (!iscarbon(M) && !istype(M, /mob/living/slime_pile)))
 		if(user)
-			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that person's genes.</span>")
+			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that organisms's genes.</span>")
 		return
 
 	if(user)
@@ -529,9 +529,9 @@
 
 /obj/machinery/computer/scan_consolenew/process()
 	if (connected && connected.occupant)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 /obj/machinery/computer/scan_consolenew/attack_hand(user as mob)
 	if(!..())
@@ -911,12 +911,12 @@
 		var/which = text2num(href_list["changeBlockLabel"])
 		var/datum/block_label/label = labels[which]
 		var/text = copytext(sanitize(input(usr, "New Label:", "Edit Label", label.name) as text|null),1,MAX_NAME_LEN)
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(text) //you can color the tab without a label, sure why not
 			label.name = text
 		var/newcolor = input("Select Tab Color", "Edit Label", label.color) as color
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(newcolor)
 			label.color = newcolor

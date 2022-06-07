@@ -6,12 +6,12 @@
 	desc = "Charges Starscreen shield generators."
 	icon = 'icons/effects/shielding.dmi'
 	icon_state = "capacitor"
-	req_one_access = list(access_security, access_engine) // For locking/unlocking controls
+	req_one_access = list(access_security, access_engine_minor) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = 1			//0 use nothing
-							//1 use idle power
-							//2 use active power
+	use_power = MACHINE_POWER_USE_IDLE	//0 use nothing
+										//1 use idle power
+										//2 use active power
 	idle_power_usage = 10
 	active_power_usage = 100
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -52,7 +52,7 @@
 		to_chat(user, "\The [src]'s controls are now [locked ? "locked" : "unlocked"].")
 	nanomanager.update_uis(src)
 
-/obj/machinery/shield_capacitor/emag(var/mob/user)
+/obj/machinery/shield_capacitor/emag_act(var/mob/user)
 	if(prob(75))
 		toggle_lock(user)
 		spark(src, 5)
@@ -111,14 +111,14 @@
 
 /obj/machinery/shield_capacitor/process()
 	if(active)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		if(stored_charge + charge_rate > max_charge)
 			active_power_usage = max_charge - stored_charge
 		else
 			active_power_usage = charge_rate
 		stored_charge += active_power_usage
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	time_since_fail++
 	if(stored_charge < active_power_usage * 1.5)
@@ -136,7 +136,7 @@
 
 /obj/machinery/shield_capacitor/kick_act()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		active = FALSE
 		return
 	if(prob(50))
@@ -161,3 +161,8 @@
 	set src in oview(1)
 
 	rotate(usr, 90)
+
+/obj/machinery/shield_capacitor/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate(usr,-90)

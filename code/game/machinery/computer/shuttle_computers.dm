@@ -78,7 +78,7 @@
 
 	..()
 
-/obj/item/weapon/disk/shuttle_coords/proc/compactible(datum/shuttle/S)
+/obj/item/weapon/disk/shuttle_coords/proc/compatible(datum/shuttle/S)
 	if(!allowed_shuttles.len)
 		return TRUE
 
@@ -135,7 +135,7 @@
 	req_access = null
 	circuit = "/obj/item/weapon/circuitboard/shuttle_control"
 
-	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE 
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE
 
 	light_color = LIGHT_COLOR_BLUE
 
@@ -255,7 +255,7 @@
 					dat += " | [text] | "
 
 			if(disk && disk.destination)
-				if(disk.compactible(shuttle))
+				if(disk.compatible(shuttle))
 					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
 				else //Shuttle not allowed to use disk
 					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"
@@ -290,6 +290,22 @@
 	user << browse("[dat]", "window=shuttle_control;size=575x450")
 	onclose(user, "shuttle_control")
 
+/// Only pass `user` if the mob is directly interacting through the UI.
+/obj/machinery/computer/shuttle_control/proc/try_move(mob/user)
+	if(!shuttle)
+		if(user)
+			to_chat(user, "<span class='warning'>No shuttle detected.</span>")
+		return
+
+	if(!selected_port && shuttle.docking_ports.len >= 2)
+		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
+
+	//Send a message to the shuttle to move
+	shuttle.travel_to(selected_port, src, user)
+
+	selected_port = null
+	updateUsrDialog()
+
 /obj/machinery/computer/shuttle_control/Topic(href, href_list)
 	if(..())
 		return
@@ -300,32 +316,10 @@
 	usr.set_machine(src)
 	add_fingerprint(usr)
 	if(href_list["move"])
-		if(!shuttle)
-			to_chat(usr, "<span class = 'warning'>No shuttle detected.</span>")
-			return
 		if(!allowed(usr))
 			to_chat(usr, "<span class='red'>Access denied.</span>")
 			return
-
-		if(!selected_port && shuttle.docking_ports.len >= 2)
-			selected_port = pick(shuttle.docking_ports - shuttle.current_port)
-
-		//Check if the selected docking port is valid (can be selected)
-		if(!allow_selecting_all && !(selected_port in shuttle.docking_ports))
-			//Check disks too
-			if(!disk || !disk.compactible(shuttle) || (disk.destination != selected_port))
-				to_chat(usr, "<span class = 'warning'>[!disk?"No disk detected":!disk.compactible(shuttle)?"Current disk not conpatable with current shuttle.":"Currently selected docking port not valid."]</span>")
-				return
-
-		if(selected_port.docked_with) //If used by another shuttle, don't try to move this shuttle
-			to_chat(usr, "<span class = 'warning'>Selected port is currently in use.</span>")
-			return
-
-		//Send a message to the shuttle to move
-		shuttle.travel_to(selected_port, src, usr)
-
-		selected_port = null
-		updateUsrDialog()
+		try_move(usr)
 	if(href_list["link_to_port"])
 		if(!shuttle)
 			return
@@ -573,6 +567,15 @@
 		to_chat(user, "<span class='info'>You insert \the [P] into \the [src], but it is rejected.</span>")
 		user.put_in_hands(P)
 
+/obj/machinery/computer/shuttle_control/kick_act(mob/user)
+	..()
+	if(is_operational() && (user ? user.lucky_prob(5, luckfactor = 1/5) : prob(5)))
+		try_move()
+
+/obj/machinery/computer/shuttle_control/emp_act(severity)
+	if(is_operational() && prob(50))
+		try_move()
+
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")
 	return ..() // Nothing happens (?)
@@ -588,7 +591,7 @@
 	req_access = shuttle.req_access
 	updateUsrDialog()
 
-/obj/machinery/computer/shuttle_control/emag(mob/user as mob)
+/obj/machinery/computer/shuttle_control/emag_act(mob/user as mob)
 	..()
 	req_access = list()
 	if(user)

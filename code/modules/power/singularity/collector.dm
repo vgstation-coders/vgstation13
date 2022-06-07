@@ -8,7 +8,7 @@ var/global/list/rad_collectors = list()
 	icon_state = "ca"
 	anchored = 0
 	density = 1
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 	var/obj/item/weapon/tank/plasma/P = null
 	var/last_power = 0
 	var/active = 0
@@ -153,7 +153,7 @@ var/global/list/rad_collectors = list()
 	overlays.len = 0
 	if(P)
 		overlays += image('icons/obj/singularity.dmi', "ptank")
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(active)
 		overlays += image('icons/obj/singularity.dmi', "on")

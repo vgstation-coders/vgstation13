@@ -1,3 +1,7 @@
+/// If non-null, all non-admin OOC messages will be this color.
+/// Format: "#RRBBGG"
+var/adminbus_ooc_color
+
 /client/verb/ooc(msg as text)
 	set name = "OOC" //Gave this shit a shorter name so you only have to time out "ooc" rather than "ooc message" to use it --NeoFite
 	set category = "OOC"
@@ -47,51 +51,44 @@
 				return
 	log_ooc("[mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 
-	var/display_colour = config.default_ooc_color
-	if(holder && !holder.fakekey)
-		display_colour = "#0099cc"	//light blue
-		if(holder.rights & R_MOD && !(holder.rights & R_ADMIN))
-			display_colour = "#184880"	//dark blue
-		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN))
-			display_colour = "#1b521f"	//dark green
-		else if(holder.rights & R_ADMIN)
-			if(config.allow_admin_ooccolor)
-				display_colour = src.prefs.ooccolor
-			else
-				display_colour = "#b82e00"	//orange
+	// browserOutput.css and browserOutput_dark.css determine the default OOC color.
+	// adminbus_ooc_color is set by adminbus.
+	var/admin_color
+
+	if(global.adminbus_ooc_color)
+		admin_color = global.adminbus_ooc_color
+
+	if(holder && !holder.fakekey && (holder.rights & R_ADMIN) && config.allow_admin_ooccolor)
+		admin_color = src.prefs.ooccolor
 
 	for(var/client/C in clients)
-		if((C.prefs.toggles & CHAT_OOC) && !iscluwnebanned(C.mob))
-			var/display_name = src.key
-			if(holder)
-				if(holder.fakekey)
-					if(C.holder)
-						display_name = "[holder.fakekey]/([src.key])"
-					else
-						display_name = holder.fakekey
-			to_chat(C, "<font color='[display_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>")
-			/*
-			if(holder)
-				if(!holder.fakekey || C.holder)
-					if(holder.rights & R_ADMIN)
-						to_chat(C, "<font color=[config.allow_admin_ooccolor ? src.prefs.ooccolor :"#b82e00" ]><b><span class='prefix'>OOC:</span> <EM>[key][holder.fakekey ? "/([holder.fakekey])" : ""]:</EM> <span class='message'>[msg]</span></b></font>")
-					else if(holder.rights & R_MOD)
-						to_chat(C, "<font color=#184880><b><span class='prefix'>OOC:</span> <EM>[src.key][holder.fakekey ? "/([holder.fakekey])" : ""]:</EM> <span class='message'>[msg]</span></b></font>")
-					else
-						to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>")
+		if(!(C.prefs.toggles & CHAT_OOC) || iscluwnebanned(C.mob))
+			continue
 
-				else
-					to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[holder.fakekey ? holder.fakekey : src.key]:</EM> <span class='message'>[msg]</span></span></font>")
+		var/display_name = src.key
+		if(holder && holder.fakekey)
+			if(C.holder)
+				display_name = "[holder.fakekey]/([src.key])"
 			else
-				to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>")
-			*/
+				display_name = holder.fakekey
 
-/client/proc/set_ooc(newColor as color)
+		var/output = "<span class='bold'>OOC: [display_name]: [msg]</span>"
+		if(admin_color)
+			output = "<font color='[admin_color]'>[output]</font>"
+		else
+			output = "<span class='ooc'>[output]</span>"
+		to_chat(C, output)
+
+/client/proc/set_ooc()
 	set name = "Set Player OOC Colour"
-	set desc = "Set to yellow for eye burning goodness."
+	set desc = "Set the OOC color for all players."
 	set category = "Fun"
 
-	config.default_ooc_color = newColor
+	switch(alert(usr, "", "Set Player OOC Colour", "Reset", "Set"))
+		if("Reset")
+			global.adminbus_ooc_color = null
+		if("Set")
+			global.adminbus_ooc_color = input(usr, "Set the OOC color for all players.", "Set Player OOC Colour", global.adminbus_ooc_color) as null|color
 
 // Stealing it back :3c -Nexypoo
 /client/verb/looc(msg as text)
@@ -171,14 +168,14 @@
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
-			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[is_living ? src.mob.name : display_name]:</EM> <span class='message'>[msg]</span></span></font>")
+			to_chat(C, "<font color='#6699CC'><span class='looc'><span class='prefix'>LOOC:</span> <EM>[is_living ? src.mob.name : display_name]:</EM> <span class='message'>[msg]</span></span></font>")
 
 	for(var/client/C in admins)
 		if(C.prefs.toggles & CHAT_LOOC)
 			var/prefix = "(R)LOOC"
 			if (C.mob in heard)
 				prefix = "LOOC"
-			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[src.key]/[src.mob.name]:</EM> <span class='message'>[msg]</span></span></font>")
+			to_chat(C, "<font color='#6699CC'><span class='looc'><span class='prefix'>[prefix]:</span> <EM>[src.key]/[src.mob.name]:</EM> <span class='message'>[msg]</span></span></font>")
 	if(istype(AI))
 		var/client/C = AI.client
 		if (C in admins)
@@ -193,4 +190,4 @@
 						display_name = "[holder.fakekey]/([src.key])"
 					else
 						display_name = holder.fakekey
-			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[is_living ? src.mob.name : display_name]:</EM> <span class='message'>[msg]</span></span></font>")
+			to_chat(C, "<font color='#6699CC'><span class='looc'><span class='prefix'>LOOC:</span> <EM>[is_living ? src.mob.name : display_name]:</EM> <span class='message'>[msg]</span></span></font>")

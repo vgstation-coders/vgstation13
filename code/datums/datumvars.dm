@@ -891,6 +891,8 @@ function loadPage(list) {
 			return
 		if (ishuman(M) && alert("Since you are resetting a human, do you want them to keep their current inventory equipped or drop it all on the floor?", "Body Resetting", "Keep Inventory", "Drop Everything") == "Keep Inventory")
 			M.reset_body(keep_clothes = TRUE)
+		else if (ishuman(M) && alert("Since you are resetting a human, do you want them to get their current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit")
+			M.reset_body(spawn_naked = FALSE)
 		else
 			M.reset_body()
 		add_gamelogs(usr, " reset [(M == usr) ? "their own" : "[key_name(M)]'s"] body from its archive.", admin = TRUE, tp_link = TRUE)

@@ -8,14 +8,14 @@
 	density = 1
 	anchored = 0
 	var/locked = FALSE
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 
 	var/obj/item/weapon/fuel_assembly/cur_assembly
 	var/fuel_usage = 0.0001			//percentage of available fuel to use per cycle
-	 
+
 	var/injecting = FALSE
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 500
 	var/remote_access_enabled = TRUE
@@ -54,7 +54,7 @@
 		out += "has been shorted.<br>"
 	else
 		out += "is [locked ? "locked" : "unlocked"].<br>"
-	if(stat & NOPOWER || state != 2)
+	if(stat & (FORCEDISABLE|NOPOWER) || state != 2)
 		out += "It seems to be powered down.<br>"
 	else if(injecting)
 		out += "It's actively injecting fuel.<br>"
@@ -66,7 +66,7 @@
 
 /obj/machinery/power/rust_fuel_injector/process()
 	if(injecting)
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			stop_injecting()
 		else
 			inject()
@@ -89,7 +89,7 @@
 		return 1
 	return -1
 
-/obj/machinery/power/rust_fuel_injector/emag(var/mob/user)
+/obj/machinery/power/rust_fuel_injector/emag_act(var/mob/user)
 	if(!emagged)
 		locked = FALSE
 		emagged = TRUE
@@ -134,7 +134,7 @@
 	. = ..()
 	if(.)
 		return
-	if(stat & NOPOWER || state != 2)
+	if(stat & (FORCEDISABLE|NOPOWER) || state != 2)
 		to_chat(user, "<span class='warning'>It's completely unresponsive.</span>")
 		return
 	ui_interact(user)
@@ -166,7 +166,7 @@
 	if(..())
 		return 1
 
-	if (stat & NOPOWER || locked || state != 2)
+	if (stat & (FORCEDISABLE|NOPOWER) || locked || state != 2)
 		return 1
 
 	if(href_list["modify_tag"])
@@ -225,14 +225,14 @@
 /obj/machinery/power/rust_fuel_injector/proc/begin_injecting()
 	if(!injecting && cur_assembly)
 		injecting = TRUE
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		update_icon()
 
 /obj/machinery/power/rust_fuel_injector/proc/stop_injecting()
 	if(injecting)
 		injecting = FALSE
 		icon_state = "injector0"
-		use_power = 0
+		use_power = MACHINE_POWER_USE_NONE
 		update_icon()
 
 /obj/machinery/power/rust_fuel_injector/proc/inject()
@@ -311,3 +311,9 @@
 		return
 
 	src.dir = turn(src.dir, 90)
+
+
+/obj/machinery/power/rust_fuel_injector/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_clock()

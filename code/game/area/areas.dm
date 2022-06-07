@@ -140,7 +140,7 @@ var/area/space_area
 
 	// Determine what the highest DL reported by air alarms is
 	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+		if((AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)
@@ -180,7 +180,7 @@ var/area/space_area
 			UpdateFirelocks()
 		atmosalm = danger_level
 		for (var/obj/machinery/alarm/AA in src)
-			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.update_icon()
 		return 1
 	return 0
@@ -190,7 +190,7 @@ var/area/space_area
 
 	// Determine what the highest DL reported by air alarms is
 	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+		if((AA.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)

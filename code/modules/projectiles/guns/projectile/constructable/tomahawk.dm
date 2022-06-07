@@ -157,6 +157,7 @@
 	var/is_lit = 0
 	var/not_burned_out = 0 //prevent the going-out message from qdel()s other than the blunt's own qdel().
 	slot_flags = SLOT_MASK
+	goes_in_mouth = TRUE
 
 /obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
 	if(current_blunt)

@@ -18,7 +18,8 @@
 	desc = "A forge used in crafting the unholy weapons used by the armies of Nar-Sie."
 	icon_state = "forge"
 
-/obj/structure/cult_legacy/pylon
+/*
+/obj/structure/cult/pylon
 	name = "Pylon"
 	desc = "A floating crystal that hums with an unearthly energy."
 	icon_state = "pylon"
@@ -26,10 +27,10 @@
 	light_range = 5
 	light_color = LIGHT_COLOR_RED
 
-/obj/structure/cult_legacy/pylon/attack_hand(mob/M as mob)
+/obj/structure/cult/pylon/attack_hand(mob/M as mob)
 	attackpylon(M, 5)
 
-/obj/structure/cult_legacy/pylon/attack_animal(mob/living/simple_animal/user as mob)
+/obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/user as mob)
 	if(istype(user, /mob/living/simple_animal/construct/builder))
 		if(isbroken)
 			if(prob(20))
@@ -39,10 +40,10 @@
 				to_chat(user, "You fail to repair the pylon.")
 	attackpylon(user, user.melee_damage_upper)
 
-/obj/structure/cult_legacy/pylon/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/cult/pylon/attackby(obj/item/W as obj, mob/user as mob)
 	attackpylon(user, W.force)
 
-/obj/structure/cult_legacy/pylon/proc/attackpylon(mob/user as mob, var/damage)
+/obj/structure/cult/pylon/proc/attackpylon(mob/user as mob, var/damage)
 	if(!isbroken)
 		if(prob(1+ damage * 5))
 			to_chat(user, "You hit the pylon, and its crystal breaks apart!")
@@ -68,14 +69,14 @@
 
 
 
-/obj/structure/cult_legacy/pylon/proc/repair(mob/user as mob)
+/obj/structure/cult/pylon/proc/repair(mob/user as mob)
 	if(isbroken)
 		to_chat(user, "You repair the pylon.")
 		isbroken = 0
 		setDensity(TRUE)
 		icon_state = "pylon"
 		set_light(5)
-
+*/
 /obj/structure/cult_legacy/tome
 	name = "Desk"
 	desc = "A desk covered in arcane manuscripts and tomes in unknown languages. Looking at the text makes your skin crawl."
@@ -102,7 +103,6 @@
 	desc = "You're pretty sure that abyss is staring back."
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "hole"
-	density = 1
 	anchored = 1.0
 	plane = ABOVE_TURF_PLANE
 	var/spawnable = null
@@ -129,11 +129,15 @@
 	return
 
 /obj/effect/gateway/active/New()
+	flick("hole-appear", src)
 	spawn(rand(30,60) SECONDS)
 		var/t = pick(spawnable)
 		new t(src.loc)
-		qdel(src)
+		flick("hole-die",src)
+		spawn(6)
+			qdel(src)
 
+/*
 /obj/effect/gateway/active/Crossed(var/atom/A)
 	if(!istype(A, /mob/living))
 		return
@@ -190,3 +194,4 @@
 			new_mob.key = M.key
 
 		to_chat(new_mob, "<B>Your form morphs into that of a cluwne.</B>")
+*/

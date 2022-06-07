@@ -5,7 +5,7 @@
 	icon_state = "table2-idle"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 1
 	active_power_usage = 5
 	var/mob/living/carbon/human/victim = null
@@ -115,7 +115,7 @@
 
 /obj/machinery/optable/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	for (var/atom/A in loc)
-		if (A == src)
+		if (A == src || A == victim || A == user)
 			continue
 		if (!A.Cross(victim,get_turf(victim)))
 			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")

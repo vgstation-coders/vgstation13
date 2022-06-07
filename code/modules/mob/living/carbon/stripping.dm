@@ -72,27 +72,33 @@
 	var/obj/item/held = user.get_active_hand()
 	var/obj/item/target_item = src.get_item_by_slot(slot)
 	var/pickpocket = user.isGoodPickpocket()
-
+	var/internal //Whether the item is equipped "internally", eg. in the mouth versus on the face.
 
 	if(istype(target_item) && !target_item.abstract) //We want the player to be able to strip someone while holding an item in their hands, for convenience and because otherwise people will bitch about it.
+
+		internal = target_item.goes_in_mouth
+
 		if(!target_item.canremove || src.is_in_modules(target_item))
 			to_chat(user, "<span class='warning'>You can't seem to be able to take that off!</span>")
 			return
 
 		if(!pickpocket)
-			visible_message("<span class='danger'>\The [user] is trying to remove \a [target_item] from \the [src]'s [src.slotID2slotname(slot)]!</span>")
+			visible_message("<span class='danger'>\The [user] is trying to remove \a [target_item] from \the [src]'s [src.slotID2slotname(slot, internal)]!</span>")
 
 		if(strip_item_from(user, target_item, slot, pickpocket))
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has stripped \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [target_item] stripped from their [src.slotID2slotname(slot)] by [user.name] ([user.ckey])</font>")
-			log_attack("[user.name] ([user.ckey]) has stripped \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has stripped \a [target_item] from [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [target_item] stripped from their [src.slotID2slotname(slot, internal)] by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has stripped \a [target_item] from [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])")
 			show_inv(user)
 		else
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to strip \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to strip \a [target_item] from this mob's [src.slotID2slotname(slot)]</font>")
-			log_attack("[user.name] ([user.ckey]) has failed to strip \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to strip \a [target_item] from [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to strip \a [target_item] from this mob's [src.slotID2slotname(slot, internal)]</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to strip \a [target_item] from [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])")
 
 	else if(istype(held) && !held.abstract)
+
+		internal = held?.goes_in_mouth
+
 		if(held.cant_drop > 0 || user.is_in_modules(held))
 			to_chat(user, "<span class='warning'>You can't seem to be able to let go of \the [held].</span>")
 			return
@@ -100,21 +106,21 @@
 			to_chat(user, "<span class='warning'>You can't put that there!</span>") //Ideally we could have a more descriptive message since this can fail for a variety of reasons, but whatever
 			return
 		if(!src.has_organ_for_slot(slot))
-			to_chat(user, "<span class='warning'>\The [src] has no [src.slotID2slotname(slot)].</span>") //blunt
+			to_chat(user, "<span class='warning'>\The [src] has no [src.slotID2slotname(slot, internal)].</span>") //blunt
 			return
 
 		if(!pickpocket)
-			visible_message("<span class='danger'>\The [user] is trying to put \a [held] on \the [src]!</span>")
+			visible_message("<span class='danger'>\The [user] is trying to put \a [held] [internal ? "in" : "on"] \the [src]'s [src.slotID2slotname(slot, internal)]!</span>")
 
 		if(reversestrip_into_slot(user, slot, pickpocket))
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [held] put into their [src.slotID2slotname(slot)] by [user.name] ([user.ckey])</font>")
-			log_attack("[user.name] ([user.ckey]) has put \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \a [held] into [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [held] put into their [src.slotID2slotname(slot, internal)] by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has put \a [held] into [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])")
 			show_inv(user)
 		else
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to place \a [held] into this mob's [src.slotID2slotname(slot)]</font>")
-			log_attack("[user.name] ([user.ckey]) has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to place \a [held] into this mob's [src.slotID2slotname(slot, internal)]</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot, internal)] ([src.ckey])")
 
 /mob/living/carbon/proc/handle_strip_hand(var/mob/living/user, var/index)
 	if(!index || !isnum(index))

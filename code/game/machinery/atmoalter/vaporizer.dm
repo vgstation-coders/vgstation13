@@ -6,7 +6,7 @@
 	icon_state = "vaporizer_closed_unlocked"
 
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	density = 1
 	machine_flags = EMAGGABLE
 	flags = OPENCONTAINER | NOREACT
@@ -36,13 +36,13 @@
 
 /obj/machinery/vaporizer/proc/toggle_power()
 	on = !on
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		on = FALSE
 		visible_message("<span class='warning'>The [src] buzzes and shuts off.</span>")
 	update_icon()
 
 /obj/machinery/vaporizer/update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "vaporizer_off"
 	else
 		icon_state = "vaporizer_[on ? "open" : "closed"]_[unlocked ? "unlocked" : "locked"]"
@@ -51,7 +51,7 @@
 	power_use_this_tick = 0
 	if(!on)
 		return
-	if(!anchored || (stat & (BROKEN|NOPOWER)))
+	if(!anchored || (stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		toggle_power()
 		return
 	if(mixrate)
@@ -75,7 +75,7 @@
 	nanomanager.update_uis(src)
 
 /obj/machinery/vaporizer/proc/handle_tanks(var/target, var/rid)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		visible_message("<span class='warning'>The [src] buzzes and shuts off.</span>")
 		on = 0
 		return
@@ -99,10 +99,6 @@
 			power_use_this_tick += 150
 	mixing_chamber.flags &= ~NOREACT
 	mixing_chamber.reagents.handle_reactions()
-
-/obj/machinery/vaporizer/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/vaporizer/attack_paw(var/mob/user as mob)
 	return attack_hand(user)

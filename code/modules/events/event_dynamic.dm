@@ -6,21 +6,23 @@ var/list/event_last_fired = list()
 		return
 
 	var/minutes_passed = world.time/600
-	var/roundstart_delay = 50
+	var/roundstart_delay = 15
 
 	if (admin_disable_events)
 		message_admins("A random event was prevented from firing by admins.")
 		log_admin("A random event was prevented from firing by admins.")
 		return
 
-	if(minutes_passed < roundstart_delay) //Self-explanatory
+	if(minutes_passed < roundstart_delay) //No events near roundstart
 		message_admins("Too early to trigger random event, aborting.")
 		return
 
 	if(universe.name != "Normal")
 		message_admins("Universe isn't normal, aborting random event spawn.")
 		return
-
+	if(player_list.len < 1) //minimum pop of 1 to trigger events
+		message_admins("Too few players to trigger random event, aborting.")
+		return
 	var/list/active_with_role = number_active_with_role()
 
 	// Maps event names to event chances
@@ -77,7 +79,7 @@ var/list/event_last_fired = list()
 	//and start working via the constructor.
 	new picked_event
 
-	score["eventsendured"]++
+	score.eventsendured++
 
 	message_admins("[picked_event] firing. Time to have fun.")
 
