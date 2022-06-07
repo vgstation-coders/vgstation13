@@ -262,7 +262,7 @@ var/list/special_fruits = list()
 	return 1
 
 //Types blacklisted from appearing as products of strange seeds and no-fruit.
-var/list/strange_seed_product_blacklist = list(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/)) //Otherwise the selection would be biased by the relatively large number of multiple leaf-number-specific subtypes - the base type with randomized leaves is still valid.
+var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/) //Otherwise the selection would be biased by the relatively large number of multiple leaf-number-specific subtypes - the base type with randomized leaves is still valid.
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn
 	name = "ear of corn"
