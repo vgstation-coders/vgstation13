@@ -59,7 +59,7 @@
 				to_chat(T, "<span class='danger'>You feel a sharp stabbing pain!</span>")
 				playsound(user, 'sound/effects/lingstabs.ogg', 50, 1)
 				var/datum/organ/external/affecting = T.get_organ(user.zone_sel.selecting)
-				if(affecting.take_damage(39,0,1,"large organic needle"))
+				if(affecting.take_damage(39,0,1, 0,"large organic needle"))
 					T.UpdateDamageIcon(1)
 
 		feedback_add_details("changeling_powers","A[stage]")
@@ -67,8 +67,6 @@
 			to_chat(user, "<span class='warning'>Our absorption of [T] has been interrupted!</span>")
 			return
 	usr.add_blood(T)
-	var/datum/organ/external/chest/chest_organ = T.get_organ(UPPER_TORSO)
-	chest_organ.add_autopsy_data("unknown", 1)
 
 	to_chat(user, "<span class='notice'>We have absorbed [T]!</span>")
 	user.visible_message("<span class='danger'>[user] sucks the fluids from [T]!</span>")
