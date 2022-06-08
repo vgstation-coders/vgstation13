@@ -180,6 +180,7 @@
                 Auto-patrol: <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
                 </li>"}
     dat += "</ul>"
+	return dat
 
 /datum/pda_app/cart/scanner/engineer
     base_name = "Halogen counter"

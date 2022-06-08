@@ -233,6 +233,7 @@
                 <a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=[cart_device.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[src];change_destination=1'>[cart_device.saved_destination] - EDIT</a> <br/>
                 </li>"}
     dat += "</ul>"
+	return dat
 
 /datum/pda_app/cart/mulebot/Topic(href, href_list)
     if(..())
