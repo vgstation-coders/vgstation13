@@ -44,8 +44,8 @@
 	item_state = "laserproof"
 	
 	armor = list(melee = 10, bullet = 10, laser = 80,energy = 50, bomb = 0, bio = 0, rad = 0)
-	eyeprot = 1
-	body_parts_covered = FULL_HEAD|MASKHEADHAIR
+	eyeprot = 0
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	siemens_coefficient = 0
 	// no reflect chance because i don't want to touch the ablative reflect code
 
@@ -57,8 +57,8 @@
 	item_state = "bulletproof"
 	
 	armor = list(melee = 10, bullet = 80, laser = 10,energy = 10, bomb = 0, bio = 0, rad = 0)
-	eyeprot = 1
-	body_parts_covered = FULL_HEAD|MASKHEADHAIR
+	eyeprot = 0
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 
 /obj/item/clothing/head/helmet/tactical/swat
