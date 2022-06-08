@@ -658,27 +658,29 @@
 			M.adjustToxLoss(REM)
 			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
-/datum/reagent/water/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
-
+/datum/reagent/water/reaction_mob(var/mob/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
 		return 1
 
 	//Put out fire
 	if(method == TOUCH)
-		M.ExtinguishMob()
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
+			C.make_visible(INVISIBLESPRAY,FALSE)
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
-		if(ishuman(M) || ismonkey(M))
-			var/mob/living/carbon/C = M
-			C.make_visible(INVISIBLESPRAY,FALSE)
+		else
+			M.make_visible(INVISIBLESPRAY)
+		if(isliving(M))
+			var/mob/living/L = M
+			L.ExtinguishMob()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
-		M.adjustToxLoss(rand(15, 20))
+		var/mob/living/L = M
+		L.adjustToxLoss(rand(15, 20))
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -704,9 +706,9 @@
 				if(screamed)
 					H.audible_scream()
 				if(!splashed)
-					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+					H.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
-				M.take_organ_damage(0, min(15, volume * 2))
+				H.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
