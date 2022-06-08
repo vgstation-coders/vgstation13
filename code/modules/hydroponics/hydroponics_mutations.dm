@@ -130,13 +130,13 @@
 			var/mutation_type = pick(PLANT_TOXIN_AFFINITY, PLANT_WEED_TOLERANCE, PLANT_PEST_TOLERANCE, PLANT_LIFESPAN, PLANT_ENDURANCE)
 			switch(mutation_type)
 				if(PLANT_TOXIN_AFFINITY)
-					var/hardcap = 11
+					var/hardcap = 100
 					seed.toxinaffinity += round(min(hardcap - hardcap/2*round(log(10,seed.toxinaffinity/hardcap*100),0.01),0.15*hardcap),0.1)
 				if(PLANT_WEED_TOLERANCE)
-					var/hardcap = 11
+					var/hardcap = 100
 					seed.weed_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.weed_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
 				if(PLANT_PEST_TOLERANCE)
-					var/hardcap = 11
+					var/hardcap = 100
 					seed.pest_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.pest_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
 				if(PLANT_LIFESPAN)
 					var/hardcap = 125

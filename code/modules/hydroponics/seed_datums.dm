@@ -372,17 +372,19 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(XENOBOTANY)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
-					teleporting 		= gene.values[3]
-					alter_temp 				= gene.values[3]
+					teleporting 		= gene.values[1]
+					alter_temp 			= gene.values[2]
+					noreact 			= gene.values[3]
 				if(GENEGUN_MODE_SPLICE)
-					teleporting 		= max(gene.values[3], teleporting)
-					alter_temp 				= max(gene.values[3], alter_temp)
-			var/list/new_gasses = gene.values[6]
+					teleporting 		= max(gene.values[1], teleporting)
+					alter_temp 			= max(gene.values[2], alter_temp)
+					noreact 			= max(gene.values[3], noreact)
+			var/list/new_gasses = gene.values[4]
 			if(islist(new_gasses))
 				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
 					exude_gasses = list()
 				exude_gasses |= new_gasses
-			new_gasses = gene.values[7]
+			new_gasses = gene.values[5]
 			if(islist(new_gasses))
 				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
 					consume_gasses = list()
@@ -410,7 +412,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			P.values = list(
 				(chems                	? chems                	: 0),
 				(potency				? potency 				: 0),
-				(teleporting          	? teleporting          	: 0) // Yes, bluespace anomalies are caused by a mystery chemical, I don't have to explain shit
 			)
 		if(GENE_MORPHOLOGY)
 			P.values = list(
@@ -448,9 +449,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(water_consumption    	? water_consumption   	: 0),
 				(alter_temp    			? alter_temp    		: 0),
 				(voracious				? voracious 			: 0),
-				(hematophage    		? hematophage    		: 0),
-				(exude_gasses    		? exude_gasses    		: 0),
-				(consume_gasses    		? consume_gasses    	: 0)
+				(hematophage    		? hematophage    		: 0)
 			)
 		if(GENE_DEVELOPMENT)
 			P.values = list(
@@ -460,6 +459,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(harvest_repeat       	? harvest_repeat      	: 0),
 				(yield              	? yield              	: 0)
 			)
+		if(XENOECOLOGY)
+			P.values = list(
+				(
+				(teleporting          	? teleporting          	: 0),
+				(exude_gasses    		? exude_gasses    		: 0),
+				(consume_gasses    		? consume_gasses    	: 0))
 	return (P ? P : 0)
 
 //This may be a new line. Update the global if it is.

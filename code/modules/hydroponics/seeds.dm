@@ -1860,6 +1860,6 @@
 	production = 5
 	yield = 5
 	growth_stages = 2
-	fluid_consumption = 0.5
-	nutrient_consumption = 0.15
+	fluid_consumption = 5
+	nutrient_consumption = 1.5
 
