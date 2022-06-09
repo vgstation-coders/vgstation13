@@ -25,17 +25,20 @@
             var/powercount = 0
             var/found = 0
 
-            for(var/obj/machinery/computer/powermonitor/pMon in power_machines)
-                if(!(pMon.stat & (NOPOWER|BROKEN)))
-                    var/turf/T = get_turf(pda_device)
-                    if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
-                        if(!found)
-                            menu = "<h4><span class='pda_icon pda_power'></span> Please select a Power Monitoring Computer</h4><BR>"
-                            found = 1
-                            menu += "<FONT SIZE=-1>"
-                        powercount++
-                        menu += "<a href='byond://?src=\ref[src];choice=Power Select;target=[powercount]'> [pMon] </a><BR>"
-                        powermonitors += "\ref[pMon]"
+            for(var/datum/power_connection/C in power_machines)
+                if(istype(C.parent, /obj/machinery/computer/powermonitor))
+                    var/obj/machinery/computer/powermonitor/pMon = C.parent
+
+                    if(!(pMon.stat & (NOPOWER|BROKEN)))
+                        var/turf/T = get_turf(pda_device)
+                        if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
+                            if(!found)
+                                menu = "<h4><span class='pda_icon pda_power'></span> Please select a Power Monitoring Computer</h4><BR>"
+                                found = 1
+                                menu += "<FONT SIZE=-1>"
+                            powercount++
+                            menu += "<a href='byond://?src=\ref[src];target=[powercount]'> [pMon] </a><BR>"
+                            powermonitors += "\ref[pMon]"
             if(found)
                 menu += "</FONT>"
 
@@ -44,15 +47,16 @@
                 menu = "<h4><span class='pda_icon pda_power'></span> Power Monitor </h4><BR>"
                 menu += "No connection<BR>"
             else
+                var/datum/powernet/connected_powernet = powmonitor.power_connection.get_powernet()
                 menu = "<h4><span class='pda_icon pda_power'></span> [powmonitor] </h4><BR>"
                 var/list/L = list()
-                for(var/obj/machinery/power/terminal/term in powmonitor.connected_powernet.nodes)
+                for(var/obj/machinery/power/terminal/term in connected_powernet.nodes)
                     if(istype(term.master, /obj/machinery/power/apc))
                         var/obj/machinery/power/apc/A = term.master
                         L += A
 
 
-                menu += {"<PRE>Total power: [powmonitor.connected_powernet.avail] W<BR>Total load:  [num2text(powmonitor.connected_powernet.viewload,10)] W<BR>
+                menu += {"<PRE>Total power: [format_watts(connected_powernet.avail)]<BR>Total load:  [format_watts(connected_powernet.viewload)]<BR>
                     <FONT SIZE=-1>"}
                 if(L.len > 0)
                     menu += "Area                           Eqp./Lgt./Env.  Load   Cell<HR>"
@@ -71,8 +75,8 @@
 /datum/pda_app/cart/power_monitor/Topic(href, href_list)
     if(..())
         return
-    if(href_list["Power Select"])
-        var/pnum = text2num(href_list["Power Select"])
+    if(href_list["target"])
+        var/pnum = text2num(href_list["target"])
         powmonitor = locate(powermonitors[pnum])
         if(istype(powmonitor))
             mode = 1
@@ -157,25 +161,26 @@
 	icon = "pda_atmos"
 
 /datum/pda_app/cart/floorbot/get_dat(var/mob/user)
-    var/dat = ""
-    if (!cart_device)
-        dat += {"<span class='pda_icon pda_atmos'></span> Could not find radio peripheral connection <br/>"}
-        return
-    if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/floorbot))
-        dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}
-        return
-    dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
-    dat += "<ul>"
-    for (var/obj/machinery/bot/floorbot/floor in bots_list)
-        if (floor.z != user.z)
-            continue
-        dat += {"<li>
-                <i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
-                Auto-patrol: <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
-                </li>"}
-    dat += "</ul>"
+	var/dat = ""
+	if (!cart_device)
+		dat += {"<span class='pda_icon pda_atmos'></span> Could not find radio peripheral connection <br/>"}
+		return
+	if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/floorbot))
+		dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}
+		return
+	dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
+	dat += "<ul>"
+	for (var/obj/machinery/bot/floorbot/floor in bots_list)
+		if (floor.z != user.z)
+			continue
+		dat += {"<li>
+				<i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
+				Auto-patrol: <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
+				</li>"}
+	dat += "</ul>"
+	return dat
 
 /datum/pda_app/cart/scanner/engineer
     base_name = "Halogen counter"
