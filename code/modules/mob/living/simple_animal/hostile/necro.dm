@@ -276,11 +276,8 @@
 	if((health < maxHealth) || (maxHealth < health_cap))
 		if(!(target.isDead()))
 			return 0 //It ain't dead
-		if(ishuman(target)) //Humans are always edible
-			return 1
 		if(target.health > -(target.maxHealth*MAX_EAT_MULTIPLIER)) //So they're not caught eating the same dumb bird all day
 			return 1
-
 	return 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
@@ -478,20 +475,13 @@
 	var/zombify_chance = 25 //Down with hardcoding
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
-/mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
-	if(busy)
-		return 0
-	if(ishuman(target))
-		return 1
-	..()
-
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()
-	if(target.health < -150  && ishuman(target)) //Gotta be a bit chewed on
+	if(target.health < -150) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
 			var/master = creator ? creator : src
-			target.make_zombie(master)
+			target.zombify(master)
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
 	/*Check what mob type the target is, if it's carbon, run through their wear_ slots see human_defines.dm L#34

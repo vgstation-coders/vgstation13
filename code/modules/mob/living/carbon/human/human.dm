@@ -1924,7 +1924,7 @@
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+/mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
 	dropBorers()
 	if(crabzombie)
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))

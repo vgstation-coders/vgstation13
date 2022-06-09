@@ -133,13 +133,10 @@
 		sql_report_death(src)
 	species.handle_death(src)
 	var/mob/living/carbon/C = src
-	if(become_zombie && ishuman(src))
+	if(become_zombie)
 		spawn(20 SECONDS)
 			if(!gcDestroyed)
-				make_zombie()
-	else if(become_zombie)
-		new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(C), C, C)
-		gib()
+				zombify()
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
