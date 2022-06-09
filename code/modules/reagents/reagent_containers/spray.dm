@@ -157,7 +157,7 @@
 	reagents.add_reagent(LUMINOL, 250)
 
 // Plant-B-Gone
-/obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
+/obj/item/weapon/reagent_containers/spray/plantbgone
 	name = "Plant-B-Gone"
 	desc = "Kills those pesky weeds!"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
@@ -173,8 +173,8 @@
 	name = "Bug Zapper"
 	desc = "Kills those pesky bugs!"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	icon_state = "plantbgone"
-	item_state = "plantbgone"
+	icon_state = "pestspray"
+	item_state = "pestspray"
 	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/bugzapper/New()
