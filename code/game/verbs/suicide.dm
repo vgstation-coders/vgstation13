@@ -12,7 +12,7 @@
 
 //Attempt to perform suicide with an item nearby or in-hand
 //Return 0 if the suicide failed, return 1 if successful. Returning 1 does not perform the default suicide afterwards
-/mob/living/proc/attempt_object_suicide(var/obj/suicide_object)
+/mob/living/proc/attempt_atom_suicide(var/atom/suicide_object)
 	if(suicide_object && suicide_object.mouse_opacity && !suicide_object.invisibility) //We need the item to be there and tangible to begin, otherwise abort
 		var/damagetype = suicide_object.suicide_act(src)
 		if(damagetype)
