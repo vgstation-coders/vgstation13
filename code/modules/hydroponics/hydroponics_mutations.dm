@@ -130,13 +130,13 @@
 			var/mutation_type = pick(PLANT_TOXIN_AFFINITY, PLANT_WEED_TOLERANCE, PLANT_PEST_TOLERANCE, PLANT_LIFESPAN, PLANT_ENDURANCE)
 			switch(mutation_type)
 				if(PLANT_TOXIN_AFFINITY)
-					var/hardcap = 100
-					seed.toxinaffinity += round(min(hardcap - hardcap/2*round(log(10,seed.toxinaffinity/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/hardcap = 110
+					seed.toxin_affinity += round(min(hardcap - hardcap/2*round(log(10,seed.toxin_affinity/hardcap*100),0.01),0.15*hardcap),0.1)
 				if(PLANT_WEED_TOLERANCE)
-					var/hardcap = 100
+					var/hardcap = 110
 					seed.weed_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.weed_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
 				if(PLANT_PEST_TOLERANCE)
-					var/hardcap = 100
+					var/hardcap = 110
 					seed.pest_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.pest_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
 				if(PLANT_LIFESPAN)
 					var/hardcap = 125
@@ -147,7 +147,7 @@
 			generic_mutation_message("quivers!")
 
 		if(GENE_METABOLISM)
-			var/mutation_type = pick(PLANT_NUTRIENT_CONSUMPTION, PLANT_FLUID_CONSUMPTION, PLANT_ROOMTEMP, PLANT_VORACIOUS, PLANT_GAS, PLANT_HEMATOPHAGE)
+			var/mutation_type = pick(PLANT_NUTRIENT_CONSUMPTION, PLANT_FLUID_CONSUMPTION, PLANT_VORACIOUS, PLANT_HEMATOPHAGE)
 			switch(mutation_type)
 				if(PLANT_NUTRIENT_CONSUMPTION)
 					if(seed.nutrient_consumption < 0.1)
@@ -179,9 +179,9 @@
 						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 						seed.consume_gasses[gas] = rand(3,9)
 					if(length(seed.exude_gasses) && prob(50))
-						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 						seed.exude_gasses -= pick(seed.exude_gasses)
 					if(prob(50))
+						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 						seed.exude_gasses[gas] = rand(3,9)
 
 					generic_mutation_message("rustles!")
@@ -189,7 +189,6 @@
 					seed.hematophage = !seed.hematophage
 					if(seed.hematophage)
 						visible_message("<span class='notice'>\The [seed.display_name] shudders thirstily, turning red at the roots!</span>")
-						nutrilevel = 1
 					else
 						visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
 		if(GENE_DEVELOPMENT)
