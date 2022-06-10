@@ -205,6 +205,11 @@
 	starting_materials = null
 	on = 0	//Lamps start out off unless someone spawns in the same room as them at roundstart.
 
+/obj/item/device/flashlight/lamp/AltClick()
+	if(toggle_light())
+		return
+	return ..()
+
 /obj/item/device/flashlight/lamp/cultify()
 	new /obj/structure/cult/pylon(loc)
 	qdel(src)
@@ -216,7 +221,6 @@
 	item_state = "lampgreen"
 	brightness_on = 5
 
-
 /obj/item/device/flashlight/lamp/verb/toggle_light()
 	set name = "Toggle light"
 	set category = "Object"
@@ -224,6 +228,8 @@
 
 	if(!usr.stat)
 		attack_self(usr)
+		return TRUE
+	return FALSE
 
 // FLARES
 
