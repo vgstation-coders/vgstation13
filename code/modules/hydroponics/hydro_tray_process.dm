@@ -153,7 +153,7 @@
 	update_name() //fuck it i'll make it not happen constantly later
 
 	// Updates the plant overlay.
-	if(get_toxinlevel() > TOXINLEVEL_MAX/2)
+	if(get_toxinlevel() > get_waterlevel())
 		overlays += image(icon = icon, icon_state = "hydrotray_toxin")
 	if(!isnull(seed))
 		if(draw_warnings && get_planthealth() <= (seed.endurance / 2))
@@ -174,21 +174,27 @@
 		overlays += image(icon = icon, icon_state = "hydrocover")
 
 	//Updated the various alert icons.
-	if(seed && draw_warnings)
-		if(seed.toxin_affinity < 5)
-			if(get_waterlevel() <= WATERLEVEL_MAX/5)
-				overlays += image(icon = icon, icon_state = "over_lowwater3")
-		else if(seed.toxin_affinity <= 7)
-			if(get_waterlevel() < WATERLEVEL_MAX/5 || get_toxinlevel() < TOXINLEVEL_MAX/5)
-				overlays += image(icon = icon, icon_state = "over_lowwater3")
-		else if(get_toxinlevel() < TOXINLEVEL_MAX/5)
+	if(!draw_warnings)
+		return
+	if(get_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
+		overlays += image(icon = icon, icon_state = "over_lownutri3")
+	if(get_weedlevel() >= WEEDLEVEL_MAX/2 || get_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
+		overlays += image(icon = icon, icon_state = "over_alert3")
+	if(get_waterlevel() <= WATERLEVEL_MAX/5 && get_toxinlevel() <= TOXINLEVEL_MAX/5)
+		overlays += image(icon = icon, icon_state = "over_lowwater3")
+	
+	if(!seed)
+		return
+	if(seed.toxin_affinity < 5)
+		if(get_waterlevel() <= WATERLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
-		if(get_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
-			overlays += image(icon = icon, icon_state = "over_lownutri3")
-		if(get_weedlevel() >= WEEDLEVEL_MAX/2 || get_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
-			overlays += image(icon = icon, icon_state = "over_alert3")
-		if(harvest)
-			overlays += image(icon = icon, icon_state = "over_harvest3")
+	else if(seed.toxin_affinity <= 7)
+		if(get_waterlevel() < WATERLEVEL_MAX/5 || get_toxinlevel() < TOXINLEVEL_MAX/5)
+			overlays += image(icon = icon, icon_state = "over_lowwater3")
+	else if(get_toxinlevel() < TOXINLEVEL_MAX/5)
+		overlays += image(icon = icon, icon_state = "over_lowwater3")
+	if(harvest)
+		overlays += image(icon = icon, icon_state = "over_harvest3")
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_light(var/turf/T)
 	var/light_out = 0
