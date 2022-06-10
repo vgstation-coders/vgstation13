@@ -132,7 +132,6 @@
 	if(ticker && ticker.mode)
 		sql_report_death(src)
 	species.handle_death(src)
-	var/mob/living/carbon/C = src
 	if(become_zombie)
 		spawn(20 SECONDS)
 			if(!gcDestroyed)

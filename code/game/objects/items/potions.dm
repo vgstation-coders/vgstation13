@@ -247,9 +247,6 @@
 	for(var/mob/living/carbon/human/H in L)
 		if(H.isDeadorDying())
 			H.zombify(M)
-			else
-				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)
-				H.gib()
 		else
 			H.become_zombie = TRUE
 
