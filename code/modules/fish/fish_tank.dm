@@ -452,6 +452,8 @@
 		new /obj/item/stack/sheet/glass/glass(cur_turf, sheets)
 		if(circuitboard)
 			new circuitboard(cur_turf)
+			new /obj/item/stack/sheet/metal(cur_turf, 5)
+			new /obj/item/stack/cable_coil(cur_turf, 5)
 	qdel(src)
 
 /obj/machinery/fishtank/proc/spill_water()
