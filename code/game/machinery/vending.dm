@@ -3907,9 +3907,9 @@ var/global/num_vending_terminals = 1
 			//We don't want the !hasmouse down there to trigger, so,
 			return
 	else if (stat & (NOPOWER|FORCEDISABLE))
-		src.icon_state = "[initial(icon_state)]-off"
+		icon_state = "[initial(icon_state)]-off"
 	else
-		src.icon_state = "[initial(icon_state)]"
+		icon_state = "[initial(icon_state)]"
 	if(!hasmouse)
 		icon_state += "nomouse"
 
