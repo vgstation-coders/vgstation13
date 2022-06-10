@@ -5,7 +5,7 @@
 	icon_state = "grinder"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	ghost_read = 0
 	idle_power_usage = 5
 	active_power_usage = 50

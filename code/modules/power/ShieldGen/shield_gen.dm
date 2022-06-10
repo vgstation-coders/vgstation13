@@ -22,7 +22,7 @@
 	req_one_access = list(access_security, access_engine_major) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = 1			//0 use nothing
+	use_power = MACHINE_POWER_USE_IDLE			//0 use nothing
 							//1 use idle power
 							//2 use active power
 	idle_power_usage = 20

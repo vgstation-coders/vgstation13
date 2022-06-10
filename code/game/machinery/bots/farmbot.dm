@@ -325,12 +325,12 @@
 	if ( setting_ignoreEmpty && !tray.seed )
 		return 0
 
-	if ( setting_water && tray.waterlevel <= 10 && tank && tank.reagents.total_volume >= 1 )
+	if ( setting_water && tray.get_waterlevel() < WATERLEVEL_MAX/5 && tank && tank.reagents.total_volume >= 1 )
 		return FARMBOT_MODE_WATER
 
-	if ( setting_weed && tray.weedlevel >= 5 )
+	if ( setting_weed && tray.get_weedlevel() >= WEEDLEVEL_MAX/2 )
 		return FARMBOT_MODE_WEED
-	if ( setting_fertilize && tray.nutrilevel <= 2 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
+	if ( setting_fertilize && tray.get_nutrientlevel() <= NUTRIENTLEVEL_MAX/5 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
 		return FARMBOT_MODE_FERTILIZE
 	return 0
 
@@ -354,7 +354,7 @@
 
 	else // feed them plants~
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		tray.nutrilevel = 10
+		tray.add_nutrientlevel(10)
 		fert.reagents.trans_to(tray, fert.reagents.total_volume)
 		qdel (fert)
 		fert = null
@@ -399,7 +399,7 @@
 			mode = 0
 
 		var /obj/machinery/portable_atmospherics/hydroponics/tray = target
-		tray.weedlevel = 0
+		tray.add_weedlevel(-50)
 		//tray.updateicon()
 
 /obj/machinery/bot/farmbot/proc/water()
@@ -427,14 +427,10 @@
 		spawn(FARMBOT_EMAG_DELAY)
 			mode = 0
 	else
-		var /obj/machinery/portable_atmospherics/hydroponics/tray = target
-		var/b_amount = tank.reagents.get_reagent_amount(WATER)
-		if(b_amount > 0 && tray.waterlevel < 100)
-			if(b_amount + tray.waterlevel > 100)
-				b_amount = 100 - tray.waterlevel
-			tank.reagents.remove_reagent(WATER, b_amount)
-			tray.adjust_water(b_amount)
-			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+		var/b_amount = tank.reagents.remove_reagent(WATER, WATERLEVEL_MAX - tray.get_waterlevel())
+		tray.add_waterlevel(b_amount)
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 		//tray.updateicon()
 		mode = FARMBOT_MODE_WAITING

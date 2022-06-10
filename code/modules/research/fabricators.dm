@@ -323,11 +323,11 @@
 	icon_state = "[base_state]_ani"
 	if(start_end_anims)
 		flick("[base_state]_start",src)
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	icon_state = base_state
 	if(start_end_anims)
 		flick("[base_state]_end",src)

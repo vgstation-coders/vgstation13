@@ -410,7 +410,7 @@
 		airflow_speed = 0
 		airflow_time = 0
 		if(src.throwing)
-			src.throw_impact(Obstacle, user = usr)
+			src.throw_impact(Obstacle, null, usr) // TODO: Find a way to pass the speed. Or remove the speed parameter.
 			src.throwing = 0
 		if(Obstacle)
 			Obstacle.Bumped(src)

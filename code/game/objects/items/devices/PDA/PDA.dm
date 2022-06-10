@@ -555,12 +555,10 @@ var/global/msg_id = 0
 		return 1
 	if (iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(8, 5, 1))
-			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
-
-			if (istype(M, /mob/living/carbon/human) && M.real_name != src.owner)
+		if(M.Slip(8, 5, 1, onwhat = "the PDA"))
+			if(istype(M, /mob/living/carbon/human) && M.real_name != src.owner)
 				var/datum/pda_app/cart/virus/honk/HV = locate(/datum/pda_app/cart/virus/honk) in applications
-				if (HV && HV.charges < 5)
+				if(HV && HV.charges < 5)
 					HV.charges++
 
 /obj/item/device/pda/proc/available_pdas()

@@ -415,6 +415,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_LACTOSE		256
 #define DISABILITY_FLAG_LISP		512
 #define DISABILITY_FLAG_ANEMIA		1024
+#define DISABILITY_FLAG_EHS			2048
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -473,7 +474,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_TOXIC_FARTS   201		// Duh
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
-#define M_PSY_RESIST    204		// Block remoteview
+#define M_JAMSIGNALS	204		// Block EMFs
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
@@ -510,6 +511,7 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define ASTHMA		32
 #define LACTOSE		64
 #define ANEMIA		128
+#define ELECTROSENSE	256
 
 //sdisabilities
 #define BLIND			1
@@ -1709,7 +1711,7 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
-#define DNA_SE_LENGTH 59
+#define DNA_SE_LENGTH 60
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"

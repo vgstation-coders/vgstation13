@@ -186,6 +186,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/railing/glass{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
 "aL" = (
@@ -589,7 +592,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "bT" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -833,16 +836,16 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cH" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
+	},
+/obj/structure/railing/glass{
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cI" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -855,10 +858,34 @@
 /obj/item/weapon/tank/jetpack/carbondioxide,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
+"iT" = (
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area)
 "kG" = (
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
 /area/crew_quarters/casino)
+"nG" = (
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
+"rd" = (
+/obj/structure/railing/glass{
+	dir = 4
+	},
+/obj/structure/railing/glass{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "ru" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -878,17 +905,53 @@
 "wX" = (
 /turf/simulated/floor/plating,
 /area)
+"xx" = (
+/obj/machinery/atmospherics/unary/vent{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "zI" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area)
+"BI" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area)
+"Cj" = (
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area)
+"Eo" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/unary/vent{
+	dir = 8
+	},
+/turf/simulated/open,
+/area/crew_quarters/bar)
 "EX" = (
 /turf/simulated/floor/plating,
 /area/crew_quarters/casino)
+"Gx" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/zpipe/down/supply{
+	dir = 4
+	},
+/turf/simulated/open,
+/area/crew_quarters/bar)
 "GO" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -911,15 +974,28 @@
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
 "Kl" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
+/obj/structure/stairs/north,
+/obj/structure/railing/glass{
 	dir = 4
 	},
-/obj/structure/stairs/north,
+/obj/structure/railing/glass{
+	dir = 8
+	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
+"Os" = (
+/obj/structure/railing/glass,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"OP" = (
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area)
 "Tb" = (
 /turf/simulated/wall/r_wall,
 /area/crew_quarters/casino)
@@ -935,13 +1011,20 @@
 /turf/simulated/floor/plating,
 /area/crew_quarters/casino)
 "WI" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area)
 "XD" = (
-/obj/structure/window/reinforced,
+/obj/structure/railing/plasteel,
+/turf/simulated/floor/plating,
+/area)
+"ZG" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area)
 
@@ -4937,7 +5020,7 @@ ad
 ae
 ae
 ae
-ae
+xx
 ae
 ad
 ac
@@ -4999,7 +5082,7 @@ ad
 al
 an
 ae
-ae
+nG
 ae
 ad
 ac
@@ -5061,7 +5144,7 @@ ad
 am
 ao
 ae
-ae
+ap
 as
 ad
 ac
@@ -8782,7 +8865,7 @@ ad
 bF
 bO
 bM
-bM
+Gx
 ch
 az
 aw
@@ -8844,7 +8927,7 @@ aP
 bG
 bP
 bM
-bM
+Eo
 cf
 az
 aw
@@ -10066,7 +10149,7 @@ at
 aw
 ad
 aK
-ae
+rd
 aV
 ad
 bf
@@ -14546,7 +14629,7 @@ cz
 cz
 bu
 bC
-cD
+Os
 aL
 aL
 cI
@@ -14608,7 +14691,7 @@ cz
 cz
 bu
 bC
-cD
+Os
 aL
 aL
 cI
@@ -18142,12 +18225,12 @@ cz
 cz
 cz
 cz
-wX
-wX
-wX
-wX
-wX
-wX
+iT
+GO
+GO
+GO
+GO
+BI
 cz
 cz
 cz
@@ -18204,12 +18287,12 @@ cz
 cz
 cz
 cz
+zI
 wX
-wX
+OP
 WI
-WI
 wX
-wX
+XD
 cz
 cz
 cz
@@ -18266,12 +18349,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 XD
 cz
 cz
 zI
-wX
+XD
 cz
 cz
 cz
@@ -18328,12 +18411,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 XD
 cz
 cz
 zI
-wX
+XD
 cz
 cz
 cz
@@ -18390,12 +18473,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 wX
 cz
 cz
 zI
-wX
+XD
 cz
 cz
 cz
@@ -18452,12 +18535,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 wX
 GO
 GO
 wX
-wX
+XD
 cz
 cz
 cz
@@ -18514,12 +18597,12 @@ cz
 cz
 cz
 cz
-wX
-wX
-wX
-wX
-wX
-wX
+Cj
+WI
+WI
+WI
+WI
+ZG
 cz
 cz
 cz

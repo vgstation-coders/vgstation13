@@ -24,6 +24,7 @@
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
 		if (GREET_ROUNDSTART)
+			antag.current.client << sound('sound/misc/wideismymotherland.ogg')
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class='warning'><FONT size = 3>You are a member of the revolutionaries' leadership!</FONT><BR>Flash un-implanted crew to bring them to your side and accomplish your objectives!</span>"})
 		if (GREET_DEFAULT)
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class='warning'><FONT size = 3>You are now a revolutionary!</FONT><BR>Help your fellow workers throw off the shackles of oppression! Viva!</span>"})

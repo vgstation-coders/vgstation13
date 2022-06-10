@@ -11,15 +11,18 @@
 	icon = 'icons/obj/power.dmi'
 	anchored = 1.0
 	var/datum/powernet/powernet = null
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
+	var/power_priority = POWER_PRIORITY_NORMAL
 
 	//For powernet rebuilding
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
 
 	var/obj/machinery/power/terminal/terminal = null //not strictly used on all machines - a placeholder
 	var/starting_terminal = 0
+
+	var/monitoring_enabled = FALSE //Whether to show up in the power monitor at all
 
 /obj/machinery/power/New()
 	. = ..()
@@ -70,13 +73,13 @@
 	if(get_powernet())
 		powernet.newavail += amount
 
-/obj/machinery/power/proc/add_load(var/amount)
+/obj/machinery/power/proc/add_load(var/amount, var/priority = power_priority)
 	if(get_powernet())
-		powernet.load += amount
+		powernet.add_load(amount, priority)
 
 /obj/machinery/power/proc/surplus()
 	if(get_powernet())
-		return powernet.avail-powernet.load
+		return powernet.avail-powernet.get_load()
 	else
 		return 0
 
@@ -88,7 +91,13 @@
 
 /obj/machinery/power/proc/load()
 	if(get_powernet())
-		return powernet.load
+		return powernet.get_load()
+	else
+		return 0
+
+/obj/machinery/power/proc/get_satisfaction(var/priority = power_priority)
+	if (get_powernet())
+		return powernet.get_satisfaction(priority)
 	else
 		return 0
 
@@ -112,71 +121,8 @@
 /obj/machinery/power/proc/disconnect_terminal() // machines without a terminal will just return, no harm no fowl.
 	return
 
-// returns true if the area has power on given channel (or doesn't require power)
-// defaults to power_channel
-/obj/machinery/proc/powered(chan = power_channel)
-	if(!src.loc)
-		return 0
-
-	if(battery_dependent && !connected_cell)
-		return 0
-
-	if(connected_cell)
-		if(connected_cell.charge > 0)
-			return 1
-		else
-			return 0
-
-	if(!use_power)
-		return 1
-	var/area/this_area = get_area(src)
-	if(!this_area)
-		return 0						// if not, then not powered.
-
-	if((machine_flags & FIXED2WORK) && !anchored)
-		return 0
-
-	return this_area.powered(chan)		// return power status of the area.
-
-// increment the power usage stats for an area
-// defaults to power_channel
-/obj/machinery/proc/use_power(amount, chan = power_channel)
-	var/area/this_area = get_area(src)
-	if(connected_cell && connected_cell.charge > 0)   //If theres a cell directly providing power use it, only for cargo carts at the moment
-		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
-			connected_cell.charge = 0
-		else
-			connected_cell.use(amount*0.75)
-	else
-		if(!this_area)
-			return 0						// if not, then not powered.
-		if(!powered(chan)) //no point in trying if we don't have power
-			return 0
-
-		this_area.use_power(amount, chan)
-
-// called whenever the power settings of the containing area change
-// by default, check equipment channel & set flag
-// can override if needed
-/obj/machinery/proc/power_change()
-	if(powered(power_channel))
-		stat &= ~NOPOWER
-
-		if(!use_auto_lights)
-			return
-		if(stat & FORCEDISABLE)
-			return
-		set_light(light_range_on, light_power_on)
-
-	else
-		stat |= NOPOWER
-
-		if(!use_auto_lights)
-			return
-		set_light(0)
-
 /obj/machinery/power/can_overload()
-	return 0
+	return FALSE
 
 // connect the machine to a powernet if a node cable is present on the turf
 /obj/machinery/power/proc/connect_to_network()
@@ -198,6 +144,32 @@
 
 	powernet.remove_machine(src)
 	return 1
+
+// produces data for the power monitor
+/obj/machinery/power/proc/get_monitor_status_template()
+	return list( // Unique ID. If you're splitting a machine into multiple loads, eg: main and battery (see APCs) you could have "\ref[src]" and "\ref[src]_battery" as IDs
+		"ref" = "\ref[src]", // ref for use in Topic() calls
+		"name" = name,
+
+		"priority" = power_priority,
+		"demand" = 0,  //How much power is being requested. Override this proc and fill this in manually.
+
+		"isbattery" = FALSE, // If true, a charge meter will be displayed
+		"charging" = MONITOR_STATUS_BATTERY_STEADY,
+		"charge" = 100
+	)
+
+/obj/machinery/power/proc/change_priority(value, id)
+	if(id == "\ref[src]")
+		power_priority = value
+		return TRUE
+
+// produces data for the power monitor
+/obj/machinery/power/proc/get_monitor_status()
+	if (!monitoring_enabled)
+		return null
+
+	return list("\ref[src]" = get_monitor_status_template())
 
 ///////////////////////////////////////////
 // Powernet handling helpers

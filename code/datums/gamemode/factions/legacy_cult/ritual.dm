@@ -83,7 +83,7 @@ var/runedec = 0 // Rune cap ?
 	if(!islegacycultist(user))
 		to_chat(user, "You can't mouth the arcane scratchings without fumbling over them.")
 		return
-	if(ismuzzle(user.wear_mask))
+	if(user.wear_mask?.is_muzzle)
 		to_chat(user, "You are unable to speak the words of the rune.")
 		return
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))

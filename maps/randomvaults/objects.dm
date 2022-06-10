@@ -371,7 +371,7 @@
 	anchored = 1
 	cant_drop = 1
 
-	slip_power = 10
+	slip_override = 11
 
 /obj/item/weapon/melee/morningstar/catechizer
 	name = "The Catechizer"
@@ -711,7 +711,7 @@
 		return
 	var/powered = 1
 
-	if(surplus() < active_power_usage)
+	if(get_satisfaction() < 1.0)
 		powered = 0
 
 	if(powered && stat & (NOPOWER))

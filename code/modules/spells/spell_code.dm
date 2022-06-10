@@ -401,7 +401,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return 0
 
 		if((ishuman(user) || ismonkey(user)) && !(invocation_type in list(SpI_EMOTE, SpI_NONE)))
-			if(ismuzzle(user.wear_mask))
+			if(user.wear_mask?.is_muzzle)
 				to_chat(user, "Mmmf mrrfff!")
 				return 0
 

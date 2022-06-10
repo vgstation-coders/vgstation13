@@ -1078,7 +1078,7 @@
 			possible_targets += cultistarget
 		else if (cultistarget.legcuffed)
 			possible_targets += cultistarget
-		else if (ismuzzle(cultistarget.wear_mask))
+		else if (cultistarget.wear_mask?.is_muzzle)
 			possible_targets += cultistarget
 		else if (istype(cultistarget.loc, /obj/structure/closet))
 			var/obj/structure/closet/closet = cultistarget.loc
@@ -1105,7 +1105,7 @@
 			return
 		if(!(cultist.locked_to || \
 			cultist.handcuffed || \
-			ismuzzle(cultist.wear_mask) || \
+			cultist.wear_mask?.is_muzzle || \
 			(istype(cultist.loc, /obj/structure/closet)&&cultist.loc:welded) || \
 			(istype(cultist.loc, /obj/structure/closet/secure_closet)&&cultist.loc:locked) || \
 			(istype(cultist.loc, /obj/machinery/dna_scannernew)&&cultist.loc:locked) \
@@ -1117,7 +1117,7 @@
 			cultist.drop_from_inventory(cultist.handcuffed)
 		if (cultist.legcuffed)
 			cultist.drop_from_inventory(cultist.legcuffed)
-		if (ismuzzle(cultist.wear_mask))
+		if (cultist.wear_mask?.is_muzzle)
 			cultist.u_equip(cultist.wear_mask, 1)
 		if(istype(cultist.loc, /obj/structure/closet))
 			var/obj/structure/closet/closet = cultist.loc

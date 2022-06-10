@@ -283,6 +283,7 @@
 #define SACRIFICIAL_MARY			"sacrificial_mary"
 #define CREAMY_HOT_COCO			"creamy_hot_coco"
 #define MOONSHINE 			"moonshine"
+#define CORNSYRUP 			"cornsyrup"
 #define MIDNIGHTKISS	"midnightkiss"
 #define COSMOPOLITAN	"cosmopolitan"
 #define CORPSEREVIVER	"corpsereviver"
@@ -470,6 +471,7 @@
 #define TRINITRINE		"trinitrine"
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
+#define BUMCIVILIAN		"bumcivilian"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -550,6 +552,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define WATERS list(WATER, HOLYWATER)
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)
+#define SUGARS list(SUGAR, CORNSYRUP)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"

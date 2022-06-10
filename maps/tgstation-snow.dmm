@@ -2277,13 +2277,13 @@
 /area/research_outpost/maint)
 "aeL" = (
 /obj/structure/stairs/west,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
 /area/hydroponics)
 "aeM" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -2378,7 +2378,10 @@
 /area/maintenance/port)
 "afc" = (
 /obj/structure/stairs/north,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -2461,7 +2464,7 @@
 	},
 /area/research_outpost/xenobot)
 "afp" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -13030,7 +13033,7 @@
 /area/research_outpost/entry)
 "aEW" = (
 /obj/structure/stairs/west,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -13041,10 +13044,10 @@
 	pixel_y = -25
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/machinery/light,
+/obj/structure/railing/glass{
 	dir = 1
 	},
-/obj/machinery/light,
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "aEY" = (
@@ -15234,13 +15237,13 @@
 "aJk" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/stairs/west,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
 /area/mine/production)
 "aJl" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -17860,8 +17863,8 @@
 	},
 /area/science/xenobiology)
 "aOI" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass,
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -17870,8 +17873,11 @@
 /area/science/xenobiology)
 "aOJ" = (
 /obj/structure/stairs/east,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass,
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -21551,7 +21557,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "green"
@@ -21959,7 +21965,7 @@
 /area/crew_quarters/kitchen)
 "bfL" = (
 /obj/machinery/portable_atmospherics/hydroponics,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -26084,7 +26090,7 @@
 /area/hydroponics)
 "bCJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -28481,7 +28487,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -32435,11 +32441,9 @@
 	master_tag = "vox_trading_airlock_control";
 	pixel_x = -24
 	},
-/obj/structure/window/reinforced,
 /turf/simulated/open,
 /area/mine/explored)
 "caW" = (
-/obj/structure/window/reinforced,
 /turf/simulated/open,
 /area/mine/explored)
 "caX" = (
@@ -36448,7 +36452,7 @@
 /area/science/hallway)
 "cqH" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -37449,13 +37453,6 @@
 	},
 /area/science/server)
 "cub" = (
-/turf/simulated/open,
-/area/science/hallway)
-"cuc" = (
-/obj/structure/catwalk,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /turf/simulated/open,
 /area/science/hallway)
 "cud" = (
@@ -38588,7 +38585,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -38609,7 +38606,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -41013,7 +41010,7 @@
 /turf/simulated/floor,
 /area/supply/miningdock)
 "cJq" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -44031,7 +44028,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -56567,16 +56564,14 @@
 	},
 /area/security/prison)
 "eax" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+/obj/structure/railing/plasteel{
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/security/prison)
 "eaH" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+/obj/structure/railing/plasteel{
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -56588,7 +56583,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 8
 	},
 /turf/simulated/floor/glass/plasma,
@@ -71069,11 +71064,11 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "gVy" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
+	},
+/obj/structure/railing/glass{
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/supply/miningdock)
@@ -73990,7 +73985,7 @@
 /turf/simulated/floor,
 /area/derelict/arrival)
 "hSo" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -76322,13 +76317,6 @@
 	icon_state = "yellow"
 	},
 /area/engineering/engine)
-"iJt" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/open,
-/area/science/xenobiology)
 "iJu" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -79858,7 +79846,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -81865,7 +81853,7 @@
 /area/derelict/medical/chapel)
 "kEm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -83176,7 +83164,7 @@
 	dir = 1;
 	on = 1
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor,
 /area/supply/miningdock)
 "lck" = (
@@ -90952,7 +90940,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -91350,7 +91338,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -96084,7 +96072,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -99677,7 +99665,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -101062,7 +101050,7 @@
 "rtK" = (
 /obj/machinery/hologram/holopad,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -103137,7 +103125,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -103420,7 +103408,7 @@
 /obj/effect/landmark/start{
 	name = "Shaft Miner"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -107198,7 +107186,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/primary/central)
 "tEb" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -107350,7 +107338,7 @@
 	dir = 8;
 	on = 1
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "green"
@@ -107363,7 +107351,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "tHj" = (
-/obj/structure/window/reinforced,
+/obj/structure/railing,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "green"
@@ -107977,9 +107965,11 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "tRB" = (
-/obj/structure/window/reinforced,
-/turf/simulated/open,
-/area/science/xenobiology)
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/snow,
+/area/surface/snow)
 "tRN" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -109490,7 +109480,7 @@
 /area/science/robotics)
 "uzu" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -110330,7 +110320,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -117839,7 +117829,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -118426,7 +118416,7 @@
 	dir = 4
 	},
 /obj/item/clothing/mask/gas,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor/plating,
@@ -118494,10 +118484,10 @@
 	},
 /area/maintenance/aft)
 "xGH" = (
-/obj/structure/window/reinforced{
+/obj/structure/catwalk,
+/obj/structure/railing/glass{
 	dir = 8
 	},
-/obj/structure/catwalk,
 /turf/simulated/open,
 /area/science/hallway)
 "xGI" = (
@@ -119269,7 +119259,6 @@
 /turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "xQa" = (
-/obj/structure/window/reinforced,
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/zpipe/down/supply/hidden{
 	dir = 1
@@ -119279,6 +119268,7 @@
 	d2 = 32;
 	icon_state = "1-32"
 	},
+/obj/structure/railing/glass,
 /turf/simulated/open,
 /area/supply/miningdock)
 "xQb" = (
@@ -268957,10 +268947,10 @@ bIX
 bKV
 bOp
 xGH
-cuc
-cuc
-cuc
-cuc
+xGH
+xGH
+xGH
+xGH
 bWj
 bYm
 caj
@@ -269009,7 +268999,7 @@ kDx
 qQV
 woY
 pBO
-iJt
+pnm
 pnm
 pnm
 pnm
@@ -269311,7 +269301,7 @@ onJ
 eBZ
 vkM
 qPk
-tRB
+pnm
 pnm
 pnm
 pnm
@@ -290619,7 +290609,7 @@ bQF
 bSZ
 bXb
 caV
-bZp
+tRB
 bZp
 bZp
 bZp
@@ -290921,7 +290911,7 @@ byS
 byS
 bXc
 caW
-bZp
+tRB
 bZp
 bMb
 bZp

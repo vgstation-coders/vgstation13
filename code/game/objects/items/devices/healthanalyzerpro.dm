@@ -163,7 +163,7 @@
 		if(!scan_success)
 			to_chat(user, "<span class='warning'>Insuffient data retrieved. Please ensure that subject has proper surgical incisions.</span>")
 		else
-			to_chat(user, "<span class='info'>Autopsy analysis of [M] cocluded.</span>")
+			to_chat(user, "<span class='info'>Autopsy analysis of [M] concluded.</span>")
 			user << browse(dat, "window=borerscan;size=430x600")
 			last_reading = dat
 			last_scantime = world.time

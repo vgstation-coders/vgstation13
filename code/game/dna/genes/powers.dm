@@ -72,13 +72,8 @@
 		user.reset_view(0)
 		return
 
-	for(var/T in targets)
-		var/mob/living/target
-		if (isliving(T))
-			target = T
-		if (istype (T, /datum/mind))
-			target = user.can_mind_interact(T)
-		if(target)
+	for(var/mob/living/target in targets)
+		if (can_mind_interact(target.mind))
 			user.remoteview_target = target
 			user.reset_view(target)
 			break
@@ -130,7 +125,7 @@
 	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE|TALKED_BEFORE|INCLUDEUSER
+	spell_flags = SELECTABLE|TALKED_BEFORE
 	override_base = "genetic"
 	hud_state = "gen_project"
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
@@ -154,29 +149,27 @@
 	else
 		M.telepathic_target.len = 0
 
-	for(var/T in targets)
-		var/mob/living/target
-		if (isliving(T))
-			target = T
-		if (istype (T, /datum/mind))
-			target = user.can_mind_interact(T)
-		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
-			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
+	var/all_switch = TRUE
+	for(var/mob/living/T in targets)
+		if(!istype(T) && !can_mind_interact(T.mind))
+			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
 			continue
-		else if(istype(M))
-			M.telepathic_target += target
+		if(istype(M))
+			M.telepathic_target += T
 			continue
-		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Telepathy, <b>[user]</b> to <b>[T]</b>: [message]</i>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[T]/actual:[key_name(T)]: [message]")
 		if(T == user) //Talking to ourselves
 			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
 			return
-		if(M_TELEPATHY in target.mutations)
+		if(M_TELEPATHY in T.mutations)
 			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: [message]</span>")
 		else
 			to_chat(T,"<span class='notice'>You hear a voice inside your head: [message] </span>")
-		to_chat(user,"<span class='notice'>Projected to <b>[T]</b>: [message]</span>")
+		if(all_switch)
+			all_switch = FALSE
+			to_chat(user,"<span class='notice'>Projected to <b>[english_list(targets)]</b>: [message]</span>")
+			for(var/mob/dead/observer/G in dead_mob_list)
+				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>: [message]</i>")
+			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
 
 /datum/dna/gene/basic/morph
 	name = "Morph"

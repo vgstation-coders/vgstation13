@@ -4,7 +4,7 @@
 
 	name = "Air Vent"
 	desc = "Has a valve and pump attached to it."
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	level = 1
 	var/area_uid

@@ -3,7 +3,7 @@
 
 /obj/machinery/door/mineral
 	name = "mineral door"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = 0
 	icon = 'icons/obj/doors/mineral.dmi'
 	icon_state = "metaldoor_closed"
@@ -302,7 +302,7 @@
 
 /obj/machinery/door/mineral/transparent/icicle
 	name = "icicle door"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = 0
 	icon = 'icons/obj/doors/mineral.dmi'
 	icon_state = "icicledoor_closed"

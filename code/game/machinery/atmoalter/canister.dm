@@ -25,7 +25,7 @@
 	pressure_resistance = 7*ONE_ATMOSPHERE
 	var/temperature_resistance = 1000 + T0C
 	volume = 1000
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/release_log = ""
 	var/busy = 0
 	starting_materials = list(MAT_IRON = 10*CC_PER_SHEET_METAL)

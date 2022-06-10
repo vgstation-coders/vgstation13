@@ -17,7 +17,7 @@
 "ct" = (/obj/structure/inflatable/door,/turf/unsimulated/floor/asteroid,/area/vault/mothership_lab/raidtunnel_upper)
 "cG" = (/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/vault/mothership_lab/control_room)
 "cH" = (/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (EAST)"},/area/vault/mothership_lab/control_room)
-"cK" = (/obj/structure/catwalk/invulnerable,/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/entrance)
+"cK" = (/obj/structure/catwalk/invulnerable,/turf/simulated/wall/invulnerable/r_wall/mothership,/area/vault/mothership_lab/entrance)
 "di" = (/obj/machinery/camera{dir = 4; id_tag = "labcameras"; name = "Processing Room"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/vault/mothership_lab/entrance)
 "dq" = (/turf/simulated/floor{dir = 5; icon_state = "darkred"; tag = "icon-darkred (NORTHEAST)"},/area/vault/mothership_lab/control_room)
 "du" = (/obj/effect/mine/stun,/turf/simulated/floor/greengrid,/area/vault/mothership_lab/entrance)
@@ -113,7 +113,7 @@
 "nU" = (/obj/effect/decal/warning_stripes{icon_state = "warning-asteroid"; tag = "icon-warning (NORTH)"},/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/asteroid)
 "nW" = (/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_upper)
 "ol" = (/obj/machinery/camera{dir = 8; id_tag = "labcameras"; name = "Entry Deck Main Hall Junction"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor,/area/vault/mothership_lab/entrance)
-"oo" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/control_room)
+"oo" = (/turf/simulated/wall/invulnerable/r_wall/mothership,/area/vault/mothership_lab/control_room)
 "oM" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/machinery/computer/atmos_alert,/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/control_room)
 "oS" = (/obj/machinery/door/airlock/external{name = "Lab External Airlock"; req_access_txt = "160"; req_one_access_txt = "160"},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "pe" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/table/reinforced,/obj/item/weapon/paper_bin/blue,/obj/item/weapon/pen,/turf/simulated/floor{dir = 4; icon_state = "darkred"; tag = "icon-darkred (EAST)"},/area/vault/mothership_lab/control_room)
@@ -153,7 +153,7 @@
 "tb" = (/obj/machinery/door/airlock/silver{name = "Habitation Deck Access"; req_access_txt = "160"; req_one_access_txt = "160"},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "th" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4},/obj/machinery/recharger,/turf/simulated/floor{dir = 5; icon_state = "darkred"; tag = "icon-darkred (NORTHEAST)"},/area/vault/mothership_lab/control_room)
 "tm" = (/obj/structure/catwalk/invulnerable,/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "disintegrator cabinet"; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
-"tr" = (/obj/effect/decal/warning_stripes{icon_state = "1"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/control_room)
+"tr" = (/obj/effect/decal/warning_stripes{icon_state = "1"},/turf/unsimulated/wall/r_wall,/area/vault/mothership_lab/control_room)
 "tF" = (/obj/structure/catwalk/invulnerable,/obj/machinery/recharger{pixel_x = 30},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "ui" = (/obj/machinery/door/window{name = "Shower"},/obj/machinery/acidshower{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/entrance)
 "uo" = (/obj/structure/catwalk/invulnerable,/obj/structure/rack,/obj/machinery/light/small{dir = 1},/obj/item/weapon/storage/fancy/flares,/obj/item/weapon/storage/fancy/flares,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
@@ -191,7 +191,7 @@
 "yt" = (/obj/machinery/atmospherics/unary/tank/air{dir = 8},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "yA" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid,/area/vault/mothership_lab/asteroid)
 "yD" = (/obj/structure/bed,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/entrance)
-"yE" = (/obj/structure/sign/securearea{desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'"; name = "AUTHORIZED PERSONNEL ONLY"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/entrance)
+"yE" = (/obj/structure/sign/securearea{desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'"; name = "AUTHORIZED PERSONNEL ONLY"},/turf/simulated/wall/invulnerable/r_wall/mothership,/area/vault/mothership_lab/entrance)
 "yG" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/entrance)
 "yN" = (/obj/structure/cage/autoclose/cover,/obj/effect/landmark/corpse/grey/worker,/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; icon_state = "floor6"},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_upper)
 "yQ" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
@@ -221,7 +221,7 @@
 "Bv" = (/obj/machinery/light/small/broken,/turf/simulated/floor/greengrid,/area/vault/mothership_lab/entrance)
 "BJ" = (/obj/structure/window/reinforced/plasma,/obj/structure/table/reinforced,/obj/item/weapon/storage/toolbox/emergency,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/control_room)
 "BL" = (/obj/structure/closet/crate,/obj/item/clothing/shoes/jackboots/mothership,/obj/item/clothing/under/grey/grey_soldier,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/entrance)
-"BX" = (/obj/structure/catwalk/invulnerable,/obj/machinery/door/airlock/hatch{name = "Lab Hangar Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
+"BX" = (/obj/structure/catwalk/invulnerable,/obj/machinery/door/airlock/hatch{name = "Lab Hangar Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/space,/area/vault/mothership_lab/entrance)
 "Ch" = (/obj/structure/table,/obj/item/tool/weldingtool/hugetank,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "Cp" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma{dir = 1},/obj/item/weapon/storage/fancy/flares,/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/control_room)
 "Cx" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/box/lights/he,/obj/item/device/gps/secure/command,/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (EAST)"},/area/vault/mothership_lab/control_room)
@@ -261,19 +261,24 @@
 "GL" = (/turf/unsimulated/floor/asteroid,/area/vault/mothership_lab/asteroid)
 "GZ" = (/obj/structure/rack,/obj/structure/window/reinforced,/obj/machinery/door/window/brigdoor{dir = 8; req_access_txt = "162"; req_one_access_txt = "162"},/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/vault/mothership_lab/entrance)
 "Hb" = (/turf/simulated/floor{dir = 4; icon_state = "stage_stairs"; tag = "icon-stage_stairs"},/area/vault/mothership_lab/control_room)
+"Hn" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'EXTERNAL AIRLOCK'"; icon_state = "space"; name = "EXTERNAL AIRLOCK"},/turf/unsimulated/wall/r_wall,/area/vault/mothership_lab/entrance)
 "HC" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/vault/mothership_lab/asteroid)
+"HI" = (/turf/unsimulated/wall/r_wall,/area/vault/mothership_lab/entrance)
 "HL" = (/obj/effect/decal/cleanable/blood/drip{basecolor = "#2299FC"; blood_color = "#2299FC"},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_upper)
+"HM" = (/turf/unsimulated/wall/r_rock,/area/vault/mothership_lab/raidtunnel_upper)
 "HQ" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/entrance)
 "Ic" = (/obj/structure/ladder{height = 1; id = "labladder_5"; name = "Administration Deck Access"},/turf/simulated/floor/plating,/area/vault/mothership_lab/control_room)
 "Io" = (/obj/structure/table/reinforced,/obj/machinery/door/poddoor{density = 0; icon_state = "pdoor0"; id_tag = "checkpointshutters1"; name = "Checkpoint Blast Doors"; opacity = 0},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/entrance)
 "Iq" = (/obj/structure/reagent_dispensers/sacid,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "Iv" = (/obj/machinery/light/he{dir = 4},/obj/structure/bed/chair{dir = 1},/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/entrance)
+"Iz" = (/turf/unsimulated/wall/r_wall,/area/vault/mothership_lab/control_room)
 "IF" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/emcloset,/turf/simulated/floor,/area/vault/mothership_lab/entrance)
 "II" = (/obj/structure/bed/chair/shuttle/blue{dir = 1},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/control_room)
 "IN" = (/obj/machinery/floodlight/on/infinite{anchored = 1},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/entrance)
 "IX" = (/obj/structure/catwalk/invulnerable,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "Jr" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/table/reinforced,/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/vault/mothership_lab/control_room)
 "JB" = (/obj/structure/cage/autoclose/cover,/obj/effect/decal/cleanable/dirt,/obj/effect/landmark/corpse/grey/worker,/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; icon_state = "floor2"},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_upper)
+"JN" = (/obj/structure/sign/securearea{desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'"; name = "AUTHORIZED PERSONNEL ONLY"},/turf/unsimulated/wall/r_wall,/area/vault/mothership_lab/entrance)
 "JT" = (/obj/structure/table/flipped,/turf/simulated/floor,/area/vault/mothership_lab/entrance)
 "JX" = (/obj/structure/table/flipped{dir = 1},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/entrance)
 "JY" = (/obj/machinery/door/airlock/silver{name = "Lab Entry Deck"; req_access_txt = "160"; req_one_access_txt = "160"},/obj/machinery/door/poddoor{id_tag = "labcheckpoint1"; name = "Checkpoint Blast Doors"},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/entrance)
@@ -320,12 +325,12 @@
 "PJ" = (/turf/simulated/floor{icon_state = "stage_stairs"; tag = "icon-stage_stairs"},/area/vault/mothership_lab/control_room)
 "PN" = (/obj/structure/bed,/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/entrance)
 "PO" = (/obj/machinery/door_control{id_tag = "checkpointshutters1"; name = "Checkpoint Shutters"; pixel_x = 25; pixel_y = 25; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/entrance)
-"Qm" = (/obj/effect/decal/warning_stripes{icon_state = "1"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/entrance)
+"Qm" = (/obj/effect/decal/warning_stripes{icon_state = "1"},/turf/simulated/wall/invulnerable/r_wall/mothership,/area/vault/mothership_lab/entrance)
 "Qs" = (/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{dir = 8},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_upper)
 "Qz" = (/turf/simulated/wall/r_rock/porous,/area/vault/mothership_lab/raidtunnel_upper)
 "QI" = (/turf/simulated/floor/plating,/area/vault/mothership_lab/asteroid)
 "QR" = (/turf/simulated/floor,/area/vault/mothership_lab/control_room)
-"QT" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'EXTERNAL AIRLOCK'"; icon_state = "space"; name = "EXTERNAL AIRLOCK"},/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/entrance)
+"QT" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'EXTERNAL AIRLOCK'"; icon_state = "space"; name = "EXTERNAL AIRLOCK"},/turf/simulated/wall/invulnerable/r_wall/mothership,/area/vault/mothership_lab/entrance)
 "Rg" = (/obj/machinery/camera{dir = 1; id_tag = "labcameras"; name = "Entry Deck Checkpoint 1"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor,/area/vault/mothership_lab/entrance)
 "Rl" = (/turf/unsimulated/mineral/uranium,/area/vault/mothership_lab/asteroid)
 "Rv" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "raider ammunition cabinet"; req_access = null},/obj/item/ammo_storage/box/b380auto,/obj/item/ammo_storage/box/b380auto,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_upper)
@@ -397,53 +402,53 @@
 "Zy" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/asteroid)
 "ZM" = (/obj/machinery/camera{id_tag = "labcameras"; name = "Entry Deck Checkpoint 2"; network = list("MOTHERSHIPLAB")},/turf/simulated/floor,/area/vault/mothership_lab/entrance)
 "ZR" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'EXTERNAL AIRLOCK'"; icon_state = "space"; name = "EXTERNAL AIRLOCK"},/turf/simulated/wall,/area/vault/mothership_lab/asteroid)
-"ZT" = (/turf/simulated/wall/invulnerable/r_wall,/area/vault/mothership_lab/entrance)
+"ZT" = (/turf/simulated/wall/invulnerable/r_wall/mothership,/area/vault/mothership_lab/entrance)
 "ZW" = (/obj/machinery/camera{dir = 4; id_tag = "labcameras"; name = "Asteroid Exit Gate"; network = list("MOTHERSHIPLAB")},/turf/unsimulated/floor/asteroid,/area/vault/mothership_lab/asteroid)
 
 (1,1,1) = {"
 zrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzr
 zrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrMDMDMDMDMDMDMDMDMDMDYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzr
-zrzrxBzrzrzrzrzrzrzrMDMDMDMDMDMDMDzrzrMDMDMDMDMDMDMDMDMDMDMDMDMDMDYFZTZTZTZTZTZTZTZTZTYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzrxBzrzr
-zrzrzrzrzrzrzrzrMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvmvMDMDYFZTAPPNBLzfEPPNzhZTZTZTZTZTZTZTZTZTZTZTYFMDmvmvMDmvMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzr
-zrzrzrzrzrzrzrMDMDMDMDMDGEGEMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvmvmvMDMDYFZTEGLKLKLKLKLKTNZTsrXASdZTCAwUwthjfaZTYFmvmvMDMDMDMDmvMDMDMDMDMDMDMDMDzrzrzrzrzrzrzr
-zrzrzrzrzrMDMDMDMDMDMDGEGEGEGEGEMDMDMDMDMDMDRlRlMDMDMDMDMDmvMDMDMDYFZTdByDvZyDvZyDLKZTPfLKLKLWPfOdRTraWEZTYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDzrzrzrzrzr
-zrzrzrzrMDMDMDMDMDMDMDGEMDMDMDMDMDMDMDmvMDRlRlMDMDMDMDmvMDMDMDMDMDYFZTZTZTZTZTZTZTxJZTPfLKckZTZTUYLsUYZTZTZTZTZTZTZTZTZTZTZTZTYFYFYFYFYFAuYFYFMDzrzrzrzr
-zrzrzrzrMDMDMDmvmvMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlRlYFZTnLFfgjLKLKaTLKZTdiLKssZTvtbIbIbITjZTvtbITjZTvtbIlZZMTjZTZTyEQTMlGLyAGLGLYFMDzrzrzr
-zrzrzrMDMDMDYFYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlYFZTZTFfxYZTPfLKLKLKpkLKLKLKeRuKuKuKuKuKaKuKuKuKpTuKuKuKuKuKJYuKoSOsWJeQeQeQGLGLYFMDzrzr
-zrzrzrMDMDYFgDoooooooooooooooooojQYFAqYFYFYFYFYFYFYFYFYFYFYFYFYFYFZTykFfEUZTLgUHksTtZTjqqfIvZTqeRgbIrpwGZTBouKbIZTqebIbIbIwGZTZTyEZTNqGLGLeQeQGLYFMDzrzr
-zrzrMDMDYFgDoooolnlooMqurwsNthoooojQYFZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTvzZTZTZTbIuKolZTZTIoxTIoZTZTYFYFYFYFYFGLGLeQGLYFMDMDzr
-zrMDMDYFgDooxOCpCxPHDYIIDYPHOKSaWdoojQZTIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXyQDEyQRzZTbIjsuKLWLKjepMPOxWZTYFAqAqMDYFAufseIfsAuMDMDzr
-zrMDYFooooxOcHPHPHvpPHEMPHvpPHPHXHWdooooIXZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTzKZTIXZTqeuKwGZTGGqsCLqCjLZTYFMDMDMDMDNfZWeQXdNfMDMDzr
-zrMDYFooxOcHEMvpPHEaEauGEaEaPHvpEMXHWdooIXZTZTZTVmgwaMaMaMaMaMaMaMaMnUaMaMaMaMaMaMaMaMgwyjZTIFDEjYgnZTIXZTQmDoQmZTZTZTZTZTZTZTYFMDMDMDMDAuGLeQGLAuMDMDzr
-zrMDYFooLfYCEMYCYvPJPJPJPJPJYvYCEMYCetooIXZTZTVmgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwZTdDdZgnXZZTIXZTBouKbIZTxXLKkDLKOkZTYFMDMDMDMDYFGLeQlyGLYFMDMD
-zrMDYFoogKbvPHqPHbkGkGkGkGkGbRrfPHZjzwooIXZTVmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBFRZTAllpOxXZZTIXZTbIuKbIZTuzLKODLKAtZTYFMDMDMDMDYFlyeQeQlyGLYFMD
-zrMDYFoogFPHPHqPHbkGkGPBkGkGbRrfPHPHpeooIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUUVgngnXZZTIXZTGJRBuKiwLKLKODLKpnZTYFMDMDMDMDYFGLGLvDeQGLYFMD
-zrMDYFooJrPHPHqPHbKSkGkGkGKSbRrfPHPHAwooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUIqDEDEGZZTIXZTbIuKfrZTisLKLKLKvfZTYFMDMDMDMDMDYFGLGLeQlyYFMD
-MDMDYFooadbvPHqPHbmjlXkGlXmjbRrfPHZjNdooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUDGqhVTldZTIXZTfNJXaYZTNjLKLvaljoZTYFMDMDMDMDMDYFYiGLeQGLYFMD
-MDMDYFoogFPHPHXHvwooUQkGUQooGecHPHPHlEooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwZTFURGlpllZTIXZTmnuKbIZTZTxJZTZTZTZTZTYFMDMDMDMDYFEblyeQlyYFMD
-MDMDYFoozyBJYUSXGdooooyqoooomJSXjnTAPdooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIgVMaQTZTyEzKyEZTIXZTbIuKUXZTCzLKHQCPyGqaZTYFYFYFMDMDYFGLGLeQGLYFMD
-MDmvYFooooooooooooooVwPJVwooooooooooooooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIMaDETYgngnDEnvZTIXZTUXINJTZTEGLKDNbHDNjEZTZTZTZTYFMDYFGLeQvDGLYFMD
-MDmvYFtrqxvPooWwQRiHoozzooKDQRWwoovPIctrIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIRDTYQTZTfxKUgnZTIXZTJTEySDZTPfLKLKLKLKLKgjlxPCZTYFMDAulyeQGLGLYFMD
-MDmvYFoojWjWooQRQRQRWwscWwQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwZTSSAnChZTIXZTppuKnjZTWOyDAsyDWRKWZTiGFfZTYFMDNfFteQlyrZYFMD
-MDMDYFoofzjWooQRQRQRQRQRQRQRQRQRoojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwyjvUvUZTZTZTZTbIdubIZTZTZTZTZTZTZTZTRRFfZTYFMDAulyeQGLsXYFMD
-MDMDYFoojWjWoomTQRQRQRQRQRQRQRmToojWfzooIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwyjZTZTfcLXVTWPQmXQbLWIZTYFZTuiFfFfZTYFMDYFGLvDGLYFMDMD
-MDMDYFoojWjWooooooSbiuiuiuSboooooojWjWooIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwFRZTZTZTFKuKdutbDEVTDEZTYFZTZTZTZTZTYFMDYFGLeQGLYFMDMD
-MDMDYFoohUjWqTqNoocGPzPzPzdqoosRcnjWjWooIXZTTXgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwynZTZTfcbIBvVTQmPcggytZTYFYFYFYFYFYFMDMDYFlyeQlyYFMDmv
-MDMDYFooPxjWeNjWAkPHPHPHPHPHAkqTeNjWUMooIXZTZTTXgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwynZTZTcKZTYxZTYxZTZTZTZTZTYFMDMDMDRlMDMDMDYFGLeQlyYFMDMD
-MDMDYFooooooooooooGfGbrGGbkHooooooooooooZTZTZTZTTXgwgigigigigigigigikqgigigigigigigigigwgwgwgwynZTZTtmzXZTZTZTZTZTYFYFYFYFMDMDMDRlMDMDMDYFGLlyeQGLYFmvMD
-MDkcMDYFYFYFYFYFooooooooooooooYFYFYFYFZTwjVPQmZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTBXZTZTZTZTZiIXIXUUuoOcZTYFMDMDMDMDMDMDMDMDMDAuNfAuGLeQvDGLYFMDMD
-MDmvkcMDMDMDMDMDYFYFYFYFYFYFYFMDMDMDMDwYBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdNMUqicIXIXhrIXIXhiIXIXIXIXIXtFZTYFMDMDMDMDMDMDGLGLGLGLkbWfGLeQGLGLYFMDMD
-MDMDmvMDAuAuAuAuAuAuAuAuMDMDMDMDMDMDYFZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTwgZTZTZTZTZTZTZTgyGzWqZTZTZTZTYFMDMDMDMDMDMDGLGLeQeQeQsKeQvDGLYFMDMDMD
-zrMDmvmvAujDKLZymRHCHCAuMDMDmvMDMDMDMDYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFZTZTZTYFYFYFYFYFZTZTZTZTZTYFAuAuAuMDMDGLGLGLGLGLGLGLGLOhWfGLGLlyYFMDMDzr
+zrzrxBzrzrzrzrzrzrzrMDMDMDMDMDMDMDzrzrMDMDMDMDMDMDMDMDMDMDMDMDMDMDYFHIHIHIHIHIHIHIHIHIYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzrxBzrzr
+zrzrzrzrzrzrzrzrMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvmvMDMDYFHIAPPNBLzfEPPNzhHIHIHIHIHIHIHIHIHIHIHIYFMDmvmvMDmvMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzr
+zrzrzrzrzrzrzrMDMDMDMDMDGEGEMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvmvmvMDMDYFHIEGLKLKLKLKLKTNZTsrXASdZTCAwUwthjfaHIYFmvmvMDMDMDMDmvMDMDMDMDMDMDMDMDzrzrzrzrzrzrzr
+zrzrzrzrzrMDMDMDMDMDMDGEGEGEGEGEMDMDMDMDMDMDRlRlMDMDMDMDMDmvMDMDMDYFHIdByDvZyDvZyDLKZTPfLKLKLWPfOdRTraWEHIYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDzrzrzrzrzr
+zrzrzrzrMDMDMDMDMDMDMDGEMDMDMDMDMDMDMDmvMDRlRlMDMDMDMDmvMDMDMDMDMDYFHIZTZTZTZTZTZTxJZTPfLKckZTZTUYLsUYZTHIHIHIHIHIHIHIHIHIHIHIYFYFYFYFYFAuYFYFMDzrzrzrzr
+zrzrzrzrMDMDMDmvmvMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlRlYFHInLFfgjLKLKaTLKZTdiLKssZTvtbIbIbITjZTvtbITjZTvtbIlZZMTjHIHIJNHnMlGLyAGLGLYFMDzrzrzr
+zrzrzrMDMDMDYFYFYFYFYFYFYFYFYFYFYFMDMDMDMDMDMDMDMDMDMDMDMDMDMDRlYFHIHIFfxYZTPfLKLKLKpkLKLKLKeRuKuKuKuKuKaKuKuKuKpTuKuKuKuKuKJYuKoSOsWJeQeQeQGLGLYFMDzrzr
+zrzrzrMDMDYFgDIzIzIzIzIzIzIzIzIzjQYFAqYFYFYFYFYFYFYFYFYFYFYFYFYFYFHIykFfEUZTLgUHksTtZTjqqfIvZTqeRgbIrpwGZTBouKbIZTqebIbIbIwGHIHIJNHINqGLGLeQeQGLYFMDzrzr
+zrzrMDMDYFgDIzIzlnlooMqurwsNthIzIzjQYFHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTvzZTZTZTbIuKolZTZTIoxTIoZTHIYFYFYFYFYFGLGLeQGLYFMDMDzr
+zrMDMDYFgDIzxOCpCxPHDYIIDYPHOKSaWdIzjQHIIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXIXyQDEyQRzZTbIjsuKLWLKjepMPOxWHIYFAqAqMDYFAufseIfsAuMDMDzr
+zrMDYFIzIzxOcHPHPHvpPHEMPHvpPHPHXHWdIzIzIXZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTzKZTIXZTqeuKwGZTGGqsCLqCjLHIYFMDMDMDMDNfZWeQXdNfMDMDzr
+zrMDYFIzxOcHEMvpPHEaEauGEaEaPHvpEMXHWdIzIXZTZTZTVmgwaMaMaMaMaMaMaMaMnUaMaMaMaMaMaMaMaMgwyjZTIFDEjYgnZTIXZTQmDoQmZTZTZTZTZTZTHIYFMDMDMDMDAuGLeQGLAuMDMDzr
+zrMDYFIzLfYCEMYCYvPJPJPJPJPJYvYCEMYCetIzIXZTZTVmgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwZTdDdZgnXZZTIXZTBouKbIZTxXLKkDLKOkHIYFMDMDMDMDYFGLeQlyGLYFMDMD
+zrMDYFIzgKbvPHqPHbkGkGkGkGkGbRrfPHZjzwIzIXZTVmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBFRZTAllpOxXZZTIXZTbIuKbIZTuzLKODLKAtHIYFMDMDMDMDYFlyeQeQlyGLYFMD
+zrMDYFIzgFPHPHqPHbkGkGPBkGkGbRrfPHPHpeIzIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUUVgngnXZZTIXZTGJRBuKiwLKLKODLKpnHIYFMDMDMDMDYFGLGLvDeQGLYFMD
+zrMDYFIzJrPHPHqPHbKSkGkGkGKSbRrfPHPHAwIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUIqDEDEGZZTIXZTbIuKfrZTisLKLKLKvfHIYFMDMDMDMDMDYFGLGLeQlyYFMD
+MDMDYFIzadbvPHqPHbmjlXkGlXmjbRrfPHZjNdIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwvUDGqhVTldZTIXZTfNJXaYZTNjLKLvaljoHIYFMDMDMDMDMDYFYiGLeQGLYFMD
+MDMDYFIzgFPHPHXHvwooUQkGUQooGecHPHPHlEIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwZTFURGlpllZTIXZTmnuKbIZTZTxJZTZTZTHIHIYFMDMDMDMDYFEblyeQlyYFMD
+MDMDYFIzzyBJYUSXGdooooyqoooomJSXjnTAPdIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIgVMaQTZTyEzKyEZTIXZTbIuKUXZTCzLKHQCPyGqaHIYFYFYFMDMDYFGLGLeQGLYFMD
+MDmvYFIzooooooooooooVwPJVwooooooooooooIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIMaDETYgngnDEnvZTIXZTUXINJTZTEGLKDNbHDNjEHIHIHIHIYFMDYFGLeQvDGLYFMD
+MDmvYFtrqxvPooWwQRiHoozzooKDQRWwoovPIctrIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIRDTYQTZTfxKUgnZTIXZTJTEySDZTPfLKLKLKLKLKgjlxPCHIYFMDAulyeQGLGLYFMD
+MDmvYFIzjWjWooQRQRQRWwscWwQRQRQRoojWjWIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwZTSSAnChZTIXZTppuKnjZTWOyDAsyDWRKWZTiGFfHIYFMDNfFteQlyrZYFMD
+MDMDYFIzfzjWooQRQRQRQRQRQRQRQRQRoojWjWIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwyjvUvUZTZTZTZTbIdubIZTZTZTZTHIHIHIZTRRFfHIYFMDAulyeQGLsXYFMD
+MDMDYFIzjWjWoomTQRQRQRQRQRQRQRmToojWfzIzIXZTMmgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwyjZTZTfcLXVTWPQmXQbLWIHIYFHIuiFfFfHIYFMDYFGLvDGLYFMDMD
+MDMDYFIzjWjWooooooSbiuiuiuSboooooojWjWIzIXZTgwgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwFRZTZTZTFKuKdutbDEVTDEHIYFHIHIHIHIHIYFMDYFGLeQGLYFMDMD
+MDMDYFIzhUjWqTqNoocGPzPzPzdqoosRcnjWjWIzIXZTTXgwgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwgwynZTZTfcbIBvVTQmPcggytHIYFYFYFYFYFYFMDMDYFlyeQlyYFMDmv
+MDMDYFIzPxjWeNjWAkPHPHPHPHPHAkqTeNjWUMIzIXZTZTTXgwjAQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQIQInBgwgwgwgwynZTZTcKZTYxZTYxHIHIHIHIHIYFMDMDMDRlMDMDMDYFGLeQlyYFMDMD
+MDMDYFIzIzIzIzIzIzGfGbrGGbkHIzIzIzIzIzIzZTZTZTZTTXgwgigigigigigigigikqgigigigigigigigigwgwgwgwynZTZTtmzXZTZTZTHIHIYFYFYFYFMDMDMDRlMDMDMDYFGLlyeQGLYFmvMD
+MDkcMDYFYFYFYFYFIzIzIzIzIzIzIzYFYFYFYFHIwjVPQmZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTZTBXZTZTZTZTZiIXIXUUuoOcHIYFMDMDMDMDMDMDMDMDMDAuNfAuGLeQvDGLYFMDMD
+MDmvkcMDMDMDMDMDYFYFYFYFYFYFYFMDMDMDMDwYBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdBdNMUqicIXIXhrIXIXhiIXIXIXIXIXtFHIYFMDMDMDMDMDMDGLGLGLGLkbWfGLeQGLGLYFMDMD
+MDMDmvMDAuAuAuAuAuAuAuAuMDMDMDMDMDMDYFHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIwgHIHIHIHIHIHIHIgyGzWqHIHIHIHIYFMDMDMDMDMDMDGLGLeQeQeQsKeQvDGLYFMDMDMD
+zrMDmvmvAujDKLZymRHCHCAuMDMDmvMDMDMDMDYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFYFHIHIHIYFYFYFYFYFHIHIHIHIHIYFAuAuAuMDMDGLGLGLGLGLGLGLGLOhWfGLGLlyYFMDMDzr
 zrMDMDMDAuATmQyUAuAuanAuMDMDmvmvmvMDMDMDMDMDMDAuAuAuMDMDMDMDMDMDMDMDMDmvmvMDMDMDYFYFYFMDMDMDMDMDYFYFYFYFYFkcGLyAGLmBmBGLGLGLGLGLMDMDAuNfAuYFYFYFMDMDMDzr
 zrMDMDMDAuAuAuAuZRsEdCAuYFYFMDmvmvmvMDMDMDGLGLGLyAGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLmBMDMDMDMDMDMDRlMDMDMDMDMDMDMDMDMDzr
 zrMDMDMDMDMDMDMDAuAuZtAunqrEYFMDMDMDMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLOhGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDRlRlMDMDMDMDMDMDMDMDMDzrzr
 zrMDMDMDFOMDMDXoXoyAGLyAGLGLGLMDMDMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLAuAuSlMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDmvMDMDMDzrzr
 zrzrMDMDFOGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDmvmvmvMDMDMDMDMDMDMDMDMDMDMDQzctQzMDQzQzQzQzQzQzQzQzQzQzMDMDMDMDMDGEGEGEMDMDMDmvMDMDMDmvmvmvMDMDzrzrzr
-zrzrMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDFOMDMDQzQzQzQzQzQzQzQzQzQzQzmuQzQzYdaJSYnWxGmZepnGWlDiQzQzQzMDMDMDGEGEGEMDmvmvMDMDmvmvmvMDMDMDzrzrzr
-zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDMDMDMDQzJBgbzuYSpmidbqPIMQQzmeVzPIMQMQDlMQMQMQHLQsMQMQPIgUgUQzQzMDMDMDMDmvmvmvMDMDmvMDMDMDzrzrzrzrzr
-zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDGEGEMDMDMDMDMDMDMDQzndgUMQMQbqMQgULkgUMQMQgUYhMQMQgUMQMQxSmhMQMQHLkrgUHLYjQzMDMDMDMDMDmvMDMDMDMDzrzrzrzrzrzrzrzr
-zrzrzrzrMDmvGLGLGLGLGLGLGLGLXomvmvMDMDGEMDMDMDMDMDMDMDMDGEQzyNzusnzuMQgUMQPIQzQzQzQzPIxGgURvDLnGSYTlTpgUYdPIMQzaQzQzMDmvmvMDMDMDMDMDMDzrzrzrzrzrzrzrzrzr
-zrzrzrzrzrMDMDGLGLGLGLGLMDMDMDMDmvmvMDMDMDMDMDMDzrzrzrMDMDQzQzQzQzQzQzQzQzQzMDMDMDMDQzQzQzQzQzQzQzQzQzQzQzQzQzQzMDMDmvMDMDzrzrzrzrzrzrzrzrzrzrzrxBzrzrzr
+zrzrMDGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDFOMDMDQzQzQzQzQzQzQzQzQzQzQzmuQzQzYdaJSYnWxGmZepnGWlDiHMHMHMMDMDMDGEGEGEMDmvmvMDMDmvmvmvMDMDMDzrzrzr
+zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDMDMDMDMDMDMDQzJBgbzuYSpmidbqPIMQQzmeVzPIMQMQDlMQMQMQHLQsMQMQPIgUgUHMHMMDMDMDMDmvmvmvMDMDmvMDMDMDzrzrzrzrzr
+zrzrzrGLGLGLGLGLGLGLGLGLGLGLGLGLMDMDMDMDGEGEMDMDMDMDMDMDMDQzndgUMQMQbqMQgULkgUMQMQgUYhMQMQgUMQMQxSmhMQMQHLkrgUHLYjHMMDMDMDMDMDmvMDMDMDMDzrzrzrzrzrzrzrzr
+zrzrzrzrMDmvGLGLGLGLGLGLGLGLXomvmvMDMDGEMDMDMDMDMDMDMDMDGEQzyNzusnzuMQgUMQPIQzQzQzQzPIxGgURvDLnGSYTlTpgUYdPIMQzaHMHMMDmvmvMDMDMDMDMDMDzrzrzrzrzrzrzrzrzr
+zrzrzrzrzrMDMDGLGLGLGLGLMDMDMDMDmvmvMDMDMDMDMDMDzrzrzrMDMDQzQzQzQzQzQzQzQzQzMDMDMDMDQzQzQzQzQzQzQzQzQzQzQzHMHMHMMDMDmvMDMDzrzrzrzrzrzrzrzrzrzrzrxBzrzrzr
 zrzrzrzrzrzrzrzrGLGLGLGLGLMDMDMDMDMDMDMDMDMDzrzrzrzrzrzrMDMDMDMDMDMDMDMDMDMDMDzrzrMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDMDzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzrzr
 "}
