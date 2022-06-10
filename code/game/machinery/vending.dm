@@ -3850,9 +3850,11 @@ var/global/num_vending_terminals = 1
 	icon_vend = "meat-vend"
 	vend_delay = 25
 	//The vending machine can have a mouse inside of it! If it does, it has a chance to eject it on each vend.
-	var/hasmouse = 0
+	var/hasmouse = FALSE
 	var/chanceofhavingmouse = 35
 	var/chanceofejectingmouse = 10
+	var/mob/hiddenmouse = /mob/living/simple_animal/mouse/common/dan
+	var/hiddenmousesound = "sound/effects/mousesqueek.ogg"
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/snacks/sausage/dan = 3,
 		)
@@ -3868,7 +3870,7 @@ var/global/num_vending_terminals = 1
 	..()
 	//Chance of a mouse inside of the vending machine
 	if(prob(chanceofhavingmouse))
-		hasmouse = 1
+		hasmouse = TRUE
 
 	//Dan isn't really consistent with his new factories. Random amounts of meats are included.
 	//This all goes into New() because rand() can't be called in an object definition.
@@ -3880,12 +3882,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/meat/human = rand(0,2),
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation = rand(0,2)
 		)
-	switch(rand(1,3))
-		if(3)
-			contraband[/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big] = 1
-		else
-			contraband[/obj/item/weapon/reagent_containers/food/snacks/meat/roach] = rand(1,2)
-	src.build_inventory(contraband, 1)
+	if(prob(33))
+		contraband[/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big] = 1
+	else
+		contraband[/obj/item/weapon/reagent_containers/food/snacks/meat/roach] = rand(1,2)
+	build_inventory(contraband, 1)
 
 /obj/machinery/vending/meat/proc/add_more_meat()
 	//More meat. More of the same entry. MORE. MORE!!
@@ -3897,37 +3898,30 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/meat/update_vicon()
 	//Override the usual function so we can run special mouse codes
 	if(stat & (BROKEN))
+		icon_state = "[initial(icon_state)]-broken"
 		//If the mouse is still inside, it isn't anymore... rip
 		if(hasmouse)
-			hasmouse = 0
+			hasmouse = FALSE
 			visible_message("\The [src.name] makes a sickening splatter sound.", "You hear a splat.")
 			playsound(loc, 'sound/effects/splat.ogg', 50, 1)
-			src.icon_state = "[initial(icon_state)]-broken"
-		else
-			src.icon_state = "[initial(icon_state)]-brokennomouse"
+			//We don't want the !hasmouse down there to trigger, so,
+			return
 	else if (stat & (NOPOWER|FORCEDISABLE))
-		if(hasmouse)
-			src.icon_state = "[initial(icon_state)]-off"
-		else
-			src.icon_state = "[initial(icon_state)]-offnomouse"
+		src.icon_state = "[initial(icon_state)]-off"
 	else
 		src.icon_state = "[initial(icon_state)]"
+	if(!hasmouse)
+		icon_state += "nomouse"
 
 /obj/machinery/vending/meat/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	..()
 	if(hasmouse && prob(chanceofejectingmouse))
-		hasmouse = 0
-		visible_message("\The [src.name] makes a squeaking sound as a mouse pops out of the slot!", "You hear a squeak.")
-		playsound(loc, 'sound/effects/mousesqueek.ogg', 50, 1)
-		spawn(vend_delay)
-			new /mob/living/simple_animal/mouse/common/dan(get_turf(src))
+		dispensemouse(vend_delay)
 
 /obj/machinery/vending/meat/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	..()
 	if(hasmouse)
-		visible_message("\The [src.name] makes a squeaking sound as a mouse pops out of the machine!", "You hear a squeak.")
-		playsound(loc, 'sound/effects/mousesqueek.ogg', 50, 1)
-		new /mob/living/simple_animal/mouse/common/dan(get_turf(src))
+		dispensemouse()
 
 /obj/machinery/vending/meat/attackby(obj/item/W, mob/user)
 	..()
@@ -3940,4 +3934,13 @@ var/global/num_vending_terminals = 1
 				to_chat(user, "<SPAN CLASS='notice'>You can't hear anything.</SPAN>")
 			else
 				to_chat(user, "<SPAN CLASS='notice'>You can only hear the hum of the motor.</SPAN>")
+
+/obj/machinery/vending/meat/proc/dispensemouse(var/delay = 0)
+	hasmouse = FALSE
+	spawn(delay)
+		visible_message("\The [src.name] makes an unusual sound as some sort of [initial(hiddenmouse.name)] pops out of the slot!", "You hear a squeak.")
+		if(hiddenmousesound)
+			playsound(loc, hiddenmousesound, 50, 1)
+		new hiddenmouse(get_turf(src))
+
 
