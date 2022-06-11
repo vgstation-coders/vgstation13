@@ -465,18 +465,19 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 	var/image/black_turf = new()
 
-	if ("black_turf_prerender" in pre_rendered_shadows)
-		black_turf.render_target = "black_turf_prerender"
-	else
-		black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-		black_turf.icon_state = "black"
-		black_turf.render_source = "black_turf_prerender"
-		pre_rendered_shadows += "black_turf_prerender"
+	if (!(lighting_flags & MOVABLE_LIGHT))
+		if ("black_turf_prerender" in pre_rendered_shadows)
+			black_turf.render_target = "black_turf_prerender"
+		else
+			black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+			black_turf.icon_state = "black"
+			black_turf.render_source = "black_turf_prerender"
+			pre_rendered_shadows += "black_turf_prerender"
 
-	black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-	black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-	black_turf.layer = HIGHEST_LIGHTING_LAYER
-	temp_appearance += black_turf
+		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
+		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+		black_turf.layer = HIGHEST_LIGHTING_LAYER
+		temp_appearance += black_turf
 
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
@@ -541,22 +542,23 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
-	for (var/turf/T in affected_shadow_walls)
-		var/image/black_turf = new()
-		if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
-			black_turf.render_source = "postprocess_black_turf_prerender"
-		else
-			black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+	if (!(lighting_flags & MOVABLE_LIGHT))
+		for (var/turf/T in affected_shadow_walls)
+			var/image/black_turf = new()
+			if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
+				black_turf.render_source = "postprocess_black_turf_prerender"
+			else
+				black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+				black_turf.icon_state = "black"
+				black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
+			pre_rendered_shadows += "postprocess_black_turf_prerender"
 			black_turf.icon_state = "black"
-			black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-		pre_rendered_shadows += "postprocess_black_turf_prerender"
-		black_turf.icon_state = "black"
-		var/x_offset = T.x - x
-		var/y_offset = T.y - y
-		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-		black_turf.layer = ANTI_GLOW_PASS_LAYER
-		temp_appearance += black_turf
+			var/x_offset = T.x - x
+			var/y_offset = T.y - y
+			black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
+			black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+			black_turf.layer = ANTI_GLOW_PASS_LAYER
+			temp_appearance += black_turf
 
 
 // Smooth out shadows and then blacken out the wall glow
@@ -584,25 +586,26 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		temp_appearance += image_result
 
 	// -- eliminating the underglow
-	for (var/turf/T in affected_shadow_walls)
-		for (var/dir in cardinal)
-			var/turf/neighbour = get_step(T, dir)
-			if (neighbour && !CHECK_OCCLUSION(neighbour))
-				var/image/black_turf = new()
-				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
-					black_turf.render_source = "postprocess_black_turf_prerender"
-				else
-					black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-					black_turf.icon_state = "black"
-					black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-					pre_rendered_shadows += "postprocess_black_turf_prerender"
+	if (!(lighting_flags & MOVABLE_LIGHT))
+		for (var/turf/T in affected_shadow_walls)
+			for (var/dir in cardinal)
+				var/turf/neighbour = get_step(T, dir)
+				if (neighbour && !CHECK_OCCLUSION(neighbour))
+					var/image/black_turf = new()
+					if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
+						black_turf.render_source = "postprocess_black_turf_prerender"
+					else
+						black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+						black_turf.icon_state = "black"
+						black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
+						pre_rendered_shadows += "postprocess_black_turf_prerender"
 
-				var/x_offset = neighbour.x - x
-				var/y_offset = neighbour.y - y
-				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-				black_turf.layer = ANTI_GLOW_PASS_LAYER
-				temp_appearance += black_turf
+					var/x_offset = neighbour.x - x
+					var/y_offset = neighbour.y - y
+					black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
+					black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+					black_turf.layer = ANTI_GLOW_PASS_LAYER
+					temp_appearance += black_turf
 
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)
