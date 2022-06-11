@@ -206,7 +206,7 @@
 
 	var/obj/effect/cult_offerings/offerings_effect
 	var/mob/sacrificer  // who started the sacrifice ritual
-	var/image/build 
+	var/image/build
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
@@ -285,7 +285,7 @@
 			S.pixel_y = 6
 			lock_atom(S, lock_type)
 			if(S.stat != DEAD)
-				S.death()	
+				S.death()
 			I.add_blood()
 			user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [S] and impales it on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [S] and impale it on \the [src]!</span>")
 		else
@@ -533,7 +533,7 @@
 				blade = null
 				playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 				update_icon()
-		else 
+		else
 			blade.forceMove(loc)
 			blade.attack_hand(user)
 			to_chat(user, "<span class='notice'>You remove \the [blade] from \the [src]</span>")
@@ -692,7 +692,7 @@
 			if(!M.mind)
 				to_chat(user, "<span class='warning'>\The [M] lacks a proper soul. They are an unsuitable sacrifice.</span>")
 				altar_task = ALTARTASK_NONE
-				return	
+				return
 			if((!istype(blade, /obj/item/weapon/melee/cultblade) && !istype(blade, /obj/item/weapon/melee/soulblade)) || istype(blade, /obj/item/weapon/melee/cultblade/nocult))
 				to_chat(user, "<span class='warning'>\The [blade] is too weak to perform such a sacrifice. Forge a stronger blade.</span>")
 				altar_task = ALTARTASK_NONE
@@ -705,7 +705,7 @@
 			if(!locate(/datum/bloodcult_ritual/animal_sacrifice) in unlocked_rituals)
 				to_chat(user, "<span class='warning'>Nar'sie has no interest in such a meager sacrifice at the moment.</span>")
 				altar_task = ALTARTASK_NONE
-				return	
+				return
 			timeleft = 15
 			timetotal = timeleft
 			min_contributors = 1
@@ -877,7 +877,7 @@
 					if(R && R.is_open_container())
 						if(istype(M, /mob/living/simple_animal/mouse))
 							M.take_blood(R, min(remaining, 30))
-						else 
+						else
 							M.take_blood(R, min(remaining, 60))
 						R.on_reagent_change()
 				TriggerCultRitual(/datum/bloodcult_ritual/animal_sacrifice, sacrificer, list("mobtype" = M.type))
@@ -885,7 +885,7 @@
 				bloodmess_splatter(TU)
 				playsound(src, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
 				flick("cult_jaunt_land",landing_animation)
-					
+
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -914,6 +914,9 @@ var/list/cult_spires = list()
 	layer = BELOW_PROJECTILE_LAYER
 	light_color = "#FF0000"
 	var/stage = 1
+
+	lighting_flags = FOLLOW_PIXEL_OFFSET
+	light_range = 2
 
 /obj/structure/cult/spire/New()
 	..()
@@ -1096,12 +1099,15 @@ var/list/cult_spires = list()
 	plane = EFFECTS_PLANE
 	layer = BELOW_PROJECTILE_LAYER
 	light_color = LIGHT_COLOR_ORANGE
+	light_range = 2
 	custom_process = 1
 	var/heating_power = 40000
 	var/set_temperature = 50
 	var/mob/forger = null
 	var/template = null
 	var/obj/effect/cult_ritual/forge/forging = null
+
+	lighting_flags = FOLLOW_PIXEL_OFFSET
 
 
 /obj/structure/cult/forge/New()

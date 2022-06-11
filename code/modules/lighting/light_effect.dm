@@ -42,6 +42,10 @@
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
 
+/atom/movable/light/smooth
+	appearance_flags = KEEP_TOGETHER | TILE_BOUND
+	animate_movement = SLIDE_STEPS
+
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
 	if(istype(holder, /atom))
@@ -98,12 +102,12 @@
 			follow_holder_dir()
 
 			if(isturf(holder))
-				forceMove(holder, glide_size_override = 8) // Default glide.
+				forceMove(holder, glide_size_override = get_glide(holder)) // Default glide.
 			else if(holder.loc.loc && ismob(holder.loc))
 				var/mob/M = holder.loc
-				forceMove(holder.loc.loc, glide_size_override = M.glide_size) // Glide size from our mob.
+				forceMove(holder.loc.loc, glide_size_override = get_glide(M)) // Glide size from our mob.
 			else
-				forceMove(holder.loc, glide_size_override = 8) // Hopefully whatever we're gliding with has smooth movement.
+				forceMove(holder.loc, glide_size_override = get_glide()) // Hopefully whatever we're gliding with has smooth movement.
 
 			if (world.cpu < LIGHT_CPU_THRESHOLD || !ticker || ticker.current_state < GAME_STATE_SETTING_UP)
 				cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
@@ -112,6 +116,18 @@
 
 	else
 		init_lights |= src
+
+/atom/movable/light/proc/get_glide(var/holder)
+	return WORLD_ICON_SIZE
+
+/atom/movable/light/smooth/get_glide(var/holder)
+	if (!holder)
+		return 8
+	if (holder)
+		if (ismob(holder))
+			var/mob/M = holder
+			return M.glide_size
+		return 8
 
 /atom/movable/light/proc/set_dir(new_dir)
 	if(dir != new_dir)

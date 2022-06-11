@@ -92,6 +92,14 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 		affecting_turfs.Cut()
 		return
 
+
+/atom/movable/light/smooth/cast_light_init()
+	. = ..()
+	light_range = 2
+	var/color = rgb2num(light_color)
+	light_color = rgb(round(color[1]/2), round(color[2]/2), round(color[2]/2))
+
+
 /*
 
 Commented out as this doesn't works well with performance currently.
@@ -187,9 +195,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 	// This to avoid TILE_BOUND corner light effects while keeping smooth movement for movable light sources
 	// There are THREE light atoms on an object
-	// - the white square (not TILE_BOUND)
-	// - the shadow square (TILE_BOUND)
-	// - the smooth white square (not TILE_BOUND)
+	// - the white square + shadows (not TILE_BOUND)
+	// - the wall shadow layer (TILE_BOUND)
+	// - the smooth white square (also TILE_BOUND)
 	icon_state = base_light_color_state
 
 	if (icon_state == "white") // This mask only makes sense if we are casting a white light
@@ -241,6 +249,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	for(var/turf/T in view(light_range, src))
 		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
+
+/atom/movable/light/smooth/cast_shadows()
+	return
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
@@ -473,6 +484,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		black_turf.render_source = "black_turf_prerender"
 		pre_rendered_shadows += "black_turf_prerender"
 
+
 	black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	black_turf.layer = HIGHEST_LIGHTING_LAYER
@@ -543,6 +555,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
 		var/image/black_turf = new()
+
 		if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
 			black_turf.render_source = "postprocess_black_turf_prerender"
 		else
@@ -550,6 +563,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			black_turf.icon_state = "black"
 			black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
 		pre_rendered_shadows += "postprocess_black_turf_prerender"
+
 		black_turf.icon_state = "black"
 		var/x_offset = T.x - x
 		var/y_offset = T.y - y
@@ -589,6 +603,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			var/turf/neighbour = get_step(T, dir)
 			if (neighbour && !CHECK_OCCLUSION(neighbour))
 				var/image/black_turf = new()
+
 				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
 					black_turf.render_source = "postprocess_black_turf_prerender"
 				else
