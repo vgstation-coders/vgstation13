@@ -282,7 +282,7 @@ var/list/impact_master = list()
 			var/mob/living/carbon/shot_at = A
 			if (istype(A))
 				if(target_zone)
-					if (shot_at.stat || target_zone.restrained())
+					if (shot_at.stat || shot_at.restrained())
 						def_zone = target_zone
 					else
 						var/idle_time = world.time - shot_at.last_moved
