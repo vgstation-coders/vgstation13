@@ -73,6 +73,7 @@
 	jumper.Move(T)
 	hurdler = null
 	shock_check(jumper)
+	return T
 
 /obj/structure/railing/to_bump(atom/Obstacle)
 	..()
@@ -363,6 +364,12 @@
 				make_into_sheets(TRUE)
 			else
 				break_glass(TRUE)
+
+/obj/structure/railing/suicide_act(mob/living/user)
+	var/turf/T = hurdle(user)
+	if(T && isopenspace(T))
+		return T.suicide_act(user) || ..()
+	return ..()
 
 /obj/structure/railing/loose
 	anchored = 0

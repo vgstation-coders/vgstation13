@@ -212,27 +212,28 @@
 	icon = "pda_mule"
 
 /datum/pda_app/cart/mulebot/get_dat(var/mob/user)
-    var/dat = ""
-    if (!cart_device)
-        dat += {"<span class='pda_icon pda_mule'></span> Could not find radio peripheral connection <br/>"}
-        return
-    if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/mule))
-        dat += {"<span class='pda_icon pda_mule'></span>Commlink bot error <br/>"}
-        return
-    // Building the data in the list
-    dat += {"<span class='pda_icon pda_mule'></span><b>M.U.L.E. bot Interlink V1.0</h4> </b><br/>"}
-    dat += "<ul>"
-    for (var/obj/machinery/bot/mulebot/mule in bots_list)
-        if (mule.z != user.z)
-            continue
-        dat += {"<li>
-                <i>[mule]</i>: [mule.return_status()] in [get_area_name(mule)] <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"] <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=[cart_device.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[src];change_destination=1'>[cart_device.saved_destination] - EDIT</a> <br/>
-                </li>"}
-    dat += "</ul>"
+	var/dat = ""
+	if (!cart_device)
+		dat += {"<span class='pda_icon pda_mule'></span> Could not find radio peripheral connection <br/>"}
+		return
+	if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/mule))
+		dat += {"<span class='pda_icon pda_mule'></span>Commlink bot error <br/>"}
+		return
+	// Building the data in the list
+	dat += {"<span class='pda_icon pda_mule'></span><b>M.U.L.E. bot Interlink V1.0</h4> </b><br/>"}
+	dat += "<ul>"
+	for (var/obj/machinery/bot/mulebot/mule in bots_list)
+		if (mule.z != user.z)
+			continue
+		dat += {"<li>
+				<i>[mule]</i>: [mule.return_status()] in [get_area_name(mule)] <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"] <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=[cart_device.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[src];change_destination=1'>[cart_device.saved_destination] - EDIT</a> <br/>
+				</li>"}
+	dat += "</ul>"
+	return dat
 
 /datum/pda_app/cart/mulebot/Topic(href, href_list)
     if(..())

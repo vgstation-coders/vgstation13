@@ -256,11 +256,11 @@
 /datum/biogen_recipe/misc
 	category="Misc."
 
-/datum/biogen_recipe/misc/pest
-	id="pest"
-	name="Insecticide"
-	reagent=INSECTICIDE
+/datum/biogen_recipe/misc/insecticide
+	id = "insecticide"
+	name = "Insecticide"
 	cost=35
+	reagent=INSECTICIDE
 	amount_per_unit=10
 	other_amounts=list(5)
 

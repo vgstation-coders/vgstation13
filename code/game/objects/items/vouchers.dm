@@ -55,26 +55,35 @@
 	var/single_items = 0 //if we can only vend each one once
 	var/vend_amount = 0 //how many items we make the machine spit out
 
-//Test case
 /obj/item/voucher/free_item/hot_drink
 	name = "free hot drink voucher"
-	desc = "Perk Up Your Day, with this handy free hot drink from your trusted name-brand vending machines."
-
-	freebies = list(/obj/item/weapon/reagent_containers/food/drinks/coffee, /obj/item/weapon/reagent_containers/food/drinks/tea, /obj/item/weapon/reagent_containers/food/drinks/h_chocolate)
+	desc = "Perk Up Your Day, with this handy free hot drink! Redeemable at any Hot Drinks machine."
+	freebies = list(
+		/obj/item/weapon/reagent_containers/food/drinks/coffee,
+		/obj/item/weapon/reagent_containers/food/drinks/tea,
+		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate
+		)
 	vend_amount = 1
 	shred_on_use = 0
 
 /obj/item/voucher/free_item/snack
 	name = "free snack voucher"
-	desc = "Perk Up Your Day, with this handy free snack from your trusted name-brand vending machines."
-
-	freebies = list(/obj/item/weapon/reagent_containers/food/snacks/candy,/obj/item/weapon/reagent_containers/food/drinks/dry_ramen,/obj/item/weapon/reagent_containers/food/snacks/chips,/obj/item/weapon/reagent_containers/food/snacks/sosjerky,/obj/item/weapon/reagent_containers/food/snacks/no_raisin,/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers)
+	desc = "Perk Up Your Day, with this handy free snack!  Redeemable at any Getmore Chocolate Corp machine."
+	freebies = list(
+		/obj/item/weapon/reagent_containers/food/snacks/candy,
+		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen,
+		/obj/item/weapon/reagent_containers/food/snacks/chips,
+		/obj/item/weapon/reagent_containers/food/snacks/sosjerky,
+		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
+		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers
+		)
 	vend_amount = 1
 	shred_on_use = 0
 
 /obj/item/voucher/free_item/donk
 	name = "free donk-pocket voucher"
-	desc = "Perk Up Your Day, with this handy free snack from your trusted name-brand vending machines."
+	desc = "Perk Up Your Day, with this handy free snack! Redeemable at any Getmore Chocolate Corp machine."
 
 	freebies = list(/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating)
 	vend_amount = 1
@@ -82,9 +91,15 @@
 
 /obj/item/voucher/free_item/glowing //This one gives you special voucher-only items!
 	name = "glowing voucher"
-	desc = "Don't bother appealing to a vendomat without this!"
+	desc = "Don't bother appealing to a Vendomat without this!"
 	icon_state = "glowingvoucher"
-	freebies = list(/obj/item/weapon/glowstick, /obj/item/weapon/glowstick/red, /obj/item/weapon/glowstick/blue, /obj/item/weapon/glowstick/yellow, /obj/item/weapon/glowstick/magenta)
+	freebies = list(
+		/obj/item/weapon/glowstick,
+		/obj/item/weapon/glowstick/red,
+		/obj/item/weapon/glowstick/blue,
+		/obj/item/weapon/glowstick/yellow,
+		/obj/item/weapon/glowstick/magenta
+		)
 	vend_amount = 5 //All five types
 	single_items = 1 //One of each
 	shred_on_use = 1
@@ -97,7 +112,10 @@
 	name = "ammo voucher"
 	desc = "Load up! Redeem at a SecTech for two magazines of criminal-stopping .380AUTO ammunition."
 	icon_state = "secvoucher"
-	freebies = list(/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto/rubber)
+	freebies = list(
+		/obj/item/ammo_storage/magazine/m380auto,
+		/obj/item/ammo_storage/magazine/m380auto/rubber
+		)
 	vend_amount = 2
 	single_items = 1
 
@@ -105,16 +123,30 @@
 	name = "medibot voucher"
 	desc = "Stay healthy! This voucher entitles you to a single (1) Nanotrasen Advanced Medibot! Redeem at a NanoMedPlus."
 	icon_state = "medvoucher"
-	freebies = list(/obj/item/weapon/medbot_cube)
+	freebies = list(
+		/obj/item/weapon/medbot_cube
+		)
 	vend_amount = 1
 	single_items = 1
-	
 
 /obj/item/voucher/free_item/armorstrap
 	name = "reinforced strap voucher"
 	desc = "Redeem at a SECtech vending machine to get a set of reinforced armor straps for an armored vest."
 	icon_state = "secvoucher"
-	freebies = list(/obj/item/clothing/accessory/armoredvestshoulderstrap)
+	freebies = list(
+		/obj/item/clothing/accessory/armoredvestshoulderstrap
+		)
 	vend_amount = 1
 	single_items = 1
 	shred_on_use = 1
+
+/obj/item/voucher/free_item/meat
+	name = "free meat voucher"
+	desc = "Discount Dan gives you his blessings. Redeemable at a Meat Fridge vendor, brought to you by Discount Dan."
+	freebies = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan
+		)
+	vend_amount = 1
+	single_items = 1
+	shred_on_use = 1
+  
