@@ -278,7 +278,24 @@ var/list/impact_master = list()
 				miss_modifier += 8*distance
 				miss_modifier += (abs(miss_modifier))
 
-			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier)
+			var/target_zone = def_zone
+			var/mob/living/carbon/shot_at = A
+			if (istype(A))
+				if(target_zone)
+					if (shot_at.stat || target_zone.restrained())
+						def_zone = target_zone
+					else
+						var/idle_time = world.time - shot_at.last_moved
+						switch (idle_time)
+							if (-9999 to 2 SECONDS)
+								def_zone = get_zone_with_miss_chance(target_zone, src)
+							if (2 SECONDS to 5 SECONDS)
+								if (prob(50))
+									def_zone = get_zone_with_miss_chance(target_zone, src)
+								else
+									def_zone = target_zone
+							else
+								def_zone = target_zone
 
 		if(!def_zone)
 			visible_message("<span class='notice'>\The [src] misses [M] narrowly!</span>")

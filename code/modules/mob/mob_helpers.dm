@@ -194,21 +194,21 @@
 			if(LIMB_HEAD)
 				miss_chance = 40
 			if(LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_RIGHT_ARM, LIMB_LEFT_ARM)
-				miss_chance = 40
+				miss_chance = 60
 				if (miss_chance_mod < 0)
 					miss_chance_mod *= 0.5
 			if(LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
-				miss_chance = 60
+				miss_chance = 90
 				if (miss_chance_mod < 0)
 					miss_chance_mod *= 0.2
 		miss_chance = max(miss_chance + miss_chance_mod, 0)
 		if(prob(miss_chance))
 			var/fully_miss = 70
 			switch(zone)
-				if(LIMB_HEAD)
+				if(LIMB_HEAD, LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_RIGHT_ARM, LIMB_LEFT_ARM)
 					fully_miss = 70
 				else
-					fully_miss = 95
+					fully_miss = 50
 			if(prob(fully_miss))
 				return null
 			else
