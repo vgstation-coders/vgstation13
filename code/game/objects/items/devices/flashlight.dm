@@ -226,10 +226,15 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!usr.stat)
+	if(!Adjacent(usr))
+		return
+
+	if(usr.incapacitated() || usr.stat) //Checks for stuns, ghost, restraint, and being awake.
+		return
+
+	if(usr.has_hand_check())
 		attack_self(usr)
 		return TRUE
-	return FALSE
 
 // FLARES
 
