@@ -184,31 +184,32 @@
 /proc/get_zone_with_miss_chance(zone, var/mob/target, var/miss_chance_mod = 0)
 	zone = check_zone(zone)
 
+	if (!isnum(miss_chance_mod))
+		miss_chance_mod = 0
+
 	// you can only miss if your target is standing and not restrained
 	if(!target.locked_to && !target.lying)
 		var/miss_chance = 10
 		switch(zone)
 			if(LIMB_HEAD)
 				miss_chance = 40
-			if(LIMB_LEFT_LEG)
-				miss_chance = 20
-			if(LIMB_RIGHT_LEG)
-				miss_chance = 20
-			if(LIMB_LEFT_ARM)
-				miss_chance = 20
-			if(LIMB_RIGHT_ARM)
-				miss_chance = 20
-			if(LIMB_LEFT_HAND)
-				miss_chance = 50
-			if(LIMB_RIGHT_HAND)
-				miss_chance = 50
-			if(LIMB_LEFT_FOOT)
-				miss_chance = 50
-			if(LIMB_RIGHT_FOOT)
-				miss_chance = 50
+			if(LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_RIGHT_ARM, LIMB_LEFT_ARM)
+				miss_chance = 40
+				if (miss_chance_mod < 0)
+					miss_chance_mod *= 0.5
+			if(LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				miss_chance = 60
+				if (miss_chance_mod < 0)
+					miss_chance_mod *= 0.2
 		miss_chance = max(miss_chance + miss_chance_mod, 0)
 		if(prob(miss_chance))
-			if(prob(70))
+			var/fully_miss = 70
+			switch(zone)
+				if(LIMB_HEAD)
+					fully_miss = 70
+				else
+					fully_miss = 95
+			if(prob(fully_miss))
 				return null
 			else
 				var/t = rand(1, 10)
