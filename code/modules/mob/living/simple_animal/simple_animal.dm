@@ -786,9 +786,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return ..()
 
 /mob/living/simple_animal/proc/reagent_act(id, method, volume)
-	if(isDead())
-		return
-
 	switch(id)
 		if(SACID)
 			if(acidimmune)
@@ -800,6 +797,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				return
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
+		if(WATER)
+			make_visible(INVISIBLESPRAY)
 
 /mob/living/simple_animal/proc/delayedRegen()
 	set waitfor = 0

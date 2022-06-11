@@ -161,25 +161,26 @@
 	icon = "pda_atmos"
 
 /datum/pda_app/cart/floorbot/get_dat(var/mob/user)
-    var/dat = ""
-    if (!cart_device)
-        dat += {"<span class='pda_icon pda_atmos'></span> Could not find radio peripheral connection <br/>"}
-        return
-    if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/floorbot))
-        dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}
-        return
-    dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
-    dat += "<ul>"
-    for (var/obj/machinery/bot/floorbot/floor in bots_list)
-        if (floor.z != user.z)
-            continue
-        dat += {"<li>
-                <i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
-                <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
-                Auto-patrol: <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
-                </li>"}
-    dat += "</ul>"
+	var/dat = ""
+	if (!cart_device)
+		dat += {"<span class='pda_icon pda_atmos'></span> Could not find radio peripheral connection <br/>"}
+		return
+	if (!istype(cart_device.radio, /obj/item/radio/integrated/signal/bot/floorbot))
+		dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}
+		return
+	dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
+	dat += "<ul>"
+	for (var/obj/machinery/bot/floorbot/floor in bots_list)
+		if (floor.z != user.z)
+			continue
+		dat += {"<li>
+				<i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=summon;user=\ref[user]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
+				<a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=switch_power;user=\ref[user]'>Turn [floor.on ? "off" : "on"]</a> <br/>
+				Auto-patrol: <a href='?src=\ref[cart_device.radio];bot=\ref[floor];command=auto_patrol;user=\ref[user]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
+				</li>"}
+	dat += "</ul>"
+	return dat
 
 /datum/pda_app/cart/scanner/engineer
     base_name = "Halogen counter"

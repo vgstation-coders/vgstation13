@@ -128,17 +128,14 @@ Frequency:
 	item_state = "bluespacebanana_peel"
 
 /obj/item/weapon/bananapeel/bluespace/handle_slip(atom/movable/AM)
-	if(iscarbon(AM))
-		var/mob/living/carbon/M = AM
-		if(M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>"))
-			if(ishuman(AM))
-				var/mob/living/carbon/human/H = AM
-				var/obj/teleported_shoes = H.get_item_by_slot(slot_shoes)
-				var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)
-				if(teleported_shoes && tele_destination)
-					H.drop_from_inventory(teleported_shoes)
-					teleported_shoes.forceMove(tele_destination)
-					spark(H.loc)
+	if(..() && ishuman(AM))
+		var/mob/living/carbon/human/H = AM
+		var/obj/teleported_shoes = H.get_item_by_slot(slot_shoes)
+		var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)
+		if(teleported_shoes && tele_destination)
+			H.drop_from_inventory(teleported_shoes)
+			teleported_shoes.forceMove(tele_destination)
+			spark(H.loc)
 
 /*
  * Hand-tele

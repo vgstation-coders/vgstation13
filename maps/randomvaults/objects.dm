@@ -371,7 +371,7 @@
 	anchored = 1
 	cant_drop = 1
 
-	slip_power = 10
+	slip_override = 11
 
 /obj/item/weapon/melee/morningstar/catechizer
 	name = "The Catechizer"

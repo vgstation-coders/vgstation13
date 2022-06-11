@@ -252,42 +252,7 @@
 	user.visible_message("<span class='notice'>\The [src] spits out a piece of paper.</span>")
 	return
 
-// *************************************
-// Hydroponics Tools
-// *************************************
-
-/obj/item/weapon/plantspray
-	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	item_state = "spray"
-	flags = FPRINT | NO_ATTACK_MSG
-	slot_flags = SLOT_BELT
-	throwforce = 4
-	w_class = W_CLASS_SMALL
-	throw_speed = 2
-	throw_range = 10
-	var/toxicity = 40
-	var/uses = 0
-
-/obj/item/weapon/plantspray/proc/use(amount = 1)
-	uses = max(uses - amount,0)
-	if(!uses)
-		name = "empty [src]"
-		return FALSE
-	else
-		return TRUE
-
-/obj/item/weapon/plantspray/weeds
-	name = "weed-spray"
-	desc = "It's a toxic mixture, in spray form, to kill small weeds."
-	icon_state = "weedspray"
-	uses = 6
-
-/obj/item/weapon/plantspray/pests
-	name = "pest-spray"
-	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
-	icon_state = "pestspray"
-	uses = 6
-
+//Hatchets and things
 /obj/item/weapon/minihoe
 	name = "mini hoe"
 	desc = "It's used for removing weeds or scratching your back."
@@ -303,48 +268,6 @@
 	w_type = RECYK_METAL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
-// *************************************
-// Weedkiller defines for hydroponics
-// *************************************
-
-/obj/item/weedkiller
-	name = "bottle of weedkiller"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	var/toxicity = 40
-	var/uses = 6
-
-/obj/item/weedkiller/proc/use(amount = 1)
-	uses = max(uses - amount,0)
-	if(!uses)
-		name = "empty [src]"
-		return FALSE
-	else
-		return TRUE
-
-/obj/item/weedkiller/triclopyr
-	name = "bottle of glyphosate"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	toxicity = 4
-
-/obj/item/weedkiller/lindane
-	name = "bottle of triclopyr"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle18"
-	flags = FPRINT
-	toxicity = 6
-
-/obj/item/weedkiller/D24
-	name = "bottle of 2,4-D"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle15"
-	flags = FPRINT
-	toxicity = 8
-
-//Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
 	name = "hatchet"
 	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."

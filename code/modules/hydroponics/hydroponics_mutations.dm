@@ -349,7 +349,7 @@
 			seed.hematophage = !seed.hematophage
 			if(seed.hematophage)
 				visible_message("<span class='notice'>\The [seed.display_name] shudders thirstily, turning red at the roots!</span>")
-				add_nutrientlevel(-50)
+				add_nutrientlevel(-50, TRUE)
 			else
 				visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
 
