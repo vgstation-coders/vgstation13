@@ -229,7 +229,7 @@
 	if(!Adjacent(usr))
 		return
 
-	if(usr.incapacitated() || usr.stat) //Checks for stuns, ghost, restraint, and being awake.
+	if(usr.incapacitated()) //Checks for stuns, ghost, restraint, and being awake.
 		return
 
 	if(usr.has_hand_check())
