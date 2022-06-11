@@ -38,15 +38,15 @@
 		else
 			var/idle_time = world.time - last_moved
 			switch (idle_time)
-			if (-9999 to 2 SECONDS)
-				target_zone = get_zone_with_miss_chance(def_zone, src)
-			if (2 SECONDS to 5 SECONDS)
-				if (prob(50))
+				if (-9999 to 2 SECONDS)
 					target_zone = get_zone_with_miss_chance(def_zone, src)
+				if (2 SECONDS to 5 SECONDS)
+					if (prob(50))
+						target_zone = get_zone_with_miss_chance(def_zone, src)
+					else
+						target_zone = def_zone
 				else
 					target_zone = def_zone
-			else
-				target_zone = def_zone
 	else if(originator)
 		if(ismob(originator))
 			var/mob/M = originator
