@@ -56,7 +56,7 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/plasmaman/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Plasmaman")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
