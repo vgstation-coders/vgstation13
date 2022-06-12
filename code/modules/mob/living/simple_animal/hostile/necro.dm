@@ -276,11 +276,8 @@
 	if((health < maxHealth) || (maxHealth < health_cap))
 		if(!(target.isDead()))
 			return 0 //It ain't dead
-		if(isjusthuman(target)) //Humans are always edible
-			return 1
 		if(target.health > -(target.maxHealth*MAX_EAT_MULTIPLIER)) //So they're not caught eating the same dumb bird all day
 			return 1
-
 	return 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
@@ -297,7 +294,7 @@
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
-	if(!can_evolve) //How did you get here if not?
+	if(!can_evolve)
 		return
 
 	/*
@@ -308,9 +305,6 @@
 			Putrid													Crimson
 	Eaten too much, died too little								Eaten too little, died too much
 	*/
-/*	if(istype(src, /mob/living/simple_animal/hostile/necro/zombie/turned))
-	else if (istype(src, /mob/living/simple_animal/hostile/necro/zombie/rotting))
-		*/
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/stats()
 	stat(null, "Times revived - [times_revived]")
@@ -405,47 +399,35 @@
 		host = null
 	..()
 
-
 /mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
-	if(stat == DEAD) //Can only attempt to unzombify if they're dead
-		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
-			if(being_unzombified)
-				to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
-				return
-			being_unzombified = TRUE
-			var/obj/item/weapon/storage/bible/bible = W
-			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
+	if(!istype(W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
+		return
+	if(being_unzombified)
+		to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
+		return
+	being_unzombified = TRUE
+	var/obj/item/weapon/storage/bible/bible = W
+	user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
-			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
-			if(user.mind && isReligiousLeader(user))
-				chaplain = TRUE //Indeed we are
-			if(do_after(user, src, 25)) //So there's a nice delay
-				if(!chaplain)
-					if(prob(5)) //Let's be generous, they'll only get one regen for this
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!</span>")
-						unzombify()
-					else
-						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
-
-				else if(chaplain)
-					var/holy_modifier = 1 //How much the potential for reconversion works
-					if(user.reagents.reagent_list.len)
-						if(user.reagents.has_reagent(WHISKEY) || user.reagents.has_reagent(HOLYWATER)) //Take a swig, then get to work
-							holy_modifier += 1
-					var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
-					if(turf_on.holy) //We're in the chapel
-						holy_modifier += 2
-					else
-						if(turf_on.blessed) //The chaplain's spilt some of his holy water
-							holy_modifier += 1
-
-					if(prob(15*holy_modifier)) //Gotta have faith
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
-						unzombify()
-					else
-						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
-			being_unzombified = FALSE
+	var/holy_bonus = 0 //How much the potential for reconversion works
+	if(do_after(user, src, 25)) //So there's a nice delay
+		if(user.reagents.reagent_list.len)
+			if(user.reagents.has_reagent(WHISKEY) || user.reagents.has_reagent(HOLYWATER)) //Take a swig, then get to work
+				holy_bonus += 10
+		var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
+		if(turf_on.holy) //We're in the chapel
+			holy_bonus += 10
+		if(turf_on.blessed) //Blessed ground by holy water
+			holy_bonus += 10
+		if(user.mind && isReligiousLeader(user)) //chaplain
+			holy_bonus += 65
+		if(prob(5+holy_bonus)) //Gotta have faith
+			to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
+			unzombify()
+		else
+			to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
+	being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
 	if(host && mind)
@@ -456,6 +438,7 @@
 			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
+		host.become_zombie = FALSE
 		visible_message("<span class='notice'>\The [src]'s eyes regain focus, and the smell of decay vanishes. [host] has come back to their senses!</span>")
 		host = null
 		qdel(src)
@@ -492,34 +475,13 @@
 	var/zombify_chance = 25 //Down with hardcoding
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
-/mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
-	if(busy)
-		return 0
-	if(isjusthuman(target))
-		return 1
-	..()
-
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()
-	if(target.health < -150  && isjusthuman(target)) //Gotta be a bit chewed on
+	if(target.health < -150) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
 			var/master = creator ? creator : src
-			target.make_zombie(master)
-
-/*
-
-/mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
-	//Make the target drop their stuff, move them into the contents of the zombie so the ghost can at least see how its zombie self is doing
-	//target.drop_all()
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/new_zombie = new /mob/living/simple_animal/hostile/necro/zombie/turned(target.loc)
-	get_clothes(target, new_zombie)
-	new_zombie.name = target.real_name
-	new_zombie.host = target
-	target.ghostize()
-	target.loc = null
-
-*/
+			target.zombify(master)
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
 	/*Check what mob type the target is, if it's carbon, run through their wear_ slots see human_defines.dm L#34
@@ -598,7 +560,6 @@
 	health = 80
 
 ///////////////// Vox Raider Zombies ////////////////////
-
 /mob/living/simple_animal/hostile/necro/zombie/raider1
 	name = "tainted raider"
 	desc = "A zombified vox raider, still clad in the remains of armored hardsuit plates. Its remaining eye gleams with a new kind of hunger."
@@ -726,11 +687,7 @@
 
 #undef RAD_COST
 
-
-///////////////////////////////////////////////////////
 ///////////////// HEADCRAB ZOMBIES ////////////////////
-///////////////////////////////////////////////////////
-
 /mob/living/simple_animal/hostile/necro/zombie/headcrab
 	icon_state = "zombie_headcrab"
 	icon_living = "zombie_headcrab"

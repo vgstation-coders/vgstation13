@@ -239,18 +239,16 @@
 	return ishuman(user)
 
 /obj/item/potion/zombie/imbibe_effect(mob/living/carbon/human/user)
-	user.become_zombie_after_death = 2
+	user.become_zombie = TRUE
 
 /obj/item/potion/zombie/impact_atom(atom/target)
 	var/mob/M = get_last_player_touched()
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
 		if(H.isDeadorDying())
-			if(isjusthuman(H))
-				H.make_zombie(M)
-			else
-				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)
-				H.gib()
+			H.zombify(M)
+		else
+			H.become_zombie = TRUE
 
 /obj/item/potion/fullness
 	name = "potion of fullness"
