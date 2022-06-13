@@ -1157,6 +1157,9 @@
 /area/surface/western/township)
 "dM" = (
 /obj/structure/flora/ausbushes/grassybush,
+/obj/structure/railing/wood{
+	dir = 8
+	},
 /turf/simulated/floor/plating/ironsand{
 	icon_state = "ironsand1";
 	name = "dust";
@@ -1735,7 +1738,8 @@
 /area/surface/western/desert)
 "fu" = (
 /obj/machinery/door/poddoor/shutters{
-	dir = 2
+	dir = 2;
+	id_tag = "rodeo_side"
 	},
 /turf/simulated/floor/wood,
 /area/awaymission/western/rodeoshowroom)
@@ -2449,6 +2453,18 @@
 	color = "#00ff00"
 	},
 /area/awaymission/western/dontgodeep)
+"hZ" = (
+/mob/living/simple_animal/hostile/humanoid/kitchen/meatballer{
+	desc = "It's disgusting.";
+	faction = "gut";
+	name = "meat thing"
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
+	},
+/area/awaymission/western/dontgodeep)
 "ia" = (
 /obj/item/weapon/storage/bag/money/treasure,
 /turf/simulated/floor/plating/ironsand{
@@ -2598,6 +2614,17 @@
 /obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze,
 /turf/simulated/floor,
 /area/awaymission/western/ufo)
+"iU" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/railing/wood{
+	dir = 8
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
+	},
+/area/surface/western/desert)
 "iV" = (
 /obj/structure/table,
 /obj/item/device/camera_film,
@@ -2905,6 +2932,16 @@
 /obj/item/voucher/free_item/scrip/threefiftyseven,
 /turf/simulated/floor/wood,
 /area/awaymission/western/town_interior)
+"kp" = (
+/obj/structure/railing/wood{
+	dir = 4
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
+	},
+/area/surface/western/desert)
 "kq" = (
 /obj/item/trash/cigbutt,
 /turf/simulated/floor/carpet,
@@ -3384,7 +3421,11 @@
 /area/surface/western/desert)
 "mG" = (
 /obj/effect/trigger/cowrustlin,
-/turf/simulated/floor/plating/deck,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "asteroid";
+	name = "dirt";
+	tag = "icon-ironsand1"
+	},
 /area/surface/western/township)
 "mH" = (
 /obj/machinery/vending/coffee,
@@ -3538,6 +3579,14 @@
 	tag = "icon-ironsand1"
 	},
 /area/awaymission/western/floodedcave)
+"nq" = (
+/obj/structure/window/barricade/full,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
+	},
+/area/awaymission/western/dontgodeep)
 "nr" = (
 /obj/machinery/door/window/brigdoor{
 	dir = 1;
@@ -3565,6 +3614,17 @@
 /obj/structure/fence/door/secure/from_south,
 /turf/unsimulated/beach/sandbar{
 	name = "shallow oasis"
+	},
+/area/surface/western/desert)
+"nG" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/railing/wood{
+	dir = 4
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
 	},
 /area/surface/western/desert)
 "nH" = (
@@ -3836,6 +3896,16 @@
 	},
 /turf/simulated/floor/wood,
 /area/awaymission/western/town_interior)
+"oP" = (
+/obj/structure/railing/wood{
+	dir = 4
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand12";
+	name = "dust";
+	tag = "icon-ironsand12"
+	},
+/area/surface/western/desert)
 "oR" = (
 /obj/machinery/vending/cola,
 /obj/machinery/light{
@@ -4319,6 +4389,14 @@
 /obj/structure/curtain/medical,
 /turf/simulated/floor/engine,
 /area/awaymission/western/ufo)
+"rf" = (
+/mob/living/simple_animal/hostile/scarybat/cave,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
+	},
+/area/awaymission/western/dontgodeep)
 "rj" = (
 /mob/living/simple_animal/hostile/humanoid/clownboy/ranged,
 /turf/simulated/floor/wood,
@@ -4471,6 +4549,10 @@
 /obj/structure/sign/double/barsign,
 /turf/simulated/wall/mineral/sandstone,
 /area/awaymission/western/town_interior)
+"rN" = (
+/obj/item/weapon/dnainjector/nofail/eat,
+/turf/simulated/floor/plating/flesh,
+/area/awaymission/western/dontgodeep)
 "rO" = (
 /obj/structure/bed/therapy,
 /turf/simulated/floor/plating/ironsand{
@@ -4585,6 +4667,10 @@
 	},
 /turf/simulated/floor/beach/sand,
 /area/surface/western/desert)
+"sL" = (
+/obj/structure/railing/wood,
+/turf/unsimulated/beach/sand/spread,
+/area/surface/western/desert)
 "sQ" = (
 /obj/machinery/optable,
 /turf/simulated/floor/shuttle{
@@ -4645,6 +4731,13 @@
 	tag = "icon-ironsand1"
 	},
 /area/surface/western/township)
+"ti" = (
+/obj/structure/flora/ausbushes/ywflowers,
+/obj/structure/railing/wood{
+	dir = 4
+	},
+/turf/simulated/floor/grass,
+/area/surface/western/desert)
 "tl" = (
 /obj/structure/table,
 /obj/item/weapon/storage/fancy/cigarettes/redsuits,
@@ -4793,6 +4886,16 @@
 	},
 /turf/simulated/floor/wood,
 /area/awaymission/western/town_interior)
+"ua" = (
+/obj/structure/railing/wood{
+	dir = 8
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
+	},
+/area/surface/western/desert)
 "ub" = (
 /obj/effect/forcefield{
 	desc = "You can't get in. Heh.";
@@ -6358,6 +6461,12 @@
 /obj/item/weapon/storage/box/lethalshells,
 /turf/simulated/floor/wood,
 /area/awaymission/western/town_interior)
+"Bw" = (
+/obj/structure/railing/wood{
+	dir = 8
+	},
+/turf/simulated/floor/grass,
+/area/surface/western/desert)
 "BD" = (
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged,
 /turf/simulated/floor/plating/ironsand{
@@ -6377,7 +6486,7 @@
 	},
 /area/surface/western/grave)
 "BJ" = (
-/obj/machinery/turret/centcomm,
+/obj/machinery/turret/centcomm/syndie,
 /turf/simulated/floor/dark,
 /area/awaymission/western/enemymine)
 "BK" = (
@@ -7285,6 +7394,15 @@
 /mob/living/simple_animal/hostile/necro/skeleton/western/bandito,
 /turf/simulated/floor/engine/cult,
 /area/awaymission/western/crypt)
+"Fw" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/railing/wood,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand12";
+	name = "dust";
+	tag = "icon-ironsand12"
+	},
+/area/surface/western/desert)
 "Fx" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -7701,6 +7819,14 @@
 /obj/structure/flora/ausbushes/leafybush,
 /turf/simulated/floor/grass,
 /area/awaymission/western/ufo)
+"Hx" = (
+/mob/living/simple_animal/hostile/retaliate/goat/wooly,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand1";
+	name = "dust";
+	tag = "icon-ironsand1"
+	},
+/area/awaymission/western/dontgodeep)
 "Hz" = (
 /obj/structure/closet/secure_closet/engineering_electrical{
 	anchored = 1;
@@ -9202,6 +9328,15 @@
 /mob/living/simple_animal/hostile/necro/skeleton/western/scythe/caballero,
 /turf/simulated/floor/engine/cult,
 /area/awaymission/western/crypt)
+"Pf" = (
+/obj/structure/flora/ausbushes/grassybush,
+/obj/structure/railing/wood,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand12";
+	name = "dust";
+	tag = "icon-ironsand12"
+	},
+/area/surface/western/desert)
 "Pg" = (
 /obj/machinery/light/small{
 	dir = 4;
@@ -9317,6 +9452,14 @@
 	tag = "icon-ironsand1"
 	},
 /area/awaymission/western/floodedcave)
+"PI" = (
+/obj/structure/railing/wood,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand12";
+	name = "dust";
+	tag = "icon-ironsand12"
+	},
+/area/surface/western/desert)
 "PJ" = (
 /obj/structure/bed/chair,
 /turf/simulated/floor{
@@ -9704,6 +9847,17 @@
 	icon_state = "bar"
 	},
 /area/awaymission/western/mayor)
+"RQ" = (
+/obj/structure/railing/wood,
+/obj/structure/railing/wood{
+	dir = 4
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand12";
+	name = "dust";
+	tag = "icon-ironsand12"
+	},
+/area/surface/western/desert)
 "RR" = (
 /obj/machinery/conveyor/auto,
 /turf/simulated/floor/plating,
@@ -9872,9 +10026,16 @@
 /turf/simulated/floor/wood,
 /area/awaymission/western/mine)
 "SC" = (
-/obj/item/weapon/dnainjector/nofail/psychic_resist,
+/obj/item/weapon/dnainjector/nofail/jamsignals,
 /turf/simulated/floor/plating/flesh,
 /area/awaymission/western/dontgodeep)
+"SD" = (
+/obj/structure/railing/wood,
+/obj/structure/railing/wood{
+	dir = 8
+	},
+/turf/unsimulated/beach/sand/spread,
+/area/surface/western/desert)
 "SE" = (
 /obj/structure/ore_box,
 /obj/effect/decal/cleanable/dirt,
@@ -10116,6 +10277,16 @@
 /obj/structure/altar/podium,
 /turf/simulated/floor/carpet,
 /area/awaymission/western/town_interior)
+"TO" = (
+/obj/structure/railing/wood{
+	dir = 8
+	},
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "ironsand12";
+	name = "dust";
+	tag = "icon-ironsand12"
+	},
+/area/surface/western/desert)
 "TQ" = (
 /obj/structure/flora/ausbushes/fullgrass,
 /turf/simulated/floor/grass,
@@ -10791,6 +10962,14 @@
 	tag = "icon-ironsand1"
 	},
 /area/awaymission/western/crypt)
+"Xq" = (
+/obj/structure/railing/wood,
+/turf/simulated/floor/plating/ironsand{
+	icon_state = "asteroid";
+	name = "dirt";
+	tag = "icon-ironsand1"
+	},
+/area/surface/western/township)
 "Xr" = (
 /obj/machinery/door/mineral/wood{
 	layer = 11;
@@ -27536,7 +27715,7 @@ hM
 hM
 kc
 kc
-kc
+nq
 kc
 kc
 kc
@@ -28331,7 +28510,7 @@ hM
 hM
 TB
 up
-up
+rN
 OL
 yZ
 TB
@@ -28846,7 +29025,7 @@ hM
 TB
 TB
 Kr
-up
+rN
 up
 TB
 hM
@@ -29084,7 +29263,7 @@ hM
 hM
 hM
 kc
-kc
+rf
 tS
 Qj
 kc
@@ -29342,7 +29521,7 @@ hM
 hM
 hM
 kc
-kc
+rf
 tS
 Qj
 kc
@@ -29598,7 +29777,7 @@ hM
 hM
 hM
 hM
-kc
+rf
 kc
 hM
 ST
@@ -29864,9 +30043,9 @@ kc
 oJ
 oJ
 MH
+hZ
 kc
-kc
-kc
+hZ
 MH
 hM
 hM
@@ -30371,7 +30550,7 @@ hM
 hM
 hM
 hM
-kc
+rf
 hM
 kc
 we
@@ -30627,7 +30806,7 @@ hM
 hM
 hM
 hM
-kc
+rf
 kc
 hM
 kc
@@ -31917,7 +32096,7 @@ hM
 hM
 up
 up
-kc
+nq
 kc
 ST
 kc
@@ -32940,7 +33119,7 @@ gP
 gC
 hM
 hM
-kc
+rf
 hM
 hM
 hM
@@ -33712,7 +33891,7 @@ gC
 hM
 hM
 hM
-kc
+rf
 kc
 hM
 hM
@@ -34227,7 +34406,7 @@ hM
 hM
 hM
 hM
-kc
+rf
 hM
 hM
 kc
@@ -35520,7 +35699,7 @@ hM
 hM
 tS
 Qj
-kc
+hZ
 oJ
 TB
 TB
@@ -36291,7 +36470,7 @@ hM
 hM
 ST
 kc
-kc
+hZ
 oJ
 TB
 up
@@ -37308,7 +37487,7 @@ gP
 gP
 gC
 hM
-kc
+Hx
 hM
 hM
 hM
@@ -37566,7 +37745,7 @@ gP
 gC
 hM
 kc
-kc
+Hx
 hM
 hM
 hM
@@ -39052,8 +39231,8 @@ fs
 fs
 fs
 ZL
-gD
-fY
+TO
+SD
 gP
 fY
 fs
@@ -39310,7 +39489,7 @@ fs
 fs
 ZL
 gE
-fY
+sL
 fY
 fY
 fs
@@ -39567,7 +39746,7 @@ fs
 fs
 ZL
 gD
-gE
+Fw
 fY
 fY
 fs
@@ -39824,7 +40003,7 @@ fs
 fs
 ZL
 gF
-gE
+Fw
 fY
 fs
 fs
@@ -40073,12 +40252,12 @@ cK
 cK
 aE
 da
-Iv
+ti
+kp
 fs
 fs
-fs
-dJ
-dJ
+nG
+nG
 LV
 gF
 gD
@@ -40844,11 +41023,11 @@ cK
 cK
 aE
 da
-fs
-FC
+ua
+Bw
 dJ
 fs
-dJ
+iU
 dM
 LV
 gE
@@ -41109,7 +41288,7 @@ fs
 dJ
 ZL
 gE
-gD
+PI
 fY
 fs
 Wk
@@ -41366,7 +41545,7 @@ fs
 fs
 ZL
 mF
-gF
+Pf
 fY
 fY
 fY
@@ -41623,7 +41802,7 @@ fs
 fs
 ZL
 gF
-gD
+PI
 fY
 gP
 fY
@@ -41679,7 +41858,7 @@ hM
 hM
 kc
 kc
-kc
+rf
 hM
 kc
 kc
@@ -41879,8 +42058,8 @@ fs
 dJ
 fs
 ZL
-gD
-gD
+oP
+RQ
 fY
 gP
 fY
@@ -41934,7 +42113,7 @@ gC
 gC
 hM
 hM
-kc
+rf
 hM
 hM
 hM
@@ -42137,7 +42316,7 @@ fs
 fs
 ZL
 gD
-gD
+fY
 fY
 gP
 fY
@@ -42447,7 +42626,7 @@ hM
 hM
 hM
 kc
-kc
+rf
 hM
 hM
 kc
@@ -42457,7 +42636,7 @@ hM
 hM
 MH
 MH
-up
+OE
 MH
 MH
 hM
@@ -42708,7 +42887,7 @@ kc
 hM
 hM
 kc
-kc
+rf
 kc
 hM
 hM
@@ -43221,7 +43400,7 @@ hM
 hM
 kc
 kc
-kc
+rf
 kc
 kc
 kc
@@ -61375,8 +61554,8 @@ qx
 qx
 qx
 AT
-mG
-mG
+Vg
+Vg
 VJ
 dL
 bG
@@ -61634,7 +61813,7 @@ EB
 AT
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -61891,7 +62070,7 @@ qx
 AT
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -62148,7 +62327,7 @@ qx
 AT
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -62405,7 +62584,7 @@ AT
 AT
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -62660,9 +62839,9 @@ rd
 rd
 rd
 rd
-rd
-rd
-dL
+mG
+mG
+Xq
 dL
 bG
 dL
@@ -62919,7 +63098,7 @@ rd
 rd
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -63176,7 +63355,7 @@ rd
 rd
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -63433,7 +63612,7 @@ rd
 Ek
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -63690,7 +63869,7 @@ rd
 rd
 rd
 rd
-dL
+Xq
 dL
 bG
 dL
@@ -63947,7 +64126,7 @@ rd
 rd
 rd
 rd
-dL
+Xq
 dL
 bG
 dL

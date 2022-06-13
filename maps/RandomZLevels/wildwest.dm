@@ -18,12 +18,23 @@
 	message_admins("Trying to start the daynight cycle.")
 	daily_events += new /datum/timely_event/desertspawns()
 	SSDayNight.Initialize()
+	for(var/mob/living/simple_animal/S in objects)
+		S.home = S.loc
 
 /datum/map_element/away_mission/wildwest/can_load()
 	if(!(SSDayNight.flags & SS_NO_FIRE))
 		message_admins("Wild West load failed. Cannot load if daynight is already active.")
 		return FALSE
 	return ..()
+
+/datum/map_element/away_mission/wildwest/onArrive(mob/user)
+	..()
+	if(!(user in guests))
+		to_chat(user, "<big><span class='notice'>Yeehaw, you're in the Wild West. If you want to get back to the station, you'll need to find a teleporter.</span></big>")
+		if(!(flags & WILDWEST_MAYORRESCUED))
+			to_chat(user, "<span class='warning'>The folks out here are suspicious of outsiders. You'll need a badge to blend in.</span>")
+		else
+			to_chat(user, "<span class='good'>The folks out here are warming up to us. You don't need a badge 'round these parts.</span>")
 
 //Timely events
 /datum/timely_event/desertspawns/time_changed(datum/timeofday/ctod, cycles)
@@ -36,6 +47,10 @@
 			if(cycles == 1) //One day has already passed
 				message_admins("Wild West event: Picador appears (Sunrise 2)")
 				createnew("picador spawn", /mob/living/simple_animal/hostile/necro/skeleton/western/picador)
+
+		if(TOD_MORNING)
+			//if(cycles == 1)
+			//El Gallo appears here
 
 		if(TOD_SUNSET)
 			//if(cycles == 2)
@@ -281,7 +296,6 @@
 		return
 	lit = TRUE
 	set_light(6, l_color = light_color)
-	rad_pulse()
 	sleep(10 SECONDS)
 	set_light(2, l_color = light_color)
 	lit = FALSE
@@ -499,7 +513,9 @@
 
 /obj/effect/tractorbeam/Bumped(atom/movable/AM)
 	AM.forceMove(endpoint)
-	to_chat(AM, "<span class='warning'>Gravity seems to lapse as you float into the sky!</span>")
+	if(ismob(AM))
+		AM << 'sound/music/xfiles.ogg'
+		to_chat(AM, "<span class='warning'>Gravity seems to lapse as you float into the sky!</span>")
 
 /obj/effect/trigger
 	icon = 'icons/mob/screen1.dmi'
@@ -520,6 +536,9 @@
 		var/datum/map_element/away_mission/wildwest/W = get_away_mission(WESTERN)
 		if(W)
 			W.flags &= WILDWEST_COWDELIVERED
+			for(var/obj/machinery/door/poddoor/shutters/S in view(7,src)
+				if(S.id == "rodeo_side")
+					S.open()
 			qdel(src)
 
 /obj/effect/trigger/mayorrescue/Crossed(atom/movable/AM)
@@ -834,6 +853,10 @@
 	name = "saloon tender"
 	desc = "The saloon keeper loves a drunk, but not as a son-in-law."
 	icon_state = "saloon_tender"
+	speak = list("Welcome to the saloon. Put your spurs up!t.",
+				"Hey there, tumbleweed!",
+				"Don't drag the dirt in on them boots, leave em at the door.")
+	speak_chance = 3
 
 /mob/living/simple_animal/hostile/humanoid/civilwest/flee/banker
 	name = "banker"
@@ -1056,6 +1079,7 @@
 	move_to_delay = 1.4
 
 	stat_attack = 1 //Evil
+	minimum_shot_distance = 1 //point blank shot
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
 
 	corpse = /obj/effect/landmark/corpse //gotta remember to add these
@@ -1194,7 +1218,7 @@
 
 /mob/living/simple_animal/hostile/necro/skeleton/western/heno/enoch
 	name = "Don Enoch"
-	desc = "Cuando el municipio todavía era \"New Zounds\", Don Enoch supervisó la Cámara de Comercio."
+	desc = "Cuando el municipio todavía era \"New Zounds\", Don Enoch supervisaba la Cámara de Comercio."
 	icon = 'icons/mob/giantmobs.dmi'
 	icon_state = "enoch"
 	icon_living = "enoch"
@@ -1243,7 +1267,7 @@
 
 /mob/living/simple_animal/hostile/necro/skeleton/western/juergista
 	name = "juergista de la muerte"
-	desc = "Hay quienes no temen a la muerte, pero le dan la bienvenida. Ellos festejan incluso ahora."
+	desc = "Hay quienes no temen a la muerte, sino que le dan la bienvenida. Ellos festejan incluso ahora."
 	icon_state = "juergista"
 	health = 50
 	maxHealth = 50
@@ -1299,7 +1323,7 @@
 
 /mob/living/simple_animal/hostile/necro/skeleton/western/banderillo
 	name = "El Banderillo Misterioso"
-	desc = "Hubo un tiempo en que la bandera de \"New Zounds\" se posaba en el lomo de todo toro desde aquí hasta el horizonte. Se dice que esta tarea la cumplió un banderillero sin nombre."
+	desc = "Hubo un tiempo en que la bandera de \"New Zounds\" se posaba en el lomo de todo toro desde aquí hasta el horizonte. Se dice que esta faena la cumplió un banderillero sin nombre."
 	icon_state = "matador_cape"
 
 /mob/living/simple_animal/hostile/necro/skeleton/western/picador
@@ -1333,7 +1357,7 @@
 /mob/living/simple_animal/hostile/hivebot/refinery/get_unarmed_damage()
 	var/damage = rand(melee_damage_lower, melee_damage_upper)
 	visible_message("<span class='rose'>[src] optimizes!</span>")
-	level++
+	optimizations++
 	name = "refinery robot class [optimizations]"
 
 	melee_damage_upper += melee_damage_lower //increase our cap by the last lowest possibility
@@ -1376,6 +1400,7 @@
 	if(timestopped)
 		return
 	..()
+	reveal()
 
 /mob/living/simple_animal/hostile/somethingwrong/proc/reveal()
 	var/list/unfreeze = list()
@@ -1393,6 +1418,7 @@
 	desc = "A blood-drinking creature of ill-renown."
 	icon_state = "somethingwrong"
 	timestopped = FALSE
+	revealed = 10 //life ticks, so 20 seconds
 	sleep(2 SECONDS)
 	for(var/atom/A in unfreeze)
 		A.timestopped = FALSE

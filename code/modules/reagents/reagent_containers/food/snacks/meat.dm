@@ -480,4 +480,13 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat
+	name = "carne de lidia"
+	desc = "En algunos lugares, la tauromaquia es incruenta. Aqui no."
+	icon_state = "bearmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(BICARIDINE, 5)
+	bitesize = 3

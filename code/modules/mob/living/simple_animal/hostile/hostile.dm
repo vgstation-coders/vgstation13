@@ -32,11 +32,16 @@
 	var/friendly_fire = 0 //If set to 1, they won't hesitate to shoot their target even if a friendly is in the way.
 	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
 	var/hostile_interest = 2 //How long will we wait in the same spot trying to chase something before giving up?
+	//The above is also used for leashing
 	var/atom/lastloc //Where we were last time we were moving toward a target.
 
 	var/strafe_width = -1 //How wide should we swing while strafing? 0 = run over, 1 = melee, >1 = ranged shots, -1 = do not
 	var/strafe_depth = 2 //In order to attempt a strafe, there need to be at least 2 spaces behind the target.
 	//Strafe depth is how far we would like to continue our charge past the target given unlimited space
+
+	var/turf/home   //If set, this is where the mob likes to leash to
+	var/idle_leash_distance = 7 //If home is set, this is how far the mob can go from its home while idling (greater than to leash)
+	var/aggro_leash_distance = 14 //If home is set, this is how far the mob can go from its home while in combat (greater than to leash)
 
 	var/list/target_rules = list()
 
@@ -125,16 +130,34 @@
 				GiveTarget(new_target)
 				if(new_target)
 					AfterIdle()
+				else if(home && get_dist(loc,home) > idle_leash_distance)
+					//Did not find a new target, check to see if we've wandered too far
+					Goto(home,move_to_delay)
 
 			if(HOSTILE_STANCE_ATTACK)
 				if(!(flags & INVULNERABLE))
 					MoveToTarget()
 					DestroySurroundings()
+					if(home)
+						CheckLeash()
 
 			if(HOSTILE_STANCE_ATTACKING)
 				if(!(flags & INVULNERABLE))
 					AttackTarget()
 					DestroySurroundings()
+					if(home)
+						CheckLeash()
+
+			if(HOSTILE_STANCE_LEASHING)
+				if(loc == home)
+					stance = HOSTILE_STANCE_IDLE
+				else
+					Goto(home,move_to_delay)
+					if(hostile_interest <= 0)
+						hostile_interest = initial(hostile_interest)
+						stance = HOSTILE_STANCE_IDLE //Couldn't get home, give up
+					else
+						hostile_interest--
 
 //////////////HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
@@ -238,6 +261,10 @@
 	return 0
 
 /mob/living/simple_animal/hostile/proc/GiveTarget(var/new_target)//Step 4, give us our selected target
+	if(stance == HOSTILE_STANCE_LEASHING)
+		hostile_interest = initial(hostile_interest) //We will attempt to leash based on interest
+		return //We're leashing
+
 	target = new_target
 	if(target != null)
 		Aggro()

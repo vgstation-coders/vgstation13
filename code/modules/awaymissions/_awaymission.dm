@@ -39,6 +39,8 @@ Example of the second method:
 
 	var/datum/zLevel/zLevel
 
+	var/list/guests = list() //Those who have come to the Z-level via a gateway
+
 /datum/map_element/away_mission/initialize(list/objects) //objects: list of all atoms in the away mission. This proc is called after the away mission is loaded
 	..()
 
@@ -60,6 +62,9 @@ Example of the second method:
 
 	for(var/obj/machinery/gateway/G in gateways)
 		G.initialize()
+
+/datum/map_element/away_mission/proc/onArrive(mob/user)
+	guests += user
 
 /datum/map_element/away_mission/empty_space
 	name = "empty space"
@@ -186,9 +191,14 @@ var/static/list/away_mission_subtypes = subtypesof(/datum/map_element/away_missi
 //Helper procs
 
 //Finds an active away mission with a matching name, or returns null
-proc/get_away_mission(var/id)
+/proc/get_away_mission(var/id)
 	for(var/datum/map_element/away_mission/AD in existing_away_missions)
 		if(id == AD.name)
+			return AD
+
+/proc/get_mission_by_z(var/num)
+	for(var/datum/map_element/away_mission/AD in existing_away_missions)
+		if(zLevel.z == num)
 			return AD
 
 

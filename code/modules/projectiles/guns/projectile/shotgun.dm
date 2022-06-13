@@ -90,6 +90,15 @@
 	max_shells = 3
 	silencer_offset = list(22,5)
 
+/obj/item/weapon/gun/projectile/shotgun/pump/combat/pistol
+	name = "shotgun pistol"
+	desc = "Even shortier than the combat shorty."
+	icon_state = "scshotgun"
+	w_class = W_CLASS_SMALL
+	slot_flags = SLOT_BELT
+	max_shells = 1
+	silencer_offset = list(22,5)
+
 //this is largely hacky and bad :(	-Pete
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel
 	name = "double-barreled shotgun"

@@ -336,12 +336,19 @@
 	var/inert = 0
 	var/time_left = 1200 //deciseconds
 	var/last_process
+	var/starts_frozen = FALSE
+
+/obj/item/asteroid/hivelord_core/frozen
+	name = "frozen hivelord core"
+	desc = "Its healing properties are preserved. Bite in, if you can stomach it."
+	starts_frozen = TRUE
 
 /obj/item/asteroid/hivelord_core/New()
 	..()
 	create_reagents(5)
-	last_process = world.time
-	processing_objects.Add(src)
+	if(!starts_frozen)
+		last_process = world.time
+		processing_objects.Add(src)
 
 /obj/item/asteroid/hivelord_core/Destroy()
 	processing_objects.Remove(src)
@@ -533,7 +540,6 @@
 			var/obj/effect/goliath_tentacle/GT = new(T)
 			GT.icon = icon
 			GT.icon_state = icon_state
-	..()
 
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
