@@ -13,20 +13,19 @@
 		return
 	if(seed.immutable)
 		return
-	if(age < 3 && length(seed.mutants) && prob(30))
+	if(age < 3 && length(seed.mutants))
 		mutate_species()
-		return
 
 	check_for_divergence()
 
 	switch(gene)
 		if(GENE_PHYTOCHEMISTRY)
-			var/mutation_type = pick(70; PLANT_POTENCY, 15; PLANT_CHEMICAL, 15; PLANT_TELEPORT)
+			var/mutation_type = pick(85; PLANT_POTENCY, 15; PLANT_CHEMICAL)
 			switch(mutation_type)
 				if(PLANT_POTENCY)
-					var/hardcap = 200
 					if(seed.potency <= 0)
 						return
+					var/hardcap = 200
 					//This function modifies stats with diminishing returns, approaching the hardcap value
 					//15% is currently set for the maximum change
 					//Log function so can't be equal to or less than 0.
@@ -43,19 +42,12 @@
 						check_success = seed.add_random_chemical()
 						if(check_success)
 							visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
-				if(PLANT_TELEPORT)
-					//Toggle true or false
-					seed.teleporting = !seed.teleporting
-					if(seed.teleporting)
-						visible_message("<span class='notice'>\The [seed.display_name] wobbles unstably, glowing blue for a moment!</span>")
-					else
-						visible_message("<span class='notice'>\The [seed.display_name] slowly becomes spatial-temporally stable again.</span>")
 
 		if(GENE_MORPHOLOGY)
 			var/mutation_type = pick(PLANT_PRODUCTS, PLANT_THORNY, PLANT_JUICY, PLANT_LIGNEOUS, PLANT_STINGING, PLANT_APPEARANCE)
 			switch(mutation_type)
 				if(PLANT_PRODUCTS)
-					seed.products += pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-/obj/item/weapon/reagent_containers/food/snacks/grown)
+					seed.products += pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
 					visible_message("<span class='notice'>\The [seed.display_name] seems to be growing something weird.</span>")
 				if(PLANT_THORNY)
 					seed.thorny = !seed.thorny
@@ -165,26 +157,10 @@
 						var/hardcap = 0.01
 						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.fluid_consumption/hardcap*100),0.01),0.15*hardcap),0.1)
 					generic_mutation_message("rustles!")
-				if(PLANT_ROOMTEMP)
-					seed.alter_temp = !seed.alter_temp
-					generic_mutation_message("rustles!")
 				if(PLANT_VORACIOUS)
 					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
 					seed.voracious = seed.voracious % 2 + 1
 					generic_mutation_message("shudders hungrily.")
-				if(PLANT_GAS)
-					if(length(seed.consume_gasses) && prob(50))
-						seed.consume_gasses -= pick(seed.consume_gasses)
-					if(prob(50))
-						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
-						seed.consume_gasses[gas] = rand(3,9)
-					if(length(seed.exude_gasses) && prob(50))
-						seed.exude_gasses -= pick(seed.exude_gasses)
-					if(prob(50))
-						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
-						seed.exude_gasses[gas] = rand(3,9)
-
-					generic_mutation_message("rustles!")
 				if(PLANT_HEMATOPHAGE)
 					seed.hematophage = !seed.hematophage
 					if(seed.hematophage)
@@ -242,6 +218,34 @@
 						return
 					var/hardcap = 16
 					seed.yield += round(min(hardcap - hardcap/2*round(log(10,seed.yield/hardcap*100),0.01),0.15*hardcap),0.1)
+
+		if(GENE_XENOECOLOGY)
+			var/mutation_type = pick(PLANT_TELEPORT, PLANT_GAS, PLANT_ROOMTEMP, PLANT_NOREACT)
+			switch(mutation_type)
+				if(PLANT_TELEPORT)
+					//Toggle true or false
+					seed.teleporting = !seed.teleporting
+					if(seed.teleporting)
+						visible_message("<span class='notice'>\The [seed.display_name] wobbles unstably, glowing blue for a moment!</span>")
+					else
+						visible_message("<span class='notice'>\The [seed.display_name] slowly becomes spatial-temporally stable again.</span>")
+				if(PLANT_GAS)
+					if(length(seed.consume_gasses) && prob(50))
+						seed.consume_gasses -= pick(seed.consume_gasses)
+					if(prob(50))
+						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
+						seed.consume_gasses[gas] = rand(3,9)
+					if(length(seed.exude_gasses) && prob(50))
+						seed.exude_gasses -= pick(seed.exude_gasses)
+					if(prob(50))
+						var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
+						seed.exude_gasses[gas] = rand(3,9)
+					generic_mutation_message("rustles!")
+				if(PLANT_ROOMTEMP)
+					seed.alter_temp = !seed.alter_temp
+					generic_mutation_message("rustles!")
+				if(PLANT_NOREACT)
+					seed.noreact = !seed.
 
 //Returns a key corresponding to an entry in the global seed list.
 /datum/seed/proc/get_mutant_variant()
