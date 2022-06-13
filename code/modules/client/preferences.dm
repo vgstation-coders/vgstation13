@@ -1596,14 +1596,11 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 
 /datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
 	// We just grab the role from the POST(?) data.
-	var/updated = 0
 	for(var/role_id in special_roles)
-		if(!(role_id in href_list))
-			continue
-		roles[role_id] = text2num(href_list[role_id])
-
-	ShowChoices(user)
-	return 1
+		if(role_id in href_list)
+			roles[role_id] = text2num(href_list[role_id])
+			ShowChoices(user)
+			return 1
 
 /client/verb/modify_preferences(page as num)
 	set name = "modifypreferences"
