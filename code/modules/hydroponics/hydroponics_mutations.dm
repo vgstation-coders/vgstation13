@@ -245,7 +245,7 @@
 					seed.alter_temp = !seed.alter_temp
 					generic_mutation_message("rustles!")
 				if(PLANT_NOREACT)
-					seed.noreact = !seed.
+					seed.noreact = !seed.noreact
 
 //Returns a key corresponding to an entry in the global seed list.
 /datum/seed/proc/get_mutant_variant()
