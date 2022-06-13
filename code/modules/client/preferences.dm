@@ -1600,15 +1600,7 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 	for(var/role_id in special_roles)
 		if(!(role_id in href_list))
 			continue
-		var/oldval=text2num(roles[role_id])
 		roles[role_id] = text2num(href_list[role_id])
-		if(oldval!=roles[role_id])
-			updated = 1
-			to_chat(user, "<span class='info'>Set role [role_id] to [get_role_desire_str(user.client.prefs.roles[role_id])]!</span>")
-
-	if(!updated)
-		to_chat(user, "<span class='warning'>No changes to role preferences found!</span>")
-		return 0
 
 	ShowChoices(user)
 	return 1
