@@ -1570,27 +1570,30 @@
 	reagents.add_reagent(CARAMEL, 3)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/explosive
-	trash = null
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie
+	name = "banana cream pie"
+	desc = "Just like back home, on clown planet! HONK!"
+	icon_state = "pie"
+	food_flags = FOOD_SWEET
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/explosive/New()
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/New()
 	..()
 	reagents.clear_reagents()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(BANANA,3)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/explosive/examine(mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/examine(mob/user)
 	if(is_holder_of(user,src))
 		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and seems to be ticking.</span>")
 		return
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/explosive/after_consume(mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/after_consume(mob/user)
 	explosion(get_turf(user), -1, 0, 0, 3)
 	user.gib()
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/explosive/throw_impact(atom/hit_atom)
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/throw_impact(atom/hit_atom)
 	set waitfor = FALSE
 	if(ismob(hit_atom))
 		var/mob/M = hit_atom
