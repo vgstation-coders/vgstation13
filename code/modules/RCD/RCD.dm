@@ -209,7 +209,7 @@
 	var/t = selected.attack(A, user)
 	if(!t) // No errors
 		if(~selected.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
-			use_energy(selected.energy_cost, user)
+			use_energy(selected.energy_cost, user, selected.plasma_energy_cost)
 	else
 		if(istext(t))
 			to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
@@ -225,10 +225,10 @@
 		spark(src, 5, FALSE)
 		next_spark = world.time + 0.5 SECONDS
 
-/obj/item/device/rcd/proc/get_energy(var/mob/user)
+/obj/item/device/rcd/proc/get_energy(var/mob/user, var/plasma = FALSE)
 	return INFINITY
 
-/obj/item/device/rcd/proc/use_energy(var/amount, var/mob/user)
+/obj/item/device/rcd/proc/use_energy(var/amount, var/mob/user, var/plasma_amount)
 	return
 
 /obj/item/device/rcd/proc/update_options_menu()
@@ -300,7 +300,6 @@
 /obj/item/device/rcd/matter
 	var/matter     = 0
 	var/max_matter = 30
-	var/accepted_stacktype = /obj/item/stack/rcd_ammo
 
 /obj/item/device/rcd/matter/attack_self(var/mob/living/user)
 	if(!selected || user.shown_schematics_background || !selected.show(user))
@@ -312,9 +311,7 @@
 
 /obj/item/device/rcd/matter/attackby(var/obj/item/stack/S, var/mob/user)
 	..()
-	if(istype(S, /obj/item/stack/rcd_ammo) && S?.type != accepted_stacktype)
-		to_chat(user, "<span class='warning'>This is the wrong cartridge type for this device!</span>")
-	else if(S?.type == accepted_stacktype)
+	if(istype(S,/obj/item/stack/rcd_ammo))
 		if((matter + 10) > max_matter)
 			to_chat(user, "<span class='notice'>\the [src] can't hold any more matter-units.</span>")
 			return 1
@@ -332,11 +329,11 @@
 
 		return 1
 
-/obj/item/device/rcd/matter/use_energy(var/amount, var/mob/user)
+/obj/item/device/rcd/matter/use_energy(var/amount, var/mob/user, var/plasma_amount)
 	matter -= amount
 	to_chat(user, "<span class='notice'>\the [src] currently holds [matter]/[max_matter] matter-units.")
 
-/obj/item/device/rcd/matter/get_energy(var/mob/user)
+/obj/item/device/rcd/matter/get_energy(var/mob/user, var/plasma = FALSE)
 	return matter
 
 /obj/item/device/rcd/proc/show_default(var/mob/living/user)

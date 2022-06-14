@@ -89,11 +89,11 @@
 	return 0
 
 /datum/rcd_schematic/con_rfloors
-	name		= "Build reinforced floors"
-	icon		= 'icons/turf/floors.dmi'
-	icon_state	= "engine"
-	category	= "Construction"
-	energy_cost	= 1
+	name				= "Build reinforced floors"
+	icon				= 'icons/turf/floors.dmi'
+	icon_state			= "engine"
+	category			= "Construction"
+	plasma_energy_cost	= 1
 
 	flags		= RCD_GET_TURF
 
@@ -143,11 +143,11 @@
 	return 1
 
 /datum/rcd_schematic/con_rwalls
-	name		= "Build reinforced walls"
-	icon		= 'icons/turf/walls.dmi'
-	icon_state	= "r_wall"
-	category	= "Construction"
-	energy_cost	= 3
+	name				= "Build reinforced walls"
+	icon				= 'icons/turf/walls.dmi'
+	icon_state			= "r_wall"
+	category			= "Construction"
+	plasma_energy_cost	= 2
 
 /datum/rcd_schematic/con_rwalls/attack(var/atom/A, var/mob/user)
 	if(A?.type != /turf/simulated/wall) // Only one with strict type like this for now

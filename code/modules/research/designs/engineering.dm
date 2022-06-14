@@ -117,11 +117,11 @@
 	name = "Plasma-Infused Compressed Mattter Cartridge"
 	desc = "A special cartridge for more elite-grade rapid construction devices."
 	id = "picm"
-	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 2, Tc_PLASMATECH = 3)
+	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2, Tc_PLASMATECH = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10000, MAT_GLASS = 10000, MAT_PLASMA = 10000)
+	materials = list(MAT_IRON = 20000, MAT_PLASMA = 10000)
 	category = "Engineering"
-	build_path = /obj/item/stack/rcd_ammo/plasma
+	build_path = /obj/item/stack/rcd_ammo_plasma
 
 //Sadly there is no file "trash.dm"
 /*
