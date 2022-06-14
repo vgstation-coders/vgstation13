@@ -204,7 +204,7 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	singular_name = "plasma-infused compressed matter cartridge"
 	desc = "Highly compressed matter in a cartridge form, used in various fabricators that require plasteel creation."
 	icon = 'icons/obj/ammo.dmi'
-	icon_state = "rcd"
+	icon_state = "prcd"
 	item_state = "rcdammo"
 	max_amount = 6
 

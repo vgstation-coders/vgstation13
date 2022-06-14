@@ -41,6 +41,7 @@
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv
 	name = "advanced Rapid-Construction-Device (RCD)"
+	icon_state = "arcd"
 	schematics = list(
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
