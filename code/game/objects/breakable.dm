@@ -234,7 +234,7 @@
 		user.do_attack_animation(src, W)
 		user.delayNextAttack(1 SECONDS)
 		add_fingerprint(user)
-		var/glanced=!take_damage(W.force, skip_break = TRUE)
+		var/glanced=!take_damage(W.force, damage_type = W.damtype == BURN ? "energy" : "melee", skip_break = TRUE)
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
 		user.visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(pick(W.attack_verb))] \the [src] with \the [W][generate_break_text(glanced)]<span>")
