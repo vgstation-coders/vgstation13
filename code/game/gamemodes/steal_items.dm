@@ -106,6 +106,11 @@
 	typepath = /obj/item/blueprints/primary
 	protected_jobs = list("Chief Engineer")
 
+/datum/theft_objective/traitor/arcd
+	name = "an advanced Rapid-Construction-Device"
+	typepath = /obj/item/device/rcd/matter/engineering/pre_loaded/adv
+	protected_jobs = list("Chief Engineer")
+
 /datum/theft_objective/traitor/voidsuit
 	name = "a nasa voidsuit"
 	typepath = /obj/item/clothing/suit/space/nasavoid
