@@ -200,6 +200,10 @@
 		floor_tile.amount = 1
 	update_icon()
 
+/turf/simulated/floor/engine/plated/airless
+	oxygen = 0.01
+	nitrogen = 0.01
+
 /turf/simulated/floor/engine/cult
 	name = "engraved floor"
 	icon_state = "cult"

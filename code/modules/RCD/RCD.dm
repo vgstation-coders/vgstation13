@@ -300,6 +300,7 @@
 /obj/item/device/rcd/matter
 	var/matter     = 0
 	var/max_matter = 30
+	var/accepted_stacktype = /obj/item/stack/rcd_ammo
 
 /obj/item/device/rcd/matter/attack_self(var/mob/living/user)
 	if(!selected || user.shown_schematics_background || !selected.show(user))
@@ -311,7 +312,9 @@
 
 /obj/item/device/rcd/matter/attackby(var/obj/item/stack/S, var/mob/user)
 	..()
-	if(istype(S, /obj/item/stack/rcd_ammo))
+	if(istype(S, /obj/item/stack/rcd_ammo) && S?.type != accepted_stacktype)
+		to_chat(user, "<span class='warning'>This is the wrong cartridge type for this device!</span>")
+	else if(S?.type == accepted_stacktype)
 		if((matter + 10) > max_matter)
 			to_chat(user, "<span class='notice'>\the [src] can't hold any more matter-units.</span>")
 			return 1
