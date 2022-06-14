@@ -222,7 +222,7 @@
 		to_chat(user, "It currently holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.")
 
 /obj/item/device/material_synth/attackby(var/obj/O, mob/user)
-	if(O?.type == /obj/item/stack/rcd_ammo)
+	if(istype(O, /obj/item/stack/rcd_ammo))
 		var/obj/item/stack/rcd_ammo/RA = O
 		if(matter + 10 > MAX_MATSYNTH_MATTER)
 			to_chat(user, "<span class='warning'>\The [src] can't take any more material right now.</span>")
