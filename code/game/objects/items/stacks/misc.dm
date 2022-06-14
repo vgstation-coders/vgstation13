@@ -185,7 +185,7 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "rcd"
 	item_state = "rcdammo"
-	max_amount = 10
+	max_amount = 12
 
 	origin_tech = Tc_MATERIALS + "=2"
 	w_class = W_CLASS_SMALL
@@ -193,7 +193,7 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/stack/rcd_ammo/ce
-	amount = 10
+	amount = 12
 
 /obj/item/stack/rcd_ammo/attackby(var/obj/O, mob/user)
 	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
@@ -206,7 +206,7 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "rcd"
 	item_state = "rcdammo"
-	max_amount = 5
+	max_amount = 6
 
 	origin_tech = Tc_MATERIALS + "=3" + Tc_PLASMATECH + "=3"
 	starting_materials = list(MAT_IRON = 20000, MAT_PLASMA = 10000)
@@ -216,4 +216,4 @@ var/list/datum/stack_recipe/chain_recipes = list (
 		return O.attackby(src, user)
 
 /obj/item/stack/rcd_ammo_plasma/ce
-	amount = 5
+	amount = 6
