@@ -109,7 +109,7 @@
 
 	to_chat(user, "Building floor...")
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
-	if(master.delay(user, A, 1 SECONDS))
+	if(master.delay(user, A, 2 SECONDS))
 		if(master.get_energy(user) < energy_cost)
 			return 1
 

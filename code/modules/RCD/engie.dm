@@ -56,6 +56,9 @@
 	origin_tech = Tc_ENGINEERING + "=5;" + Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=4"
 	mech_flags = MECH_SCAN_FAIL
 
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
+	return do_after(user, target, amount/2)
+
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin
 	name = "experimental Rapid-Construction-Device (RCD)"
 	max_matter = INFINITY
