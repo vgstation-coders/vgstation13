@@ -167,7 +167,7 @@
 	health = 100
 	canRegenerate = 1
 	minRegenTime = 30 SECONDS
-	maxRegenTime = 180 SECONDS
+	maxRegenTime = 120 SECONDS
 
 	harm_intent_damage = 15
 	melee_damage_lower = 10
