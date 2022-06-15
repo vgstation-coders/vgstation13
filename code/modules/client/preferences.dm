@@ -1583,7 +1583,7 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 					else
 						var/wikiroute = role_wiki[role_id]
 						var/desire = get_role_desire_str(roles[role_id])
-						dat += {"<td>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>(Wiki)</a>" : "None"]</td>
+						dat += {"<td>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>(Wiki)</a>" : "<s>(Wiki)</s>"]</td>
 								<td><a class = 'fullsize clmNeverO[desire == "Never" ? "n" : "ff"]' href='?_src_=prefs;preference=set_roles;[role_id]=[ROLEPREF_NEVER|ROLEPREF_SAVE];'>Never</a></td>
 								<td><a class = 'fullsize clmNoO[desire == "No" ? "n" : "ff"]' href='?_src_=prefs;preference=set_roles;[role_id]=[ROLEPREF_NO|ROLEPREF_SAVE];'>No</a></td>
 								<td><a class = 'fullsize clmYesO[desire == "Yes" ? "n" : "ff"]' href='?_src_=prefs;preference=set_roles;[role_id]=[ROLEPREF_YES|ROLEPREF_SAVE];'>Yes</a></td>
