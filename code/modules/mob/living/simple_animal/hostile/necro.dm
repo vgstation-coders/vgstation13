@@ -166,8 +166,8 @@
 	maxHealth = 100
 	health = 100
 	canRegenerate = 1
-	minRegenTime = 300
-	maxRegenTime = 1800
+	minRegenTime = 30 SECONDS
+	maxRegenTime = 180 SECONDS
 
 	harm_intent_damage = 15
 	melee_damage_lower = 10
@@ -739,8 +739,8 @@
 	size = SIZE_BIG
 	move_to_delay = 4
 	canRegenerate = 1
-	minRegenTime = 300
-	maxRegenTime = 1200
+	minRegenTime = 30 SECONDS
+	maxRegenTime = 60 SECONDS
 
 /mob/living/simple_animal/hostile/necro/necromorph/leaper
 	desc = "A twisted husk of what was once human. Sporting razor-sharp fangs, along with a long scythe-tipped tail."
@@ -755,9 +755,6 @@
 	melee_damage_upper = 20
 	attacktext = "slashes"
 	attack_sound = 'sound/weapons/slashmiss.ogg'
-
-	minRegenTime = 240
-	maxRegenTime = 600
 
 	ranged = 1
 	ranged_cooldown_cap = 8
