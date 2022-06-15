@@ -379,12 +379,10 @@
 	if(current_battery.charge <= amount_to_drain)
 		amount_to_drain = current_battery.charge
 	if(maxcharge <= max_can_absorb && charge >= maxcharge)
-		maxcharge += amount_to_drain
-	else if(charge >= maxcharge)
-		amount_to_drain = 0
-	current_battery.charge -= amount_to_drain
+		maxcharge = min(maxcharge + amount_to_drain, max_can_absorb)
 	var/amount_added = min((maxcharge-charge),amount_to_drain)
 	charge += amount_added
+	current_battery.charge -= amount_added
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
