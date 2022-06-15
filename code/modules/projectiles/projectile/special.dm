@@ -494,3 +494,36 @@
 		H.drop_item()
 		H.vomit(0,1)
 	return 0
+
+/obj/item/projectile/puke
+	icon_state = "projectile_puke"
+
+/obj/item/projectile/puke/New()
+	..()
+	create_reagents(500)
+	make_reagents()
+
+/obj/item/projectile/puke/proc/make_reagents()
+	var/room_remaining = 500
+	var/poly_to_add = rand(100,200)
+	reagents.add_reagent(PACID, poly_to_add)
+	room_remaining -= poly_to_add
+	var/sulph_to_add = rand(100,200)
+	reagents.add_reagent(SACID, sulph_to_add)
+	room_remaining -= sulph_to_add
+	reagents.add_reagent(VOMIT, room_remaining)
+
+/obj/item/projectile/puke/clear/make_reagents()
+	return
+
+/obj/item/projectile/puke/on_hit(var/atom/atarget, var/blocked = 0)
+	..()
+	splash_sub(reagents, atarget, -1)
+
+/obj/item/projectile/puke/process_step()
+	..()
+	var/turf/simulated/T = get_turf(src)
+	if(T) //The first time it runs, it won't work, it'll runtime
+		playsound(T, 'sound/effects/splat.ogg', 50, 1)
+		T.add_vomit_floor(src, 1, 1, 1)
+	sleep(1) //Slow the fuck down, hyperspeed vomit
