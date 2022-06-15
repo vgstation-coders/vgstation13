@@ -741,6 +741,7 @@
 	canRegenerate = 1
 	minRegenTime = 30 SECONDS
 	maxRegenTime = 60 SECONDS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
 
 /mob/living/simple_animal/hostile/necro/necromorph/leaper
 	desc = "A twisted husk of what was once human. Sporting razor-sharp fangs, along with a long scythe-tipped tail."
