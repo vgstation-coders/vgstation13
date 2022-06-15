@@ -51,10 +51,8 @@
 	/datum/rcd_schematic/con_airlock,
 	/datum/rcd_schematic/con_window,
 	)
-	matter = 60
-	max_matter = 60
-	var/plasma_matter = 30
-	var/max_plasma_matter = 30
+	matter = 90
+	max_matter = 90
 	origin_tech = Tc_ENGINEERING + "=5;" + Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=4"
 	mech_flags = MECH_SCAN_FAIL
 
@@ -63,8 +61,6 @@
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin
 	name = "experimental Rapid-Construction-Device (RCD)"
-	max_matter = INFINITY
-	max_plasma_matter = INFINITY
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))
