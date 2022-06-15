@@ -209,7 +209,7 @@
 	var/t = selected.attack(A, user)
 	if(!t) // No errors
 		if(~selected.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
-			use_energy(selected.energy_cost, user, selected.plasma_energy_cost)
+			use_energy(selected.energy_cost, user)
 	else
 		if(istext(t))
 			to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
@@ -225,10 +225,10 @@
 		spark(src, 5, FALSE)
 		next_spark = world.time + 0.5 SECONDS
 
-/obj/item/device/rcd/proc/get_energy(var/mob/user, var/plasma = FALSE)
+/obj/item/device/rcd/proc/get_energy(var/mob/user)
 	return INFINITY
 
-/obj/item/device/rcd/proc/use_energy(var/amount, var/mob/user, var/plasma_amount)
+/obj/item/device/rcd/proc/use_energy(var/amount, var/mob/user)
 	return
 
 /obj/item/device/rcd/proc/update_options_menu()
@@ -329,11 +329,11 @@
 
 		return 1
 
-/obj/item/device/rcd/matter/use_energy(var/amount, var/mob/user, var/plasma_amount)
+/obj/item/device/rcd/matter/use_energy(var/amount, var/mob/user)
 	matter -= amount
 	to_chat(user, "<span class='notice'>\the [src] currently holds [matter]/[max_matter] matter-units.")
 
-/obj/item/device/rcd/matter/get_energy(var/mob/user, var/plasma = FALSE)
+/obj/item/device/rcd/matter/get_energy(var/mob/user)
 	return matter
 
 /obj/item/device/rcd/proc/show_default(var/mob/living/user)

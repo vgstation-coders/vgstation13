@@ -93,7 +93,7 @@
 	icon				= 'icons/turf/floors.dmi'
 	icon_state			= "engine"
 	category			= "Construction"
-	plasma_energy_cost	= 1
+	energy_cost			= 2
 
 	flags		= RCD_GET_TURF
 
@@ -147,7 +147,7 @@
 	icon				= 'icons/turf/walls.dmi'
 	icon_state			= "r_wall"
 	category			= "Construction"
-	plasma_energy_cost	= 2
+	energy_cost			= 5
 
 /datum/rcd_schematic/con_rwalls/attack(var/atom/A, var/mob/user)
 	if(A?.type != /turf/simulated/wall) // Only one with strict type like this for now

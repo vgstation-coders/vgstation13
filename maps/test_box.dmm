@@ -72565,9 +72565,6 @@
 /obj/structure/table/reinforced,
 /obj/item/device/rcd/rpd,
 /obj/item/stack/rcd_ammo/ce,
-/obj/item/stack/rcd_ammo_plasma/ce{
-	pixel_x = -6
-	},
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv{
 	pixel_y = 8
 	},

@@ -198,22 +198,3 @@ var/list/datum/stack_recipe/chain_recipes = list (
 /obj/item/stack/rcd_ammo/attackby(var/obj/O, mob/user)
 	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
 		return O.attackby(src, user)
-
-/obj/item/stack/rcd_ammo_plasma
-	name = "plasma-infused compressed matter cartridge"
-	singular_name = "plasma-infused compressed matter cartridge"
-	desc = "Highly compressed matter in a cartridge form, used in various fabricators that require plasteel creation."
-	icon = 'icons/obj/ammo.dmi'
-	icon_state = "prcd"
-	item_state = "rcdammo"
-	max_amount = 6
-
-	origin_tech = Tc_MATERIALS + "=3" + Tc_PLASMATECH + "=3"
-	starting_materials = list(MAT_IRON = 20000, MAT_PLASMA = 10000)
-
-/obj/item/stack/rcd_ammo_plasma/attackby(var/obj/O, mob/user)
-	if(istype(O, /obj/item/device/rcd/matter/engineering/pre_loaded/adv))
-		return O.attackby(src, user)
-
-/obj/item/stack/rcd_ammo_plasma/ce
-	amount = 6

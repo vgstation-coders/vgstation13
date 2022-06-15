@@ -2,7 +2,6 @@
 	var/name				= "whomp"	//Obvious.
 	var/category			= ""		//More obvious. Yes you need a category.
 	var/energy_cost			= 0			//Energy cost of this schematic.
-	var/plasma_energy_cost	= 0			//For advanced RCDs
 	var/flags				= 0			//Bitflags.
 
 	var/obj/item/device/rcd/master		//Okay all of the vars here are obvious...
