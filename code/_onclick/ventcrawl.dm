@@ -112,7 +112,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/simple_animal/hostile/lizard/can_ventcrawl()
 	return TRUE
 
-/mob/living/simple_animal/hostile/necromorph/leaper/can_ventcrawl()
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/can_ventcrawl()
 	return TRUE
 
 /mob/living/simple_animal/shade/can_ventcrawl()

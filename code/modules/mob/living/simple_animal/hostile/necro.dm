@@ -782,7 +782,7 @@
 			var/list/can_see = view(get_turf(src), vision_range/2) //Nothing too close for comfort
 			var/all_clear = 1
 			for(var/mob/living/L in can_see)
-				if(!istype(L, /mob/living/simple_animal/hostile/necromorph) && !(L.isDead()))
+				if(!istype(L, /mob/living/simple_animal/hostile/necro/necromorph) && !(L.isDead()))
 					all_clear = 0
 			if(!istype(loc, /obj/machinery/atmospherics/unary/vent_pump) && istype(loc, /turf) && all_clear)
 				stop_automated_movement = 0

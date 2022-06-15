@@ -34,7 +34,7 @@
 			/mob/living/simple_animal/hostile/bear,
 			/mob/living/simple_animal/hostile/creature,
 			/mob/living/simple_animal/hostile/monster/skrite,
-			/mob/living/simple_animal/hostile/necromorph,
+			/mob/living/simple_animal/hostile/necro/necromorph,
 			)
 	else
 		spawn_type = pick(
