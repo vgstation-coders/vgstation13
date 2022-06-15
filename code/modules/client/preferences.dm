@@ -1572,14 +1572,10 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 			dat += "<th colspan='6' text-align = 'center' height = '40px'><h1>You are banned from antagonist roles</h1></th>"
 		else
 			for(var/role_id in table_type)
-				dat += "<tr>"
-				dat += "<td>[capitalize(role_id)]</td>"
+				dat += "<tr><td>[capitalize(role_id)]</td>"
 				if(table_type[role_id]) //if mode is available on the server
-					if(jobban_isbanned(user, role_id))
+					if(jobban_isbanned(user, role_id) || (role_id == "pai candidate" && jobban_isbanned(user, "pAI")))
 						dat += "<td class='bannedColumn' colspan='5'><b>\[BANNED]</b></td>"
-					else if(role_id == "pai candidate")
-						if(jobban_isbanned(user, "pAI"))
-							dat += "<td class='bannedColumn' colspan='5'><b>\[BANNED]</b></td>"
 					else
 						var/wikiroute = role_wiki[role_id]
 						var/desire = get_role_desire_str(roles[role_id])
