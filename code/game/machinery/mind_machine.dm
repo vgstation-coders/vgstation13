@@ -343,19 +343,13 @@
 		if(DEAD)
 			OS = "Dead"
 	if(!S.mind)
-		MT = MINDMACHINE_LOWER//Simple mob
-	if(S.mind)
-		if(isrobot(S))
-			MT = MINDMACHINE_SILICON //Silicon player, obviously
-		else
-			MT = MINDMACHINE_HIGHER //Player controlled
-	if(isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S))
+		MT = MINDMACHINE_LOWER //Simple mob
+	else if(isrobot(S))
+		MT = MINDMACHINE_SILICON //Silicon player, obviously
+	else if(!can_mind_interact(S.mind) || isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S) || is_type_in_list(S, illegalSwap))
 		MT = MINDMACHINE_SHIELDED //Mostly to fix spell bugs but also tinfoil
-	if(is_type_in_list(S, illegalSwap) || is_type_in_list(S, illegalSwap))
-		MT = MINDMACHINE_SHIELDED
-	if((ishigherbeing(S)) || (ismonkey(S)))
-		if(!can_mind_interact(S.mind))
-			MT = MINDMACHINE_SHIELDED
+	else
+		MT = MINDMACHINE_HIGHER //Player controlled 
 	if(S == occupantOne)
 		mindTypeOne = MT
 		occupantStatOne = OS
