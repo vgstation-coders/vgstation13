@@ -110,7 +110,7 @@
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|text
 	return strip_html_simple(name, max_length)
-	
+
 //As above, but for full-size paragraph textboxes
 /proc/stripped_message(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|message
@@ -384,12 +384,13 @@
  */
 var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 
-/proc/format_units(var/number)
+/proc/format_units(var/number, var/decimals=2)
 	if (number<0)
 		return "-[format_units(abs(number))]"
 	if (number==0)
 		return "0 "
 
+	// Figure out suffix
 	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
@@ -397,6 +398,10 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 		i++
 		if (i == max_unit_suffix)
 			break
+
+	// Remove excess decimals
+	decimals = 10 ** decimals
+	number = round(number * decimals)/decimals
 
 	return "[format_num(number)] [unit_suffixes[i]]"
 
@@ -716,3 +721,37 @@ var/quote = ascii2text(34)
 			count++
 	while(last_index)
 	return count
+
+/proc/get_reflexive_pronoun(var/gender) //For when \himself won't work.
+	switch(gender)
+		if(MALE)
+			return "himself"
+		if(FEMALE)
+			return "herself"
+		if(PLURAL) //Can be used in conjunction with shift_verb_tense(). eg. "The bees cleans themselves." -> "The bees clean themselves."
+			return "themselves"
+		else
+			return "itself"
+
+/proc/shift_verb_tense(var/input) //Turns "slashes" into "slash" and "hits" into "hit".
+	//Special cases can be added here as they are encountered.
+	switch(input)
+		if("staves in")
+			return "stave in"
+	//Check if input ends in "es" or "s" and chop those off if so.
+	var/inputlength = length(input)
+	if(inputlength > 2)
+		if(copytext(input, inputlength - 1, inputlength + 1) == "es") //If it ends in "es"
+			var/third_to_last = copytext(input, inputlength - 2, inputlength - 1)
+			if(findtext("cdefgklmnprstuvxz", third_to_last)) //If the third-to-last letter is any of the given letters, remove only the "s".
+				return copytext(input, 1, inputlength) //"smiles" becomes "smile"
+			else if(third_to_last == "i")
+				return copytext(input, 1, inputlength - 2) + "y" //"parries" becomes "parry"
+			else
+				return copytext(input, 1, inputlength - 1) //Otherwise remove the "es".
+		else if(copytext(input, inputlength, inputlength + 1) == "s") //If the second-to-last letter isn't "e", and the last letter is "s", remove the "s".
+			return copytext(input, 1, inputlength)	//"gets" becomes "get"
+		else
+			return input
+	else
+		return input

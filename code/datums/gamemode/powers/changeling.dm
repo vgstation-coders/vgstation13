@@ -61,20 +61,12 @@
 	allowduringhorrorform = 0
 
 // Hivemind
-/datum/power/changeling/hive_upload
-	name = "Hive Channel"
-	desc = "We can channel a DNA into the airwaves, allowing our fellow changelings to absorb it and transform into it as if they acquired the DNA themselves."
-	helptext = "Allows other changelings to absorb the DNA you channel from the airwaves. Will not help them towards their absorb objectives."
+/datum/power/changeling/hivemind
+	name = "Hivemind"
+	desc = "We can transmit and receive DNA. We can use this DNA to transform as if we acquired the DNA ourselves."
+	helptext = "Allows changelings to transmit and recieve DNA. This DNA will not help toward absorb objectives."
 	cost = 0
-	spellpath = /spell/changeling/hiveupload
-	allowduringhorrorform = 0
-
-/datum/power/changeling/hive_download
-	name = "Hive Absorb"
-	desc = "We can absorb a single DNA from the airwaves, allowing us to use more disguises with help from our fellow changelings."
-	helptext = "Allows you to absorb a single DNA and use it. Does not count towards your absorb objective."
-	cost = 0
-	spellpath = /spell/changeling/hivedownload
+	spellpath = /spell/changeling/hivemind
 	allowduringhorrorform = 0
 
 /datum/power/changeling/lesser_form
@@ -219,20 +211,19 @@
 	if(changeling)
 		changeling.chem_storage += 25
 
-/datum/power/changeling/DigitalCamoflague
+/datum/power/changeling/DigitalCamouflage
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
 	cost = 2
 	allowduringlesserform = 1
 	allowduringhorrorform = 0
 
-/datum/power/changeling/DigitalCamoflague/add_power(var/datum/role/R)
+/datum/power/changeling/DigitalCamouflage/add_power(var/datum/role/R)
 	. = ..()
 	if (!.) 
 		return 
 	var/mob/living/carbon/human/C = R.antag.current
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
-	C.digitalcamo = 1
 
 /datum/power/changeling/rapidregeneration
 	name = "Rapid Regeneration"

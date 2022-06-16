@@ -256,11 +256,11 @@
 /datum/biogen_recipe/misc
 	category="Misc."
 
-/datum/biogen_recipe/misc/pest
-	id="pest"
-	name="Insecticide"
-	reagent=INSECTICIDE
+/datum/biogen_recipe/misc/insecticide
+	id = "insecticide"
+	name = "Insecticide"
 	cost=35
+	reagent=INSECTICIDE
 	amount_per_unit=10
 	other_amounts=list(5)
 
@@ -340,7 +340,7 @@
 	icon_state = "biogen-stand"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 40
 	var/speed_coefficient = 15
 	var/biomass_coefficient = 9

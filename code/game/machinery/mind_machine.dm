@@ -3,7 +3,7 @@
 	icon = 'icons/obj/mind_machine.dmi'
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	active_power_usage = 2000
 	light_power_on = 1
@@ -354,7 +354,7 @@
 	if(is_type_in_list(S, illegalSwap) || is_type_in_list(S, illegalSwap))
 		MT = MINDMACHINE_SHIELDED
 	if((ishigherbeing(S)) || (ismonkey(S)))
-		if(S.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+		if(!can_mind_interact(S.mind))
 			MT = MINDMACHINE_SHIELDED
 	if(S == occupantOne)
 		mindTypeOne = MT

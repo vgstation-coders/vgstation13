@@ -6,7 +6,7 @@
 	icon_state = "portgen1"
 	density = 1
 	anchored = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 

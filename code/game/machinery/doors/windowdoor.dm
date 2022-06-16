@@ -6,7 +6,7 @@
 	var/base_state = "left"
 	health = 60
 	visible = 0.0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	flow_flags = ON_BORDER
 	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
 	layer = WINDOOR_LAYER //Below curtains

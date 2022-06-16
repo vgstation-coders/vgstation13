@@ -44,7 +44,14 @@
 	jammed = 2
 	flags = NO_PACIFICATION
 
-/area/vault/mothership_lab/raidtunnel
+/area/vault/mothership_lab/raidtunnel_upper
+	name = "\improper Mothership Lab Raider Tunnel"
+	icon_state = "mothershiplab_raidertunnel"
+	requires_power = 0
+	jammed = 2
+	flags = NO_PACIFICATION
+
+/area/vault/mothership_lab/raidtunnel_lower
 	name = "\improper Mothership Lab Raider Tunnel"
 	icon_state = "mothershiplab_raidertunnel"
 	requires_power = 0
@@ -99,6 +106,44 @@
 	requires_power = 0
 	jammed = 2
 	flags = NO_PACIFICATION
+
+//////////////////////////////
+// WALLS (An invulnerable wall subtype, and two icon-swapped riveted walls, applied to appropriate areas to prevent escaping the vault to the Centcomm Z-level, or tunneling into boss rooms)
+//////////////////////////////
+
+/turf/simulated/wall/invulnerable/r_wall/mothership
+	name = "super-reinforced wall"
+	desc = "Someone spent a lot of time and money on this bullet-proof, bomb-proof wall."
+	icon_state = "r_wall"
+	walltype = "rwall"
+
+/turf/simulated/wall/invulnerable/r_wall/mothership/canSmoothWith() // SMOOTH DAT WALL (For the mothership lab vault)
+	var/static/list/smoothables = list(/turf/simulated/wall/invulnerable/r_wall/mothership, /turf/unsimulated/wall/r_wall)
+	return smoothables
+
+/turf/unsimulated/wall/r_wall
+	name = "riveted reinforced wall"
+	desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."
+	icon = 'icons/turf/walls.dmi'
+	icon_state = "r_wall"
+	explosion_block = 9999
+	walltype = "rwall"
+
+/turf/unsimulated/wall/r_wall/canSmoothWith() // SMOOTH DAT WALL
+	var/static/list/smoothables = list(/turf/unsimulated/wall/r_wall, /turf/simulated/wall/invulnerable/r_wall)
+	return smoothables
+
+/turf/unsimulated/wall/r_rock
+	name = "riveted porous rock"
+	desc = "Asteroid rock reinforced by a wall with massive rivets embedded in the struts."
+	icon = 'icons/turf/walls.dmi'
+	icon_state = "rock_rf0"
+	explosion_block = 9999
+	walltype = "rock_rf"
+
+/turf/unsimulated/wall/r_rock/canSmoothWith() // SMOOTH DAT WALL
+	var/static/list/smoothables = list(/turf/unsimulated/wall/r_rock)
+	return smoothables
 
 //////////////////////////////
 // NARRATION
@@ -326,7 +371,7 @@
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 
 //Ayy lmao boots
-/obj/item/clothing/shoes/jackboots/steeltoe/mothership
+/obj/item/clothing/shoes/jackboots/mothership
 	name = "mothership boots"
 	desc = "Issued, recalled post-mortem, and reissued countless times to many mothership denizens. Despite that, the boots still shine impeccably."
 	sterility = 75

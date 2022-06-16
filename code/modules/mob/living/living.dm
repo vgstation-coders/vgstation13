@@ -45,12 +45,13 @@
 			size = "huge"
 
 	var/pronoun = "it is"
-	if(src.gender == FEMALE)
-		pronoun = "she is"
-	else if(src.gender == MALE)
-		pronoun = "he is"
-	else if(src.gender == PLURAL)
-		pronoun = "they are"
+	switch(gender)
+		if(FEMALE)
+			pronoun = "she is"
+		if(MALE)
+			pronoun = "he is"
+		if(PLURAL)
+			pronoun = "they are"
 
 	..(user, " [capitalize(pronoun)] [size].", show_name, FALSE)
 	if(meat_taken > 0)
@@ -557,6 +558,11 @@ Thanks.
 		locked_to.unbuckle()
 	locked_to = initial(src.locked_to)
 	*/
+	if(istype(src, /mob/living/carbon))
+		var/mob/living/carbon/C = src
+		dead_mob_list -= C
+		living_mob_list |= list(C)
+
 	if(istype(src, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
 		H.timeofdeath = 0

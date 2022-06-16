@@ -381,7 +381,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/clothing/head/helmet/donutgiver/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	if(!..())
 		return CANNOT_EQUIP
-	if(!isjusthuman(M))
+	if(!ishuman(M))
 		to_chat(usr, "<span class='warning'>Your nonhuman DNA is rejected by \the [src].</span>")
 		return CANNOT_EQUIP
 	if(!dna_profile)

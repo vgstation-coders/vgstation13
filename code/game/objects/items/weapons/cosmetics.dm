@@ -529,7 +529,7 @@
 			H.my_appearance.h_style = new_style
 			H.update_hair()
 
-/obj/item/weapon/pocket_mirror/proc/shatter()
+/obj/item/weapon/pocket_mirror/proc/shatter(mob/shatterer)
 	if (shattered)
 		return
 	shattered = 1
@@ -537,23 +537,27 @@
 	playsound(src, "shatter", 70, 1)
 	desc = "Oh no, seven years of bad luck!"
 
-/obj/item/weapon/pocket_mirror/kick_act()
-	shatter()
+	//Curse the shatterer with bad luck
+	var/datum/blesscurse/brokenmirror/mirrorcurse = new /datum/blesscurse/brokenmirror
+	shatterer.add_blesscurse(mirrorcurse)
+
+/obj/item/weapon/pocket_mirror/kick_act(mob/living/carbon/human/H)
+	shatter(H)
 	..()
 
-/obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom)
+/obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
 	if(!isturf(hit_atom))
 		return
 	if (prob(25))
-		shatter()
+		shatter(user)
 
 /obj/item/weapon/pocket_mirror/comb
 	name = "hair comb"
 	desc = "Despite the name honey is not included nor recommended for use with this."
 	icon_state = "comb"
 
-/obj/item/weapon/pocket_mirror/comb/shatter()
+/obj/item/weapon/pocket_mirror/comb/shatter(mob/shatterer)
 	return
 
 /obj/item/weapon/pocket_mirror/comb/attack(mob/M, mob/user)
@@ -569,7 +573,7 @@
 	sharpness = 1
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 
-/obj/item/weapon/pocket_mirror/scissors/shatter()
+/obj/item/weapon/pocket_mirror/scissors/shatter(mob/shatterer)
 	return
 
 /obj/item/weapon/pocket_mirror/scissors/attack(atom/target, mob/user)

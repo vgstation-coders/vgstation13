@@ -60,7 +60,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	var/field_strength = 1//0.01
 	var/field_frequency = 1
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	active_power_usage = 500	//multiplied by field strength
 	anchored = 0
@@ -129,7 +129,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	owned_field.ChangeFieldFrequency(field_frequency)
 	set_light(light_range_on, light_power_on)
 	icon_state = "core1"
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	. = 1
 
 /obj/machinery/power/rust_core/proc/Shutdown()
@@ -137,7 +137,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	if(owned_field)
 		icon_state = "core0"
 		qdel(owned_field)
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		set_light(0)
 
 /obj/machinery/power/rust_core/proc/AddParticles(var/name, var/quantity = 1)

@@ -110,7 +110,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	anchored = 1
 	plane = OBJ_PLANE
 	layer = ABOVE_DOOR_LAYER
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 2
 	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
@@ -267,10 +267,10 @@ var/global/list/obj/machinery/light/alllights = list()
 					on = 0
 					set_light(0)
 			else
-				use_power = 2
+				use_power = MACHINE_POWER_USE_ACTIVE
 				set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		set_light(0)
 
 	if(current_bulb)

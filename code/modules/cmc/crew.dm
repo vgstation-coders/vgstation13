@@ -22,7 +22,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	name = "Crew monitoring computer"
 	desc = "Used to monitor active health sensors built into most of the crew's uniforms."
 	icon_state = "crew"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 250
 	active_power_usage = 500
 	circuit = "/obj/item/weapon/circuitboard/crew"
@@ -273,6 +273,8 @@ GENERAL PROCS
 		health += dam
 	health = round(100 - health)
 	switch (health)
+		if(100)
+			return "0"
 		if(80 to 99)
 			return "1"
 		if(60 to 79)
@@ -281,10 +283,8 @@ GENERAL PROCS
 			return "3"
 		if(20 to 39)
 			return "4"
-		else if(health != 100)
-			return "5"
 		else
-			return "0"
+			return "5"
 
 /*
 HOLOMAP PROCS

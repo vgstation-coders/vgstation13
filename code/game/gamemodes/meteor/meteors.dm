@@ -306,15 +306,73 @@
 	..()
 
 /obj/item/projectile/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
-	name = "human corpse"
+	name = "organic debris"
 	icon_state = "human"
+	var/mob/living/mob_to_gib = /mob/living/carbon/human
+	var/datum/species/species
+
+/obj/item/projectile/meteor/gib/New(atom/start, atom/end)
+	if(prob(50))
+		var/list/blocked = boss_mobs + blacklisted_mobs
+		do
+			mob_to_gib = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blocked))
+		while(!initial(mob_to_gib.meat_type))
+	else
+		var/list/human_blocked = list(
+			/mob/living/carbon/human/krampus,
+			/mob/living/carbon/human/dummy,
+			/mob/living/carbon/human/manifested,
+			/mob/living/carbon/human/muton,
+			/mob/living/carbon/human/golem,
+			/mob/living/carbon/human/umbra,
+			/mob/living/carbon/human/frankenstein,
+			/mob/living/carbon/human/lich,
+			/mob/living/carbon/human/NPC,
+		)
+		mob_to_gib = pick(existing_typesof(/mob/living/carbon/human) - existing_typesof_list(human_blocked))
+	name = initial(mob_to_gib.name)
+	if(ispath(mob_to_gib,/mob/living/carbon/human))
+		var/pathtext = "[mob_to_gib]"
+		pathtext = replacetext(pathtext,"/mob/living/carbon/human","/datum/species")
+		pathtext = replacetext(pathtext,"/skelevox","/skellington/skelevox")
+		if(pathtext == "/datum/species")
+			pathtext = "/datum/species/human"
+		var/specpath = text2path(pathtext)
+		species = new specpath
+	else
+		icon = initial(mob_to_gib.icon)
+		icon_state = initial(mob_to_gib.icon_state)
+	..(start,end)
 
 /obj/item/projectile/meteor/gib/to_bump(atom/A)
 
 	if(loc == null)
 		return
-
-	new /obj/effect/gibspawner/human(src.loc)
+	if(ispath(mob_to_gib,/mob/living/carbon/human) && species)
+		for(var/organ_name in species.has_organ)
+			var/datum/organ/internal/O = species.has_organ[organ_name]
+			var/true_organ = initial(O.removed_type)
+			new true_organ(loc)
+		var/static/list/ext_organs = list(
+			/obj/item/organ/external/l_arm,
+			/obj/item/organ/external/r_arm,
+			/obj/item/organ/external/l_leg,
+			/obj/item/organ/external/r_leg,
+			/obj/item/organ/external/l_foot,
+			/obj/item/organ/external/r_foot,
+			/obj/item/organ/external/l_hand,
+			/obj/item/organ/external/r_hand,
+		)
+		for(var/ext_type in ext_organs)
+			var/obj/item/organ/external/E = new ext_type(loc)
+			E.species = species
+			E.update_icon()
+	if(initial(mob_to_gib.meat_type) && (initial(mob_to_gib.meat_amount) || initial(mob_to_gib.size)))
+		var/meattype = ispath(mob_to_gib,/mob/living/carbon/human) && species ? species.meat_type : initial(mob_to_gib.meat_type)
+		var/meatamount = initial(mob_to_gib.meat_amount) ? initial(mob_to_gib.meat_amount) : initial(mob_to_gib.size)
+		for(var/i in 1 to meatamount)
+			new meattype(loc)
+	new /obj/effect/gibspawner/human(loc, fleshcolor = species ? species.flesh_color : DEFAULT_FLESH, bloodcolor = species ? species.blood_color : DEFAULT_BLOOD)
 	qdel(src)
 
 

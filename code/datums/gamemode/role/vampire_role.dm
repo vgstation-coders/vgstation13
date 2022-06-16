@@ -164,8 +164,14 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/vamp_H = M
+
+		if(vamp_H.is_muzzled())
+			to_chat(M, "<span class='warning'> The [vamp_H.wear_mask] prevents you from biting!</span>")
+			return FALSE
+
 		if(vamp_H.check_body_part_coverage(MOUTH))
 			to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
+
 	return TRUE
 
 
@@ -308,11 +314,12 @@
 	if((T.get_lumcount() * 10) <= 2)
 		if(locate(/datum/power/vampire/shadow) in current_powers)
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15), INVISIBILITY_LEVEL_TWO)
-			H.color = "#000000"
 		else
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		return TRUE
 	else
+		if(H.invisibility > 0)
+			H.make_visible(VAMPIRECLOAK, TRUE)
 		if(locate(/datum/power/vampire/shadow) in current_powers)
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		else

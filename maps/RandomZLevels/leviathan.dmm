@@ -1782,7 +1782,7 @@
 	pixel_x = 13;
 	pixel_y = 5
 	},
-/obj/item/weedkiller/triclopyr,
+/obj/item/weapon/reagent_containers/spray/bugzapper,
 /obj/item/weapon/reagent_containers/glass/bottle/left4zed,
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)

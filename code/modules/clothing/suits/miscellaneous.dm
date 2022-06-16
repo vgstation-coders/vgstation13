@@ -369,7 +369,7 @@ var/list/tag_suits_list = list()
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
-	
+
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
 	desc = "It's treason then."
@@ -1013,7 +1013,9 @@ var/list/tag_suits_list = list()
 	if (!active) //no explosion with no active vest, dummy
 		return
 
-	var/message_say = user.handle_suicide_bomb_cause()
+	var/message_say = user.handle_suicide_bomb_cause(src)
+	if(!message_say)
+		return
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
 	explosion(user, 3, 5, 7, whodunnit = user)

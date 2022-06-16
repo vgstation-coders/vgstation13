@@ -328,6 +328,11 @@
 		if(7) //supply
 			return "Supply"
 
+/proc/get_access_desc_list(var/list/L)
+	var/list/names = list()
+	for(var/access in L)
+		names.Add(get_access_desc(access))
+	return english_list(names)
 
 /proc/get_access_desc(A)
 	switch(A)

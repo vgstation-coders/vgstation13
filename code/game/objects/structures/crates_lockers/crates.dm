@@ -164,6 +164,23 @@
 /obj/structure/closet/crate/bin/wrenchable()
     return TRUE
 
+/obj/structure/closet/crate/ayybin
+	desc = "A large bin."
+	name = "Mothership Large bin"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayybin"
+	density = 1
+	icon_opened = "ayybinopen"
+	icon_closed = "ayybin"
+
+/obj/structure/closet/crate/ayybin/attackby(var/obj/item/weapon/W, var/mob/user)
+    if(W.is_wrench(user) && wrenchable())
+        return wrenchAnchor(user, W)
+    ..()
+
+/obj/structure/closet/crate/ayybin/wrenchable()
+    return TRUE
+
 /obj/structure/closet/crate/radiation
 	desc = "A crate with a radiation sign on it."
 	name = "Radioactive gear crate"
@@ -181,6 +198,15 @@
 	density = 1
 	icon_opened = "weaponcrateopen"
 	icon_closed = "weaponcrate"
+
+/obj/structure/closet/crate/secure/ayyweapon
+	desc = "A secure mothership weapons crate."
+	name = "Mothership Weapons crate"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayyweaponcrate"
+	density = 1
+	icon_opened = "ayyweaponcrateopen"
+	icon_closed = "ayyweaponcrate"
 
 /obj/structure/closet/crate/secure/plasma
 	desc = "A secure plasma crate."
@@ -227,6 +253,25 @@
     ..()
 
 /obj/structure/closet/crate/secure/bin/wrenchable()
+    return TRUE
+
+/obj/structure/closet/crate/secure/ayybin
+	desc = "A secure bin."
+	name = "Mothership Secure bin"
+	icon_state = "ayybinsecure"
+	icon_opened = "ayybinsecureopen"
+	icon_closed = "ayybinsecure"
+	redlight = "largebinr"
+	greenlight = "largebing"
+	sparks = "largebinsparks"
+	emag = "largebinemag"
+
+/obj/structure/closet/crate/secure/ayybin/attackby(var/obj/item/weapon/W, var/mob/user)
+    if(W.is_wrench(user) && wrenchable())
+        return wrenchAnchor(user, W)
+    ..()
+
+/obj/structure/closet/crate/secure/ayybin/wrenchable()
     return TRUE
 
 /obj/structure/closet/crate/secure/large

@@ -16,6 +16,9 @@
 <b>Integrity:</b> Implant will last so long as the nanobots are inside the bloodstream."}
 
 /obj/item/weapon/implant/traitor/insert(mob/living/target, target_limb, mob/implanter)
+	. = ..()
+	if (!.)
+		return
 	if(!iscarbon(target))
 		to_chat(implanter, "<span class='danger'>The implant doesn't seem to be compatible with [target]!</span>")
 		return FALSE
@@ -46,7 +49,6 @@
 			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
 			head_organ.explode()
 		return FALSE
-	return ..()
 
 /obj/item/weapon/implant/traitor/implanted(mob/implanter)
 	for(var/obj/item/weapon/implant/I in imp_in)
