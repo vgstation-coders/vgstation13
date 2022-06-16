@@ -8,6 +8,16 @@
 	build_path = /obj/item/weapon/cell/empty
 	category = "Engineering"
 
+/datum/design/socket_wrench
+	name = "Socket Wrench"
+	desc = "A wrench intended to be wrenchier than other wrenches. It's the wrenchiest."
+	id = "socket_wrench"
+	req_tech = list(Tc_ENGINEERING = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 10000)
+	build_path = /obj/item/tool/wrench/socket
+	category = "Engineering"
+
 /datum/design/high_cell
 	name = "High-Capacity Power Cell"
 	desc = "A power cell that holds 10000 units of energy."

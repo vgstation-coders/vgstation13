@@ -147,7 +147,6 @@
 		new /obj/item/weapon/beartrap(),\
 		new /obj/item/gun_part/scope(),\
 		new /obj/item/weapon/grenade/chem_grenade/timer(), \
-		new /obj/item/tool/wrench/socket(), \
 		)
 	)
 
