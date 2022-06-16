@@ -322,7 +322,6 @@
 	else if(W.is_screwdriver(user) && state == 2 )
 		busy = 1
 		W.playtoolsound(src, 100)
-		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
 		if(!src)
 			return
 		to_chat(user, "<span class='notice'>You finish the airlock!</span>")
