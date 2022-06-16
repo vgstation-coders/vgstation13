@@ -261,23 +261,18 @@
 		busy = 0
 
 	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && state == 1 && W:icon_state != "door_electronics_smoked")
-		busy = 1
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
 		user.drop_item(W, src, force_drop = 1)
+		if(!src)
+			return
+		var/obj/item/weapon/circuitboard/airlock/electronic = W
+		electronic.installed = 1
+		to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
+		src.state = 2
+		src.name = "Near finished Airlock Assembly"
+		src.electronics = W
 
-		if(do_after(user, src, 20))
-			if(!src)
-				return
-			var/obj/item/weapon/circuitboard/airlock/electronic = W
-			electronic.installed = 1
-			to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
-			src.state = 2
-			src.name = "Near finished Airlock Assembly"
-			src.electronics = W
-		else
-			W.forceMove(src.loc)
-		busy = 0
 
 	else if(iscrowbar(W) && state == 2 )
 		busy = 1
