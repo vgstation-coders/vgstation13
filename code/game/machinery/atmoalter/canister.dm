@@ -131,7 +131,7 @@
 			overlayiconstate = "can-o2"
 		if(4)
 			overlayiconstate = "can-o3"
-	return image('icons/obj/atmos.dmi', overlayiconstate)
+	return image(icon, overlayiconstate)
 
 /obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
 	var/overlayiconstate
@@ -140,7 +140,7 @@
 			overlayiconstate = "can-open"
 		if(2)
 			overlayiconstate = "can-connector"
-	return image('icons/obj/atmos.dmi', overlayiconstate)
+	return image(icon, overlayiconstate)
 
 /obj/machinery/portable_atmospherics/canister/proc/check_updates(tank_pressure = 0)
 	if((overlay_status & OVERLAY_HOLDING) != holding)

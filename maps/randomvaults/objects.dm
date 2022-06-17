@@ -572,7 +572,7 @@
 			overlayiconstate = "old-o2"
 		if(4)
 			overlayiconstate = "old-o3"
-	return image('icons/obj/atmos.dmi', overlayiconstate)
+	return image(icon, overlayiconstate)
 
 /obj/machinery/portable_atmospherics/canister/old/other_overlays(var/state)
 	var/overlayiconstate
@@ -581,7 +581,7 @@
 			overlayiconstate = "old-open"
 		if(2)
 			overlayiconstate = "old-connector"
-	return image('icons/obj/atmos.dmi', overlayiconstate)
+	return image(icon, overlayiconstate)
 
 
 /obj/machinery/portable_atmospherics/canister/old/process()
