@@ -1249,11 +1249,10 @@ About the new airlock wires panel:
 			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
-			if (do_after(user, src, 40))
-				to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
-				revert(user,null)
-				qdel(src)
-				return
+			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
+			revert(user,null)
+			qdel(src)
+			return
 		else if(arePowerSystemsOn() && !(stat & (FORCEDISABLE|NOPOWER)))
 			to_chat(user, "<span class='notice'>The airlock's motors resist your efforts to force it.</span>")
 		else if(locked)

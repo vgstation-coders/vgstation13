@@ -265,19 +265,15 @@
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
 		user.drop_item(W, src, force_drop = 1)
-
-		if(do_after(user, src, 40))
-			if(!src)
-				return
-			var/obj/item/weapon/circuitboard/airlock/electronic = W
-			electronic.installed = 1
-			to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
-			src.state = 2
-			src.name = "Near finished Airlock Assembly"
-			src.electronics = W
-		else
-			W.forceMove(src.loc)
-		busy = 0
+		if(!src)
+			return
+		var/obj/item/weapon/circuitboard/airlock/electronic = W
+		electronic.installed = 1
+		to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
+		src.state = 2
+		src.name = "Near finished Airlock Assembly"
+		src.electronics = W
+		busy = 0 
 
 	else if(iscrowbar(W) && state == 2 )
 		busy = 1
@@ -326,39 +322,36 @@
 	else if(W.is_screwdriver(user) && state == 2 )
 		busy = 1
 		W.playtoolsound(src, 100)
-		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
-
-		if(do_after(user, src, 40))
-			if(!src)
-				return
-			to_chat(user, "<span class='notice'>You finish the airlock!</span>")
-			var/path
-			if(istext(glass))
-				path = text2path("/obj/machinery/door/airlock/[glass]")
-			else if (glass == 1)
-				path = text2path("/obj/machinery/door/airlock[glass_type]")
-			else
-				path = text2path("/obj/machinery/door/airlock[airlock_type]")
-			var/obj/machinery/door/airlock/door = new path(src.loc)
-			door.assembly_type = type
-			door.electronics = src.electronics
-			door.fingerprints += src.fingerprints
-			door.fingerprintshidden += src.fingerprintshidden
-			door.fingerprintslast = user.ckey
-			if(src.electronics.one_access)
-				door.req_access = null
-				door.req_one_access = src.electronics.conf_access
-			else
-				door.req_access = src.electronics.conf_access
-			door.req_access_dir = src.electronics.dir_access
-			door.access_not_dir = src.electronics.access_nodir
-			if(created_name)
-				door.name = created_name
-			else
-				door.name = "[istext(glass) ? "[glass] airlock" : base_name]"
-			src.electronics.forceMove(door)
-			src.electronics.installed = 1
-			qdel(src)
+		if(!src)
+			return
+		to_chat(user, "<span class='notice'>You finish the airlock!</span>")
+		var/path
+		if(istext(glass))
+			path = text2path("/obj/machinery/door/airlock/[glass]")
+		else if (glass == 1)
+			path = text2path("/obj/machinery/door/airlock[glass_type]")
+		else
+			path = text2path("/obj/machinery/door/airlock[airlock_type]")
+		var/obj/machinery/door/airlock/door = new path(src.loc)
+		door.assembly_type = type
+		door.electronics = src.electronics
+		door.fingerprints += src.fingerprints
+		door.fingerprintshidden += src.fingerprintshidden
+		door.fingerprintslast = user.ckey
+		if(src.electronics.one_access)
+			door.req_access = null
+			door.req_one_access = src.electronics.conf_access
+		else
+			door.req_access = src.electronics.conf_access
+		door.req_access_dir = src.electronics.dir_access
+		door.access_not_dir = src.electronics.access_nodir
+		if(created_name)
+			door.name = created_name
+		else
+			door.name = "[istext(glass) ? "[glass] airlock" : base_name]"
+		src.electronics.forceMove(door)
+		src.electronics.installed = 1
+		qdel(src)
 		busy = 0
 	else
 		..()
