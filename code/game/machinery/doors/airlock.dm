@@ -1252,6 +1252,7 @@ About the new airlock wires panel:
 			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
 			revert(user,null)
 			qdel(src)
+			return
 		else if(arePowerSystemsOn() && !(stat & (FORCEDISABLE|NOPOWER)))
 			to_chat(user, "<span class='notice'>The airlock's motors resist your efforts to force it.</span>")
 		else if(locked)
