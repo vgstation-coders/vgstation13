@@ -33,10 +33,7 @@
 	melt_temperature = MELTPOINT_STEEL
 
 	//Icon Update Code
-	var/global/list/status_overlays_pressure = list()
-	var/global/list/status_overlays_other = list()
 	var/overlay_status = 0
-
 	var/log="" // Bad boys, bad boys.
 
 /obj/machinery/portable_atmospherics/canister/New()
@@ -124,22 +121,26 @@
 	return
 
 /obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)
-	var/static/list/status_overlays_pressure = list(
-		image(icon, "can-o0"),
-		image(icon, "can-o1"),
-		image(icon, "can-o2"),
-		image(icon, "can-o3")
-	)
-
-	return status_overlays_pressure[state]
+	var/overlayiconstate
+	switch(state)
+		if(1)
+			overlayiconstate = "can-o0"
+		if(2)
+			overlayiconstate = "can-o1"
+		if(3)
+			overlayiconstate = "can-o2"
+		if(4)
+			overlayiconstate = "can-o3"
+	return image('icons/obj/atmos.dmi', overlayiconstate)
 
 /obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
-	var/static/list/status_overlays_other = list(
-		image(icon, "can-open"),
-		image(icon, "can-connector")
-	)
-
-	return status_overlays_other[state]
+	var/overlayiconstate
+	switch(state)
+		if(1)
+			overlayiconstate = "can-open"
+		if(2)
+			overlayiconstate = "can-connector"
+	return image('icons/obj/atmos.dmi', overlayiconstate)
 
 /obj/machinery/portable_atmospherics/canister/proc/check_updates(tank_pressure = 0)
 	if((overlay_status & OVERLAY_HOLDING) != holding)
