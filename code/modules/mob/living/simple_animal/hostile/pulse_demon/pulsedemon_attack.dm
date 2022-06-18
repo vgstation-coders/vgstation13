@@ -203,12 +203,13 @@
 
 // Lets you view from these, and inherit view properties like xray if any
 /obj/machinery/camera/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    user.loc = src
+    user.forceMove(src.loc)
     user.change_sight(adding = vision_flags)
 
 // Talk ability handled elsewhere
 /obj/item/device/radio/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    user.loc = src
+	//you can jump to station bounced radios too, not just wall intercoms
+    user.forceMove(src.loc)
 
 // Lets you take over a weapon to fire
 /obj/machinery/recharger/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
@@ -281,8 +282,8 @@
 
 // Lets you go back into the APC, and also removes cam stuff
 /obj/machinery/power/apc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-    if(user.loc != src)
-        user.loc = src
+    if(user.loc != src.loc)
+        user.forceMove(src.loc)
         if(user.current_bot)
             user.current_bot.PD_occupant = null
             if(user.current_bot.pAImove_delayer && !user.current_bot.integratedpai)
