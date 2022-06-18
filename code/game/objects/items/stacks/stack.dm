@@ -77,6 +77,8 @@
 
 		if(istype(E, /datum/stack_recipe))
 			var/datum/stack_recipe/R = E
+			if((R.z_up_required && !HasAbove(z)) || (R.z_down_required && !HasBelow(z)))
+				continue
 			var/max_multiplier = round(src.amount / R.req_amount)
 			var/title
 			var/can_build = 1

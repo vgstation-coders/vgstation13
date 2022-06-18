@@ -95,6 +95,8 @@
 		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
 		var/list/L = schematics[cat]
 		for(var/datum/rcd_schematic/C in L)
+			if(((C.flags & RCD_Z_DOWN) && !HasBelow(z)) || ((C.flags & RCD_Z_UP) && !HasAbove(z)))
+				continue
 			dat += C.schematic_list_line(interface)
 
 		dat += "</ul>"
