@@ -272,7 +272,8 @@
 // Lets you take over a bot to move it around
 /obj/machinery/bot/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
     if(user.loc != src)
-        user.loc = src
+		//to_chat(user,"<span class='notice'>You are now inside \the [src]. If it is destroyed, you will instantly die.</span>")// WHY DOES THIS NOT COMPILE AAAAA
+        user.forceMove(src)
         user.current_bot = src
         PD_occupant = user
         if(!pAImove_delayer)
