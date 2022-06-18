@@ -122,7 +122,7 @@
 
 /obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)
 	var/static/list/status_overlays_pressure = list(
-		image('icons/obj/atmos.dmi', "can-o0"),
+		image('icons/obj/atmos.dmi', "can-o0"), //Should be able to use icon as an arg here, but BYOND makes it null for some reason. null actually works fine here though because it uses src.icon by default. But for the sake of clarity we'll keep the explicit path here for now. Same situation with the vintage canisters randomvaults/objects.dm.
 		image('icons/obj/atmos.dmi', "can-o1"),
 		image('icons/obj/atmos.dmi', "can-o2"),
 		image('icons/obj/atmos.dmi', "can-o3")
