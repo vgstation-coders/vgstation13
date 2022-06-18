@@ -45,6 +45,7 @@
 	var/can_leave_cable = FALSE										//For the ability that lets you
 	var/draining = TRUE												//For draining power or not
 	var/move_divide = 4												//For slowing down of above
+	var/powerloss_alerted = 0										//Prevent spam notifying
 
 	//TYPES
 	var/area/controlling_area										// Area controlled from an APC
@@ -117,16 +118,30 @@
 	if(statpanel("Status"))
 		stat(null, text("Charge stored: [charge]W"))
 		stat(null, text("Max charge stored: [maxcharge]W"))
+		
+/mob/living/simple_animal/hostile/pulse_demon/proc/power_lost()
+	health -= health_drain_rate
+	if(!powerloss_alerted)
+		to_chat(src, "You have lost power!")
+		powerloss_alerted = 1
+		//TODO add a sound
+	
+/mob/living/simple_animal/hostile/pulse_demon/proc/power_restored()
+	var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
+	if(health < maxHealth)
+		health += health_to_add
+	if(powerloss_alerted)
+		to_chat(src, "Power restored.")
+		powerloss_alerted = 0
+		//TODO add a sound
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
-	// Add the regen rate unless it puts us over max health, then just cap it off
-	var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
 	if(current_cable)
 		if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
-			health -= health_drain_rate
-		else if(health < maxHealth && draining)
+			power_lost()
+		else
+			power_restored()
 			current_cable.add_load(amount_per_regen, POWER_PRIORITY_BYPASS)
-			health += health_to_add
 	else if(current_power)
 		if(istype(current_power,/obj/machinery/power/battery) && draining)
 			var/obj/machinery/power/battery/current_battery = current_power
@@ -134,11 +149,11 @@
 		else if(istype(current_power,/obj/machinery/power/apc) && draining)
 			var/obj/machinery/power/apc/current_apc = current_power
 			drainAPC(current_apc)
-		if(current_power.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
-			health -= health_drain_rate
-		else if(health < maxHealth && draining)
-			current_cable.add_load(amount_per_regen, POWER_PRIORITY_BYPASS)
-			health += health_to_add
+		if(current_power.avail() < amount_per_regen)
+			power_lost()
+		else
+			power_restored()
+			//current_cable.add_load(amount_per_regen, POWER_PRIORITY_BYPASS) //TODO fix this, current cable is null and runtimes; i have no idea where else to draw power from
 	else if(can_leave_cable) // Health drains if not on cable with leaving ability on
 		health -= health_drain_rate
 	else
@@ -147,7 +162,7 @@
 	standard_damage_overlay_updates()
 	..()
 
-/mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
+/mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)  //TODO fix, this infinite loops somehow if you die in specific circumstances
 	..()
 	var/turf/T = get_turf(src)
 	spark(src,rand(2,4))
@@ -173,7 +188,7 @@
 	if(new_power)
 		current_power = new_power
 		current_cable = null
-		loc = new_power
+		forceMove(new_power.loc)
 		playsound(src,'sound/weapons/electriczap.ogg',50, 1)
 		spark(src,rand(2,4))
 		if(istype(current_power,/obj/machinery/power/apc))
@@ -277,6 +292,8 @@
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
 	return
+	
+//TODO add something to make you unable to be hit by thrown stuff
 
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
@@ -379,12 +396,10 @@
 	if(current_battery.charge <= amount_to_drain)
 		amount_to_drain = current_battery.charge
 	if(maxcharge <= max_can_absorb && charge >= maxcharge)
-		maxcharge += amount_to_drain
-	else if(charge >= maxcharge)
-		amount_to_drain = 0
-	current_battery.charge -= amount_to_drain
+		maxcharge = min(maxcharge + amount_to_drain, max_can_absorb)
 	var/amount_added = min((maxcharge-charge),amount_to_drain)
 	charge += amount_added
+	current_battery.charge -= amount_added
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
@@ -393,24 +408,20 @@
 
 // This too
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
-	// Was too pitiful at normal level, this should now allow a maximum of 400kw from the best power cells, just below 600kw from best SME
-	max_can_absorb = current_apc.cell.maxcharge * 10
+	//max_can_absorb = current_apc.cell.maxcharge * 10 //draining APC batteries has no upper limit due to uhhh galvanic isolation
 	var/amount_to_drain = charge_absorb_amount
 	// Cap conditions
 	if(current_apc.cell.charge <= amount_to_drain)
 		amount_to_drain = current_apc.cell.charge
-	if(maxcharge <= max_can_absorb && charge >= maxcharge)
-		maxcharge += amount_to_drain
-	else if(charge >= maxcharge)
-		amount_to_drain = 0
+	maxcharge += amount_to_drain * 2 //multiplier to balance the pitiful powercells in APCs
+	charge += amount_to_drain * 2
 	current_apc.cell.use(amount_to_drain)
-	var/amount_added = min((maxcharge-charge),amount_to_drain)
-	charge += amount_added
+	
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
 		if(PD)
-			PD.charge_absorbed += amount_added
+			PD.charge_absorbed += amount_to_drain
 
 // Helper for client image managing
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
