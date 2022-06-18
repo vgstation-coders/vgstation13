@@ -562,27 +562,22 @@
 	volume = 50000
 
 /obj/machinery/portable_atmospherics/canister/old/pressure_overlays(var/state)
-	var/overlayiconstate
-	switch(state)
-		if(1)
-			overlayiconstate = "old-o0"
-		if(2)
-			overlayiconstate = "old-o1"
-		if(3)
-			overlayiconstate = "old-o2"
-		if(4)
-			overlayiconstate = "old-o3"
-	return image(icon, overlayiconstate)
+	var/static/list/status_overlays_pressure = list(
+		image(null, "old-o0"),
+		image(null, "old-o1"),
+		image(null, "old-o2"),
+		image(null, "old-o3")
+	)
+
+	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/old/other_overlays(var/state)
-	var/overlayiconstate
-	switch(state)
-		if(1)
-			overlayiconstate = "old-open"
-		if(2)
-			overlayiconstate = "old-connector"
-	return image(icon, overlayiconstate)
+	var/static/list/status_overlays_other = list(
+		image(null, "old-open"),
+		image(null, "old-connector")
+	)
 
+	return status_overlays_other[state]
 
 /obj/machinery/portable_atmospherics/canister/old/process()
 	..()

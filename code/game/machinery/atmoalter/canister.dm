@@ -121,26 +121,22 @@
 	return
 
 /obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)
-	var/overlayiconstate
-	switch(state)
-		if(1)
-			overlayiconstate = "can-o0"
-		if(2)
-			overlayiconstate = "can-o1"
-		if(3)
-			overlayiconstate = "can-o2"
-		if(4)
-			overlayiconstate = "can-o3"
-	return image(icon, overlayiconstate)
+	var/static/list/status_overlays_pressure = list(
+		image(null, "can-o0"),
+		image(null, "can-o1"),
+		image(null, "can-o2"),
+		image(null, "can-o3")
+	)
+
+	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
-	var/overlayiconstate
-	switch(state)
-		if(1)
-			overlayiconstate = "can-open"
-		if(2)
-			overlayiconstate = "can-connector"
-	return image(icon, overlayiconstate)
+	var/static/list/status_overlays_other = list(
+		image(null, "can-open"),
+		image(null, "can-connector")
+	)
+
+	return status_overlays_other[state]
 
 /obj/machinery/portable_atmospherics/canister/proc/check_updates(tank_pressure = 0)
 	if((overlay_status & OVERLAY_HOLDING) != holding)
