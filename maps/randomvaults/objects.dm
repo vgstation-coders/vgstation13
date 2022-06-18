@@ -563,18 +563,18 @@
 
 /obj/machinery/portable_atmospherics/canister/old/pressure_overlays(var/state)
 	var/static/list/status_overlays_pressure = list(
-		image(null, "old-o0"),
-		image(null, "old-o1"),
-		image(null, "old-o2"),
-		image(null, "old-o3")
+		image('icons/obj/atmos.dmi', "old-o0"),
+		image('icons/obj/atmos.dmi', "old-o1"),
+		image('icons/obj/atmos.dmi', "old-o2"),
+		image('icons/obj/atmos.dmi', "old-o3")
 	)
 
 	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/old/other_overlays(var/state)
 	var/static/list/status_overlays_other = list(
-		image(null, "old-open"),
-		image(null, "old-connector")
+		image('icons/obj/atmos.dmi', "old-open"),
+		image('icons/obj/atmos.dmi', "old-connector")
 	)
 
 	return status_overlays_other[state]
