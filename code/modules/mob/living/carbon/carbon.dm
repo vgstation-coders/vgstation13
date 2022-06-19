@@ -689,9 +689,9 @@
 			make_visible(source_define)
 
 /mob/living/carbon/make_visible(var/source_define)	
-	if(!body_alphas || !source_define)
+	if(!source_define)
 		return
-	if(src)
+	if(src && body_alphas)
 		body_alphas.Remove(source_define)
 		regenerate_icons()
 	..()

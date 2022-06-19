@@ -2093,7 +2093,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
-/mob/proc/make_invisible(var/source_define, var/time, var/alpha_value = 1, var/invisibility_value = 0)
+/mob/proc/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
 	if(invisibility || alpha <= 1 || !source_define)
 		return
 	invisibility = invisibility_value
