@@ -122,7 +122,7 @@
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
 			user.unregister_event(/event/moved, src, .proc/mob_moved)
-			user.make_visible(CLOAKINGCLOAK, TRUE)
+			user.make_visible(CLOAKINGCLOAK)
 
 /obj/item/weapon/glow_orb
 	name = "inert stone"
