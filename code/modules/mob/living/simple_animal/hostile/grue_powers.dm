@@ -99,10 +99,10 @@
 /spell/aoe_turf/grue_drainlight/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	playsound(user, 'sound/effects/grue_drainlight.ogg', 50, 1)
 	user.drainlight(TRUE)
-	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_UMBRA)
+	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_GRUE)
 
 /spell/aoe_turf/grue_drainlight/stop_casting(list/targets, mob/living/simple_animal/hostile/grue/user, var/mute=FALSE)
 	user.drainlight(FALSE, mute)
-	playsound(user, null, 50, channel = CHANNEL_UMBRA)
+	playsound(user, null, 50, channel = CHANNEL_GRUE)
 	..()
 

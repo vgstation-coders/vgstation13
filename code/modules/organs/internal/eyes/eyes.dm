@@ -24,7 +24,6 @@
 	if(is_bruised())
 		owner.eye_blurry = max(2, owner.eye_blurry)
 
-
 /datum/organ/internal/eyes/tajaran
 	name = "feline eyes"
 	see_in_dark=9
@@ -52,14 +51,10 @@
 	name = "bird eyes"
 	removed_type = /obj/item/organ/internal/eyes/vox
 
-/datum/organ/internal/eyes/umbra
+/datum/organ/internal/eyes/monstrous
 	name = "monstrous eyes"
-	see_in_dark=8
-	colourmatrix = list(-1, 0, 0,
-						 0,-1, 0,
-						 0, 0,-1,
-						 1, 1, 1)
-	removed_type = /obj/item/organ/internal/eyes/umbra
+	see_in_dark= 9
+	removed_type = /obj/item/organ/internal/eyes/monstrous
 
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"

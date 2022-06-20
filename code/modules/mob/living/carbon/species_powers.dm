@@ -23,7 +23,7 @@
 		if(istype(E))
 			E.dark_mode = !E.dark_mode
 
-/spell/swallow_light	//Umbra
+/spell/swallow_light
 	name = "Swallow Light"
 	abbreviation = "SL"
 	desc = "Create a void of darkness around yourself."
@@ -41,11 +41,11 @@
 /spell/swallow_light/cast(list/targets, mob/user)
 	user.set_light(8,-20)
 	playsound(user, cast_sound, 50, 1)
-	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_UMBRA)
+	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_GRUE)
 
 /spell/swallow_light/stop_casting(list/targets, mob/user)
 	user.set_light(0)
-	playsound(user, null, 50, channel = CHANNEL_UMBRA)
+	playsound(user, null, 50, channel = CHANNEL_GRUE)
 
 /spell/swallow_light/choose_targets(mob/user = usr)
 	var/list/targets = list()
@@ -55,7 +55,7 @@
 /spell/swallow_light/is_valid_target(var/target, mob/user, options)
 	return(target == user)
 
-/spell/shatter_lights	//Umbra
+/spell/shatter_lights
 	name = "Shatter Lights"
 	abbreviation = "ST"
 	desc = "Shatter all nearby lights with a shriek."
