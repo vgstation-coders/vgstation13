@@ -12,7 +12,7 @@
 	desc = "A device that uses station power to create points of magnetic energy."
 	level = 1		// underfloor
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 
 	var/freq = 1449		// radio frequency
@@ -158,10 +158,10 @@
 
 	// Update power usage:
 	if(on)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		active_power_usage = electricity_level*15
 	else
-		use_power = 0
+		use_power = MACHINE_POWER_USE_NONE
 
 
 	// Overload conditions:
@@ -208,7 +208,7 @@
 	icon_state = "airlock_control_standby"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 45
 	var/frequency = 1449
 	var/code = 0

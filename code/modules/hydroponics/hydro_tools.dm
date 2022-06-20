@@ -104,22 +104,22 @@
 		dat += "The mature plant will produce [grown_seed.products.len == 1 ? "fruit" : "[grown_seed.products.len] varieties of fruit"].<br>"
 
 	if(grown_seed.nutrient_consumption == 0)
-		dat += "It does not require nutrient fluid to subsist.<br>"
-	else if(grown_seed.nutrient_consumption < 0.15)
-		dat += "It consumes a small amount of nutrient fluid.<br>"
-	else if(grown_seed.nutrient_consumption > 0.25)
-		dat += "It requires a heavy supply of nutrient fluid.<br>"
+		dat += "It does not require nutrient to subsist.<br>"
+	else if(grown_seed.nutrient_consumption < 2)
+		dat += "It consumes a small amount of nutrient.<br>"
+	else if(grown_seed.nutrient_consumption > 3)
+		dat += "It requires a heavy supply of nutrient.<br>"
 	else
-		dat += "It requires a moderate supply of nutrient fluid.<br>"
+		dat += "It requires a moderate supply of nutrient.<br>"
 
-	if(grown_seed.water_consumption == 0)
-		dat += "It does not require water to subsist.<br>"
-	else if(grown_seed.water_consumption < 1)
-		dat += "It requires very little water.<br>"
-	else if(grown_seed.water_consumption > 5)
-		dat += "It requires a large amount of water.<br>"
+	if(grown_seed.fluid_consumption == 0)
+		dat += "It does not require fluids to subsist.<br>"
+	else if(grown_seed.fluid_consumption < 1)
+		dat += "It requires very little fluids.<br>"
+	else if(grown_seed.fluid_consumption > 5)
+		dat += "It requires a large amount of fluids.<br>"
 	else
-		dat += "It requires a stable supply of water.<br>"
+		dat += "It requires a stable supply of fluids.<br>"
 
 	dat += "It thrives in a temperature of [grown_seed.ideal_heat] Kelvin."
 
@@ -147,19 +147,19 @@
 	else if(grown_seed.light_tolerance < 3)
 		dat += "<br>It is very sensitive to light level shifts."
 
-	if(grown_seed.toxins_tolerance < 3)
+	if(grown_seed.toxin_affinity < 5)
 		dat += "<br>It is highly sensitive to toxins."
-	else if(grown_seed.toxins_tolerance > 7)
-		dat += "<br>It is remarkably resistant to toxins."
+	else if(grown_seed.toxin_affinity > 7)
+		dat += "<br>It has a remarkable affinity for toxins."
 
-	if(grown_seed.pest_tolerance < 3)
+	if(grown_seed.pest_tolerance < 30)
 		dat += "<br>It is highly sensitive to pests."
-	else if(grown_seed.pest_tolerance > 7)
+	else if(grown_seed.pest_tolerance > 70)
 		dat += "<br>It is remarkably resistant to pests."
 
-	if(grown_seed.weed_tolerance < 3)
+	if(grown_seed.weed_tolerance < 30)
 		dat += "<br>It is highly sensitive to weeds."
-	else if(grown_seed.weed_tolerance > 7)
+	else if(grown_seed.weed_tolerance > 70)
 		dat += "<br>It is remarkably resistant to weeds."
 
 	switch(grown_seed.spread)
@@ -236,7 +236,6 @@
 		last_data = ""
 		usr << browse(null, "window=plant_analyzer")
 
-
 /obj/item/device/analyzer/plant_analyzer/proc/print_report(var/mob/living/user) //full credits to Zuhayr
 	if(!last_data)
 		to_chat(user, "<span class='warning'>[bicon(src)] There is no plant scan data to print.</span>")
@@ -253,70 +252,8 @@
 	user.visible_message("<span class='notice'>\The [src] spits out a piece of paper.</span>")
 	return
 
-// *************************************
-// Hydroponics Tools
-// *************************************
-
-/obj/item/weapon/plantspray
-	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	item_state = "spray"
-	flags = FPRINT | NO_ATTACK_MSG
-	slot_flags = SLOT_BELT
-	throwforce = 4
-	w_class = W_CLASS_SMALL
-	throw_speed = 2
-	throw_range = 10
-	var/toxicity = 4
-	var/pest_kill_str = 0
-	var/weed_kill_str = 0
-
-/obj/item/weapon/plantspray/weeds // -- Skie
-
-	name = "weed-spray"
-	desc = "It's a toxic mixture, in spray form, to kill small weeds."
-	icon_state = "weedspray"
-	weed_kill_str = 6
-
-/obj/item/weapon/plantspray/pests
-	name = "pest-spray"
-	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
-	icon_state = "pestspray"
-	pest_kill_str = 6
-
-/obj/item/weapon/plantspray/pests/proc/use(amount = 1)
-	if(pest_kill_str >= amount)
-		pest_kill_str -= amount
-
-		if(pest_kill_str == 0)
-			name = "empty [src]"
-
-		return TRUE
-	return FALSE
-
-/obj/item/weapon/plantspray/pests/old
-	name = "bottle of pestkiller"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-
-/obj/item/weapon/plantspray/pests/old/carbaryl
-	name = "bottle of carbaryl"
-	icon_state = "bottle16"
-	toxicity = 4
-	pest_kill_str = 2
-
-/obj/item/weapon/plantspray/pests/old/lindane
-	name = "bottle of lindane"
-	icon_state = "bottle18"
-	toxicity = 6
-	pest_kill_str = 4
-
-/obj/item/weapon/plantspray/pests/old/phosmet
-	name = "bottle of phosmet"
-	icon_state = "bottle15"
-	toxicity = 8
-	pest_kill_str = 7
-
-/obj/item/weapon/minihoe // -- Numbers
+//Hatchets and things
+/obj/item/weapon/minihoe
 	name = "mini hoe"
 	desc = "It's used for removing weeds or scratching your back."
 	icon = 'icons/obj/weapons.dmi'
@@ -331,44 +268,6 @@
 	w_type = RECYK_METAL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
-
-// *************************************
-// Weedkiller defines for hydroponics
-// *************************************
-
-/obj/item/weedkiller
-	name = "bottle of weedkiller"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	var/toxicity = 0
-	var/weed_kill_str = 0
-
-/obj/item/weedkiller/triclopyr
-	name = "bottle of glyphosate"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	toxicity = 4
-	weed_kill_str = 2
-
-/obj/item/weedkiller/lindane
-	name = "bottle of triclopyr"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle18"
-	flags = FPRINT
-	toxicity = 6
-	weed_kill_str = 4
-
-/obj/item/weedkiller/D24
-	name = "bottle of 2,4-D"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle15"
-	flags = FPRINT
-	toxicity = 8
-	weed_kill_str = 7
-
-//Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
 	name = "hatchet"
 	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
@@ -393,7 +292,6 @@
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
 
-//If it's a hatchet it goes here. I guess
 /obj/item/weapon/hatchet/unathiknife
 	name = "dueling knife"
 	desc = "A length of leather-bound wood studded with razor-sharp teeth. How crude."
@@ -428,20 +326,6 @@
 		for(var/obj/structure/cable/powercreeper/C in range(user,1))
 			C.die()
 		user.delayNextAttack(10)
-		/*var/olddir = user.dir
-		spawn for(var/i=-2, i<=2, i++) //hheeeehehe i'm so dumb
-			user.dir = turn(olddir, 45*i)
-			sleep(2)*/
-	/*if(istype(A, /obj/effect/plantsegment))
-		for(var/obj/effect/plantsegment/B in orange(A,1))
-			if(prob(B.seed.ligneous ? 10 : 80))
-				B.die_off()
-		var/obj/effect/plantsegment/K = A
-		K.die_off()
-	if(istype(A, /turf/simulated/floor))
-		for(var/obj/effect/plantsegment/B in orange(A,1))
-			if(prob(B.seed.ligneous ? 10 : 80))
-				B.die_off()*/
 
 /obj/item/claypot
 	name = "clay pot"
@@ -465,7 +349,6 @@
 		to_chat(user, "<span class='warning'>There is no plant to remove in \the [src].</span>")
 	else
 		to_chat(user, "<span class='warning'>You cannot plant \the [O] in \the [src].</span>")
-
 
 /obj/item/claypot/throw_impact(atom/hit_atom)
 	..()

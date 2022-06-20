@@ -498,7 +498,7 @@ var/global/list/loopModeNames=list(
 		attack_hand(user)
 
 
-/obj/machinery/media/jukebox/emag(mob/user)
+/obj/machinery/media/jukebox/emag_act(mob/user)
 	if(!emagged)
 		if(user)
 			user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")

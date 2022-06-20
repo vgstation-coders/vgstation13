@@ -47,6 +47,7 @@ var/stacking_limit = 90
 	var/list/dead_players = list()
 	var/list/list_observers = list()
 	var/last_time_of_population = 0
+	var/last_time_of_late_shuttle_call = 0
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
@@ -500,7 +501,7 @@ var/stacking_limit = 90
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
 			. = TRUE
-	for (var/datum/dynamic_ruleset/latejoin/non_executed in drafted_rules) 
+	for (var/datum/dynamic_ruleset/latejoin/non_executed in drafted_rules)
 		non_executed.assigned.Cut()
 
 
@@ -658,11 +659,14 @@ var/stacking_limit = 90
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
-	
+
 	if(living_players.len) //if anybody is around and alive in the current round
 		last_time_of_population = world.time
 	else if(last_time_of_population && world.time - last_time_of_population > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without it
 		ticker.station_nolife_cinematic()
+	if(world.time > (7 HOURS + 40 MINUTES) && world.time - last_time_of_late_shuttle_call > 1 HOURS && emergency_shuttle.direction == 0) // 8 hour work shift, with time for shuttle to arrive and leave. If recalled, do every hour
+		shuttle_autocall("Shift due to end")
+		last_time_of_late_shuttle_call = world.time
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0

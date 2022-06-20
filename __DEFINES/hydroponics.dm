@@ -18,6 +18,16 @@
 #define MUTCAT_WEIRD "SomethingWeird"
 #define MUTCAT_WEIRD2 "SomethingBizarre"
 
+//Defines for maximum amounts in the trays
+#define MUTATIONLEVEL_MAX 100
+#define NUTRIENTLEVEL_MAX 100
+#define WATERLEVEL_MAX 100
+#define PESTLEVEL_MAX 100
+#define WEEDLEVEL_MAX 100
+#define TOXINLEVEL_MAX 100
+#define YIELDMOD_MAX 2
+#define MUTATIONMOD_MAX 3
+
 // Xenobotany machines
 #define GENEGUN_MODE_SPLICE 1
 #define GENEGUN_MODE_PURGE 2

@@ -228,9 +228,9 @@
 			new /obj/item/weapon/storage/box/mystery_vial(src)
 
 		if("Killtheking")//weight 50, same as anarchist. We found a witch!
-			new /obj/item/weapon/implant/traitor(src)
-			new /obj/item/weapon/implant/traitor(src)
-			new /obj/item/weapon/implant/traitor(src)
+			new /obj/item/weapon/implanter/traitor(src)
+			new /obj/item/weapon/implanter/traitor(src)
+			new /obj/item/weapon/implanter/traitor(src)
 			new /obj/item/device/flashlight/torch(src)
 			new /obj/item/device/flashlight/torch(src)
 			new /obj/item/device/flashlight/torch(src)

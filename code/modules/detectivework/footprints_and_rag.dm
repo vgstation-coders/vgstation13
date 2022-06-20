@@ -15,10 +15,15 @@
 	w_class = W_CLASS_TINY
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "rag"
+	item_state = new/icon("icon" = 'icons/mob/mask.dmi', "icon_state" = "rag")
 	amount_per_transfer_from_this = 5
 	possible_transfer_amounts = list(5)
 	volume = 5
 	can_be_placed_into = null
+	slot_flags = SLOT_MASK
+	body_parts_covered = MOUTH
+	goes_in_mouth = TRUE
+	is_muzzle = MUZZLE_SOFT
 	var/mob/current_target = null
 
 /obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)
@@ -99,3 +104,25 @@
 						qdel(O)
 			reagents.remove_any(1)
 			user.visible_message("<span class='notice'>[user] finishes wiping down \the [target].</span>", "<span class='notice'>You have finished wiping down \the [target]!</span>")
+
+/obj/item/weapon/reagent_containers/glass/rag/process()
+	//Reagents in the rag gradually get transferred into the wearer. Copied from cigs_lighters.dm.
+	var/mob/living/M = get_holder_of_type(src, /mob/living)
+	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
+		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
+			if(M.reagents.has_any_reagents(LEXORINS) || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+				reagents.remove_any(REAGENTS_METABOLISM)
+			else
+				reagents.reaction(M, INGEST)
+				reagents.trans_to(M, 0.5)
+		else
+			processing_objects.Remove(src)
+
+/obj/item/weapon/reagent_containers/glass/rag/equipped(mob/living/carbon/human/H, equipped_slot)
+	..()
+	if(istype(H) && H.get_item_by_slot(slot_wear_mask) == src && equipped_slot != null && equipped_slot == slot_wear_mask)
+		processing_objects.Add(src)
+
+/obj/item/weapon/reagent_containers/glass/rag/unequipped(mob/living/carbon/human/user, from_slot = null)
+	..()
+	processing_objects.Remove(src)

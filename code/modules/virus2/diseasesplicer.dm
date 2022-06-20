@@ -103,9 +103,9 @@
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(scanning || splicing || burning)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	if(scanning)
 		scanning -= 1

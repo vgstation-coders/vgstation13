@@ -218,11 +218,9 @@
 	nitrogen = 0.01
 
 /turf/simulated/floor/engine/n20
-
-/turf/simulated/floor/engine/n20/New()
-	..()
-	if(src.air)
-		air.adjust_gas(GAS_SLEEPING, 9 * 4000) //NO goddamn idea what those numbers mean, but it's what they were before
+	oxygen = 0
+	nitrogen = 0
+	misc_gases = list(GAS_SLEEPING = 36000)
 
 /turf/simulated/floor/engine/nitrogen
 	name = "nitrogen floor"

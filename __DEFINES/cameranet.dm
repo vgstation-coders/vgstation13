@@ -16,3 +16,4 @@
 #define CAMERANET_SINGULARITY "Singularity"
 #define CAMERANET_RD "RD"
 #define CAMERANET_SPESSTV "Spess.TV" // Sponsored
+#define	CAMERANET_MOTHERSHIPLAB "MOTHERSHIPLAB" //ayy lmao

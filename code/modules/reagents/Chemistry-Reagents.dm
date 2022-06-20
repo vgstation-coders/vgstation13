@@ -206,6 +206,10 @@
 	if(tolerance_increase)
 		M.tolerated_chems[src.id] += tolerance_increase
 
+	M.nutrition += nutriment_factor	//Centralized nutritional values
+	if(M.nutrition < 0) //Prevent from going into negatives
+		M.nutrition = 0
+
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
 
@@ -413,6 +417,42 @@
 		else
 			M.say(pick("Praise the mothership!", "Be productive this quarter, fellow denizens.", "Grey minds are naturally superior.", "I work for the happiness of all greykind.", "Alert the local battalion about any socially unstable behavior."))
 
+/datum/reagent/greygoo // A very powerful mothership neurostimulant and anti hallucinogenic. Toxic for other species and less effective, but still usable
+	name = "Grey Goo"
+	id = GREYGOO
+	description = "A viscous grey substance of unknown origin."
+	reagent_state = REAGENT_STATE_LIQUID
+	dupeable = FALSE
+	color = "#B5B5B5" //rgb: 181, 181, 181
+	custom_metabolism = 0.1
+	pain_resistance = 50
+
+/datum/reagent/greygoo/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+
+	if(holder.has_any_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS)))
+		holder.remove_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS), 5 * REM)
+	if(holder.has_any_reagents(list(MINDBREAKER, SPIRITBREAKER)))
+		holder.remove_reagents(list(MINDBREAKER, SPIRITBREAKER), 3 * REM) // The only chemical that removes spiritbreaker besides adminordrazine
+
+	if(alien && alien == IS_GREY) // A nice brain scrub for greys, cleaning out any damage, hallucinations, confusion, and dizziness
+		if(ishuman(M))
+			M.adjustBrainLoss(-10)
+			M.hallucination = 0
+			M.dizziness = 0
+			M.confused = 0
+			if(prob(5))
+				to_chat(M, "<span class='notice'>[pick("You feel a pleasant equilibrium settle across your mind.","You feel much more focused.","Your mind is clear and lucid.")]</span>")
+	else // Still a pretty effective brain scrub for other species, but cures brain damage half as effectively and causes some toxin damage
+		if(ishuman(M))
+			M.adjustBrainLoss(-5)
+			M.hallucination = 0
+			M.dizziness = 0
+			M.confused = 0
+			M.adjustToxLoss(1)
+
 /datum/reagent/slimejelly
 	name = "Slime Jelly"
 	id = SLIMEJELLY
@@ -597,8 +637,8 @@
 
 /datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.5, bloody=1)
-	T.adjust_water(0.7)
+	T.add_nutrientlevel(5, TRUE)
+	T.add_waterlevel(1)
 
 /datum/reagent/water
 	name = "Water"
@@ -622,32 +662,29 @@
 			M.adjustToxLoss(REM)
 			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
-/datum/reagent/water/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
-
+/datum/reagent/water/reaction_mob(var/mob/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
 		return 1
 
 	//Put out fire
 	if(method == TOUCH)
-		M.ExtinguishMob()
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
+			C.make_visible(INVISIBLESPRAY,FALSE)
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
-		if(ishuman(M) || ismonkey(M))
-			var/mob/living/carbon/C = M
-			if(C.body_alphas[INVISIBLESPRAY])
-				C.body_alphas.Remove(INVISIBLESPRAY)
-				C.regenerate_icons()
-		else if(M.alphas[INVISIBLESPRAY])
-			M.alpha = initial(M.alpha)
-			M.alphas.Remove(INVISIBLESPRAY)
+		else
+			M.make_visible(INVISIBLESPRAY)
+		if(isliving(M))
+			var/mob/living/L = M
+			L.ExtinguishMob()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
-		M.adjustToxLoss(rand(15, 20))
+		var/mob/living/L = M
+		L.adjustToxLoss(rand(15, 20))
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -673,9 +710,9 @@
 				if(screamed)
 					H.audible_scream()
 				if(!splashed)
-					M.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+					H.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
-				M.take_organ_damage(0, min(15, volume * 2))
+				H.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
@@ -698,20 +735,11 @@
 		qdel(hotspot)
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
-
-	var/datum/reagent/self = src
 	if(..())
 		return 1
 
-	if(O.has_been_invisible_sprayed)
-		O.alpha = initial(O.alpha)
-		O.has_been_invisible_sprayed = FALSE
-		if(ismob(O.loc))
-			var/mob/M = O.loc
-			M.regenerate_icons()
-	if(isturf(O.loc))
-		var/turf/T = get_turf(O)
-		self.reaction_turf(T, volume)
+	if(O.invisibility)
+		O.make_visible(INVISIBLESPRAY)
 
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
@@ -742,7 +770,7 @@
 
 /datum/reagent/water/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(1)
+	T.add_waterlevel(1)
 
 /datum/reagent/lube
 	name = "Space Lube"
@@ -845,9 +873,7 @@
 
 /datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins -= 10
-	if(T.seed && !T.dead)
-		T.health += 1
+	T.add_toxinlevel(-10)
 
 /datum/reagent/phalanximine
 	name = "Phalanximine"
@@ -885,7 +911,7 @@
 
 /datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 10
+	T.add_toxinlevel(10)
 
 /datum/reagent/plasticide
 	name = "Plasticide"
@@ -1126,7 +1152,7 @@
 			M.eye_blurry = max(M.eye_blurry, 10) //Eyes get blurry immediately
 		if(5 to INFINITY)
 			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
-				
+
 	//This handles sleeper/cryo vs out of sleeper/cryo behaviors
 	if (istype(M.loc,/obj/machinery/sleeper) || M.bodytemperature < 170)
 		//If the patient is in a sleeper/cryo and it's been at least 20 seconds...
@@ -1236,6 +1262,10 @@
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
 
+/datum/reagent/holywater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.add_waterlevel(1)
+
 /datum/reagent/holysalts
 	name = "Holy Salts"
 	id = HOLYSALTS
@@ -1279,14 +1309,9 @@
 
 /datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-3)
-	T.adjust_nutrient(-0.3)
-	T.toxins += 8
-	T.weedlevel -= 2
-	T.pestlevel -= 1
-	if(T.seed && !T.dead)
-		T.health -= 2
-
+	T.add_waterlevel(-3)
+	T.add_nutrientlevel(-3)
+	T.add_toxinlevel(8)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -1458,11 +1483,7 @@
 
 /datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-0.5)
-	T.toxins += 15
-	T.weedlevel -= 3
-	if(T.seed && !T.dead)
-		T.health -= 1
+	T.add_toxinlevel(8)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -1485,11 +1506,7 @@
 
 /datum/reagent/fluorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-0.5)
-	T.toxins += 25
-	T.weedlevel -= 4
-	if(T.seed && !T.dead)
-		T.health -= 2
+	T.add_toxinlevel(25)
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -1539,9 +1556,7 @@
 
 /datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.1)
-	T.adjust_water(-0.5)
-	T.weedlevel -= 2
+	T.add_nutrientlevel(1)
 
 /datum/reagent/lithium
 	name = "Lithium"
@@ -1568,21 +1583,20 @@
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	sport = SPORTINESS_SUGAR
 	density = 1.59
 	specheatcap = 1.244
 
-/datum/reagent/sugar/on_mob_life(var/mob/living/M)
-	if(..())
-		return 1
-
-	M.nutrition += REM
-
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.1)
-	T.weedlevel += 2
-	T.pestlevel += 2
+	T.add_nutrientlevel(1)
+	T.add_pestlevel(1)
+
+/datum/reagent/sugar/cornsyrup
+	name = "High-fructose corn syrup"
+	id = CORNSYRUP
+	description = "For when sugar needs to be produced on a budget, can become so prevalent that everyone will be made to drink it."
 
 /datum/reagent/caramel
 	name = "Caramel"
@@ -1590,15 +1604,9 @@
 	description = "Created from the removal of water from sugar."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#844b06" //rgb: 132, 75, 6
+	nutriment_factor = 5 * REAGENTS_METABOLISM
 	specheatcap = 1.244
 	density = 1.59
-
-/datum/reagent/caramel/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += (2 * REM)
 
 /datum/reagent/honey
 	name = "Honey"
@@ -1616,7 +1624,6 @@
 		var/mob/living/carbon/human/H = M
 		if(!holder)
 			return
-		H.nutrition += nutriment_factor
 		if(H.getBruteLoss() && prob(60))
 			H.heal_organ_damage(quality, 0)
 		if(H.getFireLoss() && prob(50))
@@ -1736,10 +1743,7 @@
 
 /datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 10
-	T.weedlevel -= 2
-	if(T.seed && !T.dead)
-		T.health -= 4
+	T.add_toxinlevel(10)
 
 /datum/reagent/pacid
 	name = "Polytrinic acid"
@@ -1822,10 +1826,7 @@
 
 /datum/reagent/pacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 20
-	T.weedlevel -= 4
-	if(T.seed && !T.dead)
-		T.health -= 8
+	T.add_toxinlevel(20)
 
 /datum/reagent/glycerol
 	name = "Glycerol"
@@ -1886,7 +1887,6 @@
 				return
 
 /datum/reagent/radium/reaction_turf(var/turf/simulated/T, var/volume)
-
 	if(..())
 		return 1
 
@@ -1896,12 +1896,11 @@
 
 /datum/reagent/radium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.mutation_level += 0.6*T.mutation_mod*custom_plant_metabolism
-	T.toxins += 4
+	T.add_mutationlevel(0.6*T.get_mutationmod()*custom_plant_metabolism)
+	T.add_toxinlevel(4)
 	if(T.seed && !T.dead)
-		T.health -= 1.5
 		if(prob(20))
-			T.mutation_mod += 0.1 //ha ha
+			T.add_mutationmod(0.1)
 
 /datum/reagent/ryetalyn
 	name = "Ryetalyn"
@@ -2038,7 +2037,7 @@
 
 /datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.mutation_level += 1*T.mutation_mod*custom_plant_metabolism
+	T.add_mutationlevel(1*T.get_mutationmod()*custom_plant_metabolism)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -2096,17 +2095,10 @@
 	id = VIRUSFOOD
 	description = "A mixture of water, milk, and oxygen. Virus cells can use this mixture to reproduce."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 2 * REAGENTS_METABOLISM
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#899613" //rgb: 137, 150, 19
 	density = 0.67
 	specheatcap = 4.18
-
-/datum/reagent/virus_food/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += nutriment_factor*REM
 
 /datum/reagent/sterilizine
 	name = "Sterilizine"
@@ -2481,7 +2473,7 @@
 
 /datum/reagent/fertilizer/eznutrient/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
+	T.add_nutrientlevel(10)
 
 /datum/reagent/fertilizer/left4zed
 	name = "Left-4-Zed"
@@ -2493,11 +2485,9 @@
 
 /datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	if(T.seed && !T.dead)
-		T.health -= 0.5
-		if(prob(30))
-			T.mutation_mod += 0.2
+	T.add_nutrientlevel(10)
+	if(prob(30))
+		T.add_mutationmod(0.2)
 
 /datum/reagent/fertilizer/robustharvest
 	name = "Robust Harvest"
@@ -2510,11 +2500,11 @@
 
 /datum/reagent/fertilizer/robustharvest/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.05)
+	T.add_nutrientlevel(1)
 	if(prob(25*custom_plant_metabolism))
-		T.weedlevel += 1
+		T.add_weedlevel(10)
 	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
-		T.pestlevel += 1
+		T.add_pestlevel(10)
 	if(T.seed && !T.dead && !T.seed.immutable)
 		var/chance
 		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
@@ -2562,7 +2552,7 @@
 		var/obj/effect/plantsegment/K = O
 		var/dmg = 200
 		if(K.seed)
-			dmg -= K.seed.toxins_tolerance*20
+			dmg -= 20*K.seed.toxin_affinity
 		for(var/obj/effect/plantsegment/KV in orange(O,1))
 			KV.health -= dmg*0.4
 			KV.try_break()
@@ -2572,19 +2562,13 @@
 		SSplant.add_plant(K)
 	else if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = O
-		if(tray.seed)
-			tray.health -= rand(30,50)
-		tray.pestlevel -= 2
-		tray.weedlevel -= 3
-		tray.toxins += 15
-		tray.check_level_sanity()
+		tray.die()
 	else if(istype(O, /obj/structure/cable/powercreeper))
 		var/obj/structure/cable/powercreeper/PC = O
 		if(prob(1*(PC.powernet.avail/1000))) //The less there is, the hardier it gets
 			PC.die()
 
 /datum/reagent/toxin/plantbgone/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
-
 	if(..())
 		return 1
 	if(iscarbon(M))
@@ -2606,11 +2590,7 @@
 
 /datum/reagent/toxin/plantbgone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 6
-	T.weedlevel -= 8
-	if(T.seed && !T.dead)
-		T.health -= 20
-		T.mutation_mod += 0.1
+	T.die()
 
 /datum/reagent/toxin/insecticide
 	name = "Insecticide"
@@ -2641,9 +2621,7 @@
 
 /datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-
-	T.pestlevel -= 8
-
+	T.add_pestlevel(-8)
 
 /datum/reagent/plasma
 	name = "Plasma"
@@ -2915,13 +2893,12 @@
 
 /datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	T.adjust_water(1)
-	T.weedlevel -= 5
-	T.pestlevel -= 5
-	T.toxins -= 5
-	if(T.seed && !T.dead)
-		T.health += 50
+	T.add_nutrientlevel(1)
+	T.add_waterlevel(1)
+	T.add_weedlevel(5)
+	T.add_pestlevel(5)
+	T.add_toxinlevel(5)
+	T.add_planthealth(50)
 
 //Just for fun
 var/list/procizine_calls = list()
@@ -3553,9 +3530,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins -= 3
-	if(T.seed && !T.dead)
-		T.health += 3
+	T.add_toxinlevel(-3)
+	T.add_planthealth(3)
 
 /datum/reagent/clonexadone
 	name = "Clonexadone"
@@ -3579,9 +3555,9 @@ var/procizine_tolerance = 0
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins -= 5
+	T.add_toxinlevel(-5)
+	T.add_planthealth(5)
 	if(T.seed && !T.dead)
-		T.health += 5
 		var/datum/seed/S = T.seed
 		var/deviation
 		if(T.age > S.maturation)
@@ -3671,7 +3647,6 @@ var/procizine_tolerance = 0
 
 	..()
 
-	M.nutrition += nutriment_factor
 	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
 		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
@@ -4262,9 +4237,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/ammonia/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	if(T.seed && !T.dead)
-		T.health += 0.5
+	T.add_nutrientlevel(10)
+	T.add_planthealth(1)
 
 /datum/reagent/ultraglue
 	name = "Ultra Glue"
@@ -4284,11 +4258,11 @@ var/procizine_tolerance = 0
 
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.1)
+	T.add_nutrientlevel(1)
+	T.add_planthealth(1)
 	if(prob(100*custom_plant_metabolism))
-		T.pestlevel -= 1
+		T.add_pestlevel(-1)
 	if(T.seed && !T.dead)
-		T.health += 0.1
 		if(prob(200*custom_plant_metabolism))
 			T.affect_growth(1)
 		if(!T.seed.immutable)
@@ -4399,13 +4373,10 @@ var/procizine_tolerance = 0
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
 
-	M.nutrition += nutriment_factor	//For hunger and fatness
-
 /datum/reagent/nutriment/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(1)
-	if(T.seed && !T.dead)
-		T.health += 0.5
+	T.add_nutrientlevel(10)
+	T.add_planthealth(1)
 
 //The anti-nutriment
 /datum/reagent/lipozine
@@ -4413,7 +4384,7 @@ var/procizine_tolerance = 0
 	id = LIPOZINE
 	description = "A chemical compound that causes a powerful fat-burning reaction."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 10 * REAGENTS_METABOLISM
+	nutriment_factor = -10 * REAGENTS_METABOLISM
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 2.63
 	specheatcap = 381.13
@@ -4423,10 +4394,7 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition -= nutriment_factor
 	M.overeatduration = 0
-	if(M.nutrition < 0) //Prevent from going into negatives
-		M.nutrition = 0
 
 /datum/reagent/dietine
 	name = "Dietine"
@@ -4619,6 +4587,26 @@ var/procizine_tolerance = 0
 						H.custom_pain("Your chest feels like its on fire!",1)
 						M.audible_scream()
 
+/datum/reagent/polypgelatin
+	name = "Polyp Gelatin"
+	id = POLYPGELATIN
+	description = "An edible gelatinous liquid harvested from a space polyp. It's very mild in flavor, and surprisingly filling."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 10 * REAGENTS_METABOLISM
+	color = "#00FFFF" //rgb: 211, 90, 13
+
+/datum/reagent/polypgelatin/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getFireLoss() && prob(20))
+		M.heal_organ_damage(0, 1)
+
+/datum/reagent/polypgelatin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.add_nutrientlevel(5)
+
 /datum/reagent/egg_yolk
 	name = "Egg Yolk"
 	id = EGG_YOLK
@@ -4656,7 +4644,7 @@ var/procizine_tolerance = 0
 	name = "Gator Mix"
 	id = GATORMIX
 	description = "A vile sludge of mixed carbohydrates. Makes people more alert. May cause kidney damage in large doses."
-	nutriment_factor = 8 * REAGENTS_METABOLISM //get fat, son
+	nutriment_factor = 4 * REAGENTS_METABOLISM //get fat, son
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A41D77"
 	adj_dizzy = -5
@@ -4829,7 +4817,7 @@ var/procizine_tolerance = 0
 /datum/reagent/frostoil
 	name = "Frost Oil"
 	id = FROSTOIL
-	description = "A special oil that noticably chills the body. Extraced from Icepeppers."
+	description = "A special oil that noticeably chills the body. Extraced from Icepeppers."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8BA6E9" //rgb: 139, 166, 233
 	custom_metabolism = FOOD_METABOLISM
@@ -4907,13 +4895,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/sodiumchloride/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_water(-3)
-	T.adjust_nutrient(-0.3)
-	T.toxins += 8
-	T.weedlevel -= 2
-	T.pestlevel -= 1
-	if(T.seed && !T.dead)
-		T.health -= 2
+	T.add_waterlevel(-5)
+	T.add_nutrientlevel(5)
 
 /datum/reagent/creatine
 	name = "Creatine"
@@ -5068,19 +5051,12 @@ var/procizine_tolerance = 0
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 
-/datum/reagent/coco/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += nutriment_factor
-
 /datum/reagent/drink/hot_coco
 	name = "Hot Chocolate"
 	id = HOT_COCO
 	description = "Made with love! And cocoa beans."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 2 * FOOD_METABOLISM
+	nutriment_factor = 6 * REAGENTS_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
 	adj_temp = 5
 	density = 1.2
@@ -5093,8 +5069,6 @@ var/procizine_tolerance = 0
 
 	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
 		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
-
-	M.nutrition += nutriment_factor
 
 /datum/reagent/drink/hot_coco/subhuman
 	id = HOT_COCO_SUBHUMAN
@@ -5110,7 +5084,7 @@ var/procizine_tolerance = 0
 	id = CREAMY_HOT_COCO
 	description = "Never ever let it cool."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 2 * FOOD_METABOLISM
+	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
 	glass_icon_state = "creamyhotchocolate"
 	glass_name = "\improper Creamy Hot Chocolate"
@@ -5223,7 +5197,7 @@ var/procizine_tolerance = 0
 	name = "Sprinkles"
 	id = SPRINKLES
 	description = "Multi-colored little bits of sugar, commonly found on donuts. Loved by cops."
-	nutriment_factor = REAGENTS_METABOLISM
+	nutriment_factor = 0.5 * REAGENTS_METABOLISM
 	color = "#FF00FF" //rgb: 255, 0, 255
 	density = 1.59
 	specheatcap = 1.24
@@ -5233,12 +5207,11 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += REM * nutriment_factor
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
 			H.heal_organ_damage(1, 1)
-			H.nutrition += REM * nutriment_factor //Double nutrition
+			H.nutrition += nutriment_factor //Double nutrition
 
 /*
 //Removed because of meta bullshit. this is why we can't have nice things.
@@ -5274,8 +5247,6 @@ var/procizine_tolerance = 0
 
 	if(..())
 		return 1
-
-	M.nutrition += nutriment_factor
 
 //Now handle corn oil interactions
 	if(!has_had_heart_explode && ishuman(M))
@@ -5338,8 +5309,6 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
-
 /datum/reagent/hot_ramen
 	name = "Hot Ramen"
 	id = HOT_RAMEN
@@ -5355,7 +5324,6 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
 	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
 		M.bodytemperature = min(310, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
@@ -5374,7 +5342,6 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/flour
@@ -5389,7 +5356,6 @@ var/procizine_tolerance = 0
 
 	if(..())
 		return 1
-	M.nutrition += nutriment_factor
 
 /datum/reagent/flour/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -5422,7 +5388,6 @@ var/procizine_tolerance = 0
 
 	if(..())
 		return 1
-	M.nutrition += nutriment_factor
 
 /datum/reagent/pancake_mix/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -5446,8 +5411,6 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
-
 /datum/reagent/cherryjelly
 	name = "Cherry Jelly"
 	id = CHERRYJELLY
@@ -5460,8 +5423,6 @@ var/procizine_tolerance = 0
 
 	if(..())
 		return 1
-
-	M.nutrition += nutriment_factor
 
 /datum/reagent/discount
 	name = "Discount Dan's Special Sauce"
@@ -5605,7 +5566,7 @@ var/procizine_tolerance = 0
 	description = "American Cheese."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-	nutriment_factor = REAGENTS_METABOLISM
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 
 /datum/reagent/bonemarrow
 	name = "Bone Marrow"
@@ -5613,7 +5574,7 @@ var/procizine_tolerance = 0
 	description = "Looks like a skeleton got stuck in the production line."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-	nutriment_factor = REAGENTS_METABOLISM
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
@@ -5700,6 +5661,8 @@ var/procizine_tolerance = 0
 	id = CAFFEINE
 	description = "Caffeine is a common stimulant. It works by making your metabolism faster so it also increases your appetite."
 	color = "#E8E8E8" //rgb: 232, 232, 232
+	// it also makes you hungry because it speeds up your metabolism
+	nutriment_factor = -5 * REAGENTS_METABOLISM
 	density = 1.23
 	specheatcap = 0.89
 	custom_metabolism = 0.1
@@ -5709,14 +5672,12 @@ var/procizine_tolerance = 0
 		return 1
 	// you just ingested pure caffeine so you're gonna get the BIG shakes
 	M.Jitter(10)
-	// it also makes you hungry because it speeds up your metabolism
-	M.nutrition--
 
 /datum/reagent/tendies
 	name = "Tendies"
 	id = TENDIES
 	description = "Gimme gimme chicken tendies, be they crispy or from Wendys."
-	nutriment_factor = REAGENTS_METABOLISM
+	nutriment_factor = 0.5 * REAGENTS_METABOLISM
 	color = "#AB6F0E" //rgb: 171, 111, 14
 	density = 5
 	specheatcap = 1
@@ -5726,12 +5687,11 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += REM * nutriment_factor
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.mind.assigned_role == "Janitor")
 			H.heal_organ_damage(1, 1)
-			H.nutrition += REM * nutriment_factor //Double nutrition
+			H.nutrition += nutriment_factor //Double nutrition
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5743,7 +5703,7 @@ var/procizine_tolerance = 0
 	id = DRINK
 	description = "Uh, some kind of drink."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = REAGENTS_METABOLISM
+	nutriment_factor = 0.5 * REAGENTS_METABOLISM
 	color = "#E78108" //rgb: 231, 129, 8
 	custom_metabolism = FOOD_METABOLISM
 	var/adj_dizzy = 0
@@ -5755,8 +5715,6 @@ var/procizine_tolerance = 0
 
 	if(..())
 		return 1
-
-	M.nutrition += nutriment_factor * REM
 
 	if(adj_dizzy)
 		M.dizziness = max(0,M.dizziness + adj_dizzy)
@@ -5774,7 +5732,7 @@ var/procizine_tolerance = 0
 	id = ORANGEJUICE
 	description = "Both delicious AND rich in Vitamin C. What more do you need?"
 	color = "#E78108" //rgb: 231, 129, 8
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Vitamins! Yay!"
 
 /datum/reagent/drink/orangejuice/on_mob_life(var/mob/living/M)
@@ -5790,7 +5748,7 @@ var/procizine_tolerance = 0
 	id = OPOKJUICE
 	description = "A fruit from the mothership pulped into bitter juice, with a very slight undertone of sweetness."
 	color = "#FF9191" //rgb: 255, 145, 145
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Vitamins from the mothership!"
 
 /datum/reagent/drink/opokjuice/on_mob_life(var/mob/living/M)
@@ -5806,7 +5764,7 @@ var/procizine_tolerance = 0
 	id = TOMATOJUICE
 	description = "Tomatoes made into juice. What a waste of good tomatoes, huh?"
 	color = "#731008" //rgb: 115, 16, 8
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Are you sure this is tomato juice?"
 	mug_desc = "Are you sure this is tomato juice?"
 
@@ -5824,7 +5782,7 @@ var/procizine_tolerance = 0
 	description = "The sweet-sour juice of limes."
 	color = "#99bb43" //rgb: 153, 187, 67
 	alpha = 170
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "A glass of sweet-sour lime juice."
 
 /datum/reagent/drink/limejuice/on_mob_life(var/mob/living/M)
@@ -5840,7 +5798,7 @@ var/procizine_tolerance = 0
 	id = CARROTJUICE
 	description = "It's like a carrot, but less crunchy."
 	color = "#FF8820" //rgb: 255, 136, 32
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "It's like a carrot, but less crunchy."
 
 /datum/reagent/drink/carrotjuice/on_mob_life(var/mob/living/M)
@@ -5860,21 +5818,21 @@ var/procizine_tolerance = 0
 	id = GRAPEJUICE
 	description = "Freshly squeezed juice from red grapes. Quite sweet."
 	color = "#512284" //rgb: 81, 34, 132
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
 /datum/reagent/drink/ggrapejuice
 	name = "Green Grape Juice"
 	id = GGRAPEJUICE
 	description = "Freshly squeezed juice from green grapes. Smoothly sweet."
 	color = "#B79E42" //rgb: 183, 158, 66
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
 /datum/reagent/drink/berryjuice
 	name = "Berry Juice"
 	id = BERRYJUICE
 	description = "A delicious blend of several different kinds of berries."
 	color = "#660099" //rgb: 102, 0, 153
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Berry juice. Or maybe it's jam. Who cares?"
 
 /datum/reagent/drink/poisonberryjuice
@@ -5897,7 +5855,7 @@ var/procizine_tolerance = 0
 	description = "The delicious juice of a watermelon."
 	color = "#EF3520" //rgb: 239, 53, 32
 	alpha = 240
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
 /datum/reagent/drink/applejuice
 	name = "Apple Juice"
@@ -5905,7 +5863,7 @@ var/procizine_tolerance = 0
 	description = "Tastes of New York."
 	color = "#FDAD01" //rgb: 253, 173, 1
 	alpha = 150
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
 /datum/reagent/drink/lemonjuice
 	name = "Lemon Juice"
@@ -5913,7 +5871,7 @@ var/procizine_tolerance = 0
 	description = "This juice is VERY sour."
 	color = "#fff690" //rgb: 255, 246, 144
 	alpha = 170
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Sour..."
 
 /datum/reagent/drink/banana
@@ -5922,7 +5880,7 @@ var/procizine_tolerance = 0
 	description = "The raw essence of a banana. HONK"
 	color = "#FFE777" //rgb: 255, 230, 119
 	alpha = 255
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 
 /datum/reagent/drink/nothing
 	name = "Nothing"
@@ -5950,14 +5908,14 @@ var/procizine_tolerance = 0
 	name = "Potato Juice"
 	id = POTATO
 	description = "Juice of the potato. Bleh."
-	nutriment_factor = 5 * FOOD_METABOLISM
+	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 
 /datum/reagent/drink/plumphjuice
 	name = "Plump Helmet Juice"
 	id = PLUMPHJUICE
 	description = "Eeeewwwww."
-	nutriment_factor = 5 * FOOD_METABOLISM
+	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#A28691" //rgb: 162, 134, 145
 	glass_name = "glass of plump helmet wine"
 	glass_desc = "An absolute staple to get through a day's work."
@@ -5969,7 +5927,7 @@ var/procizine_tolerance = 0
 	description = "An opaque white liquid produced by the mammary glands of mammals."
 	color = "#DFDFDF" //rgb: 223, 223, 223
 	alpha = 240
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "White and nutritious goodness!"
 
 /datum/reagent/drink/milk/on_mob_life(var/mob/living/M)
@@ -5988,8 +5946,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/milk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.1)
-	T.adjust_water(0.9)
+	T.add_nutrientlevel(1)
+	T.add_waterlevel(1)
 
 
 /datum/reagent/drink/milk/mommimilk
@@ -5997,7 +5955,7 @@ var/procizine_tolerance = 0
 	id = MOMMIMILK
 	description = "Milk from a MoMMI, but how is it produced?"
 	color = "#eaeaea" //rgb(234, 234, 234)
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Artificially white nutrition!"
 
 
@@ -6007,16 +5965,15 @@ var/procizine_tolerance = 0
 	M.adjustToxLoss(1)
 /datum/reagent/drink/milk/mommimilk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += 10
-	if(T.seed && !T.dead)
-		T.health -= 20
+	T.add_toxinlevel(10)
+	T.add_planthealth(-20)
 
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
 	id = SOYMILK
 	description = "An opaque white liquid made from soybeans."
 	color = "#e8e8d8" //rgb: 232, 232, 216
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "White and nutritious soy goodness!"
 
 /datum/reagent/drink/milk/cream
@@ -6024,7 +5981,7 @@ var/procizine_tolerance = 0
 	id = CREAM
 	description = "The fatty, still liquid part of milk. Why don't you mix this with sum scotch, eh?"
 	color = "#DFD7AF" //rgb: 223, 215, 175
-	nutriment_factor = 5 * REAGENTS_METABOLISM
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	density = 2.37
 	specheatcap = 1.38
 	glass_desc = "Like milk, but thicker."
@@ -6190,10 +6147,9 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.1)
-	T.adjust_water(1)
-	if(T.seed && !T.dead)
-		T.health += 0.1
+	T.add_nutrientlevel(1)
+	T.add_waterlevel(1)
+	T.add_planthealth(1)
 
 /datum/reagent/drink/cold/ice
 	name = "Ice"
@@ -6444,8 +6400,6 @@ var/procizine_tolerance = 0
 	//Sober block makes it more difficult to get drunk
 	var/sober_str =! (M_SOBER in M.mutations) ? 1 : 2
 
-	M.nutrition += REM*nutriment_factor
-
 	tick /= sober_str
 
 	//Make all the ethanol-based beverages work together
@@ -6503,7 +6457,7 @@ var/procizine_tolerance = 0
 	name = "Beer"
 	id = BEER
 	description = "An alcoholic beverage made from malted grains, hops, yeast, and water."
-	nutriment_factor = 2 * FOOD_METABOLISM
+	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
@@ -6517,8 +6471,8 @@ var/procizine_tolerance = 0
 
 /datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.adjust_nutrient(0.25)
-	T.adjust_water(0.7)
+	T.add_nutrientlevel(1)
+	T.add_waterlevel(1)
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"
@@ -7123,7 +7077,7 @@ var/procizine_tolerance = 0
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.mind.GetRole(NINJA))
-			M.nutrition += nutriment_factor
+			M.nutrition += nutriment_factor //double of nothing is still... nothing. Change in future PR.
 			if(M.getOxyLoss() && prob(50))
 				M.adjustOxyLoss(-2)
 			if(M.getBruteLoss() && prob(60))
@@ -7256,7 +7210,6 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
 	M.drowsyness = max(0, M.drowsyness - 7)
 	M.Jitter(1)
 
@@ -7472,7 +7425,7 @@ var/procizine_tolerance = 0
 	id = DOCTORSDELIGHT
 	description = "A gulp a day keeps the MediBot away. That's what they say, at least."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = FOOD_METABOLISM
+	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#BA7DBA" //rgb: 73, 49, 73
 	glass_icon_state = "doctorsdelightglass"
 	glass_name = "\improper Doctor's Delight"
@@ -7483,7 +7436,6 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
 	if(M.getOxyLoss())
 		M.adjustOxyLoss(-2)
 	if(M.getBruteLoss())
@@ -8102,7 +8054,7 @@ var/procizine_tolerance = 0
 	name = "Banana Honk"
 	id = BANANAHONK
 	description = "A non-alcoholic drink of banana juice, milk cream and sugar."
-	nutriment_factor = FOOD_METABOLISM
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "bananahonkglass"
 	glass_name = "\improper Banana Honk"
@@ -8112,7 +8064,7 @@ var/procizine_tolerance = 0
 	name = "Silencer"
 	id = SILENCER
 	description = "Some say this is the diluted blood of the mime."
-	nutriment_factor = FOOD_METABOLISM
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "silencerglass"
 	glass_name = "\improper Silencer"
@@ -8195,7 +8147,7 @@ var/procizine_tolerance = 0
 	name = "Driest Martini"
 	id = DRIESTMARTINI
 	description = "Only for the experienced. You think you see sand floating in the glass."
-	nutriment_factor = FOOD_METABOLISM
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#2E6671" //rgb: 46, 102, 113
 	glass_icon_state = "driestmartiniglass"
 	glass_name = "\improper Driest Martini"
@@ -8542,7 +8494,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/drink/coffee/tonio
 	name = "Tonio"
 	id = TONIO
-	nutriment_factor = FOOD_METABOLISM
+	nutriment_factor = 3 * REAGENTS_METABOLISM
 	description = "This coffee seems uncannily good."
 	mug_icon_state = "tonio"
 	mug_name = "\improper Tonio"
@@ -8563,7 +8515,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		holder.remove_reagent(reagent.id, 3 * REM)
 
 	M.adjustToxLoss(-2 * REM)
-	M.nutrition += nutriment_factor
 
 	if(M.getBruteLoss() && prob(20))
 		M.heal_organ_damage(1, 0)
@@ -8592,7 +8543,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Passione"
 	id = PASSIONE
 	description = "Rejuvenating!"
-	nutriment_factor = 3 * REAGENTS_METABOLISM //because honey
+	nutriment_factor = 4.5 * REAGENTS_METABOLISM //because honey
 	mug_icon_state = "passione"
 	mug_name = "\improper Passione"
 	mug_desc = "Sometimes referred to as a 'Vento Aureo'."
@@ -8605,7 +8556,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(!holder)
 			return
 		H.sleeping = 0
-		H.nutrition += nutriment_factor //honey doing it's work
 		if(H.getBruteLoss() && prob(60))
 			H.heal_organ_damage(1, 0)
 		if(H.getFireLoss() && prob(50))
@@ -8632,6 +8582,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Lifeline"
 	id = MEDCOFFEE
 	description = "Tastes like it's got iron in it or something."
+	nutriment_factor = 1.5 * REAGENTS_METABOLISM //because medical healing?
 	mug_icon_state = "medcoffee"
 	mug_name = "\improper Lifeline"
 	mug_desc = "Some days, the only thing that keeps you going is cryo and caffeine."
@@ -8641,7 +8592,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
 	if(M.getOxyLoss() && prob(25))
 		M.adjustOxyLoss(-1)
 	if(M.getBruteLoss() && prob(30))
@@ -8823,7 +8773,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	M.nutrition += nutriment_factor
 	M.adjustOxyLoss(-2 * REM)
 	M.adjustToxLoss(-2 * REM)
 	M.adjustBruteLoss(-3 * REM)
@@ -9242,10 +9191,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(holder.has_reagent(LIPOZINE))
 		holder.remove_reagent(LIPOZINE, 50)
 
-	M.nutrition += nutriment_factor
-
-
-
 /datum/reagent/saltwater
 	name = "Salt Water"
 	id = SALTWATER
@@ -9514,7 +9459,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	nutriment_factor = 45 * REAGENTS_METABOLISM //This is maybe a little much
+	nutriment_factor = 0 //Custom nutrition effect on_mob_life, scales on volume
 	sport = 0 //This will never come up but adding it made me smile
 	density = 3 //He DENSE
 	specheatcap = 0.55536
@@ -9540,7 +9485,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		else
 			playsound(H, pick(chubbysound), 100, 1)
 			H.overeatduration += 10 * volume
-			H.nutrition += 10 * volume
+			H.nutrition += 10 * volume //to compare, the holy liquid butter would be 5 here
 		if(H.nutrition > 750)
 			if(prob(volume) && heart && !heart.robotic)
 				to_chat(H, "<span class='danger'>Your heart just can't take it anymore!</span>")
@@ -9714,6 +9659,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Hyperactivity Incense"
 	id = INCENSE_NOVAFLOWERS
 	description = "This fragrance helps you focus and pull into your energy reserves to move quickly."
+	nutriment_factor = -5 * REAGENTS_METABOLISM
 	custom_metabolism = 0.15
 
 /datum/reagent/incense/novaflowers/on_mob_life(var/mob/living/M)
@@ -9721,7 +9667,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(holder.get_reagent_amount(HYPERZINE) < 2)
 		holder.add_reagent(HYPERZINE, 0.5)
-	M.nutrition--
 
 /datum/reagent/incense/banana
 	name = "Banana Incense"
@@ -9853,3 +9798,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
 		if(E && !istype(E, /datum/organ/internal/eyes/umbra) && !E.robotic) //doesn't harm umbra or robotic eyes
 			E.damage += 0.5
+
+/datum/reagent/bumcivilian
+	name = "Bumcivilian"
+	id = BUMCIVILIAN
+	description = "The most basic form of iron, also known as 'brown iron'. It has the unusual property of absorbing sound particles when it is produced by reactions with sulfuric acid."
+	color = "#786228" //120, 98, 40
+	specheatcap = 0.45
+	density = 7.874
+	var/mute_duration = 300 //30 seconds

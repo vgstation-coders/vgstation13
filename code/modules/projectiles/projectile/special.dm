@@ -370,14 +370,14 @@
 /obj/item/projectile/fire_breath/straight
 	fire_blast_type = /obj/effect/fire_blast/no_spread
 
-/obj/item/projectile/fire_breath/New(turf/T, var/direction, var/F_Dam, var/P, var/T, var/F_Dur)
+/obj/item/projectile/fire_breath/New(turf/T, var/direction, var/F_Dam, var/P, var/Temp, var/F_Dur)
 	..(T,direction)
 	if(F_Dam)
 		fire_damage = F_Dam
 	if(P)
 		pressure = P
-	if(T)
-		temperature = T
+	if(Temp)
+		temperature = Temp
 	if(F_Dur)
 		fire_duration = F_Dur
 

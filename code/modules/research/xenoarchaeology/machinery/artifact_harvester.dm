@@ -8,7 +8,7 @@
 	density = 1
 	idle_power_usage = 50
 	active_power_usage = 750
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	var/harvesting = 0
 	var/obj/item/weapon/anobattery/inserted_battery
 	var/obj/machinery/artifact/cur_artifact
@@ -139,7 +139,7 @@
 		//check if we've finished
 		if(inserted_battery.stored_charge >= inserted_battery.capacity)
 			inserted_battery.stored_charge = inserted_battery.capacity //Prevents overcharging
-			use_power = 1
+			use_power = MACHINE_POWER_USE_IDLE
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
@@ -162,7 +162,7 @@
 
 		//if there's no charge left, finish
 		if(inserted_battery.stored_charge <= 0)
-			use_power = 1
+			use_power = MACHINE_POWER_USE_IDLE
 			inserted_battery.stored_charge = 0
 			harvesting = 0
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
@@ -196,7 +196,7 @@
 				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
 					chargerate = isolated_primary.chargelevelmax / isolated_primary.effectrange
 					harvesting = 1
-					use_power = 2
+					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
@@ -245,7 +245,7 @@
 				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
 					chargerate = isolated_secondary.chargelevelmax / isolated_secondary.effectrange
 					harvesting = 1
-					use_power = 2
+					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
@@ -368,7 +368,7 @@
 					if(!inserted_battery.battery_effect.activated)
 						inserted_battery.battery_effect.ToggleActivate(0)
 					harvesting = -1
-					use_power = 2
+					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()
 					var/message = "<b>[src]</b> states, \"Warning, battery charge dump commencing.\""
 					src.visible_message(message)

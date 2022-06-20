@@ -131,9 +131,9 @@
 	//mask
 	if(wear_mask && !(slot_wear_mask in obscured) && wear_mask.is_visible())
 		if(wear_mask.blood_DNA && wear_mask.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(wear_mask)] [wear_mask.gender==PLURAL?"some":"a"] blood-stained [wear_mask.name] on [t_his] face! [format_examine(wear_mask, "Examine")][wear_mask.description_accessories()]</span>\n"
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(wear_mask)] [wear_mask.gender==PLURAL?"some":"a"] blood-stained [wear_mask.name] [wear_mask.goes_in_mouth ? "in" : "on"] [t_his] [wear_mask.goes_in_mouth ? "mouth" : "face"]! [format_examine(wear_mask, "Examine")][wear_mask.description_accessories()]</span>\n"
 		else
-			msg += "[t_He] [t_has] [bicon(wear_mask)] \a [wear_mask] on [t_his] face. [format_examine(wear_mask, "Examine")][wear_mask.description_accessories()]\n"
+			msg += "[t_He] [t_has] [bicon(wear_mask)] \a [wear_mask] [wear_mask.goes_in_mouth ? "in" : "on"] [t_his] [wear_mask.goes_in_mouth ? "mouth" : "face"]. [format_examine(wear_mask, "Examine")][wear_mask.description_accessories()]\n"
 
 	//eyes
 	if(glasses && !(slot_glasses in obscured) && glasses.is_visible())

@@ -8,7 +8,7 @@ var/list/camera_names=list()
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "camera"
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 5
 	active_power_usage = 10
 	plane = ABOVE_HUMAN_PLANE
@@ -315,16 +315,16 @@ var/list/camera_messages = list()
 		add_fingerprint(user)
 		user.delayNextAttack(8)
 		if(user.a_intent == I_HELP)
-			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
+			user.visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>", "<span class='notice'>You gently tap [src] with [W].</span>")
 			return
 		W.on_attack(src, user)
 		if(W.force < CAMERA_MIN_WEAPON_DAMAGE)
 			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
-			visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>")
+			user.visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>", "<span class='warning'>You hit [src] with [W]. It's not very effective.</span>")
 			return
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
-		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
+		user.visible_message("<span class='danger'>[user] [pick(W.attack_verb)] [src] with [W].</span>", "<span class='warning'>You [shift_verb_tense(pick(W.attack_verb))] [src] with [W].</span>")
 		take_damage(W.force)
 
 /obj/machinery/camera/damaged_updates()
@@ -484,7 +484,7 @@ var/list/camera_messages = list()
 	name = "arena camera"
 	desc = "A camera anchored to the floor, designed to survive hits and explosions of any size. What's it made of anyway?"
 	icon_state = "camerarena"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
 	layer = DECAL_LAYER

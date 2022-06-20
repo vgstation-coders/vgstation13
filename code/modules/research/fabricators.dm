@@ -76,7 +76,7 @@
 		T += Ml.rating - 1
 	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
-/obj/machinery/r_n_d/fabricator/emag()
+/obj/machinery/r_n_d/fabricator/emag_act()
 	sleep()
 	if(!(research_flags & ACCESS_EMAG))
 		return
@@ -323,11 +323,11 @@
 	icon_state = "[base_state]_ani"
 	if(start_end_anims)
 		flick("[base_state]_start",src)
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	icon_state = base_state
 	if(start_end_anims)
 		flick("[base_state]_end",src)

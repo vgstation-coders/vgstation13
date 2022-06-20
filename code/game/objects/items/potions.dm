@@ -127,10 +127,8 @@
 /obj/item/potion/invisibility/imbibe_effect(mob/user)
 	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
 
-/obj/item/potion/invisibility/impact_atom(atom/target)
-	if(ismovable(target))
-		var/atom/movable/AM = target
-		AM.make_invisible(INVISIBLEPOTION, time)
+/obj/item/potion/invisibility/impact_atom(obj/target)
+	target.make_invisible(INVISIBLEPOTION, time, 1, INVISIBILITY_MAXIMUM)
 
 /obj/item/potion/invisibility/major
 	name = "potion of major invisibility"
@@ -241,18 +239,16 @@
 	return ishuman(user)
 
 /obj/item/potion/zombie/imbibe_effect(mob/living/carbon/human/user)
-	user.become_zombie_after_death = 2
+	user.become_zombie = TRUE
 
 /obj/item/potion/zombie/impact_atom(atom/target)
 	var/mob/M = get_last_player_touched()
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
 		if(H.isDeadorDying())
-			if(isjusthuman(H))
-				H.make_zombie(M)
-			else
-				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)
-				H.gib()
+			H.zombify(M)
+		else
+			H.become_zombie = TRUE
 
 /obj/item/potion/fullness
 	name = "potion of fullness"
@@ -269,18 +265,13 @@
 	name = "potion of reduced visibility"
 	desc = "Become slightly transparent for ten minutes."
 	icon_state = "blue_minibottle"
+	var/time = 10 MINUTES
 
 /obj/item/potion/transparency/imbibe_effect(mob/user)
-	user.alphas[TRANSPARENCYPOTION] = 125
-	spawn(10 MINUTES)
-		user.alphas -= TRANSPARENCYPOTION
+	user.make_invisible(TRANSPARENCYPOTION, time, TRUE, 125)
 
-/obj/item/potion/transparency/impact_atom(atom/target)
-	if(!ismovable(target))
-		return
-	target.alpha = 125
-	spawn(10 MINUTES)
-		target.alpha = initial(target.alpha)
+/obj/item/potion/transparency/impact_atom(obj/target)
+	target.make_invisible(TRANSPARENCYPOTION, time, 125)
 
 /obj/item/potion/paralysis
 	name = "potion of minor paralysis"

@@ -125,7 +125,7 @@
 					if(R.lockdown)
 						to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Slaved Cyborg [R.name] locked down. Signal traced to [get_area(src).name]</b></span>")
 						R.connected_ai << 'sound/machines/twobeep.ogg'
-					else 
+					else
 						to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] The lockdown on cyborg [R.name] has been lifted. Signal traced to [get_area(src).name]</b></span>")
 						R.connected_ai << 'sound/misc/notice2.ogg'
 			else
@@ -199,7 +199,7 @@
 			to_chat(R, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Emergency Self-Destruct Sequence Halted.</b></span>")
 			R << 'sound/misc/notice2.ogg'
 
-/obj/machinery/computer/robotics/emag(mob/user)
+/obj/machinery/computer/robotics/emag_act(mob/user)
 	..()
 	req_access = list()
 	if(user)

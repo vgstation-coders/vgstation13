@@ -410,7 +410,7 @@
 		airflow_speed = 0
 		airflow_time = 0
 		if(src.throwing)
-			src.throw_impact(Obstacle)
+			src.throw_impact(Obstacle, null, usr) // TODO: Find a way to pass the speed. Or remove the speed parameter.
 			src.throwing = 0
 		if(Obstacle)
 			Obstacle.Bumped(src)
@@ -1100,9 +1100,6 @@
 			sleep(3)
 			for(var/client/C in clients)
 				C.images -= hitmarker
-
-/atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
-	return invisibility || alpha <= 1	//already invisible
 
 /atom/movable/proc/break_all_tethers()	//Breaks all tethers
 	if(current_tethers)

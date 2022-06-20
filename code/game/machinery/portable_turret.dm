@@ -178,7 +178,7 @@ Status: []<BR>"},
 				src.icon_state = "[lasercolor]grey_target_prism"
 				stat |= NOPOWER
 
-/obj/machinery/turret/portable/emag(mob/user)
+/obj/machinery/turret/portable/emag_act(mob/user)
 	if(!emagged)
 		if(user)
 			to_chat(user, "<span class='warning'>You short out [src]'s threat assessment circuits.</span>")
@@ -340,7 +340,7 @@ Status: []<BR>"},
 	lastfired = 0
 	if(attacked)
 		attacked--
-	
+
 	..()
 
 /obj/machinery/turret/portable/check_target(var/atom/movable/T as mob|obj)
@@ -372,7 +372,7 @@ Status: []<BR>"},
 				if(isslime(L) && !(check_anomalies || attacked))
 					return 0
 
-				return 1 // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee		
+				return 1 // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 	return 0
 
 /obj/machinery/turret/portable/get_new_target()

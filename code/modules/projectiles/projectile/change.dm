@@ -55,6 +55,51 @@
 			to_chat(new_mob, "<B>Your form morphs into that of a [(istype(H) && H.species && H.species.name) ? H.species.name : randomize].</B>")
 			return new_mob
 
+/obj/item/projectile/polymorph
+	name = "bolt of polymorph"
+	icon_state = "ice_1"
+	damage = 0
+	nodamage = TRUE
+	flag = "energy"
+	fire_sound = 'sound/weapons/radgun.ogg'
+	var/status = MAJOR
+
+/obj/item/projectile/polymorph/on_hit(var/atom/hit)
+	if(hit == firer)
+		var/mob/living/M = new /mob/living/simple_animal/pollywog(firer.loc)
+		M.ckey = firer.ckey
+		firer.Premorph()
+		qdel(firer)
+		return
+	var/stat = status
+	bullet_die()
+	polymorph(hit,stat)
+
+/obj/item/projectile/polymorph/proc/polymorph(var/mob/living/M, var/status)
+	if(istype(M) && M.stat != DEAD)
+		if(ismanifested(M))
+			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
+			return
+
+		var/list/available_mobs = list()
+		var/time_to_untransmog = 0
+		var/kill = FALSE
+		switch(status)
+			if(MINOR)
+				available_mobs = minor_mobs - (boss_mobs+blacklisted_mobs)
+				time_to_untransmog = rand(10 SECONDS, 20 SECONDS)
+			if(MAJOR)
+				available_mobs = major_mobs - (boss_mobs+blacklisted_mobs)
+				time_to_untransmog = rand(16 SECONDS, 32 SECONDS)
+			if(DEFECTIVE)
+				available_mobs = (major_mobs + corrupt_mobs) - (boss_mobs+blacklisted_mobs)
+				kill = TRUE
+
+		M.transmogrify(pick(available_mobs), kill_on_death = kill)
+		if(time_to_untransmog)
+			spawn(time_to_untransmog)
+				M.completely_untransmogrify()
+
 /obj/item/projectile/zwartepiet
 	name = "bolt of zwarte piet"
 	icon_state = "ice_1"

@@ -198,10 +198,11 @@
 	update_icon()
 
 /obj/item/gum/Crossed(mob/living/carbon/human/AM)
+	if(..())
+		return 1
 	if(chewed && !locked_to)
 		if(istype(AM) && AM.on_foot())
 			gum_shoes(AM)
-	..()
 
 /obj/item/gum/proc/gum_shoes(mob/living/carbon/human/H)	//make this explode
 	if(!istype(H))

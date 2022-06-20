@@ -5,7 +5,7 @@
 	icon_state = "mw"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 100
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
@@ -74,7 +74,7 @@
 				acceptable_items |= item
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
-		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)   
+		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)
 /*******************
 *   Part Upgrades
 ********************/
@@ -241,7 +241,7 @@
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/microwave/emag(mob/user)
+/obj/machinery/microwave/emag_act(mob/user)
 	..()
 	emagged = 1
 	to_chat(user, "<span class='warning'>You mess up \the [src]'s circuitry.</span>")
@@ -366,7 +366,7 @@
 *   Microwave Menu Handling/Cooking
 ************************************/
 
-/obj/machinery/microwave/proc/cook()
+/obj/machinery/microwave/proc/cook(mob/user)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(operating)
@@ -461,7 +461,7 @@
 			cooked.forceMove(src.loc)
 			return
 		if(!emagged)
-			cooked = recipe.make_food(src)
+			cooked = recipe.make_food(src,user)
 		else
 			cooked = fail()
 		stop()
@@ -581,7 +581,7 @@
 	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
-		cook() //Cook checks for power, brokenness, and contents internally
+		cook(user) //Cook checks for power, brokenness, and contents internally
 		return
 	return ..()
 
@@ -606,7 +606,7 @@
 
 		switch(task)
 			if("Cook")
-				cook()
+				cook(user)
 			if("Eject Ingredients")
 				dispose()
 			if("Toggle Reagent Disposal")
@@ -635,7 +635,7 @@
 
 	switch(href_list["action"])
 		if ("cook")
-			cook()
+			cook(usr)
 
 		if ("dispose")
 			dispose()

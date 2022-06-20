@@ -9,7 +9,7 @@
 	power_channel = ENVIRON
 	var/frequency = 1439
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4
 	machine_flags = MULTITOOL_MENU

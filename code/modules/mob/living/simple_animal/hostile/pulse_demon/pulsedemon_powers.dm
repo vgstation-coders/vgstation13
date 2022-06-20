@@ -377,12 +377,6 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         if(PD.controlling_area == get_area(target))
-            // For some reason there's 2 emag functions
-            if(istype(target,/obj/machinery))
-                var/obj/machinery/M = target
-                M.emag(PD)
-                ..()
-                return
             target.emag_act(PD)
             ..()
         // Only works in an APC

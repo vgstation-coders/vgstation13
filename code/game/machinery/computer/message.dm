@@ -44,7 +44,7 @@
 	..()
 	return
 
-/obj/machinery/computer/message_monitor/emag(mob/user as mob)
+/obj/machinery/computer/message_monitor/emag_act(mob/user as mob)
 	// Will create sparks and print out the console's password. You will then have to wait a while for the console to be back online.
 // It'll take more time if there's more characters in the password..
 	if(!emagged)

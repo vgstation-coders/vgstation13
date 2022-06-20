@@ -122,6 +122,11 @@ var/list/headset_modes = list(
 	if(!message)
 		return
 
+	//Muting
+	var/turf/T = get_turf(src)
+	if(T.mute_time > world.time)
+		return
+
 	var/message_mode = get_message_mode(message)
 	if(silent)
 		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
@@ -163,6 +168,7 @@ var/list/headset_modes = list(
 		speech.language = parse_language(speech.message)
 		say_testing(src, "Getting speaking language, got [istype(speech.language) ? speech.language.name : "null"]")
 	if(istype(speech.language))
+
 #ifdef SAY_DEBUG
 		var/oldmsg = message
 #endif
@@ -180,6 +186,17 @@ var/list/headset_modes = list(
 		speech.language = get_default_language()
 		say_testing(src, "Didnt have a language, get_default_language() gave us [speech.language ? speech.language.name : "null"]")
 	speech.message = trim_left(speech.message)
+
+	//Handle speech muffling by muzzles.
+	if(!(speech?.language?.flags & NONORAL))
+		var/mob/living/carbon/C = src
+		switch(C.is_muzzled())
+			if(MUZZLE_SOFT)
+				speech.message = muffle(speech.message)
+			if(MUZZLE_HARD)
+				qdel(speech)
+				return
+
 	if(handle_inherent_channels(speech, message_mode))
 		say_testing(src, "Handled by inherent channel")
 		qdel(speech)
@@ -227,7 +244,6 @@ var/list/headset_modes = list(
 	else
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
-	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
 	qdel(speech)
 	return 1
@@ -375,9 +391,6 @@ var/list/headset_modes = list(
 		return
 
 	if(is_mute())
-		return
-
-	if(is_muzzled())
 		return
 
 	if(!IsVocal())
@@ -727,3 +740,30 @@ var/list/headset_modes = list(
 
 /obj/effect/speech_bubble
 	var/mob/parent
+
+//Muffles a message for when muzzled.
+/proc/muffle(var/message)
+	var/muffle_syllables = list("mh","mph","mm","mgh","mg")
+	var/unmuffled = list(" ", "-", ",", ".", "!", "?")
+	var/output = ""
+	var/i = 1
+	var/current_char
+	while(i <= length(message))
+		current_char = message[i]
+		if(current_char in unmuffled)
+			output += current_char
+			i += 1
+		else
+			var/length_to_add = 1
+			var/allcaps = uppertext(message[i]) == message[i]
+			while((i + length_to_add <= length(message)) && (length_to_add < 3))
+				if(message[i + length_to_add] in unmuffled)
+					break
+				allcaps &= uppertext(message[i + length_to_add]) == message[i + length_to_add]
+				length_to_add += 1
+			i += length_to_add
+			if(allcaps)
+				output += uppertext(pick(muffle_syllables))
+			else
+				output += pick(muffle_syllables)
+	return output

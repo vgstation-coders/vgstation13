@@ -38,16 +38,21 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "scanner_0old"
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
+	power_priority = POWER_PRIORITY_EXCESS
+	monitoring_enabled = TRUE
 	density = 1
 	anchored = 0
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	req_access = list(access_engine_minor)
 
+
 	var/consumption = 0 //How much are we set to draw off the net? Clamped between 0 and 2 GIGAWATT (2,000,000,000 Watts)
+	var/old_consumption = 0 //How much did we request the previous tick?
 	var/on = 0
+	var/max_charge = 2*GIGAWATT
 	var/charge = 0 //How much we've stored. Also capped at 2 GIGAWATT.
-	var/charged_last_tick = 0
+	var/charged_last_tick = FALSE
 	var/category = "resources" //which list to display
 	var/list/categories = list(list("category" = "resources"), list("category" = "tools"), list("category" = "machinery")) //Yes it is necessary to write the list like this
 
@@ -58,25 +63,41 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 		visible_message("<span class='warning'>The [src] buzzes and shuts off.</span>")
 	update_icon()
 
+/obj/machinery/power/antiquesynth/get_monitor_status()
+	if (!(monitoring_enabled && on))
+		return null
+
+	var/list/template = get_monitor_status_template()
+	template["demand"] = consumption
+	template["isbattery"] = TRUE
+	template["charge"] = round(100 * charge/max_charge)
+	if (charged_last_tick)
+		template["charging"] = MONITOR_STATUS_BATTERY_CHARGING
+	return list("\ref[src]" = get_monitor_status_template())
+
 /obj/machinery/power/antiquesynth/update_icon()
 	return
 	//Maybe I'll add more?
 
 /obj/machinery/power/antiquesynth/process()
-	charged_last_tick = 0
 	if(!on)
 		return
 	if(!anchored || !get_powernet())
 		toggle_power()
 		return
-	if(charge >= 2*GIGAWATT)
-		charge = min(charge, 2*GIGAWATT)
+	if(charge >= max_charge)
+		charge = min(charge, max_charge)
 		return //We can't get more charged than this!
-	if(avail()>consumption)
-		charged_last_tick = 1
-		charge += consumption
-		add_load(consumption)
+
+	if(get_satisfaction() == 1.0)
+		charged_last_tick = TRUE
+		charge += old_consumption
 		nanomanager.update_uis(src)
+	else if (charged_last_tick != FALSE)
+		charged_last_tick = FALSE
+		nanomanager.update_uis(src)
+	old_consumption = consumption
+	add_load(old_consumption)
 
 /obj/machinery/power/antiquesynth/attack_ai(mob/user)
 	if(isAdminGhost(user))
@@ -136,7 +157,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 		toggle_power()
 	if(href_list["set_draw"])
 		consumption = input("Megajoules to draw per tick: ", "1MW = 1000kW = 1000000W", consumption/MEGAWATT) as num
-		consumption = round(clamp(consumption*MEGAWATT, 0, 2*GIGAWATT)) //we're storing the actual number of watts but only displaying the users the mw conversion
+		consumption = round(clamp(consumption*MEGAWATT, 0, max_charge)) //we're storing the actual number of watts but only displaying the users the mw conversion
 	if(href_list["synth"])
 		locate_data(href_list["synth"]) //Even though the list contains a path, hrefs only pass text so let's use name here instead of path
 	if(href_list["category"])

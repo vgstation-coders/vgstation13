@@ -11,7 +11,7 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	emag_cost = 0
 	emagged = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 	hack_abilities = list(
 		/datum/malfhack_ability/oneuse/overload_quiet,
@@ -70,7 +70,7 @@
 	else
 		return ..()
 
-/obj/machinery/sweet/emag(mob/user)
+/obj/machinery/sweet/emag_act(mob/user)
 	if(!emagged && user)
 		to_chat(user, "<span class='warning'>You inexplicably short out the [src.name].</span>")
 	emagged = !emagged

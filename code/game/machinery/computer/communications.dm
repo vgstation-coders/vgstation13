@@ -502,7 +502,7 @@ var/list/shuttle_log = list()
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
 
-/obj/machinery/computer/communications/emag(mob/user as mob)
+/obj/machinery/computer/communications/emag_act(mob/user as mob)
 	if(!emagged)
 		emagged = 1
 		if(user)
@@ -729,7 +729,7 @@ var/list/shuttle_log = list()
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	shuttle_autocall()
+	shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
 	..()
 
 // -- Blob defcon 1 things
@@ -831,6 +831,6 @@ var/list/shuttle_log = list()
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	shuttle_autocall()
+	shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
 
 	..()

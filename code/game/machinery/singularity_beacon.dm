@@ -17,18 +17,25 @@
 	var/obj/item/weapon/cell/cell
 	var/power_load = 1000 //A bit ugly. How much power this machine needs per tick. Equivalent to one minute on 30k W battery, two second ticks
 	var/power_draw = 0 //If there's spare power on the grid, cannibalize it to charge the beacon's battery
+	var/power_received = 0 // How much power we drew from the grid last tick
 	var/active = 0 //It doesn't use APCs, so use_power wouldn't really suit it
 	var/icontype = "beacon"
-	var/obj/structure/cable/attached = null
+	var/datum/power_connection/consumer/cable/power_connection = null
+
+/obj/machinery/singularity_beacon/New()
+	. = ..()
+	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_BYPASS
+	cell = new /obj/item/weapon/cell/hyper(src) //Singularity beacons are wasteful as fuck, that state-of-the-art cell will last a single minute
+
+/obj/machinery/singularity_beacon/Destroy()
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	. = ..()
 
 /obj/machinery/singularity_beacon/get_cell()
 	return cell
-
-/obj/machinery/singularity_beacon/New()
-
-	..()
-
-	cell = new /obj/item/weapon/cell/hyper(src) //Singularity beacons are wasteful as fuck, that state-of-the-art cell will last a single minute
 
 /obj/machinery/singularity_beacon/examine(mob/user)
 
@@ -36,7 +43,7 @@
 
 	if(anchored)
 		to_chat(user, "<span class='info'>It appears firmly secured to the floor. Nothing a wrench can't undo.</span>")
-	to_chat(user, "<span class='info'>It features a power port. [attached ? "A power cable is running through it":"It looks like a power cable can be ran straight through it to power it"].</span>")
+	to_chat(user, "<span class='info'>It features a power port. [power_connection.connected ? "A power cable is running through it":"It looks like a power cable can be ran straight through it to power it"].</span>")
 	if(active)
 		to_chat(user, "<span class='info'>It is slowly pulsing red and emitting a deep humming sound.</span>")
 
@@ -82,11 +89,11 @@
 /obj/machinery/singularity_beacon/attack_hand(var/mob/user as mob)
 	user.delayNextAttack(10) //Prevent spam toggling, otherwise you can brick the cell very quickly
 	if(anchored)
-		if(!attached)
+		if(!power_connection.connected)
 			var/turf/T = get_turf(src)
 			if(isturf(T) && !T.intact)
-				attached = locate() in T
-			if(attached)
+				power_connection.connect()
+			if(power_connection.connected)
 				user.visible_message("<span class='notice'>[user] reaches for the exposed cabling and carefully runs it through \the [src]'s power port.</span>", \
 				"<span class='notice'>You reach for the exposed cabling and carefully run it through \the [src]'s power port.</span>")
 				return //Need to attack again to actually start
@@ -102,8 +109,8 @@
 	. = ..()
 	if(!.)
 		return
-	if(attached)
-		attached = null //Reset attached cable
+	if(power_connection.connected)
+		power_connection.disconnect() //Reset attached cable
 
 /obj/machinery/singularity_beacon/Destroy()
 	new /datum/artifact_postmortem_data(src,TRUE)//we only archive those that were excavated
@@ -125,29 +132,42 @@
 
 //Simplified check for power. If we can charge straight out of the grid, do it
 /obj/machinery/singularity_beacon/proc/check_wire_power()
-	if(!attached) //No wire, move straight to battery power
-		return 0
-	var/datum/powernet/PN = attached.get_powernet()
+	// Check we're connected to the grid
+	if(!power_connection.connected) //No wire, move straight to battery power
+		return FALSE
+
+	var/datum/powernet/PN = power_connection.get_powernet()
 	if(!PN) //Powernet is dead
-		return 0
-	if(PN.avail < power_load) //Cannot drain enough power, needs 1500 per tick, move to battery
-		return 0
+		return FALSE
+
+	// Figure out how much power we received this tick
+	power_received = power_connection.get_satisfaction() * (power_load + power_draw)
+
+	// Request power for next tick
+	power_connection.add_load(power_load) // request power from the network for next tick
+	if(cell && cell.charge < cell.maxcharge && cell.charge > 0)
+		power_draw = cell.maxcharge - cell.charge
+		power_connection.add_load(power_draw) // request cell recharge power for next tick
 	else
-		PN.load += power_load
-		if(cell && cell.charge < cell.maxcharge && cell.charge > 0 && PN.netexcess)
-			power_draw = min(cell.maxcharge - cell.charge, PN.netexcess) //Draw power directly from excess power
-			PN.load += power_draw
-			cell.give(power_draw) //We drew power from the grid, charge the cell
-		return 1
+		power_draw = 0
+
+	// Try using the power we've been alloted this tick
+	if (power_received < power_load) // We didn't receive enough to cover costs, move to battery
+		return FALSE
+	power_received -= power_load
+	if(cell && cell.charge < cell.maxcharge && cell.charge > 0)
+		cell.give(power_received) // use leftovers to recharge battery
+
+	return TRUE
 
 //Use up the battery if powernet check fails
 /obj/machinery/singularity_beacon/proc/check_battery_power()
 
 	if(cell && cell.charge > power_load)
-		cell.use(power_load)
-		return 1
+		cell.use(clamp(power_load - power_received, 0, power_load))
+		return TRUE
 	else //Nothing here either
-		return 0
+		return FALSE
 
 //Composite of the two, called at every process
 /obj/machinery/singularity_beacon/proc/check_power()

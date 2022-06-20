@@ -4,7 +4,7 @@
 	icon_state = "incubator_old"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 500
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | MULTIOUTPUT
@@ -41,7 +41,7 @@
 	speed_bonus = round(capcount/2,1)
 
 /obj/machinery/egg_incubator/update_icon()
-	if(use_power==2)
+	if(use_power==MACHINE_POWER_USE_ACTIVE)
 		icon_state = active_state
 	else
 		icon_state = initial(icon_state)
@@ -98,10 +98,10 @@
 /obj/machinery/egg_incubator/process()
 	..()
 	if(!(contents.len))
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		update_icon()
 		return
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	update_icon()
 	if(handle_growth(contents))
 		playsound(src, 'sound/machines/ding.ogg', 50, 1) //Only ding once per process

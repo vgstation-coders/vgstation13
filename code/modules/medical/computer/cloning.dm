@@ -117,7 +117,7 @@
 				src.updateUsrDialog()
 				return 1
 
-/obj/machinery/computer/cloning/emag(mob/user)
+/obj/machinery/computer/cloning/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
 		if(user && !issilicon(user))

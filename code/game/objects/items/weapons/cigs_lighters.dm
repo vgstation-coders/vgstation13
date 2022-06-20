@@ -181,6 +181,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
+	goes_in_mouth = TRUE
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/trash/cigbutt
@@ -557,13 +558,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 ////////////
 // CIGARS //
 ////////////
-
-/obj/item/clothing/mask/cigarette/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	var/mob/living/carbon/C = M
-	if(!istype(C) || !C.hasmouth())
-		to_chat(C, "<span class='warning'>You have no mouth.</span>")
-		return CANNOT_EQUIP
-	. = ..()
 
 /obj/item/clothing/mask/cigarette/cigar
 	name = "Premium Cigar"

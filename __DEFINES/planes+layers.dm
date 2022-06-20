@@ -74,6 +74,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	------
 	FLOAT_PLANE = -32767
 */
+#define BELOW_PLATING_PLANE 			(-6 + FLOAT_PLANE)
 
 #define PLATING_PLANE 			(-5 + FLOAT_PLANE)
 
@@ -87,6 +88,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
 	#define PULSEDEMON_LAYER			9
+	#define FLOORBOARD_ITEM_LAYER		10
 
 #define FLOOR_PLANE 			(-3 + FLOAT_PLANE)
 
@@ -167,6 +169,9 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define SHADOW_LAYER				0
 	#define VEHICLE_LAYER 				0
 	#define CHAIR_ARMREST_LAYER 		0
+	#define RAILING_BACK_LAYER 			0.1
+	#define RAILING_MID_LAYER 			0.2
+	#define RAILING_FRONT_LAYER 		0.3
 	#define WINDOOR_LAYER 				1
 	#define OPEN_CURTAIN_LAYER			2
 	// BELOW_OBJ_LAYER					2

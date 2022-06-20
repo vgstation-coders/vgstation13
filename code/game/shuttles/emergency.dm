@@ -98,7 +98,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 		if(!move_to_dock(dock_shuttle, 0, 180))
 			message_admins("Warning: [src] failed to crash into shuttle.")
 		else
-			explosion(get_turf(dock_shuttle), 2, 4, 5, 6)
+			explosion(get_turf(dock_shuttle), 2, 3, 4, 6)
 
 			for(var/mob/living/M in emergency_shuttle.shuttle.linked_area)
 				shake_camera(M, 10, 1) 

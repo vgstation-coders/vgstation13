@@ -13,7 +13,7 @@
 /area/shuttle/escape/centcom)
 "bh" = (
 /obj/structure/stairs/east,
-/obj/structure/window/reinforced,
+/obj/structure/railing/plasteel/glass,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "bi" = (
@@ -91,10 +91,13 @@
 /turf/simulated/floor,
 /area/gateway)
 "fA" = (
-/obj/structure/window/reinforced{
+/obj/structure/stairs/west,
+/obj/structure/railing/plasteel/glass{
 	dir = 1
 	},
-/obj/structure/stairs/west,
+/obj/structure/railing/plasteel/glass{
+	dir = 1
+	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "fL" = (
@@ -445,7 +448,7 @@
 /area/crew_quarters/bar)
 "sk" = (
 /obj/structure/stairs/south,
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -455,7 +458,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "tf" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -564,13 +567,17 @@
 /obj/docking_port/shuttle,
 /turf/simulated/floor,
 /area/shuttle/arrival/station)
+"wy" = (
+/obj/structure/railing/plasteel/glass,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
 "wT" = (
 /obj/machinery/suit_storage_unit/mining,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "wV" = (
 /obj/structure/stairs/north,
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -614,7 +621,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "yV" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -857,7 +864,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "HZ" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel/glass{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -13227,7 +13234,7 @@ bi
 ag
 aa
 ag
-jK
+wy
 uv
 uv
 uv

@@ -320,6 +320,18 @@
     else
         return ..()
 
+/obj/item/weapon/nullrod/loop //loop religion
+	name = "rewind rifle"
+	desc = "The incarnation of looping in gun form. The shooting mechanism has been replaced with looping machinery and will only fire when the Loop happens."
+	icon = 'icons/obj/gun.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')	
+	icon_state = "xcomlasergun"
+	item_state = "xcomlasergun"
+	w_class = W_CLASS_MEDIUM
+	hitsound = 'sound/effects/fall.ogg'
+	attack_verb = list("loops")
+	fluff_pickup = "loop"
+
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos
 	name = "chaos blade"

@@ -70,7 +70,7 @@
 	// Non-mature vampires are not stopped by holy things.
 	if(M)
 		//Chaplains are ALWAYS resistant to vampire powers
-		if(mind && mind.assigned_role == "Chaplain")
+		if(isReligiousLeader(src))
 			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			return 0
 		// Null rod nullifies vampire powers, unless we're a young vamp.
@@ -83,7 +83,7 @@
 			if (locate(/datum/power/vampire/jaunt) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
 				return 0
-		return 1
+	return 1
 
 // If the target is weakened, the spells take less time to complete.
 /mob/living/carbon/proc/get_vamp_enhancements()

@@ -7,7 +7,7 @@ var/list/pda_multicasters = list()
 	icon_state = "pda_server-on"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 750
 	var/obj/item/device/pda/camo/CAMO
 	var/on = TRUE

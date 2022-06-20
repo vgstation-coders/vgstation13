@@ -156,6 +156,8 @@
 	var/gateway_delay = 18000 //How long the gateway takes before it activates. Default is half an hour.
 	var/ghost_interaction = 0
 
+	var/human_captive_kickbite = 0 //Can restrained humans still kick and bite while also being pulled, grabbed, or buckled?
+
 	var/comms_password = ""
 	var/paperwork_library = 0 //use the library DLL.
 
@@ -532,6 +534,9 @@
 
 				if("uneducated_mice")
 					config.uneducated_mice = 1
+
+				if("human_captive_kickbite")
+					config.human_captive_kickbite = 1
 
 				if("comms_password")
 					config.comms_password = value

@@ -4,7 +4,8 @@
 	icon_state = "battery_port"
 	density = 0
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_SMES_RECHARGE
 
 	var/obj/machinery/power/battery/portable/connected = null
 
@@ -65,10 +66,15 @@
 			else
 				overlays += image('icons/obj/power.dmi', "bp-d")
 
-/obj/machinery/power/battery_port/add_load(var/amount)
+/obj/machinery/power/battery_port/add_load(var/amount, var/priority = priority)
 	if(terminal && terminal.get_powernet())
-		terminal.powernet.load += amount
+		terminal.powernet.add_load(amount, priority)
 		return 1
+	return 0
+
+/obj/machinery/power/battery_port/get_satisfaction(var/priority = power_priority)
+	if(terminal && terminal.get_powernet())
+		return terminal.get_satisfaction(priority)
 	return 0
 
 /obj/machinery/power/battery_port/surplus()

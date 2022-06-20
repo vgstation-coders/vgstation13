@@ -33,8 +33,12 @@
 
 /obj/effect/rooting_trap/proc/stick_to(var/atom/A, var/side = null)
 	var/turf/T = get_turf(A)
-
-	if(isliving(A) && !isspace(T))//can't nail people down unless there's a turf to nail them to.
+	if(isspace(T)) //can't nail people down unless there's a turf to nail them to.
+		return FALSE
+	if(!isliving(A))
+		return FALSE
+	var/mob/living/M = A
+	if(M.stat < 2)
 		stuck_to = A
 		lock_atom(A, /datum/locking_category/buckle)
 

@@ -8,7 +8,7 @@
 	reference = "control_box"
 	anchored = 0
 	density = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 500
 	active_power_usage = 10000
 	construction_state = 0
@@ -52,7 +52,7 @@
 
 /obj/machinery/particle_accelerator/control_box/update_state()
 	if(construction_state < 3)
-		use_power = 0
+		use_power = MACHINE_POWER_USE_NONE
 		assembled = 0
 		active = 0
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
@@ -62,7 +62,7 @@
 		connected_parts = list()
 		return
 	if(!part_scan())
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		active = 0
 		connected_parts = list()
 
@@ -75,7 +75,7 @@
 		if(stat & (FORCEDISABLE|NOPOWER))
 			icon_state = "[reference]w"
 			return
-		else if(use_power)
+		else if(use_power != MACHINE_POWER_USE_NONE)
 			if(assembled)
 				icon_state = "[reference]p"
 		else
@@ -149,9 +149,9 @@
 	..()
 	if(stat & (FORCEDISABLE|NOPOWER))
 		active = 0
-		use_power = 0
+		use_power = MACHINE_POWER_USE_NONE
 	else if(!stat && construction_state <= 3)
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 	src.update_icon()
 	for(var/obj/structure/particle_accelerator/part in connected_parts)
 		part.strength = null
@@ -231,13 +231,13 @@
 		message_admins("PA Control Computer turned ON by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 		log_game("PA Control Computer turned ON by [usr.ckey]([usr]) in ([x],[y],[z])")
 	if(src.active)
-		src.use_power = 2
+		src.use_power = MACHINE_POWER_USE_ACTIVE
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = src.strength
 			part.powered = 1
 			part.update_icon()
 	else
-		src.use_power = 1
+		src.use_power = MACHINE_POWER_USE_IDLE
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = null
 			part.powered = 0

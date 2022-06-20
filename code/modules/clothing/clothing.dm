@@ -278,12 +278,6 @@
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 
-/obj/item/clothing/proc/get_armor(var/type)
-	return armor[type]
-
-/obj/item/clothing/proc/get_armor_absorb(var/type)
-	return armor_absorb[type]
-
 /obj/item/clothing/proc/offenseTackleBonus()
 	return
 

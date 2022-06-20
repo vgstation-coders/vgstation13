@@ -120,7 +120,7 @@
 	return:
 		obj: Resulting object.
 */
-/datum/recipe/proc/make_food(var/obj/container)
+/datum/recipe/proc/make_food(var/obj/container, var/mob/user)
 	var/obj/result_obj = new result(container)
 	for(var/obj/O in (container.contents - result_obj))
 		if(O.reagents)

@@ -70,5 +70,5 @@
 					var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
 					. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
 		if(bought_nothing)
-			. += "The pulse demon did not use any abilities this round."
-		. += "<BR>The pulse demon hijacked [controlled_apcs.len] APCs with a takeover time of [PD.takeover_time] seconds and a health of [PD.maxHealth], absorbing [PD.charge_absorb_amount]W per second."
+			. += "The pulse demon did not use any abilities this round.<BR>"
+		. += "The pulse demon hijacked [controlled_apcs.len] APCs with a takeover time of [PD.takeover_time] seconds and a health of [PD.maxHealth], absorbing [PD.charge_absorb_amount]W per second.<BR>"

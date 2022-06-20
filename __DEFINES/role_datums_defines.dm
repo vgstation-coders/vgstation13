@@ -75,6 +75,7 @@
 #define GIANTSPIDER "giant spider"
 #define PULSEDEMON "Pulse Demon"
 #define STREAMER "streamer"
+#define JECTIE_COOKER "chef that cooked jecties"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"
 #define CLOWN_LING "clown ling"

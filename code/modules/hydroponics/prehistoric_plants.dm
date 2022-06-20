@@ -93,6 +93,7 @@
 	plant_dmi = 'icons/obj/hydroponics/amauri.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/amauri)
 	mutants = null
+	noreact = 1
 	chems = list(POTASSIUM = list(0,10),SUGAR = list(0,10),PHOSPHORUS = list(0,10))
 
 	lifespan = 25
@@ -115,7 +116,6 @@
 	name = "amauri fruit"
 	desc = "It is small, round and hard. Its skin is a thick dark purple."
 	plantname = "amauri"
-	flags = NOREACT
 	hydroflags = HYDRO_PREHISTORIC
 
 /datum/seed/gelthi

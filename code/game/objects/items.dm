@@ -63,6 +63,8 @@
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
+	var/goes_in_mouth //Whether or not the item is described as "on his/her face" or "in his/her mouth" when worn on the face slot.
+	var/is_muzzle	//Whether or not the item is a muzzle, and how strong the muzzling effect is. See setup.dm.
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
@@ -79,8 +81,8 @@
 
 	var/datum/speech_filter/speech_filter
 
-/obj/item/proc/return_thermal_protection()
-	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
+	var/luckiness //How much luck or unluck the item confers while held
+	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
 
 /obj/item/New()
 	..()
@@ -108,11 +110,52 @@
 	*/
 	//var/list/sprite_sheets_obj = null
 
+
+/obj/item/proc/get_armor(var/type)
+	return armor[type]
+
+/obj/item/proc/get_armor_absorb(var/type)
+	return armor_absorb[type]
+
+/obj/item/proc/return_thermal_protection()
+	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
+
 /obj/item/acid_melt()
 	if (acidable())
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
 		I.desc = "Looks like this was \a [src] some time ago."
 		qdel(src)
+
+/obj/item/hide(i)
+	if(isturf(loc))
+		level = i ? LEVEL_BELOW_FLOOR : LEVEL_ABOVE_FLOOR
+		invisibility = i ? 101 : 0
+		plane = i ? ABOVE_PLATING_PLANE : initial(plane)
+		layer = i ? FLOORBOARD_ITEM_LAYER : initial(layer)
+		anchored = i
+
+/obj/item/Crossed(atom/movable/AM)
+	if(level < LEVEL_ABOVE_FLOOR)
+		return 1
+	return 0
+
+/obj/item/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	var/oldalpha = alpha
+	invisibility = 0
+	alpha = 127
+	plane = initial(plane)
+	layer = initial(layer)
+
+	spawn(1 SECONDS)
+		var/turf/U = loc
+		if(istype(U) && U.intact)
+			invisibility = 101
+			plane = ABOVE_PLATING_PLANE
+			layer = FLOORBOARD_ITEM_LAYER
+		alpha = oldalpha
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -187,6 +230,59 @@
 	return
 
 /obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if(sharpness_flags & (SHARP_BLADE | SERRATED_BLADE | SHARP_TIP | HOT_EDGE)) //Running with sharp objects is dangerous!
+			var/severity = 0
+			var/saving_prob = C.lucky_probability(60, luckfactor = 1/50)
+
+			if(M_CLUMSY in C.mutations)
+				severity += 1
+
+			for(var/i in 1 to 3) //Three saving throws. One failed means a near miss. Two failed means a normal attack. Three failed means a critical attack.
+				if(prob(saving_prob))
+					break
+				severity += 1
+			if(severity >= 2)
+				var/list/attackable_zones = list("head")
+				if(C.has_eyes())
+					attackable_zones += "eyes"
+				if(C.hasmouth())
+					attackable_zones += "mouth"
+				var/attackable_zone = pick(attackable_zones)
+
+				//Temporarily switch C to harm intent and make them target their head.
+				var/previntent = C.a_intent
+				var/prevzone
+				if(C.zone_sel)
+					prevzone = C.zone_sel.selecting
+					C.zone_sel.selecting = attackable_zone //For proper afterattack() behavior, otherwise we chould just pass attackable_zone into attacked_by().
+				C.a_intent = I_HURT
+
+				//Do the attack.
+				C.attacked_by(src, C, def_zone = attackable_zone, crit = severity >= 3, flavor = "accidentally")
+				afterattack(C, C)
+
+				//Switch them back to their previous intent and targeting.
+				C.a_intent = previntent
+				if(C.zone_sel)
+					C.zone_sel.selecting = prevzone
+
+			else if(severity >= 1)
+				var/list/possibles = list("face", "neck")
+				if(C.has_eyes())
+					possibles += "eye"
+				if(C.hasmouth())
+					possibles += "throat"
+				var/list/possible_edgepoints = list()
+				if(sharpness_flags & SHARP_BLADE)
+					possible_edgepoints += "sharp edge"
+				if(sharpness_flags & SERRATED_BLADE)
+					possible_edgepoints += "serrated edge"
+				if(sharpness_flags & SHARP_TIP)
+					possible_edgepoints += "sharp point"
+				to_chat(C, "<span class = 'warning'>[possible_edgepoints.len ? "The [pick(possible_edgepoints)] of \the [src]" : "\The [src]"] just misses your [pick(possibles)]... close one!</span>")
+
 	return
 
 /obj/item/projectile_check()
@@ -375,6 +471,7 @@
 		var/datum/action/A = X
 		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
 			A.Grant(user)
+	INVOKE_EVENT(src, /event/equipped, "user" = user)
 	return
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
@@ -458,6 +555,11 @@
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
+
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				return CAN_EQUIP
 			if(slot_back)
 				if( !(slot_flags & SLOT_BACK) )
@@ -1284,16 +1386,16 @@ var/global/list/image/blood_overlays = list()
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
 	var/broken = FALSE
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
-		
+
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced, TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced, TRUE)]</span>")
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
-		
+
 	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y

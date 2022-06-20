@@ -50,8 +50,8 @@
 	if (istype(held_item, /obj/item/weapon/painting_brush))
 		// If holding a palette (item) add it's colors to the brush's list
 		for (var/obj/item/weapon/palette/pal in user.held_items)
-			for (var/datum/painting_utensil/pu in pal.stored_colours)
-				palette += pu.base_color
+			for (var/c in pal.stored_colours)
+				palette += pal.stored_colours[c]
 
 		var/obj/item/weapon/painting_brush/b = held_item
 		if (b.paint_color)
@@ -69,9 +69,10 @@
 		if (length(palette[i]) < 9) //If missing alpha channel assume opaque
 			palette[i] += "ff"
 	// Normalize base color
-	base_color = lowertext(base_color)
-	if (length(base_color) < 9) //If missing alpha channel assume opaque
-		base_color += "ff"
+	if (base_color)
+		base_color = lowertext(base_color)
+		if (length(base_color) < 9) //If missing alpha channel assume opaque
+			base_color += "ff"
 
 
 /datum/painting_utensil/proc/duplicate()

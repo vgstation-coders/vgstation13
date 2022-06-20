@@ -163,7 +163,7 @@
 	if(. && !emagged && isturf(loc)) //Retreat if we're not hostile and we're under attack
 		step_away(src,user)
 
-/obj/machinery/bot/bloodbot/Emag(mob/user as mob)
+/obj/machinery/bot/bloodbot/emag_act(mob/user as mob)
 	if(!locked)
 		visible_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		emagged = 1

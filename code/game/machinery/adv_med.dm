@@ -198,7 +198,7 @@
 	update_icon()
 	set_light(0)
 
-/obj/machinery/bodyscanner/emag(mob/user)
+/obj/machinery/bodyscanner/emag_act(mob/user)
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
 		to_chat(user, "<span class='notice'>\The [src] emits an ominous hum.</span>")
@@ -280,15 +280,15 @@
 
 /obj/machinery/bodyscanner/process()
 	if (stat & (BROKEN | NOPOWER | MAINT | EMPED | FORCEDISABLE))
-		use_power = 0
+		use_power = MACHINE_POWER_USE_NONE
 		return
 	if (occupant)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		if (emagged)
 			occupant.apply_radiation(12,RAD_EXTERNAL)
 
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 /obj/machinery/bodyscanner/attack_paw(mob/user)
 	return attack_hand(user)

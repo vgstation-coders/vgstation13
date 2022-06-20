@@ -15,7 +15,7 @@
 
 	var/injecting = FALSE
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 500
 	var/remote_access_enabled = TRUE
@@ -89,7 +89,7 @@
 		return 1
 	return -1
 
-/obj/machinery/power/rust_fuel_injector/emag(var/mob/user)
+/obj/machinery/power/rust_fuel_injector/emag_act(var/mob/user)
 	if(!emagged)
 		locked = FALSE
 		emagged = TRUE
@@ -225,14 +225,14 @@
 /obj/machinery/power/rust_fuel_injector/proc/begin_injecting()
 	if(!injecting && cur_assembly)
 		injecting = TRUE
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		update_icon()
 
 /obj/machinery/power/rust_fuel_injector/proc/stop_injecting()
 	if(injecting)
 		injecting = FALSE
 		icon_state = "injector0"
-		use_power = 0
+		use_power = MACHINE_POWER_USE_NONE
 		update_icon()
 
 /obj/machinery/power/rust_fuel_injector/proc/inject()
@@ -311,3 +311,9 @@
 		return
 
 	src.dir = turn(src.dir, 90)
+
+
+/obj/machinery/power/rust_fuel_injector/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_clock()

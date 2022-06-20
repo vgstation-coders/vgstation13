@@ -158,7 +158,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else
 		return ..()
 
-/obj/machinery/bot/cleanbot/Emag(mob/user)
+/obj/machinery/bot/cleanbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)

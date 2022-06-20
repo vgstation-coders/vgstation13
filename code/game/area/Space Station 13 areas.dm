@@ -459,6 +459,16 @@ var/global/list/adminbusteleportlocs = list()
 /area/shuttle/lightship/start
 	icon_state = "yellow"
 
+/area/shuttle/brokeufo
+	name = "\improper Broken UFO"
+	requires_power = 1
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
+/area/shuttle/brokeufo/start
+	icon_state = "yellow"
+
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
 	icon_state = "yellow"

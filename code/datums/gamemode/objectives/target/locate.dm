@@ -28,11 +28,7 @@ var/list/potential_locate_objects = list(/obj/item/weapon/bikehorn/rubberducky,
 	var/max = (object_max >= object_min) ? object_max : (potential_objects.len-1)
 	for(var/i = 0 to rand(min,max))
 		var/type = pick(potential_objects)
-		if(type == /obj/item/weapon/disk/nuclear) // Singleton item, behaves differently.
-			objects_to_locate.Add(nukedisk)
-		else
-			var/atom/pick = new type
-			objects_to_locate.Add(pick)
+		objects_to_locate.Add(type)
 		potential_objects.Remove(type)
 	explanation_text = format_explanation()
 	return TRUE
@@ -43,12 +39,14 @@ var/list/potential_locate_objects = list(/obj/item/weapon/bikehorn/rubberducky,
 	return "No items to locate."
 
 /datum/objective/target/locate/proc/check(var/list/objects)
-	for(var/atom/A in objects_to_locate)
-		if(locate(A) in objects)
-			to_chat(owner.current, "<span class='notice'>[capitalize(initial(A.name))] located.</span>")
-			objects_to_locate.Remove(A)
-			if(objects_to_locate.len)
-				to_chat(owner.current, "<span class='notice'>Remaining items to locate: [capitalize(counted_english_list(objects_to_locate))].</span>")
-			else
-				to_chat(owner.current, "<span class='notice'>All items located!</span>")
+	for(var/atom/A in objects)
+		// Have to do it this way to prevent list cache being made and including redundant subtypes, and also to check supertypes
+		for(var/type in objects_to_locate)
+			if(istype(A,type))
+				to_chat(owner.current, "<span class='notice'>[capitalize(initial(A.name))] located.</span>")
+				objects_to_locate.Remove(A.type)
+				if(objects_to_locate.len)
+					to_chat(owner.current, "<span class='notice'>Remaining items to locate: [capitalize(counted_english_list(objects_to_locate))].</span>")
+				else
+					to_chat(owner.current, "<span class='notice'>All items located!</span>")
 	IsFulfilled()

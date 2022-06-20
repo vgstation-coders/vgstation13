@@ -56,11 +56,11 @@
 
 	src.busy = 1
 	src.overlays += image(icon = icon, icon_state = "[base_state]_ani")
-	src.use_power = 2
+	src.use_power = MACHINE_POWER_USE_ACTIVE
 	src.updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	src.use_power = 1
+	src.use_power = MACHINE_POWER_USE_IDLE
 	src.overlays -= image(icon = icon, icon_state = "[base_state]_ani")
 	if(being_built)
 		var/turf/output = get_output()

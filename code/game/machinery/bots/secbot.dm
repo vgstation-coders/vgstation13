@@ -214,7 +214,7 @@ Auto Patrol: []"},
 	if(threatlevel > 0)
 		set_target(H)
 
-/obj/machinery/bot/secbot/Emag(mob/user)
+/obj/machinery/bot/secbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)

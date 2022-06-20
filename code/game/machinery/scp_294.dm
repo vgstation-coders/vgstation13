@@ -133,6 +133,6 @@
 /obj/machinery/chem_dispenser/scp_294/update_icon()
 	return
 
-/obj/machinery/chem_dispenser/scp_294/emag()
+/obj/machinery/chem_dispenser/scp_294/emag_act()
 	..()
 	emagged = TRUE

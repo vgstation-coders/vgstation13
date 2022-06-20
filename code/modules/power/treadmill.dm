@@ -14,7 +14,7 @@
 	flow_flags = ON_BORDER
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | EMAGGABLE
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	pass_flags_self = PASSGLASS
 	var/count_power = 0 //How much power have we produced SO FAR this count?
@@ -33,7 +33,7 @@
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
-	
+
 /obj/machinery/power/treadmill/New()
 	..()
 	setup_border_dummy()
@@ -117,7 +117,7 @@
 	else
 		disconnect_from_network()
 
-/obj/machinery/power/treadmill/emag()
+/obj/machinery/power/treadmill/emag_act()
 	..()
 	emagged = 1
 	name = "\improper DREADMILL"

@@ -187,16 +187,17 @@
 	icon_state = "floor4"
 
 
-/obj/machinery/podcomputer 
+/obj/machinery/podcomputer
 	name = "pod computer"
 	desc = "A computer for piloting escape pods. The software hasn't been updated since the autopilot system was installed and is mostly non-functional."
 	use_power = 0
 	icon = 'icons/obj/computer.dmi'
+	anchored = TRUE
 	icon_state = "podcomputer"
 	icon_state_open = "podcomputer_maint"
 
 	var/datum/shuttle/escape/pod/linked_pod
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	hack_abilities = list(
 		/datum/malfhack_ability/oneuse/emag,
@@ -207,7 +208,7 @@
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
 	..()
-	
+
 /obj/machinery/podcomputer/process()
 	..()
 	update_icon()
@@ -228,7 +229,7 @@
 	..()
 	if(panel_open && emagged)
 		to_chat(user, "<span class='danger'>Some of the wires have been shorted out!</span>")
-	
+
 /obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
 	..()
 	if(issolder(O) && emagged && panel_open)
@@ -248,7 +249,7 @@
 		icon_state = "podcomputer_shuttle"
 	else if(emagged)
 		icon_state = "podcomputer_error"
-	else 
+	else
 		icon_state = "podcomputer"
 
 

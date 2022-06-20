@@ -164,8 +164,14 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/vamp_H = M
+
+		if(vamp_H.is_muzzled())
+			to_chat(M, "<span class='warning'> The [vamp_H.wear_mask] prevents you from biting!</span>")
+			return FALSE
+
 		if(vamp_H.check_body_part_coverage(MOUTH))
 			to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
+
 	return TRUE
 
 
@@ -298,23 +304,26 @@
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
-	if(H.stat != DEAD)
+	if(H.stat == DEAD)
 		iscloaking = FALSE
 	if(!iscloaking)
-		H.alphas["vampire_cloak"] = 255
+		H.make_visible(VAMPIRECLOAK,TRUE)
 		H.color = "#FFFFFF"
 		return FALSE
 
 	if((T.get_lumcount() * 10) <= 2)
-		H.alphas["vampire_cloak"] = round((255 * 0.15))
 		if(locate(/datum/power/vampire/shadow) in current_powers)
-			H.color = "#000000"
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15), INVISIBILITY_LEVEL_TWO)
+		else
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		return TRUE
 	else
+		if(H.invisibility > 0)
+			H.make_visible(VAMPIRECLOAK, TRUE)
 		if(locate(/datum/power/vampire/shadow) in current_powers)
-			H.alphas["vampire_cloak"] = round((255 * 0.15))
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		else
-			H.alphas["vampire_cloak"] = round((255 * 0.80))
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.8))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
 	if(H.stat == DEAD)

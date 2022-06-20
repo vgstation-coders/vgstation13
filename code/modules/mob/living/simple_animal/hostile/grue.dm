@@ -100,7 +100,7 @@
 	var/list/speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //speed modifiers based on light condition
 	var/list/base_speed_m_dark_dim_light=list(1/1.2,1/1.1,1) //base speed modifiers based on light condition
 	var/regenbonus=1													//bonus to health regen based on sentient beings eaten
-	var/base_regenbonus=1
+	var/base_regenbonus=1.5
 	var/lightresist=1													//scales light damage depending on life stage to make grues slightly more resistant to light as they mature. multiplicative (lower is more resistant).
 
 /datum/grue_calc/grue/proc/nutri_adjust(var/mob/living/simple_animal/hostile/grue/G)
@@ -275,7 +275,6 @@
 		return GRUE_DIM
 
 /mob/living/simple_animal/hostile/grue/proc/lifestage_updates() //Initialize or update lifestage-dependent stats
-	var/tempHealth=health/maxHealth
 	if(lifestage==GRUE_LARVA)
 		name = "grue larva"
 		desc = "A scurrying thing that lives in the dark. It is still a larva."
@@ -285,7 +284,7 @@
 		base_melee_dam_up = 5				//base melee damage upper
 		base_melee_dam_lw = 3				//base melee damage lower
 		attacktext = "bites"
-		maxHealth=50
+		rescaleHealth(50)
 		nutrienergy=50 //starts out ready to moult
 		maxnutrienergy = 50
 		moultcost=50
@@ -309,7 +308,7 @@
 		base_melee_dam_up = 20				//base melee damage upper
 		base_melee_dam_lw = 15				//base melee damage lower
 		attacktext = "chomps"
-		maxHealth=150
+		rescaleHealth(150)
 		nutrienergy=0 //starts out hungry
 		maxnutrienergy = 500
 		moultcost = 100
@@ -330,7 +329,7 @@
 		icon_living = "grue_living"
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
-		maxHealth = 250
+		rescaleHealth(250)
 		maxnutrienergy = 1000
 		moultcost=0 //not needed for adults
 		base_melee_dam_up = 30				//base melee damage upper
@@ -349,7 +348,6 @@
 		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
-	health=tempHealth*maxHealth
 	grue_stat_updates()
 
 //Grue vision
@@ -425,7 +423,6 @@
 		ismoulting=TRUE
 		moulttimer=moulttime//reset moulting timer
 		plane = MOB_PLANE //In case grue somehow moulted while hiding
-		var/tempHealth=health/maxHealth //to scale health level
 		if(lifestage==GRUE_LARVA)
 			lifestage=GRUE_JUVENILE
 			desc = "A small grue chrysalis."
@@ -433,7 +430,7 @@
 			icon_state = "moult1"
 			icon_living = "moult1"
 			icon_dead = "moult1"
-			maxHealth=25 //vulnerable while moulting
+			rescaleHealth(25) //vulnerable while moulting
 		else if(lifestage==GRUE_JUVENILE)
 			lifestage=GRUE_ADULT
 			desc = "A grue chrysalis."
@@ -441,8 +438,7 @@
 			icon_state = "moult2"
 			icon_living = "moult2"
 			icon_dead = "moult2"
-			maxHealth=50 //vulnerable while moulting
-		health=tempHealth*maxHealth //keep same health percentage
+			rescaleHealth(50) //vulnerable while moulting
 		//Remove spells to prepare for new lifestage spell list
 		var/list/current_spells = src.spell_list.Copy()
 		for(var/spell/S in current_spells)
@@ -452,9 +448,7 @@
 
 /mob/living/simple_animal/hostile/grue/proc/complete_moult()
 	if(ismoulting && stat!=DEAD)
-		var/tempHealth=health/maxHealth //to scale health level
 		lifestage_updates()
-		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
 		ismoulting=FALSE //is no longer moulting
 		var/hintstring=""

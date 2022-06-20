@@ -97,7 +97,7 @@
 	to_chat(user, "<span class = 'warning'>There is no engine within range of \the [src] it can connect to.</span>")
 	return FALSE
 
-/obj/structure/shuttle/engine/heater/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+/obj/structure/shuttle/engine/heater/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
 	.=..()
 	if(.)
 		if(!anchored)
@@ -150,7 +150,7 @@
 		return wrenchAnchor(user, I, 5 SECONDS)
 	return ..()
 
-/obj/structure/shuttle/engine/propulsion/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+/obj/structure/shuttle/engine/propulsion/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
 	.=..()
 	if(.)
 		if(!anchored)

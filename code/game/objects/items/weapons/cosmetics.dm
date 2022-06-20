@@ -374,47 +374,18 @@
 		return 1
 	if(permanent)
 		invisible_time = 0
-	target.make_invisible(INVISIBLESPRAY, invisible_time)
-	/*
-	if(istype(target, /mob))
-		if(istype(target, /mob/living/carbon/human) || istype(target, /mob/living/carbon/monkey))
-			var/mob/living/carbon/C = target
-			C.body_alphas[INVISIBLESPRAY] = 1
-			C.regenerate_icons()
-			if(!permanent)
-				spawn(invisible_time)
-					if(C)
-						C.body_alphas.Remove(INVISIBLESPRAY)
-						C.regenerate_icons()
-		else
-			var/mob/M = target
-			M.alpha = 1	//to cloak immediately instead of on the next Life() tick
-			M.alphas[INVISIBLESPRAY] = 1
-			if(!permanent)
-				spawn(invisible_time)
-					if(M)
-						M.alpha = initial(M.alpha)
-						M.alphas.Remove(INVISIBLESPRAY)
-	else
-		if(istype(target, /obj))
-			var/obj/O = target
-			O.alpha = 1
-			O.has_been_invisible_sprayed = TRUE
-			if(O.loc == user)
-				user.regenerate_icons()
-			if(!permanent)
-				spawn(invisible_time)
-					if(O)
-						O.alpha = initial(O.alpha)
-						O.has_been_invisible_sprayed = FALSE
-						if(ismob(O.loc))
-							var/mob/M = O.loc
-							M.regenerate_icons()
-	*/
-	if(target == user)
+	var/mob/M = target
+	if(M == user)
 		to_chat(user, "You spray yourself with \the [src].")
-	else
-		to_chat(user, "You spray \the [target] with \the [src].")
+		user.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_MAXIMUM)
+	else if (ismob(M))
+		to_chat(user, "You spray [M] with \the [src].")
+		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_MAXIMUM)
+	var/obj/O = target
+	if(isobj(O))
+		to_chat(user, "You spray \the [O] with \the [src].")
+		O.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_MAXIMUM)
+
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))
@@ -558,7 +529,7 @@
 			H.my_appearance.h_style = new_style
 			H.update_hair()
 
-/obj/item/weapon/pocket_mirror/proc/shatter()
+/obj/item/weapon/pocket_mirror/proc/shatter(mob/shatterer)
 	if (shattered)
 		return
 	shattered = 1
@@ -566,23 +537,27 @@
 	playsound(src, "shatter", 70, 1)
 	desc = "Oh no, seven years of bad luck!"
 
-/obj/item/weapon/pocket_mirror/kick_act()
-	shatter()
+	//Curse the shatterer with bad luck
+	var/datum/blesscurse/brokenmirror/mirrorcurse = new /datum/blesscurse/brokenmirror
+	shatterer.add_blesscurse(mirrorcurse)
+
+/obj/item/weapon/pocket_mirror/kick_act(mob/living/carbon/human/H)
+	shatter(H)
 	..()
 
-/obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom)
+/obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
 	if(!isturf(hit_atom))
 		return
 	if (prob(25))
-		shatter()
+		shatter(user)
 
 /obj/item/weapon/pocket_mirror/comb
 	name = "hair comb"
 	desc = "Despite the name honey is not included nor recommended for use with this."
 	icon_state = "comb"
 
-/obj/item/weapon/pocket_mirror/comb/shatter()
+/obj/item/weapon/pocket_mirror/comb/shatter(mob/shatterer)
 	return
 
 /obj/item/weapon/pocket_mirror/comb/attack(mob/M, mob/user)
@@ -598,7 +573,7 @@
 	sharpness = 1
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 
-/obj/item/weapon/pocket_mirror/scissors/shatter()
+/obj/item/weapon/pocket_mirror/scissors/shatter(mob/shatterer)
 	return
 
 /obj/item/weapon/pocket_mirror/scissors/attack(atom/target, mob/user)

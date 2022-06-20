@@ -316,3 +316,9 @@
 	name = "Syndicate Suits recharge pack"
 	targetvendomat = /obj/machinery/vending/coffee
 	icon_state = "syndicatesuits"
+
+/obj/structure/vendomatpack/meat
+	name = "Meat Fridge recharge pack"
+	desc = "You could return it to cargo or just flatten it. The label looks like it was partially cut off."
+	targetvendomat = /obj/machinery/vending/meat
+	icon_state = "meat"

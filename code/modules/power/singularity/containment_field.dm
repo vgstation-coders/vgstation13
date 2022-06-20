@@ -7,7 +7,7 @@
 	icon_state = "Contain_F"
 	anchored = 1
 	density = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	luminosity = 4
 
 	flags = FPRINT | PROXMOVE

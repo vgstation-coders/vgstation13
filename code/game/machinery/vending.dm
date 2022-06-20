@@ -421,7 +421,7 @@ var/global/num_vending_terminals = 1
 
 //		to_chat(world, "Added: [R.product_name]] - [R.amount] - [R.product_path]")
 
-/obj/machinery/vending/emag(mob/user)
+/obj/machinery/vending/emag_act(mob/user)
 	if(!emagged || !extended_inventory || scan_id)
 		emagged = 1
 		extended_inventory = 1
@@ -530,7 +530,7 @@ var/global/num_vending_terminals = 1
 	else if(istype(W, /obj/item/weapon/card/emag))
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
 		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
-		if (emag())
+		if (emag_act())
 			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
 		else
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
@@ -1181,7 +1181,7 @@ var/global/num_vending_terminals = 1
 		throw_item()
 		lost_inventory--
 	stat |= BROKEN
-	src.icon_state = "[initial(icon_state)]-broken"
+	update_vicon()
 
 //Somebody cut an important wire and now we're following a new definition of "pitch."
 /obj/machinery/vending/proc/throw_item()
@@ -2172,6 +2172,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/lemonseed = 3,
 		/obj/item/seeds/orangeseed = 3,
 		/obj/item/seeds/grassseed = 3,
+		/obj/item/seeds/cloverseed = 3,
 		/obj/item/seeds/cocoapodseed = 3,
 		/obj/item/seeds/cabbageseed = 3,
 		/obj/item/seeds/grapeseed = 3,
@@ -2875,7 +2876,7 @@ var/global/num_vending_terminals = 1
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
 
-/obj/machinery/vending/nazivend/emag(mob/user)
+/obj/machinery/vending/nazivend/emag_act(mob/user)
 	if(!emagged)
 		if(user)
 			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
@@ -2958,7 +2959,7 @@ var/global/num_vending_terminals = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
 
 
-/obj/machinery/vending/sovietvend/emag(mob/user)
+/obj/machinery/vending/sovietvend/emag_act(mob/user)
 	if(!emagged)
 		if(user)
 			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
@@ -3828,3 +3829,120 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/syndicatesuits
+
+////////////////////////////////////////
+//			MEAT FRIDGE
+////////////////////////////////////////
+//a dan special
+//there'a sometimes a mouse stuck inside it!
+
+/obj/machinery/vending/meat
+	name = "\improper Meat Fridge"
+	desc = "A vending machine that dispenses meat, brought to you by Discount Dan. Dear LORD."
+	product_slogans = list(
+		"Meat! Get your meat!",
+		"One hundred percent, real meat. Verified by, heh, professionals.",
+		"We use the whole cow, here.",
+		"Brought to you by Discount Dan!"
+	)
+	product_ads = list(
+		"This isn't spam! Only real meat here."
+	)
+	icon_state = "meat"
+	icon_vend = "meat-vend"
+	vend_delay = 25
+	//The vending machine can have a mouse inside of it! If it does, it has a chance to eject it on each vend.
+	var/hasmouse = FALSE
+	var/chanceofhavingmouse = 35
+	var/chanceofejectingmouse = 10
+	var/mob/hiddenmouse = /mob/living/simple_animal/mouse/common/dan
+	var/hiddenmousesound = "sound/effects/mousesqueek.ogg"
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/snacks/sausage/dan = 3,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/sausage/dan = 15,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/human = 15,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation = 15,
+		)
+	pack = /obj/structure/vendomatpack/meat
+
+/obj/machinery/vending/meat/New()
+	..()
+	//Chance of a mouse inside of the vending machine
+	if(prob(chanceofhavingmouse))
+		hasmouse = TRUE
+
+	//Dan isn't really consistent with his new factories. Random amounts of meats are included.
+	//This all goes into New() because rand() can't be called in an object definition.
+	for(var/i = 1 to rand(6,8))
+		add_more_meat()
+
+	contraband = list(
+		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cowcube = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/human = rand(0,2),
+		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation = rand(0,2)
+		)
+	if(prob(33))
+		contraband[/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big] = 1
+	else
+		contraband[/obj/item/weapon/reagent_containers/food/snacks/meat/roach] = rand(1,2)
+	build_inventory(contraband, 1)
+
+/obj/machinery/vending/meat/proc/add_more_meat()
+	//More meat. More of the same entry. MORE. MORE!!
+	products = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan = rand(1,6),
+		)
+	src.build_inventory(products)
+
+/obj/machinery/vending/meat/update_vicon()
+	//Override the usual function so we can run special mouse codes
+	if(stat & (BROKEN))
+		icon_state = "[initial(icon_state)]-broken"
+		//If the mouse is still inside, it isn't anymore... rip
+		if(hasmouse)
+			hasmouse = FALSE
+			visible_message("\The [src.name] makes a sickening splatter sound.", "You hear a splat.")
+			playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+			//We don't want the !hasmouse down there to trigger, so,
+			return
+	else if (stat & (NOPOWER|FORCEDISABLE))
+		icon_state = "[initial(icon_state)]-off"
+	else
+		icon_state = "[initial(icon_state)]"
+	if(!hasmouse)
+		icon_state += "nomouse"
+
+/obj/machinery/vending/meat/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
+	..()
+	if(hasmouse && prob(chanceofejectingmouse))
+		dispensemouse(vend_delay)
+
+/obj/machinery/vending/meat/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
+	..()
+	if(hasmouse)
+		dispensemouse()
+
+/obj/machinery/vending/meat/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/accessory/stethoscope))
+		to_chat(user, "<SPAN CLASS='notice'>You lean in with your [W.name], listening closely.</SPAN>")
+		if(do_after(user, src, 40))
+			if(hasmouse)
+				to_chat(user, "<SPAN CLASS='notice'>You hear something moving around in the vending machine!</SPAN>")
+			else if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+				to_chat(user, "<SPAN CLASS='notice'>You can't hear anything.</SPAN>")
+			else
+				to_chat(user, "<SPAN CLASS='notice'>You can only hear the hum of the motor.</SPAN>")
+
+/obj/machinery/vending/meat/proc/dispensemouse(var/delay = 0)
+	hasmouse = FALSE
+	spawn(delay)
+		visible_message("\The [src.name] makes an unusual sound as some sort of [initial(hiddenmouse.name)] pops out of the slot!", "You hear a squeak.")
+		if(hiddenmousesound)
+			playsound(loc, hiddenmousesound, 50, 1)
+		new hiddenmouse(get_turf(src))
+
+

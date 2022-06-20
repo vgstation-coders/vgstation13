@@ -25,12 +25,24 @@ var/datum/subsystem/trade_system/SStrade
 	..()
 
 /datum/subsystem/trade_system/fire(resumed = FALSE)
-	if(prob(FLUX_CHANCE))
-		market_flux()
-	restock_chance()
-	flash_sale()
-	for(var/obj/structure/trade_window/TW in all_twindows)
-		nanomanager.update_uis(TW)
+	if(flags & SS_NO_FIRE)
+		if(trader_account)
+			message_admins("Trade subsystem resumed, trader account found.")
+			flags &= ~SS_NO_FIRE
+			//if(state == SS_PAUSED)
+				//state = SS_RUNNING
+		return
+	if(trader_account)
+		if(prob(FLUX_CHANCE))
+			market_flux()
+		restock_chance()
+		flash_sale()
+		for(var/obj/structure/trade_window/TW in all_twindows)
+			nanomanager.update_uis(TW)
+	else
+		flags |= SS_NO_FIRE
+		//pause()
+		message_admins("Trade subsystem was paused due to lack of a trader account.")
 
 /datum/subsystem/trade_system/proc/market_flux(var/update_windows = TRUE)
 	for(var/datum/trade_product/TP in all_trade_merch)

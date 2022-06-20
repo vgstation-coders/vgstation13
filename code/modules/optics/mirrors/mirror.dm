@@ -10,7 +10,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 	var/nsplits=1
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	anchored = 0
 	density = 1
 

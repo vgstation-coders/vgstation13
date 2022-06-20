@@ -83,6 +83,10 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 
 	var/Dist = world.view + extrarange
 
+	//Area muting
+	if(turf_source.mute_time > world.time)
+		return
+
 	// Looping through the player list has the added bonus of working for mobs inside containers
 	for (var/mob/player in player_list)
 		if(!player || !player.client)

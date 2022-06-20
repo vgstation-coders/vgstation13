@@ -15,7 +15,7 @@
 	var/cooldown_time = 0
 	var/cooldown_state = 0 // Just for icons.
 	var/robot_cell_charge = 5000
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 5000
 

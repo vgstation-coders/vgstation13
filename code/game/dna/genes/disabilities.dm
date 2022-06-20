@@ -168,3 +168,13 @@
 /datum/dna/gene/disability/anemia/New()
 	..()
 	block = ANEMIABLOCK
+
+/datum/dna/gene/disability/ehs
+	name = "Electromagnetic Hypersensitivity"
+	activation_message = "You feel like electricity burns you."
+	deactivation_message = "Electricity no longer hurts to be around."
+	disability = ELECTROSENSE
+
+/datum/dna/gene/disability/ehs/New()
+	..()
+	block = EHSBLOCK

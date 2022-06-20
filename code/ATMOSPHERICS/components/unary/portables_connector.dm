@@ -8,7 +8,7 @@
 	var/obj/machinery/portable_atmospherics/connected_device
 
 	var/on = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	level = 0
 
 

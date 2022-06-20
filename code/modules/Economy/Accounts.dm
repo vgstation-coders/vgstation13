@@ -334,7 +334,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 				else if((access_hop in idcard.access) || (access_captain in idcard.access))
 					access_level = 1
 
-/obj/machinery/account_database/emag(mob/user)
+/obj/machinery/account_database/emag_act(mob/user)
 	if(emagged)
 		emagged = 0
 		access_level = 0
@@ -384,7 +384,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 				else
 					var/obj/item/I = usr.get_active_hand()
 					if(isEmag(I))
-						emag(usr)
+						emag_act(usr)
 						return
 					if (istype(I, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/C = I

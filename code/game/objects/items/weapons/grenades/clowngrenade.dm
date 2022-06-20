@@ -64,39 +64,32 @@
 	throw_speed = 4
 	throw_range = 20
 
-	var/slip_power = 4
+	slip_override = 5
 
-/obj/item/weapon/bananapeel/traitorpeel/Crossed(AM as mob|obj)
-	var/burned = rand(2,5)
-	if(istype(AM, /mob/living))
+/obj/item/weapon/bananapeel/traitorpeel/handle_slip(atom/movable/AM)
+	if(isliving(AM))
+		var/burned = rand(2,5)
 		var/mob/living/M = AM
 		if(M.lying)
 			M.take_overall_damage(0, max(0, (burned - 2)))
 			M.simple_message("<span class='danger'>Something burns your back!</span>",\
 				"<span class='userdanger'>They're eating your back!</span>")
-			return
+			return 0
+
 		if(ishuman(M))
-			if(M.CheckSlip() != TRUE)
-				return
-			else
+			if(M.CheckSlip())
 				M.simple_message("<span class='warning'>Your feet feel like they're on fire!</span>",\
 					"<span class='userdanger'>Egads! They bite your feet!</span>")
 				M.take_overall_damage(0, max(0, (burned - 2)))
+			else
+				return 0
 
 		if(!istype(M, /mob/living/carbon/slime) && !isrobot(M))
-			M.stop_pulling()
-			step(M, M.dir)
-			spawn(1)
-				for(var/i = 1 to slip_power)
-					step(M, M.dir)
-					sleep(1)
+			slip_n_slide(M, 10, 10, "<span class='userdanger[iscarbon(M) ? " notice" : ""]'>Please, just end the pain!</span>")
 			M.take_organ_damage(2) // Was 5 -- TLE
-			M.simple_message("<span class='notice'>You slipped on \the [name]!</span>",\
-				"<span class='userdanger'>Please, just end the pain!</span>")
-			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-			M.Knockdown(10)
-			M.Stun(10)
 			M.take_overall_damage(0, burned)
+		return 1
+	return ..()
 
 /obj/item/weapon/bananapeel/traitorpeel/throw_impact(atom/hit_atom)
 	var/burned = rand(1,3)

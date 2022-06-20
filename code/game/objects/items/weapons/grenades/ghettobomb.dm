@@ -121,8 +121,10 @@
 /obj/item/weapon/grenade/iedcasing/suicide_act(var/mob/living/user)
 	if (!active) //no explosion with no active ied, dummy
 		return
-	
-	var/message_say = user.handle_suicide_bomb_cause()
+
+	var/message_say = user.handle_suicide_bomb_cause(src)
+	if(!message_say)
+		return
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
 	attack_self(user)

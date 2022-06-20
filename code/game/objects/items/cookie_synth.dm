@@ -13,12 +13,7 @@
 	var/delay = 15 SECONDS
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/cookiesynth/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(isEmag(W))
-		Emag(user)
-
-/obj/item/weapon/cookiesynth/proc/Emag(mob/user)
+/obj/item/weapon/cookiesynth/emag_act(mob/user)
 	emagged = !emagged
 	spark(src)
 

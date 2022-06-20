@@ -424,10 +424,10 @@
 	desc = "Drymate brand neaera cubes, shipped from Jargon 4. Just add water!"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube = 6)
 
-/obj/item/weapon/storage/box/monkeycubes/roachcubes
-	name = "roach cube box"
-	desc = "Drymate brand roach cubes, shipped from Secto 4. Just add water!"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube = 6)
+/obj/item/weapon/storage/box/monkeycubes/isopodcubes
+	name = "isopod cube box"
+	desc = "Drymate brand isopod cubes, shipped from Secto 4. Just add water!"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/mousecubes
 	name = "lab mouse cube box"
@@ -1317,3 +1317,10 @@
 	new /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit(src)
 	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+
+/obj/item/weapon/storage/box/demolition
+	icon_state = "box_of_doom"
+	items_to_spawn = list(
+		/obj/item/device/modkit/demolition,
+		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
+	)

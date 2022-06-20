@@ -218,7 +218,7 @@ Auto Patrol: []"},
 		target = H
 		shootAt(H)
 
-/obj/machinery/bot/ed209/Emag(mob/user)
+/obj/machinery/bot/ed209/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)

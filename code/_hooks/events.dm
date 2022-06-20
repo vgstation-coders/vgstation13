@@ -205,6 +205,18 @@
 // obj/item/item: the item being used for the attack
 /event/attackby
 
+// Called by throw_impact
+// Arguments:
+// atom/hit_atom: the atom hit by the throw impact
+// speed: the speed at which the thrown atom was thrown
+// mob/living/user: the mob who threw the atom, if any
+/event/throw_impact
+
+//Called by examine
+//Arguments:
+//mob/user: the mob doing the examining
+/event/examined
+
 /event/ui_act
 
 // Called when living calls a life() tick
