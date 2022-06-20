@@ -3,7 +3,7 @@
 	icon = 'icons/obj/switchtool.dmi'
 	icon_state = "switchtool"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/switchtool.dmi', "right_hand" = 'icons/mob/in-hand/right/switchtool.dmi')
-	desc = "A multi-deployable, multi-instrument, finely crafted multi-purpose tool. The envy of engineers everywhere."
+	desc = "A multi-deployable, multi-instrument, finely crafted multi-purpose tool. The envy of engineers everywhere.  Use SHIFT+Mousewheel to quickly Swap tools"
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 3
@@ -106,7 +106,7 @@
 
 /obj/item/weapon/switchtool/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
 	var/modifiers = params2list(params)
-	if (modifiers["ctrl"])
+	if (modifiers["shift"])
 		if (delta_y <= 0)
 			index++
 		else
@@ -289,7 +289,7 @@
 	name = "surgeon's switchtool"
 	icon_state = "surg_switchtool"
 	item_state = "surg_switchtool"
-	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
+	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go.  Use SHIFT+Mousewheel to quickly Swap tools"
 
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_BIOTECH + "=3"
 	stored_modules = list("/obj/item/tool/scalpel:scalpel" = null,
@@ -323,7 +323,7 @@
 	sharpness_flags = 0
 	icon_state = "s_a_k"
 	item_state = "s_a_k"
-	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
+	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil.  Use SHIFT+Mousewheel to quickly Swap tools"
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 
 	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
@@ -594,7 +594,7 @@
 
 /obj/item/weapon/switchtool/engineering
 	name = "\improper Engineering switchtool"
-	desc = "A switchtool designed specifically to be the perfect companion for an Engineer."
+	desc = "A switchtool designed specifically to be the perfect companion for an Engineer. Use SHIFT+Mousewheel to quickly Swap tools"
 	stored_modules = list(
 		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/screwdriver:screwdriver" = null,
