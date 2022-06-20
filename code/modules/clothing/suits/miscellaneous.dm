@@ -1062,7 +1062,7 @@ var/list/tag_suits_list = list()
 
 // -- American """"""Football""""""
 
-/obj/clothing/suit/nt_football
+/obj/item/clothing/suit/nt_football
 	name = "NT Football suit"
 	desc = "Contrary to popular belief, 13 wasn't chosen, it's simply the last number that hasn't been permanently inducted into the SNFL Hall of Fame."
 	blood_overlay_type = "armor"
@@ -1070,7 +1070,7 @@ var/list/tag_suits_list = list()
 	icon_state = "ntfootball"
 	flags = FPRINT
 
-/obj/clothing/suit/syndie_football
+/obj/item/clothing/suit/syndie_football
 	name = "Syndie Football suit"
 	desc = "The S stands for Soccer."
 	blood_overlay_type = "armor"

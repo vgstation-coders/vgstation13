@@ -2785,7 +2785,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
-		/obj/clothing/suit/nt_football = 5,
+		/obj/item/clothing/suit/nt_football = 5,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,

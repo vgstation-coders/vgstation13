@@ -854,9 +854,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/syndie_football_helmet,
 					/obj/item/clothing/head/syndie_football_helmet,
 					/obj/item/clothing/head/syndie_football_helmet,
-					/obj/clothing/suit/syndie_football,
-					/obj/clothing/suit/syndie_football,
-					/obj/clothing/suit/syndie_football,)
+					/obj/item/clothing/suit/syndie_football,
+					/obj/item/clothing/suit/syndie_football,
+					/obj/item/clothing/suit/syndie_football,)
 	cost = 100
 	containertype = /obj/structure/largecrate/
 	containername = "NFL dummy crate"
