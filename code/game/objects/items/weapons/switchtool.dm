@@ -201,6 +201,8 @@
 		return FALSE
 	if(!stored_modules[module])
 		return FALSE
+	if(deployed)
+		return FALSE
 	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	hmodule = get_module_name(module)
