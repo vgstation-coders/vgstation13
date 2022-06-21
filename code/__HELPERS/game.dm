@@ -225,6 +225,10 @@
 				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Inactive.")
 				continue
 
+			if(isAdminGhost(G)) // don't do this to admins
+				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Is adminned.")
+				continue
+
 			roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Selected [G] as candidate.")
 			candidates += G
 		i++
