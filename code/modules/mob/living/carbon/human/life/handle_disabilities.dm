@@ -74,7 +74,6 @@
 				"stop grifing me!!!!", \
 				"SOTP IT#", "based and redpilled",\
 				"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
-				"ITS MORBIN TIME",\
 				"AI ROUGE",\
 				"BLOB",\
 				"its gat ti ti metabyddt abd i wont debt vtbutiful", \
