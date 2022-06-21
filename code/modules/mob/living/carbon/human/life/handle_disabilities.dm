@@ -65,7 +65,8 @@
 			if(prob(3))
 				text = pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 				"without oxigen blob don't evoluate?", \
-				"CAPTAINS A COMDOM", "[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
+				"CAPTAINS A COMDOM", \
+				"[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
 				"can u give me [pick("telikesis","halk","eppilapse")]?", \
 				"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
 				"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
@@ -74,9 +75,9 @@
 				"ITS MORBIN TIME",\
 				"AI ROUGE",\
 				"BLOB",\
-				"OH MY GAW!!!")
-			else if(prob(3))
-				text = pick("FUS RO DAH", \
+				"its gat ti ti metabyddt abd i wont debt vtbutiful", \
+				"OH MY GAW!!!"
+				"FUS RO DAH", \
 				"fucking 4rries!", \
 				"stat me", \
 				">my face", \
@@ -97,6 +98,7 @@
 				"not so tough now huh", \
 				"WERE NOT BAY!!", \
 				"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
+				"ALL I DO IS TALK ABOUT 2ND WORLD WAR SHIT OR CLAssical historical", \
 				"DONT TALK TO ME ABOUT BALANCE!!!!", \
 				"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
 				"BLAME HOSHI!!!", \
