@@ -73,7 +73,8 @@
 				"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
 				"ITS MORBIN TIME",\
 				"AI ROUGE",\
-				"BLOB")
+				"BLOB",\
+				"OH MY GAW!!!")
 			else if(prob(3))
 				text = pick("FUS RO DAH", \
 				"fucking 4rries!", \
