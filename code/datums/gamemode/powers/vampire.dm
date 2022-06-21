@@ -7,7 +7,6 @@
 /datum/power/vampire/rejuvenate
 	cost = 0
 	spellpath = /spell/rejuvenate
-	granttext = "You have gained the ability to rejuvnate your body and clean yourself of all incapacitating effects."
 
 /datum/power/vampire/glare
 	cost = 0
@@ -16,6 +15,10 @@
 /datum/power/vampire/hypnotise
 	cost = 0
 	spellpath = /spell/targeted/hypnotise
+
+/datum/power/vampire/shapeshift
+	cost = 0
+	spellpath = /spell/shapeshift
 
 /datum/power/vampire/vision
 	cost = 100
@@ -67,11 +70,6 @@
 	cost = 400
 	granttext = "You have reached physical maturity. You are more vulnerable to holy things, and your vision has been improved greatly. You drain blood from people twice as fast and you no longer need to take their masks off."
 	store_in_memory = TRUE
-
-/datum/power/vampire/shapeshift
-	cost = 400
-	spellpath = /spell/shapeshift
-	granttext = "You have gained the shapeshifting ability."
 
 /datum/power/vampire/shadow
 	cost = 450

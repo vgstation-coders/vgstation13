@@ -249,10 +249,11 @@
 	// Vision-related changes.
 	if (locate(/datum/power/vampire/vision) in current_powers)
 		H.change_sight(adding = SEE_MOBS)
+		H.update_perception()
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.see_in_dark = 8
+		H.update_perception()
 
 /datum/role/vampire/proc/is_mature_or_has_vision()
 	return (locate(/datum/power/vampire/vision) in current_powers) || (locate(/datum/power/vampire/mature) in current_powers)

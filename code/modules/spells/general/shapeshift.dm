@@ -41,6 +41,7 @@
 		user.set_species(identity.species, 0)
 		user.dna = identity
 		user.UpdateAppearance()
+		user.update_perception()
 		humanform = TRUE
 	
 	..()

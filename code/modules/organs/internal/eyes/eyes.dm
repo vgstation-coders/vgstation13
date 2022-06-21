@@ -10,8 +10,6 @@
 	var/see_in_dark=2
 	var/list/colourmatrix = list()
 
-
-
 /datum/organ/internal/eyes/proc/init_perception(var/mob/living/carbon/human/M)
 	return
 
@@ -55,6 +53,9 @@
 	name = "monstrous eyes"
 	see_in_dark= 9
 	removed_type = /obj/item/organ/internal/eyes/monstrous
+
+/datum/organ/internal/eyes/monstrous/update_perception(var/mob/living/carbon/human/M)
+	M.client.darkness_planemaster.alpha = 100
 
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"
