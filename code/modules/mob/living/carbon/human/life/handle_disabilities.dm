@@ -70,7 +70,8 @@
 				"can u give me [pick("telikesis","halk","eppilapse")]?", \
 				"THe saiyans screwed", \
 				"Bi is THE BEST OF BOTH WORLDS>", \
-				"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
+				"I WANNA PET TEH monkeyS", \
+				"stop grifing me!!!!", \
 				"SOTP IT#", "based and redpilled",\
 				"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
 				"ITS MORBIN TIME",\
