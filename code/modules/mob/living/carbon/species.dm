@@ -1033,8 +1033,6 @@ var/list/has_died_as_golem = list()
 	anatomy_flags = HAS_LIPS
 	punch_damage = 7
 	default_mutations=list(M_CLAWS,M_TALONS)
-	burn_mod = 2
-	brute_mod = 2
 	has_mutant_race = 0
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
