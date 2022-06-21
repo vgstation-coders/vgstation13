@@ -1,6 +1,6 @@
 /spell/shapeshift
 	name = "Shapeshift"
-	desc = "You change into your true form."
+	desc = "You change into your true form, granting you better vision, and obfuscating technology."
 	abbreviation = "SS"
 	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
 	school = "vampire"
