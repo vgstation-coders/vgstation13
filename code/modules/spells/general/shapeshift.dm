@@ -6,8 +6,8 @@
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
 
-	charge_max = 300
-	cooldown_min = 30 SECONDS
+	charge_max = 200
+	cooldown_min = 20 SECONDS
 	spell_flags = NEEDSHUMAN
 
 	charge_type = Sp_RECHARGE
