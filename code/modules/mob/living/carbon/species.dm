@@ -1266,8 +1266,6 @@ var/list/has_died_as_golem = list()
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
 
-
-
 /datum/species/mushroom
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'

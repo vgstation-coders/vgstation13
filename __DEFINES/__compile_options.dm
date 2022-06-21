@@ -47,7 +47,7 @@
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
-#define DEVELOPER_MODE 1
+#define DEVELOPER_MODE 0
 
 // If 1, unit tests will be compiled
 #define UNIT_TESTS_ENABLED 0
