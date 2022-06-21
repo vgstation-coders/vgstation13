@@ -2,7 +2,6 @@
 /mob/proc/make_changeling()
 	if(!mind)
 		return
-
 	var/datum/role/changeling/C = mind.GetRole(CHANGELING)
 	if(!C)
 		return
@@ -14,7 +13,6 @@
 		C.antag.current.add_spell(new /spell/changeling/higherform, "changeling_spell_base", /obj/abstract/screen/movable/spell_master/changeling)
 
 	C.refreshpowers()
-
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H))
