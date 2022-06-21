@@ -46,7 +46,7 @@
 			audible_cough(src)
 	if(disabilities & TOURETTES)
 		if(prob(7))
-			say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS", "NIGGER", "I HAVE A BOMB")]")
+			say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS")]")
 		if(prob(3))
 			emote("twitch")
 		if(prob(10))
