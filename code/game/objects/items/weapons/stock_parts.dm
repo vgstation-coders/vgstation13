@@ -148,12 +148,12 @@
 //Rating 3
 
 /obj/item/weapon/stock_parts/console_screen/reinforced/plasma
-	name = "plasma reinforced console screen"
+	name = "plasma console screen"
 	desc = "Used in the construction of computers and other devices with a interactive console."
-	icon_state = "prscreen"
+	icon_state = "pscreen"
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_PLASMATECH + "=3"
 	rating = 3
-	starting_materials = list(MAT_PLASMA = 100, MAT_IRON = 100, MAT_GLASS = 200)
+	starting_materials = list(MAT_PLASMA = 100, MAT_GLASS = 200)
 
 /obj/item/weapon/stock_parts/capacitor/adv/super
 	name = "super capacitor"
@@ -198,6 +198,14 @@
 
 //Rating 4
 //Please don't make these too easily accessible to the station.
+
+/obj/item/weapon/stock_parts/console_screen/reinforced/plasma/rplasma
+	name = "reinforced plasma console screen"
+	desc = "Used in the construction of computers and other devices with a interactive console."
+	icon_state = "pscreen"
+	origin_tech = Tc_MATERIALS + "=7;" + Tc_PLASMATECH + "=3"
+	rating = 4
+	starting_materials = list(MAT_PLASMA = 100, MAT_IRON = 100, MAT_GLASS = 200)
 
 /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace
 	name = "bluespace matter bin"

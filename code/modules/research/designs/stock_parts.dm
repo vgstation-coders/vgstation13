@@ -177,7 +177,7 @@
 	build_path = /obj/item/weapon/stock_parts/matter_bin/adv/super
 
 /datum/design/plasma_console_screen
-	name = "Plasma Reinforced Console Screen"
+	name = "Plasma Console Screen"
 	desc = "A stock part used in the construction of various devices."
 	id = "plasma_console_screen"
 	req_tech = list(Tc_MATERIALS = 5, Tc_PLASMATECH = 3)
