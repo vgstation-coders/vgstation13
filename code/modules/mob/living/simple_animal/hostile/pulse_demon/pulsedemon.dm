@@ -30,7 +30,7 @@
 	harm_intent_damage = 0
 	melee_damage_lower = 0
 	melee_damage_upper = 0											//Handled in unarmed_attack_mob() anyways
-	pass_flags = PASSDOOR											//Stops the message spam
+	pass_flags = PASSDOOR //| PASSMOB									//Stops the message spam
 
 	//VARS
 	var/charge = 1000												//Charge stored
@@ -72,7 +72,7 @@
 		if(istype(current_power,/obj/machinery/power/apc))
 			controlling_area = get_area(current_power)
 		forceMove(current_power)
-	set_light(2,2,"#bbbb00")
+	set_light(1.5,2,"#bbbb00")
 	add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
 	add_spell(new /spell/pulse_demon/toggle_drain, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
 	for(var/pd_spell in getAllPulseDemonSpells())
@@ -125,6 +125,20 @@
 		to_chat(src, "You have lost power!")
 		powerloss_alerted = 1
 		//TODO add a sound
+		
+/mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
+	var/range = 1.5 
+	if(charge <= 50000) //why isn't there a log function, i guess i could have used len(str()) but that's fucking stupid
+		range = 1.5
+	else if(charge <= 100000)
+		range = 2
+	else if(charge <= 200000)
+		range = 2.5
+	else if(charge <= 400000)
+		range = 3
+	else
+		range = 3.5
+	set_light(range, 2, "#bbbb00")
 	
 /mob/living/simple_animal/hostile/pulse_demon/proc/power_restored()
 	var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
@@ -134,8 +148,9 @@
 		to_chat(src, "Power restored.")
 		powerloss_alerted = 0
 		//TODO add a sound
-
+	
 /mob/living/simple_animal/hostile/pulse_demon/Life()
+	update_glow()
 	if(current_cable)
 		if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
 			power_lost()
@@ -162,11 +177,13 @@
 	standard_damage_overlay_updates()
 	..()
 
-/mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)  //TODO fix, this infinite loops somehow if you die in specific circumstances
+/mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
 	..()
 	var/turf/T = get_turf(src)
 	spark(src,rand(2,4))
-	empulse(T,charge/50000,charge/25000)
+	var/heavyemp_radius = min(charge/50000, 20)
+	var/lightemp_radius = min(charge/25000, 25)
+	empulse(T, heavyemp_radius, lightemp_radius)
 	playsound(T,"pd_wail_sound",50,1)
 	qdel(src) // We vaporise into thin air
 
@@ -271,7 +288,9 @@
 
 	else
 		playsound(loc, "[pick(emote_sound)]", 50, 1) // Play sound if in an intercom or not
-		if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
+		var/radio = locate(/obj/item/device/radio) in loc
+		var/holopad = locate(/obj/machinery/hologram/holopad/) in loc
+		if(!radio && !holopad) // if not in a machine you can speak out of, just sizzle 
 			emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
 			return 1 // To stop speaking normally
 
@@ -292,8 +311,6 @@
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
 	return
-	
-//TODO add something to make you unable to be hit by thrown stuff
 
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
@@ -408,7 +425,7 @@
 
 // This too
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
-	//max_can_absorb = current_apc.cell.maxcharge * 10 //draining APC batteries has no upper limit due to uhhh galvanic isolation
+	//max_can_absorb = current_apc.cell.maxcharge * 10 //draining APC batteries has no upper limit on maxpower due to uhhh galvanic isolation
 	var/amount_to_drain = charge_absorb_amount
 	// Cap conditions
 	if(current_apc.cell.charge <= amount_to_drain)
