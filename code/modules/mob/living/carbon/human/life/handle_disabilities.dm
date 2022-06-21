@@ -118,7 +118,7 @@
 				if(prob(50))
 					say("; [text]")
 				else
-					say("[text]"")
+					say("[text]")
 		if(getBrainLoss() > 50 && prob(1))
 			if(canmove)
 				to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
