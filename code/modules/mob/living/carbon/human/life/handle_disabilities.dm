@@ -46,7 +46,7 @@
 			audible_cough(src)
 	if(disabilities & TOURETTES)
 		if(prob(7))
-			say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS", "NIGGER")]")
+			say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS", "NIGGER", "I HAVE A BOMB")]")
 		if(prob(3))
 			emote("twitch")
 		if(prob(10))
@@ -68,7 +68,8 @@
 				"CAPTAINS A COMDOM", \
 				"[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
 				"can u give me [pick("telikesis","halk","eppilapse")]?", \
-				"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
+				"THe saiyans screwed", \
+				"Bi is THE BEST OF BOTH WORLDS>", \
 				"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
 				"SOTP IT#", "based and redpilled",\
 				"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
