@@ -74,9 +74,6 @@
 				"stop grifing me!!!!", \
 				"SOTP IT#", "based and redpilled",\
 				"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
-				"AI ROUGE",\
-				"BLOB",\
-				"its gat ti ti metabyddt abd i wont debt vtbutiful", \
 				"OH MY GAW!!!", \
 				"FUS RO DAH", \
 				"fucking 4rries!", \
@@ -99,7 +96,6 @@
 				"not so tough now huh", \
 				"WERE NOT BAY!!", \
 				"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
-				"ALL I DO IS TALK ABOUT 2ND WORLD WAR SHIT OR CLAssical historical", \
 				"DONT TALK TO ME ABOUT BALANCE!!!!", \
 				"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
 				"BLAME HOSHI!!!", \
@@ -114,8 +110,7 @@
 				"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
 				"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 				"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
-				"I AM BASTE", \
-				"I CANT BREET")
+				"I AM BASTE")
 			else if(prob(3))
 				emote("drool")
 			if(text)
