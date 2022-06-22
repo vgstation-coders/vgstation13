@@ -671,7 +671,7 @@
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
-			C.make_visible(INVISIBLESPRAY,FALSE)
+			C.make_visible(INVISIBLESPRAY)
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
