@@ -56,7 +56,7 @@ emp_act
 	if(def_zone)
 		if(isorgan(def_zone))
 			return checkarmor(def_zone, type)
-		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		var/datum/organ/external/affecting = get_organ(check_zone(def_zone))
 		return checkarmor(affecting, type)
 		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
 
