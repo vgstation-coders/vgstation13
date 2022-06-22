@@ -204,7 +204,7 @@
 	var/static/list/possible_types = list(
 		/mob/living/simple_animal/construct/armoured,
 		/mob/living/simple_animal/hostile/gremlin,
-		/mob/living/simple_animal/hostile/necromorph,
+		/mob/living/simple_animal/hostile/necro/necromorph,
 		/mob/living/simple_animal/hostile/asteroid/goliath,
 		/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,
