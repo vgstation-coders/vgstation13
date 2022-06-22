@@ -848,6 +848,21 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/security_formal_wear/New()
 	selection_from = list(Blue, Navy, Tan)
 
+/datum/supply_packs/nfl_suits
+	name = "NFL Suit and training dummy"
+	contains = list(/obj/structure/mannequin,
+					/obj/item/clothing/head/syndie_football_helmet,
+					/obj/item/clothing/head/syndie_football_helmet,
+					/obj/item/clothing/head/syndie_football_helmet,
+					/obj/item/clothing/suit/syndie_football,
+					/obj/item/clothing/suit/syndie_football,
+					/obj/item/clothing/suit/syndie_football,)
+	cost = 100
+	containertype = /obj/structure/largecrate/
+	containername = "NFL dummy crate"
+	group = "Clothing"
+
+
 //Winter Coats//
 
 /datum/supply_packs/engwinter
