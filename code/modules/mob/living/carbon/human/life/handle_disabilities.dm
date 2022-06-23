@@ -6,7 +6,7 @@
 		var/affect_chance = 30
 		var/affected = FALSE
 		if(head && istype(head,/obj/item/clothing/head/tinfoil))
-			affect_chance -= 14
+			affect_chance -= 15
 		if(wear_suit && istype(wear_suit,/obj/item/clothing/suit/spaceblanket))
 			affect_chance -= 15
 		if(prob(affect_chance))
