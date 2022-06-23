@@ -772,13 +772,6 @@
 			R.convert(new_character,null,TRUE,TRUE)
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
 
-	if(new_character.disabilities & ELECTROSENSE) //QoL so no instaburn if you get this
-		var/area/A = get_area(new_character)
-		if(A && !isspace(A))
-			if(A.areaapc?.operating)
-				A.areaapc.operating = 0
-				A.areaapc.update()
-
 	return new_character
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
