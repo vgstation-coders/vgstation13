@@ -216,6 +216,7 @@
 	addWordReplacement("oh god","cheese and crackers")
 	addWordReplacement("jesus","gee wiz")
 	addWordReplacement("weak","strong")
+	addWordReplacement("\\b(fuck you|i hate you|kill yourself|go die)","you're mean")
 	addWordReplacement("kill","hug")
 	addReplacement("murder","tease")
 	addWordReplacement("ugly","beutiful")
@@ -232,7 +233,6 @@
 	addWordReplacement("beer","water with ice")
 	addWordReplacement("drink","water")
 	addWordReplacement("\\b(feminist|feminazi|SJW|social justice warrior)","empowered woman")
-	addWordReplacement("\\b(fuck you|i hate you|hug yourself|go die)","you're mean") //kill becomes hug
 	addWordReplacement("nigger","african american")
 	addWordReplacement("faggot","effeminate male")
 	addPickReplacement("fag", list("fig", "friend"))
