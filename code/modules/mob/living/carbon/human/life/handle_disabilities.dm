@@ -25,7 +25,7 @@
 					affected = TRUE
 					continue
 		if(affected)
-			to_chat(src, "<span class='warning'>The electrical devices hum loudly in your ears!</span>")
+			to_chat(src, "<span class='warning'>The electrical devices hum loudly!</span>")
 			Jitter(20)
 			if(eye_blurry <= 1)
 				eye_blurry = 10
