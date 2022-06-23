@@ -69,7 +69,7 @@
 
 	if(getBrainLoss() >= 60 && prob(3))
 		var/text = null
-		text = pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
+		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
 		"[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
@@ -117,11 +117,7 @@
 		"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
 		"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 		"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
-		"I AM BASTE")
-		if(prob(50))
-			say("; [text]")
-		else
-			say("[text]")
+		"I AM BASTE"))
 	else if(prob(3))
 		emote("drool")
 	if(getBrainLoss() > 50 && prob(1.5))
