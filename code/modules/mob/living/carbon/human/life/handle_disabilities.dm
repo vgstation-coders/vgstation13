@@ -29,7 +29,7 @@
 			Jitter(20)
 			if(eye_blurry <= 1)
 				eye_blurry = 10
-			if(getHalLoss() < 20)
+			if(getHalLoss() < 50)
 				adjustHalLoss(20)
 
 	//If we have the gene for being crazy, have random events.
