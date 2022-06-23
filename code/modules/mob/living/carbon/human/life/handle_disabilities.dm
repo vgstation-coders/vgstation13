@@ -68,7 +68,6 @@
 			Jitter(10)
 
 	if(getBrainLoss() >= 60 && prob(3))
-		var/text = null
 		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
