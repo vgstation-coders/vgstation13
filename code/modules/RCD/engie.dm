@@ -7,7 +7,6 @@
 	/datum/rcd_schematic/con_window,
 	)
 
-
 /obj/item/device/rcd/matter/engineering/New()
 	. = ..()
 	rcd_list += src
@@ -40,16 +39,35 @@
 	/datum/rcd_schematic/con_window/borg,
 	)
 
-/obj/item/device/rcd/matter/engineering/pre_loaded/admin
-	name = "experimental Rapid-Construction-Device (RCD)"
-	max_matter = INFINITY
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv
+	name = "advanced Rapid-Construction-Device (RCD)"
+	icon_state = "arcd"
+	schematics = list(
+	/datum/rcd_schematic/decon,
+	/datum/rcd_schematic/con_floors,
+	/datum/rcd_schematic/con_rfloors,
+	/datum/rcd_schematic/con_walls,
+	/datum/rcd_schematic/con_rwalls,
+	/datum/rcd_schematic/con_airlock,
+	/datum/rcd_schematic/con_window,
+	)
+	matter = 90
+	max_matter = 90
+	origin_tech = Tc_ENGINEERING + "=5;" + Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=4"
+	mech_flags = MECH_SCAN_FAIL
 
-/obj/item/device/rcd/matter/engineering/pre_loaded/admin/afterattack(var/atom/A, var/mob/user)
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
+	return do_after(user, target, amount/2)
+
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin
+	name = "experimental Rapid-Construction-Device (RCD)"
+
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))
 		visible_message("\The [src] disappears into nothing.")
 		qdel(src)
 		return
 	return ..()
 
-/obj/item/device/rcd/matter/engineering/pre_loaded/admin/delay(var/mob/user, var/atom/target, var/amount)
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/delay(var/mob/user, var/atom/target, var/amount)
 	return TRUE

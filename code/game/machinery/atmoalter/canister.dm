@@ -33,10 +33,7 @@
 	melt_temperature = MELTPOINT_STEEL
 
 	//Icon Update Code
-	var/global/list/status_overlays_pressure = list()
-	var/global/list/status_overlays_other = list()
 	var/overlay_status = 0
-
 	var/log="" // Bad boys, bad boys.
 
 /obj/machinery/portable_atmospherics/canister/New()
@@ -125,18 +122,18 @@
 
 /obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)
 	var/static/list/status_overlays_pressure = list(
-		image(icon, "can-o0"),
-		image(icon, "can-o1"),
-		image(icon, "can-o2"),
-		image(icon, "can-o3")
+		image('icons/obj/atmos.dmi', "can-o0"), //Should be able to use icon as an arg here, but BYOND (as of v514) makes it null for some reason. null actually works fine here though because it uses src.icon by default. But for the sake of clarity we'll keep the explicit path here for now. Same situation with the vintage canisters in randomvaults/objects.dm.
+		image('icons/obj/atmos.dmi', "can-o1"),
+		image('icons/obj/atmos.dmi', "can-o2"),
+		image('icons/obj/atmos.dmi', "can-o3")
 	)
 
 	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
 	var/static/list/status_overlays_other = list(
-		image(icon, "can-open"),
-		image(icon, "can-connector")
+		image('icons/obj/atmos.dmi', "can-open"),
+		image('icons/obj/atmos.dmi', "can-connector")
 	)
 
 	return status_overlays_other[state]

@@ -3,9 +3,7 @@
 	desc = "We extract extra adrenaline from epinephrine sacs within our body, instantly recovering us from stuns."
 	abbreviation = "ES"
 	hud_state = "unstun"
-
 	spell_flags = NEEDSHUMAN
-
 	chemcost = 45
 
 //Recover from stuns.
