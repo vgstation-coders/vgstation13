@@ -834,14 +834,14 @@
 /obj/structure/disposalpipe/t_scanner_expose()
 	if (level != LEVEL_BELOW_FLOOR)
 		return
-
+	var/old_invisibility = invisibility
 	invisibility = 0
 	plane = ABOVE_TURF_PLANE
 
 	spawn(1 SECONDS)
 		var/turf/U = loc
 		if(istype(U) && U.intact)
-			invisibility = 101
+			invisibility = old_invisibility
 			plane = initial(plane)
 
 // expel the held objects into a turf

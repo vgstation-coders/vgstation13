@@ -227,7 +227,7 @@
 "at" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/necromorph{
+/mob/living/simple_animal/hostile/necro/necromorph{
 	health = 500;
 	melee_damage_lower = 50;
 	name = "Necromorph Specimen Alpha"

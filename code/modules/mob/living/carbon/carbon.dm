@@ -33,7 +33,6 @@
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
-
 	if(.)
 		if(nutrition && stat != DEAD)
 			burn_calories(HUNGER_FACTOR / 20)
@@ -680,23 +679,22 @@
 /mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
 	//INVISIBILITY_LEVEL_ONE to INVISIBILITY_MAXIMUM for invisibility
 	if(include_clothing)
-		return ..()
+		..()
 	if(invisibility || alpha <= 1 || !source_define)
 		return
 	body_alphas[source_define] = alpha_value
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			make_visible(source_define, include_clothing)
+			make_visible(source_define)
 
-/mob/living/carbon/make_visible(var/source_define, var/include_clothing)
-	if(include_clothing)
-		..()
-	if(!body_alphas || !source_define)
+/mob/living/carbon/make_visible(var/source_define)	
+	if(!source_define)
 		return
-	if(src)
+	if(src && body_alphas)
 		body_alphas.Remove(source_define)
 		regenerate_icons()
+	..()
 
 /mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
 	if(!..())

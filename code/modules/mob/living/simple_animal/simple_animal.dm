@@ -241,8 +241,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		purge -= 1
 
-	isRegenerating = 0
-
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
 		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
@@ -804,10 +802,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	set waitfor = 0
 	isRegenerating = 1
 	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
-	src.resurrect()
-	src.revive()
-	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
-	isRegenerating = 0
+	if(src)
+		resurrect()
+		revive()
+		visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+		isRegenerating = 0
 
 /mob/living/simple_animal/proc/pointed_at(var/mob/pointer)
 	return

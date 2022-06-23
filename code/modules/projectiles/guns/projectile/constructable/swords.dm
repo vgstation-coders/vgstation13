@@ -249,7 +249,7 @@
 	hitsound = "sound/weapons/smash.ogg"
 	var/complete = 0
 
-/obj/item/weapon/sword/executioner/afterattack(null, mob/living/user as mob|obj, null, null, null)
+/obj/item/weapon/sword/executioner/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(complete)
 		user.delayNextAttack(30) //thrice the regular attack delay
 

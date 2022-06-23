@@ -1,5 +1,3 @@
-
-
 /obj/item/clothing/head/centhat
 	name = "\improper CentComm. hat"
 	icon_state = "centcom"
@@ -752,3 +750,17 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 /obj/item/clothing/head/bteamcaptain/unequipped(mob/user)
     user.overlays -= unusual_overlay
     return ..()
+
+// American "football"
+
+/obj/item/clothing/head/nt_football_helmet
+	name = "NT football helmet"
+	desc = "Where captain rigs go to die."
+	flags = FPRINT
+	icon_state = "ntfootballhelmet"
+
+/obj/item/clothing/head/syndie_football_helmet
+	name = "Syndie football helmet"
+	desc = "It survived an explosive implant, it'll survive you."
+	flags = FPRINT
+	icon_state = "footballsyndiehelmet"

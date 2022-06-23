@@ -73,6 +73,64 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2022.06.22</h2>
+			<h3 class="author">DorainGrey updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now iterate through a switchtool by holding down Shift + MouseWheel.</li>
+			</ul>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed issue with armor calculation for worn non-clothing items.</li>
+				<li class="bugfix">Fixed scythe AOE plant cutting.</li>
+				<li class="rscadd">Added support for damage-type-specific armor for breakable objects.</li>
+			</ul>
+			<h3 class="author">OctoKing-dev updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Shunted APC copies of malfunctioning AIs will no longer appear in the crew manifest under certain conditions.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The long-standing tradition of American football has finally reached the outermost areas of space. Get a suit representing Nanotrasen and practice for UniverseBowl today.</li>
+			</ul>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">T- and P- ray scanners now should pick up more invisible objects</li>
+				<li class="bugfix">Fixed a bug with reviving causing zombies and necromorphs to revive multiple times while dead</li>
+				<li class="tweak">lowered robust harvest weed rates again</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Changing player special role preferences can now be done by pressing save setup at the bottom of the menu, instead of the old &#34;submit&#34; button. The menu has also been reformatted.</li>
+				<li class="rscadd">Chief engineers now get their own advanced rapid construction devices, capable of reinforcing already existing floors and walls with an extended capacity of 90 units and building twice as fast.</li>
+				<li class="tweak">Stairs can no longer be built on levels with nothing above.</li>
+				<li class="tweak">Upwards or downwards pipes can no longer be built if nothing is in their indicated direction.</li>
+			</ul>
+			<h2 class="date">2022.06.21</h2>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Mind machine can mindswap catatonic monkeymen again</li>
+			</ul>
+			<h3 class="author">pedr69 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">emagging telecomms lets you use the console</li>
+			</ul>
+			<h2 class="date">2022.06.20</h2>
+			<h3 class="author">adacovsk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Weeds shouldn&#39;t overtake as fast</li>
+			</ul>
+			<h2 class="date">2022.06.17</h2>
+			<h3 class="author">DorainGrey updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added Socket Wrench to prolathe</li>
+				<li class="tweak">Crowbaring, Inserting and screwing airlock electronics are now instantaneous.</li>
+			</ul>
+			<h2 class="date">2022.06.16</h2>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Lamps can be turned on or off via alt-click.</li>
+				<li class="tweak">Only creatures with a free hand can turn lamps on or off.</li>
+			</ul>
 			<h2 class="date">2022.06.12</h2>
 			<h3 class="author">adacovsk updated:</h3>
 			<ul class="changes bgimages16">
@@ -1470,88 +1528,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Time agent twins can now teleport out of the void between timelines.</li>
 				<li class="bugfix">Time agent twins now receive their objective.</li>
 				<li class="bugfix">Time agents can now leave through the time anomaly with a jump charge.</li>
-			</ul>
-			<h2 class="date">2021.12.30</h2>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Tractors now have working headlights.</li>
-				<li class="rscadd">Janitors now have a winter coat. Available in civilian winterwear crates and their clothing locker on Snow Station.</li>
-			</ul>
-			<h2 class="date">2021.12.28</h2>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Pulse demons now have a spell allowing them to toggle power draining.</li>
-				<li class="tweak">The maximum pulse demon absorbed charge in an APC has been multiplied by ten, with a max of 400kW from the best normally available cells, and 30kW by default. (up from 3kW)</li>
-				<li class="tweak">The purchase cost of the following pulse demon spells has been changed: Electromagnetic pulse: 50kW to 150kW, Electromagnetic tamper: 100kW to 200kW, Overload machinery: 200kW to 300kW, Self-sustaining charge: 100kW to 500kW.</li>
-				<li class="tweak">The upgrade cost of the following pulse demon spells has been changed: Electromagnetic pulse: 20kW to 50kW, Self-sustaining charge: 20kW to 200kW.</li>
-				<li class="tweak">The upgrade cost of each pulse demon spell increases with each purchase of one.</li>
-				<li class="tweak">Pulse demons absorb charge 10 times faster in batteries, but not APCs.</li>
-				<li class="tweak">Pulse demons can now be EMPed inside machinery that gets EMPed.</li>
-				<li class="bugfix">Pulse demons can now leave APCs with self sustaining charge toggled on.</li>
-				<li class="bugfix">The maximum pulse demon charge absorb from an APC or battery is now updated on each drain, instead of just when you move inside.</li>
-				<li class="bugfix">Pulse demons will now properly drain their health on an empty powernet if inside a power source.</li>
-				<li class="bugfix">Pulse demons no longer randomly lose cable view.</li>
-				<li class="bugfix">Pulse demons are no longer tangible to melee weapons.</li>
-			</ul>
-			<h2 class="date">2021.12.26</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The liberator anti-blob rifle is now available at the ammolathe. It deals severely reduced damage to humans, so it&#39;s a lower risk option to distribute to civilians.</li>
-			</ul>
-			<h2 class="date">2021.12.25</h2>
-			<h3 class="author">Cyadox updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes dupe issue when using monkeyman heads in lieu of the original corpse&#39;s head during head reattachment surgery</li>
-				<li class="bugfix">Exploded heads will delete eyes from the body too</li>
-				<li class="bugfix">You will no longer be stuck in implant/cavity surgery if the head is cut off after you&#39;ve opened it surgically.</li>
-				<li class="bugfix">Unscrewing and screwing a computer&#39;s screen will no longer magically delete the fingerprints/fibres left on it</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">You can once again kick ATMs to release your ID.</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Turned the broke ufo vault&#39;s lightbulbs off, hopefully</li>
-				<li class="tweak">Podstation vault now has some fuel to spare</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Players can now commit suicide easier by typing &#34;*suicide&#34; into the chat box.</li>
-				<li class="bugfix">Suicide acts while holding things acting on objects in front of the player should now work properly.</li>
-				<li class="bugfix">Welderbomb suicides now work properly.</li>
-				<li class="bugfix">Faith and job based suicide bomb lines no longer runtime.</li>
-			</ul>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now use wood to build easels and display your paintings. Wrench to deconstruct.</li>
-				<li class="tweak">Canvas no longer start with wooden their frames. You can add a frame to a painting with wood, or remove it with a crowbar.</li>
-				<li class="rscadd">Adds a grid toggle to the painting UI</li>
-				<li class="tweak">Improves upon the painting template import system: Newer templates will now specify width and height when exported, and templates that specify a width will be able to be used on any canvas size. Any older templates will still work, but will need to be updated to use them outside the canvas size they were originally meant for. Add &#34;w&#34;:[width] to the template, or if you can&#39;t figure it out, just import, paint, and export again.</li>
-				<li class="rscadd">Templates can now be offset along the X and Y axes, so that if you&#39;re using a template meant for a large canvas on a portrait canvas you can just re-center it.</li>
-				<li class="bugfix">Crayons no longer break palettes and prevent their UI from opening.</li>
-			</ul>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Players can now re-enter their old corpses properly after possessing a SAMMI</li>
-			</ul>
-			<h2 class="date">2021.12.21</h2>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds two new grayy themed laser guns</li>
-				<li class="rscadd">Revamped layout of broke ufo vault and added new loot</li>
-				<li class="rscadd">Grayy hostile humanoids are more dangerous</li>
-				<li class="rscadd">Adds a new grayy soup recipe: Blether Noodle Soup</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">some transit tube fixes</li>
-				<li class="tweak">Fixed trader on Frankenline</li>
-			</ul>
-			<h3 class="author">robintime updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">added anemia as a roundstart disability. with anemia, unbuckling from a chair or bed will make you briefly pass out, and you have a lower blood count (specifically, your vessel volume will rest at 501 units compared to the normal 560.)</li>
-				<li class="spellcheck">UNATOMICALLY FIXES TYPOS</li>
 			</ul>
 		</div>
 		<!--

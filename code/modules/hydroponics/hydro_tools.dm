@@ -320,7 +320,10 @@
 		return
 	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor) || istype(A, /obj/effect/biomass) || istype(A, /obj/structure/cable/powercreeper))
 		for(var/obj/effect/plantsegment/B in range(user,1))
-			B.take_damage(src)
+			if(is_hot() || (is_sharp() && !B.seed.ligneous))
+				B.take_damage(force * 4)
+			else
+				B.take_damage(force)
 		for(var/obj/effect/biomass/BM in range(user,1))
 			BM.adjust_health(rand(15,45))
 		for(var/obj/structure/cable/powercreeper/C in range(user,1))

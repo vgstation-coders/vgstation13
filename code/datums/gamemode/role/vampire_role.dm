@@ -307,7 +307,7 @@
 	if(H.stat == DEAD)
 		iscloaking = FALSE
 	if(!iscloaking)
-		H.make_visible(VAMPIRECLOAK,TRUE)
+		H.make_visible(VAMPIRECLOAK)
 		H.color = "#FFFFFF"
 		return FALSE
 
@@ -319,7 +319,7 @@
 		return TRUE
 	else
 		if(H.invisibility > 0)
-			H.make_visible(VAMPIRECLOAK, TRUE)
+			H.make_visible(VAMPIRECLOAK)
 		if(locate(/datum/power/vampire/shadow) in current_powers)
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		else

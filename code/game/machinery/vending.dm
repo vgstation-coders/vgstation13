@@ -2666,7 +2666,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/mask/gas/oni = 3,
 		/obj/item/clothing/head/helmet/samurai = 3,
 		/obj/item/clothing/suit/armor/samurai = 3,
-		/obj/item/toy/syndicateballoon/green = 1
+		/obj/item/toy/syndicateballoon/green = 1,
+		/obj/item/clothing/head/nt_football_helmet = 5,
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2784,6 +2785,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
+		/obj/item/clothing/suit/nt_football = 5,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
