@@ -10,7 +10,7 @@
 		if(wear_suit && istype(wear_suit,/obj/item/clothing/suit/spaceblanket))
 			affect_chance -= 15
 		if(prob(affect_chance))
-			for(var/atom/movable/A in range(2,src))
+			for(var/atom/movable/A in view(2,src))
 				if(istype(A,/obj/machinery))
 					var/obj/machinery/M = A
 					if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0)
