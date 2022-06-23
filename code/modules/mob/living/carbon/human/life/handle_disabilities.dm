@@ -11,17 +11,17 @@
 			affect_chance -= 15
 		if(prob(affect_chance))
 			for(var/atom/movable/A in range(2,src))
-				if(istype(A,/obj/machinery/))
+				if(istype(A,/obj/machinery))
 					var/obj/machinery/M = A
 					if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0)
 						affected = TRUE
 						continue
-				if(istype(A,/obj/item/weapon/cell/))
+				if(istype(A,/obj/item/weapon/cell))
 					var/obj/item/weapon/cell/C = A.get_cell()
 					if(C && C.charge)
 						affected = TRUE
 						continue
-				if(istype(A,/obj/item/device/radio/))
+				if(istype(A,/obj/item/device/radio))
 					affected = TRUE
 					continue
 		if(affected)
