@@ -146,6 +146,10 @@
 		return
 	if (H.disabilities & ASTHMA)
 		items_to_collect[/obj/item/device/inhaler] = SURVIVAL_BOX
+	if (H.disabilities & ELECTROSENSE)
+		items_to_collect[/obj/item/tool/crowbar] = SURVIVAL_BOX // To open doors
+		items_to_equip[slot_head_str] = /obj/item/clothing/head/tinfoil // To protect from electricity
+		items_to_equip[slot_wear_suit_str] = /obj/item/clothing/suit/spaceblanket // Same here
 	if (!items_to_equip[slot_glasses_str] && (H.disabilities & NEARSIGHTED))
 		items_to_equip[slot_glasses_str] = /obj/item/clothing/glasses/regular
 

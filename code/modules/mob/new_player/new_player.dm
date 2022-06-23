@@ -729,6 +729,9 @@
 	if(client.prefs.disabilities & DISABILITY_FLAG_ANEMIA)
 		new_character.dna.SetSEState(ANEMIABLOCK, 1, 1)
 
+	if(client.prefs.disabilities & DISABILITY_FLAG_EHS)
+		new_character.dna.SetSEState(EHSBLOCK, 1, 1)
+
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
@@ -768,6 +771,13 @@
 		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
 			R.convert(new_character,null,TRUE,TRUE)
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
+
+	if(new_character.disabilities & ELECTROSENSE) //QoL so no instaburn if you get this
+		var/area/A = get_area(new_character)
+		if(A && !isspace(A))
+			if(A.areaapc?.operating)
+				A.areaapc.operating = 0
+				A.areaapc.update()
 
 	return new_character
 
