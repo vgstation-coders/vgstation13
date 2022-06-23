@@ -2,7 +2,7 @@
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(stat == DEAD)
 		return
-	if(disabilities & ELECTROSENSE)
+	if(disabilities & ELECTROSENSE && !dna.GetSEState(JAMSIGNALSBLOCK))
 		var/affect_chance = 30
 		var/affected = FALSE
 		if(head && istype(head,/obj/item/clothing/head/tinfoil))
@@ -10,15 +10,20 @@
 		if(wear_suit && istype(wear_suit,/obj/item/clothing/suit/spaceblanket))
 			affect_chance -= 15
 		if(prob(affect_chance))
-			for(var/obj/machinery/M in range(2,src))
-				if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0)
-					affected = TRUE
 			for(var/atom/movable/A in range(2,src))
-				var/obj/item/weapon/cell/C = A.get_cell()
-				if(C && C.charge)
+				if(istype(A,/obj/machinery/))
+					var/obj/machinery/M = A
+					if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0)
+						affected = TRUE
+						continue
+				if(istype(A,/obj/item/weapon/cell/))
+					var/obj/item/weapon/cell/C = A.get_cell()
+					if(C && C.charge)
+						affected = TRUE
+						continue
+				if(istype(A,/obj/item/device/radio/))
 					affected = TRUE
-			for(var/obj/item/device/radio/R in range(2,src))
-				affected = TRUE
+					continue
 		if(affected)
 			to_chat(src, "<span class='warning'>The electrical devices hum loudly in your ears!</span>")
 			Jitter(20)
