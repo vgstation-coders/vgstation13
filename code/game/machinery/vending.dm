@@ -2631,7 +2631,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cowboy = 3,
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
-		/obj/item/clothing/suit/red_suit = 3
+		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/head/nt_football_helmet = 5,
+		/obj/item/clothing/suit/nt_football = 5,
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche = AUTO_DROBE_DEFAULT_STOCK,
@@ -2639,6 +2641,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cardborg = 3,
 		/obj/item/clothing/suit/judgerobe = 3,
 		/obj/item/clothing/head/powdered_wig = 3,
+		/obj/item/clothing/head/syndie_football_helmet = 5,
+		/obj/item/clothing/suit/syndie_football = 5,
 		/obj/item/toy/gun = 3,
 		/obj/item/weapon/glue/temp_glue = 1
 		)
@@ -2714,14 +2718,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/beanie/stripedred = 10,
 		/obj/item/clothing/head/beanie/stripedblue = 10,
 		/obj/item/clothing/head/beanie/stripedgreen = 10,
-		/obj/item/clothing/head/nt_football_helmet = 5,
 		)
 	contraband = list(
 		/obj/item/clothing/mask/balaclava = 5,
 		/obj/item/clothing/head/bearpelt = 5,
 		/obj/item/clothing/head/bearpelt/brown = 5,
 		/obj/item/clothing/head/energy_dome = 5,
-		/obj/item/clothing/head/syndie_football_helmet = 5,
 		)
 	premium = list(
 		/obj/item/clothing/head/soft/rainbow = 1,
@@ -2786,13 +2788,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
-		/obj/item/clothing/suit/nt_football = 5,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
 		/obj/item/clothing/under/color/orange = 5,
 		/obj/item/clothing/under/psyche = 5,
-		/obj/item/clothing/suit/syndie_football = 5,
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
