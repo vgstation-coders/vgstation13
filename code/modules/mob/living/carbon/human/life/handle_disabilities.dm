@@ -1,27 +1,31 @@
 //Refer to life.dm for caller
-
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(stat == DEAD)
 		return
 	if(disabilities & ELECTROSENSE)
-		var/affect_chance = 100
-		var/affect_amount = 0
+		var/affect_chance = 30
+		var/affected = FALSE
 		if(head && istype(head,/obj/item/clothing/head/tinfoil))
-			affect_chance /= 2
+			affect_chance -= 14
 		if(wear_suit && istype(wear_suit,/obj/item/clothing/suit/spaceblanket))
-			affect_chance /= 2
-		for(var/obj/machinery/M in range(3,src))
-			if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0 && prob(affect_chance))
-				affect_amount++
-		for(var/atom/movable/A in range(rand(1,2),src))
-			var/obj/item/weapon/cell/C = A.get_cell()
-			if(C && C.charge && prob(affect_chance))
-				affect_amount++
-		adjustHalLoss(affect_amount)
-		if(prob(min(affect_amount,100)))
-			Jitter(min(affect_amount,100))
-		if(prob(min(affect_amount,100)))
-			eye_blurry += min(affect_amount,100)
+			affect_chance -= 15
+		if(prob(affect_chance))
+			for(var/obj/machinery/M in range(2,src))
+				if(!(M.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && M.use_power > 0)
+					affected = TRUE
+			for(var/atom/movable/A in range(2,src))
+				var/obj/item/weapon/cell/C = A.get_cell()
+				if(C && C.charge)
+					affected = TRUE
+			for(var/obj/item/device/radio/R in range(2,src))
+				affected = TRUE
+		if(affected)
+			to_chat(src, "<span class='warning'>The electrical devices hum loudly in your ears!</span>")
+			Jitter(20)
+			if(eye_blurry <= 1)
+				eye_blurry = 10
+			if(getHalLoss() < 20)
+				adjustHalLoss(20)
 
 	//If we have the gene for being crazy, have random events.
 	if(dna.GetSEState(HALLUCINATIONBLOCK) && prob(4))
@@ -56,11 +60,7 @@
 		if(prob(3))
 			emote("twitch")
 		if(prob(10))
-			var/x_offset_change = rand(-2,2) * PIXEL_MULTIPLIER
-			var/y_offset_change = rand(-1,1) * PIXEL_MULTIPLIER
-
-			animate(src, pixel_x = (pixel_x + x_offset_change), pixel_y = (pixel_y + y_offset_change), time = 1)
-			animate(pixel_x = (pixel_x - x_offset_change), pixel_y = (pixel_y - y_offset_change), time = 1)
+			Jitter(10)
 
 	if(getBrainLoss() >= 60 && prob(3))
 		var/text = null
