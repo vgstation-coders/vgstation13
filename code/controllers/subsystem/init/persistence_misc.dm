@@ -295,4 +295,4 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		station_jackpot = data["station_jackpot"] <= 0 ? 5000000 : min(200000000, data["station_jackpot"] + (jackpot_accumulation_multiplier * 1000000)) // ~1 million every new round, starting at 5 million and up to 200 million
 
 /datum/persistence_task/lotto_jackpot/on_shutdown()
-	write_file(list("station_jackpot" = station_jackpot))
+	write_file(list("station_jackpot" = max(0,station_jackpot)))
