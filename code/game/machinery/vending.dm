@@ -3754,10 +3754,9 @@ var/global/num_vending_terminals = 1
 
 var/station_jackpot = 5000000
 
-/obj/machinery/vending/lotto/New()
+/obj/machinery/vending/lotto/examine(mob/user)
 	..()
-	desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
-			<br><span class='notice'>Today's winning jackpot is [round(station_jackpot/1000000,0.1)]m credits!</span>"}
+	to_chat(user,"<span class='notice'>Today's winning jackpot is [round(station_jackpot/1000000,0.1)]m credits!</span>")
 
 /obj/item/weapon/paper/lotto_numbers
 	name = "Lotto numbers"
@@ -3851,8 +3850,6 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	dispense_cash(amount, get_turf(src))
 	playsound(src, "polaroid", 50, 1)
 	station_jackpot -= (min(station_jackpot,amount))
-	desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
-			<br><span class='notice'>Today's winning jackpot is [round(station_jackpot/1000000,0.1)]m credits!</span>"}
 
 
 /obj/machinery/vending/lotto/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
