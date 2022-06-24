@@ -3752,11 +3752,11 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/lotto
 	var/list/winning_numbers = list()
 
-var/station_jackpot = 5000000
+var/station_jackpot = 1000000
 
 /obj/machinery/vending/lotto/examine(mob/user)
 	..()
-	to_chat(user,"<span class='notice'>Today's winning jackpot is [round(station_jackpot/1000000,0.1)]m credits!</span>")
+	to_chat(user,"<span class='notice'>Today's winning jackpot is [station_jackpot >= 1000000 ? "[round(station_jackpot/1000000,0.1)]m" : station_jackpot] credits!</span>")
 
 /obj/item/weapon/paper/lotto_numbers
 	name = "Lotto numbers"

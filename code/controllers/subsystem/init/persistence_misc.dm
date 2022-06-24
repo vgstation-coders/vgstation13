@@ -292,7 +292,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/lotto_jackpot/on_init()
 	data = read_file()
 	if(length(data))
-		station_jackpot = max(5000000,min(200000000, data["station_jackpot"])) //5 mil - 200 mil
+		station_jackpot = max(1000000,min(200000000, data["station_jackpot"])) //1 - 200 mil
 
 /datum/persistence_task/lotto_jackpot/on_shutdown()
-	write_file(list("station_jackpot" = max(5000000,station_jackpot)))
+	write_file(list("station_jackpot" = max(1000000,station_jackpot)))
