@@ -3858,7 +3858,7 @@ var/jackpot_accumulation_multiplier = 0
 
 /obj/machinery/vending/lotto/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	..()
-	jackpot_accumulation_multiplier += (R.price/100)
+	jackpot_accumulation_multiplier += R.price
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)
