@@ -172,7 +172,7 @@ var/global/list/rnd_machines = list()
 				found = matID
 		if(!user.Adjacent(src) || !stack || !stack.loc || (stack.loc != user && !isgripper(stack.loc)))
 			return 1
-		/var/amount = 0 
+		var/amount = 0 
 		amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
 
 		if (!(amount > 0))
