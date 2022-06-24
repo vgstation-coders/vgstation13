@@ -144,6 +144,7 @@ var/global/list/hidden_tech = list(
 		T.level = clamp(T.level, 1, 20)
 	for(var/datum/design/D in known_designs)
 		D.CalcReliability(known_tech)
+	sortTim(known_designs, /proc/cmp_name_asc)
 	return
 
 //Refreshes the levels of a given tech.
