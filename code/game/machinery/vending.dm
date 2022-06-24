@@ -3805,9 +3805,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 			playsound(src, "buzz-sigh", 50, 1)
 			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
 		else
-			visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund!\"")
-			dispense_cash(T.winnings, get_turf(src))
-			playsound(src, "polaroid", 50, 1)
+			dispense_funds(T.winnings)
 			if(T.winnings >= 10000)
 				AnnounceWinner(src,user,T.winnings)
 				log_admin("([user.ckey]/[user]) won a large lottery prize of [T.winnings] credits.")
@@ -3836,18 +3834,23 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 				LW.message = "Congratulations to [user] for winning the Central Command Grand Slam -Stellar- Lottery Fund and walking home with [final_jackpot] credits!"
 				command_alert(LW)
 				winning_numbers.Cut() // Reset this, we had a winner
-				jackpot = rand(1000000,30000000) //1-30 million
-				desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
-						<br><span class='notice'>Today's winning jackpot is [round(jackpot/1000000,0.1)]m credits!</span>"}
 			else
 				AnnounceWinner(src,user,final_jackpot)
-			visible_message("<b>[src]</b>'s monitor flashes, \"[matches < 5 ? "[matches+1] of 6 matches," : "All numbers matched,"] withdrawing [final_jackpot] credits from the Central Command Grand Slam -Stellar- Lottery Fund!\"")
-			dispense_cash(final_jackpot, get_turf(src))
-			playsound(src, "polaroid", 50, 1)
+			dispense_funds(final_jackpot)
 			log_admin("([user.ckey]/[user]) won [final_jackpot] credits from the lottery!")
 			qdel(LN)
 	else
 		..()
+
+/obj/machinery/vending/lotto/proc/dispense_funds(var/amount)
+	visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
+	dispense_cash(amount, get_turf(src))
+	playsound(src, "polaroid", 50, 1)
+	jackpot -= amount
+	if(jackpot <= 0)
+		jackpot = rand(1000000,30000000) //1-30 million
+	desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
+			<br><span class='notice'>Today's winning jackpot is [round(jackpot/1000000,0.1)]m credits!</span>"}
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)
