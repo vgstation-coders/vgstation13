@@ -1584,6 +1584,7 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/explosive_pie/examine(mob/user)
+	..()
 	if(is_holder_of(user,src))
 		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and seems to be ticking.</span>")
 		return
