@@ -3733,6 +3733,7 @@ var/global/num_vending_terminals = 1
 	icon_state = "Lotto"
 	icon_vend = "Lotto-vend"
 	products = list(
+		/obj/item/weapon/paper/lotto_numbers = 20,
 		/obj/item/toy/lotto_ticket/gold_rush = 20,
 		/obj/item/toy/lotto_ticket/diamond_hands = 20,
 		/obj/item/toy/lotto_ticket/phazon_fortune = 20
@@ -3741,6 +3742,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/lotto_ticket/supermatter_surprise = 5
 		)
 	prices = list(
+		/obj/item/weapon/paper/lotto_numbers = 1,
 		/obj/item/toy/lotto_ticket/gold_rush = 5,
 		/obj/item/toy/lotto_ticket/diamond_hands = 10,
 		/obj/item/toy/lotto_ticket/phazon_fortune = 20,
@@ -3748,7 +3750,30 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/lotto
+	var/list/winning_numbers = list()
+	var/jackpot = 0
 
+/obj/machinery/vending/lotto/New()
+	..()
+	jackpot = rand(1000000,30000000) //1-30 million
+	desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
+			<br><span class='notice'>Today's winning jackpot is [round(jackpot/1000000,0.1)]m credits!</span>"}
+
+/obj/item/weapon/paper/lotto_numbers
+	name = "Lotto numbers"
+	desc = "A piece of papers with numbers that can be cashed out at randomly announced draws. Rarely wins."
+	info = "The numbers on this paper are:<br>"
+	var/list/winning_numbers = list()
+
+/obj/item/weapon/paper/lotto_numbers/New()
+	..()
+	for(var/i in 1 to 6)
+		var/newnumber = 0
+		do
+			newnumber = rand(1,47)
+		while(newnumber in winning_numbers) //6/47 system
+		winning_numbers.Add(newnumber)
+		info += "[i == 6 ? ": " : ""][newnumber][i < 6 ? " " : ""]"
 
 /obj/machinery/vending/lotto/proc/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend, var/mob/living/carbon/human/character, var/winnings)
 		var/rank = character.mind.role_alt_title
@@ -3769,8 +3794,7 @@ var/global/num_vending_terminals = 1
 		if(!T.revealed)
 			playsound(src, "buzz-sigh", 50, 1)
 			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket cannot be read until the film is scratched off.\"")
-			return
-		if(!T.iswinner)
+		else if(!T.iswinner)
 			playsound(src, "buzz-sigh", 50, 1)
 			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
 		else
@@ -3781,6 +3805,40 @@ var/global/num_vending_terminals = 1
 				AnnounceWinner(src,user,T.winnings)
 				log_admin("([user.ckey]/[user]) won a large lottery prize of [T.winnings] credits.")
 			qdel(T)
+	if(istype(I, /obj/item/weapon/paper/lotto_numbers))
+		if(!winning_numbers.len)
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"These numbers cannot be redeemed until the lotto draw.\"")
+			return
+		var/obj/item/weapon/paper/lotto_numbers/LN = I
+		if(winning_numbers.len != LN.winning_numbers.len || LN.winning_numbers.len != 6)
+			CRASH("Someone didn't make the lotto ticket winning numbers the right length or same length as the event's.")
+		var/bonusmatch = winning_numbers[6] == LN.winning_numbers[6]
+		var/matches = 0
+		for(var/i in 1 to (winning_numbers.len - 1))
+			if(winning_numbers[i] == LN.winning_numbers[i])
+				matches++
+		if(!bonusmatch || matches < 2)
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"These numbers have no win. [bonusmatch ? "(Not enough matches, [matches+1] of at least 3)" : "(Bonus number not matched)"]\"")
+			return
+		else
+			var/final_jackpot = jackpot / (10 ** (5-matches)) //3 total (including bonus) matches divides by 1000, 4 by 100, 5 by 10 and 6 by 1
+			if(matches >= 5)
+				var/datum/command_alert/lotto_winner/LW = new
+				LW.message = "Congratulations to [user] for winning the Central Command Grand Slam -Stellar- Lottery Fund and walking home with [final_jackpot] credits!"
+				command_alert(LW)
+				winning_numbers.Cut() // Reset this, we had a winner
+				jackpot = rand(1000000,30000000) //1-30 million
+				desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
+						<br><span class='notice'>Today's winning jackpot is [round(jackpot/1000000,0.1)]m credits!</span>"}
+			else
+				AnnounceWinner(src,user,final_jackpot)
+			visible_message("<b>[src]</b>'s monitor flashes, \"[matches < 5 ? "[matches+1] of 6 matches," : "All numbers matched,"] withdrawing [final_jackpot] credits from the Central Command Grand Slam -Stellar- Lottery Fund!\"")
+			dispense_cash(final_jackpot, get_turf(src))
+			playsound(src, "polaroid", 50, 1)
+			log_admin("([user.ckey]/[user]) won [final_jackpot] credits from the lottery!")
+			qdel(LN)
 	else
 		..()
 
