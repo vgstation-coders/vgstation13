@@ -3852,7 +3852,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	playsound(src, "polaroid", 50, 1)
 	station_jackpot -= (min(station_jackpot,amount))
 	desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
-			<br><span class='notice'>Today's winning jackpot is [round(jackpot/1000000,0.1)]m credits!</span>"}
+			<br><span class='notice'>Today's winning jackpot is [round(station_jackpot/1000000,0.1)]m credits!</span>"}
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)
