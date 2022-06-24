@@ -3751,13 +3751,13 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/lotto
 	var/list/winning_numbers = list()
-	var/jackpot = 0
+
+var/station_jackpot = 0
 
 /obj/machinery/vending/lotto/New()
 	..()
-	jackpot = rand(1000000,30000000) //1-30 million
 	desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
-			<br><span class='notice'>Today's winning jackpot is [round(jackpot/1000000,0.1)]m credits!</span>"}
+			<br><span class='notice'>Today's winning jackpot is [round(station_jackpot/1000000,0.1)]m credits!</span>"}
 
 /obj/item/weapon/paper/lotto_numbers
 	name = "Lotto numbers"
@@ -3828,7 +3828,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 			visible_message("<b>[src]</b>'s monitor flashes, \"These numbers have no win. [bonusmatch ? "(Not enough matches, [matches+1] of at least 3)" : "(Bonus number not matched)"]\"")
 			return
 		else
-			var/final_jackpot = jackpot / (10 ** (5-matches)) //3 total (including bonus) matches divides by 1000, 4 by 100, 5 by 10 and 6 by 1
+			var/final_jackpot = station_jackpot / (10 ** (5-matches)) //3 total (including bonus) matches divides by 1000, 4 by 100, 5 by 10 and 6 by 1
 			if(matches >= 5)
 				var/datum/command_alert/lotto_winner/LW = new
 				LW.message = "Congratulations to [user] for winning the Central Command Grand Slam -Stellar- Lottery Fund and walking home with [final_jackpot] credits!"
@@ -3843,12 +3843,14 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		..()
 
 /obj/machinery/vending/lotto/proc/dispense_funds(var/amount)
+	if(station_jackpot <= 0)
+		playsound(src, "buzz-sigh", 50, 1)
+		visible_message("<b>[src]</b>'s monitor flashes, \"The Central Command Lottery Fund is empty, and cannot dispense money.\"")
+		return
 	visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
 	dispense_cash(amount, get_turf(src))
 	playsound(src, "polaroid", 50, 1)
-	jackpot -= amount
-	if(jackpot <= 0)
-		jackpot = rand(1000000,30000000) //1-30 million
+	station_jackpot -= (min(station_jackpot,amount))
 	desc = {"Table-mounted vending machine which dispenses scratch-off lottery tickets. Winners can be cashed here.
 			<br><span class='notice'>Today's winning jackpot is [round(jackpot/1000000,0.1)]m credits!</span>"}
 

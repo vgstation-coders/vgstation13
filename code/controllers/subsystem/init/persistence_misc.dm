@@ -238,13 +238,13 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/highscores/proc/clear_records()
 	data = list()
 	fdel(file(file_path))
-	
+
 //stores map votes for code/modules/html_interface/voting/voting.dm
 /datum/persistence_task/vote
 	execute = TRUE
 	name = "Persistent votes"
 	file_path = "data/persistence/votes.json"
-	
+
 /datum/persistence_task/vote/on_init()
 	var/list/to_read = read_file()
 	if(!to_read)
@@ -281,3 +281,18 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/ape_mode/on_shutdown()
 	write_file(list("ape_mode" = ape_mode))
+
+//Lotto
+
+/datum/persistence_task/lotto_jackpot
+	execute = TRUE
+	name = "Lotto jackpot"
+	file_path = "data/persistence/lotto_jackpot.json"
+
+/datum/persistence_task/ape_mode/on_init()
+	data = read_file()
+	if(length(data))
+		station_jackpot = min(100000000, data["station_jackpot"] + 1000000) // 1 million every new round, up to 100 million
+
+/datum/persistence_task/ape_mode/on_shutdown()
+	write_file(list("station_jackpot" = station_jackpot))
