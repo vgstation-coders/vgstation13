@@ -3765,8 +3765,11 @@ var/global/num_vending_terminals = 1
 	info = "The numbers on this paper are:<br>"
 	var/list/winning_numbers = list()
 
+var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
+
 /obj/item/weapon/paper/lotto_numbers/New()
 	..()
+	lotto_papers += src
 	for(var/i in 1 to 6)
 		var/newnumber = 0
 		do
@@ -3774,6 +3777,10 @@ var/global/num_vending_terminals = 1
 		while(newnumber in winning_numbers) //6/47 system
 		winning_numbers.Add(newnumber)
 		info += "[i == 6 ? ": " : ""][newnumber][i < 6 ? " " : ""]"
+
+/obj/item/weapon/paper/lotto_numbers/Destroy()
+	lotto_papers -= src
+	..()
 
 /obj/machinery/vending/lotto/proc/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend, var/mob/living/carbon/human/character, var/winnings)
 		var/rank = character.mind.role_alt_title

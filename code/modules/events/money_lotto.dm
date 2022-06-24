@@ -4,7 +4,7 @@
 	var/list/winning_numbers = list()
 
 /datum/event/money_lotto/can_start()
-	return 20
+	return (lotto_papers.len > 0) * (min(10,lotto_papers.len) * 5)
 
 /datum/event/money_lotto/setup()
 	for(var/i in 1 to 6)
