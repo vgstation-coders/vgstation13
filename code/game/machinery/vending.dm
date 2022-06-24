@@ -3752,7 +3752,7 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/lotto
 	var/list/winning_numbers = list()
 
-var/station_jackpot = 0
+var/station_jackpot = 5000000
 
 /obj/machinery/vending/lotto/New()
 	..()
