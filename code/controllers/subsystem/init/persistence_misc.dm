@@ -292,7 +292,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/lotto_jackpot/on_init()
 	data = read_file()
 	if(length(data))
-		station_jackpot = min(200000000, data["station_jackpot"] + (jackpot_accumulation_multiplier * 10000)) // 10,000 times total cost of all lotto vendor items bought every new round up to 200 million
+		station_jackpot = min(200000000, data["station_jackpot"])
 
 /datum/persistence_task/lotto_jackpot/on_shutdown()
 	write_file(list("station_jackpot" = max(5000000,station_jackpot)))
