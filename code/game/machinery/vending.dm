@@ -3833,6 +3833,24 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 				LW.message = "Congratulations to [user] for winning the Central Command Grand Slam -Stellar- Lottery Fund and walking home with [final_jackpot] credits!"
 				command_alert(LW)
 				winning_numbers.Cut() // Reset this, we had a winner
+				var/datum/feed_message/newMsg = new /datum/feed_message
+				newMsg.author = "Nanotrasen Editor"
+				newMsg.is_admin_message = 1
+
+				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for recieving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
+
+				for(var/datum/feed_channel/FC in news_network.network_channels)
+					if(FC.channel_name == "Tau Ceti Daily")
+						FC.messages += newMsg
+						break
+
+				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+					NEWSCASTER.newsAlert("Tau Ceti Daily")
+
+				for(var/obj/item/device/pda/PDA in PDAs)
+					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+					if(reader)
+						reader.newsAlert("Tau Ceti Daily")
 			else
 				AnnounceWinner(src,user,final_jackpot)
 			dispense_funds(final_jackpot)
