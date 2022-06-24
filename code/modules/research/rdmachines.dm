@@ -149,8 +149,9 @@ var/global/list/rnd_machines = list()
 		..()
 
 /obj/machinery/r_n_d/AltClick(mob/user)
+	var/obj/item/O = user.get_active_hand()
 	if (shocked)
-		shock(user,50, user.get_active_hand().siemens_coefficient)
+		shock(user,50, O.siemens_coefficient)
 	if (busy)
 		to_chat(user, "<span class='warning'>The [src.name] is busy. Please wait for completion of previous operation.</span>")
 		return 1
@@ -163,9 +164,9 @@ var/global/list/rnd_machines = list()
 	if (!linked_console && !(istype(src, /obj/machinery/r_n_d/fabricator))) //fabricators get a free pass because they aren't tied to a console
 		to_chat(user, "\The [src] must be linked to an R&D console first!")
 		return 1
-	if(istype(user.get_active_hand(),/obj/item/stack/sheet) && research_flags &TAKESMATIN)
+	if(istype(O,/obj/item/stack/sheet) && research_flags &TAKESMATIN)
 		var/found = "" //the matID we're compatible with
-		var/obj/item/stack/sheet/stack = user.get_active_hand()
+		var/obj/item/stack/sheet/stack = O
 		for(var/matID in materials.storage)
 			var/datum/material/M = materials.getMaterial(matID)
 			if(M.sheettype==stack.type)
