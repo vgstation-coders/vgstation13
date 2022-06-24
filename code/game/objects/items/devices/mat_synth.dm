@@ -223,12 +223,11 @@ var/static/list/mat2type = list(
 				var/obj/item/stack/sheet/S = mat2type[mat]
 				if(S in cant_scan)
 					to_chat(user, "<span class='warning'>Your [src.name] does not contain this functionality to scan [initial(S.name)].</span>")
-					continue
-				if(initial(S.name) in materials_scanned)
+				else if(initial(S.name) in materials_scanned)
 					to_chat(user, "<span class='warning'>You have already scanned [initial(S.name)].</span>")
-					continue
-				materials_scanned["[initial(S.name)]"] = S
-				to_chat(user, "<span class='notice'>You successfully scan [initial(S.name)] into \the [src]'s material banks.</span>")
+				else
+					materials_scanned["[initial(S.name)]"] = S
+					to_chat(user, "<span class='notice'>You successfully scan [initial(S.name)] into \the [src]'s material banks.</span>")
 		return 1
 	if(is_type_in_list(target, can_scan) && !is_type_in_list(target, cant_scan))
 		for(var/matID in materials_scanned)
