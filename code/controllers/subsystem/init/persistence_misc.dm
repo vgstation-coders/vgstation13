@@ -289,10 +289,10 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	name = "Lotto jackpot"
 	file_path = "data/persistence/lotto_jackpot.json"
 
-/datum/persistence_task/ape_mode/on_init()
+/datum/persistence_task/lotto_jackpot/on_init()
 	data = read_file()
 	if(length(data))
 		station_jackpot = min(100000000, data["station_jackpot"] + 1000000) // 1 million every new round, up to 100 million
 
-/datum/persistence_task/ape_mode/on_shutdown()
+/datum/persistence_task/lotto_jackpot/on_shutdown()
 	write_file(list("station_jackpot" = station_jackpot))
