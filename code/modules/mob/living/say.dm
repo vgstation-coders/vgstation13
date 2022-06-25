@@ -513,6 +513,10 @@ var/list/headset_modes = list(
 		speech.message = replacetext(speech.message,";","") // motor mouth
 		speech.message = replacetext(speech.message,"-","") // motor mouth
 
+	for(var/obj/item/weapon/implant/vocal/VI in src)
+		if(VI.imp_in == src)
+			speech.message = VI.filter.FilterSpeech(speech.message)
+
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
 		if(MODE_WHISPER, SPEECH_MODE_FINAL)

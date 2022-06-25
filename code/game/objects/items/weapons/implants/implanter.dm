@@ -142,3 +142,27 @@
 		c.scanned = I
 		c.scanned.forceMove(c)
 		update()
+
+/obj/item/weapon/implanter/vocal
+	name = "implanter (V)"
+	desc = "A small device used to apply implants to people."
+	imp_type = /obj/item/weapon/implant/vocal
+
+/obj/item/weapon/implanter/vocal/attack_self(mob/user)
+	if(istype(imp,imp_type))
+		var/obj/item/weapon/implant/vocal/V = imp
+		var/input = input(user, "Enter an input phrase, regex works here", "Input phrase") as text
+		if(!input)
+			return
+		var/keepgoing = FALSE
+		var/list/outputs = list()
+		do
+			var/output =  input(user, "Enter an output phrase", "Output phrase") as text
+			if(!output)
+				return
+			outputs.Add(output)
+			keepgoing = alert(user, "Add another output?", "Output phrase", "Yes", "No") == "Yes"
+		while(keepgoing)
+		var/casesense = alert(user, "Case sensitive?", "Case sensitivity","Yes","No") == "Yes"
+		if(input && outputs.len)
+			V.filter.addPickReplacement(input,outputs,casesense)

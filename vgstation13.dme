@@ -1149,6 +1149,7 @@
 #include "code\game\objects\items\weapons\implants\types\pax_implant.dm"
 #include "code\game\objects\items\weapons\implants\types\tracking_implant.dm"
 #include "code\game\objects\items\weapons\implants\types\uplink_implant.dm"
+#include "code\game\objects\items\weapons\implants\types\vocal_implant.dm"
 #include "code\game\objects\items\weapons\melee\energy.dm"
 #include "code\game\objects\items\weapons\melee\misc.dm"
 #include "code\game\objects\items\weapons\storage\backpack.dm"
