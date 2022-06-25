@@ -104,7 +104,7 @@
 	spawn(0)
 		for (var/i = 0, i < 3, i++)
 			step_towards(D, target)
-			D.react()
+			D.react(zones = user?.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS)
 			sleep(3)
 
 		qdel(D)
@@ -231,7 +231,7 @@
 
 			for (var/j = 1, j <= rand(6, 8), j++)
 				step_towards(D, my_target)
-				D.react(iteration_delay = 0)
+				D.react(iteration_delay = 0, zones = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS)
 				sleep(2)
 
 			qdel(D)
@@ -265,7 +265,7 @@
 			step_towards(D, target)
 			if(i > 1)
 				D.flags &= ~NOREACT
-			D.react()
+			D.react(zones = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS)
 			sleep(3)
 
 		qdel(D)
