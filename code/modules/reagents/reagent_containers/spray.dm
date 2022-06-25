@@ -231,7 +231,7 @@
 
 			for (var/j = 1, j <= rand(6, 8), j++)
 				step_towards(D, my_target)
-				D.react(iteration_delay = 0, zones = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS)
+				D.react(iteration_delay = 0)
 				sleep(2)
 
 			qdel(D)
