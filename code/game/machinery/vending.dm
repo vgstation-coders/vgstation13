@@ -2124,6 +2124,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/bag/plants = 5,
 		)
 	contraband = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/toxin = 10,
 		/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,
 		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5,
 		)
