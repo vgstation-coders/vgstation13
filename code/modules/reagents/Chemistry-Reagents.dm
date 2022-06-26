@@ -2502,9 +2502,9 @@
 	..()
 	T.add_nutrientlevel(1)
 	if(prob(25*custom_plant_metabolism))
-		T.add_weedlevel(3)
+		T.add_weedlevel(10)
 	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
-		T.add_pestlevel(3)
+		T.add_pestlevel(10)
 	if(T.seed && !T.dead && !T.seed.immutable)
 		var/chance
 		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
