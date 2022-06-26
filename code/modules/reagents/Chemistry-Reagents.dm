@@ -2452,9 +2452,6 @@
 				H.custom_pain("Your [E] burn horribly!", 1)
 				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
-//Reagents used for plant fertilizers.
-//WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?
-
 /datum/reagent/fertilizer
 	name = "fertilizer"
 	id = FERTILIZER
