@@ -71,7 +71,6 @@
 		"SOTP IT#", \
 		"based and redpilled",\
 		"ho now talking like a milenian piece of shit is too unralistic in the fucking",\
-		"OH MY GAW!!!", \
 		"FUS RO DAH", \
 		"fucking 4rries!", \
 		"stat me", \
