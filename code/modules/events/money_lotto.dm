@@ -9,15 +9,12 @@
 /datum/event/money_lotto/setup()
 	var/list/luck_skewed_papers = list()
 	for(var/obj/item/weapon/paper/lotto_numbers/LN in lotto_papers)
-		if(!LN.fingerprintslast)
-			continue
-		var/client/foundclient = directory[ckey(LN.fingerprintslast)]
-		if(!foundclient)
-			continue
-		var/mob/foundmob = foundclient.mob
-		if(!foundmob)
-			continue
-		luck_skewed_papers[LN] = foundmob.luck()
+		if(LN.fingerprintslast)
+			var/client/foundclient = directory[ckey(LN.fingerprintslast)]
+			if(foundclient)
+				var/mob/foundmob = foundclient.mob
+				if(foundmob)
+					luck_skewed_papers[LN] = foundmob.luck()
 	var/luck_copy_amount = 0
 	var/list/copied_winning_numbers = list()
 	if(luck_skewed_papers.len)
