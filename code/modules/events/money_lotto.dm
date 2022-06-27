@@ -39,7 +39,7 @@
 		while(num_to_copy in nums_to_copy)
 		nums_to_copy.Add(num_to_copy)
 	for(var/i in 1 to LOTTO_SAMPLE)
-		if(i in nums_to_copy)
+		if((i in nums_to_copy) && copied_winning_numbers.len)
 			winning_numbers.Add(copied_winning_numbers[i])
 		else
 			var/newnumber = 0
