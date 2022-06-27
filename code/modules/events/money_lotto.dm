@@ -17,7 +17,7 @@
 		var/obj/item/weapon/paper/lotto_numbers/picked_ticket = pickweight(luck_skewed_papers)
 		var/client/foundclient = directory[ckey(picked_ticket.fingerprintslast)]
 		var/mob/foundmob = foundclient.mob
-		if(foundmob.lucky_prob(1/combinations(LOTTO_BALLCOUNT,LOTTO_SAMPLE), luckfactor = 1/12000, maxskew = 49.9))
+		if(foundmob.lucky_prob(100/combinations(LOTTO_BALLCOUNT,LOTTO_SAMPLE), luckfactor = 1/12000, maxskew = 49.9))
 			winning_numbers = picked_ticket.winning_numbers.Copy()
 			luck_copied = TRUE
 	if(!luck_copied)
