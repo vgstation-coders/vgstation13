@@ -3758,6 +3758,10 @@ var/station_jackpot = 1000000
 	..()
 	to_chat(user,"<span class='notice'>Today's winning jackpot is [station_jackpot >= 1000000 ? "[round(station_jackpot/1000000,0.1)]m" : station_jackpot] credits!</span>")
 
+#define LOTTO_BALLCOUNT 32
+#define LOTTO_SAMPLE 6
+#define MATCH_SAMPLE LOTTO_SAMPLE-1
+
 /obj/item/weapon/paper/lotto_numbers
 	name = "Lotto numbers"
 	desc = "A piece of papers with numbers that can be cashed out at randomly announced draws. Rarely wins."

@@ -1,7 +1,3 @@
-#define LOTTO_BALLCOUNT 32
-#define LOTTO_SAMPLE 6
-#define MATCH_SAMPLE LOTTO_SAMPLE-1
-
 /datum/event/money_lotto
 	endWhen = 2
 	announceWhen = 1
