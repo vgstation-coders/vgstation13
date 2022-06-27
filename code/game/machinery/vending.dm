@@ -3778,7 +3778,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 			newnumber = rand(1,LOTTO_BALLCOUNT)
 		while(newnumber in winning_numbers)
 		winning_numbers.Add(newnumber)
-		info += "[i == 6 ? ": " : ""][newnumber][i < 6 ? " " : ""]"
+		info += "[i == LOTTO_SAMPLE ? ": " : ""][newnumber][i < LOTTO_SAMPLE ? " " : ""]"
 
 /obj/item/weapon/paper/lotto_numbers/Destroy()
 	lotto_papers -= src
