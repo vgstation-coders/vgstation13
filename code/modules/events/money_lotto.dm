@@ -32,7 +32,9 @@
 						copied_winning_numbers = picked_ticket.winning_numbers.Copy()
 						break
 	var/list/nums_to_copy = list()
-	for(var/i in 1 to luck_copy_amount)
+	if(luck_copy_amount)
+		nums_to_copy.Add(LOTTO_SAMPLE)
+	for(var/i in 1 to (luck_copy_amount-1))
 		var/num_to_copy = 0
 		do
 			num_to_copy = rand(1,LOTTO_SAMPLE)
