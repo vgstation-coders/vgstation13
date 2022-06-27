@@ -26,14 +26,14 @@
 			var/client/foundclient = directory[ckey(picked_ticket.fingerprintslast)]
 			if(foundclient)
 				var/mob/foundmob = foundclient.mob
-				for(var/i in LOTTO_SAMPLE-3 TO LOTTO_SAMPLE)
+				for(var/i in LOTTO_SAMPLE-3 to LOTTO_SAMPLE)
 					if(foundmob?.lucky_prob(100/combinations(LOTTO_BALLCOUNT,i), luckfactor = 1/12000, maxskew = 49.9))
 						luck_copy_amount = i
 						copied_winning_numbers = picked_ticket.winning_numbers.Copy()
 						break
 	var/list/nums_to_copy = list()
-	var/num_to_copy = 0
 	for(var/i in 1 to luck_copy_amount)
+		var/num_to_copy = 0
 		do
 			num_to_copy = rand(1,LOTTO_SAMPLE)
 		while(num_to_copy in nums_to_copy)
