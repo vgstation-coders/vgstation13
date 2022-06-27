@@ -1373,7 +1373,7 @@ var/global/list/cloudnine_stuff = list(
 	/obj/structure/largecrate/secure/magmaw,
 	/obj/item/wasteos,
 	/obj/item/weapon/storage/toolbox/master,
-	/obj/item/weapon/antiaxe_kit,
+	/obj/item/device/modkit/antiaxe_kit,
 	)
 
 /obj/structure/closet/crate/internals/cloudnine/New()
@@ -1636,16 +1636,6 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 /obj/item/weapon/storage/toolbox/master/attack_self(mob/user)
 	cant_drop = !cant_drop
 	to_chat(user,"<span class='notice'>You [cant_drop ? "engage" : "disengage"] the safety grip.</span>")
-
-/obj/item/weapon/antiaxe_kit
-	name = "antimatter axe kit"
-	desc = "A matter inverter from the secret labs of the Cloud IX engineering facility. It will turn your ordinary axe into an antimatter axe."
-	icon = 'icons/obj/device.dmi'
-	icon_state = "modkit"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
-	flags = FPRINT
-	siemens_coefficient = 0
-	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/fireaxe/antimatter
 	name = "antimatter fireaxe"
