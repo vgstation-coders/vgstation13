@@ -7,6 +7,8 @@
 	return (lotto_papers.len > 0) * (min(20,lotto_papers.len) * 4)
 
 /datum/event/money_lotto/setup()
+	if(LOTTO_BALLCOUNT < LOTTO_SAMPLE)
+		CRASH("Always make the sample picked lower than the ballcount!")
 	for(var/i in 1 to LOTTO_SAMPLE)
 		var/newnumber = 0
 		do
