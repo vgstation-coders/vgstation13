@@ -3771,9 +3771,9 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 /obj/item/weapon/paper/lotto_numbers/New()
 	..()
+	lotto_papers += src
 	if(LOTTO_BALLCOUNT < LOTTO_SAMPLE)
 		CRASH("Always make the sample picked lower than the ballcount!")
-	lotto_papers += src
 	for(var/i in 1 to LOTTO_SAMPLE)
 		var/newnumber = 0
 		do
