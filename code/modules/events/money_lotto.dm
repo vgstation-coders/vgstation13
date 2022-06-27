@@ -31,12 +31,12 @@
 	var/list/nums_to_copy = list()
 	if(luck_copy_amount)
 		nums_to_copy.Add(LOTTO_SAMPLE)
-	for(var/i in 1 to (luck_copy_amount-1))
-		var/num_to_copy = 0
-		do
-			num_to_copy = rand(1,LOTTO_SAMPLE-1)
-		while(num_to_copy in nums_to_copy)
-		nums_to_copy.Add(num_to_copy)
+		for(var/i in 1 to (luck_copy_amount-1))
+			var/num_to_copy = 0
+			do
+				num_to_copy = rand(1,LOTTO_SAMPLE-1)
+			while(num_to_copy in nums_to_copy)
+			nums_to_copy.Add(num_to_copy)
 	for(var/i in 1 to LOTTO_SAMPLE)
 		if((i in nums_to_copy) && copied_winning_numbers.len)
 			winning_numbers.Add(copied_winning_numbers[i])
