@@ -27,7 +27,6 @@
 					if(foundmob?.lucky_prob(100/combinations(LOTTO_BALLCOUNT,i), luckfactor = 1/12000, maxskew = 49.9))
 						luck_copy_amount = i
 						copied_winning_numbers = picked_ticket.winning_numbers.Copy()
-						break
 	var/list/nums_to_copy = list()
 	if(luck_copy_amount)
 		nums_to_copy.Add(LOTTO_SAMPLE)
