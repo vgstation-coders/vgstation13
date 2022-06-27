@@ -3769,11 +3769,11 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 /obj/item/weapon/paper/lotto_numbers/New()
 	..()
 	lotto_papers += src
-	for(var/i in 1 to 6)
+	for(var/i in 1 to LOTTO_SAMPLE)
 		var/newnumber = 0
 		do
-			newnumber = rand(1,47)
-		while(newnumber in winning_numbers) //6/47 system
+			newnumber = rand(1,LOTTO_BALLCOUNT)
+		while(newnumber in winning_numbers)
 		winning_numbers.Add(newnumber)
 		info += "[i == 6 ? ": " : ""][newnumber][i < 6 ? " " : ""]"
 
@@ -3815,9 +3815,9 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 			visible_message("<b>[src]</b>'s monitor flashes, \"These numbers cannot be redeemed until the lotto draw.\"")
 			return
 		var/obj/item/weapon/paper/lotto_numbers/LN = I
-		if(winning_numbers.len != LN.winning_numbers.len || LN.winning_numbers.len != 6)
+		if(winning_numbers.len != LN.winning_numbers.len || LN.winning_numbers.len != LOTTO_SAMPLE)
 			CRASH("Someone didn't make the lotto ticket winning numbers the right length or same length as the event's.")
-		var/bonusmatch = winning_numbers[6] == LN.winning_numbers[6]
+		var/bonusmatch = winning_numbers[LOTTO_SAMPLE] == LN.winning_numbers[LOTTO_SAMPLE]
 		var/matches = 0
 		for(var/i in 1 to (winning_numbers.len - 1))
 			if(winning_numbers[i] == LN.winning_numbers[i])
@@ -3827,8 +3827,8 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 			visible_message("<b>[src]</b>'s monitor flashes, \"These numbers have no win. [bonusmatch ? "(Not enough matches, [matches+1] of at least 3)" : "(Bonus number not matched)"]\"")
 			return
 		else
-			var/final_jackpot = station_jackpot / (10 ** (5-matches)) //3 total (including bonus) matches divides by 1000, 4 by 100, 5 by 10 and 6 by 1
-			if(matches >= 5)
+			var/final_jackpot = station_jackpot / (10 ** (MATCH_SAMPLE-matches)) //n-3 total (including bonus) matches divides by 1000, n-2 by 100, n-1 by 10 and n by 1
+			if(matches >= MATCH_SAMPLE)
 				var/datum/command_alert/lotto_winner/LW = new
 				LW.message = "Congratulations to [user] for winning the Central Command Grand Slam -Stellar- Lottery Fund and walking home with [final_jackpot] credits!"
 				command_alert(LW)
