@@ -248,6 +248,11 @@ var/list/science_goggles_wearers = list()
 	item_state = "hipster_glasses"
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/glasses/regular/flawless
+	name = "flawless glasses"
+	desc = "Flawless glasses which provide superb examination abilities."
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/glasses/gglasses
 	name = "Green Glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
