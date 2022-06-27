@@ -327,8 +327,5 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	for(var/i in 1 to num)
 		. *= i
 
-/proc/permutations(amount,sample)
-	return factorial(amount) / factorial(amount - sample)
-
-/proc/combinations(amount,sample)
-	return factorial(amount) / (factorial(sample) * factorial(amount - sample))
+#define permutations(amount,sample) (factorial(amount) / factorial(amount - sample))
+#define combinations(amount,sample) (factorial(amount) / (factorial(sample) * factorial(amount - sample)))
