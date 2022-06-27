@@ -3760,6 +3760,9 @@ var/station_jackpot = 1000000
 
 #define LOTTO_SAMPLE 6
 #define LOTTO_BALLCOUNT 32 //lottery is a topdefine/bottomdefine system
+#if LOTTO_BALLCOUNT < LOTTO_SAMPLE
+#define LOTTO_BALLCOUNT LOTTO_SAMPLE
+#endif
 
 /obj/item/weapon/paper/lotto_numbers
 	name = "Lotto numbers"
@@ -3772,8 +3775,6 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 /obj/item/weapon/paper/lotto_numbers/New()
 	..()
 	lotto_papers += src
-	if(LOTTO_BALLCOUNT < LOTTO_SAMPLE)
-		CRASH("Always make the sample picked lower than the ballcount!")
 	for(var/i in 1 to LOTTO_SAMPLE)
 		var/newnumber = 0
 		do

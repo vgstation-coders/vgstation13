@@ -7,8 +7,6 @@
 	return (lotto_papers.len > 0) * (min(20,lotto_papers.len) * 4)
 
 /datum/event/money_lotto/setup()
-	if(LOTTO_BALLCOUNT < LOTTO_SAMPLE)
-		CRASH("Always make the sample picked lower than the ballcount!")
 	var/list/luck_skewed_papers = list()
 	for(var/obj/item/weapon/paper/lotto_numbers/LN in lotto_papers)
 		var/client/foundclient = directory[ckey(LN.fingerprintslast)]
