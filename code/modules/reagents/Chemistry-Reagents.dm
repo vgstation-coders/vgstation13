@@ -1893,12 +1893,17 @@
 			new /obj/effect/decal/cleanable/greenglow(T)
 
 /datum/reagent/radium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
 	T.add_toxinlevel(2)
-	if(T.reagents.get_reagent_amount(id) >= 5)
+	if(T.reagents.get_reagent_amount(id) > 0)
 		if(prob(10))
 			T.mutate(GENE_MORPHOLOGY)
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/ryetalyn
 	name = "Ryetalyn"
@@ -2033,11 +2038,19 @@
 	M.apply_radiation(10,RAD_INTERNAL)
 
 /datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	if(T.reagents.get_reagent_amount(id) >= 5)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
 		if(prob(10))
 			T.mutate(GENE_PHYTOCHEMISTRY)
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -2197,11 +2210,19 @@
 			new /obj/effect/decal/cleanable/greenglow(T)
 
 /datum/reagent/uranium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	if(T.reagents.get_reagent_amount(id) >= 5)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
 		if(prob(10))
 			T.mutate(GENE_BIOLUMINESCENCE)
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/diamond
 	name = "Diamond dust"
@@ -2491,27 +2512,32 @@
 	specheatcap = 0.60
 
 /datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
 	T.add_nutrientlevel(10)
-	if(T.reagents.get_reagent_amount(id) >= 5)
-		if(prob(1))
+	if(T.reagents.get_reagent_amount(id) >= 1)
+		if(prob(0.2))
 			T.mutate(GENE_PHYTOCHEMISTRY)
-		if(prob(1))
+		if(prob(0.2))
 			T.mutate(GENE_MORPHOLOGY)
-		if(prob(1))
+		if(prob(0.2))
 			T.mutate(GENE_BIOLUMINESCENCE)
-		if(prob(1))
+		if(prob(0.2))
 			T.mutate(GENE_ECOLOGY)
-		if(prob(1))
+		if(prob(0.2))
 			T.mutate(GENE_ECOPHYSIOLOGY)
-		if(prob(1))
+		if(prob(0.2))
 			T.mutate(GENE_METABOLISM)
-		if(prob(1))
+		if(prob(0.2))
 			T.mutate(GENE_DEVELOPMENT)
-		if(prob(1))
+		if(prob(0.2))
 			T.mutate(GENE_XENOECOLOGY)
 		if(prob(1))
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/fertilizer/robustharvest
 	name = "Robust Harvest"
@@ -2739,13 +2765,21 @@
 	M.heal_organ_damage(0, 2 * REM)
 
 /datum/reagent/kelotane/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	if(T.reagents.get_reagent_amount(id) >= 5)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
 		if(prob(10))
-			T.mutate(GENE_ECOPHYSIOLOGY)
-			T.reagents.remove_reagent(id, 5)
+			T.mutate(GENE_PHYSIOLOGY)
+			T.reagents.remove_reagent(id, 1)
 		if(prob(10))
-			T.mutate(GENE_ECOPHYSIOLOGY)
+			T.mutate(GENE_PHYSIOLOGY)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/dermaline
 	name = "Dermaline"
@@ -2783,11 +2817,19 @@
 		holder.remove_reagents(LEXORINS, 2 * REM)
 
 /datum/reagent/dexalin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	if(T.reagents.get_reagent_amount(id) >= 5)
-		if(prob(25))
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(10))
 			T.mutate(GENE_XENOECOLOGY)
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/dexalinp
 	name = "Dexalin Plus"
@@ -2925,8 +2967,8 @@
 
 /datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
+	T.add_nutrientlevel(2)
+	T.add_waterlevel(2)
 	T.add_weedlevel(5)
 	T.add_pestlevel(5)
 	T.add_toxinlevel(5)
@@ -3342,13 +3384,21 @@ var/procizine_tolerance = 0
 				W.heal_damage(0.2, TRUE)
 
 /datum/reagent/bicaridine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	if(T.reagents.get_reagent_amount(id) >= 5)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
 		if(prob(10))
 			T.mutate(GENE_ECOLOGY)
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
 		if(prob(10))
 			T.mutate(GENE_ECOLOGY)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/synthocarisol
 	name = "Synthocarisol"
@@ -3418,13 +3468,21 @@ var/procizine_tolerance = 0
 		M.adjustToxLoss(1) // Toxins for everyone else
 
 /datum/reagent/hyperzine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	if(T.reagents.get_reagent_amount(id) >= 5)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
 		if(prob(10))
 			T.mutate(GENE_METABOLISM)
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
 		if(prob(10))
 			T.mutate(GENE_METABOLISM)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
@@ -3615,7 +3673,6 @@ var/procizine_tolerance = 0
 		T.age -= deviation
 		T.skip_aging++
 		T.force_update = 1
-	if(!T.seed.immutable)
 		if(prob(25))
 			T.mutate(GENE_ECOPHYSIOLOGY)
 
@@ -4315,7 +4372,6 @@ var/procizine_tolerance = 0
 	if(T.seed && !T.dead)
 		if(prob(20))
 			T.affect_growth(1)
-	if(!T.seed.immutable)
 		if(prob(25))
 			T.mutate(GENE_ECOPHYSIOLOGY)
 
@@ -5002,11 +5058,19 @@ var/procizine_tolerance = 0
 						H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?", "TOO SWOLE TO CONTROL", "HEY MANG", "HEY MAAAANG"))
 
 /datum/reagent/creatine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	if(T.reagents.get_reagent_amount(id) >= 5)
-		if(prob(25))
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(10))
 			T.mutate(GENE_DEVELOPMENT)
-			T.reagents.remove_reagent(id, 5)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/creatine/proc/dehulk(var/mob/living/carbon/human/H, damage = 200, override_remove = 0, gib = 1)
 
