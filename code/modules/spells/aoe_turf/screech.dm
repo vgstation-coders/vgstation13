@@ -64,6 +64,8 @@
 		C.Jitter(150)
 	for(var/obj/structure/window/W in view(4))
 		W.shatter()
+	for(var/obj/machinery/light/L in view(7))
+		L.broken()
 
 	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 
