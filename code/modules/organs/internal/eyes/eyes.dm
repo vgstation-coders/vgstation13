@@ -10,8 +10,6 @@
 	var/see_in_dark=2
 	var/list/colourmatrix = list()
 
-
-
 /datum/organ/internal/eyes/proc/init_perception(var/mob/living/carbon/human/M)
 	return
 
@@ -23,7 +21,6 @@
 		owner.eye_blind = max(2, owner.eye_blind)
 	if(is_bruised())
 		owner.eye_blurry = max(2, owner.eye_blurry)
-
 
 /datum/organ/internal/eyes/tajaran
 	name = "feline eyes"
@@ -52,14 +49,13 @@
 	name = "bird eyes"
 	removed_type = /obj/item/organ/internal/eyes/vox
 
-/datum/organ/internal/eyes/umbra
+/datum/organ/internal/eyes/monstrous
 	name = "monstrous eyes"
-	see_in_dark=8
-	colourmatrix = list(-1, 0, 0,
-						 0,-1, 0,
-						 0, 0,-1,
-						 1, 1, 1)
-	removed_type = /obj/item/organ/internal/eyes/umbra
+	see_in_dark= 9
+	removed_type = /obj/item/organ/internal/eyes/monstrous
+
+/datum/organ/internal/eyes/monstrous/update_perception(var/mob/living/carbon/human/M)
+	M.client.darkness_planemaster.alpha = 100
 
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"

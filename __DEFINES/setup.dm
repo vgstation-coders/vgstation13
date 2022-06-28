@@ -113,8 +113,6 @@ var/global/disable_vents     = 0
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
 
-#define FIRE_MINIMUM_TEMPERATURE_TO_SPREAD	150+T0C
-#define FIRE_MINIMUM_TEMPERATURE_TO_EXIST	100+T0C
 #define FIRE_SPREAD_RADIOSITY_SCALE		0.85
 #define FIRE_CARBON_ENERGY_RELEASED	  500000 //Amount of heat released per mole of burnt carbon into the tile
 #define FIRE_PLASMA_ENERGY_RELEASED	 3000000 //Amount of heat released per mole of burnt plasma into the tile
@@ -1356,7 +1354,7 @@ var/proccalls = 1
 #define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
-#define CHANNEL_UMBRA				1021	//only ever used to allow the ambient umbra sound to be made to stop playing
+#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024

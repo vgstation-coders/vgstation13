@@ -324,7 +324,7 @@
 			/mob/living/carbon/human/manifested,
 			/mob/living/carbon/human/muton,
 			/mob/living/carbon/human/golem,
-			/mob/living/carbon/human/umbra,
+			/mob/living/carbon/human/vampire,
 			/mob/living/carbon/human/frankenstein,
 			/mob/living/carbon/human/lich,
 			/mob/living/carbon/human/NPC,
