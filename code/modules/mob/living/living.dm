@@ -558,6 +558,11 @@ Thanks.
 		locked_to.unbuckle()
 	locked_to = initial(src.locked_to)
 	*/
+	if(istype(src, /mob/living/carbon))
+		var/mob/living/carbon/C = src
+		dead_mob_list -= C
+		living_mob_list |= list(C)
+
 	if(istype(src, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
 		H.timeofdeath = 0

@@ -15,7 +15,7 @@
 	if (!.)
 		return FALSE
 	if(user.mind && user.mind.suiciding)			//no reviving from suicides
-		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?")
+		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
 		return FALSE
 	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
@@ -47,6 +47,8 @@
 		
 	feedback_add_details("changeling_powers","FD")
 
+	..()
+
 /datum/action/lingrevive
 	name = "Return to Life"
 	desc = "Regenerate your body and continue to spread."
@@ -57,19 +59,12 @@
 	var/datum/role/changeling/changeling = owner.mind.GetRole(CHANGELING)
 	var/mob/living/carbon/C = owner
 
-	dead_mob_list -= C
-	living_mob_list |= list(C)
-	C.stat = CONSCIOUS
-	C.tod = null
 	C.rejuvenate(0)
 	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
-	C.status_flags &= ~(FAKEDEATH)
-	C.update_canmove()
 	if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
 		to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
 		if(C.dna in changeling.absorbed_dna)
 			changeling.absorbed_dna.Remove(C.dna)
-	C.regenerate_icons()
 	feedback_add_details("changeling_powers","RJ")
 	Remove(owner)
 

@@ -567,6 +567,16 @@ its easier to just keep the beam vertical.
 	qdel(src)
 	return 1
 
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/atom/proc/suicide_act(var/mob/living/user)
+	return
+
 // Returns TRUE if it's been handled, children should return if parent has already handled
 /atom/proc/hitby(var/atom/movable/AM)
 	. = isobserver(AM)

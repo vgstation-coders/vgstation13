@@ -9,6 +9,7 @@
 	var/winnings = 0
 	var/list/prizelist = list(100000,50000,10000,5000,1000,500,250,100,50,20,10,5,4,3,2,1)
 	var/list/problist = list(0.0001, 0.0002, 0.001, 0.002, 0.01, 0.02, 0.04, 0.2, 1, 2.5, 5, 10, 12.5, 17, 20, 25)
+	var/tuning_value = 1/5 //Used to adjust expected values.
 
 /obj/item/toy/lotto_ticket/New()
 	..()
@@ -16,14 +17,13 @@
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 
 /obj/item/toy/lotto_ticket/proc/scratch(var/input_prize_multiplier, var/mob/user)
-	var/tuning_value = 1/5 //Used to adjust expected values.
 	var/profit = 0
 	var/luck = user?.luck()
 	for(var/prize = 1 to problist.len)
 		var/thisprob = problist[prize]
 		//Take luck into account.
-		if(user ? user.lucky_prob(thisprob, luckfactor = 1/5000, maxskew = 25, ourluck = luck) : prob(thisprob))
-			profit = prizelist[prize]*input_prize_multiplier*tuning_value
+		if(user ? user.lucky_prob(thisprob, luckfactor = 1/12000, maxskew = 49.9, ourluck = luck) : prob(thisprob))
+			profit = prizelist[prize] * prize_multiplier * tuning_value
 			return profit
 
 //Flash code taken from Blinder
@@ -102,22 +102,14 @@
 	icon_state = "lotto_3"
 	prize_multiplier = 50 //EV 45.50, ER -4.50
 
-
 //Emag card
 /obj/item/toy/lotto_ticket/supermatter_surprise
 	name = "Supermatter Surprise lottery ticket"
 	desc = "An extremely expensive scratch-off lottery ticket. Guaranteed win of up to 5,000,000 credits! Experimental film material - use at your own risk!"
 	icon_state = "lotto_4"
+	prize_multiplier = 50
+	tuning_value = 1
 	var/flashed = FALSE
-
-/obj/item/toy/lotto_ticket/supermatter_surprise/scratch()
-	var/input_prize_multiplier = 50
-	var/profit = 0
-	while(!profit)
-		for(var/prize = 1 to problist.len)
-			if(prob(problist[prize]))
-				profit = prizelist[prize]*input_prize_multiplier
-				return profit
 
 /obj/item/toy/lotto_ticket/supermatter_surprise/attackby(obj/item/weapon/S, mob/user)
 	..()

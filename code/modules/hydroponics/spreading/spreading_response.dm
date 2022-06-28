@@ -22,11 +22,11 @@
 	manual_unbuckle(user)
 
 /obj/effect/plantsegment/proc/harvest(var/mob/user)
-	seed.harvest(user, yield_mod = 0.5)
+	seed.harvest(user, 0.5)
 	after_harvest()
 
 /obj/effect/plantsegment/proc/autoharvest()
-	seed.autoharvest(get_turf(src), yield_mod = 0.5)
+	seed.autoharvest(get_turf(src), 0.5)
 	after_harvest()
 
 /obj/effect/plantsegment/proc/after_harvest()

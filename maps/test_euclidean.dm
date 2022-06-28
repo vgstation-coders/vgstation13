@@ -34,7 +34,6 @@
 	tDomeX = 50
 	tDomeY = 50
 	tDomeZ = 1
-	multiz = TRUE
 	zLevels = list(
 		/datum/zLevel/centcomm,
 		/datum/zLevel/ground,

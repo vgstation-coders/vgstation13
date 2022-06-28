@@ -1,26 +1,41 @@
 /spell/changeling/rapidregen
-	name = "Rapid Regeneration (30)"
+	name = "Rapid Regeneration (40)"
 	desc = "We evolve the ability to rapidly regenerate, negating the need for stasis."
 	abbreviation = "RR"
 	hud_state = "rapidregen"
 
-	spell_flags = NEEDSHUMAN
+	spell_flags = NEEDSHUMAN | STATALLOWED
 
-	chemcost = 30
+	charge_max = 100 SECONDS
+	cooldown_min = 100 SECONDS
 
-/spell/changeling/rapidregen/cast(var/list/targets, var/mob/living/carbon/human/user)
+	chemcost = 40
 
-	var/mob/living/carbon/human/C = user
-	..()
+/spell/changeling/rapidregen/cast_check(skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.)
+		return FALSE
+	if(user.mind && user.mind.suiciding)			//no reviving from suicides
+		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
+		return FALSE
+	if(M_HUSK in user.mutations)
+		to_chat(user, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
+		return FALSE
+	if(inuse)
+		return FALSE
+	if(!istype(usr, /mob/living/carbon/))
+		return
 
+/spell/changeling/rapidregen/cast(var/list/targets, var/mob/living/carbon/C)
 	for(var/i = 0, i<10,i++)
 		if(C)
-			C.adjustBruteLoss(-10)
-			C.adjustToxLoss(-10)
-			C.adjustOxyLoss(-10)
-			C.adjustFireLoss(-10)
+			C.adjustBruteLoss(-5)
+			C.adjustToxLoss(-5)
+			C.adjustOxyLoss(-5)
+			C.adjustFireLoss(-5)
 			sleep(10)
-
+	C.rejuvenate(0)
 	feedback_add_details("changeling_powers","RR")
+	..()
 
 	

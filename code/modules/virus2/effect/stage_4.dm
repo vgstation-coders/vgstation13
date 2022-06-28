@@ -84,10 +84,9 @@
 /datum/disease2/effect/zombie/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
-		H.become_zombie_after_death = 2
+		H.become_zombie = TRUE
 		if(H.isDeadorDying())
-			if(isjusthuman(H))
-				H.make_zombie()
+			H.zombify()
 	to_chat(mob, "<span class = 'notice'>You hunger...</span>")
 
 /datum/disease2/effect/suicide

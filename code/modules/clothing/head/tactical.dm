@@ -36,6 +36,31 @@
 /obj/item/clothing/head/helmet/tactical/riot/defenseTackleBonus()
 	return 10
 
+
+/obj/item/clothing/head/helmet/tactical/laserproof
+	name = "ablative helmet"
+	desc = "A helmet that excels in protecting the wearer against energy projectiles."
+	icon_state = "laserproof"
+	item_state = "laserproof"
+	
+	armor = list(melee = 10, bullet = 10, laser = 80,energy = 50, bomb = 0, bio = 0, rad = 0)
+	eyeprot = 0
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
+	siemens_coefficient = 0
+	// no reflect chance because i don't want to touch the ablative reflect code
+
+
+/obj/item/clothing/head/helmet/tactical/bulletproof
+	name = "bulletproof helmet"
+	desc = "A helmet that excels in protecting the wearer against high-velocity solid projectiles."
+	icon_state = "bulletproof"
+	item_state = "bulletproof"
+	
+	armor = list(melee = 10, bullet = 80, laser = 10,energy = 10, bomb = 0, bio = 0, rad = 0)
+	eyeprot = 0
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
+
+
 /obj/item/clothing/head/helmet/tactical/swat
 	name = "\improper SWAT helmet"
 	desc = "They're often used by highly trained Swat Members."
@@ -49,3 +74,11 @@
 	siemens_coefficient = 0.5
 	eyeprot = 1
 	body_parts_visible_override = FACE
+	
+	
+/obj/item/clothing/head/helmet/tactical/antichrist
+	name = "blue helmet"
+	desc = "It has some markings at the front."
+	item_state = "antichrist"
+	icon_state = "antichrist"
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR

@@ -234,11 +234,17 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return -1
 
 	var/success
-	// Transfer from dispenser
-	if (can_receive && istype(target, /obj/structure/reagent_dispensers))
-		var/obj/structure/reagent_dispensers/S = target
-		if(S.can_transfer(src, user))
-			var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+	// Transfer from dispenser or cooking machine
+	if (can_receive)
+		if(istype(target, /obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/S = target
+			if(S.can_transfer(src, user))
+				var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+				if (tx_amount > 0)
+					to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+				return tx_amount
+		if(reagents && reagents.is_empty() && istype(target, /obj/machinery/cooking/deepfryer))
+			var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
 			return tx_amount

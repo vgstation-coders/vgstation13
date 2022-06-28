@@ -154,53 +154,53 @@
 	popup.open()
 
 /mob/living/simple_animal/hostile/pulse_demon/Topic(href, href_list)
-	..()
-	if(href_list["upgrade"])
-		var/datum/pulse_demon_upgrade/PDU = locate(href_list["thing"])
-		PDU.on_purchase()
+    ..()
+    if(href_list["upgrade"])
+        var/datum/pulse_demon_upgrade/PDU = locate(href_list["thing"])
+        PDU.on_purchase()
 
-	if(href_list["buy"])
-		var/spell/pulse_demon/PDS = locate(href_list["spell"])
-		if(PDS.purchase_cost > charge)
-			to_chat(src,"<span class='warning'>You cannot afford this ability.</span>")
-			return
+    if(href_list["buy"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.purchase_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this ability.</span>")
+            return
 
-		// Give the power and take away the money.
-		add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
-		charge -= PDS.purchase_cost
-		possible_spells.Remove(PDS)
+        // Give the power and take away the money.
+        add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
+        charge -= PDS.purchase_cost
+        possible_spells.Remove(PDS)
 
-	if(href_list["desc"])
-		show_desc = !show_desc
+    if(href_list["desc"])
+        show_desc = !show_desc
 
-	if(href_list["quicken"])
-		var/spell/pulse_demon/PDS = locate(href_list["spell"])
-		if(PDS.spell_flags & NO_BUTTON)
-			to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
-			return
-		if(PDS.upgrade_cost > charge)
-			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-			return
-		if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
-			to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
-			return
+    if(href_list["quicken"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.spell_flags & NO_BUTTON)
+            to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
+            return
+        if(PDS.upgrade_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
+            to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
+            return
 
-		PDS.quicken_spell()
-		charge -= PDS.upgrade_cost
+        charge -= PDS.upgrade_cost
+        PDS.quicken_spell()
 
-	if(href_list["empower"])
-		var/spell/pulse_demon/PDS = locate(href_list["spell"])
-		if(PDS.upgrade_cost > charge)
-			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-			return
-		if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
-			to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
-			return
+    if(href_list["empower"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.upgrade_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
+            to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
+            return
 
-		PDS.empower_spell()
-		charge -= PDS.upgrade_cost
+        charge -= PDS.upgrade_cost
+        PDS.empower_spell()
 
-	powerMenu()
+    powerMenu()
 
 /spell/pulse_demon
 	name = "Pulse Demon Spell"

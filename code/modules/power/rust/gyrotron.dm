@@ -127,3 +127,8 @@
 		return
 
 	dir = turn(dir, 90)
+
+/obj/machinery/rust/gyrotron/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_cw()

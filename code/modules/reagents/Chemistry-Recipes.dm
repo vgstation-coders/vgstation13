@@ -3959,6 +3959,24 @@
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGARS = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/bumcivilian
+	name = "Bumcivilian"
+	id = BUMCIVILIAN
+	result = BUMCIVILIAN
+	required_reagents = list(IRON = 1, SACIDS = 1) //..5.05 Mg
+	result_amount = 1
+
+/datum/chemical_reaction/bumcivilian/required_condition_check(datum/reagents/holder)
+	for(var/obj/item/device/deskbell/B in view(3,get_turf(holder.my_atom)))
+		if(world.time - B.last_ring_time <= 30)
+			return 1
+
+/datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
+	for(var/turf/T in view(get_turf(holder.my_atom)))
+		T.mute_time = world.time + B.mute_duration
+
 /datum/chemical_reaction/random
 	name = "Random chemical"
 	id = "random"

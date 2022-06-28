@@ -12,15 +12,15 @@
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
 
 	// Plant maintenance vars.
-	var/waterlevel = 100       // Water (max 100)
-	var/nutrilevel = 100       // Nutrient (max 100)
-	var/pestlevel = 0          // Pests (max 10)
-	var/weedlevel = 0          // Weeds (max 10)
-	var/toxins = 0             // Toxicity in the tray (max 100)
-	var/improper_light = 0	   // Becomes 1 when the plant has improper lighting, only used for update_icon purposes.
-	var/improper_kpa = 0       // Becomes 1 when the environment pressure is too high/too low, only used for update_icon purposes.
-	var/improper_heat = 0	   // Becomes 1 when the environment temperature is too low/too high, only used for update_icon purposes.
-	var/missing_gas = 0		   // Adds +1 for every type of gas missing, used in process().
+	var/waterlevel = 100		// Water (max 100)
+	var/nutrientlevel = 100		// Nutrient (max 100)
+	var/pestlevel = 0			// Pests (max 100)
+	var/weedlevel = 0			// Weeds (max 100)
+	var/toxinlevel = 0			// Toxicity in the tray (max 100)
+	var/improper_light = 0		// Becomes 1 when the plant has improper lighting, only used for update_icon purposes.
+	var/improper_kpa = 0		// Becomes 1 when the environment pressure is too high/too low, only used for update_icon purposes.
+	var/improper_heat = 0		// Becomes 1 when the environment temperature is too low/too high, only used for update_icon purposes.
+	var/missing_gas = 0			// Adds +1 for every type of gas missing, used in process().
 
 	// Tray state vars.
 	var/dead = 0               // Is it dead?
@@ -29,10 +29,10 @@
 	var/sampled = 0            // Have we taken a sample?
 
 	// Harvest/mutation mods.
-	var/yield_mod = 1          // Multiplier to yield for the next harvest.
-	var/mutation_mod = 1       // Modifier to mutation_level increase.
-	var/mutation_level = 0     // Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
-	var/is_somatoraying = 0    // Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
+	var/yield_mod = 1			// Multiplier to yield for the next harvest.
+	var/mutation_mod = 1		// Modifier to mutationlevel increase.
+	var/mutationlevel = 0		// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
+	var/is_somatoraying = 0		// Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
 
 	// Mechanical concerns.
 	var/plant_health = 0       // Plant health.
@@ -102,14 +102,14 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
 	dead = 1
 	harvest = 0
-	mutation_level = 0
+	mutationlevel = 0
 	yield_mod = 1
 	mutation_mod = 1
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
 	// When the plant dies, weeds thrive and pests die off.
-	weedlevel += 1 * HYDRO_SPEED_MULTIPLIER
+	add_weedlevel(10 * HYDRO_SPEED_MULTIPLIER)
 	pestlevel = 0
 	update_icon()
 
@@ -142,7 +142,7 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user, yield_mod)
+	seed.harvest(user,get_yieldmod())
 	after_harvest()
 	return
 
@@ -162,7 +162,6 @@
 	if(!seed.harvest_repeat)
 		remove_plant()
 
-	check_level_sanity()
 	update_icon()
 	return
 
@@ -170,22 +169,18 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/remove_dead(var/mob/user)
 	if(!user || !dead)
 		return
-
 	if(closed_system)
 		to_chat(user, "You can't remove the dead plant while the lid is shut.")
 		return
 
 	remove_plant()
-
 	to_chat(user, "You remove the dead plant from the [src].")
-	check_level_sanity()
+
 	update_icon()
 	return
 
  // If a weed growth is sufficient, this proc is called.
 /obj/machinery/portable_atmospherics/hydroponics/proc/weed_invasion()
-
-
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
@@ -193,7 +188,7 @@
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
-	plant_health = seed.endurance
+	add_planthealth(seed.endurance)
 	lastcycle = world.time
 	weedlevel = 0
 	update_icon()
@@ -201,8 +196,31 @@
 
 	return
 
-/obj/machinery/portable_atmospherics/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/portable_atmospherics/hydroponics/proc/try_spread()
+	if(!seed.spread)
+		return FALSE
+	//Up to 80% chance it doesn't spread
+	if(prob(8 * max(10,seed.potency)))
+		return FALSE
+	if(closed_system)
+		return FALSE
+	if(age < seed.maturation)
+		return FALSE
+	if(seed.hematophage || seed.carnivorous)
+		return TRUE
+	//Doesn't spread if well-fed
+	if(get_nutrientlevel() < NUTRIENTLEVEL_MAX * 0.8)
+		return TRUE
+	if(seed.toxin_affinity < 5 && get_waterlevel() < WATERLEVEL_MAX * 0.8)
+		return TRUE
+	else if(seed.toxin_affinity <= 7 && (get_waterlevel() < WATERLEVEL_MAX * 0.8 || get_toxinlevel() < TOXINLEVEL_MAX * 0.8))
+		return TRUE
+	else if(seed.toxin_affinity > 7 && get_toxinlevel() < TOXINLEVEL_MAX* 0.8)
+		return TRUE
+	else
+		return FALSE
 
+/obj/machinery/portable_atmospherics/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(O.is_open_container())
 		return 0
 
@@ -237,26 +255,21 @@
 			dead = 0
 			age = 1
 			if(seed.hematophage)
-				nutrilevel = 1
+				add_nutrientlevel(-50)
 
 			//Snowflakey, maybe move this to the seed datum
-			plant_health = seed.endurance
+			add_planthealth(seed.endurance)
 
 			lastcycle = world.time
 
 			qdel(O)
-
-			check_level_sanity()
 			update_icon()
-
 		else
 			to_chat(user, "<span class='alert'>\The [src] already has seeds in it!</span>")
 
 	else if(O.force && seed && user.a_intent == I_HURT)
 		visible_message("<span class='danger'>\The [seed.display_name] has been attacked by [user] with \the [O]!</span>")
-		if(!dead)
-			plant_health -= O.force
-			check_health()
+		add_planthealth(-O.force)
 		user.delayNextAttack(5)
 
 	else if(istype(O, /obj/item/claypot))
@@ -304,8 +317,6 @@
 					S.light_color = seed.biolum_colour
 
 			remove_plant()
-
-			check_level_sanity()
 			update_icon()
 		else
 			C.being_potted = FALSE
@@ -328,13 +339,11 @@
 		// Create a sample.
 		seed.spawn_seed_packet(get_turf(user))
 		to_chat(user, "You take a sample from the [seed.display_name].")
-		plant_health -= (rand(3,5)*10)
+		add_planthealth(-rand(3,5)*10)
 
 		if(prob(30))
 			sampled = 1
 
-		// Bookkeeping.
-		check_level_sanity()
 		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
@@ -343,7 +352,7 @@
 
 	else if (ishoe(O))
 
-		if(weedlevel > 0)
+		if(get_weedlevel() > 0)
 			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
 			weedlevel = 0
 			update_icon()
@@ -359,20 +368,6 @@
 			if(!S.can_be_inserted(G))
 				return
 			S.handle_item_insertion(G, 1)
-
-	else if ( istype(O, /obj/item/weapon/plantspray) )
-
-		var/obj/item/weapon/plantspray/spray = O
-		user.drop_item(spray, force_drop = 1)
-		toxins += spray.toxicity
-		pestlevel -= spray.pest_kill_str
-		weedlevel -= spray.weed_kill_str
-		to_chat(user, "You spray [src] with [O].")
-		playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
-		qdel(O)
-
-		check_level_sanity()
-		update_icon()
 
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
@@ -417,10 +412,8 @@
 		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
-
 	if(harvest)
 		harvest(user)
-
 	else if(dead)
 		remove_dead(user)
 
@@ -450,26 +443,28 @@
 	view_contents(user)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/view_contents(mob/user)
-	if(src.seed && !src.dead)
-		to_chat(user, "<span class='info'>[src.seed.display_name]</span> is growing here.")
-		if(src.plant_health <= (src.seed.endurance / 2))
+	if(seed && !dead)
+		to_chat(user, "<span class='info'>[seed.display_name]</span> is growing here.")
+		if(get_planthealth() <= (seed.endurance / 2))
 			to_chat(user, "The plant looks <span class='alert'>[age > seed.lifespan ? "old and wilting" : "unhealthy"].</span>")
-	else if(src.seed && src.dead)
+	else if(seed && dead)
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
 		to_chat(user, "[src] has nothing planted.")
 	if (Adjacent(user) || isobserver(user) || issilicon(user))
-		to_chat(user, "Water: [round(src.waterlevel,0.1)]/100")
+		to_chat(user, "Water: [get_waterlevel()]/100")
+		if(seed && seed.toxin_affinity >= 5)
+			to_chat(user, "Toxin: [get_toxinlevel()]/100")
 		if(seed && seed.hematophage)
-			to_chat(user, "<span class='danger'>Blood:</span> [round(src.nutrilevel,0.1)]/10") //so edgy!!
+			to_chat(user, "<span class='danger'>Blood:</span> [get_nutrientlevel()]/100")
 		else
-			to_chat(user, "Nutrient: [round(src.nutrilevel,0.1)]/10")
-		if(src.weedlevel >= 5)
+			to_chat(user, "Nutrient: [src.get_nutrientlevel()]/100")
+		if(get_weedlevel() >= WEEDLEVEL_MAX/2)
 			to_chat(user, "[src] is <span class='alert'>filled with weeds!</span>")
-		if(src.pestlevel >= 5)
+		if(get_pestlevel() >= WEEDLEVEL_MAX/2)
 			to_chat(user, "[src] is <span class='alert'>filled with tiny worms!</span>")
-		if(draw_warnings)
-			if(src.toxins >= 40)
+		if(seed && draw_warnings)
+			if(seed.toxin_affinity < 5 && get_toxinlevel() >= TOXINLEVEL_MAX/2)
 				to_chat(user, "The tray's <span class='alert'>toxicity level alert</span> is flashing red.")
 			if(improper_light)
 				to_chat(user, "The tray's <span class='alert'>improper light level alert</span> is blinking.")
@@ -529,7 +524,7 @@
 	if(!usr || usr.isUnconscious() || usr.restrained())
 		return
 	light_on = !light_on
-	calculate_light()
+	check_light()
 	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
@@ -566,8 +561,7 @@
 					if(M && M.loc == get_turf(src))
 						unlock_atom(M)
 						M.gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
-						nutrilevel += 6
-						check_level_sanity()
+						add_nutrientlevel(6)
 						update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)
@@ -590,9 +584,8 @@
 				return
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(seed && !dead)
-			yield_mod = clamp(yield_mod + (rand(3,5)/10), 1, 2)
-			if(yield_mod >= 2)
-				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
+			add_yieldmod(rand(3,5)/10)
+			visible_message("<span class='notice'>\The [seed.display_name] looks lush.</span>")
 			return
 
 	..()

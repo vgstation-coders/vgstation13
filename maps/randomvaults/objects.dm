@@ -371,7 +371,7 @@
 	anchored = 1
 	cant_drop = 1
 
-	slip_power = 10
+	slip_override = 11
 
 /obj/item/weapon/melee/morningstar/catechizer
 	name = "The Catechizer"
@@ -563,18 +563,18 @@
 
 /obj/machinery/portable_atmospherics/canister/old/pressure_overlays(var/state)
 	var/static/list/status_overlays_pressure = list(
-		image(icon, "old-o0"),
-		image(icon, "old-o1"),
-		image(icon, "old-o2"),
-		image(icon, "old-o3")
+		image('icons/obj/atmos.dmi', "old-o0"),
+		image('icons/obj/atmos.dmi', "old-o1"),
+		image('icons/obj/atmos.dmi', "old-o2"),
+		image('icons/obj/atmos.dmi', "old-o3")
 	)
 
 	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/old/other_overlays(var/state)
 	var/static/list/status_overlays_other = list(
-		image(icon, "old-open"),
-		image(icon, "old-connector")
+		image('icons/obj/atmos.dmi', "old-open"),
+		image('icons/obj/atmos.dmi', "old-connector")
 	)
 
 	return status_overlays_other[state]

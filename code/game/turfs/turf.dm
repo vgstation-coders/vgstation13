@@ -73,6 +73,8 @@
 
 	var/last_beam_damage = 0
 
+	var/mute_time = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)

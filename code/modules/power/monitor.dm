@@ -1,56 +1,54 @@
 /*
  * For reference, this is the JSON being produced by ui_data() that will be sent to PowerMonitor.js:
  *
- *	{
- *		"engineer_access": Boolean. Whether the user has minor engineering access (same access as APCs). Enables priority buttons.
- *		"attached": Boolean. Whether the console is attached to a grid
+ *  {
+ *      "engineer_access": Boolean. Whether the user has minor engineering access (same access as APCs). Enables priority buttons.
+ *      "attached": Boolean. Whether the console is attached to a grid
  *
- *		"history": {
- *			"supply": Float List. Contains previous measurements of power available to the grid.
- *			"demand": Float List. Contains previous measurements of power requested by the grid.
- *		},
- *		"supply": String. Last measured supply, preformatted. eg: 1234.5 becomes "1.23 kW"
- *		"demand": String. Last measured demand, preformatted.
+ *      "history": {
+ *          "supply": Float List. Contains previous measurements of power available to the grid.
+ *          "demand": Float List. Contains previous measurements of power requested by the grid.
+ *      },
+ *      "supply": String. Last measured supply, preformatted. eg: 1234.5 becomes "1.23 kW"
+ *      "demand": String. Last measured demand, preformatted.
  *
- *		"areas": Map. Key is the area's \ref, value is area stats and machine list. May contain a
- *				fake "\ref[null]" area named "Other" grouping any machines whose area can't be determined
- *				Value is as follows:
- *			{
- *				"name": String. Area name
+ *      "areas": Map. Key is the area's \ref, value is area stats and machine list. May contain a
+ *                fake "\ref[null]" area named "Other" grouping any machines whose area can't be determined
+ *               Value is as follows:
+ *      {
+ *          "name": String. Area name
  *
- *				"demand": Float. Sum of machine and APC demand in this area.
- *				"f_demand": String. Preformatted version of "demand". eg: 1234.5 becomes "1.23 kW"
+ *          "demand": Float. Sum of machine and APC demand in this area.
+ *          "f_demand": String. Preformatted version of "demand". eg: 1234.5 becomes "1.23 kW"
  *
- *				"charge": Float, 0 to 100. Area's APC percent charge
- *				"charging": Integer, -1 to 1. Whether the area's APC is currently charging (1), unchanged (0) or discharging (-1)
+ *          "charge": Float, 0 to 100. Area's APC percent charge
+ *          "charging": Integer, -1 to 1. Whether the area's APC is currently charging (1), unchanged (0) or discharging (-1)
  *
- *				"eqp": Integer, 0 to 3. Whether the APC's equipment channel is off (0), auto-off (1), on (2) or auto-on (3)
- *				"lgt": Integer, 0 to 3. Whether the APC's light channel is off (0), auto-off (1), on (2) or auto-on (3)
- *				"env": Integer, 0 to 3. Whether the APC's enviroment channel is off (0), auto-off (1), on (2) or auto-on (3)
+ *          "eqp": Integer, 0 to 3. Whether the APC's equipment channel is off (0), auto-off (1), on (2) or auto-on (3)
+ *          "lgt": Integer, 0 to 3. Whether the APC's light channel is off (0), auto-off (1), on (2) or auto-on (3)
+ *          "env": Integer, 0 to 3. Whether the APC's enviroment channel is off (0), auto-off (1), on (2) or auto-on (3)
  *
- *				"machines": Map. Key is the machine's \ref, value is as follows:
- *					{
- *						"ref" = "\ref[src]", // ref for use in Topic() calls
- *						"name": Machine name,
- *						"icon": ???
+ *          "machines": Map. Key is the machine's identifier, usually derived from "\ref[src]". May identify separate aspects
+ *                       of the same object, eg: powering things in an APC's area (identified as "\ref[src]") vs recharging said
+ *                       APC's battery (identified as "\ref[src]_b").
+ *                      Value is as follows:
+ *          {
+ *              "ref": String, "\ref[src]". A reference, for use in Topic() calls, to the object managing this machine's priority
+ *              "name": String. Machine name.
  *
- *						"priority": Integer, ranges 1 to 11. Machine priority. Keep in mind priority level 1 is reserved for
- *									rogue power consumers (eg: syndicate tech, pulse demons) and not meant to be recognized.
+ *              "priority": Integer, ranges 1 to 11. Machine priority. Keep in mind priority level 1 is reserved for
+ *                           rogue power consumers (eg: syndicate tech, pulse demons) and not meant to be recognized.
  *
- *						"demand": Float. Power being requested by this machine
- *						"f_demand": String. Preformatted version of "demand". eg: 1234.5 becomes "1.23 kW"
+ *              "demand": Float. Power being requested by this machine
+ *              "f_demand": String. Preformatted version of "demand". eg: 1234.5 becomes "1.23 kW"
  *
- *						"isbattery": Boolean. Whether this machine has an internal battery, eg: an SMES, an APC's battery
- *						"charge": Float, 0 to 100. Machine percent charge
- *						"charging": Integer, -1 to 1. Whether the machine's battery is charging (1), unchanged (0) or discharging (-1)
- *					}
- *				}
- *			}
- *		}
- *	}
+ *              "isbattery": Boolean. Whether this machine has an internal battery, eg: an SMES, an APC's battery
+ *              "charge": Float, 0 to 100. Machine percent charge
+ *              "charging": Integer, -1 to 1. Whether the machine's battery is charging (1), unchanged (0) or discharging (-1)
+ *          }
+ *      }
+ *  }
 */
-
-
 
 /obj/machinery/computer/powermonitor
 	name = "power monitor"
@@ -68,12 +66,23 @@
 	idle_power_usage = 300
 	active_power_usage = 300
 
-	var/datum/powernet/connected_powernet
+	//var/datum/powernet/connected_powernet
+	var/datum/power_connection/power_connection = null
 
 	var/list/history = list()
 	var/record_size = 60
 	var/record_interval = 50
 	var/next_record = 0
+
+/obj/machinery/computer/powermonitor/New()
+	..()
+	power_connection = new(src)
+
+/obj/machinery/computer/powermonitor/Destroy()
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	. = ..()
 
 /obj/machinery/computer/powermonitor/initialize()
 	..()
@@ -82,16 +91,14 @@
 	history["demand"] = list()
 
 /obj/machinery/computer/powermonitor/proc/search()
+
 	var/obj/machinery/power/apc/areaapc = get_area(src).areaapc
 	if(areaapc)
-		connected_powernet = areaapc.terminal.powernet
+		var/turf/T = get_turf(areaapc)
+		var/obj/structure/cable/C = T.get_cable_node()
+		power_connection.connect(C)
 
-	var/obj/structure/cable/attached = null
-	var/turf/T = loc
-	if(isturf(T))
-		attached = locate() in T
-	if(attached)
-		connected_powernet = attached.get_powernet()
+	power_connection.connect()
 
 /obj/machinery/computer/powermonitor/attack_hand(mob/user)
 	. = ..()
@@ -108,6 +115,8 @@
 
 /obj/machinery/computer/powermonitor/ui_data(mob/user)
 	var/list/data = list()
+
+	var/datum/powernet/connected_powernet = power_connection.get_powernet()
 
 	data["engineer_access"] = (access_engine_minor in user.GetAccess()) // Engineer access allows players to modify priorities
 	data["attached"] = connected_powernet ? TRUE : FALSE
@@ -130,18 +139,24 @@
 		if (istype(machine, /obj/machinery/power/apc))
 			var/obj/machinery/power/apc/apc = machine
 			var/list/apc_status = apc.get_monitor_status()
+
 			apc_status["\ref[apc]"]["f_demand"] = format_watts(apc_status["\ref[apc]"]["demand"])
-			apc_status["\ref[apc]_b"]["f_demand"] = format_watts(apc_status["\ref[apc]_b"]["demand"])
 			data["areas"]["\ref[get_area(apc)]"] = list(
 				"name" = get_area(apc).name,
-				"demand" = (apc_status["\ref[apc]"]["demand"] + apc_status["\ref[apc]_b"]["demand"]),
-				"charging" = apc_status["\ref[apc]_b"]["charging"],
-				"charge" = apc_status["\ref[apc]_b"]["charge"],
+				"demand" = apc_status["\ref[apc]"]["demand"],
+				"charging" = MONITOR_STATUS_BATTERY_STEADY,
+				"charge" = 0,
 				"eqp" = apc.equipment,
 				"lgt" = apc.lighting,
 				"env" = apc.environ,
 				"machines" = apc_status
 			)
+
+			if (apc_status["\ref[apc]_b"])
+				apc_status["\ref[apc]_b"]["f_demand"] = format_watts(apc_status["\ref[apc]_b"]["demand"])
+				data["areas"]["\ref[get_area(apc)]"]["demand"] += apc_status["\ref[apc]_b"]["demand"]
+				data["areas"]["\ref[get_area(apc)]"]["charging"] = apc_status["\ref[apc]_b"]["charging"]
+				data["areas"]["\ref[get_area(apc)]"]["charge"] = apc_status["\ref[apc]_b"]["charge"]
 
 		else if (machine && !(machine in machines)) //Some machines (eg: SMES) could have an input terminal and output wire knot on
 			machines += machine						// the same grid, counting them twice. This prevents that
@@ -193,6 +208,7 @@
 		var/list/supply = history["supply"]
 		var/list/demand = history["demand"]
 
+		var/datum/powernet/connected_powernet = power_connection.get_powernet()
 		if(connected_powernet)
 			supply += connected_powernet.avail
 			if(supply.len > record_size)

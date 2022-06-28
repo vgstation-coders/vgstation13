@@ -63048,7 +63048,7 @@
 /obj/machinery/computer/general_air_control{
 	frequency = 1441;
 	name = "Tank Monitor";
-	sensors = list("n2_sensor" = "Nitrogen", "o2_sensor" = "Oxygen", "co2_sensor" = "Carbon Dioxide", "tox_sensor" = "Toxins", "n2o_sensor" = "Nitrous Oxide", "waste_sensor" = "Gas Mix Tank")
+	sensors = list("n2_sensor"="Nitrogen","o2_sensor"="Oxygen","co2_sensor"="Carbon Dioxide","tox_sensor"="Toxins","n2o_sensor"="Nitrous Oxide","waste_sensor"="Gas Mix Tank")
 	},
 /obj/machinery/requests_console{
 	department = "Atmospherics";
@@ -63760,7 +63760,7 @@
 	frequency = 1443;
 	level = 3;
 	name = "Distribution and Waste Monitor";
-	sensors = list("mair_in_meter" = "Mixed Air In", "air_sensor" = "Mixed Air Supply Tank", "mair_out_meter" = "Mixed Air Out", "dloop_atm_meter" = "Distribution Loop", "wloop_atm_meter" = "Waste Loop")
+	sensors = list("mair_in_meter"="Mixed Air In","air_sensor"="Mixed Air Supply Tank","mair_out_meter"="Mixed Air Out","dloop_atm_meter"="Distribution Loop","wloop_atm_meter"="Waste Loop")
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
@@ -63869,7 +63869,7 @@
 	input_tag = "waste_in";
 	name = "Gas Mix Tank Control";
 	output_tag = "waste_out";
-	sensors = list("waste_sensor" = "Tank")
+	sensors = list("waste_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
 	dir = 4
@@ -65896,7 +65896,7 @@
 	},
 /obj/machinery/computer/general_air_control/large_tank_control{
 	name = "Telecomms Room Monitoring";
-	sensors = list("tcomms_sensor" = "Server Room")
+	sensors = list("tcomms_sensor"="Server Room")
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -66555,7 +66555,7 @@
 	input_tag = "n2o_in";
 	name = "Nitrous Oxide Supply Control";
 	output_tag = "n2o_out";
-	sensors = list("n2o_sensor" = "Tank")
+	sensors = list("n2o_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /turf/simulated/floor{
@@ -68359,7 +68359,7 @@
 	input_tag = "tox_in";
 	name = "Toxin Supply Control";
 	output_tag = "tox_out";
-	sensors = list("tox_sensor" = "Tank")
+	sensors = list("tox_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /obj/machinery/light{
@@ -70551,7 +70551,7 @@
 	input_tag = "co2_in";
 	name = "Carbon Dioxide Supply Control";
 	output_tag = "co2_out";
-	sensors = list("co2_sensor" = "Tank")
+	sensors = list("co2_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /turf/simulated/floor{
@@ -72563,17 +72563,11 @@
 	pixel_y = 32
 	},
 /obj/structure/table/reinforced,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/device/rcd/matter/engineering{
-	pixel_x = 4;
-	pixel_y = 3
-	},
 /obj/item/device/rcd/rpd,
+/obj/item/stack/rcd_ammo/ce,
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv{
+	pixel_y = 8
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralfull"
@@ -73474,7 +73468,7 @@
 	input_tag = "n2_in";
 	name = "Nitrogen Supply Control";
 	output_tag = "n2_out";
-	sensors = list("n2_sensor" = "Tank")
+	sensors = list("n2_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
 	dir = 4
@@ -73515,7 +73509,7 @@
 	input_tag = "o2_in";
 	name = "Oxygen Supply Control";
 	output_tag = "o2_out";
-	sensors = list("o2_sensor" = "Tank")
+	sensors = list("o2_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/cyan/visible,
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
@@ -73574,7 +73568,7 @@
 	name = "Mixed Air Supply Control";
 	output_tag = "air_out";
 	pressure_setting = 2000;
-	sensors = list("air_sensor" = "Tank")
+	sensors = list("air_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
 	dir = 4
@@ -78206,7 +78200,7 @@
 	frequency = 1449;
 	input_tag = "inc_in";
 	output_tag = "inc_out";
-	sensors = list("inc_sensor" = "Tank")
+	sensors = list("inc_sensor"="Tank")
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -82015,7 +82009,7 @@
 	input_tag = "coolant_in";
 	name = "Coolant Control";
 	output_tag = "coolant_out";
-	sensors = list("sme_sensor" = "Engine")
+	sensors = list("sme_sensor"="Engine")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"

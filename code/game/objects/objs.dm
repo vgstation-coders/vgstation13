@@ -329,14 +329,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/interact(mob/user)
 	return
 
-//user: The mob that is suiciding
-//damagetype: The type of damage the item will inflict on the user
-//SUICIDE_ACT_BRUTELOSS = 1
-//SUICIDE_ACT_FIRELOSS = 2
-//SUICIDE_ACT_TOXLOSS = 4
-//SUICIDE_ACT_OXYLOSS = 8
-//Output a creative message and then return the damagetype done
-/obj/proc/suicide_act(var/mob/living/user)
+/obj/suicide_act(var/mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
 		user.IgniteMob()
@@ -608,16 +601,18 @@ a {
 	return !(flags & INVULNERABLE)
 
 /obj/proc/t_scanner_expose()
-	if (level != LEVEL_BELOW_FLOOR)
-		return
-
-	if (invisibility == 101)
+	//don't reveal docking ports or spawns
+	if(invisibility > 0 && invisibility < INVISIBILITY_OBSERVER || alpha < 255)
+		var/old_invisibility = invisibility
+		var/old_alpha = alpha
 		invisibility = 0
+		alpha = 255
 
 		spawn(1 SECONDS)
 			var/turf/U = loc
 			if(istype(U) && U.intact)
-				invisibility = 101
+				invisibility = old_invisibility
+				alpha = old_alpha
 
 /obj/proc/become_defective()
 	if(!defective)

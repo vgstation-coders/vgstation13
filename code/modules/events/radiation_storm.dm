@@ -43,7 +43,7 @@
 			var/area/ma = get_area(A)
 			ma.radiation_alert()
 
-		make_maint_all_access()
+		make_doors_all_access(list(access_maint_tunnels))
 
 
 		sleep(30 SECONDS)
@@ -106,4 +106,4 @@
 		sleep(600) // Want to give them time to get out of maintenance.
 
 
-		revoke_maint_all_access()
+		revoke_doors_all_access(list(access_maint_tunnels))

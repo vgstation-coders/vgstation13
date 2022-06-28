@@ -67,6 +67,11 @@
 	src.dir = turn(src.dir, 90)
 	return 1
 
+/obj/machinery/power/emitter/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_cw()
+
 /obj/machinery/power/emitter/initialize()
 	..()
 	if(state == 2 && anchored)

@@ -24,6 +24,7 @@
 	speed = 1
 	flying = 1
 	size = SIZE_TINY
+	density = 0 //people walk over you isntead of bumping
 
 	attacktext = "electrocutes"
 	attack_sound = "sparks"
@@ -326,6 +327,9 @@
 /mob/living/simple_animal/hostile/pulse_demon/hitby(thrown_thing)
 	visible_message("<span class ='notice'>\the [thrown_thing] goes right through \the [src]!</span>")
 	//no damage from being hit by thrown stuff but the whack sound still plays for some reason
+  return
+  
+/mob/living/simple_animal/hostile/pulse_demon/electrocute_act() //don't get killed by powercreeper vines
 	return
 
 // Our one weakness

@@ -418,7 +418,7 @@
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
 		if(arguments == "fueltank_crash")
-			if(isjusthuman(H))
+			if(ishuman(H))
 				playsound(H, 'sound/misc/crash_scream.ogg', 50, 0)
 				H.last_emote_sound = world.time
 				return

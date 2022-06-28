@@ -82,6 +82,7 @@
 	icon_state = "socket_wrench"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_LARGE //big shit, to balance its power
+	starting_materials = list(MAT_IRON = 150)
 	force = 15.0
 	throwforce = 12.0
 

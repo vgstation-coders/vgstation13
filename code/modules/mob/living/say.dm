@@ -122,6 +122,11 @@ var/list/headset_modes = list(
 	if(!message)
 		return
 
+	//Muting
+	var/turf/T = get_turf(src)
+	if(T.mute_time > world.time)
+		return
+
 	var/message_mode = get_message_mode(message)
 	if(silent)
 		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
@@ -239,7 +244,6 @@ var/list/headset_modes = list(
 	else
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
-	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
 	qdel(speech)
 	return 1

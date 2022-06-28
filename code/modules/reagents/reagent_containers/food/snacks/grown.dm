@@ -46,6 +46,8 @@ var/list/special_fruits = list()
 		potency = round(seed.potency)
 		force = seed.thorny ? 5+seed.carnivorous*3 : 0
 		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
+		if(seed.noreact)
+			flags |= NOREACT
 
 		if(seed.teleporting)
 			name = "blue-space [name]"
@@ -260,6 +262,8 @@ var/list/special_fruits = list()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
+//Types blacklisted from appearing as products of strange seeds and no-fruit.
+var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/) //Otherwise the selection would be biased by the relatively large number of multiple leaf-number-specific subtypes - the base type with randomized leaves is still valid.
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn
 	name = "ear of corn"
@@ -931,7 +935,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname, mob/harvester)
 	..()
-	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
+	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits() - strange_seed_product_blacklist
 	available_fruits = shuffle(available_fruits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()

@@ -1,23 +1,10 @@
-//The astrogator has a way with plants of every type.
-//She nurtures alien veg'tables and cooks them when they're ripe!
-//She had a Veged orchid once that ate the captain's cat.
-//Then terrorized the ship's exec, until she squashed it flat!
-
-//Mutates the plant overall (randomly).
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/severity)
-
 	if(!severity)
 		return
-
-	// No seed? Try to mutate the weeds or pests in the tray, if any.
 	if(!seed)
-		//TODO
 		return
-
 	if(seed.immutable)
 		return
-
-	//Is the plant still a sapling? If so, try to mutate species, otherwise do something bad.
 	if(age < 3)
 		if(seed.mutants && seed.mutants.len)
 			if(prob(30))
@@ -25,10 +12,9 @@
 				return
 		var/mutation_type = pick_mut(severity, MUTCAT_BAD)
 		apply_mut(mutation_type, severity)
-		return
-
-	var/mutation_type = pick_mut(severity)
-	apply_mut(mutation_type, severity)
+	else
+		var/mutation_type = pick_mut(severity)
+		apply_mut(mutation_type, severity)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/pick_mut(var/severity, var/mutation_category = "")
 
@@ -37,10 +23,8 @@
 		return
 
 	//First we'll pick a CATEGORY of mutations to look from, for simplicity and to keep an even ratio of good things to bad things if more mutations are added.
-	//This looks like shit, but it's a lot easier to read/change this way. Maybe. Promise. Hahaha. Shit.
 	if(!mutation_category) //If we already have a category, use that instead.
 		mutation_category = pick(\
-			// What's going on with these numbers?
 			// Effectively, the weight of each category is a linear function that increases with the potency of the mutation.
 			// Most categories have an integer deducted from severity, this means that the chance for that mutation
 			// is 0 below said severity (e.g. you won't get dangerous shit if you use less than 14u mutagen).
@@ -56,18 +40,17 @@
 	switch(mutation_category)
 		if(MUTCAT_GOOD)
 			mutation_type = pick(\
-			// What's going on with these numbers?
 			// We want a different weight for the mutation depending on whether the plant already has it. For example, a non-glowey plant
 			// will have a fair chance to toggle bio-luminiscence. However, if it already has bioluminiscence, then it will have a smaller
 			// chance to toggle again, since then it would stop glowing, which is less fun and frustrating if you're trying to stack mutations.
 			10;						"plusstat_potency", \
 			S.yield == -1 ? 0 : 6;	"plusstat_yield",\
-			3;						"plusstat_weed&toxins_tolerance",\
+			3;						"plusstat_weed&toxin_affinity",\
 			5;						"plusstat_lifespan&endurance",\
 			5;						"plusstat_production&maturation",\
 			3;						"plusstat_heat&pressure_tolerance",\
 			3;						"plusstat_light_tolerance", \
-			3;						"plusstat_nutrient&water_consumption", \
+			3;						"plusstat_nutrient&fluid_consumption", \
 			S.yield != -1 && !S.harvest_repeat ? 0.4 : 0;	"toggle_repeatharvest"
 			)
 		if(MUTCAT_WEIRD)
@@ -143,7 +126,6 @@
 	//testing("Mutation Category: [mutation_category] - Mutation Type: [mutation_type]. Severity: [severity]. All category weights at this sev: GOOD=15/BAD=[clamp(0.4*severity,0, 7)]/WEIRD=[clamp(0.7*(severity-5),0,8)]/BIZZARE=[clamp(severity-12,0,7)]/AWFUL=[clamp(severity-12,0,14)]/DANGEROUS=[clamp(severity-14,0,20)]")
 	switch(mutation_type)
 		if("code_explanation")
-			// DEARIE ME, WHAT IS GOING ON HERE?
 			// Each stat mutation will have a "soft cap" and a "hard cap" depending on how much mutagen is used. If the stat to mutate is bigger than the "soft cap",
 			// the strength of the mutation will decrease. As that stat approaches the "hard cap", the strength of subsequent mutations will linearly decrease to 0.
 			// Example: If the potency "soft cap" is 50, the "hard cap" is 75, and your plant has 60 potency, then the mutation will only be 60% of what is listed.
@@ -159,7 +141,7 @@
 			// Finally, we use the linear interpolation function, and we'll have our final soft cap and hard cap.
 			var/softcap = mix(softcap_values[i], softcap_values[i+1], lerp_factor)
 			var/hardcap = mix(hardcap_values[i], hardcap_values[i+1], lerp_factor)
-			// Excellent! Now we can check if the mutation's strength should be affected by these caps.
+			// Now we can check if the mutation's strength should be affected by these caps.
 			// To do this, we use the unmix function, which returns a decimal number from 0 to 1.
 			var/cap_ratio = unmix(seed.potency, softcap, hardcap)
 			// Now that we have all the final modifiers, we can calculate the mutation's final strength.
@@ -187,7 +169,7 @@
 			seed.yield = clamp(seed.yield + deviation, 0, 16)
 			generic_mutation_message("quivers!")
 
-		if("plusstat_weed&toxins_tolerance")
+		if("plusstat_weed&toxin_affinity")
 			var/list/softcap_values = list(2, 3, 6,  9,  11, 11)
 			var/list/hardcap_values = list(4, 5, 10, 12, 12, 12)
 			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.weed_tolerance)
@@ -196,9 +178,9 @@
 
 			softcap_values = list(2, 3, 6,  9,  11, 11)
 			hardcap_values = list(4, 5, 10, 12, 12, 12)
-			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.toxins_tolerance)
+			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.toxin_affinity)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.toxins_tolerance = clamp(seed.toxins_tolerance + deviation, 0, 11)
+			seed.toxin_affinity = clamp(seed.toxin_affinity + deviation, 0, 11)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_lifespan&endurance")
@@ -257,7 +239,7 @@
 			seed.light_tolerance = clamp(seed.light_tolerance + deviation, 0, 10)
 			generic_mutation_message("quivers!")
 
-		if("plusstat_nutrient&water_consumption")
+		if("plusstat_nutrient&fluid_consumption")
 			var/list/softcap_values = list(0.30, 0.25, 0.15, 0.05, 0, 0)
 			var/list/hardcap_values = list(0.15, 0.10, 0.05, 0,    0, 0)
 			var/deviation = severity * (rand(3, 7)/1000) * get_ratio(severity, softcap_values, hardcap_values, seed.nutrient_consumption)
@@ -266,37 +248,33 @@
 
 			softcap_values = list(4, 3,   1.5, 0.5, 0, 0)
 			hardcap_values = list(2, 1.5, 0.5, 0,   0, 0)
-			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.water_consumption)
+			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.fluid_consumption)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.water_consumption = clamp(seed.water_consumption - deviation, 0, 10)
+			seed.fluid_consumption = clamp(seed.fluid_consumption - deviation, 0, 10)
 			generic_mutation_message("quivers!")
 
 		if("tox_increase")
-			toxins += rand(50,80)
+			add_toxinlevel(rand(5,20))
 			generic_mutation_message("shudders!")
 		if("weed_increase")
-			weedlevel = max(4, weedlevel * 2)
+			add_weedlevel(max(get_weedlevel() * 2, 40))
 			generic_mutation_message("shudders!")
 		if("pest_increase")
-			pestlevel = max(4, pestlevel * 2)
+			add_pestlevel(max(get_pestlevel() * 2, 40))
 			generic_mutation_message("shudders!")
 		if("stunt_growth")
 			affect_growth(-rand(2,4))
 			generic_mutation_message("droops idly...")
-
 		if("randomize_light")
 			seed.ideal_light = rand(2,10)
 			generic_mutation_message("shakes!")
-
 		if("randomize_temperature") //Variance so small that it can be fixed by just touching the thermostat, but I guarantee people will just apply a new enviro gene anyways
 			seed.ideal_heat = rand(253,343)
 			generic_mutation_message("shakes!")
-
 		if("breathe_aliengas") //This is honestly awful and pretty unfun. It just guarantees that the user will have to apply a new enviro gene. But for now I'm leaving it in
 			var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.consume_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
-
 		if("exude_dangerousgas")
 			var/gas = pick(GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.exude_gasses[gas] = rand(3,9)
@@ -371,7 +349,7 @@
 			seed.hematophage = !seed.hematophage
 			if(seed.hematophage)
 				visible_message("<span class='notice'>\The [seed.display_name] shudders thirstily, turning red at the roots!</span>")
-				nutrilevel = 1
+				add_nutrientlevel(-50, TRUE)
 			else
 				visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
 
@@ -466,7 +444,7 @@
 				source_turf.visible_message("<span class='warning'>\The [display_name] withers rapidly!</span>")
 			if(1)
 				nutrient_consumption =      max(0,  min(5,   nutrient_consumption + rand(-(degree*0.1),(degree*0.1))))
-				water_consumption =         max(0,  min(50,  water_consumption    + rand(-degree,degree)))
+				fluid_consumption =         max(0,  min(50,  fluid_consumption    + rand(-degree,degree)))
 			if(2)
 				ideal_heat =                max(70, min(800, ideal_heat           + (rand(-5,5)   * degree)))
 				heat_tolerance =            max(70, min(800, heat_tolerance       + (rand(-5,5)   * degree)))
@@ -476,7 +454,7 @@
 				ideal_light =               max(0,  min(30,  ideal_light          + (rand(-1,1)   * degree)))
 				light_tolerance =           max(0,  min(10,  light_tolerance      + (rand(-2,2)   * degree)))
 			if(4)
-				toxins_tolerance =          max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))//nice copypaste
+				toxin_affinity =          max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))//nice copypaste
 			if(5)
 				weed_tolerance  =           max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))
 				if(prob(degree*5))
@@ -542,7 +520,6 @@
 	health = seed.endurance
 	lastcycle = world.time
 	harvest = 0
-	weedlevel = 0 //Why is this here?
 	sampled = 0
 
 	update_icon()

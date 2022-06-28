@@ -1149,6 +1149,30 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/sausage/dan
+	name = "premium sausage"
+	desc = "A piece of premium, mixed meat. Very mixed..."
+	icon_state = "sausage"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/sausage/dan/New()
+	..()
+	reagents.clear_reagents()
+	for(var/blendedmeat = 1 to 6)
+		switch(rand(1,3))
+			if(1)
+				reagents.add_reagent(NUTRIMENT, 1) //15 nutrition
+			if(2)
+				reagents.add_reagent(BEFF,rand(3,8)) //6-16
+			if(3)
+				reagents.add_reagent(HORSEMEAT,rand(3,6)) //9-18
+	reagents.add_reagent(BONEMARROW,rand(0,3)) //0-3
+	if(prob(50))
+		reagents.add_reagent(ROACHSHELL,rand(0,8)) //0
+	//36 to 111 nutrition. 4noraisins has 90...
+	bitesize = 7 //Three bites on average to finish
+
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket
 	name = "\improper Donk-pocket"
 	desc = "The food of choice for the seasoned traitor."
