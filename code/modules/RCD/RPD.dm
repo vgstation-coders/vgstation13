@@ -29,6 +29,8 @@
 		/datum/rcd_schematic/pipe/dtvalve,
 		/datum/rcd_schematic/pipe/layer_manifold,
 		/datum/rcd_schematic/pipe/layer_adapter,
+		/datum/rcd_schematic/pipe/z_up,
+		/datum/rcd_schematic/pipe/z_down,
 
 		/* Devices */
 		/datum/rcd_schematic/pipe/connector,
@@ -65,16 +67,10 @@
 		/datum/rcd_schematic/pipe/disposal/outlet,
 		/datum/rcd_schematic/pipe/disposal/chute,
 		/datum/rcd_schematic/pipe/disposal/sort,
-		/datum/rcd_schematic/pipe/disposal/sort_wrap
+		/datum/rcd_schematic/pipe/disposal/sort_wrap,
+		/datum/rcd_schematic/pipe/disposal/up,
+		/datum/rcd_schematic/pipe/disposal/down,
 	)
-
-/obj/item/device/rcd/rpd/New()
-	if(map.multiz)
-		schematics.Add(/datum/rcd_schematic/pipe/z_up)
-		schematics.Add(/datum/rcd_schematic/pipe/z_down)
-		schematics.Add(/datum/rcd_schematic/pipe/disposal/up)
-		schematics.Add(/datum/rcd_schematic/pipe/disposal/down)
-	..()
 
 /obj/item/device/rcd/rpd/examine(var/mob/user)
 	..()

@@ -165,7 +165,7 @@
 /datum/power/changeling/Epinephrine
 	name = "Epinephrine sacs"
 	desc = "We evolve additional sacs of adrenaline throughout our body."
-	helptext = "Gives the ability to instantly recover from stuns.  High chemical cost."
+	helptext = "Gives the ability to instantly recover from stuns."
 	cost = 3
 	spellpath = /spell/changeling/unstun
 

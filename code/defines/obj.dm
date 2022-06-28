@@ -101,6 +101,8 @@
 	// sort mobs
 	if(OOC)
 		for(var/mob/living/silicon/ai/dooropener in mob_list)
+			if(dooropener.parent) //Hide shunted AI APC Copies from view.
+				continue
 			bot[dooropener.name] = "AI"
 			isactive[dooropener.name] = (dooropener.client && dooropener.client.inactivity <= 10 * 60 * 10) ? "Active" : "Inactive"
 		for(var/mob/living/silicon/robot/tincan in mob_list)
