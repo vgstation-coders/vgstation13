@@ -1587,7 +1587,6 @@
 	..()
 	if(is_holder_of(user,src))
 		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and seems to be ticking.</span>")
-		return
 
 /obj/item/weapon/reagent_containers/food/snacks/explosive_pie/after_consume(mob/user)
 	explosion(get_turf(user), -1, 0, 0, 3)
