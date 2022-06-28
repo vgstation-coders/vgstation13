@@ -288,7 +288,7 @@
 	if(H.stat == DEAD)
 		iscloaking = FALSE
 	if(!iscloaking)
-		H.make_visible(VAMPIRECLOAK)
+		H.make_visible(VAMPIRECLOAK,TRUE)
 		H.color = "#FFFFFF"
 		return FALSE
 
@@ -300,10 +300,8 @@
 		return TRUE
 	else
 		if(H.invisibility > 0)
-			H.make_visible(VAMPIRECLOAK, TRUE)
-		if(locate(/datum/power/vampire/mature) in current_powers)
 			H.make_visible(VAMPIRECLOAK)
-		if(locate(/datum/power/vampire/shadow) in current_powers)
+		if(locate(/datum/power/vampire/mature) in current_powers)
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		else
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.8))
@@ -586,7 +584,6 @@
 				Drop(TRUE)
 
 /mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0)
-
 	var/datum/role/vampire/vampire = isvampire(src)
 
 	if(!vampire)
