@@ -104,8 +104,6 @@
 		channeling_night_vision = 1
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-		host.see_in_dark_override = 8
-		host.see_invisible_override = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 		spawn()
 			var/time_spent_channeling = 0
 			while(chemicals >=5 && channeling && channeling_night_vision)
@@ -115,8 +113,6 @@
 			change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = initial(see_in_dark)
 			see_invisible = initial(see_invisible)
-			host.see_in_dark_override = 0
-			host.see_invisible_override = 0
 			channeling = 0
 			channeling_night_vision = 0
 			var/showmessage = 0

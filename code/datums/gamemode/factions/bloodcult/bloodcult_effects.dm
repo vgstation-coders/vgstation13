@@ -202,8 +202,6 @@
 			if (ismob(rider))
 				var/mob/M = rider
 				M.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-				M.see_invisible_override = SEE_INVISIBLE_LEVEL_TWO
-				M.apply_vision_overrides()
 				M.flags |= INVULNERABLE
 	if (packup)
 		var/list/noncult_victims = list()
@@ -227,8 +225,6 @@
 				if (ismob(AM))
 					var/mob/M = AM
 					M.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-					M.see_invisible_override = SEE_INVISIBLE_LEVEL_TWO
-					M.apply_vision_overrides()
 					M.flags |= INVULNERABLE
 		if(noncult_victims.len > 0 && activator)
 			TriggerCultRitual(/datum/bloodcult_ritual/spirited_away, activator, list("victims" = noncult_victims))
@@ -426,9 +422,6 @@
 					if (seer_ritual.caster == M)
 						jaunter = TRUE
 						break
-				if (!jaunter)
-					M.see_invisible_override = 0
-					M.apply_vision_overrides()
 				if (iscarbon(rider))
 					var/mob/living/carbon/C = rider
 					if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
@@ -447,9 +440,6 @@
 						if (seer_ritual.caster == M)
 							jaunter = TRUE
 							break
-					if (!jaunter)
-						M.see_invisible_override = 0
-						M.apply_vision_overrides()
 					if (iscarbon(AM))
 						var/mob/living/carbon/C = AM
 						if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))

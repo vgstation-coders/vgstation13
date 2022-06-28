@@ -1867,8 +1867,6 @@ var/list/confusion_victims = list()
 		qdel(src)
 		return
 
-	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
-	M.apply_vision_overrides()
 	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration, animate_movement = TRUE)
 	new /obj/effect/cult_ritual/seer(activator,activator,null,TRUE, talisman_duration)
 	qdel(src)
@@ -1904,8 +1902,6 @@ var/list/seer_rituals = list()
 			source.abort(RITUALABORT_GONE)
 		qdel(src)
 		return
-	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
-	caster.apply_vision_overrides()
 	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side, and also find out the crew's propensity to be successfully converted, whether they are <b><font color='green'>Willing</font></b>, <b><font color='orange'>Uncertain</font></b>, or <b><font color='red'>Unconvertible</font></b>.</span>")
 	if (talisman)
 		spawn(talisman_duration)
@@ -1917,9 +1913,6 @@ var/list/seer_rituals = list()
 	processing_objects.Remove(src)
 	if (caster && caster.client)
 		caster.client.images -= propension
-		if (!istype(caster.loc, /obj/effect/bloodcult_jaunt))
-			caster.see_invisible_override = 0
-			caster.apply_vision_overrides()
 		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
 	caster = null
 	if (source)

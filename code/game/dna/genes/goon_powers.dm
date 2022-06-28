@@ -63,7 +63,7 @@
 	return 1
 
 /datum/dna/gene/basic/stealth/chameleon/proc/mob_moved(var/mob/mover)
-	mover.alphas["chameleon_stealth"] = round(255 * 0.80)
+	mover.make_visible(CHAMELEON)
 
 /datum/dna/gene/basic/stealth/chameleon/OnMobLife(var/mob/M)
 	if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())

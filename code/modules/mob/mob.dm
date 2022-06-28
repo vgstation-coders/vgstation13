@@ -1902,12 +1902,6 @@ Use this proc preferably at the end of an equipment loadout
 		return client.view
 	return world.view
 
-/mob/proc/apply_vision_overrides()
-	if(see_in_dark_override)
-		see_in_dark = see_in_dark_override
-	if(see_invisible_override)
-		see_invisible = see_invisible_override
-
 /mob/proc/update_perception()
 	return
 

@@ -20,7 +20,6 @@
 	user.register_event(/event/moved, src, .proc/mob_moved)
 	user.visible_message("\The [user] holds \the [src] up to \his eye.","You hold \the [src] up to your eye.")
 	user.see_invisible = INVISIBILITY_MAXIMUM
-	user.see_invisible_override = INVISIBILITY_MAXIMUM
 	if(user && user.client)
 		var/client/C = user.client
 		C.color = list(
@@ -33,7 +32,6 @@
 	user.unregister_event(/event/moved, src, .proc/mob_moved)
 	user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 	user.see_invisible = initial(user.see_invisible)
-	user.see_invisible_override = 0
 	if(user && user.client)
 		var/client/C = user.client
 		C.color = initial(C.color)

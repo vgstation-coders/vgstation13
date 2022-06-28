@@ -90,9 +90,6 @@
 				see_invisible = SEE_INVISIBLE_LIVING
 				seer = 0
 
-		apply_vision_overrides()
-
-
 		if(healths)
 			healths.overlays.len = 0
 			if (pain_numb)

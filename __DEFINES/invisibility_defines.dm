@@ -5,3 +5,4 @@
 #define TRANSPARENCYPOTION "transparencypotion"
 #define VAMPIRECLOAK "vampire_cloak"
 #define HORROR "horror"
+#define CHAMELEON "chameleon_stealth"
