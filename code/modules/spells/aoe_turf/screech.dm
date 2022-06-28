@@ -26,7 +26,6 @@
 		return FALSE
 
 /spell/aoe_turf/screech/choose_targets(var/mob/user = usr)
-
 	var/list/targets = list()
 
 	for(var/mob/living/carbon/C in hearers(user, 4))
@@ -44,11 +43,6 @@
 					continue
 				if (VAMP_FAILURE)
 					critfail(targets, user)
-
-	if (!targets.len)
-		to_chat(user, "<span class='warning'>There are no targets.</span>")
-		return FALSE
-
 	return targets
 
 /spell/aoe_turf/screech/cast(var/list/targets, var/mob/user)

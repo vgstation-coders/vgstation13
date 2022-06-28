@@ -68,13 +68,8 @@
 
 /datum/power/vampire/mature
 	cost = 400
-	granttext = "You have reached physical maturity. You are more vulnerable to holy things, and your vision has been improved greatly. You drain blood from people twice as fast and you no longer need to take their masks off."
+	granttext = "You have reached physical maturity. You are more vulnerable to holy things, and your vision has been improved greatly. You drain blood from people twice as fast and you no longer need to take their masks off. You can hide further into the shadows."
 	store_in_memory = TRUE
-
-/datum/power/vampire/shadow
-	cost = 450
-	spellpath = /spell/menace
-	granttext = "You have gained mastery over the shadows. In the dark, you can mask your identity, instantly terrify non-vampires who approach you, and enter the chapel for a longer period of time."
 
 /datum/power/vampire/charisma // Passive
 	cost = 500
