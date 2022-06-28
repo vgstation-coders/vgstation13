@@ -215,9 +215,9 @@
 					dat += "<span title=\"This plant is a robust and vigorous vine that will spread rapidly.\">VINE </span>"
 			switch(P.seed.voracious)
 				if(1)
-					dat += "<span title=\"This plant is voracious and will eat tray pests and weeds for sustenance.\">CARN </span>"
+					dat += "<span title=\"This plant is voracious and will eat tray pests and weeds for sustenance.\">VORA </span>"
 				if(2)
-					dat += "<span title=\"This plant is carnivorous and poses a significant threat to living things around it.\">HCARN </span>"
+					dat += "<span title=\"This plant is carnivorous and poses a significant threat to living things around it.\">CARN </span>"
 			switch(P.seed.juicy)
 				if(1)
 					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT</span>"

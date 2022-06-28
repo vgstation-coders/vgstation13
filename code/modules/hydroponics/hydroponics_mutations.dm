@@ -30,7 +30,7 @@
 					//This function modifies stats with diminishing returns, approaching the hardcap value
 					//15% is currently default for the maximum change in most cases
 					//Log function so can't be equal to or less than 0.
-					//Careful when minimizing on the sign
+					//Formulas are different for lowering and increasing values inside log function
 					seed.potency += round(min(hardcap - hardcap/2*round(log(10,seed.potency/hardcap*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("quivers!")
 				if(PLANT_CHEMICAL)
@@ -110,7 +110,7 @@
 						//lower better
 						var/hardcap = 0.1
 						var/max_change = 0.15 //percent
-						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,seed.lowkpa_tolerance/hardcap*100),0.01),max_change*hardcap),0.1) 
+						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*hardcap),0.1) 
 					//higher better
 					var/hardcap = 500
 					var/max_change = 0.15 //percent
@@ -158,7 +158,7 @@
 						//Lower better
 						var/hardcap = 0.01
 						var/max_change = 0.15 //percent
-						seed.nutrient_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.nutrient_consumption/hardcap*100),0.01),max_change*hardcap),0.1)
+						seed.nutrient_consumption -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.nutrient_consumption*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("rustles!")
 				if(PLANT_FLUID_CONSUMPTION)
 					if(seed.fluid_consumption < 0.1)
@@ -167,7 +167,7 @@
 						//Lower better
 						var/hardcap = 0.01
 						var/max_change = 0.15 //percent
-						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.fluid_consumption/hardcap*100),0.01),max_change*hardcap),0.1)
+						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.fluid_consumption*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("rustles!")
 				if(PLANT_VORACIOUS)
 					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
@@ -192,13 +192,13 @@
 					//lower better
 					var/hardcap = 1
 					var/max_change = 0.15 //percent
-					seed.production -= round(min(hardcap - hardcap/2*round(log(10,seed.production/hardcap*100),0.01),max_change*hardcap),0.1)
+					seed.production -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.production*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("wriggles!")
 				if(PLANT_MATURATION)
 					//lower better
 					var/hardcap = 1.1
 					var/max_change = 0.15 //percent
-					seed.maturation -= round(min(hardcap - hardcap/2*round(log(10,seed.maturation/hardcap*100),0.01),max_change*hardcap),0.1)
+					seed.maturation -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.maturation*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("wriggles!")
 				if(PLANT_SPREAD)
 					seed.spread = seed.spread % 2 + 1
@@ -234,7 +234,7 @@
 					var/hardcap = 16
 					seed.yield += round(min(hardcap - hardcap/2*round(log(10,seed.yield/hardcap*100),0.01),0.15*hardcap),0.1)
 
-		if(GENE_XENOECOLOGY)
+		if(GENE_XENOPHYSIOLOGY)
 			var/mutation_type = pick(PLANT_TELEPORT, PLANT_GAS, PLANT_ROOMTEMP, PLANT_NOREACT)
 			switch(mutation_type)
 				if(PLANT_TELEPORT)

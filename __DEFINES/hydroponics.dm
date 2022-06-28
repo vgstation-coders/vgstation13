@@ -15,7 +15,7 @@
 #define GENE_ECOPHYSIOLOGY "ecophysiology"
 #define GENE_METABOLISM "metabolism"
 #define GENE_DEVELOPMENT "development"
-#define GENE_XENOECOLOGY "xenoecology"
+#define GENE_XENOPHYSIOLOGY "xenophysiology"
 
 //Defines for maximum amounts in the trays
 #define WATERLEVEL_MAX 100
@@ -68,7 +68,7 @@
 #define PLANT_HARVEST (1<<3)
 #define PLANT_YIELD (1<<4)
 
-//Xenoecology
+//Xenophysiology
 #define PLANT_TELEPORT (1<<0)
 #define PLANT_ROOMTEMP (1<<1)
 #define PLANT_GAS (1<<2)

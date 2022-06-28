@@ -1901,7 +1901,7 @@
 		return
 	T.add_toxinlevel(2)
 	if(T.reagents.get_reagent_amount(id) > 0)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_MORPHOLOGY)
 			T.reagents.remove_reagent(id, 1)
 
@@ -2046,7 +2046,7 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_PHYTOCHEMISTRY)
 			T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
@@ -2218,7 +2218,7 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_BIOLUMINESCENCE)
 			T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
@@ -2535,7 +2535,7 @@
 		if(prob(0.2))
 			T.mutate(GENE_DEVELOPMENT)
 		if(prob(0.2))
-			T.mutate(GENE_XENOECOLOGY)
+			T.mutate(GENE_XENOPHYSIOLOGY)
 		if(prob(1))
 			T.reagents.remove_reagent(id, 1)
 
@@ -2773,10 +2773,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_ECOPHYSIOLOGY)
 			T.reagents.remove_reagent(id, 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_ECOPHYSIOLOGY)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
@@ -2825,8 +2825,8 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(10))
-			T.mutate(GENE_XENOECOLOGY)
+		if(prob(15))
+			T.mutate(GENE_XENOPHYSIOLOGY)
 			T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
@@ -3392,10 +3392,10 @@ var/procizine_tolerance = 0
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_ECOLOGY)
 			T.reagents.remove_reagent(id, 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_ECOLOGY)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
@@ -3476,10 +3476,10 @@ var/procizine_tolerance = 0
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_METABOLISM)
 			T.reagents.remove_reagent(id, 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_METABOLISM)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
@@ -5066,7 +5066,7 @@ var/procizine_tolerance = 0
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(10))
+		if(prob(15))
 			T.mutate(GENE_DEVELOPMENT)
 			T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)

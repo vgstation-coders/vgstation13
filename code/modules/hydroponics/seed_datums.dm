@@ -364,7 +364,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					spread 				= max(gene.values[3], spread)
 					harvest_repeat 		= max(gene.values[4], harvest_repeat)
 					yield				= round(mix(gene.values[5], yield,		rand(40, 60)/100), 0.1)
-		if(GENE_XENOECOLOGY)
+		if(GENE_XENOPHYSIOLOGY)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					teleporting 		= gene.values[1]
@@ -453,7 +453,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(harvest_repeat       	? harvest_repeat      	: 0),
 				(yield              	? yield              	: 0)
 			)
-		if(GENE_XENOECOLOGY)
+		if(GENE_XENOPHYSIOLOGY)
 			P.values = list(
 				(teleporting          	? teleporting          	: 0),
 				(alter_temp    			? alter_temp    		: 0),
