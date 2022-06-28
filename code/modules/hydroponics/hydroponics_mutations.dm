@@ -26,11 +26,12 @@
 					if(seed.potency <= 0)
 						return
 					var/hardcap = 200
+					var/max_change = 0.10 //percent
 					//This function modifies stats with diminishing returns, approaching the hardcap value
-					//15% is currently set for the maximum change
+					//15% is currently default for the maximum change in most cases
 					//Log function so can't be equal to or less than 0.
 					//Careful when minimizing on the sign
-					seed.potency += round(min(hardcap - hardcap/2*round(log(10,seed.potency/hardcap*100),0.01),0.15*hardcap),0.1)
+					seed.potency += round(min(hardcap - hardcap/2*round(log(10,seed.potency/hardcap*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("quivers!")
 				if(PLANT_CHEMICAL)
 					var/check_success = FALSE
@@ -100,22 +101,26 @@
 					seed.ideal_heat = rand(253,343)
 				if(PLANT_HEAT_TOLERANCE)
 					var/hardcap = 800
-					seed.heat_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.heat_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.10 //percent
+					seed.heat_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.heat_tolerance/hardcap*100),0.01),max_change*hardcap),0.1)
 				if(PLANT_PRESSURE_TOLERANCE)
 					if(seed.lowkpa_tolerance < 1)
 						seed.lowkpa_tolerance = 0
 					else
 						//lower better
 						var/hardcap = 0.1
-						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,seed.lowkpa_tolerance/hardcap*100),0.01),0.15*hardcap),0.1) 
+						var/max_change = 0.15 //percent
+						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,seed.lowkpa_tolerance/hardcap*100),0.01),max_change*hardcap),0.1) 
 					//higher better
 					var/hardcap = 500
-					seed.highkpa_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.highkpa_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.highkpa_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.highkpa_tolerance/hardcap*100),0.01),max_change*hardcap),0.1)
 				if(PLANT_LIGHT_IDEAL)
 					seed.ideal_light = rand(2,10)
 				if(PLANT_LIGHT_TOLERANCE)
 					var/hardcap = 10
-					seed.light_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.light_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.light_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.light_tolerance/hardcap*100),0.01),max_change*hardcap),0.1)
 			generic_mutation_message("shakes!")
 
 		if(GENE_ECOPHYSIOLOGY)
@@ -123,19 +128,24 @@
 			switch(mutation_type)
 				if(PLANT_TOXIN_AFFINITY)
 					var/hardcap = 110
-					seed.toxin_affinity += round(min(hardcap - hardcap/2*round(log(10,seed.toxin_affinity/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.toxin_affinity += round(min(hardcap - hardcap/2*round(log(10,seed.toxin_affinity/hardcap*100),0.01),max_change*hardcap),0.1)
 				if(PLANT_WEED_TOLERANCE)
 					var/hardcap = 110
-					seed.weed_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.weed_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.weed_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.weed_tolerance/hardcap*100),0.01),max_change*hardcap),0.1)
 				if(PLANT_PEST_TOLERANCE)
 					var/hardcap = 110
-					seed.pest_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.pest_tolerance/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.pest_tolerance += round(min(hardcap - hardcap/2*round(log(10,seed.pest_tolerance/hardcap*100),0.01),max_change*hardcap),0.1)
 				if(PLANT_LIFESPAN)
 					var/hardcap = 125
-					seed.lifespan += round(min(hardcap - hardcap/2*round(log(10,seed.lifespan/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.lifespan += round(min(hardcap - hardcap/2*round(log(10,seed.lifespan/hardcap*100),0.01),max_change*hardcap),0.1)
 				if(PLANT_ENDURANCE)
 					var/hardcap = 125
-					seed.endurance += round(min(hardcap - hardcap/2*round(log(10,seed.endurance/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.endurance += round(min(hardcap - hardcap/2*round(log(10,seed.endurance/hardcap*100),0.01),max_change*hardcap),0.1)
 			generic_mutation_message("quivers!")
 
 		if(GENE_METABOLISM)
@@ -147,7 +157,8 @@
 					else
 						//Lower better
 						var/hardcap = 0.01
-						seed.nutrient_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.nutrient_consumption/hardcap*100),0.01),0.15*hardcap),0.1)
+						var/max_change = 0.15 //percent
+						seed.nutrient_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.nutrient_consumption/hardcap*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("rustles!")
 				if(PLANT_FLUID_CONSUMPTION)
 					if(seed.fluid_consumption < 0.1)
@@ -155,7 +166,8 @@
 					else
 						//Lower better
 						var/hardcap = 0.01
-						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.fluid_consumption/hardcap*100),0.01),0.15*hardcap),0.1)
+						var/max_change = 0.15 //percent
+						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,seed.fluid_consumption/hardcap*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("rustles!")
 				if(PLANT_VORACIOUS)
 					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
@@ -179,12 +191,14 @@
 				if(PLANT_PRODUCTION)
 					//lower better
 					var/hardcap = 1
-					seed.production -= round(min(hardcap - hardcap/2*round(log(10,seed.production/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.production -= round(min(hardcap - hardcap/2*round(log(10,seed.production/hardcap*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("wriggles!")
 				if(PLANT_MATURATION)
 					//lower better
 					var/hardcap = 1.1
-					seed.maturation -= round(min(hardcap - hardcap/2*round(log(10,seed.maturation/hardcap*100),0.01),0.15*hardcap),0.1)
+					var/max_change = 0.15 //percent
+					seed.maturation -= round(min(hardcap - hardcap/2*round(log(10,seed.maturation/hardcap*100),0.01),max_change*hardcap),0.1)
 					generic_mutation_message("wriggles!")
 				if(PLANT_SPREAD)
 					seed.spread = seed.spread % 2 + 1
