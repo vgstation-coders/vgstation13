@@ -294,15 +294,15 @@
 
 	if((T.get_lumcount() * 10) <= 2)
 		if(locate(/datum/power/vampire/mature) in current_powers)
-			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15), INVISIBILITY_LEVEL_TWO)
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3), INVISIBILITY_LEVEL_TWO)
 		else
-			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3))
 		return TRUE
 	else
 		if(H.invisibility > 0)
 			H.make_visible(VAMPIRECLOAK)
 		if(locate(/datum/power/vampire/mature) in current_powers)
-			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3))
 		else
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.8))
 
@@ -644,6 +644,7 @@
 
 /mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
 	//Other vampires aren't affected
+	var/success = null
 	if(mind && mind.GetRole(VAMPIRE))
 		return 0
 
@@ -652,17 +653,18 @@
 		//Chaplains are ALWAYS resistant to vampire powers
 		if(isReligiousLeader(src))
 			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
-			return 0
+			success = null
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
 			if (locate(/datum/power/vampire/undying) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact has turned our powers against us!</span>")
-				return VAMP_FAILURE
+				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
+				success = VAMP_FAILURE
 			if (locate(/datum/power/vampire/jaunt) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
-				return 0
+				success = null
+		return success
 	return 1
 
 // If the target is weakened, the spells take less time to complete.
