@@ -32,9 +32,9 @@
 	if(humanform)
 		identity = user.dna.Clone()
 		appearance = user.my_appearance.Copy()
+		user.set_species("Vampire")
 		user.name = "Nosferatu"
 		user.real_name = "Nosferatu"
-		user.set_species("Vampire")
 		user.UpdateAppearance()
 		user.update_perception()
 		humanform = FALSE
