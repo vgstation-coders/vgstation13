@@ -187,7 +187,7 @@
 				//These have a yield that is not allowed to be modified
 				mutation_type = pick(PLANT_PRODUCTION, PLANT_MATURATION, PLANT_SPREAD)
 			else
-				mutation_type = pick(26; PLANT_PRODUCTION, 26; PLANT_MATURATION, 11; PLANT_SPREAD, 11; PLANT_HARVEST, 26; PLANT_YIELD)
+				mutation_type = pick(28; PLANT_PRODUCTION, 28; PLANT_MATURATION, 8; PLANT_SPREAD, 8; PLANT_HARVEST, 28; PLANT_YIELD)
 			switch(mutation_type)
 				if(PLANT_PRODUCTION)
 					//lower better
