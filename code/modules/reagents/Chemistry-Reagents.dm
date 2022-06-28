@@ -28,7 +28,6 @@
 	var/pain_resistance = 0
 	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
-	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
 	var/overdose_am = 0
 	var/overdose_tick = 0
 	var/tick = 0
@@ -221,7 +220,7 @@
 	if(!istype(T)) //Still can't find it, abort
 		return
 
-	holder.remove_reagent(src.id, custom_plant_metabolism)
+	holder.remove_reagent(src.id, 1)
 
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)
@@ -671,7 +670,7 @@
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
-			C.make_visible(INVISIBLESPRAY)
+			C.make_visible(INVISIBLESPRAY,FALSE)
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
@@ -770,7 +769,7 @@
 
 /datum/reagent/water/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_waterlevel(1)
+	T.add_waterlevel(2)
 
 /datum/reagent/lube
 	name = "Space Lube"
@@ -911,7 +910,7 @@
 
 /datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(10)
+	T.add_toxinlevel(2)
 
 /datum/reagent/plasticide
 	name = "Plasticide"
@@ -1309,9 +1308,9 @@
 
 /datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_waterlevel(-3)
-	T.add_nutrientlevel(-3)
-	T.add_toxinlevel(8)
+	T.add_waterlevel(-4)
+	T.add_nutrientlevel(-5)
+	T.add_toxinlevel(2)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -1743,7 +1742,7 @@
 
 /datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(10)
+	T.add_toxinlevel(2)
 
 /datum/reagent/pacid
 	name = "Polytrinic acid"
@@ -1870,7 +1869,6 @@
 	color = "#669966" //rgb: 102, 153, 102
 	density = 5
 	specheatcap = 94
-	custom_plant_metabolism = 2
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -1896,11 +1894,11 @@
 
 /datum/reagent/radium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_mutationlevel(0.6*T.get_mutationmod()*custom_plant_metabolism)
-	T.add_toxinlevel(4)
-	if(T.seed && !T.dead)
-		if(prob(20))
-			T.add_mutationmod(0.1)
+	T.add_toxinlevel(2)
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(10))
+			T.mutate(GENE_MORPHOLOGY)
+			T.reagents.remove_reagent(id, 5)
 
 /datum/reagent/ryetalyn
 	name = "Ryetalyn"
@@ -2007,7 +2005,6 @@
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
 	specheatcap = 96.86
-	custom_plant_metabolism = 2
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 
@@ -2037,7 +2034,10 @@
 
 /datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_mutationlevel(1*T.get_mutationmod()*custom_plant_metabolism)
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(10))
+			T.mutate(GENE_PHYTOCHEMISTRY)
+			T.reagents.remove_reagent(id, 5)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -2195,6 +2195,13 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
+
+/datum/reagent/uranium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(10))
+			T.mutate(GENE_BIOLUMINESCENCE)
+			T.reagents.remove_reagent(id, 5)
 
 /datum/reagent/diamond
 	name = "Diamond dust"
@@ -2486,8 +2493,25 @@
 /datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(10)
-	if(prob(30))
-		T.add_mutationmod(0.2)
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(2))
+			T.mutate(GENE_PHYTOCHEMISTRY)
+		if(prob(2))
+			T.mutate(GENE_MORPHOLOGY)
+		if(prob(2))
+			T.mutate(GENE_BIOLUMINESCENCE)
+		if(prob(2))
+			T.mutate(GENE_ECOLOGY)
+		if(prob(2))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+		if(prob(2))
+			T.mutate(GENE_METABOLISM)
+		if(prob(2))
+			T.mutate(GENE_DEVELOPMENT)
+		if(prob(2))
+			T.mutate(GENE_XENOECOLOGY)
+		if(prob(2))
+			T.reagents.remove_reagent(id, 5)
 
 /datum/reagent/fertilizer/robustharvest
 	name = "Robust Harvest"
@@ -2496,25 +2520,17 @@
 	color = "#3E901C" // rgb: 62, 144, 28
 	density = 1.32
 	specheatcap = 0.60
-	custom_plant_metabolism = 0.1
 
 /datum/reagent/fertilizer/robustharvest/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
-	if(prob(25*custom_plant_metabolism))
+	if(prob(3))
 		T.add_weedlevel(3)
-	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
-		T.add_pestlevel(3)
-	if(T.seed && !T.dead && !T.seed.immutable)
-		var/chance
-		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
-		if(prob(chance))
-			T.check_for_divergence(1)
+	if(T.seed && !T.dead && prob(3))
+		if(prob(3))
+			T.add_pestlevel(3)
+		if(!T.seed.immutable && prob(35))
 			T.seed.potency++
-		chance = unmix(T.seed.yield, 6, 2)*15*custom_plant_metabolism
-		if(prob(chance))
-			T.check_for_divergence(1)
-			T.seed.yield--
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -2722,6 +2738,15 @@
 
 	M.heal_organ_damage(0, 2 * REM)
 
+/datum/reagent/kelotane/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(10))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+			T.reagents.remove_reagent(id, 5)
+		if(prob(10))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+
 /datum/reagent/dermaline
 	name = "Dermaline"
 	id = DERMALINE
@@ -2756,6 +2781,13 @@
 
 	if(holder.has_any_reagents(LEXORINS))
 		holder.remove_reagents(LEXORINS, 2 * REM)
+
+/datum/reagent/dexalin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(25))
+			T.mutate(GENE_XENOECOLOGY)
+			T.reagents.remove_reagent(id, 5)
 
 /datum/reagent/dexalinp
 	name = "Dexalin Plus"
@@ -3309,6 +3341,15 @@ var/procizine_tolerance = 0
 			for(var/datum/wound/W in E.wounds)
 				W.heal_damage(0.2, TRUE)
 
+/datum/reagent/bicaridine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(10))
+			T.mutate(GENE_ECOLOGY)
+			T.reagents.remove_reagent(id, 5)
+		if(prob(10))
+			T.mutate(GENE_ECOLOGY)
+
 /datum/reagent/synthocarisol
 	name = "Synthocarisol"
 	id = SYNTHOCARISOL
@@ -3355,7 +3396,6 @@ var/procizine_tolerance = 0
 	density = 1.79
 	specheatcap = 0.70
 
-
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -3376,6 +3416,15 @@ var/procizine_tolerance = 0
 			M.adjustFireLoss(1) // Burn damage for dionae
 	else
 		M.adjustToxLoss(1) // Toxins for everyone else
+
+/datum/reagent/hyperzine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(10))
+			T.mutate(GENE_METABOLISM)
+			T.reagents.remove_reagent(id, 5)
+		if(prob(10))
+			T.mutate(GENE_METABOLISM)
 
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
@@ -3541,7 +3590,6 @@ var/procizine_tolerance = 0
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
-	custom_plant_metabolism = 0.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -3567,6 +3615,9 @@ var/procizine_tolerance = 0
 		T.age -= deviation
 		T.skip_aging++
 		T.force_update = 1
+	if(!T.seed.immutable)
+		if(prob(25))
+			T.mutate(GENE_ECOPHYSIOLOGY)
 
 /datum/reagent/rezadone
 	name = "Rezadone"
@@ -4254,28 +4305,20 @@ var/procizine_tolerance = 0
 	color = "#604030" //rgb: 96, 64, 48
 	density = 0.65
 	specheatcap = 35.37
-	custom_plant_metabolism = 0.1
 
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
 	T.add_planthealth(1)
-	if(prob(100*custom_plant_metabolism))
+	if(prob(10))
 		T.add_pestlevel(-1)
 	if(T.seed && !T.dead)
-		if(prob(200*custom_plant_metabolism))
+		if(prob(20))
 			T.affect_growth(1)
-		if(!T.seed.immutable)
-			var/chance
-			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.lifespan++
-			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.endurance++
-//Fuck you, alcohol
+	if(!T.seed.immutable)
+		if(prob(25))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
 	id = ETHYLREDOXRAZINE
@@ -4957,6 +5000,13 @@ var/procizine_tolerance = 0
 						dehulk(H)
 					else if(prob(1))
 						H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?", "TOO SWOLE TO CONTROL", "HEY MANG", "HEY MAAAANG"))
+
+/datum/reagent/creatine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	if(T.reagents.get_reagent_amount(id) >= 5)
+		if(prob(25))
+			T.mutate(GENE_DEVELOPMENT)
+			T.reagents.remove_reagent(id, 5)
 
 /datum/reagent/creatine/proc/dehulk(var/mob/living/carbon/human/H, damage = 200, override_remove = 0, gib = 1)
 
@@ -8671,7 +8721,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	sport = SPORTINESS_SPORTS_DRINK
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
-	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
 /datum/reagent/citalopram
 	name = "Citalopram"
@@ -8861,6 +8910,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#150A03" //rgb: 21, 10, 3
 
+/datum/reagent/kelotane/tannic_acid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+
 /datum/reagent/dermaline/kathalai
 	name = "Kathalai"
 	id = KATHALAI
@@ -8872,6 +8924,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = OPIUM
 	description = "Opium is an exceptional natural analgesic."
 	color = "#AE9260" //rgb: 174, 146, 96
+
+/datum/reagent/bicaridine/opium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
 
 /datum/reagent/space_drugs/mescaline
 	name = "Mescaline"
@@ -8890,6 +8945,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = COCAINE
 	description = "Cocaine is a powerful nervous system stimulant."
 	color = "#FFFFFF" //rgb: 255, 255, 255
+
+/datum/reagent/hyperzine/cocaine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
 
 /datum/reagent/imidazoline/zeaxanthin
 	name = "Zeaxanthin"
@@ -8950,6 +9008,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = THYMOL
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
+
+/datum/reagent/dexalin/thymol/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
 
 /datum/reagent/synthocarisol/phytocarisol
 	name = "Phytocarisol"
@@ -9265,15 +9326,18 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 2.61
 	specheatcap = 111.8
 
-/datum/reagent/untable
+/datum/reagent/mutagen/untable
 	name = "Untable Mutagen"
 	id = UNTABLE_MUTAGEN
-	description = "Untable Mutagen is a substance that is inert to most materials and objects, but highly corrosive to tables."
+	description = "Untable Mutagen is a substance that is highly corrosive to tables."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#84121D" //rgb: 132, 18, 29
 	overdose_am = REAGENTS_OVERDOSE
 
-/datum/reagent/untable/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/mutagen/untable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+
+/datum/reagent/mutagen/untable/reaction_obj(var/obj/O, var/volume)
 
 	if(..())
 		return 1

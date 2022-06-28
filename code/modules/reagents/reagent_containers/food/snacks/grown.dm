@@ -44,8 +44,8 @@ var/list/special_fruits = list()
 		icon = seed.plant_dmi
 		icon_state = seed.plant_icon_state
 		potency = round(seed.potency)
-		force = seed.thorny ? 5+seed.carnivorous*3 : 0
-		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
+		force = seed.thorny ? 5+seed.voracious*3 : 0
+		throwforce = seed.thorny ? 5+seed.voracious*3 : 0
 		if(seed.noreact)
 			flags |= NOREACT
 
@@ -211,8 +211,7 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/thorns_apply_damage(mob/living/carbon/human/H, datum/organ/external/affecting)
 	if(!seed.thorny || !affecting)
 		return 0
-	//if(affecting.take_damage(5+seed.carnivorous*3, 0, 0, "plant thorns")) //For some fucked up reason, it's not returning 1
-	affecting.take_damage(5+seed.carnivorous*3, 0, 0, "plant thorns")
+	affecting.take_damage(5+seed.voracious*3, 0, 0, "plant thorns")
 	H.UpdateDamageIcon()
 	return 1
 

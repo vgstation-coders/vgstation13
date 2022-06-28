@@ -196,8 +196,8 @@
 		list("tag" = GENE_ECOLOGY),
 		list("tag" = GENE_ECOPHYSIOLOGY),
 		list("tag" = GENE_METABOLISM),
-		list("tag" = GENE_NUTRITION),
-		list("tag" = GENE_DEVELOPMENT)
+		list("tag" = GENE_DEVELOPMENT),
+		list("tag" = GENE_XENOECOLOGY)
 	)
 	data["geneTags"] = gene_tag_list
 

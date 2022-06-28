@@ -299,7 +299,7 @@
 	// Check for pests and weeds.
 	// Some carnivorous plants happily eat pests.
 	if(get_pestlevel() > 0)
-		if(seed.carnivorous)
+		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
 			add_pestlevel(-HYDRO_SPEED_MULTIPLIER)
 		else if (get_pestlevel() > seed.pest_tolerance)
@@ -308,7 +308,7 @@
 
 	// Some plants thrive and live off of weeds.
 	if(get_weedlevel() > 0)
-		if(seed.parasite)
+		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
 			add_weedlevel(-HYDRO_SPEED_MULTIPLIER)
 		else if (get_weedlevel() > seed.weed_tolerance)

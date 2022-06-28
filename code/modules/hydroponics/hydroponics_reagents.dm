@@ -1,29 +1,8 @@
 //Process reagents being input into the tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents()
-	if(reagents.total_volume <= 0 || get_mutationlevel() >= 25)
-		if(get_mutationlevel()) //probably a way to not check this twice but meh
-			mutate(min(get_mutationlevel(), 25)) //Lazy 25u cap to prevent cheesing the whole thing
-			mutationlevel = 0
-			return
-	else
-		for(var/datum/reagent/A in reagents.reagent_list)
-			A.on_plant_life(src)
-			reagents.update_total()
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/add_mutationlevel(var/amount)
-	if(!seed)
-		return
-	if(dead)
-		return
-	if (amount > 0)
-		//every increase in mutation, lose some health
-		mutationlevel = round(min(mutationlevel + amount, MUTATIONLEVEL_MAX))
-		add_planthealth(-2)
-	else
-		mutationlevel = round(max(0, mutationlevel + amount))
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/get_mutationlevel()
-	return mutationlevel
+	for(var/datum/reagent/A in reagents.reagent_list)
+		A.on_plant_life(src)
+		reagents.update_total()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/add_nutrientlevel(var/amount, var/bloody = FALSE)
 	if(seed)
@@ -33,10 +12,8 @@
 			return
 	if (amount > 0)
 		nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
-		weedlevel = round(min(weedlevel + amount, WEEDLEVEL_MAX))
 	else
 		nutrientlevel = round(max(0, nutrientlevel + amount))
-		weedlevel = round(max(0, weedlevel + amount))
 		if(nutrientlevel < 1)
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
@@ -92,32 +69,6 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_toxinlevel()
 	return toxinlevel
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/add_yieldmod(var/amount)
-	if(!seed)
-		return
-	if(dead)
-		return
-	if(amount > 0)
-		yield_mod = min(yield_mod + amount,YIELDMOD_MAX)
-	else
-		yield_mod = max(0, yield_mod + amount)
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/get_yieldmod()
-	return yield_mod
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/add_mutationmod(var/amount)
-	if(!seed)
-		return
-	if(dead)
-		return
-	if(amount > 0)
-		yield_mod = min(yield_mod + amount, MUTATIONMOD_MAX)
-	else
-		yield_mod = max(0, yield_mod + amount)
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/get_mutationmod()
-	return yield_mod
 
 //plant_health is only modified here. This avoids the need for sanity checks every tick
 /obj/machinery/portable_atmospherics/hydroponics/proc/add_planthealth(var/amount)
