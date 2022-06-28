@@ -138,12 +138,12 @@
 	category = "Misc"
 	build_path = /obj/item/dses_module/distance_get
 
-/datum/design/flawlessglasses
-	name = "Flawless Glasses"
-	desc = "Flawless glasses which provide superb examination abilities."
-	id = "flawlessglasses"
+/datum/design/trackingglasses
+	name = "Eye Tracking Glasses"
+	desc = "Eye tracking glasses which allow the wearer to see what others are looking at."
+	id = "trackingglasses"
 	req_tech = list(Tc_MATERIALS = 6)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_DIAMOND = 500)
 	category = "Misc"
-	build_path = /obj/item/clothing/glasses/regular/flawless
+	build_path = /obj/item/clothing/glasses/regular/tracking
