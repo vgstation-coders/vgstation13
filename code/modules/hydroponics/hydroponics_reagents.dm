@@ -2,7 +2,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents()
 	for(var/datum/reagent/A in reagents.reagent_list)
 		A.on_plant_life(src)
-		reagents.update_total()
+	reagents.update_total()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/add_nutrientlevel(var/amount, var/bloody = FALSE)
 	if(seed)
