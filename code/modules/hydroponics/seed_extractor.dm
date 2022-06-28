@@ -241,6 +241,10 @@
 				dat += "<span title=\"This is a ligneous plant with strong and robust stems.\">WOOD </span>"
 			if(P.seed.teleporting)
 				dat += "<span title=\"This plant possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.\">TELE </span>"
+			if(P.seed.toxin_affinity > 7)
+				dat += "<span title=\"This plant can only survive in extremely toxic environments.\">HTOX </span>"
+			else if(P.seed.toxin_affinity > 5)
+				dat += "<span title=\"This plant requires a balanced toxin and water environment.\">TOX </span>"
 			dat += "</td><tr>"
 		dat += "</tbody></table>"
 	dat = jointext(dat,"")
