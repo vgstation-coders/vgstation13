@@ -24,6 +24,7 @@
 	speed = 1
 	flying = 1
 	size = SIZE_TINY
+	density = 0 //people walk over you isntead of bumping
 
 	attacktext = "electrocutes"
 	attack_sound = "sparks"
@@ -288,6 +289,9 @@
 	if(!is_under_tile())
 		visible_message("<span class ='notice'>[user] attempted to taste \the [src], for no particular reason, and got rightfully burned.</span>")
 		shockMob(user)
+		
+/mob/living/simple_animal/hostile/pulse_demon/electrocute_act() //don't get killed by powercreeper vines
+	return
 
 // Our one weakness
 /mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
