@@ -661,7 +661,7 @@
 			if (locate(/datum/power/vampire/undying) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
 				success = VAMP_FAILURE
-			if (locate(/datum/power/vampire/jaunt) in V.current_powers)
+			else if (locate(/datum/power/vampire/jaunt) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
 				success = FALSE
 	return success
