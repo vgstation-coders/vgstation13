@@ -148,6 +148,10 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 		to_chat(user, "<span class='notice'>You cut a piece off the cable coil.</span>")
 		update_icon()
 		return
+	if(istype(W, /obj/item/weapon/rcl/))
+		var/obj/item/weapon/rcl/O = W
+		O.attackby(src, usr)
+		return
 	return ..()
 
 ///////////////////////////////////////////////

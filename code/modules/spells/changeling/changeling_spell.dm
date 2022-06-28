@@ -55,6 +55,3 @@
 
 /spell/changeling/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
-
-
-	

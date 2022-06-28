@@ -45,7 +45,7 @@
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			qdel(D)
 			return 0
-	
+
 	else if(istype(A,/obj/structure/window))
 		var/obj/structure/window/W = A
 		if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
@@ -88,6 +88,36 @@
 	S.ChangeTurf(/turf/simulated/floor/plating/airless)
 	return 0
 
+/datum/rcd_schematic/con_rfloors
+	name				= "Build reinforced floors"
+	icon				= 'icons/turf/floors.dmi'
+	icon_state			= "engine"
+	category			= "Construction"
+	energy_cost			= 2
+
+	flags		= RCD_GET_TURF
+
+/datum/rcd_schematic/con_rfloors/attack(var/atom/A, var/mob/user)
+	if(!(istype(A,/turf/simulated/floor)))
+		return "it can only create floors on plating!"
+	else
+		var/turf/simulated/floor/F = A
+		if(F.floor_tile)
+			return "it can only create floors on plating!"
+
+	var/turf/T = A
+
+	to_chat(user, "Building floor...")
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+	if(master.delay(user, A, 2 SECONDS))
+		if(master.get_energy(user) < energy_cost)
+			return 1
+
+
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.ChangeTurf(/turf/simulated/floor/engine/plated/airless)
+	return 0
+
 /datum/rcd_schematic/con_walls
 	name		= "Build walls"
 	icon		= 'icons/turf/walls.dmi'
@@ -108,6 +138,30 @@
 
 		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 		T.ChangeTurf(/turf/simulated/wall)
+		return 0
+
+	return 1
+
+/datum/rcd_schematic/con_rwalls
+	name				= "Build reinforced walls"
+	icon				= 'icons/turf/walls.dmi'
+	icon_state			= "r_wall"
+	category			= "Construction"
+	energy_cost			= 5
+
+/datum/rcd_schematic/con_rwalls/attack(var/atom/A, var/mob/user)
+	if(A?.type != /turf/simulated/wall) // Only one with strict type like this for now
+		return "it can only reinforce existing walls!"
+
+	var/turf/simulated/floor/T = A
+	to_chat(user, "Building wall...")
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	if(master.delay(user, A, 2 SECONDS))
+		if(master.get_energy(user) < energy_cost)
+			return 1
+
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.ChangeTurf(/turf/simulated/wall/r_wall)
 		return 0
 
 	return 1
@@ -639,7 +693,7 @@
 /datum/selection_schematic/window_schematic/Destroy()
 	overlays = list()
 	..()
-	
+
 /datum/selection_schematic/window_schematic/clicked(var/mob/user)
 	master.selected = src
 

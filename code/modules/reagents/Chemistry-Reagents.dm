@@ -671,7 +671,7 @@
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
-			C.make_visible(INVISIBLESPRAY,FALSE)
+			C.make_visible(INVISIBLESPRAY)
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
@@ -2502,9 +2502,9 @@
 	..()
 	T.add_nutrientlevel(1)
 	if(prob(25*custom_plant_metabolism))
-		T.add_weedlevel(10)
+		T.add_weedlevel(3)
 	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
-		T.add_pestlevel(10)
+		T.add_pestlevel(3)
 	if(T.seed && !T.dead && !T.seed.immutable)
 		var/chance
 		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism

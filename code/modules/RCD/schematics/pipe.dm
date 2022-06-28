@@ -510,12 +510,14 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= PIPE_Z_UP
 	pipe_type	= PIPE_Z_UP_BINARY
+	flags 		= RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH | RCD_Z_UP
 
 /datum/rcd_schematic/pipe/z_down
 	name		= "Down Pipe"
 
 	pipe_id		= PIPE_Z_DOWN
 	pipe_type	= PIPE_Z_DOWN_BINARY
+	flags 		= RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH | RCD_Z_DOWN
 
 /datum/rcd_schematic/pipe/manifold
 	name		= "Manifold"
@@ -847,6 +849,7 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= DISP_PIPE_UP
 	actual_id	= 13
 	pipe_type	= PIPE_Z_UP_BINARY
+	flags 		= RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH | RCD_Z_UP
 
 /datum/rcd_schematic/pipe/disposal/down
 	name		= "Down Pipe"
@@ -854,3 +857,4 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= DISP_PIPE_DOWN
 	actual_id	= 14
 	pipe_type	= PIPE_Z_DOWN_BINARY
+	flags 		= RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH | RCD_Z_DOWN

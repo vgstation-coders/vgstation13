@@ -185,12 +185,15 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "rcd"
 	item_state = "rcdammo"
-	max_amount = 5
-	
+	max_amount = 12
+
 	origin_tech = Tc_MATERIALS + "=2"
 	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
 	w_type = RECYK_ELECTRONIC
+
+/obj/item/stack/rcd_ammo/ce
+	amount = 12
 
 /obj/item/stack/rcd_ammo/attackby(var/obj/O, mob/user)
 	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))

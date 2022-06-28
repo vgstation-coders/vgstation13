@@ -86,14 +86,6 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/fireaxe/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W,/obj/item/weapon/antiaxe_kit))
-		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
-		new /obj/item/weapon/fireaxe/antimatter(loc)
-		qdel(W)
-		qdel(src)
-
 /obj/item/weapon/fireaxe/suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
 		return (SUICIDE_ACT_BRUTELOSS)

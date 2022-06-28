@@ -42,6 +42,8 @@
 		user.set_species(identity.species, 0)
 		user.name = identity.real_name
 		user.real_name = identity.real_name
+	else
+		user.set_species(identity.species, 0)
 		user.dna = identity
 		user.UpdateAppearance()
 		user.update_perception()

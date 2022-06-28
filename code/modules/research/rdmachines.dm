@@ -148,6 +148,67 @@ var/global/list/rnd_machines = list()
 	if(research_flags &HASOUTPUT)
 		..()
 
+/obj/machinery/r_n_d/AltClick(mob/user)
+	var/obj/item/O = user.get_active_hand()
+	if (shocked)
+		shock(user,50, O.siemens_coefficient)
+	if (busy)
+		to_chat(user, "<span class='warning'>The [src.name] is busy. Please wait for completion of previous operation.</span>")
+		return 1
+	if(panel_open)
+		return 1
+	if (stat)
+		return 1
+	if (disabled)
+		return 1
+	if (!linked_console && !(istype(src, /obj/machinery/r_n_d/fabricator))) //fabricators get a free pass because they aren't tied to a console
+		to_chat(user, "\The [src] must be linked to an R&D console first!")
+		return 1
+	if(istype(O,/obj/item/stack/sheet) && research_flags &TAKESMATIN)
+		var/found = "" //the matID we're compatible with
+		var/obj/item/stack/sheet/stack = O
+		for(var/matID in materials.storage)
+			var/datum/material/M = materials.getMaterial(matID)
+			if(M.sheettype==stack.type)
+				found = matID
+		if(!user.Adjacent(src) || !stack || !stack.loc || (stack.loc != user && !isgripper(stack.loc)))
+			return 1
+		var/amount = 0 
+		amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
+
+		if (!(amount > 0))
+			to_chat(user, "<span class='warning'>\The [src]'s material bin is full. Please remove material before adding more.</span>")
+			return 1
+
+		if (busy)
+			to_chat(user, "<span class='warning'>\The [src] is busy. Please wait for completion of previous operation.</span>")
+			return 1
+
+		busy = TRUE
+
+		if(research_flags & HASMAT_OVER)
+			update_icon()
+			overlays |= image(icon = icon, icon_state = "[base_state]_[stack.name]")
+			if(default_mat_overlays)
+				overlays |= image(icon = icon, icon_state = "autolathe_[stack.name]")
+			spawn(ANIM_LENGTH)
+				overlays -= image(icon = icon, icon_state = "[base_state]_[stack.name]")
+				if(default_mat_overlays)
+					overlays -= image(icon = icon, icon_state = "autolathe_[stack.name]")
+
+		icon_state = "[base_state]"
+		use_power(max(1000, (3750*amount/10)))
+		stack.use(amount)
+		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src].</span>")
+		icon_state = "[base_state]"
+
+		var/datum/material/material = materials.getMaterial(found)
+		materials.addAmount(found, amount * material.cc_per_sheet)
+		spawn(ANIM_LENGTH)
+			busy = FALSE
+		return 1
+	return 0
+
 /obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)
 		shock(user,50, O.siemens_coefficient)

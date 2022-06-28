@@ -77,6 +77,9 @@
 
 		if(istype(E, /datum/stack_recipe))
 			var/datum/stack_recipe/R = E
+			var/turf/T = get_turf(src)
+			if(!T || (R.z_up_required && !HasAbove(T.z)) || (R.z_down_required && !HasBelow(T.z)))
+				continue
 			var/max_multiplier = round(src.amount / R.req_amount)
 			var/title
 			var/can_build = 1
