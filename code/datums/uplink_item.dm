@@ -1066,6 +1066,14 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Clown")
 	jobs_excluded = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/piebomb
+	name = "Pie Bomb"
+	desc = "These aren't homemade, they were made in a factory. A bomb factory. They're bombs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/explosive_pie
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Clown", "Mime")
+
 /datum/uplink_item/jobspecific/assistant
 	category = "Assistant Specials"
 
