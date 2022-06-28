@@ -644,7 +644,7 @@
 
 /mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
 	//Other vampires aren't affected
-	var/success = null
+	var/success = TRUE
 	if(mind && mind.GetRole(VAMPIRE))
 		return 0
 
@@ -653,7 +653,7 @@
 		//Chaplains are ALWAYS resistant to vampire powers
 		if(isReligiousLeader(src))
 			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
-			success = null
+			success = FALSE
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
@@ -663,9 +663,8 @@
 				success = VAMP_FAILURE
 			if (locate(/datum/power/vampire/jaunt) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
-				success = null
-		return success
-	return 1
+				success = FALSE
+	return success
 
 // If the target is weakened, the spells take less time to complete.
 /mob/living/carbon/proc/get_vamp_enhancements()
