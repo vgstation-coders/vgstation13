@@ -2774,10 +2774,10 @@
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
 		if(prob(10))
-			T.mutate(GENE_PHYSIOLOGY)
+			T.mutate(GENE_ECOPHYSIOLOGY)
 			T.reagents.remove_reagent(id, 1)
 		if(prob(10))
-			T.mutate(GENE_PHYSIOLOGY)
+			T.mutate(GENE_ECOPHYSIOLOGY)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
