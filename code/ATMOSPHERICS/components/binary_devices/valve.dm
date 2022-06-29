@@ -32,12 +32,13 @@
 
 	return null
 
-/obj/machinery/atmospherics/binary/valve/proc/open()
+/obj/machinery/atmospherics/binary/valve/proc/open(var/animate = TRUE)
 	if(open)
 		return 0
 
-	update_icon(0,1) //animate
-	sleep(10)
+	if(animate)
+		update_icon(0,1)
+		sleep(10)
 	open = TRUE
 	update_icon()
 
@@ -52,12 +53,13 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/valve/proc/close()
+/obj/machinery/atmospherics/binary/valve/proc/close(var/animate = TRUE)
 	if(!open)
 		return 0
 
-	update_icon(0,1) //animate
-	sleep(10)
+	if(animate)
+		update_icon(0,1)
+		sleep(10)
 	open = FALSE
 	update_icon()
 
@@ -100,8 +102,8 @@
 	build_network()
 
 	if(openDuringInit)
-		close()
-		open()
+		close(FALSE)
+		open(FALSE)
 		openDuringInit = 0
 
 	else
