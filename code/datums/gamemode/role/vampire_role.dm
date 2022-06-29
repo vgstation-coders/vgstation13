@@ -15,6 +15,7 @@
 
 	var/iscloaking = FALSE
 	var/deadchat_timer = 0
+	var/ismenacing = FALSE
 	var/deadchat = FALSE
 	var/nullified = 0
 	var/smitecounter = 0
@@ -336,16 +337,16 @@
 		return
 	if(H.stat == DEAD)
 		return
-	if(locate(/datum/power/vampire/charisma) in V.current_powers)
+	if(locate(/datum/power/vampire/charisma) in current_powers)
 		if(world.time > deadchat_timer)
 			deadchat = FALSE
-			M.client.prefs.toggles |= CHAT_GHOSTEARS
-			M.client.prefs.toggles |= CHAT_DEAD
+			H.client.prefs.toggles |= CHAT_GHOSTEARS
+			H.client.prefs.toggles |= CHAT_DEAD
 			//have deadchat for 30 seconds every five minutes
 			spawn(300)
 				deadchat_timer = world.time + 5 MINUTES
-				M.client.prefs.toggles &= ~CHAT_GHOSTEARS
-				M.client.prefs.toggles &= ~CHAT_DEAD
+				H.client.prefs.toggles &= ~CHAT_GHOSTEARS
+				H.client.prefs.toggles &= ~CHAT_DEAD
 				deadchat = TRUE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
@@ -602,90 +603,3 @@
 				return
 			if (prob(35)) // 35% chance of dethralling
 				Drop(TRUE)
-
-/mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0)
-	var/datum/role/vampire/vampire = isvampire(src)
-
-	if(!vampire)
-		world.log << "[src] has vampire spells but isn't a vampire."
-		return 0
-
-	var/fullpower = (locate(/datum/power/vampire/jaunt) in vampire.current_powers)
-
-	if(src.stat > max_stat)
-		to_chat(src, "<span class='warning'>You are incapacitated.</span>")
-		return 0
-
-	if(vampire.nullified)
-		if(!fullpower)
-			to_chat(src, "<span class='warning'>Something is blocking your powers!</span>")
-			return 0
-	if(vampire.blood_usable < required_blood)
-		to_chat(src, "<span class='warning'>You require at least [required_blood] units of usable blood to do that!</span>")
-		return 0
-	//chapel check
-	if(istype(get_area(src), /area/chapel))
-		to_chat(src, "<span class='warning'>Your powers are useless on this holy ground.</span>")
-		return 0
-	if(check_holy(src))
-		var/turf/T = get_turf(src)
-		if((T.get_lumcount() * 10) > 2)
-			to_chat(src, "<span class='warning'>This ground has been blessed and illuminated, suppressing your abilities.</span>")
-			return 0
-		if (fullpower)
-			to_chat(src, "<span class='warning'>Our awakened powers are suppressed on this holy ground.</span>")
-			return 0
-	return 1
-
-/mob/proc/can_enthrall(var/mob/living/carbon/human/H)
-	var/datum/role/vampire/V = isvampire(src)
-	if(restrained())
-		to_chat(src, "<span class ='warning'> You cannot do this while restrained! </span>")
-		return 0
-	if(!istype(H))
-		to_chat(src, "<span class='warning'>You can only enthrall humanoids!</span>")
-		return 0
-	if(!H)
-		message_admins("Error during enthralling: no target. Mob is [src], (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]&mob=\ref[src]'>JMP</A>)")
-		return FALSE
-	if(!H.mind)
-		to_chat(src, "<span class='warning'>[H]'s mind is not there for you to enthrall.</span>")
-		return FALSE
-	if(isvampire(H) || isthrall(H))
-		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a familiar sensation in your skull that quickly dissipates.</span>")
-		return FALSE
-	//Charisma allows implanted targets to be enthralled.
-	if(!(locate(/datum/power/vampire/charisma) in V.current_powers) && H.is_loyalty_implanted())
-		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a strange sensation in your skull that quickly dissipates.</span>")
-		return FALSE
-	if(H.vampire_affected(mind) <= 0)
-		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil!</span>")
-	return TRUE
-
-/mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
-	//Other vampires aren't affected
-	var/success = TRUE
-	if(mind && mind.GetRole(VAMPIRE))
-		return 0
-
-	// Non-mature vampires are not stopped by holy things.
-	if(M)
-		//Chaplains are ALWAYS resistant to vampire powers
-		if(isReligiousLeader(src))
-			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
-			success = FALSE
-		// Null rod nullifies vampire powers, unless we're a young vamp.
-		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
-		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
-		if (N)
-			if (locate(/datum/power/vampire/undying) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
-				success = VAMP_FAILURE
-			else if (locate(/datum/power/vampire/jaunt) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
-				success = FALSE
-	return success
-
-// If the target is weakened, the spells take less time to complete.
-/mob/living/carbon/proc/get_vamp_enhancements()
-	return ((knockdown ? 2 : 0) + (stunned ? 1 : 0) + (sleeping || paralysis ? 3 : 0))
