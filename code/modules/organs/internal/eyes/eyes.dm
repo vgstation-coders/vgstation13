@@ -14,7 +14,7 @@
 	return
 
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
-	return
+	M.client.darkness_planemaster.alpha = 100
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
 	if(is_broken())
