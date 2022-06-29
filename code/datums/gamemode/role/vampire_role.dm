@@ -15,6 +15,7 @@
 
 	var/iscloaking = FALSE
 	var/deadchat_timer = 0
+	var/deadchat = FALSE
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -331,14 +332,21 @@
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
 
 /datum/role/vampire/proc/handle_deadspeak(var/mob/living/carbon/human/H)
-	if(locate(/datum/power/vampire/charisma) in V.current_powers && !stat)
+	if(!deadchat)
+		return
+	if(H.stat == DEAD)
+		return
+	if(locate(/datum/power/vampire/charisma) in V.current_powers)
 		if(world.time > deadchat_timer)
+			deadchat = FALSE
 			M.client.prefs.toggles |= CHAT_GHOSTEARS
 			M.client.prefs.toggles |= CHAT_DEAD
-			deadchat_timer = world.time + 2 MINUTES
-		else
-			M.client.prefs.toggles &= ~CHAT_GHOSTEARS
-			M.client.prefs.toggles &= ~CHAT_DEAD
+			//have deadchat for 30 seconds every five minutes
+			spawn(300)
+				deadchat_timer = world.time + 5 MINUTES
+				M.client.prefs.toggles &= ~CHAT_GHOSTEARS
+				M.client.prefs.toggles &= ~CHAT_DEAD
+				deadchat = TRUE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0
