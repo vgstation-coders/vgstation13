@@ -344,8 +344,8 @@
 			H.client.prefs.toggles |= CHAT_GHOSTEARS
 			H.client.prefs.toggles |= CHAT_DEAD
 			//have deadchat for 30 seconds every five minutes
-			spawn(300)
-				deadchat_timer = world.time + 5 MINUTES
+			spawn(rand(200, 400))
+				deadchat_timer = world.time + 1800 + rand(300, 1200)
 				H.client.prefs.toggles &= ~CHAT_GHOSTRADIO
 				H.client.prefs.toggles &= ~CHAT_GHOSTEARS
 				H.client.prefs.toggles &= ~CHAT_DEAD
