@@ -84,14 +84,12 @@ var/list/global_deadchat_listeners = list()
 			continue
 
 		var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
+		rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
 		if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
-			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			to_chat(M, rendered)//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
 		else if(M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute))
-			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			to_chat(M, rendered)
 		else if(istype(M,/mob/living/carbon/brain))
-			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			var/mob/living/carbon/brain/B = M
 			if(B.brain_dead_chat())
 				to_chat(M, rendered)
