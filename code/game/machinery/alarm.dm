@@ -307,13 +307,16 @@ var/global/list/airalarm_presets = list(
 		if(AC.current == src)
 			AC.current = null
 			nanomanager.update_uis(src)
-
+	var/area/this_area = get_area(src)
+	if(src in this_area.air_alarms)
+		this_area.air_alarms.Remove(src)
 	..()
 
 /obj/machinery/alarm/proc/first_run()
 	var/area/this_area = get_area(src)
 	area_uid = this_area.uid
 	name = "[this_area.name] Air Alarm"
+	this_area.air_alarms.Add(src)
 
 	// breathable air according to human/Life()
 	/*
@@ -328,6 +331,13 @@ var/global/list/airalarm_presets = list(
 	apply_preset(1, 0) // Don't cycle and don't propagate.
 	apply_mode() //apply mode to scrubbers and vents
 
+/obj/machinery/alarm/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
+	var/area/old_area = get_area(src)
+	var/area/new_area = get_area(NewLoc)
+	if(old_area != new_area)
+		old_area.air_alarms.Remove(src)
+		new_area.air_alarms.Add(src)
+	return ..()
 
 /obj/machinery/alarm/initialize()
 	add_self_to_holomap()
