@@ -16,7 +16,7 @@
 	var/iscloaking = FALSE
 	var/deadchat_timer = 0
 	var/ismenacing = FALSE
-	var/deadchat = FALSE
+	var/deadchat = TRUE
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -345,11 +345,12 @@
 			H.client.prefs.toggles |= CHAT_DEAD
 			//have deadchat for 30 seconds every five minutes
 			spawn(rand(200, 400))
-				deadchat_timer = world.time + 1800 + rand(300, 1200)
-				H.client.prefs.toggles &= ~CHAT_GHOSTRADIO
-				H.client.prefs.toggles &= ~CHAT_GHOSTEARS
-				H.client.prefs.toggles &= ~CHAT_DEAD
-				deadchat = TRUE
+				if(H.stat != DEAD)
+					deadchat_timer = world.time + 1800 + rand(300, 1200)
+					H.client.prefs.toggles &= ~CHAT_GHOSTRADIO
+					H.client.prefs.toggles &= ~CHAT_GHOSTEARS
+					H.client.prefs.toggles &= ~CHAT_DEAD
+					deadchat = TRUE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0
