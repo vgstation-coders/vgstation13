@@ -14,7 +14,7 @@
 	admin_voice_style = "danger"
 
 	var/iscloaking = FALSE
-	var/isdeadspeak = FALSE
+	var/deadchat_timer = 0
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -331,13 +331,14 @@
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
 
 /datum/role/vampire/proc/handle_deadspeak(var/mob/living/carbon/human/H)
-	if(!(locate(/datum/power/vampire/charisma) in V.current_powers))
-		M.client.prefs.toggles |= CHAT_DEAD
-	<a href='?_src_=prefs;preference=ghost_deadchat'><b>[(toggles & CHAT_DEAD) ? "On" : "Off"]</b></a><br>
-	<b>Ghost Hearing:</b>
-	<a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearby Speech"]</b></a><br>
-	<b>Ghost Sight:</b>
-	<a href='?_src_=prefs;preference=ghost_sight'><b>[(toggles & CHAT_GHOSTSIGHT) ? "All Emotes" : "Nearby Emotes"]</b></a><br>
+	if(locate(/datum/power/vampire/charisma) in V.current_powers && !stat)
+		if(world.time > deadchat_timer)
+			M.client.prefs.toggles |= CHAT_GHOSTEARS
+			M.client.prefs.toggles |= CHAT_DEAD
+			deadchat_timer = world.time + 2 MINUTES
+		else
+			M.client.prefs.toggles &= ~CHAT_GHOSTEARS
+			M.client.prefs.toggles &= ~CHAT_DEAD
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0
