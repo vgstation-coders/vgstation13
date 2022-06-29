@@ -90,6 +90,8 @@ var/list/global_deadchat_listeners = list()
 			var/mob/living/carbon/brain/B = M
 			if(B.brain_dead_chat())
 				to_chat(M, rendered)
+		else if(isvampire(M) && M.client.prefs.toggles & CHAT_DEAD)
+			to_chat(M, rendered)
 
 /mob/proc/get_ear()
 	// returns an atom representing a location on the map from which this
