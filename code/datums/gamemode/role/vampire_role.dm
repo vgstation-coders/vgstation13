@@ -340,11 +340,13 @@
 	if(locate(/datum/power/vampire/charisma) in current_powers)
 		if(world.time > deadchat_timer)
 			deadchat = FALSE
+			H.client.prefs.toggles |= CHAT_GHOSTRADIO
 			H.client.prefs.toggles |= CHAT_GHOSTEARS
 			H.client.prefs.toggles |= CHAT_DEAD
 			//have deadchat for 30 seconds every five minutes
 			spawn(300)
 				deadchat_timer = world.time + 5 MINUTES
+				H.client.prefs.toggles &= ~CHAT_GHOSTRADIO
 				H.client.prefs.toggles &= ~CHAT_GHOSTEARS
 				H.client.prefs.toggles &= ~CHAT_DEAD
 				deadchat = TRUE
