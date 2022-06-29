@@ -251,6 +251,8 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/regular/tracking
 	name = "eye tracking glasses"
 	desc = "Eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "cmohud"
+	item_state = "cmohud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/gglasses
