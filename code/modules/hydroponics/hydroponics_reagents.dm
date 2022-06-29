@@ -33,10 +33,8 @@
 			return
 	if (amount > 0)
 		nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
-		weedlevel = round(min(weedlevel + amount, WEEDLEVEL_MAX))
 	else
 		nutrientlevel = round(max(0, nutrientlevel + amount))
-		weedlevel = round(max(0, weedlevel + amount))
 		if(nutrientlevel < 1)
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)

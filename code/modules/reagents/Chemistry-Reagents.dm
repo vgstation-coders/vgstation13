@@ -2452,9 +2452,6 @@
 				H.custom_pain("Your [E] burn horribly!", 1)
 				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
-//Reagents used for plant fertilizers.
-//WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?
-
 /datum/reagent/fertilizer
 	name = "fertilizer"
 	id = FERTILIZER
@@ -2502,9 +2499,9 @@
 	..()
 	T.add_nutrientlevel(1)
 	if(prob(25*custom_plant_metabolism))
-		T.add_weedlevel(3)
+		T.add_weedlevel(10)
 	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
-		T.add_pestlevel(3)
+		T.add_pestlevel(10)
 	if(T.seed && !T.dead && !T.seed.immutable)
 		var/chance
 		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
