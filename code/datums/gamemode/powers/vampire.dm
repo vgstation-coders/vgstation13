@@ -48,7 +48,7 @@
 
 /datum/power/vampire/heal
 	cost = 200
-	granttext = "Your rejuvination abilities have improved and will now heal you over time when used."
+	granttext = "Your rejuvenation abilities have improved and will now heal you over time when used."
 	store_in_memory = TRUE
 
 /datum/power/vampire/jaunt
