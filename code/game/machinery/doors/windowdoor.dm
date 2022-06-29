@@ -129,7 +129,7 @@
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
 
-/obj/machinery/door/window/open()
+/obj/machinery/door/window/open(var/animate = TRUE)
 	if(!density) //it's already open you silly cunt
 		return FALSE
 	if(operating == 1) //doors can still open when emag-disabled
@@ -143,10 +143,12 @@
 	if(smartwindow && window_is_opaque)
 		animate(src, color="#FFFFFF", time=10)
 
-	door_animate("opening")
-	playsound(src, soundeffect, 100, 1)
+	if(animate)
+		door_animate("opening")
+		playsound(src, soundeffect, 100, 1)
 	icon_state = "[base_state]open"
-	sleep(animation_delay)
+	if(animate)
+		sleep(animation_delay)
 
 	explosion_resistance = 0
 	setDensity(FALSE)

@@ -41,7 +41,7 @@
 	for(var/obj/machinery/door/window/brigdoor/M in all_doors)
 		if (M.id_tag == src.id_tag)
 			targets += M
-			M.open() //these start the shift open
+			M.open(animate = FALSE) //these start the shift open
 
 	for(var/obj/machinery/flasher/F in flashers)
 		if(F.id_tag == src.id_tag)
