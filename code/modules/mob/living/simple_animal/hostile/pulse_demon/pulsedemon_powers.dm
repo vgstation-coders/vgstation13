@@ -184,8 +184,8 @@
             to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
             return
 
-        PDS.quicken_spell()
         charge -= PDS.upgrade_cost
+        PDS.quicken_spell()
 
     if(href_list["empower"])
         var/spell/pulse_demon/PDS = locate(href_list["spell"])
@@ -196,8 +196,8 @@
             to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
             return
 
-        PDS.empower_spell()
         charge -= PDS.upgrade_cost
+        PDS.empower_spell()
 
     powerMenu()
 

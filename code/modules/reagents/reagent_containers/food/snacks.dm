@@ -1570,6 +1570,41 @@
 	reagents.add_reagent(CARAMEL, 3)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie
+	name = "banana cream pie"
+	desc = "Just like back home, on clown planet! HONK!"
+	icon_state = "pie"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(BANANA,3)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/examine(mob/user)
+	..()
+	if(is_holder_of(user,src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and seems to be ticking.</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/after_consume(mob/user)
+	explosion(get_turf(user), -1, 0, 0, 3)
+	user.gib()
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/throw_impact(atom/hit_atom)
+	set waitfor = FALSE
+	if(ismob(hit_atom))
+		var/mob/M = hit_atom
+		src.visible_message("<span class='warning'>\The [src] explodes in [M]'s face!</span>")
+		explosion(get_turf(M), -1, 0, 1, 3)
+		qdel(src)
+
+	if(isturf(hit_atom))
+		explosion(get_turf(hit_atom), -1, 0, 1, 3)
+		qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/berryclafoutis
 	name = "berry clafoutis"
 	desc = "No black birds, this is a good sign."

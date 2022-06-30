@@ -1024,24 +1024,18 @@ var/list/has_died_as_golem = list()
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
 
-/datum/species/umbra
-	name = "Umbra"
+/datum/species/vampire
+	name = "Vampire"
 	icobase = 'icons/mob/human_races/r_grue.dmi'		// Normal icon set.
 	deform = 'icons/mob/human_races/r_def_grue.dmi'	// Mutated icon set.
-	eyes = "grue_eyes_s"
 	attack_verb = "claws"
-	flags = NO_PAIN | IS_WHITELISTED | HYPOTHERMIA_IMMUNE
+	flags = IS_WHITELISTED | HYPOTHERMIA_IMMUNE
 	anatomy_flags = HAS_LIPS
 	punch_damage = 7
-	default_mutations=list(M_HULK,M_CLAWS,M_TALONS)
-	burn_mod = 2
-	brute_mod = 2
-	move_speed_multiplier = 2
+	default_mutations=list(M_CLAWS,M_TALONS, M_JAMSIGNALS)
 	has_mutant_race = 0
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
-
-	spells = list(/spell/swallow_light,/spell/shatter_lights)
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -1050,13 +1044,13 @@ var/list/has_died_as_golem = list()
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/umbra
+		"eyes" =     /datum/organ/internal/eyes/monstrous
 	)
 
-/datum/species/umbra/makeName()
-	return "umbra"
+/datum/species/vampire/makeName()
+	return "vampire"
 
-/datum/species/umbra/gib(mob/living/carbon/human/H)
+/datum/species/vampire/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -1269,8 +1263,6 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
-
-
 
 /datum/species/mushroom
 	name = "Mushroom"

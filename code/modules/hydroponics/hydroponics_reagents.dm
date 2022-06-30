@@ -18,7 +18,6 @@
 				return
 			nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
 
-
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_nutrientlevel()
 	return nutrientlevel
 

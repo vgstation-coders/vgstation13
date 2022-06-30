@@ -2480,9 +2480,6 @@
 				H.custom_pain("Your [E] burn horribly!", 1)
 				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
-//Reagents used for plant fertilizers.
-//WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?
-
 /datum/reagent/fertilizer
 	name = "fertilizer"
 	id = FERTILIZER
@@ -2551,11 +2548,12 @@
 	..()
 	T.add_nutrientlevel(1)
 	if(prob(3))
-		T.add_weedlevel(3)
+		T.add_weedlevel(10)
 	if(T.seed && !T.dead && prob(3))
 		if(prob(3))
-			T.add_pestlevel(3)
+			T.add_pestlevel(10)
 		if(!T.seed.immutable && prob(35))
+			T.check_for_divergence(1)
 			T.seed.potency++
 
 /datum/reagent/toxin/plantbgone
@@ -9924,7 +9922,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E= H.internal_organs_by_name["eyes"] //damages the eyes
-		if(E && !istype(E, /datum/organ/internal/eyes/umbra) && !E.robotic) //doesn't harm umbra or robotic eyes
+		if(E && !istype(E, /datum/organ/internal/eyes/monstrous) && !E.robotic) //doesn't harm monstrous or robotic eyes
 			E.damage += 0.5
 
 /datum/reagent/bumcivilian
