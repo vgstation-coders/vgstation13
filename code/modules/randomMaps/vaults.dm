@@ -228,7 +228,7 @@
 		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
 			var/timetook2load = world.timeofday - timestart
 			spawned.Add(ME)
-			log_debug("Loaded [ME.file_path] in [timetook2load / 10] seconds: ([vault_x]) ([vault_y]) ([vault_z]) [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].",FALSE)
+			log_debug("Loaded [ME.file_path] in [timetook2load / 10] seconds at ([vault_x],[vault_y],[vault_z])[(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].",FALSE)
 			message_admins("<span class='info'>Loaded [ME.file_path] in [timetook2load / 10] seconds: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].</span>")
 			if(!ME.can_rotate)
 				message_admins("<span class='info'>[ME.file_path] was not rotated, can_rotate was set to FALSE.</span>")
