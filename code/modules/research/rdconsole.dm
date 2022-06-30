@@ -610,6 +610,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				screen = 1.6
 				updateUsrDialog()
 
+	else if(href_list["alphatoggle"]) //Reset the R&D console's database.
+		griefProtection()
+		if(files)
+			screen = 0.0
+			files.alphabetsort = !files.alphabetsort
+			spawn(20)
+				screen = 1.6
+				updateUsrDialog()
+
 	else if(href_list["toggleCategory"]) //Filter or unfilter a category
 		var/cat = href_list["toggleCategory"]
 		var/machine = href_list["machine"]
@@ -814,6 +823,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += {"<A href='?src=\ref[src];menu=1.7'>Device Linkage Menu</A><BR>
 				<A href='?src=\ref[src];lock=0.2'>Lock Console</A><BR>
+				<A href='?src=\ref[src];alphatoggle=1'>[files?.alphabetsort ? "Dis" : "En"]able alphabetical sorting.</A><BR>
 				<A href='?src=\ref[src];reset=1'>Reset R&D Database.</A><BR>"}
 		if(1.7) //R&D device linkage
 
