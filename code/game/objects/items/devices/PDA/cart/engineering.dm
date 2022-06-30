@@ -64,7 +64,7 @@
                     for(var/obj/machinery/power/apc/A in L)
                         var/area/APC_area = get_area(A)
                         menu += copytext(add_tspace(trim_left(APC_area.name), 30), 1, 31)
-                        menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 9)] [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
+                        menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(format_watts(A.lastused_total), 9)] [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
 
                 menu += "</FONT></PRE>"
     return menu
