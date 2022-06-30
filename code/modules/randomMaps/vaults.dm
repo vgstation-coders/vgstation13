@@ -202,7 +202,7 @@
 			var/inbounds = FALSE
 			for(var/turf/start in invalid_bounds) // And begin the invalid bounds checking. Might look like extra work, but is much faster than just removing blocks of spawn points.
 				var/turf/end = invalid_bounds[start]
-				if(new_spawn_point.x >= start.x && new_spawn_point.y >= start.y && new_spawn_point.x <= end?.x && new_spawn_point.y <= end?.y)
+				if(start && end && new_spawn_point.x >= start.x && new_spawn_point.y >= start.y && new_spawn_point.x <= end.x && new_spawn_point.y <= end.y)
 					inbounds = TRUE
 					break
 			if(inbounds || (filter_function && !call(filter_function)(ME, new_spawn_point)))
