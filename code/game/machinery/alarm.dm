@@ -331,9 +331,9 @@ var/global/list/airalarm_presets = list(
 	apply_preset(1, 0) // Don't cycle and don't propagate.
 	apply_mode() //apply mode to scrubbers and vents
 
-/obj/machinery/alarm/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
-	var/area/old_area = get_area(src)
-	var/area/new_area = get_area(NewLoc)
+/obj/machinery/alarm/Entered(atom/movable/Obj, atom/OldLoc)
+	var/area/old_area = get_area(OldLoc)
+	var/area/new_area = get_area(Obj)
 	if(old_area != new_area)
 		old_area.air_alarms.Remove(src)
 		new_area.air_alarms.Add(src)
