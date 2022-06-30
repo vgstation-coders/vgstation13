@@ -32,45 +32,43 @@
 
 	return null
 
-/obj/machinery/atmospherics/binary/valve/proc/open(var/animate = TRUE)
+/obj/machinery/atmospherics/binary/valve/proc/open()
 	if(open)
 		return 0
 
-	if(animate)
-		update_icon(0,1)
-		sleep(10)
-	open = TRUE
-	update_icon()
+	update_icon(0,1)
+	spawn(10)
+		open = TRUE
+		update_icon()
 
-	if(network1&&network2)
-		network1.merge(network2)
-		network2 = network1
+		if(network1&&network2)
+			network1.merge(network2)
+			network2 = network1
 
-	if(network1)
-		network1.update = 1
-	else if(network2)
-		network2.update = 1
+		if(network1)
+			network1.update = 1
+		else if(network2)
+			network2.update = 1
 
 	return 1
 
-/obj/machinery/atmospherics/binary/valve/proc/close(var/animate = TRUE)
+/obj/machinery/atmospherics/binary/valve/proc/close()
 	if(!open)
 		return 0
 
-	if(animate)
-		update_icon(0,1)
-		sleep(10)
-	open = FALSE
-	update_icon()
+	update_icon(0,1)
+	spawn(10)
+		open = FALSE
+		update_icon()
 
-	if(network1)
 		if(network1)
-			qdel(network1)
-	if(network2)
-		if(network1)
-			qdel(network2)
+			if(network1)
+				qdel(network1)
+		if(network2)
+			if(network1)
+				qdel(network2)
 
-	build_network()
+		build_network()
 
 	return 1
 
@@ -102,8 +100,8 @@
 	build_network()
 
 	if(openDuringInit)
-		close(FALSE)
-		open(FALSE)
+		close()
+		open()
 		openDuringInit = 0
 
 	else

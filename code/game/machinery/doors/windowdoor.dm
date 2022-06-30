@@ -129,7 +129,7 @@
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
 
-/obj/machinery/door/window/open(var/animate = TRUE)
+/obj/machinery/door/window/open()
 	if(!density) //it's already open you silly cunt
 		return FALSE
 	if(operating == 1) //doors can still open when emag-disabled
@@ -143,20 +143,17 @@
 	if(smartwindow && window_is_opaque)
 		animate(src, color="#FFFFFF", time=10)
 
-	if(animate)
-		door_animate("opening")
-		playsound(src, soundeffect, 100, 1)
+	door_animate("opening")
+	playsound(src, soundeffect, 100, 1)
 	icon_state = "[base_state]open"
-	if(animate)
-		sleep(animation_delay)
+	spawn(animation_delay)
+		explosion_resistance = 0
+		setDensity(FALSE)
+		set_opacity(0) //You can see through open windoors even if the glass is opaque
+		update_nearby_tiles()
 
-	explosion_resistance = 0
-	setDensity(FALSE)
-	set_opacity(0) //You can see through open windoors even if the glass is opaque
-	update_nearby_tiles()
-
-	if(operating == 1) //emag again
-		operating = 0
+		if(operating == 1) //emag again
+			operating = 0
 	return TRUE
 
 /obj/machinery/door/window/close()
@@ -176,11 +173,11 @@
 	explosion_resistance = initial(explosion_resistance)
 	update_nearby_tiles()
 
-	sleep(animation_delay)
-	if(window_is_opaque) //you can't see through closed opaque windoors
-		set_opacity(1)
+	spawn(animation_delay)
+		if(window_is_opaque) //you can't see through closed opaque windoors
+			set_opacity(1)
 
-	operating = 0
+		operating = 0
 	return TRUE
 
 /obj/machinery/door/window/try_break()
