@@ -152,6 +152,7 @@
 		if(!istype(ME))
 			continue
 
+		var/timestart1 = world.timeofday
 		var/list/dimensions = ME.get_dimensions() //List with the element's width and height
 
 		var/new_width = dimensions[1]
@@ -217,9 +218,14 @@
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
 			valid_spawn_points.Remove(block(t1, t2))
 
+		var/timetook2find = world.timeofday - timestart1
+		log_debug("[ME.file_path] placed in [timetook2find / 10] seconds.")
+		var/timestart2 = world.timeofday
 		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
+			var/timetook2load = world.timeofday - timestart2
+			log_debug("[ME.file_path] loaded in [timetook2load / 10] seconds.")
 			spawned.Add(ME)
-			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
+			message_admins("<span class='info'>Loaded [ME.file_path] in [(timetook2find + timetook2load) / 10] seconds: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
 			if(!ME.can_rotate)
 				message_admins("<span class='info'>[ME.file_path] was not rotated, can_rotate was set to FALSE.</span>")
 			else if(config.disable_vault_rotation)

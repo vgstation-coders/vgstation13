@@ -130,7 +130,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	// Sort subsystems by init_order, so they initialize in the correct order.
 	sortTim(subsystems, /proc/cmp_subsystem_init)
 
-	var/time_to_init = world.time
+	var/time_to_init = world.timeofday
 	// Initialize subsystems.
 	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT
 	for (var/datum/subsystem/SS in subsystems)
@@ -139,7 +139,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		SS.Initialize(world.timeofday)
 		CHECK_TICK
 	CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
-	time_taken_to_init = world.time - time_to_init
+	time_taken_to_init = world.timeofday - time_to_init
 
 	to_chat(world, "<span class='boldannounce'>Initializations complete in [time_taken_to_init / 10] seconds!</span>")
 	world.log << "Initializations complete. Took [time_taken_to_init / 10] seconds."
