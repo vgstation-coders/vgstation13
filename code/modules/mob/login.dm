@@ -31,7 +31,7 @@
 						matches_both = TRUE
 					matches += "ID ([client.computer_id])"
 #if WARN_FOR_CLIENTS_SHARING_IP
-				to_chat(M,"You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
+				to_chat(M,"You have logged in already with another key this round, please log out of it NOW or risk being banned!")
 				to_chat(src,"You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
 #endif
 				if(matches)
