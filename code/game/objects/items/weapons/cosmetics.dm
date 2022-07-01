@@ -383,7 +383,7 @@
 		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_LEVEL_TWO)
 	var/obj/O = target
 	if(isobj(O))
-		if(user.contents && (locate(O) in user.contents))
+		if(locate(O) in get_contents_in_object(user))
 			O.make_invisible(INVISIBLESPRAY, invisible_time, 1)
 		else
 			O.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_LEVEL_TWO)
