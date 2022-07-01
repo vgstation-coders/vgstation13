@@ -324,10 +324,8 @@
 		visible_message("<span class ='notice'>[user] attempted to taste \the [src], for no particular reason, and got rightfully burned.</span>")
 		shockMob(user)
 		
-/mob/living/simple_animal/hostile/pulse_demon/hitby(thrown_thing)
-	visible_message("<span class ='notice'>\the [thrown_thing] goes right through \the [src]!</span>")
-	//no damage from being hit by thrown stuff but the whack sound still plays for some reason
-	return
+/mob/living/simple_animal/hostile/pulse_demon/PreImpact(atom/movable/A, speed) //don't get hit by thrown stuff
+	return TRUE
   
 /mob/living/simple_animal/hostile/pulse_demon/electrocute_act() //don't get killed by powercreeper vines
 	return
