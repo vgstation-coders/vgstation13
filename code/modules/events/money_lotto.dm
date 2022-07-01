@@ -46,7 +46,7 @@
 				newnumber = rand(1,LOTTO_BALLCOUNT)
 			while(newnumber in winning_numbers)
 			winning_numbers.Add(newnumber)
-	for(/obj/machinery/computer/security/telescreen/entertainment/E in machines)
+	for(var/obj/machinery/computer/security/telescreen/entertainment/E in machines)
 		E.say("Hello and welcome to another edition of Central Command's Grand Slam -Stellar- Lottery. The numbers are now due to be announced.")
 	sleep(10 SECONDS)
 	for(var/i in 1 to winning_numbers.len - 1)
