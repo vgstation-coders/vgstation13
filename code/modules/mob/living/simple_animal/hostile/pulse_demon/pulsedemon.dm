@@ -1,3 +1,5 @@
+#define PULSEDEMON_APC_CHARGE_MULTIPLIER 2
+
 /mob/living/simple_animal/hostile/pulse_demon
 	name = "pulse demon"
 	desc = "A strange electrical apparition that lives in wires."
@@ -396,8 +398,8 @@
 	// Cap conditions
 	if(current_apc.cell.charge <= amount_to_drain)
 		amount_to_drain = current_apc.cell.charge
-	maxcharge += amount_to_drain * 2 //multiplier to balance the pitiful powercells in APCs
-	charge += amount_to_drain * 2
+	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
+	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
 	
 	// Add to stats if any
