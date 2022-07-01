@@ -50,7 +50,7 @@
 		E.say("Hello and welcome to another edition of Central Command's Grand Slam -Stellar- Lottery. The numbers are now due to be announced.")
 	sleep(10 SECONDS)
 	for(var/i in 1 to winning_numbers.len)
-		for(/obj/machinery/computer/security/telescreen/entertainment/E in machines)
+		for(var/obj/machinery/computer/security/telescreen/entertainment/E in machines)
 			E.say("[i < winning_numbers.len ? "T" : "And finally t"]he [i]\th number[i == 1 ? " of the draw" : ""] is [winning_numbers[i]].[i == winning_numbers.len ? "Be sure to collect any winnings. This concludes another edition of the Central Command Grand Slam -Stellar- Lottery." : ""]")
 		sleep(2 SECONDS)
 	for(var/obj/machinery/vending/lotto/L in machines)
