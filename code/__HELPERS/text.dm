@@ -1,4 +1,5 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
+#define UTF_LIMIT (1 << 20) + (1 << 16) - 1
 #define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
 
 /*
@@ -266,14 +267,14 @@
 //Returns a string with reserved characters and spaces before the first letter removed
 /proc/trim_left(text)
 	for (var/i = 1 to length(text))
-		if (text2ascii(text, i) > 32)
+		if (text2ascii(text, i) > 32 && text2ascii(text, i) <= UTF_LIMIT)
 			return copytext(text, i)
 	return ""
 
 //Returns a string with reserved characters and spaces after the last letter removed
 /proc/trim_right(text)
 	for (var/i = length(text), i > 0, i--)
-		if (text2ascii(text, i) > 32)
+		if (text2ascii(text, i) > 32 && text2ascii(text, i) <= UTF_LIMIT)
 			return copytext(text, 1, i + 1)
 
 	return ""
