@@ -76,8 +76,7 @@
 				announcer = new(T)
 				announcer.generate_name()
 				var/datum/outfit/special/with_id/nt_rep/NT = new
-				NT.equip(announcer)
-				announcer.regenerate_icons()
+				NT.equip(announcer,TRUE)
 
 		if(announcer)
 			announcer.say("Hello and welcome to another edition of Central Command's Grand Slam -Stellar- Lottery. The numbers are now due to be announced.")
