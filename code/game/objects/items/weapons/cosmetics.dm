@@ -383,8 +383,11 @@
 		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_LEVEL_TWO)
 	var/obj/O = target
 	if(isobj(O))
+		if(locate(O) in get_contents_in_object(user))
+			O.make_invisible(INVISIBLESPRAY, invisible_time, 1)
+		else
+			O.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_LEVEL_TWO)
 		to_chat(user, "You spray \the [O] with \the [src].")
-		O.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_LEVEL_TWO)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
@@ -393,7 +396,7 @@
 	if(istype(target, /obj/machinery/singularity))
 		animate(target, color = grayscale, time = 6 SECONDS)
 		return 0
-	return 1
+	return 1	
 
 /obj/item/weapon/invisible_spray/permanent
 	desc = "A can of... invisibility?"

@@ -140,23 +140,23 @@
 	return 0
 
 /obj/item/t_scanner_expose()
-	if (level != LEVEL_BELOW_FLOOR)
-		return
+	if (level > LEVEL_BELOW_FLOOR)
+		..()
+	else
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		invisibility = 0
+		alpha = 127
+		plane = initial(plane)
+		layer = initial(layer)
 
-	var/old_alpha = alpha
-	var/old_invisibility = invisibility
-	invisibility = 0
-	alpha = 127
-	plane = initial(plane)
-	layer = initial(layer)
-
-	spawn(1 SECONDS)
-		var/turf/U = loc
-		if(istype(U) && U.intact)
-			invisibility = old_invisibility
-			plane = ABOVE_PLATING_PLANE
-			layer = FLOORBOARD_ITEM_LAYER
-		alpha = old_alpha
+		spawn(1 SECONDS)
+			var/turf/U = loc
+			if(istype(U) && U.intact)
+				invisibility = old_invisibility
+				plane = ABOVE_PLATING_PLANE
+				layer = FLOORBOARD_ITEM_LAYER
+			alpha = old_alpha
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -422,6 +422,7 @@
 
 // called when this item is added into a storage item, which is passed on as S. The loc variable is already set to the storage item.
 /obj/item/proc/on_enter_storage(obj/item/weapon/storage/S as obj)
+	invisibility = 0
 	return
 
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
