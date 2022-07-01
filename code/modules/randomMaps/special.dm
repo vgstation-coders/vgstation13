@@ -175,7 +175,7 @@
 			height = 0
 			return
 
-		overwriting = input(usr, "Do you want these vaults to overwrite their area?", "Vault Overwriting", "Yes", "No") == "Yes"
+		overwriting = alert(usr, "Do you want these vaults to overwrite their area?", "Vault Overwriting", "Yes", "No") == "Yes"
 
 /datum/map_element/customizable/vault_placement/initialize()
 	if(!location)

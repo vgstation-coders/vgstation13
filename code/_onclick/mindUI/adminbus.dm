@@ -506,7 +506,7 @@
 	var/mob/M = GetUser()
 	if (M && istype(M.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 		var/obj/structure/bed/chair/vehicle/adminbus/A = M.locked_to
-		A.mass_rejuvinate(M)
+		A.mass_rejuvenate(M)
 
 //------------------------------------------------------------
 

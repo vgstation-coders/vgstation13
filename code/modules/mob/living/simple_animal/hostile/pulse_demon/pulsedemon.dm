@@ -1,3 +1,5 @@
+#define PULSEDEMON_APC_CHARGE_MULTIPLIER 2
+
 /mob/living/simple_animal/hostile/pulse_demon
 	name = "pulse demon"
 	desc = "A strange electrical apparition that lives in wires."
@@ -24,13 +26,14 @@
 	speed = 1
 	flying = 1
 	size = SIZE_TINY
+	density = 0 //people walk over you isntead of bumping
 
 	attacktext = "electrocutes"
 	attack_sound = "sparks"
 	harm_intent_damage = 0
 	melee_damage_lower = 0
 	melee_damage_upper = 0											//Handled in unarmed_attack_mob() anyways
-	pass_flags = PASSDOOR											//Stops the message spam
+	pass_flags = PASSDOOR //| PASSMOB									//Stops the message spam
 
 	//VARS
 	var/charge = 1000												//Charge stored
@@ -45,6 +48,7 @@
 	var/can_leave_cable = FALSE										//For the ability that lets you
 	var/draining = TRUE												//For draining power or not
 	var/move_divide = 4												//For slowing down of above
+	var/powerloss_alerted = FALSE									//Prevent spam notifying
 
 	//TYPES
 	var/area/controlling_area										// Area controlled from an APC
@@ -71,7 +75,7 @@
 		if(istype(current_power,/obj/machinery/power/apc))
 			controlling_area = get_area(current_power)
 		forceMove(current_power)
-	set_light(2,2,"#bbbb00")
+	set_light(1.5,2,"#bbbb00")
 	add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
 	add_spell(new /spell/pulse_demon/toggle_drain, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
 	for(var/pd_spell in getAllPulseDemonSpells())
@@ -117,16 +121,41 @@
 	if(statpanel("Status"))
 		stat(null, text("Charge stored: [charge]W"))
 		stat(null, text("Max charge stored: [maxcharge]W"))
+		
+/mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
+	var/range = 2 + (log(2,charge+1)-log(2,50000)) / 2
+	range = max(range, 1.5)  //negative lights due to logarithms when?
+	//1.5 <= 25k
+	//2   at 50k
+	//2.5 at 100k
+	//3   at 200k
+	//3.5 at 400k, etc
+	set_light(range, 2, "#bbbb00")
 
-/mob/living/simple_animal/hostile/pulse_demon/Life()
-	// Add the regen rate unless it puts us over max health, then just cap it off
+/mob/living/simple_animal/hostile/pulse_demon/proc/power_lost()
+	health -= health_drain_rate
+	if(!powerloss_alerted)
+		to_chat(src, "You have lost power!")
+		powerloss_alerted = TRUE
+		//TODO add a sound
+	
+/mob/living/simple_animal/hostile/pulse_demon/proc/power_restored()
 	var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
+	if(health < maxHealth)
+		health += health_to_add
+	if(powerloss_alerted)
+		to_chat(src, "Power restored.")
+		powerloss_alerted = FALSE
+		//TODO add a sound
+	
+/mob/living/simple_animal/hostile/pulse_demon/Life()
+	update_glow()
 	if(current_cable)
 		if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
-			health -= health_drain_rate
-		else if(health < maxHealth && draining)
+			power_lost()
+		else
+			power_restored()
 			current_cable.add_load(amount_per_regen, POWER_PRIORITY_BYPASS)
-			health += health_to_add
 	else if(current_power)
 		if(istype(current_power,/obj/machinery/power/battery) && draining)
 			var/obj/machinery/power/battery/current_battery = current_power
@@ -134,11 +163,11 @@
 		else if(istype(current_power,/obj/machinery/power/apc) && draining)
 			var/obj/machinery/power/apc/current_apc = current_power
 			drainAPC(current_apc)
-		if(current_power.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
-			health -= health_drain_rate
-		else if(health < maxHealth && draining)
-			current_cable.add_load(amount_per_regen, POWER_PRIORITY_BYPASS)
-			health += health_to_add
+		if(current_power.avail() < amount_per_regen)
+			power_lost()
+		else
+			power_restored()
+			//current_cable.add_load(amount_per_regen, POWER_PRIORITY_BYPASS) //TODO fix this, current cable is null and runtimes; i have no idea where else to draw power from
 	else if(can_leave_cable) // Health drains if not on cable with leaving ability on
 		health -= health_drain_rate
 	else
@@ -151,7 +180,9 @@
 	..()
 	var/turf/T = get_turf(src)
 	spark(src,rand(2,4))
-	empulse(T,charge/50000,charge/25000)
+	var/heavyemp_radius = min(charge/50000, 20)
+	var/lightemp_radius = min(charge/25000, 25)
+	empulse(T, heavyemp_radius, lightemp_radius)
 	playsound(T,"pd_wail_sound",50,1)
 	qdel(src) // We vaporise into thin air
 
@@ -173,7 +204,7 @@
 	if(new_power)
 		current_power = new_power
 		current_cable = null
-		loc = new_power
+		forceMove(new_power.loc)
 		playsound(src,'sound/weapons/electriczap.ogg',50, 1)
 		spark(src,rand(2,4))
 		if(istype(current_power,/obj/machinery/power/apc))
@@ -256,7 +287,9 @@
 
 	else
 		playsound(loc, "[pick(emote_sound)]", 50, 1) // Play sound if in an intercom or not
-		if(!istype(loc,/obj/item/device/radio)) // Speak via radios, including intercoms
+		var/radio = locate(/obj/item/device/radio) in loc
+		var/holopad = locate(/obj/machinery/hologram/holopad) in loc
+		if(!radio && !holopad) // if not in a machine you can speak out of, just sizzle 
 			emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
 			return 1 // To stop speaking normally
 
@@ -288,6 +321,12 @@
 	if(!is_under_tile())
 		visible_message("<span class ='notice'>[user] attempted to taste \the [src], for no particular reason, and got rightfully burned.</span>")
 		shockMob(user)
+		
+/mob/living/simple_animal/hostile/pulse_demon/PreImpact(atom/movable/A, speed) //don't get hit by thrown stuff
+	return TRUE
+  
+/mob/living/simple_animal/hostile/pulse_demon/electrocute_act() //don't get killed by powercreeper vines
+	return
 
 // Our one weakness
 /mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
@@ -379,12 +418,10 @@
 	if(current_battery.charge <= amount_to_drain)
 		amount_to_drain = current_battery.charge
 	if(maxcharge <= max_can_absorb && charge >= maxcharge)
-		maxcharge += amount_to_drain
-	else if(charge >= maxcharge)
-		amount_to_drain = 0
-	current_battery.charge -= amount_to_drain
+		maxcharge = min(maxcharge + amount_to_drain, max_can_absorb)
 	var/amount_added = min((maxcharge-charge),amount_to_drain)
 	charge += amount_added
+	current_battery.charge -= amount_added
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
@@ -393,24 +430,20 @@
 
 // This too
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
-	// Was too pitiful at normal level, this should now allow a maximum of 400kw from the best power cells, just below 600kw from best SME
-	max_can_absorb = current_apc.cell.maxcharge * 10
+	//draining APC batteries has no upper limit on maxpower due to uhhh galvanic isolation
 	var/amount_to_drain = charge_absorb_amount
 	// Cap conditions
 	if(current_apc.cell.charge <= amount_to_drain)
 		amount_to_drain = current_apc.cell.charge
-	if(maxcharge <= max_can_absorb && charge >= maxcharge)
-		maxcharge += amount_to_drain
-	else if(charge >= maxcharge)
-		amount_to_drain = 0
+	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
+	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
-	var/amount_added = min((maxcharge-charge),amount_to_drain)
-	charge += amount_added
+	
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
 		if(PD)
-			PD.charge_absorbed += amount_added
+			PD.charge_absorbed += amount_to_drain
 
 // Helper for client image managing
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()

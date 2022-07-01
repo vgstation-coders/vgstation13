@@ -649,14 +649,14 @@ var/const/MAX_SAVE_SLOTS = 16
 		if(SPECIAL_ROLES_SETUP)
 			dat = configure_special_roles(dat, user)
 
-	dat += "<br><hr>"
+	dat += "<div style='float:none;'><br><hr><center>"
 
 	if(!IsGuestKey(user.key))
-		dat += {"<center><a href='?_src_=prefs;preference=load'>Undo</a> |
+		dat += {"<a href='?_src_=prefs;preference=load'>Undo</a> |
 			<a href='?_src_=prefs;preference=save'>Save Setup</a> | "}
 
 	dat += {"<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>
-		</center></body></html>"}
+		</center></div></body></html>"}
 
 	//user << browse(dat, "window=preferences;size=560x580")
 	var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 680, 640)
@@ -795,39 +795,6 @@ var/const/MAX_SAVE_SLOTS = 16
 /datum/preferences/proc/ResetJobs()
 	jobs.Cut()
 
-/datum/preferences/proc/SetRole(var/mob/user, var/list/href_list)
-	var/role_id = href_list["role_id"]
-//	to_chat(user, "<span class='info'>Toggling role [role_id] (currently at [roles[role_id]])...</span>")
-	if(!(role_id in special_roles))
-		to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
-		return 0
-
-	if(roles[role_id] == null || roles[role_id] == "")
-		roles[role_id] = 0
-
-	var/question={"Would you like to be \a [role_id] this round?
-
-No/Yes:  Only affects this round.
-Never/Always: Saved for later rounds.
-
-NOTE:  The change will take effect AFTER any current recruiting periods."}
-	var/answer = alert(question,"Role Preference", "Never", "No", "Yes", "Always")
-	var/newval=0
-	switch(answer)
-		if("Never")
-			newval = ROLEPREF_NEVER|ROLEPREF_SAVE
-		if("No")
-			newval = ROLEPREF_NO
-		if("Yes")
-			newval = ROLEPREF_YES
-		if("Always")
-			newval = ROLEPREF_ALWAYS|ROLEPREF_SAVE
-	roles[role_id] = (roles[role_id] & ~ROLEPREF_VALMASK) | newval // We only set the lower 2 bits, leaving polled and friends untouched.
-
-	save_preferences_sqlite(user, user.ckey)
-	save_character_sqlite(user.ckey, user, default_slot)
-
-	return 1
 
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
@@ -1321,7 +1288,6 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 
 				if("save")
 					if(world.timeofday >= (lastPolled + POLLED_LIMIT) || user.client.holder)
-						SetRoles(user,href_list)
 						save_preferences_sqlite(user, user.ckey)
 						save_character_sqlite(user.ckey, user, default_slot)
 						lastPolled = world.timeofday
@@ -1577,9 +1543,7 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 	user << browse(null, "window=saves")
 
 /datum/preferences/proc/configure_special_roles(var/dat, var/mob/user)
-	dat+={"<form method="get">
-	<input type="hidden" name="src" value="\ref[src]" />
-	<input type="hidden" name="preference" value="set_roles" />
+	dat+={"
 	<h1>Special Role Preferences</h1>
 	<p>Please note that this also handles in-round polling for things like Raging Mages and Borers.</p>
 	<fieldset>
@@ -1595,121 +1559,44 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 			<dd>Accept this role for this round and all future rounds. You will not be polled again.</dd>
 		</dl>
 	</fieldset>
-	<h2>TO SAVE YOUR SPECIAL ROLE PREFERENCES, PRESS SUBMIT, NOT SAVE SETUP.</h2>
+	<div id="container" style="overflow:auto;">
+		"}
 
-	<table border=\"0\" padding-left = 20px;>
-		<thead>
-			<tr>
-				<th colspan='6' height = '40px' valign='bottom'><h1>Antagonist Roles</h1></th>
-			</tr>
-		</thead>
-		<tbody>"}
+	for(var/list/table_type in list(antag_roles,nonantag_roles))
+		dat += {"
+			<div id="[table_type == antag_roles ? "left" : "right"]Div" style="width:50%;float:[table_type == antag_roles ? "left" : "right"];">
+			<table border=\"0\" padding-left = 20px;>
+			<tr><th colspan='6' height = '60px' valign='bottom'><h1>[table_type == nonantag_roles ? "Non-" : ""]Antagonist Roles</h1></th></tr>
+			"}
+		if(table_type == antag_roles && isantagbanned(user))
+			dat += "<th colspan='6' text-align = 'center' height = '40px'><h1>You are banned from antagonist roles</h1></th>"
+		else
+			for(var/role_id in table_type)
+				dat += "<tr><td>[capitalize(role_id)]</td>"
+				if(table_type[role_id]) //if mode is available on the server
+					if(jobban_isbanned(user, role_id) || (role_id == "pai candidate" && jobban_isbanned(user, "pAI")))
+						dat += "<td class='bannedColumn' colspan='5'><b>\[BANNED]</b></td>"
+					else
+						var/wikiroute = role_wiki[role_id]
+						var/desire = get_role_desire_str(roles[role_id])
+						dat += {"<td>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>(Wiki)</a>" : "<s>(Wiki)</s>"]</td>
+								<td><a class = 'fullsize clmNeverO[desire == "Never" ? "n" : "ff"]' href='?_src_=prefs;preference=set_roles;[role_id]=[ROLEPREF_NEVER|ROLEPREF_SAVE];'>Never</a></td>
+								<td><a class = 'fullsize clmNoO[desire == "No" ? "n" : "ff"]' href='?_src_=prefs;preference=set_roles;[role_id]=[ROLEPREF_NO|ROLEPREF_SAVE];'>No</a></td>
+								<td><a class = 'fullsize clmYesO[desire == "Yes" ? "n" : "ff"]' href='?_src_=prefs;preference=set_roles;[role_id]=[ROLEPREF_YES|ROLEPREF_SAVE];'>Yes</a></td>
+								<td><a class = 'fullsize clmAlwaysO[desire == "Always" ? "n" : "ff"]' href='?_src_=prefs;preference=set_roles;[role_id]=[ROLEPREF_ALWAYS|ROLEPREF_SAVE];'>Always</a></td>
+						</tr>"}
+		dat += "</table></div>"
+	dat += "</div><br>"
 
-
-	dat += {"<tr>
-				<th><u>Role</u></th>
-				<th>Instructions</th>
-				<th class="clmNever">Never</th>
-				<th class="clmNo">No</th>
-				<th class="clmYes">Yes</th>
-				<th class="clmAlways">Always</th>
-			</tr>"}
-
-	if(isantagbanned(user))
-		dat += "<th colspan='6' text-align = 'center' height = '40px'><h1>You are banned from antagonist roles</h1></th>"
-	else
-		for(var/role_id in antag_roles)
-			dat += "<tr>"
-			dat += "<td>[capitalize(role_id)]</td>"
-			if(antag_roles[role_id]) //if mode is available on the server
-				if(jobban_isbanned(user, role_id))
-					dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
-				else if(role_id == "pai candidate")
-					if(jobban_isbanned(user, "pAI"))
-						dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
-				else
-					var/wikiroute = role_wiki[role_id]
-					var/desire = get_role_desire_str(roles[role_id])
-					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : "None"]</td>
-							<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NEVER|ROLEPREF_SAVE]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
-							<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NO|ROLEPREF_SAVE]" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
-							<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_YES|ROLEPREF_SAVE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
-							<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ALWAYS|ROLEPREF_SAVE]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
-					</tr>"}
-
-	dat += "<th colspan='6' height = '60px' valign='bottom'><h1>Non-Antagonist Roles</h1></th>"
-
-	dat += {"<tr>
-				<th><u>Role</u></th>
-				<th>Instructions</th>
-				<th class="clmNever">Never</th>
-				<th class="clmNo">No</th>
-				<th class="clmYes">Yes</th>
-				<th class="clmAlways">Always</th>
-			</tr>"}
-
-	for(var/role_id in nonantag_roles)
-		dat += "<tr>"
-		dat += "<td>[capitalize(role_id)]</td>"
-		if(nonantag_roles[role_id]) //if mode is available on the server
-			if(jobban_isbanned(user, role_id))
-				dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
-			else if(role_id == "pai candidate")
-				if(jobban_isbanned(user, "pAI"))
-					dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
-			else
-				var/wikiroute = role_wiki[role_id]
-				var/desire = get_role_desire_str(roles[role_id])
-				dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
-						<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NEVER|ROLEPREF_SAVE]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
-						<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NO|ROLEPREF_SAVE]" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
-						<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_YES|ROLEPREF_SAVE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
-						<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ALWAYS|ROLEPREF_SAVE]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
-				</tr>"}
-
-	dat += {"</tbody>
-		</table>
-		<br>
-		<input type="submit" value="Submit" />
-		<input type="reset" value="Reset" />
-		</form>
-		<br>"}
 	return dat
 
 /datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
 	// We just grab the role from the POST(?) data.
-	var/updated = 0
 	for(var/role_id in special_roles)
-		if(!(role_id in href_list))
-			continue
-		var/oldval=text2num(roles[role_id])
-		roles[role_id] = text2num(href_list[role_id])
-		if(oldval!=roles[role_id])
-			updated = 1
-			to_chat(user, "<span class='info'>Set role [role_id] to [get_role_desire_str(user.client.prefs.roles[role_id])]!</span>")
-
-	if(!updated)
-		to_chat(user, "<span class='warning'>No changes to role preferences found!</span>")
-		return 0
-
-	save_preferences_sqlite(user, user.ckey)
-	save_character_sqlite(user.ckey, user, default_slot)
-	return 1
-
-/datum/preferences/Topic(href, href_list)
-	if(!client)
-		return
-	if(!usr)
-		WARNING("No usr on Topic for [client] with href [href]!")
-		return
-	if(client.mob!=usr)
-		to_chat(usr, "YOU AREN'T ME GO AWAY")
-		return
-	switch(href_list["preference"])
-		if("set_roles")
-			return SetRoles(usr, href_list)
-		if("set_role")
-			return SetRole(usr, href_list)
+		if(role_id in href_list)
+			roles[role_id] = text2num(href_list[role_id])
+			ShowChoices(user)
+			return 1
 
 /client/verb/modify_preferences(page as num)
 	set name = "modifypreferences"

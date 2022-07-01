@@ -50,27 +50,41 @@ BREATHALYZER
 		return null
 
 	for(var/turf/T in trange(ray_range, get_turf(src)))
-
 		if(!T.intact)
 			continue
 
-		for(var/obj/O in T.contents)
-			O.t_scanner_expose()
-
-		for(var/mob/living/M in T.contents)
-			var/oldalpha = M.alpha
-			if(M.alpha < 255 && istype(M))
-				M.alpha = 255
-				spawn(10)
-					if(M)
-						M.alpha = oldalpha
-
-		var/mob/living/M = locate() in T
-		if(M && M.invisibility == 2)
-			M.invisibility = 0
-			spawn(10)
-				if(M)
-					M.invisibility = INVISIBILITY_LEVEL_TWO
+		for(var/A in T.contents)
+			if(istype(A,/obj/))
+				var/obj/O = A
+				O.t_scanner_expose()
+			else if(istype(A,/mob/living/carbon))
+				var/mob/living/carbon/C = A
+				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
+					var/old_alpha = C.alpha
+					var/old_invisibility = C.invisibility
+					var/list/old_body_alphas = C.body_alphas.Copy()
+					C.body_alphas.Cut()
+					C.alpha = OPAQUE
+					C.invisibility = 0
+					C.regenerate_icons()
+					spawn(1 SECONDS)
+						if(C)
+							if(length(old_body_alphas))
+								C.body_alphas = old_body_alphas.Copy()
+								C.regenerate_icons()
+							C.alpha = old_alpha
+							C.invisibility = old_invisibility
+			else if(istype(A,/mob/living/))
+				var/mob/living/L = A
+				if(L.alpha < OPAQUE || (L.invisibility > 0 && L.invisibility < INVISIBILITY_OBSERVER))
+					var/old_alpha = L.alpha
+					var/old_invisibility = L.invisibility
+					L.alpha = OPAQUE
+					L.invisibility = 0
+					spawn(1 SECONDS)
+						if(L)
+							L.alpha = old_alpha
+							L.invisibility = old_invisibility
 
 /obj/item/device/t_scanner/advanced
 	name = "\improper P-ray scanner"

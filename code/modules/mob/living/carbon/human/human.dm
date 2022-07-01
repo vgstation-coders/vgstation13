@@ -76,9 +76,8 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/umbra/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc, "Umbra")
-	faction = "grue" //Umbras are friendly with grues
+/mob/living/carbon/human/vampire/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Vampire")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
@@ -367,8 +366,7 @@
 		return get_worn_id_name("Unknown")
 	if( head && head.is_hidden_identity())
 		return get_worn_id_name("Unknown")	//Likewise for hats
-	var/datum/role/vampire/V = isvampire(src)
-	if(V && (locate(/datum/power/vampire/shadow) in V.current_powers) && V.ismenacing)
+	if(istruevampire(src))
 		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_worn_id_name("")
@@ -2266,7 +2264,7 @@
 			return list(
 		if ("Golem")
 			return list(
-		if ("Umbra")
+		if ("Vampire")
 			return list(
 		if ("Slime")
 			return list(

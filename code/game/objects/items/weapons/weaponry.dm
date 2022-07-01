@@ -298,7 +298,7 @@
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
+/obj/item/weapon/melee/bone_hammer/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.delayNextAttack(50) //five times the regular attack delay
 
 /obj/item/weapon/melee/bone_hammer/New(atom/A, var/p_borer = null)

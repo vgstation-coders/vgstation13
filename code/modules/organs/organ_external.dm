@@ -323,7 +323,7 @@
 //This function completely restores a damaged organ to perfect condition
 /datum/organ/external/proc/rejuvenate()
 	damage_state = "00"
-	//Robotic organs stay robotic.  Fix because right click rejuvinate makes IPC's organs organic.
+	//Robotic organs stay robotic.  Fix because right click rejuvenate makes IPC's organs organic.
 	//N3X: Use bitmask to exclude shit we don't want.
 	status = status & (ORGAN_ROBOT|ORGAN_PEG)
 	perma_injury = 0

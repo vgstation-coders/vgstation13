@@ -18,6 +18,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 	var/hmodule = null
+	var/index = 0
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
@@ -73,6 +74,7 @@
 /obj/item/weapon/switchtool/examine(mob/user)
 	..()
 	to_chat(user, "This one is capable of holding [get_formatted_modules()].")
+	to_chat(user, " Use SHIFT+Mousewheel to quickly Swap tools")
 
 /obj/item/weapon/switchtool/attack_self(mob/user)
 	if(!user)
@@ -102,6 +104,22 @@
 		return TRUE
 	else
 		return ..()
+
+/obj/item/weapon/switchtool/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
+	var/modifiers = params2list(params)
+	if (modifiers["shift"])
+		if (delta_y <= 0)
+			index++
+		else
+			index--
+		if (index > stored_modules.len)
+			index = 0
+		if(index < 0)
+			index = stored_modules.len
+		var/moduled = stored_modules[index]
+		undeploy()
+		deploy(moduled, user)
+		edit_deploy(1)
 
 /obj/item/weapon/switchtool/proc/get_module_type(var/module)
 	return copytext(module, 1, findtext(module, ":"))
@@ -180,14 +198,12 @@
 	user.update_inv_hands()
 
 /obj/item/weapon/switchtool/proc/deploy(var/module, mob/user)
-
 	if(!(module in stored_modules))
 		return FALSE
 	if(!stored_modules[module])
 		return FALSE
 	if(deployed)
 		return FALSE
-
 	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	hmodule = get_module_name(module)

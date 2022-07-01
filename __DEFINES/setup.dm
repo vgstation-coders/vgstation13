@@ -113,8 +113,6 @@ var/global/disable_vents     = 0
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
 
-#define FIRE_MINIMUM_TEMPERATURE_TO_SPREAD	150+T0C
-#define FIRE_MINIMUM_TEMPERATURE_TO_EXIST	100+T0C
 #define FIRE_SPREAD_RADIOSITY_SCALE		0.85
 #define FIRE_CARBON_ENERGY_RELEASED	  500000 //Amount of heat released per mole of burnt carbon into the tile
 #define FIRE_PLASMA_ENERGY_RELEASED	 3000000 //Amount of heat released per mole of burnt plasma into the tile
@@ -696,13 +694,10 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
 #define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams.
+#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams
 
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
-
-#define INVISIBILITY_CULTJAUNT 50	//Used by cult
-#define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
+#define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers and objects/spells
 
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
@@ -847,7 +842,7 @@ SEE_PIXELS	256
 #define R_POSSESS		64
 #define R_PERMISSIONS	128
 #define R_STEALTH		256
-#define R_REJUVINATE	512
+#define R_REJUVENATE	512
 #define R_VAREDIT		1024
 #define R_SOUNDS		2048
 #define R_SPAWN			4096
@@ -1359,7 +1354,7 @@ var/proccalls = 1
 #define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
-#define CHANNEL_UMBRA				1021	//only ever used to allow the ambient umbra sound to be made to stop playing
+#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024

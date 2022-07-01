@@ -31,7 +31,6 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-	var/multiz = FALSE //Don't even boot up multiz if we don't need it.
 
 	//Center of thunderdome admin room
 	var/tDomeX = 0

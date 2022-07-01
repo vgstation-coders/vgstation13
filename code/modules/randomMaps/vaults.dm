@@ -144,6 +144,7 @@
 
 	var/list/spawned = list()
 	var/successes = 0
+	var/list/invalid_bounds = list() // Previously we just removed everything in these bounds from valid_spawn_points, which costed about a second or two during placement, now totally eliminated.
 
 	while(map_element_objects.len)
 		var/datum/map_element/ME = pick(map_element_objects)
@@ -177,7 +178,7 @@
 					var/turf/t2 = locate(T.x + conflict.width, T.y + conflict.height, T.z) //Corner #2: Old vault's coordinates plus old vault's dimensions
 
 					//A rectangle defined by corners #1 and #2 is marked as invalid spawn area
-					valid_spawn_points.Remove(block(t1, t2))
+					invalid_bounds[t1] = t2
 
 			if(POPULATION_SCARCE)
 				//This method is much cheaper but results in less accuracy. Bad spawn areas will be removed later - when the new vault is created
@@ -198,7 +199,13 @@
 			sanity++
 			new_spawn_point = pick(valid_spawn_points)
 			valid_spawn_points.Remove(new_spawn_point)
-			if(filter_function && !call(filter_function)(ME, new_spawn_point))
+			var/inbounds = FALSE
+			for(var/turf/start in invalid_bounds) // And begin the invalid bounds checking. Might look like extra work, but is much faster than just removing blocks of spawn points.
+				var/turf/end = invalid_bounds[start]
+				if(start && end && new_spawn_point.x >= start.x && new_spawn_point.y >= start.y && new_spawn_point.x <= end.x && new_spawn_point.y <= end.y)
+					inbounds = TRUE
+					break
+			if(inbounds || (filter_function && !call(filter_function)(ME, new_spawn_point)))
 				new_spawn_point = null
 				filter_counter++
 				continue
@@ -215,11 +222,14 @@
 		if(population_density == POPULATION_SCARCE)
 			var/turf/t1 = locate(max(1, vault_x - MAX_VAULT_WIDTH - 1), max(1, vault_y - MAX_VAULT_HEIGHT - 1), vault_z)
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
-			valid_spawn_points.Remove(block(t1, t2))
+			invalid_bounds[t1] = t2
 
+		var/timestart = world.timeofday
 		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
+			var/timetook2load = world.timeofday - timestart
 			spawned.Add(ME)
-			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
+			log_debug("Loaded [ME.file_path] in [timetook2load / 10] seconds at ([vault_x],[vault_y],[vault_z])[(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].",FALSE)
+			message_admins("<span class='info'>Loaded [ME.file_path] in [timetook2load / 10] seconds: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].</span>")
 			if(!ME.can_rotate)
 				message_admins("<span class='info'>[ME.file_path] was not rotated, can_rotate was set to FALSE.</span>")
 			else if(config.disable_vault_rotation)

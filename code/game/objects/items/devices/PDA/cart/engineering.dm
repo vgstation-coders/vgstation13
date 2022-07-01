@@ -55,19 +55,16 @@
                         var/obj/machinery/power/apc/A = term.master
                         L += A
 
-
-                menu += {"<PRE>Total power: [format_watts(connected_powernet.avail)]<BR>Total load:  [format_watts(connected_powernet.viewload)]<BR>
-                    <FONT SIZE=-1>"}
+                menu += "<PRE>Total power: [format_watts(connected_powernet.avail)]<BR>Total load:  [format_watts(connected_powernet.viewload)]<BR><FONT SIZE=-1>"
                 if(L.len > 0)
-                    menu += "Area                           Eqp./Lgt./Env.  Load   Cell<HR>"
-
+                    menu += "             Area              Eqp./Lgt./Env.    Load    Cell<HR>"
                     var/list/S = list(" Off","AOff","  On", " AOn")
                     var/list/chg = list("N","C","F")
 
                     for(var/obj/machinery/power/apc/A in L)
                         var/area/APC_area = get_area(A)
-                        menu += copytext(add_tspace(APC_area.name, 30), 1, 30)
-                        menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 6)]  [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
+                        menu += copytext(add_tspace(trim_left(APC_area.name), 30), 1, 31)
+                        menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(format_watts(A.lastused_total), 9)] [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
 
                 menu += "</FONT></PRE>"
     return menu

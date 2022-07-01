@@ -124,11 +124,19 @@
 	var/time = 5 MINUTES
 	var/include_clothes = FALSE
 
-/obj/item/potion/invisibility/imbibe_effect(mob/user)
-	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
+/obj/item/potion/invisibility/imbibe_effect(mob/living/carbon/human/user)
+	user.make_invisible(INVISIBLEPOTION, time, include_clothes, 1, INVISIBILITY_LEVEL_TWO)
 
-/obj/item/potion/invisibility/impact_atom(obj/target)
-	target.make_invisible(INVISIBLEPOTION, time, 1, INVISIBILITY_MAXIMUM)
+/obj/item/potion/invisibility/impact_atom(atom/movable/target)
+	if(istype(target, /obj/))
+		var/obj/O = target
+		O.make_invisible(INVISIBLEPOTION, time, 1, INVISIBILITY_LEVEL_TWO)
+	if(istype(target, /mob/living/carbon))
+		var/mob/C = target
+		C.make_invisible(INVISIBLEPOTION, time, include_clothes, 1, INVISIBILITY_LEVEL_TWO)
+	if(istype(target, /mob/))
+		var/mob/M = target
+		M.make_invisible(INVISIBLEPOTION, time, include_clothes, 1, INVISIBILITY_LEVEL_TWO)
 
 /obj/item/potion/invisibility/major
 	name = "potion of major invisibility"
@@ -196,7 +204,7 @@
 	var/static/list/possible_types = list(
 		/mob/living/simple_animal/construct/armoured,
 		/mob/living/simple_animal/hostile/gremlin,
-		/mob/living/simple_animal/hostile/necromorph,
+		/mob/living/simple_animal/hostile/necro/necromorph,
 		/mob/living/simple_animal/hostile/asteroid/goliath,
 		/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,
