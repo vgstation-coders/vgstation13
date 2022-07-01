@@ -17,7 +17,7 @@
 # +BAN = the ability to ban, jobban and fullban
 # +STEALTH = the ability to stealthmin (make yourself appear with a fake name to everyone but other admins
 # +POSSESS = the ability to possess objects
-# +REJUV (or +REJUVINATE) = the ability to heal, respawn, modify damage and use godmode
+# +REJUV (or +REJUVENATE) = the ability to heal, respawn, modify damage and use godmode
 # +BUILD (or +BUILDMODE) = the ability to use buildmode
 # +SERVER = higher-risk admin verbs and abilities, such as those which affect the server configuration.
 # +DEBUG = debug tools used for diagnosing and fixing problems. It's useful to give this to coders so they can investigate problems on a live server.
