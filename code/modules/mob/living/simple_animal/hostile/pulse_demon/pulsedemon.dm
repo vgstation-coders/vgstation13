@@ -46,7 +46,7 @@
 	var/can_leave_cable = FALSE										//For the ability that lets you
 	var/draining = TRUE												//For draining power or not
 	var/move_divide = 4												//For slowing down of above
-	var/powerloss_alerted = 0										//Prevent spam notifying
+	var/powerloss_alerted = FALSE									//Prevent spam notifying
 
 	//TYPES
 	var/area/controlling_area										// Area controlled from an APC
@@ -124,7 +124,7 @@
 	health -= health_drain_rate
 	if(!powerloss_alerted)
 		to_chat(src, "You have lost power!")
-		powerloss_alerted = 1
+		powerloss_alerted = TRUE
 		//TODO add a sound
 		
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
@@ -147,7 +147,7 @@
 		health += health_to_add
 	if(powerloss_alerted)
 		to_chat(src, "Power restored.")
-		powerloss_alerted = 0
+		powerloss_alerted = FALSE
 		//TODO add a sound
 	
 /mob/living/simple_animal/hostile/pulse_demon/Life()
