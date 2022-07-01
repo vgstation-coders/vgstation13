@@ -371,15 +371,17 @@ var/list/map_dimension_cache = list()
 /dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate)
 	if(!path)
 		return
+	var/timestart = world.timeofday
 	var/atom/instance
 	_preloader.setup(attributes, path)
 
+	var/turf/T = locate(x,y,z)
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
-		var/turf/oldTurf = locate(x,y,z)
-		if(path != oldTurf.type)
-			instance = oldTurf.ChangeTurf(path, allow = 1)
+		if(path != T.type)
+			instance = T.ChangeTurf(path, allow = 1)
+			T = instance
 	else
-		instance = new path (locate(x,y,z))//first preloader pass
+		instance = new path (T)//first preloader pass
 
 	// Stolen from shuttlecode but very good to reuse here
 	if(rotate && instance)
@@ -388,6 +390,9 @@ var/list/map_dimension_cache = list()
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
 
+	var/timetook2instance = world.timeofday - timestart
+	if(timetook2instance > 1)
+		log_debug("Slow atom instance. [instance] ([instance.type]) at [T?.x],[T?.y],[T?.z] took [timetook2instance/10] seconds to instance.")
 	return instance
 
 //text trimming (both directions) helper proc
