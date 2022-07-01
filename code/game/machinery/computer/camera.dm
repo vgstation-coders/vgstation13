@@ -233,6 +233,15 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	light_color = null
 
+/obj/machinery/computer/security/telescreen/entertainment/proc/lotto_announce(var/list/winning_numbers)
+	if(!winning_numbers || !winning_numbers.len)
+		return
+	say("Hello and welcome to another edition of Central Command's Grand Slam -Stellar- Lottery. The numbers are now due to be announced.")
+	spawn(8 SECONDS)
+		for(var/i in 1 to winning_numbers.len)
+			spawn(2 SECONDS)
+				say("[i < winning_numbers.len ? "T" : "And finally t"]he [i]\th number[i == 1 ? " of the draw" : ""] is [winning_numbers[i]].[i == winning_numbers.len ? " Be sure to collect any winnings. This concludes another edition of the Central Command Grand Slam -Stellar- Lottery." : ""]")
+
 /obj/machinery/computer/security/telescreen/entertainment/spesstv
 	name = "low-latency Spess.TV CRT monitor"
 	desc = "An ancient computer monitor. They don't make them like they used to. A sticker reads: \"Come be their hero\"."
@@ -241,6 +250,9 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	network = list(CAMERANET_SPESSTV)
 	density = TRUE
 	tgui_interface = "SpessTVCameraConsole"
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/lotto_announce(var/list/winning_numbers)
+	return
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/ui_act(action, list/params)
 	. = ..()
