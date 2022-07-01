@@ -290,7 +290,7 @@
 	else
 		playsound(loc, "[pick(emote_sound)]", 50, 1) // Play sound if in an intercom or not
 		var/radio = locate(/obj/item/device/radio) in loc
-		var/holopad = locate(/obj/machinery/hologram/holopad/) in loc
+		var/holopad = locate(/obj/machinery/hologram/holopad) in loc
 		if(!radio && !holopad) // if not in a machine you can speak out of, just sizzle 
 			emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
 			return 1 // To stop speaking normally
