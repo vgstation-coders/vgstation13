@@ -15,7 +15,7 @@ var/list
 					"hsbwater	tank" = "Spawn Water Tank",
 					"hsbtoolbox" = "Spawn Toolbox",
 					"hsbmedkit" = "Spawn Medical Kit",
-					"revive" = "Rejuvinate")
+					"revive" = "Rejuvenate")
 
 /mob/var/datum/hSB/sandbox = null
 /mob/proc/CanBuild()
