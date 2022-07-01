@@ -65,11 +65,11 @@
 #define PLANT_PRODUCTION (1<<0)
 #define PLANT_MATURATION (1<<1)
 #define PLANT_SPREAD (1<<2)
-#define PLANT_HARVEST (1<<3)
+#define PLANT_HARVEST (1<<3) //note that auto_harvest = 2 is unused
 #define PLANT_YIELD (1<<4)
 
 //Xenophysiology
 #define PLANT_TELEPORT (1<<0)
 #define PLANT_ROOMTEMP (1<<1)
 #define PLANT_GAS (1<<2)
-#define PLANT_NOREACT (1<<3)
+#define PLANT_NOREACT (1<<3) //unique to xeno plants, unused
