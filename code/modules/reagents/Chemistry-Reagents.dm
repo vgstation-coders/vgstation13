@@ -2452,9 +2452,6 @@
 				H.custom_pain("Your [E] burn horribly!", 1)
 				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
-//Reagents used for plant fertilizers.
-//WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?
-
 /datum/reagent/fertilizer
 	name = "fertilizer"
 	id = FERTILIZER
@@ -2502,9 +2499,9 @@
 	..()
 	T.add_nutrientlevel(1)
 	if(prob(25*custom_plant_metabolism))
-		T.add_weedlevel(3)
+		T.add_weedlevel(10)
 	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
-		T.add_pestlevel(3)
+		T.add_pestlevel(10)
 	if(T.seed && !T.dead && !T.seed.immutable)
 		var/chance
 		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
@@ -6784,7 +6781,7 @@ var/procizine_tolerance = 0
 		var/mob/living/carbon/human/H = M
 		if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
 			var/turf/T = get_turf(H)
-			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = MOB_PLANE)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
 			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
 			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
 			if(H.w_uniform)

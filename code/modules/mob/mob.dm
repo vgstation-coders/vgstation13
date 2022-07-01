@@ -2107,7 +2107,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/make_visible(var/source_define)
 	if(!invisibility && alpha == 255 || !source_define)
 		return
-	if(src)
+	if(src && alphas[source_define])
 		invisibility = 0
 		alphas.Remove(source_define)
 		handle_alpha()
