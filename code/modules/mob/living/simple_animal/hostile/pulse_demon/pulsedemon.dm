@@ -120,26 +120,22 @@
 		stat(null, text("Charge stored: [charge]W"))
 		stat(null, text("Max charge stored: [maxcharge]W"))
 		
+/mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
+	var/range = 2 + (log(2,charge+1)-log(2,50000)) / 2
+	range = max(range, 1.5)  //negative lights due to logarithms when?
+	//1.5 <= 25k
+	//2   at 50k
+	//2.5 at 100k
+	//3   at 200k
+	//3.5 at 400k, etc
+	set_light(range, 2, "#bbbb00")
+
 /mob/living/simple_animal/hostile/pulse_demon/proc/power_lost()
 	health -= health_drain_rate
 	if(!powerloss_alerted)
 		to_chat(src, "You have lost power!")
 		powerloss_alerted = TRUE
 		//TODO add a sound
-		
-/mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
-	var/range = 1.5 
-	if(charge <= 50000) //why isn't there a log function, i guess i could have used len(str()) but that's fucking stupid
-		range = 1.5
-	else if(charge <= 100000)
-		range = 2
-	else if(charge <= 200000)
-		range = 2.5
-	else if(charge <= 400000)
-		range = 3
-	else
-		range = 3.5
-	set_light(range, 2, "#bbbb00")
 	
 /mob/living/simple_animal/hostile/pulse_demon/proc/power_restored()
 	var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
