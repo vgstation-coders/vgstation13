@@ -3733,7 +3733,6 @@ var/global/num_vending_terminals = 1
 	icon_state = "Lotto"
 	icon_vend = "Lotto-vend"
 	products = list(
-		/obj/item/weapon/paper/lotto_numbers = 20,
 		/obj/item/toy/lotto_ticket/gold_rush = 20,
 		/obj/item/toy/lotto_ticket/diamond_hands = 20,
 		/obj/item/toy/lotto_ticket/phazon_fortune = 20
@@ -3757,6 +3756,8 @@ var/station_jackpot = 1000000
 /obj/machinery/vending/lotto/examine(mob/user)
 	..()
 	to_chat(user,"<span class='notice'>Today's winning jackpot is [station_jackpot >= 1000000 ? "[round(station_jackpot/1000000,0.1)]m" : station_jackpot] credits!</span>")
+	if(winning_numbers && winning_numbers.len)
+		to_chat(user,"<span class='notice'>The winning numbers are [english_list(winning_numbers)]</span>")
 
 #define LOTTO_SAMPLE 6
 #define LOTTO_BALLCOUNT 32 //lottery is a topdefine/bottomdefine system
