@@ -1,6 +1,6 @@
 /datum/event/money_lotto
-	endWhen = 61
-	startWhen = 60
+	endWhen = 360
+	startWhen = 300
 	announceWhen = 1
 	var/list/winning_numbers = list()
 
