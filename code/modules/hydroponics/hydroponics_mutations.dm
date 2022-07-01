@@ -18,7 +18,6 @@
 
 	check_for_divergence()
 
-
 	//The scaling functions modify stats with diminishing returns, approaching the hardcap value
 	//15% is currently default for the maximum change in most cases
 	//Log function so can't be equal to or less than 0, there are special cases where below a threshold the value is set to 0
