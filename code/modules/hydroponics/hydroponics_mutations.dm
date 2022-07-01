@@ -222,8 +222,10 @@
 						visible_message("<span class='notice'>\The [seed.display_name] recedes into the tray.</span>")
 				if(PLANT_HARVEST)
 					var/new_harvest
-					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
-					new_harvest = seed.harvest_repeat % 2 + 1
+					if(seed.harvest_repeat == 2)
+						new_harvest = 1
+					else
+						new_harvest = !seed.harvest_repeat
 					if(seed.harvest_repeat < new_harvest)
 						visible_message("<span class='notice'>\The [seed.display_name] roots deep and sprouts new stalks!</span>")
 					else
@@ -260,8 +262,6 @@
 				if(PLANT_ROOMTEMP)
 					seed.alter_temp = !seed.alter_temp
 					generic_mutation_message("rustles!")
-				if(PLANT_NOREACT)
-					seed.noreact = !seed.noreact
 
 //Returns a key corresponding to an entry in the global seed list.
 /datum/seed/proc/get_mutant_variant()
