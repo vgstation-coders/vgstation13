@@ -100,16 +100,14 @@
 			if(AMC.add_shielding(src))
 				break
 		if(!mapped) // Prevent suicide if it's part of the map
-			if(!priorscan)
-				sleep(20)
-				controllerscan(1)//Last chance
-				return
-			qdel(src)
-		else
-			if(!priorscan)
-				sleep(20)
+			if(priorscan)
+				qdel(src)
+			else
+				spawn(20)
+					controllerscan(1)//Last chance
+		else if(!priorscan)
+			spawn(20)
 				controllerscan(1)
-				return
 
 // Find surrounding unconnected shielding and add them to our controller
 /obj/machinery/am_shielding/proc/assimilate()

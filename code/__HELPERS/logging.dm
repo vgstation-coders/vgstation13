@@ -46,13 +46,14 @@
 	if(config.log_admin_only)
 		admin_diary << html_decode(text_to_log)
 
-/proc/log_debug(text)
+/proc/log_debug(text, send2chat = TRUE)
 	if (!config || config.log_debug) // Sorry, if config isn't loaded we'll assume you want debug output.
 		diary << html_decode("\[[time_stamp()]]DEBUG: [text]")
 
-	for(var/client/C in admins)
-		if(C.prefs.toggles & CHAT_DEBUGLOGS)
-			to_chat(C, "DEBUG: [text]")
+	if(send2chat)
+		for(var/client/C in admins)
+			if(C.prefs.toggles & CHAT_DEBUGLOGS)
+				to_chat(C, "DEBUG: [text]")
 
 /proc/log_sql(text)
 	if (!config || (config && config.log_sql))

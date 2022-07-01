@@ -157,6 +157,7 @@
 /datum/dna/gene/disability/swedish/New()
 	..()
 	block=SWEDEBLOCK
+	speech_filter = new /datum/speech_filter/swedish
 
 /datum/dna/gene/disability/swedish/OnSay(var/mob/M, var/datum/speech/speech)
 	// svedish!

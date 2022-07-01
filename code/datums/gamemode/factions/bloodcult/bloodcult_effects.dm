@@ -145,7 +145,7 @@
 	mouse_opacity = 0
 	icon = 'icons/effects/96x96.dmi'
 	icon_state ="cult_jaunt"
-	invisibility = INVISIBILITY_CULTJAUNT
+	invisibility = SEE_INVISIBLE_LEVEL_TWO
 	alpha = 127
 	layer = NARSIE_GLOW
 	plane = ABOVE_LIGHTING_PLANE
@@ -201,8 +201,8 @@
 			rider = user
 			if (ismob(rider))
 				var/mob/M = rider
-				M.see_invisible = SEE_INVISIBLE_CULTJAUNT
-				M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
+				M.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+				M.see_invisible_override = SEE_INVISIBLE_LEVEL_TWO
 				M.apply_vision_overrides()
 				M.flags |= INVULNERABLE
 	if (packup)
@@ -226,8 +226,8 @@
 				packed.Add(AM)
 				if (ismob(AM))
 					var/mob/M = AM
-					M.see_invisible = SEE_INVISIBLE_CULTJAUNT
-					M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
+					M.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+					M.see_invisible_override = SEE_INVISIBLE_LEVEL_TWO
 					M.apply_vision_overrides()
 					M.flags |= INVULNERABLE
 		if(noncult_victims.len > 0 && activator)

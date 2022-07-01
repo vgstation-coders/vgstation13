@@ -331,7 +331,7 @@ var/list/admin_verbs_mod = list(
 			verbs += admin_verbs_polling
 		if(holder.rights & R_STEALTH)
 			verbs += /client/proc/stealth
-		if(holder.rights & R_REJUVINATE)
+		if(holder.rights & R_REJUVENATE)
 			verbs += admin_verbs_rejuv
 		if(holder.rights & R_SOUNDS)
 			verbs += admin_verbs_sounds

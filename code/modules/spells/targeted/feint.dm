@@ -39,7 +39,7 @@
 			if(!L.put_in_hands(sword))
 				qdel(sword)	//No sword if the wizard doesn't have a free hand
 
-	L.invisibility = INVISIBILITY_MAXIMUM
+	L.invisibility = INVISIBILITY_LEVEL_TWO
 	L.flags |= INVULNERABLE
 	var/old_density = L.density
 	L.setDensity(FALSE)

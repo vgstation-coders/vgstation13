@@ -23,9 +23,6 @@
 	var/nullified = 0
 	var/smitecounter = 0
 
-	var/list/saved_appearances = list()
-	var/datum/human_appearance/initial_appearance
-
 	var/reviving = FALSE
 	var/draining = FALSE
 	var/blood_usable = STARTING_BLOOD
@@ -81,10 +78,6 @@
 	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
 		var/datum/faction/vampire/V = faction
 		V.name_clan(src)
-
-	var/mob/living/carbon/human/H = antag.current
-	initial_appearance = H.my_appearance.Copy()
-	initial_appearance.name = H.real_name
 
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
@@ -256,10 +249,11 @@
 	// Vision-related changes.
 	if (locate(/datum/power/vampire/vision) in current_powers)
 		H.change_sight(adding = SEE_MOBS)
+		H.update_perception()
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.see_in_dark = 8
+		H.update_perception()
 
 /datum/role/vampire/proc/is_mature_or_has_vision()
 	return (locate(/datum/power/vampire/vision) in current_powers) || (locate(/datum/power/vampire/mature) in current_powers)
@@ -307,7 +301,7 @@
 	if(H.stat == DEAD)
 		iscloaking = FALSE
 	if(!iscloaking)
-		H.make_visible(VAMPIRECLOAK,TRUE)
+		H.make_visible(VAMPIRECLOAK)
 		H.color = "#FFFFFF"
 		return FALSE
 
@@ -319,7 +313,7 @@
 		return TRUE
 	else
 		if(H.invisibility > 0)
-			H.make_visible(VAMPIRECLOAK, TRUE)
+			H.make_visible(VAMPIRECLOAK)
 		if(locate(/datum/power/vampire/shadow) in current_powers)
 			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.15))
 		else
@@ -385,11 +379,6 @@
 		smitetemp = -1
 
 	smitecounter = max(0, (smitecounter + smitetemp))
-
-	// At any rate
-	if (smitecounter && H.real_name != initial_appearance.name)
-		H.switch_appearance(initial_appearance) // Reveal us as who we are
-		H.real_name = initial_appearance.name
 
 	switch(smitecounter)
 		if(1 to 30) //just dizziness

@@ -2107,7 +2107,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/make_visible(var/source_define)
 	if(!invisibility && alpha == 255 || !source_define)
 		return
-	if(src)
+	if(src && alphas[source_define])
 		invisibility = 0
 		alphas.Remove(source_define)
 		handle_alpha()
@@ -2207,6 +2207,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(istype(H))
 		if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 			return null
+	if(istruevampire(H))
+		return null
 	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
 	if(istype(C))
 		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)
