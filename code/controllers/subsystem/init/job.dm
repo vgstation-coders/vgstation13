@@ -14,6 +14,9 @@ var/datum/subsystem/job/SSjob
 	job_master = new /datum/controller/occupations()
 	job_master.SetupOccupations()
 	job_master.LoadJobs("config/jobs.txt")
+	funjob_master = new /datum/controller/occupations()
+	funjob_master.SetupOccupations()
+	funjob_master.LoadJobs("config/funnyjobs.txt")
 	for (var/mob/new_player/player in player_list)
 		player.new_player_panel_proc() // adds the Manifest Prediction button to players who were already connected
 	if(!syndicate_code_phrase)

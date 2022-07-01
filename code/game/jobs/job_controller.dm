@@ -1,4 +1,5 @@
 var/global/datum/controller/occupations/job_master
+var/global/datum/controller/occupations/funjob_master
 
 #define FREE_ASSISTANTS 2
 
@@ -136,6 +137,12 @@ var/global/datum/controller/occupations/job_master
 
 /datum/controller/occupations/proc/TogglePriority(var/rank, mob/user)
 	var/datum/job/job = GetJob(rank)
+	if(job in funny_positions)
+		if(user)
+			log_admin("[key_name(user)] has set the priority of the ?!##!#? job to [job.priority].")
+			message_admins("[key_name_admin(user)] has set the priority of the ?!##!#? job to [job.priority].")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The ?!##!#? job is [job.priority ? "now highly requested!" : "no longer highly requested."]</span>")
 	if(job)
 		if(job.priority)
 			job.priority = FALSE

@@ -1120,6 +1120,14 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Captain", "Head of Personnel")
 
+/datum/uplink_item/jobspecific/command/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which, when installed in the Labor Management Console, enables mystery jobs to be hired at the station."
+	item = /obj/item/weapon/disk/jobdisk
+	cost = 10
+	discounted_cost = 6
+	jobs_with_discount = list("Captain", "Head of Personnel")
+
 /datum/uplink_item/jobspecific/command/lawgivermk2
 	name = "Lawgiver Demolition Kit"
 	desc = "A container that comes with a Lawgiver modification kit, converting it into a Demolition variant Lawgiver. Also comes with two spare demolition magazines."
