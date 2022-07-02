@@ -268,7 +268,7 @@
 			spooky.faction = "\ref[user]"
 		else
 			H.zombify(user)
-	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/)
+	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
 		success = TRUE
 		var/living/simple_animal/S = target
 		S.faction = "\ref[user]"
