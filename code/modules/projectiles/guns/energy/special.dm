@@ -213,9 +213,6 @@
 		P.status=setting
 	return 1
 
-#define RAISE_TYPE_ZOMBIE 0
-#define RAISE_TYPE_SKELETON 1
-
 /obj/item/weapon/gun/energy/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
@@ -253,7 +250,7 @@
 		return
 	raisetype = !raisetype
 
-	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
+	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
 	next_change = world.timeofday + 30
 
 /obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user, flag, params, struggle = 0)
@@ -262,14 +259,14 @@
 	var/success = FALSE
 	if(ishuman(target))
 		success = TRUE
-		switch(raisetype)
-			if(RAISE_TYPE_ZOMBIE)
-				H.zombify(user)
-			if(RAISE_TYPE_SKELETON)
-				H.dropBorers()
-				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
-				H.gib()
-				spooky.faction = "\ref[user]"
+		if(raisetype)
+			H.dropBorers()
+			var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
+			H.gib()
+			spooky.faction = "\ref[user]"
+		else
+			var/mob/living/carbon/human/H = target
+			H.zombify(user)
 	else if(isanimal(target) || ismonkey(target))
 		var/mob/living/L = target
 		success = TRUE
@@ -288,7 +285,6 @@
 		S.gib()
 	if(success)
 		make_tracker_effects(get_turf(S), user)
-		charges--
 		if(iswizard(user) || isapprentice(user))
 			user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
 			"BOW BEFORE [pick("MY POWER","ME, [uppertext(H.real_name)]")].",\
@@ -300,12 +296,10 @@
 			"YOUR TIME HAS NOT COME, YET.",\
 			"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 		playsound(src, get_sfx("soulstone"), 50,1)
+		charges--
 
 /obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
 	afterattack(target,user,1)
-
-#undef RAISE_TYPE_ZOMBIE
-#undef RAISE_TYPE_SKELETON
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
