@@ -618,7 +618,6 @@
 		/obj/item/projectile/energy/declone					= 70,	//Decloner bolts
 		/obj/item/projectile/energy/bolt					= 70 ,	//Ebow bolts
 		/obj/item/projectile/energy/buster					= 120,	//20 damage
-		/obj/item/projectile/energy/floramut				= 100,	//floral somatray bolts
 		/obj/item/projectile/kinetic						= 100,	//KA bolts
 		/obj/item/projectile/ricochet						= 100,	//Richochet lasers
 		/obj/item/projectile/spur/polarstar					= 100,	//Polar star

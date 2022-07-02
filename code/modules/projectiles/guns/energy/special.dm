@@ -535,33 +535,45 @@
 	if(emagged)
 		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+			if(do_after(user,tray, 20))
+				for(var/gene in genes)
+					tray.mutate(gene)
 		if(ishuman(target))
 			var/mob/living/carbon/human/H = target
 			if((H.species.flags & IS_PLANT))
 				H.apply_radiation((rand(10,30)),RAD_EXTERNAL)
 				H.Knockdown(5)
 				H.Stun(5)
-				user.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
+				user.show_message("<span class='warning'>[H] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			else
-				M.show_message("<span class='warning'>The radiation beam singes you!</span>")
+				H.show_message("<span class='warning'>The radiation beam singes you!</span>")
 				if(prob(80))
-					randmutb(M)
-					domutcheck(M,null)
+					randmutb(H)
+					domutcheck(H,null)
 				else
-					M.adjustFireLoss(rand(3, 10))
-					randmutg(M)
-					domutcheck(M,null)
+					H.adjustFireLoss(rand(3, 10))
+					randmutg(H)
+					domutcheck(H,null)
+		if(istype(target, /obj/machinery/apiary))
+			var/obj/machinery/apiary/A = target
+			A.angry_swarm()
 	else
 		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-			do_after(user,tray, 20)
-				tray.mutate(genes[mode])
-		if(ishuman(target) && H.species.flags & IS_PLANT)
+			if(do_after(user,tray, 20))
+				tray.mutate((genes[mode]))
+		if(istype(target, /obj/machinery/apiary))
+			var/obj/machinery/apiary/A = target
+			if(!A.yieldmod)
+				A.yieldmod += 1
+			else if (prob(1/(A.yieldmod * A.yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
+				A.yieldmod += 1
+		if(ishuman(target))
 			var/mob/living/carbon/human/H = target
 			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
 				H.nutrition += 30
-		else if (target.client && istype(target, /mob/living/carbon/))
-			target.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
+			else 
+				H.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 
 /obj/item/weapon/gun/energy/meteorgun
 	name = "meteor gun"
