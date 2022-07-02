@@ -538,18 +538,18 @@
 	isSomatoraying = TRUE
 	if(emagged)
 		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-			make_tracker_effects(get_turf(user), get_turf(target))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+			make_tracker_effects(get_turf(user), get_turf(tray))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			if(do_after(user,tray, 10))
 				for(var/gene in genes)
 					if(prob(50))
 						tray.mutate(gene)
 
 		if(ishuman(target))
-			make_tracker_effects(get_turf(user), get_turf(target))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			var/mob/living/carbon/human/H = target
+			make_tracker_effects(get_turf(user), get_turf(H))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			if((H.species.flags & IS_PLANT))
 				H.apply_radiation((rand(10,30)),RAD_EXTERNAL)
 				H.Knockdown(5)
@@ -565,30 +565,30 @@
 					randmutg(H)
 					domutcheck(H,null)
 		if(istype(target, /obj/machinery/apiary))
-			make_tracker_effects(get_turf(user), get_turf(target))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			var/obj/machinery/apiary/A = target
+			make_tracker_effects(get_turf(user), get_turf(A))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			A.angry_swarm()
 	else
 		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+			make_tracker_effects(get_turf(user), get_turf(tray))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			if(do_after(user,tray, 10))
 				if(prob(50))
 					tray.mutate((genes[mode]))
-					make_tracker_effects(get_turf(user), get_turf(target))
-					playsound(user,'sound/effects/stealthoff.ogg', 50)
 		if(istype(target, /obj/machinery/apiary))
-			make_tracker_effects(get_turf(user), get_turf(target))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			var/obj/machinery/apiary/A = target
+			make_tracker_effects(get_turf(user), get_turf(A))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			if(!A.yieldmod)
 				A.yieldmod += 1
 			else if (prob(1/(A.yieldmod * A.yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
 				A.yieldmod += 1
 		if(ishuman(target))
-			make_tracker_effects(get_turf(user), get_turf(target))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			var/mob/living/carbon/human/H = target
+			make_tracker_effects(get_turf(user), get_turf(H))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
 				H.nutrition += 30
 			else 
