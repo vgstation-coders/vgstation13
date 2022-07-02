@@ -253,8 +253,8 @@
 	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
 	next_change = world.timeofday + 30
 
-/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user, flag, params, struggle = 0)
-	if(!charges || istype(target, /mob/living/simple_animal/hostile/necro) || get_dist(target, user) > 7)
+/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user = usr, flag, params, struggle = 0)
+	if(!charges || get_dist(target, user) > 7)
 		return 0
 	var/success = FALSE
 
