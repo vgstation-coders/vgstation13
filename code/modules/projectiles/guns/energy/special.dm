@@ -269,8 +269,8 @@
 			H.zombify(user)
 	else if(isanimal(target) || ismonkey(target))
 		var/mob/living/L = target
-		success = TRUE
 		if(L.stat == DEAD)
+			success = TRUE
 			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user)
 			mG.ghoulifyMeat(L)
 			mG.faction = "\ref[user]"
