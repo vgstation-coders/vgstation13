@@ -270,7 +270,7 @@
 			H.zombify(user)
 	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
 		success = TRUE
-		var/living/simple_animal/S = target
+		var/mob/living/simple_animal/S = target
 		S.faction = "\ref[user]"
 	else if(isanimal(target) || ismonkey(target))
 		var/mob/living/L = target
