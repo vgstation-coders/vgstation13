@@ -503,13 +503,6 @@
 /datum/disease2/effect/catvision/activate(var/mob/living/mob)
 	night_vision_strength = mob.see_in_dark
 
-	if (mob.see_in_dark_override < 9)
-		mob.see_in_dark_override = night_vision_strength + 1
-		if (count == 1)
-			to_chat(mob, "<span class = 'notice'>Your pupils dilate as they adjust for low-light environments.</span>")
-		else
-			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
-
 /datum/disease2/effect/colorsmoke
 	name = "Colorful Syndrome"
 	desc = "Causes the infected to synthesize smoke & rainbow colourant."

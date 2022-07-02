@@ -897,8 +897,6 @@ Suit and assorted
 	if (spaceninja.internals)
 		spaceninja.internals.icon_state = "internal1"
 
-	spaceninja.see_in_dark_override = 8
-
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
 	if(!istype(H))
 		return 0
@@ -920,8 +918,6 @@ Suit and assorted
 	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
-
-	H.see_in_dark_override = 8
 
 	var/datum/role/R = H.mind.GetRole(NINJA)
 	if(R)
