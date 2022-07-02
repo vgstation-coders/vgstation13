@@ -257,6 +257,7 @@
 	if(!charges || istype(target, /mob/living/simple_animal/hostile/necro) || get_dist(target, user) > 7)
 		return 0
 	var/success = FALSE
+
 	if(ishuman(target))
 		success = TRUE
 		var/mob/living/carbon/human/H = target
@@ -267,6 +268,10 @@
 			spooky.faction = "\ref[user]"
 		else
 			H.zombify(user)
+	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/)
+		success = TRUE
+		var/living/simple_animal/S = target
+		S.faction = "\ref[user]"
 	else if(isanimal(target) || ismonkey(target))
 		var/mob/living/L = target
 		if(L.stat == DEAD)
