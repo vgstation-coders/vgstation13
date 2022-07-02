@@ -253,10 +253,7 @@
 	var/mob/M = get_last_player_touched()
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
-		if(H.isDeadorDying())
-			H.zombify(M)
-		else
-			H.become_zombie = TRUE
+		H.zombify(M)
 
 /obj/item/potion/fullness
 	name = "potion of fullness"
