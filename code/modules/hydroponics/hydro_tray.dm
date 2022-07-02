@@ -30,7 +30,6 @@
 
 	// Harvest/mutation mods.
 	var/list/mutation_levels = list()	// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
-	var/is_somatoraying = 0				// Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
 
 	// Mechanical concerns.
 	var/plant_health = 0       // Plant health.
@@ -553,25 +552,6 @@
 						M.gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 						add_nutrientlevel(6)
 						update_icon()
-
-/obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)
-	//Don't act on seeds like dionaea that shouldn't change.
-	if(seed && seed.immutable > 0)
-		return
-
-	//Override for somatoray projectiles.
-	if(!is_somatoraying && istype(Proj, /obj/item/projectile/energy/floramut))
-		is_somatoraying = 1
-		spawn(10)
-			is_somatoraying = 0
-			mutate(GENE_PHYTOCHEMISTRY)
-			return
-	else if(istype(Proj, /obj/item/projectile/energy/florayield))
-		is_somatoraying = 1
-		spawn(10)
-			mutate(GENE_DEVELOPMENT)
-			return
-	..()
 
 /obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
 	if((usr.incapacitated() || !Adjacent(usr)))

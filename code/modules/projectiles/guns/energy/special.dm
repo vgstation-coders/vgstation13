@@ -482,8 +482,9 @@
 	mech_flags = null // So it can be scanned by the Device Analyser
 	modifystate = "floramut"
 	var/charge_tick = 0
-	var/mode = 0 //0 = mutate, 1 = yield boost, 2 = emag-mutate
-	var/mutstrength = 10 //how many units of mutagen will the mutation projectile act as
+	var/mode = 1
+	var/list/genes = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
+	var/emagged = FALSE
 
 /obj/item/weapon/gun/energy/floragun/isHandgun()
 	return TRUE
@@ -492,11 +493,9 @@
 	..()
 	processing_objects.Add(src)
 
-
 /obj/item/weapon/gun/energy/floragun/Destroy()
 	processing_objects.Remove(src)
 	..()
-
 
 /obj/item/weapon/gun/energy/floragun/process()
 	charge_tick++
@@ -509,50 +508,16 @@
 	update_icon()
 	return 1
 
-/obj/item/weapon/gun/energy/floragun/process_chambered()
-	. = ..()
-	if(istype(in_chamber, /obj/item/projectile/energy/floramut))
-		var/obj/item/projectile/energy/floramut/P = in_chamber
-		P.mutstrength = src.mutstrength
-
 /obj/item/weapon/gun/energy/floragun/attack_self(mob/living/user as mob)
-	switch(mode)
-		if(0)
-			mode = 1
-			charge_cost = 100
-			to_chat(user, "<span class='warning'>\The [src] is now set to improve harvests.</span>")
-			projectile_type = "/obj/item/projectile/energy/florayield"
-			modifystate = "florayield"
-		if(1)
-			mode = 0
-			charge_cost = mutstrength * 10
-			to_chat(user, "<span class='warning'>\The [src] is now set to induce mutations.</span>")
-			projectile_type = "/obj/item/projectile/energy/floramut"
-			modifystate = "floramut"
-		if(2)
-			to_chat(user, "<span class='warning'>\The [src] appears to be locked into one mode.</span>")
-			return
-	update_icon()
-	return
-
-/obj/item/weapon/gun/energy/floragun/verb/SetMutationStrength()
-	set name = "Set mutation strength"
-	set category = "Object"
-	if(mode == 2)
-		mutstrength = input(usr, "Enter new mutation strength level (15-25):", "Somatoray Gamma Ray Threshold", mutstrength) as num
-		mutstrength = clamp(round(mutstrength), 15, 25)
-	else
-		mutstrength = input(usr, "Enter new mutation strength level (1-15):", "Somatoray Alpha Ray Threshold", mutstrength) as num
-		mutstrength = clamp(round(mutstrength), 1, 15)
+	//loops through all genes
+	mode = mode % length(genes) + 1
+	to_chat(user, "<span class='warning'>\The [src] is now set to modify [genes[mode]] genes.</span>")
 
 /obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isEmag(W) || issolder(W))
-		if (mode == 2)
+		if (emagged)
 			to_chat(user, "The safeties are already de-activated.")
 		else
-			mode = 2
-			mutstrength = 25
-			charge_cost = mutstrength * 10
 			projectile_type = "/obj/item/projectile/energy/floramut/emag"
 			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
 			desc += " It seems to have it's safety features de-activated."
@@ -560,14 +525,43 @@
 			modifystate = "floraemag"
 			update_icon()
 
-/obj/item/weapon/gun/energy/floragun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		if(process_chambered())
-			user.visible_message("<span class='danger'> \The [user] fires \the [src] into \the [tray]!</span>")
-			Fire(target,user)
-		return
-	..()
+/obj/item/weapon/gun/energy/floragun/attack(atom/movable/target, mob/living/user as mob)
+	make_tracker_effects(get_turf(target), user)
+	afterattack(target,user,1)
+
+/obj/item/weapon/gun/energy/floragun/afterattack(atom/movable/target, mob/living/user, flag, params, struggle = 0)
+	//if(flag)
+	//	return //we're placing gun on a table or in backpack
+	if(emagged)
+		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+			if((H.species.flags & IS_PLANT))
+				H.apply_radiation((rand(10,30)),RAD_EXTERNAL)
+				H.Knockdown(5)
+				H.Stun(5)
+				user.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
+			else
+				M.show_message("<span class='warning'>The radiation beam singes you!</span>")
+				if(prob(80))
+					randmutb(M)
+					domutcheck(M,null)
+				else
+					M.adjustFireLoss(rand(3, 10))
+					randmutg(M)
+					domutcheck(M,null)
+	else
+		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+			do_after(user,tray, 20)
+				tray.mutate(genes[mode])
+		if(ishuman(target) && H.species.flags & IS_PLANT)
+			var/mob/living/carbon/human/H = target
+			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
+				H.nutrition += 30
+		else if (target.client && istype(target, /mob/living/carbon/))
+			target.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 
 /obj/item/weapon/gun/energy/meteorgun
 	name = "meteor gun"
