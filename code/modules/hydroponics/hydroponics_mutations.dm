@@ -15,9 +15,10 @@
 		return
 	if(age < 3 && length(seed.mutants))
 		mutate_species()
+	if(!gene)
+		gene = pick(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
 
 	check_for_divergence()
-
 	//The scaling functions modify stats with diminishing returns, approaching the hardcap value
 	//15% is currently default for the maximum change in most cases
 	//Log function so can't be equal to or less than 0, there are special cases where below a threshold the value is set to 0
