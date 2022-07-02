@@ -1196,7 +1196,7 @@
 			M.losebreath = max(10, M.losebreath - 5)
 
 /datum/reagent/space_drugs
-	name = "Space drugs"
+	name = "Space Drugs"
 	id = SPACE_DRUGS
 	description = "An illegal chemical compound used as drug."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -1594,7 +1594,7 @@
 	T.add_pestlevel(1)
 
 /datum/reagent/sugar/cornsyrup
-	name = "High-fructose corn syrup"
+	name = "High-Fructose Corn Syrup"
 	id = CORNSYRUP
 	description = "For when sugar needs to be produced on a budget, can become so prevalent that everyone will be made to drink it."
 
@@ -1664,7 +1664,7 @@
 		..()
 
 /datum/reagent/sacid
-	name = "Sulphuric acid"
+	name = "Sulphuric Acid"
 	id = SACID
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -1746,7 +1746,7 @@
 	T.add_toxinlevel(10)
 
 /datum/reagent/pacid
-	name = "Polytrinic acid"
+	name = "Polytrinic Acid"
 	id = PACID
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -2000,7 +2000,7 @@
 	density = 1.26
 
 /datum/reagent/mutagen
-	name = "Unstable mutagen"
+	name = "Unstable Mutagen"
 	id = MUTAGEN
 	description = "Might cause unpredictable mutations. Keep away from children."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -2154,7 +2154,7 @@
 	density = 7.874
 
 /datum/reagent/gold
-	name = "Gold powder"
+	name = "Gold Powder"
 	id = GOLD
 	description = "Gold is a dense, soft, shiny metal and the most malleable and ductile metal known."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2163,7 +2163,7 @@
 	density = 19.3
 
 /datum/reagent/silver
-	name = "Silver powder"
+	name = "Silver Powder"
 	id = SILVER
 	description = "A soft, white, lustrous transition metal, it has the highest electrical conductivity of any element and the highest thermal conductivity of any metal."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2197,7 +2197,7 @@
 			new /obj/effect/decal/cleanable/greenglow(T)
 
 /datum/reagent/diamond
-	name = "Diamond dust"
+	name = "Diamond Dust"
 	id = DIAMONDDUST
 	description = "An allotrope of carbon, one of the hardest minerals known."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2215,7 +2215,7 @@
 		M.audible_scream()
 
 /datum/reagent/phazon
-	name = "Phazon salt"
+	name = "Phazon Salt"
 	id = PHAZON
 	description = "The properties of this rare metal are not well-known."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2257,7 +2257,7 @@
 	specheatcap = 0.712
 
 /datum/reagent/fuel
-	name = "Welding fuel"
+	name = "Welding Fuel"
 	id = FUEL
 	description = "Required for welders. Flamable."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -2453,7 +2453,7 @@
 				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
 /datum/reagent/fertilizer
-	name = "fertilizer"
+	name = "Fertilizer"
 	id = FERTILIZER
 	description = "A chemical mix good for growing plants with."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -3970,7 +3970,7 @@ var/procizine_tolerance = 0
 	return ..()
 
 /datum/reagent/nanites/autist
-	name = "Autist nanites"
+	name = "Autist Nanites"
 	id = AUTISTNANITES
 	description = "Microscopic construction robots. They look more autistic than usual."
 	disease_type = DISEASE_MOMMI
@@ -4181,7 +4181,7 @@ var/procizine_tolerance = 0
 //Metal foaming agent
 //This is lithium hydride. Add other recipies (e.g. LiH + H2O -> LiOH + H2) eventually
 /datum/reagent/foaming_agent
-	name = "Foaming agent"
+	name = "Foaming Agent"
 	id = FOAMING_AGENT
 	description = "A agent that yields metallic foam when mixed with light metal and a strong acid."
 	reagent_state = REAGENT_STATE_SOLID
@@ -5342,7 +5342,7 @@ var/procizine_tolerance = 0
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/flour
-	name = "flour"
+	name = "Flour"
 	id = FLOUR
 	description = "This is what you rub all over yourself to pretend to be a ghost."
 	reagent_state = REAGENT_STATE_SOLID
@@ -5363,7 +5363,7 @@ var/procizine_tolerance = 0
 		new /obj/effect/decal/cleanable/flour(T)
 
 /datum/reagent/flour/nova_flour
-	name = "nova flour"
+	name = "Nova Flour"
 	id = NOVAFLOUR
 	description = "This is what you rub all over yourself to set on fire."
 	color = "#B22222" //rgb: 178, 34, 34
@@ -5374,7 +5374,7 @@ var/procizine_tolerance = 0
 	M.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/pancake_mix
-	name = "pancake mix"
+	name = "Pancake Mix"
 	id = PANCAKE
 	description = "A mix of flour, milk, butter, and egg yolk. ready to be cooked into delicious pancakes."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -5725,7 +5725,7 @@ var/procizine_tolerance = 0
 		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/orangejuice
-	name = "Orange juice"
+	name = "Orange Juice"
 	id = ORANGEJUICE
 	description = "Both delicious AND rich in Vitamin C. What more do you need?"
 	color = "#E78108" //rgb: 231, 129, 8
@@ -5791,7 +5791,7 @@ var/procizine_tolerance = 0
 		M.adjustToxLoss(-1)
 
 /datum/reagent/drink/carrotjuice
-	name = "Carrot juice"
+	name = "Carrot Juice"
 	id = CARROTJUICE
 	description = "It's like a carrot, but less crunchy."
 	color = "#FF8820" //rgb: 255, 136, 32
@@ -6121,7 +6121,7 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/cold
 	id = EXPLICITLY_INVALID_REAGENT_ID
-	name = "Cold drink"
+	name = "Cold Drink"
 	adj_temp = -5
 
 /datum/reagent/drink/cold/tonic
@@ -7800,7 +7800,7 @@ var/procizine_tolerance = 0
 	glass_icon_state = "whiskeysodaglass2"
 
 /datum/reagent/ethanol/drink/antifreeze
-	name = "Anti-freeze"
+	name = "Anti-Freeze"
 	id = ANTIFREEZE
 	description = "The ultimate refreshment."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -7861,7 +7861,7 @@ var/procizine_tolerance = 0
 	glass_name = "\improper Gin Fizz"
 
 /datum/reagent/ethanol/drink/bahama_mama
-	name = "Bahama mama"
+	name = "Bahama Mama"
 	id = BAHAMA_MAMA
 	description = "Tropical cocktail."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -8811,14 +8811,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	return
 
 /datum/reagent/roach_shell
-	name = "Cockroach chitin"
+	name = "Cockroach Chitin"
 	id = ROACHSHELL
 	description = "Looks like somebody's been shelling peanuts."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#8B4513"
 
 /datum/reagent/ethanol/drink/greyvodka
-	name = "Greyshirt vodka"
+	name = "Greyshirt Vodka"
 	id = GREYVODKA
 	description = "Made presumably from whatever scrapings you can get out of maintenance. Don't think, just drink."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -8834,7 +8834,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	H.rad_tick = max(H.rad_tick - 3 * REM, 0)
 
 /datum/reagent/mediumcores
-	name = "medium-salted cores"
+	name = "Medium-Salted Cores"
 	id = MEDCORES
 	description = "A derivative of the chemical known as 'Hardcores', easier to mass produce, but at a cost of quality."
 	reagent_state = REAGENT_STATE_SOLID
@@ -8842,7 +8842,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	custom_metabolism = 0.1
 
 /datum/reagent/softcores
-	name = "softcores"
+	name = "Softcores"
 	id = SOFTCORES
 	description = "Lesser known than its cheaper cousin in the popular snack 'mag-bites', softcores have all the benefits of chemical magnetism without the heart-stopping side effects."
 	reagent_state = REAGENT_STATE_SOLID
@@ -8852,7 +8852,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 //Plant-specific reagents
 
 /datum/reagent/kelotane/tannic_acid
-	name = "Tannic acid"
+	name = "Tannic Acid"
 	id = TANNIC_ACID
 	description = "Tannic acid is a natural burn remedy."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -8895,13 +8895,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#CC4303" //rgb: 204, 67, 3
 
 /datum/reagent/stoxin/valerenic_acid
-	name = "Valerenic acid"
+	name = "Valerenic Acid"
 	id = VALERENIC_ACID
 	description = "An herbal sedative used to treat insomnia."
 	color = "#EAB160" //rgb: 234, 177, 96
 
 /datum/reagent/sacid/formic_acid
-	name = "Formic acid"
+	name = "Formic Acid"
 	id = FORMIC_ACID
 	description = "A weak natural acid which causes a burning sensation upon contact."
 	color = "#9B3D00" //rgb: 155, 61, 0
@@ -9314,7 +9314,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	..()
 
 /datum/reagent/degeneratecalcium
-	name = "Degenerate calcium"
+	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
 	description = "A highly radical chemical derived from calcium that aggressively attempts to regenerate osseus tissues it comes in contact with. In the presence of micro-fractures caused by extensive brute damage it rapidly heals the surrounding tissues, but in healthy limbs the new tissue quickly causes the osseal structure to lose shape and shatter rather graphically."
 	reagent_state = REAGENT_STATE_LIQUID
