@@ -1936,7 +1936,7 @@
 		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
 		if(master && master.faction)
-			T.faction = "\ref[user]"
+			T.faction = "\ref[master]"
 		T.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		if(isgrey(src))
 			T.icon_state = "mauled_laborer"

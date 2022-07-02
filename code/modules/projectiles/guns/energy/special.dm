@@ -259,35 +259,36 @@
 	var/success = FALSE
 	if(ishuman(target))
 		success = TRUE
+		var/mob/living/carbon/human/H = target
 		if(raisetype)
 			H.dropBorers()
 			var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
 			H.gib()
 			spooky.faction = "\ref[user]"
 		else
-			var/mob/living/carbon/human/H = target
 			H.zombify(user)
 	else if(isanimal(target) || ismonkey(target))
 		var/mob/living/L = target
 		success = TRUE
 		if(L.stat == DEAD)
-			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(M), user)
-			mG.ghoulifyMeat(M)
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user)
+			mG.ghoulifyMeat(L)
 			mG.faction = "\ref[user]"
-			qdel(M)
+			L.gib()
 		else
 			to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
 	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(S), user, S)
+		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, target)
 		success = TRUE
-		aG.ghoulifyAnimal(S)
+		aG.ghoulifyAnimal(target)
 		aG.faction = "\ref[user]"
-		S.gib()
+		qdel(target)
+
 	if(success)
-		make_tracker_effects(get_turf(S), user)
+		make_tracker_effects(get_turf(target), user)
 		if(iswizard(user) || isapprentice(user))
 			user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
-			"BOW BEFORE [pick("MY POWER","ME, [uppertext(H.real_name)]")].",\
+			"BOW BEFORE [pick("MY POWER","ME, [uppertext(target.name)]")].",\
 			"G'T T'FUK UP.",\
 			"IF YOU DIE, YOU DIE FOR ME.",\
 			"EVEN IN DEATH YOU MAY SERVE.",\
