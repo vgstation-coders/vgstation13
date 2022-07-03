@@ -117,11 +117,9 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/inward_txt = alert("Which way?","Spiral Block", "Inward","Outward")
-	var/inward = inward_txt == "Inward" ? 1 : 0
 	var/shape_txt = alert("What shape?","Spiral Block", "Cube","Octahedron")
 	var/shape = shape_txt == "Cube" ? 1 : 0
-	multi_z_spiral_block(epicenter,max_range,1,shape)
+	multi_z_spiral_block(epicenter,max_range,shape)
 
 // Halves above and below, as per suggestion by deity on how to handle multi-z explosions
 /proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)
