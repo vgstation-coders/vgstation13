@@ -17,7 +17,7 @@
 	if(Compiler)
 		Compiler.GC()
 		Compiler = null
-	,,()
+	..()
 
 /obj/item/weapon/implant/vocal/get_data()
 	return {"
