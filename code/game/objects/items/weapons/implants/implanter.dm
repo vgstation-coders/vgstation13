@@ -147,6 +147,7 @@
 	name = "implanter (V)"
 	desc = "A small device used to apply implants to people."
 	imp_type = /obj/item/weapon/implant/vocal
+	var/storedcode = ""			// code stored
 
 /obj/item/weapon/implanter/vocal/attack_self(mob/user)
 	if(istype(imp,imp_type))
@@ -169,4 +170,9 @@
 			if(input && outputs.len)
 				V.filter.addPickReplacement(input,outputs,casesense)
 		else if(uselevel == "Advanced")
-			return //TODO
+			winshow(user, "Vocal Implant IDE", 1) // show the IDE
+			winset(user, "vicode", "is-disabled=false")
+			winset(user, "vicode", "text=\"\"")
+			var/showcode = replacetext(storedcode, "\\\"", "\\\\\"")
+			showcode = replacetext(storedcode, "\"", "\\\"")
+			winset(user, "vicode", "text=\"[showcode]\"")

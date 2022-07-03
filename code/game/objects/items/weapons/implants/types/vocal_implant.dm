@@ -19,6 +19,27 @@
 		Compiler = null
 	..()
 
+/obj/item/weapon/implant/vocal/proc/setcode(var/t)
+	if(t)
+		if(istext(t))
+			rawcode = t
+
+/obj/item/weapon/implant/vocal/proc/compile(var/mob/user)
+	if(Compiler)
+		admin_log(user)
+		return Compiler.Compile(rawcode)
+
+/obj/item/weapon/implant/vocal/proc/admin_log(var/mob/mob)
+	var/msg = "[key_name(mob)] has compiled a script to a vocal implant"
+
+	diary << msg
+	diary << rawcode
+
+	investigation_log(I_NTSL, "[msg]<br /><pre>[rawcode]</pre>")
+
+	if (length(rawcode)) // Let's not bother the admins for empty code.
+		message_admins("[msg] ([formatJumpTo(mob)])", 0, 1)
+
 /obj/item/weapon/implant/vocal/get_data()
 	return {"
 <b>Implant Specifications:</b><BR>
