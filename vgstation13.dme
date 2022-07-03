@@ -2603,6 +2603,7 @@
 #include "code\modules\scripting\AST\Operators\Unary Operators.dm"
 #include "code\modules\scripting\Implementations\_Logic.dm"
 #include "code\modules\scripting\Implementations\Telecomms.dm"
+#include "code\modules\scripting\Implementations\vocalimplant.dm"
 #include "code\modules\scripting\Interpreter\Evaluation.dm"
 #include "code\modules\scripting\Interpreter\Interaction.dm"
 #include "code\modules\scripting\Interpreter\Interpreter.dm"

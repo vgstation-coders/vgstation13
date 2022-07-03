@@ -2,10 +2,21 @@
 	name = "vocal implant"
 	icon_state = "implant_evil"
 	var/datum/speech_filter/filter
+	var/list/memory = list()	// stored memory
+	var/rawcode = ""	// the code to compile (raw text)
+	var/datum/n_Compiler/vocal_implant/Compiler	// the compiler that compiles and runs the code
 
 /obj/item/weapon/implant/vocal/New()
 	..()
 	filter = new
+	Compiler = new
+	Compiler.Holder = src
+
+/obj/item/weapon/implant/vocal/Destroy()
+	// Garbage collects all the NTSL datums.
+	if(Compiler)
+		Compiler.GC()
+		Compiler = null
 
 /obj/item/weapon/implant/vocal/get_data()
 	return {"
