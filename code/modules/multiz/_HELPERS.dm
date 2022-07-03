@@ -101,7 +101,7 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 	var/list/spiraled_turfs = list()
 	var/turf/upturf = epicenter
 	var/turf/downturf = epicenter
-	spiraled_turfs += spiral_block(epicenter,max_range,draw_red)
+	. = spiral_block(epicenter,max_range,draw_red)
 	for(var/i = 1, i < max_range, i++)
 		if(HasAbove(upturf.z))
 			upturf = GetAbove(upturf)
