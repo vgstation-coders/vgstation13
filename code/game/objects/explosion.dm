@@ -204,7 +204,7 @@ var/explosion_shake_message_cooldown = 0
 	. = list()
 	// we cache the explosion block rating of every turf in the explosion area
 	//explosion block reduces explosion distance based on path from epicentre
-	for(var/affected_turf in 1 to length(affected_turfs))
+	for(var/turf/affected_turf in affected_turfs)
 		var/turf/T = affected_turfs[affected_turf]
 		var/current_exp_block = T.density ? T.explosion_block : 0
 		for (var/obj/machinery/door/D in T)
