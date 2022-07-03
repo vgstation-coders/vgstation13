@@ -69,16 +69,16 @@
 				@param frequency:		Frequency to send the signal to
 				@param code:			Encryption code to send the signal with
 	*/
-	interpreter.SetProc("signal", "signaler", signal, list("freq", "code"))
+	interpreter.SetProc("signal", "tcs_signaler", signal, list("freq", "code"))
 
 	/*
 		-> Store a value permanently to the server machine (not the actual game hosting machine, the ingame machine)
-				@format: mem(address, value)
+				@format: tcs_mem(address, value)
 
 				@param address:		The memory address (string index) to store a value to
 				@param value:		The value to store to the memory address
 	*/
-	interpreter.SetProc("mem", "mem", signal, list("address", "value"))
+	interpreter.SetProc("mem", "tcs_mem", signal, list("address", "value"))
 
 	..()
 
@@ -109,7 +109,7 @@
 
 /var/const/SIGNAL_COOLDOWN = 20 // 2 seconds
 
-/datum/signal/proc/mem(var/address, var/value)
+/datum/signal/proc/tcs_mem(var/address, var/value)
 	if(istext(address))
 		var/obj/machinery/telecomms/server/S = data["server"]
 
@@ -119,7 +119,7 @@
 		else
 			S.memory[address] = value
 
-/datum/signal/proc/signaler(var/freq = COMMON_FREQ, var/code = 30)
+/datum/signal/proc/tcs_signaler(var/freq = COMMON_FREQ, var/code = 30)
 	if(isnum(freq) && isnum(code))
 
 		var/obj/machinery/telecomms/server/S = data["server"]
