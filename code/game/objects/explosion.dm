@@ -147,7 +147,7 @@ var/explosion_shake_message_cooldown = 0
 	var/y0 = offcenter.y
 	//var/z0 = offcenter.z
 
-	var/list/affected_turfs = spiral_block2(offcenter,max_range)	
+	var/list/affected_turfs = spiral_block(offcenter,max_range)	
 	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
 	for(var/turf/T in affected_turfs)
@@ -218,65 +218,3 @@ var/explosion_shake_message_cooldown = 0
 			continue
 
 		.[T] = current_exp_block
-
-/proc/spiral_block2(turf/epicenter, range, inward=FALSE, draw_red=FALSE)
-	if(!epicenter)
-		return list()
-
-	if(!range)
-		return list(epicenter)
-
-	. = list()
-
-	var/turf/T
-	var/y
-	var/x
-	var/c_dist = 1
-	. += epicenter
-
-	while( c_dist <= range )
-		y = epicenter.y + c_dist
-		x = epicenter.x - c_dist + 1
-		for(x in x to epicenter.x+c_dist)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-
-		y = epicenter.y + c_dist - 1
-		x = epicenter.x + c_dist
-		for(y in epicenter.y-c_dist to y)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-
-		y = epicenter.y - c_dist
-		x = epicenter.x + c_dist - 1
-		for(x in epicenter.x-c_dist to x)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-
-		y = epicenter.y - c_dist + 1
-		x = epicenter.x - c_dist
-		for(y in y to epicenter.y+c_dist)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-		c_dist++
-
-	if(draw_red)
-		sleep(30)
-		for(var/turf/T in .)
-			T.color = null

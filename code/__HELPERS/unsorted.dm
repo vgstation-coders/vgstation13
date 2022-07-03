@@ -1475,109 +1475,67 @@ var/mob/dview/tview/tview_mob = new()
 		result = "-[result]"
 	return result
 
-/proc/spiral_block(var/turf/epicenter,var/max_range,var/inward=0,var/draw_red=0)//alternative to block. instead of being listed from bottom to top, turfs are listed spiraling inward/outward.
-	var/list/spiraled_turfs = list()
+/proc/spiral_block(turf/epicenter, range, inward=FALSE, draw_red=FALSE)
+	if(!epicenter)
+		return list()
 
-	//epicenter coordinates
-	var/x0 = epicenter.x
-	var/y0 = epicenter.y
-	var/z0 = epicenter.z
+	if(!range)
+		return list(epicenter)
 
-	//world limits
-	var/south_limit = 1 - y0
-	var/west_limit = 1 - x0
-	var/north_limit = world.maxy - y0
-	var/east_limit = world.maxx - x0
+	. = list()
 
-	var/max_steps = (max_range*2 + 1) * (max_range*2 + 1)
+	var/turf/T
+	var/y
+	var/x
+	var/c_dist = 1
+	. += epicenter
 
-	var/pointer_x = 0
-	var/pointer_y = 0
-	var/segment = 0
-	var/movement_dir = NORTH
-	var/segment_length = 1
-
-	if(inward)
-		pointer_x = -max_range
-		pointer_y = -max_range
-		segment_length = max_range*2+1
-		segment = 1
-
-		for(var/sstep=max_steps-1;sstep>=0;sstep--)
-			if((pointer_x >= west_limit) && (pointer_x <= east_limit) && (pointer_y >= south_limit) && (pointer_y <= north_limit))//are we inside the map's boundaries
-				var/turf/T = locate(x0+pointer_x,y0+pointer_y,z0)
-				spiraled_turfs += T
+	while( c_dist <= range )
+		y = epicenter.y + c_dist
+		x = epicenter.x - c_dist + 1
+		for(x in x to epicenter.x+c_dist)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
 				if(draw_red)
 					T.color = "red"
-			if(sstep && ((sstep%segment_length) == 0))
-				switch(movement_dir)//clockwise spiral
-					if(NORTH)
-						movement_dir = EAST
-					if(EAST)
-						movement_dir = SOUTH
-					if(SOUTH)
-						movement_dir = WEST
-					if(WEST)
-						movement_dir = NORTH
-				if(!segment)
-					segment = 1
-				else
-					segment = 0
-					segment_length--
+					sleep(1)
 
-			switch(movement_dir)
-				if(NORTH)
-					pointer_y++
-				if(EAST)
-					pointer_x++
-				if(SOUTH)
-					pointer_y--
-				if(WEST)
-					pointer_x--
-			if(draw_red)
-				sleep(1)
-	else
-		for(var/sstep in 1 to max_steps)
-			if((pointer_x >= west_limit) && (pointer_x <= east_limit) && (pointer_y >= south_limit) && (pointer_y <= north_limit))//are we inside the map's boundaries
-				var/turf/T = locate(x0+pointer_x,y0+pointer_y,z0)
-				spiraled_turfs += T
+		y = epicenter.y + c_dist - 1
+		x = epicenter.x + c_dist
+		for(y in epicenter.y-c_dist to y)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
 				if(draw_red)
 					T.color = "red"
+					sleep(1)
 
-			switch(movement_dir)
-				if(NORTH)
-					pointer_y++
-				if(EAST)
-					pointer_x++
-				if(SOUTH)
-					pointer_y--
-				if(WEST)
-					pointer_x--
+		y = epicenter.y - c_dist
+		x = epicenter.x + c_dist - 1
+		for(x in epicenter.x-c_dist to x)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
 
-			if((sstep%segment_length) == 0)
-				switch(movement_dir)//clockwise spiral
-					if(NORTH)
-						movement_dir = EAST
-					if(EAST)
-						movement_dir = SOUTH
-					if(SOUTH)
-						movement_dir = WEST
-					if(WEST)
-						movement_dir = NORTH
-				if(!segment)
-					segment = 1
-				else
-					segment = 0
-					segment_length++
-			if(draw_red)
-				sleep(1)
+		y = epicenter.y - c_dist + 1
+		x = epicenter.x - c_dist
+		for(y in y to epicenter.y+c_dist)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
+		c_dist++
 
 	if(draw_red)
 		sleep(30)
-		for(var/turf/T in spiraled_turfs)
-			T.color = null
-
-	return spiraled_turfs
+		for(var/turf/Q in .)
+			Q.color = null
 
 /proc/get_random_colour(var/simple, var/lower, var/upper)
 	var/colour
