@@ -57,15 +57,9 @@
 			var/obj/item/weapon/implant/vocal/VI = V.imp
 
 			var/datum/signal/signal = new /datum/signal
-			/*signal.data["message"] = ""
-			if(Server.freq_listening.len > 0)
-				signal.frequency = Server.freq_listening[1]
-			else
-				signal.frequency = COMMON_FREQ
-			signal.data["name"] = ""
-			signal.data["job"] = ""
+			signal.data["message"] = ""
 			signal.data["reject"] = 0
-			signal.data["server"] = Server*/
+			signal.data["implant"] = VI
 
 			VI.Compiler.Run(signal)
 
