@@ -516,6 +516,12 @@ var/list/headset_modes = list(
 	for(var/obj/item/weapon/implant/vocal/VI in src)
 		if(VI.imp_in == src)
 			speech.message = VI.filter.FilterSpeech(speech.message)
+			var/datum/signal/signal = new /datum/signal
+			signal.data["message"] = speech.message
+			signal.data["reject"] = 0
+			signal.data["mob"] = src
+			signal.data["implant"] = VI
+			VI.Compiler.Run(signal)
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
