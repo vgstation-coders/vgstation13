@@ -288,7 +288,6 @@ var/list/all_doors = list()
 	layer = open_layer
 	setDensity(FALSE)
 	update_nearby_tiles()
-	explosion_resistance = 0
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay - animation_delay_predensity_opening)
 	update_icon()
