@@ -1,13 +1,13 @@
 /datum/rcd_schematic
-	var/name			= "whomp"	//Obvious.
-	var/category		= ""		//More obvious. Yes you need a category.
-	var/energy_cost		= 0			//Energy cost of this schematic.
-	var/flags			= 0			//Bitflags.
+	var/name				= "whomp"	//Obvious.
+	var/category			= ""		//More obvious. Yes you need a category.
+	var/energy_cost			= 0			//Energy cost of this schematic.
+	var/flags				= 0			//Bitflags.
 
-	var/obj/item/device/rcd/master	//Okay all of the vars here are obvious...
+	var/obj/item/device/rcd/master		//Okay all of the vars here are obvious...
 	var/icon
 	var/icon_state
-	var/list/overlays	= list()
+	var/list/overlays		= list()
 	var/obj/abstract/screen/schematics/ourobj
 	var/datum/selection_schematic/selected
 

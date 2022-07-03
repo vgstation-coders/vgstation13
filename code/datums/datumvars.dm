@@ -601,7 +601,7 @@ function loadPage(list) {
 		href_list["datumrefresh"] = href_list["give_disease2"]
 
 	else if(href_list["godmode"])
-		if(!check_rights(R_REJUVINATE))
+		if(!check_rights(R_REJUVENATE))
 			return
 
 		var/mob/M = locate(href_list["godmode"])

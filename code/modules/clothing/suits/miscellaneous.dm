@@ -1059,3 +1059,21 @@ var/list/tag_suits_list = list()
 		else if(!B.active)
 			B.activate_vest()
 			to_chat(owner, "<span class='warning'>You toggle on the vest. Bumping into anything will detonate it, as will being hit.</span>")
+
+// -- American """"""Football""""""
+
+/obj/item/clothing/suit/nt_football
+	name = "NT Football suit"
+	desc = "Contrary to popular belief, 13 wasn't chosen, it's simply the last number that hasn't been permanently inducted into the SNFL Hall of Fame."
+	blood_overlay_type = "armor"
+	body_parts_covered = FULL_TORSO
+	icon_state = "ntfootball"
+	flags = FPRINT
+
+/obj/item/clothing/suit/syndie_football
+	name = "Syndie Football suit"
+	desc = "The S stands for Soccer."
+	blood_overlay_type = "armor"
+	body_parts_covered = FULL_TORSO
+	icon_state = "syndiefootball"
+	flags = FPRINT

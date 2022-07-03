@@ -47,9 +47,6 @@
 				advanced_butchery = "\The [target_name] seems to have been butchered with"
 				for(var/i = 1, i <= H.advanced_butchery.len, i++)
 					var/tool_name = H.advanced_butchery[i]
-					if(tool_name == "umbra")
-						advanced_butchery = "<span class='warning'>\The [target_name] is likely to have been eaten by an umbra.</span>"
-						break
 					if(H.advanced_butchery.len == 1)
 						advanced_butchery += " \a [tool_name]."
 					else if(i != H.advanced_butchery.len)

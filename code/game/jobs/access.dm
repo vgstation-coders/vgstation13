@@ -132,11 +132,10 @@
 			condition |= M.x > src.x
 		if(req_access_dir & WEST)
 			condition |= M.x < src.x
-		if(map.multiz)
-			if(req_access_dir & UP)
-				condition |= M.z > src.z
-			if(req_access_dir & DOWN)
-				condition |= M.z < src.z
+		if(HasAbove(z) && (req_access_dir & UP))
+			condition |= M.z > src.z
+		if(HasBelow(z) && (req_access_dir & DOWN))
+			condition |= M.z < src.z
 		if(condition)
 			return can_access(ACL,req_access,req_one_access)
 		else

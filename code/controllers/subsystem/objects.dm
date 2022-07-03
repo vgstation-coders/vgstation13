@@ -24,7 +24,7 @@ var/list/processing_objects = list()
 			var/time_start = world.timeofday
 			object.initialize()
 			var/time = (world.timeofday - time_start)
-			if(time > 1 SECONDS)
+			if(time > 1) // At this point very few items (such as corpse landmarks) take longer than a tick to init, with the main bulk of items taking around 1 tick being things that use relativewall()
 				var/turf/T = get_turf(object)
 				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
 		else

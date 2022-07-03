@@ -546,6 +546,7 @@
 
 /datum/find/stock_parts/spawn_item()
 	var/list/possible_spawns = list(
+			/obj/item/weapon/stock_parts/console_screen/reinforced/plasma/rplasma,
 			/obj/item/weapon/stock_parts/capacitor/adv/super/ultra,
 			/obj/item/weapon/stock_parts/micro_laser/high/ultra/giga,
 			/obj/item/weapon/stock_parts/manipulator/nano/pico/femto,

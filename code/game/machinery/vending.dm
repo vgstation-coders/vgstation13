@@ -2124,6 +2124,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/bag/plants = 5,
 		)
 	contraband = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/toxin = 10,
 		/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,
 		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5,
 		)
@@ -2631,7 +2632,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cowboy = 3,
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
-		/obj/item/clothing/suit/red_suit = 3
+		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/head/nt_football_helmet = 5,
+		/obj/item/clothing/suit/nt_football = 5,
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche = AUTO_DROBE_DEFAULT_STOCK,
@@ -2639,6 +2642,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cardborg = 3,
 		/obj/item/clothing/suit/judgerobe = 3,
 		/obj/item/clothing/head/powdered_wig = 3,
+		/obj/item/clothing/head/syndie_football_helmet = 5,
+		/obj/item/clothing/suit/syndie_football = 5,
 		/obj/item/toy/gun = 3,
 		/obj/item/weapon/glue/temp_glue = 1
 		)
@@ -2666,7 +2671,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/mask/gas/oni = 3,
 		/obj/item/clothing/head/helmet/samurai = 3,
 		/obj/item/clothing/suit/armor/samurai = 3,
-		/obj/item/toy/syndicateballoon/green = 1
+		/obj/item/toy/syndicateballoon/green = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2713,7 +2718,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/beanie/striped = 10,
 		/obj/item/clothing/head/beanie/stripedred = 10,
 		/obj/item/clothing/head/beanie/stripedblue = 10,
-		/obj/item/clothing/head/beanie/stripedgreen = 10
+		/obj/item/clothing/head/beanie/stripedgreen = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/mask/balaclava = 5,

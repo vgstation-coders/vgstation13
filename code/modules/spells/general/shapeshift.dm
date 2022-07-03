@@ -1,56 +1,50 @@
 /spell/shapeshift
-	name = "Shapeshift (1)"
-	desc = "Changes your name and appearance, either to someone in view or randomly. Has a cooldown of 3 minutes."
+	name = "Shapeshift"
+	desc = "You change into your true form, granting you better vision, and obfuscating technology."
 	abbreviation = "SS"
-
+	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
 
+	charge_max = 200
+	cooldown_min = 20 SECONDS
+	spell_flags = NEEDSHUMAN
+
 	charge_type = Sp_RECHARGE
-	charge_max = 3 MINUTES
 	invocation_type = SpI_NONE
 	range = 0
-	spell_flags = STATALLOWED | NEEDSHUMAN
-	cooldown_min = 3 MINUTES
 
 	override_base = "vamp"
 	hud_state = "vamp_shapeshift"
+	var/datum/dna/identity = null
+	var/datum/human_appearance/appearance = null
+	var/humanform = TRUE
 
-	var/blood_cost = 1
-
-/spell/shapeshift/cast_check(var/skipcharge = 0, var/mob/user = usr)
+/spell/shapeshift/cast_check(skipcharge = 0, mob/user = usr)
 	. = ..()
-	if (!.) // No need to go further.
-		return FALSE
-	if (!user.vampire_power(blood_cost, CONSCIOUS))
+	if (!.) 
 		return FALSE
 
 /spell/shapeshift/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
 
 /spell/shapeshift/cast(var/list/targets, var/mob/living/carbon/human/user)
-	if (!istype(user))
-		return FALSE
-	var/list/choices = list()
-	var/datum/role/vampire/V = isvampire(user)
-	choices[V.initial_appearance.name] = V.initial_appearance
-	for (var/mob/living/carbon/human/H in view(user) - user)
-		choices[H.real_name] = H.my_appearance.Copy()
-	for (var/datum/human_appearance/looks in V.saved_appearances)
-		choices[looks.name] = looks
-	choices["Random"] = ""
-
-	var/choice = input(user, "Which appearance shall we adopt?", "Shapeshift", "Random") as null|anything in choices
-
-	if (!choice)
-		return
-	else if (choice == "Random")
-		var/name = user.generate_name() //random_name(M.current.gender)
-		var/datum/human_appearance/new_looks = user.randomise_appearance_for(user.gender)
-		new_looks.name = name
-		V.saved_appearances += new_looks
+	if(humanform)
+		identity = user.dna.Clone()
+		appearance = user.my_appearance.Copy()
+		user.set_species("Vampire")
+		user.name = "Nosferatu"
+		user.real_name = "Nosferatu"
+		user.UpdateAppearance()
+		user.update_perception()
+		humanform = FALSE
 	else
-		user.switch_appearance(choices[choice])
-		user.real_name = choice
-
-	V.remove_blood(blood_cost)
+		user.set_species(identity.species, 0)
+		user.name = identity.real_name
+		user.real_name = identity.real_name
+		user.dna = identity
+		user.UpdateAppearance()
+		user.update_perception()
+		humanform = TRUE
+	
+	..()

@@ -352,36 +352,63 @@ div.notice
 	height:64px;
 }
 
-td.column
+td.bannedColumn
 {
     width: 60px;
     text-align: center;
+    background: #ffcccc;
+	color: #770000;
 }
-td.clmNever
+a.clmNeverOff
 {
     background: #ffcccc;
+	color: #770000;
 }
 
-td.clmNo
+a.clmNoOff
 {
     background: #ffeeee;
+	color: #990000;
 }
 
-td.clmYes
+a.clmYesOff
 {
     background: #eeffee;
+	color: #006600;
 }
 
-td.clmAlways
+a.clmAlwaysOff
 {
     background: #ccffcc;
+	color: #004400;
+}
+a.clmNeverOn
+{
+    color: #ffcccc;
+	background: #770000;
 }
 
-label.fullsize
+a.clmNoOn
 {
-    width: 100%;
-    height: 100%;
-    display: inline-block;
+    color: #ffeeee;
+	background: #990000;
+}
+
+a.clmYesOn
+{
+    color: #eeffee;
+	background: #006600;
+}
+
+a.clmAlwaysOn
+{
+    color: #ccffcc;
+	background: #004400;
+}
+
+a.fullsize
+{
+    width: 55px;
 }
 
 .modal

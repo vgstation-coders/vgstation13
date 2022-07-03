@@ -23,6 +23,7 @@
 	// Make sparks. LOTS OF SPARKS.
 	var/sparky          = TRUE
 
+	var/z_last_checked	= 0
 	// A list schematics can use for storing mutual data.
 	var/list/data
 
@@ -45,6 +46,10 @@
 
 	init_schematics()
 	rebuild_ui()
+
+	var/turf/T = get_turf(src)
+	if(T)
+		z_last_checked = T.z
 
 //create and organize the schematics
 /obj/item/device/rcd/proc/init_schematics()
@@ -78,6 +83,9 @@
 		dropped_by.hud_used.toggle_show_schematics_display(null,1, src)
 
 /obj/item/device/rcd/attack_self(var/mob/user)
+	var/turf/T = get_turf(src)
+	if(T?.z != z_last_checked)
+		rebuild_ui()
 	interface.show(user)
 
 /obj/item/device/rcd/proc/rebuild_ui()
@@ -95,6 +103,9 @@
 		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
 		var/list/L = schematics[cat]
 		for(var/datum/rcd_schematic/C in L)
+			var/turf/T = get_turf(src)
+			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
+				continue
 			dat += C.schematic_list_line(interface)
 
 		dat += "</ul>"
@@ -311,7 +322,7 @@
 
 /obj/item/device/rcd/matter/attackby(var/obj/item/stack/S, var/mob/user)
 	..()
-	if(istype(S, /obj/item/stack/rcd_ammo))
+	if(istype(S,/obj/item/stack/rcd_ammo))
 		if((matter + 10) > max_matter)
 			to_chat(user, "<span class='notice'>\the [src] can't hold any more matter-units.</span>")
 			return 1
