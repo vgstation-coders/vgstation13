@@ -110,7 +110,7 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 		if(HasBelow(downturf.z))
 			downturf = GetBelow(downturf)
 			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
-			spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, draw_red)
+			. += spiral_block(downturf, cube ? max_range : max_range - i, draw_red)
 
 	return spiraled_turfs
 
