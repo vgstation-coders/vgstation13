@@ -361,12 +361,9 @@ var/list/all_doors = list()
 		// above most items if closed
 		plane = closed_plane
 		layer = closed_layer
-		explosion_resistance = initial(explosion_resistance)
 	else
 		plane = open_plane
 		layer = open_layer
-
-		explosion_resistance = 0
 
 	if(width > 1)
 		if(dir in list(EAST, WEST))

@@ -170,7 +170,6 @@
 	icon_state = base_state
 
 	setDensity(TRUE)
-	explosion_resistance = initial(explosion_resistance)
 	update_nearby_tiles()
 
 	spawn(animation_delay)
