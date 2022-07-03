@@ -18,10 +18,12 @@
 	var/datum/scope/curScope
 	var/datum/scope/globalScope
 
-	var/datum/node/BlockDefinition/program	
-	var/datum/node/statement/FunctionDefinition/curFunction	
+	var/datum/node/BlockDefinition/program
+	var/datum/node/statement/FunctionDefinition/curFunction
 	var/datum/stack/scopes	= new()
 	var/datum/stack/functions	= new()
+
+	var/datum/n_Compiler/Compiler
 
 	var/datum/container // associated container for interpeter
 /*
@@ -58,6 +60,7 @@
 */
 /datum/n_Interpreter/proc/GC()
 	container = null
+	Compiler = null
 
 /*
 	Proc: RaiseError
@@ -86,8 +89,8 @@ Alerts the admins of a script that is bad.
 */
 /datum/n_Interpreter/proc/AlertAdmins()
 	if(container && !alertadmins)
-		if(istype(container, /datum/TCS_Compiler))
-			var/datum/TCS_Compiler/Compiler = container
+		if(istype(container, /datum/n_Compiler/TCS_Compiler))
+			var/datum/n_Compiler/TCS_Compiler/Compiler = container
 			var/obj/machinery/telecomms/server/Holder = Compiler.Holder
 			var/message = "Potential crash-inducing NTSL script detected at telecommunications server [Compiler.Holder] ([Holder.x], [Holder.y], [Holder.z])."
 
