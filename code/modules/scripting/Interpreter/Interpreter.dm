@@ -88,14 +88,7 @@ Proc: AlertAdmins
 Alerts the admins of a script that is bad.
 */
 /datum/n_Interpreter/proc/AlertAdmins()
-	if(container && !alertadmins)
-		if(istype(container, /datum/n_Compiler/TCS_Compiler))
-			var/datum/n_Compiler/TCS_Compiler/Compiler = container
-			var/obj/machinery/telecomms/server/Holder = Compiler.Holder
-			var/message = "Potential crash-inducing NTSL script detected at telecommunications server [Compiler.Holder] ([Holder.x], [Holder.y], [Holder.z])."
-
-			alertadmins = 1
-			message_admins(message, 1)
+	return
 /*
 Proc: RunBlock
 Runs each statement in a block of code.
