@@ -90,7 +90,9 @@
 
 /obj/machinery/dna_scannernew/RefreshParts()
 	var/efficiency = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts) efficiency += SP.rating-1
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(!istype(SP,/obj/item/weapon/stock_parts/console_screen))
+			efficiency += SP.rating-1
 	injector_cooldown = initial(injector_cooldown) - 15*(efficiency)
 
 /obj/machinery/dna_scannernew/allow_drop()

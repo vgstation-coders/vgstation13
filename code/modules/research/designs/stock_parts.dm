@@ -49,6 +49,16 @@
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/matter_bin
 
+/datum/design/basic_console_screen
+	name = "Basic Console Screen"
+	desc = "A stock part used in the construction of various devices."
+	id = "basic_console_screen"
+	req_tech = list(Tc_MATERIALS = 1)
+	build_type = PROTOLATHE | AUTOLATHE
+	materials = list(MAT_GLASS = 200)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/console_screen
+
 /datum/design/adv_capacitor
 	name = "Advanced Capacitor"
 	desc = "A stock part used in the construction of various devices."
@@ -99,6 +109,16 @@
 	materials = list(MAT_IRON = 80)
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/matter_bin/adv
+
+/datum/design/reinforced_console_screen
+	name = "Reinforced Console Screen"
+	desc = "A stock part used in the construction of various devices."
+	id = "reinforced_console_screen"
+	req_tech = list(Tc_MATERIALS = 3)
+	build_type = PROTOLATHE | AUTOLATHE
+	materials = list(MAT_IRON = 100, MAT_GLASS = 200)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/console_screen/reinforced
 
 /datum/design/super_capacitor
 	name = "Super Capacitor"
@@ -155,7 +175,17 @@
 	reliability_base = 75
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/matter_bin/adv/super
-	
+
+/datum/design/plasma_console_screen
+	name = "Plasma Console Screen"
+	desc = "A stock part used in the construction of various devices."
+	id = "plasma_console_screen"
+	req_tech = list(Tc_MATERIALS = 5, Tc_PLASMATECH = 3)
+	build_type = PROTOLATHE | AUTOLATHE
+	materials = list(MAT_PLASMA = 100, MAT_IRON = 100, MAT_GLASS = 200)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/console_screen/reinforced/plasma
+
 /datum/design/bluespace_matter_bin
 	name = "Bluespace Matter Bin"
 	desc = "A stock part used to link material storage space between machines."

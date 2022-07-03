@@ -1364,10 +1364,6 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/get_rating()
 	return FALSE
 
-// Like the above, but used for RPED sorting of parts.
-/obj/item/proc/rped_rating()
-	return get_rating()
-
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
