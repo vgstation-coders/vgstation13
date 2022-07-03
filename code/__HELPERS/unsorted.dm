@@ -1913,33 +1913,34 @@ Game Mode config tags:
 	while( c_dist <= range )
 		y = epicenter.y + c_dist
 		x = epicenter.x - c_dist + 1
+		//bottom
 		for(x in x to epicenter.x+c_dist)
 			T = locate(x,y,epicenter.z)
 			if(T)
 				. += T
 				if(draw_red)
 					T.color = "red"
-					sleep(1)
-
+					sleep(5)
+		
 		y = epicenter.y + c_dist - 1
 		x = epicenter.x + c_dist
-		for(y in epicenter.y-c_dist to y)
+		for(y in y to epicenter.y-c_dist step -1)
 			T = locate(x,y,epicenter.z)
 			if(T)
 				. += T
 				if(draw_red)
 					T.color = "red"
-					sleep(1)
+					sleep(5)
 
 		y = epicenter.y - c_dist
 		x = epicenter.x + c_dist - 1
-		for(x in epicenter.x-c_dist to x)
+		for(x in  x to epicenter.x-c_dist step -1)
 			T = locate(x,y,epicenter.z)
 			if(T)
 				. += T
 				if(draw_red)
 					T.color = "red"
-					sleep(1)
+					sleep(5)
 
 		y = epicenter.y - c_dist + 1
 		x = epicenter.x - c_dist
@@ -1949,7 +1950,7 @@ Game Mode config tags:
 				. += T
 				if(draw_red)
 					T.color = "red"
-					sleep(1)
+					sleep(5)
 		c_dist++
 
 	if(draw_red)
