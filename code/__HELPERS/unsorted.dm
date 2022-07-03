@@ -1475,68 +1475,6 @@ var/mob/dview/tview/tview_mob = new()
 		result = "-[result]"
 	return result
 
-/proc/spiral_block(turf/epicenter, range, draw_red=FALSE)
-	if(!epicenter)
-		return list()
-
-	if(!range)
-		return list(epicenter)
-
-	. = list()
-
-	var/turf/T
-	var/y
-	var/x
-	var/c_dist = 1
-	. += epicenter
-
-	while( c_dist <= range )
-		y = epicenter.y + c_dist
-		x = epicenter.x - c_dist + 1
-		for(x in x to epicenter.x+c_dist)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-
-		y = epicenter.y + c_dist - 1
-		x = epicenter.x + c_dist
-		for(y in epicenter.y-c_dist to y)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-
-		y = epicenter.y - c_dist
-		x = epicenter.x + c_dist - 1
-		for(x in epicenter.x-c_dist to x)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-
-		y = epicenter.y - c_dist + 1
-		x = epicenter.x - c_dist
-		for(y in y to epicenter.y+c_dist)
-			T = locate(x,y,epicenter.z)
-			if(T)
-				. += T
-				if(draw_red)
-					T.color = "red"
-					sleep(1)
-		c_dist++
-
-	if(draw_red)
-		sleep(30)
-		for(var/turf/Q in .)
-			Q.color = null
-
 /proc/get_random_colour(var/simple, var/lower, var/upper)
 	var/colour
 	if(simple)

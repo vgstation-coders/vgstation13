@@ -98,7 +98,6 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((get_zs_away(a,b))**2)
 
 /proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/draw_red=0,var/cube=1)
-	var/list/spiraled_turfs = list()
 	var/turf/upturf = epicenter
 	var/turf/downturf = epicenter
 	. = spiral_block(epicenter,max_range,draw_red)
@@ -111,8 +110,6 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 			downturf = GetBelow(downturf)
 			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
 			. += spiral_block(downturf, cube ? max_range : max_range - i, draw_red)
-
-	return spiraled_turfs
 
 /client/proc/check_multi_z_spiral()
 	set name = "Check Multi-Z Spiral Block"
@@ -136,3 +133,65 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 		var/turf/downcenter = GetBelow(offcenter)
 		if(downcenter.z < epicenter.z)
 			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time, whodunnit)
+
+/proc/spiral_block(turf/epicenter, range, draw_red=FALSE)
+	if(!epicenter)
+		return list()
+
+	if(!range)
+		return list(epicenter)
+
+	. = list()
+
+	var/turf/T
+	var/y
+	var/x
+	var/c_dist = 1
+	. += epicenter
+
+	while( c_dist <= range )
+		y = epicenter.y + c_dist
+		x = epicenter.x - c_dist + 1
+		for(x in x to epicenter.x+c_dist)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
+
+		y = epicenter.y + c_dist - 1
+		x = epicenter.x + c_dist
+		for(y in epicenter.y-c_dist to y)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
+
+		y = epicenter.y - c_dist
+		x = epicenter.x + c_dist - 1
+		for(x in epicenter.x-c_dist to x)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
+
+		y = epicenter.y - c_dist + 1
+		x = epicenter.x - c_dist
+		for(y in y to epicenter.y+c_dist)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
+		c_dist++
+
+	if(draw_red)
+		sleep(30)
+		for(var/turf/Q in .)
+			Q.color = null
