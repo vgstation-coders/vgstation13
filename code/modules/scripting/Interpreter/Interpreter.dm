@@ -25,7 +25,6 @@
 
 	var/datum/n_Compiler/Compiler
 
-	var/datum/container // associated container for interpeter
 /*
 	Var: status
 	A variable indicating that the rest of the current block should be skipped. This may be set to any combination of <Status Macros>.
@@ -59,7 +58,6 @@
 	Set ourselves to Garbage Collect
 */
 /datum/n_Interpreter/proc/GC()
-	container = null
 	Compiler = null
 
 /*

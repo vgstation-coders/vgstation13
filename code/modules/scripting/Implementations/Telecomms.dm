@@ -10,9 +10,9 @@
 		TCS.Holder.add_entry(e.ToString(), "Execution Error")
 
 /datum/n_Interpreter/TCS_Interpreter/AlertAdmins()
-	if(container && !alertadmins)
+	if(Compiler && !alertadmins)
 		if(istype(Compiler, /datum/n_Compiler/TCS_Compiler))
-			var/datum/n_Compiler/TCS_Compiler/TCS = container
+			var/datum/n_Compiler/TCS_Compiler/TCS = Compiler
 			var/obj/machinery/telecomms/server/Holder = TCS.Holder
 			var/message = "Potential crash-inducing NTSL script detected at telecommunications server [Holder] ([Holder.x], [Holder.y], [Holder.z])."
 

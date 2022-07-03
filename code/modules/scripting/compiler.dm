@@ -42,8 +42,6 @@
 	if(!interpreter)
 		return
 
-	interpreter.container = src
-
 	SetVars(signal)
 	SetProcs(signal)
 
