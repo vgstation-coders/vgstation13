@@ -220,52 +220,47 @@ var/explosion_shake_message_cooldown = 0
 
 		.[T] = current_exp_block
 
-/proc/spiral_block2(turf/epicenter, range)
-	var/list/outlist = list()
-	var/center = epicenter
-	var/dist = range
-	if(!dist)
-		outlist += center
-		return outlist
+/proc/spiral_block2(turf/epicenter, range, inward=FALSE, draw_red=FALSE)
+    if(!epicenter)
+        return list()
 
-	var/turf/t_center = get_turf(center)
-	if(!t_center)
-		return outlist
+    if(!range)
+        return list(epicenter)
 
-	var/list/L = outlist
-	var/turf/T
-	var/y
-	var/x
-	var/c_dist = 1
-	L += t_center
+    . = list()
 
-	while( c_dist <= dist )
-		y = t_center.y + c_dist
-		x = t_center.x - c_dist + 1
-		for(x in x to t_center.x+c_dist)
-			T = locate(x,y,t_center.z)
-			if(T)
-				L += T
+    var/turf/T
+    var/y
+    var/x
+    var/c_dist = 1
+    . += epicenter
 
-		y = t_center.y + c_dist - 1
-		x = t_center.x + c_dist
-		for(y in t_center.y-c_dist to y)
-			T = locate(x,y,t_center.z)
-			if(T)
-				L += T
+    while( c_dist <= range )
+        y = epicenter.y + c_dist
+        x = epicenter.x - c_dist + 1
+        for(x in x to epicenter.x+c_dist)
+            T = locate(x,y,epicenter.z)
+            if(T)
+                . += T
 
-		y = t_center.y - c_dist
-		x = t_center.x + c_dist - 1
-		for(x in t_center.x-c_dist to x)
-			T = locate(x,y,t_center.z)
-			if(T)
-				L += T
+        y = epicenter.y + c_dist - 1
+        x = epicenter.x + c_dist
+        for(y in epicenter.y-c_dist to y)
+            T = locate(x,y,epicenter.z)
+            if(T)
+                . += T
 
-		y = t_center.y - c_dist + 1
-		x = t_center.x - c_dist
-		for(y in y to t_center.y+c_dist)
-			T = locate(x,y,t_center.z)
-			if(T)
-				L += T
-		c_dist++
-	. = L
+        y = epicenter.y - c_dist
+        x = epicenter.x + c_dist - 1
+        for(x in epicenter.x-c_dist to x)
+            T = locate(x,y,epicenter.z)
+            if(T)
+                . += T
+
+        y = epicenter.y - c_dist + 1
+        x = epicenter.x - c_dist
+        for(y in y to epicenter.y+c_dist)
+            T = locate(x,y,epicenter.z)
+            if(T)
+                . += T
+        c_dist++
