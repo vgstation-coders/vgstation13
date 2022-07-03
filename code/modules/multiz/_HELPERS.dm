@@ -101,37 +101,16 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 	var/list/spiraled_turfs = list()
 	var/turf/upturf = epicenter
 	var/turf/downturf = epicenter
-	if(inward)
-		var/upcount = 1
-		var/downcount = 1
-		for(var/i = 1, i < max_range, i++)
-			if(HasAbove(upturf.z))
-				upturf = GetAbove(upturf)
-				upcount++
-			if(HasBelow(downturf.z))
-				downturf = GetBelow(downturf)
-				downcount++
-		for(var/i = 1, i < max_range, i++)
-			if(GetBelow(upturf) != epicenter)
-				upturf = GetBelow(upturf)
-				spiraled_turfs += spiral_block(upturf, cube ? max_range : i + (max_range - upcount), draw_red)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - upcount)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
-			if(GetAbove(upturf) != epicenter)
-				downturf = GetAbove(downturf)
-				spiraled_turfs += spiral_block(downturf, cube ? max_range : i + (max_range - downcount), draw_red)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - downcount)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
-		spiraled_turfs += spiral_block(epicenter,max_range,draw_red)
-	else
-		spiraled_turfs += spiral_block(epicenter,max_range,draw_red)
-		for(var/i = 1, i < max_range, i++)
-			if(HasAbove(upturf.z))
-				upturf = GetAbove(upturf)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
-				spiraled_turfs += spiral_block(upturf, cube ? max_range : max_range - i, draw_red)
-			if(HasBelow(downturf.z))
-				downturf = GetBelow(downturf)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
-				spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, draw_red)
+	spiraled_turfs += spiral_block(epicenter,max_range,draw_red)
+	for(var/i = 1, i < max_range, i++)
+		if(HasAbove(upturf.z))
+			upturf = GetAbove(upturf)
+			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
+			spiraled_turfs += spiral_block(upturf, cube ? max_range : max_range - i, draw_red)
+		if(HasBelow(downturf.z))
+			downturf = GetBelow(downturf)
+			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
+			spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, draw_red)
 
 	return spiraled_turfs
 
