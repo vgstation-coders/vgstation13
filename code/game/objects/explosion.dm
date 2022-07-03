@@ -220,46 +220,63 @@ var/explosion_shake_message_cooldown = 0
 		.[T] = current_exp_block
 
 /proc/spiral_block2(turf/epicenter, range, inward=FALSE, draw_red=FALSE)
-    if(!epicenter)
-        return list()
+	if(!epicenter)
+		return list()
 
-    if(!range)
-        return list(epicenter)
+	if(!range)
+		return list(epicenter)
 
-    . = list()
+	. = list()
 
-    var/turf/T
-    var/y
-    var/x
-    var/c_dist = 1
-    . += epicenter
+	var/turf/T
+	var/y
+	var/x
+	var/c_dist = 1
+	. += epicenter
 
-    while( c_dist <= range )
-        y = epicenter.y + c_dist
-        x = epicenter.x - c_dist + 1
-        for(x in x to epicenter.x+c_dist)
-            T = locate(x,y,epicenter.z)
-            if(T)
-                . += T
+	while( c_dist <= range )
+		y = epicenter.y + c_dist
+		x = epicenter.x - c_dist + 1
+		for(x in x to epicenter.x+c_dist)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
 
-        y = epicenter.y + c_dist - 1
-        x = epicenter.x + c_dist
-        for(y in epicenter.y-c_dist to y)
-            T = locate(x,y,epicenter.z)
-            if(T)
-                . += T
+		y = epicenter.y + c_dist - 1
+		x = epicenter.x + c_dist
+		for(y in epicenter.y-c_dist to y)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
 
-        y = epicenter.y - c_dist
-        x = epicenter.x + c_dist - 1
-        for(x in epicenter.x-c_dist to x)
-            T = locate(x,y,epicenter.z)
-            if(T)
-                . += T
+		y = epicenter.y - c_dist
+		x = epicenter.x + c_dist - 1
+		for(x in epicenter.x-c_dist to x)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
 
-        y = epicenter.y - c_dist + 1
-        x = epicenter.x - c_dist
-        for(y in y to epicenter.y+c_dist)
-            T = locate(x,y,epicenter.z)
-            if(T)
-                . += T
-        c_dist++
+		y = epicenter.y - c_dist + 1
+		x = epicenter.x - c_dist
+		for(y in y to epicenter.y+c_dist)
+			T = locate(x,y,epicenter.z)
+			if(T)
+				. += T
+				if(draw_red)
+					T.color = "red"
+					sleep(1)
+		c_dist++
+
+	if(draw_red)
+		sleep(30)
+		for(var/turf/T in .)
+			T.color = null
