@@ -145,32 +145,19 @@ var/explosion_shake_message_cooldown = 0
 
 	var/x0 = offcenter.x
 	var/y0 = offcenter.y
-	var/z0 = offcenter.z
+	//var/z0 = offcenter.z
 
-	if(epicenter != offcenter) // Not relevant if not in multi-z
-		log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [offcenter.loc.name] ([x0],[y0],[z0])")
+	var/list/affected_turfs = spiral_block2(offcenter,max_range)	
+	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
-	for(var/turf/T in spiral_block(offcenter,max_range,1))
+	for(var/turf/T in affected_turfs)
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
 		var/_dist = dist
 		var/pushback = 0
-
-		if(explosion_newmethod)	//Realistic explosions that take obstacles into account
-			var/turf/Trajectory = T
-			while(Trajectory != offcenter)
-				Trajectory = get_step_towards(Trajectory,offcenter)
-				if(Trajectory.density && Trajectory.explosion_block)
-					dist += Trajectory.explosion_block
-
-				for (var/obj/machinery/door/D in Trajectory.contents)
-					if(D.density && D.explosion_block)
-						dist += D.explosion_block
-
-				for (var/obj/effect/forcefield/F in Trajectory.contents)
-					dist += F.explosion_block
-
-				for (var/obj/effect/energy_field/E in Trajectory.contents)
-					dist += E.explosion_block
+		var/turf/Trajectory = T
+		while(Trajectory != offcenter)
+			Trajectory = get_step_towards(Trajectory,offcenter)
+			dist += cached_exp_block[Trajectory]
 
 		if(dist < devastation_range)
 			dist = 1
@@ -182,12 +169,13 @@ var/explosion_shake_message_cooldown = 0
 			dist = 3
 			pushback = 1
 		else
+			//invulnerable therefore no further explosion
 			continue
 
-		for(var/atom/movable/A in T.contents)
+		for(var/atom/movable/A in T)
 			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
 				A.last_explosion_push = explosion_time
-				//world.log << "FOUND [A] NOT ANCHORED AT [T] ([T.x],[T.y])"
+				
 				var/max_dist = _dist+(pushback)
 				var/max_count = pushback
 				var/turf/throwT = get_step_away(A,offcenter,max_dist)
@@ -199,14 +187,10 @@ var/explosion_shake_message_cooldown = 0
 				if(!isturf(throwT))
 					//world.log << "FUCK OUR TURF IS BAD"
 					continue
-				//world.log << "FOUND [throwT] ([throwT.x],[throwT.y]) using get_step_away([offcenter](([offcenter.x],[offcenter.y])),[A],[pushback])"
-				//if(istype(throwT, /turf/space))
 				if(ismob(A))
 					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
 
 				A.throw_at(throwT,pushback+2,500)
-				//else A.GotoExplosionThrowDest(throwT, 50)
-				//world.log << "THROWING [A] AT [throwT]"
 			A.ex_act(dist,null,whodunnit)
 
 		T.ex_act(dist,null,whodunnit)
@@ -215,3 +199,73 @@ var/explosion_shake_message_cooldown = 0
 
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time, whodunnit)
+
+/proc/CalculateExplosionBlock(list/affected_turfs)
+	. = list()
+	// we cache the explosion block rating of every turf in the explosion area
+	//explosion block reduces explosion distance based on path from epicentre
+	for(var/affected_turf in 1 to length(affected_turfs))
+		var/turf/T = affected_turfs[affected_turf]
+		var/current_exp_block = T.density ? T.explosion_block : 0
+		for (var/obj/machinery/door/D in T)
+			if(D.density && D.explosion_block)
+				current_exp_block += D.explosion_block
+				continue
+		for (var/obj/effect/forcefield/F in T)
+			current_exp_block += F.explosion_block
+			continue
+		for (var/obj/effect/energy_field/E in T)
+			current_exp_block += E.explosion_block
+			continue
+
+		.[T] = current_exp_block
+
+/proc/spiral_block2(turf/epicenter, range)
+	var/list/outlist = list()
+	var/center = epicenter
+	var/dist = range
+	if(!dist)
+		outlist += center
+		return outlist
+
+	var/turf/t_center = get_turf(center)
+	if(!t_center)
+		return outlist
+
+	var/list/L = outlist
+	var/turf/T
+	var/y
+	var/x
+	var/c_dist = 1
+	L += t_center
+
+	while( c_dist <= dist )
+		y = t_center.y + c_dist
+		x = t_center.x - c_dist + 1
+		for(x in x to t_center.x+c_dist)
+			T = locate(x,y,t_center.z)
+			if(T)
+				L += T
+
+		y = t_center.y + c_dist - 1
+		x = t_center.x + c_dist
+		for(y in t_center.y-c_dist to y)
+			T = locate(x,y,t_center.z)
+			if(T)
+				L += T
+
+		y = t_center.y - c_dist
+		x = t_center.x + c_dist - 1
+		for(x in t_center.x-c_dist to x)
+			T = locate(x,y,t_center.z)
+			if(T)
+				L += T
+
+		y = t_center.y - c_dist + 1
+		x = t_center.x - c_dist
+		for(y in y to t_center.y+c_dist)
+			T = locate(x,y,t_center.z)
+			if(T)
+				L += T
+		c_dist++
+	. = L
