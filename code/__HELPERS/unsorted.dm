@@ -1475,7 +1475,7 @@ var/mob/dview/tview/tview_mob = new()
 		result = "-[result]"
 	return result
 
-/proc/spiral_block(turf/epicenter, range, inward=FALSE, draw_red=FALSE)
+/proc/spiral_block(turf/epicenter, range, draw_red=FALSE)
 	if(!epicenter)
 		return list()
 
