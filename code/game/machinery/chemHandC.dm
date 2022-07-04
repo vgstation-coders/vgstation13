@@ -126,20 +126,6 @@
 		return
 	return ..()
 
-/*
-//Unused desired temp setting. Maybe useful in the future? Not likely since who doesn't want their coffee as hot as the sun?
-/obj/machinery/chemheater/verb/settemp(mob/user as mob)
-	set src in view(1)
-	set name = "Set temperature"
-	set category = "Object"
-
-	var/set_temp = input("Input desired temperature (20 to [TEMPERATURE_LASER] Celsius).", "Set Temperature") as num
-	if(set_temp>[TEMPERATURE_LASER] || set_temp<20)
-		to_chat(user, "<span class='notice'>Invalid temperature.</span>")
-		return
-	max_temperature = set_temp+273.15
-*/
-
 //Cooler
 
 /obj/machinery/chemcooler
