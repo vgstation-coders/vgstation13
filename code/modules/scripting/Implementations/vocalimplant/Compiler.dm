@@ -28,13 +28,12 @@
 	// Set up the script procs
 
 	/*
-		-> Send a code signal.
-				@format: signal(frequency, code)
+		-> Send another signal to a speaker, same name as telecomms proc for ease of memory.
+				@format: broadcast(content)
 
-				@param frequency:		Frequency to send the signal to
-				@param code:			Encryption code to send the signal with
+				@param content:		Message to broadcast
 	*/
-	//interpreter.SetProc("signal", "vi_signaler", signal, list("freq", "code"))
+	interpreter.SetProc("broadcast", "vibroadcast", signal, list("message"))
 
 	/*
 		-> Store a value permanently to the server machine (not the actual game hosting machine, the ingame machine)
@@ -70,3 +69,16 @@
 
 		else
 			V.memory[address] = value
+
+/datum/signal/proc/vibroadcast(var/message)
+	var/obj/item/weapon/implant/vocal/V = data["implant"]
+	var/atom/movable/speaker = V.imp_in || V.loc
+
+	if(!ismob(speaker) || !istype(speaker,/obj/item/weapon/implanter/vocal))
+		error("[src] is not implanted or in an implanter.")
+		return
+
+	if((!message || message == "") && message != 0)
+		message = "*beep*"
+
+	speaker.say(message)
