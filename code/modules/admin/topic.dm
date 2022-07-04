@@ -3589,6 +3589,10 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PDA")
 				new /datum/event/pda_spam
+			if("money_lotto")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","PDA")
+				new /datum/event/money_lotto
 
 			if("carp")
 				feedback_inc("admin_secrets_fun_used",1)

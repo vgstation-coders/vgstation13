@@ -321,3 +321,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 /proc/map_range(old_value, old_bottom, old_top, new_bottom, new_top)
 	var/new_value = (old_value - old_bottom) / (old_top - old_bottom) * (new_top - new_bottom) + new_bottom
 	return new_value
+
+/proc/factorial(num)
+	. = 1
+	for(var/i in 1 to num)
+		. *= i
+
+#define permutations(amount,sample) (factorial(amount) / factorial(amount - sample))
+#define combinations(amount,sample) (factorial(amount) / (factorial(sample) * factorial(amount - sample)))
