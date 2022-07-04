@@ -14,6 +14,7 @@
 	admin_voice_style = "danger"
 
 	var/iscloaking = FALSE
+	var/silentbite = FALSE
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -24,7 +25,7 @@
 
 	var/list/feeders = list()
 
-	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
+	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate,  /datum/power/vampire/silentbite)
 
 	var/list/image/cached_images = list()
 
@@ -177,7 +178,7 @@
 	else
 		target.LAssailant = assailant
 		target.assaulted_by(assailant)
-	while(do_mob(assailant, target, 5 SECONDS))
+	while(do_mob(assailant, target, (5 SECONDS) * (silentbite + 1)))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")
 			draining = null
