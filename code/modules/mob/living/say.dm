@@ -218,7 +218,9 @@ var/list/headset_modes = list(
 
 	var/message_range = 7
 	treat_speech(speech)
-
+	if(!speech.message)
+		qdel(speech)
+		return
 	var/radio_return = get_speech_flags(message_mode)
 	if (speech_was_spoken_into_radio(message_mode))
 		speech.wrapper_classes.Add("spoken_into_radio")
@@ -522,7 +524,7 @@ var/list/headset_modes = list(
 			signal.data["mob"] = src
 			signal.data["implant"] = VI
 			VI.Compiler.Run(signal)
-			speech.message = signal.data["reject"] ? signal.data["message"] : ""
+			speech.message = signal.data["reject"] ? null : signal.data["message"]
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
@@ -713,6 +715,9 @@ var/list/headset_modes = list(
 
 	log_whisper("[key_name(src)] ([formatLocation(src)]): [message]")
 	treat_speech(speech)
+	if(!speech.message)
+		qdel(speech)
+		return
 
 	// If whispering your last words, limit the whisper based on how close you are to death.
 	if(critical && !said_last_words)
@@ -725,6 +730,9 @@ var/list/headset_modes = list(
 		whispers = "whispers with their final breath"
 		said_last_words = src.stat
 	treat_speech(speech)
+	if(!speech.message)
+		qdel(speech)
+		return
 
 	var/listeners = get_hearers_in_view(1, src) | observers
 	var/eavesdroppers = get_hearers_in_view(2, src) - listeners

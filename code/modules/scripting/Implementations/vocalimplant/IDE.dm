@@ -63,7 +63,7 @@
 
 			VI.Compiler.Run(signal)
 			if(!signal.data["reject"])
-				VI.say(signal.data["message"])
+				V.say(signal.data["message"])
 
 		else
 			src << output(null, "vierror")
@@ -103,7 +103,7 @@
 			VI.memory = list() // clear the memory
 			// Show results
 			src << output(null, "vierror")
-			src << output("<font color = blue>Server memory cleared!</font color>", "vierror")
+			src << output("<font color = blue>Implant memory cleared!</font color>", "vierror")
 		else
 			src << output(null, "vierror")
 			src << output("<font color = red>Failed to clear memory: Unable to locate vocal implant.</font color>", "vierror")
