@@ -551,7 +551,7 @@ var/global/datum/controller/vote/vote = new()
 				config.toggle_vote_method = config.toggle_vote_method % 4 + 1
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
-		update()
+	update()
 	user.vote()
 
 /mob/verb/vote()
