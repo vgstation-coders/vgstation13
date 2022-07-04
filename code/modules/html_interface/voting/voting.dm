@@ -99,9 +99,9 @@ var/global/datum/controller/vote/vote = new()
 		else
 			time_remaining = round((started_time + config.vote_period - world.time)/10)
 
-		if(time_remaining <= 0 || player_list.len < 1)
+		if(time_remaining <= 0 || length(player_list) < 1)
 			//if no players, select at random
-			if(player_list.len < 1)
+			if(length(player_list) < 1)
 				config.toggle_vote_method = RANDOM
 			result()
 			for(var/ckey in voters) //hide voting interface using ckeys
@@ -490,14 +490,7 @@ var/global/datum/controller/vote/vote = new()
 	status_data += list(mode)
 	status_data += list(question)
 	status_data += list(time_remaining)
-	if(config.allow_vote_restart)
-		status_data += list(1)
-	else
-		status_data += list(0)
-	if(config.allow_vote_mode)
-		status_data += list(1)
-	else
-		status_data += list(0)
+	status_data += list(length(player_list))
 	if(config.toggle_maps)
 		status_data += list(1)
 	else
@@ -529,22 +522,14 @@ var/global/datum/controller/vote/vote = new()
 			if(user.client.holder)
 				rigvote()
 				update()
-		if("toggle_restart")
-			if(user.client.holder)
-				config.allow_vote_restart = !config.allow_vote_restart
-				update()
-		if("toggle_gamemode")
-			if(user.client.holder)
-				config.allow_vote_mode = !config.allow_vote_mode
-				update()
 		if("restart")
-			if(config.allow_vote_restart || user.client.holder)
+			if(user.client.holder)
 				initiate_vote("restart",user)
 		if("gamemode")
-			if(config.allow_vote_mode || user.client.holder)
+			if(user.client.holder)
 				initiate_vote("gamemode",user)
 		if("crew_transfer")
-			if(config.allow_vote_restart || user.client.holder)
+			if(length(player_list) < 1 || user.client.holder)
 				initiate_vote("crew_transfer",user)
 		if("custom")
 			if(user.client.holder)
