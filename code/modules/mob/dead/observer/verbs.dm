@@ -1,8 +1,16 @@
+/mob/dead/observer/verb/ghost()
+	set category = "OOC"
+	set name = "Ghost"
+
+	reenter_corpse()
+
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
 	set name = "Re-enter Corpse"
 
 	var/mob/M = get_top_transmogrification()
+	if(check_rights(R_ADMIN)) // admins
+		can_reenter_corpse = 1			//just in-case.
 	if(!M.client)
 		return
 	if(!(mind && mind.current && can_reenter_corpse))
@@ -547,7 +555,7 @@
 	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
 	if(response != "Yeah!" || !src.key)
 		return  //Hit the wrong key...again.
-	
+
 	var/mob/living/carbon/human/hobo = new(pick(hobostart))
 	hobo.key = src.key
 	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
