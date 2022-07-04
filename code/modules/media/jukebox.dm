@@ -713,7 +713,6 @@ var/global/list/loopModeNames=list(
 			next_song_datum = playlist[next_song]
 			fadeout_time = next_song_datum.crossfade_time
 		if(!current_song || (song && world.time >= media_start_time + song.length - fadeout_time))
-			current_song=1
 			if(next_song)
 				current_song = next_song
 				next_song = 0
@@ -724,12 +723,15 @@ var/global/list/loopModeNames=list(
 							current_song=rand(1,playlist.len)
 							if(current_song!=last_song || playlist.len<4)
 								break
-					if(JUKEMODE_REPEAT_SONG)
-						current_song=current_song
+					//if(JUKEMODE_REPEAT_SONG)
+					//current_song is what's currently playing, no action needed
 					if(JUKEMODE_PLAY_ONCE)
 						playing=0
 						update_icon()
 						return
+			//If there's no music set after the above, sanity.
+			if(!current_song)
+				current_song = 1
 			update_music()
 
 /obj/machinery/media/jukebox/proc/eject(var/playlist_name)

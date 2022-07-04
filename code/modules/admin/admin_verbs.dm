@@ -29,7 +29,6 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/toggleguests,	/*toggles whether guests can join the current game*/
 	/datum/admins/proc/announce,		/*priority announce something to all clients.*/
 	/client/proc/colorooc,				/*allows us to set a custom colour for everythign we say in ooc*/
-	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/toggle_view_range,		/*changes how far we can see*/
 	/datum/admins/proc/view_txt_log,	/*shows the server log (diary) for today*/
 	/datum/admins/proc/view_atk_log,	/*shows the server combat-log, doesn't do anything presently*/
@@ -237,7 +236,6 @@ var/list/admin_verbs_hideable = list(
 	/datum/admins/proc/toggleguests,
 	/datum/admins/proc/announce,
 	/client/proc/colorooc,
-	/client/proc/admin_ghost,
 	/client/proc/toggle_view_range,
 	/datum/admins/proc/view_txt_log,
 	/datum/admins/proc/view_atk_log,
@@ -300,7 +298,6 @@ var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
 	/datum/admins/proc/PlayerNotes,
-	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_mod_say,
 	/client/proc/cmd_mod_window,
 	/datum/admins/proc/show_player_info,
@@ -437,30 +434,6 @@ var/list/admin_verbs_mod = list(
 	add_admin_verbs()
 	to_chat(src, "<span class='interface'>All of your adminverbs are now visible.</span>")
 	feedback_add_details("admin_verb","TAVVS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/admin_ghost()
-	set category = "Admin"
-	set name = "Aghost"
-	if(!holder)
-		return
-	if(istype(mob,/mob/dead/observer))
-		//re-enter
-		var/mob/dead/observer/ghost = mob
-		ghost.can_reenter_corpse = 1			//just in-case.
-		ghost.reenter_corpse()
-		feedback_add_details("admin_verb","P") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	else if(istype(mob,/mob/new_player))
-		to_chat(src, "<span class='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</span>")
-	else
-		//ghostize
-		var/mob/body = mob
-		if(body.mind)
-			body.mind.isScrying = 1
-		body.ghostize(1)
-
-		if(body && !body.key)
-			body.key = "@[key]"	//Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
-		feedback_add_details("admin_verb","O") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
 /client/proc/invisimin()

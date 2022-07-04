@@ -535,8 +535,9 @@
 			to_chat(usr,"<span class='warning'>Mob is in nullspace!</span>")
 			return
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/U = usr
+			U.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -567,8 +568,9 @@
 			to_chat(usr,"<span class='warning'>Item is in nullspace!</span>")
 			return
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -599,8 +601,9 @@
 			to_chat(usr,"<span class='warning'>Dish is in nullspace!</span>")
 			return
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -616,8 +619,9 @@
 		var/turf/T = locate(href_list["artifactpanel_jumpto"])
 
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -2593,8 +2597,9 @@
 		var/mob/M = locate(href_list["adminplayerobservejump"])
 
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(usr))
 			return
@@ -2654,8 +2659,9 @@
 		var/z = text2num(href_list["Z"])
 
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		C.jumptocoord(x,y,z)
 
@@ -3589,6 +3595,10 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PDA")
 				new /datum/event/pda_spam
+			if("money_lotto")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","PDA")
+				new /datum/event/money_lotto
 
 			if("carp")
 				feedback_inc("admin_secrets_fun_used",1)

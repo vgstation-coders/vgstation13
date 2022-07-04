@@ -5,15 +5,6 @@
 var/const/E		= 2.71828183
 var/const/Sqrt2	= 1.41421356
 
-/* //All point fingers and laugh at this joke of a list, I even heard using sqrt() is faster than this list lookup, honk.
-// List of square roots for the numbers 1-100.
-var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5,
-                          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7,
-                          7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
-                          8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10)
-*/
-
-
 // Returns y so that y/x = a/b.
 #define RULE_OF_THREE(a, b, x) ((a*x)/b)
 #define tan(x) (sin(x)/cos(x))
@@ -47,7 +38,6 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 
 // -- Returns an exponentially-distributed number.
 // -- The probability density function has mean lambda
-
 /proc/exp_distribution(var/desired_mean)
 	if (desired_mean <= 0)
 		desired_mean = 1 // Let's not allow that to happen
@@ -59,23 +49,9 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	return y
 
 // -- Returns the Lorentz cummulative distribution of the real x, with mean lambda
-
 /proc/exp_cummulative_distribution(var/x, var/lambda)
 	var/y = 1 - E**(lambda*x)
 	return y
-
-
-//Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
-/*
-/proc/clamp(const/val, const/min, const/max)
-	if (val <= min)
-		return min
-
-	if (val >= max)
-		return max
-
-	return val
-*/
 
 // cotangent
 /proc/Cot(x)
@@ -321,3 +297,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 /proc/map_range(old_value, old_bottom, old_top, new_bottom, new_top)
 	var/new_value = (old_value - old_bottom) / (old_top - old_bottom) * (new_top - new_bottom) + new_bottom
 	return new_value
+
+/proc/factorial(num)
+	. = 1
+	for(var/i in 1 to num)
+		. *= i
+
+#define permutations(amount,sample) (factorial(amount) / factorial(amount - sample))
+#define combinations(amount,sample) (factorial(amount) / (factorial(sample) * factorial(amount - sample)))
