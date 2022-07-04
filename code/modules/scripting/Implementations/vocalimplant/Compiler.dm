@@ -90,3 +90,4 @@
 		message = "*beep*"
 
 	speaker.say(message)
+	message_admins("The [V] in [speaker] made \him say \"[message]\" [formatJumpTo(speaker)]")

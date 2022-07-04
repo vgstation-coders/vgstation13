@@ -517,6 +517,7 @@ var/list/headset_modes = list(
 
 	for(var/obj/item/weapon/implant/vocal/VI in src)
 		if(VI.imp_in == src)
+			var/original_message = speech.message
 			speech.message = VI.filter.FilterSpeech(speech.message)
 			var/datum/signal/signal = new /datum/signal
 			signal.data["message"] = speech.message
@@ -525,6 +526,7 @@ var/list/headset_modes = list(
 			signal.data["implant"] = VI
 			VI.Compiler.Run(signal)
 			speech.message = signal.data["reject"] ? null : signal.data["message"]
+			message_admins("The [VI] in [src] made \him say \"[speech.message]\" instead of \"[original_message]\" [formatJumpTo(src)]")
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
