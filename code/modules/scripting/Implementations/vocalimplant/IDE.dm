@@ -62,7 +62,8 @@
 			signal.data["implant"] = VI
 
 			VI.Compiler.Run(signal)
-
+			if(!signal.data["reject"])
+				VI.say(signal.data["message"])
 
 		else
 			src << output(null, "vierror")
