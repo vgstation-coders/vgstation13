@@ -95,12 +95,13 @@
 	lum_r += delta_r
 	lum_g += delta_g
 	lum_b += delta_b
-
+#ifndef LIGHTING_INSTANT_UPDATES
 	if (!needs_update)
 		needs_update = TRUE
 		lighting_update_corners += src
 
 /datum/lighting_corner/proc/update_overlays()
+#endif
 	// Cache these values ahead of time so 4 individual lighting objects don't all calculate them individually.
 	var/lum_r = src.lum_r
 	var/lum_g = src.lum_g
