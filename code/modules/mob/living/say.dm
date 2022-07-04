@@ -526,7 +526,8 @@ var/list/headset_modes = list(
 			signal.data["implant"] = VI
 			VI.Compiler.Run(signal)
 			speech.message = signal.data["reject"] ? null : signal.data["message"]
-			message_admins("The [VI] in [src] made \him say \"[speech.message]\" instead of \"[original_message]\" [formatJumpTo(src)]")
+			if(speech.message != original_message)
+				message_admins("The [VI] in [src] made \him say \"[speech.message]\" instead of \"[original_message]\" [formatJumpTo(src)]")
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
