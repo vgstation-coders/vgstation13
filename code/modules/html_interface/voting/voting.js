@@ -47,11 +47,11 @@ function update_mode(newMode, newQuestion, newTimeleft, newPlayerlist, vmap, vme
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=toggle_vote_method'>" + a + "</a>")));
 	}
 	else if(player_list < 1){
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Restart Vote</font>")));
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=restart'>Call Restart Vote</a>")));
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Gamemode Vote</font>")));
-		$("#vote_main").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=crew_transfer'>Call Crew Transfer Vote</a>")));
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Crew Transfer Vote</font>")));
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Custom Vote</font>")));
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Map Vote</font>")));
+		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Call Map Vote</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (toggle_map?"All Compiled":"Votable") + "</a>)" : ""))));
 	}
 	else{
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Restart Vote</font>")));
