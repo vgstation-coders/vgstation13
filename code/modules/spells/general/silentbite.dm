@@ -1,7 +1,7 @@
 /spell/silentbite
-	name = "Silent biting"
-	desc = "Allows you to drain blood quietly, at the cost of a lower drain speed."
-	abbreviation = "SB"
+	name = "Sleight of teeth"
+	desc = "Allows you to drain blood quietly with a special maneuver, at the cost of a lower drain speed. Scrape, and lick."
+	abbreviation = "ST"
 
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
