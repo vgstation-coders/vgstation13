@@ -1115,7 +1115,7 @@ var/list/uplink_items = list()
 	item = /obj/item/biomasspacket
 	cost = 10
 	discounted_cost = 5
-	jobs_with_discount = list("Assistant") //There originally was a discount for mechanics too due to them being Assistant+, but it felt like a cheap joke
+	jobs_with_discount = list("Assistant", "Janitor") //There originally was a discount for mechanics too due to them being Assistant+, but it felt like a cheap joke
 
 /datum/uplink_item/jobspecific/command
 	category = "Command Specials"
